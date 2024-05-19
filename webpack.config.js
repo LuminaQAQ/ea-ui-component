@@ -32,7 +32,7 @@ module.exports = {
             template: path.resolve(__dirname, 'index.test.html')
         }),
         new MiniCssExtractPlugin({
-            filename: 'styles.css'
+            filename: 'ea-ui.css'
         })
     ],
     devServer: {
