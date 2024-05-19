@@ -1,40 +1,44 @@
-export default class EaButton extends HTMLElement {
+// @ts-nocheck
+import setStyle from "../../utils/setStyle";
 
+export default class EaButton extends HTMLElement {
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
-        const style = document.createElement('style');
-        style.textContent = `
-        :root {
-            font-size: 5rem;
-        }
-        div {
-            font-size: 5rem;
-        }
-        button {
-            font-size: 5rem;
-        }
-        `;
 
+        const test = document.createElement('input');
+        test.type = 'button';
+        test.value = "click";
+        test.className = "__ea-button";
 
-        const test = document.createElement('button');
-        test.innerHTML = `111111`;
-
-        shadowRoot.appendChild(style);
+        setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
         shadowRoot.appendChild(test);
     }
 
-    static get buttonShape() {
-        return [
-            "plain",
-            "round",
-            "circle",
-        ]
+    get disabled() {
+        return this.getAttribute('disabled') !== null;
     }
 
-    get disabled() {
-        return this.getAttribute('disabled')
+    get checked() {
+        return this.getAttribute('checked');
+    }
+
+    get circle() {
+        return this.getAttribute('circle') !== null;
+    }
+
+    get type() {
+        const attr = this.getAttribute('type');
+        if (attr == null || attr == false) return 'normal';
+        else return attr;
+    }
+
+    connectedCallback() {
+        const button = this.shadowRoot.querySelector('.__ea-button');
+
+        button.disabled = this.disabled;
+        button.classList.add(this.type);
     }
 }

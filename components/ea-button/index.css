@@ -1,3 +1,19 @@
 .__ea-button {
-  font-size: 1rem;
+  padding: 0.25rem 1rem;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1.25;
+  font-weight: 500;
+  transition: background-color 0.1s, color 0.1s;
+  border-radius: 5px;
+}
+.__ea-button.normal {
+  border: 1px solid #e6e6e6;
+  color: black;
+  background-color: transparent;
+}
+.__ea-button.normal:hover {
+  border: 1px solid rgba(160, 207, 255, 0.4);
+  color: #3a9bff;
+  background-color: rgba(160, 207, 255, 0.05);
 }
