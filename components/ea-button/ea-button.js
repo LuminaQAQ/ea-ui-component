@@ -39,6 +39,7 @@ export default class EaButton extends HTMLElement {
         const button = this.shadowRoot.querySelector('.__ea-button');
 
         button.disabled = this.disabled;
+        if (this.disabled) button.classList.add('disabled');
         button.classList.add(this.type);
     }
 }
