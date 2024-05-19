@@ -1,3 +1,60 @@
+$color-default: black;
+$color-default-border: lighten(black, 90);
+$color-default-text: black;
+$color-default-bgc: transparent;
+$color-default-border-hover: transparentize(#a0cfff, 0.6);
+$color-default-text-hover: darken(#a0cfff, 20);
+$color-default-bgc-hover: transparentize(#a0cfff, 0.95);
+
+$color-primary: #409eff;
+$color-primary-hover: #a0cfff;
+
+$color-success: #67c23a;
+$color-info: #909399;
+$color-warning: #e6a23c;
+$color-danger: #f56c6c;
+$color-error: #f56c6c;
+
+@mixin button-type(
+  $type,
+  $border,
+  $text,
+  $bgc,
+  $border-hover,
+  $text-hover,
+  $bgc-hover
+) {
+  &.#{$type} {
+    border: 1px solid $border;
+    color: $text;
+    background-color: $bgc;
+
+    &:hover {
+      border: 1px solid $border-hover;
+      color: $text-hover;
+      background-color: $bgc-hover;
+    }
+  }
+}
+
 .__ea-button {
-  font-size: 1rem;
+  padding: 0.25rem 1rem;
+
+  cursor: pointer;
+
+  font-size: 1.25rem;
+  line-height: 1.25;
+  font-weight: 500;
+  transition: background-color 0.1s, color 0.1s;
+  border-radius: 5px;
+
+  @include button-type(
+    "normal",
+    $color-default-border,
+    $color-default-text,
+    $color-default-bgc,
+    $color-default-border-hover,
+    $color-default-text-hover,
+    $color-default-bgc-hover
+  );
 }
