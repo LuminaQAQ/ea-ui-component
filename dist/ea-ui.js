@@ -16,7 +16,7 @@
   \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ EaButton)\n/* harmony export */ });\n/* harmony import */ var _utils_setStyle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/setStyle */ \"./utils/setStyle.js\");\n// @ts-nocheck\r\n\r\n\r\nclass EaButton extends HTMLElement {\r\n    constructor() {\r\n        super();\r\n\r\n        const shadowRoot = this.attachShadow({ mode: 'open' });\r\n\r\n\r\n        const test = document.createElement('input');\r\n        test.type = 'button';\r\n        test.value = \"click\";\r\n        test.className = \"__ea-button\";\r\n\r\n        (0,_utils_setStyle__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(shadowRoot, new URL(/* asset import */ __webpack_require__(/*! ./index.css */ \"./components/ea-button/index.css\"), __webpack_require__.b).href);\r\n        shadowRoot.appendChild(test);\r\n    }\r\n\r\n    get disabled() {\r\n        return this.getAttribute('disabled') !== null;\r\n    }\r\n\r\n    get checked() {\r\n        return this.getAttribute('checked');\r\n    }\r\n\r\n    get circle() {\r\n        return this.getAttribute('circle') !== null;\r\n    }\r\n\r\n    get type() {\r\n        const attr = this.getAttribute('type');\r\n        if (attr == null || attr == false) return 'normal';\r\n        else return attr;\r\n    }\r\n\r\n    connectedCallback() {\r\n        const button = this.shadowRoot.querySelector('.__ea-button');\r\n\r\n        button.disabled = this.disabled;\r\n        if (this.disabled) button.classList.add('disabled');\r\n        button.classList.add(this.type);\r\n    }\r\n}\n\n//# sourceURL=webpack://ea_ui_component/./components/ea-button/ea-button.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ EaButton)\n/* harmony export */ });\n/* harmony import */ var _utils_setStyle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/setStyle */ \"./utils/setStyle.js\");\n// @ts-nocheck\r\n\r\n\r\nconst styleSheet = `\r\n.__ea-button {\r\n  padding: 0.25rem 1rem;\r\n  cursor: pointer;\r\n  font-size: 1.25rem;\r\n  line-height: 1.25;\r\n  font-weight: 500;\r\n  transition: background-color 0.1s, color 0.1s;\r\n  border-radius: 5px;\r\n}\r\n.__ea-button.normal {\r\n  border: 1px solid #e6e6e6;\r\n  color: black;\r\n  background-color: transparent;\r\n}\r\n.__ea-button.normal.disabled {\r\n  cursor: not-allowed !important;\r\n  background-image: none !important;\r\n  background-color: rgba(64, 64, 64, 0) !important;\r\n  border-color: white !important;\r\n  color: #404040 !important;\r\n}\r\n.__ea-button.normal:hover {\r\n  border: 1px solid rgba(160, 207, 255, 0.4);\r\n  color: #3a9bff;\r\n  background-color: rgba(160, 207, 255, 0.05);\r\n}\r\n.__ea-button.primary {\r\n  border: 1px solid #409eff;\r\n  color: #ffffff;\r\n  background-color: #409eff;\r\n}\r\n.__ea-button.primary.disabled {\r\n  cursor: not-allowed !important;\r\n  background-image: none !important;\r\n  background-color: #c0dfff !important;\r\n  border-color: #c0dfff !important;\r\n  color: white !important;\r\n}\r\n.__ea-button.primary:hover {\r\n  border: 1px solid #a5d2ff;\r\n  color: #ffffff;\r\n  background-color: #a5d2ff;\r\n}\r\n`\r\n\r\nclass EaButton extends HTMLElement {\r\n    constructor() {\r\n        super();\r\n\r\n        const shadowRoot = this.attachShadow({ mode: 'open' });\r\n\r\n\r\n        const test = document.createElement('input');\r\n        test.type = 'button';\r\n        test.value = \"click\";\r\n        test.className = \"__ea-button\";\r\n\r\n        // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);\r\n        const style = document.createElement('style');\r\n        style.textContent = styleSheet;\r\n        shadowRoot.appendChild(style);\r\n\r\n        shadowRoot.appendChild(test);\r\n    }\r\n\r\n    get disabled() {\r\n        return this.getAttribute('disabled') !== null;\r\n    }\r\n\r\n    get checked() {\r\n        return this.getAttribute('checked');\r\n    }\r\n\r\n    get circle() {\r\n        return this.getAttribute('circle') !== null;\r\n    }\r\n\r\n    get type() {\r\n        const attr = this.getAttribute('type');\r\n        if (attr == null || attr == false) return 'normal';\r\n        else return attr;\r\n    }\r\n\r\n    connectedCallback() {\r\n        const button = this.shadowRoot.querySelector('.__ea-button');\r\n\r\n        button.disabled = this.disabled;\r\n        if (this.disabled) button.classList.add('disabled');\r\n        button.classList.add(this.type);\r\n    }\r\n}\n\n//# sourceURL=webpack://ea_ui_component/./components/ea-button/ea-button.js?");
 
 /***/ }),
 
@@ -37,16 +37,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _com
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ setStyle)\n/* harmony export */ });\nfunction setStyle(shadowRoot, href) {\r\n    const link = document.createElement('link');\r\n\r\n    link.href = href;\r\n    link.rel = \"stylesheet\";\r\n\r\n    shadowRoot.appendChild(link);\r\n}\n\n//# sourceURL=webpack://ea_ui_component/./utils/setStyle.js?");
-
-/***/ }),
-
-/***/ "./components/ea-button/index.css":
-/*!****************************************!*\
-  !*** ./components/ea-button/index.css ***!
-  \****************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-eval("module.exports = __webpack_require__.p + \"85bff677a7db3a9e6db4.css\";\n\n//# sourceURL=webpack://ea_ui_component/./components/ea-button/index.css?");
 
 /***/ })
 
@@ -76,9 +66,6 @@ eval("module.exports = __webpack_require__.p + \"85bff677a7db3a9e6db4.css\";\n\n
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
@@ -106,37 +93,6 @@ eval("module.exports = __webpack_require__.p + \"85bff677a7db3a9e6db4.css\";\n\n
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/publicPath */
-/******/ 	(() => {
-/******/ 		__webpack_require__.p = "/";
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		__webpack_require__.b = document.baseURI || self.location.href;
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"main": 0
-/******/ 		};
-/******/ 		
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		// no on chunks loaded
-/******/ 		
-/******/ 		// no jsonp function
 /******/ 	})();
 /******/ 	
 /************************************************************************/
