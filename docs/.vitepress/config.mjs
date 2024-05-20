@@ -2,12 +2,13 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/ea_ui_component/',
   title: "ea-ui",
   description: "基于 WebComponent 的 ui 库",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: '组件', link: '/markdown-examples' }
+      { text: '组件', link: '/install' }
     ],
 
     sidebar: [
