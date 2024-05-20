@@ -48,48 +48,54 @@ const styleSheet = `
 `
 
 export default class EaButton extends HTMLElement {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+    const shadowRoot = this.attachShadow({ mode: 'open' });
 
 
-        const test = document.createElement('input');
-        test.type = 'button';
-        test.value = "click";
-        test.className = "__ea-button";
+    const test = document.createElement('input');
+    test.type = 'button';
+    test.value = "click";
+    test.className = "__ea-button";
 
-        // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
-        const style = document.createElement('style');
-        style.textContent = styleSheet;
-        shadowRoot.appendChild(style);
+    setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    // const style = document.createElement('style');
+    // style.textContent = styleSheet;
+    // shadowRoot.appendChild(style);
 
-        shadowRoot.appendChild(test);
-    }
+    shadowRoot.appendChild(test);
+  }
 
-    get disabled() {
-        return this.getAttribute('disabled') !== null;
-    }
+  get disabled() {
+    return this.getAttribute('disabled') !== null;
+  }
 
-    get checked() {
-        return this.getAttribute('checked');
-    }
+  get ariaDisabled() {
+    return this.getAttribute('aria-disabled') !== null;
+  }
 
-    get circle() {
-        return this.getAttribute('circle') !== null;
-    }
+  get checked() {
+    return this.getAttribute('checked');
+  }
 
-    get type() {
-        const attr = this.getAttribute('type');
-        if (attr == null || attr == false) return 'normal';
-        else return attr;
-    }
+  get circle() {
+    return this.getAttribute('circle') !== null;
+  }
 
-    connectedCallback() {
-        const button = this.shadowRoot.querySelector('.__ea-button');
+  get type() {
+    const attr = this.getAttribute('type');
+    if (attr == null || attr == false) return 'normal';
+    else return attr;
+  }
 
-        button.disabled = this.disabled;
-        if (this.disabled) button.classList.add('disabled');
-        button.classList.add(this.type);
-    }
+  connectedCallback() {
+    const button = this.shadowRoot.querySelector('.__ea-button');
+
+    button.disabled = this.disabled;
+    button.ariaDisabled = this.ariaDisabled;
+
+    if (this.disabled || this.ariaDisabled) button.classList.add('disabled');
+    button.classList.add(this.type);
+  }
 }
