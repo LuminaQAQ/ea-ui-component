@@ -45,7 +45,7 @@
   background-color: transparent;
 }
 .__ea-button.normal.round {
-  --border-radius: 999px;
+  border-radius: 999px;
 }
 .__ea-button.normal:hover {
   border: 1px solid rgba(160, 207, 255, 0.4);
@@ -78,7 +78,7 @@
   color: #409eff;
 }
 .__ea-button.primary.round {
-  --border-radius: 999px;
+  border-radius: 999px;
 }
 .__ea-button.primary:hover {
   border: 1px solid #73b8ff;
@@ -110,7 +110,7 @@
   color: #67c23a;
 }
 .__ea-button.success.round {
-  --border-radius: 999px;
+  border-radius: 999px;
 }
 .__ea-button.success:hover {
   border: 1px solid #85cf60;
@@ -142,7 +142,7 @@
   color: #909399;
 }
 .__ea-button.info.round {
-  --border-radius: 999px;
+  border-radius: 999px;
 }
 .__ea-button.info:hover {
   border: 1px solid #abadb1;
@@ -174,7 +174,7 @@
   color: #e6a23c;
 }
 .__ea-button.warning.round {
-  --border-radius: 999px;
+  border-radius: 999px;
 }
 .__ea-button.warning:hover {
   border: 1px solid #ecb869;
@@ -207,7 +207,7 @@
   background-color: #fde8e8;
 }
 .__ea-button.danger.round {
-  --border-radius: 999px;
+  border-radius: 999px;
 }
 .__ea-button.danger:hover {
   border: 1px solid #f89c9c;
@@ -240,7 +240,7 @@
   color: transparent;
 }
 .__ea-button.text.round {
-  --border-radius: 999px;
+  border-radius: 999px;
 }
 .__ea-button.text:hover {
   border: 1px solid rgba(26, 26, 26, 0);
@@ -249,4 +249,18 @@
 }
 .__ea-button.text:active {
   background-color: rgba(0, 0, 0, 0);
+}
+
+.__ea-button-group {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+.__ea-button-group ::slotted(ea-button:first-of-type) {
+  --border-radius: 4px 0 0 4px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+.__ea-button-group ::slotted(ea-button:last-of-type) {
+  --border-radius: 0 4px 4px 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
 }
