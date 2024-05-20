@@ -2,36 +2,72 @@
 import setStyle from "../../utils/setStyle";
 
 const styleSheet = `
+@charset "UTF-8";
+/**
+* $type: 按钮类型的类名
+* $border: 边框颜色
+* $text: 文字颜色
+* $bgc: 背景颜色
+*/
 .__ea-button {
-  padding: 0.25rem 1rem;
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  font-size: 1.25rem;
+  font-size: 1rem;
   line-height: 1.25;
   font-weight: 500;
   transition: background-color 0.1s, color 0.1s;
   border-radius: 5px;
 }
 .__ea-button.normal {
-  border: 1px solid #e6e6e6;
-  color: black;
+  border: 1px solid #dcdfe6;
+  color: #606266;
   background-color: transparent;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
 }
 .__ea-button.normal.disabled {
   cursor: not-allowed !important;
   background-image: none !important;
   background-color: rgba(64, 64, 64, 0) !important;
   border-color: white !important;
-  color: #404040 !important;
+  color: white !important;
+  border-color: #ebedf1 !important;
+  color: #babcbe !important;
+}
+.__ea-button.normal.plain {
+  background-color: rgba(92, 92, 92, 0);
+  border: 1px solid white;
+  color: transparent;
+  background-color: transparent;
+  border: 1px solid #dcdfe6;
+  color: #606266;
+}
+.__ea-button.normal.plain:hover {
+  background-color: transparent;
+}
+.__ea-button.normal.round {
+  border-radius: 999px;
 }
 .__ea-button.normal:hover {
   border: 1px solid rgba(160, 207, 255, 0.4);
   color: #3a9bff;
   background-color: rgba(160, 207, 255, 0.05);
 }
+.__ea-button.normal:active {
+  background-color: rgba(7, 130, 255, 0.05);
+  border: 1px solid rgba(33, 143, 255, 0.4);
+}
 .__ea-button.primary {
   border: 1px solid #409eff;
-  color: #ffffff;
+  color: #fff;
   background-color: #409eff;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
 }
 .__ea-button.primary.disabled {
   cursor: not-allowed !important;
@@ -40,56 +76,195 @@ const styleSheet = `
   border-color: #c0dfff !important;
   color: white !important;
 }
+.__ea-button.primary.plain {
+  background-color: #f8fbff;
+  border: 1px solid #c0dfff;
+  color: #409eff;
+}
+.__ea-button.primary.round {
+  border-radius: 999px;
+}
 .__ea-button.primary:hover {
-  border: 1px solid #a5d2ff;
-  color: #ffffff;
-  background-color: #a5d2ff;
+  border: 1px solid #73b8ff;
+  color: white;
+  background-color: #73b8ff;
+}
+.__ea-button.primary:active {
+  background-color: #006bd9;
+}
+.__ea-button.success {
+  border: 1px solid #67c23a;
+  color: #fff;
+  background-color: #67c23a;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+}
+.__ea-button.success.disabled {
+  cursor: not-allowed !important;
+  background-image: none !important;
+  background-color: #b2e19b !important;
+  border-color: #b2e19b !important;
+  color: white !important;
+}
+.__ea-button.success.plain {
+  background-color: #d3eec6;
+  border: 1px solid #b2e19b;
+  color: #67c23a;
+}
+.__ea-button.success.round {
+  border-radius: 999px;
+}
+.__ea-button.success:hover {
+  border: 1px solid #85cf60;
+  color: white;
+  background-color: #85cf60;
+}
+.__ea-button.success:active {
+  background-color: #3d7323;
+}
+.__ea-button.info {
+  border: 1px solid #909399;
+  color: #fff;
+  background-color: #909399;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+}
+.__ea-button.info.disabled {
+  cursor: not-allowed !important;
+  background-image: none !important;
+  background-color: #d2d4d6 !important;
+  border-color: #d2d4d6 !important;
+  color: white !important;
+}
+.__ea-button.info.plain {
+  background-color: #f0f0f1;
+  border: 1px solid #d2d4d6;
+  color: #909399;
+}
+.__ea-button.info.round {
+  border-radius: 999px;
+}
+.__ea-button.info:hover {
+  border: 1px solid #abadb1;
+  color: white;
+  background-color: #abadb1;
+}
+.__ea-button.info:active {
+  background-color: #5d6066;
+}
+.__ea-button.warning {
+  border: 1px solid #e6a23c;
+  color: #fff;
+  background-color: #e6a23c;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+}
+.__ea-button.warning.disabled {
+  cursor: not-allowed !important;
+  background-image: none !important;
+  background-color: #f4d8ad !important;
+  border-color: #f4d8ad !important;
+  color: white !important;
+}
+.__ea-button.warning.plain {
+  background-color: #fbf0df;
+  border: 1px solid #f4d8ad;
+  color: #e6a23c;
+}
+.__ea-button.warning.round {
+  border-radius: 999px;
+}
+.__ea-button.warning:hover {
+  border: 1px solid #ecb869;
+  color: white;
+  background-color: #ecb869;
+}
+.__ea-button.warning:active {
+  background-color: #a76d15;
+}
+.__ea-button.danger {
+  border: 1px solid #f56c6c;
+  color: #fff;
+  background-color: #f56c6c;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+}
+.__ea-button.danger.disabled {
+  cursor: not-allowed !important;
+  background-image: none !important;
+  background-color: #fde3e3 !important;
+  border-color: #fde3e3 !important;
+  color: white !important;
+}
+.__ea-button.danger.plain {
+  background-color: white;
+  border: 1px solid #fde3e3;
+  color: #f56c6c;
+  background-color: #fde8e8;
+}
+.__ea-button.danger.round {
+  border-radius: 999px;
+}
+.__ea-button.danger:hover {
+  border: 1px solid #f89c9c;
+  color: white;
+  background-color: #f89c9c;
+}
+.__ea-button.danger:active {
+  background-color: #eb1010;
 }
 `
 
 export default class EaButton extends HTMLElement {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+    const shadowRoot = this.attachShadow({ mode: 'open' });
 
 
-        const test = document.createElement('input');
-        test.type = 'button';
-        test.value = "click";
-        test.className = "__ea-button";
+    const test = document.createElement('input');
+    test.type = 'button';
+    test.value = "click";
+    test.className = "__ea-button";
 
-        // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
-        const style = document.createElement('style');
-        style.textContent = styleSheet;
-        shadowRoot.appendChild(style);
+    const style = document.createElement('style');
+    style.textContent = styleSheet;
+    shadowRoot.appendChild(style);
 
-        shadowRoot.appendChild(test);
-    }
+    shadowRoot.appendChild(test);
+  }
 
-    get disabled() {
-        return this.getAttribute('disabled') !== null;
-    }
+  get disabled() {
+    return this.getAttribute('disabled') !== null;
+  }
 
-    get checked() {
-        return this.getAttribute('checked');
-    }
+  get checked() {
+    return this.getAttribute('checked');
+  }
 
-    get circle() {
-        return this.getAttribute('circle') !== null;
-    }
+  get circle() {
+    return this.getAttribute('circle') !== null;
+  }
 
-    get type() {
-        const attr = this.getAttribute('type');
-        if (attr == null || attr == false) return 'normal';
-        else return attr;
-    }
+  get type() {
+    const attr = this.getAttribute('type');
+    if (attr == null || attr == false) return 'normal';
+    else return attr;
+  }
 
-    connectedCallback() {
-        const button = this.shadowRoot.querySelector('.__ea-button');
+  connectedCallback() {
+    const button = this.shadowRoot.querySelector('.__ea-button');
 
-        button.disabled = this.disabled;
-        if (this.disabled) button.classList.add('disabled');
-        button.classList.add(this.type);
-    }
+    button.disabled = this.disabled;
+    if (this.disabled) button.classList.add('disabled');
+    button.classList.add(this.type);
+  }
 }
