@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as a}from"./chunks/framework.cWN-w6jb.js";const d=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"link.md","filePath":"link.md"}'),n={name:"link.md"};function r(o,s,c,i,l,p){return t(),a("div")}const m=e(n,[["render",r]]);export{d as __pageData,m as default};
