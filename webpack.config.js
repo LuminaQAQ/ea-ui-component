@@ -17,13 +17,6 @@ module.exports = {
                 test: /\.scss$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
             },
-            // {
-            //     test: /\.css$/,
-            //     use: [
-            //         MiniCssExtractPlugin.loader,
-            //         'css-loader'
-            //     ]
-            // }
         ]
     },
     plugins: [
@@ -31,9 +24,6 @@ module.exports = {
             title: 'test',
             template: path.resolve(__dirname, 'index.test.html')
         }),
-        // new MiniCssExtractPlugin({
-        //     filename: 'ea-ui.css'
-        // })
     ],
     devServer: {
         static: {
