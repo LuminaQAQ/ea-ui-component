@@ -135,12 +135,6 @@ import { onMounted } from 'vue'
 ## 不同尺寸 `size`
 
 <div class="row">
-  <ea-button>默认按钮</ea-button>
-  <ea-button size="medium">中等按钮</ea-button>
-  <ea-button size="small">小型按钮</ea-button>
-  <ea-button size="mini">超小按钮</ea-button>
-</div>
-<div class="row">
   <ea-button round>默认按钮</ea-button>
   <ea-button size="medium" round>中等按钮</ea-button>
   <ea-button size="small" round>小型按钮</ea-button>
@@ -148,12 +142,6 @@ import { onMounted } from 'vue'
 </div>
 
 ```html
-<div class="row">
-  <ea-button>默认按钮</ea-button>
-  <ea-button size="medium">中等按钮</ea-button>
-  <ea-button size="small">小型按钮</ea-button>
-  <ea-button size="mini">超小按钮</ea-button>
-</div>
 <div class="row">
   <ea-button round>默认按钮</ea-button>
   <ea-button size="medium" round>中等按钮</ea-button>
