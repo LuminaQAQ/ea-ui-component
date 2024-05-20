@@ -1,7 +1,0 @@
-.row {
-  display: flex;
-  justify-content: space-around;
-}
-.row.left {
-  justify-content: flex-start;
-}
