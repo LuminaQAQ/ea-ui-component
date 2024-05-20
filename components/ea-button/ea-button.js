@@ -1,4 +1,7 @@
-(()=>{class e extends HTMLElement{constructor(){super();const n=this.attachShadow({mode:"open"}),o=document.createElement("input");o.type="button",o.value="click",o.className="__ea-button";const r=document.createElement("style");r.textContent=`
+// @ts-nocheck
+import setStyle from "../../utils/setStyle";
+
+const stylesheet = `
 @charset "UTF-8";
 /**
 * $type: 按钮类型的类名
@@ -218,4 +221,142 @@
 .__ea-button.danger:active {
   background-color: #eb1010;
 }
-`,n.appendChild(r),n.appendChild(o)}get BUTTON_STYLE(){return["plain","round"]}get disabled(){return this.getAttribute("disabled")!==null}get ariaDisabled(){return this.getAttribute("aria-disabled")!==null}get value(){return this.getAttribute("value")}get innerHTMLValue(){return this.innerHTML}get ariaValueText(){return this.getAttribute("aria-valuetext")}get plain(){return this.getAttribute("plain")!==void 0&&this.getAttribute("plain")!==null}get round(){return this.getAttribute("round")!==void 0&&this.getAttribute("round")!==null}get type(){const n=this.getAttribute("type");return n==null||n==0?"normal":n}connectedCallback(){const n=this.shadowRoot.querySelector(".__ea-button");n.disabled=this.disabled,n.ariaDisabled=this.ariaDisabled,n.ariaValueText=this.ariaValueText,n.value=this.value,n.value=this.innerHTMLValue;for(let o,r=0;o=this.BUTTON_STYLE[r++];)if(this[o]){n.classList.add(o);break}(this.disabled||this.ariaDisabled)&&n.classList.add("disabled"),n.classList.add(this.type)}}customElements.define("ea-button",e)})();
+.__ea-button.text {
+  border: 1px solid transparent;
+  color: #409eff;
+  background-color: transparent;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+}
+.__ea-button.text.disabled {
+  cursor: not-allowed !important;
+  background-image: none !important;
+  background-color: rgba(64, 64, 64, 0) !important;
+  border-color: rgba(64, 64, 64, 0) !important;
+  color: white !important;
+  color: #c0c4cc !important;
+}
+.__ea-button.text.plain {
+  background-color: rgba(92, 92, 92, 0);
+  border: 1px solid rgba(64, 64, 64, 0);
+  color: transparent;
+}
+.__ea-button.text.round {
+  border-radius: 999px;
+}
+.__ea-button.text:hover {
+  border: 1px solid rgba(26, 26, 26, 0);
+  color: #73b8ff;
+  background-color: rgba(26, 26, 26, 0);
+}
+.__ea-button.text:active {
+  background-color: rgba(0, 0, 0, 0);
+}
+`;
+
+export default class EaButton extends HTMLElement {
+
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+
+    const dom = document.createElement('button');
+    const slot = document.createElement('slot');
+    dom.className = "__ea-button";
+    dom.appendChild(slot);
+
+    this.dom = dom;
+
+    // ------- 打包 -------
+    // #region
+    const styleNode = document.createElement('style');
+    styleNode.innerHTML = stylesheet;
+    this.shadowRoot.appendChild(styleNode);
+    // #endregion
+    // ------- end -------
+
+    // ------- 本地调试 -------
+    // #region
+    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    // #endregion
+    // ------- end -------
+
+
+    shadowRoot.appendChild(dom);
+    this.init();
+  }
+
+  get BUTTON_STYLE() {
+    return ['plain', 'round'];
+  }
+
+  // ------- 禁用 -------
+  // #region
+  get disabled() {
+    return this.getAttribute('disabled') !== null;
+  }
+
+  get ariaDisabled() {
+    return this.getAttribute('aria-disabled') !== null;
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 按钮样式 -------
+  // #region
+  get plain() {
+    return this.getAttribute('plain') !== undefined && this.getAttribute('plain') !== null;
+  }
+  set plain(value) {
+    this.dom.classList.add(value);
+  }
+
+  get round() {
+    return this.getAttribute('round') !== undefined && this.getAttribute('round') !== null;
+  }
+  set round(value) {
+    this.dom.classList.add(value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- type属性 -------
+  // #region
+  get type() {
+    const attr = this.getAttribute('type');
+    if (attr == null || attr == false) return 'normal';
+    else return attr;
+  }
+
+  set type(value) {
+    this.dom.classList.add(value);
+  }
+  // #endregion
+  // ------- end -------
+
+  init() {
+    const button = this.dom;
+
+    // 禁用
+    button.disabled = this.disabled;
+    button.ariaDisabled = this.ariaDisabled;
+
+    // 按钮样式
+    for (let i = 0, style; style = this.BUTTON_STYLE[i++];) {
+      if (this[style]) {
+        button.classList.add(style);
+        break;
+      }
+    }
+
+    if (this.disabled || this.ariaDisabled) button.classList.add('disabled');
+    button.classList.add(this.type);
+  }
+}
+
+if (!window.customElements.get("ea-button")) {
+  window.customElements.define("ea-button", EaButton);
+}

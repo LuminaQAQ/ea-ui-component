@@ -1,16 +1,10 @@
 <script setup>
 import { onMounted } from 'vue'
   onMounted(() => {
-    import('./js/ea-ui.js')
+    import('../components/ea-button/ea-button.js')
+    import('./css/index.css')
   })
 </script>
-
-<style>
-    .row {
-        display: flex;
-        justify-content: space-around;
-    }
-</style>
 
 # Button 按钮
 
