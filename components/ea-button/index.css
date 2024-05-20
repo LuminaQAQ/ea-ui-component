@@ -1,33 +1,69 @@
+@charset "UTF-8";
+/**
+* $type: 按钮类型的类名
+* $border: 边框颜色
+* $text: 文字颜色
+* $bgc: 背景颜色
+*/
 .__ea-button {
-  padding: 0.25rem 1rem;
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  font-size: 1.25rem;
+  font-size: 1rem;
   line-height: 1.25;
   font-weight: 500;
   transition: background-color 0.1s, color 0.1s;
   border-radius: 5px;
 }
 .__ea-button.normal {
-  border: 1px solid #e6e6e6;
-  color: black;
+  border: 1px solid #dcdfe6;
+  color: #606266;
   background-color: transparent;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
 }
 .__ea-button.normal.disabled {
   cursor: not-allowed !important;
   background-image: none !important;
   background-color: rgba(64, 64, 64, 0) !important;
   border-color: white !important;
-  color: #404040 !important;
+  color: white !important;
+  border-color: #ebedf1 !important;
+  color: #babcbe !important;
+}
+.__ea-button.normal.plain {
+  background-color: rgba(92, 92, 92, 0);
+  border: 1px solid white;
+  color: transparent;
+  background-color: transparent;
+  border: 1px solid #dcdfe6;
+  color: #606266;
+}
+.__ea-button.normal.plain:hover {
+  background-color: transparent;
+}
+.__ea-button.normal.round {
+  border-radius: 999px;
 }
 .__ea-button.normal:hover {
   border: 1px solid rgba(160, 207, 255, 0.4);
   color: #3a9bff;
   background-color: rgba(160, 207, 255, 0.05);
 }
+.__ea-button.normal:active {
+  background-color: rgba(7, 130, 255, 0.05);
+  border: 1px solid rgba(33, 143, 255, 0.4);
+}
 .__ea-button.primary {
   border: 1px solid #409eff;
   color: #ffffff;
   background-color: #409eff;
+  /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
 }
 .__ea-button.primary.disabled {
   cursor: not-allowed !important;
@@ -36,8 +72,19 @@
   border-color: #c0dfff !important;
   color: white !important;
 }
+.__ea-button.primary.plain {
+  background-color: #f8fbff;
+  border: 1px solid #c0dfff;
+  color: #409eff;
+}
+.__ea-button.primary.round {
+  border-radius: 999px;
+}
 .__ea-button.primary:hover {
-  border: 1px solid #a5d2ff;
-  color: #ffffff;
-  background-color: #a5d2ff;
+  border: 1px solid #73b8ff;
+  color: white;
+  background-color: #73b8ff;
+}
+.__ea-button.primary:active {
+  background-color: #006bd9;
 }
