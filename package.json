@@ -1,13 +1,15 @@
 {
   "devDependencies": {
     "gh-pages": "^6.1.1",
+    "scss": "^0.2.4",
+    "scss-loader": "^0.0.1",
     "vitepress": "^1.2.0"
   },
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
-    "deploy": "gh-pages -d docs"
+    "deploy": "vitepress build docs && gh-pages -d docs/.vitepress/dist"
   },
   "dependencies": {
     "path": "^0.12.7"
