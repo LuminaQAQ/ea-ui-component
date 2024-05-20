@@ -1,29 +1,15 @@
 {
-  "name": "ea_ui_component",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack serve --open",
-    "build": "webpack --mode production"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "html-webpack-plugin": "^5.6.0",
-    "mini-css-extract-plugin": "^2.9.0",
-    "sass-loader": "^14.2.1",
-    "scss": "^0.2.4",
-    "scss-loader": "^0.0.1",
-    "style-loader": "^4.0.0",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "gh-pages": "^6.1.1",
+    "vitepress": "^1.2.0"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "deploy": "gh-pages -d docs"
   },
   "dependencies": {
-    "css-loader": "^7.1.1",
-    "sass": "^1.77.2"
+    "path": "^0.12.7"
   }
 }
