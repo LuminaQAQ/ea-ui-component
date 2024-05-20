@@ -17,13 +17,18 @@ const stylesheet = `
   line-height: 1.25;
   font-weight: 500;
   transition: background-color 0.1s, color 0.1s;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
 }
 .__ea-button.normal {
+  --border-radius: 6px;
   border: 1px solid #dcdfe6;
   color: #606266;
   background-color: transparent;
   /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
@@ -49,7 +54,16 @@ const stylesheet = `
   background-color: transparent;
 }
 .__ea-button.normal.round {
-  border-radius: 999px;
+  --border-radius: 999px;
+}
+.__ea-button.normal.medium {
+  font-size: 14px;
+}
+.__ea-button.normal.small {
+  font-size: 12px;
+}
+.__ea-button.normal.mini {
+  font-size: 10px;
 }
 .__ea-button.normal:hover {
   border: 1px solid rgba(160, 207, 255, 0.4);
@@ -61,10 +75,15 @@ const stylesheet = `
   border: 1px solid rgba(33, 143, 255, 0.4);
 }
 .__ea-button.primary {
+  --border-radius: 6px;
   border: 1px solid #409eff;
   color: #fff;
   background-color: #409eff;
   /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
@@ -82,7 +101,16 @@ const stylesheet = `
   color: #409eff;
 }
 .__ea-button.primary.round {
-  border-radius: 999px;
+  --border-radius: 999px;
+}
+.__ea-button.primary.medium {
+  font-size: 14px;
+}
+.__ea-button.primary.small {
+  font-size: 12px;
+}
+.__ea-button.primary.mini {
+  font-size: 10px;
 }
 .__ea-button.primary:hover {
   border: 1px solid #73b8ff;
@@ -93,10 +121,15 @@ const stylesheet = `
   background-color: #006bd9;
 }
 .__ea-button.success {
+  --border-radius: 6px;
   border: 1px solid #67c23a;
   color: #fff;
   background-color: #67c23a;
   /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
@@ -114,7 +147,16 @@ const stylesheet = `
   color: #67c23a;
 }
 .__ea-button.success.round {
-  border-radius: 999px;
+  --border-radius: 999px;
+}
+.__ea-button.success.medium {
+  font-size: 14px;
+}
+.__ea-button.success.small {
+  font-size: 12px;
+}
+.__ea-button.success.mini {
+  font-size: 10px;
 }
 .__ea-button.success:hover {
   border: 1px solid #85cf60;
@@ -125,10 +167,15 @@ const stylesheet = `
   background-color: #3d7323;
 }
 .__ea-button.info {
+  --border-radius: 6px;
   border: 1px solid #909399;
   color: #fff;
   background-color: #909399;
   /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
@@ -146,7 +193,16 @@ const stylesheet = `
   color: #909399;
 }
 .__ea-button.info.round {
-  border-radius: 999px;
+  --border-radius: 999px;
+}
+.__ea-button.info.medium {
+  font-size: 14px;
+}
+.__ea-button.info.small {
+  font-size: 12px;
+}
+.__ea-button.info.mini {
+  font-size: 10px;
 }
 .__ea-button.info:hover {
   border: 1px solid #abadb1;
@@ -157,10 +213,15 @@ const stylesheet = `
   background-color: #5d6066;
 }
 .__ea-button.warning {
+  --border-radius: 6px;
   border: 1px solid #e6a23c;
   color: #fff;
   background-color: #e6a23c;
   /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
@@ -178,7 +239,16 @@ const stylesheet = `
   color: #e6a23c;
 }
 .__ea-button.warning.round {
-  border-radius: 999px;
+  --border-radius: 999px;
+}
+.__ea-button.warning.medium {
+  font-size: 14px;
+}
+.__ea-button.warning.small {
+  font-size: 12px;
+}
+.__ea-button.warning.mini {
+  font-size: 10px;
 }
 .__ea-button.warning:hover {
   border: 1px solid #ecb869;
@@ -189,10 +259,15 @@ const stylesheet = `
   background-color: #a76d15;
 }
 .__ea-button.danger {
+  --border-radius: 6px;
   border: 1px solid #f56c6c;
   color: #fff;
   background-color: #f56c6c;
   /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
@@ -211,7 +286,16 @@ const stylesheet = `
   background-color: #fde8e8;
 }
 .__ea-button.danger.round {
-  border-radius: 999px;
+  --border-radius: 999px;
+}
+.__ea-button.danger.medium {
+  font-size: 14px;
+}
+.__ea-button.danger.small {
+  font-size: 12px;
+}
+.__ea-button.danger.mini {
+  font-size: 10px;
 }
 .__ea-button.danger:hover {
   border: 1px solid #f89c9c;
@@ -222,10 +306,15 @@ const stylesheet = `
   background-color: #eb1010;
 }
 .__ea-button.text {
+  --border-radius: 6px;
   border: 1px solid transparent;
   color: #409eff;
   background-color: transparent;
   /* ------- 按钮样式 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
@@ -244,7 +333,16 @@ const stylesheet = `
   color: transparent;
 }
 .__ea-button.text.round {
-  border-radius: 999px;
+  --border-radius: 999px;
+}
+.__ea-button.text.medium {
+  font-size: 14px;
+}
+.__ea-button.text.small {
+  font-size: 12px;
+}
+.__ea-button.text.mini {
+  font-size: 10px;
 }
 .__ea-button.text:hover {
   border: 1px solid rgba(26, 26, 26, 0);
@@ -272,15 +370,15 @@ export default class EaButton extends HTMLElement {
 
     // ------- 打包 -------
     // #region
-    // const styleNode = document.createElement('style');
-    // styleNode.innerHTML = stylesheet;
-    // this.shadowRoot.appendChild(styleNode);
+    const styleNode = document.createElement('style');
+    styleNode.innerHTML = stylesheet;
+    this.shadowRoot.appendChild(styleNode);
     // #endregion
     // ------- end -------
 
     // ------- 本地调试 -------
     // #region
-    setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
     // #endregion
     // ------- end -------
 
@@ -342,6 +440,9 @@ export default class EaButton extends HTMLElement {
   // #region
   get size() {
     return this.getAttribute('size');
+  }
+  set size(value) {
+    this.dom.classList.add(value);
   }
   // #endregion
   // ------- end -------
