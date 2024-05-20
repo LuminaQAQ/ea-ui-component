@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: 快速上手
-      link: /markdown-examples
+      link: /install
     - theme: alt
       text: 去 github 查看源码
       link: https://github.com/LuminaQAQ/ea_ui_component/tree/dev_1.0
