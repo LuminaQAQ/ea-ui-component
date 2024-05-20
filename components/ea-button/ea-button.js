@@ -1,6 +1,4 @@
 // @ts-nocheck
-import setStyle from "../../utils/setStyle";
-
 const styleSheet = `
 @charset "UTF-8";
 /**
@@ -221,7 +219,7 @@ const styleSheet = `
 .__ea-button.danger:active {
   background-color: #eb1010;
 }
-`
+`;
 
 export default class EaButton extends HTMLElement {
   constructor() {
