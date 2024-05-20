@@ -89,3 +89,17 @@ import { onMounted } from 'vue'
   <ea-button type="danger" disabled>危险按钮</ea-button>
 </div>
 ```
+
+## 文字按钮 `text`
+
+<div class="row left">
+  <ea-button type="text">文字按钮</ea-button>
+  <ea-button type="text" disabled>文字按钮</ea-button>
+</div>
+
+```html
+<div class="row left">
+  <ea-button type="text">文字按钮</ea-button>
+  <ea-button type="text" disabled>文字按钮</ea-button>
+</div>
+```
