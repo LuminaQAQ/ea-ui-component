@@ -319,6 +319,7 @@ export default class EaButton extends HTMLElement {
   }
   set round(value) {
     this.dom.classList.add(value);
+    this.dom.style.setProperty('--border-radius', '999px');
   }
   // #endregion
   // ------- end -------
@@ -337,6 +338,14 @@ export default class EaButton extends HTMLElement {
   // #endregion
   // ------- end -------
 
+  // ------- 按钮大小 -------
+  // #region
+  get size() {
+    return this.getAttribute('size');
+  }
+  // #endregion
+  // ------- end -------
+
   init() {
     const button = this.dom;
 
@@ -347,13 +356,32 @@ export default class EaButton extends HTMLElement {
     // 按钮样式
     for (let i = 0, style; style = this.BUTTON_STYLE[i++];) {
       if (this[style]) {
-        button.classList.add(style);
+        this[style] = style;
         break;
+      } else {
+        // this.dom.style.setProperty('--border-radius', '8px');
       }
     }
 
+    // 禁用属性
     if (this.disabled || this.ariaDisabled) button.classList.add('disabled');
+
+    // 按钮种类
     button.classList.add(this.type);
+
+    // 按钮大小
+    switch (this.size) {
+      case 'medium':
+        this.dom.classList.add('medium');
+        break;
+      case 'small':
+        this.dom.classList.add('small');
+        break;
+      case 'mini':
+        this.dom.classList.add('mini');
+        break;
+      default: break;
+    }
   }
 }
 

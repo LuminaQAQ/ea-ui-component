@@ -8,6 +8,7 @@
 */
 @mixin button-type($type, $border, $text, $bgc) {
   &.#{$type} {
+    --border-radius: 6px;
     // hover的颜色
     $border-hover: lighten($border, 10);
     $text-hover: lighten($text, 10);
@@ -75,6 +76,20 @@
     /* #endregion */
     /* ------- end  ------- */
 
+    /* ------- 按钮大小 ------- */
+    /* #region  */
+    &.medium {
+      font-size: 14px;
+    }
+    &.small {
+      font-size: 12px;
+    }
+    &.mini {
+      font-size: 10px;
+    }
+    /* #endregion */
+    /* ------- end  ------- */
+
     // 鼠标悬浮时样式
     &:hover {
       border: 1px solid $border-hover;
@@ -92,7 +107,6 @@
     }
   }
 }
-
 .__ea-button {
   box-sizing: border-box;
 
