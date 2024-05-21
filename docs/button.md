@@ -124,8 +124,8 @@ function change(e) {
 ## 图标按钮 `icon`
 
 <div class="row left">
-  <ea-button type="primary" icon="el-icon-edit">文字按钮</ea-button>
-  <ea-button type="primary" icon="el-icon-edit" disabled>文字按钮</ea-button>
+  <ea-button type="primary" icon="icon-firefox">文字按钮</ea-button>
+  <ea-button type="primary" icon="icon-chrome" disabled>文字按钮</ea-button>
 </div>
 
 ## 链接按钮 `href`
