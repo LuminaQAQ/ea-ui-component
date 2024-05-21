@@ -13,9 +13,25 @@
 * $text: 文字颜色
 * $bgc: 背景颜色
 */
+:host {
+  --margin-right: 1rem;
+  --border-radius: 6px;
+  --border-size: 1px;
+}
+
+:host([href]) > a {
+  text-decoration: none;
+}
+
+:host-context(ea-button-group) {
+  --margin-right: 0;
+  --border-size: 0;
+}
+
 .__ea-button {
   box-sizing: border-box;
   padding: 0.5rem 1rem;
+  margin-right: var(--margin-right);
   cursor: pointer;
   font-size: 1rem;
   line-height: 1.25;
@@ -24,8 +40,7 @@
   border-radius: var(--border-radius);
 }
 .__ea-button.normal {
-  --border-radius: 6px;
-  border: 1px solid #dcdfe6;
+  border: var(--border-size) solid #dcdfe6;
   color: #606266;
   background-color: transparent;
   /* ------- 按钮样式 ------- */
@@ -48,10 +63,10 @@
 }
 .__ea-button.normal.plain {
   background-color: rgba(92, 92, 92, 0);
-  border: 1px solid white;
+  border: var(--border-size) solid white;
   color: transparent;
   background-color: transparent;
-  border: 1px solid #dcdfe6;
+  border: var(--border-size) solid #dcdfe6;
   color: #606266;
 }
 .__ea-button.normal.plain:hover {
@@ -70,21 +85,20 @@
   font-size: 10px;
 }
 .__ea-button.normal:hover {
-  border: 1px solid rgba(160, 207, 255, 0.4);
+  border: var(--border-size) solid rgba(160, 207, 255, 0.4);
   color: #3a9bff;
   background-color: rgba(160, 207, 255, 0.05);
 }
 .__ea-button.normal:active {
   background-color: rgba(7, 130, 255, 0.05);
-  border: 1px solid rgba(33, 143, 255, 0.4);
+  border: var(--border-size) solid rgba(33, 143, 255, 0.4);
 }
 .__ea-button > i {
   font-size: 1rem;
   margin-right: 0.5rem;
 }
 .__ea-button.primary {
-  --border-radius: 6px;
-  border: 1px solid #409eff;
+  border: var(--border-size) solid #409eff;
   color: #fff;
   background-color: #409eff;
   /* ------- 按钮样式 ------- */
@@ -105,7 +119,7 @@
 }
 .__ea-button.primary.plain {
   background-color: #f8fbff;
-  border: 1px solid #c0dfff;
+  border: var(--border-size) solid #c0dfff;
   color: #409eff;
 }
 .__ea-button.primary.round {
@@ -121,7 +135,7 @@
   font-size: 10px;
 }
 .__ea-button.primary:hover {
-  border: 1px solid #73b8ff;
+  border: var(--border-size) solid #73b8ff;
   color: white;
   background-color: #73b8ff;
 }
@@ -133,8 +147,7 @@
   margin-right: 0.5rem;
 }
 .__ea-button.success {
-  --border-radius: 6px;
-  border: 1px solid #67c23a;
+  border: var(--border-size) solid #67c23a;
   color: #fff;
   background-color: #67c23a;
   /* ------- 按钮样式 ------- */
@@ -155,7 +168,7 @@
 }
 .__ea-button.success.plain {
   background-color: #d3eec6;
-  border: 1px solid #b2e19b;
+  border: var(--border-size) solid #b2e19b;
   color: #67c23a;
 }
 .__ea-button.success.round {
@@ -171,7 +184,7 @@
   font-size: 10px;
 }
 .__ea-button.success:hover {
-  border: 1px solid #85cf60;
+  border: var(--border-size) solid #85cf60;
   color: white;
   background-color: #85cf60;
 }
@@ -183,8 +196,7 @@
   margin-right: 0.5rem;
 }
 .__ea-button.info {
-  --border-radius: 6px;
-  border: 1px solid #909399;
+  border: var(--border-size) solid #909399;
   color: #fff;
   background-color: #909399;
   /* ------- 按钮样式 ------- */
@@ -205,7 +217,7 @@
 }
 .__ea-button.info.plain {
   background-color: #f0f0f1;
-  border: 1px solid #d2d4d6;
+  border: var(--border-size) solid #d2d4d6;
   color: #909399;
 }
 .__ea-button.info.round {
@@ -221,7 +233,7 @@
   font-size: 10px;
 }
 .__ea-button.info:hover {
-  border: 1px solid #abadb1;
+  border: var(--border-size) solid #abadb1;
   color: white;
   background-color: #abadb1;
 }
@@ -233,8 +245,7 @@
   margin-right: 0.5rem;
 }
 .__ea-button.warning {
-  --border-radius: 6px;
-  border: 1px solid #e6a23c;
+  border: var(--border-size) solid #e6a23c;
   color: #fff;
   background-color: #e6a23c;
   /* ------- 按钮样式 ------- */
@@ -255,7 +266,7 @@
 }
 .__ea-button.warning.plain {
   background-color: #fbf0df;
-  border: 1px solid #f4d8ad;
+  border: var(--border-size) solid #f4d8ad;
   color: #e6a23c;
 }
 .__ea-button.warning.round {
@@ -271,7 +282,7 @@
   font-size: 10px;
 }
 .__ea-button.warning:hover {
-  border: 1px solid #ecb869;
+  border: var(--border-size) solid #ecb869;
   color: white;
   background-color: #ecb869;
 }
@@ -283,8 +294,7 @@
   margin-right: 0.5rem;
 }
 .__ea-button.danger {
-  --border-radius: 6px;
-  border: 1px solid #f56c6c;
+  border: var(--border-size) solid #f56c6c;
   color: #fff;
   background-color: #f56c6c;
   /* ------- 按钮样式 ------- */
@@ -305,7 +315,7 @@
 }
 .__ea-button.danger.plain {
   background-color: white;
-  border: 1px solid #fde3e3;
+  border: var(--border-size) solid #fde3e3;
   color: #f56c6c;
   background-color: #fde8e8;
 }
@@ -322,7 +332,7 @@
   font-size: 10px;
 }
 .__ea-button.danger:hover {
-  border: 1px solid #f89c9c;
+  border: var(--border-size) solid #f89c9c;
   color: white;
   background-color: #f89c9c;
 }
@@ -334,8 +344,7 @@
   margin-right: 0.5rem;
 }
 .__ea-button.text {
-  --border-radius: 6px;
-  border: 1px solid transparent;
+  border: var(--border-size) solid transparent;
   color: #409eff;
   background-color: transparent;
   /* ------- 按钮样式 ------- */
@@ -357,7 +366,7 @@
 }
 .__ea-button.text.plain {
   background-color: rgba(92, 92, 92, 0);
-  border: 1px solid rgba(64, 64, 64, 0);
+  border: var(--border-size) solid rgba(64, 64, 64, 0);
   color: transparent;
 }
 .__ea-button.text.round {
@@ -373,7 +382,7 @@
   font-size: 10px;
 }
 .__ea-button.text:hover {
-  border: 1px solid rgba(26, 26, 26, 0);
+  border: var(--border-size) solid rgba(26, 26, 26, 0);
   color: #73b8ff;
   background-color: rgba(26, 26, 26, 0);
 }
@@ -384,7 +393,12 @@
   font-size: 1rem;
   margin-right: 0.5rem;
 }
-
-.__ea-button[href] {
-  text-decoration: none;
+.__ea-button.first-child {
+  border-radius: 4px 0 0 4px;
+}
+.__ea-button.middle-child {
+  border-radius: 0;
+}
+.__ea-button.last-child {
+  border-radius: 0 4px 4px 0;
 }

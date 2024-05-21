@@ -7,9 +7,25 @@
 * $text: 文字颜色
 * $bgc: 背景颜色
 */
+:host {
+  --margin-right: 1rem;
+  --border-radius: 6px;
+  --border-size: 1px;
+}
+
+:host([href]) {
+  & > a {
+    text-decoration: none;
+  }
+}
+
+:host-context(ea-button-group) {
+  --margin-right: 0;
+  --border-size: 0;
+}
+
 @mixin button-type($type, $border, $text, $bgc) {
   &.#{$type} {
-    --border-radius: 6px;
     // hover的颜色
     $border-hover: lighten($border, 10);
     $text-hover: lighten($text, 10);
@@ -23,7 +39,7 @@
     }
 
     // 默认样式
-    border: 1px solid $border;
+    border: var(--border-size) solid $border;
     color: $text;
     background-color: $bgc;
 
@@ -51,12 +67,12 @@
     // 朴素按钮
     &.plain {
       background-color: lighten($bgc, 36);
-      border: 1px solid lighten($border, 25);
+      border: var(--border-size) solid lighten($border, 25);
       color: $bgc;
 
       @if ($type == "normal") {
         background-color: transparent;
-        border: 1px solid $border;
+        border: var(--border-size) solid $border;
         color: $text;
 
         &:hover {
@@ -93,7 +109,7 @@
 
     // 鼠标悬浮时样式
     &:hover {
-      border: 1px solid $border-hover;
+      border: var(--border-size) solid $border-hover;
       color: $text-hover;
       background-color: $bgc-hover;
     }
@@ -103,7 +119,7 @@
       background-color: darken($bgc-hover, 30);
 
       @if ($type == "normal") {
-        border: 1px solid darken($border-hover, 25);
+        border: var(--border-size) solid darken($border-hover, 25);
       }
     }
   }
@@ -118,6 +134,7 @@
   box-sizing: border-box;
 
   padding: 0.5rem 1rem;
+  margin-right: var(--margin-right);
 
   cursor: pointer;
 
@@ -171,8 +188,14 @@
   );
 
   @include button-type("text", transparent, $color-primary-bgc, transparent);
-}
 
-.__ea-button[href] {
-  text-decoration: none;
+  &.first-child {
+    border-radius: 4px 0 0 4px;
+  }
+  &.middle-child {
+    border-radius: 0;
+  }
+  &.last-child {
+    border-radius: 0 4px 4px 0;
+  }
 }
