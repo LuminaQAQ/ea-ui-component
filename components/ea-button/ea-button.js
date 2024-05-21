@@ -485,7 +485,3 @@ export default class EaButton extends HTMLElement {
     }
   }
 }
-
-if (!window.customElements.get("ea-button")) {
-  window.customElements.define("ea-button", EaButton);
-}
