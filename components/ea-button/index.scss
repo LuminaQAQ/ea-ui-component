@@ -50,6 +50,7 @@
       background-color: lighten($bgc, 25) !important;
       border-color: lighten($border, 25) !important;
       color: lighten($text, 75) !important;
+      pointer-events: none;
 
       @if ($type == "normal") {
         border-color: lighten($border, 5) !important;
