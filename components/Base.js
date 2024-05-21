@@ -10,7 +10,7 @@ export default class Base extends HTMLElement {
 
             if (className) this.dom.classList.add(className);
         } else {
-            this.removeAttribute(attr);
+            if (this.hasAttribute(attr)) this.removeAttribute(attr);
             if (className) this.dom.classList.remove(className);
         }
     }

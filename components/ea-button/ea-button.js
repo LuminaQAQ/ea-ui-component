@@ -393,7 +393,7 @@ export default class EaButton extends Base {
   }
 
   static get observedAttributes() {
-    return ['loading'];
+    return ['loading', 'disabled'];
   }
 
   get BUTTON_STYLE() {
@@ -412,15 +412,16 @@ export default class EaButton extends Base {
   // ------- 禁用 -------
   // #region
   get disabled() {
-    return this.getAttribute('disabled') !== null;
+    return this.hasAttribute('disabled');
   }
 
   set disabled(value) {
+    console.log(this.disabled);
     this.toggleAttribute('disabled', value, 'disabled');
   }
 
   get ariaDisabled() {
-    return this.getAttribute('aria-disabled') !== null;
+    return this.getAttribute('aria-disabled') !== null || this.getAttribute('aria-disabled') !== undefined;
   }
 
   set ariaDisabled(value) {
@@ -501,7 +502,7 @@ export default class EaButton extends Base {
   // #endregion
   // ------- end -------
 
-  // -------  -------
+  // ------- 链接按钮 -------
   // #region
   get href() {
     return this.getAttribute('href');
@@ -520,8 +521,8 @@ export default class EaButton extends Base {
 
   init() {
     // 禁用
-    this.disabled = this.disabled;
-    this.ariaDisabled = this.ariaDisabled;
+    // this.ariaDisabled = this.ariaDisabled;
+    this.disabled = this.hasAttribute('disabled');
 
     // 加载
     this.loading = this.loading;
@@ -551,9 +552,15 @@ export default class EaButton extends Base {
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue == newValue) return;
 
-    if (name == "loading") {
-      if (newValue === "") newValue = true;
-      this.loading = newValue;
+    switch (name) {
+      case "loading":
+        if (newValue === "") newValue = true;
+        this.loading = newValue;
+        break;
+      case "disabled":
+        this.disabled = newValue === "true" || newValue === "";
+        break;
+      default: break;
     }
   }
 }
