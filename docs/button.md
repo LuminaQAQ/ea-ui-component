@@ -9,7 +9,11 @@ onMounted(() => {
 })
 
 function change(e) {
-  e.target.getAttribute('loading') !== null ? e.target.removeAttribute('loading') : e.target.setAttribute('loading', 'true');
+  e.target.getAttribute('loading') !== null ? e.target.removeAttribute('loading') : e.target.setAttribute('loading', true);
+}
+
+function hrefDisabled(e) {
+  e.target.getAttribute('disabled') !== null ? e.target.removeAttribute('disabled') : e.target.setAttribute('disabled', true);
 }
 </script>
 
@@ -133,15 +137,23 @@ function change(e) {
 对普通链接的样式进行美化，可以在不同场景下选择相应的样式。
 
 <div class="row left">
-  <ea-button type="text" href="https://www.baidu.com">文字按钮</ea-button>
-  <ea-button type="normal" href="https://www.baidu.com">文字按钮</ea-button>
+  <ea-button type="text" href="https://www.baidu.com">链接按钮</ea-button>
+  <ea-button @click="hrefDisabled" type="normal" href="https://www.baidu.com" disabled>链接按钮</ea-button>
 </div>
 
 ```html
 <div class="row left">
   <ea-button type="text">文字按钮</ea-button>
-  <ea-button type="text" disabled>文字按钮</ea-button>
+  <ea-button class="ea-button-a" type="text" disabled>文字按钮</ea-button>
 </div>
+
+<script>
+  document.querySelector("ea-button-a").addEventListener("click", function (e) {
+    e.target.getAttribute("disabled") !== null
+      ? e.target.removeAttribute("disabled")
+      : e.target.setAttribute("disabled", true);
+  });
+</script>
 ```
 
 ## 按钮组 `button-group`
@@ -189,7 +201,7 @@ function change(e) {
   document.querySelector(".ea-button").addEventListener("click", function (e) {
     e.target.getAttribute("loading") !== null
       ? e.target.removeAttribute("loading")
-      : e.target.setAttribute("loading", "true");
+      : e.target.setAttribute("loading", true);
   });
 </script>
 ```

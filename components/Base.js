@@ -6,10 +6,11 @@ export default class Base extends HTMLElement {
 
     toggleAttribute(attr, flag, className) {
         if (flag) {
-            this.setAttribute(attr, '');
+            this.setAttribute(attr, flag);
 
             if (className) this.dom.classList.add(className);
         } else {
+
             if (this.hasAttribute(attr)) this.removeAttribute(attr);
             if (className) this.dom.classList.remove(className);
         }

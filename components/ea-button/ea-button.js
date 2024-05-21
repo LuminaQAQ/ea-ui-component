@@ -412,11 +412,10 @@ export default class EaButton extends Base {
   // ------- 禁用 -------
   // #region
   get disabled() {
-    return this.hasAttribute('disabled');
+    return this.getAttribute('disabled') !== null;
   }
 
   set disabled(value) {
-    console.log(this.disabled);
     this.toggleAttribute('disabled', value, 'disabled');
   }
 
@@ -507,6 +506,7 @@ export default class EaButton extends Base {
   get href() {
     return this.getAttribute('href');
   }
+
   set href(value) {
     if (value == null || value == false) {
       this.removeAttribute('href');
@@ -551,14 +551,15 @@ export default class EaButton extends Base {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue == newValue) return;
-
     switch (name) {
       case "loading":
         if (newValue === "") newValue = true;
         this.loading = newValue;
         break;
       case "disabled":
+        console.log();
         this.disabled = newValue === "true" || newValue === "";
+        if (newValue === "true" || newValue === "") this.setAttribute("disabled", true);
         break;
       default: break;
     }
