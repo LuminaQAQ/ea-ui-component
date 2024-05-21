@@ -19,6 +19,8 @@ function change(e) {
 
 ## 基础用法 `normal`
 
+基础的按钮用法。
+
 <div class="row">
     <ea-button>默认按钮</ea-button>
     <ea-button type="primary">主要按钮</ea-button>
@@ -38,6 +40,8 @@ function change(e) {
 ```
 
 ## 朴素按钮 `plain`
+
+朴素按钮用法。
 
 <div class="row">
     <ea-button plain>朴素按钮</ea-button>
@@ -59,6 +63,8 @@ function change(e) {
 
 ## 圆角按钮 `round`
 
+圆角按钮用法。
+
 <div class="row">
     <ea-button round>圆角按钮</ea-button>
     <ea-button type="primary" round>主要按钮</ea-button>
@@ -78,6 +84,8 @@ function change(e) {
 ```
 
 ## 禁用按钮 `disabled`
+
+按钮不可用状态。
 
 <div class="row">
   <ea-button disabled>禁用按钮</ea-button>
@@ -99,6 +107,8 @@ function change(e) {
 
 ## 文字按钮 `text`
 
+没有边框和背景色的按钮。
+
 <div class="row left">
   <ea-button type="text">文字按钮</ea-button>
   <ea-button type="text" disabled>文字按钮</ea-button>
@@ -111,7 +121,16 @@ function change(e) {
 </div>
 ```
 
+## 图标按钮 `icon`
+
+<div class="row left">
+  <ea-button type="primary" icon="el-icon-edit">文字按钮</ea-button>
+  <ea-button type="primary" icon="el-icon-edit" disabled>文字按钮</ea-button>
+</div>
+
 ## 链接按钮 `href`
+
+对普通链接的样式进行美化，可以在不同场景下选择相应的样式。
 
 <div class="row left">
   <ea-button type="text" href="https://www.baidu.com">文字按钮</ea-button>
@@ -126,6 +145,8 @@ function change(e) {
 ```
 
 ## 按钮组 `button-group`
+
+以按钮组的方式出现，常用于多项类似操作。
 
 <div class="row left">
   <ea-button-group>
@@ -153,7 +174,7 @@ function change(e) {
 
 ## 加载中 `loading`
 
-可以点击尝试
+点击按钮后进行数据加载操作，在按钮上显示加载状态。可以点击尝试。
 
 <div class="row left">
   <ea-button @click="change" type="primary" loading>默认按钮</ea-button>
@@ -174,6 +195,8 @@ function change(e) {
 ```
 
 ## 不同尺寸 `size`
+
+Button 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。
 
 <div class="row">
   <ea-button round>默认按钮</ea-button>

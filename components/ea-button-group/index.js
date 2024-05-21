@@ -462,19 +462,32 @@ export default class EaButtonGroup extends HTMLElement {
 
     // ------- 打包 -------
     // #region
-    const styleNode = document.createElement('style');
-    styleNode.innerHTML = stylesheet;
-    this.shadowRoot.appendChild(styleNode);
+    // const styleNode = document.createElement('style');
+    // styleNode.innerHTML = stylesheet;
+    // this.shadowRoot.appendChild(styleNode);
     // #endregion
     // ------- end -------
 
     // ------- 本地调试 -------
     // #region
-    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
     // #endregion
     // ------- end -------
 
-
     shadowRoot.appendChild(dom);
+  }
+
+  // 指定各个按钮的样式
+  connectedCallback() {
+    Array.from(this.children).map((child, index, arr) => {
+      const button = child.shadowRoot.querySelector('button');
+      if (index === 0) {
+        button.style.setProperty('--border-radius', '4px 0 0 4px');
+      } else if (index === arr.length - 1) {
+        button.style.setProperty('--border-radius', '0 4px 4px 0');
+      } else {
+        button.style.setProperty('--border-radius', '0');
+      }
+    })
   }
 }

@@ -555,10 +555,5 @@ export default class EaButton extends Base {
       if (newValue === "") newValue = true;
       this.loading = newValue;
     }
-
-
-    this.addEventListener('click', function () {
-
-    })
   }
 }
