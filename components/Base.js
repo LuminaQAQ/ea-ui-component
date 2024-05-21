@@ -1,0 +1,17 @@
+// @ts-nocheck
+export default class Base extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    toggleAttribute(attr, flag, className) {
+        if (flag) {
+            this.setAttribute(attr, '');
+
+            if (className) this.dom.classList.add(className);
+        } else {
+            this.removeAttribute(attr);
+            if (className) this.dom.classList.remove(className);
+        }
+    }
+}

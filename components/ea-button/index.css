@@ -1,15 +1,11 @@
 @charset "UTF-8";
-@import "./ea-icon/css/animation.css";
-@import "./ea-icon/css/fontello.css";
-@import "./ea-icon/css/fontello-codes.css";
-@import "./ea-icon/css/fontello-embedded.css";
-@import "./ea-icon/css/fontello-ie7.css";
-@import "./ea-icon/css/fontello-ie7-codes.css";
+@import "../ea-icon/css/fontello.css";
+@import "../ea-icon/css/animation.css";
 @font-face {
   font-size: 1rem;
   font-size: 16px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  src: url("./ea-icon/font/fontello.eot") format("embedded-opentype"), url("./ea-icon/font/fontello.ttf") format("truetype"), url("./ea-icon/font/fontello.woff") format("woff"), url("./ea-icon/font/fontello.woff2") format("woff2"), url("./ea-icon/font/fontello.svg") format("svg");
+  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
 }
 /**
 * $type: 按钮类型的类名
@@ -82,6 +78,10 @@
   background-color: rgba(7, 130, 255, 0.05);
   border: 1px solid rgba(33, 143, 255, 0.4);
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.primary {
   --border-radius: 6px;
   border: 1px solid #409eff;
@@ -127,6 +127,10 @@
 }
 .__ea-button.primary:active {
   background-color: #006bd9;
+}
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
 }
 .__ea-button.success {
   --border-radius: 6px;
@@ -174,6 +178,10 @@
 .__ea-button.success:active {
   background-color: #3d7323;
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.info {
   --border-radius: 6px;
   border: 1px solid #909399;
@@ -220,6 +228,10 @@
 .__ea-button.info:active {
   background-color: #5d6066;
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.warning {
   --border-radius: 6px;
   border: 1px solid #e6a23c;
@@ -265,6 +277,10 @@
 }
 .__ea-button.warning:active {
   background-color: #a76d15;
+}
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
 }
 .__ea-button.danger {
   --border-radius: 6px;
@@ -313,6 +329,10 @@
 .__ea-button.danger:active {
   background-color: #eb1010;
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.text {
   --border-radius: 6px;
   border: 1px solid transparent;
@@ -359,4 +379,12 @@
 }
 .__ea-button.text:active {
   background-color: rgba(0, 0, 0, 0);
+}
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+
+.__ea-button[href] {
+  text-decoration: none;
 }

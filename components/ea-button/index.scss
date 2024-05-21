@@ -1,4 +1,5 @@
 @import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
 
 /**
 * $type: 按钮类型的类名
@@ -106,7 +107,13 @@
       }
     }
   }
+
+  & > i {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
 }
+
 .__ea-button {
   box-sizing: border-box;
 
@@ -164,4 +171,8 @@
   );
 
   @include button-type("text", transparent, $color-primary-bgc, transparent);
+}
+
+.__ea-button[href] {
+  text-decoration: none;
 }

@@ -3,8 +3,7 @@ import {onMounted} from "vue"
 import configs from "../components/ea-icon/config.json"
 
 onMounted(() => {
-    import("../components/ea-ui-base-style.scss")
-    import("../components/ea-icon/index.scss")
+    import("./index.scss")
 })
 </script>
 
@@ -20,8 +19,7 @@ onMounted(() => {
 <i class="icon-chrome"></i>
 
 ```html
-<i class="icon-spin6 animate-spin"></i>
-<i class="icon-chrome"></i>
+<i class="icon-spin6 animate-spin"></i> <i class="icon-chrome"></i>
 ```
 
 ## 图标集合
