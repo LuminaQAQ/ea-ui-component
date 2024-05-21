@@ -1,5 +1,7 @@
 // @ts-nocheck
 import setStyle from "../../utils/setStyle";
+import Base from "../Base";
+import "../ea-icon/index.scss";
 
 const stylesheet = `
 @charset "UTF-8";
@@ -354,14 +356,18 @@ const stylesheet = `
 }
 `;
 
-export default class EaButton extends HTMLElement {
+export default class EaButton extends Base {
 
   constructor() {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
+    let dom = null;
 
-    const dom = document.createElement('button');
+
+    if (this.getAttribute('href') !== null && this.getAttribute('href') !== '') dom = document.createElement('a');
+    else dom = document.createElement('button');
+
     const slot = document.createElement('slot');
     dom.className = "__ea-button";
     dom.appendChild(slot);
@@ -370,26 +376,38 @@ export default class EaButton extends HTMLElement {
 
     // ------- 打包 -------
     // #region
-    const styleNode = document.createElement('style');
-    styleNode.innerHTML = stylesheet;
-    this.shadowRoot.appendChild(styleNode);
+    // const styleNode = document.createElement('style');
+    // styleNode.innerHTML = stylesheet;
+    // this.shadowRoot.appendChild(styleNode);
     // #endregion
     // ------- end -------
 
     // ------- 本地调试 -------
     // #region
-    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
     // #endregion
     // ------- end -------
 
 
     shadowRoot.appendChild(dom);
-    this.init();
+  }
+
+  static get observedAttributes() {
+    return ['loading'];
   }
 
   get BUTTON_STYLE() {
     return ['plain', 'round'];
   }
+
+  get BUTTON_TYPE() {
+    return ['normal', 'primary', 'success', 'warning', 'danger', 'text'];
+  }
+
+  get BUTTON_SIZE() {
+    return ['medium', 'small', 'mini'];
+  }
+
 
   // ------- 禁用 -------
   // #region
@@ -397,8 +415,16 @@ export default class EaButton extends HTMLElement {
     return this.getAttribute('disabled') !== null;
   }
 
+  set disabled(value) {
+    this.toggleAttribute('disabled', value, 'disabled');
+  }
+
   get ariaDisabled() {
     return this.getAttribute('aria-disabled') !== null;
+  }
+
+  set ariaDisabled(value) {
+    this.toggleAttribute('aria-disabled', value, 'disabled');
   }
   // #endregion
   // ------- end -------
@@ -409,15 +435,16 @@ export default class EaButton extends HTMLElement {
     return this.getAttribute('plain') !== undefined && this.getAttribute('plain') !== null;
   }
   set plain(value) {
-    this.dom.classList.add(value);
+    this.toggleAttribute('plain', value, 'plain');
   }
 
   get round() {
     return this.getAttribute('round') !== undefined && this.getAttribute('round') !== null;
   }
   set round(value) {
-    this.dom.classList.add(value);
-    this.dom.style.setProperty('--border-radius', '999px');
+    this.toggleAttribute('round', value, 'round');
+
+    if (value) this.dom.style.setProperty('--border-radius', '999px');
   }
   // #endregion
   // ------- end -------
@@ -426,12 +453,15 @@ export default class EaButton extends HTMLElement {
   // #region
   get type() {
     const attr = this.getAttribute('type');
+
     if (attr == null || attr == false) return 'normal';
     else return attr;
   }
 
   set type(value) {
-    this.dom.classList.add(value);
+    if (!this.BUTTON_TYPE.includes(value)) value = 'normal';
+
+    this.toggleAttribute('type', value, value);
   }
   // #endregion
   // ------- end -------
@@ -442,46 +472,93 @@ export default class EaButton extends HTMLElement {
     return this.getAttribute('size');
   }
   set size(value) {
-    this.dom.classList.add(value);
+    if (!this.BUTTON_SIZE.includes(value)) return;
+
+    this.toggleAttribute('size', value, value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 按钮加载 -------
+  // #region
+  get loading() {
+    return this.getAttribute('loading') !== null && this.getAttribute('loading') !== undefined;
+  }
+
+  set loading(value) {
+    this.toggleAttribute('loading', value, 'loading');
+    this.disabled = value;
+
+    if (value && !this.dom.querySelector('i')) {
+      const i = document.createElement('i');
+      i.className = "icon-spin6 animate-spin";
+
+      this.dom.insertBefore(i, this.dom.firstChild)
+    } else if (!value && this.dom.querySelector('i')) {
+      this.dom.querySelector('i').remove();
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  // -------  -------
+  // #region
+  get href() {
+    return this.getAttribute('href');
+  }
+  set href(value) {
+    if (value == null || value == false) {
+      this.removeAttribute('href');
+      this.dom.removeAttribute('href');
+    } else {
+      this.setAttribute('href', value);
+      this.dom.setAttribute('href', value);
+    }
   }
   // #endregion
   // ------- end -------
 
   init() {
-    const button = this.dom;
-
     // 禁用
-    button.disabled = this.disabled;
-    button.ariaDisabled = this.ariaDisabled;
+    this.disabled = this.disabled;
+    this.ariaDisabled = this.ariaDisabled;
+
+    // 加载
+    this.loading = this.loading;
 
     // 按钮样式
     for (let i = 0, style; style = this.BUTTON_STYLE[i++];) {
       if (this[style]) {
-        this[style] = style;
+        this[style] = this[style];
         break;
-      } else {
-        // this.dom.style.setProperty('--border-radius', '8px');
       }
     }
 
-    // 禁用属性
-    if (this.disabled || this.ariaDisabled) button.classList.add('disabled');
-
     // 按钮种类
-    button.classList.add(this.type);
+    this.type = this.type;
 
     // 按钮大小
-    switch (this.size) {
-      case 'medium':
-        this.dom.classList.add('medium');
-        break;
-      case 'small':
-        this.dom.classList.add('small');
-        break;
-      case 'mini':
-        this.dom.classList.add('mini');
-        break;
-      default: break;
+    this.size = this.size;
+
+    // 链接
+    this.href = this.href;
+  }
+
+  connectedCallback() {
+    this.init();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue == newValue) return;
+
+    if (name == "loading") {
+      if (newValue === "") newValue = true;
+      this.loading = newValue;
     }
+
+
+    this.addEventListener('click', function () {
+
+    })
   }
 }

@@ -2,18 +2,10 @@
 import { onMounted } from 'vue'
 
   onMounted(() => {
-    import('../index.js')
-    import('./css/index.css')
+    import('./index.scss')
   })
 </script>
 
 <div class="row left">
-    <ea-button type="primary" loading>文字按钮</ea-button>
+  <i class="icon-spin6"></i>
 </div>
-
-```html
-<div class="row left">
-  <ea-button type="text">文字按钮</ea-button>
-  <ea-button type="text" disabled>文字按钮</ea-button>
-</div>
-```

@@ -1,9 +1,16 @@
 <script setup>
-import { onMounted } from 'vue'
-  onMounted(() => {
-    import('../index.js')
-    import('./css/index.scss')
-  })
+import { onMounted, ref } from 'vue'
+
+const btn = ref(null);
+
+onMounted(() => {
+  import('../index.js')
+  import('./index.scss')
+})
+
+function change(e) {
+  e.target.getAttribute('loading') !== null ? e.target.removeAttribute('loading') : e.target.setAttribute('loading', 'true');
+}
 </script>
 
 # Button 按钮
@@ -104,6 +111,20 @@ import { onMounted } from 'vue'
 </div>
 ```
 
+## 链接按钮 `href`
+
+<div class="row left">
+  <ea-button type="text" href="https://www.baidu.com">文字按钮</ea-button>
+  <ea-button type="normal" href="https://www.baidu.com">文字按钮</ea-button>
+</div>
+
+```html
+<div class="row left">
+  <ea-button type="text">文字按钮</ea-button>
+  <ea-button type="text" disabled>文字按钮</ea-button>
+</div>
+```
+
 ## 按钮组 `button-group`
 
 <div class="row left">
@@ -132,6 +153,26 @@ import { onMounted } from 'vue'
 
 ## 加载中 `loading`
 
+可以点击尝试
+
+<div class="row left">
+  <ea-button @click="change" type="primary" loading>默认按钮</ea-button>
+</div>
+
+```html
+<div class="row">
+  <ea-button class="ea-button" round>默认按钮</ea-button>
+</div>
+
+<script>
+  document.querySelector(".ea-button").addEventListener("click", function (e) {
+    e.target.getAttribute("loading") !== null
+      ? e.target.removeAttribute("loading")
+      : e.target.setAttribute("loading", "true");
+  });
+</script>
+```
+
 ## 不同尺寸 `size`
 
 <div class="row">
@@ -149,3 +190,16 @@ import { onMounted } from 'vue'
   <ea-button size="mini" round>超小按钮</ea-button>
 </div>
 ```
+
+## Attributes
+
+| 参数     | 说明       | 类型    | 可选值                                           | 默认值 |
+| -------- | ---------- | ------- | ------------------------------------------------ | ------ |
+| size     | 尺寸       | string  | normal/medium/small/mini                         | normal |
+| type     | 类型       | string  | normal/primary/success <br> /warning/danger/text | normal |
+| plain    | 朴素按钮   | boolean | true/false                                       | false  |
+| disabled | 禁用状态   | boolean | true/false                                       | false  |
+| round    | 圆角按钮   | boolean | true/false                                       | false  |
+| loading  | 加载中状态 | boolean | true/false                                       | false  |
+| icon     | 图标类名   | string  | -                                                | -      |
+| href     | 链接地址   | string  | -                                                | -      |
