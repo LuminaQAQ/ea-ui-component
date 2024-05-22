@@ -480,7 +480,8 @@ export default class EaButtonGroup extends HTMLElement {
   // 指定各个按钮的样式
   connectedCallback() {
     Array.from(this.children).map((child, index, arr) => {
-      const button = child.shadowRoot.querySelector('button');
+      const button = !child.shadowRoot ? child : child.shadowRoot.querySelector('button');
+      
       if (index === 0) {
         button.style.setProperty('--border-radius', '4px 0 0 4px');
       } else if (index === arr.length - 1) {
