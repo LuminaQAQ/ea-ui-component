@@ -422,7 +422,6 @@ export default class EaButton extends Base {
     } else {
       this.toggleAttribute('disabled', value, 'disabled');
     }
-    console.log(this.getAttribute('disabled'));
   }
 
   get ariaDisabled() {
@@ -515,7 +514,7 @@ export default class EaButton extends Base {
   }
 
   set href(value) {
-    if (value == null || value == false) {
+    if (value == null && value == false) {
       this.removeAttribute('href');
       this.dom.removeAttribute('href');
     } else {
