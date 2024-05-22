@@ -555,6 +555,31 @@ export default class EaButton extends Base {
   // #endregion
   // ------- end -------
 
+  // ------- 图标按钮 -------
+  // #region
+  get icon() {
+    return this.getAttribute('icon');
+  }
+
+  set icon(value) {
+    if (value) {
+      this.setAttribute('icon', value);
+
+      if (!this.dom.querySelector('i')) {
+        const i = document.createElement('i');
+        i.className = value;
+        if (!this.innerHTML) i.style.setProperty('margin-right', '0');
+
+        this.dom.insertBefore(i, this.dom.firstChild)
+      }
+    } else {
+      this.removeAttribute('icon');
+      this.dom.querySelector('i')?.remove();
+    }
+  }
+  // #endregion
+  // ------- end -------
+
   // ------- 链接按钮 -------
   // #region
   get href() {
@@ -563,7 +588,7 @@ export default class EaButton extends Base {
 
   set href(value) {
     if (this.shadowRoot.querySelector("button")) return;
-    
+
     if (value == null && value == false) {
       this.removeAttribute('href');
       this.dom.removeAttribute('href');
@@ -598,6 +623,9 @@ export default class EaButton extends Base {
 
     // 链接
     this.href = this.href;
+
+    // 图标
+    this.icon = this.icon;
   }
 
   connectedCallback() {

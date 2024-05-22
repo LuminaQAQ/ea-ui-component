@@ -133,14 +133,27 @@ onMounted(() => {
 
 ## 图标按钮 `icon`
 
+带图标的按钮可增强辨识度（有文字）或节省空间（无文字）。
+
 <div class="row left">
-  <ea-button type="primary" icon="icon-firefox">文字按钮</ea-button>
-  <ea-button type="primary" icon="icon-chrome" disabled>文字按钮</ea-button>
+  <ea-button type="primary" icon="icon-edit"></ea-button>
+  <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
+  <ea-button type="primary" icon="icon-trash-empty" disabled>图标按钮</ea-button>
 </div>
+
+```html
+<div class="row left">
+  <ea-button type="primary" icon="icon-edit"></ea-button>
+  <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
+  <ea-button type="primary" icon="icon-trash-empty" disabled
+    >图标按钮</ea-button
+  >
+</div>
+```
 
 ## 链接按钮 `href`
 
-对普通链接的样式进行美化，可以在不同场景下选择相应的样式。(该示例中, 点击可解禁链接按钮)
+对普通链接的样式进行美化，可以在不同场景下选择相应的样式。<br/> (该示例中, 点击可解禁链接按钮)
 
 <div class="row left">
   <ea-button type="text" href="https://www.baidu.com">链接按钮</ea-button>
@@ -197,12 +210,12 @@ onMounted(() => {
 点击按钮后进行数据加载操作，在按钮上显示加载状态。可以点击尝试。
 
 <div class="row left">
-  <ea-button id="ea-button-loading" type="primary" loading>默认按钮</ea-button>
+  <ea-button id="ea-button-loading" type="primary" loading>加载中按钮</ea-button>
 </div>
 
 ```html
 <div class="row">
-  <ea-button id="ea-button-loading" round>默认按钮</ea-button>
+  <ea-button id="ea-button-loading" round>加载中按钮</ea-button>
 </div>
 
 <script>
