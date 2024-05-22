@@ -425,15 +425,15 @@ export default class EaButton extends Base {
 
     // ------- 打包 -------
     // #region
-    const styleNode = document.createElement('style');
-    styleNode.innerHTML = stylesheet;
-    this.shadowRoot.appendChild(styleNode);
+    // const styleNode = document.createElement('style');
+    // styleNode.innerHTML = stylesheet;
+    // this.shadowRoot.appendChild(styleNode);
     // #endregion
     // ------- end -------
 
     // ------- 本地调试 -------
     // #region
-    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
     // #endregion
     // ------- end -------
 
@@ -562,6 +562,8 @@ export default class EaButton extends Base {
   }
 
   set href(value) {
+    if (this.shadowRoot.querySelector("button")) return;
+    
     if (value == null && value == false) {
       this.removeAttribute('href');
       this.dom.removeAttribute('href');
