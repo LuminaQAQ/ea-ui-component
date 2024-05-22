@@ -4,16 +4,27 @@ import Base from "../Base";
 import "../ea-icon/index.scss";
 
 const stylesheet = `
-@charset "UTF-8";
-/**
-* $type: 按钮类型的类名
-* $border: 边框颜色
-* $text: 文字颜色
-* $bgc: 背景颜色
-*/
+@import url('/ea_ui_component/icon/index.css');
+
+:host {
+  --margin-right: 1rem;
+  --border-radius: 6px;
+  --border-size: 1px;
+}
+
+:host([href]) > a {
+  text-decoration: none;
+}
+
+:host-context(ea-button-group) {
+  --margin-right: 0;
+  --border-size: 0;
+}
+
 .__ea-button {
   box-sizing: border-box;
   padding: 0.5rem 1rem;
+  margin-right: var(--margin-right);
   cursor: pointer;
   font-size: 1rem;
   line-height: 1.25;
@@ -22,8 +33,7 @@ const stylesheet = `
   border-radius: var(--border-radius);
 }
 .__ea-button.normal {
-  --border-radius: 6px;
-  border: 1px solid #dcdfe6;
+  border: var(--border-size) solid #dcdfe6;
   color: #606266;
   background-color: transparent;
   /* ------- 按钮样式 ------- */
@@ -41,15 +51,16 @@ const stylesheet = `
   background-color: rgba(64, 64, 64, 0) !important;
   border-color: white !important;
   color: white !important;
+  pointer-events: none;
   border-color: #ebedf1 !important;
   color: #babcbe !important;
 }
 .__ea-button.normal.plain {
   background-color: rgba(92, 92, 92, 0);
-  border: 1px solid white;
+  border: var(--border-size) solid white;
   color: transparent;
   background-color: transparent;
-  border: 1px solid #dcdfe6;
+  border: var(--border-size) solid #dcdfe6;
   color: #606266;
 }
 .__ea-button.normal.plain:hover {
@@ -68,17 +79,20 @@ const stylesheet = `
   font-size: 10px;
 }
 .__ea-button.normal:hover {
-  border: 1px solid rgba(160, 207, 255, 0.4);
+  border: var(--border-size) solid rgba(160, 207, 255, 0.4);
   color: #3a9bff;
   background-color: rgba(160, 207, 255, 0.05);
 }
 .__ea-button.normal:active {
   background-color: rgba(7, 130, 255, 0.05);
-  border: 1px solid rgba(33, 143, 255, 0.4);
+  border: var(--border-size) solid rgba(33, 143, 255, 0.4);
+}
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
 }
 .__ea-button.primary {
-  --border-radius: 6px;
-  border: 1px solid #409eff;
+  border: var(--border-size) solid #409eff;
   color: #fff;
   background-color: #409eff;
   /* ------- 按钮样式 ------- */
@@ -96,10 +110,11 @@ const stylesheet = `
   background-color: #c0dfff !important;
   border-color: #c0dfff !important;
   color: white !important;
+  pointer-events: none;
 }
 .__ea-button.primary.plain {
   background-color: #f8fbff;
-  border: 1px solid #c0dfff;
+  border: var(--border-size) solid #c0dfff;
   color: #409eff;
 }
 .__ea-button.primary.round {
@@ -115,16 +130,19 @@ const stylesheet = `
   font-size: 10px;
 }
 .__ea-button.primary:hover {
-  border: 1px solid #73b8ff;
+  border: var(--border-size) solid #73b8ff;
   color: white;
   background-color: #73b8ff;
 }
 .__ea-button.primary:active {
   background-color: #006bd9;
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.success {
-  --border-radius: 6px;
-  border: 1px solid #67c23a;
+  border: var(--border-size) solid #67c23a;
   color: #fff;
   background-color: #67c23a;
   /* ------- 按钮样式 ------- */
@@ -142,10 +160,11 @@ const stylesheet = `
   background-color: #b2e19b !important;
   border-color: #b2e19b !important;
   color: white !important;
+  pointer-events: none;
 }
 .__ea-button.success.plain {
   background-color: #d3eec6;
-  border: 1px solid #b2e19b;
+  border: var(--border-size) solid #b2e19b;
   color: #67c23a;
 }
 .__ea-button.success.round {
@@ -161,16 +180,19 @@ const stylesheet = `
   font-size: 10px;
 }
 .__ea-button.success:hover {
-  border: 1px solid #85cf60;
+  border: var(--border-size) solid #85cf60;
   color: white;
   background-color: #85cf60;
 }
 .__ea-button.success:active {
   background-color: #3d7323;
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.info {
-  --border-radius: 6px;
-  border: 1px solid #909399;
+  border: var(--border-size) solid #909399;
   color: #fff;
   background-color: #909399;
   /* ------- 按钮样式 ------- */
@@ -188,10 +210,11 @@ const stylesheet = `
   background-color: #d2d4d6 !important;
   border-color: #d2d4d6 !important;
   color: white !important;
+  pointer-events: none;
 }
 .__ea-button.info.plain {
   background-color: #f0f0f1;
-  border: 1px solid #d2d4d6;
+  border: var(--border-size) solid #d2d4d6;
   color: #909399;
 }
 .__ea-button.info.round {
@@ -207,16 +230,19 @@ const stylesheet = `
   font-size: 10px;
 }
 .__ea-button.info:hover {
-  border: 1px solid #abadb1;
+  border: var(--border-size) solid #abadb1;
   color: white;
   background-color: #abadb1;
 }
 .__ea-button.info:active {
   background-color: #5d6066;
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.warning {
-  --border-radius: 6px;
-  border: 1px solid #e6a23c;
+  border: var(--border-size) solid #e6a23c;
   color: #fff;
   background-color: #e6a23c;
   /* ------- 按钮样式 ------- */
@@ -234,10 +260,11 @@ const stylesheet = `
   background-color: #f4d8ad !important;
   border-color: #f4d8ad !important;
   color: white !important;
+  pointer-events: none;
 }
 .__ea-button.warning.plain {
   background-color: #fbf0df;
-  border: 1px solid #f4d8ad;
+  border: var(--border-size) solid #f4d8ad;
   color: #e6a23c;
 }
 .__ea-button.warning.round {
@@ -253,16 +280,19 @@ const stylesheet = `
   font-size: 10px;
 }
 .__ea-button.warning:hover {
-  border: 1px solid #ecb869;
+  border: var(--border-size) solid #ecb869;
   color: white;
   background-color: #ecb869;
 }
 .__ea-button.warning:active {
   background-color: #a76d15;
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.danger {
-  --border-radius: 6px;
-  border: 1px solid #f56c6c;
+  border: var(--border-size) solid #f56c6c;
   color: #fff;
   background-color: #f56c6c;
   /* ------- 按钮样式 ------- */
@@ -280,10 +310,11 @@ const stylesheet = `
   background-color: #fde3e3 !important;
   border-color: #fde3e3 !important;
   color: white !important;
+  pointer-events: none;
 }
 .__ea-button.danger.plain {
   background-color: white;
-  border: 1px solid #fde3e3;
+  border: var(--border-size) solid #fde3e3;
   color: #f56c6c;
   background-color: #fde8e8;
 }
@@ -300,16 +331,19 @@ const stylesheet = `
   font-size: 10px;
 }
 .__ea-button.danger:hover {
-  border: 1px solid #f89c9c;
+  border: var(--border-size) solid #f89c9c;
   color: white;
   background-color: #f89c9c;
 }
 .__ea-button.danger:active {
   background-color: #eb1010;
 }
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
 .__ea-button.text {
-  --border-radius: 6px;
-  border: 1px solid transparent;
+  border: var(--border-size) solid transparent;
   color: #409eff;
   background-color: transparent;
   /* ------- 按钮样式 ------- */
@@ -327,11 +361,12 @@ const stylesheet = `
   background-color: rgba(64, 64, 64, 0) !important;
   border-color: rgba(64, 64, 64, 0) !important;
   color: white !important;
+  pointer-events: none;
   color: #c0c4cc !important;
 }
 .__ea-button.text.plain {
   background-color: rgba(92, 92, 92, 0);
-  border: 1px solid rgba(64, 64, 64, 0);
+  border: var(--border-size) solid rgba(64, 64, 64, 0);
   color: transparent;
 }
 .__ea-button.text.round {
@@ -347,12 +382,25 @@ const stylesheet = `
   font-size: 10px;
 }
 .__ea-button.text:hover {
-  border: 1px solid rgba(26, 26, 26, 0);
+  border: var(--border-size) solid rgba(26, 26, 26, 0);
   color: #73b8ff;
   background-color: rgba(26, 26, 26, 0);
 }
 .__ea-button.text:active {
   background-color: rgba(0, 0, 0, 0);
+}
+.__ea-button > i {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+.__ea-button.first-child {
+  border-radius: 4px 0 0 4px;
+}
+.__ea-button.middle-child {
+  border-radius: 0;
+}
+.__ea-button.last-child {
+  border-radius: 0 4px 4px 0;
 }
 `;
 
@@ -377,15 +425,15 @@ export default class EaButton extends Base {
 
     // ------- 打包 -------
     // #region
-    // const styleNode = document.createElement('style');
-    // styleNode.innerHTML = stylesheet;
-    // this.shadowRoot.appendChild(styleNode);
+    const styleNode = document.createElement('style');
+    styleNode.innerHTML = stylesheet;
+    this.shadowRoot.appendChild(styleNode);
     // #endregion
     // ------- end -------
 
     // ------- 本地调试 -------
     // #region
-    setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
     // #endregion
     // ------- end -------
 
