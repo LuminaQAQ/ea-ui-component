@@ -6,15 +6,21 @@ const btn = ref(null);
 onMounted(() => {
   import('../index.js')
   import('./index.scss')
+
+  document.querySelector("#ea-button-a").addEventListener("click", function (e) {
+    e.target.getAttribute("disabled") !== null
+      ? e.target.removeAttribute("disabled")
+      : e.target.setAttribute("disabled", true);
+  });
+
+  document
+    .querySelector("#ea-button-loading")
+    .addEventListener("click", function (e) {
+      e.target.getAttribute("loading") !== null
+        ? e.target.removeAttribute("loading")
+        : e.target.setAttribute("loading", true);
+    });
 })
-
-function change(e) {
-  e.target.getAttribute('loading') !== null ? e.target.removeAttribute('loading') : e.target.setAttribute('loading', true);
-}
-
-function hrefDisabled(e) {
-  e.target.getAttribute('disabled') !== null ? e.target.removeAttribute('disabled') : e.target.setAttribute('disabled', true);
-}
 </script>
 
 # Button 按钮
@@ -138,21 +144,23 @@ function hrefDisabled(e) {
 
 <div class="row left">
   <ea-button type="text" href="https://www.baidu.com">链接按钮</ea-button>
-  <ea-button @click="hrefDisabled" type="normal" href="https://www.baidu.com" disabled>链接按钮</ea-button>
+  <ea-button id="ea-button-a" type="normal" href="https://www.baidu.com" disabled>链接按钮</ea-button>
 </div>
 
 ```html
 <div class="row left">
   <ea-button type="text">文字按钮</ea-button>
-  <ea-button class="ea-button-a" type="text" disabled>文字按钮</ea-button>
+  <ea-button id="ea-button-a" type="text" disabled>文字按钮</ea-button>
 </div>
 
 <script>
-  document.querySelector("ea-button-a").addEventListener("click", function (e) {
-    e.target.getAttribute("disabled") !== null
-      ? e.target.removeAttribute("disabled")
-      : e.target.setAttribute("disabled", true);
-  });
+  document
+    .querySelector("#ea-button-a")
+    .addEventListener("click", function (e) {
+      e.target.getAttribute("disabled") !== null
+        ? e.target.removeAttribute("disabled")
+        : e.target.setAttribute("disabled", true);
+    });
 </script>
 ```
 
@@ -189,20 +197,22 @@ function hrefDisabled(e) {
 点击按钮后进行数据加载操作，在按钮上显示加载状态。可以点击尝试。
 
 <div class="row left">
-  <ea-button @click="change" type="primary" loading>默认按钮</ea-button>
+  <ea-button id="ea-button-loading" type="primary" loading>默认按钮</ea-button>
 </div>
 
 ```html
 <div class="row">
-  <ea-button class="ea-button" round>默认按钮</ea-button>
+  <ea-button id="ea-button-loading" round>默认按钮</ea-button>
 </div>
 
 <script>
-  document.querySelector(".ea-button").addEventListener("click", function (e) {
-    e.target.getAttribute("loading") !== null
-      ? e.target.removeAttribute("loading")
-      : e.target.setAttribute("loading", true);
-  });
+  document
+    .querySelector("#ea-button-loading")
+    .addEventListener("click", function (e) {
+      e.target.getAttribute("loading") !== null
+        ? e.target.removeAttribute("loading")
+        : e.target.setAttribute("loading", true);
+    });
 </script>
 ```
 
