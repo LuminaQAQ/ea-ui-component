@@ -357,6 +357,7 @@ const stylesheet = `
 `;
 
 export default class EaButton extends Base {
+  #mounted = false;
 
   constructor() {
     super();
@@ -412,11 +413,16 @@ export default class EaButton extends Base {
   // ------- 禁用 -------
   // #region
   get disabled() {
-    return this.getAttribute('disabled') !== null;
+    return this.hasAttribute('disabled');
   }
 
   set disabled(value) {
-    this.toggleAttribute('disabled', value, 'disabled');
+    if (!this.#mounted) {
+      this.toggleAttribute('disabled', this.disabled, 'disabled');
+    } else {
+      this.toggleAttribute('disabled', value, 'disabled');
+    }
+    console.log(this.getAttribute('disabled'));
   }
 
   get ariaDisabled() {
@@ -482,10 +488,11 @@ export default class EaButton extends Base {
   // ------- 按钮加载 -------
   // #region
   get loading() {
-    return this.getAttribute('loading') !== null && this.getAttribute('loading') !== undefined;
+    return this.hasAttribute('loading');
   }
 
   set loading(value) {
+    value = value === "true" || value === "" || value === true ? true : false;
     this.toggleAttribute('loading', value, 'loading');
     this.disabled = value;
 
@@ -521,7 +528,6 @@ export default class EaButton extends Base {
 
   init() {
     // 禁用
-    // this.ariaDisabled = this.ariaDisabled;
     this.disabled = this.hasAttribute('disabled');
 
     // 加载
@@ -547,6 +553,8 @@ export default class EaButton extends Base {
 
   connectedCallback() {
     this.init();
+
+    this.#mounted = true;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -557,9 +565,10 @@ export default class EaButton extends Base {
         this.loading = newValue;
         break;
       case "disabled":
-        console.log();
-        this.disabled = newValue === "true" || newValue === "";
-        if (newValue === "true" || newValue === "") this.setAttribute("disabled", true);
+        if (this.#mounted) {
+          this.disabled = newValue === "true" || newValue === "";
+          if (newValue === "true" || newValue === "") this.setAttribute("disabled", true);
+        }
         break;
       default: break;
     }

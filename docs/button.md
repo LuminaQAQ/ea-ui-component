@@ -134,7 +134,7 @@ function hrefDisabled(e) {
 
 ## 链接按钮 `href`
 
-对普通链接的样式进行美化，可以在不同场景下选择相应的样式。
+对普通链接的样式进行美化，可以在不同场景下选择相应的样式。(该示例中, 点击可解禁链接按钮)
 
 <div class="row left">
   <ea-button type="text" href="https://www.baidu.com">链接按钮</ea-button>
