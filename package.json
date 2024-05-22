@@ -10,7 +10,7 @@
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
-    "deploy": "vitepress build docs && gh-pages -d docs/.vitepress/dist"
+    "deploy": "gh-pages -d docs/.vitepress/dist"
   },
   "dependencies": {
     "path": "^0.12.7"
