@@ -21,6 +21,17 @@
 
   &.left {
     justify-content: flex-start;
+    & > * {
+      margin-right: 0.5rem;
+    }
+  }
+
+  &.right {
+    justify-content: flex-end;
+  }
+
+  &.center {
+    justify-content: center;
   }
 }
 
