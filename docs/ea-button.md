@@ -156,8 +156,8 @@ onMounted(() => {
 对普通链接的样式进行美化，可以在不同场景下选择相应的样式。<br/> (该示例中, 点击可解禁链接按钮)
 
 <div class="row left">
-  <ea-button type="text" href="https://www.baidu.com">链接按钮</ea-button>
-  <ea-button id="ea-button-a" type="normal" href="https://www.baidu.com" disabled>链接按钮</ea-button>
+  <ea-button type="text" href="https://github.com/LuminaQAQ">链接按钮</ea-button>
+  <ea-button id="ea-button-a" type="normal" href="https://github.com/LuminaQAQ" disabled>链接按钮</ea-button>
 </div>
 
 ```html

@@ -14,6 +14,15 @@
 .row.left {
   justify-content: flex-start;
 }
+.row.left > * {
+  margin-right: 0.5rem;
+}
+.row.right {
+  justify-content: flex-end;
+}
+.row.center {
+  justify-content: center;
+}
 
 .main-icon-wrap {
   display: flex;

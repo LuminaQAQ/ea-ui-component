@@ -15,4 +15,6 @@ export default class Base extends HTMLElement {
             if (className) this.dom.classList.remove(className);
         }
     }
+
+    
 }

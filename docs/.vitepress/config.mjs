@@ -29,9 +29,9 @@ export default defineConfig({
       {
         text: '基础组件',
         items: [
-          { text: 'Icon 图标', link: '/icon' },
-          { text: 'Button 按钮', link: '/button' },
-          { text: 'Link 文字链接', link: '/link' },
+          { text: 'Icon 图标', link: '/ea-icon' },
+          { text: 'Button 按钮', link: '/ea-button' },
+          { text: 'Link 文字链接', link: '/ea-link' },
         ]
       },
     ],

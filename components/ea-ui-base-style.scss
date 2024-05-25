@@ -32,3 +32,18 @@ $color-danger-border: #f56c6c;
 
 // 配色
 $color-disabled-text: #c0c4cc;
+
+// 链接的配色
+@mixin ea-link-theme($theme-name, $color) {
+  &.#{$theme-name} {
+    color: $color;
+
+    &:hover {
+      color: lighten($color, 10);
+    }
+
+    @if ($theme-name == "disabled") {
+      pointer-events: none;
+    }
+  }
+}

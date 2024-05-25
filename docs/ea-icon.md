@@ -19,7 +19,8 @@ onMounted(() => {
 <i class="icon-chrome"></i>
 
 ```html
-<i class="icon-spin6 animate-spin"></i> <i class="icon-chrome"></i>
+<i class="icon-spin6 animate-spin"></i>
+<i class="icon-chrome"></i>
 ```
 
 ## 图标集合
