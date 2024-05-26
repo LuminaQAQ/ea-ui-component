@@ -75,19 +75,14 @@ onMounted(() => {
 
 带图标的文字链接可增强辨识度。
 
-<!-- <div class="row left">
-    <ea-link>无下划线</ea-link>
-    <ea-link type="primary" underline>下划线</ea-link>
+<div class="row left">
+    <ea-link icon="icon-eye">查看</ea-link>
+    <ea-link icon="icon-share">分享</ea-link>
 </div>
 
 ```html
 <div class="row left">
-  <ea-link>无下划线</ea-link>
-  <ea-link type="primary" underline>下划线</ea-link>
+  <ea-link icon="icon-eye">查看</ea-link>
+  <ea-link icon="icon-share">分享</ea-link>
 </div>
-``` -->
-
-<!-- <div class="row left">
-    <ea-link>图标</ea-link>
-    <ea-link icon="icon-spin6">图标</ea-link>
-</div> -->
+```
