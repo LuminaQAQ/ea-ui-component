@@ -112,6 +112,22 @@ export default class EaLink extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- icon图标 -------
+    // #region
+    get icon() {
+        return this.getAttribute('icon');
+    }
+
+    set icon(value) {
+        if (value === null || value === "") return;
+
+        const icon = document.createElement('i');
+        icon.className = value;
+        this.dom.insertBefore(icon, this.dom.firstChild);
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         // 设置链接
         this.href = this.href;
@@ -124,6 +140,9 @@ export default class EaLink extends Base {
 
         // 设置下划线
         this.underline = this.underline;
+
+        // 图标
+        this.icon = this.icon;
     }
 
     connectedCallback() {
