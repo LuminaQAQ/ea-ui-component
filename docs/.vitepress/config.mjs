@@ -34,6 +34,12 @@ export default defineConfig({
           { text: 'Link 文字链接', link: '/ea-link' },
         ]
       },
+      {
+        text: '表单组件',
+        items: [
+          { text: 'Radio 单选框', link: '/ea-radio' },
+        ]
+      },
     ],
 
     socialLinks: [
