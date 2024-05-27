@@ -86,3 +86,13 @@ onMounted(() => {
   <ea-link icon="icon-share">分享</ea-link>
 </div>
 ```
+
+## Attributes
+
+| 参数      | 说明       | 类型    | 可选值                                      | 默认值 |
+| --------- | ---------- | ------- | ------------------------------------------- | ------ |
+| type      | 类型       | string  | primary / success / warning / danger / info | -      |
+| disabled  | 是否禁用   | boolean | -                                           | false  |
+| underline | 是否下划线 | boolean | -                                           | true   |
+| icon      | 图标       | string  | -                                           | -      |
+| href      | 链接地址   | string  | -                                           | -      |

@@ -2,7 +2,58 @@
 import setStyle from "../../utils/setStyle";
 import Base from '../Base.js'
 
-const stylesheet = ``;
+const stylesheet = `
+@import url('/ea_ui_component/icon/index.css');
+
+.__ea-link {
+  text-decoration: none;
+  color: #606266;
+  cursor: pointer;
+}
+.__ea-link:hover {
+  color: #797b80;
+}
+.__ea-link.underline:hover {
+  text-decoration: underline;
+}
+.__ea-link.primary {
+  color: #409eff;
+}
+.__ea-link.primary:hover {
+  color: #73b8ff;
+}
+.__ea-link.success {
+  color: #67c23a;
+}
+.__ea-link.success:hover {
+  color: #85cf60;
+}
+.__ea-link.info {
+  color: #909399;
+}
+.__ea-link.info:hover {
+  color: #abadb1;
+}
+.__ea-link.warning {
+  color: #e6a23c;
+}
+.__ea-link.warning:hover {
+  color: #ecb869;
+}
+.__ea-link.danger {
+  color: #f56c6c;
+}
+.__ea-link.danger:hover {
+  color: #f89c9c;
+}
+.__ea-link.disabled {
+  color: #c0c4cc;
+  pointer-events: none;
+}
+.__ea-link.disabled:hover {
+  color: #dcdee3;
+}
+`;
 
 export default class EaLink extends Base {
     constructor() {
@@ -21,15 +72,15 @@ export default class EaLink extends Base {
 
         // ------- 打包 -------
         // #region
-        // const styleNode = document.createElement('style');
-        // styleNode.innerHTML = stylesheet;
-        // this.shadowRoot.appendChild(styleNode);
+        const styleNode = document.createElement('style');
+        styleNode.innerHTML = stylesheet;
+        this.shadowRoot.appendChild(styleNode);
         // #endregion
         // ------- end -------
 
         // ------- 本地调试 -------
         // #region
-        setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+        // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
         // #endregion
         // ------- end -------
 
