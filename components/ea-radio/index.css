@@ -72,3 +72,11 @@
 .ea-radio_wrap.disabled[checked=true] .__ea-radio-input_wrap .__ea-radio-input_inner::before {
   background-color: #c0c4cc;
 }
+.ea-radio_wrap.border {
+  border: 1px solid #ccc;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+}
+.ea-radio_wrap.border[checked=true] {
+  border: 1px solid #409eff;
+}

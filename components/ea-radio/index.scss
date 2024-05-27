@@ -113,4 +113,14 @@
       }
     }
   }
+
+  &.border {
+    border: 1px solid #ccc;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+  }
+
+  &.border[checked="true"] {
+    border: 1px solid $color-primary-bgc;
+  }
 }
