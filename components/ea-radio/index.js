@@ -137,6 +137,18 @@ export default class EaRadio extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- border 是否带有边框 -------
+    // #region
+    get border() {
+        return this.getAttrBoolean('border');
+    }
+
+    set border(val) {
+        this.#label.classList.toggle('border', val);
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
 
@@ -151,6 +163,9 @@ export default class EaRadio extends Base {
 
         // radio 的 disabled 属性
         this.disabled = this.disabled;
+
+        // border 属性
+        this.border = this.border;
 
         // 监听 change 事件, 修改 checked 属性
         this.#radio.addEventListener('change', function (e) {
