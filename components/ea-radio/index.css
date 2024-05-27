@@ -48,3 +48,13 @@
 .ea-radio_wrap.checked .__ea-radio-label_desc {
   color: #409eff;
 }
+.ea-radio_wrap.disabled .__ea-radio-input_wrap .__ea-radio-input_inner {
+  border-color: #c0c4cc;
+  background-color: #c0c4cc;
+}
+.ea-radio_wrap.disabled .__ea-radio-input_wrap .__ea-radio-input_inner::before {
+  background-color: #a4aab5;
+}
+.ea-radio_wrap.disabled .__ea-radio-label_desc {
+  color: #c0c4cc;
+}
