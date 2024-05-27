@@ -1,0 +1,18 @@
+.ea-radio-group {
+  display: flex;
+
+  ea-radio {
+    margin-right: 2rem;
+  }
+
+  ::slotted(ea-radio) {
+    // --text-color: blue;
+
+    // --radio-show-type: none;
+
+    // --button-size: 0;
+    // --button-margin: 0;
+
+    // margin-right: 0;
+  }
+}
