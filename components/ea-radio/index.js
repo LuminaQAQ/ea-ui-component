@@ -78,8 +78,7 @@ export default class EaRadio extends Base {
     // ------- 选中 -------
     // #region
     get checked() {
-        const attr = this.getAttribute('checked');
-        return attr === true || attr === 'true' || attr === '';
+        return this.getAttrBoolean('checked');
     }
 
     set checked(val) {
@@ -124,6 +123,19 @@ export default class EaRadio extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- disabled 禁用状态 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean('disabled');
+    }
+
+    set disabled(val) {
+        this.#radio.disabled = val;
+        this.#label.toggleAttribute('disabled', val);
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
 
@@ -151,7 +163,7 @@ export default class EaRadio extends Base {
             }
         })
 
-        
+
     }
 
     connectedCallback() {

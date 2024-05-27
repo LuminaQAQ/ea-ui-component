@@ -70,4 +70,21 @@
       color: $color-primary-bgc;
     }
   }
+
+  &.disabled {
+    .__ea-radio-input_wrap {
+      .__ea-radio-input_inner {
+        border-color: $color-disabled-text;
+        background-color: $color-disabled-text;
+
+        &::before {
+          background-color: darken($color-disabled-text, 10);
+        }
+      }
+    }
+
+    .__ea-radio-label_desc {
+      color: $color-disabled-text;
+    }
+  }
 }
