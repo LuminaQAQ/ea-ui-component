@@ -132,6 +132,7 @@ export default class EaRadio extends Base {
     set disabled(val) {
         this.#radio.disabled = val;
         this.#label.toggleAttribute('disabled', val);
+        this.#label.classList.toggle('disabled', val);
     }
     // #endregion
     // ------- end -------
@@ -147,6 +148,9 @@ export default class EaRadio extends Base {
 
         // radio 的 value 属性
         this.value = this.value;
+
+        // radio 的 disabled 属性
+        this.disabled = this.disabled;
 
         // 监听 change 事件, 修改 checked 属性
         this.#radio.addEventListener('change', function (e) {

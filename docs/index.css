@@ -17,9 +17,6 @@
 .row.left > * {
   margin-right: 0.5rem;
 }
-.row.left > ea-radio {
-  margin-right: 2rem;
-}
 .row.right {
   justify-content: flex-end;
 }

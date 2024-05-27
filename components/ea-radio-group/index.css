@@ -1,0 +1,6 @@
+.ea-radio-group {
+  display: flex;
+}
+.ea-radio-group ea-radio {
+  margin-right: 2rem;
+}
