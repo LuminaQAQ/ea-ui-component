@@ -51,3 +51,16 @@
 .ea-checkbox_wrap.checked .__ea-checkbox-label_desc {
   color: #409eff;
 }
+.ea-checkbox_wrap.disabled .__ea-checkbox-input_wrap .__ea-checkbox-input_inner {
+  border-color: #eeeeee;
+  background-color: #eeeeee;
+}
+.ea-checkbox_wrap.disabled .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::before {
+  background-color: transparent;
+}
+.ea-checkbox_wrap.disabled .__ea-checkbox-label_desc {
+  color: #c0c4cc;
+}
+.ea-checkbox_wrap.disabled[checked=true] .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::before {
+  background-color: #c0c4cc;
+}

@@ -22,13 +22,48 @@ onMounted(() => {
     <ea-checkbox name="work" value="后端">后端</ea-checkbox>
 </div>
 
+```html
+<div class="row left">
+  <ea-checkbox name="work" value="前端">前端</ea-checkbox>
+  <ea-checkbox name="work" value="后端">后端</ea-checkbox>
+</div>
+```
+
 ## 禁用状态
 
 多选框不可用状态。
 
+<div class="row left">
+    <ea-checkbox name="salary" value="月入3000笑哈哈">月入3000笑哈哈</ea-checkbox>
+    <ea-checkbox name="salary" value="月薪过万不是梦" disabled>月薪过万不是梦</ea-checkbox>
+</div>
+
+```html
+<div class="row left">
+  <ea-checkbox name="salary" value="月入3000笑哈哈">月入3000笑哈哈</ea-checkbox>
+  <ea-checkbox name="salary" value="月薪过万不是梦" disabled>
+    月薪过万不是梦
+  </ea-checkbox>
+</div>
+```
+
 ## 多选框组
 
 适用于多个勾选框绑定到同一个数组的情景，通过是否勾选来表示这一组选项中选中的项。
+
+<!-- <div class="row left">
+  <ea-checkbox-group min="1" max="2">
+    <ea-checkbox label="上海"></ea-checkbox>
+    <ea-checkbox label="北京"></ea-checkbox>
+    <ea-checkbox label="广州"></ea-checkbox>
+    <ea-checkbox label="深圳"></ea-checkbox>
+    <ea-checkbox label="南京"></ea-checkbox>
+    <ea-checkbox label="成都"></ea-checkbox>
+    <ea-checkbox label="西安"></ea-checkbox>
+    <ea-checkbox label="武汉"></ea-checkbox>
+    <ea-checkbox label="杭州"></ea-checkbox>
+  </ea-checkbox-group>
+</div> -->
 
 ## indeterminate 状态
 
