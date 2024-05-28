@@ -22,29 +22,34 @@
 
       border-radius: 3px;
 
-      //   background-color: aqua;
       border: 1px solid #ccc;
+      transition: background-color 0.2s, border-color 0.2s;
 
       &::after {
         content: "";
         position: absolute;
+        left: 52.5%;
+        top: 45%;
 
-        width: 0.75rem;
-        height: 0.75rem;
+        transform: translate(-50%, -50%) rotate(-135deg);
 
-        border-radius: 3px;
+        display: block;
 
-        // opacity: 0;
+        width: 3px;
+        height: 7px;
+
+        opacity: 0;
         transition: opacity 0.2s;
       }
     }
 
     .__ea-checkbox-input_input {
-      //   display: none;
+      display: none;
     }
   }
 
   .__ea-checkbox-label_desc {
+    transition: color 0.2s;
   }
 
   &.checked {
@@ -54,8 +59,15 @@
         background-color: $color-primary-bgc;
 
         &::after {
+          opacity: 1;
+          border-left: 2px solid white;
+          border-top: 2px solid white;
         }
       }
+    }
+
+    .__ea-checkbox-label_desc {
+      color: $color-primary-bgc;
     }
   }
 }
