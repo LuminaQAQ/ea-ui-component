@@ -1,0 +1,100 @@
+@import "../ea-ui-base-style.scss";
+
+:host {
+  --margin-right: 1rem;
+}
+
+.ea-checkbox_wrap {
+  display: flex;
+  align-items: center;
+  margin-right: var(--margin-right);
+
+  .__ea-checkbox-input_wrap {
+    margin-right: 0.5rem;
+
+    .__ea-checkbox-input_inner {
+      box-sizing: border-box;
+      position: relative;
+      display: block;
+      width: 0.8125rem;
+      height: 0.8125rem;
+      line-height: 0.8125;
+
+      border-radius: 3px;
+
+      border: 1px solid #ccc;
+      transition: background-color 0.2s, border-color 0.2s;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 52.5%;
+        top: 45%;
+
+        transform: translate(-50%, -50%) rotate(-135deg);
+
+        display: block;
+
+        width: 3px;
+        height: 7px;
+
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+    }
+
+    .__ea-checkbox-input_input {
+      display: none;
+    }
+  }
+
+  .__ea-checkbox-label_desc {
+    transition: color 0.2s;
+  }
+
+  &.checked {
+    .__ea-checkbox-input_wrap {
+      .__ea-checkbox-input_inner {
+        border-color: $color-primary-bgc;
+        background-color: $color-primary-bgc;
+
+        &::after {
+          opacity: 1;
+          border-left: 2px solid white;
+          border-top: 2px solid white;
+        }
+      }
+    }
+
+    .__ea-checkbox-label_desc {
+      color: $color-primary-bgc;
+    }
+  }
+
+  &.disabled {
+    .__ea-checkbox-input_wrap {
+      .__ea-checkbox-input_inner {
+        border-color: $color-disabled-btn-bgc;
+        background-color: $color-disabled-btn-bgc;
+
+        &::before {
+          background-color: transparent;
+        }
+      }
+    }
+
+    .__ea-checkbox-label_desc {
+      color: $color-disabled-text;
+    }
+  }
+
+  &.disabled[checked="true"] {
+    .__ea-checkbox-input_wrap {
+      .__ea-checkbox-input_inner {
+        &::before {
+          background-color: $color-disabled-text;
+        }
+      }
+    }
+  }
+}
