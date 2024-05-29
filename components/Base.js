@@ -28,7 +28,7 @@ export default class Base extends HTMLElement {
      */
     getAttrBoolean(attrName) {
         const attr = this.getAttribute(attrName);
-        return attr === true || attr === 'true' || attr === '';
+        return attr === 'true' || attr === '';
     }
 
 }

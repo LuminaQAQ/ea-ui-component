@@ -30,7 +30,8 @@ const labelDom = () => {
     return labelDesc;
 }
 
-export default class EacheCkbox extends Base {
+export default class EacheChekbox extends Base {
+    #mounted = false;
     #checkbox;
     #label;
 
@@ -42,6 +43,7 @@ export default class EacheCkbox extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
+        const that = this;
         let dom = document.createElement('label');
         dom.className = "ea-checkbox_wrap";
 
@@ -75,7 +77,7 @@ export default class EacheCkbox extends Base {
         shadowRoot.appendChild(dom);
     }
 
-    // ------- 选中 -------
+    // ------- checked 选中 -------
     // #region
     get checked() {
         return this.getAttrBoolean('checked');
@@ -92,12 +94,13 @@ export default class EacheCkbox extends Base {
             this.removeAttribute('checked');
             this.#label.removeAttribute('checked');
             this.#label.classList.remove('checked');
+            this.#label.classList.remove('indeterminate');
         }
     }
     // #endregion
     // ------- end -------
 
-    // ------- label_for 单选框的唯一键 -------
+    // ------- name 单选框的唯一键 -------
     // #region
     get name() {
         return this.getAttribute('name');
@@ -149,6 +152,24 @@ export default class EacheCkbox extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- indeterminate 状态 -------
+    // #region
+    get indeterminate() {
+        return this.getAttrBoolean('indeterminate');
+    }
+
+    set indeterminate(val) {
+        if (val) {
+            this.setAttribute('indeterminate', true);
+            this.#label.classList.add('indeterminate');
+        } else {
+            this.removeAttribute('indeterminate');
+            this.#label.classList.remove('indeterminate');
+        }
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
 
@@ -167,8 +188,12 @@ export default class EacheCkbox extends Base {
         // border 属性
         this.border = this.border;
 
+        // indeterminate 属性
+        this.indeterminate = this.indeterminate;
+
         // 监听 change 事件, 修改 checked 属性
         this.#checkbox.addEventListener('change', function (e) {
+            e.preventDefault();
             that.checked = e.target.checked;
             if (e.target.checked) {
                 // document.querySelectorAll(`ea-checkbox[name="${that.name}"]`).forEach(btn => {
@@ -182,8 +207,6 @@ export default class EacheCkbox extends Base {
                 // });
             }
         })
-
-
     }
 
     connectedCallback() {
@@ -191,6 +214,6 @@ export default class EacheCkbox extends Base {
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-        // console.log(name);
+
     }
 }

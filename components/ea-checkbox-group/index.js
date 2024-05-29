@@ -1,9 +1,10 @@
 // @ts-nocheck
 import setStyle from "../../utils/setStyle";
+import Base from "../Base";
 
 const stylesheet = ``;
 
-export default class EaCheckboxGroup extends HTMLElement {
+export default class EaCheckboxGroup extends Base {
 
     constructor() {
         super();
