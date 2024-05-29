@@ -9,6 +9,7 @@
 .row {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   margin-bottom: 0.5rem;
   padding: 1rem;
   border: 1px solid rgba(204, 204, 204, 0.5);

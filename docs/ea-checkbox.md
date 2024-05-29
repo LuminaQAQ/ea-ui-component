@@ -6,6 +6,23 @@ const btn = ref(null);
 onMounted(() => {
   import('../index.js')
   import('./index.scss')
+
+  document.querySelector('#city-group').addEventListener('click', () => {
+    const name = "city";
+    const elements = document.querySelectorAll(`ea-checkbox[name=${name}][checked]`);
+
+    const checkboxValueArr = [];
+
+    elements.forEach(item => checkboxValueArr.push(item.value));
+
+    alert(`[${checkboxValueArr}]`);
+  })
+
+
+  document.querySelector('#setIndeterminate').addEventListener('click', function(e) {
+    document.querySelector('#checkAll').indeterminate = true;
+  })
+
 })
 </script>
 
@@ -60,6 +77,9 @@ onMounted(() => {
     <ea-checkbox value="成都" disabled checked>成都</ea-checkbox>
   </ea-checkbox-group>
 </div>
+<div class="row left">
+  <ea-button id="city-group" type="primary">点击获取 checkbox 值</ea-button>
+</div>
 
 ```html
 <div class="row left">
@@ -71,11 +91,55 @@ onMounted(() => {
     <ea-checkbox value="成都" disabled checked>成都</ea-checkbox>
   </ea-checkbox-group>
 </div>
+<div class="row left">
+  <ea-button id="city-group" type="primary">点击获取 checkbox 值</ea-button>
+</div>
+```
+
+`JS`获取多选值操作。
+
+```js
+document.querySelector("#city-group").addEventListener("click", () => {
+  const name = "city";
+  const elements = document.querySelectorAll(
+    `ea-checkbox[name=${name}][checked]`
+  );
+
+  const checkboxValueArr = [];
+
+  elements.forEach((item) => checkboxValueArr.push(item.value));
+
+  alert(`[${checkboxValueArr}]`);
+});
 ```
 
 ## indeterminate 状态
 
 indeterminate 属性用以表示 checkbox 的不确定状态，一般用于实现全选的效果
+
+<div class="row left">
+  <ea-checkbox id="checkAll" name="food">全选</ea-checkbox>
+  <ea-button id="setIndeterminate" type="primary">设置 indeterminate 状态</ea-button>
+</div>
+
+```html
+<div class="row left">
+  <ea-checkbox id="checkAll" name="food">全选</ea-checkbox>
+  <ea-button id="setIndeterminate" type="primary">
+    设置 indeterminate 状态
+  </ea-button>
+</div>
+```
+
+`JS` 操作 indeterminate 状态。
+
+```js
+document
+  .querySelector("#setIndeterminate")
+  .addEventListener("click", function (e) {
+    document.querySelector("#checkAll").indeterminate = true;
+  });
+```
 
 ## 可选项目数量的限制
 
