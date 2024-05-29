@@ -1,0 +1,81 @@
+@import "../components/ea-icon/css/fontello.css";
+@import "../components/ea-icon/css/animation.css";
+@import "../components/ea-ui-base-style.scss";
+
+@font-face {
+  font-size: 1rem;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  src: url("../components/ea-icon/font/fontello.eot")
+      format("embedded-opentype"),
+    url("../components/ea-icon/font/fontello.ttf") format("truetype"),
+    url("../components/ea-icon/font/fontello.woff") format("woff"),
+    url("../components/ea-icon/font/fontello.woff2") format("woff2"),
+    url("../components/ea-icon/font/fontello.svg") format("svg");
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+  border-radius: 8px;
+
+  &.left {
+    justify-content: flex-start;
+    & > * {
+      margin-right: 0.5rem;
+    }
+
+    & > ea-radio {
+      // margin-right: 2rem;
+    }
+  }
+
+  &.right {
+    justify-content: flex-end;
+  }
+
+  &.center {
+    justify-content: center;
+  }
+}
+
+.main-icon-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  section {
+    box-sizing: border-box;
+    padding: 0.75rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    width: 16.66%;
+
+    color: #666;
+
+    border: 1px solid #eee;
+    transition: color 0.2s;
+
+    span {
+      line-height: 1;
+      font-size: 0.7rem;
+    }
+
+    &:hover {
+      color: #5cb6ff;
+    }
+
+    i {
+      font-size: 2rem;
+      margin: 0.5rem 0;
+    }
+  }
+}
