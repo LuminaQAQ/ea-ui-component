@@ -1,6 +1,6 @@
-.ea-radio-group {
+.ea-checkbox-group {
   display: flex;
 }
-.ea-radio-group ea-radio {
-  margin-right: 2rem;
+.ea-checkbox-group ::slotted(ea-checkbox) {
+  margin-right: 1.5rem;
 }

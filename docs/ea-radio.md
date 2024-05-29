@@ -76,18 +76,14 @@ onMounted(() => {
 ## 带有边框
 
 <div class="row left">
-  <ea-radio name="age" value="重返18岁" checked border>重返18岁</ea-radio>
+  <ea-radio name="age" value="Relife" checked border>Relife</ea-radio>
   <ea-radio name="age" value="重返未来1999" border>重返未来1999</ea-radio>
 </div>
 
 ```html
 <div class="row left">
-  <ea-radio name="salary" value="月入3000笑哈哈" checked border>
-    月入3000笑哈哈
-  </ea-radio>
-  <ea-radio name="salary" value="月薪过万不是梦" border>
-    月薪过万不是梦
-  </ea-radio>
+  <ea-radio name="age" value="重返18岁" checked border>Relife</ea-radio>
+  <ea-radio name="age" value="重返未来1999" border>重返未来1999</ea-radio>
 </div>
 ```
 

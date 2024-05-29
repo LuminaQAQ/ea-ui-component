@@ -1,11 +1,7 @@
-.ea-radio-group {
+.ea-checkbox-group {
   display: flex;
 
-  ea-radio {
-    margin-right: 2rem;
-  }
-
-  ::slotted(ea-radio) {
+  ::slotted(ea-checkbox) {
     // --text-color: blue;
 
     // --radio-show-type: none;
@@ -13,6 +9,6 @@
     // --button-size: 0;
     // --button-margin: 0;
 
-    // margin-right: 0;
+    margin-right: 1.5rem;
   }
 }

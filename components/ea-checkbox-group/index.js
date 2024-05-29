@@ -34,8 +34,6 @@ export default class EaCheckboxGroup extends HTMLElement {
         // ------- end -------
 
         shadowRoot.appendChild(dom);
-
-        console.log();
     }
 
     // ------- name 唯一键值 -------
@@ -47,6 +45,7 @@ export default class EaCheckboxGroup extends HTMLElement {
     set name(val) {
         this.querySelectorAll('ea-checkbox').forEach(checkbox => {
             checkbox.setAttribute('name', val);
+            checkbox.name = val;
         });
     }
     // #endregion
