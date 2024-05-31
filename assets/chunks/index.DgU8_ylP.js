@@ -1,4 +1,4 @@
-var s=(n,e,o)=>{if(!e.has(n))throw TypeError("Cannot "+o)};var a=(n,e,o)=>(s(n,e,"read from private field"),o?o.call(n):e.get(n)),b=(n,e,o)=>{if(e.has(n))throw TypeError("Cannot add the same private member more than once");e instanceof WeakSet?e.add(n):e.set(n,o)},c=(n,e,o,r)=>(s(n,e,"write to private field"),r?r.call(n,o):e.set(n,o),o);class u extends HTMLElement{constructor(){super()}toggleAttribute(e,o,r){o?(this.setAttribute(e,o),r&&this.dom.classList.add(r)):(this.hasAttribute(e)&&this.removeAttribute(e),r&&this.dom.classList.remove(r))}}const l=`
+var g=(i,t,e)=>{if(!t.has(i))throw TypeError("Cannot "+e)};var n=(i,t,e)=>(g(i,t,"read from private field"),e?e.call(i):t.get(i)),u=(i,t,e)=>{if(t.has(i))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(i):t.set(i,e)},h=(i,t,e,r)=>(g(i,t,"write to private field"),r?r.call(i,e):t.set(i,e),e);class m extends HTMLElement{constructor(){super()}toggleAttribute(t,e,r){e?(this.setAttribute(t,e),r&&this.dom.classList.add(r)):(this.hasAttribute(t)&&this.removeAttribute(t),r&&this.dom.classList.remove(r))}getAttrBoolean(t){const e=this.getAttribute(t);return e==="true"||e===""}}const f=`
 @import url('/ea_ui_component/icon/index.css');
 
 :host {
@@ -397,7 +397,7 @@ var s=(n,e,o)=>{if(!e.has(n))throw TypeError("Cannot "+o)};var a=(n,e,o)=>(s(n,e
 .__ea-button.last-child {
   border-radius: 0 4px 4px 0;
 }
-`;var i;class g extends u{constructor(){super();b(this,i,!1);const o=this.attachShadow({mode:"open"});let r=null;this.getAttribute("href")!==null&&this.getAttribute("href")!==""?r=document.createElement("a"):r=document.createElement("button");const t=document.createElement("slot");r.className="__ea-button",r.appendChild(t),this.dom=r;const d=document.createElement("style");d.innerHTML=l,this.shadowRoot.appendChild(d),o.appendChild(r)}static get observedAttributes(){return["loading","disabled"]}get BUTTON_STYLE(){return["plain","round"]}get BUTTON_TYPE(){return["normal","primary","success","warning","danger","text"]}get BUTTON_SIZE(){return["medium","small","mini"]}get disabled(){return this.hasAttribute("disabled")}set disabled(o){a(this,i)?this.toggleAttribute("disabled",o,"disabled"):this.toggleAttribute("disabled",this.disabled,"disabled")}get ariaDisabled(){return this.getAttribute("aria-disabled")!==null||this.getAttribute("aria-disabled")!==void 0}set ariaDisabled(o){this.toggleAttribute("aria-disabled",o,"disabled")}get plain(){return this.getAttribute("plain")!==void 0&&this.getAttribute("plain")!==null}set plain(o){this.toggleAttribute("plain",o,"plain")}get round(){return this.getAttribute("round")!==void 0&&this.getAttribute("round")!==null}set round(o){this.toggleAttribute("round",o,"round"),o&&this.dom.style.setProperty("--border-radius","999px")}get type(){const o=this.getAttribute("type");return o==null||o==!1?"normal":o}set type(o){this.BUTTON_TYPE.includes(o)||(o="normal"),this.toggleAttribute("type",o,o)}get size(){return this.getAttribute("size")}set size(o){this.BUTTON_SIZE.includes(o)&&this.toggleAttribute("size",o,o)}get loading(){return this.hasAttribute("loading")}set loading(o){if(o=o==="true"||o===""||o===!0,this.toggleAttribute("loading",o,"loading"),this.disabled=o,o&&!this.dom.querySelector("i")){const r=document.createElement("i");r.className="icon-spin6 animate-spin",this.dom.insertBefore(r,this.dom.firstChild)}else!o&&this.dom.querySelector("i")&&this.dom.querySelector("i").remove()}get icon(){return this.getAttribute("icon")}set icon(o){var r;if(o){if(this.setAttribute("icon",o),!this.dom.querySelector("i")){const t=document.createElement("i");t.className=o,this.innerHTML||t.style.setProperty("margin-right","0"),this.dom.insertBefore(t,this.dom.firstChild)}}else this.removeAttribute("icon"),(r=this.dom.querySelector("i"))==null||r.remove()}get href(){return this.getAttribute("href")}set href(o){this.shadowRoot.querySelector("button")||(o==null&&o==!1?(this.removeAttribute("href"),this.dom.removeAttribute("href")):(this.setAttribute("href",o),this.dom.setAttribute("href",o)))}init(){this.disabled=this.hasAttribute("disabled"),this.loading=this.loading;for(let o=0,r;r=this.BUTTON_STYLE[o++];)if(this[r]){this[r]=this[r];break}this.type=this.type,this.size=this.size,this.href=this.href,this.icon=this.icon}connectedCallback(){this.init(),c(this,i,!0)}attributeChangedCallback(o,r,t){if(r!=t)switch(o){case"loading":t===""&&(t=!0),this.loading=t;break;case"disabled":a(this,i)&&(this.disabled=t==="true"||t==="",(t==="true"||t==="")&&this.setAttribute("disabled",!0));break}}}i=new WeakMap;const _=`
+`;var _;class k extends m{constructor(){super();u(this,_,!1);const e=this.attachShadow({mode:"open"});let r=null;this.getAttribute("href")!==null&&this.getAttribute("href")!==""?r=document.createElement("a"):r=document.createElement("button");const o=document.createElement("slot");r.className="__ea-button",r.appendChild(o),this.dom=r;const l=document.createElement("style");l.innerHTML=f,this.shadowRoot.appendChild(l),e.appendChild(r)}static get observedAttributes(){return["loading","disabled"]}get BUTTON_STYLE(){return["plain","round"]}get BUTTON_TYPE(){return["normal","primary","success","warning","danger","text"]}get BUTTON_SIZE(){return["medium","small","mini"]}get disabled(){return this.hasAttribute("disabled")}set disabled(e){n(this,_)?this.toggleAttribute("disabled",e,"disabled"):this.toggleAttribute("disabled",this.disabled,"disabled")}get ariaDisabled(){return this.getAttribute("aria-disabled")!==null||this.getAttribute("aria-disabled")!==void 0}set ariaDisabled(e){this.toggleAttribute("aria-disabled",e,"disabled")}get plain(){return this.getAttribute("plain")!==void 0&&this.getAttribute("plain")!==null}set plain(e){this.toggleAttribute("plain",e,"plain")}get round(){return this.getAttribute("round")!==void 0&&this.getAttribute("round")!==null}set round(e){this.toggleAttribute("round",e,"round"),e&&this.dom.style.setProperty("--border-radius","999px")}get type(){const e=this.getAttribute("type");return e==null||e==!1?"normal":e}set type(e){this.BUTTON_TYPE.includes(e)||(e="normal"),this.toggleAttribute("type",e,e)}get size(){return this.getAttribute("size")}set size(e){this.BUTTON_SIZE.includes(e)&&this.toggleAttribute("size",e,e)}get loading(){return this.hasAttribute("loading")}set loading(e){if(e=e==="true"||e===""||e===!0,this.toggleAttribute("loading",e,"loading"),this.disabled=e,e&&!this.dom.querySelector("i")){const r=document.createElement("i");r.className="icon-spin6 animate-spin",this.dom.insertBefore(r,this.dom.firstChild)}else!e&&this.dom.querySelector("i")&&this.dom.querySelector("i").remove()}get icon(){return this.getAttribute("icon")}set icon(e){var r;if(e){if(this.setAttribute("icon",e),!this.dom.querySelector("i")){const o=document.createElement("i");o.className=e,this.innerHTML||o.style.setProperty("margin-right","0"),this.dom.insertBefore(o,this.dom.firstChild)}}else this.removeAttribute("icon"),(r=this.dom.querySelector("i"))==null||r.remove()}get href(){return this.getAttribute("href")}set href(e){this.shadowRoot.querySelector("button")||(e==null&&e==!1?(this.removeAttribute("href"),this.dom.removeAttribute("href")):(this.setAttribute("href",e),this.dom.setAttribute("href",e)))}init(){this.disabled=this.hasAttribute("disabled"),this.loading=this.loading;for(let e=0,r;r=this.BUTTON_STYLE[e++];)if(this[r]){this[r]=this[r];break}this.type=this.type,this.size=this.size,this.href=this.href,this.icon=this.icon}connectedCallback(){this.init(),h(this,_,!0)}attributeChangedCallback(e,r,o){if(r!=o)switch(e){case"loading":o===""&&(o=!0),this.loading=o;break;case"disabled":n(this,_)&&(this.disabled=o==="true"||o==="",(o==="true"||o==="")&&this.setAttribute("disabled",!0));break}}}_=new WeakMap;const x=`
 :host {
   --margin-right: 1rem;
   --border-radius: 6px;
@@ -811,4 +811,246 @@ var s=(n,e,o)=>{if(!e.has(n))throw TypeError("Cannot "+o)};var a=(n,e,o)=>(s(n,e
 .__ea-button-group ::slotted(ea-button) {
   --margin-right: 0;
 }
-`;class m extends HTMLElement{constructor(){super();const e=this.attachShadow({mode:"open"}),o=document.createElement("div");e.appendChild(o);const r=document.createElement("slot");o.className="__ea-button-group",o.appendChild(r),this.dom=o;const t=document.createElement("style");t.innerHTML=_,this.shadowRoot.appendChild(t),e.appendChild(o)}connectedCallback(){Array.from(this.children).map((e,o,r)=>{const t=e.shadowRoot?e.shadowRoot.querySelector("button"):e;o===0?t.style.setProperty("--border-radius","4px 0 0 4px"):o===r.length-1?t.style.setProperty("--border-radius","0 4px 4px 0"):t.style.setProperty("--border-radius","0")})}}window.customElements.get("ea-button")||(window.customElements.define("ea-button",g),window.customElements.define("ea-button-group",m));
+`;class w extends HTMLElement{constructor(){super();const t=this.attachShadow({mode:"open"}),e=document.createElement("div");t.appendChild(e);const r=document.createElement("slot");e.className="__ea-button-group",e.appendChild(r),this.dom=e;const o=document.createElement("style");o.innerHTML=x,this.shadowRoot.appendChild(o),t.appendChild(e)}connectedCallback(){Array.from(this.children).map((t,e,r)=>{const o=t.shadowRoot?t.shadowRoot.querySelector("button"):t;e===0?o.style.setProperty("--border-radius","4px 0 0 4px"):e===r.length-1?o.style.setProperty("--border-radius","0 4px 4px 0"):o.style.setProperty("--border-radius","0")})}}const v=`
+@import url('/ea_ui_component/icon/index.css');
+
+.__ea-link {
+  text-decoration: none;
+  color: #606266;
+  cursor: pointer;
+}
+.__ea-link:hover {
+  color: #797b80;
+}
+.__ea-link.underline:hover {
+  text-decoration: underline;
+}
+.__ea-link.primary {
+  color: #409eff;
+}
+.__ea-link.primary:hover {
+  color: #73b8ff;
+}
+.__ea-link.success {
+  color: #67c23a;
+}
+.__ea-link.success:hover {
+  color: #85cf60;
+}
+.__ea-link.info {
+  color: #909399;
+}
+.__ea-link.info:hover {
+  color: #abadb1;
+}
+.__ea-link.warning {
+  color: #e6a23c;
+}
+.__ea-link.warning:hover {
+  color: #ecb869;
+}
+.__ea-link.danger {
+  color: #f56c6c;
+}
+.__ea-link.danger:hover {
+  color: #f89c9c;
+}
+.__ea-link.disabled {
+  color: #c0c4cc;
+  pointer-events: none;
+}
+.__ea-link.disabled:hover {
+  color: #dcdee3;
+}
+`;class z extends m{constructor(){super();const t=this.attachShadow({mode:"open"});let e=document.createElement("a");const r=document.createElement("slot");e.className="__ea-link",e.appendChild(r),this.dom=e;const o=document.createElement("style");o.innerHTML=v,this.shadowRoot.appendChild(o),t.appendChild(e)}static get observedAttributes(){return["disabled"]}get LINK_TYPE(){return["primary","success","info","warning","danger"]}get href(){return this.getAttribute("href")}set href(t){t!==null&&(this.dom.href=t)}get type(){return this.getAttribute("type")}set type(t){if(t!==null){for(let e=0;e<this.LINK_TYPE.length;e++)if(t===this.LINK_TYPE[e]){this.dom.classList.add(t);break}}}get disabled(){return this.getAttribute("disabled")===""||this.getAttribute("disabled")==="true"}set disabled(t){t&&(t?this.dom.classList.add("disabled"):this.dom.classList.remove("disabled"))}get underline(){return this.getAttribute("underline")===""||this.getAttribute("underline")==="true"}set underline(t){t&&(t?this.dom.classList.add("underline"):this.dom.classList.remove("underline"))}get icon(){return this.getAttribute("icon")}set icon(t){if(t===null||t==="")return;const e=document.createElement("i");e.className=t,this.dom.insertBefore(e,this.dom.firstChild)}init(){this.href=this.href,this.type=this.type,this.disabled=this.disabled,this.underline=this.underline,this.icon=this.icon}connectedCallback(){this.init()}attributeChangedCallback(t,e,r){switch(t){case"disabled":this.disabled=r===""||r==="true"||r===!0;break}}}const y=`:host(ea-radio) {
+  --margin-right: 0.75rem;
+  --text-color: #606266;
+  --radio-show-type: inline-block;
+  --button-size: 1rem;
+  --button-margin: 0.5rem;
+}
+
+.ea-radio_wrap {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+.ea-radio_wrap .__ea-radio-input_wrap {
+  width: var(--button-size);
+  height: var(--button-size);
+  line-height: 1;
+  margin-right: var(--button-margin);
+}
+.ea-radio_wrap .__ea-radio-input_wrap input {
+  display: none;
+}
+.ea-radio_wrap .__ea-radio-input_wrap .__ea-radio-input_inner {
+  position: relative;
+  display: var(--radio-show-type);
+  width: 1rem;
+  height: 1rem;
+  line-height: 1;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 1px solid #606266;
+}
+.ea-radio_wrap .__ea-radio-input_wrap .__ea-radio-input_inner::before {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  content: "";
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background-color: transparent;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+.ea-radio_wrap .__ea-radio-input_wrap .__ea-radio-input_inner:hover {
+  border-color: #409eff;
+}
+.ea-radio_wrap .__ea-radio-label_desc {
+  color: var(--text-color);
+}
+.ea-radio_wrap.checked .__ea-radio-input_wrap .__ea-radio-input_inner {
+  border-color: #409eff;
+  background-color: #409eff;
+}
+.ea-radio_wrap.checked .__ea-radio-input_wrap .__ea-radio-input_inner::before {
+  background-color: white;
+}
+.ea-radio_wrap.checked .__ea-radio-label_desc {
+  color: #409eff;
+}
+.ea-radio_wrap.disabled .__ea-radio-input_wrap .__ea-radio-input_inner {
+  border-color: #eeeeee;
+  background-color: #eeeeee;
+}
+.ea-radio_wrap.disabled .__ea-radio-input_wrap .__ea-radio-input_inner::before {
+  background-color: transparent;
+}
+.ea-radio_wrap.disabled .__ea-radio-label_desc {
+  color: #c0c4cc;
+}
+.ea-radio_wrap.disabled[checked=true] .__ea-radio-input_wrap .__ea-radio-input_inner::before {
+  background-color: #c0c4cc;
+}
+.ea-radio_wrap.border {
+  border: 1px solid #ccc;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+}
+.ea-radio_wrap.border[checked=true] {
+  border: 1px solid #409eff;
+}`,A=()=>{const i=document.createElement("span");i.className="__ea-radio-input_wrap";const t=document.createElement("span");t.className="__ea-radio-input_inner",i.appendChild(t);const e=document.createElement("input");return e.type="radio",e.className="__ea-radio-input_input",i.appendChild(e),{wrap:i,input:e}},E=()=>{const i=document.createElement("span");i.className="__ea-radio-label_desc";const t=document.createElement("slot");return i.appendChild(t),i};var s,d;class C extends m{constructor(){super();u(this,s,void 0);u(this,d,void 0);const e=this.attachShadow({mode:"open"});let r=document.createElement("label");r.className="ea-radio_wrap";const o=A();r.appendChild(o.wrap);const l=E();r.appendChild(l),h(this,d,r),h(this,s,o.input);const p=document.createElement("style");p.innerHTML=y,this.shadowRoot.appendChild(p),e.appendChild(r)}static get observedAttributes(){return["checked"]}get checked(){return this.getAttrBoolean("checked")}set checked(e){n(this,s).checked=e,e?(this.setAttribute("checked",!0),n(this,d).setAttribute("checked",!0),n(this,d).classList.add("checked")):(this.removeAttribute("checked"),n(this,d).removeAttribute("checked"),n(this,d).classList.remove("checked"))}get name(){return this.getAttribute("name")}set name(e){n(this,s).setAttribute("name",e)}get value(){return this.getAttribute("value")}set value(e){n(this,d).setAttribute("for",e),n(this,s).setAttribute("id",e),n(this,s).setAttribute("value",e)}get disabled(){return this.getAttrBoolean("disabled")}set disabled(e){n(this,s).disabled=e,n(this,d).toggleAttribute("disabled",e),n(this,d).classList.toggle("disabled",e)}get border(){return this.getAttrBoolean("border")}set border(e){n(this,d).classList.toggle("border",e)}init(){const e=this;this.checked=this.checked,this.name=this.name,this.value=this.value,this.disabled=this.disabled,this.border=this.border,n(this,s).addEventListener("change",function(r){r.target.checked&&document.querySelectorAll(`ea-radio[name="${e.name}"]`).forEach(o=>{o.shadowRoot.querySelector("input")!==this?o.checked=!1:o.checked=!0})})}connectedCallback(){this.init()}attributeChangedCallback(e,r,o){}}s=new WeakMap,d=new WeakMap;const L=`
+.ea-radio-group {
+  display: flex;
+}
+.ea-radio-group ea-radio {
+  margin-right: 2rem;
+}`;class N extends HTMLElement{constructor(){super();const t=this.attachShadow({mode:"open"}),e=document.createElement("div");t.appendChild(e);const r=document.createElement("slot");e.className="ea-radio-group",e.appendChild(r),this.dom=e;const o=document.createElement("style");o.innerHTML=L,this.shadowRoot.appendChild(o),t.appendChild(e),console.log()}get name(){return this.getAttribute("name")}set name(t){this.querySelectorAll("ea-radio").forEach(e=>{e.setAttribute("name",t)})}init(){this.name=this.name}connectedCallback(){this.init()}}const T=`:host {
+  --margin-right: 1rem;
+}
+
+.ea-checkbox_wrap {
+  display: flex;
+  align-items: center;
+  margin-right: var(--margin-right);
+}
+.ea-checkbox_wrap .__ea-checkbox-input_wrap {
+  margin-right: 0.5rem;
+}
+.ea-checkbox_wrap .__ea-checkbox-input_wrap .__ea-checkbox-input_inner {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  width: 0.8125rem;
+  height: 0.8125rem;
+  line-height: 0.8125;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.ea-checkbox_wrap .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::after {
+  content: "";
+  position: absolute;
+  left: 52.5%;
+  top: 45%;
+  transform: translate(-50%, -50%) rotate(-135deg);
+  display: block;
+  width: 3px;
+  height: 7px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.ea-checkbox_wrap .__ea-checkbox-input_wrap .__ea-checkbox-input_input {
+  display: none;
+}
+.ea-checkbox_wrap .__ea-checkbox-label_desc {
+  transition: color 0.2s;
+}
+.ea-checkbox_wrap.checked .__ea-checkbox-input_wrap .__ea-checkbox-input_inner {
+  border-color: #409eff;
+  background-color: #409eff;
+}
+.ea-checkbox_wrap.checked .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::after {
+  opacity: 1;
+  border-left: 2px solid white;
+  border-top: 2px solid white;
+}
+.ea-checkbox_wrap.checked .__ea-checkbox-label_desc {
+  color: #409eff;
+}
+.ea-checkbox_wrap.disabled .__ea-checkbox-input_wrap .__ea-checkbox-input_inner {
+  border-color: #eeeeee;
+  background-color: #eeeeee;
+}
+.ea-checkbox_wrap.disabled .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::before {
+  background-color: transparent;
+}
+.ea-checkbox_wrap.disabled .__ea-checkbox-label_desc {
+  color: #c0c4cc;
+}
+.ea-checkbox_wrap.disabled[checked=true] .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::before {
+  background-color: #c0c4cc;
+}
+.ea-checkbox_wrap.indeterminate .__ea-checkbox-input_wrap .__ea-checkbox-input_inner {
+  border-color: #409eff;
+  background-color: #409eff;
+}
+.ea-checkbox_wrap.indeterminate .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::after {
+  opacity: 1;
+  left: 50%;
+  top: 50%;
+  width: 80%;
+  height: 3px;
+  background-color: white;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+.ea-checkbox_wrap.indeterminate .__ea-checkbox-label_desc {
+  color: #409eff;
+}
+.ea-checkbox_wrap.indeterminate[checked=true] .__ea-checkbox-input_wrap .__ea-checkbox-input_inner {
+  border-color: #409eff;
+  background-color: #409eff;
+}
+.ea-checkbox_wrap.indeterminate[checked=true] .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::after {
+  width: 3px;
+  height: 7px;
+  left: 52.5%;
+  top: 45%;
+  transform: translate(-50%, -50%) rotate(-135deg);
+  opacity: 1;
+  border-left: 2px solid white;
+  border-top: 2px solid white;
+  background-color: transparent;
+}
+.ea-checkbox_wrap.indeterminate[checked=true] .__ea-checkbox-label_desc {
+  color: #409eff;
+}`,S=()=>{const i=document.createElement("span");i.className="__ea-checkbox-input_wrap";const t=document.createElement("span");t.className="__ea-checkbox-input_inner",i.appendChild(t);const e=document.createElement("input");return e.type="checkbox",e.className="__ea-checkbox-input_input",i.appendChild(e),{wrap:i,input:e}},B=()=>{const i=document.createElement("span");i.className="__ea-checkbox-label_desc";const t=document.createElement("slot");return i.appendChild(t),i};var c,a;class R extends m{constructor(){super();u(this,c,void 0);u(this,a,void 0);const e=this.attachShadow({mode:"open"});let r=document.createElement("label");r.className="ea-checkbox_wrap";const o=S();r.appendChild(o.wrap);const l=B();r.appendChild(l),h(this,a,r),h(this,c,o.input);const p=document.createElement("style");p.innerHTML=T,this.shadowRoot.appendChild(p),e.appendChild(r)}static get observedAttributes(){return["checked","disabled"]}get checked(){return this.getAttrBoolean("checked")}set checked(e){n(this,c).checked=e,e?(this.setAttribute("checked",!0),n(this,a).setAttribute("checked",!0),n(this,a).classList.add("checked")):(this.removeAttribute("checked"),n(this,a).removeAttribute("checked"),n(this,a).classList.remove("checked"),n(this,a).classList.remove("indeterminate"))}get name(){return this.getAttribute("name")}set name(e){n(this,c).setAttribute("name",e)}get value(){return this.getAttribute("value")}set value(e){n(this,a).setAttribute("for",e),n(this,c).setAttribute("id",e),n(this,c).setAttribute("value",e)}get disabled(){return this.getAttrBoolean("disabled")}set disabled(e){n(this,c).disabled=e,n(this,a).toggleAttribute("disabled",e),n(this,a).classList.toggle("disabled",e)}get border(){return this.getAttrBoolean("border")}set border(e){n(this,a).classList.toggle("border",e)}get indeterminate(){return this.getAttrBoolean("indeterminate")}set indeterminate(e){e?(this.setAttribute("indeterminate",!0),n(this,a).classList.add("indeterminate")):(this.removeAttribute("indeterminate"),n(this,a).classList.remove("indeterminate"))}init(){const e=this;this.checked=this.checked,this.name=this.name,this.value=this.value,this.disabled=this.disabled,this.border=this.border,this.indeterminate=this.indeterminate,n(this,c).addEventListener("change",function(r){r.preventDefault(),e.checked=r.target.checked,r.target.checked})}connectedCallback(){this.init()}attributeChangedCallback(e,r,o){switch(e){case"disabled":n(this,a).setAttribute("checked",!0),n(this,a).classList.add("checked");break}}}c=new WeakMap,a=new WeakMap;const q=`.ea-checkbox-group {
+  display: flex;
+}
+.ea-checkbox-group ::slotted(ea-checkbox) {
+  margin-right: 1.5rem;
+}`;class H extends m{constructor(){super();const t=this.attachShadow({mode:"open"}),e=document.createElement("div");t.appendChild(e);const r=document.createElement("slot");e.className="ea-checkbox-group",e.appendChild(r),this.dom=e;const o=document.createElement("style");o.innerHTML=q,this.shadowRoot.appendChild(o),t.appendChild(e)}get name(){return this.getAttribute("name")}set name(t){this.querySelectorAll("ea-checkbox").forEach(e=>{e.setAttribute("name",t),e.name=t})}get value(){if(this.getAttribute("value"))return this.getAttribute("value")}set value(t){if(t)try{t.split(",").map(r=>r.trimStart()).map(r=>{const o=this.querySelector(`ea-checkbox[value="${r}"]`);o.checked="123456"})}catch{}}get disabled(){return this.getAttrBoolean("disabled")}set disabled(t){this.querySelectorAll("ea-checkbox").forEach(e=>{e.disabled=t})}init(){this.name=this.name,this.value=this.value,this.disabled=this.disabled}connectedCallback(){this.init()}}const b=(i,t)=>{window.customElements.get(i)||window.customElements.define(i,t)};b("ea-button",k);b("ea-button-group",w);b("ea-link",z);b("ea-radio",C);b("ea-radio-group",N);b("ea-checkbox",R);b("ea-checkbox-group",H);
