@@ -18,9 +18,22 @@ onMounted(() => {
     alert(`[${checkboxValueArr}]`);
   })
 
-
+  // 
   document.querySelector('#setIndeterminate').addEventListener('click', function(e) {
     document.querySelector('#checkAll').indeterminate = true;
+  })
+
+  // 
+  document.querySelector('#day-group').addEventListener('click', function(e) {
+    console.log(document.querySelector('#ea-checkbox-group').value);
+    const name = "day";
+    const elements = document.querySelectorAll(`ea-checkbox[name=${name}][checked]`);
+
+    const checkboxValueArr = [];
+
+    elements.forEach(item => checkboxValueArr.push(item.value));
+
+    alert(`[${checkboxValueArr}]`);
   })
 
 })
@@ -141,8 +154,17 @@ document
   });
 ```
 
-## 可选项目数量的限制
+## 多选框组 value 属性
 
-使用 min 和 max 属性能够限制可以被勾选的项目的数量。
-
-## 带有边框
+<div class="row left">
+  <ea-checkbox-group id="ea-checkbox-group" name="day" value="今天, 明天" disabled>
+    <ea-checkbox value="前天">前天</ea-checkbox>
+    <ea-checkbox value="昨天">昨天</ea-checkbox>
+    <ea-checkbox value="今天">今天</ea-checkbox>
+    <ea-checkbox value="明天">明天</ea-checkbox>
+    <ea-checkbox value="后天">后天</ea-checkbox>
+  </ea-checkbox-group>
+</div>
+<div class="row left">
+  <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
+</div>

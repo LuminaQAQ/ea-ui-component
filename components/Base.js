@@ -1,7 +1,11 @@
 // @ts-nocheck
+
+import setStyle from '../utils/setStyle';
+
 export default class Base extends HTMLElement {
     constructor() {
         super();
+        this.isProduction = true;
     }
 
     /**
@@ -31,4 +35,14 @@ export default class Base extends HTMLElement {
         return attr === 'true' || attr === '';
     }
 
+    // 样式构建
+    build(shadowRoot, stylesheet) {
+        if (this.isProduction) {
+            const styleNode = document.createElement('style');
+            styleNode.innerHTML = stylesheet;
+            this.shadowRoot.appendChild(styleNode);
+        } else {
+            setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
+        }
+    }
 }
