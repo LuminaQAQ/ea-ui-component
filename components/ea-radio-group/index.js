@@ -1,9 +1,16 @@
 // @ts-nocheck
 import setStyle from "../../utils/setStyle";
+import Base from "../Base";
 
-const stylesheet = ``;
+const stylesheet = `
+.ea-radio-group {
+  display: flex;
+}
+.ea-radio-group ea-radio {
+  margin-right: 2rem;
+}`;
 
-export default class EaRadioGroup extends HTMLElement {
+export default class EaRadioGroup extends Base {
 
     constructor() {
         super();
@@ -19,23 +26,9 @@ export default class EaRadioGroup extends HTMLElement {
 
         this.dom = dom;
 
-        // ------- 打包 -------
-        // #region
-        // const styleNode = document.createElement('style');
-        // styleNode.innerHTML = stylesheet;
-        // this.shadowRoot.appendChild(styleNode);
-        // #endregion
-        // ------- end -------
-
-        // ------- 本地调试 -------
-        // #region
-        setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
-        // #endregion
-        // ------- end -------
+        this.build(shadowRoot, stylesheet);
 
         shadowRoot.appendChild(dom);
-
-        console.log();
     }
 
     // ------- name 唯一键值 -------
