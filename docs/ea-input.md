@@ -4,6 +4,10 @@ import { onMounted } from 'vue'
 onMounted(() => {
   import('../index.js')
   import('./index.scss')
+
+  document.querySelector('#basicInput').addEventListener('change', (e) => {
+    console.log(e.target.value)
+  })
 })
 </script>
 
@@ -14,18 +18,40 @@ onMounted(() => {
 ## 基础用法
 
 <div class="row left">
-    <ea-input placeholder="请输入内容"></ea-input>
+    <ea-input id="basicInput" placeholder="请输入内容"></ea-input>
+    <ea-input id="basicInput" placeholder="请输入内容" value="hello"></ea-input>
 </div>
 
 ```html
 <div class="row left">
-  <ea-input placeholder="请输入内容"></ea-input>
+  <ea-input id="basicInput" placeholder="请输入内容" value="hello"></ea-input>
 </div>
 ```
 
 ## 禁用状态
 
+<div class="row left">
+    <ea-input id="basicInput" placeholder="请输入内容" disabled></ea-input>
+    <ea-input id="basicInput" placeholder="请输入内容" value="hello" disabled></ea-input>
+</div>
+
+```html
+<div class="row left">
+  <ea-input id="basicInput" placeholder="请输入内容" disabled></ea-input>
+  <ea-input
+    id="basicInput"
+    placeholder="请输入内容"
+    value="hello"
+    disabled
+  ></ea-input>
+</div>
+```
+
 ## 可清空
+
+<div class="row left">
+    <ea-input id="basicInput" placeholder="请输入内容"></ea-input>
+</div>
 
 ## 密码框
 

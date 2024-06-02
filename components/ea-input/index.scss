@@ -18,4 +18,9 @@
   &::placeholder {
     color: $color-disabled-text;
   }
+
+  &.disabled {
+    background-color: $color-disabled-btn-bgc;
+    color: $color-disabled-text;
+  }
 }
