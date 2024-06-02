@@ -14,8 +14,14 @@ onMounted(() => {
 ## 基础用法
 
 <div class="row left">
-    <ea-input type="textarea"></ea-input>
+    <ea-input placeholder="请输入内容"></ea-input>
 </div>
+
+```html
+<div class="row left">
+  <ea-input placeholder="请输入内容"></ea-input>
+</div>
+```
 
 ## 禁用状态
 

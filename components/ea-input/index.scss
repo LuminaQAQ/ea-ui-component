@@ -1,0 +1,21 @@
+@import "../ea-ui-base-style.scss";
+
+.ea-textarea_inner,
+.ea-input_inner {
+  box-shadow: none;
+  border: 1px solid $color-border;
+  outline: 0;
+  transition: border 0.2s;
+  border-radius: 3px;
+
+  padding: 0.5rem 0;
+  padding-left: 0.75rem;
+
+  &:focus {
+    border-color: $color-primary-border;
+  }
+
+  &::placeholder {
+    color: $color-disabled-text;
+  }
+}
