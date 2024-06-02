@@ -1,0 +1,18 @@
+.ea-textarea_inner,
+.ea-input_inner {
+  box-shadow: none;
+  border: 1px solid #dcdfe6;
+  outline: 0;
+  transition: border 0.2s;
+  border-radius: 3px;
+  padding: 0.5rem 0;
+  padding-left: 0.75rem;
+}
+.ea-textarea_inner:focus,
+.ea-input_inner:focus {
+  border-color: #409eff;
+}
+.ea-textarea_inner::placeholder,
+.ea-input_inner::placeholder {
+  color: #c0c4cc;
+}

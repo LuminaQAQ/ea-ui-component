@@ -34,6 +34,9 @@ $color-danger-border: #f56c6c;
 $color-disabled-text: #c0c4cc;
 $color-disabled-btn-bgc: #eeeeee;
 
+// 边框
+$color-border: #dcdfe6;
+
 // 链接的配色
 @mixin ea-link-theme($theme-name, $color) {
   &.#{$theme-name} {
