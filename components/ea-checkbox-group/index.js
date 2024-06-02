@@ -2,7 +2,8 @@
 import setStyle from "../../utils/setStyle";
 import Base from "../Base";
 
-const stylesheet = `.ea-checkbox-group {
+const stylesheet = `
+.ea-checkbox-group {
   display: flex;
 }
 .ea-checkbox-group ::slotted(ea-checkbox) {
