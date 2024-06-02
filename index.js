@@ -8,6 +8,7 @@ import EaRadio from "./components/ea-radio/";
 import EaRadioGroup from "./components/ea-radio-group/";
 import EaCheckbox from "./components/ea-checkbox/";
 import EaCheckboxGroup from "./components/ea-checkbox-group/";
+import EaInput from "./components/ea-input/";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -22,3 +23,4 @@ register("ea-radio", EaRadio);
 register("ea-radio-group", EaRadioGroup);
 register("ea-checkbox", EaCheckbox);
 register("ea-checkbox-group", EaCheckboxGroup);
+register("ea-input", EaInput); 

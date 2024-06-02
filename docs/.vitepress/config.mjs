@@ -39,6 +39,7 @@ export default defineConfig({
         items: [
           { text: 'Radio 单选框', link: '/ea-radio' },
           { text: 'Checkbox 多选框', link: '/ea-checkbox' },
+          { text: 'Input 输入框', link: '/ea-input' },
         ]
       },
     ],

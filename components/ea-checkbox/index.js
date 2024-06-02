@@ -243,8 +243,12 @@ export default class EacheChekbox extends Base {
 
   set indeterminate(val) {
     if (val) {
+      this.checked = false;
+      this.#label.classList.remove('checked');
+
       this.setAttribute('indeterminate', true);
       this.#label.classList.add('indeterminate');
+      console.log(val);
     } else {
       this.removeAttribute('indeterminate');
       this.#label.classList.remove('indeterminate');
