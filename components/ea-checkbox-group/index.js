@@ -60,8 +60,8 @@ export default class EaCheckboxGroup extends Base {
 
             valArr.map(item => {
                 const checkbox = document.querySelector(`ea-checkbox[name="${this.name}"][value="${item}"]`);
-                console.log(checkbox.querySelector(''));
                 checkbox.setAttribute('checked', 'true');
+                checkbox.checked = 'true';
             })
         } catch (error) {
 
@@ -81,6 +81,7 @@ export default class EaCheckboxGroup extends Base {
 
         checkboxs.forEach(checkbox => {
             checkbox.setAttribute('disabled', 'true');
+            checkbox.disabled = 'true';
         });
     }
     // #endregion
