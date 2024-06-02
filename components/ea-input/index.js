@@ -21,6 +21,8 @@ const inputDom = (type = "text") => {
 
 export default class EaInput extends Base {
     #input;
+    #mounted = false;
+
     constructor() {
         super();
 
@@ -47,6 +49,23 @@ export default class EaInput extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- value 输入框的值 -------
+    // #region
+    get value() {
+        if (!this.#mounted) {
+            this.#input.value = this.getAttribute("value") || '';
+        }
+
+        return this.#input.value;
+    }
+
+    set value(val) {
+        this.setAttribute("value", val);
+        this.#input.value = val;
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- placeholder 提示 -------
     // #region
     get placeholder() {
@@ -60,17 +79,51 @@ export default class EaInput extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- disabled 输入框禁用 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean("disabled");
+    }
+
+    set disabled(val) {
+        this.setAttribute("disabled", val);
+        this.#input.disabled = val;
+        this.#input.classList.toggle("disabled", val);
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
+        const that = this;
+
         // 按钮类型
         this.type = this.type;
 
         // 输入框提示
         this.placeholder = this.placeholder;
 
-        console.log(this);
+        // 输入框的值
+        this.value = this.value;
+
+        // 禁用
+        this.disabled = this.disabled;
+
+        // 
+        this.#input.addEventListener("input", (e) => {
+            this.dispatchEvent(
+                new CustomEvent("change", {
+                    detail: {
+                        value: e.target.value
+                    }
+                })
+            );
+        });
     }
 
     connectedCallback() {
         this.init();
+        this.#mounted = true;
     }
+
+
 }

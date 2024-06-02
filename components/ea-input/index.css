@@ -16,3 +16,8 @@
 .ea-input_inner::placeholder {
   color: #c0c4cc;
 }
+.ea-textarea_inner.disabled,
+.ea-input_inner.disabled {
+  background-color: #eeeeee;
+  color: #c0c4cc;
+}
