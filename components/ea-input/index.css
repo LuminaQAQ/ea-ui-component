@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import "../ea-icon/css/fontello.css";
 @import "../ea-icon/css/animation.css";
 @font-face {
@@ -8,6 +9,14 @@
 }
 .ea-input_wrap {
   position: relative;
+  /* ------- 特定的属性的图标(clearable, password) ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 标识图标在输入框前还是后 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
 }
 .ea-input_wrap .ea-textarea_inner,
 .ea-input_wrap .ea-input_inner {
@@ -78,4 +87,7 @@
 }
 .ea-input_wrap.suffix .ea-input_inner {
   padding-right: 1.75rem;
+}
+.ea-input_wrap .ea-textarea_inner {
+  resize: vertical;
 }

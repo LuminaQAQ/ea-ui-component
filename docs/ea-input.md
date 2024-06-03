@@ -105,6 +105,16 @@ onMounted(() => {
 
 用于输入多行文本信息，通过将 `type` 属性的值指定为 textarea。
 
+<div class="row left">
+    <ea-input type="textarea" rows="2" placeholder="这不是空的"></ea-input>
+</div>
+
+```html
+<div class="row left">
+  <ea-input type="textarea" rows="2" placeholder="这不是空的"></ea-input>
+</div>
+```
+
 ## 可自适应文本高度的文本域
 
 通过设置 autosize 属性可以使得文本域的高度能够根据文本内容自动进行调整，并且 autosize 还可以设定为一个对象，指定最小行数和最大行数。

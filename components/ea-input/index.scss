@@ -45,6 +45,8 @@
     line-height: 0.8;
   }
 
+  /* ------- 特定的属性的图标(clearable, password) ------- */
+  /* #region  */
   i[class="icon-cancel-circled2"],
   i[class="icon-eye"],
   i[class="icon-eye-off"] {
@@ -62,7 +64,11 @@
       padding-right: 1.75rem;
     }
   }
+  /* #endregion */
+  /* ------- end  ------- */
 
+  /* ------- 标识图标在输入框前还是后 ------- */
+  /* #region  */
   &.prefix,
   &.suffix {
     i {
@@ -98,5 +104,12 @@
     .ea-input_inner {
       padding-right: 1.75rem;
     }
+  }
+
+  /* #endregion */
+  /* ------- end  ------- */
+
+  .ea-textarea_inner {
+    resize: vertical;
   }
 }
