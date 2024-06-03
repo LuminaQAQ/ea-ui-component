@@ -223,6 +223,12 @@ export default class EaInput extends Base {
 
     // ------- textarea 文本域 -------
     // #region
+
+    setTextareaHeight(rows) {
+        this.#input.style.height = `${rows * 0.66 + 1}rem`;
+        this.#input.style.minHeight = `${rows * 0.66 + 1}rem`;
+    }
+
     get rows() {
         return this.getAttribute("rows") || 2;
     }
@@ -233,6 +239,52 @@ export default class EaInput extends Base {
         this.setAttribute("rows", val);
         this.#input.rows = val;
     }
+
+    get autosize() {
+        return this.getAttrBoolean("autosize");
+    }
+
+    set autosize(val) {
+        if (!val || this.#input.type !== 'textarea') return;
+
+        this.setAttribute("autosize", val);
+
+        this.#input.addEventListener('input', (e) => {
+            const cols = this.#input.cols;
+            const chars = e.target.value.length;
+
+            let rows = Math.ceil(chars / cols) <= Number(this.rows) ? Number(this.rows) : Math.ceil(chars / cols);
+
+            if (chars % cols == 1) {
+                if (this.minRows < rows) this.setTextareaHeight(this.minRows);
+                else if (this.maxRows < rows) this.setTextareaHeight(this.maxRows);
+                else this.setTextareaHeight(rows);
+            }
+        })
+    }
+
+    get minRows() {
+        return this.getAttribute("min-rows") || 2;
+    }
+
+    set minRows(val) {
+        if (!val || this.#input.type !== 'textarea') return;
+
+        this.setAttribute("min-rows", val);
+        this.setTextareaHeight(Number(val));
+    }
+
+    get maxRows() {
+        return this.getAttribute("max-rows") || 10;
+    }
+
+    set maxRows(val) {
+        if (!val || this.#input.type !== 'textarea') return;
+
+        this.setAttribute("max-rows", val);
+        this.setTextareaHeight(Number(val));
+    }
+
     // #endregion
     // ------- end -------
 
@@ -277,6 +329,7 @@ export default class EaInput extends Base {
 
         // 文本域属性
         this.rows = this.rows;
+        this.autosize = this.autosize;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {

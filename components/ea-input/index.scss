@@ -3,21 +3,23 @@
 
 .ea-input_wrap {
   position: relative;
+  width: 100%;
 
   .ea-textarea_inner,
   .ea-input_inner {
     box-sizing: border-box;
     box-shadow: none;
+
     border: 1px solid $color-border;
     outline: 0;
     transition: border 0.2s;
     border-radius: 3px;
 
-    padding: 0.5rem 0;
-    padding-left: 0.75rem;
+    padding: 0.5rem;
 
     line-height: 0.8;
     font-size: 0.8rem;
+    scrollbar-width: none;
 
     &:focus {
       border-color: $color-primary-border;
@@ -111,5 +113,6 @@
 
   .ea-textarea_inner {
     resize: vertical;
+    min-height: 1.75rem;
   }
 }
