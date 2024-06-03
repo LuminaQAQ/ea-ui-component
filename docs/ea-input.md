@@ -68,6 +68,23 @@ onMounted(() => {
 
 ## 密码框
 
+<div class="row left">
+    <ea-input id="basicInput" placeholder="这不是空的" show-password></ea-input>
+    <ea-input id="basicInput" placeholder="这不是空的" value="这是空的" show-password></ea-input>
+</div>
+
+```html
+<div class="row left">
+  <ea-input id="basicInput" placeholder="这不是空的" show-password></ea-input>
+  <ea-input
+    id="basicInput"
+    placeholder="这不是空的"
+    value="这是空的"
+    show-password
+  ></ea-input>
+</div>
+```
+
 ## 带 icon 的输入框
 
 带有图标标记输入类型
