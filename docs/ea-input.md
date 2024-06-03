@@ -50,8 +50,21 @@ onMounted(() => {
 ## 可清空
 
 <div class="row left">
-    <ea-input id="basicInput" placeholder="请输入内容"></ea-input>
+    <ea-input id="basicInput" placeholder="这不是空的" clearable></ea-input>
+    <ea-input id="basicInput" placeholder="请输入内容" value="这是空的" clearable></ea-input>
 </div>
+
+```html
+<div class="row left">
+  <ea-input id="basicInput" placeholder="这不是空的" clearable></ea-input>
+  <ea-input
+    id="basicInput"
+    placeholder="请输入内容"
+    value="这是空的"
+    clearable
+  ></ea-input>
+</div>
+```
 
 ## 密码框
 
