@@ -221,6 +221,21 @@ export default class EaInput extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- textarea 文本域 -------
+    // #region
+    get rows() {
+        return this.getAttribute("rows") || 2;
+    }
+
+    set rows(val) {
+        if (!val || this.#input.type !== 'textarea') return;
+
+        this.setAttribute("rows", val);
+        this.#input.rows = val;
+    }
+    // #endregion
+    // ------- end -------
+
     iconInit(className) {
         const clearIcon = document.createElement('i');
         clearIcon.className = className;
@@ -259,6 +274,9 @@ export default class EaInput extends Base {
         // 输入框图标
         this.prefixIcon = this.prefixIcon;
         this.surfixIcon = this.surfixIcon;
+
+        // 文本域属性
+        this.rows = this.rows;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
