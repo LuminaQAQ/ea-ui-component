@@ -1,13 +1,13 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 onMounted(() => {
   import('../index.js')
   import('./index.scss')
 
-  document.querySelector('#basicInput').addEventListener('change', (e) => {
-    console.log(e.target.value)
-  })
+  // document.querySelector('#basicInput').addEventListener('change', (e) => {
+  //   console.log(e.target.value)
+  // })
 })
 </script>
 
@@ -120,7 +120,7 @@ onMounted(() => {
 通过设置 autosize 属性可以使得文本域的高度能够根据文本内容自动进行调整。
 
 <div class="col left">
-    <ea-input type="textarea" placeholder="这不是空的" autosize></ea-input>
+  <ea-input type="textarea"></ea-input>
 </div>
 
 ```html
@@ -129,26 +129,26 @@ onMounted(() => {
 </div>
 ```
 
-## 设置高度的最值
+<!-- ## 设置高度的最值
 
 可以指定最小行数和最大行数。
 
 <div class="col left">
-    <ea-input type="textarea" placeholder="这不是空的" autosize></ea-input>
-</div>
+    <ea-input type="textarea" placeholder="这不是空的" min-rows="2" max-rows="10"></ea-input>
+</div> -->
 
-## 复合型输入框
+<!-- ## 复合型输入框
 
-可前置或后置元素，一般为标签或按钮
+可前置或后置元素，一般为标签或按钮 -->
 
-## 尺寸
+<!-- ## 尺寸 -->
 
-## 带输入建议
+<!-- ## 带输入建议
 
-根据输入内容提供对应的输入建议
+根据输入内容提供对应的输入建议 -->
 
-## 远程搜索
+<!-- ## 远程搜索
 
-从服务端搜索数据
+从服务端搜索数据 -->
 
-## 输入长度限制
+<!-- ## 输入长度限制 -->
