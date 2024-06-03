@@ -1,26 +1,54 @@
 @import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
 
-.ea-textarea_inner,
-.ea-input_inner {
-  box-shadow: none;
-  border: 1px solid $color-border;
-  outline: 0;
-  transition: border 0.2s;
-  border-radius: 3px;
+.ea-input_wrap {
+  position: relative;
+  .ea-textarea_inner,
+  .ea-input_inner {
+    box-sizing: border-box;
+    box-shadow: none;
+    border: 1px solid $color-border;
+    outline: 0;
+    transition: border 0.2s;
+    border-radius: 3px;
 
-  padding: 0.5rem 0;
-  padding-left: 0.75rem;
+    padding: 0.5rem 0;
+    padding-left: 0.75rem;
 
-  &:focus {
-    border-color: $color-primary-border;
+    &:focus {
+      border-color: $color-primary-border;
+    }
+
+    &::placeholder {
+      color: $color-disabled-text;
+    }
+
+    &.disabled {
+      background-color: $color-disabled-btn-bgc;
+      color: $color-disabled-text;
+    }
+
+    &.ea-input_clear {
+      ::before {
+        content: "\e9c3";
+        display: block;
+      }
+    }
   }
 
-  &::placeholder {
+  i[class="icon-cancel-circled2"] {
+    position: absolute;
+    right: 0;
+    top: 50%;
+
+    transform: translateY(-50%);
     color: $color-disabled-text;
+    margin-right: 0.25rem;
   }
 
-  &.disabled {
-    background-color: $color-disabled-btn-bgc;
-    color: $color-disabled-text;
+  &.clearable {
+    .ea-input_inner {
+      padding-right: 1.25rem;
+    }
   }
 }

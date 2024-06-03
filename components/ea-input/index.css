@@ -1,5 +1,17 @@
-.ea-textarea_inner,
-.ea-input_inner {
+@import "../ea-icon/css/fontello.css";
+@import "../ea-icon/css/animation.css";
+@font-face {
+  font-size: 1rem;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
+}
+.ea-input_wrap {
+  position: relative;
+}
+.ea-input_wrap .ea-textarea_inner,
+.ea-input_wrap .ea-input_inner {
+  box-sizing: border-box;
   box-shadow: none;
   border: 1px solid #dcdfe6;
   outline: 0;
@@ -8,16 +20,32 @@
   padding: 0.5rem 0;
   padding-left: 0.75rem;
 }
-.ea-textarea_inner:focus,
-.ea-input_inner:focus {
+.ea-input_wrap .ea-textarea_inner:focus,
+.ea-input_wrap .ea-input_inner:focus {
   border-color: #409eff;
 }
-.ea-textarea_inner::placeholder,
-.ea-input_inner::placeholder {
+.ea-input_wrap .ea-textarea_inner::placeholder,
+.ea-input_wrap .ea-input_inner::placeholder {
   color: #c0c4cc;
 }
-.ea-textarea_inner.disabled,
-.ea-input_inner.disabled {
+.ea-input_wrap .ea-textarea_inner.disabled,
+.ea-input_wrap .ea-input_inner.disabled {
   background-color: #eeeeee;
   color: #c0c4cc;
+}
+.ea-input_wrap .ea-textarea_inner.ea-input_clear ::before,
+.ea-input_wrap .ea-input_inner.ea-input_clear ::before {
+  content: "\e9c3";
+  display: block;
+}
+.ea-input_wrap i[class=icon-cancel-circled2] {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #c0c4cc;
+  margin-right: 0.25rem;
+}
+.ea-input_wrap.clearable .ea-input_inner {
+  padding-right: 1.25rem;
 }
