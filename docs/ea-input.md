@@ -89,6 +89,18 @@ onMounted(() => {
 
 带有图标标记输入类型
 
+<div class="row left">
+    <ea-input placeholder="这不是空的" prefix-icon="icon-search"></ea-input>
+    <ea-input placeholder="这不是空的" suffix-icon="icon-search"></ea-input>
+</div>
+
+```html
+<div class="row left">
+  <ea-input placeholder="这不是空的" prefix-icon="icon-search"></ea-input>
+  <ea-input placeholder="这不是空的" suffix-icon="icon-search"></ea-input>
+</div>
+```
+
 ## 文本域
 
 用于输入多行文本信息，通过将 `type` 属性的值指定为 textarea。

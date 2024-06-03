@@ -3,6 +3,7 @@
 
 .ea-input_wrap {
   position: relative;
+
   .ea-textarea_inner,
   .ea-input_inner {
     box-sizing: border-box;
@@ -14,6 +15,9 @@
 
     padding: 0.5rem 0;
     padding-left: 0.75rem;
+
+    line-height: 0.8;
+    font-size: 0.8rem;
 
     &:focus {
       border-color: $color-primary-border;
@@ -36,22 +40,63 @@
     }
   }
 
+  i {
+    font-size: 0.9rem;
+    line-height: 0.8;
+  }
+
   i[class="icon-cancel-circled2"],
   i[class="icon-eye"],
   i[class="icon-eye-off"] {
     position: absolute;
-    right: 0;
+    left: calc(100% - 1.75rem);
     top: 50%;
-
-    transform: translateY(-50%);
     color: $color-disabled-text;
-    margin-right: 0.25rem;
+    transform: translate(calc(-100% - 0.25rem), -50%);
   }
 
   &.clearable,
   &.password {
     .ea-input_inner {
-      padding-right: 1.25rem;
+      width: calc(100% - 1.75rem);
+      padding-right: 1.75rem;
+    }
+  }
+
+  &.prefix,
+  &.suffix {
+    i {
+      position: absolute;
+      top: 50%;
+      color: $color-disabled-text;
+    }
+
+    .ea-input_inner {
+      width: calc(100% - 1.75rem);
+    }
+  }
+
+  &.prefix {
+    i {
+      left: 2.5%;
+
+      transform: translate(-2.5%, -50%);
+    }
+
+    .ea-input_inner {
+      padding-left: 1.75rem;
+    }
+  }
+
+  &.suffix {
+    i {
+      left: calc(100% - 1.75rem);
+
+      transform: translate(calc(-100% - 0.25rem), -50%);
+    }
+
+    .ea-input_inner {
+      padding-right: 1.75rem;
     }
   }
 }

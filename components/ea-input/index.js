@@ -106,6 +106,8 @@ export default class EaInput extends Base {
     }
 
     set clearable(val) {
+        if (!val) return;
+
         this.setAttribute("clearable", val);
     }
 
@@ -151,6 +153,7 @@ export default class EaInput extends Base {
     }
 
     set showPassword(val) {
+        if (!val) return;
         this.setAttribute("show-password", val);
 
         if (val) {
@@ -173,7 +176,7 @@ export default class EaInput extends Base {
     initShowPasswordIcon() {
         if (this.showPassword) {
             const showPasswordIcon = this.iconInit('icon-eye');
-            showPasswordIcon.style.display = 'none';
+            if (!this.value) showPasswordIcon.style.display = 'none';
 
             showPasswordIcon.addEventListener('click', (e) => {
                 this.#showPasswordIcon.className = this.#input.type === "password" ? "icon-eye-off" : "icon-eye";
@@ -186,6 +189,34 @@ export default class EaInput extends Base {
 
             this.iconAppend('password', this.showPassword, showPasswordIcon);
         }
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- prefix/surfix 指定图标显示位置 -------
+    // #region
+    get prefixIcon() {
+        return this.getAttribute("prefix-icon") || '';
+    }
+
+    set prefixIcon(val) {
+        if (!val) return;
+
+        this.setAttribute("prefix", val);
+        const prefixIcon = this.iconInit(val);
+        this.iconAppend('prefix', true, prefixIcon);
+    }
+
+    get surfixIcon() {
+        return this.getAttribute("suffix-icon") || '';
+    }
+
+    set surfixIcon(val) {
+        if (!val) return;
+
+        this.setAttribute("suffix", val);
+        const surfixIcon = this.iconInit(val);
+        this.iconAppend('suffix', true, surfixIcon);
     }
     // #endregion
     // ------- end -------
@@ -224,6 +255,10 @@ export default class EaInput extends Base {
         // 密码
         this.showPassword = this.showPassword;
         this.initShowPasswordIcon();
+
+        // 输入框图标
+        this.prefixIcon = this.prefixIcon;
+        this.surfixIcon = this.surfixIcon;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
