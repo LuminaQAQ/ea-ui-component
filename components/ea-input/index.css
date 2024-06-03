@@ -38,7 +38,9 @@
   content: "\e9c3";
   display: block;
 }
-.ea-input_wrap i[class=icon-cancel-circled2] {
+.ea-input_wrap i[class=icon-cancel-circled2],
+.ea-input_wrap i[class=icon-eye],
+.ea-input_wrap i[class=icon-eye-off] {
   position: absolute;
   right: 0;
   top: 50%;
@@ -46,6 +48,6 @@
   color: #c0c4cc;
   margin-right: 0.25rem;
 }
-.ea-input_wrap.clearable .ea-input_inner {
+.ea-input_wrap.clearable .ea-input_inner, .ea-input_wrap.password .ea-input_inner {
   padding-right: 1.25rem;
 }

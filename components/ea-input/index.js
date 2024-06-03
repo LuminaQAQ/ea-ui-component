@@ -23,6 +23,7 @@ export default class EaInput extends Base {
     #wrap;
     #input;
     #clearIcon;
+    #showPasswordIcon;
     #mounted = false;
 
     constructor() {
@@ -106,11 +107,12 @@ export default class EaInput extends Base {
 
     set clearable(val) {
         this.setAttribute("clearable", val);
-        this.#input.classList.toggle("ea-input_clear", val);
     }
 
     // 清除图标
     clearableEvent(e) {
+        if (!this.clearable) return;
+
         if (this.clearable && e.target.value !== '') {
             this.#clearIcon.style.display = 'block';
         } else {
@@ -120,27 +122,85 @@ export default class EaInput extends Base {
 
     // 清除图标初始化
     initClearableIcon() {
-        const clearIcon = document.createElement('i');
-        clearIcon.className = "icon-cancel-circled2"
-        clearIcon.addEventListener('click', () => {
-            this.value = '';
-            this.#input.focus();
-        })
+        if (this.clearable) {
+            const clearIcon = this.iconInit('icon-cancel-circled2');
 
-        this.#clearIcon = clearIcon;
+            clearIcon.addEventListener('click', () => {
+                this.value = '';
+                this.#input.focus();
+            })
 
-        if (this.value) {
-            this.#clearIcon.style.display = 'block';
-        } else {
-            this.#clearIcon.style.display = 'none';
+            this.#clearIcon = clearIcon;
+
+            if (this.value) {
+                this.#clearIcon.style.display = 'block';
+            } else {
+                this.#clearIcon.style.display = 'none';
+            }
+
+            this.iconAppend('clearable', this.clearable, clearIcon);
         }
-
-        this.#wrap.classList.add('clearable');
-        this.#wrap.appendChild(clearIcon);
     }
     // #endregion
     // ------- end -------
 
+    // ------- show-password 密码 -------
+    // #region
+    get showPassword() {
+        return this.getAttrBoolean("show-password");
+    }
+
+    set showPassword(val) {
+        this.setAttribute("show-password", val);
+
+        if (val) {
+            this.#input.type = "password";
+        }
+    }
+
+    // 显示/隐藏密码图标
+    showPasswordEvent(e) {
+        if (!this.showPassword) return;
+
+        if (this.showPassword && e.target.value !== '') {
+            this.#showPasswordIcon.style.display = 'block';
+        } else {
+            this.#showPasswordIcon.style.display = 'none';
+        }
+    }
+
+    // 初始化 显示/隐藏密码
+    initShowPasswordIcon() {
+        if (this.showPassword) {
+            const showPasswordIcon = this.iconInit('icon-eye');
+            showPasswordIcon.style.display = 'none';
+
+            showPasswordIcon.addEventListener('click', (e) => {
+                this.#showPasswordIcon.className = this.#input.type === "password" ? "icon-eye-off" : "icon-eye";
+                this.#input.type = this.#input.type === "password" ? "text" : "password";
+
+                this.#input.focus();
+            })
+
+            this.#showPasswordIcon = showPasswordIcon;
+
+            this.iconAppend('password', this.showPassword, showPasswordIcon);
+        }
+    }
+    // #endregion
+    // ------- end -------
+
+    iconInit(className) {
+        const clearIcon = document.createElement('i');
+        clearIcon.className = className;
+
+        return clearIcon;
+    }
+
+    iconAppend(className, isClassName, element) {
+        this.#wrap.classList.toggle(className, isClassName);
+        this.#wrap.appendChild(element);
+    }
 
     init() {
         const that = this;
@@ -159,7 +219,11 @@ export default class EaInput extends Base {
 
         // 可清除
         this.clearable = this.clearable;
-        if (this.clearable) this.initClearableIcon();
+        this.initClearableIcon();
+
+        // 密码
+        this.showPassword = this.showPassword;
+        this.initShowPasswordIcon();
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
@@ -172,6 +236,7 @@ export default class EaInput extends Base {
             );
 
             this.clearableEvent(e);
+            this.showPasswordEvent(e);
         });
 
         // 聚焦时
@@ -185,6 +250,7 @@ export default class EaInput extends Base {
             );
 
             this.clearableEvent(e);
+            this.showPasswordEvent(e);
         });
 
         // 失焦时
@@ -196,6 +262,9 @@ export default class EaInput extends Base {
                     }
                 })
             );
+
+            this.clearableEvent(e);
+            this.showPasswordEvent(e);
         });
     }
 
@@ -203,6 +272,4 @@ export default class EaInput extends Base {
         this.init();
         this.#mounted = true;
     }
-
-
 }
