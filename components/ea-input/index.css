@@ -9,6 +9,7 @@
 }
 .ea-input_wrap {
   position: relative;
+  width: 100%;
   /* ------- 特定的属性的图标(clearable, password) ------- */
   /* #region  */
   /* #endregion */
@@ -26,10 +27,10 @@
   outline: 0;
   transition: border 0.2s;
   border-radius: 3px;
-  padding: 0.5rem 0;
-  padding-left: 0.75rem;
+  padding: 0.5rem;
   line-height: 0.8;
   font-size: 0.8rem;
+  scrollbar-width: none;
 }
 .ea-input_wrap .ea-textarea_inner:focus,
 .ea-input_wrap .ea-input_inner:focus {
@@ -90,4 +91,5 @@
 }
 .ea-input_wrap .ea-textarea_inner {
   resize: vertical;
+  min-height: 1.75rem;
 }

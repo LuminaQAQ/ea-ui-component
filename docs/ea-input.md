@@ -117,7 +117,25 @@ onMounted(() => {
 
 ## 可自适应文本高度的文本域
 
-通过设置 autosize 属性可以使得文本域的高度能够根据文本内容自动进行调整，并且 autosize 还可以设定为一个对象，指定最小行数和最大行数。
+通过设置 autosize 属性可以使得文本域的高度能够根据文本内容自动进行调整。
+
+<div class="col left">
+    <ea-input type="textarea" placeholder="这不是空的" autosize></ea-input>
+</div>
+
+```html
+<div class="col left">
+  <ea-input type="textarea" placeholder="这不是空的" autosize></ea-input>
+</div>
+```
+
+## 设置高度的最值
+
+可以指定最小行数和最大行数。
+
+<div class="col left">
+    <ea-input type="textarea" placeholder="这不是空的" autosize></ea-input>
+</div>
 
 ## 复合型输入框
 

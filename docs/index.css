@@ -28,6 +28,23 @@
   justify-content: center;
 }
 
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+  border-radius: 8px;
+}
+.col.left {
+  align-items: flex-start;
+}
+.col.left > * {
+  margin-right: 0.5rem;
+}
+
 .main-icon-wrap {
   display: flex;
   flex-wrap: wrap;
