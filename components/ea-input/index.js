@@ -1,16 +1,109 @@
 // @ts-nocheck
 import Base from "../Base";
 
-const stylesheet = ``;
+const stylesheet = `
+@charset "UTF-8";
+@import url('/ea_ui_component/icon/index.css');
+@font-face {
+  font-size: 1rem;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
+}
+.ea-input_wrap {
+  position: relative;
+  width: 100%;
+  /* ------- 特定的属性的图标(clearable, password) ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+  /* ------- 标识图标在输入框前还是后 ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
+}
+.ea-input_wrap .ea-textarea_inner,
+.ea-input_wrap .ea-input_inner {
+  box-sizing: border-box;
+  box-shadow: none;
+  border: 1px solid #dcdfe6;
+  outline: 0;
+  transition: border 0.2s;
+  border-radius: 3px;
+  padding: 0.5rem;
+  line-height: 0.8;
+  font-size: 0.8rem;
+  scrollbar-width: none;
+}
+.ea-input_wrap .ea-textarea_inner:focus,
+.ea-input_wrap .ea-input_inner:focus {
+  border-color: #409eff;
+}
+.ea-input_wrap .ea-textarea_inner::placeholder,
+.ea-input_wrap .ea-input_inner::placeholder {
+  color: #c0c4cc;
+}
+.ea-input_wrap .ea-textarea_inner.disabled,
+.ea-input_wrap .ea-input_inner.disabled {
+  background-color: #eeeeee;
+  color: #c0c4cc;
+}
+.ea-input_wrap .ea-textarea_inner.ea-input_clear ::before,
+.ea-input_wrap .ea-input_inner.ea-input_clear ::before {
+  content: "\e9c3";
+  display: block;
+}
+.ea-input_wrap i {
+  font-size: 0.9rem;
+  line-height: 0.8;
+}
+.ea-input_wrap i[class=icon-cancel-circled2],
+.ea-input_wrap i[class=icon-eye],
+.ea-input_wrap i[class=icon-eye-off] {
+  position: absolute;
+  left: calc(100% - 1.75rem);
+  top: 50%;
+  color: #c0c4cc;
+  transform: translate(calc(-100% - 0.25rem), -50%);
+}
+.ea-input_wrap.clearable .ea-input_inner, .ea-input_wrap.password .ea-input_inner {
+  width: calc(100% - 1.75rem);
+  padding-right: 1.75rem;
+}
+.ea-input_wrap.prefix i, .ea-input_wrap.suffix i {
+  position: absolute;
+  top: 50%;
+  color: #c0c4cc;
+}
+.ea-input_wrap.prefix .ea-input_inner, .ea-input_wrap.suffix .ea-input_inner {
+  width: calc(100% - 1.75rem);
+}
+.ea-input_wrap.prefix i {
+  left: 2.5%;
+  transform: translate(-2.5%, -50%);
+}
+.ea-input_wrap.prefix .ea-input_inner {
+  padding-left: 1.75rem;
+}
+.ea-input_wrap.suffix i {
+  left: calc(100% - 1.75rem);
+  transform: translate(calc(-100% - 0.25rem), -50%);
+}
+.ea-input_wrap.suffix .ea-input_inner {
+  padding-right: 1.75rem;
+}
+.ea-input_wrap .ea-textarea_inner {
+  resize: vertical;
+  min-height: 1.75rem;
+}`;
 
-const inputDom = (type = "text") => {
-    let input = null;
+const inputDom = (that, type) => {
+    let input = type === "textarea" ? document.createElement('textarea') : document.createElement('input');
+    // console.log(that.shadowRoot.parentNode);
 
     if (type === "textarea") {
-        input = document.createElement('textarea');
         input.className = "ea-textarea_inner";
     } else {
-        input = document.createElement('input');
         input.className = "ea-input_inner";
         input.type = type;
         input.autocomplete = "off";
@@ -34,10 +127,10 @@ export default class EaInput extends Base {
         wrap.className = "ea-input_wrap";
         this.#wrap = wrap;
 
-        const dom = inputDom(this.type);
+        const dom = inputDom(this, this.type);
         this.#input = dom;
 
-        wrap.appendChild(dom);
+        this.#wrap.appendChild(dom);
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
@@ -62,10 +155,12 @@ export default class EaInput extends Base {
             this.#input.value = this.getAttribute("value") || '';
         }
 
-        return this.#input.value;
+        return this.getAttribute('value');
     }
 
     set value(val) {
+        if (!val) return;
+
         this.setAttribute("value", val);
         this.#input.value = val;
     }
@@ -92,7 +187,7 @@ export default class EaInput extends Base {
     }
 
     set disabled(val) {
-        this.setAttribute("disabled", val);
+        this.toggleAttr("disabled", val);
         this.#input.disabled = val;
         this.#input.classList.toggle("disabled", val);
     }
@@ -225,6 +320,8 @@ export default class EaInput extends Base {
     // #region
 
     setTextareaHeight(rows) {
+        rows = Number(rows);
+
         this.#input.style.height = `${rows * 0.66 + 1}rem`;
         this.#input.style.minHeight = `${rows * 0.66 + 1}rem`;
     }
@@ -240,27 +337,14 @@ export default class EaInput extends Base {
         this.#input.rows = val;
     }
 
-    get autosize() {
+    get autoSize() {
         return this.getAttrBoolean("autosize");
     }
 
-    set autosize(val) {
+    set autoSize(val) {
         if (!val || this.#input.type !== 'textarea') return;
 
         this.setAttribute("autosize", val);
-
-        this.#input.addEventListener('input', (e) => {
-            const cols = this.#input.cols;
-            const chars = e.target.value.length;
-
-            let rows = Math.ceil(chars / cols) <= Number(this.rows) ? Number(this.rows) : Math.ceil(chars / cols);
-
-            if (chars % cols == 1) {
-                if (this.minRows < rows) this.setTextareaHeight(this.minRows);
-                else if (this.maxRows < rows) this.setTextareaHeight(this.maxRows);
-                else this.setTextareaHeight(rows);
-            }
-        })
     }
 
     get minRows() {
@@ -305,6 +389,7 @@ export default class EaInput extends Base {
 
         // 按钮类型
         this.type = this.type;
+        // console.log(this, this.#input);
 
         // 输入框提示
         this.placeholder = this.placeholder;
@@ -329,7 +414,9 @@ export default class EaInput extends Base {
 
         // 文本域属性
         this.rows = this.rows;
-        this.autosize = this.autosize;
+        this.autoSize = this.autoSize;
+        // this.maxRows = this.maxRows;
+        // this.minRows = this.minRows;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
@@ -343,6 +430,20 @@ export default class EaInput extends Base {
 
             this.clearableEvent(e);
             this.showPasswordEvent(e);
+
+            if (e.target.type === 'textarea') {
+                const cols = this.#input.cols;
+                const chars = e.target.value.length;
+
+                let rows = Math.ceil(chars / cols) <= Number(this.rows) ? Number(this.rows) : Math.ceil(chars / cols);
+
+                console.log(this.minRows, rows);
+                if (chars % cols == 1) {
+                    if (this.minRows > rows) this.setTextareaHeight(this.minRows);
+                    else if (this.maxRows < rows) this.setTextareaHeight(this.maxRows);
+                    else this.setTextareaHeight(rows);
+                }
+            }
         });
 
         // 聚焦时

@@ -5,7 +5,8 @@ import setStyle from '../utils/setStyle';
 export default class Base extends HTMLElement {
     constructor() {
         super();
-        this.isProduction = false;
+        // this.isProduction = false;
+        this.isProduction = true;
     }
 
     /**
@@ -25,6 +26,20 @@ export default class Base extends HTMLElement {
             if (className) this.dom.classList.remove(className);
         }
     }
+
+    /**
+     * 设置属性值
+     * @param {string} attr 属性名
+     * @param {boolean} flag 属性值
+     */
+    toggleAttr(attr, flag) {
+        if (flag) {
+            this.setAttribute(attr, flag);
+        } else {
+            this.removeAttribute(attr);
+        }
+    }
+
     /**
      * 获取属性值，并转换为布尔值
      * @param {string} attrName 属性名
