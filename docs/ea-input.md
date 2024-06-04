@@ -8,6 +8,22 @@ onMounted(() => {
   // document.querySelector('#basicInput').addEventListener('change', (e) => {
   //   console.log(e.target.value)
   // })
+
+  document.querySelector('#trigger-on-focus').suggestion = [
+    { value: '张三' },
+    { value: '1' },
+    { value: '2' },
+    { value: '李四' },
+    { value: '张三' },
+    { value: '李四' },
+    { value: '张三' },
+    { value: '李四' },
+    { value: '张三' },
+    { value: '李四' },
+    { value: '张三' },
+    { value: '李四' },
+  ];
+  // console.log(document.querySelector('#trigger-on-focus').suggestion)
 })
 </script>
 
@@ -113,6 +129,8 @@ onMounted(() => {
 
 可前置或后置元素，一般为标签或按钮
 
+> 使用 div 标签来定义前置或后置元素, 而非其他标签
+
 <div class="col left">
     <ea-input placeholder="假装有网址">
       <div class="prepend" slot="prepend">Http://</div>
@@ -127,6 +145,14 @@ onMounted(() => {
       </div>
     </ea-input>
 </div>
+
+```css
+.prepend,
+.append {
+  background-color: #f5f7fa;
+  padding: 0.5rem;
+}
+```
 
 ```html
 <div class="col left">
@@ -145,11 +171,22 @@ onMounted(() => {
 </div>
 ```
 
-<!-- ## 尺寸 -->
+## 带输入建议
 
-<!-- ## 带输入建议
+根据输入内容提供对应的输入建议(建议使用场景为非交互模式, 数据为静态数据)
 
-根据输入内容提供对应的输入建议 -->
+> 因技术问题, 若案例未弹出输入建议, 需要刷新该页面
+
+<div class="row">
+  <section>
+    <p>激活时列出输入建议</p>
+    <ea-input id="trigger-on-focus" placeholder="请输入内容" trigger-on-focus></ea-input>
+  </section>
+  <section>
+    <p>输入后匹配输入建议</p>
+    <ea-input id="trigger-after-input" placeholder="请输入内容" trigger-after-input></ea-input>
+  </section>
+</div>
 
 <!-- ## 远程搜索
 

@@ -125,7 +125,7 @@
   &.append-slot {
     display: flex;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: 0.925rem;
     line-height: 1;
 
     ::slotted(div) {
@@ -161,6 +161,38 @@
     .ea-input_inner {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
+    }
+  }
+
+  .ea-input_suggestion-wrap {
+    @include clear-ul-default-style;
+
+    display: none;
+    position: absolute;
+    box-sizing: border-box;
+
+    top: calc(100% + 5px);
+    left: 0;
+
+    padding: 0.5rem 0;
+    width: 100%;
+    max-height: 10rem;
+
+    overflow-y: scroll;
+
+    z-index: 1;
+
+    background-color: white;
+    box-shadow: 0 1px 8px 1px rgba(0, 0, 0, 0.2);
+
+    li {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f5f7fa;
+      }
     }
   }
 }

@@ -38,6 +38,11 @@
   &.center {
     justify-content: center;
   }
+
+  p {
+    text-align: center;
+    color: darken($color-disabled-text, 20);
+  }
 }
 
 .col {
