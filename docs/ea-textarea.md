@@ -37,10 +37,28 @@ onMounted(() => {
 </div>
 ```
 
-<!-- ## 设置高度的最值
+## 设置高度的最值
 
 可以指定最小行数和最大行数。
 
 <div class="col left">
-    <ea-input type="textarea" placeholder="这不是空的" min-rows="2" max-rows="10"></ea-input>
-</div> -->
+    <ea-textarea type="textarea" placeholder="这不是空的" min-rows="2" max-rows="10"></ea-textarea>
+    <ea-textarea type="textarea" placeholder="这不是空的" min-rows="5" max-rows="20"></ea-textarea>
+</div>
+
+```html
+<div class="col left">
+  <ea-textarea
+    type="textarea"
+    placeholder="这不是空的"
+    min-rows="2"
+    max-rows="10"
+  ></ea-textarea>
+  <ea-textarea
+    type="textarea"
+    placeholder="这不是空的"
+    min-rows="5"
+    max-rows="20"
+  ></ea-textarea>
+</div>
+```

@@ -143,22 +143,28 @@ export default class EaTextarea extends Base {
     }
 
     get minRows() {
-        return Number(this.getAttribute("min-rows")) || 2;
+        const val = Number(this.getAttribute("min-rows"));
+        return val !== 0 && val > 0
+            ? val
+            : 1;
     }
 
     set minRows(val) {
-        if (!val || this.#input.type !== 'textarea') return;
+        if (!val) return;
 
         this.setAttribute("min-rows", val);
         this.setTextareaHeight(Number(val));
     }
 
     get maxRows() {
-        return this.getAttribute("max-rows") || 10;
+        const val = Number(this.getAttribute("max-rows"));
+        return val !== 0 && val > 0
+            ? val
+            : 10;
     }
 
     set maxRows(val) {
-        if (!val || this.#input.type !== 'textarea') return;
+        if (!val) return;
 
         this.setAttribute("max-rows", val);
         this.setTextareaHeight(Number(val));
@@ -186,8 +192,8 @@ export default class EaTextarea extends Base {
         this.autosize = this.autosize;
 
         // 最大最小行数
-        this.maxRows = this.maxRows;
-        this.minRows = this.minRows;
+        if (this.maxRows) this.maxRows = this.maxRows;
+        if (this.minRows) this.minRows = this.minRows;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
