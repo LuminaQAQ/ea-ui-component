@@ -19,7 +19,6 @@
   /* #endregion */
   /* ------- end  ------- */
 }
-.ea-input_wrap .ea-textarea_inner,
 .ea-input_wrap .ea-input_inner {
   box-sizing: border-box;
   box-shadow: none;
@@ -32,20 +31,16 @@
   font-size: 0.8rem;
   scrollbar-width: none;
 }
-.ea-input_wrap .ea-textarea_inner:focus,
 .ea-input_wrap .ea-input_inner:focus {
   border-color: #409eff;
 }
-.ea-input_wrap .ea-textarea_inner::placeholder,
 .ea-input_wrap .ea-input_inner::placeholder {
   color: #c0c4cc;
 }
-.ea-input_wrap .ea-textarea_inner.disabled,
 .ea-input_wrap .ea-input_inner.disabled {
   background-color: #eeeeee;
   color: #c0c4cc;
 }
-.ea-input_wrap .ea-textarea_inner.ea-input_clear ::before,
 .ea-input_wrap .ea-input_inner.ea-input_clear ::before {
   content: "\e9c3";
   display: block;
@@ -88,8 +83,4 @@
 }
 .ea-input_wrap.suffix .ea-input_inner {
   padding-right: 1.75rem;
-}
-.ea-input_wrap .ea-textarea_inner {
-  resize: vertical;
-  min-height: 1.75rem;
 }

@@ -98,16 +98,11 @@ const stylesheet = `
 }`;
 
 const inputDom = (that, type) => {
-    let input = type === "textarea" ? document.createElement('textarea') : document.createElement('input');
-    // console.log(that.shadowRoot.parentNode);
+    const input = document.createElement('input');
 
-    if (type === "textarea") {
-        input.className = "ea-textarea_inner";
-    } else {
-        input.className = "ea-input_inner";
-        input.type = type;
-        input.autocomplete = "off";
-    }
+    input.className = "ea-input_inner";
+    input.type = type || "text";
+    input.autocomplete = "off";
 
     return input;
 }
@@ -316,62 +311,6 @@ export default class EaInput extends Base {
     // #endregion
     // ------- end -------
 
-    // ------- textarea 文本域 -------
-    // #region
-
-    setTextareaHeight(rows) {
-        rows = Number(rows);
-
-        this.#input.style.height = `${rows * 0.66 + 1}rem`;
-        this.#input.style.minHeight = `${rows * 0.66 + 1}rem`;
-    }
-
-    get rows() {
-        return this.getAttribute("rows") || 2;
-    }
-
-    set rows(val) {
-        if (!val || this.#input.type !== 'textarea') return;
-
-        this.setAttribute("rows", val);
-        this.#input.rows = val;
-    }
-
-    get autoSize() {
-        return this.getAttrBoolean("autosize");
-    }
-
-    set autoSize(val) {
-        if (!val || this.#input.type !== 'textarea') return;
-
-        this.setAttribute("autosize", val);
-    }
-
-    get minRows() {
-        return this.getAttribute("min-rows") || 2;
-    }
-
-    set minRows(val) {
-        if (!val || this.#input.type !== 'textarea') return;
-
-        this.setAttribute("min-rows", val);
-        this.setTextareaHeight(Number(val));
-    }
-
-    get maxRows() {
-        return this.getAttribute("max-rows") || 10;
-    }
-
-    set maxRows(val) {
-        if (!val || this.#input.type !== 'textarea') return;
-
-        this.setAttribute("max-rows", val);
-        this.setTextareaHeight(Number(val));
-    }
-
-    // #endregion
-    // ------- end -------
-
     iconInit(className) {
         const clearIcon = document.createElement('i');
         clearIcon.className = className;
@@ -389,7 +328,6 @@ export default class EaInput extends Base {
 
         // 按钮类型
         this.type = this.type;
-        // console.log(this, this.#input);
 
         // 输入框提示
         this.placeholder = this.placeholder;
@@ -412,12 +350,6 @@ export default class EaInput extends Base {
         this.prefixIcon = this.prefixIcon;
         this.surfixIcon = this.surfixIcon;
 
-        // 文本域属性
-        this.rows = this.rows;
-        this.autoSize = this.autoSize;
-        // this.maxRows = this.maxRows;
-        // this.minRows = this.minRows;
-
         // 输入时
         this.#input.addEventListener("input", (e) => {
             this.dispatchEvent(
@@ -430,20 +362,6 @@ export default class EaInput extends Base {
 
             this.clearableEvent(e);
             this.showPasswordEvent(e);
-
-            if (e.target.type === 'textarea') {
-                const cols = this.#input.cols;
-                const chars = e.target.value.length;
-
-                let rows = Math.ceil(chars / cols) <= Number(this.rows) ? Number(this.rows) : Math.ceil(chars / cols);
-
-                console.log(this.minRows, rows);
-                if (chars % cols == 1) {
-                    if (this.minRows > rows) this.setTextareaHeight(this.minRows);
-                    else if (this.maxRows < rows) this.setTextareaHeight(this.maxRows);
-                    else this.setTextareaHeight(rows);
-                }
-            }
         });
 
         // 聚焦时
