@@ -36,13 +36,15 @@
   margin-bottom: 0.5rem;
   padding: 1rem;
   border: 1px solid rgba(204, 204, 204, 0.5);
-  border-radius: 8px;
 }
 .col.left {
   align-items: flex-start;
 }
 .col.left > * {
-  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.col.left > ea-input {
+  margin-bottom: 0.5rem;
 }
 
 .main-icon-wrap {
