@@ -107,6 +107,13 @@ const inputDom = (type) => {
     return input;
 }
 
+const suggestionBoardDom = () => {
+    const suggestionBoard = document.createElement('ul');
+    suggestionBoard.className = "ea-input_suggestion-wrap";
+
+    return suggestionBoard;
+}
+
 const slotDom = (name) => {
     const slot = document.createElement('slot');
     slot.name = name;
@@ -121,6 +128,12 @@ export default class EaInput extends Base {
     #showPasswordIcon;
     #mounted = false;
 
+    #suggestion = [];
+
+    static get observedAttributes() {
+        return ['suggestion'];
+    }
+
     constructor() {
         super();
 
@@ -129,6 +142,8 @@ export default class EaInput extends Base {
         wrap.className = "ea-input_wrap";
 
         const dom = inputDom(this.type);
+
+        // slot 和 template, 用于输入框前后 的 插槽
         const prependSlot = slotDom('prepend');
         const appendSlot = slotDom('append');
 
@@ -137,10 +152,6 @@ export default class EaInput extends Base {
 
         if (prependTemplate) {
             wrap.classList.add('prepend-slot');
-            // wrap.style.setProperty('--border-top-right-radius', '0');
-            // wrap.style.setProperty('--border-bottom-right-radius', '0');
-            // wrap.style.setProperty('--border-right-width', '0');
-            // wrap.style.setProperty('--border-left-width', '1px');
 
             prependTemplate.style.setProperty('--border-top-left-radius', '3px');
             prependTemplate.style.setProperty('--border-bottom-left-radius', '3px');
@@ -167,11 +178,62 @@ export default class EaInput extends Base {
         wrap.insertBefore(prependSlot, dom);
         wrap.appendChild(appendSlot);
 
+        this.#wrap = wrap;
+        this.#input = dom;
+
+        // 输入建议
+        if (this.suggestion.length > 0) {
+            const suggestionBoard = suggestionBoardDom();
+            suggestionBoard.isClose = false;
+            suggestionBoard.isFirstClose = false;
+
+            //  利用 li 标签 将用户传入值 进行渲染
+            this.suggestion.forEach(item => {
+                const li = document.createElement('li');
+                li.innerText = item.value;
+
+                li.addEventListener('click', () => {
+                    this.value = item.value;
+                    suggestionBoard.style.display = 'none';
+                });
+
+                suggestionBoard.appendChild(li);
+            });
+
+            // 当点击其他地方时, 关闭输入建议
+            document.addEventListener('click', (e) => {
+                if (e.target !== this) {
+                    suggestionBoard.style.display = 'none';
+                }
+            });
+
+            this.#input.addEventListener('focus', (e) => {
+                let timer = setTimeout(() => {
+                    suggestionBoard.style.display = 'block';
+
+                    clearTimeout(timer);
+                    timer = null;
+                }, 50);
+            });
+
+            // 匹配输入建议
+            this.#input.addEventListener('input', (e) => {
+                this.shadowRoot.querySelectorAll('li').forEach(item => {
+                    if (item.innerText.includes(e.target.value)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                })
+            });
+
+            wrap.appendChild(suggestionBoard);
+        }
+
+
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
 
-        this.#wrap = wrap;
-        this.#input = dom;
     }
 
     // ------- type 标识是 input 还是 textarea  -------
@@ -354,6 +416,35 @@ export default class EaInput extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- suggestion 建议 -------
+    // #region
+    get suggestion() {
+        return this.#suggestion;
+    }
+
+    set suggestion(val) {
+        if (!val) return;
+
+        this.#suggestion = val;
+    }
+
+    // 输入框激活时列出输入建议
+    get triggerOnFocus() {
+        return this.getAttrBoolean("trigger-after-input");
+    }
+
+    // 输入框输入后匹配输入建议
+    get triggerAfterInput() {
+        return this.getAttrBoolean("trigger-after-input");
+    }
+    set triggerAfterInput(val) {
+        if (!val) return;
+
+        this.setAttribute("trigger-after-input", val);
+    }
+    // #endregion
+    // ------- end -------
+
     iconInit(className) {
         const clearIcon = document.createElement('i');
         clearIcon.className = className;
@@ -364,6 +455,19 @@ export default class EaInput extends Base {
     iconAppend(className, isClassName, element) {
         this.#wrap.classList.toggle(className, isClassName);
         this.#wrap.appendChild(element);
+    }
+
+    eventInit(e, eventName) {
+        this.dispatchEvent(
+            new CustomEvent(eventName, {
+                detail: {
+                    value: e.target.value
+                }
+            })
+        );
+
+        this.clearableEvent(e);
+        this.showPasswordEvent(e);
     }
 
     init() {
@@ -393,51 +497,32 @@ export default class EaInput extends Base {
         this.prefixIcon = this.prefixIcon;
         this.surfixIcon = this.surfixIcon;
 
+        // 输入建议
+        this.suggestion = this.suggestion;
+
         // 输入时
         this.#input.addEventListener("input", (e) => {
-            this.dispatchEvent(
-                new CustomEvent("change", {
-                    detail: {
-                        value: e.target.value
-                    }
-                })
-            );
-
-            this.clearableEvent(e);
-            this.showPasswordEvent(e);
+            this.eventInit(e, "change");
         });
 
         // 聚焦时
         this.#input.addEventListener("focus", (e) => {
-            this.dispatchEvent(
-                new CustomEvent("focus", {
-                    detail: {
-                        value: e.target.value
-                    }
-                })
-            );
-
-            this.clearableEvent(e);
-            this.showPasswordEvent(e);
+            this.eventInit(e, "focus");
         });
 
         // 失焦时
         this.#input.addEventListener("blur", (e) => {
-            this.dispatchEvent(
-                new CustomEvent("blur", {
-                    detail: {
-                        value: e.target.value
-                    }
-                })
-            );
-
-            this.clearableEvent(e);
-            this.showPasswordEvent(e);
+            this.eventInit(e, "blur");
         });
     }
 
     connectedCallback() {
         this.init();
         this.#mounted = true;
+    }
+    attributeChangedCallback(name, oldVal, newVal) {
+        if (name === "suggestion") {
+            this.#suggestion = newVal;
+        }
     }
 }
