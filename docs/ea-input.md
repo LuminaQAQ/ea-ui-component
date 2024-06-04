@@ -11,6 +11,14 @@ onMounted(() => {
 })
 </script>
 
+<style lang="scss" scoped>
+  .prepend,
+  .append {
+    background-color: #f5f7fa;
+    padding: 0.5rem;
+  }
+</style>
+
 # Input 输入框
 
 通过鼠标或键盘输入字符
@@ -101,9 +109,41 @@ onMounted(() => {
 </div>
 ```
 
-<!-- ## 复合型输入框
+## 复合型输入框
 
-可前置或后置元素，一般为标签或按钮 -->
+可前置或后置元素，一般为标签或按钮
+
+<div class="col left">
+    <ea-input placeholder="假装有网址">
+      <div class="prepend" slot="prepend">Http://</div>
+    </ea-input>
+    <ea-input placeholder="假装有网址">
+      <div class="append" slot="append">.com</div>
+    </ea-input>
+    <ea-input placeholder="假装有网址">
+      <div class="prepend" slot="prepend">Http://</div>
+      <div class="append" slot="append">
+        <i class="icon-search"></i>
+      </div>
+    </ea-input>
+</div>
+
+```html
+<div class="col left">
+  <ea-input placeholder="假装有网址">
+    <div class="prepend" slot="prepend">Http://</div>
+  </ea-input>
+  <ea-input placeholder="假装有网址">
+    <div class="append" slot="append">.com</div>
+  </ea-input>
+  <ea-input placeholder="假装有网址">
+    <div class="prepend" slot="prepend">Http://</div>
+    <div class="append" slot="append">
+      <i class="icon-search"></i>
+    </div>
+  </ea-input>
+</div>
+```
 
 <!-- ## 尺寸 -->
 

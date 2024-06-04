@@ -7,6 +7,15 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
 }
+:host {
+  --border-top-left-radius: 0;
+  --border-top-right-radius: 0;
+  --border-bottom-left-radius: 0;
+  --border-bottom-right-radius: 0;
+  --border-left-width: 0;
+  --border-right-width: 0;
+}
+
 .ea-input_wrap {
   position: relative;
   width: 100%;
@@ -83,4 +92,27 @@
 }
 .ea-input_wrap.suffix .ea-input_inner {
   padding-right: 1.75rem;
+}
+.ea-input_wrap.prepend-slot, .ea-input_wrap.append-slot {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.ea-input_wrap.prepend-slot ::slotted(div), .ea-input_wrap.append-slot ::slotted(div) {
+  border: 1px solid #dcdfe6;
+  border-left-width: var(--border-left-width);
+  border-right-width: var(--border-right-width);
+  border-top-right-radius: var(--border-top-right-radius);
+  border-bottom-right-radius: var(--border-bottom-right-radius);
+  border-top-left-radius: var(--border-top-left-radius);
+  border-bottom-left-radius: var(--border-bottom-left-radius);
+}
+.ea-input_wrap.prepend-slot .ea-input_inner {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.ea-input_wrap.append-slot .ea-input_inner {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }

@@ -97,7 +97,7 @@ const stylesheet = `
   min-height: 1.75rem;
 }`;
 
-const inputDom = (that, type) => {
+const inputDom = (type) => {
     const input = document.createElement('input');
 
     input.className = "ea-input_inner";
@@ -105,6 +105,13 @@ const inputDom = (that, type) => {
     input.autocomplete = "off";
 
     return input;
+}
+
+const slotDom = (name) => {
+    const slot = document.createElement('slot');
+    slot.name = name;
+
+    return slot;
 }
 
 export default class EaInput extends Base {
@@ -120,15 +127,51 @@ export default class EaInput extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         const wrap = document.createElement('div');
         wrap.className = "ea-input_wrap";
-        this.#wrap = wrap;
 
-        const dom = inputDom(this, this.type);
-        this.#input = dom;
+        const dom = inputDom(this.type);
+        const prependSlot = slotDom('prepend');
+        const appendSlot = slotDom('append');
 
-        this.#wrap.appendChild(dom);
+        const prependTemplate = this.querySelector('[slot=prepend]');
+        const appendTemplate = this.querySelector('[slot=append]');
+
+        if (prependTemplate) {
+            wrap.classList.add('prepend-slot');
+            // wrap.style.setProperty('--border-top-right-radius', '0');
+            // wrap.style.setProperty('--border-bottom-right-radius', '0');
+            // wrap.style.setProperty('--border-right-width', '0');
+            // wrap.style.setProperty('--border-left-width', '1px');
+
+            prependTemplate.style.setProperty('--border-top-left-radius', '3px');
+            prependTemplate.style.setProperty('--border-bottom-left-radius', '3px');
+
+            prependTemplate.style.setProperty('--border-right-width', '0');
+            prependTemplate.style.setProperty('--border-left-width', '1px');
+
+            prependSlot.appendChild(prependTemplate.cloneNode(true));
+        }
+
+        if (appendTemplate) {
+            wrap.classList.add('append-slot');
+
+            appendTemplate.style.setProperty('--border-top-right-radius', '3px');
+            appendTemplate.style.setProperty('--border-bottom-right-radius', '3px');
+
+            appendTemplate.style.setProperty('--border-left-width', '0');
+            appendTemplate.style.setProperty('--border-right-width', '1px');
+
+            appendSlot.appendChild(appendTemplate.cloneNode(true));
+        }
+
+        wrap.appendChild(dom);
+        wrap.insertBefore(prependSlot, dom);
+        wrap.appendChild(appendSlot);
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
+
+        this.#wrap = wrap;
+        this.#input = dom;
     }
 
     // ------- type 标识是 input 还是 textarea  -------

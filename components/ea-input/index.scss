@@ -1,6 +1,17 @@
 @import "../ea-ui-base-style.scss";
 @import "../ea-icon/index.scss";
 
+:host {
+  --border-top-left-radius: 0;
+  --border-top-right-radius: 0;
+
+  --border-bottom-left-radius: 0;
+  --border-bottom-right-radius: 0;
+
+  --border-left-width: 0;
+  --border-right-width: 0;
+}
+
 .ea-input_wrap {
   position: relative;
   width: 100%;
@@ -109,4 +120,47 @@
 
   /* #endregion */
   /* ------- end  ------- */
+
+  &.prepend-slot,
+  &.append-slot {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    line-height: 1;
+
+    ::slotted(div) {
+      border: 1px solid $color-border;
+
+      border-left-width: var(--border-left-width);
+      border-right-width: var(--border-right-width);
+
+      border-top-right-radius: var(--border-top-right-radius);
+      border-bottom-right-radius: var(--border-bottom-right-radius);
+      border-top-left-radius: var(--border-top-left-radius);
+      border-bottom-left-radius: var(--border-bottom-left-radius);
+    }
+
+    // ::slotted(div:last-child) {
+    //   border: 1px solid $color-border;
+    //   border-left: 0;
+    //   border-radius: 0;
+
+    //   border-top-right-radius: 3px;
+    //   border-bottom-right-radius: 3px;
+    // }
+  }
+
+  &.prepend-slot {
+    .ea-input_inner {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  &.append-slot {
+    .ea-input_inner {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
 }
