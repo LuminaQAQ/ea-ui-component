@@ -53,13 +53,14 @@ onMounted(() => {
 ## 基础用法
 
 <div class="row left">
-    <ea-input id="basicInput" placeholder="请输入内容"></ea-input>
-    <ea-input id="basicInput" placeholder="请输入内容" value="hello"></ea-input>
+    <ea-input placeholder="请输入内容"></ea-input>
+    <ea-input placeholder="请输入内容" value="hello"></ea-input>
 </div>
 
 ```html
 <div class="row left">
-  <ea-input id="basicInput" placeholder="请输入内容" value="hello"></ea-input>
+  <ea-input placeholder="请输入内容"></ea-input>
+  <ea-input placeholder="请输入内容" value="hello"></ea-input>
 </div>
 ```
 
@@ -314,3 +315,49 @@ EaInput.remote = true;
 ```
 
 ## 输入长度限制
+
+<div class="col left">
+    <ea-input placeholder="请输入内容" show-word-limit max-length="10"></ea-input>
+    <ea-input placeholder="请输入内容" show-word-limit min-length="2"></ea-input>
+</div>
+
+```html
+<div class="col left">
+  <ea-input placeholder="请输入内容" show-word-limit max-length="10"></ea-input>
+  <ea-input placeholder="请输入内容" show-word-limit min-length="2"></ea-input>
+</div>
+```
+
+## Attributes
+
+| 参数                | 说明               | 类型    | 可选值                                                                                                       | 默认值 |
+| ------------------- | ------------------ | ------- | ------------------------------------------------------------------------------------------------------------ | ------ |
+| type                | 输入框类型         | String  | text / password / number / email / url / search / tel / date / time / datetime / week / month / color / file | text   |
+| value               | 输入框的值         | String  | -                                                                                                            | -      |
+| placeholder         | 占位符             | String  | -                                                                                                            | -      |
+| disabled            | 禁用               | Boolean | true / false                                                                                                 | false  |
+| clearable           | 可清空             | Boolean | true / false                                                                                                 | false  |
+| show-password       | 显示密码           | Boolean | true / false                                                                                                 | false  |
+| prefix-icon         | 输入框图标(前)     | String  | -                                                                                                            | -      |
+| suffix-icon         | 输入框图标(后)     | String  | -                                                                                                            | -      |
+| trigger-on-focus    | 激活时列出输入建议 | Boolean | true / false                                                                                                 | false  |
+| trigger-after-input | 输入后匹配输入建议 | Boolean | true / false                                                                                                 | false  |
+| remote              | 远程搜索           | Boolean | true / false                                                                                                 | false  |
+| max-length          | 最大输入长度       | Number  | -                                                                                                            | -      |
+| min-length          | 最小输入长度       | Number  | -                                                                                                            | -      |
+| show-word-limit     | 显示输入长度限制   | Boolean | true / false                                                                                                 | false  |
+
+## Input 插槽
+
+| 插槽名  | 说明           |
+| ------- | -------------- |
+| prepend | 输入框前置内容 |
+| append  | 输入框后置内容 |
+
+## Input 事件
+
+| 事件名 | 说明                 | 参数 | 获取值         | 值的类型 |
+| ------ | -------------------- | ---- | -------------- | -------- |
+| input  | 输入时触发           | -    | e.target.value | String   |
+| focus  | 输入框聚焦时触发     | -    | e.target.value | String   |
+| blur   | 输入框失去焦点时触发 | -    | e.target.value | String   |
