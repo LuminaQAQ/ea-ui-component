@@ -9,7 +9,9 @@ onMounted(() => {
   //   console.log(e.target.value)
   // })
 
-  document.querySelector('#trigger-on-focus').suggestion = [
+  const valArr = [
+    { value: '1' },
+    { value: '2' },
     { value: '张三' },
     { value: '李四' },
     { value: '王五' },
@@ -18,21 +20,21 @@ onMounted(() => {
     { value: '周八' },
     { value: '吴九' },
     { value: '郑十' },
-    { value: '1' },
-    { value: '2' },
   ];
+
+  document.querySelector('#trigger-on-focus').suggestion = valArr;
   
-  document.querySelector('#trigger-after-input').suggestion = [
-    { value: '周一' },
-    { value: '周二' },
-    { value: '周三' },
-    { value: '周四' },
-    { value: '周五' },
-    { value: '周六' },
-    { value: '周日' },
-    { value: '3' },
-    { value: '4' },
-  ];
+  document.querySelector('#trigger-after-input').suggestion = valArr;
+
+  setTimeout(() => {  
+    const input = document.querySelector('#trigger-on-focus_for-remote');
+    input.suggestion = [
+      { value: '5' },
+      { value: '6' },
+    ];
+    input.refresh();
+    input.remote = false;
+  }, 10 * 1000)
 })
 </script>
 
@@ -182,10 +184,28 @@ onMounted(() => {
 
 ## 带输入建议
 
-根据输入内容提供对应的输入建议(建议使用场景为非交互模式, 数据为静态数据)
+根据输入内容提供对应的输入建议(建议使用场景: 建议数据为静态数据)
 
-> 因技术问题, 若案例未弹出输入建议, 需要刷新该页面
+> 因文档库搭建框架的技术限制, 若案例未弹出输入建议, 需要刷新该页面
 
+<div class="row">
+  {{
+    "搜索词: [" + 
+    [ { value: '1' },
+    { value: '2' },
+    { value: '张三' },
+    { value: '李四' },
+    { value: '王五' },
+    { value: '赵六' },
+    { value: '孙七' },
+    { value: '周八' },
+    { value: '吴九' },
+    { value: '郑十' },]
+    .map(item => {
+      return item.value
+    }) +"]"
+  }}
+</div>
 <div class="row">
   <section>
     <p>激活时列出输入建议</p>
@@ -197,8 +217,67 @@ onMounted(() => {
   </section>
 </div>
 
-<!-- ## 远程搜索
+```html
+<div class="row">
+  <section>
+    <p>激活时列出输入建议</p>
+    <ea-input
+      id="trigger-on-focus"
+      placeholder="请输入内容"
+      trigger-on-focus
+    ></ea-input>
+  </section>
+  <section>
+    <p>输入后匹配输入建议</p>
+    <ea-input
+      id="trigger-after-input"
+      placeholder="请输入内容"
+      trigger-after-input
+    ></ea-input>
+  </section>
+</div>
+```
 
-从服务端搜索数据 -->
+`get` 和 `set` 操作
 
+```js
+// 获取值
+EaInput.suggestion;
+
+// 赋值: 页面初始化时
+EaInput.suggestion = [{ value: "1" }, { value: "2" }];
+
+// 延迟性赋值: 还需手动调用内置函数来进行数据刷新
+EaInput.suggestion = [{ value: "1" }, { value: "2" }];
+EaInput.refresh();
+```
+
+## 远程搜索
+
+从服务端搜索数据
+
+<div class="row">
+  {{
+    "搜索词: [" + 
+    [ { value: '1' },
+    { value: '2' },
+    { value: '张三' },
+    { value: '李四' },
+    { value: '王五' },
+    { value: '赵六' },
+    { value: '孙七' },
+    { value: '周八' },
+    { value: '吴九' },
+    { value: '郑十' },]
+    .map(item => {
+      return item.value
+    }) +"]"
+  }}
+</div>
+<div class="row">
+  <section>
+    <p>激活时列出输入建议</p>
+    <ea-input id="trigger-on-focus_for-remote" placeholder="请输入内容" trigger-on-focus remote></ea-input>
+  </section>
+</div>
 <!-- ## 输入长度限制 -->

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import Base from "../Base";
+import { nanoid } from "nanoid";
 
 const stylesheet = `
 @charset "UTF-8";
@@ -129,10 +130,7 @@ export default class EaInput extends Base {
     #mounted = false;
 
     #suggestion = [];
-
-    static get observedAttributes() {
-        return ['suggestion'];
-    }
+    #suggestionBoard;
 
     constructor() {
         super();
@@ -182,57 +180,9 @@ export default class EaInput extends Base {
         this.#input = dom;
 
         // 输入建议
-        if (this.suggestion.length > 0) {
-            const suggestionBoard = suggestionBoardDom();
-            suggestionBoard.isClose = false;
-            suggestionBoard.isFirstClose = false;
-
-            //  利用 li 标签 将用户传入值 进行渲染
-            this.suggestion.forEach(item => {
-                const li = document.createElement('li');
-                li.innerText = item.value;
-
-                li.addEventListener('click', () => {
-                    this.value = item.value;
-                    suggestionBoard.style.display = 'none';
-                });
-
-                suggestionBoard.appendChild(li);
-            });
-
-            // 当点击其他地方时, 关闭输入建议
-            document.addEventListener('click', (e) => {
-                if (e.target !== this) {
-                    suggestionBoard.style.display = 'none';
-                }
-            });
-
-            // 匹配输入建议
-            this.#input.addEventListener('input', (e) => {
-                this.shadowRoot.querySelectorAll('li').forEach(item => {
-                    if (item.innerText.includes(e.target.value)) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                })
-            });
-
-            if (this.triggerOnFocus) {
-                this.#input.addEventListener('focus', (e) => {
-                    suggestionBoard.style.display = 'block';
-                });
-            } else if (this.triggerAfterInput) {
-                this.#input.addEventListener('input', (e) => {
-                    if (e.target.value.length > 0) {
-                        suggestionBoard.style.display = 'block';
-                    }
-                });
-            }
-
-            wrap.appendChild(suggestionBoard);
+        if (this.suggestion.length > 0 || this.remote) {
+            this.suggestionEvent();
         }
-
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
@@ -421,6 +371,8 @@ export default class EaInput extends Base {
 
     // ------- suggestion 建议 -------
     // #region
+
+    // 建议列表
     get suggestion() {
         return this.#suggestion;
     }
@@ -428,7 +380,10 @@ export default class EaInput extends Base {
     set suggestion(val) {
         if (!val) return;
 
+        // console.log(val);
         this.#suggestion = val;
+        this.setAttribute("primary-key", nanoid());
+        this.primaryKey = nanoid();
     }
 
     // 输入框激活时列出输入建议
@@ -451,9 +406,97 @@ export default class EaInput extends Base {
 
         this.setAttribute("trigger-after-input", val);
     }
+
+    get remote() {
+        return this.getAttrBoolean("remote");
+    }
+
+    set remote(val) {
+        if (val === null || val === undefined) return;
+
+        try {
+            const flag = this.#suggestionBoard.style.display
+            if (flag == "flex") this.#suggestionBoard.style.display = "block";
+            else if (flag == "") this.#suggestionBoard.style.display = "none";
+
+            this.#suggestionBoard.classList.toggle('loading', val);
+            this.setAttribute("remote", val);
+        } catch (error) {
+
+        }
+    }
+
+    // 数据更新时调用
+    refresh() {
+        try {
+            this.#suggestionBoard.innerHTML = '';
+            this.suggestionEvent();
+        } catch (error) {
+
+        }
+    }
+
+    // 输入建议逻辑
+    suggestionEvent() {
+        const suggestionBoard = !this.#mounted ? suggestionBoardDom() : this.#suggestionBoard;
+
+        //  利用 li 标签 将用户传入值 进行渲染
+        this.suggestion.forEach(item => {
+            const li = document.createElement('li');
+            li.innerText = item.value;
+
+            li.addEventListener('click', () => {
+                this.value = item.value;
+                suggestionBoard.style.display = 'none';
+            });
+
+            suggestionBoard.appendChild(li);
+        });
+
+        // 当点击其他地方时, 关闭输入建议
+        document.addEventListener('click', (e) => {
+            if (e.target !== this) {
+                suggestionBoard.style.display = 'none';
+            }
+        });
+
+        // 匹配输入建议
+        this.#input.addEventListener('input', (e) => {
+            this.shadowRoot.querySelectorAll('li').forEach(item => {
+                if (item.innerText.includes(e.target.value)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            })
+        });
+
+        // 激活时列出输入建议
+        if (this.triggerOnFocus) {
+            this.#input.addEventListener('focus', (e) => {
+                suggestionBoard.style.display = this.remote ? "flex" : 'block';
+            });
+            // 输入时列出输入建议
+        } else if (this.triggerAfterInput) {
+            this.#input.addEventListener('input', (e) => {
+                if (e.target.value.length > 0) {
+                    suggestionBoard.style.display = 'block';
+                } else {
+                    suggestionBoard.style.display = 'none';
+                }
+            });
+        }
+
+        if (!this.#mounted) {
+            this.#suggestionBoard = suggestionBoard;
+            this.#wrap.appendChild(suggestionBoard);
+        }
+    }
+
     // #endregion
     // ------- end -------
 
+    // 图标dom初始化
     iconInit(className) {
         const clearIcon = document.createElement('i');
         clearIcon.className = className;
@@ -461,11 +504,13 @@ export default class EaInput extends Base {
         return clearIcon;
     }
 
+    // 图标dom添加
     iconAppend(className, isClassName, element) {
         this.#wrap.classList.toggle(className, isClassName);
         this.#wrap.appendChild(element);
     }
 
+    // 事件初始化
     eventInit(e, eventName) {
         this.dispatchEvent(
             new CustomEvent(eventName, {
@@ -508,6 +553,7 @@ export default class EaInput extends Base {
 
         // 输入建议
         this.suggestion = this.suggestion;
+        if (this.remote) this.remote = this.remote;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
@@ -528,10 +574,5 @@ export default class EaInput extends Base {
     connectedCallback() {
         this.init();
         this.#mounted = true;
-    }
-    attributeChangedCallback(name, oldVal, newVal) {
-        if (name === "suggestion") {
-            this.#suggestion = newVal;
-        }
     }
 }
