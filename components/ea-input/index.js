@@ -421,6 +421,8 @@ export default class EaInput extends Base {
 
             this.#suggestionBoard.classList.toggle('loading', val);
             this.setAttribute("remote", val);
+
+            if (this.#mounted) this.refresh();
         } catch (error) {
 
         }

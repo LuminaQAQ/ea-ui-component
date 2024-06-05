@@ -280,4 +280,37 @@ EaInput.refresh();
     <ea-input id="trigger-on-focus_for-remote" placeholder="请输入内容" trigger-on-focus remote></ea-input>
   </section>
 </div>
-<!-- ## 输入长度限制 -->
+
+```html
+<div class="row">
+  <section>
+    <p>激活时列出输入建议</p>
+    <ea-input
+      id="trigger-on-focus_for-remote"
+      placeholder="请输入内容"
+      trigger-on-focus
+      remote
+    ></ea-input>
+  </section>
+</div>
+```
+
+```js
+setTimeout(() => {
+  const input = document.querySelector("#trigger-on-focus_for-remote");
+  input.suggestion = [{ value: "5" }, { value: "6" }];
+  input.remote = false;
+}, 10 * 1000);
+```
+
+`set` 和 `get` 操作
+
+```js
+// 获取值
+EaInput.remote;
+
+// 赋值: 当数据返回时
+EaInput.remote = true;
+```
+
+## 输入长度限制
