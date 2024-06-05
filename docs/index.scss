@@ -65,6 +65,15 @@
       margin-bottom: 0.5rem;
     }
   }
+
+  p {
+    text-align: center;
+    color: darken($color-disabled-text, 20);
+  }
+
+  section {
+    text-align: center;
+  }
 }
 
 .main-icon-wrap {

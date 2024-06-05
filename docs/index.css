@@ -50,6 +50,13 @@
 .col.left > ea-input {
   margin-bottom: 0.5rem;
 }
+.col p {
+  text-align: center;
+  color: #888f9e;
+}
+.col section {
+  text-align: center;
+}
 
 .main-icon-wrap {
   display: flex;
