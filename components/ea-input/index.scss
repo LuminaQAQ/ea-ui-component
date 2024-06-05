@@ -39,6 +39,10 @@
       color: $color-disabled-text;
     }
 
+    &.invalid {
+      border-color: $color-danger-border;
+    }
+
     &.disabled {
       background-color: $color-disabled-btn-bgc;
       color: $color-disabled-text;
@@ -121,6 +125,8 @@
   /* #endregion */
   /* ------- end  ------- */
 
+  /* ------- 输入框前后的dom ------- */
+  /* #region  */
   &.prepend-slot,
   &.append-slot {
     display: flex;
@@ -163,7 +169,10 @@
       border-bottom-right-radius: 0;
     }
   }
+  /* #endregion */
+  /* ------- end  ------- */
 
+  // 输入建议
   .ea-input_suggestion-wrap {
     @include clear-ul-default-style;
 
@@ -233,6 +242,25 @@
         animation: spin 1s linear infinite;
         animation-play-state: running;
       }
+    }
+  }
+
+  &.word-limit {
+    border: 1px solid $color-border;
+    border-radius: 3px;
+
+    .ea-input_inner {
+      border: 0;
+
+      width: calc(100% - 3rem);
+    }
+
+    .ea-input_word-limit {
+      padding-right: 0.5rem;
+
+      width: 2.5rem;
+      font-size: 0.75rem;
+      text-align: center;
     }
   }
 }

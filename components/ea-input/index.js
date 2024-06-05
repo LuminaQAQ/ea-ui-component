@@ -3,14 +3,15 @@ import Base from "../Base";
 import { nanoid } from "nanoid";
 
 const stylesheet = `
-@charset "UTF-8";
-@import url('/ea_ui_component/icon/index.css');
-@font-face {
-  font-size: 1rem;
-  font-size: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
+:host {
+  --border-top-left-radius: 0;
+  --border-top-right-radius: 0;
+  --border-bottom-left-radius: 0;
+  --border-bottom-right-radius: 0;
+  --border-left-width: 0;
+  --border-right-width: 0;
 }
+
 .ea-input_wrap {
   position: relative;
   width: 100%;
@@ -22,8 +23,11 @@ const stylesheet = `
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
+  /* ------- 输入框前后的dom ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
 }
-.ea-input_wrap .ea-textarea_inner,
 .ea-input_wrap .ea-input_inner {
   box-sizing: border-box;
   box-shadow: none;
@@ -36,20 +40,19 @@ const stylesheet = `
   font-size: 0.8rem;
   scrollbar-width: none;
 }
-.ea-input_wrap .ea-textarea_inner:focus,
 .ea-input_wrap .ea-input_inner:focus {
   border-color: #409eff;
 }
-.ea-input_wrap .ea-textarea_inner::placeholder,
 .ea-input_wrap .ea-input_inner::placeholder {
   color: #c0c4cc;
 }
-.ea-input_wrap .ea-textarea_inner.disabled,
+.ea-input_wrap .ea-input_inner.invalid {
+  border-color: #f56c6c;
+}
 .ea-input_wrap .ea-input_inner.disabled {
   background-color: #eeeeee;
   color: #c0c4cc;
 }
-.ea-input_wrap .ea-textarea_inner.ea-input_clear ::before,
 .ea-input_wrap .ea-input_inner.ea-input_clear ::before {
   content: "\e9c3";
   display: block;
@@ -93,9 +96,99 @@ const stylesheet = `
 .ea-input_wrap.suffix .ea-input_inner {
   padding-right: 1.75rem;
 }
-.ea-input_wrap .ea-textarea_inner {
-  resize: vertical;
-  min-height: 1.75rem;
+.ea-input_wrap.prepend-slot, .ea-input_wrap.append-slot {
+  display: flex;
+  align-items: center;
+  font-size: 0.925rem;
+  line-height: 1;
+}
+.ea-input_wrap.prepend-slot ::slotted(div), .ea-input_wrap.append-slot ::slotted(div) {
+  border: 1px solid #dcdfe6;
+  border-left-width: var(--border-left-width);
+  border-right-width: var(--border-right-width);
+  border-top-right-radius: var(--border-top-right-radius);
+  border-bottom-right-radius: var(--border-bottom-right-radius);
+  border-top-left-radius: var(--border-top-left-radius);
+  border-bottom-left-radius: var(--border-bottom-left-radius);
+}
+.ea-input_wrap.prepend-slot .ea-input_inner {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.ea-input_wrap.append-slot .ea-input_inner {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.ea-input_wrap .ea-input_suggestion-wrap {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+  unicode-bidi: unset;
+  display: none;
+  position: absolute;
+  box-sizing: border-box;
+  top: calc(100% + 5px);
+  left: 0;
+  padding: 0.5rem 0;
+  width: 100%;
+  max-height: 10rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0 1px 8px 1px rgba(0, 0, 0, 0.2);
+}
+.ea-input_wrap .ea-input_suggestion-wrap li {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.ea-input_wrap .ea-input_suggestion-wrap li:hover {
+  background-color: #f5f7fa;
+}
+.ea-input_wrap .ea-input_suggestion-wrap.loading {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-input_wrap .ea-input_suggestion-wrap.loading::after {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: never;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: 0.2em;
+  text-align: center;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1em;
+  margin-left: 0.2em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e839";
+  font-size: 1.5rem;
+  animation: spin 1s linear infinite;
+  animation-play-state: running;
+}
+.ea-input_wrap.word-limit {
+  border: 1px solid #dcdfe6;
+  border-radius: 3px;
+}
+.ea-input_wrap.word-limit .ea-input_inner {
+  border: 0;
+  width: calc(100% - 3rem);
+}
+.ea-input_wrap.word-limit .ea-input_word-limit {
+  padding-right: 0.5rem;
+  width: 2.5rem;
+  font-size: 0.75rem;
+  text-align: center;
 }`;
 
 const inputDom = (type) => {
@@ -131,6 +224,9 @@ export default class EaInput extends Base {
 
     #suggestion = [];
     #suggestionBoard;
+
+    #prependSlot;
+    #appendSlot;
 
     constructor() {
         super();
@@ -178,6 +274,8 @@ export default class EaInput extends Base {
 
         this.#wrap = wrap;
         this.#input = dom;
+        this.#prependSlot = prependSlot;
+        this.#appendSlot = appendSlot;
 
         // 输入建议
         if (this.suggestion.length > 0 || this.remote) {
@@ -407,6 +505,7 @@ export default class EaInput extends Base {
         this.setAttribute("trigger-after-input", val);
     }
 
+    // 数据为远程加载时, 显示加载中
     get remote() {
         return this.getAttrBoolean("remote");
     }
@@ -498,6 +597,78 @@ export default class EaInput extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- max-length 最大长度 -------
+    // #region
+
+    // 获取最大限制值
+    get maxLength() {
+        return this.getAttribute("max-length");
+    }
+
+    set maxLength(val) {
+        if (!val || this.#input.type !== "text") return;
+
+        this.setAttribute("max-length", val);
+        this.#input.maxLength = val;
+
+        this.#input.addEventListener('input', (e) => {
+            if (e.target.value.length > val) {
+                e.target.value = e.target.value.slice(0, val);
+            }
+        });
+
+        if (this.showWordLimit) this.showWordLimit = true;
+    }
+
+    // 获取最小限制值
+    get minLength() {
+        return this.getAttribute("min-length");
+    }
+
+    set minLength(val) {
+        if (!val || this.#input.type !== "text") return;
+
+        this.setAttribute("min-length", val);
+        this.#input.minLength = val;
+
+        this.#input.addEventListener('input', (e) => {
+            if (e.target.value.length < val) {
+                e.target.classList.add('invalid');
+            } else {
+                e.target.classList.remove('invalid');
+            }
+        });
+    }
+
+    // 显示 当前文字长度 和 限制值
+    get showWordLimit() {
+        return this.getAttrBoolean("show-word-limit");
+    }
+
+    set showWordLimit(val) {
+        if (!val || this.#input.type !== "text") return;
+
+        this.setAttribute("show-word-limit", val);
+
+        // 加入显示的dom
+        const wordLimit = document.createElement('span');
+        this.#wrap.classList.toggle('word-limit', val);
+        this.#wrap.classList.toggle('append-slot', val);
+        wordLimit.className = 'ea-input_word-limit';
+        wordLimit.innerText = `${this.#input.value.length}/${this.maxLength}`;
+
+        this.#input.addEventListener('input', (e) => {
+            wordLimit.innerText = `${e.target.value.length}/${this.maxLength}`;
+        });
+
+
+        this.#appendSlot.appendChild(wordLimit);
+        this.#wrap.appendChild(wordLimit);
+    }
+
+    // #endregion
+    // ------- end -------
+
     // 图标dom初始化
     iconInit(className) {
         const clearIcon = document.createElement('i');
@@ -556,6 +727,10 @@ export default class EaInput extends Base {
         // 输入建议
         this.suggestion = this.suggestion;
         if (this.remote) this.remote = this.remote;
+
+        // 输入长度限制
+        this.maxLength = this.maxLength;
+        this.minLength = this.minLength;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {

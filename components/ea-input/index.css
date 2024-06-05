@@ -27,6 +27,10 @@
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
+  /* ------- 输入框前后的dom ------- */
+  /* #region  */
+  /* #endregion */
+  /* ------- end  ------- */
 }
 .ea-input_wrap .ea-input_inner {
   box-sizing: border-box;
@@ -45,6 +49,9 @@
 }
 .ea-input_wrap .ea-input_inner::placeholder {
   color: #c0c4cc;
+}
+.ea-input_wrap .ea-input_inner.invalid {
+  border-color: #f56c6c;
 }
 .ea-input_wrap .ea-input_inner.disabled {
   background-color: #eeeeee;
@@ -172,4 +179,18 @@
   font-size: 1.5rem;
   animation: spin 1s linear infinite;
   animation-play-state: running;
+}
+.ea-input_wrap.word-limit {
+  border: 1px solid #dcdfe6;
+  border-radius: 3px;
+}
+.ea-input_wrap.word-limit .ea-input_inner {
+  border: 0;
+  width: calc(100% - 3rem);
+}
+.ea-input_wrap.word-limit .ea-input_word-limit {
+  padding-right: 0.5rem;
+  width: 2.5rem;
+  font-size: 0.75rem;
+  text-align: center;
 }
