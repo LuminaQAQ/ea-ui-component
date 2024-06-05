@@ -11,19 +11,28 @@ onMounted(() => {
 
   document.querySelector('#trigger-on-focus').suggestion = [
     { value: '张三' },
+    { value: '李四' },
+    { value: '王五' },
+    { value: '赵六' },
+    { value: '孙七' },
+    { value: '周八' },
+    { value: '吴九' },
+    { value: '郑十' },
     { value: '1' },
     { value: '2' },
-    { value: '李四' },
-    { value: '张三' },
-    { value: '李四' },
-    { value: '张三' },
-    { value: '李四' },
-    { value: '张三' },
-    { value: '李四' },
-    { value: '张三' },
-    { value: '李四' },
   ];
-  // console.log(document.querySelector('#trigger-on-focus').suggestion)
+  
+  document.querySelector('#trigger-after-input').suggestion = [
+    { value: '周一' },
+    { value: '周二' },
+    { value: '周三' },
+    { value: '周四' },
+    { value: '周五' },
+    { value: '周六' },
+    { value: '周日' },
+    { value: '3' },
+    { value: '4' },
+  ];
 })
 </script>
 
