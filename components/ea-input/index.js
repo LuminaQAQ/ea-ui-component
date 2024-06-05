@@ -207,15 +207,6 @@ export default class EaInput extends Base {
                 }
             });
 
-            this.#input.addEventListener('focus', (e) => {
-                let timer = setTimeout(() => {
-                    suggestionBoard.style.display = 'block';
-
-                    clearTimeout(timer);
-                    timer = null;
-                }, 50);
-            });
-
             // 匹配输入建议
             this.#input.addEventListener('input', (e) => {
                 this.shadowRoot.querySelectorAll('li').forEach(item => {
@@ -226,6 +217,18 @@ export default class EaInput extends Base {
                     }
                 })
             });
+
+            if (this.triggerOnFocus) {
+                this.#input.addEventListener('focus', (e) => {
+                    suggestionBoard.style.display = 'block';
+                });
+            } else if (this.triggerAfterInput) {
+                this.#input.addEventListener('input', (e) => {
+                    if (e.target.value.length > 0) {
+                        suggestionBoard.style.display = 'block';
+                    }
+                });
+            }
 
             wrap.appendChild(suggestionBoard);
         }
@@ -430,7 +433,13 @@ export default class EaInput extends Base {
 
     // 输入框激活时列出输入建议
     get triggerOnFocus() {
-        return this.getAttrBoolean("trigger-after-input");
+        return this.getAttrBoolean("trigger-on-focus");
+    }
+
+    set triggerOnFocus(val) {
+        if (!val) return;
+
+        this.setAttribute("trigger-on-focus", val);
     }
 
     // 输入框输入后匹配输入建议
