@@ -62,3 +62,69 @@ onMounted(() => {
   ></ea-textarea>
 </div>
 ```
+
+## 输入长度限制
+
+<div class="col left">
+    <ea-textarea type="textarea" placeholder="这不是空的" min-length="2" max-length="10"></ea-textarea>
+    <ea-textarea type="textarea" placeholder="这不是空的" min-length="5" max-length="20"></ea-textarea>
+</div>
+
+```html
+<div class="col left">
+  <ea-textarea
+    type="textarea"
+    placeholder="这不是空的"
+    min-length="2"
+    max-length="10"
+  ></ea-textarea>
+  <ea-textarea
+    type="textarea"
+    placeholder="这不是空的"
+    min-length="5"
+    max-length="20"
+  ></ea-textarea>
+</div>
+```
+
+## 展示字数统计
+
+<div class="col left">
+    <ea-textarea type="textarea" placeholder="这不是空的" rows="5" min-length="5" max-length="20" show-word-limit></ea-textarea>
+</div>
+
+```html
+<div class="col left">
+  <ea-textarea
+    type="textarea"
+    placeholder="这不是空的"
+    rows="5"
+    min-length="5"
+    max-length="20"
+    show-word-limit
+  ></ea-textarea>
+</div>
+```
+
+## Attributes
+
+| 参数            | 说明             | 类型    | 可选值   | 默认值   |
+| --------------- | ---------------- | ------- | -------- | -------- |
+| type            | 类型             | string  | textarea | textarea |
+| rows            | 输入框行数       | number  | -        | 2        |
+| min-rows        | 最小行数         | number  | -        | -        |
+| max-rows        | 最大行数         | number  | -        | -        |
+| min-length      | 最小长度         | number  | -        | -        |
+| max-length      | 最大长度         | number  | -        | -        |
+| show-word-limit | 是否显示字数统计 | boolean | -        | false    |
+| autosize        | 高度是否自适应   | boolean | -        | false    |
+| placeholder     | 输入框占位文本   | string  | -        | -        |
+| disabled        | 禁用             | boolean | -        | false    |
+
+## 事件
+
+| 事件名 | 说明                 | 参数 | 获取值         | 值的类型 |
+| ------ | -------------------- | ---- | -------------- | -------- |
+| input  | 输入时触发           | -    | e.target.value | String   |
+| focus  | 输入框聚焦时触发     | -    | e.target.value | String   |
+| blur   | 输入框失去焦点时触发 | -    | e.target.value | String   |

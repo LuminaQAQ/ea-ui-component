@@ -34,5 +34,16 @@
       background-color: $color-disabled-btn-bgc;
       color: $color-disabled-text;
     }
+
+    &.invalid {
+      border-color: $color-danger-border;
+    }
+  }
+
+  .ea-input_word-limit {
+    position: absolute;
+    font-size: 0.75rem;
+    bottom: 0.5rem;
+    right: 0.5rem;
   }
 }

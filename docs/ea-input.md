@@ -347,14 +347,14 @@ EaInput.remote = true;
 | min-length          | 最小输入长度       | Number  | -                                                                                                            | -      |
 | show-word-limit     | 显示输入长度限制   | Boolean | true / false                                                                                                 | false  |
 
-## Input 插槽
+## 插槽
 
 | 插槽名  | 说明           |
 | ------- | -------------- |
 | prepend | 输入框前置内容 |
 | append  | 输入框后置内容 |
 
-## Input 事件
+## 事件
 
 | 事件名 | 说明                 | 参数 | 获取值         | 值的类型 |
 | ------ | -------------------- | ---- | -------------- | -------- |

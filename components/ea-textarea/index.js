@@ -97,16 +97,8 @@ export default class EaTextarea extends Base {
     // #endregion
     // ------- end -------
 
-    // ------- textarea 文本域 -------
+    // ------- rows 默认行数 -------
     // #region
-
-    setTextareaHeight(rows) {
-        rows = Number(rows);
-        this.#input.rows = rows;
-        // this.#input.style.height = `${rows * 0.66 + 1}rem`;
-        // this.#input.style.minHeight = `${rows * 0.66 + 1}rem`;
-    }
-
     get rows() {
         return this.getAttribute("rows") || 2;
     }
@@ -116,8 +108,13 @@ export default class EaTextarea extends Base {
 
         this.setAttribute("rows", val);
         this.#input.rows = val;
+        this.#input.setAttribute("rows", val);
     }
+    // #endregion
+    // ------- end -------
 
+    // ------- autosize 自动调整高度 -------
+    // #region
     get autosize() {
         return this.getAttrBoolean("autosize");
     }
@@ -140,6 +137,16 @@ export default class EaTextarea extends Base {
                 }
             }
         })
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- min-rows/max-rows 最小/最大行数 -------
+    // #region
+
+    setTextareaHeight(rows) {
+        rows = Number(rows);
+        this.#input.rows = rows;
     }
 
     get minRows() {
@@ -173,6 +180,82 @@ export default class EaTextarea extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- max-length/min-length 最大/最小字符长度 -------
+    // #region
+
+    // 获取最大限制值
+    get maxLength() {
+        return this.getAttribute("max-length");
+    }
+
+    set maxLength(val) {
+        if (!val) return;
+
+        this.setAttribute("max-length", val);
+        this.#input.maxLength = val;
+
+        this.#input.addEventListener('input', (e) => {
+            if (e.target.value.length > val) {
+                e.target.value = e.target.value.slice(0, val);
+            }
+        });
+
+        if (this.showWordLimit) this.showWordLimit = true;
+    }
+
+    // 获取最小限制值
+    get minLength() {
+        return this.getAttribute("min-length");
+    }
+
+    set minLength(val) {
+        if (!val) return;
+
+        this.setAttribute("min-length", val);
+        this.#input.minLength = val;
+
+        this.#input.addEventListener('input', (e) => {
+            if (e.target.value.length < val) {
+                e.target.classList.add('invalid');
+            } else {
+                e.target.classList.remove('invalid');
+            }
+        });
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- 显示 当前文字长度 和 限制值 -------
+    // #region
+
+    get showWordLimit() {
+        return this.getAttrBoolean("show-word-limit");
+    }
+
+    set showWordLimit(val) {
+        if (!val) return;
+
+        this.setAttribute("show-word-limit", val);
+
+        // 加入显示的dom
+        const wordLimit = document.createElement('span');
+        this.#wrap.classList.toggle('word-limit', val);
+        this.#wrap.classList.toggle('append-slot', val);
+        wordLimit.className = 'ea-input_word-limit';
+        wordLimit.innerText = `${this.#input.value.length}/${this.maxLength}`;
+
+        this.#input.addEventListener('input', (e) => {
+            wordLimit.innerText = `${e.target.value.length}/${this.maxLength}`;
+        });
+
+
+        // this.#appendSlot.appendChild(wordLimit);
+        this.#wrap.appendChild(wordLimit);
+    }
+    // #endregion
+    // ------- end -------
+
+
     init() {
         const that = this;
 
@@ -185,15 +268,19 @@ export default class EaTextarea extends Base {
         // 禁用
         this.disabled = this.disabled;
 
-        // 默认行数
-        this.rows = this.rows;
-
         // 自动调整高度
         this.autosize = this.autosize;
 
         // 最大最小行数
         if (this.maxRows) this.maxRows = this.maxRows;
         if (this.minRows) this.minRows = this.minRows;
+
+        // 默认行数
+        this.rows = this.rows;
+
+        // 输入长度限制
+        this.maxLength = this.maxLength;
+        this.minLength = this.minLength;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
