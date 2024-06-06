@@ -3,14 +3,8 @@ import Base from "../Base";
 import { nanoid } from "nanoid";
 
 const stylesheet = `
-:host {
-  --border-top-left-radius: 0;
-  --border-top-right-radius: 0;
-  --border-bottom-left-radius: 0;
-  --border-bottom-right-radius: 0;
-  --border-left-width: 0;
-  --border-right-width: 0;
-}
+@charset "UTF-8";
+@import url('/ea_ui_component/icon/index.css');
 
 .ea-input_wrap {
   position: relative;
@@ -120,6 +114,7 @@ const stylesheet = `
   border-bottom-right-radius: 0;
 }
 .ea-input_wrap .ea-input_suggestion-wrap {
+  z-index: 3;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -137,7 +132,6 @@ const stylesheet = `
   max-height: 10rem;
   overflow-y: auto;
   scrollbar-width: thin;
-  z-index: 1;
   background-color: white;
   box-shadow: 0 1px 8px 1px rgba(0, 0, 0, 0.2);
 }

@@ -180,6 +180,8 @@
     position: absolute;
     box-sizing: border-box;
 
+    z-index: 3;
+
     top: calc(100% + 5px);
     left: 0;
 
@@ -189,8 +191,6 @@
 
     overflow-y: auto;
     scrollbar-width: thin;
-
-    z-index: 1;
 
     background-color: white;
     box-shadow: 0 1px 8px 1px rgba(0, 0, 0, 0.2);

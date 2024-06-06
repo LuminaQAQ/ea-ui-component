@@ -33,6 +33,15 @@ const stylesheet = `
   background-color: #eeeeee;
   color: #c0c4cc;
 }
+.ea-textarea_wrap .ea-textarea_inner.invalid {
+  border-color: #f56c6c;
+}
+.ea-textarea_wrap .ea-input_word-limit {
+  position: absolute;
+  font-size: 0.75rem;
+  bottom: 0.5rem;
+  right: 0.5rem;
+}
 `;
 
 const inputDom = () => {
