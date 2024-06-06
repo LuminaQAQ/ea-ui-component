@@ -1184,7 +1184,6 @@ var I=(n,o,e)=>{if(!o.has(n))throw TypeError("Cannot "+e)};var r=(n,o,e)=>(I(n,o
   max-height: 10rem;
   overflow-y: auto;
   scrollbar-width: thin;
-  z-index: 1;
   background-color: white;
   box-shadow: 0 1px 8px 1px rgba(0, 0, 0, 0.2);
 }
