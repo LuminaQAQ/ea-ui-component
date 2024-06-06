@@ -1166,6 +1166,7 @@ var I=(n,o,e)=>{if(!o.has(n))throw TypeError("Cannot "+e)};var r=(n,o,e)=>(I(n,o
   border-bottom-right-radius: 0;
 }
 .ea-input_wrap .ea-input_suggestion-wrap {
+  z-index: 3;
   list-style-type: none;
   padding: 0;
   margin: 0;
