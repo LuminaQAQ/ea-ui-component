@@ -43,6 +43,8 @@ export default defineConfig({
           { text: 'Input 输入框', link: '/ea-input' },
           { text: 'Textarea 文本域', link: '/ea-textarea' },
           { text: 'InputNumber 计数器', link: '/ea-input-number' },
+          { text: 'Select 选择器', link: '/ea-select' },
+          { text: 'Switch 开关', link: '/ea-switch' },
         ]
       },
     ],
