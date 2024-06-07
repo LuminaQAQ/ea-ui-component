@@ -16,7 +16,7 @@ const signDom = (sign) => {
 
 const inputDom = () => {
     const input = document.createElement('input');
-    input.className = 'ea-input-numbe_inner';
+    input.className = 'ea-input-number_inner';
     input.type = 'text';
     input.value = 0;
 
@@ -55,8 +55,21 @@ export default class EaInputNumber extends Base {
     signEvent(sign, precision) {
         if (this.getAttrBoolean('disabled')) return;
 
-        const val = parseInt(this.#input.value);
-        this.#input.value = sign === "minu" ? val - this.step : val + this.step;
+
+        const val = Number(this.#input.value);
+
+        const defaultStepPrecision = this.#input.value.split('.')[1]; // 简单处理精度问题
+        const res = sign === "minu" ? val - this.step : val + this.step;
+
+        if (precision) {
+            this.#input.value = (res).toFixed(precision);
+        }
+        // 简单处理精度问题
+        else if (defaultStepPrecision?.length) {
+            this.#input.value = (res).toFixed(defaultStepPrecision.length);
+        } else {
+            this.#input.value = res;
+        }
 
         this.#input.dispatchEvent(
             new CustomEvent("change", {
@@ -70,7 +83,7 @@ export default class EaInputNumber extends Base {
     // 处理连加连减事件
     handleCounterEvent(sign) {
         let timer = setInterval(() => {
-            this.signEvent(sign, this.getAttribute('precision'));
+            this.signEvent(sign, this.precision);
         }, 100);
 
         this.addEventListener('mouseup', function () {
@@ -112,14 +125,14 @@ export default class EaInputNumber extends Base {
     // ------- value 值 -------
     // #region
     get value() {
-        return this.#input.value || 0;
+        return this.getAttribute('value') || 0;
     }
 
     set value(val) {
-        val = parseInt(val);
-        this.#input.value = val;
+        val = this.precision ? Number(val).toFixed(this.precision) : Number(val);
+        this.setAttribute('value', val);
 
-        if (this.disabled) return;
+        this.#input.value = val;
     }
     // #endregion
     // ------- end -------
@@ -192,12 +205,65 @@ export default class EaInputNumber extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- precision 精度 -------
+    // #region
+    get precision() {
+        const num = Number(this.getAttribute('precision'));
+        if (num < 0 || !Number.isInteger(num)) {
+            console.warn(`precision must be a positive integer(precisionValue: ${num})`);
+            return false;
+        }
+
+        return Number(this.getAttribute('precision')) || 0;
+    }
+
+    set precision(precision) {
+        this.setAttribute('precision', precision);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- size 按钮大小(medium、small、mini) -------
+    // #region
+    get size() {
+        return this.getAttribute('size') || '';
+    }
+
+    handleSize(size) {
+        this.#signMinus.classList.add(`ea-input-number_sign--${size}`);
+        this.#signPlus.classList.add(`ea-input-number_sign--${size}`);
+        this.#input.classList.add(`ea-input-number_inner--${size}`);
+        this.setAttribute('size', size);
+    }
+
+    set size(size) {
+        switch (size) {
+            case 'medium':
+                this.handleSize('medium');
+                break;
+            case 'small':
+                this.handleSize('small');
+                break;
+            case 'mini':
+                this.handleSize('mini');
+                break;
+            default:
+                break;
+        }
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
 
         // 禁用
         this.disabled = this.disabled;
 
+        // 大小
+        this.size = this.size;
+
+        // 默认值
         if (this.min) this.value = this.min;
         else this.value = this.value;
 
@@ -214,7 +280,7 @@ export default class EaInputNumber extends Base {
 
             if (that.stepStrictly) {
                 const step = that.step;
-                const val = parseInt(that.#input.value);
+                const val = Number(that.#input.value);
                 const mod = val % step;
 
                 if (val < 0 && mod !== 0) that.#input.value = val - mod - step;
@@ -228,12 +294,12 @@ export default class EaInputNumber extends Base {
 
         // 减号
         this.#signMinus.addEventListener('click', function () {
-            that.signEvent("minu", that.getAttribute('precision'));
+            that.signEvent("minu", that.precision);
         })
 
         // 加号
         this.#signPlus.addEventListener('click', function (e) {
-            that.signEvent("plus", that.getAttribute('precision'));
+            that.signEvent("plus", that.precision);
         })
 
         // 连减
