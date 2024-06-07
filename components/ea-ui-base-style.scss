@@ -34,6 +34,12 @@ $color-danger-border: #f56c6c;
 $color-disabled-text: #c0c4cc;
 $color-disabled-btn-bgc: #eeeeee;
 
+// 计数器
+$color-counter-bgc: #f5f7fa;
+$color-counter-text: #606266;
+$color-counter-hover-text: #409eff;
+$color-counter-disabled-text: #c0c4cc;
+
 // 边框
 $color-border: #dcdfe6;
 
@@ -60,4 +66,44 @@ $color-border: #dcdfe6;
   margin-block-end: 0;
   padding-inline-start: 0;
   unicode-bidi: unset;
+}
+
+@mixin input-default-theme {
+  box-sizing: border-box;
+  box-shadow: none;
+
+  border: 1px solid $color-border;
+  outline: 0;
+  transition: border 0.2s;
+  border-radius: 3px;
+
+  padding: 0.5rem;
+
+  line-height: 0.8;
+  font-size: 0.8rem;
+  scrollbar-width: none;
+
+  &:focus {
+    border-color: $color-primary-border;
+  }
+
+  &::placeholder {
+    color: $color-disabled-text;
+  }
+
+  &.invalid {
+    border-color: $color-danger-border;
+  }
+
+  &.disabled {
+    background-color: $color-disabled-btn-bgc;
+    color: $color-disabled-text;
+  }
+
+  &.ea-input_clear {
+    ::before {
+      content: "\e9c3";
+      display: block;
+    }
+  }
 }
