@@ -36,6 +36,18 @@ onMounted(() => {
 </div>
 ```
 
+## 限制值
+
+<div class="row left">
+    <ea-input-number min="1" max="10"></ea-input-number>
+</div>
+
+```html
+<div class="row left">
+  <ea-input-number min="1" max="10"></ea-input-number>
+</div>
+```
+
 ## 步数
 
 <div class="row left">
@@ -51,8 +63,12 @@ onMounted(() => {
 ## 严格步数
 
 <div class="row left">
-    <ea-input-number step="3" step-strictly></ea-input-number>
+  <ea-input-number step="3" step-strictly></ea-input-number>
 </div>
+
+```html
+
+```
 
 ## 精度
 
@@ -63,3 +79,7 @@ onMounted(() => {
 额外提供了 medium、small、mini 三种尺寸的数字输入框
 
 ## 按钮位置
+
+```
+
+```

@@ -39,7 +39,7 @@
 }
 .ea-input-number_wrap .ea-input-number_sign.disabled {
   pointer-events: none;
-  cursor: default;
+  cursor: not-allowed;
   color: #c0c4cc;
 }
 .ea-input-number_wrap .ea-input-numbe_inner {
@@ -80,8 +80,8 @@
 }
 .ea-input-number_wrap .ea-input-numbe_inner.disabled {
   pointer-events: none;
-  cursor: default;
   color: #c0c4cc;
+  cursor: not-allowed;
   background-color: #f5f7fa;
 }
 .ea-input-number_wrap.focus {

@@ -84,6 +84,46 @@ export default class EaInputNumber extends Base {
         this.#wrap.classList.toggle('focus', flag)
     }
 
+    handleLimitVal() {
+        if (this.min === false && this.max === false) return;
+
+        // 限制输入框的值
+        if (this.min !== undefined && this.#input.value < this.min) {
+            this.#input.value = this.min;
+        } else if (this.max !== undefined && this.#input.value > this.max) {
+            this.#input.value = this.max;
+        }
+
+        // 当达到限制值时, 禁用加减按钮
+        if (this.#input.value == this.min) {
+            this.#signMinus.classList.add('disabled');
+        } else if (this.#input.value == this.max) {
+            this.#signPlus.classList.add('disabled');
+        } else {
+            try {
+                this.#signMinus.classList.remove('disabled');
+                this.#signPlus.classList.remove('disabled');
+            } catch (error) {
+
+            }
+        }
+    }
+
+    // ------- value 值 -------
+    // #region
+    get value() {
+        return this.#input.value || 0;
+    }
+
+    set value(val) {
+        val = parseInt(val);
+        this.#input.value = val;
+
+        if (this.disabled) return;
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- disabled 禁用 -------
     // #region
     get disabled() {
@@ -125,11 +165,43 @@ export default class EaInputNumber extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- min/max 限制最大/最小值 -------
+    // #region
+    get min() {
+        if (this.getAttribute('min') === null) return false;
+        else return Number(this.getAttribute('min')) || 0;
+    }
+
+    set min(min) {
+        if (min === false) {
+            this.removeAttribute('min');
+            return;
+        }
+
+        this.setAttribute('min', min);
+    }
+
+    get max() {
+        if (this.getAttribute('max') === null) return false;
+        else return Number(this.getAttribute('max'));
+    }
+
+    set max(max) {
+        this.setAttribute('max', max);
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
 
         // 禁用
         this.disabled = this.disabled;
+
+        if (this.min) this.value = this.min;
+        else this.value = this.value;
+
+        this.handleLimitVal();
 
         // 输入框获取焦点
         this.#input.addEventListener('focus', function () {
@@ -139,6 +211,19 @@ export default class EaInputNumber extends Base {
         // 输入框失去焦点
         this.#input.addEventListener('blur', function () {
             that.handleWrapBorder(false);
+
+            if (that.stepStrictly) {
+                const step = that.step;
+                const val = parseInt(that.#input.value);
+                const mod = val % step;
+
+                if (val < 0 && mod !== 0) that.#input.value = val - mod - step;
+                else if (val < 0 && mod === 0) that.#input.value = val;
+                else if (mod === 0) that.#input.value = val;
+                else that.#input.value = val - mod + step;
+            }
+
+            that.handleLimitVal();
         })
 
         // 减号
@@ -163,14 +248,7 @@ export default class EaInputNumber extends Base {
 
         // 输入框值改变时
         this.#input.addEventListener('change', function () {
-            if (isNaN(that.#input.value) || that.#input.value === '') that.#input.value = 0;
-
-            if (that.stepStrictly) {
-                const step = that.step;
-                const val = parseInt(that.#input.value);
-                const mod = val % step;
-                that.#input.value = mod === 0 ? val : val - mod + step;
-            }
+            that.handleLimitVal();
         })
 
     }
