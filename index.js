@@ -11,6 +11,8 @@ import EaCheckboxGroup from "./components/ea-checkbox-group/";
 import EaInput from "./components/ea-input/";
 import EaTextarea from "./components/ea-textarea/";
 import EaInputNumber from "./components/ea-input-number/";
+import EaSelect from "./components/ea-select/";
+import EaSwitch from "./components/ea-switch/";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -28,3 +30,5 @@ register("ea-checkbox-group", EaCheckboxGroup);
 register("ea-input", EaInput);
 register("ea-textarea", EaTextarea);
 register("ea-input-number", EaInputNumber);
+register("ea-select", EaSelect);
+register("ea-switch", EaSwitch);
