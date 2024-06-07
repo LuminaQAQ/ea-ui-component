@@ -45,7 +45,7 @@
     // }
     &.disabled {
       pointer-events: none;
-      cursor: default;
+      cursor: not-allowed;
       color: $color-counter-disabled-text;
     }
   }
@@ -66,8 +66,9 @@
 
     &.disabled {
       pointer-events: none;
-      cursor: default;
       color: $color-counter-disabled-text;
+
+      cursor: not-allowed;
       background-color: $color-counter-bgc;
     }
   }
