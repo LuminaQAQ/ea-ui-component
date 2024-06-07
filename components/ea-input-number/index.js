@@ -56,7 +56,7 @@ export default class EaInputNumber extends Base {
         if (this.getAttrBoolean('disabled')) return;
 
         const val = parseInt(this.#input.value);
-        this.#input.value = sign === "minu" ? val - 1 : val + 1;
+        this.#input.value = sign === "minu" ? val - this.step : val + this.step;
 
         this.#input.dispatchEvent(
             new CustomEvent("change", {
@@ -101,6 +101,30 @@ export default class EaInputNumber extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- step 加减的步长 -------
+    // #region
+    get step() {
+        return Number(this.getAttribute('step')) || 1;
+    }
+
+    set step(step) {
+        this.setAttribute('step', step);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- step-strictly 严格步长 -------
+    // #region
+    get stepStrictly() {
+        return this.getAttrBoolean('step-strictly');
+    }
+
+    set stepStrictly(flag) {
+        this.toggleAttr('step-strictly', flag);
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
 
@@ -140,6 +164,13 @@ export default class EaInputNumber extends Base {
         // 输入框值改变时
         this.#input.addEventListener('change', function () {
             if (isNaN(that.#input.value) || that.#input.value === '') that.#input.value = 0;
+
+            if (that.stepStrictly) {
+                const step = that.step;
+                const val = parseInt(that.#input.value);
+                const mod = val % step;
+                that.#input.value = mod === 0 ? val : val - mod + step;
+            }
         })
 
     }
