@@ -5,6 +5,7 @@ const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 `;
 
+// +/- 符号dom
 const signDom = (sign) => {
     const dom = document.createElement('span');
     dom.className = `ea-input-number_sign ${sign}`;
@@ -14,6 +15,7 @@ const signDom = (sign) => {
     return dom;
 }
 
+// input dom
 const inputDom = () => {
     const input = document.createElement('input');
     input.className = 'ea-input-number_inner';
@@ -52,14 +54,13 @@ export default class EaInputNumber extends Base {
     }
 
     // 处理输入框加减事件
-    signEvent(sign, precision) {
+    signEvent(sign, precision, eventName) {
         if (this.getAttrBoolean('disabled')) return;
-
 
         const val = Number(this.#input.value);
 
         const defaultStepPrecision = this.#input.value.split('.')[1]; // 简单处理精度问题
-        const res = sign === "minu" ? val - this.step : val + this.step;
+        const res = sign === "minu" ? val - this.step : val + this.step; // 处理加减问题
 
         if (precision) {
             this.#input.value = (res).toFixed(precision);
@@ -71,13 +72,16 @@ export default class EaInputNumber extends Base {
             this.#input.value = res;
         }
 
-        this.#input.dispatchEvent(
-            new CustomEvent("change", {
-                detail: {
-                    value: this.#input.value
-                }
-            })
-        )
+        // 为外部dom添加事件监听
+        if (eventName) {
+            this.#input.dispatchEvent(
+                new CustomEvent(eventName, {
+                    detail: {
+                        value: this.#input.value
+                    }
+                })
+            )
+        }
     }
 
     // 处理连加连减事件
@@ -267,15 +271,21 @@ export default class EaInputNumber extends Base {
         if (this.min) this.value = this.min;
         else this.value = this.value;
 
+        // 限制值初始化
         this.handleLimitVal();
 
         // 输入框获取焦点
-        this.#input.addEventListener('focus', function () {
+        this.#input.addEventListener('focus', function (e) {
             that.handleWrapBorder(true);
+
+
+            this.dispatchEvent(new CustomEvent("blur",
+                { detail: { value: e.target.value } }
+            ))
         })
 
         // 输入框失去焦点
-        this.#input.addEventListener('blur', function () {
+        this.#input.addEventListener('blur', function (e) {
             that.handleWrapBorder(false);
 
             if (that.stepStrictly) {
@@ -290,31 +300,38 @@ export default class EaInputNumber extends Base {
             }
 
             that.handleLimitVal();
+
+            this.dispatchEvent(new CustomEvent("blur",
+                { detail: { value: e.target.value } }
+            ))
         })
 
         // 减号
         this.#signMinus.addEventListener('click', function () {
-            that.signEvent("minu", that.precision);
+            that.signEvent("minu", that.precision, "minus");
         })
 
         // 加号
         this.#signPlus.addEventListener('click', function (e) {
-            that.signEvent("plus", that.precision);
+            that.signEvent("plus", that.precision, "plus");
         })
 
         // 连减
-        this.#signMinus.addEventListener('mousedown', function () {
-            that.handleCounterEvent("minu", that.getAttribute('precision'));
+        this.#signMinus.addEventListener('mousedown', function (e) {
+            that.handleCounterEvent("minu", that.precision);
+
         })
 
         // 连加
         this.#signPlus.addEventListener('mousedown', function () {
-            that.handleCounterEvent("plus", that.getAttribute('precision'));
+            that.handleCounterEvent("plus", that.precision,);
         })
 
         // 输入框值改变时
-        this.#input.addEventListener('change', function () {
+        this.#input.addEventListener('change', function (e) {
             that.handleLimitVal();
+
+            this.dispatchEvent(new CustomEvent("change", { detail: { value: e.target.value } }))
         })
 
     }
