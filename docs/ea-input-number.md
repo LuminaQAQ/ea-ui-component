@@ -38,7 +38,21 @@ onMounted(() => {
 
 ## 步数
 
+<div class="row left">
+    <ea-input-number step="2"></ea-input-number>
+</div>
+
+```html
+<div class="row left">
+  <ea-input-number step="2"></ea-input-number>
+</div>
+```
+
 ## 严格步数
+
+<div class="row left">
+    <ea-input-number step="3" step-strictly></ea-input-number>
+</div>
 
 ## 精度
 
