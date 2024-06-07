@@ -4,8 +4,11 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   base: '/ea_ui_component/',
-
   title: "ea-ui",
+
+  head: [
+    ['link', { rel: 'icon', href: '/ea_ui_component/favicon.ico' }]
+  ],
 
   cleanUrls: true,
   lastUpdated: true,
