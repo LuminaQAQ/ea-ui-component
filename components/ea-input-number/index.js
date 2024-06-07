@@ -194,12 +194,16 @@ export default class EaInputNumber extends Base {
                 })
             )
         }
+
+        // 限制输入框的值
+        this.handleLimitVal();
     }
 
     // 处理连加连减事件
     handleCounterEvent(sign) {
         let timer = setInterval(() => {
             this.signEvent(sign, this.precision);
+            this.handleLimitVal();
         }, 100);
 
         this.addEventListener('mouseup', function () {
@@ -390,9 +394,8 @@ export default class EaInputNumber extends Base {
         this.#input.addEventListener('focus', function (e) {
             that.handleWrapBorder(true);
 
-
             this.dispatchEvent(new CustomEvent("blur",
-                { detail: { value: e.target.value } }
+                { detail: { value: this.value } }
             ))
         })
 
@@ -414,7 +417,7 @@ export default class EaInputNumber extends Base {
             that.handleLimitVal();
 
             this.dispatchEvent(new CustomEvent("blur",
-                { detail: { value: e.target.value } }
+                { detail: { value: this.value } }
             ))
         })
 
@@ -431,19 +434,18 @@ export default class EaInputNumber extends Base {
         // 连减
         this.#signMinus.addEventListener('mousedown', function (e) {
             that.handleCounterEvent("minu", that.precision);
-
         })
 
         // 连加
         this.#signPlus.addEventListener('mousedown', function () {
-            that.handleCounterEvent("plus", that.precision,);
+            that.handleCounterEvent("plus", that.precision);
         })
 
         // 输入框值改变时
         this.#input.addEventListener('change', function (e) {
             that.handleLimitVal();
 
-            this.dispatchEvent(new CustomEvent("change", { detail: { value: e.target.value } }))
+            this.dispatchEvent(new CustomEvent("change", { detail: { value: this.value } }))
         })
 
     }
