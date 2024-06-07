@@ -10,6 +10,7 @@ import EaCheckbox from "./components/ea-checkbox/";
 import EaCheckboxGroup from "./components/ea-checkbox-group/";
 import EaInput from "./components/ea-input/";
 import EaTextarea from "./components/ea-textarea/";
+import EaInputNumber from "./components/ea-input-number/";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -26,3 +27,4 @@ register("ea-checkbox", EaCheckbox);
 register("ea-checkbox-group", EaCheckboxGroup);
 register("ea-input", EaInput);
 register("ea-textarea", EaTextarea);
+register("ea-input-number", EaInputNumber);
