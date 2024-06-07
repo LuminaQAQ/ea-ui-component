@@ -67,16 +67,46 @@ onMounted(() => {
 </div>
 
 ```html
-
+<div class="row left">
+  <ea-input-number step="3" step-strictly></ea-input-number>
+</div>
 ```
 
 ## 精度
 
 > precision 的值必须是一个非负整数，并且不能小于 step 的小数位数。
 
+<div class="row left">
+  <ea-input-number value="1" step="0.1" precision="1"></ea-input-number>
+  <ea-input-number value="1" step="0.01" precision="2"></ea-input-number>
+</div>
+
+```html
+<div class="row left">
+  <ea-input-number value="1" step="0.1" precision="1"></ea-input-number>
+  <ea-input-number value="1" step="0.01" precision="2"></ea-input-number>
+</div>
+```
+
 ## 尺寸
 
 额外提供了 medium、small、mini 三种尺寸的数字输入框
+
+<div class="row left">
+  <ea-input-number></ea-input-number>
+  <ea-input-number size="medium"></ea-input-number>
+  <ea-input-number size="small"></ea-input-number>
+  <ea-input-number size="mini"></ea-input-number>
+</div>
+
+```html
+<div class="row left">
+  <ea-input-number></ea-input-number>
+  <ea-input-number size="medium"></ea-input-number>
+  <ea-input-number size="small"></ea-input-number>
+  <ea-input-number size="mini"></ea-input-number>
+</div>
+```
 
 ## 按钮位置
 
