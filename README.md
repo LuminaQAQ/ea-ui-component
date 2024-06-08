@@ -26,7 +26,7 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Textarea 文本域
   - [x] InputNumber 计数器
   - [ ] Select 选择框
-  - [ ] Switch 开关
+  - [x] Switch 开关
   - [ ] Slider 滑块
   - [ ] Rate 评分
 
