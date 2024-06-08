@@ -358,6 +358,6 @@ EaInput.remote = true;
 
 | 事件名 | 说明                 | 参数 | 获取值         | 值的类型 |
 | ------ | -------------------- | ---- | -------------- | -------- |
-| input  | 输入时触发           | -    | e.target.value | String   |
-| focus  | 输入框聚焦时触发     | -    | e.target.value | String   |
-| blur   | 输入框失去焦点时触发 | -    | e.target.value | String   |
+| input  | 输入时触发           | -    | e.detail.value | String   |
+| focus  | 输入框聚焦时触发     | -    | e.detail.value | String   |
+| blur   | 输入框失去焦点时触发 | -    | e.detail.value | String   |
