@@ -5,8 +5,8 @@ import setStyle from '../utils/setStyle';
 export default class Base extends HTMLElement {
     constructor() {
         super();
-        this.isProduction = false;
-        // this.isProduction = true;
+        // this.isProduction = false;
+        this.isProduction = true;
     }
 
     /**
