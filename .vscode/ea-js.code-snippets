@@ -19,6 +19,7 @@
     "scope": "javascript",
     "prefix": "ea-template",
     "body": [
+      "// @ts-nocheck",
       "import Base from '../Base';",
       "",
 
@@ -34,7 +35,6 @@
       "super();",
       "",
       "const shadowRoot = this.attachShadow({ mode: 'open' });",
-      "this.shadowRoot = shadowRoot;",
       "const wrap = document.createElement('div');",
       "wrap.className = 'ea-$0_wrap';",
       "",
