@@ -43,6 +43,13 @@ $color-counter-disabled-text: #c0c4cc;
 // 边框
 $color-border: #dcdfe6;
 
+// 开关
+$color-switch-bgc: #dcdfe6;
+$color-switch-checked-bgc: #409eff;
+$color-switch-disabled-bgc: #eff1f5;
+$color-switch-disabled-text: #c0c4cc;
+$color-switch-disabled-active-text: #7ebfff;
+
 // 链接的配色
 @mixin ea-link-theme($theme-name, $color) {
   &.#{$theme-name} {
