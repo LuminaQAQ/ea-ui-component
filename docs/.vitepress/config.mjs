@@ -51,6 +51,12 @@ export default defineConfig({
           { text: 'Rate 评分', link: '/ea-rate' },
         ]
       },
+      {
+        text: '数据组件',
+        items: [
+          { text: 'Tag 标签', link: '/ea-tag' },
+        ]
+      },
     ],
 
     socialLinks: [
