@@ -21,6 +21,7 @@ const rateDom = (index) => {
 
 
 export default class EaRate extends Base {
+    #mounted = false;
     #wrap;
     #textList = ["极差", "失望", "一般", "满意", "惊喜"];
     constructor() {
@@ -30,46 +31,15 @@ export default class EaRate extends Base {
         const wrap = document.createElement('div');
         wrap.className = 'ea-rate_wrap';
 
-        const that = this;
         for (let i = 0; i < 5; i++) {
             const dom = rateDom(i);
-            wrap.appendChild(dom);
+            dom.setAttribute('data-index', i + 1);
 
-            // 鼠标移入: 显示选中状态
-            dom.addEventListener('mouseenter', function (e) {
-                const index = Number(this.getAttribute('data-index'));
-
-                that.clearCheckedStatus();
-                that.setCheckedStatus(index - 1);
-
-                that.dispatchEvent(new CustomEvent("hover", {
-                    detail: {
-                        value: index
-                    }
-                }));
-            })
-
-            // 鼠标移出: 清除选中状态
-            dom.addEventListener('mouseleave', function (e) {
-                that.clearCheckedStatus();
-
-                that.setCheckedStatus(that.value - 1);
-            })
-
-            // 点击: 设置选中状态
-            dom.addEventListener('click', function (e) {
-                const index = Number(this.getAttribute('data-index'));
-
-                that.value = index - 1;
-                that.dispatchEvent(new CustomEvent("change", {
-                    detail: {
-                        value: index
-                    }
-                }))
-            })
+            wrap.appendChild(rateDom(i));
         }
 
         this.#wrap = wrap;
+
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
     }
@@ -80,7 +50,7 @@ export default class EaRate extends Base {
 
         for (let i = 0; i <= index; i++) {
             item[i].classList.add('ea-rate_item--active');
-            item[i].querySelector('i').className = "icon-star";
+            item[i].querySelector('i').className = this.activeIconClass;
 
             if (this.showText) {
                 const text = this.#wrap.querySelector('.ea-rate_text');
@@ -93,7 +63,7 @@ export default class EaRate extends Base {
     clearCheckedStatus() {
         this.#wrap.querySelectorAll('.ea-rate_item').forEach(item => {
             item.classList.remove('ea-rate_item--active');
-            item.querySelector('i').className = "icon-star-empty";
+            item.querySelector('i').className = this.voidIconClass;
 
             if (this.showText) {
                 const text = this.#wrap.querySelector('.ea-rate_text');
@@ -114,7 +84,7 @@ export default class EaRate extends Base {
     set value(val) {
         val = Number(val);
 
-        this.setAttribute('value', val + 1);
+        this.setAttribute('value', val);
 
         this.clearCheckedStatus();
 
@@ -124,14 +94,14 @@ export default class EaRate extends Base {
     // #endregion
     // ------- end -------
 
-    // ------- colors 颜色 -------
+    // ------- color 颜色 -------
     // #region
-    get colors() {
-        return this.getAttribute('colors') || 'rgb(247, 186, 42)';
+    get color() {
+        return this.getAttribute('color') || 'rgb(247, 186, 42)';
     }
 
-    set colors(val) {
-        this.setAttribute('colors', val);
+    set color(val) {
+        this.setAttribute('color', val);
         this.#wrap.querySelectorAll('.ea-rate_item').forEach(item => {
             item.querySelector('i').style.setProperty('--i-color', val);
         })
@@ -160,8 +130,44 @@ export default class EaRate extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- void-icon-class 自定空图标样式类 -------
+    // #region
+    get voidIconClass() {
+        return this.getAttribute('void-icon-class') || 'icon-star-empty';
+    }
+
+    set voidIconClass(val) {
+        this.setAttribute('void-icon-class', val);
+        this.#wrap.querySelectorAll('.ea-rate_item').forEach(item => {
+            item.querySelector('i').className = val;
+        })
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- active-icon-class 自定图标样式类 -------
+    // #region
+    get activeIconClass() {
+        return this.getAttribute('active-icon-class') || 'icon-star';
+    }
+
+    set activeIconClass(val) {
+        this.setAttribute('active-icon-class', val);
+        this.#wrap.querySelectorAll('.ea-rate_item').forEach(item => {
+            item.querySelector('i').className = val;
+        })
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
+
+        // icon-class 自定图标样式类初始化
+        this.activeIconClass = this.activeIconClass;
+
+        // void-icon-class 自定空图标样式类初始化
+        this.voidIconClass = this.voidIconClass;
 
         // show-text 显示文本初始化
         if (this.showText) {
@@ -171,14 +177,57 @@ export default class EaRate extends Base {
         }
         this.showText = this.showText;
 
-        // colors 颜色初始化
-        this.colors = this.colors;
+        // color 颜色初始化
+        this.color = this.color;
 
         // value 星级初始化
         this.value = this.value - 1;
+
+
+        this.#wrap.querySelectorAll('.ea-rate_item').forEach(dom => {
+
+            // 鼠标移入: 显示选中状态
+            dom.addEventListener('mouseenter', function (e) {
+                const index = Number(this.getAttribute('data-index'));
+
+                that.clearCheckedStatus();
+                that.setCheckedStatus(index - 1);
+
+                that.dispatchEvent(new CustomEvent("hover", {
+                    detail: {
+                        value: index,
+                        rateText: that.#textList[index - 1]
+                    }
+                }));
+            })
+
+            // 鼠标移出: 清除选中状态
+            dom.addEventListener('mouseleave', function (e) {
+                that.clearCheckedStatus();
+
+                that.setCheckedStatus(that.value);
+            })
+
+            // 点击: 设置选中状态
+            dom.addEventListener('click', function (e) {
+                const index = Number(this.getAttribute('data-index'));
+
+                that.value = index - 1;
+                that.dispatchEvent(new CustomEvent("change", {
+                    detail: {
+                        value: index,
+                        rateText: that.#textList[index - 1]
+                    }
+                }))
+            })
+        })
+        for (let i = 0; i < 5; i++) {
+        }
     }
 
     connectedCallback() {
         this.init();
+
+        this.#mounted = true;
     }
 }

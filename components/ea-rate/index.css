@@ -11,6 +11,7 @@
 }
 
 .ea-rate_wrap {
+  --i-color: rgb(247, 186, 42);
   display: flex;
   align-items: center;
 }

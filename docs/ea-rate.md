@@ -11,7 +11,7 @@ onMounted(() => {
 
   document.getElementById('ea-rate-show-text-customization').showTextList = ["极差", "差", "中", "良", "优"];
   document.getElementById('ea-rate-show-text').addEventListener('hover', function (e) {
-    console.log(e.detail.value)
+    console.log(e.detail.value, e.detail.rateText)
   })
 })
 </script>
@@ -29,7 +29,7 @@ onMounted(() => {
     </section>
     <section>
         <p>自定义颜色</p>
-        <ea-rate id="ea-rate-different-color" colors="#f56c6c"></ea-rate>
+        <ea-rate id="ea-rate-different-color" color="#f56c6c"></ea-rate>
     </section>
 </div>
 
@@ -41,7 +41,7 @@ onMounted(() => {
   </section>
   <section>
     <p>自定义颜色</p>
-    <ea-rate id="ea-rate-different-color" colors="#f56c6c"></ea-rate>
+    <ea-rate id="ea-rate-different-color" color="#f56c6c"></ea-rate>
   </section>
 </div>
 ```
@@ -87,6 +87,14 @@ document.getElementById("ea-rate").addEventListener("change", function (e) {
 `JS` 自定义显示文字
 
 ```js
+// get: 获取评分描述: e.detail.rateText
+document
+  .getElementById("ea-rate-show-text")
+  .addEventListener("hover", function (e) {
+    console.log(e.detail.value, e.detail.rateText);
+  });
+
+// set: 设置评分值描述: element.showTextList = []
 document.getElementById("ea-rate-show-text").showTextList = [
   "极差",
   "差",
@@ -100,6 +108,37 @@ document.getElementById("ea-rate-show-text").showTextList = [
 
 当有多层评价时，可以用不同类型的 icon 区分评分层级
 
+<div class="col left">
+    <ea-rate value="1"></ea-rate>
+    <ea-rate void-icon-class="icon-heart-empty" active-icon-class="icon-heart" color="#f56c6c" value="2"></ea-rate>
+    <ea-rate void-icon-class="icon-ok-circled2" active-icon-class="icon-ok-circled" color="#67c23a" value="3"></ea-rate>
+    <ea-rate void-icon-class="icon-cancel-circled2" active-icon-class="icon-cancel-circled" color="red" value="4"></ea-rate>
+</div>
+
+```html
+<div class="col left">
+  <ea-rate value="1"></ea-rate>
+  <ea-rate
+    void-icon-class="icon-heart-empty"
+    active-icon-class="icon-heart"
+    color="#f56c6c"
+    value="2"
+  ></ea-rate>
+  <ea-rate
+    void-icon-class="icon-ok-circled2"
+    active-icon-class="icon-ok-circled"
+    color="#67c23a"
+    value="3"
+  ></ea-rate>
+  <ea-rate
+    void-icon-class="icon-cancel-circled2"
+    active-icon-class="icon-cancel-circled"
+    color="red"
+    value="4"
+  ></ea-rate>
+</div>
+```
+
 ## 只读
 
-只读的评分用来展示分数，允许出现半星
+只读的评分用来展示分数
