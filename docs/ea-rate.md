@@ -142,3 +142,7 @@ document.getElementById("ea-rate-show-text").showTextList = [
 ## 只读
 
 只读的评分用来展示分数
+
+<div class="col left">
+    <ea-rate value="1"></ea-rate>
+</div>

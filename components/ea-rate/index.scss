@@ -7,6 +7,7 @@
 .ea-rate_wrap {
   --i-color: rgb(247, 186, 42);
 
+  position: relative;
   display: flex;
   align-items: center;
 
@@ -41,5 +42,22 @@
     line-height: 0.8;
 
     vertical-align: middle;
+  }
+
+  .ea-rate_score {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    .ea-rate_score_item {
+      width: 24px;
+      height: 24px;
+
+      & > i {
+        color: #c0c4cc;
+        font-size: 1rem;
+        line-height: 1;
+      }
+    }
   }
 }
