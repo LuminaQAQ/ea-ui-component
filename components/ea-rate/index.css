@@ -27,11 +27,13 @@
   line-height: 1;
   transition: color 0.3s, font-size 0.1s;
 }
-.ea-rate_wrap .ea-rate_item:hover > i {
-  font-size: 1.1rem;
-}
 .ea-rate_wrap .ea-rate_item.ea-rate_item--active > i {
   color: var(--i-color);
+  font-size: 1.1rem;
+}
+.ea-rate_wrap .ea-rate_item.ea-rate_item--disabled {
+  pointer-events: none;
+  cursor: default;
 }
 .ea-rate_wrap .ea-rate_text {
   margin-left: 0.25rem;
