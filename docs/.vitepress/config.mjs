@@ -48,6 +48,7 @@ export default defineConfig({
           { text: 'InputNumber 计数器', link: '/ea-input-number' },
           { text: 'Select 选择器', link: '/ea-select' },
           { text: 'Switch 开关', link: '/ea-switch' },
+          { text: 'Rate 评分', link: '/ea-rate' },
         ]
       },
     ],
