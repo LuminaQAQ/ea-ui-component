@@ -4,11 +4,9 @@ import Base from '../Base';
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 
-
 :host {
   --i-color: rgb(247, 186, 42);
 }
-
 .ea-rate_wrap {
   --i-color: rgb(247, 186, 42);
   position: relative;
@@ -29,6 +27,10 @@ const stylesheet = `
 .ea-rate_wrap .ea-rate_item.ea-rate_item--active > i {
   color: var(--i-color);
   font-size: 1.1rem;
+}
+.ea-rate_wrap .ea-rate_item.ea-rate_item--disabled {
+  pointer-events: none;
+  cursor: default;
 }
 .ea-rate_wrap .ea-rate_text {
   margin-left: 0.25rem;
