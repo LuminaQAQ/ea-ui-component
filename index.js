@@ -13,6 +13,7 @@ import EaTextarea from "./components/ea-textarea/";
 import EaInputNumber from "./components/ea-input-number/";
 import EaSelect from "./components/ea-select/";
 import EaSwitch from "./components/ea-switch/";
+import EaRate from "./components/ea-rate/";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -32,3 +33,4 @@ register("ea-textarea", EaTextarea);
 register("ea-input-number", EaInputNumber);
 register("ea-select", EaSelect);
 register("ea-switch", EaSwitch);
+register("ea-rate", EaRate);
