@@ -9,6 +9,9 @@ onMounted(() => {
     console.log(e.detail.value)
   })
 
+  document.getElementById('ea-rate').setAttribute('value', 5);
+  document.getElementById('ea-rate-disabled').setAttribute('value', 2);
+
   document.getElementById('ea-rate-show-text-customization').showTextList = ["极差", "差", "中", "良", "优"];
   document.getElementById('ea-rate-show-text').addEventListener('hover', function (e) {
     console.log(e.detail.value, e.detail.rateText)
@@ -25,11 +28,11 @@ onMounted(() => {
 <div class="row">
     <section>
         <p>默认颜色</p>
-        <ea-rate id="ea-rate" value="2"></ea-rate>
+        <ea-rate id="ea-rate"></ea-rate>
     </section>
     <section>
         <p>自定义颜色</p>
-        <ea-rate id="ea-rate-different-color" color="#f56c6c"></ea-rate>
+        <ea-rate id="ea-rate-different-color" value="2" color="#f56c6c"></ea-rate>
     </section>
 </div>
 
@@ -51,9 +54,27 @@ onMounted(() => {
 > (测试可看控制台)
 
 ```js
+// 获取分数
 document.getElementById("ea-rate").addEventListener("change", function (e) {
   console.log(e.detail.value);
 });
+
+// 设置分数
+document.getElementById("ea-rate").setAttribute("value", 5);
+```
+
+## 禁用状态
+
+只读的评分用来展示分数
+
+<div class="col left">
+    <ea-rate id="ea-rate-disabled" value="1" disabled></ea-rate>
+</div>
+
+```html
+<div class="col left">
+  <ea-rate id="ea-rate-disabled" value="1" disabled></ea-rate>
+</div>
 ```
 
 ## 辅助文字
@@ -139,10 +160,22 @@ document.getElementById("ea-rate-show-text").showTextList = [
 </div>
 ```
 
-## 只读
+## Attributes
 
-只读的评分用来展示分数
+| 参数              | 说明                         | 类型    | 可选值                | 默认值                                   |
+| ----------------- | ---------------------------- | ------- | --------------------- | ---------------------------------------- |
+| value             | 绑定值                       | number  | —                     | 0                                        |
+| disabled          | 是否为只读状态，无法进行交互 | boolean | —                     | false                                    |
+| show-text         | 是否显示辅助文字             | boolean | —                     | false                                    |
+| void-icon-class   | 未选中 icon 的类名           | string  | —                     | icon-star-empty                          |
+| active-icon-class | 选中 icon 的类名             | string  | —                     | icon-star                                |
+| show-text-list    | 辅助文字列表                 | array   | —                     | ["极差", "失望", "一般", "满意", "惊喜"] |
+| color             | 激活时的颜色                 | string  | —                     | #f7ba2a                                  |
+| size              | 尺寸                         | string  | medium / small / mini | -                                        |
 
-<div class="col left">
-    <ea-rate value="1"></ea-rate>
-</div>
+## Events
+
+| 事件名称 | 说明           | 回调参数                                            |
+| -------- | -------------- | --------------------------------------------------- |
+| change   | 评分改变时触发 | (e.target.value: number)                            |
+| hover    | 鼠标移入时触发 | (e.target.value: number, e.target.rateText: string) |

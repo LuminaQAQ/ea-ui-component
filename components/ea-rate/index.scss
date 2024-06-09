@@ -25,12 +25,14 @@
       transition: color 0.3s, font-size 0.1s;
     }
 
-    &:hover > i {
+    &.ea-rate_item--active > i {
+      color: var(--i-color);
       font-size: 1.1rem;
     }
 
-    &.ea-rate_item--active > i {
-      color: var(--i-color);
+    &.ea-rate_item--disabled {
+      pointer-events: none;
+      cursor: default;
     }
   }
 

@@ -4,6 +4,53 @@ import Base from '../Base';
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 
+
+:host {
+  --i-color: rgb(247, 186, 42);
+}
+
+.ea-rate_wrap {
+  --i-color: rgb(247, 186, 42);
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ea-rate_wrap .ea-rate_item {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+.ea-rate_wrap .ea-rate_item > i {
+  color: #c0c4cc;
+  font-size: 1rem;
+  line-height: 1;
+  transition: color 0.3s, font-size 0.1s;
+}
+.ea-rate_wrap .ea-rate_item.ea-rate_item--active > i {
+  color: var(--i-color);
+  font-size: 1.1rem;
+}
+.ea-rate_wrap .ea-rate_text {
+  margin-left: 0.25rem;
+  min-width: 2rem;
+  font-size: 0.8rem;
+  line-height: 0.8;
+  vertical-align: middle;
+}
+.ea-rate_wrap .ea-rate_score {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.ea-rate_wrap .ea-rate_score .ea-rate_score_item {
+  width: 24px;
+  height: 24px;
+}
+.ea-rate_wrap .ea-rate_score .ea-rate_score_item > i {
+  color: #c0c4cc;
+  font-size: 1rem;
+  line-height: 1;
+}
 `;
 
 const rateDom = (index) => {
@@ -26,6 +73,10 @@ export default class EaRate extends Base {
     #appendSlot;
     #textList = ["极差", "失望", "一般", "满意", "惊喜"];
 
+    static get observedAttributes() {
+        return ['value'];
+    }
+
     constructor() {
         super();
 
@@ -39,7 +90,12 @@ export default class EaRate extends Base {
             wrap.appendChild(dom);
         }
 
+        const text = document.createElement('span');
+        text.className = 'ea-rate_text';
+        wrap.appendChild(text);
+
         this.#wrap = wrap;
+        this.#appendSlot = text;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
@@ -54,8 +110,7 @@ export default class EaRate extends Base {
             item[i].querySelector('i').className = this.activeIconClass;
 
             if (this.showText) {
-                const text = this.#wrap.querySelector('.ea-rate_text');
-                text.innerText = this.showTextList[index - 1];
+                this.#appendSlot.innerText = this.showTextList[index - 1];
             }
         }
     }
@@ -161,30 +216,26 @@ export default class EaRate extends Base {
     // #endregion
     // ------- end -------
 
-    init() {
+    // ------- disabled 禁用 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean('disabled');
+    }
+
+    set disabled(val) {
+        this.toggleAttr('disabled', val);
+
+        this.#wrap.querySelectorAll('.ea-rate_item').forEach(item => {
+            item.classList.toggle('ea-rate_item--disabled', val);
+        })
+    }
+    // #endregion
+    // ------- end -------
+
+    // 初始化鼠标事件
+    initRateEvent() {
         const that = this;
 
-        // icon-class 自定图标样式类初始化
-        this.activeIconClass = this.activeIconClass;
-
-        // void-icon-class 自定空图标样式类初始化
-        this.voidIconClass = this.voidIconClass;
-
-        // show-text 显示文本初始化
-        if (this.showText) {
-            const text = document.createElement('span');
-            text.className = 'ea-rate_text';
-            this.#wrap.appendChild(text);
-        }
-        this.showText = this.showText;
-
-        // color 颜色初始化
-        this.color = this.color;
-
-        // value 星级初始化
-        this.value = this.value;
-
-        // 初始化鼠标事件
         this.#wrap.querySelectorAll('.ea-rate_item').forEach(dom => {
 
             // 鼠标移入: 显示选中状态
@@ -216,7 +267,7 @@ export default class EaRate extends Base {
                 that.value = index + 1;
                 that.dispatchEvent(new CustomEvent("change", {
                     detail: {
-                        value: index,
+                        value: index + 1,
                         rateText: that.#textList[index]
                     }
                 }))
@@ -224,9 +275,45 @@ export default class EaRate extends Base {
         })
     }
 
+    init() {
+        const that = this;
+
+        // icon-class 自定图标样式类初始化
+        this.activeIconClass = this.activeIconClass;
+
+        // void-icon-class 自定空图标样式类初始化
+        this.voidIconClass = this.voidIconClass;
+
+        // show-text 显示文本初始化
+        this.showText = this.showText;
+
+        // color 颜色初始化
+        this.color = this.color;
+
+        // value 星级初始化
+        this.value = this.value;
+
+        // disabled 禁用初始化
+        this.disabled = this.disabled;
+
+        // 初始化鼠标事件
+        if (!this.disabled) this.initRateEvent();
+    }
+
     connectedCallback() {
         this.init();
 
         this.#mounted = true;
+    }
+
+    attributeChangedCallback(name, oldVal, newVal) {
+        if (!this.#mounted) return;
+
+        if (name == "value") {
+
+            this.clearCheckedStatus();
+
+            this.setCheckedStatus(newVal);
+        }
     }
 }
