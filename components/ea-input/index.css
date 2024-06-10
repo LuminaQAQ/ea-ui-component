@@ -40,6 +40,7 @@
   transition: border 0.2s;
   border-radius: 3px;
   padding: 0.5rem;
+  width: 100%;
   line-height: 0.8;
   font-size: 0.8rem;
   scrollbar-width: none;
