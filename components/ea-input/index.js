@@ -6,6 +6,16 @@ const stylesheet = `
 @charset "UTF-8";
 @import url('/ea_ui_component/icon/index.css');
 
+
+:host {
+  --border-top-left-radius: 0;
+  --border-top-right-radius: 0;
+  --border-bottom-left-radius: 0;
+  --border-bottom-right-radius: 0;
+  --border-left-width: 0;
+  --border-right-width: 0;
+}
+
 .ea-input_wrap {
   position: relative;
   width: 100%;
@@ -30,6 +40,7 @@ const stylesheet = `
   transition: border 0.2s;
   border-radius: 3px;
   padding: 0.5rem;
+  width: 100%;
   line-height: 0.8;
   font-size: 0.8rem;
   scrollbar-width: none;
@@ -114,7 +125,6 @@ const stylesheet = `
   border-bottom-right-radius: 0;
 }
 .ea-input_wrap .ea-input_suggestion-wrap {
-  z-index: 3;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -125,6 +135,7 @@ const stylesheet = `
   display: none;
   position: absolute;
   box-sizing: border-box;
+  z-index: 3;
   top: calc(100% + 5px);
   left: 0;
   padding: 0.5rem 0;
@@ -183,7 +194,8 @@ const stylesheet = `
   width: 2.5rem;
   font-size: 0.75rem;
   text-align: center;
-}`;
+}
+`;
 
 const inputDom = (type) => {
     const input = document.createElement('input');
