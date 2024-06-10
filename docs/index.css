@@ -22,6 +22,9 @@
 .row.left > * {
   margin-right: 0.5rem;
 }
+.row.left > ea-tag {
+  margin-right: 1.5rem;
+}
 .row.right {
   justify-content: flex-end;
 }
