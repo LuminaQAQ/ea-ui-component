@@ -66,6 +66,44 @@ export default class EaTag extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- effect 不同主题 -------
+    // #region
+    get effect() {
+        return this.getAttribute('effect') || "light";
+    }
+
+    set effect(value) {
+        if (value === "light") return;
+
+        this.setAttribute('effect', value);
+        this.#wrap.classList.add(`ea-tag--${value}`);
+    }
+    // #endregion
+    // ------- end -------
+    initCloseEvent() {
+        const that = this;
+        const closeIcon = closeDom();
+
+        closeIcon.addEventListener('mouseenter', function (e) {
+            closeIcon.className = 'icon-cancel-circled';
+        });
+
+        closeIcon.addEventListener('mouseleave', function (e) {
+            closeIcon.className = 'icon-cancel-circled2';
+        });
+
+        closeIcon.addEventListener('click', function (e) {
+            that.dispatchEvent(new CustomEvent('close', {
+                detail: {
+                    value: that.innerText
+                },
+                bubbles: true,
+            }));
+        });
+
+        this.#closeSlot.appendChild(closeIcon);
+    }
+
     init() {
         const that = this;
 
@@ -74,31 +112,10 @@ export default class EaTag extends Base {
 
         // 显示可关闭
         this.closable = this.closable;
-        if (this.closable) {
-            const closeIcon = closeDom();
+        if (this.closable) this.initCloseEvent();
 
-            closeIcon.addEventListener('mouseenter', function (e) {
-                closeIcon.className = 'icon-cancel-circled';
-            });
-
-            closeIcon.addEventListener('mouseleave', function (e) {
-                closeIcon.className = 'icon-cancel-circled2';
-            });
-
-            closeIcon.addEventListener('click', function (e) {
-
-                that.dispatchEvent(new CustomEvent('close', {
-                    detail: {
-                        value: that.innerText
-                    },
-                    bubbles: true,
-                }));
-
-                // that.remove();
-            });
-
-            this.#closeSlot.appendChild(closeIcon);
-        }
+        // 主题
+        this.effect = this.effect;
     }
 
     connectedCallback() {

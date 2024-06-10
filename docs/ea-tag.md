@@ -11,6 +11,10 @@ onMounted(() => {
             console.log('标签被移除', e.target, e.detail.value);
         })
     })
+
+    document.querySelector("#click").addEventListener("click", function (e) {
+        console.log('标签被点击', e.target);
+    })
 })
 </script>
 
@@ -21,7 +25,7 @@ onMounted(() => {
 ## 基础用法
 
 <div class="row left">
-    <ea-tag>默认标签</ea-tag>
+    <ea-tag id="click">默认标签</ea-tag>
     <ea-tag type="success">成功标签</ea-tag>
     <ea-tag type="info">信息标签</ea-tag>
     <ea-tag type="warning">警告标签</ea-tag>
@@ -36,6 +40,14 @@ onMounted(() => {
   <ea-tag type="warning">警告标签</ea-tag>
   <ea-tag type="danger">危险标签</ea-tag>
 </div>
+```
+
+`JS`: 点击事件
+
+```js
+document.querySelector("#click").addEventListener("click", function (e) {
+  console.log("标签被点击", e.target);
+});
 ```
 
 ## 可移除标签
@@ -68,7 +80,6 @@ onMounted(() => {
     <ea-tag class="dynamic-closable-tag" type="info" closable>信息标签</ea-tag>
     <ea-tag class="dynamic-closable-tag" type="warning" closable>警告标签</ea-tag>
     <ea-tag class="dynamic-closable-tag" type="danger" closable>危险标签</ea-tag>
-    <ea-input></ea-input>
 </div>
 
 ```html
@@ -97,10 +108,47 @@ document.querySelectorAll(".dynamic-closable-tag").forEach((item) => {
 });
 ```
 
-## 不同尺寸
+<!-- ## 不同尺寸
 
-Tag 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。
+Tag 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。 -->
 
 ## 不同主题
 
 Tag 组件提供了三个不同的主题：dark、light 和 plain
+
+> 通过设置 `effect` 属性来改变主题, 默认主题为 `light`
+
+Dark 主题:
+
+<div class="row left">
+    <ea-tag effect="dark">dark: 默认标签</ea-tag>
+    <ea-tag effect="dark" type="success">dark: 成功标签</ea-tag>
+    <ea-tag effect="dark" type="info">dark: 信息标签</ea-tag>
+    <ea-tag effect="dark" type="warning">dark: 警告标签</ea-tag>
+    <ea-tag effect="dark" type="danger">dark: 危险标签</ea-tag>
+</div>
+
+Plain 主题:
+
+<div class="row left">
+    <ea-tag effect="plain">plain: 默认标签</ea-tag>
+    <ea-tag effect="plain" type="success">plain: 成功标签</ea-tag>
+    <ea-tag effect="plain" type="info">plain: 信息标签</ea-tag>
+    <ea-tag effect="plain" type="warning">plain: 警告标签</ea-tag>
+    <ea-tag effect="plain" type="danger">plain: 危险标签</ea-tag>
+</div>
+
+## Attributes
+
+| 参数     | 说明       | 类型    | 可选值                              | 默认值  |
+| -------- | ---------- | ------- | ----------------------------------- | ------- |
+| type     | 主题类型   | string  | default/success/info/warning/danger | default |
+| closable | 是否可关闭 | boolean | true/false                          | false   |
+| effect   | 主题效果   | string  | dark/light/plain                    | light   |
+
+## Events
+
+| 事件名称 | 说明             | 回调参数                            |
+| -------- | ---------------- | ----------------------------------- |
+| close    | 关闭时触发的事件 | event: (e.detail.value: 该标签的值) |
+| click    | 点击时触发的事件 | event                               |
