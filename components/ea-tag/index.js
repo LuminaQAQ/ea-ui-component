@@ -85,6 +85,18 @@ export default class EaTag extends Base {
                 closeIcon.className = 'icon-cancel-circled2';
             });
 
+            closeIcon.addEventListener('click', function (e) {
+
+                that.dispatchEvent(new CustomEvent('close', {
+                    detail: {
+                        value: that.innerText
+                    },
+                    bubbles: true,
+                }));
+
+                // that.remove();
+            });
+
             this.#closeSlot.appendChild(closeIcon);
         }
     }
