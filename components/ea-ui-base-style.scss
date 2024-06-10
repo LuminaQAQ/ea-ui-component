@@ -50,6 +50,31 @@ $color-switch-disabled-bgc: #eff1f5;
 $color-switch-disabled-text: #c0c4cc;
 $color-switch-disabled-active-text: #7ebfff;
 
+// 标签-默认
+$color-tag-default-bgc: #ecf5ff;
+$color-tag-default-text: #409eff;
+$color-tag-default-border: #dcdfe6;
+
+// 标签-成功
+$color-tag-success-bgc: #f0f9eb;
+$color-tag-success-text: #67c23a;
+$color-tag-success-border: #e1f3d8;
+
+// 标签-信息
+$color-tag-info-bgc: #f4f4f5;
+$color-tag-info-text: #909399;
+$color-tag-info-border: #e9e9eb;
+
+// 标签-警告
+$color-tag-warning-bgc: #fdf6ec;
+$color-tag-warning-text: #e6a23c;
+$color-tag-warning-border: #faecd8;
+
+// 标签-危险
+$color-tag-danger-bgc: #fef0f0;
+$color-tag-danger-text: #f56c6c;
+$color-tag-danger-border: #fbc4c4;
+
 // 链接的配色
 @mixin ea-link-theme($theme-name, $color) {
   &.#{$theme-name} {

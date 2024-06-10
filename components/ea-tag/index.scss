@@ -1,0 +1,45 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+.ea-tag_wrap {
+  display: inline-block;
+
+  height: 2rem;
+  line-height: 30px;
+  white-space: nowrap;
+
+  padding: 0 0.625rem;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+
+  &.ea-tag--default {
+    color: $color-tag-default-text;
+    background-color: $color-tag-default-bgc;
+    border-color: $color-tag-default-border;
+  }
+
+  &.ea-tag--success {
+    color: $color-tag-success-text;
+    background-color: $color-tag-success-bgc;
+    border-color: $color-tag-success-border;
+  }
+
+  &.ea-tag--info {
+    color: $color-tag-info-text;
+    background-color: $color-tag-info-bgc;
+    border-color: $color-tag-info-border;
+  }
+
+  &.ea-tag--warning {
+    color: $color-tag-warning-text;
+    background-color: $color-tag-warning-bgc;
+    border-color: $color-tag-warning-border;
+  }
+
+  &.ea-tag--danger {
+    color: $color-tag-danger-text;
+    background-color: $color-tag-danger-bgc;
+    border-color: $color-tag-danger-border;
+  }
+}

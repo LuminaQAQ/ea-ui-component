@@ -14,6 +14,7 @@ import EaInputNumber from "./components/ea-input-number/";
 import EaSelect from "./components/ea-select/";
 import EaSwitch from "./components/ea-switch/";
 import EaRate from "./components/ea-rate/";
+import EaTag from "./components/ea-tag";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -34,3 +35,4 @@ register("ea-input-number", EaInputNumber);
 register("ea-select", EaSelect);
 register("ea-switch", EaSwitch);
 register("ea-rate", EaRate);
+register("ea-tag", EaTag);

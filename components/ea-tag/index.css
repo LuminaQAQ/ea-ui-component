@@ -1,0 +1,43 @@
+@import "../ea-icon/css/fontello.css";
+@import "../ea-icon/css/animation.css";
+@font-face {
+  font-size: 1rem;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
+}
+.ea-tag_wrap {
+  display: inline-block;
+  height: 2rem;
+  line-height: 30px;
+  white-space: nowrap;
+  padding: 0 0.625rem;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+}
+.ea-tag_wrap.ea-tag--default {
+  color: #409eff;
+  background-color: #ecf5ff;
+  border-color: #dcdfe6;
+}
+.ea-tag_wrap.ea-tag--success {
+  color: #67c23a;
+  background-color: #f0f9eb;
+  border-color: #e1f3d8;
+}
+.ea-tag_wrap.ea-tag--info {
+  color: #909399;
+  background-color: #f4f4f5;
+  border-color: #e9e9eb;
+}
+.ea-tag_wrap.ea-tag--warning {
+  color: #e6a23c;
+  background-color: #fdf6ec;
+  border-color: #faecd8;
+}
+.ea-tag_wrap.ea-tag--danger {
+  color: #f56c6c;
+  background-color: #fef0f0;
+  border-color: #fbc4c4;
+}
