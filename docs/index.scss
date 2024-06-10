@@ -29,10 +29,12 @@
     justify-content: flex-start;
     & > * {
       margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
     & > ea-tag {
       margin-right: 1.5rem;
+      margin-bottom: 0.5rem;
     }
   }
 
