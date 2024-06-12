@@ -2,6 +2,8 @@
 @import "../ea-icon/index.scss";
 
 .ea-progress_wrap {
+  position: relative;
+
   display: flex;
   align-items: center;
 
@@ -39,5 +41,25 @@
     margin-left: 0.5rem;
     font-size: 0.8rem;
     width: 3rem;
+  }
+
+  .ea-progress_text--circle {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+  }
+
+  svg {
+    circle {
+      transform-origin: center center;
+      transform: rotate(-90deg);
+      stroke-dashoffset: 0px;
+      stroke-width: 4px;
+
+      transition: stroke-dashoffset 0.2s;
+    }
   }
 }

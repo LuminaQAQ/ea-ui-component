@@ -44,6 +44,40 @@ export default class EaProgress extends Base {
         this.shadowRoot.appendChild(wrap);
     }
 
+    // ------- type 进度条类型 -------
+    // #region
+    get type() {
+        return this.getAttribute('type');
+    }
+
+    set type(value) {
+        if (value === null || value === undefined || value === '') return;
+
+        this.setAttribute('type', value);
+
+        if (this.type === "circle") {
+            this.#wrap.style.height = '126px';
+            this.#wrap.style.width = '126px';
+            this.#wrap.innerHTML = `
+                <svg viewBox="0 0 100 100">
+                    <circle class="track" cx="50" cy="50" r="48" fill="none" stroke="aliceblue" stroke-width="4" stroke-dasharray="302px" stroke-dashoffset="0" style="transform-origin: center; transform: rotate(-90deg);" />
+                    <circle class="path" cx="50" cy="50" r="48" fill="none" stroke="rgb(32, 160, 255)" stroke-width="4" stroke-dasharray="302px" stroke-dashoffset="0"  stroke-linecap="round" style="transform-origin: center; transform: rotate(-90deg);" />
+                </svg>
+                <span class="ea-progress_text--circle"></span>
+            `;
+
+            const track = this.#wrap.querySelector('circle[class="track"]');
+            const path = this.#wrap.querySelector('circle[class="path"]');
+            const progressText = this.#wrap.querySelector('span[class="ea-progress_text--circle"]');
+
+            this.#track = track;
+            this.#path = path;
+            this.#progressText = progressText;
+        }
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- percentage 进度百分比 -------
     // #region
     get percentage() {
@@ -56,11 +90,14 @@ export default class EaProgress extends Base {
         else if (Number(value) > 100) value = 100;
 
         this.setAttribute('percentage', value);
-        this.#path.style.width = `${value}%`;
         this.#progressText.innerHTML = `${value}%`;
 
-        if (this.textInside) {
-            this.handleTextInside(value);
+        if (this.type === "circle") {
+            this.#path.style.strokeDashoffset = `${302 * (100 - Number(value)) / 100}px`;
+        } else {
+            this.#path.style.width = `${value}%`;
+
+            if (this.textInside) this.handleTextInside(value);
         }
     }
     // #endregion
@@ -68,6 +105,8 @@ export default class EaProgress extends Base {
 
     // ------- status 进度条状态样式 -------
     // #region
+
+    // 样式配置
     get statusList() {
         return {
             success: {
@@ -78,12 +117,19 @@ export default class EaProgress extends Base {
                 icon: 'icon-attention-circled',
                 color: '#e6a23c'
             },
-            eception: {
+            exception: {
                 icon: 'icon-cancel-circled',
                 color: '#f56c6c'
             },
             primary: '',
         }
+    }
+
+    // 状态处理
+    handleStatusStyle(value, className) {
+        this.#progressText.innerText = !this.statusList[value] ? `${this.percentage}%` : '';
+        this.#progressText.className = `${className} ${this.statusList[value].icon || ''}`;
+        this.#progressText.style.color = this.statusList[value].color;
     }
 
     get status() {
@@ -93,11 +139,15 @@ export default class EaProgress extends Base {
     set status(value) {
         this.setAttribute('status', value);
 
-        this.#progressText.innerHTML = !this.statusList[value] ? this.#progressText.innerText : '';
-        this.#progressText.className = `ea-progress_text ${this.statusList[value].icon || ''}`;
-        this.#progressText.style.color = this.statusList[value].color;
+        if (this.type === "circle") {
+            this.#path.style.stroke = this.statusList[value].color;
 
-        this.#path.style.backgroundColor = this.statusList[value].color;
+            this.handleStatusStyle(value, 'ea-progress_text--circle');
+        } else {
+            this.#path.style.backgroundColor = this.statusList[value].color;
+
+            this.handleStatusStyle(value, 'ea-progress_text');
+        }
     }
     // #endregion
     // ------- end -------
@@ -105,6 +155,8 @@ export default class EaProgress extends Base {
     // ------- text-inside 进度文字内显 -------
     // #region
     handleTextInside(value) {
+        if (this.type === "circle") return;
+
         if (value) {
             this.#progressText.style.display = "none";
             this.#path.innerText = `${this.percentage}%`;
@@ -133,20 +185,30 @@ export default class EaProgress extends Base {
     }
 
     set strokeWidth(value) {
-        value = value ? value : 8;
+        value = value ? value : 4;
 
         this.toggleAttr("stroke-width", value);
 
-        this.#track.style.height = `${value}px`;
-        this.#track.style.lineHeight = `${value}px`;
-        this.#path.style.height = `${value}px`;
-        this.#path.style.lineHeight = `${value}px`;
+        if (this.type === "circle") {
+            this.#track.style.strokeWidth = `${Number(value)}px`;
+            this.#path.style.strokeWidth = `${Number(value)}px`;
+        } else {
+            value = Number(value) + 4;
+
+            this.#track.style.height = `${value}px`;
+            this.#track.style.lineHeight = `${value}px`;
+            this.#path.style.height = `${value}px`;
+            this.#path.style.lineHeight = `${value}px`;
+        }
     }
     // #endregion
     // ------- end -------
 
     init() {
         const that = this;
+
+        // type 进度条类型
+        this.type = this.type;
 
         // percentage 百分比
         this.percentage = this.percentage;
