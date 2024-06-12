@@ -58,6 +58,10 @@ export default class EaProgress extends Base {
         this.setAttribute('percentage', value);
         this.#path.style.width = `${value}%`;
         this.#progressText.innerHTML = `${value}%`;
+
+        if (this.textInside) {
+            this.handleTextInside(value);
+        }
     }
     // #endregion
     // ------- end -------
@@ -91,9 +95,52 @@ export default class EaProgress extends Base {
 
         this.#progressText.innerHTML = !this.statusList[value] ? this.#progressText.innerText : '';
         this.#progressText.className = `ea-progress_text ${this.statusList[value].icon || ''}`;
+        this.#progressText.style.color = this.statusList[value].color;
 
         this.#path.style.backgroundColor = this.statusList[value].color;
-        this.#progressText.style.color = this.statusList[value].color;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- text-inside 进度文字内显 -------
+    // #region
+    handleTextInside(value) {
+        if (value) {
+            this.#progressText.style.display = "none";
+            this.#path.innerText = `${this.percentage}%`;
+        } else {
+            this.#progressText.style.display = "block";
+            this.#path.innerText = ``;
+        }
+    }
+
+    get textInside() {
+        return this.getAttrBoolean("text-inside");
+    }
+
+    set textInside(value) {
+        this.setAttribute("text-inside", value);
+
+        this.handleTextInside(value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- stroke-width 进度条高度 -------
+    // #region
+    get strokeWidth() {
+        return this.getAttribute("stroke-width");
+    }
+
+    set strokeWidth(value) {
+        value = value ? value : 8;
+
+        this.toggleAttr("stroke-width", value);
+
+        this.#track.style.height = `${value}px`;
+        this.#track.style.lineHeight = `${value}px`;
+        this.#path.style.height = `${value}px`;
+        this.#path.style.lineHeight = `${value}px`;
     }
     // #endregion
     // ------- end -------
@@ -106,6 +153,12 @@ export default class EaProgress extends Base {
 
         // status 状态
         this.status = this.status;
+
+        // text-inside 文本内显
+        this.textInside = this.textInside;
+
+        // stroke-width 进度条的高度
+        this.strokeWidth = this.strokeWidth;
     }
 
     connectedCallback() {

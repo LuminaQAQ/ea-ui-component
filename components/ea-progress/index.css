@@ -24,6 +24,11 @@
   width: 100%;
 }
 .ea-progress_wrap .ea-progress_track .ea-progress_path {
+  box-sizing: border-box;
+  padding-right: 0.5rem;
+  color: aliceblue;
+  font-size: 0.8rem;
+  text-align: right;
   width: 0%;
   background-color: #409eff;
   transition: width 0.2s;
@@ -31,4 +36,5 @@
 .ea-progress_wrap .ea-progress_text {
   margin-left: 0.5rem;
   font-size: 0.8rem;
+  width: 3rem;
 }

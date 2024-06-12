@@ -57,6 +57,9 @@
 .col.left > ea-input {
   margin-bottom: 0.5rem;
 }
+.col.left > ea-progress {
+  margin-bottom: 2rem;
+}
 .col p {
   text-align: center;
   color: #888f9e;
