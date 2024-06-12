@@ -66,19 +66,34 @@ export default class EaProgress extends Base {
     // #region
     get statusList() {
         return {
-            success: 'icon-ok-circled',
-            warning: 'warning',
-            danger: 'icon-cancel-circled'
+            success: {
+                icon: 'icon-ok-circled',
+                color: '#67c23a'
+            },
+            warning: {
+                icon: 'icon-attention-circled',
+                color: '#e6a23c'
+            },
+            eception: {
+                icon: 'icon-cancel-circled',
+                color: '#f56c6c'
+            },
+            primary: '',
         }
     }
 
     get status() {
-        return this.getAttribute('status');
+        return this.getAttribute('status') || 'primary';
     }
 
     set status(value) {
         this.setAttribute('status', value);
-        this.#progressText.innerHTML = value;
+
+        this.#progressText.innerHTML = !this.statusList[value] ? this.#progressText.innerText : '';
+        this.#progressText.className = `ea-progress_text ${this.statusList[value].icon || ''}`;
+
+        this.#path.style.backgroundColor = this.statusList[value].color;
+        this.#progressText.style.color = this.statusList[value].color;
     }
     // #endregion
     // ------- end -------
@@ -86,7 +101,11 @@ export default class EaProgress extends Base {
     init() {
         const that = this;
 
+        // percentage 百分比
         this.percentage = this.percentage;
+
+        // status 状态
+        this.status = this.status;
     }
 
     connectedCallback() {

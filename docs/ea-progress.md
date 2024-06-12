@@ -23,16 +23,43 @@ ea-progress {
 
 ## 线形进度条
 
-<div class="col left">
-    <ea-progress id="ea-progress" percentage="50"></ea-progress>
+<div class="row left">
     <ea-button id="ea-progress-change-btn" type="primary">修改值为 100</ea-button>
+    <ea-progress id="ea-progress" percentage="25"></ea-progress>
 </div>
 
 <div class="col left">
-    <ea-progress id="ea-progress" percentage="50" status="success"></ea-progress>
-    <ea-progress id="ea-progress" percentage="50" status="warning"></ea-progress>
-    <ea-progress id="ea-progress" percentage="50" status="eception"></ea-progress>
+    <ea-progress id="ea-progress" percentage="60" status="success"></ea-progress>
+    <ea-progress id="ea-progress" percentage="75" status="warning"></ea-progress>
+    <ea-progress id="ea-progress" percentage="90" status="eception"></ea-progress>
 </div>
+
+```html
+<div class="row left">
+  <ea-button id="ea-progress-change-btn" type="primary">修改值为 100</ea-button>
+  <ea-progress id="ea-progress" percentage="25"></ea-progress>
+</div>
+
+<div class="col left">
+  <ea-progress id="ea-progress" percentage="60" status="success"></ea-progress>
+  <ea-progress id="ea-progress" percentage="75" status="warning"></ea-progress>
+  <ea-progress id="ea-progress" percentage="90" status="eception"></ea-progress>
+</div>
+```
+
+`JS`: 设置进度条的进度
+
+```js
+// 核心逻辑
+progress.percentage = 100;
+
+// 示例
+document
+  .querySelector("#ea-progress-change-btn")
+  .addEventListener("click", function (e) {
+    document.querySelector("#ea-progress").percentage = 100;
+  });
+```
 
 ## 百分比内显
 
