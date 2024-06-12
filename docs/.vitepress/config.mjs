@@ -55,6 +55,7 @@ export default defineConfig({
         text: '数据组件',
         items: [
           { text: 'Tag 标签', link: '/ea-tag' },
+          { text: 'Progress 进度条', link: '/ea-progress' },
         ]
       },
     ],

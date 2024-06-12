@@ -1,0 +1,34 @@
+@import "../ea-icon/css/fontello.css";
+@import "../ea-icon/css/animation.css";
+@font-face {
+  font-size: 1rem;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
+}
+.ea-progress_wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  line-height: 1;
+  height: 1rem;
+}
+.ea-progress_wrap .ea-progress_track,
+.ea-progress_wrap .ea-progress_path {
+  height: 0.5rem;
+  line-height: 1;
+  background-color: rgb(235, 238, 245);
+  border-radius: 999px;
+}
+.ea-progress_wrap .ea-progress_track {
+  width: 100%;
+}
+.ea-progress_wrap .ea-progress_track .ea-progress_path {
+  width: 0%;
+  background-color: #409eff;
+  transition: width 0.2s;
+}
+.ea-progress_wrap .ea-progress_text {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+}
