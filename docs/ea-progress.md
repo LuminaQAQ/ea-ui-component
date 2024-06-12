@@ -8,6 +8,10 @@ onMounted(() => {
     document.querySelector('#ea-progress-change-btn').addEventListener('click', function (e) {
         document.querySelector('#ea-progress').percentage = 100;
     })
+
+    document.querySelector('#ea-progress-text-inside-btn').addEventListener('click', function (e) {
+        document.querySelector('#ea-progress-text-inside').percentage = 100;
+    })
 })
 </script>
 
@@ -29,9 +33,9 @@ ea-progress {
 </div>
 
 <div class="col left">
-    <ea-progress id="ea-progress" percentage="60" status="success"></ea-progress>
-    <ea-progress id="ea-progress" percentage="75" status="warning"></ea-progress>
-    <ea-progress id="ea-progress" percentage="90" status="eception"></ea-progress>
+    <ea-progress percentage="60" status="success"></ea-progress>
+    <ea-progress percentage="75" status="warning"></ea-progress>
+    <ea-progress percentage="90" status="eception"></ea-progress>
 </div>
 
 ```html
@@ -41,9 +45,9 @@ ea-progress {
 </div>
 
 <div class="col left">
-  <ea-progress id="ea-progress" percentage="60" status="success"></ea-progress>
-  <ea-progress id="ea-progress" percentage="75" status="warning"></ea-progress>
-  <ea-progress id="ea-progress" percentage="90" status="eception"></ea-progress>
+  <ea-progress percentage="60" status="success"></ea-progress>
+  <ea-progress percentage="75" status="warning"></ea-progress>
+  <ea-progress percentage="90" status="eception"></ea-progress>
 </div>
 ```
 
@@ -64,6 +68,52 @@ document
 ## 百分比内显
 
 百分比不占用额外控件，适用于文件上传等场景。
+
+<div class="row left">
+    <ea-button id="ea-progress-text-inside-btn" type="primary">修改值为 100</ea-button>
+    <ea-progress id="ea-progress-text-inside" stroke-width="26" text-inside percentage="25"></ea-progress>
+</div>
+
+<div class="col left">
+    <ea-progress stroke-width="24" text-inside percentage="60" status="success"></ea-progress>
+    <ea-progress stroke-width="22" text-inside percentage="75" status="warning"></ea-progress>
+    <ea-progress stroke-width="20" text-inside percentage="90" status="eception"></ea-progress>
+</div>
+
+```html
+<div class="row left">
+  <ea-button id="ea-progress-text-inside-btn" type="primary"
+    >修改值为 100</ea-button
+  >
+  <ea-progress
+    id="ea-progress-text-inside"
+    stroke-width="26"
+    text-inside
+    percentage="25"
+  ></ea-progress>
+</div>
+
+<div class="col left">
+  <ea-progress
+    stroke-width="24"
+    text-inside
+    percentage="60"
+    status="success"
+  ></ea-progress>
+  <ea-progress
+    stroke-width="22"
+    text-inside
+    percentage="75"
+    status="warning"
+  ></ea-progress>
+  <ea-progress
+    stroke-width="20"
+    text-inside
+    percentage="90"
+    status="eception"
+  ></ea-progress>
+</div>
+```
 
 ## 自定义颜色
 
