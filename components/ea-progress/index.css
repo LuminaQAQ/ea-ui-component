@@ -7,6 +7,7 @@
   src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
 }
 .ea-progress_wrap {
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
@@ -37,4 +38,17 @@
   margin-left: 0.5rem;
   font-size: 0.8rem;
   width: 3rem;
+}
+.ea-progress_wrap .ea-progress_text--circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.ea-progress_wrap svg circle {
+  transform-origin: center center;
+  transform: rotate(-90deg);
+  stroke-dashoffset: 0px;
+  stroke-width: 4px;
+  transition: stroke-dashoffset 0.2s;
 }

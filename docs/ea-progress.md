@@ -12,12 +12,20 @@ onMounted(() => {
     document.querySelector('#ea-progress-text-inside-btn').addEventListener('click', function (e) {
         document.querySelector('#ea-progress-text-inside').percentage = 100;
     })
+
+    document.querySelector('#ea-progress_circle-change-btn').addEventListener('click', function (e) {
+        document.querySelector('#ea-progress_circle').percentage = 100;
+    })
 })
 </script>
 
 <style lang="scss" scoped>
 ea-progress {
     width: 20rem;
+}
+
+ea-progress[type="circle"] {
+    width: auto;
 }
 </style>
 
@@ -35,7 +43,7 @@ ea-progress {
 <div class="col left">
     <ea-progress percentage="60" status="success"></ea-progress>
     <ea-progress percentage="75" status="warning"></ea-progress>
-    <ea-progress percentage="90" status="eception"></ea-progress>
+    <ea-progress percentage="90" status="exception"></ea-progress>
 </div>
 
 ```html
@@ -47,7 +55,7 @@ ea-progress {
 <div class="col left">
   <ea-progress percentage="60" status="success"></ea-progress>
   <ea-progress percentage="75" status="warning"></ea-progress>
-  <ea-progress percentage="90" status="eception"></ea-progress>
+  <ea-progress percentage="90" status="exception"></ea-progress>
 </div>
 ```
 
@@ -77,7 +85,7 @@ document
 <div class="col left">
     <ea-progress stroke-width="24" text-inside percentage="60" status="success"></ea-progress>
     <ea-progress stroke-width="22" text-inside percentage="75" status="warning"></ea-progress>
-    <ea-progress stroke-width="20" text-inside percentage="90" status="eception"></ea-progress>
+    <ea-progress stroke-width="20" text-inside percentage="90" status="exception"></ea-progress>
 </div>
 
 ```html
@@ -110,17 +118,55 @@ document
     stroke-width="20"
     text-inside
     percentage="90"
-    status="eception"
+    status="exception"
   ></ea-progress>
 </div>
 ```
 
-## 自定义颜色
-
-可以通过 color 设置进度条的颜色，color 可以接受颜色字符串，函数和数组。
-
 ## 环形进度条
 
 Progress 组件可通过 type 属性来指定使用环形进度条，在环形进度条中，还可以通过 width 属性来设置其大小。
+
+<div class="row left">
+    <ea-progress id="ea-progress_circle" type="circle" :percentage="0"></ea-progress>
+    <ea-button id="ea-progress_circle-change-btn" type="primary">修改值为 100</ea-button>
+</div>
+
+<div class="row left">
+    <ea-progress type="circle" :percentage="0"></ea-progress>
+    <ea-progress type="circle" :percentage="25"></ea-progress>
+    <ea-progress type="circle" :percentage="100" status="success"></ea-progress>
+    <ea-progress type="circle" :percentage="70" status="warning"></ea-progress>
+    <ea-progress type="circle" :percentage="50" status="exception"></ea-progress>
+</div>
+
+```html
+<div class="row left">
+  <ea-progress
+    id="ea-progress_circle"
+    type="circle"
+    :percentage="0"
+  ></ea-progress>
+  <ea-button id="ea-progress_circle-change-btn" type="primary"
+    >修改值为 100</ea-button
+  >
+</div>
+
+<div class="row left">
+  <ea-progress type="circle" :percentage="0"></ea-progress>
+  <ea-progress type="circle" :percentage="25"></ea-progress>
+  <ea-progress type="circle" :percentage="100" status="success"></ea-progress>
+  <ea-progress type="circle" :percentage="70" status="warning"></ea-progress>
+  <ea-progress type="circle" :percentage="50" status="exception"></ea-progress>
+</div>
+```
+
+```js
+document
+  .querySelector("#ea-progress_circle-change-btn")
+  .addEventListener("click", function (e) {
+    document.querySelector("#ea-progress_circle").percentage = 100;
+  });
+```
 
 ## 仪表盘形进度条
