@@ -1,0 +1,35 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+.ea-progress_wrap {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  line-height: 1;
+  height: 1rem;
+
+  .ea-progress_track,
+  .ea-progress_path {
+    height: 0.5rem;
+    line-height: 1;
+    background-color: rgb(235, 238, 245);
+    border-radius: 999px;
+  }
+
+  .ea-progress_track {
+    width: 100%;
+
+    .ea-progress_path {
+      width: 0%;
+      background-color: $color-primary-bgc;
+
+      transition: width 0.2s;
+    }
+  }
+
+  .ea-progress_text {
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+  }
+}
