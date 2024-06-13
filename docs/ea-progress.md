@@ -16,6 +16,15 @@ onMounted(() => {
     document.querySelector('#ea-progress_circle-change-btn').addEventListener('click', function (e) {
         document.querySelector('#ea-progress_circle').percentage = 100;
     })
+
+    document.querySelector('#ea-progress_dashboard-change-btn-add').addEventListener('click', function (e) {
+        const dashboardPercentage = Number(document.querySelector('#ea-progress_dashboard').percentage);
+        document.querySelector('#ea-progress_dashboard').percentage = dashboardPercentage - 10;
+    })
+    document.querySelector('#ea-progress_dashboard-change-btn-minus').addEventListener('click', function (e) {
+        const dashboardPercentage = Number(document.querySelector('#ea-progress_dashboard').percentage);
+        document.querySelector('#ea-progress_dashboard').percentage = dashboardPercentage + 10;
+    })
 })
 </script>
 
@@ -24,7 +33,8 @@ ea-progress {
     width: 20rem;
 }
 
-ea-progress[type="circle"] {
+ea-progress[type="circle"],
+ea-progress[type="dashboard"] {
     width: auto;
 }
 </style>
@@ -170,3 +180,76 @@ document
 ```
 
 ## 仪表盘形进度条
+
+<div class="row left">
+    <ea-progress id="ea-progress_dashboard" type="dashboard" :percentage="25"></ea-progress>
+    <ea-button-group>
+      <ea-button id="ea-progress_dashboard-change-btn-add" type="primary">-</ea-button>
+      <ea-button id="ea-progress_dashboard-change-btn-minus" type="primary">+</ea-button>
+    </ea-button-group>
+</div>
+
+<div class="row left">
+    <ea-progress type="dashboard" :percentage="0"></ea-progress>
+    <ea-progress type="dashboard" :percentage="25"></ea-progress>
+    <ea-progress type="dashboard" :percentage="100" status="success"></ea-progress>
+    <ea-progress type="dashboard" :percentage="70" status="warning"></ea-progress>
+    <ea-progress type="dashboard" :percentage="50" status="exception"></ea-progress>
+</div>
+
+```html
+<!-- 示例: html + js -->
+<div class="row left">
+  <ea-progress
+    id="ea-progress_dashboard"
+    type="dashboard"
+    :percentage="25"
+  ></ea-progress>
+  <ea-button-group>
+    <ea-button id="ea-progress_dashboard-change-btn-add" type="primary"
+      >-</ea-button
+    >
+    <ea-button id="ea-progress_dashboard-change-btn-minus" type="primary"
+      >+</ea-button
+    >
+  </ea-button-group>
+</div>
+
+<!-- 实例 -->
+<div class="row left">
+  <ea-progress type="dashboard" :percentage="0"></ea-progress>
+  <ea-progress type="dashboard" :percentage="25"></ea-progress>
+  <ea-progress
+    type="dashboard"
+    :percentage="100"
+    status="success"
+  ></ea-progress>
+  <ea-progress type="dashboard" :percentage="70" status="warning"></ea-progress>
+  <ea-progress
+    type="dashboard"
+    :percentage="50"
+    status="exception"
+  ></ea-progress>
+</div>
+```
+
+```js
+document
+  .querySelector("#ea-progress_dashboard-change-btn-add")
+  .addEventListener("click", function (e) {
+    const dashboardPercentage = Number(
+      document.querySelector("#ea-progress_dashboard").percentage
+    );
+    document.querySelector("#ea-progress_dashboard").percentage =
+      dashboardPercentage - 10;
+  });
+document
+  .querySelector("#ea-progress_dashboard-change-btn-minus")
+  .addEventListener("click", function (e) {
+    const dashboardPercentage = Number(
+      document.querySelector("#ea-progress_dashboard").percentage
+    );
+    document.querySelector("#ea-progress_dashboard").percentage =
+      dashboardPercentage + 10;
+  });
+```

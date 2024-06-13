@@ -43,7 +43,8 @@
     width: 3rem;
   }
 
-  .ea-progress_text--circle {
+  .ea-progress_text--circle,
+  .ea-progress_text--dashboard {
     position: absolute;
 
     left: 50%;
@@ -54,12 +55,20 @@
 
   svg {
     circle {
-      transform-origin: center center;
-      transform: rotate(-90deg);
-      stroke-dashoffset: 0px;
       stroke-width: 4px;
 
+      transform-origin: center center;
       transition: stroke-dashoffset 0.2s;
+    }
+
+    .track--circle,
+    .path--circle {
+      transform: rotate(-90deg);
+    }
+
+    .track--dashboard,
+    .path--dashboard {
+      transform: rotate(161deg);
     }
   }
 }

@@ -5,6 +5,25 @@ const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 `;
 
+const SVGTemplate = {
+    dashboard: `
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle class="track--dashboard" cx="50" cy="50" r="40" fill="none" stroke-dasharray="252px" stroke="aliceblue"
+            stroke-width="4px" stroke-dashoffset="100" stroke-linecap="round" />
+        <circle class="path--dashboard" cx="50" cy="50" r="40" fill="none" stroke-dasharray="252px" stroke="rgb(32, 160, 255)" stroke-width="4px"
+            stroke-dashoffset="252" stroke-linecap="round" />
+    </svg>
+    <span class="ea-progress_text--dashboard"></span>
+    `,
+    circle: `
+    <svg viewBox="0 0 100 100">
+        <circle class="track--circle" cx="50" cy="50" r="48" fill="none" stroke="aliceblue" stroke-width="4" stroke-dasharray="302px" stroke-dashoffset="0" />
+        <circle class="path--circle" cx="50" cy="50" r="48" fill="none" stroke="rgb(32, 160, 255)" stroke-width="4" stroke-dasharray="302px" stroke-dashoffset="0"  stroke-linecap="round" />
+    </svg>
+    <span class="ea-progress_text--circle"></span>
+    `,
+}
+
 export default class EaProgress extends Base {
     #wrap;
     #track;
@@ -46,6 +65,22 @@ export default class EaProgress extends Base {
 
     // ------- type 进度条类型 -------
     // #region
+
+    handleSVGTemplate(type) {
+        this.#wrap.style.height = '126px';
+        this.#wrap.style.width = '126px';
+
+        this.#wrap.innerHTML = SVGTemplate[type];
+
+        const track = this.#wrap.querySelector(`circle[class="track--${type}"]`);
+        const path = this.#wrap.querySelector(`circle[class="path--${type}"]`);
+        const progressText = this.#wrap.querySelector(`span[class="ea-progress_text--${type}"]`);
+
+        this.#track = track;
+        this.#path = path;
+        this.#progressText = progressText;
+    }
+
     get type() {
         return this.getAttribute('type');
     }
@@ -55,24 +90,13 @@ export default class EaProgress extends Base {
 
         this.setAttribute('type', value);
 
-        if (this.type === "circle") {
-            this.#wrap.style.height = '126px';
-            this.#wrap.style.width = '126px';
-            this.#wrap.innerHTML = `
-                <svg viewBox="0 0 100 100">
-                    <circle class="track" cx="50" cy="50" r="48" fill="none" stroke="aliceblue" stroke-width="4" stroke-dasharray="302px" stroke-dashoffset="0" style="transform-origin: center; transform: rotate(-90deg);" />
-                    <circle class="path" cx="50" cy="50" r="48" fill="none" stroke="rgb(32, 160, 255)" stroke-width="4" stroke-dasharray="302px" stroke-dashoffset="0"  stroke-linecap="round" style="transform-origin: center; transform: rotate(-90deg);" />
-                </svg>
-                <span class="ea-progress_text--circle"></span>
-            `;
-
-            const track = this.#wrap.querySelector('circle[class="track"]');
-            const path = this.#wrap.querySelector('circle[class="path"]');
-            const progressText = this.#wrap.querySelector('span[class="ea-progress_text--circle"]');
-
-            this.#track = track;
-            this.#path = path;
-            this.#progressText = progressText;
+        switch (this.type) {
+            case "circle":
+                this.handleSVGTemplate("circle");
+                break;
+            case "dashboard":
+                this.handleSVGTemplate("dashboard");
+                break;
         }
     }
     // #endregion
@@ -81,7 +105,15 @@ export default class EaProgress extends Base {
     // ------- percentage 进度百分比 -------
     // #region
     get percentage() {
-        return this.getAttribute('percentage');
+        return this.getAttribute('percentage') || 0;
+    }
+
+    getCirclePercentageValue(value) {
+        return 302 * (100 - Number(value)) / 100;
+    }
+
+    getDashboardPercentageValue(value) {
+        return 152 * (100 - Number(value)) / 100 + 100;
     }
 
     set percentage(value) {
@@ -92,12 +124,21 @@ export default class EaProgress extends Base {
         this.setAttribute('percentage', value);
         this.#progressText.innerHTML = `${value}%`;
 
-        if (this.type === "circle") {
-            this.#path.style.strokeDashoffset = `${302 * (100 - Number(value)) / 100}px`;
-        } else {
-            this.#path.style.width = `${value}%`;
+        switch (this.type) {
+            case "circle": {
+                this.#path.style.strokeDashoffset = `${this.getCirclePercentageValue(value)}px`;
+                break;
+            }
+            case "dashboard": {
+                this.#path.style.strokeDashoffset = `${this.getDashboardPercentageValue(value)}px`;
+                break;
+            }
+            default: {
+                this.#path.style.width = `${value}%`;
 
-            if (this.textInside) this.handleTextInside(value);
+                if (this.textInside) this.handleTextInside(value);
+                break;
+            }
         }
     }
     // #endregion
@@ -138,15 +179,18 @@ export default class EaProgress extends Base {
 
     set status(value) {
         this.setAttribute('status', value);
+        this.#path.style.stroke = this.statusList[value].color;
 
-        if (this.type === "circle") {
-            this.#path.style.stroke = this.statusList[value].color;
-
-            this.handleStatusStyle(value, 'ea-progress_text--circle');
-        } else {
-            this.#path.style.backgroundColor = this.statusList[value].color;
-
-            this.handleStatusStyle(value, 'ea-progress_text');
+        switch (this.type) {
+            case "circle":
+                this.handleStatusStyle(value, 'ea-progress_text--circle');
+                break;
+            case "dashboard":
+                this.handleStatusStyle(value, 'ea-progress_text--dashboard');
+                break;
+            default:
+                this.handleStatusStyle(value, 'ea-progress_text');
+                break;
         }
     }
     // #endregion
