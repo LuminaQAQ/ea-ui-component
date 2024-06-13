@@ -233,17 +233,19 @@ export default class EaProgress extends Base {
 
     set status(value) {
         this.setAttribute('status', value);
-        this.#path.style.stroke = this.statusList[value].color;
 
         switch (this.type) {
             case "circle":
                 this.handleStatusStyle(value, 'ea-progress_text--circle');
+                this.#path.style.stroke = this.statusList[value].color;
                 break;
             case "dashboard":
                 this.handleStatusStyle(value, 'ea-progress_text--dashboard');
+                this.#path.style.stroke = this.statusList[value].color;
                 break;
             default:
                 this.handleStatusStyle(value, 'ea-progress_text');
+                this.#path.style.backgroundColor = this.statusList[value].color;
                 break;
         }
     }
