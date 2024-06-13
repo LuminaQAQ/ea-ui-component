@@ -253,3 +253,13 @@ document
       dashboardPercentage + 10;
   });
 ```
+
+## Attributes
+
+| 参数         | 说明                  | 类型    | 可选值                   | 默认值 |
+| ------------ | --------------------- | ------- | ------------------------ | ------ |
+| type         | 进度条类型            | String  | circle, dashboard        | -      |
+| percentage   | 进度百分比            | Number  | 0-100                    | 0      |
+| status       | 进度条状态            | String  | success, warning, danger | -      |
+| text-inside  | 进度条内显示文字      | Boolean | true, false              | false  |
+| stroke-width | 进度条的宽度，单位 px | Number  | -                        | 6      |

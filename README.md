@@ -32,7 +32,7 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
 - Data
 
   - [x] Tag 标签
-  - [ ] Progress 进度条
+  - [x] Progress 进度条
   - [ ] Pagination 分页
   - [ ] Badge 标记
   - [ ] Avatar 头像
