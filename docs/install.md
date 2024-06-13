@@ -4,20 +4,25 @@ outline: deep
 
 # 安装
 
-## 1. 从 github [下载](https://github.com/LuminaQAQ/ea_ui_component/blob/master/dist/ea-ui.js)
+## npm 安装
 
-![从github下载](./screenshot/install/by_Github.png)
+推荐使用 npm 的方式安装，它能更好地和 [webpack](https://webpack.js.org/) 打包工具配合使用。
 
-## 2. 跳转到源码页面手动保存
+```bash
+npm init -y
 
----
+npm i easy-component-ui
+```
 
-<a href="https://luminaqaq.github.io/ea_ui_component/assets/chunks/index.Dbei1mnz.js" download>ea-ui.js</a>
+## 在原生环境引入
 
----
+如果是在原生环境引入, 且要放置在指定目录中，则需要到 `/node_modules` 中找到 `easy-component-ui` 的目录.
 
-<a href="https://luminaqaq.github.io/ea_ui_component/icon/css/animation.css" download >animation.css</a>
+```html
+<!-- 以下路径要按使用项目的路径来修改 -->
 
----
-
-<a href="https://luminaqaq.github.io/ea_ui_component/icon/css/fontello.css" download>fontello.css</a>
+<link rel="stylesheet" href="easy-component-ui/dist/index.css" />
+<script type="module">
+  import "easy-component-ui";
+</script>
+```
