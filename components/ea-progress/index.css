@@ -39,16 +39,23 @@
   font-size: 0.8rem;
   width: 3rem;
 }
-.ea-progress_wrap .ea-progress_text--circle {
+.ea-progress_wrap .ea-progress_text--circle,
+.ea-progress_wrap .ea-progress_text--dashboard {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
 .ea-progress_wrap svg circle {
-  transform-origin: center center;
-  transform: rotate(-90deg);
-  stroke-dashoffset: 0px;
   stroke-width: 4px;
+  transform-origin: center center;
   transition: stroke-dashoffset 0.2s;
+}
+.ea-progress_wrap svg .track--circle,
+.ea-progress_wrap svg .path--circle {
+  transform: rotate(-90deg);
+}
+.ea-progress_wrap svg .track--dashboard,
+.ea-progress_wrap svg .path--dashboard {
+  transform: rotate(161deg);
 }
