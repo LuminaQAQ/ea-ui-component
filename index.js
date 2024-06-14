@@ -16,6 +16,7 @@ import EaSwitch from "./components/ea-switch/";
 import EaRate from "./components/ea-rate/";
 import EaTag from "./components/ea-tag";
 import EaProgress from "./components/ea-progress/";
+import { EaPagination } from "./components/ea-pagination/";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -38,3 +39,4 @@ register("ea-switch", EaSwitch);
 register("ea-rate", EaRate);
 register("ea-tag", EaTag);
 register("ea-progress", EaProgress);
+register("ea-pagination", EaPagination);
