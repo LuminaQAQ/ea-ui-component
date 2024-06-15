@@ -2,4 +2,47 @@
 @import "../ea-icon/index.scss";
 
 .ea-pagination_wrap {
+  display: flex;
+  font-size: 0.9rem;
+
+  .ea-pagination_item_wrap {
+    display: flex;
+    align-items: center;
+
+    .ea-pagination_item {
+      cursor: pointer;
+      padding: 0 10px;
+
+      &.ea-pagination_item--active {
+        color: $color-primary-bgc;
+      }
+    }
+
+    .ea-pagination_more {
+      width: 1rem;
+
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+
+  .ea-pagination_arrow {
+    user-select: none;
+    cursor: pointer;
+    padding: 0 10px;
+
+    &.disabled {
+      cursor: default;
+      pointer-events: none;
+      color: $color-switch-disabled-text;
+    }
+
+    &:first-child {
+      margin-right: 0.25rem;
+    }
+
+    &:last-child {
+      margin-left: 0.25rem;
+    }
+  }
 }

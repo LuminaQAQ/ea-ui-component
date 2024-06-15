@@ -50,6 +50,12 @@ export default class Base extends HTMLElement {
         return attr === 'true' || attr === '';
     }
 
+    getAttrNumber(attrName) {
+        const attr = this.getAttribute(attrName);
+        
+        return attr ? Number(attr) : 0;
+    }
+
     // 样式构建
     build(shadowRoot, stylesheet) {
         if (this.isProduction) {
