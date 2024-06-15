@@ -56,6 +56,7 @@ export default defineConfig({
         items: [
           { text: 'Tag 标签', link: '/ea-tag' },
           { text: 'Progress 进度条', link: '/ea-progress' },
+          { text: 'Pagination 分页', link: '/ea-pagination' },
         ]
       },
     ],
