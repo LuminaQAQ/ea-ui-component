@@ -4,6 +4,10 @@ import { onMounted } from 'vue'
 onMounted(() => {
     import('../index.js')
     import('./index.scss')
+
+    document.querySelector('#prevAndNext').addEventListener('change', function (e) {
+        console.log(e.detail.currentPage)
+    })
 })
 </script>
 
@@ -14,9 +18,11 @@ onMounted(() => {
 ## 基础用法
 
 <div class="col left">
-    <!-- <ea-pagination layout="prev,pager,next" total="500" page-count="6" />
-    <ea-pagination layout="prev,pager,next" total="50" page-count="6" /> -->
     <ea-pagination layout="prev,pager,next" total="80" />
+    <ea-pagination layout="next,pager" total="80" />
+    <ea-pagination layout="prev,pager" total="80" />
+    <ea-pagination layout="pager" total="80" />
+    <ea-pagination id="prevAndNext" layout="prev,next" total="80" />
 </div>
 
 ## 设置最大页码按钮数
