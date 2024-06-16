@@ -30,6 +30,37 @@ const getArrowItem = (arrow) => {
     return arrowItem;
 }
 
+const getMoreItem = (arrow) => {
+    const moreItem = document.createElement('span');
+    moreItem.className = 'ea-pagination_more';
+    moreItem.innerHTML = '···';
+
+    // moreItem.addEventListener('click', () => {
+    //     const page = this.getAttrNumber('page');
+    //     const total = this.getAttrNumber('total');
+    //     const pageSize = this.getAttrNumber('page-size');
+
+    //     const currentPage = page + 1;
+    //     const totalPage = Math.ceil(total / pageSize);
+
+    //     if (currentPage < totalPage) {
+    //         this.setAttribute('page', currentPage);
+    //     }
+    // })
+
+    moreItem.addEventListener('mouseenter', function (e) {
+        moreItem.classList.add('ea-pagination_more--active');
+        moreItem.innerHTML = arrow === "prev" ? '&lt;&lt;' : '&gt;&gt;';
+    })
+
+    moreItem.addEventListener('mouseleave', function (e) {
+        moreItem.classList.remove('ea-pagination_more--active');
+        moreItem.innerHTML = '···';
+    })
+
+    return moreItem;
+}
+
 export class EaPagination extends Base {
     #container;
 
@@ -185,6 +216,23 @@ export class EaPagination extends Base {
         }
     }
 
+    // 处理分页点击事件
+    handlePaginationClick(pageItem, index) {
+        const that = this;
+
+        pageItem.addEventListener('click', function (e) {
+
+            that.currentPage = index;
+            that.handlePaginationChange();
+
+            that.handleDispatchEvent('change', {
+                detail: {
+                    currentPage: that.currentPage
+                }
+            });
+        })
+    }
+
     // 处理分页的页码
     handlePaginationItemChange() {
         const that = this;
@@ -192,7 +240,22 @@ export class EaPagination extends Base {
         if (!this.layout.includes('pager')) return;
 
         this.#paginationWrap.innerHTML = '';
-        for (let i = 1; i <= this.paginationCount; i++) {
+
+        const interval = Math.floor(this.pageCount / 2);
+        let start = this.currentPage - interval;
+        let end = this.currentPage + interval;
+
+        if (start <= 1) {
+            start = 1;
+            end = this.pageCount;
+        } else if (end >= this.paginationCount) {
+            start = this.paginationCount - this.pageCount + 1;
+            end = this.paginationCount;
+        } else {
+            end--;
+        }
+
+        for (let i = start; i <= end; i++) {
             const pageItem = getPageItem(i);
             this.#paginationWrap.appendChild(pageItem);
 
@@ -202,17 +265,25 @@ export class EaPagination extends Base {
             }
 
             // 添加点击事件
-            pageItem.addEventListener('click', function (e) {
+            that.handlePaginationClick(pageItem, i);
+        }
 
-                that.currentPage = i;
-                that.handlePaginationChange();
+        if (this.total > this.pageCount && this.currentPage >= this.pageCount) {
+            const more = getMoreItem('prev');
+            const firstPage = getPageItem(1);
+            this.handlePaginationClick(firstPage, 1);
 
-                that.handleDispatchEvent('change', {
-                    detail: {
-                        currentPage: that.currentPage
-                    }
-                });
-            })
+            this.#paginationWrap.insertBefore(more, this.#paginationWrap.firstChild);
+            this.#paginationWrap.insertBefore(firstPage, this.#paginationWrap.firstChild);
+        }
+
+        if (this.total > this.pageCount && this.currentPage < this.paginationCount - interval) {
+            const more = getMoreItem('next');
+            const lastPage = getPageItem(this.paginationCount);
+            this.handlePaginationClick(lastPage, this.paginationCount);
+
+            this.#paginationWrap.appendChild(more);
+            this.#paginationWrap.appendChild(lastPage);
         }
     }
 

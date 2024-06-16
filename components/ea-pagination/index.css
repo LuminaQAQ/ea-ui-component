@@ -14,17 +14,23 @@
   display: flex;
   align-items: center;
 }
-.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_item {
+.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_item,
+.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_more {
   cursor: pointer;
+  box-sizing: border-box;
   padding: 0 10px;
+  width: 32px;
+  text-align: center;
 }
 .ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_item.ea-pagination_item--active {
   color: #409eff;
 }
 .ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_more {
-  width: 1rem;
   cursor: pointer;
   user-select: none;
+}
+.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_more.ea-pagination_more--active {
+  color: #409eff;
 }
 .ea-pagination_wrap .ea-pagination_arrow {
   user-select: none;

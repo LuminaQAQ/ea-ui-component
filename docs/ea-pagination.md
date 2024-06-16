@@ -6,7 +6,7 @@ onMounted(() => {
     import('./index.scss')
 
     document.querySelector('#prevAndNext').addEventListener('change', function (e) {
-        console.log(e.detail.currentPage)
+        alert(`当前页码为: ${e.detail.currentPage}`);
     })
 })
 </script>
@@ -17,13 +17,36 @@ onMounted(() => {
 
 ## 基础用法
 
+> 可以设置`layout`属性来控制显示的内容。
+
 <div class="col left">
-    <ea-pagination layout="prev,pager,next" total="80" />
-    <ea-pagination layout="next,pager" total="80" />
-    <ea-pagination layout="prev,pager" total="80" />
-    <ea-pagination layout="pager" total="80" />
+    <ea-pagination layout="prev,pager,next" total="81" />
+    <ea-pagination layout="prev,pager,next" total="200" />
+</div>
+
+```html
+<div class="col left">
+  <ea-pagination layout="prev,pager,next" total="80" />
+</div>
+```
+
+> 当只显示前后按钮时，可以通过`change`事件监听当前页码的变化。
+
+<div class="col left">
     <ea-pagination id="prevAndNext" layout="prev,next" total="80" />
 </div>
+
+```html
+<div class="col left">
+  <ea-pagination id="prevAndNext" layout="prev,next" total="80" />
+</div>
+```
+
+```js
+document.querySelector("#prevAndNext").addEventListener("change", function (e) {
+  alert(`当前页码为: ${e.detail.currentPage}`);
+});
+```
 
 ## 设置最大页码按钮数
 

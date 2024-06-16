@@ -9,20 +9,29 @@
     display: flex;
     align-items: center;
 
-    .ea-pagination_item {
+    .ea-pagination_item,
+    .ea-pagination_more {
       cursor: pointer;
+      box-sizing: border-box;
       padding: 0 10px;
+      width: 32px;
+      text-align: center;
+    }
 
+    .ea-pagination_item {
       &.ea-pagination_item--active {
         color: $color-primary-bgc;
       }
     }
 
     .ea-pagination_more {
-      width: 1rem;
 
       cursor: pointer;
       user-select: none;
+
+      &.ea-pagination_more--active {
+        color: $color-primary-bgc;
+      }
     }
   }
 
