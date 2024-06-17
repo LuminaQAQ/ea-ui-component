@@ -15,6 +15,8 @@ export default defineConfig({
 
   description: "基于 WebComponent 的 ui 库",
 
+  appearance: false,
+
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
