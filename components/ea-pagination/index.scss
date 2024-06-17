@@ -3,6 +3,7 @@
 
 .ea-pagination_wrap {
   display: flex;
+  align-items: center;
   font-size: 0.9rem;
 
   .ea-pagination_item_wrap {
@@ -62,19 +63,26 @@
     }
   }
 
-  .ea-pagination_item.background,
-  .ea-pagination_more.background,
-  .ea-pagination_arrow.background {
-    background-color: #f4f4f5;
-    border-radius: 3px;
+  .ea-pagination_item,
+  .ea-pagination_more,
+  .ea-pagination_arrow {
+    &.background {
+      background-color: #f4f4f5;
+      border-radius: 3px;
 
-    &:hover {
-      color: $color-primary-bgc;
-    }
+      &:hover {
+        color: $color-primary-bgc;
+      }
 
-    &.active {
-      background-color: $color-primary-bgc;
-      color: #f4f4f5;
+      &.active {
+        background-color: $color-primary-bgc;
+        color: #f4f4f5;
+      }
     }
+  }
+
+  .ea-pagination_show_total {
+    margin-right: 0.5rem;
+    font-size: 13px;
   }
 }

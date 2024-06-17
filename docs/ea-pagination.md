@@ -81,14 +81,28 @@ document.querySelector("#prevAndNext").addEventListener("change", function (e) {
 </div>
 ```
 
-## 小型分页
-
-在空间有限的情况下，可以使用简单的小型分页。
-
 ## 附加功能
 
 根据场景需要，可以添加其他功能模块。
 
-## 当只有一页时隐藏分页
+<div class="col left">
+    <section>显示总数</section>
+    <ea-pagination background layout="total,prev,pager,next" total="200" />
+</div>
 
-当只有一页时，通过设置 hide-on-single-page 属性来隐藏分页。
+## Attributes
+
+| 参数        | 说明           | 类型    | 可选值 | 默认值          |
+| ----------- | -------------- | ------- | ------ | --------------- |
+| total       | 总数           | number  | -      | 0               |
+| page-count  | 最大页码按钮数 | number  | -      | 7               |
+| layout      | 显示的内容     | string  | -      | prev,pager,next |
+| background  | 显示背景色     | boolean | -      | false           |
+| page-size   | 每页显示条数   | number  | -      | 10              |
+| pager-count | 页码按钮的数量 | number  | -      | 7               |
+
+## Events
+
+| 事件名称 | 说明           | 回调参数                |
+| -------- | -------------- | ----------------------- |
+| change   | 页码改变时触发 | { currentPage: number } |

@@ -8,6 +8,7 @@
 }
 .ea-pagination_wrap {
   display: flex;
+  align-items: center;
   font-size: 0.9rem;
 }
 .ea-pagination_wrap .ea-pagination_item_wrap {
@@ -68,4 +69,8 @@
 .ea-pagination_wrap .ea-pagination_arrow.background.active {
   background-color: #409eff;
   color: #f4f4f5;
+}
+.ea-pagination_wrap .ea-pagination_show_total {
+  margin-right: 0.5rem;
+  font-size: 13px;
 }
