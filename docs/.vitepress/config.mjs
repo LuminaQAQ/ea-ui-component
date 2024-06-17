@@ -59,6 +59,7 @@ export default defineConfig({
           { text: 'Tag 标签', link: '/ea-tag' },
           { text: 'Progress 进度条', link: '/ea-progress' },
           { text: 'Pagination 分页', link: '/ea-pagination' },
+          { text: 'Badge 徽标数', link: '/ea-badge' },
         ]
       },
     ],
