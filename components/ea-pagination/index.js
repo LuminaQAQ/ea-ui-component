@@ -221,8 +221,34 @@ export class EaPagination extends Base {
         const that = this;
 
         pageItem.addEventListener('click', function (e) {
-
             that.currentPage = index;
+            that.handlePaginationChange();
+
+            that.handleDispatchEvent('change', {
+                detail: {
+                    currentPage: that.currentPage
+                }
+            });
+        })
+    }
+
+    // 处理更多按钮点击事件
+    handleMoreItemClick(moreItem, arrow) {
+        const that = this;
+
+        moreItem.addEventListener('click', function (e) {
+
+            // 跳转到指定页码
+            that.currentPage += arrow === "prev" ? -5 : 5;
+
+            /**
+             * 边界处理: 
+             * 页码数量小于1, 跳转到第一页
+             * 页码数量大于总页数, 跳转到最后一页
+             */
+            if (that.currentPage < 1) that.currentPage = 1;
+            else if (that.currentPage > that.paginationCount) that.currentPage = that.paginationCount;
+
             that.handlePaginationChange();
 
             that.handleDispatchEvent('change', {
@@ -245,9 +271,10 @@ export class EaPagination extends Base {
         let start = this.currentPage - interval;
         let end = this.currentPage + interval;
 
+        // 边界处理
         if (start <= 1) {
             start = 1;
-            end = this.pageCount;
+            end = this.pageCount < this.paginationCount ? this.pageCount : this.paginationCount;
         } else if (end >= this.paginationCount) {
             start = this.paginationCount - this.pageCount + 1;
             end = this.paginationCount;
@@ -255,6 +282,7 @@ export class EaPagination extends Base {
             end--;
         }
 
+        // 添加页码
         for (let i = start; i <= end; i++) {
             const pageItem = getPageItem(i);
             this.#paginationWrap.appendChild(pageItem);
@@ -268,8 +296,11 @@ export class EaPagination extends Base {
             that.handlePaginationClick(pageItem, i);
         }
 
-        if (this.total > this.pageCount && this.currentPage >= this.pageCount) {
+        // 添加 更多(左) + 第一页
+        if (this.total > this.pageCount && this.currentPage >= this.pageCount && this.paginationCount !== this.pageCount) {
             const more = getMoreItem('prev');
+            that.handleMoreItemClick(more, 'prev');
+
             const firstPage = getPageItem(1);
             this.handlePaginationClick(firstPage, 1);
 
@@ -277,8 +308,11 @@ export class EaPagination extends Base {
             this.#paginationWrap.insertBefore(firstPage, this.#paginationWrap.firstChild);
         }
 
-        if (this.total > this.pageCount && this.currentPage < this.paginationCount - interval) {
+        // 添加 更多(右) + 最后一页
+        if (this.total > this.pageCount && this.currentPage < this.paginationCount - interval && this.paginationCount !== this.pageCount) {
             const more = getMoreItem('next');
+            that.handleMoreItemClick(more, 'next');
+
             const lastPage = getPageItem(this.paginationCount);
             this.handlePaginationClick(lastPage, this.paginationCount);
 
