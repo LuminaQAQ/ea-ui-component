@@ -30,7 +30,7 @@ export default class EaBadge extends Base {
         this.shadowRoot.appendChild(wrap);
     }
 
-    // ------- value badge的值 -------
+    // ------- value 徽章内的值 -------
     // #region
     get value() {
         return this.getAttribute('value') || '';
@@ -44,7 +44,7 @@ export default class EaBadge extends Base {
     // #endregion
     // ------- end -------
 
-    // ------- type badge的类型 -------
+    // ------- type 样式类型 -------
     // #region
     get type() {
         return this.getAttribute('type') || 'normal';
@@ -58,12 +58,34 @@ export default class EaBadge extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- max 最大值 -------
+    // #region
+    get max() {
+        return this.getAttrNumber('max') || Infinity;
+    }
+
+    set max(value) {
+        if (value === Infinity) return;
+
+        value = parseInt(value);
+
+        this.setAttribute('max', value);
+
+        if (this.value > value) {
+            this.value = value + '+';
+        }
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
 
         this.value = this.value;
 
         this.type = this.type;
+
+        this.max = this.max;
 
         try {
             const button = this.querySelector('ea-button');
