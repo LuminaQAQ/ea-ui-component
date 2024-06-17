@@ -6,7 +6,7 @@ export default class Base extends HTMLElement {
     constructor() {
         super();
         this.isProduction = false;
-        this.isProduction = true;
+        // this.isProduction = true;
     }
 
     /**
@@ -52,7 +52,7 @@ export default class Base extends HTMLElement {
 
     getAttrNumber(attrName) {
         const attr = this.getAttribute(attrName);
-        
+
         return attr ? Number(attr) : 0;
     }
 
