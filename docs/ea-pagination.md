@@ -20,13 +20,14 @@ onMounted(() => {
 > 可以设置`layout`属性来控制显示的内容。
 
 <div class="col left">
-    <ea-pagination layout="prev,pager,next" total="81" />
-    <ea-pagination layout="prev,pager,next" total="200" />
+    <ea-pagination layout="prev,pager,next" total="60" page-count="10" />
+    <ea-pagination layout="prev,pager,next" total="200" page-count="10" />
 </div>
 
 ```html
 <div class="col left">
-  <ea-pagination layout="prev,pager,next" total="80" />
+  <ea-pagination layout="prev,pager,next" total="60" page-count="10" />
+  <ea-pagination layout="prev,pager,next" total="200" page-count="10" />
 </div>
 ```
 
