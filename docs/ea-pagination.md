@@ -17,21 +17,23 @@ onMounted(() => {
 
 ## 基础用法
 
-> 可以设置`layout`属性来控制显示的内容。
+需要设置`total`属性来设置数据总数。可以设置`layout`属性来控制显示的内容。
+
+> 利用`change`事件监听当前页码的变化。
 
 <div class="col left">
-    <ea-pagination layout="prev,pager,next" total="60" page-count="10" />
-    <ea-pagination layout="prev,pager,next" total="200" page-count="10" />
+    <ea-pagination layout="prev,pager,next" total="60" />
+    <ea-pagination layout="prev,pager,next" total="200" />
 </div>
 
 ```html
 <div class="col left">
-  <ea-pagination layout="prev,pager,next" total="60" page-count="10" />
-  <ea-pagination layout="prev,pager,next" total="200" page-count="10" />
+  <ea-pagination layout="prev,pager,next" total="60" />
+  <ea-pagination layout="prev,pager,next" total="200" />
 </div>
 ```
 
-> 当只显示前后按钮时，可以通过`change`事件监听当前页码的变化。
+> 当只显示前后按钮时，也可以通过`change`事件监听当前页码的变化。
 
 <div class="col left">
     <ea-pagination id="prevAndNext" layout="prev,next" total="80" />
@@ -51,7 +53,33 @@ document.querySelector("#prevAndNext").addEventListener("change", function (e) {
 
 ## 设置最大页码按钮数
 
+> 设置`page-count`属性来设置最大页码按钮数。
+
+<div class="col left">
+    <ea-pagination layout="prev,pager,next" total="60" page-count="10" />
+    <ea-pagination layout="prev,pager,next" total="200" page-count="10" />
+</div>
+
+```html
+<div class="col left">
+  <ea-pagination layout="prev,pager,next" total="60" page-count="10" />
+  <ea-pagination layout="prev,pager,next" total="200" page-count="10" />
+</div>
+```
+
 ## 带有背景色的分页
+
+通过设置`background`属性来设置背景色。
+
+<div class="col left">
+    <ea-pagination background layout="prev,pager,next" total="200" />
+</div>
+
+```html
+<div class="col left">
+  <ea-pagination background layout="prev,pager,next" total="200" />
+</div>
+```
 
 ## 小型分页
 

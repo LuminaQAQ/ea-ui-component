@@ -13,8 +13,16 @@
     .ea-pagination_more {
       cursor: pointer;
       box-sizing: border-box;
-      padding: 0 10px;
-      width: 32px;
+
+      margin: 0 5px;
+      padding: 0 4px;
+
+      min-width: 30px;
+      height: 28px;
+      line-height: 28px;
+
+      font-size: 13px;
+
       text-align: center;
     }
 
@@ -25,7 +33,6 @@
     }
 
     .ea-pagination_more {
-
       cursor: pointer;
       user-select: none;
 
@@ -52,6 +59,22 @@
 
     &:last-child {
       margin-left: 0.25rem;
+    }
+  }
+
+  .ea-pagination_item.background,
+  .ea-pagination_more.background,
+  .ea-pagination_arrow.background {
+    background-color: #f4f4f5;
+    border-radius: 3px;
+
+    &:hover {
+      color: $color-primary-bgc;
+    }
+
+    &.active {
+      background-color: $color-primary-bgc;
+      color: #f4f4f5;
     }
   }
 }

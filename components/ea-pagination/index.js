@@ -13,40 +13,33 @@ const getPaginationWrap = () => {
     return paginationWrap;
 }
 
-const getPageItem = (page) => {
+const getPageItem = (page, hasBgc) => {
     const pageItem = document.createElement('span');
     pageItem.className = 'ea-pagination_item';
     pageItem.innerText = page;
     pageItem.setAttribute('data-page', page);
 
+    if (hasBgc) pageItem.classList.add('background');
+
     return pageItem;
 };
 
-const getArrowItem = (arrow) => {
+const getArrowItem = (arrow, hasBgc) => {
     const arrowItem = document.createElement('span');
     arrowItem.className = 'ea-pagination_arrow';
     arrowItem.innerHTML = arrow === "prev" ? '&lt;' : '&gt;';
 
+    if (hasBgc) arrowItem.classList.add('background');
+
     return arrowItem;
 }
 
-const getMoreItem = (arrow) => {
+const getMoreItem = (arrow, hasBgc) => {
     const moreItem = document.createElement('span');
     moreItem.className = 'ea-pagination_more';
     moreItem.innerHTML = '···';
 
-    // moreItem.addEventListener('click', () => {
-    //     const page = this.getAttrNumber('page');
-    //     const total = this.getAttrNumber('total');
-    //     const pageSize = this.getAttrNumber('page-size');
-
-    //     const currentPage = page + 1;
-    //     const totalPage = Math.ceil(total / pageSize);
-
-    //     if (currentPage < totalPage) {
-    //         this.setAttribute('page', currentPage);
-    //     }
-    // })
+    if (hasBgc) moreItem.classList.add('background');
 
     moreItem.addEventListener('mouseenter', function (e) {
         moreItem.classList.add('ea-pagination_more--active');
@@ -80,9 +73,9 @@ export class EaPagination extends Base {
 
         this.#container = wrap;
 
-        const prevArrow = getArrowItem('prev');
+        const prevArrow = getArrowItem('prev', this.background);
         const pageItemWrap = getPaginationWrap();
-        const nextArrow = getArrowItem('next');
+        const nextArrow = getArrowItem('next', this.background);
 
         this.#container.appendChild(prevArrow);
         this.#container.appendChild(pageItemWrap);
@@ -163,6 +156,18 @@ export class EaPagination extends Base {
     // #region
     get paginationCount() {
         return Math.ceil(this.total / this.sizes);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- background 背景颜色 -------
+    // #region
+    get background() {
+        return this.getAttrBoolean('background');
+    }
+
+    set background(value) {
+        this.setAttribute('background', value);
     }
     // #endregion
     // ------- end -------
@@ -284,12 +289,13 @@ export class EaPagination extends Base {
 
         // 添加页码
         for (let i = start; i <= end; i++) {
-            const pageItem = getPageItem(i);
+            const pageItem = getPageItem(i, this.background);
             this.#paginationWrap.appendChild(pageItem);
 
-            // 设置当前页码
+            // 设置当前页码选中后的样式
             if (i === this.currentPage) {
                 pageItem.classList.add('ea-pagination_item--active');
+                if (this.background) pageItem.classList.add('active');
             }
 
             // 添加点击事件
@@ -298,10 +304,10 @@ export class EaPagination extends Base {
 
         // 添加 更多(左) + 第一页
         if (this.total > this.pageCount && this.currentPage >= this.pageCount && this.paginationCount !== this.pageCount) {
-            const more = getMoreItem('prev');
+            const more = getMoreItem('prev', this.background);
             that.handleMoreItemClick(more, 'prev');
 
-            const firstPage = getPageItem(1);
+            const firstPage = getPageItem(1, this.background);
             this.handlePaginationClick(firstPage, 1);
 
             this.#paginationWrap.insertBefore(more, this.#paginationWrap.firstChild);
@@ -310,10 +316,10 @@ export class EaPagination extends Base {
 
         // 添加 更多(右) + 最后一页
         if (this.total > this.pageCount && this.currentPage < this.paginationCount - interval && this.paginationCount !== this.pageCount) {
-            const more = getMoreItem('next');
+            const more = getMoreItem('next', this.background);
             that.handleMoreItemClick(more, 'next');
 
-            const lastPage = getPageItem(this.paginationCount);
+            const lastPage = getPageItem(this.paginationCount, this.background);
             this.handlePaginationClick(lastPage, this.paginationCount);
 
             this.#paginationWrap.appendChild(more);
