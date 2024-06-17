@@ -85,6 +85,57 @@ onMounted(() => {
 
 > 定义 value 为 String 类型是时可以用于显示自定义文本。
 
+<div class="row left">
+  <ea-badge value="new">
+    <ea-button size="small">评论</ea-button>
+  </ea-badge>
+  <ea-badge value="hot">
+    <ea-button size="small">回复</ea-button>
+  </ea-badge>
+</div>
+
+```html
+<div class="row left">
+  <ea-badge value="new">
+    <ea-button size="small">评论</ea-button>
+  </ea-badge>
+  <ea-badge value="hot">
+    <ea-button size="small">回复</ea-button>
+  </ea-badge>
+</div>
+```
+
 ## 小红点
 
 以红点的形式标注需要关注的内容
+
+<div class="row left">
+  <ea-badge is-dot>
+    <ea-button size="small">评论</ea-button>
+  </ea-badge>
+  <ea-badge is-dot>信息</ea-badge>
+  <ea-badge is-dot>
+    <ea-button size="small" icon="icon-mail"></ea-button>
+  </ea-badge>
+</div>
+
+```html
+<div class="row left">
+  <ea-badge is-dot>
+    <ea-button size="small">评论</ea-button>
+  </ea-badge>
+  <ea-badge is-dot>信息</ea-badge>
+  <ea-badge is-dot>
+    <ea-button size="small" icon="icon-mail"></ea-button>
+  </ea-badge>
+</div>
+```
+
+## Attributes
+
+| 参数   | 说明                                                               | 类型            | 可选值                                      | 默认值  |
+| ------ | ------------------------------------------------------------------ | --------------- | ------------------------------------------- | ------- |
+| value  | 显示值                                                             | String / Number | —                                           | —       |
+| max    | 最大值，超过最大值会显示 `{max}+`，仅当 `value` 为 `Number` 时生效 | Number          | —                                           | —       |
+| is-dot | 是否显示小圆点                                                     | Boolean         | —                                           | false   |
+| type   | 徽标颜色                                                           | String          | primary / success / warning / danger / info | primary |
