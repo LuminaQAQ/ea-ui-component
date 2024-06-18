@@ -24,10 +24,10 @@ onMounted(() => {
 > `size` 默认为 `normal`, 可选 `large`、`medium`、`small`、。
 
 <div class="row">
-    <ea-avatar src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain" ></ea-avatar>
-    <ea-avatar size="large" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain" ></ea-avatar>
-    <ea-avatar size="medium" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain" ></ea-avatar>
-    <ea-avatar size="small" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain" ></ea-avatar>
+    <ea-avatar src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
+    <ea-avatar size="large" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
+    <ea-avatar size="medium" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
+    <ea-avatar size="small" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
 </div>
 
 <div class="row">
@@ -86,10 +86,20 @@ onMounted(() => {
 支持三种类型：图标、图片和字符
 
 <div class="row">
-    <ea-avatar icon="icon-coffee" ></ea-avatar>
-    <ea-avatar src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"  ></ea-avatar>
+    <ea-avatar icon="icon-coffee"></ea-avatar>
+    <ea-avatar src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
     <ea-avatar>user</ea-avatar>
 </div>
+
+```html
+<div class="row">
+  <ea-avatar icon="icon-coffee"></ea-avatar>
+  <ea-avatar
+    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-avatar>
+  <ea-avatar>user</ea-avatar>
+</div>
+```
 
 ## 图片加载失败的 fallback 行为
 
