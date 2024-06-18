@@ -60,6 +60,7 @@ export default defineConfig({
           { text: 'Progress 进度条', link: '/ea-progress' },
           { text: 'Pagination 分页', link: '/ea-pagination' },
           { text: 'Badge 徽标数', link: '/ea-badge' },
+          { text: 'Avatar 头像', link: '/ea-avatar' },
         ]
       },
     ],
