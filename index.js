@@ -18,7 +18,8 @@ import EaTag from "./components/ea-tag";
 import EaProgress from "./components/ea-progress/";
 import { EaPagination } from "./components/ea-pagination/";
 import EaBadge from "./components/ea-badge/";
-import EaAvatar from "./components/ea-avatar";
+import EaAvatar from "./components/ea-avatar/";
+import { EaSkeleton } from "./components/ea-skeleton/";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -44,3 +45,4 @@ register("ea-progress", EaProgress);
 register("ea-pagination", EaPagination);
 register("ea-badge", EaBadge);
 register("ea-avatar", EaAvatar);
+register("ea-skeleton", EaSkeleton);

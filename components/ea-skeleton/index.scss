@@ -1,0 +1,30 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+.ea-skeleton_wrap {
+  width: 100%;
+
+  .ea-skeleton_item {
+    display: inline-block;
+    background-color: #f2f2f2;
+    height: 16px;
+    border-radius: 4px;
+
+    &.el-skeleton_p {
+      width: 100%;
+
+      &.el-skeleton_paragraph {
+        width: 100%;
+        margin-top: 16px;
+      }
+
+      &.is-first {
+        width: 33%;
+      }
+
+      &.is-last {
+        width: 61%;
+      }
+    }
+  }
+}

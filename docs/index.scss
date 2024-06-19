@@ -14,6 +14,13 @@
     url("../components/ea-icon/font/fontello.svg") format("svg");
 }
 
+.demo {
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+  border-radius: 8px;
+}
+
 .row {
   display: flex;
   justify-content: space-around;
