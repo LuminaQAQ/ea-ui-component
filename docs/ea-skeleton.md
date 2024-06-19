@@ -4,6 +4,61 @@ import { onMounted } from 'vue'
 onMounted(() => {
     import('../index.js')
     import('./index.scss')
+
+    const skeletonTemplate = `
+        <div style="width: 240px;">
+            <ea-skeleton animated>
+                <div slot="template">
+                    <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
+                    <div style="padding: 14px">
+                        <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+                        <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
+                        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+                    </div>
+                </div>        
+            </ea-skeleton>
+        </div>
+    `;
+
+    const realDomTemplate = `
+        <div style="width: 240px;">
+            <ea-avatar size="240" shape="square"></ea-avatar>
+            <div style="padding: 14px">
+                <div>Hello World!</div>
+                <div>Hello World! Hello World!</div>
+                <div>Hello!</div>
+            </div>
+        </div>
+    `;
+
+    document.querySelector("#handleLoadingStatusSwitch").addEventListener('change', (e) => {
+        const isChecked = e.detail.checked;
+        const wrap = document.querySelector("#loadingStatusNodeWrap");
+
+        if (isChecked) wrap.innerHTML = skeletonTemplate;
+        else wrap.innerHTML = realDomTemplate;
+    })
+
+    document.querySelector("#handleMultipleLoadingStatusSwitch").addEventListener('change', (e) => {
+        const isChecked = e.detail.checked;
+        const wrap = document.querySelector("#multipleLoadingStatusNodeWrap");
+
+        let template = ``;
+
+        if (isChecked){
+            for(let i = 0; i < 3; i++) {
+                template += skeletonTemplate;
+            }
+
+            wrap.innerHTML = template;
+        } else {
+            for(let i = 0; i < 3; i++) {
+                template += realDomTemplate;
+            }
+            
+            wrap.innerHTML = template;
+        } 
+    })
 })
 </script>
 
@@ -61,7 +116,7 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
 
 <div class="demo">
     <div style="width: 240px;">
-        <ea-skeleton animated>
+        <ea-skeleton>
             <div slot="template">
                 <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
                 <div style="padding: 14px">
@@ -102,13 +157,138 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
 
 ## Loading 状态
 
-当 Loading 结束之后，我们往往需要显示真实的 UI，可以通过 loading 的值来控制是否显示真实的 DOM。然后通过 具名 Slot 来设置当 loading 结束之后需要展示的 UI。
+<div class="demo">
+    <p class="align-center">
+        切换 Loading 状态 <ea-switch id="handleLoadingStatusSwitch" checked></ea-switch>
+    </p>
+    <div id="loadingStatusNodeWrap">
+        <div style="width: 240px;">
+            <ea-skeleton animated>
+                <div slot="template">
+                    <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
+                    <div style="padding: 14px">
+                        <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+                        <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
+                        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+                    </div>
+                </div>        
+            </ea-skeleton>
+        </div>
+    </div>
+</div>
+
+```html
+<div style="width: 240px;">
+  <ea-skeleton animated>
+    <div slot="template">
+      <ea-skeleton-item
+        variant="image"
+        style="width: 240px; height: 240px"
+      ></ea-skeleton-item>
+      <div style="padding: 14px">
+        <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+        <ea-skeleton-item
+          variant="text"
+          style="margin-right: 16px;"
+        ></ea-skeleton-item>
+        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+      </div>
+    </div>
+  </ea-skeleton>
+</div>
+```
+
+### 示例
+
+```html
+<p class="align-center">
+  切换 Loading 状态
+  <ea-switch id="handleLoadingStatusSwitch" checked></ea-switch>
+</p>
+
+<div id="loadingStatusNodeWrap">
+  <div style="width: 240px;">
+    <ea-skeleton animated>
+      <div slot="template">
+        <ea-skeleton-item
+          variant="image"
+          style="width: 240px; height: 240px"
+        ></ea-skeleton-item>
+        <div style="padding: 14px">
+          <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+          <ea-skeleton-item
+            variant="text"
+            style="margin-right: 16px;"
+          ></ea-skeleton-item>
+          <ea-skeleton-item
+            variant="text"
+            style="width: 30%;"
+          ></ea-skeleton-item>
+        </div>
+      </div>
+    </ea-skeleton>
+  </div>
+</div>
+```
+
+```js
+document
+  .querySelector("#handleLoadingStatusSwitch")
+  .addEventListener("change", (e) => {
+    const isChecked = e.detail.checked;
+    const wrap = document.querySelector("#loadingStatusNodeWrap");
+
+    if (isChecked) wrap.innerHTML = skeletonTemplate;
+    else wrap.innerHTML = realDomTemplate;
+  });
+```
 
 ## 渲染多条数据
 
-大多时候, 骨架屏都被用来渲染列表, 当我们需要在从服务器获取数据的时候来渲染一个假的 UI。利用 count 这个属性就能控制渲染多少条假的数据在页面上
+大多时候, 骨架屏都被用来渲染列表, 当我们需要在从服务器获取数据的时候来渲染一个假的 UI。利用 `count` 这个属性就能控制渲染多少条假的数据在页面上
 
 > 请注意, 请尽可能的将 count 的大小保持在最小状态, 即使是假的 UI, DOM 元素多了之后, 照样会引起性能问题, 并且在骨架屏销毁时所消耗的时间也会更长(相对的)。
+
+<div class="demo">
+    <p class="align-center">
+        切换 Loading 状态 <ea-switch id="handleMultipleLoadingStatusSwitch" checked></ea-switch>
+    </p>
+    <div id="multipleLoadingStatusNodeWrap">
+        <div style="width: 240px;">
+            <ea-skeleton animated count="3">
+                <div slot="template">
+                    <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
+                    <div style="padding: 14px">
+                        <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+                        <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
+                        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+                    </div>
+                </div>        
+            </ea-skeleton>
+        </div>
+    </div>
+</div>
+
+```html
+<div style="width: 240px;">
+  <ea-skeleton animated count="3">
+    <div slot="template">
+      <ea-skeleton-item
+        variant="image"
+        style="width: 240px; height: 240px"
+      ></ea-skeleton-item>
+      <div style="padding: 14px">
+        <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+        <ea-skeleton-item
+          variant="text"
+          style="margin-right: 16px;"
+        ></ea-skeleton-item>
+        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+      </div>
+    </div>
+  </ea-skeleton>
+</div>
+```
 
 ## 防止渲染抖动
 
