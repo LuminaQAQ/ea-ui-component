@@ -12,6 +12,69 @@ const imageElement = `
 
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
+
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+}
+.ea-skeleton_item,
+.ea-skeleton-item_wrap {
+  position: relative;
+  display: inline-block;
+  background-color: #f2f2f2;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.ea-skeleton-item_wrap.animated {
+  background-image: linear-gradient(90deg, #f6f6f6 25%, #e8e8e8 37%, #f6f6f6 63%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+}
+
+.ea-skeleton_wrap.animated .ea-skeleton_item {
+  background-image: linear-gradient(90deg, #f6f6f6 25%, #e8e8e8 37%, #f6f6f6 63%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+}
+
+.ea-skeleton_wrap {
+  width: 100%;
+}
+.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p {
+  width: 100%;
+}
+.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.el-skeleton_paragraph {
+  width: 100%;
+  margin-top: 16px;
+}
+.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.is-first {
+  width: 33%;
+}
+.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.is-last {
+  width: 61%;
+}
+
+.ea-skeleton-item_wrap .skeleton-image {
+  width: 30%;
+  height: 30%;
+}
+.ea-skeleton-item_wrap.ea-skeleton_p {
+  width: 100%;
+}
+.ea-skeleton-item_wrap.ea-skeleton_image {
+  width: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+}
+.ea-skeleton-item_wrap.ea-skeleton_text {
+  width: 100%;
+  height: 13px;
+}
 `;
 
 /**
@@ -199,10 +262,6 @@ export class EaSkeleton extends Base {
     }
 }
 
-const EaSkeletonItemStylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-`;
-
 export class EaSkeletonItem extends Base {
     #wrap;
 
@@ -222,7 +281,7 @@ export class EaSkeletonItem extends Base {
 
         this.#wrap = wrap;
 
-        this.build(shadowRoot, EaSkeletonItemStylesheet);
+        this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
     }
 
