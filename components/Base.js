@@ -69,7 +69,8 @@ export default class Base extends HTMLElement {
             styleNode.innerHTML = stylesheet;
             this.shadowRoot.appendChild(styleNode);
         } else {
-            setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
+            if (this.nodeName.toLowerCase() == 'ea-skeleton-item') setStyle(shadowRoot, new URL("ea-skeleton" + '/index.css', import.meta.url).href);
+            else setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
         }
     }
 }
