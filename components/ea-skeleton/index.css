@@ -1,0 +1,30 @@
+@import "../ea-icon/css/fontello.css";
+@import "../ea-icon/css/animation.css";
+@font-face {
+  font-size: 1rem;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
+}
+.ea-skeleton_wrap {
+  width: 100%;
+}
+.ea-skeleton_wrap .ea-skeleton_item {
+  display: inline-block;
+  background-color: #f2f2f2;
+  height: 16px;
+  border-radius: 4px;
+}
+.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p {
+  width: 100%;
+}
+.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.el-skeleton_paragraph {
+  width: 100%;
+  margin-top: 16px;
+}
+.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.is-first {
+  width: 33%;
+}
+.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.is-last {
+  width: 61%;
+}

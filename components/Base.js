@@ -51,6 +51,11 @@ export default class Base extends HTMLElement {
         return attr === 'true' || attr === '';
     }
 
+    /**
+     * 获取属性值，并转换为数字
+     * @param {string} attrName 属性名
+     * @returns {number}
+     */
     getAttrNumber(attrName) {
         const attr = this.getAttribute(attrName);
 
