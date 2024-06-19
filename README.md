@@ -36,7 +36,7 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Pagination 分页
   - [x] Badge 标记
   - [x] Avatar 头像
-  - [ ] Skeleton 骨架屏
+  - [x] Skeleton 骨架屏
   - [ ] Empty 空状态
   - [ ] Descriptions 描述列表
   - [ ] Result 结果
