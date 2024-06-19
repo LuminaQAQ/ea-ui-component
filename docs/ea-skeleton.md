@@ -5,59 +5,16 @@ onMounted(() => {
     import('../index.js')
     import('./index.scss')
 
-    const skeletonTemplate = `
-        <div style="width: 240px;">
-            <ea-skeleton animated>
-                <div slot="template">
-                    <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
-                    <div style="padding: 14px">
-                        <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
-                        <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
-                        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
-                    </div>
-                </div>        
-            </ea-skeleton>
-        </div>
-    `;
-
-    const realDomTemplate = `
-        <div style="width: 240px;">
-            <ea-avatar size="240" shape="square"></ea-avatar>
-            <div style="padding: 14px">
-                <div>Hello World!</div>
-                <div>Hello World! Hello World!</div>
-                <div>Hello!</div>
-            </div>
-        </div>
-    `;
-
     document.querySelector("#handleLoadingStatusSwitch").addEventListener('change', (e) => {
         const isChecked = e.detail.checked;
         const wrap = document.querySelector("#loadingStatusNodeWrap");
-
-        if (isChecked) wrap.innerHTML = skeletonTemplate;
-        else wrap.innerHTML = realDomTemplate;
+        wrap.loading = isChecked;
     })
 
     document.querySelector("#handleMultipleLoadingStatusSwitch").addEventListener('change', (e) => {
         const isChecked = e.detail.checked;
         const wrap = document.querySelector("#multipleLoadingStatusNodeWrap");
-
-        let template = ``;
-
-        if (isChecked){
-            for(let i = 0; i < 3; i++) {
-                template += skeletonTemplate;
-            }
-
-            wrap.innerHTML = template;
-        } else {
-            for(let i = 0; i < 3; i++) {
-                template += realDomTemplate;
-            }
-            
-            wrap.innerHTML = template;
-        } 
+        wrap.loading = isChecked;
     })
 })
 </script>
@@ -117,14 +74,14 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
 <div class="demo">
     <div style="width: 240px;">
         <ea-skeleton>
-            <div slot="template">
-                <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
-                <div style="padding: 14px">
-                    <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
-                    <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
-                    <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
-                </div>
-            </div>        
+          <div slot="template">
+              <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
+              <div style="padding: 14px">
+                  <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+                  <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
+                  <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+              </div>
+          </div>   
         </ea-skeleton>
     </div>
 </div>
@@ -161,25 +118,33 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
     <p class="align-center">
         切换 Loading 状态 <ea-switch id="handleLoadingStatusSwitch" checked></ea-switch>
     </p>
-    <div id="loadingStatusNodeWrap">
+    <div>
         <div style="width: 240px;">
-            <ea-skeleton animated>
-                <div slot="template">
-                    <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
-                    <div style="padding: 14px">
-                        <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
-                        <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
-                        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
-                    </div>
-                </div>        
+            <ea-skeleton id="loadingStatusNodeWrap" animated>
+              <div slot="template">
+                  <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
+                  <div style="padding: 14px">
+                      <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+                      <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
+                      <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+                  </div>
+              </div>
+              <div>
+                  <ea-avatar size="240" shape="square" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
+                  <div style="padding: 14px">
+                      <div>Hello World!</div>
+                      <div>Hello World! Hello World!</div>
+                      <div>Hello!</div>
+                  </div>
+              </div>         
             </ea-skeleton>
-        </div>
+        </div>      
     </div>
 </div>
 
 ```html
 <div style="width: 240px;">
-  <ea-skeleton animated>
+  <ea-skeleton id="loadingStatusNodeWrap" animated>
     <div slot="template">
       <ea-skeleton-item
         variant="image"
@@ -194,6 +159,18 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
         <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
       </div>
     </div>
+    <div>
+      <ea-avatar
+        size="240"
+        shape="square"
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+      ></ea-avatar>
+      <div style="padding: 14px">
+        <div>Hello World!</div>
+        <div>Hello World! Hello World!</div>
+        <div>Hello!</div>
+      </div>
+    </div>
   </ea-skeleton>
 </div>
 ```
@@ -205,10 +182,9 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
   切换 Loading 状态
   <ea-switch id="handleLoadingStatusSwitch" checked></ea-switch>
 </p>
-
-<div id="loadingStatusNodeWrap">
+<div>
   <div style="width: 240px;">
-    <ea-skeleton animated>
+    <ea-skeleton id="loadingStatusNodeWrap" animated>
       <div slot="template">
         <ea-skeleton-item
           variant="image"
@@ -226,6 +202,18 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
           ></ea-skeleton-item>
         </div>
       </div>
+      <div>
+        <ea-avatar
+          size="240"
+          shape="square"
+          src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+        ></ea-avatar>
+        <div style="padding: 14px">
+          <div>Hello World!</div>
+          <div>Hello World! Hello World!</div>
+          <div>Hello!</div>
+        </div>
+      </div>
     </ea-skeleton>
   </div>
 </div>
@@ -237,9 +225,7 @@ document
   .addEventListener("change", (e) => {
     const isChecked = e.detail.checked;
     const wrap = document.querySelector("#loadingStatusNodeWrap");
-
-    if (isChecked) wrap.innerHTML = skeletonTemplate;
-    else wrap.innerHTML = realDomTemplate;
+    wrap.loading = isChecked;
   });
 ```
 
@@ -253,17 +239,30 @@ document
     <p class="align-center">
         切换 Loading 状态 <ea-switch id="handleMultipleLoadingStatusSwitch" checked></ea-switch>
     </p>
-    <div id="multipleLoadingStatusNodeWrap">
+    <div>
         <div style="width: 240px;">
-            <ea-skeleton animated count="3">
+            <ea-skeleton id="multipleLoadingStatusNodeWrap" animated count="2">
                 <div slot="template">
                     <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
                     <div style="padding: 14px">
                         <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
                         <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
-                        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
                     </div>
-                </div>        
+                </div>
+                <div>
+                  <ea-avatar size="240" shape="square" src="https://b0.bdstatic.com/2bb3119a584a173526df6da5ee42754b.jpg@h_1280"></ea-avatar>
+                  <div style="padding: 14px">
+                      <div>牛马</div>
+                      <div style="font-size: 12px; color: gray;">这是一只牛马</div>
+                  </div>
+                </div>
+                <div>
+                  <ea-avatar size="240" shape="square" src="https://pic4.zhimg.com/v2-c2bdf8d900f904e7ff1f3e7d7cdc665b_r.jpg"></ea-avatar>
+                  <div style="padding: 14px">
+                      <div>吗喽</div>
+                      <div style="font-size: 12px; color: gray;">这是一只吗喽</div>
+                  </div>
+                </div>               
             </ea-skeleton>
         </div>
     </div>
@@ -271,7 +270,7 @@ document
 
 ```html
 <div style="width: 240px;">
-  <ea-skeleton animated count="3">
+  <ea-skeleton id="multipleLoadingStatusNodeWrap" animated count="2">
     <div slot="template">
       <ea-skeleton-item
         variant="image"
@@ -283,13 +282,52 @@ document
           variant="text"
           style="margin-right: 16px;"
         ></ea-skeleton-item>
-        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+      </div>
+    </div>
+    <div>
+      <ea-avatar
+        size="240"
+        shape="square"
+        src="https://b0.bdstatic.com/2bb3119a584a173526df6da5ee42754b.jpg@h_1280"
+      ></ea-avatar>
+      <div style="padding: 14px">
+        <div>牛马</div>
+        <div style="font-size: 12px; color: gray;">这是一只牛马</div>
+      </div>
+    </div>
+    <div>
+      <ea-avatar
+        size="240"
+        shape="square"
+        src="https://pic4.zhimg.com/v2-c2bdf8d900f904e7ff1f3e7d7cdc665b_r.jpg"
+      ></ea-avatar>
+      <div style="padding: 14px">
+        <div>吗喽</div>
+        <div style="font-size: 12px; color: gray;">这是一只吗喽</div>
       </div>
     </div>
   </ea-skeleton>
 </div>
 ```
 
-## 防止渲染抖动
+## Skeleton Attributes
 
-有的时候，API 的请求回来的特别快，往往骨架占位刚刚被渲染，真实的数据就已经回来了，用户的界面会突然一闪，此时为了避免这种情况，就需要通过 throttle 属性来避免这个问题。
+| 参数     | 说明             | 类型    | 可选值 | 默认值 |
+| -------- | ---------------- | ------- | ------ | ------ |
+| animated | 是否开启动画     | Boolean | -      | false  |
+| count    | 渲染的骨架屏个数 | Number  | -      | 1      |
+| loading  | 是否显示骨架屏   | Boolean | -      | true   |
+| rows     | 段落占位图行数   | Number  | -      | 0      |
+
+## Skeleton Item Attributes
+
+| 参数    | 说明       | 类型   | 可选值         | 默认值 |
+| ------- | ---------- | ------ | -------------- | ------ |
+| variant | 占位图类型 | String | image, p, text | image  |
+
+## Skeleton Slots
+
+| 名称     | 说明                   |
+| -------- | ---------------------- |
+| template | 骨架屏模板             |
+| default  | 骨架屏内容, 非具名插槽 |

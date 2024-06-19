@@ -30,9 +30,13 @@ const getSkeletonElement = (className) => {
 };
 
 export class EaSkeleton extends Base {
+    #mounted = false;
+
     #wrap;
 
     #customizationSlot;
+    #defaultSlot;
+
     constructor() {
         super();
 
@@ -40,15 +44,20 @@ export class EaSkeleton extends Base {
         const wrap = document.createElement('div');
         wrap.className = 'ea-skeleton_wrap';
 
+        const defaultSlot = document.createElement('slot');
+        defaultSlot.style.display = 'none';
+
         const customizationSlot = document.createElement('slot');
         customizationSlot.name = 'template';
 
         this.#wrap = wrap;
+        this.#defaultSlot = defaultSlot;
         this.#customizationSlot = customizationSlot;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
         this.shadowRoot.appendChild(customizationSlot);
+        this.shadowRoot.appendChild(defaultSlot);
     }
 
     // ------- row 骨架屏的渲染行数 -------
@@ -88,6 +97,26 @@ export class EaSkeleton extends Base {
         this.setAttribute('count', value);
 
         this.#wrap.innerHTML = '';
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- loading 是否显示骨架屏 -------
+    // #region
+    get loading() {
+        return this.getAttrBoolean('loading') || true;
+    }
+
+    set loading(value) {
+        this.setAttribute('loading', value);
+
+        if (value) {
+            this.#customizationSlot.style.display = 'block';
+            this.#defaultSlot.style.display = 'none';
+        } else {
+            this.#customizationSlot.style.display = 'none';
+            this.#defaultSlot.style.display = 'block';
+        }
     }
     // #endregion
     // ------- end -------
@@ -144,6 +173,8 @@ export class EaSkeleton extends Base {
 
         this.count = this.count;
 
+        this.loading = this.loading;
+
         const items = this.querySelectorAll('ea-skeleton-item');
         if (items.length > 0) {
             this.#wrap.style.display = "none";
@@ -163,6 +194,8 @@ export class EaSkeleton extends Base {
 
     connectedCallback() {
         this.init();
+
+        this.#mounted = true;
     }
 }
 
