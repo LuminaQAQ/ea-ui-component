@@ -29,9 +29,29 @@ onMounted(() => {
 
 可以配置骨架屏段落数量，以便更接近真实渲染效果。首行会被渲染一个长度 33% 的段首。
 
+<div class="demo">
+    <ea-skeleton row="6"></ea-skeleton>
+</div>
+
+```html
+<div class="demo">
+  <ea-skeleton row="6"></ea-skeleton>
+</div>
+```
+
 ## 动画效果
 
 显示动画效果。
+
+<div class="demo">
+    <ea-skeleton row="6" animated></ea-skeleton>
+</div>
+
+```html
+<div class="demo">
+  <ea-skeleton row="6" animated></ea-skeleton>
+</div>
+```
 
 ## 自定义样式
 

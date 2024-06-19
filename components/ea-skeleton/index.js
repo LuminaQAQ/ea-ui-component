@@ -35,12 +35,41 @@ export class EaSkeleton extends Base {
         this.shadowRoot.appendChild(wrap);
     }
 
-    defaultSkeletonInit(row = 2) {
+    // ------- row 骨架屏的渲染行数 -------
+    // #region
+    get row() {
+        return this.getAttrNumber('row') || 4;
+    }
+
+    set row(value) {
+        this.setAttribute('row', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- animated 骨架屏的动画效果 -------
+    // #region
+    get animated() {
+        return this.getAttrBoolean('animated');
+    }
+
+    set animated(value) {
+        this.setAttribute('animated', value);
+
+        this.#wrap.classList.toggle('animated', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    defaultSkeletonInit(row) {
+        row = Number(row) || 4;
+
         const firstSkeleton = getSkeletonElement('is-first');
         this.#wrap.appendChild(firstSkeleton);
 
-        for (let i = 0; i < row; i++) {
+        for (let i = 0; i < row - 2; i++) {
             const paragraphSkeleton = getSkeletonElement('el-skeleton_paragraph');
+            paragraphSkeleton.classList.toggle
             this.#wrap.appendChild(paragraphSkeleton);
         }
 
@@ -51,7 +80,11 @@ export class EaSkeleton extends Base {
     init() {
         const that = this;
 
-        this.defaultSkeletonInit();
+        this.row = this.row;
+        this.defaultSkeletonInit(this.row);
+
+        this.animated = this.animated;
+
     }
 
     connectedCallback() {
