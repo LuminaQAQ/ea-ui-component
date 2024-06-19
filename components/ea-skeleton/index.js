@@ -73,16 +73,26 @@ export class EaSkeleton extends Base {
         this.setAttribute('animated', value);
 
         this.#wrap.classList.toggle('animated', value);
+
     }
     // #endregion
     // ------- end -------
 
-    // -------  -------
+    // ------- count 元素重复数 -------
     // #region
+    get count() {
+        return this.getAttrNumber('count') || 1;
+    }
 
+    set count(value) {
+        this.setAttribute('count', value);
+
+        this.#wrap.innerHTML = '';
+    }
     // #endregion
     // ------- end -------
 
+    // 默认骨架屏的初始化
     defaultSkeletonInit(row) {
         row = Number(row) || 4;
 
@@ -91,7 +101,6 @@ export class EaSkeleton extends Base {
 
         for (let i = 0; i < row - 2; i++) {
             const paragraphSkeleton = getSkeletonElement('el-skeleton_paragraph');
-            paragraphSkeleton.classList.toggle
             this.#wrap.appendChild(paragraphSkeleton);
         }
 
@@ -99,23 +108,54 @@ export class EaSkeleton extends Base {
         this.#wrap.appendChild(lastSkeleton);
     }
 
+    // 渲染自定义骨架屏
     customizationSkeletonInit() {
         const item = this.querySelectorAll('ea-skeleton-item');
 
         if (item.length > 0) this.#wrap.innerHTML = "";
     }
 
+    // 渲染带动画的骨架屏
+    handleSkeletonItemAniamted(isAnimated) {
+        if (!isAnimated) return;
+
+        const items = this.querySelectorAll('ea-skeleton-item');
+        items.forEach(item => {
+            item.setAttribute("animated", true);
+        })
+    }
+
+    // 渲染骨架屏的渲染个数
+    handleSkeletonItemCount(count) {
+        const item = this.querySelector('[slot="template"]');
+        let template = ``;
+
+        for (let i = 0; i < count; i++) {
+            template += item.innerHTML;
+        }
+
+        item.innerHTML = template;
+    }
+
     init() {
         const that = this;
 
-        const item = this.querySelectorAll('ea-skeleton-item');
+        this.animated = this.animated;
 
-        if (item.length > 0) {
+        this.count = this.count;
+
+        const items = this.querySelectorAll('ea-skeleton-item');
+        if (items.length > 0) {
             this.#wrap.style.display = "none";
+
+            this.handleSkeletonItemCount(this.count);
+
+            this.handleSkeletonItemAniamted(this.animated);
+
             return;
         }
 
-        this.animated = this.animated;
+
 
         this.row = this.row;
         this.defaultSkeletonInit(this.row);
@@ -133,6 +173,9 @@ const EaSkeletonItemStylesheet = `
 export class EaSkeletonItem extends Base {
     #wrap;
 
+    static get observedAttributes() {
+        return ['animated'];
+    }
     get variantOptions() {
         return ["text", "image", "p"];
     }
@@ -163,7 +206,7 @@ export class EaSkeletonItem extends Base {
     // #endregion
     // ------- end -------
 
-    // ------- variant html标签上的样式 -------
+    // ------- variant html标签标识 -------
     // #region
     get variant() {
         return this.getAttribute('variant');
@@ -189,5 +232,13 @@ export class EaSkeletonItem extends Base {
 
     connectedCallback() {
         this.init();
+    }
+
+    attributeChangedCallback(name, oldVal, newVal) {
+        switch (name) {
+            case "animated":
+                this.#wrap.classList.toggle("animated", this.getAttrBoolean(name));
+                break;
+        }
     }
 }

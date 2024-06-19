@@ -21,6 +21,11 @@
   border-radius: 8px;
 }
 
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
 .row {
   display: flex;
   justify-content: space-around;
