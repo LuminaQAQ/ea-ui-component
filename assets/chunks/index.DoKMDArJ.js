@@ -1905,6 +1905,12 @@ var ge=(o,a,e)=>{if(!a.has(o))throw TypeError("Cannot "+e)};var i=(o,a,e)=>(ge(o
 `,ye=`
 @import url('/ea_ui_component/icon/index.css');
 
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+}
 .ea-skeleton_item,
 .ea-skeleton-item_wrap {
   position: relative;
