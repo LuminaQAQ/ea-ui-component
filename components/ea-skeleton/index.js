@@ -1,6 +1,15 @@
 // @ts-nocheck
 import Base from '../Base';
 
+const imageElement = `
+<svg class="skeleton-image" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15 20h70v60H15z" stroke="#c0c4cc" stroke-width="5px" fill="none" />
+    <circle r="8" cx="32" cy="35" fill="#c0c4cc" />
+    <path d="M60 42.5L39 75h42z" fill="#c0c4cc" />
+    <path d="M35 52.5L20 75h-4 32z" fill="#c0c4cc" />
+</svg>
+`;
+
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 `;
@@ -22,6 +31,8 @@ const getSkeletonElement = (className) => {
 
 export class EaSkeleton extends Base {
     #wrap;
+
+    #customizationSlot;
     constructor() {
         super();
 
@@ -29,10 +40,15 @@ export class EaSkeleton extends Base {
         const wrap = document.createElement('div');
         wrap.className = 'ea-skeleton_wrap';
 
+        const customizationSlot = document.createElement('slot');
+        customizationSlot.name = 'template';
+
         this.#wrap = wrap;
+        this.#customizationSlot = customizationSlot;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
+        this.shadowRoot.appendChild(customizationSlot);
     }
 
     // ------- row 骨架屏的渲染行数 -------
@@ -61,6 +77,12 @@ export class EaSkeleton extends Base {
     // #endregion
     // ------- end -------
 
+    // -------  -------
+    // #region
+
+    // #endregion
+    // ------- end -------
+
     defaultSkeletonInit(row) {
         row = Number(row) || 4;
 
@@ -77,14 +99,92 @@ export class EaSkeleton extends Base {
         this.#wrap.appendChild(lastSkeleton);
     }
 
+    customizationSkeletonInit() {
+        const item = this.querySelectorAll('ea-skeleton-item');
+
+        if (item.length > 0) this.#wrap.innerHTML = "";
+    }
+
     init() {
         const that = this;
 
-        this.row = this.row;
-        this.defaultSkeletonInit(this.row);
+        const item = this.querySelectorAll('ea-skeleton-item');
+
+        if (item.length > 0) {
+            this.#wrap.style.display = "none";
+            return;
+        }
 
         this.animated = this.animated;
 
+        this.row = this.row;
+        this.defaultSkeletonInit(this.row);
+    }
+
+    connectedCallback() {
+        this.init();
+    }
+}
+
+const EaSkeletonItemStylesheet = `
+@import url('/ea_ui_component/icon/index.css');
+`;
+
+export class EaSkeletonItem extends Base {
+    #wrap;
+
+    get variantOptions() {
+        return ["text", "image", "p"];
+    }
+
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        const wrap = document.createElement('div');
+        wrap.className = 'ea-skeleton-item_wrap';
+
+        this.#wrap = wrap;
+
+        this.build(shadowRoot, EaSkeletonItemStylesheet);
+        this.shadowRoot.appendChild(wrap);
+    }
+
+    // ------- style html标签上的样式 -------
+    // #region
+    get elementStyle() {
+        return this.getAttribute('style');
+    }
+
+    set elementStyle(value) {
+        this.setAttribute('style', value);
+        this.#wrap.setAttribute('style', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- variant html标签上的样式 -------
+    // #region
+    get variant() {
+        return this.getAttribute('variant');
+    }
+
+    set variant(value) {
+        this.variantOptions.includes(value) ? this.setAttribute('variant', value) : this.setAttribute('variant', 'text');
+
+        if (value === "image") this.#wrap.innerHTML = imageElement;
+
+        this.#wrap.classList.add("ea-skeleton_" + this.variant);
+    }
+    // #endregion
+    // ------- end -------
+
+    init() {
+        const that = this;
+
+        this.variant = this.variant;
+
+        this.elementStyle = this.elementStyle;
     }
 
     connectedCallback() {

@@ -7,17 +7,19 @@
   }
 }
 
+.ea-skeleton_item,
+.ea-skeleton-item_wrap {
+  position: relative;
+  display: inline-block;
+  background-color: #f2f2f2;
+  height: 16px;
+  border-radius: 4px;
+}
+
 .ea-skeleton_wrap {
   width: 100%;
 
   .ea-skeleton_item {
-    position: relative;
-    display: inline-block;
-    background-color: #f2f2f2;
-    height: 16px;
-    border-radius: 4px;
-    overflow: hidden;
-
     &.el-skeleton_p {
       width: 100%;
 
@@ -49,5 +51,29 @@
 
       animation: skeleton-loading 1.4s ease infinite;
     }
+  }
+}
+
+.ea-skeleton-item_wrap {
+  .skeleton-image {
+    width: 30%;
+    height: 30%;
+  }
+
+  &.ea-skeleton_p {
+    width: 100%;
+  }
+
+  &.ea-skeleton_image {
+    width: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+  }
+
+  &.ea-skeleton_text {
+    width: 100%;
+    height: 13px;
   }
 }

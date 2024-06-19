@@ -59,6 +59,47 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
 
 我们提供了不同的模板单元可供使用，具体可选值请看 API 详细描述。 建议在描述模板的时候，尽量靠近真实的 DOM 结构，这样可以避免 DOM 高度差距引起的抖动。
 
+<div class="demo">
+    <div style="width: 240px;">
+        <ea-skeleton animated>
+            <div slot="template">
+                <ea-skeleton-item variant="image" style="width: 240px; height: 240px" ></ea-skeleton-item>
+                <div style="padding: 14px">
+                    <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+                    <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
+                    <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+                </div>
+            </div>        
+        </ea-skeleton>
+    </div>
+</div>
+
+```html
+<div class="demo">
+  <div style="width: 240px;">
+    <ea-skeleton animated>
+      <div slot="template">
+        <ea-skeleton-item
+          variant="image"
+          style="width: 240px; height: 240px"
+        ></ea-skeleton-item>
+        <div style="padding: 14px">
+          <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+          <ea-skeleton-item
+            variant="text"
+            style="margin-right: 16px;"
+          ></ea-skeleton-item>
+          <ea-skeleton-item
+            variant="text"
+            style="width: 30%;"
+          ></ea-skeleton-item>
+        </div>
+      </div>
+    </ea-skeleton>
+  </div>
+</div>
+```
+
 ## Loading 状态
 
 当 Loading 结束之后，我们往往需要显示真实的 UI，可以通过 loading 的值来控制是否显示真实的 DOM。然后通过 具名 Slot 来设置当 loading 结束之后需要展示的 UI。
