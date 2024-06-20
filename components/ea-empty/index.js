@@ -3,6 +3,29 @@ import Base from '../Base';
 
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
+
+.ea-empty_wrap {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.ea-empty_wrap .ea-empty_image {
+  width: 8rem;
+  object-fit: cover;
+}
+.ea-empty_wrap .ea-empty_image svg,
+.ea-empty_wrap .ea-empty_image img {
+  width: 100%;
+  height: 100%;
+}
+.ea-empty_wrap .ea-empty_description {
+  margin-top: 20px;
+}
+.ea-empty_wrap .ea-empty_bottom {
+  margin-top: 20px;
+}
 `;
 
 const emptyStatusSVG = `
@@ -16,6 +39,7 @@ export class EaEmpty extends Base {
     #wrap;
     #imageWrap;
     #descriptionWrap;
+    #slot;
 
     constructor() {
         super();
@@ -34,9 +58,16 @@ export class EaEmpty extends Base {
         descriptionWrap.innerHTML = `暂无数据`;
         wrap.appendChild(descriptionWrap);
 
+        const bottomWrap = document.createElement('div');
+        const slot = document.createElement('slot');
+        bottomWrap.className = 'ea-empty_bottom';
+        bottomWrap.appendChild(slot);
+        wrap.appendChild(bottomWrap);
+
         this.#wrap = wrap;
         this.#imageWrap = imageWrap;
         this.#descriptionWrap = descriptionWrap;
+        this.#slot = slot;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);

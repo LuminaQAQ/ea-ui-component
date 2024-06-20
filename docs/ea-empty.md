@@ -63,3 +63,31 @@ onMounted(() => {
 ## 底部内容
 
 使用默认插槽可在底部插入内容。
+
+<div class="demo">
+  <ea-empty>
+    <ea-button type="primary">刷新</ea-button>
+  </ea-empty>
+</div>
+
+```html
+<div class="demo">
+  <ea-empty>
+    <ea-button type="primary">刷新</ea-button>
+  </ea-empty>
+</div>
+```
+
+## Attributes
+
+| 参数        | 说明     | 类型   | 可选值 | 默认值 |
+| ----------- | -------- | ------ | ------ | ------ |
+| description | 描述     | string | -      | -      |
+| image       | 图片     | string | -      | -      |
+| image-size  | 图片大小 | number | -      | 80     |
+
+## Slots
+
+| 名称    | 说明                 |
+| ------- | -------------------- |
+| default | 底部内容(非具名插槽) |
