@@ -62,6 +62,7 @@ export default defineConfig({
           { text: 'Badge 徽标数', link: '/ea-badge' },
           { text: 'Avatar 头像', link: '/ea-avatar' },
           { text: "Skeleton 骨架屏", link: '/ea-skeleton' },
+          { text: "Empty 空状态", link: '/ea-empty' },
         ]
       },
     ],

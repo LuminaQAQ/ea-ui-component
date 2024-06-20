@@ -28,7 +28,7 @@
 
       "`;",
       "",
-      "export default class $1 extends Base {",
+      "export class Ea$1 extends Base {",
       "#wrap;",
 
       "constructor() {",
