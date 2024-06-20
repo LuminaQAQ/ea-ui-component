@@ -55,10 +55,44 @@ export class EaEmpty extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- image 自定义图片 -------
+    // #region
+    get image() {
+        return this.getAttribute('image') || "";
+    }
+
+    set image(value) {
+        if (!value) return;
+
+        this.setAttribute('image', value);
+        this.#imageWrap.innerHTML = `<img src="${value}" />`;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- image-size 自定义图片大小 -------
+    // #region
+    get imageSize() {
+        return this.getAttribute('image-size') || "128";
+    }
+
+    set imageSize(value) {
+        if (!value) return;
+
+        this.setAttribute('image-size', value);
+        this.#imageWrap.style.width = value + "px";
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
 
         this.description = this.description;
+
+        this.image = this.image;
+
+        this.imageSize = this.imageSize;
     }
 
     connectedCallback() {

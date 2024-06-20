@@ -15,8 +15,10 @@
 }
 .ea-empty_wrap .ea-empty_image {
   width: 8rem;
+  object-fit: cover;
 }
-.ea-empty_wrap .ea-empty_image svg {
+.ea-empty_wrap .ea-empty_image svg,
+.ea-empty_wrap .ea-empty_image img {
   width: 100%;
   height: 100%;
 }
