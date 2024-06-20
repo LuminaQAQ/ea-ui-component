@@ -96,7 +96,14 @@ export class EaEmpty extends Base {
         if (!value) return;
 
         this.setAttribute('image', value);
-        this.#imageWrap.innerHTML = `<img src="${value}" />`;
+
+        const image = new Image();
+        image.src = value;
+        image.onload = () => {
+            // this.#imageWrap.style.width = image.width + "px";
+            this.#imageWrap.innerHTML = `<img src="${value}" />`;
+        }
+
     }
     // #endregion
     // ------- end -------
