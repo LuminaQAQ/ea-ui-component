@@ -7,7 +7,7 @@ const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 
 :host {
-  --margin-right: 1rem;
+  --margin-right: 0rem;
   --border-radius: 6px;
   --border-size: 1px;
 }
