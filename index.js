@@ -21,6 +21,7 @@ import EaBadge from "./components/ea-badge/";
 import EaAvatar from "./components/ea-avatar/";
 import { EaSkeleton } from "./components/ea-skeleton/";
 import { EaSkeletonItem } from "./components/ea-skeleton/";
+import { EaEmpty } from "./components/ea-empty";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -48,3 +49,4 @@ register("ea-badge", EaBadge);
 register("ea-avatar", EaAvatar);
 register("ea-skeleton", EaSkeleton);
 register("ea-skeleton-item", EaSkeletonItem);
+register("ea-empty", EaEmpty);
