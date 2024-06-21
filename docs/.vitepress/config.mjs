@@ -63,6 +63,7 @@ export default defineConfig({
           { text: 'Avatar 头像', link: '/ea-avatar' },
           { text: "Skeleton 骨架屏", link: '/ea-skeleton' },
           { text: "Empty 空状态", link: '/ea-empty' },
+          { text: "Descriptions 描述列表", link: '/ea-descriptions' },
         ]
       },
     ],
