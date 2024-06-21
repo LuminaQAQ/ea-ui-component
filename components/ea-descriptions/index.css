@@ -1,0 +1,13 @@
+.ea-descriptions_wrap {
+  font-size: 14px;
+}
+.ea-descriptions_wrap .ea-descriptions_header {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.ea-descriptions_wrap .ea-descriptions_body table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
