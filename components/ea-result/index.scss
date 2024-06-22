@@ -1,0 +1,47 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+.ea-result_wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding: 40px 30px;
+
+  .ea-result_icon {
+    font-size: 3rem;
+
+    i[class="icon-ok-circled"] {
+      color: $color-success-bgc;
+    }
+    i[class="icon-cancel-circled"] {
+      color: $color-danger-bgc;
+    }
+    i[class="icon-attention-alt"] {
+      color: $color-warning-bgc;
+    }
+    i[class="icon-info"] {
+      color: $color-info-bgc;
+    }
+  }
+
+  .ea-result_title,
+  .ea-result_subtitle {
+    color: #5e6d82;
+    font-size: 14px;
+  }
+
+  .ea-result_title {
+    margin-top: 20px;
+  }
+
+  .ea-result_subtitle {
+    margin-top: 10px;
+  }
+
+  .ea-result_extra {
+    margin-top: 30px;
+  }
+}

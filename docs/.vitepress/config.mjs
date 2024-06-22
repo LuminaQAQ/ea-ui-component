@@ -64,6 +64,7 @@ export default defineConfig({
           { text: "Skeleton 骨架屏", link: '/ea-skeleton' },
           { text: "Empty 空状态", link: '/ea-empty' },
           { text: "Descriptions 描述列表", link: '/ea-descriptions' },
+          { text: "Result 结果", link: '/ea-result' },
         ]
       },
     ],
