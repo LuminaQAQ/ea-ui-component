@@ -5,6 +5,31 @@ const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 `;
 
+const contentTemplate = (item, colspan, hasBorder) => {
+    let label = item.getAttribute("label");
+    let content = item.innerHTML;
+
+    if (!label) {
+        label = item.querySelector('[slot="label"]').innerHTML || "";
+        
+        console.log(item.textContent);
+    }
+
+    const notBorder = `
+    <td class="ea-descriptions-item" colspan="${colspan}">
+        <span class="ea-descriptions-item_label">${label}:</span>
+        <span class="ea-descriptions-item_content">${content}</span>
+    </td>
+    `;
+
+    const border = `
+    <th class="ea-descriptions-item_label ea-descriptions-item_cell is-border" colspan="${1}">${label}</th>
+    <td class="ea-descriptions-item_content ea-descriptions-item_cell is-border" colspan="${colspan}">${content}</td>
+    `;
+
+    return hasBorder ? border : notBorder;
+}
+
 export class EaDescriptions extends Base {
     #wrap;
 
@@ -68,14 +93,25 @@ export class EaDescriptions extends Base {
     // #endregion
     // ------- end -------
 
-    initDescriptionsItem(colNumber, items) {
+    // ------- border 是否显示边框 -------
+    // #region
+    get border() {
+        return this.getAttrBoolean('border');
+    }
+
+    set border(value) {
+        this.toggleAttr('border', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    initDescriptionsItem(colNumber, items, hasBorder) {
         const length = Number(items.length);
 
         for (let i = 0; i < length; i += 3) {
             let colspanCount = 0;
             const tbody = document.createElement('tbody');
             const tr = document.createElement('tr');
-            tbody.appendChild(tr);
 
             for (let j = i; j < colNumber + i; j++) {
                 const colspan = Number(items[j]?.getAttribute("span")) || 1;
@@ -83,22 +119,10 @@ export class EaDescriptions extends Base {
 
                 if (temp > colNumber || !items[j]) break;
 
-
-                const td = document.createElement('td');
-                td.className = 'ea-descriptions-item_wrap';
-                td.colSpan = colspan;
-
-                td.innerHTML = `
-                    <span class="ea-descriptions-item_label">${items[j].getAttribute("label")}:</span>
-                    <span class="ea-descriptions-item_content">
-                        ${items[j].innerHTML}
-                    </span>
-                `;
-
-                // tr.appendChild(items[j].cloneNode(true));
-                tr.appendChild(td);
+                tr.innerHTML += contentTemplate(items[j], colspan, hasBorder);
             }
 
+            tbody.appendChild(tr);
             this.#table.appendChild(tbody);
         }
 
@@ -114,8 +138,10 @@ export class EaDescriptions extends Base {
 
         this.col = this.col;
 
+        this.border = this.border;
+
         const items = this.querySelectorAll('ea-descriptions-item');
-        this.initDescriptionsItem(this.col, items);
+        this.initDescriptionsItem(this.col, items, this.border);
     }
 
     connectedCallback() {

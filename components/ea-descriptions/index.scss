@@ -1,3 +1,6 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
 .ea-descriptions_wrap {
   font-size: 14px;
 
@@ -15,5 +18,20 @@
       border-collapse: collapse;
       table-layout: fixed;
     }
+  }
+
+  .ea-descriptions-item_label,
+  .ea-descriptions-item_content {
+    font-weight: normal;
+    font-size: 14px;
+
+    &.is-border {
+      border: 1px solid #ebeef5;
+    }
+  }
+
+  .ea-descriptions-item_cell {
+    text-align: left;
+    padding: 12px 10px;
   }
 }

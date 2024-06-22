@@ -19,4 +19,11 @@
     flex: 1;
     align-items: baseline;
   }
+
+  .ea-descriptions-item_label,
+  .ea-descriptions-item_content {
+    &.is-border {
+      border: 1px solid #ebeef5;
+    }
+  }
 }

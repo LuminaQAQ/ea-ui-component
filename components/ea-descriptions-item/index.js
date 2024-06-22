@@ -10,6 +10,8 @@ export class EaDescriptionsItem extends Base {
 
     #label;
 
+    #labelSlot;
+
     constructor() {
         super();
 
@@ -20,17 +22,21 @@ export class EaDescriptionsItem extends Base {
         wrap.colSpan = 1;
 
         const label = document.createElement('span');
+        const labelSlot = document.createElement('slot');
         label.className = 'ea-descriptions-item_label';
+        label.appendChild(labelSlot);
         wrap.appendChild(label);
 
         const content = document.createElement('span');
         const slot = document.createElement('slot');
         content.className = 'ea-descriptions-item_content';
+        labelSlot.name = 'label';
         content.appendChild(slot);
         wrap.appendChild(content);
 
         this.#wrap = wrap;
         this.#label = label;
+        this.#labelSlot = labelSlot;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
@@ -39,7 +45,7 @@ export class EaDescriptionsItem extends Base {
     // ------- label 该格的标题 -------
     // #region
     get label() {
-        return this.getAttribute('label');
+        return this.getAttribute('label') || '';
     }
 
     set label(value) {
