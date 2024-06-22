@@ -13,11 +13,6 @@
   border-radius: 8px;
 }
 
-.align-center {
-  display: flex;
-  align-items: center;
-}
-
 .row {
   display: flex;
   justify-content: space-around;
@@ -31,7 +26,7 @@
 .row.left {
   justify-content: flex-start;
 }
-.row.left > * {
+.row.left > *:not(ea-result) {
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
 }
@@ -81,6 +76,16 @@
 }
 .col section {
   text-align: center;
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
 }
 
 .main-icon-wrap {
