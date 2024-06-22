@@ -3,16 +3,62 @@ import Base from '../Base';
 
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
+
+.ea-descriptions_wrap {
+  font-size: 14px;
+}
+.ea-descriptions_wrap .ea-descriptions_header {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.ea-descriptions_wrap .ea-descriptions_body table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.ea-descriptions_wrap .ea-descriptions_body table th {
+  background-color: #fafafa;
+}
+.ea-descriptions_wrap .ea-descriptions_body table td {
+  vertical-align: baseline;
+}
+.ea-descriptions_wrap .ea-descriptions-item_label,
+.ea-descriptions_wrap .ea-descriptions-item_content {
+  font-weight: normal;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.ea-descriptions_wrap .ea-descriptions-item_label.is-border,
+.ea-descriptions_wrap .ea-descriptions-item_content.is-border {
+  border: 1px solid #ebeef5;
+}
+.ea-descriptions_wrap .ea-descriptions-item_cell {
+  text-align: left;
+  padding: 12px 10px;
+}
 `;
+
+const getThTemplate = (label, hasBorder) => {
+    return `
+    <th class="ea-descriptions-item_label ea-descriptions-item_cell ${hasBorder ? 'is-border' : ''}" colspan="${1}">
+        ${label}${hasBorder ? '' : ':'}
+    </th>`
+}
+
+const getTdTemplate = (text, hasBorder, colspan) => {
+    return `
+    <td class="ea-descriptions-item_content ea-descriptions-item_cell ${hasBorder ? 'is-border' : ''}" colspan="${colspan}">
+        ${text}
+    </td>`
+}
 
 const contentTemplate = (item, colspan, hasBorder) => {
     let label = item.getAttribute("label");
     let content = item.innerHTML;
 
     if (!label) {
-        label = item.querySelector('[slot="label"]').innerHTML || "";
-        
-        console.log(item.textContent);
+        label = item.querySelector('[slot="label"]')?.innerHTML || "";
     }
 
     const notBorder = `
@@ -76,6 +122,8 @@ export class EaDescriptions extends Base {
     }
 
     set title(value) {
+        this.setAttribute('title', value);
+
         this.#tableHeader.innerHTML = value;
     }
     // #endregion
@@ -105,7 +153,19 @@ export class EaDescriptions extends Base {
     // #endregion
     // ------- end -------
 
-    initDescriptionsItem(colNumber, items, hasBorder) {
+    // ------- direction 显示方向 -------
+    // #region
+    get direction() {
+        return this.getAttribute('direction') || "horizontal";
+    }
+
+    set direction(value) {
+        this.setAttribute('direction', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    initDescriptionsItem(colNumber, items, hasBorder, direction) {
         const length = Number(items.length);
 
         for (let i = 0; i < length; i += 3) {
@@ -113,16 +173,36 @@ export class EaDescriptions extends Base {
             const tbody = document.createElement('tbody');
             const tr = document.createElement('tr');
 
+            const th_tr = document.createElement('tr');
+            const td_tr = document.createElement('tr');
+
             for (let j = i; j < colNumber + i; j++) {
                 const colspan = Number(items[j]?.getAttribute("span")) || 1;
                 let temp = colspanCount + colspan;
 
                 if (temp > colNumber || !items[j]) break;
 
-                tr.innerHTML += contentTemplate(items[j], colspan, hasBorder);
+                switch (direction) {
+                    case "horizontal":
+                        tr.innerHTML += contentTemplate(items[j], colspan, hasBorder);
+                        break;
+                    case "vertical":
+                        th_tr.innerHTML += getThTemplate(items[j].getAttribute("label"), hasBorder);
+                        td_tr.innerHTML += getTdTemplate(items[j].innerHTML, hasBorder, colspan);
+                        break;
+                }
             }
 
-            tbody.appendChild(tr);
+            switch (direction) {
+                case "horizontal":
+                    tbody.appendChild(tr);
+                    break;
+                case "vertical":
+                    tbody.appendChild(th_tr);
+                    tbody.appendChild(td_tr);
+                    break;
+            }
+
             this.#table.appendChild(tbody);
         }
 
@@ -140,8 +220,10 @@ export class EaDescriptions extends Base {
 
         this.border = this.border;
 
+        this.direction = this.direction;
+
         const items = this.querySelectorAll('ea-descriptions-item');
-        this.initDescriptionsItem(this.col, items, this.border);
+        this.initDescriptionsItem(this.col, items, this.border, this.direction);
     }
 
     connectedCallback() {
