@@ -39,14 +39,29 @@ const stylesheet = `
 }
 `;
 
-const getThTemplate = (label, hasBorder) => {
+const getThTemplate_normal = (label, content, colspan) => {
+    return `
+    <td class="ea-descriptions-item" colspan="${colspan}">
+        <span class="ea-descriptions-item_label">${label}:</span>
+        <span class="ea-descriptions-item_content">${content}</span>
+    </td>
+    `;
+}
+
+const getTdTemplate_border = (label, content, colspan) => {
+    return `
+    <th class="ea-descriptions-item_label ea-descriptions-item_cell is-border" colspan="${1}">${label}</th>
+    <td class="ea-descriptions-item_content ea-descriptions-item_cell is-border" colspan="${colspan}">${content}</td>
+    `
+}
+const getThTemplate_direction = (label, hasBorder) => {
     return `
     <th class="ea-descriptions-item_label ea-descriptions-item_cell ${hasBorder ? 'is-border' : ''}" colspan="${1}">
         ${label}${hasBorder ? '' : ':'}
     </th>`
 }
 
-const getTdTemplate = (text, hasBorder, colspan) => {
+const getTdTemplate_direction = (text, hasBorder, colspan) => {
     return `
     <td class="ea-descriptions-item_content ea-descriptions-item_cell ${hasBorder ? 'is-border' : ''}" colspan="${colspan}">
         ${text}
@@ -57,23 +72,9 @@ const contentTemplate = (item, colspan, hasBorder) => {
     let label = item.getAttribute("label");
     let content = item.innerHTML;
 
-    if (!label) {
-        label = item.querySelector('[slot="label"]')?.innerHTML || "";
-    }
+    if (!label) label = item.querySelector('[slot="label"]')?.innerHTML || "";
 
-    const notBorder = `
-    <td class="ea-descriptions-item" colspan="${colspan}">
-        <span class="ea-descriptions-item_label">${label}:</span>
-        <span class="ea-descriptions-item_content">${content}</span>
-    </td>
-    `;
-
-    const border = `
-    <th class="ea-descriptions-item_label ea-descriptions-item_cell is-border" colspan="${1}">${label}</th>
-    <td class="ea-descriptions-item_content ea-descriptions-item_cell is-border" colspan="${colspan}">${content}</td>
-    `;
-
-    return hasBorder ? border : notBorder;
+    return hasBorder ? getTdTemplate_border(label, content, colspan) : getThTemplate_normal(label, content, colspan);
 }
 
 export class EaDescriptions extends Base {
@@ -171,36 +172,41 @@ export class EaDescriptions extends Base {
         for (let i = 0; i < length; i += 3) {
             let colspanCount = 0;
             const tbody = document.createElement('tbody');
-            const tr = document.createElement('tr');
-
-            const th_tr = document.createElement('tr');
-            const td_tr = document.createElement('tr');
-
-            for (let j = i; j < colNumber + i; j++) {
-                const colspan = Number(items[j]?.getAttribute("span")) || 1;
-                let temp = colspanCount + colspan;
-
-                if (temp > colNumber || !items[j]) break;
-
-                switch (direction) {
-                    case "horizontal":
-                        tr.innerHTML += contentTemplate(items[j], colspan, hasBorder);
-                        break;
-                    case "vertical":
-                        th_tr.innerHTML += getThTemplate(items[j].getAttribute("label"), hasBorder);
-                        td_tr.innerHTML += getTdTemplate(items[j].innerHTML, hasBorder, colspan);
-                        break;
-                }
-            }
 
             switch (direction) {
-                case "horizontal":
+                case "horizontal": {
+                    const tr = document.createElement('tr');
+
+                    for (let j = i; j < colNumber + i; j++) {
+                        const colspan = Number(items[j]?.getAttribute("span")) || 1;
+                        let temp = colspanCount + colspan;
+
+                        if (temp > colNumber || !items[j]) break;
+
+                        tr.innerHTML += contentTemplate(items[j], colspan, hasBorder);
+                    }
+
                     tbody.appendChild(tr);
                     break;
-                case "vertical":
+                }
+                case "vertical": {
+                    const th_tr = document.createElement('tr');
+                    const td_tr = document.createElement('tr');
+
+                    for (let j = i; j < colNumber + i; j++) {
+                        const colspan = Number(items[j]?.getAttribute("span")) || 1;
+                        let temp = colspanCount + colspan;
+
+                        if (temp > colNumber || !items[j]) break;
+
+                        th_tr.innerHTML += getThTemplate_direction(items[j].getAttribute("label"), hasBorder);
+                        td_tr.innerHTML += getTdTemplate_direction(items[j].innerHTML, hasBorder, colspan);
+                    }
+
                     tbody.appendChild(th_tr);
                     tbody.appendChild(td_tr);
                     break;
+                }
             }
 
             this.#table.appendChild(tbody);
