@@ -62,10 +62,32 @@ $themes-dark: (
     align-items: center;
     justify-content: space-between;
 
+    .ea-alert_title {
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: 0.5rem;
+      }
+    }
+
     .ea-alert_close-icon {
       color: #c0c4cc;
       cursor: pointer;
     }
+
+    &.ea-alert--center {
+      .ea-alert_title,
+      .ea-alert_close-icon {
+        margin-left: auto;
+      }
+    }
+  }
+
+  .ea-alert_description {
+    width: 100%;
+    margin: 5px 0 0;
+    font-size: 12px;
   }
 
   @each $theme-name, $theme-color in $themes-light {

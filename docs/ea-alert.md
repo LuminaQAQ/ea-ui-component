@@ -79,12 +79,85 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 
 表示某种状态时提升可读性。
 
+<div class="demo">
+    <ea-alert title="成功提示的文案" type="success" show-icon></ea-alert>
+    <ea-alert title="消息提示的文案" type="info" show-icon></ea-alert>
+    <ea-alert title="警告提示的文案" type="warning" show-icon></ea-alert>
+    <ea-alert title="错误提示的文案" type="error" show-icon></ea-alert>
+</div>
+
+```html
+<div class="demo">
+  <ea-alert title="成功提示的文案" type="success" show-icon></ea-alert>
+  <ea-alert title="消息提示的文案" type="info" show-icon></ea-alert>
+  <ea-alert title="警告提示的文案" type="warning" show-icon></ea-alert>
+  <ea-alert title="错误提示的文案" type="error" show-icon></ea-alert>
+</div>
+```
+
 ## 文字居中
 
 使用 center 属性让文字水平居中。
+
+<div class="demo">
+    <ea-alert title="成功提示的文案" type="success" center show-icon></ea-alert>
+    <ea-alert title="消息提示的文案" type="info" center show-icon></ea-alert>
+    <ea-alert title="警告提示的文案" type="warning" center show-icon></ea-alert>
+    <ea-alert title="错误提示的文案" type="error" center show-icon></ea-alert>
+</div>
+
+```html
+<div class="demo">
+  <ea-alert title="成功提示的文案" type="success" center show-icon></ea-alert>
+  <ea-alert title="消息提示的文案" type="info" center show-icon></ea-alert>
+  <ea-alert title="警告提示的文案" type="warning" center show-icon></ea-alert>
+  <ea-alert title="错误提示的文案" type="error" center show-icon></ea-alert>
+</div>
+```
 
 ## 带有辅助性文字介绍
 
 包含标题和内容，解释更详细的警告。
 
-## 带有 icon 和辅助性文字介绍
+<div class="demo">
+    <ea-alert title="带辅助性文字介绍" type="success" show-icon description="中国人认为宇宙万法的那个源头🤔，
+它是什么🧐，如如😋，
+对吧，所以这个词叫如带，我经常说如带😍，
+这个词有秘密，
+如带，如带了吗？🤨如带嘛😎，
+他真带了吗？如带☝🏻️🤓，
+到底带没带，如带😆，
+为什么说如带，他真的带了吗？😫
+如带，你看看，带没带？如带。🤗"></ea-alert>
+</div>
+
+```html
+<div class="demo">
+  <ea-alert
+    title="带辅助性文字介绍"
+    type="success"
+    show-icon
+    description="
+    中国人认为宇宙万法的那个源头🤔，
+    它是什么🧐，如如😋，
+    对吧，所以这个词叫如带，我经常说如带😍，
+    这个词有秘密，
+    如带，如带了吗？🤨如带嘛😎，
+    他真带了吗？如带☝🏻️🤓，
+    到底带没带，如带😆，
+    为什么说如带，他真的带了吗？😫
+    如带，你看看，带没带？如带。🤗"
+  ></ea-alert>
+</div>
+```
+
+## Attributes
+
+| 参数        | 说明               | 类型    | 可选值     | 默认值 |
+| ----------- | ------------------ | ------- | ---------- | ------ |
+| closable    | 是否可关闭         | boolean | —          | true   |
+| closeText   | 关闭按钮自定义文本 | string  | —          | —      |
+| description | 辅助性文字介绍     | string  | —          | —      |
+| effect      | 选择提供的主题     | string  | light/dark | light  |
+| show-icon   | 是否显示图标       | boolean | —          | false  |
+| title       | 标题               | string  | —          | —      |
