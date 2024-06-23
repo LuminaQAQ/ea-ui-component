@@ -75,6 +75,12 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 </div>
 ```
 
+```js
+document.querySelector("#callback").addEventListener("close", (e) => {
+  alert("Hello World");
+});
+```
+
 ## 带有 icon
 
 表示某种状态时提升可读性。
