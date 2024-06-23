@@ -25,6 +25,7 @@ import { EaEmpty } from "./components/ea-empty";
 import { EaDescriptions } from "./components/ea-descriptions/";
 import { EaDescriptionsItem } from "./components/ea-descriptions-item/";
 import { EaResult } from "./components/ea-result/";
+import { EaAlert } from "./components/ea-alert";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -56,3 +57,4 @@ register("ea-empty", EaEmpty);
 register("ea-descriptions", EaDescriptions);
 register("ea-descriptions-item", EaDescriptionsItem);
 register("ea-result", EaResult);
+register("ea-alert", EaAlert);
