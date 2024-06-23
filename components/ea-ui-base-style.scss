@@ -78,6 +78,15 @@ $color-tag-danger-bgc: #fef0f0;
 $color-tag-danger-text: #f56c6c;
 $color-tag-danger-border: #fbc4c4;
 
+$themes: (
+  default: $color-default-bgc,
+  primary: $color-primary-bgc,
+  success: $color-success-bgc,
+  info: $color-info-bgc,
+  warning: $color-warning-bgc,
+  danger: $color-danger-bgc,
+);
+
 // 链接的配色
 @mixin ea-link-theme($theme-name, $color) {
   &.#{$theme-name} {

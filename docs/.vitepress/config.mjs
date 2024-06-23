@@ -67,6 +67,12 @@ export default defineConfig({
           { text: "Result 结果", link: '/ea-result' },
         ]
       },
+      {
+        text: '提示组件',
+        items: [
+          { text: 'Alert 警告', link: '/ea-alert' },
+        ]
+      },
     ],
 
     socialLinks: [

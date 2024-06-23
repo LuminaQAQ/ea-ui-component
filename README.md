@@ -40,7 +40,6 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Empty 空状态
   - [x] Descriptions 描述列表
   - [x] Result 结果
-  - [ ] Statistic 统计数字
 
 - Notice
 
