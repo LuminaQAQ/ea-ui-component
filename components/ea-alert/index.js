@@ -76,6 +76,25 @@ export class EaAlert extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- close-text 关闭按钮文字 -------
+    // #region
+    get closeText() {
+        return this.getAttribute('close-text') || "";
+    }
+
+    set closeText(value) {
+        this.setAttribute('close-text', value);
+
+        if (value) {
+            const closeIcon = createElement('ea-icon', 'ea-alert_close-icon', value);
+            this.#alertContent.appendChild(closeIcon);
+        } else {
+            this.#alertContent.removeChild(this.#alertContent.lastChild);
+        }
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- effect 亮色与暗色主题 -------
     // #region
     get effect() {
@@ -90,6 +109,44 @@ export class EaAlert extends Base {
         } else {
             this.#wrap.classList.remove('ea-alert--dark');
         }
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- show-icon 是否显示图标 -------
+    // #region
+    get showIcon() {
+        return this.getAttrBoolean('show-icon') || false;
+    }
+
+    set showIcon(value) {
+        this.setAttribute('show-icon', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- center 是否居中 -------
+    // #region
+    get center() {
+        return this.getAttrBoolean('center') || false;
+    }
+
+    set center(value) {
+        this.setAttribute('center', value);
+
+        this.#alertContent.classList.toggle('ea-alert--center', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- description 提示描述 -------
+    // #region
+    get description() {
+        return this.getAttribute('description') || "";
+    }
+
+    set description(value) {
+        this.setAttribute('description', value);
     }
     // #endregion
     // ------- end -------
@@ -112,6 +169,27 @@ export class EaAlert extends Base {
         });
     }
 
+    initShowIconElement(type) {
+        const iconClass = {
+            success: 'ok-circled',
+            info: 'info',
+            warning: 'attention-alt',
+            error: 'cancel-circled'
+        }
+
+        const icon = createElement('i', `icon-${iconClass[type]}`);
+        icon.classList.add(`ea-alert--${type}`);
+        this.#alertTitle.insertBefore(icon, this.#alertTitle.firstChild);
+    }
+
+    initDescriptionElement(description) {
+        const descriptionElement = createElement('p', 'ea-alert_description');
+        this.#wrap.style.flexDirection = 'column';
+
+        descriptionElement.innerText = description;
+        this.#wrap.appendChild(descriptionElement);
+    }
+
     init() {
         const that = this;
 
@@ -123,7 +201,13 @@ export class EaAlert extends Base {
 
         this.effect = this.effect;
 
+        this.center = this.center;
+
         if (this.closable) this.initClosableElement(this.closable);
+
+        if (this.showIcon) this.initShowIconElement(this.type);
+
+        if (this.description) this.initDescriptionElement(this.description);
     }
 
     connectedCallback() {
