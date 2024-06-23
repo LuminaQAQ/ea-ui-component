@@ -11,7 +11,8 @@
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
-    "deploy": "gh-pages -d docs/.vitepress/dist"
+    "deploy": "gh-pages -d docs/.vitepress/dist",
+    "commit": "git add . && git commit && git push"
   },
   "dependencies": {
     "path": "^0.12.7"
