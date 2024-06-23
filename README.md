@@ -39,7 +39,7 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Skeleton 骨架屏
   - [x] Empty 空状态
   - [x] Descriptions 描述列表
-  - [ ] Result 结果
+  - [x] Result 结果
   - [ ] Statistic 统计数字
 
 - Notice
