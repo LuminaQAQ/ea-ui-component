@@ -14,3 +14,10 @@ export const createElement = (tagName, className, children) => {
 
     return element;
 };
+
+export const createSlotElement = (name) => {
+    const slot = document.createElement('slot');
+    slot.name = name;
+
+    return slot;
+};
