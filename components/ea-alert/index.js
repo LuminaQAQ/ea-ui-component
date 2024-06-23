@@ -65,9 +65,8 @@ export class EaAlert extends Base {
         const flag = this.getAttribute('closable');
 
         if (flag === null || flag === "true" || flag === "") return true;
-        if (flag === "false") return false;
 
-        return flag;
+        return false;
     }
 
     set closable(value) {
@@ -84,13 +83,6 @@ export class EaAlert extends Base {
 
     set closeText(value) {
         this.setAttribute('close-text', value);
-
-        if (value) {
-            const closeIcon = createElement('ea-icon', 'ea-alert_close-icon', value);
-            this.#alertContent.appendChild(closeIcon);
-        } else {
-            this.#alertContent.removeChild(this.#alertContent.lastChild);
-        }
     }
     // #endregion
     // ------- end -------
@@ -151,11 +143,11 @@ export class EaAlert extends Base {
     // #endregion
     // ------- end -------
 
-    initClosableElement(closable) {
+    initClosableElement(closable, closeText) {
         const that = this;
 
         const closeIcon = createElement('i', 'ea-alert_close-icon');
-        closable === true ? closeIcon.classList.add('icon-cancel') : closeIcon.innerText = closable;
+        closable === true && closeText === "" ? closeIcon.classList.add('icon-cancel') : closeIcon.innerText = closeText;
         this.#alertContent.appendChild(closeIcon);
 
         closeIcon.addEventListener('click', function () {
@@ -191,7 +183,6 @@ export class EaAlert extends Base {
     }
 
     init() {
-        const that = this;
 
         this.type = this.type;
 
@@ -199,11 +190,13 @@ export class EaAlert extends Base {
 
         this.closable = this.closable;
 
+        this.closeText = this.closeText;
+
         this.effect = this.effect;
 
         this.center = this.center;
 
-        if (this.closable) this.initClosableElement(this.closable);
+        if (this.closable) this.initClosableElement(this.closable, this.closeText);
 
         if (this.showIcon) this.initShowIconElement(this.type);
 

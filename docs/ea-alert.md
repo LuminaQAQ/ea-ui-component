@@ -23,7 +23,7 @@ onMounted(() => {
 
 <div class="demo">
     <ea-alert title="成功提示的文案" type="success"></ea-alert>
-    <ea-alert title="消息提示的文案" type="info"></ea-alert>
+    <ea-alert title="消息提示的文案"></ea-alert>
     <ea-alert title="警告提示的文案" type="warning"></ea-alert>
     <ea-alert title="错误提示的文案" type="error"></ea-alert>
 </div>
@@ -31,7 +31,7 @@ onMounted(() => {
 ```html
 <div class="demo">
   <ea-alert title="成功提示的文案" type="success"></ea-alert>
-  <ea-alert title="消息提示的文案" type="info"></ea-alert>
+  <ea-alert title="消息提示的文案"></ea-alert>
   <ea-alert title="警告提示的文案" type="warning"></ea-alert>
   <ea-alert title="错误提示的文案" type="error"></ea-alert>
 </div>
@@ -63,14 +63,14 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 
 <div class="demo">
     <ea-alert closable="false" title="不可关闭的alert" type="success"></ea-alert>
-    <ea-alert closable="知道了" title="消息提示的文案" type="info"></ea-alert>
+    <ea-alert close-text="知道了" title="消息提示的文案" type="info"></ea-alert>
     <ea-alert id="callback" title="警告提示的文案" type="warning"></ea-alert>
 </div>
 
 ```html
 <div class="demo">
   <ea-alert closable="false" title="不可关闭的alert" type="success"></ea-alert>
-  <ea-alert closable="知道了" title="消息提示的文案" type="info"></ea-alert>
+  <ea-alert close-text="知道了" title="消息提示的文案" type="info"></ea-alert>
   <ea-alert id="callback" title="警告提示的文案" type="warning"></ea-alert>
 </div>
 ```
@@ -153,11 +153,19 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 
 ## Attributes
 
-| 参数        | 说明               | 类型    | 可选值     | 默认值 |
-| ----------- | ------------------ | ------- | ---------- | ------ |
-| closable    | 是否可关闭         | boolean | —          | true   |
-| closeText   | 关闭按钮自定义文本 | string  | —          | —      |
-| description | 辅助性文字介绍     | string  | —          | —      |
-| effect      | 选择提供的主题     | string  | light/dark | light  |
-| show-icon   | 是否显示图标       | boolean | —          | false  |
-| title       | 标题               | string  | —          | —      |
+| 参数        | 说明               | 类型    | 可选值                     | 默认值 |
+| ----------- | ------------------ | ------- | -------------------------- | ------ |
+| title       | 标题               | string  | —                          | —      |
+| type        | 主题               | string  | success/warning/info/error | info   |
+| description | 辅助性文字介绍     | string  | —                          | —      |
+| closable    | 是否可关闭         | boolean | —                          | true   |
+| center      | 文字是否居中       | boolean | —                          | false  |
+| close-text  | 关闭按钮自定义文本 | string  | —                          | —      |
+| show-icon   | 是否显示图标       | boolean | —                          | false  |
+| effect      | 选择提供的主题     | string  | light/dark                 | light  |
+
+## Events
+
+| 事件名称 | 说明              | 回调参数 |
+| -------- | ----------------- | -------- |
+| close    | 关闭 alert 时触发 | —        |
