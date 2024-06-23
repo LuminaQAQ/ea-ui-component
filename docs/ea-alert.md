@@ -4,6 +4,10 @@ import { onMounted } from 'vue'
 onMounted(() => {
     import('../index.js')
     import('./index.scss')
+
+    document.querySelector('#callback').addEventListener('close', (e) => {
+        alert("Hello World");
+    })
 })
 </script>
 
@@ -44,9 +48,32 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
     <ea-alert effect="dark" title="错误提示的文案" type="error"></ea-alert>
 </div>
 
+```html
+<div class="demo">
+  <ea-alert effect="dark" title="成功提示的文案" type="success"></ea-alert>
+  <ea-alert effect="dark" title="消息提示的文案" type="info"></ea-alert>
+  <ea-alert effect="dark" title="警告提示的文案" type="warning"></ea-alert>
+  <ea-alert effect="dark" title="错误提示的文案" type="error"></ea-alert>
+</div>
+```
+
 ## 自定义关闭按钮
 
 自定义关闭按钮为文字或其他符号。
+
+<div class="demo">
+    <ea-alert closable="false" title="不可关闭的alert" type="success"></ea-alert>
+    <ea-alert closable="知道了" title="消息提示的文案" type="info"></ea-alert>
+    <ea-alert id="callback" title="警告提示的文案" type="warning"></ea-alert>
+</div>
+
+```html
+<div class="demo">
+  <ea-alert closable="false" title="不可关闭的alert" type="success"></ea-alert>
+  <ea-alert closable="知道了" title="消息提示的文案" type="info"></ea-alert>
+  <ea-alert id="callback" title="警告提示的文案" type="warning"></ea-alert>
+</div>
+```
 
 ## 带有 icon
 
