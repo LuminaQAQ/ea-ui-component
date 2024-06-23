@@ -61,6 +61,11 @@ $themes-dark: (
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .ea-alert_close-icon {
+      color: #c0c4cc;
+      cursor: pointer;
+    }
   }
 
   @each $theme-name, $theme-color in $themes-light {
@@ -71,12 +76,11 @@ $themes-dark: (
       &.ea-alert--dark {
         color: #fff;
         background-color: map-get($theme-color, text);
+
+        .ea-alert_close-icon {
+          color: #fff;
+        }
       }
     }
-  }
-
-  .ea-alert_close-icon {
-    color: #c0c4cc;
-    cursor: pointer;
   }
 }

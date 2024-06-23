@@ -62,7 +62,12 @@ export class EaAlert extends Base {
     // ------- closable 是否可关闭 -------
     // #region
     get closable() {
-        return this.getAttrBoolean('closable') || true;
+        const flag = this.getAttribute('closable');
+
+        if (flag === null || flag === "true" || flag === "") return true;
+        if (flag === "false") return false;
+
+        return flag;
     }
 
     set closable(value) {
@@ -89,16 +94,17 @@ export class EaAlert extends Base {
     // #endregion
     // ------- end -------
 
-    initClosableElement() {
+    initClosableElement(closable) {
         const that = this;
 
         const closeIcon = createElement('i', 'ea-alert_close-icon');
-        closeIcon.classList.add('icon-cancel');
-
+        closable === true ? closeIcon.classList.add('icon-cancel') : closeIcon.innerText = closable;
         this.#alertContent.appendChild(closeIcon);
 
         closeIcon.addEventListener('click', function () {
             that.#wrap.style.opacity = 0;
+
+            that.dispatchEvent(new CustomEvent('close', { detail: { target: that } }));
         });
 
         this.#wrap.addEventListener('transitionend', function () {
@@ -117,7 +123,7 @@ export class EaAlert extends Base {
 
         this.effect = this.effect;
 
-        if (this.closable) this.initClosableElement();
+        if (this.closable) this.initClosableElement(this.closable);
     }
 
     connectedCallback() {
