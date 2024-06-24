@@ -27,6 +27,8 @@ import { EaDescriptionsItem } from "./components/ea-descriptions-item/";
 import { EaResult } from "./components/ea-result/";
 import { EaAlert } from "./components/ea-alert";
 import { EaLoading } from "./components/ea-loading";
+import { EaMessageElement } from "./components/ea-message";
+
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
         window.customElements.define(name, component);
@@ -59,3 +61,4 @@ register("ea-descriptions-item", EaDescriptionsItem);
 register("ea-result", EaResult);
 register("ea-alert", EaAlert);
 register("ea-loading", EaLoading);
+register("ea-message", EaMessageElement);
