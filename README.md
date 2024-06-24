@@ -43,8 +43,8 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
 
 - Notice
 
-  - [ ] Alert 警告
-  - [ ] Loading 加载
+  - [x] Alert 警告
+  - [x] Loading 加载
   - [ ] Message 消息提示
   - [ ] MessageBox 弹框
   - [ ] Notification 通知
