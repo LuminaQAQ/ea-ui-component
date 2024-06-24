@@ -139,6 +139,30 @@ document.querySelector("#btn").addEventListener("click", (e) => {
 </div>
 ```
 
+```js
+document.querySelector("#fullscreenBtn").addEventListener("click", (e) => {
+  const isLoading = document.querySelector("#fullscreenLoading");
+  isLoading.loading = !isLoading.loading;
+
+  let timer = setTimeout(() => {
+    isLoading.loading = false;
+    clearTimeout(timer);
+    timer = null;
+  }, 2000);
+});
+
+document.querySelector("#fullscreenLockBtn").addEventListener("click", (e) => {
+  const isLoading = document.querySelector("#fullscreenLockLoading");
+  isLoading.loading = !isLoading.loading;
+
+  let timer = setTimeout(() => {
+    isLoading.loading = false;
+    clearTimeout(timer);
+    timer = null;
+  }, 2000);
+});
+```
+
 ## Attributes
 
 | 参数         | 说明             | 类型    | 可选值 | 默认值                 |
