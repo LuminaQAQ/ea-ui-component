@@ -71,7 +71,8 @@ export default defineConfig({
         text: '提示组件',
         items: [
           { text: 'Alert 警告', link: '/ea-alert' },
-          { text: 'Loading 加载', link: '/ea-loading' }
+          { text: 'Loading 加载', link: '/ea-loading' },
+          { text: 'Message 消息提示', link: '/ea-message' },
         ]
       },
     ],
