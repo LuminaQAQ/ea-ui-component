@@ -1,5 +1,65 @@
 @import "../ea-ui-base-style.scss";
 @import "../ea-icon/index.scss";
 
+$themes-light: (
+  success: (
+    bgc: #f0f9eb,
+    text: #67c23a,
+  ),
+  info: (
+    bgc: #f4f4f5,
+    text: #909399,
+  ),
+  warning: (
+    bgc: #fdf6ec,
+    text: #e6a23c,
+  ),
+  error: (
+    bgc: #fef0f0,
+    text: #f56c6c,
+  ),
+);
+
 .ea-message_wrap {
+  position: fixed;
+  left: 50%;
+  z-index: 999;
+
+  display: flex;
+  align-items: center;
+
+  padding: 15px 15px 15px 20px;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+
+  top: -100%;
+  transform-origin: center;
+  opacity: 0;
+  transform: translate(-50%, 0);
+
+  min-width: 380px;
+
+  overflow: hidden;
+  background-color: black;
+
+  transition: opacity 0.3s, top 0.3s;
+
+  .ea-icon-wrap {
+    margin-right: 0.5rem;
+
+    line-height: 1;
+  }
+
+  .ea-text-content {
+    line-height: 1;
+
+    vertical-align: middle;
+  }
+
+  @each $theme-name, $theme-color in $themes-light {
+    &.ea-message--#{$theme-name} {
+      background-color: map-get($theme-color, bgc);
+      color: map-get($theme-color, text);
+    }
+  }
 }
