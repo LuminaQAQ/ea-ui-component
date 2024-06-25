@@ -47,14 +47,25 @@ onMounted(() => {
 })
 </script>
 
+# Message 消息提示
+
+常用于主动操作后的反馈提示。与 Notification 的区别是后者更多用于系统级通知的被动提醒。
+
+## 基础用法
+
+从顶部出现，3 秒后自动消失。
+
 <div class="demo">
     <ea-button id="messageTextBtn">文本类消息提示(info)</ea-button>
-    &emsp;
+</div>
+
+## 不同状态
+
+用来显示「成功、警告、消息、错误」类的操作反馈。
+
+<div class="row left">
     <ea-button id="messageObjectBtn">对象类消息提示(info)</ea-button>
-    &emsp;
     <ea-button id="messageSuccessObjectBtn" type="success">对象类消息提示(success)</ea-button>
-    &emsp;
     <ea-button id="messageErrorObjectBtn" type="danger">对象类消息提示(error)</ea-button>
-    &emsp;
     <ea-button id="messageWarningObjectBtn" type="warning">对象类消息提示(warning)</ea-button>
 </div>
