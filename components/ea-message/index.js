@@ -4,6 +4,52 @@ import { createElement } from '../../utils/createElement.js';
 
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
+
+.ea-message_wrap {
+  position: fixed;
+  left: 50%;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  padding: 15px 15px 15px 20px;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  top: -100%;
+  transform-origin: center;
+  opacity: 0;
+  transform: translate(-50%, 0);
+  min-width: 380px;
+  overflow: hidden;
+  background-color: black;
+  transition: opacity 0.3s, top 0.3s;
+}
+.ea-message_wrap .ea-icon-wrap {
+  margin-right: 0.5rem;
+  line-height: 1;
+}
+.ea-message_wrap .ea-text-content {
+  line-height: 1;
+  vertical-align: middle;
+}
+.ea-message_wrap .ea-close-icon {
+  margin-left: auto;
+}
+.ea-message_wrap.ea-message--success {
+  background-color: #f0f9eb;
+  color: #67c23a;
+}
+.ea-message_wrap.ea-message--info {
+  background-color: #f4f4f5;
+  color: #909399;
+}
+.ea-message_wrap.ea-message--warning {
+  background-color: #fdf6ec;
+  color: #e6a23c;
+}
+.ea-message_wrap.ea-message--error {
+  background-color: #fef0f0;
+  color: #f56c6c;
+}
 `;
 
 export class EaMessageElement extends Base {
@@ -37,6 +83,7 @@ export class EaMessageElement extends Base {
         this.#icon = icon;
         this.#textContent = textContent;
         this.#closeWrap = closeIcon;
+        this.closeWrap = closeIcon;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
@@ -177,76 +224,4 @@ export class EaMessageElement extends Base {
             });
         }
     }
-}
-
-
-export class EaMessage {
-    constructor() {
-    }
-
-    /**
-     * 处理字符串型消息
-     * @param {Element} el EaMessage元素
-     * @param {String} tip 文本
-     */
-    handleStringMsg(el, tip) {
-        el.text = tip;
-        el.type = "info";
-        el.hasClose = false;
-    }
-
-    /**
-     * 处理对象型消息
-     * @param {Element} el EaMessage元素
-     * @param {String} tips 文本
-     * @param {*} attrs 属性列表
-     */
-    handleObjectMsg(el, tips, attrs) {
-        for (const k in tips) {
-            if (attrs.includes(k)) el[k] = tips[k];
-        }
-
-        if (!Object.keys(tips).includes("type")) el.type = "info";
-    }
-
-    /**
-     * 处理消失的时长
-     * @param {*} el EaMessage元素
-     * @param {*} duration 时间间隔
-     */
-    handleDuration(el, duration = 3) {
-        if (duration === 0) return;
-
-        let timer = setTimeout(() => {
-            el.show = false;
-
-            clearTimeout(timer);
-            timer = null;
-        }, duration * 1000 + 40);
-    }
-
-    open(tip) {
-        const eaMessage = document.createElement('ea-message');
-        document.body.appendChild(eaMessage);
-
-        if (typeof tip === 'string') {
-            this.handleStringMsg(eaMessage, tip);
-            this.handleDuration(eaMessage);
-        } else if (typeof tip === 'object') {
-            this.handleObjectMsg(eaMessage, tip, eaMessage.attrs);
-            this.handleDuration(eaMessage, tip.duration);
-        }
-
-        setTimeout(() => {
-            eaMessage.show = true;
-        }, 20);
-
-        return {
-            onClose(fn) {
-                if (typeof fn === 'function') fn();
-            }
-        }
-    }
-
-
 }

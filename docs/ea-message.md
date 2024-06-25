@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
-import { EaMessage } from '../components/ea-message/index.js'
+import { EaMessage } from '../components/ea-message/MessageClass.js'
 
 onMounted(() => {
     import('../index.js')
@@ -92,6 +92,14 @@ onMounted(() => {
             text: "3",
             showClose: true,
             center: true,
+        })
+    })
+
+    document.getElementById('closeEventBtn').addEventListener('click', () => {
+        message.open({
+            text: "3",
+            showClose: true,
+            center: true,
         }).onClose(() => {
             alert('关闭了');
         });
@@ -104,7 +112,7 @@ onMounted(() => {
 常用于主动操作后的反馈提示。与 Notification 的区别是后者更多用于系统级通知的被动提醒。
 
 ```js
-import { EaMessage } from "../components/ea-message/index.js";
+import { EaMessage } from "../components/ea-message/MessageClass.js";
 ```
 
 ## 基础用法
@@ -258,7 +266,15 @@ document
 ```
 
 ```js
-
+document
+  .getElementById("centerMessageObjectBtn")
+  .addEventListener("click", () => {
+    message.open({
+      text: "3",
+      showClose: true,
+      center: true,
+    });
+  });
 ```
 
 ## close 事件
@@ -275,19 +291,17 @@ document
 
 ```js
 const message = new EaMessage();
-document
-  .getElementById("centerMessageObjectBtn")
-  .addEventListener("click", () => {
-    message
-      .open({
-        text: "3",
-        showClose: true,
-        center: true,
-      })
-      .onClose(() => {
-        alert("关闭了");
-      });
-  });
+document.getElementById("closeEventBtn").addEventListener("click", () => {
+  message
+    .open({
+      text: "3",
+      showClose: true,
+      center: true,
+    })
+    .onClose(() => {
+      alert("关闭了");
+    });
+});
 ```
 
 ## Attributes
