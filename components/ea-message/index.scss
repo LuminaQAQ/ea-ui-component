@@ -56,6 +56,10 @@ $themes-light: (
     vertical-align: middle;
   }
 
+  .ea-close-icon {
+    margin-left: auto;
+  }
+
   @each $theme-name, $theme-color in $themes-light {
     &.ea-message--#{$theme-name} {
       background-color: map-get($theme-color, bgc);

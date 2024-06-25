@@ -13,6 +13,8 @@ export class EaMessageElement extends Base {
 
     #textContent;
 
+    #closeWrap;
+
     constructor() {
         super();
 
@@ -26,18 +28,22 @@ export class EaMessageElement extends Base {
         const textContent = createElement('div', 'ea-text-content');
         wrap.appendChild(textContent);
 
+        const closeIcon = createElement('i', 'ea-close-icon icon-cancel');
+        wrap.appendChild(closeIcon);
+        closeIcon.style.display = 'none';
+
         this.#wrap = wrap;
         this.wrap = wrap;
         this.#icon = icon;
         this.#textContent = textContent;
-
+        this.#closeWrap = closeIcon;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
     }
 
     get attrs() {
-        return ["show", "text", "icon", "type"];
+        return ["show", "text", "icon", "type", "showClose", "center"];
     }
 
     get iconList() {
@@ -112,12 +118,52 @@ export class EaMessageElement extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- showClose 提示框的关闭按钮 -------
+    // #region
+    get showClose() {
+        return this.getAttrBoolean('showClose') || false;
+    }
+
+    set showClose(value) {
+        this.setAttribute('showClose', value);
+
+        if (value) {
+            this.#closeWrap.style.display = "block";
+        } else {
+            this.#closeWrap.style.display = "none";
+        }
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- center 提示框是否居中 -------
+    // #region
+    get center() {
+        return this.getAttrBoolean('center') || false;
+    }
+
+    set center(value) {
+        this.setAttribute('center', value);
+
+        if (value) {
+            this.#icon.style.marginLeft = `auto`;
+        } else {
+            this.#icon.style.marginLeft = `0`;
+        }
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         const that = this;
     }
 
     connectedCallback() {
         this.init();
+
+        this.#closeWrap.addEventListener('click', () => {
+            this.show = false;
+        });
     }
 
     disconnectedCallback() {
@@ -146,6 +192,7 @@ export class EaMessage {
     handleStringMsg(el, tip) {
         el.text = tip;
         el.type = "info";
+        el.hasClose = false;
     }
 
     /**
@@ -158,6 +205,8 @@ export class EaMessage {
         for (const k in tips) {
             if (attrs.includes(k)) el[k] = tips[k];
         }
+
+        if (!Object.keys(tips).includes("type")) el.type = "info";
     }
 
     /**
@@ -165,7 +214,9 @@ export class EaMessage {
      * @param {*} el EaMessage元素
      * @param {*} duration 时间间隔
      */
-    handleDuration(el, duration = 30) {
+    handleDuration(el, duration = 3) {
+        if (duration === 0) return;
+
         let timer = setTimeout(() => {
             el.show = false;
 
@@ -189,5 +240,13 @@ export class EaMessage {
         setTimeout(() => {
             eaMessage.show = true;
         }, 20);
+
+        return {
+            onClose(fn) {
+                if (typeof fn === 'function') fn();
+            }
+        }
     }
+
+
 }

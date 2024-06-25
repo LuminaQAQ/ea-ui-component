@@ -32,6 +32,9 @@
   line-height: 1;
   vertical-align: middle;
 }
+.ea-message_wrap .ea-close-icon {
+  margin-left: auto;
+}
 .ea-message_wrap.ea-message--success {
   background-color: #f0f9eb;
   color: #67c23a;
