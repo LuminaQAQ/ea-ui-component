@@ -64,7 +64,7 @@ export class EaMessage {
             onClose(fn) {
                 if (typeof fn === 'function') eaMessage.addEventListener('click', function () {
                     fn();
-                }) 
+                })
             }
         }
     }
