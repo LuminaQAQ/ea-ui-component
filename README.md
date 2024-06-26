@@ -46,19 +46,18 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Alert 警告
   - [x] Loading 加载
   - [x] Message 消息提示
-  - [ ] MessageBox 弹框
-  - [ ] Notification 通知
+  - [x] MessageBox 弹框
 
 - Others
 
-  - [ ] Dialog 对话框
-  - [ ] Tooltip 文字提示
-  - [ ] Popover 弹出框
   - [ ] Card 卡片
   - [ ] Carousel 走马灯
   - [ ] TimeLine 时间线
-  - [ ] Divider 分割线
   - [ ] Backtop 回到顶部
+  - [ ] Dialog 对话框
+  - [ ] Tooltip 文字提示
+  - [ ] Popover 弹出框
+  - [ ] Divider 分割线
 
 ## 下面是 element 框架的所有组件(好多:sob:)
 
