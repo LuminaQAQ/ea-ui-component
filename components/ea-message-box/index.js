@@ -4,9 +4,66 @@ import { createElement } from "../../utils/createElement.js"
 
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
+
+.ea-dialog_wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2024;
+}
+.ea-dialog_wrap .ea-dialog_board {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: aliceblue;
+  width: 420px;
+  padding-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid #ebeef5;
+  box-sizing: 0 2px 12px 0;
+  font-size: 18px;
+  text-align: left;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_header {
+  padding: 15px 15px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_header .ea-dialog_header-title {
+  font-size: 18px;
+  line-height: 1;
+  color: #303133;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_header .ea-dialog_header-close {
+  display: inline-block;
+  font-size: 16px;
+  color: #909399;
+  cursor: pointer;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_content {
+  padding: 10px 15px;
+  color: #606266;
+  font-size: 14px;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_footer {
+  padding: 5px 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_footer :first-child {
+  margin-right: 0.5rem;
+}
 `;
 
-export class EaDialogElement extends Base {
+export class EaMessageBoxElement extends Base {
     #wrap;
 
     #headerWrap;
@@ -27,7 +84,7 @@ export class EaDialogElement extends Base {
         const headerTitle = createElement('span', 'ea-dialog_header-title');
         const headerClose = createElement('i', 'ea-dialog_header-close icon-cancel');
         headerClose.addEventListener('click', () => {
-            this.dispatchEvent(new CustomEvent('close'));
+            this.dispatchEvent(new CustomEvent('cancel'));
         });
         const header = createElement('div', 'ea-dialog_header', [headerTitle, headerClose]);
 
@@ -100,7 +157,7 @@ export class EaDialogElement extends Base {
         this.setAttribute('confirmButtonText', val);
 
         if (val || val !== '') {
-            this.#confirmButton.innerHTML = `<ea-button type="primary">${val}</ea-button>`;
+            this.#confirmButton.innerHTML = `<ea-button size="medium" type="primary">${val}</ea-button>`;
 
             this.#confirmButton.addEventListener('click', () => {
                 that.dispatchEvent(new CustomEvent('confirm'));
@@ -112,7 +169,22 @@ export class EaDialogElement extends Base {
 
     // ------- cancelButtonText 取消按钮文本 -------
     // #region
+    get cancelButtonText() {
+        return this.getAttribute('cancelButtonText');
+    }
 
+    set cancelButtonText(val) {
+        const that = this;
+        this.setAttribute('cancelButtonText', val);
+
+        if (val || val !== '') {
+            this.#cancelButton.innerHTML = `<ea-button size="medium">${val}</ea-button>`;
+
+            this.#cancelButton.addEventListener('click', () => {
+                that.dispatchEvent(new CustomEvent('cancel'));
+            });
+        }
+    }
     // #endregion
     // ------- end -------
 
