@@ -10,9 +10,6 @@ onMounted(() => {
 
     const $message = new EaMessage();
 
-    const testAlert = new EaMessageBoxAlert();
-    console.log(testAlert)
-
     const $alert = new EaMessageBox();
     document.querySelector("#openAlertMessageBox").addEventListener("click", () => {
         $alert
