@@ -55,5 +55,10 @@
 }
 .ea-dialog_wrap .ea-dialog_board .ea-dialog_footer {
   padding: 5px 15px 0;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_footer :first-child {
+  margin-right: 0.5rem;
 }

@@ -73,7 +73,7 @@ export default defineConfig({
           { text: 'Alert 警告', link: '/ea-alert' },
           { text: 'Loading 加载', link: '/ea-loading' },
           { text: 'Message 消息提示', link: '/ea-message' },
-          { text: 'Dialog 消息框', link: '/ea-dialog' },
+          { text: 'MessageBox 消息框', link: '/ea-message-box' },
         ]
       },
     ],
