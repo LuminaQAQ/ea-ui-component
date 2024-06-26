@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted } from 'vue'
-import { EaDialog } from "../components/ea-dialog/EaMessageBox.js"
 import { EaMessage } from "../components/ea-message/MessageClass.js"
+
+import { EaDialog } from "../components/ea-dialog/EaDialogClass.js"
 
 onMounted(() => {
     import('../index.js')

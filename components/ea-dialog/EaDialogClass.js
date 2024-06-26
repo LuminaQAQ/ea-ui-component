@@ -22,24 +22,24 @@ export class EaDialog {
     open(content, title, options) {
         const that = this;
 
-        const EaMessageBox = createElement('ea-dialog', '');
-        document.body.appendChild(EaMessageBox);
+        const EaDialog = createElement('ea-dialog', '');
+        document.body.appendChild(EaDialog);
 
-        EaMessageBox.open = true;
+        EaDialog.open = true;
 
-        EaMessageBox.content = content;
-        EaMessageBox.title = title;
+        EaDialog.content = content;
+        EaDialog.title = title;
 
-        this.handleElementAttrs(EaMessageBox, options, this.attrs);
+        this.handleElementAttrs(EaDialog, options, this.attrs);
 
         return new Promise((resolve, reject) => {
-            EaMessageBox.addEventListener('close', () => {
-                that.close(EaMessageBox);
+            EaDialog.addEventListener('close', () => {
+                that.close(EaDialog);
                 reject();
             });
 
-            EaMessageBox.addEventListener('confirm', () => {
-                that.close(EaMessageBox);
+            EaDialog.addEventListener('confirm', () => {
+                that.close(EaDialog);
                 resolve(true);
             });
         });
