@@ -171,3 +171,10 @@ onMounted(() => {
 | ------ | -------- | ------ | ---------------------- | ------ |
 | header | 卡片标题 | string | —                      | —      |
 | shadow | 卡片阴影 | string | always / hover / never | always |
+
+## Slot
+
+| name   | 说明     |
+| ------ | -------- |
+| —      | 卡片内容 |
+| header | 卡片标题 |
