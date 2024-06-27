@@ -29,6 +29,7 @@ import { EaAlert } from "./components/ea-alert";
 import { EaLoading } from "./components/ea-loading";
 import { EaMessageElement } from "./components/ea-message";
 import { EaMessageBoxElement } from "./components/ea-message-box/";
+import { EaCard } from "./components/ea-card";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -64,3 +65,4 @@ register("ea-alert", EaAlert);
 register("ea-loading", EaLoading);
 register("ea-message", EaMessageElement);
 register("ea-message-box", EaMessageBoxElement);
+register("ea-card", EaCard);
