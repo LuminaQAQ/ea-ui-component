@@ -30,6 +30,7 @@ import { EaLoading } from "./components/ea-loading";
 import { EaMessageElement } from "./components/ea-message";
 import { EaMessageBoxElement } from "./components/ea-message-box/";
 import { EaCard } from "./components/ea-card";
+import { EaCarousel, EaCarouselItem } from "./components/ea-carousel";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -66,3 +67,5 @@ register("ea-loading", EaLoading);
 register("ea-message", EaMessageElement);
 register("ea-message-box", EaMessageBoxElement);
 register("ea-card", EaCard);
+register("ea-carousel", EaCarousel);
+register("ea-carousel-item", EaCarouselItem);
