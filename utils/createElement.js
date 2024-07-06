@@ -1,3 +1,10 @@
+/**
+ * 创建元素
+ * @param {String} tagName 
+ * @param {String} className 
+ * @param {HTMLElement} children 
+ * @returns {HTMLElement}
+ */
 export const createElement = (tagName, className, children) => {
     const element = document.createElement(tagName || 'div');
     element.className = className || '';
