@@ -76,6 +76,19 @@ export class EaCarousel extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- trigger 轮播图指示器触发方式 -------
+    // #region
+    get trigger() {
+        const trigger = this.getAttribute('trigger') || "hover";
+        return ["click", "hover"].includes(trigger) ? trigger : "click";
+    }
+
+    set trigger(value) {
+        this.setAttribute('trigger', value);
+    }
+    // #endregion
+    // ------- end -------
+
     /**
      * 处理索引溢出问题
      * @param {number} val - 需要检查和调整的索引值
@@ -83,7 +96,7 @@ export class EaCarousel extends Base {
      */
     #handleIndexOverflow(val) {
         // 获取容器孩子的数量
-        const length = document.querySelectorAll('ea-carousel-item').length - 1;
+        const length = this.querySelectorAll('ea-carousel-item').length - 1;
 
         // 如果索引值小于0，将其设置为最后一个索引
         if (val < 0) {
@@ -102,7 +115,7 @@ export class EaCarousel extends Base {
      */
     #initCarouselItem() {
         // 获取所有轮播项元素
-        const items = document.querySelectorAll('ea-carousel-item');
+        const items = this.querySelectorAll('ea-carousel-item');
 
         // 遍历每个轮播项
         items.forEach((item, index) => {
@@ -122,7 +135,7 @@ export class EaCarousel extends Base {
         const that = this;
 
         // 获取所有轮播项元素
-        const items = document.querySelectorAll('ea-carousel-item');
+        const items = this.querySelectorAll('ea-carousel-item');
         items.forEach((item, index) => {
             const indicator = createElement('div', 'ea-carousel-item_indicator');
             this.#indicatorWrap.appendChild(indicator);
@@ -131,10 +144,10 @@ export class EaCarousel extends Base {
         // 遍历每个指示器
         const indicators = this.#indicatorWrap.querySelectorAll('.ea-carousel-item_indicator');
         indicators.forEach((indicator, index) => {
-            indicator.addEventListener('mouseenter', () => {
+            indicator.addEventListener(this.trigger === 'click' ? 'click' : 'mouseenter', () => {
                 that.index = index;
 
-                indicators.forEach((item, index) => {
+                indicators.forEach((item) => {
                     item.classList.remove('ea-carousel-item_active');
                 })
                 indicator.classList.add('ea-carousel-item_active');
@@ -216,6 +229,8 @@ export class EaCarousel extends Base {
         const that = this;
 
         this.direction = this.direction;
+
+        this.trigger = this.trigger;
 
         this.#initCarouselItem();
         this.#initArrowItem();
