@@ -417,7 +417,7 @@ const stylesheet = `
 }
 `;
 
-export default class EaButtonGroup extends HTMLElement {
+export  class EaButtonGroup extends HTMLElement {
 
   constructor() {
     super();
@@ -464,4 +464,8 @@ export default class EaButtonGroup extends HTMLElement {
       }
     })
   }
+}
+
+if (!window.customElements.get("ea-button-group")) {
+  window.customElements.define("ea-button-group", EaButtonGroup);
 }

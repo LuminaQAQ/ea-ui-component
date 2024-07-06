@@ -69,7 +69,7 @@ const rateDom = (index) => {
 }
 
 
-export default class EaRate extends Base {
+export class EaRate extends Base {
     #mounted = false;
     #wrap;
     #appendSlot;
@@ -318,4 +318,8 @@ export default class EaRate extends Base {
             this.setCheckedStatus(newVal);
         }
     }
+}
+
+if (!customElements.get('ea-rate')) {
+    customElements.define('ea-rate', EaRate);
 }

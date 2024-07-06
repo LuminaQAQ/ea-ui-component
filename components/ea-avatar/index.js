@@ -105,7 +105,7 @@ const textAvatar = (text) => {
     `;
 }
 
-export default class EaAvatar extends Base {
+export class EaAvatar extends Base {
     #wrap;
 
     #textSlot;
@@ -267,4 +267,8 @@ export default class EaAvatar extends Base {
     connectedCallback() {
         this.init();
     }
+}
+
+if (!customElements.get('ea-avatar')) {
+    customElements.define('ea-avatar', EaAvatar);
 }

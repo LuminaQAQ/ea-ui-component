@@ -221,7 +221,7 @@ const slotDom = (name) => {
     return slot;
 }
 
-export default class EaInput extends Base {
+export class EaInput extends Base {
     #wrap;
     #input;
     #clearIcon;
@@ -758,4 +758,8 @@ export default class EaInput extends Base {
         this.init();
         this.#mounted = true;
     }
+}
+
+if (!window.customElements.get("ea-input")) {
+    window.customElements.define("ea-input", EaInput);
 }

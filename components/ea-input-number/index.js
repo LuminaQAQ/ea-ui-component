@@ -137,7 +137,7 @@ const inputDom = () => {
     return input;
 }
 
-export default class EaInputNumber extends Base {
+export class EaInputNumber extends Base {
     #wrap;
     #input;
     #signMinus;
@@ -453,4 +453,8 @@ export default class EaInputNumber extends Base {
     connectedCallback() {
         this.init();
     }
+}
+
+if (!window.customElements.get("ea-input-number")) {
+    window.customElements.define("ea-input-number", EaInputNumber);
 }

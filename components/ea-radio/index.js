@@ -86,191 +86,195 @@ const stylesheet = `:host(ea-radio) {
 }`;
 
 const inputDom = () => {
-    const wrap = document.createElement('span');
-    wrap.className = "__ea-radio-input_wrap";
+  const wrap = document.createElement('span');
+  wrap.className = "__ea-radio-input_wrap";
 
-    const radio = document.createElement('span');
-    radio.className = "__ea-radio-input_inner";
-    wrap.appendChild(radio);
+  const radio = document.createElement('span');
+  radio.className = "__ea-radio-input_inner";
+  wrap.appendChild(radio);
 
-    const input = document.createElement('input');
-    input.type = 'radio';
-    input.className = "__ea-radio-input_input";
+  const input = document.createElement('input');
+  input.type = 'radio';
+  input.className = "__ea-radio-input_input";
 
-    wrap.appendChild(input);
+  wrap.appendChild(input);
 
-    return { wrap, input };
+  return { wrap, input };
 }
 
 const labelDom = () => {
-    const labelDesc = document.createElement('span');
-    labelDesc.className = "__ea-radio-label_desc";
-    const slot = document.createElement('slot');
-    labelDesc.appendChild(slot);
+  const labelDesc = document.createElement('span');
+  labelDesc.className = "__ea-radio-label_desc";
+  const slot = document.createElement('slot');
+  labelDesc.appendChild(slot);
 
-    return labelDesc;
+  return labelDesc;
 }
 
-export default class EaRadio extends Base {
-    #radio;
-    #label;
+export class EaRadio extends Base {
+  #radio;
+  #label;
 
-    static get observedAttributes() {
-        return ['checked'];
-    }
+  static get observedAttributes() {
+    return ['checked'];
+  }
 
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        let dom = document.createElement('label');
-        dom.className = "ea-radio_wrap";
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    let dom = document.createElement('label');
+    dom.className = "ea-radio_wrap";
 
-        // input + radio
-        const input = inputDom();
-        dom.appendChild(input.wrap);
+    // input + radio
+    const input = inputDom();
+    dom.appendChild(input.wrap);
 
-        // label 标签文字
-        const label = labelDom();
-        dom.appendChild(label);
+    // label 标签文字
+    const label = labelDom();
+    dom.appendChild(label);
 
-        this.#label = dom;
-        this.#radio = input.input;
-
-
-        // ------- 打包 -------
-        // #region
-        const styleNode = document.createElement('style');
-        styleNode.innerHTML = stylesheet;
-        this.shadowRoot.appendChild(styleNode);
-        // #endregion
-        // ------- end -------
-
-        // ------- 本地调试 -------
-        // #region
-        // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
-        // #endregion
-        // ------- end -------
+    this.#label = dom;
+    this.#radio = input.input;
 
 
-        shadowRoot.appendChild(dom);
-    }
-
-    // ------- 选中 -------
+    // ------- 打包 -------
     // #region
-    get checked() {
-        return this.getAttrBoolean('checked');
-    }
-
-    set checked(val) {
-        this.#radio.checked = val;
-
-        if (val) {
-            this.setAttribute('checked', true);
-            this.#label.setAttribute('checked', true);
-            this.#label.classList.add('checked');
-        } else {
-            this.removeAttribute('checked');
-            this.#label.removeAttribute('checked');
-            this.#label.classList.remove('checked');
-        }
-    }
+    const styleNode = document.createElement('style');
+    styleNode.innerHTML = stylesheet;
+    this.shadowRoot.appendChild(styleNode);
     // #endregion
     // ------- end -------
 
-    // ------- label_for 单选框的唯一键 -------
+    // ------- 本地调试 -------
     // #region
-    get name() {
-        return this.getAttribute('name');
-    }
-
-    set name(val) {
-        this.#radio.setAttribute('name', val);
-    }
+    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
     // #endregion
     // ------- end -------
 
-    // ------- value 单选框的值 -------
-    // #region
-    get value() {
-        return this.getAttribute('value');
+
+    shadowRoot.appendChild(dom);
+  }
+
+  // ------- 选中 -------
+  // #region
+  get checked() {
+    return this.getAttrBoolean('checked');
+  }
+
+  set checked(val) {
+    this.#radio.checked = val;
+
+    if (val) {
+      this.setAttribute('checked', true);
+      this.#label.setAttribute('checked', true);
+      this.#label.classList.add('checked');
+    } else {
+      this.removeAttribute('checked');
+      this.#label.removeAttribute('checked');
+      this.#label.classList.remove('checked');
     }
+  }
+  // #endregion
+  // ------- end -------
 
-    set value(val) {
-        this.#label.setAttribute('for', val);
-        this.#radio.setAttribute('id', val);
-        this.#radio.setAttribute('value', val);
-    }
-    // #endregion
-    // ------- end -------
+  // ------- label_for 单选框的唯一键 -------
+  // #region
+  get name() {
+    return this.getAttribute('name');
+  }
 
-    // ------- disabled 禁用状态 -------
-    // #region
-    get disabled() {
-        return this.getAttrBoolean('disabled');
-    }
+  set name(val) {
+    this.#radio.setAttribute('name', val);
+  }
+  // #endregion
+  // ------- end -------
 
-    set disabled(val) {
-        this.#radio.disabled = val;
-        this.#label.toggleAttribute('disabled', val);
-        this.#label.classList.toggle('disabled', val);
-    }
-    // #endregion
-    // ------- end -------
+  // ------- value 单选框的值 -------
+  // #region
+  get value() {
+    return this.getAttribute('value');
+  }
 
-    // ------- border 是否带有边框 -------
-    // #region
-    get border() {
-        return this.getAttrBoolean('border');
-    }
+  set value(val) {
+    this.#label.setAttribute('for', val);
+    this.#radio.setAttribute('id', val);
+    this.#radio.setAttribute('value', val);
+  }
+  // #endregion
+  // ------- end -------
 
-    set border(val) {
-        this.#label.classList.toggle('border', val);
-    }
-    // #endregion
-    // ------- end -------
+  // ------- disabled 禁用状态 -------
+  // #region
+  get disabled() {
+    return this.getAttrBoolean('disabled');
+  }
 
-    init() {
-        const that = this;
+  set disabled(val) {
+    this.#radio.disabled = val;
+    this.#label.toggleAttribute('disabled', val);
+    this.#label.classList.toggle('disabled', val);
+  }
+  // #endregion
+  // ------- end -------
 
-        // radio 的 checked 属性
-        this.checked = this.checked;
+  // ------- border 是否带有边框 -------
+  // #region
+  get border() {
+    return this.getAttrBoolean('border');
+  }
 
-        // label 的 for 属性
-        this.name = this.name;
+  set border(val) {
+    this.#label.classList.toggle('border', val);
+  }
+  // #endregion
+  // ------- end -------
 
-        // radio 的 value 属性
-        this.value = this.value;
+  init() {
+    const that = this;
 
-        // radio 的 disabled 属性
-        this.disabled = this.disabled;
+    // radio 的 checked 属性
+    this.checked = this.checked;
 
-        // border 属性
-        this.border = this.border;
+    // label 的 for 属性
+    this.name = this.name;
 
-        // 监听 change 事件, 修改 checked 属性
-        this.#radio.addEventListener('change', function (e) {
-            if (e.target.checked) {
-                document.querySelectorAll(`ea-radio[name="${that.name}"]`).forEach(btn => {
-                    const btnInput = btn.shadowRoot.querySelector('input');
+    // radio 的 value 属性
+    this.value = this.value;
 
-                    if (btnInput !== this) {
-                        btn.checked = false;
-                    } else {
-                        btn.checked = true;
-                    }
-                });
-            }
-        })
+    // radio 的 disabled 属性
+    this.disabled = this.disabled;
+
+    // border 属性
+    this.border = this.border;
+
+    // 监听 change 事件, 修改 checked 属性
+    this.#radio.addEventListener('change', function (e) {
+      if (e.target.checked) {
+        document.querySelectorAll(`ea-radio[name="${that.name}"]`).forEach(btn => {
+          const btnInput = btn.shadowRoot.querySelector('input');
+
+          if (btnInput !== this) {
+            btn.checked = false;
+          } else {
+            btn.checked = true;
+          }
+        });
+      }
+    })
 
 
-    }
+  }
 
-    connectedCallback() {
-        this.init();
-    }
+  connectedCallback() {
+    this.init();
+  }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-        // console.log(name);
-    }
+  attributeChangedCallback(name, oldVal, newVal) {
+    // console.log(name);
+  }
+}
+
+if (!window.customElements.get("ea-radio")) {
+  window.customElements.define("ea-radio", EaRadio);
 }

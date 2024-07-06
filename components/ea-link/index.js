@@ -55,7 +55,7 @@ const stylesheet = `
 }
 `;
 
-export default class EaLink extends Base {
+export class EaLink extends Base {
     constructor() {
         super();
 
@@ -208,4 +208,8 @@ export default class EaLink extends Base {
             default: break;
         }
     }
+}
+
+if (!window.customElements.get("ea-link")) {
+  window.customElements.define("ea-link", EaLink);
 }

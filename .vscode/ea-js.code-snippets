@@ -52,6 +52,10 @@
       "connectedCallback() {",
       "this.init();",
       "}",
+      "}",
+      "",
+      "if (!customElements.get('ea-$0')) {",
+      "customElements.define('ea-$0', Ea$1);",
       "}"
     ],
     "description": "ea-template"

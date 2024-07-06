@@ -198,3 +198,7 @@ export class EaMessageBoxElement extends Base {
         this.init();
     }
 }
+
+if (!customElements.get('ea-message-box')) {
+    customElements.define('ea-message-box', EaMessageBoxElement);
+}

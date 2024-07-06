@@ -52,7 +52,7 @@ const inputDom = () => {
     return input;
 }
 
-export default class EaTextarea extends Base {
+export class EaTextarea extends Base {
     #wrap;
     #input;
     #mounted = false;
@@ -329,4 +329,8 @@ export default class EaTextarea extends Base {
         this.init();
         this.#mounted = true;
     }
+}
+
+if (!window.customElements.get("ea-textarea")) {
+    window.customElements.define("ea-textarea", EaTextarea);
 }

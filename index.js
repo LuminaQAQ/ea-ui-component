@@ -1,24 +1,24 @@
-// @ts-nocheck
+
 import "./components/ea-ui-base-style.css";
 
-import EaButton from "./components/ea-button/ea-button.js";
-import EaButtonGroup from "./components/ea-button-group/";
-import EaLink from "./components/ea-link/";
-import EaRadio from "./components/ea-radio/";
-import EaRadioGroup from "./components/ea-radio-group/";
-import EaCheckbox from "./components/ea-checkbox/";
-import EaCheckboxGroup from "./components/ea-checkbox-group/";
-import EaInput from "./components/ea-input/";
-import EaTextarea from "./components/ea-textarea/";
-import EaInputNumber from "./components/ea-input-number/";
-import EaSelect from "./components/ea-select/";
-import EaSwitch from "./components/ea-switch/";
-import EaRate from "./components/ea-rate/";
-import EaTag from "./components/ea-tag";
-import EaProgress from "./components/ea-progress/";
+import { EaButton } from "./components/ea-button/ea-button.js";
+import { EaButtonGroup } from "./components/ea-button-group/";
+import { EaLink } from "./components/ea-link/";
+import { EaRadio } from "./components/ea-radio/";
+import { EaRadioGroup } from "./components/ea-radio-group/";
+import { EaCheckbox } from "./components/ea-checkbox/";
+import { EaCheckboxGroup } from "./components/ea-checkbox-group/";
+import { EaInput } from "./components/ea-input/";
+import { EaTextarea } from "./components/ea-textarea/";
+import { EaInputNumber } from "./components/ea-input-number/";
+import { EaSelect } from "./components/ea-select/";
+import { EaSwitch } from "./components/ea-switch/";
+import { EaRate } from "./components/ea-rate/";
+import { EaTag } from "./components/ea-tag";
+import { EaProgress } from "./components/ea-progress/";
 import { EaPagination } from "./components/ea-pagination/";
-import EaBadge from "./components/ea-badge/";
-import EaAvatar from "./components/ea-avatar/";
+import { EaBadge } from "./components/ea-badge/";
+import { EaAvatar } from "./components/ea-avatar/";
 import { EaSkeleton } from "./components/ea-skeleton/";
 import { EaSkeletonItem } from "./components/ea-skeleton/";
 import { EaEmpty } from "./components/ea-empty";

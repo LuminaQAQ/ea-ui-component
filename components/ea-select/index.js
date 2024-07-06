@@ -4,7 +4,7 @@ const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 `;
 
-export default class EaSelect extends Base {
+export class EaSelect extends Base {
     #wrap;
     constructor() {
         super();
@@ -27,4 +27,8 @@ export default class EaSelect extends Base {
     connectedCallback() {
         this.init();
     }
+}
+
+if (!window.customElements.get("ea-select")) {
+    window.customElements.define("ea-select", EaSelect);
 }
