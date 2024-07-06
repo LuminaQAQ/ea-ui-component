@@ -160,3 +160,53 @@ onMounted(() => {
         </ea-carousel-item>
     </ea-carousel>
 </div>
+
+```html
+<div class="demo">
+  <div class="title"><b>arrow</b> 属性值为 <b>always</b></div>
+  <ea-carousel arrow="always">
+    <ea-carousel-item>
+      <div>1</div>
+    </ea-carousel-item>
+    <ea-carousel-item>
+      <div>2</div>
+    </ea-carousel-item>
+    <ea-carousel-item>
+      <div>3</div>
+    </ea-carousel-item>
+    <ea-carousel-item>
+      <div>4</div>
+    </ea-carousel-item>
+    <ea-carousel-item>
+      <div>5</div>
+    </ea-carousel-item>
+  </ea-carousel>
+  <hr />
+  <div class="title"><b>arrow</b> 属性值为 <b>never</b></div>
+  <ea-carousel arrow="never">
+    <ea-carousel-item>
+      <div>1</div>
+    </ea-carousel-item>
+    <ea-carousel-item>
+      <div>2</div>
+    </ea-carousel-item>
+    <ea-carousel-item>
+      <div>3</div>
+    </ea-carousel-item>
+    <ea-carousel-item>
+      <div>4</div>
+    </ea-carousel-item>
+    <ea-carousel-item>
+      <div>5</div>
+    </ea-carousel-item>
+  </ea-carousel>
+</div>
+```
+
+## Attributes
+
+| 参数     | 说明               | 类型   | 可选值             | 默认值 |
+| -------- | ------------------ | ------ | ------------------ | ------ |
+| interval | 切换间隔，单位为秒 | number | —                  | 3000   |
+| trigger  | 指示器触发方式     | string | hover/click        | hover  |
+| arrow    | 切换箭头显示时机   | string | always/hover/never | hover  |
