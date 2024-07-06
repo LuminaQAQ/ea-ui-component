@@ -4,6 +4,91 @@ import { createElement, createSlotElement } from "../../utils/createElement"
 
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
+
+.ea-carousel_wrap {
+  position: relative;
+}
+.ea-carousel_wrap.ea-carousel--horizontal {
+  overflow-x: hidden;
+}
+.ea-carousel_wrap .ea-carousel_container {
+  position: relative;
+  color: #fff;
+  text-align: center;
+  height: 300px;
+  transition: transform 0.5s;
+}
+.ea-carousel_wrap .ea-carousel-item_arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1.5;
+  text-align: center;
+  border-radius: 50%;
+  background-color: rgba(31, 45, 61, 0.11);
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+}
+.ea-carousel_wrap .ea-carousel-item_arrow.ea-carousel-item_arrow--left {
+  left: 0;
+  transform: translate(-100%, -50%);
+}
+.ea-carousel_wrap .ea-carousel-item_arrow.ea-carousel-item_arrow--right {
+  right: 0;
+  transform: translate(100%, -50%);
+}
+.ea-carousel_wrap .ea-carousel-item_arrow:hover {
+  background-color: rgba(31, 45, 61, 0.3);
+}
+.ea-carousel_wrap .ea-carousel-indicator_wrap {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.ea-carousel_wrap .ea-carousel-indicator_wrap .ea-carousel-item_indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0 0.25rem;
+  transition: background-color 0.3s;
+}
+.ea-carousel_wrap .ea-carousel-indicator_wrap .ea-carousel-item_indicator.ea-carousel-item_indicator--active {
+  background-color: #fff;
+}
+
+:host {
+  --odd-bgc: #d3dce6;
+}
+
+.ea-carousel-item_wrap {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  background-color: var(--odd-bgc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-carousel-item_wrap ::slotted(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 `;
 
 export class EaCarousel extends Base {
