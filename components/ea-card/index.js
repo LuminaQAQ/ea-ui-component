@@ -25,51 +25,55 @@ const stylesheet = `
 `;
 
 export class EaCard extends Base {
-    #wrap;
+  #wrap;
 
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-card_wrap';
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    const wrap = document.createElement('div');
+    wrap.className = 'ea-card_wrap';
 
-        const headerSlot = createSlotElement('header');
-        const header = createElement('div', 'ea-card_header', [headerSlot]);
-        wrap.appendChild(header);
+    const headerSlot = createSlotElement('header');
+    const header = createElement('div', 'ea-card_header', [headerSlot]);
+    wrap.appendChild(header);
 
-        const contentSlot = document.createElement('slot');
-        const content = createElement('div', 'ea-card_content', [contentSlot]);
-        wrap.appendChild(content);
+    const contentSlot = document.createElement('slot');
+    const content = createElement('div', 'ea-card_content', [contentSlot]);
+    wrap.appendChild(content);
 
-        this.#wrap = wrap;
+    this.#wrap = wrap;
 
 
-        this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
-    }
+    this.build(shadowRoot, stylesheet);
+    this.shadowRoot.appendChild(wrap);
+  }
 
-    // ------- shadow 阴影属性 -------
-    // #region
-    get shadow() {
-        return this.getAttribute('shadow') || "always";
-    }
+  // ------- shadow 阴影属性 -------
+  // #region
+  get shadow() {
+    return this.getAttribute('shadow') || "always";
+  }
 
-    set shadow(val) {
-        this.setAttribute('shadow', val);
+  set shadow(val) {
+    this.setAttribute('shadow', val);
 
-        this.#wrap.classList.add(`is-${val}-shadow`);
-    }
-    // #endregion
-    // ------- end -------
+    this.#wrap.classList.add(`is-${val}-shadow`);
+  }
+  // #endregion
+  // ------- end -------
 
-    init() {
-        const that = this;
+  init() {
+    const that = this;
 
-        this.shadow = this.shadow;
-    }
+    this.shadow = this.shadow;
+  }
 
-    connectedCallback() {
-        this.init();
-    }
+  connectedCallback() {
+    this.init();
+  }
+}
+
+if (!customElements.get('ea-card')) {
+  customElements.define('ea-card', EaCard);
 }

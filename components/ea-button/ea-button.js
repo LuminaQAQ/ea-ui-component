@@ -404,7 +404,7 @@ const stylesheet = `
 }
 `;
 
-export default class EaButton extends Base {
+export class EaButton extends Base {
   #mounted = false;
 
   constructor() {
@@ -650,4 +650,8 @@ export default class EaButton extends Base {
       default: break;
     }
   }
+}
+
+if (!window.customElements.get("ea-button")) {
+  window.customElements.define("ea-button", EaButton);
 }

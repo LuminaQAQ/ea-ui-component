@@ -211,3 +211,7 @@ export class EaLoading extends Base {
         this.init();
     }
 }
+
+if (!customElements.get('ea-loading')) {
+    customElements.define('ea-loading', EaLoading);
+}

@@ -78,7 +78,7 @@ const SVGTemplate = {
     `,
 }
 
-export default class EaProgress extends Base {
+export class EaProgress extends Base {
     #wrap;
     #track;
     #path;
@@ -326,4 +326,8 @@ export default class EaProgress extends Base {
     connectedCallback() {
         this.init();
     }
+}
+
+if (!customElements.get("ea-progress")) {
+    customElements.define("ea-progress", EaProgress);
 }

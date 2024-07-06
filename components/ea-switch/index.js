@@ -97,7 +97,7 @@ const labelDom = (posi) => {
     return label;
 }
 
-export default class EaSwitch extends Base {
+export class EaSwitch extends Base {
     #mounted = false;
 
     #wrap;
@@ -296,4 +296,8 @@ export default class EaSwitch extends Base {
             }))
         }
     }
+}
+
+if (!customElements.get('ea-switch')) {
+    customElements.define('ea-switch', EaSwitch);
 }

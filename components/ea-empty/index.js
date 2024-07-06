@@ -137,3 +137,7 @@ export class EaEmpty extends Base {
         this.init();
     }
 }
+
+if (!customElements.get('ea-empty')) {
+    customElements.define('ea-empty', EaEmpty);
+}

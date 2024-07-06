@@ -10,7 +10,7 @@ const stylesheet = `
   margin-right: 1.5rem;
 }`;
 
-export default class EaCheckboxGroup extends Base {
+export class EaCheckboxGroup extends Base {
     constructor() {
         super();
 
@@ -102,4 +102,8 @@ export default class EaCheckboxGroup extends Base {
     connectedCallback() {
         this.init();
     }
+}
+
+if (!window.customElements.get("ea-checkbox-group")) {
+    window.customElements.define("ea-checkbox-group", EaCheckboxGroup);
 }

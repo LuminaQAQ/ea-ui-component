@@ -440,3 +440,7 @@ export class EaPagination extends Base {
         this.init();
     }
 }
+
+if (!customElements.get('ea-pagination')) {
+    customElements.define('ea-pagination', EaPagination);
+}

@@ -427,3 +427,10 @@ export class EaCarouselItem extends Base {
         this.init();
     }
 }
+
+if (!customElements.get('ea-carousel')) {
+    customElements.define('ea-carousel', EaCarousel);
+}
+if (!customElements.get('ea-carousel-item')) {
+    customElements.define('ea-carousel-item', EaCarouselItem);
+}

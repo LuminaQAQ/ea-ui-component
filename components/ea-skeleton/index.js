@@ -334,3 +334,11 @@ export class EaSkeletonItem extends Base {
         }
     }
 }
+
+if (!customElements.get('ea-skeleton')) {
+    customElements.define('ea-skeleton', EaSkeleton);
+}
+
+if (!customElements.get('ea-skeleton-item')) {
+    customElements.define('ea-skeleton-item', EaSkeletonItem);
+}

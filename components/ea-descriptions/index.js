@@ -236,3 +236,7 @@ export class EaDescriptions extends Base {
         this.init();
     }
 }
+
+if (!customElements.get('ea-descriptions')) {
+    customElements.define('ea-descriptions', EaDescriptions);
+}

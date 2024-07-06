@@ -129,7 +129,7 @@ const labelDom = () => {
   return labelDesc;
 }
 
-export default class EacheChekbox extends Base {
+export class EaCheckbox extends Base {
   #checkbox;
   #label;
 
@@ -308,4 +308,8 @@ export default class EacheChekbox extends Base {
     //         break;
     // }
   }
+}
+
+if (!window.customElements.get("ea-checkbox")) {
+  window.customElements.define("ea-checkbox", EaCheckbox);
 }

@@ -10,7 +10,7 @@ const stylesheet = `
   margin-right: 2rem;
 }`;
 
-export default class EaRadioGroup extends Base {
+export class EaRadioGroup extends Base {
 
     constructor() {
         super();
@@ -53,4 +53,8 @@ export default class EaRadioGroup extends Base {
     connectedCallback() {
         this.init();
     }
+}
+
+if (!window.customElements.get("ea-radio-group")) {
+    window.customElements.define("ea-radio-group", EaRadioGroup);
 }

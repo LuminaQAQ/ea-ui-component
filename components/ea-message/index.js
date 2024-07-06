@@ -225,3 +225,7 @@ export class EaMessageElement extends Base {
         }
     }
 }
+
+if (!customElements.get('ea-message')) {
+    customElements.define('ea-message', EaMessageElement);
+}
