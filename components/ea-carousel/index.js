@@ -89,6 +89,31 @@ export class EaCarousel extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- interval 轮播图自动播放间隔时间 -------
+    // #region
+    get interval() {
+        return this.getAttrNumber('interval') || 3;
+    }
+
+    set interval(value) {
+        this.setAttribute('interval', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- arrow 轮播图是否一直显示箭头 -------
+    // #region
+    get arrow() {
+        const arrow = this.getAttribute('arrow') || "hover";
+        return ["always", "hover", "never"].includes(arrow) ? arrow : "hover";
+    }
+
+    set arrow(value) {
+        this.setAttribute('arrow', value);
+    }
+    // #endregion
+    // ------- end -------
+
     /**
      * 处理索引溢出问题
      * @param {number} val - 需要检查和调整的索引值
@@ -131,7 +156,10 @@ export class EaCarousel extends Base {
         });
     }
 
-    #initIndicators(duration) {
+    /**
+     * 初始化轮播指示器
+     */
+    #initIndicators() {
         const that = this;
 
         // 获取所有轮播项元素
@@ -159,12 +187,13 @@ export class EaCarousel extends Base {
     /**
      * 创建箭头项
      * @param {string} arrow - 箭头方向，"left" 或 "right"
+     * @param {string} show - 箭头显示的时机，"always"、"hover" 或 "never"
      * @returns {HTMLElement} - 创建的箭头元素
      * 
      * 该函数用于创建轮播图的左右箭头元素，并设置其初始状态和点击事件。
      * 箭头元素的样式和位置会在鼠标进入和离开时动态改变。
      */
-    #createArrowItem(arrow) {
+    #createArrowItem(arrow, show) {
         // 保持当前对象的引用
         const that = this;
         // 创建箭头元素，并根据方向添加相应的类名
@@ -172,52 +201,76 @@ export class EaCarousel extends Base {
         // 根据箭头方向设置箭头的HTML内容
         arrowItem.innerHTML = arrow === "left" ? `&lt;` : `&gt;`;
 
+        switch (show) {
+            case "always":
+                // 如果显示时机为“总是”，则设置箭头的初始位置和透明度
+                arrowItem.style.transform = `translateY(-50%) translateX(${arrow === "left" ? 1 : -1}rem)`;
+                arrowItem.style.opacity = 1;
+                break;
+            case "hover":
+                // 当鼠标进入箭头元素时，改变其位置和透明度
+                this.#wrap.addEventListener('mouseenter', (e) => {
+                    arrowItem.style.transform = `translateY(-50%) translateX(${arrow === "left" ? 1 : -1}rem)`;
+                    arrowItem.style.opacity = 1;
+                })
+
+                // 当鼠标离开箭头元素时，恢复其初始位置和透明度
+                this.#wrap.addEventListener('mouseleave', (e) => {
+                    arrowItem.style.transform = `translateY(-50%) translateX(${arrow === "left" ? -100 : 100}%)`;
+                    arrowItem.style.opacity = 0;
+                })
+                break;
+        }
+
         // 绑定点击事件，根据箭头方向改变轮播图的索引
         arrowItem.addEventListener('click', (e) => {
             that.index = arrow === "left" ? --that.index : ++that.index;
-        })
-
-        // 当鼠标进入箭头元素时，改变其位置和透明度
-        this.#wrap.addEventListener('mouseenter', (e) => {
-            arrowItem.style.transform = `translateY(-50%) translateX(${arrow === "left" ? 1 : -1}rem)`;
-            arrowItem.style.opacity = 1;
-        })
-
-        // 当鼠标离开箭头元素时，恢复其初始位置和透明度
-        this.#wrap.addEventListener('mouseleave', (e) => {
-            arrowItem.style.transform = `translateY(-50%) translateX(${arrow === "left" ? -100 : 100}%)`;
-            arrowItem.style.opacity = 0;
         })
 
         // 返回创建的箭头元素
         return arrowItem;
     }
 
-    #initArrowItem() {
-        const leftArrowItem = this.#createArrowItem("left");
-        const rightArrowItem = this.#createArrowItem("right");
+    /**
+     * 初始化箭头项
+     * 该方法用于创建并添加左右两个箭头项到指定的包装元素中。
+     * 这两个箭头项分别代表向左和向右的导航功能。
+     * 
+     * @private
+     */
+    #initArrowItem(show) {
+        if (show === "never") return;
 
+        // 创建一个向左的箭头项
+        const leftArrowItem = this.#createArrowItem("left", show);
+        // 创建一个向右的箭头项
+        const rightArrowItem = this.#createArrowItem("right", show);
+
+        // 将左箭头项添加到包装元素中
         this.#wrap.appendChild(leftArrowItem);
+        // 将右箭头项添加到包装元素中
         this.#wrap.appendChild(rightArrowItem);
     }
 
-    #setTimer(duration) {
-        return setInterval(() => {
-            this.index = this.index + 1;
-        }, duration * 1000);
-    }
-
-    #initCarouselAotuPlay(duration) {
+    /**
+     * 初始化轮播图自动播放功能。
+     * @param {number} duration - 每张图片展示的时间间隔，单位为秒。
+     */
+    #initCarouselAutoPlay(duration) {
+        // 保存当前上下文的引用
         const that = this;
+        // 设置定时器，每隔一定时间自动切换到下一张图片
         this.#timer = setInterval(() => {
             this.index = this.index + 1;
-        }, duration * 1000);;
+        }, duration * 1000);
 
+        // 当鼠标进入轮播图区域时，停止自动播放
         this.addEventListener('mouseenter', () => {
             clearInterval(this.#timer);
             that.#timer = null;
         });
 
+        // 当鼠标离开轮播图区域时，恢复自动播放
         this.addEventListener('mouseleave', () => {
             that.#timer = setInterval(() => {
                 this.index = this.index + 1;
@@ -232,10 +285,14 @@ export class EaCarousel extends Base {
 
         this.trigger = this.trigger;
 
+        this.interval = this.interval;;
+
+        this.arrow = this.arrow;
+
         this.#initCarouselItem();
-        this.#initArrowItem();
-        this.#initIndicators(3);
-        this.#initCarouselAotuPlay(3);
+        this.#initArrowItem(this.arrow);
+        this.#initIndicators(this.interval);
+        this.#initCarouselAutoPlay(this.interval);
 
         this.index = this.index;
     }

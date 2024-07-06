@@ -11,6 +11,8 @@
   .ea-carousel_container {
     position: relative;
 
+    color: #fff;
+
     text-align: center;
     height: 300px;
     transition: transform 0.5s;
@@ -20,7 +22,6 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    transition: transform 0.3s, opacity 0.3s;
     opacity: 0;
 
     width: 1.5rem;
@@ -34,6 +35,8 @@
     cursor: pointer;
     user-select: none;
 
+    transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+
     &.ea-carousel-item_arrow--left {
       left: 0;
       transform: translate(-100%, -50%);
@@ -42,6 +45,10 @@
     &.ea-carousel-item_arrow--right {
       right: 0;
       transform: translate(100%, -50%);
+    }
+
+    &:hover {
+      background-color: rgba(31, 45, 61, 0.3);
     }
   }
 
