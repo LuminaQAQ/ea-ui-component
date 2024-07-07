@@ -261,6 +261,13 @@ export class EaRadio extends Base {
           }
         });
       }
+
+      that.dispatchEvent(new CustomEvent('change', {
+        detail: {
+          value: this.value,
+          checked: this.checked
+        }
+      }))
     })
 
 

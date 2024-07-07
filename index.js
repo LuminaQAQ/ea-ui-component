@@ -31,6 +31,7 @@ import { EaMessageElement } from "./components/ea-message";
 import { EaMessageBoxElement } from "./components/ea-message-box/";
 import { EaCard } from "./components/ea-card";
 import { EaCarousel, EaCarouselItem } from "./components/ea-carousel";
+import { EaTimeline, EaTimelineItem } from "./components/ea-timeline";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -69,3 +70,5 @@ register("ea-message-box", EaMessageBoxElement);
 register("ea-card", EaCard);
 register("ea-carousel", EaCarousel);
 register("ea-carousel-item", EaCarouselItem);
+register("ea-timeline", EaTimeline);
+register("ea-timeline-item", EaTimelineItem);
