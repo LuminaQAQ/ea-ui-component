@@ -207,6 +207,6 @@ onMounted(() => {
 
 | 参数     | 说明               | 类型   | 可选值             | 默认值 |
 | -------- | ------------------ | ------ | ------------------ | ------ |
-| interval | 切换间隔，单位为秒 | number | —                  | 3000   |
+| interval | 切换间隔，单位为秒 | number | —                  | 3      |
 | trigger  | 指示器触发方式     | string | hover/click        | hover  |
 | arrow    | 切换箭头显示时机   | string | always/hover/never | hover  |
