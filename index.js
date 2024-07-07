@@ -32,6 +32,7 @@ import { EaMessageBoxElement } from "./components/ea-message-box/";
 import { EaCard } from "./components/ea-card";
 import { EaCarousel, EaCarouselItem } from "./components/ea-carousel";
 import { EaTimeline, EaTimelineItem } from "./components/ea-timeline";
+import { EaBacktop } from "./components/ea-backtop";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -72,3 +73,4 @@ register("ea-carousel", EaCarousel);
 register("ea-carousel-item", EaCarouselItem);
 register("ea-timeline", EaTimeline);
 register("ea-timeline-item", EaTimelineItem);
+register("ea-backtop", EaBacktop);
