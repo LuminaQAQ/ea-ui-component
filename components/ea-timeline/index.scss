@@ -26,6 +26,7 @@ $types: (
     display: block;
     width: 12px;
     height: 12px;
+    font-size: 12px;
 
     border-radius: 50%;
     background-color: #e4e7ed;
@@ -33,6 +34,7 @@ $types: (
     @each $type in map-keys($types) {
       &.ea-timeline-item--#{$type} {
         background-color: map-get($types, $type);
+        color: map-get($types, $type);
       }
     }
   }
@@ -40,7 +42,7 @@ $types: (
   .ea-timeline-item_tail {
     z-index: 0;
     position: absolute;
-    left: 4.5px;
+    left: 0.3281rem;
     height: 100%;
     border-left: 2px solid #e4e7ed;
   }
@@ -50,13 +52,45 @@ $types: (
     top: -4px;
     font-size: 14px;
 
+    display: flex;
+    flex-direction: column;
+
     .ea-timeline-item_timestamp {
-      color: #303133;
+      color: #909399;
       line-height: 1;
       margin-top: 8px;
     }
+
     .ea-timeline-item_content {
-      color: #909399;
+      color: #303133;
+    }
+
+    &.ea-timeline-item_timestamp--top {
+      flex-direction: column-reverse;
+
+      .ea-timeline-item_timestamp {
+        margin-top: 0;
+        margin-bottom: 8px;
+      }
+    }
+
+    &.ea-timeline-item_timestamp--bottom {
+      flex-direction: column;
+    }
+  }
+
+  &.ea-timeline-item_circle--large {
+    .ea-timeline-item_circle {
+      width: 14px;
+      height: 14px;
+    }
+
+    .ea-timeline-item_tail {
+      left: 0.3906rem;
+    }
+
+    .ea-timeline-item_container {
+      font-size: 16px;
     }
   }
 }

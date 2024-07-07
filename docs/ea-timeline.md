@@ -104,4 +104,109 @@ positiveRadio.addEventListener("change", () => {
 
 ## ⾃定义节点样式
 
-可根据实际场景⾃定义节点尺⼨、颜⾊，或直接使⽤图标。
+可根据实际场景⾃定义节点尺⼨、颜⾊。
+
+<div class="demo">
+    <ea-timeline>
+        <ea-timeline-item type="success" size="large"  time="2024-7-1">打开冰箱</ea-timeline-item>
+        <ea-timeline-item type="primary" size="large" time="2024-7-2">把大象放进去</ea-timeline-item>
+        <ea-timeline-item type="warning" size="large" time="2024-7-3">把冰箱关住</ea-timeline-item>
+        <ea-timeline-item type="danger" size="large" time="2024-7-4">因违反动物保护法, 该组件库无限期停更</ea-timeline-item>
+        <ea-timeline-item type="danger" size="large" color="black" time="2024-7-5">该组件库已无法访问</ea-timeline-item>
+    </ea-timeline>
+</div>
+
+```html
+<div class="demo">
+  <ea-timeline>
+    <ea-timeline-item type="success" size="large" time="2024-7-1"
+      >打开冰箱</ea-timeline-item
+    >
+    <ea-timeline-item type="primary" size="large" time="2024-7-2"
+      >把大象放进去</ea-timeline-item
+    >
+    <ea-timeline-item type="warning" size="large" time="2024-7-3"
+      >把冰箱关住</ea-timeline-item
+    >
+    <ea-timeline-item type="danger" size="large" time="2024-7-4"
+      >因违反动物保护法, 该组件库无限期停更</ea-timeline-item
+    >
+    <ea-timeline-item type="danger" size="large" color="black" time="2024-7-5"
+      >该组件库已无法访问</ea-timeline-item
+    >
+  </ea-timeline>
+</div>
+```
+
+## ⾃定义时间戳
+
+当内容在垂直⽅向上过⾼时，可将时间戳置于内容之上。
+
+<div class="demo">
+    <ea-timeline>
+        <ea-timeline-item placement="top" type="success" time="2024-7-1">
+            <ea-card>打开冰箱</ea-card>
+        </ea-timeline-item>
+        <ea-timeline-item placement="top" type="primary" time="2024-7-2">
+            <ea-card>把大象放进去</ea-card>
+        </ea-timeline-item>
+        <ea-timeline-item placement="top" type="warning" time="2024-7-3">
+            <ea-card>把冰箱关住</ea-card>
+        </ea-timeline-item>
+        <ea-timeline-item placement="top" type="danger" time="2024-7-4">
+            <ea-card>因违反动物保护法, 该组件库无限期停更</ea-card>
+        </ea-timeline-item>
+        <ea-timeline-item placement="top" type="danger" color="black" time="2024-7-5">
+            <ea-card>该组件库已无法访问</ea-card>
+        </ea-timeline-item>
+    </ea-timeline>
+</div>
+
+```html
+<div class="demo">
+  <ea-timeline>
+    <ea-timeline-item placement="top" type="success" time="2024-7-1">
+      <ea-card>打开冰箱</ea-card>
+    </ea-timeline-item>
+    <ea-timeline-item placement="top" type="primary" time="2024-7-2">
+      <ea-card>把大象放进去</ea-card>
+    </ea-timeline-item>
+    <ea-timeline-item placement="top" type="warning" time="2024-7-3">
+      <ea-card>把冰箱关住</ea-card>
+    </ea-timeline-item>
+    <ea-timeline-item placement="top" type="danger" time="2024-7-4">
+      <ea-card>因违反动物保护法, 该组件库无限期停更</ea-card>
+    </ea-timeline-item>
+    <ea-timeline-item
+      placement="top"
+      type="danger"
+      color="black"
+      time="2024-7-5"
+    >
+      <ea-card>该组件库已无法访问</ea-card>
+    </ea-timeline-item>
+  </ea-timeline>
+</div>
+```
+
+## Timeline Attributes
+
+| 参数    | 说明 | 类型    | 可选值 | 默认值 |
+| ------- | ---- | ------- | ------ | ------ |
+| reverse | 倒序 | boolean | -      | true   |
+
+## TimelineItem Attributes
+
+| 参数      | 说明 | 类型   | 可选值                                   | 默认值 |
+| --------- | ---- | ------ | ---------------------------------------- | ------ |
+| time      | 时间 | string | -                                        | -      |
+| placement | 位置 | string | top                                      | bottom |
+| type      | 类型 | string | primary/success<br/>/warning/danger/info | info   |
+| size      | 大小 | string | large                                    | normal |
+| color     | 颜色 | string | -                                        | -      |
+
+## TimelineItem Slots
+
+| 名称 | 说明               |
+| ---- | ------------------ |
+| -    | 默认插槽, 放置内容 |
