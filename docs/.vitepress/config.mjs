@@ -81,7 +81,7 @@ export default defineConfig({
         items: [
           { text: 'Card 卡片', link: '/ea-card' },
           { text: 'Carousel 走马灯', link: '/ea-carousel' },
-          // { text: 'Timeline 时间轴', link: '/ea-timeline' },
+          { text: 'Timeline 时间轴', link: '/ea-timeline' },
           // { text: 'BackTop 回到顶部', link: '/ea-back-top' },
           // { text: 'Divider 分割线', link: '/ea-divider' },
         ],
