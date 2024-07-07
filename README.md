@@ -52,8 +52,8 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
 
   - [x] Card 卡片
   - [x] Carousel 走马灯
-  - [ ] TimeLine 时间线
-  - [ ] Backtop 回到顶部
+  - [x] TimeLine 时间线
+  - [x] Backtop 回到顶部
   - [ ] Dialog 对话框
   - [ ] Tooltip 文字提示
   - [ ] Popover 弹出框
