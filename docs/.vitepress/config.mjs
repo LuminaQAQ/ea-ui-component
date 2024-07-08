@@ -83,8 +83,8 @@ export default defineConfig({
           { text: 'Carousel 走马灯', link: '/ea-carousel' },
           { text: 'Timeline 时间轴', link: '/ea-timeline' },
           { text: 'BackTop 回到顶部', link: '/ea-backtop' },
-          { text: 'Collapse 折叠面板', link: '/ea-collapse' }
-          // { text: 'Divider 分割线', link: '/ea-divider' },
+          { text: 'Collapse 折叠面板', link: '/ea-collapse' },
+          { text: "Calendar 日历", link: '/ea-calendar' }
         ],
       },
     ],
