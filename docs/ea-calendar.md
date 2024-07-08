@@ -12,4 +12,4 @@ onMounted(() => {
 
 ---
 
-<ea-calendar date="2024-7-1"></ea-calendar>
+<ea-calendar date="2024-7"></ea-calendar>
