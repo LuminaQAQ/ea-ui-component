@@ -34,6 +34,7 @@ import { EaCarousel, EaCarouselItem } from "./components/ea-carousel";
 import { EaTimeline, EaTimelineItem } from "./components/ea-timeline";
 import { EaBacktop } from "./components/ea-backtop";
 import { EaCollapse, EaCollapseItem } from "./components/ea-collapse";
+import { EaCalendar } from "./components/ea-calendar";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -77,3 +78,4 @@ register("ea-timeline-item", EaTimelineItem);
 register("ea-backtop", EaBacktop);
 register("ea-collapse", EaCollapse);
 register("ea-collapse-item", EaCollapseItem);
+register("ea-calendar", EaCalendar);
