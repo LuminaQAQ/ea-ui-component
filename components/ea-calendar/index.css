@@ -37,9 +37,16 @@
   border-right: 1px solid #ebeef5;
   border-bottom: 1px solid #ebeef5;
 }
-.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td.is-selected, .ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td.is-today {
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td.is-selected {
   color: #1989fa;
   background-color: #f2f8fe;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td.is-today {
+  color: #1989fa;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td.is-disabled {
+  pointer-events: none;
+  color: #c0c4cc;
 }
 .ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td span {
   display: block;

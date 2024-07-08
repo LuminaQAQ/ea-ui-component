@@ -41,10 +41,18 @@
         border-right: 1px solid #ebeef5;
         border-bottom: 1px solid #ebeef5;
 
-        &.is-selected,
-        &.is-today {
+        &.is-selected {
           color: #1989fa;
           background-color: #f2f8fe;
+        }
+
+        &.is-today {
+          color: #1989fa;
+        }
+
+        &.is-disabled {
+          pointer-events: none;
+          color: #c0c4cc;
         }
 
         span {

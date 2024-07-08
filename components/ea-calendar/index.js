@@ -143,6 +143,27 @@ export class EaCalendar extends Base {
     // #endregion
     // ------- end -------
 
+    #handleCalendarItemSelect(node) {
+        node.addEventListener('click', () => {
+            this.#tableContent.querySelectorAll('td').forEach(el => {
+                el.classList.remove('is-selected');
+            })
+
+            if (node.classList.contains('is-selected')) {
+                node.classList.remove('is-selected');
+            } else {
+                node.classList.add('is-selected');
+            }
+        })
+    }
+
+    #handleMonthChange(flag) {
+        const date = new Date(this.date);
+        date.setMonth(date.getMonth() + (flag === "next" ? 1 : -1));
+
+        this.date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    }
+
     /**
      * 根据给定的日期更新页面上的日历视图。
      * @param {HTMLElement} content - 用于展示日历的HTML元素。
@@ -190,27 +211,35 @@ export class EaCalendar extends Base {
 
                 // 获取当前日期是星期几
                 const day = currentDate.getDay();
+                const myDate = new Date();
 
                 // 判断当前单元格应展示哪一天的日期
-                if (weekArr[length] === weekArr_getDay[day]) {
+                if (weekArr[length] === weekArr_getDay[day] && month === currentDate.getMonth() + 1) {
                     // 如果是当前月的日期，则展示当前月的日期
                     span.innerText = currentDate.getDate();
                     currentDate.setDate(currentDate.getDate() + 1);
+                    this.#handleCalendarItemSelect(td);
+                } else if (month == currentDate.getMonth()) {
+                    // 如果是下个月的日期，则展示下个月的日期
+                    span.innerText = currentDate.getDate();
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    td.classList.add("is-disabled");
                 } else {
                     // 如果是上个月的日期，则展示上个月的日期
                     lastDate.setMonth(month - 1);
                     lastDate.setDate(j - day + 2);
                     span.innerText = lastDate.getDate();
+                    td.classList.add("is-disabled");
                 }
 
-                const myDate = new Date();
                 if (currentDate.getFullYear() === myDate.getFullYear() && currentDate.getMonth() === myDate.getMonth() && currentDate.getDate() === myDate.getDate() + 1) {
-                    td.classList.add("is-selected");
+                    td.classList.add("is-today");
                 }
 
                 if (currentDate.getFullYear() === userDate.getFullYear() && currentDate.getMonth() === userDate.getMonth() && currentDate.getDate() === userDate.getDate() + 1) {
-                    td.classList.add("is-today");
+                    td.classList.add("is-selected");
                 }
+
 
                 // 将日期单元格添加到行中
                 td.appendChild(span);
@@ -230,10 +259,7 @@ export class EaCalendar extends Base {
         this.#tableHead.appendChild(createThead());
 
         this.#lastMonthBtn.addEventListener('click', () => {
-            const date = new Date(that.date);
-            date.setMonth(date.getMonth() - 1);
-
-            that.date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+            that.#handleMonthChange("last");
         });
 
         this.#todayBtn.addEventListener('click', () => {
@@ -241,10 +267,7 @@ export class EaCalendar extends Base {
         });
 
         this.#nextMonthBtn.addEventListener('click', () => {
-            const date = new Date(that.date);
-            date.setMonth(date.getMonth() + 1);
-
-            that.date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+            that.#handleMonthChange("next");
         });
     }
 
