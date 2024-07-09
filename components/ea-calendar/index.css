@@ -54,6 +54,9 @@
   height: 85px;
   padding: 8px;
 }
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td span .calendar-description {
+  margin-top: auto;
+}
 .ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table tr:first-child td {
   border-top: 1px solid #ebeef5;
 }
