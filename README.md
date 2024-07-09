@@ -54,8 +54,8 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Carousel 走马灯
   - [x] TimeLine 时间线
   - [x] Backtop 回到顶部
-  - [ ] Collapse 折叠面板
-  - [ ] Calendar 日历
+  - [x] Collapse 折叠面板
+  - [x] Calendar 日历
   - [ ] Image 图片
   - [ ] InfiniteScroll 无限滚动
   - [ ] Drawer 抽屉
