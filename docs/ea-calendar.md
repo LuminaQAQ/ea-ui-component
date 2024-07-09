@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted } from 'vue'
-import {EaCalendar} from '../components/ea-calendar/index.js'
 
 onMounted(() => {
     // import('../index.js')
+    import('../components/ea-calendar/index.js')
     import('./index.scss')
 
     document.querySelector('ea-calendar').addEventListener('select', (e) => {

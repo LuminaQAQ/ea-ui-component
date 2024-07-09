@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vitepress dev docs",
-    "build": "vitepress build docs",
+    "build": "vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e",
     "preview": "vitepress preview docs",
     "deploy": "gh-pages -d docs/.vitepress/dist",
     "commit": "git add . && git commit && git push"
