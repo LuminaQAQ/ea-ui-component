@@ -51,6 +51,13 @@
   text-align: center;
   color: #888f9e;
 }
+.row .title {
+  text-align: center;
+  display: block;
+  color: #8492a6;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
 
 .col {
   display: flex;

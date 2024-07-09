@@ -66,6 +66,14 @@
     text-align: center;
     color: darken($color-disabled-text, 20);
   }
+
+  .title {
+    text-align: center;
+    display: block;
+    color: #8492a6;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
 }
 
 .col {
