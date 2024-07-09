@@ -84,7 +84,8 @@ export default defineConfig({
           { text: 'Timeline 时间轴', link: '/ea-timeline' },
           { text: 'BackTop 回到顶部', link: '/ea-backtop' },
           { text: 'Collapse 折叠面板', link: '/ea-collapse' },
-          { text: "Calendar 日历", link: '/ea-calendar' }
+          { text: "Calendar 日历", link: '/ea-calendar' },
+          { text: "Image 图片", link: '/ea-image' },
         ],
       },
     ],
