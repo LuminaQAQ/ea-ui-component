@@ -10,6 +10,64 @@ import "../ea-descriptions-item/index.js";
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
 
+.ea-calendar_wrap {
+  padding: 12px 20px 35px;
+}
+.ea-calendar_wrap .ea-calendar-header_wrap {
+  border-bottom: 1px solid #ebeef5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+}
+.ea-calendar_wrap .ea-calendar-header_wrap .ea-calendar-header_changer .ea-calendar-header_sg-changer {
+  border: 1px solid #ebeef5;
+  border-left: 0px none transparent;
+}
+.ea-calendar_wrap .ea-calendar-header_wrap .ea-calendar-header_changer .ea-calendar-header_sg-changer:first-child {
+  border-left: 1px solid #ebeef5;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table th {
+  font-weight: 400;
+  color: #606266;
+  padding: 12px 0;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td {
+  border-right: 1px solid #ebeef5;
+  border-bottom: 1px solid #ebeef5;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td.is-selected {
+  color: #1989fa;
+  background-color: #f2f8fe;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td.is-today {
+  color: #1989fa;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td.is-disabled {
+  pointer-events: none;
+  color: #c0c4cc;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td span {
+  display: block;
+  box-sizing: border-box;
+  height: 85px;
+  padding: 8px;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table td span .calendar-description {
+  margin-top: auto;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table tr:first-child td {
+  border-top: 1px solid #ebeef5;
+}
+.ea-calendar_wrap .ea-calendar_calendar-wrap .ea-calendar_table tr td:first-child {
+  border-left: 1px solid #ebeef5;
+  border-top: 1px solid #ebeef5;
+}
 `;
 
 /**
@@ -43,12 +101,12 @@ const createChangerElement = (text, className) => {
  * 
  * @returns {HTMLElement} 返回创建好的thead元素。
  */
-const createThead = () => {
+const createThead = (weekArr = ["一", "二", "三", "四", "五", "六", "日"]) => {
     // 创建tr元素
     const tr = createElement('tr');
 
     // 使用map函数遍历一周的天数，为每一天创建一个th元素
-    const ths = ["一", "二", "三", "四", "五", "六", "日"].map(item => {
+    const ths = weekArr.map(item => {
         // 创建th元素
         const th = createElement('th');
         // 设置th元素的文本内容为当前遍历的天数名称
@@ -125,6 +183,21 @@ export class EaCalendar extends Base {
         return `${myDate.getFullYear()}-${myDate.getMonth() + 1}`
     }
 
+
+    // ------- week-start 用户传入的每周起始日 -------
+    // #region
+    get weekStart() {
+        return this.getAttribute('week-start') || "一";
+    }
+
+    set weekStart(weekStart) {
+        this.setAttribute('week-start', weekStart);
+
+        this.#tableHead.innerHTML = createThead(this.#getUserWeekStart(this.week, weekStart)).innerHTML;
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- date 用户传入日期 -------
     // #region
     get date() {
@@ -138,23 +211,63 @@ export class EaCalendar extends Base {
 
         this.#headerDateContent.innerHTML = date = isNaN(new Date(date)) ? this.getToday() : this.getUserToday(date);
 
-        this.#handleDateChange(this.#tableContent, date);
+        this.#handleDateChange(this.#tableContent, date, this.weekStart);
     }
     // #endregion
     // ------- end -------
 
+    get week() {
+        return ["日", "一", "二", "三", "四", "五", "六"];
+    }
+
+    /**
+     * 
+     * @param {Array} weekArr 
+     * @param {string} start 
+     * @returns 
+     */
+    #getUserWeekStart(weekArr, start) {
+        if (!weekArr.includes(start)) return weekArr;
+
+        const index = weekArr.findIndex((item, index) => {
+            if (item === start) return index;
+        })
+
+        if (index === 0 || index === -1) return weekArr;
+
+        return weekArr.slice(index).concat(weekArr.slice(0, index));
+    }
+
+    /**
+     * 处理日历项的选择事件。
+     * 当日历项被点击时，此函数被调用。它的目的是切换所点击项的选中状态，并取消其他项的选中状态。
+     * @param {HTMLElement} node - 日历项元素节点。这个节点代表日历中的一个日期单元格。
+     */
     #handleCalendarItemSelect(node) {
-        node.addEventListener('click', () => {
+        // 为日历项添加点击事件监听器
+        node.addEventListener('click', (e) => {
+            // 遍历日历表中的所有单元格，并移除它们的 'is-selected' 类，以取消选中状态
             this.#tableContent.querySelectorAll('td').forEach(el => {
                 el.classList.remove('is-selected');
-            })
+            });
 
+            // 如果当前点击的节点已经选中，则取消选中状态，否则选中当前节点
             if (node.classList.contains('is-selected')) {
                 node.classList.remove('is-selected');
             } else {
                 node.classList.add('is-selected');
             }
-        })
+
+            const myDate = new Date(this.date);
+            this.dispatchEvent(new CustomEvent('select', {
+                detail: {
+                    year: myDate.getFullYear(),
+                    month: myDate.getMonth() + 1,
+                    date: Number(node.innerText),
+                    day: this.week[Number(node.innerText) % 7],
+                }
+            }));
+        });
     }
 
     #handleMonthChange(flag) {
@@ -169,7 +282,7 @@ export class EaCalendar extends Base {
      * @param {HTMLElement} content - 用于展示日历的HTML元素。
      * @param {string|number|Date} date - 需要展示的月份的日期对象。
      */
-    #handleDateChange(content, date) {
+    #handleDateChange(content, date, weekStart = "一") {
         date = isNaN(new Date(date)) ? new Date() : new Date(date);
 
         // 清空内容区域，为展示新月份做准备
@@ -195,9 +308,7 @@ export class EaCalendar extends Base {
         nextDate.setDate(1);
 
         // 定义星期的中文简写数组
-        const weekArr = ["一", "二", "三", "四", "五", "六", "日"];
-        // 定义获取星期几的函数中用到的星期的中文简写数组
-        const weekArr_getDay = ["日", "一", "二", "三", "四", "五", "六"];
+        const weekArr = this.#getUserWeekStart(this.week, weekStart);
 
         // 构建日历的行，每行7天
         for (let i = 0; i < 6; i++) {
@@ -214,7 +325,7 @@ export class EaCalendar extends Base {
                 const myDate = new Date();
 
                 // 判断当前单元格应展示哪一天的日期
-                if (weekArr[length] === weekArr_getDay[day] && month === currentDate.getMonth() + 1) {
+                if (weekArr[length] === this.week[day] && month === currentDate.getMonth() + 1) {
                     // 如果是当前月的日期，则展示当前月的日期
                     span.innerText = currentDate.getDate();
                     currentDate.setDate(currentDate.getDate() + 1);
@@ -226,12 +337,18 @@ export class EaCalendar extends Base {
                     td.classList.add("is-disabled");
                 } else {
                     // 如果是上个月的日期，则展示上个月的日期
+                    const lastMonthDateStep = j - day + 2;
+                    const step = weekArr.findIndex((item, index) => {
+                        if (item === "一") return index;
+                    })
+
                     lastDate.setMonth(month - 1);
-                    lastDate.setDate(j - day + 2);
+                    lastDate.setDate(lastMonthDateStep > 0 ? (day + length) - step : lastMonthDateStep);
                     span.innerText = lastDate.getDate();
                     td.classList.add("is-disabled");
                 }
 
+                const userToday = new Date(this.date);
                 if (currentDate.getFullYear() === myDate.getFullYear() && currentDate.getMonth() === myDate.getMonth() && currentDate.getDate() === myDate.getDate() + 1) {
                     td.classList.add("is-today");
                 }
@@ -251,24 +368,37 @@ export class EaCalendar extends Base {
         }
     }
 
+    /**
+     * 初始化日期选择器的按钮事件监听器。
+     * 此方法为上个月、今天和下个月按钮添加点击事件监听器，以实现日期的选择和切换。
+     * 
+     * @private
+     */
+    #initDateChangersEvent() {
+        // 为上个月按钮添加点击事件监听器，点击时调用#handleMonthChange方法，参数为"last"表示切换到上个月
+        this.#lastMonthBtn.addEventListener('click', () => {
+            this.#handleMonthChange("last");
+        });
+
+        // 为今天按钮添加点击事件监听器，点击时设置日期为当前日期
+        this.#todayBtn.addEventListener('click', () => {
+            this.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
+        });
+
+        // 为下个月按钮添加点击事件监听器，点击时调用#handleMonthChange方法，参数为"next"表示切换到下个月
+        this.#nextMonthBtn.addEventListener('click', () => {
+            this.#handleMonthChange("next");
+        });
+    }
+
     init() {
         const that = this;
 
+        this.weekStart = this.weekStart;
+
         this.date = this.date;
 
-        this.#tableHead.appendChild(createThead());
-
-        this.#lastMonthBtn.addEventListener('click', () => {
-            that.#handleMonthChange("last");
-        });
-
-        this.#todayBtn.addEventListener('click', () => {
-            that.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-        });
-
-        this.#nextMonthBtn.addEventListener('click', () => {
-            that.#handleMonthChange("next");
-        });
+        this.#initDateChangersEvent();
     }
 
     connectedCallback() {
