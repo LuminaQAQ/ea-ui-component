@@ -47,9 +47,6 @@
 .row.center {
   justify-content: center;
 }
-.row.flex-start {
-  align-items: flex-start;
-}
 .row p {
   text-align: center;
   color: #888f9e;

@@ -76,15 +76,4 @@ export default class Base extends HTMLElement {
             else setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
         }
     }
-
-    /**
-     * 
-     * @param {string} url 链接
-     */
-    setIconFile(url) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = url;
-        this.shadowRoot.appendChild(link);
-    }
 }

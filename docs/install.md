@@ -12,33 +12,28 @@ npm init -y
 npm i easy-component-ui
 ```
 
-## 在线引入
-
-> `js`: 相应组件的引入, 需考虑修改`/components/ea-button/index.js`部分.
-
-```html
-<script type="module">
-  import "https://unpkg.com/easy-component-ui@1.0.3/components/ea-button/index.js";
-<script>
-```
-
 ## 在原生环境引入
 
-这里的路径是 `node_modules` 目录下的 `easy-component-ui` 目录, 即默认下载路径.
+需要到 `/node_modules` 中找到 `easy-component-ui` 的目录, 然后将这个文件移至项目的`根目录下`.
 
-> `css`: 特别的, 如果项目中会使用到带有图标的 `属性/组件`, 需要使用 `link` 标签引入图标文件
+> 注意: 因特殊原因, 该文件夹必须放在项目的根目录下
 
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```txt
+├─easy-component-ui
+│ ├─icon
+│ │ ├─config.json
+│ │ ├─css
+│ │ ├─font
+│ │ └─index.css
+│ ├─index.js
+├─css
+├─js
+└─index.html
 ```
 
-> `js`: 相应组件的引入, 请看对应组件的文档. 格式通常如下:
-
-```js
+```html
+<link rel="stylesheet" href="./easy-component-ui/icon/index.css" />
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-button/index.js";
-<script>
+  import "./easy-component-ui/index.js";
+</script>
 ```
