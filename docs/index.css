@@ -6,9 +6,28 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   src: url("../components/ea-icon/font/fontello.eot") format("embedded-opentype"), url("../components/ea-icon/font/fontello.ttf") format("truetype"), url("../components/ea-icon/font/fontello.woff") format("woff"), url("../components/ea-icon/font/fontello.woff2") format("woff2"), url("../components/ea-icon/font/fontello.svg") format("svg");
 }
+<<<<<<< HEAD
+.demo {
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+  border-radius: 8px;
+}
+.demo .title {
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
 .row {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+=======
+.row {
+  display: flex;
+  justify-content: space-around;
+>>>>>>> master
   margin-bottom: 0.5rem;
   padding: 1rem;
   border: 1px solid rgba(204, 204, 204, 0.5);
@@ -17,8 +36,21 @@
 .row.left {
   justify-content: flex-start;
 }
+<<<<<<< HEAD
+.row.left > *:not(ea-result) {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.row.left > ea-tag {
+  margin-right: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.row.left > ea-badge {
+  margin-right: 1.5rem;
+=======
 .row.left > * {
   margin-right: 0.5rem;
+>>>>>>> master
 }
 .row.right {
   justify-content: flex-end;
@@ -26,6 +58,60 @@
 .row.center {
   justify-content: center;
 }
+<<<<<<< HEAD
+.row p {
+  text-align: center;
+  color: #888f9e;
+}
+.row .title {
+  text-align: center;
+  display: block;
+  color: #8492a6;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+  border-radius: 8px;
+}
+.col.left {
+  align-items: flex-start;
+}
+.col.left > * {
+  margin-bottom: 0.5rem;
+}
+.col.left > ea-input {
+  margin-bottom: 0.5rem;
+}
+.col.left > ea-progress {
+  margin-bottom: 2rem;
+}
+.col p {
+  text-align: center;
+  color: #888f9e;
+}
+.col section {
+  text-align: center;
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+=======
+>>>>>>> master
 
 .main-icon-wrap {
   display: flex;
@@ -54,4 +140,13 @@
 .main-icon-wrap section i {
   font-size: 2rem;
   margin: 0.5rem 0;
+<<<<<<< HEAD
+}
+
+.color-picker {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+=======
+>>>>>>> master
 }

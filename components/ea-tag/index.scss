@@ -1,0 +1,66 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+@mixin ea-tag-theme($theme-name, $text-color, $bgc-color, $border-color) {
+  &.ea-tag--#{$theme-name} {
+    color: $text-color;
+    background-color: $bgc-color;
+    border-color: $border-color;
+
+    &.ea-tag--dark {
+      color: #fff;
+      background-color: $text-color;
+      border-color: $text-color;
+    }
+
+    &.ea-tag--plain {
+      color: $text-color;
+      background-color: #fff;
+      border-color: $border-color;
+    }
+  }
+}
+
+.ea-tag_wrap {
+  display: inline-block;
+
+  height: 2rem;
+  line-height: 30px;
+  white-space: nowrap;
+
+  padding: 0 0.625rem;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+
+  @include ea-tag-theme(
+    "default",
+    $color-tag-default-text,
+    $color-tag-default-bgc,
+    $color-tag-default-border
+  );
+  @include ea-tag-theme(
+    "success",
+    $color-tag-success-text,
+    $color-tag-success-bgc,
+    $color-tag-success-border
+  );
+  @include ea-tag-theme(
+    "info",
+    $color-tag-info-text,
+    $color-tag-info-bgc,
+    $color-tag-info-border
+  );
+  @include ea-tag-theme(
+    "warning",
+    $color-tag-warning-text,
+    $color-tag-warning-bgc,
+    $color-tag-warning-border
+  );
+  @include ea-tag-theme(
+    "danger",
+    $color-tag-danger-text,
+    $color-tag-danger-bgc,
+    $color-tag-danger-border
+  );
+}

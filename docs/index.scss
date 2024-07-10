@@ -14,9 +14,29 @@
     url("../components/ea-icon/font/fontello.svg") format("svg");
 }
 
+<<<<<<< HEAD
+.demo {
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+  border-radius: 8px;
+
+  .title {
+    text-align: center;
+    margin: 0.5rem 0;
+  }
+}
+
 .row {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+=======
+.row {
+  display: flex;
+  justify-content: space-around;
+>>>>>>> master
 
   margin-bottom: 0.5rem;
   padding: 1rem;
@@ -25,12 +45,27 @@
 
   &.left {
     justify-content: flex-start;
+<<<<<<< HEAD
+    & > *:not(ea-result) {
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    & > ea-tag {
+      margin-right: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    & > ea-badge {
+      margin-right: 1.5rem;
+=======
     & > * {
       margin-right: 0.5rem;
     }
 
     & > ea-radio {
       // margin-right: 2rem;
+>>>>>>> master
     }
   }
 
@@ -41,6 +76,68 @@
   &.center {
     justify-content: center;
   }
+<<<<<<< HEAD
+
+  p {
+    text-align: center;
+    color: darken($color-disabled-text, 20);
+  }
+
+  .title {
+    text-align: center;
+    display: block;
+    color: #8492a6;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+  border-radius: 8px;
+
+  &.left {
+    align-items: flex-start;
+    & > * {
+      margin-bottom: 0.5rem;
+    }
+
+    & > ea-input {
+      margin-bottom: 0.5rem;
+    }
+
+    & > ea-progress {
+      margin-bottom: 2rem;
+    }
+  }
+
+  p {
+    text-align: center;
+    color: darken($color-disabled-text, 20);
+  }
+
+  section {
+    text-align: center;
+  }
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+=======
+>>>>>>> master
 }
 
 .main-icon-wrap {
@@ -79,3 +176,13 @@
     }
   }
 }
+<<<<<<< HEAD
+
+.color-picker {
+  display: block;
+
+  width: 1rem;
+  height: 1rem;
+}
+=======
+>>>>>>> master

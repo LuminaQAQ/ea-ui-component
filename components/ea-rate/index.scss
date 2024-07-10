@@ -1,0 +1,65 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+:host {
+  --i-color: rgb(247, 186, 42);
+}
+
+.ea-rate_wrap {
+  --i-color: rgb(247, 186, 42);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .ea-rate_item {
+    cursor: pointer;
+
+    width: 24px;
+    height: 24px;
+
+    & > i {
+      color: #c0c4cc;
+      font-size: 1rem;
+      line-height: 1;
+
+      transition: color 0.3s, font-size 0.1s;
+    }
+
+    &.ea-rate_item--active > i {
+      color: var(--i-color);
+      font-size: 1.1rem;
+    }
+
+    &.ea-rate_item--disabled {
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+
+  .ea-rate_text {
+    margin-left: 0.25rem;
+    min-width: 2rem;
+
+    font-size: 0.8rem;
+    line-height: 0.8;
+
+    vertical-align: middle;
+  }
+
+  .ea-rate_score {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    .ea-rate_score_item {
+      width: 24px;
+      height: 24px;
+
+      & > i {
+        color: #c0c4cc;
+        font-size: 1rem;
+        line-height: 1;
+      }
+    }
+  }
+}

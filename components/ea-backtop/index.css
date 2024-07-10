@@ -1,0 +1,27 @@
+@import "../ea-icon/css/fontello.css";
+@import "../ea-icon/css/animation.css";
+@font-face {
+  font-size: 1rem;
+  font-size: 16px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
+}
+.ea-backtop_wrap {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  right: 40px;
+  bottom: 40px;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 50%;
+  color: #409eff;
+  font-size: 14px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+  opacity: 1;
+  z-index: 5;
+  transition: opacity 0.3s ease-in-out;
+}

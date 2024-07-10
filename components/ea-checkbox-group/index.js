@@ -1,10 +1,24 @@
 // @ts-nocheck
 import setStyle from "../../utils/setStyle";
+<<<<<<< HEAD
+import Base from "../Base";
+
+const stylesheet = `
+.ea-checkbox-group {
+  display: flex;
+}
+.ea-checkbox-group ::slotted(ea-checkbox) {
+  margin-right: 1.5rem;
+}`;
+
+export class EaCheckboxGroup extends Base {
+=======
 
 const stylesheet = ``;
 
 export default class EaCheckboxGroup extends HTMLElement {
 
+>>>>>>> master
     constructor() {
         super();
 
@@ -19,6 +33,9 @@ export default class EaCheckboxGroup extends HTMLElement {
 
         this.dom = dom;
 
+<<<<<<< HEAD
+        this.build(shadowRoot, stylesheet);
+=======
         // ------- 打包 -------
         // #region
         // const styleNode = document.createElement('style');
@@ -32,6 +49,7 @@ export default class EaCheckboxGroup extends HTMLElement {
         setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
         // #endregion
         // ------- end -------
+>>>>>>> master
 
         shadowRoot.appendChild(dom);
     }
@@ -51,12 +69,74 @@ export default class EaCheckboxGroup extends HTMLElement {
     // #endregion
     // ------- end -------
 
+<<<<<<< HEAD
+    // ------- value 指定选中值 -------
+    // #region
+    get value() {
+        if (!this.getAttribute('value')) return;
+
+        return this.getAttribute('value');
+    }
+
+    set value(val) {
+        if (!val) return;
+
+        try {
+            const valArr = val.split(',').map(item => item.trimStart());
+
+            valArr.map(item => {
+                const checkbox = document.querySelector(`ea-checkbox[name="${this.name}"][value="${item}"]`);
+                checkbox.setAttribute('checked', 'true');
+                checkbox.checked = 'true';
+            })
+        } catch (error) {
+
+        }
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- disabled 禁用 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean('disabled');
+    }
+
+    set disabled(val) {
+        const checkboxs = document.querySelectorAll(`ea-checkbox[name="${this.name}"]`);
+
+        checkboxs.forEach(checkbox => {
+            checkbox.setAttribute('disabled', 'true');
+            checkbox.disabled = 'true';
+        });
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         // name 唯一键值
         this.name = this.name;
+
+        // value 指定选中值
+        this.value = this.value;
+
+        // disabled 禁用
+        this.disabled = this.disabled;
+=======
+    init() {
+        // name 唯一键值
+        this.name = this.name;
+>>>>>>> master
     }
 
     connectedCallback() {
         this.init();
     }
 }
+<<<<<<< HEAD
+
+if (!window.customElements.get("ea-checkbox-group")) {
+    window.customElements.define("ea-checkbox-group", EaCheckboxGroup);
+}
+=======
+>>>>>>> master

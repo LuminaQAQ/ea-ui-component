@@ -2,6 +2,10 @@
 import {onMounted} from "vue"
 import configs from "../components/ea-icon/config.json"
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 onMounted(() => {
     import("./index.scss")
 })
@@ -19,8 +23,12 @@ onMounted(() => {
 <i class="icon-chrome"></i>
 
 ```html
+<<<<<<< HEAD
+<i class="icon-spin6 animate-spin"></i> <i class="icon-chrome"></i>
+=======
 <i class="icon-spin6 animate-spin"></i>
 <i class="icon-chrome"></i>
+>>>>>>> master
 ```
 
 ## 图标集合

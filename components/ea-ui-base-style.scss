@@ -29,11 +29,71 @@ $color-warning-border: #e6a23c;
 $color-danger-text: #fff;
 $color-danger-bgc: #f56c6c;
 $color-danger-border: #f56c6c;
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 
 // 配色
 $color-disabled-text: #c0c4cc;
 $color-disabled-btn-bgc: #eeeeee;
 
+<<<<<<< HEAD
+// 计数器
+$color-counter-bgc: #f5f7fa;
+$color-counter-text: #606266;
+$color-counter-hover-text: #409eff;
+$color-counter-disabled-text: #c0c4cc;
+
+// 边框
+$color-border: #dcdfe6;
+
+// 开关
+$color-switch-bgc: #dcdfe6;
+$color-switch-checked-bgc: #409eff;
+$color-switch-disabled-bgc: #eff1f5;
+$color-switch-disabled-text: #c0c4cc;
+$color-switch-disabled-active-text: #7ebfff;
+
+// 标签-dark-文字颜色
+$color-tag-dark-text: #fff;
+
+// 标签-默认
+$color-tag-default-bgc: #ecf5ff;
+$color-tag-default-text: #409eff;
+$color-tag-default-border: #dcdfe6;
+
+// 标签-成功
+$color-tag-success-bgc: #f0f9eb;
+$color-tag-success-text: #67c23a;
+$color-tag-success-border: #e1f3d8;
+
+// 标签-信息
+$color-tag-info-bgc: #f4f4f5;
+$color-tag-info-text: #909399;
+$color-tag-info-border: #e9e9eb;
+
+// 标签-警告
+$color-tag-warning-bgc: #fdf6ec;
+$color-tag-warning-text: #e6a23c;
+$color-tag-warning-border: #faecd8;
+
+// 标签-危险
+$color-tag-danger-bgc: #fef0f0;
+$color-tag-danger-text: #f56c6c;
+$color-tag-danger-border: #fbc4c4;
+
+$themes: (
+  default: $color-default-bgc,
+  primary: $color-primary-bgc,
+  success: $color-success-bgc,
+  info: $color-info-bgc,
+  warning: $color-warning-bgc,
+  danger: $color-danger-bgc,
+);
+
+=======
+>>>>>>> master
 // 链接的配色
 @mixin ea-link-theme($theme-name, $color) {
   &.#{$theme-name} {
@@ -48,3 +108,58 @@ $color-disabled-btn-bgc: #eeeeee;
     }
   }
 }
+<<<<<<< HEAD
+
+@mixin clear-ul-default-style {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 0;
+  unicode-bidi: unset;
+}
+
+@mixin input-default-theme {
+  box-sizing: border-box;
+  box-shadow: none;
+
+  border: 1px solid $color-border;
+  outline: 0;
+  transition: border 0.2s;
+  border-radius: 3px;
+
+  padding: 0.5rem;
+
+  line-height: 0.8;
+  font-size: 0.8rem;
+  scrollbar-width: none;
+
+  &:focus {
+    border-color: $color-primary-border;
+  }
+
+  &::placeholder {
+    color: $color-disabled-text;
+  }
+
+  &.invalid {
+    border-color: $color-danger-border;
+  }
+
+  &.disabled {
+    background-color: $color-disabled-btn-bgc;
+    color: $color-disabled-text;
+  }
+
+  &.ea-input_clear {
+    ::before {
+      content: "\e9c3";
+      display: block;
+    }
+  }
+}
+=======
+>>>>>>> origin/dev_1.0
+=======
+>>>>>>> master

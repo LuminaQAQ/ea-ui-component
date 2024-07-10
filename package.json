@@ -1,6 +1,27 @@
 {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  "name": "ea_ui_component",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack serve --open",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+>>>>>>> origin/dev_1.0
   "devDependencies": {
     "gh-pages": "^6.1.1",
+    "nanoid": "^5.0.7",
+=======
+  "devDependencies": {
+    "gh-pages": "^6.1.1",
+>>>>>>> master
     "sass": "^1.77.2",
     "scss": "^0.2.4",
     "scss-loader": "^0.0.1",
@@ -8,9 +29,16 @@
   },
   "scripts": {
     "dev": "vitepress dev docs",
+<<<<<<< HEAD
+    "build": "vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e && vitepress preview docs",
+    "preview": "vitepress preview docs",
+    "deploy": "gh-pages -d docs/.vitepress/dist",
+    "commit": "git add . && git commit && git push"
+=======
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
     "deploy": "gh-pages -d docs/.vitepress/dist"
+>>>>>>> master
   },
   "dependencies": {
     "path": "^0.12.7"
