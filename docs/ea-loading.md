@@ -43,6 +43,27 @@ onMounted(() => {
 
 加载数据时显示动效。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-loading/index.js";
+</script>
+```
+
+> `js`: 如果需要使用案例, 则需额外引入 `ea-description` 和 `ea-description-item` 组件。
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-button/index.js";
+  import "./node_modules/easy-component-ui/components/ea-descriptions/index.js";
+  import
+  "./node_modules/easy-component-ui/components/ea-descriptions-item/index.js";
+</script>
+```
+
 ## 区域加载
 
 在表格等容器中加载数据时显示。

@@ -11,6 +11,16 @@ onMounted(() => {
 
 返回页面顶部的操作按钮
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-backtop/index.js";
+</script>
+```
+
 ## 基础用法
 
 滑动页面即可看到右下方的按钮。

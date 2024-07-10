@@ -15,6 +15,16 @@ onMounted(() => {
 
 用图标、图片或者字符的形式展示用户或事物信息。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-avatar/index.js";
+</script>
+```
+
 ## 基本用法
 
 通过 `shape` 和 `size` 设置头像的形状和大小。

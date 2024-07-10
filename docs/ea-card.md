@@ -34,6 +34,16 @@ onMounted(() => {
 
 将信息聚合在卡片容器中展示。
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-card/index.js";
+</script>
+```
+
 ## 基础用法
 
 包含标题，内容和操作。
@@ -70,6 +80,10 @@ onMounted(() => {
 ```
 
 ```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-card/index.js";
+</script>
+
 <div class="ea-card-demo">
   <ea-card>
     <div slot="header" class="header">

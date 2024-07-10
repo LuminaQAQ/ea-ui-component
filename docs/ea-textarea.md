@@ -11,6 +11,16 @@ onMounted(() => {
 
 通过鼠标或键盘输入字符
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-textarea/index.js";
+</script>
+```
+
 ## 基础用法
 
 <div class="row left">

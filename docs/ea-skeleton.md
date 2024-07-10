@@ -23,6 +23,16 @@ onMounted(() => {
 
 在需要等待加载内容的位置设置一个骨架屏，某些场景下比 Loading 的视觉效果更好。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-skeleton/index.js";
+</script>
+```
+
 ## 基础用法
 
 基础的骨架效果。

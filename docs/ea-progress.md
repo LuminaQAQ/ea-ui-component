@@ -28,7 +28,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 ea-progress {
     width: 20rem;
 }
@@ -42,6 +42,16 @@ ea-progress[type="dashboard"] {
 # Progress 进度条
 
 用于展示操作进度，告知用户当前状态和预期。
+
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-progress/index.js";
+</script>
+```
 
 ## 线形进度条
 
