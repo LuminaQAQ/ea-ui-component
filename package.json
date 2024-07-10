@@ -1,4 +1,19 @@
 {
+<<<<<<< HEAD
+=======
+  "name": "ea_ui_component",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack serve --open",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+>>>>>>> origin/dev_1.0
   "devDependencies": {
     "gh-pages": "^6.1.1",
     "nanoid": "^5.0.7",

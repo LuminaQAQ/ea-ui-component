@@ -21,6 +21,7 @@ const stylesheet = `
   --border-size: 0;
 }
 
+<<<<<<< HEAD
 .__ea-button {
   box-sizing: border-box;
   padding: 0.5rem 1rem;
@@ -406,11 +407,15 @@ const stylesheet = `
 
 export class EaButton extends Base {
   #mounted = false;
+=======
+export default class EaButton extends HTMLElement {
+>>>>>>> origin/dev_1.0
 
   constructor() {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
+<<<<<<< HEAD
     let dom = null;
 
 
@@ -478,6 +483,47 @@ export class EaButton extends Base {
 
   set ariaDisabled(value) {
     this.toggleAttribute('aria-disabled', value, 'disabled');
+=======
+
+    const test = document.createElement('input');
+    test.type = 'button';
+    test.value = "click";
+    test.className = "__ea-button";
+
+
+    setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    shadowRoot.appendChild(test);
+  }
+
+  get BUTTON_STYLE() {
+    return ['plain', 'round'];
+  }
+
+  // ------- 禁用 -------
+  // #region
+  get disabled() {
+    return this.getAttribute('disabled') !== null;
+  }
+
+  get ariaDisabled() {
+    return this.getAttribute('aria-disabled') !== null;
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 按钮内容 -------
+  // #region
+  get value() {
+    return this.getAttribute('value');
+  }
+
+  get innerHTMLValue() {
+    return this.innerHTML;
+  }
+
+  get ariaValueText() {
+    return this.getAttribute('aria-valuetext');
+>>>>>>> origin/dev_1.0
   }
   // #endregion
   // ------- end -------
@@ -487,6 +533,7 @@ export class EaButton extends Base {
   get plain() {
     return this.getAttribute('plain') !== undefined && this.getAttribute('plain') !== null;
   }
+<<<<<<< HEAD
   set plain(value) {
     this.toggleAttribute('plain', value, 'plain');
   }
@@ -507,10 +554,21 @@ export class EaButton extends Base {
   get type() {
     const attr = this.getAttribute('type');
 
+=======
+  get round() {
+    return this.getAttribute('round') !== undefined && this.getAttribute('round') !== null;
+  }
+  // #endregion
+  // ------- end -------
+
+  get type() {
+    const attr = this.getAttribute('type');
+>>>>>>> origin/dev_1.0
     if (attr == null || attr == false) return 'normal';
     else return attr;
   }
 
+<<<<<<< HEAD
   set type(value) {
     if (!this.BUTTON_TYPE.includes(value)) value = 'normal';
 
@@ -606,15 +664,33 @@ export class EaButton extends Base {
 
     // 加载
     this.loading = this.loading;
+=======
+  connectedCallback() {
+    const button = this.shadowRoot.querySelector('.__ea-button');
+
+    // 禁用
+    button.disabled = this.disabled;
+    button.ariaDisabled = this.ariaDisabled;
+
+    // 按钮内容
+    button.ariaValueText = this.ariaValueText;
+    button.value = this.value;
+    button.value = this.innerHTMLValue;
+>>>>>>> origin/dev_1.0
 
     // 按钮样式
     for (let i = 0, style; style = this.BUTTON_STYLE[i++];) {
       if (this[style]) {
+<<<<<<< HEAD
         this[style] = this[style];
+=======
+        button.classList.add(style);
+>>>>>>> origin/dev_1.0
         break;
       }
     }
 
+<<<<<<< HEAD
     // 按钮种类
     this.type = this.type;
 
@@ -654,4 +730,9 @@ export class EaButton extends Base {
 
 if (!window.customElements.get("ea-button")) {
   window.customElements.define("ea-button", EaButton);
+=======
+    if (this.disabled || this.ariaDisabled) button.classList.add('disabled');
+    button.classList.add(this.type);
+  }
+>>>>>>> origin/dev_1.0
 }
