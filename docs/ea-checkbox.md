@@ -6,7 +6,6 @@ const btn = ref(null);
 onMounted(() => {
   import('../index.js')
   import('./index.scss')
-<<<<<<< HEAD
 
   document.querySelector('#city-group').addEventListener('click', () => {
     const name = "city";
@@ -37,8 +36,6 @@ onMounted(() => {
     alert(`[${checkboxValueArr}]`);
   })
 
-=======
->>>>>>> master
 })
 </script>
 
@@ -93,12 +90,9 @@ onMounted(() => {
     <ea-checkbox value="成都" disabled checked>成都</ea-checkbox>
   </ea-checkbox-group>
 </div>
-<<<<<<< HEAD
 <div class="row left">
   <ea-button id="city-group" type="primary">点击获取 checkbox 值</ea-button>
 </div>
-=======
->>>>>>> master
 
 ```html
 <div class="row left">
@@ -110,7 +104,6 @@ onMounted(() => {
     <ea-checkbox value="成都" disabled checked>成都</ea-checkbox>
   </ea-checkbox-group>
 </div>
-<<<<<<< HEAD
 <div class="row left">
   <ea-button id="city-group" type="primary">点击获取 checkbox 值</ea-button>
 </div>
@@ -131,15 +124,12 @@ document.querySelector("#city-group").addEventListener("click", () => {
 
   alert(`[${checkboxValueArr}]`);
 });
-=======
->>>>>>> master
 ```
 
 ## indeterminate 状态
 
 indeterminate 属性用以表示 checkbox 的不确定状态，一般用于实现全选的效果
 
-<<<<<<< HEAD
 <div class="row left">
   <ea-checkbox id="checkAll" name="food">全选</ea-checkbox>
   <ea-button id="setIndeterminate" type="primary">设置 indeterminate 状态</ea-button>
@@ -178,10 +168,3 @@ document
 <div class="row left">
   <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
 </div>
-=======
-## 可选项目数量的限制
-
-使用 min 和 max 属性能够限制可以被勾选的项目的数量。
-
-## 带有边框
->>>>>>> master
