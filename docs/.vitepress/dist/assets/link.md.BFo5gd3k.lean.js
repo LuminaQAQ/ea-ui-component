@@ -1,0 +1,1 @@
+import{_ as e,o as t,c as a}from"./chunks/framework.DchfT4Lv.js";const _=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"link.md","filePath":"link.md","lastUpdated":1716278879000}'),n={name:"link.md"};function r(o,s,c,i,d,l){return t(),a("div")}const m=e(n,[["render",r]]);export{_ as __pageData,m as default};
