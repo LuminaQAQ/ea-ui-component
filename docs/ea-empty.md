@@ -11,6 +11,16 @@ onMounted(() => {
 
 空状态时的占位提示。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-empty/index.js";
+</script>
+```
+
 ## 基础用法
 
 通过设置 `description` 属性来配置描述文字。

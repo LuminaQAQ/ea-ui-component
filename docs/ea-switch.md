@@ -15,6 +15,16 @@ onMounted(() => {
 
 表示两种相互对立的状态间的切换，多用于触发「开/关」。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-switch/index.js";
+</script>
+```
+
 ## 基本用法
 
 <div class="row">

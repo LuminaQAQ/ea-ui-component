@@ -13,7 +13,6 @@ const urls =  [
 ]
 
 onMounted(() => {
-    // import('../index.js')
     import('./index.scss')
     import("../components/ea-image/index.js")
 })
@@ -22,6 +21,16 @@ onMounted(() => {
 # Image 图片
 
 图片容器，在保留原生 img 的特性下，支持懒加载，自定义占位、加载失败等
+
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-image/index.js";
+</script>
+```
 
 ## 基础用法
 

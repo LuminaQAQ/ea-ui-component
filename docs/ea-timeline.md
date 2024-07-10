@@ -30,6 +30,16 @@ onMounted(() => {
 
 可视化地呈现时间流信息。
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-timeline/index.js";
+</script>
+```
+
 ## 基础用法
 
 Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，时间戳是其区分于其他控件的重要特征，使⽤时注意与 `Steps` 步骤条等区分。
@@ -52,6 +62,11 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
 </div>
 
 ```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-radio/index.js";
+  import "./node_modules/easy-component-ui/components/ea-radio-group/index.js";
+</script>
+
 <div class="demo">
   <ea-radio-group name="sort">
     <span style="margin-right: 1rem;">排序：</span>

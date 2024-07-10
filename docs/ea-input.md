@@ -27,14 +27,16 @@ onMounted(() => {
   document.querySelector('#trigger-after-input').suggestion = valArr;
 
   setTimeout(() => {  
-    const input = document.querySelector('#trigger-on-focus_for-remote');
-    input.suggestion = [
-      { value: '5' },
-      { value: '6' },
-    ];
-    input.refresh();
-    input.remote = false;
-  }, 10 * 1000)
+    try{
+      const input = document.querySelector('#trigger-on-focus_for-remote');
+      input.suggestion = [
+        { value: '5' },
+        { value: '6' },
+      ];
+      input.refresh();
+      input.remote = false;
+    } catch(e) {}
+  }, 5 * 1000)
 })
 </script>
 
@@ -49,6 +51,16 @@ onMounted(() => {
 # Input 输入框
 
 通过鼠标或键盘输入字符
+
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-input/index.js";
+</script>
+```
 
 ## 基础用法
 

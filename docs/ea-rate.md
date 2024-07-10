@@ -23,6 +23,16 @@ onMounted(() => {
 
 评分组件
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-rate/index.js";
+</script>
+```
+
 ## 基础用法
 
 <div class="row">

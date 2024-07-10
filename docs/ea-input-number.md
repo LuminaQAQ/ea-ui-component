@@ -12,6 +12,16 @@ onMounted(() => {
 
 仅允许输入标准的数字值，可定义范围
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-input-number/index.js";
+</script>
+```
+
 ## 基础用法
 
 <div class="row left">

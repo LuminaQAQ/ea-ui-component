@@ -64,6 +64,16 @@ ea-infinite::part(wrap) {
 
 滚动至底部时，加载更多数据。
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-infinite-scroll/index.js";
+</script>
+```
+
 ## 基础用法
 
 通过 `ea-infinite` 与 `ea-infinite-item` 组件配合实现无限滚动。通过监听 `bottomReached` 事件可实现滚动到底部时自动执行加载方法。

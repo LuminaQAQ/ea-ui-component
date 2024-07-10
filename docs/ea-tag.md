@@ -22,6 +22,16 @@ onMounted(() => {
 
 用于标记和选择。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-tag/index.js";
+</script>
+```
+
 ## 基础用法
 
 <div class="row left">

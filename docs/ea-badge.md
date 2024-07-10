@@ -11,6 +11,16 @@ onMounted(() => {
 
 出现在按钮、图标旁的数字或状态标记。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-badge/index.js";
+</script>
+```
+
 ## 基础用法
 
 展示新消息数量。

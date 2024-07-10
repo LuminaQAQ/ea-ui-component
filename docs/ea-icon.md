@@ -2,7 +2,6 @@
 import {onMounted} from "vue"
 import configs from "../components/ea-icon/config.json"
 
-
 onMounted(() => {
     import("./index.scss")
 })
@@ -21,6 +20,12 @@ onMounted(() => {
 
 ```html
 <i class="icon-spin6 animate-spin"></i> <i class="icon-chrome"></i>
+```
+
+> 也可以通过组件的方式使用：
+
+```html
+<ea-icon icon="icon-coffee"></ea-icon>
 ```
 
 ## 图标集合

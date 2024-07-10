@@ -49,11 +49,43 @@ onMounted(() => {
 
 > 从场景上说，`MessageBox` 的作用是美化系统自带的 `alert`、`confirm` 和 `prompt`，因此适合展示较为简单的内容。如果需要弹出较为复杂的内容，请使用 `Dialog`。
 
-## 使用
+## 引入
 
-```js
-import "./easy-component-ui/index.js";
-import { EaMessageBox } from "./easy-component-ui/ea-message-box/EaMessageBoxClass.js";
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-message-box/index.js";
+  import { EaMessageBox } from "./node_modules/easy-component-ui/components/ea-message-box/EaMessageBoxClass.js";
+</script>
+```
+
+> `js`: 如果需要使用案例, 则需额外引入一下代码
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-message/index.js";
+  import { EaMessage } from "./node_modules/easy-component-ui/components/ea-message/MessageClass.js";
+  import "./node_modules/easy-component-ui/components/ea-message-box/index.js";
+  import { EaMessageBox } from "./node_modules/easy-component-ui/components/ea-message-box/EaMessageBoxClass.js";
+
+  const $confirm = new EaMessageBox();
+  const $message = new EaMessage();
+  document
+    .querySelector("#openAlertMessageBox")
+    .addEventListener("click", () => {
+      $confirm
+        .open("同意该须知则意味着您同意该须知", "是否同意该须知", {
+          confirmButtonText: "同意",
+        })
+        .then(() => {
+          $message.open("用户取消了确认");
+        })
+        .catch(() => {
+          $message.open("用户取消了取消");
+        });
+    });
+</script>
 ```
 
 ## 消息提示
@@ -72,20 +104,30 @@ import { EaMessageBox } from "./easy-component-ui/ea-message-box/EaMessageBoxCla
 </div>
 ```
 
-```js
-const $alert = new EaMessageBox();
-document.querySelector("#openAlertMessageBox").addEventListener("click", () => {
-  $confirm
-    .open("同意该须知则意味着您同意该须知", "是否同意该须知", {
-      confirmButtonText: "同意",
-    })
-    .then(() => {
-      $message.open("用户取消了确认");
-    })
-    .catch(() => {
-      $message.open("用户取消了取消");
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-message/index.js";
+  import { EaMessage } from "./node_modules/easy-component-ui/components/ea-message/MessageClass.js";
+  import "./node_modules/easy-component-ui/components/ea-message-box/index.js";
+  import { EaMessageBox } from "./node_modules/easy-component-ui/components/ea-message-box/EaMessageBoxClass.js";
+
+  const $confirm = new EaMessageBox();
+  const $message = new EaMessage();
+  document
+    .querySelector("#openAlertMessageBox")
+    .addEventListener("click", () => {
+      $confirm
+        .open("同意该须知则意味着您同意该须知", "是否同意该须知", {
+          confirmButtonText: "同意",
+        })
+        .then(() => {
+          $message.open("用户取消了确认");
+        })
+        .catch(() => {
+          $message.open("用户取消了取消");
+        });
     });
-});
+</script>
 ```
 
 ## 确认消息
@@ -104,21 +146,30 @@ document.querySelector("#openAlertMessageBox").addEventListener("click", () => {
 </div>
 ```
 
-```js
-const $confirm = new EaMessageBox();
-document.querySelector("#openMessageBox").addEventListener("click", () => {
-  $confirm
-    .open("这是一段内容", "确认取消确认", {
-      confirmButtonText: "确认取消",
-      cancelButtonText: "取消确认",
-    })
-    .then(() => {
-      $message.open("用户取消了确认");
-    })
-    .catch(() => {
-      $message.open("用户取消了取消");
-    });
-});
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-message/index.js";
+  import { EaMessage } from "./node_modules/easy-component-ui/components/ea-message/MessageClass.js";
+  import "./node_modules/easy-component-ui/components/ea-message-box/index.js";
+  import { EaMessageBox } from "./node_modules/easy-component-ui/components/ea-message-box/EaMessageBoxClass.js";
+
+  const $confirm = new EaMessageBox();
+  const $message = new EaMessage();
+
+  document.querySelector("#openMessageBox").addEventListener("click", () => {
+    $confirm
+      .open("这是一段内容", "确认取消确认", {
+        confirmButtonText: "确认取消",
+        cancelButtonText: "取消确认",
+      })
+      .then(() => {
+        $message.open("用户取消了确认");
+      })
+      .catch(() => {
+        $message.open("用户取消了取消");
+      });
+  });
+</script>
 ```
 
 ## Attributes

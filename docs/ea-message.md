@@ -111,8 +111,17 @@ onMounted(() => {
 
 常用于主动操作后的反馈提示。与 Notification 的区别是后者更多用于系统级通知的被动提醒。
 
-```js
-import { EaMessage } from "../components/ea-message/MessageClass.js";
+## 引入
+
+> `js`: 注意需要在引入的部位编写业务逻辑.
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-message/index.js";
+  import { EaMessage } from "./node_modules/easy-component-ui/components/ea-message/MessageClass.js";
+
+  const message = new EaMessage();
+</script>
 ```
 
 ## 基础用法
@@ -129,11 +138,16 @@ import { EaMessage } from "../components/ea-message/MessageClass.js";
 </div>
 ```
 
-```js
-const message = new EaMessage();
-document.getElementById("messageTextBtn").addEventListener("click", () => {
-  message.open("1");
-});
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-message/index.js";
+  import { EaMessage } from "./node_modules/easy-component-ui/components/ea-message/MessageClass.js";
+
+  const message = new EaMessage();
+  document.getElementById("messageTextBtn").addEventListener("click", () => {
+    message.open("1");
+  });
+</script>
 ```
 
 ## 不同状态

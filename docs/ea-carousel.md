@@ -11,6 +11,16 @@ onMounted(() => {
 
 在有限空间内，循环播放同一类型的图片、文字等内容
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-carousel/index.js";
+</script>
+```
+
 ## 基础用法
 
 适用广泛的基础用法
