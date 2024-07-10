@@ -43,18 +43,6 @@ onMounted(() => {
 
 一组备选项中进行多选
 
-## 引入
-
-> `js`
-
-```js
-<script type="module">
-  import "./node_modules/easy-component-ui/components/ea-checkbox/index.js";
-  import
-  "./node_modules/easy-component-ui/components/ea-checkbox-group/index.js";
-</script>
-```
-
 ## 基础用法
 
 单独使用可以表示两种状态之间的切换，写在标签中的内容为 checkbox 按钮后的介绍。
@@ -180,43 +168,3 @@ document
 <div class="row left">
   <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
 </div>
-
-```html
-<script type="module">
-  import "./node_modules/easy-component-ui/components/ea-checkbox/index.js";
-  import "./node_modules/easy-component-ui/components/ea-checkbox-group/index.js";
-  import "./node_modules/easy-component-ui/components/ea-button/index.js";
-
-  document.querySelector("#day-group").addEventListener("click", function (e) {
-    console.log(document.querySelector("#ea-checkbox-group").value);
-    const name = "day";
-    const elements = document.querySelectorAll(
-      `ea-checkbox[name=${name}][checked]`
-    );
-
-    const checkboxValueArr = [];
-
-    elements.forEach((item) => checkboxValueArr.push(item.value));
-
-    alert(`[${checkboxValueArr}]`);
-  });
-</script>
-
-<div class="row left">
-  <ea-checkbox-group
-    id="ea-checkbox-group"
-    name="day"
-    value="今天, 明天"
-    disabled
-  >
-    <ea-checkbox value="前天">前天</ea-checkbox>
-    <ea-checkbox value="昨天">昨天</ea-checkbox>
-    <ea-checkbox value="今天">今天</ea-checkbox>
-    <ea-checkbox value="明天">明天</ea-checkbox>
-    <ea-checkbox value="后天">后天</ea-checkbox>
-  </ea-checkbox-group>
-</div>
-<div class="row left">
-  <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
-</div>
-```

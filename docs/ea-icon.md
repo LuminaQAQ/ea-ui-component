@@ -2,6 +2,7 @@
 import {onMounted} from "vue"
 import configs from "../components/ea-icon/config.json"
 
+
 onMounted(() => {
     import("./index.scss")
 })
@@ -10,16 +11,6 @@ onMounted(() => {
 # Icon 图标
 
 提供了一套常用的图标集合。
-
-## 引入
-
-> `js`
-
-```html
-<script type="module">
-  import "./node_modules/easy-component-ui/components/ea-icon/index.js";
-</script>
-```
 
 ## 使用方法
 
@@ -30,12 +21,6 @@ onMounted(() => {
 
 ```html
 <i class="icon-spin6 animate-spin"></i> <i class="icon-chrome"></i>
-```
-
-> 也可以通过组件的方式使用：
-
-```html
-<ea-icon icon="icon-coffee"></ea-icon>
 ```
 
 ## 图标集合

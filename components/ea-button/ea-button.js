@@ -31,7 +31,6 @@ const stylesheet = `
   font-weight: 500;
   transition: background-color 0.1s, color 0.1s;
   border-radius: var(--border-radius);
-  will-change: width;
 }
 .__ea-button.normal {
   border: var(--border-size) solid #dcdfe6;
@@ -417,8 +416,6 @@ export class EaButton extends Base {
 
     if (this.getAttribute('href') !== null && this.getAttribute('href') !== '') dom = document.createElement('a');
     else dom = document.createElement('button');
-
-    dom.part = "wrap";
 
     const slot = document.createElement('slot');
     dom.className = "__ea-button";
