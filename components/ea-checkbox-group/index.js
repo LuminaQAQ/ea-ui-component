@@ -1,5 +1,6 @@
 // @ts-nocheck
 import setStyle from "../../utils/setStyle";
+<<<<<<< HEAD
 import Base from "../Base";
 
 const stylesheet = `
@@ -11,6 +12,13 @@ const stylesheet = `
 }`;
 
 export class EaCheckboxGroup extends Base {
+=======
+
+const stylesheet = ``;
+
+export default class EaCheckboxGroup extends HTMLElement {
+
+>>>>>>> master
     constructor() {
         super();
 
@@ -25,7 +33,23 @@ export class EaCheckboxGroup extends Base {
 
         this.dom = dom;
 
+<<<<<<< HEAD
         this.build(shadowRoot, stylesheet);
+=======
+        // ------- 打包 -------
+        // #region
+        // const styleNode = document.createElement('style');
+        // styleNode.innerHTML = stylesheet;
+        // this.shadowRoot.appendChild(styleNode);
+        // #endregion
+        // ------- end -------
+
+        // ------- 本地调试 -------
+        // #region
+        setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+        // #endregion
+        // ------- end -------
+>>>>>>> master
 
         shadowRoot.appendChild(dom);
     }
@@ -45,6 +69,7 @@ export class EaCheckboxGroup extends Base {
     // #endregion
     // ------- end -------
 
+<<<<<<< HEAD
     // ------- value 指定选中值 -------
     // #region
     get value() {
@@ -97,13 +122,21 @@ export class EaCheckboxGroup extends Base {
 
         // disabled 禁用
         this.disabled = this.disabled;
+=======
+    init() {
+        // name 唯一键值
+        this.name = this.name;
+>>>>>>> master
     }
 
     connectedCallback() {
         this.init();
     }
 }
+<<<<<<< HEAD
 
 if (!window.customElements.get("ea-checkbox-group")) {
     window.customElements.define("ea-checkbox-group", EaCheckboxGroup);
 }
+=======
+>>>>>>> master

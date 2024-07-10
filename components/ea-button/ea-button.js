@@ -2,6 +2,7 @@
 import setStyle from "../../utils/setStyle";
 import Base from "../Base.js";
 import "../ea-icon/index.scss";
+<<<<<<< HEAD
 
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');
@@ -22,6 +23,27 @@ const stylesheet = `
 }
 
 <<<<<<< HEAD
+=======
+
+const stylesheet = `
+@import url('/ea_ui_component/icon/index.css');
+
+:host {
+  --margin-right: 1rem;
+  --border-radius: 6px;
+  --border-size: 1px;
+}
+
+:host([href]) > a {
+  text-decoration: none;
+}
+
+:host-context(ea-button-group) {
+  --margin-right: 0;
+  --border-size: 0;
+}
+
+>>>>>>> master
 .__ea-button {
   box-sizing: border-box;
   padding: 0.5rem 1rem;
@@ -404,6 +426,7 @@ const stylesheet = `
   border-radius: 0 4px 4px 0;
 }
 `;
+<<<<<<< HEAD
 
 export class EaButton extends Base {
   #mounted = false;
@@ -411,16 +434,26 @@ export class EaButton extends Base {
 export default class EaButton extends HTMLElement {
 >>>>>>> origin/dev_1.0
 
+=======
+
+export default class EaButton extends Base {
+  #mounted = false;
+
+>>>>>>> master
   constructor() {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
     let dom = null;
 
 
     if (this.getAttribute('href') !== null && this.getAttribute('href') !== '') dom = document.createElement('a');
     else dom = document.createElement('button');
+<<<<<<< HEAD
 
     const slot = document.createElement('slot');
     dom.className = "__ea-button";
@@ -495,28 +528,69 @@ export default class EaButton extends HTMLElement {
     shadowRoot.appendChild(test);
   }
 
+=======
+
+    const slot = document.createElement('slot');
+    dom.className = "__ea-button";
+    dom.appendChild(slot);
+
+    this.dom = dom;
+
+    // ------- 打包 -------
+    // #region
+    const styleNode = document.createElement('style');
+    styleNode.innerHTML = stylesheet;
+    this.shadowRoot.appendChild(styleNode);
+    // #endregion
+    // ------- end -------
+
+    // ------- 本地调试 -------
+    // #region
+    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+    // #endregion
+    // ------- end -------
+
+
+    shadowRoot.appendChild(dom);
+  }
+
+  static get observedAttributes() {
+    return ['loading', 'disabled'];
+  }
+
+>>>>>>> master
   get BUTTON_STYLE() {
     return ['plain', 'round'];
   }
 
+  get BUTTON_TYPE() {
+    return ['normal', 'primary', 'success', 'warning', 'danger', 'text'];
+  }
+
+  get BUTTON_SIZE() {
+    return ['medium', 'small', 'mini'];
+  }
+
+
   // ------- 禁用 -------
   // #region
   get disabled() {
-    return this.getAttribute('disabled') !== null;
+    return this.hasAttribute('disabled');
+  }
+
+  set disabled(value) {
+    if (!this.#mounted) {
+      this.toggleAttribute('disabled', this.disabled, 'disabled');
+    } else {
+      this.toggleAttribute('disabled', value, 'disabled');
+    }
   }
 
   get ariaDisabled() {
-    return this.getAttribute('aria-disabled') !== null;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- 按钮内容 -------
-  // #region
-  get value() {
-    return this.getAttribute('value');
+    return this.getAttribute('aria-disabled') !== null || this.getAttribute('aria-disabled') !== undefined;
   }
 
+<<<<<<< HEAD
   get innerHTMLValue() {
     return this.innerHTML;
   }
@@ -524,6 +598,10 @@ export default class EaButton extends HTMLElement {
   get ariaValueText() {
     return this.getAttribute('aria-valuetext');
 >>>>>>> origin/dev_1.0
+=======
+  set ariaDisabled(value) {
+    this.toggleAttribute('aria-disabled', value, 'disabled');
+>>>>>>> master
   }
   // #endregion
   // ------- end -------
@@ -534,10 +612,14 @@ export default class EaButton extends HTMLElement {
     return this.getAttribute('plain') !== undefined && this.getAttribute('plain') !== null;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   set plain(value) {
     this.toggleAttribute('plain', value, 'plain');
   }
 
+<<<<<<< HEAD
   get round() {
     return this.getAttribute('round') !== undefined && this.getAttribute('round') !== null;
   }
@@ -555,19 +637,33 @@ export default class EaButton extends HTMLElement {
     const attr = this.getAttribute('type');
 
 =======
+=======
+>>>>>>> master
   get round() {
     return this.getAttribute('round') !== undefined && this.getAttribute('round') !== null;
+  }
+  set round(value) {
+    this.toggleAttribute('round', value, 'round');
+
+    if (value) this.dom.style.setProperty('--border-radius', '999px');
   }
   // #endregion
   // ------- end -------
 
+  // ------- type属性 -------
+  // #region
   get type() {
     const attr = this.getAttribute('type');
+<<<<<<< HEAD
 >>>>>>> origin/dev_1.0
+=======
+
+>>>>>>> master
     if (attr == null || attr == false) return 'normal';
     else return attr;
   }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   set type(value) {
     if (!this.BUTTON_TYPE.includes(value)) value = 'normal';
@@ -667,30 +763,132 @@ export default class EaButton extends HTMLElement {
 =======
   connectedCallback() {
     const button = this.shadowRoot.querySelector('.__ea-button');
+=======
+  set type(value) {
+    if (!this.BUTTON_TYPE.includes(value)) value = 'normal';
+>>>>>>> master
 
+    this.toggleAttribute('type', value, value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 按钮大小 -------
+  // #region
+  get size() {
+    return this.getAttribute('size');
+  }
+  set size(value) {
+    if (!this.BUTTON_SIZE.includes(value)) return;
+
+    this.toggleAttribute('size', value, value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 按钮加载 -------
+  // #region
+  get loading() {
+    return this.hasAttribute('loading');
+  }
+
+  set loading(value) {
+    value = value === "true" || value === "" || value === true ? true : false;
+    this.toggleAttribute('loading', value, 'loading');
+    this.disabled = value;
+
+    if (value && !this.dom.querySelector('i')) {
+      const i = document.createElement('i');
+      i.className = "icon-spin6 animate-spin";
+
+      this.dom.insertBefore(i, this.dom.firstChild)
+    } else if (!value && this.dom.querySelector('i')) {
+      this.dom.querySelector('i').remove();
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 图标按钮 -------
+  // #region
+  get icon() {
+    return this.getAttribute('icon');
+  }
+
+  set icon(value) {
+    if (value) {
+      this.setAttribute('icon', value);
+
+      if (!this.dom.querySelector('i')) {
+        const i = document.createElement('i');
+        i.className = value;
+        if (!this.innerHTML) i.style.setProperty('margin-right', '0');
+
+        this.dom.insertBefore(i, this.dom.firstChild)
+      }
+    } else {
+      this.removeAttribute('icon');
+      this.dom.querySelector('i')?.remove();
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 链接按钮 -------
+  // #region
+  get href() {
+    return this.getAttribute('href');
+  }
+
+  set href(value) {
+    if (this.shadowRoot.querySelector("button")) return;
+
+    if (value == null && value == false) {
+      this.removeAttribute('href');
+      this.dom.removeAttribute('href');
+    } else {
+      this.setAttribute('href', value);
+      this.dom.setAttribute('href', value);
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  init() {
     // 禁用
-    button.disabled = this.disabled;
-    button.ariaDisabled = this.ariaDisabled;
+    this.disabled = this.hasAttribute('disabled');
 
+<<<<<<< HEAD
     // 按钮内容
     button.ariaValueText = this.ariaValueText;
     button.value = this.value;
     button.value = this.innerHTMLValue;
 >>>>>>> origin/dev_1.0
+=======
+    // 加载
+    this.loading = this.loading;
+>>>>>>> master
 
     // 按钮样式
     for (let i = 0, style; style = this.BUTTON_STYLE[i++];) {
       if (this[style]) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         this[style] = this[style];
 =======
         button.classList.add(style);
 >>>>>>> origin/dev_1.0
+=======
+        this[style] = this[style];
+>>>>>>> master
         break;
       }
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
     // 按钮种类
     this.type = this.type;
 
@@ -702,6 +900,7 @@ export default class EaButton extends HTMLElement {
 
     // 图标
     this.icon = this.icon;
+<<<<<<< HEAD
   }
 
   connectedCallback() {
@@ -736,3 +935,30 @@ if (!window.customElements.get("ea-button")) {
   }
 >>>>>>> origin/dev_1.0
 }
+=======
+  }
+
+  connectedCallback() {
+    this.init();
+
+    this.#mounted = true;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue == newValue) return;
+    switch (name) {
+      case "loading":
+        if (newValue === "") newValue = true;
+        this.loading = newValue;
+        break;
+      case "disabled":
+        if (this.#mounted) {
+          this.disabled = newValue === "true" || newValue === "";
+          if (newValue === "true" || newValue === "") this.setAttribute("disabled", true);
+        }
+        break;
+      default: break;
+    }
+  }
+}
+>>>>>>> master

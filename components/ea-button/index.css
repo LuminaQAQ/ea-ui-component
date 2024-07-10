@@ -1,5 +1,8 @@
 @charset "UTF-8";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 @import "../ea-icon/css/fontello.css";
 @import "../ea-icon/css/animation.css";
 @font-face {
@@ -8,8 +11,11 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
 }
+<<<<<<< HEAD
 =======
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 /**
 * $type: 按钮类型的类名
 * $border: 边框颜色
@@ -17,8 +23,13 @@
 * $bgc: 背景颜色
 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 :host {
   --margin-right: 0rem;
+=======
+:host {
+  --margin-right: 1rem;
+>>>>>>> master
   --border-radius: 6px;
   --border-size: 1px;
 }
@@ -36,11 +47,14 @@
   box-sizing: border-box;
   padding: 0.5rem 1rem;
   margin-right: var(--margin-right);
+<<<<<<< HEAD
 =======
 .__ea-button {
   box-sizing: border-box;
   padding: 0.5rem 1rem;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   cursor: pointer;
   font-size: 1rem;
   line-height: 1.25;
@@ -50,10 +64,14 @@
 }
 .__ea-button.normal {
 <<<<<<< HEAD
+<<<<<<< HEAD
   border: var(--border-size) solid #dcdfe6;
 =======
   border: 1px solid #dcdfe6;
 >>>>>>> origin/dev_1.0
+=======
+  border: var(--border-size) solid #dcdfe6;
+>>>>>>> master
   color: #606266;
   background-color: transparent;
   /* ------- 按钮样式 ------- */
@@ -61,12 +79,18 @@
   /* #endregion */
   /* ------- end  ------- */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
+<<<<<<< HEAD
 =======
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 }
 .__ea-button.normal.disabled {
   cursor: not-allowed !important;
@@ -75,25 +99,35 @@
   border-color: white !important;
   color: white !important;
 <<<<<<< HEAD
+<<<<<<< HEAD
   pointer-events: none;
 =======
 >>>>>>> origin/dev_1.0
+=======
+  pointer-events: none;
+>>>>>>> master
   border-color: #ebedf1 !important;
   color: #babcbe !important;
 }
 .__ea-button.normal.plain {
   background-color: rgba(92, 92, 92, 0);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   border: var(--border-size) solid white;
   color: transparent;
   background-color: transparent;
   border: var(--border-size) solid #dcdfe6;
+<<<<<<< HEAD
 =======
   border: 1px solid white;
   color: transparent;
   background-color: transparent;
   border: 1px solid #dcdfe6;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: #606266;
 }
 .__ea-button.normal.plain:hover {
@@ -101,6 +135,9 @@
 }
 .__ea-button.normal.round {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   --border-radius: 999px;
 }
 .__ea-button.normal.medium {
@@ -111,9 +148,12 @@
 }
 .__ea-button.normal.mini {
   font-size: 10px;
+<<<<<<< HEAD
 =======
   border-radius: 999px;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 }
 .__ea-button.normal:hover {
   border: var(--border-size) solid rgba(160, 207, 255, 0.4);
@@ -123,12 +163,16 @@
 .__ea-button.normal:active {
   background-color: rgba(7, 130, 255, 0.05);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   border: var(--border-size) solid rgba(33, 143, 255, 0.4);
 }
 .__ea-button > i {
   font-size: 1rem;
   margin-right: 0.5rem;
 }
+<<<<<<< HEAD
 .__ea-button.primary {
   border: var(--border-size) solid #409eff;
 =======
@@ -137,6 +181,10 @@
 .__ea-button.primary {
   border: 1px solid #409eff;
 >>>>>>> origin/dev_1.0
+=======
+.__ea-button.primary {
+  border: var(--border-size) solid #409eff;
+>>>>>>> master
   color: #fff;
   background-color: #409eff;
   /* ------- 按钮样式 ------- */
@@ -144,12 +192,18 @@
   /* #endregion */
   /* ------- end  ------- */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
+<<<<<<< HEAD
 =======
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 }
 .__ea-button.primary.disabled {
   cursor: not-allowed !important;
@@ -175,6 +229,7 @@
 }
 .__ea-button.primary.mini {
   font-size: 10px;
+<<<<<<< HEAD
 }
 .__ea-button.primary.plain {
   background-color: #f8fbff;
@@ -190,6 +245,11 @@
 =======
   border: 1px solid #73b8ff;
 >>>>>>> origin/dev_1.0
+=======
+}
+.__ea-button.primary:hover {
+  border: var(--border-size) solid #73b8ff;
+>>>>>>> master
   color: white;
   background-color: #73b8ff;
 }
@@ -197,16 +257,22 @@
   background-color: #006bd9;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 .__ea-button > i {
   font-size: 1rem;
   margin-right: 0.5rem;
 }
 .__ea-button.success {
   border: var(--border-size) solid #67c23a;
+<<<<<<< HEAD
 =======
 .__ea-button.success {
   border: 1px solid #67c23a;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: #fff;
   background-color: #67c23a;
   /* ------- 按钮样式 ------- */
@@ -214,12 +280,18 @@
   /* #endregion */
   /* ------- end  ------- */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
+<<<<<<< HEAD
 =======
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 }
 .__ea-button.success.disabled {
   cursor: not-allowed !important;
@@ -228,6 +300,9 @@
   border-color: #b2e19b !important;
   color: white !important;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   pointer-events: none;
 }
 .__ea-button.success.plain {
@@ -249,6 +324,7 @@
 }
 .__ea-button.success:hover {
   border: var(--border-size) solid #85cf60;
+<<<<<<< HEAD
 =======
 }
 .__ea-button.success.plain {
@@ -262,6 +338,8 @@
 .__ea-button.success:hover {
   border: 1px solid #85cf60;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: white;
   background-color: #85cf60;
 }
@@ -269,16 +347,22 @@
   background-color: #3d7323;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 .__ea-button > i {
   font-size: 1rem;
   margin-right: 0.5rem;
 }
 .__ea-button.info {
   border: var(--border-size) solid #909399;
+<<<<<<< HEAD
 =======
 .__ea-button.info {
   border: 1px solid #909399;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: #fff;
   background-color: #909399;
   /* ------- 按钮样式 ------- */
@@ -286,12 +370,18 @@
   /* #endregion */
   /* ------- end  ------- */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
+<<<<<<< HEAD
 =======
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 }
 .__ea-button.info.disabled {
   cursor: not-allowed !important;
@@ -300,6 +390,9 @@
   border-color: #d2d4d6 !important;
   color: white !important;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   pointer-events: none;
 }
 .__ea-button.info.plain {
@@ -321,6 +414,7 @@
 }
 .__ea-button.info:hover {
   border: var(--border-size) solid #abadb1;
+<<<<<<< HEAD
 =======
 }
 .__ea-button.info.plain {
@@ -334,6 +428,8 @@
 .__ea-button.info:hover {
   border: 1px solid #abadb1;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: white;
   background-color: #abadb1;
 }
@@ -341,16 +437,22 @@
   background-color: #5d6066;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 .__ea-button > i {
   font-size: 1rem;
   margin-right: 0.5rem;
 }
 .__ea-button.warning {
   border: var(--border-size) solid #e6a23c;
+<<<<<<< HEAD
 =======
 .__ea-button.warning {
   border: 1px solid #e6a23c;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: #fff;
   background-color: #e6a23c;
   /* ------- 按钮样式 ------- */
@@ -358,12 +460,18 @@
   /* #endregion */
   /* ------- end  ------- */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
+<<<<<<< HEAD
 =======
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 }
 .__ea-button.warning.disabled {
   cursor: not-allowed !important;
@@ -372,6 +480,9 @@
   border-color: #f4d8ad !important;
   color: white !important;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   pointer-events: none;
 }
 .__ea-button.warning.plain {
@@ -393,6 +504,7 @@
 }
 .__ea-button.warning:hover {
   border: var(--border-size) solid #ecb869;
+<<<<<<< HEAD
 =======
 }
 .__ea-button.warning.plain {
@@ -406,6 +518,8 @@
 .__ea-button.warning:hover {
   border: 1px solid #ecb869;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: white;
   background-color: #ecb869;
 }
@@ -413,16 +527,22 @@
   background-color: #a76d15;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 .__ea-button > i {
   font-size: 1rem;
   margin-right: 0.5rem;
 }
 .__ea-button.danger {
   border: var(--border-size) solid #f56c6c;
+<<<<<<< HEAD
 =======
 .__ea-button.danger {
   border: 1px solid #f56c6c;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: #fff;
   background-color: #f56c6c;
   /* ------- 按钮样式 ------- */
@@ -430,12 +550,18 @@
   /* #endregion */
   /* ------- end  ------- */
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   /* ------- 按钮大小 ------- */
   /* #region  */
   /* #endregion */
   /* ------- end  ------- */
+<<<<<<< HEAD
 =======
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 }
 .__ea-button.danger.disabled {
   cursor: not-allowed !important;
@@ -444,22 +570,31 @@
   border-color: #fde3e3 !important;
   color: white !important;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   pointer-events: none;
 }
 .__ea-button.danger.plain {
   background-color: white;
   border: var(--border-size) solid #fde3e3;
+<<<<<<< HEAD
 =======
 }
 .__ea-button.danger.plain {
   background-color: white;
   border: 1px solid #fde3e3;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: #f56c6c;
   background-color: #fde8e8;
 }
 .__ea-button.danger.round {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
   --border-radius: 999px;
 }
 .__ea-button.danger.medium {
@@ -473,18 +608,24 @@
 }
 .__ea-button.danger:hover {
   border: var(--border-size) solid #f89c9c;
+<<<<<<< HEAD
 =======
   border-radius: 999px;
 }
 .__ea-button.danger:hover {
   border: 1px solid #f89c9c;
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
   color: white;
   background-color: #f89c9c;
 }
 .__ea-button.danger:active {
   background-color: #eb1010;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 }
 .__ea-button > i {
   font-size: 1rem;
@@ -549,6 +690,9 @@
 }
 .__ea-button.last-child {
   border-radius: 0 4px 4px 0;
+<<<<<<< HEAD
 =======
 >>>>>>> origin/dev_1.0
+=======
+>>>>>>> master
 }

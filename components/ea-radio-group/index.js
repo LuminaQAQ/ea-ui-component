@@ -1,5 +1,6 @@
 // @ts-nocheck
 import setStyle from "../../utils/setStyle";
+<<<<<<< HEAD
 import Base from "../Base";
 
 const stylesheet = `
@@ -11,6 +12,12 @@ const stylesheet = `
 }`;
 
 export class EaRadioGroup extends Base {
+=======
+
+const stylesheet = ``;
+
+export default class EaRadioGroup extends HTMLElement {
+>>>>>>> master
 
     constructor() {
         super();
@@ -26,9 +33,29 @@ export class EaRadioGroup extends Base {
 
         this.dom = dom;
 
+<<<<<<< HEAD
         this.build(shadowRoot, stylesheet);
 
         shadowRoot.appendChild(dom);
+=======
+        // ------- 打包 -------
+        // #region
+        // const styleNode = document.createElement('style');
+        // styleNode.innerHTML = stylesheet;
+        // this.shadowRoot.appendChild(styleNode);
+        // #endregion
+        // ------- end -------
+
+        // ------- 本地调试 -------
+        // #region
+        setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
+        // #endregion
+        // ------- end -------
+
+        shadowRoot.appendChild(dom);
+
+        console.log();
+>>>>>>> master
     }
 
     // ------- name 唯一键值 -------
@@ -54,7 +81,10 @@ export class EaRadioGroup extends Base {
         this.init();
     }
 }
+<<<<<<< HEAD
 
 if (!window.customElements.get("ea-radio-group")) {
     window.customElements.define("ea-radio-group", EaRadioGroup);
 }
+=======
+>>>>>>> master

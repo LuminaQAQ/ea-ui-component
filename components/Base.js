@@ -1,4 +1,5 @@
 // @ts-nocheck
+<<<<<<< HEAD
 
 import setStyle from '../utils/setStyle';
 
@@ -8,6 +9,11 @@ export default class Base extends HTMLElement {
 
         this.isProduction = false;
         this.isProduction = true;
+=======
+export default class Base extends HTMLElement {
+    constructor() {
+        super();
+>>>>>>> master
     }
 
     /**
@@ -27,6 +33,7 @@ export default class Base extends HTMLElement {
             if (className) this.dom.classList.remove(className);
         }
     }
+<<<<<<< HEAD
 
     /**
      * 设置属性值
@@ -41,6 +48,8 @@ export default class Base extends HTMLElement {
         }
     }
 
+=======
+>>>>>>> master
     /**
      * 获取属性值，并转换为布尔值
      * @param {string} attrName 属性名
@@ -48,6 +57,7 @@ export default class Base extends HTMLElement {
      */
     getAttrBoolean(attrName) {
         const attr = this.getAttribute(attrName);
+<<<<<<< HEAD
         return attr === 'true' || attr === '';
     }
 
@@ -76,4 +86,9 @@ export default class Base extends HTMLElement {
             else setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
         }
     }
+=======
+        return attr === true || attr === 'true' || attr === '';
+    }
+
+>>>>>>> master
 }
