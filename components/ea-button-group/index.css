@@ -14,7 +14,11 @@
 * $bgc: 背景颜色
 */
 :host {
+<<<<<<< HEAD
   --margin-right: 0rem;
+=======
+  --margin-right: 1rem;
+>>>>>>> master
   --border-radius: 6px;
   --border-size: 1px;
 }

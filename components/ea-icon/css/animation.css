@@ -8,6 +8,10 @@
   animation: spin 2s infinite linear;
   display: inline-block;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 @-moz-keyframes spin {
   0% {
     -moz-transform: rotate(0deg);
@@ -23,6 +27,10 @@
     transform: rotate(359deg);
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 @-webkit-keyframes spin {
   0% {
     -moz-transform: rotate(0deg);
@@ -38,6 +46,10 @@
     transform: rotate(359deg);
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 @-o-keyframes spin {
   0% {
     -moz-transform: rotate(0deg);
@@ -53,6 +65,10 @@
     transform: rotate(359deg);
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 @-ms-keyframes spin {
   0% {
     -moz-transform: rotate(0deg);
@@ -68,6 +84,10 @@
     transform: rotate(359deg);
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 @keyframes spin {
   0% {
     -moz-transform: rotate(0deg);
@@ -82,4 +102,8 @@
     -webkit-transform: rotate(359deg);
     transform: rotate(359deg);
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> master
