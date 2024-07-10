@@ -1,0 +1,95 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+.ea-switch_wrap {
+  display: flex;
+  align-items: center;
+
+  input {
+    display: none;
+  }
+
+  span {
+    display: block;
+    cursor: default;
+  }
+
+  .ea-switch_label {
+    color: $color-default-text;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &.ea-switch_label--active {
+      color: $color-switch-checked-bgc;
+    }
+  }
+
+  .ea-switch_core {
+    position: relative;
+    cursor: pointer;
+
+    margin: 0 0.75rem;
+
+    width: 2.5rem;
+    height: 1.25rem;
+    line-height: 1.25rem;
+
+    background-color: $color-switch-bgc;
+    border-radius: 999px;
+
+    transition: background-color 0.2s;
+
+    &.ea-switch_core--checked {
+      background-color: $color-switch-checked-bgc;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+
+      position: absolute;
+      left: 2px;
+      top: 50%;
+      transform: translate(0, -50%);
+
+      width: 1rem;
+      height: 1rem;
+
+      border-radius: 999px;
+      background-color: #fff;
+
+      transition: left 0.2s, transform 0.2s;
+    }
+
+    &.ea-switch_core--checked {
+      &::after {
+        left: calc(100% - 1rem - 2px);
+      }
+    }
+
+    &.ea-switch_core--disabled {
+      background-color: $color-disabled-text;
+    }
+  }
+
+  &.ea-switch_wrap--disabled {
+    cursor: not-allowed;
+
+    .ea-switch_label,
+    .ea-switch_core {
+      pointer-events: none;
+    }
+
+    .ea-switch_core {
+      background-color: $color-switch-disabled-bgc;
+    }
+
+    .ea-switch_label {
+      color: $color-switch-disabled-text;
+      &.ea-switch_label--active {
+        color: $color-switch-disabled-active-text;
+      }
+    }
+  }
+}

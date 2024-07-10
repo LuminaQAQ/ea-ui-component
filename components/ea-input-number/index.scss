@@ -1,0 +1,109 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+@mixin sign-size($size-type, $size) {
+  &.ea-input-number_sign--#{$size-type} {
+    height: $size;
+    width: $size;
+  }
+}
+
+@mixin input-size($size-type, $size) {
+  &.ea-input-number_inner--#{$size-type} {
+    height: $size;
+    line-height: $size;
+  }
+}
+
+.ea-input-number_wrap {
+  display: flex;
+  align-items: center;
+
+  border: 1px solid transparent;
+  border-radius: 3px;
+  transition: border 0.2s;
+
+  .ea-input-number_sign {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: 1px solid $color-border;
+    background-color: $color-counter-bgc;
+
+    height: 2rem;
+    width: 2rem;
+
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+
+    user-select: none;
+
+    &:first-child {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+      border-right: 0;
+    }
+
+    &:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-left: 0;
+    }
+
+    &:hover {
+      color: $color-counter-hover-text;
+    }
+
+    // .minus,
+    // .plus {
+    // }
+    &.disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+      color: $color-counter-disabled-text;
+    }
+
+    @include sign-size("medium", 1.75rem);
+    @include sign-size("small", 1.5rem);
+    @include sign-size("mini", 1.25rem);
+  }
+
+  .ea-input-number_inner {
+    @include input-default-theme;
+
+    width: 5rem;
+    height: 2rem;
+
+    border-radius: 0;
+
+    text-align: center;
+
+    &:focus {
+      border-color: #dcdfe6;
+    }
+
+    &.disabled {
+      pointer-events: none;
+      color: $color-counter-disabled-text;
+
+      cursor: not-allowed;
+      background-color: $color-counter-bgc;
+    }
+
+    @include input-size("medium", 1.75rem);
+    @include input-size("small", 1.5rem);
+    @include input-size("mini", 1.25rem);
+  }
+
+  &.focus {
+    border: 1px solid $color-primary-border;
+
+    .ea-input-number_sign {
+      border-color: transparent;
+    }
+  }
+}

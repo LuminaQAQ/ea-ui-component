@@ -1,0 +1,108 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+$themes-light: (
+  success: (
+    bgc: #f0f9eb,
+    text: #67c23a,
+  ),
+  info: (
+    bgc: #f4f4f5,
+    text: #909399,
+  ),
+  warning: (
+    bgc: #fdf6ec,
+    text: #e6a23c,
+  ),
+  error: (
+    bgc: #fef0f0,
+    text: #f56c6c,
+  ),
+);
+
+$themes-dark: (
+  success: (
+    bgc: #1f2d3d,
+    text: #67c23a,
+  ),
+  info: (
+    bgc: #1f2d3d,
+    text: #909399,
+  ),
+  warning: (
+    bgc: #1f2d3d,
+    text: #e6a23c,
+  ),
+  error: (
+    bgc: #1f2d3d,
+    text: #f56c6c,
+  ),
+);
+
+.ea-alert_wrap {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin: 20px 0 0;
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  opacity: 1;
+
+  transition: opacity 0.2s;
+
+  .ea-alert_content {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .ea-alert_title {
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: 0.5rem;
+      }
+    }
+
+    .ea-alert_close-icon {
+      color: #c0c4cc;
+      cursor: pointer;
+    }
+
+    &.ea-alert--center {
+      .ea-alert_title,
+      .ea-alert_close-icon {
+        margin-left: auto;
+      }
+    }
+  }
+
+  .ea-alert_description {
+    width: 100%;
+    margin: 5px 0 0;
+    font-size: 12px;
+  }
+
+  @each $theme-name, $theme-color in $themes-light {
+    &.ea-alert--#{$theme-name} {
+      background-color: map-get($theme-color, bgc);
+      color: map-get($theme-color, text);
+
+      &.ea-alert--dark {
+        color: #fff;
+        background-color: map-get($theme-color, text);
+
+        .ea-alert_close-icon {
+          color: #fff;
+        }
+      }
+    }
+  }
+}

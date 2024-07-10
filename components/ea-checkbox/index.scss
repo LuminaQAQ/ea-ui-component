@@ -97,4 +97,60 @@
       }
     }
   }
+<<<<<<< HEAD
+
+  &.indeterminate {
+    .__ea-checkbox-input_wrap {
+      .__ea-checkbox-input_inner {
+        border-color: $color-primary-bgc;
+        background-color: $color-primary-bgc;
+        &::after {
+          opacity: 1;
+
+          left: 50%;
+          top: 50%;
+
+          width: 80%;
+          height: 3px;
+          background-color: white;
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+      }
+    }
+
+    .__ea-checkbox-label_desc {
+      color: $color-primary-bgc;
+    }
+  }
+
+  &.indeterminate[checked="true"] {
+    .__ea-checkbox-input_wrap {
+      .__ea-checkbox-input_inner {
+        border-color: $color-primary-bgc;
+        background-color: $color-primary-bgc;
+
+        &::after {
+          width: 3px;
+          height: 7px;
+
+          left: 52.5%;
+          top: 45%;
+
+          transform: translate(-50%, -50%) rotate(-135deg);
+
+          opacity: 1;
+          border-left: 2px solid white;
+          border-top: 2px solid white;
+
+          background-color: transparent;
+        }
+      }
+    }
+
+    .__ea-checkbox-label_desc {
+      color: $color-primary-bgc;
+    }
+  }
+=======
+>>>>>>> master
 }

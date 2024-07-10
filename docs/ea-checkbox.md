@@ -6,6 +6,39 @@ const btn = ref(null);
 onMounted(() => {
   import('../index.js')
   import('./index.scss')
+<<<<<<< HEAD
+
+  document.querySelector('#city-group').addEventListener('click', () => {
+    const name = "city";
+    const elements = document.querySelectorAll(`ea-checkbox[name=${name}][checked]`);
+
+    const checkboxValueArr = [];
+
+    elements.forEach(item => checkboxValueArr.push(item.value));
+
+    alert(`[${checkboxValueArr}]`);
+  })
+
+  // 
+  document.querySelector('#setIndeterminate').addEventListener('click', function(e) {
+    document.querySelector('#checkAll').indeterminate = true;
+  })
+
+  // 
+  document.querySelector('#day-group').addEventListener('click', function(e) {
+    console.log(document.querySelector('#ea-checkbox-group').value);
+    const name = "day";
+    const elements = document.querySelectorAll(`ea-checkbox[name=${name}][checked]`);
+
+    const checkboxValueArr = [];
+
+    elements.forEach(item => checkboxValueArr.push(item.value));
+
+    alert(`[${checkboxValueArr}]`);
+  })
+
+=======
+>>>>>>> master
 })
 </script>
 
@@ -60,6 +93,12 @@ onMounted(() => {
     <ea-checkbox value="成都" disabled checked>成都</ea-checkbox>
   </ea-checkbox-group>
 </div>
+<<<<<<< HEAD
+<div class="row left">
+  <ea-button id="city-group" type="primary">点击获取 checkbox 值</ea-button>
+</div>
+=======
+>>>>>>> master
 
 ```html
 <div class="row left">
@@ -71,14 +110,78 @@ onMounted(() => {
     <ea-checkbox value="成都" disabled checked>成都</ea-checkbox>
   </ea-checkbox-group>
 </div>
+<<<<<<< HEAD
+<div class="row left">
+  <ea-button id="city-group" type="primary">点击获取 checkbox 值</ea-button>
+</div>
+```
+
+`JS`获取多选值操作。
+
+```js
+document.querySelector("#city-group").addEventListener("click", () => {
+  const name = "city";
+  const elements = document.querySelectorAll(
+    `ea-checkbox[name=${name}][checked]`
+  );
+
+  const checkboxValueArr = [];
+
+  elements.forEach((item) => checkboxValueArr.push(item.value));
+
+  alert(`[${checkboxValueArr}]`);
+});
+=======
+>>>>>>> master
 ```
 
 ## indeterminate 状态
 
 indeterminate 属性用以表示 checkbox 的不确定状态，一般用于实现全选的效果
 
+<<<<<<< HEAD
+<div class="row left">
+  <ea-checkbox id="checkAll" name="food">全选</ea-checkbox>
+  <ea-button id="setIndeterminate" type="primary">设置 indeterminate 状态</ea-button>
+</div>
+
+```html
+<div class="row left">
+  <ea-checkbox id="checkAll" name="food">全选</ea-checkbox>
+  <ea-button id="setIndeterminate" type="primary">
+    设置 indeterminate 状态
+  </ea-button>
+</div>
+```
+
+`JS` 操作 indeterminate 状态。
+
+```js
+document
+  .querySelector("#setIndeterminate")
+  .addEventListener("click", function (e) {
+    document.querySelector("#checkAll").indeterminate = true;
+  });
+```
+
+## 多选框组 value 属性
+
+<div class="row left">
+  <ea-checkbox-group id="ea-checkbox-group" name="day" value="今天, 明天" disabled>
+    <ea-checkbox value="前天">前天</ea-checkbox>
+    <ea-checkbox value="昨天">昨天</ea-checkbox>
+    <ea-checkbox value="今天">今天</ea-checkbox>
+    <ea-checkbox value="明天">明天</ea-checkbox>
+    <ea-checkbox value="后天">后天</ea-checkbox>
+  </ea-checkbox-group>
+</div>
+<div class="row left">
+  <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
+</div>
+=======
 ## 可选项目数量的限制
 
 使用 min 和 max 属性能够限制可以被勾选的项目的数量。
 
 ## 带有边框
+>>>>>>> master
