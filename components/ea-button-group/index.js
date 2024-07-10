@@ -417,11 +417,7 @@ const stylesheet = `
 }
 `;
 
-<<<<<<< HEAD
 export  class EaButtonGroup extends HTMLElement {
-=======
-export default class EaButtonGroup extends HTMLElement {
->>>>>>> master
 
   constructor() {
     super();
@@ -469,10 +465,7 @@ export default class EaButtonGroup extends HTMLElement {
     })
   }
 }
-<<<<<<< HEAD
 
 if (!window.customElements.get("ea-button-group")) {
   window.customElements.define("ea-button-group", EaButtonGroup);
 }
-=======
->>>>>>> master

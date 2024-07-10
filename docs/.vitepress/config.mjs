@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
-<<<<<<< HEAD
 
 export default defineConfig({
   base: '/ea_ui_component/',
@@ -10,23 +9,14 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', href: '/ea_ui_component/favicon.ico' }]
   ],
-=======
-export default defineConfig({
-  base: '/ea_ui_component/',
-
-  title: "ea-ui",
->>>>>>> master
 
   cleanUrls: true,
   lastUpdated: true,
 
   description: "基于 WebComponent 的 ui 库",
 
-<<<<<<< HEAD
   appearance: false,
 
-=======
->>>>>>> master
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -55,7 +45,6 @@ export default defineConfig({
         items: [
           { text: 'Radio 单选框', link: '/ea-radio' },
           { text: 'Checkbox 多选框', link: '/ea-checkbox' },
-<<<<<<< HEAD
           { text: 'Input 输入框', link: '/ea-input' },
           { text: 'Textarea 文本域', link: '/ea-textarea' },
           { text: 'InputNumber 计数器', link: '/ea-input-number' },
@@ -100,10 +89,6 @@ export default defineConfig({
           { text: "InfiniteScroll 无限滚动", link: '/ea-infinite-scroll' },
         ],
       },
-=======
-        ]
-      },
->>>>>>> master
     ],
 
     socialLinks: [

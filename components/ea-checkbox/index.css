@@ -63,7 +63,6 @@
 }
 .ea-checkbox_wrap.disabled[checked=true] .__ea-checkbox-input_wrap .__ea-checkbox-input_inner::before {
   background-color: #c0c4cc;
-<<<<<<< HEAD
 }
 .ea-checkbox_wrap.indeterminate .__ea-checkbox-input_wrap .__ea-checkbox-input_inner {
   border-color: #409eff;
@@ -98,6 +97,4 @@
 }
 .ea-checkbox_wrap.indeterminate[checked=true] .__ea-checkbox-label_desc {
   color: #409eff;
-=======
->>>>>>> master
 }

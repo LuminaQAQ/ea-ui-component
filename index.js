@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 import "./components/ea-ui-base-style.css";
 
@@ -38,23 +37,13 @@ import { EaCollapse, EaCollapseItem } from "./components/ea-collapse";
 import { EaCalendar } from "./components/ea-calendar";
 import { EaImage } from "./components/ea-image";
 import { EaInfiniteScroll } from "./components/ea-infinite-scroll";
-=======
-// @ts-nocheck
-import "./components/ea-ui-base-style.css";
-
-import EaButton from "./components/ea-button/ea-button.js";
-import EaButtonGroup from "./components/ea-button-group/";
-import EaLink from "./components/ea-link/";
-import EaRadio from "./components/ea-radio/";
-import EaRadioGroup from "./components/ea-radio-group/";
-import EaCheckbox from "./components/ea-checkbox/";
-import EaCheckboxGroup from "./components/ea-checkbox-group/";
->>>>>>> master
 
 const register = (name, component) => {
-    if (!window.customElements.get(name)) {
-        window.customElements.define(name, component);
-    }
+    try {
+        if (!window.customElements.get(name)) {
+            window.customElements.define(name, component);
+        }
+    } catch (error) { }
 }
 
 register("ea-button", EaButton);
@@ -63,7 +52,6 @@ register("ea-link", EaLink);
 register("ea-radio", EaRadio);
 register("ea-radio-group", EaRadioGroup);
 register("ea-checkbox", EaCheckbox);
-<<<<<<< HEAD
 register("ea-checkbox-group", EaCheckboxGroup);
 register("ea-input", EaInput);
 register("ea-textarea", EaTextarea);
@@ -97,6 +85,3 @@ register("ea-collapse-item", EaCollapseItem);
 register("ea-calendar", EaCalendar);
 register("ea-image", EaImage);
 register("ea-infinite-scroll", EaInfiniteScroll);
-=======
-register("ea-checkbox-group", EaCheckboxGroup);
->>>>>>> master

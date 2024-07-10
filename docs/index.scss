@@ -14,7 +14,6 @@
     url("../components/ea-icon/font/fontello.svg") format("svg");
 }
 
-<<<<<<< HEAD
 .demo {
   margin-bottom: 0.5rem;
   padding: 1rem;
@@ -32,11 +31,6 @@
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-=======
-.row {
-  display: flex;
-  justify-content: space-around;
->>>>>>> master
 
   margin-bottom: 0.5rem;
   padding: 1rem;
@@ -45,7 +39,6 @@
 
   &.left {
     justify-content: flex-start;
-<<<<<<< HEAD
     & > *:not(ea-result) {
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
@@ -58,14 +51,6 @@
 
     & > ea-badge {
       margin-right: 1.5rem;
-=======
-    & > * {
-      margin-right: 0.5rem;
-    }
-
-    & > ea-radio {
-      // margin-right: 2rem;
->>>>>>> master
     }
   }
 
@@ -76,7 +61,6 @@
   &.center {
     justify-content: center;
   }
-<<<<<<< HEAD
 
   p {
     text-align: center;
@@ -136,8 +120,6 @@
 .space-between {
   display: flex;
   justify-content: space-between;
-=======
->>>>>>> master
 }
 
 .main-icon-wrap {
@@ -176,7 +158,6 @@
     }
   }
 }
-<<<<<<< HEAD
 
 .color-picker {
   display: block;
@@ -184,5 +165,3 @@
   width: 1rem;
   height: 1rem;
 }
-=======
->>>>>>> master
