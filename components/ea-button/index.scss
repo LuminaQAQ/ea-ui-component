@@ -1,5 +1,8 @@
 @import "../ea-ui-base-style.scss";
+<<<<<<< HEAD
 @import "../ea-icon/index.scss";
+=======
+>>>>>>> origin/dev_1.0
 
 /**
 * $type: 按钮类型的类名
@@ -7,6 +10,7 @@
 * $text: 文字颜色
 * $bgc: 背景颜色
 */
+<<<<<<< HEAD
 :host {
   --margin-right: 0rem;
   --border-radius: 6px;
@@ -24,6 +28,8 @@
   --border-size: 0;
 }
 
+=======
+>>>>>>> origin/dev_1.0
 @mixin button-type($type, $border, $text, $bgc) {
   &.#{$type} {
     // hover的颜色
@@ -39,7 +45,11 @@
     }
 
     // 默认样式
+<<<<<<< HEAD
     border: var(--border-size) solid $border;
+=======
+    border: 1px solid $border;
+>>>>>>> origin/dev_1.0
     color: $text;
     background-color: $bgc;
 
@@ -50,16 +60,22 @@
       background-color: lighten($bgc, 25) !important;
       border-color: lighten($border, 25) !important;
       color: lighten($text, 75) !important;
+<<<<<<< HEAD
       pointer-events: none;
+=======
+>>>>>>> origin/dev_1.0
 
       @if ($type == "normal") {
         border-color: lighten($border, 5) !important;
         color: lighten($text, 35) !important;
       }
+<<<<<<< HEAD
 
       @if ($type == "text") {
         color: $color-disabled-text !important;
       }
+=======
+>>>>>>> origin/dev_1.0
     }
 
     /* ------- 按钮样式 ------- */
@@ -68,12 +84,20 @@
     // 朴素按钮
     &.plain {
       background-color: lighten($bgc, 36);
+<<<<<<< HEAD
       border: var(--border-size) solid lighten($border, 25);
+=======
+      border: 1px solid lighten($border, 25);
+>>>>>>> origin/dev_1.0
       color: $bgc;
 
       @if ($type == "normal") {
         background-color: transparent;
+<<<<<<< HEAD
         border: var(--border-size) solid $border;
+=======
+        border: 1px solid $border;
+>>>>>>> origin/dev_1.0
         color: $text;
 
         &:hover {
@@ -88,12 +112,17 @@
 
     // 圆角按钮
     &.round {
+<<<<<<< HEAD
       --border-radius: 999px;
+=======
+      border-radius: 999px;
+>>>>>>> origin/dev_1.0
     }
 
     /* #endregion */
     /* ------- end  ------- */
 
+<<<<<<< HEAD
     /* ------- 按钮大小 ------- */
     /* #region  */
     &.medium {
@@ -108,6 +137,8 @@
     /* #endregion */
     /* ------- end  ------- */
 
+=======
+>>>>>>> origin/dev_1.0
     // 鼠标悬浮时样式
     &:hover {
       border: var(--border-size) solid $border-hover;
@@ -120,6 +151,7 @@
       background-color: darken($bgc-hover, 30);
 
       @if ($type == "normal") {
+<<<<<<< HEAD
         border: var(--border-size) solid darken($border-hover, 25);
       }
     }
@@ -128,6 +160,11 @@
   & > i {
     font-size: 1rem;
     margin-right: 0.5rem;
+=======
+        border: 1px solid darken($border-hover, 25);
+      }
+    }
+>>>>>>> origin/dev_1.0
   }
 }
 
@@ -135,7 +172,10 @@
   box-sizing: border-box;
 
   padding: 0.5rem 1rem;
+<<<<<<< HEAD
   margin-right: var(--margin-right);
+=======
+>>>>>>> origin/dev_1.0
 
   cursor: pointer;
 
@@ -158,6 +198,37 @@
     $color-primary-border,
     $color-primary-text,
     $color-primary-bgc
+<<<<<<< HEAD
+=======
+  );
+
+  @include button-type(
+    "success",
+    $color-success-border,
+    $color-success-text,
+    $color-success-bgc
+  );
+
+  @include button-type(
+    "info",
+    $color-info-border,
+    $color-info-text,
+    $color-info-bgc
+  );
+
+  @include button-type(
+    "warning",
+    $color-warning-border,
+    $color-warning-text,
+    $color-warning-bgc
+  );
+
+  @include button-type(
+    "danger",
+    $color-danger-border,
+    $color-danger-text,
+    $color-danger-bgc
+>>>>>>> origin/dev_1.0
   );
 
   @include button-type(
