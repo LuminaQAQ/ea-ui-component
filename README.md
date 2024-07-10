@@ -25,7 +25,6 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Input 输入框
   - [x] Textarea 文本域
   - [x] InputNumber 计数器
-  - [ ] Select 选择框
   - [x] Switch 开关
   - [x] Rate 评分
 
@@ -57,8 +56,7 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Collapse 折叠面板
   - [x] Calendar 日历
   - [x] Image 图片
-  - [ ] InfiniteScroll 无限滚动
-  - [ ] Drawer 抽屉
+  - [x] InfiniteScroll 无限滚动
 
 ## 下面是 2.0 的计划
 
@@ -88,6 +86,7 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [ ] PageHeader 页头
   - [ ] Dropdown 下拉菜单
   - [ ] Steps 步骤条
+  - [ ] Drawer 抽屉
 
 - Others
 
