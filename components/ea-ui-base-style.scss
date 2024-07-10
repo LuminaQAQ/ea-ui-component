@@ -29,16 +29,11 @@ $color-warning-border: #e6a23c;
 $color-danger-text: #fff;
 $color-danger-bgc: #f56c6c;
 $color-danger-border: #f56c6c;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> master
 
 // 配色
 $color-disabled-text: #c0c4cc;
 $color-disabled-btn-bgc: #eeeeee;
 
-<<<<<<< HEAD
 // 计数器
 $color-counter-bgc: #f5f7fa;
 $color-counter-text: #606266;
@@ -92,8 +87,6 @@ $themes: (
   danger: $color-danger-bgc,
 );
 
-=======
->>>>>>> master
 // 链接的配色
 @mixin ea-link-theme($theme-name, $color) {
   &.#{$theme-name} {
@@ -108,7 +101,6 @@ $themes: (
     }
   }
 }
-<<<<<<< HEAD
 
 @mixin clear-ul-default-style {
   list-style-type: none;
@@ -159,7 +151,3 @@ $themes: (
     }
   }
 }
-=======
->>>>>>> origin/dev_1.0
-=======
->>>>>>> master
