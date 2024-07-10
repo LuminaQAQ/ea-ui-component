@@ -86,6 +86,7 @@ export default defineConfig({
           { text: 'Collapse 折叠面板', link: '/ea-collapse' },
           { text: "Calendar 日历", link: '/ea-calendar' },
           { text: "Image 图片", link: '/ea-image' },
+          { text: "InfiniteScroll 无限滚动", link: '/ea-infinite-scroll' },
         ],
       },
     ],
