@@ -36,6 +36,7 @@ import { EaBacktop } from "./components/ea-backtop";
 import { EaCollapse, EaCollapseItem } from "./components/ea-collapse";
 import { EaCalendar } from "./components/ea-calendar";
 import { EaImage } from "./components/ea-image";
+import { EaInfiniteScroll } from "./components/ea-infinite-scroll";
 
 const register = (name, component) => {
     if (!window.customElements.get(name)) {
@@ -81,3 +82,4 @@ register("ea-collapse", EaCollapse);
 register("ea-collapse-item", EaCollapseItem);
 register("ea-calendar", EaCalendar);
 register("ea-image", EaImage);
+register("ea-infinite-scroll", EaInfiniteScroll);
