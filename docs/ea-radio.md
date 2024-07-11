@@ -19,6 +19,17 @@ onMounted(() => {
 
 在一组备选项中进行单选
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-radio/index.js";
+  import "./node_modules/easy-component-ui/components/ea-radio-group/index.js";
+</script>
+```
+
 ## 基础用法
 
 由于选项默认可见，不宜过多，若选项过多，建议使用 Select 选择器。

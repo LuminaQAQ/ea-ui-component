@@ -15,6 +15,16 @@ onMounted(() => {
 
 当数据量过多时，使用分页分解数据。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-pagination/index.js";
+</script>
+```
+
 ## 基础用法
 
 需要设置`total`属性来设置数据总数。可以设置`layout`属性来控制显示的内容。
@@ -28,20 +38,20 @@ onMounted(() => {
 
 ```html
 <div class="col left">
-  <ea-pagination layout="prev,pager,next" total="60" />
-  <ea-pagination layout="prev,pager,next" total="200" />
+  <ea-pagination layout="prev,pager,next" total="60"></ea-pagination>
+  <ea-pagination layout="prev,pager,next" total="200"></ea-pagination>
 </div>
 ```
 
 > 当只显示前后按钮时，也可以通过`change`事件监听当前页码的变化。
 
 <div class="col left">
-    <ea-pagination id="prevAndNext" layout="prev,next" total="80" />
+    <ea-pagination id="prevAndNext" layout="prev,next" total="80"></ea-pagination>
 </div>
 
 ```html
 <div class="col left">
-  <ea-pagination id="prevAndNext" layout="prev,next" total="80" />
+  <ea-pagination id="prevAndNext" layout="prev,next" total="80"></ea-pagination>
 </div>
 ```
 
@@ -56,14 +66,22 @@ document.querySelector("#prevAndNext").addEventListener("change", function (e) {
 > 设置`page-count`属性来设置最大页码按钮数。
 
 <div class="col left">
-    <ea-pagination layout="prev,pager,next" total="60" page-count="10" />
-    <ea-pagination layout="prev,pager,next" total="200" page-count="10" />
+    <ea-pagination layout="prev,pager,next" total="60" page-count="10"></ea-pagination>
+    <ea-pagination layout="prev,pager,next" total="200" page-count="10"></ea-pagination>
 </div>
 
 ```html
 <div class="col left">
-  <ea-pagination layout="prev,pager,next" total="60" page-count="10" />
-  <ea-pagination layout="prev,pager,next" total="200" page-count="10" />
+  <ea-pagination
+    layout="prev,pager,next"
+    total="60"
+    page-count="10"
+  ></ea-pagination>
+  <ea-pagination
+    layout="prev,pager,next"
+    total="200"
+    page-count="10"
+  ></ea-pagination>
 </div>
 ```
 
@@ -72,12 +90,16 @@ document.querySelector("#prevAndNext").addEventListener("change", function (e) {
 通过设置`background`属性来设置背景色。
 
 <div class="col left">
-    <ea-pagination background layout="prev,pager,next" total="200" />
+    <ea-pagination background layout="prev,pager,next" total="200"></ea-pagination>
 </div>
 
 ```html
 <div class="col left">
-  <ea-pagination background layout="prev,pager,next" total="200" />
+  <ea-pagination
+    background
+    layout="prev,pager,next"
+    total="200"
+  ></ea-pagination>
 </div>
 ```
 
@@ -87,8 +109,19 @@ document.querySelector("#prevAndNext").addEventListener("change", function (e) {
 
 <div class="col left">
     <section>显示总数</section>
-    <ea-pagination background layout="total,prev,pager,next" total="200" />
+    <ea-pagination background layout="total,prev,pager,next" total="200"></ea-pagination>
 </div>
+
+```html
+<div class="col left">
+  <section>显示总数</section>
+  <ea-pagination
+    background
+    layout="total,prev,pager,next"
+    total="200"
+  ></ea-pagination>
+</div>
+```
 
 ## Attributes
 

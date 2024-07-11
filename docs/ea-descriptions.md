@@ -11,6 +11,18 @@ onMounted(() => {
 
 列表形式展示多个字段。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-descriptions/index.js";
+  import
+  "./node_modules/easy-component-ui/components/ea-descriptions-item/index.js";
+</script>
+```
+
 ## 基础用法
 
 <div class="demo">
