@@ -20,7 +20,7 @@
     "prefix": "ea-template",
     "body": [
       "// @ts-nocheck",
-      "import Base from '../Base';",
+      "import Base from '../Base.js';",
       "import { createElement, createSlotElement } from '../../utils/createElement.js';",
       "",
       "const stylesheet = `",
