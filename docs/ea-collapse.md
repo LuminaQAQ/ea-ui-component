@@ -27,6 +27,16 @@ onMounted(() => {
 
 通过折叠面板收纳内容区域
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-collapse/index.js";
+</script>
+```
+
 ## 基础用法
 
 可同时展开多个面板，面板之间不影响

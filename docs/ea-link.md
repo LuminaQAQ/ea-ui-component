@@ -13,6 +13,25 @@ onMounted(() => {
 
 文字超链接
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-link/index.js";
+</script>
+```
+
+> `css`: 需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 基础用法
 
 基础的文字链接用法。

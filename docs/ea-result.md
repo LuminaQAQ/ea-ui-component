@@ -11,6 +11,16 @@ onMounted(() => {
 
 用于对用户的操作结果或者异常状态做反馈。
 
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-result/index.js";
+</script>
+```
+
 ## 基础用法
 
 <div class="row space-between">

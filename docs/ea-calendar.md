@@ -16,6 +16,16 @@ onMounted(() => {
 
 显示日期
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-calendar/index.js";
+</script>
+```
+
 ## 基本
 
 <div class="demo">
