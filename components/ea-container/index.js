@@ -57,7 +57,7 @@ export class EaContainer extends Base {
             }
 
             if (item.tagName.toLowerCase() === 'ea-container') {
-                item.style.flex = '1 0 auto';
+                item.style.flex = '1';
             }
         });
 
