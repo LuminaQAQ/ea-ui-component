@@ -348,6 +348,8 @@ const stylesheet = `
 export class EaButton extends Base {
   #mounted = false;
 
+  #wrap;
+
   constructor() {
     super();
 
@@ -357,22 +359,17 @@ export class EaButton extends Base {
     if (this.getAttribute('href') !== null && this.getAttribute('href') !== '') dom = document.createElement('a');
     else dom = document.createElement('button');
 
-
     dom.part = "wrap";
 
     const slot = document.createElement('slot');
     dom.className = "__ea-button";
     dom.appendChild(slot);
 
-    this.dom = dom;
+    this.#wrap = dom;
 
     this.build(shadowRoot, stylesheet);
 
     shadowRoot.appendChild(dom);
-  }
-
-  static get observedAttributes() {
-    return ['loading', 'disabled'];
   }
 
   get BUTTON_STYLE() {
@@ -395,19 +392,8 @@ export class EaButton extends Base {
   }
 
   set disabled(value) {
-    if (!this.#mounted) {
-      this.toggleAttribute('disabled', this.disabled, 'disabled');
-    } else {
-      this.toggleAttribute('disabled', value, 'disabled');
-    }
-  }
-
-  get ariaDisabled() {
-    return this.getAttribute('aria-disabled') !== null || this.getAttribute('aria-disabled') !== undefined;
-  }
-
-  set ariaDisabled(value) {
-    this.toggleAttribute('aria-disabled', value, 'disabled');
+    this.toggleAttr('disabled', value);
+    this.#wrap.classList.toggle('disabled', value);
   }
   // #endregion
   // ------- end -------
@@ -415,19 +401,19 @@ export class EaButton extends Base {
   // ------- 按钮样式 -------
   // #region
   get plain() {
-    return this.getAttribute('plain') !== undefined && this.getAttribute('plain') !== null;
+    return this.getAttrBoolean('plain');
   }
   set plain(value) {
-    this.toggleAttribute('plain', value, 'plain');
+    this.toggleAttr('plain', value);
   }
 
   get round() {
-    return this.getAttribute('round') !== undefined && this.getAttribute('round') !== null;
+    return this.getAttrBoolean('round');
   }
   set round(value) {
-    this.toggleAttribute('round', value, 'round');
+    this.toggleAttr('round', value);
 
-    if (value) this.dom.style.setProperty('--border-radius', '999px');
+    if (value) this.#wrap.style.setProperty('--border-radius', '999px');
   }
   // #endregion
   // ------- end -------
@@ -435,16 +421,14 @@ export class EaButton extends Base {
   // ------- type属性 -------
   // #region
   get type() {
-    const attr = this.getAttribute('type');
-
-    if (attr == null || attr == false) return 'normal';
-    else return attr;
+    return this.getAttribute('type') || 'normal';
   }
 
   set type(value) {
     if (!this.BUTTON_TYPE.includes(value)) value = 'normal';
 
-    this.toggleAttribute('type', value, value);
+    this.setAttribute('type', value);
+    this.#wrap.classList.toggle(value);
   }
   // #endregion
   // ------- end -------
@@ -457,7 +441,8 @@ export class EaButton extends Base {
   set size(value) {
     if (!this.BUTTON_SIZE.includes(value)) return;
 
-    this.toggleAttribute('size', value, value);
+    this.toggleAttr('size', value);
+    this.#wrap.classList.toggle(value);
   }
   // #endregion
   // ------- end -------
@@ -465,21 +450,20 @@ export class EaButton extends Base {
   // ------- 按钮加载 -------
   // #region
   get loading() {
-    return this.hasAttribute('loading');
+    return this.getAttrBoolean('loading');
   }
 
   set loading(value) {
-    value = value === "true" || value === "" || value === true ? true : false;
-    this.toggleAttribute('loading', value, 'loading');
+    this.toggleAttr('loading', value);
     this.disabled = value;
 
-    if (value && !this.dom.querySelector('i')) {
-      const i = document.createElement('i');
-      i.className = "icon-spin6 animate-spin";
+    if (value && !this.#wrap.querySelector('ea-icon')) {
+      const i = document.createElement('ea-icon');
+      i.icon = 'icon-spin6 animate-spin';
 
-      this.dom.insertBefore(i, this.dom.firstChild)
-    } else if (!value && this.dom.querySelector('i')) {
-      this.dom.querySelector('i').remove();
+      this.#wrap.insertBefore(i, this.#wrap.firstChild)
+    } else if (!value && this.#wrap.querySelector('ea-icon')) {
+      this.#wrap.querySelector('ea-icon').remove();
     }
   }
   // #endregion
@@ -495,15 +479,15 @@ export class EaButton extends Base {
     if (value) {
       this.setAttribute('icon', value);
 
-      if (!this.dom.querySelector('i')) {
+      if (!this.#wrap.querySelector('ea-icon')) {
         const eaIcon = document.createElement('ea-icon');
         eaIcon.icon = value;
 
-        this.dom.insertBefore(eaIcon, this.dom.firstChild)
+        this.#wrap.insertBefore(eaIcon, this.#wrap.firstChild)
       }
     } else {
       this.removeAttribute('icon');
-      this.dom.querySelector('i')?.remove();
+      this.#wrap.querySelector('ea-icon')?.remove();
     }
   }
   // #endregion
@@ -518,24 +502,18 @@ export class EaButton extends Base {
   set href(value) {
     if (this.shadowRoot.querySelector("button")) return;
 
-    if (value == null && value == false) {
-      this.removeAttribute('href');
-      this.dom.removeAttribute('href');
-    } else {
+    if (value) {
       this.setAttribute('href', value);
-      this.dom.setAttribute('href', value);
+      this.#wrap.setAttribute('href', value);
+    } else {
+      this.removeAttribute('href');
+      this.#wrap.removeAttribute('href');
     }
   }
   // #endregion
   // ------- end -------
 
-  init() {
-    // 禁用
-    this.disabled = this.hasAttribute('disabled');
-
-    // 加载
-    this.loading = this.loading;
-
+  #init() {
     // 按钮样式
     for (let i = 0, style; style = this.BUTTON_STYLE[i++];) {
       if (this[style]) {
@@ -555,29 +533,15 @@ export class EaButton extends Base {
 
     // 图标
     this.icon = this.icon;
+
+    // 禁用
+    this.disabled = this.disabled;
   }
 
   connectedCallback() {
-    this.init();
+    this.#init();
 
     this.#mounted = true;
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue == newValue) return;
-    switch (name) {
-      case "loading":
-        if (newValue === "") newValue = true;
-        this.loading = newValue;
-        break;
-      case "disabled":
-        if (this.#mounted) {
-          this.disabled = newValue === "true" || newValue === "";
-          if (newValue === "true" || newValue === "") this.setAttribute("disabled", true);
-        }
-        break;
-      default: break;
-    }
   }
 }
 
