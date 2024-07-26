@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        ea-button::part(wrap):focus {
+            width: 10rem;
+            background-color: aquamarine;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="module">
+        import "./components/ea-button/index.js"
+    </script>
+
+    <ea-button>Hello</ea-button>
+</body>
+
+</html>

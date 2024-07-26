@@ -354,9 +354,11 @@ export class EaButton extends Base {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     let dom = null;
 
-
     if (this.getAttribute('href') !== null && this.getAttribute('href') !== '') dom = document.createElement('a');
     else dom = document.createElement('button');
+
+
+    dom.part = "wrap";
 
     const slot = document.createElement('slot');
     dom.className = "__ea-button";
@@ -389,7 +391,7 @@ export class EaButton extends Base {
   // ------- 禁用 -------
   // #region
   get disabled() {
-    return this.hasAttribute('disabled');
+    return this.getAttrBoolean('disabled');
   }
 
   set disabled(value) {
