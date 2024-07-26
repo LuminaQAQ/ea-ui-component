@@ -4,7 +4,10 @@ import { onMounted, ref } from 'vue'
 const btn = ref(null);
 
 onMounted(() => {
-  import('../index.js')
+  import('../components/ea-icon/index.css')
+  import('../components/ea-button/ea-button.js')
+  import('../components/ea-button-group/index.js')
+  import('../components/ea-switch/index.js')
   import('./index.scss')
 
   document.querySelector("#ea-button-a").addEventListener("click", function (e) {
@@ -14,14 +17,22 @@ onMounted(() => {
   });
 
   document
-    .querySelector("#ea-button-loading")
+    .querySelector("#ea-radio-loading")
     .addEventListener("click", function (e) {
-      e.target.getAttribute("loading") !== null
-        ? e.target.removeAttribute("loading")
-        : e.target.setAttribute("loading", true);
+      const btn = document.querySelector("#ea-button-loading");
+
+      e.target.checked
+        ? btn.loading = true
+        : btn.loading = false;
     });
 })
 </script>
+
+<style>
+  .part::part(wrap) {
+    background: aquamarine;
+  }
+</style>
 
 # Button 按钮
 
@@ -52,21 +63,39 @@ onMounted(() => {
 基础的按钮用法。
 
 <div class="row">
-    <ea-button>默认按钮</ea-button>
-    <ea-button type="primary">主要按钮</ea-button>
-    <ea-button type="success">成功按钮</ea-button>
-    <ea-button type="warning">警告按钮</ea-button>
-    <ea-button type="danger">危险按钮</ea-button>
-</div>
-
-```html
-<div class="row">
   <ea-button>默认按钮</ea-button>
+  <ea-button class="part">默认按钮</ea-button>
   <ea-button type="primary">主要按钮</ea-button>
   <ea-button type="success">成功按钮</ea-button>
   <ea-button type="warning">警告按钮</ea-button>
   <ea-button type="danger">危险按钮</ea-button>
 </div>
+
+```html
+<div class="row">
+  <ea-button>默认按钮</ea-button>
+  <ea-button class="part">默认按钮</ea-button>
+  <ea-button type="primary">主要按钮</ea-button>
+  <ea-button type="success">成功按钮</ea-button>
+  <ea-button type="warning">警告按钮</ea-button>
+  <ea-button type="danger">危险按钮</ea-button>
+</div>
+```
+
+`css`: 自定义样式
+
+```html
+<style>
+  .part::part(wrap) {
+    background: aquamarine;
+  }
+
+  /* 或修改所有 ea-button */
+
+  ea-button::part(wrap) {
+    background: aquamarine;
+  }
+</style>
 ```
 
 ## 朴素按钮 `plain`
@@ -230,6 +259,7 @@ onMounted(() => {
 点击按钮后进行数据加载操作，在按钮上显示加载状态。可以点击尝试。
 
 <div class="row left">
+  <ea-switch id="ea-radio-loading" checked></ea-switch>
   <ea-button id="ea-button-loading" type="primary" loading>加载中按钮</ea-button>
 </div>
 
