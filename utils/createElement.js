@@ -24,7 +24,7 @@ export const createElement = (tagName, className, children) => {
 
 export const createSlotElement = (name) => {
     const slot = document.createElement('slot');
-    slot.name = name;
+    if (name) slot.name = name;
 
     return slot;
 };
