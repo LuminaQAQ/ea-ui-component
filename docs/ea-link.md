@@ -4,10 +4,16 @@ import { onMounted, ref } from 'vue'
 const btn = ref(null);
 
 onMounted(() => {
-  import('../index.js')
+  import('../components/ea-link/index.js')
   import('./index.scss')
 })
 </script>
+
+<style>
+  .custom-link::part(wrap) {
+    color: pink;
+  }
+</style>
 
 # Link 文字链接
 
@@ -38,6 +44,7 @@ onMounted(() => {
 
 <div class="row left">
     <ea-link href="https://github.com/LuminaQAQ">默认链接</ea-link>
+    <ea-link class="custom-link" href="https://github.com/LuminaQAQ">默认链接-自定义链接颜色</ea-link>
     <ea-link href="https://github.com/LuminaQAQ" type="primary">主要链接</ea-link>
     <ea-link href="https://github.com/LuminaQAQ" type="success">成功链接</ea-link>
     <ea-link href="https://github.com/LuminaQAQ" type="warning">警告链接</ea-link>
@@ -48,12 +55,31 @@ onMounted(() => {
 ```html
 <div class="row left">
   <ea-link href="https://github.com/LuminaQAQ">默认链接</ea-link>
+  <ea-link class="custom-link" href="https://github.com/LuminaQAQ"
+    >默认链接-自定义链接颜色</ea-link
+  >
   <ea-link href="https://github.com/LuminaQAQ" type="primary">主要链接</ea-link>
   <ea-link href="https://github.com/LuminaQAQ" type="success">成功链接</ea-link>
   <ea-link href="https://github.com/LuminaQAQ" type="warning">警告链接</ea-link>
   <ea-link href="https://github.com/LuminaQAQ" type="danger">危险链接</ea-link>
   <ea-link href="https://github.com/LuminaQAQ" type="info">信息链接</ea-link>
 </div>
+```
+
+`css`: 自定义样式
+
+```html
+<style>
+  .custom-link::part(wrap) {
+    color: pink;
+  }
+
+  /* 或改变所有 */
+
+  ea-link::part(wrap) {
+    color: black;
+  }
+</style>
 ```
 
 ## 禁用状态
