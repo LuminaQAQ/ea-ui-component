@@ -1,0 +1,1 @@
+const o=(e,t,a)=>{const n=document.createElement(e||"div");return n.className=t||"",a&&(Array.isArray(a)?a.forEach(s=>{n.appendChild(s)}):n.appendChild(a)),n},r=e=>{const t=document.createElement("slot");return e&&(t.name=e),t};export{r as a,o as c};
