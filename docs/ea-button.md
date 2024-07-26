@@ -10,11 +10,13 @@ onMounted(() => {
   import('../components/ea-switch/index.js')
   import('./index.scss')
 
-  document.querySelector("#ea-button-a").addEventListener("click", function (e) {
-    e.target.getAttribute("disabled") !== null
-      ? e.target.removeAttribute("disabled")
-      : e.target.setAttribute("disabled", true);
-  });
+  document
+    .querySelector("#ea-radio-href")
+    .addEventListener("click", function (e) {
+      const btn = document.querySelector("#ea-button-a");
+
+      btn.disabled = e.target.checked;
+    });
 
   document
     .querySelector("#ea-radio-loading")
@@ -202,9 +204,10 @@ onMounted(() => {
 
 ## 链接按钮 `href`
 
-对普通链接的样式进行美化，可以在不同场景下选择相应的样式。<br/> (该示例中, 点击可解禁链接按钮)
+对普通链接的样式进行美化，可以在不同场景下选择相应的样式。
 
 <div class="row left">
+  <ea-switch id="ea-radio-href" checked></ea-switch>
   <ea-button type="text" href="https://github.com/LuminaQAQ">链接按钮</ea-button>
   <ea-button id="ea-button-a" type="normal" href="https://github.com/LuminaQAQ" disabled>链接按钮</ea-button>
 </div>
@@ -217,11 +220,11 @@ onMounted(() => {
 
 <script>
   document
-    .querySelector("#ea-button-a")
+    .querySelector("#ea-radio-href")
     .addEventListener("click", function (e) {
-      e.target.getAttribute("disabled") !== null
-        ? e.target.removeAttribute("disabled")
-        : e.target.setAttribute("disabled", true);
+      const btn = document.querySelector("#ea-button-a");
+
+      btn.disabled = e.target.checked;
     });
 </script>
 ```
@@ -265,16 +268,19 @@ onMounted(() => {
 
 ```html
 <div class="row">
-  <ea-button id="ea-button-loading" round>加载中按钮</ea-button>
+  <ea-switch id="ea-radio-loading" checked></ea-switch>
+  <ea-button id="ea-button-loading" type="primary" loading
+    >加载中按钮</ea-button
+  >
 </div>
 
 <script>
   document
-    .querySelector("#ea-button-loading")
+    .querySelector("#ea-radio-loading")
     .addEventListener("click", function (e) {
-      e.target.getAttribute("loading") !== null
-        ? e.target.removeAttribute("loading")
-        : e.target.setAttribute("loading", true);
+      const btn = document.querySelector("#ea-button-loading");
+
+      e.target.checked ? (btn.loading = true) : (btn.loading = false);
     });
 </script>
 ```
