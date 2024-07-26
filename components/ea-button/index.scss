@@ -146,6 +146,8 @@
 
   border-radius: var(--border-radius);
 
+  will-change: width;
+
   @include button-type(
     "normal",
     $color-default-border,
