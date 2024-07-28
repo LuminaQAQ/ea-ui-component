@@ -12,12 +12,12 @@ const stylesheet = `
   flex-direction: row;
   align-items: center;
   padding: 0 20px;
-  overflow: auto;
 }
 .ea-menu_wrap.is-vertical {
   flex-direction: column;
   align-items: flex-start;
   border-right: 1px solid #e6e6e6;
+  overflow: auto;
 }
 .ea-menu_wrap.is-vertical ::slotted(ea-menu-item),
 .ea-menu_wrap.is-vertical ::slotted(ea-submenu) {
@@ -136,7 +136,8 @@ export class EaMenu extends Base {
             item.itemIndex = index;
 
             item.addEventListener('item-selected', (e) => {
-                const itemIndex = e.detail.index;
+                const itemIndex = index;
+                const itemTitle = e.detail.title;
 
                 items.forEach(callback);
 
@@ -145,6 +146,13 @@ export class EaMenu extends Base {
                 menuItemGroups.forEach(callback);
 
                 item.actived = true;
+
+                this.dispatchEvent(new CustomEvent('select', {
+                    detail: {
+                        index,
+                        title: itemTitle,
+                    },
+                }));
             });
         });
 

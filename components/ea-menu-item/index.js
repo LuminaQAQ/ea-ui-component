@@ -169,6 +169,7 @@ export class EaMenuItem extends Base {
             this.dispatchEvent(new CustomEvent('item-selected', {
                 detail: {
                     index: this.index,
+                    title: this.textContent,
                 },
             }));
         });

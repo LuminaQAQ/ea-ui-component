@@ -14,14 +14,6 @@
 </head>
 
 <body>
-    <script type='module'>
-        import "../components/ea-container/index.js"
-        import "../components/ea-aside/index.js"
-        import "../components/ea-main/index.js"
-
-        import '../components/ea-menu/index.js'
-        import "../components/ea-switch/index.js"
-    </script>
 
     <ea-menu mode="horizontal">
         <ea-menu-item actived>首页</ea-menu-item>
@@ -39,7 +31,7 @@
         </ea-submenu>
     </ea-menu>
 
-    <ea-menu mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+    <ea-menu id="test" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <ea-menu-item actived>首页</ea-menu-item>
         <ea-menu-item>产品中心</ea-menu-item>
         <ea-menu-item>关于我们</ea-menu-item>
@@ -54,6 +46,18 @@
             <ea-menu-item>关于我们</ea-menu-item>
         </ea-submenu>
     </ea-menu>
+    <script type='module'>
+        import "../components/ea-container/index.js"
+        import "../components/ea-aside/index.js"
+        import "../components/ea-main/index.js"
+
+        import '../components/ea-menu/index.js'
+        import "../components/ea-switch/index.js"
+
+        document.querySelector('#test').addEventListener('select', (e) => {
+            console.log(e.detail);
+        })
+    </script>
 
     <hr>
 
