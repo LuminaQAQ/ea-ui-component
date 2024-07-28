@@ -7,7 +7,25 @@ import "../ea-submenu/index.js"
 import "../ea-menu-item-group/index.js"
 
 const stylesheet = `
-
+.ea-menu_wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 20px;
+  overflow: auto;
+}
+.ea-menu_wrap.is-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  border-right: 1px solid #e6e6e6;
+}
+.ea-menu_wrap.is-vertical ::slotted(ea-menu-item),
+.ea-menu_wrap.is-vertical ::slotted(ea-submenu) {
+  width: 100%;
+}
+.ea-menu_wrap.is-vertical ::slotted(ea-submenu) {
+  width: 100%;
+}
 `;
 
 export class EaMenu extends Base {

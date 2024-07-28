@@ -120,8 +120,7 @@
 
     <hr>
 
-    <button id="open">展开</button>
-    <button id="close">收起</button>
+    <ea-switch id="switch" inactive-text="收起" active-text="展开" checked></ea-switch>
 
     <ea-menu id="ea-menu-collapse" mode="vertical" background-color="#545c64" text-color="#fff"
         active-text-color="#ffd04b">
@@ -154,15 +153,10 @@
 
     <script>
         const menu = document.querySelector('#ea-menu-collapse');
-        const openBtn = document.querySelector('#open');
-        const closeBtn = document.querySelector('#close');
+        const switchBtn = document.querySelector('#switch');
 
-        openBtn.addEventListener('click', () => {
-            menu.collapse = false;
-        });
-
-        closeBtn.addEventListener('click', () => {
-            menu.collapse = true;
+        switchBtn.addEventListener('change', (e) => {
+            menu.collapse = e.detail.checked;
         });
     </script>
 
