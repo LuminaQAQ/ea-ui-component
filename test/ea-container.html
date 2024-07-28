@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../components/ea-icon/index.css" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            height: 100%;
+            width: 100%;
+        }
+
+        ea-header::part(wrap),
+        ea-main::part(wrap),
+        ea-footer::part(wrap),
+        ea-aside::part(wrap) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        ea-header::part(wrap) {
+            text-align: center;
+            background-color: #b3c0d1;
+        }
+
+        ea-main::part(wrap) {
+            text-align: center;
+            background-color: #e9eef3;
+        }
+
+        ea-footer::part(wrap) {
+            text-align: center;
+            background-color: #b3c0d1;
+        }
+
+        ea-aside::part(wrap) {
+            background-color: #d3dce6;
+            text-align: center;
+        }
+
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="module">
+        import "../components/ea-container/index.js"
+        import "../components/ea-header/index.js"
+        import "../components/ea-main/index.js"
+        import "../components/ea-footer/index.js"
+        import "../components/ea-aside/index.js"
+    </script>
+
+    <ea-container>
+        <ea-header>header</ea-header>
+        <ea-main>01. 这是最简单的布局，只包含了 Header 和 Main 部分，没有 Footer。</ea-main>
+    </ea-container>
+
+    <hr>
+
+    <ea-container>
+        <ea-header>header</ea-header>
+        <ea-main>02. 这个示例在示例 1 的基础上增加了 Footer。</ea-main>
+        <ea-footer>footer</ea-footer>
+    </ea-container>
+
+    <hr>
+
+    <ea-container direction="vertical">
+        <ea-aside width="200">Aside</ea-aside>
+        <ea-main>03. 这个示例展示了带有侧边栏 (Aside) 和主内容区 (Main) 的布局。</ea-main>
+    </ea-container>
+
+    <hr>
+
+    <ea-container direction="vertical">
+        <ea-header>header</ea-header>
+        <ea-container direction="vertical">
+            <ea-aside width="200">Aside</ea-aside>
+            <ea-main>04. 这个示例在 Header 下方嵌套了一个包含 Aside 和 Main 的 el-container。</ea-main>
+        </ea-container>
+    </ea-container>
+
+    <hr>
+
+    <ea-container>
+        <ea-header>header</ea-header>
+        <ea-container direction="vertical">
+            <ea-aside width="200">Aside</ea-aside>
+            <ea-container>
+                <ea-main>05. 这个示例进一步嵌套了一个 el-container，内部包含了 Aside、Main 和 Footer。</ea-main>
+                <ea-footer>Footer</ea-footer>
+            </ea-container>
+        </ea-container>
+    </ea-container>
+
+    <hr>
+
+    <ea-container direction="vertical">
+        <ea-aside width="200">Aside</ea-aside>
+        <ea-container direction="vertical">
+            <ea-header>header</ea-header>
+            <ea-main>06. 这个示例中，侧边栏 (Aside) 位于外层 el-container 的左侧，内部 el-container 包含了 Header 和 Main。</ea-main>
+        </ea-container>
+    </ea-container>
+
+    <hr>
+
+    <ea-container direction="vertical">
+        <ea-aside width="200">Aside</ea-aside>
+        <ea-container>
+            <ea-header>Header</ea-header>
+            <ea-main>07. 最后一个示例与示例 6 类似，不过增加了一个 Footer。</ea-main>
+            <ea-footer>Footer</ea-footer>
+        </ea-container>
+    </ea-container>
+</body>
+
+</html>
