@@ -17,6 +17,8 @@
   color: var(--normal-text-color);
   background-color: var(--normal-bgc);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   cursor: pointer;
 
@@ -52,5 +54,9 @@
   ::slotted(a) {
     color: var(--normal-text-color);
     text-decoration: none;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

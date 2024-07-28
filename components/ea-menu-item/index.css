@@ -13,6 +13,8 @@
   color: var(--normal-text-color);
   background-color: var(--normal-bgc);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
   transition: border-color 0.3s, background-color 0.3s, color 0.3s;
 }
@@ -40,4 +42,7 @@
 .ea-menu-item_wrap ::slotted(a) {
   color: var(--normal-text-color);
   text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

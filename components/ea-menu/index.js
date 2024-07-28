@@ -98,6 +98,8 @@ export class EaMenu extends Base {
         this.querySelectorAll('ea-menu-item-group').forEach((item) => {
             if (this.mode === 'vertical') item.collapse = !value;
         });
+
+        // if (this.mode === 'vertical') this.#wrap.style.width = '48px';
     }
     // #endregion
     // ------- end -------
