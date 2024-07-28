@@ -45,6 +45,6 @@ export class EaMain extends Base {
     }
 }
 
-if (!customElements.get('ea-main')) {
+if (!window.customElements.get('ea-main')) {
     customElements.define('ea-main', EaMain);
 }

@@ -38,6 +38,7 @@
   font-weight: 500;
   transition: background-color 0.1s, color 0.1s;
   border-radius: var(--border-radius);
+  will-change: width;
 }
 .__ea-button.normal {
   border: var(--border-size) solid #dcdfe6;
