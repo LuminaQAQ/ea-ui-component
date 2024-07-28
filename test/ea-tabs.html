@@ -6,15 +6,34 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Document</title>
     <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        .tab-page {
+            display: none;
+        }
+
+        .tab-page.show {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
     <script type='module'>
         import '../components/ea-tabs/index.js'
 
-        const tabs = document.getElementById('clickEvent');
+        const tabs = document.querySelector('#clickEvent');
+        const tabPages = document.querySelectorAll('.tab-page');
+
         tabs.addEventListener('tab-click', (e) => {
-            // console.log(e.detail);
+            tabPages.forEach(item => {
+                item.classList.remove('show');
+
+                if (item.getAttribute('name') === e.detail.name) {
+                    item.classList.add('show');
+                }
+            })
+            // console.log(e.detail.name);
         })
     </script>
 
@@ -23,8 +42,13 @@
         <ea-tab-pane name="second">配置管理</ea-tab-pane>
         <ea-tab-pane name="third">角色管理</ea-tab-pane>
         <ea-tab-pane name="fourth">定时任务补偿</ea-tab-pane>
-        <ea-tab-pane>定时任务补偿</ea-tab-pane>
     </ea-tabs>
+    <div>
+        <p class="tab-page" name="first">用户管理</p>
+        <p class="tab-page show" name="second">配置管理</p>
+        <p class="tab-page" name="third">角色管理</p>
+        <p class="tab-page" name="fourth">定时任务补偿</p>
+    </div>
 </body>
 
 </html>
