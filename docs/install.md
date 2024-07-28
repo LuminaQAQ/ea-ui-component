@@ -12,6 +12,16 @@ npm init -y
 npm i easy-component-ui
 ```
 
+## 在线引入
+
+> `js`: 相应组件的引入, 需考虑修改`/components/ea-button/index.js`部分.
+
+```html
+<script type="module">
+  import "https://unpkg.com/easy-component-ui@1.0.3/components/ea-button/index.js";
+<script>
+```
+
 ## 在原生环境引入
 
 这里的路径是 `node_modules` 目录下的 `easy-component-ui` 目录, 即默认下载路径.
