@@ -62,6 +62,10 @@
     justify-content: center;
   }
 
+  &.flex-start {
+    align-items: flex-start;
+  }
+
   p {
     text-align: center;
     color: darken($color-disabled-text, 20);
