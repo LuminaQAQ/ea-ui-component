@@ -31,7 +31,7 @@ export class EaAside extends Base {
     // ------- width 侧边栏宽度 -------
     // #region
     get width() {
-        return this.getAttrNumber('width');
+        return this.getAttrNumber('width') || 200;
     }
 
     set width(value) {

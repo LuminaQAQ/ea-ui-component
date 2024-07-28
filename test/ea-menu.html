@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script type='module'>
+        import "../components/ea-container/index.js"
+        import "../components/ea-aside/index.js"
+        import "../components/ea-main/index.js"
+
+        import '../components/ea-menu/index.js'
+        import "../components/ea-switch/index.js"
+    </script>
+
+    <ea-menu mode="horizontal">
+        <ea-menu-item actived>首页</ea-menu-item>
+        <ea-menu-item>产品中心</ea-menu-item>
+        <ea-menu-item>关于我们</ea-menu-item>
+        <ea-menu-item disabled>
+            <ea-icon icon="icon-coffee"></ea-icon>
+            <a href="https://luminaqaq.github.io/ea_ui_component/" target="_blank">联系我们</a> </ea-menu-item>
+        </ea-menu-item>
+        <ea-submenu>
+            <div slot='title'>更多</div>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+        </ea-submenu>
+    </ea-menu>
+
+    <ea-menu mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+        <ea-menu-item actived>首页</ea-menu-item>
+        <ea-menu-item>产品中心</ea-menu-item>
+        <ea-menu-item>关于我们</ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-coffee"></ea-icon>
+            <a href="https://luminaqaq.github.io/ea_ui_component/" target="_blank">联系我们</a> </ea-menu-item>
+        </ea-menu-item>
+        <ea-submenu disabled>
+            <div slot='title'>更多</div>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+        </ea-submenu>
+    </ea-menu>
+
+    <hr>
+
+    <style>
+        .ea-menu-item-title {
+            margin-left: 0.25rem;
+        }
+    </style>
+    <ea-menu mode="vertical" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+        <ea-menu-item actived>
+            <ea-icon icon="icon-crown"></ea-icon>
+            <span class="ea-menu-item-title">联系我们</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-briefcase"></ea-icon>
+            <span class="ea-menu-item-title">产品中心</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-user"></ea-icon>
+            <span class="ea-menu-item-title">关于我们</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-mail-alt"></ea-icon>
+            <span class="ea-menu-item-title">联系我们</span>
+        </ea-menu-item>
+        <ea-menu-item-group>
+            <div slot='title'>
+                <ea-icon icon="icon-th-large"></ea-icon>
+                <span class="ea-menu-item-title">更多</span>
+            </div>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+        </ea-menu-item-group>
+    </ea-menu>
+
+    <ea-menu mode="vertical">
+        <ea-menu-item actived>
+            <ea-icon icon="icon-crown"></ea-icon>
+            <span class="ea-menu-item-title">联系我们</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-briefcase"></ea-icon>
+            <span class="ea-menu-item-title">产品中心</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-user"></ea-icon>
+            <span class="ea-menu-item-title">关于我们</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-mail-alt"></ea-icon>
+            <span class="ea-menu-item-title">联系我们</span>
+        </ea-menu-item>
+        <ea-menu-item-group>
+            <div slot='title'>
+                <ea-icon icon="icon-th-large"></ea-icon>
+                <span class="ea-menu-item-title">更多</span>
+            </div>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+        </ea-menu-item-group>
+    </ea-menu>
+
+    <hr>
+
+    <button id="open">展开</button>
+    <button id="close">收起</button>
+
+    <ea-menu id="ea-menu-collapse" mode="vertical" background-color="#545c64" text-color="#fff"
+        active-text-color="#ffd04b">
+        <ea-menu-item actived>
+            <ea-icon icon="icon-crown"></ea-icon>
+            <span class="ea-menu-item-title">联系我们</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-briefcase"></ea-icon>
+            <span class="ea-menu-item-title">产品中心</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-user"></ea-icon>
+            <span class="ea-menu-item-title">关于我们</span>
+        </ea-menu-item>
+        <ea-menu-item>
+            <ea-icon icon="icon-mail-alt"></ea-icon>
+            <span class="ea-menu-item-title">联系我们</span>
+        </ea-menu-item>
+        <ea-menu-item-group>
+            <div slot='title'>
+                <ea-icon icon="icon-th-large"></ea-icon>
+                <span class="ea-menu-item-title">更多</span>
+            </div>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+            <ea-menu-item>关于我们</ea-menu-item>
+        </ea-menu-item-group>
+    </ea-menu>
+
+    <script>
+        const menu = document.querySelector('#ea-menu-collapse');
+        const openBtn = document.querySelector('#open');
+        const closeBtn = document.querySelector('#close');
+
+        openBtn.addEventListener('click', () => {
+            menu.collapse = false;
+        });
+
+        closeBtn.addEventListener('click', () => {
+            menu.collapse = true;
+        });
+    </script>
+
+</body>
+
+</html>

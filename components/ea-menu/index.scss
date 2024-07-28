@@ -1,0 +1,22 @@
+.ea-menu_wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 20px;
+  overflow: auto;
+
+  &.is-vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    border-right: 1px solid #e6e6e6;
+
+    ::slotted(ea-menu-item),
+    ::slotted(ea-submenu) {
+      width: 100%;
+    }
+
+    ::slotted(ea-submenu) {
+      width: 100%;
+    }
+  }
+}
