@@ -67,6 +67,50 @@ onMounted(() => {
     </ea-menu>
 </div>
 
+```html
+<div class="demo">
+  <ea-menu mode="horizontal">
+    <ea-menu-item actived>首页</ea-menu-item>
+    <ea-menu-item>产品中心</ea-menu-item>
+    <ea-menu-item>关于我们</ea-menu-item>
+    <ea-menu-item disabled>
+      <ea-icon icon="icon-coffee"></ea-icon>
+      <a href="https://luminaqaq.github.io/ea_ui_component/" target="_blank"
+        >联系我们</a
+      >
+    </ea-menu-item>
+    <ea-submenu>
+      <div slot="title">更多</div>
+      <ea-menu-item>关于我们</ea-menu-item>
+      <ea-menu-item>关于我们</ea-menu-item>
+      <ea-menu-item>关于我们</ea-menu-item>
+    </ea-submenu>
+  </ea-menu>
+  <ea-menu
+    mode="horizontal"
+    background-color="#545c64"
+    text-color="#fff"
+    active-text-color="#ffd04b"
+  >
+    <ea-menu-item actived>首页</ea-menu-item>
+    <ea-menu-item>产品中心</ea-menu-item>
+    <ea-menu-item>关于我们</ea-menu-item>
+    <ea-menu-item>
+      <ea-icon icon="icon-coffee"></ea-icon>
+      <a href="https://luminaqaq.github.io/ea_ui_component/" target="_blank"
+        >联系我们</a
+      >
+    </ea-menu-item>
+    <ea-submenu disabled>
+      <div slot="title">更多</div>
+      <ea-menu-item>关于我们</ea-menu-item>
+      <ea-menu-item>关于我们</ea-menu-item>
+      <ea-menu-item>关于我们</ea-menu-item>
+    </ea-submenu>
+  </ea-menu>
+</div>
+```
+
 ## 侧栏
 
 垂直菜单，可内嵌子菜单。
@@ -129,6 +173,71 @@ onMounted(() => {
         </ea-menu-item-group>
     </ea-menu>
 </div>
+
+```html
+<div class="row flex-start" style="height: 500px;">
+  <ea-menu
+    class="vertical"
+    mode="vertical"
+    background-color="#545c64"
+    text-color="#fff"
+    active-text-color="#ffd04b"
+  >
+    <ea-menu-item actived>
+      <ea-icon icon="icon-crown"></ea-icon>
+      <span class="ea-menu-item-title">联系我们</span>
+    </ea-menu-item>
+    <ea-menu-item>
+      <ea-icon icon="icon-briefcase"></ea-icon>
+      <span class="ea-menu-item-title">产品中心</span>
+    </ea-menu-item>
+    <ea-menu-item>
+      <ea-icon icon="icon-user"></ea-icon>
+      <span class="ea-menu-item-title">关于我们</span>
+    </ea-menu-item>
+    <ea-menu-item>
+      <ea-icon icon="icon-mail-alt"></ea-icon>
+      <span class="ea-menu-item-title">联系我们</span>
+    </ea-menu-item>
+    <ea-menu-item-group>
+      <div slot="title">
+        <ea-icon icon="icon-th-large"></ea-icon>
+        <span class="ea-menu-item-title">更多</span>
+      </div>
+      <ea-menu-item>关于我们</ea-menu-item>
+      <ea-menu-item>关于我们</ea-menu-item>
+      <ea-menu-item>关于我们</ea-menu-item>
+    </ea-menu-item-group>
+  </ea-menu>
+  <ea-menu class="vertical" mode="vertical">
+    <ea-menu-item actived>
+      <ea-icon icon="icon-crown"></ea-icon>
+      <span class="ea-menu-item-title">联系我们</span>
+    </ea-menu-item>
+    <ea-menu-item>
+      <ea-icon icon="icon-briefcase"></ea-icon>
+      <span class="ea-menu-item-title">产品中心</span>
+    </ea-menu-item>
+    <ea-menu-item>
+      <ea-icon icon="icon-user"></ea-icon>
+      <span class="ea-menu-item-title">关于我们</span>
+    </ea-menu-item>
+    <ea-menu-item>
+      <ea-icon icon="icon-mail-alt"></ea-icon>
+      <span class="ea-menu-item-title">联系我们</span>
+    </ea-menu-item>
+    <ea-menu-item-group>
+      <div slot="title">
+        <ea-icon icon="icon-th-large"></ea-icon>
+        <span class="ea-menu-item-title">更多</span>
+      </div>
+      <ea-menu-item>关于我们</ea-menu-item>
+      <ea-menu-item>关于我们</ea-menu-item>
+      <ea-menu-item>关于我们</ea-menu-item>
+    </ea-menu-item-group>
+  </ea-menu>
+</div>
+```
 
 ## Menu Attribute
 
