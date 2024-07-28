@@ -138,7 +138,7 @@ export class EaMenu extends Base {
             item.itemIndex = index;
 
             item.addEventListener('item-selected', (e) => {
-                const itemIndex = e.detail.index;
+                const itemTitle = e.detail.title;
 
                 items.forEach(callback);
 
