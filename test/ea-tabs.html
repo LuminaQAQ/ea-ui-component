@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+</head>
+
+<body>
+    <script type='module'>
+        import '../components/ea-tabs/index.js'
+
+        const tabs = document.getElementById('clickEvent');
+        tabs.addEventListener('tab-click', (e) => {
+            // console.log(e.detail);
+        })
+    </script>
+
+    <ea-tabs id="clickEvent" actived="second">
+        <ea-tab-pane name="first">用户管理</ea-tab-pane>
+        <ea-tab-pane name="second">配置管理</ea-tab-pane>
+        <ea-tab-pane name="third">角色管理</ea-tab-pane>
+        <ea-tab-pane name="fourth">定时任务补偿</ea-tab-pane>
+        <ea-tab-pane>定时任务补偿</ea-tab-pane>
+    </ea-tabs>
+</body>
+
+</html>

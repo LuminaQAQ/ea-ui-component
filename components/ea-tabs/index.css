@@ -1,0 +1,24 @@
+.ea-tabs_wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ea-tabs_wrap .ea-tabs_tab-bottom-bar {
+  position: absolute;
+  height: 2px;
+  width: 2rem;
+  bottom: -2px;
+  left: 0;
+  border-radius: 999px;
+  background-color: #409eff;
+  transition: left 0.3s, width 0.3s;
+}
+.ea-tabs_wrap.ea-tabs_wrap--border-card {
+  border-bottom: 2px solid;
+  border-color: #e4e7ed;
+}
+.ea-tabs_wrap.ea-tabs_wrap--card {
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
