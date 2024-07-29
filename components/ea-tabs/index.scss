@@ -4,6 +4,8 @@
   .ea-tabs_tab-wrap {
     display: flex;
     align-items: center;
+    overflow-x: auto;
+    scrollbar-width: thin;
   }
 
   .ea-tabs_pane-wrap {
@@ -22,7 +24,7 @@
 
     background-color: #409eff;
 
-    transition: left 0.3s, width 0.3s;
+    transition: left 0.3s;
   }
 
   &.ea-tabs_wrap--normal {
@@ -45,8 +47,12 @@
   }
 
   &.ea-tabs_wrap--border-card {
-    border-bottom: 1px solid;
-    border-color: #e4e7ed;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+    .ea-tabs_tab-wrap {
+      background-color: #f5f7fa;
+      border-bottom: 1px solid #e4e7ed;
+    }
 
     .ea-tabs_tab-bottom-bar {
       height: 1px;

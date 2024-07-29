@@ -14,6 +14,11 @@ export class EaTabs extends Base {
     #wrap;
     #tabBottomBar;
     #paneWrap;
+
+    #tabSlot;
+
+    #previousNodesLen = 0;
+
     constructor() {
         super();
 
@@ -36,6 +41,7 @@ export class EaTabs extends Base {
         this.#wrap = wrap;
         this.#tabBottomBar = tabBottomBar;
         this.#paneWrap = paneWrap;
+        this.#tabSlot = slot;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
@@ -57,9 +63,11 @@ export class EaTabs extends Base {
             item.type = value;
         });
 
-        items[0].handleBorderRadius('--border-radius-top-left');
-        items[items.length - 1].handleBorderRadius('--border-radius-top-right');
-        items[items.length - 1].handleBorderRightWidth();
+        if (value !== 'border-card') {
+            items[0].handleBorderRadius('--border-radius-top-left');
+            items[items.length - 1].handleBorderRadius('--border-radius-top-right');
+            items[items.length - 1].handleBorderRightWidth();
+        }
     }
     // #endregion
     // ------- end -------
@@ -74,8 +82,22 @@ export class EaTabs extends Base {
         this.setAttribute('actived', value);
 
         this.querySelectorAll('ea-tab').forEach((item, index) => {
-            item.actived = index === value;
+            item.actived = item.name === value;
         });
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- editable 标签是否可编辑 -------
+    // #region
+    get editable() {
+        return this.getAttrBoolean('editable') || false;
+    }
+
+    set editable(value) {
+        this.setAttribute('editable', value);
+
+        this.#handleEditable(value);
     }
     // #endregion
     // ------- end -------
@@ -84,17 +106,16 @@ export class EaTabs extends Base {
         const items = this.querySelectorAll('ea-tab');
         const paneItems = this.querySelectorAll('ea-pane');
 
-        const target = e;
-        const { left, width, height } = target.getBoundingClientRect();
+        const { left, width, height } = e.getBoundingClientRect();
 
-        items.forEach(item => {
+        const callback = (item, index) => {
             item.actived = false;
-        });
+            item.index = index;
+        }
+
+        items.forEach(callback);
+        paneItems.forEach(callback);
         e.actived = true;
-
-        paneItems.forEach(item => {
-            item.actived = false;
-        });
         this.querySelector(`ea-pane[name="${e.name}"]`).actived = true;
 
         this.#tabBottomBar.style.left = left - 8 + 'px';
@@ -104,6 +125,13 @@ export class EaTabs extends Base {
 
     #handleSubItemsName() {
         const items = this.querySelectorAll('ea-tab');
+        const paneItems = this.querySelectorAll('ea-pane');
+
+        const eventListener = (e) => {
+            this.#handleBottomBarMove(e.detail.event);
+            this.actived = e.detail.name;
+            e.detail.event.actived = true;
+        }
 
         items.forEach((item, index) => {
             item.index = index;
@@ -112,11 +140,16 @@ export class EaTabs extends Base {
                 item.name = index;
             }
 
-            item.addEventListener('tab-click', (e) => {
-                this.#handleBottomBarMove(e.detail.event);
-                this.actived = e.detail.name;
-                e.detail.event.actived = true;
-            })
+            item.removeEventListener('tab-click', eventListener);
+            item.addEventListener('tab-click', eventListener);
+        })
+
+        paneItems.forEach((item, index) => {
+            item.index = index;
+
+            if (!item.name) {
+                item.name = index;
+            }
         })
     }
 
@@ -128,6 +161,73 @@ export class EaTabs extends Base {
         }, 20)
     }
 
+    #handleTabCloseEventListener(e) {
+        e.stopPropagation();
+
+        const items = this.querySelectorAll('ea-tab');
+        const { name, event, index } = e.detail;
+        let willActivedIndex = index;
+
+        if (items[index + 1]) {
+            willActivedIndex = index + 1;
+        } else if (items[index - 1]) {
+            willActivedIndex = index - 1;
+        }
+
+
+        try {
+            this.actived = items[willActivedIndex]?.name;
+
+            event.remove();
+            this.querySelector(`ea-pane[name="${name}"]`).remove();
+
+            if (items.length <= 1) {
+                this.#tabBottomBar.style.width = 0;
+            } else {
+                this.#initBottomBarMove();
+                this.#handleSubItemsName();
+            }
+        } catch (error) { }
+    }
+
+    #handleEditable(value) {
+        this.querySelectorAll('ea-tab').forEach(item => {
+            item.editable = value;
+        });
+
+        this.removeEventListener('tab-close', this.#handleTabCloseEventListener);
+        this.addEventListener('tab-close', this.#handleTabCloseEventListener);
+    }
+
+    #handleTabAdd() {
+        setTimeout(() => {
+            this.#previousNodesLen = this.#tabSlot.assignedNodes().length;
+
+            this.#tabSlot.addEventListener('slotchange', (e) => {
+                const currentNodesLen = e.target.assignedNodes().length;
+
+                if (currentNodesLen > this.previousNodesLen) {
+                    this.#handleSubItemsName();
+                    this.#handleEditable(this.editable);
+                    this.type = this.type;
+
+                    this.#previousNodesLen = currentNodesLen;
+
+                    this.dispatchEvent(new CustomEvent('tab-add', {
+                        detail: {
+                            event: e,
+                            tabs: this.querySelectorAll('ea-tab'),
+                            panes: this.querySelectorAll('ea-pane'),
+                        },
+                        bubbles: true,
+                        composed: true,
+                    }));
+
+                }
+            })
+        }, 20)
+    }
+
     #init() {
         const that = this;
 
@@ -135,8 +235,11 @@ export class EaTabs extends Base {
 
         this.actived = this.actived;
 
+        this.editable = this.editable;
+
         this.#initBottomBarMove();
         this.#handleSubItemsName();
+        this.#handleTabAdd();
     }
 
     connectedCallback() {

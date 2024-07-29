@@ -16,10 +16,47 @@
 
 <body>
     <script type='module'>
+        import "../components/ea-icon/index.js"
         import '../components/ea-tabs/index.js'
+
+        const editableObj = {
+            wrap: document.querySelector('#editable'),
+            paneSlot: document.querySelector('#editableSlot'),
+            addBtn: document.querySelector('#addBtn'),
+
+            handleTabclose(wrap) {
+                wrap.addEventListener('tab-close', (e) => {
+                    console.log('close', e.detail);
+                })
+            },
+
+            handleTabAdd(btn, wrap, slotWrap) {
+                btn.addEventListener('click', () => {
+                    const tab = document.createElement('ea-tab');
+                    tab.innerText = '新增标签';
+
+                    const pane = document.createElement('ea-pane');
+                    pane.innerText = '新增标签内容';
+
+                    wrap.appendChild(tab);
+                    slotWrap.appendChild(pane);
+                })
+
+                wrap.addEventListener('tab-add', (e) => {
+                    console.log('add', e.detail);
+                })
+            },
+
+            init() {
+                this.handleTabclose(this.wrap);
+                this.handleTabAdd(this.addBtn, this.wrap, this.paneSlot);
+            }
+        }
+
+        editableObj.init();
     </script>
 
-    <!-- -------- 1 --------  -->
+    <!-- -------- 1 基础用法 --------  -->
     <!-- #region  -->
     <ea-tabs id="clickEvent--normal-card" actived="second">
         <ea-tab name="first">用户管理</ea-tab>
@@ -39,7 +76,7 @@
 
     <hr>
 
-    <!-- -------- 2 --------  -->
+    <!-- -------- 2 选项卡样式 --------  -->
     <!-- #region  -->
     <ea-tabs id="clickEvent--card" actived="second" type="card">
         <ea-tab name="first">用户管理</ea-tab>
@@ -59,15 +96,40 @@
 
     <hr>
 
-    <!-- -------- 3 --------  -->
+    <!-- -------- 3 卡片化 --------  -->
     <!-- #region  -->
-    <ea-tabs id="clickEvent--border-card" actived="second" type="card">
+    <ea-tabs id="clickEvent--border-card" actived="second" type="border-card">
         <ea-tab name="first">用户管理</ea-tab>
         <ea-tab name="second">配置管理</ea-tab>
         <ea-tab name="third">角色管理</ea-tab>
         <ea-tab name="fourth">定时任务补偿</ea-tab>
 
         <div slot="pane">
+            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+        </div>
+    </ea-tabs>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 4 增减标签页 --------  -->
+    <!-- #region  -->
+    <button id="addBtn">add</button>
+
+    <ea-tabs actived="second" type="border-card" editable id="editable">
+        <ea-tab name="first">
+            <ea-icon icon="icon-coffee"></ea-icon>
+            用户管理
+        </ea-tab>
+        <ea-tab name="second">配置管理</ea-tab>
+        <ea-tab name="third">角色管理</ea-tab>
+        <ea-tab name="fourth">定时任务补偿</ea-tab>
+
+        <div id="editableSlot" slot="pane">
             <ea-pane class="tab-page" name="first">用户管理</ea-pane>
             <ea-pane class="tab-page" name="second">配置管理</ea-pane>
             <ea-pane class="tab-page" name="third">角色管理</ea-pane>

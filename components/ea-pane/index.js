@@ -40,6 +40,18 @@ export class EaPane extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- name 标签唯一标识 -------
+    // #region
+    get name() {
+        return this.getAttribute('name');
+    }
+
+    set name(value) {
+        this.setAttribute('name', value);
+    }
+    // #endregion
+    // ------- end -------
+
     #init() {
         const that = this;
     }

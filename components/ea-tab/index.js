@@ -70,18 +70,51 @@ export class EaTab extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- editable 是否可关闭 -------
+    // #region
+    get editable() {
+        return this.getAttrBoolean('editable');
+    }
+
+    set editable(value) {
+        this.setAttribute('editable', value);
+        this.#wrap.classList.toggle('ea-tab_wrap--editable', value);
+
+        if (value) {
+            this.#handleTabCloasable();
+        }
+    }
+    // #endregion
+    // ------- end -------
+
     #handleSelectedEvent() {
         this.addEventListener('click', (e) => {
-            if (e.detail.value === this.getAttrBoolean('selected')) {
-                this.toggleAttribute('actived', true);
-            } else {
-                this.toggleAttribute('actived', false);
-            }
+            const isSelected = e.detail.value === this.getAttrBoolean('selected');
+            this.toggleAttr('selected', isSelected)
 
             this.dispatchEvent(new CustomEvent('tab-click', {
                 detail: {
                     name: this.name,
                     event: this,
+                },
+                bubbles: true,
+            }));
+        });
+    }
+
+    #handleTabCloasable() {
+        const span = createElement('span', 'ea-tab_wrap--editable-sign');
+        span.innerText = 'x';
+        this.#wrap.appendChild(span);
+
+        span.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            this.dispatchEvent(new CustomEvent('tab-close', {
+                detail: {
+                    event: this,
+                    name: this.name,
+                    index: this.index,
                 },
                 bubbles: true,
             }));
