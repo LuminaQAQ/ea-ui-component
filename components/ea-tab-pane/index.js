@@ -45,13 +45,13 @@ export class EaTabPane extends Base {
     // ------- type 标签样式类型 -------
     // #region
     get type() {
-        return this.getAttrBoolean('type') || 'border-card';
+        return this.getAttrBoolean('type') || 'normal';
     }
 
     set type(value) {
         this.setAttribute('type', value);
 
-        this.#wrap.classList.add(`ea-tab-pane_wrap--${this.type}`);
+        this.#wrap.classList.add(`ea-tab-pane_wrap--${value}`);
     }
     // #endregion
     // ------- end -------
@@ -86,6 +86,14 @@ export class EaTabPane extends Base {
                 bubbles: true,
             }));
         });
+    }
+
+    handleBorderRadius(key) {
+        this.#wrap.style.setProperty(key, '3px');
+    }
+
+    handleBorderRightWidth() {
+        this.#wrap.style.setProperty('--border-right-width', '1px');
     }
 
     #init() {

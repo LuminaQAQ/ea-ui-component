@@ -2,11 +2,12 @@
   position: relative;
   display: flex;
   align-items: center;
+  border: 1px solid black;
 
   .ea-tabs_tab-bottom-bar {
     position: absolute;
     height: 2px;
-    width: 2rem;
+    width: 0;
 
     bottom: -2px;
     left: 0;
@@ -18,14 +19,32 @@
     transition: left 0.3s, width 0.3s;
   }
 
-  &.ea-tabs_wrap--border-card {
+  &.ea-tabs_wrap--normal {
     border-bottom: 2px solid;
     border-color: #e4e7ed;
   }
 
   &.ea-tabs_wrap--card {
-    border-radius: 4px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid;
+    border-color: #e4e7ed;
+
+    .ea-tabs_tab-bottom-bar {
+      height: 1px;
+      bottom: -1px;
+
+      background-color: white;
+    }
+  }
+
+  &.ea-tabs_wrap--border-card {
+    border-bottom: 1px solid;
+    border-color: #e4e7ed;
+
+    .ea-tabs_tab-bottom-bar {
+      height: 1px;
+      bottom: -1px;
+
+      background-color: white;
+    }
   }
 }

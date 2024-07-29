@@ -36,16 +36,22 @@ export class EaTabs extends Base {
     // ------- type 标签样式类型 -------
     // #region
     get type() {
-        return this.getAttribute('type') || 'border-card';
+        return this.getAttribute('type') || 'normal';
     }
 
     set type(value) {
         this.setAttribute('type', value);
 
         this.#wrap.classList.add('ea-tabs_wrap--' + value);
-        this.querySelectorAll('ea-tab-pane').forEach(item => {
+
+        const items = this.querySelectorAll(`ea-tab-pane`);
+        items.forEach(item => {
             item.type = value;
         });
+
+        items[0].handleBorderRadius('--border-radius-top-left');
+        items[items.length - 1].handleBorderRadius('--border-radius-top-right');
+        items[items.length - 1].handleBorderRightWidth();
     }
     // #endregion
     // ------- end -------
@@ -67,8 +73,14 @@ export class EaTabs extends Base {
     // ------- end -------
 
     #handleBottomBarMove(e) {
+        const items = this.querySelectorAll('ea-tab-pane');
         const target = e;
         const { left, width } = target.getBoundingClientRect();
+
+        items.forEach(item => {
+            item.actived = false;
+        });
+        e.actived = true;
 
         this.#tabBottomBar.style.left = left - 8 + 'px';
         this.#tabBottomBar.style.width = width + 'px';
@@ -86,6 +98,8 @@ export class EaTabs extends Base {
 
             item.addEventListener('tab-click', (e) => {
                 this.#handleBottomBarMove(e.detail.event);
+                this.actived = e.detail.name;
+                e.detail.event.actived = true;
             })
         })
     }
@@ -93,7 +107,8 @@ export class EaTabs extends Base {
     #initBottomBarMove() {
         setTimeout(() => {
             const item = this.querySelector('ea-tab-pane[name="' + this.actived + '"]');
-            this.#handleBottomBarMove(item)
+            item.actived = true;
+            this.#handleBottomBarMove(item);
         }, 20)
     }
 
