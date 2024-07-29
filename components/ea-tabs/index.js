@@ -3,7 +3,8 @@ import Base from '../Base.js';
 import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 
-import "../ea-tab-pane/index.js"
+import "../ea-tab/index.js"
+import '../ea-pane/index.js'
 
 const stylesheet = `
 
@@ -12,6 +13,7 @@ const stylesheet = `
 export class EaTabs extends Base {
     #wrap;
     #tabBottomBar;
+    #paneWrap;
     constructor() {
         super();
 
@@ -21,13 +23,19 @@ export class EaTabs extends Base {
         wrap.part = 'wrap';
 
         const slot = createSlotElement();
-        wrap.appendChild(slot);
+        const tabWrap = createElement('div', 'ea-tabs_tab-wrap', [slot]);
+        wrap.appendChild(tabWrap);
 
         const tabBottomBar = createElement('div', 'ea-tabs_tab-bottom-bar');
         wrap.appendChild(tabBottomBar);
 
+        const paneSlot = createSlotElement('pane');
+        const paneWrap = createElement('div', 'ea-tabs_pane-wrap', [paneSlot]);
+        wrap.appendChild(paneWrap);
+
         this.#wrap = wrap;
         this.#tabBottomBar = tabBottomBar;
+        this.#paneWrap = paneWrap;
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
@@ -44,7 +52,7 @@ export class EaTabs extends Base {
 
         this.#wrap.classList.add('ea-tabs_wrap--' + value);
 
-        const items = this.querySelectorAll(`ea-tab-pane`);
+        const items = this.querySelectorAll(`ea-tab`);
         items.forEach(item => {
             item.type = value;
         });
@@ -59,13 +67,13 @@ export class EaTabs extends Base {
     // ------- actived 标签是否被选中 -------
     // #region
     get actived() {
-        return this.getAttribute('actived') || this.querySelectorAll('ea-tab-pane')[0].name || 0;
+        return this.getAttribute('actived') || this.querySelectorAll('ea-tab')[0].name || 0;
     }
 
     set actived(value) {
         this.setAttribute('actived', value);
 
-        this.querySelectorAll('ea-tab-pane').forEach((item, index) => {
+        this.querySelectorAll('ea-tab').forEach((item, index) => {
             item.actived = index === value;
         });
     }
@@ -73,21 +81,29 @@ export class EaTabs extends Base {
     // ------- end -------
 
     #handleBottomBarMove(e) {
-        const items = this.querySelectorAll('ea-tab-pane');
+        const items = this.querySelectorAll('ea-tab');
+        const paneItems = this.querySelectorAll('ea-pane');
+
         const target = e;
-        const { left, width } = target.getBoundingClientRect();
+        const { left, width, height } = target.getBoundingClientRect();
 
         items.forEach(item => {
             item.actived = false;
         });
         e.actived = true;
 
+        paneItems.forEach(item => {
+            item.actived = false;
+        });
+        this.querySelector(`ea-pane[name="${e.name}"]`).actived = true;
+
         this.#tabBottomBar.style.left = left - 8 + 'px';
         this.#tabBottomBar.style.width = width + 'px';
+        this.#tabBottomBar.style.top = height + 'px';
     }
 
     #handleSubItemsName() {
-        const items = this.querySelectorAll('ea-tab-pane');
+        const items = this.querySelectorAll('ea-tab');
 
         items.forEach((item, index) => {
             item.index = index;
@@ -106,7 +122,7 @@ export class EaTabs extends Base {
 
     #initBottomBarMove() {
         setTimeout(() => {
-            const item = this.querySelector('ea-tab-pane[name="' + this.actived + '"]');
+            const item = this.querySelector('ea-tab[name="' + this.actived + '"]');
             item.actived = true;
             this.#handleBottomBarMove(item);
         }, 20)

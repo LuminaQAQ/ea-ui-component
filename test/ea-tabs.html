@@ -11,70 +11,29 @@
         hr {
             margin: 3rem 0;
         }
-
-        .tab-page {
-            display: none;
-        }
-
-        .tab-page.show {
-            display: block;
-        }
     </style>
 </head>
 
 <body>
     <script type='module'>
         import '../components/ea-tabs/index.js'
-
-        // ------- 1 -------
-        // #region
-        const tabs_borderCard = document.querySelector('#clickEvent--normal-card');
-        const tabPages_borderCard = document.querySelectorAll('#clickEventPages--normal-card .tab-page');
-
-        tabs_borderCard.addEventListener('tab-click', (e) => {
-            tabPages_borderCard.forEach(item => {
-                item.classList.remove('show');
-
-                if (item.getAttribute('name') === e.detail.name) {
-                    item.classList.add('show');
-                }
-            })
-        })
-        // #endregion
-        // ------- end -------
-
-        // ------- 2 -------
-        // #region
-        const tabs_card = document.querySelector('#clickEvent--card');
-        const tabPages_card = document.querySelectorAll('#clickEventPages--card .tab-page');
-
-        tabs_card.addEventListener('tab-click', (e) => {
-            tabPages_card.forEach(item => {
-                item.classList.remove('show');
-
-                if (item.getAttribute('name') === e.detail.name) {
-                    item.classList.add('show');
-                }
-            })
-        })
-        // #endregion
-        // ------- end -------
     </script>
 
     <!-- -------- 1 --------  -->
     <!-- #region  -->
     <ea-tabs id="clickEvent--normal-card" actived="second">
-        <ea-tab-pane name="first">用户管理</ea-tab-pane>
-        <ea-tab-pane name="second">配置管理</ea-tab-pane>
-        <ea-tab-pane name="third">角色管理</ea-tab-pane>
-        <ea-tab-pane name="fourth">定时任务补偿</ea-tab-pane>
+        <ea-tab name="first">用户管理</ea-tab>
+        <ea-tab name="second">配置管理</ea-tab>
+        <ea-tab name="third">角色管理</ea-tab>
+        <ea-tab name="fourth">定时任务补偿</ea-tab>
+
+        <div slot="pane">
+            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+        </div>
     </ea-tabs>
-    <div id="clickEventPages--normal-card">
-        <p class="tab-page" name="first">用户管理</p>
-        <p class="tab-page show" name="second">配置管理</p>
-        <p class="tab-page" name="third">角色管理</p>
-        <p class="tab-page" name="fourth">定时任务补偿</p>
-    </div>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -83,17 +42,18 @@
     <!-- -------- 2 --------  -->
     <!-- #region  -->
     <ea-tabs id="clickEvent--card" actived="second" type="card">
-        <ea-tab-pane name="first">用户管理</ea-tab-pane>
-        <ea-tab-pane name="second">配置管理</ea-tab-pane>
-        <ea-tab-pane name="third">角色管理</ea-tab-pane>
-        <ea-tab-pane name="fourth">定时任务补偿</ea-tab-pane>
+        <ea-tab name="first">用户管理</ea-tab>
+        <ea-tab name="second">配置管理</ea-tab>
+        <ea-tab name="third">角色管理</ea-tab>
+        <ea-tab name="fourth">定时任务补偿</ea-tab>
+
+        <div slot="pane">
+            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+        </div>
     </ea-tabs>
-    <div id="clickEventPages--card">
-        <p class="tab-page" name="first">用户管理</p>
-        <p class="tab-page show" name="second">配置管理</p>
-        <p class="tab-page" name="third">角色管理</p>
-        <p class="tab-page" name="fourth">定时任务补偿</p>
-    </div>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -102,17 +62,18 @@
     <!-- -------- 3 --------  -->
     <!-- #region  -->
     <ea-tabs id="clickEvent--border-card" actived="second" type="card">
-        <ea-tab-pane name="first" label="用户管理">用户管理</ea-tab-pane>
-        <ea-tab-pane name="second" label="配置管理">配置管理</ea-tab-pane>
-        <ea-tab-pane name="third" label="角色管理">角色管理</ea-tab-pane>
-        <ea-tab-pane name="fourth" label="定时任务补偿">定时任务补偿</ea-tab-pane>
+        <ea-tab name="first">用户管理</ea-tab>
+        <ea-tab name="second">配置管理</ea-tab>
+        <ea-tab name="third">角色管理</ea-tab>
+        <ea-tab name="fourth">定时任务补偿</ea-tab>
+
+        <div slot="pane">
+            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+        </div>
     </ea-tabs>
-    <div id="clickEventPages--border-card">
-        <p class="tab-page" name="first">用户管理</p>
-        <p class="tab-page show" name="second">配置管理</p>
-        <p class="tab-page" name="third">角色管理</p>
-        <p class="tab-page" name="fourth">定时任务补偿</p>
-    </div>
     <!-- #endregion  -->
     <!-- -------------------  -->
 </body>

@@ -7,7 +7,7 @@ const stylesheet = `
 
 `;
 
-export class EaTabPane extends Base {
+export class EaTab extends Base {
     #wrap;
 
     #slot;
@@ -17,7 +17,7 @@ export class EaTabPane extends Base {
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
         const wrap = document.createElement('div');
-        wrap.className = 'ea-tab-pane_wrap';
+        wrap.className = 'ea-tab_wrap';
         wrap.part = 'wrap';
 
         const slot = createSlotElement();
@@ -51,7 +51,7 @@ export class EaTabPane extends Base {
     set type(value) {
         this.setAttribute('type', value);
 
-        this.#wrap.classList.add(`ea-tab-pane_wrap--${value}`);
+        this.#wrap.classList.add(`ea-tab_wrap--${value}`);
     }
     // #endregion
     // ------- end -------
@@ -109,6 +109,6 @@ export class EaTabPane extends Base {
     }
 }
 
-if (!customElements.get('ea-tab-pane')) {
-    customElements.define('ea-tab-pane', EaTabPane);
+if (!customElements.get('ea-tab')) {
+    customElements.define('ea-tab', EaTab);
 }
