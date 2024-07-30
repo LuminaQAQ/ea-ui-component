@@ -256,7 +256,7 @@ export class EaTabs extends Base {
             this.#tabSlot.addEventListener('slotchange', (e) => {
                 const currentNodesLen = e.target.assignedNodes().length;
 
-                if (currentNodesLen > this.previousNodesLen) {
+                if (currentNodesLen >= this.#previousNodesLen) {
                     this.#handleSubItemsName();
                     this.#handleEditable(this.editable);
                     this.type = this.type;
@@ -273,6 +273,8 @@ export class EaTabs extends Base {
                         composed: true,
                     }));
 
+                } else {
+                    this.#previousNodesLen = this.#tabSlot.assignedNodes().length;
                 }
             })
         }, 20)
