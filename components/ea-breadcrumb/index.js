@@ -6,7 +6,12 @@ import { createSlotElement, createElement } from '../../utils/createElement.js';
 import "../ea-breadcrumb-item/index.js"
 
 const stylesheet = `
-
+.ea-breadcrumb_wrap {
+  display: flex;
+}
+.ea-breadcrumb_wrap .separator {
+  margin: 0 10px;
+}
 `;
 
 export class EaBreadcrumb extends Base {
@@ -75,7 +80,7 @@ export class EaBreadcrumb extends Base {
                 if (separatorClass) {
                     separatorIcon.icon = separatorClass;
                 } else {
-                separatorIcon.style.margin = '0 10px';
+                    separatorIcon.style.margin = '0 10px';
                     separatorIcon.innerText = separator;
                 }
 
