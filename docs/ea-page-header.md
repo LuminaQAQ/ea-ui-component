@@ -5,6 +5,7 @@ onMounted(() => {
     import('./index.scss')
     
     import('../components/ea-icon/index.js')
+    import('../components/ea-icon/index.css')
     import('../components/ea-page-header/index.js')
 
     const pageHeader = document.querySelector('#pageHeader');
