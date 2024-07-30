@@ -12,6 +12,14 @@ onMounted(() => {
 
 显示当前页面的路径，快速返回之前的任意页面。
 
+## 引入
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-breadcrumb/index.js";
+</script>
+```
+
 ## 基础用法
 
 适用广泛的基础用法。
