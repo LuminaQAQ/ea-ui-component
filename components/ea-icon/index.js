@@ -1,33 +1,47 @@
-import Base from "../Base";
+// @ts-nocheck
+import Base from "../Base.js";
 
 export class EaIcon extends Base {
     static observedAttributes = ['type', 'size', 'color'];
 
+    #wrap;
+
     constructor() {
         super();
 
-        const stylesheet = ``;
-        // `
-
-        // @font-face {
-        //     font-size: 1rem;
-        //     font-size: 16px;
-        //     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        //     src: url("${new URL('./font/fontello.eot', import.meta.url).href}") format("embedded-opentype"), url("${new URL('./font/fontello.ttf', import.meta.url).href}") format("truetype"), url("${new URL('./font/fontello.woff', import.meta.url).href}") format("woff"), url("${new URL('./font/fontello.woff2', import.meta.url).href}") format("woff2"), url("${new URL('./font/fontello.svg', import.meta.url).href}") format("svg");
-        // }
-        // `;
-
-        // const font = document.createElement('link');
-        // font.rel = 'stylesheet';
-        // font.href = new URL('./css/fontello.css', import.meta.url).href;
-
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        // shadowRoot.appendChild(font);
         const wrap = document.createElement('i');
-        wrap.className = "icon-spin6";
 
-        this.build(shadowRoot, stylesheet);
+        this.setIconFile(new URL('../ea-icon/index.scss', import.meta.url).href);
+
+        this.#wrap = wrap;
 
         shadowRoot.appendChild(wrap);
     }
+
+    // ------- icon 图标类名 -------
+    // #region
+    get icon() {
+        return this.getAttribute('icon') || "";
+    }
+
+    set icon(value) {
+        this.setAttribute('icon', value);
+
+        this.#wrap.className = `${value}`;
+    }
+    // #endregion
+    // ------- end -------
+
+    #init() {
+        this.icon = this.icon;
+    }
+
+    connectedCallback() {
+        this.#init()
+    }
+}
+
+if (!window.customElements.get("ea-icon")) {
+    window.customElements.define("ea-icon", EaIcon);
 }

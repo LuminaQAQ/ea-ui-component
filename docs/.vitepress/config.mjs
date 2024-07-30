@@ -44,9 +44,8 @@ export default defineConfig({
         text: '页面组件',
         items: [
           { text: 'NavMenu 导航菜单', link: '/ea-nav-menu' },
-          // { text: 'Icon 图标', link: '/ea-icon' },
-          // { text: 'Button 按钮', link: '/ea-button' },
-          // { text: 'Link 文字链接', link: '/ea-link' },
+          { text: 'Tabs 标签页', link: '/ea-tabs' },
+
         ]
       },
       {

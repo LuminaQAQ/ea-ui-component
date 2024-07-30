@@ -2,9 +2,10 @@
 import { createElement, createSlotElement } from '../../utils/createElement.js';
 import Base from '../Base.js';
 import '../ea-icon/index.js'
+
+import "../ea-menu-item-group/index.js"
 import "../ea-menu-item/index.js"
 import "../ea-submenu/index.js"
-import "../ea-menu-item-group/index.js"
 
 const stylesheet = `
 @import url('/ea_ui_component/icon/index.css');

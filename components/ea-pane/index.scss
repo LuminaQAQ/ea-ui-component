@@ -1,0 +1,7 @@
+.ea-pane_wrap {
+  display: none;
+
+  &.is-actived {
+    display: block;
+  }
+}
