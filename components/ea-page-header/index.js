@@ -4,6 +4,8 @@ import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 const stylesheet = `
+@import url('/ea_ui_component/icon/index.css');
+
 .ea-page-header_wrap {
   display: flex;
   align-items: center;
@@ -56,8 +58,8 @@ export class EaPageHeader extends Base {
         wrap.part = 'wrap';
 
         const titleSlot = createSlotElement('title');
-        const backIcon = createElement('ea-icon', 'ea-page-header_back-icon');
-        backIcon.icon = 'icon-angle-left';
+        const backIcon = createElement('i', 'ea-page-header_back-icon');
+        backIcon.className = 'icon-angle-left';
         const titleWrap = createElement('div', 'ea-page-header_title-wrap', [backIcon, titleSlot]);
         titleWrap.part = 'title-wrap';
         wrap.appendChild(titleWrap);
