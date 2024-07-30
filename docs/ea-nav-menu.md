@@ -3,11 +3,10 @@ import { onMounted } from 'vue'
 
 onMounted(() => {
     import('./index.scss')
+    
+    import('../components/ea-icon/index.js')
     import('../components/ea-switch/index.js')
     import('../components/ea-menu/index.js')
-    import('../components/ea-menu-item/index.js')
-    import('../components/ea-menu-item-group/index.js')
-    import('../components/ea-submenu/index.js')
 })
 </script>
 
@@ -27,6 +26,16 @@ onMounted(() => {
 
 > [!CAUTION]
 > 若出现奇怪布局, 刷新浏览器即可 ( `vitepress` 不知道抽的什么风, 可以正常直接使用)
+
+## 引入
+
+> `js`
+
+```js
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-menu/index.js";
+</script>
+```
 
 ## 顶栏
 
