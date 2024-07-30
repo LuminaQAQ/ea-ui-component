@@ -4,7 +4,12 @@ import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 const stylesheet = `
-
+.ea-pane_wrap {
+  display: none;
+}
+.ea-pane_wrap.is-actived {
+  display: block;
+}
 `;
 
 export class EaPane extends Base {
