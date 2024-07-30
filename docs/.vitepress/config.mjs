@@ -45,6 +45,7 @@ export default defineConfig({
         items: [
           { text: 'NavMenu 导航菜单', link: '/ea-nav-menu' },
           { text: 'Tabs 标签页', link: '/ea-tabs' },
+          { text: 'Breadcrumb 面包屑', link: '/ea-breadcrumb' },
 
         ]
       },
