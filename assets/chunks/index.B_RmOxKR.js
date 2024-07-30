@@ -1,4 +1,4 @@
-var n=(e,o,t)=>{if(!o.has(e))throw TypeError("Cannot "+t)};var p=(e,o,t)=>(n(e,o,"read from private field"),t?t.call(e):o.get(e)),h=(e,o,t)=>{if(o.has(e))throw TypeError("Cannot add the same private member more than once");o instanceof WeakSet?o.add(e):o.set(e,t)},c=(e,o,t,s)=>(n(e,o,"write to private field"),s?s.call(e,t):o.set(e,t),t);var l=(e,o,t)=>(n(e,o,"access private method"),t);import{a as g}from"./createElement.BM9xfELw.js";import{B as f}from"./Base.yCeCPjNm.js";import"./index.CBgfcM5M.js";const w=`
+var n=(e,o,t)=>{if(!o.has(e))throw TypeError("Cannot "+t)};var p=(e,o,t)=>(n(e,o,"read from private field"),t?t.call(e):o.get(e)),h=(e,o,t)=>{if(o.has(e))throw TypeError("Cannot add the same private member more than once");o instanceof WeakSet?o.add(e):o.set(e,t)},c=(e,o,t,s)=>(n(e,o,"write to private field"),s?s.call(e,t):o.set(e,t),t);var l=(e,o,t)=>(n(e,o,"access private method"),t);import{a as g}from"./createElement.BM9xfELw.js";import{B as f}from"./Base.yCeCPjNm.js";import"./index.h3IRzvjH.js";const w=`
 .ea-footer_wrap {
   box-sizing: border-box;
   padding: 0 20px;
