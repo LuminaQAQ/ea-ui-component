@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { createSlotElement } from "../../utils/createElement.js";
 import Base from "../Base.js";
 
 export class EaIcon extends Base {
@@ -11,8 +12,10 @@ export class EaIcon extends Base {
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
         const wrap = document.createElement('i');
+        const slot = createSlotElement();
+        wrap.appendChild(slot);
 
-        this.setIconFile(new URL('../ea-icon/index.scss', import.meta.url).href);
+        this.setIconFile(new URL('../ea-icon/index.css', import.meta.url).href);
 
         this.#wrap = wrap;
 
@@ -33,8 +36,24 @@ export class EaIcon extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- color 颜色 -------
+    // #region
+    get color() {
+        return this.getAttribute('color') || "";
+    }
+
+    set color(value) {
+        this.setAttribute('color', value);
+
+        this.#wrap.style.color = value;
+    }
+    // #endregion
+    // ------- end -------
+
     #init() {
         this.icon = this.icon;
+
+        this.color = this.color;
     }
 
     connectedCallback() {
