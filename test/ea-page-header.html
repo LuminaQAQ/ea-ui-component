@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+</head>
+
+<body>
+    <script type='module'>
+        import '../components/ea-page-header/index.js'
+
+        const pageHeader = document.querySelector('#pageHeader');
+
+        pageHeader.addEventListener('back', () => {
+            console.log('go back');
+        })
+    </script>
+
+    <ea-page-header id="pageHeader" content="详情页面"></ea-page-header>
+</body>
+
+</html>
