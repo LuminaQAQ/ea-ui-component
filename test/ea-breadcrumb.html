@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+</head>
+
+<body>
+    <script type='module'>
+        import '../components/ea-breadcrumb/index.js'
+    </script>
+
+    <!-- -------- 1. 基础用法 --------  -->
+    <!-- #region  -->
+    <ea-breadcrumb separator="/" separator-color="#c0c4cc">
+        <ea-breadcrumb-item>
+            <a href="javascript:;">首页</a>
+        </ea-breadcrumb-item>
+        <ea-breadcrumb-item>
+            <a href="javascript:;">一级</a>
+        </ea-breadcrumb-item>
+        <ea-breadcrumb-item>二级</ea-breadcrumb-item>
+        <ea-breadcrumb-item>三级</ea-breadcrumb-item>
+    </ea-breadcrumb>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 2. 图标分隔符 --------  -->
+    <!-- #region  -->
+    <ea-breadcrumb separator-class="icon-angle-right" separator-color="#c0c4cc">
+        <ea-breadcrumb-item>
+            <a href="javascript:;">首页</a>
+        </ea-breadcrumb-item>
+        <ea-breadcrumb-item>一级</ea-breadcrumb-item>
+        <ea-breadcrumb-item>二级</ea-breadcrumb-item>
+        <ea-breadcrumb-item>三级</ea-breadcrumb-item>
+    </ea-breadcrumb>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>
