@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script type='module'>
+        import '../components/ea-icon/index.js'
+
+        import '../components/ea-button/index.js'
+        import '../components/ea-button-group/index.js'
+
+        import '../components/ea-steps/index.js'
+
+        // ------- 1. 基础用法 -------
+        // #region
+        const basicObj = {
+            wrap: document.querySelector('#basicObj'),
+
+            nextBtn: document.querySelector('#basicObj_next-btn'),
+            prevBtn: document.querySelector('#basicObj_pre-btn'),
+
+            stepChildren: document.querySelectorAll('#basicObj ea-step'),
+
+            handleActiveChange(flag) {
+                let cur = this.wrap.active;
+
+                if (flag === "prev") {
+                    if (--cur < 0) return this.wrap.active = 3;
+
+                    this.wrap.active = cur;
+                } else {
+                    if (++cur > this.stepChildren.length) return this.wrap.active = 0;
+
+                    this.wrap.active = cur;
+                }
+            },
+
+            init() {
+                const { length } = this.stepChildren;
+
+
+                this.prevBtn.addEventListener('click', () => {
+                    this.handleActiveChange("prev");
+                });
+
+                this.nextBtn.addEventListener('click', () => {
+                    this.handleActiveChange("next");
+                });
+            }
+        };
+        basicObj.init();
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 1. 基础用法 --------  -->
+    <!-- #region  -->
+    <p>
+        <ea-button id="basicObj_pre-btn">上一步</ea-button>
+        <ea-button id="basicObj_next-btn">下一步</ea-button>
+    </p>
+    <ea-steps id="basicObj" active="0">
+        <ea-step title="步骤一" description="这是步骤一的描述"></ea-step>
+        <ea-step title="步骤二" description="这是步骤二的描述"></ea-step>
+        <ea-step title="步骤三" description="这是步骤三的描述"></ea-step>
+        <ea-step title="步骤四" description="这是步骤四的描述"></ea-step>
+    </ea-steps>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 2. 含状态步骤条 --------  -->
+    <!-- #region  -->
+    <ea-steps active="1" finish-status="success">
+        <ea-step title="已完成"></ea-step>
+        <ea-step title="进行中"></ea-step>
+        <ea-step title="步骤 3"></ea-step>
+    </ea-steps>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 3. 有描述的步骤条 --------  -->
+    <!-- #region  -->
+    <ea-steps :active="1">
+        <ea-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></ea-step>
+        <ea-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></ea-step>
+        <ea-step title="步骤 3" description="这段就没那么长了"></ea-step>
+    </ea-steps>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+</body>
+
+</html>
