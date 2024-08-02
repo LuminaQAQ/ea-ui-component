@@ -6,7 +6,17 @@ import { createSlotElement, createElement } from '../../utils/createElement.js';
 import "../ea-step/index.js"
 
 const stylesheet = `
-
+.ea-steps_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.ea-steps_wrap ::slotted(ea-step) {
+  flex-basis: 50%;
+}
+.ea-steps_wrap.is-simple {
+  justify-content: unset;
+}
 `;
 
 export class EaSteps extends Base {
@@ -53,6 +63,41 @@ export class EaSteps extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- space 步骤之间的间距 -------
+    // #region
+    get space() {
+        return this.getAttribute('space') || '50%';
+    }
+
+    set space(value) {
+        this.setAttribute('space', value);
+
+        this.#stepChildren.forEach((item, index) => {
+            if (index < this.#stepChildren.length - 1) item.space = value;
+        });
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- simple 简洁模式 -------
+    // #region
+    get simple() {
+        return this.getAttrBoolean('simple') || false;
+    }
+
+    set simple(value) {
+        this.toggleAttr('simple', value);
+
+        this.#stepChildren.forEach((item, index) => {
+            item.simple = value;
+            this.#wrap.classList.toggle('is-simple', value);
+
+            if (index < this.#stepChildren.length - 1) item.space = value ? 'auto' : this.space;
+        });
+    }
+    // #endregion
+    // ------- end -------
+
     #init() {
         const that = this;
 
@@ -65,7 +110,11 @@ export class EaSteps extends Base {
         });
         this.#stepChildren[this.#stepChildren.length - 1].isLast = true;
 
+        this.simple = this.simple;
+
         this.active = this.active;
+
+        this.space = this.space;
     }
 
     connectedCallback() {

@@ -6,4 +6,8 @@
   ::slotted(ea-step) {
     flex-basis: 50%;
   }
+
+  &.is-simple {
+    justify-content: unset;
+  }
 }

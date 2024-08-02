@@ -6,3 +6,6 @@
 .ea-steps_wrap ::slotted(ea-step) {
   flex-basis: 50%;
 }
+.ea-steps_wrap.is-simple {
+  justify-content: unset;
+}

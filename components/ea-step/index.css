@@ -59,3 +59,26 @@
 .ea-step_wrap.is-finish .ea-step_head-wrap .ea-step_bar {
   background-color: #67c23a;
 }
+.ea-step_wrap.is-simple {
+  display: flex;
+  align-items: center;
+}
+.ea-step_wrap.is-simple .ea-step_head-wrap {
+  position: relative;
+}
+.ea-step_wrap.is-simple .ea-step_head-wrap .ea-step_bar {
+  position: relative;
+  width: auto;
+  height: auto;
+  transform: translateY(0%);
+  margin-left: 2px;
+  flex: 1;
+}
+.ea-step_wrap.is-simple .ea-step_main-wrap {
+  margin-left: 16px;
+  line-height: 24px;
+  height: 24px;
+}
+.ea-step_wrap.is-simple .ea-step_main-wrap .ea-step_title-wrap {
+  line-height: 24px;
+}
