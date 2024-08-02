@@ -47,6 +47,7 @@ export default defineConfig({
           { text: 'Tabs 标签页', link: '/ea-tabs' },
           { text: 'Breadcrumb 面包屑', link: '/ea-breadcrumb' },
           { text: 'PageHeader 页头', link: '/ea-page-header' },
+          { text: 'Steps 步骤条', link: '/ea-steps' },
         ]
       },
       {
