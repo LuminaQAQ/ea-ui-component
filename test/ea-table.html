@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script type='module'>
+        import '../components/ea-icon/index.js'
+
+        import '../components/ea-table/index.js'
+
+        const table = document.querySelector('ea-table');
+        const data = [
+            { name: 'Lumina', age: 18, address: '福建' },
+            { name: 'Alice', age: 19, address: '中国' }
+        ];
+        table.renderTable(data);
+
+    </script>
+
+    <!-- -------- 1.  --------  -->
+    <!-- #region  -->
+    <ea-table>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>
