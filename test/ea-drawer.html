@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        body {
+            /* background-color: aquamarine; */
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-icon/index.js'
+        import '../components/ea-button/index.js'
+
+        import '../components/ea-descriptions/index.js'
+        import '../components/ea-descriptions-item/index.js'
+
+        import '../components/ea-tag/index.js'
+
+        import '../components/ea-drawer/index.js'
+
+        // ------- 1. 基本用法 -------
+        // #region
+        const Drawer = {
+            drawer: document.querySelector('#drawer'),
+            openBtn: document.querySelector('#openDrawerBtn'),
+
+            init() {
+                this.openBtn.addEventListener('click', () => {
+                    this.drawer.open = true;
+                })
+
+                this.drawer.addEventListener('close', () => {
+                    console.log('close');
+                })
+            }
+        };
+
+        Drawer.init();
+        // #endregion
+        // ------- end -------
+
+
+        // ------- 2. 自定义内容 -------
+        // #region
+        const CustomDrawer = {
+            drawer: document.querySelector('#customDrawer'),
+            openBtn: document.querySelector('#openCustomDrawerBtn'),
+
+            init() {
+                this.openBtn.addEventListener('click', () => {
+                    this.drawer.open = true;
+                })
+
+                this.drawer.addEventListener('close', () => {
+                    console.log('close');
+                })
+            }
+        };
+
+        CustomDrawer.init();
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 1. 基本用法 --------  -->
+    <!-- #region  -->
+    <ea-button type="primary" id="openDrawerBtn">打开普通的抽屉</ea-button>
+
+    <ea-drawer id="drawer" title="我是标题" direction="ltr">
+        <span>我是内容</span>
+    </ea-drawer>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 2. 自定义内容 --------  -->
+    <!-- #region  -->
+    <ea-button type="primary" id="openCustomDrawerBtn">打开自定义内容的抽屉</ea-button>
+
+    <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
+        <ea-descriptions direction="vertical" border>
+            <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
+            <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
+            <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
+            <ea-descriptions-item label="称号">
+                <ea-tag>宿命背反</ea-tag>
+            </ea-descriptions-item>
+            <ea-descriptions-item label="属性" span="1">
+                <ea-tag type="warning" style="margin-right: 1rem;">雷电</ea-tag>
+                <ea-tag type="info">物理</ea-tag>
+            </ea-descriptions-item>
+        </ea-descriptions>
+    </ea-drawer>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+</body>
+
+</html>
