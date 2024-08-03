@@ -109,6 +109,7 @@ export class EaDrawer extends Base {
         this.#drawerWrap = drawerWrap;
         this.#maskWrap = maskWrap;
 
+        this.#headerWrap = headerWrap;
         this.#headerTitleWrap = headerTitleWrap;
         this.#headerCloseIcon = headerCloseIcon;
 
@@ -165,6 +166,30 @@ export class EaDrawer extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- withHeader 是否显示标题 -------
+    // #region
+    get withHeader() {
+        let attr = this.getAttribute('with-header');
+
+        if (attr === 'false' || attr === false) {
+            attr = false;
+        } else if (attr === 'true' || attr === true) {
+            attr = true;
+        } else {
+            attr = true;
+        }
+
+        return attr;
+    }
+
+    set withHeader(value) {
+        this.toggleAttr('with-header', value);
+
+        this.#headerWrap.style.display = value ? 'flex' : 'none';
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- title 标题 -------
     // #region
     get title() {
@@ -213,6 +238,8 @@ export class EaDrawer extends Base {
 
     #init() {
         const that = this;
+
+        this.withHeader = this.withHeader;
 
         this.title = this.title;
 
