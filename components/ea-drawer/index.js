@@ -2,6 +2,7 @@
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
+import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
 
 const stylesheet = `
 .ea-drawer_wrap {
@@ -169,15 +170,7 @@ export class EaDrawer extends Base {
     // ------- withHeader 是否显示标题 -------
     // #region
     get withHeader() {
-        let attr = this.getAttribute('with-header');
-
-        if (attr === 'false' || attr === false) {
-            attr = false;
-        } else if (attr === 'true' || attr === true) {
-            attr = true;
-        } else {
-            attr = true;
-        }
+        let attr = handleDefaultAttrIsTrue(this.getAttribute('with-header'));
 
         return attr;
     }
@@ -206,6 +199,36 @@ export class EaDrawer extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- modal 遮罩层 -------
+    // #region
+    get modal() {
+        let attr = handleDefaultAttrIsTrue(this.getAttribute('modal'));
+
+        return attr;
+    }
+
+    set modal(value) {
+        this.toggleAttr('modal', value);
+
+        this.#maskWrap.style.display = value ? 'block' : 'none';
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- wrapperClosable 点击遮罩层是否关闭 -------
+    // #region
+    get wrapperClosable() {
+        let attr = handleDefaultAttrIsTrue(this.getAttribute('wrapper-closable'));
+
+        return attr;
+    }
+
+    set wrapperClosable(value) {
+        this.setAttribute('wrapper-closable', value);
+    }
+    // #endregion
+    // ------- end -------
+
     #handleDrawerClose() {
         const that = this;
 
@@ -213,13 +236,13 @@ export class EaDrawer extends Base {
             that.open = false;
             this.#wrap.classList.remove('will-close');
 
-            this.#maskWrap.removeEventListener('transitionend', callback);
+            this.#drawerWrap.removeEventListener('transitionend', callback);
         }
 
         const handleClose = () => {
             this.#wrap.classList.add('will-close');
 
-            this.#maskWrap.addEventListener('transitionend', callback);
+            this.#drawerWrap.addEventListener('transitionend', callback);
 
             this.dispatchEvent(new CustomEvent('close', {
                 bubbles: true,
@@ -227,9 +250,11 @@ export class EaDrawer extends Base {
             }));
         }
 
-        this.#maskWrap.addEventListener('click', () => {
-            handleClose();
-        });
+        if (this.wrapperClosable) {
+            this.#maskWrap.addEventListener('click', () => {
+                handleClose();
+            });
+        }
 
         this.#headerCloseIcon.addEventListener('click', () => {
             handleClose();
@@ -242,6 +267,10 @@ export class EaDrawer extends Base {
         this.withHeader = this.withHeader;
 
         this.title = this.title;
+
+        this.modal = this.modal;
+
+        this.wrapperClosable = this.wrapperClosable;
 
         this.open = false;
 
