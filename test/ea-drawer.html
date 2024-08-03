@@ -11,10 +11,6 @@
         hr {
             margin: 3rem 0;
         }
-
-        body {
-            /* background-color: aquamarine; */
-        }
     </style>
 </head>
 
@@ -35,10 +31,30 @@
         // #region
         const Drawer = {
             drawer: document.querySelector('#drawer'),
-            openBtn: document.querySelector('#openDrawerBtn'),
+
+            ltrBtn: document.querySelector('#openDrawerBtn--ltr'),
+            rtlBtn: document.querySelector('#openDrawerBtn--rtl'),
+            ttbBtn: document.querySelector('#openDrawerBtn--ttb'),
+            bttBtn: document.querySelector('#openDrawerBtn--btt'),
 
             init() {
-                this.openBtn.addEventListener('click', () => {
+                this.ltrBtn.addEventListener('click', () => {
+                    this.drawer.direction = 'ltr';
+                    this.drawer.open = true;
+                })
+
+                this.rtlBtn.addEventListener('click', () => {
+                    this.drawer.direction = 'rtl';
+                    this.drawer.open = true;
+                })
+
+                this.ttbBtn.addEventListener('click', () => {
+                    this.drawer.direction = 'ttb';
+                    this.drawer.open = true;
+                })
+
+                this.bttBtn.addEventListener('click', () => {
+                    this.drawer.direction = 'btt';
                     this.drawer.open = true;
                 })
 
@@ -77,9 +93,13 @@
 
     <!-- -------- 1. 基本用法 --------  -->
     <!-- #region  -->
-    <ea-button type="primary" id="openDrawerBtn">打开普通的抽屉</ea-button>
+    <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
+    <ea-button type="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
+    <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
+    <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
-    <ea-drawer id="drawer" title="我是标题" direction="ltr" wrapper-closable="false">
+
+    <ea-drawer id="drawer" title="我是标题" direction="ltr">
         <span>我是内容</span>
     </ea-drawer>
     <!-- #endregion  -->
@@ -91,7 +111,7 @@
     <!-- #region  -->
     <ea-button type="primary" id="openCustomDrawerBtn">打开自定义内容的抽屉</ea-button>
 
-    <ea-drawer id="customDrawer" title="我是标题" direction="ltr" with-header="false">
+    <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
         <ea-descriptions direction="vertical" border>
             <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
             <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>

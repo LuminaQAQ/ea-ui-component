@@ -7,21 +7,16 @@ import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js'
 const stylesheet = `
 .ea-drawer_wrap {
   position: fixed;
-  top: 0;
-  left: -100%;
   width: 100%;
   height: 100%;
   z-index: 2001;
 }
 .ea-drawer_wrap .ea-drawer_drawer-wrap {
   position: absolute;
-  top: 0;
-  left: -100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
   background-color: #fff;
-  transition: left 0.3s;
+  transition: left 0.3s, right 0.3s, top 0.3s, bottom 0.3s;
 }
 .ea-drawer_wrap .ea-drawer_drawer-wrap .ea-drawer_header-wrap {
   display: flex;
@@ -43,31 +38,110 @@ const stylesheet = `
 }
 .ea-drawer_wrap .ea-drawer_drawer-wrap .ea-drawer_mask-wrap {
   position: fixed;
-  left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   z-index: -1;
   opacity: 0;
   scale: 0;
-  transition: opacity 0.3s, left 0.3s;
+  transition: opacity 0.3s, left 0.3s, right 0.3s, top 0.3s, bottom 0.3s;
 }
-.ea-drawer_wrap.is-open {
+.ea-drawer_wrap.direction-ltr, .ea-drawer_wrap.direction-rtl {
+  top: 0;
+}
+.ea-drawer_wrap.direction-ltr .ea-drawer_drawer-wrap, .ea-drawer_wrap.direction-rtl .ea-drawer_drawer-wrap {
+  top: 0;
+  height: 100%;
+}
+.ea-drawer_wrap.direction-ttb, .ea-drawer_wrap.direction-btt {
   left: 0;
 }
-.ea-drawer_wrap.is-open .ea-drawer_drawer-wrap {
+.ea-drawer_wrap.direction-ttb .ea-drawer_drawer-wrap, .ea-drawer_wrap.direction-btt .ea-drawer_drawer-wrap {
+  left: 0;
+  width: 100%;
+}
+.ea-drawer_wrap.direction-ttb .ea-drawer_mask-wrap, .ea-drawer_wrap.direction-btt .ea-drawer_mask-wrap {
   left: 0;
 }
-.ea-drawer_wrap.is-open .ea-drawer_mask-wrap {
+.ea-drawer_wrap.direction-ltr.is-open .ea-drawer_mask-wrap, .ea-drawer_wrap.direction-rtl.is-open .ea-drawer_mask-wrap, .ea-drawer_wrap.direction-ttb.is-open .ea-drawer_mask-wrap, .ea-drawer_wrap.direction-btt.is-open .ea-drawer_mask-wrap {
   opacity: 1;
   scale: 1;
 }
-.ea-drawer_wrap.will-close .ea-drawer_drawer-wrap {
-  left: -100%;
-}
-.ea-drawer_wrap.will-close .ea-drawer_mask-wrap {
+.ea-drawer_wrap.direction-ltr.will-close .ea-drawer_mask-wrap, .ea-drawer_wrap.direction-rtl.will-close .ea-drawer_mask-wrap, .ea-drawer_wrap.direction-ttb.will-close .ea-drawer_mask-wrap, .ea-drawer_wrap.direction-btt.will-close .ea-drawer_mask-wrap {
   opacity: 0;
   scale: 0;
+}
+.ea-drawer_wrap.direction-ltr {
+  left: -100%;
+}
+.ea-drawer_wrap.direction-ltr .ea-drawer_drawer-wrap {
+  left: -100%;
+}
+.ea-drawer_wrap.direction-ltr .ea-drawer_mask-wrap {
+  left: 0;
+}
+.ea-drawer_wrap.direction-ltr.is-open {
+  left: 0;
+}
+.ea-drawer_wrap.direction-ltr.is-open .ea-drawer_drawer-wrap {
+  left: 0;
+}
+.ea-drawer_wrap.direction-ltr.will-close .ea-drawer_drawer-wrap {
+  left: -100%;
+}
+.ea-drawer_wrap.direction-rtl {
+  right: -100%;
+}
+.ea-drawer_wrap.direction-rtl .ea-drawer_drawer-wrap {
+  right: -100%;
+}
+.ea-drawer_wrap.direction-rtl .ea-drawer_mask-wrap {
+  right: 0;
+}
+.ea-drawer_wrap.direction-rtl.is-open {
+  right: 0;
+}
+.ea-drawer_wrap.direction-rtl.is-open .ea-drawer_drawer-wrap {
+  right: 0;
+}
+.ea-drawer_wrap.direction-rtl.will-close .ea-drawer_drawer-wrap {
+  right: -100%;
+}
+.ea-drawer_wrap.direction-ttb {
+  bottom: -100%;
+}
+.ea-drawer_wrap.direction-ttb .ea-drawer_drawer-wrap {
+  bottom: -100%;
+}
+.ea-drawer_wrap.direction-ttb .ea-drawer_mask-wrap {
+  bottom: 0;
+}
+.ea-drawer_wrap.direction-ttb.is-open {
+  bottom: 0;
+}
+.ea-drawer_wrap.direction-ttb.is-open .ea-drawer_drawer-wrap {
+  bottom: 0;
+}
+.ea-drawer_wrap.direction-ttb.will-close .ea-drawer_drawer-wrap {
+  bottom: -100%;
+}
+.ea-drawer_wrap.direction-btt {
+  top: -100%;
+}
+.ea-drawer_wrap.direction-btt .ea-drawer_drawer-wrap {
+  top: -100%;
+}
+.ea-drawer_wrap.direction-btt .ea-drawer_mask-wrap {
+  top: 0;
+}
+.ea-drawer_wrap.direction-btt.is-open {
+  top: 0;
+}
+.ea-drawer_wrap.direction-btt.is-open .ea-drawer_drawer-wrap {
+  top: 0;
+}
+.ea-drawer_wrap.direction-btt.will-close .ea-drawer_drawer-wrap {
+  top: -100%;
 }
 `;
 
@@ -123,7 +197,7 @@ export class EaDrawer extends Base {
      * 
      * @returns {Array} 文本方向类型的数组，包括左到右（ltr）、右到左（rtl）、顶到底（ttb）、底到顶（btt）
      */
-    static get directionType() {
+    get directionType() {
         return ['ltr', 'rtl', 'ttb', 'btt'];
     }
 
@@ -131,11 +205,19 @@ export class EaDrawer extends Base {
     // #region
     get direction() {
         const attr = this.getAttribute('direction');
+
         return this.directionType.includes(attr) ? attr : 'ltr';
     }
 
     set direction(value) {
-        this.setAttrString('direction', value);
+        this.setAttribute('direction', value);
+
+        this.#wrap.classList.toggle('direction-ltr', value === 'ltr');
+        this.#wrap.classList.toggle('direction-rtl', value === 'rtl');
+        this.#wrap.classList.toggle('direction-ttb', value === 'ttb');
+        this.#wrap.classList.toggle('direction-btt', value === 'btt');
+
+        this.#handleDirectionAndSizeChange(this.size);
     }
     // #endregion
     // ------- end -------
@@ -148,13 +230,27 @@ export class EaDrawer extends Base {
 
     set open(value) {
         this.toggleAttr('open', value);
-        this.#wrap.classList.toggle('is-open', value);
+
+        setTimeout(() => {
+            // this.#maskWrap.style.display = value ? 'block' : 'none';
+            this.#wrap.classList.toggle('is-open', value);
+        }, 20);
     }
     // #endregion
     // ------- end -------
 
     // ------- size 抽屉宽度 -------
     // #region
+    #handleDirectionAndSizeChange(value) {
+
+        const directionSize = this.direction === "ltr" || this.direction === "rtl" ? 'width' : 'height';
+
+        this.#drawerWrap.style.height = 'inherit';
+        this.#drawerWrap.style.width = 'inherit';
+
+        this.#drawerWrap.style[directionSize] = value;
+    }
+
     get size() {
         return this.getAttribute('size') || '30%';
     }
@@ -162,7 +258,7 @@ export class EaDrawer extends Base {
     set size(value) {
         this.setAttribute('size', value);
 
-        this.#drawerWrap.style.width = value;
+        this.#handleDirectionAndSizeChange(value);
     }
     // #endregion
     // ------- end -------
@@ -266,19 +362,25 @@ export class EaDrawer extends Base {
             }));
         }
 
-        if (this.wrapperClosable) {
+        if (this.wrapperClosable && this.modal) {
             this.#maskWrap.addEventListener('click', () => {
                 handleClose();
             });
         }
 
-        this.#headerCloseIcon.addEventListener('click', () => {
-            handleClose();
-        });
+        if (this.showClose) {
+            this.#headerCloseIcon.addEventListener('click', () => {
+                handleClose();
+            });
+        }
     }
 
     #init() {
         const that = this;
+
+        this.direction = this.direction;
+
+        this.size = this.size;
 
         this.withHeader = this.withHeader;
         if (this.withHeader) {
@@ -291,8 +393,6 @@ export class EaDrawer extends Base {
         this.wrapperClosable = this.wrapperClosable;
 
         this.open = false;
-
-        this.size = this.size;
 
         this.#handleDrawerClose();
     }

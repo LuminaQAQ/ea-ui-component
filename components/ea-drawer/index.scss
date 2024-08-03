@@ -1,7 +1,5 @@
 .ea-drawer_wrap {
   position: fixed;
-  top: 0;
-  left: -100%;
 
   width: 100%;
   height: 100%;
@@ -10,16 +8,13 @@
 
   .ea-drawer_drawer-wrap {
     position: absolute;
-    top: 0;
-    left: -100%;
 
     display: flex;
     flex-direction: column;
 
-    height: 100%;
     background-color: #fff;
 
-    transition: left 0.3s;
+    transition: left 0.3s, right 0.3s, top 0.3s, bottom 0.3s;
 
     .ea-drawer_header-wrap {
       display: flex;
@@ -48,7 +43,6 @@
 
     .ea-drawer_mask-wrap {
       position: fixed;
-      left: 0;
 
       width: 100%;
       height: 100%;
@@ -59,31 +53,156 @@
       opacity: 0;
       scale: 0;
 
-      transition: opacity 0.3s, left 0.3s;
+      transition: opacity 0.3s, left 0.3s, right 0.3s, top 0.3s, bottom 0.3s;
     }
   }
 
-  &.is-open {
+  &.direction-ltr,
+  &.direction-rtl {
+    top: 0;
+
+    .ea-drawer_drawer-wrap {
+      top: 0;
+
+      height: 100%;
+    }
+  }
+
+  &.direction-ttb,
+  &.direction-btt {
     left: 0;
 
     .ea-drawer_drawer-wrap {
       left: 0;
+
+      width: 100%;
     }
 
     .ea-drawer_mask-wrap {
-      opacity: 1;
-      scale: 1;
+      left: 0;
     }
   }
 
-  &.will-close {
+  &.direction-ltr,
+  &.direction-rtl,
+  &.direction-ttb,
+  &.direction-btt {
+    &.is-open {
+      .ea-drawer_mask-wrap {
+        opacity: 1;
+        scale: 1;
+      }
+    }
+
+    &.will-close {
+      .ea-drawer_mask-wrap {
+        opacity: 0;
+        scale: 0;
+      }
+    }
+  }
+
+  &.direction-ltr {
+    left: -100%;
+
     .ea-drawer_drawer-wrap {
       left: -100%;
     }
 
     .ea-drawer_mask-wrap {
-      opacity: 0;
-      scale: 0;
+      left: 0;
+    }
+
+    &.is-open {
+      left: 0;
+
+      .ea-drawer_drawer-wrap {
+        left: 0;
+      }
+    }
+
+    &.will-close {
+      .ea-drawer_drawer-wrap {
+        left: -100%;
+      }
+    }
+  }
+
+  &.direction-rtl {
+    right: -100%;
+
+    .ea-drawer_drawer-wrap {
+      right: -100%;
+    }
+
+    .ea-drawer_mask-wrap {
+      right: 0;
+    }
+
+    &.is-open {
+      right: 0;
+
+      .ea-drawer_drawer-wrap {
+        right: 0;
+      }
+    }
+
+    &.will-close {
+      .ea-drawer_drawer-wrap {
+        right: -100%;
+      }
+    }
+  }
+
+  &.direction-ttb {
+    bottom: -100%;
+
+    .ea-drawer_drawer-wrap {
+      bottom: -100%;
+    }
+
+    .ea-drawer_mask-wrap {
+      bottom: 0;
+    }
+
+    &.is-open {
+      bottom: 0;
+
+      .ea-drawer_drawer-wrap {
+        bottom: 0;
+      }
+    }
+
+    &.will-close {
+      .ea-drawer_drawer-wrap {
+        bottom: -100%;
+      }
+    }
+  }
+
+  &.direction-btt {
+    top: -100%;
+
+    .ea-drawer_drawer-wrap {
+      top: -100%;
+    }
+
+    .ea-drawer_mask-wrap {
+      top: 0;
+    }
+
+    &.is-open {
+      top: 0;
+
+      .ea-drawer_drawer-wrap {
+        top: 0;
+      }
+    }
+
+    &.will-close {
+      .ea-drawer_drawer-wrap {
+        top: -100%;
+      }
     }
   }
 }
