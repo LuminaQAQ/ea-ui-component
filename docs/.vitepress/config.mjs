@@ -48,6 +48,7 @@ export default defineConfig({
           { text: 'Breadcrumb 面包屑', link: '/ea-breadcrumb' },
           { text: 'PageHeader 页头', link: '/ea-page-header' },
           { text: 'Steps 步骤条', link: '/ea-steps' },
+          { text: 'Drawer 抽屉', link: '/ea-drawer' },
         ]
       },
       {
