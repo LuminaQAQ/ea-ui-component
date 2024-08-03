@@ -199,6 +199,22 @@ export class EaDrawer extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- show-close 是否显示关闭按钮 -------
+    // #region
+    get showClose() {
+        let attr = handleDefaultAttrIsTrue(this.getAttribute('show-close'));
+
+        return attr;
+    }
+
+    set showClose(value) {
+        this.toggleAttr('show-close', value);
+
+        this.#headerCloseIcon.style.display = value ? 'block' : 'none';
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- modal 遮罩层 -------
     // #region
     get modal() {
@@ -265,8 +281,10 @@ export class EaDrawer extends Base {
         const that = this;
 
         this.withHeader = this.withHeader;
-
-        this.title = this.title;
+        if (this.withHeader) {
+            this.showClose = this.showClose;
+            this.title = this.title;
+        }
 
         this.modal = this.modal;
 
