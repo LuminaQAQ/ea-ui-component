@@ -55,6 +55,8 @@ export class EaTableColumn extends Base {
 
     set label(value) {
         this.setAttribute('label', value);
+
+        this.innerHTML = value;
     }
     // #endregion
     // ------- end -------

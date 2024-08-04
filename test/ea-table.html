@@ -20,6 +20,17 @@
 
         import '../components/ea-table/index.js'
 
+        const header = [
+            { label: '姓名' },
+            { label: '详细信息' },
+            { label: '地区' },
+        ];
+
+        const multipleHeader = [
+            [{ label: '姓名', rowspan: 2 }, { label: '详细信息', colspan: 2 }],
+            [{ label: '年龄', colspan: 1 }, { label: '地区' }]
+        ];
+
         const data = [
             { name: 'Lumina', age: 18, address: '中国' },
             { name: 'Alice', age: 18, address: '中国' },
@@ -47,30 +58,34 @@
         // ------- 1. 基础表格 -------
         // #region
         const basicTable = document.querySelector('#basicTable');
-        basicTable.renderTable(data);
+        basicTable.renderTableHeader(header);
+        basicTable.renderTableBody(data);
         // #endregion
         // ------- end -------
 
-        // ------- 2. 带斑马纹表格 -------
-        // #region
+        // // ------- 2. 带斑马纹表格 -------
+        // // #region
         const stripeTable = document.querySelector('#stripeTable');
-        stripeTable.renderTable(data);
-        // #endregion
-        // ------- end -------
+        stripeTable.renderTableHeader(header);
+        stripeTable.renderTableBody(data);
+        // // #endregion
+        // // ------- end -------
 
-        // ------- 3. 带边框表格 -------
-        // #region
+        // // ------- 3. 带边框表格 -------
+        // // #region
         const borderTable = document.querySelector('#borderTable');
-        borderTable.renderTable(data);
-        // #endregion
-        // ------- end -------
+        borderTable.renderTableHeader(header);
+        borderTable.renderTableBody(data);
+        // // #endregion
+        // // ------- end -------
 
-        // ------- 4. 固定表头 -------
-        // #region
+        // // ------- 4. 固定表头 -------
+        // // #region
         const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
-        fixedHeaderTable.renderTable(moreData);
-        // #endregion
-        // ------- end -------
+        fixedHeaderTable.renderTableHeader(header);
+        fixedHeaderTable.renderTableBody(moreData);
+        // // #endregion
+        // // ------- end -------
     </script>
 
     <!-- -------- 1. 基础表格 --------  -->
@@ -132,7 +147,6 @@
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->
-
 </body>
 
 </html>
