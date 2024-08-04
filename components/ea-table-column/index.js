@@ -21,7 +21,6 @@ export class EaTableColumn extends Base {
         `;
 
         this.build(shadowRoot, stylesheet);
-        // this.shadowRoot.appendChild(wrap);
     }
 
     // ------- prop 表头对应的数据的键值 -------
@@ -48,12 +47,26 @@ export class EaTableColumn extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- label 标题 -------
+    // #region
+    get label() {
+        return this.getAttribute('label');
+    }
+
+    set label(value) {
+        this.setAttribute('label', value);
+    }
+    // #endregion
+    // ------- end -------
+
     #init() {
         const that = this;
 
         this.prop = this.prop;
 
         this.width = this.width;
+
+        this.label = this.label;
     }
 
     connectedCallback() {

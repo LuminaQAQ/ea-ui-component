@@ -20,24 +20,119 @@
 
         import '../components/ea-table/index.js'
 
-        const table = document.querySelector('ea-table');
         const data = [
-            { name: 'Lumina', age: 18, address: '福建' },
-            { name: 'Alice', age: 19, address: '中国' }
+            { name: 'Lumina', age: 18, address: '中国' },
+            { name: 'Alice', age: 18, address: '中国' },
+            { name: 'Tom', age: 18, address: '中国' },
+            { name: 'Bob', age: 18, address: '中国' },
         ];
-        table.renderTable(data);
 
+        const moreData = [
+            { name: 'Lumina', age: 18, address: '中国' },
+            { name: 'Alice', age: 18, address: '中国' },
+            { name: 'Tom', age: 18, address: '中国' },
+            { name: 'Bob', age: 18, address: '中国' },
+            { name: 'Jerry', age: 18, address: '中国' },
+            { name: 'Lucy', age: 18, address: '中国' },
+            { name: 'Tom', age: 18, address: '中国' },
+            { name: 'Bob', age: 18, address: '中国' },
+            { name: 'Jerry', age: 18, address: '中国' },
+            { name: 'Lucy', age: 18, address: '中国' },
+            { name: 'Tom', age: 18, address: '中国' },
+            { name: 'Bob', age: 18, address: '中国' },
+            { name: 'Jerry', age: 18, address: '中国' },
+            { name: 'Lucy', age: 18, address: '中国' },
+        ]
+
+        // ------- 1. 基础表格 -------
+        // #region
+        const basicTable = document.querySelector('#basicTable');
+        basicTable.renderTable(data);
+        // #endregion
+        // ------- end -------
+
+        // ------- 2. 带斑马纹表格 -------
+        // #region
+        const stripeTable = document.querySelector('#stripeTable');
+        stripeTable.renderTable(data);
+        // #endregion
+        // ------- end -------
+
+        // ------- 3. 带边框表格 -------
+        // #region
+        const borderTable = document.querySelector('#borderTable');
+        borderTable.renderTable(data);
+        // #endregion
+        // ------- end -------
+
+        // ------- 4. 固定表头 -------
+        // #region
+        const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
+        fixedHeaderTable.renderTable(moreData);
+        // #endregion
+        // ------- end -------
     </script>
 
-    <!-- -------- 1.  --------  -->
+    <!-- -------- 1. 基础表格 --------  -->
     <!-- #region  -->
-    <ea-table>
+    <ea-table id="basicTable">
         <ea-table-column prop="name" width="100">姓名</ea-table-column>
         <ea-table-column prop="age" width="100">年龄</ea-table-column>
         <ea-table-column prop="address">地址</ea-table-column>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 2. 带斑马纹表格 --------  -->
+    <!-- #region  -->
+    <ea-table id="stripeTable" stripe>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 3. 带边框表格 --------  -->
+    <!-- #region  -->
+    <ea-table id="borderTable" border>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 4. 固定表头 --------  -->
+    <!-- #region  -->
+    <ea-table id="fixedHeaderTable" border height="250">
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 5. 多级表头 --------  -->
+    <!-- #region  -->
+    <ea-table id="groupingHeadTable" border height="250">
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column label="信息">
+            <ea-table-column prop="age" width="100">年龄</ea-table-column>
+            <ea-table-column prop="address">地址</ea-table-column>
+        </ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
 </body>
 
 </html>
