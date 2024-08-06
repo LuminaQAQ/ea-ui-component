@@ -3,6 +3,8 @@ import Base from '../Base.js';
 import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 
+import "../ea-table-column/index.js"
+
 const stylesheet = `
 
 `;
@@ -18,12 +20,13 @@ export class EaTable extends Base {
     #bodyTableColgroup
     #bodyTableTbody
 
+    #tableColumns;
+
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-
-        this.shadowRoot.innerHTML = `
+        shadowRoot.innerHTML = `
             <div class="ea-table_wrap">
                 <div class="ea-table_header-wrap">
                     <table class="ea-table_header">
@@ -38,7 +41,10 @@ export class EaTable extends Base {
                     </table>
                 </div>
             </div>
+            <slot></slot>
         `;
+
+        this.build(shadowRoot, stylesheet);
 
         this.#container = this.shadowRoot.querySelector('.ea-table_wrap');
 
@@ -50,7 +56,7 @@ export class EaTable extends Base {
         this.#bodyTableColgroup = this.#bodyTable.querySelector('.ea-table_body-wrap colgroup');
         this.#bodyTableTbody = this.#bodyTable.querySelector('.ea-table_body-wrap tbody');
 
-        this.build(shadowRoot, stylesheet);
+        this.#tableColumns = this.querySelectorAll('ea-table-column');
     }
 
     // ------- border 边框 -------
@@ -62,7 +68,7 @@ export class EaTable extends Base {
     set border(value) {
         this.setAttribute('border', value);
 
-        this.#bodyTable.classList.toggle('border', value);
+        this.#container.classList.toggle('border', value);
         this.#headerTable.classList.toggle('border', value);
     }
     // #endregion
@@ -77,7 +83,7 @@ export class EaTable extends Base {
     set stripe(value) {
         this.setAttribute('stripe', value);
 
-        this.#bodyTable.classList.toggle('stripe', value);
+        this.#container.classList.toggle('stripe', value);
     }
     // #endregion
     // ------- end -------
@@ -95,34 +101,10 @@ export class EaTable extends Base {
             const bodyWrap = this.shadowRoot.querySelector('.ea-table_body-wrap');
             bodyWrap.style.height = `${value}px`;
         }
-        else this.#bodyTable.style.height = '';
+        else this.#container.style.height = '';
     }
     // #endregion
     // ------- end -------
-
-    // #handleGutterElement() {
-    //     const headerColgroup = this.shadowRoot.querySelector('.ea-table_header-wrap colgroup');
-    //     const headerTHead = this.shadowRoot.querySelector('.ea-table_header-wrap thead tr');
-
-    //     const bodyWrap = this.shadowRoot.querySelector('.ea-table_body-wrap');
-    //     const bodyTable = this.shadowRoot.querySelector('.ea-table_body-wrap .ea-table_main');
-
-    //     const scrollWidth = bodyWrap.getBoundingClientRect().width - bodyTable.getBoundingClientRect().width;
-
-    //     const headerCol = createElement('col', 'is-gutter');
-    //     headerCol.setAttribute('width', scrollWidth);
-    //     headerCol.style.maxWidth = `${scrollWidth}px`;
-
-    //     const headerTH = createElement('th', 'ea-table__cell is-gutter');
-    //     headerTH.style.width = `${scrollWidth}px`;
-    //     headerTH.style.maxWidth = `${scrollWidth}px`;
-    //     headerTH.setAttribute('colspan', 1);
-    //     headerTH.setAttribute('rowspan', 1);
-    //     headerTHead.appendChild(headerTH);
-
-    //     headerColgroup.appendChild(headerCol);
-    //     headerTHead.appendChild(headerTH);
-    // }
 
     /**
      * 处理窗口调整大小时表格的宽度调整
@@ -182,64 +164,48 @@ export class EaTable extends Base {
         });
     }
 
-    #createTableTHElement(tr, child) {
-        const th = createElement('th', 'ea-table__cell th-cell');
-
-        th.textContent = child.label || '';
-        th.colSpan = child.colspan || 1;
-        th.rowSpan = child.rowspan || 1;
-
-        tr.appendChild(th);
-    }
-
-    renderTableHeader(data) {
-        if (data.length === 0) return;
-
+    #renderTableHeader() {
+        const columns = this.querySelectorAll('ea-table-column');
         this.#headerTableColgroup.innerHTML = '';
         this.#bodyTableColgroup.innerHTML = '';
         this.#headerTableThead.innerHTML = '';
 
-        const tr = document.createElement('tr');
-        data.forEach(header => {
-            const headerCol = createElement('col');
-            const bodyCol = createElement('col');
-            headerCol.setAttribute('width', header.width || 100);
-            bodyCol.setAttribute('width', header.width || 100);
+        const createThElement = (child, i = 1) => {
+            const newTr = createElement('tr');
+            newTr.setAttribute('index', i);
+            Array.from(child).forEach(subchild => {
+                const th = createElement('th', 'ea-table__cell th-cell');
 
-            const tr = document.createElement('tr');
-            if (header.forEach) {
-                header.forEach(child => {
-                    this.#createTableTHElement(tr, child);
-                });
-                this.#headerTableThead.appendChild(tr);
-            } else {
-                this.#createTableTHElement(this.#headerTableThead, header);
-            }
+                th.setAttribute('colspan', subchild.colspan || 1);
+                th.setAttribute('rowspan', subchild.rowspan || 1);
 
-            this.#headerTableColgroup.appendChild(headerCol);
-            this.#bodyTableColgroup.appendChild(bodyCol);
-        });
+                th.appendChild(subchild);
+                newTr.appendChild(th);
 
-        this.#headerTableThead.appendChild(tr);
+                if (subchild.children.length > 0) {
+                    createThElement(subchild.children, ++i);
+                } else {
+                    this.#headerTableThead.appendChild(newTr);
+                }
+            });
+        };
+
+        createThElement(this.children);
     }
 
     renderTableBody(data) {
-        if (data.length === 0) return;
-
-        const tbody = this.shadowRoot.querySelector('tbody');
-        tbody.innerHTML = '';
+        this.#bodyTableTbody.innerHTML = '';
 
         data.forEach(item => {
             const row = createElement('tr', 'ea-table__row');
 
-            for (const k in item) {
+            Object.entries(item).forEach(([key, value]) => {
                 const cell = createElement('td', 'ea-table__cell td_cell');
-                cell.innerHTML = item[k];
-
+                cell.innerHTML = value;
                 row.appendChild(cell);
-            }
+            });
 
-            tbody.appendChild(row);
+            this.#bodyTableTbody.appendChild(row);
         });
     }
 
@@ -252,7 +218,9 @@ export class EaTable extends Base {
 
         this.height = this.height;
 
-        // this.#handleHasGutterTable();
+        this.#renderTableHeader();
+
+        this.#handleHasGutterTable();
     }
 
     connectedCallback() {

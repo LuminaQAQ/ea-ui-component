@@ -20,17 +20,6 @@
 
         import '../components/ea-table/index.js'
 
-        const header = [
-            { label: '姓名' },
-            { label: '详细信息' },
-            { label: '地区' },
-        ];
-
-        const multipleHeader = [
-            [{ label: '姓名', rowspan: 2 }, { label: '详细信息', colspan: 2 }],
-            [{ label: '年龄', colspan: 1 }, { label: '地区' }]
-        ];
-
         const data = [
             { name: 'Lumina', age: 18, address: '中国' },
             { name: 'Alice', age: 18, address: '中国' },
@@ -39,26 +28,25 @@
         ];
 
         const moreData = [
-            { name: 'Lumina', age: 18, address: '中国' },
-            { name: 'Alice', age: 18, address: '中国' },
-            { name: 'Tom', age: 18, address: '中国' },
-            { name: 'Bob', age: 18, address: '中国' },
-            { name: 'Jerry', age: 18, address: '中国' },
-            { name: 'Lucy', age: 18, address: '中国' },
-            { name: 'Tom', age: 18, address: '中国' },
-            { name: 'Bob', age: 18, address: '中国' },
-            { name: 'Jerry', age: 18, address: '中国' },
-            { name: 'Lucy', age: 18, address: '中国' },
-            { name: 'Tom', age: 18, address: '中国' },
-            { name: 'Bob', age: 18, address: '中国' },
-            { name: 'Jerry', age: 18, address: '中国' },
-            { name: 'Lucy', age: 18, address: '中国' },
+            { date: "2024-08-01", name: 'Lumina', age: 18, address: '中国' },
+            { date: "2024-08-02", name: 'Alice', age: 18, address: '中国' },
+            { date: "2024-08-03", name: 'Tom', age: 18, address: '中国' },
+            { date: "2024-08-04", name: 'Bob', age: 18, address: '中国' },
+            { date: "2024-08-05", name: 'Jerry', age: 18, address: '中国' },
+            { date: "2024-08-06", name: 'Lucy', age: 18, address: '中国' },
+            { date: "2024-08-07", name: 'Tom', age: 18, address: '中国' },
+            { date: "2024-08-08", name: 'Bob', age: 18, address: '中国' },
+            { date: "2024-08-09", name: 'Jerry', age: 18, address: '中国' },
+            { date: "2024-08-10", name: 'Lucy', age: 18, address: '中国' },
+            { date: "2024-08-11", name: 'Tom', age: 18, address: '中国' },
+            { date: "2024-08-12", name: 'Bob', age: 18, address: '中国' },
+            { date: "2024-08-13", name: 'Jerry', age: 18, address: '中国' },
+            { date: "2024-08-14", name: 'Lucy', age: 18, address: '中国' },
         ]
 
         // ------- 1. 基础表格 -------
         // #region
         const basicTable = document.querySelector('#basicTable');
-        basicTable.renderTableHeader(header);
         basicTable.renderTableBody(data);
         // #endregion
         // ------- end -------
@@ -66,7 +54,6 @@
         // // ------- 2. 带斑马纹表格 -------
         // // #region
         const stripeTable = document.querySelector('#stripeTable');
-        stripeTable.renderTableHeader(header);
         stripeTable.renderTableBody(data);
         // // #endregion
         // // ------- end -------
@@ -74,16 +61,21 @@
         // // ------- 3. 带边框表格 -------
         // // #region
         const borderTable = document.querySelector('#borderTable');
-        borderTable.renderTableHeader(header);
         borderTable.renderTableBody(data);
         // // #endregion
         // // ------- end -------
 
-        // // ------- 4. 固定表头 -------
+        // // ------- 4. 多级表头 -------
+        // // #region
+        const groupingHeadTable = document.querySelector('#groupingHeadTable');
+        groupingHeadTable.renderTableBody(moreData);
+        // // #endregion
+        // // ------- end -------
+
+        // // ------- 5. 固定表头 -------
         // // #region
         const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
-        fixedHeaderTable.renderTableHeader(header);
-        fixedHeaderTable.renderTableBody(moreData);
+        fixedHeaderTable.renderTableBody(data);
         // // #endregion
         // // ------- end -------
     </script>
@@ -124,26 +116,29 @@
 
     <hr>
 
-    <!-- -------- 4. 固定表头 --------  -->
+    <!-- -------- 4. 多级表头 --------  -->
     <!-- #region  -->
-    <ea-table id="fixedHeaderTable" border height="250">
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
+    <ea-table id="groupingHeadTable" border height="250">
+        <ea-table-column prop="date" width="100" rowspan="3">日期</ea-table-column>
+        <ea-table-column label="详细信息" colspan="3">
+            <ea-table-column prop="name" width="100" rowspan="2">姓名</ea-table-column>
+            <ea-table-column label="个人信息" colspan="2">
+                <ea-table-column prop="age" width="100">年龄</ea-table-column>
+                <ea-table-column prop="address">地址</ea-table-column>
+            </ea-table-column>
+        </ea-table-column>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
     <hr>
 
-    <!-- -------- 5. 多级表头 --------  -->
+    <!-- -------- 5. 固定表头 --------  -->
     <!-- #region  -->
-    <ea-table id="groupingHeadTable" border height="250">
+    <ea-table id="fixedHeaderTable" border height="250">
         <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column label="信息">
-            <ea-table-column prop="age" width="100">年龄</ea-table-column>
-            <ea-table-column prop="address">地址</ea-table-column>
-        </ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->

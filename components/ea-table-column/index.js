@@ -8,7 +8,7 @@ const stylesheet = `
 `;
 
 export class EaTableColumn extends Base {
-    #wrap;
+    #labelNode;
     constructor() {
         super();
 
@@ -17,10 +17,13 @@ export class EaTableColumn extends Base {
         shadowRoot.innerHTML = `
             <th>
                 <slot></slot>
+                <span></span>
             </th>
         `;
 
         this.build(shadowRoot, stylesheet);
+
+        this.#labelNode = shadowRoot.querySelector('span');
     }
 
     // ------- prop 表头对应的数据的键值 -------
@@ -50,13 +53,37 @@ export class EaTableColumn extends Base {
     // ------- label 标题 -------
     // #region
     get label() {
-        return this.getAttribute('label');
+        return this.getAttribute('label') || '';
     }
 
     set label(value) {
         this.setAttribute('label', value);
 
-        this.innerHTML = value;
+        if (value !== '') this.#labelNode.innerHTML = value;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- colspan 跨列 -------
+    // #region
+    get colspan() {
+        return this.getAttrNumber('colspan') || 1;
+    }
+
+    set colspan(value) {
+        this.setAttribute('colspan', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- rowspan 跨行 -------
+    // #region
+    get rowspan() {
+        return this.getAttrNumber('rowspan') || 1;
+    }
+
+    set rowspan(value) {
+        this.setAttribute('rowspan', value);
     }
     // #endregion
     // ------- end -------
@@ -69,6 +96,10 @@ export class EaTableColumn extends Base {
         this.width = this.width;
 
         this.label = this.label;
+
+        this.colspan = this.colspan;
+
+        this.rowspan = this.rowspan;
     }
 
     connectedCallback() {
