@@ -46,6 +46,8 @@ export class EaTable extends Base {
 
         this.build(shadowRoot, stylesheet);
 
+        this.style.position = 'relative';
+
         this.#container = this.shadowRoot.querySelector('.ea-table_wrap');
 
         this.#headerTable = this.shadowRoot.querySelector('.ea-table_header');
@@ -70,6 +72,7 @@ export class EaTable extends Base {
 
         this.#container.classList.toggle('border', value);
         this.#headerTable.classList.toggle('border', value);
+        this.#bodyTable.classList.toggle('border', value);
     }
     // #endregion
     // ------- end -------
@@ -106,21 +109,9 @@ export class EaTable extends Base {
     // #endregion
     // ------- end -------
 
-    /**
-     * 处理窗口调整大小时表格的宽度调整
-     * @param {Element} bodyWrap - 表格内容部分的包裹元素
-     * @param {Element} bodyTable - 表格内容部分的表格元素
-     * @param {Element} headerWrap - 表头部分的包裹元素
-     * @param {Element} headerColgroup - 表头部分的列组元素
-     * @param {boolean} isInit - 是否是初始化阶段
-     */
-    #handleResize(bodyWrap, bodyTable, headerWrap, headerColgroup, isInit = false) {
-        // 获取自定义元素的阴影根中的表格包裹元素
-        const wrap = this.shadowRoot.querySelector('.ea-table_wrap');
+    #handleResize(bodyWrap, bodyTable, headerWrap, headerColgroup, scrollbarWidth, isInit = false) {
         // 获取父元素的宽度
-        const width = this.parentNode.offsetWidth;
-        // 计算滚动条的宽度
-        const scrollbarWidth = bodyWrap.getBoundingClientRect().width - bodyTable.getBoundingClientRect().width;
+        const width = this.parentNode.clientWidth;
 
         // 计算所有列的宽度之和
         const colWidth = Array.from(headerColgroup.children).reduce((pre, cur) => {
@@ -130,13 +121,14 @@ export class EaTable extends Base {
         // 根据窗口和列宽度的比较，设置表头和表格内容部分的宽度
         if (width > 0 && colWidth <= width) {
             headerWrap.style.width = `${width - scrollbarWidth}px`;
-            bodyWrap.style.width = `${width - scrollbarWidth}px`;
+            bodyWrap.style.width = `${width}px`;
             bodyTable.style.width = `${width - scrollbarWidth}px`;
 
             // 在初始化阶段，表格内容部分的宽度应与窗口宽度相同
             if (isInit) bodyWrap.style.width = `${width}px`;
         } else {
             // 当窗口宽度不足以显示所有列时，表格内容部分的宽度应与窗口宽度相同
+            headerWrap.style.width = `${width}px`;
             bodyWrap.style.width = `${width}px`;
             bodyTable.style.width = `${width}px`;
         }
@@ -150,12 +142,19 @@ export class EaTable extends Base {
         const bodyWrap = this.shadowRoot.querySelector('.ea-table_body-wrap');
         const bodyTable = this.shadowRoot.querySelector('.ea-table_body-wrap .ea-table_main');
 
+        let scrollbarWidth = null;
+
+        const resizeFn = () => {
+            this.#handleResize(this.#container, this.#bodyTable, this.#headerTable, this.#headerTableColgroup, scrollbarWidth);
+        }
+
         window.addEventListener('resize', () => {
-            this.#handleResize(bodyWrap, bodyTable, headerWrap, headerColgroup);
+            resizeFn();
         });
 
         setTimeout(() => {
-            this.#handleResize(bodyWrap, bodyTable, headerWrap, headerColgroup, true);
+            scrollbarWidth = this.#container.getBoundingClientRect().width - this.#bodyTable.getBoundingClientRect().width;
+            resizeFn();
         }, 0);
 
         // 监听表格内容部分的滚动事件，保持表头位置同步
@@ -174,6 +173,7 @@ export class EaTable extends Base {
             const newTr = createElement('tr');
             newTr.setAttribute('index', i);
             Array.from(child).forEach(subchild => {
+
                 const th = createElement('th', 'ea-table__cell th-cell');
 
                 th.setAttribute('colspan', subchild.colspan || 1);
@@ -185,6 +185,13 @@ export class EaTable extends Base {
                 if (subchild.children.length > 0) {
                     createThElement(subchild.children, ++i);
                 } else {
+                    const headerCol = createElement('col');
+                    headerCol.setAttribute('width', subchild.getAttribute('width') || 100);
+                    const bodyCol = createElement('col');
+                    bodyCol.setAttribute('width', subchild.getAttribute('width') || 100);
+                    this.#headerTableColgroup.appendChild(headerCol);
+                    this.#bodyTableColgroup.appendChild(bodyCol);
+
                     this.#headerTableThead.appendChild(newTr);
                 }
             });
@@ -196,13 +203,26 @@ export class EaTable extends Base {
     renderTableBody(data) {
         this.#bodyTableTbody.innerHTML = '';
 
+        const fixedColumnsArr = [];
+        this.#tableColumns.forEach(column => {
+            if (column.fixed) {
+                fixedColumnsArr.push(column.prop);
+            }
+        });
+        // console.log(fixedColumnsArr);
+
         data.forEach(item => {
             const row = createElement('tr', 'ea-table__row');
+
+            // console.log(item[fixedColumnsArr[0]]);
 
             Object.entries(item).forEach(([key, value]) => {
                 const cell = createElement('td', 'ea-table__cell td_cell');
                 cell.innerHTML = value;
                 row.appendChild(cell);
+
+                // console.log(fixedColumnsArr.includes(key));
+                // console.log(key);
             });
 
             this.#bodyTableTbody.appendChild(row);

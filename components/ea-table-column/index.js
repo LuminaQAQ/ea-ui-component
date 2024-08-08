@@ -88,6 +88,18 @@ export class EaTableColumn extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- fixed 固定列 -------
+    // #region
+    get fixed() {
+        return this.getAttrBoolean('fixed');
+    }
+
+    set fixed(value) {
+        this.setAttribute('fixed', value);
+    }
+    // #endregion
+    // ------- end -------
+
     #init() {
         const that = this;
 
@@ -100,6 +112,8 @@ export class EaTableColumn extends Base {
         this.colspan = this.colspan;
 
         this.rowspan = this.rowspan;
+
+        this.fixed = this.fixed;
     }
 
     connectedCallback() {

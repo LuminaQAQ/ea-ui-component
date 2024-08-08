@@ -1,10 +1,13 @@
-.ea-table_wrap {
+.ea-table_wrap,
+.ea-table_fixed-column {
+  position: relative;
   background-color: #fff;
   overflow: hidden;
   // overflow-x: auto;
 
   .ea-table_header-wrap .ea-table_header,
-  .ea-table_body-wrap .ea-table_main {
+  .ea-table_body-wrap .ea-table_main,
+  .ea-table_main {
     position: relative;
 
     box-sizing: border-box;
@@ -60,6 +63,12 @@
     }
   }
 
+  .ea-table_main {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
   .ea-table_header-wrap {
     .ea-table_header {
     }
@@ -75,4 +84,10 @@
       }
     }
   }
+}
+
+.ea-table_fixed-column {
+  position: absolute;
+  left: 0;
+  top: 0;
 }

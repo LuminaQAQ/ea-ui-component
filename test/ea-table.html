@@ -51,33 +51,40 @@
         // #endregion
         // ------- end -------
 
-        // // ------- 2. 带斑马纹表格 -------
-        // // #region
+        // ------- 2. 带斑马纹表格 -------
+        // #region
         const stripeTable = document.querySelector('#stripeTable');
         stripeTable.renderTableBody(data);
-        // // #endregion
-        // // ------- end -------
+        // #endregion
+        // ------- end -------
 
-        // // ------- 3. 带边框表格 -------
-        // // #region
+        // ------- 3. 带边框表格 -------
+        // #region
         const borderTable = document.querySelector('#borderTable');
         borderTable.renderTableBody(data);
-        // // #endregion
-        // // ------- end -------
+        // #endregion
+        // ------- end -------
 
-        // // ------- 4. 多级表头 -------
-        // // #region
+        // ------- 4. 固定表头 -------
+        // #region
+        const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
+        fixedHeaderTable.renderTableBody(moreData);
+        // #endregion
+        // ------- end -------
+
+        // ------- 5. 多级表头 -------
+        // #region
         const groupingHeadTable = document.querySelector('#groupingHeadTable');
         groupingHeadTable.renderTableBody(moreData);
-        // // #endregion
-        // // ------- end -------
+        // #endregion
+        // ------- end -------
 
-        // // ------- 5. 固定表头 -------
-        // // #region
-        const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
-        fixedHeaderTable.renderTableBody(data);
-        // // #endregion
-        // // ------- end -------
+        // ------- 6. 单选 -------
+        // #region
+        const radioTable = document.querySelector('#radioTable');
+        radioTable.renderTableBody(moreData);
+        // #endregion
+        // ------- end -------
     </script>
 
     <!-- -------- 1. 基础表格 --------  -->
@@ -116,7 +123,20 @@
 
     <hr>
 
-    <!-- -------- 4. 多级表头 --------  -->
+    <!-- -------- 4. 固定表头 --------  -->
+    <!-- #region  -->
+    <ea-table id="fixedHeaderTable" border height="250">
+        <ea-table-column prop="date" width="100">日期</ea-table-column>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 5. 多级表头 --------  -->
     <!-- #region  -->
     <ea-table id="groupingHeadTable" border height="250">
         <ea-table-column prop="date" width="100" rowspan="3">日期</ea-table-column>
@@ -133,15 +153,17 @@
 
     <hr>
 
-    <!-- -------- 5. 固定表头 --------  -->
+    <!-- -------- 6. 单选 --------  -->
     <!-- #region  -->
-    <ea-table id="fixedHeaderTable" border height="250">
+    <ea-table id="radioTable" border height="250" highlight-current-row>
+        <ea-table-column prop="date" width="100" fixed>日期</ea-table-column>
         <ea-table-column prop="name" width="100">姓名</ea-table-column>
         <ea-table-column prop="age" width="100">年龄</ea-table-column>
         <ea-table-column prop="address">地址</ea-table-column>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->
+
 </body>
 
 </html>
