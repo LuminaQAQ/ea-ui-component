@@ -4,9 +4,107 @@ import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 import "../ea-table-column/index.js"
+import "../ea-checkbox/index.js"
 
 const stylesheet = `
-
+.ea-table_wrap,
+.ea-table_fixed-column {
+  position: relative;
+  background-color: #fff;
+  overflow: hidden;
+}
+.ea-table_wrap .ea-table_header-wrap .ea-table_header,
+.ea-table_wrap .ea-table_body-wrap .ea-table_main,
+.ea-table_wrap .ea-table_main,
+.ea-table_fixed-column .ea-table_header-wrap .ea-table_header,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main,
+.ea-table_fixed-column .ea-table_main {
+  position: relative;
+  box-sizing: border-box;
+  padding: 12px 0;
+  width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: left;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.ea-table_wrap .ea-table_header-wrap .ea-table_header .ea-table__cell,
+.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__cell,
+.ea-table_wrap .ea-table_main .ea-table__cell,
+.ea-table_fixed-column .ea-table_header-wrap .ea-table_header .ea-table__cell,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__cell,
+.ea-table_fixed-column .ea-table_main .ea-table__cell {
+  border-top: 1px solid #ebeef5;
+  border-bottom: 1px solid #ebeef5;
+  box-sizing: border-box;
+  padding: 8px;
+  color: #606266;
+}
+.ea-table_wrap .ea-table_header-wrap .ea-table_header .ea-table__cell.th-cell,
+.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__cell.th-cell,
+.ea-table_wrap .ea-table_main .ea-table__cell.th-cell,
+.ea-table_fixed-column .ea-table_header-wrap .ea-table_header .ea-table__cell.th-cell,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__cell.th-cell,
+.ea-table_fixed-column .ea-table_main .ea-table__cell.th-cell {
+  color: #909399;
+}
+.ea-table_wrap .ea-table_header-wrap .ea-table_header .ea-table__cell.is-gutter,
+.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__cell.is-gutter,
+.ea-table_wrap .ea-table_main .ea-table__cell.is-gutter,
+.ea-table_fixed-column .ea-table_header-wrap .ea-table_header .ea-table__cell.is-gutter,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__cell.is-gutter,
+.ea-table_fixed-column .ea-table_main .ea-table__cell.is-gutter {
+  width: 15px;
+  padding: 0;
+}
+.ea-table_wrap .ea-table_header-wrap .ea-table_header.border .ea-table__cell,
+.ea-table_wrap .ea-table_body-wrap .ea-table_main.border .ea-table__cell,
+.ea-table_wrap .ea-table_main.border .ea-table__cell,
+.ea-table_fixed-column .ea-table_header-wrap .ea-table_header.border .ea-table__cell,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main.border .ea-table__cell,
+.ea-table_fixed-column .ea-table_main.border .ea-table__cell {
+  border: 1px solid #ebeef5;
+  padding: 8px;
+  color: #606266;
+}
+.ea-table_wrap .ea-table_header-wrap .ea-table_header.border .ea-table__cell.is-gutter,
+.ea-table_wrap .ea-table_body-wrap .ea-table_main.border .ea-table__cell.is-gutter,
+.ea-table_wrap .ea-table_main.border .ea-table__cell.is-gutter,
+.ea-table_fixed-column .ea-table_header-wrap .ea-table_header.border .ea-table__cell.is-gutter,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main.border .ea-table__cell.is-gutter,
+.ea-table_fixed-column .ea-table_main.border .ea-table__cell.is-gutter {
+  width: 15px;
+  padding: 0;
+  min-width: none;
+}
+.ea-table_wrap .ea-table_header-wrap .ea-table_header.stripe .ea-table__row:nth-child(2n),
+.ea-table_wrap .ea-table_body-wrap .ea-table_main.stripe .ea-table__row:nth-child(2n),
+.ea-table_wrap .ea-table_main.stripe .ea-table__row:nth-child(2n),
+.ea-table_fixed-column .ea-table_header-wrap .ea-table_header.stripe .ea-table__row:nth-child(2n),
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main.stripe .ea-table__row:nth-child(2n),
+.ea-table_fixed-column .ea-table_main.stripe .ea-table__row:nth-child(2n) {
+  background-color: #fafafa;
+}
+.ea-table_wrap .ea-table_main,
+.ea-table_fixed-column .ea-table_main {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.ea-table_wrap .ea-table_body-wrap,
+.ea-table_fixed-column .ea-table_body-wrap {
+  overflow-y: auto;
+}
+.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__row:hover,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__row:hover {
+  background-color: #f5f7fa;
+}
+.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__row.is-current-row,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__row.is-current-row {
+  background-color: #ecf5ff;
+}
 `;
 
 export class EaTable extends Base {
@@ -21,6 +119,8 @@ export class EaTable extends Base {
     #bodyTableTbody
 
     #tableColumns;
+
+    #checkAllElement;
 
     constructor() {
         super();
@@ -109,6 +209,30 @@ export class EaTable extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- highlight-current-row 当前行高亮 -------
+    // #region
+    get highlightCurrentRow() {
+        return this.getAttrBoolean('highlight-current-row') || false;
+    }
+
+    set highlightCurrentRow(value) {
+        this.setAttribute('highlight-current-row', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- currentRow 当前行 -------
+    // #region
+    get currentRow() {
+        return this.getAttrNumber('current-row') || 0;
+    }
+
+    set currentRow(value) {
+        this.setAttribute('current-row', value);
+    }
+    // #endregion
+    // ------- end -------
+
     #handleResize(bodyWrap, bodyTable, headerWrap, headerColgroup, scrollbarWidth, isInit = false) {
         // 获取父元素的宽度
         const width = this.parentNode.clientWidth;
@@ -173,7 +297,6 @@ export class EaTable extends Base {
             const newTr = createElement('tr');
             newTr.setAttribute('index', i);
             Array.from(child).forEach(subchild => {
-
                 const th = createElement('th', 'ea-table__cell th-cell');
 
                 th.setAttribute('colspan', subchild.colspan || 1);
@@ -181,6 +304,10 @@ export class EaTable extends Base {
 
                 th.appendChild(subchild);
                 newTr.appendChild(th);
+
+                if (subchild.type === 'selection') {
+                    this.#checkAllElement = subchild.querySelector('ea-checkbox');
+                }
 
                 if (subchild.children.length > 0) {
                     createThElement(subchild.children, ++i);
@@ -200,30 +327,108 @@ export class EaTable extends Base {
         createThElement(this.children);
     }
 
+    #handleHighlightCurrentRow(row, data) {
+        if (this.highlightCurrentRow) {
+            row.addEventListener('click', () => {
+                const rows = this.#bodyTableTbody.querySelectorAll('.ea-table__row');
+                let isIndexType = false;
+                let isSelectionType = false;
+                rows.forEach((row, index) => {
+                    if (row.type === "index") isIndexType = true;
+                    if (row.type === "selection") isSelectionType = true;
+
+                    row.index = index;
+                    row.classList.remove('is-current-row');
+                });
+                row.classList.add('is-current-row');
+
+                if (isIndexType) delete data.index;
+                if (isSelectionType) delete data.index;
+
+                this.currentRow = row.index;
+
+                this.dispatchEvent(new CustomEvent('current-change', {
+                    detail: {
+                        index: row.index,
+                        row,
+                        data
+                    }
+                }));
+            });
+        }
+    }
+
+    #handleTypeTh(data, type) {
+        const ths = this.#headerTable.querySelectorAll('ea-table-column');
+        let colIndex = 0;
+        let isIndexTh = false;
+        ths.forEach((item, i) => {
+            if (item.type === type) {
+                colIndex = i;
+                isIndexTh = true;
+            }
+        });
+
+        if (isIndexTh) {
+            return data.map((item, index) => {
+                const obj = {};
+                const arr = Object.keys(item);
+                arr.splice(colIndex, 0, type);
+                arr.forEach((key, i) => {
+                    if (key === 'index') obj[key] = index + 1;
+                    else if (key === 'selection') obj[key] = `<ea-checkbox></ea-checkbox>`;
+                    else obj[key] = item[key];
+                });
+
+                return obj;
+            });
+        }
+
+        return data;
+    }
+
     renderTableBody(data) {
         this.#bodyTableTbody.innerHTML = '';
 
-        const fixedColumnsArr = [];
-        this.#tableColumns.forEach(column => {
-            if (column.fixed) {
-                fixedColumnsArr.push(column.prop);
-            }
+        data = this.#handleTypeTh(data, 'index');
+        data = this.#handleTypeTh(data, 'selection');
+
+        const thSequence = Array.from(this.#headerTable.querySelectorAll('ea-table-column')).map((item, i) => {
+            return item.type === "default" ? item.prop : item.type;
         });
-        // console.log(fixedColumnsArr);
+        data = data.map(item => {
+            const obj = {};
+            thSequence.forEach(key => {
+                if (key !== null && key !== 'null' && typeof key !== 'undefined' && key !== "undefined")
+                    obj[key] = item[key];
+            });
+            return obj;
+        });
 
-        data.forEach(item => {
+        data.forEach((item, index) => {
             const row = createElement('tr', 'ea-table__row');
-
-            // console.log(item[fixedColumnsArr[0]]);
 
             Object.entries(item).forEach(([key, value]) => {
                 const cell = createElement('td', 'ea-table__cell td_cell');
                 cell.innerHTML = value;
-                row.appendChild(cell);
 
-                // console.log(fixedColumnsArr.includes(key));
-                // console.log(key);
+                if (key === "selection") {
+                    cell.querySelector('ea-checkbox').addEventListener('change', (e) => {
+
+                        this.dispatchEvent(new CustomEvent('body-selection-change', {
+                            detail: {
+                                checked: e.detail.checked,
+                                row: row,
+                                data: item
+                            }
+                        }));
+                    });
+                }
+
+                row.appendChild(cell);
             });
+
+            this.#handleHighlightCurrentRow(row, item);
 
             this.#bodyTableTbody.appendChild(row);
         });
@@ -238,9 +443,36 @@ export class EaTable extends Base {
 
         this.height = this.height;
 
+        this.highlightCurrentRow = this.highlightCurrentRow;
+
         this.#renderTableHeader();
 
         this.#handleHasGutterTable();
+
+        this.addEventListener('header-selection-change', (e) => {
+            const checkboxes = this.#bodyTable.querySelectorAll('ea-checkbox');
+            checkboxes.forEach(item => {
+                item.checked = e.detail.checked;
+            });
+        })
+
+        this.addEventListener('body-selection-change', (e) => {
+            const checkallBtn = this.#headerTableThead.querySelector('ea-table-column').shadowRoot.querySelector('ea-checkbox');
+            const checkboxes = this.#bodyTable.querySelectorAll('ea-checkbox');
+
+            let isAllSelectedArr = Array.from(checkboxes).map(item => {
+                return item.checked;
+            })
+
+
+            if (isAllSelectedArr.every(item => item === true)) {
+                checkallBtn.checked = true;
+            } else if (isAllSelectedArr.every(item => item === false)) {
+                checkallBtn.checked = false;
+            } else {
+                checkallBtn.indeterminate = true;
+            }
+        })
     }
 
     connectedCallback() {

@@ -3,7 +3,6 @@
   position: relative;
   background-color: #fff;
   overflow: hidden;
-  // overflow-x: auto;
 
   .ea-table_header-wrap .ea-table_header,
   .ea-table_body-wrap .ea-table_main,
@@ -75,19 +74,17 @@
   }
 
   .ea-table_body-wrap {
-    // overflow: hidden;
     overflow-y: auto;
 
     .ea-table_main {
-      .ea-table__row:hover {
-        background-color: #f5f7fa;
+      .ea-table__row {
+        &:hover {
+          background-color: #f5f7fa;
+        }
+        &.is-current-row {
+          background-color: #ecf5ff;
+        }
       }
     }
   }
-}
-
-.ea-table_fixed-column {
-  position: absolute;
-  left: 0;
-  top: 0;
 }

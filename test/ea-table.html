@@ -19,6 +19,8 @@
         import '../components/ea-icon/index.js'
 
         import '../components/ea-table/index.js'
+        import '../components/ea-button-group/index.js'
+        import '../components/ea-button/index.js'
 
         const data = [
             { name: 'Lumina', age: 18, address: '中国' },
@@ -81,8 +83,32 @@
 
         // ------- 6. 单选 -------
         // #region
-        const radioTable = document.querySelector('#radioTable');
-        radioTable.renderTableBody(moreData);
+        const radioTable = {
+            table: document.querySelector('#radioTable'),
+
+            init() {
+                this.table.renderTableBody(moreData);
+
+                this.table.addEventListener('current-change', (e) => {
+                    console.log(e.detail);
+                });
+            }
+        }
+        radioTable.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 7. 自增id序列 -------
+        // #region
+        const increaseliyTable = document.querySelector('#increaseliyTable');
+        increaseliyTable.renderTableBody(data);
+        // #endregion
+        // ------- end -------
+
+        // ------- 8. 多选 -------
+        // #region
+        const checkboxTable = document.querySelector('#checkboxTable');
+        checkboxTable.renderTableBody(data);
         // #endregion
         // ------- end -------
     </script>
@@ -155,8 +181,38 @@
 
     <!-- -------- 6. 单选 --------  -->
     <!-- #region  -->
+    <h2>6. 单选</h2>
     <ea-table id="radioTable" border height="250" highlight-current-row>
-        <ea-table-column prop="date" width="100" fixed>日期</ea-table-column>
+        <ea-table-column prop="date" width="100">日期</ea-table-column>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 7. 自增id序列 --------  -->
+    <!-- #region  -->
+    <h2>7. 自增id序列</h2>
+    <ea-table id="increaseliyTable" border height="250" highlight-current-row>
+        <ea-table-column type="index" width="100">id</ea-table-column>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 8. 多选 --------  -->
+    <!-- #region  -->
+    <h2>8. 多选</h2>
+    <ea-table id="checkboxTable" border height="250">
+        <ea-table-column type="selection" width="100"></ea-table-column>
+        <ea-table-column type="index" width="100">id</ea-table-column>
         <ea-table-column prop="name" width="100">姓名</ea-table-column>
         <ea-table-column prop="age" width="100">年龄</ea-table-column>
         <ea-table-column prop="address">地址</ea-table-column>

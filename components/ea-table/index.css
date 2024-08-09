@@ -92,9 +92,7 @@
 .ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__row:hover {
   background-color: #f5f7fa;
 }
-
-.ea-table_fixed-column {
-  position: absolute;
-  left: 0;
-  top: 0;
+.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__row.is-current-row,
+.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__row.is-current-row {
+  background-color: #ecf5ff;
 }

@@ -168,6 +168,8 @@ export class EaCheckbox extends Base {
   set checked(val) {
     this.#checkbox.checked = val;
 
+    this.#label.classList.toggle('checked', val);
+
     if (val) {
       this.setAttribute('checked', true);
       this.#label.setAttribute('checked', true);
@@ -281,31 +283,21 @@ export class EaCheckbox extends Base {
     this.#checkbox.addEventListener('change', function (e) {
       e.preventDefault();
       that.checked = e.target.checked;
-      if (e.target.checked) {
-        // document.querySelectorAll(`ea-checkbox[name="${that.name}"]`).forEach(btn => {
-        //     const btnInput = btn.shadowRoot.querySelector('input');
 
-        //     if (btnInput !== this) {
-        //         btn.checked = false;
-        //     } else {
-        //         btn.checked = true;
-        //     }
-        // });
-      }
+      that.dispatchEvent(new CustomEvent('change', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          checked: e.target.checked,
+          value: e.target.value,
+          name: e.target.name,
+        }
+      }))
     })
   }
 
   connectedCallback() {
     this.init();
-  }
-
-  attributeChangedCallback(name, oldVal, newVal) {
-    // switch (name) {
-    //     case 'disabled':
-    //         this.#label.setAttribute('checked', true);
-    //         this.#label.classList.add('checked');
-    //         break;
-    // }
   }
 }
 

@@ -3,6 +3,8 @@ import Base from '../Base.js';
 import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 
+import "../ea-checkbox/index.js"
+
 const stylesheet = `
 
 `;
@@ -88,14 +90,31 @@ export class EaTableColumn extends Base {
     // #endregion
     // ------- end -------
 
-    // ------- fixed 固定列 -------
+    // ------- type 列类型 -------
     // #region
-    get fixed() {
-        return this.getAttrBoolean('fixed');
+    get type() {
+        const attr = this.getAttribute('type');
+
+        return ['default', 'index', 'selection'].includes(attr) ? attr : 'default';
     }
 
-    set fixed(value) {
-        this.setAttribute('fixed', value);
+    set type(value) {
+        this.setAttribute('type', value);
+
+        if (value === "selection") {
+            this.#labelNode.innerHTML = `
+                <ea-checkbox></ea-checkbox>
+            `;
+
+            this.#labelNode.querySelector('ea-checkbox').addEventListener('change', (e) => {
+                this.dispatchEvent(new CustomEvent('header-selection-change', {
+                    detail: {
+                        checked: e.detail.checked,
+                    },
+                    composed: true
+                }));
+            });
+        }
     }
     // #endregion
     // ------- end -------
@@ -113,7 +132,7 @@ export class EaTableColumn extends Base {
 
         this.rowspan = this.rowspan;
 
-        this.fixed = this.fixed;
+        this.type = this.type;
     }
 
     connectedCallback() {
