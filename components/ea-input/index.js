@@ -312,7 +312,7 @@ export class EaInput extends Base {
             this.#input.value = this.getAttribute("value") || '';
         }
 
-        return this.getAttribute('value');
+        return this.#input.value;
     }
 
     set value(val) {

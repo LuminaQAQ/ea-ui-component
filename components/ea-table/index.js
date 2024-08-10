@@ -146,6 +146,8 @@ export class EaTable extends Base {
                 </div>
             </div>
             <slot></slot>
+            <slot name="header"></slot>
+            <slot name="body"></slot>
         `;
 
         this.build(shadowRoot, stylesheet);
@@ -347,6 +349,8 @@ export class EaTable extends Base {
             const newTr = createElement('tr');
             newTr.setAttribute('index', i);
             Array.from(child).forEach(subchild => {
+                if (subchild.nodeName !== 'EA-TABLE-COLUMN') return;
+
                 const th = createElement('th', 'ea-table__cell th-cell');
 
                 th.setAttribute('colspan', subchild.colspan || 1);
@@ -537,6 +541,22 @@ export class EaTable extends Base {
         this.#handleHasGutterTable();
 
         this.#initSelectionTypeTh();
+
+
+        const headerSlot = this.shadowRoot.querySelector('slot[name="header"]');
+        if (headerSlot.assignedNodes().length > 0) {
+            const tr = this.#headerTableThead.querySelector('tr');
+            const th = createElement('th', 'ea-table__cell th-cell');
+            let maxRowSpan = 1;
+            Array.from(this.#headerTableThead.querySelectorAll('th')).forEach(item => {
+                if (item.rowSpan > maxRowSpan) maxRowSpan = item.rowSpan;
+            });
+            th.rowSpan = maxRowSpan;
+            th.appendChild(headerSlot);
+            tr.appendChild(th);
+        } else {
+            headerSlot.remove();
+        }
     }
 
     connectedCallback() {

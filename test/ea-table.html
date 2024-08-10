@@ -11,6 +11,12 @@
         hr {
             margin: 3rem 0;
         }
+
+        .prepend,
+        .append {
+            background-color: #f5f7fa;
+            padding: 0.5rem;
+        }
     </style>
 </head>
 
@@ -19,8 +25,10 @@
         import '../components/ea-icon/index.js'
 
         import '../components/ea-table/index.js'
-        import '../components/ea-button-group/index.js'
+
         import '../components/ea-button/index.js'
+        import '../components/ea-button-group/index.js'
+        import '../components/ea-input/index.js'
 
         const data = [
             { name: 'Lumina', age: 18, address: '中国' },
@@ -112,11 +120,23 @@
         // #endregion
         // ------- end -------
 
-        // ------- 9. sortableTable -------
+        // ------- 9. 排序 -------
         // #region
-        const sortableTable = document.querySelector('#sortableTable');
-        // sortableTable.renderTableBody(data);
-        sortableTable.data = data;
+        const sortableTable = {
+            table:  document.querySelector('#sortableTable'),
+            searchBtn: document.querySelector('#searchBtn'),
+            searchInput: document.querySelector('#searchInput'),
+
+            init() {
+                this.table.data = moreData;
+
+                this.searchBtn.addEventListener('click', () => {
+                    console.log(this.searchInput.value);
+                    // this.table.data = this.table.data.filter(item => item.name.includes(this.searchInput.value));
+                });
+            }
+        } 
+        sortableTable.init();
         // #endregion
         // ------- end -------
     </script>
@@ -234,10 +254,23 @@
     <!-- #region  -->
     <h2>9. 排序</h2>
     <ea-table id="sortableTable" border height="250">
-        <ea-table-column type="index" width="100" sortable>id</ea-table-column>
-        <ea-table-column prop="name" width="100" sortable>姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
+        <ea-table-column prop="date" width="100" rowspan="3" sortable>日期</ea-table-column>
+        <ea-table-column label="详细信息" colspan="3">
+            <ea-table-column prop="name" width="100" rowspan="2" sortable>姓名</ea-table-column>
+            <ea-table-column label="个人信息" colspan="2">
+                <ea-table-column prop="age" width="100">年龄</ea-table-column>
+                <ea-table-column prop="address">地址</ea-table-column>
+            </ea-table-column>
+        </ea-table-column>
+
+        <div slot="header">
+            <ea-input id="searchInput" placeholder="假装有网址">
+                <div class="append" slot="append" id="searchBtn">
+                    <i class="icon-search"></i>
+                </div>
+            </ea-input>
+        </div>
+        <div slot="body"></div>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->
