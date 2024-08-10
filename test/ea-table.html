@@ -123,19 +123,41 @@
         // ------- 9. 排序 -------
         // #region
         const sortableTable = {
-            table:  document.querySelector('#sortableTable'),
+            table: document.querySelector('#sortableTable'),
             searchBtn: document.querySelector('#searchBtn'),
             searchInput: document.querySelector('#searchInput'),
+
+            deleteBtn: document.querySelector('#delete'),
 
             init() {
                 this.table.data = moreData;
 
                 this.searchBtn.addEventListener('click', () => {
-                    console.log(this.searchInput.value);
-                    // this.table.data = this.table.data.filter(item => item.name.includes(this.searchInput.value));
+                    const res = moreData.filter(item => item.name.includes(this.searchInput.value));
+                    this.table.data = res;
                 });
+
+                const clickCallback = (editBtns) => {
+                    editBtns.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            setTimeout(() => {
+                                console.log(this.table.currentRowDetail);
+                            }, 0);
+                        });
+                    });
+                }
+
+                let editBtns = this.table.shadowRoot.querySelectorAll('.edit');
+                clickCallback(editBtns);
+                this.table.addEventListener('sort-change', (e) => {
+                    editBtns = this.table.shadowRoot.querySelectorAll('.edit');
+                    console.log(e.detail);
+
+                    clickCallback(editBtns);
+                });
+
             }
-        } 
+        }
         sortableTable.init();
         // #endregion
         // ------- end -------
@@ -270,7 +292,12 @@
                 </div>
             </ea-input>
         </div>
-        <div slot="body"></div>
+        <div slot="body">
+            <div style="display: flex; justify-content: space-evenly;">
+                <ea-button class="edit" size="mini">编辑</ea-button>
+                <ea-button id="delete" size="mini" type="danger">删除</ea-button>
+            </div>
+        </div>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->

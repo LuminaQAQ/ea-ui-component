@@ -126,6 +126,8 @@ export class EaTable extends Base {
 
     #tableDataIsInit;
 
+    #bodySlot;
+
     constructor() {
         super();
 
@@ -230,6 +232,7 @@ export class EaTable extends Base {
     // ------- currentRow 当前行 -------
     // #region
     get currentRow() {
+        console.log();
         return this.getAttrNumber('current-row') || 0;
     }
 
@@ -252,6 +255,17 @@ export class EaTable extends Base {
         this.#tableData = jsonData;
 
         this.renderTableBody(jsonData);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- currentRowDetail 当前行详情 -------
+    // #region
+    get currentRowDetail() {
+        const index = this.currentRow;
+        const data = this.data[index];
+        const target = this.#bodyTable.querySelectorAll('.ea-table__row')[index] || null;
+        return { index, data, target };
     }
     // #endregion
     // ------- end -------
@@ -335,6 +349,15 @@ export class EaTable extends Base {
                 })
 
                 this.renderTableBody(data);
+
+                this.dispatchEvent(new CustomEvent('sort-change', {
+                    detail: {
+                        prop: subchild.prop,
+                        order: subchild.order
+                    },
+                    composed: true,
+                    bubbles: true,
+                }));
             });
         }
     }
@@ -384,33 +407,34 @@ export class EaTable extends Base {
     }
 
     #handleHighlightCurrentRow(row, data) {
-        if (this.highlightCurrentRow) {
-            row.addEventListener('click', () => {
-                const rows = this.#bodyTableTbody.querySelectorAll('.ea-table__row');
-                let isIndexType = false;
-                let isSelectionType = false;
-                rows.forEach((row, index) => {
-                    if (row.type === "index") isIndexType = true;
-                    if (row.type === "selection") isSelectionType = true;
+        row.addEventListener('click', () => {
+            const rows = this.#bodyTableTbody.querySelectorAll('.ea-table__row');
+            let isIndexType = false;
+            let isSelectionType = false;
+            rows.forEach((row, index) => {
+                if (row.type === "index") isIndexType = true;
+                if (row.type === "selection") isSelectionType = true;
 
-                    row.index = index;
-                    row.classList.remove('is-current-row');
-                });
-                row.classList.add('is-current-row');
+                row.index = index;
 
-                if (isSelectionType) delete data.selection;
-
-                this.currentRow = row.index;
-
-                this.dispatchEvent(new CustomEvent('current-change', {
-                    detail: {
-                        index: row.index,
-                        row,
-                        data
-                    }
-                }));
+                if (this.highlightCurrentRow) row.classList.remove('is-current-row');
             });
-        }
+            if (this.highlightCurrentRow) row.classList.add('is-current-row');
+
+            if (isSelectionType) delete data.selection;
+
+            this.currentRow = row.index;
+
+            this.dispatchEvent(new CustomEvent('current-change', {
+                composed: true,
+                bubbles: true,
+                detail: {
+                    index: row.index,
+                    row,
+                    data
+                }
+            }));
+        });
     }
 
     #handleTypeTh(data, type) {
@@ -440,6 +464,36 @@ export class EaTable extends Base {
         }
 
         return data;
+    }
+
+    #handleRenderBodySlot() {
+        const trs = this.#bodyTableTbody.querySelectorAll('tr');
+        const slot = this.shadowRoot.querySelector('slot[name="body"]');
+
+        if (!slot.assignedNodes().length) {
+            slot.remove();
+        } else {
+            trs.forEach(item => {
+                const div = createElement('td');
+                Array.from(slot.assignedNodes()).forEach(slotItem => {
+                    const cloneNode = slotItem.cloneNode(true);
+                    div.appendChild(cloneNode);
+
+                    cloneNode.addEventListener('click', () => {
+                        slotItem.dispatchEvent(new CustomEvent('click', {
+                            bubbles: true,
+                            composed: true,
+                            detail: {
+                                row: item
+                            }
+                        }));
+                    });
+                });
+                item.appendChild(div);
+            });
+            slot.style.display = 'none';
+        }
+
     }
 
     renderTableBody(data) {
@@ -476,6 +530,8 @@ export class EaTable extends Base {
                     cell.querySelector('ea-checkbox').addEventListener('change', (e) => {
 
                         this.dispatchEvent(new CustomEvent('body-selection-change', {
+                            composed: true,
+                            bubbles: true,
                             detail: {
                                 checked: e.detail.checked,
                                 row: row,
@@ -493,6 +549,9 @@ export class EaTable extends Base {
             this.#bodyTableTbody.appendChild(row);
         });
         this.#tableData = data;
+
+
+        this.#handleRenderBodySlot();
     }
 
     #initSelectionTypeTh() {
@@ -525,6 +584,23 @@ export class EaTable extends Base {
         })
     }
 
+    #initHeaderSlot() {
+        const headerSlot = this.shadowRoot.querySelector('slot[name="header"]');
+        if (headerSlot.assignedNodes().length > 0) {
+            const tr = this.#headerTableThead.querySelector('tr');
+            const th = createElement('th', 'ea-table__cell th-cell');
+            let maxRowSpan = 1;
+            Array.from(this.#headerTableThead.querySelectorAll('th')).forEach(item => {
+                if (item.rowSpan > maxRowSpan) maxRowSpan = item.rowSpan;
+            });
+            th.rowSpan = maxRowSpan;
+            th.appendChild(headerSlot);
+            tr.appendChild(th);
+        } else {
+            headerSlot.remove();
+        }
+    }
+
     #init() {
         const that = this;
 
@@ -542,21 +618,7 @@ export class EaTable extends Base {
 
         this.#initSelectionTypeTh();
 
-
-        const headerSlot = this.shadowRoot.querySelector('slot[name="header"]');
-        if (headerSlot.assignedNodes().length > 0) {
-            const tr = this.#headerTableThead.querySelector('tr');
-            const th = createElement('th', 'ea-table__cell th-cell');
-            let maxRowSpan = 1;
-            Array.from(this.#headerTableThead.querySelectorAll('th')).forEach(item => {
-                if (item.rowSpan > maxRowSpan) maxRowSpan = item.rowSpan;
-            });
-            th.rowSpan = maxRowSpan;
-            th.appendChild(headerSlot);
-            tr.appendChild(th);
-        } else {
-            headerSlot.remove();
-        }
+        this.#initHeaderSlot();
     }
 
     connectedCallback() {
