@@ -119,6 +119,30 @@ export class EaTableColumn extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- sortable 是否可排序 -------
+    // #region
+    get sortable() {
+        return this.getAttrBoolean('sortable') || false;
+    }
+
+    set sortable(value) {
+        this.setAttribute('sortable', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- order 排序方式 -------
+    // #region
+    get order() {
+        return this.getAttribute('order') || 'asc';
+    }
+
+    set order(value) {
+        this.setAttribute('order', value);
+    }
+    // #endregion
+    // ------- end -------
+
     #init() {
         const that = this;
 
@@ -133,6 +157,10 @@ export class EaTableColumn extends Base {
         this.rowspan = this.rowspan;
 
         this.type = this.type;
+
+        this.sortable = this.sortable;
+
+        this.order = this.order;
     }
 
     connectedCallback() {

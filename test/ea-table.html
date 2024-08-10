@@ -111,6 +111,14 @@
         checkboxTable.renderTableBody(data);
         // #endregion
         // ------- end -------
+
+        // ------- 9. sortableTable -------
+        // #region
+        const sortableTable = document.querySelector('#sortableTable');
+        // sortableTable.renderTableBody(data);
+        sortableTable.data = data;
+        // #endregion
+        // ------- end -------
     </script>
 
     <!-- -------- 1. 基础表格 --------  -->
@@ -214,6 +222,20 @@
         <ea-table-column type="selection" width="100"></ea-table-column>
         <ea-table-column type="index" width="100">id</ea-table-column>
         <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 9. 排序 --------  -->
+    <!-- #region  -->
+    <h2>9. 排序</h2>
+    <ea-table id="sortableTable" border height="250">
+        <ea-table-column type="index" width="100" sortable>id</ea-table-column>
+        <ea-table-column prop="name" width="100" sortable>姓名</ea-table-column>
         <ea-table-column prop="age" width="100">年龄</ea-table-column>
         <ea-table-column prop="address">地址</ea-table-column>
     </ea-table>

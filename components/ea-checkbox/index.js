@@ -249,7 +249,6 @@ export class EaCheckbox extends Base {
 
       this.setAttribute('indeterminate', true);
       this.#label.classList.add('indeterminate');
-      console.log(val);
     } else {
       this.removeAttribute('indeterminate');
       this.#label.classList.remove('indeterminate');

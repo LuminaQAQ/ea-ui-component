@@ -122,6 +122,10 @@ export class EaTable extends Base {
 
     #checkAllElement;
 
+    #tableData;
+
+    #tableDataIsInit;
+
     constructor() {
         super();
 
@@ -233,6 +237,23 @@ export class EaTable extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- data 数据 -------
+    // #region
+    get data() {
+        return this.#tableData || [];
+    }
+
+    set data(value) {
+        const strData = JSON.stringify(value);
+        let jsonData = JSON.parse(strData);
+
+        this.#tableData = jsonData;
+
+        this.renderTableBody(jsonData);
+    }
+    // #endregion
+    // ------- end -------
+
     #handleResize(bodyWrap, bodyTable, headerWrap, headerColgroup, scrollbarWidth, isInit = false) {
         // 获取父元素的宽度
         const width = this.parentNode.clientWidth;
@@ -287,6 +308,35 @@ export class EaTable extends Base {
         });
     }
 
+    #handleSortableTh(th, subchild) {
+        if (subchild.sortable && subchild.type !== 'selection') {
+            const icon = createElement('ea-icon');
+            icon.icon = "icon-angle-down";
+            icon.style.float = 'right';
+            th.appendChild(icon);
+
+            th.addEventListener('click', () => {
+                icon.color = "#5cb6ff";
+                const order = subchild.order;
+                if (order === "asc") {
+                    subchild.order = "desc";
+                    icon.icon = "icon-angle-up";
+                } else {
+                    subchild.order = "asc";
+                    icon.icon = "icon-angle-down";
+                }
+
+                let data = this.data.sort((a, b) => {
+                    const key = subchild.prop !== "null" ? subchild.prop : subchild.type;
+
+                    return subchild.order === "asc" ? String(a[key]).localeCompare(b[key]) : String(b[key]).localeCompare(a[key]);
+                })
+
+                this.renderTableBody(data);
+            });
+        }
+    }
+
     #renderTableHeader() {
         const columns = this.querySelectorAll('ea-table-column');
         this.#headerTableColgroup.innerHTML = '';
@@ -320,6 +370,8 @@ export class EaTable extends Base {
                     this.#bodyTableColgroup.appendChild(bodyCol);
 
                     this.#headerTableThead.appendChild(newTr);
+
+                    this.#handleSortableTh(th, subchild);
                 }
             });
         };
@@ -342,8 +394,7 @@ export class EaTable extends Base {
                 });
                 row.classList.add('is-current-row');
 
-                if (isIndexType) delete data.index;
-                if (isSelectionType) delete data.index;
+                if (isSelectionType) delete data.selection;
 
                 this.currentRow = row.index;
 
@@ -390,20 +441,25 @@ export class EaTable extends Base {
     renderTableBody(data) {
         this.#bodyTableTbody.innerHTML = '';
 
-        data = this.#handleTypeTh(data, 'index');
-        data = this.#handleTypeTh(data, 'selection');
+        if (!this.#tableDataIsInit) {
+            data = this.#handleTypeTh(data, 'index');
+            data = this.#handleTypeTh(data, 'selection');
 
-        const thSequence = Array.from(this.#headerTable.querySelectorAll('ea-table-column')).map((item, i) => {
-            return item.type === "default" ? item.prop : item.type;
-        });
-        data = data.map(item => {
-            const obj = {};
-            thSequence.forEach(key => {
-                if (key !== null && key !== 'null' && typeof key !== 'undefined' && key !== "undefined")
-                    obj[key] = item[key];
+            const thSequence = Array.from(this.#headerTable.querySelectorAll('ea-table-column')).map((item, i) => {
+                return item.type === "default" ? item.prop : item.type;
             });
-            return obj;
-        });
+            data = data.map(item => {
+                const obj = {};
+                thSequence.forEach(key => {
+                    if (key !== null && key !== 'null' && typeof key !== 'undefined' && key !== "undefined")
+                        obj[key] = item[key];
+                });
+                return obj;
+            });
+
+            this.#tableDataIsInit = true;
+        }
+
 
         data.forEach((item, index) => {
             const row = createElement('tr', 'ea-table__row');
@@ -432,22 +488,12 @@ export class EaTable extends Base {
 
             this.#bodyTableTbody.appendChild(row);
         });
+        this.#tableData = data;
     }
 
-    #init() {
-        const that = this;
-
-        this.border = this.border;
-
-        this.stripe = this.stripe;
-
-        this.height = this.height;
-
-        this.highlightCurrentRow = this.highlightCurrentRow;
-
-        this.#renderTableHeader();
-
-        this.#handleHasGutterTable();
+    #initSelectionTypeTh() {
+        const ths = this.shadowRoot.querySelectorAll('ea-table-column');
+        if (!Array.from(ths).some(item => item.type === "selection")) return;
 
         this.addEventListener('header-selection-change', (e) => {
             const checkboxes = this.#bodyTable.querySelectorAll('ea-checkbox');
@@ -473,6 +519,24 @@ export class EaTable extends Base {
                 checkallBtn.indeterminate = true;
             }
         })
+    }
+
+    #init() {
+        const that = this;
+
+        this.border = this.border;
+
+        this.stripe = this.stripe;
+
+        this.height = this.height;
+
+        this.highlightCurrentRow = this.highlightCurrentRow;
+
+        this.#renderTableHeader();
+
+        this.#handleHasGutterTable();
+
+        this.#initSelectionTypeTh();
     }
 
     connectedCallback() {
