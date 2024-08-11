@@ -1,11 +1,9 @@
 // @ts-nocheck
-import Base from "../Base";
-import { nanoid } from "nanoid";
+import Base from "../Base.js";
+import "../ea-icon/index.js"
 
 const stylesheet = `
 @charset "UTF-8";
-@import url('/ea_ui_component/icon/index.css');
-
 
 :host {
   --border-top-left-radius: 0;
@@ -288,6 +286,8 @@ export class EaInput extends Base {
             this.suggestionEvent();
         }
 
+        this.setIconFile(new URL('../ea-icon/index.css', import.meta.url).href);
+
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
 
@@ -312,7 +312,7 @@ export class EaInput extends Base {
             this.#input.value = this.getAttribute("value") || '';
         }
 
-        return this.getAttribute('value');
+        return this.#input.value;
     }
 
     set value(val) {
@@ -486,8 +486,8 @@ export class EaInput extends Base {
 
         // console.log(val);
         this.#suggestion = val;
-        this.setAttribute("primary-key", nanoid());
-        this.primaryKey = nanoid();
+        // this.setAttribute("primary-key", nanoid());
+        // this.primaryKey = nanoid();
     }
 
     // 输入框激活时列出输入建议
