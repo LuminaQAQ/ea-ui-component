@@ -32,12 +32,12 @@ export class EaMain extends Base {
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
-
-        this.style.flex = '1';
     }
 
     #init() {
         const that = this;
+
+        this.style.flex = '1';
     }
 
     connectedCallback() {
