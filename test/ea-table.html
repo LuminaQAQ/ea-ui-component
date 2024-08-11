@@ -58,35 +58,35 @@
         // ------- 1. 基础表格 -------
         // #region
         const basicTable = document.querySelector('#basicTable');
-        basicTable.renderTableBody(data);
+        basicTable.data = data;
         // #endregion
         // ------- end -------
 
         // ------- 2. 带斑马纹表格 -------
         // #region
         const stripeTable = document.querySelector('#stripeTable');
-        stripeTable.renderTableBody(data);
+        stripeTable.data = data;
         // #endregion
         // ------- end -------
 
         // ------- 3. 带边框表格 -------
         // #region
         const borderTable = document.querySelector('#borderTable');
-        borderTable.renderTableBody(data);
+        borderTable.data = data;
         // #endregion
         // ------- end -------
 
         // ------- 4. 固定表头 -------
         // #region
         const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
-        fixedHeaderTable.renderTableBody(moreData);
+        fixedHeaderTable.data = moreData;
         // #endregion
         // ------- end -------
 
         // ------- 5. 多级表头 -------
         // #region
         const groupingHeadTable = document.querySelector('#groupingHeadTable');
-        groupingHeadTable.renderTableBody(moreData);
+        groupingHeadTable.data = moreData;
         // #endregion
         // ------- end -------
 
@@ -96,7 +96,7 @@
             table: document.querySelector('#radioTable'),
 
             init() {
-                this.table.renderTableBody(moreData);
+                this.table.data = moreData;
 
                 this.table.addEventListener('current-change', (e) => {
                     console.log(e.detail);
@@ -110,14 +110,17 @@
         // ------- 7. 自增id序列 -------
         // #region
         const increaseliyTable = document.querySelector('#increaseliyTable');
-        increaseliyTable.renderTableBody(data);
+        increaseliyTable.data = data;
         // #endregion
         // ------- end -------
 
         // ------- 8. 多选 -------
         // #region
         const checkboxTable = document.querySelector('#checkboxTable');
-        checkboxTable.renderTableBody(data);
+        checkboxTable.data = data;
+        checkboxTable.addEventListener('body-selection-change', (e) => {
+            console.log(e.detail);
+        });
         // #endregion
         // ------- end -------
 

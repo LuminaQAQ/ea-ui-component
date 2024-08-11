@@ -155,8 +155,6 @@ export class EaTable extends Base {
 
         this.build(shadowRoot, stylesheet);
 
-        this.style.position = 'relative';
-
         this.#container = this.shadowRoot.querySelector('.ea-table_wrap');
 
         this.#headerTable = this.shadowRoot.querySelector('.ea-table_header');
@@ -529,14 +527,27 @@ export class EaTable extends Base {
 
                 if (key === "selection") {
                     cell.querySelector('ea-checkbox').addEventListener('change', (e) => {
+                        const checkboxes = this.shadowRoot.querySelectorAll('ea-checkbox');
+                        const checkedElements = Array.from(checkboxes).filter((checkbox, index) => {
+                            checkbox.index = index;
+                            return checkbox.checked;
+                        });
+                        const checkedElementsData = checkedElements.map(checkbox => {
+                            const currentData = data[checkbox.index];
+                            delete currentData.selection;
+
+                            return currentData;
+                        });
 
                         this.dispatchEvent(new CustomEvent('body-selection-change', {
                             composed: true,
                             bubbles: true,
                             detail: {
                                 checked: e.detail.checked,
-                                row: row,
-                                data: item
+                                currentRow: row,
+                                currentRowData: item,
+                                checkedElements,
+                                checkedElementsData
                             }
                         }));
                     });
@@ -610,7 +621,7 @@ export class EaTable extends Base {
     }
 
     #init() {
-        const that = this;
+        this.style.position = 'relative';
 
         this.border = this.border;
 

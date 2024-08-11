@@ -75,8 +75,6 @@ export class EaMenuItemGroup extends Base {
 
         this.build(shadowRoot, stylesheet);
         this.shadowRoot.appendChild(wrap);
-
-        this.style.width = '100%';
     }
 
 
@@ -175,6 +173,8 @@ export class EaMenuItemGroup extends Base {
 
     #init() {
         const that = this;
+
+        this.style.width = '100%';
 
         this.#handleSubMenuItemsEvent();
     }
