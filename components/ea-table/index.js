@@ -144,6 +144,7 @@ export class EaTable extends Base {
                     <table class="ea-table_main">
                         <colgroup></colgroup>
                         <tbody></tbody>
+                        <slot name="empty" style="display: none;"></slot>
                     </table>
                 </div>
             </div>
@@ -474,7 +475,7 @@ export class EaTable extends Base {
             slot.remove();
         } else {
             trs.forEach(item => {
-                const div = createElement('td');
+                const div = createElement('td', 'ea-table__cell');
                 Array.from(slot.assignedNodes()).forEach(slotItem => {
                     const cloneNode = slotItem.cloneNode(true);
                     div.appendChild(cloneNode);
@@ -549,6 +550,13 @@ export class EaTable extends Base {
             this.#bodyTableTbody.appendChild(row);
         });
         this.#tableData = data;
+
+        const emptySlot = this.shadowRoot.querySelector('slot[name="empty"]');
+        if (data.length > 0) {
+            emptySlot.style.display = 'none';
+        } else {
+            emptySlot.style.display = 'block';
+        }
 
 
         this.#handleRenderBodySlot();
