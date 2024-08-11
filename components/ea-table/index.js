@@ -158,6 +158,20 @@ export class EaTable extends Base {
             <slot name="header"></slot>
             <slot name="body"></slot>
         `;
+
+        this.build(this.shadowRoot, stylesheet);
+
+        this.#container = this.shadowRoot.querySelector('.ea-table_wrap');
+
+        this.#headerTable = this.shadowRoot.querySelector('.ea-table_header');
+        this.#headerTableColgroup = this.#headerTable.querySelector('.ea-table_header colgroup');
+        this.#headerTableThead = this.#headerTable.querySelector('.ea-table_header thead');
+
+        this.#bodyTable = this.shadowRoot.querySelector('.ea-table_main');
+        this.#bodyTableColgroup = this.#bodyTable.querySelector('.ea-table_body-wrap colgroup');
+        this.#bodyTableTbody = this.#bodyTable.querySelector('.ea-table_body-wrap tbody');
+
+        this.#tableColumns = this.querySelectorAll('ea-table-column');
     }
 
     // ------- border 边框 -------
@@ -633,20 +647,8 @@ export class EaTable extends Base {
     }
 
     #init() {
-        this.build(this.shadowRoot, stylesheet);
 
         this.style.position = 'relative';
-        this.#container = this.shadowRoot.querySelector('.ea-table_wrap');
-
-        this.#headerTable = this.shadowRoot.querySelector('.ea-table_header');
-        this.#headerTableColgroup = this.#headerTable.querySelector('.ea-table_header colgroup');
-        this.#headerTableThead = this.#headerTable.querySelector('.ea-table_header thead');
-
-        this.#bodyTable = this.shadowRoot.querySelector('.ea-table_main');
-        this.#bodyTableColgroup = this.#bodyTable.querySelector('.ea-table_body-wrap colgroup');
-        this.#bodyTableTbody = this.#bodyTable.querySelector('.ea-table_body-wrap tbody');
-
-        this.#tableColumns = this.querySelectorAll('ea-table-column');
 
         const that = this;
 
