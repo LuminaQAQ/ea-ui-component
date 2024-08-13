@@ -1,34 +1,39 @@
-import Base from '../Base';
+// @ts-nocheck
+import Base from '../Base.js';
+import '../ea-icon/index.js'
+import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
+
 `;
 
 export class EaSelect extends Base {
-    #wrap;
+    #container;
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        this.shadowRoot = shadowRoot;
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-select_wrap';
 
-        this.#wrap = wrap;
+        shadowRoot.innerHTML = `
+            <div class="ea-select_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
+
+        this.#container = shadowRoot.querySelector('.ea-select_wrap');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
-    init() {
+    #init() {
         const that = this;
     }
 
     connectedCallback() {
-        this.init();
+        this.#init();
     }
 }
 
-if (!window.customElements.get("ea-select")) {
-    window.customElements.define("ea-select", EaSelect);
+if (!customElements.get('ea-select')) {
+    customElements.define('ea-select', EaSelect);
 }

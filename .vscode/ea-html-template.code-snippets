@@ -29,7 +29,7 @@
       "<body>",
       "",
       "<script type='module'>",
-      "import '../components/$0/index.js'",
+      "import '../components/ea-$0/index.js'",
       "</script>",
       "",
       "</body>",
