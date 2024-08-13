@@ -675,6 +675,21 @@ export class EaInput extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- readonly 只读 -------
+    // #region
+    get readonly() {
+        return this.getAttrBoolean("readonly");
+    }
+
+    set readonly(val) {
+        if (val === null || val === undefined) return;
+
+        this.setAttribute("readonly", val);
+        this.#input.readOnly = val;
+    }
+    // #endregion
+    // ------- end -------
+
     // 图标dom初始化
     iconInit(className) {
         const clearIcon = document.createElement('i');
@@ -737,6 +752,8 @@ export class EaInput extends Base {
         // 输入长度限制
         this.maxLength = this.maxLength;
         this.minLength = this.minLength;
+
+        this.readonly = this.readonly;
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
