@@ -316,8 +316,6 @@ export class EaInput extends Base {
     }
 
     set value(val) {
-        if (!val) return;
-
         this.setAttribute("value", val);
         this.#input.value = val;
     }
