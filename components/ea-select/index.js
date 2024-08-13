@@ -4,6 +4,7 @@ import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 import "../ea-option/index.js"
+import '../ea-option-gropu/index.js'
 import "../ea-input/index.js"
 
 const stylesheet = `
@@ -105,6 +106,11 @@ export class EaSelect extends Base {
         this.setAttribute('value', val);
 
         this.#selectInput.value = val;
+        const options = this.querySelectorAll('ea-option');
+
+        options.forEach(option => {
+            option.checked = option.value === val;
+        });
     }
     // #endregion
     // ------- end -------

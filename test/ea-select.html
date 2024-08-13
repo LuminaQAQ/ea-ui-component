@@ -63,10 +63,71 @@
     <!-- -------- 4. 可清空单选 --------  -->
     <!-- #region  -->
     <ea-select placeholder="请选择" clearable>
-        <ea-option value="1">选项1</ea-option>
-        <ea-option value="2">选项2</ea-option>
-        <ea-option value="3">选项3</ea-option>
-        <ea-option value="4">选项4</ea-option>
+        <ea-option value="北京">北京</ea-option>
+        <ea-option value="上海">上海</ea-option>
+        <ea-option value="广州">广州</ea-option>
+        <ea-option value="深圳">深圳</ea-option>
+    </ea-select>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 5. 自定义模板 --------  -->
+    <!-- #region  -->
+    <ea-select placeholder="请选择" clearable>
+        <style>
+            .ea-select_option-wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .ea-select_option-eng {
+                font-size: 10px;
+            }
+        </style>
+        <ea-option value="北京">
+            <div class="ea-select_option-wrap">
+                <div class="ea-select_option-text">北京</div>
+                <div class="ea-select_option-eng">Beijing</div>
+            </div>
+        </ea-option>
+        <ea-option value="上海">
+            <div class="ea-select_option-wrap">
+                <div class="ea-select_option-text">上海</div>
+                <div class="ea-select_option-eng">Shanghai</div>
+            </div>
+        </ea-option>
+        <ea-option value="广州">
+            <div class="ea-select_option-wrap">
+                <div class="ea-select_option-text">广州</div>
+                <div class="ea-select_option-eng">Guangzhou</div>
+            </div>
+        </ea-option>
+        <ea-option value="深圳">
+            <div class="ea-select_option-wrap">
+                <div class="ea-select_option-text">深圳</div>
+                <div class="ea-select_option-eng">Shenzhen</div>
+            </div>
+        </ea-option>
+    </ea-select>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 6. 分组 --------  -->
+    <!-- #region  -->
+    <ea-select placeholder="请选择">
+        <ea-option-group label="热门城市">
+            <ea-option value="北京">北京</ea-option>
+            <ea-option value="上海">上海</ea-option>
+        </ea-option-group>
+        <ea-option-group label="一分别想带回家城市">
+            <ea-option value="广州">广州</ea-option>
+            <ea-option value="深圳">深圳</ea-option>
+        </ea-option-group>
     </ea-select>
     <!-- #endregion  -->
     <!-- -------------------  -->
