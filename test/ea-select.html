@@ -18,6 +18,7 @@
 
     <script type='module'>
         import "../components/ea-select/index.js"
+        import "../components/ea-empty/index.js"
     </script>
 
 
@@ -128,6 +129,35 @@
             <ea-option value="广州">广州</ea-option>
             <ea-option value="深圳">深圳</ea-option>
         </ea-option-group>
+    </ea-select>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 6. 分组 --------  -->
+    <!-- #region  -->
+    <ea-select placeholder="请选择" filterable>
+        <ea-option value="北京">北京</ea-option>
+        <ea-option value="上海">上海</ea-option>
+        <ea-option value="广州">广州</ea-option>
+        <ea-option value="深圳">深圳</ea-option>
+        <div slot="empty">
+            <ea-empty></ea-empty>
+        </div>
+    </ea-select>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 7. 基础多选 --------  -->
+    <!-- #region  -->
+    <ea-select placeholder="请选择" multiple>
+        <ea-option value="北京">北京</ea-option>
+        <ea-option value="上海">上海</ea-option>
+        <ea-option value="广州">广州</ea-option>
+        <ea-option value="深圳">深圳</ea-option>
     </ea-select>
     <!-- #endregion  -->
     <!-- -------------------  -->

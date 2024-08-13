@@ -32,6 +32,13 @@ const stylesheet = `
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 2035;
 }
+.ea-select_wrap .ea-select_dropdown-wrap .ea-select_dropdown-empty {
+  padding: 10px 0;
+  margin: 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
 .ea-select_wrap.is-open .ea-select_input-wrap .ea-select_dropdown-icon {
   transform: translateY(-50%) rotate(180deg);
 }
@@ -55,6 +62,8 @@ export class EaSelect extends Base {
     #selectInput;
     #dropdownIcon;
     #dropdownWrap;
+    #noResultWrap;
+
     constructor() {
         super();
 
@@ -70,14 +79,19 @@ export class EaSelect extends Base {
                 </div>
                 <div class="ea-select_dropdown-wrap">
                     <slot></slot>
+                    <slot name="empty" class="ea-select_dropdown-empty" style="display: none;">
+                        <p>暂无数据</p>
+                    </slot>
                 </div>
             </div>
         `;
+
 
         this.#container = this.shadowRoot.querySelector('.ea-select_wrap');
         this.#selectInput = this.shadowRoot.querySelector('ea-input');
         this.#dropdownIcon = this.shadowRoot.querySelector('.ea-select_dropdown-icon');
         this.#dropdownWrap = this.shadowRoot.querySelector('.ea-select_dropdown-wrap');
+        this.#noResultWrap = this.shadowRoot.querySelector('.ea-select_dropdown-empty');
 
         this.build(shadowRoot, stylesheet);
     }
@@ -106,11 +120,6 @@ export class EaSelect extends Base {
         this.setAttribute('value', val);
 
         this.#selectInput.value = val;
-        const options = this.querySelectorAll('ea-option');
-
-        options.forEach(option => {
-            option.checked = option.value === val;
-        });
     }
     // #endregion
     // ------- end -------
@@ -170,6 +179,81 @@ export class EaSelect extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- filterable 是否可搜索 -------
+    // #region
+    get filterable() {
+        return this.getAttrBoolean('filterable') || false;
+    }
+
+    set filterable(val) {
+        this.setAttribute('filterable', val);
+
+        this.#selectInput.readonly = val === false;
+
+        if (val) {
+            this.#selectInput.addEventListener('change', (e) => {
+                const options = this.querySelectorAll('ea-option');
+                const { value } = e.detail;
+
+                options.forEach(option => {
+                    option.style.display = option.value.includes(value) ? 'block' : 'none';
+                });
+                let isAllHidden = Array.from(options).every(option => {
+                    return option.style.display === 'block' ? false : true;
+                });
+
+                this.#noResultWrap.style.display = isAllHidden ? 'block' : 'none';
+            });
+        }
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- multiple 是否多选 -------
+    // #region
+    get multiple() {
+        return this.getAttrBoolean('multiple') || false;
+    }
+
+    set multiple(val) {
+        this.setAttribute('multiple', val);
+    }
+    // #endregion
+    // ------- end -------
+
+    #handleOptionChecked() {
+        const options = this.querySelectorAll('ea-option');
+        options.forEach(option => {
+            option.checked = option.value === this.value;
+        });
+
+        options.forEach(option => {
+            if (!option.disabled) {
+                option.addEventListener('click', (e) => {
+                    if (this.multiple) {
+                        option.checked = !option.checked;
+
+                        if (!option.checked) {
+                            const choise = this.value.split(',');
+                            choise.splice(choise.indexOf(option.value), 1);
+                            this.value = choise.join(',');
+                        } else {
+                            this.value = this.value ? this.value + ',' + option.value : option.value;
+                        }
+                    } else {
+                        this.#selectInput.value = option.value;
+                        this.value = option.value;
+
+                        options.forEach(item => {
+                            item.checked = false;
+                        });
+                        option.checked = true;
+                    }
+                });
+            }
+        });
+    }
+
     #initDropdownWrapOpen() {
         this.#selectInput.addEventListener('focus', (e) => {
             this.#container.classList.add('is-open');
@@ -186,6 +270,7 @@ export class EaSelect extends Base {
 
     #init() {
         this.setAttribute('data-ea-component', true);
+        this.#dropdownWrap.style.width = this.width;
 
         this.width = this.width;
 
@@ -197,30 +282,18 @@ export class EaSelect extends Base {
 
         this.clearable = this.clearable;
 
-        this.#dropdownWrap.style.width = this.width;
+        this.filterable = this.filterable;
+
+        this.multiple = this.multiple;
+
+        this.#initDropdownWrapOpen();
+        this.#handleOptionChecked();
 
         let timer = setTimeout(() => {
             clearTimeout(timer);
             timer = null;
             this.#container.classList.add('with-transition');
         }, 20);
-
-        this.#initDropdownWrapOpen();
-
-        const options = this.querySelectorAll('ea-option');
-        options.forEach(option => {
-            if (!option.disabled) {
-                option.addEventListener('click', (e) => {
-                    this.#selectInput.value = option.value;
-                    this.value = option.value;
-
-                    options.forEach(item => {
-                        item.checked = false;
-                    });
-                    option.checked = true;
-                });
-            }
-        });
     }
 
     connectedCallback() {

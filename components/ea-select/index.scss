@@ -29,6 +29,14 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
     z-index: 2035;
+
+    .ea-select_dropdown-empty {
+      padding: 10px 0;
+      margin: 0;
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+    }
   }
 
   &.is-open {
