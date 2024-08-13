@@ -180,29 +180,32 @@ export class EaSelect extends Base {
     }
 
     set clearable(val) {
-        if (!val) return;
-
         this.setAttribute('clearable', val);
 
-        const icon = this.#dropdownIcon.querySelector('i');
+        if (val) {
+            const icon = this.#dropdownIcon.querySelector('ea-icon');
+            this.#dropdownIcon.addEventListener('mouseenter', (e) => {
+                icon.icon = 'icon-cancel-circled2';
+            });
 
-        this.#dropdownIcon.addEventListener('mouseenter', (e) => {
-            icon.className = 'icon-cancel-circled2';
-        });
+            this.#dropdownIcon.addEventListener('mouseleave', (e) => {
+                icon.icon = 'icon-angle-down';
+            });
 
-        this.#dropdownIcon.addEventListener('mouseleave', (e) => {
-            icon.className = 'icon-angle-down';
-        });
+            this.#dropdownIcon.addEventListener('click', (e) => {
+                this.dispatchEvent(new CustomEvent('clear', {
+                    detail: {
+                        originValue: this.selection
+                    }
+                }));
 
-        this.#dropdownIcon.addEventListener('click', (e) => {
-            this.dispatchEvent(new CustomEvent('clear', {
-                detail: {
-                    originValue: this.selection
-                }
-            }));
+                this.querySelectorAll('ea-option').forEach(option => {
+                    option.checked = false;
+                });
+                this.selection = '';
+            });
 
-            this.selection = '';
-        });
+        }
     }
     // #endregion
     // ------- end -------
