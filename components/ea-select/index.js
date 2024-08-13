@@ -74,7 +74,7 @@ export class EaSelect extends Base {
                 <div class="ea-select_input-wrap">
                     <ea-input type="text" part="input" readonly autocomplete="off"></ea-input>
                     <span class="ea-select_dropdown-icon">
-                        <ea-icon part="icon" icon="icon-angle-down" color="#c0c4cc"></ea-icon>
+                        <i part="icon" class="icon-angle-down" style="color: #c0c4cc;"></i>
                     </span>
                 </div>
                 <div class="ea-select_dropdown-wrap">
@@ -113,11 +113,21 @@ export class EaSelect extends Base {
     // ------- value 选项值 -------
     // #region
     get value() {
-        return this.getAttribute('value') || '';
+        const value = this.selection;
+        if (this.multiple) return value.split(',') || [];
+        else return this.selection;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- selection 选中项 -------
+    // #region
+    get selection() {
+        return this.getAttribute('selection') || '';
     }
 
-    set value(val) {
-        this.setAttribute('value', val);
+    set selection(val) {
+        this.setAttribute('selection', val);
 
         this.#selectInput.value = val;
     }
@@ -173,7 +183,7 @@ export class EaSelect extends Base {
         });
 
         this.#dropdownIcon.addEventListener('click', (e) => {
-            this.value = '';
+            this.selection = '';
         });
     }
     // #endregion
@@ -223,9 +233,6 @@ export class EaSelect extends Base {
 
     #handleOptionChecked() {
         const options = this.querySelectorAll('ea-option');
-        options.forEach(option => {
-            option.checked = option.value === this.value;
-        });
 
         options.forEach(option => {
             if (!option.disabled) {
@@ -234,15 +241,15 @@ export class EaSelect extends Base {
                         option.checked = !option.checked;
 
                         if (!option.checked) {
-                            const choise = this.value.split(',');
+                            const choise = this.selection.split(',');
                             choise.splice(choise.indexOf(option.value), 1);
-                            this.value = choise.join(',');
+                            this.selection = choise.join(',');
                         } else {
-                            this.value = this.value ? this.value + ',' + option.value : option.value;
+                            this.selection = this.selection ? this.selection + ',' + option.value : option.value;
                         }
                     } else {
                         this.#selectInput.value = option.value;
-                        this.value = option.value;
+                        this.selection = option.value;
 
                         options.forEach(item => {
                             item.checked = false;
@@ -274,7 +281,7 @@ export class EaSelect extends Base {
 
         this.width = this.width;
 
-        this.value = this.value;
+        this.selection = this.selection;
 
         this.placeholder = this.placeholder;
 
