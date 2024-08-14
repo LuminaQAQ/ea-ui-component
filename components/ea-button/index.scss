@@ -1,0 +1,204 @@
+@import "../ea-ui-base-style.scss";
+@import "../ea-icon/index.scss";
+
+/**
+* $type: 按钮类型的类名
+* $border: 边框颜色
+* $text: 文字颜色
+* $bgc: 背景颜色
+*/
+:host {
+  --margin-right: 0rem;
+  --border-radius: 6px;
+  --border-size: 1px;
+}
+
+:host([href]) {
+  & > a {
+    text-decoration: none;
+  }
+}
+
+:host-context(ea-button-group) {
+  --margin-right: 0;
+  --border-size: 0;
+}
+
+@mixin button-type($type, $border, $text, $bgc) {
+  &.#{$type} {
+    // hover的颜色
+    $border-hover: lighten($border, 10);
+    $text-hover: lighten($text, 10);
+    $bgc-hover: lighten($bgc, 10);
+
+    // 单独设置了普通按钮的颜色
+    @if ($type == "normal") {
+      $border-hover: transparentize(#a0cfff, 0.6);
+      $text-hover: darken(#a0cfff, 20);
+      $bgc-hover: transparentize(#a0cfff, 0.95);
+    }
+
+    // 默认样式
+    border: var(--border-size) solid $border;
+    color: $text;
+    background-color: $bgc;
+
+    // 禁用样式
+    &.disabled {
+      cursor: not-allowed !important;
+      background-image: none !important;
+      background-color: lighten($bgc, 25) !important;
+      border-color: lighten($border, 25) !important;
+      color: lighten($text, 75) !important;
+      pointer-events: none;
+
+      @if ($type == "normal") {
+        border-color: lighten($border, 5) !important;
+        color: lighten($text, 35) !important;
+      }
+
+      @if ($type == "text") {
+        color: $color-disabled-text !important;
+      }
+    }
+
+    /* ------- 按钮样式 ------- */
+    /* #region  */
+
+    // 朴素按钮
+    &.plain {
+      background-color: lighten($bgc, 36);
+      border: var(--border-size) solid lighten($border, 25);
+      color: $bgc;
+
+      @if ($type == "normal") {
+        background-color: transparent;
+        border: var(--border-size) solid $border;
+        color: $text;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+
+      @if ($type == "danger") {
+        background-color: lighten($bgc, 26);
+      }
+    }
+
+    // 圆角按钮
+    &.round {
+      --border-radius: 999px;
+    }
+
+    /* #endregion */
+    /* ------- end  ------- */
+
+    /* ------- 按钮大小 ------- */
+    /* #region  */
+    &.medium {
+      font-size: 14px;
+    }
+    &.small {
+      font-size: 12px;
+    }
+    &.mini {
+      font-size: 10px;
+    }
+    /* #endregion */
+    /* ------- end  ------- */
+
+    // 鼠标悬浮时样式
+    &:hover {
+      border: var(--border-size) solid $border-hover;
+      color: $text-hover;
+      background-color: $bgc-hover;
+    }
+
+    // 鼠标点击时样式
+    &:active {
+      background-color: darken($bgc-hover, 30);
+
+      @if ($type == "normal") {
+        border: var(--border-size) solid darken($border-hover, 25);
+      }
+    }
+  }
+
+  & > i {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.__ea-button {
+  box-sizing: border-box;
+
+  padding: 0.5rem 1rem;
+  margin-right: var(--margin-right);
+
+  cursor: pointer;
+
+  font-size: 1rem;
+  line-height: 1.25;
+  font-weight: 500;
+  transition: background-color 0.1s, color 0.1s;
+
+  border-radius: var(--border-radius);
+
+  will-change: width;
+
+  @include button-type(
+    "normal",
+    $color-default-border,
+    $color-default-text,
+    $color-default-bgc
+  );
+
+  @include button-type(
+    "primary",
+    $color-primary-border,
+    $color-primary-text,
+    $color-primary-bgc
+  );
+
+  @include button-type(
+    "success",
+    $color-success-border,
+    $color-success-text,
+    $color-success-bgc
+  );
+
+  @include button-type(
+    "info",
+    $color-info-border,
+    $color-info-text,
+    $color-info-bgc
+  );
+
+  @include button-type(
+    "warning",
+    $color-warning-border,
+    $color-warning-text,
+    $color-warning-bgc
+  );
+
+  @include button-type(
+    "danger",
+    $color-danger-border,
+    $color-danger-text,
+    $color-danger-bgc
+  );
+
+  @include button-type("text", transparent, $color-primary-bgc, transparent);
+
+  &.first-child {
+    border-radius: 4px 0 0 4px;
+  }
+  &.middle-child {
+    border-radius: 0;
+  }
+  &.last-child {
+    border-radius: 0 4px 4px 0;
+  }
+}
