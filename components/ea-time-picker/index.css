@@ -1,0 +1,28 @@
+.ea-time-picker_wrap {
+  position: relative;
+}
+.ea-time-picker_wrap .ea-time-picker_icon {
+  position: absolute;
+  top: 50%;
+  left: 0.5rem;
+  transform: translateY(-50%);
+  z-index: 1;
+  color: #c0c4cc;
+}
+.ea-time-picker_wrap .ea-time-picker_dropdown-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translate(0, 120%) scaleY(0);
+  transform-origin: top center;
+  box-sizing: border-box;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.ea-time-picker_wrap.is-open .ea-time-picker_dropdown-wrap {
+  transform: translate(0, 100%) scaleY(1);
+}
+.ea-time-picker_wrap.with-transition .ea-time-picker_dropdown-wrap {
+  transition: transform 0.3s ease-in-out;
+}

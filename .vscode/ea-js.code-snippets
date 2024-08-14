@@ -23,6 +23,7 @@
       "import Base from '../Base.js';",
       "import '../ea-icon/index.js'",
       "import { createSlotElement, createElement } from '../../utils/createElement.js';",
+      "import { timeout } from '../../utils/timeout.js';",
       "",
       "const stylesheet = `",
       "",
