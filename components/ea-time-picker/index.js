@@ -67,6 +67,24 @@ export class EaTimePicker extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- time 时间 -------
+    // #region
+    get time() {
+        return this.getAttribute('time') || '00:00:00';
+    }
+
+    set time(value) {
+        this.setAttribute('time', value);
+
+        const [hour, minute, second] = value.split(':');
+
+        this.hour = hour;
+        this.minute = minute;
+        this.second = second;
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- hour 小时 -------
     // #region
     get hour() {
@@ -77,11 +95,7 @@ export class EaTimePicker extends Base {
     set hour(value) {
         this.setAttribute('hour', value);
 
-        this.#timePickerHourWrap.querySelectorAll('li').forEach(li => {
-            if (li.innerText === value) {
-                li.click();
-            }
-        });
+        this.#handleTimeItemPicker(this.#timePickerHourWrap, value);
     }
     // #endregion
     // ------- end -------
@@ -96,11 +110,7 @@ export class EaTimePicker extends Base {
     set minute(value) {
         this.setAttribute('minute', value);
 
-        this.#timePickerMinuteWrap.querySelectorAll('li').forEach(li => {
-            if (li.innerText === value) {
-                li.click();
-            }
-        });
+        this.#handleTimeItemPicker(this.#timePickerMinuteWrap, value);
     }
     // #endregion
     // ------- end -------
@@ -115,17 +125,20 @@ export class EaTimePicker extends Base {
     set second(value) {
         this.setAttribute('second', value);
 
-        this.#timePickerSecondWrap.querySelectorAll('li').forEach(li => {
-            if (li.innerText === value) {
-                li.click();
-            }
-        });
+        this.#handleTimeItemPicker(this.#timePickerSecondWrap, value);
     }
     // #endregion
     // ------- end -------
 
     #handleLessThanTen(num, defaultNum = '00') {
+        num = Number(num);
         return num < 10 ? `0${num}` : (num || defaultNum);
+    }
+
+    #handleTimeItemPicker(wrap, value) {
+        wrap.querySelectorAll('li').forEach(li => {
+            if (Number(li.innerText) === Number(this.#handleLessThanTen(value))) li.click();
+        });
     }
 
     #initElementsStyle() {
@@ -161,7 +174,7 @@ export class EaTimePicker extends Base {
 
             this.#timePickerInput.value = `${this.hour}:${this.minute}:${this.second}`;
 
-            const top = li.getBoundingClientRect().height * (index);
+            const top = li.getBoundingClientRect().height * index;
             timeItemWrap.scrollTo({
                 top,
                 behavior: 'smooth',
@@ -185,8 +198,7 @@ export class EaTimePicker extends Base {
     #initTimerPickerTimeItem() {
         for (let i = 0; i < 24; i++) {
             const li = createElement('li', 'ea-time-picker_dropdown-item');
-            li.innerText = i;
-            if (i === 0) li.classList.add('is-active');
+            li.innerText = this.#handleLessThanTen(i);
             this.#timePickerHourWrap.appendChild(li);
 
             this.#handleTimeItemClickEvent(li, i, this.#timePickerHourWrap, 'hour');
@@ -200,11 +212,6 @@ export class EaTimePicker extends Base {
             this.#timePickerMinuteWrap.appendChild(minLi);
             this.#timePickerSecondWrap.appendChild(secLi);
 
-            if (i === 0) {
-                minLi.classList.add('is-active');
-                secLi.classList.add('is-active');
-            }
-
             this.#handleTimeItemClickEvent(minLi, i, this.#timePickerMinuteWrap, 'minute');
             this.#handleTimeItemClickEvent(secLi, i, this.#timePickerSecondWrap, 'second');
         }
@@ -214,16 +221,18 @@ export class EaTimePicker extends Base {
         this.#handleTimeWrapScroll(this.#timePickerSecondWrap);
     }
 
-    #init() {
-        this.width = this.width;
+    #initToggleDropdownWrapShow() {
+        let timePickerIsInit = false;
 
-        this.hour = this.hour;
-        this.minute = this.minute;
-        this.second = this.second;
-        this.#timePickerInput.value = `${this.hour}:${this.minute}:${this.second}`;
-
+        const dropdownWrapInitCallback = () => {
+            this.time = this.time;
+            timePickerIsInit = true;
+            this.#dropdownWrap.removeEventListener('transitionend', dropdownWrapInitCallback);
+        }
         this.#timePickerInput.addEventListener('focus', () => {
             this.#container.classList.add('is-open');
+
+            if (!timePickerIsInit) this.#dropdownWrap.addEventListener('transitionend', dropdownWrapInitCallback);
         });
 
         window.addEventListener('click', (e) => {
@@ -233,9 +242,19 @@ export class EaTimePicker extends Base {
                 this.#timePickerInput.shadowRoot.querySelector('.ea-input_inner').focus();
             }
         });
+    }
+
+    #init() {
+
+        this.width = this.width;
 
         this.#initElementsStyle();
         this.#initTimerPickerTimeItem();
+
+        this.time = this.time;
+        this.#timePickerInput.value = `${this.hour}:${this.minute}:${this.second}`;
+
+        this.#initToggleDropdownWrapShow();
     }
 
     connectedCallback() {
