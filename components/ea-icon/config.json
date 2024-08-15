@@ -1013,6 +1013,18 @@
       "css": "bluetooth-b",
       "code": 62100,
       "src": "fontawesome"
+    },
+    {
+      "uid": "598a5f2bcf3521d1615de8e1881ccd17",
+      "css": "clock",
+      "code": 59467,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "a027a2ce420dfd6b660212d5ac6a7cc9",
+      "css": "calendar-times-o",
+      "code": 62067,
+      "src": "fontawesome"
     }
   ]
 }
