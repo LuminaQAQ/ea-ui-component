@@ -129,6 +129,7 @@
 .icon-umbrella:before { content: '\e848'; } /* '' */
 .icon-flight:before { content: '\e849'; } /* '' */
 .icon-leaf:before { content: '\e84a'; } /* '' */
+.icon-clock:before { content: '\e84b'; } /* '' */
 .icon-link-ext:before { content: '\f08e'; } /* '' */
 .icon-twitter:before { content: '\f099'; } /* '' */
 .icon-github-circled:before { content: '\f09b'; } /* '' */
@@ -217,6 +218,7 @@
 .icon-hourglass-2:before { content: '\f252'; } /* '' */
 .icon-hourglass-3:before { content: '\f253'; } /* '' */
 .icon-hourglass:before { content: '\f254'; } /* '' */
+.icon-calendar-times-o:before { content: '\f273'; } /* '' */
 .icon-map-signs:before { content: '\f277'; } /* '' */
 .icon-map:before { content: '\f279'; } /* '' */
 .icon-bluetooth-b:before { content: '\f294'; } /* '' */

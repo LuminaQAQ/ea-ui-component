@@ -50,10 +50,26 @@ export class EaIcon extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- size 大小 -------
+    // #region
+    get size() {
+        return this.getAttribute('size') || "";
+    }
+
+    set size(value) {
+        this.setAttribute('size', value);
+
+        this.#wrap.style.fontSize = `${value}px`;
+    }
+    // #endregion
+    // ------- end -------
+
     #init() {
         this.icon = this.icon;
 
         this.color = this.color;
+
+        this.size = this.size;
     }
 
     connectedCallback() {
