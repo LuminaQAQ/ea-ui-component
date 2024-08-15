@@ -356,6 +356,8 @@ export class EaTimePicker extends Base {
         this.#timePickerInput.value = `${this.hour}:${this.minute}:${this.second}`;
 
         this.#initToggleDropdownWrapShow();
+
+        this.setAttribute('data-ea-component', true);
     }
 
     connectedCallback() {
