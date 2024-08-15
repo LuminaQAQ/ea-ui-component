@@ -20,6 +20,8 @@ export class EaTimePicker extends Base {
     #timePickerMinuteWrap;
     #timePickerSecondWrap;
 
+    #timePickerIsInit = false;
+
     constructor() {
         super();
 
@@ -130,6 +132,76 @@ export class EaTimePicker extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- value 时间 -------
+    // #region
+    get value() {
+        return this.time;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- disabled 禁用 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean('disabled') || false;
+    }
+
+    set disabled(value) {
+        this.setAttribute('disabled', value);
+
+        this.#timePickerInput.disabled = value;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- align 对齐方式 -------
+    // #region
+    get align() {
+        return this.getAttribute('align') || 'left';
+    }
+
+    set align(value) {
+        this.setAttribute('align', value);
+
+        this.#timePickerInput.shadowRoot.querySelector('input').style.textAlign = value;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- limit-range-start 限制起始时间 -------
+    // #region
+    get limitRangeStart() {
+        const attr = this.getAttribute('limit-range-start');
+        if (!attr) return "00:00:00";
+        else {
+            const [hour, minute, second] = this.getAttribute('limit-range-start')?.split(':');
+            return `${this.#handleLessThanTen(hour)}:${this.#handleLessThanTen(minute)}:${this.#handleLessThanTen(second)}`;
+        }
+    }
+
+    set limitRangeStart(value) {
+        this.setAttribute('limit-range-start', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- limit-range-end 限制结束时间 -------
+    // #region
+    get limitRangeEnd() {
+        const attr = this.getAttribute('limit-range-end');
+        if (!attr) return "23:59:59"
+        else {
+            const [hour, minute, second] = this.getAttribute('limit-range-end')?.split(':');
+            return `${this.#handleLessThanTen(hour)}:${this.#handleLessThanTen(minute)}:${this.#handleLessThanTen(second)}`;
+        }
+    }
+
+    set limitRangeEnd(value) {
+        this.setAttribute('limit-range-end', value);
+    }
+    // #endregion
+    // ------- end -------
+
     #handleLessThanTen(num, defaultNum = '00') {
         num = Number(num);
         return num < 10 ? `0${num}` : (num || defaultNum);
@@ -172,7 +244,10 @@ export class EaTimePicker extends Base {
                     break;
             }
 
+            if (this.#timePickerIsInit) this.dispatchEvent(new CustomEvent('change', { detail: { time: this.time } }));
+
             this.#timePickerInput.value = `${this.hour}:${this.minute}:${this.second}`;
+            this.time = `${this.hour}:${this.minute}:${this.second}`;
 
             const top = li.getBoundingClientRect().height * index;
             timeItemWrap.scrollTo({
@@ -196,25 +271,44 @@ export class EaTimePicker extends Base {
     }
 
     #initTimerPickerTimeItem() {
-        for (let i = 0; i < 24; i++) {
-            const li = createElement('li', 'ea-time-picker_dropdown-item');
-            li.innerText = this.#handleLessThanTen(i);
-            this.#timePickerHourWrap.appendChild(li);
+        const [startHour, startMinute, startSecond] = this.limitRangeStart.split(':');
+        const [endHour, endMinute, endSecond] = this.limitRangeEnd.split(':');
 
-            this.#handleTimeItemClickEvent(li, i, this.#timePickerHourWrap, 'hour');
+        const todayDate = new Date();
+        const startDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), startHour, startMinute, startSecond);
+        const endDate = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), endHour, endMinute, endSecond);
+        if (startDate > endDate) throw new Error('limit-range-start must be less than limit-range-end');
+
+        const initTimeItem = (startTime, endTime, wrap, type) => {
+            startTime = Number(startTime);
+            endTime = Number(endTime);
+            let start = 0;
+            let end = 0;
+
+            switch (type) {
+                case 'hour':
+                    start = 0;
+                    end = 23;
+                    break;
+                default:
+                    start = 0;
+                    end = 59;
+                    if (!String(startTime).localeCompare(endTime) && (startHour !== endHour)) endTime = endTime === 0 ? 59 : endTime;
+            }
+
+            for (let i = start; i <= end; i++) {
+                const li = createElement('li', 'ea-time-picker_dropdown-item');
+                li.innerText = this.#handleLessThanTen(i);
+                wrap.appendChild(li);
+
+                if (i >= startTime && i <= endTime) this.#handleTimeItemClickEvent(li, i, wrap, type);
+                else li.classList.add('is-disabled');
+            }
         }
 
-        for (let i = 0; i <= 59; i++) {
-            const minLi = createElement('li', 'ea-time-picker_dropdown-item');
-            const secLi = createElement('li', 'ea-time-picker_dropdown-item');
-            minLi.innerText = this.#handleLessThanTen(i);
-            secLi.innerText = this.#handleLessThanTen(i);
-            this.#timePickerMinuteWrap.appendChild(minLi);
-            this.#timePickerSecondWrap.appendChild(secLi);
-
-            this.#handleTimeItemClickEvent(minLi, i, this.#timePickerMinuteWrap, 'minute');
-            this.#handleTimeItemClickEvent(secLi, i, this.#timePickerSecondWrap, 'second');
-        }
+        initTimeItem(startHour, endHour, this.#timePickerHourWrap, 'hour');
+        initTimeItem(startMinute, endMinute, this.#timePickerMinuteWrap, 'minute');
+        initTimeItem(startSecond, endSecond, this.#timePickerSecondWrap, 'second');
 
         this.#handleTimeWrapScroll(this.#timePickerHourWrap);
         this.#handleTimeWrapScroll(this.#timePickerMinuteWrap);
@@ -227,6 +321,7 @@ export class EaTimePicker extends Base {
         const dropdownWrapInitCallback = () => {
             this.time = this.time;
             timePickerIsInit = true;
+            this.#timePickerIsInit = true;
             this.#dropdownWrap.removeEventListener('transitionend', dropdownWrapInitCallback);
         }
         this.#timePickerInput.addEventListener('focus', () => {
@@ -245,8 +340,14 @@ export class EaTimePicker extends Base {
     }
 
     #init() {
-
         this.width = this.width;
+
+        this.disabled = this.disabled;
+
+        this.align = this.align;
+
+        this.limitRangeStart = this.limitRangeStart;
+        this.limitRangeEnd = this.limitRangeEnd;
 
         this.#initElementsStyle();
         this.#initTimerPickerTimeItem();

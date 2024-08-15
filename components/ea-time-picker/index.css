@@ -18,6 +18,7 @@
   box-sizing: border-box;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 .ea-time-picker_wrap .ea-time-picker_dropdown-wrap::before {
   content: "";
@@ -72,6 +73,9 @@
 }
 .ea-time-picker_wrap .ea-time-picker_dropdown-wrap .ea-time-picker_dropdown-inner-wrap .ea-time-picker_dropdown-inner .ea-time-picker_dropdown-item.is-active {
   color: #409eff;
+}
+.ea-time-picker_wrap .ea-time-picker_dropdown-wrap .ea-time-picker_dropdown-inner-wrap .ea-time-picker_dropdown-inner .ea-time-picker_dropdown-item.is-disabled {
+  color: #c0c4cc;
 }
 .ea-time-picker_wrap .ea-time-picker_dropdown-wrap .ea-time-picker_dropdown-button-group {
   text-align: right;

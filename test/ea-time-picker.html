@@ -17,9 +17,48 @@
 <body>
 
     <script type='module'>
-        import '../components/ea-time-picker/index.js'
+        import '../components/ea-time-picker/index.js';
+        import '../components/ea-button/index.js';
+
+        // ------- 1. 基础用法 -------
+        // #region
+        const basicTimePicker = document.querySelector('#basicTimePicker');
+        basicTimePicker.addEventListener('change', (e) => {
+            console.log(e.detail);
+        });
+        // #endregion
+        // ------- end -------
     </script>
-    <ea-time-picker time="2:1:11"></ea-time-picker>
+
+    <!-- -------- 1. 基础用法 --------  -->
+    <!-- #region  -->
+    <ea-time-picker id="basicTimePicker" time="2:1:11"></ea-time-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 2. 禁用 --------  -->
+    <!-- #region  -->
+    <ea-time-picker time="8:0:0" disabled></ea-time-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 3. 对齐方式 --------  -->
+    <!-- #region  -->
+    <ea-time-picker time="8:0:0" align="center"></ea-time-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 4. 时间限定 --------  -->
+    <!-- #region  -->
+    <ea-time-picker limit-range-start="3:0:0" limit-range-end="3:10:0"></ea-time-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 </body>
 
 </html>

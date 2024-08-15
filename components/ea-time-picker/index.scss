@@ -17,13 +17,14 @@
     bottom: -12px;
     left: 0;
     transform-origin: center top;
-    // transform: translateY(100%) scaleY(1);
     transform: translateY(100%) scaleY(0);
 
     box-sizing: border-box;
 
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    z-index: 2;
 
     &::before {
       content: "";
@@ -90,6 +91,10 @@
 
           &.is-active {
             color: #409eff;
+          }
+
+          &.is-disabled {
+            color: #c0c4cc;
           }
         }
       }
