@@ -87,6 +87,18 @@ export class EaTimePicker extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- name 属性 -------
+    // #region
+    get name() {
+        return this.getAttribute('name') || 'timePicker';
+    }
+
+    set name(value) {
+        this.setAttribute('name', value);
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- hour 小时 -------
     // #region
     get hour() {
@@ -340,6 +352,8 @@ export class EaTimePicker extends Base {
     }
 
     #init() {
+        this.name = this.name;
+
         this.width = this.width;
 
         this.disabled = this.disabled;
