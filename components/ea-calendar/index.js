@@ -4,8 +4,6 @@ import { createElement, createSlotElement } from '../../utils/createElement.js';
 
 import "../ea-button-group/index.js";
 import "../ea-button/index.js";
-import "../ea-descriptions/index.js";
-import "../ea-descriptions-item/index.js";
 
 const stylesheet = `
 .ea-calendar_wrap {
@@ -66,6 +64,13 @@ const stylesheet = `
   border-left: 1px solid #ebeef5;
   border-top: 1px solid #ebeef5;
 }
+.ea-calendar_wrap.small .ea-calendar_calendar-wrap .ea-calendar_table td span {
+  height: 50px;
+  padding: 4px;
+}
+.ea-calendar_wrap.small .ea-calendar-header_wrap {
+  padding-bottom: 0.25rem;
+}
 `;
 
 /**
@@ -121,8 +126,9 @@ const createThead = (weekArr = ["一", "二", "三", "四", "五", "六", "日"]
 }
 
 export class EaCalendar extends Base {
-    #wrap;
+    #container;
 
+    #headerDateWrap;
     #headerDateContent;
     #headerChangerWrap;
 
@@ -137,36 +143,39 @@ export class EaCalendar extends Base {
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
-        const headerDateContent = createElement('span', 'ea-calendar-header_content');
+        shadowRoot.innerHTML = `
+            <div class='ea-calendar_wrap' part='container'>
+                <div class='ea-calendar-header_wrap' part='header-wrap'>
+                    <span class='ea-calendar-header_content' part='header-content'></span>
+                    <ea-button-group class='ea-calendar-header_changer' part='header-changer'>
+                        <ea-button class='ea-calendar-header_sg-changer ea-calendar-header_changer-lastMonth' part='header-changer-lastMonth' size="small">上个月</ea-button>
+                        <ea-button class='ea-calendar-header_sg-changer ea-calendar-header_changer-today' part='header-changer-today' size="small">今天</ea-button>
+                        <ea-button class='ea-calendar-header_sg-changer ea-calendar-header_changer-nextMonth' part='header-changer-nextMonth' size="small">下个月</ea-button>
+                    </ea-button-group>
+                </div>
+                <div class='ea-calendar_calendar-wrap' part='calendar-wrap'>
+                    <table class='ea-calendar_table' part='table'>
+                        <thead class='ea-calendar_table-head' part='table-head'></thead>
+                        <tbody class='ea-calendar_table-body' part='table-body'></tbody>
+                    </table>
+                </div>
+            </div>
+        `;
 
-        const headerChanger_lastMonth = createChangerElement("上个月", "lastMonth");
-        const headerChanger_today = createChangerElement("今天", "today");
-        const headerChanger_nextMonth = createChangerElement("下个月", "nextMonth");
-        const headerChangerWrap = createElement('ea-button-group', 'ea-calendar-header_changer', [headerChanger_lastMonth, headerChanger_today, headerChanger_nextMonth]);
+        this.#container = this.shadowRoot.querySelector('.ea-calendar_wrap');
 
-        const calendarThead = createElement('thead', 'ea-calendar_table-head');
-        const calendarTbody = createElement('tbody', 'ea-calendar_table-body');
-        const calendarTable = createElement('table', 'ea-calendar_table', [calendarThead, calendarTbody]);
-        const calendarWrap = createElement('div', 'ea-calendar_calendar-wrap', [calendarTable]);
+        this.#headerDateContent = shadowRoot.querySelector('.ea-calendar-header_content');
+        this.#headerDateWrap = shadowRoot.querySelector('.ea-calendar-header_wrap');
 
-        const headerWrap = createElement('div', 'ea-calendar-header_wrap', [headerDateContent, headerChangerWrap]);
+        this.#headerChangerWrap = shadowRoot.querySelector('.ea-calendar-header_changer');
+        this.#lastMonthBtn = shadowRoot.querySelector('.ea-calendar-header_changer-lastMonth');
+        this.#todayBtn = shadowRoot.querySelector('.ea-calendar-header_changer-today');
+        this.#nextMonthBtn = shadowRoot.querySelector('.ea-calendar-header_changer-nextMonth');
 
-        const wrap = createElement('div', 'ea-calendar_wrap', [headerWrap, calendarWrap]);
-
-        this.#wrap = wrap;
-
-        this.#headerDateContent = headerDateContent;
-
-        this.#headerChangerWrap = headerChangerWrap;
-        this.#lastMonthBtn = headerChanger_lastMonth;
-        this.#todayBtn = headerChanger_today;
-        this.#nextMonthBtn = headerChanger_nextMonth;
-
-        this.#tableHead = calendarThead;
-        this.#tableContent = calendarTbody;
+        this.#tableHead = shadowRoot.querySelector('.ea-calendar_table-head');
+        this.#tableContent = shadowRoot.querySelector('.ea-calendar_table-body');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     getToday() {
@@ -210,6 +219,34 @@ export class EaCalendar extends Base {
         this.#headerDateContent.innerHTML = date = isNaN(new Date(date)) ? this.getToday() : this.getUserToday(date);
 
         this.#handleDateChange(this.#tableContent, date, this.weekStart);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- size 用户传入尺寸 -------
+    // #region
+    get size() {
+        const attr = this.getAttribute('size');
+        return ["mini"].includes(attr) ? attr : "medium";
+    }
+
+    set size(size) {
+        this.setAttribute('size', size);
+
+        this.#container.classList.add(size);
+
+        if (size === "mini") {
+            const prevIcon = createElement("span", "prev-btn");
+            prevIcon.innerText = "<";
+            const nextIcon = createElement("span", "next-btn");
+            nextIcon.innerText = ">";
+
+            this.#lastMonthBtn = prevIcon;
+            this.#nextMonthBtn = nextIcon;
+
+            this.#headerDateWrap.insertBefore(prevIcon, this.#headerDateWrap.firstChild);
+            this.#headerDateWrap.appendChild(nextIcon);
+        }
     }
     // #endregion
     // ------- end -------
@@ -395,6 +432,8 @@ export class EaCalendar extends Base {
         this.weekStart = this.weekStart;
 
         this.date = this.date;
+
+        this.size = this.size;
 
         this.#initDateChangersEvent();
     }
