@@ -1,6 +1,3 @@
-@import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
-
 .ea-calendar_wrap {
   padding: 12px 20px 35px;
 
@@ -78,6 +75,29 @@
           &:first-child {
             border-left: 1px solid #ebeef5;
             border-top: 1px solid #ebeef5;
+          }
+        }
+      }
+    }
+  }
+
+  &.mini {
+    font-size: 10px;
+    text-align: center;
+
+    .ea-calendar-header_wrap {
+      justify-content: space-around;
+      .ea-calendar-header_changer {
+        display: none;
+      }
+    }
+
+    .ea-calendar_calendar-wrap {
+      .ea-calendar_table {
+        td {
+          span {
+            height: 20px;
+            padding: 4px;
           }
         }
       }

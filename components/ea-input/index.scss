@@ -1,5 +1,4 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
 :host {
   --border-top-left-radius: 0;
@@ -62,8 +61,6 @@
     line-height: 0.8;
   }
 
-  /* ------- 特定的属性的图标(clearable, password) ------- */
-  /* #region  */
   i[class="icon-cancel-circled2"],
   i[class="icon-eye"],
   i[class="icon-eye-off"] {
@@ -81,21 +78,13 @@
       padding-right: 1.75rem;
     }
   }
-  /* #endregion */
-  /* ------- end  ------- */
 
-  /* ------- 标识图标在输入框前还是后 ------- */
-  /* #region  */
   &.prefix,
   &.suffix {
     i {
       position: absolute;
       top: 50%;
       color: $color-disabled-text;
-    }
-
-    .ea-input_inner {
-      width: calc(100% - 1.75rem);
     }
   }
 
@@ -123,11 +112,6 @@
     }
   }
 
-  /* #endregion */
-  /* ------- end  ------- */
-
-  /* ------- 输入框前后的dom ------- */
-  /* #region  */
   &.prepend-slot,
   &.append-slot {
     display: flex;
@@ -146,15 +130,6 @@
       border-top-left-radius: var(--border-top-left-radius);
       border-bottom-left-radius: var(--border-bottom-left-radius);
     }
-
-    // ::slotted(div:last-child) {
-    //   border: 1px solid $color-border;
-    //   border-left: 0;
-    //   border-radius: 0;
-
-    //   border-top-right-radius: 3px;
-    //   border-bottom-right-radius: 3px;
-    // }
   }
 
   &.prepend-slot {
@@ -170,10 +145,7 @@
       border-bottom-right-radius: 0;
     }
   }
-  /* #endregion */
-  /* ------- end  ------- */
 
-  // 输入建议
   .ea-input_suggestion-wrap {
     @include clear-ul-default-style;
 
