@@ -1,5 +1,5 @@
 // @ts-nocheck
-import setStyle from "../../utils/setStyle";
+import setStyle from "../../utils/setStyle.js";
 
 const stylesheet = `
 :host {
@@ -32,14 +32,6 @@ const stylesheet = `
   border: var(--border-size) solid #dcdfe6;
   color: #606266;
   background-color: transparent;
-  /* ------- 按钮样式 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 按钮大小 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
 }
 .__ea-button.normal.disabled {
   cursor: not-allowed !important;
@@ -91,14 +83,6 @@ const stylesheet = `
   border: var(--border-size) solid #409eff;
   color: #fff;
   background-color: #409eff;
-  /* ------- 按钮样式 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 按钮大小 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
 }
 .__ea-button.primary.disabled {
   cursor: not-allowed !important;
@@ -141,14 +125,6 @@ const stylesheet = `
   border: var(--border-size) solid #67c23a;
   color: #fff;
   background-color: #67c23a;
-  /* ------- 按钮样式 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 按钮大小 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
 }
 .__ea-button.success.disabled {
   cursor: not-allowed !important;
@@ -191,14 +167,6 @@ const stylesheet = `
   border: var(--border-size) solid #909399;
   color: #fff;
   background-color: #909399;
-  /* ------- 按钮样式 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 按钮大小 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
 }
 .__ea-button.info.disabled {
   cursor: not-allowed !important;
@@ -241,14 +209,6 @@ const stylesheet = `
   border: var(--border-size) solid #e6a23c;
   color: #fff;
   background-color: #e6a23c;
-  /* ------- 按钮样式 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 按钮大小 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
 }
 .__ea-button.warning.disabled {
   cursor: not-allowed !important;
@@ -291,14 +251,6 @@ const stylesheet = `
   border: var(--border-size) solid #f56c6c;
   color: #fff;
   background-color: #f56c6c;
-  /* ------- 按钮样式 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 按钮大小 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
 }
 .__ea-button.danger.disabled {
   cursor: not-allowed !important;
@@ -342,14 +294,6 @@ const stylesheet = `
   border: var(--border-size) solid transparent;
   color: #409eff;
   background-color: transparent;
-  /* ------- 按钮样式 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 按钮大小 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
 }
 .__ea-button.text.disabled {
   cursor: not-allowed !important;
@@ -417,7 +361,7 @@ const stylesheet = `
 }
 `;
 
-export  class EaButtonGroup extends HTMLElement {
+export class EaButtonGroup extends HTMLElement {
 
   constructor() {
     super();
