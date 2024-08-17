@@ -64,12 +64,19 @@ const stylesheet = `
   border-left: 1px solid #ebeef5;
   border-top: 1px solid #ebeef5;
 }
-.ea-calendar_wrap.small .ea-calendar_calendar-wrap .ea-calendar_table td span {
-  height: 50px;
-  padding: 4px;
+.ea-calendar_wrap.mini {
+  font-size: 10px;
+  text-align: center;
 }
-.ea-calendar_wrap.small .ea-calendar-header_wrap {
-  padding-bottom: 0.25rem;
+.ea-calendar_wrap.mini .ea-calendar-header_wrap {
+  justify-content: space-around;
+}
+.ea-calendar_wrap.mini .ea-calendar-header_wrap .ea-calendar-header_changer {
+  display: none;
+}
+.ea-calendar_wrap.mini .ea-calendar_calendar-wrap .ea-calendar_table td span {
+  height: 20px;
+  padding: 4px;
 }
 `;
 

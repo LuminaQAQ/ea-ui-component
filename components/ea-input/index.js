@@ -3,8 +3,6 @@ import Base from "../Base.js";
 import "../ea-icon/index.js"
 
 const stylesheet = `
-@charset "UTF-8";
-
 :host {
   --border-top-left-radius: 0;
   --border-top-right-radius: 0;
@@ -17,18 +15,6 @@ const stylesheet = `
 .ea-input_wrap {
   position: relative;
   width: 100%;
-  /* ------- 特定的属性的图标(clearable, password) ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 标识图标在输入框前还是后 ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
-  /* ------- 输入框前后的dom ------- */
-  /* #region  */
-  /* #endregion */
-  /* ------- end  ------- */
 }
 .ea-input_wrap .ea-input_inner {
   box-sizing: border-box;
@@ -81,9 +67,6 @@ const stylesheet = `
   position: absolute;
   top: 50%;
   color: #c0c4cc;
-}
-.ea-input_wrap.prefix .ea-input_inner, .ea-input_wrap.suffix .ea-input_inner {
-  width: calc(100% - 1.75rem);
 }
 .ea-input_wrap.prefix i {
   left: 2.5%;

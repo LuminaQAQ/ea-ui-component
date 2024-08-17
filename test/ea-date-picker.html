@@ -20,7 +20,27 @@
         import '../components/ea-date-picker/index.js'
     </script>
 
-    <ea-date-picker></ea-date-picker>
+    <!-- -------- 1. 任意时间点  --------  -->
+    <!-- #region  -->
+    <ea-date-picker placeholder="选择日期"></ea-date-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 2. 禁用  --------  -->
+    <!-- #region  -->
+    <ea-date-picker placeholder="选择日期" value="2024-1-1" disabled></ea-date-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 3. 对齐方式  --------  -->
+    <!-- #region  -->
+    <ea-date-picker placeholder="选择日期" align="center"></ea-date-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 </body>
 
 </html>
