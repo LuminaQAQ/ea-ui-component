@@ -62,31 +62,29 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
 
 - 表单组件
 
-  - [ ] Select 选择框
-  - [ ] Cascader 级联选择框
-  - [ ] TimePicker 时间选择器
-  - [ ] DatePicker 日期选择器
-  - [ ] DateTimePicker 日期时间选择器
+  - [x] Select 选择框
+  - [x] TimePicker 时间选择器
+  - [x] DatePicker 日期选择器
   - [ ] Upload 上传
   - [ ] Transfer 穿梭框
   - [ ] Form 表单
 
 - Data
 
-  - [ ] Table 表格
+  - [x] Table 表格
   - [ ] Tree 树形控件
   - [ ] Statistic 统计数字
 
 - Navigation
 
-  - [ ] NavMenu 导航菜单
-  - [ ] Tabs 标签页
-  - [ ] Breadcrumb 面包屑
-  - [ ] Tabs 标签页
-  - [ ] PageHeader 页头
-  - [ ] Dropdown 下拉菜单
-  - [ ] Steps 步骤条
-  - [ ] Drawer 抽屉
+  - [x] NavMenu 导航菜单
+  - [x] Tabs 标签页
+  - [x] Breadcrumb 面包屑
+  - [x] Tabs 标签页
+  - [x] PageHeader 页头
+  - [x] Dropdown 下拉菜单
+  - [x] Steps 步骤条
+  - [x] Drawer 抽屉
 
 - Others
 
