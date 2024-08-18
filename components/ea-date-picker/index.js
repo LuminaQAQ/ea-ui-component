@@ -164,6 +164,7 @@ export class EaDatePicker extends Base {
 
         this.#calendarElement.addEventListener('select', (e) => {
             const { year, month, date, day } = e.detail;
+            this.value = `${year}-${month}-${date}`;
             this.#calendarInput.value = `${year}-${month}-${date}`;
 
             this.dispatchEvent(new CustomEvent('change', {

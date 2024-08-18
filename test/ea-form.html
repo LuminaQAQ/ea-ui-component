@@ -20,7 +20,9 @@
         import '../components/ea-form/index.js'
 
         import '../components/ea-time-picker/index.js'
+        import '../components/ea-date-picker/index.js'
         import '../components/ea-input/index.js'
+        import '../components/ea-select/index.js'
 
         import '../components/ea-button/index.js'
 
@@ -36,13 +38,14 @@
 
     <ea-form>
         <ea-form-item label='姓名'>
-            <ea-input name="姓名"></ea-input>
+            <ea-input name="name" value="洛霖"></ea-input>
         </ea-form-item>
-        <ea-form-item label='起始时间'>
-            <ea-time-picker name="起始时间"></ea-time-picker>
+        <ea-form-item label='到达日期'>
+            <ea-date-picker name="arrivalDate" value="2024-10-1"></ea-date-picker>
         </ea-form-item>
-        <ea-form-item label='时间'>
-            <ea-time-picker name="终止时间"></ea-time-picker>
+        <ea-form-item label='到达时间'>
+            <ea-time-picker name="arrivalTime" time="17:0:0" limit-range-start="9:0:0" limit-range-end="17:00:0">
+            </ea-time-picker>
         </ea-form-item>
         <ea-form-item>
             <ea-button type="primary">提交</ea-button>

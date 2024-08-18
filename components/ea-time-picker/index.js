@@ -11,14 +11,6 @@ const stylesheet = `
 .ea-time-picker_wrap {
   position: relative;
 }
-.ea-time-picker_wrap .ea-time-picker_icon {
-  position: absolute;
-  top: 50%;
-  left: 0.5rem;
-  transform: translateY(-50%);
-  z-index: 1;
-  color: #c0c4cc;
-}
 .ea-time-picker_wrap .ea-time-picker_dropdown-wrap {
   position: absolute;
   bottom: -12px;
@@ -118,8 +110,7 @@ export class EaTimePicker extends Base {
 
         shadowRoot.innerHTML = `
             <div class='ea-time-picker_wrap' part='container'>
-                <ea-icon class="ea-time-picker_icon" icon="icon-clock"></ea-icon>
-                <ea-input part='input' autocomplete="off" readonly></ea-input>
+                <ea-input part='input' autocomplete="off" readonly prefix-icon="icon-clock"></ea-input>
                 <div class="ea-time-picker_dropdown-wrap" part='dropdown-wrap'>
                     <div class="ea-time-picker_dropdown-inner-wrap">
                         <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-hour" part='dropdown-inner'>
@@ -315,8 +306,6 @@ export class EaTimePicker extends Base {
     }
 
     #initElementsStyle() {
-        const input = this.#timePickerInput.shadowRoot.querySelector('.ea-input_inner');
-        input.style.paddingLeft = "2.5rem";
         this.#dropdownWrap.style.width = this.#timePickerInput.getBoundingClientRect().width + "px";
 
         timeout(() => {
