@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-form/index.js'
+
+        import '../components/ea-time-picker/index.js'
+        import '../components/ea-input/index.js'
+
+        import '../components/ea-button/index.js'
+
+        const form = document.querySelector('ea-form');
+        const btn = document.querySelector('ea-button');
+
+        btn.addEventListener('click', () => {
+            const { data } = form;
+
+            console.log(data);
+        })
+    </script>
+
+    <ea-form>
+        <ea-form-item label='姓名'>
+            <ea-input name="姓名"></ea-input>
+        </ea-form-item>
+        <ea-form-item label='起始时间'>
+            <ea-time-picker name="起始时间"></ea-time-picker>
+        </ea-form-item>
+        <ea-form-item label='时间'>
+            <ea-time-picker name="终止时间"></ea-time-picker>
+        </ea-form-item>
+        <ea-form-item>
+            <ea-button type="primary">提交</ea-button>
+        </ea-form-item>
+    </ea-form>
+</body>
+
+</html>
