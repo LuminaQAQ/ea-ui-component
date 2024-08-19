@@ -107,6 +107,19 @@ export class EaFromItem extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- isRequired 是否必填 -------
+    // #region
+    get isRequired() {
+        return this.getAttrBoolean('is-required');
+    }
+
+    set isRequired(value) {
+        this.setAttribute('is-required', value);
+
+        this.#container.classList.toggle('is-required-star', value);
+    }
+    // #endregion
+    // ------- end -------
 
     validateEvent() {
         const formItem = this.querySelector('[data-ea-component]');
@@ -137,7 +150,6 @@ export class EaFromItem extends Base {
         this.trigger = this.trigger;
 
         timeout(() => {
-            this.required = this.required;
             this.#container.classList.add('with-transition');
         }, 50);
     }

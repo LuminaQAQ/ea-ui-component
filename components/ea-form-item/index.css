@@ -28,6 +28,11 @@
   color: #f56c6c;
   white-space: nowrap;
 }
+.ea-form-item_wrap.is-required-star .ea-form-item_label-wrap::before {
+  content: "*";
+  color: #f56c6c;
+  margin-right: 4px;
+}
 .ea-form-item_wrap.is-required .ea-form-item_content-wrap .ea-form-item_invalid-wrap {
   transform: translateY(100%) scaleY(1);
 }

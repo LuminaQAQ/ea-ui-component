@@ -62,6 +62,7 @@ export class EaForm extends Base {
         valueItems.forEach((input, index) => {
             formItems[index].rule = value[input.name];
             formItems[index].validateEvent();
+            formItems[index].isRequired = value[input.name]?.required ? true : false;
         });
     }
     // #endregion
@@ -74,6 +75,8 @@ export class EaForm extends Base {
         let isValid = [];
 
         valueItems.forEach((input, index) => {
+            if (!this.#rules[input.name]) return;
+
             if (!Validator.required(input.value)) {
                 formItems[index].isInvalid = true;
                 input.isInvalid = true;

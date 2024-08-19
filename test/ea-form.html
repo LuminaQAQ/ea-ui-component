@@ -27,6 +27,8 @@
         import '../components/ea-select/index.js'
         import '../components/ea-radio/index.js'
         import '../components/ea-radio-group/index.js'
+        import '../components/ea-checkbox/index.js'
+        import '../components/ea-checkbox-group/index.js'
 
         import '../components/ea-button/index.js'
 
@@ -43,7 +45,9 @@
 
         btn.addEventListener('click', () => {
             const isInvalid = form.validate();
-            if (!isInvalid) {
+            if (isInvalid.length > 0) {
+                console.log(isInvalid);
+            } else {
                 console.log(form.data);
             }
         })
@@ -59,9 +63,17 @@
         <ea-form-item label='性别'>
             <div slot="invalid-text">请选择性别</div>
             <ea-radio-group name="gender">
-                <ea-radio value="男" checked>男</ea-radio>
+                <ea-radio value="男">男</ea-radio>
                 <ea-radio value="女">女</ea-radio>
             </ea-radio-group>
+        </ea-form-item>
+        <ea-form-item label='爱好'>
+            <div slot="invalid-text">爱好不能为空</div>
+            <ea-checkbox-group name="hobby">
+                <ea-checkbox value="吃饭">吃饭</ea-checkbox>
+                <ea-checkbox value="睡觉">睡觉</ea-checkbox>
+                <ea-checkbox value="编程">编程</ea-checkbox>
+            </ea-checkbox-group>
         </ea-form-item>
         <ea-form-item label='校区'>
             <div slot="invalid-text">校区不能为空</div>

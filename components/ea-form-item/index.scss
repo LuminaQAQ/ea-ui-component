@@ -33,6 +33,16 @@
     }
   }
 
+  &.is-required-star {
+    .ea-form-item_label-wrap {
+      &::before {
+        content: "*";
+        color: #f56c6c;
+        margin-right: 4px;
+      }
+    }
+  }
+
   &.is-required {
     .ea-form-item_content-wrap {
       .ea-form-item_invalid-wrap {
