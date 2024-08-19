@@ -26,6 +26,7 @@
   transform: translateY(100%) scaleY(0);
   font-size: 12px;
   color: #f56c6c;
+  white-space: nowrap;
 }
 .ea-form-item_wrap.is-required .ea-form-item_content-wrap .ea-form-item_invalid-wrap {
   transform: translateY(100%) scaleY(1);

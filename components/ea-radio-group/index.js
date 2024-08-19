@@ -44,9 +44,32 @@ export class EaRadioGroup extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- value 值 -------
+    // #region
+    get value() {
+        return this.getAttribute('value') || '';
+    }
+
+    set value(val) {
+        this.setAttribute("value", val);
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         // name 唯一键值
         this.name = this.name;
+
+        const radios = this.querySelectorAll('ea-radio');
+        radios.forEach(radio => {
+            if (radio.checked) this.value = radio.value;
+
+            radio.addEventListener('change', e => {
+                this.value = radio.value;
+            });
+        });
+
+        this.setAttribute("data-ea-component", true);
     }
 
     connectedCallback() {

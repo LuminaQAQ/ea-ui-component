@@ -25,6 +25,8 @@
         import '../components/ea-date-picker/index.js'
         import '../components/ea-input/index.js'
         import '../components/ea-select/index.js'
+        import '../components/ea-radio/index.js'
+        import '../components/ea-radio-group/index.js'
 
         import '../components/ea-button/index.js'
 
@@ -34,19 +36,61 @@
         form.rules = {
             name: { required: true, min: 2, max: 4 },
             area: { required: true },
+            gender: { required: true },
             arrivalDate: { required: true },
             arrivalTime: { required: true },
         };
 
         btn.addEventListener('click', () => {
-            const { data } = form;
-
-            console.log(data);
+            const isInvalid = form.validate();
+            if (!isInvalid) {
+                console.log(form.data);
+            }
         })
     </script>
 
+    <!-- -------- 1. 典型表单 --------  -->
+    <!-- #region  -->
     <ea-form>
         <ea-form-item label='姓名'>
+            <div slot="invalid-text">请正确填写姓名, 长度为 2-4 个字符</div>
+            <ea-input name="name" placeholder="姓名"></ea-input>
+        </ea-form-item>
+        <ea-form-item label='性别'>
+            <div slot="invalid-text">请选择性别</div>
+            <ea-radio-group name="gender">
+                <ea-radio value="男" checked>男</ea-radio>
+                <ea-radio value="女">女</ea-radio>
+            </ea-radio-group>
+        </ea-form-item>
+        <ea-form-item label='校区'>
+            <div slot="invalid-text">校区不能为空</div>
+            <ea-select name="area" placeholder="请选择校区">
+                <ea-option value="A 校区">A 校区</ea-option>
+                <ea-option value="B 校区">B 校区</ea-option>
+            </ea-select>
+        </ea-form-item>
+        <ea-form-item label='到达日期'>
+            <div slot="invalid-text">到达日期不能为空</div>
+            <ea-date-picker name="arrivalDate" value="2024-10-1"></ea-date-picker>
+        </ea-form-item>
+        <ea-form-item label='到达时间'>
+            <div slot="invalid-text">到达时间不能为空</div>
+            <ea-time-picker name="arrivalTime" time="17:0:0" limit-range-start="9:0:0" limit-range-end="17:00:0">
+            </ea-time-picker>
+        </ea-form-item>
+        <ea-form-item>
+            <ea-button type="primary">提交</ea-button>
+        </ea-form-item>
+    </ea-form>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <ea-form>
+        <ea-form-item label='姓名'>
+            <div slot="invalid-text">请正确填写姓名, 长度为 2-4 个字符</div>
             <ea-input name="name" placeholder="姓名"></ea-input>
         </ea-form-item>
         <ea-form-item label='校区'>

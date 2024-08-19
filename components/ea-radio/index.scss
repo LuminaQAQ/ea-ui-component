@@ -1,0 +1,126 @@
+@import "../ea-ui-base-style.scss";
+
+:host(ea-radio) {
+  --margin-right: 0.75rem;
+
+  --text-color: #606266;
+
+  --radio-show-type: inline-block;
+
+  --button-size: 1rem;
+
+  --button-margin: 0.5rem;
+}
+
+.ea-radio_wrap {
+  // --checke-and-disabled-color: $color-disabled-text;
+
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+
+  .__ea-radio-input_wrap {
+    width: var(--button-size);
+    height: var(--button-size);
+    line-height: 1;
+    margin-right: var(--button-margin);
+
+    input {
+      display: none;
+    }
+
+    .__ea-radio-input_inner {
+      position: relative;
+      // display: inline-block;
+      display: var(--radio-show-type);
+
+      width: 1rem;
+      height: 1rem;
+      line-height: 1;
+
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 1px solid $color-default-text;
+
+      &::before {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        content: "";
+        width: 0.35rem;
+        height: 0.35rem;
+        border-radius: 50%;
+        background-color: transparent;
+
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+
+      &:hover {
+        border-color: $color-primary-bgc;
+      }
+    }
+    .__ea-radio-input_input {
+    }
+  }
+
+  .__ea-radio-label_desc {
+    color: var(--text-color);
+  }
+
+  &.checked {
+    .__ea-radio-input_wrap {
+      .__ea-radio-input_inner {
+        border-color: $color-primary-bgc;
+        background-color: $color-primary-bgc;
+
+        &::before {
+          background-color: white;
+        }
+      }
+    }
+
+    .__ea-radio-label_desc {
+      color: $color-primary-bgc;
+    }
+  }
+
+  &.disabled {
+    .__ea-radio-input_wrap {
+      .__ea-radio-input_inner {
+        border-color: $color-disabled-btn-bgc;
+        background-color: $color-disabled-btn-bgc;
+
+        &::before {
+          background-color: transparent;
+        }
+      }
+    }
+
+    .__ea-radio-label_desc {
+      color: $color-disabled-text;
+    }
+  }
+
+  &.disabled[checked="true"] {
+    .__ea-radio-input_wrap {
+      .__ea-radio-input_inner {
+        &::before {
+          background-color: $color-disabled-text;
+        }
+      }
+    }
+  }
+
+  &.border {
+    border: 1px solid #ccc;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+  }
+
+  &.border[checked="true"] {
+    border: 1px solid $color-primary-bgc;
+  }
+}

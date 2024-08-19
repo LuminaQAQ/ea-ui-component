@@ -77,6 +77,20 @@ export class EaFromItem extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- is-invalid 是否校验失败 -------
+    // #region
+    get isInvalid() {
+        return this.getAttribute('is-invalid') === 'true';
+    }
+
+    set isInvalid(value) {
+        this.setAttribute('is-invalid', value);
+
+        this.#container.classList.toggle('is-required', value);
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- rule 校验规则 -------
     // #region
     get rule() {

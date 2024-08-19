@@ -692,7 +692,6 @@ export class EaInput extends Base {
     set isInvalid(val) {
         this.setAttribute("is-invalid", val);
         this.#input.classList.toggle('invalid', val);
-        console.log(this.name, this.parentNode, val);
     }
     // #endregion
     // ------- end -------

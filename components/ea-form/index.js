@@ -68,7 +68,22 @@ export class EaForm extends Base {
     // ------- end -------
 
     validate() {
+        const formItems = this.querySelectorAll('ea-form-item');
+        const valueItems = this.querySelectorAll('[data-ea-component]');
 
+        let isValid = [];
+
+        valueItems.forEach((input, index) => {
+            if (!Validator.required(input.value)) {
+                formItems[index].isInvalid = true;
+                input.isInvalid = true;
+                isValid.push(input.name);
+            } else {
+                formItems[index].isInvalid = false;
+            }
+        });
+
+        return isValid;
     }
 
     #init() {
