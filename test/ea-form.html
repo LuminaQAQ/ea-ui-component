@@ -29,6 +29,8 @@
         import '../components/ea-radio-group/index.js'
         import '../components/ea-checkbox/index.js'
         import '../components/ea-checkbox-group/index.js'
+        import '../components/ea-switch/index.js'
+        import '../components/ea-textarea/index.js'
 
         import '../components/ea-button/index.js'
 
@@ -37,8 +39,9 @@
 
         form.rules = {
             name: { required: true, min: 2, max: 4 },
-            area: { required: true },
             gender: { required: true },
+            hobby: { required: true },
+            area: { required: true },
             arrivalDate: { required: true },
             arrivalTime: { required: true },
         };
@@ -58,26 +61,32 @@
     <ea-form>
         <ea-form-item label='姓名'>
             <div slot="invalid-text">请正确填写姓名, 长度为 2-4 个字符</div>
-            <ea-input name="name" placeholder="姓名"></ea-input>
+            <ea-input name="name" placeholder="姓名" value="洛霖"></ea-input>
         </ea-form-item>
         <ea-form-item label='性别'>
             <div slot="invalid-text">请选择性别</div>
-            <ea-radio-group name="gender">
+            <ea-radio-group name="gender" value="男">
                 <ea-radio value="男">男</ea-radio>
                 <ea-radio value="女">女</ea-radio>
             </ea-radio-group>
         </ea-form-item>
         <ea-form-item label='爱好'>
-            <div slot="invalid-text">爱好不能为空</div>
-            <ea-checkbox-group name="hobby">
+            <div slot="invalid-text">请至少选择一种爱好</div>
+            <ea-checkbox-group name="hobby" value="吃饭">
                 <ea-checkbox value="吃饭">吃饭</ea-checkbox>
                 <ea-checkbox value="睡觉">睡觉</ea-checkbox>
                 <ea-checkbox value="编程">编程</ea-checkbox>
             </ea-checkbox-group>
         </ea-form-item>
+        <ea-form-item label='宿舍'>
+            <div slot="invalid-text">校区不能为空</div>
+            <ea-switch name="dorm" inactive-color="#409eff" active-color="#13ce66" inactive-text="四人间"
+                active-text="六人间">
+            </ea-switch>
+        </ea-form-item>
         <ea-form-item label='校区'>
             <div slot="invalid-text">校区不能为空</div>
-            <ea-select name="area" placeholder="请选择校区">
+            <ea-select name="area" placeholder="请选择校区" selection="A 校区">
                 <ea-option value="A 校区">A 校区</ea-option>
                 <ea-option value="B 校区">B 校区</ea-option>
             </ea-select>
@@ -90,6 +99,10 @@
             <div slot="invalid-text">到达时间不能为空</div>
             <ea-time-picker name="arrivalTime" time="17:0:0" limit-range-start="9:0:0" limit-range-end="17:00:0">
             </ea-time-picker>
+        </ea-form-item>
+        <ea-form-item label='备注'>
+            <div slot="invalid-text">到达时间不能为空</div>
+            <ea-textarea name="remark" type="textarea" rows="2" placeholder="这不是空的"></ea-textarea>
         </ea-form-item>
         <ea-form-item>
             <ea-button type="primary">提交</ea-button>

@@ -135,10 +135,38 @@ export class EaSwitch extends Base {
         this.shadowRoot.appendChild(wrap);
     }
 
+    // ------- name 属性 -------
+    // #region
+    get name() {
+        return this.getAttribute('name') || '';
+    }
+
+    set name(value) {
+        this.setAttribute('name', value);
+        this.#input.name = value;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- value 属性 -------
+    // #region
+    get value() {
+        if (this.inactiveText && !this.checked) return this.inactiveText;
+        else if (this.activeText && this.checked) return this.activeText;
+        return this.checked;
+    }
+
+    set value(value) {
+        this.setAttribute('value', value);
+        this.#input.value = value;
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- inactive-text 关闭时选项 -------
     // #region
     get inactiveText() {
-        return this.getAttribute('inactive-text');
+        return this.getAttribute('inactive-text') || '';
     }
 
     set inactiveText(value) {
@@ -151,7 +179,7 @@ export class EaSwitch extends Base {
     // ------- active-text 开启时选项 -------
     // #region
     get activeText() {
-        return this.getAttribute('active-text');
+        return this.getAttribute('active-text') || '';
     }
 
     set activeText(value) {
@@ -204,7 +232,7 @@ export class EaSwitch extends Base {
     // ------- inactive-color 关闭时颜色 -------
     // #region
     get inactiveColor() {
-        return this.getAttribute('inactive-color');
+        return this.getAttribute('inactive-color') ||'';
     }
 
     set inactiveColor(value) {
@@ -243,6 +271,12 @@ export class EaSwitch extends Base {
 
     init() {
         const that = this;
+
+        this.setAttribute('data-ea-component', true);
+
+        this.name = this.name;
+
+        this.value = this.value
 
         // 设置勾选值
         this.checked = this.checked;
