@@ -69,6 +69,9 @@ export class EaRadioGroup extends Base {
             });
         });
 
+        const valueRadio = Array.from(radios).find(radio => radio.value === this.value);
+        if (valueRadio) valueRadio.checked = true;
+
         this.setAttribute("data-ea-component", true);
     }
 
