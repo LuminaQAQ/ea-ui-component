@@ -71,20 +71,27 @@ export class EaTextarea extends Base {
         this.shadowRoot.appendChild(wrap);
     }
 
+    // ------- name 属性 -------
+    // #region
+    get name() {
+        return this.getAttribute('name') || '';
+    }
+
+    set name(value) {
+        this.setAttribute('name', value);
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- value 输入框的值 -------
     // #region
     get value() {
-        if (!this.#mounted) {
-            this.#input.value = this.getAttribute("value") || '';
-        }
 
-        return this.getAttribute('value');
+        // return this.getAttribute('value') || '';
+        return this.#input.value;
     }
 
     set value(val) {
-        if (!val) return;
-
-        this.setAttribute("value", val);
         this.#input.value = val;
     }
     // #endregion
@@ -265,11 +272,16 @@ export class EaTextarea extends Base {
     init() {
         const that = this;
 
+        this.setAttribute('data-ea-component', true);
+
+        this.name = this.name;
+
         // 输入框提示
         this.placeholder = this.placeholder;
 
         // 输入框的值
         this.value = this.value;
+        this.#input.value = this.getAttribute("value") || '';
 
         // 禁用
         this.disabled = this.disabled;
