@@ -3,6 +3,7 @@ import Base from '../Base.js';
 import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 import { timeout } from '../../utils/timeout.js';
+import { Validator } from "../../utils/Validator.js";
 
 import "../ea-form-item/index.js"
 import '../ea-button/index.js'
@@ -13,6 +14,9 @@ const stylesheet = `
 
 export class EaForm extends Base {
     #container;
+
+    #rules;
+
     constructor() {
         super();
 
@@ -43,6 +47,29 @@ export class EaForm extends Base {
     }
     // #endregion
     // ------- end -------
+
+    // ------- rules 校验规则 -------
+    // #region
+    get rules() {
+        return this.#rules || {};
+    }
+
+    set rules(value) {
+        this.#rules = value;
+
+        const formItems = this.querySelectorAll('ea-form-item');
+        const valueItems = this.querySelectorAll('[data-ea-component]');
+        valueItems.forEach((input, index) => {
+            formItems[index].rule = value[input.name];
+            formItems[index].validateEvent();
+        });
+    }
+    // #endregion
+    // ------- end -------
+
+    validate() {
+
+    }
 
     #init() {
         const formItemsWrap = this.querySelectorAll('ea-form-item');

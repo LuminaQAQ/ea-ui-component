@@ -683,6 +683,20 @@ export class EaInput extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- is-invalid 错误 -------
+    // #region
+    get isInvalid() {
+        return this.getAttrBoolean("is-invalid");
+    }
+
+    set isInvalid(val) {
+        this.setAttribute("is-invalid", val);
+        this.#input.classList.toggle('invalid', val);
+        console.log(this.name, this.parentNode, val);
+    }
+    // #endregion
+    // ------- end -------
+
     // 图标dom初始化
     iconInit(className) {
         const clearIcon = document.createElement('i');

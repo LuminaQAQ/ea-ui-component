@@ -252,6 +252,19 @@ export class EaSelect extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- is-invalid 是否校验失败 -------
+    // #region
+    get isInvalid() {
+        return this.getAttrBoolean('is-invalid') || false;
+    }
+
+    set isInvalid(val) {
+        this.setAttribute('is-invalid', val);
+        this.#selectInput.isInvalid = val;
+    }
+    // #endregion
+    // ------- end -------
+
     #handleOptionChecked() {
         const options = this.querySelectorAll('ea-option');
 
