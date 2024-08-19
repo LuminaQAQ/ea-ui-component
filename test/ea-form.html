@@ -34,31 +34,71 @@
 
         import '../components/ea-button/index.js'
 
-        const form = document.querySelector('ea-form');
-        const btn = document.querySelector('ea-button');
+        // ------- 1. 基本表单 -------
+        // #region
+        const basicForm = {
+            form: document.querySelector('#basicForm'),
+            btn: document.querySelector('#basicFormSubmitBtn'),
 
-        form.rules = {
-            name: { required: true, min: 2, max: 4 },
-            gender: { required: true },
-            hobby: { required: true },
-            area: { required: true },
-            arrivalDate: { required: true },
-            arrivalTime: { required: true },
-        };
+            init() {
+                // this.form.rules = {
+                //     name: { required: true, min: 2, max: 4 },
+                //     gender: { required: true },
+                //     hobby: { required: true },
+                //     area: { required: true },
+                //     arrivalDate: { required: true },
+                //     arrivalTime: { required: true },
+                // };
 
-        btn.addEventListener('click', () => {
-            const isInvalid = form.validate();
-            if (isInvalid.length > 0) {
-                console.log(isInvalid);
-            } else {
-                console.log(form.data);
+                this.btn.addEventListener('click', () => {
+                    console.log(this.form.data);
+                    // const isInvalid = this.form.validate();
+                    // if (isInvalid.length > 0) {
+                    //     console.log(isInvalid);
+                    // } else {
+                    //     console.log(this.form.data);
+                    // }
+                })
             }
-        })
+        };
+        basicForm.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 2. 表单验证 -------
+        // #region
+        const validtorForm = {
+            form: document.querySelector('#validtorForm'),
+            btn: document.querySelector('#validtorFormSubmitBtn'),
+
+            init() {
+                this.form.rules = {
+                    name: { required: true, min: 2, max: 4 },
+                    gender: { required: true },
+                    hobby: { required: true },
+                    area: { required: true },
+                    arrivalDate: { required: true },
+                    arrivalTime: { required: true },
+                };
+
+                this.btn.addEventListener('click', () => {
+                    const isInvalid = this.form.validate();
+                    if (isInvalid.length > 0) {
+                        console.log(isInvalid);
+                    } else {
+                        console.log(this.form.data);
+                    }
+                })
+            }
+        };
+        validtorForm.init();
+        // #endregion
+        // ------- end -------
     </script>
 
-    <!-- -------- 1. 典型表单 --------  -->
+    <!-- -------- 1. 基本表单 --------  -->
     <!-- #region  -->
-    <ea-form>
+    <ea-form id="basicForm">
         <ea-form-item label='姓名'>
             <div slot="invalid-text">请正确填写姓名, 长度为 2-4 个字符</div>
             <ea-input name="name" placeholder="姓名" value="洛霖"></ea-input>
@@ -105,7 +145,7 @@
             <ea-textarea name="remark" type="textarea" rows="2" placeholder="这不是空的"></ea-textarea>
         </ea-form-item>
         <ea-form-item>
-            <ea-button type="primary">提交</ea-button>
+            <ea-button id="basicFormSubmitBtn" type="primary">提交</ea-button>
         </ea-form-item>
     </ea-form>
     <!-- #endregion  -->
@@ -113,10 +153,33 @@
 
     <hr>
 
-    <ea-form>
+    <!-- -------- 2. 表单验证 --------  -->
+    <!-- #region  -->
+    <ea-form id="validtorForm">
         <ea-form-item label='姓名'>
             <div slot="invalid-text">请正确填写姓名, 长度为 2-4 个字符</div>
             <ea-input name="name" placeholder="姓名"></ea-input>
+        </ea-form-item>
+        <ea-form-item label='性别'>
+            <div slot="invalid-text">请选择性别</div>
+            <ea-radio-group name="gender">
+                <ea-radio value="男">男</ea-radio>
+                <ea-radio value="女">女</ea-radio>
+            </ea-radio-group>
+        </ea-form-item>
+        <ea-form-item label='爱好'>
+            <div slot="invalid-text">请至少选择一种爱好</div>
+            <ea-checkbox-group name="hobby">
+                <ea-checkbox value="吃饭">吃饭</ea-checkbox>
+                <ea-checkbox value="睡觉">睡觉</ea-checkbox>
+                <ea-checkbox value="编程">编程</ea-checkbox>
+            </ea-checkbox-group>
+        </ea-form-item>
+        <ea-form-item label='宿舍'>
+            <div slot="invalid-text">校区不能为空</div>
+            <ea-switch name="dorm" inactive-color="#409eff" active-color="#13ce66" inactive-text="四人间"
+                active-text="六人间">
+            </ea-switch>
         </ea-form-item>
         <ea-form-item label='校区'>
             <div slot="invalid-text">校区不能为空</div>
@@ -127,17 +190,23 @@
         </ea-form-item>
         <ea-form-item label='到达日期'>
             <div slot="invalid-text">到达日期不能为空</div>
-            <ea-date-picker name="arrivalDate" value="2024-10-1"></ea-date-picker>
+            <ea-date-picker name="arrivalDate" placeholder="到达日期"></ea-date-picker>
         </ea-form-item>
         <ea-form-item label='到达时间'>
             <div slot="invalid-text">到达时间不能为空</div>
             <ea-time-picker name="arrivalTime" time="17:0:0" limit-range-start="9:0:0" limit-range-end="17:00:0">
             </ea-time-picker>
         </ea-form-item>
+        <ea-form-item label='备注'>
+            <div slot="invalid-text">到达时间不能为空</div>
+            <ea-textarea name="remark" type="textarea" rows="2" placeholder="这不是空的"></ea-textarea>
+        </ea-form-item>
         <ea-form-item>
-            <ea-button type="primary">提交</ea-button>
+            <ea-button id="validtorFormSubmitBtn" type="primary">提交</ea-button>
         </ea-form-item>
     </ea-form>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 </body>
 
 </html>
