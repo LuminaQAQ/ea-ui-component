@@ -86,8 +86,6 @@ export class EaTextarea extends Base {
     // ------- value 输入框的值 -------
     // #region
     get value() {
-
-        // return this.getAttribute('value') || '';
         return this.#input.value;
     }
 
