@@ -1,8 +1,9 @@
 // @ts-nocheck
-import setStyle from "../../utils/setStyle";
-import Base from "../Base";
+import Base from "../Base.js";
 
 const stylesheet = `
+@import url('/ea_ui_component/icon/index.css');
+
 .ea-checkbox-group {
   display: flex;
 }
@@ -48,22 +49,22 @@ export class EaCheckboxGroup extends Base {
     // ------- value 指定选中值 -------
     // #region
     get value() {
-        if (!this.getAttribute('value')) return;
-
-        return this.getAttribute('value');
+        return this.getAttribute('value') || '';
     }
 
     set value(val) {
-        if (!val) return;
+        this.setAttribute('value', val);
 
         try {
             const valArr = val.split(',').map(item => item.trimStart());
 
             valArr.map(item => {
-                const checkbox = document.querySelector(`ea-checkbox[name="${this.name}"][value="${item}"]`);
+                const checkbox = this.querySelector(`ea-checkbox[name="${this.name}"][value="${item}"]`);
                 checkbox.setAttribute('checked', 'true');
                 checkbox.checked = 'true';
             })
+
+            this.dispatchEvent(new CustomEvent('change', { detail: valArr }));
         } catch (error) {
 
         }
@@ -81,8 +82,7 @@ export class EaCheckboxGroup extends Base {
         const checkboxs = document.querySelectorAll(`ea-checkbox[name="${this.name}"]`);
 
         checkboxs.forEach(checkbox => {
-            checkbox.setAttribute('disabled', 'true');
-            checkbox.disabled = 'true';
+            checkbox.disabled = val;
         });
     }
     // #endregion
@@ -97,6 +97,21 @@ export class EaCheckboxGroup extends Base {
 
         // disabled 禁用
         this.disabled = this.disabled;
+
+        const checkboxes = this.querySelectorAll('ea-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', e => {
+                let valueArr = [];
+                Array.from(checkboxes).filter(item => {
+                    if (item.checked) return valueArr.push(item.value);
+                    return false;
+                })
+
+                this.value = valueArr.join(',');
+            });
+        });
+
+        this.setAttribute('data-ea-component', true);
     }
 
     connectedCallback() {

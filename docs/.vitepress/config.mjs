@@ -62,9 +62,9 @@ export default defineConfig({
           { text: 'Select 选择器', link: '/ea-select' },
           { text: 'Switch 开关', link: '/ea-switch' },
           { text: 'Rate 评分', link: '/ea-rate' },
-          { text: 'Select 选择器', link: '/ea-select' },
           { text: 'TimePicker 时间选择器', link: '/ea-time-picker' },
           { text: 'DatePicker 日期选择器', link: '/ea-date-picker' },
+          { text: 'Form 表单', link: '/ea-form' },
         ]
       },
       {

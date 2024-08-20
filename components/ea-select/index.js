@@ -76,7 +76,7 @@ export class EaSelect extends Base {
                 <div class="ea-select_input-wrap">
                     <ea-input type="text" part="input" readonly autocomplete="off"></ea-input>
                     <span class="ea-select_dropdown-icon">
-                        <i part="icon" class="icon-angle-down" style="color: #c0c4cc;"></i>
+                        <ea-icon part="icon" icon="icon-angle-down" color="#c0c4cc"></ea-icon>
                     </span>
                 </div>
                 <div class="ea-select_dropdown-wrap">
@@ -130,6 +130,13 @@ export class EaSelect extends Base {
         const value = this.selection;
         if (this.multiple) return value.split(',') || [];
         else return this.selection;
+    }
+
+    set value(val) {
+        this.setAttribute('value', val);
+
+        if (this.multiple) this.selection = val.join(',');
+        else this.selection = val;
     }
     // #endregion
     // ------- end -------
@@ -185,13 +192,13 @@ export class EaSelect extends Base {
         this.setAttribute('clearable', val);
 
         if (val) {
-            const icon = this.#dropdownIcon.querySelector('i');
+            const icon = this.#dropdownIcon.querySelector('ea-icon');
             this.#dropdownIcon.addEventListener('mouseenter', (e) => {
-                icon.className = 'icon-cancel-circled2';
+                icon.icon = 'icon-cancel-circled2';
             });
 
             this.#dropdownIcon.addEventListener('mouseleave', (e) => {
-                icon.className = 'icon-angle-down';
+                icon.icon = 'icon-angle-down';
             });
 
             this.#dropdownIcon.addEventListener('click', (e) => {
@@ -250,6 +257,19 @@ export class EaSelect extends Base {
 
     set multiple(val) {
         this.setAttribute('multiple', val);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- is-invalid 是否校验失败 -------
+    // #region
+    get isInvalid() {
+        return this.getAttrBoolean('is-invalid') || false;
+    }
+
+    set isInvalid(val) {
+        this.setAttribute('is-invalid', val);
+        this.#selectInput.isInvalid = val;
     }
     // #endregion
     // ------- end -------
@@ -314,6 +334,7 @@ export class EaSelect extends Base {
             }));
         });
     }
+
 
     #init() {
         this.setAttribute('data-ea-component', true);

@@ -1,17 +1,6 @@
 .ea-time-picker_wrap {
   position: relative;
 
-  .ea-time-picker_icon {
-    position: absolute;
-    top: 50%;
-    left: 0.5rem;
-    transform: translateY(-50%);
-
-    z-index: 1;
-
-    color: #c0c4cc;
-  }
-
   .ea-time-picker_dropdown-wrap {
     position: absolute;
     bottom: -12px;

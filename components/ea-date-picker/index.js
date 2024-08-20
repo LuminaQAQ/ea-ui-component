@@ -8,6 +8,8 @@ import "../ea-calendar/index.js"
 import "../ea-input/index.js"
 
 const stylesheet = `
+@import url('/ea_ui_component/icon/index.css');
+
 .ea-date-picker_wrap .ea-date-picker_input-wrap {
   position: relative;
 }
@@ -150,6 +152,8 @@ export class EaDatePicker extends Base {
     // ------- end -------
 
     #init() {
+        this.name = this.name;
+
         this.width = this.width;
 
         this.value = this.value;
@@ -162,6 +166,7 @@ export class EaDatePicker extends Base {
 
         this.#calendarElement.addEventListener('select', (e) => {
             const { year, month, date, day } = e.detail;
+            this.value = `${year}-${month}-${date}`;
             this.#calendarInput.value = `${year}-${month}-${date}`;
 
             this.dispatchEvent(new CustomEvent('change', {
@@ -190,6 +195,8 @@ export class EaDatePicker extends Base {
         timeout(() => {
             this.#container.classList.add('with-transition');
         }, 300);
+
+        this.setAttribute('data-ea-component', true);
     }
 
     connectedCallback() {
