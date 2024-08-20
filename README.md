@@ -66,8 +66,7 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] TimePicker 时间选择器
   - [x] DatePicker 日期选择器
   - [ ] Upload 上传
-  - [ ] Transfer 穿梭框
-  - [ ] Form 表单
+  - [x] Form 表单
 
 - Data
 
