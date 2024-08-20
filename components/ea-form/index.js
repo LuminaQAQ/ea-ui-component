@@ -95,6 +95,16 @@ export class EaForm extends Base {
         return isValid;
     }
 
+    reset() {
+        const formItems = this.querySelectorAll('ea-form-item');
+        const valueItems = this.querySelectorAll('[data-ea-component]');
+        valueItems.forEach((input, index) => {
+            input.value = '';
+            input.isInvalid = false;
+            formItems[index].isInvalid = false;
+        });
+    }
+
     #init() {
         const formItemsWrap = this.querySelectorAll('ea-form-item');
 

@@ -53,6 +53,7 @@
         const validtorForm = {
             form: document.querySelector('#validtorForm'),
             btn: document.querySelector('#validtorFormSubmitBtn'),
+            resetBtn: document.querySelector('#validtorFormResetBtn'),
 
             init() {
                 this.form.rules = {
@@ -72,6 +73,10 @@
                     } else {
                         console.log(this.form.data);
                     }
+                })
+
+                this.resetBtn.addEventListener('click', () => {
+                    this.form.reset();
                 })
             }
         };
@@ -190,7 +195,10 @@
             <ea-textarea name="remark" type="textarea" rows="2" placeholder="这不是空的"></ea-textarea>
         </ea-form-item>
         <ea-form-item>
-            <ea-button id="validtorFormSubmitBtn" type="primary">提交</ea-button>
+            <div style="display: flex; justify-content: space-between;">
+                <ea-button id="validtorFormSubmitBtn" type="primary" style="margin-right: 1rem;">提交</ea-button>
+                <ea-button id="validtorFormResetBtn">重置</ea-button>
+            </div>
         </ea-form-item>
     </ea-form>
     <!-- #endregion  -->

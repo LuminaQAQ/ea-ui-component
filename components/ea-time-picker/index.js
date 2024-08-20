@@ -229,6 +229,10 @@ export class EaTimePicker extends Base {
     get value() {
         return this.time;
     }
+
+    set value(value) {
+        this.time = value;
+    }
     // #endregion
     // ------- end -------
 

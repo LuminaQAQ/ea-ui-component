@@ -129,6 +129,13 @@ export class EaSelect extends Base {
         if (this.multiple) return value.split(',') || [];
         else return this.selection;
     }
+
+    set value(val) {
+        this.setAttribute('value', val);
+
+        if (this.multiple) this.selection = val.join(',');
+        else this.selection = val;
+    }
     // #endregion
     // ------- end -------
 
