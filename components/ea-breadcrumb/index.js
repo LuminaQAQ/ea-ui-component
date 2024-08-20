@@ -1,42 +1,30 @@
 // @ts-nocheck
 import Base from '../Base.js';
-import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
+import '../ea-icon/index.js';
 
-import "../ea-breadcrumb-item/index.js"
+import "../ea-breadcrumb-item/index.js";
 
-const stylesheet = `
-.ea-breadcrumb_wrap {
-  display: flex;
-}
-.ea-breadcrumb_wrap .separator {
-  margin: 0 10px;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
+import { handleSeparator } from './src/utils/handleSeparator.js';
 
 export class EaBreadcrumb extends Base {
-    #wrap;
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-breadcrumb_wrap';
-        wrap.part = 'wrap';
-
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
+        shadowRoot.innerHTML = `
+            <div class="ea-breadcrumb_wrap" part='container'>
+                <slot></slot>
+            </div>
+        `;
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- separator 分隔符 -------
     // #region
     get separator() {
-        return this.getAttribute('separator') || "/";
+        return this.getAttribute('separator') || "\/";
     }
 
     set separator(value) {
@@ -69,38 +57,13 @@ export class EaBreadcrumb extends Base {
     // #endregion
     // ------- end -------
 
-    #handleSeparator(separator, separatorClass, separatorColor) {
-        const items = this.querySelectorAll('ea-breadcrumb-item');
 
-        items.forEach((item, index) => {
-            if (index < items.length - 1) {
-                const separatorIcon = createElement('ea-icon');
-                separatorIcon.color = separatorColor;
-
-                if (separatorClass) {
-                    separatorIcon.icon = separatorClass;
-                } else {
-                    separatorIcon.style.margin = '0 10px';
-                    separatorIcon.innerText = separator;
-                }
-
-                item.appendChild(separatorIcon);
-            }
-        });
-    }
-
-    #init() {
-        const that = this;
-
+    connectedCallback() {
         this.separator = this.separator;
         this.separatorClass = this.separatorClass;
         this.separatorColor = this.separatorColor;
 
-        this.#handleSeparator(this.separator, this.separatorClass, this.separatorColor);
-    }
-
-    connectedCallback() {
-        this.#init();
+        handleSeparator.call(this, this.separator, this.separatorClass, this.separatorColor)
     }
 }
 
