@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-badge/index.js'
+        import '../components/ea-button/index.js'
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-badge value="12">
+            <ea-button size="small">评论</ea-button>
+        </ea-badge>
+        <ea-badge value="3" type="primary">
+            <ea-button size="small">回复</ea-button>
+        </ea-badge>
+        <ea-badge value="12" type="success">
+            <ea-button size="small">成功</ea-button>
+        </ea-badge>
+        <ea-badge value="3" type="warning">
+            <ea-button size="small">警告</ea-button>
+        </ea-badge>
+        <ea-badge value="3" type="info">
+            <ea-button size="small">信息</ea-button>
+        </ea-badge>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 最大值 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-badge value="11" max="10">
+            <ea-button size="small">评论</ea-button>
+        </ea-badge>
+        <ea-badge value="100" max="99">
+            <ea-button size="small">回复</ea-button>
+        </ea-badge>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 自定义内容 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-badge value="new">
+            <ea-button size="small">评论</ea-button>
+        </ea-badge>
+        <ea-badge value="hot">
+            <ea-button size="small">回复</ea-button>
+        </ea-badge>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 小红点 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-badge is-dot>
+            <ea-button size="small">评论</ea-button>
+        </ea-badge>
+        <ea-badge is-dot>信息</ea-badge>
+        <ea-badge is-dot>
+            <ea-button size="small" icon="icon-mail"></ea-button>
+        </ea-badge>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>
