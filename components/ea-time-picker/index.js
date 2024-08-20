@@ -13,14 +13,6 @@ const stylesheet = `
 .ea-time-picker_wrap {
   position: relative;
 }
-.ea-time-picker_wrap .ea-time-picker_icon {
-  position: absolute;
-  top: 50%;
-  left: 0.5rem;
-  transform: translateY(-50%);
-  z-index: 1;
-  color: #c0c4cc;
-}
 .ea-time-picker_wrap .ea-time-picker_dropdown-wrap {
   position: absolute;
   bottom: -12px;
@@ -120,8 +112,7 @@ export class EaTimePicker extends Base {
 
         shadowRoot.innerHTML = `
             <div class='ea-time-picker_wrap' part='container'>
-                <i class="ea-time-picker_icon icon-clock"></i>
-                <ea-input part='input' autocomplete="off" readonly></ea-input>
+                <ea-input part='input' autocomplete="off" readonly prefix-icon="icon-clock"></ea-input>
                 <div class="ea-time-picker_dropdown-wrap" part='dropdown-wrap'>
                     <div class="ea-time-picker_dropdown-inner-wrap">
                         <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-hour" part='dropdown-inner'>
@@ -145,18 +136,6 @@ export class EaTimePicker extends Base {
 
         this.build(shadowRoot, stylesheet);
     }
-
-    // ------- name 属性 -------
-    // #region
-    get name() {
-        return this.getAttribute('name') || 'timePicker';
-    }
-
-    set name(value) {
-        this.setAttribute('name', value);
-    }
-    // #endregion
-    // ------- end -------
 
     // ------- width 宽度 -------
     // #region
@@ -186,6 +165,18 @@ export class EaTimePicker extends Base {
         this.hour = hour;
         this.minute = minute;
         this.second = second;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- name 属性 -------
+    // #region
+    get name() {
+        return this.getAttribute('name') || 'timePicker';
+    }
+
+    set name(value) {
+        this.setAttribute('name', value);
     }
     // #endregion
     // ------- end -------
@@ -239,6 +230,10 @@ export class EaTimePicker extends Base {
     // #region
     get value() {
         return this.time;
+    }
+
+    set value(value) {
+        this.time = value;
     }
     // #endregion
     // ------- end -------
@@ -317,8 +312,6 @@ export class EaTimePicker extends Base {
     }
 
     #initElementsStyle() {
-        const input = this.#timePickerInput.shadowRoot.querySelector('.ea-input_inner');
-        input.style.paddingLeft = "2.5rem";
         this.#dropdownWrap.style.width = this.#timePickerInput.getBoundingClientRect().width + "px";
 
         timeout(() => {
@@ -443,6 +436,8 @@ export class EaTimePicker extends Base {
     }
 
     #init() {
+        this.name = this.name;
+
         this.width = this.width;
 
         this.disabled = this.disabled;
@@ -457,9 +452,10 @@ export class EaTimePicker extends Base {
 
         this.time = this.time;
         this.#timePickerInput.value = `${this.hour}:${this.minute}:${this.second}`;
-        this.setAttribute('data-ea-component', true);
 
         this.#initToggleDropdownWrapShow();
+
+        this.setAttribute('data-ea-component', true);
     }
 
     connectedCallback() {
