@@ -78,16 +78,16 @@ export class EaForm extends Base {
             if (!this.#rules[input.name]) return;
 
             for (const k in formItems[index].rule) {
-                if (Validator[k]) {
-                    if (!Validator[k](input.value, formItems[index].rule[k])) {
-                        formItems[index].isInvalid = true;
-                        input.isInvalid = true;
-                        isValid.push(input.name);
-                        break;
-                    } else {
-                        formItems[index].isInvalid = false;
-                        input.isInvalid = false;
-                    }
+                if (!Validator[k]) continue;
+
+                if (!Validator[k](input.value, formItems[index].rule[k])) {
+                    formItems[index].isInvalid = true;
+                    input.isInvalid = true;
+                    isValid.push(input.name);
+                    break;
+                } else {
+                    formItems[index].isInvalid = false;
+                    input.isInvalid = false;
                 }
             }
         });
