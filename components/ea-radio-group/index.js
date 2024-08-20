@@ -1,8 +1,9 @@
 // @ts-nocheck
-import setStyle from "../../utils/setStyle";
-import Base from "../Base";
+import Base from "../Base.js";
 
 const stylesheet = `
+@import url('/ea_ui_component/icon/index.css');
+
 .ea-radio-group {
   display: flex;
 }
@@ -45,9 +46,43 @@ export class EaRadioGroup extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- value 值 -------
+    // #region
+    get value() {
+        return this.getAttribute('value') || '';
+    }
+
+    set value(val) {
+        this.setAttribute("value", val);
+    }
+    // #endregion
+    // ------- end -------
+
     init() {
         // name 唯一键值
         this.name = this.name;
+
+        const radios = this.querySelectorAll('ea-radio');
+        radios.forEach(radio => {
+            if (radio.checked) this.value = radio.value;
+
+            radio.addEventListener('change', e => {
+                this.value = radio.value;
+
+                this.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        value: this.value
+                    }
+                }));
+            });
+        });
+
+        const valueRadio = Array.from(radios).find(radio => radio.value === this.value);
+        if (valueRadio) valueRadio.checked = true;
+
+        this.setAttribute("data-ea-component", true);
     }
 
     connectedCallback() {

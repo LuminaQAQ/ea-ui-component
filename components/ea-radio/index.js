@@ -1,8 +1,10 @@
 // @ts-nocheck
-import setStyle from "../../utils/setStyle";
 import Base from '../Base.js'
 
-const stylesheet = `:host(ea-radio) {
+const stylesheet = `
+@import url('/ea_ui_component/icon/index.css');
+
+:host(ea-radio) {
   --margin-right: 0.75rem;
   --text-color: #606266;
   --radio-show-type: inline-block;

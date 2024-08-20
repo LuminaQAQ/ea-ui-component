@@ -278,6 +278,18 @@ export class EaInput extends Base {
 
     }
 
+    // ------- name 元素原生name属性 -------
+    // #region
+    get name() {
+        return this.getAttribute("name") || '';
+    }
+
+    set name(val) {
+        this.setAttribute("name", val);
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- type 标识是 input 还是 textarea  -------
     // #region
     get type() {
@@ -673,6 +685,19 @@ export class EaInput extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- is-invalid 错误 -------
+    // #region
+    get isInvalid() {
+        return this.getAttrBoolean("is-invalid");
+    }
+
+    set isInvalid(val) {
+        this.setAttribute("is-invalid", val);
+        this.#input.classList.toggle('invalid', val);
+    }
+    // #endregion
+    // ------- end -------
+
     // 图标dom初始化
     iconInit(className) {
         const clearIcon = document.createElement('i');
@@ -703,6 +728,8 @@ export class EaInput extends Base {
 
     init() {
         const that = this;
+
+        this.name = this.name;
 
         // 按钮类型
         this.type = this.type;
@@ -752,6 +779,8 @@ export class EaInput extends Base {
         this.#input.addEventListener("blur", (e) => {
             this.eventInit(e, "blur");
         });
+
+        this.setAttribute("data-ea-component", true);
     }
 
     connectedCallback() {
