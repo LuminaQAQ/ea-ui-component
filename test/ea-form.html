@@ -83,6 +83,37 @@
         validtorForm.init();
         // #endregion
         // ------- end -------
+
+        // ------- 3. 自定义验证 -------
+        // #region
+        const customValidtorForm = {
+            form: document.querySelector('#customValidtorForm'),
+            btn: document.querySelector('#customValidtorFormSubmitBtn'),
+            resetBtn: document.querySelector('#customValidtorFormResetBtn'),
+
+            init() {
+                this.form.rules = {
+                    phone: { required: true, reg: /^1[3456789]\d{9}$/, trigger: 'change' },
+                    email: { required: true, reg: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, trigger: 'change' }
+                };
+
+                this.btn.addEventListener('click', () => {
+                    const isInvalid = this.form.validate();
+                    if (isInvalid.length > 0) {
+                        console.log(isInvalid);
+                    } else {
+                        console.log(this.form.data);
+                    }
+                })
+
+                this.resetBtn.addEventListener('click', () => {
+                    this.form.reset();
+                })
+            }
+        };
+        customValidtorForm.init();
+        // #endregion
+        // ------- end -------
     </script>
 
     <!-- -------- 1. 基本表单 --------  -->
@@ -198,6 +229,29 @@
             <div style="display: flex; justify-content: space-between;">
                 <ea-button id="validtorFormSubmitBtn" type="primary" style="margin-right: 1rem;">提交</ea-button>
                 <ea-button id="validtorFormResetBtn">重置</ea-button>
+            </div>
+        </ea-form-item>
+    </ea-form>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 3. 自定义验证 --------  -->
+    <!-- #region  -->
+    <ea-form id="customValidtorForm">
+        <ea-form-item label='手机号'>
+            <div slot="invalid-text">请正确填写手机号</div>
+            <ea-input name="phone" placeholder="手机号"></ea-input>
+        </ea-form-item>
+        <ea-form-item label='邮箱'>
+            <div slot="invalid-text">请正确填写邮箱</div>
+            <ea-input name="email" placeholder="邮箱"></ea-input>
+        </ea-form-item>
+        <ea-form-item>
+            <div style="display: flex; justify-content: space-between;">
+                <ea-button id="customValidtorFormSubmitBtn" type="primary" style="margin-right: 1rem;">提交</ea-button>
+                <ea-button id="customValidtorFormResetBtn">重置</ea-button>
             </div>
         </ea-form-item>
     </ea-form>
