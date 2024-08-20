@@ -92,7 +92,13 @@ export class EaForm extends Base {
             }
         });
 
-        return isValid;
+        return new Promise((resolve, reject) => {
+            if (isValid.length > 0) {
+                reject(isValid);
+            } else {
+                resolve(true);
+            }
+        });
     }
 
     reset() {

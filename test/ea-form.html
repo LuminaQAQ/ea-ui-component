@@ -67,12 +67,11 @@
                 };
 
                 this.btn.addEventListener('click', () => {
-                    const isInvalid = this.form.validate();
-                    if (isInvalid.length > 0) {
-                        console.log(isInvalid);
-                    } else {
-                        console.log(this.form.data);
-                    }
+                    this.form.validate().then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                        console.log(err);
+                    })
                 })
 
                 this.resetBtn.addEventListener('click', () => {
@@ -98,12 +97,11 @@
                 };
 
                 this.btn.addEventListener('click', () => {
-                    const isInvalid = this.form.validate();
-                    if (isInvalid.length > 0) {
-                        console.log(isInvalid);
-                    } else {
-                        console.log(this.form.data);
-                    }
+                    this.form.validate().then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                        console.log(err);
+                    })
                 })
 
                 this.resetBtn.addEventListener('click', () => {
