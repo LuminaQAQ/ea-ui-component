@@ -10,4 +10,7 @@ export const Validator = {
     max(value, max) {
         return value.length <= max;
     },
+    reg(value, reg) {
+        return reg.test(value);
+    },
 };

@@ -66,6 +66,14 @@ export class EaRadioGroup extends Base {
 
             radio.addEventListener('change', e => {
                 this.value = radio.value;
+
+                this.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        value: this.value
+                    }
+                }));
             });
         });
 

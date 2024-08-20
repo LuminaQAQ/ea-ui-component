@@ -41,23 +41,8 @@
             btn: document.querySelector('#basicFormSubmitBtn'),
 
             init() {
-                // this.form.rules = {
-                //     name: { required: true, min: 2, max: 4 },
-                //     gender: { required: true },
-                //     hobby: { required: true },
-                //     area: { required: true },
-                //     arrivalDate: { required: true },
-                //     arrivalTime: { required: true },
-                // };
-
                 this.btn.addEventListener('click', () => {
                     console.log(this.form.data);
-                    // const isInvalid = this.form.validate();
-                    // if (isInvalid.length > 0) {
-                    //     console.log(isInvalid);
-                    // } else {
-                    //     console.log(this.form.data);
-                    // }
                 })
             }
         };
@@ -74,8 +59,9 @@
             init() {
                 this.form.rules = {
                     name: { required: true, min: 2, max: 4 },
-                    gender: { required: true },
-                    hobby: { required: true },
+                    phone: { required: true, reg: /^1[3456789]\d{9}$/ },
+                    gender: { required: true, trigger: 'change' },
+                    hobby: { required: true, trigger: 'change' },
                     area: { required: true },
                     arrivalDate: { required: true },
                     arrivalTime: { required: true },
@@ -159,6 +145,10 @@
         <ea-form-item label='姓名'>
             <div slot="invalid-text">请正确填写姓名, 长度为 2-4 个字符</div>
             <ea-input name="name" placeholder="姓名"></ea-input>
+        </ea-form-item>
+        <ea-form-item label='手机号'>
+            <div slot="invalid-text">请正确填写手机号</div>
+            <ea-input name="phone" placeholder="手机号"></ea-input>
         </ea-form-item>
         <ea-form-item label='性别'>
             <div slot="invalid-text">请选择性别</div>

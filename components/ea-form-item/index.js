@@ -125,21 +125,19 @@ export class EaFromItem extends Base {
         const formItem = this.querySelector('[data-ea-component]');
         try {
             formItem.addEventListener(this.trigger, (e) => {
-                timeout(() => {
-                    for (const key in this.#rule) {
-                        if (Validator[key]) {
-                            if (!Validator[key](formItem.value, this.#rule[key])) {
-                                formItem.isInvalid = true;
-                                this.#container.classList.add('is-required');
+                for (const key in this.#rule) {
+                    if (Validator[key]) {
+                        if (!Validator[key](formItem.value, this.#rule[key])) {
+                            formItem.isInvalid = true;
+                            this.#container.classList.add('is-required');
 
-                                break;
-                            } else {
-                                formItem.isInvalid = false;
-                                this.#container.classList.remove('is-required');
-                            }
+                            break;
+                        } else {
+                            formItem.isInvalid = false;
+                            this.#container.classList.remove('is-required');
                         }
                     }
-                }, 100);
+                }
             });
         } catch (error) { }
     }
