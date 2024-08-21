@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { timeout } from "../../utils/timeout.js";
 import Base from "../Base.js";
 
 import { stylesheet } from "./src/style/stylesheet.js";
@@ -42,7 +43,10 @@ export class EaButtonGroup extends Base {
 
   connectedCallback() {
     this.disabled = this.disabled;
-    handleButtonStyle(this.children);
+
+    timeout(() => {
+      handleButtonStyle.call(this, this.children);
+    }, 100);
   }
 }
 
