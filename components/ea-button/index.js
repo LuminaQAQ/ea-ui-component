@@ -2,351 +2,13 @@
 import Base from "../Base.js";
 import "../ea-icon/index.js"
 
-const stylesheet = `
-:host {
-  --margin-right: 0rem;
-  --border-radius: 6px;
-  --border-size: 1px;
-}
+import { ButtonComm } from "./src/components/ButtonComm.js";
+import { HrefComm } from "./src/components/HrefComm.js";
 
-:host([href]) > a {
-  text-decoration: none;
-}
-
-:host-context(ea-button-group) {
-  --margin-right: 0;
-  --border-size: 0;
-}
-
-.__ea-button {
-  box-sizing: border-box;
-  padding: 0.5rem 1rem;
-  margin-right: var(--margin-right);
-  cursor: pointer;
-  font-size: 1rem;
-  line-height: 1.25;
-  font-weight: 500;
-  transition: background-color 0.1s, color 0.1s;
-  border-radius: var(--border-radius);
-}
-.__ea-button.normal {
-  border: var(--border-size) solid #dcdfe6;
-  color: #606266;
-  background-color: transparent;
-}
-.__ea-button.normal.disabled {
-  cursor: not-allowed !important;
-  background-image: none !important;
-  background-color: rgba(64, 64, 64, 0) !important;
-  border-color: white !important;
-  color: white !important;
-  pointer-events: none;
-  border-color: #ebedf1 !important;
-  color: #babcbe !important;
-}
-.__ea-button.normal.plain {
-  background-color: rgba(92, 92, 92, 0);
-  border: var(--border-size) solid white;
-  color: transparent;
-  background-color: transparent;
-  border: var(--border-size) solid #dcdfe6;
-  color: #606266;
-}
-.__ea-button.normal.plain:hover {
-  background-color: transparent;
-}
-.__ea-button.normal.round {
-  --border-radius: 999px;
-}
-.__ea-button.normal.medium {
-  font-size: 14px;
-}
-.__ea-button.normal.small {
-  font-size: 12px;
-}
-.__ea-button.normal.mini {
-  font-size: 10px;
-}
-.__ea-button.normal:hover {
-  border: var(--border-size) solid rgba(160, 207, 255, 0.4);
-  color: #3a9bff;
-  background-color: rgba(160, 207, 255, 0.05);
-}
-.__ea-button.normal:active {
-  background-color: rgba(7, 130, 255, 0.05);
-  border: var(--border-size) solid rgba(33, 143, 255, 0.4);
-}
-.__ea-button > i {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-}
-.__ea-button.primary {
-  border: var(--border-size) solid #409eff;
-  color: #fff;
-  background-color: #409eff;
-}
-.__ea-button.primary.disabled {
-  cursor: not-allowed !important;
-  background-image: none !important;
-  background-color: #c0dfff !important;
-  border-color: #c0dfff !important;
-  color: white !important;
-  pointer-events: none;
-}
-.__ea-button.primary.plain {
-  background-color: #f8fbff;
-  border: var(--border-size) solid #c0dfff;
-  color: #409eff;
-}
-.__ea-button.primary.round {
-  --border-radius: 999px;
-}
-.__ea-button.primary.medium {
-  font-size: 14px;
-}
-.__ea-button.primary.small {
-  font-size: 12px;
-}
-.__ea-button.primary.mini {
-  font-size: 10px;
-}
-.__ea-button.primary:hover {
-  border: var(--border-size) solid #73b8ff;
-  color: white;
-  background-color: #73b8ff;
-}
-.__ea-button.primary:active {
-  background-color: #006bd9;
-}
-.__ea-button > i {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-}
-.__ea-button.success {
-  border: var(--border-size) solid #67c23a;
-  color: #fff;
-  background-color: #67c23a;
-}
-.__ea-button.success.disabled {
-  cursor: not-allowed !important;
-  background-image: none !important;
-  background-color: #b2e19b !important;
-  border-color: #b2e19b !important;
-  color: white !important;
-  pointer-events: none;
-}
-.__ea-button.success.plain {
-  background-color: #d3eec6;
-  border: var(--border-size) solid #b2e19b;
-  color: #67c23a;
-}
-.__ea-button.success.round {
-  --border-radius: 999px;
-}
-.__ea-button.success.medium {
-  font-size: 14px;
-}
-.__ea-button.success.small {
-  font-size: 12px;
-}
-.__ea-button.success.mini {
-  font-size: 10px;
-}
-.__ea-button.success:hover {
-  border: var(--border-size) solid #85cf60;
-  color: white;
-  background-color: #85cf60;
-}
-.__ea-button.success:active {
-  background-color: #3d7323;
-}
-.__ea-button > i {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-}
-.__ea-button.info {
-  border: var(--border-size) solid #909399;
-  color: #fff;
-  background-color: #909399;
-}
-.__ea-button.info.disabled {
-  cursor: not-allowed !important;
-  background-image: none !important;
-  background-color: #d2d4d6 !important;
-  border-color: #d2d4d6 !important;
-  color: white !important;
-  pointer-events: none;
-}
-.__ea-button.info.plain {
-  background-color: #f0f0f1;
-  border: var(--border-size) solid #d2d4d6;
-  color: #909399;
-}
-.__ea-button.info.round {
-  --border-radius: 999px;
-}
-.__ea-button.info.medium {
-  font-size: 14px;
-}
-.__ea-button.info.small {
-  font-size: 12px;
-}
-.__ea-button.info.mini {
-  font-size: 10px;
-}
-.__ea-button.info:hover {
-  border: var(--border-size) solid #abadb1;
-  color: white;
-  background-color: #abadb1;
-}
-.__ea-button.info:active {
-  background-color: #5d6066;
-}
-.__ea-button > i {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-}
-.__ea-button.warning {
-  border: var(--border-size) solid #e6a23c;
-  color: #fff;
-  background-color: #e6a23c;
-}
-.__ea-button.warning.disabled {
-  cursor: not-allowed !important;
-  background-image: none !important;
-  background-color: #f4d8ad !important;
-  border-color: #f4d8ad !important;
-  color: white !important;
-  pointer-events: none;
-}
-.__ea-button.warning.plain {
-  background-color: #fbf0df;
-  border: var(--border-size) solid #f4d8ad;
-  color: #e6a23c;
-}
-.__ea-button.warning.round {
-  --border-radius: 999px;
-}
-.__ea-button.warning.medium {
-  font-size: 14px;
-}
-.__ea-button.warning.small {
-  font-size: 12px;
-}
-.__ea-button.warning.mini {
-  font-size: 10px;
-}
-.__ea-button.warning:hover {
-  border: var(--border-size) solid #ecb869;
-  color: white;
-  background-color: #ecb869;
-}
-.__ea-button.warning:active {
-  background-color: #a76d15;
-}
-.__ea-button > i {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-}
-.__ea-button.danger {
-  border: var(--border-size) solid #f56c6c;
-  color: #fff;
-  background-color: #f56c6c;
-}
-.__ea-button.danger.disabled {
-  cursor: not-allowed !important;
-  background-image: none !important;
-  background-color: #fde3e3 !important;
-  border-color: #fde3e3 !important;
-  color: white !important;
-  pointer-events: none;
-}
-.__ea-button.danger.plain {
-  background-color: white;
-  border: var(--border-size) solid #fde3e3;
-  color: #f56c6c;
-  background-color: #fde8e8;
-}
-.__ea-button.danger.round {
-  --border-radius: 999px;
-}
-.__ea-button.danger.medium {
-  font-size: 14px;
-}
-.__ea-button.danger.small {
-  font-size: 12px;
-}
-.__ea-button.danger.mini {
-  font-size: 10px;
-}
-.__ea-button.danger:hover {
-  border: var(--border-size) solid #f89c9c;
-  color: white;
-  background-color: #f89c9c;
-}
-.__ea-button.danger:active {
-  background-color: #eb1010;
-}
-.__ea-button > i {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-}
-.__ea-button.text {
-  border: var(--border-size) solid transparent;
-  color: #409eff;
-  background-color: transparent;
-}
-.__ea-button.text.disabled {
-  cursor: not-allowed !important;
-  background-image: none !important;
-  background-color: rgba(64, 64, 64, 0) !important;
-  border-color: rgba(64, 64, 64, 0) !important;
-  color: white !important;
-  pointer-events: none;
-  color: #c0c4cc !important;
-}
-.__ea-button.text.plain {
-  background-color: rgba(92, 92, 92, 0);
-  border: var(--border-size) solid rgba(64, 64, 64, 0);
-  color: transparent;
-}
-.__ea-button.text.round {
-  --border-radius: 999px;
-}
-.__ea-button.text.medium {
-  font-size: 14px;
-}
-.__ea-button.text.small {
-  font-size: 12px;
-}
-.__ea-button.text.mini {
-  font-size: 10px;
-}
-.__ea-button.text:hover {
-  border: var(--border-size) solid rgba(26, 26, 26, 0);
-  color: #73b8ff;
-  background-color: rgba(26, 26, 26, 0);
-}
-.__ea-button.text:active {
-  background-color: rgba(0, 0, 0, 0);
-}
-.__ea-button > i {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-}
-.__ea-button.first-child {
-  border-radius: 4px 0 0 4px;
-}
-.__ea-button.middle-child {
-  border-radius: 0;
-}
-.__ea-button.last-child {
-  border-radius: 0 4px 4px 0;
-}
-`;
+import { stylesheet } from "./src/style/stylesheet.js";
 
 export class EaButton extends Base {
-  #mounted = false;
+  #buttonType = "button";
 
   #wrap;
 
@@ -354,22 +16,19 @@ export class EaButton extends Base {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    let dom = null;
 
-    if (this.getAttribute('href') !== null && this.getAttribute('href') !== '') dom = document.createElement('a');
-    else dom = document.createElement('button');
+    const hrefAttr = this.getAttribute('href')
+    if (hrefAttr) {
+      shadowRoot.innerHTML = HrefComm;
+      this.#buttonType = "a";
+    } else {
+      shadowRoot.innerHTML = ButtonComm;
+      this.#buttonType = "button";
+    }
 
-    dom.part = "wrap";
-
-    const slot = document.createElement('slot');
-    dom.className = "__ea-button";
-    dom.appendChild(slot);
-
-    this.#wrap = dom;
+    this.#wrap = shadowRoot.querySelector('.ea-button');
 
     this.build(shadowRoot, stylesheet);
-
-    shadowRoot.appendChild(dom);
   }
 
   get BUTTON_STYLE() {
@@ -405,6 +64,7 @@ export class EaButton extends Base {
   }
   set plain(value) {
     this.toggleAttr('plain', value);
+    this.#wrap.classList.toggle('plain', value);
   }
 
   get round() {
@@ -413,7 +73,7 @@ export class EaButton extends Base {
   set round(value) {
     this.toggleAttr('round', value);
 
-    if (value) this.#wrap.style.setProperty('--border-radius', '999px');
+    this.#wrap.classList.toggle('round', value);
   }
   // #endregion
   // ------- end -------
@@ -421,14 +81,13 @@ export class EaButton extends Base {
   // ------- type属性 -------
   // #region
   get type() {
-    return this.getAttribute('type') || 'normal';
+    const attr = this.getAttribute('type');
+    return this.BUTTON_TYPE.includes(attr) ? attr : 'normal';
   }
 
   set type(value) {
-    if (!this.BUTTON_TYPE.includes(value)) value = 'normal';
-
     this.setAttribute('type', value);
-    this.#wrap.classList.toggle(value);
+    this.#wrap.classList.add(value);
   }
   // #endregion
   // ------- end -------
@@ -436,13 +95,12 @@ export class EaButton extends Base {
   // ------- 按钮大小 -------
   // #region
   get size() {
-    return this.getAttribute('size');
+    const attr = this.getAttribute('size');
+    return this.BUTTON_SIZE.includes(attr) ? attr : 'medium';
   }
   set size(value) {
-    if (!this.BUTTON_SIZE.includes(value)) return;
-
     this.toggleAttr('size', value);
-    this.#wrap.classList.toggle(value);
+    this.#wrap.classList.add(value);
   }
   // #endregion
   // ------- end -------
@@ -455,15 +113,18 @@ export class EaButton extends Base {
 
   set loading(value) {
     this.toggleAttr('loading', value);
+
     this.disabled = value;
 
-    if (value && !this.#wrap.querySelector('ea-icon')) {
+    if (value) {
       const i = document.createElement('ea-icon');
+      i.id = 'ea-loading-icon';
       i.icon = 'icon-spin6 animate-spin';
 
       this.#wrap.insertBefore(i, this.#wrap.firstChild)
-    } else if (!value && this.#wrap.querySelector('ea-icon')) {
-      this.#wrap.querySelector('ea-icon').remove();
+    } else {
+      const loadingIcon = this.#wrap.querySelector('#ea-loading-icon');
+      if (loadingIcon) loadingIcon.remove();
     }
   }
   // #endregion
@@ -472,22 +133,18 @@ export class EaButton extends Base {
   // ------- 图标按钮 -------
   // #region
   get icon() {
-    return this.getAttribute('icon');
+    return this.getAttribute('icon') || '';
   }
 
   set icon(value) {
-    if (value) {
-      this.setAttribute('icon', value);
+    this.setAttribute('icon', value);
 
-      if (!this.#wrap.querySelector('ea-icon')) {
-        const eaIcon = document.createElement('ea-icon');
-        eaIcon.icon = value;
+    if (value && !this.#wrap.querySelector('ea-icon')) {
+      const eaIcon = document.createElement('ea-icon');
+      eaIcon.icon = value;
+      eaIcon.part = "icon";
 
-        this.#wrap.insertBefore(eaIcon, this.#wrap.firstChild)
-      }
-    } else {
-      this.removeAttribute('icon');
-      this.#wrap.querySelector('ea-icon')?.remove();
+      this.#wrap.insertBefore(eaIcon, this.#wrap.firstChild);
     }
   }
   // #endregion
@@ -496,31 +153,22 @@ export class EaButton extends Base {
   // ------- 链接按钮 -------
   // #region
   get href() {
-    return this.getAttribute('href');
+    return this.getAttribute('href') || '';
   }
 
   set href(value) {
-    if (this.shadowRoot.querySelector("button")) return;
+    if (this.#buttonType === "button") return;
 
-    if (value) {
-      this.setAttribute('href', value);
-      this.#wrap.setAttribute('href', value);
-    } else {
-      this.removeAttribute('href');
-      this.#wrap.removeAttribute('href');
-    }
+    this.setAttribute('href', value);
+    this.#wrap.setAttribute('href', value);
   }
   // #endregion
   // ------- end -------
 
-  #init() {
+  connectedCallback() {
     // 按钮样式
-    for (let i = 0, style; style = this.BUTTON_STYLE[i++];) {
-      if (this[style]) {
-        this[style] = this[style];
-        break;
-      }
-    }
+    this.plain = this.plain;
+    this.round = this.round;
 
     // 按钮种类
     this.type = this.type;
@@ -528,20 +176,16 @@ export class EaButton extends Base {
     // 按钮大小
     this.size = this.size;
 
-    // 链接
-    this.href = this.href;
-
     // 图标
     this.icon = this.icon;
 
     // 禁用
     this.disabled = this.disabled;
-  }
 
-  connectedCallback() {
-    this.#init();
+    // 链接
+    this.href = this.href;
 
-    this.#mounted = true;
+    if (this.loading) this.loading = this.loading;
   }
 }
 

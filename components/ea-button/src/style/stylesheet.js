@@ -1,11 +1,8 @@
-:host {
-  --border-radius: 6px;
-}
-
+export const stylesheet = `
 .ea-button {
   box-sizing: border-box;
   padding: 0.5rem;
-  border-radius: var(--border-radius);
+  border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
   line-height: 1.25;
@@ -192,6 +189,15 @@
 .ea-button.text:active {
   background-color: rgba(0, 0, 0, 0);
 }
+.ea-button.first-child {
+  border-radius: 4px 0 0 4px;
+}
+.ea-button.middle-child {
+  border-radius: 0;
+}
+.ea-button.last-child {
+  border-radius: 0 4px 4px 0;
+}
 .ea-button.round {
   border-radius: 50%;
 }
@@ -204,3 +210,4 @@
 .ea-button.mini {
   font-size: 10px;
 }
+`;

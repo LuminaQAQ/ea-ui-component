@@ -8,14 +8,63 @@
     <link rel="stylesheet" href="../components/ea-icon/index.css" />
 
     <style>
-        .part::part(wrap) {
+        .part::part(container) {
             background: aquamarine;
+            color: white;
         }
+
+        /* ea-button::part(icon) {
+            color: black;
+        } */
     </style>
 </head>
 
 <body>
+    <script type="module">
+        import "../components/ea-button/index.js"
+        import "../components/ea-button-group/index.js"
+        import "../components/ea-switch/index.js"
 
+        // ------- 链接按钮 -------
+        // #region
+        document
+            .querySelector("#ea-radio-href")
+            .addEventListener("click", function (e) {
+                const btn = document.querySelector("#ea-button-a");
+
+                btn.disabled = e.target.checked;
+            });
+        // #endregion
+        // ------- end -------
+
+        // ------- 按钮组 -------
+        // #region
+        document
+            .querySelector("#btngroup-switch")
+            .addEventListener("click", function (e) {
+                const btn = document.querySelector("#btngroup");
+
+                e.target.checked ? (btn.disabled = true) : (btn.disabled = false);
+            });
+        // #endregion
+        // ------- end -------
+
+        // ------- 加载按钮 -------
+        // #region
+        document
+            .querySelector("#ea-radio-loading")
+            .addEventListener("click", function (e) {
+                const btn = document.querySelector("#ea-button-loading");
+
+                e.target.checked ? (btn.loading = true) : (btn.loading = false);
+            });
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
     <div class="row">
         <ea-button>默认按钮</ea-button>
         <ea-button class="part">默认按钮-自定义</ea-button>
@@ -24,9 +73,13 @@
         <ea-button type="warning">警告按钮</ea-button>
         <ea-button type="danger">危险按钮</ea-button>
     </div>
-
     <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
+    <!-- -------- 朴素按钮 --------  -->
+    <!-- #region  -->
+    <h2>朴素按钮</h2>
     <div class="row">
         <ea-button plain>朴素按钮</ea-button>
         <ea-button type="primary" plain>主要按钮</ea-button>
@@ -34,19 +87,13 @@
         <ea-button type="warning" plain>警告按钮</ea-button>
         <ea-button type="danger" plain>危险按钮</ea-button>
     </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
-    <hr>
-
-    <div class="row">
-        <ea-button round>圆角按钮</ea-button>
-        <ea-button type="primary" round>主要按钮</ea-button>
-        <ea-button type="success" round>成功按钮</ea-button>
-        <ea-button type="warning" round>警告按钮</ea-button>
-        <ea-button type="danger" round>危险按钮</ea-button>
-    </div>
-
-    <hr>
-
+    <!-- -------- 禁用按钮 --------  -->
+    <!-- #region  -->
+    <h2>禁用按钮</h2>
     <div class="row">
         <ea-button disabled>禁用按钮</ea-button>
         <ea-button type="primary" disabled>主要按钮</ea-button>
@@ -54,87 +101,93 @@
         <ea-button type="warning" disabled>警告按钮</ea-button>
         <ea-button type="danger" disabled>危险按钮</ea-button>
     </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
-    <hr>
-
+    <!-- -------- 文字按钮 --------  -->
+    <!-- #region  -->
+    <h2>文字按钮</h2>
     <div class="row left">
-        <ea-button type="primary" icon="icon-edit"></ea-button>
+        <ea-button type="text" icon="icon-coffee">文字按钮</ea-button>
+        <ea-button type="text" disabled>文字按钮</ea-button>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 图标按钮 --------  -->
+    <!-- #region  -->
+    <h2>图标按钮</h2>
+    <div class="row left">
+        <ea-button type="primary" icon="icon-edit" round></ea-button>
         <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
         <ea-button type="primary" icon="icon-trash-empty" disabled>图标按钮</ea-button>
     </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
-    <hr>
-
-    <div class="row left">
-        <ea-button type="text">文字按钮</ea-button>
-        <ea-button type="text" disabled>文字按钮</ea-button>
-    </div>
-
-    <hr>
-
+    <!-- -------- 链接按钮 --------  -->
+    <!-- #region  -->
+    <h2>链接按钮</h2>
     <div class="row left">
         <ea-switch id="ea-radio-href" checked></ea-switch>
-        <ea-button type="text" href="https://github.com/LuminaQAQ">链接按钮</ea-button>
-        <ea-button id="ea-button-a" type="normal" href="https://github.com/LuminaQAQ" disabled>链接按钮</ea-button>
+        <ea-button type="text" href="https://luminaqaq.github.io/ea_ui_component/ea-button">链接按钮</ea-button>
+        <ea-button disabled id="ea-button-a" type="text"
+            href="https://luminaqaq.github.io/ea_ui_component/ea-button">链接按钮</ea-button>
     </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
-    <hr>
+    <!-- -------- 按钮组 --------  -->
+    <!-- #region  -->
+    <h2>按钮组</h2>
+    <div class="row left">
+        <ea-switch id="btngroup-switch" checked></ea-switch>
+        <ea-button-group id="btngroup" id="" disabled>
+            <ea-button type="primary">上一页</ea-button>
+            <ea-button type="primary">下一页</ea-button>
+        </ea-button-group>
+        <ea-button-group>
+            <ea-button>后退</ea-button>
+            <ea-button>刷新</ea-button>
+            <ea-button>前进</ea-button>
+        </ea-button-group>
+        <ea-button-group>
+            <ea-button type="primary">后退</ea-button>
+            <ea-button type="primary">刷新</ea-button>
+            <ea-button type="primary">前进</ea-button>
+        </ea-button-group>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
-    <ea-button-group>
-        <ea-button type="primary">上一页</ea-button>
-        <ea-button type="primary">下一页</ea-button>
-    </ea-button-group>
-    <ea-button-group>
-        <ea-button type="primary">后退</ea-button>
-        <ea-button type="primary">刷新</ea-button>
-        <ea-button type="primary">前进</ea-button>
-    </ea-button-group>
-
-    <hr>
-
+    <!-- -------- 加载中 --------  -->
+    <!-- #region  -->
+    <h2>按钮组</h2>
     <div class="row">
-        <ea-switch id="ea-radio-loading"></ea-switch>
-        <ea-button id="ea-button-loading" type="primary">加载中按钮</ea-button>
+        <ea-switch id="ea-radio-loading" checked></ea-switch>
+        <ea-button id="ea-button-loading" type="primary" loading icon="icon-coffee">加载中按钮</ea-button>
     </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
-    <hr>
-
+    <!-- -------- 不同尺寸 --------  -->
+    <!-- #region  -->
+    <h2>不同尺寸</h2>
     <div class="row">
-        <ea-button round>默认按钮</ea-button>
-        <ea-button size="medium" round>中等按钮</ea-button>
-        <ea-button size="small" round>小型按钮</ea-button>
-        <ea-button size="mini" round>超小按钮</ea-button>
+        <ea-button type="primary">默认按钮</ea-button>
+        <ea-button type="primary" size="medium">中等按钮</ea-button>
+        <ea-button type="primary" size="small">小型按钮</ea-button>
+        <ea-button type="primary" size="mini">超小按钮</ea-button>
     </div>
-
-    <script type="module">
-        import "../components/ea-button/index.js"
-        import "../components/ea-button-group/index.js"
-        import "../components/ea-switch/index.js"
-
-        document
-            .querySelector("#ea-radio-href")
-            .addEventListener("click", function (e) {
-                const btn = document.querySelector("#ea-button-a");
-
-                btn.disabled = e.target.checked;
-            });
-
-        document
-            .querySelector("#ea-button-a")
-            .addEventListener("click", function (e) {
-                e.target.getAttribute("disabled") !== null
-                    ? e.target.removeAttribute("disabled")
-                    : e.target.setAttribute("disabled", true);
-            });
-
-        document
-            .querySelector("#ea-radio-loading")
-            .addEventListener("click", function (e) {
-                const btn = document.querySelector("#ea-button-loading");
-
-                e.target.checked ? (btn.loading = true) : (btn.loading = false);
-            });
-    </script>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 </body>
 
 </html>
