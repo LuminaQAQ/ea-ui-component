@@ -1,14 +1,9 @@
 // @ts-nocheck
-import { timeout } from "../../utils/timeout.js";
 import Base from "../Base.js";
 
 import { stylesheet } from "./src/style/stylesheet.js";
 
-import { handleButtonStyle } from "./src/utils/handleButtonStyle.js";
-
 export class EaButtonGroup extends Base {
-  #container;
-
   constructor() {
     super();
 
@@ -19,8 +14,6 @@ export class EaButtonGroup extends Base {
         <slot></slot>
       </div>
     `;
-
-    this.#container = shadowRoot.querySelector('.ea-button-group');
 
     this.build(shadowRoot, stylesheet);
   }
@@ -43,10 +36,6 @@ export class EaButtonGroup extends Base {
 
   connectedCallback() {
     this.disabled = this.disabled;
-
-    timeout(() => {
-      handleButtonStyle.call(this, this.children);
-    }, 100);
   }
 }
 
