@@ -1,26 +1,7 @@
 // @ts-nocheck
 import Base from '../Base.js';
-import { createElement, createSlotElement } from '../../utils/createElement.js';
 
-const stylesheet = `
-.ea-card_wrap {
-  border-radius: 4px;
-  border: 1px solid #ebeef5;
-  background-color: #fff;
-  overflow: hidden;
-  color: #303133;
-  transition: box-shadow 0.3s;
-}
-.ea-card_wrap.is-always-shadow, .ea-card_wrap.is-hover-shadow:hover {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-.ea-card_wrap.is-never-shadow {
-  box-shadow: none;
-}
-.ea-card_wrap .ea-card_content {
-  padding: 20px;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 class EaCard extends Base {
   #wrap;
@@ -29,22 +10,21 @@ class EaCard extends Base {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    const wrap = document.createElement('div');
-    wrap.className = 'ea-card_wrap';
 
-    const headerSlot = createSlotElement('header');
-    const header = createElement('div', 'ea-card_header', [headerSlot]);
-    wrap.appendChild(header);
+    shadowRoot.innerHTML = `
+      <div class="ea-card_wrap" part="container">
+        <div class="ea-card_header" part="header">
+          <slot name="header"></slot>
+        </div>
+        <div class="ea-card_content" part="content">
+          <slot></slot>
+        </div>
+      </div>
+    `;
 
-    const contentSlot = document.createElement('slot');
-    const content = createElement('div', 'ea-card_content', [contentSlot]);
-    wrap.appendChild(content);
-
-    this.#wrap = wrap;
-
+    this.#wrap = shadowRoot.querySelector('.ea-card_wrap');
 
     this.build(shadowRoot, stylesheet);
-    this.shadowRoot.appendChild(wrap);
   }
 
   // ------- shadow 阴影属性 -------

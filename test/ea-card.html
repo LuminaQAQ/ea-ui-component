@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-bottom: 1px solid #ebeef5;
+            box-sizing: border-box;
+        }
+
+        .ea-card-demo {
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-card/index.js';
+        import '../components/ea-button/index.js';
+    </script>
+
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="ea-card-demo">
+        <ea-card>
+            <div slot="header" class="header">
+                <span>卡片标题</span>
+                <ea-button type="text" size="small">操作按钮</ea-button>
+            </div>
+            <p class="ea-card-content">content1</p>
+            <p class="ea-card-content">content2</p>
+            <p class="ea-card-content">content3</p>
+            <p class="ea-card-content">content4</p>
+        </ea-card>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 简单卡片 --------  -->
+    <!-- #region  -->
+    <h2>简单卡片</h2>
+    <div class="demo">
+        <div class="ea-card-demo">
+            <ea-card>
+                <p class="ea-card-content">content1</p>
+                <p class="ea-card-content">content2</p>
+                <p class="ea-card-content">content3</p>
+                <p class="ea-card-content">content4</p>
+            </ea-card>
+        </div>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 带图片 --------  -->
+    <!-- #region  -->
+    <h2>带图片</h2>
+    <div class="demo">
+        <div class="ea-card-demo">
+            <ea-card>
+                <div class="image">
+                    <!-- <img src="https://picture.gptkong.com/20240627/15559913d5b477444baca33968cbb88b44.jpeg" /> -->
+                </div>
+                <div class="header" style="padding: 14px;">
+                    <span>地狱笑话</span>
+                    <ea-button type="text" class="button">操作按钮</ea-button>
+                </div>
+            </ea-card>
+        </div>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 卡片阴影 --------  -->
+    <!-- #region  -->
+    <h2>卡片阴影</h2>
+    <div class="demo">
+        <ea-card shadow="always">总是显示</ea-card>
+        <ea-card shadow="hover">鼠标移入显示</ea-card>
+        <ea-card shadow="never">从不显示</ea-card>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>
