@@ -64,8 +64,8 @@
   color: #c0c4cc;
 }
 .ea-input_wrap.prefix i {
-  left: 2.5%;
-  transform: translate(-2.5%, -50%);
+  left: 0.875rem;
+  transform: translate(-50%, -50%);
 }
 .ea-input_wrap.prefix .ea-input_inner {
   padding-left: 1.75rem;

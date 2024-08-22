@@ -1,31 +1,13 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
-import { timeout } from '../../utils/timeout.js';
 
 import "../ea-calendar/index.js"
 import "../ea-input/index.js"
 
-const stylesheet = `
-.ea-date-picker_wrap .ea-date-picker_input-wrap {
-  position: relative;
-}
-.ea-date-picker_wrap .ea-date-picker_dropdown-wrap {
-  position: absolute;
-  background-color: #fff;
-  transform-origin: top center;
-  transform: scaleY(0);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  z-index: 2;
-}
-.ea-date-picker_wrap.is-open .ea-date-picker_dropdown-wrap {
-  transform: scaleY(1);
-}
-.ea-date-picker_wrap.with-transition .ea-date-picker_dropdown-wrap {
-  transition: transform 0.3s;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
+
+import { timeout } from '../../utils/timeout.js';
 
 export class EaDatePicker extends Base {
     #container;
@@ -149,7 +131,9 @@ export class EaDatePicker extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
+    connectedCallback() {
+        this.setAttribute('data-ea-component', true);
+
         this.name = this.name;
 
         this.width = this.width;
@@ -193,12 +177,6 @@ export class EaDatePicker extends Base {
         timeout(() => {
             this.#container.classList.add('with-transition');
         }, 300);
-
-        this.setAttribute('data-ea-component', true);
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

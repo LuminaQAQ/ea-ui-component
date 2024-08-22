@@ -4,6 +4,12 @@
 
 - 基础组件
 
+  - [ ] Container 布局容器
+    - [ ] Container 外层容器
+    - [ ] Header 顶栏容器
+    - [ ] Main 主体容器
+    - [ ] Footer 底栏容器
+    - [ ] Aside 侧边栏容器
   - [ ] Icon 图标
   - [x] Button 按钮
   - [ ] Link 文字链接
@@ -62,3 +68,9 @@
   - [ ] Dropdown 下拉菜单
   - [ ] Steps 步骤条
   - [ ] Drawer 抽屉
+
+## 已知虫子
+
+- 文档类
+  - [ ] Container 布局容器, 开头描述中, 还是沿用的 `<el-container>`. `el` -> `ea`
+  - [ ] Checkbox 多选框, 缺少 attr, slot, event 描述
