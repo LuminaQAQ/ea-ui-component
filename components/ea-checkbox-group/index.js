@@ -1,13 +1,9 @@
 // @ts-nocheck
 import Base from "../Base.js";
 
-const stylesheet = `
-.ea-checkbox-group {
-  display: flex;
-}
-.ea-checkbox-group ::slotted(ea-checkbox) {
-  margin-right: 1.5rem;
-}`;
+import { stylesheet } from "./src/style/stylesheet.js";
+
+import { handleValueUptate } from "./src/utils/handleValueUptate.js";
 
 export class EaCheckboxGroup extends Base {
     constructor() {
@@ -15,18 +11,13 @@ export class EaCheckboxGroup extends Base {
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
-        const dom = document.createElement('div');
-        shadowRoot.appendChild(dom);
-        const slot = document.createElement('slot');
-        dom.className = "ea-checkbox-group";
-        dom.appendChild(slot);
-
-
-        this.dom = dom;
+        shadowRoot.innerHTML = `
+            <div class="ea-checkbox-group_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
 
         this.build(shadowRoot, stylesheet);
-
-        shadowRoot.appendChild(dom);
     }
 
     // ------- name 唯一键值 -------
@@ -99,15 +90,10 @@ export class EaCheckboxGroup extends Base {
         const checkboxes = this.querySelectorAll('ea-checkbox');
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', e => {
-                let valueArr = [];
-                Array.from(checkboxes).filter(item => {
-                    if (item.checked) return valueArr.push(item.value);
-                    return false;
-                })
-
-                this.value = valueArr.join(',');
+                handleValueUptate.call(this, checkboxes);
             });
         });
+        handleValueUptate.call(this, checkboxes);
 
         this.setAttribute('data-ea-component', true);
     }

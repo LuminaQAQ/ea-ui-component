@@ -1,3 +1,4 @@
+export const stylesheet = `
 :host {
   --margin-right: 1rem;
 }
@@ -102,3 +103,4 @@
 .ea-checkbox_wrap.indeterminate[checked=true] .ea-checkbox-label_desc {
   color: #409eff;
 }
+`;

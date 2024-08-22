@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-checkbox/index.js';
+        import '../components/ea-checkbox-group/index.js';
+        import '../components/ea-button/index.js';
+
+        // ------- 多选框组 -------
+        // #region
+        document.querySelector("#cityGroupBtn").addEventListener("click", () => {
+            alert(`[${document.querySelector("#cityGroup").value}]`);
+        });
+        // #endregion
+        // ------- end -------
+
+        // ------- indeterminate 状态 -------
+        // #region
+        document
+            .querySelector("#setIndeterminate")
+            .addEventListener("click", function (e) {
+                document.querySelector("#checkAll").indeterminate = true;
+            });
+        // #endregion
+        // ------- end -------
+
+        // ------- 多选框组 value 属性 -------
+        // #region
+        document.querySelector("#day-group").addEventListener("click", function (e) {
+            alert(`[${document.querySelector("#ea-checkbox-group").value}]`);
+        });
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-checkbox name="work" value="前端">前端</ea-checkbox>
+        <ea-checkbox name="work" value="后端">后端</ea-checkbox>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 禁用状态 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-checkbox name="salary" value="月入3000笑哈哈">月入3000笑哈哈</ea-checkbox>
+        <ea-checkbox name="salary" value="月薪过万不是梦" disabled>
+            月薪过万不是梦
+        </ea-checkbox>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 多选框组 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-checkbox-group id="cityGroup" name="city">
+            <ea-checkbox value="北京">北京</ea-checkbox>
+            <ea-checkbox value="上海">上海</ea-checkbox>
+            <ea-checkbox value="广州">广州</ea-checkbox>
+            <ea-checkbox value="深圳" disabled>深圳</ea-checkbox>
+            <ea-checkbox value="成都" disabled checked>成都</ea-checkbox>
+        </ea-checkbox-group>
+    </div>
+    <div class="row left">
+        <ea-button id="cityGroupBtn" type="primary">点击获取 checkbox 值</ea-button>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- indeterminate 状态 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-checkbox id="checkAll" name="food">全选</ea-checkbox>
+        <ea-button id="setIndeterminate" type="primary">
+            设置 indeterminate 状态
+        </ea-button>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 多选框组 value 属性 --------  -->
+    <!-- #region  -->
+    <h2>多选框组 value 属性</h2>
+    <div class="row left">
+        <ea-checkbox-group id="ea-checkbox-group" name="day" value="今天, 明天" disabled>
+            <ea-checkbox value="前天">前天</ea-checkbox>
+            <ea-checkbox value="昨天">昨天</ea-checkbox>
+            <ea-checkbox value="今天">今天</ea-checkbox>
+            <ea-checkbox value="明天">明天</ea-checkbox>
+            <ea-checkbox value="后天">后天</ea-checkbox>
+        </ea-checkbox-group>
+    </div>
+    <div class="row left">
+        <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>
