@@ -1,31 +1,7 @@
 // @ts-nocheck
 import Base from '../Base.js';
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-descriptions-item_wrap {
-  display: inline-flex;
-  text-align: left;
-  padding-bottom: 1rem;
-  line-height: 1.5;
-}
-.ea-descriptions-item_wrap .ea-descriptions-item_label {
-  margin-right: 10px;
-}
-.ea-descriptions-item_wrap .ea-descriptions-item_label::after {
-  content: ":";
-}
-.ea-descriptions-item_wrap .ea-descriptions-item_content {
-  display: inline-flex;
-  flex: 1;
-  align-items: baseline;
-}
-.ea-descriptions-item_wrap .ea-descriptions-item_label.is-border,
-.ea-descriptions-item_wrap .ea-descriptions-item_content.is-border {
-  border: 1px solid #ebeef5;
-}
-`;
+import { stylesheet } from './src/stylesheet.js';
 
 export class EaDescriptionsItem extends Base {
   #wrap;
@@ -39,29 +15,22 @@ export class EaDescriptionsItem extends Base {
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
 
-    const wrap = document.createElement('td');
-    wrap.className = 'ea-descriptions-item_wrap';
-    wrap.colSpan = 1;
+    shadowRoot.innerHTML = `
+        <td class="ea-descriptions-item_wrap" part="container">
+            <span class="ea-descriptions-item_label" part="label">
+                <slot slot="label"></slot>
+            </span>
+            <span class="ea-descriptions-item_content" part="content">
+                <slot></slot>
+            </span>
+        </td>
+    `;
 
-    const label = document.createElement('span');
-    const labelSlot = document.createElement('slot');
-    label.className = 'ea-descriptions-item_label';
-    label.appendChild(labelSlot);
-    wrap.appendChild(label);
-
-    const content = document.createElement('span');
-    const slot = document.createElement('slot');
-    content.className = 'ea-descriptions-item_content';
-    labelSlot.name = 'label';
-    content.appendChild(slot);
-    wrap.appendChild(content);
-
-    this.#wrap = wrap;
-    this.#label = label;
-    this.#labelSlot = labelSlot;
+    this.#wrap = shadowRoot.querySelector('.ea-descriptions-item_wrap');
+    this.#label = shadowRoot.querySelector('.ea-descriptions-item_label');
+    this.#labelSlot = shadowRoot.querySelector('slot[name="label"]');
 
     this.build(shadowRoot, stylesheet);
-    this.shadowRoot.appendChild(wrap);
   }
 
   // ------- label 该格的标题 -------
@@ -86,22 +55,14 @@ export class EaDescriptionsItem extends Base {
 
   set span(value) {
     this.setAttribute('span', value);
-
-    this.#wrap.colSpan = value;
   }
   // #endregion
   // ------- end -------
 
-  init() {
-    const that = this;
-
+  connectedCallback() {
     this.label = this.label;
 
     this.span = this.span;
-  }
-
-  connectedCallback() {
-    this.init();
   }
 }
 

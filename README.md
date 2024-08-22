@@ -72,5 +72,10 @@
 ## 已知虫子
 
 - 文档类
+
   - [ ] Container 布局容器, 开头描述中, 还是沿用的 `<el-container>`. `el` -> `ea`
   - [ ] Checkbox 多选框, 缺少 attr, slot, event 描述
+
+- 脚本类
+
+  - [ ] Descriptions 描述列表, span 值设置超过表格总 span 会导致元素消失
