@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-collapse/index.js';
+
+        import '../components/ea-button/index.js';
+
+        // ------- 基础用法 -------
+        // #region
+        document.querySelector("#collapse").addEventListener("click", () => {
+            document.querySelector("#normalCollapse").active = "1, 2, 3";
+        });
+        // #endregion
+        // ------- end -------
+
+        // ------- 手风琴效果 -------
+        // #region
+        document.querySelector("#closeAll").addEventListener("click", () => {
+            document.querySelector("#normalCollapse").active = "";
+        });
+
+        document.querySelector("#accordion").addEventListener("click", () => {
+            document.querySelector("#accordionCollapse").active = 2;
+        });
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="demo">
+        <ea-button-group>
+            <ea-button id="collapse" type="primary">设置 active 为 1, 2, 3</ea-button>
+            <ea-button id="closeAll" type="primary">设置 active 为 ""</ea-button>
+        </ea-button-group>
+        <ea-collapse id="normalCollapse" active="1, 2">
+            <ea-collapse-item class="" title="标题1" name="1">
+                <div>内容1</div>
+            </ea-collapse-item>
+            <ea-collapse-item class="" title="标题2" name="2">
+                <div>内容2</div>
+            </ea-collapse-item>
+            <ea-collapse-item class="" title="标题3" name="3">
+                <div>内容3</div>
+            </ea-collapse-item>
+        </ea-collapse>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 手风琴效果 --------  -->
+    <!-- #region  -->
+    <h2>手风琴效果</h2>
+    <div class="demo">
+        <ea-button id="accordion" type="primary">设置 active 为 2</ea-button>
+        <ea-collapse id="accordionCollapse" active="1" accordion>
+            <ea-collapse-item class="" title="标题1" name="1">
+                <div>内容1</div>
+            </ea-collapse-item>
+            <ea-collapse-item class="" title="标题2" name="2">
+                <div>内容2</div>
+            </ea-collapse-item>
+        </ea-collapse>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+</body>
+
+</html>
