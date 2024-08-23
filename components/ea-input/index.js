@@ -1,6 +1,7 @@
 // @ts-nocheck
 import Base from "../Base.js";
 import "../ea-icon/index.js"
+import { createFixIcon } from "./src/utils/createFixIcon.js";
 
 const stylesheet = `
 :host {
@@ -178,28 +179,11 @@ const stylesheet = `
 }
 `;
 
-const inputDom = (type) => {
-    const input = document.createElement('input');
-
-    input.className = "ea-input_inner";
-    input.type = type || "text";
-    input.autocomplete = "off";
-
-    return input;
-}
-
 const suggestionBoardDom = () => {
     const suggestionBoard = document.createElement('ul');
     suggestionBoard.className = "ea-input_suggestion-wrap";
 
     return suggestionBoard;
-}
-
-const slotDom = (name) => {
-    const slot = document.createElement('slot');
-    slot.name = name;
-
-    return slot;
 }
 
 export class EaInput extends Base {
@@ -219,60 +203,26 @@ export class EaInput extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = "ea-input_wrap";
+        shadowRoot.innerHTML = `
+            <div class='ea-input_wrap' part='container'>
+                <div class="ea-input_wrap">
+                    <div class="ea-input_prepend-slot" part="prepend-container">
+                        <slot name="prepend"></slot>
+                    </div>
+                    <input class="ea-input_inner" type="text" part="input" autocomplete="off" />
+                    <div class="ea-input_append-slot" part="append-container">
+                        <slot name="append"></slot>
+                    </div>
+                </div>
+            </div>
+        `;
 
-        const dom = inputDom(this.type);
-
-        // slot 和 template, 用于输入框前后 的 插槽
-        const prependSlot = slotDom('prepend');
-        const appendSlot = slotDom('append');
-
-        const prependTemplate = this.querySelector('[slot=prepend]');
-        const appendTemplate = this.querySelector('[slot=append]');
-
-        if (prependTemplate) {
-            wrap.classList.add('prepend-slot');
-
-            prependTemplate.style.setProperty('--border-top-left-radius', '3px');
-            prependTemplate.style.setProperty('--border-bottom-left-radius', '3px');
-
-            prependTemplate.style.setProperty('--border-right-width', '0');
-            prependTemplate.style.setProperty('--border-left-width', '1px');
-
-            prependSlot.appendChild(prependTemplate.cloneNode(true));
-        }
-
-        if (appendTemplate) {
-            wrap.classList.add('append-slot');
-
-            appendTemplate.style.setProperty('--border-top-right-radius', '3px');
-            appendTemplate.style.setProperty('--border-bottom-right-radius', '3px');
-
-            appendTemplate.style.setProperty('--border-left-width', '0');
-            appendTemplate.style.setProperty('--border-right-width', '1px');
-
-            appendSlot.appendChild(appendTemplate.cloneNode(true));
-        }
-
-        wrap.appendChild(dom);
-        wrap.insertBefore(prependSlot, dom);
-        wrap.appendChild(appendSlot);
-
-        this.#wrap = wrap;
-        this.#input = dom;
-        this.#prependSlot = prependSlot;
-        this.#appendSlot = appendSlot;
-
-        // 输入建议
-        if (this.suggestion.length > 0 || this.remote) {
-            this.suggestionEvent();
-        }
-
-        this.setIconFile(new URL('../ea-icon/index.css', import.meta.url).href);
+        this.#wrap = shadowRoot.querySelector('.ea-input_wrap');
+        this.#input = shadowRoot.querySelector('.ea-input_inner');
+        this.#prependSlot = shadowRoot.querySelector('slot[name="prepend"]');
+        this.#appendSlot = shadowRoot.querySelector('slot[name="append"]');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
 
     }
 
@@ -288,7 +238,7 @@ export class EaInput extends Base {
     // #endregion
     // ------- end -------
 
-    // ------- type 标识是 input 还是 textarea  -------
+    // ------- type input原生属性  -------
     // #region
     get type() {
         return this.getAttribute("type") || "text";
@@ -303,11 +253,7 @@ export class EaInput extends Base {
     // ------- value 输入框的值 -------
     // #region
     get value() {
-        if (!this.#mounted) {
-            this.#input.value = this.getAttribute("value") || '';
-        }
-
-        return this.#input.value;
+        return this.getAttribute("value") || '';
     }
 
     set value(val) {
@@ -337,7 +283,7 @@ export class EaInput extends Base {
     }
 
     set disabled(val) {
-        this.toggleAttr("disabled", val);
+        this.setAttribute("disabled", val);
         this.#input.disabled = val;
         this.#input.classList.toggle("disabled", val);
     }
@@ -448,8 +394,8 @@ export class EaInput extends Base {
         if (!val) return;
 
         this.setAttribute("prefix", val);
-        const prefixIcon = this.iconInit(val);
-        this.iconAppend('prefix', true, prefixIcon);
+
+        createFixIcon(this.#wrap, val, 'prefix');
     }
 
     get surfixIcon() {
@@ -460,8 +406,8 @@ export class EaInput extends Base {
         if (!val) return;
 
         this.setAttribute("suffix", val);
-        const surfixIcon = this.iconInit(val);
-        this.iconAppend('suffix', true, surfixIcon);
+
+        createFixIcon(this.#wrap, val, 'surfix');
     }
     // #endregion
     // ------- end -------
@@ -477,10 +423,7 @@ export class EaInput extends Base {
     set suggestion(val) {
         if (!val) return;
 
-        // console.log(val);
         this.#suggestion = val;
-        // this.setAttribute("primary-key", nanoid());
-        // this.primaryKey = nanoid();
     }
 
     // 输入框激活时列出输入建议
@@ -598,8 +541,6 @@ export class EaInput extends Base {
 
     // ------- max-length 最大长度 -------
     // #region
-
-    // 获取最大限制值
     get maxLength() {
         return this.getAttribute("max-length");
     }
@@ -610,16 +551,14 @@ export class EaInput extends Base {
         this.setAttribute("max-length", val);
         this.#input.maxLength = val;
 
-        this.#input.addEventListener('input', (e) => {
-            if (e.target.value.length > val) {
-                e.target.value = e.target.value.slice(0, val);
-            }
-        });
-
         if (this.showWordLimit) this.showWordLimit = true;
     }
 
-    // 获取最小限制值
+    // #endregion
+    // ------- end -------
+
+    // ------- min-length 最小长度 -------
+    // #region
     get minLength() {
         return this.getAttribute("min-length");
     }
@@ -631,15 +570,14 @@ export class EaInput extends Base {
         this.#input.minLength = val;
 
         this.#input.addEventListener('input', (e) => {
-            if (e.target.value.length < val) {
-                e.target.classList.add('invalid');
-            } else {
-                e.target.classList.remove('invalid');
-            }
+            this.#input.classList.toggle('invalid', e.target.value.length < val);
         });
     }
+    // #endregion
+    // ------- end -------
 
-    // 显示 当前文字长度 和 限制值
+    // ------- show-word-limit 显示字数限制 -------
+    // #region
     get showWordLimit() {
         return this.getAttrBoolean("show-word-limit");
     }
@@ -664,7 +602,6 @@ export class EaInput extends Base {
         this.#appendSlot.appendChild(wordLimit);
         this.#wrap.appendChild(wordLimit);
     }
-
     // #endregion
     // ------- end -------
 
@@ -698,8 +635,8 @@ export class EaInput extends Base {
 
     // 图标dom初始化
     iconInit(className) {
-        const clearIcon = document.createElement('i');
-        clearIcon.className = className;
+        const clearIcon = document.createElement('ea-icon');
+        clearIcon.icon = className;
 
         return clearIcon;
     }
@@ -724,8 +661,12 @@ export class EaInput extends Base {
         this.showPasswordEvent(e);
     }
 
+    focus() {
+        this.#input.focus();
+    }
+
     init() {
-        const that = this;
+        this.setAttribute("data-ea-component", true);
 
         this.name = this.name;
 
@@ -777,8 +718,6 @@ export class EaInput extends Base {
         this.#input.addEventListener("blur", (e) => {
             this.eventInit(e, "blur");
         });
-
-        this.setAttribute("data-ea-component", true);
     }
 
     connectedCallback() {

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        .prepend,
+        .append {
+            height: 100%;
+            padding: 0 0.5rem;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background-color: #f5f7fa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-input/index.js'
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-input placeholder="请输入内容"></ea-input>
+        <ea-input placeholder="请输入内容" value="hello"></ea-input>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 禁用状态 --------  -->
+    <!-- #region  -->
+    <h2>禁用状态</h2>
+    <div class="row left">
+        <ea-input id="basicInput" placeholder="请输入内容" disabled></ea-input>
+        <ea-input id="basicInput" placeholder="请输入内容" value="hello" disabled></ea-input>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 可清空 --------  -->
+    <!-- #region  -->
+    <h2>可清空</h2>
+    <div class="row left">
+        <ea-input id="basicInput" placeholder="这不是空的" clearable></ea-input>
+        <ea-input id="basicInput" placeholder="请输入内容" value="这是空的" clearable></ea-input>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 密码框 --------  -->
+    <!-- #region  -->
+    <h2>密码框</h2>
+    <div class="row left">
+        <ea-input id="basicInput" placeholder="这不是空的" show-password></ea-input>
+        <ea-input id="basicInput" placeholder="这不是空的" value="这是空的" show-password></ea-input>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 带 icon 的输入框 --------  -->
+    <!-- #region  -->
+    <h2>带 icon 的输入框</h2>
+    <div class="row left">
+        <ea-input placeholder="这不是空的" prefix-icon="icon-search"></ea-input>
+        <ea-input placeholder="这不是空的" suffix-icon="icon-search"></ea-input>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 复合型输入框 --------  -->
+    <!-- #region  -->
+    <h2>复合型输入框</h2>
+    <div class="col left">
+        <ea-input placeholder="假装有网址">
+            <div class="prepend" slot="prepend">Http://</div>
+        </ea-input>
+        <ea-input placeholder="假装有网址">
+            <div class="append" slot="append">.com</div>
+        </ea-input>
+        <ea-input placeholder="假装有网址">
+            <div class="prepend" slot="prepend">Http://</div>
+            <div class="append" slot="append">
+                <i class="icon-search"></i>
+            </div>
+        </ea-input>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 带输入建议 --------  -->
+    <!-- #region  -->
+    <h2>带输入建议</h2>
+    <div class="row">
+        <section>
+            <p>激活时列出输入建议</p>
+            <ea-input id="trigger-on-focus" placeholder="请输入内容" trigger-on-focus></ea-input>
+        </section>
+        <section>
+            <p>输入后匹配输入建议</p>
+            <ea-input id="trigger-after-input" placeholder="请输入内容" trigger-after-input></ea-input>
+        </section>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 远程搜索 --------  -->
+    <!-- #region  -->
+    <h2>远程搜索</h2>
+    <div class="row">
+        <section>
+            <p>激活时列出输入建议</p>
+            <ea-input id="trigger-on-focus_for-remote" placeholder="请输入内容" trigger-on-focus remote></ea-input>
+        </section>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 输入长度限制 --------  -->
+    <!-- #region  -->
+    <h2>输入长度限制</h2>
+    <div class="col left">
+        <ea-input placeholder="请输入内容" show-word-limit max-length="10"></ea-input>
+        <ea-input placeholder="请输入内容" show-word-limit min-length="2"></ea-input>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

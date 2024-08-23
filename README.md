@@ -56,7 +56,7 @@
   - [x] Collapse 折叠面板
   - [x] Calendar 日历
   - [x] Image 图片
-  - [ ] InfiniteScroll 无限滚动
+  - [x] InfiniteScroll 无限滚动
 
 - Navigation
 

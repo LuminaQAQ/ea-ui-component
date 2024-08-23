@@ -13,6 +13,8 @@
 
 .ea-input_wrap {
   position: relative;
+  display: flex;
+  align-items: stretch;
   width: 100%;
 
   .ea-input_inner {
@@ -79,71 +81,106 @@
     }
   }
 
-  &.prefix,
-  &.suffix {
-    i {
-      position: absolute;
-      top: 50%;
-      color: $color-disabled-text;
-    }
+  // &.prefix,
+  // &.suffix {
+  //   i {
+  //     position: absolute;
+  //     top: 50%;
+  //     color: $color-disabled-text;
+  //   }
+  // }
+
+  // &.prefix {
+  //   i {
+  //     left: 0.875rem;
+
+  //     transform: translate(-50%, -50%);
+  //   }
+
+  //   .ea-input_inner {
+  //     padding-left: 1.75rem;
+  //   }
+  // }
+
+  // &.suffix {
+  //   i {
+  //     left: calc(100% - 1.75rem);
+
+  //     transform: translate(calc(-100% - 0.25rem), -50%);
+  //   }
+
+  //   .ea-input_inner {
+  //     padding-right: 1.75rem;
+  //   }
+  // }
+
+  .fix-icon {
+    position: absolute;
+    top: 50%;
+
+    font-size: 0.8rem;
+    line-height: 0.8rem;
   }
 
   &.prefix {
-    i {
-      left: 0.875rem;
-
-      transform: translate(-50%, -50%);
-    }
-
     .ea-input_inner {
       padding-left: 1.75rem;
     }
+
+    .prefix-icon {
+      left: 1rem;
+      transform: translate(-50%, -50%);
+    }
   }
 
-  &.suffix {
-    i {
-      left: calc(100% - 1.75rem);
-
-      transform: translate(calc(-100% - 0.25rem), -50%);
-    }
-
+  &.surfix {
     .ea-input_inner {
       padding-right: 1.75rem;
     }
-  }
 
-  &.prepend-slot,
-  &.append-slot {
-    display: flex;
-    align-items: center;
-    font-size: 0.925rem;
-    line-height: 1;
-
-    ::slotted(div) {
-      border: 1px solid $color-border;
-
-      border-left-width: var(--border-left-width);
-      border-right-width: var(--border-right-width);
-
-      border-top-right-radius: var(--border-top-right-radius);
-      border-bottom-right-radius: var(--border-bottom-right-radius);
-      border-top-left-radius: var(--border-top-left-radius);
-      border-bottom-left-radius: var(--border-bottom-left-radius);
+    .surfix-icon {
+      right: 1rem;
+      transform: translate(50%, -50%);
     }
   }
 
-  &.prepend-slot {
-    .ea-input_inner {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-  }
+  // &.prepend-slot,
+  // &.append-slot {
+  //   display: flex;
+  //   align-items: center;
+  //   font-size: 0.925rem;
+  //   line-height: 1;
 
-  &.append-slot {
-    .ea-input_inner {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
+  //   ::slotted(div) {
+  //     border: 1px solid $color-border;
+
+  //     border-left-width: var(--border-left-width);
+  //     border-right-width: var(--border-right-width);
+
+  //     border-top-right-radius: var(--border-top-right-radius);
+  //     border-bottom-right-radius: var(--border-bottom-right-radius);
+  //     border-top-left-radius: var(--border-top-left-radius);
+  //     border-bottom-left-radius: var(--border-bottom-left-radius);
+  //   }
+  // }
+
+  // &.prepend-slot {
+  //   .ea-input_inner {
+  //     border-top-left-radius: 0;
+  //     border-bottom-left-radius: 0;
+  //   }
+  // }
+
+  // &.append-slot {
+  //   .ea-input_inner {
+  //     border-top-right-radius: 0;
+  //     border-bottom-right-radius: 0;
+  //   }
+  // }
+
+  .ea-input_prepend-slot,
+  .ea-input_append-slot {
+    height: 100%;
   }
 
   .ea-input_suggestion-wrap {
