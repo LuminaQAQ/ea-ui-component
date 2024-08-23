@@ -1,37 +1,8 @@
 // @ts-nocheck
 import Base from '../Base.js';
 
-const stylesheet = `
-.ea-empty_wrap {
-  padding: 40px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.ea-empty_wrap .ea-empty_image {
-  width: 8rem;
-  object-fit: cover;
-}
-.ea-empty_wrap .ea-empty_image svg,
-.ea-empty_wrap .ea-empty_image img {
-  width: 100%;
-  height: 100%;
-}
-.ea-empty_wrap .ea-empty_description {
-  margin-top: 20px;
-}
-.ea-empty_wrap .ea-empty_bottom {
-  margin-top: 20px;
-}
-`;
-
-const emptyStatusSVG = `
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <path d="M30 50v21.5a2 2 0 0 0 1 1h39a2 2 0 0 0 1-1V50H61a10 10 0 0 1-20 0h-6.5z" fill="#6E6E6F" />
-    <path d="M30.5 50.5L34 39h32.5l4 11.5" fill="none" stroke="#6E6E6F" />
-</svg>
-`;
+import { emptyStatusSVG } from './src/assets/emptyStatusSVG.js';
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaEmpty extends Base {
     #wrap;
@@ -43,32 +14,26 @@ export class EaEmpty extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-empty_wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-empty_wrap" part="container">
+                <div class="ea-empty_image" part="image">
+                    ${emptyStatusSVG}
+                </div>
+                <div class="ea-empty_description" part="description">
+                    暂无数据
+                </div>
+                <div class="ea-empty_bottom" part="bottom">
+                    <slot></slot>
+                </div>
+            </div>
+        `;
 
-        const imageWrap = document.createElement('div');
-        imageWrap.className = 'ea-empty_image';
-        imageWrap.innerHTML = emptyStatusSVG;
-        wrap.appendChild(imageWrap);
-
-        const descriptionWrap = document.createElement('div');
-        descriptionWrap.className = 'ea-empty_description';
-        descriptionWrap.innerHTML = `暂无数据`;
-        wrap.appendChild(descriptionWrap);
-
-        const bottomWrap = document.createElement('div');
-        const slot = document.createElement('slot');
-        bottomWrap.className = 'ea-empty_bottom';
-        bottomWrap.appendChild(slot);
-        wrap.appendChild(bottomWrap);
-
-        this.#wrap = wrap;
-        this.#imageWrap = imageWrap;
-        this.#descriptionWrap = descriptionWrap;
-        this.#slot = slot;
+        this.#wrap = shadowRoot.querySelector('.ea-empty_wrap');
+        this.#imageWrap = shadowRoot.querySelector('.ea-empty_image');
+        this.#descriptionWrap = shadowRoot.querySelector('.ea-empty_description');
+        this.#slot = shadowRoot.querySelector('slot');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- description 描述文字 -------
@@ -98,10 +63,8 @@ export class EaEmpty extends Base {
         const image = new Image();
         image.src = value;
         image.onload = () => {
-            // this.#imageWrap.style.width = image.width + "px";
             this.#imageWrap.innerHTML = `<img src="${value}" />`;
         }
-
     }
     // #endregion
     // ------- end -------
@@ -121,18 +84,12 @@ export class EaEmpty extends Base {
     // #endregion
     // ------- end -------
 
-    init() {
-        const that = this;
-
+    connectedCallback() {
         this.description = this.description;
 
         this.image = this.image;
 
         this.imageSize = this.imageSize;
-    }
-
-    connectedCallback() {
-        this.init();
     }
 }
 

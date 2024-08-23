@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-empty/index.js'
+        import '../components/ea-button/index.js'
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="demo">
+        <ea-empty description="描述文字"></ea-empty>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 自定义图片 --------  -->
+    <!-- #region  -->
+    <h2>自定义图片</h2>
+    <div class="demo">
+        <ea-empty
+            image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-empty>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 图片尺寸 --------  -->
+    <!-- #region  -->
+    <h2>图片尺寸</h2>
+    <div class="row">
+        <ea-empty image-size="100"
+            image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-empty>
+        <ea-empty image-size="100"></ea-empty>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 底部内容 --------  -->
+    <!-- #region  -->
+    <h2>底部内容</h2>
+    <div class="demo">
+        <ea-empty>
+            <ea-button type="primary">刷新</ea-button>
+        </ea-empty>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+</body>
+
+</html>
