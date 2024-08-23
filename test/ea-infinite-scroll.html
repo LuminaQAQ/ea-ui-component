@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        .sg-infinite-item {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            background-color: aquamarine;
+            margin-bottom: 10px;
+        }
+
+        ea-infinite::part(wrap) {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-infinite-scroll/index.js'
+
+        const infiniteNodes = {
+            wrap: document.getElementById("infinite"),
+            createTemplate(content) {
+                return `<div class="sg-infinite-item">${content}</div>`;
+            },
+        };
+
+        infiniteNodes.wrap.addEventListener("bottomReached", (e) => {
+            const children = infiniteNodes.wrap.children;
+
+            for (let i = 0; i < 5; i++) {
+                const item = document.createElement("ea-infinite-item");
+                item.innerHTML = infiniteNodes.createTemplate(children.length + 1);
+
+                infiniteNodes.wrap.appendChild(item);
+            }
+        });
+    </script>
+
+    <!-- -------- name --------  -->
+    <!-- #region  -->
+    <h2></h2>
+    <div class="demo" style="height: 150px; overflow: auto;">
+        <ea-infinite id="infinite">
+            <ea-infinite-item>
+                <div class="sg-infinite-item">1</div>
+            </ea-infinite-item>
+            <ea-infinite-item>
+                <div class="sg-infinite-item">2</div>
+            </ea-infinite-item>
+            <ea-infinite-item>
+                <div class="sg-infinite-item">3</div>
+            </ea-infinite-item>
+            <ea-infinite-item>
+                <div class="sg-infinite-item">4</div>
+            </ea-infinite-item>
+            <ea-infinite-item>
+                <div class="sg-infinite-item">5</div>
+            </ea-infinite-item>
+        </ea-infinite>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>
