@@ -1,16 +1,11 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 import { timeout } from '../../utils/timeout.js';
 import { Validator } from "../../utils/Validator.js";
 
 import "../ea-form-item/index.js"
 import '../ea-button/index.js'
-
-const stylesheet = `
-
-`;
 
 export class EaForm extends Base {
     #container;
@@ -29,8 +24,6 @@ export class EaForm extends Base {
         `;
 
         this.#container = shadowRoot.querySelector('.ea-form_wrap');
-
-        this.build(shadowRoot, stylesheet);
     }
 
     // ------- data 获取form表单的值 -------
@@ -111,7 +104,7 @@ export class EaForm extends Base {
         });
     }
 
-    #init() {
+    connectedCallback() {
         const formItemsWrap = this.querySelectorAll('ea-form-item');
 
         const lenArr = Array.from(formItemsWrap).map(item => item.label.length);
@@ -120,10 +113,6 @@ export class EaForm extends Base {
         formItemsWrap.forEach(item => {
             item.shadowRoot.querySelector('.ea-form-item_label-wrap').style.width = `${max * 20}px`;
         });
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 
