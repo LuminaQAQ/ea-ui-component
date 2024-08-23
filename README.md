@@ -35,8 +35,8 @@
   - [x] Badge 标记
   - [x] Avatar 头像
   - [ ] Skeleton 骨架屏
-  - [ ] Empty 空状态
-  - [ ] Descriptions 描述列表
+  - [x] Empty 空状态
+  - [x] Descriptions 描述列表
   - [ ] Result 结果
   - [x] Table 表格
 
@@ -67,7 +67,7 @@
   - [ ] PageHeader 页头
   - [ ] Dropdown 下拉菜单
   - [ ] Steps 步骤条
-  - [ ] Drawer 抽屉
+  - [x] Drawer 抽屉
 
 ## 已知虫子
 
@@ -75,6 +75,7 @@
 
   - [ ] Container 布局容器, 开头描述中, 还是沿用的 `<el-container>`. `el` -> `ea`
   - [ ] Checkbox 多选框, 缺少 attr, slot, event 描述
+  - [ ] Icon 图标, 缺少 图标来源
 
 - 脚本类
 
