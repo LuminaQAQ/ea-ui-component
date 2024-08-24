@@ -1,3 +1,4 @@
+export const stylesheet = `
 .ea-input_container {
   display: flex;
   align-items: stretch;
@@ -130,3 +131,4 @@
 .ea-input_container .ea-input_wrap.with-transition .ea-input_suggestion-wrap {
   transition: transform 0.3s;
 }
+`;

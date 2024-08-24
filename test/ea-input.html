@@ -30,6 +30,39 @@
 
     <script type='module'>
         import '../components/ea-input/index.js'
+
+        // ------- 带输入建议 -------
+        // #region
+        const suggestion = {
+            input: document.querySelector('#trigger-on-focus'),
+            afterInput: document.querySelector('#trigger-after-input'),
+            remote: document.querySelector('#trigger-on-focus_for-remote'),
+            data: [{ value: "123" }, { value: "456" }, { value: "789" }],
+
+            handleRemoteSearch(data) {
+                this.remote.remote = true;
+                setTimeout(() => {
+                    this.remote.suggestion = data;
+                    this.remote.remote = false;
+                }, 3 * 1000);
+            },
+
+            init() {
+                this.input.suggestion = [{ value: "1" }, { value: "2" }];
+                this.afterInput.suggestion = [{ value: "456" }, { value: "789" }];
+
+                this.remote.addEventListener('change', (e) => {
+                    this.handleRemoteSearch(this.data.filter(item => item.value.includes(e.detail.value)));
+                });
+
+                this.remote.addEventListener('focus', (e) => {
+                    this.handleRemoteSearch(this.data);
+                });
+            }
+        }
+        suggestion.init();
+        // #endregion
+        // ------- end -------
     </script>
 
     <!-- -------- 基础用法 --------  -->
