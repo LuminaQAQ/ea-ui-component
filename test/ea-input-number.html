@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-input-number/index.js'
+
+        const basic = document.querySelector('#basic')
+
+        basic.addEventListener('minus', (e) => {
+            console.log(e.detail.value)
+        })
+
+        basic.addEventListener('plus', (e) => {
+            console.log(e.detail.value)
+        })
+
+        basic.addEventListener('change', (e) => {
+            console.log(e.detail.value)
+        })
+
+        basic.addEventListener('focus', (e) => {
+            console.log(e.target.value);
+        })
+
+        basic.addEventListener('blur', (e) => {
+            console.log(e.target.value);
+        })
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-input-number id="basic"></ea-input-number>
+        <ea-input-number readonly></ea-input-number>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 禁用状态 --------  -->
+    <!-- #region  -->
+    <h2>禁用状态</h2>
+    <div class="row left">
+        <ea-input-number disabled></ea-input-number>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 限制值 --------  -->
+    <!-- #region  -->
+    <h2>限制值</h2>
+    <div class="row left">
+        <ea-input-number min="1" max="10"></ea-input-number>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 步数 --------  -->
+    <!-- #region  -->
+    <h2>步数</h2>
+    <div class="row left">
+        <ea-input-number step="2"></ea-input-number>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 严格步数 --------  -->
+    <!-- #region  -->
+    <h2>严格步数</h2>
+    <div class="row left">
+        <ea-input-number step="3" step-strictly></ea-input-number>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 精度 --------  -->
+    <!-- #region  -->
+    <h2>精度</h2>
+    <div class="row left">
+        <ea-input-number value="1" step="0.1" precision="1"></ea-input-number>
+        <ea-input-number value="1" step="0.01" precision="2"></ea-input-number>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 尺寸 --------  -->
+    <!-- #region  -->
+    <h2>尺寸</h2>
+    <div class="row left">
+        <ea-input-number></ea-input-number>
+        <ea-input-number size="medium"></ea-input-number>
+        <ea-input-number size="small"></ea-input-number>
+        <ea-input-number size="mini"></ea-input-number>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+</body>
+
+</html>
