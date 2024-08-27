@@ -12,15 +12,15 @@
     - [ ] Aside 侧边栏容器
   - [x] Icon 图标
   - [x] Button 按钮
-  - [ ] Link 文字链接
+  - [x] Link 文字链接
 
 - 表单组件
 
   - [ ] Radio 单选框
   - [x] Checkbox 多选框
-  - [ ] Input 输入框
+  - [x] Input 输入框
   - [ ] Textarea 文本域
-  - [ ] InputNumber 计数器
+  - [x] InputNumber 计数器
   - [ ] Switch 开关
   - [ ] Rate 评分
   - [ ] TimePicker 时间选择器

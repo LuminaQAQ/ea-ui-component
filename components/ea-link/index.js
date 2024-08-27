@@ -2,79 +2,23 @@
 import Base from '../Base.js'
 import "../ea-icon/index.js"
 
-const stylesheet = `
-.__ea-link {
-  text-decoration: none;
-  color: #606266;
-  cursor: pointer;
-}
-.__ea-link:hover {
-  color: #797b80;
-}
-.__ea-link.underline:hover {
-  text-decoration: underline;
-}
-.__ea-link.primary {
-  color: #409eff;
-}
-.__ea-link.primary:hover {
-  color: #73b8ff;
-}
-.__ea-link.success {
-  color: #67c23a;
-}
-.__ea-link.success:hover {
-  color: #85cf60;
-}
-.__ea-link.info {
-  color: #909399;
-}
-.__ea-link.info:hover {
-  color: #abadb1;
-}
-.__ea-link.warning {
-  color: #e6a23c;
-}
-.__ea-link.warning:hover {
-  color: #ecb869;
-}
-.__ea-link.danger {
-  color: #f56c6c;
-}
-.__ea-link.danger:hover {
-  color: #f89c9c;
-}
-.__ea-link.disabled {
-  color: #c0c4cc;
-  pointer-events: none;
-}
-.__ea-link.disabled:hover {
-  color: #dcdee3;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaLink extends Base {
+  #container;
   constructor() {
     super();
-
-
+    
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    let dom = document.createElement('a');;
+    shadowRoot.innerHTML = `
+      <div class="ea-link" part="container">
+        <slot></slot>
+      </div>
+    `;
 
-    const slot = document.createElement('slot');
-    dom.className = "__ea-link";
-    dom.appendChild(slot);
-
-    this.dom = dom;
+    this.#container = shadowRoot.querySelector('.ea-link');
 
     this.build(shadowRoot, stylesheet);
-    this.setIconFile(new URL('../ea-icon/index.css', import.meta.url).href);
-
-    shadowRoot.appendChild(dom);
-  }
-
-  static get observedAttributes() {
-    return ['disabled'];
   }
 
   get LINK_TYPE() {
@@ -88,7 +32,10 @@ export class EaLink extends Base {
   }
 
   set href(value) {
-    if (value !== null) this.dom.href = value;
+    if (!value) return;
+
+    this.setAttribute('href', value);
+    this.#container.href = value;
   }
   // #endregion
   // ------- end -------
@@ -96,18 +43,14 @@ export class EaLink extends Base {
   // ------- type类型 -------
   // #region
   get type() {
-    return this.getAttribute('type');
+    const attr = this.getAttribute('type');
+    return this.LINK_TYPE.includes(attr) ? attr : null;
   }
 
   set type(value) {
-    if (value === null) return;
+    if (!value) return;
 
-    for (let i = 0; i < this.LINK_TYPE.length; i++) {
-      if (value === this.LINK_TYPE[i]) {
-        this.dom.classList.add(value);
-        break;
-      }
-    }
+    if (this.LINK_TYPE.includes(value)) this.#container.classList.add(value);
   }
   // #endregion
   // ------- end -------
@@ -115,17 +58,13 @@ export class EaLink extends Base {
   // ------- disabled禁用状态 -------
   // #region
   get disabled() {
-    return this.getAttribute('disabled') === "" || this.getAttribute('disabled') === 'true';
+    return this.getAttrBoolean('disabled');
   }
 
   set disabled(value) {
-    if (!value) return;
-
-    if (value) {
-      this.dom.classList.add('disabled');
-    } else {
-      this.dom.classList.remove('disabled');
-    }
+    this.setAttribute('disabled', value);
+    this.#container.classList.toggle('disabled', value);
+    this.style.cursor = value ? 'not-allowed' : 'pointer';
   }
   // #endregion
   // ------- end -------
@@ -133,17 +72,11 @@ export class EaLink extends Base {
   // ------- underline下划线 -------
   // #region
   get underline() {
-    return this.getAttribute('underline') === "" || this.getAttribute('underline') === 'true';
+    return this.getAttrBoolean('underline');
   }
 
   set underline(value) {
-    if (!value) return;
-
-    if (value) {
-      this.dom.classList.add('underline');
-    } else {
-      this.dom.classList.remove('underline');
-    }
+    this.#container.classList.toggle('underline', value);
   }
   // #endregion
   // ------- end -------
@@ -155,16 +88,18 @@ export class EaLink extends Base {
   }
 
   set icon(value) {
-    if (value === null || value === "") return;
+    if (!value) return;
 
-    const icon = document.createElement('i');
-    icon.className = value;
-    this.dom.insertBefore(icon, this.dom.firstChild);
+    const icon = document.createElement('ea-icon');
+    icon.icon = value;
+    this.#container.insertBefore(icon, this.#container.firstChild);
   }
   // #endregion
   // ------- end -------
 
-  init() {
+  connectedCallback() {
+    this.style.display = 'inline-block';
+
     // 设置链接
     this.href = this.href;
 
@@ -179,19 +114,6 @@ export class EaLink extends Base {
 
     // 图标
     this.icon = this.icon;
-  }
-
-  connectedCallback() {
-    this.init();
-  }
-
-  attributeChangedCallback(name, oldVal, newVal) {
-    switch (name) {
-      case 'disabled':
-        this.disabled = newVal === "" || newVal === 'true' || newVal === true;
-        break;
-      default: break;
-    }
   }
 }
 

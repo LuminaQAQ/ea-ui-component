@@ -1,0 +1,36 @@
+@import "../ea-ui-base-style.scss";
+
+@mixin ea-link-theme($theme-name, $color) {
+  &.#{$theme-name} {
+    color: $color;
+
+    &:hover {
+      color: lighten($color, 10);
+    }
+
+    @if ($theme-name == "disabled") {
+      pointer-events: none;
+    }
+  }
+}
+
+.ea-link {
+  text-decoration: none;
+  color: $color-default-text;
+  cursor: pointer;
+
+  &:hover {
+    color: lighten($color-default-text, 10);
+  }
+
+  &.underline:hover {
+    text-decoration: underline;
+  }
+
+  @include ea-link-theme("primary", $color-primary-bgc);
+  @include ea-link-theme("success", $color-success-bgc);
+  @include ea-link-theme("info", $color-info-bgc);
+  @include ea-link-theme("warning", $color-warning-bgc);
+  @include ea-link-theme("danger", $color-danger-bgc);
+  @include ea-link-theme("disabled", $color-disabled-text);
+}

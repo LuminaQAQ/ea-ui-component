@@ -1,0 +1,48 @@
+.ea-link {
+  text-decoration: none;
+  color: #606266;
+  cursor: pointer;
+}
+.ea-link:hover {
+  color: #797b80;
+}
+.ea-link.underline:hover {
+  text-decoration: underline;
+}
+.ea-link.primary {
+  color: #409eff;
+}
+.ea-link.primary:hover {
+  color: #73b8ff;
+}
+.ea-link.success {
+  color: #67c23a;
+}
+.ea-link.success:hover {
+  color: #85cf60;
+}
+.ea-link.info {
+  color: #909399;
+}
+.ea-link.info:hover {
+  color: #abadb1;
+}
+.ea-link.warning {
+  color: #e6a23c;
+}
+.ea-link.warning:hover {
+  color: #ecb869;
+}
+.ea-link.danger {
+  color: #f56c6c;
+}
+.ea-link.danger:hover {
+  color: #f89c9c;
+}
+.ea-link.disabled {
+  color: #c0c4cc;
+  pointer-events: none;
+}
+.ea-link.disabled:hover {
+  color: #dcdee3;
+}

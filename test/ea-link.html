@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-link/index.js'
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-link href="https://github.com/LuminaQAQ">默认链接</ea-link>
+        <ea-link class="custom-link" href="https://github.com/LuminaQAQ">默认链接-自定义链接颜色</ea-link>
+        <ea-link href="https://github.com/LuminaQAQ" type="primary">主要链接</ea-link>
+        <ea-link href="https://github.com/LuminaQAQ" type="success">成功链接</ea-link>
+        <ea-link href="https://github.com/LuminaQAQ" type="warning">警告链接</ea-link>
+        <ea-link href="https://github.com/LuminaQAQ" type="danger">危险链接</ea-link>
+        <ea-link href="https://github.com/LuminaQAQ" type="info">信息链接</ea-link>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 禁用状态 --------  -->
+    <!-- #region  -->
+    <h2>禁用状态</h2>
+    <div class="row left">
+        <ea-link type="primary" href="https://github.com/LuminaQAQ">未禁用状态</ea-link>
+        <ea-link disabled>禁用状态</ea-link>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 下划线 --------  -->
+    <!-- #region  -->
+    <h2>下划线</h2>
+    <div class="row left">
+        <ea-link>无下划线</ea-link>
+        <ea-link type="primary" underline>下划线</ea-link>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 图标 --------  -->
+    <!-- #region  -->
+    <h2>图标</h2>
+    <div class="row left">
+        <ea-link icon="icon-eye">查看</ea-link>
+        <ea-link icon="icon-share">分享</ea-link>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>
