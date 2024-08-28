@@ -43,7 +43,7 @@
 - Notice
 
   - [ ] Alert 警告
-  - [ ] Loading 加载
+  - [x] Loading 加载
   - [ ] Message 消息提示
   - [ ] MessageBox 弹框
 
