@@ -5,7 +5,16 @@ import '../ea-icon/index.js'
 import { createElement, createSlotElement } from "../../utils/createElement.js"
 
 const stylesheet = `
-
+.ea-container_wrap {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+.ea-container_wrap.is-vertical {
+  flex-direction: column;
+}
 `;
 
 export class EaContainer extends Base {
