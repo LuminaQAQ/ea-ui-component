@@ -3,54 +3,9 @@ import Base from '../Base.js';
 import { createElement } from '../../utils/createElement.js';
 import "../ea-icon/index.js"
 
-const stylesheet = `
+import { EaMessage } from "./src/utils/MessageClass.js"
 
-.ea-message_wrap {
-  position: fixed;
-  left: 50%;
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  padding: 15px 15px 15px 20px;
-  border: 1px solid #ebeef5;
-  border-radius: 4px;
-  top: -100%;
-  transform-origin: center;
-  opacity: 0;
-  transform: translate(-50%, 0);
-  min-width: 380px;
-  overflow: hidden;
-  background-color: black;
-  transition: opacity 0.3s, top 0.3s;
-}
-.ea-message_wrap .ea-icon-wrap {
-  margin-right: 0.5rem;
-  line-height: 1;
-}
-.ea-message_wrap .ea-text-content {
-  line-height: 1;
-  vertical-align: middle;
-}
-.ea-message_wrap .ea-close-icon {
-  margin-left: auto;
-}
-.ea-message_wrap.ea-message--success {
-  background-color: #f0f9eb;
-  color: #67c23a;
-}
-.ea-message_wrap.ea-message--info {
-  background-color: #f4f4f5;
-  color: #909399;
-}
-.ea-message_wrap.ea-message--warning {
-  background-color: #fdf6ec;
-  color: #e6a23c;
-}
-.ea-message_wrap.ea-message--error {
-  background-color: #fef0f0;
-  color: #f56c6c;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaMessageElement extends Base {
     #wrap;
@@ -65,30 +20,22 @@ export class EaMessageElement extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-message_wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-message_wrap" part="container">
+                <ea-icon class="ea-icon-wrap" part="icon"></ea-icon>
+                <div class="ea-text-content" part="content"></div>
+                <ea-icon class="ea-close-icon" icon="icon-cancel"></ea-icon>
+            </div>
+        `;
 
-        const icon = createElement('i', 'ea-icon-wrap');
-        wrap.appendChild(icon);
-
-        const textContent = createElement('div', 'ea-text-content');
-        wrap.appendChild(textContent);
-
-        const closeIcon = createElement('i', 'ea-close-icon icon-cancel');
-        wrap.appendChild(closeIcon);
-        closeIcon.style.display = 'none';
-
-        this.#wrap = wrap;
-        this.wrap = wrap;
-        this.#icon = icon;
-        this.#textContent = textContent;
-        this.#closeWrap = closeIcon;
-        this.closeWrap = closeIcon;
+        this.#wrap = shadowRoot.querySelector('.ea-message_wrap');
+        this.wrap = this.#wrap;
+        this.#icon = shadowRoot.querySelector('.ea-icon-wrap');
+        this.#textContent = shadowRoot.querySelector('.ea-text-content');
+        this.#closeWrap = shadowRoot.querySelector('.ea-close-icon');
+        this.closeWrap = this.#closeWrap;
 
         this.build(shadowRoot, stylesheet);
-        this.setIconFile(new URL('../ea-icon/index.css', import.meta.url).href);
-
-        this.shadowRoot.appendChild(wrap);
     }
 
     get attrs() {
@@ -123,14 +70,12 @@ export class EaMessageElement extends Base {
             this.#wrap.style.top = `${length * elementHeight + gap}px`;
             this.#wrap.style.opacity = 1;
         } else {
-            const that = this;
-
             this.#wrap.style.top = `-100%`;
             this.#wrap.style.opacity = 0;
 
-            let event = this.#wrap.addEventListener('transitionend', function () {
+            let event = this.#wrap.addEventListener('transitionend', () => {
                 this.removeEventListener('transitionend', event);
-                that.remove();
+                this.remove();
             });
         }
 
@@ -145,6 +90,7 @@ export class EaMessageElement extends Base {
     }
 
     set text(value) {
+        if (!value) return;
         this.setAttribute('text', value);
 
         this.#textContent.innerText = value;
@@ -162,7 +108,7 @@ export class EaMessageElement extends Base {
         this.setAttribute('type', value);
 
         this.#wrap.classList.add(`ea-message--${value}`);
-        this.#icon.classList.add(`${this.iconList[value]}`);
+        this.#icon.icon = this.iconList[value];
     }
     // #endregion
     // ------- end -------
@@ -174,13 +120,11 @@ export class EaMessageElement extends Base {
     }
 
     set showClose(value) {
+        if (!value) return;
+
         this.setAttribute('showClose', value);
 
-        if (value) {
-            this.#closeWrap.style.display = "block";
-        } else {
-            this.#closeWrap.style.display = "none";
-        }
+        this.#closeWrap.style.display = value ? "block" : "none";
     }
     // #endregion
     // ------- end -------
@@ -192,24 +136,16 @@ export class EaMessageElement extends Base {
     }
 
     set center(value) {
+        if (!value) return;
+
         this.setAttribute('center', value);
 
-        if (value) {
-            this.#icon.style.marginLeft = `auto`;
-        } else {
-            this.#icon.style.marginLeft = `0`;
-        }
+        this.#icon.style.marginLeft = value ? `auto` : `0`;
     }
     // #endregion
     // ------- end -------
 
-    init() {
-        const that = this;
-    }
-
     connectedCallback() {
-        this.init();
-
         this.#closeWrap.addEventListener('click', () => {
             this.show = false;
         });
@@ -231,3 +167,5 @@ export class EaMessageElement extends Base {
 if (!customElements.get('ea-message')) {
     customElements.define('ea-message', EaMessageElement);
 }
+
+window.$message = new EaMessage();

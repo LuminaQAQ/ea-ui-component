@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-button/index.js'
+        import '../components/ea-message/index.js'
+
+        // ------- close 事件 -------
+        // #region
+        document.getElementById("closeEventBtn").addEventListener("click", () => {
+            $message
+                .open({
+                    text: "close 事件",
+                    showClose: true,
+                    center: true,
+                })
+                .onClose(() => {
+                    alert("关闭了");
+                });
+        });
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <ea-button onclick='$message.open("基础用法")'>基础用法</ea-button>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 不同状态 --------  -->
+    <!-- #region  -->
+    <h2>不同状态</h2>
+    <ea-button onclick='$message.open({ text: "对象类消息提示(info)", type: "info"})'>对象类消息提示(info)</ea-button>
+    <ea-button type="success"
+        onclick='$message.open({ text: "对象类消息提示(success)", type: "success"})'>对象类消息提示(success)</ea-button>
+    <ea-button type="danger"
+        onclick='$message.open({ text: "对象类消息提示(error)", type: "error"})'>对象类消息提示(error)</ea-button>
+    <ea-button type="warning"
+        onclick='$message.open({ text: "对象类消息提示(warning)", type: "warning"})'>对象类消息提示(warning)</ea-button>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 可关闭 --------  -->
+    <!-- #region  -->
+    <h2>可关闭</h2>
+    <ea-button
+        onclick='$message.open({ text: "对象类消息提示(info)", type: "info", showClose: true})'>对象类消息提示(info)</ea-button>
+    <ea-button
+        onclick='$message.open({ text: "对象类消息提示(info)", type: "info", duration: 0, showClose: true})'>对象类消息提示(不会自动消失)</ea-button>
+    <ea-button type="success"
+        onclick='$message.open({ text: "对象类消息提示(success)", type: "success", showClose: true})'>对象类消息提示(success)</ea-button>
+    <ea-button type="danger"
+        onclick='$message.open({ text: "对象类消息提示(error)", type: "error", showClose: true})'>对象类消息提示(error)</ea-button>
+    <ea-button type="warning"
+        onclick='$message.open({ text: "对象类消息提示(warning)", type: "warning", showClose: true})'>对象类消息提示(warning)</ea-button>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 文字居中 --------  -->
+    <!-- #region  -->
+    <h2>文字居中</h2><ea-button
+        onclick='$message.open({ text: "对象类消息提示(info)", center: true, duration: 0})'>文字居中</ea-button>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- close 事件 --------  -->
+    <!-- #region  -->
+    <h2>close 事件</h2>
+    <ea-button id="closeEventBtn">close 事件</ea-button>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

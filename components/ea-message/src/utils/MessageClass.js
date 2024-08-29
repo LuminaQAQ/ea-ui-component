@@ -1,7 +1,5 @@
 // @ts-nocheck
 export class EaMessage {
-    constructor() {
-    }
 
     /**
      * 处理字符串型消息
@@ -54,11 +52,9 @@ export class EaMessage {
         } else if (typeof tip === 'object') {
             this.handleObjectMsg(eaMessage, tip, eaMessage.attrs);
             this.handleDuration(eaMessage, tip.duration);
-        }
+        } else throw new Error("[EaMessage] TypeError");
 
-        setTimeout(() => {
-            eaMessage.show = true;
-        }, 20);
+        eaMessage.show = true;
 
         return {
             onClose(fn) {
