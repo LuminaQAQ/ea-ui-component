@@ -60,7 +60,7 @@
 
 - Navigation
 
-  - [ ] NavMenu 导航菜单
+  - [x] NavMenu 导航菜单
   - [ ] Tabs 标签页
   - [x] Breadcrumb 面包屑
   - [ ] Tabs 标签页

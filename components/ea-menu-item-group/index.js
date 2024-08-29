@@ -1,45 +1,10 @@
 // @ts-nocheck
 import { createElement, createSlotElement } from '../../utils/createElement.js';
+import { timeout } from '../../utils/timeout.js';
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
-const stylesheet = `
-.ea-menu-item-group_wrap {
-  --normal-bgc: #fff;
-  --normal-text-color: #303133;
-  --actived-text-color: #409eff;
-  --actived-bgc: #fff;
-  width: 100%;
-}
-.ea-menu-item-group_wrap.is-actived .ea-submenu_title_wrap {
-  color: var(--actived-text-color);
-  border-color: var(--actived-text-color);
-}
-.ea-menu-item-group_wrap .ea-submenu_title_wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0 20px;
-  border-bottom: 2px solid;
-  border-color: transparent;
-  height: 60px;
-  line-height: 60px;
-  font-size: 14px;
-  color: var(--normal-text-color);
-  background-color: var(--normal-bgc);
-  white-space: nowrap;
-  cursor: pointer;
-  transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-}
-.ea-menu-item-group_wrap .ea-submenu_items_wrap {
-  margin: 0 20px;
-  height: 0;
-  overflow: hidden;
-  transition: height 0.3s;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaMenuItemGroup extends Base {
     #wrap;
@@ -50,31 +15,24 @@ export class EaMenuItemGroup extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-menu-item-group_wrap';
-        wrap.part = 'wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-menu-item-group_wrap" part="container">
+                <div class="ea-submenu_title_wrap" part="title">
+                    <slot name="title"></slot>
+                    <ea-icon class="ea-submenu_dropdown_icon" icon="icon-angle-down" part="dropdown-icon"></ea-icon>
+                </div>
+                <div class="ea-submenu_items_wrap" part="dropdown-wrap">
+                    <slot></slot>
+                </div>
+            </div>
+        `;
 
-        const titleSlot = createSlotElement('title');
-        const dropdowpIcon = createElement('ea-icon', 'ea-submenu_dropdown_icon');
-        dropdowpIcon.icon = 'ea-submenu_dropdown_icon icon-angle-down';
-        dropdowpIcon.part = 'dropdown-icon';
-        dropdowpIcon.style.transition = 'transform 0.3s';
-        dropdowpIcon.style.transform = 'rotate(-90deg)';
-        const titleWrap = createElement('div', 'ea-submenu_title_wrap', [titleSlot, dropdowpIcon]);
-        wrap.appendChild(titleWrap);
-
-        const slot = createSlotElement();
-        const subItemsWrap = createElement('div', 'ea-submenu_items_wrap', [slot]);
-        subItemsWrap.part = 'dropdown-wrap';
-        wrap.appendChild(subItemsWrap);
-
-        this.#wrap = wrap;
-        this.#titleWrap = titleWrap;
-        this.#subItemsWrap = subItemsWrap;
-        this.#dropdowpIcon = dropdowpIcon;
+        this.#wrap = shadowRoot.querySelector('.ea-menu-item-group_wrap');
+        this.#titleWrap = shadowRoot.querySelector('.ea-submenu_title_wrap');
+        this.#subItemsWrap = shadowRoot.querySelector('.ea-submenu_items_wrap');
+        this.#dropdowpIcon = shadowRoot.querySelector('.ea-submenu_dropdown_icon');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
 
@@ -146,22 +104,21 @@ export class EaMenuItemGroup extends Base {
         this.setAttribute('collapse', value);
 
         this.#subItemsWrap.style.height = value ? this.#subItemsWrap.scrollHeight + 'px' : '0';
-        this.#dropdowpIcon.style.transform = value ? 'rotate(0deg)' : 'rotate(-90deg)';
+        this.#wrap.classList.toggle('is-open', value)
     }
     // #endregion
     // ------- end -------
 
-    #handleSubMenuItemsEvent() {
-        const items = this.querySelectorAll('ea-menu-item');
+    connectedCallback() {
+        this.style.width = "100%";
 
+        const items = this.querySelectorAll('ea-menu-item');
         items.forEach((item, index) => {
             item.isSubItem = true;
 
             item.addEventListener('item-selected', (e) => {
-                let timer = setTimeout(() => {
+                timeout(() => {
                     this.actived = true;
-                    clearTimeout(timer);
-                    timer = null;
                 }, 20);
             });
         });
@@ -169,18 +126,6 @@ export class EaMenuItemGroup extends Base {
         this.#titleWrap.addEventListener('click', (e) => {
             this.collapse = !this.collapse;
         });
-    }
-
-    #init() {
-        const that = this;
-
-        this.style.width = '100%';
-
-        this.#handleSubMenuItemsEvent();
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

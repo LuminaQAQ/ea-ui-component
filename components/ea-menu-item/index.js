@@ -1,82 +1,25 @@
 // @ts-nocheck
-import { createElement, createSlotElement } from '../../utils/createElement.js';
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
-
-const stylesheet = `
-.ea-menu-item_wrap {
-  --normal-bgc: #fff;
-  --normal-text-color: #303133;
-  --actived-text-color: #409eff;
-  --actived-bgc: #fff;
-  box-sizing: border-box;
-  padding: 0 20px;
-  border-bottom: 2px solid;
-  border-color: transparent;
-  height: 60px;
-  line-height: 60px;
-  font-size: 14px;
-  color: var(--normal-text-color);
-  background-color: var(--normal-bgc);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-}
-.ea-menu-item_wrap.is-actived {
-  color: var(--actived-text-color);
-  border-color: var(--actived-text-color);
-}
-.ea-menu-item_wrap.is-actived ::slotted(a) {
-  color: var(--actived-text-color);
-}
-.ea-menu-item_wrap.is-sub-actived {
-  color: var(--actived-text-color);
-}
-.ea-menu-item_wrap.is-sub-actived ::slotted(a) {
-  color: var(--actived-text-color);
-}
-.ea-menu-item_wrap.is-disabled {
-  color: #c0c4cc;
-  pointer-events: none;
-  cursor: not-allowed;
-}
-.ea-menu-item_wrap.is-disabled ::slotted(a) {
-  color: #c0c4cc;
-}
-.ea-menu-item_wrap ::slotted(a) {
-  color: var(--normal-text-color);
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-`;
-
-
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaMenuItem extends Base {
     #wrap;
-    #slot;
 
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-menu-item_wrap';
-        wrap.part = 'wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-menu-item_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
 
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
-        this.#slot = slot;
+        this.#wrap = shadowRoot.querySelector('.ea-menu-item_wrap');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- actived 菜单激活状态 -------
@@ -103,6 +46,8 @@ export class EaMenuItem extends Base {
         return this.getAttrBoolean('is-sub-item');
     }
     set isSubItem(value) {
+        if (!value) return;
+
         this.setAttribute('is-sub-item', value);
     }
     // #endregion
@@ -164,7 +109,11 @@ export class EaMenuItem extends Base {
     // #endregion
     // ------- end -------
 
-    #handleSelectedEvent() {
+    connectedCallback() {
+        this.actived = this.actived;
+
+        this.disabled = this.disabled;
+
         this.#wrap.addEventListener('click', () => {
             this.dispatchEvent(new CustomEvent('item-selected', {
                 detail: {
@@ -173,20 +122,6 @@ export class EaMenuItem extends Base {
                 },
             }));
         });
-    }
-
-    #init() {
-        const that = this;
-
-        this.actived = this.actived;
-
-        this.disabled = this.disabled;
-
-        this.#handleSelectedEvent();
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

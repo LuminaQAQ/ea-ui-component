@@ -1,3 +1,4 @@
+export const stylesheet = `
 .ea-menu-item-group_wrap {
   --normal-bgc: #fff;
   --normal-text-color: #303133;
@@ -40,3 +41,4 @@
 .ea-menu-item-group_wrap.is-open .ea-submenu_dropdown_icon {
   transform: rotate(0deg);
 }
+`;
