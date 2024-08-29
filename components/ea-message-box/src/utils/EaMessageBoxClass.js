@@ -1,4 +1,4 @@
-import { createElement } from "../../utils/createElement.js"
+import { createElement } from "../../../../utils/createElement.js"
 
 export class EaMessageBox {
     constructor() {
@@ -20,8 +20,6 @@ export class EaMessageBox {
     }
 
     open(content, title, options) {
-        const that = this;
-
         const EaMessageBox = createElement('ea-message-box', '');
         document.body.appendChild(EaMessageBox);
 
@@ -34,12 +32,12 @@ export class EaMessageBox {
 
         return new Promise((resolve, reject) => {
             EaMessageBox.addEventListener('cancel', () => {
-                that.#close(EaMessageBox);
+                this.#close(EaMessageBox);
                 reject();
             });
 
             EaMessageBox.addEventListener('confirm', () => {
-                that.#close(EaMessageBox);
+                this.#close(EaMessageBox);
                 resolve(true);
             });
         });

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-message/index.js'
+        import '../components/ea-message-box/index.js'
+
+        // ------- 消息提示 -------
+        // #region
+        const alertBtn = document.querySelector("#openAlertMessageBox");
+        alertBtn.addEventListener("click", () => {
+            $alert
+                .open("同意该须知则意味着您同意该须知", "是否同意该须知", {
+                    confirmButtonText: "同意",
+                })
+                .then(() => {
+                    $message.open("用户同意了同意");
+                }).catch(() => {
+                    $message.open("用户不同意了同意");
+                });
+        });
+        // #endregion
+        // ------- end -------
+
+        // ------- 确认消息 -------
+        // #region
+        const confirmBtn = document.querySelector("#openconfirmMessageBox");
+        confirmBtn.addEventListener("click", () => {
+            $confirm
+                .open("这是一段内容", "确认取消确认", {
+                    confirmButtonText: "确认取消",
+                    cancelButtonText: "取消确认",
+                })
+                .then(() => {
+                    $message.open("用户取消了确认");
+                })
+                .catch(() => {
+                    $message.open("用户取消了取消");
+                });
+        });
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 消息提示 --------  -->
+    <!-- #region  -->
+    <h2>消息提示</h2>
+    <ea-button type="primary" id="openAlertMessageBox">是否同意</ea-button>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 确认消息 --------  -->
+    <!-- #region  -->
+    <h2>确认消息</h2>
+    <ea-button type="primary" id="openconfirmMessageBox">是否取消确认</ea-button>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+</body>
+
+</html>
