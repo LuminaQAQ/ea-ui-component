@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-pagination/index.js';
+
+        document.querySelector("#prevAndNext").addEventListener("change", function (e) {
+            alert(`当前页码为: ${e.detail.currentPage}`);
+        });
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="col left">
+        <ea-pagination layout="prev,pager,next" total="60"></ea-pagination>
+        <ea-pagination layout="prev,pager,next" total="200"></ea-pagination>
+    </div>
+    <div class="col left">
+        <ea-pagination id="prevAndNext" layout="prev,next" total="80"></ea-pagination>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 设置最大页码按钮数 --------  -->
+    <!-- #region  -->
+    <h2>设置最大页码按钮数</h2>
+    <div class="col left">
+        <ea-pagination layout="prev,pager,next" total="60" page-count="10"></ea-pagination>
+        <ea-pagination layout="prev,pager,next" total="200" page-count="10"></ea-pagination>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 带有背景色的分页 --------  -->
+    <!-- #region  -->
+    <h2>带有背景色的分页</h2>
+    <div class="col left">
+        <ea-pagination background layout="prev,pager,next" total="200"></ea-pagination>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 附加功能 --------  -->
+    <!-- #region  -->
+    <h2>附加功能</h2>
+    <div class="col left">
+        <section>显示总数</section>
+        <ea-pagination background layout="total,prev,pager,next" total="200"></ea-pagination>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+</body>
+
+</html>

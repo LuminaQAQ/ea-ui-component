@@ -1,84 +1,7 @@
 // @ts-nocheck
 import Base from '../Base.js';
 
-const stylesheet = `
-.ea-pagination_wrap {
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-}
-.ea-pagination_wrap .ea-pagination_item_wrap {
-  display: flex;
-  align-items: center;
-}
-.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_item,
-.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_more {
-  cursor: pointer;
-  box-sizing: border-box;
-  margin: 0 5px;
-  padding: 0 4px;
-  min-width: 30px;
-  height: 28px;
-  line-height: 28px;
-  font-size: 13px;
-  text-align: center;
-}
-.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_item.ea-pagination_item--active {
-  color: #409eff;
-}
-.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_more {
-  cursor: pointer;
-  user-select: none;
-}
-.ea-pagination_wrap .ea-pagination_item_wrap .ea-pagination_more.ea-pagination_more--active {
-  color: #409eff;
-}
-.ea-pagination_wrap .ea-pagination_arrow {
-  user-select: none;
-  cursor: pointer;
-  padding: 0 10px;
-}
-.ea-pagination_wrap .ea-pagination_arrow.disabled {
-  cursor: default;
-  pointer-events: none;
-  color: #c0c4cc;
-}
-.ea-pagination_wrap .ea-pagination_arrow:first-child {
-  margin-right: 0.25rem;
-}
-.ea-pagination_wrap .ea-pagination_arrow:last-child {
-  margin-left: 0.25rem;
-}
-.ea-pagination_wrap .ea-pagination_item.background,
-.ea-pagination_wrap .ea-pagination_more.background,
-.ea-pagination_wrap .ea-pagination_arrow.background {
-  background-color: #f4f4f5;
-  border-radius: 3px;
-}
-.ea-pagination_wrap .ea-pagination_item.background:hover,
-.ea-pagination_wrap .ea-pagination_more.background:hover,
-.ea-pagination_wrap .ea-pagination_arrow.background:hover {
-  color: #409eff;
-}
-.ea-pagination_wrap .ea-pagination_item.background.active,
-.ea-pagination_wrap .ea-pagination_more.background.active,
-.ea-pagination_wrap .ea-pagination_arrow.background.active {
-  background-color: #409eff;
-  color: #f4f4f5;
-}
-.ea-pagination_wrap .ea-pagination_show_total {
-  margin-right: 0.5rem;
-  font-size: 13px;
-}
-`;
-
-
-const getPaginationWrap = () => {
-    const paginationWrap = document.createElement('div');
-    paginationWrap.className = 'ea-pagination_item_wrap';
-
-    return paginationWrap;
-}
+import { stylesheet } from './src/style/stylesheet.js';
 
 const getPageItem = (page, hasBgc) => {
     const pageItem = document.createElement('span');
@@ -90,16 +13,6 @@ const getPageItem = (page, hasBgc) => {
 
     return pageItem;
 };
-
-const getArrowItem = (arrow, hasBgc) => {
-    const arrowItem = document.createElement('span');
-    arrowItem.className = 'ea-pagination_arrow';
-    arrowItem.innerHTML = arrow === "prev" ? '&lt;' : '&gt;';
-
-    if (hasBgc) arrowItem.classList.add('background');
-
-    return arrowItem;
-}
 
 const getMoreItem = (arrow, hasBgc) => {
     const moreItem = document.createElement('span');
@@ -142,25 +55,21 @@ export class EaPagination extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-pagination_wrap';
 
-        this.#container = wrap;
+        shadowRoot.innerHTML = `
+            <div class="ea-pagination_wrap" part="container">
+                <span class="ea-pagination_arrow prev ${this.background ? 'background' : ''}" part="arrow">&lt;</span>
+                <div class="ea-pagination_item_wrap" part="item-wrap"></div>
+                <span class="ea-pagination_arrow next ${this.background ? 'background' : ''}" part="arrow">&gt;</span>
+            </div>
+        `;
 
-        const prevArrow = getArrowItem('prev', this.background);
-        const pageItemWrap = getPaginationWrap();
-        const nextArrow = getArrowItem('next', this.background);
-
-        this.#container.appendChild(prevArrow);
-        this.#container.appendChild(pageItemWrap);
-        this.#container.appendChild(nextArrow);
-
-        this.#prevArrow = prevArrow;
-        this.#paginationWrap = pageItemWrap;
-        this.#nextArrow = nextArrow;
+        this.#container = shadowRoot.querySelector('.ea-pagination_wrap');
+        this.#prevArrow = shadowRoot.querySelector('.prev');
+        this.#paginationWrap = shadowRoot.querySelector('.ea-pagination_item_wrap');
+        this.#nextArrow = shadowRoot.querySelector('.next');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- layout 布局(前一页, 页码, 后一页) -------
@@ -215,7 +124,6 @@ export class EaPagination extends Base {
 
     // ------- total 总记录数 -------
     // #region
-
     get total() {
         return this.getAttrNumber('total');
     }
@@ -241,29 +149,29 @@ export class EaPagination extends Base {
     }
 
     set background(value) {
+        if (!value) return;
+
         this.setAttribute('background', value);
     }
     // #endregion
     // ------- end -------
 
-    handleDispatchEvent(event, options) {
+    #handleDispatchEvent(event, options) {
         this.dispatchEvent(new CustomEvent(event, options));
     }
 
     // 初始化箭头元素
-    initArrowItem() {
-        const that = this;
-
-        this.handleArrowStatus();
+    #initArrowItem() {
+        this.#handleArrowStatus();
 
         if (this.layout.includes('prev')) {
             this.#prevArrow.addEventListener('click', () => {
-                if (that.currentPage <= 1) return;
+                if (this.currentPage <= 1) return;
 
-                that.currentPage--;
-                that.handlePaginationChange();
+                this.currentPage--;
+                this.#handlePaginationChange();
 
-                that.handleDispatchEvent("change", { detail: { currentPage: that.currentPage } });
+                this.#handleDispatchEvent("change", { detail: { currentPage: this.currentPage } });
             })
         } else {
             this.#prevArrow.style.display = 'none';
@@ -271,12 +179,12 @@ export class EaPagination extends Base {
 
         if (this.layout.includes('next')) {
             this.#nextArrow.addEventListener('click', () => {
-                if (that.currentPage >= that.paginationCount) return;
+                if (this.currentPage >= this.paginationCount) return;
 
-                that.currentPage++;
-                that.handlePaginationChange();
+                this.currentPage++;
+                this.#handlePaginationChange();
 
-                that.handleDispatchEvent("change", { detail: { currentPage: that.currentPage } });
+                this.#handleDispatchEvent("change", { detail: { currentPage: this.currentPage } });
             })
         } else {
             this.#nextArrow.style.display = 'none';
@@ -284,7 +192,7 @@ export class EaPagination extends Base {
     }
 
     // 处理箭头状态
-    handleArrowStatus() {
+    #handleArrowStatus() {
         if (!this.layout.includes('prev') && !this.layout.includes('next')) return;
 
         if (this.currentPage === 1 && this.layout.includes('prev')) this.#prevArrow.classList.add('disabled');
@@ -296,52 +204,46 @@ export class EaPagination extends Base {
     }
 
     // 处理分页点击事件
-    handlePaginationClick(pageItem, index) {
-        const that = this;
+    #handlePaginationClick(pageItem, index) {
+        pageItem.addEventListener('click', (e) => {
+            this.currentPage = index;
+            this.#handlePaginationChange();
 
-        pageItem.addEventListener('click', function (e) {
-            that.currentPage = index;
-            that.handlePaginationChange();
-
-            that.handleDispatchEvent('change', {
+            this.#handleDispatchEvent('change', {
                 detail: {
-                    currentPage: that.currentPage
+                    currentPage: this.currentPage
                 }
             });
         })
     }
 
     // 处理更多按钮点击事件
-    handleMoreItemClick(moreItem, arrow) {
-        const that = this;
-
-        moreItem.addEventListener('click', function (e) {
+    #handleMoreItemClick(moreItem, arrow) {
+        moreItem.addEventListener('click', (e) => {
 
             // 跳转到指定页码
-            that.currentPage += arrow === "prev" ? -5 : 5;
+            this.currentPage += arrow === "prev" ? -5 : 5;
 
             /**
              * 边界处理: 
              * 页码数量小于1, 跳转到第一页
              * 页码数量大于总页数, 跳转到最后一页
              */
-            if (that.currentPage < 1) that.currentPage = 1;
-            else if (that.currentPage > that.paginationCount) that.currentPage = that.paginationCount;
+            if (this.currentPage < 1) this.currentPage = 1;
+            else if (this.currentPage > this.paginationCount) this.currentPage = this.paginationCount;
 
-            that.handlePaginationChange();
+            this.#handlePaginationChange();
 
-            that.handleDispatchEvent('change', {
+            this.#handleDispatchEvent('change', {
                 detail: {
-                    currentPage: that.currentPage
+                    currentPage: this.currentPage
                 }
             });
         })
     }
 
     // 处理分页的页码
-    handlePaginationItemChange() {
-        const that = this;
-
+    #handlePaginationItemChange() {
         if (!this.layout.includes('pager')) return;
 
         this.#paginationWrap.innerHTML = '';
@@ -373,16 +275,16 @@ export class EaPagination extends Base {
             }
 
             // 添加点击事件
-            that.handlePaginationClick(pageItem, i);
+            this.#handlePaginationClick(pageItem, i);
         }
 
         // 添加 更多(左) + 第一页
         if (this.total > this.pageCount && this.currentPage >= this.pageCount && this.paginationCount !== this.pageCount) {
             const more = getMoreItem('prev', this.background);
-            that.handleMoreItemClick(more, 'prev');
+            this.#handleMoreItemClick(more, 'prev');
 
             const firstPage = getPageItem(1, this.background);
-            this.handlePaginationClick(firstPage, 1);
+            this.#handlePaginationClick(firstPage, 1);
 
             this.#paginationWrap.insertBefore(more, this.#paginationWrap.firstChild);
             this.#paginationWrap.insertBefore(firstPage, this.#paginationWrap.firstChild);
@@ -391,10 +293,10 @@ export class EaPagination extends Base {
         // 添加 更多(右) + 最后一页
         if (this.total > this.pageCount && this.currentPage < this.paginationCount - interval && this.paginationCount !== this.pageCount) {
             const more = getMoreItem('next', this.background);
-            that.handleMoreItemClick(more, 'next');
+            this.#handleMoreItemClick(more, 'next');
 
             const lastPage = getPageItem(this.paginationCount, this.background);
-            this.handlePaginationClick(lastPage, this.paginationCount);
+            this.#handlePaginationClick(lastPage, this.paginationCount);
 
             this.#paginationWrap.appendChild(more);
             this.#paginationWrap.appendChild(lastPage);
@@ -402,13 +304,13 @@ export class EaPagination extends Base {
     }
 
     // 处理分页变化
-    handlePaginationChange() {
-        this.handleArrowStatus();
-        this.handlePaginationItemChange();
+    #handlePaginationChange() {
+        this.#handleArrowStatus();
+        this.#handlePaginationItemChange();
     }
 
     // 处理显示总数
-    initTotalShow() {
+    #initTotalShow() {
         if (!this.layout.includes('total')) return;
 
         const totalItem = getShowTotalItem();
@@ -417,9 +319,7 @@ export class EaPagination extends Base {
         this.#container.insertBefore(totalItem, this.#container.firstChild);
     }
 
-    init() {
-        const that = this;
-
+    connectedCallback() {
         // 设置sizes
         this.sizes = this.sizes;
 
@@ -429,13 +329,9 @@ export class EaPagination extends Base {
         // 设置total
         this.total = this.total;
 
-        this.initArrowItem();
-        this.handlePaginationItemChange();
-        this.initTotalShow();
-    }
-
-    connectedCallback() {
-        this.init();
+        this.#initArrowItem();
+        this.#handlePaginationItemChange();
+        this.#initTotalShow();
     }
 }
 

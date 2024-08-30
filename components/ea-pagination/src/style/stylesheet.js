@@ -1,3 +1,4 @@
+export const stylesheet = `
 .ea-pagination_wrap {
   display: flex;
   align-items: center;
@@ -67,3 +68,4 @@
   margin-right: 0.5rem;
   font-size: 13px;
 }
+`;
