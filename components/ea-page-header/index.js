@@ -3,41 +3,7 @@ import Base from '../Base.js';
 import '../ea-icon/index.js'
 import { createSlotElement, createElement } from '../../utils/createElement.js';
 
-const stylesheet = `
-.ea-page-header_wrap {
-  display: flex;
-  align-items: center;
-  line-height: 24px;
-}
-.ea-page-header_wrap .ea-page-header_title-wrap,
-.ea-page-header_wrap .ea-page-header_divider,
-.ea-page-header_wrap .ea-page-header_content-wrap {
-  line-height: 24px;
-}
-.ea-page-header_wrap .ea-page-header_title-wrap {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
-  cursor: pointer;
-}
-.ea-page-header_wrap .ea-page-header_divider {
-  margin: 0 1rem;
-  margin-bottom: 1px;
-  font-size: 14px;
-  height: 14px;
-  overflow: hidden;
-  color: #dcdfe6;
-  line-height: 1;
-  vertical-align: middle;
-}
-.ea-page-header_wrap .ea-page-header_content-wrap {
-  font-size: 18px;
-  color: #303133;
-  line-height: 1;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaPageHeader extends Base {
     #wrap;
@@ -51,39 +17,26 @@ export class EaPageHeader extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-page-header_wrap';
-        wrap.part = 'wrap';
+        shadowRoot.innerHTML = `
+            <div class='ea-page-header_wrap' part='container'>
+                <div class='ea-page-header_title-wrap' part='title-wrap'>
+                    <ea-icon class='ea-page-header_back-icon' part='back-icon' icon="icon-angle-left"></ea-icon>
+                    <slot name="title"></slot>
+                </div>
+                <div class='ea-page-header_divider' part='divider'>|</div>
+                <div class='ea-page-header_content-wrap' part='content-wrap'>
+                    <slot name="content"></slot>
+                </div>
+            </div>
+        `;
 
-        const titleSlot = createSlotElement('title');
-        const backIcon = createElement('ea-icon', 'ea-page-header_back-icon');
-        backIcon.icon = 'icon-angle-left';
-        const titleWrap = createElement('div', 'ea-page-header_title-wrap', [backIcon, titleSlot]);
-        titleWrap.part = 'title-wrap';
-        wrap.appendChild(titleWrap);
-
-        const divider = createElement('div', 'ea-page-header_divider');
-        divider.innerText = '|';
-        divider.part = 'divider';
-        wrap.appendChild(divider);
-
-        const contentSlot = createSlotElement('content');
-        const contentWrap = createElement('div', 'ea-page-header_content-wrap', [contentSlot]);
-        contentWrap.part = 'content-wrap';
-        wrap.appendChild(contentWrap);
-
-        this.#wrap = wrap;
-        this.#titleWrap = titleWrap;
-        this.#titleSlot = titleSlot;
-        this.#contentWrap = contentWrap;
-        this.#contentSlot = contentSlot;
+        this.#wrap = shadowRoot.querySelector('.ea-page-header_wrap');
+        this.#titleWrap = shadowRoot.querySelector('.ea-page-header_title-wrap');
+        this.#titleSlot = shadowRoot.querySelector('slot[name="title"]');
+        this.#contentWrap = shadowRoot.querySelector('.ea-page-header_content-wrap');
+        this.#contentSlot = shadowRoot.querySelector('slot[name="content"]');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
-    }
-
-    #init() {
-        const that = this;
     }
 
     // ------- title 返回区域的内容 -------
@@ -122,20 +75,14 @@ export class EaPageHeader extends Base {
     // #endregion
     // ------- end -------
 
-    #initBackEvent() {
-        this.#titleWrap.addEventListener('click', () => {
-            this.dispatchEvent(new CustomEvent('back'));
-        });
-    }
-
     connectedCallback() {
-        this.#init();
-
         this.title = this.title;
 
         this.content = this.content;
 
-        this.#initBackEvent();
+        this.#titleWrap.addEventListener('click', () => {
+            this.dispatchEvent(new CustomEvent('back'));
+        });
     }
 }
 

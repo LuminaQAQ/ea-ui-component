@@ -7,55 +7,7 @@ import "../ea-option/index.js"
 import '../ea-option-gropu/index.js'
 import "../ea-input/index.js"
 
-const stylesheet = `
-.ea-select_wrap {
-  position: relative;
-}
-.ea-select_wrap .ea-select_input-wrap .ea-select_dropdown-icon {
-  position: absolute;
-  left: calc(100% - 24px);
-  top: 50%;
-  transform-origin: center;
-  transform: translateY(-50%);
-}
-.ea-select_wrap .ea-select_input-wrap .ea-select_dropdown-icon.is-open {
-  transform: translateY(-50%) rotate(180deg);
-}
-.ea-select_wrap .ea-select_dropdown-wrap {
-  position: absolute;
-  left: 0;
-  bottom: -12px;
-  transform: translateY(100%) scaleY(0);
-  transform-origin: center top;
-  box-sizing: border-box;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 2035;
-}
-.ea-select_wrap .ea-select_dropdown-wrap .ea-select_dropdown-empty {
-  padding: 10px 0;
-  margin: 0;
-  text-align: center;
-  color: #999;
-  font-size: 14px;
-}
-.ea-select_wrap.is-open .ea-select_input-wrap .ea-select_dropdown-icon {
-  transform: translateY(-50%) rotate(180deg);
-}
-.ea-select_wrap.is-open .ea-select_dropdown-wrap {
-  transform: translateY(100%) scaleY(1);
-}
-.ea-select_wrap.is-disabled {
-  pointer-events: none;
-  cursor: not-allowed;
-}
-.ea-select_wrap.with-transition .ea-select_input-wrap .ea-select_dropdown-icon {
-  transition: transform 0.3s;
-}
-.ea-select_wrap.with-transition .ea-select_dropdown-wrap {
-  transition: transform 0.3s;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaSelect extends Base {
     #container;
@@ -297,6 +249,7 @@ export class EaSelect extends Base {
                         });
                         option.checked = true;
                     }
+
                     this.dispatchEvent(new CustomEvent('change', {
                         detail: {
                             value: this.selection
@@ -307,7 +260,28 @@ export class EaSelect extends Base {
         });
     }
 
-    #initDropdownWrapOpen() {
+    connectedCallback() {
+        this.setAttribute('data-ea-component', true);
+        this.#dropdownWrap.style.width = this.width;
+
+        this.name = this.name;
+
+        this.width = this.width;
+
+        this.selection = this.selection;
+
+        this.placeholder = this.placeholder;
+
+        this.disabled = this.disabled;
+
+        this.clearable = this.clearable;
+
+        this.filterable = this.filterable;
+
+        this.multiple = this.multiple;
+
+        this.#handleOptionChecked();
+
         this.#selectInput.addEventListener('focus', (e) => {
             this.#container.classList.add('is-open');
 
@@ -331,41 +305,12 @@ export class EaSelect extends Base {
                 }
             }));
         });
-    }
-
-
-    #init() {
-        this.setAttribute('data-ea-component', true);
-        this.#dropdownWrap.style.width = this.width;
-
-        this.name = this.name;
-
-        this.width = this.width;
-
-        this.selection = this.selection;
-
-        this.placeholder = this.placeholder;
-
-        this.disabled = this.disabled;
-
-        this.clearable = this.clearable;
-
-        this.filterable = this.filterable;
-
-        this.multiple = this.multiple;
-
-        this.#initDropdownWrapOpen();
-        this.#handleOptionChecked();
 
         let timer = setTimeout(() => {
             clearTimeout(timer);
             timer = null;
             this.#container.classList.add('with-transition');
         }, 20);
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

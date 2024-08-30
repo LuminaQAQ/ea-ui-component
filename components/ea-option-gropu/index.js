@@ -1,7 +1,6 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 const stylesheet = `
 .ea-option-group_wrap .ea-option-group_title {
@@ -48,14 +47,8 @@ export class EaOptionGroup extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        const that = this;
-
-        this.label = this.label;
-    }
-
     connectedCallback() {
-        this.#init();
+        this.label = this.label;
     }
 }
 

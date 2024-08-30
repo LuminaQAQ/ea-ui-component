@@ -1,34 +1,8 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
-const stylesheet = `
-.ea-option_wrap {
-  position: relative;
-  padding: 0 20px;
-  height: 30px;
-  line-height: 30px;
-  font-size: 14px;
-  color: #606266;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-}
-.ea-option_wrap.is-checked {
-  color: #409eff;
-  font-weight: 700;
-}
-.ea-option_wrap.is-disabled {
-  color: #c0c4cc;
-  pointer-events: none;
-  cursor: not-allowed;
-}
-.ea-option_wrap:hover {
-  background-color: #f5f7fa;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaOption extends Base {
     #container;
@@ -88,16 +62,10 @@ export class EaOption extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        const that = this;
-
+    connectedCallback() {
         this.value = this.value;
 
         this.disabled = this.disabled;
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 
