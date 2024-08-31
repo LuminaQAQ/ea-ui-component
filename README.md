@@ -75,9 +75,10 @@
     - [x] NavMenuItemGroup
     - [x] NavSubMenu
   - [ ] Tabs 标签页
+    - [ ] TabPane
+    - [ ] Tab
   - [x] Breadcrumb 面包屑
     - [x] BreadcrumbItem
-  - [ ] Tabs 标签页
   - [x] PageHeader 页头
   - [ ] Dropdown 下拉菜单
   - [ ] Steps 步骤条
@@ -97,3 +98,13 @@
 - 脚本类
 
   - [ ] Descriptions 描述列表, span 值设置超过表格总 span 会导致元素消失
+
+- 样式类
+
+  - [ ] Tabs 标签页, 带有关闭功能的标签页, 最佳实践是设置最小高度
+    ```css
+    ea-tabs::part(pane-wrap) {
+      min-height: 10rem;
+    }
+    ```
+  -

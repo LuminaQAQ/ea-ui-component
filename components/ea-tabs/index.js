@@ -1,58 +1,13 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 import "../ea-tab/index.js"
 import '../ea-pane/index.js'
 
-const stylesheet = `
-.ea-tabs_wrap {
-  position: relative;
-}
-.ea-tabs_wrap .ea-tabs_tab-wrap {
-  display: flex;
-  align-items: center;
-  overflow-x: auto;
-  scrollbar-width: thin;
-}
-.ea-tabs_wrap .ea-tabs_pane-wrap {
-  padding: 20px;
-}
-.ea-tabs_wrap .ea-tabs_tab-bottom-bar {
-  position: absolute;
-  height: 2px;
-  width: 0;
-  top: 40px;
-  left: 0;
-  border-radius: 999px;
-  background-color: #409eff;
-  transition: left 0.3s;
-}
-.ea-tabs_wrap.ea-tabs_wrap--normal .ea-tabs_tab-wrap {
-  border-bottom: 2px solid #e4e7ed;
-}
-.ea-tabs_wrap.ea-tabs_wrap--card .ea-tabs_tab-wrap {
-  border-bottom: 1px solid #e4e7ed;
-}
-.ea-tabs_wrap.ea-tabs_wrap--card .ea-tabs_tab-bottom-bar {
-  height: 1px;
-  bottom: -1px;
-  background-color: white;
-}
-.ea-tabs_wrap.ea-tabs_wrap--border-card {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-.ea-tabs_wrap.ea-tabs_wrap--border-card .ea-tabs_tab-wrap {
-  background-color: #f5f7fa;
-  border-bottom: 1px solid #e4e7ed;
-}
-.ea-tabs_wrap.ea-tabs_wrap--border-card .ea-tabs_tab-bottom-bar {
-  height: 1px;
-  bottom: -1px;
-  background-color: white;
-}
-`;
+import { timeout } from '../../utils/timeout.js';
+
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaTabs extends Base {
     #wrap;
@@ -67,28 +22,24 @@ export class EaTabs extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-tabs_wrap';
-        wrap.part = 'wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-tabs_wrap" part="container">
+                <div class="ea-tabs_tab-wrap" part="tab-wrap">
+                    <slot></slot>
+                </div>
+                <div class="ea-tabs_tab-bottom-bar" part="tab-bottom-bar"></div>
+                <div class="ea-tabs_pane-wrap" part="pane-wrap">
+                    <slot name="pane"></slot>
+                </div>
+            </div>
+        `;
 
-        const slot = createSlotElement();
-        const tabWrap = createElement('div', 'ea-tabs_tab-wrap', [slot]);
-        wrap.appendChild(tabWrap);
-
-        const tabBottomBar = createElement('div', 'ea-tabs_tab-bottom-bar');
-        wrap.appendChild(tabBottomBar);
-
-        const paneSlot = createSlotElement('pane');
-        const paneWrap = createElement('div', 'ea-tabs_pane-wrap', [paneSlot]);
-        wrap.appendChild(paneWrap);
-
-        this.#wrap = wrap;
-        this.#tabBottomBar = tabBottomBar;
-        this.#paneWrap = paneWrap;
-        this.#tabSlot = slot;
+        this.#wrap = shadowRoot.querySelector('.ea-tabs_wrap');
+        this.#tabBottomBar = shadowRoot.querySelector('.ea-tabs_tab-bottom-bar');
+        this.#paneWrap = shadowRoot.querySelector('.ea-tabs_pane-wrap');
+        this.#tabSlot = shadowRoot.querySelector('.ea-tabs_tab-wrap > slot');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- type 标签样式类型 -------
@@ -186,9 +137,7 @@ export class EaTabs extends Base {
         items.forEach((item, index) => {
             item.index = index;
 
-            if (!item.name) {
-                item.name = index;
-            }
+            if (!item.name) item.name = index;
 
             item.removeEventListener('tab-click', eventListener);
             item.addEventListener('tab-click', eventListener);
@@ -197,14 +146,12 @@ export class EaTabs extends Base {
         paneItems.forEach((item, index) => {
             item.index = index;
 
-            if (!item.name) {
-                item.name = index;
-            }
+            if (!item.name) item.name = index;
         })
     }
 
     #initBottomBarMove() {
-        setTimeout(() => {
+        timeout(() => {
             const item = this.querySelector('ea-tab[name="' + this.actived + '"]');
             item.actived = true;
             this.#handleBottomBarMove(item);
@@ -250,7 +197,7 @@ export class EaTabs extends Base {
     }
 
     #handleTabAdd() {
-        setTimeout(() => {
+        timeout(() => {
             this.#previousNodesLen = this.#tabSlot.assignedNodes().length;
 
             this.#tabSlot.addEventListener('slotchange', (e) => {
@@ -280,9 +227,7 @@ export class EaTabs extends Base {
         }, 20)
     }
 
-    #init() {
-        const that = this;
-
+    connectedCallback() {
         this.type = this.type;
 
         this.actived = this.actived;
@@ -292,10 +237,6 @@ export class EaTabs extends Base {
         this.#initBottomBarMove();
         this.#handleSubItemsName();
         this.#handleTabAdd();
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 
