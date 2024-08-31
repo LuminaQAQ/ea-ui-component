@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-button/index.js'
+        import '../components/ea-radio/index.js'
+        import '../components/ea-radio-group/index.js'
+
+        // ------- 获取选中值 -------
+        // #region
+        document.querySelector("#getCheckedValue").addEventListener("click", (e) => {
+            const name = "gender";
+            const node = document.querySelector(`ea-radio[name=${name}][checked]`);
+            window.alert(`您选中的是: name 为 ${name}, 值为 ${node.value} 的单选框选项`);
+        });
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-radio name="city" value="福州" checked>福州</ea-radio>
+        <ea-radio name="city" value="厦门">厦门</ea-radio>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 禁用状态 --------  -->
+    <!-- #region  -->
+    <h2>禁用状态</h2>
+    <div class="row left">
+        <ea-radio name="work" value="前端切图工程师" checked disabled>
+            前端切图仔
+        </ea-radio>
+        <ea-radio name="work" value="后端CRUD工程师" disabled>
+            后端CRUD工程师
+        </ea-radio>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 单选框组 --------  -->
+    <!-- #region  -->
+    <h2>单选框组</h2>
+    <ea-radio-group name="salary">
+        <ea-radio value="月入3000笑哈哈" checked>月入3000笑哈哈</ea-radio>
+        <ea-radio value="月薪过万不是梦">月薪过万不是梦</ea-radio>
+    </ea-radio-group>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 带有边框 --------  -->
+    <!-- #region  -->
+    <h2>带有边框</h2>
+    <div class="row left">
+        <ea-radio name="age" value="重返18岁" checked border>Relife</ea-radio>
+        <ea-radio name="age" value="重返未来1999" border>重返未来1999</ea-radio>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 获取选中值 --------  -->
+    <!-- #region  -->
+    <h2>获取选中值</h2>
+    <div class="row left">
+        <ea-radio name="gender" value="武装直升机" checked border>
+            武装直升机
+        </ea-radio>
+        <ea-radio name="gender" value="沃尔玛购物袋" border> 沃尔玛购物袋 </ea-radio>
+    </div>
+    <div class="row left">
+        <ea-button type="primary" id="getCheckedValue">获取选中值</ea-button>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

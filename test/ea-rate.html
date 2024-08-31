@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-rate/index.js'
+
+        // ------- 基础用法 -------
+        // #region
+        // 获取分数
+        document.getElementById("ea-rate").addEventListener("change", function (e) {
+            console.log(e.detail.value);
+        });
+
+        // 设置分数
+        document.getElementById("ea-rate").value = 5;
+        // #endregion
+        // ------- end -------
+
+        // ------- 辅助文字 -------
+        // #region
+        // get: 获取评分描述: e.detail.rateText
+        document
+            .getElementById("ea-rate-show-text")
+            .addEventListener("hover", function (e) {
+                console.log(e.detail.value, e.detail.rateText);
+            });
+
+        // set: 设置评分值描述: element.showTextList = []
+        document.getElementById("ea-rate-show-text").showTextList = [
+            "极差",
+            "差",
+            "中",
+            "良",
+            "优",
+        ];
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row">
+        <section>
+            <p>默认颜色</p>
+            <ea-rate id="ea-rate"></ea-rate>
+        </section>
+        <section>
+            <p>自定义颜色</p>
+            <ea-rate id="ea-rate-different-color" color="#f56c6c"></ea-rate>
+        </section>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 禁用状态 --------  -->
+    <!-- #region  -->
+    <h2>禁用状态</h2>
+    <div class="col left">
+        <ea-rate id="ea-rate-disabled" value="1" disabled></ea-rate>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 辅助文字 --------  -->
+    <!-- #region  -->
+    <h2>辅助文字</h2>
+    <div class="row">
+        <section>
+            <p>默认颜色</p>
+            <ea-rate id="ea-rate-show-text" show-text></ea-rate>
+        </section>
+        <section>
+            <p>默认颜色</p>
+            <ea-rate id="ea-rate-show-text-customization" show-text></ea-rate>
+        </section>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 其它 icon --------  -->
+    <!-- #region  -->
+    <h2>其它 icon</h2>
+    <div class="col left">
+        <ea-rate value="1"></ea-rate>
+        <ea-rate void-icon="icon-heart-empty" active-icon="icon-heart" color="#f56c6c" value="2"></ea-rate>
+        <ea-rate void-icon="icon-ok-circled2" active-icon="icon-ok-circled" color="#67c23a"
+            value="3"></ea-rate>
+        <ea-rate void-icon="icon-cancel-circled2" active-icon="icon-cancel-circled" color="red"
+            value="4"></ea-rate>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

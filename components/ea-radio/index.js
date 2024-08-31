@@ -1,159 +1,33 @@
 // @ts-nocheck
 import Base from '../Base.js'
 
-const stylesheet = `
-:host(ea-radio) {
-  --margin-right: 0.75rem;
-  --text-color: #606266;
-  --radio-show-type: inline-block;
-  --button-size: 1rem;
-  --button-margin: 0.5rem;
-}
-
-.ea-radio_wrap {
-  display: flex;
-  align-items: center;
-  margin-right: 1rem;
-}
-.ea-radio_wrap .__ea-radio-input_wrap {
-  width: var(--button-size);
-  height: var(--button-size);
-  line-height: 1;
-  margin-right: var(--button-margin);
-}
-.ea-radio_wrap .__ea-radio-input_wrap input {
-  display: none;
-}
-.ea-radio_wrap .__ea-radio-input_wrap .__ea-radio-input_inner {
-  position: relative;
-  display: var(--radio-show-type);
-  width: 1rem;
-  height: 1rem;
-  line-height: 1;
-  box-sizing: border-box;
-  border-radius: 50%;
-  border: 1px solid #606266;
-}
-.ea-radio_wrap .__ea-radio-input_wrap .__ea-radio-input_inner::before {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  content: "";
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 50%;
-  background-color: transparent;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-}
-.ea-radio_wrap .__ea-radio-input_wrap .__ea-radio-input_inner:hover {
-  border-color: #409eff;
-}
-.ea-radio_wrap .__ea-radio-label_desc {
-  color: var(--text-color);
-}
-.ea-radio_wrap.checked .__ea-radio-input_wrap .__ea-radio-input_inner {
-  border-color: #409eff;
-  background-color: #409eff;
-}
-.ea-radio_wrap.checked .__ea-radio-input_wrap .__ea-radio-input_inner::before {
-  background-color: white;
-}
-.ea-radio_wrap.checked .__ea-radio-label_desc {
-  color: #409eff;
-}
-.ea-radio_wrap.disabled .__ea-radio-input_wrap .__ea-radio-input_inner {
-  border-color: #eeeeee;
-  background-color: #eeeeee;
-}
-.ea-radio_wrap.disabled .__ea-radio-input_wrap .__ea-radio-input_inner::before {
-  background-color: transparent;
-}
-.ea-radio_wrap.disabled .__ea-radio-label_desc {
-  color: #c0c4cc;
-}
-.ea-radio_wrap.disabled[checked=true] .__ea-radio-input_wrap .__ea-radio-input_inner::before {
-  background-color: #c0c4cc;
-}
-.ea-radio_wrap.border {
-  border: 1px solid #ccc;
-  padding: 0.25rem 0.5rem;
-  border-radius: 8px;
-}
-.ea-radio_wrap.border[checked=true] {
-  border: 1px solid #409eff;
-}`;
-
-const inputDom = () => {
-  const wrap = document.createElement('span');
-  wrap.className = "__ea-radio-input_wrap";
-
-  const radio = document.createElement('span');
-  radio.className = "__ea-radio-input_inner";
-  wrap.appendChild(radio);
-
-  const input = document.createElement('input');
-  input.type = 'radio';
-  input.className = "__ea-radio-input_input";
-
-  wrap.appendChild(input);
-
-  return { wrap, input };
-}
-
-const labelDom = () => {
-  const labelDesc = document.createElement('span');
-  labelDesc.className = "__ea-radio-label_desc";
-  const slot = document.createElement('slot');
-  labelDesc.appendChild(slot);
-
-  return labelDesc;
-}
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaRadio extends Base {
   #radio;
   #label;
 
-  static get observedAttributes() {
-    return ['checked'];
-  }
-
   constructor() {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    let dom = document.createElement('label');
-    dom.className = "ea-radio_wrap";
 
-    // input + radio
-    const input = inputDom();
-    dom.appendChild(input.wrap);
+    shadowRoot.innerHTML = `
+      <label class="ea-radio_wrap" part="container">
+        <span class="ea-radio-input_wrap">
+          <span class="ea-radio-input_inner"></span>
+          <input class="ea-radio-input_input" type="radio" />
+        </span>
+        <span class="ea-radio-label_desc">
+          <slot></slot>
+        </span>
+      </label>
+    `;
 
-    // label 标签文字
-    const label = labelDom();
-    dom.appendChild(label);
+    this.#label = shadowRoot.querySelector('.ea-radio_wrap');
+    this.#radio = shadowRoot.querySelector('.ea-radio-input_input');
 
-    this.#label = dom;
-    this.#radio = input.input;
-
-
-    // ------- 打包 -------
-    // #region
-    const styleNode = document.createElement('style');
-    styleNode.innerHTML = stylesheet;
-    this.shadowRoot.appendChild(styleNode);
-    // #endregion
-    // ------- end -------
-
-    // ------- 本地调试 -------
-    // #region
-    // setStyle(shadowRoot, new URL('./index.css', import.meta.url).href);
-    // #endregion
-    // ------- end -------
-
-
-    shadowRoot.appendChild(dom);
+    this.build(shadowRoot, stylesheet);
   }
 
   // ------- 选中 -------
@@ -163,17 +37,11 @@ export class EaRadio extends Base {
   }
 
   set checked(val) {
+    this.setAttribute('checked', val);
+    this.#label.setAttribute('checked', val);
     this.#radio.checked = val;
 
-    if (val) {
-      this.setAttribute('checked', true);
-      this.#label.setAttribute('checked', true);
-      this.#label.classList.add('checked');
-    } else {
-      this.removeAttribute('checked');
-      this.#label.removeAttribute('checked');
-      this.#label.classList.remove('checked');
-    }
+    this.#label.classList.toggle('checked', val);
   }
   // #endregion
   // ------- end -------
@@ -212,7 +80,7 @@ export class EaRadio extends Base {
 
   set disabled(val) {
     this.#radio.disabled = val;
-    this.#label.toggleAttribute('disabled', val);
+    this.#label.setAttribute('disabled', val);
     this.#label.classList.toggle('disabled', val);
   }
   // #endregion
@@ -230,9 +98,7 @@ export class EaRadio extends Base {
   // #endregion
   // ------- end -------
 
-  init() {
-    const that = this;
-
+  connectedCallback() {
     // radio 的 checked 属性
     this.checked = this.checked;
 
@@ -249,36 +115,19 @@ export class EaRadio extends Base {
     this.border = this.border;
 
     // 监听 change 事件, 修改 checked 属性
-    this.#radio.addEventListener('change', function (e) {
-      if (e.target.checked) {
-        document.querySelectorAll(`ea-radio[name="${that.name}"]`).forEach(btn => {
-          const btnInput = btn.shadowRoot.querySelector('input');
+    this.#radio.addEventListener('change', (e) => {
+      document.querySelectorAll(`ea-radio[name="${this.name}"]`).forEach(btn => {
+        const btnInput = btn.shadowRoot.querySelector('input');
+        btn.checked = btnInput === this.#radio;
+      });
 
-          if (btnInput !== this) {
-            btn.checked = false;
-          } else {
-            btn.checked = true;
-          }
-        });
-      }
-
-      that.dispatchEvent(new CustomEvent('change', {
+      this.dispatchEvent(new CustomEvent('change', {
         detail: {
           value: this.value,
           checked: this.checked
         }
       }))
     })
-
-
-  }
-
-  connectedCallback() {
-    this.init();
-  }
-
-  attributeChangedCallback(name, oldVal, newVal) {
-    // console.log(name);
   }
 }
 

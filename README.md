@@ -17,7 +17,8 @@
 
 - 表单组件
 
-  - [ ] Radio 单选框
+  - [x] Radio 单选框
+    - [x] RadioGroup 单选框组
   - [x] Checkbox 多选框
     - [x] CheckboxGroup 多选框组
   - [x] Input 输入框
@@ -27,7 +28,7 @@
   - [ ] Textarea 文本域
   - [x] InputNumber 计数器
   - [ ] Switch 开关
-  - [ ] Rate 评分
+  - [x] Rate 评分
   - [ ] TimePicker 时间选择器
   - [x] DatePicker 日期选择器
   - [x] Form 表单
@@ -94,6 +95,9 @@
   - [ ] Message 调整了 引入方式及 使用方式,
         引入方式改为 `import 'ea-ui'`
         使用方式改为 `window.$message.open()`
+  - [ ] Rate 属性重构
+    - void-icon-class => void-icon
+    - active-icon-class => active-icon
 
 - 脚本类
 

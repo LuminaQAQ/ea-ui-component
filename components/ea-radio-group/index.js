@@ -2,12 +2,10 @@
 import Base from "../Base.js";
 
 const stylesheet = `
-.ea-radio-group {
+.ea-radio-group_wrap {
   display: flex;
 }
-.ea-radio-group ea-radio {
-  margin-right: 2rem;
-}`;
+`;
 
 export class EaRadioGroup extends Base {
 
@@ -15,19 +13,12 @@ export class EaRadioGroup extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-
-        const dom = document.createElement('div');
-        shadowRoot.appendChild(dom);
-        const slot = document.createElement('slot');
-        dom.className = "ea-radio-group";
-        dom.appendChild(slot);
-
-
-        this.dom = dom;
-
+        shadowRoot.innerHTML = `
+            <div class="ea-radio-group_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
         this.build(shadowRoot, stylesheet);
-
-        shadowRoot.appendChild(dom);
     }
 
     // ------- name 唯一键值 -------
@@ -51,16 +42,14 @@ export class EaRadioGroup extends Base {
     }
 
     set value(val) {
+        if (!val) return;
+
         this.setAttribute("value", val);
     }
     // #endregion
     // ------- end -------
 
-    init() {
-        // name 唯一键值
-        this.name = this.name;
-
-        const radios = this.querySelectorAll('ea-radio');
+    #initValue(radios) {
         radios.forEach(radio => {
             if (radio.checked) this.value = radio.value;
 
@@ -71,20 +60,28 @@ export class EaRadioGroup extends Base {
                     bubbles: true,
                     composed: true,
                     detail: {
+                        target: radio,
                         value: this.value
                     }
                 }));
             });
         });
+    }
 
+    #initRadioChecked(radios) {
         const valueRadio = Array.from(radios).find(radio => radio.value === this.value);
         if (valueRadio) valueRadio.checked = true;
-
-        this.setAttribute("data-ea-component", true);
     }
 
     connectedCallback() {
-        this.init();
+        this.setAttribute("data-ea-component", true);
+
+        // name 唯一键值
+        this.name = this.name;
+
+        const radios = this.querySelectorAll('ea-radio');
+        this.#initValue(radios);
+        this.#initRadioChecked(radios);
     }
 }
 

@@ -1,3 +1,4 @@
+export const stylesheet = `
 :host {
   --margin-right: 0.75rem;
   --text-color: #606266;
@@ -80,3 +81,4 @@
 .ea-radio_wrap.border[checked=true] {
   border: 1px solid #409eff;
 }
+`;
