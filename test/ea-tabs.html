@@ -122,10 +122,29 @@
 
     <!-- -------- 4 增减标签页 --------  -->
     <!-- #region  -->
+    <h2>增减标签页</h2>
+    <p>在tabs组件上</p>
     <button id="addBtn">add</button>
-
     <ea-tabs actived="second" type="border-card" editable id="editable">
         <ea-tab name="first">
+            <ea-icon icon="icon-coffee"></ea-icon>
+            用户管理
+        </ea-tab>
+        <ea-tab name="second">配置管理</ea-tab>
+        <ea-tab name="third">角色管理</ea-tab>
+        <ea-tab name="fourth">定时任务补偿</ea-tab>
+
+        <div id="editableSlot" slot="pane">
+            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+        </div>
+    </ea-tabs>
+
+    <p>在tab组件上</p>
+    <ea-tabs actived="second" type="border-card" id="editable">
+        <ea-tab name="first" editable>
             <ea-icon icon="icon-coffee"></ea-icon>
             用户管理
         </ea-tab>

@@ -125,6 +125,8 @@ export class EaTab extends Base {
     }
 
     connectedCallback() {
+        this.editable = this.editable;
+
         this.label = this.label;
 
         this.#handleSelectedEvent();

@@ -59,6 +59,7 @@ export const stylesheet = `
   right: 0;
   top: 50%;
   transform: translate(0, -50%);
+  user-select: none;
   width: 0;
   overflow: hidden;
   transition: width 0.3s;
