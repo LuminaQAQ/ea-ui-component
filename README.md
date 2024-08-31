@@ -36,7 +36,7 @@
 - Data
 
   - [ ] Tag 标签
-  - [ ] Progress 进度条
+  - [x] Progress 进度条
   - [ ] Pagination 分页
   - [x] Badge 标记
   - [x] Avatar 头像
@@ -74,9 +74,9 @@
     - [x] NavMenuItem
     - [x] NavMenuItemGroup
     - [x] NavSubMenu
-  - [ ] Tabs 标签页
-    - [ ] TabPane
-    - [ ] Tab
+  - [x] Tabs 标签页
+    - [x] TabPane
+    - [x] Tab
   - [x] Breadcrumb 面包屑
     - [x] BreadcrumbItem
   - [x] PageHeader 页头
