@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-result/index.js'
+        import '../components/ea-button/index.js'
+        import '../components/ea-avatar/index.js'
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row space-between">
+        <ea-result icon="icon-ok-circled" title="成功提示" sub-title="请根据提示进行操作">
+            <template slot="extra">
+                <ea-button type="success" size="small">确定</ea-button>
+            </template>
+        </ea-result>
+        <ea-result icon="icon-attention-alt" title="警告提示" sub-title="请根据提示进行操作">
+            <template slot="extra">
+                <ea-button type="warning" size="small">确定</ea-button>
+            </template>
+        </ea-result>
+        <ea-result icon="icon-cancel-circled" title="错误提示" sub-title="请根据提示进行操作">
+            <template slot="extra">
+                <ea-button type="danger" size="small">返回</ea-button>
+            </template>
+        </ea-result>
+        <ea-result icon="icon-info" title="信息提示" sub-title="请根据提示进行操作">
+            <template slot="extra">
+                <ea-button type="primary" size="small">朕已阅</ea-button>
+            </template>
+        </ea-result>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 自定义内容 --------  -->
+    <!-- #region  -->
+    <h2>自定义内容</h2>
+    <ea-result>
+        <div slot="icon">
+            <ea-avatar size="100" shape="square"
+                src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
+        </div>
+        <div slot="title">
+            <div>404</div>
+        </div>
+        <div slot="subTitle">
+            <div>抱歉，请求错误</div>
+        </div>
+        <div slot="extra">
+            <ea-button type="primary" size="medium">返回</ea-button>
+        </div>
+    </ea-result>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

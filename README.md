@@ -45,7 +45,7 @@
   - [x] Empty 空状态
   - [x] Descriptions 描述列表
     - [x] DescriptionsItem
-  - [ ] Result 结果
+  - [x] Result 结果
   - [x] Table 表格
 
 - Notice

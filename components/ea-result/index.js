@@ -1,48 +1,8 @@
 // @ts-nocheck
-import { createElement, createSlotElement } from '../../utils/createElement.js';
-import { handleTemplate } from '../../utils/handleTemplate.js';
 import Base from '../Base.js';
 import "../ea-icon/index.js"
 
-const stylesheet = `
-.ea-result_wrap {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  padding: 40px 30px;
-}
-.ea-result_wrap .ea-result_icon {
-  font-size: 3rem;
-}
-.ea-result_wrap .ea-result_icon i[class=icon-ok-circled] {
-  color: #67c23a;
-}
-.ea-result_wrap .ea-result_icon i[class=icon-cancel-circled] {
-  color: #f56c6c;
-}
-.ea-result_wrap .ea-result_icon i[class=icon-attention-alt] {
-  color: #e6a23c;
-}
-.ea-result_wrap .ea-result_icon i[class=icon-info] {
-  color: #909399;
-}
-.ea-result_wrap .ea-result_title,
-.ea-result_wrap .ea-result_subtitle {
-  color: #5e6d82;
-  font-size: 14px;
-}
-.ea-result_wrap .ea-result_title {
-  margin-top: 20px;
-}
-.ea-result_wrap .ea-result_subtitle {
-  margin-top: 10px;
-}
-.ea-result_wrap .ea-result_extra {
-  margin-top: 30px;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaResult extends Base {
   #wrap;
@@ -61,45 +21,35 @@ export class EaResult extends Base {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    const wrap = document.createElement('div');
-    wrap.className = 'ea-result_wrap';
+    shadowRoot.innerHTML = `
+      <div class="ea-result_wrap" part="container">
+        <div class="ea-result_icon" part="icon">
+          <slot name="icon"></slot>
+        </div>
+        <div class="ea-result_title" part="title">
+          <slot name="title"></slot>
+        </div>
+        <div class="ea-result_subtitle" part="subTitle">
+          <slot name="subTitle"></slot>
+        </div>
+        <div class="ea-result_extra" part="extra">
+          <slot name="extra"></slot>
+        </div>
+      </div>
+    `;
 
-    const iconWrap = createElement('div', 'ea-result_icon');
-    wrap.appendChild(iconWrap);
+    this.#wrap = shadowRoot.querySelector('.ea-result_wrap');
+    this.#resultIcon = shadowRoot.querySelector('.ea-result_icon');
+    this.#resultTitle = shadowRoot.querySelector('.ea-result_title');
+    this.#resultSubtitle = shadowRoot.querySelector('.ea-result_subtitle');
+    this.#resultExtraWrap = shadowRoot.querySelector('.ea-result_extra');
 
-    const resultTitle = createElement('div', 'ea-result_title');
-    wrap.appendChild(resultTitle);
-
-    const resultSubtitle = createElement('div', 'ea-result_subtitle');
-    wrap.appendChild(resultSubtitle);
-
-    const resultExtraWrap = createElement('div', 'ea-result_extra');
-    wrap.appendChild(resultExtraWrap);
-
-    const resultIconSlot = createSlotElement('icon');
-    const resultTitleSlot = createSlotElement('title');
-    const resultSubtitleSlot = createSlotElement('subTitle');
-    const resultExtraSlot = createSlotElement('extra');
-
-    this.#wrap = wrap;
-    this.#resultIcon = iconWrap;
-    this.#resultTitle = resultTitle;
-    this.#resultSubtitle = resultSubtitle;
-    this.#resultExtraWrap = resultExtraWrap;
-
-    this.#resultIconSlot = resultIconSlot;
-    this.#resultTitleSlot = resultTitleSlot;
-    this.#resultSubtitleSlot = resultSubtitleSlot;
-    this.#resultExtraSlot = resultExtraSlot;
+    this.#resultIconSlot = shadowRoot.querySelector('slot[name="icon"]');
+    this.#resultTitleSlot = shadowRoot.querySelector('slot[name="title"]');
+    this.#resultSubtitleSlot = shadowRoot.querySelector('slot[name="subTitle"]');
+    this.#resultExtraSlot = shadowRoot.querySelector('slot[name="extra"]');
 
     this.build(shadowRoot, stylesheet);
-    this.setIconFile(new URL('../ea-icon/index.css', import.meta.url).href);
-    this.shadowRoot.appendChild(wrap);
-
-    shadowRoot.appendChild(resultIconSlot);
-    shadowRoot.appendChild(resultTitleSlot);
-    shadowRoot.appendChild(resultSubtitleSlot);
-    shadowRoot.appendChild(resultExtraSlot);
   }
 
   // ------- icon 设置自定义icon -------
@@ -109,9 +59,10 @@ export class EaResult extends Base {
   }
 
   set icon(value) {
+    if (!value) return;
     this.setAttribute('icon', value);
 
-    this.#resultIcon.innerHTML = `<i class="${value}"></i>`;
+    this.#resultIcon.innerHTML = `<ea-icon icon="${value}"></ea-icon>`;
   }
   // #endregion
   // ------- end -------
@@ -123,6 +74,7 @@ export class EaResult extends Base {
   }
 
   set title(value) {
+    if (!value) return;
     this.setAttribute('title', value);
 
     this.#resultTitle.innerText = value;
@@ -137,6 +89,7 @@ export class EaResult extends Base {
   }
 
   set subtitle(value) {
+    if (!value) return;
     this.setAttribute('sub-title', value);
 
     this.#resultSubtitle.innerText = value;
@@ -144,21 +97,10 @@ export class EaResult extends Base {
   // #endregion
   // ------- end -------
 
-  init() {
-    const that = this;
-
+  connectedCallback() {
     this.icon = this.icon;
     this.title = this.title;
     this.subtitle = this.subtitle;
-
-    handleTemplate(this, "icon", this.#resultIcon, this.#resultIconSlot);
-    handleTemplate(this, "title", this.#resultTitle, this.#resultTitleSlot);
-    handleTemplate(this, "subTitle", this.#resultSubtitle, this.#resultSubtitleSlot);
-    handleTemplate(this, "extra", this.#resultExtraWrap, this.#resultExtraSlot);
-  }
-
-  connectedCallback() {
-    this.init();
   }
 }
 
