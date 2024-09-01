@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-skeleton/index.js'
+        import '../components/ea-avatar/index.js'
+        import '../components/ea-switch/index.js'
+
+        document.querySelector("#handleLoadingStatusSwitch").addEventListener('change', (e) => {
+            const isChecked = e.detail.checked;
+            const wrap = document.querySelector("#loadingStatusNodeWrap");
+            wrap.loading = isChecked;
+        })
+
+        document.querySelector("#handleMultipleLoadingStatusSwitch").addEventListener('change', (e) => {
+            const isChecked = e.detail.checked;
+            const wrap = document.querySelector("#multipleLoadingStatusNodeWrap");
+            wrap.loading = isChecked;
+        })
+    </script>
+
+    <!-- -------- 骨架屏 --------  -->
+    <!-- #region  -->
+    <h2>骨架屏</h2>
+    <div class="demo">
+        <ea-skeleton></ea-skeleton>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 更多参数 --------  -->
+    <!-- #region  -->
+    <h2>更多参数</h2>
+    <div class="demo">
+        <ea-skeleton row="6"></ea-skeleton>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 动画效果 --------  -->
+    <!-- #region  -->
+    <h2>动画效果</h2>
+    <div class="demo">
+        <ea-skeleton row="6" animated></ea-skeleton>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 自定义样式 --------  -->
+    <!-- #region  -->
+    <h2>自定义样式</h2>
+    <div style="width: 240px;">
+        <ea-skeleton animated 1="1">
+            <div slot="template">
+                <ea-skeleton-item variant="image" style="width: 240px; height: 240px"></ea-skeleton-item>
+                <div style="padding: 14px">
+                    <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
+                    <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
+                    <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
+                </div>
+            </div>
+        </ea-skeleton>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- Loading 状态 --------  -->
+    <!-- #region  -->
+    <h2>Loading 状态</h2>
+    <div style="width: 240px;">
+        <p>
+            切换状态: <ea-switch id="handleLoadingStatusSwitch" checked></ea-switch>
+        </p>
+        <ea-skeleton id="loadingStatusNodeWrap" animated>
+            <div slot="template">
+                <ea-skeleton-item variant="image" style="width: 240px; height: 240px"></ea-skeleton-item>
+                <div style="height: 90px; padding: 14px">
+                    <ea-skeleton-item variant="text" style="height: 20.67px; width: 50%;"></ea-skeleton-item>
+                    <ea-skeleton-item variant="text" style="height: 20.67px; margin-right: 16px;"></ea-skeleton-item>
+                    <ea-skeleton-item variant="text" style="height: 20.67px; width: 30%;"></ea-skeleton-item>
+                </div>
+            </div>
+            <div>
+                <ea-avatar size="240" shape="square"
+                    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
+                <div style="padding: 14px">
+                    <div>Hello World!</div>
+                    <div>Hello World! Hello World!</div>
+                    <div>Hello!</div>
+                </div>
+            </div>
+        </ea-skeleton>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 渲染多条数据 --------  -->
+    <!-- #region  -->
+    <h2>渲染多条数据</h2>
+    <div style="width: 240px;">
+        <p>
+            切换状态: <ea-switch id="handleMultipleLoadingStatusSwitch" checked></ea-switch>
+        </p>
+        <ea-skeleton id="multipleLoadingStatusNodeWrap" animated count="2">
+            <div slot="template">
+                <ea-skeleton-item variant="image" style="width: 240px; height: 240px"></ea-skeleton-item>
+                <div style="padding: 14px">
+                    <ea-skeleton-item variant="text" style="width: 50%;"></ea-skeleton-item>
+                    <ea-skeleton-item variant="text" style="margin-right: 16px;"></ea-skeleton-item>
+                </div>
+            </div>
+            <div>
+                <ea-avatar size="240" shape="square"
+                    src="https://b0.bdstatic.com/2bb3119a584a173526df6da5ee42754b.jpg@h_1280"></ea-avatar>
+                <div style="padding: 14px">
+                    <div>牛马</div>
+                    <div style="font-size: 12px; color: gray;">这是一只牛马</div>
+                </div>
+            </div>
+            <div>
+                <ea-avatar size="240" shape="square"
+                    src="https://pic4.zhimg.com/v2-c2bdf8d900f904e7ff1f3e7d7cdc665b_r.jpg"></ea-avatar>
+                <div style="padding: 14px">
+                    <div>吗喽</div>
+                    <div style="font-size: 12px; color: gray;">这是一只吗喽</div>
+                </div>
+            </div>
+        </ea-skeleton>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <div style="width: 240px;">
+        <ea-skeleton id="multipleLoadingStatusNodeWrap" animated count="2">
+            <div slot="template">
+                <div style="padding: 14px">
+                    <ea-skeleton-item variant="h1"></ea-skeleton-item>
+                    <ea-skeleton-item variant="h2"></ea-skeleton-item>
+                    <ea-skeleton-item variant="h3"></ea-skeleton-item>
+                    <ea-skeleton-item variant="h4"></ea-skeleton-item>
+                    <ea-skeleton-item variant="h5"></ea-skeleton-item>
+                    <ea-skeleton-item variant="h6"></ea-skeleton-item>
+                </div>
+            </div>
+        </ea-skeleton>
+    </div>
+</body>
+
+</html>

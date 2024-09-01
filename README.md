@@ -41,7 +41,8 @@
   - [ ] Pagination 分页
   - [x] Badge 标记
   - [x] Avatar 头像
-  - [ ] Skeleton 骨架屏
+  - [x] Skeleton 骨架屏
+    - [x] SkeletonItem
   - [x] Empty 空状态
   - [x] Descriptions 描述列表
     - [x] DescriptionsItem

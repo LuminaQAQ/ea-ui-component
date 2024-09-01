@@ -1,97 +1,14 @@
 // @ts-nocheck
 import Base from '../Base.js';
 
-const imageElement = `
-<svg class="skeleton-image" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15 20h70v60H15z" stroke="#c0c4cc" stroke-width="5px" fill="none" />
-    <circle r="8" cx="32" cy="35" fill="#c0c4cc" />
-    <path d="M60 42.5L39 75h42z" fill="#c0c4cc" />
-    <path d="M35 52.5L20 75h-4 32z" fill="#c0c4cc" />
-</svg>
-`;
+import "../ea-skeleton-item/index.js"
 
-const stylesheet = `
-@keyframes skeleton-loading {
-  0% {
-    background-position: 100% 50%;
-  }
-}
-.ea-skeleton_item,
-.ea-skeleton-item_wrap {
-  position: relative;
-  display: inline-block;
-  background-color: #f2f2f2;
-  height: 16px;
-  border-radius: 4px;
-}
+import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
+import { createSkeletonElement } from './src/utils/createSkeletonElement.js';
 
-.ea-skeleton-item_wrap.animated {
-  background-image: linear-gradient(90deg, #f6f6f6 25%, #e8e8e8 37%, #f6f6f6 63%);
-  background-size: 400% 100%;
-  animation: skeleton-loading 1.4s ease infinite;
-}
-
-.ea-skeleton_wrap.animated .ea-skeleton_item {
-  background-image: linear-gradient(90deg, #f6f6f6 25%, #e8e8e8 37%, #f6f6f6 63%);
-  background-size: 400% 100%;
-  animation: skeleton-loading 1.4s ease infinite;
-}
-
-.ea-skeleton_wrap {
-  width: 100%;
-}
-.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p {
-  width: 100%;
-}
-.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.el-skeleton_paragraph {
-  width: 100%;
-  margin-top: 16px;
-}
-.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.is-first {
-  width: 33%;
-}
-.ea-skeleton_wrap .ea-skeleton_item.el-skeleton_p.is-last {
-  width: 61%;
-}
-
-.ea-skeleton-item_wrap .skeleton-image {
-  width: 30%;
-  height: 30%;
-}
-.ea-skeleton-item_wrap.ea-skeleton_p {
-  width: 100%;
-}
-.ea-skeleton-item_wrap.ea-skeleton_image {
-  width: unset;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0;
-}
-.ea-skeleton-item_wrap.ea-skeleton_text {
-  width: 100%;
-  height: 13px;
-}
-`;
-
-/**
- * 创建一个具有骨架屏样式的元素。
- * 
- * @param {string} item - 包含要添加到新元素的类名。
- * @param {boolean} isFirst - 指示生成的元素是否应该是列表中的第一个元素。
- * @param {boolean} isLast - 指示生成的元素是否应该是列表中的最后一个元素。
- * @returns {HTMLElement} - 返回一个新创建的div元素。
- */
-const getSkeletonElement = (className) => {
-    const el = document.createElement('div');
-    el.className = `ea-skeleton_item el-skeleton_p ${className ? className : ''}`;
-
-    return el;
-};
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaSkeleton extends Base {
-    #mounted = false;
-
     #wrap;
 
     #customizationSlot;
@@ -101,23 +18,18 @@ export class EaSkeleton extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-skeleton_wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-skeleton_wrap" part="container">
+                <slot></slot>
+                <slot name="template"></slot>
+            </div>
+        `;
 
-        const defaultSlot = document.createElement('slot');
-        defaultSlot.style.display = 'none';
-
-        const customizationSlot = document.createElement('slot');
-        customizationSlot.name = 'template';
-
-        this.#wrap = wrap;
-        this.#defaultSlot = defaultSlot;
-        this.#customizationSlot = customizationSlot;
+        this.#wrap = shadowRoot.querySelector('.ea-skeleton_wrap');
+        this.#defaultSlot = shadowRoot.querySelector('slot');
+        this.#customizationSlot = shadowRoot.querySelector('slot[name="template"]');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
-        this.shadowRoot.appendChild(customizationSlot);
-        this.shadowRoot.appendChild(defaultSlot);
     }
 
     // ------- row 骨架屏的渲染行数 -------
@@ -139,10 +51,9 @@ export class EaSkeleton extends Base {
     }
 
     set animated(value) {
+        if (!value) return;
+
         this.setAttribute('animated', value);
-
-        this.#wrap.classList.toggle('animated', value);
-
     }
     // #endregion
     // ------- end -------
@@ -156,7 +67,7 @@ export class EaSkeleton extends Base {
     set count(value) {
         this.setAttribute('count', value);
 
-        this.#wrap.innerHTML = '';
+        // this.#wrap.innerHTML = '';
     }
     // #endregion
     // ------- end -------
@@ -164,58 +75,50 @@ export class EaSkeleton extends Base {
     // ------- loading 是否显示骨架屏 -------
     // #region
     get loading() {
-        return this.getAttrBoolean('loading') || true;
+        const attr = this.getAttribute('loading');
+        return handleDefaultAttrIsTrue(attr);
     }
 
     set loading(value) {
         this.setAttribute('loading', value);
 
-        if (value) {
-            this.#customizationSlot.style.display = 'block';
-            this.#defaultSlot.style.display = 'none';
-        } else {
-            this.#customizationSlot.style.display = 'none';
-            this.#defaultSlot.style.display = 'block';
-        }
+        this.#customizationSlot.style.display = value ? 'block' : 'none';
+        this.#defaultSlot.style.display = value ? 'none' : 'block';
     }
     // #endregion
     // ------- end -------
 
     // 默认骨架屏的初始化
-    defaultSkeletonInit(row) {
+    #initDefaultSkeleton(row) {
         row = Number(row) || 4;
 
-        const firstSkeleton = getSkeletonElement('is-first');
-        this.#wrap.appendChild(firstSkeleton);
+        const defaultSlotNodeLen = this.#defaultSlot.assignedNodes();
+        const customizationSlotLen = this.#customizationSlot.assignedNodes();
 
-        for (let i = 0; i < row - 2; i++) {
-            const paragraphSkeleton = getSkeletonElement('el-skeleton_paragraph');
+
+        if (this.children.length > 0) return;
+        else this.#wrap.innerHTML = '';
+
+        for (let i = 0; i < row; i++) {
+            const paragraphSkeleton = createSkeletonElement('p', this.animated);
             this.#wrap.appendChild(paragraphSkeleton);
         }
-
-        const lastSkeleton = getSkeletonElement('el-skeleton_paragraph is-last');
-        this.#wrap.appendChild(lastSkeleton);
-    }
-
-    // 渲染自定义骨架屏
-    customizationSkeletonInit() {
-        const item = this.querySelectorAll('ea-skeleton-item');
-
-        if (item.length > 0) this.#wrap.innerHTML = "";
     }
 
     // 渲染带动画的骨架屏
-    handleSkeletonItemAniamted(isAnimated) {
+    #handleSkeletonItemAniamted(isAnimated) {
         if (!isAnimated) return;
 
         const items = this.querySelectorAll('ea-skeleton-item');
         items.forEach(item => {
-            item.setAttribute("animated", true);
+            item.animated = true;
         })
     }
 
     // 渲染骨架屏的渲染个数
-    handleSkeletonItemCount(count) {
+    #handleSkeletonItemCount(count) {
+        if (this.children.length === 0 || count < 1) return;
+
         const item = this.querySelector('[slot="template"]');
         let template = ``;
 
@@ -226,116 +129,21 @@ export class EaSkeleton extends Base {
         item.innerHTML = template;
     }
 
-    init() {
-        const that = this;
-
+    connectedCallback() {
         this.animated = this.animated;
-
-        this.count = this.count;
 
         this.loading = this.loading;
 
-        const items = this.querySelectorAll('ea-skeleton-item');
-        if (items.length > 0) {
-            this.#wrap.style.display = "none";
-
-            this.handleSkeletonItemCount(this.count);
-
-            this.handleSkeletonItemAniamted(this.animated);
-
-            return;
-        }
-
-
+        this.count = this.count;
 
         this.row = this.row;
-        this.defaultSkeletonInit(this.row);
-    }
 
-    connectedCallback() {
-        this.init();
-
-        this.#mounted = true;
-    }
-}
-
-export class EaSkeletonItem extends Base {
-    #wrap;
-
-    static get observedAttributes() {
-        return ['animated'];
-    }
-    get variantOptions() {
-        return ["text", "image", "p"];
-    }
-
-    constructor() {
-        super();
-
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-skeleton-item_wrap';
-
-        this.#wrap = wrap;
-
-        this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
-    }
-
-    // ------- style html标签上的样式 -------
-    // #region
-    get elementStyle() {
-        return this.getAttribute('style');
-    }
-
-    set elementStyle(value) {
-        this.setAttribute('style', value);
-        this.#wrap.setAttribute('style', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- variant html标签标识 -------
-    // #region
-    get variant() {
-        return this.getAttribute('variant');
-    }
-
-    set variant(value) {
-        this.variantOptions.includes(value) ? this.setAttribute('variant', value) : this.setAttribute('variant', 'text');
-
-        if (value === "image") this.#wrap.innerHTML = imageElement;
-
-        this.#wrap.classList.add("ea-skeleton_" + this.variant);
-    }
-    // #endregion
-    // ------- end -------
-
-    init() {
-        const that = this;
-
-        this.variant = this.variant;
-
-        this.elementStyle = this.elementStyle;
-    }
-
-    connectedCallback() {
-        this.init();
-    }
-
-    attributeChangedCallback(name, oldVal, newVal) {
-        switch (name) {
-            case "animated":
-                this.#wrap.classList.toggle("animated", this.getAttrBoolean(name));
-                break;
-        }
+        this.#initDefaultSkeleton(this.row);
+        this.#handleSkeletonItemCount(this.count);
+        this.#handleSkeletonItemAniamted(this.animated);
     }
 }
 
 if (!customElements.get('ea-skeleton')) {
     customElements.define('ea-skeleton', EaSkeleton);
-}
-
-if (!customElements.get('ea-skeleton-item')) {
-    customElements.define('ea-skeleton-item', EaSkeletonItem);
 }
