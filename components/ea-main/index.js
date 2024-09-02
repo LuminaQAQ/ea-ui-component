@@ -1,40 +1,29 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
-import { createElement, createSlotElement } from "../../utils/createElement.js"
-
 const stylesheet = `
-
+.ea-main_wrap {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  overflow: auto;
+  color: #333;
+}
 `;
 
 export class EaMain extends Base {
-    #wrap;
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('main');
-        wrap.className = 'ea-main_wrap';
-        wrap.part = 'wrap';
-
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
+        shadowRoot.innerHTML = `
+            <main class="ea-main_wrap" part="container">
+                <slot></slot>
+            </main>
+        `;
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
-    }
-
-    #init() {
-        const that = this;
-
-        this.style.flex = '1';
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

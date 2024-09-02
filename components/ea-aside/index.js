@@ -1,7 +1,12 @@
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
-const stylesheet = ``;
+const stylesheet = `
+.ea-aside_wrap {
+  height: 100%;
+  overflow: auto;
+}
+`;
 
 export class EaAside extends Base {
     #wrap;

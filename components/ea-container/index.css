@@ -8,3 +8,6 @@
 .ea-container_wrap.is-vertical {
   flex-direction: column;
 }
+.ea-container_wrap ::slotted(ea-main) {
+  flex: 1;
+}

@@ -4,11 +4,11 @@
 
 - 基础组件
 
-  - [ ] Container 布局容器
-    - [ ] Container 外层容器
-    - [ ] Header 顶栏容器
-    - [ ] Main 主体容器
-    - [ ] Footer 底栏容器
+  - [x] Container 布局容器
+    - [x] Container 外层容器
+    - [x] Header 顶栏容器
+    - [x] Main 主体容器
+    - [x] Footer 底栏容器
     - [x] Aside 侧边栏容器
   - [x] Icon 图标
   - [x] Button 按钮

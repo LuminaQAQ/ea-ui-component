@@ -10,4 +10,8 @@
   &.is-vertical {
     flex-direction: column;
   }
+
+  ::slotted(ea-main) {
+    flex: 1;
+  }
 }

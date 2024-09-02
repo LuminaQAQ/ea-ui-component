@@ -18,11 +18,11 @@ export class EaCollapseItem extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class="ea-collapse-item_wrap" part="container">
-                <div class="ea-collapse-item_title" part="title-container">
+                <div class="ea-collapse-item_title" part="title-wrap">
                     <span class="ea-collapse-item_title-content" part="title-content"></span>
                     <span class="ea-collapse-item_title-icon" part="title-icon"></span>
                 </div>
-                <div class="ea-collapse-item_content" part="content-container">
+                <div class="ea-collapse-item_content" part="content-wrap">
                     <slot></slot>
                 </div>
             </div>

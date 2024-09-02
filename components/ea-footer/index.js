@@ -1,5 +1,3 @@
-// @ts-nocheck
-import { createSlotElement } from '../../utils/createElement.js';
 import Base from '../Base.js';
 import '../ea-icon/index.js';
 
@@ -9,24 +7,20 @@ const stylesheet = `
 
 export class EaFooter extends Base {
     #wrap;
-    #slot;
 
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-footer_wrap';
-        wrap.part = 'wrap';
-
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
-        this.#slot = slot;
+        shadowRoot.innerHTML = `
+            <footer class="ea-footer_wrap" part="container">
+                <slot></slot>
+            </footer>
+        `;
+        
+        this.#wrap = shadowRoot.querySelector('.ea-footer_wrap');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- height 底栏高度 -------
@@ -44,14 +38,8 @@ export class EaFooter extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        const that = this;
-
-        this.height = this.height;
-    }
-
     connectedCallback() {
-        this.#init();
+        this.height = this.height;
     }
 }
 
