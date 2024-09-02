@@ -1,3 +1,4 @@
+export const stylesheet = `
 :host {
   --active-text-color: #409eff;
   --inactive-text-color: ##606266;
@@ -88,3 +89,4 @@
 .ea-switch_wrap.disabled .ea-switch_core {
   pointer-events: none;
 }
+`;

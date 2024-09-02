@@ -27,7 +27,7 @@
     - [x] OptionGroup
   - [ ] Textarea 文本域
   - [x] InputNumber 计数器
-  - [ ] Switch 开关
+  - [x] Switch 开关
   - [x] Rate 评分
   - [ ] TimePicker 时间选择器
   - [x] DatePicker 日期选择器

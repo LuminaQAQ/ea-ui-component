@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-switch/index.js'
+
+        document.querySelector("#switch").addEventListener("change", function (e) {
+            console.log(e.detail.checked, e.detail.value);
+        });
+    </script>
+
+    <!-- -------- 基本用法 --------  -->
+    <!-- #region  -->
+    <h2>基本用法</h2>
+    <div class="row">
+        <ea-switch name="basic"></ea-switch>
+        <ea-switch name="basicHasText" inactive-text="按年付费" active-text="按月付费"></ea-switch>
+        <ea-switch name="basicHasText" inactive-text="按年付费" active-text="按月付费" checked></ea-switch>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 默认选中状态 --------  -->
+    <!-- #region  -->
+    <h2>默认选中状态</h2>
+    <div class="row">
+        <ea-switch checked></ea-switch>
+        <ea-switch inactive-text="按年付费" active-text="按月付费" checked></ea-switch>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 禁用状态 --------  -->
+    <!-- #region  -->
+    <h2>禁用状态</h2>
+    <div class="row">
+        <ea-switch disabled></ea-switch>
+        <ea-switch inactive-text="按年付费" active-text="按月付费" checked disabled></ea-switch>
+        <ea-switch inactive-text="按年付费" active-text="按月付费" disabled></ea-switch>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 指定背景色 --------  -->
+    <!-- #region  -->
+    <h2>指定背景色</h2>
+    <div class="row">
+        <ea-switch inactive-color="#ff4949" active-color="#13ce66"></ea-switch>
+        <ea-switch inactive-color="#ff4949" active-color="#13ce66" inactive-text="按年付费" active-text="按月付费"
+            checked></ea-switch>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- change 事件 --------  -->
+    <!-- #region  -->
+    <h2>change 事件</h2>
+    <div class="row">
+        <ea-switch id="switch" inactive-text="按年付费" active-text="按月付费"></ea-switch>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>
