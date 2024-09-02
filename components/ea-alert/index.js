@@ -1,11 +1,8 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import "../ea-icon/index.js"
 import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
 
-import { initClosableElement } from './src/utils/initClosableElement.js';
-import { initShowIconElement } from './src/utils/initShowIconElement.js';
-import { initDescriptionElement } from './src/utils/initDescriptionElement.js';
+import { createElement } from '../../utils/createElement.js';
 
 import { stylesheet } from './src/style/stylesheet.js';
 
@@ -143,6 +140,52 @@ export class EaAlert extends Base {
   // #endregion
   // ------- end -------
 
+  #initClosableElement() {
+    if (!this.closable) return;
+
+    this.closable === true && this.closeText === "" ? this.#closeIcon.icon = 'icon-cancel' : this.#closeIcon.innerText = this.closeText;
+
+    this.#closeIcon.addEventListener('click', () => {
+      this.#wrap.style.opacity = 0;
+
+      this.dispatchEvent(new CustomEvent('close', { detail: { target: this.#closeIcon } }));
+    });
+
+    this.#wrap.addEventListener('transitionend', () => {
+      this.remove();
+    });
+  }
+
+  get iconList() {
+    return {
+      success: 'ok-circled',
+      info: 'info',
+      warning: 'attention-alt',
+      error: 'cancel-circled'
+    }
+  }
+
+  #initShowIconElement() {
+    if (!this.showIcon) return;
+
+    const icon = createElement('ea-icon');
+    icon.icon = `icon-${this.iconList[this.type]}`;
+    icon.classList.add(`ea-alert--${this.type}`);
+
+    this.#alertTitle.insertBefore(icon, this.#alertTitle.firstChild);
+  }
+
+  #initDescriptionElement() {
+    if (!this.description) return;
+
+    const descriptionElement = createElement('p', 'ea-alert_description');
+    descriptionElement.part = 'description';
+    this.#wrap.style.flexDirection = 'column';
+
+    descriptionElement.innerText = this.description;
+    this.#wrap.appendChild(descriptionElement);
+  }
+
   connectedCallback() {
     this.type = this.type;
 
@@ -156,9 +199,9 @@ export class EaAlert extends Base {
 
     this.center = this.center;
 
-    initClosableElement.call(this, this.#wrap, this.#closeIcon, this.closeText, this.closable);
-    initShowIconElement.call(this, this.#alertTitle, this.type, this.showIcon);
-    initDescriptionElement.call(this, this.#wrap, this.description);
+    this.#initClosableElement();
+    this.#initShowIconElement();
+    this.#initDescriptionElement();
   }
 }
 
