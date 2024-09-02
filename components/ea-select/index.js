@@ -23,13 +23,13 @@ export class EaSelect extends Base {
 
         shadowRoot.innerHTML = `
             <div class="ea-select_wrap" part="container">
-                <div class="ea-select_input-wrap">
+                <div class="ea-select_input-wrap" part="input-wrap">
                     <ea-input type="text" part="input" readonly autocomplete="off"></ea-input>
-                    <span class="ea-select_dropdown-icon">
+                    <span class="ea-select_dropdown-icon" part="dropdown-icon-wrap">
                         <ea-icon part="icon" icon="icon-angle-down" color="#c0c4cc"></ea-icon>
                     </span>
                 </div>
-                <div class="ea-select_dropdown-wrap">
+                <div class="ea-select_dropdown-wrap" part="dropdown-wrap">
                     <slot></slot>
                     <slot name="empty" class="ea-select_dropdown-empty" style="display: none;">
                         <p>暂无数据</p>

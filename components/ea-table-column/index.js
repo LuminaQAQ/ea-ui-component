@@ -14,7 +14,7 @@ export class EaTableColumn extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
         shadowRoot.innerHTML = `
-            <th>
+            <th part="container">
                 <slot></slot>
                 <span></span>
             </th>

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import "../ea-icon/index.js"
 
@@ -18,10 +17,10 @@ export class EaProgress extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class="ea-progress_wrap" part="container">
-                <section class="ea-progress_track">
-                    <section class="ea-progress_path"></section>
+                <section class="ea-progress_track" part="track-wrap">
+                    <section class="ea-progress_path" part="path"></section>
                 </section>
-                <section class="ea-progress_text"></section>
+                <section class="ea-progress_text" part="text-wrap"></section>
             </div>
         `;
 

@@ -1,14 +1,11 @@
-// @ts-nocheck
 import Base from '../Base.js';
 
 import { emptyStatusSVG } from './src/assets/emptyStatusSVG.js';
 import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaEmpty extends Base {
-    #wrap;
     #imageWrap;
     #descriptionWrap;
-    #slot;
 
     constructor() {
         super();
@@ -16,22 +13,20 @@ export class EaEmpty extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class="ea-empty_wrap" part="container">
-                <div class="ea-empty_image" part="image">
+                <div class="ea-empty_image" part="image-wrap">
                     ${emptyStatusSVG}
                 </div>
-                <div class="ea-empty_description" part="description">
+                <div class="ea-empty_description" part="description-wrap">
                     暂无数据
                 </div>
-                <div class="ea-empty_bottom" part="bottom">
+                <div class="ea-empty_bottom" part="bottom-wrap">
                     <slot></slot>
                 </div>
             </div>
         `;
 
-        this.#wrap = shadowRoot.querySelector('.ea-empty_wrap');
         this.#imageWrap = shadowRoot.querySelector('.ea-empty_image');
         this.#descriptionWrap = shadowRoot.querySelector('.ea-empty_description');
-        this.#slot = shadowRoot.querySelector('slot');
 
         this.build(shadowRoot, stylesheet);
     }

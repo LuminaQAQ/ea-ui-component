@@ -1,10 +1,10 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
-import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
-import { initDrawerCloseEvent } from './src/utils/initDrawerCloseEvent.js';
+
 import { timeout } from '../../utils/timeout.js';
+import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
+
+import { initDrawerCloseEvent } from './src/utils/initDrawerCloseEvent.js';
 
 import { stylesheet } from './src/style/stylesheet.js';
 
@@ -26,7 +26,7 @@ export class EaDrawer extends Base {
       <div class="ea-drawer_wrap" part="container">
         <div class="ea-drawer_drawer-wrap" part="drawer-wrap">
           <div class="ea-drawer_header-wrap" part="header-wrap">
-            <span class="ea-drawer_title" part="title">
+            <span class="ea-drawer_title" part="title-wrap">
               <slot name="title"></slot>
             </span>
             <ea-icon class="ea-drawer_icon" icon="icon-cancel" part="icon"></ea-icon>
@@ -195,6 +195,38 @@ export class EaDrawer extends Base {
     this.#drawerWrap.style[directionSize] = value;
   }
 
+  #initDrawerCloseEvent() {
+    const callback = () => {
+      this.open = false;
+      this.#wrap.classList.remove('will-close');
+
+      this.#drawerWrap.removeEventListener('transitionend', callback);
+    }
+
+    const handleClose = () => {
+      this.#wrap.classList.add('will-close');
+
+      this.#drawerWrap.addEventListener('transitionend', callback);
+
+      this.dispatchEvent(new CustomEvent('close', {
+        bubbles: true,
+        composed: true,
+      }));
+    }
+
+    if (this.wrapperClosable && this.modal) {
+      this.#maskWrap.addEventListener('click', () => {
+        handleClose();
+      });
+    }
+
+    if (this.showClose) {
+      this.#headerCloseIcon.addEventListener('click', () => {
+        handleClose();
+      });
+    }
+  }
+
   connectedCallback() {
     this.direction = this.direction;
 
@@ -212,7 +244,7 @@ export class EaDrawer extends Base {
 
     this.open = false;
 
-    initDrawerCloseEvent.call(this, this.#wrap, this.#drawerWrap, this.#maskWrap, this.#headerCloseIcon);
+    this.#initDrawerCloseEvent();
   }
 }
 

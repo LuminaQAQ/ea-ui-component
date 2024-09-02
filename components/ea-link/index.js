@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js'
 import "../ea-icon/index.js"
 
@@ -8,7 +7,7 @@ export class EaLink extends Base {
   #container;
   constructor() {
     super();
-    
+
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.innerHTML = `
       <div class="ea-link" part="container">

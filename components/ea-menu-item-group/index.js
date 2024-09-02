@@ -1,8 +1,6 @@
-// @ts-nocheck
-import { createElement, createSlotElement } from '../../utils/createElement.js';
-import { timeout } from '../../utils/timeout.js';
 import Base from '../Base.js';
 import '../ea-icon/index.js'
+import { timeout } from '../../utils/timeout.js';
 
 import { stylesheet } from './src/style/stylesheet.js';
 
@@ -10,14 +8,13 @@ export class EaMenuItemGroup extends Base {
     #wrap;
     #titleWrap;
     #subItemsWrap;
-    #dropdowpIcon;
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class="ea-menu-item-group_wrap" part="container">
-                <div class="ea-submenu_title_wrap" part="title">
+                <div class="ea-submenu_title_wrap" part="title-wrap">
                     <slot name="title"></slot>
                     <ea-icon class="ea-submenu_dropdown_icon" icon="icon-angle-down" part="dropdown-icon"></ea-icon>
                 </div>
@@ -30,7 +27,6 @@ export class EaMenuItemGroup extends Base {
         this.#wrap = shadowRoot.querySelector('.ea-menu-item-group_wrap');
         this.#titleWrap = shadowRoot.querySelector('.ea-submenu_title_wrap');
         this.#subItemsWrap = shadowRoot.querySelector('.ea-submenu_items_wrap');
-        this.#dropdowpIcon = shadowRoot.querySelector('.ea-submenu_dropdown_icon');
 
         this.build(shadowRoot, stylesheet);
     }
@@ -113,7 +109,7 @@ export class EaMenuItemGroup extends Base {
         this.style.width = "100%";
 
         const items = this.querySelectorAll('ea-menu-item');
-        items.forEach((item, index) => {
+        items.forEach((item) => {
             item.isSubItem = true;
 
             item.addEventListener('item-selected', (e) => {

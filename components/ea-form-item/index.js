@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
@@ -23,7 +22,7 @@ export class EaFromItem extends Base {
 
         shadowRoot.innerHTML = `
             <div class='ea-form-item_wrap' part='container'>
-                <label class="ea-form-item_label-wrap" part='label'>
+                <label class="ea-form-item_label-wrap" part='label-wrap'>
                     <slot name='label'></slot>
                 </label>
                 <div class="ea-form-item_content-wrap" part='content-wrap'> 

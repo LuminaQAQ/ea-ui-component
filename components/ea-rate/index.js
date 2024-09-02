@@ -25,7 +25,7 @@ export class EaRate extends Base {
             <div class="ea-rate_wrap" part="container">
                 <section class="ea-rate_item-wrap" part="item-wrap">
                 </section>
-                <span class="ea-rate_text" part="text"></span>
+                <span class="ea-rate_text" part="text-wrap"></span>
             </div>
         `;
 

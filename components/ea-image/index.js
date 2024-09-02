@@ -1,11 +1,9 @@
-// @ts-nocheck
 import Base from '../Base.js';
-import { createElement, createSlotElement } from '../../utils/createElement.js';
 
-import { errorImage } from './src/assets/errorImage.js';
+import { errorImage } from "./src/assets/errorImage.js";
+
 import { stylesheet } from './src/style/stylesheet.js';
 import { initImagePreview } from './src/utils/createPreviewTools.js';
-import { initImageLoadEvent } from './src/utils/initImageLoadEvent.js';
 
 export class EaImage extends Base {
     #wrap;
@@ -123,6 +121,38 @@ export class EaImage extends Base {
     // #endregion
     // ------- end -------
 
+    #initImageLoadEvent() {
+        const image = new Image();
+
+        if (this.lazy) {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].intersectionRatio <= 0) return;
+
+                image.src = this.src;
+                observer.disconnect();
+            });
+
+            observer.observe(this.#wrap);
+        } else {
+            image.src = this.src;
+        }
+
+        image.onload = () => {
+            this.#img.setAttribute('src', this.src);
+            this.#imgSlot.remove();
+
+            this.dispatchEvent(new CustomEvent('load', { detail: { src: this.src } }));
+        };
+
+        image.onerror = () => {
+            this.#wrap.innerHTML = errorImage;
+            this.#wrap.classList.add('is-error');
+            this.#imgSlot.remove();
+
+            this.dispatchEvent(new CustomEvent('error', { detail: { src: this.src } }));
+        };
+    }
+
     connectedCallback() {
         this.width = this.width;
         this.height = this.height;
@@ -135,7 +165,8 @@ export class EaImage extends Base {
         this.preview = this.preview;
 
         initImagePreview(this.#wrap, this.#img, this.preview);
-        initImageLoadEvent.call(this, this.#wrap, this.#img, this.#imgSlot, this.src, this.lazy);
+
+        this.#initImageLoadEvent();
     }
 }
 

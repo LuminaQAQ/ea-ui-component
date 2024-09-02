@@ -1,7 +1,6 @@
 import Base from '../Base.js';
 
 export class EaInfiniteScrollItem extends Base {
-    #wrap;
     constructor() {
         super();
 

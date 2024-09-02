@@ -29,12 +29,12 @@ export class EaTimePicker extends Base {
             <div class='ea-time-picker_wrap' part='container'>
                 <ea-input part='input' autocomplete="off" readonly prefix-icon="icon-clock"></ea-input>
                 <div class="ea-time-picker_dropdown-wrap" part='dropdown-wrap'>
-                    <div class="ea-time-picker_dropdown-inner-wrap">
-                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-hour" part='dropdown-inner'>
+                    <div class="ea-time-picker_dropdown-inner-wrap" part='dropdown-inner-wrap'>
+                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-hour" part='dropdown-time'>
                         </ul>
-                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-minute" part='dropdown-inner'>
+                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-minute" part='dropdown-time'>
                         </ul>
-                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-second" part='dropdown-inner'>
+                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-second" part='dropdown-time'>
                         </ul>
                     </div>
                 </div>

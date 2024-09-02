@@ -1,13 +1,7 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import "../ea-infinite-scroll-item/index.js"
 
-import { createElement, createSlotElement } from '../../utils/createElement.js';
-import { initBottomReachedObserver } from './src/utils/initBottomReachedObserver.js';
-
 export class EaInfiniteScroll extends Base {
-    #wrap;
-
     #loadingSlot;
 
     #noMoreSlot;
@@ -23,8 +17,7 @@ export class EaInfiniteScroll extends Base {
             <slot name='loading' style="display: none;"></slot>
             <slot name='noMore' style="display: none;"></slot>
         `;
-
-        this.#wrap = shadowRoot.querySelector('.ea-infinite_wrap');
+        
         this.#loadingSlot = shadowRoot.querySelector('slot[name="loading"]');
         this.#noMoreSlot = shadowRoot.querySelector('slot[name="noMore"]');
     }
@@ -69,10 +62,50 @@ export class EaInfiniteScroll extends Base {
     // #endregion
     // ------- end -------
 
+    #getLastChild() {
+        const items = this.querySelectorAll('ea-infinite-item');
+        return items[items.length - 1];
+    }
+
+    #initBottomReachedObserver() {
+        if (this.disabled) return;
+
+        let item = this.#getLastChild();
+        let timer = null;
+
+        const observer = new IntersectionObserver((entries) => {
+            const { isIntersecting } = entries[0];
+            if (this.disabled) {
+                observer.disconnect();
+                return;
+            }
+
+            if (!isIntersecting || timer) return;
+
+            if (this.loading) this.#loadingSlot.style.display = 'block';
+
+            observer.unobserve(item);
+
+            timer = setTimeout(() => {
+                this.dispatchEvent(new CustomEvent('bottomReached'));
+
+                clearTimeout(timer);
+                timer = null;
+
+                item = this.#getLastChild();
+                observer.observe(item);
+                this.#loadingSlot.style.display = 'none';
+
+            }, this.delay || 200);
+        }, { root: this.parentNode, rootMargin: '10px', threshold: 0.1 });
+
+        // 初始观察
+        observer.observe(item);
+    }
     connectedCallback() {
         this.delay = this.delay;
-        
-        initBottomReachedObserver.call(this, this.#loadingSlot, this.delay);
+
+        this.#initBottomReachedObserver();
     }
 }
 

@@ -1,45 +1,10 @@
-// @ts-nocheck
 import Base from '../Base.js';
 
 import { stylesheet } from './src/style/stylesheet.js';
 
-const getPageItem = (page, hasBgc) => {
-    const pageItem = document.createElement('span');
-    pageItem.className = 'ea-pagination_item';
-    pageItem.innerText = page;
-    pageItem.setAttribute('data-page', page);
-
-    if (hasBgc) pageItem.classList.add('background');
-
-    return pageItem;
-};
-
-const getMoreItem = (arrow, hasBgc) => {
-    const moreItem = document.createElement('span');
-    moreItem.className = 'ea-pagination_more';
-    moreItem.innerHTML = '···';
-
-    if (hasBgc) moreItem.classList.add('background');
-
-    moreItem.addEventListener('mouseenter', function (e) {
-        moreItem.classList.add('ea-pagination_more--active');
-        moreItem.innerHTML = arrow === "prev" ? '&lt;&lt;' : '&gt;&gt;';
-    })
-
-    moreItem.addEventListener('mouseleave', function (e) {
-        moreItem.classList.remove('ea-pagination_more--active');
-        moreItem.innerHTML = '···';
-    })
-
-    return moreItem;
-}
-
-const getShowTotalItem = () => {
-    const showTotalItem = document.createElement('span');
-    showTotalItem.className = 'ea-pagination_show_total';
-
-    return showTotalItem;
-}
+import { getMoreItem } from './src/components/getMoreItem.js';
+import { getPageItem } from './src/components/getPageItem.js';
+import { getShowTotalItem } from './src/components/getShowTotalItem.js';
 
 export class EaPagination extends Base {
     #container;

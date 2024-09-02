@@ -23,16 +23,16 @@ export class EaResult extends Base {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.innerHTML = `
       <div class="ea-result_wrap" part="container">
-        <div class="ea-result_icon" part="icon">
+        <div class="ea-result_icon" part="icon-wrap">
           <slot name="icon"></slot>
         </div>
-        <div class="ea-result_title" part="title">
+        <div class="ea-result_title" part="title-wrap">
           <slot name="title"></slot>
         </div>
-        <div class="ea-result_subtitle" part="subTitle">
+        <div class="ea-result_subtitle" part="subTitle-wrap">
           <slot name="subTitle"></slot>
         </div>
-        <div class="ea-result_extra" part="extra">
+        <div class="ea-result_extra" part="extra-wrap">
           <slot name="extra"></slot>
         </div>
       </div>

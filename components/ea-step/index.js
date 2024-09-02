@@ -27,7 +27,7 @@ export class EaStep extends Base {
       <div class="ea-step_wrap" part="container">
         <div class="ea-step_head-wrap" part="head-wrap">
           <div class="ea-step_bar" part="step-bar"></div>
-          <div class="ea-step_head-icon" part="icon"></div>
+          <div class="ea-step_head-icon" part="head-icon"></div>
         </div>
         <div class="ea-step_main-wrap" part="main-wrap">
           <div class="ea-step_title-wrap" part="title-wrap">

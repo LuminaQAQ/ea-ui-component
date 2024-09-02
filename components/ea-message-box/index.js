@@ -1,7 +1,4 @@
-// @ts-nocheck
 import Base from '../Base.js';
-
-import { createElement } from "../../utils/createElement.js"
 
 import { EaMessageBox } from './src/utils/EaMessageBoxClass.js';
 import "../ea-button/index.js"
@@ -24,18 +21,18 @@ export class EaMessageBoxElement extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class="ea-dialog_wrap" part="container" role="dialog">
-                <div class="ea-dialog_board" part="dialog_body">
-                    <div class="ea-dialog_header" part="dialog_header">
-                        <span class="ea-dialog_header-title" part="dialog_header-title"></span>
-                        <ea-icon class="ea-dialog_header-close" icon="icon-cancel" part="dialog_header-close"></ea-icon>
+                <div class="ea-dialog_board" part="dialog-body">
+                    <div class="ea-dialog_header" part="dialog-header">
+                        <span class="ea-dialog_header-title" part="dialog-title"></span>
+                        <ea-icon class="ea-dialog_header-close" icon="icon-cancel" part="close-icon"></ea-icon>
                     </div>
-                    <div class="ea-dialog_content" part="dialog_content"></div>
-                    <div class="ea-dialog_footer" part="dialog_footer">
-                        <div class="ea-dialog_footer-cancel-button" part="dialog_footer-cancel-button"></div>
-                        <div class="ea-dialog_footer-confirm-button" part="dialog_footer-confirm-button"></div>
+                    <div class="ea-dialog_content" part="dialog-content"></div>
+                    <div class="ea-dialog_footer" part="dialog-footer">
+                        <div class="ea-dialog_footer-cancel-button" part="footer-cancel-button"></div>
+                        <div class="ea-dialog_footer-confirm-button" part="footer-confirm-button"></div>
                     </div>
                 </div>
-                <div class="ea-dialog_mask" part="mask"></div>
+                <div class="ea-dialog_mask" part="mask-wrap"></div>
             </div>
         `;
         this.#wrap = shadowRoot.querySelector('.ea-dialog_wrap');

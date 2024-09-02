@@ -23,7 +23,7 @@ export class EaMessageElement extends Base {
         shadowRoot.innerHTML = `
             <div class="ea-message_wrap" part="container">
                 <ea-icon class="ea-icon-wrap" part="icon"></ea-icon>
-                <div class="ea-text-content" part="content"></div>
+                <div class="ea-text-content" part="content-wrap"></div>
                 <ea-icon class="ea-close-icon" icon="icon-cancel"></ea-icon>
             </div>
         `;

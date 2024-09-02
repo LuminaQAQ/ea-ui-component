@@ -14,11 +14,11 @@ export class EaRadio extends Base {
 
     shadowRoot.innerHTML = `
       <label class="ea-radio_wrap" part="container">
-        <span class="ea-radio-input_wrap">
-          <span class="ea-radio-input_inner"></span>
+        <span class="ea-radio-input_wrap" part="input-wrap">
+          <span class="ea-radio-input_inner" part="input"></span>
           <input class="ea-radio-input_input" type="radio" />
         </span>
-        <span class="ea-radio-label_desc">
+        <span class="ea-radio-label_desc" part="label-wrap">
           <slot></slot>
         </span>
       </label>

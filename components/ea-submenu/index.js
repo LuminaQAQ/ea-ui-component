@@ -15,9 +15,9 @@ export class EaSubmenu extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class="ea-submenu_wrap" part="container">
-                <div class="ea-submenu_title_wrap" part="title">
+                <div class="ea-submenu_title_wrap" part="title-wrap">
                     <slot name="title"></slot>
-                    <ea-icon class="ea-submenu_dropdown_icon" icon="icon-angle-down"></ea-icon>
+                    <ea-icon class="ea-submenu_dropdown_icon" icon="icon-angle-down" part="dropdown-icon"></ea-icon>
                 </div>
                 <div class="ea-submenu_items_wrap" part="dropdown-wrap">
                     <slot></slot>

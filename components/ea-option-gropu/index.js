@@ -22,7 +22,7 @@ export class EaOptionGroup extends Base {
 
         shadowRoot.innerHTML = `
             <div class='ea-option-group_wrap' part='container'>
-                <div class='ea-option-group_title' part='title'></div>
+                <div class='ea-option-group_title' part='title-wrap'></div>
                 <slot></slot>
             </div>
         `;

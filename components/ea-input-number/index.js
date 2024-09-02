@@ -15,9 +15,9 @@ export class EaInputNumber extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class="ea-input-number_wrap" part="container">
-                <span class="ea-input-number_sign minus" part="minus">-</span>
+                <span class="ea-input-number_sign minus" part="minus-wrap">-</span>
                 <input class="ea-input-number_inner" part="input" type="text" />
-                <span class="ea-input-number_sign plus" part="plus">+</span>
+                <span class="ea-input-number_sign plus" part="plus-wrap">+</span>
             </div>
         `;
 

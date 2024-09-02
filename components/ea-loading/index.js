@@ -17,8 +17,8 @@ export class EaLoading extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
         <div class="ea-loading_wrap" part="container">
-            <div class="ea-loading_mask" part="mask">
-                <ea-icon icon="icon-spin6 animate-spin" class="ea-loading_spinner"></ea-icon>
+            <div class="ea-loading_mask" part="mask-mask">
+                <ea-icon icon="icon-spin6 animate-spin" class="ea-loading_spinner" part="icon"></ea-icon>
             </div>
             <slot></slot>
         </div>

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from "../Base.js";
 import "../ea-icon/index.js"
 
@@ -26,12 +25,12 @@ export class EaInput extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class='ea-input_container' part='container'>
-                <div class="ea-input_wrap">
-                    <div class="ea-input_prepend-slot" part="prepend-container">
+                <div class="ea-input_wrap" part="input-wrap">
+                    <div class="ea-input_prepend-slot" part="prepend-wrap">
                         <slot name="prepend"></slot>
                     </div>
                     <input class="ea-input_inner" type="text" part="input" autocomplete="off" />
-                    <div class="ea-input_append-slot" part="append-container">
+                    <div class="ea-input_append-slot" part="append-wrap">
                         <slot name="append"></slot>
                     </div>
                 </div>

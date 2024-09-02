@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js';
 
 import { stylesheet } from './src/stylesheet.js';
@@ -17,10 +16,10 @@ export class EaDescriptionsItem extends Base {
 
     shadowRoot.innerHTML = `
         <td class="ea-descriptions-item_wrap" part="container">
-            <span class="ea-descriptions-item_label" part="label">
+            <span class="ea-descriptions-item_label" part="label-wrap">
                 <slot slot="label"></slot>
             </span>
-            <span class="ea-descriptions-item_content" part="content">
+            <span class="ea-descriptions-item_content" part="content-wrap">
                 <slot></slot>
             </span>
         </td>

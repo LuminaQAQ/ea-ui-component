@@ -34,15 +34,15 @@ export class EaTable extends Base {
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
-            <div class="ea-table_wrap">
-                <div class="ea-table_header-wrap">
-                    <table class="ea-table_header">
+            <div class="ea-table_wrap" part="container">
+                <div class="ea-table_header-wrap" part="header-wrap">
+                    <table class="ea-table_header" part="header-table">
                         <colgroup></colgroup>
                         <thead></thead>
                     </table>
                 </div>
-                <div class="ea-table_body-wrap">
-                    <table class="ea-table_main">
+                <div class="ea-table_body-wrap" part="body-wrap">
+                    <table class="ea-table_main" part="body-table">
                         <colgroup></colgroup>
                         <tbody></tbody>
                         <slot name="empty" style="display: none;"></slot>
@@ -265,11 +265,13 @@ export class EaTable extends Base {
 
         const createThElement = (child, i = 1) => {
             const newTr = createElement('tr');
+            newTr.part = 'row';
             newTr.setAttribute('index', i);
             Array.from(child).forEach(subchild => {
                 if (subchild.nodeName !== 'EA-TABLE-COLUMN') return;
 
                 const th = createElement('th', 'ea-table__cell th-cell');
+                th.part = 'th-cell';
 
                 th.setAttribute('colspan', subchild.colspan || 1);
                 th.setAttribute('rowspan', subchild.rowspan || 1);
@@ -370,6 +372,7 @@ export class EaTable extends Base {
         } else {
             trs.forEach(item => {
                 const div = createElement('td', 'ea-table__cell');
+                div.part = 'td-cell';
                 Array.from(slot.assignedNodes()).forEach(slotItem => {
                     const cloneNode = slotItem.cloneNode(true);
                     div.appendChild(cloneNode);
@@ -416,9 +419,11 @@ export class EaTable extends Base {
 
         data.forEach((item, index) => {
             const row = createElement('tr', 'ea-table__row');
+            row.part = 'row';
 
             Object.entries(item).forEach(([key, value]) => {
                 const cell = createElement('td', 'ea-table__cell td_cell');
+                cell.part = 'td-cell';
                 cell.innerHTML = value;
 
                 if (key === "selection") {
@@ -504,6 +509,7 @@ export class EaTable extends Base {
         if (headerSlot.assignedNodes().length > 0) {
             const tr = this.#headerTableThead.querySelector('tr');
             const th = createElement('th', 'ea-table__cell th-cell');
+            th.part = 'th-cell';
             let maxRowSpan = 1;
             Array.from(this.#headerTableThead.querySelectorAll('th')).forEach(item => {
                 if (item.rowSpan > maxRowSpan) maxRowSpan = item.rowSpan;

@@ -1,31 +1,16 @@
-// @ts-nocheck
 import Base from '../Base.js';
 
 import "../ea-descriptions-item/index.js";
 
-import { getThTemplate_normal } from './src/components/getThTemplate_normal.js';
-import { getTdTemplate_border } from './src/components/getTdTemplate_border.js';
 import { getThTemplate_direction } from './src/components/getThTemplate_direction.js';
 import { getTdTemplate_direction } from './src/components/getTdTemplate_direction.js';
+import { contentTemplate } from "./src/components/contentTemplate.js";
 
 import { stylesheet } from './src/style/stylesheet.js';
-import { initDescriptionsItem } from './src/utils/initDescriptionsItem.js';
-
-const contentTemplate = (item, colspan, hasBorder) => {
-    let label = item.getAttribute("label");
-    let content = item.innerHTML;
-
-    if (!label) label = item.querySelector('[slot="label"]')?.innerHTML || "";
-
-    return hasBorder ? getTdTemplate_border(label, content, colspan) : getThTemplate_normal(label, content, colspan);
-}
 
 export class EaDescriptions extends Base {
-    #wrap;
-
     #table;
     #tableHeader;
-    #tableBody;
 
     constructor() {
         super();
@@ -33,14 +18,13 @@ export class EaDescriptions extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <div class="ea-descriptions_wrap" part="container">
-                <div class="ea-descriptions_header" part="header"></div>
-                <div class="ea-descriptions_body" part="body-container">
-                    <table class="ea-descriptions_table" part="table"></table>
+                <div class="ea-descriptions_header" part="header-wrap"></div>
+                <div class="ea-descriptions_body" part="body-wrap">
+                    <table class="ea-descriptions_table" part="table-wrap"></table>
                 </div>
             </div>
         `;
 
-        this.#wrap = shadowRoot.querySelector('.ea-descriptions_wrap');
         this.#table = shadowRoot.querySelector('.ea-descriptions_table');
         this.#tableHeader = shadowRoot.querySelector('.ea-descriptions_header');
 
@@ -97,6 +81,57 @@ export class EaDescriptions extends Base {
     // #endregion
     // ------- end -------
 
+    #initDescriptionsItem(items) {
+        const length = Number(items.length);
+
+        for (let i = 0; i < length; i += 3) {
+            let colspanCount = 0;
+            const tbody = document.createElement('tbody');
+
+            switch (this.direction) {
+                case "horizontal": {
+                    const tr = document.createElement('tr');
+
+                    for (let j = i; j < this.col + i; j++) {
+                        const colspan = Number(items[j]?.getAttribute("span")) || 1;
+                        let temp = colspanCount + colspan;
+
+                        if (temp > this.col || !items[j]) break;
+
+                        tr.innerHTML += contentTemplate(items[j], colspan, this.border);
+                    }
+
+                    tbody.appendChild(tr);
+                    break;
+                }
+                case "vertical": {
+                    const th_tr = document.createElement('tr');
+                    const td_tr = document.createElement('tr');
+
+                    for (let j = i; j < this.col + i; j++) {
+                        const colspan = Number(items[j]?.getAttribute("span")) || 1;
+                        let temp = colspanCount + colspan;
+
+                        if (temp > this.col || !items[j]) break;
+
+                        th_tr.innerHTML += getThTemplate_direction(items[j].getAttribute("label"), this.border);
+                        td_tr.innerHTML += getTdTemplate_direction(items[j].innerHTML, this.border, colspan);
+                    }
+
+                    tbody.appendChild(th_tr);
+                    tbody.appendChild(td_tr);
+                    break;
+                }
+            }
+
+            this.#table.appendChild(tbody);
+        }
+
+        items.forEach(el => {
+            el.remove();
+        });
+    }
+
     connectedCallback() {
         this.title = this.title;
 
@@ -107,7 +142,7 @@ export class EaDescriptions extends Base {
         this.direction = this.direction;
 
         const items = this.querySelectorAll('ea-descriptions-item');
-        initDescriptionsItem(this.#table, this.col, items, this.border, this.direction);
+        this.#initDescriptionsItem(items);
     }
 }
 
