@@ -145,57 +145,59 @@
         // #region
         const customTable = {
             table: document.querySelector('#customTable'),
-            // searchBtn: document.querySelector('#searchBtn'),
             searchInput: document.querySelector('#searchInput'),
-
-            /**
-             * 为传入的按钮数组中的每个按钮添加点击事件监听器。
-             * 当按钮被点击时，在下一个事件循环中输出当前表格行的详细信息到控制台。
-             * 
-             * @param {Array} btns - 包含按钮元素的数组。
-             */
-            clickCallback(btns) {
-                // 遍历按钮数组
-                btns.forEach(btn => {
-                    // 为每个按钮添加点击事件监听器
-                    btn.addEventListener('click', (e) => {
-                        // 使用 setTimeout 来确保在事件循环的下一阶段执行，避免阻塞 UI
-                        setTimeout(() => {
-                            // 输出当前表格行的详细信息到控制台
-                            console.log(this.table.currentRowDetail);
-                        }, 0);
-                    });
-                });
-            },
 
             init() {
                 this.table.data = moreData;
 
                 // 搜索
-                this.searchInput.addEventListener('keyup', () => {
-                    const res = moreData.filter(item => item.name.indexOf(this.searchInput.value) !== -1);
+                this.searchInput.addEventListener('change', () => {
+                    const res = moreData.filter(item => item.name.includes(this.searchInput.value));
                     this.table.data = res;
-                });
-
-                // 点击按钮
-                let editBtns = this.table.shadowRoot.querySelectorAll('.edit');
-                let deleteBtns = this.table.shadowRoot.querySelectorAll('.delete');
-                this.clickCallback(editBtns);
-                this.clickCallback(deleteBtns);
-
-                // 排序时, 更新按钮及其点击事件
-                this.table.addEventListener('sort-change', (e) => {
-                    editBtns = this.table.shadowRoot.querySelectorAll('.edit');
-                    deleteBtns = this.table.shadowRoot.querySelectorAll('.delete');
-
-                    console.log(e.detail);
-
-                    clickCallback(editBtns);
-                    clickCallback(deleteBtns);
                 });
             }
         }
         customTable.init();
+
+        // 编辑按钮
+        class MyEditButton extends HTMLElement {
+            constructor() {
+                super();
+
+                const shadowroot = this.attachShadow({ mode: 'open' });
+                shadowroot.innerHTML = `
+                    <ea-button type="primary" size="mini">编辑</ea-button>
+                `;
+                const btn = shadowroot.querySelector('ea-button');
+                btn.addEventListener('click', (e) => {
+                    setTimeout(() => {
+                        console.log(customTable.table.currentRowDetail);
+                    }, 0);
+                })
+
+                shadowroot.appendChild(btn);
+            }
+        }
+        window.customElements.define('my-edit-button', MyEditButton);
+
+        // 删除按钮
+        class MyDeleteButton extends HTMLElement {
+            constructor() {
+                super();
+
+                const shadowroot = this.attachShadow({ mode: 'open' });
+                shadowroot.innerHTML = `
+                    <ea-button type="danger" size="mini">删除</ea-button>
+                `;
+                const btn = shadowroot.querySelector('ea-button');
+                btn.addEventListener('click', (e) => {
+                    setTimeout(() => {
+                        console.log(customTable.table.currentRowDetail);
+                    }, 0);
+                })
+            }
+        }
+        window.customElements.define('my-delete-button', MyDeleteButton);
         // #endregion
         // ------- end -------
     </script>
@@ -329,7 +331,7 @@
 
     <!-- -------- 10. 自定义插槽 --------  -->
     <!-- #region  -->
-    <h2>10. 排序</h2>
+    <h2>10. 自定义插槽</h2>
     <ea-table id="customTable" border height="250">
         <ea-table-column prop="date" width="100" rowspan="3" sortable>日期</ea-table-column>
         <ea-table-column label="详细信息" colspan="3">
@@ -345,8 +347,8 @@
         </div>
         <div slot="body">
             <div style="display: flex; justify-content: space-evenly;">
-                <ea-button class="edit" size="mini">编辑</ea-button>
-                <ea-button class="delete" size="mini" type="danger">删除</ea-button>
+                <my-edit-button></my-edit-button>
+                <my-delete-button></my-delete-button>
             </div>
         </div>
         <div slot="empty">

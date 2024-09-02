@@ -1,13 +1,10 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 import "../ea-checkbox/index.js"
 
-const stylesheet = `
-
-`;
+const stylesheet = ``;
 
 export class EaTableColumn extends Base {
     #labelNode;
@@ -143,9 +140,7 @@ export class EaTableColumn extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        const that = this;
-
+    connectedCallback() {
         this.prop = this.prop;
 
         this.width = this.width;
@@ -161,10 +156,6 @@ export class EaTableColumn extends Base {
         this.sortable = this.sortable;
 
         this.order = this.order;
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

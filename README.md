@@ -77,7 +77,7 @@
     - [x] NavMenuItemGroup
     - [x] NavSubMenu
   - [x] Tabs 标签页
-    - [x] TabPane
+    - [x] Pane
     - [x] Tab
   - [x] Breadcrumb 面包屑
     - [x] BreadcrumbItem
@@ -99,6 +99,7 @@
   - [ ] Rate 属性重构
     - void-icon-class => void-icon
     - active-icon-class => active-icon
+  - [ ] Table 表格, 修改了 自定义插槽 的按钮实现方式
 
 - 脚本类
 

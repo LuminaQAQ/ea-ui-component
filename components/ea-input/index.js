@@ -360,6 +360,7 @@ export class EaInput extends Base {
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
+            this.value = e.target.value;
             dispatchEvent.call(this, e, "change");
         });
 
