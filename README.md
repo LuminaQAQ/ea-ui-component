@@ -9,7 +9,7 @@
     - [ ] Header 顶栏容器
     - [ ] Main 主体容器
     - [ ] Footer 底栏容器
-    - [ ] Aside 侧边栏容器
+    - [x] Aside 侧边栏容器
   - [x] Icon 图标
   - [x] Button 按钮
     - [x] ButtonGroup 按钮组
