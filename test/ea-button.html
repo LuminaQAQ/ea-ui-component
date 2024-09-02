@@ -53,10 +53,9 @@
         // #region
         document
             .querySelector("#ea-radio-loading")
-            .addEventListener("click", function (e) {
+            .addEventListener("change", function (e) {
                 const btn = document.querySelector("#ea-button-loading");
-
-                e.target.checked ? (btn.loading = true) : (btn.loading = false);
+                btn.loading = e.target.checked;
             });
         // #endregion
         // ------- end -------

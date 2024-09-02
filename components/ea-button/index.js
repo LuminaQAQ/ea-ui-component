@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from "../Base.js";
 import "../ea-icon/index.js"
 
@@ -123,8 +122,10 @@ export class EaButton extends Base {
 
       this.#wrap.insertBefore(i, this.#wrap.firstChild)
     } else {
-      const loadingIcon = this.#wrap.querySelector('#ea-loading-icon');
-      if (loadingIcon) loadingIcon.remove();
+      const loadingIcon = this.#wrap?.querySelectorAll('#ea-loading-icon');
+      if (loadingIcon?.length > 0) {
+        loadingIcon?.forEach(item => item.remove());
+      }
     }
   }
   // #endregion
