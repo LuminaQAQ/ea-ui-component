@@ -161,7 +161,7 @@ export class EaCarousel extends Base {
         let throttle = false;
         const arrowItem = createElement('div', `ea-carousel-item_arrow ea-carousel-item_arrow--${arrow}`);
 
-        arrowItem.innerHTML = this.arrow === "left" ? `&lt;` : `&gt;`;
+        arrowItem.innerHTML = arrow === "left" ? `&lt;` : `&gt;`;
 
         switch (this.arrow) {
             case "always":
@@ -174,7 +174,7 @@ export class EaCarousel extends Base {
 
         arrowItem.addEventListener('click', () => {
             if (throttle) return;
-            this.index = this.arrow === "left" ? --this.index : ++this.index;
+            this.index = arrow === "left" ? --this.index : ++this.index;
         })
 
         this.#contentContainer.addEventListener('transitionstart', () => {
