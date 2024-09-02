@@ -1,9 +1,7 @@
-// @ts-nocheck
 import Base from '../Base.js';
 
 import "../ea-icon/index.js"
 
-import { defaultAvatar } from './src/assets/defaultAvatar.js';
 import { errorAvatar } from './src/assets/errorAvatar.js';
 import { iconAvatar, textAvatar } from './src/assets/iconAndTextAvatar.js';
 
@@ -11,10 +9,6 @@ import { stylesheet } from "./src/style/stylesheet.js"
 
 
 export class EaAvatar extends Base {
-    #wrap;
-
-    #textSlot;
-
     #avatar;
 
     constructor() {
@@ -24,14 +18,12 @@ export class EaAvatar extends Base {
 
         shadowRoot.innerHTML = `
             <div class="ea-avatar_wrap" part='container'>
-                <span class="ea-avatar">
+                <span class="ea-avatar" part="avatar">
                     <slot></slot>
                 </span>
             </div>
         `;
 
-        this.#wrap = shadowRoot.querySelector('.ea-avatar_wrap');
-        this.#textSlot = shadowRoot.querySelector('slot');
         this.#avatar = shadowRoot.querySelector('.ea-avatar');
 
         this.build(shadowRoot, stylesheet);

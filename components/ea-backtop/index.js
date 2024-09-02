@@ -1,15 +1,11 @@
-// @ts-nocheck
+import { timeout } from '../../utils/timeout.js';
 import Base from '../Base.js';
 import "../ea-icon/index.js"
 
 import { stylesheet } from './src/style/stylesheet.js';
 
-import { initScrollBtn } from './src/utils/initScrollBtn.js';
-
 export class EaBacktop extends Base {
     #wrap;
-
-    #iconSlot;
 
     constructor() {
         super();
@@ -94,14 +90,75 @@ export class EaBacktop extends Base {
     // #endregion
     // ------- end -------
 
+    #handleScrollEvent(targetName) {
+        let dom = null;
+        let scrollDom = null;
+
+        if (targetName === "null" || targetName === '' || targetName === null || targetName === undefined || targetName === 'undefined') {
+            dom = document;
+            scrollDom = document.documentElement;
+        } else {
+            dom = document.querySelector(targetName);
+            scrollDom = document.querySelector(targetName);
+        }
+
+        return { dom, scrollDom };
+    }
+
+    #handleBackTopBtnShow(scrollDom) {
+        if (scrollDom.scrollTop > this.visibilityHeight) {
+            this.#wrap.style.display = 'flex';
+            this.#wrap.ontransitionend = null;
+
+            timeout(() => {
+                this.#wrap.style.opacity = 1;
+            }, 10);
+        } else {
+            this.#wrap.style.opacity = 0;
+
+            this.#wrap.ontransitionend = () => {
+                this.#wrap.style.display = 'none';
+            };
+        }
+    }
+
+    #initScrollBtn() {
+        const { dom, scrollDom } = this.#handleScrollEvent(this.target);
+
+        this.#handleBackTopBtnShow(scrollDom);
+
+        dom.addEventListener('scroll', () => {
+            this.#handleBackTopBtnShow(scrollDom);
+        });
+
+        this.#wrap.addEventListener('click', function () {
+            let step = 10;
+
+            let timer = setInterval(() => {
+                step += 5;
+                scrollDom.scrollTop -= step;
+
+                if (scrollDom.scrollTop <= 0) {
+                    scrollDom.scrollTop = 0;
+                    clearInterval(timer);
+                    timer = null;
+
+                    this.dispatchEvent(new CustomEvent('reachedTop', {}));
+                }
+            }, 12);
+
+            this.dispatchEvent(new CustomEvent('backtop', {}));
+        });
+    }
+
     connectedCallback() {
         this.target = this.target;
         this.right = this.right;
         this.bottom = this.bottom;
         this.visibilityHeight = this.visibilityHeight;
         this.icon = this.icon;
-
-        initScrollBtn.call(this, this.#wrap, this.target, this.visibilityHeight);
+        
+        this.#initScrollBtn();
     }
 }
 
