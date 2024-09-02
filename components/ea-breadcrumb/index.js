@@ -1,11 +1,10 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js';
 
 import "../ea-breadcrumb-item/index.js";
 
 import { stylesheet } from './src/style/stylesheet.js';
-import { handleSeparator } from './src/utils/handleSeparator.js';
+import { createElement } from '../../utils/createElement.js';
 
 export class EaBreadcrumb extends Base {
     constructor() {
@@ -57,13 +56,32 @@ export class EaBreadcrumb extends Base {
     // #endregion
     // ------- end -------
 
+    #initSeparator() {
+        const items = this.querySelectorAll('ea-breadcrumb-item');
+
+        items.forEach((item, index) => {
+            if (index < items.length - 1) {
+                const separatorIcon = createElement('ea-icon');
+                separatorIcon.color = this.separatorColor;
+
+                if (this.separatorClass) {
+                    separatorIcon.icon = this.separatorClass;
+                } else {
+                    separatorIcon.style.margin = '0 10px';
+                    separatorIcon.innerText = this.separator;
+                }
+
+                item.appendChild(separatorIcon);
+            }
+        });
+    }
 
     connectedCallback() {
         this.separator = this.separator;
         this.separatorClass = this.separatorClass;
         this.separatorColor = this.separatorColor;
 
-        handleSeparator.call(this, this.separator, this.separatorClass, this.separatorColor)
+        this.#initSeparator();
     }
 }
 
