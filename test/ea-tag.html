@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-tag/index.js'
+
+        // ------- 动态编辑标签 -------
+        // #region
+        document.querySelectorAll(".dynamic-closable-tag").forEach((item) => {
+            item.addEventListener("close", function (e) {
+                // 移除该dom
+                this.remove();
+
+                // e.target: 当前标签; e.detail.value: 当前标签的 value 值
+                console.log("标签被移除", e.target, e.detail.value);
+            });
+        });
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-tag>默认标签</ea-tag>
+        <ea-tag type="success">成功标签</ea-tag>
+        <ea-tag type="info">信息标签</ea-tag>
+        <ea-tag type="warning">警告标签</ea-tag>
+        <ea-tag type="danger">危险标签</ea-tag>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 带关闭图标的标签 --------  -->
+    <!-- #region  -->
+    <h2>带关闭图标的标签</h2>
+    <div class="row left">
+        <ea-tag class="dynamic-closable-tag" closable>默认标签</ea-tag>
+        <ea-tag class="dynamic-closable-tag" type="success" closable>成功标签</ea-tag>
+        <ea-tag class="dynamic-closable-tag" type="info" closable>信息标签</ea-tag>
+        <ea-tag class="dynamic-closable-tag" type="warning" closable>警告标签</ea-tag>
+        <ea-tag class="dynamic-closable-tag" type="danger" closable>危险标签</ea-tag>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 动态编辑标签 --------  -->
+    <!-- #region  -->
+    <h2>动态编辑标签</h2>
+    <div class="row left">
+        <ea-tag class="dynamic-closable-tag" closable>默认标签</ea-tag>
+        <ea-tag class="dynamic-closable-tag" type="success" closable>成功标签</ea-tag>
+        <ea-tag class="dynamic-closable-tag" type="info" closable>信息标签</ea-tag>
+        <ea-tag class="dynamic-closable-tag" type="warning" closable>警告标签</ea-tag>
+        <ea-tag class="dynamic-closable-tag" type="danger" closable>危险标签</ea-tag>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 不同主题 --------  -->
+    <!-- #region  -->
+    <h2>不同主题</h2>
+    <p>Dark 主题:</p>
+    <div class="row left">
+        <ea-tag effect="dark">dark: 默认标签</ea-tag>
+        <ea-tag effect="dark" type="success">dark: 成功标签</ea-tag>
+        <ea-tag effect="dark" type="info">dark: 信息标签</ea-tag>
+        <ea-tag effect="dark" type="warning">dark: 警告标签</ea-tag>
+        <ea-tag effect="dark" type="danger">dark: 危险标签</ea-tag>
+    </div>
+    <p>Plain 主题:</p>
+    <div class="row left">
+        <ea-tag effect="plain">plain: 默认标签</ea-tag>
+        <ea-tag effect="plain" type="success">plain: 成功标签</ea-tag>
+        <ea-tag effect="plain" type="info">plain: 信息标签</ea-tag>
+        <ea-tag effect="plain" type="warning">plain: 警告标签</ea-tag>
+        <ea-tag effect="plain" type="danger">plain: 危险标签</ea-tag>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

@@ -100,10 +100,14 @@
     - void-icon-class => void-icon
     - active-icon-class => active-icon
   - [ ] Table 表格, 修改了 自定义插槽 的按钮实现方式
+  - [ ] Tag 标签
+    - `不同主题`缺少代码描述
+    - `可关闭标签`的标题, 修改为 `带关闭图标的标签`
 
 - 脚本类
 
   - [ ] Descriptions 描述列表, span 值设置超过表格总 span 会导致元素消失
+  - [ ] Table 表格, 缺少 `part` 属性
 
 - 样式类
 
