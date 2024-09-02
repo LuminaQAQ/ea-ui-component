@@ -70,7 +70,7 @@ export class EaProgress extends Base {
     }
 
     set percentage(value) {
-        if (value === null || value === undefined || value === '') return;
+        if (isNaN(Number(value))) return;
         else if (Number(value) < 0) value = 0;
         else if (Number(value) > 100) value = 100;
 
@@ -115,13 +115,18 @@ export class EaProgress extends Base {
                 icon: 'icon-cancel-circled',
                 color: '#f56c6c'
             },
-            primary: '',
+            primary: {},
         }
     }
 
     // 状态处理
     #handleStatusStyle(value, className) {
-        this.#progressText.innerText = !this.statusList[value] ? `${this.percentage}%` : '';
+        if ((!this.type && this.textInside) || (this.type === 'dashboard' || this.type === 'circle')) {
+            this.#progressText.innerText = `${this.percentage}%`;
+        } else {
+            this.#progressText.innerText = '';
+        }
+
         this.#progressText.className = `${className} ${this.statusList[value].icon || ''}`;
         this.#progressText.style.color = this.statusList[value].color;
     }

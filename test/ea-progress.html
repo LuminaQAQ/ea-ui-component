@@ -117,16 +117,16 @@
     <!-- #region  -->
     <h2>环形进度条</h2>
     <div class="row left">
-        <ea-progress id="ea-progress_circle" type="circle" :percentage="0"></ea-progress>
+        <ea-progress id="ea-progress_circle" type="circle" percentage="0"></ea-progress>
         <ea-button id="ea-progress_circle-change-btn" type="primary">修改值为 100</ea-button>
     </div>
 
     <div class="row left">
-        <ea-progress type="circle" :percentage="0"></ea-progress>
-        <ea-progress type="circle" :percentage="25"></ea-progress>
-        <ea-progress type="circle" :percentage="100" status="success"></ea-progress>
-        <ea-progress type="circle" :percentage="70" status="warning"></ea-progress>
-        <ea-progress type="circle" :percentage="50" status="exception"></ea-progress>
+        <ea-progress type="circle" percentage="0"></ea-progress>
+        <ea-progress type="circle" percentage="25"></ea-progress>
+        <ea-progress type="circle" percentage="100" status="success"></ea-progress>
+        <ea-progress type="circle" percentage="70" status="warning"></ea-progress>
+        <ea-progress type="circle" percentage="50" status="exception"></ea-progress>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -137,7 +137,7 @@
     <h2>仪表盘形进度条</h2>
     <!-- 示例: html + js -->
     <div class="row left">
-        <ea-progress id="ea-progress_dashboard" type="dashboard" :percentage="25"></ea-progress>
+        <ea-progress id="ea-progress_dashboard" type="dashboard" percentage="25"></ea-progress>
         <ea-button-group>
             <ea-button id="ea-progress_dashboard-change-btn-add" type="primary">-</ea-button>
             <ea-button id="ea-progress_dashboard-change-btn-minus" type="primary">+</ea-button>
@@ -146,11 +146,11 @@
 
     <!-- 实例 -->
     <div class="row left">
-        <ea-progress type="dashboard" :percentage="0"></ea-progress>
-        <ea-progress type="dashboard" :percentage="25"></ea-progress>
-        <ea-progress type="dashboard" :percentage="100" status="success"></ea-progress>
-        <ea-progress type="dashboard" :percentage="70" status="warning"></ea-progress>
-        <ea-progress type="dashboard" :percentage="50" status="exception"></ea-progress>
+        <ea-progress type="dashboard" percentage="0"></ea-progress>
+        <ea-progress type="dashboard" percentage="25"></ea-progress>
+        <ea-progress type="dashboard" percentage="100" status="success"></ea-progress>
+        <ea-progress type="dashboard" percentage="70" status="warning"></ea-progress>
+        <ea-progress type="dashboard" percentage="50" status="exception"></ea-progress>
     </div>
     <hr>
     <!-- #endregion  -->
