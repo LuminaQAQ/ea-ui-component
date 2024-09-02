@@ -4,8 +4,6 @@ import '../ea-icon/index.js'
 import { timeout } from '../../utils/timeout.js';
 import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
 
-import { initDrawerCloseEvent } from './src/utils/initDrawerCloseEvent.js';
-
 import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaDrawer extends Base {
