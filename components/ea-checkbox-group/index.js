@@ -1,9 +1,6 @@
-// @ts-nocheck
 import Base from "../Base.js";
 
 import { stylesheet } from "./src/style/stylesheet.js";
-
-import { handleValueUptate } from "./src/utils/handleValueUptate.js";
 
 export class EaCheckboxGroup extends Base {
     constructor() {
@@ -23,7 +20,7 @@ export class EaCheckboxGroup extends Base {
     // ------- name 唯一键值 -------
     // #region
     get name() {
-        return this.getAttribute('name');
+        return this.getAttribute('name') || 'ea-checkbox';
     }
 
     set name(val) {
@@ -77,7 +74,19 @@ export class EaCheckboxGroup extends Base {
     // #endregion
     // ------- end -------
 
-    init() {
+    #handleValueUptate(checkboxes) {
+        let valueArr = [];
+        Array.from(checkboxes).filter(item => {
+            if (item.checked) return valueArr.push(item.value);
+            return false;
+        })
+
+        this.value = valueArr.join(',');
+    }
+
+    connectedCallback() {
+        this.setAttribute('data-ea-component', true);
+
         // name 唯一键值
         this.name = this.name;
 
@@ -90,16 +99,10 @@ export class EaCheckboxGroup extends Base {
         const checkboxes = this.querySelectorAll('ea-checkbox');
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', e => {
-                handleValueUptate.call(this, checkboxes);
+                this.#handleValueUptate(checkboxes);
             });
         });
-        handleValueUptate.call(this, checkboxes);
-
-        this.setAttribute('data-ea-component', true);
-    }
-
-    connectedCallback() {
-        this.init();
+        this.#handleValueUptate(checkboxes);
     }
 }
 
