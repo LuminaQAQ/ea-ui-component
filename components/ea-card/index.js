@@ -41,14 +41,8 @@ class EaCard extends Base {
   // #endregion
   // ------- end -------
 
-  init() {
-    const that = this;
-
-    this.shadow = this.shadow;
-  }
-
   connectedCallback() {
-    this.init();
+    this.shadow = this.shadow;
   }
 }
 
