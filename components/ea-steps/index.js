@@ -1,23 +1,10 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 import "../ea-step/index.js"
 
-const stylesheet = `
-.ea-steps_wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-.ea-steps_wrap ::slotted(ea-step) {
-  flex-basis: 50%;
-}
-.ea-steps_wrap.is-simple {
-  justify-content: unset;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaSteps extends Base {
     #wrap;
@@ -27,17 +14,15 @@ export class EaSteps extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-steps_wrap';
-        wrap.part = 'wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-steps_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
 
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
+        this.#wrap = shadowRoot.querySelector('.ea-steps_wrap');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
 
@@ -98,9 +83,7 @@ export class EaSteps extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        const that = this;
-
+    connectedCallback() {
         const stepChildrens = this.querySelectorAll('ea-step');
         this.#stepChildren = stepChildrens;
 
@@ -113,12 +96,6 @@ export class EaSteps extends Base {
         this.simple = this.simple;
 
         this.active = this.active;
-
-        this.space = this.space;
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

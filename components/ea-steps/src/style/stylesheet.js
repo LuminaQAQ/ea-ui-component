@@ -1,3 +1,4 @@
+export const stylesheet = `
 .ea-steps_wrap {
   display: flex;
   align-items: center;
@@ -17,3 +18,4 @@
 .ea-steps_wrap ::slotted(ea-step[simple]) {
   flex: 1;
 }
+`;

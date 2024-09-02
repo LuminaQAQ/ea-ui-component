@@ -10,6 +10,10 @@
         hr {
             margin: 3rem 0;
         }
+
+        ea-steps::part(container) {
+            min-height: 90px;
+        }
     </style>
 </head>
 
@@ -66,6 +70,7 @@
 
     <!-- -------- 1. 基础用法 --------  -->
     <!-- #region  -->
+    <h2>基础用法</h2>
     <p>
         <ea-button id="basicObj_pre-btn">上一步</ea-button>
         <ea-button id="basicObj_next-btn">下一步</ea-button>
@@ -76,54 +81,58 @@
         <ea-step title="步骤三" description="这是步骤三的描述"></ea-step>
         <ea-step title="步骤四" description="这是步骤四的描述"></ea-step>
     </ea-steps>
+    <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
-
     <!-- -------- 2. 含状态步骤条 --------  -->
     <!-- #region  -->
+    <h2>含状态步骤条</h2>
     <ea-steps active="1" finish-status="success">
         <ea-step title="已完成"></ea-step>
         <ea-step title="进行中"></ea-step>
         <ea-step title="步骤 3"></ea-step>
     </ea-steps>
+    <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
 
     <!-- -------- 3. 有描述的步骤条 --------  -->
     <!-- #region  -->
+    <h2>有描述的步骤条</h2>
     <ea-steps :active="1">
         <ea-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></ea-step>
         <ea-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></ea-step>
         <ea-step title="步骤 3" description="这段就没那么长了"></ea-step>
     </ea-steps>
+    <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
 
     <!-- -------- 4. 自定义每个 step 的间距 --------  -->
     <!-- #region  -->
-    <ea-steps active="1" space="10px">
+    <h2>自定义每个 step 的间距</h2>
+    <ea-steps active="1" space="100px">
         <ea-step title="步骤 1" icon="icon-music"></ea-step>
         <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
         <ea-step title="步骤 3" icon="icon-camera"></ea-step>
     </ea-steps>
+    <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
 
     <!-- -------- 5. 简洁风格的步骤条 --------  -->
     <!-- #region  -->
+    <h2>简洁风格的步骤条</h2>
     <ea-steps active="1" simple>
         <ea-step title="步骤 1" icon="icon-music"></ea-step>
         <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
         <ea-step title="步骤 3" icon="icon-camera"></ea-step>
     </ea-steps>
+    <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
 

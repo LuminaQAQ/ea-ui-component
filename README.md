@@ -38,7 +38,7 @@
 
   - [ ] Tag 标签
   - [x] Progress 进度条
-  - [ ] Pagination 分页
+  - [x] Pagination 分页
   - [x] Badge 标记
   - [x] Avatar 头像
   - [x] Skeleton 骨架屏
@@ -82,8 +82,8 @@
   - [x] Breadcrumb 面包屑
     - [x] BreadcrumbItem
   - [x] PageHeader 页头
-  - [ ] Dropdown 下拉菜单
-  - [ ] Steps 步骤条
+  - [x] Steps 步骤条
+    - [x] StepItem
   - [x] Drawer 抽屉
 
 ## 已知虫子
