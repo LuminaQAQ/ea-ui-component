@@ -61,7 +61,7 @@
   - [x] Card 卡片
   - [x] Carousel 走马灯
     - [x] CarouselItem
-  - [ ] TimeLine 时间线
+  - [x] TimeLine 时间线
   - [x] Backtop 回到顶部
   - [x] Collapse 折叠面板
     - [x] CollapseItem

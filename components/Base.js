@@ -69,13 +69,7 @@ export default class Base extends HTMLElement {
             styleNode.innerHTML = stylesheet;
             this.shadowRoot.appendChild(styleNode);
         } else {
-            // if (this.nodeName.toLowerCase() == 'ea-skeleton-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-skeleton" + '/index.css', import.meta.url).href);
-            // else if (this.nodeName.toLowerCase() == 'ea-carousel-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-carousel" + '/index.css', import.meta.url).href);
-            if (this.nodeName.toLowerCase() == 'ea-timeline-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-timeline" + '/index.css', import.meta.url).href);
-            // else if (this.nodeName.toLowerCase() == 'ea-collapse-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-collapse" + '/index.css', import.meta.url).href);
-            // else if (this.nodeName.toLowerCase() == 'ea-menu-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-menu" + '/index.css', import.meta.url).href);
-            // else if (this.nodeName.toLowerCase() == 'ea-submenu' && !this.isProduction) setStyle(shadowRoot, new URL("ea-menu" + '/index.css', import.meta.url).href);
-            else setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
+            setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
         }
     }
 
