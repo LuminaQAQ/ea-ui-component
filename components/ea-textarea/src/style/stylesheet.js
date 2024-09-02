@@ -1,3 +1,4 @@
+export const stylesheet = `
 .ea-textarea_wrap {
   position: relative;
   width: 100%;
@@ -35,3 +36,4 @@
   bottom: 0.5rem;
   right: 0.5rem;
 }
+`;

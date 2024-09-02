@@ -1,80 +1,32 @@
 // @ts-nocheck
 import Base from "../Base.js";
 
-const stylesheet = `
-.ea-textarea_wrap {
-  position: relative;
-  width: 100%;
-}
-.ea-textarea_wrap .ea-textarea_inner {
-  box-sizing: border-box;
-  box-shadow: none;
-  resize: vertical;
-  min-height: 1.75rem;
-  border: 1px solid #dcdfe6;
-  outline: 0;
-  transition: border 0.2s;
-  border-radius: 3px;
-  padding: 0.5rem;
-  line-height: 0.8;
-  font-size: 0.8rem;
-  scrollbar-width: none;
-}
-.ea-textarea_wrap .ea-textarea_inner:focus {
-  border-color: #409eff;
-}
-.ea-textarea_wrap .ea-textarea_inner::placeholder {
-  color: #c0c4cc;
-}
-.ea-textarea_wrap .ea-textarea_inner.disabled {
-  background-color: #eeeeee;
-  color: #c0c4cc;
-}
-.ea-textarea_wrap .ea-textarea_inner.invalid {
-  border-color: #f56c6c;
-}
-.ea-textarea_wrap .ea-input_word-limit {
-  position: absolute;
-  font-size: 0.75rem;
-  bottom: 0.5rem;
-  right: 0.5rem;
-}
-`;
-
-const inputDom = () => {
-    let input = document.createElement('textarea');
-
-    input.className = "ea-textarea_inner";
-
-    return input;
-}
+import { stylesheet } from "./src/style/stylesheet.js";
 
 export class EaTextarea extends Base {
     #wrap;
     #input;
-    #mounted = false;
 
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = "ea-textarea_wrap";
-        this.#wrap = wrap;
+        shadowRoot.innerHTML = `
+            <div class="ea-textarea_wrap" part="container">
+                <textarea class="ea-textarea_inner" part="textarea" placeholder="请输入内容"></textarea>
+            </div>
+        `;
 
-        const dom = inputDom();
-        this.#input = dom;
-
-        this.#wrap.appendChild(dom);
+        this.#wrap = shadowRoot.querySelector('.ea-textarea_wrap');
+        this.#input = shadowRoot.querySelector('.ea-textarea_inner');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- name 属性 -------
     // #region
     get name() {
-        return this.getAttribute('name') || '';
+        return this.getAttribute('name') || 'ea-textarea';
     }
 
     set name(value) {
@@ -95,6 +47,19 @@ export class EaTextarea extends Base {
     // #endregion
     // ------- end -------
 
+    // ------- disabled 是否禁用 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean('disabled');
+    }
+
+    set disabled(val) {
+        this.toggleAttr('disabled', val);
+        this.#input.disabled = val;
+    }
+    // #endregion
+    // ------- end -------
+
     // ------- placeholder 提示 -------
     // #region
     get placeholder() {
@@ -102,6 +67,8 @@ export class EaTextarea extends Base {
     }
 
     set placeholder(val) {
+        if (!val) return;
+
         this.setAttribute("placeholder", val);
         this.#input.placeholder = val;
     }
@@ -115,11 +82,8 @@ export class EaTextarea extends Base {
     }
 
     set rows(val) {
-        if (!val) return;
-
         this.setAttribute("rows", val);
         this.#input.rows = val;
-        this.#input.setAttribute("rows", val);
     }
     // #endregion
     // ------- end -------
@@ -136,15 +100,20 @@ export class EaTextarea extends Base {
         this.setAttribute("autosize", val);
 
         this.#input.addEventListener('input', (e) => {
+            if (this.#input.style.height !== this.#input.scrollHeight + 'px') {
+                this.#input.style.height = this.#input.scrollHeight + 'px';
+                this.#input.style.minHeight = this.#input.scrollHeight + 'px';
+            }
+
             if (e.target.type === 'textarea') {
                 const cols = this.#input.cols;
                 const chars = e.target.value.length;
 
                 let rows = Math.ceil(chars / cols) <= Number(this.#input.rows) ? Number(this.#input.rows) : Math.ceil(chars / cols);
                 if (chars % cols == 1) {
-                    if (this.minRows > rows) this.setTextareaHeight(this.minRows);
-                    else if (this.maxRows < rows) this.setTextareaHeight(this.maxRows);
-                    else this.setTextareaHeight(rows);
+                    if (this.minRows > rows) this.#setTextareaHeight(this.minRows);
+                    else if (this.maxRows < rows) this.#setTextareaHeight(this.maxRows);
+                    else this.#setTextareaHeight(rows);
                 }
             }
         })
@@ -152,40 +121,34 @@ export class EaTextarea extends Base {
     // #endregion
     // ------- end -------
 
-    // ------- min-rows/max-rows 最小/最大行数 -------
+    // ------- min-rows 最小行数 -------
     // #region
-
-    setTextareaHeight(rows) {
-        rows = Number(rows);
-        this.#input.rows = rows;
-    }
-
     get minRows() {
-        const val = Number(this.getAttribute("min-rows"));
-        return val !== 0 && val > 0
-            ? val
-            : 1;
+        const val = this.getAttrNumber("min-rows");
+        return val !== 0 && val > 0 ? val : 0;
     }
 
     set minRows(val) {
         if (!val) return;
 
         this.setAttribute("min-rows", val);
-        this.setTextareaHeight(Number(val));
+        this.#setTextareaHeight(Number(val));
     }
+    // #endregion
+    // ------- end -------
 
+    // ------- max-rows 最大行数 -------
+    // #region
     get maxRows() {
         const val = Number(this.getAttribute("max-rows"));
-        return val !== 0 && val > 0
-            ? val
-            : 10;
+        return val !== 0 && val > 0 ? val : 0;
     }
 
     set maxRows(val) {
         if (!val) return;
 
         this.setAttribute("max-rows", val);
-        this.setTextareaHeight(Number(val));
+        this.#setTextareaHeight(Number(val));
     }
 
     // #endregion
@@ -193,7 +156,6 @@ export class EaTextarea extends Base {
 
     // ------- max-length/min-length 最大/最小字符长度 -------
     // #region
-
     // 获取最大限制值
     get maxLength() {
         return this.getAttribute("max-length");
@@ -204,12 +166,6 @@ export class EaTextarea extends Base {
 
         this.setAttribute("max-length", val);
         this.#input.maxLength = val;
-
-        this.#input.addEventListener('input', (e) => {
-            if (e.target.value.length > val) {
-                e.target.value = e.target.value.slice(0, val);
-            }
-        });
 
         if (this.showWordLimit) this.showWordLimit = true;
     }
@@ -224,21 +180,12 @@ export class EaTextarea extends Base {
 
         this.setAttribute("min-length", val);
         this.#input.minLength = val;
-
-        this.#input.addEventListener('input', (e) => {
-            if (e.target.value.length < val) {
-                e.target.classList.add('invalid');
-            } else {
-                e.target.classList.remove('invalid');
-            }
-        });
     }
     // #endregion
     // ------- end -------
 
-    // ------- 显示 当前文字长度 和 限制值 -------
+    // ------- show-word-limit 显示 当前文字长度 和 限制值 -------
     // #region
-
     get showWordLimit() {
         return this.getAttrBoolean("show-word-limit");
     }
@@ -250,11 +197,8 @@ export class EaTextarea extends Base {
 
         // 加入显示的dom
         const wordLimit = document.createElement('span');
-        this.#wrap.classList.toggle('word-limit', val);
-        this.#wrap.classList.toggle('append-slot', val);
         wordLimit.className = 'ea-input_word-limit';
         wordLimit.innerText = `${this.#input.value.length}/${this.maxLength}`;
-
 
         this.#input.addEventListener('input', (e) => {
             wordLimit.innerText = `${e.target.value.length}/${this.maxLength}`;
@@ -266,10 +210,22 @@ export class EaTextarea extends Base {
     // #endregion
     // ------- end -------
 
+    #setTextareaHeight(rows) {
+        rows = Number(rows);
+        this.#input.rows = rows;
+    }
 
-    init() {
-        const that = this;
+    #handleDispatchEvent(eventName, e) {
+        this.dispatchEvent(
+            new CustomEvent(eventName, {
+                detail: {
+                    value: e.target.value
+                }
+            })
+        );
+    }
 
+    connectedCallback() {
         this.setAttribute('data-ea-component', true);
 
         this.name = this.name;
@@ -300,41 +256,18 @@ export class EaTextarea extends Base {
 
         // 输入时
         this.#input.addEventListener("input", (e) => {
-            this.dispatchEvent(
-                new CustomEvent("change", {
-                    detail: {
-                        value: e.target.value
-                    }
-                })
-            );
+            this.#handleDispatchEvent("change", e);
         });
 
         // 聚焦时
         this.#input.addEventListener("focus", (e) => {
-            this.dispatchEvent(
-                new CustomEvent("focus", {
-                    detail: {
-                        value: e.target.value
-                    }
-                })
-            );
+            this.#handleDispatchEvent("focus", e);
         });
 
         // 失焦时
         this.#input.addEventListener("blur", (e) => {
-            this.dispatchEvent(
-                new CustomEvent("blur", {
-                    detail: {
-                        value: e.target.value
-                    }
-                })
-            );
+            this.#handleDispatchEvent("blur", e);
         });
-    }
-
-    connectedCallback() {
-        this.init();
-        this.#mounted = true;
     }
 }
 

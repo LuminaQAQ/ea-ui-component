@@ -25,18 +25,18 @@
   - [x] Select 选择器
     - [x] Option
     - [x] OptionGroup
-  - [ ] Textarea 文本域
+  - [x] Textarea 文本域
   - [x] InputNumber 计数器
   - [x] Switch 开关
   - [x] Rate 评分
-  - [ ] TimePicker 时间选择器
+  - [x] TimePicker 时间选择器
   - [x] DatePicker 日期选择器
   - [x] Form 表单
     - [x] FormItem
 
 - Data
 
-  - [ ] Tag 标签
+  - [x] Tag 标签
   - [x] Progress 进度条
   - [x] Pagination 分页
   - [x] Badge 标记
@@ -103,6 +103,7 @@
   - [ ] Tag 标签
     - `不同主题`缺少代码描述
     - `可关闭标签`的标题, 修改为 `带关闭图标的标签`
+  - [ ] Textarea 文本域, 该文档标题错误
 
 - 脚本类
 
