@@ -1,37 +1,49 @@
 {
-  "hash": "eb70f1fa",
-  "configHash": "0b5b1dac",
+  "hash": "bbe6fc30",
+  "configHash": "4549be31",
   "lockfileHash": "b2264b4d",
-  "browserHash": "2d76ce55",
+  "browserHash": "c848aa4f",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "fb767f2c",
+      "fileHash": "2b8ffa6d",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "9e15a1ff",
+      "fileHash": "83b78536",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "00adecb9",
+      "fileHash": "ba6556e6",
+      "needsInterop": false
+    },
+    "vitepress > @vueuse/integrations/useFocusTrap": {
+      "src": "../../../../node_modules/@vueuse/integrations/useFocusTrap.mjs",
+      "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
+      "fileHash": "924b995c",
+      "needsInterop": false
+    },
+    "vitepress > mark.js/src/vanilla.js": {
+      "src": "../../../../node_modules/mark.js/src/vanilla.js",
+      "file": "vitepress___mark__js_src_vanilla__js.js",
+      "fileHash": "a1283bc7",
+      "needsInterop": false
+    },
+    "vitepress > minisearch": {
+      "src": "../../../../node_modules/minisearch/dist/es/index.js",
+      "file": "vitepress___minisearch.js",
+      "fileHash": "07a5aede",
       "needsInterop": false
     },
     "@theme/index": {
       "src": "../../../../node_modules/vitepress/dist/client/theme-default/index.js",
       "file": "@theme_index.js",
-      "fileHash": "2050d414",
-      "needsInterop": false
-    },
-    "nanoid": {
-      "src": "../../../../node_modules/nanoid/index.browser.js",
-      "file": "nanoid.js",
-      "fileHash": "f1b96d47",
+      "fileHash": "ec67f8e2",
       "needsInterop": false
     }
   },
