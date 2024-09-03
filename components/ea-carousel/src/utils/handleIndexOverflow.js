@@ -1,0 +1,1 @@
+export function handleIndexOverflow(e,n){return n<0?n=e:n>e&&(n=0),n}

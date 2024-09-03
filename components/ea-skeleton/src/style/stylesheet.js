@@ -1,0 +1,1 @@
+export const stylesheet="\n.ea-skeleton_wrap {\n  width: 100%;\n  position: relative;\n  border-radius: 4px;\n}\n.ea-skeleton_wrap ea-skeleton-item[variant=p]:first-child {\n  --p-width: 33%;\n  --margin-top: 0;\n}\n.ea-skeleton_wrap ea-skeleton-item[variant=p]:last-child {\n  --p-width: 61%;\n}\n";

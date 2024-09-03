@@ -1,0 +1,1 @@
+export const createElement=(e,t,n)=>{const r=document.createElement(e||"div");return r.className=t||"",n&&(Array.isArray(n)?n.forEach((e=>{r.appendChild(e)})):r.appendChild(n)),r};export const createSlotElement=e=>{const t=document.createElement("slot");return e&&(t.name=e),t};

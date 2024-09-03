@@ -1,0 +1,1 @@
+export const Validator={required:r=>"string"==typeof r?""!==r:!!Array.isArray(r)&&r.length>0,min:(r,t)=>r.length>=t,max:(r,t)=>r.length<=t,reg:(r,t)=>t.test(r)};

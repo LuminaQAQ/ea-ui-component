@@ -1,0 +1,1 @@
+export const timeout=(t,e=0)=>{let i=setTimeout((()=>{clearTimeout(i),i=null,t()}),e)};export const withTransitionTimeOut=(t,e=300)=>{let i=setTimeout((()=>{clearTimeout(i),i=null,t.classList.add("with-transition")}),e)};

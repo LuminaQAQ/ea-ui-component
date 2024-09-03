@@ -1,0 +1,1 @@
+export const getThTemplate_normal=(s,n,e)=>`\n        <td class="ea-descriptions-item" colspan="${e}">\n            <span class="ea-descriptions-item_label">${s}:</span>\n            <span class="ea-descriptions-item_content">${n}</span>\n        </td>\n    `;

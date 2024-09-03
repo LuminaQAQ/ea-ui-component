@@ -1,0 +1,1 @@
+export const stylesheet="\n.ea-breadcrumb_wrap {\n  display: flex;\n}\n.ea-breadcrumb_wrap .separator {\n  margin: 0 10px;\n}\n";

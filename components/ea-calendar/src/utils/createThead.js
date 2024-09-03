@@ -1,0 +1,1 @@
+import{createElement}from"../../../../utils/createElement.js";export const createThead=(e=["一","二","三","四","五","六","日"])=>{const t=createElement("tr"),r=e.map((e=>{const t=createElement("th");return t.innerText=e,t}));return t.append(...r),t};

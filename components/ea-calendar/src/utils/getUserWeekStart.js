@@ -1,0 +1,1 @@
+export function getUserWeekStart(e,n){if(!e.includes(n))return e;const t=e.findIndex(((e,t)=>{if(e===n)return t}));return 0===t||-1===t?e:e.slice(t).concat(e.slice(0,t))}

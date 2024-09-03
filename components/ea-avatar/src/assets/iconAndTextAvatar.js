@@ -1,0 +1,1 @@
+const background='\n<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">\n    <path fill="#c0c4cc" d="M0 0h100v100H0z" />\n</svg>\n';export const iconAvatar=a=>`\n        ${background}\n        <ea-icon class="fa ea-avatar--text" icon="${a}"></ea-icon>\n    `;export const textAvatar=a=>`\n        ${background}\n        <span class="ea-avatar--text">${a}</span>\n    `;

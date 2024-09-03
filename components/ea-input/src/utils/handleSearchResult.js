@@ -1,0 +1,1 @@
+export function handleSearchResult(e,l){e.querySelectorAll("li").forEach((e=>{e.innerText.includes(l)?e.style.display="block":e.style.display="none"}))}

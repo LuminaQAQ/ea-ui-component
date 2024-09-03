@@ -1,0 +1,1 @@
+export function initTriggerAfterInputEvent(e,t){e.addEventListener("input",(e=>{const n=Array.from(t.querySelectorAll("li")).some(((t,n)=>t.innerText.includes(e.target.value)));t.classList.toggle("is-open",n&&""!==e.target.value)}))}export function initTriggerOnFocusEvent(e,t){t.addEventListener("focus",(t=>{e.classList.add("is-open")}))}
