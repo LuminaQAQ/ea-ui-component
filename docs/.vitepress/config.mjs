@@ -22,6 +22,9 @@ export default defineConfig({
     nav: [
       { text: '组件', link: '/install' },
     ],
+    search: {
+      provider: 'local'
+    },
 
     sidebar: [
       {
