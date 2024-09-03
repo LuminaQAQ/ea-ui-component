@@ -1,6 +1,6 @@
 {
   "name": "easy-component-ui",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Easy-ui, 基于 Web Components 的 UI 组件库",
   "main": "index.js",
   "scripts": {
