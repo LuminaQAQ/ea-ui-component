@@ -38,6 +38,8 @@ onMounted(() => {
     <ea-alert title="错误提示的文案" type="error"></ea-alert>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="demo">
   <ea-alert title="成功提示的文案" type="success"></ea-alert>
@@ -46,6 +48,8 @@ onMounted(() => {
   <ea-alert title="错误提示的文案" type="error"></ea-alert>
 </div>
 ```
+
+:::
 
 ## 主题
 
@@ -58,6 +62,8 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
     <ea-alert effect="dark" title="错误提示的文案" type="error"></ea-alert>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="demo">
   <ea-alert effect="dark" title="成功提示的文案" type="success"></ea-alert>
@@ -66,6 +72,8 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
   <ea-alert effect="dark" title="错误提示的文案" type="error"></ea-alert>
 </div>
 ```
+
+:::
 
 ## 自定义关闭按钮
 
@@ -77,6 +85,10 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
     <ea-alert id="callback" title="警告提示的文案" type="warning"></ea-alert>
 </div>
 
+::: details 查看代码
+
+`html`
+
 ```html
 <div class="demo">
   <ea-alert closable="false" title="不可关闭的alert" type="success"></ea-alert>
@@ -85,15 +97,20 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 </div>
 ```
 
+`js`: 在该元素上添加 `close` 事件即可。
+
 ```js
-document.querySelector("#callback").addEventListener("close", (e) => {
+const callbackAlert = document.querySelector("#callback");
+callbackAlert.addEventListener("close", (e) => {
   alert("Hello World");
 });
 ```
 
+:::
+
 ## 带有 icon
 
-表示某种状态时提升可读性。
+表示某种状态时提升可读性。在元素上添加 `show-icon` 属性即可。
 
 <div class="demo">
     <ea-alert title="成功提示的文案" type="success" show-icon></ea-alert>
@@ -101,6 +118,8 @@ document.querySelector("#callback").addEventListener("close", (e) => {
     <ea-alert title="警告提示的文案" type="warning" show-icon></ea-alert>
     <ea-alert title="错误提示的文案" type="error" show-icon></ea-alert>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -111,9 +130,11 @@ document.querySelector("#callback").addEventListener("close", (e) => {
 </div>
 ```
 
+:::
+
 ## 文字居中
 
-使用 center 属性让文字水平居中。
+使用 `center` 属性让文字水平居中。
 
 <div class="demo">
     <ea-alert title="成功提示的文案" type="success" center show-icon></ea-alert>
@@ -121,6 +142,8 @@ document.querySelector("#callback").addEventListener("close", (e) => {
     <ea-alert title="警告提示的文案" type="warning" center show-icon></ea-alert>
     <ea-alert title="错误提示的文案" type="error" center show-icon></ea-alert>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -131,9 +154,11 @@ document.querySelector("#callback").addEventListener("close", (e) => {
 </div>
 ```
 
+:::
+
 ## 带有辅助性文字介绍
 
-包含标题和内容，解释更详细的警告。
+包含标题和内容，解释更详细的警告。在元素上添加 `description` 属性即可。
 
 <div class="demo">
     <ea-alert title="带辅助性文字介绍" type="success" show-icon description="中国人认为宇宙万法的那个源头🤔，
@@ -146,6 +171,8 @@ document.querySelector("#callback").addEventListener("close", (e) => {
 为什么说如带，他真的带了吗？😫
 如带，你看看，带没带？如带。🤗"></ea-alert>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -167,6 +194,8 @@ document.querySelector("#callback").addEventListener("close", (e) => {
 </div>
 ```
 
+:::
+
 ## Attributes
 
 | 参数        | 说明               | 类型    | 可选值                     | 默认值 |
@@ -179,6 +208,18 @@ document.querySelector("#callback").addEventListener("close", (e) => {
 | close-text  | 关闭按钮自定义文本 | string  | —                          | —      |
 | show-icon   | 是否显示图标       | boolean | —                          | false  |
 | effect      | 选择提供的主题     | string  | light/dark                 | light  |
+
+## CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称         | 说明                              |
+| ------------ | --------------------------------- |
+| container    | alert 外层容器                    |
+| content-wrap | alert 内层容器                    |
+| title        | alert 内容容器(`title`属性)       |
+| description  | alert 描述容器(`description`属性) |
+| icon         | alert 图标                        |
 
 ## Events
 
