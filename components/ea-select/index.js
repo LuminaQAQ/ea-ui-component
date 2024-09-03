@@ -6,6 +6,7 @@ import '../ea-option-gropu/index.js'
 import "../ea-input/index.js"
 
 import { stylesheet } from './src/style/stylesheet.js';
+import { timeout, withTransitionTimeOut } from '../../utils/timeout.js';
 
 export class EaSelect extends Base {
     #container;
@@ -291,9 +292,7 @@ export class EaSelect extends Base {
         });
 
         this.#selectInput.addEventListener('blur', (e) => {
-            let timer = setTimeout(() => {
-                clearTimeout(timer);
-                timer = null;
+            timeout(() => {
                 this.#container.classList.remove('is-open');
             }, 100);
 
@@ -304,11 +303,7 @@ export class EaSelect extends Base {
             }));
         });
 
-        let timer = setTimeout(() => {
-            clearTimeout(timer);
-            timer = null;
-            this.#container.classList.add('with-transition');
-        }, 20);
+        withTransitionTimeOut(this.#container);
     }
 }
 
