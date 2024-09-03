@@ -10,6 +10,9 @@
   "author": "Lumina <https://github.com/LuminaQAQ>",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.25.6",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
     "@open-wc/testing": "^4.0.0",
     "@types/mocha": "^10.0.7",
     "jest": "^29.7.0",
