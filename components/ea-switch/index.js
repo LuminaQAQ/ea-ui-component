@@ -17,7 +17,7 @@ export class EaSwitch extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
             <label class="ea-switch_wrap" part="container">
-                <input class="ea-switch_input" part="input" type="checkbox">
+                <input class="ea-switch_input" type="checkbox">
                 <span class="ea-switch_label ea-switch_label--left" part="label-left"></span>
                 <span class="ea-switch_core" part="switch"></span>
                 <span class="ea-switch_label ea-switch_label--right" part="label-right"></span>

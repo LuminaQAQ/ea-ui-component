@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js';
 
 import { imageSVG } from './src/assets/imageSVG.js';

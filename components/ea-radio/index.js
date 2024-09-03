@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js'
 
 import { stylesheet } from './src/style/stylesheet.js';

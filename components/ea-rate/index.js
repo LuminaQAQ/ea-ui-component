@@ -1,5 +1,3 @@
-// @ts-nocheck
-import { createElement } from '../../utils/createElement.js';
 import Base from '../Base.js';
 import "../ea-icon/index.js"
 

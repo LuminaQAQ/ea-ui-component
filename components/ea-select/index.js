@@ -1,7 +1,5 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 import "../ea-option/index.js"
 import '../ea-option-gropu/index.js'

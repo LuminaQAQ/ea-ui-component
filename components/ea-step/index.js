@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 import { timeout } from '../../utils/timeout.js';
@@ -14,8 +13,7 @@ export class EaStep extends Base {
 
   #titleWrap;
   #descriptionWrap;
-
-  #headSlot;
+  
   #titleSlot;
   #descriptionSlot;
 
