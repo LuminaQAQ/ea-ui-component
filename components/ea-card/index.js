@@ -13,10 +13,10 @@ class EaCard extends Base {
 
     shadowRoot.innerHTML = `
       <div class="ea-card_wrap" part="container">
-        <div class="ea-card_header" part="header">
+        <div class="ea-card_header" part="header-wrap">
           <slot name="header"></slot>
         </div>
-        <div class="ea-card_content" part="content">
+        <div class="ea-card_content" part="content-wrap">
           <slot></slot>
         </div>
       </div>
