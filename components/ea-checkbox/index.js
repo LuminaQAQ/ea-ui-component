@@ -13,10 +13,9 @@ export class EaCheckbox extends Base {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.innerHTML = `
       <label class="ea-checkbox_wrap" part="container">
+        <input type="checkbox" class="ea-checkbox-input_input"/>
         <span class="ea-checkbox-input_wrap" part="input-container">
           <span class="ea-checkbox-input_inner" part="input"></span>
-          <input type="checkbox" class="ea-checkbox-input_input">
-          </input>
         </span>
         <span class="ea-checkbox-label_desc" part="label-container">
           <slot></slot>
@@ -37,14 +36,8 @@ export class EaCheckbox extends Base {
   }
 
   set checked(val) {
-    this.#checkbox.checked = val;
-
-    this.#label.classList.toggle('checked', val);
     this.setAttribute('checked', val);
-    this.#label.setAttribute('checked', val);
-    this.#label.classList.toggle('checked', val);
-
-    if (val) this.#label.classList.remove('indeterminate');
+    this.#checkbox.checked = val;
   }
   // #endregion
   // ------- end -------
@@ -84,7 +77,6 @@ export class EaCheckbox extends Base {
   set disabled(val) {
     this.#checkbox.disabled = val;
     this.#label.toggleAttribute('disabled', val);
-    this.#label.classList.toggle('disabled', val);
   }
   // #endregion
   // ------- end -------
@@ -109,19 +101,20 @@ export class EaCheckbox extends Base {
 
   set indeterminate(val) {
     this.setAttribute('indeterminate', val);
-    this.#label.classList.toggle('indeterminate', val);
+    this.#checkbox.setAttribute('indeterminate', val);
 
     if (val) {
       this.checked = false;
       this.#label.classList.remove('checked');
 
       this.setAttribute('indeterminate', true);
+      this.#checkbox.setAttribute('indeterminate', true);
     }
   }
   // #endregion
   // ------- end -------
 
-  init() {
+  connectedCallback() {
     // checkbox 的 checked 属性
     this.checked = this.checked;
 
@@ -143,6 +136,7 @@ export class EaCheckbox extends Base {
     // 监听 change 事件, 修改 checked 属性
     this.#checkbox.addEventListener('change', (e) => {
       e.preventDefault();
+      this.indeterminate = false;
       this.checked = e.target.checked;
 
       this.dispatchEvent(new CustomEvent('change', {
@@ -155,10 +149,6 @@ export class EaCheckbox extends Base {
         }
       }))
     })
-  }
-
-  connectedCallback() {
-    this.init();
   }
 }
 
