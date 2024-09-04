@@ -121,6 +121,7 @@ export class EaCarousel extends Base {
 
         for (let i = 0; i < length; i++) {
             const indicator = createElement('div', 'ea-carousel-item_indicator');
+            indicator.part = 'indicator';
             this.#indicatorWrap.appendChild(indicator);
         }
 
@@ -160,6 +161,7 @@ export class EaCarousel extends Base {
     #createArrowItem(arrow) {
         let throttle = false;
         const arrowItem = createElement('div', `ea-carousel-item_arrow ea-carousel-item_arrow--${arrow}`);
+        arrowItem.part = 'arrow';
 
         arrowItem.innerHTML = arrow === "left" ? `&lt;` : `&gt;`;
 
