@@ -204,12 +204,15 @@ export class EaCalendar extends Base {
         // 构建日历的行，每行7天
         for (let i = 0; i < 6; i++) {
             const tr = createElement('tr');
+            tr.part = 'table-body-row';
 
             // 构建每一天的单元格
             for (let j = 0; j < 7; j++) {
                 const { length } = tr.children;
                 const td = createElement('td');
+                td.part = 'table-body-cell';
                 const span = createElement('span');
+                span.part = 'table-body-cell-content';
 
                 // 获取当前日期是星期几
                 const day = currentDate.getDay();
@@ -226,6 +229,7 @@ export class EaCalendar extends Base {
                     span.innerText = currentDate.getDate();
                     currentDate.setDate(currentDate.getDate() + 1);
                     td.classList.add("is-disabled");
+                    td.part = "table-body-cell-disabled";
                 } else {
                     // 如果是上个月的日期，则展示上个月的日期
                     const lastMonthDateStep = j - day + 2;
@@ -236,15 +240,18 @@ export class EaCalendar extends Base {
                     lastDate.setMonth(month - 1);
                     lastDate.setDate(lastMonthDateStep > 0 ? (day + length) - step : lastMonthDateStep);
                     span.innerText = lastDate.getDate();
+                    td.part = "table-body-cell-disabled";
                     td.classList.add("is-disabled");
                 }
 
                 const userToday = new Date(this.date);
                 if (currentDate.getFullYear() === myDate.getFullYear() && currentDate.getMonth() === myDate.getMonth() && currentDate.getDate() === myDate.getDate() + 1) {
+                    td.part = "table-body-cell-today";
                     td.classList.add("is-today");
                 }
 
                 if (currentDate.getFullYear() === userDate.getFullYear() && currentDate.getMonth() === userDate.getMonth() && currentDate.getDate() === userDate.getDate() + 1) {
+                    td.part = "table-body-cell-selected";
                     td.classList.add("is-selected");
                 }
 
