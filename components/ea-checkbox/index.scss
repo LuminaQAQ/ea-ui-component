@@ -1,5 +1,4 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-ui-base-style.scss";
 
 :host {
   --margin-right: 1rem;
@@ -103,7 +102,9 @@
   }
 
   .ea-checkbox-input_input:disabled {
+    pointer-events: none;
     & + .ea-checkbox-input_wrap {
+      cursor: not-allowed;
       .ea-checkbox-input_inner {
         border-color: $color-disabled-btn-bgc;
         background-color: $color-disabled-btn-bgc;
@@ -114,6 +115,7 @@
       }
 
       & + .ea-checkbox-label_desc {
+        cursor: not-allowed;
         color: $color-disabled-text;
       }
     }

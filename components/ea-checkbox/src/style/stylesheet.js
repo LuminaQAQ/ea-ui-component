@@ -78,6 +78,12 @@ export const stylesheet = `
 .ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {
   color: #409eff;
 }
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled {
+  pointer-events: none;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap {
+  cursor: not-allowed;
+}
 .ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
   border-color: #eeeeee;
   background-color: #eeeeee;
@@ -86,6 +92,7 @@ export const stylesheet = `
   background-color: transparent;
 }
 .ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {
+  cursor: not-allowed;
   color: #c0c4cc;
 }
 .ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner {

@@ -75,8 +75,8 @@ export class EaCheckbox extends Base {
   }
 
   set disabled(val) {
+    this.setAttribute('disabled', val);
     this.#checkbox.disabled = val;
-    this.#label.setAttribute('disabled', val);
   }
   // #endregion
   // ------- end -------
