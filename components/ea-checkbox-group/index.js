@@ -1,8 +1,10 @@
+import { timeout } from "../../utils/timeout.js";
 import Base from "../Base.js";
 
 import { stylesheet } from "./src/style/stylesheet.js";
 
 export class EaCheckboxGroup extends Base {
+    #mounted = false;
     constructor() {
         super();
 
@@ -45,8 +47,7 @@ export class EaCheckboxGroup extends Base {
             const valArr = val.split(',').map(item => item.trimStart());
 
             valArr.map(item => {
-                const checkbox = this.querySelector(`ea-checkbox[name="${this.name}"][value="${item}"]`);
-                checkbox.setAttribute('checked', 'true');
+                const checkbox = this.querySelector(`ea-checkbox[value="${item}"]`);
                 checkbox.checked = 'true';
             })
 
@@ -65,8 +66,9 @@ export class EaCheckboxGroup extends Base {
     }
 
     set disabled(val) {
-        const checkboxs = document.querySelectorAll(`ea-checkbox[name="${this.name}"]`);
+        if (!val && !this.#mounted) return;
 
+        const checkboxs = this.querySelectorAll(`ea-checkbox`);
         checkboxs.forEach(checkbox => {
             checkbox.disabled = val;
         });
@@ -90,19 +92,23 @@ export class EaCheckboxGroup extends Base {
         // name 唯一键值
         this.name = this.name;
 
-        // value 指定选中值
-        this.value = this.value;
+        timeout(() => {
+            // value 指定选中值
+            this.value = this.value;
 
-        // disabled 禁用
-        this.disabled = this.disabled;
+            // disabled 禁用
+            this.disabled = this.disabled;
 
-        const checkboxes = this.querySelectorAll('ea-checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', e => {
-                this.#handleValueUptate(checkboxes);
+            const checkboxes = this.querySelectorAll('ea-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', e => {
+                    this.#handleValueUptate(checkboxes);
+                });
             });
-        });
-        this.#handleValueUptate(checkboxes);
+            this.#handleValueUptate(checkboxes);
+
+            this.#mounted = true;
+        }, 20);
     }
 }
 

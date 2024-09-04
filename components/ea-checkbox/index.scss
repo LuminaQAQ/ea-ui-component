@@ -1,4 +1,5 @@
 @import "../ea-ui-base-style.scss";
+@import "../ea-ui-base-style.scss";
 
 :host {
   --margin-right: 1rem;
@@ -101,8 +102,7 @@
     }
   }
 
-  .ea-checkbox-input_input:disabled,
-  .ea-checkbox-input_input:checked:disabled {
+  .ea-checkbox-input_input:disabled {
     & + .ea-checkbox-input_wrap {
       .ea-checkbox-input_inner {
         border-color: $color-disabled-btn-bgc;
@@ -110,6 +110,24 @@
 
         &::before {
           background-color: transparent;
+        }
+      }
+
+      & + .ea-checkbox-label_desc {
+        color: $color-disabled-text;
+      }
+    }
+  }
+
+  .ea-checkbox-input_input:disabled:checked {
+    & + .ea-checkbox-input_wrap {
+      .ea-checkbox-input_inner {
+        border-color: $color-disabled-btn-bgc;
+        background-color: $color-disabled-btn-bgc;
+        &::before {
+          opacity: 1;
+          border-left: 2px solid white;
+          border-top: 2px solid white;
         }
       }
 
