@@ -7,7 +7,7 @@ export default class Base extends HTMLElement {
         super();
 
         this.isProduction = false;
-        this.isProduction = true;
+        // this.isProduction = true;
     }
 
     /**
