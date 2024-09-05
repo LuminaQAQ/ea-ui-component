@@ -39,6 +39,7 @@ export class EaDescriptionsItem extends Base {
   }
 
   set label(value) {
+    if (!value) return;
     this.setAttribute('label', value);
 
     this.#label.innerHTML = value;
