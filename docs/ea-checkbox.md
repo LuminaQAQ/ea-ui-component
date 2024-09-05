@@ -4,12 +4,15 @@ import { onMounted, ref } from 'vue'
 const btn = ref(null);
 
 onMounted(() => {
-  import('../index.js')
+  // import('../index.js')
+  import('../components/ea-checkbox-group/index.js')
+  import('../components/ea-checkbox/index.js')
+  import('../components/ea-button/ea-button.js')
   import('./index.scss')
 
   document.querySelector('#city-group').addEventListener('click', () => {
     const name = "city";
-    const elements = document.querySelectorAll(`ea-checkbox[name=${name}][checked]`);
+    const elements = document.querySelectorAll(`ea-checkbox[name=${name}][checked="true"]`);
 
     const checkboxValueArr = [];
 
@@ -23,18 +26,13 @@ onMounted(() => {
     document.querySelector('#checkAll').indeterminate = true;
   })
 
-  // 
-  document.querySelector('#day-group').addEventListener('click', function(e) {
-    console.log(document.querySelector('#ea-checkbox-group').value);
-    const name = "day";
-    const elements = document.querySelectorAll(`ea-checkbox[name=${name}][checked]`);
-
-    const checkboxValueArr = [];
-
-    elements.forEach(item => checkboxValueArr.push(item.value));
-
-    alert(`[${checkboxValueArr}]`);
-  })
+  // ------- 多选框组 value 属性 -------
+  // #region
+  document.querySelector("#day-group").addEventListener("click", function (e) {
+      alert(`[${document.querySelector("#ea-checkbox-group").value}]`);
+  });
+  // #endregion
+  // ------- end -------
 
 })
 </script>
@@ -60,8 +58,8 @@ onMounted(() => {
 单独使用可以表示两种状态之间的切换，写在标签中的内容为 checkbox 按钮后的介绍。
 
 <div class="row left">
-    <ea-checkbox name="work" value="前端">前端</ea-checkbox>
-    <ea-checkbox name="work" value="后端">后端</ea-checkbox>
+  <ea-checkbox name="work" value="前端">前端</ea-checkbox>
+  <ea-checkbox name="work" value="后端">后端</ea-checkbox>
 </div>
 
 ```html
@@ -169,16 +167,16 @@ document
 ## 多选框组 value 属性
 
 <div class="row left">
-  <ea-checkbox-group id="ea-checkbox-group" name="day" value="今天, 明天" disabled>
-    <ea-checkbox value="前天">前天</ea-checkbox>
-    <ea-checkbox value="昨天">昨天</ea-checkbox>
-    <ea-checkbox value="今天">今天</ea-checkbox>
-    <ea-checkbox value="明天">明天</ea-checkbox>
-    <ea-checkbox value="后天">后天</ea-checkbox>
-  </ea-checkbox-group>
+    <ea-checkbox-group id="ea-checkbox-group" name="day" value="今天, 明天" disabled>
+        <ea-checkbox value="前天">前天</ea-checkbox>
+        <ea-checkbox value="昨天">昨天</ea-checkbox>
+        <ea-checkbox value="今天">今天</ea-checkbox>
+        <ea-checkbox value="明天">明天</ea-checkbox>
+        <ea-checkbox value="后天">后天</ea-checkbox>
+    </ea-checkbox-group>
 </div>
 <div class="row left">
-  <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
+    <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
 </div>
 
 ```html
