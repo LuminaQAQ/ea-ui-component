@@ -1,0 +1,6 @@
+var r=(e,i,t)=>{if(!i.has(e))throw TypeError("Cannot "+t)};var o=(e,i,t)=>(r(e,i,"read from private field"),t?t.call(e):i.get(e)),n=(e,i,t)=>{if(i.has(e))throw TypeError("Cannot add the same private member more than once");i instanceof WeakSet?i.add(e):i.set(e,t)},h=(e,i,t,c)=>(r(e,i,"write to private field"),c?c.call(e,t):i.set(e,t),t);var s;class l extends HTMLElement{constructor(){super();n(this,s,void 0);const t=this.attachShadow({mode:"open"});t.innerHTML=`
+            <link rel="stylesheet" href="${new URL("data:text/css;base64,QGltcG9ydCAiLi9jc3MvZm9udGVsbG8uY3NzIjsNCkBpbXBvcnQgIi4vY3NzL2FuaW1hdGlvbi5jc3MiOw==",import.meta.url).href}">
+            <i class="ea-icon_wrap" part="container">
+                <slot></slot>
+            </i>
+        `,h(this,s,t.querySelector(".ea-icon_wrap"))}get icon(){return this.getAttribute("icon")||""}set icon(t){this.setAttribute("icon",t),o(this,s).className=`${t}`}get color(){return this.getAttribute("color")||""}set color(t){this.setAttribute("color",t),o(this,s).style.color=t}get size(){return this.getAttribute("size")||""}set size(t){this.setAttribute("size",t),o(this,s).style.fontSize=`${t}px`}connectedCallback(){this.icon=this.icon,this.color=this.color,this.size=this.size}}s=new WeakMap;window.customElements.get("ea-icon")||window.customElements.define("ea-icon",l);export{l as EaIcon};
