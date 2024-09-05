@@ -1,3 +1,4 @@
+export const stylesheet = `
 .ea-descriptions_wrap {
   font-size: 14px;
 }
@@ -31,3 +32,4 @@
   text-align: left;
   padding: 12px 10px;
 }
+`;
