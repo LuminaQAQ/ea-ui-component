@@ -16,24 +16,19 @@ export class EaCheckboxGroup extends Base {
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
-        const dom = document.createElement('div');
-        shadowRoot.appendChild(dom);
-        const slot = document.createElement('slot');
-        dom.className = "ea-checkbox-group";
-        dom.appendChild(slot);
-
-
-        this.dom = dom;
+        shadowRoot.innerHTML = `
+            <div class="ea-checkbox-group_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
 
         this.build(shadowRoot, stylesheet);
-
-        shadowRoot.appendChild(dom);
     }
 
     // ------- name 唯一键值 -------
     // #region
     get name() {
-        return this.getAttribute('name');
+        return this.getAttribute('name') || 'ea-checkbox';
     }
 
     set name(val) {
@@ -48,22 +43,22 @@ export class EaCheckboxGroup extends Base {
     // ------- value 指定选中值 -------
     // #region
     get value() {
-        if (!this.getAttribute('value')) return;
-
-        return this.getAttribute('value');
+        return this.getAttribute('value') || '';
     }
 
     set value(val) {
-        if (!val) return;
+        this.setAttribute('value', val);
 
         try {
             const valArr = val.split(',').map(item => item.trimStart());
 
             valArr.map(item => {
-                const checkbox = document.querySelector(`ea-checkbox[name="${this.name}"][value="${item}"]`);
+                const checkbox = this.querySelector(`ea-checkbox[name="${this.name}"][value="${item}"]`);
                 checkbox.setAttribute('checked', 'true');
                 checkbox.checked = 'true';
             })
+
+            this.dispatchEvent(new CustomEvent('change', { detail: valArr }));
         } catch (error) {
 
         }
@@ -78,17 +73,29 @@ export class EaCheckboxGroup extends Base {
     }
 
     set disabled(val) {
-        const checkboxs = document.querySelectorAll(`ea-checkbox[name="${this.name}"]`);
+        if (!val) return;
+        const checkboxs = this.querySelectorAll('ea-checkbox');
 
         checkboxs.forEach(checkbox => {
-            checkbox.setAttribute('disabled', 'true');
-            checkbox.disabled = 'true';
+            checkbox.disabled = val;
         });
     }
     // #endregion
     // ------- end -------
 
-    init() {
+    #handleValueUptate(checkboxes) {
+        let valueArr = [];
+        Array.from(checkboxes).filter(item => {
+            if (item.checked) return valueArr.push(item.value);
+            return false;
+        })
+
+        this.value = valueArr.join(',');
+    }
+
+    connectedCallback() {
+        this.setAttribute('data-ea-component', true);
+
         // name 唯一键值
         this.name = this.name;
 
@@ -97,10 +104,14 @@ export class EaCheckboxGroup extends Base {
 
         // disabled 禁用
         this.disabled = this.disabled;
-    }
 
-    connectedCallback() {
-        this.init();
+        const checkboxes = this.querySelectorAll('ea-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', e => {
+                this.#handleValueUptate(checkboxes);
+            });
+        });
+        this.#handleValueUptate(checkboxes);
     }
 }
 
