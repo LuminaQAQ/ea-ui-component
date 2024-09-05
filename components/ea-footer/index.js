@@ -2,7 +2,16 @@ import Base from '../Base.js';
 import '../ea-icon/index.js';
 
 const stylesheet = `
+.ea-footer_wrap {
+  box-sizing: border-box;
+  padding: 0 20px;
 
+  height: 60px;
+
+  color: #333;
+
+  overflow: hidden;
+}
 `;
 
 export class EaFooter extends Base {
@@ -17,7 +26,7 @@ export class EaFooter extends Base {
                 <slot></slot>
             </footer>
         `;
-        
+
         this.#wrap = shadowRoot.querySelector('.ea-footer_wrap');
 
         this.build(shadowRoot, stylesheet);

@@ -5,6 +5,11 @@ const stylesheet = `
 .ea-aside_wrap {
   height: 100%;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.ea-aside_wrap ::slotted(ea-main) {
+  overflow: auto;
 }
 `;
 

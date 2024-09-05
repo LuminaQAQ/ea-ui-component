@@ -1,7 +1,18 @@
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
-const stylesheet = ``;
+const stylesheet = `
+.ea-header_wrap {
+  box-sizing: border-box;
+  padding: 0 20px;
+
+  height: 60px;
+
+  color: #333;
+
+  overflow: hidden;
+}
+`;
 
 export class EaHeader extends Base {
     #wrap;

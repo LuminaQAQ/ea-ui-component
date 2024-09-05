@@ -14,6 +14,7 @@ const stylesheet = `
 }
 .ea-container_wrap ::slotted(ea-main) {
   flex: 1;
+  overflow: auto;
 }
 `;
 
