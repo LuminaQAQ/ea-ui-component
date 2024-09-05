@@ -13,6 +13,9 @@ const stylesheet = `
   user-select: none;
   margin-right: var(--margin-right);
 }
+.ea-checkbox_wrap input {
+  display: none;
+}
 .ea-checkbox_wrap .ea-checkbox-input_wrap {
   line-height: 1;
   margin-right: 0.5rem;
@@ -47,36 +50,11 @@ const stylesheet = `
   line-height: 1;
   transition: color 0.2s;
 }
-.ea-checkbox_wrap.checked .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true] + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
   border-color: #409eff;
   background-color: #409eff;
 }
-.ea-checkbox_wrap.checked .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {
-  opacity: 1;
-  border-left: 2px solid white;
-  border-top: 2px solid white;
-}
-.ea-checkbox_wrap.checked .ea-checkbox-label_desc {
-  color: #409eff;
-}
-.ea-checkbox_wrap.disabled .ea-checkbox-input_wrap .ea-checkbox-input_inner {
-  border-color: #eeeeee;
-  background-color: #eeeeee;
-}
-.ea-checkbox_wrap.disabled .ea-checkbox-input_wrap .ea-checkbox-input_inner::before {
-  background-color: transparent;
-}
-.ea-checkbox_wrap.disabled .ea-checkbox-label_desc {
-  color: #c0c4cc;
-}
-.ea-checkbox_wrap.disabled[checked=true] .ea-checkbox-input_wrap .ea-checkbox-input_inner::before {
-  background-color: #c0c4cc;
-}
-.ea-checkbox_wrap.indeterminate .ea-checkbox-input_wrap .ea-checkbox-input_inner {
-  border-color: #409eff;
-  background-color: #409eff;
-}
-.ea-checkbox_wrap.indeterminate .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true] + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {
   opacity: 1;
   left: 50%;
   top: 50%;
@@ -85,26 +63,52 @@ const stylesheet = `
   background-color: white;
   transform: translate(-50%, -50%) rotate(0deg);
 }
-.ea-checkbox_wrap.indeterminate .ea-checkbox-label_desc {
-  color: #409eff;
-}
-.ea-checkbox_wrap.indeterminate[checked=true] .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
   border-color: #409eff;
   background-color: #409eff;
 }
-.ea-checkbox_wrap.indeterminate[checked=true] .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {
-  width: 3px;
-  height: 7px;
-  left: 52.5%;
-  top: 45%;
-  transform: translate(-50%, -50%) rotate(-135deg);
+.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {
   opacity: 1;
   border-left: 2px solid white;
   border-top: 2px solid white;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {
+  color: #409eff;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled {
+  pointer-events: none;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap {
+  cursor: not-allowed;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+  border-color: #eeeeee;
+  background-color: #eeeeee;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap .ea-checkbox-input_inner::before {
   background-color: transparent;
 }
-.ea-checkbox_wrap.indeterminate[checked=true] .ea-checkbox-label_desc {
-  color: #409eff;
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {
+  cursor: not-allowed;
+  color: #c0c4cc;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+  border-color: #eeeeee;
+  background-color: #eeeeee;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::before {
+  opacity: 1;
+  border-left: 2px solid white;
+  border-top: 2px solid white;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {
+  color: #c0c4cc;
 }
 `;
 
@@ -118,10 +122,9 @@ export class EaCheckbox extends Base {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.innerHTML = `
       <label class="ea-checkbox_wrap" part="container">
+        <input type="checkbox" class="ea-checkbox-input_input"/>
         <span class="ea-checkbox-input_wrap" part="input-container">
           <span class="ea-checkbox-input_inner" part="input"></span>
-          <input type="checkbox" class="ea-checkbox-input_input">
-          </input>
         </span>
         <span class="ea-checkbox-label_desc" part="label-container">
           <slot></slot>
@@ -142,14 +145,8 @@ export class EaCheckbox extends Base {
   }
 
   set checked(val) {
-    this.#checkbox.checked = val;
-
-    this.#label.classList.toggle('checked', val);
     this.setAttribute('checked', val);
-    this.#label.setAttribute('checked', val);
-    this.#label.classList.toggle('checked', val);
-
-    if (val) this.#label.classList.remove('indeterminate');
+    this.#checkbox.checked = val;
   }
   // #endregion
   // ------- end -------
@@ -187,9 +184,8 @@ export class EaCheckbox extends Base {
   }
 
   set disabled(val) {
+    this.setAttribute('disabled', val);
     this.#checkbox.disabled = val;
-    this.#label.toggleAttribute('disabled', val);
-    this.#label.classList.toggle('disabled', val);
   }
   // #endregion
   // ------- end -------
@@ -214,19 +210,20 @@ export class EaCheckbox extends Base {
 
   set indeterminate(val) {
     this.setAttribute('indeterminate', val);
-    this.#label.classList.toggle('indeterminate', val);
+    this.#checkbox.setAttribute('indeterminate', val);
 
     if (val) {
       this.checked = false;
       this.#label.classList.remove('checked');
 
       this.setAttribute('indeterminate', true);
+      this.#checkbox.setAttribute('indeterminate', true);
     }
   }
   // #endregion
   // ------- end -------
 
-  init() {
+  connectedCallback() {
     // checkbox 的 checked 属性
     this.checked = this.checked;
 
@@ -248,6 +245,7 @@ export class EaCheckbox extends Base {
     // 监听 change 事件, 修改 checked 属性
     this.#checkbox.addEventListener('change', (e) => {
       e.preventDefault();
+      this.indeterminate = false;
       this.checked = e.target.checked;
 
       this.dispatchEvent(new CustomEvent('change', {
@@ -260,10 +258,6 @@ export class EaCheckbox extends Base {
         }
       }))
     })
-  }
-
-  connectedCallback() {
-    this.init();
   }
 }
 
