@@ -6,7 +6,9 @@ onMounted(() => {
     import('../components/ea-descriptions/index.js')
     import('../components/ea-descriptions-item/index.js')
     import('../components/ea-tag/index.js')
+
     import('./index.scss')
+    import('../components/ea-icon/index.css')
 })
 </script>
 
@@ -112,13 +114,14 @@ onMounted(() => {
 ## 自定义 label 属性插槽
 
 ::: warning
-注意：已知项目环境为 `VUE` 时, 该项目自带的[图标](./ea-icon.md)可能在 **开发环境** 中正常显示，但无法在 **生产环境** 中显示。
+已知： 项目环境: `VUE` , 组件: `ea-descriptions`(本组件) <br>
+在这种情况下, 该项目的[图标组件](./ea-icon.md)可能在 **开发环境** 中正常显示，但在 **生产环境** 中无法显示。
 :::
 
 <div class="demo">
   <ea-descriptions title="带边框列表" border>
     <ea-descriptions-item>
-      <div slot="label"><ea-icon class="icon-user"></ea-icon>用户名</div>
+      <div slot="label"><i class="icon-user"></i>用户名</div>
       张三
     </ea-descriptions-item>
     <ea-descriptions-item>
