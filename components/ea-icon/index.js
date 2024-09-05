@@ -1,25 +1,18 @@
-// @ts-nocheck
-import { createSlotElement } from "../../utils/createElement.js";
-import Base from "../Base.js";
-
-export class EaIcon extends Base {
-    static observedAttributes = ['type', 'size', 'color'];
-
+export class EaIcon extends HTMLElement {
     #wrap;
 
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('i');
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
+        shadowRoot.innerHTML = `
+            <link rel="stylesheet" href="${new URL('../ea-icon/index.css', import.meta.url).href}">
+            <i class="ea-icon_wrap" part="container">
+                <slot></slot>
+            </i>
+        `;
 
-        this.setIconFile(new URL('../ea-icon/index.css', import.meta.url).href);
-
-        this.#wrap = wrap;
-
-        shadowRoot.appendChild(wrap);
+        this.#wrap = shadowRoot.querySelector('.ea-icon_wrap');
     }
 
     // ------- icon 图标类名 -------
@@ -64,16 +57,12 @@ export class EaIcon extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
+    connectedCallback() {
         this.icon = this.icon;
 
         this.color = this.color;
 
         this.size = this.size;
-    }
-
-    connectedCallback() {
-        this.#init()
     }
 }
 

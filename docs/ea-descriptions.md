@@ -39,7 +39,7 @@ onMounted(() => {
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#descriptions-css-part)。
 
 ## 基础用法
 
@@ -111,38 +111,32 @@ onMounted(() => {
 
 ## 自定义 label 属性插槽
 
+::: warning
+注意：已知项目环境为 `VUE` 时, 该项目自带的[图标](./ea-icon.md)可能在 **开发环境** 中正常显示，但无法在 **生产环境** 中显示。
+:::
+
 <div class="demo">
   <ea-descriptions title="带边框列表" border>
-      <ea-descriptions-item>
-        <template slot="label">
-          <i class="icon-user"></i>用户名
-        </template>
-        张三
-      </ea-descriptions-item>
-      <ea-descriptions-item>
-        <template slot="label">
-          <i class="icon-tablet"></i>手机号
-        </template>
-        110
-      </ea-descriptions-item>
-      <ea-descriptions-item>
-        <template slot="label">
-          <i class="icon-location"></i>居住地
-        </template>
-        福建省
-      </ea-descriptions-item>
-      <ea-descriptions-item>
-        <template slot="label">
-          <i class="icon-tag"></i>备注
-        </template>
-        <ea-tag>正确的</ea-tag>
-      </ea-descriptions-item>
-      <ea-descriptions-item span="3">
-        <template slot="label">
-          <i class="icon-direction"></i>联系地址
-        </template>
-        帝都东城区史家胡同123号
-      </ea-descriptions-item>
+    <ea-descriptions-item>
+      <div slot="label"><ea-icon class="icon-user"></ea-icon>用户名</div>
+      张三
+    </ea-descriptions-item>
+    <ea-descriptions-item>
+      <div slot="label"><ea-icon class="icon-tablet"></ea-icon>手机号</div>
+      110
+    </ea-descriptions-item>
+    <ea-descriptions-item>
+      <div slot="label"><ea-icon class="icon-location"></ea-icon>居住地</div>
+      福建省
+    </ea-descriptions-item>
+    <ea-descriptions-item>
+      <div slot="label"><ea-icon class="icon-tag"></ea-icon>备注</div>
+      <ea-tag>正确的</ea-tag>
+    </ea-descriptions-item>
+    <ea-descriptions-item span="3">
+      <div slot="label"><ea-icon class="icon-direction"></ea-icon>联系地址</div>
+      帝都东城区史家胡同123号
+    </ea-descriptions-item>
   </ea-descriptions>
 </div>
 
@@ -152,23 +146,23 @@ onMounted(() => {
 <div class="demo">
   <ea-descriptions title="带边框列表" border>
     <ea-descriptions-item>
-      <template slot="label"> <i class="icon-user"></i>用户名 </template>
+      <div slot="label"><ea-icon class="icon-user"></ea-icon>用户名</div>
       张三
     </ea-descriptions-item>
     <ea-descriptions-item>
-      <template slot="label"> <i class="icon-tablet"></i>手机号 </template>
+      <div slot="label"><ea-icon class="icon-tablet"></ea-icon>手机号</div>
       110
     </ea-descriptions-item>
     <ea-descriptions-item>
-      <template slot="label"> <i class="icon-location"></i>居住地 </template>
+      <div slot="label"><ea-icon class="icon-location"></ea-icon>居住地</div>
       福建省
     </ea-descriptions-item>
     <ea-descriptions-item>
-      <template slot="label"> <i class="icon-tag"></i>备注 </template>
+      <div slot="label"><ea-icon class="icon-tag"></ea-icon>备注</div>
       <ea-tag>正确的</ea-tag>
     </ea-descriptions-item>
     <ea-descriptions-item span="3">
-      <template slot="label"> <i class="icon-direction"></i>联系地址 </template>
+      <div slot="label"><ea-icon class="icon-direction"></ea-icon>联系地址</div>
       帝都东城区史家胡同123号
     </ea-descriptions-item>
   </ea-descriptions>
@@ -220,6 +214,8 @@ onMounted(() => {
   </ea-descriptions>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="demo">
   <ea-descriptions title="带边框垂直列表" direction="vertical" border>
@@ -248,6 +244,8 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## Descriptions Attributes
 
 | 参数      | 说明       | 类型    | 可选值                | 默认值     |
@@ -263,6 +261,21 @@ onMounted(() => {
 | ----- | -------- | ------ | ------ | ------ |
 | label | 标题     | string | -      | -      |
 | span  | 列表列数 | number | -      | 1      |
+
+## Descriptions CSS Part
+
+| 名称                                                  | 说明                                                        |
+| ----------------------------------------------------- | ----------------------------------------------------------- |
+| container                                             | 外层容器, 包含 标题容器`header-wrap` 和 表格容器`body-wrap` |
+| header-wrap                                           | 标题容器( `title` 属性内容所在容器)                         |
+| body-wrap                                             | 表格容器, 包含 表格本体 `table-wrap`                        |
+| table-wrap                                            | 表格本体                                                    |
+| table-tbody                                           | 表格 `tbody` 本体                                           |
+| table-tr                                              | 表格 `tr`行 本体                                            |
+| table-th                                              | 表格 `th` 本体                                              |
+| table-td                                              | 表格 `td` 本体                                              |
+| **(仅当使用`基础用法`时存在该属性)** table-td-label   | 表格 `td` 本体中的 `label` 文本                             |
+| **(仅当使用`基础用法`时存在该属性)** table-td-content | `descriptions-item`标签内传入的内容                         |
 
 ## Descriptions-Item Slots
 
