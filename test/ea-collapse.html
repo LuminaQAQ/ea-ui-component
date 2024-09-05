@@ -23,21 +23,38 @@
 
         // ------- 基础用法 -------
         // #region
-        document.querySelector("#collapse").addEventListener("click", () => {
-            document.querySelector("#normalCollapse").active = "1, 2, 3";
-        });
+        const collapseControler = {
+            el: document.querySelector("#normalCollapse"),
+            collapseAll: document.querySelector("#collapse"),
+            closeAll: document.querySelector("#closeAll"),
+            init() {
+                this.collapseAll.addEventListener("click", () => {
+                    this.el.active = "1, 2, 3";
+                });
+                this.closeAll.addEventListener("click", () => {
+                    this.el.active = "";
+                });
+            },
+        };
+        collapseControler.init();
         // #endregion
         // ------- end -------
 
         // ------- 手风琴效果 -------
         // #region
-        document.querySelector("#closeAll").addEventListener("click", () => {
-            document.querySelector("#normalCollapse").active = "";
-        });
-
-        document.querySelector("#accordion").addEventListener("click", () => {
-            document.querySelector("#accordionCollapse").active = 2;
-        });
+        const accordionControler = {
+            el: document.querySelector("#accordionCollapse"),
+            btn: document.querySelector("#accordion"),
+            init() {
+                this.btn.addEventListener("click", () => {
+                    this.el.active = 2;
+                });
+                this.el.addEventListener("change", (e) => {
+                    console.log(e.detail);
+                });
+            },
+        };
+        accordionControler.init();
         // #endregion
         // ------- end -------
     </script>
@@ -77,6 +94,9 @@
             </ea-collapse-item>
             <ea-collapse-item class="" title="标题2" name="2">
                 <div>内容2</div>
+            </ea-collapse-item>
+            <ea-collapse-item class="" title="标题3" name="3">
+                <div>内容3</div>
             </ea-collapse-item>
         </ea-collapse>
     </div>

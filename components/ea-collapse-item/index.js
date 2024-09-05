@@ -93,12 +93,14 @@ export class EaCollapseItem extends Base {
         this.title = this.title;
         this.name = this.name;
 
-        this.#titleWrap.addEventListener('click', () => {
-            this.dispatchEvent(new CustomEvent('collapseItemStatusChange', {
+        this.#titleWrap.addEventListener('click', (e) => {
+            this.dispatchEvent(new CustomEvent('change', {
                 detail: {
                     name: this.name,
                     isOpen: this.isOpen,
                 },
+                bubbles: true,
+                composed: true,
             }));
         });
     }

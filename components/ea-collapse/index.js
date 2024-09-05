@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { timeout } from '../../utils/timeout.js';
 import Base from '../Base.js';
 import "../ea-collapse-item/index.js";
 
@@ -24,9 +25,9 @@ export class EaCollapse extends Base {
     set active(name) {
         this.setAttribute('active', name);
 
-        setTimeout(() => {
+        timeout(() => {
             this.#handleCollapse(this.accordion, name);
-        }, 20);
+        }, 20)
     }
     // #endregion
     // ------- end -------
@@ -40,7 +41,7 @@ export class EaCollapse extends Base {
     set accordion(flag) {
         this.setAttribute('accordion', flag);
 
-        setTimeout(() => {
+        timeout(() => {
             this.#handleCollapse(flag, this.active);
         }, 20);
     }
@@ -64,7 +65,7 @@ export class EaCollapse extends Base {
 
         // 遍历每个折叠项，绑定状态改变事件的监听器
         items.forEach(item => {
-            item.addEventListener('collapseItemStatusChange', (e) => {
+            item.addEventListener('change', (e) => {
                 // 在单选模式下，关闭所有其他折叠项
                 if (flag) items.forEach(item => {
                     item.isOpen = false;
@@ -72,14 +73,6 @@ export class EaCollapse extends Base {
 
                 // 更新当前折叠项的展开状态
                 item.isOpen = !e.detail.isOpen;
-
-                // 触发change事件，通知外部当前折叠项的状态改变
-                this.dispatchEvent(new CustomEvent("change", {
-                    detail: {
-                        name: item.name,
-                        isOpen: item.isOpen,
-                    },
-                }))
             });
         });
 
