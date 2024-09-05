@@ -1,5 +1,6 @@
 // @ts-nocheck
 import Base from '../Base';
+import { timeout } from '../../utils/timeout.js';
 import { createElement, createSlotElement } from '../../utils/createElement.js';
 
 const stylesheet = `
@@ -39,19 +40,16 @@ const stylesheet = `
 `;
 
 export class EaCollapse extends Base {
-    #wrap;
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
-        const slot = createSlotElement('');
-        const wrap = createElement('div', 'ea-collapse_wrap', [slot]);
-
-        this.#wrap = wrap;
-
-        this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
+        shadowRoot.innerHTML = `
+            <div class="ea-collapse_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
     }
 
     // ------- active 当前展开项 -------
@@ -63,9 +61,9 @@ export class EaCollapse extends Base {
     set active(name) {
         this.setAttribute('active', name);
 
-        setTimeout(() => {
+        timeout(() => {
             this.#handleCollapse(this.accordion, name);
-        }, 20);
+        }, 20)
     }
     // #endregion
     // ------- end -------
@@ -79,7 +77,7 @@ export class EaCollapse extends Base {
     set accordion(flag) {
         this.setAttribute('accordion', flag);
 
-        setTimeout(() => {
+        timeout(() => {
             this.#handleCollapse(flag, this.active);
         }, 20);
     }
@@ -96,7 +94,6 @@ export class EaCollapse extends Base {
      * @param {string} activeItemName - 激活项的名称，用于决定哪些折叠项应该展开。
      */
     #handleCollapse(flag, activeItemName) {
-        const that = this;
         // 将所有ea-collapse-item元素转换为数组
         const items = Array.from(this.querySelectorAll('ea-collapse-item'));
         // 初始化用于记录展开状态的变量
@@ -104,7 +101,7 @@ export class EaCollapse extends Base {
 
         // 遍历每个折叠项，绑定状态改变事件的监听器
         items.forEach(item => {
-            item.addEventListener('collapseItemStatusChange', (e) => {
+            item.addEventListener('change', (e) => {
                 // 在单选模式下，关闭所有其他折叠项
                 if (flag) items.forEach(item => {
                     item.isOpen = false;
@@ -112,64 +109,34 @@ export class EaCollapse extends Base {
 
                 // 更新当前折叠项的展开状态
                 item.isOpen = !e.detail.isOpen;
-
-                // 触发change事件，通知外部当前折叠项的状态改变
-                that.dispatchEvent(new CustomEvent("change", {
-                    detail: {
-                        name: item.name,
-                        isOpen: item.isOpen,
-                    },
-                }))
             });
         });
 
-        try {
-            // 根据flag的值来处理折叠项的展开状态
-            if (flag) {
-                // 在单选模式下，根据activeItemName确定哪个折叠项应该展开
-                collapseItem = activeItemName.toString().trim()[0];
+        // 根据flag的值来处理折叠项的展开状态
+        if (flag) {
+            // 在单选模式下，根据activeItemName确定哪个折叠项应该展开
+            collapseItem = activeItemName.toString().trim()[0];
 
-                items.forEach(item => {
-                    // 根据collapseItem的值，决定当前折叠项是否展开
-                    if (item.name === collapseItem) {
-                        item.isOpen = true;
-                    } else {
-                        item.isOpen = false;
-                    }
-                });
-            } else {
-                // 在多选模式下，将activeItemName解析为数组，并处理每个折叠项的展开状态
-                collapseItem = activeItemName.split(',').map(item => {
-                    return item.trim();
-                }).concat();
+            items.forEach(item => {
+                item.isOpen = item.name === collapseItem;
+            });
+        } else {
+            // 在多选模式下，将activeItemName解析为数组，并处理每个折叠项的展开状态
+            collapseItem = activeItemName.split(',').map(item => {
+                return item.trim();
+            }).concat();
 
-                items.forEach(item => {
-                    // 根据collapseItem数组中的值，决定当前折叠项是否展开
-                    if (collapseItem.includes(item.name)) {
-                        item.isOpen = true;
-                    } else {
-                        item.isOpen = false;
-                    }
-                });
-            }
-
-        } catch (error) { }
-    }
-
-    #handleChildrenItemName() {
-
-    }
-
-    init() {
-        const that = this;
-
-        this.accordion = this.accordion;
-
-        this.active = this.active;
+            items.forEach(item => {
+                // 根据collapseItem数组中的值，决定当前折叠项是否展开
+                item.isOpen = collapseItem.includes(item.name);
+            });
+        }
     }
 
     connectedCallback() {
-        this.init();
+        this.accordion = this.accordion;
+
+        this.active = this.active;
     }
 }
 
@@ -190,23 +157,25 @@ export class EaCollapseItem extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <div class="ea-collapse-item_wrap" part="container">
+                <div class="ea-collapse-item_title" part="title-wrap">
+                    <span class="ea-collapse-item_title-content" part="title-content"></span>
+                    <span class="ea-collapse-item_title-icon" part="title-icon"></span>
+                </div>
+                <div class="ea-collapse-item_content" part="content-wrap">
+                    <slot></slot>
+                </div>
+            </div>
+        `;
 
-        const titleContent = createElement('span', 'ea-collapse-item_title-content');
-        const icon = createElement('span', 'ea-collapse-item_title-icon');
-        const titleWrap = createElement('div', 'ea-collapse-item_title', [titleContent, icon]);
-        const contentSlot = createSlotElement('');
-        const contentWrap = createElement('div', 'ea-collapse-item_content', [contentSlot]);
-
-        const wrap = createElement('div', 'ea-collapse-item_wrap', [titleWrap, contentWrap]);
-
-        this.#wrap = wrap;
-        this.#titleWrap = titleWrap;
-        this.#titleContent = titleContent;
-        this.#titleIcon = icon;
-        this.#contentWrap = contentWrap;
+        this.#wrap = shadowRoot.querySelector('.ea-collapse-item_wrap');
+        this.#titleWrap = shadowRoot.querySelector('.ea-collapse-item_title');
+        this.#titleContent = shadowRoot.querySelector('.ea-collapse-item_title-content');
+        this.#titleIcon = shadowRoot.querySelector('.ea-collapse-item_title-icon');
+        this.#contentWrap = shadowRoot.querySelector('.ea-collapse-item_content');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- title 标题 -------
@@ -252,7 +221,6 @@ export class EaCollapseItem extends Base {
             this.#contentWrap.style.height = `${height}px`;
             this.#contentWrap.style.paddingBottom = '20px';
             this.#titleIcon.style.rotate = '45deg';
-
         } else {
             this.#contentWrap.style.height = '0px';
             this.#contentWrap.style.paddingBottom = '0px';
@@ -262,30 +230,20 @@ export class EaCollapseItem extends Base {
     // #endregion
     // ------- end -------
 
-    #initCollapseChange() {
-        const that = this;
-
-        this.#titleWrap.addEventListener('click', () => {
-            that.dispatchEvent(new CustomEvent('collapseItemStatusChange', {
-                detail: {
-                    name: that.name,
-                    isOpen: that.isOpen,
-                },
-            }));
-        });
-    }
-
-    init() {
-        const that = this;
-
+    connectedCallback() {
         this.title = this.title;
         this.name = this.name;
 
-        this.#initCollapseChange();
-    }
-
-    connectedCallback() {
-        this.init();
+        this.#titleWrap.addEventListener('click', (e) => {
+            this.dispatchEvent(new CustomEvent('change', {
+                detail: {
+                    name: this.name,
+                    isOpen: this.isOpen,
+                },
+                bubbles: true,
+                composed: true,
+            }));
+        });
     }
 }
 
