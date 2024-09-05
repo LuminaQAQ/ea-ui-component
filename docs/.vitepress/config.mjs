@@ -12,6 +12,7 @@ export default defineConfig({
 
   cleanUrls: true,
   lastUpdated: true,
+  // mpa: true,
 
   description: "基于 WebComponent 的 ui 库",
 
