@@ -2,7 +2,10 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    // import('../index.js')
+    import('../components/ea-descriptions/index.js')
+    import('../components/ea-descriptions-item/index.js')
+    import('../components/ea-tag/index.js')
     import('./index.scss')
 })
 </script>
@@ -13,15 +16,30 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+`js`
 
-```js
+```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-descriptions/index.js";
-  import
-  "./node_modules/easy-component-ui/components/ea-descriptions-item/index.js";
 </script>
 ```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
 
 ## 基础用法
 
@@ -36,6 +54,8 @@ onMounted(() => {
         <ea-descriptions-item span="2" label="联系地址">帝都东城区史家胡同123号</ea-descriptions-item>
     </ea-descriptions>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -53,6 +73,8 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## 带边框列表
 
 <div class="demo">
@@ -66,6 +88,8 @@ onMounted(() => {
         <ea-descriptions-item span="3" label="联系地址">帝都东城区史家胡同123号</ea-descriptions-item>
     </ea-descriptions>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -83,7 +107,9 @@ onMounted(() => {
 </div>
 ```
 
-## 自定义`label`
+:::
+
+## 自定义 label 属性插槽
 
 <div class="demo">
   <ea-descriptions title="带边框列表" border>
@@ -120,6 +146,8 @@ onMounted(() => {
   </ea-descriptions>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="demo">
   <ea-descriptions title="带边框列表" border>
@@ -146,6 +174,8 @@ onMounted(() => {
   </ea-descriptions>
 </div>
 ```
+
+:::
 
 ## 垂直列表
 
