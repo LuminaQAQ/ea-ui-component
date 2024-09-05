@@ -2,8 +2,6 @@
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
-import { createElement, createSlotElement } from "../../utils/createElement.js"
-
 const stylesheet = `
 .ea-container_wrap {
   display: flex;
@@ -15,15 +13,32 @@ const stylesheet = `
 .ea-container_wrap.is-vertical {
   flex-direction: column;
 }
+.ea-container_wrap ::slotted(ea-main) {
+  flex: 1;
+  overflow: auto;
+}
 `;
 
 export class EaContainer extends Base {
     #wrap;
 
-    #slot;
-
     get CONTAINER_TYPE() {
         return ['ea-header', 'ea-main', 'ea-footer', 'ea-container', 'ea-aside'];
+    }
+
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <div class="ea-container_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
+
+        this.#wrap = shadowRoot.querySelector('.ea-container_wrap');
+
+        this.build(shadowRoot, stylesheet);
     }
 
     // ------- direction 排列方向 -------
@@ -38,24 +53,6 @@ export class EaContainer extends Base {
     }
     // #endregion
     // ------- end -------
-
-    constructor() {
-        super();
-
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-container_wrap';
-        wrap.part = 'wrap';
-
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
-        this.#slot = slot;
-
-        this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
-    }
 
     #handleContainerChildren(containers) {
         const eachContainerTagName = containers.map(item => item.tagName.toLowerCase());
@@ -77,16 +74,10 @@ export class EaContainer extends Base {
         }
     }
 
-    #init() {
-        const that = this;
-
+    connectedCallback() {
         const containers = Array.from(this.children);
 
         this.#handleContainerChildren(containers);
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

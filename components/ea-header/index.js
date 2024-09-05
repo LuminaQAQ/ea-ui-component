@@ -2,14 +2,16 @@
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
-import { createElement, createSlotElement } from "../../utils/createElement.js"
-
 const stylesheet = `
 .ea-header_wrap {
   box-sizing: border-box;
   padding: 0 20px;
+
   height: 60px;
+
   color: #333;
+
+  overflow: hidden;
 }
 `;
 
@@ -19,17 +21,14 @@ export class EaHeader extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('header');
-        wrap.className = 'ea-header_wrap';
-        wrap.part = 'wrap';
-
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
+        shadowRoot.innerHTML = `
+            <header class="ea-header_wrap" part="container">
+                <slot></slot>
+            </header>
+        `;
+        this.#wrap = shadowRoot.querySelector('.ea-header_wrap');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- height 顶栏高度 -------
@@ -47,14 +46,8 @@ export class EaHeader extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        const that = this;
-
-        this.height = this.height;
-    }
-
     connectedCallback() {
-        this.#init();
+        this.height = this.height;
     }
 }
 
