@@ -4,12 +4,14 @@ import configs from "../components/ea-icon/config.json"
 
 onMounted(() => {
     import("./index.scss")
+    import("../components/ea-icon/index.js")
+    import("../components/ea-icon/index.css")
 })
 </script>
 
 # Icon 图标
 
-提供了一套常用的图标集合。
+提供了一套常用的图标集合。图标来源：https://fontello.com/
 
 ## 引入
 
@@ -42,11 +44,11 @@ onMounted(() => {
 
 <div class="main-icon-wrap">
     <section>
-        <i class="icon-spin6 animate-spin"></i>
+        <ea-icon icon="icon-spin6 animate-spin" size="19"></ea-icon>
         <span>icon-spin6 animate-spin</span>
     </section>
     <section v-for="(item, index) in configs.glyphs">
-        <i :class="'icon-' + item.css"></i>
+        <ea-icon :icon="'icon-' + item.css" size="19"></ea-icon>
         <span>icon-{{item.css}}</span>
     </section>
 </div>
