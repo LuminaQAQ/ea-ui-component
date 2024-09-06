@@ -57,9 +57,17 @@
     ::slotted(ea-textarea),
     ::slotted(ea-time-picker),
     ::slotted(ea-date-picker) {
-      border: 1px solid #f56c6c;
-      border-radius: 3px;
+      border-color: #f56c6c;
     }
+  }
+
+  ::slotted(ea-input),
+  ::slotted(ea-select),
+  ::slotted(ea-textarea),
+  ::slotted(ea-time-picker),
+  ::slotted(ea-date-picker) {
+    border: 1px solid transparent;
+    border-radius: 3px;
   }
 
   &.with-transition {
@@ -67,6 +75,9 @@
       .ea-form-item_invalid-wrap {
         transition: transform 0.3s;
       }
+    }
+    .ea-form-item_label-wrap {
+      transition: color 0.3s;
     }
   }
 }

@@ -44,9 +44,19 @@
 .ea-form-item_wrap.is-required ::slotted(ea-textarea),
 .ea-form-item_wrap.is-required ::slotted(ea-time-picker),
 .ea-form-item_wrap.is-required ::slotted(ea-date-picker) {
-  border: 1px solid #f56c6c;
+  border-color: #f56c6c;
+}
+.ea-form-item_wrap ::slotted(ea-input),
+.ea-form-item_wrap ::slotted(ea-select),
+.ea-form-item_wrap ::slotted(ea-textarea),
+.ea-form-item_wrap ::slotted(ea-time-picker),
+.ea-form-item_wrap ::slotted(ea-date-picker) {
+  border: 1px solid transparent;
   border-radius: 3px;
 }
 .ea-form-item_wrap.with-transition .ea-form-item_content-wrap .ea-form-item_invalid-wrap {
   transition: transform 0.3s;
+}
+.ea-form-item_wrap.with-transition .ea-form-item_label-wrap {
+  transition: color 0.3s;
 }
