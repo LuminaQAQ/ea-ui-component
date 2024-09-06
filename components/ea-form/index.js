@@ -110,6 +110,8 @@ export class EaForm extends Base {
                 const labelWrap = item.shadowRoot.querySelector('.ea-form-item_label-wrap');
                 if (labelWrap) labelWrap.style.width = `${max * 20}px`;
             });
+
+            this.dispatchEvent(new CustomEvent('ready', { bubbles: true }));
         }, 50);
     }
 }
