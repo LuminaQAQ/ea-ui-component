@@ -26,6 +26,7 @@ export class EaCheckboxGroup extends Base {
     }
 
     set name(val) {
+        this.setAttribute('name', val);
         this.querySelectorAll('ea-checkbox').forEach(checkbox => {
             checkbox.setAttribute('name', val);
             checkbox.name = val;
@@ -48,6 +49,7 @@ export class EaCheckboxGroup extends Base {
 
             valArr.map(item => {
                 const checkbox = this.querySelector(`ea-checkbox[value="${item}"]`);
+
                 checkbox.checked = 'true';
             })
 
@@ -89,10 +91,11 @@ export class EaCheckboxGroup extends Base {
     connectedCallback() {
         this.setAttribute('data-ea-component', true);
 
-        // name 唯一键值
-        this.name = this.name;
 
-        timeout(() => {
+        setTimeout(() => {
+            // name 唯一键值
+            this.name = this.name;
+
             // value 指定选中值
             this.value = this.value;
 
@@ -106,9 +109,9 @@ export class EaCheckboxGroup extends Base {
                 });
             });
             this.#handleValueUptate(checkboxes);
-
             this.#mounted = true;
-        }, 20);
+        }, 50);
+
     }
 }
 

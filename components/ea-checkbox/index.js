@@ -49,6 +49,7 @@ export class EaCheckbox extends Base {
   }
 
   set name(val) {
+    this.setAttribute('name', val);
     this.#checkbox.setAttribute('name', val);
   }
   // #endregion
@@ -60,7 +61,9 @@ export class EaCheckbox extends Base {
     return this.getAttribute('value');
   }
 
+
   set value(val) {
+    this.setAttribute('value', val);
     this.#label.setAttribute('for', val);
     this.#checkbox.setAttribute('id', val);
     this.#checkbox.setAttribute('value', val);

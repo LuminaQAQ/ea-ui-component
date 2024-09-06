@@ -152,7 +152,7 @@ export class EaInput extends Base {
 
         this.setAttribute("prefix", val);
 
-        createFixIcon(this.#wrap, val, 'prefix');
+        const a = createFixIcon(this.#wrap, val, 'prefix');
     }
 
     get surfixIcon() {

@@ -1,6 +1,7 @@
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 import { Validator } from "../../utils/Validator.js";
+import { timeout } from '../../utils/timeout.js';
 
 import "../ea-form-item/index.js"
 import '../ea-button/index.js'
@@ -99,14 +100,19 @@ export class EaForm extends Base {
     }
 
     connectedCallback() {
-        const formItemsWrap = this.querySelectorAll('ea-form-item');
+        timeout(() => {
+            const formItemsWrap = this.querySelectorAll('ea-form-item');
 
-        const lenArr = Array.from(formItemsWrap).map(item => item.label.length);
-        const max = Math.max(...lenArr);
+            const lenArr = Array.from(formItemsWrap).map(item => item.label.length);
+            const max = Math.max(...lenArr);
 
-        formItemsWrap.forEach(item => {
-            item.shadowRoot.querySelector('.ea-form-item_label-wrap').style.width = `${max * 20}px`;
-        });
+            formItemsWrap.forEach(item => {
+                timeout(() => {
+                    const labelWrap = item.shadowRoot.querySelector('.ea-form-item_label-wrap');
+                    if (labelWrap) labelWrap.style.width = `${max * 20}px`;
+                }, 0)
+            });
+        }, 50);
     }
 }
 

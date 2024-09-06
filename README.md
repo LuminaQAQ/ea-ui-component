@@ -92,7 +92,7 @@
 
   - [x] Container 布局容器, 开头描述中, 还是沿用的 `<el-container>`. `el` -> `ea`
   - [x] Checkbox 多选框, 缺少 attr, slot, event 描述
-  - [ ] Icon 图标, 缺少 图标来源
+  - [x] Icon 图标, 缺少 图标来源
   - [ ] Message 调整了 引入方式及 使用方式,
         引入方式改为 `import 'ea-ui'`
         使用方式改为 `window.$message.open()`
