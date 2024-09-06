@@ -25,10 +25,6 @@ onMounted(() => {
 
 ## 使用方法
 
-::: warning
-`VUE` 环境下，不推荐使用`ea-icon`方式。
-:::
-
 直接通过设置类名为 icon-iconName 来使用即可。例如：
 
 <i class="icon-spin6 animate-spin"></i>
