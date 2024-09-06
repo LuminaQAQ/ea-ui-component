@@ -1,12 +1,11 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
+
+import { timeout } from '../../utils/timeout.js';
 import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
 
 const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
 .ea-drawer_wrap {
   position: fixed;
   width: 100%;
@@ -161,43 +160,35 @@ export class EaDrawer extends Base {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    const wrap = document.createElement('div');
-    wrap.className = 'ea-drawer_wrap';
-    wrap.part = 'wrap';
+    shadowRoot.innerHTML = `
+      <div class="ea-drawer_wrap" part="container">
+        <div class="ea-drawer_drawer-wrap" part="drawer-wrap">
+          <div class="ea-drawer_header-wrap" part="header-wrap">
+            <span class="ea-drawer_title" part="title-wrap">
+              <slot name="title"></slot>
+            </span>
+            <ea-icon class="ea-drawer_icon" icon="icon-cancel" part="icon"></ea-icon>
+          </div>
+          <div class="ea-drawer_main-wrap" part="main-wrap">
+            <slot></slot>
+          </div>
+          <div class="ea-drawer_mask-wrap" part="mask-wrap"></div>
+        </div>
+      </div>
+    `;
 
-    const maskWrap = createElement('div', 'ea-drawer_mask-wrap');
-    maskWrap.part = 'mask-wrap';
 
-    const headerSlot = createSlotElement('title');
-    const headerTitleWrap = createElement('span', 'ea-drawer_title', [headerSlot]);
-    const headerCloseIcon = createElement('i', 'ea-drawer_icon icon-cancel');
-    const headerWrap = createElement('div', 'ea-drawer_header-wrap', [headerTitleWrap, headerCloseIcon]);
-    headerWrap.part = 'header-wrap';
+    this.#wrap = shadowRoot.querySelector('.ea-drawer_wrap');
+    this.#drawerWrap = shadowRoot.querySelector('.ea-drawer_drawer-wrap');
+    this.#maskWrap = shadowRoot.querySelector('.ea-drawer_mask-wrap');
 
-    const mainSlot = createSlotElement();
-    const mainWrap = createElement('div', 'ea-drawer_main-wrap', [mainSlot]);
-    mainWrap.part = 'main-wrap';
-    const drawerWrap = createElement('div', 'ea-drawer_drawer-wrap', [headerWrap, mainWrap, maskWrap]);
-    drawerWrap.part = 'drawer-wrap';
-    wrap.appendChild(drawerWrap);
-
-    this.#wrap = wrap;
-    this.#drawerWrap = drawerWrap;
-    this.#maskWrap = maskWrap;
-
-    this.#headerWrap = headerWrap;
-    this.#headerTitleWrap = headerTitleWrap;
-    this.#headerCloseIcon = headerCloseIcon;
+    this.#headerWrap = shadowRoot.querySelector('.ea-drawer_header-wrap');
+    this.#headerTitleWrap = shadowRoot.querySelector('.ea-drawer_title');
+    this.#headerCloseIcon = shadowRoot.querySelector('.ea-drawer_icon');
 
     this.build(shadowRoot, stylesheet);
-    this.shadowRoot.appendChild(wrap);
   }
 
-  /**
-   * 获取文本方向类型
-   * 
-   * @returns {Array} 文本方向类型的数组，包括左到右（ltr）、右到左（rtl）、顶到底（ttb）、底到顶（btt）
-   */
   get directionType() {
     return ['ltr', 'rtl', 'ttb', 'btt'];
   }
@@ -232,8 +223,7 @@ export class EaDrawer extends Base {
   set open(value) {
     this.toggleAttr('open', value);
 
-    setTimeout(() => {
-      // this.#maskWrap.style.display = value ? 'block' : 'none';
+    timeout(() => {
       this.#wrap.classList.toggle('is-open', value);
     }, 20);
   }
@@ -242,15 +232,6 @@ export class EaDrawer extends Base {
 
   // ------- size 抽屉宽度 -------
   // #region
-  #handleDirectionAndSizeChange(value) {
-
-    const directionSize = this.direction === "ltr" || this.direction === "rtl" ? 'width' : 'height';
-
-    this.#drawerWrap.style.height = 'inherit';
-    this.#drawerWrap.style.width = 'inherit';
-
-    this.#drawerWrap.style[directionSize] = value;
-  }
 
   get size() {
     return this.getAttribute('size') || '30%';
@@ -342,11 +323,19 @@ export class EaDrawer extends Base {
   // #endregion
   // ------- end -------
 
-  #handleDrawerClose() {
-    const that = this;
+  #handleDirectionAndSizeChange(value) {
 
+    const directionSize = this.direction === "ltr" || this.direction === "rtl" ? 'width' : 'height';
+
+    this.#drawerWrap.style.height = 'inherit';
+    this.#drawerWrap.style.width = 'inherit';
+
+    this.#drawerWrap.style[directionSize] = value;
+  }
+
+  #initDrawerCloseEvent() {
     const callback = () => {
-      that.open = false;
+      this.open = false;
       this.#wrap.classList.remove('will-close');
 
       this.#drawerWrap.removeEventListener('transitionend', callback);
@@ -376,9 +365,7 @@ export class EaDrawer extends Base {
     }
   }
 
-  #init() {
-    const that = this;
-
+  connectedCallback() {
     this.direction = this.direction;
 
     this.size = this.size;
@@ -395,11 +382,7 @@ export class EaDrawer extends Base {
 
     this.open = false;
 
-    this.#handleDrawerClose();
-  }
-
-  connectedCallback() {
-    this.#init();
+    this.#initDrawerCloseEvent();
   }
 }
 
