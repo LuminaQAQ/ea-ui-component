@@ -1,14 +1,12 @@
 // @ts-nocheck
-import setStyle from "../../utils/setStyle";
-import Base from "../Base";
+import { timeout } from "../../utils/timeout.js";
+import Base from "../Base.js";
 
 const stylesheet = `
-.ea-radio-group {
+.ea-radio-group_wrap {
   display: flex;
 }
-.ea-radio-group ea-radio {
-  margin-right: 2rem;
-}`;
+`;
 
 export class EaRadioGroup extends Base {
 
@@ -16,19 +14,12 @@ export class EaRadioGroup extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-
-        const dom = document.createElement('div');
-        shadowRoot.appendChild(dom);
-        const slot = document.createElement('slot');
-        dom.className = "ea-radio-group";
-        dom.appendChild(slot);
-
-
-        this.dom = dom;
-
+        shadowRoot.innerHTML = `
+            <div class="ea-radio-group_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
         this.build(shadowRoot, stylesheet);
-
-        shadowRoot.appendChild(dom);
     }
 
     // ------- name 唯一键值 -------
@@ -38,6 +29,7 @@ export class EaRadioGroup extends Base {
     }
 
     set name(val) {
+        this.setAttribute("name", val);
         this.querySelectorAll('ea-radio').forEach(radio => {
             radio.setAttribute('name', val);
         });
@@ -45,13 +37,57 @@ export class EaRadioGroup extends Base {
     // #endregion
     // ------- end -------
 
-    init() {
-        // name 唯一键值
-        this.name = this.name;
+    // ------- value 值 -------
+    // #region
+    get value() {
+        return this.getAttribute('value') || '';
+    }
+
+    set value(val) {
+        if (!val) return;
+
+        this.setAttribute("value", val);
+    }
+    // #endregion
+    // ------- end -------
+
+    #initValue(radios) {
+        radios.forEach(radio => {
+            if (radio.checked) this.value = radio.value;
+
+            radio.addEventListener('change', e => {
+                this.value = radio.value;
+
+                this.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        target: radio,
+                        value: this.value
+                    }
+                }));
+            });
+        });
+    }
+
+    #initRadioChecked(radios) {
+        const valueRadio = Array.from(radios).find(radio => radio.value === this.value);
+        if (valueRadio) valueRadio.checked = true;
     }
 
     connectedCallback() {
-        this.init();
+        this.setAttribute("data-ea-component", true);
+
+        // name 唯一键值
+        this.name = this.name;
+
+        this.value = this.value;
+
+        timeout(() => {
+            const radios = this.querySelectorAll('ea-radio');
+            this.#initValue(radios);
+            this.#initRadioChecked(radios);
+        }, 20);
     }
 }
 

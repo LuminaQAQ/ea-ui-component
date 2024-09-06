@@ -4,10 +4,9 @@ import { onMounted, ref } from 'vue'
 const btn = ref(null);
 
 onMounted(() => {
-  // import('../index.js')
   import('../components/ea-checkbox-group/index.js')
   import('../components/ea-checkbox/index.js')
-  import('../components/ea-button/ea-button.js')
+  import('../components/ea-button/index.js')
   import('../components/ea-switch/index.js')
   import('./index.scss')
 
@@ -37,6 +36,7 @@ onMounted(() => {
     group: document.querySelector("#cityGroup"),
     init() {
       this.btn.addEventListener("click", () => {
+        console.log(this.group.value);
         alert(`[${this.group.value}]`);
       });
     },

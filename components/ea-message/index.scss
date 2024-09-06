@@ -1,5 +1,4 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
 $themes-light: (
   success: (
@@ -52,12 +51,14 @@ $themes-light: (
 
   .ea-text-content {
     line-height: 1;
+    margin-right: auto;
 
     vertical-align: middle;
   }
 
   .ea-close-icon {
     margin-left: auto;
+    display: none;
   }
 
   @each $theme-name, $theme-color in $themes-light {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 
@@ -28,6 +27,6 @@ export class EaMain extends Base {
     }
 }
 
-if (!window.customElements.get('ea-main')) {
+if (!customElements.get('ea-main')) {
     customElements.define('ea-main', EaMain);
 }

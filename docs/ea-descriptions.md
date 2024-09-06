@@ -113,11 +113,6 @@ onMounted(() => {
 
 ## 自定义 label 属性插槽
 
-::: warning
-已知： 项目环境: `VUE` , 组件: `ea-descriptions`(本组件) <br>
-在这种情况下, 该项目的[图标组件](./ea-icon.md)可能在 **开发环境** 中正常显示，但在 **生产环境** 中无法显示。
-:::
-
 <div class="demo">
   <ea-descriptions title="带边框列表" border>
     <ea-descriptions-item>

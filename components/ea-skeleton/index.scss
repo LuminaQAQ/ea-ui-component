@@ -1,96 +1,16 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
-
-@keyframes skeleton-loading {
-  0% {
-    background-position: 100% 50%;
-  }
-}
-
-.ea-skeleton_item,
-.ea-skeleton-item_wrap {
-  position: relative;
-  display: inline-block;
-  background-color: #f2f2f2;
-  height: 16px;
-  border-radius: 4px;
-}
-
-.ea-skeleton-item_wrap {
-  &.animated {
-    background-image: linear-gradient(
-      90deg,
-      #f6f6f6 25%,
-      #e8e8e8 37%,
-      #f6f6f6 63%
-    );
-
-    background-size: 400% 100%;
-
-    animation: skeleton-loading 1.4s ease infinite;
-  }
-}
-
-.ea-skeleton_wrap {
-  &.animated {
-    .ea-skeleton_item {
-      background-image: linear-gradient(
-        90deg,
-        #f6f6f6 25%,
-        #e8e8e8 37%,
-        #f6f6f6 63%
-      );
-
-      background-size: 400% 100%;
-
-      animation: skeleton-loading 1.4s ease infinite;
-    }
-  }
-}
 
 .ea-skeleton_wrap {
   width: 100%;
+  position: relative;
+  border-radius: 4px;
 
-  .ea-skeleton_item {
-    &.el-skeleton_p {
-      width: 100%;
-
-      &.el-skeleton_paragraph {
-        width: 100%;
-        margin-top: 16px;
-      }
-
-      &.is-first {
-        width: 33%;
-      }
-
-      &.is-last {
-        width: 61%;
-      }
-    }
-  }
-}
-
-.ea-skeleton-item_wrap {
-  .skeleton-image {
-    width: 30%;
-    height: 30%;
+  ea-skeleton-item[variant="p"]:first-child {
+    --p-width: 33%;
+    --margin-top: 0;
   }
 
-  &.ea-skeleton_p {
-    width: 100%;
-  }
-
-  &.ea-skeleton_image {
-    width: unset;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0;
-  }
-
-  &.ea-skeleton_text {
-    width: 100%;
-    height: 13px;
+  ea-skeleton-item[variant="p"]:last-child {
+    --p-width: 61%;
   }
 }

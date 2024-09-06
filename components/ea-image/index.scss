@@ -1,15 +1,6 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
 .ea-image_wrap {
-  &.is-loading,
-  &.is-error {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f7fa;
-  }
-
   &.is-error {
     svg {
       width: 20px;

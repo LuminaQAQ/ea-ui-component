@@ -1,16 +1,7 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
-const stylesheet = `
-.ea-pane_wrap {
-  display: none;
-}
-.ea-pane_wrap.is-actived {
-  display: block;
-}
-`;
+import { stylesheet } from './src/stylesheet.js';
 
 export class EaPane extends Base {
     #wrap;
@@ -18,17 +9,15 @@ export class EaPane extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-pane_wrap';
-        wrap.part = 'wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-pane_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
 
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
+        this.#wrap = shadowRoot.querySelector('.ea-pane_wrap');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- actived 是否激活 -------
@@ -56,14 +45,6 @@ export class EaPane extends Base {
     }
     // #endregion
     // ------- end -------
-
-    #init() {
-        const that = this;
-    }
-
-    connectedCallback() {
-        this.#init();
-    }
 }
 
 if (!customElements.get('ea-pane')) {

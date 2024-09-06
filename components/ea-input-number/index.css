@@ -1,11 +1,3 @@
-@import "../ea-icon/css/fontello.css";
-@import "../ea-icon/css/animation.css";
-@font-face {
-  font-size: 1rem;
-  font-size: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
-}
 .ea-input-number_wrap {
   display: flex;
   align-items: center;
@@ -45,18 +37,6 @@
   cursor: not-allowed;
   color: #c0c4cc;
 }
-.ea-input-number_wrap .ea-input-number_sign.ea-input-number_sign--medium {
-  height: 1.75rem;
-  width: 1.75rem;
-}
-.ea-input-number_wrap .ea-input-number_sign.ea-input-number_sign--small {
-  height: 1.5rem;
-  width: 1.5rem;
-}
-.ea-input-number_wrap .ea-input-number_sign.ea-input-number_sign--mini {
-  height: 1.25rem;
-  width: 1.25rem;
-}
 .ea-input-number_wrap .ea-input-number_inner {
   box-sizing: border-box;
   box-shadow: none;
@@ -95,25 +75,46 @@
 }
 .ea-input-number_wrap .ea-input-number_inner.disabled {
   pointer-events: none;
-  color: #c0c4cc;
   cursor: not-allowed;
+  color: #c0c4cc;
   background-color: #f5f7fa;
-}
-.ea-input-number_wrap .ea-input-number_inner.ea-input-number_inner--medium {
-  height: 1.75rem;
-  line-height: 1.75rem;
-}
-.ea-input-number_wrap .ea-input-number_inner.ea-input-number_inner--small {
-  height: 1.5rem;
-  line-height: 1.5rem;
-}
-.ea-input-number_wrap .ea-input-number_inner.ea-input-number_inner--mini {
-  height: 1.25rem;
-  line-height: 1.25rem;
 }
 .ea-input-number_wrap.focus {
   border: 1px solid #409eff;
 }
 .ea-input-number_wrap.focus .ea-input-number_sign {
   border-color: transparent;
+}
+.ea-input-number_wrap.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.ea-input-number_wrap.disabled .ea-input-number_sign,
+.ea-input-number_wrap.disabled .ea-input-number_inner {
+  color: #c0c4cc;
+  border-color: #dcdfe6;
+}
+.ea-input-number_wrap.ea-input-number--medium .ea-input-number_sign {
+  height: 1.75rem;
+  width: 1.75rem;
+}
+.ea-input-number_wrap.ea-input-number--medium .ea-input-number_inner {
+  height: 1.75rem;
+  line-height: 1.75rem;
+}
+.ea-input-number_wrap.ea-input-number--small .ea-input-number_sign {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+.ea-input-number_wrap.ea-input-number--small .ea-input-number_inner {
+  height: 1.5rem;
+  line-height: 1.5rem;
+}
+.ea-input-number_wrap.ea-input-number--mini .ea-input-number_sign {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+.ea-input-number_wrap.ea-input-number--mini .ea-input-number_inner {
+  height: 1.25rem;
+  line-height: 1.25rem;
 }

@@ -7,7 +7,7 @@ onMounted(() => {
     import('../components/ea-icon/index.js')
     import('../components/ea-icon/index.css')
     
-    import('../components/ea-button/ea-button.js')
+    import('../components/ea-button/index.js')
     import('../components/ea-tabs/index.js')
 
     const editableObj = {

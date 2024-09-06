@@ -1,51 +1,7 @@
 // @ts-nocheck
-import Base from '../Base';
+import Base from '../Base.js';
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-badge_wrap {
-  position: relative;
-  vertical-align: middle;
-  display: inline-block;
-}
-.ea-badge_wrap .ea-badge_content {
-  display: inline-block;
-  padding: 0 0.375rem;
-  border-radius: 0.625rem;
-  border: 1px solid #fff;
-  height: 1.125rem;
-  line-height: 1.125rem;
-  position: absolute;
-  right: 0.625rem;
-  top: 0;
-  transform: translate(100%, -50%);
-  color: #fff;
-  font-size: 0.75rem;
-  text-align: center;
-  white-space: nowrap;
-  background-color: #f56c6c;
-}
-.ea-badge_wrap .ea-badge_content.primary {
-  background-color: #409eff;
-}
-.ea-badge_wrap .ea-badge_content.success {
-  background-color: #67c23a;
-}
-.ea-badge_wrap .ea-badge_content.warning {
-  background-color: #e6a23c;
-}
-.ea-badge_wrap .ea-badge_content.info {
-  background-color: #909399;
-}
-.ea-badge_wrap .ea-badge_content.dot {
-  right: 0.3125rem;
-  padding: 0;
-  border-radius: 50%;
-  width: 0.5rem;
-  height: 0.5rem;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaBadge extends Base {
   #wrap;
@@ -55,21 +11,17 @@ export class EaBadge extends Base {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    const wrap = document.createElement('div');
-    wrap.className = 'ea-badge_wrap';
+    shadowRoot.innerHTML = `
+        <div class="ea-badge_wrap" part='container'>
+            <slot></slot>
+            <sup class="ea-badge_content" part='content'></sup>
+        </div>
+    `;
 
-    const slot = document.createElement('slot');
-    wrap.appendChild(slot);
-
-    const badgeWrap = document.createElement('sup');
-    badgeWrap.className = 'ea-badge_content';
-    wrap.appendChild(badgeWrap);
-
-    this.#wrap = wrap;
-    this.#badgeWrap = badgeWrap;
+    this.#wrap = shadowRoot.querySelector('.ea-badge_wrap');
+    this.#badgeWrap = shadowRoot.querySelector('.ea-badge_content');
 
     this.build(shadowRoot, stylesheet);
-    this.shadowRoot.appendChild(wrap);
   }
 
   // ------- value 徽章内的值 -------
@@ -135,9 +87,7 @@ export class EaBadge extends Base {
   // #endregion
   // ------- end -------
 
-  init() {
-    const that = this;
-
+  connectedCallback() {
     this.value = this.value;
 
     this.type = this.type;
@@ -145,15 +95,6 @@ export class EaBadge extends Base {
     this.max = this.max;
 
     this.isDot = this.isDot;
-
-    try {
-      const button = this.querySelector('ea-button');
-      if (button) button.style.setProperty('--margin-right', '0');
-    } catch (error) { }
-  }
-
-  connectedCallback() {
-    this.init();
   }
 }
 

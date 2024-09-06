@@ -4,10 +4,6 @@
   background-color: #fff;
   overflow: hidden;
 }
-.ea-table_wrap.stripe .ea-table__row:nth-child(2n),
-.ea-table_fixed-column.stripe .ea-table__row:nth-child(2n) {
-  background-color: #fafafa;
-}
 .ea-table_wrap .ea-table_header-wrap .ea-table_header,
 .ea-table_wrap .ea-table_body-wrap .ea-table_main,
 .ea-table_wrap .ea-table_main,

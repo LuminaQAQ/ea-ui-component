@@ -5,7 +5,7 @@ const btn = ref(null);
 
 onMounted(() => {
   import('../components/ea-icon/index.css')
-  import('../components/ea-button/ea-button.js')
+  import('../components/ea-button/index.js')
   import('../components/ea-button-group/index.js')
   import('../components/ea-switch/index.js')
   import('./index.scss')
@@ -20,7 +20,7 @@ onMounted(() => {
 
   document
     .querySelector("#ea-radio-loading")
-    .addEventListener("click", function (e) {
+    .addEventListener("change", function (e) {
       const btn = document.querySelector("#ea-button-loading");
 
       e.target.checked
@@ -280,7 +280,7 @@ btn.addEventListener("click", function (e) {
 点击按钮后进行数据加载操作，在按钮上显示加载状态。可以点击尝试。
 
 <div class="row left">
-  <ea-switch id="ea-radio-loading"></ea-switch>
+  <ea-switch id="ea-radio-loading" checked></ea-switch>
   <ea-button id="ea-button-loading" type="primary" loading>加载中按钮</ea-button>
 </div>
 

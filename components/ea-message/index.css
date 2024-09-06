@@ -1,11 +1,3 @@
-@import "../ea-icon/css/fontello.css";
-@import "../ea-icon/css/animation.css";
-@font-face {
-  font-size: 1rem;
-  font-size: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
-}
 .ea-message_wrap {
   position: fixed;
   left: 50%;
@@ -30,10 +22,12 @@
 }
 .ea-message_wrap .ea-text-content {
   line-height: 1;
+  margin-right: auto;
   vertical-align: middle;
 }
 .ea-message_wrap .ea-close-icon {
   margin-left: auto;
+  display: none;
 }
 .ea-message_wrap.ea-message--success {
   background-color: #f0f9eb;

@@ -1,118 +1,37 @@
-// @ts-nocheck
-import Base from '../Base';
+import Base from '../Base.js';
+import "../ea-icon/index.js"
+import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
+
 import { createElement } from '../../utils/createElement.js';
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-alert_wrap {
-  position: relative;
-  box-sizing: border-box;
-  overflow: hidden;
-  border-radius: 4px;
-  padding: 8px 16px;
-  margin: 20px 0 0;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  opacity: 1;
-  transition: opacity 0.2s;
-}
-.ea-alert_wrap .ea-alert_content {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.ea-alert_wrap .ea-alert_content .ea-alert_title {
-  display: flex;
-  align-items: center;
-}
-.ea-alert_wrap .ea-alert_content .ea-alert_title i {
-  margin-right: 0.5rem;
-}
-.ea-alert_wrap .ea-alert_content .ea-alert_close-icon {
-  color: #c0c4cc;
-  cursor: pointer;
-}
-.ea-alert_wrap .ea-alert_content.ea-alert--center .ea-alert_title,
-.ea-alert_wrap .ea-alert_content.ea-alert--center .ea-alert_close-icon {
-  margin-left: auto;
-}
-.ea-alert_wrap .ea-alert_description {
-  width: 100%;
-  margin: 5px 0 0;
-  font-size: 12px;
-}
-.ea-alert_wrap.ea-alert--success {
-  background-color: #f0f9eb;
-  color: #67c23a;
-}
-.ea-alert_wrap.ea-alert--success.ea-alert--dark {
-  color: #fff;
-  background-color: #67c23a;
-}
-.ea-alert_wrap.ea-alert--success.ea-alert--dark .ea-alert_close-icon {
-  color: #fff;
-}
-.ea-alert_wrap.ea-alert--info {
-  background-color: #f4f4f5;
-  color: #909399;
-}
-.ea-alert_wrap.ea-alert--info.ea-alert--dark {
-  color: #fff;
-  background-color: #909399;
-}
-.ea-alert_wrap.ea-alert--info.ea-alert--dark .ea-alert_close-icon {
-  color: #fff;
-}
-.ea-alert_wrap.ea-alert--warning {
-  background-color: #fdf6ec;
-  color: #e6a23c;
-}
-.ea-alert_wrap.ea-alert--warning.ea-alert--dark {
-  color: #fff;
-  background-color: #e6a23c;
-}
-.ea-alert_wrap.ea-alert--warning.ea-alert--dark .ea-alert_close-icon {
-  color: #fff;
-}
-.ea-alert_wrap.ea-alert--error {
-  background-color: #fef0f0;
-  color: #f56c6c;
-}
-.ea-alert_wrap.ea-alert--error.ea-alert--dark {
-  color: #fff;
-  background-color: #f56c6c;
-}
-.ea-alert_wrap.ea-alert--error.ea-alert--dark .ea-alert_close-icon {
-  color: #fff;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaAlert extends Base {
   #wrap;
 
   #alertContent;
   #alertTitle;
+  #closeIcon;
 
   constructor() {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    const wrap = document.createElement('div');
-    wrap.className = 'ea-alert_wrap';
+    shadowRoot.innerHTML = `
+      <div class='ea-alert_wrap' part='container'>
+        <div class="ea-alert_content" part='content-wrap'>
+          <span class="ea-alert_title" part='title'></span>
+          <ea-icon class="ea-alert_close-icon" part='icon'></ea-icon>
+        </div>
+      </div>
+    `;
 
-    const alertTitle = createElement('span', 'ea-alert_title');
-    const alertContent = createElement('div', 'ea-alert_content', alertTitle);
-    wrap.appendChild(alertContent);
-
-    this.#wrap = wrap;
-    this.#alertContent = alertContent;
-    this.#alertTitle = alertTitle;
+    this.#wrap = shadowRoot.querySelector('.ea-alert_wrap');
+    this.#alertContent = shadowRoot.querySelector('.ea-alert_content');
+    this.#alertTitle = shadowRoot.querySelector('.ea-alert_title');
+    this.#closeIcon = shadowRoot.querySelector('.ea-alert_close-icon');
 
     this.build(shadowRoot, stylesheet);
-    this.shadowRoot.appendChild(wrap);
   }
 
   // ------- type 获取提示类型 -------
@@ -146,15 +65,13 @@ export class EaAlert extends Base {
   // ------- closable 是否可关闭 -------
   // #region
   get closable() {
-    const flag = this.getAttribute('closable');
-
-    if (flag === null || flag === "true" || flag === "") return true;
-
-    return false;
+    return handleDefaultAttrIsTrue('closable');
   }
 
   set closable(value) {
     this.setAttribute('closable', value);
+
+    this.#closeIcon.style.display = value ? 'block' : 'none';
   }
   // #endregion
   // ------- end -------
@@ -180,11 +97,7 @@ export class EaAlert extends Base {
   set effect(value) {
     this.setAttribute('effect', value);
 
-    if (value === "dark") {
-      this.#wrap.classList.add('ea-alert--dark');
-    } else {
-      this.#wrap.classList.remove('ea-alert--dark');
-    }
+    this.#wrap.classList.toggle('ea-alert--dark', value === "dark");
   }
   // #endregion
   // ------- end -------
@@ -227,47 +140,53 @@ export class EaAlert extends Base {
   // #endregion
   // ------- end -------
 
-  initClosableElement(closable, closeText) {
-    const that = this;
+  #initClosableElement() {
+    if (!this.closable) return;
 
-    const closeIcon = createElement('i', 'ea-alert_close-icon');
-    closable === true && closeText === "" ? closeIcon.classList.add('icon-cancel') : closeIcon.innerText = closeText;
-    this.#alertContent.appendChild(closeIcon);
+    this.closable === true && this.closeText === "" ? this.#closeIcon.icon = 'icon-cancel' : this.#closeIcon.innerText = this.closeText;
 
-    closeIcon.addEventListener('click', function () {
-      that.#wrap.style.opacity = 0;
+    this.#closeIcon.addEventListener('click', () => {
+      this.#wrap.style.opacity = 0;
 
-      that.dispatchEvent(new CustomEvent('close', { detail: { target: that } }));
+      this.dispatchEvent(new CustomEvent('close', { detail: { target: this.#closeIcon } }));
     });
 
-    this.#wrap.addEventListener('transitionend', function () {
-      that.remove();
+    this.#wrap.addEventListener('transitionend', () => {
+      this.remove();
     });
   }
 
-  initShowIconElement(type) {
-    const iconClass = {
+  get iconList() {
+    return {
       success: 'ok-circled',
       info: 'info',
       warning: 'attention-alt',
       error: 'cancel-circled'
     }
+  }
 
-    const icon = createElement('i', `icon-${iconClass[type]}`);
-    icon.classList.add(`ea-alert--${type}`);
+  #initShowIconElement() {
+    if (!this.showIcon) return;
+
+    const icon = createElement('ea-icon');
+    icon.icon = `icon-${this.iconList[this.type]}`;
+    icon.classList.add(`ea-alert--${this.type}`);
+
     this.#alertTitle.insertBefore(icon, this.#alertTitle.firstChild);
   }
 
-  initDescriptionElement(description) {
+  #initDescriptionElement() {
+    if (!this.description) return;
+
     const descriptionElement = createElement('p', 'ea-alert_description');
+    descriptionElement.part = 'description';
     this.#wrap.style.flexDirection = 'column';
 
-    descriptionElement.innerText = description;
+    descriptionElement.innerText = this.description;
     this.#wrap.appendChild(descriptionElement);
   }
 
-  init() {
-
+  connectedCallback() {
     this.type = this.type;
 
     this.title = this.title;
@@ -280,15 +199,9 @@ export class EaAlert extends Base {
 
     this.center = this.center;
 
-    if (this.closable) this.initClosableElement(this.closable, this.closeText);
-
-    if (this.showIcon) this.initShowIconElement(this.type);
-
-    if (this.description) this.initDescriptionElement(this.description);
-  }
-
-  connectedCallback() {
-    this.init();
+    this.#initClosableElement();
+    this.#initShowIconElement();
+    this.#initDescriptionElement();
   }
 }
 

@@ -1,55 +1,30 @@
 // @ts-nocheck
-import { createElement, createSlotElement } from '../../utils/createElement.js';
+import { timeout } from '../../utils/timeout.js';
+import { handleMenuItemEvent } from './src/utils/handleMenuItemEvent.js';
+
+import { stylesheet } from './src/style/stylesheet.js';
+
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-
-import "../ea-menu-item-group/index.js"
 import "../ea-menu-item/index.js"
 import "../ea-submenu/index.js"
-
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-menu_wrap {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 20px;
-}
-.ea-menu_wrap.is-vertical {
-  flex-direction: column;
-  align-items: flex-start;
-  border-right: 1px solid #e6e6e6;
-  overflow: auto;
-}
-.ea-menu_wrap.is-vertical ::slotted(ea-menu-item),
-.ea-menu_wrap.is-vertical ::slotted(ea-submenu) {
-  width: 100%;
-}
-.ea-menu_wrap.is-vertical ::slotted(ea-submenu) {
-  width: 100%;
-}
-`;
+import "../ea-menu-item-group/index.js"
 
 export class EaMenu extends Base {
     #wrap;
-    #slot;
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-menu_wrap';
-        wrap.part = 'wrap';
+        shadowRoot.innerHTML = `
+            <div class="ea-menu_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
 
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
-        this.#slot = slot;
+        this.#wrap = shadowRoot.querySelector('.ea-menu_wrap');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- mode 顶栏排列方式 -------
@@ -119,68 +94,11 @@ export class EaMenu extends Base {
         this.querySelectorAll('ea-menu-item-group').forEach((item) => {
             if (this.mode === 'vertical') item.collapse = !value;
         });
-
-        // if (this.mode === 'vertical') this.#wrap.style.width = '48px';
     }
     // #endregion
     // ------- end -------
 
-    #handleMenuItemEvent() {
-        const items = this.querySelectorAll('ea-menu-item');
-        const subMenuItems = this.querySelectorAll('ea-submenu');
-        const menuItemGroups = this.querySelectorAll('ea-menu-item-group');
-
-        const callback = (item, index) => {
-            item.actived = false;
-        }
-
-
-        items.forEach((item, index) => {
-            item.itemIndex = index;
-
-            item.addEventListener('item-selected', (e) => {
-                const itemTitle = e.detail.title;
-
-                items.forEach(callback);
-
-                subMenuItems.forEach(callback);
-
-                menuItemGroups.forEach(callback);
-
-                item.actived = true;
-
-                this.dispatchEvent(new CustomEvent('select', {
-                    detail: {
-                        index,
-                        title: itemTitle,
-                    },
-                }));
-            });
-        });
-
-    }
-
-    #handleMenuColorStyle() {
-        const normalItems = this.querySelectorAll('ea-menu-item');
-        const subItems = this.querySelectorAll('ea-submenu');
-        const menuItemGroups = this.querySelectorAll('ea-menu-item-group');
-
-        const callback = (item, index) => {
-            item.backgroundColor = this.backgroundColor;
-            item.textColor = this.textColor;
-            item.activeTextColor = this.activeTextColor;
-        }
-
-        normalItems.forEach(callback);
-
-        subItems.forEach(callback);
-
-        menuItemGroups.forEach(callback);
-    }
-
-    #init() {
-        const that = this;
-
+    connectedCallback() {
         this.mode = this.mode;
 
         this.collapse = true;
@@ -189,18 +107,22 @@ export class EaMenu extends Base {
         this.textColor = this.textColor;
         this.activeTextColor = this.activeTextColor;
 
-        this.#handleMenuItemEvent();
+        const menuItems = this.querySelectorAll('ea-menu-item');
+        const subMenuItems = this.querySelectorAll('ea-submenu');
+        const menuItemGroups = this.querySelectorAll('ea-menu-item-group');
 
-        let timer = setTimeout(() => {
-            this.#handleMenuColorStyle();
+        handleMenuItemEvent.call(this, menuItems, subMenuItems, menuItemGroups);
 
-            clearTimeout(timer);
-            timer = null;
-        }, 20)
-    }
+        const callback = (item, index) => {
+            item.backgroundColor = this.backgroundColor;
+            item.textColor = this.textColor;
+            item.activeTextColor = this.activeTextColor;
+        }
+        menuItems.forEach(callback);
 
-    connectedCallback() {
-        this.#init();
+        subMenuItems.forEach(callback);
+
+        menuItemGroups.forEach(callback);
     }
 }
 

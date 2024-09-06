@@ -5,6 +5,7 @@ onMounted(() => {
     import('./index.scss')
 
     import('../components/ea-breadcrumb/index.js')
+    import('../components/ea-link/index.js')
 })
 </script>
 
@@ -48,10 +49,10 @@ onMounted(() => {
 <div class="demo">
     <ea-breadcrumb separator="/" separator-color="#c0c4cc">
         <ea-breadcrumb-item>
-            <a href="javascript:;">首页</a>
+          <ea-link href="javascript:;" type="primary" underline>首页</ea-link>
         </ea-breadcrumb-item>
         <ea-breadcrumb-item>
-            <a href="javascript:;">一级</a>
+          <ea-link href="javascript:;" type="primary" underline>一级</ea-link>
         </ea-breadcrumb-item>
         <ea-breadcrumb-item>二级</ea-breadcrumb-item>
         <ea-breadcrumb-item>三级</ea-breadcrumb-item>
@@ -66,10 +67,10 @@ onMounted(() => {
 <div class="demo">
   <ea-breadcrumb separator="/" separator-color="#c0c4cc">
     <ea-breadcrumb-item>
-      <a href="javascript:;">首页</a>
+      <ea-link href="javascript:;" type="primary" underline>首页</ea-link>
     </ea-breadcrumb-item>
     <ea-breadcrumb-item>
-      <a href="javascript:;">一级</a>
+      <ea-link href="javascript:;" type="primary" underline>一级</ea-link>
     </ea-breadcrumb-item>
     <ea-breadcrumb-item>二级</ea-breadcrumb-item>
     <ea-breadcrumb-item>三级</ea-breadcrumb-item>
@@ -88,7 +89,7 @@ onMounted(() => {
 <div class="demo">
     <ea-breadcrumb separator-class="icon-angle-right" separator-color="#c0c4cc">
         <ea-breadcrumb-item>
-            <a href="javascript:;">首页</a>
+          <ea-link href="javascript:;" type="primary" underline>一级</ea-link>
         </ea-breadcrumb-item>
         <ea-breadcrumb-item>一级</ea-breadcrumb-item>
         <ea-breadcrumb-item>二级</ea-breadcrumb-item>

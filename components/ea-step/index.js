@@ -1,96 +1,8 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
+import { timeout } from '../../utils/timeout.js';
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-step_wrap {
-  color: #c0c4cc;
-  transition: color 0.3s;
-}
-.ea-step_wrap .ea-step_head-wrap {
-  position: relative;
-}
-.ea-step_wrap .ea-step_head-wrap .ea-step_head-icon {
-  position: relative;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  background-color: #fff;
-  font-size: 14px;
-  z-index: 1;
-}
-.ea-step_wrap .ea-step_head-wrap .ea-step_head-icon.is-text {
-  border-radius: 50%;
-  border: 2px solid;
-}
-.ea-step_wrap .ea-step_head-wrap .ea-step_bar {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-left: 2px;
-  width: 100%;
-  height: 2px;
-  background-color: #c0c4cc;
-}
-.ea-step_wrap .ea-step_head-wrap.is-last {
-  flex-basis: auto;
-}
-.ea-step_wrap .ea-step_head-wrap.is-last .ea-step_bar {
-  display: none;
-}
-.ea-step_wrap .ea-step_main-wrap {
-  white-space: normal;
-  text-align: left;
-}
-.ea-step_wrap .ea-step_main-wrap .ea-step_title-wrap {
-  font-size: 16px;
-  line-height: 38px;
-}
-.ea-step_wrap .ea-step_main-wrap .ea-step_description-wrap {
-  margin-top: -5px;
-  font-size: 12px;
-  line-height: 20px;
-}
-.ea-step_wrap.is-process {
-  color: #303133;
-  border-color: #303133;
-}
-.ea-step_wrap.is-finish {
-  color: #67c23a;
-  border-color: #67c23a;
-}
-.ea-step_wrap.is-finish .ea-step_head-wrap .ea-step_bar {
-  background-color: #67c23a;
-}
-.ea-step_wrap.is-simple {
-  display: flex;
-  align-items: center;
-}
-.ea-step_wrap.is-simple .ea-step_head-wrap {
-  position: relative;
-}
-.ea-step_wrap.is-simple .ea-step_head-wrap .ea-step_bar {
-  position: relative;
-  width: auto;
-  height: auto;
-  transform: translateY(0%);
-  margin-left: 2px;
-  flex: 1;
-}
-.ea-step_wrap.is-simple .ea-step_main-wrap {
-  margin-left: 16px;
-  line-height: 24px;
-  height: 24px;
-}
-.ea-step_wrap.is-simple .ea-step_main-wrap .ea-step_title-wrap {
-  line-height: 24px;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaStep extends Base {
   #wrap;
@@ -101,8 +13,7 @@ export class EaStep extends Base {
 
   #titleWrap;
   #descriptionWrap;
-
-  #headSlot;
+  
   #titleSlot;
   #descriptionSlot;
 
@@ -110,38 +21,34 @@ export class EaStep extends Base {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
-    const wrap = document.createElement('div');
-    wrap.className = 'ea-step_wrap';
-    wrap.part = 'wrap';
+    shadowRoot.innerHTML = `
+      <div class="ea-step_wrap" part="container">
+        <div class="ea-step_head-wrap" part="head-wrap">
+          <div class="ea-step_bar" part="step-bar"></div>
+          <div class="ea-step_head-icon" part="head-icon"></div>
+        </div>
+        <div class="ea-step_main-wrap" part="main-wrap">
+          <div class="ea-step_title-wrap" part="title-wrap">
+            <slot name="title"></slot>
+          </div>
+          <div class="ea-step_description-wrap" part="description-wrap">
+            <slot name="description"></slot>
+          </div>
+        </div>
+      </div>
+    `;
 
-    const stepIcon = createElement('div', 'ea-step_head-icon');
-    const stepBar = createElement('div', 'ea-step_bar');
-    const headWrap = createElement('div', 'ea-step_head-wrap', [stepBar, stepIcon]);
-    headWrap.part = 'head-wrap';
-    wrap.appendChild(headWrap);
+    this.#wrap = shadowRoot.querySelector('.ea-step_wrap');
+    this.#headWrap = shadowRoot.querySelector('.ea-step_head-wrap');
+    this.#stepIcon = shadowRoot.querySelector('.ea-step_head-icon');
+    this.#stepBar = shadowRoot.querySelector('.ea-step_bar');
 
-    const titleSlot = createSlotElement('title');
-    const titleWrap = createElement('div', 'ea-step_title-wrap', [titleSlot]);
-    titleWrap.part = 'title-wrap';
-    const descriptionSlot = createSlotElement('description');
-    const descriptionWrap = createElement('div', 'ea-step_description-wrap', [descriptionSlot]);
-    descriptionWrap.part = 'description-wrap';
-    const mainWrap = createElement('div', 'ea-step_main-wrap', [titleWrap, descriptionWrap]);
-    mainWrap.part = 'main-wrap';
-    wrap.appendChild(mainWrap);
-
-    this.#wrap = wrap;
-    this.#headWrap = headWrap;
-    this.#stepIcon = stepIcon;
-    this.#stepBar = stepBar;
-
-    this.#titleWrap = titleWrap;
-    this.#titleSlot = titleSlot;
-    this.#descriptionWrap = descriptionWrap;
-    this.#descriptionSlot = descriptionSlot;
+    this.#titleWrap = shadowRoot.querySelector('.ea-step_title-wrap');
+    this.#titleSlot = shadowRoot.querySelector('slot[name="title"]');
+    this.#descriptionWrap = shadowRoot.querySelector('.ea-step_description-wrap');
+    this.#descriptionSlot = shadowRoot.querySelector('slot[name="description"]');
 
     this.build(shadowRoot, stylesheet);
-    this.shadowRoot.appendChild(wrap);
   }
 
   // ------- title 步骤的标题(如:步骤一) -------
@@ -151,6 +58,8 @@ export class EaStep extends Base {
   }
 
   set title(value) {
+    if (!value) return;
+
     const slot = this.querySelector('[slot="title"]');
 
     if (!slot) {
@@ -172,6 +81,8 @@ export class EaStep extends Base {
   }
 
   set description(value) {
+    if (!value) return;
+
     const slot = this.querySelector('[slot="description"]');
 
     if (!slot) {
@@ -213,7 +124,7 @@ export class EaStep extends Base {
       value = this.index + 1;
     } else {
       this.#stepIcon.innerHTML = `
-        <i class="${value}" style="font-size: 24px;"></i>
+          <ea-icon icon="${value}" size="24"></ea-icon>
       `;
     }
 
@@ -244,11 +155,6 @@ export class EaStep extends Base {
     this.toggleAttr('is-last', value);
 
     this.#headWrap.classList.toggle('is-last', value);
-    this.style.cssText = `
-            flex-basis: auto;
-            flex-grow: 0;
-            flex-shrink: 0;
-        `;
   }
   // #endregion
   // ------- end -------
@@ -267,10 +173,10 @@ export class EaStep extends Base {
     this.#wrap.classList.toggle('is-wait', value === 'wait');
 
     if (value === 'finish') {
-      const isIcon = this.#stepIcon.querySelector('i');
+      const isIcon = this.#stepIcon.querySelector('ea-icon');
 
       if (!isIcon) this.#stepIcon.innerHTML = `
-        <i class="icon-ok" style="font-size: 14px; line-height: 14px; color: #67c23a;"></i>
+          <ea-icon icon="icon-ok" color="#67c23a" style="font-size: 14px; line-height: 14px;"></ea-icon>
       `;
     } else {
       this.#stepIcon.innerHTML = this.index + 1;
@@ -292,10 +198,9 @@ export class EaStep extends Base {
 
     if (value && !this.isLast) {
       this.#stepBar.innerHTML = `
-        <i class="icon-angle-right" style="font-size: 24px; line-height: 24px; color: #c0c4cc;"></i>
+        <ea-icon icon="icon-angle-right" color="#c0c4cc" style="font-size: 24px; line-height: 24px;"></ea-icon>
       `;
 
-      this.style.flex = "1";
       this.#stepBar.style.flex = "1";
       this.#stepBar.style.textAlign = "center";
 
@@ -309,25 +214,14 @@ export class EaStep extends Base {
   // #endregion
   // ------- end -------
 
-  #init() {
-    const that = this;
-
+  connectedCallback() {
     this.title = this.title;
     this.description = this.description;
     this.simple = this.simple;;
 
-
-    let timer = setTimeout(() => {
+    timeout(() => {
       this.icon = this.icon;
-
-      clearTimeout(timer);
-      timer = null;
     }, 20);
-
-  }
-
-  connectedCallback() {
-    this.#init();
   }
 }
 

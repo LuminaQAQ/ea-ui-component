@@ -1,7 +1,20 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
-.__ea-link {
+@mixin ea-link-theme($theme-name, $color) {
+  &.#{$theme-name} {
+    color: $color;
+
+    &:hover {
+      color: lighten($color, 10);
+    }
+
+    @if ($theme-name == "disabled") {
+      pointer-events: none;
+    }
+  }
+}
+
+.ea-link {
   text-decoration: none;
   color: $color-default-text;
   cursor: pointer;

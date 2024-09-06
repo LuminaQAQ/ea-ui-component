@@ -1,13 +1,10 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 import "../ea-checkbox/index.js"
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-`;
+const stylesheet = ``;
 
 export class EaTableColumn extends Base {
     #labelNode;
@@ -17,11 +14,15 @@ export class EaTableColumn extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
         shadowRoot.innerHTML = `
-            <th>
+            <th part="container">
                 <slot></slot>
                 <span></span>
             </th>
         `;
+
+        this.build(shadowRoot, stylesheet);
+
+        this.#labelNode = shadowRoot.querySelector('span');
     }
 
     // ------- prop 表头对应的数据的键值 -------
@@ -139,13 +140,7 @@ export class EaTableColumn extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        const that = this;
-
-        this.build(this.shadowRoot, stylesheet);
-
-        this.#labelNode = this.shadowRoot.querySelector('span');
-
+    connectedCallback() {
         this.prop = this.prop;
 
         this.width = this.width;
@@ -161,10 +156,6 @@ export class EaTableColumn extends Base {
         this.sortable = this.sortable;
 
         this.order = this.order;
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

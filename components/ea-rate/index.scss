@@ -1,12 +1,9 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 :host {
   --i-color: rgb(247, 186, 42);
 }
 
 .ea-rate_wrap {
-  --i-color: rgb(247, 186, 42);
-
   position: relative;
   display: flex;
   align-items: center;
@@ -14,25 +11,18 @@
   .ea-rate_item {
     cursor: pointer;
 
-    width: 24px;
-    height: 24px;
-
-    & > i {
-      color: #c0c4cc;
-      font-size: 1rem;
-      line-height: 1;
-
+    ea-icon::part(container) {
+      color: var(--i-color);
       transition: color 0.3s, font-size 0.1s;
     }
 
-    &.ea-rate_item--active > i {
-      color: var(--i-color);
+    &.active ea-icon::part(container) {
       font-size: 1.1rem;
     }
 
-    &.ea-rate_item--disabled {
+    &.disabled {
       pointer-events: none;
-      cursor: default;
+      cursor: not-allowed;
     }
   }
 

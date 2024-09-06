@@ -1,42 +1,29 @@
-// @ts-nocheck
 import Base from '../Base.js';
-import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
+import '../ea-icon/index.js';
 
-import "../ea-breadcrumb-item/index.js"
+import "../ea-breadcrumb-item/index.js";
 
-const stylesheet = `
-.ea-breadcrumb_wrap {
-  display: flex;
-}
-.ea-breadcrumb_wrap .separator {
-  margin: 0 10px;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
+import { createElement } from '../../utils/createElement.js';
 
 export class EaBreadcrumb extends Base {
-    #wrap;
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-breadcrumb_wrap';
-        wrap.part = 'wrap';
-
-        const slot = createSlotElement();
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
+        shadowRoot.innerHTML = `
+            <div class="ea-breadcrumb_wrap" part='container'>
+                <slot></slot>
+            </div>
+        `;
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- separator 分隔符 -------
     // #region
     get separator() {
-        return this.getAttribute('separator') || "/";
+        return this.getAttribute('separator') || "\/";
     }
 
     set separator(value) {
@@ -69,19 +56,19 @@ export class EaBreadcrumb extends Base {
     // #endregion
     // ------- end -------
 
-    #handleSeparator(separator, separatorClass, separatorColor) {
+    #initSeparator() {
         const items = this.querySelectorAll('ea-breadcrumb-item');
 
         items.forEach((item, index) => {
             if (index < items.length - 1) {
-                const separatorIcon = createElement('i');
-                separatorIcon.color = separatorColor;
+                const separatorIcon = createElement('ea-icon');
+                separatorIcon.color = this.separatorColor;
 
-                if (separatorClass) {
-                    separatorIcon.className = separatorClass;
+                if (this.separatorClass) {
+                    separatorIcon.icon = this.separatorClass;
                 } else {
                     separatorIcon.style.margin = '0 10px';
-                    separatorIcon.innerText = separator;
+                    separatorIcon.innerText = this.separator;
                 }
 
                 item.appendChild(separatorIcon);
@@ -89,18 +76,12 @@ export class EaBreadcrumb extends Base {
         });
     }
 
-    #init() {
-        const that = this;
-
+    connectedCallback() {
         this.separator = this.separator;
         this.separatorClass = this.separatorClass;
         this.separatorColor = this.separatorColor;
 
-        this.#handleSeparator(this.separator, this.separatorClass, this.separatorColor);
-    }
-
-    connectedCallback() {
-        this.#init();
+        this.#initSeparator();
     }
 }
 

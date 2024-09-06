@@ -2,7 +2,9 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    import('../components/ea-empty/index.js')
+    import('../components/ea-button/index.js')
+
     import('./index.scss')
 })
 </script>
