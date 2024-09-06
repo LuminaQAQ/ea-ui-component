@@ -194,7 +194,7 @@ export const stylesheet = `
   background-color: rgba(0, 0, 0, 0);
 }
 .ea-button.round {
-  border-radius: 50%;
+  border-radius: 999px;
 }
 .ea-button.medium {
   font-size: 14px;

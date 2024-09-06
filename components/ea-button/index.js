@@ -52,6 +52,9 @@ export class EaButton extends Base {
   set disabled(value) {
     this.toggleAttr('disabled', value);
     this.#wrap.classList.toggle('disabled', value);
+    this.style.cursor = value ? 'not-allowed' : 'pointer';
+
+    if (value) this.#wrap.setAttribute('disabled', value);
   }
   // #endregion
   // ------- end -------

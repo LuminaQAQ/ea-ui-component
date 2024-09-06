@@ -128,7 +128,7 @@
   @include button-type("text", transparent, $color-primary-bgc, transparent);
 
   &.round {
-    border-radius: 50%;
+    border-radius: 999px;
   }
 
   &.medium {
