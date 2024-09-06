@@ -52,6 +52,7 @@ export class EaRadio extends Base {
   }
 
   set name(val) {
+    this.setAttribute("name", val);
     this.#radio.setAttribute('name', val);
   }
   // #endregion
@@ -64,6 +65,7 @@ export class EaRadio extends Base {
   }
 
   set value(val) {
+    this.setAttribute('value', val);
     this.#label.setAttribute('for', val);
     this.#radio.setAttribute('id', val);
     this.#radio.setAttribute('value', val);

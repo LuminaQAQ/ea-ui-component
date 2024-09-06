@@ -28,6 +28,7 @@ export class EaRadioGroup extends Base {
     }
 
     set name(val) {
+        this.setAttribute("name", val);
         this.querySelectorAll('ea-radio').forEach(radio => {
             radio.setAttribute('name', val);
         });
@@ -79,9 +80,13 @@ export class EaRadioGroup extends Base {
         // name 唯一键值
         this.name = this.name;
 
-        const radios = this.querySelectorAll('ea-radio');
-        this.#initValue(radios);
-        this.#initRadioChecked(radios);
+        this.value = this.value;
+
+        timeout(() => {
+            const radios = this.querySelectorAll('ea-radio');
+            this.#initValue(radios);
+            this.#initRadioChecked(radios);
+        }, 20);
     }
 }
 
