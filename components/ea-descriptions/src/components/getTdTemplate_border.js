@@ -1,1 +1,1 @@
-export const getTdTemplate_border=(e,t,s)=>`\n        <th class="ea-descriptions-item_label ea-descriptions-item_cell is-border" colspan="1">${e}</th>\n        <td class="ea-descriptions-item_content ea-descriptions-item_cell is-border" colspan="${s}">${t}</td>\n    `;
+export const getTdTemplate_border=(e,t,s)=>`\n        <th class="ea-descriptions-item_label ea-descriptions-item_cell is-border" colspan="1" part="table-th">${e}</th>\n        <td class="ea-descriptions-item_content ea-descriptions-item_cell is-border" colspan="${s}" part="table-td">${t}</td>\n    `;
