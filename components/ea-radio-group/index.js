@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { timeout } from "../../utils/timeout.js";
 import Base from "../Base.js";
 
 const stylesheet = `
