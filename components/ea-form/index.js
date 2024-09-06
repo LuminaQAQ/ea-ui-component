@@ -107,10 +107,8 @@ export class EaForm extends Base {
             const max = Math.max(...lenArr);
 
             formItemsWrap.forEach(item => {
-                timeout(() => {
-                    const labelWrap = item.shadowRoot.querySelector('.ea-form-item_label-wrap');
-                    if (labelWrap) labelWrap.style.width = `${max * 20}px`;
-                }, 0)
+                const labelWrap = item.shadowRoot.querySelector('.ea-form-item_label-wrap');
+                if (labelWrap) labelWrap.style.width = `${max * 20}px`;
             });
         }, 50);
     }
