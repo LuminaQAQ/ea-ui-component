@@ -1,5 +1,4 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
 .ea-result_wrap {
   display: flex;
@@ -13,16 +12,16 @@
   .ea-result_icon {
     font-size: 3rem;
 
-    i[class="icon-ok-circled"] {
+    ea-icon[icon="icon-ok-circled"] {
       color: $color-success-bgc;
     }
-    i[class="icon-cancel-circled"] {
+    ea-icon[icon="icon-cancel-circled"] {
       color: $color-danger-bgc;
     }
-    i[class="icon-attention-alt"] {
+    ea-icon[icon="icon-attention-alt"] {
       color: $color-warning-bgc;
     }
-    i[class="icon-info"] {
+    ea-icon[icon="icon-info"] {
       color: $color-info-bgc;
     }
   }

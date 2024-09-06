@@ -1,143 +1,32 @@
-// @ts-nocheck
-import Base from '../Base';
+import Base from '../Base.js';
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
+import "../ea-icon/index.js"
 
-.ea-avatar_wrap .ea-avatar {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  color: #ffffff;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar-fill--fill img {
-  object-fit: fill;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar-fill--contain img {
-  object-fit: contain;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar-fill--cover img {
-  object-fit: cover;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar-fill--none img {
-  object-fit: none;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar-fill--scale-down img {
-  object-fit: scale-down;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar--normal {
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar--large {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar--medium {
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar--small {
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
-}
-.ea-avatar_wrap .ea-avatar .ea-avatar--text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar--circle {
-  border-radius: 50%;
-}
-.ea-avatar_wrap .ea-avatar.ea-avatar--square {
-  border-radius: 5px;
-}
-.ea-avatar_wrap .ea-avatar .ea-avatar--img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-`;
+import { errorAvatar } from './src/assets/errorAvatar.js';
+import { iconAvatar, textAvatar } from './src/assets/iconAndTextAvatar.js';
 
-const defaultAvatar = `
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <clipPath id="a">
-                <path d="M0 40h90v45H0z" />
-            </clipPath>
-        </defs>
-        <path fill="#c0c4cc" d="M0 0h100v100H0z" />
-        <circle cx="50" cy="35" r="20" fill="#fff" />
-        <circle cx="50" cy="97" r="40" fill="#fff" clip-path="url(#a)" />
-    </svg>
-`;
+import { stylesheet } from "./src/style/stylesheet.js"
 
-const errorAvatar = `
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#c0c4cc" d="M0 0h100v100H0z" />
-        <path fill="#fff" d="M15 20h70v60H15z" />
-        <circle r="8" cx="32" cy="35" fill="#c0c4cc" />
-        <path d="M60 42.5L39 75h42z" fill="#c0c4cc" />
-        <path d="M35 52.5L20 75h-4 32z" fill="#c0c4cc" />
-    </svg>
-`;
-
-const iconAvatar = (icon) => {
-    return `
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#c0c4cc" d="M0 0h100v100H0z" />
-        </svg>
-        <i class="ea-avatar--text ${icon}"></i>
-    `;
-}
-
-const textAvatar = (text) => {
-    return `
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#c0c4cc" d="M0 0h100v100H0z" />
-        </svg>
-        <span class="ea-avatar--text">${text}</span>
-    `;
-}
 
 export class EaAvatar extends Base {
-    #wrap;
-
-    #textSlot;
-
     #avatar;
-    #img;
 
     constructor() {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-avatar_wrap';
 
-        const avatar = document.createElement('span');
-        avatar.className = 'ea-avatar';
-        avatar.innerHTML = defaultAvatar;
-        wrap.appendChild(avatar);
+        shadowRoot.innerHTML = `
+            <div class="ea-avatar_wrap" part='container'>
+                <span class="ea-avatar" part="avatar">
+                    <slot></slot>
+                </span>
+            </div>
+        `;
 
-        const slot = document.createElement('slot');
-        avatar.appendChild(slot);
-
-        const img = document.createElement('img');
-        avatar.appendChild(img);
-
-        this.#wrap = wrap;
-        this.#textSlot = slot;
-        this.#avatar = avatar;
-        this.#img = img;
+        this.#avatar = shadowRoot.querySelector('.ea-avatar');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- size 图片大小 -------
@@ -155,7 +44,6 @@ export class EaAvatar extends Base {
 
     set size(value) {
         this.setAttribute('size', value);
-
 
         if (typeof value === "number") {
             this.#avatar.style.width = `${value}px`;
@@ -192,16 +80,16 @@ export class EaAvatar extends Base {
     set src(value) {
         if (!value) return;
 
+        this.setAttribute('src', value);
+
         const image = new Image();
         image.src = value;
 
         image.onload = () => {
-            this.setAttribute('src', value);
             this.#avatar.innerHTML = `<img class="ea-avatar--img" src="${value}" alt="头像">`;
         };
 
         image.onerror = (e) => {
-            this.setAttribute('src', value);
             this.#avatar.innerHTML = errorAvatar;
 
             this.dispatchEvent(new CustomEvent('error', {
@@ -217,7 +105,7 @@ export class EaAvatar extends Base {
     // ------- icon 图标 -------
     // #region
     get icon() {
-        return this.getAttribute('icon');
+        return this.getAttribute('icon') || '';
     }
 
     set icon(value) {
@@ -242,9 +130,7 @@ export class EaAvatar extends Base {
     // #endregion
     // ------- end -------
 
-    init() {
-        const that = this;
-
+    connectedCallback() {
         this.size = this.size;
 
         this.shape = this.shape;
@@ -262,10 +148,6 @@ export class EaAvatar extends Base {
         if (this.innerHTML !== "" && !this.icon && !this.src) {
             this.#avatar.innerHTML = textAvatar(this.innerHTML);
         }
-    }
-
-    connectedCallback() {
-        this.init();
     }
 }
 

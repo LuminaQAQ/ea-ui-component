@@ -1,15 +1,7 @@
-// @ts-nocheck
-import Base from '../Base';
-import { createElement, createSlotElement } from '../../utils/createElement.js';
-
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-`;
+import Base from '../Base.js';
+import "../ea-infinite-scroll-item/index.js"
 
 export class EaInfiniteScroll extends Base {
-    #wrap;
-
     #loadingSlot;
 
     #noMoreSlot;
@@ -18,28 +10,16 @@ export class EaInfiniteScroll extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-infinite_wrap';
-        wrap.part = "wrap";
-
-        const slot = createSlotElement("");
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
-
-        this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
-
-        const loadingSlot = createSlotElement("loading");
-        loadingSlot.style.display = "none";
-        this.shadowRoot.appendChild(loadingSlot);
-
-        const noMoreSlot = createSlotElement("noMore");
-        noMoreSlot.style.display = "none";
-        this.shadowRoot.appendChild(noMoreSlot);
-
-        this.#loadingSlot = loadingSlot;
-        this.#noMoreSlot = noMoreSlot;
+        shadowRoot.innerHTML = `
+            <div class='ea-infinite_wrap' part='container'>
+                <slot></slot>
+            </div>
+            <slot name='loading' style="display: none;"></slot>
+            <slot name='noMore' style="display: none;"></slot>
+        `;
+        
+        this.#loadingSlot = shadowRoot.querySelector('slot[name="loading"]');
+        this.#noMoreSlot = shadowRoot.querySelector('slot[name="noMore"]');
     }
 
     // ------- delay 节流时延, 单位为ms -------
@@ -87,7 +67,7 @@ export class EaInfiniteScroll extends Base {
         return items[items.length - 1];
     }
 
-    #initBottomReachedObserver(delay) {
+    #initBottomReachedObserver() {
         if (this.disabled) return;
 
         let item = this.#getLastChild();
@@ -116,57 +96,19 @@ export class EaInfiniteScroll extends Base {
                 observer.observe(item);
                 this.#loadingSlot.style.display = 'none';
 
-            }, delay || 200);
+            }, this.delay || 200);
         }, { root: this.parentNode, rootMargin: '10px', threshold: 0.1 });
 
         // 初始观察
         observer.observe(item);
     }
-
-    init() {
-        const that = this;
-
+    connectedCallback() {
         this.delay = this.delay;
 
-        this.#initBottomReachedObserver(this.delay);
-    }
-
-    connectedCallback() {
-        this.init();
+        this.#initBottomReachedObserver();
     }
 }
 
 if (!customElements.get('ea-infinite')) {
     customElements.define('ea-infinite', EaInfiniteScroll);
-}
-
-export class EaInfiniteScrollItem extends Base {
-    #wrap;
-    constructor() {
-        super();
-
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-infinite-item_wrap';
-
-        const slot = createSlotElement("");
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
-
-        this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
-    }
-
-    init() {
-        const that = this;
-    }
-
-    connectedCallback() {
-        this.init();
-    }
-}
-
-if (!customElements.get('ea-infinite-item')) {
-    customElements.define('ea-infinite-item', EaInfiniteScrollItem);
 }

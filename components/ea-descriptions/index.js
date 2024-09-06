@@ -88,10 +88,12 @@ export class EaDescriptions extends Base {
         for (let i = 0; i < length; i += 3) {
             let colspanCount = 0;
             const tbody = document.createElement('tbody');
+            tbody.part = 'table-tbody';
 
             switch (this.direction) {
                 case "horizontal": {
                     const tr = document.createElement('tr');
+                    tr.part = 'table-tr';
 
                     for (let j = i; j < this.col + i; j++) {
                         const colspan = Number(items[j]?.getAttribute("span")) || 1;
@@ -108,6 +110,8 @@ export class EaDescriptions extends Base {
                 case "vertical": {
                     const th_tr = document.createElement('tr');
                     const td_tr = document.createElement('tr');
+                    th_tr.part = 'table-tr';
+                    td_tr.part = 'table-tr';
 
                     for (let j = i; j < this.col + i; j++) {
                         const colspan = Number(items[j]?.getAttribute("span")) || 1;
@@ -139,9 +143,11 @@ export class EaDescriptions extends Base {
     #initHasIconItem() {
         const hasIcon = this.shadowRoot?.querySelector('ea-icon');
 
-        if (hasIcon) this.shadowRoot.innerHTML += `
-            <link rel="stylesheet" href="${new URL('../ea-icon/index.css', import.meta.url).href}">
-        `;
+        if (hasIcon) {
+            this.shadowRoot.innerHTML += `
+                <link rel="stylesheet" href="${new URL('../ea-icon/index.css', import.meta.url).href}">
+            `;
+        }
     }
 
     connectedCallback() {

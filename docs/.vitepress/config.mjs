@@ -7,7 +7,9 @@ export default defineConfig({
   title: "ea-ui",
 
   head: [
-    ['link', { rel: 'icon', href: '/ea_ui_component/favicon.ico' }]
+    ['link', { rel: 'icon', href: '/ea_ui_component/favicon.ico' }],
+    ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/animation.css' }],
+    ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/fontello.css' }]
   ],
 
   cleanUrls: true,

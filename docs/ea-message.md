@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted } from 'vue'
-import { EaMessage } from '../components/ea-message/MessageClass.js'
 
 onMounted(() => {
     import('../index.js')

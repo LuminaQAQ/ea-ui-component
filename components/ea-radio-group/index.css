@@ -1,6 +1,3 @@
-.ea-radio-group {
+.ea-radio-group_wrap {
   display: flex;
-}
-.ea-radio-group ea-radio {
-  margin-right: 2rem;
 }

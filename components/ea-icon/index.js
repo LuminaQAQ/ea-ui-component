@@ -6,7 +6,8 @@ export class EaIcon extends HTMLElement {
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="${new URL('../ea-icon/index.css', import.meta.url).href}">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/animation.css">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/fontello.css">
             <i class="ea-icon_wrap" part="container">
                 <slot></slot>
             </i>

@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    import('../components/ea-avatar/index.js')
     import('./index.scss')
 
     document.querySelector('#error').addEventListener('error', (e) => {

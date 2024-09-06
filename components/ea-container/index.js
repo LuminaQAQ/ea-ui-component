@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
 

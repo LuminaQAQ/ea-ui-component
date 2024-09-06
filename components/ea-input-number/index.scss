@@ -1,5 +1,4 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
 @mixin sign-size($size-type, $size) {
   &.ea-input-number_sign--#{$size-type} {
@@ -10,6 +9,18 @@
 
 @mixin input-size($size-type, $size) {
   &.ea-input-number_inner--#{$size-type} {
+    height: $size;
+    line-height: $size;
+  }
+}
+
+@mixin input-number-size($size) {
+  .ea-input-number_sign {
+    height: $size;
+    width: $size;
+  }
+
+  .ea-input-number_inner {
     height: $size;
     line-height: $size;
   }
@@ -58,18 +69,11 @@
       color: $color-counter-hover-text;
     }
 
-    // .minus,
-    // .plus {
-    // }
     &.disabled {
       pointer-events: none;
       cursor: not-allowed;
       color: $color-counter-disabled-text;
     }
-
-    @include sign-size("medium", 1.75rem);
-    @include sign-size("small", 1.5rem);
-    @include sign-size("mini", 1.25rem);
   }
 
   .ea-input-number_inner {
@@ -88,15 +92,11 @@
 
     &.disabled {
       pointer-events: none;
-      color: $color-counter-disabled-text;
-
       cursor: not-allowed;
+
+      color: $color-counter-disabled-text;
       background-color: $color-counter-bgc;
     }
-
-    @include input-size("medium", 1.75rem);
-    @include input-size("small", 1.5rem);
-    @include input-size("mini", 1.25rem);
   }
 
   &.focus {
@@ -105,5 +105,28 @@
     .ea-input-number_sign {
       border-color: transparent;
     }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+
+    .ea-input-number_sign,
+    .ea-input-number_inner {
+      color: $color-counter-disabled-text;
+      border-color: $color-border;
+    }
+  }
+
+  &.ea-input-number--medium {
+    @include input-number-size(1.75rem);
+  }
+
+  &.ea-input-number--small {
+    @include input-number-size(1.5rem);
+  }
+
+  &.ea-input-number--mini {
+    @include input-number-size(1.25rem);
   }
 }

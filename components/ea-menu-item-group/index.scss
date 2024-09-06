@@ -46,4 +46,15 @@
 
     transition: height 0.3s;
   }
+
+  .ea-submenu_dropdown_icon {
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+  }
+
+  &.is-open {
+    .ea-submenu_dropdown_icon {
+      transform: rotate(0deg);
+    }
+  }
 }

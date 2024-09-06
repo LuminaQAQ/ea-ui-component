@@ -1,21 +1,20 @@
-@import "../ea-button/index.scss";
-
-.__ea-button-group {
+.ea-button-group {
   display: flex;
   align-items: center;
-  margin-right: 0.5rem;
+
+  ::slotted(ea-button) {
+    --border-radius: 0;
+  }
+
+  ::slotted(ea-button:not([type="normal"])) {
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+  }
 
   ::slotted(ea-button:first-of-type) {
     --border-radius: 4px 0 0 4px;
-    border-right: 1px solid rgba(255, 255, 255, 0.3);
   }
 
   ::slotted(ea-button:last-of-type) {
     --border-radius: 0 4px 4px 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
-  }
-
-  ::slotted(ea-button) {
-    --margin-right: 0;
   }
 }

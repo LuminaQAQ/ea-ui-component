@@ -1,11 +1,3 @@
-@import "../ea-icon/css/fontello.css";
-@import "../ea-icon/css/animation.css";
-@font-face {
-  font-size: 1rem;
-  font-size: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
-}
 .ea-textarea_wrap {
   position: relative;
   width: 100%;
@@ -30,11 +22,11 @@
 .ea-textarea_wrap .ea-textarea_inner::placeholder {
   color: #c0c4cc;
 }
-.ea-textarea_wrap .ea-textarea_inner.disabled {
+.ea-textarea_wrap .ea-textarea_inner:disabled {
   background-color: #eeeeee;
   color: #c0c4cc;
 }
-.ea-textarea_wrap .ea-textarea_inner.invalid {
+.ea-textarea_wrap .ea-textarea_inner:invalid {
   border-color: #f56c6c;
 }
 .ea-textarea_wrap .ea-input_word-limit {

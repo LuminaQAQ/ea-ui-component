@@ -1,239 +1,172 @@
 @import "../ea-ui-base-style.scss";
 
-:host {
-  --border-top-left-radius: 0;
-  --border-top-right-radius: 0;
-
-  --border-bottom-left-radius: 0;
-  --border-bottom-right-radius: 0;
-
-  --border-left-width: 0;
-  --border-right-width: 0;
-}
-
-.ea-input_wrap {
-  position: relative;
+.ea-input_container {
+  display: flex;
+  align-items: stretch;
   width: 100%;
 
-  .ea-input_inner {
-    box-sizing: border-box;
-    box-shadow: none;
-
-    border: 1px solid $color-border;
-    outline: 0;
-    transition: border 0.2s;
-    border-radius: 3px;
-
-    padding: 0.5rem;
+  .ea-input_wrap {
+    position: relative;
+    display: flex;
+    align-items: stretch;
     width: 100%;
 
-    line-height: 0.8;
-    font-size: 0.8rem;
-    scrollbar-width: none;
+    .ea-input_inner {
+      flex: 1;
+      box-sizing: border-box;
+      box-shadow: none;
 
-    &:focus {
-      border-color: $color-primary-border;
-    }
+      border: 1px solid $color-border;
+      outline: 0;
+      border-radius: 3px;
 
-    &::placeholder {
-      color: $color-disabled-text;
-    }
+      padding: 0.5rem;
+      width: 100%;
 
-    &.invalid {
-      border-color: $color-danger-border;
-    }
+      line-height: 0.8;
+      font-size: 0.8rem;
+      scrollbar-width: none;
 
-    &.disabled {
-      background-color: $color-disabled-btn-bgc;
-      color: $color-disabled-text;
-    }
+      &:focus {
+        border-color: $color-primary-border;
+      }
 
-    &.ea-input_clear {
-      ::before {
-        content: "\e9c3";
-        display: block;
+      &::placeholder {
+        color: $color-disabled-text;
+      }
+
+      &:invalid {
+        border-color: $color-danger-border;
+      }
+
+      &[disabled] {
+        background-color: $color-disabled-btn-bgc;
+        color: $color-disabled-text;
       }
     }
-  }
 
-  i {
-    font-size: 0.9rem;
-    line-height: 0.8;
-  }
-
-  i[class="icon-cancel-circled2"],
-  i[class="icon-eye"],
-  i[class="icon-eye-off"] {
-    position: absolute;
-    left: calc(100% - 1.75rem);
-    top: 50%;
-    color: $color-disabled-text;
-    transform: translate(calc(-100% - 0.25rem), -50%);
-  }
-
-  &.clearable,
-  &.password {
-    .ea-input_inner {
-      width: calc(100% - 1.75rem);
-      padding-right: 1.75rem;
-    }
-  }
-
-  &.prefix,
-  &.suffix {
-    i {
+    .fix-icon {
       position: absolute;
       top: 50%;
-      color: $color-disabled-text;
-    }
-  }
 
-  &.prefix {
-    i {
-      left: 2.5%;
-
-      transform: translate(-2.5%, -50%);
+      font-size: 0.8rem;
+      line-height: 0.8rem;
     }
 
-    .ea-input_inner {
-      padding-left: 1.75rem;
+    &.prefix {
+      .ea-input_inner {
+        padding-left: 1.75rem;
+      }
+
+      .prefix-icon {
+        left: 1rem;
+        transform: translate(-50%, -50%);
+      }
     }
-  }
 
-  &.suffix {
-    i {
-      left: calc(100% - 1.75rem);
+    &.surfix {
+      .ea-input_inner {
+        padding-right: 1.75rem;
+      }
 
-      transform: translate(calc(-100% - 0.25rem), -50%);
+      .surfix-icon {
+        right: 1rem;
+        transform: translate(50%, -50%);
+      }
     }
 
-    .ea-input_inner {
-      padding-right: 1.75rem;
+    .ea-input_prepend-slot,
+    .ea-input_append-slot {
+      height: 100%;
     }
-  }
 
-  &.prepend-slot,
-  &.append-slot {
-    display: flex;
-    align-items: center;
-    font-size: 0.925rem;
-    line-height: 1;
+    .ea-input_suggestion-wrap {
+      @include clear-ul-default-style;
 
-    ::slotted(div) {
+      position: absolute;
+      box-sizing: border-box;
+
+      z-index: 3;
+
+      top: calc(100% + 5px);
+      left: 0;
+
+      transform-origin: top center;
+      transform: scaleY(0);
+
+      padding: 0.5rem 0;
+      width: 100%;
+      max-height: 10rem;
+
+      overflow-y: auto;
+      scrollbar-width: thin;
+
+      background-color: white;
+      box-shadow: 0 1px 8px 1px rgba(0, 0, 0, 0.2);
+
+      li {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #f5f7fa;
+        }
+      }
+
+      .loading-icon {
+        display: none;
+      }
+
+      &.loading {
+        height: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        li {
+          display: none;
+        }
+
+        .loading-icon {
+          display: block;
+        }
+      }
+
+      &.is-open {
+        transform: scaleY(1);
+      }
+    }
+
+    &.word-limit {
       border: 1px solid $color-border;
+      border-radius: 3px;
 
-      border-left-width: var(--border-left-width);
-      border-right-width: var(--border-right-width);
-
-      border-top-right-radius: var(--border-top-right-radius);
-      border-bottom-right-radius: var(--border-bottom-right-radius);
-      border-top-left-radius: var(--border-top-left-radius);
-      border-bottom-left-radius: var(--border-bottom-left-radius);
-    }
-  }
-
-  &.prepend-slot {
-    .ea-input_inner {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-  }
-
-  &.append-slot {
-    .ea-input_inner {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-  }
-
-  .ea-input_suggestion-wrap {
-    @include clear-ul-default-style;
-
-    display: none;
-    position: absolute;
-    box-sizing: border-box;
-
-    z-index: 3;
-
-    top: calc(100% + 5px);
-    left: 0;
-
-    padding: 0.5rem 0;
-    width: 100%;
-    max-height: 10rem;
-
-    overflow-y: auto;
-    scrollbar-width: thin;
-
-    background-color: white;
-    box-shadow: 0 1px 8px 1px rgba(0, 0, 0, 0.2);
-
-    li {
-      padding: 0.5rem;
-      font-size: 0.9rem;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #f5f7fa;
+      .ea-input_inner {
+        border: 0;
       }
-    }
 
-    &.loading {
-      height: 5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      .ea-input_word-limit {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
 
-      &::after {
-        // position: absolute;
-        // left: 50%;
-        // top: 50%;
-        // transform: translate(-50%, -50%);
+        padding-right: 0.5rem;
 
-        font-family: "fontello";
-        font-style: normal;
-        font-weight: normal;
-        speak: never;
-
-        display: inline-block;
-        text-decoration: inherit;
-        width: 1em;
-        margin-right: 0.2em;
+        font-size: 0.75rem;
         text-align: center;
-        font-variant: normal;
-        text-transform: none;
-
-        line-height: 1em;
-
-        margin-left: 0.2em;
-
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-
-        content: "\e839";
-        font-size: 1.5rem;
-        animation: spin 1s linear infinite;
-        animation-play-state: running;
       }
     }
-  }
 
-  &.word-limit {
-    border: 1px solid $color-border;
-    border-radius: 3px;
+    &.with-transition {
+      .ea-input_inner {
+        transition: border 0.3s;
+      }
 
-    .ea-input_inner {
-      border: 0;
-
-      width: calc(100% - 3rem);
-    }
-
-    .ea-input_word-limit {
-      padding-right: 0.5rem;
-
-      width: 2.5rem;
-      font-size: 0.75rem;
-      text-align: center;
+      .ea-input_suggestion-wrap {
+        transition: transform 0.3s;
+      }
     }
   }
 }

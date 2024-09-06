@@ -1,117 +1,12 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
+import { createElement } from '../../utils/createElement.js';
 
 import "../ea-table-column/index.js"
 import "../ea-checkbox/index.js"
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-table_wrap,
-.ea-table_fixed-column {
-  position: relative;
-  background-color: #fff;
-  overflow: hidden;
-}
-.ea-table_wrap.stripe .ea-table__row:nth-child(2n),
-.ea-table_fixed-column.stripe .ea-table__row:nth-child(2n) {
-  background-color: #fafafa;
-}
-.ea-table_wrap .ea-table_header-wrap .ea-table_header,
-.ea-table_wrap .ea-table_body-wrap .ea-table_main,
-.ea-table_wrap .ea-table_main,
-.ea-table_fixed-column .ea-table_header-wrap .ea-table_header,
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main,
-.ea-table_fixed-column .ea-table_main {
-  position: relative;
-  box-sizing: border-box;
-  padding: 12px 0;
-  width: 100%;
-  min-width: 0;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-  text-align: left;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-.ea-table_wrap .ea-table_header-wrap .ea-table_header .ea-table__cell,
-.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__cell,
-.ea-table_wrap .ea-table_main .ea-table__cell,
-.ea-table_fixed-column .ea-table_header-wrap .ea-table_header .ea-table__cell,
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__cell,
-.ea-table_fixed-column .ea-table_main .ea-table__cell {
-  border-top: 1px solid #ebeef5;
-  border-bottom: 1px solid #ebeef5;
-  box-sizing: border-box;
-  padding: 8px;
-  color: #606266;
-}
-.ea-table_wrap .ea-table_header-wrap .ea-table_header .ea-table__cell.th-cell,
-.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__cell.th-cell,
-.ea-table_wrap .ea-table_main .ea-table__cell.th-cell,
-.ea-table_fixed-column .ea-table_header-wrap .ea-table_header .ea-table__cell.th-cell,
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__cell.th-cell,
-.ea-table_fixed-column .ea-table_main .ea-table__cell.th-cell {
-  color: #909399;
-}
-.ea-table_wrap .ea-table_header-wrap .ea-table_header .ea-table__cell.is-gutter,
-.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__cell.is-gutter,
-.ea-table_wrap .ea-table_main .ea-table__cell.is-gutter,
-.ea-table_fixed-column .ea-table_header-wrap .ea-table_header .ea-table__cell.is-gutter,
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__cell.is-gutter,
-.ea-table_fixed-column .ea-table_main .ea-table__cell.is-gutter {
-  width: 15px;
-  padding: 0;
-}
-.ea-table_wrap .ea-table_header-wrap .ea-table_header.border .ea-table__cell,
-.ea-table_wrap .ea-table_body-wrap .ea-table_main.border .ea-table__cell,
-.ea-table_wrap .ea-table_main.border .ea-table__cell,
-.ea-table_fixed-column .ea-table_header-wrap .ea-table_header.border .ea-table__cell,
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main.border .ea-table__cell,
-.ea-table_fixed-column .ea-table_main.border .ea-table__cell {
-  border: 1px solid #ebeef5;
-  padding: 8px;
-  color: #606266;
-}
-.ea-table_wrap .ea-table_header-wrap .ea-table_header.border .ea-table__cell.is-gutter,
-.ea-table_wrap .ea-table_body-wrap .ea-table_main.border .ea-table__cell.is-gutter,
-.ea-table_wrap .ea-table_main.border .ea-table__cell.is-gutter,
-.ea-table_fixed-column .ea-table_header-wrap .ea-table_header.border .ea-table__cell.is-gutter,
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main.border .ea-table__cell.is-gutter,
-.ea-table_fixed-column .ea-table_main.border .ea-table__cell.is-gutter {
-  width: 15px;
-  padding: 0;
-  min-width: none;
-}
-.ea-table_wrap .ea-table_header-wrap .ea-table_header.stripe .ea-table__row:nth-child(2n),
-.ea-table_wrap .ea-table_body-wrap .ea-table_main.stripe .ea-table__row:nth-child(2n),
-.ea-table_wrap .ea-table_main.stripe .ea-table__row:nth-child(2n),
-.ea-table_fixed-column .ea-table_header-wrap .ea-table_header.stripe .ea-table__row:nth-child(2n),
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main.stripe .ea-table__row:nth-child(2n),
-.ea-table_fixed-column .ea-table_main.stripe .ea-table__row:nth-child(2n) {
-  background-color: #fafafa;
-}
-.ea-table_wrap .ea-table_main,
-.ea-table_fixed-column .ea-table_main {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-.ea-table_wrap .ea-table_body-wrap,
-.ea-table_fixed-column .ea-table_body-wrap {
-  overflow-y: auto;
-}
-.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__row:hover,
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__row:hover {
-  background-color: #f5f7fa;
-}
-.ea-table_wrap .ea-table_body-wrap .ea-table_main .ea-table__row.is-current-row,
-.ea-table_fixed-column .ea-table_body-wrap .ea-table_main .ea-table__row.is-current-row {
-  background-color: #ecf5ff;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaTable extends Base {
     #container;
@@ -139,15 +34,15 @@ export class EaTable extends Base {
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
-            <div class="ea-table_wrap">
-                <div class="ea-table_header-wrap">
-                    <table class="ea-table_header">
+            <div class="ea-table_wrap" part="container">
+                <div class="ea-table_header-wrap" part="header-wrap">
+                    <table class="ea-table_header" part="header-table">
                         <colgroup></colgroup>
                         <thead></thead>
                     </table>
                 </div>
-                <div class="ea-table_body-wrap">
-                    <table class="ea-table_main">
+                <div class="ea-table_body-wrap" part="body-wrap">
+                    <table class="ea-table_main" part="body-table">
                         <colgroup></colgroup>
                         <tbody></tbody>
                         <slot name="empty" style="display: none;"></slot>
@@ -159,7 +54,7 @@ export class EaTable extends Base {
             <slot name="body"></slot>
         `;
 
-        this.build(this.shadowRoot, stylesheet);
+        this.build(shadowRoot, stylesheet);
 
         this.#container = this.shadowRoot.querySelector('.ea-table_wrap');
 
@@ -271,20 +166,6 @@ export class EaTable extends Base {
         const target = this.#bodyTable.querySelectorAll('.ea-table__row')[index] || null;
         return { index, data, target };
     }
-
-    set currentRowDetail(value) {
-        const { index, data, target } = value;
-        this.currentRow = index;
-        this.#bodyTable.querySelectorAll('.ea-table__row').forEach((row, i) => {
-            if (i == index) {
-                row.classList.add('is-current-row');
-                if (target) target.classList.add('is-current-row');
-            } else {
-                row.classList.remove('is-current-row');
-                if (target) target.classList.remove('is-current-row');
-            }
-        });
-    }
     // #endregion
     // ------- end -------
 
@@ -315,11 +196,7 @@ export class EaTable extends Base {
 
     #handleHasGutterTable() {
         const headerWrap = this.shadowRoot.querySelector('.ea-table_header-wrap');
-        const headerColgroup = this.shadowRoot.querySelector('.ea-table_header-wrap colgroup');
-        const bodyColgroup = this.shadowRoot.querySelector('.ea-table_body-wrap colgroup');
-
         const bodyWrap = this.shadowRoot.querySelector('.ea-table_body-wrap');
-        const bodyTable = this.shadowRoot.querySelector('.ea-table_body-wrap .ea-table_main');
 
         let scrollbarWidth = null;
 
@@ -388,11 +265,13 @@ export class EaTable extends Base {
 
         const createThElement = (child, i = 1) => {
             const newTr = createElement('tr');
+            newTr.part = 'row';
             newTr.setAttribute('index', i);
             Array.from(child).forEach(subchild => {
                 if (subchild.nodeName !== 'EA-TABLE-COLUMN') return;
 
                 const th = createElement('th', 'ea-table__cell th-cell');
+                th.part = 'th-cell';
 
                 th.setAttribute('colspan', subchild.colspan || 1);
                 th.setAttribute('rowspan', subchild.rowspan || 1);
@@ -488,18 +367,12 @@ export class EaTable extends Base {
         const trs = this.#bodyTableTbody.querySelectorAll('tr');
         const slot = this.shadowRoot.querySelector('slot[name="body"]');
 
-        if (slot.assignedNodes().length === 0) {
+        if (!slot.assignedNodes().length) {
             slot.remove();
         } else {
-            const bodyCol = createElement('col');
-            const headerCol = createElement('col');
-            bodyCol.setAttribute('width', '100');
-            headerCol.setAttribute('width', '100');
-            this.#bodyTableColgroup.appendChild(bodyCol);
-            this.#headerTableColgroup.appendChild(headerCol);
-
             trs.forEach(item => {
-                const div = createElement('td', 'ea-table__cell td_cell');
+                const div = createElement('td', 'ea-table__cell');
+                div.part = 'td-cell';
                 Array.from(slot.assignedNodes()).forEach(slotItem => {
                     const cloneNode = slotItem.cloneNode(true);
                     div.appendChild(cloneNode);
@@ -546,9 +419,11 @@ export class EaTable extends Base {
 
         data.forEach((item, index) => {
             const row = createElement('tr', 'ea-table__row');
+            row.part = 'row';
 
             Object.entries(item).forEach(([key, value]) => {
                 const cell = createElement('td', 'ea-table__cell td_cell');
+                cell.part = 'td-cell';
                 cell.innerHTML = value;
 
                 if (key === "selection") {
@@ -634,6 +509,7 @@ export class EaTable extends Base {
         if (headerSlot.assignedNodes().length > 0) {
             const tr = this.#headerTableThead.querySelector('tr');
             const th = createElement('th', 'ea-table__cell th-cell');
+            th.part = 'th-cell';
             let maxRowSpan = 1;
             Array.from(this.#headerTableThead.querySelectorAll('th')).forEach(item => {
                 if (item.rowSpan > maxRowSpan) maxRowSpan = item.rowSpan;
@@ -646,11 +522,8 @@ export class EaTable extends Base {
         }
     }
 
-    #init() {
-
+    connectedCallback() {
         this.style.position = 'relative';
-
-        const that = this;
 
         this.border = this.border;
 
@@ -667,10 +540,6 @@ export class EaTable extends Base {
         this.#initSelectionTypeTh();
 
         this.#initHeaderSlot();
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 

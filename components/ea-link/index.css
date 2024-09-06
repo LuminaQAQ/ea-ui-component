@@ -1,56 +1,48 @@
-@import "../ea-icon/css/fontello.css";
-@import "../ea-icon/css/animation.css";
-@font-face {
-  font-size: 1rem;
-  font-size: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
-}
-.__ea-link {
+.ea-link {
   text-decoration: none;
   color: #606266;
   cursor: pointer;
 }
-.__ea-link:hover {
+.ea-link:hover {
   color: #797b80;
 }
-.__ea-link.underline:hover {
+.ea-link.underline:hover {
   text-decoration: underline;
 }
-.__ea-link.primary {
+.ea-link.primary {
   color: #409eff;
 }
-.__ea-link.primary:hover {
+.ea-link.primary:hover {
   color: #73b8ff;
 }
-.__ea-link.success {
+.ea-link.success {
   color: #67c23a;
 }
-.__ea-link.success:hover {
+.ea-link.success:hover {
   color: #85cf60;
 }
-.__ea-link.info {
+.ea-link.info {
   color: #909399;
 }
-.__ea-link.info:hover {
+.ea-link.info:hover {
   color: #abadb1;
 }
-.__ea-link.warning {
+.ea-link.warning {
   color: #e6a23c;
 }
-.__ea-link.warning:hover {
+.ea-link.warning:hover {
   color: #ecb869;
 }
-.__ea-link.danger {
+.ea-link.danger {
   color: #f56c6c;
 }
-.__ea-link.danger:hover {
+.ea-link.danger:hover {
   color: #f89c9c;
 }
-.__ea-link.disabled {
+.ea-link.disabled {
   color: #c0c4cc;
   pointer-events: none;
 }
-.__ea-link.disabled:hover {
+.ea-link.disabled:hover {
   color: #dcdee3;
 }

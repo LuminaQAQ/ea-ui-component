@@ -1,49 +1,9 @@
 // @ts-nocheck
-import { createElement, createSlotElement } from '../../utils/createElement';
-import Base from '../Base';
+import Base from '../Base.js';
+import "../ea-icon/index.js";
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
+import { stylesheet } from './src/style/stylesheet.js';
 
-.ea-loading_wrap {
-  position: relative;
-}
-.ea-loading_wrap i {
-  opacity: 0;
-  transition: opacity 0.2s;
-  color: #409eff;
-}
-.ea-loading_wrap .ea-loading_text {
-  color: #409eff;
-  margin-left: 0.5rem;
-}
-.ea-loading_wrap.ea-loading_wrap--fullscreen {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 999;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-.ea-loading_wrap.ea-loading_wrap--loading .ea-loading_mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background-color: hsla(0, 0%, 100%, 0.9);
-  z-index: 1;
-  transition: background-color 0.2s;
-}
-.ea-loading_wrap.ea-loading_wrap--loading .ea-loading_mask i {
-  opacity: 1;
-  font-size: 2rem;
-}
-`;
 
 export class EaLoading extends Base {
     #wrap;
@@ -55,23 +15,20 @@ export class EaLoading extends Base {
         super();
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-loading_wrap';
+        shadowRoot.innerHTML = `
+        <div class="ea-loading_wrap" part="container">
+            <div class="ea-loading_mask" part="mask-mask">
+                <ea-icon icon="icon-spin6 animate-spin" class="ea-loading_spinner" part="icon"></ea-icon>
+            </div>
+            <slot></slot>
+        </div>
+        `;
 
-        const spinner = createElement('i', 'ea-loading_spinner animate-spin');
-        const loading = createElement('div', 'ea-loading', spinner);
-        const loadingWrap = createElement('div', 'ea-loading_mask', loading);
-        wrap.appendChild(loadingWrap);
-
-        const slot = createSlotElement('')
-        wrap.appendChild(slot);
-
-        this.#wrap = wrap;
-        this.#loadingWrap = loadingWrap;
-        this.#spinner = spinner;
+        this.#wrap = shadowRoot.querySelector('.ea-loading_wrap');
+        this.#loadingWrap = shadowRoot.querySelector('.ea-loading_mask');
+        this.#spinner = shadowRoot.querySelector('.ea-loading_spinner');
 
         this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- loading 加载状态 -------
@@ -81,17 +38,11 @@ export class EaLoading extends Base {
     }
 
     set loading(flag) {
-        this.toggleAttr('loading', flag);
+        this.setAttribute('loading', flag);
 
-        if (flag) {
-            this.#wrap.classList.add('ea-loading_wrap--loading');
-            this.#loadingWrap.style.display = "flex";
-        } else {
-            this.#wrap.classList.remove('ea-loading_wrap--loading');
-            this.#loadingWrap.style.display = "none";
-        }
+        this.#wrap.classList.toggle('ea-loading_wrap--loading', flag);
 
-        this.handleFullscreen(this.fullscreen, flag, this.lock);
+        this.#handleFullscreen(this.fullscreen, flag, this.lock);
     }
     // #endregion
     // ------- end -------
@@ -105,7 +56,7 @@ export class EaLoading extends Base {
     set spinner(val) {
         this.setAttribute('spinner', val);
 
-        this.#spinner.className = `ea-loading_spinner animate-spin ${val}`;
+        this.#spinner.icon = `${val} animate-spin`
     }
     // #endregion
     // ------- end -------
@@ -145,6 +96,8 @@ export class EaLoading extends Base {
     }
 
     set text(val) {
+        if (!val) return;
+
         this.setAttribute('text', val);
     }
     // #endregion
@@ -157,6 +110,8 @@ export class EaLoading extends Base {
     }
 
     set fullscreen(val) {
+        if (!val) return;
+
         this.setAttribute('fullscreen', val);
     }
     // #endregion
@@ -169,32 +124,23 @@ export class EaLoading extends Base {
     }
 
     set lock(val) {
+        if (!val) return;
+
         this.setAttribute('lock', val);
     }
     // #endregion
     // ------- end -------
 
-    initTextElement(text) {
-        const el = createElement('div', 'ea-loading_text');
-        el.innerHTML = text;
-        this.#loadingWrap.appendChild(el);
-    }
-
-    handleFullscreen(isFullscreen, isLoading, isLock) {
+    #handleFullscreen(isFullscreen, isLoading, isLock) {
         if (isFullscreen) {
             this.#wrap.classList.toggle('ea-loading_wrap--fullscreen', isLoading);
-            this.#wrap.style.display = isLoading ? 'block' : 'none';
 
             if (isLock) document.body.style.overflow = isLoading ? 'hidden' : 'auto';
         }
     }
 
-    init() {
-        const that = this;
-
+    connectedCallback() {
         this.fullscreen = this.fullscreen;
-
-
 
         this.loading = this.loading;
 
@@ -204,11 +150,12 @@ export class EaLoading extends Base {
 
         this.background = this.background;
 
-        if (this.text) this.initTextElement(this.text);
-    }
-
-    connectedCallback() {
-        this.init();
+        if (this.text) {
+            const el = document.createElement('div');
+            el.className = 'ea-loading_text';
+            el.innerHTML = this.text;
+            this.#loadingWrap.appendChild(el);
+        }
     }
 }
 

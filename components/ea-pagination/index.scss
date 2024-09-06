@@ -1,5 +1,4 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
 .ea-pagination_wrap {
   display: flex;
@@ -47,6 +46,8 @@
     user-select: none;
     cursor: pointer;
     padding: 0 10px;
+
+    line-height: 28px;
 
     &.disabled {
       cursor: default;

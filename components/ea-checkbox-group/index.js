@@ -1,14 +1,7 @@
-// @ts-nocheck
-import setStyle from "../../utils/setStyle";
-import Base from "../Base";
+import { timeout } from "../../utils/timeout.js";
+import Base from "../Base.js";
 
-const stylesheet = `
-.ea-checkbox-group {
-  display: flex;
-}
-.ea-checkbox-group ::slotted(ea-checkbox) {
-  margin-right: 1.5rem;
-}`;
+import { stylesheet } from "./src/style/stylesheet.js";
 
 export class EaCheckboxGroup extends Base {
     #mounted = false;
@@ -33,6 +26,7 @@ export class EaCheckboxGroup extends Base {
     }
 
     set name(val) {
+        this.setAttribute('name', val);
         this.querySelectorAll('ea-checkbox').forEach(checkbox => {
             checkbox.setAttribute('name', val);
             checkbox.name = val;
@@ -97,10 +91,11 @@ export class EaCheckboxGroup extends Base {
     connectedCallback() {
         this.setAttribute('data-ea-component', true);
 
-        // name 唯一键值
-        this.name = this.name;
 
         setTimeout(() => {
+            // name 唯一键值
+            this.name = this.name;
+
             // value 指定选中值
             this.value = this.value;
 
@@ -115,7 +110,7 @@ export class EaCheckboxGroup extends Base {
             });
             this.#handleValueUptate(checkboxes);
             this.#mounted = true;
-        }, 20);
+        }, 50);
 
     }
 }

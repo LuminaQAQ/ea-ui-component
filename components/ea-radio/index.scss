@@ -1,6 +1,6 @@
 @import "../ea-ui-base-style.scss";
 
-:host(ea-radio) {
+:host {
   --margin-right: 0.75rem;
 
   --text-color: #606266;
@@ -13,13 +13,11 @@
 }
 
 .ea-radio_wrap {
-  // --checke-and-disabled-color: $color-disabled-text;
-
   display: flex;
   align-items: center;
   margin-right: 1rem;
 
-  .__ea-radio-input_wrap {
+  .ea-radio-input_wrap {
     width: var(--button-size);
     height: var(--button-size);
     line-height: 1;
@@ -29,9 +27,8 @@
       display: none;
     }
 
-    .__ea-radio-input_inner {
+    .ea-radio-input_inner {
       position: relative;
-      // display: inline-block;
       display: var(--radio-show-type);
 
       width: 1rem;
@@ -62,17 +59,15 @@
         border-color: $color-primary-bgc;
       }
     }
-    .__ea-radio-input_input {
-    }
   }
 
-  .__ea-radio-label_desc {
+  .ea-radio-label_desc {
     color: var(--text-color);
   }
 
   &.checked {
-    .__ea-radio-input_wrap {
-      .__ea-radio-input_inner {
+    .ea-radio-input_wrap {
+      .ea-radio-input_inner {
         border-color: $color-primary-bgc;
         background-color: $color-primary-bgc;
 
@@ -82,14 +77,14 @@
       }
     }
 
-    .__ea-radio-label_desc {
+    .ea-radio-label_desc {
       color: $color-primary-bgc;
     }
   }
 
   &.disabled {
-    .__ea-radio-input_wrap {
-      .__ea-radio-input_inner {
+    .ea-radio-input_wrap {
+      .ea-radio-input_inner {
         border-color: $color-disabled-btn-bgc;
         background-color: $color-disabled-btn-bgc;
 
@@ -99,19 +94,17 @@
       }
     }
 
-    .__ea-radio-label_desc {
+    .ea-radio-label_desc {
       color: $color-disabled-text;
     }
   }
 
   &.disabled[checked="true"] {
-    .__ea-radio-input_wrap {
-      .__ea-radio-input_inner {
+      .ea-radio-input_inner {
         &::before {
           background-color: $color-disabled-text;
         }
       }
-    }
   }
 
   &.border {

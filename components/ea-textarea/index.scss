@@ -1,5 +1,4 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
 .ea-textarea_wrap {
   position: relative;
@@ -30,12 +29,12 @@
       color: $color-disabled-text;
     }
 
-    &.disabled {
+    &:disabled {
       background-color: $color-disabled-btn-bgc;
       color: $color-disabled-text;
     }
 
-    &.invalid {
+    &:invalid {
       border-color: $color-danger-border;
     }
   }

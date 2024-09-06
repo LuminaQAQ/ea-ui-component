@@ -1,11 +1,8 @@
 // @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
 .ea-option-group_wrap .ea-option-group_title {
   padding-left: 20px;
   font-size: 12px;
@@ -25,7 +22,7 @@ export class EaOptionGroup extends Base {
 
         shadowRoot.innerHTML = `
             <div class='ea-option-group_wrap' part='container'>
-                <div class='ea-option-group_title' part='title'></div>
+                <div class='ea-option-group_title' part='title-wrap'></div>
                 <slot></slot>
             </div>
         `;
@@ -50,14 +47,8 @@ export class EaOptionGroup extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        const that = this;
-
-        this.label = this.label;
-    }
-
     connectedCallback() {
-        this.#init();
+        this.label = this.label;
     }
 }
 

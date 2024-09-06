@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    import('../components/ea-backtop/index.js')
     import('./index.scss')
 })
 </script>
@@ -40,7 +40,7 @@ onMounted(() => {
 
 ## 基础用法
 
-<ea-backtop><i class="icon-angle-up"></i></ea-backtop>
+<ea-backtop><ea-icon icon="icon-angle-up"></ea-icon></ea-backtop>
 
 <div class="demo">
     <p>滑动页面即可看到右下方的按钮。</p> 
@@ -56,7 +56,7 @@ onMounted(() => {
 
 ## 自定义触发元素
 
-<ea-backtop target="#hasTarget" bottom="100">UP</ea-backtop>
+<ea-backtop target="#hasTarget" bottom="120px">UP</ea-backtop>
 
 <div class="demo" id="hasTarget" style="height: 50px; overflow: auto;">
     <p>滑动该区域即可看到右下方的按钮。</p> 
@@ -69,7 +69,7 @@ onMounted(() => {
 ::: details 显示代码
 
 ```html
-<ea-backtop target="#hasTarget" bottom="100">UP</ea-backtop>
+<ea-backtop target="#hasTarget" bottom="120px">UP</ea-backtop>
 
 <div class="demo" id="hasTarget" style="height: 50px; overflow: auto;">
   <p>滑动该区域即可看到右下方的按钮。</p>
@@ -84,7 +84,7 @@ onMounted(() => {
 
 ## 自定义滚动到的视距
 
-<ea-backtop bottom="160" visibility-height="500">视距</ea-backtop>
+<ea-backtop bottom="200px" visibility-height="500">视距</ea-backtop>
 
 <div class="demo">
     <p>滑动页面大约 50px 即可看到右下方的按钮。</p> 
@@ -93,7 +93,7 @@ onMounted(() => {
 ::: details 查看代码
 
 ```html
-<ea-backtop bottom="160" visibility-height="500">视距</ea-backtop>
+<ea-backtop bottom="200px" visibility-height="500">视距</ea-backtop>
 
 <div class="demo">
   <p>滑动页面大约 50px 即可看到右下方的按钮。</p>

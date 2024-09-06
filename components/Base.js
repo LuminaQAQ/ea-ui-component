@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import setStyle from '../utils/setStyle';
+import setStyle from '../utils/setStyle.js';
 
 export default class Base extends HTMLElement {
     constructor() {
@@ -69,22 +69,7 @@ export default class Base extends HTMLElement {
             styleNode.innerHTML = stylesheet;
             this.shadowRoot.appendChild(styleNode);
         } else {
-            if (this.nodeName.toLowerCase() == 'ea-skeleton-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-skeleton" + '/index.css', import.meta.url).href);
-            else if (this.nodeName.toLowerCase() == 'ea-carousel-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-carousel" + '/index.css', import.meta.url).href);
-            else if (this.nodeName.toLowerCase() == 'ea-timeline-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-timeline" + '/index.css', import.meta.url).href);
-            else if (this.nodeName.toLowerCase() == 'ea-collapse-item' && !this.isProduction) setStyle(shadowRoot, new URL("ea-collapse" + '/index.css', import.meta.url).href);
-            else setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
+            setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
         }
-    }
-
-    /**
-     * 
-     * @param {string} url 链接
-     */
-    setIconFile(url) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = url;
-        this.shadowRoot.appendChild(link);
     }
 }

@@ -1,0 +1,26 @@
+export const stylesheet = `
+.ea-option_wrap {
+  position: relative;
+  padding: 0 20px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  color: #606266;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.ea-option_wrap.is-checked {
+  color: #409eff;
+  font-weight: 700;
+}
+.ea-option_wrap.is-disabled {
+  color: #c0c4cc;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.ea-option_wrap:hover {
+  background-color: #f5f7fa;
+}
+`;

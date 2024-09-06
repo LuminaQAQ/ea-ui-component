@@ -29,7 +29,7 @@
     border-color: var(--actived-text-color);
 
     ::slotted(a) {
-      color: var(--actived-text-color) !important;
+      color: var(--actived-text-color);
     }
   }
 
@@ -37,23 +37,23 @@
     color: var(--actived-text-color);
 
     ::slotted(a) {
-      color: var(--actived-text-color) !important;
+      color: var(--actived-text-color);
     }
   }
 
   &.is-disabled {
-    color: #c0c4cc !important;
+    color: #c0c4cc;
     pointer-events: none;
     cursor: not-allowed;
 
     ::slotted(a) {
-      color: #c0c4cc !important;
+      color: #c0c4cc;
     }
   }
 
   ::slotted(a) {
-    color: var(--normal-text-color) !important;
-    text-decoration: none !important;
+    color: var(--normal-text-color);
+    text-decoration: none;
 
     white-space: nowrap;
     overflow: hidden;

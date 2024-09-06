@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    import('../components/ea-alert/index.js')
     import('./index.scss')
 
     document.querySelector('#callback').addEventListener('close', (e) => {
@@ -11,9 +11,7 @@ onMounted(() => {
 })
 </script>
 
-# Alert 警告
-
-用于页面中展示重要的提示信息。
+# Form 表单
 
 ## 引入
 

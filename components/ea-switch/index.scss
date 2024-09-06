@@ -1,27 +1,74 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
+
+:host {
+  --active-text-color: #409eff;
+  --inactive-text-color: ##606266;
+
+  --active-checkbox-bgc: #409eff;
+  --inactive-checkbox-bgc: #eff1f5;
+
+  --active-disabled-text-color: #7ebfff;
+  --active-disabled-bgc: #bbdcff;
+  --inactive-disabled-text-color: #c0c4cc;
+  --inactive-disabled-bgc: #eff1f5;
+}
 
 .ea-switch_wrap {
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   input {
     display: none;
   }
 
-  span {
-    display: block;
-    cursor: default;
+  .ea-switch_label {
+    font-size: 0.875rem;
+    transition: color 0.2s;
   }
 
-  .ea-switch_label {
-    color: $color-default-text;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: color 0.2s;
+  input + .ea-switch_label--left {
+    color: var(--active-text-color);
+  }
 
-    &.ea-switch_label--active {
-      color: $color-switch-checked-bgc;
+  input:checked + .ea-switch_label--left {
+    color: var(--inactive-text-color);
+
+    & + .ea-switch_core {
+      background-color: var(--active-checkbox-bgc);
+      &::after {
+        left: calc(100% - 1rem - 2px);
+      }
+
+      & + .ea-switch_label--right {
+        color: var(--active-text-color);
+      }
+    }
+  }
+
+  input:disabled + .ea-switch_label--left {
+    color: var(--active-disabled-text-color);
+
+    & + .ea-switch_core {
+      background-color: var(--inactive-disabled-bgc);
+
+      & + .ea-switch_label--right {
+        color: var(--inactive-disabled-text-color);
+      }
+    }
+  }
+
+  input:checked:disabled + .ea-switch_label--left {
+    color: var(--inactive-disabled-text-color);
+    & + .ea-switch_core {
+      background-color: var(--active-disabled-bgc);
+      &::after {
+        left: calc(100% - 1rem - 2px);
+      }
+
+      & + .ea-switch_label--right {
+        color: var(--inactive-disabled-text-color);
+      }
     }
   }
 
@@ -35,14 +82,10 @@
     height: 1.25rem;
     line-height: 1.25rem;
 
-    background-color: $color-switch-bgc;
+    background-color: var(--inactive-checkbox-bgc);
     border-radius: 999px;
 
     transition: background-color 0.2s;
-
-    &.ea-switch_core--checked {
-      background-color: $color-switch-checked-bgc;
-    }
 
     &::after {
       content: "";
@@ -61,35 +104,14 @@
 
       transition: left 0.2s, transform 0.2s;
     }
-
-    &.ea-switch_core--checked {
-      &::after {
-        left: calc(100% - 1rem - 2px);
-      }
-    }
-
-    &.ea-switch_core--disabled {
-      background-color: $color-disabled-text;
-    }
   }
 
-  &.ea-switch_wrap--disabled {
+  &.disabled {
     cursor: not-allowed;
 
     .ea-switch_label,
     .ea-switch_core {
       pointer-events: none;
-    }
-
-    .ea-switch_core {
-      background-color: $color-switch-disabled-bgc;
-    }
-
-    .ea-switch_label {
-      color: $color-switch-disabled-text;
-      &.ea-switch_label--active {
-        color: $color-switch-disabled-active-text;
-      }
     }
   }
 }

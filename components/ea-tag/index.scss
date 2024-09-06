@@ -1,5 +1,4 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
 
 @mixin ea-tag-theme($theme-name, $text-color, $bgc-color, $border-color) {
   &.ea-tag--#{$theme-name} {
@@ -32,6 +31,12 @@
   border-width: 1px;
   border-style: solid;
   border-radius: 4px;
+
+  ea-icon {
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
 
   @include ea-tag-theme(
     "default",

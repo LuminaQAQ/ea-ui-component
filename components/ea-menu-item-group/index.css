@@ -33,3 +33,10 @@
   overflow: hidden;
   transition: height 0.3s;
 }
+.ea-menu-item-group_wrap .ea-submenu_dropdown_icon {
+  transform: rotate(-90deg);
+  transition: transform 0.3s;
+}
+.ea-menu-item-group_wrap.is-open .ea-submenu_dropdown_icon {
+  transform: rotate(0deg);
+}
