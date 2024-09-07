@@ -3,13 +3,13 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 
 export default defineConfig({
-  base: '/ea_ui_component/',
+  base: '/ea-ui-component/',
   title: "ea-ui",
 
   head: [
-    ['link', { rel: 'icon', href: '/ea_ui_component/favicon.ico' }],
-    ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/animation.css' }],
-    ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/fontello.css' }]
+    ['link', { rel: 'icon', href: '/ea-ui-component/favicon.ico' }],
+    ['link', { rel: 'stylesheet', href: '/ea-ui-component/ea-icon/css/animation.css' }],
+    ['link', { rel: 'stylesheet', href: '/ea-ui-component/ea-icon/css/fontello.css' }]
   ],
 
   cleanUrls: true,
