@@ -35,7 +35,7 @@
         color: $color-disabled-text;
       }
 
-      &:invalid {
+      &[aria-invalid="true"] {
         border-color: $color-danger-border;
       }
 
@@ -139,7 +139,8 @@
     }
 
     &.word-limit {
-      border: 1px solid $color-border;
+      border: 1px solid;
+      border-color: $color-border;
       border-radius: 3px;
 
       .ea-input_inner {
@@ -159,12 +160,17 @@
       }
     }
 
+    &.focus {
+      border-color: $color-primary-border;
+    }
+
     &.with-transition {
+      transition: border 0.3s;
+
       .ea-input_inner {
         transition: border 0.3s;
       }
-
-      .ea-input_suggestion-wrap {
+      \ .ea-input_suggestion-wrap {
         transition: transform 0.3s;
       }
     }
