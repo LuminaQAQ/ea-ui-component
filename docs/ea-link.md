@@ -48,24 +48,22 @@ onMounted(() => {
 
 ## 基础用法
 
-基础的文字链接用法。
+基础的文字链接用法。通过设置 `type` 属性来定义文字链接的类型。
 
 <div class="row left">
-    <ea-link href="https://github.com/LuminaQAQ">默认链接</ea-link>
-    <ea-link class="custom-link" href="https://github.com/LuminaQAQ">默认链接-自定义链接颜色</ea-link>
-    <ea-link href="https://github.com/LuminaQAQ" type="primary">主要链接</ea-link>
-    <ea-link href="https://github.com/LuminaQAQ" type="success">成功链接</ea-link>
-    <ea-link href="https://github.com/LuminaQAQ" type="warning">警告链接</ea-link>
-    <ea-link href="https://github.com/LuminaQAQ" type="danger">危险链接</ea-link>
-    <ea-link href="https://github.com/LuminaQAQ" type="info">信息链接</ea-link>
+  <ea-link href="https://github.com/LuminaQAQ">默认链接</ea-link>
+  <ea-link href="https://github.com/LuminaQAQ" type="primary">主要链接</ea-link>
+  <ea-link href="https://github.com/LuminaQAQ" type="success">成功链接</ea-link>
+  <ea-link href="https://github.com/LuminaQAQ" type="warning">警告链接</ea-link>
+  <ea-link href="https://github.com/LuminaQAQ" type="danger">危险链接</ea-link>
+  <ea-link href="https://github.com/LuminaQAQ" type="info">信息链接</ea-link>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row left">
   <ea-link href="https://github.com/LuminaQAQ">默认链接</ea-link>
-  <ea-link class="custom-link" href="https://github.com/LuminaQAQ"
-    >默认链接-自定义链接颜色</ea-link
-  >
   <ea-link href="https://github.com/LuminaQAQ" type="primary">主要链接</ea-link>
   <ea-link href="https://github.com/LuminaQAQ" type="success">成功链接</ea-link>
   <ea-link href="https://github.com/LuminaQAQ" type="warning">警告链接</ea-link>
@@ -74,30 +72,20 @@ onMounted(() => {
 </div>
 ```
 
-`css`: 自定义样式
-
-```html
-<style>
-  .custom-link::part(wrap) {
-    color: pink;
-  }
-
-  /* 或改变所有 */
-
-  ea-link::part(wrap) {
-    color: black;
-  }
-</style>
-```
+:::
 
 ## 禁用状态
 
-文字链接不可用状态。
+文字链接不可用状态。通过设置 `disabled` 属性来定义是否禁用状态。
 
 <div class="row left">
-    <ea-link type="primary" href="https://github.com/LuminaQAQ">未禁用状态</ea-link>
-    <ea-link disabled>禁用状态</ea-link>
+  <ea-link type="primary" href="https://github.com/LuminaQAQ"
+    >未禁用状态</ea-link
+  >
+  <ea-link disabled>禁用状态</ea-link>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row left">
@@ -108,14 +96,18 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## 下划线
 
-文字链接下划线。
+文字链接下划线。通过设置 `underline` 属性来定义是否显示下划线。
 
 <div class="row left">
-    <ea-link>无下划线</ea-link>
-    <ea-link type="primary" underline>下划线</ea-link>
+  <ea-link>无下划线</ea-link>
+  <ea-link type="primary" underline>下划线</ea-link>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row left">
@@ -124,14 +116,18 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## 图标
 
 带图标的文字链接可增强辨识度。
 
 <div class="row left">
-    <ea-link icon="icon-eye">查看</ea-link>
-    <ea-link icon="icon-share">分享</ea-link>
+  <ea-link icon="icon-eye">查看</ea-link>
+  <ea-link icon="icon-share">分享</ea-link>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row left">
@@ -139,6 +135,8 @@ onMounted(() => {
   <ea-link icon="icon-share">分享</ea-link>
 </div>
 ```
+
+:::
 
 ## Attributes
 
@@ -149,3 +147,9 @@ onMounted(() => {
 | underline | 是否下划线 | boolean | -                                           | true   |
 | icon      | 图标       | string  | -                                           | -      |
 | href      | 链接地址   | string  | -                                           | -      |
+
+## CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
