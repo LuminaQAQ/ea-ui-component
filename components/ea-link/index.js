@@ -10,9 +10,9 @@ export class EaLink extends Base {
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.innerHTML = `
-      <div class="ea-link" part="container">
+      <a class="ea-link" part="container">
         <slot></slot>
-      </div>
+      </a>
     `;
 
     this.#container = shadowRoot.querySelector('.ea-link');
@@ -75,6 +75,7 @@ export class EaLink extends Base {
   }
 
   set underline(value) {
+    this.setAttribute('underline', value);
     this.#container.classList.toggle('underline', value);
   }
   // #endregion
