@@ -7,9 +7,11 @@ export function createSuggestionBoard(container, val) {
 
     const suggestionBoard = document.createElement('ul');
     suggestionBoard.className = "ea-input_suggestion-wrap";
+    suggestionBoard.part = 'suggestion-wrap';
 
     val.forEach(item => {
         const li = document.createElement('li');
+        li.part = 'suggestion-item';
         li.innerText = item.value;
 
         li.addEventListener('click', () => {
@@ -21,8 +23,9 @@ export function createSuggestionBoard(container, val) {
     });
 
     const loadingIcon = document.createElement('ea-icon');
-    loadingIcon.className = 'loading-icon animate-spin';
-    loadingIcon.icon = 'icon-spin6 ';
+    loadingIcon.className = 'loading-icon';
+    loadingIcon.icon = 'icon-spin6 animate-spin';
+    loadingIcon.part = 'loading-icon';
     suggestionBoard.appendChild(loadingIcon);
 
     window.addEventListener('click', (e) => {

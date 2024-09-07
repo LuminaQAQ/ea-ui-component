@@ -29,7 +29,7 @@ export const stylesheet = `
 .ea-input_container .ea-input_wrap .ea-input_inner::placeholder {
   color: #c0c4cc;
 }
-.ea-input_container .ea-input_wrap .ea-input_inner:invalid {
+.ea-input_container .ea-input_wrap .ea-input_inner[aria-invalid=true] {
   border-color: #f56c6c;
 }
 .ea-input_container .ea-input_wrap .ea-input_inner[disabled] {
@@ -110,7 +110,8 @@ export const stylesheet = `
   transform: scaleY(1);
 }
 .ea-input_container .ea-input_wrap.word-limit {
-  border: 1px solid #dcdfe6;
+  border: 1px solid;
+  border-color: #dcdfe6;
   border-radius: 3px;
 }
 .ea-input_container .ea-input_wrap.word-limit .ea-input_inner {
@@ -125,10 +126,16 @@ export const stylesheet = `
   font-size: 0.75rem;
   text-align: center;
 }
+.ea-input_container .ea-input_wrap.focus {
+  border-color: #409eff;
+}
+.ea-input_container .ea-input_wrap.with-transition {
+  transition: border 0.3s;
+}
 .ea-input_container .ea-input_wrap.with-transition .ea-input_inner {
   transition: border 0.3s;
 }
-.ea-input_container .ea-input_wrap.with-transition .ea-input_suggestion-wrap {
+.ea-input_container .ea-input_wrap.with-transition \ .ea-input_suggestion-wrap {
   transition: transform 0.3s;
 }
 `;
