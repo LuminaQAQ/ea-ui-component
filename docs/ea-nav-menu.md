@@ -4,7 +4,6 @@ import { onMounted } from 'vue'
 onMounted(() => {
     import('./index.scss')
     
-    import('../components/ea-icon/index.js')
     import('../components/ea-switch/index.js')
     import('../components/ea-menu/index.js')
     import('../components/ea-link/index.js')
