@@ -7,7 +7,7 @@ import { createClearableFixIcon, createFixIcon, createShowPasswordIcon } from ".
 import { createWordLimitElement } from "./src/components/createWordLimitElement.js";
 import { createSuggestionBoard } from "./src/components/createSuggestionBoard.js"
 
-import { withTransitionTimeOut } from "../../utils/timeout.js";
+import { timeout, withTransitionTimeOut } from "../../utils/timeout.js";
 import { dispatchEvent } from "./src/utils/dispatchEvent.js"
 import { handleSearchResult } from "./src/utils/handleSearchResult.js";
 import { initTriggerAfterInputEvent, initTriggerOnFocusEvent } from "./src/utils/handleSuggestionBoardTrigger.js";
@@ -136,7 +136,7 @@ export class EaInput extends Base {
         this.setAttribute("show-password", val);
         this.#input.type = "password";
 
-        const showPasswordIcon = createShowPasswordIcon(this.#wrap, this.#input, 'icon-eye');
+        createShowPasswordIcon(this.#wrap, this.#input, 'icon-eye');
     }
     // #endregion
     // ------- end -------
@@ -274,7 +274,7 @@ export class EaInput extends Base {
         this.#input.minLength = val;
 
         this.#input.addEventListener('input', (e) => {
-            this.#input.classList.toggle('invalid', e.target.value.length < val);
+            this.#input.ariaInvalid = e.target.value.length < val;
         });
     }
     // #endregion
@@ -295,6 +295,14 @@ export class EaInput extends Base {
         const wordLimit = createWordLimitElement.call(this, this.#input);
         this.#wrap.classList.toggle('word-limit', val);
         this.#wrap.appendChild(wordLimit);
+
+        this.#input.addEventListener('focus', (e) => {
+            this.#wrap.classList.add("focus");
+        });
+
+        this.#input.addEventListener('blur', (e) => {
+            this.#wrap.classList.remove("focus");
+        });
     }
     // #endregion
     // ------- end -------
@@ -316,6 +324,10 @@ export class EaInput extends Base {
 
     focus() {
         this.#input.focus();
+    }
+
+    blur() {
+        this.#input.blur();
     }
 
     connectedCallback() {
@@ -374,6 +386,10 @@ export class EaInput extends Base {
         });
 
         withTransitionTimeOut(this.#wrap);
+
+        timeout(() => {
+            this.dispatchEvent(new CustomEvent("ready", { bubbles: true }));
+        }, 0);
     }
 }
 
