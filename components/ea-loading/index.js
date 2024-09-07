@@ -17,10 +17,12 @@ export class EaLoading extends Base {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
         <div class="ea-loading_wrap" part="container">
-            <div class="ea-loading_mask" part="mask-mask">
+            <div class="ea-loading_mask" part="mask-wrap">
                 <ea-icon icon="icon-spin6 animate-spin" class="ea-loading_spinner" part="icon"></ea-icon>
             </div>
-            <slot></slot>
+            <div class="ea-loading_content" part="content-wrap">
+                <slot></slot>
+            </div>
         </div>
         `;
 
