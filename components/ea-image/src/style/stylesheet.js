@@ -1,4 +1,11 @@
 export const stylesheet = `
+.ea-image_wrap {
+  align-content: center;
+  text-align: center;
+}
+.ea-image_wrap.is-error {
+  background-color: #f5f7fa;
+}
 .ea-image_wrap.is-error svg {
   width: 20px;
   height: 20px;
