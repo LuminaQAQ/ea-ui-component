@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 
 onMounted(() => {
-  import('../index.js')
+  import('../components/ea-input/index.js')
   import('./index.scss')
 
   // document.querySelector('#basicInput').addEventListener('change', (e) => {
