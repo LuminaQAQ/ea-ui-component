@@ -17,8 +17,9 @@ function handlePreviewDisplay(wrap) {
  * @returns {HTMLElement} 返回创建的关闭按钮元素
  */
 function createCloseBtn(wrap) {
-    const closeBtn = createElement('span', 'ea-icon-close');
-    closeBtn.innerText = "x";
+    const closeBtn = createElement('ea-icon', 'ea-icon-close');
+    closeBtn.part = 'close-btn';
+    closeBtn.icon = 'icon-cancel';
 
     closeBtn.addEventListener('click', () => {
         handlePreviewDisplay(wrap);
@@ -67,11 +68,12 @@ function handleImageDrag(wrap, img) {
  */
 function createPreviewTools(img) {
     const toolsWrap = createElement('div', 'ea-image_preview-tools');
+    toolsWrap.part = 'tools-wrap';
     toolsWrap.innerHTML = `
-        <span class="ea-icon-zoom ea-icon-zoom-in">+</span>
-        <span class="ea-icon-zoom ea-icon-zoom-out">-</span>
-        <span class="ea-icon-rotate ea-icon-rotate-left">↺</span>
-        <span class="ea-icon-rotate ea-icon-rotate-right">↻</span>
+        <span class="ea-icon-zoom ea-icon-zoom-in" part="zoom-in">+</span>
+        <span class="ea-icon-zoom ea-icon-zoom-out" part="zoom-out">-</span>
+        <span class="ea-icon-rotate ea-icon-rotate-left" part="rotate-left">↺</span>
+        <span class="ea-icon-rotate ea-icon-rotate-right" part="rotate-righ">↻</span>
     `;
 
     const zoomInBtn = toolsWrap.querySelector('.ea-icon-zoom-in');
@@ -114,6 +116,7 @@ export function initImagePreview(container, img, isPreview) {
 
             // 创建预览包装元素，并将克隆的图片添加到其中。
             const wrap = createElement('div', 'ea-image_preview-wrap', [img]);
+            wrap.part = 'preview-wrap';
             container.appendChild(wrap);
 
             // 创建并添加关闭按钮到预览窗口。

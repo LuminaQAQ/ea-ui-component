@@ -32,9 +32,26 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
+
 ## 基础用法
 
-> 可通过 `fit` 确定图片如何适应到容器框，同原生 `object-fit`。
+> 可通过 `fit` 确定图片如何适应到容器框，同原生 [`object-fit`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit)。
 
 <div class="row">
     <div class="sg-item" v-for="fit in fits">
@@ -42,6 +59,8 @@ onMounted(() => {
         <ea-image :fit="fit" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></ea-image>
     </div>
 </div>
+
+::: details 查看代码
 
 ```html
 <ea-image
@@ -66,7 +85,11 @@ onMounted(() => {
 ></ea-image>
 ```
 
+:::
+
 ## 占位内容
+
+在 `slot="placeholder"` 插槽中自定义占位内容。
 
 <div class="row">
     <ea-image
@@ -76,6 +99,8 @@ onMounted(() => {
         <div slot="placeholder">加载中...</div>
     </ea-image>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row">
@@ -88,17 +113,23 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## 加载失败
 
 <div class="row">
     <ea-image fit="fill"></ea-image>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="row">
   <ea-image fit="fill"></ea-image>
 </div>
 ```
+
+:::
 
 ## 懒加载
 
@@ -114,6 +145,8 @@ onMounted(() => {
 
 > 单项
 
+::: details 查看代码
+
 ```html
 <div class="row">
   <ea-image
@@ -123,7 +156,11 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 > 多项
+
+::: details 查看代码
 
 ```html
 <div class="demo" style="height: 120px; overflow: auto;">
@@ -158,11 +195,15 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## 大图预览
 
 <div class="row">
     <ea-image src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" lazy preview></ea-image>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row">
@@ -174,6 +215,8 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## Attributes
 
 | 参数    | 说明         | 类型    | 可选值                                 | 默认值 |
@@ -183,6 +226,23 @@ onMounted(() => {
 | alt     | 原生 alt     | String  | -                                      | -      |
 | lazy    | 是否懒加载   | Boolean | -                                      | false  |
 | preview | 是否开启预览 | Boolean | -                                      | false  |
+
+## CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称                                       | 说明                   |
+| :----------------------------------------- | :--------------------- |
+| container                                  | 外层容器               |
+| image                                      | 图片内容               |
+| placeholder-wrap                           | 图片未加载时的占位内容 |
+| **(仅开启 `preview` 属性时)** preview-wrap | 图片预览容器           |
+| **(仅开启 `preview` 属性时)** close-btn    | 关闭按钮               |
+| **(仅开启 `preview` 属性时)** tools-wrap   | 操作工具栏容器         |
+| **(仅开启 `preview` 属性时)** zoom-in      | 放大按钮               |
+| **(仅开启 `preview` 属性时)** zoom-out     | 缩小按钮               |
+| **(仅开启 `preview` 属性时)** rotate-left  | 左旋转按钮             |
+| **(仅开启 `preview` 属性时)** rotate-right | 右旋转按钮             |
 
 ## Events
 

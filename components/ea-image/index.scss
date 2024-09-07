@@ -1,7 +1,10 @@
 @import "../ea-ui-base-style.scss";
 
 .ea-image_wrap {
+  align-content: center;
+  text-align: center;
   &.is-error {
+    background-color: #f5f7fa;
     svg {
       width: 20px;
       height: 20px;

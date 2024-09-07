@@ -1,5 +1,7 @@
 import Base from '../Base.js';
 
+import "../ea-icon/index.js"
+
 import { errorImage } from "./src/assets/errorImage.js";
 
 import { stylesheet } from './src/style/stylesheet.js';
@@ -18,7 +20,9 @@ export class EaImage extends Base {
         shadowRoot.innerHTML = `
             <div class='ea-image_wrap' part='container'>
                 <img part='image' class='ea-image' />
-                <slot name='placeholder'></slot>
+                <div class='ea-image_placeholder-wrap' part='placeholder-wrap'>
+                    <slot name='placeholder'></slot>
+                </div>
             </div>
         `;
 
@@ -104,6 +108,8 @@ export class EaImage extends Base {
     }
 
     set lazy(value) {
+        if (!value) return;
+
         this.setAttribute('lazy', value);
     }
     // #endregion
@@ -116,6 +122,7 @@ export class EaImage extends Base {
     }
 
     set preview(value) {
+        if (!value) return;
         this.setAttribute('preview', value);
     }
     // #endregion
