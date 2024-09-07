@@ -74,6 +74,23 @@ ea-infinite::part(wrap) {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
+
 ## 基础用法
 
 通过 `ea-infinite` 与 `ea-infinite-item` 组件配合实现无限滚动。通过监听 `bottomReached` 事件可实现滚动到底部时自动执行加载方法。
@@ -87,6 +104,27 @@ ea-infinite::part(wrap) {
         </template>
     </ea-infinite>
 </div>
+
+::: details 查看代码
+
+> `css`: 通过使用 `::part()` 伪类修改 `ea-infinite` 样式
+
+```css
+.sg-infinite-item {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  background-color: aquamarine;
+  margin-bottom: 10px;
+}
+
+ea-infinite::part(wrap) {
+  display: flex;
+  flex-direction: column;
+}
+```
+
+> `html`
 
 ```html
 <div class="demo" style="height: 150px; overflow: auto;">
@@ -108,23 +146,6 @@ ea-infinite::part(wrap) {
     </ea-infinite-item>
   </ea-infinite>
 </div>
-```
-
-> `css`: 通过使用 `::part()` 伪类修改 `ea-infinite` 样式
-
-```css
-.sg-infinite-item {
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  background-color: aquamarine;
-  margin-bottom: 10px;
-}
-
-ea-infinite::part(wrap) {
-  display: flex;
-  flex-direction: column;
-}
 ```
 
 > `js`: 通过监听 `bottomReached` 事件来处理相应事件
@@ -149,7 +170,11 @@ infiniteNodes.wrap.addEventListener("bottomReached", (e) => {
 });
 ```
 
+:::
+
 ## 禁用加载
+
+通过设置 `disabled` 属性，可以禁用无限加载功能。若同时使用了插槽名为 `noMore` 的插槽，则会显示 `noMore` 插槽的内容。
 
 <div class="demo" style="height: 150px; overflow: auto;">
   <ea-infinite id="infinite-disabled" delay="500" loading>
@@ -173,13 +198,11 @@ infiniteNodes.wrap.addEventListener("bottomReached", (e) => {
   </ea-infinite>
 </div>
 
-> `js`: 通过设置 `disabled` 属性，可以禁用无限加载功能。若同时使用了插槽名为 `noMore` 的插槽，则会显示 `noMore` 插槽的内容。
-
 ```js
 infinite.disabled = true;
 ```
 
-### 示例
+::: details 查看代码
 
 `css`
 
@@ -254,6 +277,8 @@ infiniteNodes.disabledWrap.addEventListener("bottomReached", (e) => {
 });
 ```
 
+:::
+
 ## Attributes
 
 | 参数     | 说明                                                          | 类型    | 可选值 | 默认值 |
@@ -261,6 +286,16 @@ infiniteNodes.disabledWrap.addEventListener("bottomReached", (e) => {
 | disabled | 是否禁用无限加载                                              | Boolean | -      | false  |
 | loading  | 加载中时显示的内容<br/>(需要配合 `slot="loading"` 的容器使用) | String  | -      | -      |
 | delay    | 延迟加载的时间(ms)                                            | Number  | -      | 200    |
+
+## CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称         | 说明                                              |
+| ------------ | ------------------------------------------------- |
+| container    | 内容容器                                          |
+| loading-wrap | 显示加载中的内容的容器(`slot="loading"`的容器)    |
+| noMore-wrap  | 显示无更多数据的内容的容器(`slot="noMore"`的容器) |
 
 ## Events
 

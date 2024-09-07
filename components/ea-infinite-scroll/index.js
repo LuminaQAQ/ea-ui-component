@@ -1,4 +1,5 @@
 import Base from '../Base.js';
+import "../ea-icon/index.js"
 import "../ea-infinite-scroll-item/index.js"
 
 export class EaInfiniteScroll extends Base {
@@ -14,10 +15,14 @@ export class EaInfiniteScroll extends Base {
             <div class='ea-infinite_wrap' part='container'>
                 <slot></slot>
             </div>
-            <slot name='loading' style="display: none;"></slot>
-            <slot name='noMore' style="display: none;"></slot>
+            <div class='ea-infinite_loading-wrap' part='loading-wrap'>
+                <slot name='loading' style="display: none;"></slot>
+            </div>
+            <div class='ea-infinite_noMore-wrap' part='noMore-wrap'>
+                <slot name='noMore' style="display: none;"></slot>
+            </div>
         `;
-        
+
         this.#loadingSlot = shadowRoot.querySelector('slot[name="loading"]');
         this.#noMoreSlot = shadowRoot.querySelector('slot[name="noMore"]');
     }
