@@ -2,107 +2,161 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
-    import('./index.scss')
+  import('../components/ea-message/index.js')
+  import('../components/ea-button/index.js')
+  import('./index.scss')
 
-    const message = new EaMessage();
+  // 基础用法
+  const btn = document.getElementById("messageTextBtn");
+  btn.addEventListener("click", () => {
+    window.$message.open("1");
+  });
 
-    // 基础用法
-    document.getElementById('messageTextBtn').addEventListener('click', () => {
-        message.open("1");
-    })
 
+  // 不同状态
+  const differentController = {
+    objectBtn: document.getElementById("messageObjectBtn"),
+    successObjectBtn: document.getElementById("messageSuccessObjectBtn"),
+    errorObjectBtn: document.getElementById("messageErrorObjectBtn"),
+    warningObjectBtn: document.getElementById("messageWarningObjectBtn"),
 
-    // 不同状态
-    document.getElementById('messageObjectBtn').addEventListener('click', () => {
-        message.open({
-            text: "2",
-            type: "info",
+    addEvent(btn, fn) {
+      btn.addEventListener("click", () => {
+        if (fn) fn();
+      });
+    },
+
+    init() {
+      this.addEvent(this.objectBtn, () => {
+        window.$message.open({
+          text: "2",
+          type: "info",
         });
-    })
+      });
 
-    document.getElementById('messageSuccessObjectBtn').addEventListener('click', () => {
-        message.open({
-            text: "2",
-            type: "success",
+      this.addEvent(this.successObjectBtn, () => {
+        window.$message.open({
+          text: "2",
+          type: "success",
         });
-    })
+      });
 
-    document.getElementById('messageErrorObjectBtn').addEventListener('click', () => {
-        message.open({
-            text: "3",
-            type: "error",
+      this.addEvent(this.errorObjectBtn, () => {
+        window.$message.open({
+          text: "3",
+          type: "error",
         });
-    })
+      });
 
-    document.getElementById('messageWarningObjectBtn').addEventListener('click', () => {
-        message.open({
-            text: "3",
-            type: "warning",
+      this.addEvent(this.warningObjectBtn, () => {
+        window.$message.open({
+          text: "3",
+          type: "warning",
         });
-    })
+      });
+    },
+  };
+
+  differentController.init();
 
     
-    // 不可关闭
-    document.getElementById('messageObjectBtnHasClose').addEventListener('click', () => {
-        message.open({
-            text: "2",
-            showClose: true,
-            type: "info",
-        });
-    })
+  // 可关闭
+  const closableController = {
+    closableBtn: document.getElementById("messageObjectBtnHasClose"),
+    durationIsZeroBtn: document.getElementById("messageObjectBtnNotClose"),
+    successObjectBtn: document.getElementById(
+      "messageSuccessObjectBtnBtnHasClose"
+    ),
+    errorObjectBtn: document.getElementById("messageErrorObjectBtnBtnHasClose"),
+    warningObjectBtn: document.getElementById(
+      "messageWarningObjectBtnBtnHasClose"
+    ),
 
-    document.getElementById('messageObjectBtnNotClose').addEventListener('click', () => {
-        message.open({
-            text: "2",
-            showClose: true,
-            type: "info",
-            duration: 0,
-        });
-    })
+    addEvent(btn, fn) {
+      btn.addEventListener("click", () => {
+        if (fn) fn();
+      });
+    },
 
-    document.getElementById('messageSuccessObjectBtnBtnHasClose').addEventListener('click', () => {
-        message.open({
-            text: "2",
-            showClose: true,
-            type: "success",
+    init() {
+      this.addEvent(this.closableBtn, () => {
+        window.$message.open({
+          text: "2",
+          showClose: true,
+          type: "info",
         });
-    })
+      });
 
-    document.getElementById('messageErrorObjectBtnBtnHasClose').addEventListener('click', () => {
-        message.open({
-            text: "3",
-            showClose: true,
-            type: "error",
+      this.addEvent(this.durationIsZeroBtn, () => {
+        window.$message.open({
+          text: "2",
+          showClose: true,
+          type: "info",
+          duration: 0,
         });
-    })
+      });
 
-    document.getElementById('messageWarningObjectBtnBtnHasClose').addEventListener('click', () => {
-        message.open({
-            text: "3",
-            showClose: true,
-            type: "warning",
+      this.addEvent(this.successObjectBtn, () => {
+        window.$message.open({
+          text: "2",
+          showClose: true,
+          type: "success",
         });
-    })
+      });
 
-    // 文字居中
-    document.getElementById('centerMessageObjectBtn').addEventListener('click', () => {
-        message.open({
+      this.addEvent(this.errorObjectBtn, () => {
+        window.$message.open({
+          text: "3",
+          showClose: true,
+          type: "error",
+        });
+      });
+
+      this.addEvent(this.warningObjectBtn, () => {
+        window.$message.open({
+          text: "3",
+          showClose: true,
+          type: "warning",
+        });
+      });
+    },
+  };
+
+  closableController.init();
+
+  // 文字居中
+  const centerController = {
+    centerBtn: document.getElementById("centerMessageObjectBtn"),
+    init() {
+      this.centerBtn.addEventListener("click", () => {
+        window.$message.open({
+          text: "3",
+          showClose: true,
+          center: true,
+        });
+      });
+    },
+  };
+  centerController.init();
+
+  // 关闭事件
+  const closeEventController = {
+    closeEventBtn: document.getElementById("closeEventBtn"),
+    init() {
+      this.closeEventBtn.addEventListener("click", () => {
+        window.$message
+          .open({
             text: "3",
             showClose: true,
             center: true,
-        })
-    })
-
-    document.getElementById('closeEventBtn').addEventListener('click', () => {
-        message.open({
-            text: "3",
-            showClose: true,
-            center: true,
-        }).onClose(() => {
-            alert('关闭了');
-        });
-    })
+          })
+          .onClose(() => {
+            alert("关闭了");
+          });
+      });
+    },
+  };
+  closeEventController.init();
 })
 </script>
 
@@ -112,16 +166,30 @@ onMounted(() => {
 
 ## 引入
 
-> `js`: 注意需要在引入的部位编写业务逻辑.
+`js`
 
 ```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-message/index.js";
-  import { EaMessage } from "./node_modules/easy-component-ui/components/ea-message/MessageClass.js";
-
-  const message = new EaMessage();
 </script>
 ```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
 
 ## 基础用法
 
@@ -131,27 +199,30 @@ onMounted(() => {
     <ea-button id="messageTextBtn">文本类消息提示(info)</ea-button>
 </div>
 
+::: details 查看代码
+
+`html`
+
 ```html
 <div class="demo">
   <ea-button id="messageTextBtn">文本类消息提示(info)</ea-button>
 </div>
 ```
 
-```html
-<script type="module">
-  import "./node_modules/easy-component-ui/components/ea-message/index.js";
-  import { EaMessage } from "./node_modules/easy-component-ui/components/ea-message/MessageClass.js";
+`js`
 
-  const message = new EaMessage();
-  document.getElementById("messageTextBtn").addEventListener("click", () => {
-    message.open("1");
-  });
-</script>
+```js
+const btn = document.getElementById("messageTextBtn");
+btn.addEventListener("click", () => {
+  window.$message.open("1");
+});
 ```
+
+:::
 
 ## 不同状态
 
-用来显示「成功、警告、消息、错误」类的操作反馈。
+用来显示「成功、警告、消息、错误」类的操作反馈。通过设置 `option` 中的 `type` 属性来改变主题。
 
 <div class="row left">
     <ea-button id="messageObjectBtn">对象类消息提示(info)</ea-button>
@@ -159,6 +230,10 @@ onMounted(() => {
     <ea-button id="messageErrorObjectBtn" type="danger">对象类消息提示(error)</ea-button>
     <ea-button id="messageWarningObjectBtn" type="warning">对象类消息提示(warning)</ea-button>
 </div>
+
+::: details 查看代码
+
+`html`
 
 ```html
 <div class="row left">
@@ -175,42 +250,56 @@ onMounted(() => {
 </div>
 ```
 
+`js`
+
 ```js
-const message = new EaMessage();
-document.getElementById("messageObjectBtn").addEventListener("click", () => {
-  message.open({
-    text: "2",
-    type: "info",
-  });
-});
+const differentController = {
+  objectBtn: document.getElementById("messageObjectBtn"),
+  successObjectBtn: document.getElementById("messageSuccessObjectBtn"),
+  errorObjectBtn: document.getElementById("messageErrorObjectBtn"),
+  warningObjectBtn: document.getElementById("messageWarningObjectBtn"),
 
-document
-  .getElementById("messageSuccessObjectBtn")
-  .addEventListener("click", () => {
-    message.open({
-      text: "2",
-      type: "success",
+  addEvent(btn, fn) {
+    btn.addEventListener("click", () => {
+      if (fn) fn();
     });
-  });
+  },
 
-document
-  .getElementById("messageErrorObjectBtn")
-  .addEventListener("click", () => {
-    message.open({
-      text: "3",
-      type: "error",
+  init() {
+    this.addEvent(this.objectBtn, () => {
+      window.$message.open({
+        text: "2",
+        type: "info",
+      });
     });
-  });
 
-document
-  .getElementById("messageWarningObjectBtn")
-  .addEventListener("click", () => {
-    message.open({
-      text: "3",
-      type: "warning",
+    this.addEvent(this.successObjectBtn, () => {
+      window.$message.open({
+        text: "2",
+        type: "success",
+      });
     });
-  });
+
+    this.addEvent(this.errorObjectBtn, () => {
+      window.$message.open({
+        text: "3",
+        type: "error",
+      });
+    });
+
+    this.addEvent(this.warningObjectBtn, () => {
+      window.$message.open({
+        text: "3",
+        type: "warning",
+      });
+    });
+  },
+};
+
+differentController.init();
 ```
+
+:::
 
 ## 可关闭
 
@@ -218,11 +307,13 @@ document
 
 <div class="row left">
     <ea-button id="messageObjectBtnHasClose">对象类消息提示(info)</ea-button>
-    <ea-button id="messageObjectBtnNotClose">对象类消息提示(不可关闭)</ea-button>
+    <ea-button id="messageObjectBtnNotClose">对象类消息提示(不会自动关闭)</ea-button>
     <ea-button id="messageSuccessObjectBtnBtnHasClose" type="success">对象类消息提示(success)</ea-button>
     <ea-button id="messageErrorObjectBtnBtnHasClose" type="danger">对象类消息提示(error)</ea-button>
     <ea-button id="messageWarningObjectBtnBtnHasClose" type="warning">对象类消息提示(warning)</ea-button>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row left">
@@ -240,29 +331,71 @@ document
 ```
 
 ```js
-const message = new EaMessage();
-document
-  .getElementById("messageObjectBtnHasClose")
-  .addEventListener("click", () => {
-    message.open({
-      text: "2",
-      showClose: true,
-      type: "info",
-    });
-  });
+const closableController = {
+  closableBtn: document.getElementById("messageObjectBtnHasClose"),
+  durationIsZeroBtn: document.getElementById("messageObjectBtnNotClose"),
+  successObjectBtn: document.getElementById(
+    "messageSuccessObjectBtnBtnHasClose"
+  ),
+  errorObjectBtn: document.getElementById("messageErrorObjectBtnBtnHasClose"),
+  warningObjectBtn: document.getElementById(
+    "messageWarningObjectBtnBtnHasClose"
+  ),
 
-// 不会自动消失
-document
-  .getElementById("messageObjectBtnNotClose")
-  .addEventListener("click", () => {
-    message.open({
-      text: "2",
-      showClose: true,
-      type: "info",
-      duration: 0,
+  addEvent(btn, fn) {
+    btn.addEventListener("click", () => {
+      if (fn) fn();
     });
-  });
+  },
+
+  init() {
+    this.addEvent(this.closableBtn, () => {
+      window.$message.open({
+        text: "2",
+        showClose: true,
+        type: "info",
+      });
+    });
+
+    this.addEvent(this.durationIsZeroBtn, () => {
+      window.$message.open({
+        text: "2",
+        showClose: true,
+        type: "info",
+        duration: 0,
+      });
+    });
+
+    this.addEvent(this.successObjectBtn, () => {
+      window.$message.open({
+        text: "2",
+        showClose: true,
+        type: "success",
+      });
+    });
+
+    this.addEvent(this.errorObjectBtn, () => {
+      window.$message.open({
+        text: "3",
+        showClose: true,
+        type: "error",
+      });
+    });
+
+    this.addEvent(this.warningObjectBtn, () => {
+      window.$message.open({
+        text: "3",
+        showClose: true,
+        type: "warning",
+      });
+    });
+  },
+};
+
+closableController.init();
 ```
+
+:::
 
 ## 文字居中
 
@@ -272,6 +405,8 @@ document
     <ea-button id="centerMessageObjectBtn">文字居中</ea-button>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="row left">
   <ea-button id="centerMessageObjectBtn">文字居中</ea-button>
@@ -279,22 +414,30 @@ document
 ```
 
 ```js
-document
-  .getElementById("centerMessageObjectBtn")
-  .addEventListener("click", () => {
-    message.open({
-      text: "3",
-      showClose: true,
-      center: true,
+const centerController = {
+  centerBtn: document.getElementById("centerMessageObjectBtn"),
+  init() {
+    this.centerBtn.addEventListener("click", () => {
+      window.$message.open({
+        text: "3",
+        showClose: true,
+        center: true,
+      });
     });
-  });
+  },
+};
+centerController.init();
 ```
+
+:::
 
 ## close 事件
 
 <div class="demo">
     <ea-button id="closeEventBtn">自定义 close 事件</ea-button>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -303,19 +446,26 @@ document
 ```
 
 ```js
-const message = new EaMessage();
-document.getElementById("closeEventBtn").addEventListener("click", () => {
-  message
-    .open({
-      text: "3",
-      showClose: true,
-      center: true,
-    })
-    .onClose(() => {
-      alert("关闭了");
+const closeEventController = {
+  closeEventBtn: document.getElementById("closeEventBtn"),
+  init() {
+    this.closeEventBtn.addEventListener("click", () => {
+      window.$message
+        .open({
+          text: "3",
+          showClose: true,
+          center: true,
+        })
+        .onClose(() => {
+          alert("关闭了");
+        });
     });
-});
+  },
+};
+closeEventController.init();
 ```
+
+:::
 
 ## Attributes
 
@@ -326,6 +476,17 @@ document.getElementById("closeEventBtn").addEventListener("click", () => {
 | showClose | 是否显示关闭按钮                      | boolean | —                          | false  |
 | center    | 文字是否居中                          | boolean | —                          | false  |
 | duration  | 显示时间, 毫秒。设为 0 则不会自动关闭 | number  | —                          | 3000   |
+
+## CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称         | 说明           |
+| ------------ | -------------- |
+| container    | 外层容器       |
+| icon         | 类型自带的图标 |
+| content-wrap | 内容容器       |
+| icon-cancel  | 关闭按钮       |
 
 ## Events
 
