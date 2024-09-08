@@ -2,7 +2,8 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import('../index.js')
+  import('../components/ea-rate/index.js')
+
   import('./index.scss')
 
   document.getElementById('ea-rate').addEventListener('change', function (e) {
@@ -27,11 +28,28 @@ onMounted(() => {
 
 > `js`
 
-```js
+```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-rate/index.js";
 </script>
 ```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
 
 ## 基础用法
 
@@ -46,6 +64,8 @@ onMounted(() => {
     </section>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="row">
   <section>
@@ -59,9 +79,7 @@ onMounted(() => {
 </div>
 ```
 
-`JS`: 用 `e.detail.value` 获取当前分数
-
-> (测试可看控制台)
+`js`: 用 `e.detail.value` 获取当前分数
 
 ```js
 // 获取分数
@@ -73,6 +91,8 @@ document.getElementById("ea-rate").addEventListener("change", function (e) {
 document.getElementById("ea-rate").setAttribute("value", 5);
 ```
 
+:::
+
 ## 禁用状态
 
 只读的评分用来展示分数
@@ -81,11 +101,15 @@ document.getElementById("ea-rate").setAttribute("value", 5);
     <ea-rate id="ea-rate-disabled" value="1" disabled></ea-rate>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="col left">
   <ea-rate id="ea-rate-disabled" value="1" disabled></ea-rate>
 </div>
 ```
+
+:::
 
 ## 辅助文字
 
@@ -102,6 +126,8 @@ document.getElementById("ea-rate").setAttribute("value", 5);
     </section>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="row">
   <section>
@@ -115,7 +141,7 @@ document.getElementById("ea-rate").setAttribute("value", 5);
 </div>
 ```
 
-`JS` 自定义显示文字
+`js` 自定义显示文字
 
 ```js
 // get: 获取评分描述: e.detail.rateText
@@ -135,53 +161,85 @@ document.getElementById("ea-rate-show-text").showTextList = [
 ];
 ```
 
+:::
+
 ## 其它 icon
 
 当有多层评价时，可以用不同类型的 icon 区分评分层级
 
 <div class="col left">
-    <ea-rate value="1"></ea-rate>
-    <ea-rate void-icon-class="icon-heart-empty" active-icon-class="icon-heart" color="#f56c6c" value="2"></ea-rate>
-    <ea-rate void-icon-class="icon-ok-circled2" active-icon-class="icon-ok-circled" color="#67c23a" value="3"></ea-rate>
-    <ea-rate void-icon-class="icon-cancel-circled2" active-icon-class="icon-cancel-circled" color="red" value="4"></ea-rate>
+  <ea-rate value="1"></ea-rate>
+  <ea-rate
+    void-icon="icon-heart-empty"
+    active-icon="icon-heart"
+    color="#f56c6c"
+    value="2"
+  ></ea-rate>
+  <ea-rate
+    void-icon="icon-ok-circled2"
+    active-icon="icon-ok-circled"
+    color="#67c23a"
+    value="3"
+  ></ea-rate>
+  <ea-rate
+    void-icon="icon-cancel-circled2"
+    active-icon="icon-cancel-circled"
+    color="red"
+    value="4"
+  ></ea-rate>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="col left">
   <ea-rate value="1"></ea-rate>
   <ea-rate
-    void-icon-class="icon-heart-empty"
-    active-icon-class="icon-heart"
+    void-icon="icon-heart-empty"
+    active-icon="icon-heart"
     color="#f56c6c"
     value="2"
   ></ea-rate>
   <ea-rate
-    void-icon-class="icon-ok-circled2"
-    active-icon-class="icon-ok-circled"
+    void-icon="icon-ok-circled2"
+    active-icon="icon-ok-circled"
     color="#67c23a"
     value="3"
   ></ea-rate>
   <ea-rate
-    void-icon-class="icon-cancel-circled2"
-    active-icon-class="icon-cancel-circled"
+    void-icon="icon-cancel-circled2"
+    active-icon="icon-cancel-circled"
     color="red"
     value="4"
   ></ea-rate>
 </div>
 ```
 
+:::
+
 ## Attributes
 
-| 参数              | 说明                         | 类型    | 可选值                | 默认值                                   |
-| ----------------- | ---------------------------- | ------- | --------------------- | ---------------------------------------- |
-| value             | 绑定值                       | number  | —                     | 0                                        |
-| disabled          | 是否为只读状态，无法进行交互 | boolean | —                     | false                                    |
-| show-text         | 是否显示辅助文字             | boolean | —                     | false                                    |
-| void-icon-class   | 未选中 icon 的类名           | string  | —                     | icon-star-empty                          |
-| active-icon-class | 选中 icon 的类名             | string  | —                     | icon-star                                |
-| show-text-list    | 辅助文字列表                 | array   | —                     | ["极差", "失望", "一般", "满意", "惊喜"] |
-| color             | 激活时的颜色                 | string  | —                     | #f7ba2a                                  |
-| size              | 尺寸                         | string  | medium / small / mini | -                                        |
+| 参数           | 说明                         | 类型    | 可选值                | 默认值                                   |
+| -------------- | ---------------------------- | ------- | --------------------- | ---------------------------------------- |
+| value          | 绑定值                       | number  | —                     | 0                                        |
+| disabled       | 是否为只读状态，无法进行交互 | boolean | —                     | false                                    |
+| show-text      | 是否显示辅助文字             | boolean | —                     | false                                    |
+| void-icon      | 未选中 icon 的类名           | string  | —                     | icon-star-empty                          |
+| active-icon    | 选中 icon 的类名             | string  | —                     | icon-star                                |
+| show-text-list | 辅助文字列表                 | array   | —                     | ["极差", "失望", "一般", "满意", "惊喜"] |
+| color          | 激活时的颜色                 | string  | —                     | #f7ba2a                                  |
+| size           | 尺寸                         | string  | medium / small / mini | -                                        |
+
+## CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称      | 说明                                          |
+| --------- | --------------------------------------------- |
+| container | 外层容器                                      |
+| item-wrap | 评分图标容器                                  |
+| rate-item | 评分图标                                      |
+| text-wrap | 文本容器 **(仅当 `show-text="true"` 时生效)** |
 
 ## Events
 
