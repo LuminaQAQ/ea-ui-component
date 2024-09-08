@@ -1,8 +1,8 @@
 import { createElement } from "../../../../utils/createElement.js"
 
 export class EaMessageBox {
-    constructor() {
-
+    constructor(isPrompt) {
+        this.isPrompt = isPrompt;
     }
 
     get attrs() {
@@ -20,7 +20,13 @@ export class EaMessageBox {
     }
 
     open(content, title, options) {
-        const EaMessageBox = createElement('ea-message-box', '');
+        const EaMessageBox = createElement('ea-message-box');
+        EaMessageBox.addEventListener('ready', () => {
+            if (this.isPrompt) EaMessageBox.isPrompt = true;
+            EaMessageBox.reg = new RegExp(options.reg);
+            EaMessageBox.style.setProperty('--invalid-message', `"${options.invalidMessage}"`);
+            EaMessageBox.inputPlaceholder = options.inputPlaceholder;
+        });
         document.body.appendChild(EaMessageBox);
 
         EaMessageBox.open = true;
@@ -36,9 +42,17 @@ export class EaMessageBox {
                 reject();
             });
 
-            EaMessageBox.addEventListener('confirm', () => {
+            EaMessageBox.addEventListener('confirm', (e) => {
+                if (this.isPrompt && !options.reg.test(e.detail.value)) {
+                    e.detail.target.setAttribute('aria-invalid', true);
+                    e.detail.target.focus();
+
+                    return;
+                }
+
                 this.#close(EaMessageBox);
-                resolve(true);
+                if (this.isPrompt) resolve(e.detail.value);
+                else resolve(true);
             });
         });
     }

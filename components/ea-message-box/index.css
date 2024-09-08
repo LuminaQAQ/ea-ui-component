@@ -1,11 +1,7 @@
-@import "../ea-icon/css/fontello.css";
-@import "../ea-icon/css/animation.css";
-@font-face {
-  font-size: 1rem;
-  font-size: 16px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  src: url("../ea-icon/font/fontello.eot") format("embedded-opentype"), url("../ea-icon/font/fontello.ttf") format("truetype"), url("../ea-icon/font/fontello.woff") format("woff"), url("../ea-icon/font/fontello.woff2") format("woff2"), url("../ea-icon/font/fontello.svg") format("svg");
+:host {
+  --invalid-message: "";
 }
+
 .ea-dialog_wrap {
   position: fixed;
   top: 0;
@@ -20,7 +16,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: aliceblue;
+  background-color: #fff;
   width: 420px;
   padding-bottom: 10px;
   border-radius: 4px;
@@ -53,6 +49,9 @@
   color: #606266;
   font-size: 14px;
 }
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_content .ea-dialog_content-input {
+  display: none;
+}
 .ea-dialog_wrap .ea-dialog_board .ea-dialog_footer {
   padding: 5px 15px 0;
   display: flex;
@@ -61,4 +60,26 @@
 }
 .ea-dialog_wrap .ea-dialog_board .ea-dialog_footer :first-child {
   margin-right: 0.5rem;
+}
+.ea-dialog_wrap.is-prompt .ea-dialog_board .ea-dialog_content {
+  position: relative;
+}
+.ea-dialog_wrap.is-prompt .ea-dialog_board .ea-dialog_content .ea-dialog_content-input {
+  margin-top: 15px;
+  padding-bottom: 15px;
+  display: block;
+}
+.ea-dialog_wrap.is-prompt .ea-dialog_board .ea-dialog_content .ea-dialog_content-input::after {
+  content: var(--invalid-message);
+  position: absolute;
+  display: block;
+  bottom: 0;
+  transform-origin: top center;
+  transform: scaleY(0);
+  transition: transform 0.3s;
+}
+.ea-dialog_wrap.is-prompt .ea-dialog_board .ea-dialog_content .ea-dialog_content-input[aria-invalid=true]::after {
+  transform-origin: top center;
+  transform: scaleY(1);
+  color: #f56c6c;
 }
