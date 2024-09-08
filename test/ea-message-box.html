@@ -55,6 +55,29 @@
         });
         // #endregion
         // ------- end -------
+
+        // ------- 提交内容 -------
+        // #region
+        const promptBtn = document.querySelector("#openPromptMessageBox");
+        promptBtn.addEventListener("click", () => {
+            $prompt
+                .open("请输入邮箱", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    inputPlaceholder: "请输入邮箱",
+                    reg: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/,
+                    invalidMessage: "请输入正确的邮箱",
+                })
+                .then((msg) => {
+                    console.log(msg);
+                    $message.open("用户取消了确认");
+                })
+                .catch(() => {
+                    $message.open("用户取消了取消");
+                });
+        });
+        // #endregion
+        // ------- end -------
     </script>
 
     <!-- -------- 消息提示 --------  -->
@@ -69,6 +92,16 @@
     <!-- #region  -->
     <h2>确认消息</h2>
     <ea-button type="primary" id="openconfirmMessageBox">是否取消确认</ea-button>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 提交内容 --------  -->
+    <!-- #region  -->
+    <h2>提交内容</h2>
+    <div class="demo">
+        <ea-button type="primary" id="openPromptMessageBox">提交内容</ea-button>
+    </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->

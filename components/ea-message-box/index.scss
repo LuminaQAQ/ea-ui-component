@@ -1,5 +1,8 @@
 @import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
+
+:host {
+  --invalid-message: "";
+}
 
 .ea-dialog_wrap {
   position: fixed;
@@ -15,7 +18,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-color: aliceblue;
+    background-color: #fff;
 
     width: 420px;
     padding-bottom: 10px;
@@ -55,6 +58,10 @@
       color: #606266;
 
       font-size: 14px;
+
+      .ea-dialog_content-input {
+        display: none;
+      }
     }
 
     .ea-dialog_footer {
@@ -66,6 +73,40 @@
 
       :first-child {
         margin-right: 0.5rem;
+      }
+    }
+  }
+
+  &.is-prompt {
+    .ea-dialog_board {
+      .ea-dialog_content {
+        position: relative;
+
+        .ea-dialog_content-input {
+          margin-top: 15px;
+          padding-bottom: 15px;
+          display: block;
+
+          &::after {
+            content: var(--invalid-message);
+            position: absolute;
+            display: block;
+            bottom: 0;
+            transform-origin: top center;
+            transform: scaleY(0);
+
+            transition: transform 0.3s;
+          }
+
+          &[aria-invalid="true"] {
+            &::after {
+              transform-origin: top center;
+              transform: scaleY(1);
+
+              color: #f56c6c;
+            }
+          }
+        }
       }
     }
   }
