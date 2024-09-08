@@ -2,6 +2,7 @@ export const getMoreItem = (arrow, hasBgc) => {
     const moreItem = document.createElement('span');
     moreItem.className = 'ea-pagination_more';
     moreItem.innerHTML = '···';
+    moreItem.part = 'more-item';
 
     if (hasBgc) moreItem.classList.add('background');
 
