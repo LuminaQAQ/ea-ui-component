@@ -75,7 +75,7 @@ export class EaProgress extends Base {
         else if (Number(value) > 100) value = 100;
 
         this.setAttribute('percentage', value);
-        this.#progressText.innerHTML = `${value}%`;
+        if (this.textInside || this.type === "dashboard" || this.type === "circle") this.#progressText.innerHTML = `${value}%`;
 
         switch (this.type) {
             case "circle": {
@@ -163,7 +163,7 @@ export class EaProgress extends Base {
     }
 
     set textInside(value) {
-        if (this.type === "circle") return;
+        if (this.type === "circle" || !value) return;
 
         this.setAttribute("text-inside", value);
 
