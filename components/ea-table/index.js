@@ -7,6 +7,7 @@ import "../ea-table-column/index.js"
 import "../ea-checkbox/index.js"
 
 import { stylesheet } from './src/style/stylesheet.js';
+import { timeout } from '../../utils/timeout.js';
 
 export class EaTable extends Base {
     #container;
@@ -367,31 +368,33 @@ export class EaTable extends Base {
         const trs = this.#bodyTableTbody.querySelectorAll('tr');
         const slot = this.shadowRoot.querySelector('slot[name="body"]');
 
-        if (!slot.assignedNodes().length) {
-            slot.remove();
-        } else {
-            trs.forEach(item => {
-                const div = createElement('td', 'ea-table__cell');
-                div.part = 'td-cell';
-                Array.from(slot.assignedNodes()).forEach(slotItem => {
-                    const cloneNode = slotItem.cloneNode(true);
-                    div.appendChild(cloneNode);
+        timeout(() => {
+            if (!slot.assignedNodes().length) {
+                slot.remove();
+            } else {
+                trs.forEach(item => {
+                    const div = createElement('td', 'ea-table__cell');
+                    div.part = 'td-cell';
+                    Array.from(slot.assignedNodes()).forEach(slotItem => {
+                        const cloneNode = slotItem.cloneNode(true);
+                        div.appendChild(cloneNode);
 
-                    cloneNode.addEventListener('click', () => {
-                        slotItem.dispatchEvent(new CustomEvent('click', {
-                            bubbles: true,
-                            composed: true,
-                            detail: {
-                                row: item
-                            }
-                        }));
+                        cloneNode.addEventListener('click', () => {
+                            slotItem.dispatchEvent(new CustomEvent('click', {
+                                bubbles: true,
+                                composed: true,
+                                detail: {
+                                    row: item
+                                }
+                            }));
+                        });
                     });
+                    item.appendChild(div);
                 });
-                item.appendChild(div);
-            });
-            slot.style.display = 'none';
-        }
+                slot.style.display = 'none';
 
+            }
+        }, 0)
     }
 
     renderTableBody(data) {
@@ -540,6 +543,10 @@ export class EaTable extends Base {
         this.#initSelectionTypeTh();
 
         this.#initHeaderSlot();
+
+        timeout(() => {
+            this.dispatchEvent(new CustomEvent('table-ready'));
+        }, 20);
     }
 }
 

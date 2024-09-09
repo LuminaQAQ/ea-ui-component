@@ -96,7 +96,7 @@
   - [x] Message 调整了 引入方式及 使用方式,
         引入方式改为 `import 'ea-ui'`
         使用方式改为 `window.$message.open()`
-  - [ ] Rate 属性重构
+  - [x] Rate 属性重构
     - void-icon-class => void-icon
     - active-icon-class => active-icon
   - [ ] Table 表格, 修改了 自定义插槽 的按钮实现方式
@@ -108,7 +108,7 @@
 - 脚本类
 
   - [ ] Descriptions 描述列表, span 值设置超过表格总 span 会导致元素消失
-  - [ ] Table 表格, 缺少 `part` 属性
+  - [x] Table 表格, 缺少 `part` 属性
   - [x] Container 布局容器, 一些子组件不知道什么时候设置了最小高度
 
 - 样式类
