@@ -48,6 +48,12 @@ onMounted(() => {
 })
 </script>
 
+<style>
+ea-tabs::part(pane-wrap) {
+    min-height: 10rem;
+}
+</style>
+
 # Tabs 标签页
 
 分隔内容上有关联但属于不同类别的数据集合。
@@ -61,6 +67,34 @@ onMounted(() => {
   import "./node_modules/easy-component-ui/components/ea-tabs/index.js";
 </script>
 ```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#tabs-css-part)。
+
+::: tip
+建议给 `ea-tabs` 设置最小高度，避免某些情况下出现页面抖动。
+
+```css
+ea-tabs::part(pane-wrap) {
+  min-height: 10rem;
+}
+```
+
+:::
 
 ## 基础用法
 
@@ -87,7 +121,7 @@ onMounted(() => {
 <!-- #endregion  -->
 <!-- -------------------  -->
 
-::: details 点击查看代码
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -129,7 +163,7 @@ onMounted(() => {
     </ea-tabs>
 </div>
 
-::: details 点击查看代码
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -171,7 +205,7 @@ onMounted(() => {
     </ea-tabs>
 </div>
 
-::: details 点击查看代码
+::: details 查看代码
 
 ```html
 <ea-tabs id="clickEvent--border-card" actived="second" type="border-card">
@@ -193,7 +227,7 @@ onMounted(() => {
 
 ## 动态增减标签页
 
-> 通过设置 `editable`，标签页可以动态增删。
+通过设置 `editable`，标签页可以动态增删。
 
 <div class="demo">
     <ea-button id="addBtn" type="primary" size="small">添加标签页</ea-button>
@@ -214,7 +248,7 @@ onMounted(() => {
     </ea-tabs>
 </div>
 
-::: details 点击查看代码 `html`
+::: details 查看代码 `html`
 
 ```html
 <div class="demo">
@@ -238,7 +272,7 @@ onMounted(() => {
 
 :::
 
-::: details 点击查看代码 `js`
+::: details 查看代码 `js`
 
 ```js
 const editableObj = {
@@ -299,6 +333,29 @@ editableObj.init();
 | 参数 | 说明               | 类型   | 可选值 | 默认值                                                |
 | ---- | ------------------ | ------ | ------ | ----------------------------------------------------- |
 | name | 标签页名称唯一标识 | String | -      | 该选项卡在选项卡列表中的顺序值，如第一个选项卡则为'1' |
+
+## Tabs CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称           | 说明               |
+| -------------- | ------------------ |
+| container      | 外层容器           |
+| tab-wrap       | 标签页容器         |
+| tab-bottom-bar | 标签页底部的移动线 |
+| pane-wrap      | 内容容器           |
+
+## Tab CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
+
+## Pane CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
 
 ## Tabs Events
 
