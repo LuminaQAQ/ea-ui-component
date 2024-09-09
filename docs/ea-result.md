@@ -2,7 +2,9 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    import('../components/ea-result/index.js')
+    import('../components/ea-button/index.js')
+    import('../components/ea-avatar/index.js')
     import('./index.scss')
 })
 </script>
@@ -15,11 +17,28 @@ onMounted(() => {
 
 > `js`
 
-```js
+```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-result/index.js";
 </script>
 ```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
 
 ## 基础用法
 
@@ -45,6 +64,8 @@ onMounted(() => {
         </template>
     </ea-result>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row space-between">
@@ -83,26 +104,30 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## 自定义内容
 
 <ea-result>
-  <template slot="icon">  
+  <div slot="icon">  
     <ea-avatar
         size="100"
         shape="square"
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
     ></ea-avatar>
-  </template>
-  <template slot="title">
+  </div>
+  <div slot="title">
     <div>404</div>
-  </template>
-  <template slot="subTitle">
+  </div>
+  <div slot="subTitle">
     <div>抱歉，请求错误</div>  
-  </template>
-  <template slot="extra">
+  </div>
+  <div slot="extra">
     <ea-button type="primary" size="medium">返回</ea-button>
-  </template>
+  </div>
 </ea-result>
+
+::: details 查看代码
 
 ```html
 <ea-result>
@@ -125,6 +150,8 @@ onMounted(() => {
 </ea-result>
 ```
 
+:::
+
 ## Attributes
 
 | 参数      | 说明 | 类型   | 可选值 | 默认值 |
@@ -133,7 +160,19 @@ onMounted(() => {
 | title     | 标题 | string | -      | -      |
 | sub-title | 描述 | string | -      | -      |
 
-## Result Slots
+## CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称          | 说明           |
+| ------------- | -------------- |
+| container     | 外层容器       |
+| icon-wrap     | 图标容器       |
+| title-wrap    | 标题容器       |
+| subTitle-wrap | 描述容器       |
+| extra-wrap    | 额外内容的容器 |
+
+## Slots
 
 | 名称     | 说明     |
 | -------- | -------- |
