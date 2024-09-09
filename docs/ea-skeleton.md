@@ -2,7 +2,9 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    import('../components/ea-skeleton/index.js')
+    import('../components/ea-avatar/index.js')
+    import('../components/ea-switch/index.js')
     import('./index.scss')
 
     document.querySelector("#handleLoadingStatusSwitch").addEventListener('change', (e) => {
@@ -33,6 +35,23 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
+
 ## 基础用法
 
 基础的骨架效果。
@@ -41,19 +60,25 @@ onMounted(() => {
     <ea-skeleton></ea-skeleton>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="demo">
   <ea-skeleton></ea-skeleton>
 </div>
 ```
 
+:::
+
 ## 更多参数
 
-可以配置骨架屏段落数量，以便更接近真实渲染效果。首行会被渲染一个长度 33% 的段首。
+可以配置骨架屏段落数量，以便更接近真实渲染效果。首行会被渲染一个长度 `33%` 的段首。
 
 <div class="demo">
     <ea-skeleton row="6"></ea-skeleton>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -61,13 +86,17 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## 动画效果
 
-显示动画效果。
+通过设置 `animated` 属性，可以显示动画效果。
 
 <div class="demo">
     <ea-skeleton row="6" animated></ea-skeleton>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -75,11 +104,13 @@ onMounted(() => {
 </div>
 ```
 
+:::
+
 ## 自定义样式
 
-Element 提供的排版模式有时候并不满足要求，当您想要用自己定义的模板时，可以通过一个具名 Slot 来自己设定模板。
+默认提供的排版模式有时候并不满足要求，当您想要用自己定义的模板时，可以通过一个具名 `slot="template"` 来自己设定模板。
 
-我们提供了不同的模板单元可供使用，具体可选值请看 API 详细描述。 建议在描述模板的时候，尽量靠近真实的 DOM 结构，这样可以避免 DOM 高度差距引起的抖动。
+我们提供了不同的模板单元可供使用，具体可选值请看 [API-variant](#skeleton-item-attributes) 详细描述。 建议在描述模板的时候，尽量靠近真实的 DOM 结构，这样可以避免 DOM 高度差距引起的抖动。
 
 <div class="demo">
     <div style="width: 240px;">
@@ -95,6 +126,8 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
         </ea-skeleton>
     </div>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -121,6 +154,8 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
   </div>
 </div>
 ```
+
+:::
 
 ## Loading 状态
 
@@ -152,40 +187,9 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
     </div>
 </div>
 
-```html
-<div style="width: 240px;">
-  <ea-skeleton id="loadingStatusNodeWrap" animated>
-    <div slot="template">
-      <ea-skeleton-item
-        variant="image"
-        style="width: 240px; height: 240px"
-      ></ea-skeleton-item>
-      <div style="padding: 14px">
-        <ea-skeleton-item variant="p" style="width: 50%;"></ea-skeleton-item>
-        <ea-skeleton-item
-          variant="text"
-          style="margin-right: 16px;"
-        ></ea-skeleton-item>
-        <ea-skeleton-item variant="text" style="width: 30%;"></ea-skeleton-item>
-      </div>
-    </div>
-    <div>
-      <ea-avatar
-        size="240"
-        shape="square"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
-      <div style="padding: 14px">
-        <div>Hello World!</div>
-        <div>Hello World! Hello World!</div>
-        <div>Hello!</div>
-      </div>
-    </div>
-  </ea-skeleton>
-</div>
-```
+::: details 查看代码
 
-### 示例
+`html`
 
 ```html
 <p class="align-center">
@@ -229,6 +233,8 @@ Element 提供的排版模式有时候并不满足要求，当您想要用自己
 </div>
 ```
 
+`js`
+
 ```js
 document
   .querySelector("#handleLoadingStatusSwitch")
@@ -239,11 +245,17 @@ document
   });
 ```
 
+:::
+
 ## 渲染多条数据
 
-大多时候, 骨架屏都被用来渲染列表, 当我们需要在从服务器获取数据的时候来渲染一个假的 UI。利用 `count` 这个属性就能控制渲染多少条假的数据在页面上
+大多时候, 骨架屏都被用来渲染列表, 当我们需要在从服务器获取数据的时候来渲染一个假的 `UI`。利用 `count` 这个属性就能控制渲染多少条假的数据在页面上
 
-> 请注意, 请尽可能的将 count 的大小保持在最小状态, 即使是假的 UI, DOM 元素多了之后, 照样会引起性能问题, 并且在骨架屏销毁时所消耗的时间也会更长(相对的)。
+:::warning
+
+请注意, 请尽可能的将 `count` 的大小保持在最小状态, 即使是假的 `UI`, `DOM` 元素多了之后, 照样会引起性能问题。
+
+:::
 
 <div class="demo">
     <p class="align-center">
@@ -277,6 +289,8 @@ document
         </div>
     </div>
 </div>
+
+::: details 查看代码
 
 ```html
 <div style="width: 240px;">
@@ -320,6 +334,8 @@ document
 </div>
 ```
 
+:::
+
 ## Skeleton Attributes
 
 | 参数     | 说明             | 类型    | 可选值 | 默认值 |
@@ -327,17 +343,31 @@ document
 | animated | 是否开启动画     | Boolean | -      | false  |
 | count    | 渲染的骨架屏个数 | Number  | -      | 1      |
 | loading  | 是否显示骨架屏   | Boolean | -      | true   |
-| rows     | 段落占位图行数   | Number  | -      | 0      |
+| rows     | 段落占位图行数   | Number  | -      | 4      |
 
 ## Skeleton Item Attributes
 
-| 参数    | 说明       | 类型   | 可选值         | 默认值 |
-| ------- | ---------- | ------ | -------------- | ------ |
-| variant | 占位图类型 | String | image, p, text | image  |
+| 参数    | 说明       | 类型   | 可选值                                                   | 默认值 |
+| ------- | ---------- | ------ | -------------------------------------------------------- | ------ |
+| variant | 占位图类型 | String | `image`, `p`, `text`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6` | text   |
+
+## Skeleton CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
+
+## SkeletonItem CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
 
 ## Skeleton Slots
 
 | 名称     | 说明                   |
 | -------- | ---------------------- |
+| -        | 骨架屏内容, 非具名插槽 |
 | template | 骨架屏模板             |
-| default  | 骨架屏内容, 非具名插槽 |
