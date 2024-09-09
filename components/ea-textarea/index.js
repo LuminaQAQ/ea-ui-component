@@ -197,6 +197,7 @@ export class EaTextarea extends Base {
 
         // 加入显示的dom
         const wordLimit = document.createElement('span');
+        wordLimit.part = 'word-limit';
         wordLimit.className = 'ea-input_word-limit';
         wordLimit.innerText = `${this.#input.value.length}/${this.maxLength}`;
 

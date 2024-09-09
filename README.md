@@ -99,11 +99,11 @@
   - [x] Rate 属性重构
     - void-icon-class => void-icon
     - active-icon-class => active-icon
-  - [ ] Table 表格, 修改了 自定义插槽 的按钮实现方式
-  - [ ] Tag 标签
+  - [x] Table 表格, 修改了 自定义插槽 的按钮实现方式
+  - [x] Tag 标签
     - `不同主题`缺少代码描述
     - `可关闭标签`的标题, 修改为 `带关闭图标的标签`
-  - [ ] Textarea 文本域, 该文档标题错误
+  - [x] Textarea 文本域, 该文档标题错误
 
 - 脚本类
 
@@ -113,7 +113,7 @@
 
 - 样式类
 
-  - [ ] Tabs 标签页, 带有关闭功能的标签页, 最佳实践是设置最小高度
+  - [x] Tabs 标签页, 带有关闭功能的标签页, 最佳实践是设置最小高度
     ```css
     ea-tabs::part(pane-wrap) {
       min-height: 10rem;
