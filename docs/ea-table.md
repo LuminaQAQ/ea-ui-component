@@ -26,191 +26,219 @@ const moreData = [
 ]
 
 onMounted(() => {
-    import('./index.scss')
+  import('./index.scss')
+  
+  import('../components/ea-icon/index.js')
+  import('../components/ea-icon/index.css')
+  import('../components/ea-button/index.js')
+  import('../components/ea-button-group/index.js')
+  
+  import('../components/ea-input/index.js')
+  import('../components/ea-empty/index.js')
+
+  import('../components/ea-table/index.js')
     
-    import('../components/ea-icon/index.js')
-    import('../components/ea-icon/index.css')
-    import('../components/ea-button/index.js')
-    import('../components/ea-button-group/index.js')
-    
-    import('../components/ea-input/index.js')
-    import('../components/ea-empty/index.js')
+  const data = [
+      { name: 'Lumina', age: 18, address: '中国' },
+      { name: 'Alice', age: 18, address: '中国' },
+      { name: 'Tom', age: 18, address: '中国' },
+      { name: 'Bob', age: 18, address: '中国' },
+  ];
 
-    import('../components/ea-table/index.js')
-    
-    const data = [
-        { name: 'Lumina', age: 18, address: '中国' },
-        { name: 'Alice', age: 18, address: '中国' },
-        { name: 'Tom', age: 18, address: '中国' },
-        { name: 'Bob', age: 18, address: '中国' },
-    ];
+  const moreData = [
+      { date: "2024-08-01", name: 'Lumina', age: 18, address: '中国' },
+      { date: "2024-08-02", name: 'Alice', age: 18, address: '中国' },
+      { date: "2024-08-03", name: 'Tom', age: 18, address: '中国' },
+      { date: "2024-08-04", name: 'Bob', age: 18, address: '中国' },
+      { date: "2024-08-05", name: 'Jerry', age: 18, address: '中国' },
+      { date: "2024-08-06", name: 'Lucy', age: 18, address: '中国' },
+      { date: "2024-08-07", name: 'Tom', age: 18, address: '中国' },
+      { date: "2024-08-08", name: 'Bob', age: 18, address: '中国' },
+      { date: "2024-08-09", name: 'Jerry', age: 18, address: '中国' },
+      { date: "2024-08-10", name: 'Lucy', age: 18, address: '中国' },
+      { date: "2024-08-11", name: 'Tom', age: 18, address: '中国' },
+      { date: "2024-08-12", name: 'Bob', age: 18, address: '中国' },
+      { date: "2024-08-13", name: 'Jerry', age: 18, address: '中国' },
+      { date: "2024-08-14", name: 'Lucy', age: 18, address: '中国' },
+  ]
 
-    const moreData = [
-        { date: "2024-08-01", name: 'Lumina', age: 18, address: '中国' },
-        { date: "2024-08-02", name: 'Alice', age: 18, address: '中国' },
-        { date: "2024-08-03", name: 'Tom', age: 18, address: '中国' },
-        { date: "2024-08-04", name: 'Bob', age: 18, address: '中国' },
-        { date: "2024-08-05", name: 'Jerry', age: 18, address: '中国' },
-        { date: "2024-08-06", name: 'Lucy', age: 18, address: '中国' },
-        { date: "2024-08-07", name: 'Tom', age: 18, address: '中国' },
-        { date: "2024-08-08", name: 'Bob', age: 18, address: '中国' },
-        { date: "2024-08-09", name: 'Jerry', age: 18, address: '中国' },
-        { date: "2024-08-10", name: 'Lucy', age: 18, address: '中国' },
-        { date: "2024-08-11", name: 'Tom', age: 18, address: '中国' },
-        { date: "2024-08-12", name: 'Bob', age: 18, address: '中国' },
-        { date: "2024-08-13", name: 'Jerry', age: 18, address: '中国' },
-        { date: "2024-08-14", name: 'Lucy', age: 18, address: '中国' },
-    ]
+  // ------- 1. 基础表格 -------
+  // #region
+  const basicTable = document.querySelector('#basicTable');
+  basicTable.addEventListener('table-ready', (e) => {
+    basicTable.data = data;
+  });
 
-    try {
-        setTimeout(() => {
-            // ------- 1. 基础表格 -------
-            // #region
-            const basicTable = document.querySelector('#basicTable');
-            basicTable.data = data;
-            // #endregion
-            // ------- end -------
+  // #endregion
+  // ------- end -------
 
-            // ------- 2. 带斑马纹表格 -------
-            // #region
-            const stripeTable = document.querySelector('#stripeTable');
-            stripeTable.data = data;
-            // #endregion
-            // ------- end -------
+  // ------- 2. 带斑马纹表格 -------
+  // #region
+  const stripeTable = document.querySelector('#stripeTable');
+  stripeTable.addEventListener('table-ready', (e) => {
+    stripeTable.data = data;
+  });
+  // #endregion
+  // ------- end -------
 
-            // ------- 3. 带边框表格 -------
-            // #region
-            const borderTable = document.querySelector('#borderTable');
-            borderTable.data = data;
-            // #endregion
-            // ------- end -------
-            
-            // ------- 4. 固定表头 -------
-            // #region
-            const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
-            fixedHeaderTable.data = moreData;
-            // #endregion
-            // ------- end -------
+  // ------- 3. 带边框表格 -------
+  // #region
+  const borderTable = document.querySelector('#borderTable');
+  borderTable.addEventListener('table-ready', (e) => {
+    borderTable.data = data;
+  });
+  // #endregion
+  // ------- end -------
 
-            // ------- 5. 多级表头 -------
-            // #region
-            const groupingHeadTable = document.querySelector('#groupingHeadTable');
-            groupingHeadTable.data = moreData;
-            // #endregion
-            // ------- end -------
+  // ------- 4. 固定表头 -------
+  // #region
+  const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
+  fixedHeaderTable.addEventListener('table-ready', (e) => {
+    fixedHeaderTable.data = moreData;
+  });
+  // #endregion
+  // ------- end -------
 
-            // ------- 6. 单选 -------
-            // #region
-            const radioTable = {
-                table: document.querySelector('#radioTable'),
+  // ------- 5. 多级表头 -------
+  // #region
+  const groupingHeadTable = document.querySelector('#groupingHeadTable');
+  groupingHeadTable.addEventListener('table-ready', (e) => {
+    groupingHeadTable.data = moreData;
+  });
+  // #endregion
+  // ------- end -------
 
-                init() {
-                    this.table.data = moreData;
+  // ------- 6. 单选 -------
+  // #region
+  const radioTable = {
+      table: document.querySelector('#radioTable'),
 
-                    this.table.addEventListener('current-change', (e) => {
-                        console.log(e.detail);
-                    });
-                }
-            }
-            radioTable.init();
-            // #endregion
-            // ------- end -------
+      init() {
+          this.table.addEventListener('table-ready', (e) => {
+            this.table.data = moreData;
+          });
 
-            // ------- 7. 自增id序列 -------
-            // #region
-            const increaseliyTable = document.querySelector('#increaseliyTable');
-            increaseliyTable.data = data;
-            // #endregion
-            // ------- end -------
+          this.table.addEventListener('current-change', (e) => {
+              console.log(e.detail);
+          });
+      }
+  }
+  radioTable.init();
+  // #endregion
+  // ------- end -------
 
-            // ------- 8. 多选 -------
-            // #region
-            const checkboxTable = document.querySelector('#checkboxTable');
-            checkboxTable.data = data;
-            checkboxTable.addEventListener('body-selection-change', (e) => {
-                console.log(e.detail);
-            });
-            // #endregion
-            // ------- end -------
+  // ------- 7. 自增id序列 -------
+  // #region
+  const increaseliyTable = document.querySelector('#increaseliyTable');
+  increaseliyTable.addEventListener('table-ready', (e) => {
+    increaseliyTable.data = data;
+  });
+  // #endregion
+  // ------- end -------
 
-            // ------- 9. 排序 -------
-            // #region
-            const sortableTable = {
-                table: document.querySelector('#sortableTable'),
+  // ------- 8. 多选 -------
+  // #region
+  const checkboxTable = document.querySelector('#checkboxTable');
+  checkboxTable.addEventListener('table-ready', (e) => {
+    checkboxTable.data = data;
+  });
+  checkboxTable.addEventListener('body-selection-change', (e) => {
+      console.log(e.detail);
+  });
+  // #endregion
+  // ------- end -------
 
-                init() {
-                    this.table.data = moreData;
+  // ------- 9. 排序 -------
+  // #region
+  const sortableTable = {
+      table: document.querySelector('#sortableTable'),
 
-                    this.table.addEventListener('sort-change', (e) => {
-                        console.log(e.detail);
-                    });
-                }
-            }
-            sortableTable.init();
-            // #endregion
-            // ------- end -------
+      init() {
+          this.table.addEventListener('table-ready', (e) => {
+            this.table.data = moreData;
+          });
 
-            // ------- 10. 自定义插槽 -------
-            // #region
-            const customTable = {
-                table: document.querySelector('#customTable'),
-                // searchBtn: document.querySelector('#searchBtn'),
-                searchInput: document.querySelector('#searchInput'),
+          this.table.addEventListener('sort-change', (e) => {
+              console.log(e.detail);
+          });
+      }
+  }
+  sortableTable.init();
+  // #endregion
+  // ------- end -------
 
-                /**
-                 * 为传入的按钮数组中的每个按钮添加点击事件监听器。
-                 * 当按钮被点击时，在下一个事件循环中输出当前表格行的详细信息到控制台。
-                 * 
-                 * @param {Array} btns - 包含按钮元素的数组。
-                 */
-                clickCallback(btns) {
-                    // 遍历按钮数组
-                    btns.forEach(btn => {
-                        // 为每个按钮添加点击事件监听器
-                        btn.addEventListener('click', (e) => {
-                            // 使用 setTimeout 来确保在事件循环的下一阶段执行，避免阻塞 UI
-                            setTimeout(() => {
-                                // 输出当前表格行的详细信息到控制台
-                                console.log(this.table.currentRowDetail);
-                            }, 0);
-                        });
-                    });
-                },
+  // ------- 10. 自定义插槽 -------
+  // #region
 
-                init() {
-                    this.table.data = moreData;
+  const customTable = {
+      table: document.querySelector('#customTable'),
+      searchInput: document.querySelector('#searchInput'),
 
-                    // 搜索
-                    this.searchInput.addEventListener('keyup', () => {
-                        const res = moreData.filter(item => item.name.indexOf(this.searchInput.value) !== -1);
-                        this.table.data = res;
-                    });
+      init() {
+          this.table.addEventListener('table-ready', (e) => {
+            this.table.data = moreData;
+          });
+          
+          // 搜索
+          this.searchInput.addEventListener('change', () => {
+              const res = moreData.filter(item => item.name.includes(this.searchInput.value));
+              this.table.data = res;
+          });
+      }
+  }
+  customTable.init();
 
-                    // 点击按钮
-                    let editBtns = this.table.shadowRoot.querySelectorAll('.edit');
-                    let deleteBtns = this.table.shadowRoot.querySelectorAll('.delete');
-                    this.clickCallback(editBtns);
-                    this.clickCallback(deleteBtns);
+  // 编辑按钮
+  class MyEditButton extends HTMLElement {
+      constructor() {
+          super();
 
-                    // 排序时, 更新按钮及其点击事件
-                    this.table.addEventListener('sort-change', (e) => {
-                        editBtns = this.table.shadowRoot.querySelectorAll('.edit');
-                        deleteBtns = this.table.shadowRoot.querySelectorAll('.delete');
+          const shadowroot = this.attachShadow({ mode: 'open' });
+          shadowroot.innerHTML = `
+              <ea-button type="primary" size="mini">编辑</ea-button>
+          `;
+          const btn = shadowroot.querySelector('ea-button');
+          btn.addEventListener('click', (e) => {
+              setTimeout(() => {
+                  console.log(customTable.table.currentRowDetail);
+              }, 0);
+          })
 
-                        console.log(e.detail);
+          shadowroot.appendChild(btn);
+      }
+  }
+  if(!window.customElements.get('ea-my-edit-button')) window.customElements.define('ea-my-edit-button', MyEditButton);
 
-                        clickCallback(editBtns);
-                        clickCallback(deleteBtns);
-                    });
-                }
-            }
-            customTable.init();
-            // #endregion
-            // ------- end -------
-        }, 500);
-    } catch (error) {}
+  // 删除按钮
+  class MyDeleteButton extends HTMLElement {
+      constructor() {
+          super();
+
+          const shadowroot = this.attachShadow({ mode: 'open' });
+          shadowroot.innerHTML = `
+              <ea-button type="danger" size="mini">删除</ea-button>
+          `;
+          const btn = shadowroot.querySelector('ea-button');
+          btn.addEventListener('click', (e) => {
+              setTimeout(() => {
+                  console.log(customTable.table.currentRowDetail);
+              }, 0);
+          })
+      }
+  }
+  if(!window.customElements.get('ea-my-delete-button')) window.customElements.define('ea-my-delete-button', MyDeleteButton);
+  // #endregion
+  // ------- end -------
 })
 </script>
+
+<style>
+    .prepend,
+    .append {
+        background-color: #f5f7fa;
+        padding: 0.5rem;
+    }
+</style>
 
 # Table 表格
 
@@ -227,6 +255,12 @@ onMounted(() => {
 ## 基础表格
 
 基础的表格展示用法。
+
+::: warning
+注意: 在 `VUE` 环境下, `data` 的设置推荐在 `table-ready` 事件触发时设置，否则可能会导致表格数据不渲染。**此后示例同此情况。**<br/>
+
+同理, 若原生环境出现该问题, 也可使用该方法。
+:::
 
 <!-- -------- 1. 基础表格 --------  -->
 <!-- #region  -->
@@ -260,7 +294,9 @@ onMounted(() => {
 
 ```js
 const basicTable = document.querySelector("#basicTable");
-basicTable.data = data;
+basicTable.addEventListener("table-ready", (e) => {
+  basicTable.data = data;
+});
 ```
 
 :::
@@ -301,7 +337,9 @@ basicTable.data = data;
 
 ```js
 const stripeTable = document.querySelector("#stripeTable");
-stripeTable.data = data;
+stripeTable.addEventListener("table-ready", (e) => {
+  stripeTable.data = data;
+});
 ```
 
 :::
@@ -340,7 +378,9 @@ stripeTable.data = data;
 
 ```js
 const borderTable = document.querySelector("#borderTable");
-borderTable.data = data;
+borderTable.addEventListener("table-ready", (e) => {
+  borderTable.data = data;
+});
 ```
 
 :::
@@ -383,7 +423,9 @@ borderTable.data = data;
 
 ```js
 const fixedHeaderTable = document.querySelector("#fixedHeaderTable");
-fixedHeaderTable.data = moreData;
+fixedHeaderTable.addEventListener("table-ready", (e) => {
+  fixedHeaderTable.data = moreData;
+});
 ```
 
 :::
@@ -436,7 +478,9 @@ fixedHeaderTable.data = moreData;
 
 ```js
 const groupingHeadTable = document.querySelector("#groupingHeadTable");
-groupingHeadTable.data = moreData;
+groupingHeadTable.addEventListener("table-ready", (e) => {
+  groupingHeadTable.data = moreData;
+});
 ```
 
 :::
@@ -482,7 +526,9 @@ const radioTable = {
   table: document.querySelector("#radioTable"),
 
   init() {
-    this.table.data = moreData;
+    this.table.addEventListener("table-ready", (e) => {
+      this.table.data = moreData;
+    });
 
     this.table.addEventListener("current-change", (e) => {
       console.log(e.detail);
@@ -530,7 +576,9 @@ radioTable.init();
 
 ```js
 const increaseliyTable = document.querySelector("#increaseliyTable");
-increaseliyTable.data = data;
+increaseliyTable.addEventListener("table-ready", (e) => {
+  increaseliyTable.data = data;
+});
 ```
 
 :::
@@ -573,7 +621,9 @@ increaseliyTable.data = data;
 
 ```js
 const checkboxTable = document.querySelector("#checkboxTable");
-checkboxTable.data = data;
+checkboxTable.addEventListener("table-ready", (e) => {
+  checkboxTable.data = data;
+});
 checkboxTable.addEventListener("body-selection-change", (e) => {
   console.log(e.detail);
 });
@@ -632,7 +682,9 @@ const sortableTable = {
   table: document.querySelector("#sortableTable"),
 
   init() {
-    this.table.data = moreData;
+    this.table.addEventListener("table-ready", (e) => {
+      this.table.data = moreData;
+    });
 
     this.table.addEventListener("sort-change", (e) => {
       console.log(e.detail);
@@ -648,33 +700,39 @@ sortableTable.init();
 
 自定义某列或表头的显示内容，可组合其他组件使用。
 
+:::danger
+注意: 若 `slot="body"` 中的元素要带有业务逻辑且开启了排序功能，则该元素必须以 `WebComponent` 的形式存在，且`事件`需要在组件中已经定义和绑定。否则会在排序后丢失元素事件。
+:::
+
 <!-- -------- 9. 排序 --------  -->
 <!-- #region  -->
-<div>
-    <ea-table id="customTable" border height="250">
+<div class="demo">
+  <ea-table id="customTable" border height="250">
     <ea-table-column prop="date" width="100" rowspan="3" sortable
-        >日期</ea-table-column
+      >日期</ea-table-column
     >
     <ea-table-column label="详细信息" colspan="3">
-        <ea-table-column prop="name" width="100" rowspan="2" sortable
+      <ea-table-column prop="name" width="100" rowspan="2" sortable
         >姓名</ea-table-column
-        >
-        <ea-table-column label="个人信息" colspan="2">
+      >
+      <ea-table-column label="个人信息" colspan="2">
         <ea-table-column prop="age" width="100">年龄</ea-table-column>
         <ea-table-column prop="address">地址</ea-table-column>
-        </ea-table-column>
+      </ea-table-column>
     </ea-table-column>
     <div slot="header">
-        <ea-input id="searchInput" placeholder="搜索名字"></ea-input>
+      <ea-input id="searchInput" placeholder="搜索名字"></ea-input>
     </div>
     <div slot="body">
-        <ea-button class="edit" size="mini">编辑</ea-button>
-        <ea-button class="delete" size="mini" type="danger">删除</ea-button>
+      <div style="display: flex;justify-content: space-evenly;flex-wrap: wrap;">
+        <ea-my-edit-button></ea-my-edit-button>
+        <ea-my-delete-button></ea-my-delete-button>
+      </div>
     </div>
     <div slot="empty">
-        <ea-empty description="描述文字" image-size="100"></ea-empty>
+      <ea-empty description="描述文字" image-size="100"></ea-empty>
     </div>
-    </ea-table>
+  </ea-table>
 </div>
 <!-- #endregion  -->
 <!-- -------------------  -->
@@ -684,92 +742,107 @@ sortableTable.init();
 `html`
 
 ```html
-<ea-table id="customTable" border height="250">
-  <ea-table-column prop="date" width="100" rowspan="3" sortable
-    >日期</ea-table-column
-  >
-  <ea-table-column label="详细信息" colspan="3">
-    <ea-table-column prop="name" width="100" rowspan="2" sortable
-      >姓名</ea-table-column
+<div class="demo">
+  <ea-table id="customTable" border height="250">
+    <ea-table-column prop="date" width="100" rowspan="3" sortable
+      >日期</ea-table-column
     >
-    <ea-table-column label="个人信息" colspan="2">
-      <ea-table-column prop="age" width="100">年龄</ea-table-column>
-      <ea-table-column prop="address">地址</ea-table-column>
+    <ea-table-column label="详细信息" colspan="3">
+      <ea-table-column prop="name" width="100" rowspan="2" sortable
+        >姓名</ea-table-column
+      >
+      <ea-table-column label="个人信息" colspan="2">
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+      </ea-table-column>
     </ea-table-column>
-  </ea-table-column>
-  <div slot="header">
-    <ea-input id="searchInput" placeholder="搜索名字"></ea-input>
-  </div>
-  <div slot="body">
-    <ea-button class="edit" size="mini">编辑</ea-button>
-    <ea-button class="delete" size="mini" type="danger">删除</ea-button>
-  </div>
-  <div slot="empty">
-    <ea-empty description="描述文字" image-size="100"></ea-empty>
-  </div>
-</ea-table>
+    <div slot="header">
+      <ea-input id="searchInput" placeholder="搜索名字"></ea-input>
+    </div>
+    <div slot="body">
+      <div style="display: flex; justify-content: space-evenly;">
+        <my-edit-button></my-edit-button>
+        <my-delete-button></my-delete-button>
+      </div>
+    </div>
+    <div slot="empty">
+      <ea-empty description="描述文字" image-size="100"></ea-empty>
+    </div>
+  </ea-table>
+</div>
 ```
 
 ---
 
 `js`
 
+> [!NOTE]
+> 示例中的自定义组件，其中的逻辑使用了异步操作，因为其本身调用的是 `Table` 组件上的事件，所以需要等待 `Table` 组件自身的事件触发完成。
+
 ```js
 const customTable = {
   table: document.querySelector("#customTable"),
-  // searchBtn: document.querySelector('#searchBtn'),
   searchInput: document.querySelector("#searchInput"),
 
-  /**
-   * 为传入的按钮数组中的每个按钮添加点击事件监听器。
-   * 当按钮被点击时，在下一个事件循环中输出当前表格行的详细信息到控制台。
-   *
-   * @param {Array} btns - 包含按钮元素的数组。
-   */
-  clickCallback(btns) {
-    // 遍历按钮数组
-    btns.forEach((btn) => {
-      // 为每个按钮添加点击事件监听器
-      btn.addEventListener("click", (e) => {
-        // 使用 setTimeout 来确保在事件循环的下一阶段执行，避免阻塞 UI
-        setTimeout(() => {
-          // 输出当前表格行的详细信息到控制台
-          console.log(this.table.currentRowDetail);
-        }, 0);
-      });
-    });
-  },
-
   init() {
-    this.table.data = moreData;
+    this.table.addEventListener("table-ready", (e) => {
+      console.log(this.table.data, e);
+      console.log(this.table.data);
+      this.table.data = moreData;
+    });
 
     // 搜索
-    this.searchInput.addEventListener("keyup", () => {
-      const res = moreData.filter(
-        (item) => item.name.indexOf(this.searchInput.value) !== -1
+    this.searchInput.addEventListener("change", () => {
+      const res = moreData.filter((item) =>
+        item.name.includes(this.searchInput.value)
       );
       this.table.data = res;
-    });
-
-    // 点击按钮
-    let editBtns = this.table.shadowRoot.querySelectorAll(".edit");
-    let deleteBtns = this.table.shadowRoot.querySelectorAll(".delete");
-    this.clickCallback(editBtns);
-    this.clickCallback(deleteBtns);
-
-    // 排序时, 更新按钮及其点击事件
-    this.table.addEventListener("sort-change", (e) => {
-      editBtns = this.table.shadowRoot.querySelectorAll(".edit");
-      deleteBtns = this.table.shadowRoot.querySelectorAll(".delete");
-
-      console.log(e.detail);
-
-      clickCallback(editBtns);
-      clickCallback(deleteBtns);
     });
   },
 };
 customTable.init();
+
+// 编辑按钮
+class MyEditButton extends HTMLElement {
+  constructor() {
+    super();
+
+    const shadowroot = this.attachShadow({ mode: "open" });
+    shadowroot.innerHTML = `
+              <ea-button type="primary" size="mini">编辑</ea-button>
+          `;
+    const btn = shadowroot.querySelector("ea-button");
+    btn.addEventListener("click", (e) => {
+      setTimeout(() => {
+        console.log(customTable.table.currentRowDetail);
+      }, 0);
+    });
+
+    shadowroot.appendChild(btn);
+  }
+}
+if (!window.customElements.get("ea-my-edit-button"))
+  window.customElements.define("ea-my-edit-button", MyEditButton);
+
+// 删除按钮
+class MyDeleteButton extends HTMLElement {
+  constructor() {
+    super();
+
+    const shadowroot = this.attachShadow({ mode: "open" });
+    shadowroot.innerHTML = `
+              <ea-button type="danger" size="mini">删除</ea-button>
+          `;
+    const btn = shadowroot.querySelector("ea-button");
+    btn.addEventListener("click", (e) => {
+      setTimeout(() => {
+        console.log(customTable.table.currentRowDetail);
+      }, 0);
+    });
+  }
+}
+if (!window.customElements.get("ea-my-delete-button"))
+  window.customElements.define("ea-my-delete-button", MyDeleteButton);
 ```
 
 :::
@@ -785,6 +858,26 @@ customTable.init();
 | highlight-current-row | 当前行高亮 | -    | -      | false  |
 | currentRow            | 当前行     | -    | -      | -      |
 | currentRowDetail      | 当前行详情 | -    | -      | -      |
+
+## Table CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称         | 说明                                                                                       |
+| ------------ | ------------------------------------------------------------------------------------------ |
+| container    | 外层容器                                                                                   |
+| header-wrap  | 表格的`thead`容器(内部为一个 `table` 元素, 仅含 `colgroup` 和 `thead`)                     |
+| header-table | 表头表格                                                                                   |
+| body-wrap    | 表格的`tbody`容器(内部为一个`table`元素, 仅含`colgroup`, `tbody` 和 `slot [name="empty"]`) |
+| row          | 表格行                                                                                     |
+| th-cell      | 表头单元格                                                                                 |
+| td-cell      | 表格单元格                                                                                 |
+
+## TableColumn CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
 
 ## Table Events
 
