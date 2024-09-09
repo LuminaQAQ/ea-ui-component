@@ -37,6 +37,33 @@ onMounted(() => {
 
 当选项过多时，使用下拉菜单展示并选择内容。
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-select/index.js";
+</script>
+```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#select-css-part)。
+
 ## 基础用法
 
 适用广泛的基础单选
@@ -392,3 +419,29 @@ document.getElementById("clearableSelect").addEventListener("clear", (e) => {
 | value    | 选项的值   | String  | -      | -      |
 | label    | 选项的显示 | String  | -      | -      |
 | disabled | 是否禁用   | Boolean | -      | false  |
+
+## Select CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称               | 说明             |
+| ------------------ | ---------------- |
+| container          | 外层容器         |
+| input-wrap         | 输入框外层容器   |
+| input              | 输入框           |
+| dropdown-icon-wrap | 下拉图标外层容器 |
+| icon               | 下拉图标         |
+| dropdown-wrap      | 下拉框外层容器   |
+
+## Option CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
+
+## OptionGroup CSS Part
+
+| 名称       | 说明         |
+| ---------- | ------------ |
+| container  | 外层容器     |
+| title-wrap | 标题外层容器 |
