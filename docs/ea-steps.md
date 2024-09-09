@@ -53,6 +53,12 @@ onMounted(() => {
 })
 </script>
 
+<style>
+  ea-steps::part(container) {
+      min-height: 90px;
+  }
+</style>
+
 # Steps 步骤条
 
 引导用户按照流程完成任务的分步导航条，可根据实际应用场景设定步骤，步骤不得少于 2 步。
@@ -67,11 +73,39 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
+
 ## 基础用法
 
-简单的步骤条。
+简单的步骤条。 设置 `active` 属性，接受一个 `Number`，表明步骤的 `index`，从 0 开始。
 
-> 设置 `active` 属性，接受一个 `Number`，表明步骤的 `index`，从 0 开始。
+::: tip
+步骤条可能会出现页面抖动的情况，建议设置最小高度
+
+```html
+<style>
+  ea-steps::part(container) {
+    min-height: 90px;
+  }
+</style>
+```
+
+:::
 
 <!-- -------- 1. 基础用法 --------  -->
 <!-- #region  -->
@@ -190,7 +224,7 @@ basicObj.init();
 <!-- -------- 3. 有描述的步骤条 --------  -->
 <!-- #region  -->
 <div class="demo">
-    <ea-steps :active="1">
+    <ea-steps active="1">
         <ea-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></ea-step>
         <ea-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></ea-step>
         <ea-step title="步骤 3" description="这段就没那么长了"></ea-step>
@@ -203,7 +237,7 @@ basicObj.init();
 
 ```html
 <div class="demo">
-  <ea-steps :active="1">
+  <ea-steps active="1">
     <ea-step
       title="步骤 1"
       description="这是一段很长很长很长的描述性文字"
@@ -252,7 +286,7 @@ basicObj.init();
 <!-- -------- 4. 自定义每个 step 的间距 --------  -->
 <!-- #region  -->
 <div class="demo">
-    <ea-steps active="1" space="300px">
+    <ea-steps active="1" space="100px">
         <ea-step title="步骤 1" icon="icon-music"></ea-step>
         <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
         <ea-step title="步骤 3" icon="icon-camera"></ea-step>
@@ -295,16 +329,10 @@ basicObj.init();
 
 ```html
 <div class="demo">
-  <ea-steps :active="1">
-    <ea-step
-      title="步骤 1"
-      description="这是一段很长很长很长的描述性文字"
-    ></ea-step>
-    <ea-step
-      title="步骤 2"
-      description="这是一段很长很长很长的描述性文字"
-    ></ea-step>
-    <ea-step title="步骤 3" description="这段就没那么长了"></ea-step>
+  <ea-steps active="1" space="300px">
+    <ea-step title="步骤 1" icon="icon-music"></ea-step>
+    <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
+    <ea-step title="步骤 3" icon="icon-camera"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -327,6 +355,26 @@ basicObj.init();
 | description | 步骤的详细描述 | string | —                       | —       |
 | icon        | 图标           | string | —                       | —       |
 | status      | 步骤的状态     | string | wait / process / finish | process |
+
+## Steps CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
+
+## Step CSS Part
+
+| 名称             | 说明     |
+| ---------------- | -------- |
+| container        | 外层容器 |
+| head-wrap        | 头部容器 |
+| step-bar         | 步骤条   |
+| head-icon        | 图标     |
+| main-wrap        | 主体容器 |
+| title-wrap       | 标题容器 |
+| description-wrap | 描述容器 |
 
 ## Step Slot
 
