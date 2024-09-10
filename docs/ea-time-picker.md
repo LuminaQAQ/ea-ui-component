@@ -21,6 +21,33 @@ onMounted(() => {
 
 用于选择或输入时间
 
+## 引入
+
+> `js`
+
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-time-picker/index.js";
+</script>
+```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
+
 ## 任意时间点
 
 可以选择任意时间
@@ -95,7 +122,7 @@ basicTimePicker.addEventListener("change", (e) => {
 通过设置 `limit-range-start` 和 `limit-range-end` 属性，可以设置时间选择器的最小值和最大值
 
 <div class="demo">
-    <ea-time-picker limit-range-start="3:0:0" limit-range-end="3:10:0"></ea-time-picker>
+    <ea-time-picker time="3:0:0" limit-range-start="3:0:0" limit-range-end="3:10:0"></ea-time-picker>
 </div>
 
 ::: details 查看代码
@@ -105,6 +132,7 @@ basicTimePicker.addEventListener("change", (e) => {
 ```html
 <div class="demo">
   <ea-time-picker
+    time="3:0:0"
     limit-range-start="3:0:0"
     limit-range-end="3:10:0"
   ></ea-time-picker>
@@ -123,6 +151,18 @@ basicTimePicker.addEventListener("change", (e) => {
 | align             | 对齐方式           | string  | left/center/right | left   |
 | limit-range-start | 固定时间范围开始值 | string  | -                 | -      |
 | limit-range-end   | 固定时间范围结束值 | string  | -                 | -      |
+
+## CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称                | 说明           |
+| ------------------- | -------------- |
+| container           | 外层容器       |
+| input               | 输入框         |
+| dropdown-wrap       | 下拉框外层容器 |
+| dropdown-inner-wrap | 下拉框容器     |
+| dropdown-time       | 下拉框内的元素 |
 
 ## Events
 
