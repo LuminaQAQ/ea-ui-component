@@ -6,7 +6,7 @@ outline: deep
 
 本节将介绍如何在项目中使用 Ea-ui
 
-### 在原生 HTML 中使用
+## 在 原生 项目中使用
 
 ```html
 <!DOCTYPE html>
@@ -30,4 +30,20 @@ outline: deep
     <ea-button type="primary" icon="icon-edit">1</ea-button>
   </body>
 </html>
+```
+
+## 在 Vue 项目中使用
+
+```vue
+<script setup>
+import { onMounted } from "vue";
+
+onMounted(() => {
+  import("your/path/ea-button/index.js");
+});
+</script>
+
+<template>
+  <ea-button type="primary" icon="icon-edit">1</ea-button>
+</template>
 ```

@@ -1,24 +1,25 @@
+
 export class EaIcon extends HTMLElement {
     #wrap;
+    #fontCSS;
 
     constructor() {
         super();
 
-        // <link rel="stylesheet" href="/ea-ui-component/ea-icon/css/animation.css">
-        // <link rel="stylesheet" href="/ea-ui-component/ea-icon/css/fontello.css">
-
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="/ea-ui-component/ea-icon/css/animation.css">
-            <link rel="stylesheet" href="/ea-ui-component/ea-icon/css/fontello.css">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/animation.min.css">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/fontello.min.css">
+            <link id="fontello-stylesheet" rel="stylesheet" href="/ea-ui-component/ea-icon/css/fontello.css">
             <i class="ea-icon_wrap" part="container">
                 <slot></slot>
             </i>
         `;
 
         this.#wrap = shadowRoot.querySelector('.ea-icon_wrap');
+        this.#fontCSS = shadowRoot.querySelector('#fontello-stylesheet');
+
+        document.addEventListener('configChanged', (e) => {
+            this.#updateStyles(e.detail);
+        });
     }
 
     // ------- icon 图标类名 -------
@@ -63,12 +64,18 @@ export class EaIcon extends HTMLElement {
     // #endregion
     // ------- end -------
 
+    #updateStyles(newConfig) {
+        this.#fontCSS.href = newConfig.fontelloCSS;
+    }
+
     connectedCallback() {
         this.icon = this.icon;
 
         this.color = this.color;
 
         this.size = this.size;
+
+        document.dispatchEvent(new CustomEvent("ea-icon-ready"))
     }
 }
 
