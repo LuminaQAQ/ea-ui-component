@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    import('../components/ea-tag/index.js')
     import('./index.scss')
     
     document.querySelectorAll(".dynamic-closable-tag").forEach(item => {
@@ -32,6 +32,23 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#css-part)。
+
 ## 基础用法
 
 <div class="row left">
@@ -41,6 +58,8 @@ onMounted(() => {
     <ea-tag type="warning">警告标签</ea-tag>
     <ea-tag type="danger">危险标签</ea-tag>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row left">
@@ -60,7 +79,9 @@ document.querySelector("#click").addEventListener("click", function (e) {
 });
 ```
 
-## 可移除标签
+:::
+
+## 带关闭图标的标签
 
 <div class="row left">
     <ea-tag closable>默认标签</ea-tag>
@@ -69,6 +90,8 @@ document.querySelector("#click").addEventListener("click", function (e) {
     <ea-tag type="warning" closable>警告标签</ea-tag>
     <ea-tag type="danger" closable>危险标签</ea-tag>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row left">
@@ -79,6 +102,8 @@ document.querySelector("#click").addEventListener("click", function (e) {
   <ea-tag type="danger" closable>危险标签</ea-tag>
 </div>
 ```
+
+:::
 
 ## 动态编辑标签
 
@@ -91,6 +116,8 @@ document.querySelector("#click").addEventListener("click", function (e) {
     <ea-tag class="dynamic-closable-tag" type="warning" closable>警告标签</ea-tag>
     <ea-tag class="dynamic-closable-tag" type="danger" closable>危险标签</ea-tag>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="row left">
@@ -118,17 +145,17 @@ document.querySelectorAll(".dynamic-closable-tag").forEach((item) => {
 });
 ```
 
+:::
+
 <!-- ## 不同尺寸
 
 Tag 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。 -->
 
 ## 不同主题
 
-Tag 组件提供了三个不同的主题：dark、light 和 plain
+Tag 组件提供了三个不同的主题：`dark`、`light` 和 `plain`。通过设置 `effect` 属性来改变主题, 默认主题为 `light`
 
-> 通过设置 `effect` 属性来改变主题, 默认主题为 `light`
-
-Dark 主题:
+`Dark 主题:`
 
 <div class="row left">
     <ea-tag effect="dark">dark: 默认标签</ea-tag>
@@ -138,7 +165,21 @@ Dark 主题:
     <ea-tag effect="dark" type="danger">dark: 危险标签</ea-tag>
 </div>
 
-Plain 主题:
+::: details 查看代码
+
+```html
+<div class="row left">
+  <ea-tag effect="dark">dark: 默认标签</ea-tag>
+  <ea-tag effect="dark" type="success">dark: 成功标签</ea-tag>
+  <ea-tag effect="dark" type="info">dark: 信息标签</ea-tag>
+  <ea-tag effect="dark" type="warning">dark: 警告标签</ea-tag>
+  <ea-tag effect="dark" type="danger">dark: 危险标签</ea-tag>
+</div>
+```
+
+:::
+
+`Plain 主题:`
 
 <div class="row left">
     <ea-tag effect="plain">plain: 默认标签</ea-tag>
@@ -148,6 +189,20 @@ Plain 主题:
     <ea-tag effect="plain" type="danger">plain: 危险标签</ea-tag>
 </div>
 
+::: details 查看代码
+
+```html
+<div class="row left">
+  <ea-tag effect="plain">plain: 默认标签</ea-tag>
+  <ea-tag effect="plain" type="success">plain: 成功标签</ea-tag>
+  <ea-tag effect="plain" type="info">plain: 信息标签</ea-tag>
+  <ea-tag effect="plain" type="warning">plain: 警告标签</ea-tag>
+  <ea-tag effect="plain" type="danger">plain: 危险标签</ea-tag>
+</div>
+```
+
+:::
+
 ## Attributes
 
 | 参数     | 说明       | 类型    | 可选值                              | 默认值  |
@@ -155,6 +210,14 @@ Plain 主题:
 | type     | 主题类型   | string  | default/success/info/warning/danger | default |
 | closable | 是否可关闭 | boolean | true/false                          | false   |
 | effect   | 主题效果   | string  | dark/light/plain                    | light   |
+
+## CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
 
 ## Events
 
