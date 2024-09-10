@@ -26,7 +26,9 @@ npm i easy-component-ui
 
 这里的路径是 `node_modules` 目录下的 `easy-component-ui` 目录, 即默认下载路径.
 
-> `css`: 特别的, 如果项目中会使用到带有图标的 `属性/组件`, 需要使用 `link` 标签引入图标文件
+:::warning
+`css`: 特别的, 如果项目中会使用到带有图标的 `属性/组件`, 需要使用 `link` 标签引入图标文件
+:::
 
 ```html
 <link
