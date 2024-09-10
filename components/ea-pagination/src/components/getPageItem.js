@@ -1,1 +1,11 @@
-export const getPageItem=(e,t)=>{const a=document.createElement("span");return a.className="ea-pagination_item",a.innerText=e,a.setAttribute("data-page",e),t&&a.classList.add("background"),a};
+export const getPageItem = (page, hasBgc) => {
+    const pageItem = document.createElement('span');
+    pageItem.part = 'page-item';
+    pageItem.className = 'ea-pagination_item';
+    pageItem.innerText = page;
+    pageItem.setAttribute('data-page', page);
+
+    if (hasBgc) pageItem.classList.add('background');
+
+    return pageItem;
+};

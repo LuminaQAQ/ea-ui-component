@@ -1,0 +1,1 @@
+export default function setStyle(e,t){const l=document.createElement("link");l.href=t,l.rel="stylesheet",e.appendChild(l)}

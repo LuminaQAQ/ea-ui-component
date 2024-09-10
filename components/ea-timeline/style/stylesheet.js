@@ -1,1 +1,3 @@
-export const stylesheet="\n\n";
+export const stylesheet = `
+
+`;

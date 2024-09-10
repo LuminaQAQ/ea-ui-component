@@ -1,0 +1,19 @@
+.ea-steps_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-steps_wrap ::slotted(ea-step) {
+  flex-basis: 50%;
+}
+.ea-steps_wrap.is-simple {
+  justify-content: unset;
+}
+.ea-steps_wrap ::slotted(ea-step:last-child) {
+  flex-basis: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.ea-steps_wrap ::slotted(ea-step[simple]) {
+  flex: 1;
+}

@@ -1,1 +1,5 @@
-export function handleCustomEvent(t,e){this.dispatchEvent(new CustomEvent(t,{detail:e}))}
+export function handleCustomEvent(eventName, detail) {
+    this.dispatchEvent(new CustomEvent(eventName, {
+        detail
+    }));
+};

@@ -1,1 +1,48 @@
-export const stylesheet="\n.ea-message_wrap {\n  position: fixed;\n  left: 50%;\n  z-index: 999;\n  display: flex;\n  align-items: center;\n  padding: 15px 15px 15px 20px;\n  border: 1px solid #ebeef5;\n  border-radius: 4px;\n  top: -100%;\n  transform-origin: center;\n  opacity: 0;\n  transform: translate(-50%, 0);\n  min-width: 380px;\n  overflow: hidden;\n  background-color: black;\n  transition: opacity 0.3s, top 0.3s;\n}\n.ea-message_wrap .ea-icon-wrap {\n  margin-right: 0.5rem;\n  line-height: 1;\n}\n.ea-message_wrap .ea-text-content {\n  line-height: 1;\n  margin-right: auto;\n  vertical-align: middle;\n}\n.ea-message_wrap .ea-close-icon {\n  margin-left: auto;\n}\n.ea-message_wrap.ea-message--success {\n  background-color: #f0f9eb;\n  color: #67c23a;\n}\n.ea-message_wrap.ea-message--info {\n  background-color: #f4f4f5;\n  color: #909399;\n}\n.ea-message_wrap.ea-message--warning {\n  background-color: #fdf6ec;\n  color: #e6a23c;\n}\n.ea-message_wrap.ea-message--error {\n  background-color: #fef0f0;\n  color: #f56c6c;\n}\n";
+export const stylesheet = `
+.ea-message_wrap {
+  position: fixed;
+  left: 50%;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  padding: 15px 15px 15px 20px;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  top: -100%;
+  transform-origin: center;
+  opacity: 0;
+  transform: translate(-50%, 0);
+  min-width: 380px;
+  overflow: hidden;
+  background-color: black;
+  transition: opacity 0.3s, top 0.3s;
+}
+.ea-message_wrap .ea-icon-wrap {
+  margin-right: 0.5rem;
+  line-height: 1;
+}
+.ea-message_wrap .ea-text-content {
+  line-height: 1;
+  margin-right: auto;
+  vertical-align: middle;
+}
+.ea-message_wrap .ea-close-icon {
+  margin-left: auto;
+}
+.ea-message_wrap.ea-message--success {
+  background-color: #f0f9eb;
+  color: #67c23a;
+}
+.ea-message_wrap.ea-message--info {
+  background-color: #f4f4f5;
+  color: #909399;
+}
+.ea-message_wrap.ea-message--warning {
+  background-color: #fdf6ec;
+  color: #e6a23c;
+}
+.ea-message_wrap.ea-message--error {
+  background-color: #fef0f0;
+  color: #f56c6c;
+}
+`;

@@ -1,1 +1,21 @@
-export const stylesheet="\n.ea-menu_wrap {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  padding: 0 20px;\n}\n.ea-menu_wrap.is-vertical {\n  flex-direction: column;\n  align-items: flex-start;\n  border-right: 1px solid #e6e6e6;\n  overflow: auto;\n}\n.ea-menu_wrap.is-vertical ::slotted(ea-menu-item),\n.ea-menu_wrap.is-vertical ::slotted(ea-submenu) {\n  width: 100%;\n}\n.ea-menu_wrap.is-vertical ::slotted(ea-submenu) {\n  width: 100%;\n}\n";
+export const stylesheet = `
+.ea-menu_wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 20px;
+}
+.ea-menu_wrap.is-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  border-right: 1px solid #e6e6e6;
+  overflow: auto;
+}
+.ea-menu_wrap.is-vertical ::slotted(ea-menu-item),
+.ea-menu_wrap.is-vertical ::slotted(ea-submenu) {
+  width: 100%;
+}
+.ea-menu_wrap.is-vertical ::slotted(ea-submenu) {
+  width: 100%;
+}
+`;

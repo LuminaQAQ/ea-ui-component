@@ -1,0 +1,1 @@
+export const getPageItem=(e,t)=>{const a=document.createElement("span");return a.part="page-item",a.className="ea-pagination_item",a.innerText=e,a.setAttribute("data-page",e),t&&a.classList.add("background"),a};

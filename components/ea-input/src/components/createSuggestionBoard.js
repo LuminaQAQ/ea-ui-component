@@ -1,1 +1,43 @@
-function handleSuggestionBoardClose(e){e.classList.remove("is-open")}export function createSuggestionBoard(e,n){const t=this.shadowRoot.querySelector(".ea-input_suggestion-wrap"),a=document.createElement("ul");a.className="ea-input_suggestion-wrap",a.part="suggestion-wrap",n.forEach((e=>{const n=document.createElement("li");n.part="suggestion-item",n.innerText=e.value,n.addEventListener("click",(()=>{this.value=e.value,handleSuggestionBoardClose(a)})),a.appendChild(n)}));const o=document.createElement("ea-icon");return o.className="loading-icon",o.icon="icon-spin6 animate-spin",o.part="loading-icon",a.appendChild(o),window.addEventListener("click",(e=>{this.contains(e.target)||handleSuggestionBoardClose(a)})),t&&(t.remove(),a.classList.add("is-open")),e.appendChild(a),a}
+function handleSuggestionBoardClose(suggestionBoard) {
+    suggestionBoard.classList.remove('is-open');
+}
+
+export function createSuggestionBoard(container, val) {
+    const hasSuggestionBoard = this.shadowRoot.querySelector('.ea-input_suggestion-wrap');
+
+    const suggestionBoard = document.createElement('ul');
+    suggestionBoard.className = "ea-input_suggestion-wrap";
+    suggestionBoard.part = 'suggestion-wrap';
+
+    val.forEach(item => {
+        const li = document.createElement('li');
+        li.part = 'suggestion-item';
+        li.innerText = item.value;
+
+        li.addEventListener('click', () => {
+            this.value = item.value;
+            handleSuggestionBoardClose(suggestionBoard);
+        });
+
+        suggestionBoard.appendChild(li);
+    });
+
+    const loadingIcon = document.createElement('ea-icon');
+    loadingIcon.className = 'loading-icon';
+    loadingIcon.icon = 'icon-spin6 animate-spin';
+    loadingIcon.part = 'loading-icon';
+    suggestionBoard.appendChild(loadingIcon);
+
+    window.addEventListener('click', (e) => {
+        if (!this.contains(e.target)) handleSuggestionBoardClose(suggestionBoard);
+    });
+
+    if (hasSuggestionBoard) {
+        hasSuggestionBoard.remove();
+        suggestionBoard.classList.add('is-open');
+    }
+
+    container.appendChild(suggestionBoard);
+
+    return suggestionBoard;
+}

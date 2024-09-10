@@ -1,1 +1,51 @@
-import Base from"../Base.js";import{stylesheet}from"./src/style/stylesheet.js";class EaCard extends Base{#s;constructor(){super();const s=this.attachShadow({mode:"open"});s.innerHTML='\n      <div class="ea-card_wrap" part="container">\n        <div class="ea-card_header" part="header-wrap">\n          <slot name="header"></slot>\n        </div>\n        <div class="ea-card_content" part="content-wrap">\n          <slot></slot>\n        </div>\n      </div>\n    ',this.#s=s.querySelector(".ea-card_wrap"),this.build(s,stylesheet)}get shadow(){return this.getAttribute("shadow")||"always"}set shadow(s){this.setAttribute("shadow",s),this.#s.classList.add(`is-${s}-shadow`)}connectedCallback(){this.shadow=this.shadow}}customElements.get("ea-card")||customElements.define("ea-card",EaCard);
+// @ts-nocheck
+import Base from '../Base.js';
+
+import { stylesheet } from './src/style/stylesheet.js';
+
+class EaCard extends Base {
+  #wrap;
+
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+
+    shadowRoot.innerHTML = `
+      <div class="ea-card_wrap" part="container">
+        <div class="ea-card_header" part="header-wrap">
+          <slot name="header"></slot>
+        </div>
+        <div class="ea-card_content" part="content-wrap">
+          <slot></slot>
+        </div>
+      </div>
+    `;
+
+    this.#wrap = shadowRoot.querySelector('.ea-card_wrap');
+
+    this.build(shadowRoot, stylesheet);
+  }
+
+  // ------- shadow 阴影属性 -------
+  // #region
+  get shadow() {
+    return this.getAttribute('shadow') || "always";
+  }
+
+  set shadow(val) {
+    this.setAttribute('shadow', val);
+
+    this.#wrap.classList.add(`is-${val}-shadow`);
+  }
+  // #endregion
+  // ------- end -------
+
+  connectedCallback() {
+    this.shadow = this.shadow;
+  }
+}
+
+if (!customElements.get('ea-card')) {
+  customElements.define('ea-card', EaCard);
+}

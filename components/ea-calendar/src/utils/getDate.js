@@ -1,1 +1,11 @@
-export function getToday(){const t=new Date;return`${t.getFullYear()}-${t.getMonth()+1}`}export function getUserToday(t){const e=new Date(t);return`${e.getFullYear()}-${e.getMonth()+1}`}
+export function getToday() {
+    const myDate = new Date();
+
+    return `${myDate.getFullYear()}-${myDate.getMonth() + 1}`
+}
+
+export function getUserToday(date) {
+    const myDate = new Date(date);
+
+    return `${myDate.getFullYear()}-${myDate.getMonth() + 1}`
+}

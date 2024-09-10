@@ -1,0 +1,31 @@
+.ea-option_wrap {
+  position: relative;
+  padding: 0 20px;
+
+  height: 30px;
+  line-height: 30px;
+
+  font-size: 14px;
+  color: #606266;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  cursor: pointer;
+
+  &.is-checked {
+    color: #409eff;
+    font-weight: 700;
+  }
+
+  &.is-disabled {
+    color: #c0c4cc;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    background-color: #f5f7fa;
+  }
+}

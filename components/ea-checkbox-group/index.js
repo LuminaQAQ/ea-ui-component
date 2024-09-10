@@ -1,1 +1,120 @@
-import{timeout}from"../../utils/timeout.js";import Base from"../Base.js";import{stylesheet}from"./src/style/stylesheet.js";export class EaCheckboxGroup extends Base{#e=!1;constructor(){super();const e=this.attachShadow({mode:"open"});e.innerHTML='\n            <div class="ea-checkbox-group_wrap" part="container">\n                <slot></slot>\n            </div>\n        ',this.build(e,stylesheet)}get name(){return this.getAttribute("name")||"ea-checkbox"}set name(e){this.setAttribute("name",e),this.querySelectorAll("ea-checkbox").forEach((t=>{t.setAttribute("name",e),t.name=e}))}get value(){return this.getAttribute("value")||""}set value(e){this.setAttribute("value",e);try{const t=e.split(",").map((e=>e.trimStart()));t.map((e=>{this.querySelector(`ea-checkbox[value="${e}"]`).checked="true"})),this.dispatchEvent(new CustomEvent("change",{detail:t}))}catch(e){}}get disabled(){return this.getAttrBoolean("disabled")}set disabled(e){if(!e&&!this.#e)return;this.querySelectorAll("ea-checkbox").forEach((t=>{t.disabled=e}))}#t(e){let t=[];Array.from(e).filter((e=>!!e.checked&&t.push(e.value))),this.value=t.join(",")}connectedCallback(){this.setAttribute("data-ea-component",!0),setTimeout((()=>{this.name=this.name,this.value=this.value,this.disabled=this.disabled;const e=this.querySelectorAll("ea-checkbox");e.forEach((t=>{t.addEventListener("change",(t=>{this.#t(e)}))})),this.#t(e),this.#e=!0}),50)}}window.customElements.get("ea-checkbox-group")||window.customElements.define("ea-checkbox-group",EaCheckboxGroup);
+import { timeout } from "../../utils/timeout.js";
+import Base from "../Base.js";
+
+import { stylesheet } from "./src/style/stylesheet.js";
+
+export class EaCheckboxGroup extends Base {
+    #mounted = false;
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+
+        shadowRoot.innerHTML = `
+            <div class="ea-checkbox-group_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
+
+        this.build(shadowRoot, stylesheet);
+    }
+
+    // ------- name 唯一键值 -------
+    // #region
+    get name() {
+        return this.getAttribute('name') || 'ea-checkbox';
+    }
+
+    set name(val) {
+        this.setAttribute('name', val);
+        this.querySelectorAll('ea-checkbox').forEach(checkbox => {
+            checkbox.setAttribute('name', val);
+            checkbox.name = val;
+        });
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- value 指定选中值 -------
+    // #region
+    get value() {
+        return this.getAttribute('value') || '';
+    }
+
+    set value(val) {
+        this.setAttribute('value', val);
+
+        try {
+            const valArr = val.split(',').map(item => item.trimStart());
+
+            valArr.map(item => {
+                const checkbox = this.querySelector(`ea-checkbox[value="${item}"]`);
+
+                checkbox.checked = 'true';
+            })
+
+            this.dispatchEvent(new CustomEvent('change', { detail: valArr }));
+        } catch (error) {
+
+        }
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- disabled 禁用 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean('disabled');
+    }
+
+    set disabled(val) {
+        if (!val && !this.#mounted) return;
+
+        const checkboxs = this.querySelectorAll(`ea-checkbox`);
+        checkboxs.forEach(checkbox => {
+            checkbox.disabled = val;
+        });
+    }
+    // #endregion
+    // ------- end -------
+
+    #handleValueUptate(checkboxes) {
+        let valueArr = [];
+        Array.from(checkboxes).filter(item => {
+            if (item.checked) return valueArr.push(item.value);
+            return false;
+        })
+
+        this.value = valueArr.join(',');
+    }
+
+    connectedCallback() {
+        this.setAttribute('data-ea-component', true);
+
+
+        setTimeout(() => {
+            // name 唯一键值
+            this.name = this.name;
+
+            // value 指定选中值
+            this.value = this.value;
+
+            // disabled 禁用
+            this.disabled = this.disabled;
+
+            const checkboxes = this.querySelectorAll('ea-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', e => {
+                    this.#handleValueUptate(checkboxes);
+                });
+            });
+            this.#handleValueUptate(checkboxes);
+            this.#mounted = true;
+        }, 50);
+
+    }
+}
+
+if (!window.customElements.get("ea-checkbox-group")) {
+    window.customElements.define("ea-checkbox-group", EaCheckboxGroup);
+}

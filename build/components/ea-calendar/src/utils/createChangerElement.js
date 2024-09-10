@@ -1,0 +1,1 @@
+import{createElement}from"../../../../utils/createElement.js";export const createChangerElement=(e,a)=>{const r=createElement("ea-button",`ea-calendar-header_sg-changer ea-calendar-header_changer-${a}`);return r.innerText=e,r.size="small",r};

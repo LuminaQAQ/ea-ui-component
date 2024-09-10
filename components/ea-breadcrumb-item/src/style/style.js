@@ -1,1 +1,12 @@
-export const stylesheet="\n.ea-breadcrumb-item_wrap {\n  font-size: 14px;\n  color: #606266;\n  line-height: 1;\n}\n.ea-breadcrumb-item_wrap ::slotted(a) {\n  text-decoration: none;\n  font-weight: 600;\n  color: #303133;\n}\n";
+export const stylesheet = `
+.ea-breadcrumb-item_wrap {
+  font-size: 14px;
+  color: #606266;
+  line-height: 1;
+}
+.ea-breadcrumb-item_wrap ::slotted(a) {
+  text-decoration: none;
+  font-weight: 600;
+  color: #303133;
+}
+`;

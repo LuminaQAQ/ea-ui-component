@@ -1,1 +1,146 @@
-import Base from"../Base.js";import{stylesheet}from"./src/style/stylesheet.js";export class EaTimelineItem extends Base{#t;#e;#i;#s;constructor(){super();const t=this.attachShadow({mode:"open"});t.innerHTML="\n            <div class='ea-timeline-item_wrap' part='container'>\n                <div class='ea-timeline-item_circle' part='circle'></div>\n                <div class='ea-timeline-item_tail' part='tail'></div>\n                <div class='ea-timeline-item_container' part='body'>\n                    <div class='ea-timeline-item_content' part='content'>\n                        <slot></slot>\n                    </div>\n                    <div class='ea-timeline-item_timestamp' part='timestamp'></div>\n                </div>\n            </div>\n        ",this.#t=t.querySelector(".ea-timeline-item_wrap"),this.#e=t.querySelector(".ea-timeline-item_timestamp"),this.#i=t.querySelector(".ea-timeline-item_circle"),this.#s=t.querySelector(".ea-timeline-item_timestamp"),this.build(t,stylesheet)}get time(){return this.getAttribute("time")||""}set time(t){t&&(this.setAttribute("time",t),this.#s.innerText=t)}get typeList(){return["primary","success","warning","danger","info"]}get type(){const t=this.getAttribute("type");return this.typeList.includes(t)?t:"info"}set type(t){this.setAttribute("type",t),this.#i.classList.add(`ea-timeline-item--${t}`)}get color(){return this.getAttribute("color")||""}set color(t){if(!t)return;this.setAttribute("color",t);""!==((new Option).style.color=t)&&(this.#i.style.backgroundColor=t)}get sizeList(){return["normal","large"]}get size(){const t=this.getAttribute("size");return this.sizeList.includes(t)?t:"normal"}set size(t){this.setAttribute("size",t),this.#t.classList.add(`ea-timeline-item_circle--${t}`)}get placementList(){return["top","bottom"]}get placement(){const t=this.getAttribute("placement");return this.placementList.includes(t)?t:"bottom"}set placement(t){this.setAttribute("placement",t),this.#e.classList.add(`ea-timeline-item_timestamp--${t}`)}connectedCallback(){this.time=this.time,this.type=this.type,this.color=this.color,this.size=this.size,this.placement=this.placement}}customElements.get("ea-timeline-item")||customElements.define("ea-timeline-item",EaTimelineItem);
+import Base from '../Base.js';
+
+import { stylesheet } from './src/style/stylesheet.js';
+
+export class EaTimelineItem extends Base {
+    #wrap;
+
+    #timeWrap;
+
+    #timelineCircle;
+    #timelineTimestamp;
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <div class='ea-timeline-item_wrap' part='container'>
+                <div class='ea-timeline-item_circle' part='circle'></div>
+                <div class='ea-timeline-item_tail' part='tail'></div>
+                <div class='ea-timeline-item_container' part='body'>
+                    <div class='ea-timeline-item_content' part='content'>
+                        <slot></slot>
+                    </div>
+                    <div class='ea-timeline-item_timestamp' part='timestamp'></div>
+                </div>
+            </div>
+        `;
+
+        this.#wrap = shadowRoot.querySelector('.ea-timeline-item_wrap');
+        this.#timeWrap = shadowRoot.querySelector('.ea-timeline-item_timestamp');
+        this.#timelineCircle = shadowRoot.querySelector('.ea-timeline-item_circle');
+        this.#timelineTimestamp = shadowRoot.querySelector('.ea-timeline-item_timestamp');
+
+        this.build(shadowRoot, stylesheet);
+    }
+
+    // ------- time 时间 -------
+    // #region
+    get time() {
+        return this.getAttribute('time') || "";
+    }
+
+    set time(value) {
+        if (!value) return;
+
+        this.setAttribute('time', value);
+
+        this.#timelineTimestamp.innerText = value;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- type 时间线类型 -------
+    // #region
+    get typeList() {
+        return ["primary", "success", "warning", "danger", "info"];
+    }
+
+    get type() {
+        const attr = this.getAttribute('type');
+
+        return this.typeList.includes(attr) ? attr : "info";
+    }
+
+    set type(value) {
+        this.setAttribute('type', value);
+
+        this.#timelineCircle.classList.add(`ea-timeline-item--${value}`);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- color 时间线颜色 -------
+    // #region
+    get color() {
+        return this.getAttribute('color') || "";
+    }
+
+    set color(value) {
+        if (!value) return;
+
+        this.setAttribute('color', value);
+
+        const isColor = new Option().style.color = value;
+
+        if (isColor !== "") this.#timelineCircle.style.backgroundColor = value;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- size 时间线尺寸 -------
+    // #region
+    get sizeList() {
+        return ["normal", "large"];
+    }
+
+    get size() {
+        const attr = this.getAttribute('size');
+
+        return this.sizeList.includes(attr) ? attr : "normal";
+    }
+
+    set size(value) {
+        this.setAttribute('size', value);
+
+        this.#wrap.classList.add(`ea-timeline-item_circle--${value}`);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- placement 时间的显示位置 -------
+    // #region
+    get placementList() {
+        return ["top", "bottom"];
+    }
+
+    get placement() {
+        const attr = this.getAttribute('placement');
+
+        return this.placementList.includes(attr) ? attr : "bottom";
+    }
+
+    set placement(value) {
+        this.setAttribute('placement', value);
+
+        this.#timeWrap.classList.add(`ea-timeline-item_timestamp--${value}`);
+    }
+    // #endregion
+    // ------- end -------d
+
+    connectedCallback() {
+        this.time = this.time;
+
+        this.type = this.type;
+
+        this.color = this.color;
+
+        this.size = this.size;
+
+        this.placement = this.placement;
+    }
+}
+
+if (!customElements.get('ea-timeline-item')) {
+    customElements.define('ea-timeline-item', EaTimelineItem);
+}

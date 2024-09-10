@@ -1,0 +1,143 @@
+@import "../ea-ui-base-style.scss";
+
+@mixin button-type($type, $border, $text, $bgc) {
+  &.#{$type} {
+    $border-hover: lighten($border, 10);
+    $text-hover: lighten($text, 10);
+    $bgc-hover: lighten($bgc, 10);
+
+    @if ($type == "normal") {
+      $border-hover: transparentize(#a0cfff, 0.6);
+      $text-hover: darken(#a0cfff, 20);
+      $bgc-hover: transparentize(#a0cfff, 0.95);
+    }
+
+    border: 1px solid $border;
+    color: $text;
+    background-color: $bgc;
+
+    &.disabled {
+      background-color: lighten($bgc, 25) !important;
+      border-color: lighten($border, 25) !important;
+      color: lighten($text, 75) !important;
+      pointer-events: none;
+
+      @if ($type == "normal") {
+        border-color: lighten($border, 5) !important;
+        color: lighten($text, 35) !important;
+      }
+
+      @if ($type == "text") {
+        color: $color-disabled-text !important;
+      }
+    }
+    &.plain {
+      background-color: lighten($bgc, 36);
+      border-color: lighten($border, 25);
+      color: $bgc;
+
+      @if ($type == "normal") {
+        background-color: transparent;
+        color: $text;
+        border-color: $border;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+
+      @if ($type == "danger") {
+        background-color: lighten($bgc, 26);
+      }
+    }
+
+    &:hover {
+      border-color: $border-hover;
+      color: $text-hover;
+      background-color: $bgc-hover;
+    }
+
+    &:active {
+      background-color: darken($bgc-hover, 30);
+    }
+  }
+}
+
+:host {
+  --border-radius: 6px;
+}
+
+.ea-button {
+  box-sizing: border-box;
+
+  padding: 0.5rem;
+  border-radius: var(--border-radius);
+
+  cursor: pointer;
+
+  font-size: 1rem;
+  line-height: 1.25;
+  font-weight: 500;
+  transition: background-color 0.1s, color 0.1s;
+  text-decoration: none;
+
+  will-change: width;
+
+  @include button-type(
+    "normal",
+    $color-default-border,
+    $color-default-text,
+    $color-default-bgc
+  );
+
+  @include button-type(
+    "primary",
+    $color-primary-border,
+    $color-primary-text,
+    $color-primary-bgc
+  );
+
+  @include button-type(
+    "success",
+    $color-success-border,
+    $color-success-text,
+    $color-success-bgc
+  );
+
+  @include button-type(
+    "info",
+    $color-info-border,
+    $color-info-text,
+    $color-info-bgc
+  );
+
+  @include button-type(
+    "warning",
+    $color-warning-border,
+    $color-warning-text,
+    $color-warning-bgc
+  );
+
+  @include button-type(
+    "danger",
+    $color-danger-border,
+    $color-danger-text,
+    $color-danger-bgc
+  );
+
+  @include button-type("text", transparent, $color-primary-bgc, transparent);
+
+  &.round {
+    border-radius: 999px;
+  }
+
+  &.medium {
+    font-size: 14px;
+  }
+  &.small {
+    font-size: 12px;
+  }
+  &.mini {
+    font-size: 10px;
+  }
+}

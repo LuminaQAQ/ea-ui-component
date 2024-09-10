@@ -1,0 +1,1 @@
+export const handleTemplate=(e,n,o,r)=>{const c=e.querySelector(`[slot="${n}"]`);if(c)try{if(0===c.childNodes.length)o.innerHTML=c.innerHTML;else if(""===c.innerHTML){const e=c.childNodes;o.innerHTML="",Array.from(e).forEach((e=>{o.appendChild(e.cloneNode(!0))}))}c.remove(),r.remove()}catch(e){}};

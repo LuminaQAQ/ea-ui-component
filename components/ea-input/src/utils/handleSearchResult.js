@@ -1,1 +1,9 @@
-export function handleSearchResult(e,l){e.querySelectorAll("li").forEach((e=>{e.innerText.includes(l)?e.style.display="block":e.style.display="none"}))}
+export function handleSearchResult(suggestionBoard, value) {
+    suggestionBoard.querySelectorAll('li').forEach(item => {
+        if (item.innerText.includes(value)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    })
+}

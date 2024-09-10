@@ -1,0 +1,12 @@
+.ea-aside_wrap {
+  height: 100%;
+
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  ::slotted(ea-main) {
+    overflow: auto;
+  }
+}

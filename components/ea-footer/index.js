@@ -1,1 +1,57 @@
-import Base from"../Base.js";import"../ea-icon/index.js";const stylesheet="\n.ea-footer_wrap {\n  box-sizing: border-box;\n  padding: 0 20px;\n\n  height: 60px;\n\n  color: #333;\n\n  overflow: hidden;\n}\n";export class EaFooter extends Base{#e;constructor(){super();const e=this.attachShadow({mode:"open"});e.innerHTML='\n            <footer class="ea-footer_wrap" part="container">\n                <slot></slot>\n            </footer>\n        ',this.#e=e.querySelector(".ea-footer_wrap"),this.build(e,stylesheet)}get height(){return this.getAttrNumber("height")||60}set height(e){this.setAttribute("height",e),this.#e.style.height=`${e}px`,this.#e.style.lineHeight=`${e}px`}connectedCallback(){this.height=this.height}}customElements.get("ea-footer")||customElements.define("ea-footer",EaFooter);
+import Base from '../Base.js';
+import '../ea-icon/index.js';
+
+const stylesheet = `
+.ea-footer_wrap {
+  box-sizing: border-box;
+  padding: 0 20px;
+
+  height: 60px;
+
+  color: #333;
+
+  overflow: hidden;
+}
+`;
+
+export class EaFooter extends Base {
+    #wrap;
+
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <footer class="ea-footer_wrap" part="container">
+                <slot></slot>
+            </footer>
+        `;
+
+        this.#wrap = shadowRoot.querySelector('.ea-footer_wrap');
+
+        this.build(shadowRoot, stylesheet);
+    }
+
+    // ------- height 底栏高度 -------
+    // #region
+    get height() {
+        return this.getAttrNumber('height') || 60;
+    }
+
+    set height(value) {
+        this.setAttribute('height', value);
+
+        this.#wrap.style.height = `${value}px`;
+        this.#wrap.style.lineHeight = `${value}px`;
+    }
+    // #endregion
+    // ------- end -------
+
+    connectedCallback() {
+        this.height = this.height;
+    }
+}
+
+if (!customElements.get('ea-footer')) {
+    customElements.define('ea-footer', EaFooter);
+}

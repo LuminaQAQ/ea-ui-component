@@ -1,1 +1,87 @@
-export const stylesheet="\n.ea-dialog_wrap {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 2024;\n}\n.ea-dialog_wrap .ea-dialog_board {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  background-color: aliceblue;\n  width: 420px;\n  padding-bottom: 10px;\n  border-radius: 4px;\n  border: 1px solid #ebeef5;\n  box-sizing: 0 2px 12px 0;\n  font-size: 18px;\n  text-align: left;\n  overflow: hidden;\n  backface-visibility: hidden;\n}\n.ea-dialog_wrap .ea-dialog_board .ea-dialog_header {\n  padding: 15px 15px 10px;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.ea-dialog_wrap .ea-dialog_board .ea-dialog_header .ea-dialog_header-title {\n  font-size: 18px;\n  line-height: 1;\n  color: #303133;\n}\n.ea-dialog_wrap .ea-dialog_board .ea-dialog_header .ea-dialog_header-close {\n  display: inline-block;\n  font-size: 16px;\n  color: #909399;\n  cursor: pointer;\n}\n.ea-dialog_wrap .ea-dialog_board .ea-dialog_content {\n  padding: 10px 15px;\n  color: #606266;\n  font-size: 14px;\n}\n.ea-dialog_wrap .ea-dialog_board .ea-dialog_footer {\n  padding: 5px 15px 0;\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n}\n.ea-dialog_wrap .ea-dialog_board .ea-dialog_footer :first-child {\n  margin-right: 0.5rem;\n}\n";
+export const stylesheet = `
+:host {
+  --invalid-message: "";
+}
+
+.ea-dialog_wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2024;
+}
+.ea-dialog_wrap .ea-dialog_board {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 420px;
+  padding-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid #ebeef5;
+  box-sizing: 0 2px 12px 0;
+  font-size: 18px;
+  text-align: left;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_header {
+  padding: 15px 15px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_header .ea-dialog_header-title {
+  font-size: 18px;
+  line-height: 1;
+  color: #303133;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_header .ea-dialog_header-close {
+  display: inline-block;
+  font-size: 16px;
+  color: #909399;
+  cursor: pointer;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_content {
+  padding: 10px 15px;
+  color: #606266;
+  font-size: 14px;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_content .ea-dialog_content-input {
+  display: none;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_footer {
+  padding: 5px 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ea-dialog_wrap .ea-dialog_board .ea-dialog_footer :first-child {
+  margin-right: 0.5rem;
+}
+.ea-dialog_wrap.is-prompt .ea-dialog_board .ea-dialog_content {
+  position: relative;
+}
+.ea-dialog_wrap.is-prompt .ea-dialog_board .ea-dialog_content .ea-dialog_content-input {
+  margin-top: 15px;
+  padding-bottom: 15px;
+  display: block;
+}
+.ea-dialog_wrap.is-prompt .ea-dialog_board .ea-dialog_content .ea-dialog_content-input::after {
+  content: var(--invalid-message);
+  position: absolute;
+  display: block;
+  bottom: 0;
+  transform-origin: top center;
+  transform: scaleY(0);
+  transition: transform 0.3s;
+}
+.ea-dialog_wrap.is-prompt .ea-dialog_board .ea-dialog_content .ea-dialog_content-input[aria-invalid=true]::after {
+  transform-origin: top center;
+  transform: scaleY(1);
+  color: #f56c6c;
+}
+`;

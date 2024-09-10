@@ -1,1 +1,7 @@
-export const getShowTotalItem=()=>{const t=document.createElement("span");return t.className="ea-pagination_show_total",t};
+export const getShowTotalItem = () => {
+    const showTotalItem = document.createElement('span');
+    showTotalItem.className = 'ea-pagination_show_total';
+    showTotalItem.part = 'total-wrap';
+
+    return showTotalItem;
+}

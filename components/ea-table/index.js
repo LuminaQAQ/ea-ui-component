@@ -1,1 +1,555 @@
-import Base from"../Base.js";import"../ea-icon/index.js";import{createElement}from"../../utils/createElement.js";import"../ea-table-column/index.js";import"../ea-checkbox/index.js";import{stylesheet}from"./src/style/stylesheet.js";export class EaTable extends Base{#e;#t;#r;#a;#l;#o;#s;#i;#n;#h;#d;#c;constructor(){super();const e=this.attachShadow({mode:"open"});e.innerHTML='\n            <div class="ea-table_wrap" part="container">\n                <div class="ea-table_header-wrap" part="header-wrap">\n                    <table class="ea-table_header" part="header-table">\n                        <colgroup></colgroup>\n                        <thead></thead>\n                    </table>\n                </div>\n                <div class="ea-table_body-wrap" part="body-wrap">\n                    <table class="ea-table_main" part="body-table">\n                        <colgroup></colgroup>\n                        <tbody></tbody>\n                        <slot name="empty" style="display: none;"></slot>\n                    </table>\n                </div>\n            </div>\n            <slot></slot>\n            <slot name="header"></slot>\n            <slot name="body"></slot>\n        ',this.build(e,stylesheet),this.#e=this.shadowRoot.querySelector(".ea-table_wrap"),this.#t=this.shadowRoot.querySelector(".ea-table_header"),this.#r=this.#t.querySelector(".ea-table_header colgroup"),this.#a=this.#t.querySelector(".ea-table_header thead"),this.#l=this.shadowRoot.querySelector(".ea-table_main"),this.#o=this.#l.querySelector(".ea-table_body-wrap colgroup"),this.#s=this.#l.querySelector(".ea-table_body-wrap tbody"),this.#i=this.querySelectorAll("ea-table-column")}get border(){return this.getAttrBoolean("border")}set border(e){this.setAttribute("border",e),this.#e.classList.toggle("border",e),this.#t.classList.toggle("border",e),this.#l.classList.toggle("border",e)}get stripe(){return this.getAttrBoolean("stripe")}set stripe(e){this.setAttribute("stripe",e),this.#e.classList.toggle("stripe",e)}get height(){return this.getAttrNumber("height")}set height(e){if(this.setAttribute("height",e),e){this.shadowRoot.querySelector(".ea-table_body-wrap").style.height=`${e}px`}else this.#e.style.height=""}get highlightCurrentRow(){return this.getAttrBoolean("highlight-current-row")||!1}set highlightCurrentRow(e){this.setAttribute("highlight-current-row",e)}get currentRow(){return this.getAttrNumber("current-row")||0}set currentRow(e){this.setAttribute("current-row",e)}get data(){return this.#h||[]}set data(e){const t=JSON.stringify(e);let r=JSON.parse(t);this.#h=r,this.renderTableBody(r)}get currentRowDetail(){const e=this.currentRow;return{index:e,data:this.data[e],target:this.#l.querySelectorAll(".ea-table__row")[e]||null}}#b(e,t,r,a,l,o=!1){const s=this.parentNode.clientWidth,i=Array.from(a.children).reduce(((e,t)=>e+Number(t.getAttribute("width"))),0);s>0&&i<=s?(r.style.width=s-l+"px",e.style.width=`${s}px`,t.style.width=s-l+"px",o&&(e.style.width=`${s}px`)):(r.style.width=`${s}px`,e.style.width=`${s}px`,t.style.width=`${s}px`)}#p(){const e=this.shadowRoot.querySelector(".ea-table_header-wrap"),t=this.shadowRoot.querySelector(".ea-table_body-wrap");let r=null;const a=()=>{this.#b(this.#e,this.#l,this.#t,this.#r,r)};window.addEventListener("resize",(()=>{a()})),setTimeout((()=>{r=this.#e.getBoundingClientRect().width-this.#l.getBoundingClientRect().width,a()}),0),t.addEventListener("scroll",(r=>{e.style.transform=`translateX(-${t.scrollLeft}px)`}))}#u(e,t){if(t.sortable&&"selection"!==t.type){const r=createElement("ea-icon");r.icon="icon-angle-down",r.style.float="right",e.appendChild(r),e.addEventListener("click",(()=>{r.color="#5cb6ff";"asc"===t.order?(t.order="desc",r.icon="icon-angle-up"):(t.order="asc",r.icon="icon-angle-down");let e=this.data.sort(((e,r)=>{const a="null"!==t.prop?t.prop:t.type;return"asc"===t.order?String(e[a]).localeCompare(r[a]):String(r[a]).localeCompare(e[a])}));this.renderTableBody(e),this.dispatchEvent(new CustomEvent("sort-change",{detail:{prop:t.prop,order:t.order},composed:!0,bubbles:!0}))}))}}#y(){this.querySelectorAll("ea-table-column");this.#r.innerHTML="",this.#o.innerHTML="",this.#a.innerHTML="";const e=(t,r=1)=>{const a=createElement("tr");a.part="row",a.setAttribute("index",r),Array.from(t).forEach((t=>{if("EA-TABLE-COLUMN"!==t.nodeName)return;const l=createElement("th","ea-table__cell th-cell");if(l.part="th-cell",l.setAttribute("colspan",t.colspan||1),l.setAttribute("rowspan",t.rowspan||1),l.appendChild(t),a.appendChild(l),"selection"===t.type&&(this.#n=t.querySelector("ea-checkbox")),t.children.length>0)e(t.children,++r);else{const e=createElement("col");e.setAttribute("width",t.getAttribute("width")||100);const r=createElement("col");r.setAttribute("width",t.getAttribute("width")||100),this.#r.appendChild(e),this.#o.appendChild(r),this.#a.appendChild(a),this.#u(l,t)}}))};e(this.children)}#g(e,t){e.addEventListener("click",(()=>{const r=this.#s.querySelectorAll(".ea-table__row");let a=!1,l=!1;r.forEach(((e,t)=>{"index"===e.type&&(a=!0),"selection"===e.type&&(l=!0),e.index=t,this.highlightCurrentRow&&e.classList.remove("is-current-row")})),this.highlightCurrentRow&&e.classList.add("is-current-row"),l&&delete t.selection,this.currentRow=e.index,this.dispatchEvent(new CustomEvent("current-change",{composed:!0,bubbles:!0,detail:{index:e.index,row:e,data:t}}))}))}#m(e,t){const r=this.#t.querySelectorAll("ea-table-column");let a=0,l=!1;return r.forEach(((e,r)=>{e.type===t&&(a=r,l=!0)})),l?e.map(((e,r)=>{const l={},o=Object.keys(e);return o.splice(a,0,t),o.forEach(((t,a)=>{l[t]="index"===t?r+1:"selection"===t?"<ea-checkbox></ea-checkbox>":e[t]})),l})):e}#T(){const e=this.#s.querySelectorAll("tr"),t=this.shadowRoot.querySelector('slot[name="body"]');t.assignedNodes().length?(e.forEach((e=>{const r=createElement("td","ea-table__cell");r.part="td-cell",Array.from(t.assignedNodes()).forEach((t=>{const a=t.cloneNode(!0);r.appendChild(a),a.addEventListener("click",(()=>{t.dispatchEvent(new CustomEvent("click",{bubbles:!0,composed:!0,detail:{row:e}}))}))})),e.appendChild(r)})),t.style.display="none"):t.remove()}renderTableBody(e){if(this.#s.innerHTML="",!this.#d){e=this.#m(e,"index"),e=this.#m(e,"selection");const t=Array.from(this.#t.querySelectorAll("ea-table-column")).map(((e,t)=>"default"===e.type?e.prop:e.type));e=e.map((e=>{const r={};return t.forEach((t=>{null!==t&&"null"!==t&&void 0!==t&&"undefined"!==t&&(r[t]=e[t])})),r})),this.#d=!0}e.forEach(((t,r)=>{const a=createElement("tr","ea-table__row");a.part="row",Object.entries(t).forEach((([r,l])=>{const o=createElement("td","ea-table__cell td_cell");o.part="td-cell",o.innerHTML=l,"selection"===r&&o.querySelector("ea-checkbox").addEventListener("change",(r=>{const l=this.shadowRoot.querySelectorAll("ea-checkbox"),o=Array.from(l).filter(((e,t)=>(e.index=t,e.checked))),s=o.map((t=>{const r=e[t.index];return delete r.selection,r}));this.dispatchEvent(new CustomEvent("body-selection-change",{composed:!0,bubbles:!0,detail:{checked:r.detail.checked,currentRow:a,currentRowData:t,checkedElements:o,checkedElementsData:s}}))})),a.appendChild(o)})),this.#g(a,t),this.#s.appendChild(a)})),this.#h=e;const t=this.shadowRoot.querySelector('slot[name="empty"]');e.length>0?t.style.display="none":t.style.display="block",this.#T()}#w(){const e=this.shadowRoot.querySelectorAll("ea-table-column");Array.from(e).some((e=>"selection"===e.type))&&(this.addEventListener("header-selection-change",(e=>{this.#l.querySelectorAll("ea-checkbox").forEach((t=>{t.checked=e.detail.checked}))})),this.addEventListener("body-selection-change",(e=>{const t=this.#a.querySelector("ea-table-column").shadowRoot.querySelector("ea-checkbox"),r=this.#l.querySelectorAll("ea-checkbox");let a=Array.from(r).map((e=>e.checked));a.every((e=>!0===e))?t.checked=!0:a.every((e=>!1===e))?t.checked=!1:t.indeterminate=!0})))}#E(){const e=this.shadowRoot.querySelector('slot[name="header"]');if(e.assignedNodes().length>0){const t=this.#a.querySelector("tr"),r=createElement("th","ea-table__cell th-cell");r.part="th-cell";let a=1;Array.from(this.#a.querySelectorAll("th")).forEach((e=>{e.rowSpan>a&&(a=e.rowSpan)})),r.rowSpan=a,r.appendChild(e),t.appendChild(r)}else e.remove()}connectedCallback(){this.style.position="relative",this.border=this.border,this.stripe=this.stripe,this.height=this.height,this.highlightCurrentRow=this.highlightCurrentRow,this.#y(),this.#p(),this.#w(),this.#E()}}customElements.get("ea-table")||customElements.define("ea-table",EaTable);
+// @ts-nocheck
+import Base from '../Base.js';
+import '../ea-icon/index.js'
+import { createElement } from '../../utils/createElement.js';
+
+import "../ea-table-column/index.js"
+import "../ea-checkbox/index.js"
+
+import { stylesheet } from './src/style/stylesheet.js';
+import { timeout } from '../../utils/timeout.js';
+
+export class EaTable extends Base {
+    #container;
+
+    #headerTable;
+    #headerTableColgroup;
+    #headerTableThead;
+
+    #bodyTable;
+    #bodyTableColgroup
+    #bodyTableTbody
+
+    #tableColumns;
+
+    #checkAllElement;
+
+    #tableData;
+
+    #tableDataIsInit;
+
+    #bodySlot;
+
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <div class="ea-table_wrap" part="container">
+                <div class="ea-table_header-wrap" part="header-wrap">
+                    <table class="ea-table_header" part="header-table">
+                        <colgroup></colgroup>
+                        <thead></thead>
+                    </table>
+                </div>
+                <div class="ea-table_body-wrap" part="body-wrap">
+                    <table class="ea-table_main" part="body-table">
+                        <colgroup></colgroup>
+                        <tbody></tbody>
+                        <slot name="empty" style="display: none;"></slot>
+                    </table>
+                </div>
+            </div>
+            <slot></slot>
+            <slot name="header"></slot>
+            <slot name="body"></slot>
+        `;
+
+        this.build(shadowRoot, stylesheet);
+
+        this.#container = this.shadowRoot.querySelector('.ea-table_wrap');
+
+        this.#headerTable = this.shadowRoot.querySelector('.ea-table_header');
+        this.#headerTableColgroup = this.#headerTable.querySelector('.ea-table_header colgroup');
+        this.#headerTableThead = this.#headerTable.querySelector('.ea-table_header thead');
+
+        this.#bodyTable = this.shadowRoot.querySelector('.ea-table_main');
+        this.#bodyTableColgroup = this.#bodyTable.querySelector('.ea-table_body-wrap colgroup');
+        this.#bodyTableTbody = this.#bodyTable.querySelector('.ea-table_body-wrap tbody');
+
+        this.#tableColumns = this.querySelectorAll('ea-table-column');
+    }
+
+    // ------- border 边框 -------
+    // #region
+    get border() {
+        return this.getAttrBoolean('border');
+    }
+
+    set border(value) {
+        this.setAttribute('border', value);
+
+        this.#container.classList.toggle('border', value);
+        this.#headerTable.classList.toggle('border', value);
+        this.#bodyTable.classList.toggle('border', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- stripe 斑马线条纹 -------
+    // #region
+    get stripe() {
+        return this.getAttrBoolean('stripe');
+    }
+
+    set stripe(value) {
+        this.setAttribute('stripe', value);
+
+        this.#container.classList.toggle('stripe', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- height 表格高度 -------
+    // #region
+    get height() {
+        return this.getAttrNumber('height');
+    }
+
+    set height(value) {
+        this.setAttribute('height', value);
+
+        if (value) {
+            const bodyWrap = this.shadowRoot.querySelector('.ea-table_body-wrap');
+            bodyWrap.style.height = `${value}px`;
+        }
+        else this.#container.style.height = '';
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- highlight-current-row 当前行高亮 -------
+    // #region
+    get highlightCurrentRow() {
+        return this.getAttrBoolean('highlight-current-row') || false;
+    }
+
+    set highlightCurrentRow(value) {
+        this.setAttribute('highlight-current-row', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- currentRow 当前行 -------
+    // #region
+    get currentRow() {
+        return this.getAttrNumber('current-row') || 0;
+    }
+
+    set currentRow(value) {
+        this.setAttribute('current-row', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- data 数据 -------
+    // #region
+    get data() {
+        return this.#tableData || [];
+    }
+
+    set data(value) {
+        const strData = JSON.stringify(value);
+        let jsonData = JSON.parse(strData);
+
+        this.#tableData = jsonData;
+
+        this.renderTableBody(jsonData);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- currentRowDetail 当前行详情 -------
+    // #region
+    get currentRowDetail() {
+        const index = this.currentRow;
+        const data = this.data[index];
+        const target = this.#bodyTable.querySelectorAll('.ea-table__row')[index] || null;
+        return { index, data, target };
+    }
+    // #endregion
+    // ------- end -------
+
+    #handleResize(bodyWrap, bodyTable, headerWrap, headerColgroup, scrollbarWidth, isInit = false) {
+        // 获取父元素的宽度
+        const width = this.parentNode.clientWidth;
+
+        // 计算所有列的宽度之和
+        const colWidth = Array.from(headerColgroup.children).reduce((pre, cur) => {
+            return pre + Number(cur.getAttribute('width'));
+        }, 0);
+
+        // 根据窗口和列宽度的比较，设置表头和表格内容部分的宽度
+        if (width > 0 && colWidth <= width) {
+            headerWrap.style.width = `${width - scrollbarWidth}px`;
+            bodyWrap.style.width = `${width}px`;
+            bodyTable.style.width = `${width - scrollbarWidth}px`;
+
+            // 在初始化阶段，表格内容部分的宽度应与窗口宽度相同
+            if (isInit) bodyWrap.style.width = `${width}px`;
+        } else {
+            // 当窗口宽度不足以显示所有列时，表格内容部分的宽度应与窗口宽度相同
+            headerWrap.style.width = `${width}px`;
+            bodyWrap.style.width = `${width}px`;
+            bodyTable.style.width = `${width}px`;
+        }
+    }
+
+    #handleHasGutterTable() {
+        const headerWrap = this.shadowRoot.querySelector('.ea-table_header-wrap');
+        const bodyWrap = this.shadowRoot.querySelector('.ea-table_body-wrap');
+
+        let scrollbarWidth = null;
+
+        const resizeFn = () => {
+            this.#handleResize(this.#container, this.#bodyTable, this.#headerTable, this.#headerTableColgroup, scrollbarWidth);
+        }
+
+        window.addEventListener('resize', () => {
+            resizeFn();
+        });
+
+        setTimeout(() => {
+            scrollbarWidth = this.#container.getBoundingClientRect().width - this.#bodyTable.getBoundingClientRect().width;
+            resizeFn();
+        }, 0);
+
+        // 监听表格内容部分的滚动事件，保持表头位置同步
+        bodyWrap.addEventListener('scroll', (e) => {
+            headerWrap.style.transform = `translateX(-${bodyWrap.scrollLeft}px)`;
+        });
+    }
+
+    #handleSortableTh(th, subchild) {
+        if (subchild.sortable && subchild.type !== 'selection') {
+            const icon = createElement('ea-icon');
+            icon.icon = "icon-angle-down";
+            icon.style.float = 'right';
+            th.appendChild(icon);
+
+            th.addEventListener('click', () => {
+                icon.color = "#5cb6ff";
+                const order = subchild.order;
+                if (order === "asc") {
+                    subchild.order = "desc";
+                    icon.icon = "icon-angle-up";
+                } else {
+                    subchild.order = "asc";
+                    icon.icon = "icon-angle-down";
+                }
+
+                let data = this.data.sort((a, b) => {
+                    const key = subchild.prop !== "null" ? subchild.prop : subchild.type;
+
+                    return subchild.order === "asc" ? String(a[key]).localeCompare(b[key]) : String(b[key]).localeCompare(a[key]);
+                })
+
+                this.renderTableBody(data);
+
+                this.dispatchEvent(new CustomEvent('sort-change', {
+                    detail: {
+                        prop: subchild.prop,
+                        order: subchild.order
+                    },
+                    composed: true,
+                    bubbles: true,
+                }));
+            });
+        }
+    }
+
+    #renderTableHeader() {
+        const columns = this.querySelectorAll('ea-table-column');
+        this.#headerTableColgroup.innerHTML = '';
+        this.#bodyTableColgroup.innerHTML = '';
+        this.#headerTableThead.innerHTML = '';
+
+        const createThElement = (child, i = 1) => {
+            const newTr = createElement('tr');
+            newTr.part = 'row';
+            newTr.setAttribute('index', i);
+            Array.from(child).forEach(subchild => {
+                if (subchild.nodeName !== 'EA-TABLE-COLUMN') return;
+
+                const th = createElement('th', 'ea-table__cell th-cell');
+                th.part = 'th-cell';
+
+                th.setAttribute('colspan', subchild.colspan || 1);
+                th.setAttribute('rowspan', subchild.rowspan || 1);
+
+                th.appendChild(subchild);
+                newTr.appendChild(th);
+
+                if (subchild.type === 'selection') {
+                    this.#checkAllElement = subchild.querySelector('ea-checkbox');
+                }
+
+                if (subchild.children.length > 0) {
+                    createThElement(subchild.children, ++i);
+                } else {
+                    const headerCol = createElement('col');
+                    headerCol.setAttribute('width', subchild.getAttribute('width') || 100);
+                    const bodyCol = createElement('col');
+                    bodyCol.setAttribute('width', subchild.getAttribute('width') || 100);
+                    this.#headerTableColgroup.appendChild(headerCol);
+                    this.#bodyTableColgroup.appendChild(bodyCol);
+
+                    this.#headerTableThead.appendChild(newTr);
+
+                    this.#handleSortableTh(th, subchild);
+                }
+            });
+        };
+
+        createThElement(this.children);
+    }
+
+    #handleHighlightCurrentRow(row, data) {
+        row.addEventListener('click', () => {
+            const rows = this.#bodyTableTbody.querySelectorAll('.ea-table__row');
+            let isIndexType = false;
+            let isSelectionType = false;
+            rows.forEach((row, index) => {
+                if (row.type === "index") isIndexType = true;
+                if (row.type === "selection") isSelectionType = true;
+
+                row.index = index;
+
+                if (this.highlightCurrentRow) row.classList.remove('is-current-row');
+            });
+            if (this.highlightCurrentRow) row.classList.add('is-current-row');
+
+            if (isSelectionType) delete data.selection;
+
+            this.currentRow = row.index;
+
+            this.dispatchEvent(new CustomEvent('current-change', {
+                composed: true,
+                bubbles: true,
+                detail: {
+                    index: row.index,
+                    row,
+                    data
+                }
+            }));
+        });
+    }
+
+    #handleTypeTh(data, type) {
+        const ths = this.#headerTable.querySelectorAll('ea-table-column');
+        let colIndex = 0;
+        let isIndexTh = false;
+        ths.forEach((item, i) => {
+            if (item.type === type) {
+                colIndex = i;
+                isIndexTh = true;
+            }
+        });
+
+        if (isIndexTh) {
+            return data.map((item, index) => {
+                const obj = {};
+                const arr = Object.keys(item);
+                arr.splice(colIndex, 0, type);
+                arr.forEach((key, i) => {
+                    if (key === 'index') obj[key] = index + 1;
+                    else if (key === 'selection') obj[key] = `<ea-checkbox></ea-checkbox>`;
+                    else obj[key] = item[key];
+                });
+
+                return obj;
+            });
+        }
+
+        return data;
+    }
+
+    #handleRenderBodySlot() {
+        const trs = this.#bodyTableTbody.querySelectorAll('tr');
+        const slot = this.shadowRoot.querySelector('slot[name="body"]');
+
+        timeout(() => {
+            if (!slot.assignedNodes().length) {
+                slot.remove();
+            } else {
+                trs.forEach(item => {
+                    const div = createElement('td', 'ea-table__cell');
+                    div.part = 'td-cell';
+                    Array.from(slot.assignedNodes()).forEach(slotItem => {
+                        const cloneNode = slotItem.cloneNode(true);
+                        div.appendChild(cloneNode);
+
+                        cloneNode.addEventListener('click', () => {
+                            slotItem.dispatchEvent(new CustomEvent('click', {
+                                bubbles: true,
+                                composed: true,
+                                detail: {
+                                    row: item
+                                }
+                            }));
+                        });
+                    });
+                    item.appendChild(div);
+                });
+                slot.style.display = 'none';
+
+            }
+        }, 0)
+    }
+
+    renderTableBody(data) {
+        this.#bodyTableTbody.innerHTML = '';
+
+        if (!this.#tableDataIsInit) {
+            data = this.#handleTypeTh(data, 'index');
+            data = this.#handleTypeTh(data, 'selection');
+
+            const thSequence = Array.from(this.#headerTable.querySelectorAll('ea-table-column')).map((item, i) => {
+                return item.type === "default" ? item.prop : item.type;
+            });
+            data = data.map(item => {
+                const obj = {};
+                thSequence.forEach(key => {
+                    if (key !== null && key !== 'null' && typeof key !== 'undefined' && key !== "undefined")
+                        obj[key] = item[key];
+                });
+                return obj;
+            });
+
+            this.#tableDataIsInit = true;
+        }
+
+
+        data.forEach((item, index) => {
+            const row = createElement('tr', 'ea-table__row');
+            row.part = 'row';
+
+            Object.entries(item).forEach(([key, value]) => {
+                const cell = createElement('td', 'ea-table__cell td_cell');
+                cell.part = 'td-cell';
+                cell.innerHTML = value;
+
+                if (key === "selection") {
+                    cell.querySelector('ea-checkbox').addEventListener('change', (e) => {
+                        const checkboxes = this.shadowRoot.querySelectorAll('ea-checkbox');
+                        const checkedElements = Array.from(checkboxes).filter((checkbox, index) => {
+                            checkbox.index = index;
+                            return checkbox.checked;
+                        });
+                        const checkedElementsData = checkedElements.map(checkbox => {
+                            const currentData = data[checkbox.index];
+                            delete currentData.selection;
+
+                            return currentData;
+                        });
+
+                        this.dispatchEvent(new CustomEvent('body-selection-change', {
+                            composed: true,
+                            bubbles: true,
+                            detail: {
+                                checked: e.detail.checked,
+                                currentRow: row,
+                                currentRowData: item,
+                                checkedElements,
+                                checkedElementsData
+                            }
+                        }));
+                    });
+                }
+
+                row.appendChild(cell);
+            });
+
+            this.#handleHighlightCurrentRow(row, item);
+
+            this.#bodyTableTbody.appendChild(row);
+        });
+        this.#tableData = data;
+
+        const emptySlot = this.shadowRoot.querySelector('slot[name="empty"]');
+        if (data.length > 0) {
+            emptySlot.style.display = 'none';
+        } else {
+            emptySlot.style.display = 'block';
+        }
+
+
+        this.#handleRenderBodySlot();
+    }
+
+    #initSelectionTypeTh() {
+        const ths = this.shadowRoot.querySelectorAll('ea-table-column');
+        if (!Array.from(ths).some(item => item.type === "selection")) return;
+
+        this.addEventListener('header-selection-change', (e) => {
+            const checkboxes = this.#bodyTable.querySelectorAll('ea-checkbox');
+            checkboxes.forEach(item => {
+                item.checked = e.detail.checked;
+            });
+        })
+
+        this.addEventListener('body-selection-change', (e) => {
+            const checkallBtn = this.#headerTableThead.querySelector('ea-table-column').shadowRoot.querySelector('ea-checkbox');
+            const checkboxes = this.#bodyTable.querySelectorAll('ea-checkbox');
+
+            let isAllSelectedArr = Array.from(checkboxes).map(item => {
+                return item.checked;
+            })
+
+
+            if (isAllSelectedArr.every(item => item === true)) {
+                checkallBtn.checked = true;
+            } else if (isAllSelectedArr.every(item => item === false)) {
+                checkallBtn.checked = false;
+            } else {
+                checkallBtn.indeterminate = true;
+            }
+        })
+    }
+
+    #initHeaderSlot() {
+        const headerSlot = this.shadowRoot.querySelector('slot[name="header"]');
+        if (headerSlot.assignedNodes().length > 0) {
+            const tr = this.#headerTableThead.querySelector('tr');
+            const th = createElement('th', 'ea-table__cell th-cell');
+            th.part = 'th-cell';
+            let maxRowSpan = 1;
+            Array.from(this.#headerTableThead.querySelectorAll('th')).forEach(item => {
+                if (item.rowSpan > maxRowSpan) maxRowSpan = item.rowSpan;
+            });
+            th.rowSpan = maxRowSpan;
+            th.appendChild(headerSlot);
+            tr.appendChild(th);
+        } else {
+            headerSlot.remove();
+        }
+    }
+
+    connectedCallback() {
+        this.style.position = 'relative';
+
+        this.border = this.border;
+
+        this.stripe = this.stripe;
+
+        this.height = this.height;
+
+        this.highlightCurrentRow = this.highlightCurrentRow;
+
+        this.#renderTableHeader();
+
+        this.#handleHasGutterTable();
+
+        this.#initSelectionTypeTh();
+
+        this.#initHeaderSlot();
+
+        timeout(() => {
+            this.dispatchEvent(new CustomEvent('table-ready'));
+        }, 20);
+    }
+}
+
+if (!customElements.get('ea-table')) {
+    customElements.define('ea-table', EaTable);
+}

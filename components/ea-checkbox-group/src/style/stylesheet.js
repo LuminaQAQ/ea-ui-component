@@ -1,1 +1,8 @@
-export const stylesheet="\n.ea-checkbox-group {\n  display: flex;\n}\n.ea-checkbox-group ::slotted(ea-checkbox) {\n  margin-right: 1.5rem;\n}\n";
+export const stylesheet = `
+.ea-checkbox-group {
+  display: flex;
+}
+.ea-checkbox-group ::slotted(ea-checkbox) {
+  margin-right: 1.5rem;
+}
+`;

@@ -1,1 +1,308 @@
-import Base from"../Base.js";import{stylesheet}from"./src/style/stylesheet.js";import{handleCustomEvent}from"./src/utils/handleCustomEvent.js";export class EaInputNumber extends Base{#t;#e;#i;#s;constructor(){super();const t=this.attachShadow({mode:"open"});t.innerHTML='\n            <div class="ea-input-number_wrap" part="container">\n                <span class="ea-input-number_sign minus" part="minus-wrap">-</span>\n                <input class="ea-input-number_inner" part="input" type="text" />\n                <span class="ea-input-number_sign plus" part="plus-wrap">+</span>\n            </div>\n        ',this.#t=t.querySelector(".ea-input-number_wrap"),this.#e=t.querySelector(".ea-input-number_inner"),this.#i=t.querySelector(".minus"),this.#s=t.querySelector(".plus"),this.build(t,stylesheet)}#n(t,e,i){if(this.getAttrBoolean("disabled"))return;const s=Number(this.#e.value),n=this.#e.value.split(".")[1],u="minus"===t?s-this.step:s+this.step;this.#e.value=e?u.toFixed(e):n?.length?u.toFixed(n.length):u,this.#u(),i&&this.#a("change",u)}#l(t){let e=setInterval((()=>{this.#n(t,this.precision),this.#u()}),100);this.addEventListener("mouseup",(function(){clearInterval(e),e=null}))}#u(){!1===this.min&&!1===this.max||(void 0!==this.min&&this.#e.value<this.min?this.#e.value=this.min:void 0!==this.max&&this.#e.value>this.max&&(this.#e.value=this.max),this.#i.classList.toggle("disabled",this.#e.value==this.min),this.#s.classList.toggle("disabled",this.#e.value==this.max))}#h(){isNaN(Number(this.#e.value))?this.#e.value=this.value:this.value=Number(this.#e.value)}#a(t,e=this.value){handleCustomEvent.call(this,t,{value:e})}get value(){return Number(this.getAttribute("value"))||0}set value(t){t=this.precision?Number(t).toFixed(this.precision):Number(t),this.setAttribute("value",t),this.#e.value=t}get disabled(){return this.getAttrBoolean("disabled")}set disabled(t){this.toggleAttr("disabled",t),this.#e.disabled=t,this.#t.classList.toggle("disabled",t),this.style.cursor=t?"not-allowed":"pointer"}get readonly(){return this.getAttrBoolean("readonly")}set readonly(t){t&&(this.#e.readOnly=t)}get step(){return this.getAttrNumber("step")||1}set step(t){t&&this.setAttribute("step",t)}get stepStrictly(){return this.getAttrBoolean("step-strictly")}set stepStrictly(t){this.toggleAttr("step-strictly",t)}get min(){return this.getAttrNumber("min")||-1/0}set min(t){Number.isNaN(t)&&!Number.isFinite(t)&&this.setAttribute("min",t)}get max(){return this.getAttrNumber("max")||1/0}set max(t){t&&this.setAttribute("max",t)}get precision(){const t=this.getAttrNumber("precision");return t<0||!Number.isInteger(t)?0:t}set precision(t){t&&this.setAttribute("precision",t)}get sizeType(){return["medium","small","mini"]}get size(){const t=this.getAttribute("size");return this.sizeType.includes(t)?t:"medium"}set size(t){this.setAttribute("size",t),this.#t.classList.add(`ea-input-number--${t}`)}connectedCallback(){this.style.display="inline-block",this.disabled=this.disabled,this.readonly=this.readonly,this.size=this.size,this.value=this.value,this.min!==-1/0&&(this.value=this.min),this.#u(),this.#e.addEventListener("focus",(t=>{this.#t.classList.add("focus"),this.#a("focus")})),this.#e.addEventListener("blur",(t=>{if(this.#t.classList.remove("focus"),this.stepStrictly){const t=that.step,e=Number(that.#e.value),i=e%t;e<0&&0!==i?that.#e.value=e-i-t:e<0&&0===i||0===i?that.#e.value=e:this.#e.value=e-i+t}this.#u(),this.#a("blur")})),this.#i.addEventListener("click",(()=>{this.#h(),this.#n("minus",this.precision,"minus")})),this.#s.addEventListener("click",(()=>{this.#h(),this.#n("plus",this.precision,"plus")})),this.#i.addEventListener("mousedown",(()=>{this.#h(),this.#l("minus",this.precision)})),this.#s.addEventListener("mousedown",(()=>{this.#h(),this.#l("plus",this.precision)})),this.#e.addEventListener("input",(()=>{this.#h(),this.#u(),this.#a("change")}))}}window.customElements.get("ea-input-number")||window.customElements.define("ea-input-number",EaInputNumber);
+// @ts-nocheck
+import Base from '../Base.js';
+
+import { stylesheet } from './src/style/stylesheet.js';
+import { handleCustomEvent } from './src/utils/handleCustomEvent.js';
+
+export class EaInputNumber extends Base {
+    #wrap;
+    #input;
+    #signMinus;
+    #signPlus;
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <div class="ea-input-number_wrap" part="container">
+                <span class="ea-input-number_sign minus" part="minus-wrap">-</span>
+                <input class="ea-input-number_inner" part="input" type="text" />
+                <span class="ea-input-number_sign plus" part="plus-wrap">+</span>
+            </div>
+        `;
+
+        this.#wrap = shadowRoot.querySelector('.ea-input-number_wrap');
+        this.#input = shadowRoot.querySelector('.ea-input-number_inner');
+        this.#signMinus = shadowRoot.querySelector('.minus');
+        this.#signPlus = shadowRoot.querySelector('.plus');
+
+        this.build(shadowRoot, stylesheet);
+    }
+
+    // 处理输入框加减事件
+    #signEvent(sign, precision, eventName) {
+        if (this.getAttrBoolean('disabled')) return;
+
+        const val = Number(this.#input.value);
+
+        const defaultStepPrecision = this.#input.value.split('.')[1]; // 简单处理精度问题
+        const res = sign === "minus" ? val - this.step : val + this.step; // 处理加减问题
+
+        if (precision) {
+            this.#input.value = (res).toFixed(precision);
+        }
+        // 简单处理精度问题
+        else if (defaultStepPrecision?.length) {
+            this.#input.value = (res).toFixed(defaultStepPrecision.length);
+        } else {
+            this.#input.value = res;
+        }
+
+        // 限制输入框的值
+        this.#handleLimitVal();
+
+        // 为外部dom添加事件监听
+        if (eventName) this.#handleCustomEvent('change', res);
+    }
+
+    // 处理连加连减事件
+    #handleCounterEvent(sign) {
+        let timer = setInterval(() => {
+            this.#signEvent(sign, this.precision);
+            this.#handleLimitVal();
+        }, 100);
+
+        this.addEventListener('mouseup', function () {
+            clearInterval(timer);
+            timer = null;
+        })
+    }
+
+    #handleLimitVal() {
+        if (this.min === false && this.max === false) return;
+
+        // 限制输入框的值
+        if (this.min !== undefined && this.#input.value < this.min) {
+            this.#input.value = this.min;
+        } else if (this.max !== undefined && this.#input.value > this.max) {
+            this.#input.value = this.max;
+        }
+
+        // 当达到限制值时, 禁用加减按钮
+        this.#signMinus.classList.toggle('disabled', this.#input.value == this.min);
+        this.#signPlus.classList.toggle('disabled', this.#input.value == this.max);
+    }
+
+    #handleValueUpdate() {
+        if (isNaN(Number(this.#input.value))) this.#input.value = this.value;
+        else this.value = Number(this.#input.value);
+    }
+
+    #handleCustomEvent(eventName, value = this.value) {
+        handleCustomEvent.call(this, eventName, {
+            value
+        });
+    }
+
+    // ------- value 值 -------
+    // #region
+    get value() {
+        return Number(this.getAttribute('value')) || 0;
+    }
+
+    set value(val) {
+        val = this.precision ? Number(val).toFixed(this.precision) : Number(val);
+        this.setAttribute('value', val);
+
+        this.#input.value = val;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- disabled 禁用 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean('disabled');
+    }
+
+    set disabled(flag) {
+        this.toggleAttr('disabled', flag);
+
+        this.#input.disabled = flag;
+        this.#wrap.classList.toggle('disabled', flag);
+        this.style.cursor = flag ? 'not-allowed' : 'pointer';
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- readonly 只读 -------
+    // #region
+    get readonly() {
+        return this.getAttrBoolean('readonly');
+    }
+
+    set readonly(value) {
+        if (!value) return;
+
+        this.#input.readOnly = value;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- step 加减的步长 -------
+    // #region
+    get step() {
+        return this.getAttrNumber('step') || 1;
+    }
+
+    set step(value) {
+        if (!value) return;
+
+        this.setAttribute('step', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- step-strictly 严格步长 -------
+    // #region
+    get stepStrictly() {
+        return this.getAttrBoolean('step-strictly');
+    }
+
+    set stepStrictly(flag) {
+        this.toggleAttr('step-strictly', flag);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- min/max 限制最大/最小值 -------
+    // #region
+    get min() {
+        return this.getAttrNumber('min') || -Infinity;
+    }
+
+    set min(value) {
+        if (!Number.isNaN(value) || Number.isFinite(value)) return;
+
+        this.setAttribute('min', value);
+    }
+
+    get max() {
+        return this.getAttrNumber('max') || Infinity;
+    }
+
+    set max(value) {
+        if (!value) return;
+        this.setAttribute('max', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- precision 精度 -------
+    // #region
+    get precision() {
+        const num = this.getAttrNumber('precision');
+
+        if (num < 0 || !Number.isInteger(num)) return 0;
+        return num;
+    }
+
+    set precision(value) {
+        if (!value) return;
+
+        this.setAttribute('precision', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- size 按钮大小(medium、small、mini) -------
+    // #region
+    get sizeType() {
+        return ['medium', 'small', 'mini']
+    }
+
+    get size() {
+        const attr = this.getAttribute('size');
+        return this.sizeType.includes(attr) ? attr : 'medium';
+    }
+
+    set size(size) {
+        this.setAttribute('size', size);
+        this.#wrap.classList.add(`ea-input-number--${size}`);
+    }
+    // #endregion
+    // ------- end -------
+
+    connectedCallback() {
+        this.style.display = 'inline-block';
+
+        // 禁用
+        this.disabled = this.disabled;
+
+        this.readonly = this.readonly;
+
+        // 大小
+        this.size = this.size;
+
+        // 默认值
+        this.value = this.value;
+
+        if (this.min !== -Infinity) this.value = this.min;
+
+        // 限制值初始化
+        this.#handleLimitVal();
+
+        // 输入框获取焦点
+        this.#input.addEventListener('focus', e => {
+            this.#wrap.classList.add('focus');
+
+            this.#handleCustomEvent("focus");
+        })
+
+        // 输入框失去焦点
+        this.#input.addEventListener('blur', e => {
+            this.#wrap.classList.remove('focus');
+
+            if (this.stepStrictly) {
+                const step = that.step;
+                const val = Number(that.#input.value);
+                const mod = val % step;
+
+                if (val < 0 && mod !== 0) that.#input.value = val - mod - step;
+                else if (val < 0 && mod === 0) that.#input.value = val;
+                else if (mod === 0) that.#input.value = val;
+                else this.#input.value = val - mod + step;
+            }
+
+            this.#handleLimitVal();
+
+            this.#handleCustomEvent("blur");
+        })
+
+        // 减号
+        this.#signMinus.addEventListener('click', () => {
+            this.#handleValueUpdate();
+            this.#signEvent("minus", this.precision, "minus");
+        })
+
+        // 加号
+        this.#signPlus.addEventListener('click', () => {
+            this.#handleValueUpdate();
+            this.#signEvent("plus", this.precision, "plus");
+        })
+
+        // 连减
+        this.#signMinus.addEventListener('mousedown', () => {
+            this.#handleValueUpdate();
+            this.#handleCounterEvent("minus", this.precision);
+        })
+
+        // 连加
+        this.#signPlus.addEventListener('mousedown', () => {
+            this.#handleValueUpdate();
+            this.#handleCounterEvent("plus", this.precision);
+        })
+
+        // 输入框值改变时
+        this.#input.addEventListener('input', () => {
+            this.#handleValueUpdate();
+            this.#handleLimitVal();
+
+            this.#handleCustomEvent("change");
+        })
+    }
+}
+
+if (!window.customElements.get("ea-input-number")) {
+    window.customElements.define("ea-input-number", EaInputNumber);
+}

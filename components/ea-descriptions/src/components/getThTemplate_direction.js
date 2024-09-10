@@ -1,1 +1,7 @@
-export const getThTemplate_direction=(e,t)=>`\n        <th class="ea-descriptions-item_label ea-descriptions-item_cell ${t?"is-border":""}" colspan="1" part="table-th">\n            ${e}${t?"":":"}\n        </th>\n    `;
+export const getThTemplate_direction = (label, hasBorder) => {
+    return `
+        <th class="ea-descriptions-item_label ea-descriptions-item_cell ${hasBorder ? 'is-border' : ''}" colspan="${1}" part="table-th">
+            ${label}${hasBorder ? '' : ':'}
+        </th>
+    `
+}

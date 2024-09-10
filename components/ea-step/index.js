@@ -1,1 +1,230 @@
-import Base from"../Base.js";import"../ea-icon/index.js";import{timeout}from"../../utils/timeout.js";import{stylesheet}from"./src/style/stylesheet.js";export class EaStep extends Base{#t;#e;#s;#i;#r;#n;#a;#o;constructor(){super();const t=this.attachShadow({mode:"open"});t.innerHTML='\n      <div class="ea-step_wrap" part="container">\n        <div class="ea-step_head-wrap" part="head-wrap">\n          <div class="ea-step_bar" part="step-bar"></div>\n          <div class="ea-step_head-icon" part="head-icon"></div>\n        </div>\n        <div class="ea-step_main-wrap" part="main-wrap">\n          <div class="ea-step_title-wrap" part="title-wrap">\n            <slot name="title"></slot>\n          </div>\n          <div class="ea-step_description-wrap" part="description-wrap">\n            <slot name="description"></slot>\n          </div>\n        </div>\n      </div>\n    ',this.#t=t.querySelector(".ea-step_wrap"),this.#e=t.querySelector(".ea-step_head-wrap"),this.#s=t.querySelector(".ea-step_head-icon"),this.#i=t.querySelector(".ea-step_bar"),this.#r=t.querySelector(".ea-step_title-wrap"),this.#a=t.querySelector('slot[name="title"]'),this.#n=t.querySelector(".ea-step_description-wrap"),this.#o=t.querySelector('slot[name="description"]'),this.build(t,stylesheet)}get title(){return this.getAttribute("title")}set title(t){if(!t)return;const e=this.querySelector('[slot="title"]');e?(t=e.innerHTML,this.#a.innerHTML=t):this.#r.innerText=t,this.setAttribute("title",t)}get description(){return this.getAttribute("description")}set description(t){if(!t)return;const e=this.querySelector('[slot="description"]');e?(t=e.innerHTML,this.#o.innerHTML=t):this.#n.innerText=t,this.setAttribute("description",t)}get space(){return this.getAttribute("space")||"50%"}set space(t){this.setAttribute("space",t||"50%"),this.style.flexBasis=t||"50%"}get icon(){return this.getAttribute("icon")}set icon(t){t?this.#s.innerHTML=`\n          <ea-icon icon="${t}" size="24"></ea-icon>\n      `:(this.#s.innerHTML=this.index+1,this.#s.classList.add("is-text"),t=this.index+1),this.setAttribute("icon",t)}get active(){return this.getAttrBoolean("active")||!1}set active(t){this.toggleAttr("active",t)}get isLast(){return this.getAttrBoolean("is-last")||!1}set isLast(t){this.toggleAttr("is-last",t),this.#e.classList.toggle("is-last",t)}get status(){return this.getAttribute("status")}set status(t){if(this.setAttribute("status",t),this.#t.classList.toggle("is-finish","finish"===t),this.#t.classList.toggle("is-process","process"===t),this.#t.classList.toggle("is-wait","wait"===t),"finish"===t){this.#s.querySelector("ea-icon")||(this.#s.innerHTML='\n          <ea-icon icon="icon-ok" color="#67c23a" style="font-size: 14px; line-height: 14px;"></ea-icon>\n      ')}else this.#s.innerHTML=this.index+1}get simple(){return this.getAttrBoolean("simple")||!1}set simple(t){this.toggleAttr("simple",t),this.#t.classList.toggle("is-simple",t),t&&!this.isLast?(this.#i.innerHTML='\n        <ea-icon icon="icon-angle-right" color="#c0c4cc" style="font-size: 24px; line-height: 24px;"></ea-icon>\n      ',this.#i.style.flex="1",this.#i.style.textAlign="center",this.#n.remove(),this.#t.appendChild(this.#i)):t&&!this.isLast&&(this.#i.innerHTML="")}connectedCallback(){this.title=this.title,this.description=this.description,this.simple=this.simple,timeout((()=>{this.icon=this.icon}),20)}}customElements.get("ea-step")||customElements.define("ea-step",EaStep);
+import Base from '../Base.js';
+import '../ea-icon/index.js'
+import { timeout } from '../../utils/timeout.js';
+
+import { stylesheet } from './src/style/stylesheet.js';
+
+export class EaStep extends Base {
+  #wrap;
+
+  #headWrap;
+  #stepIcon;
+  #stepBar;
+
+  #titleWrap;
+  #descriptionWrap;
+  
+  #titleSlot;
+  #descriptionSlot;
+
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.innerHTML = `
+      <div class="ea-step_wrap" part="container">
+        <div class="ea-step_head-wrap" part="head-wrap">
+          <div class="ea-step_bar" part="step-bar"></div>
+          <div class="ea-step_head-icon" part="head-icon"></div>
+        </div>
+        <div class="ea-step_main-wrap" part="main-wrap">
+          <div class="ea-step_title-wrap" part="title-wrap">
+            <slot name="title"></slot>
+          </div>
+          <div class="ea-step_description-wrap" part="description-wrap">
+            <slot name="description"></slot>
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.#wrap = shadowRoot.querySelector('.ea-step_wrap');
+    this.#headWrap = shadowRoot.querySelector('.ea-step_head-wrap');
+    this.#stepIcon = shadowRoot.querySelector('.ea-step_head-icon');
+    this.#stepBar = shadowRoot.querySelector('.ea-step_bar');
+
+    this.#titleWrap = shadowRoot.querySelector('.ea-step_title-wrap');
+    this.#titleSlot = shadowRoot.querySelector('slot[name="title"]');
+    this.#descriptionWrap = shadowRoot.querySelector('.ea-step_description-wrap');
+    this.#descriptionSlot = shadowRoot.querySelector('slot[name="description"]');
+
+    this.build(shadowRoot, stylesheet);
+  }
+
+  // ------- title 步骤的标题(如:步骤一) -------
+  // #region
+  get title() {
+    return this.getAttribute('title');
+  }
+
+  set title(value) {
+    if (!value) return;
+
+    const slot = this.querySelector('[slot="title"]');
+
+    if (!slot) {
+      this.#titleWrap.innerText = value;
+    } else {
+      value = slot.innerHTML;
+      this.#titleSlot.innerHTML = value;
+    }
+
+    this.setAttribute('title', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- description 步骤的描述 -------
+  // #region
+  get description() {
+    return this.getAttribute('description');
+  }
+
+  set description(value) {
+    if (!value) return;
+
+    const slot = this.querySelector('[slot="description"]');
+
+    if (!slot) {
+      this.#descriptionWrap.innerText = value;
+    } else {
+      value = slot.innerHTML;
+      this.#descriptionSlot.innerHTML = value;
+    }
+
+    this.setAttribute('description', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- space 步骤之间的间距 -------
+  // #region
+  get space() {
+    return this.getAttribute('space') || '50%';
+  }
+
+  set space(value) {
+    this.setAttribute('space', value || '50%');
+
+    this.style.flexBasis = value || '50%';
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- icon 步骤的图标 -------
+  // #region
+  get icon() {
+    return this.getAttribute('icon');
+  }
+
+  set icon(value) {
+    if (!value) {
+      this.#stepIcon.innerHTML = this.index + 1;
+      this.#stepIcon.classList.add('is-text');
+      value = this.index + 1;
+    } else {
+      this.#stepIcon.innerHTML = `
+          <ea-icon icon="${value}" size="24"></ea-icon>
+      `;
+    }
+
+    this.setAttribute('icon', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- active 当前的步骤 -------
+  // #region
+  get active() {
+    return this.getAttrBoolean('active') || false;
+  }
+
+  set active(value) {
+    this.toggleAttr('active', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- is-last 是否最后一个步骤 -------
+  // #region
+  get isLast() {
+    return this.getAttrBoolean('is-last') || false;
+  }
+
+  set isLast(value) {
+    this.toggleAttr('is-last', value);
+
+    this.#headWrap.classList.toggle('is-last', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- status 步骤的状态 -------
+  // #region
+  get status() {
+    return this.getAttribute('status');
+  }
+
+  set status(value) {
+    this.setAttribute('status', value);
+
+    this.#wrap.classList.toggle('is-finish', value === 'finish');
+    this.#wrap.classList.toggle('is-process', value === 'process');
+    this.#wrap.classList.toggle('is-wait', value === 'wait');
+
+    if (value === 'finish') {
+      const isIcon = this.#stepIcon.querySelector('ea-icon');
+
+      if (!isIcon) this.#stepIcon.innerHTML = `
+          <ea-icon icon="icon-ok" color="#67c23a" style="font-size: 14px; line-height: 14px;"></ea-icon>
+      `;
+    } else {
+      this.#stepIcon.innerHTML = this.index + 1;
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- simple 简洁模式 -------
+  // #region
+  get simple() {
+    return this.getAttrBoolean('simple') || false;
+  }
+
+  set simple(value) {
+    this.toggleAttr('simple', value);
+
+    this.#wrap.classList.toggle('is-simple', value);
+
+    if (value && !this.isLast) {
+      this.#stepBar.innerHTML = `
+        <ea-icon icon="icon-angle-right" color="#c0c4cc" style="font-size: 24px; line-height: 24px;"></ea-icon>
+      `;
+
+      this.#stepBar.style.flex = "1";
+      this.#stepBar.style.textAlign = "center";
+
+      this.#descriptionWrap.remove();
+
+      this.#wrap.appendChild(this.#stepBar);
+    } else if (value && !this.isLast) {
+      this.#stepBar.innerHTML = "";
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  connectedCallback() {
+    this.title = this.title;
+    this.description = this.description;
+    this.simple = this.simple;;
+
+    timeout(() => {
+      this.icon = this.icon;
+    }, 20);
+  }
+}
+
+if (!customElements.get('ea-step')) {
+  customElements.define('ea-step', EaStep);
+}

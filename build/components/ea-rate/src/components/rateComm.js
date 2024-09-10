@@ -1,0 +1,1 @@
+import{createElement}from"../../../../utils/createElement.js";const rateComm=e=>{const t=createElement("span","ea-rate_item");t.index=e,t.part="rate-item";const a=createElement("ea-icon");return a.icon="icon-star-empty",t.appendChild(a),t};export const initRateTempalte=e=>{for(let t=0;t<5;t++)e.appendChild(rateComm(t))};

@@ -1,1 +1,74 @@
-import Base from"../Base.js";import"../ea-timeline-item/index.js";import{handleDefaultAttrIsTrue}from"../../utils/handleDefaultAttrIsTrue.js";import{timeout}from"../../utils/timeout.js";import{stylesheet}from"./style/stylesheet.js";export class EaTimeline extends Base{#e;#t;constructor(){super();const e=this.attachShadow({mode:"open"});e.innerHTML="\n      <div class='ea-timeline_wrap' part='container'>\n        <ul class='ea-timeline-item_container' part='list-wrap'>\n          <slot></slot>\n        </ul>\n      </div>\n    ",this.#e=e.querySelector(".ea-timeline_wrap"),this.#t=e.querySelector(".ea-timeline-item_container"),this.build(e,stylesheet)}get reverse(){const e=this.getAttribute("reverse");return handleDefaultAttrIsTrue(e)}set reverse(e){this.setAttribute("reverse",e),this.#i(e)}#i(e){e="true"===e||!0===e;Array.from(this.querySelectorAll("ea-timeline-item")).sort(((t,i)=>{const r=new Date(t.time),s=new Date(i.time);return e?s-r:r-s})).forEach(((e,t)=>{this.appendChild(e)}))}connectedCallback(){this.reverse=this.reverse}}customElements.get("ea-timeline")||customElements.define("ea-timeline",EaTimeline);
+// @ts-nocheck
+import Base from '../Base.js';
+
+import "../ea-timeline-item/index.js"
+
+import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
+import { timeout } from '../../utils/timeout.js';
+
+import { stylesheet } from './style/stylesheet.js';
+
+export class EaTimeline extends Base {
+  #wrap;
+
+  #container;
+
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.innerHTML = `
+      <div class='ea-timeline_wrap' part='container'>
+        <ul class='ea-timeline-item_container' part='list-wrap'>
+          <slot></slot>
+        </ul>
+      </div>
+    `;
+
+    this.#wrap = shadowRoot.querySelector('.ea-timeline_wrap');
+    this.#container = shadowRoot.querySelector('.ea-timeline-item_container');
+
+    this.build(shadowRoot, stylesheet);
+  }
+
+  // ------- reverse 时间线排序 -------
+  // #region
+  get reverse() {
+    const attr = this.getAttribute('reverse');
+
+    return handleDefaultAttrIsTrue(attr);
+  }
+
+  set reverse(value) {
+    this.setAttribute('reverse', value);
+
+    this.#sortTimeline(value);
+  }
+  // #endregion
+  // ------- end -------
+
+  #sortTimeline(flag) {
+    flag = flag === "true" || flag === true ? true : false;
+
+    const timelineItems = Array.from(this.querySelectorAll('ea-timeline-item'));
+    const timeArr = timelineItems.sort((a, b) => {
+      const aTime = new Date(a.time);
+      const bTime = new Date(b.time);
+
+      return flag ? (bTime - aTime) : (aTime - bTime);
+    })
+
+    timeArr.forEach((item, index) => {
+      this.appendChild(item);
+    })
+  }
+
+  connectedCallback() {
+    this.reverse = this.reverse;
+  }
+}
+
+if (!customElements.get('ea-timeline')) {
+  customElements.define('ea-timeline', EaTimeline);
+}
+

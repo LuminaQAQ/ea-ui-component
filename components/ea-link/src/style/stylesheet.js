@@ -1,1 +1,50 @@
-export const stylesheet="\n.ea-link {\n  text-decoration: none;\n  color: #606266;\n  cursor: pointer;\n}\n.ea-link:hover {\n  color: #797b80;\n}\n.ea-link.underline:hover {\n  text-decoration: underline;\n}\n.ea-link.primary {\n  color: #409eff;\n}\n.ea-link.primary:hover {\n  color: #73b8ff;\n}\n.ea-link.success {\n  color: #67c23a;\n}\n.ea-link.success:hover {\n  color: #85cf60;\n}\n.ea-link.info {\n  color: #909399;\n}\n.ea-link.info:hover {\n  color: #abadb1;\n}\n.ea-link.warning {\n  color: #e6a23c;\n}\n.ea-link.warning:hover {\n  color: #ecb869;\n}\n.ea-link.danger {\n  color: #f56c6c;\n}\n.ea-link.danger:hover {\n  color: #f89c9c;\n}\n.ea-link.disabled {\n  color: #c0c4cc;\n  pointer-events: none;\n}\n.ea-link.disabled:hover {\n  color: #dcdee3;\n}\n";
+export const stylesheet = `
+.ea-link {
+  text-decoration: none;
+  color: #606266;
+  cursor: pointer;
+}
+.ea-link:hover {
+  color: #797b80;
+}
+.ea-link.underline:hover {
+  text-decoration: underline;
+}
+.ea-link.primary {
+  color: #409eff;
+}
+.ea-link.primary:hover {
+  color: #73b8ff;
+}
+.ea-link.success {
+  color: #67c23a;
+}
+.ea-link.success:hover {
+  color: #85cf60;
+}
+.ea-link.info {
+  color: #909399;
+}
+.ea-link.info:hover {
+  color: #abadb1;
+}
+.ea-link.warning {
+  color: #e6a23c;
+}
+.ea-link.warning:hover {
+  color: #ecb869;
+}
+.ea-link.danger {
+  color: #f56c6c;
+}
+.ea-link.danger:hover {
+  color: #f89c9c;
+}
+.ea-link.disabled {
+  color: #c0c4cc;
+  pointer-events: none;
+}
+.ea-link.disabled:hover {
+  color: #dcdee3;
+}
+`;

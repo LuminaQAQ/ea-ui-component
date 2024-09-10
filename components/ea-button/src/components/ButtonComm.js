@@ -1,1 +1,5 @@
-export const ButtonComm='\n<button class="ea-button" part="container">\n    <slot></slot>\n</button>\n';
+export const ButtonComm = `
+<button class="ea-button" part="container">
+    <slot></slot>
+</button>
+`;

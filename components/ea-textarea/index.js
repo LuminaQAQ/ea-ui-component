@@ -1,1 +1,277 @@
-import Base from"../Base.js";import{stylesheet}from"./src/style/stylesheet.js";export class EaTextarea extends Base{#t;#e;constructor(){super();const t=this.attachShadow({mode:"open"});t.innerHTML='\n            <div class="ea-textarea_wrap" part="container">\n                <textarea class="ea-textarea_inner" part="textarea" placeholder="请输入内容"></textarea>\n            </div>\n        ',this.#t=t.querySelector(".ea-textarea_wrap"),this.#e=t.querySelector(".ea-textarea_inner"),this.build(t,stylesheet)}get name(){return this.getAttribute("name")||"ea-textarea"}set name(t){this.setAttribute("name",t)}get value(){return this.#e.value}set value(t){this.#e.value=t}get disabled(){return this.getAttrBoolean("disabled")}set disabled(t){this.toggleAttr("disabled",t),this.#e.disabled=t}get placeholder(){return this.getAttribute("placeholder")||""}set placeholder(t){t&&(this.setAttribute("placeholder",t),this.#e.placeholder=t)}get rows(){return this.getAttribute("rows")||2}set rows(t){this.setAttribute("rows",t),this.#e.rows=t}get autosize(){return this.getAttrBoolean("autosize")}set autosize(t){t&&(this.setAttribute("autosize",t),this.#e.addEventListener("input",(t=>{if(this.#e.style.height!==this.#e.scrollHeight+"px"&&(this.#e.style.height=this.#e.scrollHeight+"px",this.#e.style.minHeight=this.#e.scrollHeight+"px"),"textarea"===t.target.type){const e=this.#e.cols,i=t.target.value.length;let s=Math.ceil(i/e)<=Number(this.#e.rows)?Number(this.#e.rows):Math.ceil(i/e);i%e==1&&(this.minRows>s?this.#i(this.minRows):this.maxRows<s?this.#i(this.maxRows):this.#i(s))}})))}get minRows(){const t=this.getAttrNumber("min-rows");return 0!==t&&t>0?t:0}set minRows(t){t&&(this.setAttribute("min-rows",t),this.#i(Number(t)))}get maxRows(){const t=Number(this.getAttribute("max-rows"));return 0!==t&&t>0?t:0}set maxRows(t){t&&(this.setAttribute("max-rows",t),this.#i(Number(t)))}get maxLength(){return this.getAttribute("max-length")}set maxLength(t){t&&(this.setAttribute("max-length",t),this.#e.maxLength=t,this.showWordLimit&&(this.showWordLimit=!0))}get minLength(){return this.getAttribute("min-length")}set minLength(t){t&&(this.setAttribute("min-length",t),this.#e.minLength=t)}get showWordLimit(){return this.getAttrBoolean("show-word-limit")}set showWordLimit(t){if(!t)return;this.setAttribute("show-word-limit",t);const e=document.createElement("span");e.className="ea-input_word-limit",e.innerText=`${this.#e.value.length}/${this.maxLength}`,this.#e.addEventListener("input",(t=>{e.innerText=`${t.target.value.length}/${this.maxLength}`})),this.#t.appendChild(e),e.style.left=this.#e.getBoundingClientRect().width-e.getBoundingClientRect().width-5+"px"}#i(t){t=Number(t),this.#e.rows=t}#s(t,e){this.dispatchEvent(new CustomEvent(t,{detail:{value:e.target.value}}))}connectedCallback(){this.setAttribute("data-ea-component",!0),this.name=this.name,this.placeholder=this.placeholder,this.value=this.value,this.#e.value=this.getAttribute("value")||"",this.disabled=this.disabled,this.autosize=this.autosize,this.maxRows&&(this.maxRows=this.maxRows),this.minRows&&(this.minRows=this.minRows),this.rows=this.rows,this.maxLength=this.maxLength,this.minLength=this.minLength,this.#e.addEventListener("input",(t=>{this.#s("change",t)})),this.#e.addEventListener("focus",(t=>{this.#s("focus",t)})),this.#e.addEventListener("blur",(t=>{this.#s("blur",t)}))}}window.customElements.get("ea-textarea")||window.customElements.define("ea-textarea",EaTextarea);
+// @ts-nocheck
+import Base from "../Base.js";
+
+import { stylesheet } from "./src/style/stylesheet.js";
+
+export class EaTextarea extends Base {
+    #wrap;
+    #input;
+
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <div class="ea-textarea_wrap" part="container">
+                <textarea class="ea-textarea_inner" part="textarea" placeholder="请输入内容"></textarea>
+            </div>
+        `;
+
+        this.#wrap = shadowRoot.querySelector('.ea-textarea_wrap');
+        this.#input = shadowRoot.querySelector('.ea-textarea_inner');
+
+        this.build(shadowRoot, stylesheet);
+    }
+
+    // ------- name 属性 -------
+    // #region
+    get name() {
+        return this.getAttribute('name') || 'ea-textarea';
+    }
+
+    set name(value) {
+        this.setAttribute('name', value);
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- value 输入框的值 -------
+    // #region
+    get value() {
+        return this.#input.value;
+    }
+
+    set value(val) {
+        this.#input.value = val;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- disabled 是否禁用 -------
+    // #region
+    get disabled() {
+        return this.getAttrBoolean('disabled');
+    }
+
+    set disabled(val) {
+        this.toggleAttr('disabled', val);
+        this.#input.disabled = val;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- placeholder 提示 -------
+    // #region
+    get placeholder() {
+        return this.getAttribute("placeholder") || '';
+    }
+
+    set placeholder(val) {
+        if (!val) return;
+
+        this.setAttribute("placeholder", val);
+        this.#input.placeholder = val;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- rows 默认行数 -------
+    // #region
+    get rows() {
+        return this.getAttribute("rows") || 2;
+    }
+
+    set rows(val) {
+        this.setAttribute("rows", val);
+        this.#input.rows = val;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- autosize 自动调整高度 -------
+    // #region
+    get autosize() {
+        return this.getAttrBoolean("autosize");
+    }
+
+    set autosize(val) {
+        if (!val) return;
+
+        this.setAttribute("autosize", val);
+
+        this.#input.addEventListener('input', (e) => {
+            if (this.#input.style.height !== this.#input.scrollHeight + 'px') {
+                this.#input.style.height = this.#input.scrollHeight + 'px';
+                this.#input.style.minHeight = this.#input.scrollHeight + 'px';
+            }
+
+            if (e.target.type === 'textarea') {
+                const cols = this.#input.cols;
+                const chars = e.target.value.length;
+
+                let rows = Math.ceil(chars / cols) <= Number(this.#input.rows) ? Number(this.#input.rows) : Math.ceil(chars / cols);
+                if (chars % cols == 1) {
+                    if (this.minRows > rows) this.#setTextareaHeight(this.minRows);
+                    else if (this.maxRows < rows) this.#setTextareaHeight(this.maxRows);
+                    else this.#setTextareaHeight(rows);
+                }
+            }
+        })
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- min-rows 最小行数 -------
+    // #region
+    get minRows() {
+        const val = this.getAttrNumber("min-rows");
+        return val !== 0 && val > 0 ? val : 0;
+    }
+
+    set minRows(val) {
+        if (!val) return;
+
+        this.setAttribute("min-rows", val);
+        this.#setTextareaHeight(Number(val));
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- max-rows 最大行数 -------
+    // #region
+    get maxRows() {
+        const val = Number(this.getAttribute("max-rows"));
+        return val !== 0 && val > 0 ? val : 0;
+    }
+
+    set maxRows(val) {
+        if (!val) return;
+
+        this.setAttribute("max-rows", val);
+        this.#setTextareaHeight(Number(val));
+    }
+
+    // #endregion
+    // ------- end -------
+
+    // ------- max-length/min-length 最大/最小字符长度 -------
+    // #region
+    // 获取最大限制值
+    get maxLength() {
+        return this.getAttribute("max-length");
+    }
+
+    set maxLength(val) {
+        if (!val) return;
+
+        this.setAttribute("max-length", val);
+        this.#input.maxLength = val;
+
+        if (this.showWordLimit) this.showWordLimit = true;
+    }
+
+    // 获取最小限制值
+    get minLength() {
+        return this.getAttribute("min-length");
+    }
+
+    set minLength(val) {
+        if (!val) return;
+
+        this.setAttribute("min-length", val);
+        this.#input.minLength = val;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- show-word-limit 显示 当前文字长度 和 限制值 -------
+    // #region
+    get showWordLimit() {
+        return this.getAttrBoolean("show-word-limit");
+    }
+
+    set showWordLimit(val) {
+        if (!val) return;
+
+        this.setAttribute("show-word-limit", val);
+
+        // 加入显示的dom
+        const wordLimit = document.createElement('span');
+        wordLimit.part = 'word-limit';
+        wordLimit.className = 'ea-input_word-limit';
+        wordLimit.innerText = `${this.#input.value.length}/${this.maxLength}`;
+
+        this.#input.addEventListener('input', (e) => {
+            wordLimit.innerText = `${e.target.value.length}/${this.maxLength}`;
+        });
+
+        this.#wrap.appendChild(wordLimit);
+        wordLimit.style.left = (this.#input.getBoundingClientRect().width - wordLimit.getBoundingClientRect().width - 5) + 'px';
+    }
+    // #endregion
+    // ------- end -------
+
+    #setTextareaHeight(rows) {
+        rows = Number(rows);
+        this.#input.rows = rows;
+    }
+
+    #handleDispatchEvent(eventName, e) {
+        this.dispatchEvent(
+            new CustomEvent(eventName, {
+                detail: {
+                    value: e.target.value
+                }
+            })
+        );
+    }
+
+    connectedCallback() {
+        this.setAttribute('data-ea-component', true);
+
+        this.name = this.name;
+
+        // 输入框提示
+        this.placeholder = this.placeholder;
+
+        // 输入框的值
+        this.value = this.value;
+        this.#input.value = this.getAttribute("value") || '';
+
+        // 禁用
+        this.disabled = this.disabled;
+
+        // 自动调整高度
+        this.autosize = this.autosize;
+
+        // 最大最小行数
+        if (this.maxRows) this.maxRows = this.maxRows;
+        if (this.minRows) this.minRows = this.minRows;
+
+        // 默认行数
+        this.rows = this.rows;
+
+        // 输入长度限制
+        this.maxLength = this.maxLength;
+        this.minLength = this.minLength;
+
+        // 输入时
+        this.#input.addEventListener("input", (e) => {
+            this.#handleDispatchEvent("change", e);
+        });
+
+        // 聚焦时
+        this.#input.addEventListener("focus", (e) => {
+            this.#handleDispatchEvent("focus", e);
+        });
+
+        // 失焦时
+        this.#input.addEventListener("blur", (e) => {
+            this.#handleDispatchEvent("blur", e);
+        });
+    }
+}
+
+if (!window.customElements.get("ea-textarea")) {
+    window.customElements.define("ea-textarea", EaTextarea);
+}

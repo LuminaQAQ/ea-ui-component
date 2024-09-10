@@ -1,0 +1,1 @@
+import{createElement}from"../../../../utils/createElement.js";export const createThead=(e=["一","二","三","四","五","六","日"])=>{const t=createElement("tr");t.part="table-head-row";const r=e.map((e=>{const t=createElement("th");return t.part="table-head-item",t.innerText=e,t}));return t.append(...r),t};

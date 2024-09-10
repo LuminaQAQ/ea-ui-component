@@ -1,0 +1,1 @@
+export const getTdTemplate_direction=(t,e,n)=>`\n        <td class="ea-descriptions-item_content ea-descriptions-item_cell ${e?"is-border":""}" colspan="${n}" part="table-td">\n            ${t}\n        </td>\n    `;

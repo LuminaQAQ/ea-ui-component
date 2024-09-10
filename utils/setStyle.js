@@ -1,1 +1,8 @@
-export default function setStyle(e,t){const l=document.createElement("link");l.href=t,l.rel="stylesheet",e.appendChild(l)}
+export default function setStyle(shadowRoot, href) {
+    const link = document.createElement('link');
+    
+    link.href = href;
+    link.rel = "stylesheet";
+
+    shadowRoot.appendChild(link);
+}

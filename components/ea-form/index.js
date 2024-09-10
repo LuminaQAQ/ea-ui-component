@@ -1,1 +1,121 @@
-import Base from"../Base.js";import"../ea-icon/index.js";import{Validator}from"../../utils/Validator.js";import{timeout}from"../../utils/timeout.js";import"../ea-form-item/index.js";import"../ea-button/index.js";export class EaForm extends Base{#e;constructor(){super();this.attachShadow({mode:"open"}).innerHTML="\n            <form class='ea-form_wrap' part='container'>\n                <slot></slot>\n            </form>\n        "}get data(){const e={};return this.querySelectorAll("[data-ea-component]").forEach((t=>{e[t.name]=t.value})),e}get rules(){return this.#e||{}}set rules(e){this.#e=e;const t=this.querySelectorAll("ea-form-item");this.querySelectorAll("[data-ea-component]").forEach(((r,a)=>{t[a].rule=e[r.name],t[a].validateEvent(),t[a].isRequired=!!e[r.name]?.required}))}validate(){const e=this.querySelectorAll("ea-form-item"),t=this.querySelectorAll("[data-ea-component]");let r=[];return t.forEach(((t,a)=>{if(this.#e[t.name])for(const o in e[a].rule)if(Validator[o]){if(!Validator[o](t.value,e[a].rule[o])){e[a].isInvalid=!0,t.isInvalid=!0,r.push(t.name);break}e[a].isInvalid=!1,t.isInvalid=!1}})),new Promise(((e,t)=>{r.length>0?t(r):e(!0)}))}reset(){const e=this.querySelectorAll("ea-form-item");this.querySelectorAll("[data-ea-component]").forEach(((t,r)=>{t.value="",t.isInvalid=!1,e[r].isInvalid=!1}))}connectedCallback(){timeout((()=>{const e=this.querySelectorAll("ea-form-item"),t=Array.from(e).map((e=>e.label.length)),r=Math.max(...t);e.forEach((e=>{const t=e.shadowRoot.querySelector(".ea-form-item_label-wrap");t&&(t.style.width=20*r+"px")})),this.dispatchEvent(new CustomEvent("ready",{bubbles:!0}))}),50)}}customElements.get("ea-form")||customElements.define("ea-form",EaForm);
+import Base from '../Base.js';
+import '../ea-icon/index.js'
+import { Validator } from "../../utils/Validator.js";
+import { timeout } from '../../utils/timeout.js';
+
+import "../ea-form-item/index.js"
+import '../ea-button/index.js'
+
+export class EaForm extends Base {
+    #rules;
+
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+
+        shadowRoot.innerHTML = `
+            <form class='ea-form_wrap' part='container'>
+                <slot></slot>
+            </form>
+        `;
+    }
+
+    // ------- data 获取form表单的值 -------
+    // #region
+    get data() {
+        const obj = {};
+        const formItems = this.querySelectorAll('[data-ea-component]');
+
+        formItems.forEach(input => {
+            obj[input.name] = input.value;
+        });
+
+        return obj;
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- rules 校验规则 -------
+    // #region
+    get rules() {
+        return this.#rules || {};
+    }
+
+    set rules(value) {
+        this.#rules = value;
+
+        const formItems = this.querySelectorAll('ea-form-item');
+        const valueItems = this.querySelectorAll('[data-ea-component]');
+        valueItems.forEach((input, index) => {
+            formItems[index].rule = value[input.name];
+            formItems[index].validateEvent();
+            formItems[index].isRequired = value[input.name]?.required ? true : false;
+        });
+    }
+    // #endregion
+    // ------- end -------
+
+    validate() {
+        const formItems = this.querySelectorAll('ea-form-item');
+        const valueItems = this.querySelectorAll('[data-ea-component]');
+
+        let isValid = [];
+
+        valueItems.forEach((input, index) => {
+            if (!this.#rules[input.name]) return;
+
+            for (const k in formItems[index].rule) {
+                if (!Validator[k]) continue;
+
+                if (!Validator[k](input.value, formItems[index].rule[k])) {
+                    formItems[index].isInvalid = true;
+                    input.isInvalid = true;
+                    isValid.push(input.name);
+                    break;
+                } else {
+                    formItems[index].isInvalid = false;
+                    input.isInvalid = false;
+                }
+            }
+        });
+
+        return new Promise((resolve, reject) => {
+            if (isValid.length > 0) {
+                reject(isValid);
+            } else {
+                resolve(true);
+            }
+        });
+    }
+
+    reset() {
+        const formItems = this.querySelectorAll('ea-form-item');
+        const valueItems = this.querySelectorAll('[data-ea-component]');
+        valueItems.forEach((input, index) => {
+            input.value = '';
+            input.isInvalid = false;
+            formItems[index].isInvalid = false;
+        });
+    }
+
+    connectedCallback() {
+        timeout(() => {
+            const formItemsWrap = this.querySelectorAll('ea-form-item');
+
+            const lenArr = Array.from(formItemsWrap).map(item => item.label.length);
+            const max = Math.max(...lenArr);
+
+            formItemsWrap.forEach(item => {
+                const labelWrap = item.shadowRoot.querySelector('.ea-form-item_label-wrap');
+                if (labelWrap) labelWrap.style.width = `${max * 20}px`;
+            });
+
+            this.dispatchEvent(new CustomEvent('ready', { bubbles: true }));
+        }, 50);
+    }
+}
+
+if (!customElements.get('ea-form')) {
+    customElements.define('ea-form', EaForm);
+}

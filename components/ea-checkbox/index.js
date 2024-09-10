@@ -1,1 +1,160 @@
-import Base from"../Base.js";import{stylesheet}from"./src/style/stylesheet.js";export class EaCheckbox extends Base{#e;#t;constructor(){super();const e=this.attachShadow({mode:"open"});e.innerHTML='\n      <label class="ea-checkbox_wrap" part="container">\n        <input type="checkbox" class="ea-checkbox-input_input"/>\n        <span class="ea-checkbox-input_wrap" part="input-container">\n          <span class="ea-checkbox-input_inner" part="input"></span>\n        </span>\n        <span class="ea-checkbox-label_desc" part="label-container">\n          <slot></slot>\n        </span>\n      </label>\n    ',this.#t=e.querySelector(".ea-checkbox_wrap"),this.#e=e.querySelector(".ea-checkbox-input_input"),this.build(e,stylesheet)}get checked(){return this.getAttrBoolean("checked")}set checked(e){this.setAttribute("checked",e),this.#e.checked=e}get name(){return this.getAttribute("name")||""}set name(e){this.setAttribute("name",e),this.#e.setAttribute("name",e)}get value(){return this.getAttribute("value")}set value(e){this.setAttribute("value",e),this.#t.setAttribute("for",e),this.#e.setAttribute("id",e),this.#e.setAttribute("value",e)}get disabled(){return this.getAttrBoolean("disabled")}set disabled(e){this.setAttribute("disabled",e),this.#e.disabled=e}get border(){return this.getAttrBoolean("border")}set border(e){this.#t.classList.toggle("border",e)}get indeterminate(){return this.getAttrBoolean("indeterminate")}set indeterminate(e){this.setAttribute("indeterminate",e),this.#e.setAttribute("indeterminate",e),e&&(this.checked=!1,this.#t.classList.remove("checked"),this.setAttribute("indeterminate",!0),this.#e.setAttribute("indeterminate",!0))}connectedCallback(){this.checked=this.checked,this.name=this.name,this.value=this.value,this.disabled=this.disabled,this.border=this.border,this.indeterminate=this.indeterminate,this.#e.addEventListener("change",(e=>{e.preventDefault(),this.indeterminate=!1,this.checked=e.target.checked,this.dispatchEvent(new CustomEvent("change",{bubbles:!0,composed:!0,detail:{checked:this.checked,value:this.value,name:this.name}}))}))}}window.customElements.get("ea-checkbox")||window.customElements.define("ea-checkbox",EaCheckbox);
+// @ts-nocheck
+import Base from '../Base.js'
+
+import { stylesheet } from './src/style/stylesheet.js';
+
+export class EaCheckbox extends Base {
+  #checkbox;
+  #label;
+
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.innerHTML = `
+      <label class="ea-checkbox_wrap" part="container">
+        <input type="checkbox" class="ea-checkbox-input_input"/>
+        <span class="ea-checkbox-input_wrap" part="input-container">
+          <span class="ea-checkbox-input_inner" part="input"></span>
+        </span>
+        <span class="ea-checkbox-label_desc" part="label-container">
+          <slot></slot>
+        </span>
+      </label>
+    `;
+
+    this.#label = shadowRoot.querySelector('.ea-checkbox_wrap');
+    this.#checkbox = shadowRoot.querySelector('.ea-checkbox-input_input');
+
+    this.build(shadowRoot, stylesheet);
+  }
+
+  // ------- checked 选中 -------
+  // #region
+  get checked() {
+    return this.getAttrBoolean('checked');
+  }
+
+  set checked(val) {
+    this.setAttribute('checked', val);
+    this.#checkbox.checked = val;
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- name 单选框的唯一键 -------
+  // #region
+  get name() {
+    return this.getAttribute('name') || '';
+  }
+
+  set name(val) {
+    this.setAttribute('name', val);
+    this.#checkbox.setAttribute('name', val);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- value 单选框的值 -------
+  // #region
+  get value() {
+    return this.getAttribute('value');
+  }
+
+
+  set value(val) {
+    this.setAttribute('value', val);
+    this.#label.setAttribute('for', val);
+    this.#checkbox.setAttribute('id', val);
+    this.#checkbox.setAttribute('value', val);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- disabled 禁用状态 -------
+  // #region
+  get disabled() {
+    return this.getAttrBoolean('disabled');
+  }
+
+  set disabled(val) {
+    this.setAttribute('disabled', val);
+    this.#checkbox.disabled = val;
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- border 是否带有边框 -------
+  // #region
+  get border() {
+    return this.getAttrBoolean('border');
+  }
+
+  set border(val) {
+    this.#label.classList.toggle('border', val);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- indeterminate 状态 -------
+  // #region
+  get indeterminate() {
+    return this.getAttrBoolean('indeterminate');
+  }
+
+  set indeterminate(val) {
+    this.setAttribute('indeterminate', val);
+    this.#checkbox.setAttribute('indeterminate', val);
+
+    if (val) {
+      this.checked = false;
+      this.#label.classList.remove('checked');
+
+      this.setAttribute('indeterminate', true);
+      this.#checkbox.setAttribute('indeterminate', true);
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  connectedCallback() {
+    // checkbox 的 checked 属性
+    this.checked = this.checked;
+
+    // label 的 for 属性
+    this.name = this.name;
+
+    // checkbox 的 value 属性
+    this.value = this.value;
+
+    // checkbox 的 disabled 属性
+    this.disabled = this.disabled;
+
+    // border 属性
+    this.border = this.border;
+
+    // indeterminate 属性
+    this.indeterminate = this.indeterminate;
+
+    // 监听 change 事件, 修改 checked 属性
+    this.#checkbox.addEventListener('change', (e) => {
+      e.preventDefault();
+      this.indeterminate = false;
+      this.checked = e.target.checked;
+
+      this.dispatchEvent(new CustomEvent('change', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          checked: this.checked,
+          value: this.value,
+          name: this.name,
+        }
+      }))
+    })
+  }
+}
+
+if (!window.customElements.get("ea-checkbox")) {
+  window.customElements.define("ea-checkbox", EaCheckbox);
+}

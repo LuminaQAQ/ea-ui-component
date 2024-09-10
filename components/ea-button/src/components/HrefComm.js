@@ -1,1 +1,5 @@
-export const HrefComm='\n<a class="ea-button" part="container">\n    <slot></slot>\n</a>\n';
+export const HrefComm = `
+<a class="ea-button" part="container">
+    <slot></slot>
+</a>
+`;

@@ -1,1 +1,23 @@
-export const stylesheet='\n.ea-descriptions-item_wrap {\n  display: inline-flex;\n  text-align: left;\n  padding-bottom: 1rem;\n  line-height: 1.5;\n}\n.ea-descriptions-item_wrap .ea-descriptions-item_label {\n  margin-right: 10px;\n}\n.ea-descriptions-item_wrap .ea-descriptions-item_label::after {\n  content: ":";\n}\n.ea-descriptions-item_wrap .ea-descriptions-item_content {\n  display: inline-flex;\n  flex: 1;\n  align-items: baseline;\n}\n.ea-descriptions-item_wrap .ea-descriptions-item_label.is-border,\n.ea-descriptions-item_wrap .ea-descriptions-item_content.is-border {\n  border: 1px solid #ebeef5;\n}\n';
+export const stylesheet = `
+.ea-descriptions-item_wrap {
+  display: inline-flex;
+  text-align: left;
+  padding-bottom: 1rem;
+  line-height: 1.5;
+}
+.ea-descriptions-item_wrap .ea-descriptions-item_label {
+  margin-right: 10px;
+}
+.ea-descriptions-item_wrap .ea-descriptions-item_label::after {
+  content: ":";
+}
+.ea-descriptions-item_wrap .ea-descriptions-item_content {
+  display: inline-flex;
+  flex: 1;
+  align-items: baseline;
+}
+.ea-descriptions-item_wrap .ea-descriptions-item_label.is-border,
+.ea-descriptions-item_wrap .ea-descriptions-item_content.is-border {
+  border: 1px solid #ebeef5;
+}
+`;

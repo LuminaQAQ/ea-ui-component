@@ -1,1 +1,198 @@
-import Base from"../Base.js";import"../ea-icon/index.js";import{ButtonComm}from"./src/components/ButtonComm.js";import{HrefComm}from"./src/components/HrefComm.js";import{stylesheet}from"./src/style/stylesheet.js";export class EaButton extends Base{#t="button";#e;constructor(){super();const t=this.attachShadow({mode:"open"});this.getAttribute("href")?(t.innerHTML=HrefComm,this.#t="a"):(t.innerHTML=ButtonComm,this.#t="button"),this.#e=t.querySelector(".ea-button"),this.build(t,stylesheet)}get BUTTON_STYLE(){return["plain","round"]}get BUTTON_TYPE(){return["normal","primary","success","warning","danger","text"]}get BUTTON_SIZE(){return["medium","small","mini"]}get disabled(){return this.getAttrBoolean("disabled")}set disabled(t){this.toggleAttr("disabled",t),this.#e.classList.toggle("disabled",t),this.style.cursor=t?"not-allowed":"pointer",t&&this.#e.setAttribute("disabled",t)}get plain(){return this.getAttrBoolean("plain")}set plain(t){this.toggleAttr("plain",t),this.#e.classList.toggle("plain",t)}get round(){return this.getAttrBoolean("round")}set round(t){this.toggleAttr("round",t),this.#e.classList.toggle("round",t)}get type(){const t=this.getAttribute("type");return this.BUTTON_TYPE.includes(t)?t:"normal"}set type(t){this.setAttribute("type",t),this.#e.classList.add(t)}get size(){const t=this.getAttribute("size");return this.BUTTON_SIZE.includes(t)?t:"medium"}set size(t){this.toggleAttr("size",t),this.#e.classList.add(t)}get loading(){return this.getAttrBoolean("loading")}set loading(t){if(this.toggleAttr("loading",t),this.disabled=t,t){const t=document.createElement("ea-icon");t.id="ea-loading-icon",t.icon="icon-spin6 animate-spin",this.#e.insertBefore(t,this.#e.firstChild)}else{const t=this.#e?.querySelectorAll("#ea-loading-icon");t?.length>0&&t?.forEach((t=>t.remove()))}}get icon(){return this.getAttribute("icon")||""}set icon(t){if(this.setAttribute("icon",t),t&&!this.#e.querySelector("ea-icon")){const e=document.createElement("ea-icon");e.icon=t,e.part="icon",this.#e.insertBefore(e,this.#e.firstChild)}}get href(){return this.getAttribute("href")||""}set href(t){"button"!==this.#t&&(this.setAttribute("href",t),this.#e.setAttribute("href",t))}connectedCallback(){this.plain=this.plain,this.round=this.round,this.type=this.type,this.size=this.size,this.icon=this.icon,this.disabled=this.disabled,this.href=this.href,this.loading&&(this.loading=this.loading)}}window.customElements.get("ea-button")||window.customElements.define("ea-button",EaButton);
+import Base from "../Base.js";
+import "../ea-icon/index.js"
+
+import { ButtonComm } from "./src/components/ButtonComm.js";
+import { HrefComm } from "./src/components/HrefComm.js";
+
+import { stylesheet } from "./src/style/stylesheet.js";
+
+export class EaButton extends Base {
+  #buttonType = "button";
+
+  #wrap;
+
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+
+    const hrefAttr = this.getAttribute('href')
+    if (hrefAttr) {
+      shadowRoot.innerHTML = HrefComm;
+      this.#buttonType = "a";
+    } else {
+      shadowRoot.innerHTML = ButtonComm;
+      this.#buttonType = "button";
+    }
+
+    this.#wrap = shadowRoot.querySelector('.ea-button');
+
+    this.build(shadowRoot, stylesheet);
+  }
+
+  get BUTTON_STYLE() {
+    return ['plain', 'round'];
+  }
+
+  get BUTTON_TYPE() {
+    return ['normal', 'primary', 'success', 'warning', 'danger', 'text'];
+  }
+
+  get BUTTON_SIZE() {
+    return ['medium', 'small', 'mini'];
+  }
+
+
+  // ------- 禁用 -------
+  // #region
+  get disabled() {
+    return this.getAttrBoolean('disabled');
+  }
+
+  set disabled(value) {
+    this.toggleAttr('disabled', value);
+    this.#wrap.classList.toggle('disabled', value);
+    this.style.cursor = value ? 'not-allowed' : 'pointer';
+
+    if (value) this.#wrap.setAttribute('disabled', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 按钮样式 -------
+  // #region
+  get plain() {
+    return this.getAttrBoolean('plain');
+  }
+  set plain(value) {
+    this.toggleAttr('plain', value);
+    this.#wrap.classList.toggle('plain', value);
+  }
+
+  get round() {
+    return this.getAttrBoolean('round');
+  }
+  set round(value) {
+    this.toggleAttr('round', value);
+
+    this.#wrap.classList.toggle('round', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- type属性 -------
+  // #region
+  get type() {
+    const attr = this.getAttribute('type');
+    return this.BUTTON_TYPE.includes(attr) ? attr : 'normal';
+  }
+
+  set type(value) {
+    this.setAttribute('type', value);
+    this.#wrap.classList.add(value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 按钮大小 -------
+  // #region
+  get size() {
+    const attr = this.getAttribute('size');
+    return this.BUTTON_SIZE.includes(attr) ? attr : 'medium';
+  }
+  set size(value) {
+    this.toggleAttr('size', value);
+    this.#wrap.classList.add(value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 按钮加载 -------
+  // #region
+  get loading() {
+    return this.getAttrBoolean('loading');
+  }
+
+  set loading(value) {
+    this.toggleAttr('loading', value);
+
+    this.disabled = value;
+
+    if (value) {
+      const i = document.createElement('ea-icon');
+      i.id = 'ea-loading-icon';
+      i.icon = 'icon-spin6 animate-spin';
+
+      this.#wrap.insertBefore(i, this.#wrap.firstChild)
+    } else {
+      const loadingIcon = this.#wrap?.querySelectorAll('#ea-loading-icon');
+      if (loadingIcon?.length > 0) {
+        loadingIcon?.forEach(item => item.remove());
+      }
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 图标按钮 -------
+  // #region
+  get icon() {
+    return this.getAttribute('icon') || '';
+  }
+
+  set icon(value) {
+    this.setAttribute('icon', value);
+
+    if (value && !this.#wrap.querySelector('ea-icon')) {
+      const eaIcon = document.createElement('ea-icon');
+      eaIcon.icon = value;
+      eaIcon.part = "icon";
+
+      this.#wrap.insertBefore(eaIcon, this.#wrap.firstChild);
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- 链接按钮 -------
+  // #region
+  get href() {
+    return this.getAttribute('href') || '';
+  }
+
+  set href(value) {
+    if (this.#buttonType === "button") return;
+
+    this.setAttribute('href', value);
+    this.#wrap.setAttribute('href', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  connectedCallback() {
+    // 按钮样式
+    this.plain = this.plain;
+    this.round = this.round;
+
+    // 按钮种类
+    this.type = this.type;
+
+    // 按钮大小
+    this.size = this.size;
+
+    // 图标
+    this.icon = this.icon;
+
+    // 禁用
+    this.disabled = this.disabled;
+
+    // 链接
+    this.href = this.href;
+
+    if (this.loading) this.loading = this.loading;
+  }
+}
+
+if (!window.customElements.get("ea-button")) {
+  window.customElements.define("ea-button", EaButton);
+}

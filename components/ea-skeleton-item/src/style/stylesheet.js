@@ -1,1 +1,71 @@
-export const stylesheet="\n:host {\n  --p-width: 100%;\n  --margin-top: 1rem;\n}\n\n@keyframes skeleton-loading {\n  0% {\n    background-position: 100% 50%;\n  }\n}\n.ea-skeleton-item_wrap {\n  position: relative;\n  background-color: #f2f2f2;\n  border-radius: 4px;\n}\n.ea-skeleton-item_wrap.animated {\n  background-image: linear-gradient(90deg, #f6f6f6 25%, #e8e8e8 37%, #f6f6f6 63%);\n  background-size: 400% 100%;\n  animation: skeleton-loading 1.4s ease infinite;\n}\n\n.ea-skeleton-item_wrap.ea-skeleton_p, .ea-skeleton-item_wrap.ea-skeleton_image, .ea-skeleton-item_wrap.ea-skeleton_text, .ea-skeleton-item_wrap.ea-skeleton_h1, .ea-skeleton-item_wrap.ea-skeleton_h2, .ea-skeleton-item_wrap.ea-skeleton_h3, .ea-skeleton-item_wrap.ea-skeleton_h4, .ea-skeleton-item_wrap.ea-skeleton_h5, .ea-skeleton-item_wrap.ea-skeleton_h6 {\n  width: 100%;\n}\n.ea-skeleton-item_wrap.ea-skeleton_p {\n  width: var(--p-width);\n  height: 16px;\n  margin-top: var(--margin-top);\n}\n.ea-skeleton-item_wrap.ea-skeleton_image {\n  width: unset;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: 0;\n  height: 100%;\n}\n.ea-skeleton-item_wrap.ea-skeleton_image .skeleton-image {\n  width: 30%;\n  height: 30%;\n}\n.ea-skeleton-item_wrap.ea-skeleton_text {\n  height: 13px;\n  margin: 2px 0;\n}\n.ea-skeleton-item_wrap.ea-skeleton_h1 {\n  height: 2rem;\n  margin-block: 0.67rem;\n}\n.ea-skeleton-item_wrap.ea-skeleton_h2 {\n  height: 1.5rem;\n  margin-block: 0.83rem;\n}\n.ea-skeleton-item_wrap.ea-skeleton_h3 {\n  height: 1.17rem;\n  margin-block: 1rem;\n}\n.ea-skeleton-item_wrap.ea-skeleton_h4 {\n  height: 1rem;\n  margin-block: 1.33rem;\n}\n.ea-skeleton-item_wrap.ea-skeleton_h5 {\n  height: 0.83rem;\n  margin-block: 1.67rem;\n}\n.ea-skeleton-item_wrap.ea-skeleton_h6 {\n  height: 0.67rem;\n  margin-block: 2.33rem;\n}\n";
+export const stylesheet = `
+:host {
+  --p-width: 100%;
+  --margin-top: 1rem;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+}
+.ea-skeleton-item_wrap {
+  position: relative;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+}
+.ea-skeleton-item_wrap.animated {
+  background-image: linear-gradient(90deg, #f6f6f6 25%, #e8e8e8 37%, #f6f6f6 63%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+}
+
+.ea-skeleton-item_wrap.ea-skeleton_p, .ea-skeleton-item_wrap.ea-skeleton_image, .ea-skeleton-item_wrap.ea-skeleton_text, .ea-skeleton-item_wrap.ea-skeleton_h1, .ea-skeleton-item_wrap.ea-skeleton_h2, .ea-skeleton-item_wrap.ea-skeleton_h3, .ea-skeleton-item_wrap.ea-skeleton_h4, .ea-skeleton-item_wrap.ea-skeleton_h5, .ea-skeleton-item_wrap.ea-skeleton_h6 {
+  width: 100%;
+}
+.ea-skeleton-item_wrap.ea-skeleton_p {
+  width: var(--p-width);
+  height: 16px;
+  margin-top: var(--margin-top);
+}
+.ea-skeleton-item_wrap.ea-skeleton_image {
+  width: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  height: 100%;
+}
+.ea-skeleton-item_wrap.ea-skeleton_image .skeleton-image {
+  width: 30%;
+  height: 30%;
+}
+.ea-skeleton-item_wrap.ea-skeleton_text {
+  height: 13px;
+  margin: 2px 0;
+}
+.ea-skeleton-item_wrap.ea-skeleton_h1 {
+  height: 2rem;
+  margin-block: 0.67rem;
+}
+.ea-skeleton-item_wrap.ea-skeleton_h2 {
+  height: 1.5rem;
+  margin-block: 0.83rem;
+}
+.ea-skeleton-item_wrap.ea-skeleton_h3 {
+  height: 1.17rem;
+  margin-block: 1rem;
+}
+.ea-skeleton-item_wrap.ea-skeleton_h4 {
+  height: 1rem;
+  margin-block: 1.33rem;
+}
+.ea-skeleton-item_wrap.ea-skeleton_h5 {
+  height: 0.83rem;
+  margin-block: 1.67rem;
+}
+.ea-skeleton-item_wrap.ea-skeleton_h6 {
+  height: 0.67rem;
+  margin-block: 2.33rem;
+}
+`;

@@ -1,1 +1,105 @@
-export const stylesheet="\n.ea-carousel_wrap {\n  position: relative;\n  overflow: hidden;\n}\n.ea-carousel_wrap .ea-carousel_content-container {\n  position: relative;\n  display: flex;\n  color: #fff;\n  text-align: center;\n  height: 300px;\n  transition: transform 0.5s;\n}\n.ea-carousel_wrap .ea-carousel_content-container ::slotted(ea-carousel-item) {\n  flex: 0 0 100%;\n  width: 100%;\n}\n.ea-carousel_wrap .ea-carousel-item_arrow {\n  position: absolute;\n  top: 50%;\n  transform: translateY(-50%);\n  opacity: 0;\n  width: 1.5rem;\n  height: 1.5rem;\n  line-height: 1.5;\n  font-weight: 800;\n  text-align: center;\n  border-radius: 50%;\n  background-color: rgba(31, 45, 61, 0.11);\n  color: #fff;\n  cursor: pointer;\n  user-select: none;\n  transition: background-color 0.3s, transform 0.3s, opacity 0.3s;\n}\n.ea-carousel_wrap .ea-carousel-item_arrow.ea-carousel-item_arrow--left {\n  left: 0;\n  transform: translate(-100%, -50%);\n}\n.ea-carousel_wrap .ea-carousel-item_arrow.ea-carousel-item_arrow--right {\n  right: 0;\n  transform: translate(100%, -50%);\n}\n.ea-carousel_wrap .ea-carousel-item_arrow:hover {\n  background-color: rgba(31, 45, 61, 0.3);\n}\n.ea-carousel_wrap .ea-carousel-indicator_wrap {\n  position: absolute;\n  bottom: 1rem;\n  left: 50%;\n  transform: translateX(-50%);\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  cursor: pointer;\n}\n.ea-carousel_wrap .ea-carousel-indicator_wrap .ea-carousel-item_indicator {\n  width: 0.5rem;\n  height: 0.5rem;\n  border-radius: 50%;\n  background-color: rgba(255, 255, 255, 0.4);\n  margin: 0.25rem;\n  transition: background-color 0.3s;\n}\n.ea-carousel_wrap .ea-carousel-indicator_wrap .ea-carousel-item_indicator.ea-carousel-item_indicator--active {\n  background-color: #fff;\n}\n.ea-carousel_wrap ::slotted(ea-carousel-item:nth-child(odd)) {\n  --odd-bgc: #d3dce6;\n}\n.ea-carousel_wrap.hover-trigger:hover .ea-carousel-item_arrow.ea-carousel-item_arrow--left {\n  left: 0;\n  transform: translate(50%, -50%);\n  opacity: 1;\n}\n.ea-carousel_wrap.hover-trigger:hover .ea-carousel-item_arrow.ea-carousel-item_arrow--right {\n  right: 0;\n  transform: translate(-50%, -50%);\n  opacity: 1;\n}\n.ea-carousel_wrap.always-show-arrow .ea-carousel-item_arrow.ea-carousel-item_arrow--left {\n  left: 0;\n  transform: translate(50%, -50%);\n  opacity: 1;\n}\n.ea-carousel_wrap.always-show-arrow .ea-carousel-item_arrow.ea-carousel-item_arrow--right {\n  right: 0;\n  transform: translate(-50%, -50%);\n  opacity: 1;\n}\n.ea-carousel_wrap.ea-carousel--horizontal .ea-carousel_content-container {\n  flex-direction: row;\n}\n.ea-carousel_wrap.ea-carousel--vertical .ea-carousel_content-container {\n  flex-direction: column;\n}\n.ea-carousel_wrap.ea-carousel--vertical .ea-carousel-item_arrow {\n  display: none;\n}\n.ea-carousel_wrap.ea-carousel--vertical .ea-carousel-indicator_wrap {\n  left: 100%;\n  bottom: 50%;\n  flex-direction: column;\n  transform: translate(-200%, 50%);\n}\n";
+export const stylesheet = `
+.ea-carousel_wrap {
+  position: relative;
+  overflow: hidden;
+}
+.ea-carousel_wrap .ea-carousel_content-container {
+  position: relative;
+  display: flex;
+  color: #fff;
+  text-align: center;
+  height: 300px;
+  transition: transform 0.5s;
+}
+.ea-carousel_wrap .ea-carousel_content-container ::slotted(ea-carousel-item) {
+  flex: 0 0 100%;
+  width: 100%;
+}
+.ea-carousel_wrap .ea-carousel-item_arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1.5;
+  font-weight: 800;
+  text-align: center;
+  border-radius: 50%;
+  background-color: rgba(31, 45, 61, 0.11);
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+}
+.ea-carousel_wrap .ea-carousel-item_arrow.ea-carousel-item_arrow--left {
+  left: 0;
+  transform: translate(-100%, -50%);
+}
+.ea-carousel_wrap .ea-carousel-item_arrow.ea-carousel-item_arrow--right {
+  right: 0;
+  transform: translate(100%, -50%);
+}
+.ea-carousel_wrap .ea-carousel-item_arrow:hover {
+  background-color: rgba(31, 45, 61, 0.3);
+}
+.ea-carousel_wrap .ea-carousel-indicator_wrap {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+.ea-carousel_wrap .ea-carousel-indicator_wrap .ea-carousel-item_indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0.25rem;
+  transition: background-color 0.3s;
+}
+.ea-carousel_wrap .ea-carousel-indicator_wrap .ea-carousel-item_indicator.ea-carousel-item_indicator--active {
+  background-color: #fff;
+}
+.ea-carousel_wrap ::slotted(ea-carousel-item:nth-child(odd)) {
+  --odd-bgc: #d3dce6;
+}
+.ea-carousel_wrap.hover-trigger:hover .ea-carousel-item_arrow.ea-carousel-item_arrow--left {
+  left: 0;
+  transform: translate(50%, -50%);
+  opacity: 1;
+}
+.ea-carousel_wrap.hover-trigger:hover .ea-carousel-item_arrow.ea-carousel-item_arrow--right {
+  right: 0;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+.ea-carousel_wrap.always-show-arrow .ea-carousel-item_arrow.ea-carousel-item_arrow--left {
+  left: 0;
+  transform: translate(50%, -50%);
+  opacity: 1;
+}
+.ea-carousel_wrap.always-show-arrow .ea-carousel-item_arrow.ea-carousel-item_arrow--right {
+  right: 0;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+.ea-carousel_wrap.ea-carousel--horizontal .ea-carousel_content-container {
+  flex-direction: row;
+}
+.ea-carousel_wrap.ea-carousel--vertical .ea-carousel_content-container {
+  flex-direction: column;
+}
+.ea-carousel_wrap.ea-carousel--vertical .ea-carousel-item_arrow {
+  display: none;
+}
+.ea-carousel_wrap.ea-carousel--vertical .ea-carousel-indicator_wrap {
+  left: 100%;
+  bottom: 50%;
+  flex-direction: column;
+  transform: translate(-200%, 50%);
+}
+`;

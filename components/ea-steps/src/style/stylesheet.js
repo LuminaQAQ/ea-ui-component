@@ -1,1 +1,21 @@
-export const stylesheet="\n.ea-steps_wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.ea-steps_wrap ::slotted(ea-step) {\n  flex-basis: 50%;\n}\n.ea-steps_wrap.is-simple {\n  justify-content: unset;\n}\n.ea-steps_wrap ::slotted(ea-step:last-child) {\n  flex-basis: auto;\n  flex-grow: 0;\n  flex-shrink: 0;\n}\n.ea-steps_wrap ::slotted(ea-step[simple]) {\n  flex: 1;\n}\n";
+export const stylesheet = `
+.ea-steps_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-steps_wrap ::slotted(ea-step) {
+  flex-basis: 50%;
+}
+.ea-steps_wrap.is-simple {
+  justify-content: unset;
+}
+.ea-steps_wrap ::slotted(ea-step:last-child) {
+  flex-basis: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.ea-steps_wrap ::slotted(ea-step[simple]) {
+  flex: 1;
+}
+`;

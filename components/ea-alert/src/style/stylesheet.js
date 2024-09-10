@@ -1,1 +1,85 @@
-export const stylesheet="\n.ea-alert_wrap {\n  position: relative;\n  box-sizing: border-box;\n  overflow: hidden;\n  border-radius: 4px;\n  padding: 8px 16px;\n  margin: 20px 0 0;\n  display: flex;\n  align-items: center;\n  width: 100%;\n  opacity: 1;\n  transition: opacity 0.2s;\n}\n.ea-alert_wrap .ea-alert_content {\n  width: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.ea-alert_wrap .ea-alert_content .ea-alert_title {\n  display: flex;\n  align-items: center;\n}\n.ea-alert_wrap .ea-alert_content .ea-alert_title i {\n  margin-right: 0.5rem;\n}\n.ea-alert_wrap .ea-alert_content .ea-alert_close-icon {\n  color: #c0c4cc;\n  cursor: pointer;\n}\n.ea-alert_wrap .ea-alert_content.ea-alert--center .ea-alert_title,\n.ea-alert_wrap .ea-alert_content.ea-alert--center .ea-alert_close-icon {\n  margin-left: auto;\n}\n.ea-alert_wrap .ea-alert_description {\n  width: 100%;\n  margin: 5px 0 0;\n  font-size: 12px;\n}\n.ea-alert_wrap.ea-alert--success {\n  background-color: #f0f9eb;\n  color: #67c23a;\n}\n.ea-alert_wrap.ea-alert--success.ea-alert--dark {\n  color: #fff;\n  background-color: #67c23a;\n}\n.ea-alert_wrap.ea-alert--success.ea-alert--dark .ea-alert_close-icon {\n  color: #fff;\n}\n.ea-alert_wrap.ea-alert--info {\n  background-color: #f4f4f5;\n  color: #909399;\n}\n.ea-alert_wrap.ea-alert--info.ea-alert--dark {\n  color: #fff;\n  background-color: #909399;\n}\n.ea-alert_wrap.ea-alert--info.ea-alert--dark .ea-alert_close-icon {\n  color: #fff;\n}\n.ea-alert_wrap.ea-alert--warning {\n  background-color: #fdf6ec;\n  color: #e6a23c;\n}\n.ea-alert_wrap.ea-alert--warning.ea-alert--dark {\n  color: #fff;\n  background-color: #e6a23c;\n}\n.ea-alert_wrap.ea-alert--warning.ea-alert--dark .ea-alert_close-icon {\n  color: #fff;\n}\n.ea-alert_wrap.ea-alert--error {\n  background-color: #fef0f0;\n  color: #f56c6c;\n}\n.ea-alert_wrap.ea-alert--error.ea-alert--dark {\n  color: #fff;\n  background-color: #f56c6c;\n}\n.ea-alert_wrap.ea-alert--error.ea-alert--dark .ea-alert_close-icon {\n  color: #fff;\n}\n";
+export const stylesheet = `
+.ea-alert_wrap {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin: 20px 0 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.ea-alert_wrap .ea-alert_content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ea-alert_wrap .ea-alert_content .ea-alert_title {
+  display: flex;
+  align-items: center;
+}
+.ea-alert_wrap .ea-alert_content .ea-alert_title i {
+  margin-right: 0.5rem;
+}
+.ea-alert_wrap .ea-alert_content .ea-alert_close-icon {
+  color: #c0c4cc;
+  cursor: pointer;
+}
+.ea-alert_wrap .ea-alert_content.ea-alert--center .ea-alert_title,
+.ea-alert_wrap .ea-alert_content.ea-alert--center .ea-alert_close-icon {
+  margin-left: auto;
+}
+.ea-alert_wrap .ea-alert_description {
+  width: 100%;
+  margin: 5px 0 0;
+  font-size: 12px;
+}
+.ea-alert_wrap.ea-alert--success {
+  background-color: #f0f9eb;
+  color: #67c23a;
+}
+.ea-alert_wrap.ea-alert--success.ea-alert--dark {
+  color: #fff;
+  background-color: #67c23a;
+}
+.ea-alert_wrap.ea-alert--success.ea-alert--dark .ea-alert_close-icon {
+  color: #fff;
+}
+.ea-alert_wrap.ea-alert--info {
+  background-color: #f4f4f5;
+  color: #909399;
+}
+.ea-alert_wrap.ea-alert--info.ea-alert--dark {
+  color: #fff;
+  background-color: #909399;
+}
+.ea-alert_wrap.ea-alert--info.ea-alert--dark .ea-alert_close-icon {
+  color: #fff;
+}
+.ea-alert_wrap.ea-alert--warning {
+  background-color: #fdf6ec;
+  color: #e6a23c;
+}
+.ea-alert_wrap.ea-alert--warning.ea-alert--dark {
+  color: #fff;
+  background-color: #e6a23c;
+}
+.ea-alert_wrap.ea-alert--warning.ea-alert--dark .ea-alert_close-icon {
+  color: #fff;
+}
+.ea-alert_wrap.ea-alert--error {
+  background-color: #fef0f0;
+  color: #f56c6c;
+}
+.ea-alert_wrap.ea-alert--error.ea-alert--dark {
+  color: #fff;
+  background-color: #f56c6c;
+}
+.ea-alert_wrap.ea-alert--error.ea-alert--dark .ea-alert_close-icon {
+  color: #fff;
+}
+`;

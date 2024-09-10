@@ -1,1 +1,107 @@
-import Base from"../Base.js";import"../ea-icon/index.js";import{stylesheet}from"./src/style/stylesheet.js";export class EaTag extends Base{#e;#t;constructor(){super();const e=this.attachShadow({mode:"open"});e.innerHTML='\n      <div class="ea-tag_wrap" part="container">\n        <slot></slot>\n      </div>\n    ',this.#e=e.querySelector(".ea-tag_wrap"),this.build(e,stylesheet)}get type(){return this.getAttribute("type")||"default"}set type(e){this.setAttribute("type",e),this.#e.classList.add(`ea-tag--${e}`)}get closable(){return this.getAttrBoolean("closable")}set closable(e){this.toggleAttr("closable",e)}get effect(){return this.getAttribute("effect")||"light"}set effect(e){"light"!==e&&(this.setAttribute("effect",e),this.#e.classList.add(`ea-tag--${e}`))}#s(){if(!this.closable)return;const e=document.createElement("ea-icon");e.icon="icon-cancel-circled2",e.part="close-icon",e.addEventListener("mouseenter",(t=>{e.icon="icon-cancel-circled"})),e.addEventListener("mouseleave",(t=>{e.icon="icon-cancel-circled2"})),e.addEventListener("click",(e=>{this.dispatchEvent(new CustomEvent("close",{detail:{value:this.innerText},bubbles:!0}))})),this.#e.appendChild(e)}connectedCallback(){this.effect=this.effect,this.type=this.type,this.closable=this.closable,this.#s()}}customElements.get("ea-tag")||customElements.define("ea-tag",EaTag);
+// @ts-nocheck
+import Base from '../Base.js';
+
+import "../ea-icon/index.js"
+
+import { stylesheet } from './src/style/stylesheet.js';
+
+export class EaTag extends Base {
+  #wrap;
+  #closeSlot;
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.innerHTML = `
+      <div class="ea-tag_wrap" part="container">
+        <slot></slot>
+      </div>
+    `;
+
+    this.#wrap = shadowRoot.querySelector('.ea-tag_wrap');
+
+    this.build(shadowRoot, stylesheet);
+  }
+
+  // ------- type tag类型样式 -------
+  // #region
+  get type() {
+    return this.getAttribute('type') || "default";
+  }
+
+  set type(value) {
+    this.setAttribute('type', value);
+    this.#wrap.classList.add(`ea-tag--${value}`);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- closable 是否显示可关闭 -------
+  // #region
+  get closable() {
+    return this.getAttrBoolean('closable');
+  }
+
+  set closable(value) {
+    this.toggleAttr('closable', value);
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- effect 不同主题 -------
+  // #region
+  get effect() {
+    return this.getAttribute('effect') || "light";
+  }
+
+  set effect(value) {
+    if (value === "light") return;
+
+    this.setAttribute('effect', value);
+    this.#wrap.classList.add(`ea-tag--${value}`);
+  }
+  // #endregion
+  // ------- end -------
+  #initCloseEvent() {
+    if (!this.closable) return;
+
+    const closeIcon = document.createElement('ea-icon');
+    closeIcon.icon = 'icon-cancel-circled2';
+    closeIcon.part = 'close-icon';
+
+    closeIcon.addEventListener('mouseenter', (e) => {
+      closeIcon.icon = 'icon-cancel-circled';
+    });
+
+    closeIcon.addEventListener('mouseleave', (e) => {
+      closeIcon.icon = 'icon-cancel-circled2';
+    });
+
+    closeIcon.addEventListener('click', (e) => {
+      this.dispatchEvent(new CustomEvent('close', {
+        detail: {
+          value: this.innerText
+        },
+        bubbles: true,
+      }));
+    });
+
+    this.#wrap.appendChild(closeIcon);
+  }
+
+  connectedCallback() {
+    // 主题
+    this.effect = this.effect;
+
+    // tag类型
+    this.type = this.type;
+
+    // 显示可关闭
+    this.closable = this.closable;
+    this.#initCloseEvent();
+  }
+}
+
+if (!customElements.get('ea-tag')) {
+  customElements.define('ea-tag', EaTag);
+}

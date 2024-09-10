@@ -1,1 +1,43 @@
-export const stylesheet="\n.ea-badge_wrap {\n  position: relative;\n  vertical-align: middle;\n  display: inline-block;\n}\n.ea-badge_wrap .ea-badge_content {\n  display: inline-block;\n  padding: 0 0.375rem;\n  border-radius: 0.625rem;\n  border: 1px solid #fff;\n  height: 1.125rem;\n  line-height: 1.125rem;\n  position: absolute;\n  right: 0.625rem;\n  top: 0;\n  transform: translate(100%, -50%);\n  color: #fff;\n  font-size: 0.75rem;\n  text-align: center;\n  white-space: nowrap;\n  background-color: #f56c6c;\n}\n.ea-badge_wrap .ea-badge_content.primary {\n  background-color: #409eff;\n}\n.ea-badge_wrap .ea-badge_content.success {\n  background-color: #67c23a;\n}\n.ea-badge_wrap .ea-badge_content.warning {\n  background-color: #e6a23c;\n}\n.ea-badge_wrap .ea-badge_content.info {\n  background-color: #909399;\n}\n.ea-badge_wrap .ea-badge_content.dot {\n  right: 0.3125rem;\n  padding: 0;\n  border-radius: 50%;\n  width: 0.5rem;\n  height: 0.5rem;\n}\n";
+export const stylesheet = `
+.ea-badge_wrap {
+  position: relative;
+  vertical-align: middle;
+  display: inline-block;
+}
+.ea-badge_wrap .ea-badge_content {
+  display: inline-block;
+  padding: 0 0.375rem;
+  border-radius: 0.625rem;
+  border: 1px solid #fff;
+  height: 1.125rem;
+  line-height: 1.125rem;
+  position: absolute;
+  right: 0.625rem;
+  top: 0;
+  transform: translate(100%, -50%);
+  color: #fff;
+  font-size: 0.75rem;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #f56c6c;
+}
+.ea-badge_wrap .ea-badge_content.primary {
+  background-color: #409eff;
+}
+.ea-badge_wrap .ea-badge_content.success {
+  background-color: #67c23a;
+}
+.ea-badge_wrap .ea-badge_content.warning {
+  background-color: #e6a23c;
+}
+.ea-badge_wrap .ea-badge_content.info {
+  background-color: #909399;
+}
+.ea-badge_wrap .ea-badge_content.dot {
+  right: 0.3125rem;
+  padding: 0;
+  border-radius: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+}
+`;

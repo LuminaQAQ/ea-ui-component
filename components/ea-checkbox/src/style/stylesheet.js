@@ -1,1 +1,110 @@
-export const stylesheet='\n:host {\n  --margin-right: 1rem;\n}\n\n.ea-checkbox_wrap {\n  display: inline-flex;\n  align-items: center;\n  white-space: nowrap;\n  user-select: none;\n  margin-right: var(--margin-right);\n}\n.ea-checkbox_wrap input {\n  display: none;\n}\n.ea-checkbox_wrap .ea-checkbox-input_wrap {\n  line-height: 1;\n  margin-right: 0.5rem;\n}\n.ea-checkbox_wrap .ea-checkbox-input_wrap .ea-checkbox-input_inner {\n  box-sizing: border-box;\n  position: relative;\n  display: block;\n  width: 0.8125rem;\n  height: 0.8125rem;\n  line-height: 0.8125;\n  border-radius: 3px;\n  border: 1px solid #ccc;\n  transition: background-color 0.2s, border-color 0.2s;\n}\n.ea-checkbox_wrap .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {\n  content: "";\n  position: absolute;\n  left: 52.5%;\n  top: 45%;\n  transform: translate(-50%, -50%) rotate(-135deg);\n  display: block;\n  width: 3px;\n  height: 7px;\n  opacity: 0;\n  transition: opacity 0.2s;\n}\n.ea-checkbox_wrap .ea-checkbox-input_wrap .ea-checkbox-input_input {\n  display: none;\n}\n.ea-checkbox_wrap .ea-checkbox-label_desc {\n  line-height: 1;\n  transition: color 0.2s;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true] + .ea-checkbox-input_wrap .ea-checkbox-input_inner {\n  border-color: #409eff;\n  background-color: #409eff;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true] + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {\n  opacity: 1;\n  left: 50%;\n  top: 50%;\n  width: 80%;\n  height: 3px;\n  background-color: white;\n  transform: translate(-50%, -50%) rotate(0deg);\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner,\n.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner,\n.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner {\n  border-color: #409eff;\n  background-color: #409eff;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after,\n.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after,\n.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {\n  opacity: 1;\n  border-left: 2px solid white;\n  border-top: 2px solid white;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc,\n.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc,\n.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {\n  color: #409eff;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:disabled {\n  pointer-events: none;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap {\n  cursor: not-allowed;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap .ea-checkbox-input_inner {\n  border-color: #eeeeee;\n  background-color: #eeeeee;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap .ea-checkbox-input_inner::before {\n  background-color: transparent;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {\n  cursor: not-allowed;\n  color: #c0c4cc;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner {\n  border-color: #eeeeee;\n  background-color: #eeeeee;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::before {\n  opacity: 1;\n  border-left: 2px solid white;\n  border-top: 2px solid white;\n}\n.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {\n  color: #c0c4cc;\n}\n';
+export const stylesheet = `
+:host {
+  --margin-right: 1rem;
+}
+
+.ea-checkbox_wrap {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  user-select: none;
+  margin-right: var(--margin-right);
+}
+.ea-checkbox_wrap input {
+  display: none;
+}
+.ea-checkbox_wrap .ea-checkbox-input_wrap {
+  line-height: 1;
+  margin-right: 0.5rem;
+}
+.ea-checkbox_wrap .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  width: 0.8125rem;
+  height: 0.8125rem;
+  line-height: 0.8125;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.ea-checkbox_wrap .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {
+  content: "";
+  position: absolute;
+  left: 52.5%;
+  top: 45%;
+  transform: translate(-50%, -50%) rotate(-135deg);
+  display: block;
+  width: 3px;
+  height: 7px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.ea-checkbox_wrap .ea-checkbox-input_wrap .ea-checkbox-input_input {
+  display: none;
+}
+.ea-checkbox_wrap .ea-checkbox-label_desc {
+  line-height: 1;
+  transition: color 0.2s;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true] + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+  border-color: #409eff;
+  background-color: #409eff;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true] + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {
+  opacity: 1;
+  left: 50%;
+  top: 50%;
+  width: 80%;
+  height: 3px;
+  background-color: white;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+  border-color: #409eff;
+  background-color: #409eff;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::after {
+  opacity: 1;
+  border-left: 2px solid white;
+  border-top: 2px solid white;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=true]:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc,
+.ea-checkbox_wrap .ea-checkbox-input_input[indeterminate=false]:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {
+  color: #409eff;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled {
+  pointer-events: none;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap {
+  cursor: not-allowed;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+  border-color: #eeeeee;
+  background-color: #eeeeee;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap .ea-checkbox-input_inner::before {
+  background-color: transparent;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {
+  cursor: not-allowed;
+  color: #c0c4cc;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner {
+  border-color: #eeeeee;
+  background-color: #eeeeee;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap .ea-checkbox-input_inner::before {
+  opacity: 1;
+  border-left: 2px solid white;
+  border-top: 2px solid white;
+}
+.ea-checkbox_wrap .ea-checkbox-input_input:disabled:checked + .ea-checkbox-input_wrap + .ea-checkbox-label_desc {
+  color: #c0c4cc;
+}
+`;

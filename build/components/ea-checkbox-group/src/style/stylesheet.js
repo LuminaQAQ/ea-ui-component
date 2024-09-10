@@ -1,0 +1,1 @@
+export const stylesheet="\n.ea-checkbox-group {\n  display: flex;\n}\n.ea-checkbox-group ::slotted(ea-checkbox) {\n  margin-right: 1.5rem;\n}\n";

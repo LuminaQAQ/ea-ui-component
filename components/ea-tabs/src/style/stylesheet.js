@@ -1,1 +1,47 @@
-export const stylesheet="\n.ea-tabs_wrap {\n  position: relative;\n}\n.ea-tabs_wrap .ea-tabs_tab-wrap {\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  scrollbar-width: thin;\n}\n.ea-tabs_wrap .ea-tabs_pane-wrap {\n  padding: 20px;\n}\n.ea-tabs_wrap .ea-tabs_tab-bottom-bar {\n  position: absolute;\n  height: 2px;\n  width: 0;\n  top: 40px;\n  left: 0;\n  border-radius: 999px;\n  background-color: #409eff;\n  transition: left 0.3s;\n}\n.ea-tabs_wrap.ea-tabs_wrap--normal .ea-tabs_tab-wrap {\n  border-bottom: 2px solid #e4e7ed;\n}\n.ea-tabs_wrap.ea-tabs_wrap--card .ea-tabs_tab-wrap {\n  border-bottom: 1px solid #e4e7ed;\n}\n.ea-tabs_wrap.ea-tabs_wrap--card .ea-tabs_tab-bottom-bar {\n  height: 1px;\n  bottom: -1px;\n  background-color: white;\n}\n.ea-tabs_wrap.ea-tabs_wrap--border-card {\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n.ea-tabs_wrap.ea-tabs_wrap--border-card .ea-tabs_tab-wrap {\n  background-color: #f5f7fa;\n  border-bottom: 1px solid #e4e7ed;\n}\n.ea-tabs_wrap.ea-tabs_wrap--border-card .ea-tabs_tab-bottom-bar {\n  height: 1px;\n  bottom: -1px;\n  background-color: white;\n}\n";
+export const stylesheet = `
+.ea-tabs_wrap {
+  position: relative;
+}
+.ea-tabs_wrap .ea-tabs_tab-wrap {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.ea-tabs_wrap .ea-tabs_pane-wrap {
+  padding: 20px;
+}
+.ea-tabs_wrap .ea-tabs_tab-bottom-bar {
+  position: absolute;
+  height: 2px;
+  width: 0;
+  top: 40px;
+  left: 0;
+  border-radius: 999px;
+  background-color: #409eff;
+  transition: left 0.3s;
+}
+.ea-tabs_wrap.ea-tabs_wrap--normal .ea-tabs_tab-wrap {
+  border-bottom: 2px solid #e4e7ed;
+}
+.ea-tabs_wrap.ea-tabs_wrap--card .ea-tabs_tab-wrap {
+  border-bottom: 1px solid #e4e7ed;
+}
+.ea-tabs_wrap.ea-tabs_wrap--card .ea-tabs_tab-bottom-bar {
+  height: 1px;
+  bottom: -1px;
+  background-color: white;
+}
+.ea-tabs_wrap.ea-tabs_wrap--border-card {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.ea-tabs_wrap.ea-tabs_wrap--border-card .ea-tabs_tab-wrap {
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #e4e7ed;
+}
+.ea-tabs_wrap.ea-tabs_wrap--border-card .ea-tabs_tab-bottom-bar {
+  height: 1px;
+  bottom: -1px;
+  background-color: white;
+}
+`;

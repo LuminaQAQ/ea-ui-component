@@ -1,1 +1,9 @@
-export function dispatchEvent(t,e){this.dispatchEvent(new CustomEvent(e,{detail:{value:t.target.value}}))}
+export function dispatchEvent(e, eventName) {
+    this.dispatchEvent(
+        new CustomEvent(eventName, {
+            detail: {
+                value: e.target.value
+            }
+        })
+    );
+}

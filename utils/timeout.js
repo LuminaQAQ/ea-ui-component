@@ -1,1 +1,16 @@
-export const timeout=(t,e=0)=>{let i=setTimeout((()=>{clearTimeout(i),i=null,t()}),e)};export const withTransitionTimeOut=(t,e=300)=>{let i=setTimeout((()=>{clearTimeout(i),i=null,t.classList.add("with-transition")}),e)};
+export const timeout = (fn, time = 0) => {
+    let timer = setTimeout(() => {
+        clearTimeout(timer);
+        timer = null;
+        fn();
+    }, time);
+}
+
+export const withTransitionTimeOut = (container, time = 300) => {
+    let timer = setTimeout(() => {
+        clearTimeout(timer);
+        timer = null;
+
+        container.classList.add('with-transition');
+    }, time);
+}

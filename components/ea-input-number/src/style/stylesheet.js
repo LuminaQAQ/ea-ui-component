@@ -1,1 +1,122 @@
-export const stylesheet='\n.ea-input-number_wrap {\n  display: flex;\n  align-items: center;\n  border: 1px solid transparent;\n  border-radius: 3px;\n  transition: border 0.2s;\n}\n.ea-input-number_wrap .ea-input-number_sign {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-sizing: border-box;\n  border: 1px solid #dcdfe6;\n  background-color: #f5f7fa;\n  height: 2rem;\n  width: 2rem;\n  cursor: pointer;\n  font-size: 1rem;\n  line-height: 1;\n  user-select: none;\n}\n.ea-input-number_wrap .ea-input-number_sign:first-child {\n  border-top-left-radius: 3px;\n  border-bottom-left-radius: 3px;\n  border-right: 0;\n}\n.ea-input-number_wrap .ea-input-number_sign:last-child {\n  border-top-right-radius: 3px;\n  border-bottom-right-radius: 3px;\n  border-left: 0;\n}\n.ea-input-number_wrap .ea-input-number_sign:hover {\n  color: #409eff;\n}\n.ea-input-number_wrap .ea-input-number_sign.disabled {\n  pointer-events: none;\n  cursor: not-allowed;\n  color: #c0c4cc;\n}\n.ea-input-number_wrap .ea-input-number_inner {\n  box-sizing: border-box;\n  box-shadow: none;\n  border: 1px solid #dcdfe6;\n  outline: 0;\n  transition: border 0.2s;\n  border-radius: 3px;\n  padding: 0.5rem;\n  line-height: 0.8;\n  font-size: 0.8rem;\n  scrollbar-width: none;\n  width: 5rem;\n  height: 2rem;\n  border-radius: 0;\n  text-align: center;\n}\n.ea-input-number_wrap .ea-input-number_inner:focus {\n  border-color: #409eff;\n}\n.ea-input-number_wrap .ea-input-number_inner::placeholder {\n  color: #c0c4cc;\n}\n.ea-input-number_wrap .ea-input-number_inner.invalid {\n  border-color: #f56c6c;\n}\n.ea-input-number_wrap .ea-input-number_inner.disabled {\n  background-color: #eeeeee;\n  color: #c0c4cc;\n}\n.ea-input-number_wrap .ea-input-number_inner.ea-input_clear ::before {\n  content: "e9c3";\n  display: block;\n}\n.ea-input-number_wrap .ea-input-number_inner:focus {\n  border-color: #dcdfe6;\n}\n.ea-input-number_wrap .ea-input-number_inner.disabled {\n  pointer-events: none;\n  cursor: not-allowed;\n  color: #c0c4cc;\n  background-color: #f5f7fa;\n}\n.ea-input-number_wrap.focus {\n  border: 1px solid #409eff;\n}\n.ea-input-number_wrap.focus .ea-input-number_sign {\n  border-color: transparent;\n}\n.ea-input-number_wrap.disabled {\n  pointer-events: none;\n  cursor: not-allowed;\n}\n.ea-input-number_wrap.disabled .ea-input-number_sign,\n.ea-input-number_wrap.disabled .ea-input-number_inner {\n  color: #c0c4cc;\n  border-color: #dcdfe6;\n}\n.ea-input-number_wrap.ea-input-number--medium .ea-input-number_sign {\n  height: 1.75rem;\n  width: 1.75rem;\n}\n.ea-input-number_wrap.ea-input-number--medium .ea-input-number_inner {\n  height: 1.75rem;\n  line-height: 1.75rem;\n}\n.ea-input-number_wrap.ea-input-number--small .ea-input-number_sign {\n  height: 1.5rem;\n  width: 1.5rem;\n}\n.ea-input-number_wrap.ea-input-number--small .ea-input-number_inner {\n  height: 1.5rem;\n  line-height: 1.5rem;\n}\n.ea-input-number_wrap.ea-input-number--mini .ea-input-number_sign {\n  height: 1.25rem;\n  width: 1.25rem;\n}\n.ea-input-number_wrap.ea-input-number--mini .ea-input-number_inner {\n  height: 1.25rem;\n  line-height: 1.25rem;\n}\n';
+export const stylesheet = `
+.ea-input-number_wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  transition: border 0.2s;
+}
+.ea-input-number_wrap .ea-input-number_sign {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 1px solid #dcdfe6;
+  background-color: #f5f7fa;
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  user-select: none;
+}
+.ea-input-number_wrap .ea-input-number_sign:first-child {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-right: 0;
+}
+.ea-input-number_wrap .ea-input-number_sign:last-child {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-left: 0;
+}
+.ea-input-number_wrap .ea-input-number_sign:hover {
+  color: #409eff;
+}
+.ea-input-number_wrap .ea-input-number_sign.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  color: #c0c4cc;
+}
+.ea-input-number_wrap .ea-input-number_inner {
+  box-sizing: border-box;
+  box-shadow: none;
+  border: 1px solid #dcdfe6;
+  outline: 0;
+  transition: border 0.2s;
+  border-radius: 3px;
+  padding: 0.5rem;
+  line-height: 0.8;
+  font-size: 0.8rem;
+  scrollbar-width: none;
+  width: 5rem;
+  height: 2rem;
+  border-radius: 0;
+  text-align: center;
+}
+.ea-input-number_wrap .ea-input-number_inner:focus {
+  border-color: #409eff;
+}
+.ea-input-number_wrap .ea-input-number_inner::placeholder {
+  color: #c0c4cc;
+}
+.ea-input-number_wrap .ea-input-number_inner.invalid {
+  border-color: #f56c6c;
+}
+.ea-input-number_wrap .ea-input-number_inner.disabled {
+  background-color: #eeeeee;
+  color: #c0c4cc;
+}
+.ea-input-number_wrap .ea-input-number_inner.ea-input_clear ::before {
+  content: "\e9c3";
+  display: block;
+}
+.ea-input-number_wrap .ea-input-number_inner:focus {
+  border-color: #dcdfe6;
+}
+.ea-input-number_wrap .ea-input-number_inner.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  color: #c0c4cc;
+  background-color: #f5f7fa;
+}
+.ea-input-number_wrap.focus {
+  border: 1px solid #409eff;
+}
+.ea-input-number_wrap.focus .ea-input-number_sign {
+  border-color: transparent;
+}
+.ea-input-number_wrap.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.ea-input-number_wrap.disabled .ea-input-number_sign,
+.ea-input-number_wrap.disabled .ea-input-number_inner {
+  color: #c0c4cc;
+  border-color: #dcdfe6;
+}
+.ea-input-number_wrap.ea-input-number--medium .ea-input-number_sign {
+  height: 1.75rem;
+  width: 1.75rem;
+}
+.ea-input-number_wrap.ea-input-number--medium .ea-input-number_inner {
+  height: 1.75rem;
+  line-height: 1.75rem;
+}
+.ea-input-number_wrap.ea-input-number--small .ea-input-number_sign {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+.ea-input-number_wrap.ea-input-number--small .ea-input-number_inner {
+  height: 1.5rem;
+  line-height: 1.5rem;
+}
+.ea-input-number_wrap.ea-input-number--mini .ea-input-number_sign {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+.ea-input-number_wrap.ea-input-number--mini .ea-input-number_inner {
+  height: 1.25rem;
+  line-height: 1.25rem;
+}
+`;

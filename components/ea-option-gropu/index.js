@@ -1,1 +1,57 @@
-import Base from"../Base.js";import"../ea-icon/index.js";const stylesheet="\n.ea-option-group_wrap .ea-option-group_title {\n  padding-left: 20px;\n  font-size: 12px;\n  color: #909399;\n  line-height: 30px;\n}\n";export class EaOptionGroup extends Base{#t;#e;constructor(){super();const t=this.attachShadow({mode:"open"});t.innerHTML="\n            <div class='ea-option-group_wrap' part='container'>\n                <div class='ea-option-group_title' part='title-wrap'></div>\n                <slot></slot>\n            </div>\n        ",this.#t=t.querySelector(".ea-option-group_wrap"),this.#e=t.querySelector(".ea-option-group_title"),this.build(t,stylesheet)}get label(){return this.getAttribute("label")||""}set label(t){this.setAttribute("label",t),this.#e.innerHTML=t}connectedCallback(){this.label=this.label}}customElements.get("ea-option-group")||customElements.define("ea-option-group",EaOptionGroup);
+// @ts-nocheck
+import Base from '../Base.js';
+import '../ea-icon/index.js'
+
+const stylesheet = `
+.ea-option-group_wrap .ea-option-group_title {
+  padding-left: 20px;
+  font-size: 12px;
+  color: #909399;
+  line-height: 30px;
+}
+`;
+
+export class EaOptionGroup extends Base {
+    #container;
+
+    #titleWrap;
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+
+        shadowRoot.innerHTML = `
+            <div class='ea-option-group_wrap' part='container'>
+                <div class='ea-option-group_title' part='title-wrap'></div>
+                <slot></slot>
+            </div>
+        `;
+
+        this.#container = shadowRoot.querySelector('.ea-option-group_wrap');
+        this.#titleWrap = shadowRoot.querySelector('.ea-option-group_title');
+
+        this.build(shadowRoot, stylesheet);
+    }
+
+    // ------- label 标题  -------
+    // #region
+    get label() {
+        return this.getAttribute('label') || '';
+    }
+
+    set label(val) {
+        this.setAttribute('label', val);
+
+        this.#titleWrap.innerHTML = val;
+    }
+    // #endregion
+    // ------- end -------
+
+    connectedCallback() {
+        this.label = this.label;
+    }
+}
+
+if (!customElements.get('ea-option-group')) {
+    customElements.define('ea-option-group', EaOptionGroup);
+}

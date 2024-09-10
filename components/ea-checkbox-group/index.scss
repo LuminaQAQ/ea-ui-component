@@ -1,0 +1,7 @@
+.ea-checkbox-group {
+  display: flex;
+
+  ::slotted(ea-checkbox) {
+    margin-right: 1.5rem;
+  }
+}

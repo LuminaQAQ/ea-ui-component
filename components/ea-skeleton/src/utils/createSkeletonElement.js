@@ -1,1 +1,7 @@
-export const createSkeletonElement=(e,t)=>{const n=document.createElement("ea-skeleton-item");return n.variant=e,n.animated=t,n};
+export const createSkeletonElement = (className, isAnimated) => {
+    const el = document.createElement('ea-skeleton-item');
+    el.variant = className;
+    el.animated = isAnimated;
+
+    return el;
+};

@@ -1,1 +1,70 @@
-export const stylesheet="\n.ea-tab_wrap {\n  --border-radius-top-left: 0;\n  --border-radius-top-right: 0;\n  --border-right-width: 0;\n  position: relative;\n  box-sizing: border-box;\n  padding: 0 1.25rem;\n  height: 40px;\n  line-height: 40px;\n  min-width: 1rem;\n  font-size: 14px;\n  font-weight: 500;\n  color: #303133;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  cursor: pointer;\n  transition: color 0.3s, background-color 0.3s, width 0.3s, min-width 0.3s;\n}\n.ea-tab_wrap:hover {\n  color: #409eff;\n}\n.ea-tab_wrap.ea-tab_wrap--normal.is-actived {\n  color: #409eff;\n}\n.ea-tab_wrap.ea-tabs_wrap--card {\n  border-bottom: 1px solid #e4e7ed;\n}\n.ea-tab_wrap.ea-tabs_wrap--card .ea-tabs_tab-bottom-bar {\n  height: 1px;\n  bottom: -1px;\n  background-color: white;\n}\n.ea-tab_wrap.ea-tab_wrap--card {\n  border-top-left-radius: var(--border-radius-top-left);\n  border-top-right-radius: var(--border-radius-top-right);\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-right-width: var(--border-right-width);\n}\n.ea-tab_wrap.ea-tab_wrap--card.is-actived {\n  border-bottom-color: white;\n  color: #409eff;\n}\n.ea-tab_wrap.ea-tab_wrap--border-card {\n  border-top-left-radius: var(--border-radius-top-left);\n  border-top-right-radius: var(--border-radius-top-right);\n  border: 0px solid rgba(0, 0, 0, 0.1);\n  border-right-width: var(--border-right-width);\n}\n.ea-tab_wrap.ea-tab_wrap--border-card.is-actived {\n  border-bottom-color: white;\n  color: #409eff;\n  background-color: white;\n}\n.ea-tab_wrap.ea-tab_wrap--editable .ea-tab_wrap--editable-sign {\n  display: block;\n  position: absolute;\n  right: 0;\n  top: 50%;\n  transform: translate(0, -50%);\n  user-select: none;\n  width: 0;\n  overflow: hidden;\n  transition: width 0.3s;\n}\n.ea-tab_wrap.ea-tab_wrap--editable:hover .ea-tab_wrap--editable-sign {\n  width: 14px;\n}\n";
+export const stylesheet = `
+.ea-tab_wrap {
+  --border-radius-top-left: 0;
+  --border-radius-top-right: 0;
+  --border-right-width: 0;
+  position: relative;
+  box-sizing: border-box;
+  padding: 0 1.25rem;
+  height: 40px;
+  line-height: 40px;
+  min-width: 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: #303133;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s, width 0.3s, min-width 0.3s;
+}
+.ea-tab_wrap:hover {
+  color: #409eff;
+}
+.ea-tab_wrap.ea-tab_wrap--normal.is-actived {
+  color: #409eff;
+}
+.ea-tab_wrap.ea-tabs_wrap--card {
+  border-bottom: 1px solid #e4e7ed;
+}
+.ea-tab_wrap.ea-tabs_wrap--card .ea-tabs_tab-bottom-bar {
+  height: 1px;
+  bottom: -1px;
+  background-color: white;
+}
+.ea-tab_wrap.ea-tab_wrap--card {
+  border-top-left-radius: var(--border-radius-top-left);
+  border-top-right-radius: var(--border-radius-top-right);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-right-width: var(--border-right-width);
+}
+.ea-tab_wrap.ea-tab_wrap--card.is-actived {
+  border-bottom-color: white;
+  color: #409eff;
+}
+.ea-tab_wrap.ea-tab_wrap--border-card {
+  border-top-left-radius: var(--border-radius-top-left);
+  border-top-right-radius: var(--border-radius-top-right);
+  border: 0px solid rgba(0, 0, 0, 0.1);
+  border-right-width: var(--border-right-width);
+}
+.ea-tab_wrap.ea-tab_wrap--border-card.is-actived {
+  border-bottom-color: white;
+  color: #409eff;
+  background-color: white;
+}
+.ea-tab_wrap.ea-tab_wrap--editable .ea-tab_wrap--editable-sign {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  user-select: none;
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s;
+}
+.ea-tab_wrap.ea-tab_wrap--editable:hover .ea-tab_wrap--editable-sign {
+  width: 14px;
+}
+`;

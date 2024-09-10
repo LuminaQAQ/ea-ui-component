@@ -1,1 +1,20 @@
-import{createElement}from"../../../../utils/createElement.js";const rateComm=e=>{const t=createElement("span","ea-rate_item");t.index=e,t.part="rate-item";const a=createElement("ea-icon");return a.icon="icon-star-empty",t.appendChild(a),t};export const initRateTempalte=e=>{for(let t=0;t<5;t++)e.appendChild(rateComm(t))};
+import { createElement } from "../../../../utils/createElement.js";
+
+const rateComm = (i) => {
+    const dom = createElement('span', 'ea-rate_item');
+    dom.index = i;
+    dom.part = 'rate-item';
+
+    const icon = createElement('ea-icon');
+    icon.icon = 'icon-star-empty';
+    dom.appendChild(icon);
+
+    return dom;
+}
+
+
+export const initRateTempalte = (container) => {
+    for (let i = 0; i < 5; i++) {
+        container.appendChild(rateComm(i));
+    }
+}

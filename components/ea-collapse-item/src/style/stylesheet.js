@@ -1,1 +1,33 @@
-export const stylesheet="\n.ea-collapse-item_wrap .ea-collapse-item_title {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  border-bottom: 1px solid #ebeef5;\n  height: 48px;\n  line-height: 48px;\n  font-size: 13px;\n  font-weight: 700;\n  color: #303133;\n  cursor: pointer;\n}\n.ea-collapse-item_wrap .ea-collapse-item_title .ea-collapse-item_title-icon {\n  width: 0.35rem;\n  height: 0.35rem;\n  margin-right: 1rem;\n  border: 3px solid #9ca0a5;\n  border-left-color: transparent;\n  border-top-color: transparent;\n  rotate: -45deg;\n  transition: rotate 0.3s;\n}\n.ea-collapse-item_wrap .ea-collapse-item_content {\n  will-change: height;\n  overflow: hidden;\n  height: 0;\n  padding-bottom: 0;\n  transition: height 0.3s, padding-bottom 0.3s;\n  font-size: 13px;\n  color: #303133;\n}\n";
+export const stylesheet = `
+.ea-collapse-item_wrap .ea-collapse-item_title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ebeef5;
+  height: 48px;
+  line-height: 48px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #303133;
+  cursor: pointer;
+}
+.ea-collapse-item_wrap .ea-collapse-item_title .ea-collapse-item_title-icon {
+  width: 0.35rem;
+  height: 0.35rem;
+  margin-right: 1rem;
+  border: 3px solid #9ca0a5;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  rotate: -45deg;
+  transition: rotate 0.3s;
+}
+.ea-collapse-item_wrap .ea-collapse-item_content {
+  will-change: height;
+  overflow: hidden;
+  height: 0;
+  padding-bottom: 0;
+  transition: height 0.3s, padding-bottom 0.3s;
+  font-size: 13px;
+  color: #303133;
+}
+`;

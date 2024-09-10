@@ -1,1 +1,22 @@
-export const stylesheet="\n:host {\n  --odd-bgc: #99a9bf;\n}\n\n.ea-carousel-item_wrap {\n  display: inline-block;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n  z-index: 0;\n  background-color: var(--odd-bgc);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.ea-carousel-item_wrap ::slotted(img) {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n}\n";
+export const stylesheet = `
+:host {
+  --odd-bgc: #99a9bf;
+}
+
+.ea-carousel-item_wrap {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  background-color: var(--odd-bgc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ea-carousel-item_wrap ::slotted(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+`;

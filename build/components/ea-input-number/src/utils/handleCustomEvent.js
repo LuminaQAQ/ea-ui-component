@@ -1,0 +1,1 @@
+export function handleCustomEvent(t,e){this.dispatchEvent(new CustomEvent(t,{detail:e}))}

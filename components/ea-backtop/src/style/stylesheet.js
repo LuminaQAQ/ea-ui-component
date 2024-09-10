@@ -1,1 +1,21 @@
-export const stylesheet="\n.ea-backtop_wrap {\n  position: fixed;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 40px;\n  height: 40px;\n  right: 40px;\n  bottom: 40px;\n  cursor: pointer;\n  background-color: #fff;\n  border-radius: 50%;\n  color: #409eff;\n  font-size: 14px;\n  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);\n  opacity: 1;\n  z-index: 5;\n  transition: opacity 0.3s ease-in-out;\n}\n";
+export const stylesheet = `
+.ea-backtop_wrap {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  right: 40px;
+  bottom: 40px;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 50%;
+  color: #409eff;
+  font-size: 14px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+  opacity: 1;
+  z-index: 5;
+  transition: opacity 0.3s ease-in-out;
+}
+`;

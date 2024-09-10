@@ -1,1 +1,30 @@
-export const createElement=(e,t,n)=>{const r=document.createElement(e||"div");return r.className=t||"",n&&(Array.isArray(n)?n.forEach((e=>{r.appendChild(e)})):r.appendChild(n)),r};export const createSlotElement=e=>{const t=document.createElement("slot");return e&&(t.name=e),t};
+/**
+ * 创建元素
+ * @param {String} tagName 
+ * @param {String} className 
+ * @param {HTMLElement} children 
+ * @returns {HTMLElement}
+ */
+export const createElement = (tagName, className, children) => {
+    const element = document.createElement(tagName || 'div');
+    element.className = className || '';
+
+    if (children) {
+        if (Array.isArray(children)) {
+            children.forEach(child => {
+                element.appendChild(child);
+            });
+        } else {
+            element.appendChild(children);
+        }
+    }
+
+    return element;
+};
+
+export const createSlotElement = (name) => {
+    const slot = document.createElement('slot');
+    if (name) slot.name = name;
+
+    return slot;
+};

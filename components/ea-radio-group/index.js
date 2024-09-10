@@ -1,1 +1,96 @@
-import{timeout}from"../../utils/timeout.js";import Base from"../Base.js";const stylesheet="\n.ea-radio-group_wrap {\n  display: flex;\n}\n";export class EaRadioGroup extends Base{constructor(){super();const e=this.attachShadow({mode:"open"});e.innerHTML='\n            <div class="ea-radio-group_wrap" part="container">\n                <slot></slot>\n            </div>\n        ',this.build(e,stylesheet)}get name(){return this.getAttribute("name")}set name(e){this.setAttribute("name",e),this.querySelectorAll("ea-radio").forEach((t=>{t.setAttribute("name",e)}))}get value(){return this.getAttribute("value")||""}set value(e){e&&this.setAttribute("value",e)}#e(e){e.forEach((e=>{e.checked&&(this.value=e.value),e.addEventListener("change",(t=>{this.value=e.value,this.dispatchEvent(new CustomEvent("change",{bubbles:!0,composed:!0,detail:{target:e,value:this.value}}))}))}))}#t(e){const t=Array.from(e).find((e=>e.value===this.value));t&&(t.checked=!0)}connectedCallback(){this.setAttribute("data-ea-component",!0),this.name=this.name,this.value=this.value,timeout((()=>{const e=this.querySelectorAll("ea-radio");this.#e(e),this.#t(e)}),20)}}window.customElements.get("ea-radio-group")||window.customElements.define("ea-radio-group",EaRadioGroup);
+// @ts-nocheck
+import { timeout } from "../../utils/timeout.js";
+import Base from "../Base.js";
+
+const stylesheet = `
+.ea-radio-group_wrap {
+  display: flex;
+}
+`;
+
+export class EaRadioGroup extends Base {
+
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <div class="ea-radio-group_wrap" part="container">
+                <slot></slot>
+            </div>
+        `;
+        this.build(shadowRoot, stylesheet);
+    }
+
+    // ------- name 唯一键值 -------
+    // #region
+    get name() {
+        return this.getAttribute('name');
+    }
+
+    set name(val) {
+        this.setAttribute("name", val);
+        this.querySelectorAll('ea-radio').forEach(radio => {
+            radio.setAttribute('name', val);
+        });
+    }
+    // #endregion
+    // ------- end -------
+
+    // ------- value 值 -------
+    // #region
+    get value() {
+        return this.getAttribute('value') || '';
+    }
+
+    set value(val) {
+        if (!val) return;
+
+        this.setAttribute("value", val);
+    }
+    // #endregion
+    // ------- end -------
+
+    #initValue(radios) {
+        radios.forEach(radio => {
+            if (radio.checked) this.value = radio.value;
+
+            radio.addEventListener('change', e => {
+                this.value = radio.value;
+
+                this.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        target: radio,
+                        value: this.value
+                    }
+                }));
+            });
+        });
+    }
+
+    #initRadioChecked(radios) {
+        const valueRadio = Array.from(radios).find(radio => radio.value === this.value);
+        if (valueRadio) valueRadio.checked = true;
+    }
+
+    connectedCallback() {
+        this.setAttribute("data-ea-component", true);
+
+        // name 唯一键值
+        this.name = this.name;
+
+        this.value = this.value;
+
+        timeout(() => {
+            const radios = this.querySelectorAll('ea-radio');
+            this.#initValue(radios);
+            this.#initRadioChecked(radios);
+        }, 20);
+    }
+}
+
+if (!window.customElements.get("ea-radio-group")) {
+    window.customElements.define("ea-radio-group", EaRadioGroup);
+}

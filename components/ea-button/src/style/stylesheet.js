@@ -1,1 +1,208 @@
-export const stylesheet="\n:host {\n  --border-radius: 6px;\n}\n\n.ea-button {\n  box-sizing: border-box;\n  padding: 0.5rem;\n  border-radius: var(--border-radius);\n  cursor: pointer;\n  font-size: 1rem;\n  line-height: 1.25;\n  font-weight: 500;\n  transition: background-color 0.1s, color 0.1s;\n  text-decoration: none;\n  will-change: width;\n}\n.ea-button.normal {\n  border: 1px solid #dcdfe6;\n  color: #606266;\n  background-color: transparent;\n}\n.ea-button.normal.disabled {\n  background-color: rgba(64, 64, 64, 0) !important;\n  border-color: white !important;\n  color: white !important;\n  pointer-events: none;\n  border-color: #ebedf1 !important;\n  color: #babcbe !important;\n}\n.ea-button.normal.plain {\n  background-color: rgba(92, 92, 92, 0);\n  border-color: white;\n  color: transparent;\n  background-color: transparent;\n  color: #606266;\n  border-color: #dcdfe6;\n}\n.ea-button.normal.plain:hover {\n  background-color: transparent;\n}\n.ea-button.normal:hover {\n  border-color: rgba(160, 207, 255, 0.4);\n  color: #3a9bff;\n  background-color: rgba(160, 207, 255, 0.05);\n}\n.ea-button.normal:active {\n  background-color: rgba(7, 130, 255, 0.05);\n}\n.ea-button.primary {\n  border: 1px solid #409eff;\n  color: #fff;\n  background-color: #409eff;\n}\n.ea-button.primary.disabled {\n  background-color: #c0dfff !important;\n  border-color: #c0dfff !important;\n  color: white !important;\n  pointer-events: none;\n}\n.ea-button.primary.plain {\n  background-color: #f8fbff;\n  border-color: #c0dfff;\n  color: #409eff;\n}\n.ea-button.primary:hover {\n  border-color: #73b8ff;\n  color: white;\n  background-color: #73b8ff;\n}\n.ea-button.primary:active {\n  background-color: #006bd9;\n}\n.ea-button.success {\n  border: 1px solid #67c23a;\n  color: #fff;\n  background-color: #67c23a;\n}\n.ea-button.success.disabled {\n  background-color: #b2e19b !important;\n  border-color: #b2e19b !important;\n  color: white !important;\n  pointer-events: none;\n}\n.ea-button.success.plain {\n  background-color: #d3eec6;\n  border-color: #b2e19b;\n  color: #67c23a;\n}\n.ea-button.success:hover {\n  border-color: #85cf60;\n  color: white;\n  background-color: #85cf60;\n}\n.ea-button.success:active {\n  background-color: #3d7323;\n}\n.ea-button.info {\n  border: 1px solid #909399;\n  color: #fff;\n  background-color: #909399;\n}\n.ea-button.info.disabled {\n  background-color: #d2d4d6 !important;\n  border-color: #d2d4d6 !important;\n  color: white !important;\n  pointer-events: none;\n}\n.ea-button.info.plain {\n  background-color: #f0f0f1;\n  border-color: #d2d4d6;\n  color: #909399;\n}\n.ea-button.info:hover {\n  border-color: #abadb1;\n  color: white;\n  background-color: #abadb1;\n}\n.ea-button.info:active {\n  background-color: #5d6066;\n}\n.ea-button.warning {\n  border: 1px solid #e6a23c;\n  color: #fff;\n  background-color: #e6a23c;\n}\n.ea-button.warning.disabled {\n  background-color: #f4d8ad !important;\n  border-color: #f4d8ad !important;\n  color: white !important;\n  pointer-events: none;\n}\n.ea-button.warning.plain {\n  background-color: #fbf0df;\n  border-color: #f4d8ad;\n  color: #e6a23c;\n}\n.ea-button.warning:hover {\n  border-color: #ecb869;\n  color: white;\n  background-color: #ecb869;\n}\n.ea-button.warning:active {\n  background-color: #a76d15;\n}\n.ea-button.danger {\n  border: 1px solid #f56c6c;\n  color: #fff;\n  background-color: #f56c6c;\n}\n.ea-button.danger.disabled {\n  background-color: #fde3e3 !important;\n  border-color: #fde3e3 !important;\n  color: white !important;\n  pointer-events: none;\n}\n.ea-button.danger.plain {\n  background-color: white;\n  border-color: #fde3e3;\n  color: #f56c6c;\n  background-color: #fde8e8;\n}\n.ea-button.danger:hover {\n  border-color: #f89c9c;\n  color: white;\n  background-color: #f89c9c;\n}\n.ea-button.danger:active {\n  background-color: #eb1010;\n}\n.ea-button.text {\n  border: 1px solid transparent;\n  color: #409eff;\n  background-color: transparent;\n}\n.ea-button.text.disabled {\n  background-color: rgba(64, 64, 64, 0) !important;\n  border-color: rgba(64, 64, 64, 0) !important;\n  color: white !important;\n  pointer-events: none;\n  color: #c0c4cc !important;\n}\n.ea-button.text.plain {\n  background-color: rgba(92, 92, 92, 0);\n  border-color: rgba(64, 64, 64, 0);\n  color: transparent;\n}\n.ea-button.text:hover {\n  border-color: rgba(26, 26, 26, 0);\n  color: #73b8ff;\n  background-color: rgba(26, 26, 26, 0);\n}\n.ea-button.text:active {\n  background-color: rgba(0, 0, 0, 0);\n}\n.ea-button.round {\n  border-radius: 999px;\n}\n.ea-button.medium {\n  font-size: 14px;\n}\n.ea-button.small {\n  font-size: 12px;\n}\n.ea-button.mini {\n  font-size: 10px;\n}\n";
+export const stylesheet = `
+:host {
+  --border-radius: 6px;
+}
+
+.ea-button {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1.25;
+  font-weight: 500;
+  transition: background-color 0.1s, color 0.1s;
+  text-decoration: none;
+  will-change: width;
+}
+.ea-button.normal {
+  border: 1px solid #dcdfe6;
+  color: #606266;
+  background-color: transparent;
+}
+.ea-button.normal.disabled {
+  background-color: rgba(64, 64, 64, 0) !important;
+  border-color: white !important;
+  color: white !important;
+  pointer-events: none;
+  border-color: #ebedf1 !important;
+  color: #babcbe !important;
+}
+.ea-button.normal.plain {
+  background-color: rgba(92, 92, 92, 0);
+  border-color: white;
+  color: transparent;
+  background-color: transparent;
+  color: #606266;
+  border-color: #dcdfe6;
+}
+.ea-button.normal.plain:hover {
+  background-color: transparent;
+}
+.ea-button.normal:hover {
+  border-color: rgba(160, 207, 255, 0.4);
+  color: #3a9bff;
+  background-color: rgba(160, 207, 255, 0.05);
+}
+.ea-button.normal:active {
+  background-color: rgba(7, 130, 255, 0.05);
+}
+.ea-button.primary {
+  border: 1px solid #409eff;
+  color: #fff;
+  background-color: #409eff;
+}
+.ea-button.primary.disabled {
+  background-color: #c0dfff !important;
+  border-color: #c0dfff !important;
+  color: white !important;
+  pointer-events: none;
+}
+.ea-button.primary.plain {
+  background-color: #f8fbff;
+  border-color: #c0dfff;
+  color: #409eff;
+}
+.ea-button.primary:hover {
+  border-color: #73b8ff;
+  color: white;
+  background-color: #73b8ff;
+}
+.ea-button.primary:active {
+  background-color: #006bd9;
+}
+.ea-button.success {
+  border: 1px solid #67c23a;
+  color: #fff;
+  background-color: #67c23a;
+}
+.ea-button.success.disabled {
+  background-color: #b2e19b !important;
+  border-color: #b2e19b !important;
+  color: white !important;
+  pointer-events: none;
+}
+.ea-button.success.plain {
+  background-color: #d3eec6;
+  border-color: #b2e19b;
+  color: #67c23a;
+}
+.ea-button.success:hover {
+  border-color: #85cf60;
+  color: white;
+  background-color: #85cf60;
+}
+.ea-button.success:active {
+  background-color: #3d7323;
+}
+.ea-button.info {
+  border: 1px solid #909399;
+  color: #fff;
+  background-color: #909399;
+}
+.ea-button.info.disabled {
+  background-color: #d2d4d6 !important;
+  border-color: #d2d4d6 !important;
+  color: white !important;
+  pointer-events: none;
+}
+.ea-button.info.plain {
+  background-color: #f0f0f1;
+  border-color: #d2d4d6;
+  color: #909399;
+}
+.ea-button.info:hover {
+  border-color: #abadb1;
+  color: white;
+  background-color: #abadb1;
+}
+.ea-button.info:active {
+  background-color: #5d6066;
+}
+.ea-button.warning {
+  border: 1px solid #e6a23c;
+  color: #fff;
+  background-color: #e6a23c;
+}
+.ea-button.warning.disabled {
+  background-color: #f4d8ad !important;
+  border-color: #f4d8ad !important;
+  color: white !important;
+  pointer-events: none;
+}
+.ea-button.warning.plain {
+  background-color: #fbf0df;
+  border-color: #f4d8ad;
+  color: #e6a23c;
+}
+.ea-button.warning:hover {
+  border-color: #ecb869;
+  color: white;
+  background-color: #ecb869;
+}
+.ea-button.warning:active {
+  background-color: #a76d15;
+}
+.ea-button.danger {
+  border: 1px solid #f56c6c;
+  color: #fff;
+  background-color: #f56c6c;
+}
+.ea-button.danger.disabled {
+  background-color: #fde3e3 !important;
+  border-color: #fde3e3 !important;
+  color: white !important;
+  pointer-events: none;
+}
+.ea-button.danger.plain {
+  background-color: white;
+  border-color: #fde3e3;
+  color: #f56c6c;
+  background-color: #fde8e8;
+}
+.ea-button.danger:hover {
+  border-color: #f89c9c;
+  color: white;
+  background-color: #f89c9c;
+}
+.ea-button.danger:active {
+  background-color: #eb1010;
+}
+.ea-button.text {
+  border: 1px solid transparent;
+  color: #409eff;
+  background-color: transparent;
+}
+.ea-button.text.disabled {
+  background-color: rgba(64, 64, 64, 0) !important;
+  border-color: rgba(64, 64, 64, 0) !important;
+  color: white !important;
+  pointer-events: none;
+  color: #c0c4cc !important;
+}
+.ea-button.text.plain {
+  background-color: rgba(92, 92, 92, 0);
+  border-color: rgba(64, 64, 64, 0);
+  color: transparent;
+}
+.ea-button.text:hover {
+  border-color: rgba(26, 26, 26, 0);
+  color: #73b8ff;
+  background-color: rgba(26, 26, 26, 0);
+}
+.ea-button.text:active {
+  background-color: rgba(0, 0, 0, 0);
+}
+.ea-button.round {
+  border-radius: 999px;
+}
+.ea-button.medium {
+  font-size: 14px;
+}
+.ea-button.small {
+  font-size: 12px;
+}
+.ea-button.mini {
+  font-size: 10px;
+}
+`;

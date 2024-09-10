@@ -1,1 +1,9 @@
-export function handleIndexOverflow(e,n){return n<0?n=e:n>e&&(n=0),n}
+export function handleIndexOverflow(length, val) {
+    if (val < 0) {
+        val = length;
+    } else if (val > length) {
+        val = 0;
+    }
+    
+    return val;
+}

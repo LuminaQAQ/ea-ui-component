@@ -1,1 +1,44 @@
-export const stylesheet="\n.ea-menu-item-group_wrap {\n  --normal-bgc: #fff;\n  --normal-text-color: #303133;\n  --actived-text-color: #409eff;\n  --actived-bgc: #fff;\n  width: 100%;\n}\n.ea-menu-item-group_wrap.is-actived .ea-submenu_title_wrap {\n  color: var(--actived-text-color);\n  border-color: var(--actived-text-color);\n}\n.ea-menu-item-group_wrap .ea-submenu_title_wrap {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  box-sizing: border-box;\n  padding: 0 20px;\n  border-bottom: 2px solid;\n  border-color: transparent;\n  height: 60px;\n  line-height: 60px;\n  font-size: 14px;\n  color: var(--normal-text-color);\n  background-color: var(--normal-bgc);\n  white-space: nowrap;\n  cursor: pointer;\n  transition: border-color 0.3s, background-color 0.3s, color 0.3s;\n}\n.ea-menu-item-group_wrap .ea-submenu_items_wrap {\n  margin: 0 20px;\n  height: 0;\n  overflow: hidden;\n  transition: height 0.3s;\n}\n.ea-menu-item-group_wrap .ea-submenu_dropdown_icon {\n  transform: rotate(-90deg);\n  transition: transform 0.3s;\n}\n.ea-menu-item-group_wrap.is-open .ea-submenu_dropdown_icon {\n  transform: rotate(0deg);\n}\n";
+export const stylesheet = `
+.ea-menu-item-group_wrap {
+  --normal-bgc: #fff;
+  --normal-text-color: #303133;
+  --actived-text-color: #409eff;
+  --actived-bgc: #fff;
+  width: 100%;
+}
+.ea-menu-item-group_wrap.is-actived .ea-submenu_title_wrap {
+  color: var(--actived-text-color);
+  border-color: var(--actived-text-color);
+}
+.ea-menu-item-group_wrap .ea-submenu_title_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  border-bottom: 2px solid;
+  border-color: transparent;
+  height: 60px;
+  line-height: 60px;
+  font-size: 14px;
+  color: var(--normal-text-color);
+  background-color: var(--normal-bgc);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+}
+.ea-menu-item-group_wrap .ea-submenu_items_wrap {
+  margin: 0 20px;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s;
+}
+.ea-menu-item-group_wrap .ea-submenu_dropdown_icon {
+  transform: rotate(-90deg);
+  transition: transform 0.3s;
+}
+.ea-menu-item-group_wrap.is-open .ea-submenu_dropdown_icon {
+  transform: rotate(0deg);
+}
+`;

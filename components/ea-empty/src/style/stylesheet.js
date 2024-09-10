@@ -1,1 +1,24 @@
-export const stylesheet="\n.ea-empty_wrap {\n  padding: 40px 0;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n}\n.ea-empty_wrap .ea-empty_image {\n  width: 8rem;\n  object-fit: cover;\n}\n.ea-empty_wrap .ea-empty_image svg,\n.ea-empty_wrap .ea-empty_image img {\n  width: 100%;\n  height: 100%;\n}\n.ea-empty_wrap .ea-empty_description {\n  margin-top: 20px;\n}\n.ea-empty_wrap .ea-empty_bottom {\n  margin-top: 20px;\n}\n";
+export const stylesheet = `
+.ea-empty_wrap {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.ea-empty_wrap .ea-empty_image {
+  width: 8rem;
+  object-fit: cover;
+}
+.ea-empty_wrap .ea-empty_image svg,
+.ea-empty_wrap .ea-empty_image img {
+  width: 100%;
+  height: 100%;
+}
+.ea-empty_wrap .ea-empty_description {
+  margin-top: 20px;
+}
+.ea-empty_wrap .ea-empty_bottom {
+  margin-top: 20px;
+}
+`;

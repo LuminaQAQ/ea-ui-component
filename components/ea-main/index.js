@@ -1,1 +1,32 @@
-import Base from"../Base.js";import"../ea-icon/index.js";const stylesheet="\n.ea-main_wrap {\n  width: 100%;\n  height: 100%;\n  box-sizing: border-box;\n  padding: 0 20px;\n  overflow: auto;\n  color: #333;\n}\n";export class EaMain extends Base{constructor(){super();const n=this.attachShadow({mode:"open"});n.innerHTML='\n            <main class="ea-main_wrap" part="container">\n                <slot></slot>\n            </main>\n        ',this.build(n,stylesheet)}}customElements.get("ea-main")||customElements.define("ea-main",EaMain);
+import Base from '../Base.js';
+import '../ea-icon/index.js'
+
+const stylesheet = `
+.ea-main_wrap {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  overflow: auto;
+  color: #333;
+}
+`;
+
+export class EaMain extends Base {
+    constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({ mode: 'open' });
+        shadowRoot.innerHTML = `
+            <main class="ea-main_wrap" part="container">
+                <slot></slot>
+            </main>
+        `;
+
+        this.build(shadowRoot, stylesheet);
+    }
+}
+
+if (!customElements.get('ea-main')) {
+    customElements.define('ea-main', EaMain);
+}
