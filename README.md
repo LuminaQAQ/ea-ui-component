@@ -119,7 +119,7 @@
       min-height: 10rem;
     }
     ```
-  - [ ] TimeLine 时间线, 如果有切换正逆序, 最佳实践是设置最小高度
+  - [x] TimeLine 时间线, 如果有切换正逆序, 最佳实践是设置最小高度
 
     ```css
     ea-timeline::part(container) {
