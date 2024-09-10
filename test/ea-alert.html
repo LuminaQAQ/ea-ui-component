@@ -17,6 +17,8 @@
 <body>
 
     <script type='module'>
+        import { setConfig } from "../components/globalConfig.js"
+        setConfig({ fontelloCSS: new URL('../components/ea-icon/index.css', import.meta.url).href })
         import '../components/ea-alert/index.js'
     </script>
 
