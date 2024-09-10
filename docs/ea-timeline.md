@@ -2,7 +2,10 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../index.js')
+    import('../components/ea-timeline/index.js')
+    import('../components/ea-radio-group/index.js')
+    import('../components/ea-radio/index.js')
+
     import('./index.scss')
 
     const add = document.querySelector('.add');
@@ -26,6 +29,12 @@ onMounted(() => {
 })
 </script>
 
+<style>
+ea-timeline::part(container) {
+  min-height: 15rem;
+}
+</style>
+
 # Timeline 时间线
 
 可视化地呈现时间流信息。
@@ -39,6 +48,34 @@ onMounted(() => {
   import "./node_modules/easy-component-ui/components/ea-timeline/index.js";
 </script>
 ```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#timeline-css-part)。
+
+::: tip
+如果包含切换正逆序, 最佳实践是设置最小高度
+
+```css
+ea-timeline::part(container) {
+  min-height: 15rem;
+}
+```
+
+:::
 
 ## 基础用法
 
@@ -61,12 +98,11 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
     </ea-timeline>
 </div>
 
-```html
-<script type="module">
-  import "./node_modules/easy-component-ui/components/ea-radio/index.js";
-  import "./node_modules/easy-component-ui/components/ea-radio-group/index.js";
-</script>
+::: details 查看代码
 
+`html`
+
+```html
 <div class="demo">
   <ea-radio-group name="sort">
     <span style="margin-right: 1rem;">排序：</span>
@@ -83,6 +119,8 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
   </ea-timeline>
 </div>
 ```
+
+`js`
 
 ```js
 // 获取页面上用于添加事件的按钮
@@ -117,9 +155,11 @@ positiveRadio.addEventListener("change", () => {
 });
 ```
 
+:::
+
 ## ⾃定义节点样式
 
-可根据实际场景⾃定义节点尺⼨、颜⾊。
+可根据实际场景⾃定义节点尺⼨`size`, 节点类型`type`。
 
 <div class="demo">
     <ea-timeline>
@@ -130,6 +170,8 @@ positiveRadio.addEventListener("change", () => {
         <ea-timeline-item type="danger" size="large" color="black" time="2024-7-5">该组件库已无法访问</ea-timeline-item>
     </ea-timeline>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -153,9 +195,11 @@ positiveRadio.addEventListener("change", () => {
 </div>
 ```
 
+:::
+
 ## ⾃定义时间戳
 
-当内容在垂直⽅向上过⾼时，可将时间戳置于内容之上。
+当内容在垂直⽅向上过⾼时，可将时间戳置于内容之上。设置 `placement` 属性为 `top` 即可。
 
 <div class="demo">
     <ea-timeline>
@@ -176,6 +220,8 @@ positiveRadio.addEventListener("change", () => {
         </ea-timeline-item>
     </ea-timeline>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -204,6 +250,8 @@ positiveRadio.addEventListener("change", () => {
 </div>
 ```
 
+:::
+
 ## Timeline Attributes
 
 | 参数    | 说明 | 类型    | 可选值 | 默认值 |
@@ -219,6 +267,28 @@ positiveRadio.addEventListener("change", () => {
 | type      | 类型 | string | primary/success<br/>/warning/danger/info | info   |
 | size      | 大小 | string | large                                    | normal |
 | color     | 颜色 | string | -                                        | -      |
+
+## Timeline CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 外层容器 |
+| list-wrap | 列表容器 |
+
+## TimelineItem CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称      | 说明                                                         |
+| --------- | ------------------------------------------------------------ |
+| container | 外层容器                                                     |
+| circle    | 圆点                                                         |
+| tail      | 线条                                                         |
+| body      | 单个时间线的内容容器(包含 `content` 和 `timestamp` 元素节点) |
+| content   | 单个时间线的内容                                             |
+| timestamp | 时间戳                                                       |
 
 ## TimelineItem Slots
 
