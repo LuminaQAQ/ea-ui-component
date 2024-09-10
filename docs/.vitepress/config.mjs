@@ -8,9 +8,7 @@ export default defineConfig({
 
   head: [
     ['link', { rel: 'icon', href: '/ea-ui-component/favicon.ico' }],
-    ['link', { rel: 'stylesheet', href: '/ea-ui-component/ea-icon/css/animation.css' }],
     ['link', { rel: 'stylesheet', href: '/ea-ui-component/ea-icon/css/fontello.css' }],
-    // ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/animation.min.css' }],
     // ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/fontello.min.css' }],
   ],
 
@@ -35,8 +33,10 @@ export default defineConfig({
       {
         text: '开发指南',
         items: [
-          { text: '安装', link: '/install' },
-          { text: '快速上手', link: '/example' }
+          { text: '安装', link: '/guide/install' },
+          { text: '快速上手', link: '/guide/example' },
+          { text: '如何改变图标链接？', link: '/guide/customIconFontHref' },
+          { text: '如何处理图标丢失的问题？', link: '/guide/HowDoIDealWithIconLoss' },
         ]
       },
       {

@@ -2,10 +2,16 @@
 import {onMounted} from "vue"
 import configs from "../components/ea-icon/config.json"
 
+import { setConfig } from "../components/globalConfig.js"
+
 onMounted(() => {
     import("./index.scss")
     import("../components/ea-icon/index.js")
     import("../components/ea-icon/index.css")
+
+    // document.addEventListener('ea-icon-ready', () => {
+    //   setConfig({ fontelloCSS: new URL('../components/ea-icon/css/fontello.css', import.meta.url).href })
+    // })
 })
 </script>
 
@@ -22,6 +28,10 @@ onMounted(() => {
   import "./node_modules/easy-component-ui/components/ea-icon/index.js";
 </script>
 ```
+
+## 如何自定义图标文件链接？
+
+[详情参考这篇文档](./guide/customIconFontHref.md)
 
 ## 使用方法
 
@@ -44,11 +54,11 @@ onMounted(() => {
 
 <div class="main-icon-wrap">
     <section>
-        <i class="icon-spin6 animate-spin" size="19"></i>
+        <ea-icon icon="icon-spin6 animate-spin" size="19"></ea-icon>
         <span>icon-spin6 animate-spin</span>
     </section>
     <section v-for="(item, index) in configs.glyphs">
-        <i :class="'icon-' + item.css"></i>
+        <ea-icon :icon="'icon-' + item.css" size="32"></ea-icon>
         <span>icon-{{item.css}}</span>
     </section>
 </div>
