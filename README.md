@@ -10,13 +10,24 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
     <img src="./public/logo.png">
 </p>
 
-## 框架进度(暂时是 1.0, 组件不多)
+## 框架进度
 
 - 基础组件
 
   - [x] Icon 图标
   - [x] Button 按钮
   - [x] Link 文字链接
+
+- Navigation
+
+  - [x] NavMenu 导航菜单
+  - [x] Tabs 标签页
+  - [x] Breadcrumb 面包屑
+  - [x] Tabs 标签页
+  - [x] PageHeader 页头
+  - [x] Dropdown 下拉菜单
+  - [x] Steps 步骤条
+  - [x] Drawer 抽屉
 
 - 表单组件
 
@@ -27,6 +38,11 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] InputNumber 计数器
   - [x] Switch 开关
   - [x] Rate 评分
+  - [x] Select 选择框
+  - [x] TimePicker 时间选择器
+  - [x] DatePicker 日期选择器
+  - [ ] Upload 上传
+  - [x] Form 表单
 
 - Data
 
@@ -39,6 +55,9 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Empty 空状态
   - [x] Descriptions 描述列表
   - [x] Result 结果
+  - [x] Table 表格
+  - [ ] Tree 树形控件
+  - [ ] Statistic 统计数字
 
 - Notice
 
@@ -57,38 +76,57 @@ Easy-ui 是一个轻量级的 UI 框架，基于 `Web Components` 构建。[文�
   - [x] Calendar 日历
   - [x] Image 图片
   - [x] InfiniteScroll 无限滚动
-
-## 下面是 2.0 的计划
-
-- 表单组件
-
-  - [x] Select 选择框
-  - [x] TimePicker 时间选择器
-  - [x] DatePicker 日期选择器
-  - [ ] Upload 上传
-  - [x] Form 表单
-
-- Data
-
-  - [x] Table 表格
-  - [ ] Tree 树形控件
-  - [ ] Statistic 统计数字
-
-- Navigation
-
-  - [x] NavMenu 导航菜单
-  - [x] Tabs 标签页
-  - [x] Breadcrumb 面包屑
-  - [x] Tabs 标签页
-  - [x] PageHeader 页头
-  - [x] Dropdown 下拉菜单
-  - [x] Steps 步骤条
-  - [x] Drawer 抽屉
-
-- Others
-
   - [ ] Popconfirm 气泡确认框
   - [ ] Dialog 对话框
   - [ ] Tooltip 文字提示
   - [ ] Popover 弹出框
   - [ ] Divider 分割线
+
+## 未来计划
+
+- [ ] 完成剩余组件（一些是自我水平不够，没信心动手；一部分是没实习和就业过，不知道有什么场景会用，所以暂时不做。）
+- [ ] 对主流框架进行全方位适配。
+- [ ] Descriptions 描述列表, span 值设置超过表格总 span 会导致元素消失
+- [ ] Table 表格, 复杂场景下可能会出现错位。
+- [ ] NavMenu 导航菜单, 在 `vue` 框架下不够灵活。可能需要以下代码
+
+  ```vue
+  <script setup>
+  import { defineComponent, onMounted, ref, watch } from "vue";
+  import { RouterLink, useRoute } from "vue-router";
+  import "easy-component-ui/components/ea-menu-item/index.js";
+
+  const props = defineProps({ to: String });
+  const route = useRoute();
+
+  defineComponent({
+    name: "MyRoute",
+  });
+
+  const navActive = {
+    activeRoute: ref(route.path) || "",
+  };
+
+  watch(route, (newVal) => {
+    navActive.activeRoute.value = newVal.path;
+  });
+  </script>
+
+  <template>
+    <ea-menu-item class="rl-item" :actived="navActive.activeRoute.value === to">
+      <RouterLink :to="to" activeClass="active">
+        <slot></slot>
+      </RouterLink>
+    </ea-menu-item>
+  </template>
+  ```
+
+- [ ] Icon 图标, 可以在 `main.js` 中设置全局配置。无需像文档内在组件引入处设置。
+
+  ```js
+  window.addEventListener("DOMContentLoaded", () => {
+    setConfig({
+      fontelloCSS: new URL("/ea-icon/css/fontello.css", import.meta.url).href,
+    });
+  });
+  ```
