@@ -2,20 +2,227 @@
   "name": "easy-component-ui",
   "version": "1.0.3",
   "description": "Easy-ui, 基于 Web Components 的 UI 组件库",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest"
-  },
   "keywords": [],
   "author": "Lumina <https://github.com/LuminaQAQ>",
   "license": "ISC",
+  "main": "src/components/index.js",
+  "module": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./ea-alert": {
+      "import": "./dist/ea-alert.js"
+    },
+    "./ea-aside": {
+      "import": "./dist/ea-aside.js"
+    },
+    "./ea-avatar": {
+      "import": "./dist/ea-avatar.js"
+    },
+    "./ea-backtop": {
+      "import": "./dist/ea-backtop.js"
+    },
+    "./ea-badge": {
+      "import": "./dist/ea-badge.js"
+    },
+    "./ea-breadcrumb": {
+      "import": "./dist/ea-breadcrumb.js"
+    },
+    "./ea-breadcrumb-item": {
+      "import": "./dist/ea-breadcrumb-item.js"
+    },
+    "./ea-button": {
+      "import": "./dist/ea-button.js"
+    },
+    "./ea-button-group": {
+      "import": "./dist/ea-button-group.js"
+    },
+    "./ea-calendar": {
+      "import": "./dist/ea-calendar.js"
+    },
+    "./ea-card": {
+      "import": "./dist/ea-card.js"
+    },
+    "./ea-carousel": {
+      "import": "./dist/ea-carousel.js"
+    },
+    "./ea-carousel-item": {
+      "import": "./dist/ea-carousel-item.js"
+    },
+    "./ea-checkbox": {
+      "import": "./dist/ea-checkbox.js"
+    },
+    "./ea-checkbox-group": {
+      "import": "./dist/ea-checkbox-group.js"
+    },
+    "./ea-collapse": {
+      "import": "./dist/ea-collapse.js"
+    },
+    "./ea-collapse-item": {
+      "import": "./dist/ea-collapse-item.js"
+    },
+    "./ea-container": {
+      "import": "./dist/ea-container.js"
+    },
+    "./ea-date-picker": {
+      "import": "./dist/ea-date-picker.js"
+    },
+    "./ea-descriptions": {
+      "import": "./dist/ea-descriptions.js"
+    },
+    "./ea-descriptions-item": {
+      "import": "./dist/ea-descriptions-item.js"
+    },
+    "./ea-drawer": {
+      "import": "./dist/ea-drawer.js"
+    },
+    "./ea-empty": {
+      "import": "./dist/ea-empty.js"
+    },
+    "./ea-footer": {
+      "import": "./dist/ea-footer.js"
+    },
+    "./ea-form": {
+      "import": "./dist/ea-form.js"
+    },
+    "./ea-form-item": {
+      "import": "./dist/ea-form-item.js"
+    },
+    "./ea-header": {
+      "import": "./dist/ea-header.js"
+    },
+    "./ea-icon": {
+      "import": "./dist/ea-icon.js"
+    },
+    "./ea-image": {
+      "import": "./dist/ea-image.js"
+    },
+    "./ea-infinite-scroll": {
+      "import": "./dist/ea-infinite-scroll.js"
+    },
+    "./ea-infinite-scroll-item": {
+      "import": "./dist/ea-infinite-scroll-item.js"
+    },
+    "./ea-input": {
+      "import": "./dist/ea-input.js"
+    },
+    "./ea-input-number": {
+      "import": "./dist/ea-input-number.js"
+    },
+    "./ea-link": {
+      "import": "./dist/ea-link.js"
+    },
+    "./ea-loading": {
+      "import": "./dist/ea-loading.js"
+    },
+    "./ea-main": {
+      "import": "./dist/ea-main.js"
+    },
+    "./ea-menu": {
+      "import": "./dist/ea-menu.js"
+    },
+    "./ea-menu-item": {
+      "import": "./dist/ea-menu-item.js"
+    },
+    "./ea-menu-item-group": {
+      "import": "./dist/ea-menu-item-group.js"
+    },
+    "./ea-message": {
+      "import": "./dist/ea-message.js"
+    },
+    "./ea-message-box": {
+      "import": "./dist/ea-message-box.js"
+    },
+    "./ea-option": {
+      "import": "./dist/ea-option.js"
+    },
+    "./ea-option-gropu": {
+      "import": "./dist/ea-option-gropu.js"
+    },
+    "./ea-page-header": {
+      "import": "./dist/ea-page-header.js"
+    },
+    "./ea-pagination": {
+      "import": "./dist/ea-pagination.js"
+    },
+    "./ea-pane": {
+      "import": "./dist/ea-pane.js"
+    },
+    "./ea-progress": {
+      "import": "./dist/ea-progress.js"
+    },
+    "./ea-radio": {
+      "import": "./dist/ea-radio.js"
+    },
+    "./ea-radio-group": {
+      "import": "./dist/ea-radio-group.js"
+    },
+    "./ea-rate": {
+      "import": "./dist/ea-rate.js"
+    },
+    "./ea-result": {
+      "import": "./dist/ea-result.js"
+    },
+    "./ea-select": {
+      "import": "./dist/ea-select.js"
+    },
+    "./ea-skeleton": {
+      "import": "./dist/ea-skeleton.js"
+    },
+    "./ea-skeleton-item": {
+      "import": "./dist/ea-skeleton-item.js"
+    },
+    "./ea-step": {
+      "import": "./dist/ea-step.js"
+    },
+    "./ea-steps": {
+      "import": "./dist/ea-steps.js"
+    },
+    "./ea-submenu": {
+      "import": "./dist/ea-submenu.js"
+    },
+    "./ea-switch": {
+      "import": "./dist/ea-switch.js"
+    },
+    "./ea-tab": {
+      "import": "./dist/ea-tab.js"
+    },
+    "./ea-table": {
+      "import": "./dist/ea-table.js"
+    },
+    "./ea-table-column": {
+      "import": "./dist/ea-table-column.js"
+    },
+    "./ea-tabs": {
+      "import": "./dist/ea-tabs.js"
+    },
+    "./ea-tag": {
+      "import": "./dist/ea-tag.js"
+    },
+    "./ea-textarea": {
+      "import": "./dist/ea-textarea.js"
+    },
+    "./ea-time-picker": {
+      "import": "./dist/ea-time-picker.js"
+    },
+    "./ea-timeline": {
+      "import": "./dist/ea-timeline.js"
+    },
+    "./ea-timeline-item": {
+      "import": "./dist/ea-timeline-item.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "node main.js && vite build",
+    "preview": "vite preview"
+  },
   "devDependencies": {
-    "@babel/cli": "^7.25.6",
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.4",
-    "@open-wc/testing": "^4.0.0",
-    "@types/mocha": "^10.0.7",
-    "jest": "^29.7.0",
-    "terser": "^5.31.6"
+    "sass-embedded": "^1.89.2",
+    "vite": "^5.4.1"
+  },
+  "dependencies": {
+    "@types/node": "^24.0.10",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5"
   }
 }

@@ -4,7 +4,7 @@ import "../ea-icon/index.js"
 import { ButtonComm } from "./src/components/ButtonComm.js";
 import { HrefComm } from "./src/components/HrefComm.js";
 
-import { stylesheet } from "./src/style/stylesheet.js";
+import stylesheet from "./index.scss?inline"
 
 export class EaButton extends Base {
   #buttonType = "button";
@@ -15,6 +15,7 @@ export class EaButton extends Base {
     super();
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
+    this.adoptedStyle(stylesheet);
 
     const hrefAttr = this.getAttribute('href')
     if (hrefAttr) {
@@ -26,8 +27,6 @@ export class EaButton extends Base {
     }
 
     this.#wrap = shadowRoot.querySelector('.ea-button');
-
-    this.build(shadowRoot, stylesheet);
   }
 
   get BUTTON_STYLE() {

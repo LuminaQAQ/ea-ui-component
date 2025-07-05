@@ -72,4 +72,10 @@ export default class Base extends HTMLElement {
             setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
         }
     }
+
+    adoptedStyle(stylesheet) {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(stylesheet);
+        this.shadowRoot.adoptedStyleSheets = [sheet];
+    }
 }
