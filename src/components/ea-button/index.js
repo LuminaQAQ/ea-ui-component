@@ -11,11 +11,23 @@ export class EaButton extends Base {
 
   #wrap;
 
+  static observedProps = ["disabled"];
+
   constructor() {
     super();
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
+    const shadowRoot = this.shadowRoot
     this.adoptedStyle(stylesheet);
+
+    this.state = this.properties({
+      disabled: {
+        type: Boolean,
+        default: false,
+        observer: (newVal) => {
+          this.#wrap.classList.toggle('disabled', newVal);
+        }
+      }
+    })
 
     const hrefAttr = this.getAttribute('href')
     if (hrefAttr) {
@@ -45,15 +57,12 @@ export class EaButton extends Base {
   // ------- 禁用 -------
   // #region
   get disabled() {
-    return this.getAttrBoolean('disabled');
+    // return this.getAttrBoolean('disabled');
+    return this.state.disabled
   }
 
   set disabled(value) {
-    this.toggleAttr('disabled', value);
-    this.#wrap.classList.toggle('disabled', value);
-    this.style.cursor = value ? 'not-allowed' : 'pointer';
-
-    if (value) this.#wrap.setAttribute('disabled', value);
+    this.state.disabled = value;
   }
   // #endregion
   // ------- end -------
@@ -168,7 +177,8 @@ export class EaButton extends Base {
   // #endregion
   // ------- end -------
 
-  connectedCallback() {
+  $mounted() {
+
     // 按钮样式
     this.plain = this.plain;
     this.round = this.round;

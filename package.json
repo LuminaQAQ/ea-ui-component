@@ -213,7 +213,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "node main.js && vite build",
+    "build": "node tools/index.js && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {

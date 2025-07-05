@@ -1,58 +1,42 @@
-const fs = require('fs');
-const path = require('path');
+import "./src/components/index.js"
 
-const handleImportModules = () => {
-  const dir = path.join(__dirname, 'src/components');
-  const entryPath = path.join(__dirname, 'src/components/index.js');
-  fs.writeFileSync(entryPath, '');
+const sleep = (duration) => new Promise(resolve => setTimeout(resolve, duration));
 
-  fs.readdirSync(dir).forEach(file => {
-    const filePath = path.join(dir, file);
-    const isDir = fs.statSync(filePath).isDirectory();
+customElements.whenDefined('ea-button').then(() => {
+    const testbtn = document.querySelector('ea-button');
+    testbtn?.addEventListener("update", async (e) => {
+        console.log(e.detail);
+    });
 
-    if (isDir) {
-      const indexPath = path.join(filePath, 'index.js');
-      if (fs.existsSync(indexPath)) {
-        fs.appendFileSync(entryPath, `import './${file}/index.js';\n`);
-      }
-    }
-  });
-}
+    testbtn?.addEventListener("click", async () => {
+        testbtn.disabled = testbtn.disabled ? false : true;
 
-const handlePackageExport = () => {
-  const dir = path.resolve(process.cwd(), 'src/components');
-  const entryConfigs = {
-    index: path.resolve(process.cwd(), 'src/components/index.js'),
-  };
+        // testbtn?.setAttribute('disabled', true);
+    });
 
-  const exportsConfig = {
-    ".": "./dist/index.js"
-  };
+    // testbtn?.addEventListener("beforeMount", async () => {
+    //     console.log('mounted', 'outside');
 
-  fs.readdirSync(dir).forEach((file) => {
-    const subPath = path.resolve(dir, file);
-    const isDirectory = fs.statSync(subPath).isDirectory();
+    //     await sleep(1000);
+    // });
 
-    if (isDirectory) {
-      const entryPath = path.resolve(subPath, 'index.js');
-      entryConfigs[file] = entryPath;
+    // testbtn?.addEventListener("mounted", async () => {
+    //     console.log('mounted', 'outside');
 
-      exportsConfig[`./${file}`] = {
-        import: `./dist/${file}.js`
-      };
-    }
-  });
+    //     await sleep(1000);
+    // });
 
-  const pkgPath = path.resolve(process.cwd(), 'package.json');
-  const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf-8'));
-  pkg.exports = exportsConfig;
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
-}
+    // setTimeout(() => {
+    //     testbtn?.remove();
+    // }, 2000);
 
-const main = async () => {
-  await handleImportModules();
-  await handlePackageExport();
-};
+    // testbtn?.addEventListener("beforeUnmount", async () => {
+    //     console.log('beforeUnmount', testbtn);
 
+    //     await sleep(1000);
+    // });
 
-main();
+    // testbtn?.addEventListener("unmounted", async () => {
+    //     console.log('unmounted', testbtn);
+    // });
+});

@@ -21,6 +21,9 @@ export default defineConfig({
     css: {
         preprocessorOptions: {
             scss: {
+                additionalData: `
+                    @import "src/components/ea-ui-base-style.scss";
+                `,
                 includePaths: ['src/themes/dark.scss']
             }
         }
