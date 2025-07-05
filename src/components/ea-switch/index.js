@@ -1,7 +1,7 @@
 // @ts-nocheck
 import Base from '../Base.js';
 
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from './index.scss?inline';
 
 export class EaSwitch extends Base {
     #wrap;
@@ -10,11 +10,13 @@ export class EaSwitch extends Base {
     #labelLeft;
     #inputCore;
     #labelRight;
-    
+
     constructor() {
         super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+        const shadowRoot = this.shadowRoot;
+        this.stylesheet = stylesheet;
+
         shadowRoot.innerHTML = `
             <label class="ea-switch_wrap" part="container">
                 <input class="ea-switch_input" type="checkbox">
@@ -30,7 +32,7 @@ export class EaSwitch extends Base {
         this.#inputCore = shadowRoot.querySelector('.ea-switch_core');
         this.#labelRight = shadowRoot.querySelector('.ea-switch_label--right');
 
-        this.build(shadowRoot, stylesheet);
+
     }
 
     // ------- name 属性 -------

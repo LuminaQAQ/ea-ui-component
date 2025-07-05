@@ -1,5 +1,3 @@
-@import "../ea-ui-base-style.scss";
-
 @mixin ea-link-theme($theme-name, $color) {
   &.#{$theme-name} {
     color: $color;

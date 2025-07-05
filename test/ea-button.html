@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../components/ea-icon/index.css" />
+    <link rel="stylesheet" href="/src/components/ea-icon/index.css" />
 
     <style>
         .part::part(container) {
@@ -16,23 +16,24 @@
         /* ea-button::part(icon) {
             color: black;
         } */
+
+        .row {
+            margin: 1rem 0;
+        }
     </style>
 </head>
 
 <body>
+    <script type="module" src="/main.js"></script>
     <script type="module">
-        import "../components/ea-button/index.js"
-        import "../components/ea-button-group/index.js"
-        import "../components/ea-switch/index.js"
-
         // ------- 链接按钮 -------
         // #region
         document
             .querySelector("#ea-radio-href")
-            .addEventListener("click", function (e) {
+            .addEventListener("change", function (e) {
                 const btn = document.querySelector("#ea-button-a");
 
-                btn.disabled = e.target.checked;
+                btn.disabled = e.detail.checked;
             });
         // #endregion
         // ------- end -------
@@ -41,10 +42,10 @@
         // #region
         document
             .querySelector("#btngroup-switch")
-            .addEventListener("click", function (e) {
+            .addEventListener("change", function (e) {
                 const btn = document.querySelector("#btngroup");
 
-                e.target.checked ? (btn.disabled = true) : (btn.disabled = false);
+                btn.disabled = e.detail.checked;
             });
         // #endregion
         // ------- end -------
@@ -55,6 +56,7 @@
             .querySelector("#ea-radio-loading")
             .addEventListener("change", function (e) {
                 const btn = document.querySelector("#ea-button-loading");
+
                 btn.loading = e.target.checked;
             });
         // #endregion
@@ -71,19 +73,26 @@
         <ea-button type="warning">警告按钮</ea-button>
         <ea-button type="danger">危险按钮</ea-button>
     </div>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <!-- -------- 朴素按钮 --------  -->
-    <!-- #region  -->
-    <h2>朴素按钮</h2>
     <div class="row">
         <ea-button plain>朴素按钮</ea-button>
         <ea-button type="primary" plain>主要按钮</ea-button>
         <ea-button type="success" plain>成功按钮</ea-button>
         <ea-button type="warning" plain>警告按钮</ea-button>
         <ea-button type="danger" plain>危险按钮</ea-button>
+    </div>
+    <div class="row">
+        <ea-button round>圆角按钮</ea-button>
+        <ea-button type="primary" round>主要按钮</ea-button>
+        <ea-button type="success" round>成功按钮</ea-button>
+        <ea-button type="warning" round>警告按钮</ea-button>
+        <ea-button type="danger" round>危险按钮</ea-button>
+    </div>
+    <div class="row">
+        <ea-button icon="icon-coffee" circle></ea-button>
+        <ea-button icon="icon-edit" type="primary" circle></ea-button>
+        <ea-button icon="icon-comment-empty" type="success" circle></ea-button>
+        <ea-button icon="icon-bell" type="warning" circle></ea-button>
+        <ea-button icon="icon-cog" type="danger" circle></ea-button>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -99,6 +108,27 @@
         <ea-button type="warning" disabled>警告按钮</ea-button>
         <ea-button type="danger" disabled>危险按钮</ea-button>
     </div>
+    <div class="row">
+        <ea-button disabled plain>禁用按钮</ea-button>
+        <ea-button type="primary" disabled plain>主要按钮</ea-button>
+        <ea-button type="success" disabled plain>成功按钮</ea-button>
+        <ea-button type="warning" disabled plain>警告按钮</ea-button>
+        <ea-button type="danger" disabled plain>危险按钮</ea-button>
+    </div>
+    <div class="row">
+        <ea-button round disabled>圆角按钮</ea-button>
+        <ea-button type="primary" round disabled>主要按钮</ea-button>
+        <ea-button type="success" round disabled>成功按钮</ea-button>
+        <ea-button type="warning" round disabled>警告按钮</ea-button>
+        <ea-button type="danger" round disabled>危险按钮</ea-button>
+    </div>
+    <div class="row">
+        <ea-button icon="icon-coffee" circle disabled></ea-button>
+        <ea-button icon="icon-edit" type="primary" circle disabled></ea-button>
+        <ea-button icon="icon-comment-empty" type="success" circle disabled></ea-button>
+        <ea-button icon="icon-bell" type="warning" circle disabled></ea-button>
+        <ea-button icon="icon-cog" type="danger" circle disabled></ea-button>
+    </div>
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -107,20 +137,12 @@
     <!-- #region  -->
     <h2>文字按钮</h2>
     <div class="row left">
-        <ea-button type="text" icon="icon-coffee">文字按钮</ea-button>
-        <ea-button type="text" disabled>文字按钮</ea-button>
-    </div>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <!-- -------- 图标按钮 --------  -->
-    <!-- #region  -->
-    <h2>图标按钮</h2>
-    <div class="row left">
-        <ea-button type="primary" icon="icon-edit" round></ea-button>
-        <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
-        <ea-button type="primary" icon="icon-trash-empty" disabled>图标按钮</ea-button>
+        <ea-button icon="icon-coffee" text>文字按钮</ea-button>
+        <ea-button icon="icon-coffee" text disabled>文字按钮</ea-button>
+        <ea-button type="primary" text>文字按钮</ea-button>
+        <ea-button type="danger" text>文字按钮</ea-button>
+        <ea-button type="warning" text>文字按钮</ea-button>
+        <ea-button type="success" text>文字按钮</ea-button>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -131,9 +153,27 @@
     <h2>链接按钮</h2>
     <div class="row left">
         <ea-switch id="ea-radio-href" checked></ea-switch>
-        <ea-button type="text" href="https://luminaqaq.github.io/ea_ui_component/ea-button">链接按钮</ea-button>
-        <ea-button disabled id="ea-button-a" type="text"
-            href="https://luminaqaq.github.io/ea_ui_component/ea-button">链接按钮</ea-button>
+        <ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>链接按钮</ea-button>
+        <ea-button type="primary" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>文本按钮</ea-button>
+        <ea-button type="danger" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>危险按钮</ea-button>
+        <ea-button type="warning" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>警告按钮</ea-button>
+        <ea-button type="success" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>成功按钮</ea-button>
+        <ea-button disabled id="ea-button-a" type="text" href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+            link>链接按钮</ea-button>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 图标按钮 --------  -->
+    <!-- #region  -->
+    <h2>图标按钮</h2>
+    <div class="row left">
+        <ea-button type="primary" icon="icon-edit" round></ea-button>
+        <ea-button type="primary" icon="icon-edit"></ea-button>
+        <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
+        <ea-button type="primary" icon="icon-trash-empty" disabled>图标按钮</ea-button>
+        <ea-button type="primary" disabled>图标按钮 <ea-icon icon="icon-trash-empty"></ea-icon></ea-button>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -144,16 +184,16 @@
     <h2>按钮组</h2>
     <div class="row left">
         <ea-switch id="btngroup-switch" checked></ea-switch>
-        <ea-button-group id="btngroup" id="" disabled>
-            <ea-button type="primary">上一页</ea-button>
+        <ea-button-group id="btngroup" disabled>
+            <ea-button type="success">上一页</ea-button>
             <ea-button type="primary">下一页</ea-button>
         </ea-button-group>
-        <ea-button-group>
+        <ea-button-group size="small">
             <ea-button>后退</ea-button>
             <ea-button>刷新</ea-button>
             <ea-button>前进</ea-button>
         </ea-button-group>
-        <ea-button-group>
+        <ea-button-group type="success">
             <ea-button type="primary">后退</ea-button>
             <ea-button type="primary">刷新</ea-button>
             <ea-button type="primary">前进</ea-button>
@@ -168,7 +208,7 @@
     <h2>按钮组</h2>
     <div class="row">
         <ea-switch id="ea-radio-loading" checked></ea-switch>
-        <ea-button id="ea-button-loading" type="primary" loading icon="icon-coffee">加载中按钮</ea-button>
+        <ea-button id="ea-button-loading" type="primary" loading="true" icon="icon-coffee">加载中按钮</ea-button>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -178,10 +218,29 @@
     <!-- #region  -->
     <h2>不同尺寸</h2>
     <div class="row">
+        <ea-button type="primary" size="large">大型按钮</ea-button>
         <ea-button type="primary">默认按钮</ea-button>
-        <ea-button type="primary" size="medium">中等按钮</ea-button>
         <ea-button type="primary" size="small">小型按钮</ea-button>
-        <ea-button type="primary" size="mini">超小按钮</ea-button>
+    </div>
+    <div class="row">
+        <ea-button type="primary" icon="icon-coffee" size="large">大型按钮</ea-button>
+        <ea-button type="primary" icon="icon-coffee">默认按钮</ea-button>
+        <ea-button type="primary" icon="icon-coffee" size="small">小型按钮</ea-button>
+    </div>
+    <div class="row">
+        <ea-button type="primary" round size="large">大型按钮</ea-button>
+        <ea-button type="primary" round>默认按钮</ea-button>
+        <ea-button type="primary" round size="small">小型按钮</ea-button>
+    </div>
+    <div class="row">
+        <ea-button type="primary" size="large">大型按钮</ea-button>
+        <ea-button type="primary">默认按钮</ea-button>
+        <ea-button type="primary" size="small">小型按钮</ea-button>
+    </div>
+    <div class="row">
+        <ea-button type="primary" circle icon="icon-coffee" size="large"></ea-button>
+        <ea-button type="primary" circle icon="icon-coffee"></ea-button>
+        <ea-button type="primary" circle icon="icon-coffee" size="small"></ea-button>
     </div>
     <hr />
     <!-- #endregion  -->

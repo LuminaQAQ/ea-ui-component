@@ -1,4 +1,7 @@
 // @ts-nocheck
+import { timeout } from "../utils/timeout";
+// import "./ea-icon/index.js"
+import variable from "../themes/variable.scss?inline";
 
 export default class Base extends HTMLElement {
     static get observedAttributes() {
@@ -8,6 +11,8 @@ export default class Base extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+
+        this._isSyncingAttrToState = false;
     }
 
     /**
@@ -16,18 +21,49 @@ export default class Base extends HTMLElement {
      */
     adoptedStyle(stylesheet) {
         const sheet = new CSSStyleSheet();
+        const variableSheet = new CSSStyleSheet();
         sheet.replaceSync(stylesheet);
-        this.shadowRoot.adoptedStyleSheets = [sheet];
+        variableSheet.replaceSync(variable);
+
+        this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
     }
 
     /**
-     * 响应式数据
-     * @param {Object} states 需要被响应式的数据
-     * @returns {states} 返回被代理后的值
-     */
+     * 创建响应式数据配置
+     * @param {Object.<string, {
+    *   type: (Function|Array<*>),
+    *   default: any,
+    *   observer?: (newVal: any, oldVal?: any) => void
+    * }>} states 配置对象，每个 key 是一个响应式字段名
+    * @returns {Object} 返回代理后的响应式状态对象
+    */
     properties(states) {
         const _this = this;
         const _states = {};
+
+        const getValue = (type, key, value) => {
+            let targetValue = value;
+            let targetType = type;
+
+            if (type instanceof Array) targetType = Array;
+            else if (typeof type === "boolean") targetType = Boolean;
+
+            switch (targetType) {
+                case Boolean: {
+                    if (value === "true" || value === '') value = true;
+                    else if (value === "false") value = false;
+
+                    targetValue = typeof value === "boolean" ? value : _this.getAttrBoolean(key);
+
+                    break;
+                }
+                case Number: targetValue = _this.getAttrNumber(key); break;
+                case Array: targetValue = type.includes(value) ? targetValue : null; break;
+                default: targetValue = _this.getAttribute(key); break;
+            }
+
+            return targetValue;
+        };
 
         for (const [key, config] of Object.entries(states)) {
             _states[key] = config?.value;
@@ -35,26 +71,22 @@ export default class Base extends HTMLElement {
 
         return new Proxy(_states, {
             get(target, key) {
-                let value;
-
-                switch (states[key]?.type) {
-                    case Boolean: value = _this.getAttrBoolean(key); break;
-                    case Number: value = _this.getAttrNumber(key); break;
-                    default: value = _this.getAttribute(key); break;
-                }
-
+                const value = getValue(states[key]?.type, key, _states[key]);
                 return value || states[key]?.default;
             },
             set(target, key, value) {
-                value = value || states[key]?.default;
+                value = getValue(states[key]?.type, key, value) || states[key]?.default;
 
                 if (target[key] === value) return true;
 
-                _this.$updated({ key, newVal: value, oldVal: target[key] });
+                if (!_this._isSyncingAttrToState) {
+                    _this.toggleAttr(key, value);
 
-                _this.setAttribute(key, value);
-                target[key] = value;
-                states[key]?.observer(value);
+                    target[key] = value;
+                    states[key]?.observer(value);
+
+                    _this.$updated({ key, newVal: value, oldVal: target[key] });
+                }
 
                 return true;
             }
@@ -89,9 +121,12 @@ export default class Base extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-        if (oldVal === newVal) return;
+        if (oldVal === newVal || this._isSyncingAttrToState) return;
 
+        this._isSyncingAttrToState = true;
         this.state[name] = newVal;
+        this._isSyncingAttrToState = false;
+
         this.$updated({
             key: name,
             newVal,
@@ -100,23 +135,22 @@ export default class Base extends HTMLElement {
     }
 
     connectedCallback() {
-        setTimeout(() => {
-            // 组件挂载前
-            this.$beforeMounted?.();
-            this.dispatchEvent(new CustomEvent('beforeMount', {
-                detail: this,
-                bubbles: false,
-                composed: true,
-            }));
+        // 组件挂载前
+        this.$beforeMounted?.();
+        this.dispatchEvent(new CustomEvent('beforeMount', {
+            detail: this,
+            bubbles: false,
+            composed: true,
+        }));
 
-            // 组件挂载后
-            this.$mounted?.();
-            this.dispatchEvent(new CustomEvent('mounted', {
-                detail: this,
-                bubbles: false,
-                composed: true,
-            }));
-        }, 0);
+        this.adoptedStyle(this.stylesheet);
+        // 组件挂载后
+        this.$mounted?.();
+        this.dispatchEvent(new CustomEvent('mounted', {
+            detail: this,
+            bubbles: false,
+            composed: true,
+        }));
     }
 
     disconnectedCallback() {

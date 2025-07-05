@@ -1,143 +1,278 @@
-// @import "../ea-ui-base-style.scss";
+:host {
+  --cursor-type: pointer;
 
-@mixin button-type($type, $border, $text, $bgc) {
-  &.#{$type} {
-    $border-hover: lighten($border, 10);
-    $text-hover: lighten($text, 10);
-    $bgc-hover: lighten($bgc, 10);
+  /* === Normal === */
+  --ea-button-normal-text: var(--grey-900);
+  --ea-button-normal-background: var(--color-white);
+  --ea-button-normal-border: var(--grey-300);
+  --ea-button-normal-text-disabled: var(--grey-400);
+  --ea-button-normal-background-disabled: var(--grey-100);
 
-    @if ($type == "normal") {
-      $border-hover: transparentize(#a0cfff, 0.6);
-      $text-hover: darken(#a0cfff, 20);
-      $bgc-hover: transparentize(#a0cfff, 0.95);
-    }
+  /* === Primary（Blue）=== */
+  --ea-button-primary-100: #d9ecff;
+  --ea-button-primary-300: #a0cfff;
+  --ea-button-primary-500: var(--color-blue); /* 默认 */
+  --ea-button-primary-600: #66b1ff; /* hover */
+  --ea-button-primary-700: #3a8ee6; /* active */
+  --ea-button-primary-text: #ffffff;
+  --ea-button-primary-disabled: var(--ea-button-primary-300);
+  --ea-button-primary-text-disabled: #ffffff;
 
-    border: 1px solid $border;
-    color: $text;
-    background-color: $bgc;
+  /* === Success（Green）=== */
+  --ea-button-success-100: #e1f3d8;
+  --ea-button-success-300: #b3e19d;
+  --ea-button-success-500: var(--color-green);
+  --ea-button-success-600: #85ce61;
+  --ea-button-success-700: #5daf34;
+  --ea-button-success-text: #ffffff;
+  --ea-button-success-disabled: var(--ea-button-success-300);
+  --ea-button-success-text-disabled: #ffffff;
 
-    &.disabled {
-      background-color: lighten($bgc, 25) !important;
-      border-color: lighten($border, 25) !important;
-      color: lighten($text, 75) !important;
-      pointer-events: none;
+  /* === Info（Muted）=== */
+  --ea-button-info-100: #e9e9eb;
+  --ea-button-info-300: #d3d4d6;
+  --ea-button-info-500: var(--color-info);
+  --ea-button-info-600: #a6a9b3;
+  --ea-button-info-700: #82848a;
+  --ea-button-info-text: #ffffff;
 
-      @if ($type == "normal") {
-        border-color: lighten($border, 5) !important;
-        color: lighten($text, 35) !important;
-      }
+  /* === Warning（Yellow）=== */
+  --ea-button-warning-100: #fdf6ec;
+  --ea-button-warning-300: #f3d19e;
+  --ea-button-warning-500: var(--color-yellow);
+  --ea-button-warning-600: #ebb563;
+  --ea-button-warning-700: #cf9236;
+  --ea-button-warning-text: #ffffff;
+  --ea-button-warning-disabled: var(--ea-button-warning-300);
+  --ea-button-warning-text-disabled: #ffffff;
 
-      @if ($type == "text") {
-        color: $color-disabled-text !important;
-      }
-    }
-    &.plain {
-      background-color: lighten($bgc, 36);
-      border-color: lighten($border, 25);
-      color: $bgc;
+  /* === Danger（Red）=== */
+  --ea-button-danger-100: #fef0f0;
+  --ea-button-danger-300: #fab6b6;
+  --ea-button-danger-500: var(--color-red);
+  --ea-button-danger-600: #f78989;
+  --ea-button-danger-700: #dd6161;
+  --ea-button-danger-text: #ffffff;
+  --ea-button-danger-disabled: var(--ea-button-danger-300);
+  --ea-button-danger-text-disabled: #ffffff;
+}
 
-      @if ($type == "normal") {
-        background-color: transparent;
-        color: $text;
-        border-color: $border;
-
-        &:hover {
-          background-color: transparent;
-        }
-      }
-
-      @if ($type == "danger") {
-        background-color: lighten($bgc, 26);
-      }
-    }
-
-    &:hover {
-      border-color: $border-hover;
-      color: $text-hover;
-      background-color: $bgc-hover;
-    }
-
-    &:active {
-      background-color: darken($bgc-hover, 30);
-    }
-  }
+:host([disabled="true"]) {
+  --cursor-type: not-allowed;
 }
 
 :host {
-  --border-radius: 6px;
+  cursor: var(--cursor-type);
 }
 
-.ea-button {
+@mixin button-disabled-type($type) {
+  &.ea-button--disabled {
+    --cursor-type: not-allowed;
+
+    color: var(--ea-button-#{$type}-text-disabled);
+
+    @if ($type == "normal") {
+      border-color: var(--ea-button-normal-border);
+      background-color: var(--ea-button-normal-background-disabled);
+    } @else {
+      border-color: var(--ea-button-#{$type}-disabled);
+      background-color: var(--ea-button-#{$type}-disabled);
+    }
+
+    pointer-events: none;
+  }
+}
+
+@mixin button-hover-type($type) {
+  &:hover {
+    @if ($type == "normal") {
+      color: var(--ea-button-primary-600);
+      border-color: var(--ea-button-primary-600);
+    } @else {
+      background-color: var(--ea-button-#{$type}-600);
+    }
+  }
+}
+
+@mixin button-active-type($type) {
+  &:active {
+    @if ($type == "normal") {
+      color: var(--ea-button-primary-700);
+      border-color: var(--ea-button-primary-700);
+    } @else {
+      background-color: var(--ea-button-#{$type}-700);
+    }
+  }
+}
+
+@mixin button-text-type($type) {
+  &.ea-button--text {
+    @if ($type == "normal") {
+      color: var(--ea-button-normal-text);
+    } @else {
+      color: var(--ea-button-#{$type}-500);
+    }
+
+    border: none;
+    background-color: unset;
+
+    &:hover {
+      @if ($type == "normal") {
+        color: var(--ea-button-primary-600);
+      } @else {
+        color: var(--ea-button-#{$type}-600);
+      }
+    }
+
+    &:active {
+      @if ($type == "normal") {
+        border-color: var(--ea-button-primary-700);
+        color: var(--ea-button-primary-700);
+      } @else {
+        color: var(--ea-button-#{$type}-700);
+      }
+    }
+
+    &.ea-button--disabled {
+      background-color: unset;
+
+      @if ($type == "normal") {
+        color: var(--ea-button-info-300);
+      } @else {
+        color: var(--ea-button-#{$type}-300);
+      }
+    }
+  }
+}
+
+@mixin button-plain-type($type) {
+  &.ea-button--plain {
+    background-color: var(--ea-button-#{$type}-100);
+
+    @if ($type == "normal") {
+      color: var(--ea-button-normal-text);
+    } @else {
+      color: var(--ea-button-#{$type}-500);
+      border-color: var(--ea-button-#{$type}-300);
+    }
+
+    &:hover {
+      @if ($type == "normal") {
+        color: var(--ea-button-primary-500);
+      } @else {
+        color: var(--color-white);
+      }
+
+      background-color: var(--ea-button-#{$type}-600);
+    }
+
+    &:active {
+      @if ($type == "normal") {
+        color: var(--ea-button-primary-700);
+      } @else {
+        background-color: var(--ea-button-#{$type}-700);
+      }
+    }
+
+    &.ea-button--disabled {
+      @if ($type == "normal") {
+        color: var(--ea-button-info-300);
+      } @else {
+        color: var(--ea-button-#{$type}-300);
+      }
+    }
+  }
+}
+
+@mixin button-round-type($type) {
+  &.ea-button--round {
+    border-radius: var(--border-radius-round);
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+}
+
+@mixin button-circle-type($type) {
+  &.ea-button--circle {
+    border-radius: var(--border-radius-circle);
+    padding: var(--spacing-md);
+  }
+}
+
+@mixin button-link-type($type) {
+  &.ea-button--link {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+}
+
+@mixin button-size-type() {
+  &.ea-button--small {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm);
+  }
+
+  &.ea-button--large {
+    font-size: var(--font-size-lg);
+    padding: var(--spacing-lg);
+  }
+}
+
+@mixin button-type($type) {
+  color: var(--ea-button-#{$type}-text);
+  background-color: var(--ea-button-#{$type}-500);
+
+  @if ($type == "normal") {
+    border-color: var(--ea-button-normal-border);
+  } @else {
+    border-color: var(--ea-button-#{$type}-500);
+  }
+
+  @include button-hover-type($type);
+  @include button-active-type($type);
+  @include button-text-type($type);
+  @include button-disabled-type($type);
+  @include button-plain-type($type);
+  @include button-round-type($type);
+  @include button-circle-type($type);
+  @include button-link-type($type);
+  @include button-size-type;
+}
+
+@include block(ea-button) {
   box-sizing: border-box;
 
-  padding: 0.5rem;
+  padding: var(--spacing-md);
+  border: 1px solid;
   border-radius: var(--border-radius);
 
-  cursor: pointer;
+  cursor: var(--cursor-type);
 
-  font-size: 1rem;
-  line-height: 1.25;
-  font-weight: 500;
-  transition: background-color 0.1s, color 0.1s;
+  font-size: var(--font-size-md);
   text-decoration: none;
+
+  transition: background-color var(--transition-fast),
+    color var(--transition-fast);
 
   will-change: width;
 
-  @include button-type(
-    "normal",
-    $color-default-border,
-    $color-default-text,
-    $color-default-bgc
-  );
-
-  @include button-type(
-    "primary",
-    $color-primary-border,
-    $color-primary-text,
-    $color-primary-bgc
-  );
-
-  @include button-type(
-    "success",
-    $color-success-border,
-    $color-success-text,
-    $color-success-bgc
-  );
-
-  @include button-type(
-    "info",
-    $color-info-border,
-    $color-info-text,
-    $color-info-bgc
-  );
-
-  @include button-type(
-    "warning",
-    $color-warning-border,
-    $color-warning-text,
-    $color-warning-bgc
-  );
-
-  @include button-type(
-    "danger",
-    $color-danger-border,
-    $color-danger-text,
-    $color-danger-bgc
-  );
-
-  @include button-type("text", transparent, $color-primary-bgc, transparent);
-
-  &.round {
-    border-radius: 999px;
+  @include modifier(normal) {
+    @include button-type(normal);
   }
 
-  &.medium {
-    font-size: 14px;
+  @include modifier(primary) {
+    @include button-type(primary);
   }
-  &.small {
-    font-size: 12px;
+
+  @include modifier(success) {
+    @include button-type(success);
   }
-  &.mini {
-    font-size: 10px;
+
+  @include modifier(danger) {
+    @include button-type(danger);
+  }
+
+  @include modifier(warning) {
+    @include button-type(warning);
   }
 }

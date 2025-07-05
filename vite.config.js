@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import entryConfigs from './configs/entryConfig.js';
+import { resolve } from 'node:path';
 
 export default defineConfig({
     build: {
@@ -22,9 +23,9 @@ export default defineConfig({
         preprocessorOptions: {
             scss: {
                 additionalData: `
-                    @import "src/components/ea-ui-base-style.scss";
+                    @import "components/ea-ui-base-style.scss";
                 `,
-                includePaths: ['src/themes/dark.scss']
+                includePaths: [resolve(__dirname, 'src')]
             }
         }
     },
