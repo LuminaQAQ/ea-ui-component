@@ -49,7 +49,7 @@ export class EaButton extends Base {
       },
     },
     type: {
-      type: Array('normal', 'primary', 'success', 'warning', 'danger', 'info'),
+      type: ['normal', 'primary', 'success', 'warning', 'danger'],
       default: 'normal',
       observer: (newVal) => {
         this.computedClasslist()
@@ -282,7 +282,6 @@ export class EaButton extends Base {
   // ------- end -------
 
   $mounted() {
-
     // 按钮样式
     this.plain = this.getAttribute('plain');
     this.round = this.getAttribute('round');
@@ -292,25 +291,20 @@ export class EaButton extends Base {
     // 按钮种类
     this.type = this.getAttribute('type');
 
-    // 禁用
-    this.disabled = this.getAttribute("disabled")
-
     // 按钮大小
     this.size = this.getAttribute('size');
 
     // 图标
-    this.icon = this.icon;
+    if (this.icon) this.icon = this.icon;
 
     // 链接
     this.link = this.getAttribute('link');
     if (this.link) this.href = this.href;
 
-    if (this.getAttrBoolean("loading")) this.loading = this.getAttribute('loading');
-  }
+    // 禁用
+    this.disabled = this.getAttrBoolean("disabled")
 
-  $unmounted() {
-    this.state = null;
-    this.remove()
+    if (this.getAttrBoolean("loading")) this.loading = this.getAttribute('loading');
   }
 }
 

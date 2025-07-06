@@ -19,6 +19,8 @@ export class EaButtonGroup extends Base {
       type: Boolean,
       default: false,
       observer: (newVal) => {
+        console.log(newVal);
+
         this.querySelectorAll("ea-button").forEach((button) => {
           button.disabled = newVal;
         });
@@ -48,12 +50,7 @@ export class EaButtonGroup extends Base {
 
   constructor() {
     super();
-
-    const shadowRoot = this.shadowRoot
-
     this.stylesheet = stylesheet;
-
-
 
     this.shadowRoot.innerHTML = `
       <div class="ea-button-group">

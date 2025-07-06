@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { timeout } from "../utils/timeout";
-// import "./ea-icon/index.js"
 import variable from "../themes/variable.scss?inline";
+import "./ea-icon/index.js"
 
 export default class Base extends HTMLElement {
     static get observedAttributes() {
@@ -39,58 +39,72 @@ export default class Base extends HTMLElement {
     */
     properties(states) {
         const _this = this;
-        const _states = {};
-
-        const getValue = (type, key, value) => {
-            let targetValue = value;
-            let targetType = type;
-
-            if (type instanceof Array) targetType = Array;
-            else if (typeof type === "boolean") targetType = Boolean;
-
-            switch (targetType) {
-                case Boolean: {
-                    if (value === "true" || value === '') value = true;
-                    else if (value === "false") value = false;
-
-                    targetValue = typeof value === "boolean" ? value : _this.getAttrBoolean(key);
-
-                    break;
-                }
-                case Number: targetValue = _this.getAttrNumber(key); break;
-                case Array: targetValue = type.includes(value) ? targetValue : null; break;
-                default: targetValue = _this.getAttribute(key); break;
-            }
-
-            return targetValue;
-        };
+        const _stateValues = {};
 
         for (const [key, config] of Object.entries(states)) {
-            _states[key] = config?.value;
+            _stateValues[key] = config.default;
         }
 
-        return new Proxy(_states, {
+        const parseValue = (key, rawValue) => {
+            const config = states[key];
+            const type = config?.type;
+
+            if (type === Boolean) {
+                return rawValue === '' || rawValue === 'true' || rawValue === true;
+            }
+            if (type === Number) {
+                const num = Number(rawValue);
+                return isNaN(num) ? config.default : num;
+            }
+            if (Array.isArray(type)) {
+                return type.includes(rawValue) ? rawValue : config.default;
+            }
+
+            return rawValue ?? config.default;
+        };
+
+        const syncToAttr = (key, value) => {
+            if (!_this._isSyncingStateToAttr) {
+                _this._isSyncingStateToAttr = true;
+                _this.toggleAttr(key, value);
+                _this._isSyncingStateToAttr = false;
+            }
+        };
+
+        return new Proxy(_stateValues, {
             get(target, key) {
-                const value = getValue(states[key]?.type, key, _states[key]);
-                return value || states[key]?.default;
+                return target[key];
             },
-            set(target, key, value) {
-                value = getValue(states[key]?.type, key, value) || states[key]?.default;
+            set(target, key, newValue) {
+                const config = states[key];
+                if (!config) return true;
 
-                if (target[key] === value) return true;
+                const parsedValue = parseValue(key, newValue);
+                const oldValue = target[key];
 
-                if (!_this._isSyncingAttrToState) {
-                    _this.toggleAttr(key, value);
+                if (oldValue === parsedValue) return true;
 
-                    target[key] = value;
-                    states[key]?.observer(value);
+                target[key] = parsedValue;
 
-                    _this.$updated({ key, newVal: value, oldVal: target[key] });
-                }
+                syncToAttr(key, parsedValue);
+                config.observer?.(parsedValue, oldValue);
+                _this.$updated({ key, newVal: parsedValue, oldVal: oldValue });
 
                 return true;
             }
         });
+    }
+
+    attributeChangedCallback(name, oldVal, newVal) {
+        if (oldVal === newVal || this._isSyncingStateToAttr) return;
+
+        this._isSyncingAttrToState = true;
+
+        if (this.state && name in this.state) {
+            this.state[name] = newVal;
+        }
+
+        this._isSyncingAttrToState = false;
     }
 
     /** @abstract 组件挂载前调用 */
@@ -120,37 +134,26 @@ export default class Base extends HTMLElement {
         }));
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-        if (oldVal === newVal || this._isSyncingAttrToState) return;
-
-        this._isSyncingAttrToState = true;
-        this.state[name] = newVal;
-        this._isSyncingAttrToState = false;
-
-        this.$updated({
-            key: name,
-            newVal,
-            oldVal,
-        });
-    }
-
     connectedCallback() {
-        // 组件挂载前
-        this.$beforeMounted?.();
-        this.dispatchEvent(new CustomEvent('beforeMount', {
-            detail: this,
-            bubbles: false,
-            composed: true,
-        }));
-
         this.adoptedStyle(this.stylesheet);
-        // 组件挂载后
-        this.$mounted?.();
-        this.dispatchEvent(new CustomEvent('mounted', {
-            detail: this,
-            bubbles: false,
-            composed: true,
-        }));
+
+        queueMicrotask(() => {
+            // 组件挂载前
+            this.$beforeMounted?.();
+            this.dispatchEvent(new CustomEvent('beforeMount', {
+                detail: this,
+                bubbles: false,
+                composed: true,
+            }));
+
+            // 组件挂载后
+            this.$mounted?.();
+            this.dispatchEvent(new CustomEvent('mounted', {
+                detail: this,
+                bubbles: false,
+                composed: true,
+            }));
+        });
     }
 
     disconnectedCallback() {
@@ -169,6 +172,9 @@ export default class Base extends HTMLElement {
             bubbles: false,
             composed: true,
         }));
+        
+        this.remove();
+        this.state = null;
     }
 
     /**

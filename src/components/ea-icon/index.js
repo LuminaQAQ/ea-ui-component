@@ -1,25 +1,27 @@
+import stylesheet from "./index.css?inline"
+import variable from "../../themes/variable.scss?inline";
 
 export class EaIcon extends HTMLElement {
     #wrap;
-    #fontCSS;
 
     constructor() {
         super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <link id="fontello-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/fontello.css">
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML = `
             <i class="ea-icon_wrap" part="container">
                 <slot></slot>
             </i>
         `;
 
-        this.#wrap = shadowRoot.querySelector('.ea-icon_wrap');
-        this.#fontCSS = shadowRoot.querySelector('#fontello-stylesheet');
+        const sheet = new CSSStyleSheet();
+        const variableSheet = new CSSStyleSheet();
+        sheet.replaceSync(stylesheet);
+        variableSheet.replaceSync(variable);
 
-        document.addEventListener('configChanged', (e) => {
-            this.#updateStyles(e.detail);
-        });
+        this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
+
+        this.#wrap = this.shadowRoot.querySelector('.ea-icon_wrap');
     }
 
     // ------- icon 图标类名 -------
@@ -64,18 +66,12 @@ export class EaIcon extends HTMLElement {
     // #endregion
     // ------- end -------
 
-    #updateStyles(newConfig) {
-        this.#fontCSS.href = newConfig.fontelloCSS;
-    }
-
-    connectedCallback() {
+    $mounted() {
         this.icon = this.icon;
 
         this.color = this.color;
 
         this.size = this.size;
-
-        document.dispatchEvent(new CustomEvent("ea-icon-ready"))
     }
 }
 

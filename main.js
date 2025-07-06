@@ -1,4 +1,13 @@
+// import { EaIcon } from "./dist/components/ea-icon.js";
+// EaIcon.iconURL = "./dist/assets/style.css"
+
 import "./src/components/index.js"
+// import "./dist/components/index.js"
+if (process.env.NODE_ENV === "development") {
+    // await import("./src/components/index.js")
+    // await import("./dist/components/index.js")
+}
+
 
 const sleep = (duration) => new Promise(resolve => setTimeout(resolve, duration));
 

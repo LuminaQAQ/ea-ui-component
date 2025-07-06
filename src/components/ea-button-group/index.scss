@@ -1,11 +1,3 @@
-:host([disabled="true"]) {
-  pointer-events: none;
-
-  ::slotted(ea-button) {
-    pointer-events: none;
-  }
-}
-
 .ea-button-group {
   display: flex;
   align-items: center;

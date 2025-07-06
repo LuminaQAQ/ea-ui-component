@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/src/components/ea-icon/index.css" />
+    <link rel="stylesheet" href="/dist/assets/icon.css" />
 
     <style>
         .part::part(container) {
@@ -26,6 +26,22 @@
 <body>
     <script type="module" src="/main.js"></script>
     <script type="module">
+        // ------- disabled按钮 -------
+        // #region
+        document
+            .querySelector("#ea-switch-disabled")
+            .addEventListener("change", function (e) {
+                const btn = document.querySelector("#ea-button-disabled");
+
+                // btn.disabled = e.detail.checked;
+                // btn.setAttribute("disabled", e.detail.checked);
+            });
+        // setTimeout(() => {
+        //     document.querySelector("#ea-button-a").remove();
+        // }, 3000);
+        // #endregion
+        // ------- end -------
+
         // ------- 链接按钮 -------
         // #region
         document
@@ -33,8 +49,12 @@
             .addEventListener("change", function (e) {
                 const btn = document.querySelector("#ea-button-a");
 
-                btn.disabled = e.detail.checked;
+                // btn.disabled = e.detail.checked;
+                btn.setAttribute("disabled", e.detail.checked);
             });
+        // setTimeout(() => {
+        //     document.querySelector("#ea-button-a").remove();
+        // }, 3000);
         // #endregion
         // ------- end -------
 
@@ -45,7 +65,8 @@
             .addEventListener("change", function (e) {
                 const btn = document.querySelector("#btngroup");
 
-                btn.disabled = e.detail.checked;
+                // btn.disabled = e.detail.checked;
+                btn.setAttribute("disabled", e.detail.checked);
             });
         // #endregion
         // ------- end -------
@@ -57,7 +78,8 @@
             .addEventListener("change", function (e) {
                 const btn = document.querySelector("#ea-button-loading");
 
-                btn.loading = e.target.checked;
+                // btn.loading = e.target.checked;
+                btn.setAttribute("loading", e.detail.checked);
             });
         // #endregion
         // ------- end -------
@@ -101,6 +123,7 @@
     <!-- -------- 禁用按钮 --------  -->
     <!-- #region  -->
     <h2>禁用按钮</h2>
+    <ea-switch id="ea-switch-disabled" checked></ea-switch>
     <div class="row">
         <ea-button disabled>禁用按钮</ea-button>
         <ea-button type="primary" disabled>主要按钮</ea-button>
@@ -116,7 +139,7 @@
         <ea-button type="danger" disabled plain>危险按钮</ea-button>
     </div>
     <div class="row">
-        <ea-button round disabled>圆角按钮</ea-button>
+        <ea-button id="ea-button-disabled" round disabled>圆角按钮</ea-button>
         <ea-button type="primary" round disabled>主要按钮</ea-button>
         <ea-button type="success" round disabled>成功按钮</ea-button>
         <ea-button type="warning" round disabled>警告按钮</ea-button>

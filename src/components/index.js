@@ -65,3 +65,4 @@ import './ea-textarea/index.js';
 import './ea-time-picker/index.js';
 import './ea-timeline/index.js';
 import './ea-timeline-item/index.js';
+import './ea-icon/index.css';

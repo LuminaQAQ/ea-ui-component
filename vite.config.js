@@ -13,7 +13,7 @@ export default defineConfig({
             output: {
                 entryFileNames: 'components/[name].js',
                 chunkFileNames: 'components/[name].js',
-                assetFileNames: 'assets/[name].[ext]'
+                assetFileNames: 'assets/icon.[ext]'
             },
         },
         minify: true,

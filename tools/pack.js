@@ -17,6 +17,10 @@ const handleImportModules = () => {
             }
         }
     });
+
+    const iconCSSPath = path.join(process.cwd(), '/src/components/ea-icon/index.css');
+
+    fs.appendFileSync(entryPath, `import './ea-icon/index.css';\n`)
 }
 
 const handlePackageExport = () => {
