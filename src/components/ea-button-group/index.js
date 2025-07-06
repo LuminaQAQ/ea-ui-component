@@ -19,8 +19,6 @@ export class EaButtonGroup extends Base {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        console.log(newVal);
-
         this.querySelectorAll("ea-button").forEach((button) => {
           button.disabled = newVal;
         });
