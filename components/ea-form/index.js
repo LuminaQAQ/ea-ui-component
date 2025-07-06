@@ -1,22 +1,12 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
-import { timeout } from '../../utils/timeout.js';
 import { Validator } from "../../utils/Validator.js";
+import { timeout } from '../../utils/timeout.js';
 
 import "../ea-form-item/index.js"
-import '../ea-button/ea-button.js'
-
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-
-`;
+import '../ea-button/index.js'
 
 export class EaForm extends Base {
-    #container;
-
     #rules;
 
     constructor() {
@@ -29,10 +19,6 @@ export class EaForm extends Base {
                 <slot></slot>
             </form>
         `;
-
-        this.#container = shadowRoot.querySelector('.ea-form_wrap');
-
-        this.build(shadowRoot, stylesheet);
     }
 
     // ------- data 获取form表单的值 -------
@@ -113,19 +99,20 @@ export class EaForm extends Base {
         });
     }
 
-    #init() {
-        const formItemsWrap = this.querySelectorAll('ea-form-item');
-
-        const lenArr = Array.from(formItemsWrap).map(item => item.label?.length || 0);
-
-        const max = Math.max(...lenArr);
-        formItemsWrap.forEach(item => {
-            if (item.shadowRoot) item.shadowRoot.querySelector('.ea-form-item_label-wrap').style.width = `${max * 24}px`;
-        });
-    }
-
     connectedCallback() {
-        this.#init();
+        timeout(() => {
+            const formItemsWrap = this.querySelectorAll('ea-form-item');
+
+            const lenArr = Array.from(formItemsWrap).map(item => item.label.length);
+            const max = Math.max(...lenArr);
+
+            formItemsWrap.forEach(item => {
+                const labelWrap = item.shadowRoot.querySelector('.ea-form-item_label-wrap');
+                if (labelWrap) labelWrap.style.width = `${max * 20}px`;
+            });
+
+            this.dispatchEvent(new CustomEvent('ready', { bubbles: true }));
+        }, 50);
     }
 }
 

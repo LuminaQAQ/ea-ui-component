@@ -20,7 +20,7 @@ onMounted(async () => {
   await import('../components/ea-checkbox/index.js');
   await import('../components/ea-switch/index.js');
   await import('../components/ea-textarea/index.js');
-  await import('../components/ea-button/ea-button.js');
+  await import('../components/ea-button/index.js');
 
 
     // ------- 1. 基本表单 -------

@@ -1,13 +1,180 @@
 // @ts-nocheck
-
-import setStyle from '../utils/setStyle.js';
+import { timeout } from "../utils/timeout";
+import variable from "../themes/variable.scss?inline";
+import "./ea-icon/index.js"
 
 export default class Base extends HTMLElement {
+    static get observedAttributes() {
+        return this.observedProps;
+    }
+
     constructor() {
         super();
+        this.attachShadow({ mode: 'open' });
 
-        this.isProduction = false;
-        this.isProduction = true;
+        this._isSyncingAttrToState = false;
+    }
+
+    /**
+     * 样式导入
+     * @param {string} stylesheet 静态样式（vite:`xxx.css?inline`）
+     */
+    adoptedStyle(stylesheet) {
+        const sheet = new CSSStyleSheet();
+        const variableSheet = new CSSStyleSheet();
+        sheet.replaceSync(stylesheet);
+        variableSheet.replaceSync(variable);
+
+        this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
+    }
+
+    /**
+     * 创建响应式数据配置
+     * @param {Object.<string, {
+    *   type: (Function|Array<*>),
+    *   default: any,
+    *   observer?: (newVal: any, oldVal?: any) => void
+    * }>} states 配置对象，每个 key 是一个响应式字段名
+    * @returns {Object} 返回代理后的响应式状态对象
+    */
+    properties(states) {
+        const _this = this;
+        const _stateValues = {};
+
+        for (const [key, config] of Object.entries(states)) {
+            _stateValues[key] = config.default;
+        }
+
+        const parseValue = (key, rawValue) => {
+            const config = states[key];
+            const type = config?.type;
+
+            if (type === Boolean) {
+                return rawValue === '' || rawValue === 'true' || rawValue === true;
+            }
+            if (type === Number) {
+                const num = Number(rawValue);
+                return isNaN(num) ? config.default : num;
+            }
+            if (Array.isArray(type)) {
+                return type.includes(rawValue) ? rawValue : config.default;
+            }
+
+            return rawValue ?? config.default;
+        };
+
+        const syncToAttr = (key, value) => {
+            if (!_this._isSyncingStateToAttr) {
+                _this._isSyncingStateToAttr = true;
+                _this.toggleAttr(key, value);
+                _this._isSyncingStateToAttr = false;
+            }
+        };
+
+        return new Proxy(_stateValues, {
+            get(target, key) {
+                return target[key];
+            },
+            set(target, key, newValue) {
+                const config = states[key];
+                if (!config) return true;
+
+                const parsedValue = parseValue(key, newValue);
+                const oldValue = target[key];
+
+                if (oldValue === parsedValue) return true;
+
+                target[key] = parsedValue;
+
+                syncToAttr(key, parsedValue);
+                config.observer?.(parsedValue, oldValue);
+                _this.$updated({ key, newVal: parsedValue, oldVal: oldValue });
+
+                return true;
+            }
+        });
+    }
+
+    attributeChangedCallback(name, oldVal, newVal) {
+        if (oldVal === newVal || this._isSyncingStateToAttr) return;
+
+        this._isSyncingAttrToState = true;
+
+        if (this.state && name in this.state) {
+            this.state[name] = newVal;
+        }
+
+        this._isSyncingAttrToState = false;
+    }
+
+    /** @abstract 组件挂载前调用 */
+    $beforeMounted() { }
+
+    /** @abstract 组件挂载后调用 */
+    $mounted() { }
+
+    /** @abstract 组件销毁前调用 */
+    $beforeUnmounted() { }
+
+    /** @abstract 组件销毁后调用 */
+    $unmounted() { }
+
+    /**
+     * 
+     * @param {Object} data 
+     * @param {any} data.key 键
+     * @param {any} data.newVal 值
+     * @param {any} data.oldVal 旧值
+     */
+    $updated(data) {
+        this.dispatchEvent(new CustomEvent('updated', {
+            detail: data,
+            bubbles: false,
+            composed: true,
+        }));
+    }
+
+    connectedCallback() {
+        this.adoptedStyle(this.stylesheet);
+
+        queueMicrotask(() => {
+            // 组件挂载前
+            this.$beforeMounted?.();
+            this.dispatchEvent(new CustomEvent('beforeMount', {
+                detail: this,
+                bubbles: false,
+                composed: true,
+            }));
+
+            // 组件挂载后
+            this.$mounted?.();
+            this.dispatchEvent(new CustomEvent('mounted', {
+                detail: this,
+                bubbles: false,
+                composed: true,
+            }));
+        });
+    }
+
+    disconnectedCallback() {
+        // 组件销毁前
+        this.$beforeUnmounted?.();
+        this.dispatchEvent(new CustomEvent('beforeUnmount', {
+            detail: this,
+            bubbles: false,
+            composed: true,
+        }));
+
+        // 组件销毁
+        this.$unmounted?.()
+        this.dispatchEvent(new CustomEvent('unmounted', {
+            detail: this,
+            bubbles: false,
+            composed: true,
+        }));
+        
+        this.remove();
+        this.state = null;
     }
 
     /**
@@ -60,16 +227,5 @@ export default class Base extends HTMLElement {
         const attr = this.getAttribute(attrName);
 
         return attr ? Number(attr) : 0;
-    }
-
-    // 样式构建
-    build(shadowRoot, stylesheet) {
-        if (this.isProduction) {
-            const styleNode = document.createElement('style');
-            styleNode.innerHTML = stylesheet;
-            this.shadowRoot.appendChild(styleNode);
-        } else {
-            setStyle(shadowRoot, new URL(this.nodeName.toLowerCase() + '/index.css', import.meta.url).href);
-        }
     }
 }

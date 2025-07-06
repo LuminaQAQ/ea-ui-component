@@ -1,63 +1,12 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
 
 import "../ea-option/index.js"
 import '../ea-option-gropu/index.js'
 import "../ea-input/index.js"
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-select_wrap {
-  position: relative;
-}
-.ea-select_wrap .ea-select_input-wrap .ea-select_dropdown-icon {
-  position: absolute;
-  left: calc(100% - 24px);
-  top: 50%;
-  transform-origin: center;
-  transform: translateY(-50%);
-}
-.ea-select_wrap .ea-select_input-wrap .ea-select_dropdown-icon.is-open {
-  transform: translateY(-50%) rotate(180deg);
-}
-.ea-select_wrap .ea-select_dropdown-wrap {
-  position: absolute;
-  left: 0;
-  bottom: -12px;
-  transform: translateY(100%) scaleY(0);
-  transform-origin: center top;
-  box-sizing: border-box;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 2035;
-}
-.ea-select_wrap .ea-select_dropdown-wrap .ea-select_dropdown-empty {
-  padding: 10px 0;
-  margin: 0;
-  text-align: center;
-  color: #999;
-  font-size: 14px;
-}
-.ea-select_wrap.is-open .ea-select_input-wrap .ea-select_dropdown-icon {
-  transform: translateY(-50%) rotate(180deg);
-}
-.ea-select_wrap.is-open .ea-select_dropdown-wrap {
-  transform: translateY(100%) scaleY(1);
-}
-.ea-select_wrap.is-disabled {
-  pointer-events: none;
-  cursor: not-allowed;
-}
-.ea-select_wrap.with-transition .ea-select_input-wrap .ea-select_dropdown-icon {
-  transition: transform 0.3s;
-}
-.ea-select_wrap.with-transition .ea-select_dropdown-wrap {
-  transition: transform 0.3s;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
+import { timeout, withTransitionTimeOut } from '../../utils/timeout.js';
 
 export class EaSelect extends Base {
     #container;
@@ -73,13 +22,13 @@ export class EaSelect extends Base {
 
         shadowRoot.innerHTML = `
             <div class="ea-select_wrap" part="container">
-                <div class="ea-select_input-wrap">
+                <div class="ea-select_input-wrap" part="input-wrap">
                     <ea-input type="text" part="input" readonly autocomplete="off"></ea-input>
-                    <span class="ea-select_dropdown-icon">
+                    <span class="ea-select_dropdown-icon" part="dropdown-icon-wrap">
                         <ea-icon part="icon" icon="icon-angle-down" color="#c0c4cc"></ea-icon>
                     </span>
                 </div>
-                <div class="ea-select_dropdown-wrap">
+                <div class="ea-select_dropdown-wrap" part="dropdown-wrap">
                     <slot></slot>
                     <slot name="empty" class="ea-select_dropdown-empty" style="display: none;">
                         <p>暂无数据</p>
@@ -299,6 +248,7 @@ export class EaSelect extends Base {
                         });
                         option.checked = true;
                     }
+
                     this.dispatchEvent(new CustomEvent('change', {
                         detail: {
                             value: this.selection
@@ -309,34 +259,7 @@ export class EaSelect extends Base {
         });
     }
 
-    #initDropdownWrapOpen() {
-        this.#selectInput.addEventListener('focus', (e) => {
-            this.#container.classList.add('is-open');
-
-            this.dispatchEvent(new CustomEvent('visible-change', {
-                detail: {
-                    visible: true,
-                }
-            }));
-        });
-
-        this.#selectInput.addEventListener('blur', (e) => {
-            let timer = setTimeout(() => {
-                clearTimeout(timer);
-                timer = null;
-                this.#container.classList.remove('is-open');
-            }, 100);
-
-            this.dispatchEvent(new CustomEvent('visible-change', {
-                detail: {
-                    visible: false,
-                }
-            }));
-        });
-    }
-
-
-    #init() {
+    connectedCallback() {
         this.setAttribute('data-ea-component', true);
         this.#dropdownWrap.style.width = this.width;
 
@@ -356,18 +279,31 @@ export class EaSelect extends Base {
 
         this.multiple = this.multiple;
 
-        this.#initDropdownWrapOpen();
         this.#handleOptionChecked();
 
-        let timer = setTimeout(() => {
-            clearTimeout(timer);
-            timer = null;
-            this.#container.classList.add('with-transition');
-        }, 20);
-    }
+        this.#selectInput.addEventListener('focus', (e) => {
+            this.#container.classList.add('is-open');
 
-    connectedCallback() {
-        this.#init();
+            this.dispatchEvent(new CustomEvent('visible-change', {
+                detail: {
+                    visible: true,
+                }
+            }));
+        });
+
+        this.#selectInput.addEventListener('blur', (e) => {
+            timeout(() => {
+                this.#container.classList.remove('is-open');
+            }, 100);
+
+            this.dispatchEvent(new CustomEvent('visible-change', {
+                detail: {
+                    visible: false,
+                }
+            }));
+        });
+
+        withTransitionTimeOut(this.#container);
     }
 }
 

@@ -1,33 +1,12 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
-import { timeout } from '../../utils/timeout.js';
 
 import "../ea-calendar/index.js"
 import "../ea-input/index.js"
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
+import { stylesheet } from './src/style/stylesheet.js';
 
-.ea-date-picker_wrap .ea-date-picker_input-wrap {
-  position: relative;
-}
-.ea-date-picker_wrap .ea-date-picker_dropdown-wrap {
-  position: absolute;
-  background-color: #fff;
-  transform-origin: top center;
-  transform: scaleY(0);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  z-index: 2;
-}
-.ea-date-picker_wrap.is-open .ea-date-picker_dropdown-wrap {
-  transform: scaleY(1);
-}
-.ea-date-picker_wrap.with-transition .ea-date-picker_dropdown-wrap {
-  transition: transform 0.3s;
-}
-`;
+import { timeout } from '../../utils/timeout.js';
 
 export class EaDatePicker extends Base {
     #container;
@@ -47,7 +26,7 @@ export class EaDatePicker extends Base {
                     <ea-input class="ea-date-picker_input" part='input' prefix-icon="icon-calendar-times-o" readonly></ea-input>
                 </div>
                 <div class='ea-date-picker_dropdown-wrap' part='dropdown-wrap'>
-                    <ea-calendar class="ea-date-picker_calendar" size="mini"></ea-calendar>
+                    <ea-calendar class="ea-date-picker_calendar" size="mini" part='calendar'></ea-calendar>
                 </div>
             </div>
         `;
@@ -151,19 +130,7 @@ export class EaDatePicker extends Base {
     // #endregion
     // ------- end -------
 
-    #init() {
-        this.name = this.name;
-
-        this.width = this.width;
-
-        this.value = this.value;
-
-        this.placeholder = this.placeholder;
-
-        this.disabled = this.disabled;
-
-        this.align = this.align;
-
+    #initSelectEvent() {
         this.#calendarElement.addEventListener('select', (e) => {
             const { year, month, date, day } = e.detail;
             this.value = `${year}-${month}-${date}`;
@@ -179,7 +146,9 @@ export class EaDatePicker extends Base {
                 },
             }));
         });
+    }
 
+    #initDropdownOpen() {
         this.#calendarInput.addEventListener('focus', () => {
             this.#container.classList.add('is-open');
         });
@@ -191,16 +160,29 @@ export class EaDatePicker extends Base {
                 this.#calendarInput.shadowRoot.querySelector('.ea-input_inner').focus();
             }
         });
+    }
+
+    connectedCallback() {
+        this.setAttribute('data-ea-component', true);
+
+        this.name = this.name;
+
+        this.width = this.width;
+
+        this.value = this.value;
+
+        this.placeholder = this.placeholder;
+
+        this.disabled = this.disabled;
+
+        this.align = this.align;
+
+        this.#initSelectEvent();
+        this.#initDropdownOpen();
 
         timeout(() => {
             this.#container.classList.add('with-transition');
         }, 300);
-
-        this.setAttribute('data-ea-component', true);
-    }
-
-    connectedCallback() {
-        this.#init();
     }
 }
 
