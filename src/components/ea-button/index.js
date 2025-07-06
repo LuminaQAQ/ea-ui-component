@@ -35,6 +35,7 @@ export class EaButton extends Base {
    * @property {boolean} round
    * @property {boolean} circle
    * @property {boolean} link
+   * @property {string} href
    * @property {string} size
    * @property {boolean} loading
    */
@@ -95,6 +96,8 @@ export class EaButton extends Base {
       default: '',
       observer: (newVal) => {
         this.computedClasslist()
+
+        this.#wrap.setAttribute('href', newVal)
       }
     },
     size: {
@@ -130,19 +133,18 @@ export class EaButton extends Base {
   constructor() {
     super();
 
-    const shadowRoot = this.shadowRoot
     this.stylesheet = stylesheet;
 
     const hrefAttr = this.getAttribute('href')
     if (hrefAttr) {
-      shadowRoot.innerHTML = HrefComm;
+      this.shadowRoot.innerHTML = HrefComm;
       this.#buttonType = "a";
     } else {
-      shadowRoot.innerHTML = ButtonComm;
+      this.shadowRoot.innerHTML = ButtonComm;
       this.#buttonType = "button";
     }
 
-    this.#wrap = shadowRoot.querySelector('.ea-button');
+    this.#wrap = this.shadowRoot.querySelector('.ea-button');
   }
 
   // ------- 禁用 -------
@@ -246,14 +248,13 @@ export class EaButton extends Base {
   }
 
   get href() {
-    return this.getAttribute('href') || '';
+    return this.state.href;
   }
 
   set href(value) {
     if (this.#buttonType === "button") return;
 
-    this.setAttribute('href', value);
-    this.#wrap.setAttribute('href', value);
+    this.state.href = value;
   }
   // #endregion
   // ------- end -------
@@ -299,7 +300,7 @@ export class EaButton extends Base {
 
     // 链接
     this.link = this.getAttribute('link');
-    if (this.link) this.href = this.href;
+    if (this.link) this.href = this.getAttribute('href');
 
     // 禁用
     this.disabled = this.getAttrBoolean("disabled")

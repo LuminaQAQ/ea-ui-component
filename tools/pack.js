@@ -46,8 +46,38 @@ const handlePackageExport = () => {
     });
 
     const pkgPath = path.resolve(process.cwd(), 'package.json');
-    const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf-8'));
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
     pkg.exports = exportsConfig;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
-module.exports = { handleImportModules, handlePackageExport }
+
+const handleImportChildPages = () => {
+    const dir = path.join(process.cwd(), 'test');
+    const entryPath = path.join(process.cwd(), 'index.html');
+    const files = [];
+
+    fs.readdirSync(dir).forEach(file => {
+        files.push(`./test/${file}`);
+    });
+
+    fs.writeFileSync(entryPath, `
+        <!DOCTYPE html>
+        <html lang="en">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+        </head>
+
+        <body>
+            <script type="module" src="main.js"></script>
+            ${files.map((file) => `<p><ea-button type="primary" href="${file}" link size="large"> ${file.slice(7, files.length)}</ea-button></p>`).join('\n')}
+        </body>
+
+        </html>
+    `);
+
+}
+
+module.exports = { handleImportModules, handlePackageExport, handleImportChildPages }
