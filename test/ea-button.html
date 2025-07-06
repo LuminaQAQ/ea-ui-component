@@ -25,6 +25,7 @@
 
 <body>
     <script type="module" src="/main.js"></script>
+    <ea-icon icon="coffee"></ea-icon>
     <script type="module">
         // ------- disabled按钮 -------
         // #region
@@ -219,10 +220,11 @@
     <!-- #region  -->
     <h2>按钮组</h2>
     <div class="row left">
+        <ea-icon icon="icon-angle-right"></ea-icon>
         <ea-switch id="btngroup-switch" checked></ea-switch>
         <ea-button-group id="btngroup" disabled>
-            <ea-button type="success">上一页</ea-button>
-            <ea-button type="primary">下一页</ea-button>
+            <ea-button icon="icon-angle-left" type="success">上一页</ea-button>
+            <ea-button type="primary">下一页 <ea-icon icon="icon-angle-right"></ea-icon> </ea-button>
         </ea-button-group>
         <ea-button-group size="small">
             <ea-button>后退</ea-button>

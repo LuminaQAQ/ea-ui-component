@@ -7,19 +7,19 @@ export class EaIcon extends HTMLElement {
     constructor() {
         super();
 
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
-            <i class="ea-icon_wrap" part="container">
-                <slot></slot>
-            </i>
-        `;
-
         const sheet = new CSSStyleSheet();
         const variableSheet = new CSSStyleSheet();
         sheet.replaceSync(stylesheet);
         variableSheet.replaceSync(variable);
 
+
+        this.attachShadow({ mode: 'open' });
         this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
+        this.shadowRoot.innerHTML = `
+            <i class="ea-icon_wrap" part="container">
+                <slot></slot>
+            </i>
+        `;
 
         this.#wrap = this.shadowRoot.querySelector('.ea-icon_wrap');
     }
@@ -66,7 +66,7 @@ export class EaIcon extends HTMLElement {
     // #endregion
     // ------- end -------
 
-    $mounted() {
+    connectedCallback() {
         this.icon = this.icon;
 
         this.color = this.color;
