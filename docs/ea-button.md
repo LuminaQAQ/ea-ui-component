@@ -7,13 +7,13 @@ onMounted(() => {
   import("../dist/components/index.js")
   import("../dist/assets/icon.css")
 
-  document
-    .querySelector("#ea-radio-href")
-    .addEventListener("click", function (e) {
-      const btn = document.querySelector("#ea-button-a");
+  // document
+  //   .querySelector("#ea-radio-href")
+  //   .addEventListener("click", function (e) {
+  //     const btn = document.querySelector("#ea-button-a");
 
-      btn.disabled = e.target.checked;
-    });
+  //     btn.disabled = e.target.checked;
+  //   });
 
   document
     .querySelector("#ea-radio-loading")
@@ -181,69 +181,229 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
 
 :::
 
-<div class="row left">
-  <ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>链接按钮</ea-button>
-  <ea-button type="primary" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>文本按钮</ea-button>
-  <ea-button type="danger" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>危险按钮</ea-button>
-  <ea-button type="warning" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>警告按钮</ea-button>
-  <ea-button type="success" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>成功按钮</ea-button>
-  <ea-button disabled id="ea-button-a" type="text" href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link>链接按钮</ea-button>
-</div>
+通过设置 `href` 属性来改变链接。
 
-```html
-<ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link
-  >链接按钮</ea-button
->
-<ea-button
-  type="primary"
-  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-  link
-  >文本按钮</ea-button
->
-<ea-button
-  type="danger"
-  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-  link
-  >危险按钮</ea-button
->
-<ea-button
-  type="warning"
-  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-  link
-  >警告按钮</ea-button
->
-<ea-button
-  type="success"
-  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-  link
-  >成功按钮</ea-button
->
-<ea-button
-  disabled
-  id="ea-button-a"
-  type="text"
-  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-  link
-  >链接按钮</ea-button
->
-```
+<div class="demo">
+  <div class="row left">
+    <ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link
+      >链接按钮</ea-button
+    >
+    <ea-button
+      type="primary"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >文本按钮</ea-button
+    >
+    <ea-button
+      type="danger"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >危险按钮</ea-button
+    >
+    <ea-button
+      type="warning"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >警告按钮</ea-button
+    >
+    <ea-button
+      type="success"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >成功按钮</ea-button
+    >
+    <ea-button
+      disabled
+      id="ea-button-a"
+      type="text"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >链接按钮</ea-button
+    >
+  </div>
 
-## 文字按钮
-
-没有边框和背景色的按钮。 通过设置 `type` 属性为 `text` 来切换按钮类型。
-
-<div class="row left">
-  <ea-button text>文字按钮</ea-button>
-  <ea-button text disabled>文字按钮</ea-button>
+  <div class="row left">
+    <ea-button
+      disabled
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >链接按钮</ea-button
+    >
+    <ea-button
+      disabled
+      type="primary"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >文本按钮</ea-button
+    >
+    <ea-button
+      disabled
+      type="danger"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >危险按钮</ea-button
+    >
+    <ea-button
+      disabled
+      type="warning"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >警告按钮</ea-button
+    >
+    <ea-button
+      disabled
+      type="success"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >成功按钮</ea-button
+    >
+    <ea-button
+      disabled
+      id="ea-button-a"
+      type="text"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >链接按钮</ea-button
+    >
+  </div>
 </div>
 
 ::: details 查看代码
 
 ```html
-<div class="row left">
-  <ea-button text>文字按钮</ea-button>
-  <ea-button text disabled>文字按钮</ea-button>
+<div class="demo">
+  <div class="row left">
+    <ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link
+      >链接按钮</ea-button
+    >
+    <ea-button
+      type="primary"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >文本按钮</ea-button
+    >
+    <ea-button
+      type="danger"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >危险按钮</ea-button
+    >
+    <ea-button
+      type="warning"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >警告按钮</ea-button
+    >
+    <ea-button
+      type="success"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >成功按钮</ea-button
+    >
+    <ea-button
+      disabled
+      id="ea-button-a"
+      type="text"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >链接按钮</ea-button
+    >
+  </div>
+
+  <div class="row left">
+    <ea-button
+      disabled
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >链接按钮</ea-button
+    >
+    <ea-button
+      disabled
+      type="primary"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >文本按钮</ea-button
+    >
+    <ea-button
+      disabled
+      type="danger"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >危险按钮</ea-button
+    >
+    <ea-button
+      disabled
+      type="warning"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >警告按钮</ea-button
+    >
+    <ea-button
+      disabled
+      type="success"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >成功按钮</ea-button
+    >
+    <ea-button
+      disabled
+      id="ea-button-a"
+      type="text"
+      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link
+      >链接按钮</ea-button
+    >
+  </div>
+</div>
+```
+
+:::
+
+## 文字按钮
+
+::: tip
+
+没有边框和背景色的按钮。 通过设置 `type` 属性为 `text` 来切换按钮类型。
+
+API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于 3.0.0，我们通过一个新的 API text: boolean 来控制文字按钮。
+
+:::
+
+<div class="demo">
+  <div class="row left">
+    <ea-button icon="icon-coffee" text>文字按钮</ea-button>
+    <ea-button type="primary" text>文字按钮</ea-button>
+    <ea-button type="danger" text>文字按钮</ea-button>
+    <ea-button type="warning" text>文字按钮</ea-button>
+    <ea-button type="success" text>文字按钮</ea-button>
+  </div>
+  <div class="row left">
+    <ea-button disabled icon="icon-coffee" text>文字按钮</ea-button>
+    <ea-button disabled type="primary" text>文字按钮</ea-button>
+    <ea-button disabled type="danger" text>文字按钮</ea-button>
+    <ea-button disabled type="warning" text>文字按钮</ea-button>
+    <ea-button disabled type="success" text>文字按钮</ea-button>
+  </div>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="demo">
+  <div class="row left">
+    <ea-button icon="icon-coffee" text>文字按钮</ea-button>
+    <ea-button type="primary" text>文字按钮</ea-button>
+    <ea-button type="danger" text>文字按钮</ea-button>
+    <ea-button type="warning" text>文字按钮</ea-button>
+    <ea-button type="success" text>文字按钮</ea-button>
+  </div>
+  <div class="row left">
+    <ea-button disabled icon="icon-coffee" text>文字按钮</ea-button>
+    <ea-button disabled type="primary" text>文字按钮</ea-button>
+    <ea-button disabled type="danger" text>文字按钮</ea-button>
+    <ea-button disabled type="warning" text>文字按钮</ea-button>
+    <ea-button disabled type="success" text>文字按钮</ea-button>
+  </div>
 </div>
 ```
 
@@ -251,44 +411,37 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
 
 ## 图标按钮
 
-带图标的按钮可增强辨识度（有文字）或节省空间（无文字）。 通过设置 `icon` 属性为 `icon-xxx` 来改变图标，更多图标请查看 [图标文档](./ea-icon.md)。
+使用图标为按钮添加更多的含义。 你也可以单独使用图标不添加文字来节省显示区域占用。
+
+通过设置 `icon` 属性为 `icon-xxx` 来改变图标，更多图标请查看 [图标文档](./ea-icon.md)。
 
 <div class="row left">
+  <ea-button type="primary" icon="icon-coffee" circle></ea-button>
+  <ea-button type="primary" icon="icon-edit" round></ea-button>
   <ea-button type="primary" icon="icon-edit"></ea-button>
   <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
-  <ea-button type="primary" icon="icon-trash-empty" disabled>图标按钮</ea-button>
+  <ea-button type="primary" icon="icon-trash-empty" disabled>
+    图标按钮
+  </ea-button>
+  <ea-button type="primary" disabled>
+    图标按钮 <ea-icon icon="icon-trash-empty"></ea-icon>
+  </ea-button>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="row left">
+  <ea-button type="primary" icon="icon-coffee" circle></ea-button>
+  <ea-button type="primary" icon="icon-edit" round></ea-button>
   <ea-button type="primary" icon="icon-edit"></ea-button>
   <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
-  <ea-button type="primary" icon="icon-trash-empty" disabled
-    >图标按钮</ea-button
-  >
-</div>
-```
-
-:::
-
-## 链接按钮
-
-对普通链接的样式进行美化，可以在不同场景下选择相应的样式。 通过设置 `href` 属性来改变链接。
-
-<div class="row left">
-  <ea-switch id="ea-radio-href"></ea-switch>
-  <ea-button type="text" href="https://github.com/LuminaQAQ">链接按钮</ea-button>
-  <ea-button id="ea-button-a" type="normal" href="https://github.com/LuminaQAQ" disabled>链接按钮</ea-button>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="row left">
-  <ea-button type="text">文字按钮</ea-button>
-  <ea-button id="ea-button-a" type="text" disabled>文字按钮</ea-button>
+  <ea-button type="primary" icon="icon-trash-empty" disabled>
+    图标按钮
+  </ea-button>
+  <ea-button type="primary" disabled>
+    图标按钮 <ea-icon icon="icon-trash-empty"></ea-icon>
+  </ea-button>
 </div>
 ```
 
@@ -300,8 +453,10 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
 
 <div class="row left">
   <ea-button-group>
-    <ea-button type="primary">上一页</ea-button>
-    <ea-button type="primary">下一页</ea-button>
+    <ea-button icon="icon-angle-left" type="primary">上一页</ea-button>
+    <ea-button type="primary">
+      下一页 <ea-icon icon="icon-angle-right"></ea-icon>
+    </ea-button>
   </ea-button-group>
   <ea-button-group>
     <ea-button type="primary">后退</ea-button>
@@ -313,22 +468,28 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
 ::: details 查看代码
 
 ```html
-<ea-button-group>
-  <ea-button type="primary">上一页</ea-button>
-  <ea-button type="primary">下一页</ea-button>
-</ea-button-group>
-<ea-button-group>
-  <ea-button type="primary">后退</ea-button>
-  <ea-button type="primary">刷新</ea-button>
-  <ea-button type="primary">前进</ea-button>
-</ea-button-group>
+<div class="row left">
+  <ea-button-group>
+    <ea-button icon="icon-angle-left" type="primary">上一页</ea-button>
+    <ea-button type="primary">
+      下一页 <ea-icon icon="icon-angle-right"></ea-icon>
+    </ea-button>
+  </ea-button-group>
+  <ea-button-group>
+    <ea-button type="primary">后退</ea-button>
+    <ea-button type="primary">刷新</ea-button>
+    <ea-button type="primary">前进</ea-button>
+  </ea-button-group>
+</div>
 ```
 
 :::
 
-## 加载中
+## 加载状态按钮 ​
 
-点击按钮后进行数据加载操作，在按钮上显示加载状态。可以点击尝试。
+点击按钮来加载数据，并向用户反馈加载状态。
+
+通过设置 loading 属性为 true 来显示加载中状态。
 
 <div class="row left">
   <ea-switch id="ea-radio-loading" checked></ea-switch>
@@ -348,12 +509,14 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
 </div>
 ```
 
-`js`: 操作 `loading` 属性。`btn.loading = true;`
+`js`: 操作 `loading` 属性。
 
 ```js
 const btn = document.querySelector("#ea-button-loading");
 btn.addEventListener("click", function (e) {
-  e.target.checked ? (btn.loading = true) : (btn.loading = false);
+  btn.loading = e.detail.checked;
+  // 或者
+  // btn.setAttribute("loading", e.detail.checked);
 });
 ```
 
@@ -361,21 +524,85 @@ btn.addEventListener("click", function (e) {
 
 ## 不同尺寸
 
-`Button` 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。通过 设置 `size` 属性来改变按钮大小。
+除了默认的大小，按钮组件还提供了几种额外的尺寸可供选择，以便适配不同的场景。
 
-<div class="row">
-  <ea-button size="large" round>大型按钮</ea-button>
-  <ea-button size="medium" round>普通按钮</ea-button>
-  <ea-button size="small" round>小型按钮</ea-button>
+使用 size 属性额外配置尺寸，可使用 large 和 small 两种值。
+
+<div class="demo">
+  <div class="row left">
+    <ea-button type="primary" size="large">大型按钮</ea-button>
+    <ea-button type="primary">默认按钮</ea-button>
+    <ea-button type="primary" size="small">小型按钮</ea-button>
+  </div>
+  <div class="row left">
+    <ea-button type="primary" icon="icon-coffee" size="large"
+      >大型按钮</ea-button
+    >
+    <ea-button type="primary" icon="icon-coffee">默认按钮</ea-button>
+    <ea-button type="primary" icon="icon-coffee" size="small"
+      >小型按钮</ea-button
+    >
+  </div>
+  <div class="row left">
+    <ea-button type="primary" round size="large">大型按钮</ea-button>
+    <ea-button type="primary" round>默认按钮</ea-button>
+    <ea-button type="primary" round size="small">小型按钮</ea-button>
+  </div>
+  <div class="row left">
+    <ea-button
+      type="primary"
+      circle
+      icon="icon-coffee"
+      size="large"
+    ></ea-button>
+    <ea-button type="primary" circle icon="icon-coffee"></ea-button>
+    <ea-button
+      type="primary"
+      circle
+      icon="icon-coffee"
+      size="small"
+    ></ea-button>
+  </div>
 </div>
 
 ::: details 查看代码
 
 ```html
-<div class="row">
-  <ea-button size="large" round>大型按钮</ea-button>
-  <ea-button size="medium" round>普通按钮</ea-button>
-  <ea-button size="small" round>小型按钮</ea-button>
+<div class="demo">
+  <div class="row left">
+    <ea-button type="primary" size="large">大型按钮</ea-button>
+    <ea-button type="primary">默认按钮</ea-button>
+    <ea-button type="primary" size="small">小型按钮</ea-button>
+  </div>
+  <div class="row left">
+    <ea-button type="primary" icon="icon-coffee" size="large"
+      >大型按钮</ea-button
+    >
+    <ea-button type="primary" icon="icon-coffee">默认按钮</ea-button>
+    <ea-button type="primary" icon="icon-coffee" size="small"
+      >小型按钮</ea-button
+    >
+  </div>
+  <div class="row left">
+    <ea-button type="primary" round size="large">大型按钮</ea-button>
+    <ea-button type="primary" round>默认按钮</ea-button>
+    <ea-button type="primary" round size="small">小型按钮</ea-button>
+  </div>
+  <div class="row left">
+    <ea-button
+      type="primary"
+      circle
+      icon="icon-coffee"
+      size="large"
+    ></ea-button>
+    <ea-button type="primary" circle icon="icon-coffee"></ea-button>
+    <ea-button
+      type="primary"
+      circle
+      icon="icon-coffee"
+      size="small"
+    ></ea-button>
+  </div>
 </div>
 ```
 
@@ -383,22 +610,24 @@ btn.addEventListener("click", function (e) {
 
 ## Button Attributes
 
-| 参数     | 说明       | 类型    | 可选值                                           | 默认值 |
-| -------- | ---------- | ------- | ------------------------------------------------ | ------ |
-| size     | 尺寸       | string  | normal/medium/small/mini                         | normal |
-| type     | 类型       | string  | normal/primary/success <br> /warning/danger/text | normal |
-| plain    | 朴素按钮   | boolean | true/false                                       | false  |
-| disabled | 禁用状态   | boolean | true/false                                       | false  |
-| round    | 圆角按钮   | boolean | true/false                                       | false  |
-| loading  | 加载中状态 | boolean | true/false                                       | false  |
-| icon     | 图标类名   | string  | -                                                | -      |
-| href     | 链接地址   | string  | -                                                | -      |
+| **参数**   | **说明** | **类型**  | **可选值**                                                          | **默认值** |
+| ---------- | -------- | --------- | ------------------------------------------------------------------- | ---------- |
+| `size`     | 按钮尺寸 | `string`  | `normal`／`medium`／`small`／`mini`                                 | `"normal"` |
+| `type`     | 按钮类型 | `string`  | `normal`／`primary`／`success`／`warning`／`danger`／`text`／`link` | `"normal"` |
+| `plain`    | 朴素效果 | `boolean` | `true`／`false`                                                     | `false`    |
+| `disabled` | 是否禁用 | `boolean` | `true`／`false`                                                     | `false`    |
+| `round`    | 圆角按钮 | `boolean` | `true`／`false`                                                     | `false`    |
+| `loading`  | 加载状态 | `boolean` | `true`／`false`                                                     | `false`    |
+| `icon`     | 图标类名 | `string`  | —                                                                   | —          |
+| `href`     | 链接地址 | `string`  | —                                                                   | —          |
 
 ## ButtonGroup Attributes
 
-| 参数     | 说明     | 类型    | 可选值     | 默认值 |
-| -------- | -------- | ------- | ---------- | ------ |
-| disabled | 禁用状态 | boolean | true/false | false  |
+| **参数**   | **说明** | **类型**  | **可选值**                                                          | **默认值** |
+| ---------- | -------- | --------- | ------------------------------------------------------------------- | ---------- |
+| `disabled` | 是否禁用 | `boolean` | `true`／`false`                                                     | `false`    |
+| `type`     | 按钮类型 | `string`  | `normal`／`primary`／`success`／`warning`／`danger`／`text`／`link` | `"normal"` |
+| `size`     | 按钮尺寸 | `string`  | `normal`／`medium`／`small`／`mini`                                 | `"normal"` |
 
 ## Button CSS Part
 
