@@ -1,15 +1,20 @@
-var f = (i) => {
-  throw TypeError(i);
+var b = (i, a, e) => {
+  if (!a.has(i))
+    throw TypeError("Cannot " + e);
 };
-var b = (i, a, e) => a.has(i) || f("Cannot " + e);
-var t = (i, a, e) => (b(i, a, "read from private field"), e ? e.call(i) : a.get(i)), c = (i, a, e) => a.has(i) ? f("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(i) : a.set(i, e), h = (i, a, e, s) => (b(i, a, "write to private field"), s ? s.call(i, e) : a.set(i, e), e), g = (i, a, e) => (b(i, a, "access private method"), e);
-import { B as y } from "./Base.js";
+var t = (i, a, e) => (b(i, a, "read from private field"), e ? e.call(i) : a.get(i)), c = (i, a, e) => {
+  if (a.has(i))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(i) : a.set(i, e);
+}, h = (i, a, e, s) => (b(i, a, "write to private field"), s ? s.call(i, e) : a.set(i, e), e);
+var f = (i, a, e) => (b(i, a, "access private method"), e);
+import { B as _ } from "./Base.js";
 import "./index3.js";
 import "./ea-option.js";
 import "./ea-option-gropu.js";
 import "./ea-input.js";
-import { t as A, w as E } from "./timeout.js";
-const x = `
+import { t as y, w as A } from "./timeout.js";
+const E = `
 .ea-select_wrap {
   position: relative;
 }
@@ -58,16 +63,18 @@ const x = `
   transition: transform 0.3s;
 }
 `;
-var r, l, n, p, u, m, v;
-class k extends y {
+var r, l, n, p, u, m, g;
+class x extends _ {
   constructor() {
     super();
+    // #endregion
+    // ------- end -------
     c(this, m);
-    c(this, r);
-    c(this, l);
-    c(this, n);
-    c(this, p);
-    c(this, u);
+    c(this, r, void 0);
+    c(this, l, void 0);
+    c(this, n, void 0);
+    c(this, p, void 0);
+    c(this, u, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class="ea-select_wrap" part="container">
@@ -84,7 +91,7 @@ class k extends y {
                     </slot>
                 </div>
             </div>
-        `, h(this, r, this.shadowRoot.querySelector(".ea-select_wrap")), h(this, l, this.shadowRoot.querySelector("ea-input")), h(this, n, this.shadowRoot.querySelector(".ea-select_dropdown-icon")), h(this, p, this.shadowRoot.querySelector(".ea-select_dropdown-wrap")), h(this, u, this.shadowRoot.querySelector(".ea-select_dropdown-empty")), this.build(e, x);
+        `, h(this, r, this.shadowRoot.querySelector(".ea-select_wrap")), h(this, l, this.shadowRoot.querySelector("ea-input")), h(this, n, this.shadowRoot.querySelector(".ea-select_dropdown-icon")), h(this, p, this.shadowRoot.querySelector(".ea-select_dropdown-wrap")), h(this, u, this.shadowRoot.querySelector(".ea-select_dropdown-empty")), this.build(e, E);
   }
   // ------- name 若与 form 组合使用，则 form 的返回值中. 该键名为该name -------
   // #region
@@ -183,8 +190,8 @@ class k extends y {
       d.forEach((w) => {
         w.style.display = w.value.includes(o) ? "block" : "none";
       });
-      let _ = Array.from(d).every((w) => w.style.display !== "block");
-      t(this, u).style.display = _ ? "block" : "none";
+      let v = Array.from(d).every((w) => w.style.display !== "block");
+      t(this, u).style.display = v ? "block" : "none";
     });
   }
   // #endregion
@@ -208,26 +215,24 @@ class k extends y {
     this.setAttribute("is-invalid", e), t(this, l).isInvalid = e;
   }
   connectedCallback() {
-    this.setAttribute("data-ea-component", !0), t(this, p).style.width = this.width, this.name = this.name, this.width = this.width, this.selection = this.selection, this.placeholder = this.placeholder, this.disabled = this.disabled, this.clearable = this.clearable, this.filterable = this.filterable, this.multiple = this.multiple, g(this, m, v).call(this), t(this, l).addEventListener("focus", (e) => {
+    this.setAttribute("data-ea-component", !0), t(this, p).style.width = this.width, this.name = this.name, this.width = this.width, this.selection = this.selection, this.placeholder = this.placeholder, this.disabled = this.disabled, this.clearable = this.clearable, this.filterable = this.filterable, this.multiple = this.multiple, f(this, m, g).call(this), t(this, l).addEventListener("focus", (e) => {
       t(this, r).classList.add("is-open"), this.dispatchEvent(new CustomEvent("visible-change", {
         detail: {
           visible: !0
         }
       }));
     }), t(this, l).addEventListener("blur", (e) => {
-      A(() => {
+      y(() => {
         t(this, r).classList.remove("is-open");
       }, 100), this.dispatchEvent(new CustomEvent("visible-change", {
         detail: {
           visible: !1
         }
       }));
-    }), E(t(this, r));
+    }), A(t(this, r));
   }
 }
-r = new WeakMap(), l = new WeakMap(), n = new WeakMap(), p = new WeakMap(), u = new WeakMap(), m = new WeakSet(), // #endregion
-// ------- end -------
-v = function() {
+r = new WeakMap(), l = new WeakMap(), n = new WeakMap(), p = new WeakMap(), u = new WeakMap(), m = new WeakSet(), g = function() {
   const e = this.querySelectorAll("ea-option");
   e.forEach((s) => {
     s.disabled || s.addEventListener("click", (d) => {
@@ -250,7 +255,7 @@ v = function() {
     });
   });
 };
-customElements.get("ea-select") || customElements.define("ea-select", k);
+customElements.get("ea-select") || customElements.define("ea-select", x);
 export {
-  k as EaSelect
+  x as EaSelect
 };

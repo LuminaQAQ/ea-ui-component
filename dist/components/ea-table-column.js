@@ -1,24 +1,28 @@
-var h = (e) => {
-  throw TypeError(e);
+var h = (e, s, t) => {
+  if (!s.has(e))
+    throw TypeError("Cannot " + t);
 };
-var a = (e, s, t) => s.has(e) || h("Cannot " + t);
-var o = (e, s, t) => (a(e, s, "read from private field"), t ? t.call(e) : s.get(e)), n = (e, s, t) => s.has(e) ? h("Cannot add the same private member more than once") : s instanceof WeakSet ? s.add(e) : s.set(e, t), l = (e, s, t, i) => (a(e, s, "write to private field"), i ? i.call(e, t) : s.set(e, t), t);
-import { B as c } from "./Base.js";
+var o = (e, s, t) => (h(e, s, "read from private field"), t ? t.call(e) : s.get(e)), a = (e, s, t) => {
+  if (s.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  s instanceof WeakSet ? s.add(e) : s.set(e, t);
+}, n = (e, s, t, i) => (h(e, s, "write to private field"), i ? i.call(e, t) : s.set(e, t), t);
+import { B as l } from "./Base.js";
 import "./index3.js";
 import "./ea-checkbox.js";
-const p = "";
+const c = "";
 var r;
-class b extends c {
+class p extends l {
   constructor() {
     super();
-    n(this, r);
+    a(this, r, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <th part="container">
                 <slot></slot>
                 <span></span>
             </th>
-        `, this.build(t, p), l(this, r, t.querySelector("span"));
+        `, this.build(t, c), n(this, r, t.querySelector("span"));
   }
   // ------- prop 表头对应的数据的键值 -------
   // #region
@@ -115,7 +119,7 @@ class b extends c {
   }
 }
 r = new WeakMap();
-customElements.get("ea-table-column") || customElements.define("ea-table-column", b);
+customElements.get("ea-table-column") || customElements.define("ea-table-column", p);
 export {
-  b as EaTableColumn
+  p as EaTableColumn
 };

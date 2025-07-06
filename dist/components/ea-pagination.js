@@ -1,10 +1,15 @@
-var x = (e) => {
-  throw TypeError(e);
+var L = (a, i, t) => {
+  if (!i.has(a))
+    throw TypeError("Cannot " + t);
 };
-var b = (e, n, t) => n.has(e) || x("Cannot " + t);
-var r = (e, n, t) => (b(e, n, "read from private field"), t ? t.call(e) : n.get(e)), l = (e, n, t) => n.has(e) ? x("Cannot add the same private member more than once") : n instanceof WeakSet ? n.add(e) : n.set(e, t), m = (e, n, t, s) => (b(e, n, "write to private field"), s ? s.call(e, t) : n.set(e, t), t), i = (e, n, t) => (b(e, n, "access private method"), t);
-import { B as E } from "./Base.js";
-const z = `
+var n = (a, i, t) => (L(a, i, "read from private field"), t ? t.call(a) : i.get(a)), s = (a, i, t) => {
+  if (i.has(a))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(a) : i.set(a, t);
+}, w = (a, i, t, r) => (L(a, i, "write to private field"), r ? r.call(a, t) : i.set(a, t), t);
+var e = (a, i, t) => (L(a, i, "access private method"), t);
+import { B as N } from "./Base.js";
+const B = `
 .ea-pagination_wrap {
   display: flex;
   align-items: center;
@@ -74,31 +79,47 @@ const z = `
   margin-right: 0.5rem;
   font-size: 13px;
 }
-`, y = (e, n) => {
+`, M = (a, i) => {
   const t = document.createElement("span");
-  return t.className = "ea-pagination_more", t.innerHTML = "···", t.part = "more-item", n && t.classList.add("background"), t.addEventListener("mouseenter", function(s) {
-    t.classList.add("ea-pagination_more--active"), t.innerHTML = e === "prev" ? "&lt;&lt;" : "&gt;&gt;";
-  }), t.addEventListener("mouseleave", function(s) {
+  return t.className = "ea-pagination_more", t.innerHTML = "···", t.part = "more-item", i && t.classList.add("background"), t.addEventListener("mouseenter", function(r) {
+    t.classList.add("ea-pagination_more--active"), t.innerHTML = a === "prev" ? "&lt;&lt;" : "&gt;&gt;";
+  }), t.addEventListener("mouseleave", function(r) {
     t.classList.remove("ea-pagination_more--active"), t.innerHTML = "···";
   }), t;
-}, v = (e, n) => {
+}, A = (a, i) => {
   const t = document.createElement("span");
-  return t.part = "page-item", t.className = "ea-pagination_item", t.innerText = e, t.setAttribute("data-page", e), n && t.classList.add("background"), t;
-}, I = () => {
-  const e = document.createElement("span");
-  return e.className = "ea-pagination_show_total", e.part = "total-wrap", e;
+  return t.part = "page-item", t.className = "ea-pagination_item", t.innerText = a, t.setAttribute("data-page", a), i && t.classList.add("background"), t;
+}, H = () => {
+  const a = document.createElement("span");
+  return a.className = "ea-pagination_show_total", a.part = "total-wrap", a;
 };
-var d, o, c, h, a, _, L, C, f, P, k, w, A;
-class M extends E {
+var m, o, c, h, l, f, x, T, v, E, _, k, C, z, P, I, d, b, y, S;
+class q extends N {
   constructor() {
     super();
-    l(this, a);
-    l(this, d);
+    // #endregion
+    // ------- end -------
+    s(this, l);
+    // 初始化箭头元素
+    s(this, x);
+    // 处理箭头状态
+    s(this, v);
+    // 处理分页点击事件
+    s(this, _);
+    // 处理更多按钮点击事件
+    s(this, C);
+    // 处理分页的页码
+    s(this, P);
+    // 处理分页变化
+    s(this, d);
+    // 处理显示总数
+    s(this, y);
+    s(this, m, void 0);
     // 页码元素的容器
-    l(this, o);
+    s(this, o, void 0);
     // 箭头
-    l(this, c);
-    l(this, h);
+    s(this, c, void 0);
+    s(this, h, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-pagination_wrap" part="container">
@@ -106,12 +127,12 @@ class M extends E {
                 <div class="ea-pagination_item_wrap" part="item-wrap"></div>
                 <span class="ea-pagination_arrow next ${this.background ? "background" : ""}" part="arrow">&gt;</span>
             </div>
-        `, m(this, d, t.querySelector(".ea-pagination_wrap")), m(this, c, t.querySelector(".prev")), m(this, o, t.querySelector(".ea-pagination_item_wrap")), m(this, h, t.querySelector(".next")), this.build(t, z);
+        `, w(this, m, t.querySelector(".ea-pagination_wrap")), w(this, c, t.querySelector(".prev")), w(this, o, t.querySelector(".ea-pagination_item_wrap")), w(this, h, t.querySelector(".next")), this.build(t, B);
   }
   // ------- layout 布局(前一页, 页码, 后一页) -------
   // #region
   get layout() {
-    return this.getAttribute("layout").split(",").map((s) => s.trim()) || ["prev", "pager", "next"];
+    return this.getAttribute("layout").split(",").map((r) => r.trim()) || ["prev", "pager", "next"];
   }
   set layout(t) {
     this.setAttribute("layout", t);
@@ -174,74 +195,67 @@ class M extends E {
     t && this.setAttribute("background", t);
   }
   connectedCallback() {
-    this.sizes = this.sizes, this.currentPage = this.currentPage, this.total = this.total, i(this, a, L).call(this), i(this, a, k).call(this), i(this, a, A).call(this);
+    this.sizes = this.sizes, this.currentPage = this.currentPage, this.total = this.total, e(this, x, T).call(this), e(this, P, I).call(this), e(this, y, S).call(this);
   }
 }
-d = new WeakMap(), o = new WeakMap(), c = new WeakMap(), h = new WeakMap(), a = new WeakSet(), // #endregion
-// ------- end -------
-_ = function(t, s) {
-  this.dispatchEvent(new CustomEvent(t, s));
-}, // 初始化箭头元素
-L = function() {
-  i(this, a, C).call(this), this.layout.includes("prev") ? r(this, c).addEventListener("click", () => {
-    this.currentPage <= 1 || (this.currentPage--, i(this, a, w).call(this), i(this, a, _).call(this, "change", { detail: { currentPage: this.currentPage } }));
-  }) : r(this, c).style.display = "none", this.layout.includes("next") ? r(this, h).addEventListener("click", () => {
-    this.currentPage >= this.paginationCount || (this.currentPage++, i(this, a, w).call(this), i(this, a, _).call(this, "change", { detail: { currentPage: this.currentPage } }));
-  }) : r(this, h).style.display = "none";
-}, // 处理箭头状态
-C = function() {
-  !this.layout.includes("prev") && !this.layout.includes("next") || (this.currentPage === 1 && this.layout.includes("prev") ? r(this, c).classList.add("disabled") : this.currentPage >= this.paginationCount && this.layout.includes("next") ? r(this, h).classList.add("disabled") : (r(this, c).classList.remove("disabled"), r(this, h).classList.remove("disabled")));
-}, // 处理分页点击事件
-f = function(t, s) {
+m = new WeakMap(), o = new WeakMap(), c = new WeakMap(), h = new WeakMap(), l = new WeakSet(), f = function(t, r) {
+  this.dispatchEvent(new CustomEvent(t, r));
+}, x = new WeakSet(), T = function() {
+  e(this, v, E).call(this), this.layout.includes("prev") ? n(this, c).addEventListener("click", () => {
+    this.currentPage <= 1 || (this.currentPage--, e(this, d, b).call(this), e(this, l, f).call(this, "change", { detail: { currentPage: this.currentPage } }));
+  }) : n(this, c).style.display = "none", this.layout.includes("next") ? n(this, h).addEventListener("click", () => {
+    this.currentPage >= this.paginationCount || (this.currentPage++, e(this, d, b).call(this), e(this, l, f).call(this, "change", { detail: { currentPage: this.currentPage } }));
+  }) : n(this, h).style.display = "none";
+}, v = new WeakSet(), E = function() {
+  !this.layout.includes("prev") && !this.layout.includes("next") || (this.currentPage === 1 && this.layout.includes("prev") ? n(this, c).classList.add("disabled") : this.currentPage >= this.paginationCount && this.layout.includes("next") ? n(this, h).classList.add("disabled") : (n(this, c).classList.remove("disabled"), n(this, h).classList.remove("disabled")));
+}, _ = new WeakSet(), k = function(t, r) {
   t.addEventListener("click", (u) => {
-    this.currentPage = s, i(this, a, w).call(this), i(this, a, _).call(this, "change", {
+    this.currentPage = r, e(this, d, b).call(this), e(this, l, f).call(this, "change", {
       detail: {
         currentPage: this.currentPage
       }
     });
   });
-}, // 处理更多按钮点击事件
-P = function(t, s) {
+}, C = new WeakSet(), z = function(t, r) {
   t.addEventListener("click", (u) => {
-    this.currentPage += s === "prev" ? -5 : 5, this.currentPage < 1 ? this.currentPage = 1 : this.currentPage > this.paginationCount && (this.currentPage = this.paginationCount), i(this, a, w).call(this), i(this, a, _).call(this, "change", {
+    this.currentPage += r === "prev" ? -5 : 5, this.currentPage < 1 ? this.currentPage = 1 : this.currentPage > this.paginationCount && (this.currentPage = this.paginationCount), e(this, d, b).call(this), e(this, l, f).call(this, "change", {
       detail: {
         currentPage: this.currentPage
       }
     });
   });
-}, // 处理分页的页码
-k = function() {
-  if (!this.layout.includes("pager")) return;
-  r(this, o).innerHTML = "";
+}, P = new WeakSet(), I = function() {
+  if (!this.layout.includes("pager"))
+    return;
+  n(this, o).innerHTML = "";
   const t = Math.floor(this.pageCount / 2);
-  let s = this.currentPage - t, u = this.currentPage + t;
-  s <= 1 ? (s = 1, u = this.pageCount < this.paginationCount ? this.pageCount : this.paginationCount) : u >= this.paginationCount ? (s = this.paginationCount - this.pageCount + 1, u = this.paginationCount) : u--;
-  for (let g = s; g <= u; g++) {
-    const p = v(g, this.background);
-    r(this, o).appendChild(p), g === this.currentPage && (p.classList.add("ea-pagination_item--active"), this.background && p.classList.add("active")), i(this, a, f).call(this, p, g);
+  let r = this.currentPage - t, u = this.currentPage + t;
+  r <= 1 ? (r = 1, u = this.pageCount < this.paginationCount ? this.pageCount : this.paginationCount) : u >= this.paginationCount ? (r = this.paginationCount - this.pageCount + 1, u = this.paginationCount) : u--;
+  for (let g = r; g <= u; g++) {
+    const p = A(g, this.background);
+    n(this, o).appendChild(p), g === this.currentPage && (p.classList.add("ea-pagination_item--active"), this.background && p.classList.add("active")), e(this, _, k).call(this, p, g);
   }
   if (this.total > this.pageCount && this.currentPage >= this.pageCount && this.paginationCount !== this.pageCount) {
-    const g = y("prev", this.background);
-    i(this, a, P).call(this, g, "prev");
-    const p = v(1, this.background);
-    i(this, a, f).call(this, p, 1), r(this, o).insertBefore(g, r(this, o).firstChild), r(this, o).insertBefore(p, r(this, o).firstChild);
+    const g = M("prev", this.background);
+    e(this, C, z).call(this, g, "prev");
+    const p = A(1, this.background);
+    e(this, _, k).call(this, p, 1), n(this, o).insertBefore(g, n(this, o).firstChild), n(this, o).insertBefore(p, n(this, o).firstChild);
   }
   if (this.total > this.pageCount && this.currentPage < this.paginationCount - t && this.paginationCount !== this.pageCount) {
-    const g = y("next", this.background);
-    i(this, a, P).call(this, g, "next");
-    const p = v(this.paginationCount, this.background);
-    i(this, a, f).call(this, p, this.paginationCount), r(this, o).appendChild(g), r(this, o).appendChild(p);
+    const g = M("next", this.background);
+    e(this, C, z).call(this, g, "next");
+    const p = A(this.paginationCount, this.background);
+    e(this, _, k).call(this, p, this.paginationCount), n(this, o).appendChild(g), n(this, o).appendChild(p);
   }
-}, // 处理分页变化
-w = function() {
-  i(this, a, C).call(this), i(this, a, k).call(this);
-}, // 处理显示总数
-A = function() {
-  if (!this.layout.includes("total")) return;
-  const t = I();
-  t.innerHTML = `共 ${this.total} 条`, r(this, d).insertBefore(t, r(this, d).firstChild);
+}, d = new WeakSet(), b = function() {
+  e(this, v, E).call(this), e(this, P, I).call(this);
+}, y = new WeakSet(), S = function() {
+  if (!this.layout.includes("total"))
+    return;
+  const t = H();
+  t.innerHTML = `共 ${this.total} 条`, n(this, m).insertBefore(t, n(this, m).firstChild);
 };
-customElements.get("ea-pagination") || customElements.define("ea-pagination", M);
+customElements.get("ea-pagination") || customElements.define("ea-pagination", q);
 export {
-  M as EaPagination
+  q as EaPagination
 };

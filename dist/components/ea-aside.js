@@ -1,11 +1,15 @@
-var o = (e) => {
-  throw TypeError(e);
+var o = (e, s, t) => {
+  if (!s.has(e))
+    throw TypeError("Cannot " + t);
 };
-var d = (e, s, t) => s.has(e) || o("Cannot " + t);
-var r = (e, s, t) => (d(e, s, "read from private field"), t ? t.call(e) : s.get(e)), h = (e, s, t) => s.has(e) ? o("Cannot add the same private member more than once") : s instanceof WeakSet ? s.add(e) : s.set(e, t), l = (e, s, t, a) => (d(e, s, "write to private field"), a ? a.call(e, t) : s.set(e, t), t);
-import { B as n } from "./Base.js";
+var d = (e, s, t) => (o(e, s, "read from private field"), t ? t.call(e) : s.get(e)), r = (e, s, t) => {
+  if (s.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  s instanceof WeakSet ? s.add(e) : s.set(e, t);
+}, h = (e, s, t, a) => (o(e, s, "write to private field"), a ? a.call(e, t) : s.set(e, t), t);
+import { B as l } from "./Base.js";
 import "./index3.js";
-const c = `
+const n = `
 .ea-aside_wrap {
   height: 100%;
   overflow: auto;
@@ -17,16 +21,16 @@ const c = `
 }
 `;
 var i;
-class w extends n {
+class c extends l {
   constructor() {
     super();
-    h(this, i);
+    r(this, i, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <aside class="ea-aside_wrap" part="container">
                 <slot></slot>
             </aside>
-        `, l(this, i, t.querySelector(".ea-aside_wrap")), this.build(t, c);
+        `, h(this, i, t.querySelector(".ea-aside_wrap")), this.build(t, n);
   }
   // ------- width 侧边栏宽度 -------
   // #region
@@ -34,7 +38,7 @@ class w extends n {
     return this.getAttrNumber("width") || 200;
   }
   set width(t) {
-    this.setAttribute("width", t), r(this, i).style.width = `${t}px`;
+    this.setAttribute("width", t), d(this, i).style.width = `${t}px`;
   }
   // #endregion
   // ------- end -------
@@ -43,7 +47,7 @@ class w extends n {
   }
 }
 i = new WeakMap();
-customElements.get("ea-aside") || customElements.define("ea-aside", w);
+customElements.get("ea-aside") || customElements.define("ea-aside", c);
 export {
-  w as EaAside
+  c as EaAside
 };

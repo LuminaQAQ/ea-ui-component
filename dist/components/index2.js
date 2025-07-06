@@ -1,12 +1,16 @@
-var c = (t) => {
-  throw TypeError(t);
+var c = (t, r, e) => {
+  if (!r.has(t))
+    throw TypeError("Cannot " + e);
 };
-var f = (t, r, e) => r.has(t) || c("Cannot " + e);
-var i = (t, r, e) => (f(t, r, "read from private field"), e ? e.call(t) : r.get(t)), n = (t, r, e) => r.has(t) ? c("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(t) : r.set(t, e), m = (t, r, e, a) => (f(t, r, "write to private field"), a ? a.call(t, e) : r.set(t, e), e);
-import { B as h } from "./Base.js";
+var i = (t, r, e) => (c(t, r, "read from private field"), e ? e.call(t) : r.get(t)), n = (t, r, e) => {
+  if (r.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  r instanceof WeakSet ? r.add(t) : r.set(t, e);
+}, m = (t, r, e, a) => (c(t, r, "write to private field"), a ? a.call(t, e) : r.set(t, e), e);
+import { B as u } from "./Base.js";
 import "./index3.js";
-import { w } from "./timeout.js";
-const u = {
+import { w as h } from "./timeout.js";
+const f = {
   required(t) {
     return typeof t == "string" ? t !== "" : Array.isArray(t) ? t.length > 0 : !1;
   },
@@ -19,7 +23,7 @@ const u = {
   reg(t, r) {
     return r.test(t);
   }
-}, g = `
+}, w = `
 .ea-form-item_wrap {
   display: flex;
   align-items: center;
@@ -84,13 +88,13 @@ const u = {
 }
 `;
 var o, s, l, d;
-class b extends h {
+class g extends u {
   constructor() {
     super();
-    n(this, o);
-    n(this, s);
-    n(this, l);
-    n(this, d);
+    n(this, o, void 0);
+    n(this, s, void 0);
+    n(this, l, void 0);
+    n(this, d, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class='ea-form-item_wrap' part='container'>
@@ -104,7 +108,7 @@ class b extends h {
                     </span>
                 </div>
             </div>
-        `, m(this, s, e.querySelector(".ea-form-item_wrap")), m(this, l, e.querySelector(".ea-form-item_label-wrap")), m(this, d, e.querySelector(".ea-form-item_invalid-wrap")), this.build(e, g);
+        `, m(this, s, e.querySelector(".ea-form-item_wrap")), m(this, l, e.querySelector(".ea-form-item_label-wrap")), m(this, d, e.querySelector(".ea-form-item_invalid-wrap")), this.build(e, w);
   }
   // ------- label 标签 -------
   // #region
@@ -169,8 +173,8 @@ class b extends h {
     try {
       e.addEventListener(this.trigger, (a) => {
         for (const p in i(this, o))
-          if (u[p])
-            if (u[p](e.value, i(this, o)[p]))
+          if (f[p])
+            if (f[p](e.value, i(this, o)[p]))
               e.isInvalid = !1, i(this, s).classList.remove("is-required");
             else {
               e.isInvalid = !0, i(this, s).classList.add("is-required");
@@ -181,12 +185,12 @@ class b extends h {
     }
   }
   connectedCallback() {
-    this.label = this.label, this.trigger = this.trigger, w(i(this, s), 50);
+    this.label = this.label, this.trigger = this.trigger, h(i(this, s), 50);
   }
 }
 o = new WeakMap(), s = new WeakMap(), l = new WeakMap(), d = new WeakMap();
-customElements.get("ea-form-item") || customElements.define("ea-form-item", b);
+customElements.get("ea-form-item") || customElements.define("ea-form-item", g);
 export {
-  b as E,
-  u as V
+  g as E,
+  f as V
 };

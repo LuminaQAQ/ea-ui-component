@@ -1,8 +1,13 @@
-var b = (s) => {
-  throw TypeError(s);
+var x = (s, r, t) => {
+  if (!r.has(s))
+    throw TypeError("Cannot " + t);
 };
-var w = (s, r, t) => r.has(s) || b("Cannot " + t);
-var i = (s, r, t) => (w(s, r, "read from private field"), t ? t.call(s) : r.get(s)), d = (s, r, t) => r.has(s) ? b("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(s) : r.set(s, t), x = (s, r, t, a) => (w(s, r, "write to private field"), a ? a.call(s, t) : r.set(s, t), t), n = (s, r, t) => (w(s, r, "access private method"), t);
+var i = (s, r, t) => (x(s, r, "read from private field"), t ? t.call(s) : r.get(s)), d = (s, r, t) => {
+  if (r.has(s))
+    throw TypeError("Cannot add the same private member more than once");
+  r instanceof WeakSet ? r.add(s) : r.set(s, t);
+}, b = (s, r, t, a) => (x(s, r, "write to private field"), a ? a.call(s, t) : r.set(s, t), t);
+var h = (s, r, t) => (x(s, r, "access private method"), t);
 import { B as p } from "./Base.js";
 const f = `
 .ea-textarea_wrap {
@@ -43,19 +48,22 @@ const f = `
   right: 0.5rem;
 }
 `;
-var u, e, h, o, m;
+var m, e, n, o, l, c;
 class L extends p {
   constructor() {
     super();
-    d(this, h);
-    d(this, u);
-    d(this, e);
+    // #endregion
+    // ------- end -------
+    d(this, n);
+    d(this, l);
+    d(this, m, void 0);
+    d(this, e, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-textarea_wrap" part="container">
                 <textarea class="ea-textarea_inner" part="textarea" placeholder="请输入内容"></textarea>
             </div>
-        `, x(this, u, t.querySelector(".ea-textarea_wrap")), x(this, e, t.querySelector(".ea-textarea_inner")), this.build(t, f);
+        `, b(this, m, t.querySelector(".ea-textarea_wrap")), b(this, e, t.querySelector(".ea-textarea_inner")), this.build(t, f);
   }
   // ------- name 属性 -------
   // #region
@@ -115,9 +123,9 @@ class L extends p {
   set autosize(t) {
     t && (this.setAttribute("autosize", t), i(this, e).addEventListener("input", (a) => {
       if (i(this, e).style.height !== i(this, e).scrollHeight + "px" && (i(this, e).style.height = i(this, e).scrollHeight + "px", i(this, e).style.minHeight = i(this, e).scrollHeight + "px"), a.target.type === "textarea") {
-        const l = i(this, e).cols, c = a.target.value.length;
-        let g = Math.ceil(c / l) <= Number(i(this, e).rows) ? Number(i(this, e).rows) : Math.ceil(c / l);
-        c % l == 1 && (this.minRows > g ? n(this, h, o).call(this, this.minRows) : this.maxRows < g ? n(this, h, o).call(this, this.maxRows) : n(this, h, o).call(this, g));
+        const u = i(this, e).cols, g = a.target.value.length;
+        let w = Math.ceil(g / u) <= Number(i(this, e).rows) ? Number(i(this, e).rows) : Math.ceil(g / u);
+        g % u == 1 && (this.minRows > w ? h(this, n, o).call(this, this.minRows) : this.maxRows < w ? h(this, n, o).call(this, this.maxRows) : h(this, n, o).call(this, w));
       }
     }));
   }
@@ -130,7 +138,7 @@ class L extends p {
     return t !== 0 && t > 0 ? t : 0;
   }
   set minRows(t) {
-    t && (this.setAttribute("min-rows", t), n(this, h, o).call(this, Number(t)));
+    t && (this.setAttribute("min-rows", t), h(this, n, o).call(this, Number(t)));
   }
   // #endregion
   // ------- end -------
@@ -141,7 +149,7 @@ class L extends p {
     return t !== 0 && t > 0 ? t : 0;
   }
   set maxRows(t) {
-    t && (this.setAttribute("max-rows", t), n(this, h, o).call(this, Number(t)));
+    t && (this.setAttribute("max-rows", t), h(this, n, o).call(this, Number(t)));
   }
   // #endregion
   // ------- end -------
@@ -169,28 +177,27 @@ class L extends p {
     return this.getAttrBoolean("show-word-limit");
   }
   set showWordLimit(t) {
-    if (!t) return;
+    if (!t)
+      return;
     this.setAttribute("show-word-limit", t);
     const a = document.createElement("span");
-    a.part = "word-limit", a.className = "ea-input_word-limit", a.innerText = `${i(this, e).value.length}/${this.maxLength}`, i(this, e).addEventListener("input", (l) => {
-      a.innerText = `${l.target.value.length}/${this.maxLength}`;
-    }), i(this, u).appendChild(a), a.style.left = i(this, e).getBoundingClientRect().width - a.getBoundingClientRect().width - 5 + "px";
+    a.part = "word-limit", a.className = "ea-input_word-limit", a.innerText = `${i(this, e).value.length}/${this.maxLength}`, i(this, e).addEventListener("input", (u) => {
+      a.innerText = `${u.target.value.length}/${this.maxLength}`;
+    }), i(this, m).appendChild(a), a.style.left = i(this, e).getBoundingClientRect().width - a.getBoundingClientRect().width - 5 + "px";
   }
   connectedCallback() {
     this.setAttribute("data-ea-component", !0), this.name = this.name, this.placeholder = this.placeholder, this.value = this.value, i(this, e).value = this.getAttribute("value") || "", this.disabled = this.disabled, this.autosize = this.autosize, this.maxRows && (this.maxRows = this.maxRows), this.minRows && (this.minRows = this.minRows), this.rows = this.rows, this.maxLength = this.maxLength, this.minLength = this.minLength, i(this, e).addEventListener("input", (t) => {
-      n(this, h, m).call(this, "change", t);
+      h(this, l, c).call(this, "change", t);
     }), i(this, e).addEventListener("focus", (t) => {
-      n(this, h, m).call(this, "focus", t);
+      h(this, l, c).call(this, "focus", t);
     }), i(this, e).addEventListener("blur", (t) => {
-      n(this, h, m).call(this, "blur", t);
+      h(this, l, c).call(this, "blur", t);
     });
   }
 }
-u = new WeakMap(), e = new WeakMap(), h = new WeakSet(), // #endregion
-// ------- end -------
-o = function(t) {
+m = new WeakMap(), e = new WeakMap(), n = new WeakSet(), o = function(t) {
   t = Number(t), i(this, e).rows = t;
-}, m = function(t, a) {
+}, l = new WeakSet(), c = function(t, a) {
   this.dispatchEvent(
     new CustomEvent(t, {
       detail: {

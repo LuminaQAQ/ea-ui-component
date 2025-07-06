@@ -1,17 +1,21 @@
-var r = (t) => {
-  throw TypeError(t);
+var r = (t, a, e) => {
+  if (!a.has(t))
+    throw TypeError("Cannot " + e);
 };
-var o = (t, a, e) => a.has(t) || r("Cannot " + e);
-var n = (t, a, e) => (o(t, a, "read from private field"), e ? e.call(t) : a.get(t)), l = (t, a, e) => a.has(t) ? r("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(t) : a.set(t, e), m = (t, a, e, s) => (o(t, a, "write to private field"), s ? s.call(t, e) : a.set(t, e), e);
-import { B as h } from "./Base.js";
-const k = `
+var n = (t, a, e) => (r(t, a, "read from private field"), e ? e.call(t) : a.get(t)), o = (t, a, e) => {
+  if (a.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(t) : a.set(t, e);
+}, l = (t, a, e, s) => (r(t, a, "write to private field"), s ? s.call(t, e) : a.set(t, e), e);
+import { B as m } from "./Base.js";
+const h = `
 <svg class="skeleton-image" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <path d="M15 20h70v60H15z" stroke="#c0c4cc" stroke-width="5px" fill="none" />
     <circle r="8" cx="32" cy="35" fill="#c0c4cc" />
     <path d="M60 42.5L39 75h42z" fill="#c0c4cc" />
     <path d="M35 52.5L20 75h-4 32z" fill="#c0c4cc" />
 </svg>
-`, c = `
+`, k = `
 :host {
   --p-width: 100%;
   --margin-top: 1rem;
@@ -83,14 +87,14 @@ const k = `
 }
 `;
 var i;
-class g extends h {
+class c extends m {
   constructor() {
     super();
-    l(this, i);
+    o(this, i, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class="ea-skeleton-item_wrap" part="container"></div>
-        `, m(this, i, e.querySelector(".ea-skeleton-item_wrap")), this.build(e, c);
+        `, l(this, i, e.querySelector(".ea-skeleton-item_wrap")), this.build(e, k);
   }
   get variantOptions() {
     return ["text", "image", "p", "h1", "h2", "h3", "h4", "h5", "h6"];
@@ -111,7 +115,7 @@ class g extends h {
     return this.getAttribute("variant");
   }
   set variant(e) {
-    this.variantOptions.includes(e) ? this.setAttribute("variant", e) : this.setAttribute("variant", "text"), e === "image" && (n(this, i).innerHTML = k), n(this, i).classList.add("ea-skeleton_" + this.variant);
+    this.variantOptions.includes(e) ? this.setAttribute("variant", e) : this.setAttribute("variant", "text"), e === "image" && (n(this, i).innerHTML = h), n(this, i).classList.add("ea-skeleton_" + this.variant);
   }
   // #endregion
   // ------- end -------
@@ -130,7 +134,7 @@ class g extends h {
   }
 }
 i = new WeakMap();
-customElements.get("ea-skeleton-item") || customElements.define("ea-skeleton-item", g);
+customElements.get("ea-skeleton-item") || customElements.define("ea-skeleton-item", c);
 export {
-  g as EaSkeletonItem
+  c as EaSkeletonItem
 };

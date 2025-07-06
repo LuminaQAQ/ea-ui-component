@@ -1,21 +1,25 @@
-var b = (t) => {
-  throw TypeError(t);
+var b = (t, i, e) => {
+  if (!i.has(t))
+    throw TypeError("Cannot " + e);
 };
-var w = (t, i, e) => i.has(t) || b("Cannot " + e);
-var a = (t, i, e) => (w(t, i, "read from private field"), e ? e.call(t) : i.get(t)), s = (t, i, e) => i.has(t) ? b("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(t) : i.set(t, e), r = (t, i, e, d) => (w(t, i, "write to private field"), d ? d.call(t, e) : i.set(t, e), e);
-import { B as p } from "./Base.js";
-const u = ':host{--active-text-color: #409eff;--inactive-text-color: ##606266;--active-checkbox-bgc: #409eff;--inactive-checkbox-bgc: #eff1f5;--active-disabled-text-color: #7ebfff;--active-disabled-bgc: #bbdcff;--inactive-disabled-text-color: #c0c4cc;--inactive-disabled-bgc: #eff1f5}.ea-switch_wrap{display:flex;align-items:center;cursor:pointer}.ea-switch_wrap input{display:none}.ea-switch_wrap .ea-switch_label{font-size:.875rem;transition:color .2s}.ea-switch_wrap input+.ea-switch_label--left{color:var(--active-text-color)}.ea-switch_wrap input:checked+.ea-switch_label--left{color:var(--inactive-text-color)}.ea-switch_wrap input:checked+.ea-switch_label--left+.ea-switch_core{background-color:var(--active-checkbox-bgc)}.ea-switch_wrap input:checked+.ea-switch_label--left+.ea-switch_core:after{left:calc(100% - 1rem - 2px)}.ea-switch_wrap input:checked+.ea-switch_label--left+.ea-switch_core+.ea-switch_label--right{color:var(--active-text-color)}.ea-switch_wrap input:disabled+.ea-switch_label--left{color:var(--active-disabled-text-color)}.ea-switch_wrap input:disabled+.ea-switch_label--left+.ea-switch_core{background-color:var(--inactive-disabled-bgc)}.ea-switch_wrap input:disabled+.ea-switch_label--left+.ea-switch_core+.ea-switch_label--right{color:var(--inactive-disabled-text-color)}.ea-switch_wrap input:checked:disabled+.ea-switch_label--left{color:var(--inactive-disabled-text-color)}.ea-switch_wrap input:checked:disabled+.ea-switch_label--left+.ea-switch_core{background-color:var(--active-disabled-bgc)}.ea-switch_wrap input:checked:disabled+.ea-switch_label--left+.ea-switch_core:after{left:calc(100% - 1rem - 2px)}.ea-switch_wrap input:checked:disabled+.ea-switch_label--left+.ea-switch_core+.ea-switch_label--right{color:var(--inactive-disabled-text-color)}.ea-switch_wrap .ea-switch_core{position:relative;cursor:pointer;margin:0 .75rem;width:2.5rem;height:1.25rem;line-height:1.25rem;background-color:var(--inactive-checkbox-bgc);border-radius:999px;transition:background-color .2s}.ea-switch_wrap .ea-switch_core:after{content:"";display:block;position:absolute;left:2px;top:50%;transform:translateY(-50%);width:1rem;height:1rem;border-radius:999px;background-color:#fff;transition:left .2s,transform .2s}.ea-switch_wrap.disabled{cursor:not-allowed}.ea-switch_wrap.disabled .ea-switch_label,.ea-switch_wrap.disabled .ea-switch_core{pointer-events:none}';
+var a = (t, i, e) => (b(t, i, "read from private field"), e ? e.call(t) : i.get(t)), s = (t, i, e) => {
+  if (i.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(t) : i.set(t, e);
+}, r = (t, i, e, d) => (b(t, i, "write to private field"), d ? d.call(t, e) : i.set(t, e), e);
+import { B as w } from "./Base.js";
+const p = ':host{--active-text-color: #409eff;--inactive-text-color: ##606266;--active-checkbox-bgc: #409eff;--inactive-checkbox-bgc: #eff1f5;--active-disabled-text-color: #7ebfff;--active-disabled-bgc: #bbdcff;--inactive-disabled-text-color: #c0c4cc;--inactive-disabled-bgc: #eff1f5}.ea-switch_wrap{display:flex;align-items:center;cursor:pointer}.ea-switch_wrap input{display:none}.ea-switch_wrap .ea-switch_label{font-size:.875rem;transition:color .2s}.ea-switch_wrap input+.ea-switch_label--left{color:var(--active-text-color)}.ea-switch_wrap input:checked+.ea-switch_label--left{color:var(--inactive-text-color)}.ea-switch_wrap input:checked+.ea-switch_label--left+.ea-switch_core{background-color:var(--active-checkbox-bgc)}.ea-switch_wrap input:checked+.ea-switch_label--left+.ea-switch_core:after{left:calc(100% - 1rem - 2px)}.ea-switch_wrap input:checked+.ea-switch_label--left+.ea-switch_core+.ea-switch_label--right{color:var(--active-text-color)}.ea-switch_wrap input:disabled+.ea-switch_label--left{color:var(--active-disabled-text-color)}.ea-switch_wrap input:disabled+.ea-switch_label--left+.ea-switch_core{background-color:var(--inactive-disabled-bgc)}.ea-switch_wrap input:disabled+.ea-switch_label--left+.ea-switch_core+.ea-switch_label--right{color:var(--inactive-disabled-text-color)}.ea-switch_wrap input:checked:disabled+.ea-switch_label--left{color:var(--inactive-disabled-text-color)}.ea-switch_wrap input:checked:disabled+.ea-switch_label--left+.ea-switch_core{background-color:var(--active-disabled-bgc)}.ea-switch_wrap input:checked:disabled+.ea-switch_label--left+.ea-switch_core:after{left:calc(100% - 1rem - 2px)}.ea-switch_wrap input:checked:disabled+.ea-switch_label--left+.ea-switch_core+.ea-switch_label--right{color:var(--inactive-disabled-text-color)}.ea-switch_wrap .ea-switch_core{position:relative;cursor:pointer;margin:0 .75rem;width:2.5rem;height:1.25rem;line-height:1.25rem;background-color:var(--inactive-checkbox-bgc);border-radius:999px;transition:background-color .2s}.ea-switch_wrap .ea-switch_core:after{content:"";display:block;position:absolute;left:2px;top:50%;transform:translateY(-50%);width:1rem;height:1rem;border-radius:999px;background-color:#fff;transition:left .2s,transform .2s}.ea-switch_wrap.disabled{cursor:not-allowed}.ea-switch_wrap.disabled .ea-switch_label,.ea-switch_wrap.disabled .ea-switch_core{pointer-events:none}';
 var h, c, l, n, o;
-class _ extends p {
+class u extends w {
   constructor() {
     super();
-    s(this, h);
-    s(this, c);
-    s(this, l);
-    s(this, n);
-    s(this, o);
+    s(this, h, void 0);
+    s(this, c, void 0);
+    s(this, l, void 0);
+    s(this, n, void 0);
+    s(this, o, void 0);
     const e = this.shadowRoot;
-    this.stylesheet = u, e.innerHTML = `
+    this.stylesheet = p, e.innerHTML = `
             <label class="ea-switch_wrap" part="container">
                 <input class="ea-switch_input" type="checkbox">
                 <span class="ea-switch_label ea-switch_label--left" part="label-left"></span>
@@ -116,7 +120,7 @@ class _ extends p {
   }
 }
 h = new WeakMap(), c = new WeakMap(), l = new WeakMap(), n = new WeakMap(), o = new WeakMap();
-customElements.get("ea-switch") || customElements.define("ea-switch", _);
+customElements.get("ea-switch") || customElements.define("ea-switch", u);
 export {
-  _ as EaSwitch
+  u as EaSwitch
 };

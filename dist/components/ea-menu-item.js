@@ -1,11 +1,15 @@
-var a = (e) => {
-  throw TypeError(e);
+var a = (e, o, t) => {
+  if (!o.has(e))
+    throw TypeError("Cannot " + t);
 };
-var c = (e, o, t) => o.has(e) || a("Cannot " + t);
-var r = (e, o, t) => (c(e, o, "read from private field"), t ? t.call(e) : o.get(e)), l = (e, o, t) => o.has(e) ? a("Cannot add the same private member more than once") : o instanceof WeakSet ? o.add(e) : o.set(e, t), n = (e, o, t, s) => (c(e, o, "write to private field"), s ? s.call(e, t) : o.set(e, t), t);
-import { B as d } from "./Base.js";
+var r = (e, o, t) => (a(e, o, "read from private field"), t ? t.call(e) : o.get(e)), c = (e, o, t) => {
+  if (o.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  o instanceof WeakSet ? o.add(e) : o.set(e, t);
+}, l = (e, o, t, s) => (a(e, o, "write to private field"), s ? s.call(e, t) : o.set(e, t), t);
+import { B as n } from "./Base.js";
 import "./index3.js";
-const m = `
+const d = `
 .ea-menu-item_wrap {
   --normal-bgc: #fff;
   --normal-text-color: #303133;
@@ -56,16 +60,16 @@ const m = `
 }
 `;
 var i;
-class b extends d {
+class m extends n {
   constructor() {
     super();
-    l(this, i);
+    c(this, i, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-menu-item_wrap" part="container">
                 <slot></slot>
             </div>
-        `, n(this, i, t.querySelector(".ea-menu-item_wrap")), this.build(t, m);
+        `, l(this, i, t.querySelector(".ea-menu-item_wrap")), this.build(t, d);
   }
   // ------- actived 菜单激活状态 -------
   // #region
@@ -139,7 +143,7 @@ class b extends d {
   }
 }
 i = new WeakMap();
-customElements.get("ea-menu-item") || customElements.define("ea-menu-item", b);
+customElements.get("ea-menu-item") || customElements.define("ea-menu-item", m);
 export {
-  b as EaMenuItem
+  m as EaMenuItem
 };

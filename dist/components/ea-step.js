@@ -1,12 +1,16 @@
-var _ = (s) => {
-  throw TypeError(s);
+var _ = (s, i, t) => {
+  if (!i.has(s))
+    throw TypeError("Cannot " + t);
 };
-var m = (s, i, t) => i.has(s) || _("Cannot " + t);
-var e = (s, i, t) => (m(s, i, "read from private field"), t ? t.call(s) : i.get(s)), p = (s, i, t) => i.has(s) ? _("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(s) : i.set(s, t), o = (s, i, t, r) => (m(s, i, "write to private field"), r ? r.call(s, t) : i.set(s, t), t);
-import { B as f } from "./Base.js";
+var e = (s, i, t) => (_(s, i, "read from private field"), t ? t.call(s) : i.get(s)), p = (s, i, t) => {
+  if (i.has(s))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(s) : i.set(s, t);
+}, o = (s, i, t, r) => (_(s, i, "write to private field"), r ? r.call(s, t) : i.set(s, t), t);
+import { B as m } from "./Base.js";
 import "./index3.js";
-import { t as x } from "./timeout.js";
-const u = `
+import { t as f } from "./timeout.js";
+const x = `
 .ea-step_wrap {
   color: #c0c4cc;
   transition: color 0.3s;
@@ -93,17 +97,17 @@ const u = `
 }
 `;
 var n, h, a, c, d, l, w, g;
-class b extends f {
+class u extends m {
   constructor() {
     super();
-    p(this, n);
-    p(this, h);
-    p(this, a);
-    p(this, c);
-    p(this, d);
-    p(this, l);
-    p(this, w);
-    p(this, g);
+    p(this, n, void 0);
+    p(this, h, void 0);
+    p(this, a, void 0);
+    p(this, c, void 0);
+    p(this, d, void 0);
+    p(this, l, void 0);
+    p(this, w, void 0);
+    p(this, g, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
       <div class="ea-step_wrap" part="container">
@@ -120,7 +124,7 @@ class b extends f {
           </div>
         </div>
       </div>
-    `, o(this, n, t.querySelector(".ea-step_wrap")), o(this, h, t.querySelector(".ea-step_head-wrap")), o(this, a, t.querySelector(".ea-step_head-icon")), o(this, c, t.querySelector(".ea-step_bar")), o(this, d, t.querySelector(".ea-step_title-wrap")), o(this, w, t.querySelector('slot[name="title"]')), o(this, l, t.querySelector(".ea-step_description-wrap")), o(this, g, t.querySelector('slot[name="description"]')), this.build(t, u);
+    `, o(this, n, t.querySelector(".ea-step_wrap")), o(this, h, t.querySelector(".ea-step_head-wrap")), o(this, a, t.querySelector(".ea-step_head-icon")), o(this, c, t.querySelector(".ea-step_bar")), o(this, d, t.querySelector(".ea-step_title-wrap")), o(this, w, t.querySelector('slot[name="title"]')), o(this, l, t.querySelector(".ea-step_description-wrap")), o(this, g, t.querySelector('slot[name="description"]')), this.build(t, x);
   }
   // ------- title 步骤的标题(如:步骤一) -------
   // #region
@@ -128,7 +132,8 @@ class b extends f {
     return this.getAttribute("title");
   }
   set title(t) {
-    if (!t) return;
+    if (!t)
+      return;
     const r = this.querySelector('[slot="title"]');
     r ? (t = r.innerHTML, e(this, w).innerHTML = t) : e(this, d).innerText = t, this.setAttribute("title", t);
   }
@@ -140,7 +145,8 @@ class b extends f {
     return this.getAttribute("description");
   }
   set description(t) {
-    if (!t) return;
+    if (!t)
+      return;
     const r = this.querySelector('[slot="description"]');
     r ? (t = r.innerHTML, e(this, g).innerHTML = t) : e(this, l).innerText = t, this.setAttribute("description", t);
   }
@@ -213,13 +219,13 @@ class b extends f {
   // #endregion
   // ------- end -------
   connectedCallback() {
-    this.title = this.title, this.description = this.description, this.simple = this.simple, x(() => {
+    this.title = this.title, this.description = this.description, this.simple = this.simple, f(() => {
       this.icon = this.icon;
     }, 20);
   }
 }
 n = new WeakMap(), h = new WeakMap(), a = new WeakMap(), c = new WeakMap(), d = new WeakMap(), l = new WeakMap(), w = new WeakMap(), g = new WeakMap();
-customElements.get("ea-step") || customElements.define("ea-step", b);
+customElements.get("ea-step") || customElements.define("ea-step", u);
 export {
-  b as EaStep
+  u as EaStep
 };

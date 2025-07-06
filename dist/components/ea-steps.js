@@ -1,12 +1,16 @@
-var c = (s) => {
-  throw TypeError(s);
+var c = (s, i, t) => {
+  if (!i.has(s))
+    throw TypeError("Cannot " + t);
 };
-var n = (s, i, t) => i.has(s) || c("Cannot " + t);
-var p = (s, i, t) => (n(s, i, "read from private field"), t ? t.call(s) : i.get(s)), h = (s, i, t) => i.has(s) ? c("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(s) : i.set(s, t), o = (s, i, t, e) => (n(s, i, "write to private field"), e ? e.call(s, t) : i.set(s, t), t);
-import { B as f } from "./Base.js";
+var p = (s, i, t) => (c(s, i, "read from private field"), t ? t.call(s) : i.get(s)), h = (s, i, t) => {
+  if (i.has(s))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(s) : i.set(s, t);
+}, o = (s, i, t, e) => (c(s, i, "write to private field"), e ? e.call(s, t) : i.set(s, t), t);
+import { B as n } from "./Base.js";
 import "./index3.js";
 import "./ea-step.js";
-const u = `
+const f = `
 .ea-steps_wrap {
   display: flex;
   align-items: center;
@@ -28,17 +32,17 @@ const u = `
 }
 `;
 var l, a;
-class m extends f {
+class u extends n {
   constructor() {
     super();
-    h(this, l);
-    h(this, a);
+    h(this, l, void 0);
+    h(this, a, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-steps_wrap" part="container">
                 <slot></slot>
             </div>
-        `, o(this, l, t.querySelector(".ea-steps_wrap")), this.build(t, u);
+        `, o(this, l, t.querySelector(".ea-steps_wrap")), this.build(t, f);
   }
   // ------- active 当前的步骤 -------
   // #region
@@ -84,7 +88,7 @@ class m extends f {
   }
 }
 l = new WeakMap(), a = new WeakMap();
-customElements.get("ea-steps") || customElements.define("ea-steps", m);
+customElements.get("ea-steps") || customElements.define("ea-steps", u);
 export {
-  m as EaSteps
+  u as EaSteps
 };

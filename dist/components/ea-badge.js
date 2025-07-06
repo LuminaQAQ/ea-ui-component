@@ -1,10 +1,14 @@
-var c = (e) => {
-  throw TypeError(e);
+var c = (e, a, t) => {
+  if (!a.has(e))
+    throw TypeError("Cannot " + t);
 };
-var g = (e, a, t) => a.has(e) || c("Cannot " + t);
-var r = (e, a, t) => (g(e, a, "read from private field"), t ? t.call(e) : a.get(e)), o = (e, a, t) => a.has(e) ? c("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(e) : a.set(e, t), n = (e, a, t, d) => (g(e, a, "write to private field"), d ? d.call(e, t) : a.set(e, t), t);
-import { B as h } from "./Base.js";
-const l = `
+var r = (e, a, t) => (c(e, a, "read from private field"), t ? t.call(e) : a.get(e)), o = (e, a, t) => {
+  if (a.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(e) : a.set(e, t);
+}, n = (e, a, t, d) => (c(e, a, "write to private field"), d ? d.call(e, t) : a.set(e, t), t);
+import { B as g } from "./Base.js";
+const h = `
 .ea-badge_wrap {
   position: relative;
   vertical-align: middle;
@@ -48,18 +52,18 @@ const l = `
 }
 `;
 var s, i;
-class b extends h {
+class l extends g {
   constructor() {
     super();
-    o(this, s);
-    o(this, i);
+    o(this, s, void 0);
+    o(this, i, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
         <div class="ea-badge_wrap" part='container'>
             <slot></slot>
             <sup class="ea-badge_content" part='content'></sup>
         </div>
-    `, n(this, s, t.querySelector(".ea-badge_wrap")), n(this, i, t.querySelector(".ea-badge_content")), this.build(t, l);
+    `, n(this, s, t.querySelector(".ea-badge_wrap")), n(this, i, t.querySelector(".ea-badge_content")), this.build(t, h);
   }
   // ------- value 徽章内的值 -------
   // #region
@@ -106,7 +110,7 @@ class b extends h {
   }
 }
 s = new WeakMap(), i = new WeakMap();
-customElements.get("ea-badge") || customElements.define("ea-badge", b);
+customElements.get("ea-badge") || customElements.define("ea-badge", l);
 export {
-  b as EaBadge
+  l as EaBadge
 };

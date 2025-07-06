@@ -1,12 +1,16 @@
-var b = (n) => {
-  throw TypeError(n);
+var b = (r, e, t) => {
+  if (!e.has(r))
+    throw TypeError("Cannot " + t);
 };
-var _ = (n, e, t) => e.has(n) || b("Cannot " + t);
-var r = (n, e, t) => (_(n, e, "read from private field"), t ? t.call(n) : e.get(n)), c = (n, e, t) => e.has(n) ? b("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(n) : e.set(n, t), u = (n, e, t, i) => (_(n, e, "write to private field"), i ? i.call(n, t) : e.set(n, t), t);
-import { B as A } from "./Base.js";
+var n = (r, e, t) => (b(r, e, "read from private field"), t ? t.call(r) : e.get(r)), c = (r, e, t) => {
+  if (e.has(r))
+    throw TypeError("Cannot add the same private member more than once");
+  e instanceof WeakSet ? e.add(r) : e.set(r, t);
+}, u = (r, e, t, i) => (b(r, e, "write to private field"), i ? i.call(r, t) : e.set(r, t), t);
+import { B as L } from "./Base.js";
 import "./index3.js";
-import { w as v, t as E } from "./timeout.js";
-const I = `
+import { w as A, t as v } from "./timeout.js";
+const E = `
 .ea-input_container {
   display: flex;
   align-items: stretch;
@@ -147,88 +151,88 @@ const I = `
   transition: transform 0.3s;
 }
 `;
-function g(n, e, t) {
+function g(r, e, t) {
   const i = document.createElement("ea-icon");
-  return i.className = `fix-icon ${t}-icon`, i.icon = e, i.part = `${t}-icon`, n.classList.add(t), n.appendChild(i), i;
+  return i.className = `fix-icon ${t}-icon`, i.icon = e, i.part = `${t}-icon`, r.classList.add(t), r.appendChild(i), i;
 }
-function f(n, e) {
-  e ? n.style.display = "block" : n.style.display = "none";
+function f(r, e) {
+  e ? r.style.display = "block" : r.style.display = "none";
 }
-function w(n, e, t) {
-  e.addEventListener(n, (i) => {
+function w(r, e, t) {
+  e.addEventListener(r, (i) => {
     var o;
     f(t, (o = i.target) == null ? void 0 : o.value);
   });
 }
-function B(n, e, t) {
-  const i = g(n, t, "surfix");
+function I(r, e, t) {
+  const i = g(r, t, "surfix");
   return i.addEventListener("click", () => {
     this.value = "", e.focus();
   }), f(i, e.value), w("input", e, i), w("focus", e, i), w("blur", e, i), i;
 }
-function k(n, e, t) {
-  const i = g(n, t, "surfix");
+function B(r, e, t) {
+  const i = g(r, t, "surfix");
   return i.addEventListener("click", () => {
     e.type = e.type === "password" ? "text" : "password", i.icon = e.type === "password" ? "icon-eye" : "icon-eye-off", e.focus();
   }), e.addEventListener("input", () => {
     f(i, e.value);
   }), f(i, e.value), i;
 }
-function C(n) {
+function k(r) {
   const e = document.createElement("span");
-  return e.className = "ea-input_word-limit", e.part = "word-limit", e.innerText = `${n.value.length}/${this.maxLength}`, n.addEventListener("input", (t) => {
+  return e.className = "ea-input_word-limit", e.part = "word-limit", e.innerText = `${r.value.length}/${this.maxLength}`, r.addEventListener("input", (t) => {
     e.innerText = `${t.target.value.length}/${this.maxLength}`;
   }), e;
 }
-function x(n) {
-  n.classList.remove("is-open");
+function _(r) {
+  r.classList.remove("is-open");
 }
-function y(n, e) {
+function x(r, e) {
   const t = this.shadowRoot.querySelector(".ea-input_suggestion-wrap"), i = document.createElement("ul");
   i.className = "ea-input_suggestion-wrap", i.part = "suggestion-wrap", e.forEach((l) => {
     const h = document.createElement("li");
     h.part = "suggestion-item", h.innerText = l.value, h.addEventListener("click", () => {
-      this.value = l.value, x(i);
+      this.value = l.value, _(i);
     }), i.appendChild(h);
   });
   const o = document.createElement("ea-icon");
   return o.className = "loading-icon", o.icon = "icon-spin6 animate-spin", o.part = "loading-icon", i.appendChild(o), window.addEventListener("click", (l) => {
-    this.contains(l.target) || x(i);
-  }), t && (t.remove(), i.classList.add("is-open")), n.appendChild(i), i;
+    this.contains(l.target) || _(i);
+  }), t && (t.remove(), i.classList.add("is-open")), r.appendChild(i), i;
 }
-function m(n, e) {
+function m(r, e) {
   this.dispatchEvent(
     new CustomEvent(e, {
       detail: {
-        value: n.target.value
+        value: r.target.value
       }
     })
   );
 }
-function L(n, e) {
-  n.querySelectorAll("li").forEach((t) => {
+function y(r, e) {
+  r.querySelectorAll("li").forEach((t) => {
     t.innerText.includes(e) ? t.style.display = "block" : t.style.display = "none";
   });
 }
-function S(n, e) {
-  n.addEventListener("input", (t) => {
+function C(r, e) {
+  r.addEventListener("input", (t) => {
     const i = Array.from(e.querySelectorAll("li")).some((o, l) => o.innerText.includes(t.target.value));
     e.classList.toggle("is-open", i && t.target.value !== "");
   });
 }
-function T(n, e) {
+function S(r, e) {
   e.addEventListener("focus", (t) => {
-    n.classList.add("is-open");
+    r.classList.add("is-open");
   });
 }
 var a, s, p, d;
-class z extends A {
+class T extends L {
   constructor() {
     super();
-    c(this, a);
-    c(this, s);
+    c(this, a, void 0);
+    c(this, s, void 0);
     c(this, p, []);
-    c(this, d);
+    c(this, d, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class='ea-input_container' part='container'>
@@ -242,7 +246,7 @@ class z extends A {
                     </div>
                 </div>
             </div>
-        `, u(this, a, t.querySelector(".ea-input_wrap")), u(this, s, t.querySelector(".ea-input_inner")), this.build(t, I);
+        `, u(this, a, t.querySelector(".ea-input_wrap")), u(this, s, t.querySelector(".ea-input_inner")), this.build(t, E);
   }
   // ------- name 元素原生name属性 -------
   // #region
@@ -270,7 +274,7 @@ class z extends A {
     return this.getAttribute("value") || "";
   }
   set value(t) {
-    this.setAttribute("value", t), r(this, s).value = t;
+    this.setAttribute("value", t), n(this, s).value = t;
   }
   // #endregion
   // ------- end -------
@@ -280,7 +284,7 @@ class z extends A {
     return this.getAttribute("placeholder") || "";
   }
   set placeholder(t) {
-    this.setAttribute("placeholder", t), r(this, s).placeholder = t;
+    this.setAttribute("placeholder", t), n(this, s).placeholder = t;
   }
   // #endregion
   // ------- end -------
@@ -290,7 +294,7 @@ class z extends A {
     return this.getAttrBoolean("disabled");
   }
   set disabled(t) {
-    this.setAttribute("disabled", t), r(this, s).disabled = t, r(this, s).classList.toggle("disabled", t);
+    this.setAttribute("disabled", t), n(this, s).disabled = t, n(this, s).classList.toggle("disabled", t);
   }
   // #endregion
   // ------- end -------
@@ -300,7 +304,7 @@ class z extends A {
     return this.getAttrBoolean("clearable");
   }
   set clearable(t) {
-    t && (this.setAttribute("clearable", t), B.call(this, r(this, a), r(this, s), "icon-cancel-circled2"));
+    t && (this.setAttribute("clearable", t), I.call(this, n(this, a), n(this, s), "icon-cancel-circled2"));
   }
   // #endregion
   // ------- end -------
@@ -310,7 +314,7 @@ class z extends A {
     return this.getAttrBoolean("show-password");
   }
   set showPassword(t) {
-    t && (this.setAttribute("show-password", t), r(this, s).type = "password", k(r(this, a), r(this, s), "icon-eye"));
+    t && (this.setAttribute("show-password", t), n(this, s).type = "password", B(n(this, a), n(this, s), "icon-eye"));
   }
   // #endregion
   // ------- end -------
@@ -320,13 +324,13 @@ class z extends A {
     return this.getAttribute("prefix-icon") || "";
   }
   set prefixIcon(t) {
-    t && (this.setAttribute("prefix", t), g(r(this, a), t, "prefix"));
+    t && (this.setAttribute("prefix", t), g(n(this, a), t, "prefix"));
   }
   get surfixIcon() {
     return this.getAttribute("suffix-icon") || "";
   }
   set surfixIcon(t) {
-    t && (this.setAttribute("suffix", t), g(r(this, a), t, "surfix"));
+    t && (this.setAttribute("suffix", t), g(n(this, a), t, "surfix"));
   }
   // #endregion
   // ------- end -------
@@ -334,15 +338,16 @@ class z extends A {
   // #region
   // 建议列表
   get suggestion() {
-    return r(this, p);
+    return n(this, p);
   }
   set suggestion(t) {
-    if (!t || !(t instanceof Array)) return;
+    if (!t || !(t instanceof Array))
+      return;
     u(this, p, t);
-    const i = y.call(this, r(this, a), t);
-    r(this, s).addEventListener("input", (o) => {
-      L(i, o.target.value);
-    }), this.triggerAfterInput ? S(r(this, s), i) : T(i, r(this, s)), L(i, r(this, s).value), r(this, a).appendChild(i), u(this, d, i);
+    const i = x.call(this, n(this, a), t);
+    n(this, s).addEventListener("input", (o) => {
+      y(i, o.target.value);
+    }), this.triggerAfterInput ? C(n(this, s), i) : S(i, n(this, s)), y(i, n(this, s).value), n(this, a).appendChild(i), u(this, d, i);
   }
   // 输入框激活时列出输入建议
   get triggerOnFocus() {
@@ -364,8 +369,8 @@ class z extends A {
   }
   set remote(t) {
     this.setAttribute("remote", t);
-    const i = y.call(this, r(this, a), r(this, p));
-    i.classList.toggle("loading", t), r(this, s).addEventListener("focus", () => {
+    const i = x.call(this, n(this, a), n(this, p));
+    i.classList.toggle("loading", t), n(this, s).addEventListener("focus", () => {
       i.classList.add("is-open");
     }), u(this, d, i);
   }
@@ -377,7 +382,7 @@ class z extends A {
     return this.getAttribute("max-length");
   }
   set maxLength(t) {
-    !t || r(this, s).type !== "text" || (this.setAttribute("max-length", t), r(this, s).maxLength = t, this.showWordLimit && (this.showWordLimit = !0));
+    !t || n(this, s).type !== "text" || (this.setAttribute("max-length", t), n(this, s).maxLength = t, this.showWordLimit && (this.showWordLimit = !0));
   }
   // #endregion
   // ------- end -------
@@ -387,8 +392,8 @@ class z extends A {
     return this.getAttribute("min-length");
   }
   set minLength(t) {
-    !t || r(this, s).type !== "text" || (this.setAttribute("min-length", t), r(this, s).minLength = t, r(this, s).addEventListener("input", (i) => {
-      r(this, s).ariaInvalid = i.target.value.length < t;
+    !t || n(this, s).type !== "text" || (this.setAttribute("min-length", t), n(this, s).minLength = t, n(this, s).addEventListener("input", (i) => {
+      n(this, s).ariaInvalid = i.target.value.length < t;
     }));
   }
   // #endregion
@@ -399,13 +404,14 @@ class z extends A {
     return this.getAttrBoolean("show-word-limit");
   }
   set showWordLimit(t) {
-    if (!t || r(this, s).type !== "text") return;
+    if (!t || n(this, s).type !== "text")
+      return;
     this.setAttribute("show-word-limit", t);
-    const i = C.call(this, r(this, s));
-    r(this, a).classList.toggle("word-limit", t), r(this, a).appendChild(i), r(this, s).addEventListener("focus", (o) => {
-      r(this, a).classList.add("focus");
-    }), r(this, s).addEventListener("blur", (o) => {
-      r(this, a).classList.remove("focus");
+    const i = k.call(this, n(this, s));
+    n(this, a).classList.toggle("word-limit", t), n(this, a).appendChild(i), n(this, s).addEventListener("focus", (o) => {
+      n(this, a).classList.add("focus");
+    }), n(this, s).addEventListener("blur", (o) => {
+      n(this, a).classList.remove("focus");
     });
   }
   // #endregion
@@ -416,30 +422,30 @@ class z extends A {
     return this.getAttrBoolean("readonly");
   }
   set readonly(t) {
-    t && (this.setAttribute("readonly", t), r(this, s).readOnly = t);
+    t && (this.setAttribute("readonly", t), n(this, s).readOnly = t);
   }
   // #endregion
   // ------- end -------
   focus() {
-    r(this, s).focus();
+    n(this, s).focus();
   }
   blur() {
-    r(this, s).blur();
+    n(this, s).blur();
   }
   connectedCallback() {
-    this.setAttribute("data-ea-component", !0), this.name = this.name, this.type = this.type, this.placeholder = this.placeholder, this.value = this.value, this.disabled = this.disabled, this.clearable = this.clearable, this.clearable || (this.showPassword = this.showPassword), this.prefixIcon = this.prefixIcon, !this.clearable && !this.showPassword && (this.surfixIcon = this.surfixIcon), this.triggerOnFocus = this.triggerOnFocus, this.triggerAfterInput = this.triggerAfterInput, this.remote && (this.remote = this.remote), this.maxLength = this.maxLength, this.minLength = this.minLength, this.readonly = this.readonly, r(this, s).addEventListener("input", (t) => {
+    this.setAttribute("data-ea-component", !0), this.name = this.name, this.type = this.type, this.placeholder = this.placeholder, this.value = this.value, this.disabled = this.disabled, this.clearable = this.clearable, this.clearable || (this.showPassword = this.showPassword), this.prefixIcon = this.prefixIcon, !this.clearable && !this.showPassword && (this.surfixIcon = this.surfixIcon), this.triggerOnFocus = this.triggerOnFocus, this.triggerAfterInput = this.triggerAfterInput, this.remote && (this.remote = this.remote), this.maxLength = this.maxLength, this.minLength = this.minLength, this.readonly = this.readonly, n(this, s).addEventListener("input", (t) => {
       this.value = t.target.value, m.call(this, t, "change");
-    }), r(this, s).addEventListener("focus", (t) => {
+    }), n(this, s).addEventListener("focus", (t) => {
       m.call(this, t, "focus");
-    }), r(this, s).addEventListener("blur", (t) => {
+    }), n(this, s).addEventListener("blur", (t) => {
       m.call(this, t, "blur");
-    }), v(r(this, a)), E(() => {
+    }), A(n(this, a)), v(() => {
       this.dispatchEvent(new CustomEvent("ready", { bubbles: !0 }));
     }, 0);
   }
 }
 a = new WeakMap(), s = new WeakMap(), p = new WeakMap(), d = new WeakMap();
-window.customElements.get("ea-input") || window.customElements.define("ea-input", z);
+window.customElements.get("ea-input") || window.customElements.define("ea-input", T);
 export {
-  z as EaInput
+  T as EaInput
 };

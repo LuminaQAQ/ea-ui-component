@@ -1,10 +1,14 @@
-var p = (t) => {
-  throw TypeError(t);
+var p = (t, c, e) => {
+  if (!c.has(t))
+    throw TypeError("Cannot " + e);
 };
-var b = (t, c, e) => c.has(t) || p("Cannot " + e);
-var a = (t, c, e) => (b(t, c, "read from private field"), e ? e.call(t) : c.get(t)), r = (t, c, e) => c.has(t) ? p("Cannot add the same private member more than once") : c instanceof WeakSet ? c.add(t) : c.set(t, e), o = (t, c, e, h) => (b(t, c, "write to private field"), h ? h.call(t, e) : c.set(t, e), e);
-import { B as s } from "./Base.js";
-const u = `
+var a = (t, c, e) => (p(t, c, "read from private field"), e ? e.call(t) : c.get(t)), r = (t, c, e) => {
+  if (c.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  c instanceof WeakSet ? c.add(t) : c.set(t, e);
+}, o = (t, c, e, h) => (p(t, c, "write to private field"), h ? h.call(t, e) : c.set(t, e), e);
+import { B as b } from "./Base.js";
+const s = `
 :host {
   --margin-right: 1rem;
 }
@@ -115,11 +119,11 @@ const u = `
 }
 `;
 var i, n;
-class d extends s {
+class u extends b {
   constructor() {
     super();
-    r(this, i);
-    r(this, n);
+    r(this, i, void 0);
+    r(this, n, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
       <label class="ea-checkbox_wrap" part="container">
@@ -131,7 +135,7 @@ class d extends s {
           <slot></slot>
         </span>
       </label>
-    `, o(this, n, e.querySelector(".ea-checkbox_wrap")), o(this, i, e.querySelector(".ea-checkbox-input_input")), this.build(e, u);
+    `, o(this, n, e.querySelector(".ea-checkbox_wrap")), o(this, i, e.querySelector(".ea-checkbox-input_input")), this.build(e, s);
   }
   // ------- checked 选中 -------
   // #region
@@ -208,7 +212,7 @@ class d extends s {
   }
 }
 i = new WeakMap(), n = new WeakMap();
-window.customElements.get("ea-checkbox") || window.customElements.define("ea-checkbox", d);
+window.customElements.get("ea-checkbox") || window.customElements.define("ea-checkbox", u);
 export {
-  d as EaCheckbox
+  u as EaCheckbox
 };

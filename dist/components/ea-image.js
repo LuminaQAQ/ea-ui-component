@@ -1,12 +1,17 @@
-var w = (i) => {
-  throw TypeError(i);
+var m = (i, t, e) => {
+  if (!t.has(i))
+    throw TypeError("Cannot " + e);
 };
-var m = (i, t, e) => t.has(i) || w("Cannot " + e);
-var a = (i, t, e) => (m(i, t, "read from private field"), e ? e.call(i) : t.get(i)), h = (i, t, e) => t.has(i) ? w("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(i) : t.set(i, e), p = (i, t, e, r) => (m(i, t, "write to private field"), r ? r.call(i, e) : t.set(i, e), e), u = (i, t, e) => (m(i, t, "access private method"), e);
-import { B as b } from "./Base.js";
+var a = (i, t, e) => (m(i, t, "read from private field"), e ? e.call(i) : t.get(i)), h = (i, t, e) => {
+  if (t.has(i))
+    throw TypeError("Cannot add the same private member more than once");
+  t instanceof WeakSet ? t.add(i) : t.set(i, e);
+}, p = (i, t, e, r) => (m(i, t, "write to private field"), r ? r.call(i, e) : t.set(i, e), e);
+var w = (i, t, e) => (m(i, t, "access private method"), e);
+import { B as y } from "./Base.js";
 import "./index3.js";
 import { c as g } from "./createElement.js";
-const z = `
+const b = `
     <svg id="errorImage" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" part="error-image">
         <path fill="#c0c4cc" d="M0 0h100v100H0z" />
         <path fill="#fff" d="M15 20h70v60H15z" />
@@ -14,7 +19,7 @@ const z = `
         <path d="M60 42.5L39 75h42z" fill="#c0c4cc" />
         <path d="M35 52.5L20 75h-4 32z" fill="#c0c4cc" />
     </svg>
-`, _ = `
+`, z = `
 .ea-image_wrap {
   align-content: center;
   text-align: center;
@@ -100,22 +105,22 @@ const z = `
   font-size: 1.5rem;
 }
 `;
-function x(i) {
+function _(i) {
   i.classList.remove("entry"), i.addEventListener("transitionend", () => {
     i.remove(), document.body.style.overflow = "auto";
   });
 }
-function L(i) {
+function x(i) {
   const t = g("ea-icon", "ea-icon-close");
   return t.part = "close-btn", t.icon = "icon-cancel", t.addEventListener("click", () => {
-    x(i);
+    _(i);
   }), t;
 }
-function E(i, t) {
+function L(i, t) {
   let e = 0, r = 0;
   function c(s) {
-    const { clientX: f, clientY: y } = s;
-    t.style.marginLeft = `${f - e}px`, t.style.marginTop = `${y - r}px`;
+    const { clientX: v, clientY: f } = s;
+    t.style.marginLeft = `${v - e}px`, t.style.marginTop = `${f - r}px`;
   }
   t.addEventListener("dragstart", (s) => {
     s.preventDefault();
@@ -125,7 +130,7 @@ function E(i, t) {
     });
   });
 }
-function A(i) {
+function E(i) {
   const t = g("div", "ea-image_preview-tools");
   return t.part = "tools-wrap", t.innerHTML = `
         <span class="ea-icon-zoom ea-icon-zoom-in" part="zoom-in">+</span>
@@ -142,27 +147,29 @@ function A(i) {
     i.style.rotate = (i.style.rotate ? Number(i.style.rotate.split("deg")[0]) + 90 : 90) + "deg";
   }), t;
 }
-function k(i, t, e) {
+function A(i, t, e) {
   e && t.addEventListener("click", () => {
     t = t.cloneNode(!0), t.style.objectFit = "contain";
     const r = g("div", "ea-image_preview-wrap", [t]);
     r.part = "preview-wrap", i.appendChild(r);
-    const c = L(r);
+    const c = x(r);
     r.appendChild(c);
-    const s = A(t);
+    const s = E(t);
     r.appendChild(s), setTimeout(() => {
       r.classList.add("entry");
-    }, 20), E(r, t), document.body.style.overflow = "hidden";
+    }, 20), L(r, t), document.body.style.overflow = "hidden";
   });
 }
-var o, n, l, d, v;
-class B extends b {
+var o, n, l, d, u;
+class k extends y {
   constructor() {
     super();
+    // #endregion
+    // ------- end -------
     h(this, d);
-    h(this, o);
-    h(this, n);
-    h(this, l);
+    h(this, o, void 0);
+    h(this, n, void 0);
+    h(this, l, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class='ea-image_wrap' part='container'>
@@ -171,7 +178,7 @@ class B extends b {
                     <slot name='placeholder'></slot>
                 </div>
             </div>
-        `, p(this, o, e.querySelector(".ea-image_wrap")), p(this, n, e.querySelector(".ea-image")), p(this, l, e.querySelector('slot[name="placeholder"]')), this.build(e, _);
+        `, p(this, o, e.querySelector(".ea-image_wrap")), p(this, n, e.querySelector(".ea-image")), p(this, l, e.querySelector('slot[name="placeholder"]')), this.build(e, z);
   }
   // ------- src 图片的路径 -------
   // #region
@@ -242,12 +249,10 @@ class B extends b {
     e && this.setAttribute("preview", e);
   }
   connectedCallback() {
-    this.width = this.width, this.height = this.height, this.fit = this.fit, this.alt = this.alt, this.lazy = this.lazy, this.src = this.src, this.preview = this.preview, k(a(this, o), a(this, n), this.preview), u(this, d, v).call(this);
+    this.width = this.width, this.height = this.height, this.fit = this.fit, this.alt = this.alt, this.lazy = this.lazy, this.src = this.src, this.preview = this.preview, A(a(this, o), a(this, n), this.preview), w(this, d, u).call(this);
   }
 }
-o = new WeakMap(), n = new WeakMap(), l = new WeakMap(), d = new WeakSet(), // #endregion
-// ------- end -------
-v = function() {
+o = new WeakMap(), n = new WeakMap(), l = new WeakMap(), d = new WeakSet(), u = function() {
   const e = new Image();
   if (this.lazy) {
     const r = new IntersectionObserver((c) => {
@@ -259,10 +264,10 @@ v = function() {
   e.onload = () => {
     a(this, n).setAttribute("src", this.src), a(this, l).remove(), this.dispatchEvent(new CustomEvent("load", { detail: { src: this.src } }));
   }, e.onerror = () => {
-    a(this, o).innerHTML = z, a(this, o).classList.add("is-error"), a(this, l).remove(), this.dispatchEvent(new CustomEvent("error", { detail: { src: this.src } }));
+    a(this, o).innerHTML = b, a(this, o).classList.add("is-error"), a(this, l).remove(), this.dispatchEvent(new CustomEvent("error", { detail: { src: this.src } }));
   };
 };
-customElements.get("ea-image") || customElements.define("ea-image", B);
+customElements.get("ea-image") || customElements.define("ea-image", k);
 export {
-  B as EaImage
+  k as EaImage
 };

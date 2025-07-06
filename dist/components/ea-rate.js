@@ -1,20 +1,25 @@
-var x = (i) => {
-  throw TypeError(i);
+var f = (i, e, t) => {
+  if (!e.has(i))
+    throw TypeError("Cannot " + t);
 };
-var g = (i, e, t) => e.has(i) || x("Cannot " + t);
-var a = (i, e, t) => (g(i, e, "read from private field"), t ? t.call(i) : e.get(i)), n = (i, e, t) => e.has(i) ? x("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(i) : e.set(i, t), h = (i, e, t, s) => (g(i, e, "write to private field"), s ? s.call(i, t) : e.set(i, t), t), o = (i, e, t) => (g(i, e, "access private method"), t);
-import { B as E } from "./Base.js";
+var a = (i, e, t) => (f(i, e, "read from private field"), t ? t.call(i) : e.get(i)), r = (i, e, t) => {
+  if (e.has(i))
+    throw TypeError("Cannot add the same private member more than once");
+  e instanceof WeakSet ? e.add(i) : e.set(i, t);
+}, c = (i, e, t, s) => (f(i, e, "write to private field"), s ? s.call(i, t) : e.set(i, t), t);
+var o = (i, e, t) => (f(i, e, "access private method"), t);
+import { B as A } from "./Base.js";
 import "./index3.js";
-import { c as f } from "./createElement.js";
-const T = (i) => {
-  const e = f("span", "ea-rate_item");
+import { c as E } from "./createElement.js";
+const y = (i) => {
+  const e = E("span", "ea-rate_item");
   e.index = i, e.part = "rate-item";
-  const t = f("ea-icon");
+  const t = E("ea-icon");
   return t.icon = "icon-star-empty", e.appendChild(t), e;
-}, A = (i) => {
+}, C = (i) => {
   for (let e = 0; e < 5; e++)
-    i.appendChild(T(e));
-}, y = `
+    i.appendChild(y(e));
+}, I = `
 :host {
   --i-color: rgb(247, 186, 42);
 }
@@ -59,17 +64,26 @@ const T = (i) => {
   line-height: 1;
 }
 `;
-var m, p, u, c, l, d, r, _, w, v, b;
-class C extends E {
+var w, d, p, n, h, l, v, b, u, g, m, _, x, T;
+class L extends A {
   constructor() {
     super();
-    n(this, r);
-    n(this, m);
-    n(this, p);
-    n(this, u);
-    n(this, c);
-    n(this, l);
-    n(this, d, ["极差", "失望", "一般", "满意", "惊喜"]);
+    // #endregion
+    // ------- end -------
+    // 处理图标
+    r(this, v);
+    // 设置/显示选中状态
+    r(this, u);
+    // 当未选中时, 清除选中状态
+    r(this, m);
+    // 初始化鼠标事件
+    r(this, x);
+    r(this, w, void 0);
+    r(this, d, void 0);
+    r(this, p, void 0);
+    r(this, n, void 0);
+    r(this, h, void 0);
+    r(this, l, ["极差", "失望", "一般", "满意", "惊喜"]);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-rate_wrap" part="container">
@@ -77,7 +91,7 @@ class C extends E {
                 </section>
                 <span class="ea-rate_text" part="text-wrap"></span>
             </div>
-        `, h(this, m, t.querySelector(".ea-rate_wrap")), h(this, p, t.querySelector(".ea-rate_item-wrap")), h(this, u, t.querySelector(".ea-rate_text")), A(a(this, p)), h(this, c, t.querySelectorAll(".ea-rate_item")), h(this, l, t.querySelectorAll("ea-icon")), this.build(t, y);
+        `, c(this, w, t.querySelector(".ea-rate_wrap")), c(this, d, t.querySelector(".ea-rate_item-wrap")), c(this, p, t.querySelector(".ea-rate_text")), C(a(this, d)), c(this, n, t.querySelectorAll(".ea-rate_item")), c(this, h, t.querySelectorAll("ea-icon")), this.build(t, I);
   }
   // ------- value rate值 -------
   // #region
@@ -86,7 +100,7 @@ class C extends E {
     return t < 1 || t > 5 || !t ? 0 : t;
   }
   set value(t) {
-    !t || isNaN(Number(t)) || (this.setAttribute("value", t), o(this, r, v).call(this), o(this, r, w).call(this, t));
+    !t || isNaN(Number(t)) || (this.setAttribute("value", t), o(this, m, _).call(this), o(this, u, g).call(this, t));
   }
   // #endregion
   // ------- end -------
@@ -96,7 +110,7 @@ class C extends E {
     return this.getAttribute("color");
   }
   set color(t) {
-    t && (this.setAttribute("color", t), a(this, p).style.setProperty("--i-color", t));
+    t && (this.setAttribute("color", t), a(this, d).style.setProperty("--i-color", t));
   }
   // #endregion
   // ------- end -------
@@ -106,9 +120,9 @@ class C extends E {
     return this.getAttrBoolean("disabled");
   }
   set disabled(t) {
-    this.toggleAttr("disabled", t), a(this, c).forEach((s) => {
+    this.toggleAttr("disabled", t), a(this, n).forEach((s) => {
       s.classList.toggle("disabled", t);
-    }), a(this, m).style.cursor = t ? "not-allowed" : "pointer";
+    }), a(this, w).style.cursor = t ? "not-allowed" : "pointer";
   }
   // #endregion
   // ------- end -------
@@ -121,10 +135,10 @@ class C extends E {
     this.toggleAttr("show-text", t);
   }
   get showTextList() {
-    return a(this, d);
+    return a(this, l);
   }
   set showTextList(t) {
-    typeof t == "object" && t.length === 5 && h(this, d, t);
+    typeof t == "object" && t.length === 5 && c(this, l, t);
   }
   // #endregion
   // ------- end -------
@@ -134,7 +148,7 @@ class C extends E {
     return this.getAttribute("void-icon") || "icon-star-empty";
   }
   set voidIcon(t) {
-    this.setAttribute("void-icon", t), o(this, r, _).call(this, t);
+    this.setAttribute("void-icon", t), o(this, v, b).call(this, t);
   }
   // #endregion
   // ------- end -------
@@ -144,52 +158,46 @@ class C extends E {
     return this.getAttribute("active-icon") || "icon-star";
   }
   set activeIcon(t) {
-    this.setAttribute("active-icon", t), o(this, r, _).call(this, t);
+    this.setAttribute("active-icon", t), o(this, v, b).call(this, t);
   }
   connectedCallback() {
-    this.activeIconClass = this.activeIconClass, this.voidIconClass = this.voidIconClass, this.showText = this.showText, this.color = this.color, this.value = this.value, this.disabled = this.disabled, this.disabled || o(this, r, b).call(this);
+    this.activeIconClass = this.activeIconClass, this.voidIconClass = this.voidIconClass, this.showText = this.showText, this.color = this.color, this.value = this.value, this.disabled = this.disabled, this.disabled || o(this, x, T).call(this);
   }
 }
-m = new WeakMap(), p = new WeakMap(), u = new WeakMap(), c = new WeakMap(), l = new WeakMap(), d = new WeakMap(), r = new WeakSet(), // #endregion
-// ------- end -------
-// 处理图标
-_ = function(t) {
-  a(this, l).forEach((s) => {
+w = new WeakMap(), d = new WeakMap(), p = new WeakMap(), n = new WeakMap(), h = new WeakMap(), l = new WeakMap(), v = new WeakSet(), b = function(t) {
+  a(this, h).forEach((s) => {
     s.icon = t;
   });
-}, // 设置/显示选中状态
-w = function(t) {
+}, u = new WeakSet(), g = function(t) {
   for (let s = 0; s < t; s++)
-    a(this, c)[s].classList.add("active"), a(this, l)[s].icon = this.activeIcon, this.showText && (a(this, u).innerText = this.showTextList[t - 1]);
-}, // 当未选中时, 清除选中状态
-v = function() {
-  a(this, c).forEach((t, s) => {
-    t.classList.remove("active"), a(this, l)[s].icon = this.voidIcon, this.showText && (a(this, u).innerText = "");
+    a(this, n)[s].classList.add("active"), a(this, h)[s].icon = this.activeIcon, this.showText && (a(this, p).innerText = this.showTextList[t - 1]);
+}, m = new WeakSet(), _ = function() {
+  a(this, n).forEach((t, s) => {
+    t.classList.remove("active"), a(this, h)[s].icon = this.voidIcon, this.showText && (a(this, p).innerText = "");
   });
-}, // 初始化鼠标事件
-b = function() {
-  a(this, c).forEach((t) => {
+}, x = new WeakSet(), T = function() {
+  a(this, n).forEach((t) => {
     const { index: s } = t;
     t.addEventListener("mouseenter", () => {
-      o(this, r, v).call(this), o(this, r, w).call(this, s + 1), this.dispatchEvent(new CustomEvent("hover", {
+      o(this, m, _).call(this), o(this, u, g).call(this, s + 1), this.dispatchEvent(new CustomEvent("hover", {
         detail: {
           value: s + 1,
-          rateText: a(this, d)[s]
+          rateText: a(this, l)[s]
         }
       }));
     }), t.addEventListener("mouseleave", () => {
-      o(this, r, v).call(this), o(this, r, w).call(this, this.value);
+      o(this, m, _).call(this), o(this, u, g).call(this, this.value);
     }), t.addEventListener("click", () => {
       this.value = s + 1, this.dispatchEvent(new CustomEvent("change", {
         detail: {
           value: s + 1,
-          rateText: a(this, d)[s]
+          rateText: a(this, l)[s]
         }
       }));
     });
   });
 };
-customElements.get("ea-rate") || customElements.define("ea-rate", C);
+customElements.get("ea-rate") || customElements.define("ea-rate", L);
 export {
-  C as EaRate
+  L as EaRate
 };

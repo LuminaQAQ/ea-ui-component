@@ -46,7 +46,8 @@ class m extends HTMLElement {
       set(n, s, r) {
         var a;
         const o = e[s];
-        if (!o) return !0;
+        if (!o)
+          return !0;
         const u = h(s, r), d = n[s];
         return d === u || (n[s] = u, c(s, u), (a = o.observer) == null || a.call(o, u, d), t.$updated({ key: s, newVal: u, oldVal: d })), !0;
       }

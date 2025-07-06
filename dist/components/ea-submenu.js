@@ -1,12 +1,16 @@
-var d = (e) => {
-  throw TypeError(e);
+var d = (e, o, t) => {
+  if (!o.has(e))
+    throw TypeError("Cannot " + t);
 };
-var u = (e, o, t) => o.has(e) || d("Cannot " + t);
-var s = (e, o, t) => (u(e, o, "read from private field"), t ? t.call(e) : o.get(e)), n = (e, o, t) => o.has(e) ? d("Cannot add the same private member more than once") : o instanceof WeakSet ? o.add(e) : o.set(e, t), c = (e, o, t, a) => (u(e, o, "write to private field"), a ? a.call(e, t) : o.set(e, t), t);
-import { t as b } from "./timeout.js";
-import { B as p } from "./Base.js";
+var s = (e, o, t) => (d(e, o, "read from private field"), t ? t.call(e) : o.get(e)), n = (e, o, t) => {
+  if (o.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  o instanceof WeakSet ? o.add(e) : o.set(e, t);
+}, c = (e, o, t, a) => (d(e, o, "write to private field"), a ? a.call(e, t) : o.set(e, t), t);
+import { t as u } from "./timeout.js";
+import { B as b } from "./Base.js";
 import "./index3.js";
-const m = `
+const p = `
 .ea-submenu_wrap {
   --normal-bgc: #fff;
   --normal-text-color: #303133;
@@ -74,12 +78,12 @@ const m = `
 }
 `;
 var r, l, i;
-class h extends p {
+class m extends b {
   constructor() {
     super();
-    n(this, r);
-    n(this, l);
-    n(this, i);
+    n(this, r, void 0);
+    n(this, l, void 0);
+    n(this, i, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-submenu_wrap" part="container">
@@ -91,7 +95,7 @@ class h extends p {
                     <slot></slot>
                 </div>
             </div>
-        `, c(this, r, t.querySelector(".ea-submenu_wrap")), c(this, l, t.querySelector(".ea-submenu_title_wrap")), c(this, i, t.querySelector(".ea-submenu_items_wrap")), this.build(t, m);
+        `, c(this, r, t.querySelector(".ea-submenu_wrap")), c(this, l, t.querySelector(".ea-submenu_title_wrap")), c(this, i, t.querySelector(".ea-submenu_items_wrap")), this.build(t, p);
   }
   // ------- actived 菜单激活状态 -------
   // #region
@@ -154,17 +158,17 @@ class h extends p {
   // #endregion
   // ------- end -------
   connectedCallback() {
-    this.disabled = this.disabled, this.querySelectorAll("ea-menu-item").forEach((a, g) => {
-      a.isSubItem = !0, a.addEventListener("item-selected", (w) => {
+    this.disabled = this.disabled, this.querySelectorAll("ea-menu-item").forEach((a, h) => {
+      a.isSubItem = !0, a.addEventListener("item-selected", (g) => {
         this.actived = !0;
       });
-    }), b(() => {
+    }), u(() => {
       s(this, i).style.display = "block";
     }, 20);
   }
 }
 r = new WeakMap(), l = new WeakMap(), i = new WeakMap();
-customElements.get("ea-submenu") || customElements.define("ea-submenu", h);
+customElements.get("ea-submenu") || customElements.define("ea-submenu", m);
 export {
-  h as EaSubmenu
+  m as EaSubmenu
 };

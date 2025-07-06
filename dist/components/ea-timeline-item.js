@@ -1,10 +1,14 @@
-var p = (t) => {
-  throw TypeError(t);
+var p = (t, i, e) => {
+  if (!i.has(t))
+    throw TypeError("Cannot " + e);
 };
-var d = (t, i, e) => i.has(t) || p("Cannot " + e);
-var m = (t, i, e) => (d(t, i, "read from private field"), e ? e.call(t) : i.get(t)), n = (t, i, e) => i.has(t) ? p("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(t) : i.set(t, e), l = (t, i, e, c) => (d(t, i, "write to private field"), c ? c.call(t, e) : i.set(t, e), e);
-import { B as _ } from "./Base.js";
-const h = `
+var m = (t, i, e) => (p(t, i, "read from private field"), e ? e.call(t) : i.get(t)), n = (t, i, e) => {
+  if (i.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(t) : i.set(t, e);
+}, l = (t, i, e, c) => (p(t, i, "write to private field"), c ? c.call(t, e) : i.set(t, e), e);
+import { B as d } from "./Base.js";
+const _ = `
 .ea-timeline-item_wrap {
   position: relative;
   padding-bottom: 20px;
@@ -86,13 +90,13 @@ const h = `
 }
 `;
 var r, s, a, o;
-class u extends _ {
+class h extends d {
   constructor() {
     super();
-    n(this, r);
-    n(this, s);
-    n(this, a);
-    n(this, o);
+    n(this, r, void 0);
+    n(this, s, void 0);
+    n(this, a, void 0);
+    n(this, o, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class='ea-timeline-item_wrap' part='container'>
@@ -105,7 +109,7 @@ class u extends _ {
                     <div class='ea-timeline-item_timestamp' part='timestamp'></div>
                 </div>
             </div>
-        `, l(this, r, e.querySelector(".ea-timeline-item_wrap")), l(this, s, e.querySelector(".ea-timeline-item_timestamp")), l(this, a, e.querySelector(".ea-timeline-item_circle")), l(this, o, e.querySelector(".ea-timeline-item_timestamp")), this.build(e, h);
+        `, l(this, r, e.querySelector(".ea-timeline-item_wrap")), l(this, s, e.querySelector(".ea-timeline-item_timestamp")), l(this, a, e.querySelector(".ea-timeline-item_circle")), l(this, o, e.querySelector(".ea-timeline-item_timestamp")), this.build(e, _);
   }
   // ------- time 时间 -------
   // #region
@@ -137,7 +141,8 @@ class u extends _ {
     return this.getAttribute("color") || "";
   }
   set color(e) {
-    if (!e) return;
+    if (!e)
+      return;
     this.setAttribute("color", e), (new Option().style.color = e) !== "" && (m(this, a).style.backgroundColor = e);
   }
   // #endregion
@@ -175,7 +180,7 @@ class u extends _ {
   }
 }
 r = new WeakMap(), s = new WeakMap(), a = new WeakMap(), o = new WeakMap();
-customElements.get("ea-timeline-item") || customElements.define("ea-timeline-item", u);
+customElements.get("ea-timeline-item") || customElements.define("ea-timeline-item", h);
 export {
-  u as EaTimelineItem
+  h as EaTimelineItem
 };

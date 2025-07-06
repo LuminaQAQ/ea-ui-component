@@ -1,15 +1,20 @@
-var f = (t) => {
-  throw TypeError(t);
+var f = (r, t, e) => {
+  if (!t.has(r))
+    throw TypeError("Cannot " + e);
 };
-var p = (t, r, e) => r.has(t) || f("Cannot " + e);
-var o = (t, r, e) => (p(t, r, "read from private field"), e ? e.call(t) : r.get(t)), u = (t, r, e) => r.has(t) ? f("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(t) : r.set(t, e), w = (t, r, e, a) => (p(t, r, "write to private field"), a ? a.call(t, e) : r.set(t, e), e), h = (t, r, e) => (p(t, r, "access private method"), e);
-import { B as L } from "./Base.js";
+var o = (r, t, e) => (f(r, t, "read from private field"), e ? e.call(r) : t.get(r)), c = (r, t, e) => {
+  if (t.has(r))
+    throw TypeError("Cannot add the same private member more than once");
+  t instanceof WeakSet ? t.add(r) : t.set(r, e);
+}, w = (r, t, e, a) => (f(r, t, "write to private field"), a ? a.call(r, e) : t.set(r, e), e);
+var u = (r, t, e) => (f(r, t, "access private method"), e);
+import { B as k } from "./Base.js";
 import "./ea-carousel-item.js";
-import { c as v } from "./createElement.js";
-function k(t, r) {
-  return r < 0 ? r = t : r > t && (r = 0), r;
+import { c as x } from "./createElement.js";
+function E(r, t) {
+  return t < 0 ? t = r : t > r && (t = 0), t;
 }
-const E = `
+const I = `
 .ea-carousel_wrap {
   position: relative;
   overflow: hidden;
@@ -114,14 +119,18 @@ const E = `
   transform: translate(-200%, 50%);
 }
 `;
-var s, l, d, n, x, b, _;
-class I extends L {
+var s, l, d, m, b, g, y, h, v;
+class S extends k {
   constructor() {
     super();
-    u(this, n);
-    u(this, s);
-    u(this, l);
-    u(this, d);
+    // #endregion
+    // ------- end -------
+    c(this, m);
+    c(this, g);
+    c(this, h);
+    c(this, s, void 0);
+    c(this, l, void 0);
+    c(this, d, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class='ea-carousel_wrap' part='container'>
@@ -130,7 +139,7 @@ class I extends L {
                 </div>
                 <div class='ea-carousel-indicator_wrap' part='indicator-wrap'></div>
             </div>
-        `, w(this, s, e.querySelector(".ea-carousel_wrap")), w(this, l, e.querySelector(".ea-carousel_content-container")), w(this, d, e.querySelector(".ea-carousel-indicator_wrap")), this.build(e, E);
+        `, w(this, s, e.querySelector(".ea-carousel_wrap")), w(this, l, e.querySelector(".ea-carousel_content-container")), w(this, d, e.querySelector(".ea-carousel-indicator_wrap")), this.build(e, I);
   }
   // ------- direction 轮播图方向 -------
   // #region
@@ -149,15 +158,15 @@ class I extends L {
     return this.getAttrNumber("index") || 0;
   }
   set index(e) {
-    const a = this.querySelectorAll("ea-carousel-item").length - 1, i = k(a, e);
+    const a = this.querySelectorAll("ea-carousel-item").length - 1, i = E(a, e);
     this.setAttribute("index", i);
-    const c = o(this, s).getBoundingClientRect(), m = this.direction === "horizontal" ? "X" : "Y", y = this.direction === "horizontal" ? c.width : c.height;
-    o(this, l).style.transform = `translate${m}(-${i * y}px)`;
+    const n = o(this, s).getBoundingClientRect(), p = this.direction === "horizontal" ? "X" : "Y", A = this.direction === "horizontal" ? n.width : n.height;
+    o(this, l).style.transform = `translate${p}(-${i * A}px)`;
     try {
-      const g = o(this, d).querySelectorAll(".ea-carousel-item_indicator");
-      g.forEach((A) => {
-        A.classList.remove("ea-carousel-item_indicator--active");
-      }), g[i].classList.add("ea-carousel-item_indicator--active");
+      const _ = o(this, d).querySelectorAll(".ea-carousel-item_indicator");
+      _.forEach((L) => {
+        L.classList.remove("ea-carousel-item_indicator--active");
+      }), _[i].classList.add("ea-carousel-item_indicator--active");
     } catch {
     }
   }
@@ -194,8 +203,8 @@ class I extends L {
     this.setAttribute("arrow", e);
   }
   connectedCallback() {
-    if (this.direction = this.direction, this.trigger = this.trigger, this.interval = this.interval, this.arrow = this.arrow, this.index = this.index, h(this, n, x).call(this), h(this, n, b).call(this), this.arrow !== "never" || this.direction !== "vertical") {
-      const e = h(this, n, _).call(this, "left"), a = h(this, n, _).call(this, "right");
+    if (this.direction = this.direction, this.trigger = this.trigger, this.interval = this.interval, this.arrow = this.arrow, this.index = this.index, u(this, m, b).call(this), u(this, g, y).call(this), this.arrow !== "never" || this.direction !== "vertical") {
+      const e = u(this, h, v).call(this, "left"), a = u(this, h, v).call(this, "right");
       o(this, s).appendChild(e), o(this, s).appendChild(a);
     }
     window.addEventListener("resize", () => {
@@ -203,23 +212,21 @@ class I extends L {
     });
   }
 }
-s = new WeakMap(), l = new WeakMap(), d = new WeakMap(), n = new WeakSet(), // #endregion
-// ------- end -------
-x = function() {
+s = new WeakMap(), l = new WeakMap(), d = new WeakMap(), m = new WeakSet(), b = function() {
   const e = this.querySelectorAll("ea-carousel-item").length;
   for (let i = 0; i < e; i++) {
-    const c = v("div", "ea-carousel-item_indicator");
-    c.part = "indicator", o(this, d).appendChild(c);
+    const n = x("div", "ea-carousel-item_indicator");
+    n.part = "indicator", o(this, d).appendChild(n);
   }
   const a = o(this, d).querySelectorAll(".ea-carousel-item_indicator");
-  a[0].classList.add("ea-carousel-item_indicator--active"), a.forEach((i, c) => {
+  a[0].classList.add("ea-carousel-item_indicator--active"), a.forEach((i, n) => {
     i.addEventListener(this.trigger === "click" ? "click" : "mouseenter", () => {
-      this.index = c, a.forEach((m) => {
-        m.classList.remove("ea-carousel-item_active");
+      this.index = n, a.forEach((p) => {
+        p.classList.remove("ea-carousel-item_active");
       }), i.classList.add("ea-carousel-item_active");
     });
   });
-}, b = function() {
+}, g = new WeakSet(), y = function() {
   let e = setInterval(() => {
     this.index = this.index + 1;
   }, this.interval * 1e3);
@@ -230,9 +237,9 @@ x = function() {
       this.index = this.index + 1;
     }, this.interval * 1e3);
   });
-}, _ = function(e) {
+}, h = new WeakSet(), v = function(e) {
   let a = !1;
-  const i = v("div", `ea-carousel-item_arrow ea-carousel-item_arrow--${e}`);
+  const i = x("div", `ea-carousel-item_arrow ea-carousel-item_arrow--${e}`);
   switch (i.part = "arrow", i.innerHTML = e === "left" ? "&lt;" : "&gt;", this.arrow) {
     case "always":
       o(this, s).classList.add("always-show-arrow");
@@ -249,7 +256,7 @@ x = function() {
     a = !1;
   }), i;
 };
-customElements.get("ea-carousel") || customElements.define("ea-carousel", I);
+customElements.get("ea-carousel") || customElements.define("ea-carousel", S);
 export {
-  I as EaCarousel
+  S as EaCarousel
 };

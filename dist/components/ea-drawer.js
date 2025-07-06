@@ -1,8 +1,13 @@
-var f = (t) => {
-  throw TypeError(t);
+var m = (t, a, r) => {
+  if (!a.has(t))
+    throw TypeError("Cannot " + r);
 };
-var g = (t, a, r) => a.has(t) || f("Cannot " + r);
-var e = (t, a, r) => (g(t, a, "read from private field"), r ? r.call(t) : a.get(t)), s = (t, a, r) => a.has(t) ? f("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(t) : a.set(t, r), o = (t, a, r, d) => (g(t, a, "write to private field"), d ? d.call(t, r) : a.set(t, r), r), _ = (t, a, r) => (g(t, a, "access private method"), r);
+var e = (t, a, r) => (m(t, a, "read from private field"), r ? r.call(t) : a.get(t)), w = (t, a, r) => {
+  if (a.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(t) : a.set(t, r);
+}, o = (t, a, r, d) => (m(t, a, "write to private field"), d ? d.call(t, r) : a.set(t, r), r);
+var _ = (t, a, r) => (m(t, a, "access private method"), r);
 import { B as k } from "./Base.js";
 import "./index3.js";
 import { t as y } from "./timeout.js";
@@ -147,17 +152,20 @@ const x = `
   top: -100%;
 }
 `;
-var i, w, p, c, h, n, l, m, u;
+var i, s, l, n, c, p, h, f, g, u;
 class A extends k {
   constructor() {
     super();
-    s(this, l);
-    s(this, i);
-    s(this, w);
-    s(this, p);
-    s(this, c);
-    s(this, h);
-    s(this, n);
+    // #endregion
+    // ------- end -------
+    w(this, h);
+    w(this, g);
+    w(this, i, void 0);
+    w(this, s, void 0);
+    w(this, l, void 0);
+    w(this, n, void 0);
+    w(this, c, void 0);
+    w(this, p, void 0);
     const r = this.attachShadow({ mode: "open" });
     r.innerHTML = `
       <div class="ea-drawer_wrap" part="container">
@@ -174,7 +182,7 @@ class A extends k {
           <div class="ea-drawer_mask-wrap" part="mask-wrap"></div>
         </div>
       </div>
-    `, o(this, i, r.querySelector(".ea-drawer_wrap")), o(this, w, r.querySelector(".ea-drawer_drawer-wrap")), o(this, p, r.querySelector(".ea-drawer_mask-wrap")), o(this, c, r.querySelector(".ea-drawer_header-wrap")), o(this, h, r.querySelector(".ea-drawer_title")), o(this, n, r.querySelector(".ea-drawer_icon")), this.build(r, x);
+    `, o(this, i, r.querySelector(".ea-drawer_wrap")), o(this, s, r.querySelector(".ea-drawer_drawer-wrap")), o(this, l, r.querySelector(".ea-drawer_mask-wrap")), o(this, n, r.querySelector(".ea-drawer_header-wrap")), o(this, c, r.querySelector(".ea-drawer_title")), o(this, p, r.querySelector(".ea-drawer_icon")), this.build(r, x);
   }
   get directionType() {
     return ["ltr", "rtl", "ttb", "btt"];
@@ -186,7 +194,7 @@ class A extends k {
     return this.directionType.includes(r) ? r : "ltr";
   }
   set direction(r) {
-    this.setAttribute("direction", r), e(this, i).classList.toggle("direction-ltr", r === "ltr"), e(this, i).classList.toggle("direction-rtl", r === "rtl"), e(this, i).classList.toggle("direction-ttb", r === "ttb"), e(this, i).classList.toggle("direction-btt", r === "btt"), _(this, l, m).call(this, this.size);
+    this.setAttribute("direction", r), e(this, i).classList.toggle("direction-ltr", r === "ltr"), e(this, i).classList.toggle("direction-rtl", r === "rtl"), e(this, i).classList.toggle("direction-ttb", r === "ttb"), e(this, i).classList.toggle("direction-btt", r === "btt"), _(this, h, f).call(this, this.size);
   }
   // #endregion
   // ------- end -------
@@ -208,7 +216,7 @@ class A extends k {
     return this.getAttribute("size") || "30%";
   }
   set size(r) {
-    this.setAttribute("size", r), _(this, l, m).call(this, r);
+    this.setAttribute("size", r), _(this, h, f).call(this, r);
   }
   // #endregion
   // ------- end -------
@@ -218,7 +226,7 @@ class A extends k {
     return b(this.getAttribute("with-header"));
   }
   set withHeader(r) {
-    this.toggleAttr("with-header", r), e(this, c).style.display = r ? "flex" : "none";
+    this.toggleAttr("with-header", r), e(this, n).style.display = r ? "flex" : "none";
   }
   // #endregion
   // ------- end -------
@@ -228,7 +236,7 @@ class A extends k {
     return this.getAttribute("title");
   }
   set title(r) {
-    this.setAttribute("title", r), r && (e(this, h).innerText = r);
+    this.setAttribute("title", r), r && (e(this, c).innerText = r);
   }
   // #endregion
   // ------- end -------
@@ -238,7 +246,7 @@ class A extends k {
     return b(this.getAttribute("show-close"));
   }
   set showClose(r) {
-    this.toggleAttr("show-close", r), e(this, n).style.display = r ? "block" : "none";
+    this.toggleAttr("show-close", r), e(this, p).style.display = r ? "block" : "none";
   }
   // #endregion
   // ------- end -------
@@ -248,7 +256,7 @@ class A extends k {
     return b(this.getAttribute("modal"));
   }
   set modal(r) {
-    this.toggleAttr("modal", r), e(this, p).style.display = r ? "block" : "none";
+    this.toggleAttr("modal", r), e(this, l).style.display = r ? "block" : "none";
   }
   // #endregion
   // ------- end -------
@@ -261,26 +269,24 @@ class A extends k {
     this.setAttribute("wrapper-closable", r);
   }
   connectedCallback() {
-    this.direction = this.direction, this.size = this.size, this.withHeader = this.withHeader, this.withHeader && (this.showClose = this.showClose, this.title = this.title), this.modal = this.modal, this.wrapperClosable = this.wrapperClosable, this.open = !1, _(this, l, u).call(this);
+    this.direction = this.direction, this.size = this.size, this.withHeader = this.withHeader, this.withHeader && (this.showClose = this.showClose, this.title = this.title), this.modal = this.modal, this.wrapperClosable = this.wrapperClosable, this.open = !1, _(this, g, u).call(this);
   }
 }
-i = new WeakMap(), w = new WeakMap(), p = new WeakMap(), c = new WeakMap(), h = new WeakMap(), n = new WeakMap(), l = new WeakSet(), // #endregion
-// ------- end -------
-m = function(r) {
+i = new WeakMap(), s = new WeakMap(), l = new WeakMap(), n = new WeakMap(), c = new WeakMap(), p = new WeakMap(), h = new WeakSet(), f = function(r) {
   const d = this.direction === "ltr" || this.direction === "rtl" ? "width" : "height";
-  e(this, w).style.height = "inherit", e(this, w).style.width = "inherit", e(this, w).style[d] = r;
-}, u = function() {
+  e(this, s).style.height = "inherit", e(this, s).style.width = "inherit", e(this, s).style[d] = r;
+}, g = new WeakSet(), u = function() {
   const r = () => {
-    this.open = !1, e(this, i).classList.remove("will-close"), e(this, w).removeEventListener("transitionend", r);
+    this.open = !1, e(this, i).classList.remove("will-close"), e(this, s).removeEventListener("transitionend", r);
   }, d = () => {
-    e(this, i).classList.add("will-close"), e(this, w).addEventListener("transitionend", r), this.dispatchEvent(new CustomEvent("close", {
+    e(this, i).classList.add("will-close"), e(this, s).addEventListener("transitionend", r), this.dispatchEvent(new CustomEvent("close", {
       bubbles: !0,
       composed: !0
     }));
   };
-  this.wrapperClosable && this.modal && e(this, p).addEventListener("click", () => {
+  this.wrapperClosable && this.modal && e(this, l).addEventListener("click", () => {
     d();
-  }), this.showClose && e(this, n).addEventListener("click", () => {
+  }), this.showClose && e(this, p).addEventListener("click", () => {
     d();
   });
 };

@@ -1,12 +1,17 @@
-var d = (i) => {
-  throw TypeError(i);
+var u = (i, e, t) => {
+  if (!e.has(i))
+    throw TypeError("Cannot " + t);
 };
-var c = (i, e, t) => e.has(i) || d("Cannot " + t);
-var n = (i, e, t) => (c(i, e, "read from private field"), t ? t.call(i) : e.get(i)), a = (i, e, t) => e.has(i) ? d("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(i) : e.set(i, t), b = (i, e, t, o) => (c(i, e, "write to private field"), o ? o.call(i, t) : e.set(i, t), t), h = (i, e, t) => (c(i, e, "access private method"), t);
-import { t as y } from "./timeout.js";
-import { B as f } from "./Base.js";
+var n = (i, e, t) => (u(i, e, "read from private field"), t ? t.call(i) : e.get(i)), l = (i, e, t) => {
+  if (e.has(i))
+    throw TypeError("Cannot add the same private member more than once");
+  e instanceof WeakSet ? e.add(i) : e.set(i, t);
+}, g = (i, e, t, o) => (u(i, e, "write to private field"), o ? o.call(i, t) : e.set(i, t), t);
+var h = (i, e, t) => (u(i, e, "access private method"), t);
+import { t as f } from "./timeout.js";
+import { B as v } from "./Base.js";
 import "./index3.js";
-const v = `
+const x = `
 .ea-backtop_wrap {
   position: fixed;
   display: flex;
@@ -27,18 +32,22 @@ const v = `
   transition: opacity 0.3s ease-in-out;
 }
 `;
-var s, r, g, p, m;
-class x extends f {
+var s, a, m, c, d, p, y;
+class k extends v {
   constructor() {
     super();
-    a(this, r);
-    a(this, s);
+    // #endregion
+    // ------- end -------
+    l(this, a);
+    l(this, c);
+    l(this, p);
+    l(this, s, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-backtop_wrap" part='container' style='display: none'>
                 <slot></slot>
             </div>
-        `, b(this, s, t.querySelector(".ea-backtop_wrap")), this.build(t, v);
+        `, g(this, s, t.querySelector(".ea-backtop_wrap")), this.build(t, x);
   }
   // ------- target 触发滚动的对象 -------
   // #region
@@ -91,32 +100,30 @@ class x extends f {
     this.setAttribute("visibility-height", t);
   }
   connectedCallback() {
-    this.target = this.target, this.right = this.right, this.bottom = this.bottom, this.visibilityHeight = this.visibilityHeight, this.icon = this.icon, h(this, r, m).call(this);
+    this.target = this.target, this.right = this.right, this.bottom = this.bottom, this.visibilityHeight = this.visibilityHeight, this.icon = this.icon, h(this, p, y).call(this);
   }
 }
-s = new WeakMap(), r = new WeakSet(), // #endregion
-// ------- end -------
-g = function(t) {
-  let o = null, l = null;
-  return t === "null" || t === "" || t === null || t === void 0 || t === "undefined" ? (o = document, l = document.documentElement) : (o = document.querySelector(t), l = document.querySelector(t)), { dom: o, scrollDom: l };
-}, p = function(t) {
-  t.scrollTop > this.visibilityHeight ? (n(this, s).style.display = "flex", n(this, s).ontransitionend = null, y(() => {
+s = new WeakMap(), a = new WeakSet(), m = function(t) {
+  let o = null, r = null;
+  return t === "null" || t === "" || t === null || t === void 0 || t === "undefined" ? (o = document, r = document.documentElement) : (o = document.querySelector(t), r = document.querySelector(t)), { dom: o, scrollDom: r };
+}, c = new WeakSet(), d = function(t) {
+  t.scrollTop > this.visibilityHeight ? (n(this, s).style.display = "flex", n(this, s).ontransitionend = null, f(() => {
     n(this, s).style.opacity = 1;
   }, 10)) : (n(this, s).style.opacity = 0, n(this, s).ontransitionend = () => {
     n(this, s).style.display = "none";
   });
-}, m = function() {
-  const { dom: t, scrollDom: o } = h(this, r, g).call(this, this.target);
-  h(this, r, p).call(this, o), t.addEventListener("scroll", () => {
-    h(this, r, p).call(this, o);
+}, p = new WeakSet(), y = function() {
+  const { dom: t, scrollDom: o } = h(this, a, m).call(this, this.target);
+  h(this, c, d).call(this, o), t.addEventListener("scroll", () => {
+    h(this, c, d).call(this, o);
   }), n(this, s).addEventListener("click", function() {
-    let l = 10, u = setInterval(() => {
-      l += 5, o.scrollTop -= l, o.scrollTop <= 0 && (o.scrollTop = 0, clearInterval(u), u = null, this.dispatchEvent(new CustomEvent("reachedTop", {})));
+    let r = 10, b = setInterval(() => {
+      r += 5, o.scrollTop -= r, o.scrollTop <= 0 && (o.scrollTop = 0, clearInterval(b), b = null, this.dispatchEvent(new CustomEvent("reachedTop", {})));
     }, 12);
     this.dispatchEvent(new CustomEvent("backtop", {}));
   });
 };
-customElements.get("ea-backtop") || customElements.define("ea-backtop", x);
+customElements.get("ea-backtop") || customElements.define("ea-backtop", k);
 export {
-  x as EaBacktop
+  k as EaBacktop
 };

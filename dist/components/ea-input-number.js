@@ -1,10 +1,15 @@
-var N = (r) => {
-  throw TypeError(r);
+var E = (r, s, e) => {
+  if (!s.has(r))
+    throw TypeError("Cannot " + e);
 };
-var x = (r, u, e) => u.has(r) || N("Cannot " + e);
-var t = (r, u, e) => (x(r, u, "read from private field"), e ? e.call(r) : u.get(r)), d = (r, u, e) => u.has(r) ? N("Cannot add the same private member more than once") : u instanceof WeakSet ? u.add(r) : u.set(r, e), g = (r, u, e, a) => (x(r, u, "write to private field"), a ? a.call(r, e) : u.set(r, e), e), s = (r, u, e) => (x(r, u, "access private method"), e);
-import { B as A } from "./Base.js";
-const E = `
+var t = (r, s, e) => (E(r, s, "read from private field"), e ? e.call(r) : s.get(r)), a = (r, s, e) => {
+  if (s.has(r))
+    throw TypeError("Cannot add the same private member more than once");
+  s instanceof WeakSet ? s.add(r) : s.set(r, e);
+}, w = (r, s, e, u) => (E(r, s, "write to private field"), u ? u.call(r, e) : s.set(r, e), e);
+var n = (r, s, e) => (E(r, s, "access private method"), e);
+import { B as z } from "./Base.js";
+const k = `
 .ea-input-number_wrap {
   display: flex;
   align-items: center;
@@ -126,20 +131,26 @@ const E = `
   line-height: 1.25rem;
 }
 `;
-function L(r, u) {
+function I(r, s) {
   this.dispatchEvent(new CustomEvent(r, {
-    detail: u
+    detail: s
   }));
 }
-var h, i, p, m, n, v, y, b, c, f;
-class z extends A {
+var h, i, d, b, _, A, x, L, p, g, m, f, c, v;
+class S extends z {
   constructor() {
     super();
-    d(this, n);
-    d(this, h);
-    d(this, i);
-    d(this, p);
-    d(this, m);
+    // 处理输入框加减事件
+    a(this, _);
+    // 处理连加连减事件
+    a(this, x);
+    a(this, p);
+    a(this, m);
+    a(this, c);
+    a(this, h, void 0);
+    a(this, i, void 0);
+    a(this, d, void 0);
+    a(this, b, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class="ea-input-number_wrap" part="container">
@@ -147,7 +158,7 @@ class z extends A {
                 <input class="ea-input-number_inner" part="input" type="text" />
                 <span class="ea-input-number_sign plus" part="plus-wrap">+</span>
             </div>
-        `, g(this, h, e.querySelector(".ea-input-number_wrap")), g(this, i, e.querySelector(".ea-input-number_inner")), g(this, p, e.querySelector(".minus")), g(this, m, e.querySelector(".plus")), this.build(e, E);
+        `, w(this, h, e.querySelector(".ea-input-number_wrap")), w(this, i, e.querySelector(".ea-input-number_inner")), w(this, d, e.querySelector(".minus")), w(this, b, e.querySelector(".plus")), this.build(e, k);
   }
   // ------- value 值 -------
   // #region
@@ -241,50 +252,49 @@ class z extends A {
   // #endregion
   // ------- end -------
   connectedCallback() {
-    this.style.display = "inline-block", this.disabled = this.disabled, this.readonly = this.readonly, this.size = this.size, this.value = this.value, this.min !== -1 / 0 && (this.value = this.min), s(this, n, b).call(this), t(this, i).addEventListener("focus", (e) => {
-      t(this, h).classList.add("focus"), s(this, n, f).call(this, "focus");
+    this.style.display = "inline-block", this.disabled = this.disabled, this.readonly = this.readonly, this.size = this.size, this.value = this.value, this.min !== -1 / 0 && (this.value = this.min), n(this, p, g).call(this), t(this, i).addEventListener("focus", (e) => {
+      t(this, h).classList.add("focus"), n(this, c, v).call(this, "focus");
     }), t(this, i).addEventListener("blur", (e) => {
       if (t(this, h).classList.remove("focus"), this.stepStrictly) {
-        const a = that.step, o = Number(t(that, i).value), l = o % a;
-        o < 0 && l !== 0 ? t(that, i).value = o - l - a : o < 0 && l === 0 || l === 0 ? t(that, i).value = o : t(this, i).value = o - l + a;
+        const u = that.step, o = Number(t(that, i).value), l = o % u;
+        o < 0 && l !== 0 ? t(that, i).value = o - l - u : o < 0 && l === 0 || l === 0 ? t(that, i).value = o : t(this, i).value = o - l + u;
       }
-      s(this, n, b).call(this), s(this, n, f).call(this, "blur");
-    }), t(this, p).addEventListener("click", () => {
-      s(this, n, c).call(this), s(this, n, v).call(this, "minus", this.precision, "minus");
-    }), t(this, m).addEventListener("click", () => {
-      s(this, n, c).call(this), s(this, n, v).call(this, "plus", this.precision, "plus");
-    }), t(this, p).addEventListener("mousedown", () => {
-      s(this, n, c).call(this), s(this, n, y).call(this, "minus", this.precision);
-    }), t(this, m).addEventListener("mousedown", () => {
-      s(this, n, c).call(this), s(this, n, y).call(this, "plus", this.precision);
+      n(this, p, g).call(this), n(this, c, v).call(this, "blur");
+    }), t(this, d).addEventListener("click", () => {
+      n(this, m, f).call(this), n(this, _, A).call(this, "minus", this.precision, "minus");
+    }), t(this, b).addEventListener("click", () => {
+      n(this, m, f).call(this), n(this, _, A).call(this, "plus", this.precision, "plus");
+    }), t(this, d).addEventListener("mousedown", () => {
+      n(this, m, f).call(this), n(this, x, L).call(this, "minus", this.precision);
+    }), t(this, b).addEventListener("mousedown", () => {
+      n(this, m, f).call(this), n(this, x, L).call(this, "plus", this.precision);
     }), t(this, i).addEventListener("input", () => {
-      s(this, n, c).call(this), s(this, n, b).call(this), s(this, n, f).call(this, "change");
+      n(this, m, f).call(this), n(this, p, g).call(this), n(this, c, v).call(this, "change");
     });
   }
 }
-h = new WeakMap(), i = new WeakMap(), p = new WeakMap(), m = new WeakMap(), n = new WeakSet(), // 处理输入框加减事件
-v = function(e, a, o) {
-  if (this.getAttrBoolean("disabled")) return;
-  const l = Number(t(this, i).value), _ = t(this, i).value.split(".")[1], w = e === "minus" ? l - this.step : l + this.step;
-  a ? t(this, i).value = w.toFixed(a) : _ != null && _.length ? t(this, i).value = w.toFixed(_.length) : t(this, i).value = w, s(this, n, b).call(this), o && s(this, n, f).call(this, "change", w);
-}, // 处理连加连减事件
-y = function(e) {
-  let a = setInterval(() => {
-    s(this, n, v).call(this, e, this.precision), s(this, n, b).call(this);
+h = new WeakMap(), i = new WeakMap(), d = new WeakMap(), b = new WeakMap(), _ = new WeakSet(), A = function(e, u, o) {
+  if (this.getAttrBoolean("disabled"))
+    return;
+  const l = Number(t(this, i).value), y = t(this, i).value.split(".")[1], N = e === "minus" ? l - this.step : l + this.step;
+  u ? t(this, i).value = N.toFixed(u) : y != null && y.length ? t(this, i).value = N.toFixed(y.length) : t(this, i).value = N, n(this, p, g).call(this), o && n(this, c, v).call(this, "change", N);
+}, x = new WeakSet(), L = function(e) {
+  let u = setInterval(() => {
+    n(this, _, A).call(this, e, this.precision), n(this, p, g).call(this);
   }, 100);
   this.addEventListener("mouseup", function() {
-    clearInterval(a), a = null;
+    clearInterval(u), u = null;
   });
-}, b = function() {
-  this.min === !1 && this.max === !1 || (this.min !== void 0 && t(this, i).value < this.min ? t(this, i).value = this.min : this.max !== void 0 && t(this, i).value > this.max && (t(this, i).value = this.max), t(this, p).classList.toggle("disabled", t(this, i).value == this.min), t(this, m).classList.toggle("disabled", t(this, i).value == this.max));
-}, c = function() {
+}, p = new WeakSet(), g = function() {
+  this.min === !1 && this.max === !1 || (this.min !== void 0 && t(this, i).value < this.min ? t(this, i).value = this.min : this.max !== void 0 && t(this, i).value > this.max && (t(this, i).value = this.max), t(this, d).classList.toggle("disabled", t(this, i).value == this.min), t(this, b).classList.toggle("disabled", t(this, i).value == this.max));
+}, m = new WeakSet(), f = function() {
   isNaN(Number(t(this, i).value)) ? t(this, i).value = this.value : this.value = Number(t(this, i).value);
-}, f = function(e, a = this.value) {
-  L.call(this, e, {
-    value: a
+}, c = new WeakSet(), v = function(e, u = this.value) {
+  I.call(this, e, {
+    value: u
   });
 };
-window.customElements.get("ea-input-number") || window.customElements.define("ea-input-number", z);
+window.customElements.get("ea-input-number") || window.customElements.define("ea-input-number", S);
 export {
-  z as EaInputNumber
+  S as EaInputNumber
 };

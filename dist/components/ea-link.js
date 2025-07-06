@@ -1,22 +1,26 @@
-var o = (t) => {
-  throw TypeError(t);
+var o = (t, i, e) => {
+  if (!i.has(t))
+    throw TypeError("Cannot " + e);
 };
-var l = (t, i, e) => i.has(t) || o("Cannot " + e);
-var r = (t, i, e) => (l(t, i, "read from private field"), e ? e.call(t) : i.get(t)), c = (t, i, e) => i.has(t) ? o("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(t) : i.set(t, e), a = (t, i, e, s) => (l(t, i, "write to private field"), s ? s.call(t, e) : i.set(t, e), e);
-import { B as h } from "./Base.js";
+var r = (t, i, e) => (o(t, i, "read from private field"), e ? e.call(t) : i.get(t)), l = (t, i, e) => {
+  if (i.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(t) : i.set(t, e);
+}, c = (t, i, e, s) => (o(t, i, "write to private field"), s ? s.call(t, e) : i.set(t, e), e);
+import { B as a } from "./Base.js";
 import "./index3.js";
-const d = ".ea-link{text-decoration:none;color:#606266;cursor:pointer}.ea-link:hover{color:#797b80}.ea-link.underline:hover{text-decoration:underline}.ea-link.primary{color:#409eff}.ea-link.primary:hover{color:#73b8ff}.ea-link.success{color:#67c23a}.ea-link.success:hover{color:#85cf60}.ea-link.info{color:#909399}.ea-link.info:hover{color:#abadb1}.ea-link.warning{color:#e6a23c}.ea-link.warning:hover{color:#ecb869}.ea-link.danger{color:#f56c6c}.ea-link.danger:hover{color:#f89c9c}.ea-link.disabled{color:#c0c4cc;pointer-events:none}.ea-link.disabled:hover{color:#dcdee3}";
+const h = ".ea-link{text-decoration:none;color:#606266;cursor:pointer}.ea-link:hover{color:#797b80}.ea-link.underline:hover{text-decoration:underline}.ea-link.primary{color:#409eff}.ea-link.primary:hover{color:#73b8ff}.ea-link.success{color:#67c23a}.ea-link.success:hover{color:#85cf60}.ea-link.info{color:#909399}.ea-link.info:hover{color:#abadb1}.ea-link.warning{color:#e6a23c}.ea-link.warning:hover{color:#ecb869}.ea-link.danger{color:#f56c6c}.ea-link.danger:hover{color:#f89c9c}.ea-link.disabled{color:#c0c4cc;pointer-events:none}.ea-link.disabled:hover{color:#dcdee3}";
 var n;
-class u extends h {
+class d extends a {
   constructor() {
     super();
-    c(this, n);
+    l(this, n, void 0);
     const e = this.shadowRoot;
-    this.stylesheet = d, e.innerHTML = `
+    this.stylesheet = h, e.innerHTML = `
       <a class="ea-link" part="container">
         <slot></slot>
       </a>
-    `, a(this, n, e.querySelector(".ea-link"));
+    `, c(this, n, e.querySelector(".ea-link"));
   }
   get LINK_TYPE() {
     return ["primary", "success", "info", "warning", "danger"];
@@ -68,7 +72,8 @@ class u extends h {
     return this.getAttribute("icon");
   }
   set icon(e) {
-    if (!e) return;
+    if (!e)
+      return;
     const s = document.createElement("ea-icon");
     s.icon = e, r(this, n).insertBefore(s, r(this, n).firstChild);
   }
@@ -79,7 +84,7 @@ class u extends h {
   }
 }
 n = new WeakMap();
-window.customElements.get("ea-link") || window.customElements.define("ea-link", u);
+window.customElements.get("ea-link") || window.customElements.define("ea-link", d);
 export {
-  u as EaLink
+  d as EaLink
 };

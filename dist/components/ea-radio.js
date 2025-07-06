@@ -1,10 +1,14 @@
-var c = (r) => {
-  throw TypeError(r);
+var c = (r, a, e) => {
+  if (!a.has(r))
+    throw TypeError("Cannot " + e);
 };
-var l = (r, a, e) => a.has(r) || c("Cannot " + e);
-var t = (r, a, e) => (l(r, a, "read from private field"), e ? e.call(r) : a.get(r)), s = (r, a, e) => a.has(r) ? c("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(r) : a.set(r, e), n = (r, a, e, d) => (l(r, a, "write to private field"), d ? d.call(r, e) : a.set(r, e), e);
-import { B as h } from "./Base.js";
-const u = `
+var t = (r, a, e) => (c(r, a, "read from private field"), e ? e.call(r) : a.get(r)), s = (r, a, e) => {
+  if (a.has(r))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(r) : a.set(r, e);
+}, n = (r, a, e, d) => (c(r, a, "write to private field"), d ? d.call(r, e) : a.set(r, e), e);
+import { B as p } from "./Base.js";
+const h = `
 :host {
   --margin-right: 0.75rem;
   --text-color: #606266;
@@ -89,11 +93,11 @@ const u = `
 }
 `;
 var i, o;
-class b extends h {
+class u extends p {
   constructor() {
     super();
-    s(this, i);
-    s(this, o);
+    s(this, i, void 0);
+    s(this, o, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
       <label class="ea-radio_wrap" part="container">
@@ -105,7 +109,7 @@ class b extends h {
           <slot></slot>
         </span>
       </label>
-    `, n(this, o, e.querySelector(".ea-radio_wrap")), n(this, i, e.querySelector(".ea-radio-input_input")), this.build(e, u);
+    `, n(this, o, e.querySelector(".ea-radio_wrap")), n(this, i, e.querySelector(".ea-radio-input_input")), this.build(e, h);
   }
   // ------- 选中 -------
   // #region
@@ -160,8 +164,8 @@ class b extends h {
   connectedCallback() {
     this.checked = this.checked, this.name = this.name, this.value = this.value, this.disabled = this.disabled, this.border = this.border, t(this, i).addEventListener("change", (e) => {
       document.querySelectorAll(`ea-radio[name="${this.name}"]`).forEach((d) => {
-        const p = d.shadowRoot.querySelector("input");
-        d.checked = p === t(this, i);
+        const l = d.shadowRoot.querySelector("input");
+        d.checked = l === t(this, i);
       }), this.dispatchEvent(new CustomEvent("change", {
         detail: {
           value: this.value,
@@ -172,7 +176,7 @@ class b extends h {
   }
 }
 i = new WeakMap(), o = new WeakMap();
-window.customElements.get("ea-radio") || window.customElements.define("ea-radio", b);
+window.customElements.get("ea-radio") || window.customElements.define("ea-radio", u);
 export {
-  b as EaRadio
+  u as EaRadio
 };

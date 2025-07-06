@@ -1,9 +1,13 @@
-var u = (t) => {
-  throw TypeError(t);
+var c = (i, a, e) => {
+  if (!a.has(i))
+    throw TypeError("Cannot " + e);
 };
-var c = (t, i, e) => i.has(t) || u("Cannot " + e);
-var n = (t, i, e) => i.has(t) ? u("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(t) : i.set(t, e);
-var r = (t, i, e) => (c(t, i, "access private method"), e);
+var o = (i, a, e) => {
+  if (a.has(i))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(i) : a.set(i, e);
+};
+var u = (i, a, e) => (c(i, a, "access private method"), e);
 import { t as d } from "./timeout.js";
 import { B as m } from "./Base.js";
 const v = `
@@ -11,11 +15,14 @@ const v = `
   display: flex;
 }
 `;
-var s, l, h;
+var s, l, r, h;
 class p extends m {
   constructor() {
     super();
-    n(this, s);
+    // #endregion
+    // ------- end -------
+    o(this, s);
+    o(this, r);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class="ea-radio-group_wrap" part="container">
@@ -29,8 +36,8 @@ class p extends m {
     return this.getAttribute("name");
   }
   set name(e) {
-    this.setAttribute("name", e), this.querySelectorAll("ea-radio").forEach((a) => {
-      a.setAttribute("name", e);
+    this.setAttribute("name", e), this.querySelectorAll("ea-radio").forEach((t) => {
+      t.setAttribute("name", e);
     });
   }
   // #endregion
@@ -46,28 +53,26 @@ class p extends m {
   connectedCallback() {
     this.setAttribute("data-ea-component", !0), this.name = this.name, this.value = this.value, d(() => {
       const e = this.querySelectorAll("ea-radio");
-      r(this, s, l).call(this, e), r(this, s, h).call(this, e);
+      u(this, s, l).call(this, e), u(this, r, h).call(this, e);
     }, 20);
   }
 }
-s = new WeakSet(), // #endregion
-// ------- end -------
-l = function(e) {
-  e.forEach((a) => {
-    a.checked && (this.value = a.value), a.addEventListener("change", (o) => {
-      this.value = a.value, this.dispatchEvent(new CustomEvent("change", {
+s = new WeakSet(), l = function(e) {
+  e.forEach((t) => {
+    t.checked && (this.value = t.value), t.addEventListener("change", (n) => {
+      this.value = t.value, this.dispatchEvent(new CustomEvent("change", {
         bubbles: !0,
         composed: !0,
         detail: {
-          target: a,
+          target: t,
           value: this.value
         }
       }));
     });
   });
-}, h = function(e) {
-  const a = Array.from(e).find((o) => o.value === this.value);
-  a && (a.checked = !0);
+}, r = new WeakSet(), h = function(e) {
+  const t = Array.from(e).find((n) => n.value === this.value);
+  t && (t.checked = !0);
 };
 window.customElements.get("ea-radio-group") || window.customElements.define("ea-radio-group", p);
 export {

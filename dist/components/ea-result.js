@@ -1,11 +1,15 @@
-var m = (e) => {
-  throw TypeError(e);
+var m = (e, r, t) => {
+  if (!r.has(e))
+    throw TypeError("Cannot " + t);
 };
-var x = (e, r, t) => r.has(e) || m("Cannot " + t);
-var n = (e, r, t) => (x(e, r, "read from private field"), t ? t.call(e) : r.get(e)), i = (e, r, t) => r.has(e) ? m("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(e) : r.set(e, t), s = (e, r, t, d) => (x(e, r, "write to private field"), d ? d.call(e, t) : r.set(e, t), t);
-import { B as w } from "./Base.js";
+var n = (e, r, t) => (m(e, r, "read from private field"), t ? t.call(e) : r.get(e)), i = (e, r, t) => {
+  if (r.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  r instanceof WeakSet ? r.add(e) : r.set(e, t);
+}, s = (e, r, t, d) => (m(e, r, "write to private field"), d ? d.call(e, t) : r.set(e, t), t);
+import { B as x } from "./Base.js";
 import "./index3.js";
-const S = `
+const w = `
 .ea-result_wrap {
   display: flex;
   flex-direction: column;
@@ -45,18 +49,18 @@ const S = `
 }
 `;
 var c, l, a, o, u, p, _, h, b;
-class f extends w {
+class S extends x {
   constructor() {
     super();
-    i(this, c);
-    i(this, l);
-    i(this, a);
-    i(this, o);
-    i(this, u);
-    i(this, p);
-    i(this, _);
-    i(this, h);
-    i(this, b);
+    i(this, c, void 0);
+    i(this, l, void 0);
+    i(this, a, void 0);
+    i(this, o, void 0);
+    i(this, u, void 0);
+    i(this, p, void 0);
+    i(this, _, void 0);
+    i(this, h, void 0);
+    i(this, b, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
       <div class="ea-result_wrap" part="container">
@@ -73,7 +77,7 @@ class f extends w {
           <slot name="extra"></slot>
         </div>
       </div>
-    `, s(this, c, t.querySelector(".ea-result_wrap")), s(this, l, t.querySelector(".ea-result_icon")), s(this, a, t.querySelector(".ea-result_title")), s(this, o, t.querySelector(".ea-result_subtitle")), s(this, u, t.querySelector(".ea-result_extra")), s(this, p, t.querySelector('slot[name="icon"]')), s(this, _, t.querySelector('slot[name="title"]')), s(this, h, t.querySelector('slot[name="subTitle"]')), s(this, b, t.querySelector('slot[name="extra"]')), this.build(t, S);
+    `, s(this, c, t.querySelector(".ea-result_wrap")), s(this, l, t.querySelector(".ea-result_icon")), s(this, a, t.querySelector(".ea-result_title")), s(this, o, t.querySelector(".ea-result_subtitle")), s(this, u, t.querySelector(".ea-result_extra")), s(this, p, t.querySelector('slot[name="icon"]')), s(this, _, t.querySelector('slot[name="title"]')), s(this, h, t.querySelector('slot[name="subTitle"]')), s(this, b, t.querySelector('slot[name="extra"]')), this.build(t, w);
   }
   // ------- icon 设置自定义icon -------
   // #region
@@ -110,7 +114,7 @@ class f extends w {
   }
 }
 c = new WeakMap(), l = new WeakMap(), a = new WeakMap(), o = new WeakMap(), u = new WeakMap(), p = new WeakMap(), _ = new WeakMap(), h = new WeakMap(), b = new WeakMap();
-customElements.get("ea-result") || customElements.define("ea-result", f);
+customElements.get("ea-result") || customElements.define("ea-result", S);
 export {
-  f as EaResult
+  S as EaResult
 };

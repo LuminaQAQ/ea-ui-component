@@ -1,11 +1,15 @@
-var m = (s) => {
-  throw TypeError(s);
+var m = (s, t, e) => {
+  if (!t.has(s))
+    throw TypeError("Cannot " + e);
 };
-var f = (s, t, e) => t.has(s) || m("Cannot " + e);
-var o = (s, t, e) => (f(s, t, "read from private field"), e ? e.call(s) : t.get(s)), l = (s, t, e) => t.has(s) ? m("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(s) : t.set(s, e), h = (s, t, e, n) => (f(s, t, "write to private field"), n ? n.call(s, e) : t.set(s, e), e);
-import { B as u } from "./Base.js";
+var o = (s, t, e) => (m(s, t, "read from private field"), e ? e.call(s) : t.get(s)), l = (s, t, e) => {
+  if (t.has(s))
+    throw TypeError("Cannot add the same private member more than once");
+  t instanceof WeakSet ? t.add(s) : t.set(s, e);
+}, h = (s, t, e, n) => (m(s, t, "write to private field"), n ? n.call(s, e) : t.set(s, e), e);
+import { B as f } from "./Base.js";
 import "./index3.js";
-class w {
+class u {
   /**
    * 处理字符串型消息
    * @param {Element} el EaMessage元素
@@ -31,7 +35,8 @@ class w {
    * @param {*} duration 时间间隔
    */
   handleDuration(t, e = 3) {
-    if (e === 0) return;
+    if (e === 0)
+      return;
     let n = setTimeout(() => {
       t.show = !1, clearTimeout(n), n = null;
     }, e * 1e3 + 40);
@@ -42,7 +47,8 @@ class w {
       this.handleStringMsg(e, t), this.handleDuration(e);
     else if (typeof t == "object")
       this.handleObjectMsg(e, t, e.attrs), this.handleDuration(e, t.duration);
-    else throw new Error("[EaMessage] TypeError");
+    else
+      throw new Error("[EaMessage] TypeError");
     return e.show = !0, {
       onClose(n) {
         typeof n == "function" && e.addEventListener("click", function() {
@@ -52,7 +58,7 @@ class w {
     };
   }
 }
-const y = `
+const w = `
 .ea-message_wrap {
   position: fixed;
   left: 50%;
@@ -101,13 +107,13 @@ const y = `
 }
 `;
 var a, c, g, r;
-class b extends u {
+class y extends f {
   constructor() {
     super();
-    l(this, a);
-    l(this, c);
-    l(this, g);
-    l(this, r);
+    l(this, a, void 0);
+    l(this, c, void 0);
+    l(this, g, void 0);
+    l(this, r, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class="ea-message_wrap" part="container">
@@ -115,7 +121,7 @@ class b extends u {
                 <div class="ea-text-content" part="content-wrap"></div>
                 <ea-icon class="ea-close-icon" icon="icon-cancel"></ea-icon>
             </div>
-        `, h(this, a, e.querySelector(".ea-message_wrap")), this.wrap = o(this, a), h(this, c, e.querySelector(".ea-icon-wrap")), h(this, g, e.querySelector(".ea-text-content")), h(this, r, e.querySelector(".ea-close-icon")), this.closeWrap = o(this, r), this.build(e, y);
+        `, h(this, a, e.querySelector(".ea-message_wrap")), this.wrap = o(this, a), h(this, c, e.querySelector(".ea-icon-wrap")), h(this, g, e.querySelector(".ea-text-content")), h(this, r, e.querySelector(".ea-close-icon")), this.closeWrap = o(this, r), this.build(e, w);
   }
   get attrs() {
     return ["show", "text", "icon", "type", "showClose", "center"];
@@ -203,8 +209,8 @@ class b extends u {
   }
 }
 a = new WeakMap(), c = new WeakMap(), g = new WeakMap(), r = new WeakMap();
-customElements.get("ea-message") || customElements.define("ea-message", b);
-window.$message = new w();
+customElements.get("ea-message") || customElements.define("ea-message", y);
+window.$message = new u();
 export {
-  b as EaMessageElement
+  y as EaMessageElement
 };

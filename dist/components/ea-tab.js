@@ -1,8 +1,13 @@
-var n = (e) => {
-  throw TypeError(e);
+var l = (e, a, t) => {
+  if (!a.has(e))
+    throw TypeError("Cannot " + t);
 };
-var d = (e, a, t) => a.has(e) || n("Cannot " + t);
-var i = (e, a, t) => (d(e, a, "read from private field"), t ? t.call(e) : a.get(e)), b = (e, a, t) => a.has(e) ? n("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(e) : a.set(e, t), h = (e, a, t, o) => (d(e, a, "write to private field"), o ? o.call(e, t) : a.set(e, t), t), l = (e, a, t) => (d(e, a, "access private method"), t);
+var i = (e, a, t) => (l(e, a, "read from private field"), t ? t.call(e) : a.get(e)), s = (e, a, t) => {
+  if (a.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(e) : a.set(e, t);
+}, h = (e, a, t, o) => (l(e, a, "write to private field"), o ? o.call(e, t) : a.set(e, t), t);
+var n = (e, a, t) => (l(e, a, "access private method"), t);
 import { B as w } from "./Base.js";
 import "./index3.js";
 import "./ea-pane.js";
@@ -77,12 +82,15 @@ const m = `
   width: 14px;
 }
 `;
-var r, s, p, c;
+var r, d, p, b, c;
 class u extends w {
   constructor() {
     super();
-    b(this, s);
-    b(this, r);
+    // #endregion
+    // ------- end -------
+    s(this, d);
+    s(this, b);
+    s(this, r, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-tab_wrap" part="container">
@@ -126,7 +134,7 @@ class u extends w {
     return this.getAttrBoolean("editable");
   }
   set editable(t) {
-    this.setAttribute("editable", t), i(this, r).classList.toggle("ea-tab_wrap--editable", t), t && l(this, s, c).call(this);
+    this.setAttribute("editable", t), i(this, r).classList.toggle("ea-tab_wrap--editable", t), t && n(this, b, c).call(this);
   }
   handleBorderRadius(t) {
     i(this, r).style.setProperty(t, "3px");
@@ -135,12 +143,10 @@ class u extends w {
     i(this, r).style.setProperty("--border-right-width", "1px");
   }
   connectedCallback() {
-    this.editable = this.editable, this.label = this.label, l(this, s, p).call(this);
+    this.editable = this.editable, this.label = this.label, n(this, d, p).call(this);
   }
 }
-r = new WeakMap(), s = new WeakSet(), // #endregion
-// ------- end -------
-p = function() {
+r = new WeakMap(), d = new WeakSet(), p = function() {
   this.addEventListener("click", (t) => {
     const o = t.detail.value === this.getAttrBoolean("selected");
     this.toggleAttr("selected", o), this.dispatchEvent(new CustomEvent("tab-click", {
@@ -151,7 +157,7 @@ p = function() {
       bubbles: !0
     }));
   });
-}, c = function() {
+}, b = new WeakSet(), c = function() {
   const t = g("span", "ea-tab_wrap--editable-sign");
   t.innerText = "x", i(this, r).appendChild(t), t.addEventListener("click", (o) => {
     o.stopPropagation(), this.dispatchEvent(new CustomEvent("tab-close", {

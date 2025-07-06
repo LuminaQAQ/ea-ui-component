@@ -1,6 +1,6 @@
 var a = Object.defineProperty;
 var l = (s, e, t) => e in s ? a(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t;
-var r = (s, e, t) => l(s, typeof e != "symbol" ? e + "" : e, t);
+var r = (s, e, t) => (l(s, typeof e != "symbol" ? e + "" : e, t), t);
 import { B as u } from "./Base.js";
 const d = ".ea-button-group{display:flex;align-items:center}.ea-button-group ::slotted(ea-button){--border-radius: 0}.ea-button-group ::slotted(ea-button:not([type=normal])){border-right:1px solid rgba(255,255,255,.3)}.ea-button-group ::slotted(ea-button:first-of-type){--border-radius: 4px 0 0 4px}.ea-button-group ::slotted(ea-button:last-of-type){--border-radius: 0 4px 4px 0}";
 class i extends u {

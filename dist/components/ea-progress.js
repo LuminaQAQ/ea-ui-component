@@ -1,11 +1,16 @@
-var y = (s) => {
-  throw TypeError(s);
+var f = (s, i, t) => {
+  if (!i.has(s))
+    throw TypeError("Cannot " + t);
 };
-var x = (s, a, t) => a.has(s) || y("Cannot " + t);
-var e = (s, a, t) => (x(s, a, "read from private field"), t ? t.call(s) : a.get(s)), l = (s, a, t) => a.has(s) ? y("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(s) : a.set(s, t), p = (s, a, t, g) => (x(s, a, "write to private field"), g ? g.call(s, t) : a.set(s, t), t), c = (s, a, t) => (x(s, a, "access private method"), t);
-import { B as u } from "./Base.js";
+var e = (s, i, t) => (f(s, i, "read from private field"), t ? t.call(s) : i.get(s)), h = (s, i, t) => {
+  if (i.has(s))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(s) : i.set(s, t);
+}, p = (s, i, t, g) => (f(s, i, "write to private field"), g ? g.call(s, t) : i.set(s, t), t);
+var c = (s, i, t) => (f(s, i, "access private method"), t);
+import { B as T } from "./Base.js";
 import "./index3.js";
-const $ = `
+const A = `
 .ea-progress_wrap {
   position: relative;
   display: flex;
@@ -59,7 +64,7 @@ const $ = `
 .ea-progress_wrap svg .path--dashboard {
   transform: rotate(161deg);
 }
-`, S = {
+`, L = {
   dashboard: `
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle class="track--dashboard" cx="50" cy="50" r="40" fill="none" stroke-dasharray="252px" stroke="aliceblue"
@@ -77,15 +82,22 @@ const $ = `
     <span class="ea-progress_text--circle"></span>
     `
 };
-var o, n, r, h, i, f, w, d, k, b;
-class T extends u {
+var a, n, r, o, b, m, y, u, l, k, d, w, x, _;
+class N extends T {
   constructor() {
     super();
-    l(this, i);
-    l(this, o);
-    l(this, n);
-    l(this, r);
-    l(this, h);
+    h(this, b);
+    h(this, y);
+    // 状态处理
+    h(this, l);
+    // #endregion
+    // ------- end -------
+    h(this, d);
+    h(this, x);
+    h(this, a, void 0);
+    h(this, n, void 0);
+    h(this, r, void 0);
+    h(this, o, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-progress_wrap" part="container">
@@ -94,7 +106,7 @@ class T extends u {
                 </section>
                 <section class="ea-progress_text" part="text-wrap"></section>
             </div>
-        `, p(this, o, t.querySelector(".ea-progress_wrap")), p(this, n, t.querySelector(".ea-progress_track")), p(this, r, t.querySelector(".ea-progress_path")), p(this, h, t.querySelector(".ea-progress_text")), this.build(t, $);
+        `, p(this, a, t.querySelector(".ea-progress_wrap")), p(this, n, t.querySelector(".ea-progress_track")), p(this, r, t.querySelector(".ea-progress_path")), p(this, o, t.querySelector(".ea-progress_text")), this.build(t, A);
   }
   // ------- type 进度条类型 -------
   // #region
@@ -105,10 +117,10 @@ class T extends u {
     if (t)
       switch (this.setAttribute("type", t), this.type) {
         case "circle":
-          c(this, i, k).call(this, "circle");
+          c(this, d, w).call(this, "circle");
           break;
         case "dashboard":
-          c(this, i, k).call(this, "dashboard");
+          c(this, d, w).call(this, "dashboard");
           break;
       }
   }
@@ -121,17 +133,17 @@ class T extends u {
   }
   set percentage(t) {
     if (!isNaN(Number(t)))
-      switch (Number(t) < 0 ? t = 0 : Number(t) > 100 && (t = 100), this.setAttribute("percentage", t), (this.textInside || this.type === "dashboard" || this.type === "circle") && (e(this, h).innerHTML = `${t}%`), this.type) {
+      switch (Number(t) < 0 ? t = 0 : Number(t) > 100 && (t = 100), this.setAttribute("percentage", t), (this.textInside || this.type === "dashboard" || this.type === "circle") && (e(this, o).innerHTML = `${t}%`), this.type) {
         case "circle": {
-          e(this, r).style.strokeDashoffset = `${c(this, i, f).call(this, t)}px`;
+          e(this, r).style.strokeDashoffset = `${c(this, b, m).call(this, t)}px`;
           break;
         }
         case "dashboard": {
-          e(this, r).style.strokeDashoffset = `${c(this, i, w).call(this, t)}px`;
+          e(this, r).style.strokeDashoffset = `${c(this, y, u).call(this, t)}px`;
           break;
         }
         default: {
-          e(this, r).style.width = `${t}%`, this.textInside && c(this, i, b).call(this, t);
+          e(this, r).style.width = `${t}%`, this.textInside && c(this, x, _).call(this, t);
           break;
         }
       }
@@ -164,13 +176,13 @@ class T extends u {
   set status(t) {
     switch (this.setAttribute("status", t), this.type) {
       case "circle":
-        c(this, i, d).call(this, t, "ea-progress_text--circle"), e(this, r).style.stroke = this.statusList[t].color;
+        c(this, l, k).call(this, t, "ea-progress_text--circle"), e(this, r).style.stroke = this.statusList[t].color;
         break;
       case "dashboard":
-        c(this, i, d).call(this, t, "ea-progress_text--dashboard"), e(this, r).style.stroke = this.statusList[t].color;
+        c(this, l, k).call(this, t, "ea-progress_text--dashboard"), e(this, r).style.stroke = this.statusList[t].color;
         break;
       default:
-        c(this, i, d).call(this, t, "ea-progress_text"), e(this, r).style.backgroundColor = this.statusList[t].color;
+        c(this, l, k).call(this, t, "ea-progress_text"), e(this, r).style.backgroundColor = this.statusList[t].color;
         break;
     }
   }
@@ -182,7 +194,7 @@ class T extends u {
     return this.getAttrBoolean("text-inside");
   }
   set textInside(t) {
-    this.type === "circle" || !t || (this.setAttribute("text-inside", t), c(this, i, b).call(this, t));
+    this.type === "circle" || !t || (this.setAttribute("text-inside", t), c(this, x, _).call(this, t));
   }
   // #endregion
   // ------- end -------
@@ -192,29 +204,26 @@ class T extends u {
     return this.getAttribute("stroke-width");
   }
   set strokeWidth(t) {
-    t = t ? Number(t) : 4, this.toggleAttr("stroke-width", t), this.type === "circle" || this.type === "dashboard" ? (e(this, n).style.strokeWidth = `${t}px`, e(this, r).style.strokeWidth = `${t}px`) : (t = t + 4, e(this, n).style.height = `${t}px`, e(this, n).style.lineHeight = `${t}px`, e(this, r).style.height = `${t}px`, e(this, r).style.lineHeight = `${t}px`, e(this, o).style.height = `${t}px`, e(this, o).style.lineHeight = `${t}px`);
+    t = t ? Number(t) : 4, this.toggleAttr("stroke-width", t), this.type === "circle" || this.type === "dashboard" ? (e(this, n).style.strokeWidth = `${t}px`, e(this, r).style.strokeWidth = `${t}px`) : (t = t + 4, e(this, n).style.height = `${t}px`, e(this, n).style.lineHeight = `${t}px`, e(this, r).style.height = `${t}px`, e(this, r).style.lineHeight = `${t}px`, e(this, a).style.height = `${t}px`, e(this, a).style.lineHeight = `${t}px`);
   }
   connectedCallback() {
     this.type = this.type, this.percentage = this.percentage, this.status = this.status, this.textInside = this.textInside, this.strokeWidth = this.strokeWidth;
   }
 }
-o = new WeakMap(), n = new WeakMap(), r = new WeakMap(), h = new WeakMap(), i = new WeakSet(), f = function(t) {
+a = new WeakMap(), n = new WeakMap(), r = new WeakMap(), o = new WeakMap(), b = new WeakSet(), m = function(t) {
   return 302 * (100 - Number(t)) / 100;
-}, w = function(t) {
+}, y = new WeakSet(), u = function(t) {
   return 152 * (100 - Number(t)) / 100 + 100;
-}, // 状态处理
-d = function(t, g) {
-  !this.type && this.textInside || this.type === "dashboard" || this.type === "circle" ? e(this, h).innerText = `${this.percentage}%` : e(this, h).innerText = "", e(this, h).className = `${g} ${this.statusList[t].icon || ""}`, e(this, h).style.color = this.statusList[t].color;
-}, // #endregion
-// ------- end -------
-k = function(t) {
-  e(this, o).style.height = "126px", e(this, o).style.width = "126px", e(this, o).innerHTML = S[t];
-  const g = e(this, o).querySelector(`circle[class="track--${t}"]`), _ = e(this, o).querySelector(`circle[class="path--${t}"]`), m = e(this, o).querySelector(`span[class="ea-progress_text--${t}"]`);
-  p(this, n, g), p(this, r, _), p(this, h, m);
-}, b = function(t) {
-  t ? (e(this, h).style.display = "none", e(this, r).innerText = `${this.percentage}%`) : (e(this, h).style.display = "block", e(this, r).innerText = "");
+}, l = new WeakSet(), k = function(t, g) {
+  !this.type && this.textInside || this.type === "dashboard" || this.type === "circle" ? e(this, o).innerText = `${this.percentage}%` : e(this, o).innerText = "", e(this, o).className = `${g} ${this.statusList[t].icon || ""}`, e(this, o).style.color = this.statusList[t].color;
+}, d = new WeakSet(), w = function(t) {
+  e(this, a).style.height = "126px", e(this, a).style.width = "126px", e(this, a).innerHTML = L[t];
+  const g = e(this, a).querySelector(`circle[class="track--${t}"]`), $ = e(this, a).querySelector(`circle[class="path--${t}"]`), S = e(this, a).querySelector(`span[class="ea-progress_text--${t}"]`);
+  p(this, n, g), p(this, r, $), p(this, o, S);
+}, x = new WeakSet(), _ = function(t) {
+  t ? (e(this, o).style.display = "none", e(this, r).innerText = `${this.percentage}%`) : (e(this, o).style.display = "block", e(this, r).innerText = "");
 };
-customElements.get("ea-progress") || customElements.define("ea-progress", T);
+customElements.get("ea-progress") || customElements.define("ea-progress", N);
 export {
-  T as EaProgress
+  N as EaProgress
 };

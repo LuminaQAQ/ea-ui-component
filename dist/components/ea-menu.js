@@ -1,9 +1,13 @@
-var u = (e) => {
-  throw TypeError(e);
+var u = (e, o, t) => {
+  if (!o.has(e))
+    throw TypeError("Cannot " + t);
 };
-var h = (e, o, t) => o.has(e) || u("Cannot " + t);
-var c = (e, o, t) => (h(e, o, "read from private field"), t ? t.call(e) : o.get(e)), d = (e, o, t) => o.has(e) ? u("Cannot add the same private member more than once") : o instanceof WeakSet ? o.add(e) : o.set(e, t), m = (e, o, t, r) => (h(e, o, "write to private field"), r ? r.call(e, t) : o.set(e, t), t);
-import { B as p } from "./Base.js";
+var c = (e, o, t) => (u(e, o, "read from private field"), t ? t.call(e) : o.get(e)), h = (e, o, t) => {
+  if (o.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  o instanceof WeakSet ? o.add(e) : o.set(e, t);
+}, d = (e, o, t, r) => (u(e, o, "write to private field"), r ? r.call(e, t) : o.set(e, t), t);
+import { B as m } from "./Base.js";
 import "./index3.js";
 import "./ea-menu-item.js";
 import "./ea-submenu.js";
@@ -11,14 +15,14 @@ import "./ea-menu-item-group.js";
 const n = (e) => {
   e.actived = !1;
 };
-function g(e, o, t) {
+function p(e, o, t) {
   e.forEach(n), o.forEach(n), t.forEach(n);
 }
-function b(e, o, t) {
+function g(e, o, t) {
   e.forEach((r, s) => {
     r.itemIndex = s, r.addEventListener("item-selected", (l) => {
       const a = l.detail.title;
-      g(e, o, t), r.actived = !0, this.dispatchEvent(new CustomEvent("select", {
+      p(e, o, t), r.actived = !0, this.dispatchEvent(new CustomEvent("select", {
         detail: {
           index: s,
           title: a
@@ -27,7 +31,7 @@ function b(e, o, t) {
     });
   });
 }
-const f = `
+const b = `
 .ea-menu_wrap {
   display: flex;
   flex-direction: row;
@@ -49,16 +53,16 @@ const f = `
 }
 `;
 var i;
-class x extends p {
+class f extends m {
   constructor() {
     super();
-    d(this, i);
+    h(this, i, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-menu_wrap" part="container">
                 <slot></slot>
             </div>
-        `, m(this, i, t.querySelector(".ea-menu_wrap")), this.build(t, f);
+        `, d(this, i, t.querySelector(".ea-menu_wrap")), this.build(t, b);
   }
   // ------- mode 顶栏排列方式 -------
   // #region
@@ -117,15 +121,15 @@ class x extends p {
   connectedCallback() {
     this.mode = this.mode, this.collapse = !0, this.backgroundColor = this.backgroundColor, this.textColor = this.textColor, this.activeTextColor = this.activeTextColor;
     const t = this.querySelectorAll("ea-menu-item"), r = this.querySelectorAll("ea-submenu"), s = this.querySelectorAll("ea-menu-item-group");
-    b.call(this, t, r, s);
-    const l = (a, v) => {
+    g.call(this, t, r, s);
+    const l = (a, x) => {
       a.backgroundColor = this.backgroundColor, a.textColor = this.textColor, a.activeTextColor = this.activeTextColor;
     };
     t.forEach(l), r.forEach(l), s.forEach(l);
   }
 }
 i = new WeakMap();
-customElements.get("ea-menu") || customElements.define("ea-menu", x);
+customElements.get("ea-menu") || customElements.define("ea-menu", f);
 export {
-  x as EaMenu
+  f as EaMenu
 };

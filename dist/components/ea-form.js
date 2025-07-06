@@ -1,18 +1,22 @@
-var c = (t) => {
-  throw TypeError(t);
+var c = (r, a, e) => {
+  if (!a.has(r))
+    throw TypeError("Cannot " + e);
 };
-var f = (t, a, e) => a.has(t) || c("Cannot " + e);
-var i = (t, a, e) => (f(t, a, "read from private field"), e ? e.call(t) : a.get(t)), u = (t, a, e) => a.has(t) ? c("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(t) : a.set(t, e), h = (t, a, e, s) => (f(t, a, "write to private field"), s ? s.call(t, e) : a.set(t, e), e);
-import { B as v } from "./Base.js";
+var i = (r, a, e) => (c(r, a, "read from private field"), e ? e.call(r) : a.get(r)), f = (r, a, e) => {
+  if (a.has(r))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(r) : a.set(r, e);
+}, u = (r, a, e, s) => (c(r, a, "write to private field"), s ? s.call(r, e) : a.set(r, e), e);
+import { B as d } from "./Base.js";
 import "./index3.js";
-import { V as d } from "./index2.js";
-import { t as I } from "./timeout.js";
+import { V as h } from "./index2.js";
+import { t as v } from "./timeout.js";
 import "./ea-button.js";
 var n;
-class p extends v {
+class I extends d {
   constructor() {
     super();
-    u(this, n);
+    f(this, n, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <form class='ea-form_wrap' part='container'>
@@ -36,11 +40,11 @@ class p extends v {
     return i(this, n) || {};
   }
   set rules(e) {
-    h(this, n, e);
+    u(this, n, e);
     const s = this.querySelectorAll("ea-form-item");
-    this.querySelectorAll("[data-ea-component]").forEach((r, o) => {
+    this.querySelectorAll("[data-ea-component]").forEach((t, o) => {
       var m;
-      s[o].rule = e[r.name], s[o].validateEvent(), s[o].isRequired = !!((m = e[r.name]) != null && m.required);
+      s[o].rule = e[t.name], s[o].validateEvent(), s[o].isRequired = !!((m = e[t.name]) != null && m.required);
     });
   }
   // #endregion
@@ -48,39 +52,39 @@ class p extends v {
   validate() {
     const e = this.querySelectorAll("ea-form-item"), s = this.querySelectorAll("[data-ea-component]");
     let l = [];
-    return s.forEach((r, o) => {
-      if (i(this, n)[r.name]) {
+    return s.forEach((t, o) => {
+      if (i(this, n)[t.name]) {
         for (const m in e[o].rule)
-          if (d[m])
-            if (d[m](r.value, e[o].rule[m]))
-              e[o].isInvalid = !1, r.isInvalid = !1;
+          if (h[m])
+            if (h[m](t.value, e[o].rule[m]))
+              e[o].isInvalid = !1, t.isInvalid = !1;
             else {
-              e[o].isInvalid = !0, r.isInvalid = !0, l.push(r.name);
+              e[o].isInvalid = !0, t.isInvalid = !0, l.push(t.name);
               break;
             }
       }
-    }), new Promise((r, o) => {
-      l.length > 0 ? o(l) : r(!0);
+    }), new Promise((t, o) => {
+      l.length > 0 ? o(l) : t(!0);
     });
   }
   reset() {
     const e = this.querySelectorAll("ea-form-item");
-    this.querySelectorAll("[data-ea-component]").forEach((l, r) => {
-      l.value = "", l.isInvalid = !1, e[r].isInvalid = !1;
+    this.querySelectorAll("[data-ea-component]").forEach((l, t) => {
+      l.value = "", l.isInvalid = !1, e[t].isInvalid = !1;
     });
   }
   connectedCallback() {
-    I(() => {
-      const e = this.querySelectorAll("ea-form-item"), s = Array.from(e).map((r) => r.label.length), l = Math.max(...s);
-      e.forEach((r) => {
-        const o = r.shadowRoot.querySelector(".ea-form-item_label-wrap");
+    v(() => {
+      const e = this.querySelectorAll("ea-form-item"), s = Array.from(e).map((t) => t.label.length), l = Math.max(...s);
+      e.forEach((t) => {
+        const o = t.shadowRoot.querySelector(".ea-form-item_label-wrap");
         o && (o.style.width = `${l * 20}px`);
       }), this.dispatchEvent(new CustomEvent("ready", { bubbles: !0 }));
     }, 50);
   }
 }
 n = new WeakMap();
-customElements.get("ea-form") || customElements.define("ea-form", p);
+customElements.get("ea-form") || customElements.define("ea-form", I);
 export {
-  p as EaForm
+  I as EaForm
 };

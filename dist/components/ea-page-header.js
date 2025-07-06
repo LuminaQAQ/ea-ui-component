@@ -1,11 +1,15 @@
-var c = (t) => {
-  throw TypeError(t);
+var c = (t, a, e) => {
+  if (!a.has(t))
+    throw TypeError("Cannot " + e);
 };
-var g = (t, a, e) => a.has(t) || c("Cannot " + e);
-var i = (t, a, e) => (g(t, a, "read from private field"), e ? e.call(t) : a.get(t)), r = (t, a, e) => a.has(t) ? c("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(t) : a.set(t, e), n = (t, a, e, d) => (g(t, a, "write to private field"), d ? d.call(t, e) : a.set(t, e), e);
-import { B as w } from "./Base.js";
+var i = (t, a, e) => (c(t, a, "read from private field"), e ? e.call(t) : a.get(t)), r = (t, a, e) => {
+  if (a.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(t) : a.set(t, e);
+}, n = (t, a, e, d) => (c(t, a, "write to private field"), d ? d.call(t, e) : a.set(t, e), e);
+import { B as g } from "./Base.js";
 import "./index3.js";
-const _ = `
+const w = `
 .ea-page-header_wrap {
   display: flex;
   align-items: center;
@@ -41,14 +45,14 @@ const _ = `
 }
 `;
 var h, p, l, s, o;
-class m extends w {
+class _ extends g {
   constructor() {
     super();
-    r(this, h);
-    r(this, p);
-    r(this, l);
-    r(this, s);
-    r(this, o);
+    r(this, h, void 0);
+    r(this, p, void 0);
+    r(this, l, void 0);
+    r(this, s, void 0);
+    r(this, o, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class='ea-page-header_wrap' part='container'>
@@ -61,7 +65,7 @@ class m extends w {
                     <slot name="content"></slot>
                 </div>
             </div>
-        `, n(this, h, e.querySelector(".ea-page-header_wrap")), n(this, p, e.querySelector(".ea-page-header_title-wrap")), n(this, s, e.querySelector('slot[name="title"]')), n(this, l, e.querySelector(".ea-page-header_content-wrap")), n(this, o, e.querySelector('slot[name="content"]')), this.build(e, _);
+        `, n(this, h, e.querySelector(".ea-page-header_wrap")), n(this, p, e.querySelector(".ea-page-header_title-wrap")), n(this, s, e.querySelector('slot[name="title"]')), n(this, l, e.querySelector(".ea-page-header_content-wrap")), n(this, o, e.querySelector('slot[name="content"]')), this.build(e, w);
   }
   // ------- title 返回区域的内容 -------
   // #region
@@ -90,7 +94,7 @@ class m extends w {
   }
 }
 h = new WeakMap(), p = new WeakMap(), l = new WeakMap(), s = new WeakMap(), o = new WeakMap();
-customElements.get("ea-page-header") || customElements.define("ea-page-header", m);
+customElements.get("ea-page-header") || customElements.define("ea-page-header", _);
 export {
-  m as EaPageHeader
+  _ as EaPageHeader
 };

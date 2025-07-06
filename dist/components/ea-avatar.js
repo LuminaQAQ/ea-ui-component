@@ -1,11 +1,15 @@
-var c = (t) => {
-  throw TypeError(t);
+var c = (t, i, a) => {
+  if (!i.has(t))
+    throw TypeError("Cannot " + a);
 };
-var h = (t, i, a) => i.has(t) || c("Cannot " + a);
-var r = (t, i, a) => (h(t, i, "read from private field"), a ? a.call(t) : i.get(t)), n = (t, i, a) => i.has(t) ? c("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(t) : i.set(t, a), o = (t, i, a, s) => (h(t, i, "write to private field"), s ? s.call(t, a) : i.set(t, a), a);
-import { B as p } from "./Base.js";
+var r = (t, i, a) => (c(t, i, "read from private field"), a ? a.call(t) : i.get(t)), h = (t, i, a) => {
+  if (i.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(t) : i.set(t, a);
+}, n = (t, i, a, s) => (c(t, i, "write to private field"), s ? s.call(t, a) : i.set(t, a), a);
+import { B as v } from "./Base.js";
 import "./index3.js";
-const f = `
+const p = `
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path fill="#c0c4cc" d="M0 0h100v100H0z" />
         <path fill="#fff" d="M15 20h70v60H15z" />
@@ -13,17 +17,17 @@ const f = `
         <path d="M60 42.5L39 75h42z" fill="#c0c4cc" />
         <path d="M35 52.5L20 75h-4 32z" fill="#c0c4cc" />
     </svg>
-`, l = `
+`, o = `
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <path fill="#c0c4cc" d="M0 0h100v100H0z" />
 </svg>
-`, g = (t) => `
-        ${l}
+`, f = (t) => `
+        ${o}
         <ea-icon class="fa ea-avatar--text" icon="${t}"></ea-icon>
-    `, d = (t) => `
-        ${l}
+    `, g = (t) => `
+        ${o}
         <span class="ea-avatar--text">${t}</span>
-    `, w = `
+    `, d = `
 .ea-avatar_wrap .ea-avatar {
   position: relative;
   display: inline-block;
@@ -84,10 +88,10 @@ const f = `
 }
 `;
 var e;
-class m extends p {
+class w extends v {
   constructor() {
     super();
-    n(this, e);
+    h(this, e, void 0);
     const a = this.attachShadow({ mode: "open" });
     a.innerHTML = `
             <div class="ea-avatar_wrap" part='container'>
@@ -95,7 +99,7 @@ class m extends p {
                     <slot></slot>
                 </span>
             </div>
-        `, o(this, e, a.querySelector(".ea-avatar")), this.build(a, w);
+        `, n(this, e, a.querySelector(".ea-avatar")), this.build(a, d);
   }
   // ------- size 图片大小 -------
   // #region
@@ -125,15 +129,16 @@ class m extends p {
     return this.getAttribute("src");
   }
   set src(a) {
-    if (!a) return;
+    if (!a)
+      return;
     this.setAttribute("src", a);
     const s = new Image();
     s.src = a, s.onload = () => {
       r(this, e).innerHTML = `<img class="ea-avatar--img" src="${a}" alt="头像">`;
-    }, s.onerror = (v) => {
-      r(this, e).innerHTML = f, this.dispatchEvent(new CustomEvent("error", {
+    }, s.onerror = (l) => {
+      r(this, e).innerHTML = p, this.dispatchEvent(new CustomEvent("error", {
         detail: {
-          error: v
+          error: l
         }
       }));
     };
@@ -146,7 +151,7 @@ class m extends p {
     return this.getAttribute("icon") || "";
   }
   set icon(a) {
-    this.setAttribute("icon", a), r(this, e).innerHTML = g(a);
+    this.setAttribute("icon", a), r(this, e).innerHTML = f(a);
   }
   // #endregion
   // ------- end -------
@@ -161,11 +166,11 @@ class m extends p {
   // #endregion
   // ------- end -------
   connectedCallback() {
-    this.size = this.size, this.shape = this.shape, this.src = this.src, this.src && (this.fit = this.fit), !this.src && this.icon && (this.icon = this.icon), this.innerHTML !== "" && !this.icon && !this.src && (r(this, e).innerHTML = d(this.innerHTML));
+    this.size = this.size, this.shape = this.shape, this.src = this.src, this.src && (this.fit = this.fit), !this.src && this.icon && (this.icon = this.icon), this.innerHTML !== "" && !this.icon && !this.src && (r(this, e).innerHTML = g(this.innerHTML));
   }
 }
 e = new WeakMap();
-customElements.get("ea-avatar") || customElements.define("ea-avatar", m);
+customElements.get("ea-avatar") || customElements.define("ea-avatar", w);
 export {
-  m as EaAvatar
+  w as EaAvatar
 };

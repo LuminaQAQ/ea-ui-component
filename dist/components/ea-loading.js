@@ -1,11 +1,16 @@
-var p = (t) => {
-  throw TypeError(t);
+var c = (t, i, e) => {
+  if (!i.has(t))
+    throw TypeError("Cannot " + e);
 };
-var c = (t, i, e) => i.has(t) || p("Cannot " + e);
-var n = (t, i, e) => (c(t, i, "read from private field"), e ? e.call(t) : i.get(t)), l = (t, i, e) => i.has(t) ? p("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(t) : i.set(t, e), d = (t, i, e, o) => (c(t, i, "write to private field"), o ? o.call(t, e) : i.set(t, e), e), h = (t, i, e) => (c(t, i, "access private method"), e);
-import { B as _ } from "./Base.js";
+var n = (t, i, e) => (c(t, i, "read from private field"), e ? e.call(t) : i.get(t)), l = (t, i, e) => {
+  if (i.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(t) : i.set(t, e);
+}, d = (t, i, e, o) => (c(t, i, "write to private field"), o ? o.call(t, e) : i.set(t, e), e);
+var p = (t, i, e) => (c(t, i, "access private method"), e);
+import { B as f } from "./Base.js";
 import "./index3.js";
-const b = `
+const _ = `
 .ea-loading_wrap {
   position: relative;
 }
@@ -45,14 +50,16 @@ const b = `
   display: flex;
 }
 `;
-var s, a, r, g, u;
-class m extends _ {
+var s, a, r, g, h;
+class b extends f {
   constructor() {
     super();
+    // #endregion
+    // ------- end -------
     l(this, g);
-    l(this, s);
-    l(this, a);
-    l(this, r);
+    l(this, s, void 0);
+    l(this, a, void 0);
+    l(this, r, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
         <div class="ea-loading_wrap" part="container">
@@ -63,7 +70,7 @@ class m extends _ {
                 <slot></slot>
             </div>
         </div>
-        `, d(this, s, e.querySelector(".ea-loading_wrap")), d(this, a, e.querySelector(".ea-loading_mask")), d(this, r, e.querySelector(".ea-loading_spinner")), this.build(e, b);
+        `, d(this, s, e.querySelector(".ea-loading_wrap")), d(this, a, e.querySelector(".ea-loading_mask")), d(this, r, e.querySelector(".ea-loading_spinner")), this.build(e, _);
   }
   // ------- loading 加载状态 -------
   // #region
@@ -71,7 +78,7 @@ class m extends _ {
     return this.getAttrBoolean("loading") || !1;
   }
   set loading(e) {
-    this.setAttribute("loading", e), n(this, s).classList.toggle("ea-loading_wrap--loading", e), h(this, g, u).call(this, this.fullscreen, e, this.lock);
+    this.setAttribute("loading", e), n(this, s).classList.toggle("ea-loading_wrap--loading", e), p(this, g, h).call(this, this.fullscreen, e, this.lock);
   }
   // #endregion
   // ------- end -------
@@ -140,12 +147,10 @@ class m extends _ {
     }
   }
 }
-s = new WeakMap(), a = new WeakMap(), r = new WeakMap(), g = new WeakSet(), // #endregion
-// ------- end -------
-u = function(e, o, f) {
-  e && (n(this, s).classList.toggle("ea-loading_wrap--fullscreen", o), f && (document.body.style.overflow = o ? "hidden" : "auto"));
+s = new WeakMap(), a = new WeakMap(), r = new WeakMap(), g = new WeakSet(), h = function(e, o, u) {
+  e && (n(this, s).classList.toggle("ea-loading_wrap--fullscreen", o), u && (document.body.style.overflow = o ? "hidden" : "auto"));
 };
-customElements.get("ea-loading") || customElements.define("ea-loading", m);
+customElements.get("ea-loading") || customElements.define("ea-loading", b);
 export {
-  m as EaLoading
+  b as EaLoading
 };

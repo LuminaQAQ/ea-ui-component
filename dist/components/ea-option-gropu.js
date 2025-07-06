@@ -1,11 +1,15 @@
-var l = (e) => {
-  throw TypeError(e);
+var l = (e, o, t) => {
+  if (!o.has(e))
+    throw TypeError("Cannot " + t);
 };
-var n = (e, o, t) => o.has(e) || l("Cannot " + t);
-var u = (e, o, t) => (n(e, o, "read from private field"), t ? t.call(e) : o.get(e)), a = (e, o, t) => o.has(e) ? l("Cannot add the same private member more than once") : o instanceof WeakSet ? o.add(e) : o.set(e, t), p = (e, o, t, s) => (n(e, o, "write to private field"), s ? s.call(e, t) : o.set(e, t), t);
-import { B as c } from "./Base.js";
+var n = (e, o, t) => (l(e, o, "read from private field"), t ? t.call(e) : o.get(e)), a = (e, o, t) => {
+  if (o.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  o instanceof WeakSet ? o.add(e) : o.set(e, t);
+}, p = (e, o, t, s) => (l(e, o, "write to private field"), s ? s.call(e, t) : o.set(e, t), t);
+import { B as u } from "./Base.js";
 import "./index3.js";
-const h = `
+const c = `
 .ea-option-group_wrap .ea-option-group_title {
   padding-left: 20px;
   font-size: 12px;
@@ -14,18 +18,18 @@ const h = `
 }
 `;
 var r, i;
-class d extends c {
+class h extends u {
   constructor() {
     super();
-    a(this, r);
-    a(this, i);
+    a(this, r, void 0);
+    a(this, i, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class='ea-option-group_wrap' part='container'>
                 <div class='ea-option-group_title' part='title-wrap'></div>
                 <slot></slot>
             </div>
-        `, p(this, r, t.querySelector(".ea-option-group_wrap")), p(this, i, t.querySelector(".ea-option-group_title")), this.build(t, h);
+        `, p(this, r, t.querySelector(".ea-option-group_wrap")), p(this, i, t.querySelector(".ea-option-group_title")), this.build(t, c);
   }
   // ------- label 标题  -------
   // #region
@@ -33,7 +37,7 @@ class d extends c {
     return this.getAttribute("label") || "";
   }
   set label(t) {
-    this.setAttribute("label", t), u(this, i).innerHTML = t;
+    this.setAttribute("label", t), n(this, i).innerHTML = t;
   }
   // #endregion
   // ------- end -------
@@ -42,7 +46,7 @@ class d extends c {
   }
 }
 r = new WeakMap(), i = new WeakMap();
-customElements.get("ea-option-group") || customElements.define("ea-option-group", d);
+customElements.get("ea-option-group") || customElements.define("ea-option-group", h);
 export {
-  d as EaOptionGroup
+  h as EaOptionGroup
 };

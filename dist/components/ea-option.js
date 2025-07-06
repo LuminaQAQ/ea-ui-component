@@ -1,11 +1,15 @@
-var r = (t) => {
-  throw TypeError(t);
+var r = (t, o, e) => {
+  if (!o.has(t))
+    throw TypeError("Cannot " + e);
 };
-var n = (t, o, e) => o.has(t) || r("Cannot " + e);
-var i = (t, o, e) => (n(t, o, "read from private field"), e ? e.call(t) : o.get(t)), l = (t, o, e) => o.has(t) ? r("Cannot add the same private member more than once") : o instanceof WeakSet ? o.add(t) : o.set(t, e), c = (t, o, e, a) => (n(t, o, "write to private field"), a ? a.call(t, e) : o.set(t, e), e);
-import { B as d } from "./Base.js";
+var i = (t, o, e) => (r(t, o, "read from private field"), e ? e.call(t) : o.get(t)), n = (t, o, e) => {
+  if (o.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  o instanceof WeakSet ? o.add(t) : o.set(t, e);
+}, l = (t, o, e, a) => (r(t, o, "write to private field"), a ? a.call(t, e) : o.set(t, e), e);
+import { B as c } from "./Base.js";
 import "./index3.js";
-const h = `
+const d = `
 .ea-option_wrap {
   position: relative;
   padding: 0 20px;
@@ -32,16 +36,16 @@ const h = `
 }
 `;
 var s;
-class p extends d {
+class h extends c {
   constructor() {
     super();
-    l(this, s);
+    n(this, s, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
             <div class='ea-option_wrap' part='container'>
                 <slot></slot>
             </div>
-        `, c(this, s, e.querySelector(".ea-option_wrap")), this.build(e, h);
+        `, l(this, s, e.querySelector(".ea-option_wrap")), this.build(e, d);
   }
   // ------- value 选项值 -------
   // #region
@@ -78,7 +82,7 @@ class p extends d {
   }
 }
 s = new WeakMap();
-customElements.get("ea-option") || customElements.define("ea-option", p);
+customElements.get("ea-option") || customElements.define("ea-option", h);
 export {
-  p as EaOption
+  h as EaOption
 };

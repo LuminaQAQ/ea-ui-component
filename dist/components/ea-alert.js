@@ -1,13 +1,18 @@
-var u = (t) => {
-  throw TypeError(t);
+var u = (t, a, e) => {
+  if (!a.has(t))
+    throw TypeError("Cannot " + e);
 };
-var f = (t, a, e) => a.has(t) || u("Cannot " + e);
-var r = (t, a, e) => (f(t, a, "read from private field"), e ? e.call(t) : a.get(t)), c = (t, a, e) => a.has(t) ? u("Cannot add the same private member more than once") : a instanceof WeakSet ? a.add(t) : a.set(t, e), n = (t, a, e, d) => (f(t, a, "write to private field"), d ? d.call(t, e) : a.set(t, e), e), p = (t, a, e) => (f(t, a, "access private method"), e);
-import { B as m } from "./Base.js";
+var r = (t, a, e) => (u(t, a, "read from private field"), e ? e.call(t) : a.get(t)), l = (t, a, e) => {
+  if (a.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  a instanceof WeakSet ? a.add(t) : a.set(t, e);
+}, c = (t, a, e, g) => (u(t, a, "write to private field"), g ? g.call(t, e) : a.set(t, e), e);
+var h = (t, a, e) => (u(t, a, "access private method"), e);
+import { B as x } from "./Base.js";
 import "./index3.js";
-import { h as x } from "./handleDefaultAttrIsTrue.js";
-import { c as g } from "./createElement.js";
-const y = `
+import { h as y } from "./handleDefaultAttrIsTrue.js";
+import { c as _ } from "./createElement.js";
+const k = `
 .ea-alert_wrap {
   position: relative;
   box-sizing: border-box;
@@ -92,15 +97,19 @@ const y = `
   color: #fff;
 }
 `;
-var i, h, o, s, l, _, w, b;
-class k extends m {
+var i, n, o, s, p, w, f, b, d, m;
+class A extends x {
   constructor() {
     super();
-    c(this, l);
-    c(this, i);
-    c(this, h);
-    c(this, o);
-    c(this, s);
+    // #endregion
+    // ------- end -------
+    l(this, p);
+    l(this, f);
+    l(this, d);
+    l(this, i, void 0);
+    l(this, n, void 0);
+    l(this, o, void 0);
+    l(this, s, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
       <div class='ea-alert_wrap' part='container'>
@@ -109,7 +118,7 @@ class k extends m {
           <ea-icon class="ea-alert_close-icon" part='icon'></ea-icon>
         </div>
       </div>
-    `, n(this, i, e.querySelector(".ea-alert_wrap")), n(this, h, e.querySelector(".ea-alert_content")), n(this, o, e.querySelector(".ea-alert_title")), n(this, s, e.querySelector(".ea-alert_close-icon")), this.build(e, y);
+    `, c(this, i, e.querySelector(".ea-alert_wrap")), c(this, n, e.querySelector(".ea-alert_content")), c(this, o, e.querySelector(".ea-alert_title")), c(this, s, e.querySelector(".ea-alert_close-icon")), this.build(e, k);
   }
   // ------- type 获取提示类型 -------
   // #region
@@ -134,7 +143,7 @@ class k extends m {
   // ------- closable 是否可关闭 -------
   // #region
   get closable() {
-    return x("closable");
+    return y("closable");
   }
   set closable(e) {
     this.setAttribute("closable", e), r(this, s).style.display = e ? "block" : "none";
@@ -177,7 +186,7 @@ class k extends m {
     return this.getAttrBoolean("center") || !1;
   }
   set center(e) {
-    this.setAttribute("center", e), r(this, h).classList.toggle("ea-alert--center", e);
+    this.setAttribute("center", e), r(this, n).classList.toggle("ea-alert--center", e);
   }
   // #endregion
   // ------- end -------
@@ -198,27 +207,27 @@ class k extends m {
     };
   }
   connectedCallback() {
-    this.type = this.type, this.title = this.title, this.closable = this.closable, this.closeText = this.closeText, this.effect = this.effect, this.center = this.center, p(this, l, _).call(this), p(this, l, w).call(this), p(this, l, b).call(this);
+    this.type = this.type, this.title = this.title, this.closable = this.closable, this.closeText = this.closeText, this.effect = this.effect, this.center = this.center, h(this, p, w).call(this), h(this, f, b).call(this), h(this, d, m).call(this);
   }
 }
-i = new WeakMap(), h = new WeakMap(), o = new WeakMap(), s = new WeakMap(), l = new WeakSet(), // #endregion
-// ------- end -------
-_ = function() {
+i = new WeakMap(), n = new WeakMap(), o = new WeakMap(), s = new WeakMap(), p = new WeakSet(), w = function() {
   this.closable && (this.closable === !0 && this.closeText === "" ? r(this, s).icon = "icon-cancel" : r(this, s).innerText = this.closeText, r(this, s).addEventListener("click", () => {
     r(this, i).style.opacity = 0, this.dispatchEvent(new CustomEvent("close", { detail: { target: r(this, s) } }));
   }), r(this, i).addEventListener("transitionend", () => {
     this.remove();
   }));
-}, w = function() {
-  if (!this.showIcon) return;
-  const e = g("ea-icon");
+}, f = new WeakSet(), b = function() {
+  if (!this.showIcon)
+    return;
+  const e = _("ea-icon");
   e.icon = `icon-${this.iconList[this.type]}`, e.classList.add(`ea-alert--${this.type}`), r(this, o).insertBefore(e, r(this, o).firstChild);
-}, b = function() {
-  if (!this.description) return;
-  const e = g("p", "ea-alert_description");
+}, d = new WeakSet(), m = function() {
+  if (!this.description)
+    return;
+  const e = _("p", "ea-alert_description");
   e.part = "description", r(this, i).style.flexDirection = "column", e.innerText = this.description, r(this, i).appendChild(e);
 };
-customElements.get("ea-alert") || customElements.define("ea-alert", k);
+customElements.get("ea-alert") || customElements.define("ea-alert", A);
 export {
-  k as EaAlert
+  A as EaAlert
 };

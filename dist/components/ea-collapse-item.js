@@ -1,10 +1,14 @@
-var m = (e) => {
-  throw TypeError(e);
+var m = (e, i, t) => {
+  if (!i.has(e))
+    throw TypeError("Cannot " + t);
 };
-var d = (e, i, t) => i.has(e) || m("Cannot " + t);
-var s = (e, i, t) => (d(e, i, "read from private field"), t ? t.call(e) : i.get(e)), l = (e, i, t) => i.has(e) ? m("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(e) : i.set(e, t), o = (e, i, t, c) => (d(e, i, "write to private field"), c ? c.call(e, t) : i.set(e, t), t);
-import { B as g } from "./Base.js";
-const u = `
+var s = (e, i, t) => (m(e, i, "read from private field"), t ? t.call(e) : i.get(e)), l = (e, i, t) => {
+  if (i.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  i instanceof WeakSet ? i.add(e) : i.set(e, t);
+}, o = (e, i, t, c) => (m(e, i, "write to private field"), c ? c.call(e, t) : i.set(e, t), t);
+import { B as d } from "./Base.js";
+const g = `
 .ea-collapse-item_wrap .ea-collapse-item_title {
   display: flex;
   align-items: center;
@@ -38,14 +42,14 @@ const u = `
 }
 `;
 var h, r, p, n, a;
-class b extends g {
+class u extends d {
   constructor() {
     super();
-    l(this, h);
-    l(this, r);
-    l(this, p);
-    l(this, n);
-    l(this, a);
+    l(this, h, void 0);
+    l(this, r, void 0);
+    l(this, p, void 0);
+    l(this, n, void 0);
+    l(this, a, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-collapse-item_wrap" part="container">
@@ -57,7 +61,7 @@ class b extends g {
                     <slot></slot>
                 </div>
             </div>
-        `, o(this, h, t.querySelector(".ea-collapse-item_wrap")), o(this, r, t.querySelector(".ea-collapse-item_title")), o(this, p, t.querySelector(".ea-collapse-item_title-content")), o(this, n, t.querySelector(".ea-collapse-item_title-icon")), o(this, a, t.querySelector(".ea-collapse-item_content")), this.build(t, u);
+        `, o(this, h, t.querySelector(".ea-collapse-item_wrap")), o(this, r, t.querySelector(".ea-collapse-item_title")), o(this, p, t.querySelector(".ea-collapse-item_title-content")), o(this, n, t.querySelector(".ea-collapse-item_title-icon")), o(this, a, t.querySelector(".ea-collapse-item_content")), this.build(t, g);
   }
   // ------- title 标题 -------
   // #region
@@ -85,7 +89,8 @@ class b extends g {
     return this.getAttrBoolean("is-open") || !1;
   }
   set isOpen(t) {
-    if (t === this.isOpen) return;
+    if (t === this.isOpen)
+      return;
     this.toggleAttr("is-open", t);
     const c = s(this, a).scrollHeight;
     this.isOpen ? (s(this, a).style.height = `${c}px`, s(this, a).style.paddingBottom = "20px", s(this, n).style.rotate = "45deg") : (s(this, a).style.height = "0px", s(this, a).style.paddingBottom = "0px", s(this, n).style.rotate = "-45deg");
@@ -106,7 +111,7 @@ class b extends g {
   }
 }
 h = new WeakMap(), r = new WeakMap(), p = new WeakMap(), n = new WeakMap(), a = new WeakMap();
-customElements.get("ea-collapse-item") || customElements.define("ea-collapse-item", b);
+customElements.get("ea-collapse-item") || customElements.define("ea-collapse-item", u);
 export {
-  b as EaCollapseItem
+  u as EaCollapseItem
 };

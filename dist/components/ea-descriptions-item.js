@@ -1,10 +1,14 @@
-var p = (t) => {
-  throw TypeError(t);
+var p = (t, s, e) => {
+  if (!s.has(t))
+    throw TypeError("Cannot " + e);
 };
-var c = (t, s, e) => s.has(t) || p("Cannot " + e);
-var d = (t, s, e) => (c(t, s, "read from private field"), e ? e.call(t) : s.get(t)), a = (t, s, e) => s.has(t) ? p("Cannot add the same private member more than once") : s instanceof WeakSet ? s.add(t) : s.set(t, e), n = (t, s, e, o) => (c(t, s, "write to private field"), o ? o.call(t, e) : s.set(t, e), e);
-import { B as m } from "./Base.js";
-const b = `
+var c = (t, s, e) => (p(t, s, "read from private field"), e ? e.call(t) : s.get(t)), a = (t, s, e) => {
+  if (s.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  s instanceof WeakSet ? s.add(t) : s.set(t, e);
+}, n = (t, s, e, o) => (p(t, s, "write to private field"), o ? o.call(t, e) : s.set(t, e), e);
+import { B as d } from "./Base.js";
+const m = `
 .ea-descriptions-item_wrap {
   display: inline-flex;
   text-align: left;
@@ -28,12 +32,12 @@ const b = `
 }
 `;
 var r, i, l;
-class h extends m {
+class b extends d {
   constructor() {
     super();
-    a(this, r);
-    a(this, i);
-    a(this, l);
+    a(this, r, void 0);
+    a(this, i, void 0);
+    a(this, l, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
         <td class="ea-descriptions-item_wrap" part="container">
@@ -44,7 +48,7 @@ class h extends m {
                 <slot></slot>
             </span>
         </td>
-    `, n(this, r, e.querySelector(".ea-descriptions-item_wrap")), n(this, i, e.querySelector(".ea-descriptions-item_label")), n(this, l, e.querySelector('slot[name="label"]')), this.build(e, b);
+    `, n(this, r, e.querySelector(".ea-descriptions-item_wrap")), n(this, i, e.querySelector(".ea-descriptions-item_label")), n(this, l, e.querySelector('slot[name="label"]')), this.build(e, m);
   }
   // ------- label 该格的标题 -------
   // #region
@@ -52,7 +56,7 @@ class h extends m {
     return this.getAttribute("label") || "";
   }
   set label(e) {
-    e && (this.setAttribute("label", e), d(this, i).innerHTML = e);
+    e && (this.setAttribute("label", e), c(this, i).innerHTML = e);
   }
   // #endregion
   // ------- end -------
@@ -71,7 +75,7 @@ class h extends m {
   }
 }
 r = new WeakMap(), i = new WeakMap(), l = new WeakMap();
-customElements.get("ea-descriptions-item") || customElements.define("ea-descriptions-item", h);
+customElements.get("ea-descriptions-item") || customElements.define("ea-descriptions-item", b);
 export {
-  h as EaDescriptionsItem
+  b as EaDescriptionsItem
 };

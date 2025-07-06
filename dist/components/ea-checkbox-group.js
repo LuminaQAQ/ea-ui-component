@@ -1,10 +1,15 @@
-var u = (t) => {
-  throw TypeError(t);
+var i = (t, s, e) => {
+  if (!s.has(t))
+    throw TypeError("Cannot " + e);
 };
-var i = (t, s, e) => s.has(t) || u("Cannot " + e);
-var d = (t, s, e) => (i(t, s, "read from private field"), e ? e.call(t) : s.get(t)), h = (t, s, e) => s.has(t) ? u("Cannot add the same private member more than once") : s instanceof WeakSet ? s.add(t) : s.set(t, e), b = (t, s, e, a) => (i(t, s, "write to private field"), a ? a.call(t, e) : s.set(t, e), e), n = (t, s, e) => (i(t, s, "access private method"), e);
-import { B as p } from "./Base.js";
-const k = `
+var u = (t, s, e) => (i(t, s, "read from private field"), e ? e.call(t) : s.get(t)), h = (t, s, e) => {
+  if (s.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  s instanceof WeakSet ? s.add(t) : s.set(t, e);
+}, d = (t, s, e, a) => (i(t, s, "write to private field"), a ? a.call(t, e) : s.set(t, e), e);
+var n = (t, s, e) => (i(t, s, "access private method"), e);
+import { B as m } from "./Base.js";
+const p = `
 .ea-checkbox-group {
   display: flex;
 }
@@ -13,9 +18,11 @@ const k = `
 }
 `;
 var o, c, l;
-class x extends p {
+class k extends m {
   constructor() {
     super();
+    // #endregion
+    // ------- end -------
     h(this, c);
     h(this, o, !1);
     const e = this.attachShadow({ mode: "open" });
@@ -23,7 +30,7 @@ class x extends p {
             <div class="ea-checkbox-group_wrap" part="container">
                 <slot></slot>
             </div>
-        `, this.build(e, k);
+        `, this.build(e, p);
   }
   // ------- name 唯一键值 -------
   // #region
@@ -47,8 +54,8 @@ class x extends p {
     try {
       const a = e.split(",").map((r) => r.trimStart());
       a.map((r) => {
-        const m = this.querySelector(`ea-checkbox[value="${r}"]`);
-        m.checked = "true";
+        const b = this.querySelector(`ea-checkbox[value="${r}"]`);
+        b.checked = "true";
       }), this.dispatchEvent(new CustomEvent("change", { detail: a }));
     } catch {
     }
@@ -61,7 +68,8 @@ class x extends p {
     return this.getAttrBoolean("disabled");
   }
   set disabled(e) {
-    if (!e && !d(this, o)) return;
+    if (!e && !u(this, o))
+      return;
     this.querySelectorAll("ea-checkbox").forEach((r) => {
       r.disabled = e;
     });
@@ -74,17 +82,15 @@ class x extends p {
         a.addEventListener("change", (r) => {
           n(this, c, l).call(this, e);
         });
-      }), n(this, c, l).call(this, e), b(this, o, !0);
+      }), n(this, c, l).call(this, e), d(this, o, !0);
     }, 50);
   }
 }
-o = new WeakMap(), c = new WeakSet(), // #endregion
-// ------- end -------
-l = function(e) {
+o = new WeakMap(), c = new WeakSet(), l = function(e) {
   let a = [];
   Array.from(e).filter((r) => r.checked ? a.push(r.value) : !1), this.value = a.join(",");
 };
-window.customElements.get("ea-checkbox-group") || window.customElements.define("ea-checkbox-group", x);
+window.customElements.get("ea-checkbox-group") || window.customElements.define("ea-checkbox-group", k);
 export {
-  x as EaCheckboxGroup
+  k as EaCheckboxGroup
 };

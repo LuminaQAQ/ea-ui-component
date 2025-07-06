@@ -1,11 +1,15 @@
-var i = (e) => {
-  throw TypeError(e);
+var i = (e, o, t) => {
+  if (!o.has(e))
+    throw TypeError("Cannot " + t);
 };
-var a = (e, o, t) => o.has(e) || i("Cannot " + t);
-var r = (e, o, t) => (a(e, o, "read from private field"), t ? t.call(e) : o.get(e)), n = (e, o, t) => o.has(e) ? i("Cannot add the same private member more than once") : o instanceof WeakSet ? o.add(e) : o.set(e, t), c = (e, o, t, h) => (a(e, o, "write to private field"), h ? h.call(e, t) : o.set(e, t), t);
-import { B as p } from "./Base.js";
+var r = (e, o, t) => (i(e, o, "read from private field"), t ? t.call(e) : o.get(e)), a = (e, o, t) => {
+  if (o.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  o instanceof WeakSet ? o.add(e) : o.set(e, t);
+}, n = (e, o, t, h) => (i(e, o, "write to private field"), h ? h.call(e, t) : o.set(e, t), t);
+import { B as c } from "./Base.js";
 import "./index3.js";
-const g = `
+const p = `
 .ea-footer_wrap {
   box-sizing: border-box;
   padding: 0 20px;
@@ -18,16 +22,16 @@ const g = `
 }
 `;
 var s;
-class l extends p {
+class g extends c {
   constructor() {
     super();
-    n(this, s);
+    a(this, s, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <footer class="ea-footer_wrap" part="container">
                 <slot></slot>
             </footer>
-        `, c(this, s, t.querySelector(".ea-footer_wrap")), this.build(t, g);
+        `, n(this, s, t.querySelector(".ea-footer_wrap")), this.build(t, p);
   }
   // ------- height 底栏高度 -------
   // #region
@@ -44,7 +48,7 @@ class l extends p {
   }
 }
 s = new WeakMap();
-customElements.get("ea-footer") || customElements.define("ea-footer", l);
+customElements.get("ea-footer") || customElements.define("ea-footer", g);
 export {
-  l as EaFooter
+  g as EaFooter
 };

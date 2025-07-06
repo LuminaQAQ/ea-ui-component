@@ -1,11 +1,16 @@
-var i = (a) => {
-  throw TypeError(a);
+var s = (a, o, e) => {
+  if (!o.has(a))
+    throw TypeError("Cannot " + e);
 };
-var s = (a, o, e) => o.has(a) || i("Cannot " + e);
-var c = (a, o, e) => (s(a, o, "read from private field"), e ? e.call(a) : o.get(a)), l = (a, o, e) => o.has(a) ? i("Cannot add the same private member more than once") : o instanceof WeakSet ? o.add(a) : o.set(a, e), d = (a, o, e, r) => (s(a, o, "write to private field"), r ? r.call(a, e) : o.set(a, e), e), g = (a, o, e) => (s(a, o, "access private method"), e);
-import { B as p } from "./Base.js";
+var c = (a, o, e) => (s(a, o, "read from private field"), e ? e.call(a) : o.get(a)), l = (a, o, e) => {
+  if (o.has(a))
+    throw TypeError("Cannot add the same private member more than once");
+  o instanceof WeakSet ? o.add(a) : o.set(a, e);
+}, i = (a, o, e, r) => (s(a, o, "write to private field"), r ? r.call(a, e) : o.set(a, e), e);
+var d = (a, o, e) => (s(a, o, "access private method"), e);
+import { B as b } from "./Base.js";
 import "./index3.js";
-const u = `
+const p = `
 .ea-tag_wrap {
   display: inline-block;
   height: 2rem;
@@ -97,19 +102,21 @@ const u = `
   border-color: #fbc4c4;
 }
 `;
-var t, f, n, b;
-class h extends p {
+var t, f, n, g;
+class u extends b {
   constructor() {
     super();
+    // #endregion
+    // ------- end -------
     l(this, n);
-    l(this, t);
-    l(this, f);
+    l(this, t, void 0);
+    l(this, f, void 0);
     const e = this.attachShadow({ mode: "open" });
     e.innerHTML = `
       <div class="ea-tag_wrap" part="container">
         <slot></slot>
       </div>
-    `, d(this, t, e.querySelector(".ea-tag_wrap")), this.build(e, u);
+    `, i(this, t, e.querySelector(".ea-tag_wrap")), this.build(e, p);
   }
   // ------- type tag类型样式 -------
   // #region
@@ -140,13 +147,12 @@ class h extends p {
     e !== "light" && (this.setAttribute("effect", e), c(this, t).classList.add(`ea-tag--${e}`));
   }
   connectedCallback() {
-    this.effect = this.effect, this.type = this.type, this.closable = this.closable, g(this, n, b).call(this);
+    this.effect = this.effect, this.type = this.type, this.closable = this.closable, d(this, n, g).call(this);
   }
 }
-t = new WeakMap(), f = new WeakMap(), n = new WeakSet(), // #endregion
-// ------- end -------
-b = function() {
-  if (!this.closable) return;
+t = new WeakMap(), f = new WeakMap(), n = new WeakSet(), g = function() {
+  if (!this.closable)
+    return;
   const e = document.createElement("ea-icon");
   e.icon = "icon-cancel-circled2", e.part = "close-icon", e.addEventListener("mouseenter", (r) => {
     e.icon = "icon-cancel-circled";
@@ -161,7 +167,7 @@ b = function() {
     }));
   }), c(this, t).appendChild(e);
 };
-customElements.get("ea-tag") || customElements.define("ea-tag", h);
+customElements.get("ea-tag") || customElements.define("ea-tag", u);
 export {
-  h as EaTag
+  u as EaTag
 };

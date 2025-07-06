@@ -1,16 +1,22 @@
-var E = (i) => {
-  throw TypeError(i);
+var y = (i, e, t) => {
+  if (!e.has(i))
+    throw TypeError("Cannot " + t);
 };
-var w = (i, e, t) => e.has(i) || E("Cannot " + t);
-var n = (i, e, t) => (w(i, e, "read from private field"), t ? t.call(i) : e.get(i)), r = (i, e, t) => e.has(i) ? E("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(i) : e.set(i, t), s = (i, e, t, o) => (w(i, e, "write to private field"), o ? o.call(i, t) : e.set(i, t), t), _ = (i, e, t) => (w(i, e, "access private method"), t);
+var n = (i, e, t) => (y(i, e, "read from private field"), t ? t.call(i) : e.get(i)), r = (i, e, t) => {
+  if (e.has(i))
+    throw TypeError("Cannot add the same private member more than once");
+  e instanceof WeakSet ? e.add(i) : e.set(i, t);
+}, s = (i, e, t, o) => (y(i, e, "write to private field"), o ? o.call(i, t) : e.set(i, t), t);
+var _ = (i, e, t) => (y(i, e, "access private method"), t);
 import { B as k } from "./Base.js";
 import { c as L } from "./createElement.js";
 import "./ea-button.js";
 import "./ea-input.js";
-var d, P, y;
+var b, P, g, E;
 class B {
   constructor(e) {
-    r(this, d);
+    r(this, b);
+    r(this, g);
     this.isPrompt = e;
   }
   get attrs() {
@@ -20,24 +26,24 @@ class B {
     const a = L("ea-message-box");
     return a.addEventListener("ready", () => {
       this.isPrompt && (a.isPrompt = !0), a.reg = new RegExp(o.reg), a.style.setProperty("--invalid-message", `"${o.invalidMessage}"`), a.inputPlaceholder = o.inputPlaceholder;
-    }), document.body.appendChild(a), a.open = !0, a.content = e, a.title = t, _(this, d, P).call(this, a, o, this.attrs), new Promise((v, A) => {
+    }), document.body.appendChild(a), a.open = !0, a.content = e, a.title = t, _(this, b, P).call(this, a, o, this.attrs), new Promise((w, A) => {
       a.addEventListener("cancel", () => {
-        _(this, d, y).call(this, a), A();
+        _(this, g, E).call(this, a), A();
       }), a.addEventListener("confirm", (f) => {
         if (this.isPrompt && !o.reg.test(f.detail.value)) {
           f.detail.target.setAttribute("aria-invalid", !0), f.detail.target.focus();
           return;
         }
-        _(this, d, y).call(this, a), this.isPrompt ? v(f.detail.value) : v(!0);
+        _(this, g, E).call(this, a), this.isPrompt ? w(f.detail.value) : w(!0);
       });
     });
   }
 }
-d = new WeakSet(), P = function(e, t, o) {
+b = new WeakSet(), P = function(e, t, o) {
   o.forEach((a) => {
     t[a] && (e[a] = t[a]);
   });
-}, y = function(e) {
+}, g = new WeakSet(), E = function(e) {
   e.remove();
 };
 const S = `
@@ -127,19 +133,19 @@ const S = `
   color: #f56c6c;
 }
 `;
-var c, u, b, h, l, x, p, g, m;
+var d, u, x, h, l, v, c, p, m;
 class q extends k {
   constructor() {
     super();
-    r(this, c);
-    r(this, u);
-    r(this, b);
-    r(this, h);
-    r(this, l);
-    r(this, x);
-    r(this, p);
-    r(this, g);
-    r(this, m);
+    r(this, d, void 0);
+    r(this, u, void 0);
+    r(this, x, void 0);
+    r(this, h, void 0);
+    r(this, l, void 0);
+    r(this, v, void 0);
+    r(this, c, void 0);
+    r(this, p, void 0);
+    r(this, m, void 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-dialog_wrap" part="container" role="dialog">
@@ -159,7 +165,7 @@ class q extends k {
                 </div>
                 <div class="ea-dialog_mask" part="mask-wrap"></div>
             </div>
-        `, s(this, c, t.querySelector(".ea-dialog_wrap")), s(this, u, t.querySelector(".ea-dialog_header")), s(this, b, t.querySelector(".ea-dialog_content")), s(this, h, t.querySelector(".ea-dialog_content-text")), s(this, l, t.querySelector(".ea-dialog_content-input")), s(this, x, t.querySelector(".ea-dialog_footer")), s(this, p, t.querySelector(".ea-dialog_footer-confirm-button")), s(this, g, t.querySelector(".ea-dialog_footer-cancel-button")), this.build(t, S);
+        `, s(this, d, t.querySelector(".ea-dialog_wrap")), s(this, u, t.querySelector(".ea-dialog_header")), s(this, x, t.querySelector(".ea-dialog_content")), s(this, h, t.querySelector(".ea-dialog_content-text")), s(this, l, t.querySelector(".ea-dialog_content-input")), s(this, v, t.querySelector(".ea-dialog_footer")), s(this, c, t.querySelector(".ea-dialog_footer-confirm-button")), s(this, p, t.querySelector(".ea-dialog_footer-cancel-button")), this.build(t, S);
   }
   // ------- open 是否显示 -------
   // #region
@@ -167,7 +173,7 @@ class q extends k {
     return this.getAttrBoolean("open");
   }
   set open(t) {
-    this.toggleAttr("open", t), n(this, c).style.display = t ? "block" : "none";
+    this.toggleAttr("open", t), n(this, d).style.display = t ? "block" : "none";
   }
   // #endregion
   // ------- end -------
@@ -188,7 +194,7 @@ class q extends k {
   }
   set isPrompt(t) {
     var o;
-    this.toggleAttr("isPrompt", t), (o = n(this, c)) == null || o.classList.toggle("is-prompt", t);
+    this.toggleAttr("isPrompt", t), (o = n(this, d)) == null || o.classList.toggle("is-prompt", t);
   }
   // #endregion
   // ------- end -------
@@ -231,7 +237,7 @@ class q extends k {
     return this.getAttribute("confirmButtonText");
   }
   set confirmButtonText(t) {
-    t && (this.setAttribute("confirmButtonText", t), n(this, p).innerHTML = `<ea-button size="medium" type="primary">${t}</ea-button>`, n(this, p).addEventListener("click", () => {
+    t && (this.setAttribute("confirmButtonText", t), n(this, c).innerHTML = `<ea-button size="medium" type="primary">${t}</ea-button>`, n(this, c).addEventListener("click", () => {
       this.isPrompt ? this.dispatchEvent(new CustomEvent("confirm", {
         detail: {
           target: n(this, l),
@@ -248,7 +254,7 @@ class q extends k {
     return this.getAttribute("cancelButtonText");
   }
   set cancelButtonText(t) {
-    t && (this.setAttribute("cancelButtonText", t), n(this, g).innerHTML = `<ea-button size="medium">${t}</ea-button>`, n(this, g).addEventListener("click", () => {
+    t && (this.setAttribute("cancelButtonText", t), n(this, p).innerHTML = `<ea-button size="medium">${t}</ea-button>`, n(this, p).addEventListener("click", () => {
       this.dispatchEvent(new CustomEvent("cancel"));
     }));
   }
@@ -258,7 +264,7 @@ class q extends k {
     this.dispatchEvent(new CustomEvent("ready"));
   }
 }
-c = new WeakMap(), u = new WeakMap(), b = new WeakMap(), h = new WeakMap(), l = new WeakMap(), x = new WeakMap(), p = new WeakMap(), g = new WeakMap(), m = new WeakMap();
+d = new WeakMap(), u = new WeakMap(), x = new WeakMap(), h = new WeakMap(), l = new WeakMap(), v = new WeakMap(), c = new WeakMap(), p = new WeakMap(), m = new WeakMap();
 customElements.get("ea-message-box") || customElements.define("ea-message-box", q);
 const T = new B(!1);
 window.$alert = T;

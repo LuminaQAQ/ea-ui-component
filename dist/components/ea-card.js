@@ -1,10 +1,14 @@
-var t = (e) => {
-  throw TypeError(e);
+var t = (e, s, a) => {
+  if (!s.has(e))
+    throw TypeError("Cannot " + a);
 };
-var d = (e, s, a) => s.has(e) || t("Cannot " + a);
-var c = (e, s, a) => (d(e, s, "read from private field"), a ? a.call(e) : s.get(e)), i = (e, s, a) => s.has(e) ? t("Cannot add the same private member more than once") : s instanceof WeakSet ? s.add(e) : s.set(e, a), h = (e, s, a, o) => (d(e, s, "write to private field"), o ? o.call(e, a) : s.set(e, a), a);
-import { B as n } from "./Base.js";
-const w = `
+var d = (e, s, a) => (t(e, s, "read from private field"), a ? a.call(e) : s.get(e)), c = (e, s, a) => {
+  if (s.has(e))
+    throw TypeError("Cannot add the same private member more than once");
+  s instanceof WeakSet ? s.add(e) : s.set(e, a);
+}, i = (e, s, a, o) => (t(e, s, "write to private field"), o ? o.call(e, a) : s.set(e, a), a);
+import { B as h } from "./Base.js";
+const n = `
 .ea-card_wrap {
   border-radius: 4px;
   border: 1px solid #ebeef5;
@@ -24,10 +28,10 @@ const w = `
 }
 `;
 var r;
-class p extends n {
+class w extends h {
   constructor() {
     super();
-    i(this, r);
+    c(this, r, void 0);
     const a = this.attachShadow({ mode: "open" });
     a.innerHTML = `
       <div class="ea-card_wrap" part="container">
@@ -38,7 +42,7 @@ class p extends n {
           <slot></slot>
         </div>
       </div>
-    `, h(this, r, a.querySelector(".ea-card_wrap")), this.build(a, w);
+    `, i(this, r, a.querySelector(".ea-card_wrap")), this.build(a, n);
   }
   // ------- shadow 阴影属性 -------
   // #region
@@ -46,7 +50,7 @@ class p extends n {
     return this.getAttribute("shadow") || "always";
   }
   set shadow(a) {
-    this.setAttribute("shadow", a), c(this, r).classList.add(`is-${a}-shadow`);
+    this.setAttribute("shadow", a), d(this, r).classList.add(`is-${a}-shadow`);
   }
   // #endregion
   // ------- end -------
@@ -55,4 +59,4 @@ class p extends n {
   }
 }
 r = new WeakMap();
-customElements.get("ea-card") || customElements.define("ea-card", p);
+customElements.get("ea-card") || customElements.define("ea-card", w);

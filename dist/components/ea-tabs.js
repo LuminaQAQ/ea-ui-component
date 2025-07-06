@@ -1,14 +1,19 @@
-var L = (s) => {
-  throw TypeError(s);
+var L = (s, r, t) => {
+  if (!r.has(s))
+    throw TypeError("Cannot " + t);
 };
-var S = (s, i, t) => i.has(s) || L("Cannot " + t);
-var d = (s, i, t) => (S(s, i, "read from private field"), t ? t.call(s) : i.get(s)), c = (s, i, t) => i.has(s) ? L("Cannot add the same private member more than once") : i instanceof WeakSet ? i.add(s) : i.set(s, t), b = (s, i, t, e) => (S(s, i, "write to private field"), e ? e.call(s, t) : i.set(s, t), t), n = (s, i, t) => (S(s, i, "access private method"), t);
-import { B as C } from "./Base.js";
+var d = (s, r, t) => (L(s, r, "read from private field"), t ? t.call(s) : r.get(s)), n = (s, r, t) => {
+  if (r.has(s))
+    throw TypeError("Cannot add the same private member more than once");
+  r instanceof WeakSet ? r.add(s) : r.set(s, t);
+}, b = (s, r, t, e) => (L(s, r, "write to private field"), e ? e.call(s, t) : r.set(s, t), t);
+var o = (s, r, t) => (L(s, r, "access private method"), t);
+import { B as W } from "./Base.js";
 import "./index3.js";
 import "./ea-tab.js";
 import "./ea-pane.js";
-import { t as k } from "./timeout.js";
-const I = `
+import { t as I } from "./timeout.js";
+const $ = `
 .ea-tabs_wrap {
   position: relative;
 }
@@ -55,16 +60,23 @@ const I = `
   background-color: white;
 }
 `;
-var w, h, g, p, u, a, A, y, E, q, B, N;
-class T extends C {
+var w, h, A, c, p, v, k, u, S, f, N, y, R, g, C, E, T;
+class H extends W {
   constructor() {
     super();
-    c(this, a);
-    c(this, w);
-    c(this, h);
-    c(this, g);
-    c(this, p);
-    c(this, u, 0);
+    // #endregion
+    // ------- end -------
+    n(this, v);
+    n(this, u);
+    n(this, f);
+    n(this, y);
+    n(this, g);
+    n(this, E);
+    n(this, w, void 0);
+    n(this, h, void 0);
+    n(this, A, void 0);
+    n(this, c, void 0);
+    n(this, p, 0);
     const t = this.attachShadow({ mode: "open" });
     t.innerHTML = `
             <div class="ea-tabs_wrap" part="container">
@@ -76,7 +88,7 @@ class T extends C {
                     <slot name="pane"></slot>
                 </div>
             </div>
-        `, b(this, w, t.querySelector(".ea-tabs_wrap")), b(this, h, t.querySelector(".ea-tabs_tab-bottom-bar")), b(this, g, t.querySelector(".ea-tabs_pane-wrap")), b(this, p, t.querySelector(".ea-tabs_tab-wrap > slot")), this.build(t, I);
+        `, b(this, w, t.querySelector(".ea-tabs_wrap")), b(this, h, t.querySelector(".ea-tabs_tab-bottom-bar")), b(this, A, t.querySelector(".ea-tabs_pane-wrap")), b(this, c, t.querySelector(".ea-tabs_tab-wrap > slot")), this.build(t, $);
   }
   // ------- type 标签样式类型 -------
   // #region
@@ -110,52 +122,50 @@ class T extends C {
     return this.getAttrBoolean("editable") || !1;
   }
   set editable(t) {
-    this.setAttribute("editable", t), n(this, a, B).call(this, t);
+    this.setAttribute("editable", t), o(this, g, C).call(this, t);
   }
   connectedCallback() {
-    this.type = this.type, this.actived = this.actived, this.editable = this.editable, n(this, a, E).call(this), n(this, a, y).call(this), n(this, a, N).call(this);
+    this.type = this.type, this.actived = this.actived, this.editable = this.editable, o(this, f, N).call(this), o(this, u, S).call(this), o(this, E, T).call(this);
   }
 }
-w = new WeakMap(), h = new WeakMap(), g = new WeakMap(), p = new WeakMap(), u = new WeakMap(), a = new WeakSet(), // #endregion
-// ------- end -------
-A = function(t) {
-  const e = this.querySelectorAll("ea-tab"), l = this.querySelectorAll("ea-pane"), { width: r, height: o } = t.getBoundingClientRect(), f = Array.from(e).reduce((m, x, R) => R <= t.index ? m + x.offsetWidth : m, 0), _ = (m, x) => {
-    m.actived = !1, m.index = x;
+w = new WeakMap(), h = new WeakMap(), A = new WeakMap(), c = new WeakMap(), p = new WeakMap(), v = new WeakSet(), k = function(t) {
+  const e = this.querySelectorAll("ea-tab"), l = this.querySelectorAll("ea-pane"), { width: a, height: i } = t.getBoundingClientRect(), x = Array.from(e).reduce((m, B, M) => M <= t.index ? m + B.offsetWidth : m, 0), q = (m, B) => {
+    m.actived = !1, m.index = B;
   };
-  e.forEach(_), l.forEach(_), t.actived = !0, this.querySelector(`ea-pane[name="${t.name}"]`).actived = !0, d(this, h).style.left = f - r + "px", d(this, h).style.width = r + "px", d(this, h).style.top = o + "px";
-}, y = function() {
-  const t = this.querySelectorAll("ea-tab"), e = this.querySelectorAll("ea-pane"), l = (r) => {
-    n(this, a, A).call(this, r.detail.event), this.actived = r.detail.name, r.detail.event.actived = !0;
+  e.forEach(q), l.forEach(q), t.actived = !0, this.querySelector(`ea-pane[name="${t.name}"]`).actived = !0, d(this, h).style.left = x - a + "px", d(this, h).style.width = a + "px", d(this, h).style.top = i + "px";
+}, u = new WeakSet(), S = function() {
+  const t = this.querySelectorAll("ea-tab"), e = this.querySelectorAll("ea-pane"), l = (a) => {
+    o(this, v, k).call(this, a.detail.event), this.actived = a.detail.name, a.detail.event.actived = !0;
   };
-  t.forEach((r, o) => {
-    r.index = o, r.name || (r.name = o), r.removeEventListener("tab-click", l), r.addEventListener("tab-click", l);
-  }), e.forEach((r, o) => {
-    r.index = o, r.name || (r.name = o);
+  t.forEach((a, i) => {
+    a.index = i, a.name || (a.name = i), a.removeEventListener("tab-click", l), a.addEventListener("tab-click", l);
+  }), e.forEach((a, i) => {
+    a.index = i, a.name || (a.name = i);
   });
-}, E = function() {
-  k(() => {
+}, f = new WeakSet(), N = function() {
+  I(() => {
     const t = this.querySelector('ea-tab[name="' + this.actived + '"]');
-    t.actived = !0, n(this, a, A).call(this, t);
+    t.actived = !0, o(this, v, k).call(this, t);
   }, 20);
-}, q = function(t) {
-  var f;
+}, y = new WeakSet(), R = function(t) {
+  var x;
   t.stopPropagation();
-  const e = this.querySelectorAll("ea-tab"), { name: l, event: r, index: o } = t.detail;
-  let v = o;
-  e[o + 1] ? v = o + 1 : e[o - 1] && (v = o - 1);
+  const e = this.querySelectorAll("ea-tab"), { name: l, event: a, index: i } = t.detail;
+  let _ = i;
+  e[i + 1] ? _ = i + 1 : e[i - 1] && (_ = i - 1);
   try {
-    this.actived = (f = e[v]) == null ? void 0 : f.name, r.remove(), this.querySelector(`ea-pane[name="${l}"]`).remove(), e.length <= 1 ? d(this, h).style.width = 0 : (n(this, a, E).call(this), n(this, a, y).call(this));
+    this.actived = (x = e[_]) == null ? void 0 : x.name, a.remove(), this.querySelector(`ea-pane[name="${l}"]`).remove(), e.length <= 1 ? d(this, h).style.width = 0 : (o(this, f, N).call(this), o(this, u, S).call(this));
   } catch {
   }
-}, B = function(t) {
+}, g = new WeakSet(), C = function(t) {
   this.querySelectorAll("ea-tab").forEach((e) => {
     e.editable = t;
-  }), this.removeEventListener("tab-close", n(this, a, q)), this.addEventListener("tab-close", n(this, a, q));
-}, N = function() {
-  k(() => {
-    b(this, u, d(this, p).assignedNodes().length), d(this, p).addEventListener("slotchange", (t) => {
+  }), this.removeEventListener("tab-close", o(this, y, R)), this.addEventListener("tab-close", o(this, y, R));
+}, E = new WeakSet(), T = function() {
+  I(() => {
+    b(this, p, d(this, c).assignedNodes().length), d(this, c).addEventListener("slotchange", (t) => {
       const e = t.target.assignedNodes().length;
-      e >= d(this, u) ? (n(this, a, y).call(this), n(this, a, B).call(this, this.editable), this.type = this.type, b(this, u, e), this.dispatchEvent(new CustomEvent("tab-add", {
+      e >= d(this, p) ? (o(this, u, S).call(this), o(this, g, C).call(this, this.editable), this.type = this.type, b(this, p, e), this.dispatchEvent(new CustomEvent("tab-add", {
         detail: {
           event: t,
           tabs: this.querySelectorAll("ea-tab"),
@@ -163,11 +173,11 @@ A = function(t) {
         },
         bubbles: !0,
         composed: !0
-      }))) : b(this, u, d(this, p).assignedNodes().length);
+      }))) : b(this, p, d(this, c).assignedNodes().length);
     });
   }, 20);
 };
-customElements.get("ea-tabs") || customElements.define("ea-tabs", T);
+customElements.get("ea-tabs") || customElements.define("ea-tabs", H);
 export {
-  T as EaTabs
+  H as EaTabs
 };
