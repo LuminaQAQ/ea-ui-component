@@ -4,11 +4,8 @@ import { onMounted, ref } from 'vue'
 const btn = ref(null);
 
 onMounted(() => {
-  import('../components/ea-icon/index.css')
-  import('../components/ea-button/index.js')
-  import('../components/ea-button-group/index.js')
-  import('../components/ea-switch/index.js')
-  import('./index.scss')
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
 
   document
     .querySelector("#ea-radio-href")
@@ -64,14 +61,37 @@ onMounted(() => {
 
 ## 基础用法
 
-基础的按钮用法。通过设置 `type` 属性来切换按钮类型，默认为 `default`。
+使用 type、plain、round 和 circle 来定义按钮的样式。
 
-<div class="row">
-  <ea-button>默认按钮</ea-button>
-  <ea-button type="primary">主要按钮</ea-button>
-  <ea-button type="success">成功按钮</ea-button>
-  <ea-button type="warning">警告按钮</ea-button>
-  <ea-button type="danger">危险按钮</ea-button>
+<div class="demo">
+  <div class="row">
+      <ea-button>默认按钮</ea-button>
+      <ea-button type="primary">主要按钮</ea-button>
+      <ea-button type="success">成功按钮</ea-button>
+      <ea-button type="warning">警告按钮</ea-button>
+      <ea-button type="danger">危险按钮</ea-button>
+  </div>
+  <div class="row">
+      <ea-button plain>朴素按钮</ea-button>
+      <ea-button type="primary" plain>主要按钮</ea-button>
+      <ea-button type="success" plain>成功按钮</ea-button>
+      <ea-button type="warning" plain>警告按钮</ea-button>
+      <ea-button type="danger" plain>危险按钮</ea-button>
+  </div>
+  <div class="row">
+      <ea-button round>圆角按钮</ea-button>
+      <ea-button type="primary" round>主要按钮</ea-button>
+      <ea-button type="success" round>成功按钮</ea-button>
+      <ea-button type="warning" round>警告按钮</ea-button>
+      <ea-button type="danger" round>危险按钮</ea-button>
+  </div>
+  <div class="row">
+      <ea-button icon="icon-coffee" circle></ea-button>
+      <ea-button icon="icon-edit" type="primary" circle></ea-button>
+      <ea-button icon="icon-comment-empty" type="success" circle></ea-button>
+      <ea-button icon="icon-bell" type="warning" circle></ea-button>
+      <ea-button icon="icon-cog" type="danger" circle></ea-button>
+  </div>
 </div>
 
 ::: details 查看代码
@@ -89,68 +109,41 @@ onMounted(() => {
 
 :::
 
-## 朴素按钮
+## 禁用状态
 
-朴素按钮用法。通过设置 `plain` 属性为 `true` 来切换按钮类型，默认为 `false`。
+你可以使用 disabled 属性来定义按钮是否被禁用。
 
-<div class="row">
-    <ea-button plain>朴素按钮</ea-button>
-    <ea-button type="primary" plain>主要按钮</ea-button>
-    <ea-button type="success" plain>成功按钮</ea-button>
-    <ea-button type="warning" plain>警告按钮</ea-button>
-    <ea-button type="danger" plain>危险按钮</ea-button>
-</div>
+使用 disabled 属性来控制按钮是否为禁用状态。 该属性接受一个 Boolean 类型的值。
 
-::: details 查看代码
-
-```html
-<div class="row">
-  <ea-button plain>朴素按钮</ea-button>
-  <ea-button type="primary" plain>主要按钮</ea-button>
-  <ea-button type="success" plain>成功按钮</ea-button>
-  <ea-button type="warning" plain>警告按钮</ea-button>
-  <ea-button type="danger" plain>危险按钮</ea-button>
-</div>
-```
-
-:::
-
-## 圆角按钮
-
-圆角按钮用法。 通过设置 `round` 属性为 `true` 来切换按钮类型，默认为 `false`。
-
-<div class="row">
-    <ea-button round>圆角按钮</ea-button>
-    <ea-button type="primary" round>主要按钮</ea-button>
-    <ea-button type="success" round>成功按钮</ea-button>
-    <ea-button type="warning" round>警告按钮</ea-button>
-    <ea-button type="danger" round>危险按钮</ea-button>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="row">
-  <ea-button round>圆角按钮</ea-button>
-  <ea-button type="primary" round>主要按钮</ea-button>
-  <ea-button type="success" round>成功按钮</ea-button>
-  <ea-button type="warning" round>警告按钮</ea-button>
-  <ea-button type="danger" round>危险按钮</ea-button>
-</div>
-```
-
-:::
-
-## 禁用按钮
-
-按钮不可用状态。 通过设置 `disabled` 属性为 `true` 来切换按钮类型，默认为 `false`。
-
-<div class="row">
-  <ea-button disabled>禁用按钮</ea-button>
-  <ea-button type="primary" disabled>主要按钮</ea-button>
-  <ea-button type="success" disabled>成功按钮</ea-button>
-  <ea-button type="warning" disabled>警告按钮</ea-button>
-  <ea-button type="danger" disabled>危险按钮</ea-button>
+<div class="demo">
+  <div class="row">
+      <ea-button disabled>禁用按钮</ea-button>
+      <ea-button type="primary" disabled>主要按钮</ea-button>
+      <ea-button type="success" disabled>成功按钮</ea-button>
+      <ea-button type="warning" disabled>警告按钮</ea-button>
+      <ea-button type="danger" disabled>危险按钮</ea-button>
+  </div>
+  <div class="row">
+      <ea-button disabled plain>禁用按钮</ea-button>
+      <ea-button type="primary" disabled plain>主要按钮</ea-button>
+      <ea-button type="success" disabled plain>成功按钮</ea-button>
+      <ea-button type="warning" disabled plain>警告按钮</ea-button>
+      <ea-button type="danger" disabled plain>危险按钮</ea-button>
+  </div>
+  <div class="row">
+      <ea-button id="ea-button-disabled" round disabled>圆角按钮</ea-button>
+      <ea-button type="primary" round disabled>主要按钮</ea-button>
+      <ea-button type="success" round disabled>成功按钮</ea-button>
+      <ea-button type="warning" round disabled>警告按钮</ea-button>
+      <ea-button type="danger" round disabled>危险按钮</ea-button>
+  </div>
+  <div class="row">
+      <ea-button icon="icon-coffee" circle disabled></ea-button>
+      <ea-button icon="icon-edit" type="primary" circle disabled></ea-button>
+      <ea-button icon="icon-comment-empty" type="success" circle disabled></ea-button>
+      <ea-button icon="icon-bell" type="warning" circle disabled></ea-button>
+      <ea-button icon="icon-cog" type="danger" circle disabled></ea-button>
+  </div>
 </div>
 
 ::: details 查看代码
@@ -178,21 +171,79 @@ btn.addEventListener("click", function (e) {
 
 :::
 
+## 链接按钮 ​
+
+::: danger
+
+type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至新的 API。
+
+新的 API link 于 3.0.0 版本时添加，你可以使用 type API 设置链接按钮的主题样式
+
+:::
+
+<div class="row left">
+  <ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>链接按钮</ea-button>
+  <ea-button type="primary" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>文本按钮</ea-button>
+  <ea-button type="danger" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>危险按钮</ea-button>
+  <ea-button type="warning" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>警告按钮</ea-button>
+  <ea-button type="success" href="https://luminaqaq.github.io/ea-ui-component/ea-button" link>成功按钮</ea-button>
+  <ea-button disabled id="ea-button-a" type="text" href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+      link>链接按钮</ea-button>
+</div>
+
+```html
+<ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link
+  >链接按钮</ea-button
+>
+<ea-button
+  type="primary"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >文本按钮</ea-button
+>
+<ea-button
+  type="danger"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >危险按钮</ea-button
+>
+<ea-button
+  type="warning"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >警告按钮</ea-button
+>
+<ea-button
+  type="success"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >成功按钮</ea-button
+>
+<ea-button
+  disabled
+  id="ea-button-a"
+  type="text"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >链接按钮</ea-button
+>
+```
+
 ## 文字按钮
 
 没有边框和背景色的按钮。 通过设置 `type` 属性为 `text` 来切换按钮类型。
 
 <div class="row left">
-  <ea-button type="text">文字按钮</ea-button>
-  <ea-button type="text" disabled>文字按钮</ea-button>
+  <ea-button text>文字按钮</ea-button>
+  <ea-button text disabled>文字按钮</ea-button>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="row left">
-  <ea-button type="text">文字按钮</ea-button>
-  <ea-button type="text" disabled>文字按钮</ea-button>
+  <ea-button text>文字按钮</ea-button>
+  <ea-button text disabled>文字按钮</ea-button>
 </div>
 ```
 
@@ -313,20 +364,18 @@ btn.addEventListener("click", function (e) {
 `Button` 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。通过 设置 `size` 属性来改变按钮大小。
 
 <div class="row">
-  <ea-button round>默认按钮</ea-button>
-  <ea-button size="medium" round>中等按钮</ea-button>
+  <ea-button size="large" round>大型按钮</ea-button>
+  <ea-button size="medium" round>普通按钮</ea-button>
   <ea-button size="small" round>小型按钮</ea-button>
-  <ea-button size="mini" round>超小按钮</ea-button>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="row">
-  <ea-button round>默认按钮</ea-button>
-  <ea-button size="medium" round>中等按钮</ea-button>
+  <ea-button size="large" round>大型按钮</ea-button>
+  <ea-button size="medium" round>普通按钮</ea-button>
   <ea-button size="small" round>小型按钮</ea-button>
-  <ea-button size="mini" round>超小按钮</ea-button>
 </div>
 ```
 

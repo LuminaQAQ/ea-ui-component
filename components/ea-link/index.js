@@ -1,23 +1,25 @@
 import Base from '../Base.js'
 import "../ea-icon/index.js"
 
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from './index.scss?inline';
 
 export class EaLink extends Base {
   #container;
   constructor() {
     super();
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
+    const shadowRoot = this.shadowRoot;
+    this.stylesheet = stylesheet;
     shadowRoot.innerHTML = `
       <a class="ea-link" part="container">
         <slot></slot>
       </a>
     `;
 
+
     this.#container = shadowRoot.querySelector('.ea-link');
 
-    this.build(shadowRoot, stylesheet);
+    // this.build(shadowRoot, stylesheet);
   }
 
   get LINK_TYPE() {
@@ -97,7 +99,7 @@ export class EaLink extends Base {
   // #endregion
   // ------- end -------
 
-  connectedCallback() {
+  $mounted() {
     this.style.display = 'inline-block';
 
     // 设置链接

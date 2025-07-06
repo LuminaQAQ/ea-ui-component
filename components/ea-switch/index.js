@@ -1,105 +1,9 @@
 // @ts-nocheck
 import Base from '../Base.js';
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-switch_wrap {
-  display: flex;
-  align-items: center;
-}
-.ea-switch_wrap input {
-  display: none;
-}
-.ea-switch_wrap span {
-  display: block;
-  cursor: default;
-}
-.ea-switch_wrap .ea-switch_label {
-  color: #606266;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.ea-switch_wrap .ea-switch_label.ea-switch_label--active {
-  color: #409eff;
-}
-.ea-switch_wrap .ea-switch_core {
-  position: relative;
-  cursor: pointer;
-  margin: 0 0.75rem;
-  width: 2.5rem;
-  height: 1.25rem;
-  line-height: 1.25rem;
-  background-color: #dcdfe6;
-  border-radius: 999px;
-  transition: background-color 0.2s;
-}
-.ea-switch_wrap .ea-switch_core.ea-switch_core--checked {
-  background-color: #409eff;
-}
-.ea-switch_wrap .ea-switch_core::after {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 2px;
-  top: 50%;
-  transform: translate(0, -50%);
-  width: 1rem;
-  height: 1rem;
-  border-radius: 999px;
-  background-color: #fff;
-  transition: left 0.2s, transform 0.2s;
-}
-.ea-switch_wrap .ea-switch_core.ea-switch_core--checked::after {
-  left: calc(100% - 1rem - 2px);
-}
-.ea-switch_wrap .ea-switch_core.ea-switch_core--disabled {
-  background-color: #c0c4cc;
-}
-.ea-switch_wrap.ea-switch_wrap--disabled {
-  cursor: not-allowed;
-}
-.ea-switch_wrap.ea-switch_wrap--disabled .ea-switch_label,
-.ea-switch_wrap.ea-switch_wrap--disabled .ea-switch_core {
-  pointer-events: none;
-}
-.ea-switch_wrap.ea-switch_wrap--disabled .ea-switch_core {
-  background-color: #eff1f5;
-}
-.ea-switch_wrap.ea-switch_wrap--disabled .ea-switch_label {
-  color: #c0c4cc;
-}
-.ea-switch_wrap.ea-switch_wrap--disabled .ea-switch_label.ea-switch_label--active {
-  color: #7ebfff;
-}
-`;
-
-const inputDom = () => {
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.className = 'ea-switch_input';
-
-    return input;
-}
-
-const inputCoreDom = () => {
-    const div = document.createElement('span');
-    div.className = 'ea-switch_core';
-
-    return div;
-}
-
-const labelDom = (posi) => {
-    const label = document.createElement('span');
-    label.className = `ea-switch_label ea-switch_label--${posi}`;
-
-    return label;
-}
+import stylesheet from './index.scss?inline';
 
 export class EaSwitch extends Base {
-    #mounted = false;
-
     #wrap;
     #input;
 
@@ -107,45 +11,42 @@ export class EaSwitch extends Base {
     #inputCore;
     #labelRight;
 
-    static get observedAttributes() {
-        return ['checked'];
-    }
     constructor() {
         super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        const wrap = document.createElement('div');
-        wrap.className = 'ea-switch_wrap';
+        const shadowRoot = this.shadowRoot;
+        this.stylesheet = stylesheet;
 
-        const input = inputDom();
-        const leftLabel = labelDom('left');
-        const inputCore = inputCoreDom();
-        const rightLabel = labelDom('right');
+        shadowRoot.innerHTML = `
+            <label class="ea-switch_wrap" part="container">
+                <input class="ea-switch_input" type="checkbox">
+                <span class="ea-switch_label ea-switch_label--left" part="label-left"></span>
+                <span class="ea-switch_core" part="switch"></span>
+                <span class="ea-switch_label ea-switch_label--right" part="label-right"></span>
+            </label>
+        `;
 
-        wrap.appendChild(input);
-        wrap.appendChild(leftLabel);
-        wrap.appendChild(inputCore);
-        wrap.appendChild(rightLabel);
+        this.#wrap = shadowRoot.querySelector('.ea-switch_wrap');
+        this.#input = shadowRoot.querySelector('.ea-switch_input');
+        this.#labelLeft = shadowRoot.querySelector('.ea-switch_label--left');
+        this.#inputCore = shadowRoot.querySelector('.ea-switch_core');
+        this.#labelRight = shadowRoot.querySelector('.ea-switch_label--right');
 
-        this.#wrap = wrap;
-        this.#input = input;
-        this.#labelLeft = leftLabel;
-        this.#inputCore = inputCore;
-        this.#labelRight = rightLabel;
 
-        this.build(shadowRoot, stylesheet);
-        this.shadowRoot.appendChild(wrap);
     }
 
     // ------- name 属性 -------
     // #region
     get name() {
-        return this.getAttribute('name') || '';
+        return this.getAttribute('name') || 'ea-switch';
     }
 
     set name(value) {
         this.setAttribute('name', value);
-        this.#input.name = value;
+
+        this.#wrap.setAttribute('for', value);
+        this.#input.setAttribute('name', value);
+        this.#input.setAttribute('id', value);
     }
     // #endregion
     // ------- end -------
@@ -159,7 +60,6 @@ export class EaSwitch extends Base {
     }
 
     set value(value) {
-        this.setAttribute('value', value);
         this.#input.value = value;
     }
     // #endregion
@@ -172,6 +72,8 @@ export class EaSwitch extends Base {
     }
 
     set inactiveText(value) {
+        if (!value) return;
+
         this.setAttribute('inactive-text', value);
         this.#labelLeft.innerText = value;
     }
@@ -185,6 +87,8 @@ export class EaSwitch extends Base {
     }
 
     set activeText(value) {
+        if (!value) return;
+
         this.setAttribute('active-text', value);
         this.#labelRight.innerText = value;
     }
@@ -200,19 +104,6 @@ export class EaSwitch extends Base {
     set checked(value) {
         this.setAttribute('checked', value);
         this.#input.checked = value;
-        this.#input.setAttribute('checked', value);
-
-        if (value) {
-            this.#inputCore.classList.add('ea-switch_core--checked');
-            this.#labelRight.classList.add('ea-switch_label--active');
-
-            this.#labelLeft.classList.remove('ea-switch_label--active');
-        } else {
-            this.#inputCore.classList.remove('ea-switch_core--checked');
-            this.#labelLeft.classList.add('ea-switch_label--active');
-
-            this.#labelRight.classList.remove('ea-switch_label--active');
-        }
     }
     // #endregion
     // ------- end -------
@@ -226,7 +117,7 @@ export class EaSwitch extends Base {
     set disabled(value) {
         this.setAttribute('disabled', value);
         this.#input.disabled = value;
-        this.#wrap.classList.toggle('ea-switch_wrap--disabled', value);
+        this.#wrap.classList.toggle('disabled', value);
     }
     // #endregion
     // ------- end -------
@@ -234,14 +125,13 @@ export class EaSwitch extends Base {
     // ------- inactive-color 关闭时颜色 -------
     // #region
     get inactiveColor() {
-        return this.getAttribute('inactive-color') ||'';
+        return this.getAttribute('inactive-color') || '';
     }
 
     set inactiveColor(value) {
         if (!value) return;
 
-        this.setAttribute('inactive-color', value);
-        if (value) this.#inputCore.style.backgroundColor = value;
+        this.style.setProperty('--inactive-checkbox-bgc', value);
     }
     // #endregion
     // ------- end -------
@@ -255,25 +145,12 @@ export class EaSwitch extends Base {
     set activeColor(value) {
         if (!value) return;
 
-        this.setAttribute('active-color', value);
-        this.#inputCore.style.backgroundColor = value;
+        this.style.setProperty('--active-checkbox-bgc', value);
     }
     // #endregion
     // ------- end -------
 
-    handleInputChecked(e) {
-        const currentChecked = this.#input.checked;
-
-        if (this.inactiveColor && this.activeColor) {
-            this.#inputCore.style.backgroundColor = currentChecked ? this.inactiveColor : this.activeColor;
-        } else {
-            this.#inputCore.classList.toggle('ea-switch_core--checked', currentChecked);
-        }
-    }
-
-    init() {
-        const that = this;
-
+    connectedCallback() {
         this.setAttribute('data-ea-component', true);
 
         this.name = this.name;
@@ -290,45 +167,22 @@ export class EaSwitch extends Base {
         // 设置禁用
         this.disabled = this.disabled;
 
-        // 设置颜色
-        if (this.activeColor && this.inactiveColor) {
-            if (this.checked) this.activeColor = this.activeColor;
-            else this.inactiveColor = this.inactiveColor;
-        }
+        this.inactiveColor = this.inactiveColor;
+        this.activeColor = this.activeColor;
 
+        this.#input.addEventListener('change', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
 
-        this.#labelLeft.addEventListener('click', function (e) {
-            that.checked = !that.#input.checked;
-        });
-
-        this.#labelRight.addEventListener('click', function (e) {
-            that.checked = !that.#input.checked;
-        });
-
-        this.#inputCore.addEventListener('click', function (e) {
-            that.checked = !that.#input.checked;
-        });
-    }
-
-    connectedCallback() {
-        this.init();
-        this.#mounted = true;
-    }
-
-    attributeChangedCallback(name, oldVal, newVal) {
-        if (!this.#mounted) return;
-
-        if (name === 'checked') {
-            const value = this.checked ? this.activeText : this.inactiveText;
-            this.handleInputChecked();
+            this.checked = e.target.checked;
 
             this.dispatchEvent(new CustomEvent("change", {
                 detail: {
                     checked: this.checked,
-                    value,
+                    value: this.value,
                 },
             }))
-        }
+        });
     }
 }
 

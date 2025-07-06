@@ -2,8 +2,6 @@
 import {onMounted} from "vue"
 import configs from "../components/ea-icon/config.json"
 
-import { setConfig } from "../components/globalConfig.js"
-
 onMounted(() => {
     import("./index.scss")
     import("../components/ea-icon/index.js")

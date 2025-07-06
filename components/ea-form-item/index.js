@@ -1,55 +1,10 @@
-// @ts-nocheck
 import Base from '../Base.js';
 import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
-import { timeout } from '../../utils/timeout.js';
+
+import { withTransitionTimeOut } from '../../utils/timeout.js';
 import { Validator } from "../../utils/Validator.js";
 
-const stylesheet = `
-@import url('/ea_ui_component/icon/index.css');
-
-.ea-form-item_wrap {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 22px;
-}
-.ea-form-item_wrap .ea-form-item_label-wrap {
-  text-align: right;
-  float: left;
-  font-size: 14px;
-  color: #606266;
-  line-height: 40px;
-  padding: 0 12px 0 0;
-  box-sizing: border-box;
-}
-.ea-form-item_wrap .ea-form-item_content-wrap {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-.ea-form-item_wrap .ea-form-item_content-wrap .ea-form-item_invalid-wrap {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  transform-origin: top center;
-  transform: translateY(100%) scaleY(0);
-  font-size: 12px;
-  color: #f56c6c;
-  white-space: nowrap;
-}
-.ea-form-item_wrap.is-required-star .ea-form-item_label-wrap::before {
-  content: "*";
-  color: #f56c6c;
-  margin-right: 4px;
-}
-.ea-form-item_wrap.is-required .ea-form-item_content-wrap .ea-form-item_invalid-wrap {
-  transform: translateY(100%) scaleY(1);
-}
-.ea-form-item_wrap.with-transition .ea-form-item_content-wrap .ea-form-item_invalid-wrap {
-  transition: transform 0.3s;
-}
-`;
+import { stylesheet } from './src/style/stylesheet.js';
 
 export class EaFromItem extends Base {
     #rule;
@@ -67,7 +22,7 @@ export class EaFromItem extends Base {
 
         shadowRoot.innerHTML = `
             <div class='ea-form-item_wrap' part='container'>
-                <label class="ea-form-item_label-wrap" part='label'>
+                <label class="ea-form-item_label-wrap" part='label-wrap'>
                     <slot name='label'></slot>
                 </label>
                 <div class="ea-form-item_content-wrap" part='content-wrap'> 
@@ -91,7 +46,7 @@ export class EaFromItem extends Base {
     // ------- label 标签 -------
     // #region
     get label() {
-        return this.getAttribute('label') || '';
+        return this.getAttribute('label');
     }
 
     set label(value) {
@@ -183,18 +138,12 @@ export class EaFromItem extends Base {
         } catch (error) { }
     }
 
-    #init() {
+    connectedCallback() {
         this.label = this.label;
 
         this.trigger = this.trigger;
 
-        timeout(() => {
-            this.#container.classList.add('with-transition');
-        }, 50);
-    }
-
-    connectedCallback() {
-        this.#init();
+        withTransitionTimeOut(this.#container, 50);
     }
 }
 
