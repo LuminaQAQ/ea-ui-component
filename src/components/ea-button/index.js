@@ -116,6 +116,7 @@ export class EaButton extends Base {
           i.id = 'ea-loading-icon';
           i.icon = 'icon-spin6 animate-spin';
           i.size = this.state.size;
+          i.part = 'loading-icon';
 
           this.#wrap.insertBefore(i, this.#wrap.firstChild)
         } else {

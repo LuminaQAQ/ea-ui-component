@@ -264,6 +264,11 @@
     color var(--transition-fast);
 
   will-change: width;
+
+  #ea-loading-icon {
+    margin-right: var(--spacing-md);
+  }
+
   @include button-type(normal);
 
   @include modifier(primary) {
