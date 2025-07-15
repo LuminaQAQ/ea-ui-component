@@ -1,5 +1,6 @@
 :host {
   --cursor-type: pointer;
+  --font-size: var(--font-size-md);
 
   /* === Normal === */
   --ea-button-normal-text: var(--grey-900);
@@ -213,12 +214,12 @@
 
 @mixin button-size-type() {
   &.ea-button--small {
-    font-size: var(--font-size-sm);
+    --font-size: var(--font-size-sm);
     padding: var(--spacing-sm);
   }
 
   &.ea-button--large {
-    font-size: var(--font-size-lg);
+    --font-size: var(--font-size-lg);
     padding: var(--spacing-lg);
   }
 }
@@ -255,7 +256,8 @@
 
   cursor: var(--cursor-type);
 
-  font-size: var(--font-size-md);
+  font-size: var(--font-size);
+  line-height: var(--font-size);
   text-decoration: none;
 
   transition: background-color var(--transition-fast),

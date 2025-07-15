@@ -1,1 +1,14 @@
 @import "./css/fontello.css";
+
+:host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+:host-context(ea-button) {
+    font-size: var(--font-size);
+    line-height: var(--font-size);
+    width: var(--font-size);
+    height: var(--font-size);
+}
