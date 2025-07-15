@@ -4,6 +4,8 @@ import variable from "../themes/variable.scss?inline";
 import "./ea-icon/index.js"
 
 export default class Base extends HTMLElement {
+    observedProps = [];
+
     static get observedAttributes() {
         return this.observedProps;
     }
@@ -26,6 +28,16 @@ export default class Base extends HTMLElement {
         variableSheet.replaceSync(variable);
 
         this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
+    }
+
+    /**
+     * 计算classlist
+     * @param {string} block 块级元素名称
+     * @param {object} classListObj classList对象
+     * @returns {string} classList
+     */
+    computedClasslist(block, classListObj) {
+        return [block, ...Object.entries(classListObj).filter(([, value]) => value).map(([key]) => block + key)].join(' ');
     }
 
     /**
@@ -136,6 +148,11 @@ export default class Base extends HTMLElement {
 
     connectedCallback() {
         this.adoptedStyle(this.stylesheet);
+        this.tabIndex = 0;
+
+        this.addEventListener('keydown', (e) => {
+            console.log(e.key, e.ctrlKey);
+        })
 
         queueMicrotask(() => {
             // 组件挂载前
@@ -172,7 +189,7 @@ export default class Base extends HTMLElement {
             bubbles: false,
             composed: true,
         }));
-        
+
         this.remove();
         this.state = null;
     }

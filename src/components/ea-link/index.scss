@@ -1,34 +1,126 @@
-@mixin ea-link-theme($theme-name, $color) {
-  &.#{$theme-name} {
-    color: $color;
+:host {
+  --link-cursor: var(--cursor-pointer);
+  --link-pointer-events: auto;
 
+  --link-normal-color: var(--color-black);
+  --link-normal-disabled-color: var(--grey-600);
+  --link-normal-hover-color: var(--grey-800);
+  --link-normal-active-color: var(--grey-900);
+
+  --link-primary-color: var(--blue-500);
+  --link-primary-disabled-color: var(--blue-300);
+  --link-primary-hover-color: var(--blue-400);
+  --link-primary-active-color: var(--blue-600);
+
+  --link-info-color: var(--grey-500);
+  --link-info-disabled-color: var(--grey-300);
+  --link-info-hover-color: var(--grey-400);
+  --link-info-active-color: var(--grey-600);
+
+  --link-success-color: var(--green-500);
+  --link-success-disabled-color: var(--green-300);
+  --link-success-hover-color: var(--green-400);
+  --link-success-active-color: var(--green-600);
+
+  --link-warning-color: var(--yellow-500);
+  --link-warning-disabled-color: var(--yellow-300);
+  --link-warning-hover-color: var(--yellow-400);
+  --link-warning-active-color: var(--yellow-600);
+
+  --link-danger-color: var(--red-500);
+  --link-danger-disabled-color: var(--red-300);
+  --link-danger-hover-color: var(--red-400);
+  --link-danger-active-color: var(--red-600);
+}
+
+:host([disabled]),
+:host([disabled="true"]) {
+  --link-cursor: var(--cursor-not-allowed);
+  --link-pointer-events: none;
+}
+
+:host([underline="hover"]) {
+  @include block(ea-link) {
     &:hover {
-      color: lighten($color, 10);
-    }
-
-    @if ($theme-name == "disabled") {
-      pointer-events: none;
+      text-decoration: underline;
     }
   }
 }
 
-.ea-link {
-  text-decoration: none;
-  color: $color-default-text;
-  cursor: pointer;
-
-  &:hover {
-    color: lighten($color-default-text, 10);
-  }
-
-  &.underline:hover {
+:host([underline="always"]) {
+  @include block(ea-link) {
     text-decoration: underline;
   }
-
-  @include ea-link-theme("primary", $color-primary-bgc);
-  @include ea-link-theme("success", $color-success-bgc);
-  @include ea-link-theme("info", $color-info-bgc);
-  @include ea-link-theme("warning", $color-warning-bgc);
-  @include ea-link-theme("danger", $color-danger-bgc);
-  @include ea-link-theme("disabled", $color-disabled-text);
 }
+
+:host {
+  display: inline-block;
+  -webkit-user-drag: auto;
+
+  cursor: var(--link-cursor);
+}
+
+@mixin link-theme($theme-name) {
+  @include modifier($theme-name) {
+    color: var(--link-#{$theme-name}-color);
+
+    &:hover {
+      color: var(--link-#{$theme-name}-hover-color);
+    }
+
+    &.ea-link--disabled {
+      color: var(--link-#{$theme-name}-disabled-color);
+      cursor: var(--link-cursor);
+      pointer-events: var(--link-pointer-events);
+    }
+  }
+}
+
+@include block(ea-link) {
+  text-decoration: none;
+  color: var(--link-normal-color);
+
+  transition: color var(--transition-fast);
+
+  @include link-theme(normal);
+  @include link-theme(primary);
+  @include link-theme(success);
+  @include link-theme(warning);
+  @include link-theme(danger);
+  @include link-theme(info);
+}
+
+// @mixin ea-link-theme($theme-name, $color) {
+//   &.#{$theme-name} {
+//     color: $color;
+
+//     &:hover {
+//       color: lighten($color, 10);
+//     }
+
+//     @if ($theme-name == "disabled") {
+//       pointer-events: none;
+//     }
+//   }
+// }
+
+// .ea-link {
+//   text-decoration: none;
+//   color: $color-default-text;
+//   cursor: pointer;
+
+//   &:hover {
+//     color: lighten($color-default-text, 10);
+//   }
+
+//   &.underline:hover {
+//     text-decoration: underline;
+//   }
+
+//   @include ea-link-theme("primary", $color-primary-bgc);
+//   @include ea-link-theme("success", $color-success-bgc);
+//   @include ea-link-theme("info", $color-info-bgc);
+//   @include ea-link-theme("warning", $color-warning-bgc);
+//   @include ea-link-theme("danger", $color-danger-bgc);
+//   @include ea-link-theme("disabled", $color-disabled-text);
+// }
