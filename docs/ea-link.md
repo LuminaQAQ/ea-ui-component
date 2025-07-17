@@ -160,7 +160,7 @@ onMounted(() => {
 
 <div class="row left">
   <ea-link icon="icon-eye">查看</ea-link>
-  <ea-link icon="icon-share">分享</ea-link>
+  <ea-link>分享<ea-icon icon="icon-share"></ea-icon></ea-link>
 </div>
 
 ::: details 查看代码
@@ -174,17 +174,19 @@ onMounted(() => {
 
 :::
 
-## Attributes
+## Link API
 
-| 参数      | 说明       | 类型    | 可选值                                      | 默认值 |
-| --------- | ---------- | ------- | ------------------------------------------- | ------ |
-| type      | 类型       | string  | primary / success / warning / danger / info | -      |
-| disabled  | 是否禁用   | boolean | -                                           | false  |
-| underline | 是否下划线 | boolean | -                                           | true   |
-| icon      | 图标       | string  | -                                           | -      |
-| href      | 链接地址   | string  | -                                           | -      |
+### Attributes
 
-## CSS Part
+| 参数      | 说明       | 类型                         | 可选值                                                | 默认值   |
+| --------- | ---------- | ---------------------------- | ----------------------------------------------------- | -------- |
+| type      | 类型       | string                       | `primary` / `success` / `warning` / `danger` / `info` | `normal` |
+| disabled  | 是否禁用   | boolean                      | -                                                     | `false`  |
+| underline | 是否下划线 | `always` / `hover` / `never` | -                                                     | -        |
+| icon      | 图标       | string                       | -                                                     | -        |
+| href      | 链接地址   | string                       | -                                                     | -        |
+
+### CSS Part
 
 | 名称      | 说明     |
 | --------- | -------- |
