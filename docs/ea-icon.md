@@ -22,14 +22,16 @@ onMounted(() => {
 > `js`
 
 ```html
+<link rel="stylesheet" href="/dist/assets/icon.css" />
+
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-icon/index.js";
 </script>
 ```
 
-## 如何自定义图标文件链接？
+<!-- ## 如何自定义图标文件链接？
 
-[详情参考这篇文档](./guide/customIconFontHref.md)
+[详情参考这篇文档](./guide/customIconFontHref.md) -->
 
 ## 使用方法
 
