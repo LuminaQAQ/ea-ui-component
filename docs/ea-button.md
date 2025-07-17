@@ -7,14 +7,6 @@ onMounted(() => {
   import("../dist/components/index.js")
   import("../dist/assets/icon.css")
 
-  // document
-  //   .querySelector("#ea-radio-href")
-  //   .addEventListener("click", function (e) {
-  //     const btn = document.querySelector("#ea-button-a");
-
-  //     btn.disabled = e.target.checked;
-  //   });
-
   document
     .querySelector("#ea-radio-loading")
     .addEventListener("change", function (e) {

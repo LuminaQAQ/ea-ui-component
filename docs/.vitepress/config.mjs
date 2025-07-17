@@ -2,14 +2,20 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 
+const base = process.env.NODE_ENV === 'production' ? '/ea-ui-component/' : '';
+
 export default defineConfig({
-  base: '/ea-ui-component/',
+  base,
   title: "ea-ui",
+  description: "基于 WebComponent 的 ui 库",
 
   head: [
-    ['link', { rel: 'icon', href: '/ea-ui-component/favicon.ico' }],
-    ['link', { rel: 'stylesheet', href: '/ea-ui-component/ea-icon/css/fontello.css' }],
-    ['link', { rel: 'stylesheet', href: '/ea-ui-component/index.scss' }],
+    ['link', { rel: 'icon', href: `${base}dist/assets/favicon.ico` }],
+    ['link', { rel: 'stylesheet', href: `${base}dist/assets/icon.css` }],
+    ['link', { rel: 'stylesheet', href: `${base}index.css` }],
+
+    // ['link', { rel: 'stylesheet', href: '/ea-ui-component/ea-icon/css/fontello.css' }],
+    // ['link', { rel: 'stylesheet', href: '/ea-ui-component/index.scss' }],
     // ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/fontello.min.css' }],
   ],
 
@@ -17,7 +23,6 @@ export default defineConfig({
   lastUpdated: true,
   // mpa: true,
 
-  description: "基于 WebComponent 的 ui 库",
 
   appearance: false,
 
@@ -46,7 +51,7 @@ export default defineConfig({
       //     { text: 'Container 布局容器', link: '/ea-container' },
       //     { text: 'Icon 图标', link: '/ea-icon' },
       { text: 'Button 按钮', link: '/ea-button' },
-      //     { text: 'Link 文字链接', link: '/ea-link' },
+      { text: 'Link 文字链接', link: '/ea-link' },
       //   ]
       // },
       // {

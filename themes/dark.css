@@ -1,0 +1,6 @@
+:host {
+  --text-color: red;
+}
+:host button {
+  color: green;
+}

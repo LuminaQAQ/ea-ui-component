@@ -4,8 +4,8 @@ import { onMounted, ref } from 'vue'
 const btn = ref(null);
 
 onMounted(() => {
-  import('../components/ea-link/index.js')
-  import('./index.scss')
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
 })
 </script>
 
@@ -79,20 +79,44 @@ onMounted(() => {
 文字链接不可用状态。通过设置 `disabled` 属性来定义是否禁用状态。
 
 <div class="row left">
-  <ea-link type="primary" href="https://github.com/LuminaQAQ"
-    >未禁用状态</ea-link
-  >
-  <ea-link disabled>禁用状态</ea-link>
+  <ea-link href="https://github.com/LuminaQAQ" disabled>默认链接</ea-link>
+  <ea-link type="primary" href="https://github.com/LuminaQAQ" disabled>
+    主要链接
+  </ea-link>
+  <ea-link type="success" href="https://github.com/LuminaQAQ" disabled>
+    成功链接
+  </ea-link>
+  <ea-link type="warning" href="https://github.com/LuminaQAQ" disabled>
+    警告链接
+  </ea-link>
+  <ea-link type="danger" href="https://github.com/LuminaQAQ" disabled>
+    危险链接
+  </ea-link>
+  <ea-link type="info" href="https://github.com/LuminaQAQ" disabled>
+    信息链接
+  </ea-link>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="row left">
-  <ea-link type="primary" href="https://github.com/LuminaQAQ"
-    >未禁用状态</ea-link
-  >
-  <ea-link disabled>禁用状态</ea-link>
+  <ea-link href="https://github.com/LuminaQAQ" disabled>默认链接</ea-link>
+  <ea-link type="primary" href="https://github.com/LuminaQAQ" disabled>
+    主要链接
+  </ea-link>
+  <ea-link type="success" href="https://github.com/LuminaQAQ" disabled>
+    成功链接
+  </ea-link>
+  <ea-link type="warning" href="https://github.com/LuminaQAQ" disabled>
+    警告链接
+  </ea-link>
+  <ea-link type="danger" href="https://github.com/LuminaQAQ" disabled>
+    危险链接
+  </ea-link>
+  <ea-link type="info" href="https://github.com/LuminaQAQ" disabled>
+    信息链接
+  </ea-link>
 </div>
 ```
 
@@ -102,9 +126,19 @@ onMounted(() => {
 
 文字链接下划线。通过设置 `underline` 属性来定义是否显示下划线。
 
+::: danger
+属性 `boolean` 值 将在 `3.0.0` 版本中被移除，请考虑切换至新的 API。
+:::
+
+::: tip
+从 `3.0.0` 开始，你可以使用 `'always' | 'hover' | 'never'` 来控制是否显示下划线。 文档中的示例将都使用这些值。
+:::
+
 <div class="row left">
   <ea-link>无下划线</ea-link>
-  <ea-link type="primary" underline>下划线</ea-link>
+  <ea-link underline="never">无下划线</ea-link>
+  <ea-link type="primary" underline="hover">hover下划线</ea-link>
+  <ea-link type="primary" underline="always">always下划线</ea-link>
 </div>
 
 ::: details 查看代码
@@ -112,7 +146,9 @@ onMounted(() => {
 ```html
 <div class="row left">
   <ea-link>无下划线</ea-link>
-  <ea-link type="primary" underline>下划线</ea-link>
+  <ea-link underline="never">无下划线</ea-link>
+  <ea-link type="primary" underline="hover">hover下划线</ea-link>
+  <ea-link type="primary" underline="always">always下划线</ea-link>
 </div>
 ```
 
