@@ -1,0 +1,15 @@
+:host {
+  [part="loading-icon"] {
+    color: var(--default-loading-icon-color);
+  }
+}
+
+:host-context(ea-button[type="primary"]),
+:host-context(ea-button[type="success"]),
+:host-context(ea-button[type="warning"]),
+:host-context(ea-button[type="danger"]),
+:host-context(ea-button[type="info"]) {
+  [part="loading-icon"] {
+    --default-loading-icon-color: var(--color-white);
+  }
+}

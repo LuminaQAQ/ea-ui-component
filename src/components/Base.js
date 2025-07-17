@@ -112,18 +112,18 @@ export default class Base extends HTMLElement {
         });
     }
 
-    // ------- loading 属性 -------
+    // ------- loading-full 属性 -------
     // #region
-    get loading() {
-        return this.getAttrBoolean("loading") || false;
+    get "loading-full"() {
+        return this.getAttrBoolean("loading-full") || false;
     }
 
-    set loading(value) {
-        this.toggleAttribute("loading", value);
+    set "loading-full"(value) {
+        this.toggleAttribute("loading-full", value);
         if (!this.getAttrBoolean("disabled")) this.toggleAttribute("disabled", value);
 
         try {
-            const loadingIcon = this.shadowRoot.querySelectorAll(`[part="loading-icon"]`);
+            const loadingIcon = this.shadowRoot.querySelectorAll(`[part="loading-full"]`);
             if (loadingIcon?.length > 0) {
                 loadingIcon?.forEach((item) => item.remove());
             }
@@ -132,7 +132,7 @@ export default class Base extends HTMLElement {
                 const loadingIcon = document.createElement("ea-icon");
                 loadingIcon.id = "ea-loading-icon";
                 loadingIcon.icon = "icon-spin6 animate-spin";
-                loadingIcon.part = "loading-icon";
+                loadingIcon.part = "loading-full";
                 this.shadowRoot.insertBefore(loadingIcon, this.shadowRoot.firstChild);
             }
         } catch (error) { }
@@ -184,7 +184,9 @@ export default class Base extends HTMLElement {
     connectedCallback() {
         this.adoptedStyle(this.stylesheet);
         this.tabIndex = 0;
-        this.loading = this.loading;
+        if (this["loading-full"]) console.log(this["loading-full"], this);
+
+        this["loading-full"] = this["loading-full"];
 
         this.addEventListener("keydown", (e) => {
             console.log(e.key, e.ctrlKey);

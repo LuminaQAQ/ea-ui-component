@@ -1,5 +1,6 @@
 import stylesheet from "./index.css?inline"
 import variable from "../../themes/variable.scss?inline";
+import host from "./host.scss?inline"
 
 export class EaIcon extends HTMLElement {
     #wrap;
@@ -9,8 +10,10 @@ export class EaIcon extends HTMLElement {
 
         const sheet = new CSSStyleSheet();
         const variableSheet = new CSSStyleSheet();
+        const hostSheet = new CSSStyleSheet();
         sheet.replaceSync(stylesheet);
         variableSheet.replaceSync(variable);
+        hostSheet.replaceSync(host);
 
 
         this.attachShadow({ mode: 'open' });
