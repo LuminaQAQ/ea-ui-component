@@ -107,6 +107,30 @@ export default class Base extends HTMLElement {
         });
     }
 
+    get loading() {
+        return this.getAttrBoolean('loading') || false;
+    }
+
+    set loading(value) {
+        this.toggleAttribute('loading', value);
+        this.toggleAttribute('disabled', value);
+
+        try {
+            if (value) {
+                const loadingIcon = document.createElement('ea-icon');
+                loadingIcon.id = 'ea-loading-icon';
+                loadingIcon.icon = 'icon-spin6 animate-spin';
+                loadingIcon.part = 'loading-icon';
+                this.shadowRoot.insertBefore(loadingIcon, this.shadowRoot.firstChild);
+            } else {
+                const loadingIcon = this.shadowRoot.querySelectorAll('#ea-loading-icon');
+                if (loadingIcon?.length > 0) {
+                    loadingIcon?.forEach(item => item.remove());
+                }
+            }
+        } catch (error) { }
+    }
+
     attributeChangedCallback(name, oldVal, newVal) {
         if (oldVal === newVal || this._isSyncingStateToAttr) return;
 
@@ -149,6 +173,7 @@ export default class Base extends HTMLElement {
     connectedCallback() {
         this.adoptedStyle(this.stylesheet);
         this.tabIndex = 0;
+        this.loading = this.loading;
 
         this.addEventListener('keydown', (e) => {
             console.log(e.key, e.ctrlKey);
@@ -206,7 +231,6 @@ export default class Base extends HTMLElement {
 
             if (className) this.dom.classList.add(className);
         } else {
-
             if (this.hasAttribute(attr)) this.removeAttribute(attr);
             if (className) this.dom.classList.remove(className);
         }

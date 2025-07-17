@@ -156,7 +156,7 @@ export class EaLink extends Base {
     this.underline = this.getAttrBoolean('underline');
 
     // // 图标
-    // this.icon = this.icon;
+    this.icon = this.icon;
   }
 }
 
