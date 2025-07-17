@@ -74,10 +74,6 @@ export class EaLink extends Base {
     this.#container = this.shadowRoot.querySelector('.ea-link');
   }
 
-  get LINK_TYPE() {
-    return ['primary', 'success', 'info', 'warning', 'danger'];
-  }
-
   // ------- href链接 -------
   // #region
   get href() {
