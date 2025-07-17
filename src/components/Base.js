@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { timeout } from "../utils/timeout";
 import variable from "../themes/variable.scss?inline";
-import "./ea-icon/index.js"
+import "./ea-icon/index.js";
 
 export default class Base extends HTMLElement {
     observedProps = [];
@@ -12,7 +12,7 @@ export default class Base extends HTMLElement {
 
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
+        this.attachShadow({ mode: "open" });
 
         this._isSyncingAttrToState = false;
     }
@@ -37,18 +37,23 @@ export default class Base extends HTMLElement {
      * @returns {string} classList
      */
     computedClasslist(block, classListObj) {
-        return [block, ...Object.entries(classListObj).filter(([, value]) => value).map(([key]) => block + key)].join(' ');
+        return [
+            block,
+            ...Object.entries(classListObj)
+                .filter(([, value]) => value)
+                .map(([key]) => block + key),
+        ].join(" ");
     }
 
     /**
      * 创建响应式数据配置
      * @param {Object.<string, {
-    *   type: (Function|Array<*>),
-    *   default: any,
-    *   observer?: (newVal: any, oldVal?: any) => void
-    * }>} states 配置对象，每个 key 是一个响应式字段名
-    * @returns {Object} 返回代理后的响应式状态对象
-    */
+     *   type: (Function|Array<*>),
+     *   default: any,
+     *   observer?: (newVal: any, oldVal?: any) => void
+     * }>} states 配置对象，每个 key 是一个响应式字段名
+     * @returns {Object} 返回代理后的响应式状态对象
+     */
     properties(states) {
         const _this = this;
         const _stateValues = {};
@@ -62,7 +67,7 @@ export default class Base extends HTMLElement {
             const type = config?.type;
 
             if (type === Boolean) {
-                return rawValue === '' || rawValue === 'true' || rawValue === true;
+                return rawValue === "" || rawValue === "true" || rawValue === true;
             }
             if (type === Number) {
                 const num = Number(rawValue);
@@ -103,33 +108,37 @@ export default class Base extends HTMLElement {
                 _this.$updated({ key, newVal: parsedValue, oldVal: oldValue });
 
                 return true;
-            }
+            },
         });
     }
 
+    // ------- loading 属性 -------
+    // #region
     get loading() {
-        return this.getAttrBoolean('loading') || false;
+        return this.getAttrBoolean("loading") || false;
     }
 
     set loading(value) {
-        this.toggleAttribute('loading', value);
-        this.toggleAttribute('disabled', value);
+        this.toggleAttribute("loading", value);
+        if (!this.getAttrBoolean("disabled")) this.toggleAttribute("disabled", value);
 
         try {
+            const loadingIcon = this.shadowRoot.querySelectorAll(`[part="loading-icon"]`);
+            if (loadingIcon?.length > 0) {
+                loadingIcon?.forEach((item) => item.remove());
+            }
+
             if (value) {
-                const loadingIcon = document.createElement('ea-icon');
-                loadingIcon.id = 'ea-loading-icon';
-                loadingIcon.icon = 'icon-spin6 animate-spin';
-                loadingIcon.part = 'loading-icon';
+                const loadingIcon = document.createElement("ea-icon");
+                loadingIcon.id = "ea-loading-icon";
+                loadingIcon.icon = "icon-spin6 animate-spin";
+                loadingIcon.part = "loading-icon";
                 this.shadowRoot.insertBefore(loadingIcon, this.shadowRoot.firstChild);
-            } else {
-                const loadingIcon = this.shadowRoot.querySelectorAll('#ea-loading-icon');
-                if (loadingIcon?.length > 0) {
-                    loadingIcon?.forEach(item => item.remove());
-                }
             }
         } catch (error) { }
     }
+    // #endregion
+    // ------- end -------
 
     attributeChangedCallback(name, oldVal, newVal) {
         if (oldVal === newVal || this._isSyncingStateToAttr) return;
@@ -156,64 +165,75 @@ export default class Base extends HTMLElement {
     $unmounted() { }
 
     /**
-     * 
-     * @param {Object} data 
+     *
+     * @param {Object} data
      * @param {any} data.key 键
      * @param {any} data.newVal 值
      * @param {any} data.oldVal 旧值
      */
     $updated(data) {
-        this.dispatchEvent(new CustomEvent('updated', {
-            detail: data,
-            bubbles: false,
-            composed: true,
-        }));
+        this.dispatchEvent(
+            new CustomEvent("updated", {
+                detail: data,
+                bubbles: false,
+                composed: true,
+            })
+        );
     }
 
     connectedCallback() {
         this.adoptedStyle(this.stylesheet);
         this.tabIndex = 0;
-        this.loading = this.loading;
 
-        this.addEventListener('keydown', (e) => {
+        this.addEventListener("keydown", (e) => {
             console.log(e.key, e.ctrlKey);
-        })
+        });
 
         queueMicrotask(() => {
             // 组件挂载前
             this.$beforeMounted?.();
-            this.dispatchEvent(new CustomEvent('beforeMount', {
-                detail: this,
-                bubbles: false,
-                composed: true,
-            }));
+            this.dispatchEvent(
+                new CustomEvent("beforeMount", {
+                    detail: this,
+                    bubbles: false,
+                    composed: true,
+                })
+            );
 
             // 组件挂载后
             this.$mounted?.();
-            this.dispatchEvent(new CustomEvent('mounted', {
-                detail: this,
-                bubbles: false,
-                composed: true,
-            }));
+            this.dispatchEvent(
+                new CustomEvent("mounted", {
+                    detail: this,
+                    bubbles: false,
+                    composed: true,
+                })
+            );
+
+            this.loading = this.loading;
         });
     }
 
     disconnectedCallback() {
         // 组件销毁前
         this.$beforeUnmounted?.();
-        this.dispatchEvent(new CustomEvent('beforeUnmount', {
-            detail: this,
-            bubbles: false,
-            composed: true,
-        }));
+        this.dispatchEvent(
+            new CustomEvent("beforeUnmount", {
+                detail: this,
+                bubbles: false,
+                composed: true,
+            })
+        );
 
         // 组件销毁
-        this.$unmounted?.()
-        this.dispatchEvent(new CustomEvent('unmounted', {
-            detail: this,
-            bubbles: false,
-            composed: true,
-        }));
+        this.$unmounted?.();
+        this.dispatchEvent(
+            new CustomEvent("unmounted", {
+                detail: this,
+                bubbles: false,
+                composed: true,
+            })
+        );
 
         this.remove();
         this.state = null;
@@ -256,7 +276,7 @@ export default class Base extends HTMLElement {
      */
     getAttrBoolean(attrName) {
         const attr = this.getAttribute(attrName);
-        return attr === 'true' || attr === '';
+        return attr === "true" || attr === "";
     }
 
     /**
