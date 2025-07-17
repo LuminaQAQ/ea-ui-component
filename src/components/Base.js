@@ -184,6 +184,7 @@ export default class Base extends HTMLElement {
     connectedCallback() {
         this.adoptedStyle(this.stylesheet);
         this.tabIndex = 0;
+        this.loading = this.loading;
 
         this.addEventListener("keydown", (e) => {
             console.log(e.key, e.ctrlKey);
@@ -209,8 +210,6 @@ export default class Base extends HTMLElement {
                     composed: true,
                 })
             );
-
-            this.loading = this.loading;
         });
     }
 
