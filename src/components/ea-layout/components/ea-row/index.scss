@@ -1,6 +1,8 @@
 :host {
   --ea-row-gutter: 0px;
   --ea-row-justify: start;
+
+  display: block;
 }
 
 @include block(ea-row) {

@@ -15,6 +15,13 @@
         ea-button::part(container) {
             width: 100%;
         }
+
+        .row-container {
+            margin: 0.5rem 0;
+            padding: .5rem;
+
+            background-color: #f9fafc;
+        }
     </style>
 </head>
 
@@ -25,62 +32,62 @@
     <!-- #region 基础布局  -->
     <h1>基础布局</h1>
     <div>
-        <ea-row>
+        <ea-row class="row-container">
             <ea-col span="24">
-                <ea-button>col-24</ea-button>
+                <ea-button type="primary">col-24</ea-button>
             </ea-col>
         </ea-row>
-        <ea-row>
+        <ea-row class="row-container">
             <ea-col span="12">
-                <ea-button>col-12</ea-button>
+                <ea-button type="primary">col-12</ea-button>
             </ea-col>
             <ea-col span="12">
-                <ea-button>col-12</ea-button>
+                <ea-button type="primary">col-12</ea-button>
             </ea-col>
         </ea-row>
-        <ea-row>
+        <ea-row class="row-container">
             <ea-col span="8">
-                <ea-button>col-8</ea-button>
+                <ea-button type="primary">col-8</ea-button>
             </ea-col>
             <ea-col span="8">
-                <ea-button>col-8</ea-button>
+                <ea-button type="primary">col-8</ea-button>
             </ea-col>
             <ea-col span="8">
-                <ea-button>col-8</ea-button>
+                <ea-button type="primary">col-8</ea-button>
             </ea-col>
         </ea-row>
-        <ea-row>
+        <ea-row class="row-container">
             <ea-col span="6">
-                <ea-button>col-6</ea-button>
+                <ea-button type="primary">col-6</ea-button>
             </ea-col>
             <ea-col span="6">
-                <ea-button>col-6</ea-button>
+                <ea-button type="primary">col-6</ea-button>
             </ea-col>
             <ea-col span="6">
-                <ea-button>col-6</ea-button>
+                <ea-button type="primary">col-6</ea-button>
             </ea-col>
             <ea-col span="6">
-                <ea-button>col-6</ea-button>
+                <ea-button type="primary">col-6</ea-button>
             </ea-col>
         </ea-row>
-        <ea-row>
+        <ea-row class="row-container">
             <ea-col span="4">
-                <ea-button>col-4</ea-button>
+                <ea-button type="primary">col-4</ea-button>
             </ea-col>
             <ea-col span="4">
-                <ea-button>col-4</ea-button>
+                <ea-button type="primary">col-4</ea-button>
             </ea-col>
             <ea-col span="4">
-                <ea-button>col-4</ea-button>
+                <ea-button type="primary">col-4</ea-button>
             </ea-col>
             <ea-col span="4">
-                <ea-button>col-4</ea-button>
+                <ea-button type="primary">col-4</ea-button>
             </ea-col>
             <ea-col span="4">
-                <ea-button>col-4</ea-button>
+                <ea-button type="primary">col-4</ea-button>
             </ea-col>
             <ea-col span="4">
-                <ea-button>col-4</ea-button>
+                <ea-button type="primary">col-4</ea-button>
             </ea-col>
         </ea-row>
     </div>
@@ -91,18 +98,18 @@
     <div>
         <h1>分栏间隔</h1>
 
-        <ea-row gutter="20">
+        <ea-row class="row-container" gutter="20">
             <ea-col span="6">
-                <ea-button>col-gutter-20</ea-button>
+                <ea-button type="primary">col-gutter-20</ea-button>
             </ea-col>
             <ea-col span="6">
-                <ea-button>col-gutter-20</ea-button>
+                <ea-button type="primary">col-gutter-20</ea-button>
             </ea-col>
             <ea-col span="6">
-                <ea-button>col-gutter-20</ea-button>
+                <ea-button type="primary">col-gutter-20</ea-button>
             </ea-col>
             <ea-col span="6">
-                <ea-button>col-gutter-20</ea-button>
+                <ea-button type="primary">col-gutter-20</ea-button>
             </ea-col>
         </ea-row>
 
@@ -114,37 +121,37 @@
     <div>
         <h1>混合布局</h1>
 
-        <ea-row gutter="20">
+        <ea-row class="row-container" gutter="20">
             <ea-col span="16">
-                <ea-button>span-16</ea-button>
+                <ea-button type="primary">span-16</ea-button>
             </ea-col>
             <ea-col span="8">
-                <ea-button>span-8</ea-button>
+                <ea-button type="primary">span-8</ea-button>
             </ea-col>
         </ea-row>
-        <ea-row gutter="20">
+        <ea-row class="row-container" gutter="20">
             <ea-col span="8">
-                <ea-button>span-8</ea-button>
+                <ea-button type="primary">span-8</ea-button>
             </ea-col>
             <ea-col span="8">
-                <ea-button>span-8</ea-button>
+                <ea-button type="primary">span-8</ea-button>
             </ea-col>
             <ea-col span="4">
-                <ea-button>span-4</ea-button>
+                <ea-button type="primary">span-4</ea-button>
             </ea-col>
             <ea-col span="4">
-                <ea-button>span-4</ea-button>
+                <ea-button type="primary">span-4</ea-button>
             </ea-col>
         </ea-row>
-        <ea-row gutter="20">
+        <ea-row class="row-container" gutter="20">
             <ea-col span="4">
-                <ea-button>span-4</ea-button>
+                <ea-button type="primary">span-4</ea-button>
             </ea-col>
             <ea-col span="16">
-                <ea-button>span-16</ea-button>
+                <ea-button type="primary">span-16</ea-button>
             </ea-col>
             <ea-col span="4">
-                <ea-button>span-4</ea-button>
+                <ea-button type="primary">span-4</ea-button>
             </ea-col>
         </ea-row>
 
@@ -155,25 +162,25 @@
     <!-- #region 列偏移 -->
     <h1>列偏移</h1>
 
-    <ea-row gutter="20">
+    <ea-row class="row-container" gutter="20">
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6" offset="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
     </ea-row>
-    <ea-row gutter="20">
+    <ea-row class="row-container" gutter="20">
         <ea-col span="6" offset="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6" offset="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
     </ea-row>
-    <ea-row gutter="20">
+    <ea-row class="row-container" gutter="20">
         <ea-col span="12" offset="6">
-            <ea-button>span-12</ea-button>
+            <ea-button type="primary">span-12</ea-button>
         </ea-col>
     </ea-row>
 
@@ -184,41 +191,41 @@
     <h1>列栅格偏移</h1>
 
     <p>栅格向右移动</p>
-    <ea-row gutter="20">
+    <ea-row class="row-container" class gutter="20">
         <ea-col span="4">
-            <ea-button>span-4</ea-button>
+            <ea-button type="primary">span-4</ea-button>
         </ea-col>
         <ea-col span="4">
-            <ea-button>span-4</ea-button>
+            <ea-button type="primary">span-4</ea-button>
         </ea-col>
     </ea-row>
 
-    <ea-row gutter="20">
+    <ea-row class="row-container" gutter="20">
         <ea-col span="4" push="4">
-            <ea-button>span-4 push-4</ea-button>
+            <ea-button type="primary">span-4 push-4</ea-button>
         </ea-col>
         <ea-col span="4" push="4">
-            <ea-button>span-4 push-4</ea-button>
+            <ea-button type="primary">span-4 push-4</ea-button>
         </ea-col>
     </ea-row>
 
     <p>栅格向左移动</p>
 
-    <ea-row gutter="20">
+    <ea-row class="row-container" gutter="20">
         <ea-col span="4" offset="4">
-            <ea-button>span-4 offset-4</ea-button>
+            <ea-button type="primary">span-4 offset-4</ea-button>
         </ea-col>
         <ea-col span="4" offset="4">
-            <ea-button>span-4 offset-4</ea-button>
+            <ea-button type="primary">span-4 offset-4</ea-button>
         </ea-col>
     </ea-row>
 
-    <ea-row gutter="20">
+    <ea-row class="row-container" gutter="20">
         <ea-col span="4" pull="4" offset="4">
-            <ea-button>span-4 pull-4 offset-4</ea-button>
+            <ea-button type="primary">span-4 pull-4 offset-4</ea-button>
         </ea-col>
         <ea-col span="4" pull="4" offset="4">
-            <ea-button>span-4 pull-4 offset-4</ea-button>
+            <ea-button type="primary">span-4 pull-4 offset-4</ea-button>
         </ea-col>
     </ea-row>
 
@@ -228,70 +235,70 @@
     <!-- #region 对齐方式 -->
     <h1>对齐方式</h1>
 
-    <ea-row>
+    <ea-row class="row-container">
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
-        </ea-col>
-    </ea-row>
-    <ea-row justify="center">
-        <ea-col span="6">
-            <ea-button>span-6</ea-button>
-        </ea-col>
-        <ea-col span="6">
-            <ea-button>span-6</ea-button>
-        </ea-col>
-        <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
     </ea-row>
-    <ea-row justify="end">
+    <ea-row class="row-container" justify="center">
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
-        </ea-col>
-    </ea-row>
-    <ea-row justify="space-between">
-        <ea-col span="6">
-            <ea-button>span-6</ea-button>
-        </ea-col>
-        <ea-col span="6">
-            <ea-button>span-6</ea-button>
-        </ea-col>
-        <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
     </ea-row>
-    <ea-row justify="space-around">
+    <ea-row class="row-container" justify="end">
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
     </ea-row>
-    <ea-row justify="space-evenly">
+    <ea-row class="row-container" justify="space-between">
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
         <ea-col span="6">
-            <ea-button>span-6</ea-button>
+            <ea-button type="primary">span-6</ea-button>
+        </ea-col>
+    </ea-row>
+    <ea-row class="row-container" justify="space-around">
+        <ea-col span="6">
+            <ea-button type="primary">span-6</ea-button>
+        </ea-col>
+        <ea-col span="6">
+            <ea-button type="primary">span-6</ea-button>
+        </ea-col>
+        <ea-col span="6">
+            <ea-button type="primary">span-6</ea-button>
+        </ea-col>
+    </ea-row>
+    <ea-row class="row-container" justify="space-evenly">
+        <ea-col span="6">
+            <ea-button type="primary">span-6</ea-button>
+        </ea-col>
+        <ea-col span="6">
+            <ea-button type="primary">span-6</ea-button>
+        </ea-col>
+        <ea-col span="6">
+            <ea-button type="primary">span-6</ea-button>
         </ea-col>
     </ea-row>
 
