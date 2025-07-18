@@ -3,9 +3,10 @@ import {onMounted} from "vue"
 import configs from "../components/ea-icon/config.json"
 
 onMounted(() => {
-    import("./index.scss")
-    import("../components/ea-icon/index.js")
-    import("../components/ea-icon/index.css")
+    import("../dist/components/ea-icon.js")
+    // import("./index.scss")
+    // import("../components/ea-icon/index.js")
+    // import("../components/ea-icon/index.css")
 
     // document.addEventListener('ea-icon-ready', () => {
     //   setConfig({ fontelloCSS: new URL('../components/ea-icon/css/fontello.css', import.meta.url).href })
