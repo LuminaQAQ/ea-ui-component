@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 
 const base = process.env.NODE_ENV === 'production' ? '/ea-ui-component/' : '';
+const iconHref = process.env.NODE_ENV === 'production' ? '/ea-ui-component/' : '';
 
 export default defineConfig({
   base,
@@ -10,7 +11,7 @@ export default defineConfig({
   description: "基于 WebComponent 的 ui 库",
 
   head: [
-    ['link', { rel: 'icon', href: `${base}dist/assets/favicon.ico` }],
+    ['link', { rel: 'shortcut icon', href: `${iconHref}/favicon.ico`, type: "image/x-icon" }],
     ['link', { rel: 'stylesheet', href: `${base}dist/assets/icon.css` }],
     ['link', { rel: 'stylesheet', href: `${base}index.css` }],
 
@@ -52,6 +53,7 @@ export default defineConfig({
           { text: 'Icon 图标', link: '/ea-icon' },
           { text: 'Button 按钮', link: '/ea-button' },
           { text: 'Link 文字链接', link: '/ea-link' },
+          { text: 'Layout 布局', link: '/ea-layout' },
         ]
       },
       // {
