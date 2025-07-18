@@ -31,6 +31,7 @@ import './ea-infinite-scroll/index.js';
 import './ea-infinite-scroll-item/index.js';
 import './ea-input/index.js';
 import './ea-input-number/index.js';
+import './ea-layout/index.js';
 import './ea-link/index.js';
 import './ea-loading/index.js';
 import './ea-main/index.js';
