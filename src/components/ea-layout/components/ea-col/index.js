@@ -114,7 +114,7 @@ export class EaCol extends Base {
         this.tag = this.tag;
 
         this.shadowRoot.innerHTML = `
-            <${this.tag} class="ea-row">
+            <${this.tag} class="ea-row" part="container">
                 <slot></slot>
             </${this.tag}>
         `;
