@@ -81,5 +81,23 @@
       "      }"
     ],
     "description": "ea-template"
+  },
+  "ea-getter+setter": {
+    "scope": "javascript,typescript",
+    "prefix": "ea-getter+setter",
+    "body": [
+      "    // ------- $0 -------",
+      "    // #region",
+      "    get $0() {",
+      "      return this.state.$0;",
+      "    }",
+      "",
+      "    set $0(value) {",
+      "      this.state.$0 = value;",
+      "    }",
+      "    // #endregion",
+      "    // ------- end -------"
+    ],
+    "description": "getter+setter"
   }
 }

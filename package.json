@@ -201,6 +201,9 @@
     "./ea-tag": {
       "import": "./dist/ea-tag.js"
     },
+    "./ea-text": {
+      "import": "./dist/ea-text.js"
+    },
     "./ea-textarea": {
       "import": "./dist/ea-textarea.js"
     },

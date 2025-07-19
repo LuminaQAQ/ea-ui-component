@@ -37,5 +37,20 @@
       "</html>"
     ],
     "description": "ea-html-template"
+  },
+  "ea-section": {
+    "scope": "html",
+    "prefix": "ea-section",
+    "body": [
+      "      <!-- #region $0 -->",
+      "      <h1>$0</h1>",
+      "",
+      "      <div>",
+      "      </div>",
+      "",
+      "      <hr>",
+      "      <!-- #endregion  -->"
+    ],
+    "description": "ea-section"
   }
 }

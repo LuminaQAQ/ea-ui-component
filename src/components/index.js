@@ -62,6 +62,7 @@ import './ea-table/index.js';
 import './ea-table-column/index.js';
 import './ea-tabs/index.js';
 import './ea-tag/index.js';
+import './ea-text/index.js';
 import './ea-textarea/index.js';
 import './ea-time-picker/index.js';
 import './ea-timeline/index.js';

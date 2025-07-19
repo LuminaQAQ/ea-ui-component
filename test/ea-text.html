@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rea='stylesheet' href='/dist/assets/icon.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        ea-button::part(container) {
+            width: 100%;
+        }
+
+        .row-container {
+            margin: 0.5rem 0;
+            padding: .5rem;
+
+            background-color: #f9fafc;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="module" src="/dist/components/ea-layout.js"></script>
+    <script type="module" src="/src/components/ea-text/index.js"></script>
+
+    <!-- #region 基础用法  -->
+    <h1>基础用法</h1>
+
+    <div>
+        <ea-text>Default</ea-text>
+        <ea-text type="primary">Primary</ea-text>
+        <ea-text type="success">Success</ea-text>
+        <ea-text type="info">Info</ea-text>
+        <ea-text type="warning">Warning</ea-text>
+        <ea-text type="danger">Danger</ea-text>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+
+    <!-- #region 尺寸 -->
+    <div>
+        <h1>尺寸</h1>
+
+        <ea-text size="large">Large</ea-text>
+        <ea-text>Default</ea-text>
+        <ea-text size="small">Small</ea-text>
+
+        <hr />
+    </div>
+    <!-- #endregion  -->
+
+    <!-- #region 省略 -->
+    <div>
+        <h1>省略</h1>
+
+        <div>
+            <ea-text tag="p" truncated style="width: 100px;">
+                Self element set width 100px
+            </ea-text>
+            <ea-row style="width: 100px;">
+                <ea-text tag="p" truncated>Squeezed by parent element</ea-text>
+            </ea-row>
+            <ea-text tag="p" line-clamp="2">
+                The -webkit-line-clamp CSS property<br />
+                allows limiting of the contents of<br />
+                a block to the specified number of lines.
+            </ea-text>
+        </div>
+
+        <hr>
+    </div>
+    <!-- #endregion  -->
+
+    <!-- #region 覆盖 -->
+    <h1>覆盖</h1>
+
+    <div style="display: flex; flex-direction: column;">
+        <ea-text>span</ea-text>
+        <ea-text tag="p">This is a paragraph.</ea-text>
+        <ea-text tag="b">Bold</ea-text>
+        <ea-text tag="i">Italic</ea-text>
+        <ea-text>
+            This is
+            <ea-text tag="sub" size="small">subscript</ea-text>
+        </ea-text>
+        <ea-text>
+            This is
+            <ea-text tag="sup" size="small">superscript</ea-text>
+        </ea-text>
+        <ea-text tag="ins">Inserted</ea-text>
+        <ea-text tag="del">Deleted</ea-text>
+        <ea-text tag="mark">Marked</ea-text>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+</body>
+
+</html>
