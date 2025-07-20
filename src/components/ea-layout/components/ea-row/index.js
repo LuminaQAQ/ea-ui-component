@@ -3,7 +3,9 @@ import Base from "../../../Base.js"
 import stylesheet from './index.scss?inline';
 
 export class EaRow extends Base {
-    observedProps = ["gutter", "justify", "align"];
+    static get observedAttributes() {
+        return ["gutter", "justify", "align", "tag"];
+    }
 
     /** 
      * @typedef {Object} State
@@ -32,73 +34,29 @@ export class EaRow extends Base {
             default: '',
             observer: (newVal) => { }
         },
+        tag: {
+            type: String,
+            default: 'div',
+            observer: (newVal) => { }
+        }
     })
 
     constructor() {
         super();
-
         this.stylesheet = stylesheet;
-    }
-
-    // ------- gutter -------
-    // #region
-    get gutter() {
-        return this.state.gutter;
-    }
-
-    set gutter(value) {
-        this.state.gutter = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- justify -------
-    // #region
-    get justify() {
-        return this.state.justify;
-    }
-
-    set justify(value) {
-        this.state.justify = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- align -------
-    // #region
-    get align() {
-        return this.state.align;
-    }
-
-    set align(value) {
-        this.state.align = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- tag -------
-    // #region
-    get tag() {
-        return this.getAttribute('tag') || 'div';
-    }
-
-    set tag(value) {
-        this.setAttribute('tag', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    $mounted() {
-        this.tag = this.tag;
 
         this.shadowRoot.innerHTML = `
             <${this.tag} class="ea-row" part="container">
                 <slot></slot>
             </${this.tag}>
         `;
+    }
 
-        this.gutter = this.getAttrNumber('gutter');
-        this.justify = this.getAttribute('justify');
+    $mounted() {
+        this.tag = this.tag;
+        this.gutter = this.gutter;
+        this.justify = this.justify;
+        this.align = this.align;
     }
 }
 

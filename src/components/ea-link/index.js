@@ -3,28 +3,24 @@ import Base from '../Base.js'
 import stylesheet from './index.scss?inline';
 
 export class EaLink extends Base {
+  static get observedAttributes() {
+    return ["href", "type", "disabled", "underline", "icon"];
+  }
+
   /** @type {HTMLAnchorElement} */
   #container;
 
-  observedProps = ["href", "type", "disabled", "underline", "icon"];
-
   /** 
    * @typedef {Object} LinkState
-   * @property {string} href
    * @property {string} type
    * @property {Boolean} disabled
    * @property {Boolean} underline
+   * @property {string} href
+   * @property {string} icon
    */
 
   /** @type {LinkState} */
   state = this.properties({
-    href: {
-      type: String,
-      default: '',
-      observer: (newVal) => {
-        this.#container.href = newVal;
-      }
-    },
     type: {
       type: ['normal', 'primary', 'success', 'info', 'warning', 'danger'],
       default: 'normal',
@@ -46,6 +42,25 @@ export class EaLink extends Base {
         this.#container.className = this.updateContainerClasslist()
       }
     },
+    href: {
+      type: String,
+      default: '',
+      observer: (newVal) => {
+        this.#container.href = newVal;
+      }
+    },
+    icon: {
+      type: String,
+      default: '',
+      observer: (newVal) => {
+        if (!newVal) return;
+
+        const icon = document.createElement('ea-icon');
+        icon.icon = newVal;
+
+        this.#container.insertBefore(icon, this.#container.firstChild);
+      }
+    },
   })
 
   /**
@@ -54,9 +69,9 @@ export class EaLink extends Base {
    */
   updateContainerClasslist() {
     return this.computedClasslist('ea-link', {
-      ['--' + this.state.type]: this.state.type,
-      ['--underline-' + this.state.underline]: this.state.underline,
-      '--disabled': this.state.disabled,
+      ['--' + this.type]: this.type,
+      ['--underline-' + this.underline]: this.underline,
+      '--disabled': this.disabled,
     });
   }
 
@@ -74,84 +89,20 @@ export class EaLink extends Base {
     this.#container = this.shadowRoot.querySelector('.ea-link');
   }
 
-  // ------- href链接 -------
-  // #region
-  get href() {
-    return this.state.href;
-  }
-
-  set href(value) {
-    this.state.href = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- type类型 -------
-  // #region
-  get type() {
-    return this.state.type;
-  }
-
-  set type(value) {
-    this.state.type = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- disabled禁用状态 -------
-  // #region
-  get disabled() {
-    return this.state.disabled;
-  }
-
-  set disabled(value) {
-    this.state.disabled = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- underline下划线 -------
-  // #region
-  get underline() {
-    return this.state.underline;
-  }
-
-  set underline(value) {
-    this.state.underline = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- icon图标 -------
-  // #region
-  get icon() {
-    return this.getAttribute('icon');
-  }
-
-  set icon(value) {
-    if (!value) return;
-
-    const icon = document.createElement('ea-icon');
-    icon.icon = value;
-    this.#container.insertBefore(icon, this.#container.firstChild);
-  }
-  // #endregion
-  // ------- end -------
-
   $mounted() {
     // 设置链接
-    this.href = this.getAttribute('href');
+    this.href = this.href;
 
     // 设置类型
-    this.type = this.getAttribute('type');
+    this.type = this.type;
 
     // 禁用状态
-    this.disabled = this.getAttrBoolean('disabled');
+    this.disabled = this.disabled;
 
-    // // 设置下划线
-    this.underline = this.getAttrBoolean('underline');
+    // 设置下划线
+    this.underline = this.underline;
 
-    // // 图标
+    // 图标
     this.icon = this.icon;
   }
 }

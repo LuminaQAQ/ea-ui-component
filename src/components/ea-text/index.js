@@ -3,10 +3,9 @@ import Base from '../Base.js'
 import stylesheet from './index.scss?inline';
 
 export class EaText extends Base {
-    observedProps = ["type", "size", "truncated", "line-clamp"];
-
-    /** @type {HTMLElement} */
-    #container;
+    static get observedAttributes() {
+        return ["title", "type", "size", "truncated", "line-clamp", "tag"];
+    }
 
     /** 
      * @typedef {Object} State
@@ -22,22 +21,20 @@ export class EaText extends Base {
         title: {
             type: String,
             default: '',
-            observer: (newVal) => {
-                this.setAttribute('title', newVal);
-            }
+            observer: (newVal) => { }
         },
         type: {
             type: ['normal', 'primary', 'success', 'warning', 'danger', 'info'],
             default: 'normal',
             observer: (newVal) => {
-                this.#container.className = this.updateContainerClasslist()
+                this.shadowRoot.querySelector('.ea-text').className = this.updateContainerClasslist()
             }
         },
         size: {
             type: ['large', 'medium', 'small'],
             default: 'medium',
             observer: (newVal) => {
-                this.#container.className = this.updateContainerClasslist()
+                this.shadowRoot.querySelector('.ea-text').className = this.updateContainerClasslist()
             }
         },
         truncated: {
@@ -45,16 +42,16 @@ export class EaText extends Base {
             default: false,
             observer: (newVal) => {
                 this.title = this.innerText || '';
-                this.#container.className = this.updateContainerClasslist()
+                this.shadowRoot.querySelector('.ea-text').className = this.updateContainerClasslist()
             }
         },
         "line-clamp": {
             type: Number,
             default: 0,
             observer: (newVal) => {
+                if (newVal > 0) this.style.setProperty('--ea-text-line-clamp', newVal)
+                this.shadowRoot.querySelector('.ea-text').className = this.updateContainerClasslist()
                 this.title = this.innerText || '';
-                this.style.setProperty('--ea-text-line-clamp', newVal)
-                this.#container.className = this.updateContainerClasslist()
             }
         },
         tag: {
@@ -71,10 +68,10 @@ export class EaText extends Base {
     updateContainerClasslist() {
         return this.computedClasslist('ea-text',
             {
-                ['--' + this.state.type]: this.state.type,
-                ['--' + this.state.size]: this.state.size,
-                ['--truncated']: this.state.truncated,
-                ['--line-clamp']: this.state["line-clamp"] > 0,
+                ['--' + this.type]: this.type,
+                ['--' + this.size]: this.size,
+                ['--truncated']: this.truncated,
+                ['--line-clamp']: this["line-clamp"] > 0,
             }
         );
     }
@@ -85,81 +82,8 @@ export class EaText extends Base {
         this.stylesheet = stylesheet;
     }
 
-    // ------- title -------
-    // #region
-    get title() {
-        return this.state.title;
-    }
-
-    set title(value) {
-        this.state.title = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- type -------
-    // #region
-    get type() {
-        return this.state.type;
-    }
-
-    set type(value) {
-        this.state.type = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- tag -------
-    // #region
-    get tag() {
-        return this.state.tag;
-    }
-
-    set tag(value) {
-        this.state.tag = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- size -------
-    // #region
-    get size() {
-        return this.state.size;
-    }
-
-    set size(value) {
-        this.state.size = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- truncated -------
-    // #region
-    get truncated() {
-        return this.state.truncated;
-    }
-
-    set truncated(value) {
-        this.state.truncated = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- "line-clamp" -------
-    // #region
-    get "line-clamp"() {
-        return this.state["line-clamp"];
-    }
-
-    set "line-clamp"(value) {
-        this.state["line-clamp"] = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    $mounted() {
-        this.tag = this.getAttribute('tag');
-
+    connectedCallback() {
+        super.connectedCallback();
 
         this.shadowRoot.innerHTML = `
             <${this.tag} class="ea-text" part="container">
@@ -167,12 +91,14 @@ export class EaText extends Base {
             </${this.tag}>
         `;
 
-        this.#container = this.shadowRoot.querySelector('.ea-text');
+        this.tag = this.tag;
 
-        this.type = this.getAttribute('type');
-        this.size = this.getAttribute('size');
-        this.truncated = this.getAttrBoolean('truncated');
-        this["line-clamp"] = this.getAttrNumber('line-clamp');
+        this.title = this.title;
+        this.type = this.type;
+        this.size = this.size;
+        this.truncated = this.truncated;
+
+        this["line-clamp"] = this['line-clamp'];
     }
 }
 

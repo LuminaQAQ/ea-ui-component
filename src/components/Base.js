@@ -4,17 +4,13 @@ import variable from "../themes/variable.scss?inline";
 import "./ea-icon/index.js";
 
 export default class Base extends HTMLElement {
-    observedProps = [];
-
-    static get observedAttributes() {
-        return this.observedProps;
-    }
+    #stateConfigs = {};
+    #isMounted = false;
 
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-
-        this._isSyncingAttrToState = false;
+        this.adoptedStyle(this.stylesheet);
     }
 
     /**
@@ -55,12 +51,21 @@ export default class Base extends HTMLElement {
      * @returns {Object} 返回代理后的响应式状态对象
      */
     properties(states) {
-        const _this = this;
-        const _stateValues = {};
+        const parseType = (type) => {
+            if (type === Boolean) {
+                type = "Boolean";
+            }
 
-        for (const [key, config] of Object.entries(states)) {
-            _stateValues[key] = config.default;
-        }
+            if (type === Number) {
+                type = "Number";
+            }
+
+            if (type === String || Array.isArray(type)) {
+                type = "String";
+            }
+
+            return type;
+        };
 
         const parseValue = (key, rawValue) => {
             const config = states[key];
@@ -69,47 +74,62 @@ export default class Base extends HTMLElement {
             if (type === Boolean) {
                 return rawValue === "" || rawValue === "true" || rawValue === true;
             }
+
             if (type === Number) {
                 const num = Number(rawValue);
                 return isNaN(num) ? config.default : num;
             }
+
             if (Array.isArray(type)) {
                 return type.includes(rawValue) ? rawValue : config.default;
             }
 
-            return rawValue ?? config.default;
+            return rawValue || config.default;
         };
 
-        const syncToAttr = (key, value) => {
-            if (!_this._isSyncingStateToAttr) {
-                _this._isSyncingStateToAttr = true;
-                _this.toggleAttr(key, value);
-                _this._isSyncingStateToAttr = false;
-            }
-        };
+        for (const [key, config] of Object.entries(states)) {
+            this.#stateConfigs[key] = config.observer;
 
-        return new Proxy(_stateValues, {
-            get(target, key) {
-                return target[key];
-            },
-            set(target, key, newValue) {
-                const config = states[key];
-                if (!config) return true;
+            Object.defineProperty(this, key, {
+                get: () => {
+                    const type = parseType(config.type);
 
-                const parsedValue = parseValue(key, newValue);
-                const oldValue = target[key];
+                    return this[`getAttr${type}`](key, config.default);
+                },
+                set: (value) => {
+                    this.setAttr(key, parseValue(key, value));
+                }
+            });
+        }
+    }
 
-                if (oldValue === parsedValue) return true;
+    attributeChangedCallback(name, oldVal, newVal) {
+        if (oldVal === newVal || this.#isMounted) return;
 
-                target[key] = parsedValue;
 
-                syncToAttr(key, parsedValue);
-                config.observer?.(parsedValue, oldValue);
-                _this.$updated({ key, newVal: parsedValue, oldVal: oldValue });
+        if (name === "loading-full") {
 
-                return true;
-            },
-        });
+            try {
+                const loadingIcon = this.shadowRoot.querySelectorAll(`[part="loading-full"]`);
+                if (loadingIcon?.length > 0) {
+                    loadingIcon?.forEach((item) => item.remove());
+                }
+
+                if (value) {
+                    const loadingIcon = document.createElement("ea-icon");
+                    loadingIcon.id = "ea-loading-icon";
+                    loadingIcon.icon = "icon-spin6 animate-spin";
+                    loadingIcon.part = "loading-full";
+                    this.shadowRoot.insertBefore(loadingIcon, this.shadowRoot.firstChild);
+                }
+            } catch (error) { }
+
+            return;
+        }
+
+        try {
+            this.#stateConfigs[name]?.(newVal);
+        } catch { }
     }
 
     // ------- loading-full 属性 -------
@@ -121,36 +141,9 @@ export default class Base extends HTMLElement {
     set "loading-full"(value) {
         this.toggleAttribute("loading-full", value);
         if (!this.getAttrBoolean("disabled")) this.toggleAttribute("disabled", value);
-
-        try {
-            const loadingIcon = this.shadowRoot.querySelectorAll(`[part="loading-full"]`);
-            if (loadingIcon?.length > 0) {
-                loadingIcon?.forEach((item) => item.remove());
-            }
-
-            if (value) {
-                const loadingIcon = document.createElement("ea-icon");
-                loadingIcon.id = "ea-loading-icon";
-                loadingIcon.icon = "icon-spin6 animate-spin";
-                loadingIcon.part = "loading-full";
-                this.shadowRoot.insertBefore(loadingIcon, this.shadowRoot.firstChild);
-            }
-        } catch (error) { }
     }
     // #endregion
     // ------- end -------
-
-    attributeChangedCallback(name, oldVal, newVal) {
-        if (oldVal === newVal || this._isSyncingStateToAttr) return;
-
-        this._isSyncingAttrToState = true;
-
-        if (this.state && name in this.state) {
-            this.state[name] = newVal;
-        }
-
-        this._isSyncingAttrToState = false;
-    }
 
     /** @abstract 组件挂载前调用 */
     $beforeMounted() { }
@@ -182,19 +175,14 @@ export default class Base extends HTMLElement {
     }
 
     connectedCallback() {
-        this.adoptedStyle(this.stylesheet);
-        this.tabIndex = 0;
-        if (this["loading-full"]) console.log(this["loading-full"], this);
-
-        this["loading-full"] = this["loading-full"];
 
         this.addEventListener("keydown", (e) => {
             console.log(e.key, e.ctrlKey);
         });
 
         queueMicrotask(() => {
-            // 组件挂载前
-            this.$beforeMounted?.();
+
+            this.$beforeMounted();
             this.dispatchEvent(
                 new CustomEvent("beforeMount", {
                     detail: this,
@@ -204,7 +192,7 @@ export default class Base extends HTMLElement {
             );
 
             // 组件挂载后
-            this.$mounted?.();
+            this.$mounted();
             this.dispatchEvent(
                 new CustomEvent("mounted", {
                     detail: this,
@@ -212,7 +200,13 @@ export default class Base extends HTMLElement {
                     composed: true,
                 })
             );
+            // 组件挂载前
+            this.#isMounted = true;
+            this.tabIndex = 0;
+
+            this["loading-full"] = this["loading-full"];
         });
+
     }
 
     disconnectedCallback() {
@@ -250,10 +244,10 @@ export default class Base extends HTMLElement {
         if (flag) {
             this.setAttribute(attr, flag);
 
-            if (className) this.dom.classList.add(className);
+            // if (className) this.dom.classList.add(className);
         } else {
             if (this.hasAttribute(attr)) this.removeAttribute(attr);
-            if (className) this.dom.classList.remove(className);
+            // if (className) this.dom.classList.remove(className);
         }
     }
 
@@ -275,9 +269,9 @@ export default class Base extends HTMLElement {
      * @param {string} attrName 属性名
      * @returns {boolean}
      */
-    getAttrBoolean(attrName) {
+    getAttrBoolean(attrName, defaultValue) {
         const attr = this.getAttribute(attrName);
-        return attr === "true" || attr === "";
+        return (attr === "true" || attr === "") || defaultValue;
     }
 
     /**
@@ -285,9 +279,23 @@ export default class Base extends HTMLElement {
      * @param {string} attrName 属性名
      * @returns {number}
      */
-    getAttrNumber(attrName) {
+    getAttrNumber(attrName, defaultValue) {
         const attr = this.getAttribute(attrName);
 
-        return attr ? Number(attr) : 0;
+        return attr ? Number(attr) : (defaultValue || 0);
+    }
+
+    getAttrString(attrName, defaultValue) {
+        const attr = this.getAttribute(attrName);
+
+        return attr ? attr : (defaultValue || '');
+    }
+
+    setAttr(attrName, value) {
+        if (value) {
+            this.setAttribute(attrName, value);
+        } else {
+            this.removeAttribute(attrName);
+        }
     }
 }

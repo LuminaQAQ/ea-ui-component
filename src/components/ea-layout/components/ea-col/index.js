@@ -3,7 +3,9 @@ import Base from "../../../Base.js"
 import stylesheet from './index.scss?inline';
 
 export class EaCol extends Base {
-    observedProps = ["span", "offset", "push", "pull", "tag"];
+    static get observedAttributes() {
+        return ["span", "offset", "push", "pull", "tag"];
+    }
 
     /** 
      * @typedef {Object} State
@@ -42,87 +44,31 @@ export class EaCol extends Base {
                 this.style.setProperty('--ea-col-pull', newVal);
             }
         },
+        tag: {
+            type: String,
+            default: 'div',
+            observer: (newVal) => {
+            }
+        },
     })
 
     constructor() {
         super();
-
         this.stylesheet = stylesheet;
-    }
-
-    // ------- span -------
-    // #region
-    get span() {
-        return this.state.span;
-    }
-
-    set span(value) {
-        this.state.span = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- offset -------
-    // #region
-    get offset() {
-        return this.state.offset;
-    }
-
-    set offset(value) {
-        this.state.offset = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- push -------
-    // #region
-    get push() {
-        return this.state.push;
-    }
-
-    set push(value) {
-        this.state.push = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- pull -------
-    // #region
-    get pull() {
-        return this.state.pull;
-    }
-
-    set pull(value) {
-        this.state.pull = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- tag -------
-    // #region
-    get tag() {
-        return this.getAttribute('tag') || 'div';
-    }
-
-    set tag(value) {
-        this.setAttribute('tag', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    $mounted() {
-        this.tag = this.tag;
 
         this.shadowRoot.innerHTML = `
             <${this.tag} class="ea-row" part="container">
                 <slot></slot>
             </${this.tag}>
         `;
+    }
 
-        this.span = this.getAttrNumber('span');
-        this.offset = this.getAttrNumber('offset');
-        this.push = this.getAttrNumber('push');
-        this.pull = this.getAttrNumber('pull');
+    $mounted() {
+        this.tag = this.tag;
+        this.span = this.span;
+        this.offset = this.offset;
+        this.push = this.push;
+        this.pull = this.pull;
     }
 }
 
