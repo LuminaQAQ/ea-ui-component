@@ -3,28 +3,28 @@ import variable from "../../themes/variable.scss?inline";
 import host from "./host.scss?inline"
 
 export class EaIcon extends HTMLElement {
-    #wrap;
+    /** @type {HTMLElement} */
+    #container;
 
     constructor() {
         super();
 
-        const sheet = new CSSStyleSheet();
-        const variableSheet = new CSSStyleSheet();
-        const hostSheet = new CSSStyleSheet();
-        sheet.replaceSync(stylesheet);
-        variableSheet.replaceSync(variable);
-        hostSheet.replaceSync(host);
-
-
         this.attachShadow({ mode: 'open' });
-        this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
         this.shadowRoot.innerHTML = `
-            <i class="ea-icon_wrap" part="container">
+            <i class="ea-icon" part="container">
                 <slot></slot>
             </i>
         `;
 
-        this.#wrap = this.shadowRoot.querySelector('.ea-icon_wrap');
+        this.#container = this.shadowRoot.querySelector('.ea-icon');
+    }
+
+    setAttr(attrName, value) {
+        if (value) {
+            this.setAttribute(attrName, value);
+        } else {
+            this.removeAttribute(attrName);
+        }
     }
 
     // ------- icon 图标类名 -------
@@ -34,9 +34,9 @@ export class EaIcon extends HTMLElement {
     }
 
     set icon(value) {
-        this.setAttribute('icon', value);
+        this.setAttr('icon', value);
 
-        this.#wrap.className = `${value}`;
+        this.#container.className = `${value}`;
     }
     // #endregion
     // ------- end -------
@@ -48,9 +48,9 @@ export class EaIcon extends HTMLElement {
     }
 
     set color(value) {
-        this.setAttribute('color', value);
+        this.setAttr('color', value);
 
-        this.#wrap.style.color = value;
+        this.style.setProperty('--ea-icon-color', value);
     }
     // #endregion
     // ------- end -------
@@ -62,14 +62,22 @@ export class EaIcon extends HTMLElement {
     }
 
     set size(value) {
-        this.setAttribute('size', value);
+        if (value !== "14" || value !== 14) this.setAttr('size', value);
 
-        this.#wrap.style.fontSize = `${value}px`;
+        this.style.setProperty('--ea-icon-size', `${value || 14}px`);
     }
     // #endregion
     // ------- end -------
 
     connectedCallback() {
+        const sheet = new CSSStyleSheet();
+        const variableSheet = new CSSStyleSheet();
+        const hostSheet = new CSSStyleSheet();
+        sheet.replaceSync(stylesheet);
+        variableSheet.replaceSync(variable);
+        hostSheet.replaceSync(host);
+        this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet, hostSheet];
+
         this.icon = this.icon;
 
         this.color = this.color;

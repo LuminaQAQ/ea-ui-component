@@ -45,6 +45,10 @@ export class EaRow extends Base {
         super();
         this.stylesheet = stylesheet;
 
+        this.$render();
+    }
+
+    $render() {
         this.shadowRoot.innerHTML = `
             <${this.tag} class="ea-row" part="container">
                 <slot></slot>
@@ -52,7 +56,9 @@ export class EaRow extends Base {
         `;
     }
 
-    $mounted() {
+    connectedCallback() {
+        super.connectedCallback();
+
         this.tag = this.tag;
         this.gutter = this.gutter;
         this.justify = this.justify;

@@ -4,7 +4,7 @@ import stylesheet from './index.scss?inline';
 
 export class EaLink extends Base {
   static get observedAttributes() {
-    return ["href", "type", "disabled", "underline", "icon"];
+    return ["type", "disabled", "underline", "href", "icon"];
   }
 
   /** @type {HTMLAnchorElement} */
@@ -37,7 +37,7 @@ export class EaLink extends Base {
     },
     underline: {
       type: ['always', 'hover', 'never'],
-      default: 'never',
+      default: '',
       observer: (newVal) => {
         this.#container.className = this.updateContainerClasslist()
       }
@@ -57,6 +57,7 @@ export class EaLink extends Base {
 
         const icon = document.createElement('ea-icon');
         icon.icon = newVal;
+        icon.part = "icon";
 
         this.#container.insertBefore(icon, this.#container.firstChild);
       }
@@ -80,6 +81,10 @@ export class EaLink extends Base {
 
     this.stylesheet = stylesheet;
 
+    this.$render();
+  }
+
+  $render() {
     this.shadowRoot.innerHTML = `
       <a class="ea-link" part="container" tabindex="-1">
         <slot></slot>
@@ -89,7 +94,9 @@ export class EaLink extends Base {
     this.#container = this.shadowRoot.querySelector('.ea-link');
   }
 
-  $mounted() {
+  connectedCallback() {
+    super.connectedCallback();
+
     // 设置链接
     this.href = this.href;
 

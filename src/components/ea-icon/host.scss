@@ -1,7 +1,15 @@
 :host {
+  --ea-icon-size: var(--font-size-md);
+  --ea-icon-color: var(--color-black);
+}
+
+:host {
   [part="loading-icon"] {
     color: var(--default-loading-icon-color);
   }
+
+  font-size: var(--ea-icon-size);
+  color: var(--ea-icon-color);
 }
 
 :host-context(ea-button[type="primary"]),

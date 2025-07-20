@@ -79,8 +79,11 @@
             .addEventListener("change", function (e) {
                 const btn = document.querySelector("#ea-button-loading");
 
-                // btn.loading = e.target.checked;
-                btn.setAttribute("loading", e.detail.checked);
+                // console.log(e.detail.checked);
+
+
+                btn.loading = e.target.checked;
+                // btn.setAttribute("loading", e.detail.checked);
             });
         // #endregion
         // ------- end -------
