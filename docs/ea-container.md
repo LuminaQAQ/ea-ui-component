@@ -2,13 +2,8 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('./index.scss')
-
-    import('../components/ea-container/index.js')
-    import('../components/ea-header/index.js')
-    import('../components/ea-footer/index.js')
-    import('../components/ea-aside/index.js')
-    import('../components/ea-main/index.js')
+    import('../dist/assets/icon.css');
+    import('../dist/components/ea-container.js');
 })
 </script>
 
@@ -51,17 +46,17 @@ hr {
 
 `<ea-footer>`：底栏容器。
 
-> 以上组件采用了 flex 布局，使用前请确定目标浏览器是否兼容。此外，`<ea-container>` 的子元素只能是以上五个组件，后四个组件的父元素也只能是 `<ea-container>`。
+::: tip
+
+以上组件采用了 flex 布局，使用前请确定目标浏览器是否兼容。此外，`<ea-container>` 的子元素只能是以上五个组件，后四个组件的父元素也只能是 `<ea-container>`。
+
+:::
 
 ## 引入
 
 ```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-container/index.js";
-  import "./node_modules/easy-component-ui/components/ea-header/index.js";
-  import "./node_modules/easy-component-ui/components/ea-footer/index.js";
-  import "./node_modules/easy-component-ui/components/ea-aside/index.js";
-  import "./node_modules/easy-component-ui/components/ea-main/index.js";
 </script>
 ```
 
@@ -80,9 +75,9 @@ hr {
 
 ## 示例样式
 
-::: details 查看样式
+::: code-group
 
-```html
+```html [示例样式]
 <style>
   ea-header::part(container) {
     text-align: center;
@@ -102,8 +97,11 @@ hr {
   ea-aside::part(container) {
     background-color: #d3dce6;
   }
+</style>
+```
 
-  /* 容器推荐类似以下的设置 */
+```html [页面样式]
+<style>
   body,
   html {
     height: 100%;
@@ -113,29 +111,18 @@ hr {
 ```
 
 :::
-
-```html
-<style>
-  /* 容器推荐类似以下的设置 */
-  body,
-  html {
-    height: 100%;
-    width: 100%;
-  }
-</style>
-```
 
 ## 自定义样式
 
 移步到 [CSS Part](#container-css-part)。
 
-## 01. `Container` > (`Header` + `Main`) 布局。
+## 常见页面布局
 
 <div class="demo">
-    <ea-container>
-        <ea-header>header</ea-header>
-        <ea-main>01. 这是最简单的布局，只包含了 Header 和 Main 部分，没有 Footer。</ea-main>
-    </ea-container>
+  <ea-container>
+    <ea-header>Header</ea-header>
+    <ea-main>Main</ea-main>
+  </ea-container>
 </div>
 
 ::: details 查看代码
@@ -143,25 +130,22 @@ hr {
 ```html
 <div class="demo">
   <ea-container>
-    <ea-header>header</ea-header>
-    <ea-main
-      >01. 这是最简单的布局，只包含了 Header 和 Main 部分，没有
-      Footer。</ea-main
-    >
+    <ea-header>Header</ea-header>
+    <ea-main>Main</ea-main>
   </ea-container>
 </div>
 ```
 
 :::
 
-## 02. `Container` > (`Header` + `Main` + `Footer`) 布局。
+---
 
 <div class="demo">
-    <ea-container>
-        <ea-header>header</ea-header>
-        <ea-main>02. 这个示例在示例 1 的基础上增加了 Footer。</ea-main>
-        <ea-footer>footer</ea-footer>
-    </ea-container>
+  <ea-container>
+    <ea-header>Header</ea-header>
+    <ea-main>Main</ea-main>
+    <ea-footer>Footer</ea-footer>
+  </ea-container>
 </div>
 
 ::: details 查看代码
@@ -169,85 +153,23 @@ hr {
 ```html
 <div class="demo">
   <ea-container>
-    <ea-header>header</ea-header>
-    <ea-main>02. 这个示例在示例 1 的基础上增加了 Footer。</ea-main>
-    <ea-footer>footer</ea-footer>
+    <ea-header>Header</ea-header>
+    <ea-main>Main</ea-main>
+    <ea-footer>Footer</ea-footer>
   </ea-container>
 </div>
 ```
 
 :::
 
-## 03. `Container` > (`Aside` + `Main`) 布局。
+---
 
 <div class="demo">
-    <ea-container direction="vertical">
-        <ea-aside width="200">Aside</ea-aside>
-        <ea-main> <p>03. 这个示例展示了带有侧边栏 (Aside) 和主内容区 (Main) 的布局。</p></ea-main>
-    </ea-container>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="demo">
-  <ea-container direction="vertical">
-    <ea-aside width="200">Aside</ea-aside>
-    <ea-main>
-      <p>
-        03. 这个示例展示了带有侧边栏 (Aside) 和主内容区 (Main) 的布局。
-      </p></ea-main
-    >
+  <ea-container>
+    <ea-aside width="150px">Aside</ea-aside>
+    <ea-main>Main</ea-main>
+    <ea-aside width="150px">Aside</ea-aside>
   </ea-container>
-</div>
-```
-
-:::
-
-## 04. `Container` > [`Header` + `Container` > (`Aside` + `Main`)] 布局。
-
-<div class="demo">
-    <ea-container direction="vertical">
-        <ea-header>header</ea-header>
-        <ea-container direction="vertical">
-            <ea-aside width="200">Aside</ea-aside>
-            <ea-main>04. 这个示例在 Header 下方嵌套了一个包含 Aside 和 Main 的 ea-container。</ea-main>
-        </ea-container>
-    </ea-container>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="demo">
-  <ea-container direction="vertical">
-    <ea-header>header</ea-header>
-    <ea-container direction="vertical">
-      <ea-aside width="200">Aside</ea-aside>
-      <ea-main
-        >04. 这个示例在 Header 下方嵌套了一个包含 Aside 和 Main 的
-        ea-container。</ea-main
-      >
-    </ea-container>
-  </ea-container>
-</div>
-```
-
-:::
-
-## 05. `Container` > {`Header` + `Container` > [`Aside` + `Container` > (`Main` + `Footer`)]} 布局。
-
-<div class="demo">
-    <ea-container>
-        <ea-header>header</ea-header>
-        <ea-container direction="vertical">
-            <ea-aside width="200">Aside</ea-aside>
-            <ea-container>
-                <ea-main>05. 这个示例进一步嵌套了一个 ea-container，内部包含了 Aside、Main 和 Footer。</ea-main>
-                <ea-footer>Footer</ea-footer>
-            </ea-container>
-        </ea-container>
-    </ea-container>
 </div>
 
 ::: details 查看代码
@@ -255,14 +177,68 @@ hr {
 ```html
 <div class="demo">
   <ea-container>
-    <ea-header>header</ea-header>
-    <ea-container direction="vertical">
-      <ea-aside width="200">Aside</ea-aside>
+    <ea-aside width="200px">Aside</ea-aside>
+    <ea-main>Main</ea-main>
+    <ea-aside width="200px">Aside</ea-aside>
+  </ea-container>
+</div>
+```
+
+:::
+
+---
+
+<div class="demo">
+  <ea-container>
+    <ea-header>Header</ea-header>
+    <ea-container>
+      <ea-aside width="200px">Aside</ea-aside>
+      <ea-main>Main</ea-main>
+    </ea-container>
+  </ea-container>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="demo">
+  <ea-container>
+    <ea-header>Header</ea-header>
+    <ea-container>
+      <ea-aside width="200px">Aside</ea-aside>
+      <ea-main>Main</ea-main>
+    </ea-container>
+  </ea-container>
+</div>
+```
+
+:::
+
+---
+
+<div class="demo">
+  <ea-container>
+    <ea-header>Header</ea-header>
+    <ea-container>
+      <ea-aside width="200px">Aside</ea-aside>
       <ea-container>
-        <ea-main
-          >05. 这个示例进一步嵌套了一个 ea-container，内部包含了 Aside、Main 和
-          Footer。</ea-main
-        >
+        <ea-main>Main</ea-main>
+        <ea-footer>Footer</ea-footer>
+      </ea-container>
+    </ea-container>
+  </ea-container>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="demo">
+  <ea-container>
+    <ea-header>Header</ea-header>
+    <ea-container>
+      <ea-aside width="200px">Aside</ea-aside>
+      <ea-container>
+        <ea-main>Main</ea-main>
         <ea-footer>Footer</ea-footer>
       </ea-container>
     </ea-container>
@@ -272,30 +248,27 @@ hr {
 
 :::
 
-## 06. `Container` > [`Aside` + `Container` > (`Header` + `Main`) ] 布局。
+---
 
 <div class="demo">
-    <ea-container direction="vertical">
-        <ea-aside width="150">Aside</ea-aside>
-        <ea-container direction="vertical">
-            <ea-header>header</ea-header>
-            <ea-main>06. 这个示例中，侧边栏 (Aside) 位于外层 ea-container 的左侧，内部 ea-container 包含了 Header 和 Main。</ea-main>
-        </ea-container>
+  <ea-container>
+    <ea-aside width="200px">Aside</ea-aside>
+    <ea-container>
+      <ea-header>Header</ea-header>
+      <ea-main>Main</ea-main>
     </ea-container>
+  </ea-container>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-container direction="vertical">
-    <ea-aside width="150">Aside</ea-aside>
-    <ea-container direction="vertical">
-      <ea-header>header</ea-header>
-      <ea-main
-        >06. 这个示例中，侧边栏 (Aside) 位于外层 ea-container 的左侧，内部
-        ea-container 包含了 Header 和 Main。</ea-main
-      >
+  <ea-container>
+    <ea-aside width="200px">Aside</ea-aside>
+    <ea-container>
+      <ea-header>Header</ea-header>
+      <ea-main>Main</ea-main>
     </ea-container>
   </ea-container>
 </div>
@@ -303,28 +276,28 @@ hr {
 
 :::
 
-## 07. `Container` > [`Aside` + `Container` > (`Header` + `Main` + `Footer`) ] 布局。
+---
 
 <div class="demo">
-    <ea-container direction="vertical">
-        <ea-aside width="200">Aside</ea-aside>
-        <ea-container>
-            <ea-header>Header</ea-header>
-            <ea-main>07. 最后一个示例与示例 6 类似，不过增加了一个 Footer。</ea-main>
-            <ea-footer>Footer</ea-footer>
-        </ea-container>
+  <ea-container>
+    <ea-aside width="200px">Aside</ea-aside>
+    <ea-container>
+      <ea-header>Header</ea-header>
+      <ea-main>Main</ea-main>
+      <ea-footer>Footer</ea-footer>
     </ea-container>
+  </ea-container>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-container direction="vertical">
-    <ea-aside width="200">Aside</ea-aside>
+  <ea-container>
+    <ea-aside width="200px">Aside</ea-aside>
     <ea-container>
       <ea-header>Header</ea-header>
-      <ea-main>07. 最后一个示例与示例 6 类似，不过增加了一个 Footer。</ea-main>
+      <ea-main>Main</ea-main>
       <ea-footer>Footer</ea-footer>
     </ea-container>
   </ea-container>
@@ -333,7 +306,7 @@ hr {
 
 :::
 
-## 08. 类 `vitepress` 布局。
+## 例子
 
 <div class="demo" style="height: 500px;">
   <ea-container direction="vertical">
@@ -849,27 +822,27 @@ hr {
 
 ## Container Attributes
 
-| 参数      | 说明                                        | 类型   | 可选值                | 默认值     |
-| --------- | ------------------------------------------- | ------ | --------------------- | ---------- |
-| direction | 布局模式，可选值为 `horizontal`、`vertical` | string | horizontal / vertical | horizontal |
+| 参数      | 说明     | 类型   | 可选值                   | 默认值     |
+| --------- | -------- | ------ | ------------------------ | ---------- |
+| direction | 布局模式 | string | `horizontal`、`vertical` | horizontal |
 
 ## Header Attributes
 
-| 参数   | 说明                   | 类型   | 可选值 | 默认值 |
-| ------ | ---------------------- | ------ | ------ | ------ |
-| height | Header 的高度，单位 px | number | -      | 60     |
+| 参数   | 说明                   | 类型     | 可选值 | 默认值 |
+| ------ | ---------------------- | -------- | ------ | ------ |
+| height | Header 的高度，单位 px | `String` | -      | `60px` |
 
 ## Aside Attributes
 
-| 参数  | 说明                  | 类型   | 可选值 | 默认值 |
-| ----- | --------------------- | ------ | ------ | ------ |
-| width | Aside 的宽度，单位 px | number | -      | 200    |
+| 参数  | 说明                  | 类型     | 可选值 | 默认值  |
+| ----- | --------------------- | -------- | ------ | ------- |
+| width | Aside 的宽度，单位 px | `String` | -      | `300px` |
 
 ## Footer Attributes
 
-| 参数   | 说明                   | 类型   | 可选值 | 默认值 |
-| ------ | ---------------------- | ------ | ------ | ------ |
-| height | Footer 的高度，单位 px | number | -      | 60     |
+| 参数   | 说明                   | 类型     | 可选值 | 默认值 |
+| ------ | ---------------------- | -------- | ------ | ------ |
+| height | Footer 的高度，单位 px | `String` | -      | `60px` |
 
 ## Container CSS Part
 
