@@ -1,0 +1,31 @@
+:host {
+  --ea-container-direction: row;
+}
+
+// :host(ea-header),
+// :host(ea-footer) {
+//   --ea-container-direction: column;
+// }
+
+::slotted(ea-main) {
+  flex: 1;
+  overflow: auto;
+}
+
+::slotted(ea-container) {
+  flex: 1;
+}
+
+@include block(ea-container) {
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: var(--ea-container-direction);
+
+  width: 100%;
+  height: 100%;
+
+  @include modifier(vertical) {
+    --ea-container-direction: column;
+  }
+}
