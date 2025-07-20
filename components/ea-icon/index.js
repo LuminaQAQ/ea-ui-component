@@ -1,5 +1,6 @@
 import stylesheet from "./index.css?inline"
 import variable from "../../themes/variable.scss?inline";
+import host from "./host.scss?inline"
 
 export class EaIcon extends HTMLElement {
     #wrap;
@@ -7,19 +8,21 @@ export class EaIcon extends HTMLElement {
     constructor() {
         super();
 
+        const sheet = new CSSStyleSheet();
+        const variableSheet = new CSSStyleSheet();
+        const hostSheet = new CSSStyleSheet();
+        sheet.replaceSync(stylesheet);
+        variableSheet.replaceSync(variable);
+        hostSheet.replaceSync(host);
+
+
         this.attachShadow({ mode: 'open' });
+        this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
         this.shadowRoot.innerHTML = `
             <i class="ea-icon_wrap" part="container">
                 <slot></slot>
             </i>
         `;
-
-        const sheet = new CSSStyleSheet();
-        const variableSheet = new CSSStyleSheet();
-        sheet.replaceSync(stylesheet);
-        variableSheet.replaceSync(variable);
-
-        this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
 
         this.#wrap = this.shadowRoot.querySelector('.ea-icon_wrap');
     }
@@ -66,7 +69,7 @@ export class EaIcon extends HTMLElement {
     // #endregion
     // ------- end -------
 
-    $mounted() {
+    connectedCallback() {
         this.icon = this.icon;
 
         this.color = this.color;

@@ -1,18 +1,15 @@
 // @ts-nocheck
 import { timeout } from "../utils/timeout";
 import variable from "../themes/variable.scss?inline";
-import "./ea-icon/index.js"
+import "./ea-icon/index.js";
 
 export default class Base extends HTMLElement {
-    static get observedAttributes() {
-        return this.observedProps;
-    }
+    #stateConfigs = {};
+    #isMounted = false;
 
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
-
-        this._isSyncingAttrToState = false;
+        this.attachShadow({ mode: "open" });
     }
 
     /**
@@ -29,83 +26,123 @@ export default class Base extends HTMLElement {
     }
 
     /**
+     * 计算classlist
+     * @param {string} block 块级元素名称
+     * @param {object} classListObj classList对象
+     * @returns {string} classList
+     */
+    computedClasslist(block, classListObj) {
+        return [
+            block,
+            ...Object.entries(classListObj)
+                .filter(([, value]) => value)
+                .map(([key]) => block + key),
+        ].join(" ");
+    }
+
+    /**
      * 创建响应式数据配置
      * @param {Object.<string, {
-    *   type: (Function|Array<*>),
-    *   default: any,
-    *   observer?: (newVal: any, oldVal?: any) => void
-    * }>} states 配置对象，每个 key 是一个响应式字段名
-    * @returns {Object} 返回代理后的响应式状态对象
-    */
+     *   type: (Function|Array<*>),
+     *   default: any,
+     *   observer?: (newVal: any, oldVal?: any) => void
+     * }>} states 配置对象，每个 key 是一个响应式字段名
+     * @returns {Object} 返回代理后的响应式状态对象
+     */
     properties(states) {
-        const _this = this;
-        const _stateValues = {};
+        const parseType = (type) => {
+            if (type === Boolean) {
+                type = "Boolean";
+            }
 
-        for (const [key, config] of Object.entries(states)) {
-            _stateValues[key] = config.default;
-        }
+            if (type === Number) {
+                type = "Number";
+            }
+
+            if (type === String || Array.isArray(type)) {
+                type = "String";
+            }
+
+            return type;
+        };
 
         const parseValue = (key, rawValue) => {
             const config = states[key];
             const type = config?.type;
 
             if (type === Boolean) {
-                return rawValue === '' || rawValue === 'true' || rawValue === true;
+                return rawValue === "" || rawValue === "true" || rawValue === true;
             }
+
             if (type === Number) {
                 const num = Number(rawValue);
                 return isNaN(num) ? config.default : num;
             }
+
             if (Array.isArray(type)) {
                 return type.includes(rawValue) ? rawValue : config.default;
             }
 
-            return rawValue ?? config.default;
+            return rawValue || config.default;
         };
 
-        const syncToAttr = (key, value) => {
-            if (!_this._isSyncingStateToAttr) {
-                _this._isSyncingStateToAttr = true;
-                _this.toggleAttr(key, value);
-                _this._isSyncingStateToAttr = false;
-            }
-        };
+        for (const [key, config] of Object.entries(states)) {
+            this.#stateConfigs[key] = config.observer;
 
-        return new Proxy(_stateValues, {
-            get(target, key) {
-                return target[key];
-            },
-            set(target, key, newValue) {
-                const config = states[key];
-                if (!config) return true;
+            Object.defineProperty(this, key, {
+                get: () => {
+                    const type = parseType(config.type);
 
-                const parsedValue = parseValue(key, newValue);
-                const oldValue = target[key];
-
-                if (oldValue === parsedValue) return true;
-
-                target[key] = parsedValue;
-
-                syncToAttr(key, parsedValue);
-                config.observer?.(parsedValue, oldValue);
-                _this.$updated({ key, newVal: parsedValue, oldVal: oldValue });
-
-                return true;
-            }
-        });
+                    return this[`getAttr${type}`](key, config.default);
+                },
+                set: (value) => {
+                    this.setAttr(key, parseValue(key, value));
+                }
+            });
+        }
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-        if (oldVal === newVal || this._isSyncingStateToAttr) return;
+        if (oldVal === newVal || this.#isMounted) return;
 
-        this._isSyncingAttrToState = true;
 
-        if (this.state && name in this.state) {
-            this.state[name] = newVal;
+        if (name === "loading-full") {
+
+            try {
+                const loadingIcon = this.shadowRoot.querySelectorAll(`[part="loading-full"]`);
+                if (loadingIcon?.length > 0) {
+                    loadingIcon?.forEach((item) => item.remove());
+                }
+
+                if (value) {
+                    const loadingIcon = document.createElement("ea-icon");
+                    loadingIcon.id = "ea-loading-icon";
+                    loadingIcon.icon = "icon-spin6 animate-spin";
+                    loadingIcon.part = "loading-full";
+                    this.shadowRoot.insertBefore(loadingIcon, this.shadowRoot.firstChild);
+                }
+            } catch (error) { }
+
+            return;
         }
 
-        this._isSyncingAttrToState = false;
+        try {
+            this.#stateConfigs[name]?.(newVal);
+        } catch { }
     }
+
+    // ------- loading-full 属性 -------
+    // #region
+    get "loading-full"() {
+        return this.getAttrBoolean("loading-full") || false;
+    }
+
+    set "loading-full"(value) {
+        this.toggleAttribute("loading-full", value);
+        if (!this.getAttrBoolean("disabled")) this.toggleAttribute("disabled", value);
+    }
+    // #endregion
+    // ------- end -------
 
     /** @abstract 组件挂载前调用 */
     $beforeMounted() { }
@@ -120,59 +157,78 @@ export default class Base extends HTMLElement {
     $unmounted() { }
 
     /**
-     * 
-     * @param {Object} data 
+     *
+     * @param {Object} data
      * @param {any} data.key 键
      * @param {any} data.newVal 值
      * @param {any} data.oldVal 旧值
      */
     $updated(data) {
-        this.dispatchEvent(new CustomEvent('updated', {
-            detail: data,
-            bubbles: false,
-            composed: true,
-        }));
+        this.dispatchEvent(
+            new CustomEvent("updated", {
+                detail: data,
+                bubbles: false,
+                composed: true,
+            })
+        );
     }
 
     connectedCallback() {
-        this.adoptedStyle(this.stylesheet);
+
+        this.addEventListener("keydown", (e) => {
+            console.log(e.key, e.ctrlKey);
+        });
 
         queueMicrotask(() => {
-            // 组件挂载前
-            this.$beforeMounted?.();
-            this.dispatchEvent(new CustomEvent('beforeMount', {
-                detail: this,
-                bubbles: false,
-                composed: true,
-            }));
+
+            this.$beforeMounted();
+            this.dispatchEvent(
+                new CustomEvent("beforeMount", {
+                    detail: this,
+                    bubbles: false,
+                    composed: true,
+                })
+            );
 
             // 组件挂载后
-            this.$mounted?.();
-            this.dispatchEvent(new CustomEvent('mounted', {
-                detail: this,
-                bubbles: false,
-                composed: true,
-            }));
+            this.$mounted();
+            this.dispatchEvent(
+                new CustomEvent("mounted", {
+                    detail: this,
+                    bubbles: false,
+                    composed: true,
+                })
+            );
+            // 组件挂载前
+            this.#isMounted = true;
+            this.tabIndex = 0;
+
+            this["loading-full"] = this["loading-full"];
         });
+
     }
 
     disconnectedCallback() {
         // 组件销毁前
         this.$beforeUnmounted?.();
-        this.dispatchEvent(new CustomEvent('beforeUnmount', {
-            detail: this,
-            bubbles: false,
-            composed: true,
-        }));
+        this.dispatchEvent(
+            new CustomEvent("beforeUnmount", {
+                detail: this,
+                bubbles: false,
+                composed: true,
+            })
+        );
 
         // 组件销毁
-        this.$unmounted?.()
-        this.dispatchEvent(new CustomEvent('unmounted', {
-            detail: this,
-            bubbles: false,
-            composed: true,
-        }));
-        
+        this.$unmounted?.();
+        this.dispatchEvent(
+            new CustomEvent("unmounted", {
+                detail: this,
+                bubbles: false,
+                composed: true,
+            })
+        );
+
         this.remove();
         this.state = null;
     }
@@ -187,11 +243,10 @@ export default class Base extends HTMLElement {
         if (flag) {
             this.setAttribute(attr, flag);
 
-            if (className) this.dom.classList.add(className);
+            // if (className) this.dom.classList.add(className);
         } else {
-
             if (this.hasAttribute(attr)) this.removeAttribute(attr);
-            if (className) this.dom.classList.remove(className);
+            // if (className) this.dom.classList.remove(className);
         }
     }
 
@@ -213,9 +268,9 @@ export default class Base extends HTMLElement {
      * @param {string} attrName 属性名
      * @returns {boolean}
      */
-    getAttrBoolean(attrName) {
+    getAttrBoolean(attrName, defaultValue) {
         const attr = this.getAttribute(attrName);
-        return attr === 'true' || attr === '';
+        return (attr === "true" || attr === "") || defaultValue;
     }
 
     /**
@@ -223,9 +278,23 @@ export default class Base extends HTMLElement {
      * @param {string} attrName 属性名
      * @returns {number}
      */
-    getAttrNumber(attrName) {
+    getAttrNumber(attrName, defaultValue) {
         const attr = this.getAttribute(attrName);
 
-        return attr ? Number(attr) : 0;
+        return attr ? Number(attr) : (defaultValue || 0);
+    }
+
+    getAttrString(attrName, defaultValue) {
+        const attr = this.getAttribute(attrName);
+
+        return attr ? attr : (defaultValue || '');
+    }
+
+    setAttr(attrName, value) {
+        if (value) {
+            this.setAttribute(attrName, value);
+        } else {
+            this.removeAttribute(attrName);
+        }
     }
 }

@@ -1,12 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-
-const btn = ref(null);
-
-onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
-})
+import "../dist/components/index"
 </script>
 
 <style>

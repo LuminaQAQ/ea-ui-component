@@ -1,8 +1,5 @@
 <script setup>
-import { onMounted } from 'vue'
-onMounted(() => {
-  import("../dist/components/index.js")
-})
+import "../dist/components/index"
 </script>
 
 <style>

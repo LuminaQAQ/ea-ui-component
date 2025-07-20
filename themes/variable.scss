@@ -103,4 +103,15 @@
   --btn-height-sm: 32px;
   --btn-height-md: 40px;
   --btn-height-lg: 48px;
+
+  --cursor-not-allowed: not-allowed;
+  --cursor-pointer: pointer;
+  --cursor-default: default;
+}
+
+:host {
+  --default-font-size: 16px;
+  --default-loading-icon-color: var(--blue-300);
+
+  font-size: var(--default-font-size);
 }

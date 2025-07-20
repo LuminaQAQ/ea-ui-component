@@ -604,12 +604,12 @@ btn.addEventListener("click", function (e) {
 
 | **参数**   | **说明** | **类型**  | **可选值**                                                          | **默认值** |
 | ---------- | -------- | --------- | ------------------------------------------------------------------- | ---------- |
-| `size`     | 按钮尺寸 | `string`  | `normal`／`medium`／`small`／`mini`                                 | `"normal"` |
-| `type`     | 按钮类型 | `string`  | `normal`／`primary`／`success`／`warning`／`danger`／`text`／`link` | `"normal"` |
-| `plain`    | 朴素效果 | `boolean` | `true`／`false`                                                     | `false`    |
-| `disabled` | 是否禁用 | `boolean` | `true`／`false`                                                     | `false`    |
-| `round`    | 圆角按钮 | `boolean` | `true`／`false`                                                     | `false`    |
-| `loading`  | 加载状态 | `boolean` | `true`／`false`                                                     | `false`    |
+| `size`     | 按钮尺寸 | `string`  | `normal`\|`medium`\|`small`\|`mini`                                 | `"normal"` |
+| `type`     | 按钮类型 | `string`  | `normal`\|`primary`\|`success`\|`warning`\|`danger`\|`text`\|`link` | `"normal"` |
+| `plain`    | 朴素效果 | `boolean` | `true`\|`false`                                                     | `false`    |
+| `disabled` | 是否禁用 | `boolean` | `true`\|`false`                                                     | `false`    |
+| `round`    | 圆角按钮 | `boolean` | `true`\|`false`                                                     | `false`    |
+| `loading`  | 加载状态 | `boolean` | `true`\|`false`                                                     | `false`    |
 | `icon`     | 图标类名 | `string`  | —                                                                   | —          |
 | `href`     | 链接地址 | `string`  | —                                                                   | —          |
 
@@ -617,9 +617,9 @@ btn.addEventListener("click", function (e) {
 
 | **参数**   | **说明** | **类型**  | **可选值**                                                          | **默认值** |
 | ---------- | -------- | --------- | ------------------------------------------------------------------- | ---------- |
-| `disabled` | 是否禁用 | `boolean` | `true`／`false`                                                     | `false`    |
-| `type`     | 按钮类型 | `string`  | `normal`／`primary`／`success`／`warning`／`danger`／`text`／`link` | `"normal"` |
-| `size`     | 按钮尺寸 | `string`  | `normal`／`medium`／`small`／`mini`                                 | `"normal"` |
+| `disabled` | 是否禁用 | `boolean` | `true`\|`false`                                                     | `false`    |
+| `type`     | 按钮类型 | `string`  | `normal`\|`primary`\|`success`\|`warning`\|`danger`\|`text`\|`link` | `"normal"` |
+| `size`     | 按钮尺寸 | `string`  | `normal`\|`medium`\|`small`\|`mini`                                 | `"normal"` |
 
 ## Button CSS Part
 

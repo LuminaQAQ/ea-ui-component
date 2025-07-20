@@ -1,3 +1,4 @@
+import { resolve } from 'path';
 import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
@@ -50,10 +51,11 @@ export default defineConfig({
         text: '基础组件',
         items: [
           //     { text: 'Container 布局容器', link: '/ea-container' },
-          { text: 'Icon 图标', link: '/ea-icon' },
           { text: 'Button 按钮', link: '/ea-button' },
-          { text: 'Link 文字链接', link: '/ea-link' },
+          { text: 'Icon 图标', link: '/ea-icon' },
           { text: 'Layout 布局', link: '/ea-layout' },
+          { text: 'Link 文字链接', link: '/ea-link' },
+          { text: 'Text 文本', link: '/ea-text' },
         ]
       },
       // {
@@ -134,5 +136,18 @@ export default defineConfig({
       }
     }
   },
+
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+                  @import "components/ea-ui-base-style.scss";
+              `,
+          includePaths: [resolve(__dirname)]
+        }
+      }
+    },
+  }
 
 })
