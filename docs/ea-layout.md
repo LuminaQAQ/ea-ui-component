@@ -1,5 +1,10 @@
 <script setup>
-import "../dist/components/index"
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
+})
 </script>
 
 <style>

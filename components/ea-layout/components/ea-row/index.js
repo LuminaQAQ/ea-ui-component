@@ -3,7 +3,9 @@ import Base from "../../../Base.js"
 import stylesheet from './index.scss?inline';
 
 export class EaRow extends Base {
-    observedProps = ["gutter", "justify", "align"];
+    static get observedAttributes() {
+        return ["gutter", "justify", "align"];
+    }
 
     /** 
      * @typedef {Object} State
@@ -41,7 +43,8 @@ export class EaRow extends Base {
 
     constructor() {
         super();
-        this.adoptedStyle(stylesheet);
+
+        this.stylesheet = stylesheet;
 
         this.shadowRoot.innerHTML = `
             <${this.tag} class="ea-row" part="container">
@@ -50,7 +53,9 @@ export class EaRow extends Base {
         `;
     }
 
-    $mounted() {
+    connectedCallback() {
+        super.connectedCallback();
+
         this.tag = this.tag;
         this.gutter = this.gutter;
         this.justify = this.justify;

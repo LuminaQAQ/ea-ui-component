@@ -144,11 +144,8 @@ export default class Base extends HTMLElement {
     // #endregion
     // ------- end -------
 
-    /** @abstract 组件挂载前调用 */
-    $beforeMounted() { }
-
-    /** @abstract 组件挂载后调用 */
-    $mounted() { }
+    /** @abstract 组件渲染 */
+    $render() { }
 
     /** @abstract 组件销毁前调用 */
     $beforeUnmounted() { }

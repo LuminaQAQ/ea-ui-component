@@ -3,14 +3,8 @@ import {onMounted} from "vue"
 import configs from "../components/ea-icon/config.json"
 
 onMounted(() => {
-    import("../dist/components/ea-icon.js")
-    // import("./index.scss")
-    // import("../components/ea-icon/index.js")
-    // import("../components/ea-icon/index.css")
-
-    // document.addEventListener('ea-icon-ready', () => {
-    //   setConfig({ fontelloCSS: new URL('../components/ea-icon/css/fontello.css', import.meta.url).href })
-    // })
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
 })
 </script>
 
@@ -41,25 +35,32 @@ onMounted(() => {
 <i class="icon-spin6 animate-spin"></i>
 <i class="icon-chrome"></i>
 
-```html
-<i class="icon-spin6 animate-spin"></i> <i class="icon-chrome"></i>
-```
+::: code-group
 
-> 也可以通过组件的方式使用：
-
-```html
+```html [组件形式]
 <ea-icon icon="icon-coffee"></ea-icon>
 ```
+
+```html [原生形式]
+<div>
+  <i class="icon-spin6 animate-spin"></i>
+</div>
+<div>
+  <i class="icon-chrome"></i>
+</div>
+```
+
+:::
 
 ## 图标集合
 
 <div class="main-icon-wrap">
     <section>
-        <ea-icon icon="icon-spin6 animate-spin" size="19"></ea-icon>
-        <span>icon-spin6 animate-spin</span>
+        <ea-icon icon="icon-spin6 animate-spin" size="28"></ea-icon>
+        <span style="margin-top: 1rem;">icon-spin6 animate-spin</span>
     </section>
     <section v-for="(item, index) in configs.glyphs">
-        <ea-icon :icon="'icon-' + item.css" size="32"></ea-icon>
-        <span>icon-{{item.css}}</span>
+        <ea-icon :icon="'icon-' + item.css" size="28"></ea-icon>
+        <span style="margin-top: 1rem;">icon-{{item.css}}</span>
     </section>
 </div>

@@ -1,6 +1,10 @@
 <script setup>
-import "../dist/components/ea-text"
-// import "../components/ea-text/index"
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
+})
 </script>
 
 <style>
