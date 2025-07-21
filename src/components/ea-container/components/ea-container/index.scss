@@ -13,7 +13,13 @@
 }
 
 ::slotted(ea-container) {
-  flex: 1;
+  width: 100%;
+}
+
+::slotted(ea-header),
+::slotted(ea-main),
+::slotted(ea-header) {
+  width: 100%;
 }
 
 @include block(ea-container) {

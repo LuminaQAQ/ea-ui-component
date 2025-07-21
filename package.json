@@ -12,9 +12,6 @@
     "./ea-alert": {
       "import": "./dist/ea-alert.js"
     },
-    "./ea-aside": {
-      "import": "./dist/ea-aside.js"
-    },
     "./ea-avatar": {
       "import": "./dist/ea-avatar.js"
     },
@@ -78,17 +75,11 @@
     "./ea-empty": {
       "import": "./dist/ea-empty.js"
     },
-    "./ea-footer": {
-      "import": "./dist/ea-footer.js"
-    },
     "./ea-form": {
       "import": "./dist/ea-form.js"
     },
     "./ea-form-item": {
       "import": "./dist/ea-form-item.js"
-    },
-    "./ea-header": {
-      "import": "./dist/ea-header.js"
     },
     "./ea-icon": {
       "import": "./dist/ea-icon.js"
@@ -116,9 +107,6 @@
     },
     "./ea-loading": {
       "import": "./dist/ea-loading.js"
-    },
-    "./ea-main": {
-      "import": "./dist/ea-main.js"
     },
     "./ea-menu": {
       "import": "./dist/ea-menu.js"
@@ -164,6 +152,9 @@
     },
     "./ea-result": {
       "import": "./dist/ea-result.js"
+    },
+    "./ea-scrollbar": {
+      "import": "./dist/ea-scrollbar.js"
     },
     "./ea-select": {
       "import": "./dist/ea-select.js"
