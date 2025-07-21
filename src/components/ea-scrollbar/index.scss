@@ -1,0 +1,62 @@
+:host {
+  --ea-scrollbar-top: 0;
+
+  --ea-scrollbar-track-color: transparent;
+  --ea-scrollbar-thumb-color: var(--grey-300);
+
+  --ea-scrollbar-track-height: 100%;
+  --ea-scrollbar-thumb-height: 0;
+
+  --ea-scrollbar-track-width: 8px;
+  --ea-scrollbar-thumb-width: 100%;
+
+  overflow: hidden;
+}
+
+@include block(ea-scrollbar) {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+
+  @include element(track) {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    height: 100%;
+
+    height: var(--ea-scrollbar-track-height);
+    width: var(--ea-scrollbar-track-width);
+
+    background-color: var(--ea-scrollbar-track-color);
+
+    z-index: 0;
+
+    &.is-show {
+      display: none;
+    }
+  }
+
+  @include element(thumb) {
+    position: absolute;
+    right: 0;
+    top: var(--ea-scrollbar-top);
+
+    border-radius: 999px;
+
+    width: var(--ea-scrollbar-thumb-width);
+    height: var(--ea-scrollbar-thumb-height);
+
+    background-color: var(--ea-scrollbar-thumb-color);
+    z-index: 1;
+  }
+
+  @include element(view) {
+    height: 100%;
+    overflow: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+}

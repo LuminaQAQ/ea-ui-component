@@ -4,6 +4,7 @@
 
 ::slotted(ea-main) {
   overflow: auto;
+  flex: 1;
 }
 
 @include block(ea-aside) {

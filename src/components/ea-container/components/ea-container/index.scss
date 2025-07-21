@@ -7,7 +7,8 @@
 //   --ea-container-direction: column;
 // }
 
-::slotted(ea-main) {
+::slotted(ea-main),
+::slotted(ea-scrollbar) {
   flex: 1;
   overflow: auto;
 }
