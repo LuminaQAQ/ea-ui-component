@@ -5,11 +5,13 @@ import "./ea-icon/index.js";
 
 export default class Base extends HTMLElement {
     #stateConfigs = {};
-    #isMounted = false;
 
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+
+        /** @type {HTMLElement} */
+        this.shadowRoot;
     }
 
     /**
@@ -103,32 +105,35 @@ export default class Base extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-        if (oldVal === newVal || this.#isMounted) return;
+        if (oldVal === newVal) return;
 
+        // if (name === "loading-full") {
 
-        if (name === "loading-full") {
+        //     try {
+        //         const loadingIcon = this.shadowRoot.querySelectorAll(`[part="loading-full"]`);
+        //         if (loadingIcon?.length > 0) {
+        //             loadingIcon?.forEach((item) => item.remove());
+        //         }
 
-            try {
-                const loadingIcon = this.shadowRoot.querySelectorAll(`[part="loading-full"]`);
-                if (loadingIcon?.length > 0) {
-                    loadingIcon?.forEach((item) => item.remove());
-                }
+        //         if (value) {
+        //             const loadingIcon = document.createElement("ea-icon");
+        //             loadingIcon.id = "ea-loading-icon";
+        //             loadingIcon.icon = "icon-spin6 animate-spin";
+        //             loadingIcon.part = "loading-full";
+        //             this.shadowRoot.insertBefore(loadingIcon, this.shadowRoot.firstChild);
+        //         }
+        //     } catch (error) { }
 
-                if (value) {
-                    const loadingIcon = document.createElement("ea-icon");
-                    loadingIcon.id = "ea-loading-icon";
-                    loadingIcon.icon = "icon-spin6 animate-spin";
-                    loadingIcon.part = "loading-full";
-                    this.shadowRoot.insertBefore(loadingIcon, this.shadowRoot.firstChild);
-                }
-            } catch (error) { }
-
-            return;
-        }
+        //     return;
+        // }
 
         try {
             this.#stateConfigs[name]?.(newVal);
-        } catch { }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error(e);
+            }
+        }
     }
 
     // ------- loading-full 属性 -------
@@ -171,38 +176,13 @@ export default class Base extends HTMLElement {
     }
 
     connectedCallback() {
+        this.adoptedStyle(this.stylesheet);
+        this.tabIndex = 0;
+        this["loading-full"] = this["loading-full"];
 
         this.addEventListener("keydown", (e) => {
             console.log(e.key, e.ctrlKey);
         });
-
-        queueMicrotask(() => {
-
-            this.$beforeMounted();
-            this.dispatchEvent(
-                new CustomEvent("beforeMount", {
-                    detail: this,
-                    bubbles: false,
-                    composed: true,
-                })
-            );
-
-            // 组件挂载后
-            this.$mounted();
-            this.dispatchEvent(
-                new CustomEvent("mounted", {
-                    detail: this,
-                    bubbles: false,
-                    composed: true,
-                })
-            );
-            // 组件挂载前
-            this.#isMounted = true;
-            this.tabIndex = 0;
-
-            this["loading-full"] = this["loading-full"];
-        });
-
     }
 
     disconnectedCallback() {

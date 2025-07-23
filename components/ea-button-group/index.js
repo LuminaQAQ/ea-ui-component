@@ -4,7 +4,9 @@ import Base from "../Base.js";
 import stylesheet from "./index.scss?inline"
 
 export class EaButtonGroup extends Base {
-  static observedProps = ["disabled", "size", "type"];
+  static get observedAttributes() {
+    return ["disabled", "size", "type"];
+  }
 
   /**
    * @typedef {object} Properties
@@ -50,52 +52,23 @@ export class EaButtonGroup extends Base {
     super();
     this.stylesheet = stylesheet;
 
+    this.$render()
+  }
+
+  $render() {
     this.shadowRoot.innerHTML = `
       <div class="ea-button-group">
         <slot></slot>
       </div>
     `;
   }
-  // ------- disabled 禁用子按钮 -------
-  // #region
-  get disabled() {
-    return this.state.disabled;
-  }
 
-  set disabled(value) {
-    this.state.disabled = value;
-  }
-  // #endregion
-  // ------- end -------
+  connectedCallback() {
+    super.connectedCallback();
 
-  // ------- size 子按钮大小 -------
-  // #region
-  get size() {
-    return this.state.size;
-  }
-
-  set size(value) {
-    this.state.size = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- size 子按钮大小 -------
-  // #region
-  get type() {
-    return this.state.type;
-  }
-
-  set type(value) {
-    this.state.type = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  $mounted() {
-    this.disabled = this.getAttribute("disabled")
-    this.size = this.getAttribute('size');
-    this.type = this.getAttribute('type');
+    this.disabled = this.disabled;
+    this.size = this.size;
+    this.type = this.type;
   }
 
 }

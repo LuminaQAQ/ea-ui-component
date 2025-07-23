@@ -30,14 +30,14 @@ export class EaText extends Base {
             type: ['normal', 'primary', 'success', 'warning', 'danger', 'info'],
             default: 'normal',
             observer: (newVal) => {
-                this.shadowRoot.querySelector('.ea-text').className = this.updateContainerClasslist()
+                this.#container.className = this.updateContainerClasslist()
             }
         },
         size: {
             type: ['large', 'medium', 'small'],
             default: 'medium',
             observer: (newVal) => {
-                this.shadowRoot.querySelector('.ea-text').className = this.updateContainerClasslist()
+                this.#container.className = this.updateContainerClasslist()
             }
         },
         truncated: {
@@ -45,7 +45,7 @@ export class EaText extends Base {
             default: false,
             observer: (newVal) => {
                 this.title = this.innerText || '';
-                this.shadowRoot.querySelector('.ea-text').className = this.updateContainerClasslist()
+                this.#container.className = this.updateContainerClasslist()
             }
         },
         "line-clamp": {
@@ -53,7 +53,7 @@ export class EaText extends Base {
             default: 0,
             observer: (newVal) => {
                 if (newVal > 0) this.style.setProperty('--ea-text-line-clamp', newVal)
-                this.shadowRoot.querySelector('.ea-text').className = this.updateContainerClasslist()
+                this.#container.className = this.updateContainerClasslist()
                 this.title = this.innerText || '';
             }
         },
@@ -83,24 +83,28 @@ export class EaText extends Base {
         super();
 
         this.stylesheet = stylesheet;
+
+        this.$render();
     }
 
-    $mounted() {
-        this.adoptedStyle(stylesheet);
-
-        this.tag = this.tag;
-
+    $render() {
         this.shadowRoot.innerHTML = `
             <${this.tag} class="ea-text" part="container">
                 <slot></slot>
             </${this.tag}>
         `;
 
+        this.#container = this.shadowRoot.querySelector('.ea-text')
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
+        this.tag = this.tag;
         this.title = this.title;
         this.type = this.type;
         this.size = this.size;
         this.truncated = this.truncated;
-
         this["line-clamp"] = this['line-clamp'];
     }
 }

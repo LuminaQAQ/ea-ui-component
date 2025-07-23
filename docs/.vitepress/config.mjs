@@ -56,6 +56,7 @@ export default defineConfig({
           { text: 'Layout 布局', link: '/ea-layout' },
           { text: 'Link 文字链接', link: '/ea-link' },
           { text: 'Text 文本', link: '/ea-text' },
+          { text: 'Scrollbar 滚动条', link: '/ea-scrollbar' },
         ]
       },
       // {

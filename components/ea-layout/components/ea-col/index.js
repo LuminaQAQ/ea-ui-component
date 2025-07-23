@@ -3,7 +3,9 @@ import Base from "../../../Base.js"
 import stylesheet from './index.scss?inline';
 
 export class EaCol extends Base {
-    observedProps = ["span", "offset", "push", "pull", "tag"];
+    static get observedAttributes() {
+        return ["span", "offset", "push", "pull", "tag"];
+    }
 
     /** 
      * @typedef {Object} State
@@ -52,8 +54,12 @@ export class EaCol extends Base {
 
     constructor() {
         super();
-        this.adoptedStyle(stylesheet);
+        this.stylesheet = stylesheet;
 
+        this.$render();
+    }
+
+    $render() {
         this.shadowRoot.innerHTML = `
             <${this.tag} class="ea-row" part="container">
                 <slot></slot>
@@ -61,13 +67,14 @@ export class EaCol extends Base {
         `;
     }
 
-    $mounted() {
-        this.tag = this.tag;
+    connectedCallback() {
+        super.connectedCallback();
 
-        this.span = this.getAttrNumber('span');
-        this.offset = this.getAttrNumber('offset');
-        this.push = this.getAttrNumber('push');
-        this.pull = this.getAttrNumber('pull');
+        this.tag = this.tag;
+        this.span = this.span;
+        this.offset = this.offset;
+        this.push = this.push;
+        this.pull = this.pull;
     }
 }
 

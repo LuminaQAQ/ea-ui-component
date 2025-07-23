@@ -1,0 +1,18 @@
+:host {
+  --ea-aside-width: 300px;
+}
+
+::slotted(ea-main) {
+  overflow: auto;
+  flex: 1;
+}
+
+@include block(ea-aside) {
+  width: var(--ea-aside-width);
+  height: 100%;
+
+  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+}

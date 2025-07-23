@@ -4,7 +4,7 @@ import stylesheet from './index.scss?inline';
 
 export class EaLink extends Base {
   static get observedAttributes() {
-    return ["href", "type", "disabled", "underline", "icon"];
+    return ["type", "disabled", "underline", "href", "icon"];
   }
 
   /** @type {HTMLAnchorElement} */
@@ -37,7 +37,7 @@ export class EaLink extends Base {
     },
     underline: {
       type: ['always', 'hover', 'never'],
-      default: 'never',
+      default: '',
       observer: (newVal) => {
         this.#container.className = this.updateContainerClasslist()
       }
@@ -53,10 +53,12 @@ export class EaLink extends Base {
       type: String,
       default: '',
       observer: (newVal) => {
-        if (!value) return;
+        if (!newVal) return;
 
         const icon = document.createElement('ea-icon');
-        icon.icon = value;
+        icon.icon = newVal;
+        icon.part = "icon";
+
         this.#container.insertBefore(icon, this.#container.firstChild);
       }
     },
@@ -76,11 +78,13 @@ export class EaLink extends Base {
 
   constructor() {
     super();
+
+    this.stylesheet = stylesheet;
+
+    this.$render();
   }
 
-  $mounted() {
-    this.adoptedStyle(stylesheet);
-
+  $render() {
     this.shadowRoot.innerHTML = `
       <a class="ea-link" part="container" tabindex="-1">
         <slot></slot>
@@ -88,6 +92,10 @@ export class EaLink extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector('.ea-link');
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
 
     // 设置链接
     this.href = this.href;
@@ -98,10 +106,10 @@ export class EaLink extends Base {
     // 禁用状态
     this.disabled = this.disabled;
 
-    // // 设置下划线
+    // 设置下划线
     this.underline = this.underline;
 
-    // // 图标
+    // 图标
     this.icon = this.icon;
   }
 }

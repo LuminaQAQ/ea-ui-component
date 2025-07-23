@@ -1,0 +1,38 @@
+:host {
+  --ea-container-direction: row;
+}
+
+// :host(ea-header),
+// :host(ea-footer) {
+//   --ea-container-direction: column;
+// }
+
+::slotted(ea-main),
+::slotted(ea-scrollbar) {
+  flex: 1;
+  overflow: auto;
+}
+
+::slotted(ea-container) {
+  width: 100%;
+}
+
+::slotted(ea-header),
+::slotted(ea-main),
+::slotted(ea-header) {
+  width: 100%;
+}
+
+@include block(ea-container) {
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: var(--ea-container-direction);
+
+  width: 100%;
+  height: 100%;
+
+  @include modifier(vertical) {
+    --ea-container-direction: column;
+  }
+}

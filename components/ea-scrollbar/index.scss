@@ -1,0 +1,124 @@
+:host {
+  --ea-scrollbar-top: 0;
+  --ea-scrollbar-left: 0;
+
+  --ea-scrollbar-track-color: transparent;
+  --ea-scrollbar-thumb-color: var(--grey-300);
+  --ea-scrollbar-thumb-hover-color: var(--grey-400);
+
+  --ea-scrollbar-track-vertical-height: 100%;
+  --ea-scrollbar-thumb-vertical-height: 0;
+
+  --ea-scrollbar-track-vertical-width: 10px;
+  --ea-scrollbar-thumb-vertical-width: 100%;
+
+  --ea-scrollbar-track-horizontal-height: 10px;
+  --ea-scrollbar-thumb-horizontal-height: 100%;
+
+  --ea-scrollbar-track-horizontal-width: 0;
+  --ea-scrollbar-thumb-horizontal-width: 100%;
+
+  overflow: hidden;
+}
+
+@include block(ea-scrollbar) {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+
+  .ea-scrollbar__track-vertical,
+  .ea-scrollbar__track-horizontal {
+    position: absolute;
+
+    background-color: var(--ea-scrollbar-track-color);
+
+    opacity: 0;
+
+    z-index: 0;
+
+    transition: opacity var(--transition-normal);
+
+    &.is-show {
+      display: none;
+    }
+  }
+
+  @include element(track-vertical) {
+    right: 0;
+    top: 0;
+
+    height: var(--ea-scrollbar-track-vertical-height);
+    width: var(--ea-scrollbar-track-vertical-width);
+  }
+
+  @include element(track-horizontal) {
+    left: 0;
+    bottom: 0;
+
+    height: 8px;
+    width: var(--ea-scrollbar-track-vertical-height);
+  }
+
+  .ea-scrollbar__thumb-horizontal,
+  .ea-scrollbar__thumb-vertical {
+    position: absolute;
+
+    border-radius: 999px;
+
+    background-color: var(--ea-scrollbar-thumb-color);
+
+    z-index: 1;
+
+    &.is-active,
+    &:hover {
+      background-color: var(--ea-scrollbar-thumb-hover-color);
+    }
+  }
+
+  @include element(thumb-horizontal) {
+    left: var(--ea-scrollbar-left);
+    bottom: 0;
+
+    width: var(--ea-scrollbar-thumb-horizontal-width);
+    height: var(--ea-scrollbar-thumb-horizontal-height);
+  }
+
+  @include element(thumb-vertical) {
+    right: 0;
+    top: var(--ea-scrollbar-top);
+
+    width: var(--ea-scrollbar-thumb-vertical-width);
+    height: var(--ea-scrollbar-thumb-vertical-height);
+  }
+
+  @include element(view) {
+    height: 100%;
+    overflow: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  &:hover {
+    .ea-scrollbar__track {
+      opacity: 1;
+    }
+  }
+
+  @include modifier(native) {
+    .ea-scrollbar__track {
+      display: none;
+    }
+
+    .ea-scrollbar__view {
+      scrollbar-width: auto;
+    }
+  }
+
+  @include modifier(always) {
+    .ea-scrollbar__track {
+      opacity: 1;
+    }
+  }
+}

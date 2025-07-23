@@ -6,25 +6,30 @@ import { HrefComm } from "./src/components/HrefComm.js";
 import stylesheet from "./index.scss?inline"
 
 export class EaButton extends Base {
-  #buttonType = "button";
+  static get observedAttributes() {
+    return ["disabled", "type", "text", "plain", "round", "circle", "link", "href", "size", "loading", "icon"];
+  }
 
   /** @type {HTMLButtonElement | HTMLLinkElement} */
-  #wrap;
+  #container;
 
-  static observedProps = ["disabled", "type", 'text', 'plain', 'round', 'cicle', 'link', 'icon', 'loading'];
-
-  computedClasslist = () => {
-    return this.#wrap.className = [
-      "ea-button",
-      (this.type && `ea-button--${this.type}`) || '',
-      ((this.disabled || this.loading) && "ea-button--disabled") || '',
-      ((this.text || this.link) && "ea-button--text") || '',
-      (this.plain && "ea-button--plain") || '',
-      (this.round && "ea-button--round") || '',
-      (this.circle && "ea-button--circle") || '',
-      (this.size && `ea-button--${this.size}` || ''),
-    ].join(" ");
-  };
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    return this.computedClasslist('ea-button',
+      {
+        ['--' + this.type]: this.type,
+        ['--disabled']: this.disabled || this.loading,
+        ['--text']: this.text || this.link,
+        ['--plain']: this.plain,
+        ['--round']: this.round,
+        ['--circle']: this.circle,
+        ['--' + this.size]: this.size
+      }
+    );
+  }
 
   /**
    * @typedef {Object} state
@@ -38,6 +43,8 @@ export class EaButton extends Base {
    * @property {string} href
    * @property {string} size
    * @property {boolean} loading
+   * @property {string} icon
+   * @property {boolean} loading
    */
 
   /** @type {state} */
@@ -46,87 +53,105 @@ export class EaButton extends Base {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
       },
     },
     type: {
       type: ['normal', 'primary', 'success', 'warning', 'danger'],
       default: 'normal',
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
       }
     },
     text: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
       }
     },
     plain: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
       }
     },
     round: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
       }
     },
     circle: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
       }
     },
     link: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
       }
     },
     href: {
       type: String,
       default: '',
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
 
-        this.#wrap.setAttribute('href', newVal)
+        this.#container.setAttribute('href', newVal)
       }
     },
     size: {
       type: ['small', 'medium', 'large'],
       default: 'medium',
       observer: (newVal) => {
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
       }
     },
     loading: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
+        newVal = newVal === "true" || newVal === true;
+        this.setAttr("disabled", newVal)
+
+
         if (newVal) {
           const i = document.createElement('ea-icon');
           i.id = 'ea-loading-icon';
           i.icon = 'icon-spin6 animate-spin';
-          i.size = this.state.size;
+          i.size = this.size;
           i.part = 'loading-icon';
 
-          this.#wrap.insertBefore(i, this.#wrap.firstChild)
+          this.#container.insertBefore(i, this.#container.firstChild)
         } else {
-          const loadingIcon = this.#wrap?.querySelectorAll('#ea-loading-icon');
+          const loadingIcon = this.#container?.querySelectorAll('#ea-loading-icon');
           if (loadingIcon?.length > 0) {
             loadingIcon?.forEach(item => item.remove());
           }
         }
 
-        this.computedClasslist()
+        this.#container.className = this.updateContainerClasslist()
+      }
+    },
+    icon: {
+      type: String,
+      default: '',
+      observer: (newVal) => {
+        if (newVal && !this.#container.querySelector('ea-icon')) {
+          const eaIcon = document.createElement('ea-icon');
+          eaIcon.size = this.size;
+          eaIcon.icon = newVal;
+          eaIcon.part = "icon";
+
+          this.#container.insertBefore(eaIcon, this.#container.firstChild);
+        }
       }
     },
   })
@@ -136,177 +161,47 @@ export class EaButton extends Base {
 
     this.stylesheet = stylesheet;
 
-    const hrefAttr = this.getAttribute('href')
-    if (hrefAttr) {
-      this.shadowRoot.innerHTML = HrefComm;
-      this.#buttonType = "a";
-    } else {
-      this.shadowRoot.innerHTML = ButtonComm;
-      this.#buttonType = "button";
-    }
-
-    this.#wrap = this.shadowRoot.querySelector('.ea-button');
+    this.$render();
   }
 
-  // ------- 禁用 -------
-  // #region
-  get disabled() {
-    return this.state.disabled
+  $render() {
+    const tag = this.getAttrBoolean('link') ? "a" : "button";
+    this.shadowRoot.innerHTML = `
+      <${tag} class="ea-button">
+        <slot></slot>
+      </${tag}>
+    `;
+
+    this.#container = this.shadowRoot.querySelector('.ea-button');
   }
 
-  set disabled(value) {
-    this.state.disabled = value;
-  }
-  // #endregion
-  // ------- end -------
+  connectedCallback() {
+    super.connectedCallback();
 
-  // ------- type属性 -------
-  // #region
-  get type() {
-    return this.state.type;
-  }
 
-  set type(value) {
-    this.state.type = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- text 属性 -------
-  // #region
-  get text() {
-    return this.state.text;
-  }
-
-  set text(value) {
-    this.state.text = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- plain 属性 -------
-  // #region
-  get plain() {
-    return this.state.plain;
-  }
-  set plain(value) {
-    this.state.plain = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- round 属性 -------
-  // #region
-  get round() {
-    return this.state.round;
-  }
-  set round(value) {
-    this.state.round = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- circle 属性 -------
-  // #region
-  get circle() {
-    return this.state.circle;
-  }
-  set circle(value) {
-    this.state.circle = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- 图标按钮 -------
-  // #region
-  get icon() {
-    return this.getAttribute('icon') || '';
-  }
-
-  set icon(value) {
-    this.setAttribute('icon', value);
-
-    if (value && !this.#wrap.querySelector('ea-icon')) {
-      const eaIcon = document.createElement('ea-icon');
-      eaIcon.size = this.size;
-      eaIcon.icon = value;
-      eaIcon.part = "icon";
-
-      this.#wrap.insertBefore(eaIcon, this.#wrap.firstChild);
-    }
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- 链接按钮 -------
-  // #region
-  get link() {
-    return this.state.link;
-  }
-
-  set link(value) {
-    this.state.link = value;
-  }
-
-  get href() {
-    return this.state.href;
-  }
-
-  set href(value) {
-    if (this.#buttonType === "button") return;
-
-    this.state.href = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- 按钮大小 -------
-  // #region
-  get size() {
-    return this.state.size;
-  }
-  set size(value) {
-    this.state.size = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- 按钮加载 -------
-  // #region
-  get loading() {
-    return this.state.loading;
-  }
-
-  set loading(value) {
-    this.state.loading = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  $mounted() {
     // 按钮样式
-    this.plain = this.getAttribute('plain');
-    this.round = this.getAttribute('round');
-    this.text = this.getAttribute('text');
-    this.circle = this.getAttribute('circle');
+    this.plain = this.plain;
+    this.round = this.round;
+    this.text = this.text;
+    this.circle = this.circle;
 
     // 按钮种类
-    this.type = this.getAttribute('type');
+    this.type = this.type;
 
     // 按钮大小
-    this.size = this.getAttribute('size');
+    this.size = this.size;
 
     // 图标
-    if (this.icon) this.icon = this.icon;
+    this.icon = this.icon;
 
     // 链接
-    this.link = this.getAttribute('link');
-    if (this.link) this.href = this.getAttribute('href');
+    this.link = this.link;
+    if (this.link) this.href = this.href;
 
     // 禁用
-    this.disabled = this.getAttrBoolean("disabled")
+    this.disabled = this.disabled;
 
-    if (this.getAttrBoolean("loading")) this.loading = this.getAttribute('loading');
+    this.loading = this.loading;
   }
 }
 

@@ -4,7 +4,7 @@ import stylesheet from './index.scss?inline';
 
 export class EaRow extends Base {
     static get observedAttributes() {
-        return ["gutter", "justify", "align"];
+        return ["gutter", "justify", "align", "tag"];
     }
 
     /** 
@@ -43,9 +43,12 @@ export class EaRow extends Base {
 
     constructor() {
         super();
-
         this.stylesheet = stylesheet;
 
+        this.$render();
+    }
+
+    $render() {
         this.shadowRoot.innerHTML = `
             <${this.tag} class="ea-row" part="container">
                 <slot></slot>
