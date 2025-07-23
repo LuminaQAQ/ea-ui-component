@@ -53,17 +53,6 @@ export class EaScrollbar extends Base {
         }
     })
 
-    /**
-     * 获取 classlist 列表
-     * @return {string} 属性值
-     */
-    updateContainerClasslist() {
-        return this.computedClasslist('ea-scrollbar',
-            {
-                // ['--' + this.state.type]: this.state.type,
-            });
-    }
-
     constructor() {
         super();
 
@@ -133,14 +122,16 @@ export class EaScrollbar extends Base {
      * 页面尺寸改变后，调整滚动条样式
      */
     #resizeEvent = () => {
-        const verticalThumbHeight = this.#view.clientHeight / this.#view.scrollHeight;
-        const horizontalThumbWidth = this.#view.clientWidth / this.#view.scrollWidth;
+        queueMicrotask(() => {
+            const verticalThumbHeight = this.#view.clientHeight / this.#view.scrollHeight;
+            const horizontalThumbWidth = this.#view.clientWidth / this.#view.scrollWidth;
 
-        this.#verticalThumb.style.setProperty('--ea-scrollbar-thumb-vertical-height', `${verticalThumbHeight * 100}%`);
-        this.#horizontalThumb.style.setProperty('--ea-scrollbar-thumb-horizontal-width', `${horizontalThumbWidth * 100}%`);
+            this.#verticalThumb.style.setProperty('--ea-scrollbar-thumb-vertical-height', `${verticalThumbHeight * 100}%`);
+            this.#horizontalThumb.style.setProperty('--ea-scrollbar-thumb-horizontal-width', `${horizontalThumbWidth * 100}%`);
 
-        this.#verticalTrack.classList.toggle('is-show', verticalThumbHeight >= 1);
-        this.#horizontalTrack.classList.toggle('is-show', horizontalThumbWidth >= 1);
+            this.#verticalTrack.classList.toggle('is-show', verticalThumbHeight >= 1);
+            this.#horizontalTrack.classList.toggle('is-show', horizontalThumbWidth >= 1);
+        })
     }
 
     /**
@@ -206,12 +197,13 @@ export class EaScrollbar extends Base {
         this.eventController = new AbortController();
         const controller = this.eventController;
 
+        this.#resizeEvent();
         this.#view.addEventListener('scroll', this.#scrollEvent, { signal: controller.signal });
         this.#horizontalThumb.addEventListener('mousedown', this.#mouseDownEvent, { signal: controller.signal });
         this.#verticalThumb.addEventListener('mousedown', this.#mouseDownEvent, { signal: controller.signal });
 
-        if (this.noresize) {
-            window.addEventListener('resize', this.#resizeEvent, { signal: controller.signal });
+        if (!this.noresize) {
+            this.#container.addEventListener('resize', this.#resizeEvent, { signal: controller.signal });
         }
 
         window.addEventListener('load', this.#resizeEvent, { signal: controller.signal })
