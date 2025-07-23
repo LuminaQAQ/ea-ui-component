@@ -63,7 +63,7 @@
                 <p>header</p>
             </ea-header>
             <ea-main>
-                <ea-scrollbar>
+                <ea-scrollbar native>
                     <div>aside</div>
                     <div>aside</div>
                     <div>aside</div>
@@ -235,7 +235,7 @@
                 <p>header</p>
             </ea-header>
             <ea-main>
-                <ea-scrollbar>
+                <ea-scrollbar always>
                     <p>main</p>
                     <p>main</p>
                     <p>main</p>
@@ -359,6 +359,10 @@
             </ea-footer>
         </ea-container>
     </ea-container>
+
+    <script>
+        const bar = document.querySelector('ea-scrollbar[always]');
+    </script>
 
 
     <!-- <ea-scrollbar>

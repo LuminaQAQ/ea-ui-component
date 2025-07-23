@@ -105,4 +105,20 @@
       opacity: 1;
     }
   }
+
+  @include modifier(native) {
+    .ea-scrollbar__track {
+      display: none;
+    }
+
+    .ea-scrollbar__view {
+      scrollbar-width: auto;
+    }
+  }
+
+  @include modifier(always) {
+    .ea-scrollbar__track {
+      opacity: 1;
+    }
+  }
 }

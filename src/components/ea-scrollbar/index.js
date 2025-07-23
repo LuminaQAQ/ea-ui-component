@@ -17,7 +17,7 @@ export class EaScrollbar extends Base {
     #view
 
     static get observedAttributes() {
-        return [];
+        return ['native', 'noresize', 'always'];
     }
 
     /** 
@@ -30,6 +30,27 @@ export class EaScrollbar extends Base {
             default: '',
             observer: (newVal) => { }
         },
+        native: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.#container.classList.toggle('ea-scrollbar--native', newVal);
+            }
+        },
+        noresize: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.#container.classList.toggle('ea-scrollbar--noresize', newVal);
+            }
+        },
+        always: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.#container.classList.toggle('ea-scrollbar--always', newVal);
+            }
+        }
     })
 
     /**
@@ -74,11 +95,43 @@ export class EaScrollbar extends Base {
         this.#view = this.shadowRoot.querySelector('.ea-scrollbar__view');
     }
 
+    /**
+     * 滚动事件 - 修改滚动条样式 和 事件派发
+     */
     #scrollEvent = () => {
         this.#verticalThumb.style.setProperty('--ea-scrollbar-top', `${this.#view.scrollTop / this.#view.scrollHeight * 100}%`);
         this.#horizontalThumb.style.setProperty('--ea-scrollbar-left', `${this.#view.scrollLeft / this.#view.scrollWidth * 100}%`);
+
+        this.dispatchEvent(new CustomEvent('scroll', {
+            detail: {
+                scrollTop: this.#view.scrollTop,
+                scrollLeft: this.#view.scrollLeft,
+            }
+        }))
+
+        const directions = {
+            left: this.#view.scrollTop / this.#view.scrollHeight <= 0,
+            right: this.#view.scrollTop / this.#view.scrollHeight >= 1,
+            top: this.#view.scrollLeft / this.#view.scrollWidth <= 0,
+            bottom: this.#view.scrollLeft / this.#view.scrollWidth >= 1,
+        }
+
+        Object.keys(directions).forEach(direction => {
+            if (directions[direction]) {
+                this.dispatchEvent(new CustomEvent("end-reached", {
+                    detail: {
+                        direction,
+                        scrollTop: this.#view.scrollTop,
+                        scrollLeft: this.#view.scrollLeft,
+                    }
+                }))
+            }
+        })
     };
 
+    /**
+     * 页面尺寸改变后，调整滚动条样式
+     */
     #resizeEvent = () => {
         const verticalThumbHeight = this.#view.clientHeight / this.#view.scrollHeight;
         const horizontalThumbWidth = this.#view.clientWidth / this.#view.scrollWidth;
@@ -90,6 +143,10 @@ export class EaScrollbar extends Base {
         this.#horizontalTrack.classList.toggle('is-show', horizontalThumbWidth >= 1);
     }
 
+    /**
+     * 垂直滚动条拖动事件
+     * @param {MouseEvent} e
+     */
     #verticalMouseMoveEvent = (e) => {
         const thumbHeight = this.#verticalThumb.offsetHeight / 2;
         const initTop = e.clientY - thumbHeight + (this.#view.scrollTop / this.#view.scrollHeight)
@@ -102,6 +159,10 @@ export class EaScrollbar extends Base {
         this.#verticalThumb.classList.add('is-active');
     }
 
+    /**
+     * 水平滚动条拖动事件
+     * @param {MouseEvent} e
+     */
     #horizontalMouseMoveEvent = (e) => {
         const thumbWidth = this.#horizontalThumb.offsetWidth / 2;
         const initLeft = e.clientX - thumbWidth + (this.#view.scrollLeft / this.#view.scrollWidth)
@@ -115,7 +176,7 @@ export class EaScrollbar extends Base {
     }
 
     /**
-     * 
+     * 鼠标按下事件
      * @param {MouseEvent} e 
      */
     #mouseDownEvent = (e) => {
@@ -138,6 +199,10 @@ export class EaScrollbar extends Base {
     connectedCallback() {
         super.connectedCallback();
 
+        this.native = this.native;
+        this.noresize = this.noresize;
+        this.always = this.always;
+
         this.eventController = new AbortController();
         const controller = this.eventController;
 
@@ -145,8 +210,19 @@ export class EaScrollbar extends Base {
         this.#horizontalThumb.addEventListener('mousedown', this.#mouseDownEvent, { signal: controller.signal });
         this.#verticalThumb.addEventListener('mousedown', this.#mouseDownEvent, { signal: controller.signal });
 
-        window.addEventListener('resize', this.#resizeEvent, { signal: controller.signal });
+        if (this.noresize) {
+            window.addEventListener('resize', this.#resizeEvent, { signal: controller.signal });
+        }
+
         window.addEventListener('load', this.#resizeEvent, { signal: controller.signal })
+    }
+
+    /**
+     * @exports scrollTo
+     * @param {ScrollToOptions} options 
+     */
+    scrollTo(options) {
+        this.#view.scrollTo(options)
     }
 
     $beforeUnmounted() {
