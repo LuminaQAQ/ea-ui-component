@@ -29,4 +29,12 @@ export default defineConfig({
             }
         }
     },
+    resolve: {
+        alias: {
+            '@': resolve(__dirname, 'src/'),
+            '@components': resolve(__dirname, 'src/components'),
+            '@themes': resolve(__dirname, 'src/themes'),
+            '@utils': resolve(__dirname, 'src/utils'),
+        }
+    }
 });

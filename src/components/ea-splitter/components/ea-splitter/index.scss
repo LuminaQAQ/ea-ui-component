@@ -1,0 +1,8 @@
+:host {
+  --ea-splitter-direction: row;
+}
+
+@include block(ea-splitter) {
+  display: flex;
+  flex-direction: var(--ea-splitter-direction);
+}
