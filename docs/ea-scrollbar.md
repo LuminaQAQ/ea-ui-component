@@ -3,8 +3,6 @@ import { onMounted } from 'vue'
 
 onMounted(() => {
   import("../dist/components/index.js")
-  // import("../components/ea-scrollbar/index.js")
-  // import("../components/ea-container/index.js")
   import("../dist/assets/icon.css")
 })
 </script>
