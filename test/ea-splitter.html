@@ -19,15 +19,33 @@
         hr {
             margin: 3rem 0;
         }
+
+        .demo-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 100%;
+
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 
 <body>
     <script type="module" src="/src/components/ea-splitter/index.js"></script>
 
-    <ea-splitter layout="vertical">
-        <div>1</div>
-        <div>2</div>
-    </ea-splitter>
+    <!-- #region  -->
+    <div class="demo" style="height: 250px; box-shadow: gray 0px 0px 10px">
+        <ea-splitter layout="vertical">
+            <ea-splitter-panel size="30%">
+                <div class="demo-panel">1</div>
+            </ea-splitter-panel>
+            <ea-splitter-panel min="200px">
+                <div class="demo-panel">2</div>
+            </ea-splitter-panel>
+        </ea-splitter>
+    </div>
+    <!-- #endregion  -->
 
 </html>

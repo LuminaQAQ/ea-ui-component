@@ -1,0 +1,16 @@
+:host-context(ea-splitter) {
+  --ea-splitter-panel-size: 100%;
+
+  --ea-splitter-panel-min-size: none;
+
+  width: var(--ea-splitter-panel-size);
+  height: var(--ea-splitter-panel-size);
+}
+
+@include block(ea-splitter-panel) {
+  width: var(--ea-splitter-panel-size);
+  height: var(--ea-splitter-panel-size);
+
+  min-width: var(--ea-splitter-panel-min-size);
+  min-height: var(--ea-splitter-panel-min-size);
+}

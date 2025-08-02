@@ -30,7 +30,7 @@ export class EaSplitter extends Base {
 
     $render() {
         this.shadowRoot.innerHTML = `
-          <div class="ea-splitter">
+          <div class="ea-splitter" part="container">
             <slot></slot>
           </div>
         `;
@@ -42,6 +42,19 @@ export class EaSplitter extends Base {
         super.connectedCallback();
 
         this.layout = this.layout;
+
+        queueMicrotask(() => {
+            [...this.children].forEach((child, index) => {
+                if (child.tagName === 'EA-SPLITTER-PANEL' && index < this.children.length - 1) {
+                    // const splitterBar = document.createElement('ea-splitter-bar');
+                    const splitterBar = document.createElement('div');
+                    splitterBar.style.height = '100%';
+                    splitterBar.style.width = '1px';
+                    splitterBar.style.background = 'gray';
+                    this.insertBefore(splitterBar, child.nextSibling);
+                }
+            });
+        })
     }
 }
 

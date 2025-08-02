@@ -7,15 +7,26 @@ export class EaSplitterPanel extends Base {
     #container;
 
     static get observedAttributes() {
-        return [];
+        return ['size', 'min'];
     }
 
     state = this.properties({
         size: {
             type: String,
             default: '',
-            observer: (newVal) => { }
+            observer: (newVal) => {
+                console.log(newVal);
+
+                this.style.setProperty('--ea-splitter-panel-size', newVal)
+            }
         },
+        min: {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                this.style.setProperty('--ea-splitter-panel-min-size', newVal)
+            }
+        }
     })
 
     /**
@@ -39,7 +50,9 @@ export class EaSplitterPanel extends Base {
 
     $render() {
         this.shadowRoot.innerHTML = `
-          
+            <div class="ea-splitter-panel" part="container">
+                <slot></slot>
+            </div>
         `;
 
         this.#container = this.shadowRoot.querySelector('.ea-splitter-panel');
@@ -47,6 +60,9 @@ export class EaSplitterPanel extends Base {
 
     connectedCallback() {
         super.connectedCallback();
+
+        this.size = this.size;
+        this.min = this.min;
     }
 }
 
