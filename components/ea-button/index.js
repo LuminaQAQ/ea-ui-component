@@ -1,8 +1,5 @@
 import Base from "../Base.js";
 
-import { ButtonComm } from "./src/components/ButtonComm.js";
-import { HrefComm } from "./src/components/HrefComm.js";
-
 import stylesheet from "./index.scss?inline"
 
 export class EaButton extends Base {

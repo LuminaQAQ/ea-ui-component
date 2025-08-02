@@ -53,17 +53,6 @@ export class EaScrollbar extends Base {
         }
     })
 
-    /**
-     * 获取 classlist 列表
-     * @return {string} 属性值
-     */
-    updateContainerClasslist() {
-        return this.computedClasslist('ea-scrollbar',
-            {
-                // ['--' + this.state.type]: this.state.type,
-            });
-    }
-
     constructor() {
         super();
 
@@ -134,8 +123,9 @@ export class EaScrollbar extends Base {
      */
     #resizeEvent = () => {
         queueMicrotask(() => {
-            const verticalThumbHeight = this.#view.clientHeight / this.#view.scrollHeight;
-            const horizontalThumbWidth = this.#view.clientWidth / this.#view.scrollWidth;
+            const viewRect = this.#view.getBoundingClientRect();
+            const verticalThumbHeight = viewRect.height / this.#view.scrollHeight;
+            const horizontalThumbWidth = viewRect.width / this.#view.scrollWidth;
 
             this.#verticalThumb.style.setProperty('--ea-scrollbar-thumb-vertical-height', `${verticalThumbHeight * 100}%`);
             this.#horizontalThumb.style.setProperty('--ea-scrollbar-thumb-horizontal-width', `${horizontalThumbWidth * 100}%`);
@@ -150,11 +140,14 @@ export class EaScrollbar extends Base {
      * @param {MouseEvent} e
      */
     #verticalMouseMoveEvent = (e) => {
-        const thumbHeight = this.#verticalThumb.offsetHeight / 2;
-        const initTop = e.clientY - thumbHeight + (this.#view.scrollTop / this.#view.scrollHeight)
+        const trackRect = this.#verticalTrack.getBoundingClientRect();
+
+        const relativeY = e.clientY - trackRect.top;
+        const scrollRatio = relativeY / trackRect.height;
+        const scrollTop = scrollRatio * (this.#view.scrollHeight - this.#view.clientHeight);
 
         this.#view.scrollTo({
-            top: initTop * this.#view.scrollHeight / this.#view.clientHeight,
+            top: scrollTop,
             behavior: "instant"
         });
 
@@ -166,11 +159,14 @@ export class EaScrollbar extends Base {
      * @param {MouseEvent} e
      */
     #horizontalMouseMoveEvent = (e) => {
-        const thumbWidth = this.#horizontalThumb.offsetWidth / 2;
-        const initLeft = e.clientX - thumbWidth + (this.#view.scrollLeft / this.#view.scrollWidth)
+        const trackRect = this.#horizontalTrack.getBoundingClientRect();
+
+        const relativeX = e.clientX - trackRect.left;
+        const scrollRatio = relativeX / trackRect.width;
+        const scrollLeft = scrollRatio * (this.#view.scrollWidth - this.#view.clientWidth);
 
         this.#view.scrollTo({
-            left: initLeft * this.#view.scrollWidth / this.#view.clientWidth,
+            left: scrollLeft,
             behavior: "instant"
         });
 
