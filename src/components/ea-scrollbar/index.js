@@ -20,6 +20,11 @@ export class EaScrollbar extends Base {
         return ['native', 'noresize', 'always'];
     }
 
+    #state = {
+        verticalScrollDistance: 0,
+        horizontalScrollDistance: 0,
+    }
+
     /** 
      * @typedef {Object} State
      */
@@ -130,8 +135,8 @@ export class EaScrollbar extends Base {
             this.#verticalThumb.style.setProperty('--ea-scrollbar-thumb-vertical-height', `${verticalThumbHeight * 100}%`);
             this.#horizontalThumb.style.setProperty('--ea-scrollbar-thumb-horizontal-width', `${horizontalThumbWidth * 100}%`);
 
-            this.#verticalTrack.classList.toggle('is-show', verticalThumbHeight >= 1);
-            this.#horizontalTrack.classList.toggle('is-show', horizontalThumbWidth >= 1);
+            this.#verticalTrack.classList.toggle('is-show', verticalThumbHeight >= 0.999);
+            this.#horizontalTrack.classList.toggle('is-show', horizontalThumbWidth >= 0.999);
         })
     }
 
@@ -194,6 +199,24 @@ export class EaScrollbar extends Base {
         }, { signal: controller.signal });
     }
 
+    /**
+     * 键盘事件
+     * @param {KeyboardEvent} e 
+     */
+    #mouseKeyDownEvent = (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            this.#view.scrollTo({
+                top: this.#view.scrollTop + (this.#view.scrollHeight / 8) * (e.key === 'ArrowUp' ? -1 : 1),
+                behavior: "smooth"
+            });
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            this.#view.scrollTo({
+                left: this.#view.scrollLeft + (this.#view.scrollWidth / 8) * (e.key === 'ArrowLeft' ? -1 : 1),
+                behavior: "smooth"
+            });
+        }
+    }
+
     connectedCallback() {
         super.connectedCallback();
 
@@ -208,6 +231,8 @@ export class EaScrollbar extends Base {
         this.#view.addEventListener('scroll', this.#scrollEvent, { signal: controller.signal });
         this.#horizontalThumb.addEventListener('mousedown', this.#mouseDownEvent, { signal: controller.signal });
         this.#verticalThumb.addEventListener('mousedown', this.#mouseDownEvent, { signal: controller.signal });
+
+        this.addEventListener('keydown', this.#mouseKeyDownEvent)
 
         if (!this.noresize) {
             this.#container.addEventListener('resize', this.#resizeEvent, { signal: controller.signal });
