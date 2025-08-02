@@ -15,7 +15,7 @@ export class EaSplitterPanel extends Base {
             type: String,
             default: '',
             observer: (newVal) => {
-                console.log(newVal);
+                if (!CSS.supports('width', newVal)) return console.warn(`The size value ${newVal} is not supported.`);
 
                 this.style.setProperty('--ea-splitter-panel-size', newVal)
             }
@@ -24,6 +24,8 @@ export class EaSplitterPanel extends Base {
             type: String,
             default: '',
             observer: (newVal) => {
+                if (!CSS.supports('width', newVal)) return console.warn(`The size value ${newVal} is not supported.`);
+
                 this.style.setProperty('--ea-splitter-panel-min-size', newVal)
             }
         }
@@ -61,8 +63,8 @@ export class EaSplitterPanel extends Base {
     connectedCallback() {
         super.connectedCallback();
 
-        this.size = this.size;
         this.min = this.min;
+        this.size = this.size;
     }
 }
 
