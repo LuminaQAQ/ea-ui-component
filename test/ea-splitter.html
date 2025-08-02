@@ -36,13 +36,30 @@
     <script type="module" src="/src/components/ea-splitter/index.js"></script>
 
     <!-- #region  -->
-    <div class="demo" style="height: 250px; box-shadow: gray 0px 0px 10px">
+    <div class="demo" style="height: 300px; box-shadow: gray 0px 0px 10px">
         <ea-splitter layout="vertical">
             <ea-splitter-panel size="30%">
                 <div class="demo-panel">1</div>
             </ea-splitter-panel>
-            <ea-splitter-panel min="200px">
+            <ea-splitter-panel min="20%">
                 <div class="demo-panel">2</div>
+            </ea-splitter-panel>
+            <ea-splitter-panel min="10%">
+                <div class="demo-panel">3</div>
+            </ea-splitter-panel>
+        </ea-splitter>
+    </div>
+
+    <div class="demo" style="height: 300px; box-shadow: gray 0px 0px 10px">
+        <ea-splitter>
+            <ea-splitter-panel min="30%">
+                <div class="demo-panel">1</div>
+            </ea-splitter-panel>
+            <ea-splitter-panel size="20%">
+                <div class="demo-panel">2</div>
+            </ea-splitter-panel>
+            <ea-splitter-panel size="10%">
+                <div class="demo-panel">3</div>
             </ea-splitter-panel>
         </ea-splitter>
     </div>

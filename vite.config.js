@@ -1,8 +1,17 @@
 import { defineConfig } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer'
 import entryConfigs from './configs/entryConfig.js';
 import { resolve } from 'node:path';
 
 export default defineConfig({
+    plugins: [
+        visualizer({
+            open: true,
+            gzipSize: true,
+            brotliSize: true,
+            filename: 'dist/stats.html',
+        })
+    ],
     build: {
         lib: {
             entry: entryConfigs,
@@ -11,6 +20,7 @@ export default defineConfig({
         rollupOptions: {
             external: [],
             output: {
+                manualChunks: undefined,
                 entryFileNames: 'components/[name].js',
                 chunkFileNames: 'components/[name].js',
                 assetFileNames: 'assets/icon.[ext]'

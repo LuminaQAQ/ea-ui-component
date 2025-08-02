@@ -3,13 +3,27 @@
 
   --ea-splitter-panel-min-size: none;
 
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+:host-context(ea-splitter[layout="horizontal"]) {
   width: var(--ea-splitter-panel-size);
+  min-width: var(--ea-splitter-panel-min-size);
+}
+
+:host-context(ea-splitter[layout="vertical"]) {
   height: var(--ea-splitter-panel-size);
+  min-height: var(--ea-splitter-panel-min-size);
 }
 
 @include block(ea-splitter-panel) {
-  width: var(--ea-splitter-panel-size);
-  height: var(--ea-splitter-panel-size);
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
 
   min-width: var(--ea-splitter-panel-min-size);
   min-height: var(--ea-splitter-panel-min-size);

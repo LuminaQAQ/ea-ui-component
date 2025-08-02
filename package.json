@@ -220,6 +220,7 @@
     "@types/node": "^24.0.14",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.32.0",
+    "rollup-plugin-visualizer": "^6.0.3",
     "sass-embedded": "^1.89.2",
     "vite": "^5.4.1"
   },
