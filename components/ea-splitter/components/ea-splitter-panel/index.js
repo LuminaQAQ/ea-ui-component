@@ -7,7 +7,7 @@ export class EaSplitterPanel extends Base {
     #container;
 
     static get observedAttributes() {
-        return ['size', 'min'];
+        return ['size', 'min', 'layout'];
     }
 
     state = this.properties({
@@ -28,7 +28,12 @@ export class EaSplitterPanel extends Base {
 
                 this.style.setProperty('--ea-splitter-panel-min-size', newVal)
             }
-        }
+        },
+        layout: {
+            type: ['vertical', 'horizontal'],
+            default: 'horizontal',
+            observer: (newVal) => { }
+        },
     })
 
     /**

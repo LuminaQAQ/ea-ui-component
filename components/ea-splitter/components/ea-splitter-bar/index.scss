@@ -2,7 +2,7 @@
   position: relative;
 }
 
-:host-context(ea-splitter[layout="horizontal"]) {
+:host([layout="horizontal"]) {
   cursor: col-resize;
 
   @include block(ea-splitter-bar) {
@@ -16,7 +16,7 @@
   }
 }
 
-:host-context(ea-splitter[layout="vertical"]) {
+:host([layout="vertical"]) {
   cursor: row-resize;
 
   @include block(ea-splitter-bar) {
