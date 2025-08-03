@@ -76,11 +76,10 @@ export class EaSplitter extends Base {
     }
 
     /**
-     * panel resize 的公共逻辑
-     * @param {MouseEvent} e 
-     * @param {Boolean} isCol 
+     * `layout="horizontal"` 时的 `resize` 事件监听
+     * @param {MouseEvent} e
      */
-    #setupResizeEvent = (e, isCol = true) => {
+    #splitterColResizeEvent = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -90,59 +89,51 @@ export class EaSplitter extends Base {
         const preChild = this.children[index - 1];
         const nextChild = this.children[index + 1];
 
-        const startCoord = isCol ? e.clientX : e.clientY;
+        const startX = e.clientX;
 
-        const preRect = preChild.getBoundingClientRect();
-        const nextRect = nextChild.getBoundingClientRect();
-        const initialPreSize = isCol ? preRect.width : preRect.height;
-        const initialNextSize = isCol ? nextRect.width : nextRect.height;
+        const preChildRect = preChild.getBoundingClientRect();
+        const initialPreWidth = preChildRect.width;
 
-        this.#dispatchResizeEvent(`panel-resize-start`);
+        const nextChildRect = nextChild.getBoundingClientRect();
+        const initialNextWidth = nextChildRect.width;
+
+        this.#dispatchResizeEvent('panel-resize-start');
 
         const mousemoveHandler = (moveE) => {
-            moveE.preventDefault();
-            moveE.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
 
-            const delta = (isCol ? moveE.clientX : moveE.clientY) - startCoord;
-            const newPreSize = initialPreSize + delta;
-            const newNextSize = initialNextSize - delta;
+            const deltaX = moveE.clientX - startX;
 
-            let currentPreMin = 0;
-            let currentNextMin = 0;
-            const containerSize = isCol ? this.#container.clientWidth : this.#container.clientHeight;
+            const newPreWidth = initialPreWidth + deltaX;
+            const newNextWidth = initialNextWidth - deltaX;
 
+            let currentPreWidth = 0;
+            let currentNextWidth = 0;
             if (preChild.min.endsWith('%')) {
-                currentPreMin = containerSize * parseCSSMinValue(preChild.min);
-                currentNextMin = containerSize * parseCSSMinValue(nextChild.min);
+                currentPreWidth = this.#container.clientWidth * parseCSSMinValue(preChild.min);
+                currentNextWidth = this.#container.clientWidth * parseCSSMinValue(nextChild.min);
             } else if (preChild.min.endsWith('px')) {
-                currentPreMin = parseCSSMinValue(preChild.min);
-                currentNextMin = parseCSSMinValue(nextChild.min);
+                currentPreWidth = parseCSSMinValue(preChild.min);
+                currentNextWidth = parseCSSMinValue(nextChild.min);
             }
 
-            if (newPreSize <= currentPreMin || newNextSize <= currentNextMin) return;
+            if (newPreWidth <= currentPreWidth || newNextWidth <= currentNextWidth) return;
 
-            preChild.size = newPreSize + 'px';
-            nextChild.size = newNextSize + 'px';
+            preChild.size = newPreWidth + 'px';
+            nextChild.size = newNextWidth + 'px';
 
-            this.#dispatchResizeEvent(`panel-resize`);
+            this.#dispatchResizeEvent("panel-resize");
         };
 
         const mouseupHandler = () => {
             controller.abort();
-            this.#dispatchResizeEvent(`panel-resize-end`);
+
+            this.#dispatchResizeEvent("panel-resize-end");
         };
 
         window.addEventListener('mousemove', mousemoveHandler, { signal: controller.signal });
         window.addEventListener('mouseup', mouseupHandler, { signal: controller.signal });
-    };
-
-
-    /**
-     * `layout="horizontal"` 时的 `resize` 事件监听
-     * @param {MouseEvent} e
-     */
-    #splitterColResizeEvent = (e) => {
-        this.#setupResizeEvent(e, true);
     }
 
     /**
@@ -150,7 +141,60 @@ export class EaSplitter extends Base {
      * @param {MouseEvent} e
      */
     #splitterRowResizeEvent = (e) => {
-        this.#setupResizeEvent(e, true);
+        e.preventDefault();
+        e.stopPropagation();
+
+        const controller = new AbortController();
+        const index = Number(e.target.getAttribute('data-index'));
+
+        const preChild = this.children[index - 1];
+        const nextChild = this.children[index + 1];
+
+        const startY = e.clientY;
+
+        const preChildRect = preChild.getBoundingClientRect();
+        const initialPreHeight = preChildRect.height;
+
+        const nextChildRect = nextChild.getBoundingClientRect();
+        const initialNextHeight = nextChildRect.height;
+
+        this.#dispatchResizeEvent('resize-start');
+
+        const mousemoveHandler = (moveE) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const deltaY = moveE.clientY - startY;
+
+            const newPreHeight = initialPreHeight + deltaY;
+            const newNextHeight = initialNextHeight - deltaY;
+
+            let currentPreHeight = 0;
+            let currentNextHeight = 0;
+            if (preChild.min.endsWith('%')) {
+                currentPreHeight = this.#container.clientHeight * parseCSSMinValue(preChild.min);
+                currentNextHeight = this.#container.clientHeight * parseCSSMinValue(nextChild.min);
+            } else if (preChild.min.endsWith('px')) {
+                currentPreHeight = parseCSSMinValue(preChild.min);
+                currentNextHeight = parseCSSMinValue(nextChild.min);
+            }
+
+            if (newPreHeight <= currentPreHeight || newNextHeight <= currentNextHeight) return;
+
+            preChild.size = newPreHeight + 'px';
+            nextChild.size = newNextHeight + 'px';
+
+            this.#dispatchResizeEvent("panel-resize");
+        };
+
+        const mouseupHandler = () => {
+            controller.abort();
+
+            this.#dispatchResizeEvent("panel-resize-end");
+        };
+
+        window.addEventListener('mousemove', mousemoveHandler, { signal: controller.signal });
+        window.addEventListener('mouseup', mouseupHandler, { signal: controller.signal });
     }
 
     connectedCallback() {

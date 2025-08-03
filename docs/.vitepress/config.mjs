@@ -57,6 +57,7 @@ export default defineConfig({
           { text: 'Link 文字链接', link: '/ea-link' },
           { text: 'Text 文本', link: '/ea-text' },
           { text: 'Scrollbar 滚动条', link: '/ea-scrollbar' },
+          { text: 'Splitter 分隔面板', link: '/ea-splitter' },
         ]
       },
       // {
