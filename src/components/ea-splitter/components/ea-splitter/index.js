@@ -57,52 +57,66 @@ export class EaSplitter extends Base {
         const controller = new AbortController();
         const index = Number(e.target.getAttribute('data-index'));
 
-        window.addEventListener('mousemove', moveE => {
-            const containerRect = this.#container.getBoundingClientRect();
+        const preChild = this.children[index - 1];
+        const nextChild = this.children[index + 1];
 
-            const preWidth = moveE.clientX - containerRect.left;
-            const nextWidth = containerRect.width - (moveE.clientX - containerRect.left);
+        const startX = e.clientX;
 
-            const preChild = this.children[index - 1];
-            const nextChild = this.children[index + 1];
+        const preChildRect = preChild.getBoundingClientRect();
+        const initialPreWidth = preChildRect.width;
 
-            console.log(preChild);
+        const nextChildRect = nextChild.getBoundingClientRect();
+        const initialNextWidth = nextChildRect.width;
 
-            if (!preChild.size) preChild.size = `${preWidth}px`;
-            if (!nextChild.size) nextChild.size = `${nextWidth}px`;
+        const mousemoveHandler = (moveE) => {
+            const deltaX = moveE.clientX - startX;
 
-            preChild.size = preWidth + 'px';
-            nextChild.size = nextWidth + 'px';
-        }, { signal: controller.signal });
+            const newPreWidth = initialPreWidth + deltaX;
+            const newNextWidth = initialNextWidth - deltaX;
 
-        window.addEventListener('mouseup', () => {
+            preChild.size = newPreWidth + 'px';
+            nextChild.size = newNextWidth + 'px';
+        };
+
+        const mouseupHandler = () => {
             controller.abort();
-        }, { signal: controller.signal });
+        };
+
+        window.addEventListener('mousemove', mousemoveHandler, { signal: controller.signal });
+        window.addEventListener('mouseup', mouseupHandler, { signal: controller.signal });
     }
 
     #splitterRowResizeEvent = (e) => {
         const controller = new AbortController();
         const index = Number(e.target.getAttribute('data-index'));
 
-        window.addEventListener('mousemove', moveE => {
-            const containerRect = this.#container.getBoundingClientRect();
+        const preChild = this.children[index - 1];
+        const nextChild = this.children[index + 1];
 
-            const preHeight = moveE.clientY - containerRect.top;
-            const nextHeight = containerRect.height - (moveE.clientY - containerRect.top);
+        const startY = e.clientY;
 
-            const preChild = this.children[index - 1];
-            const nextChild = this.children[index + 1];
+        const preChildRect = preChild.getBoundingClientRect();
+        const initialPreHeight = preChildRect.height;
 
-            if (!preChild.size) preChild.size = `${preHeight}px`;
-            if (!nextChild.size) nextChild.size = `${nextHeight}px`;
+        const nextChildRect = nextChild.getBoundingClientRect();
+        const initialNextHeight = nextChildRect.height;
 
-            preChild.size = preHeight + 'px';
-            nextChild.size = nextHeight + 'px';
-        }, { signal: controller.signal });
+        const mousemoveHandler = (moveE) => {
+            const deltaY = moveE.clientY - startY;
 
-        window.addEventListener('mouseup', () => {
+            const newPreHeight = initialPreHeight + deltaY;
+            const newNextHeight = initialNextHeight - deltaY;
+
+            preChild.size = newPreHeight + 'px';
+            nextChild.size = newNextHeight + 'px';
+        };
+
+        const mouseupHandler = () => {
             controller.abort();
-        }, { signal: controller.signal });
+        };
+
+        window.addEventListener('mousemove', mousemoveHandler, { signal: controller.signal });
+        window.addEventListener('mouseup', mouseupHandler, { signal: controller.signal });
     }
 
     connectedCallback() {
