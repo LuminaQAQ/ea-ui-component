@@ -7,11 +7,11 @@ export class EaSplitterBar extends Base {
     #container;
 
     static get observedAttributes() {
-        return [];
+        return ['layout'];
     }
 
     state = this.properties({
-        type: {
+        layout: {
             type: ['vertical', 'horizontal'],
             default: '',
             observer: (newVal) => { }

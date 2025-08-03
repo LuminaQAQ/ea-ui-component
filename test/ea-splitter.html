@@ -28,6 +28,13 @@
             height: 100%;
 
             font-size: 1.5rem;
+
+            overflow: hidden;
+        }
+
+        .section {
+            height: 300px;
+            box-shadow: gray 0px 0px 10px;
         }
     </style>
 </head>
@@ -35,27 +42,14 @@
 <body>
     <script type="module" src="/src/components/ea-splitter/index.js"></script>
 
-    <!-- #region  -->
-    <div class="demo" style="height: 300px; box-shadow: gray 0px 0px 10px">
-        <ea-splitter layout="vertical">
-            <ea-splitter-panel size="30%">
-                <div class="demo-panel">1</div>
-            </ea-splitter-panel>
-            <ea-splitter-panel min="20%">
-                <div class="demo-panel">2</div>
-            </ea-splitter-panel>
-            <ea-splitter-panel min="10%">
-                <div class="demo-panel">3</div>
-            </ea-splitter-panel>
-        </ea-splitter>
-    </div>
-
-    <div class="demo" style="height: 300px; box-shadow: gray 0px 0px 10px">
+    <!-- #region 垂直布局 -->
+    <h1>基础用法</h1>
+    <div class="demo section">
         <ea-splitter>
             <ea-splitter-panel min="30%">
                 <div class="demo-panel">1</div>
             </ea-splitter-panel>
-            <ea-splitter-panel size="20%">
+            <ea-splitter-panel size="20%" min="20%">
                 <div class="demo-panel">2</div>
             </ea-splitter-panel>
             <ea-splitter-panel size="10%">
@@ -63,6 +57,38 @@
             </ea-splitter-panel>
         </ea-splitter>
     </div>
+    <hr>
     <!-- #endregion  -->
+
+    <!-- #region 垂直布局 -->
+    <h1>垂直布局</h1>
+    <div class="demo section">
+        <ea-splitter layout="vertical">
+            <ea-splitter-panel min="30%">
+                <div class="demo-panel">1</div>
+            </ea-splitter-panel>
+            <ea-splitter-panel size="20%" min="20%">
+                <div class="demo-panel">2</div>
+            </ea-splitter-panel>
+            <ea-splitter-panel size="10%">
+                <div class="demo-panel">3</div>
+            </ea-splitter-panel>
+        </ea-splitter>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+
+    <script>
+        const eaSplitter = document.querySelector('ea-splitter');
+        eaSplitter.addEventListener('panel-resize-start', (e) => {
+            console.log('panel-resize-start', e.detail.size);
+        });
+        eaSplitter.addEventListener('panel-resize', (e) => {
+            console.log('panel-resize', e.detail.size);
+        });
+        eaSplitter.addEventListener('panel-resize-end', (e) => {
+            console.log('panel-resize-end', e.detail.size);
+        });
+    </script>
 
 </html>
