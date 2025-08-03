@@ -34,7 +34,7 @@
 
         .section {
             height: 300px;
-            box-shadow: gray 0px 0px 10px;
+            box-shadow: #ccc 0px 0px 10px;
         }
     </style>
 </head>
@@ -44,36 +44,40 @@
 
     <!-- #region 垂直布局 -->
     <h1>基础用法</h1>
-    <div class="demo section">
-        <ea-splitter>
-            <ea-splitter-panel min="30%">
-                <div class="demo-panel">1</div>
-            </ea-splitter-panel>
-            <ea-splitter-panel size="20%" min="20%">
-                <div class="demo-panel">2</div>
-            </ea-splitter-panel>
-            <ea-splitter-panel size="10%">
-                <div class="demo-panel">3</div>
-            </ea-splitter-panel>
-        </ea-splitter>
+    <div class="demo">
+        <div class="section">
+            <ea-splitter class="section">
+                <ea-splitter-panel min="30%">
+                    <div class="demo-panel">1</div>
+                </ea-splitter-panel>
+                <ea-splitter-panel size="20%" min="20%">
+                    <div class="demo-panel">2</div>
+                </ea-splitter-panel>
+                <ea-splitter-panel size="10%">
+                    <div class="demo-panel">3</div>
+                </ea-splitter-panel>
+            </ea-splitter>
+        </div>
     </div>
     <hr>
     <!-- #endregion  -->
 
     <!-- #region 垂直布局 -->
     <h1>垂直布局</h1>
-    <div class="demo section">
-        <ea-splitter layout="vertical">
-            <ea-splitter-panel min="30%">
-                <div class="demo-panel">1</div>
-            </ea-splitter-panel>
-            <ea-splitter-panel size="20%" min="20%">
-                <div class="demo-panel">2</div>
-            </ea-splitter-panel>
-            <ea-splitter-panel size="10%">
-                <div class="demo-panel">3</div>
-            </ea-splitter-panel>
-        </ea-splitter>
+    <div class="demo">
+        <div class="section">
+            <ea-splitter layout="vertical">
+                <ea-splitter-panel min="30%">
+                    <div class="demo-panel">1</div>
+                </ea-splitter-panel>
+                <ea-splitter-panel size="20%" min="20%">
+                    <div class="demo-panel">2</div>
+                </ea-splitter-panel>
+                <ea-splitter-panel size="10%">
+                    <div class="demo-panel">3</div>
+                </ea-splitter-panel>
+            </ea-splitter>
+        </div>
     </div>
     <hr>
     <!-- #endregion  -->

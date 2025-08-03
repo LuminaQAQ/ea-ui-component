@@ -8,10 +8,6 @@
   overflow: hidden;
 }
 
-// ::slotted(ea-splitter[layout="vertical"]) {
-//   height: 100%;
-// }
-
 @include block(ea-splitter) {
   box-sizing: border-box;
   overflow: hidden;
