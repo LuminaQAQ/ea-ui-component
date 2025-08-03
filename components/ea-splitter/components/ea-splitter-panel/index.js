@@ -15,7 +15,7 @@ export class EaSplitterPanel extends Base {
             type: String,
             default: '',
             observer: (newVal) => {
-                if (!CSS.supports('width', newVal)) return console.warn(`The size value ${newVal} is not supported.`);
+                if (!CSS.supports('width', newVal)) return;
 
                 this.style.setProperty('--ea-splitter-panel-size', newVal)
             }
@@ -24,7 +24,7 @@ export class EaSplitterPanel extends Base {
             type: String,
             default: '',
             observer: (newVal) => {
-                if (!CSS.supports('width', newVal)) return console.warn(`The size value ${newVal} is not supported.`);
+                if (!CSS.supports('width', newVal)) return;
 
                 this.style.setProperty('--ea-splitter-panel-min-size', newVal)
             }
