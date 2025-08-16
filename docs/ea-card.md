@@ -2,34 +2,31 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../components/ea-card/index.js')
-    import('../components/ea-button/index.js')
-
-    import('./index.scss')
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
 })
 </script>
 
 <style lang="scss" scoped>
-    .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 18px 20px;
-        border-bottom: 1px solid #ebeef5;
-        box-sizing: border-box;
-    }
+ea-card::part(header-wrap) {
+  text-align: center;
+}
 
-    .ea-card-demo {
-        width: 300px;
-    }
+.footer {
+  text-align: right;
+}
 
-    .image {
-        width: 100%;
+.ea-card-demo {
+  width: 300px;
+}
 
-        img {
-            width: 100%;
-        }
-    }
+.image {
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+}
 </style>
 
 # Card 卡片
@@ -65,22 +62,23 @@ onMounted(() => {
 
 ## 基础用法
 
-包含标题，内容和操作。
+卡片包含标题，内容以及操作区域。
 
-> Card 组件包括 `header` 和 `body` 部分， `header` 部分需要有显式具名 slot 分发，同时也是可选的。
+Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是可选的，其内容取决于一个具名的 slot。
 
 <div class="demo">
-    <div class="ea-card-demo">
-        <ea-card>
-            <div slot="header" class="header">
-                <span>卡片标题</span>
-                <ea-button type="text" size="small">操作按钮</ea-button>
-            </div>
-            <p class="ea-card-content" v-for="index in 4" :key="index">
-                content{{index}}
-            </p>
-        </ea-card>
+  <ea-card class="ea-card-demo " header="卡片标题">
+    <ul>
+      <li>List item 1</li>
+      <li>List item 2</li>
+      <li>List item 3</li>
+      <li>List item 4</li>
+    </ul>
+    <div class="footer" slot="footer">
+      <ea-button type="primary">确认</ea-button>
+      <ea-button>取消</ea-button>
     </div>
+  </ea-card>
 </div>
 
 ::: details 查看代码
@@ -92,13 +90,11 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 20px;
-  border-bottom: 1px solid #ebeef5;
   box-sizing: border-box;
 }
 
 .ea-card-demo {
-  width: 400px;
+  width: 300px;
 }
 ```
 
@@ -109,16 +105,18 @@ onMounted(() => {
   import "./node_modules/easy-component-ui/components/ea-card/index.js";
 </script>
 
-<div class="ea-card-demo">
-  <ea-card>
-    <div slot="header" class="header">
-      <span>卡片标题</span>
-      <ea-button type="text" size="small">操作按钮</ea-button>
+<div class="demo">
+  <ea-card class="ea-card-demo" header="卡片标题">
+    <ul>
+      <li>List item 1</li>
+      <li>List item 2</li>
+      <li>List item 3</li>
+      <li>List item 4</li>
+    </ul>
+    <div class="footer" slot="footer">
+      <ea-button type="primary">确认</ea-button>
+      <ea-button>取消</ea-button>
     </div>
-    <p class="ea-card-content">content1</p>
-    <p class="ea-card-content">content2</p>
-    <p class="ea-card-content">content3</p>
-    <p class="ea-card-content">content4</p>
   </ea-card>
 </div>
 ```
@@ -130,22 +128,29 @@ onMounted(() => {
 卡片可以只有内容区域。
 
 <div class="demo">
-  <ea-card>
-    <p class="ea-card-content" v-for="index in 4" :key="index">
-        content{{index}}
-    </p>
+  <ea-card class="ea-card-demo">
+    <ul>
+      <li>List item 1</li>
+      <li>List item 2</li>
+      <li>List item 3</li>
+      <li>List item 4</li>
+    </ul>
   </ea-card>
 </div>
 
 ::: details 查看代码
 
 ```html
-<ea-card>
-  <p class="ea-card-content">content1</p>
-  <p class="ea-card-content">content2</p>
-  <p class="ea-card-content">content3</p>
-  <p class="ea-card-content">content4</p>
-</ea-card>
+<div class="demo">
+  <ea-card class="ea-card-demo">
+    <ul>
+      <li>List item 1</li>
+      <li>List item 2</li>
+      <li>List item 3</li>
+      <li>List item 4</li>
+    </ul>
+  </ea-card>
+</div>
 ```
 
 :::
@@ -154,35 +159,31 @@ onMounted(() => {
 
 可配置定义更丰富的内容展示。
 
-<div class="demo">
-    <div class="ea-card-demo">
-        <ea-card>
-            <div class="image">
-                <img src="https://picture.gptkong.com/20240627/15559913d5b477444baca33968cbb88b44.jpeg">
-            </div>
-            <div class="header" style="padding: 14px;">
-                <span>不再流浪</span>
-                <ea-button type="text" class="button">操作按钮</ea-button>
-            </div>
-        </ea-card>
-    </div>
+<div class="demo ">
+  <div class="ea-card-demo">
+    <ea-card header="风景">
+      <div class="image">
+        <img
+          src="https://th.bing.com/th/id/R.b0ea268fa1be279d112489ce83ad4696?rik=qItsh%2fBiy33hlg&riu=http%3a%2f%2fwww.quazero.com%2fuploads%2fallimg%2f140303%2f1-140303215009.jpg&ehk=S6PLWamt%2bMzQV8uO9ugcU5d5M19BpXtCpNz2cRJ7q9M%3d&risl=&pid=ImgRaw&r=0"
+        />
+      </div>
+    </ea-card>
+  </div>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-card>
-    <div class="image">
-      <img
-        src="https://picture.gptkong.com/20240627/15559913d5b477444baca33968cbb88b44.jpeg"
-      />
-    </div>
-    <div class="header" style="padding: 14px;">
-      <span>地狱笑话</span>
-      <ea-button type="text" class="button">操作按钮</ea-button>
-    </div>
-  </ea-card>
+  <div class="ea-card-demo">
+    <ea-card header="风景">
+      <div class="image">
+        <img
+          src="https://th.bing.com/th/id/R.b0ea268fa1be279d112489ce83ad4696?rik=qItsh%2fBiy33hlg&riu=http%3a%2f%2fwww.quazero.com%2fuploads%2fallimg%2f140303%2f1-140303215009.jpg&ehk=S6PLWamt%2bMzQV8uO9ugcU5d5M19BpXtCpNz2cRJ7q9M%3d&risl=&pid=ImgRaw&r=0"
+        />
+      </div>
+    </ea-card>
+  </div>
 </div>
 ```
 
@@ -190,21 +191,27 @@ onMounted(() => {
 
 ## 卡片阴影
 
-通过设置 `shadow` 属性可对阴影的显示进行配置。
+你可以定义什么时候展示卡片的阴影效果。
+
+通过 `shadow` 属性设置卡片阴影出现的时机。 该属性的值可以是：`always`、`hover` 或 `never`。
 
 <div class="demo">
+  <ea-space direction="vertical">
     <ea-card shadow="always">总是显示</ea-card>
     <ea-card shadow="hover">鼠标移入显示</ea-card>
     <ea-card shadow="never">从不显示</ea-card>
+  </ea-space>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-card shadow="always">总是显示</ea-card>
-  <ea-card shadow="hover">鼠标移入显示</ea-card>
-  <ea-card shadow="never">从不显示</ea-card>
+  <ea-space direction="vertical">
+    <ea-card shadow="always">总是显示</ea-card>
+    <ea-card shadow="hover">鼠标移入显示</ea-card>
+    <ea-card shadow="never">从不显示</ea-card>
+  </ea-space>
 </div>
 ```
 
@@ -212,10 +219,11 @@ onMounted(() => {
 
 ## Attributes
 
-| 参数   | 说明     | 类型   | 可选值                 | 默认值 |
-| ------ | -------- | ------ | ---------------------- | ------ |
-| header | 卡片标题 | string | —                      | —      |
-| shadow | 卡片阴影 | string | always / hover / never | always |
+| 参数   | 说明                                                                                            | 类型   | 可选值                 | 默认值 |
+| ------ | ----------------------------------------------------------------------------------------------- | ------ | ---------------------- | ------ |
+| header | 卡片的标题 你既可以通过设置 header 来修改标题，也可以通过 `slot="header"` 传入 DOM 节点         | string | —                      | —      |
+| footer | 卡片页脚。 你既可以通过设置 footer 来修改卡片底部内容，也可以通过 `slot="footer"` 传入 DOM 节点 | string | —                      | —      |
+| shadow | 卡片阴影                                                                                        | string | always / hover / never | always |
 
 ## CSS Part
 
@@ -224,8 +232,9 @@ onMounted(() => {
 | 名称         | 说明      |
 | ------------ | --------- |
 | container    | card 容器 |
-| header-wrap  | 头部容器  |
+| header-wrap  | 标题容器  |
 | content-wrap | 内容容器  |
+| footer-wrap  | 页脚容器  |
 
 ## Slot
 
@@ -233,3 +242,4 @@ onMounted(() => {
 | ------ | -------- |
 | —      | 卡片内容 |
 | header | 卡片标题 |
+| footer | 卡片页脚 |

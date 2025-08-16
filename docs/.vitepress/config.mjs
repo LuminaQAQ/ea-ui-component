@@ -111,19 +111,19 @@ export default defineConfig({
       //     { text: 'MessageBox 消息框', link: '/ea-message-box' },
       //   ]
       // },
-      // {
-      //   text: '其他',
-      //   items: [
-      //     { text: 'Card 卡片', link: '/ea-card' },
-      //     { text: 'Carousel 走马灯', link: '/ea-carousel' },
-      //     { text: 'Timeline 时间轴', link: '/ea-timeline' },
-      //     { text: 'BackTop 回到顶部', link: '/ea-backtop' },
-      //     { text: 'Collapse 折叠面板', link: '/ea-collapse' },
-      //     { text: "Calendar 日历", link: '/ea-calendar' },
-      //     { text: "Image 图片", link: '/ea-image' },
-      //     { text: "InfiniteScroll 无限滚动", link: '/ea-infinite-scroll' },
-      //   ],
-      // },
+      {
+        text: '其他',
+        items: [
+          { text: 'Card 卡片', link: '/ea-card' },
+          //     { text: 'Carousel 走马灯', link: '/ea-carousel' },
+          //     { text: 'Timeline 时间轴', link: '/ea-timeline' },
+          //     { text: 'BackTop 回到顶部', link: '/ea-backtop' },
+          //     { text: 'Collapse 折叠面板', link: '/ea-collapse' },
+          //     { text: "Calendar 日历", link: '/ea-calendar' },
+          //     { text: "Image 图片", link: '/ea-image' },
+          //     { text: "InfiniteScroll 无限滚动", link: '/ea-infinite-scroll' },
+        ],
+      },
     ],
 
     socialLinks: [

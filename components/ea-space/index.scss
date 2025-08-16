@@ -1,0 +1,26 @@
+:host {
+  --ea-space-direction: row;
+  --ea-space-gap: 0.5rem;
+  --ea-space-wrap: nowrap;
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+@include block(ea-space) {
+  display: flex;
+  flex-direction: var(--ea-space-direction);
+  gap: var(--ea-space-gap);
+
+  flex-wrap: var(--ea-space-wrap);
+
+  @include modifier(horizontal) {
+    --ea-space-direction: row;
+  }
+
+  @include modifier(vertical) {
+    --ea-space-direction: column;
+  }
+}
