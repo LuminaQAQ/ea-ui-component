@@ -1,137 +1,128 @@
-import Base from '../Base.js'
+import Base from '@components/Base.js'
 
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from './index.scss?inline';
 
 export class EaRadio extends Base {
-  #radio;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
   #label;
+  /** @type {HTMLInputElement} */
+  #radio;
+
+  static get observedAttributes() {
+    return ['checked', 'name', 'value'];
+  }
+
+  state = this.properties({
+    checked: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#label.toggleAttribute('checked', newVal);
+        this.#radio.checked = newVal;
+
+        this.#container.className = this.updateContainerClasslist();
+      }
+    },
+    name: {
+      type: String,
+      default: '',
+      observer: (newVal) => {
+        this.#radio.setAttribute('name', newVal);
+      }
+    },
+    value: {
+      type: String,
+      default: '',
+      observer: (newVal) => {
+        this.#label.setAttribute('for', newVal);
+        this.#radio.setAttribute('id', newVal);
+        this.#radio.setAttribute('value', newVal);
+      }
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#radio.disabled = newVal;
+        this.#label.setAttribute('disabled', newVal);
+      }
+    },
+    border: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => { }
+    },
+  })
+
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    return this.computedClasslist('ea-radio', {
+      ['--checked']: this.checked,
+      ['--disabled']: this.disabled,
+      ['--border']: this.border,
+    });
+  }
 
   constructor() {
     super();
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
+    this.stylesheet = stylesheet;
 
-    shadowRoot.innerHTML = `
-      <label class="ea-radio_wrap" part="container">
-        <span class="ea-radio-input_wrap" part="input-wrap">
-          <span class="ea-radio-input_inner" part="input"></span>
-          <input class="ea-radio-input_input" type="radio" />
+    this.$render();
+  }
+
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <label class="ea-radio" part="container">
+        <span class="ea-radio__input" part="input-wrap">
+          <span class="ea-radio__inner" part="input"></span>
+          <input class="ea-radio__original" type="radio" />
         </span>
-        <span class="ea-radio-label_desc" part="label-wrap">
+        <span class="ea-radio__label" part="label-wrap">
           <slot></slot>
         </span>
       </label>
     `;
 
-    this.#label = shadowRoot.querySelector('.ea-radio_wrap');
-    this.#radio = shadowRoot.querySelector('.ea-radio-input_input');
+    this.#container = this.shadowRoot.querySelector('.ea-radio');
 
-    this.build(shadowRoot, stylesheet);
+    this.#label = this.shadowRoot.querySelector('.ea-radio__label');
+    this.#radio = this.shadowRoot.querySelector('.ea-radio__original');
   }
 
-  // ------- 选中 -------
-  // #region
-  get checked() {
-    return this.getAttrBoolean('checked');
-  }
+  #changeEvent = (e) => {
+    const sameGroupRadio = document.querySelectorAll(`ea-radio[name="${this.name}"]`);
+    [...sameGroupRadio].forEach(btn => {
+      btn.checked = btn === this;
+    });
 
-  set checked(val) {
-    this.setAttribute('checked', val);
-    this.#label.setAttribute('checked', val);
-    this.#radio.checked = val;
-
-    this.#label.classList.toggle('checked', val);
+    this.dispatchEvent(new CustomEvent('change', {
+      detail: {
+        value: this.value,
+        checked: this.checked
+      }
+    }))
   }
-  // #endregion
-  // ------- end -------
-
-  // ------- label_for 单选框的唯一键 -------
-  // #region
-  get name() {
-    return this.getAttribute('name');
-  }
-
-  set name(val) {
-    this.setAttribute("name", val);
-    this.#radio.setAttribute('name', val);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- value 单选框的值 -------
-  // #region
-  get value() {
-    return this.getAttribute('value');
-  }
-
-  set value(val) {
-    this.setAttribute('value', val);
-    this.#label.setAttribute('for', val);
-    this.#radio.setAttribute('id', val);
-    this.#radio.setAttribute('value', val);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- disabled 禁用状态 -------
-  // #region
-  get disabled() {
-    return this.getAttrBoolean('disabled');
-  }
-
-  set disabled(val) {
-    this.#radio.disabled = val;
-    this.#label.setAttribute('disabled', val);
-    this.#label.classList.toggle('disabled', val);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- border 是否带有边框 -------
-  // #region
-  get border() {
-    return this.getAttrBoolean('border');
-  }
-
-  set border(val) {
-    this.#label.classList.toggle('border', val);
-  }
-  // #endregion
-  // ------- end -------
 
   connectedCallback() {
-    // radio 的 checked 属性
+    super.connectedCallback();
+
     this.checked = this.checked;
-
-    // label 的 for 属性
     this.name = this.name;
-
-    // radio 的 value 属性
     this.value = this.value;
-
-    // radio 的 disabled 属性
     this.disabled = this.disabled;
-
-    // border 属性
     this.border = this.border;
 
-    // 监听 change 事件, 修改 checked 属性
-    this.#radio.addEventListener('change', (e) => {
-      document.querySelectorAll(`ea-radio[name="${this.name}"]`).forEach(btn => {
-        const btnInput = btn.shadowRoot.querySelector('input');
-        btn.checked = btnInput === this.#radio;
-      });
 
-      this.dispatchEvent(new CustomEvent('change', {
-        detail: {
-          value: this.value,
-          checked: this.checked
-        }
-      }))
-    })
+    this.#radio.addEventListener('change', this.#changeEvent)
   }
 }
 
-if (!window.customElements.get("ea-radio")) {
-  window.customElements.define("ea-radio", EaRadio);
+if (!window.customElements.get('ea-radio')) {
+  window.customElements.define('ea-radio', EaRadio);
 }

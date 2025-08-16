@@ -31,6 +31,8 @@
     <script type="module" src="/src/components/ea-space/index.js"></script>
     <script type="module" src="/src/components/ea-card/index.js"></script>
     <script type="module" src="/src/components/ea-button/index.js"></script>
+    <script type="module" src="/src/components/ea-radio/index.js"></script>
+    <script type="module" src="/src/components/ea-radio-group/index.js"></script>
 
     <!-- #region 基础用法 -->
     <h1>基础用法</h1>
@@ -104,11 +106,53 @@
                 </ol>
             </ea-card>
         </ea-space>
-        <!-- <ea-space>
-            <ea-card shadow="always" style="width: 480px;">总是显示</ea-card>
-            <ea-card shadow="hover" style="width: 480px;">鼠标移入显示</ea-card>
-            <ea-card shadow="never" style="width: 480px;">从不显示</ea-card>
-        </ea-space> -->
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 控制间距的大小 -->
+    <h1>控制间距的大小</h1>
+
+    <div>
+        <!-- <div>
+            <label for="large">
+                <input type="radio" name="size" id="large" value="large">Large
+            </label>
+            <label for="default">
+                <input type="radio" name="size" id="default" value="default">Default
+            </label>
+            <label for="small">
+                <input type="radio" name="size" id="small" value="small">Small
+            </label>
+        </div> -->
+        <ea-radio name="city" value="福州" checked>福州</ea-radio>
+        <ea-radio name="city" value="厦门">厦门</ea-radio>
+
+        <ea-space wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
     </div>
 
     <hr>
