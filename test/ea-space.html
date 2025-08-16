@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rea="stylesheet" href="/dist/assets/icon.css" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            height: 100%;
+            width: 100%;
+        }
+
+        hr {
+            margin: 3rem 0;
+        }
+
+        .section {
+            height: 300px;
+            box-shadow: #ccc 0px 0px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="module" src="/src/components/ea-space/index.js"></script>
+    <script type="module" src="/src/components/ea-card/index.js"></script>
+    <script type="module" src="/src/components/ea-button/index.js"></script>
+
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
+
+    <div>
+        <ea-space wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 垂直布局 -->
+    <h1>垂直布局</h1>
+
+    <div>
+        <ea-space direction="vertical" wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
+        <!-- <ea-space>
+            <ea-card shadow="always" style="width: 480px;">总是显示</ea-card>
+            <ea-card shadow="hover" style="width: 480px;">鼠标移入显示</ea-card>
+            <ea-card shadow="never" style="width: 480px;">从不显示</ea-card>
+        </ea-space> -->
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+</html>

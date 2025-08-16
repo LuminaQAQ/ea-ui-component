@@ -1,24 +1,74 @@
-@import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
+:host {
+  --ea-card-border-color: var(--color-border, #ebeef5);
+  --ea-card-transition: var(--transition-normal);
+  --ea-card-border-radius: var(--border-radius-sm);
+  --ea-card-box-shadow: var(--box-shadow-md);
+  --ea-card-background-color: var(--color-white);
+  --ea-card-padding: 20px;
+}
 
-.ea-card_wrap {
-  border-radius: 4px;
-  border: 1px solid #ebeef5;
-  background-color: #fff;
-  overflow: hidden;
-  color: #303133;
-  transition: box-shadow 0.3s;
+:host {
+  display: block;
+}
 
-  &.is-always-shadow,
-  &.is-hover-shadow:hover {
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+::slotted([slot="header"]),
+::slotted([slot="footer"]) {
+  display: block;
+  padding: var(--ea-card-padding);
+}
+
+::slotted([slot="header"]) {
+  border-bottom: 1px solid var(--ea-card-border-color);
+}
+
+::slotted([slot="footer"]) {
+  border-top: 1px solid var(--ea-card-border-color);
+}
+
+@include block(ea-card) {
+  width: 100%;
+
+  box-sizing: border-box;
+  border-radius: var(--ea-card-border-radius);
+  border: 1px solid var(--ea-card-border-color);
+
+  background-color: var(--ea-card-background-color);
+
+  transition: box-shadow var(--ea-card-transition);
+
+  @include element(content) {
+    padding: var(--ea-card-padding);
   }
 
-  &.is-never-shadow {
+  .ea-card__header,
+  .ea-card__footer {
+    padding: var(--ea-card-padding);
+
+    &:has(slot) {
+      padding: 0;
+      border: none;
+    }
+  }
+
+  @include element(header) {
+    border-bottom: 1px solid var(--ea-card-border-color);
+  }
+
+  @include element(footer) {
+    border-top: 1px solid var(--ea-card-border-color);
+  }
+
+  @include modifier(hover-shadow) {
+    &:hover {
+      box-shadow: var(--ea-card-box-shadow);
+    }
+  }
+
+  @include modifier(always-shadow) {
+    box-shadow: var(--ea-card-box-shadow);
+  }
+
+  @include modifier(never-shadow) {
     box-shadow: none;
-  }
-
-  .ea-card_content {
-    padding: 20px;
   }
 }

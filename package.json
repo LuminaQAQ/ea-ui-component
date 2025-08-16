@@ -165,6 +165,9 @@
     "./ea-skeleton-item": {
       "import": "./dist/ea-skeleton-item.js"
     },
+    "./ea-space": {
+      "import": "./dist/ea-space.js"
+    },
     "./ea-splitter": {
       "import": "./dist/ea-splitter.js"
     },
