@@ -11,7 +11,7 @@ export class EaRadio extends Base {
   #radio;
 
   static get observedAttributes() {
-    return ['checked', 'name', 'value'];
+    return ['checked', 'name', 'value', 'disabled', 'border'];
   }
 
   state = this.properties({
@@ -46,13 +46,15 @@ export class EaRadio extends Base {
       default: false,
       observer: (newVal) => {
         this.#radio.disabled = newVal;
-        this.#label.setAttribute('disabled', newVal);
+        this.#container.className = this.updateContainerClasslist();
       }
     },
     border: {
       type: Boolean,
       default: false,
-      observer: (newVal) => { }
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      }
     },
   })
 
@@ -78,7 +80,7 @@ export class EaRadio extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
-      <label class="ea-radio" part="container">
+      <label class="ea-radio" part="container" role="radio">
         <span class="ea-radio__input" part="input-wrap">
           <span class="ea-radio__inner" part="input"></span>
           <input class="ea-radio__original" type="radio" />
@@ -117,7 +119,6 @@ export class EaRadio extends Base {
     this.value = this.value;
     this.disabled = this.disabled;
     this.border = this.border;
-
 
     this.#radio.addEventListener('change', this.#changeEvent)
   }
