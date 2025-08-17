@@ -9,6 +9,8 @@ export class EaRadio extends Base {
   #label;
   /** @type {HTMLInputElement} */
   #radio;
+  /** @type {AbortController} */
+  #abortController;
 
   static get observedAttributes() {
     return ['checked', 'name', 'value', 'disabled', 'border'];
@@ -109,10 +111,23 @@ export class EaRadio extends Base {
         checked: this.checked
       }
     }))
+
+    if (this.parentElement.tagName === "EA-RADIO-GROUP") {
+      this.parentElement.dispatchEvent(new CustomEvent('change', {
+        detail: {
+          value: this.value,
+          checked: this.checked,
+          target: this
+        }
+      }))
+    }
+
   }
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.#abortController = new AbortController();
 
     this.checked = this.checked;
     this.name = this.name;
@@ -120,7 +135,11 @@ export class EaRadio extends Base {
     this.disabled = this.disabled;
     this.border = this.border;
 
-    this.#radio.addEventListener('change', this.#changeEvent)
+    this.#radio.addEventListener('change', this.#changeEvent, { signal: this.#abortController.signal })
+  }
+
+  $beforeUnmounted() {
+    this.#abortController.abort();
   }
 }
 

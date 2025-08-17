@@ -21,6 +21,8 @@
   display: inline-flex;
   align-items: center;
 
+  cursor: pointer;
+
   margin-right: var(--ea-radio-space);
 
   @include element(input) {

@@ -71,22 +71,22 @@ export default defineConfig({
       //     { text: 'Drawer 抽屉', link: '/ea-drawer' },
       //   ]
       // },
-      // {
-      //   text: '表单组件',
-      //   items: [
-      //     { text: 'Radio 单选框', link: '/ea-radio' },
-      //     { text: 'Checkbox 多选框', link: '/ea-checkbox' },
-      //     { text: 'Input 输入框', link: '/ea-input' },
-      //     { text: 'Textarea 文本域', link: '/ea-textarea' },
-      //     { text: 'InputNumber 计数器', link: '/ea-input-number' },
-      //     { text: 'Select 选择器', link: '/ea-select' },
-      //     { text: 'Switch 开关', link: '/ea-switch' },
-      //     { text: 'Rate 评分', link: '/ea-rate' },
-      //     { text: 'TimePicker 时间选择器', link: '/ea-time-picker' },
-      //     { text: 'DatePicker 日期选择器', link: '/ea-date-picker' },
-      //     { text: 'Form 表单', link: '/ea-form' },
-      //   ]
-      // },
+      {
+        text: '表单组件',
+        items: [
+          { text: 'Radio 单选框', link: '/ea-radio' },
+          // { text: 'Checkbox 多选框', link: '/ea-checkbox' },
+          // { text: 'Input 输入框', link: '/ea-input' },
+          // { text: 'Textarea 文本域', link: '/ea-textarea' },
+          // { text: 'InputNumber 计数器', link: '/ea-input-number' },
+          // { text: 'Select 选择器', link: '/ea-select' },
+          // { text: 'Switch 开关', link: '/ea-switch' },
+          // { text: 'Rate 评分', link: '/ea-rate' },
+          // { text: 'TimePicker 时间选择器', link: '/ea-time-picker' },
+          // { text: 'DatePicker 日期选择器', link: '/ea-date-picker' },
+          // { text: 'Form 表单', link: '/ea-form' },
+        ]
+      },
       // {
       //   text: '数据组件',
       //   items: [

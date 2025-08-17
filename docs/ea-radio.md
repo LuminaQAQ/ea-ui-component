@@ -4,10 +4,11 @@ import { onMounted, ref } from 'vue'
 const btn = ref(null);
 
 onMounted(() => {
-  import('../components/ea-button/index.js')
-  import('../components/ea-radio/index.js')
-  import('../components/ea-radio-group/index.js')
-  import('./index.scss')
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
+  // import('../components/ea-radio/index.js')
+  // import('../components/ea-radio-group/index.js')
+  // import('./index.scss')
 
   const getGroupCheckedValueObj = {
     btn: document.querySelector("#getGroupCheckedValue"),
