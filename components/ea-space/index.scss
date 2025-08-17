@@ -1,7 +1,12 @@
 :host {
   --ea-space-direction: row;
-  --ea-space-gap: 0.5rem;
   --ea-space-wrap: nowrap;
+
+  --ea-space-gap-small: 0.5rem;
+  --ea-space-gap-default: 0.75rem;
+  --ea-space-gap-large: 1rem;
+
+  --ea-space-gap: var(--ea-space-gap-default);
 }
 
 :host {
@@ -22,5 +27,17 @@
 
   @include modifier(vertical) {
     --ea-space-direction: column;
+  }
+
+  @include modifier(wrap) {
+    --ea-space-wrap: wrap;
+  }
+
+  @include modifier(small) {
+    --ea-space-gap: var(--ea-space-gap-small);
+  }
+
+  @include modifier(large) {
+    --ea-space-gap: var(--ea-space-gap-large);
   }
 }
