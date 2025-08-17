@@ -7,7 +7,7 @@ export class EaSpace extends Base {
     #container;
 
     static get observedAttributes() {
-        return ['wrap', 'direction'];
+        return ['wrap', 'direction', 'size'];
     }
 
     state = this.properties({
@@ -28,6 +28,19 @@ export class EaSpace extends Base {
             default: 'horizontal',
             observer: (newVal) => {
                 this.#container.className = this.updateContainerClasslist();
+            }
+        },
+        size: {
+            type: String,
+            default: 'default',
+            observer: (newVal) => {
+                if (['large', 'small', 'default'].includes(newVal)) {
+                    this.#container.className = `${this.updateContainerClasslist()} ea-space--${newVal}`;
+                } else {
+                    if (!CSS.supports('gap', newVal)) return console.warn('[ea-space] Invalid size value');
+
+                    this.style.setProperty('--ea-space-gap', newVal);
+                }
             }
         },
     })
@@ -64,6 +77,7 @@ export class EaSpace extends Base {
         super.connectedCallback();
 
         this.wrap = this.wrap;
+        this.size = this.size;
     }
 }
 
