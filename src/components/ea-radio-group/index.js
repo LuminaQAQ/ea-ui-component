@@ -1,96 +1,108 @@
-// @ts-nocheck
-import { timeout } from "../../utils/timeout.js";
-import Base from "../Base.js";
+import Base from '@components/Base.js'
 
-const stylesheet = `
-.ea-radio-group_wrap {
-  display: flex;
-}
-`;
+import stylesheet from './index.scss?inline';
 
 export class EaRadioGroup extends Base {
+    /** @type {HTMLElement} */
+    #container;
+
+    static get observedAttributes() {
+        return ['name', 'value', 'border', 'disabled'];
+    }
+
+    state = this.properties({
+        name: {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                this.querySelectorAll('ea-radio').forEach(radio => {
+                    radio.setAttribute('name', newVal);
+                });
+            }
+        },
+        value: {
+            type: String,
+            default: '',
+            observer: (newVal) => { }
+        },
+        border: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.querySelectorAll('ea-radio').forEach(radio => {
+                    radio.setAttribute('border', newVal);
+                });
+            }
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.querySelectorAll('ea-radio').forEach(radio => {
+                    radio.setAttribute('disabled', newVal);
+                });
+            }
+        },
+    })
+
+    /**
+     * 获取 classlist 列表
+     * @return {string} 属性值
+     */
+    updateContainerClasslist() {
+        return this.computedClasslist('ea-radio-group',
+            {
+                // ['--' + this.type]: this.type,
+            });
+    }
 
     constructor() {
         super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class="ea-radio-group_wrap" part="container">
+        this.stylesheet = stylesheet;
+
+        this.$render();
+    }
+
+    $render() {
+        this.shadowRoot.innerHTML = `
+            <div class='ea-radio-group' part='container' role='radiogroup'>
                 <slot></slot>
             </div>
         `;
-        this.build(shadowRoot, stylesheet);
+
+        this.#container = this.shadowRoot.querySelector('.ea-radio-group');
     }
 
-    // ------- name 唯一键值 -------
-    // #region
-    get name() {
-        return this.getAttribute('name');
-    }
-
-    set name(val) {
-        this.setAttribute("name", val);
-        this.querySelectorAll('ea-radio').forEach(radio => {
-            radio.setAttribute('name', val);
-        });
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- value 值 -------
-    // #region
-    get value() {
-        return this.getAttribute('value') || '';
-    }
-
-    set value(val) {
-        if (!val) return;
-
-        this.setAttribute("value", val);
-    }
-    // #endregion
-    // ------- end -------
-
-    #initValue(radios) {
-        radios.forEach(radio => {
-            if (radio.checked) this.value = radio.value;
-
-            radio.addEventListener('change', e => {
-                this.value = radio.value;
-
-                this.dispatchEvent(new CustomEvent('change', {
-                    bubbles: true,
-                    composed: true,
-                    detail: {
-                        target: radio,
-                        value: this.value
-                    }
-                }));
-            });
-        });
-    }
-
-    #initRadioChecked(radios) {
-        const valueRadio = Array.from(radios).find(radio => radio.value === this.value);
-        if (valueRadio) valueRadio.checked = true;
+    #handleInitialValue = () => {
+        const radios = this.querySelectorAll('ea-radio');
+        if (this.value) {
+            radios.forEach(radio => radio.toggleAttribute('checked', this.value === radio.value));
+        } else {
+            const checkedRadio = Array.from(radios).find(radio => radio.checked);
+            this.value = checkedRadio ? checkedRadio.value : '';
+        }
     }
 
     connectedCallback() {
-        this.setAttribute("data-ea-component", true);
+        super.connectedCallback();
 
-        // name 唯一键值
         this.name = this.name;
-
         this.value = this.value;
+        this.disabled = this.disabled;
+        this.border = this.border;
 
-        timeout(() => {
-            const radios = this.querySelectorAll('ea-radio');
-            this.#initValue(radios);
-            this.#initRadioChecked(radios);
-        }, 20);
+        this.#handleInitialValue();
+
+        this.addEventListener('change', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            this.value = e.detail.value;
+        });
     }
 }
 
-if (!window.customElements.get("ea-radio-group")) {
-    window.customElements.define("ea-radio-group", EaRadioGroup);
+if (!window.customElements.get('ea-radio-group')) {
+    window.customElements.define('ea-radio-group', EaRadioGroup);
 }

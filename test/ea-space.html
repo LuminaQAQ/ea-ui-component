@@ -115,49 +115,65 @@
     <h1>控制间距的大小</h1>
 
     <div>
-        <!-- <div>
-            <label for="large">
-                <input type="radio" name="size" id="large" value="large">Large
-            </label>
-            <label for="default">
-                <input type="radio" name="size" id="default" value="default">Default
-            </label>
-            <label for="small">
-                <input type="radio" name="size" id="small" value="small">Small
-            </label>
-        </div> -->
-        <ea-radio name="city" value="福州" border>福州</ea-radio>
-        <ea-radio name="city" value="厦门">厦门</ea-radio>
-        <ea-radio name="city" value="厦门" disabled checked>厦门</ea-radio>
-        <ea-radio name="city" value="厦门" disabled>厦门</ea-radio>
-
-        <ea-space wrap>
-            <ea-card style="width: 250px;">
-                <div slot="header">
-                    卡片标题 <ea-button>操作</ea-button>
-                </div>
-                <ol>
-                    <li>List item</li>
-                    <li>List item</li>
-                    <li>List item</li>
-                    <li>List item</li>
-                </ol>
-            </ea-card>
-            <ea-card style="width: 250px;">
-                <span slot="header">
-                    卡片标题 <ea-button>操作</ea-button>
-                </span>
-                <ol>
-                    <li>List item</li>
-                    <li>List item</li>
-                    <li>List item</li>
-                    <li>List item</li>
-                </ol>
-            </ea-card>
+        <ea-space direction="vertical" alignment="start" size="30">
+            <ea-radio-group id="controllableRadioGroup" name="salary">
+                <ea-radio value="large" checked>Large</ea-radio>
+                <ea-radio value="default">Default</ea-radio>
+                <ea-radio value="small">Small</ea-radio>
+            </ea-radio-group>
+            <ea-space id="controllableSpace" wrap>
+                <ea-card style="width: 250px;">
+                    <div slot="header">
+                        卡片标题 <ea-button>操作</ea-button>
+                    </div>
+                    <ol>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                    </ol>
+                </ea-card>
+                <ea-card style="width: 250px;">
+                    <span slot="header">
+                        卡片标题 <ea-button>操作</ea-button>
+                    </span>
+                    <ol>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                    </ol>
+                </ea-card>
+                <ea-card style="width: 250px;">
+                    <span slot="header">
+                        卡片标题 <ea-button>操作</ea-button>
+                    </span>
+                    <ol>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                    </ol>
+                </ea-card>
+            </ea-space>
         </ea-space>
     </div>
 
     <hr>
     <!-- #endregion  -->
+
+    <script>
+        const controllableExample = {
+            radioGroup: document.querySelector('#controllableRadioGroup'),
+            container: document.querySelector('#controllableSpace'),
+
+            init() {
+                this.radioGroup.addEventListener('change', (e) => {
+                    this.container.setAttribute('size', e.detail.value);
+                });
+            }
+        };
+        controllableExample.init();
+    </script>
 
 </html>
