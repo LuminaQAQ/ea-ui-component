@@ -8,11 +8,17 @@
   --ea-space-gap-large: 1rem;
 
   --ea-space-gap: var(--ea-space-gap-default);
+
+  --ea-space-fill-ratio: 100%;
 }
 
 :host {
   display: block;
   width: 100%;
+}
+
+::slotted(*) {
+  box-sizing: border-box;
 }
 
 @include block(ea-space) {
@@ -41,5 +47,12 @@
 
   @include modifier(large) {
     --ea-space-gap: var(--ea-space-gap-large);
+  }
+
+  @include modifier(fill) {
+    ::slotted(*) {
+      flex-grow: 1;
+      min-width: var(--ea-space-fill-ratio);
+    }
   }
 }

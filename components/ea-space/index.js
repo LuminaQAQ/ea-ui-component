@@ -7,7 +7,7 @@ export class EaSpace extends Base {
     #container;
 
     static get observedAttributes() {
-        return ['wrap', 'direction', 'size', 'spacer', 'alignment'];
+        return ['wrap', 'direction', 'size', 'spacer', 'alignment', 'fill', 'fill-ratio'];
     }
 
     state = this.properties({
@@ -56,11 +56,27 @@ export class EaSpace extends Base {
                     if (i < children.length - 1) {
                         const spacer = document.createElement('span');
                         spacer.innerText = newVal;
+                        spacer.part = 'spacer';
+
                         this.insertBefore(spacer, child.nextSibling);
                     }
                 });
             }
-        }
+        },
+        fill: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.#container.className = this.updateContainerClasslist();
+            }
+        },
+        'fill-ratio': {
+            type: Number,
+            default: 100,
+            observer: (newVal) => {
+                this.style.setProperty('--ea-space-fill-ratio', `${newVal}%`);
+            }
+        },
     })
 
     /**
@@ -70,6 +86,7 @@ export class EaSpace extends Base {
     updateContainerClasslist() {
         return this.computedClasslist('ea-space', {
             ['--' + this.direction]: this.direction,
+            ['--fill']: this.fill,
         });
     }
 
@@ -98,6 +115,9 @@ export class EaSpace extends Base {
         this.size = this.size;
         this.spacer = this.spacer;
         this.alignment = this.alignment;
+        this.fill = this.fill;
+
+        this['fill-ratio'] = this['fill-ratio'];
     }
 }
 
