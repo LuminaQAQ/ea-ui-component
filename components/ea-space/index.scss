@@ -1,5 +1,6 @@
 :host {
   --ea-space-direction: row;
+  --ea-space-alignment: center;
   --ea-space-wrap: nowrap;
 
   --ea-space-gap-small: 0.5rem;
@@ -16,6 +17,7 @@
 
 @include block(ea-space) {
   display: flex;
+  align-items: var(--ea-space-alignment);
   flex-direction: var(--ea-space-direction);
   gap: var(--ea-space-gap);
 
