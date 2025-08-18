@@ -20,9 +20,12 @@
             margin: 3rem 0;
         }
 
-        .section {
-            height: 300px;
-            box-shadow: #ccc 0px 0px 10px;
+        .alignment-container {
+            width: 240px;
+            margin-bottom: 20px;
+            padding: 8px;
+
+            border: 1px solid #ddd;
         }
     </style>
 </head>
@@ -33,6 +36,7 @@
     <script type="module" src="/src/components/ea-button/index.js"></script>
     <script type="module" src="/src/components/ea-radio/index.js"></script>
     <script type="module" src="/src/components/ea-radio-group/index.js"></script>
+    <script type="module" src="/src/components/ea-switch/index.js"></script>
 
     <!-- #region 基础用法 -->
     <h1>基础用法</h1>
@@ -188,6 +192,95 @@
     <h1>行间分隔符</h1>
 
     <div>
+        <ea-space size="10px" spacer="|">
+            <ea-button> button 1 </ea-button>
+            <ea-button> button 2 </ea-button>
+            <ea-button> button 3 </ea-button>
+        </ea-space>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+
+    <!-- #region 对齐方式 -->
+    <h1>对齐方式</h1>
+
+    <div>
+        <div class="alignment-container">
+            <ea-space>
+                string
+                <ea-button> button </ea-button>
+                <ea-card header="header">
+                    body
+                </ea-card>
+            </ea-space>
+        </div>
+        <div class="alignment-container">
+            <ea-space alignment="flex-start">
+                string
+                <ea-button> button </ea-button>
+                <ea-card header="header">
+                    body
+                </ea-card>
+            </ea-space>
+        </div>
+        <div class="alignment-container">
+            <ea-space alignment="flex-end">
+                string
+                <ea-button> button </ea-button>
+                <ea-card header="header">
+                    body
+                </ea-card>
+            </ea-space>
+        </div>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 填充容器 -->
+    <h1>填充容器</h1>
+
+    <div>
+        <div style="margin-bottom: 15px">
+            fill: <ea-switch></ea-switch>
+        </div>
+        <ea-space fill wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
     </div>
 
     <hr>

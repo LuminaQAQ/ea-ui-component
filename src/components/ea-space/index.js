@@ -7,7 +7,7 @@ export class EaSpace extends Base {
     #container;
 
     static get observedAttributes() {
-        return ['wrap', 'direction', 'size'];
+        return ['wrap', 'direction', 'size', 'spacer', 'alignment'];
     }
 
     state = this.properties({
@@ -21,7 +21,14 @@ export class EaSpace extends Base {
         alignment: {
             type: String,
             default: '',
-            observer: (newVal) => { }
+            observer: (newVal) => {
+                if (!CSS.supports('align-items', newVal)) return console.warn(`[ea-space] Invalid alignment value ${newVal}`);
+
+                this.style.setProperty('--ea-space-alignment', newVal);
+
+                console.log(newVal);
+
+            }
         },
         direction: {
             type: ['vertical', 'horizontal'],
@@ -43,6 +50,20 @@ export class EaSpace extends Base {
                 }
             }
         },
+        spacer: {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                const children = [...this.children];
+                children.forEach((child, i) => {
+                    if (i < children.length - 1) {
+                        const spacer = document.createElement('span');
+                        spacer.innerText = newVal;
+                        this.insertBefore(spacer, child.nextSibling);
+                    }
+                });
+            }
+        }
     })
 
     /**
@@ -78,6 +99,8 @@ export class EaSpace extends Base {
 
         this.wrap = this.wrap;
         this.size = this.size;
+        this.spacer = this.spacer;
+        this.alignment = this.alignment;
     }
 }
 
