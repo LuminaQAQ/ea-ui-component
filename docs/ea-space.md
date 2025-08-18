@@ -4,6 +4,44 @@ import { onMounted } from 'vue'
 onMounted(() => {
   import("../dist/components/index.js")
   import("../dist/assets/icon.css")
+
+
+    const controllableExample = {
+        radioGroup: document.querySelector('#controllableRadioGroup'),
+        container: document.querySelector('#controllableSpace'),
+
+        init() {
+            this.radioGroup.addEventListener('change', (e) => {
+                this.container.setAttribute('size', e.detail.value);
+            });
+        }
+    };
+    controllableExample.init();
+
+
+    const fillExample = {
+        fillSwitch: document.querySelector('#fillSwitch'),
+        fillContainer: document.querySelector('#fillSpace'),
+
+        fillRadioGroup: document.querySelector('#fillRadioGroup'),
+        fillRatioSwitch: document.querySelector('#fillRatioSwitch'),
+        fillRatioContainer: document.querySelector('#fillRatioSpace'),
+
+        init() {
+            this.fillSwitch.addEventListener('change', (e) => {
+                this.fillContainer.setAttribute('fill', e.detail.checked);
+            });
+
+            this.fillRadioGroup.addEventListener('change', (e) => {
+                this.fillRatioContainer.setAttribute('direction', e.detail.value);
+            });
+
+            this.fillRatioSwitch.addEventListener('change', (e) => {
+                this.fillRatioContainer.setAttribute('fill', e.detail.checked);
+            });
+        }
+    };
+    fillExample.init();
 })
 </script>
 
@@ -161,96 +199,435 @@ onMounted(() => {
 
 使用内置的 `small`、`default`、`large` 来设置间距大小，分别对应 `8px`、`12px` 和 `16px` 的间距。 默认的间距大小为 `small`，也就是 `8px`。
 
-您也可以通过自定义的 size 来控制大小， 参见下一个部分。
+您也可以通过自定义的 `size` 来控制大小。
 
-<div class="col">
-  <ea-text tag="p" truncated style="width: 100px;">
-    Self element set width 100px
-  </ea-text>
-  <ea-row style="width: 100px;">
-    <ea-text tag="p" truncated>Squeezed by parent element</ea-text>
-  </ea-row>
-  <ea-text tag="p" line-clamp="2">
-    The -webkit-line-clamp CSS property<br />
-    allows limiting of the contents of<br />
-    a block to the specified number of lines.
-  </ea-text>
+<div class="demo">
+  <ea-space direction="vertical" alignment="start" size="30px">
+    <ea-radio-group id="controllableRadioGroup" name="salary">
+      <ea-radio value="large" checked>Large</ea-radio>
+      <ea-radio value="default">Default</ea-radio>
+      <ea-radio value="small">Small</ea-radio>
+    </ea-radio-group>
+    <ea-space id="controllableSpace" size="large" wrap>
+      <ea-card v-for="item in 3" style="width: 250px;">
+        <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+        <ol>
+          <li>List item</li>
+          <li>List item</li>
+          <li>List item</li>
+          <li>List item</li>
+        </ol>
+      </ea-card>
+    </ea-space>
+  </ea-space>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-space direction="vertical" alignment="start" size="30px">
+    <ea-radio-group id="controllableRadioGroup" name="salary">
+      <ea-radio value="large" checked>Large</ea-radio>
+      <ea-radio value="default">Default</ea-radio>
+      <ea-radio value="small">Small</ea-radio>
+    </ea-radio-group>
+    <ea-space id="controllableSpace" size="large" wrap>
+      <ea-card style="width: 250px;">
+        <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+        <ol>
+          <li>List item</li>
+          <li>List item</li>
+          <li>List item</li>
+          <li>List item</li>
+        </ol>
+      </ea-card>
+      <ea-card style="width: 250px;">
+        <span slot="header"> 卡片标题 <ea-button>操作</ea-button> </span>
+        <ol>
+          <li>List item</li>
+          <li>List item</li>
+          <li>List item</li>
+          <li>List item</li>
+        </ol>
+      </ea-card>
+      <ea-card style="width: 250px;">
+        <span slot="header"> 卡片标题 <ea-button>操作</ea-button> </span>
+        <ol>
+          <li>List item</li>
+          <li>List item</li>
+          <li>List item</li>
+          <li>List item</li>
+        </ol>
+      </ea-card>
+    </ea-space>
+  </ea-space>
+</div>
+```
+
+```js
+const controllableExample = {
+  radioGroup: document.querySelector("#controllableRadioGroup"),
+  container: document.querySelector("#controllableSpace"),
+
+  init() {
+    this.radioGroup.addEventListener("change", (e) => {
+      this.container.setAttribute("size", e.detail.value);
+    });
+  },
+};
+controllableExample.init();
+```
+
+:::
+
+## 自动换行 ​
+
+在 **水平 (horizontal)** 模式下，通过使用 `wrap`（布尔类型）来控制自动换行行为。
+
+利用 `wrap` 属性控制换行
+
+<div class="demo">
+  <ea-space wrap>
+    <ea-button v-for="i in 10" text>Text button</ea-button>
+  </ea-space>
 </div>
 
 ::: details 查看代码
 
 ```html
-<div class="row">
-  <ea-text tag="p" truncated="true" style="width: 100px;">
-    Self element set width 100px
-  </ea-text>
-  <ea-row style="width: 100px;">
-    <ea-text tag="p" truncated="true">Squeezed by parent element</ea-text>
-  </ea-row>
-  <ea-text tag="p" line-clamp="2">
-    The -webkit-line-clamp CSS property<br />
-    allows limiting of the contents of<br />
-    a block to the specified number of lines.
-  </ea-text>
+<div class="demo">
+  <ea-space wrap>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+    <ea-button text>Text button</ea-button>
+  </ea-space>
 </div>
 ```
 
 :::
 
-## 覆盖 ​
+## 行间分隔符 ​
 
-使用属性 `tag` 覆盖元素
+有时候，仅仅在行间加空白并不能满足我们的日常需求，此时分隔符 (spacer) 就可以发挥非常好的作用了。
 
-<div class="col">
-  <ea-text>span</ea-text>
-  <ea-text tag="p">This is a paragraph.</ea-text>
-  <ea-text tag="b">Bold</ea-text>
-  <ea-text tag="i">Italic</ea-text>
-  <ea-text>
-    This is
-    <ea-text tag="sub" size="small">subscript</ea-text>
-  </ea-text>
-  <ea-text>
-    This is
-    <ea-text tag="sup" size="small">superscript</ea-text>
-  </ea-text>
-  <ea-text tag="ins">Inserted</ea-text>
-  <ea-text tag="del">Deleted</ea-text>
-  <ea-text tag="mark">Marked</ea-text>
+利用 `wrap` 属性控制换行
+
+<div class="demo">
+  <ea-space size="10px" spacer="|">
+    <ea-button> button 1 </ea-button>
+    <ea-button> button 2 </ea-button>
+    <ea-button> button 3 </ea-button>
+  </ea-space>
 </div>
 
 ::: details 查看代码
 
 ```html
-<div class="col">
-  <ea-text>span</ea-text>
-  <ea-text tag="p">This is a paragraph.</ea-text>
-  <ea-text tag="b">Bold</ea-text>
-  <ea-text tag="i">Italic</ea-text>
-  <ea-text>
-    This is
-    <ea-text tag="sub" size="small">subscript</ea-text>
-  </ea-text>
-  <ea-text>
-    This is
-    <ea-text tag="sup" size="small">superscript</ea-text>
-  </ea-text>
-  <ea-text tag="ins">Inserted</ea-text>
-  <ea-text tag="del">Deleted</ea-text>
-  <ea-text tag="mark">Marked</ea-text>
+<div class="demo">
+  <ea-space size="10px" spacer="|">
+    <ea-button> button 1 </ea-button>
+    <ea-button> button 2 </ea-button>
+    <ea-button> button 3 </ea-button>
+  </ea-space>
 </div>
 ```
 
 :::
 
-## Text API
+## 对齐方式 ​
 
-### Text Attributes
+设置该值可以调整所有子节点在容器内的对齐方式，可设置的值与 `align-items` 一致。
 
-| **属性名** | **说明** | **类型** | **可选值** | **默认值** |
-| ---------- | -------- | -------- | ---------- | ---------- |
+使用 `alignment` 属性来对齐
 
-### Text Slots
+<div class="demo">
+  <div class="alignment-container">
+    <ea-space>
+      string
+      <ea-button> button </ea-button>
+      <ea-card header="header"> body </ea-card>
+    </ea-space>
+  </div>
+  <div class="alignment-container">
+    <ea-space alignment="flex-start">
+      string
+      <ea-button> button </ea-button>
+      <ea-card header="header"> body </ea-card>
+    </ea-space>
+  </div>
+  <div class="alignment-container">
+    <ea-space alignment="flex-end">
+      string
+      <ea-button> button </ea-button>
+      <ea-card header="header"> body </ea-card>
+    </ea-space>
+  </div>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="demo">
+  <div class="alignment-container">
+    <ea-space>
+      string
+      <ea-button> button </ea-button>
+      <ea-card header="header"> body </ea-card>
+    </ea-space>
+  </div>
+  <div class="alignment-container">
+    <ea-space alignment="flex-start">
+      string
+      <ea-button> button </ea-button>
+      <ea-card header="header"> body </ea-card>
+    </ea-space>
+  </div>
+  <div class="alignment-container">
+    <ea-space alignment="flex-end">
+      string
+      <ea-button> button </ea-button>
+      <ea-card header="header"> body </ea-card>
+    </ea-space>
+  </div>
+</div>
+```
+
+:::
+
+## 填充容器 ​
+
+通过 fill **（布尔类型）** 参数，您可以控制子节点是否自动填充容器。
+
+下面的例子中，当设置为 fill 时，子节点的宽度会自动适配容器的宽度。
+
+用 fill 属性让子节点自动填充容器
+
+<div class="demo">
+  <div style="margin-bottom: 15px">
+    fill: <ea-switch id="fillSwitch"></ea-switch>
+  </div>
+  <ea-space id="fillSpace" wrap>
+    <ea-card style="width: 250px;">
+      <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+    <ea-card style="width: 250px;">
+      <span slot="header"> 卡片标题 <ea-button>操作</ea-button> </span>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+    <ea-card style="width: 250px;">
+      <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+  </ea-space>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="demo">
+  <div style="margin-bottom: 15px">
+    fill: <ea-switch id="fillSwitch"></ea-switch>
+  </div>
+  <ea-space id="fillSpace" wrap>
+    <ea-card style="width: 250px;">
+      <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+    <ea-card style="width: 250px;">
+      <span slot="header"> 卡片标题 <ea-button>操作</ea-button> </span>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+    <ea-card style="width: 250px;">
+      <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+  </ea-space>
+</div>
+```
+
+:::
+
+也可以使用 `fillRatio` 参数，自定义填充的比例， 默认值为 `100`，代表基于父容器宽度的 `100%` 进行填充
+
+需要注意的是，水平布局和垂直布局的表现形式稍有不同，具体的效果可以查看下面的例子
+
+用 `fillRatio` 自定义填充比例
+
+<div class="demo">
+  <div style="margin-bottom: 15px">
+    direction:
+    <ea-radio-group id="fillRadioGroup" name="direction">
+      <ea-radio value="horizontal" checked>horizontal</ea-radio>
+      <ea-radio value="vertical">vertical</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div style="margin-bottom: 15px">
+    fill(ratio): <ea-switch id="fillRatioSwitch"></ea-switch>
+  </div>
+  <ea-space id="fillRatioSpace" fill-ratio="49" wrap>
+    <ea-card style="width: 250px;">
+      <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+    <ea-card style="width: 250px;">
+      <span slot="header"> 卡片标题 <ea-button>操作</ea-button> </span>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+    <ea-card style="width: 250px;">
+      <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+  </ea-space>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="demo">
+  <div style="margin-bottom: 15px">
+    direction:
+    <ea-radio-group id="fillRadioGroup" name="direction">
+      <ea-radio value="horizontal" checked>horizontal</ea-radio>
+      <ea-radio value="vertical">vertical</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div style="margin-bottom: 15px">
+    fill(ratio): <ea-switch id="fillRatioSwitch"></ea-switch>
+  </div>
+  <ea-space id="fillRatioSpace" fill-ratio="49" wrap>
+    <ea-card style="width: 250px;">
+      <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+    <ea-card style="width: 250px;">
+      <span slot="header"> 卡片标题 <ea-button>操作</ea-button> </span>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+    <ea-card style="width: 250px;">
+      <div slot="header">卡片标题 <ea-button>操作</ea-button></div>
+      <ol>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+        <li>List item</li>
+      </ol>
+    </ea-card>
+  </ea-space>
+</div>
+```
+
+:::
+
+::: code-group
+
+```js [填充容器示例]
+const fillExample = {
+  fillSwitch: document.querySelector("#fillSwitch"),
+  fillContainer: document.querySelector("#fillSpace"),
+
+  fillRadioGroup: document.querySelector("#fillRadioGroup"),
+  fillRatioSwitch: document.querySelector("#fillRatioSwitch"),
+  fillRatioContainer: document.querySelector("#fillRatioSpace"),
+
+  init() {
+    this.fillSwitch.addEventListener("change", (e) => {
+      this.fillContainer.setAttribute("fill", e.detail.checked);
+    });
+
+    this.fillRadioGroup.addEventListener("change", (e) => {
+      this.fillRatioContainer.setAttribute("direction", e.detail.value);
+    });
+
+    this.fillRatioSwitch.addEventListener("change", (e) => {
+      this.fillRatioContainer.setAttribute("fill", e.detail.checked);
+    });
+  },
+};
+fillExample.init();
+```
+
+:::
+
+## API
+
+### Attributes
+
+| **属性名** | **说明**             | **类型**        | **可选值**                                                                                                                 | **默认值** |
+| ---------- | -------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| alignment  | 对齐的方式           | enum            | 详见 <ea-link type="primary" href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-items">MDN align-items</ea-link> | center     |
+| direction  | 排列的方向           | string          | `'vertical' \| 'horizontal'`                                                                                               | horizontal |
+| spacer     | 间隔                 | string / number | -                                                                                                                          | -          |
+| size       | 间隔大小             | string          | `'default' \| 'small' \| 'large'` / `string(eg: 32px)`                                                                     | default    |
+| wrap       | 设置是否自动折行     | boolean         | -                                                                                                                          | false      |
+| fill       | 子元素是否填充父容器 | boolean         | -                                                                                                                          | false      |
+| fill-ratio | 填充父容器的比例     | number          | `0-100`                                                                                                                    | 100        |
+
+### Slots
 
 | **插槽名** | **说明** |
 | ---------- | -------- |
@@ -260,6 +637,7 @@ onMounted(() => {
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+| 名称      | 说明       |
+| --------- | ---------- |
+| container | 容器       |
+| spacer    | 分隔符样式 |
