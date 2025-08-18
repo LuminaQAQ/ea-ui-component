@@ -100,7 +100,7 @@ export class EaSpace extends Base {
 
     $render() {
         this.shadowRoot.innerHTML = `
-            <div class="ea-space">
+            <div class="ea-space" part="container">
                 <slot></slot>
             </div>
         `;
