@@ -25,9 +25,6 @@ export class EaSpace extends Base {
                 if (!CSS.supports('align-items', newVal)) return console.warn(`[ea-space] Invalid alignment value ${newVal}`);
 
                 this.style.setProperty('--ea-space-alignment', newVal);
-
-                console.log(newVal);
-
             }
         },
         direction: {
