@@ -164,7 +164,7 @@ export class EaButton extends Base {
   $render() {
     const tag = this.getAttrBoolean('link') ? "a" : "button";
     this.shadowRoot.innerHTML = `
-      <${tag} class="ea-button">
+      <${tag} class="ea-button" part="container">
         <slot></slot>
       </${tag}>
     `;
