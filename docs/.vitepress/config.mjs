@@ -57,6 +57,7 @@ export default defineConfig({
           { text: 'Link 文字链接', link: '/ea-link' },
           { text: 'Text 文本', link: '/ea-text' },
           { text: 'Scrollbar 滚动条', link: '/ea-scrollbar' },
+          { text: 'Space 间距', link: '/ea-space' },
           { text: 'Splitter 分隔面板', link: '/ea-splitter' },
         ]
       },
@@ -74,7 +75,7 @@ export default defineConfig({
       {
         text: '表单组件',
         items: [
-          { text: 'Radio 单选框', link: '/ea-radio' },
+          // { text: 'Radio 单选框', link: '/ea-radio' },
           // { text: 'Checkbox 多选框', link: '/ea-checkbox' },
           // { text: 'Input 输入框', link: '/ea-input' },
           // { text: 'Textarea 文本域', link: '/ea-textarea' },

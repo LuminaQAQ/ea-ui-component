@@ -83,8 +83,6 @@ export class EaText extends Base {
         super();
 
         this.stylesheet = stylesheet;
-
-        this.$render();
     }
 
     $render() {
@@ -99,6 +97,8 @@ export class EaText extends Base {
 
     connectedCallback() {
         super.connectedCallback();
+
+        this.$render();
 
         this.tag = this.tag;
         this.title = this.title;

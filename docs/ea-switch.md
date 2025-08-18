@@ -2,12 +2,8 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import('../components/ea-switch/index.js')
-  import('./index.scss')
-
-  document.querySelector('#switch').addEventListener('change', function(e){ 
-    console.log(e.detail.checked, e.detail.value)
-  })
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
 })
 </script>
 

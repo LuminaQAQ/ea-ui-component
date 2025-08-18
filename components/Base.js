@@ -130,9 +130,9 @@ export default class Base extends HTMLElement {
         try {
             this.#stateConfigs[name]?.(newVal);
         } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                console.error(e);
-            }
+            // if (process.env.NODE_ENV === 'development') {
+            //     console.error(e);
+            // }
         }
     }
 
