@@ -1,191 +1,166 @@
-// @ts-nocheck
-import Base from '../Base.js';
+import Base from '@components/Base.js'
 
 import stylesheet from './index.scss?inline';
 
 export class EaSwitch extends Base {
-    #wrap;
-    #input;
-
-    #labelLeft;
-    #inputCore;
+    /** @type {HTMLElement} */
+    #container;
+    /** @type {HTMLElement} */
+    #originalInput;
+    /** @type {HTMLElement} */
+    #innerInput;
+    /** @type {HTMLElement} */
     #labelRight;
+    /** @type {HTMLElement} */
+    #labelLeft;
+
+    /** @type {AbortController} */
+    #abortController;
+
+    static get observedAttributes() {
+        return ['name', 'value', 'inactive-text', 'inactive-color', 'active-text', 'active-color', 'checked', 'disabled'];
+    }
+
+    state = this.properties({
+        name: {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                this.#container.setAttribute('for', newVal);
+                this.#originalInput.setAttribute('name', newVal);
+                this.#originalInput.setAttribute('id', newVal);
+            }
+        },
+        "inactive-text": {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                this.#labelLeft.innerText = newVal;
+            }
+        },
+        "inactive-color": {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                this.style.setProperty('--ea-switch-inactive-checkbox-bgc', newVal);
+            }
+        },
+        "active-text": {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                this.#labelRight.innerText = newVal;
+            }
+        },
+        "active-color": {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                this.style.setProperty('--ea-switch-active-checkbox-bgc', newVal);
+            }
+        },
+        checked: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.#originalInput.toggleAttribute('checked', newVal);
+                this.#container.className = this.updateContainerClasslist();
+            }
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.#originalInput.toggleAttribute('disabled', newVal);
+                this.#container.className = this.updateContainerClasslist();
+            }
+        },
+        value: {
+            type: String,
+            default: '',
+            observer: (newVal) => {
+                this.#originalInput.setAttribute('value', newVal);
+            }
+        },
+    })
+
+    /**
+     * 获取 classlist 列表
+     * @return {string} 属性值
+     */
+    updateContainerClasslist() {
+        return this.computedClasslist('ea-switch', {
+            ['--checked']: this.checked,
+            ['--disabled']: this.disabled,
+        });
+    }
 
     constructor() {
         super();
 
-        const shadowRoot = this.shadowRoot;
         this.stylesheet = stylesheet;
 
-        shadowRoot.innerHTML = `
-            <label class="ea-switch_wrap" part="container">
-                <input class="ea-switch_input" type="checkbox">
-                <span class="ea-switch_label ea-switch_label--left" part="label-left"></span>
-                <span class="ea-switch_core" part="switch"></span>
-                <span class="ea-switch_label ea-switch_label--right" part="label-right"></span>
+        this.$render();
+    }
+
+    $render() {
+        this.shadowRoot.innerHTML = `
+            <label class="ea-switch" part="container">
+                <input class="ea-switch__original" type="checkbox">
+                <span class="ea-switch__label label-left" part="label-left"></span>
+                <span class="ea-switch__inner" part="switch"></span>
+                <span class="ea-switch__label label-right" part="label-right"></span>
             </label>
         `;
 
-        this.#wrap = shadowRoot.querySelector('.ea-switch_wrap');
-        this.#input = shadowRoot.querySelector('.ea-switch_input');
-        this.#labelLeft = shadowRoot.querySelector('.ea-switch_label--left');
-        this.#inputCore = shadowRoot.querySelector('.ea-switch_core');
-        this.#labelRight = shadowRoot.querySelector('.ea-switch_label--right');
-
-
+        this.#container = this.shadowRoot.querySelector('.ea-switch');
+        this.#originalInput = this.shadowRoot.querySelector('.ea-switch__original');
+        this.#innerInput = this.shadowRoot.querySelector('.ea-switch__inner');
+        this.#labelLeft = this.shadowRoot.querySelector('.ea-switch__label.label-left');
+        this.#labelRight = this.shadowRoot.querySelector('.ea-switch__label.label-right');
     }
 
-    // ------- name 属性 -------
-    // #region
-    get name() {
-        return this.getAttribute('name') || 'ea-switch';
+    #changeEvent = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        this.checked = e.target.checked;
+        const value = this.checked
+            ? (this["active-text"] ? this["active-text"] : this.checked)
+            : (this["inactive-text"] ? this["inactive-text"] : this.checked);
+        this.value = value;
+
+        this.dispatchEvent(new CustomEvent("change", {
+            detail: {
+                checked: this.checked,
+                value: value,
+            },
+        }))
     }
-
-    set name(value) {
-        this.setAttribute('name', value);
-
-        this.#wrap.setAttribute('for', value);
-        this.#input.setAttribute('name', value);
-        this.#input.setAttribute('id', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- value 属性 -------
-    // #region
-    get value() {
-        if (this.inactiveText && !this.checked) return this.inactiveText;
-        else if (this.activeText && this.checked) return this.activeText;
-        return this.checked;
-    }
-
-    set value(value) {
-        this.#input.value = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- inactive-text 关闭时选项 -------
-    // #region
-    get inactiveText() {
-        return this.getAttribute('inactive-text') || '';
-    }
-
-    set inactiveText(value) {
-        if (!value) return;
-
-        this.setAttribute('inactive-text', value);
-        this.#labelLeft.innerText = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- active-text 开启时选项 -------
-    // #region
-    get activeText() {
-        return this.getAttribute('active-text') || '';
-    }
-
-    set activeText(value) {
-        if (!value) return;
-
-        this.setAttribute('active-text', value);
-        this.#labelRight.innerText = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- checked 选中 -------
-    // #region
-    get checked() {
-        return this.getAttrBoolean('checked');
-    }
-
-    set checked(value) {
-        this.setAttribute('checked', value);
-        this.#input.checked = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- disabled 禁用 -------
-    // #region
-    get disabled() {
-        return this.getAttrBoolean('disabled');
-    }
-
-    set disabled(value) {
-        this.setAttribute('disabled', value);
-        this.#input.disabled = value;
-        this.#wrap.classList.toggle('disabled', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- inactive-color 关闭时颜色 -------
-    // #region
-    get inactiveColor() {
-        return this.getAttribute('inactive-color') || '';
-    }
-
-    set inactiveColor(value) {
-        if (!value) return;
-
-        this.style.setProperty('--inactive-checkbox-bgc', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- active-color 开启时颜色 -------
-    // #region
-    get activeColor() {
-        return this.getAttribute('active-color');
-    }
-
-    set activeColor(value) {
-        if (!value) return;
-
-        this.style.setProperty('--active-checkbox-bgc', value);
-    }
-    // #endregion
-    // ------- end -------
 
     connectedCallback() {
-        this.setAttribute('data-ea-component', true);
+        super.connectedCallback();
+
+        this.#abortController = new AbortController();
 
         this.name = this.name;
-
-        this.value = this.value
-
-        // 设置勾选值
+        this.value = this.value;
         this.checked = this.checked;
-
-        // 设置开启/关闭值
-        this.inactiveText = this.inactiveText;
-        this.activeText = this.activeText;
-
-        // 设置禁用
         this.disabled = this.disabled;
 
-        this.inactiveColor = this.inactiveColor;
-        this.activeColor = this.activeColor;
+        this["active-text"] = this["active-text"];
+        this["inactive-text"] = this["inactive-text"];
+        this["active-color"] = this["active-color"];
+        this["inactive-color"] = this["inactive-color"];
 
-        this.#input.addEventListener('change', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
+        this.#originalInput.addEventListener('change', this.#changeEvent, { signal: this.#abortController.signal });
+    }
 
-            this.checked = e.target.checked;
-
-            this.dispatchEvent(new CustomEvent("change", {
-                detail: {
-                    checked: this.checked,
-                    value: this.value,
-                },
-            }))
-        });
+    $unmounted() {
+        this.#abortController.abort();
     }
 }
 
-if (!customElements.get('ea-switch')) {
-    customElements.define('ea-switch', EaSwitch);
+if (!window.customElements.get('ea-switch')) {
+    window.customElements.define('ea-switch', EaSwitch);
 }

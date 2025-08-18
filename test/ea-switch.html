@@ -16,13 +16,7 @@
 
 <body>
 
-    <script type='module'>
-        import '../components/ea-switch/index.js'
-
-        document.querySelector("#switch").addEventListener("change", function (e) {
-            console.log(e.detail.checked, e.detail.value);
-        });
-    </script>
+    <script type='module' src="../src/components/ea-switch/index.js"></script>
 
     <!-- -------- 基本用法 --------  -->
     <!-- #region  -->
@@ -80,6 +74,12 @@
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
+
+    <script>
+        document.querySelector("#switch").addEventListener("change", function (e) {
+            console.log(e.detail.checked, e.detail.value);
+        });
+    </script>
 </body>
 
 </html>
