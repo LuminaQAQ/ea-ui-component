@@ -166,7 +166,6 @@
     <hr>
     <!-- #endregion  -->
 
-
     <!-- #region 自动换行 -->
     <h1>自动换行</h1>
 
@@ -187,7 +186,6 @@
     <hr>
     <!-- #endregion  -->
 
-
     <!-- #region 行间分隔符 -->
     <h1>行间分隔符</h1>
 
@@ -201,7 +199,6 @@
 
     <hr>
     <!-- #endregion  -->
-
 
     <!-- #region 对齐方式 -->
     <h1>对齐方式</h1>
@@ -242,11 +239,11 @@
     <!-- #region 填充容器 -->
     <h1>填充容器</h1>
 
-    <div>
+    <div class="demo">
         <div style="margin-bottom: 15px">
-            fill: <ea-switch></ea-switch>
+            fill: <ea-switch id="fillSwitch"></ea-switch>
         </div>
-        <ea-space fill wrap>
+        <ea-space id="fillSpace" wrap>
             <ea-card style="width: 250px;">
                 <div slot="header">
                     卡片标题 <ea-button>操作</ea-button>
@@ -283,10 +280,61 @@
         </ea-space>
     </div>
 
+    <div class="demo">
+        <div style="margin-bottom: 15px">
+            direction:
+            <ea-radio-group id="fillRadioGroup" name="direction">
+                <ea-radio value="horizontal" checked>horizontal</ea-radio>
+                <ea-radio value="vertical">vertical</ea-radio>
+            </ea-radio-group>
+        </div>
+        <div style="margin-bottom: 15px">
+            fill(ratio): <ea-switch id="fillRatioSwitch"></ea-switch>
+        </div>
+        <ea-space id="fillRatioSpace" fill-ratio="49" wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
+    </div>
+
+
     <hr>
     <!-- #endregion  -->
 
     <script>
+        // ------- 控制间距的大小 -------
+        // #region
         const controllableExample = {
             radioGroup: document.querySelector('#controllableRadioGroup'),
             container: document.querySelector('#controllableSpace'),
@@ -298,6 +346,36 @@
             }
         };
         controllableExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 填充容器 -------
+        // #region
+        const fillExample = {
+            fillSwitch: document.querySelector('#fillSwitch'),
+            fillContainer: document.querySelector('#fillSpace'),
+
+            fillRadioGroup: document.querySelector('#fillRadioGroup'),
+            fillRatioSwitch: document.querySelector('#fillRatioSwitch'),
+            fillRatioContainer: document.querySelector('#fillRatioSpace'),
+
+            init() {
+                this.fillSwitch.addEventListener('change', (e) => {
+                    this.fillContainer.setAttribute('fill', e.detail.checked);
+                });
+
+                this.fillRadioGroup.addEventListener('change', (e) => {
+                    this.fillRatioContainer.setAttribute('direction', e.detail.value);
+                });
+
+                this.fillRatioSwitch.addEventListener('change', (e) => {
+                    this.fillRatioContainer.setAttribute('fill', e.detail.checked);
+                });
+            }
+        };
+        fillExample.init();
+        // #endregion
+        // ------- end -------
     </script>
 
 </html>
