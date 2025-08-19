@@ -6,6 +6,8 @@ import "./ea-icon/index.js";
 export default class Base extends HTMLElement {
     #stateConfigs = {};
 
+    isMounted = true;
+
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -105,7 +107,7 @@ export default class Base extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-        if (oldVal === newVal) return;
+        if (oldVal === newVal && !this.isMounted) return;
 
         // if (name === "loading-full") {
 
@@ -130,9 +132,9 @@ export default class Base extends HTMLElement {
         try {
             this.#stateConfigs[name]?.(newVal);
         } catch (e) {
-            // if (process.env.NODE_ENV === 'development') {
-            //     console.error(e);
-            // }
+            if (process.env.NODE_ENV === 'development' && this.isMounted) {
+                console.error(e);
+            }
         }
     }
 

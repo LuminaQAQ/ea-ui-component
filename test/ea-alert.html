@@ -115,12 +115,28 @@
             show-icon></ea-alert>
         <ea-alert class="with-desc-and-icon" title="Warning alert" type="warning" description="More text description"
             show-icon></ea-alert>
-        <ea-alert class="with-desc-and-icon" title="Error alert" type="error" description="More text description"
-            show-icon></ea-alert>
+        <ea-alert class="with-desc-and-icon" title="Error alert" type="error" show-icon>
+            More text description
+        </ea-alert>
     </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
+
+    <!-- #region 延迟属性 -->
+    <h1>延迟属性</h1>
+
+    <div class="demo">
+        <ea-alert id="showAfterAlert" title="Primary alert that appearance after 5000 milliseconds" type="primary"
+            show-after="5000"></ea-alert>
+        <ea-alert id="hideAfterAlert" title="Success alert that disappear after 5000 milliseconds" type="success"
+            hide-after="5000"></ea-alert>
+        <ea-alert id="autoCloseAlert" title="Info alert that in 5000 milliseconds to be hidden" type="info"
+            closable="false" auto-close="5000"></ea-alert>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
 
     <script>
         // ------- 自定义关闭按钮 -------
@@ -135,6 +151,31 @@
             }
         }
         customizedCloseBtnExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 延迟属性 -------
+        // #region
+        const delayAttrExample = {
+            showAfterAlert: document.querySelector("#showAfterAlert"),
+            hideAfterAlert: document.querySelector("#hideAfterAlert"),
+            autoCloseAlert: document.querySelector("#autoCloseAlert"),
+
+            init() {
+                this.showAfterAlert.addEventListener("open", () => {
+                    console.log("open");
+                });
+
+                this.hideAfterAlert.addEventListener("close", () => {
+                    console.log("close");
+                });
+
+                this.autoCloseAlert.addEventListener("close", () => {
+                    console.log("auto-close");
+                });
+            }
+        }
+        delayAttrExample.init();
         // #endregion
         // ------- end -------
     </script>

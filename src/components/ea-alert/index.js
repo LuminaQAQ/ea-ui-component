@@ -1,6 +1,7 @@
 import Base from '@components/Base.js'
 
 import stylesheet from './index.scss?inline';
+import { timeout } from '@/utils/timeout';
 
 export class EaAlert extends Base {
   /** @type {HTMLElement} */
@@ -21,10 +22,28 @@ export class EaAlert extends Base {
   #abortController;
 
   static get observedAttributes() {
-    return ['type', 'effect', 'closable', 'close-text', 'show-icon', 'center', 'description'];
+    return ['title', 'description', 'type', 'effect', 'closable', 'close-text', 'show-icon', 'center', 'description', 'show-after', 'hide-after', 'auto-close'];
   }
 
   state = this.properties({
+    title: {
+      type: String,
+      default: '',
+      observer: (newVal) => {
+        this.#alertTitle.innerHTML = newVal
+          ? newVal
+          : `<slot name="title"></slot>`
+      }
+    },
+    description: {
+      type: String,
+      default: '',
+      observer: (newVal) => {
+        this.#alertDescription.innerHTML = newVal
+          ? newVal
+          : `<slot></slot>`
+      }
+    },
     type: {
       type: ['primary', 'info', 'success', 'warning', 'error'],
       default: 'info',
@@ -83,15 +102,32 @@ export class EaAlert extends Base {
         this.#container.className = this.updateContainerClasslist()
       }
     },
-    description: {
-      type: String,
-      default: '',
+    "show-after": {
+      type: Number,
+      default: 0,
       observer: (newVal) => {
-        // this.#alertDescription.innerHTML = newVal
-        //   ? `<div class="ea-alert__description">${newVal}</div>`
-        //   : ''
+        newVal = Math.abs(newVal)
+        this.#container.classList.toggle('ea-alert--hide', newVal > 0);
+
+        timeout(() => {
+          this.dispatchEvent(new CustomEvent('open'));
+
+          this.#container.classList.remove('ea-alert--hide');
+        }, newVal)
       }
     },
+    "hide-after": {
+      type: Number,
+      default: 300,
+      observer: (newVal) => { }
+    },
+    "auto-close": {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        if (newVal && this.isMounted) timeout(() => this.#closeEvent(), this["auto-close"]);
+      }
+    }
   })
 
   /**
@@ -109,9 +145,9 @@ export class EaAlert extends Base {
   constructor() {
     super();
 
-    this.stylesheet = stylesheet;
+    this.isMounted = false;
 
-    this.$render();
+    this.stylesheet = stylesheet;
   }
 
   $render() {
@@ -122,10 +158,9 @@ export class EaAlert extends Base {
         </span>
         <div class="ea-alert__content" part='content-wrap'>
           <span class="ea-alert__title" part='title'>
-            ${this.title ? this.title : `<slot name="title"></slot>`}
+            <slot name="title"></slot>
           </span>
           <p class="ea-alert__description" part='description'>
-            ${this.description ? this.description : `<slot name="description"></slot>`}
             <slot></slot>
           </p>
           <span class="ea-alert__close-btn" part="close-btn"></span>
@@ -139,33 +174,52 @@ export class EaAlert extends Base {
     this.#alertTitle = this.shadowRoot.querySelector('.ea-alert__title');
     this.#alertDescription = this.shadowRoot.querySelector('.ea-alert__description');
     this.#alertCloseBtn = this.shadowRoot.querySelector('.ea-alert__close-btn');
+
+    this.isMounted = true;
   }
 
   #closeEvent = (e) => {
-    this.#container.addEventListener("transitionend", () => {
-      this.dispatchEvent(new CustomEvent('close', {
-        detail: {
-          visible: false,
-        }
-      }));
+    timeout(() => {
+      this.#abortController.abort();
 
-      this.remove();
-    }, { once: true });
-    this.#container.classList.add('ea-alert--before-close');
+      this.#container.classList.add('ea-alert--before-close');
+
+      this.#container.addEventListener("transitionend", () => {
+        this.dispatchEvent(new CustomEvent('close', {
+          detail: {
+            visible: false,
+          }
+        }));
+        this.remove();
+      }, { once: true })
+
+    }, this["hide-after"]);
   }
 
   connectedCallback() {
     super.connectedCallback();
 
+    this.#abortController = new AbortController();
+
+    this.$render();
+
+    this.title = this.title;
+    this.description = this.description;
     this.type = this.type;
     this.effect = this.effect;
     this["close-text"] = this["close-text"];
     this.closable = this.closable;
     this["show-icon"] = this["show-icon"];
 
-    this.#abortController = new AbortController();
+    this["show-after"] = this["show-after"];
+    this["hide-after"] = this["hide-after"];
+    this["auto-close"] = this["auto-close"];
 
     if (this.closable) this.#alertCloseBtn.addEventListener('click', this.#closeEvent, { signal: this.#abortController.signal });
+  }
+
+  $beforeUnmounted() {
+    this.#abortController.abort();
   }
 }
 
