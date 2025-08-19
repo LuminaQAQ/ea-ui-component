@@ -117,4 +117,16 @@ $alert-type: (
   @include modifier(before-close) {
     filter: opacity(0);
   }
+
+  @include modifier(hide) {
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+
+    overflow: hidden;
+    visibility: hidden;
+
+    filter: opacity(0);
+  }
 }
