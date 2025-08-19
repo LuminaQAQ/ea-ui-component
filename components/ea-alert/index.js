@@ -30,9 +30,12 @@ export class EaAlert extends Base {
       type: String,
       default: '',
       observer: (newVal) => {
+
         this.#alertTitle.innerHTML = newVal
           ? newVal
           : `<slot name="title"></slot>`
+
+        // console.log(newVal);
       }
     },
     description: {
@@ -145,7 +148,7 @@ export class EaAlert extends Base {
   constructor() {
     super();
 
-    this.isMounted = false;
+    this.$render();
 
     this.stylesheet = stylesheet;
   }
@@ -157,13 +160,16 @@ export class EaAlert extends Base {
           <slot name='icon'></slot>
         </span>
         <div class="ea-alert__content" part='content-wrap'>
-          <span class="ea-alert__title" part='title'>
-            <slot name="title"></slot>
-          </span>
+          <span class="ea-alert__title" part='title'></span>
           <p class="ea-alert__description" part='description'>
             <slot></slot>
           </p>
-          <span class="ea-alert__close-btn" part="close-btn"></span>
+          <span class="ea-alert__close-btn" part="close-btn">
+            ${this.closable
+        ? (this['close-text'] ? this['close-text'] : `<ea-icon class="ea-alert__close-icon" icon="icon-cancel" part="close-icon"></ea-icon>`)
+        : ''
+      }
+          </span>
         </div>
       </div>
     `;
@@ -174,8 +180,6 @@ export class EaAlert extends Base {
     this.#alertTitle = this.shadowRoot.querySelector('.ea-alert__title');
     this.#alertDescription = this.shadowRoot.querySelector('.ea-alert__description');
     this.#alertCloseBtn = this.shadowRoot.querySelector('.ea-alert__close-btn');
-
-    this.isMounted = true;
   }
 
   #closeEvent = (e) => {
@@ -200,20 +204,6 @@ export class EaAlert extends Base {
     super.connectedCallback();
 
     this.#abortController = new AbortController();
-
-    this.$render();
-
-    this.title = this.title;
-    this.description = this.description;
-    this.type = this.type;
-    this.effect = this.effect;
-    this["close-text"] = this["close-text"];
-    this.closable = this.closable;
-    this["show-icon"] = this["show-icon"];
-
-    this["show-after"] = this["show-after"];
-    this["hide-after"] = this["hide-after"];
-    this["auto-close"] = this["auto-close"];
 
     if (this.closable) this.#alertCloseBtn.addEventListener('click', this.#closeEvent, { signal: this.#abortController.signal });
   }

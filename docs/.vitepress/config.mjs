@@ -61,17 +61,17 @@ export default defineConfig({
           { text: 'Splitter 分隔面板', link: '/ea-splitter' },
         ]
       },
-      // {
-      //   text: '页面组件',
-      //   items: [
-      //     { text: 'NavMenu 导航菜单', link: '/ea-nav-menu' },
-      //     { text: 'Tabs 标签页', link: '/ea-tabs' },
-      //     { text: 'Breadcrumb 面包屑', link: '/ea-breadcrumb' },
-      //     { text: 'PageHeader 页头', link: '/ea-page-header' },
-      //     { text: 'Steps 步骤条', link: '/ea-steps' },
-      //     { text: 'Drawer 抽屉', link: '/ea-drawer' },
-      //   ]
-      // },
+      {
+        text: '页面组件',
+        items: [
+          //     { text: 'NavMenu 导航菜单', link: '/ea-nav-menu' },
+          //     { text: 'Tabs 标签页', link: '/ea-tabs' },
+          //     { text: 'Breadcrumb 面包屑', link: '/ea-breadcrumb' },
+          //     { text: 'PageHeader 页头', link: '/ea-page-header' },
+          //     { text: 'Steps 步骤条', link: '/ea-steps' },
+          //     { text: 'Drawer 抽屉', link: '/ea-drawer' },
+        ]
+      },
       {
         text: '表单组件',
         items: [
@@ -88,21 +88,21 @@ export default defineConfig({
           // { text: 'Form 表单', link: '/ea-form' },
         ]
       },
-      // {
-      //   text: '数据组件',
-      //   items: [
-      //     { text: 'Table 表格', link: '/ea-table' },
-      //     { text: 'Tag 标签', link: '/ea-tag' },
-      //     { text: 'Progress 进度条', link: '/ea-progress' },
-      //     { text: 'Pagination 分页', link: '/ea-pagination' },
-      //     { text: 'Badge 徽标数', link: '/ea-badge' },
-      //     { text: 'Avatar 头像', link: '/ea-avatar' },
-      //     { text: "Skeleton 骨架屏", link: '/ea-skeleton' },
-      //     { text: "Empty 空状态", link: '/ea-empty' },
-      //     { text: "Descriptions 描述列表", link: '/ea-descriptions' },
-      //     { text: "Result 结果", link: '/ea-result' },
-      //   ]
-      // },
+      {
+        text: '数据组件',
+        items: [
+          //     { text: 'Table 表格', link: '/ea-table' },
+          //     { text: 'Tag 标签', link: '/ea-tag' },
+          //     { text: 'Progress 进度条', link: '/ea-progress' },
+          //     { text: 'Pagination 分页', link: '/ea-pagination' },
+          //     { text: 'Badge 徽标数', link: '/ea-badge' },
+          //     { text: 'Avatar 头像', link: '/ea-avatar' },
+          //     { text: "Skeleton 骨架屏", link: '/ea-skeleton' },
+          //     { text: "Empty 空状态", link: '/ea-empty' },
+          //     { text: "Descriptions 描述列表", link: '/ea-descriptions' },
+          //     { text: "Result 结果", link: '/ea-result' },
+        ]
+      },
       {
         text: '提示组件',
         items: [
@@ -115,7 +115,7 @@ export default defineConfig({
       {
         text: '其他',
         items: [
-          { text: 'Card 卡片', link: '/ea-card' },
+          // { text: 'Card 卡片', link: '/ea-card' },
           //     { text: 'Carousel 走马灯', link: '/ea-carousel' },
           //     { text: 'Timeline 时间轴', link: '/ea-timeline' },
           //     { text: 'BackTop 回到顶部', link: '/ea-backtop' },

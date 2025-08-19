@@ -69,12 +69,6 @@ export class EaCol extends Base {
 
     connectedCallback() {
         super.connectedCallback();
-
-        this.tag = this.tag;
-        this.span = this.span;
-        this.offset = this.offset;
-        this.push = this.push;
-        this.pull = this.pull;
     }
 }
 

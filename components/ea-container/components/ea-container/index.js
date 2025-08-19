@@ -20,9 +20,6 @@ export class EaContainer extends Base {
             type: ['horizontal', 'vertical'],
             default: 'horizontal',
             observer: (newVal) => {
-                // const a = newVal === 'vertical' ? 'column' : 'row';
-                // console.log(newVal);
-
                 this.style.setProperty('--ea-container-direction', newVal === 'vertical' ? 'column' : 'row');
             }
         },

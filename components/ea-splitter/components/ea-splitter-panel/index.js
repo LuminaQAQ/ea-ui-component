@@ -67,9 +67,6 @@ export class EaSplitterPanel extends Base {
 
     connectedCallback() {
         super.connectedCallback();
-
-        this.min = this.min;
-        this.size = this.size;
     }
 }
 

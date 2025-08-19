@@ -63,7 +63,7 @@ export class EaScrollbar extends Base {
 
         this.stylesheet = stylesheet;
 
-        this.$render();
+        this.isMounted = false;
     }
 
     $render() {
@@ -87,6 +87,8 @@ export class EaScrollbar extends Base {
         this.#verticalThumb = this.shadowRoot.querySelector('.ea-scrollbar__thumb-vertical');
         this.#horizontalThumb = this.shadowRoot.querySelector('.ea-scrollbar__thumb-horizontal');
         this.#view = this.shadowRoot.querySelector('.ea-scrollbar__view');
+
+        this.isMounted = true;
     }
 
     /**
@@ -219,6 +221,8 @@ export class EaScrollbar extends Base {
 
     connectedCallback() {
         super.connectedCallback();
+
+        this.$render();
 
         this.native = this.native;
         this.noresize = this.noresize;

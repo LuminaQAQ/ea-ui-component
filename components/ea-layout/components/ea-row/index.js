@@ -58,11 +58,6 @@ export class EaRow extends Base {
 
     connectedCallback() {
         super.connectedCallback();
-
-        this.tag = this.tag;
-        this.gutter = this.gutter;
-        this.justify = this.justify;
-        this.align = this.align;
     }
 }
 

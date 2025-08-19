@@ -41,8 +41,6 @@ export class EaHeader extends Base {
 
     connectedCallback() {
         super.connectedCallback();
-
-        this.height = this.height;
     }
 }
 
