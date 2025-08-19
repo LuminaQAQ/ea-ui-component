@@ -201,8 +201,6 @@ export class EaSplitter extends Base {
         super.connectedCallback();
         this.#resizeController = new AbortController();
 
-        this.layout = this.layout;
-
         queueMicrotask(() => {
             let children = [...this.children];
             [...this.children].forEach((child, index) => {

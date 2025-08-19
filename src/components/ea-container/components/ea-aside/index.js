@@ -44,8 +44,6 @@ export class EaAside extends Base {
 
     connectedCallback() {
         super.connectedCallback();
-
-        this.width = this.width;
     }
 }
 

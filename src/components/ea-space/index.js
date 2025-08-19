@@ -110,14 +110,6 @@ export class EaSpace extends Base {
 
     connectedCallback() {
         super.connectedCallback();
-
-        this.wrap = this.wrap;
-        this.size = this.size;
-        this.spacer = this.spacer;
-        this.alignment = this.alignment;
-        this.fill = this.fill;
-
-        this['fill-ratio'] = this['fill-ratio'];
     }
 }
 

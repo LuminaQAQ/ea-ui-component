@@ -174,31 +174,6 @@ export class EaButton extends Base {
 
   connectedCallback() {
     super.connectedCallback();
-
-
-    // 按钮样式
-    this.plain = this.plain;
-    this.round = this.round;
-    this.text = this.text;
-    this.circle = this.circle;
-
-    // 按钮种类
-    this.type = this.type;
-
-    // 按钮大小
-    this.size = this.size;
-
-    // 图标
-    this.icon = this.icon;
-
-    // 链接
-    this.link = this.link;
-    if (this.link) this.href = this.href;
-
-    // 禁用
-    this.disabled = this.disabled;
-
-    this.loading = this.loading;
   }
 }
 

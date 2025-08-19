@@ -24,17 +24,6 @@ export class EaFooter extends Base {
         },
     })
 
-    /**
-     * 获取 classlist 列表
-     * @return {string} 属性值
-     */
-    updateContainerClasslist() {
-        return this.computedClasslist('ea-footer',
-            {
-                // ['--' + this.state.type]: this.state.type,
-            });
-    }
-
     constructor() {
         super();
 
@@ -55,8 +44,6 @@ export class EaFooter extends Base {
 
     connectedCallback() {
         super.connectedCallback();
-
-        this.height = this.height;
     }
 }
 

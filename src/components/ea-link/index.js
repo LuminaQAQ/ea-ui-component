@@ -96,21 +96,6 @@ export class EaLink extends Base {
 
   connectedCallback() {
     super.connectedCallback();
-
-    // 设置链接
-    this.href = this.href;
-
-    // 设置类型
-    this.type = this.type;
-
-    // 禁用状态
-    this.disabled = this.disabled;
-
-    // 设置下划线
-    this.underline = this.underline;
-
-    // 图标
-    this.icon = this.icon;
   }
 }
 

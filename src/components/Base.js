@@ -91,7 +91,7 @@ export default class Base extends HTMLElement {
         };
 
         for (const [key, config] of Object.entries(states)) {
-            this.#stateConfigs[key] = config.observer;
+            this.#stateConfigs[key] = config;
 
             Object.defineProperty(this, key, {
                 get: () => {
@@ -107,7 +107,7 @@ export default class Base extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-        if (oldVal === newVal && !this.isMounted) return;
+        if (newVal === oldVal || !this.isMounted) return;
 
         // if (name === "loading-full") {
 
@@ -130,7 +130,7 @@ export default class Base extends HTMLElement {
         // }
 
         try {
-            this.#stateConfigs[name]?.(newVal);
+            this.#stateConfigs[name]?.observer?.(this[name]);
         } catch (e) {
             if (process.env.NODE_ENV === 'development' && this.isMounted) {
                 console.error(e);
@@ -216,16 +216,12 @@ export default class Base extends HTMLElement {
      * 设置属性值，并切换className
      * @param {string} attr 属性名
      * @param {boolean} flag 属性值
-     * @param {string} className class名
      */
-    toggleAttribute(attr, flag, className) {
+    toggleAttribute(attr, flag) {
         if (flag) {
             this.setAttribute(attr, flag);
-
-            // if (className) this.dom.classList.add(className);
         } else {
             if (this.hasAttribute(attr)) this.removeAttribute(attr);
-            // if (className) this.dom.classList.remove(className);
         }
     }
 
@@ -273,7 +269,7 @@ export default class Base extends HTMLElement {
     }
 
     setAttr(attrName, value) {
-        if (value) {
+        if (value || this.#stateConfigs[attrName].default) {
             this.setAttribute(attrName, value);
         } else {
             this.removeAttribute(attrName);
