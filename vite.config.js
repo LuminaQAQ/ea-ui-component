@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer'
 import entryConfigs from './configs/entryConfig.js';
-import { resolve } from 'node:path';
+import path, { resolve } from 'node:path';
 
 export default defineConfig({
     plugins: [
@@ -18,16 +18,44 @@ export default defineConfig({
             formats: ['es'],
         },
         rollupOptions: {
-            external: [],
             output: {
-                manualChunks: undefined,
                 entryFileNames: 'components/[name].js',
-                chunkFileNames: 'components/[name].js',
-                assetFileNames: 'assets/icon.[ext]'
-            },
-        },
-        minify: true,
-        cssCodeSplit: false,
+                chunkFileNames: (chunkInfo) => {
+                    if (chunkInfo.name.startsWith('css/')) {
+                        return `${chunkInfo.name}.style.js`
+                    }
+
+                    if (chunkInfo.name.startsWith('utils/')) {
+                        return `${chunkInfo.name}.js`
+                    }
+
+                    if (chunkInfo.name.startsWith('themes/')) {
+                        return `${chunkInfo.name}.style.js`
+                    }
+
+                    return `components/[name].js`
+                },
+                assetFileNames: 'assets/icon.css',
+                manualChunks(id) {
+                    if (id.includes('.scss?inline') && id.includes('themes')) {
+                        const name = id.split('/').pop()?.replace('.scss?inline', '');
+                        return `themes/${name}`
+                    }
+
+                    if (id.includes('.scss?inline')) {
+                        const fullPathChunk = id.split('/');
+                        const fullName = fullPathChunk[fullPathChunk.length - 2];
+
+                        return `css/${fullName}`;
+                    }
+
+                    if (id.startsWith(path.join(__dirname, '/src/utils'))) {
+                        const name = id.split('/').pop()?.replace('.js', '');
+                        return `utils/${name}`
+                    }
+                }
+            }
+        }
     },
     css: {
         preprocessorOptions: {
