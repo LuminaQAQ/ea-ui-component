@@ -5,31 +5,37 @@
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
 
     <style>
         hr {
             margin: 3rem 0;
+        }
+
+        ea-alert {
+            margin: 20px 0 0;
+        }
+
+        ea-alert:first-child {
+            margin: 0;
         }
     </style>
 </head>
 
 <body>
 
-    <script type='module'>
-        import { setConfig } from "../components/globalConfig.js"
-        setConfig({ fontelloCSS: new URL('../components/ea-icon/index.css', import.meta.url).href })
-        import '../components/ea-alert/index.js'
-    </script>
+    <script src="../src/components/ea-alert/index.js" type='module'></script>
+    <script src="../src/components/ea-icon/index.js" type='module'></script>
 
     <!-- -------- 1. 基本用法 --------  -->
     <!-- #region  -->
     <h2>1. 基本用法</h2>
     <div class="demo">
-        <ea-alert title="成功提示的文案" type="success"></ea-alert>
-        <ea-alert title="消息提示的文案"></ea-alert>
-        <ea-alert title="警告提示的文案" type="warning"></ea-alert>
-        <ea-alert title="错误提示的文案" type="error"></ea-alert>
+        <ea-alert title="Primary alert" type="primary"></ea-alert>
+        <ea-alert title="Success alert" type="success"></ea-alert>
+        <ea-alert title="Info alert" type="info"></ea-alert>
+        <ea-alert title="Warning alert" type="warning"></ea-alert>
+        <ea-alert title="Error alert" type="error"></ea-alert>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -39,10 +45,11 @@
     <!-- #region  -->
     <h2>2. 主题</h2>
     <div class="demo">
-        <ea-alert effect="dark" title="成功提示的文案" type="success"></ea-alert>
-        <ea-alert effect="dark" title="消息提示的文案" type="info"></ea-alert>
-        <ea-alert effect="dark" title="警告提示的文案" type="warning"></ea-alert>
-        <ea-alert effect="dark" title="错误提示的文案" type="error"></ea-alert>
+        <ea-alert title="Primary alert" type="primary" effect="dark"></ea-alert>
+        <ea-alert title="Success alert" type="success" effect="dark"></ea-alert>
+        <ea-alert title="Info alert" type="info" effect="dark"></ea-alert>
+        <ea-alert title="Warning alert" type="warning" effect="dark"></ea-alert>
+        <ea-alert title="Error alert" type="error" effect="dark"></ea-alert>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -52,9 +59,9 @@
     <!-- #region  -->
     <h2>3. 自定义关闭按钮</h2>
     <div class="demo">
-        <ea-alert closable="false" title="不可关闭的alert" type="success"></ea-alert>
-        <ea-alert close-text="知道了" title="消息提示的文案" type="info"></ea-alert>
-        <ea-alert id="callback" title="警告提示的文案" type="warning"></ea-alert>
+        <ea-alert title="Unclosable alert" type="success" closable="false"></ea-alert>
+        <ea-alert title="Customized close text" type="info" close-text="Gotcha"></ea-alert>
+        <ea-alert id="customizedCloseBtn" title="Alert with callback" type="warning"></ea-alert>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -64,10 +71,14 @@
     <!-- #region  -->
     <h2>4. 带有 icon</h2>
     <div class="demo">
-        <ea-alert title="成功提示的文案" type="success" show-icon></ea-alert>
-        <ea-alert title="消息提示的文案" type="info" show-icon></ea-alert>
-        <ea-alert title="警告提示的文案" type="warning" show-icon></ea-alert>
-        <ea-alert title="错误提示的文案" type="error" show-icon></ea-alert>
+        <ea-alert title="Primary alert" type="primary" show-icon></ea-alert>
+        <ea-alert title="Success alert" type="success" show-icon></ea-alert>
+        <ea-alert title="Info alert" type="info" show-icon></ea-alert>
+        <ea-alert title="Warning alert" type="warning" show-icon></ea-alert>
+        <ea-alert title="Error alert" type="error" show-icon></ea-alert>
+        <ea-alert title="Error alert with custom icon" type="error" show-icon>
+            <ea-icon slot="icon" icon="icon-bell" color="red" style=""></ea-icon>
+        </ea-alert>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -77,10 +88,11 @@
     <!-- #region  -->
     <h2>5. 文字居中</h2>
     <div class="demo">
-        <ea-alert title="成功提示的文案" type="success" center show-icon></ea-alert>
-        <ea-alert title="消息提示的文案" type="info" center show-icon></ea-alert>
-        <ea-alert title="警告提示的文案" type="warning" center show-icon></ea-alert>
-        <ea-alert title="错误提示的文案" type="error" center show-icon></ea-alert>
+        <ea-alert title="Primary alert" type="primary" center show-icon></ea-alert>
+        <ea-alert title="Success alert" type="success" center show-icon></ea-alert>
+        <ea-alert title="Info alert" type="info" center show-icon></ea-alert>
+        <ea-alert title="Warning alert" type="warning" center show-icon></ea-alert>
+        <ea-alert title="Error alert" type="error" center show-icon></ea-alert>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -89,21 +101,43 @@
     <!-- -------- 6. 带有辅助性文字介绍 --------  -->
     <!-- #region  -->
     <h2>6. 带有辅助性文字介绍</h2>
+    <style>
+        .with-desc-and-icon::part(icon) {
+            --ea-icon-size: 1.75rem !important;
+        }
+    </style>
     <div class="demo">
-        <ea-alert title="带辅助性文字介绍" type="success" show-icon description="
-    中国人认为宇宙万法的那个源头🤔，
-    它是什么🧐，如如😋，
-    对吧，所以这个词叫如带，我经常说如带😍，
-    这个词有秘密，
-    如带，如带了吗？🤨如带嘛😎，
-    他真带了吗？如带☝🏻️🤓，
-    到底带没带，如带😆，
-    为什么说如带，他真的带了吗？😫
-    如带，你看看，带没带？如带。🤗"></ea-alert>
+        <ea-alert class="with-desc-and-icon" title="Primary alert" type="primary" description="More text description"
+            show-icon></ea-alert>
+        <ea-alert class="with-desc-and-icon" title="Success alert" type="success" description="More text description"
+            show-icon></ea-alert>
+        <ea-alert class="with-desc-and-icon" title="Info alert" type="info" description="More text description"
+            show-icon></ea-alert>
+        <ea-alert class="with-desc-and-icon" title="Warning alert" type="warning" description="More text description"
+            show-icon></ea-alert>
+        <ea-alert class="with-desc-and-icon" title="Error alert" type="error" description="More text description"
+            show-icon></ea-alert>
     </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
+
+    <script>
+        // ------- 自定义关闭按钮 -------
+        // #region
+        const customizedCloseBtnExample = {
+            container: document.querySelector("#customizedCloseBtn"),
+
+            init() {
+                this.container.addEventListener("close", () => {
+                    console.log("close");
+                });
+            }
+        }
+        customizedCloseBtnExample.init();
+        // #endregion
+        // ------- end -------
+    </script>
 </body>
 
 </html>
