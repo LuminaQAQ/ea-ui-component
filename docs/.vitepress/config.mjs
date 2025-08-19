@@ -50,8 +50,8 @@ export default defineConfig({
       {
         text: '基础组件',
         items: [
-          { text: 'Container 布局容器', link: '/ea-container' },
           { text: 'Button 按钮', link: '/ea-button' },
+          { text: 'Container 布局容器', link: '/ea-container' },
           { text: 'Icon 图标', link: '/ea-icon' },
           { text: 'Layout 布局', link: '/ea-layout' },
           { text: 'Link 文字链接', link: '/ea-link' },
@@ -103,15 +103,15 @@ export default defineConfig({
       //     { text: "Result 结果", link: '/ea-result' },
       //   ]
       // },
-      // {
-      //   text: '提示组件',
-      //   items: [
-      //     { text: 'Alert 警告', link: '/ea-alert' },
-      //     { text: 'Loading 加载', link: '/ea-loading' },
-      //     { text: 'Message 消息提示', link: '/ea-message' },
-      //     { text: 'MessageBox 消息框', link: '/ea-message-box' },
-      //   ]
-      // },
+      {
+        text: '提示组件',
+        items: [
+          { text: 'Alert 警告', link: '/ea-alert' },
+          //     { text: 'Loading 加载', link: '/ea-loading' },
+          //     { text: 'Message 消息提示', link: '/ea-message' },
+          //     { text: 'MessageBox 消息框', link: '/ea-message-box' },
+        ]
+      },
       {
         text: '其他',
         items: [
