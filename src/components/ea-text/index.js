@@ -82,6 +82,8 @@ export class EaText extends Base {
     constructor() {
         super();
 
+        this.isMounted = false;
+
         this.stylesheet = stylesheet;
     }
 
@@ -93,6 +95,8 @@ export class EaText extends Base {
         `;
 
         this.#container = this.shadowRoot.querySelector('.ea-text')
+
+        this.isMounted = true;
     }
 
     connectedCallback() {
