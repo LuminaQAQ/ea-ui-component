@@ -44,6 +44,10 @@
         ea-card::part(content-wrap) {
             flex: 1;
         }
+
+        .ea-card-footer {
+            text-align: right;
+        }
     </style>
 </head>
 
@@ -53,88 +57,162 @@
     <script src="../src/components/ea-card/index.js" type='module'></script>
     <script src="../src/common/ea-overlay/index.js" type='module'></script>
 
-    <!-- -------- 1. 基本用法 --------  -->
+    <!-- -------- 基本用法 --------  -->
     <!-- #region  -->
-    <h2>1. 基本用法</h2>
+    <h2>基本用法</h2>
 
     <div class="demo">
-        <ea-overlay id="basicOverlay" class="override-variable" modal="false" before-close z-index="3000"
-            background-color="rgba(0, 0, 0,  1)" content-width="90%" content-height="90%" content-left="50%"
-            content-top="0" content-translate-x="-50%" content-translate-y="0">
-            <ea-card header="标题">
-                <ol>
-                    <li>item</li>
-                    <li>item</li>
-                    <li>item</li>
-                    <li>item</li>
-                </ol>
-                <section slot="footer">
-                    <ea-button onclick="basicExample.overlay.hide()">取消</ea-button>
-                    <ea-button type="primary" onclick="basicExample.innerOverlay.show()">确定</ea-button>
+        <ea-overlay id="basicOverlay">
+            <ea-card header="title">
+                <p>message</p>
+                <section class="ea-card-footer" slot="footer">
+                    <ea-button id="basicOverlayCancelButton">Cancel</ea-button>
+                    <ea-button id="basicOverlayConfirmButton" type="primary">
+                        Confirm
+                    </ea-button>
                 </section>
             </ea-card>
         </ea-overlay>
-        <ea-button id="basicOverlayButton" type="primary">open</ea-button>
+        <ea-button id="basicOverlayOpenButton" type="primary">open</ea-button>
     </div>
-
-    <ea-overlay id="basicOverlayInner" close-on-click-modal="false">
-        <ea-card header="内部弹窗">
-            <ol>
-                <li>item</li>
-                <li>item</li>
-                <li>item</li>
-            </ol>
-            <section slot="footer">
-                <ea-button onclick="basicExample.innerOverlay.hide()">取消</ea-button>
-                <ea-button type="primary" onclick="basicExample.hide()">确定</ea-button>
-            </section>
-        </ea-card>
-    </ea-overlay>
 
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
+    <!-- #region 模态效果 -->
+    <h1>模态效果</h1>
+
+    <div class="demo">
+        <ea-overlay id="modalOverlay" modal="false">
+            <ea-card header="title">
+                <p>message</p>
+                <section class="ea-card-footer" slot="footer">
+                    <ea-button id="modalOverlayCancelButton">Cancel</ea-button>
+                    <ea-button id="modalOverlayConfirmButton" type="primary">
+                        Confirm
+                    </ea-button>
+                </section>
+            </ea-card>
+        </ea-overlay>
+        <ea-button id="modalOverlayOpenButton" type="primary">open</ea-button>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 关闭前触发 -->
+    <h1>关闭前触发</h1>
+
+    <div class="demo">
+        <ea-overlay id="beforeCloseOverlay" before-close>
+            <ea-card header="title">
+                <p>
+                    This Overlay will be hidden 2000 milliseconds after clicking on the mask
+                    layer
+                </p>
+            </ea-card>
+        </ea-overlay>
+        <ea-button id="beforeCloseOverlayOpenButton" type="primary">open</ea-button>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
     <script>
         // ------- 基本用法 -------
         // #region
         const basicExample = {
-            overlay: document.querySelector('#basicOverlay'),
-            innerOverlay: document.querySelector('#basicOverlayInner'),
-            button: document.querySelector('#basicOverlayButton'),
+            overlay: document.querySelector("#basicOverlay"),
+            openButton: document.querySelector("#basicOverlayOpenButton"),
+
+            confirmButton: document.querySelector("#basicOverlayConfirmButton"),
+            cancelButton: document.querySelector("#basicOverlayCancelButton"),
+
+            show() {
+                this.overlay.show();
+            },
 
             hide() {
                 this.overlay.hide();
-                this.innerOverlay.hide();
             },
 
             init() {
-                this.button.addEventListener('click', () => {
+                this.openButton.addEventListener("click", () => {
                     this.overlay.show();
                 });
 
-                this.overlay.addEventListener('before-close', e => {
-                    e.detail.done()
+                this.confirmButton.addEventListener("click", () => {
+                    console.log("confirm");
+                    this.overlay.hide();
                 });
 
-                this.overlay.addEventListener('open', () => {
-                    console.log('open');
+                this.cancelButton.addEventListener("click", () => {
+                    console.log("cancel");
+                    this.overlay.hide();
+                });
+            },
+        };
+        basicExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 模态效果 -------
+        // #region
+        const modalExample = {
+            overlay: document.querySelector('#modalOverlay'),
+            openButton: document.querySelector('#modalOverlayOpenButton'),
+
+            confirmButton: document.querySelector('#modalOverlayConfirmButton'),
+            cancelButton: document.querySelector('#modalOverlayCancelButton'),
+
+            show() {
+                this.overlay.show();
+            },
+
+            hide() {
+                this.overlay.hide();
+            },
+
+            init() {
+                this.openButton.addEventListener('click', () => {
+                    this.overlay.show();
                 });
 
-                this.overlay.addEventListener('opened', () => {
-                    console.log('opened');
+                this.confirmButton.addEventListener('click', () => {
+                    console.log('confirm');
+                    this.overlay.hide();
+                })
+
+                this.cancelButton.addEventListener('click', () => {
+                    console.log('cancel');
+                    this.overlay.hide();
+                })
+            }
+        }
+        modalExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 模态效果 -------
+        // #region
+        const beforeCloseExample = {
+            overlay: document.querySelector('#beforeCloseOverlay'),
+            openButton: document.querySelector('#beforeCloseOverlayOpenButton'),
+
+            init() {
+                this.openButton.addEventListener('click', () => {
+                    this.overlay.show();
                 });
 
-                this.overlay.addEventListener('close', () => {
-                    console.log('close');
-                });
-
-                this.overlay.addEventListener('closed', () => {
-                    console.log('closed');
+                this.overlay.addEventListener("before-close", async (e) => {
+                    console.log("before-close");
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    e.detail.done();
                 });
             }
         }
-        basicExample.init();
+        beforeCloseExample.init();
         // #endregion
         // ------- end -------
     </script>
