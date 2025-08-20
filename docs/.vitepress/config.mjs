@@ -115,6 +115,7 @@ export default defineConfig({
       {
         text: '其他',
         items: [
+          { text: 'Overlay 遮罩层', link: '/ea-overlay' },
           // { text: 'Card 卡片', link: '/ea-card' },
           //     { text: 'Carousel 走马灯', link: '/ea-carousel' },
           //     { text: 'Timeline 时间轴', link: '/ea-timeline' },
