@@ -9,10 +9,12 @@ export class EaOverlay extends Base {
     #overlayMask;
     /** @type {HTMLElement} */
     #overlayContent;
+    /** @type {AbortController} */
+    #abortController
 
     static get observedAttributes() {
         return [
-            'status', 'modal', 'before-close',
+            'status', 'modal', 'before-close', 'close-on-click-modal',
 
             'z-index', 'background-color',
             'content-width', 'content-height',
@@ -150,7 +152,13 @@ export class EaOverlay extends Base {
     connectedCallback() {
         super.connectedCallback();
 
-        if (this["close-on-click-modal"]) this.addEventListener('click', this.#maskCloseEvent);
+        this.#abortController = new AbortController();
+
+        if (this["close-on-click-modal"]) this.addEventListener('click', this.#maskCloseEvent, { signal: this.#abortController.signal });
+    }
+
+    $beforeUnmounted() {
+        this.#abortController.abort();
     }
 }
 
