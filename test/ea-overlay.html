@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        .override-variable {
+            --ea-overlay-z-index: 1001;
+            --ea-overlay-background-color: rgba(0, 0, 0, 0.4);
+
+            --ea-overlay-content-left: 50%;
+            --ea-overlay-content-top: 50%;
+
+            --ea-overlay-content-translate-x: calc(0% - var(--ea-overlay-content-left));
+            --ea-overlay-content-translate-y: calc(0% - var(--ea-overlay-content-top));
+            --ea-overlay-content-transform: translate(var(--ea-overlay-content-translate-x),
+                    var(--ea-overlay-content-translate-y));
+
+            --ea-overlay-content-width: 50%;
+            --ea-overlay-content-height: 50%;
+
+            --ea-overlay-transition: var(--transition-normal);
+        }
+
+        ea-card {
+            height: 100%;
+        }
+
+        ea-card::part(container) {
+            display: flex;
+            flex-direction: column;
+
+            height: 100%;
+        }
+
+        ea-card::part(content-wrap) {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script src="../src/components/ea-button/index.js" type='module'></script>
+    <script src="../src/components/ea-card/index.js" type='module'></script>
+    <script src="../src/common/ea-overlay/index.js" type='module'></script>
+
+    <!-- -------- 1. 基本用法 --------  -->
+    <!-- #region  -->
+    <h2>1. 基本用法</h2>
+
+    <div class="demo">
+        <ea-overlay id="basicOverlay" class="override-variable" modal="false" before-close z-index="3000"
+            background-color="rgba(0, 0, 0,  1)" content-width="90%" content-height="90%" content-left="50%"
+            content-top="0" content-translate-x="-50%" content-translate-y="0">
+            <ea-card header="标题">
+                <ol>
+                    <li>item</li>
+                    <li>item</li>
+                    <li>item</li>
+                    <li>item</li>
+                </ol>
+                <section slot="footer">
+                    <ea-button onclick="basicExample.overlay.hide()">取消</ea-button>
+                    <ea-button type="primary" onclick="basicExample.innerOverlay.show()">确定</ea-button>
+                </section>
+            </ea-card>
+        </ea-overlay>
+        <ea-button id="basicOverlayButton" type="primary">open</ea-button>
+    </div>
+
+    <ea-overlay id="basicOverlayInner" close-on-click-modal="false">
+        <ea-card header="内部弹窗">
+            <ol>
+                <li>item</li>
+                <li>item</li>
+                <li>item</li>
+            </ol>
+            <section slot="footer">
+                <ea-button onclick="basicExample.innerOverlay.hide()">取消</ea-button>
+                <ea-button type="primary" onclick="basicExample.hide()">确定</ea-button>
+            </section>
+        </ea-card>
+    </ea-overlay>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <script>
+        // ------- 基本用法 -------
+        // #region
+        const basicExample = {
+            overlay: document.querySelector('#basicOverlay'),
+            innerOverlay: document.querySelector('#basicOverlayInner'),
+            button: document.querySelector('#basicOverlayButton'),
+
+            hide() {
+                this.overlay.hide();
+                this.innerOverlay.hide();
+            },
+
+            init() {
+                this.button.addEventListener('click', () => {
+                    this.overlay.show();
+                });
+
+                this.overlay.addEventListener('before-close', e => {
+                    e.detail.done()
+                });
+
+                this.overlay.addEventListener('open', () => {
+                    console.log('open');
+                });
+
+                this.overlay.addEventListener('opened', () => {
+                    console.log('opened');
+                });
+
+                this.overlay.addEventListener('close', () => {
+                    console.log('close');
+                });
+
+                this.overlay.addEventListener('closed', () => {
+                    console.log('closed');
+                });
+            }
+        }
+        basicExample.init();
+        // #endregion
+        // ------- end -------
+    </script>
+</body>
+
+</html>

@@ -53,6 +53,11 @@ export default defineConfig({
                         const name = id.split('/').pop()?.replace('.js', '');
                         return `utils/${name}`
                     }
+
+                    if (id.startsWith(path.join(__dirname, '/src/common'))) {
+                        const name = id.split('/').pop()?.replace('.js', '');
+                        return `components/${name}`
+                    }
                 }
             }
         }
@@ -73,6 +78,7 @@ export default defineConfig({
             '@components': resolve(__dirname, 'src/components'),
             '@themes': resolve(__dirname, 'src/themes'),
             '@utils': resolve(__dirname, 'src/utils'),
+            '@common': resolve(__dirname, 'src/common'),
         }
     }
 });
