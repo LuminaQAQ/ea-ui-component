@@ -175,6 +175,10 @@ ea-card::part(container) {
 ea-card::part(content-wrap) {
   flex: 1;
 }
+
+.ea-card-footer {
+  text-align: right;
+}
 ```
 
 :::
