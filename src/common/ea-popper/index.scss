@@ -1,0 +1,157 @@
+:host {
+  --ea-popper-border-color: var(--grey-300);
+  --ea-popper-background-color: var(--color-white);
+  --ea-popper-box-shadow: var(--box-shadow-md);
+
+  --ea-popper-arrow-size: 10px;
+}
+
+:host {
+  display: inline-block;
+}
+
+@include block(ea-popper) {
+  position: relative;
+
+  padding: var(--spacing-md);
+  border: 1px solid var(--ea-popper-border-color);
+
+  &::after {
+    display: none;
+    content: "";
+    position: absolute;
+
+    width: var(--ea-popper-arrow-size);
+    height: var(--ea-popper-arrow-size);
+
+    background-color: var(--ea-popper-background-color);
+
+    border: 1px solid transparent;
+  }
+
+  @include modifier(top) {
+    &,
+    &-start,
+    &-end {
+      &::after {
+        top: calc(100% - 5px);
+        transform: translateX(-50%) rotate(45deg);
+
+        border-bottom-color: var(--ea-popper-border-color);
+        border-right-color: var(--ea-popper-border-color);
+      }
+    }
+
+    &::after {
+      left: 50%;
+    }
+
+    &-start {
+      &::after {
+        left: 25%;
+      }
+    }
+
+    &-end {
+      &::after {
+        left: 75%;
+      }
+    }
+  }
+
+  @include modifier(bottom) {
+    &,
+    &-start,
+    &-end {
+      &::after {
+        bottom: calc(100% - 5px);
+        transform: translateX(-50%) rotate(45deg);
+
+        border-top-color: var(--ea-popper-border-color);
+        border-left-color: var(--ea-popper-border-color);
+      }
+    }
+
+    &::after {
+      left: 50%;
+    }
+
+    &-start {
+      &::after {
+        left: 25%;
+      }
+    }
+
+    &-end {
+      &::after {
+        left: 75%;
+      }
+    }
+  }
+
+  @include modifier(right) {
+    &,
+    &-start,
+    &-end {
+      &::after {
+        right: calc(100% - 5px);
+        transform: translateY(-50%) rotate(45deg);
+
+        border-bottom-color: var(--ea-popper-border-color);
+        border-left-color: var(--ea-popper-border-color);
+      }
+    }
+
+    &-start {
+      &::after {
+        top: 25%;
+      }
+    }
+
+    &::after {
+      top: 50%;
+    }
+
+    &-end {
+      &::after {
+        top: 75%;
+      }
+    }
+  }
+
+  @include modifier(left) {
+    &,
+    &-start,
+    &-end {
+      &::after {
+        left: calc(100% - 5px);
+        transform: translateY(-50%) rotate(45deg);
+
+        border-top-color: var(--ea-popper-border-color);
+        border-right-color: var(--ea-popper-border-color);
+      }
+    }
+
+    &-start {
+      &::after {
+        top: 25%;
+      }
+    }
+
+    &::after {
+      top: 50%;
+    }
+
+    &-end {
+      &::after {
+        top: 75%;
+      }
+    }
+  }
+
+  @include modifier(show-arrow) {
+    &::after {
+      display: block;
+    }
+  }
+}
