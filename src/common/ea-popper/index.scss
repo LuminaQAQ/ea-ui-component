@@ -24,7 +24,9 @@
       var(--ea-popper-transform-x),
       var(--ea-popper-transform-y)
     );
-    transform: var(--ea-popper-transform);
+
+    display: none;
+    visibility: hidden;
 
     position: absolute;
     transform: var(--ea-popper-transform);
@@ -33,6 +35,9 @@
     border: 1px solid var(--ea-popper-border-color);
 
     background-color: var(--ea-popper-background-color);
+
+    filter: opacity(0);
+    transition: filter var(--transition-normal);
 
     &::after {
       display: none;
@@ -203,7 +208,7 @@
         --ea-popper-transform-x: calc(-100% - 10px);
 
         &::after {
-          left: calc(100%);
+          left: 100%;
           transform: translate(-50%, -50%) rotate(45deg);
 
           border-top-color: var(--ea-popper-border-color);
@@ -247,6 +252,25 @@
   @include modifier(show-arrow) {
     .ea-popper__original::after {
       display: block;
+    }
+  }
+
+  @include modifier(show) {
+    .ea-popper__original {
+      display: block;
+    }
+  }
+
+  @include modifier(is-show) {
+    .ea-popper__original {
+      visibility: visible;
+      filter: opacity(1);
+    }
+  }
+
+  @include modifier(before-hide) {
+    .ea-popper__original {
+      filter: opacity(0);
     }
   }
 }

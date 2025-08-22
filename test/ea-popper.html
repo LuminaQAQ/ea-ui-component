@@ -30,36 +30,6 @@
     <script src="../src/components/ea-card/index.js" type='module'></script>
     <script src="../src/common/ea-popper/index.js" type='module'></script>
 
-    <!-- #region 基础用法 -->
-    <h1>基础用法</h1>
-
-    <div class=‘demo’>
-        <ea-popper>top</ea-popper>
-        <ea-popper placement="top-start">top-start</ea-popper>
-        <ea-popper placement="top-end">top-end</ea-popper>
-
-        <br>
-
-        <ea-popper placement="bottom">bottom</ea-popper>
-        <ea-popper placement="bottom-start">bottom-start</ea-popper>
-        <ea-popper placement="bottom-end">bottom-end</ea-popper>
-
-        <br>
-
-        <ea-popper placement="left">left <br> &emsp;</ea-popper>
-        <ea-popper placement="left-start">left-<br> start</ea-popper>
-        <ea-popper placement="left-end">left- <br> end </ea-popper>
-
-        <br>
-
-        <ea-popper placement="right">right <br> &emsp;</ea-popper>
-        <ea-popper placement="right-start">right-<br> start</ea-popper>
-        <ea-popper placement="right-end">right- <br> end </ea-popper>
-    </div>
-
-    <hr>
-    <!-- #endregion  -->
-
     <!-- #region 展示箭头 -->
     <h1>展示箭头</h1>
 
@@ -72,10 +42,10 @@
     <hr>
     <!-- #endregion  -->
 
-    <!-- #region 参考元素 -->
-    <h1>参考元素</h1>
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
 
-    <div class="demo">
+    <div id="referenceSection" class="demo">
         <ea-popper placement="top-start">
             top-start
             <ea-button type="primary" slot="reference">top-start-button</ea-button>
@@ -139,6 +109,28 @@
     <!-- #endregion  -->
 
     <script>
+        const referenceExample = {
+            referenceElements: document.querySelectorAll('#referenceSection ea-popper'),
+
+            init() {
+                // this.referenceElements.forEach(referenceElement => {
+                //     referenceElement.addEventListener("mouseenter", (e) => {
+                //         referenceElement.show();
+
+                //         referenceElement.addEventListener("mouseleave", () => {
+                //             referenceElement.hide();
+                //         }, { once: true });
+                //     });
+                // });
+
+                this.referenceElements.forEach(referenceElement => {
+                    referenceElement.addEventListener("click", (e) => {
+                        referenceElement.toggle();
+                    });
+                });
+            }
+        }
+        referenceExample.init();
     </script>
 </body>
 

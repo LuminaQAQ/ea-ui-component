@@ -5,9 +5,15 @@ import stylesheet from './index.scss?inline';
 export class EaPopper extends Base {
     /** @type {HTMLElement} */
     #container;
+    /** @type {HTMLElement} */
+    #originalPopper;
+    /** @type {HTMLElement} */
+    #referenceElement;
+    /** @type {AbortController} */
+    #statusAbortController;
 
     static get observedAttributes() {
-        return ['placement', 'show-arrow'];
+        return ['placement', 'show-arrow', 'status', 'offset'];
     }
 
     state = this.properties({
@@ -25,6 +31,57 @@ export class EaPopper extends Base {
                 this.#container.className = this.updateContainerClasslist();
             }
         },
+        status: {
+            type: Boolean,
+            default: false,
+            observer: async (newVal) => {
+                this.#statusAbortController?.abort();
+                this.#statusAbortController = new AbortController();
+
+                if (newVal) {
+                    this.#container.className = this.updateContainerClasslist();
+                    this.#dispatchBubblesEvent('show');
+
+                    this.#container.offsetWidth;
+                    this.#container.classList.add('ea-popper--is-show');
+
+                    this.#container.addEventListener('transitionend', () => {
+                        this.#dispatchBubblesEvent('shown');
+                    }, { once: true, signal: this.#statusAbortController.signal })
+                } else {
+                    this.#container.classList.add('ea-popper--before-hide');
+                    this.#dispatchBubblesEvent('hide');
+
+                    this.#container.addEventListener('transitionend', () => {
+                        this.#container.className = this.updateContainerClasslist();
+                        this.#dispatchBubblesEvent('hidden');
+                    }, { once: true, signal: this.#statusAbortController.signal })
+                }
+            }
+        },
+        offset: {
+            type: String,
+            default: "0 0",
+            observer: (newVal) => {
+                try {
+                    let [x, y] = newVal.split(" ").map(_ => Number(_.trim()));
+
+                    if (x && typeof y === "undefined") {
+                        y = x
+                    } else if ((x && y) || `${x} ${y}` === `0 0`) {
+
+                    } else {
+                        throw new RangeError(`[ea-popper] Invalid offset value: ${newVal}, expected format: "x(Number) y(Number)"`);
+                    }
+
+                    this.#originalPopper.style.setProperty("--ea-popper-transform-x", `${x}px`);
+                    this.#originalPopper.style.setProperty("--ea-popper-transform-y", `${y}px`);
+
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        },
     })
 
     /**
@@ -35,6 +92,7 @@ export class EaPopper extends Base {
         return this.computedClasslist('ea-popper', {
             ['--' + this.placement]: this.placement,
             ['--show-arrow']: this['show-arrow'],
+            ['--show']: this.status,
         });
     }
 
@@ -59,6 +117,28 @@ export class EaPopper extends Base {
         `;
 
         this.#container = this.shadowRoot.querySelector('.ea-popper');
+        this.#originalPopper = this.shadowRoot.querySelector('.ea-popper__original');
+        this.#referenceElement = this.shadowRoot.querySelector('.ea-popper__reference');
+    }
+
+    show() {
+        this.status = true;
+    }
+
+    hide() {
+        this.status = false;
+    }
+
+    toggle() {
+        this.status = !this.status;
+    }
+
+    #dispatchBubblesEvent = (customEventName, detail) => {
+        this.dispatchEvent(new CustomEvent(customEventName, {
+            detail,
+            bubbles: true,
+            composed: true,
+        }));
     }
 
     connectedCallback() {
