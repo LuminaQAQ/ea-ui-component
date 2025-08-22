@@ -12,9 +12,14 @@
             margin: 3rem 0;
         }
 
+        .demo {
+            box-sizing: border-box;
+            padding: 2rem;
+        }
+
         ea-popper {
             /* width: 5rem; */
-            margin: .75rem;
+            margin: 2rem;
         }
     </style>
 </head>
@@ -70,31 +75,64 @@
     <!-- #region 参考元素 -->
     <h1>参考元素</h1>
 
-    <div class=‘demo’>
-        <ea-popper>top</ea-popper>
+    <div class="demo">
         <ea-popper placement="top-start">
             top-start
-            <ea-button slot="reference">top-start</ea-button>
+            <ea-button type="primary" slot="reference">top-start-button</ea-button>
         </ea-popper>
-        <ea-popper placement="top-end">top-end</ea-popper>
+        <ea-popper>
+            top
+            <ea-button type="primary" slot="reference">top-button</ea-button>
+        </ea-popper>
+        <ea-popper placement="top-end">
+            top-end
+            <ea-button type="primary" slot="reference">top-end-button</ea-button>
+        </ea-popper>
 
         <br>
 
-        <ea-popper placement="bottom">bottom</ea-popper>
-        <ea-popper placement="bottom-start">bottom-start</ea-popper>
-        <ea-popper placement="bottom-end">bottom-end</ea-popper>
+        <ea-popper placement="bottom">
+            bottom
+            <ea-button type="primary" slot="reference">bottom-button</ea-button>
+        </ea-popper>
+        <ea-popper placement="bottom-start">
+            bottom-start
+            <ea-button type="primary" slot="reference">bottom-start-button</ea-button>
+        </ea-popper>
+        <ea-popper placement="bottom-end">
+            bottom-end
+            <ea-button type="primary" slot="reference">bottom-end-button</ea-button>
+        </ea-popper>
 
         <br>
 
-        <ea-popper placement="left">left <br> &emsp;</ea-popper>
-        <ea-popper placement="left-start">left-<br> start</ea-popper>
-        <ea-popper placement="left-end">left- <br> end </ea-popper>
+        <ea-popper placement="left-start">
+            left-<br> start
+            <ea-button type="primary" slot="reference">left-start-button</ea-button>
+        </ea-popper>
+        <ea-popper placement="left">
+            left <br> &emsp;
+            <ea-button type="primary" slot="reference">left-button</ea-button>
+        </ea-popper>
+        <ea-popper placement="left-end">
+            left- <br> end
+            <ea-button type="primary" slot="reference">left-end-button</ea-button>
+        </ea-popper>
 
         <br>
 
-        <ea-popper placement="right">right <br> &emsp;</ea-popper>
-        <ea-popper placement="right-start">right-<br> start</ea-popper>
-        <ea-popper placement="right-end">right- <br> end </ea-popper>
+        <ea-popper placement="right-start">
+            right-<br> start
+            <ea-button type="primary" slot="reference">right-start-button</ea-button>
+        </ea-popper>
+        <ea-popper placement="right">
+            right <br> &emsp;
+            <ea-button type="primary" slot="reference">right-button</ea-button>
+        </ea-popper>
+        <ea-popper placement="right-end">
+            right- <br> end
+            <ea-button type="primary" slot="reference">right-end-button</ea-button>
+        </ea-popper>
     </div>
 
     <hr>
