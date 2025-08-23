@@ -59,6 +59,8 @@ export class EaPopper extends Base {
     #referenceElement;
     /** @type {AbortController} */
     #statusAbortController;
+    /** @type {Boolean} */
+    #originPlacement;
 
     static get observedAttributes() {
         return ['placement', 'show-arrow', 'status', 'offset', 'filp'];
@@ -90,7 +92,13 @@ export class EaPopper extends Base {
                     this.#container.className = this.updateContainerClasslist();
                     this.#dispatchBubblesEvent('show');
 
-                    if (this.flip) this.placement = flipPlacement(this.#originalPopper, this.placement);;
+                    if (this.flip) {
+                        if (this.#originPlacement === this.placement) {
+                            this.placement = flipPlacement(this.#originalPopper, this.placement);
+                        } else {
+                            this.placement = this.#originPlacement;
+                        }
+                    }
 
                     void this.#container.offsetWidth;
 
@@ -135,7 +143,7 @@ export class EaPopper extends Base {
         },
         flip: {
             type: Boolean,
-            default: false,
+            default: true,
             observer: (newVal) => { }
         },
     })
@@ -201,6 +209,7 @@ export class EaPopper extends Base {
         super.connectedCallback();
 
         this.placement = this.placement;
+        this.#originPlacement = this.placement;
     }
 }
 
