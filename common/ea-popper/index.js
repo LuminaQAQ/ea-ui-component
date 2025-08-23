@@ -2,6 +2,54 @@ import Base from '@components/Base.js'
 
 import stylesheet from './index.scss?inline';
 
+/**
+ * 检查视口可见
+ * @param {HTMLElement} el 
+ * @returns 
+ */
+const isIntersecting = (el) => {
+    const rect = el.getBoundingClientRect();
+
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= window.innerHeight &&
+        rect.right <= window.innerWidth
+    );
+}
+
+/**
+ * 根据视口情况翻转 placement
+ * @param {HTMLElement} el 
+ * @param {string} placement
+ * @returns {string}
+ */
+const flipPlacement = (el, placement) => {
+    const antiPlacement = {
+        left: 'right',
+        right: 'left',
+        top: 'bottom',
+        bottom: 'top',
+    }
+
+    const rect = el.getBoundingClientRect();
+    const strategies = {
+        top: rect.top < 0 && placement.includes("top"),
+        bottom: rect.bottom > window.innerHeight && placement.includes("bottom"),
+        left: rect.left < 0 && placement.includes("left"),
+        right: rect.right > window.innerWidth && placement.includes("right"),
+    }
+
+
+    if (isIntersecting(el)) return placement;
+
+    for (const strategy in strategies) {
+        if (strategies[strategy]) return placement.replace(strategy, antiPlacement[strategy]);
+    }
+
+    return placement;
+}
+
 export class EaPopper extends Base {
     /** @type {HTMLElement} */
     #container;
@@ -13,7 +61,7 @@ export class EaPopper extends Base {
     #statusAbortController;
 
     static get observedAttributes() {
-        return ['placement', 'show-arrow', 'status', 'offset'];
+        return ['placement', 'show-arrow', 'status', 'offset', 'filp'];
     }
 
     state = this.properties({
@@ -42,7 +90,10 @@ export class EaPopper extends Base {
                     this.#container.className = this.updateContainerClasslist();
                     this.#dispatchBubblesEvent('show');
 
-                    this.#container.offsetWidth;
+                    if (this.flip) this.placement = flipPlacement(this.#originalPopper, this.placement);;
+
+                    void this.#container.offsetWidth;
+
                     this.#container.classList.add('ea-popper--is-show');
 
                     this.#container.addEventListener('transitionend', () => {
@@ -81,6 +132,11 @@ export class EaPopper extends Base {
                     console.error(error);
                 }
             }
+        },
+        flip: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => { }
         },
     })
 
