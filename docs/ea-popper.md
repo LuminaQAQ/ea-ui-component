@@ -97,7 +97,7 @@ ea-popper {
 
 ## 基本用法
 
-`ea-overlay` 提供了一个基础的弹出层，可以通过 `show()` / `hide()` 来控制显示与隐藏。
+`ea-popper` 提供了一个基础的气泡，可以通过 `show()` / `hide()` 来控制显示与隐藏。
 
 <div id="referenceSection" class="demo">
   <ea-row justify="center">
@@ -120,7 +120,6 @@ ea-popper {
       </ea-popper>
     </ea-col>
   </ea-row>
-
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popper placement="left-start">
@@ -135,7 +134,6 @@ ea-popper {
       </ea-popper>
     </ea-col>
   </ea-row>
-
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popper placement="left">
@@ -150,7 +148,6 @@ ea-popper {
       </ea-popper>
     </ea-col>
   </ea-row>
-
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popper placement="left-end">
@@ -165,7 +162,6 @@ ea-popper {
       </ea-popper>
     </ea-col>
   </ea-row>
-
   <ea-row justify="center">
     <ea-col span="6">
       <ea-popper placement="bottom-start">
@@ -188,7 +184,9 @@ ea-popper {
   </ea-row>
 </div>
 
-::: code-group
+::: details 查看代码
+
+`html`
 
 ```html
 <div id="referenceSection" class="demo">
@@ -281,7 +279,9 @@ ea-popper {
 </div>
 ```
 
-```js [显隐控制]
+`js`
+
+```js
 const basicExample = {
   overlay: document.querySelector("#basicOverlay"),
   openButton: document.querySelector("#basicOverlayOpenButton"),
@@ -318,108 +318,88 @@ basicExample.init();
 
 :::
 
-## 模态效果
+## 不显示箭头
 
-通过设置 `modal` 控制是否启用模态效果。
+通过设置 `show-arrow` 控制是否启用箭头效果。
 
-<div class="demo">
-  <ea-overlay id="modalOverlay" modal="false">
-    <ea-card header="title">
-      <p>message</p>
-      <section class="ea-card-footer" slot="footer">
-        <ea-button id="modalOverlayCancelButton">Cancel</ea-button>
-        <ea-button id="modalOverlayConfirmButton" type="primary">
-          Confirm
-        </ea-button>
-      </section>
-    </ea-card>
-  </ea-overlay>
-  <ea-button id="modalOverlayOpenButton" type="primary">open</ea-button>
+<div id="arrowSection" class="demo">
+  <ea-popper placement="top-start" show-arrow="false">
+    top-start
+    <ea-button type="primary" slot="reference">top-start</ea-button>
+  </ea-popper>
+  <ea-popper show-arrow="false">
+    top
+    <ea-button type="primary" slot="reference">top</ea-button>
+  </ea-popper>
+  <ea-popper placement="top-end" show-arrow="false">
+    top-end
+    <ea-button type="primary" slot="reference">top-end</ea-button>
+  </ea-popper>
 </div>
 
 ::: details 查看代码
 
+`html`
+
 ```html
-<div class="demo">
-  <ea-overlay id="modalOverlay" modal="false">
-    <ea-card header="title">
-      <p>message</p>
-      <section class="ea-card-footer" slot="footer">
-        <ea-button id="modalOverlayCancelButton">Cancel</ea-button>
-        <ea-button id="modalOverlayConfirmButton" type="primary">
-          Confirm
-        </ea-button>
-      </section>
-    </ea-card>
-  </ea-overlay>
-  <ea-button id="modalOverlayOpenButton" type="primary">open</ea-button>
+<div id="arrowSection" class="demo">
+  <ea-popper placement="top-start" show-arrow="false">
+    top-start
+    <ea-button type="primary" slot="reference">top-start</ea-button>
+  </ea-popper>
+  <ea-popper show-arrow="false">
+    top
+    <ea-button type="primary" slot="reference">top</ea-button>
+  </ea-popper>
+  <ea-popper placement="top-end" show-arrow="false">
+    top-end
+    <ea-button type="primary" slot="reference">top-end</ea-button>
+  </ea-popper>
 </div>
+```
+
+`js`
+
+```js
+const arrowExample = {
+  referenceElements: document.querySelectorAll("#arrowSection ea-popper"),
+
+  init() {
+    this.referenceElements.forEach((referenceElement) => {
+      referenceElement.addEventListener("mouseenter", (e) => {
+        referenceElement.show();
+
+        referenceElement.addEventListener(
+          "mouseleave",
+          () => {
+            referenceElement.hide();
+          },
+          { once: true }
+        );
+      });
+    });
+  },
+};
 ```
 
 :::
 
-## 关闭前触发
-
-关闭前触发，可以拦截关闭，需调用 `e.detail.done()` 才能完成关闭。需要设置`before-close`属性。
-
-::: tip
-\< 手动调用 `overlay.hide()` \> + \< 设置 `close-on-click-modal="false"` \>可达到同样的效果。
-:::
-
-<div class="demo">
-  <ea-overlay id="beforeCloseOverlay" before-close>
-    <ea-card header="title">
-      <p>
-        This Overlay will be hidden 2000 milliseconds after clicking on the mask
-        layer
-      </p>
-    </ea-card>
-  </ea-overlay>
-  <ea-button id="beforeCloseOverlayOpenButton" type="primary">open</ea-button>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="demo">
-  <ea-overlay id="beforeCloseOverlay" before-close>
-    <ea-card header="title">
-      <p>
-        This Overlay will be hidden 2000 milliseconds after clicking on the mask
-        layer
-      </p>
-    </ea-card>
-  </ea-overlay>
-  <ea-button id="beforeCloseOverlayOpenButton" type="primary">open</ea-button>
-</div>
-```
-
-:::
-
-## Overlay API
+## Popper API
 
 ### Main API
 
-| 参数                 | 说明                       | 类型    | 可选值 | 默认值 |
-| -------------------- | -------------------------- | ------- | ------ | ------ |
-| status               | 控制 Overlay 显隐的属性    | boolean | —      | false  |
-| modal                | 是否显示遮罩层。           | boolean | —      | true   |
-| before-close         | 关闭前触发，可以拦截关闭。 | boolean | —      | false  |
-| close-on-click-modal | 点击遮罩层是否关闭。       | boolean | —      | true   |
+| 参数      | 说明                                      | 类型    | 可选值                                                                                                                                                               | 默认值                                          |
+| --------- | ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| status    | 控制 Popper 显隐的属性                    | boolean | —                                                                                                                                                                    | false                                           |
+| placement | 气泡的出现位置。                          | string  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | top                                             |
+| flip      | 是否在超过原 placement 视口时，进行翻转。 | boolean | —                                                                                                                                                                    | true                                            |
+| offset    | 气泡出现的位置偏移量。                    | string  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
 
-### CSS API
+<!-- ### CSS API
 
-| 参数                | 说明                                                                                                                             | 类型   | 可选值 | 默认值                                                                                                  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------ | ------ | ------------------------------------------------------------------------------------------------------- |
-| z-index             | <ea-link type="primary" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">MDN：z-index</ea-link>                   | String | —      | 1000                                                                                                    |
-| background-color    | <ea-link type="primary" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/background-color">MDN：background-color</ea-link> | String | —      | `rgba(0, 0, 0, 0.4)`                                                                                    |
-| content-width       | 默认插槽的宽度                                                                                                                   | String | —      | `50%`                                                                                                   |
-| content-height      | 默认插槽的高度                                                                                                                   | String | —      | `50%`                                                                                                   |
-| content-left        | 默认插槽的 left 定位                                                                                                             | String | —      | `50%`                                                                                                   |
-| content-top         | 默认插槽的 top 定位                                                                                                              | String | —      | `50%`                                                                                                   |
-| content-translate-x | 默认插槽的 translate-x 偏移量                                                                                                    | String | —      | `-50%`                                                                                                  |
-| content-translate-y | 默认插槽的 translate-y 偏移量                                                                                                    | String | —      | `-50%`                                                                                                  |
-| content-transform   | 默认插槽的 transform 属性                                                                                                        | String | —      | `translate(`<br/>`var(--ea-overlay-content-translate-x),`<br/> `var(--ea-overlay-content-translate-y))` |
+| 参数    | 说明                                                                                                           | 类型   | 可选值 | 默认值 |
+| ------- | -------------------------------------------------------------------------------------------------------------- | ------ | ------ | ------ |
+| z-index | <ea-link type="primary" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">MDN：z-index</ea-link> | String | —      | 1000   |
 
 ## CSS Part
 
@@ -432,30 +412,6 @@ basicExample.init();
 | container | overlay 外层容器 |
 | mask      | overlay 遮罩层   |
 | content   | overlay 内容容器 |
-
-### CSS Variables
-
-等同于 CSS API
-
-```css
-ea-overlay {
-  --ea-overlay-z-index: 1000;
-  --ea-overlay-background-color: rgba(0, 0, 0, 0.4);
-
-  --ea-overlay-content-left: 50%;
-  --ea-overlay-content-top: 50%;
-
-  --ea-overlay-content-translate-x: calc(0% - var(--ea-overlay-content-left));
-  --ea-overlay-content-translate-y: calc(0% - var(--ea-overlay-content-top));
-  --ea-overlay-content-transform: translate(
-    var(--ea-overlay-content-translate-x),
-    var(--ea-overlay-content-translate-y)
-  );
-
-  --ea-overlay-content-width: 50%;
-  --ea-overlay-content-height: 50%;
-}
-```
 
 ## Events
 
@@ -478,4 +434,4 @@ ea-overlay {
 
 | 名称 | 描述             |
 | ---- | ---------------- |
-| -    | Overlay 内容插槽 |
+| -    | Overlay 内容插槽 | -->
