@@ -13,7 +13,10 @@ export class EaPopper extends Base {
     #statusAbortController;
 
     static get observedAttributes() {
-        return ['placement', 'show-arrow', 'status', 'offset'];
+        return [
+            'placement', 'show-arrow', 'status', 'offset',
+            // 'filp'
+        ];
     }
 
     state = this.properties({
@@ -82,6 +85,13 @@ export class EaPopper extends Base {
                 }
             }
         },
+        // flip: {
+        //     type: Boolean,
+        //     default: false,
+        //     observer: (newVal) => {
+        //         this.#container.className = this.updateContainerClasslist();
+        //     }
+        // },
     })
 
     /**
@@ -93,6 +103,7 @@ export class EaPopper extends Base {
             ['--' + this.placement]: this.placement,
             ['--show-arrow']: this['show-arrow'],
             ['--show']: this.status,
+            // ['--flip']: this.status && this.flip,
         });
     }
 
@@ -145,6 +156,26 @@ export class EaPopper extends Base {
         super.connectedCallback();
 
         this.placement = this.placement;
+
+        // const antiPlacement = {
+        //     left: 'right',
+        //     right: 'left',
+        //     top: 'bottom',
+        //     bottom: 'top',
+        // }
+
+        // let isFlip = false;
+        // const intersectionObserver = new IntersectionObserver((entries) => {
+        //     entries.forEach((entry) => {
+        //         if (!entry.isIntersecting && this.status && !isFlip) {
+        //             const placement = Object.keys(antiPlacement).find(key => this.placement.includes(key));
+
+        //             this.placement = this.placement?.replace(placement, antiPlacement[placement]);
+        //             isFlip = true;
+        //         }
+        //     });
+        // });
+        // intersectionObserver.observe(this.#originalPopper);
     }
 }
 

@@ -30,23 +30,11 @@
     <script src="../src/components/ea-card/index.js" type='module'></script>
     <script src="../src/common/ea-popper/index.js" type='module'></script>
 
-    <!-- #region 展示箭头 -->
-    <h1>展示箭头</h1>
-
-    <div class=‘demo’>
-        <ea-popper show-arrow="false">top</ea-popper>
-        <ea-popper show-arrow="false" placement="top-start">top-start</ea-popper>
-        <ea-popper show-arrow="false" placement="top-end">top-end</ea-popper>
-    </div>
-
-    <hr>
-    <!-- #endregion  -->
-
     <!-- #region 基础用法 -->
     <h1>基础用法</h1>
 
     <div id="referenceSection" class="demo">
-        <ea-popper placement="top-start">
+        <ea-popper placement="top-start" flip>
             top-start
             <ea-button type="primary" slot="reference">top-start-button</ea-button>
         </ea-popper>
@@ -108,21 +96,34 @@
     <hr>
     <!-- #endregion  -->
 
+    <!-- #region 不显示箭头 -->
+    <h1>不显示箭头</h1>
+
+    <div id="arrowSection" class="demo">
+        <ea-popper placement="top-start" show-arrow="false">
+            top-start
+            <ea-button type="primary" slot="reference">top-start-button</ea-button>
+        </ea-popper>
+        <ea-popper show-arrow="false">
+            top
+            <ea-button type="primary" slot="reference">top-button</ea-button>
+        </ea-popper>
+        <ea-popper placement="top-end" show-arrow="false">
+            top-end
+            <ea-button type="primary" slot="reference">top-end-button</ea-button>
+        </ea-popper>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
     <script>
+        // ------- 基础用法 -------
+        // #region
         const referenceExample = {
             referenceElements: document.querySelectorAll('#referenceSection ea-popper'),
 
             init() {
-                // this.referenceElements.forEach(referenceElement => {
-                //     referenceElement.addEventListener("mouseenter", (e) => {
-                //         referenceElement.show();
-
-                //         referenceElement.addEventListener("mouseleave", () => {
-                //             referenceElement.hide();
-                //         }, { once: true });
-                //     });
-                // });
-
                 this.referenceElements.forEach(referenceElement => {
                     referenceElement.addEventListener("click", (e) => {
                         referenceElement.toggle();
@@ -131,6 +132,29 @@
             }
         }
         referenceExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 基础用法 -------
+        // #region
+        const arrowExample = {
+            referenceElements: document.querySelectorAll('#arrowSection ea-popper'),
+
+            init() {
+                this.referenceElements.forEach(referenceElement => {
+                    referenceElement.addEventListener("mouseenter", (e) => {
+                        referenceElement.show();
+
+                        referenceElement.addEventListener("mouseleave", () => {
+                            referenceElement.hide();
+                        }, { once: true });
+                    });
+                });
+            }
+        }
+        arrowExample.init();
+        // #endregion
+        // ------- end -------
     </script>
 </body>
 
