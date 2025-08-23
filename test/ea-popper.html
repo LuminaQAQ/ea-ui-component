@@ -14,11 +14,10 @@
 
         .demo {
             box-sizing: border-box;
-            padding: 2rem;
+            padding: 3rem;
         }
 
         ea-popper {
-            /* width: 5rem; */
             margin: 2rem;
         }
     </style>
@@ -28,69 +27,99 @@
 
     <script src="../src/components/ea-button/index.js" type='module'></script>
     <script src="../src/components/ea-card/index.js" type='module'></script>
+    <script src="../src/components/ea-layout/index.js" type='module'></script>
     <script src="../src/common/ea-popper/index.js" type='module'></script>
 
     <!-- #region 基础用法 -->
     <h1>基础用法</h1>
 
     <div id="referenceSection" class="demo">
-        <ea-popper placement="top-start" flip>
-            top-start
-            <ea-button type="primary" slot="reference">top-start-button</ea-button>
-        </ea-popper>
-        <ea-popper>
-            top
-            <ea-button type="primary" slot="reference">top-button</ea-button>
-        </ea-popper>
-        <ea-popper placement="top-end">
-            top-end
-            <ea-button type="primary" slot="reference">top-end-button</ea-button>
-        </ea-popper>
+        <ea-row justify="center">
+            <ea-col span="6">
+                <ea-popper placement="top-start">
+                    top-start
+                    <ea-button type="primary" slot="reference">top-start</ea-button>
+                </ea-popper>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popper>
+                    top
+                    <ea-button type="primary" slot="reference">top</ea-button>
+                </ea-popper>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popper placement="top-end">
+                    top-end
+                    <ea-button type="primary" slot="reference">top-end</ea-button>
+                </ea-popper>
+            </ea-col>
+        </ea-row>
 
-        <br>
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popper placement="left-start">
+                    left-start
+                    <ea-button type="primary" slot="reference">left-start</ea-button>
+                </ea-popper>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popper placement="right-start">
+                    right- start
+                    <ea-button type="primary" slot="reference">right-start</ea-button>
+                </ea-popper>
+            </ea-col>
+        </ea-row>
 
-        <ea-popper placement="bottom">
-            bottom
-            <ea-button type="primary" slot="reference">bottom-button</ea-button>
-        </ea-popper>
-        <ea-popper placement="bottom-start">
-            bottom-start
-            <ea-button type="primary" slot="reference">bottom-start-button</ea-button>
-        </ea-popper>
-        <ea-popper placement="bottom-end">
-            bottom-end
-            <ea-button type="primary" slot="reference">bottom-end-button</ea-button>
-        </ea-popper>
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popper placement="left">
+                    left
+                    <ea-button type="primary" slot="reference">left</ea-button>
+                </ea-popper>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popper placement="right">
+                    right
+                    <ea-button type="primary" slot="reference">right</ea-button>
+                </ea-popper>
+            </ea-col>
+        </ea-row>
 
-        <br>
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popper placement="left-end">
+                    left-end
+                    <ea-button type="primary" slot="reference">left-end</ea-button>
+                </ea-popper>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popper placement="right-end">
+                    right-end
+                    <ea-button type="primary" slot="reference">right-end</ea-button>
+                </ea-popper>
+            </ea-col>
+        </ea-row>
 
-        <ea-popper placement="left-start">
-            left-<br> start
-            <ea-button type="primary" slot="reference">left-start-button</ea-button>
-        </ea-popper>
-        <ea-popper placement="left">
-            left <br> &emsp;
-            <ea-button type="primary" slot="reference">left-button</ea-button>
-        </ea-popper>
-        <ea-popper placement="left-end">
-            left- <br> end
-            <ea-button type="primary" slot="reference">left-end-button</ea-button>
-        </ea-popper>
-
-        <br>
-
-        <ea-popper placement="right-start">
-            right-<br> start
-            <ea-button type="primary" slot="reference">right-start-button</ea-button>
-        </ea-popper>
-        <ea-popper placement="right">
-            right <br> &emsp;
-            <ea-button type="primary" slot="reference">right-button</ea-button>
-        </ea-popper>
-        <ea-popper placement="right-end">
-            right- <br> end
-            <ea-button type="primary" slot="reference">right-end-button</ea-button>
-        </ea-popper>
+        <ea-row justify="center">
+            <ea-col span="6">
+                <ea-popper placement="bottom-start">
+                    bottom-start
+                    <ea-button type="primary" slot="reference">bottom-start</ea-button>
+                </ea-popper>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popper placement="bottom">
+                    bottom
+                    <ea-button type="primary" slot="reference">bottom</ea-button>
+                </ea-popper>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popper placement="bottom-end">
+                    bottom-end
+                    <ea-button type="primary" slot="reference">bottom-end</ea-button>
+                </ea-popper>
+            </ea-col>
+        </ea-row>
     </div>
 
     <hr>
@@ -102,15 +131,15 @@
     <div id="arrowSection" class="demo">
         <ea-popper placement="top-start" show-arrow="false">
             top-start
-            <ea-button type="primary" slot="reference">top-start-button</ea-button>
+            <ea-button type="primary" slot="reference">top-start</ea-button>
         </ea-popper>
         <ea-popper show-arrow="false">
             top
-            <ea-button type="primary" slot="reference">top-button</ea-button>
+            <ea-button type="primary" slot="reference">top</ea-button>
         </ea-popper>
         <ea-popper placement="top-end" show-arrow="false">
             top-end
-            <ea-button type="primary" slot="reference">top-end-button</ea-button>
+            <ea-button type="primary" slot="reference">top-end</ea-button>
         </ea-popper>
     </div>
 

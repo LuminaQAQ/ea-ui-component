@@ -273,11 +273,4 @@
       filter: opacity(0);
     }
   }
-
-  @include modifier(flip) {
-    .ea-popper__original {
-      filter: opacity(1);
-      visibility: visible;
-    }
-  }
 }
