@@ -41,6 +41,7 @@ import './ea-option-gropu/index.js';
 import './ea-page-header/index.js';
 import './ea-pagination/index.js';
 import './ea-pane/index.js';
+import './ea-popover/index.js';
 import './ea-progress/index.js';
 import './ea-radio/index.js';
 import './ea-radio-group/index.js';

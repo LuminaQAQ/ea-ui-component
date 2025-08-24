@@ -29,6 +29,13 @@ export default class Base extends HTMLElement {
         this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
     }
 
+    assignedStyle(stylesheet) {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(stylesheet);
+
+        this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, sheet];
+    }
+
     /**
      * 计算classlist
      * @param {string} block 块级元素名称

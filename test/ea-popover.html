@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        .demo {
+            box-sizing: border-box;
+            padding: 3rem;
+        }
+
+        ea-popover {
+            margin: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script src="../src/components/ea-button/index.js" type='module'></script>
+    <script src="../src/components/ea-card/index.js" type='module'></script>
+    <script src="../src/components/ea-layout/index.js" type='module'></script>
+    <script src="../src/components/ea-popover/index.js" type='module'></script>
+
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
+
+    <div id="referenceSection" class="demo">
+        <ea-row justify="center">
+            <ea-col span="6">
+                <ea-popover placement="top-start">
+                    top-start
+                    <ea-button type="primary" slot="reference">top-start</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover>
+                    top
+                    <ea-button type="primary" slot="reference">top</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover placement="top-end">
+                    top-end
+                    <ea-button type="primary" slot="reference">top-end</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popover placement="left-start">
+                    left-start
+                    <ea-button type="primary" slot="reference">left-start</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover placement="right-start">
+                    right- start
+                    <ea-button type="primary" slot="reference">right-start</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popover placement="left">
+                    left
+                    <ea-button type="primary" slot="reference">left</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover placement="right">
+                    right
+                    <ea-button type="primary" slot="reference">right</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popover placement="left-end">
+                    left-end
+                    <ea-button type="primary" slot="reference">left-end</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover placement="right-end">
+                    right-end
+                    <ea-button type="primary" slot="reference">right-end</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="center">
+            <ea-col span="6">
+                <ea-popover placement="bottom-start">
+                    bottom-start
+                    <ea-button type="primary" slot="reference">bottom-start</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover placement="bottom">
+                    bottom
+                    <ea-button type="primary" slot="reference">bottom</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover placement="bottom-end">
+                    bottom-end
+                    <ea-button type="primary" slot="reference">bottom-end</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 不显示箭头 -->
+    <h1>不显示箭头</h1>
+
+    <div id="arrowSection" class="demo">
+        <ea-popover placement="top-start" show-arrow="false">
+            top-start
+            <ea-button type="primary" slot="reference">top-start</ea-button>
+        </ea-popover>
+        <ea-popover show-arrow="false">
+            top
+            <ea-button type="primary" slot="reference">top</ea-button>
+        </ea-popover>
+        <ea-popover placement="top-end" show-arrow="false">
+            top-end
+            <ea-button type="primary" slot="reference">top-end</ea-button>
+        </ea-popover>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 触发方式 -->
+    <h1>触发方式</h1>
+
+    <div id="triggerSection" class=‘demo’>
+        <ea-popover placement="top-start" title="title" content="this is content, this is content, this is content">
+            top-start
+            <ea-button type="primary" slot="reference">Hover to activate</ea-button>
+        </ea-popover>
+        <ea-popover placement="top-start" trigger="click">
+            top-start
+            <ea-button type="primary" slot="reference">Click to activate</ea-button>
+        </ea-popover>
+        <ea-popover placement="top-start" trigger="focus">
+            top-start
+            <ea-button type="primary" slot="reference">Focus to activate</ea-button>
+        </ea-popover>
+        <ea-popover placement="top-start" trigger="contextmenu">
+            top-start
+            <ea-button type="primary" slot="reference">contextmenu to activate</ea-button>
+        </ea-popover>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <script>
+        // ------- 基础用法 -------
+        // #region
+        // const referenceExample = {
+        //     referenceElements: document.querySelectorAll('#referenceSection ea-popover'),
+
+        //     init() {
+        //         this.referenceElements.forEach(referenceElement => {
+        //             referenceElement.addEventListener("click", (e) => {
+        //                 referenceElement.toggle();
+        //             });
+        //         });
+        //     }
+        // }
+        // referenceExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 基础用法 -------
+        // #region
+        // const arrowExample = {
+        //     referenceElements: document.querySelectorAll('#arrowSection ea-popover'),
+
+        //     init() {
+        //         this.referenceElements.forEach(referenceElement => {
+        //             referenceElement.addEventListener("mouseenter", (e) => {
+        //                 referenceElement.show();
+
+        //                 referenceElement.addEventListener("mouseleave", () => {
+        //                     referenceElement.hide();
+        //                 }, { once: true });
+        //             });
+        //         });
+        //     }
+        // }
+        // arrowExample.init();
+        // #endregion
+        // ------- end -------
+
+        // -------  -------
+        // #region
+        const triggerExample = {
+            referenceElements: document.querySelectorAll("#triggerSection ea-popover"),
+
+            init() {
+                this.referenceElements.forEach(referenceElement => {
+                    referenceElement.addEventListener("show", () => {
+                        console.log('show');
+                    });
+
+                    referenceElement.addEventListener("shown", () => {
+                        console.log('shown');
+                    });
+
+                    referenceElement.addEventListener("hide", () => {
+                        console.log('hide');
+                    });
+
+                    referenceElement.addEventListener("hidden", () => {
+                        console.log('hidden');
+                    })
+                });
+            }
+        }
+        triggerExample.init();
+        // #endregion
+        // ------- end -------
+    </script>
+</body>
+
+</html>
