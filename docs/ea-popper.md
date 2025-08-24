@@ -394,6 +394,7 @@ const arrowExample = {
 | placement | 气泡的出现位置。                          | string  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | top                                             |
 | flip      | 是否在超过原 placement 视口时，进行翻转。 | boolean | —                                                                                                                                                                    | true                                            |
 | offset    | 气泡出现的位置偏移量。                    | string  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
+| width     | 宽度，单位 px。                           | number  | —                                                                                                                                                                    | 150                                             |
 
 <!-- ### CSS API
 

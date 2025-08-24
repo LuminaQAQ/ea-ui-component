@@ -71,7 +71,7 @@ export class EaPopper extends Base {
             type: Number,
             default: '150',
             observer: (newVal) => {
-                this.#originalPopper.style.setProperty('--placement', newVal);
+                this.#originalPopper.style.setProperty('--ea-popper-width', `${newVal}px`);
             }
         },
         placement: {
