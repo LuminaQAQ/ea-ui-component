@@ -63,10 +63,17 @@ export class EaPopper extends Base {
     #originPlacement;
 
     static get observedAttributes() {
-        return ['placement', 'show-arrow', 'status', 'offset', 'filp'];
+        return ['width', 'placement', 'show-arrow', 'status', 'offset', 'filp'];
     }
 
     state = this.properties({
+        width: {
+            type: Number,
+            default: '150',
+            observer: (newVal) => {
+                this.#originalPopper.style.setProperty('--placement', newVal);
+            }
+        },
         placement: {
             type: ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'],
             default: 'top',
