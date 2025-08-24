@@ -4,6 +4,8 @@
   --ea-popper-box-shadow: var(--box-shadow-md);
 
   --ea-popper-arrow-size: 10px;
+
+  --ea-popper-width: 150px;
 }
 
 :host {
@@ -31,8 +33,11 @@
     position: absolute;
     transform: var(--ea-popper-transform);
 
+    box-sizing: border-box;
     padding: var(--spacing-md);
     border: 1px solid var(--ea-popper-border-color);
+
+    width: var(--ea-popper-width);
 
     background-color: var(--ea-popper-background-color);
 
