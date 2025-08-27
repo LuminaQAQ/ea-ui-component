@@ -5,11 +5,14 @@
   --ea-popover-content-font-size: var(--font-size-md);
 
   --ea-popover-box-shadow: var(--box-shadow-md);
+  --ea-popover-border-radius: var(--border-radius-sm);
 }
 
 @include block(ea-popper) {
   @include element(original) {
     box-shadow: var(--ea-popover-box-shadow);
+
+    border-radius: var(--ea-popover-border-radius);
   }
 }
 
@@ -23,7 +26,7 @@
 
   @include element(content) {
     font-size: var(--ea-popover-content-font-size);
-    line-height: var(--ea-popover-content-line-height);
+    line-height: var(--ea-popover-content-font-size);
     color: var(--ea-popover-content-color);
   }
 }
