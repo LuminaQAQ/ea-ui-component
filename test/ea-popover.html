@@ -30,101 +30,6 @@
     <script src="../src/components/ea-layout/index.js" type='module'></script>
     <script src="../src/components/ea-popover/index.js" type='module'></script>
 
-    <!-- #region 基础用法 -->
-    <h1>基础用法</h1>
-
-    <div id="referenceSection" class="demo">
-        <ea-row justify="center">
-            <ea-col span="6">
-                <ea-popover placement="top-start">
-                    top-start
-                    <ea-button type="primary" slot="reference">top-start</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover>
-                    top
-                    <ea-button type="primary" slot="reference">top</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover placement="top-end">
-                    top-end
-                    <ea-button type="primary" slot="reference">top-end</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
-
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-popover placement="left-start">
-                    left-start
-                    <ea-button type="primary" slot="reference">left-start</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover placement="right-start">
-                    right- start
-                    <ea-button type="primary" slot="reference">right-start</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
-
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-popover placement="left">
-                    left
-                    <ea-button type="primary" slot="reference">left</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover placement="right">
-                    right
-                    <ea-button type="primary" slot="reference">right</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
-
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-popover placement="left-end">
-                    left-end
-                    <ea-button type="primary" slot="reference">left-end</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover placement="right-end">
-                    right-end
-                    <ea-button type="primary" slot="reference">right-end</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
-
-        <ea-row justify="center">
-            <ea-col span="6">
-                <ea-popover placement="bottom-start">
-                    bottom-start
-                    <ea-button type="primary" slot="reference">bottom-start</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover placement="bottom">
-                    bottom
-                    <ea-button type="primary" slot="reference">bottom</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover placement="bottom-end">
-                    bottom-end
-                    <ea-button type="primary" slot="reference">bottom-end</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
-    </div>
-
-    <hr>
-    <!-- #endregion  -->
-
     <!-- #region 不显示箭头 -->
     <h1>不显示箭头</h1>
 
@@ -151,21 +56,104 @@
 
     <div id="triggerSection" class=‘demo’>
         <ea-popover placement="top-start" title="title" content="this is content, this is content, this is content">
-            top-start
             <ea-button type="primary" slot="reference">Hover to activate</ea-button>
         </ea-popover>
-        <ea-popover placement="top-start" trigger="click">
-            top-start
+        <ea-popover placement="top-start" trigger="click" title="title"
+            content="this is content, this is content, this is content">
             <ea-button type="primary" slot="reference">Click to activate</ea-button>
         </ea-popover>
-        <ea-popover placement="top-start" trigger="focus">
-            top-start
+        <ea-popover placement="top-start" trigger="focus" title="title"
+            content="this is content, this is content, this is content">
             <ea-button type="primary" slot="reference">Focus to activate</ea-button>
         </ea-popover>
-        <ea-popover placement="top-start" trigger="contextmenu">
-            top-start
+        <ea-popover placement="top-start" trigger="contextmenu" title="title"
+            content="this is content, this is content, this is content">
             <ea-button type="primary" slot="reference">contextmenu to activate</ea-button>
         </ea-popover>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
+
+    <div id="referenceSection" class="demo">
+        <ea-row justify="center">
+            <ea-col span="6">
+                <ea-popover title="Title" content="Top Left prompts info" placement="top-start">
+                    <ea-button type="primary" slot="reference">top-start</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover title="Title" content="Top Center prompts info" placement="top">
+                    top
+                    <ea-button type="primary" slot="reference">top</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover title="Title" content="Top Right prompts info" placement="top-end">
+                    <ea-button type="primary" slot="reference">top-end</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popover title="Title" content="Left Top prompts info" placement="left-start">
+                    <ea-button type="primary" slot="reference">left-start</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover title="Title" content="Right Top prompts info" placement="right-start">
+                    <ea-button type="primary" slot="reference">right-start</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popover title="Title" content="Left Center prompts info" placement="left">
+                    <ea-button type="primary" slot="reference">left</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover title="Title" content="Right Center prompts info" placement="right">
+                    <ea-button type="primary" slot="reference">right</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popover title="Title" content="Left Bottom prompts info" placement="left-end">
+                    <ea-button type="primary" slot="reference">left-end</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover title="Title" content="Right Bottom prompts info" placement="right-end">
+                    <ea-button type="primary" slot="reference">right-end</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="center">
+            <ea-col span="6">
+                <ea-popover title="Title" content="Bottom Left prompts info" placement="bottom-start">
+                    <ea-button type="primary" slot="reference">bottom-start</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover title="Title" content="Bottom Center prompts info" placement="bottom">
+                    <ea-button type="primary" slot="reference">bottom</ea-button>
+                </ea-popover>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popover title="Title" content="Bottom Right prompts info" placement="bottom-end">
+                    <ea-button type="primary" slot="reference">bottom-end</ea-button>
+                </ea-popover>
+            </ea-col>
+        </ea-row>
     </div>
 
     <hr>

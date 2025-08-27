@@ -7,14 +7,14 @@ import stylesheet from './index.scss?inline';
  * @param {HTMLElement} el 
  * @returns 
  */
-const isIntersecting = (el) => {
+const isIntersecting = (el, scale = 0) => {
     const rect = el.getBoundingClientRect();
 
     return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= window.innerHeight &&
-        rect.right <= window.innerWidth
+        rect.top >= scale &&
+        rect.left >= scale &&
+        rect.bottom <= window.innerHeight - scale &&
+        rect.right <= window.innerWidth - scale
     );
 }
 
@@ -100,9 +100,12 @@ export class EaPopper extends Base {
                     this.#dispatchBubblesEvent('show');
 
                     if (this.flip) {
+                        const popperRect = this.#originalPopper.getBoundingClientRect();
+                        const isOverflow = isIntersecting(this, Math.max(popperRect.width, popperRect.height));
+
                         if (this.#originPlacement === this.placement) {
                             this.placement = flipPlacement(this.#originalPopper, this.placement);
-                        } else {
+                        } else if (isOverflow) {
                             this.placement = this.#originPlacement;
                         }
                     }

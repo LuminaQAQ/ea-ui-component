@@ -1,0 +1,29 @@
+:host {
+  --ea-popover-title-color: var(--grey-900);
+  --ea-popover-title-font-size: var(--font-size-lg);
+  --ea-popover-content-color: var(--grey-700);
+  --ea-popover-content-font-size: var(--font-size-md);
+
+  --ea-popover-box-shadow: var(--box-shadow-md);
+}
+
+@include block(ea-popper) {
+  @include element(original) {
+    box-shadow: var(--ea-popover-box-shadow);
+  }
+}
+
+@include block(ea-popover) {
+  @include element(title) {
+    font-size: var(--ea-popover-title-font-size);
+    line-height: var(--ea-popover-title-font-size);
+    color: var(--ea-popover-title-color);
+    margin-bottom: 12px;
+  }
+
+  @include element(content) {
+    font-size: var(--ea-popover-content-font-size);
+    line-height: var(--ea-popover-content-line-height);
+    color: var(--ea-popover-content-color);
+  }
+}

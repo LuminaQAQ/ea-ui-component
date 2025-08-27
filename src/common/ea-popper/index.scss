@@ -5,7 +5,10 @@
 
   --ea-popper-arrow-size: 10px;
 
+  --ea-popper-spacing: var(--spacing-md);
   --ea-popper-width: 150px;
+
+  --ea-popper-transition: var(--transition-normal);
 }
 
 :host {
@@ -34,7 +37,7 @@
     transform: var(--ea-popper-transform);
 
     box-sizing: border-box;
-    padding: var(--spacing-md);
+    padding: var(--ea-popper-spacing);
     border: 1px solid var(--ea-popper-border-color);
 
     width: var(--ea-popper-width);
@@ -42,7 +45,7 @@
     background-color: var(--ea-popper-background-color);
 
     filter: opacity(0);
-    transition: filter var(--transition-normal);
+    transition: filter var(--ea-popper-transition);
 
     &::after {
       display: none;
