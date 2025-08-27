@@ -18,7 +18,7 @@
         }
 
         ea-popover {
-            margin: 2rem;
+            margin: 1rem;
         }
     </style>
 </head>
@@ -30,53 +30,8 @@
     <script src="../src/components/ea-layout/index.js" type='module'></script>
     <script src="../src/components/ea-popover/index.js" type='module'></script>
 
-    <!-- #region 不显示箭头 -->
-    <h1>不显示箭头</h1>
-
-    <div id="arrowSection" class="demo">
-        <ea-popover placement="top-start" show-arrow="false">
-            top-start
-            <ea-button type="primary" slot="reference">top-start</ea-button>
-        </ea-popover>
-        <ea-popover show-arrow="false">
-            top
-            <ea-button type="primary" slot="reference">top</ea-button>
-        </ea-popover>
-        <ea-popover placement="top-end" show-arrow="false">
-            top-end
-            <ea-button type="primary" slot="reference">top-end</ea-button>
-        </ea-popover>
-    </div>
-
-    <hr>
-    <!-- #endregion  -->
-
-    <!-- #region 触发方式 -->
-    <h1>触发方式</h1>
-
-    <div id="triggerSection" class=‘demo’>
-        <ea-popover placement="top-start" title="title" content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">Hover to activate</ea-button>
-        </ea-popover>
-        <ea-popover placement="top-start" trigger="click" title="title"
-            content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">Click to activate</ea-button>
-        </ea-popover>
-        <ea-popover placement="top-start" trigger="focus" title="title"
-            content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">Focus to activate</ea-button>
-        </ea-popover>
-        <ea-popover placement="top-start" trigger="contextmenu" title="title"
-            content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">contextmenu to activate</ea-button>
-        </ea-popover>
-    </div>
-
-    <hr>
-    <!-- #endregion  -->
-
-    <!-- #region 基础用法 -->
-    <h1>基础用法</h1>
+    <!-- #region 展示位置 -->
+    <h1>展示位置</h1>
 
     <div id="referenceSection" class="demo">
         <ea-row justify="center">
@@ -159,71 +114,95 @@
     <hr>
     <!-- #endregion  -->
 
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
+
+    <div id="triggerSection" class=‘demo’>
+        <ea-popover placement="top-start" title="Title" content="this is content, this is content, this is content">
+            <ea-button type="primary" slot="reference">Hover to activate</ea-button>
+        </ea-popover>
+        <ea-popover placement="top-start" trigger="click" title="Title"
+            content="this is content, this is content, this is content">
+            <ea-button type="primary" slot="reference">Click to activate</ea-button>
+        </ea-popover>
+        <ea-popover placement="top-start" trigger="focus" title="Title"
+            content="this is content, this is content, this is content">
+            <ea-button type="primary" slot="reference">Focus to activate</ea-button>
+        </ea-popover>
+        <ea-popover placement="top-start" trigger="contextmenu" title="Title"
+            content="this is content, this is content, this is content">
+            <ea-button type="primary" slot="reference">contextmenu to activate</ea-button>
+        </ea-popover>
+        <ea-popover placement="top-start" trigger="null" title="Title" width="200"
+            content="this is content, this is content, this is content">
+            <ea-button type="primary" slot="reference">Manual to activate</ea-button>
+        </ea-popover>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 内容可扩展 -->
+    <h1>内容可扩展</h1>
+
+    <div id="scalableSection" class="demo">
+        <ea-popover trigger="null" placement="right" show-arrow="false" width="200">
+            <ea-button id="popoverBtn" type="primary" slot="reference">Click to activate</ea-button>
+
+            <ea-card shadow="never" header="Header">
+                Are you sure?
+                <section slot="footer" style="text-align: right;">
+                    <ea-button id="confirm" type="primary" size="small">Confirm</ea-button>
+                    <ea-button id="cancel" size="small">Cancel</ea-button>
+                </section>
+            </ea-card>
+        </ea-popover>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
     <script>
         // ------- 基础用法 -------
         // #region
-        // const referenceExample = {
-        //     referenceElements: document.querySelectorAll('#referenceSection ea-popover'),
-
-        //     init() {
-        //         this.referenceElements.forEach(referenceElement => {
-        //             referenceElement.addEventListener("click", (e) => {
-        //                 referenceElement.toggle();
-        //             });
-        //         });
-        //     }
-        // }
-        // referenceExample.init();
-        // #endregion
-        // ------- end -------
-
-        // ------- 基础用法 -------
-        // #region
-        // const arrowExample = {
-        //     referenceElements: document.querySelectorAll('#arrowSection ea-popover'),
-
-        //     init() {
-        //         this.referenceElements.forEach(referenceElement => {
-        //             referenceElement.addEventListener("mouseenter", (e) => {
-        //                 referenceElement.show();
-
-        //                 referenceElement.addEventListener("mouseleave", () => {
-        //                     referenceElement.hide();
-        //                 }, { once: true });
-        //             });
-        //         });
-        //     }
-        // }
-        // arrowExample.init();
-        // #endregion
-        // ------- end -------
-
-        // -------  -------
-        // #region
         const triggerExample = {
-            referenceElements: document.querySelectorAll("#triggerSection ea-popover"),
+            referenceElement: document.querySelector('#triggerSection ea-popover[trigger="null"]'),
 
             init() {
-                this.referenceElements.forEach(referenceElement => {
-                    referenceElement.addEventListener("show", () => {
-                        console.log('show');
-                    });
-
-                    referenceElement.addEventListener("shown", () => {
-                        console.log('shown');
-                    });
-
-                    referenceElement.addEventListener("hide", () => {
-                        console.log('hide');
-                    });
-
-                    referenceElement.addEventListener("hidden", () => {
-                        console.log('hidden');
-                    })
+                this.referenceElement.addEventListener('click', () => {
+                    this.referenceElement.visible = !this.referenceElement.visible;
                 });
             }
         }
         triggerExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 基础用法 -------
+        // #region
+        const scalableExample = {
+            referenceElement: document.querySelector('#scalableSection ea-popover'),
+            openButton: document.querySelector('#scalableSection #popoverBtn'),
+            confirmButton: document.querySelector('#scalableSection #confirm'),
+            cancelButton: document.querySelector('#scalableSection #cancel'),
+
+            init() {
+                this.openButton.addEventListener('click', e => {
+                    this.referenceElement.visible = true;
+                });
+
+                this.confirmButton.addEventListener('click', () => {
+                    this.referenceElement.visible = false;
+                    console.log('confirm');
+                });
+
+                this.cancelButton.addEventListener('click', () => {
+                    this.referenceElement.visible = false;
+                    console.log('cancel');
+                });
+            }
+        }
+        scalableExample.init();
         // #endregion
         // ------- end -------
     </script>

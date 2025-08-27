@@ -19,7 +19,7 @@ export class EaPopover extends EaPopper {
     #isMounted;
 
     static get observedAttributes() {
-        return [...super.observedAttributes, 'trigger', 'title', 'content'];
+        return [...super.observedAttributes, 'trigger', 'title', 'content', 'visible'];
     }
 
     state = this.properties({
@@ -27,6 +27,13 @@ export class EaPopover extends EaPopper {
             type: ['click', 'focus', 'hover', 'contextmenu'],
             default: 'hover',
             observer: (newVal) => { }
+        },
+        visible: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => {
+                this.status = newVal;
+            }
         },
         title: {
             type: String,
@@ -136,6 +143,8 @@ export class EaPopover extends EaPopper {
     }
 
     #initTriggerEvent = () => {
+        if (this.trigger === "null" || this.trigger === null) return;
+
         const isExist = Object.keys(this.#triggerEventStrategies).find(key => this.trigger === key);
         this.#triggerEventStrategies[isExist || 'hover']?.();
 
