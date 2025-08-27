@@ -386,53 +386,45 @@ const arrowExample = {
 
 ## Popper API
 
-### Main API
-
-| 参数      | 说明                                      | 类型    | 可选值                                                                                                                                                               | 默认值                                          |
-| --------- | ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| status    | 控制 Popper 显隐的属性                    | boolean | —                                                                                                                                                                    | false                                           |
-| placement | 气泡的出现位置。                          | string  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | top                                             |
-| flip      | 是否在超过原 placement 视口时，进行翻转。 | boolean | —                                                                                                                                                                    | true                                            |
-| offset    | 气泡出现的位置偏移量。                    | string  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
-| width     | 宽度，单位 px。                           | number  | —                                                                                                                                                                    | 150                                             |
-
-<!-- ### CSS API
-
-| 参数    | 说明                                                                                                           | 类型   | 可选值 | 默认值 |
-| ------- | -------------------------------------------------------------------------------------------------------------- | ------ | ------ | ------ |
-| z-index | <ea-link type="primary" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">MDN：z-index</ea-link> | String | —      | 1000   |
+| 参数       | 说明                                      | 类型    | 可选值                                                                                                                                                               | 默认值                                          |
+| ---------- | ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| width      | 宽度，单位 px。                           | number  | —                                                                                                                                                                    | 150                                             |
+| placement  | 气泡的出现位置。                          | string  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | top                                             |
+| show-arrow | 是否显示箭头                              | boolean |                                                                                                                                                                      | false                                           |
+| status     | 控制 Popper 显隐的属性                    | boolean |                                                                                                                                                                      | false                                           |
+| offset     | 气泡出现的位置偏移量。                    | string  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
+| flip       | 是否在超过原 placement 视口时，进行翻转。 | boolean | —                                                                                                                                                                    | true                                            |
 
 ## CSS Part
 
-### Part
-
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明             |
-| --------- | ---------------- |
-| container | overlay 外层容器 |
-| mask      | overlay 遮罩层   |
-| content   | overlay 内容容器 |
+| 名称      | 说明                                  |
+| --------- | ------------------------------------- |
+| container | Popper 外层容器                       |
+| reference | 触发 Popper 显示的 HTML 元素 的父容器 |
+| original  | Popper 内容容器                       |
 
 ## Events
 
-| 事件名称     | 说明                          | 回调参数                              |
-| ------------ | ----------------------------- | ------------------------------------- |
-| open         | 开启 Overlay 时触发的事件     | `() => void`                          |
-| opened       | 开启 Overlay 的动画结束时触发 | `() => void`                          |
-| close        | 关闭 Overlay 时触发的事件     | `() => void`                          |
-| closed       | 关闭 Overlay 的动画结束时触发 | `() => void`                          |
-| before-close | 关闭 Overlay 前触发的事件     | `(e.detail.done: () => void) => void` |
+| 事件名称 | 说明                         | 回调参数     |
+| -------- | ---------------------------- | ------------ |
+| show     | 开启 Popper 时触发的事件     | `() => void` |
+| shown    | 开启 Popper 的动画结束时触发 | `() => void` |
+| hide     | 关闭 Popper 时触发的事件     | `() => void` |
+| hidden   | 关闭 Popper 的动画结束时触发 | `() => void` |
 
 ## Methods
 
-| 名称 | 详情         | 类型         |
-| ---- | ------------ | ------------ |
-| show | 显示 Overlay | `() => void` |
-| hide | 隐藏 Overlay | `() => void` |
+| 名称   | 详情                 | 类型         |
+| ------ | -------------------- | ------------ |
+| show   | 显示 Popper          | `() => void` |
+| hide   | 隐藏 Popper          | `() => void` |
+| toggle | 切换 Popper 显示状态 | `() => void` |
 
 ## Slots
 
-| 名称 | 描述             |
-| ---- | ---------------- |
-| -    | Overlay 内容插槽 | -->
+| 名称      | 描述                             |
+| --------- | -------------------------------- |
+| -         | Popper 内容插槽                  |
+| reference | 触发 Popper 显示的 HTML 元素插槽 |
