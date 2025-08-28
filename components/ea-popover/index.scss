@@ -6,6 +6,8 @@
 
   --ea-popover-box-shadow: var(--box-shadow-md);
   --ea-popover-border-radius: var(--border-radius-sm);
+
+  --ea-popover-z-index: 100;
 }
 
 @include block(ea-popper) {
@@ -13,6 +15,8 @@
     box-shadow: var(--ea-popover-box-shadow);
 
     border-radius: var(--ea-popover-border-radius);
+
+    z-index: var(--ea-popover-z-index);
   }
 }
 

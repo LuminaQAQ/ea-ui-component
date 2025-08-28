@@ -104,16 +104,17 @@ export default defineConfig({
         ]
       },
       {
-        text: '提示组件',
+        text: 'Feedback 反馈组件',
         items: [
           { text: 'Alert 警告', link: '/ea-alert' },
+          { text: 'Popover 弹出框', link: '/ea-popover' },
           //     { text: 'Loading 加载', link: '/ea-loading' },
           //     { text: 'Message 消息提示', link: '/ea-message' },
           //     { text: 'MessageBox 消息框', link: '/ea-message-box' },
         ]
       },
       {
-        text: '其他',
+        text: '基本组件',
         items: [
           { text: 'Overlay 遮罩层', link: '/ea-overlay' },
           { text: 'Popper 气泡', link: '/ea-popper' },
