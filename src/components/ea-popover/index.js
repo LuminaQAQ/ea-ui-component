@@ -76,16 +76,6 @@ export class EaPopover extends EaPopper {
         },
     })
 
-    /**
-     * 获取 classlist 列表
-     * @return {string} 属性值
-     */
-    // updateContainerClasslist() {
-    //     return this.computedClasslist('ea-popover', {
-    //         // ['--' + this.type]: this.type,
-    //     });
-    // }
-
     constructor() {
         super();
 
