@@ -11,7 +11,6 @@ onMounted(async () => {
             referenceElement: document.querySelector('#customedTrigger'),
 
             init() {
-                console.log(this.referenceElement)
                 this.referenceElement.addEventListener('click', () => {
                     this.referenceElement.visible = !this.referenceElement.visible;
                 });
@@ -399,7 +398,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   <ea-popover
     id="customedTrigger"
     placement="top-start"
-    trigger="null"
+    trigger="customized"
     title="Title"
     width="200"
     content="this is content, this is content, this is content"
@@ -449,7 +448,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   </ea-popover>
   <ea-popover
     placement="top-start"
-    trigger="null"
+    trigger="customized"
     title="Title"
     width="200"
     content="this is content, this is content, this is content"
@@ -464,7 +463,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
 ```js
 const triggerExample = {
   referenceElement: document.querySelector(
-    '#triggerSection ea-popover[trigger="null"]'
+    '#triggerSection ea-popover[trigger="customized"]'
   ),
 
   init() {
@@ -485,7 +484,7 @@ triggerExample.init();
 利用插槽取代 content 属性
 
 <div id="scalableSection" class="demo">
-  <ea-popover trigger="null" placement="right" show-arrow="false" width="200">
+  <ea-popover trigger="customized" placement="right" show-arrow="false" width="200">
     <ea-button id="popoverBtn" type="primary" slot="reference"
       >Click to activate</ea-button
     >
@@ -505,7 +504,12 @@ triggerExample.init();
 
 ```html
 <div id="scalableSection" class="demo">
-  <ea-popover trigger="null" placement="right" show-arrow="false" width="200">
+  <ea-popover
+    trigger="customized"
+    placement="right"
+    show-arrow="false"
+    width="200"
+  >
     <ea-button id="popoverBtn" type="primary" slot="reference"
       >Click to activate</ea-button
     >
@@ -555,7 +559,7 @@ scalableExample.init();
 
 | 参数       | 说明                                             | 类型    | 可选值                                                                                                                                                               | 默认值                                          |
 | ---------- | ------------------------------------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| trigger    | 触发方式。                                       | string  | `'click' \| 'focus' \| 'hover' \| 'contextmenu'`                                                                                                                     | hover                                           |
+| trigger    | 触发方式。                                       | string  | `'click' \| 'focus' \| 'hover' \| 'contextmenu' \| 'customized'`                                                                                                     | hover                                           |
 | title      | 标题                                             | string  | —                                                                                                                                                                    | —                                               |
 | content    | 显示的内容，也可以通过写入默认 slot 修改显示内容 | string  | —                                                                                                                                                                    | —                                               |
 | width      | 宽度，单位 px。                                  | number  | —                                                                                                                                                                    | 150                                             |
