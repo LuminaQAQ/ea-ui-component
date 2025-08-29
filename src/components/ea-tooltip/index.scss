@@ -24,24 +24,18 @@
     background-color: var(--ea-tooltip-background-color);
 
     color: var(--ea-tooltip-color);
+    font-size: var(--ea-tooltip-font-size);
 
     z-index: var(--ea-tooltip-z-index);
   }
 
   @include element(content) {
-    font-size: var(--ea-tooltip-content-font-size);
     line-height: var(--ea-tooltip-content-font-size);
   }
 }
 
 @include block(ea-tooltip) {
   --ea-popper-arrow-size: 6px;
-
-  @include element(content) {
-    color: var(--ea-tooltip-color);
-    font-size: var(--ea-tooltip-font-size);
-    line-height: var(--ea-tooltip-font-size);
-  }
 
   @include modifier(dark) {
     --ea-popper-border-color: transparent;
