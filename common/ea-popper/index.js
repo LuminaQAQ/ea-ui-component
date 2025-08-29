@@ -180,9 +180,9 @@ export class EaPopper extends Base {
 
     $render() {
         this.shadowRoot.innerHTML = `
-            <div class='ea-popper' part='container'>
-                <div class='ea-popper__reference' part='reference'>
-                    <div class='ea-popper__original' part='original'>
+            <div class='ea-popper' part='container' tabindex='-1'>
+                <div class='ea-popper__reference' part='reference' tabindex='-1'>
+                    <div class='ea-popper__original' part='original' tabindex='0'>
                         <slot></slot>
                     </div>
                     <slot name='reference'></slot>
