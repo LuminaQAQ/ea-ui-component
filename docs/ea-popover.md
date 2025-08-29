@@ -1,16 +1,17 @@
 <script setup>
 import { onMounted } from 'vue'
 
-onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+onMounted(async () => {
+  await import("../dist/components/index.js")
+  await import("../dist/assets/icon.css")
   
         // ------- 基础用法 -------
         // #region
         const triggerExample = {
-            referenceElement: document.querySelector('#triggerSection ea-popover[trigger="null"]'),
+            referenceElement: document.querySelector('#customedTrigger'),
 
             init() {
+                console.log(this.referenceElement)
                 this.referenceElement.addEventListener('click', () => {
                     this.referenceElement.visible = !this.referenceElement.visible;
                 });
@@ -357,11 +358,11 @@ Popover 弹出框提供 9 种展示位置。
 
 ## 基础用法 ​
 
-Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopper</ea-link> 基础上开发出来的。 因此对于重复属性，请参考 Popper 的文档，在此文档中不做详尽解释。
+Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基础上开发出来的。 因此对于重复属性，请参考 Popover 的文档，在此文档中不做详尽解释。
 
 `trigger` 属性被用来决定 popover 的触发方式，支持的触发方式： `hover`、`click`、`focus` 或 `contextmenu`。 如果你想手动控制它，可以设置 `visible` 属性。
 
-<div id="triggerSection" class="‘demo’">
+<div id="triggerSection" class="demo">
   <ea-popover
     placement="top-start"
     title="Title"
@@ -396,6 +397,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopper</ea-link> 基�
     >
   </ea-popover>
   <ea-popover
+    id="customedTrigger"
     placement="top-start"
     trigger="null"
     title="Title"
@@ -411,7 +413,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopper</ea-link> 基�
 `html`
 
 ```html
-<div id="triggerSection" class="‘demo’">
+<div id="triggerSection" class="demo">
   <ea-popover
     placement="top-start"
     title="Title"
@@ -549,7 +551,7 @@ scalableExample.init();
 
 :::
 
-## Popper API
+## Popover API
 
 | 参数       | 说明                                             | 类型    | 可选值                                                                                                                                                               | 默认值                                          |
 | ---------- | ------------------------------------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
@@ -559,7 +561,7 @@ scalableExample.init();
 | width      | 宽度，单位 px。                                  | number  | —                                                                                                                                                                    | 150                                             |
 | placement  | 气泡的出现位置。                                 | string  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | top                                             |
 | show-arrow | 是否显示箭头                                     | boolean |                                                                                                                                                                      | false                                           |
-| visible    | 控制 Popper 显隐的属性                           | boolean |                                                                                                                                                                      | false                                           |
+| visible    | 控制 Popover 显隐的属性                          | boolean |                                                                                                                                                                      | false                                           |
 | offset     | 气泡出现的位置偏移量。                           | string  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
 | flip       | 是否在超过原 placement 视口时，进行翻转。        | boolean | —                                                                                                                                                                    | true                                            |
 
@@ -567,34 +569,34 @@ scalableExample.init();
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明                                  |
-| --------- | ------------------------------------- |
-| container | Popper 外层容器                       |
-| reference | 触发 Popper 显示的 HTML 元素 的父容器 |
-| original  | Popper 内容容器                       |
-| title     | Popper 标题容器                       |
-| content   | Popper 内容容器                       |
+| 名称      | 说明                                   |
+| --------- | -------------------------------------- |
+| container | Popover 外层容器                       |
+| reference | 触发 Popover 显示的 HTML 元素 的父容器 |
+| original  | Popover 内容容器                       |
+| title     | Popover 标题容器                       |
+| content   | Popover 内容容器                       |
 
 ## Events
 
-| 事件名称 | 说明                         | 回调参数     |
-| -------- | ---------------------------- | ------------ |
-| show     | 开启 Popper 时触发的事件     | `() => void` |
-| shown    | 开启 Popper 的动画结束时触发 | `() => void` |
-| hide     | 关闭 Popper 时触发的事件     | `() => void` |
-| hidden   | 关闭 Popper 的动画结束时触发 | `() => void` |
+| 事件名称 | 说明                          | 回调参数     |
+| -------- | ----------------------------- | ------------ |
+| show     | 开启 Popover 时触发的事件     | `() => void` |
+| shown    | 开启 Popover 的动画结束时触发 | `() => void` |
+| hide     | 关闭 Popover 时触发的事件     | `() => void` |
+| hidden   | 关闭 Popover 的动画结束时触发 | `() => void` |
 
 ## Methods
 
-| 名称   | 详情                 | 类型         |
-| ------ | -------------------- | ------------ |
-| show   | 显示 Popper          | `() => void` |
-| hide   | 隐藏 Popper          | `() => void` |
-| toggle | 切换 Popper 显示状态 | `() => void` |
+| 名称   | 详情                  | 类型         |
+| ------ | --------------------- | ------------ |
+| show   | 显示 Popover          | `() => void` |
+| hide   | 隐藏 Popover          | `() => void` |
+| toggle | 切换 Popover 显示状态 | `() => void` |
 
 ## Slots
 
-| 名称      | 描述                             |
-| --------- | -------------------------------- |
-| -         | Popper 内容插槽                  |
-| reference | 触发 Popper 显示的 HTML 元素插槽 |
+| 名称      | 描述                              |
+| --------- | --------------------------------- |
+| -         | Popover 内容插槽                  |
+| reference | 触发 Popover 显示的 HTML 元素插槽 |
