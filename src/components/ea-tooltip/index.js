@@ -126,7 +126,7 @@ export class EaTooltip extends EaPopper {
     }
 
     #initTriggerEvent = () => {
-        if (this.trigger === "customized" || this.trigger === "null" || this.trigger === null) return;
+        if (this.trigger === "customized") return;
 
         const isExist = Object.keys(this.#triggerEventStrategies).find(key => this.trigger === key);
         this.#triggerEventStrategies[isExist || 'hover']?.();

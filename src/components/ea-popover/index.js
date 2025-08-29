@@ -24,7 +24,7 @@ export class EaPopover extends EaPopper {
 
     state = this.properties({
         trigger: {
-            type: ['click', 'focus', 'hover', 'contextmenu'],
+            type: ['click', 'focus', 'hover', 'contextmenu', 'customized'],
             default: 'hover',
             observer: (newVal) => { }
         },
@@ -133,7 +133,7 @@ export class EaPopover extends EaPopper {
     }
 
     #initTriggerEvent = () => {
-        if (this.trigger === "null" || this.trigger === null) return;
+        if (this.trigger === "customized") return;
 
         const isExist = Object.keys(this.#triggerEventStrategies).find(key => this.trigger === key);
         this.#triggerEventStrategies[isExist || 'hover']?.();

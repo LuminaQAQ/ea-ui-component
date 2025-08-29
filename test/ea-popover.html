@@ -133,7 +133,7 @@
             content="this is content, this is content, this is content">
             <ea-button type="primary" slot="reference">contextmenu to activate</ea-button>
         </ea-popover>
-        <ea-popover placement="top-start" trigger="null" title="Title" width="200"
+        <ea-popover placement="top-start" trigger="customized" title="Title" width="200"
             content="this is content, this is content, this is content">
             <ea-button type="primary" slot="reference">Manual to activate</ea-button>
         </ea-popover>
@@ -146,7 +146,7 @@
     <h1>内容可扩展</h1>
 
     <div id="scalableSection" class="demo">
-        <ea-popover trigger="null" placement="right" show-arrow="false" width="200">
+        <ea-popover trigger="customized" placement="right" show-arrow="false" width="200">
             <ea-button id="popoverBtn" type="primary" slot="reference">Click to activate</ea-button>
 
             <ea-card shadow="never" header="Header">
@@ -166,7 +166,7 @@
         // ------- 基础用法 -------
         // #region
         const triggerExample = {
-            referenceElement: document.querySelector('#triggerSection ea-popover[trigger="null"]'),
+            referenceElement: document.querySelector('#triggerSection ea-popover[trigger="customized"]'),
 
             init() {
                 this.referenceElement.addEventListener('click', () => {
