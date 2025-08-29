@@ -108,6 +108,7 @@ export default defineConfig({
         items: [
           { text: 'Alert 警告', link: '/ea-alert' },
           { text: 'Popover 弹出框', link: '/ea-popover' },
+          { text: 'Tooltip 文字提示', link: '/ea-tooltip' },
           //     { text: 'Loading 加载', link: '/ea-loading' },
           //     { text: 'Message 消息提示', link: '/ea-message' },
           //     { text: 'MessageBox 消息框', link: '/ea-message-box' },
