@@ -70,7 +70,7 @@
         --ea-popper-transform-y: calc(-100% - 10px);
 
         &::after {
-          top: calc(100% - 5px);
+          top: calc(100% - var(--ea-popper-arrow-size) * 0.707 + 0.5px);
           transform: translateX(-50%) rotate(45deg);
 
           border-bottom-color: var(--ea-popper-border-color);
@@ -118,7 +118,7 @@
         --ea-popper-transform-y: calc(100% + 10px);
 
         &::after {
-          bottom: calc(100% - 5px);
+          bottom: calc(100% - var(--ea-popper-arrow-size) * 0.707 + 0.5px);
           transform: translateX(-50%) rotate(45deg);
 
           border-top-color: var(--ea-popper-border-color);
@@ -166,7 +166,7 @@
         --ea-popper-transform-x: calc(100% + 10px);
 
         &::after {
-          right: calc(100% - 5px);
+          right: calc(100% - var(--ea-popper-arrow-size) * 0.707 + 0.5px);
           transform: translateY(-50%) rotate(45deg);
 
           border-bottom-color: var(--ea-popper-border-color);
@@ -181,6 +181,7 @@
         top: 0;
 
         &::after {
+          transform: translateY(-25%) rotate(45deg);
           top: 25%;
         }
       }
@@ -201,6 +202,7 @@
         top: 100%;
 
         &::after {
+          transform: translateY(-75%) rotate(45deg);
           top: 75%;
         }
       }
@@ -232,6 +234,7 @@
 
         &::after {
           top: 25%;
+          transform: translate(-50%, -25%) rotate(45deg);
         }
       }
     }
@@ -252,6 +255,7 @@
 
         &::after {
           top: 75%;
+          transform: translate(-50%, -75%) rotate(45deg);
         }
       }
     }

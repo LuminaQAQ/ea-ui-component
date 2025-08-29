@@ -215,6 +215,9 @@
     },
     "./ea-timeline-item": {
       "import": "./dist/ea-timeline-item.js"
+    },
+    "./ea-tooltip": {
+      "import": "./dist/ea-tooltip.js"
     }
   },
   "scripts": {

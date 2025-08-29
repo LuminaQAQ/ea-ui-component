@@ -1,0 +1,60 @@
+:host {
+  --ea-tooltip-spacing: 5px 11px;
+
+  --ea-tooltip-background-color-dark: var(--grey-900);
+  --ea-tooltip-color-dark: var(--white);
+  --ea-tooltip-background-color-light: var(--white);
+  --ea-tooltip-color-light: var(--grey-900);
+
+  --ea-tooltip-background-color: none;
+  --ea-tooltip-color: none;
+
+  --ea-tooltip-font-size: var(--font-size-sm);
+
+  --ea-tooltip-box-shadow: var(--box-shadow-md);
+  --ea-tooltip-border-radius: var(--border-radius-sm);
+
+  --ea-tooltip-z-index: 100;
+}
+
+@include block(ea-popper) {
+  @include element(original) {
+    padding: var(--ea-tooltip-spacing);
+    border-radius: var(--ea-tooltip-border-radius);
+    background-color: var(--ea-tooltip-background-color);
+
+    color: var(--ea-tooltip-color);
+
+    z-index: var(--ea-tooltip-z-index);
+  }
+
+  @include element(content) {
+    font-size: var(--ea-tooltip-content-font-size);
+    line-height: var(--ea-tooltip-content-font-size);
+  }
+}
+
+@include block(ea-tooltip) {
+  --ea-popper-arrow-size: 6px;
+
+  @include element(content) {
+    color: var(--ea-tooltip-color);
+    font-size: var(--ea-tooltip-font-size);
+    line-height: var(--ea-tooltip-font-size);
+  }
+
+  @include modifier(dark) {
+    --ea-popper-border-color: transparent;
+    --ea-tooltip-color: var(--ea-tooltip-color-dark);
+    --ea-tooltip-background-color: var(--ea-tooltip-background-color-dark);
+
+    .ea-popper__original {
+      --ea-popper-background-color: var(--ea-tooltip-background-color);
+    }
+  }
+
+  @include modifier(light) {
+    --ea-tooltip-color: var(--ea-tooltip-color-light);
+    --ea-tooltip-background-color: var(--ea-tooltip-background-color-light);
+  }
+}
