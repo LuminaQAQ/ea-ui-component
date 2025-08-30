@@ -35,8 +35,7 @@ export class EaPopconfirm extends EaPopper {
             ...super.observedAttributes,
             'title', 'visible',
             'icon', 'icon-color', 'hide-icon',
-            'confirm-button-text', 'cancel-button-text', 'confirm-button-type',
-
+            'confirm-button-text', 'cancel-button-text', 'confirm-button-type', 'cancel-button-type'
         ];
     }
 
@@ -99,6 +98,13 @@ export class EaPopconfirm extends EaPopper {
                 this.#confirmButton.type = newVal;
             }
         },
+        "cancel-button-type": {
+            type: ['normal', 'primary', 'success', 'warning', 'danger'],
+            default: 'normal',
+            observer: (newVal) => {
+                this.#cancelButton.type = newVal;
+            }
+        },
     })
 
     constructor() {
@@ -129,6 +135,7 @@ export class EaPopconfirm extends EaPopper {
     #renderTitleContainer = () => {
         const container = document.createElement('section');
         container.classList.add('ea-popconfirm__title');
+        container.part = 'title';
 
         container.innerHTML = `
             ${this.icon ? `<ea-icon icon="${this.icon}" part="icon"></ea-icon>` : ''}
@@ -154,12 +161,13 @@ export class EaPopconfirm extends EaPopper {
     #renderFooter() {
         const slotTemplate = `<slot name="actions"></slot>`;
         const buttonGroupTemplate = `
-            <ea-button class="ea-popconfirm__cancel" size="small" part="cancel-button" text>${this["cancel-button-text"]}</ea-button>
+            <ea-button type="${this["cancel-button-type"]}" class="ea-popconfirm__cancel" size="small" part="cancel-button" text>${this["cancel-button-text"]}</ea-button>
             <ea-button type="${this["confirm-button-type"]}" class="ea-popconfirm__confirm" part="confirm-button" size="small">${this["confirm-button-text"]}</ea-button>
         `;
 
         const footer = document.createElement('footer');
         footer.classList.add('ea-popconfirm__footer');
+        footer.part = 'footer';
         footer.innerHTML = this.querySelector(`[slot="actions"]`) ? slotTemplate : buttonGroupTemplate;
         this.#originalPopper.appendChild(footer);
 
