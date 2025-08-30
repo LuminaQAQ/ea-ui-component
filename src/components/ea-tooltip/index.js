@@ -97,15 +97,17 @@ export class EaTooltip extends EaPopper {
         'contextmenu': () => {
             this.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
+                const abortController = new AbortController();
                 this.show();
 
                 window.addEventListener('click', (e) => {
                     const isThis = this.contains(e.target);
+
                     if (!isThis) {
+                        abortController.abort();
                         this.hide();
-                        controller.abort();
                     }
-                }, { once: true })
+                }, { signal: abortController.signal })
             }, { signal: this.#abortController.signal });
         },
     }

@@ -1,6 +1,7 @@
 :host {
   --cursor-type: pointer;
   --font-size: var(--font-size-md);
+  --ea-button-border-radius: var(--border-radius-sm);
 
   /* === Normal === */
   --ea-button-normal-text: var(--grey-900);
@@ -252,7 +253,7 @@
   border: 1px solid;
   border-color: var(--ea-button-normal-border);
   background-color: var(--ea-button-normal-background);
-  border-radius: var(--border-radius);
+  border-radius: var(--ea-button-border-radius);
 
   cursor: var(--cursor-type);
 

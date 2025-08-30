@@ -138,6 +138,9 @@
     "./ea-pane": {
       "import": "./dist/ea-pane.js"
     },
+    "./ea-popconfirm": {
+      "import": "./dist/ea-popconfirm.js"
+    },
     "./ea-popover": {
       "import": "./dist/ea-popover.js"
     },
