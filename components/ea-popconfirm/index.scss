@@ -1,0 +1,50 @@
+:host {
+  --ea-popconfirm-title-icon-color: rgb(255, 153, 0);
+  --ea-popconfirm-title-icon-display: inline-block;
+
+  --ea-popover-title-color: var(--grey-900);
+  --ea-popover-title-font-size: var(--font-size-md);
+
+  --ea-popover-box-shadow: var(--box-shadow-md);
+  --ea-popover-border-radius: var(--border-radius-sm);
+
+  --ea-popover-z-index: 100;
+}
+
+@include block(ea-popper) {
+  @include element(original) {
+    box-shadow: var(--ea-popover-box-shadow);
+
+    border-radius: var(--ea-popover-border-radius);
+
+    z-index: var(--ea-popover-z-index);
+  }
+}
+
+@include block(ea-popconfirm) {
+  @include element(title) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    font-size: var(--ea-popover-title-font-size);
+    line-height: var(--ea-popover-title-font-size);
+    color: var(--ea-popover-title-color);
+    margin-bottom: 12px;
+
+    ea-icon {
+      display: var(--ea-popconfirm-title-icon-display);
+      color: var(--ea-popconfirm-title-icon-color);
+    }
+  }
+
+  @include element(footer) {
+    text-align: right;
+
+    ea-button:first-child {
+      box-sizing: border-box;
+      margin-right: 0.5rem;
+    }
+  }
+}
