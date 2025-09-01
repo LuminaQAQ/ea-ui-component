@@ -1,70 +1,115 @@
-@import "../ea-ui-base-style.scss";
+$types: (success, info, warning, error);
 
-$themes-light: (
-  success: (
-    bgc: #f0f9eb,
-    text: #67c23a,
-  ),
-  info: (
-    bgc: #f4f4f5,
-    text: #909399,
-  ),
-  warning: (
-    bgc: #fdf6ec,
-    text: #e6a23c,
-  ),
-  error: (
-    bgc: #fef0f0,
-    text: #f56c6c,
-  ),
-);
+:host {
+  --ea-message-z-index: 2000;
+  --ea-message-top: 0;
 
-.ea-message_wrap {
+  --ea-message-spacing: var(--spacing-md);
+  --ea-message-border-color: var(--grey-200);
+  --ea-message-border-radius: var(--border-radius-sm);
+
+  --ea-message-min-width: 380px;
+  --ea-message-font-size: var(--font-size-md);
+
+  --ea-message-transition: var(--transition-normal);
+
+  --ea-message-success-bgc: var(--green-100);
+  --ea-message-success-color: var(--green-500);
+
+  --ea-message-info-bgc: var(--grey-100);
+  --ea-message-info-color: var(--grey-500);
+
+  --ea-message-warning-bgc: var(--yellow-100);
+  --ea-message-warning-color: var(--yellow-500);
+
+  --ea-message-error-bgc: var(--red-100);
+  --ea-message-error-color: var(--red-500);
+
+  --ea-message-primary-bgc: var(--blue-100);
+  --ea-message-primary-color: var(--blue-500);
+
+  --ea-message-gap: var(--spacing-md);
+}
+
+@include block(ea-message) {
   position: fixed;
   left: 50%;
-  z-index: 999;
+  z-index: var(--ea-message-z-index);
 
-  display: flex;
+  display: none;
+  visibility: hidden;
   align-items: center;
 
-  padding: 15px 15px 15px 20px;
-  border: 1px solid #ebeef5;
-  border-radius: 4px;
+  box-sizing: border-box;
+  padding: var(--ea-message-spacing);
+  margin: var(--ea-message-gap) 0;
+  gap: var(--ea-message-gap);
+  border: 1px solid var(--ea-message-border-color);
+  border-radius: var(--ea-message-border-radius);
+  font-size: var(--ea-message-font-size);
 
-  top: -100%;
+  top: var(--ea-message-top);
+  left: 50%;
   transform-origin: center;
-  opacity: 0;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -100%);
+  filter: opacity(0);
 
-  min-width: 380px;
-
+  // min-width: var(--ea-message-min-width);
+  width: fit-content;
+  max-width: calc(100% - 32px);
   overflow: hidden;
-  background-color: black;
+  // background-color: black;
 
-  transition: opacity 0.3s, top 0.3s;
+  transition: filter var(--ea-message-transition),
+    transform var(--ea-message-transition);
 
-  .ea-icon-wrap {
-    margin-right: 0.5rem;
-
-    line-height: 1;
+  @include element(icon) {
+    font-size: var(--ea-message-font-size);
+    line-height: var(--ea-message-font-size);
+    // margin-right: var(--ea-message-icon-gap);
   }
 
-  .ea-text-content {
-    line-height: 1;
-    margin-right: auto;
-
+  @include element(content) {
+    line-height: var(--ea-message-font-size);
+    // margin-right: auto;
     vertical-align: middle;
   }
 
-  .ea-close-icon {
+  @include element(icon-close) {
     margin-left: auto;
     display: none;
+    color: var(--ea-message-info-color);
   }
 
-  @each $theme-name, $theme-color in $themes-light {
-    &.ea-message--#{$theme-name} {
-      background-color: map-get($theme-color, bgc);
-      color: map-get($theme-color, text);
+  @each $type in $types {
+    @include modifier($type) {
+      background-color: var(--ea-message-#{$type}-bgc);
+      color: var(--ea-message-#{$type}-color);
+
+      .ea-message__icon {
+        color: var(--ea-message-#{$type}-color);
+      }
     }
+  }
+
+  @include modifier(show-close) {
+    .ea-message__icon-close {
+      display: block;
+    }
+  }
+
+  @include modifier(visible) {
+    display: flex;
+  }
+
+  @include modifier(is-show) {
+    visibility: visible;
+    filter: opacity(1);
+    transform: translate(-50%, 0);
+  }
+
+  @include modifier(before-hide) {
+    filter: opacity(0);
+    transform: translate(-50%, -100%);
   }
 }
