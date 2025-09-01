@@ -5,7 +5,7 @@
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
 
     <style>
         hr {
@@ -15,11 +15,10 @@
 </head>
 
 <body>
+    <script type="module" src="../src/components/ea-message/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
 
     <script type='module'>
-        import '../components/ea-button/index.js'
-        import '../components/ea-message/index.js'
-
         // ------- close 事件 -------
         // #region
         document.getElementById("closeEventBtn").addEventListener("click", () => {
@@ -40,7 +39,16 @@
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
-    <ea-button onclick='$message.open("基础用法")'>基础用法</ea-button>
+    <ea-button onclick='window.$message({
+            message: "This is a message.",
+            type: "info",
+            showClose: false,
+            duration: 3000,
+            onClose: () => {
+                console.log("close")
+            },
+            appendTo: document.body
+        })'>Show message</ea-button>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
