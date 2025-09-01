@@ -1,12 +1,10 @@
 $types: (success, info, warning, error);
 
 :host {
-  // --ea-message-display: none;
-
   --ea-message-z-index: 2000;
   --ea-message-top: 0;
 
-  --ea-message-spacing: 15px 15px 15px 20px;
+  --ea-message-spacing: var(--spacing-md);
   --ea-message-border-color: var(--grey-200);
   --ea-message-border-radius: var(--border-radius-sm);
 
@@ -44,6 +42,7 @@ $types: (success, info, warning, error);
 
   box-sizing: border-box;
   padding: var(--ea-message-spacing);
+  margin: var(--ea-message-gap) 0;
   gap: var(--ea-message-gap);
   border: 1px solid var(--ea-message-border-color);
   border-radius: var(--ea-message-border-radius);

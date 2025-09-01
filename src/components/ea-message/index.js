@@ -43,6 +43,8 @@ export class EaMessage extends Base {
                 this.#visibleAbortController?.abort();
                 this.#visibleAbortController = new AbortController();
 
+                this.#initPosition();
+
                 if (newVal) {
                     this.#container.className = this.updateContainerClasslist();
                     this.#dispatchBubblesEvent('show');
@@ -57,6 +59,19 @@ export class EaMessage extends Base {
                 } else {
                     this.#container.classList.add('ea-message--before-hide');
                     this.#dispatchBubblesEvent('hide');
+
+                    const eaMessageList = document.querySelectorAll('ea-message');
+                    const height = this.getBoundingClientRect().height;
+
+                    for (let i = 1; i < eaMessageList.length - 1; i++) {
+                        const message = eaMessageList[i];
+                        const messagePosition = Number(message.style.getPropertyValue('--ea-message-top').replace('px', ''));
+
+                        console.log(messagePosition, height);
+
+
+                        message.style.setProperty('--ea-message-top', `${messagePosition - height}px`);
+                    }
 
                     this.#container.addEventListener('transitionend', () => {
                         this.#container.className = this.updateContainerClasslist();
@@ -122,6 +137,25 @@ export class EaMessage extends Base {
             bubbles: true,
             composed: true,
         }));
+    }
+
+    close = () => {
+        this.visible = false;
+    }
+
+    #initPosition = () => {
+        /** @type {HTMLElement[]} */
+        const eaMessageList = document.querySelectorAll('ea-message');
+        if (eaMessageList.length === 1) return;
+
+        const lastEl = eaMessageList[eaMessageList.length - 2];
+        /** @type {string} */
+        const lastPosition = lastEl.style.getPropertyValue('--ea-message-top');
+
+        const lastEaMessage = lastEl.shadowRoot.querySelector('.ea-message');
+        const lastEaMessageRect = lastEaMessage.getBoundingClientRect();
+
+        this.style.setProperty("--ea-message-top", `${Number(lastPosition.replace('px', '')) + lastEaMessageRect.height + 8}px`)
     }
 
     connectedCallback() {

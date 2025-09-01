@@ -48,18 +48,16 @@ const EaMessageInstance = (options) => {
     }, {});
     const el = renderer(messageOptions);
 
-    if (options.appendTo instanceof HTMLElement) {
-        options.appendTo.appendChild(el);
-    } else {
-        const appendTo = document.querySelector(options.appendTo);
-        appendTo ? appendTo.appendChild(el) : document.body.appendChild(el);
-    }
+    appendToHandler(el, options.appendTo);
 
     el.visible = true;
-    timeout(() => {
-        el.visible = false;
-    }, options.duration || 3000)
-    el.addEventListener('hidden', () => {
+    if (options.duration > 0) {
+        timeout(() => {
+            el.visible = false;
+        }, options.duration || 3000)
+    }
+    el.addEventListener('hidden', (e) => {
+        options?.onClose?.(e);
         el.remove();
     }, { once: true })
 }
