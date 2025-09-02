@@ -26,6 +26,7 @@ class EaMessageInstance {
 
             return acc;
         }, {});
+        this.options.placement = this.options.placement || 'top';
 
         const el = this.#renderer(this.options);
         this.#appendToHandler(el, options.appendTo);
