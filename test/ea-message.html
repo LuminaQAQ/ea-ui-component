@@ -63,6 +63,68 @@
         basicExample.init();
         // #endregion
         // ------- end -------
+
+        // ------- Placement -------
+        // #region
+        let topCount = 0
+        let bottomCount = 0
+        let topLeftCount = 0
+        let topRightCount = 0
+        let bottomLeftCount = 0
+        let bottomRightCount = 0
+        const openMsg = (placement = 'top') => {
+            let count = 0
+            let type = 'success'
+
+            switch (placement) {
+                case 'top':
+                    count = ++topCount
+                    type = 'success'
+                    break
+                case 'bottom':
+                    count = ++bottomCount
+                    type = 'warning'
+                    break
+                case 'top-left':
+                    count = ++topLeftCount
+                    type = 'info'
+                    break
+                case 'top-right':
+                    count = ++topRightCount
+                    type = 'primary'
+                    break
+                case 'bottom-left':
+                    count = ++bottomLeftCount
+                    type = 'warning'
+                    break
+                case 'bottom-right':
+                    count = ++bottomRightCount
+                    type = 'error'
+                    break
+            }
+
+            EaMessage({
+                message: `This is a message from the ${placement} ${count}`,
+                type,
+                placement,
+            })
+        }
+        const placementExample = {
+            els: document.querySelectorAll("#placementSection ea-button"),
+
+            init() {
+                this.els.forEach(el => {
+                    el.addEventListener("click", () => {
+                        const placement = el.textContent.trim().toLocaleLowerCase()?.replace(' ', '-');
+
+                        openMsg(placement)
+                    })
+                })
+            }
+        }
+        placementExample.init();
+        // #endregion
+        // ------- end -------
     </script>
 
     <!-- #region 基础用法 -->
@@ -119,23 +181,48 @@
             onclick="window.$message({ type: 'warning', message: 'Warning, this is a warning message.', showClose: true })">Warning</ea-button>
         <ea-button type="danger" plain
             onclick="window.$message({ type: 'error', message: 'Oops, this is a error message.', showClose: true })">Error</ea-button>
+        <ea-button plain
+            onclick="window.$message({ message: 'This is a info message.', showClose: true , duration: 0})">Won't close
+            automatically</ea-button>
     </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 文字居中 --------  -->
+    <!-- -------- 使用 HTML 片段作为正文内容 --------  -->
     <!-- #region  -->
-    <h2>文字居中</h2><ea-button
-        onclick='$message.open({ text: "对象类消息提示(info)", center: true, duration: 0})'>文字居中</ea-button>
+    <h2>使用 HTML 片段作为正文内容</h2>
+    <div class="demo">
+        <ea-button plain
+            onclick="window.$message({ dangerouslyUseHTMLString: true, message: '<strong>This is <i>HTML</i> string</strong>',})">
+            Use HTML string
+        </ea-button>
+    </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- close 事件 --------  -->
+    <!-- -------- Placement --------  -->
     <!-- #region  -->
-    <h2>close 事件</h2>
-    <ea-button id="closeEventBtn">close 事件</ea-button>
+    <h2>Placement</h2>
+    <div id="placementSection" class="demo">
+        <ea-button plain> Top </ea-button>
+        <ea-button plain>
+            Top Left
+        </ea-button>
+        <ea-button plain>
+            Top Right
+        </ea-button>
+        <ea-button plain>
+            Bottom
+        </ea-button>
+        <ea-button plain>
+            Bottom Left
+        </ea-button>
+        <ea-button plain>
+            Bottom Right
+        </ea-button>
+    </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->

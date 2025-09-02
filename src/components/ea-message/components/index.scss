@@ -2,7 +2,8 @@ $types: (success, info, warning, error, primary);
 
 :host {
   --ea-message-z-index: 2000;
-  --ea-message-top: 0;
+  --ea-message-y: 0;
+  --ea-message-fade-out-y: -100%;
 
   --ea-message-spacing: var(--spacing-md);
   --ea-message-border-color: var(--grey-200);
@@ -48,10 +49,10 @@ $types: (success, info, warning, error, primary);
   border-radius: var(--ea-message-border-radius);
   font-size: var(--ea-message-font-size);
 
-  top: var(--ea-message-top);
-  left: 50%;
+  // top: var(--ea-message-y);
+  // left: 50%;
   transform-origin: center;
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, var(--ea-message-fade-out-y));
   filter: opacity(0);
 
   width: fit-content;
@@ -59,7 +60,8 @@ $types: (success, info, warning, error, primary);
   overflow: hidden;
 
   transition: filter var(--ea-message-transition),
-    transform var(--ea-message-transition), top var(--ea-message-transition);
+    transform var(--ea-message-transition), top var(--ea-message-transition),
+    bottom var(--ea-message-transition);
 
   @include element(icon) {
     font-size: var(--ea-message-font-size);
@@ -106,6 +108,47 @@ $types: (success, info, warning, error, primary);
 
   @include modifier(before-hide) {
     filter: opacity(0);
-    transform: translate(-50%, -100%);
+    transform: translate(-50%, var(--ea-message-fade-out-y));
+  }
+
+  @include modifier(top) {
+    &,
+    &-left,
+    &-right {
+      top: var(--ea-message-y);
+    }
+
+    &-left {
+      left: 25%;
+    }
+
+    & {
+      left: 50%;
+    }
+
+    &-right {
+      left: 75%;
+    }
+  }
+
+  @include modifier(bottom) {
+    &,
+    &-left,
+    &-right {
+      --ea-message-fade-out-y: 100%;
+      bottom: var(--ea-message-y);
+    }
+
+    &-left {
+      left: 25%;
+    }
+
+    & {
+      left: 50%;
+    }
+
+    &-right {
+      left: 75%;
+    }
   }
 }

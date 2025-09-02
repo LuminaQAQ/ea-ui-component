@@ -14,8 +14,7 @@
 import { timeout } from "@/utils/timeout";
 
 class EaMessageInstance {
-    #isClose = false;
-    #includeTypes = ['message', 'placement', 'type', 'showClose', 'duration', 'offset'];
+    #includeTypes = ['dangerouslyUseHTMLString', 'message', 'placement', 'type', 'showClose', 'duration', 'offset'];
 
     /**
      * @param {EaMessageOptions} options
@@ -27,6 +26,7 @@ class EaMessageInstance {
 
             return acc;
         }, {});
+        this.options.placement = this.options.placement || 'top';
 
         const el = this.#renderer(this.options);
         this.#appendToHandler(el, options.appendTo);

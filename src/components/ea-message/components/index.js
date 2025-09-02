@@ -16,7 +16,7 @@ export class EaMessageElement extends Base {
     #visibleAbortController;
 
     static get observedAttributes() {
-        return ['type', 'visible', 'message', 'showClose'];
+        return ['type', 'visible', 'message', 'showClose', 'dangerouslyUseHTMLString', 'placement'];
     }
 
     state = this.properties({
@@ -68,11 +68,20 @@ export class EaMessageElement extends Base {
                 }
             }
         },
+        dangerouslyUseHTMLString: {
+            type: Boolean,
+            default: false,
+            observer: (newVal) => { }
+        },
         message: {
             type: String,
             default: '',
             observer: (newVal) => {
-                this.#messageContent.innerText = newVal;
+                if (this.dangerouslyUseHTMLString) {
+                    this.#messageContent.innerHTML = newVal;
+                } else {
+                    this.#messageContent.innerText = newVal;
+                }
             }
         },
         showClose: {
@@ -82,6 +91,13 @@ export class EaMessageElement extends Base {
                 this.#container.className = this.updateContainerClasslist();
             }
         },
+        placement: {
+            type: ['top', 'top-left', 'top-right', 'bottom', 'bottom-left', 'bottom-right', 'middle'],
+            default: 'top',
+            observer: (newVal) => {
+                this.className = this.updateContainerClasslist();
+            }
+        }
     })
 
     /**
@@ -93,6 +109,7 @@ export class EaMessageElement extends Base {
             ['--visible']: this.visible,
             ['--' + this.type]: this.type,
             ['--show-close']: this.showClose,
+            ['--' + this.placement]: this.placement
         });
     }
 
@@ -134,28 +151,28 @@ export class EaMessageElement extends Base {
 
     #initPosition = () => {
         /** @type {HTMLElement[]} */
-        const eaMessageList = document.querySelectorAll('ea-message');
-        if (eaMessageList.length === 1) return;
+        const eaMessageList = document.querySelectorAll(`ea-message[placement="${this.placement}"]`);
+        if (eaMessageList.length <= 1) return;
 
         const lastEl = eaMessageList[eaMessageList.length - 2];
         /** @type {string} */
-        const lastPosition = lastEl.style.getPropertyValue('--ea-message-top');
+        const lastPosition = lastEl.style.getPropertyValue('--ea-message-y');
 
         const lastEaMessage = lastEl.shadowRoot.querySelector('.ea-message');
         const lastEaMessageRect = lastEaMessage.getBoundingClientRect();
 
-        this.style.setProperty("--ea-message-top", `${Number(lastPosition.replace('px', '')) + lastEaMessageRect.height + 8}px`)
+        this.style.setProperty("--ea-message-y", `${Number(lastPosition.replace('px', '')) + lastEaMessageRect.height + 8}px`)
     }
 
     #handleHide = () => {
-        const eaMessageList = [...document.querySelectorAll('ea-message')];
+        const eaMessageList = [...document.querySelectorAll(`ea-message[placement="${this.placement}"]`)];
         const thisIndex = eaMessageList.findIndex(el => el === this);
         const els = eaMessageList.slice(thisIndex + 1);
         const height = this.#container.getBoundingClientRect().height;
 
         els.forEach((message, i) => {
-            const posi = Number(message.style.getPropertyValue('--ea-message-top').replace('px', ''));
-            message.style.setProperty('--ea-message-top', `${(posi - height - 8)}px`);
+            const posi = Number(message.style.getPropertyValue('--ea-message-y').replace('px', ''));
+            message.style.setProperty('--ea-message-y', `${(posi - height - 8)}px`);
         });
     }
 
