@@ -149,9 +149,11 @@ export class EaMessageElement extends Base {
 
     #handleHide = () => {
         const eaMessageList = [...document.querySelectorAll('ea-message')];
+        const thisIndex = eaMessageList.findIndex(el => el === this);
+        const els = eaMessageList.slice(thisIndex + 1);
         const height = this.#container.getBoundingClientRect().height;
 
-        eaMessageList.forEach((message, i) => {
+        els.forEach((message, i) => {
             const posi = Number(message.style.getPropertyValue('--ea-message-top').replace('px', ''));
             message.style.setProperty('--ea-message-top', `${(posi - height - 8)}px`);
         });
