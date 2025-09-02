@@ -15,10 +15,10 @@
 </head>
 
 <body>
-    <script type="module" src="../src/components/ea-message/index.js"></script>
+    <!-- <script type="module" src="../src/components/ea-message/index.js"></script> -->
     <script type="module" src="../src/components/ea-button/index.js"></script>
 
-    <script type='module'>
+    <!-- <script type='module'>
         // ------- close 事件 -------
         // #region
         document.getElementById("closeEventBtn").addEventListener("click", () => {
@@ -34,35 +34,73 @@
         });
         // #endregion
         // ------- end -------
+    </script> -->
+
+    <script type="module">
+        import { EaMessage } from "../src/components/ea-message/index.js";
+
+        // ------- 基础用法 -------
+        // #region
+        const basicExample = {
+            moduleInstanceBtn: document.getElementById("moduleInstanceBtn"),
+            chainInstanceBtn: document.getElementById("chainInstanceBtn"),
+
+            init() {
+                this.moduleInstanceBtn.addEventListener("click", () => {
+                    EaMessage({
+                        message: "This is a message.",
+                        type: "info",
+                        showClose: false,
+                        duration: 3000,
+                    });
+                });
+
+                this.chainInstanceBtn.addEventListener("click", () => {
+                    EaMessage.info('This is a message.');
+                });
+            }
+        }
+        basicExample.init();
+        // #endregion
+        // ------- end -------
     </script>
 
-    <!-- -------- 基础用法 --------  -->
-    <!-- #region  -->
-    <h2>基础用法</h2>
-    <ea-button onclick='window.$message({
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+        <ea-button plain onclick='window.$message({
             message: "This is a message.",
             type: "info",
             showClose: false,
             duration: 3000,
-            onClose: (e) => {
-                // console.log("close")
-            },
-            appendTo: document.body
-        })'>Show message</ea-button>
+        })'>
+            Show message
+        </ea-button>
+        <ea-button id="moduleInstanceBtn" plain>
+            Module-Instance message
+        </ea-button>
+        <ea-button id="chainInstanceBtn" plain>
+            Chain-Instance message
+        </ea-button>
+    </div>
+
     <hr>
     <!-- #endregion  -->
-    <!-- -------------------  -->
 
     <!-- -------- 不同状态 --------  -->
     <!-- #region  -->
     <h2>不同状态</h2>
-    <ea-button onclick='$message.open({ text: "对象类消息提示(info)", type: "info"})'>对象类消息提示(info)</ea-button>
-    <ea-button type="success"
-        onclick='$message.open({ text: "对象类消息提示(success)", type: "success"})'>对象类消息提示(success)</ea-button>
-    <ea-button type="danger"
-        onclick='$message.open({ text: "对象类消息提示(error)", type: "error"})'>对象类消息提示(error)</ea-button>
-    <ea-button type="warning"
-        onclick='$message.open({ text: "对象类消息提示(warning)", type: "warning"})'>对象类消息提示(warning)</ea-button>
+    <div class="demo">
+        <ea-button plain onclick="window.$message.info('This is a info message.')">info</ea-button>
+        <ea-button type="primary" plain onclick="window.$message.primary('This is a info message.')">Primary</ea-button>
+        <ea-button type="success" plain
+            onclick="window.$message.success('Congrats, this is a success message.')">Success</ea-button>
+        <ea-button type="warning" plain
+            onclick="window.$message.warning('Warning, this is a warning message.')">Warning</ea-button>
+        <ea-button type="danger" plain
+            onclick="window.$message.error('Oops, this is a error message.')">Error</ea-button>
+    </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -70,16 +108,18 @@
     <!-- -------- 可关闭 --------  -->
     <!-- #region  -->
     <h2>可关闭</h2>
-    <ea-button
-        onclick='$message.open({ text: "对象类消息提示(info)", type: "info", showClose: true})'>对象类消息提示(info)</ea-button>
-    <ea-button
-        onclick='$message.open({ text: "对象类消息提示(info)", type: "info", duration: 0, showClose: true})'>对象类消息提示(不会自动消失)</ea-button>
-    <ea-button type="success"
-        onclick='$message.open({ text: "对象类消息提示(success)", type: "success", showClose: true})'>对象类消息提示(success)</ea-button>
-    <ea-button type="danger"
-        onclick='$message.open({ text: "对象类消息提示(error)", type: "error", showClose: true})'>对象类消息提示(error)</ea-button>
-    <ea-button type="warning"
-        onclick='$message.open({ text: "对象类消息提示(warning)", type: "warning", showClose: true})'>对象类消息提示(warning)</ea-button>
+    <div class="demo">
+        <ea-button plain
+            onclick="window.$message({ message: 'This is a info message.', showClose: true })">info</ea-button>
+        <ea-button type="primary" plain
+            onclick="window.$message({ type: 'primary', message: 'This is a info message.', showClose: true })">Primary</ea-button>
+        <ea-button type="success" plain
+            onclick="window.$message({ type: 'success', message: 'Congrats, this is a success message.', showClose: true })">Success</ea-button>
+        <ea-button type="warning" plain
+            onclick="window.$message({ type: 'warning', message: 'Warning, this is a warning message.', showClose: true })">Warning</ea-button>
+        <ea-button type="danger" plain
+            onclick="window.$message({ type: 'danger', message: 'Oops, this is a error message.', showClose: true })">Error</ea-button>
+    </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->

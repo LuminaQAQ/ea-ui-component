@@ -13,53 +13,96 @@
 
 import { timeout } from "@/utils/timeout";
 
-const includeTypes = ['message', 'placement', 'type', 'showClose', 'duration', 'offset'];
+class EaMessageInstance {
+    #isClose = false;
+    #includeTypes = ['message', 'placement', 'type', 'showClose', 'duration', 'offset'];
 
-const appendToHandler = (el, appendTo) => {
-    if (appendTo instanceof HTMLElement) {
-        appendTo.appendChild(el);
-    } else {
-        const appendTo = document.querySelector(appendTo);
-        appendTo ? appendTo.appendChild(el) : document.body.appendChild(el);
+    /**
+     * @param {EaMessageOptions} options
+     */
+    constructor(options) {
+        /** @type {EaMessageOptions} */
+        this.options = this.#includeTypes.reduce((acc, cur) => {
+            if (options[cur]) acc[cur] = options[cur];
+
+            return acc;
+        }, {});
+
+        const el = this.#renderer(this.options);
+        this.#appendToHandler(el, options.appendTo);
+        this.#durationHandler(el, options.duration);
+        this.#hideHandler(el, options.onClose);
+        el.visible = true;
     }
-}
-const renderer = (options) => {
-    const el = document.createElement('ea-message');
 
-    if (options instanceof String) {
-        el.message = options;
-    } else if (options instanceof Object) {
-        for (const option in options) {
-            el[option] = options[option];
+    #renderer = (options) => {
+        const el = document.createElement('ea-message');
+
+        if (options instanceof String) {
+            el.message = options;
+        } else if (options instanceof Object) {
+            for (const option in options) {
+                el[option] = options[option];
+            }
+        } else {
+            console.warn('[EaMessage] TypeError: options must be a string or an object.');
+        }
+
+        return el;
+    }
+
+    #durationHandler = (el, duration = 3000) => {
+        if (duration <= 0) return;
+
+        timeout(() => { el.visible = false; }, duration)
+    }
+
+    #appendToHandler = (el, appendTo) => {
+        if (appendTo instanceof HTMLElement) {
+            appendTo.appendChild(el);
+        } else {
+            const parent = document.querySelector(appendTo);
+            parent ? parent.appendChild(el) : document.body.appendChild(el);
         }
     }
 
-    return el;
+    #hideHandler = (el, closeFn) => {
+        el.addEventListener('hidden', (e) => {
+            closeFn?.(e);
+            el.remove();
+        }, { once: true })
+    }
 }
 
 /**
+ * 创建消息实例
  * @param {EaMessageOptions} options
  */
-const EaMessageInstance = (options) => {
-    const messageOptions = includeTypes.reduce((acc, cur) => {
-        if (options[cur]) acc[cur] = options[cur];
-
-        return acc;
-    }, {});
-    const el = renderer(messageOptions);
-
-    appendToHandler(el, options.appendTo);
-
-    el.visible = true;
-    if (options.duration > 0) {
-        timeout(() => {
-            el.visible = false;
-        }, options.duration || 3000)
-    }
-    el.addEventListener('hidden', (e) => {
-        options?.onClose?.(e);
-        el.remove();
-    }, { once: true })
+export const EaMessage = (options) => {
+    new EaMessageInstance(options);
 }
 
-export default EaMessageInstance;
+EaMessage.primary = (message) => new EaMessageInstance({
+    message,
+    type: 'primary'
+});
+
+EaMessage.success = (message) => new EaMessageInstance({
+    message,
+    type: 'success'
+});
+
+EaMessage.warning = (message) => new EaMessageInstance({
+    message,
+    type: 'warning'
+});
+
+EaMessage.info = (message) => new EaMessageInstance({
+    message,
+    type: 'info'
+});
+
+EaMessage.error = (message) => new EaMessageInstance({
+    message,
+    type: 'error'
+});

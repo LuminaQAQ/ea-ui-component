@@ -1,67 +1,95 @@
-// @ts-nocheck
-export class EaMessage {
+/**
+ * @typedef {Object} EaMessageOptions
+ * @property {string} message - 消息文字
+ * @property {'top' | 'top-left' | 'top-right' | 'bottom' | 'bottom-left' | 'bottom-right'} placement - 消息出现的位置，可选值为 'top' | 'top-left' | 'top-right' | 'bottom' | 'bottom-left' | 'bottom-right'
+ * @property {'primary' | 'success' | 'warning' | 'info' | 'error'} type - 主题类型，可选值为 'primary' | 'success' | 'warning' | 'info' | 'error'
+ * @property {Boolean} dangerouslyUseHTMLString - 是否将 message 属性作为 HTML 片段处理
+ * @property {Boolean} show-close - 是否显示关闭按钮
+ * @property {Number} duration - 显示时间，毫秒。设为 0 则不会自动关闭
+ * @property {Function} onClose - 	关闭时的回调函数, 参数为被关闭的 message 实例
+ * @property {Boolean} offset - 设置到视口边缘的距离（当位置为'top'时为顶部，当位置为'bottom'时为底部）
+ * @property {Boolean} appendTo - 设置 message 的根元素，默认为 `document.body`
+ */
+
+import { timeout } from "@/utils/timeout";
+
+export default class EaMessageInstance {
+    #includeTypes = ['message', 'placement', 'type', 'showClose', 'duration', 'offset'];
+
+    static primary = (message) => new EaMessageInstance({
+        message,
+        type: 'primary'
+    })
+    static success = (message) => EaMessageInstance({
+        message,
+        type: 'success'
+    })
+    static warning = (message) => EaMessageInstance({
+        message,
+        type: 'warning'
+    })
+    static info = (message) => EaMessageInstance({
+        message,
+        type: 'info'
+    })
+    static error = (message) => EaMessageInstance({
+        message,
+        type: 'error'
+    })
 
     /**
-     * 处理字符串型消息
-     * @param {Element} el EaMessage元素
-     * @param {String} tip 文本
+     * @param {EaMessageOptions} options
      */
-    handleStringMsg(el, tip) {
-        el.text = tip;
-        el.type = "info";
-        el.hasClose = false;
+    constructor(options) {
+        /** @type {EaMessageOptions} */
+        this.options = this.#includeTypes.reduce((acc, cur) => {
+            if (options[cur]) acc[cur] = options[cur];
+
+            return acc;
+        }, {});
+
+        const el = this.#renderer(messageOptions);
+        this.#appendToHandler(el, options.appendTo);
+        this.#durationHandler(el, options.duration);
+        this.#hideHandler(el, options.onClose);
+        el.visible = true;
     }
 
-    /**
-     * 处理对象型消息
-     * @param {Element} el EaMessage元素
-     * @param {String} tips 文本
-     * @param {*} attrs 属性列表
-     */
-    handleObjectMsg(el, tips, attrs) {
-        for (const k in tips) {
-            if (attrs.includes(k)) el[k] = tips[k];
-        }
+    #renderer = (options) => {
+        const el = document.createElement('ea-message');
 
-        if (!Object.keys(tips).includes("type")) el.type = "info";
-    }
-
-    /**
-     * 处理消失的时长
-     * @param {*} el EaMessage元素
-     * @param {*} duration 时间间隔
-     */
-    handleDuration(el, duration = 3) {
-        if (duration === 0) return;
-
-        let timer = setTimeout(() => {
-            el.show = false;
-
-            clearTimeout(timer);
-            timer = null;
-        }, duration * 1000 + 40);
-    }
-
-    open(tip) {
-        const eaMessage = document.createElement('ea-message');
-        document.body.appendChild(eaMessage);
-
-        if (typeof tip === 'string') {
-            this.handleStringMsg(eaMessage, tip);
-            this.handleDuration(eaMessage);
-        } else if (typeof tip === 'object') {
-            this.handleObjectMsg(eaMessage, tip, eaMessage.attrs);
-            this.handleDuration(eaMessage, tip.duration);
-        } else throw new Error("[EaMessage] TypeError");
-
-        eaMessage.show = true;
-
-        return {
-            onClose(fn) {
-                if (typeof fn === 'function') eaMessage.addEventListener('click', function () {
-                    fn();
-                })
+        if (options instanceof String) {
+            el.message = options;
+        } else if (options instanceof Object) {
+            for (const option in options) {
+                el[option] = options[option];
             }
+        } else {
+            console.warn('[EaMessage] TypeError: options must be a string or an object.');
         }
+
+        return el;
+    }
+
+    #durationHandler = (el, duration = 3000) => {
+        if (duration <= 0) return;
+
+        timeout(() => { el.visible = false; }, duration)
+    }
+
+    #appendToHandler = (el, appendTo) => {
+        if (appendTo instanceof HTMLElement) {
+            appendTo.appendChild(el);
+        } else {
+            const appendTo = document.querySelector(appendTo);
+            appendTo ? appendTo.appendChild(el) : document.body.appendChild(el);
+        }
+    }
+
+    #hideHandler = (el, closeFn) => {
+        el.addEventListener('hidden', (e) => {
+            closeFn?.(e);
+            el.remove();
+        }, { once: true })
     }
 }

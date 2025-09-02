@@ -34,7 +34,7 @@ import './ea-loading/index.js';
 import './ea-menu/index.js';
 import './ea-menu-item/index.js';
 import './ea-menu-item-group/index.js';
-import './ea-message/index.js';
+import './ea-message/components/index.js';
 import './ea-message-box/index.js';
 import './ea-option/index.js';
 import './ea-option-gropu/index.js';
