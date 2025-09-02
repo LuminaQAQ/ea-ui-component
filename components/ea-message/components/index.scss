@@ -1,4 +1,4 @@
-$types: (success, info, warning, error);
+$types: (success, info, warning, error, primary);
 
 :host {
   --ea-message-z-index: 2000;
@@ -54,24 +54,20 @@ $types: (success, info, warning, error);
   transform: translate(-50%, -100%);
   filter: opacity(0);
 
-  // min-width: var(--ea-message-min-width);
   width: fit-content;
   max-width: calc(100% - 32px);
   overflow: hidden;
-  // background-color: black;
 
   transition: filter var(--ea-message-transition),
-    transform var(--ea-message-transition);
+    transform var(--ea-message-transition), top var(--ea-message-transition);
 
   @include element(icon) {
     font-size: var(--ea-message-font-size);
     line-height: var(--ea-message-font-size);
-    // margin-right: var(--ea-message-icon-gap);
   }
 
   @include element(content) {
     line-height: var(--ea-message-font-size);
-    // margin-right: auto;
     vertical-align: middle;
   }
 
