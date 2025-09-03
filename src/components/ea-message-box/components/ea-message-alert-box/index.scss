@@ -1,0 +1,10 @@
+@include block(ea-message-alert-box) {
+  @include element(header) {
+  }
+
+  @include element(content) {
+  }
+
+  @include element(footer) {
+  }
+}

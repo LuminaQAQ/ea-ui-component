@@ -5,7 +5,7 @@
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
 
     <style>
         hr {
@@ -15,25 +15,30 @@
 </head>
 
 <body>
-
+    <script type="module" src="../src/components/ea-button/index.js"></script>
     <script type='module'>
-        import '../components/ea-message/index.js'
-        import '../components/ea-message-box/index.js'
+        import '../src/components/ea-message/index.js'
+        import '../src/components/ea-message-box/index.js'
 
         // ------- 消息提示 -------
         // #region
-        const alertBtn = document.querySelector("#openAlertMessageBox");
-        alertBtn.addEventListener("click", () => {
-            $alert
-                .open("同意该须知则意味着您同意该须知", "是否同意该须知", {
-                    confirmButtonText: "同意",
-                })
-                .then(() => {
-                    $message.open("用户同意了同意");
-                }).catch(() => {
-                    $message.open("用户不同意了同意");
+        const alertExample = {
+            btn: document.querySelector("#openAlertMessageBox"),
+
+            init() {
+                this.btn.addEventListener("click", () => {
+                    $alert("同意该须知则意味着您同意该须知", "是否同意该须知", {
+                        confirmButtonText: "同意",
+                    })
+                        .then(() => {
+                            $message.info("用户同意了同意");
+                        }).catch(() => {
+                            $message.info("用户不同意了同意");
+                        });
                 });
-        });
+            }
+        };
+        alertExample.init();
         // #endregion
         // ------- end -------
 
@@ -83,7 +88,9 @@
     <!-- -------- 消息提示 --------  -->
     <!-- #region  -->
     <h2>消息提示</h2>
-    <ea-button type="primary" id="openAlertMessageBox">是否同意</ea-button>
+    <div class="demo">
+        <ea-button type="primary" id="openAlertMessageBox">是否同意</ea-button>
+    </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
