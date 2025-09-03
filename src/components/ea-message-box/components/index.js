@@ -10,7 +10,7 @@ export class EaMessageBoxElement extends EaOverlay {
     #visibleAbortController;
 
     static get observedAttributes() {
-        return [...super.observedAttributes, 'visible', 'boxtype'];
+        return [...super.observedAttributes, 'visible', 'boxtype', 'title', 'message'];
     }
 
     state = this.properties({
@@ -27,9 +27,12 @@ export class EaMessageBoxElement extends EaOverlay {
             observer: async (newVal) => {
                 const attrs = EaMessageBoxElement.observedAttributes;
                 const el = document.createElement(`ea-message-${newVal}-box`);
-                this.appendChild(el);
 
-                attrs.forEach(k => el[k] = this[k]);
+                attrs.forEach(k => {
+                    el[k] = this[k];
+                });
+
+                this.appendChild(el);
             }
         }
     })
@@ -44,18 +47,13 @@ export class EaMessageBoxElement extends EaOverlay {
         })}`;
     }
 
-    #dispatchBubblesEvent = (customEventName, detail) => {
-        this.dispatchEvent(new CustomEvent(customEventName, {
-            detail,
-            bubbles: true,
-            composed: true,
-        }));
-    }
-
     connectedCallback() {
         super.connectedCallback();
         this.assignedStyle(stylesheet);
         this.setAttribute('role', 'dialog');
+        this["content-width"] = "100%";
+        this["content-max-width"] = "420px";
+        this["content-height"] = "auto";
     }
 }
 

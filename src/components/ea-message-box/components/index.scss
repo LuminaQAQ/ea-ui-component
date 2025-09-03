@@ -1,0 +1,25 @@
+:host {
+  --ea-message-padding: 14px;
+  --ea-message-border-radius: var(--border-radius-sm);
+
+  --ea-message-title-font-size: var(--font-size-lg);
+  --ea-message-close-icon-size: var(--font-size-lg);
+  --ea-message-content-font-size: var(--font-size-md);
+
+  --ea-message-title-color: var(--grey-900);
+  --ea-message-content-color: var(--grey-700);
+
+  --ea-message-padding-primary: 12px;
+}
+
+@include block(ea-message-box) {
+  box-sizing: border-box;
+  padding: var(--ea-message-padding);
+}
+
+@include block(ea-overlay) {
+  @include element(mask) {
+    box-sizing: border-box;
+    padding: var(--ea-message-padding);
+  }
+}

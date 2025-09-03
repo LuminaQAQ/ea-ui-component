@@ -17,7 +17,7 @@ export class EaOverlay extends Base {
             'status', 'modal', 'before-close', 'close-on-click-modal',
 
             'z-index', 'background-color',
-            'content-width', 'content-height',
+            'content-width', 'content-max-width', 'content-height',
             'content-left', 'content-top', 'content-translate-x', 'content-translate-y', 'content-transform',
         ];
     }
@@ -68,7 +68,7 @@ export class EaOverlay extends Base {
 
         ...[
             'z-index', 'background-color',
-            'content-width', 'content-height',
+            'content-width', 'content-max-width', 'content-height',
             'content-left', 'content-top', 'content-translate-x', 'content-translate-y', 'content-transform',
         ].reduce(
             (acc, name) => {

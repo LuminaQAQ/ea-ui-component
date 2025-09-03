@@ -27,8 +27,8 @@
 
             init() {
                 this.btn.addEventListener("click", () => {
-                    $alert("同意该须知则意味着您同意该须知", "是否同意该须知", {
-                        confirmButtonText: "同意",
+                    $alert("This is a message", "Title", {
+                        confirmButtonText: "OK",
                     })
                         .then(() => {
                             $message.info("用户同意了同意");
@@ -36,6 +36,7 @@
                             $message.info("用户不同意了同意");
                         });
                 });
+                this.btn.click();
             }
         };
         alertExample.init();

@@ -37,10 +37,13 @@
  */
 export const EaMessageBox = (options, boxtype) => {
     const messageBox = document.createElement('ea-message-box');
-    messageBox.visible = true;
+    for (const k in options) {
+        messageBox[k] = options[k];
+    }
     messageBox.boxtype = boxtype;
 
     document.body.appendChild(messageBox);
+    messageBox.visible = true;
 
     return new Promise((resolve, reject) => {
         resolve()
