@@ -17,7 +17,7 @@ export class EaOverlay extends Base {
             'status', 'modal', 'before-close', 'close-on-click-modal',
 
             'z-index', 'background-color',
-            'content-width', 'content-height',
+            'content-width', 'content-max-width', 'content-height',
             'content-left', 'content-top', 'content-translate-x', 'content-translate-y', 'content-transform',
         ];
     }
@@ -68,7 +68,7 @@ export class EaOverlay extends Base {
 
         ...[
             'z-index', 'background-color',
-            'content-width', 'content-height',
+            'content-width', 'content-max-width', 'content-height',
             'content-left', 'content-top', 'content-translate-x', 'content-translate-y', 'content-transform',
         ].reduce(
             (acc, name) => {
@@ -137,7 +137,9 @@ export class EaOverlay extends Base {
     #beforeCloseCallback = () => this.status = false;
 
     #maskCloseEvent = (e) => {
-        const isContent = [...this.children].find(child => child === e.target || child.contains(e.target));
+        const isContent =
+            [...this.children].find(child => child === e.target || child.contains(e.target))
+            || this.#overlayContent === e.target || this.#overlayContent.contains(e.target);
         if (isContent) return;
 
         if (this["before-close"]) {
@@ -146,6 +148,7 @@ export class EaOverlay extends Base {
             });
         } else {
             this.#beforeCloseCallback();
+            this.#dispatchBubblesEvent("close");
         }
     }
 
@@ -154,7 +157,7 @@ export class EaOverlay extends Base {
 
         this.#abortController = new AbortController();
 
-        if (this["close-on-click-modal"]) this.addEventListener('click', this.#maskCloseEvent, { signal: this.#abortController.signal });
+        if (this["close-on-click-modal"]) this.shadowRoot.addEventListener('click', this.#maskCloseEvent, { signal: this.#abortController.signal });
     }
 
     $beforeUnmounted() {

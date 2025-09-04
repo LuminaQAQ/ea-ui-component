@@ -94,20 +94,24 @@ export default class Base extends HTMLElement {
                 return type.includes(rawValue) ? rawValue : config.default;
             }
 
-            return rawValue || config.default;
+            return rawValue || config?.default;
         };
 
         for (const [key, config] of Object.entries(states)) {
-            this.#stateConfigs[key] = config;
+            const realKey = key
+                .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+                .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
+                .toLowerCase();
+            this.#stateConfigs[realKey] = config;
 
-            Object.defineProperty(this, key, {
+            Object.defineProperty(this, realKey, {
                 get: () => {
                     const type = parseType(config.type);
 
-                    return this[`getAttr${type}`](key, config.default);
+                    return this[`getAttr${type}`](realKey, config.default);
                 },
                 set: (value) => {
-                    this.setAttr(key, parseValue(key, value));
+                    this.setAttr(realKey, parseValue(realKey, value));
                 }
             });
         }

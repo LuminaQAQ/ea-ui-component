@@ -13,6 +13,7 @@
   );
 
   --ea-overlay-content-width: 50%;
+  --ea-overlay-content-max-width: none;
   --ea-overlay-content-height: 50%;
 
   --ea-overlay-transition: var(--transition-normal);
@@ -51,6 +52,7 @@
   @include element(content) {
     position: absolute;
 
+    max-width: var(--ea-overlay-content-max-width);
     width: var(--ea-overlay-content-width);
     height: var(--ea-overlay-content-height);
 
