@@ -1,8 +1,9 @@
 import Base from '@components/Base.js'
 
 import stylesheet from './index.scss?inline';
+import { EaMessageBase } from '../ea-message-base';
 
-export class EaMessageAlertBox extends Base {
+export class EaMessageAlertBox extends EaMessageBase {
     /** @type {HTMLElement} */
     #container;
     /** @type {HTMLElement} */
@@ -17,43 +18,15 @@ export class EaMessageAlertBox extends Base {
     #footer;
     /** @type {HTMLElement} */
     #confirmButton;
-    /** @type {AbortController} */
-    #abortController;
 
-    static get observedAttributes() {
-        return [
-            'title', 'dangerouslyUseHTMLString', 'message',
-            'confirmbuttontext'
-        ];
-    }
+    // static get observedAttributes() {
+    //     return [
+    //         'title', 'dangerouslyUseHTMLString', 'message',
+    //         'confirmbuttontext'
+    //     ];
+    // }
 
     state = this.properties({
-        title: {
-            type: String,
-            default: '',
-            observer: (newVal) => {
-                this.#title.textContent = newVal;
-            }
-        },
-        dangerouslyUseHTMLString: {
-            type: Boolean,
-            default: false,
-            observer: (newVal) => { }
-        },
-        message: {
-            type: String,
-            default: '',
-            observer: (newVal) => {
-                if (this.dangerouslyUseHTMLString) this.#content.textContent = newVal;
-            }
-        },
-        confirmbuttontext: {
-            type: String,
-            default: 'OK',
-            observer: (newVal) => {
-                this.#confirmButton.textContent = newVal;
-            }
-        },
     })
 
     /**
@@ -97,7 +70,7 @@ export class EaMessageAlertBox extends Base {
         this.#confirmButton = this.shadowRoot.querySelector('.ea-message-alert-box__button');
     }
 
-    #dispatchBubblesEvent = (customEventName, detail) => {
+    dispatchBubblesEvent = (customEventName, detail) => {
         this.dispatchEvent(new CustomEvent(customEventName, {
             detail,
             bubbles: true,
@@ -107,24 +80,6 @@ export class EaMessageAlertBox extends Base {
 
     connectedCallback() {
         super.connectedCallback();
-
-        this.#abortController = new AbortController();
-
-        this.#confirmButton.addEventListener('click', () => {
-            this.#dispatchBubblesEvent('confirm');
-        }, { once: true, signal: this.#abortController.signal });
-
-        this.#closeIcon.addEventListener('click', () => {
-            this.#dispatchBubblesEvent('cancel');
-        }, { once: true, signal: this.#abortController.signal });
-
-        this.addEventListener('close', () => {
-            this.#dispatchBubblesEvent('cancel');
-        }, { once: true, signal: this.#abortController.signal });
-    }
-
-    $beforeUnmounted() {
-        this.#abortController?.abort();
     }
 }
 

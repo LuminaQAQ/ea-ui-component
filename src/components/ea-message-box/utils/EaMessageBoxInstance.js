@@ -37,8 +37,9 @@ const defaultOptions = {
     message: '',
     type: "primary",
     icon: '',
-    closeIcon: '',
-    showClose: true,
+    closeIcon: 'icon-cancel',
+    // showClose: true,
+    showClose: false,
 
     lockScroll: true,
 
@@ -76,8 +77,11 @@ const appendToHandler = (el, appendTo) => {
 const renderer = (options) => {
     const messageBox = document.createElement('ea-message-box');
     for (const k in Object.assign({}, defaultOptions, options)) {
-        const key = k.toLocaleLowerCase();
-        messageBox[key] = options[key];
+        const key = k.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+            .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
+            .toLowerCase();
+
+        messageBox[key] = options[k];
     }
 
     appendToHandler(messageBox, options.appendTo);
@@ -87,12 +91,12 @@ const renderer = (options) => {
 
 /**
  * @param {MessageBoxOptions} options 
- * @param {'alert' | 'confirm' | 'prompt'} boxtype
+ * @param {'alert' | 'confirm' | 'prompt'} boxType
  * @returns 
  */
-export const EaMessageBox = (options, boxtype) => {
+export const EaMessageBox = (options) => {
     const controller = new AbortController();
-    const messageBox = renderer(Object.assign({}, defaultOptions, options, { boxtype }));
+    const messageBox = renderer(Object.assign({}, defaultOptions, options, { boxType: options.boxType }));
     messageBox.visible = true;
     messageBox.addEventListener("closed", () => {
         controller.abort();
@@ -115,20 +119,20 @@ export const EaMessageBox = (options, boxtype) => {
 EaMessageBox.alert = (message, title, options) => EaMessageBox({
     message,
     title,
-    boxtype: 'alert',
+    boxType: 'alert',
     ...options,
 });
 
 EaMessageBox.confirm = (message, title, options) => EaMessageBox({
     message,
     title,
-    boxtype: 'confirm',
+    boxType: 'confirm',
     ...options,
 });
 
 EaMessageBox.prompt = (message, title, options) => EaMessageBox({
     message,
     title,
-    boxtype: 'confirm',
+    boxType: 'confirm',
     ...options,
 });
