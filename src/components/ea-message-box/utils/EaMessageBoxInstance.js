@@ -32,108 +32,132 @@
 
 /** @type {MessageBoxOptions} */
 const defaultOptions = {
-    title: '',
-    dangerouslyUseHTMLString: false,
-    message: '',
-    type: "primary",
-    icon: '',
-    closeIcon: 'icon-cancel',
-    showClose: true,
+  title: "",
+  dangerouslyUseHTMLString: false,
+  message: "",
+  type: "primary",
+  icon: "",
+  closeIcon: "icon-cancel",
+  showClose: true,
 
-    lockScroll: true,
+  // lockScroll: true,
 
-    showCancelButton: true,
-    showConfirmButton: true,
-    cancelButtonText: 'Cancel',
-    confirmButtonText: 'OK',
-    closeOnClickModal: true,
-    closeOnPressEscape: true,
+  showCancelButton: false,
+  showConfirmButton: false,
+  cancelButtonText: "Cancel",
+  confirmButtonText: "OK",
+  closeOnClickModal: false,
+  //   closeOnPressEscape: true,
 
-    showInput: false,
-    inputPlaceholder: '',
-    inputType: 'text',
-    inputValue: '',
-    inputPattern: null,
-    inputValidator: null,
-    inputErrorMessage: '',
+  //   showInput: false,
+  //   inputPlaceholder: "",
+  //   inputType: "text",
+  //   inputValue: "",
+  //   inputPattern: null,
+  //   inputValidator: null,
+  //   inputErrorMessage: "",
 
-    center: false,
-    draggable: false,
-    roundButton: false,
-    buttonSize: 'default',
-    appendTo: document.body,
+  center: false,
+  draggable: false,
+  roundButton: false,
+  buttonSize: "default",
+  appendTo: document.body,
 };
 
 const appendToHandler = (el, appendTo) => {
-    if (appendTo instanceof HTMLElement) {
-        appendTo.appendChild(el);
-    } else {
-        const appendTo = document.querySelector(appendTo);
-        appendTo ? appendTo.appendChild(el) : document.body.appendChild(el);
-    }
-}
+  if (appendTo instanceof HTMLElement) {
+    appendTo.appendChild(el);
+  } else {
+    const appendTo = document.querySelector(appendTo);
+    appendTo ? appendTo.appendChild(el) : document.body.appendChild(el);
+  }
+};
 
 const renderer = (options) => {
-    const messageBox = document.createElement('ea-message-box');
-    for (const k in options) {
-        const key = k.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-            .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
-            .toLowerCase();
+  const messageBox = document.createElement("ea-message-box");
+  for (const k in options) {
+    const key = k
+      .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+      .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
+      .toLowerCase();
 
-        messageBox.setAttribute(key, options[k])
-    }
+    messageBox.setAttribute(key, options[k]);
+  }
 
-    appendToHandler(messageBox, options.appendTo);
+  appendToHandler(messageBox, options.appendTo);
 
-    return messageBox;
+  return messageBox;
 };
 
 /**
- * @param {MessageBoxOptions} options 
+ * @param {MessageBoxOptions} options
  * @param {'alert' | 'confirm' | 'prompt'} boxType
- * @returns 
+ * @returns
  */
 export const EaMessageBox = (options) => {
-    options = Object.assign({ boxType: options.boxType }, defaultOptions, options);
+  options = Object.assign(
+    { boxType: options.boxType },
+    defaultOptions,
+    options
+  );
 
-    const controller = new AbortController();
-    const messageBox = renderer(options);
-    messageBox.visible = true;
-    messageBox.addEventListener("closed", () => {
-        controller.abort();
-        messageBox.remove();
-    }, { signal: controller.signal });
+  const controller = new AbortController();
+  const messageBox = renderer(options);
+  messageBox.visible = true;
+  messageBox.addEventListener(
+    "closed",
+    () => {
+      controller.abort();
+      messageBox.remove();
+    },
+    { signal: controller.signal }
+  );
 
-    return new Promise((resolve, reject) => {
-        messageBox.addEventListener('confirm', (e) => {
-            resolve(e);
-            messageBox.hide();
-        }, { signal: controller.signal });
+  return new Promise((resolve, reject) => {
+    messageBox.addEventListener(
+      "confirm",
+      (e) => {
+        resolve(e);
+        messageBox.hide();
+      },
+      { signal: controller.signal }
+    );
 
-        messageBox.addEventListener('cancel', (e) => {
-            reject(e);
-            messageBox.hide();
-        }, { signal: controller.signal });
-    })
-}
+    messageBox.addEventListener(
+      "cancel",
+      (e) => {
+        reject(e);
+        messageBox.hide();
+      },
+      { signal: controller.signal }
+    );
+  });
+};
 
-EaMessageBox.alert = (message, title, options) => EaMessageBox({
+EaMessageBox.alert = (message, title, options) =>
+  EaMessageBox({
     message,
     title,
-    boxType: 'alert',
+    showConfirmButton: true,
+    boxType: "alert",
     ...options,
-});
+  });
 
-EaMessageBox.confirm = (message, title, options) => EaMessageBox({
+EaMessageBox.confirm = (message, title, options) =>
+  EaMessageBox({
     message,
     title,
-    boxType: 'confirm',
+    showConfirmButton: true,
+    showCancelButton: true,
+    closeOnClickModal: true,
+    boxType: "confirm",
     ...options,
-});
+  });
 
-EaMessageBox.prompt = (message, title, options) => EaMessageBox({
+EaMessageBox.prompt = (message, title, options) =>
+  EaMessageBox({
     message,
     title,
-    boxType: 'confirm',
+    boxType: "confirm",
     ...options,
-});
+  });

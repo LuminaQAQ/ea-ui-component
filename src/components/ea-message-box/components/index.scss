@@ -16,6 +16,51 @@
 @include block(ea-message-box) {
   box-sizing: border-box;
   padding: var(--ea-message-padding);
+
+  .ea-message-alert-box,
+  .ea-message-confirm-box {
+    background-color: white;
+    padding: var(--ea-message-padding);
+    border-radius: var(--ea-message-border-radius);
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding-bottom: var(--ea-message-padding-primary);
+    }
+
+    &__title {
+      font-size: var(--ea-message-title-font-size);
+      line-height: var(--ea-message-title-font-size);
+      color: var(--ea-message-title-color);
+    }
+
+    &__icon-close {
+      cursor: pointer;
+      color: var(--ea-message-close-icon-color);
+    }
+
+    &__content {
+      font-size: var(--ea-message-content-font-size);
+      line-height: var(--ea-message-content-font-size);
+      color: var(--ea-message-content-color);
+    }
+
+    &__footer {
+      padding-top: var(--ea-message-padding-primary);
+      text-align: right;
+
+      ea-button {
+        margin: 0 0.25rem;
+      }
+
+      ea-button:last-child {
+        margin: 0;
+      }
+    }
+  }
 }
 
 @include block(ea-overlay) {
@@ -26,37 +71,33 @@
 }
 
 @include block(ea-message-alert-box) {
-  background-color: white;
-  padding: var(--ea-message-padding);
-  border-radius: var(--ea-message-border-radius);
+  // @include element(header) {
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
 
-  @include element(header) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  //   padding-bottom: var(--ea-message-padding-primary);
+  // }
 
-    padding-bottom: var(--ea-message-padding-primary);
-  }
+  // @include element(title) {
+  //   font-size: var(--ea-message-title-font-size);
+  //   line-height: var(--ea-message-title-font-size);
+  //   color: var(--ea-message-title-color);
+  // }
 
-  @include element(title) {
-    font-size: var(--ea-message-title-font-size);
-    line-height: var(--ea-message-title-font-size);
-    color: var(--ea-message-title-color);
-  }
+  // @include element(icon-close) {
+  //   cursor: pointer;
+  //   color: var(--ea-message-close-icon-color);
+  // }
 
-  @include element(icon-close) {
-    cursor: pointer;
-    color: var(--ea-message-close-icon-color);
-  }
+  // @include element(content) {
+  //   font-size: var(--ea-message-content-font-size);
+  //   line-height: var(--ea-message-content-font-size);
+  //   color: var(--ea-message-content-color);
+  // }
 
-  @include element(content) {
-    font-size: var(--ea-message-content-font-size);
-    line-height: var(--ea-message-content-font-size);
-    color: var(--ea-message-content-color);
-  }
-
-  @include element(footer) {
-    padding-top: var(--ea-message-padding-primary);
-    text-align: right;
-  }
+  // @include element(footer) {
+  //   padding-top: var(--ea-message-padding-primary);
+  //   text-align: right;
+  // }
 }

@@ -1,106 +1,118 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../dist/assets/icon.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <script type="module" src="../src/components/ea-button/index.js"></script>
-    <script type='module'>
-        import '../src/components/ea-message/index.js'
-        import '../src/components/ea-message-box/index.js'
+    <script type="module">
+      import "../src/components/ea-message/index.js";
+      import "../src/components/ea-message-box/index.js";
 
-        // ------- 消息提示 -------
-        // #region
-        const alertExample = {
-            btn: document.querySelector("#openAlertMessageBox"),
+      // ------- 消息提示 -------
+      // #region
+      const alertExample = {
+        btn: document.querySelector("#openAlertMessageBox"),
 
-            init() {
-                this.btn.addEventListener("click", () => {
-                    $alert("This is a message", "Title", {
-                        confirmButtonText: "OK",
-                    })
-                        .then((e) => {
-                            $message.info(`action: ${e.type}`);
-                        }).catch((e) => {
-                            $message.info(`action: ${e.type}`);
-                        });
-                });
-                this.btn.click();
-            }
-        };
-        alertExample.init();
-        // #endregion
-        // ------- end -------
+        init() {
+          this.btn.addEventListener("click", () => {
+            $alert("This is a message", "Title", {
+              confirmButtonText: "OK",
+            })
+              .then((e) => {
+                $message.info(`action: ${e.type}`);
+              })
+              .catch((e) => {
+                $message.info(`action: ${e.type}`);
+              });
+          });
+        },
+      };
+      alertExample.init();
+      // #endregion
+      // ------- end -------
 
-        // ------- 确认消息 -------
-        // #region
-        const confirmBtn = document.querySelector("#openconfirmMessageBox");
-        confirmBtn.addEventListener("click", () => {
-            $confirm
-                .open("这是一段内容", "确认取消确认", {
-                    confirmButtonText: "确认取消",
-                    cancelButtonText: "取消确认",
-                })
-                .then(() => {
-                    $message.open("用户取消了确认");
-                })
-                .catch(() => {
-                    $message.open("用户取消了取消");
-                });
-        });
-        // #endregion
-        // ------- end -------
+      // ------- 确认消息 -------
+      // #region
+      const confirmExample = {
+        btn: document.querySelector("#openconfirmMessageBox"),
 
-        // ------- 提交内容 -------
-        // #region
-        const promptBtn = document.querySelector("#openPromptMessageBox");
-        promptBtn.addEventListener("click", () => {
-            $prompt
-                .open("请输入邮箱", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    inputPlaceholder: "请输入邮箱",
-                    reg: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/,
-                    invalidMessage: "请输入正确的邮箱",
-                })
-                .then((msg) => {
-                    console.log(msg);
-                    $message.open("用户取消了确认");
-                })
-                .catch(() => {
-                    $message.open("用户取消了取消");
-                });
-        });
-        // #endregion
-        // ------- end -------
+        init() {
+          this.btn.addEventListener("click", () => {
+            $confirm(
+              "proxy will permanently delete the file. Continue?",
+              "Warning",
+              {
+                confirmButtonText: "OK",
+                cancelButtonText: "Cancel",
+                type: "warning",
+              }
+            )
+              .then((e) => {
+                $message.info(`action: ${e.type}`);
+              })
+              .catch((e) => {
+                $message.info(`action: ${e.type}`);
+              });
+          });
+          this.btn.click();
+        },
+      };
+      confirmExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 提交内容 -------
+      // #region
+      const promptBtn = document.querySelector("#openPromptMessageBox");
+      promptBtn.addEventListener("click", () => {
+        $prompt
+          .open("请输入邮箱", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            inputPlaceholder: "请输入邮箱",
+            reg: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/,
+            invalidMessage: "请输入正确的邮箱",
+          })
+          .then((msg) => {
+            console.log(msg);
+            $message.open("用户取消了确认");
+          })
+          .catch(() => {
+            $message.open("用户取消了取消");
+          });
+      });
+      // #endregion
+      // ------- end -------
     </script>
 
     <!-- -------- 消息提示 --------  -->
     <!-- #region  -->
     <h2>消息提示</h2>
     <div class="demo">
-        <ea-button type="primary" id="openAlertMessageBox">是否同意</ea-button>
+      <ea-button type="primary" id="openAlertMessageBox">是否同意</ea-button>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
     <!-- -------- 确认消息 --------  -->
     <!-- #region  -->
     <h2>确认消息</h2>
-    <ea-button type="primary" id="openconfirmMessageBox">是否取消确认</ea-button>
-    <hr>
+    <ea-button type="primary" id="openconfirmMessageBox"
+      >是否取消确认</ea-button
+    >
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -108,12 +120,10 @@
     <!-- #region  -->
     <h2>提交内容</h2>
     <div class="demo">
-        <ea-button type="primary" id="openPromptMessageBox">提交内容</ea-button>
+      <ea-button type="primary" id="openPromptMessageBox">提交内容</ea-button>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
-
-</body>
-
+  </body>
 </html>
