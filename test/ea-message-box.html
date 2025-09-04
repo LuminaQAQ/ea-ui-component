@@ -30,10 +30,10 @@
                     $alert("This is a message", "Title", {
                         confirmButtonText: "OK",
                     })
-                        .then(() => {
-                            $message.info("用户同意了同意");
-                        }).catch(() => {
-                            $message.info("用户不同意了同意");
+                        .then((e) => {
+                            $message.info(`action: ${e.type}`);
+                        }).catch((e) => {
+                            $message.info(`action: ${e.type}`);
                         });
                 });
                 this.btn.click();

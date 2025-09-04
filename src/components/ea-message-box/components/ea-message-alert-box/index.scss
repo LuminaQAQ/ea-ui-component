@@ -17,6 +17,11 @@
     color: var(--ea-message-title-color);
   }
 
+  @include element(icon-close) {
+    cursor: pointer;
+    color: var(--ea-message-close-icon-color);
+  }
+
   @include element(content) {
     font-size: var(--ea-message-content-font-size);
     line-height: var(--ea-message-content-font-size);

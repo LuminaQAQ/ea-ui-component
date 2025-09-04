@@ -30,43 +30,105 @@
  * @property {HTMLElement | string} appendTo
  */
 
+/** @type {MessageBoxOptions} */
+const defaultOptions = {
+    title: '',
+    dangerouslyUseHTMLString: false,
+    message: '',
+    type: "primary",
+    icon: '',
+    closeIcon: '',
+    showClose: true,
+
+    lockScroll: true,
+
+    showCancelButton: true,
+    showConfirmButton: true,
+    cancelButtonText: 'Cancel',
+    confirmButtonText: 'OK',
+    closeOnClickModal: true,
+    closeOnPressEscape: true,
+
+    showInput: false,
+    inputPlaceholder: '',
+    inputType: 'text',
+    inputValue: '',
+    inputPattern: null,
+    inputValidator: null,
+    inputErrorMessage: '',
+
+    center: false,
+    draggable: false,
+    roundButton: false,
+    buttonSize: 'default',
+    appendTo: document.body,
+};
+
+const appendToHandler = (el, appendTo) => {
+    if (appendTo instanceof HTMLElement) {
+        appendTo.appendChild(el);
+    } else {
+        const appendTo = document.querySelector(appendTo);
+        appendTo ? appendTo.appendChild(el) : document.body.appendChild(el);
+    }
+}
+
+const renderer = (options) => {
+    const messageBox = document.createElement('ea-message-box');
+    for (const k in Object.assign({}, defaultOptions, options)) {
+        const key = k.toLocaleLowerCase();
+        messageBox[key] = options[key];
+    }
+
+    appendToHandler(messageBox, options.appendTo);
+
+    return messageBox;
+};
+
 /**
  * @param {MessageBoxOptions} options 
  * @param {'alert' | 'confirm' | 'prompt'} boxtype
  * @returns 
  */
 export const EaMessageBox = (options, boxtype) => {
-    const messageBox = document.createElement('ea-message-box');
-    for (const k in options) {
-        messageBox[k] = options[k];
-    }
-    messageBox.boxtype = boxtype;
-
-    document.body.appendChild(messageBox);
+    const controller = new AbortController();
+    const messageBox = renderer(Object.assign({}, defaultOptions, options, { boxtype }));
     messageBox.visible = true;
+    messageBox.addEventListener("closed", () => {
+        controller.abort();
+        messageBox.remove();
+    }, { signal: controller.signal });
 
     return new Promise((resolve, reject) => {
-        resolve()
+        messageBox.addEventListener('confirm', (e) => {
+            resolve(e);
+            messageBox.hide();
+        }, { signal: controller.signal });
+
+        messageBox.addEventListener('cancel', (e) => {
+            reject(e);
+            messageBox.hide();
+        }, { signal: controller.signal });
     })
 }
 
 EaMessageBox.alert = (message, title, options) => EaMessageBox({
     message,
     title,
-    type: 'alert',
+    boxtype: 'alert',
     ...options,
 });
 
 EaMessageBox.confirm = (message, title, options) => EaMessageBox({
     message,
     title,
-    type: 'alert',
+    boxtype: 'confirm',
     ...options,
 });
 
 EaMessageBox.prompt = (message, title, options) => EaMessageBox({
     message,
     title,
-    type: 'alert',
+    boxtype: 'confirm',
     ...options,
 });

@@ -10,7 +10,12 @@ export class EaMessageBoxElement extends EaOverlay {
     #visibleAbortController;
 
     static get observedAttributes() {
-        return [...super.observedAttributes, 'visible', 'boxtype', 'title', 'message'];
+        return [
+            ...super.observedAttributes,
+            'visible', 'boxtype',
+            '','title', 'message',
+            'cancelButtonText', 'confirmbuttontext',
+        ];
     }
 
     state = this.properties({
@@ -34,7 +39,7 @@ export class EaMessageBoxElement extends EaOverlay {
 
                 this.appendChild(el);
             }
-        }
+        },
     })
 
     /**
@@ -48,12 +53,14 @@ export class EaMessageBoxElement extends EaOverlay {
     }
 
     connectedCallback() {
-        super.connectedCallback();
-        this.assignedStyle(stylesheet);
         this.setAttribute('role', 'dialog');
         this["content-width"] = "100%";
         this["content-max-width"] = "420px";
         this["content-height"] = "auto";
+        this["close-on-click-modal"] = false;
+
+        super.connectedCallback();
+        this.assignedStyle(stylesheet);
     }
 }
 
