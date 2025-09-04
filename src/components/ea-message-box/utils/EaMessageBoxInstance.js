@@ -38,8 +38,7 @@ const defaultOptions = {
     type: "primary",
     icon: '',
     closeIcon: 'icon-cancel',
-    // showClose: true,
-    showClose: false,
+    showClose: true,
 
     lockScroll: true,
 
@@ -76,12 +75,12 @@ const appendToHandler = (el, appendTo) => {
 
 const renderer = (options) => {
     const messageBox = document.createElement('ea-message-box');
-    for (const k in Object.assign({}, defaultOptions, options)) {
+    for (const k in options) {
         const key = k.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
             .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
             .toLowerCase();
 
-        messageBox[key] = options[k];
+        messageBox.setAttribute(key, options[k])
     }
 
     appendToHandler(messageBox, options.appendTo);
@@ -95,8 +94,10 @@ const renderer = (options) => {
  * @returns 
  */
 export const EaMessageBox = (options) => {
+    options = Object.assign({}, defaultOptions, options, { boxType: options.boxType });
+
     const controller = new AbortController();
-    const messageBox = renderer(Object.assign({}, defaultOptions, options, { boxType: options.boxType }));
+    const messageBox = renderer(options);
     messageBox.visible = true;
     messageBox.addEventListener("closed", () => {
         controller.abort();

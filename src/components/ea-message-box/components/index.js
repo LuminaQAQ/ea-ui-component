@@ -28,9 +28,10 @@ export class EaMessageBoxElement extends EaOverlay {
             'dangerouslyUseHTMLString', 'title', 'message',
             'type', 'icon', 'showClose', 'closeIcon',
             'cancelButtonText', 'confirmButtonText',
-        ].map(s => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-            .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
-            .toLowerCase());
+        ]
+            .map(s => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+                .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
+                .toLowerCase());
     }
 
     state = this.properties({
@@ -92,6 +93,13 @@ export class EaMessageBoxElement extends EaOverlay {
             type: String,
             default: '',
             observer: (newVal) => {
+            }
+        },
+        closeIcon: {
+            type: String,
+            default: 'icon-cancel',
+            observer: (newVal) => {
+                this.#closeIcon.icon = newVal;
             }
         },
         showClose: {
@@ -156,13 +164,13 @@ export class EaMessageBoxElement extends EaOverlay {
     }
 
     connectedCallback() {
-        super.connectedCallback();
-
         this.setAttribute('role', 'dialog');
         this["content-width"] = "100%";
         this["content-max-width"] = "420px";
         this["content-height"] = "auto";
         this["close-on-click-modal"] = false;
+
+        super.connectedCallback();
 
         this.assignedStyle(stylesheet);
 
