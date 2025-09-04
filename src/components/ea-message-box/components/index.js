@@ -24,6 +24,7 @@ export class EaMessageBoxElement extends EaOverlay {
     static get observedAttributes() {
         return [
             ...super.observedAttributes,
+            'boxType',
             'visible',
             'dangerouslyUseHTMLString', 'title', 'message',
             'type', 'icon', 'showClose', 'closeIcon',
@@ -35,6 +36,14 @@ export class EaMessageBoxElement extends EaOverlay {
     }
 
     state = this.properties({
+        boxType: {
+            type: ['alert' | 'confirm' | 'prompt'],
+            default: 'alert',
+            observer: async (newVal) => {
+                const contentContainer = this.shadowRoot.querySelector('.ea-overlay__content');
+                this.#initVariant[this['box-type']](contentContainer);
+            }
+        },
         visible: {
             type: Boolean,
             default: false,
@@ -42,23 +51,6 @@ export class EaMessageBoxElement extends EaOverlay {
                 this.status = newVal;
             }
         },
-        boxType: {
-            type: ['alert' | 'confirm' | 'prompt'],
-            default: 'alert',
-            observer: async (newVal) => {
-                // await import(`./ea-message-${newVal}-box/index.js`)
-
-                // const attrs = EaMessageBoxElement.observedAttributes;
-                // const el = document.createElement(`ea-message-${newVal}-box`);
-
-                // attrs.forEach(k => {
-                //     el[k] = this[k];
-                // });
-
-                // this.appendChild(el);
-            }
-        },
-
         dangerouslyUseHTMLString: {
             type: Boolean,
             default: false,
@@ -130,37 +122,41 @@ export class EaMessageBoxElement extends EaOverlay {
 
     constructor() {
         super();
-
-        const contentContainer = this.shadowRoot.querySelector('.ea-overlay__content');
-
-        contentContainer.innerHTML = `
-            <div class='ea-message-alert-box' part='container'>
-                <header class="ea-message-alert-box__header" part="header">
-                    <span class="ea-message-alert-box__title" part="title"></span>
-                    <ea-icon class="ea-message-alert-box__icon-close" icon="icon-cancel" part='close-icon'></ea-icon>
-                </header>
-                <main class="ea-message-alert-box__content" part="content"></main>
-                <footer class="ea-message-alert-box__footer" part="footer">
-                    <ea-button class="ea-message-alert-box__button" type="primary">OK</ea-button>
-                </footer>
-            </div>
-        `;
-
-        this.#container = this.shadowRoot.querySelector('.ea-message-alert-box');
-        this.#header = this.shadowRoot.querySelector('.ea-message-alert-box__header');
-        this.#title = this.shadowRoot.querySelector('.ea-message-alert-box__title');
-        this.#closeIcon = this.shadowRoot.querySelector('.ea-message-alert-box__icon-close');
-        this.#content = this.shadowRoot.querySelector('.ea-message-alert-box__content');
-        this.#footer = this.shadowRoot.querySelector('.ea-message-alert-box__footer');
-        this.#confirmButton = this.shadowRoot.querySelector('.ea-message-alert-box__button');
     }
 
-    dispatchBubblesEvent = (customEventName, detail) => {
+    #dispatchBubblesEvent = (customEventName, detail) => {
         this.dispatchEvent(new CustomEvent(customEventName, {
             detail,
             bubbles: true,
             composed: true,
         }));
+    }
+
+    #initVariant = {
+        alert: (container) => {
+            container.innerHTML = `
+                <div class='ea-message-alert-box' part='container'>
+                    <header class="ea-message-alert-box__header" part="header">
+                        <span class="ea-message-alert-box__title" part="title"></span>
+                        <ea-icon class="ea-message-alert-box__icon-close" icon="icon-cancel" part='close-icon'></ea-icon>
+                    </header>
+                    <main class="ea-message-alert-box__content" part="content"></main>
+                    <footer class="ea-message-alert-box__footer" part="footer">
+                        <ea-button class="ea-message-alert-box__button" type="primary">OK</ea-button>
+                    </footer>
+                </div>
+            `;
+
+            this.#container = this.shadowRoot.querySelector('.ea-message-alert-box');
+            this.#header = this.shadowRoot.querySelector('.ea-message-alert-box__header');
+            this.#title = this.shadowRoot.querySelector('.ea-message-alert-box__title');
+            this.#closeIcon = this.shadowRoot.querySelector('.ea-message-alert-box__icon-close');
+            this.#content = this.shadowRoot.querySelector('.ea-message-alert-box__content');
+            this.#footer = this.shadowRoot.querySelector('.ea-message-alert-box__footer');
+            this.#confirmButton = this.shadowRoot.querySelector('.ea-message-alert-box__button');
+        },
+        confirm: () => {
+        },
     }
 
     connectedCallback() {
@@ -177,15 +173,15 @@ export class EaMessageBoxElement extends EaOverlay {
         this.#abortController = new AbortController();
 
         this.#confirmButton.addEventListener('click', () => {
-            this.dispatchBubblesEvent('confirm');
+            this.#dispatchBubblesEvent('confirm');
         }, { once: true, signal: this.#abortController.signal });
 
         this.#closeIcon.addEventListener('click', () => {
-            this.dispatchBubblesEvent('cancel');
+            this.#dispatchBubblesEvent('cancel');
         }, { once: true, signal: this.#abortController.signal });
 
         this.addEventListener('close', () => {
-            this.dispatchBubblesEvent('cancel');
+            this.#dispatchBubblesEvent('cancel');
         }, { once: true, signal: this.#abortController.signal });
     }
 

@@ -94,7 +94,7 @@ const renderer = (options) => {
  * @returns 
  */
 export const EaMessageBox = (options) => {
-    options = Object.assign({}, defaultOptions, options, { boxType: options.boxType });
+    options = Object.assign({ boxType: options.boxType }, defaultOptions, options);
 
     const controller = new AbortController();
     const messageBox = renderer(options);
