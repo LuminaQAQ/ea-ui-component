@@ -1,3 +1,13 @@
+$types: (
+  primary: blue,
+  success: green,
+  warning: yellow,
+  error: red,
+  info: grey,
+);
+
+// type: ["primary", "success", "info", "warning", "error"],
+
 :host {
   --ea-message-padding: 14px;
   --ea-message-border-radius: var(--border-radius-sm);
@@ -11,52 +21,94 @@
   --ea-message-content-color: var(--grey-700);
 
   --ea-message-padding-primary: 12px;
+
+  @each $type, $color in $types {
+    --ea-message-#{$type}-icon-color: var(--#{$color}-500);
+  }
 }
 
 @include block(ea-message-box) {
   box-sizing: border-box;
   padding: var(--ea-message-padding);
+
+  .ea-message-alert-box,
+  .ea-message-confirm-box {
+    background-color: white;
+    padding: var(--ea-message-padding);
+    border-radius: var(--ea-message-border-radius);
+
+    &__header {
+      position: relative;
+      padding-bottom: var(--ea-message-padding-primary);
+    }
+
+    &__title {
+      font-size: var(--ea-message-title-font-size);
+      line-height: var(--ea-message-title-font-size);
+      color: var(--ea-message-title-color);
+    }
+
+    &__icon-close {
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      cursor: pointer;
+      color: var(--ea-message-close-icon-color);
+    }
+
+    &__content {
+      font-size: var(--ea-message-content-font-size);
+      line-height: var(--ea-message-content-font-size);
+      color: var(--ea-message-content-color);
+    }
+
+    &__footer {
+      padding-top: var(--ea-message-padding-primary);
+      text-align: right;
+
+      ea-button {
+        margin: 0 0.25rem;
+      }
+
+      ea-button:last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  @include modifier(center) {
+    .ea-message-alert-box,
+    .ea-message-confirm-box__header {
+      text-align: center;
+    }
+
+    .ea-message-alert-box,
+    .ea-message-confirm-box {
+      text-align: center;
+    }
+
+    .ea-message-alert-box,
+    .ea-message-confirm-box__footer {
+      text-align: center;
+    }
+  }
+
+  @each $type, $color in $types {
+    @include modifier($type) {
+      .ea-message-alert-box,
+      .ea-message-confirm-box {
+        @include element(type-icon) {
+          color: var(--ea-message-#{$type}-icon-color);
+        }
+      }
+    }
+  }
 }
 
 @include block(ea-overlay) {
   @include element(mask) {
     box-sizing: border-box;
     padding: var(--ea-message-padding);
-  }
-}
-
-@include block(ea-message-alert-box) {
-  background-color: white;
-  padding: var(--ea-message-padding);
-  border-radius: var(--ea-message-border-radius);
-
-  @include element(header) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding-bottom: var(--ea-message-padding-primary);
-  }
-
-  @include element(title) {
-    font-size: var(--ea-message-title-font-size);
-    line-height: var(--ea-message-title-font-size);
-    color: var(--ea-message-title-color);
-  }
-
-  @include element(icon-close) {
-    cursor: pointer;
-    color: var(--ea-message-close-icon-color);
-  }
-
-  @include element(content) {
-    font-size: var(--ea-message-content-font-size);
-    line-height: var(--ea-message-content-font-size);
-    color: var(--ea-message-content-color);
-  }
-
-  @include element(footer) {
-    padding-top: var(--ea-message-padding-primary);
-    text-align: right;
   }
 }
