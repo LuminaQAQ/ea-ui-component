@@ -52,7 +52,7 @@ export class EaMessageBoxElement extends EaOverlay {
 
   state = this.properties({
     boxType: {
-      type: ["alert" | "confirm" | "prompt"],
+      type: ["alert", "confirm", "prompt"],
       default: "alert",
       observer: async (newVal) => {
         const contentContainer = this.shadowRoot.querySelector(
@@ -92,13 +92,6 @@ export class EaMessageBoxElement extends EaOverlay {
         }
       },
     },
-    icon: {
-      type: String,
-      default: "",
-      observer: (newVal) => {
-        this.#typeIcon.icon = newVal;
-      },
-    },
     type: {
       type: ["primary", "success", "info", "warning", "error"],
       default: "",
@@ -110,9 +103,16 @@ export class EaMessageBoxElement extends EaOverlay {
           warning: "attention-alt",
           error: "cancel-circled",
         };
+        this.icon = `icon-${iconType[newVal]}`;
 
-        if (!this.icon && newVal)
-          this.#typeIcon.icon = `icon-${iconType[newVal]}`;
+        this.className = this.updateContainerClasslist();
+      },
+    },
+    icon: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#typeIcon.icon = newVal;
       },
     },
     closeIcon: {
@@ -171,6 +171,7 @@ export class EaMessageBoxElement extends EaOverlay {
       {
         ["--visible"]: this.visible,
         ["--center"]: this.center,
+        [`--${this.type}`]: this.type,
       }
     )}`;
   }
@@ -188,27 +189,27 @@ export class EaMessageBoxElement extends EaOverlay {
   #initVariant = {
     alert: (container) => {
       container.innerHTML = `
-                <div class='ea-message-alert-box' part='container'>
-                    <header class="ea-message-alert-box__header" part="header">
-                        <div class="ea-message-confirm-box__title-container">
-                            <ea-icon class="ea-message-confirm-box__type-icon" part="type-icon"></ea-icon>
-                            <span class="ea-message-confirm-box__title" part="title"></span>
-                        </div>
-                        <ea-icon class="ea-message-alert-box__icon-close" icon="icon-cancel" part='close-icon'></ea-icon>
-                    </header>
-                    <main class="ea-message-alert-box__content" part="content"></main>
-                    <footer class="ea-message-alert-box__footer" part="footer">
-                        <ea-button class="ea-message-alert-box__button" type="primary">OK</ea-button>
-                    </footer>
-                </div>
-            `;
+            <div class='ea-message-alert-box' part='container'>
+                <header class="ea-message-alert-box__header" part="header">
+                    <div class="ea-message-alert-box__title-container">
+                        <ea-icon class="ea-message-confirm-box__type-icon" part="type-icon"></ea-icon>
+                        <span class="ea-message-alert-box__title" part="title"></span>
+                    </div>
+                    <ea-icon class="ea-message-alert-box__icon-close" icon="icon-cancel" part='close-icon'></ea-icon>
+                </header>
+                <main class="ea-message-alert-box__content" part="content"></main>
+                <footer class="ea-message-alert-box__footer" part="footer">
+                    <ea-button class="ea-message-alert-box__button" type="primary">OK</ea-button>
+                </footer>
+            </div>
+    `;
 
       this.#container = this.shadowRoot.querySelector(".ea-overlay");
       this.#header = this.shadowRoot.querySelector(
         ".ea-message-alert-box__header"
       );
       this.#typeIcon = this.shadowRoot.querySelector(
-        ".ea-message-confirm-box__type-icon"
+        ".ea-message-alert-box__type-icon"
       );
       this.#title = this.shadowRoot.querySelector(
         ".ea-message-alert-box__title"

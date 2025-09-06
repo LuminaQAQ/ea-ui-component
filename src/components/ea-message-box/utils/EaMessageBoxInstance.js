@@ -35,8 +35,8 @@ const defaultOptions = {
   title: "",
   dangerouslyUseHTMLString: false,
   message: "",
-  type: "primary",
   icon: "",
+  type: "primary",
   closeIcon: "icon-cancel",
   showClose: true,
 
@@ -57,7 +57,7 @@ const defaultOptions = {
   //   inputValidator: null,
   //   inputErrorMessage: "",
 
-  center: false,
+  center: true,
   draggable: false,
   roundButton: false,
   buttonSize: "default",
@@ -98,7 +98,8 @@ export const EaMessageBox = (options) => {
   options = Object.assign(
     { boxType: options.boxType },
     defaultOptions,
-    options
+    options,
+    { icon: options.icon, type: options.type }
   );
 
   const controller = new AbortController();
