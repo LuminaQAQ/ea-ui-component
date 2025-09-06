@@ -42,6 +42,9 @@ export class EaMessageBoxElement extends EaOverlay {
       "confirmButtonText",
       "closeOnClickModal",
       "center",
+      "roundButton",
+      "buttonSize",
+      "closeOnPressEscape",
     ].map((s) =>
       s
         .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
@@ -105,14 +108,14 @@ export class EaMessageBoxElement extends EaOverlay {
         };
         this.icon = `icon-${iconType[newVal]}`;
 
-        this.className = this.updateContainerClasslist();
+        this.#container.className = this.updateContainerClasslist();
       },
     },
     icon: {
       type: String,
       default: "",
       observer: (newVal) => {
-        this.#typeIcon.icon = newVal;
+        if (this.#typeIcon) this.#typeIcon.icon = newVal;
       },
     },
     closeIcon: {
@@ -152,11 +155,35 @@ export class EaMessageBoxElement extends EaOverlay {
         this.#confirmButton.textContent = newVal;
       },
     },
+    closeOnPressEscape: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {},
+    },
     center: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
         this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    roundButton: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        if (this.#confirmButton)
+          this.#confirmButton.setAttribute("round", newVal);
+        if (this.#cancelButton)
+          this.#cancelButton.setAttribute("round", newVal);
+      },
+    },
+    buttonSize: {
+      type: ["small", "medium", "large"],
+      default: "medium",
+      observer: (newVal) => {
+        if (this.#confirmButton)
+          this.#confirmButton.setAttribute("size", newVal);
+        if (this.#cancelButton) this.#cancelButton.setAttribute("size", newVal);
       },
     },
   });
@@ -271,6 +298,53 @@ export class EaMessageBoxElement extends EaOverlay {
         ".ea-message-confirm-box__confirm-button"
       );
     },
+    prompt: (container) => {
+      container.innerHTML = `
+                <div class='ea-message-confirm-box' part='container'>
+                    <header class="ea-message-confirm-box__header" part="header">
+                        <div class="ea-message-confirm-box__title-container">
+                            <ea-icon class="ea-message-confirm-box__type-icon" part="type-icon"></ea-icon>
+                            <span class="ea-message-confirm-box__title" part="title"></span>
+                        </div>
+                        <ea-icon class="ea-message-confirm-box__icon-close" icon="icon-cancel" part='close-icon'></ea-icon>
+                    </header>
+                    <main class="ea-message-confirm-box__content" part="content">
+                        <div class="ea-message-confirm-box__description"></div>
+                        <ea-input class="ea-message-confirm-box__input" part="input"></ea-input>
+                    </main>
+                    <footer class="ea-message-confirm-box__footer" part="footer">
+                        <ea-button class="ea-message-confirm-box__cancel-button">Cancel</ea-button>
+                        <ea-button class="ea-message-confirm-box__confirm-button" type="primary">OK</ea-button>
+                    </footer>
+                </div>
+            `;
+
+      this.#container = this.shadowRoot.querySelector(".ea-overlay");
+      this.#header = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__header"
+      );
+      this.#title = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__title"
+      );
+      this.#typeIcon = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__type-icon"
+      );
+      this.#closeIcon = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__icon-close"
+      );
+      this.#content = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__content"
+      );
+      this.#footer = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__footer"
+      );
+      this.#cancelButton = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__cancel-button"
+      );
+      this.#confirmButton = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__confirm-button"
+      );
+    },
   };
 
   connectedCallback() {
@@ -285,27 +359,38 @@ export class EaMessageBoxElement extends EaOverlay {
 
     this.#abortController = new AbortController();
 
-    this.#confirmButton.addEventListener(
-      "click",
-      () => {
-        this.#dispatchBubblesEvent("confirm");
-      },
-      { once: true, signal: this.#abortController.signal }
-    );
+    if (this.#confirmButton)
+      this.#confirmButton.addEventListener(
+        "click",
+        () => {
+          this.#dispatchBubblesEvent("confirm");
+        },
+        { once: true, signal: this.#abortController.signal }
+      );
 
-    this.#closeIcon.addEventListener(
-      "click",
-      () => {
-        this.#dispatchBubblesEvent("cancel");
-      },
-      { once: true, signal: this.#abortController.signal }
-    );
+    if (this["show-close"])
+      this.#closeIcon.addEventListener(
+        "click",
+        () => {
+          this.#dispatchBubblesEvent("cancel");
+        },
+        { once: true, signal: this.#abortController.signal }
+      );
 
     if (this.#cancelButton)
       this.#cancelButton.addEventListener(
         "click",
         () => {
           this.#dispatchBubblesEvent("cancel");
+        },
+        { once: true, signal: this.#abortController.signal }
+      );
+
+    if (this["close-on-press-escape"])
+      this.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.key === "Escape") this.#dispatchBubblesEvent("cancel");
         },
         { once: true, signal: this.#abortController.signal }
       );

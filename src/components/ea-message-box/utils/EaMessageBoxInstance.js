@@ -47,9 +47,9 @@ const defaultOptions = {
   cancelButtonText: "Cancel",
   confirmButtonText: "OK",
   closeOnClickModal: false,
-  //   closeOnPressEscape: true,
+  closeOnPressEscape: false,
 
-  //   showInput: false,
+  showInput: false,
   //   inputPlaceholder: "",
   //   inputType: "text",
   //   inputValue: "",
@@ -57,19 +57,19 @@ const defaultOptions = {
   //   inputValidator: null,
   //   inputErrorMessage: "",
 
-  center: true,
-  draggable: false,
+  center: false,
+  // draggable: false,
   roundButton: false,
-  buttonSize: "default",
-  appendTo: document.body,
+  buttonSize: "medium",
+  appendTo: "body",
 };
 
 const appendToHandler = (el, appendTo) => {
   if (appendTo instanceof HTMLElement) {
     appendTo.appendChild(el);
   } else {
-    const appendTo = document.querySelector(appendTo);
-    appendTo ? appendTo.appendChild(el) : document.body.appendChild(el);
+    const parent = document.querySelector(appendTo);
+    parent ? parent.appendChild(el) : document.body.appendChild(el);
   }
 };
 
@@ -98,8 +98,7 @@ export const EaMessageBox = (options) => {
   options = Object.assign(
     { boxType: options.boxType },
     defaultOptions,
-    options,
-    { icon: options.icon, type: options.type }
+    options
   );
 
   const controller = new AbortController();
@@ -159,6 +158,9 @@ EaMessageBox.prompt = (message, title, options) =>
   EaMessageBox({
     message,
     title,
-    boxType: "confirm",
+    showConfirmButton: true,
+    showCancelButton: true,
+    closeOnClickModal: true,
+    boxType: "prompt",
     ...options,
   });
