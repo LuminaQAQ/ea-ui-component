@@ -4,6 +4,8 @@
   --ea-input-border-focus-color: var(--blue-400);
   --ea-input-padding: 0 var(--spacing-md);
 
+  --ea-input-disabled-background-color: var(--grey-100);
+
   --ea-input-height: 32px;
 
   --ea-input-font-size: var(--font-size-md);
@@ -15,18 +17,30 @@
   display: block;
 }
 
+:host([disabled]) {
+  cursor: not-allowed;
+  user-select: none;
+}
+
 @include block(ea-input) {
   display: flex;
 
   @include element(inner) {
     flex: 1;
+
+    display: flex;
+    align-items: center;
+
     box-sizing: border-box;
     box-shadow: none;
+
+    padding: var(--ea-input-padding);
 
     border: 1px solid var(--ea-input-border-color);
     border-radius: var(--ea-input-border-radius);
 
     width: 100%;
+    overflow: hidden;
 
     transition: border var(--ea-input-transition);
   }
@@ -34,7 +48,7 @@
   @include element(original) {
     box-sizing: border-box;
     margin: 0;
-    padding: var(--ea-input-padding);
+    // padding: var(--ea-input-padding);
     border: 0;
     outline: 0;
 
@@ -43,6 +57,21 @@
     width: 100%;
 
     font-size: var(--ea-input-font-size);
+  }
+
+  @include element(prefix) {
+  }
+
+  @include element(suffix) {
+    box-sizing: border-box;
+
+    display: flex;
+  }
+
+  .ea-input__clear-icon,
+  .ea-input__show-password-icon {
+    display: none;
+    cursor: pointer;
   }
 
   @include element(prepend) {
@@ -65,5 +94,23 @@
 
   @include state(focus) {
     --ea-input-border-color: var(--ea-input-border-focus-color);
+  }
+
+  @include state(disabled) {
+    background-color: var(--ea-input-disabled-background-color);
+    cursor: not-allowed;
+    pointer-events: none;
+
+    .ea-input__original {
+      &:disabled {
+        background-color: var(--ea-input-disabled-background-color);
+      }
+    }
+  }
+
+  @include modifier(clearable) {
+    .ea-input__clear-icon {
+      display: block;
+    }
   }
 }

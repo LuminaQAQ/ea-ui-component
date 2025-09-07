@@ -35,7 +35,6 @@
     <h2>基础用法</h2>
     <div class="row left">
         <ea-input style="width: 240px" placeholder="Please input"></ea-input>
-        <ea-input type="textarea" style="width: 240px" placeholder="Please input"></ea-input>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -45,8 +44,7 @@
     <!-- #region  -->
     <h2>禁用状态</h2>
     <div class="row left">
-        <ea-input id="basicInput" placeholder="请输入内容" disabled></ea-input>
-        <ea-input id="basicInput" placeholder="请输入内容" value="hello" disabled></ea-input>
+        <ea-input style="width: 240px" disabled placeholder="Please input"></ea-input>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -56,8 +54,18 @@
     <!-- #region  -->
     <h2>可清空</h2>
     <div class="row left">
-        <ea-input id="basicInput" placeholder="这不是空的" clearable></ea-input>
-        <ea-input id="basicInput" placeholder="请输入内容" value="这是空的" clearable></ea-input>
+        <ea-input style="width: 240px" placeholder="Please input" clearable></ea-input>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 自定义清除图标 --------  -->
+    <!-- #region  -->
+    <h2>自定义清除图标</h2>
+    <div class="row left">
+        <ea-input style="width: 240px" placeholder="Please input" clearable
+            clear-icon="icon-cancel-circled2"></ea-input>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -140,8 +148,8 @@
     <!-- #region  -->
     <h2>输入长度限制</h2>
     <div class="col left">
-        <ea-input placeholder="请输入内容" show-word-limit max-length="10"></ea-input>
-        <ea-input placeholder="请输入内容" show-word-limit min-length="2"></ea-input>
+        <ea-input placeholder="请输入内容" show-word-limit maxlength="10"></ea-input>
+        <ea-input placeholder="请输入内容" show-word-limit minlength="2"></ea-input>
     </div>
     <hr>
     <!-- #endregion  -->

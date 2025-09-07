@@ -10,8 +10,16 @@ export class EaInput extends Base {
   #prepend;
   /** @type {HTMLElement} */
   #inner;
+  /** @type {HTMLElement} */
+  #prefix;
   /** @type {HTMLInputElement} */
   #original;
+  /** @type {HTMLElement} */
+  #surfix;
+  /** @type {HTMLElement} */
+  #clearIcon;
+  /** @type {HTMLElement} */
+  #showPasswordIcon;
   /** @type {HTMLElement} */
   #append;
 
@@ -21,11 +29,22 @@ export class EaInput extends Base {
   static get observedAttributes() {
     return EaUtils.arrayToLowerCamelCase([
       "type",
+      "disabled",
       "value",
-      "isFocus",
       "placeholder",
+      "maxlength",
+      "minlength",
+      "show-word-limit",
+      "clearable",
+      "clearIcon",
+      "disabled",
     ]);
   }
+
+  #states = {
+    isFocus: false,
+    isMouseenter: false,
+  };
 
   state = this.properties({
     type: {
@@ -65,6 +84,9 @@ export class EaInput extends Base {
       default: "",
       observer: (newVal) => {
         this.#original.value = newVal;
+
+        if (this.clearable)
+          this.#container.className = this.updateContainerClasslist();
       },
     },
     placeholder: {
@@ -81,6 +103,48 @@ export class EaInput extends Base {
         this.#container.className = this.updateContainerClasslist();
       },
     },
+    maxlength: {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        this.#original.maxLength = newVal;
+      },
+    },
+    minlength: {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        this.#original.minLength = newVal;
+      },
+    },
+    // "show-word-limit": {
+    //   type: Boolean,
+    //   default: false,
+    //   observer: (newVal) => {
+    //     if (this.type === "textarea" || this.type === "text")
+    //       this.#container.className = this.updateContainerClasslist();
+    //   },
+    // },
+    clearable: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {},
+    },
+    clearIcon: {
+      type: String,
+      default: "icon-cancel",
+      observer: (newVal) => {
+        if (this.clearable) this.#clearIcon.icon = newVal;
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+        this.#original.disabled = newVal;
+      },
+    },
   });
 
   /**
@@ -92,9 +156,11 @@ export class EaInput extends Base {
       "ea-input",
       {
         ["--textarea"]: this.type === "textarea",
+        ["--clearable"]: this.clearable && this.value,
       },
       {
-        focus: this["is-focus"],
+        focus: this.#states.isFocus,
+        disabled: this.disabled,
       }
     );
   }
@@ -114,11 +180,16 @@ export class EaInput extends Base {
                     <slot name="prepend"></slot>
                 </div>
                 <div class="ea-input__inner" part="inner">
+                    <span class="ea-input__prefix" part="prefix"></span>
                     ${
                       this.type === "textarea"
                         ? '<textarea id="original" class="ea-input__original" part="original"></textarea>'
                         : '<input id="original" class="ea-input__original" type="text" part="original" autocomplete="off" />'
                     }
+                    <span class="ea-input__suffix" part="suffix">
+                      <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
+                      <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
+                    </span>
                 </div>
                 <div class="ea-input__append" part="append">
                     <slot name="append"></slot>
@@ -129,15 +200,23 @@ export class EaInput extends Base {
     this.#container = this.shadowRoot.querySelector(".ea-input");
     this.#prepend = this.shadowRoot.querySelector(".ea-input__prepend");
     this.#inner = this.shadowRoot.querySelector(".ea-input__inner");
+    this.#prefix = this.shadowRoot.querySelector(".ea-input__prefix");
     this.#original = this.shadowRoot.querySelector(".ea-input__original");
+    this.#surfix = this.shadowRoot.querySelector(".ea-input__surfix");
+    this.#clearIcon = this.shadowRoot.querySelector(".ea-input__clear-icon");
+    this.#showPasswordIcon = this.shadowRoot.querySelector(
+      ".ea-input__show-password-icon"
+    );
     this.#append = this.shadowRoot.querySelector(".ea-input__append");
   }
 
   focus() {
+    this.#states.isFocus = true;
     this.#original.focus();
   }
 
   blur() {
+    this.#states.isFocus = false;
     this.#original.blur();
   }
 
@@ -150,14 +229,14 @@ export class EaInput extends Base {
   }
 
   #initFocusEvent = (e) => {
-    // this.#container.classList.add("is-focus");
-    this["is-focus"] = true;
+    this.#states.isFocus = true;
+    this.#container.className = this.updateContainerClasslist();
     this.dispatchEvent("focus");
   };
 
   #initBlurEvent = (e) => {
-    // this.#container.classList.remove("is-focus");
-    this["is-focus"] = false;
+    this.#states.isFocus = false;
+    this.#container.className = this.updateContainerClasslist();
     this.dispatchEvent("blur");
   };
 
@@ -211,6 +290,11 @@ export class EaInput extends Base {
     });
   };
 
+  #initClearIconClickEvent = () => {
+    this.value = "";
+    this.focus();
+  };
+
   connectedCallback() {
     super.connectedCallback();
     this.#abortController = new AbortController();
@@ -254,6 +338,12 @@ export class EaInput extends Base {
         signal: this.#abortController.signal,
       }
     );
+
+    if (this.clearable) {
+      this.#clearIcon.addEventListener("click", this.#initClearIconClickEvent, {
+        signal: this.#abortController.signal,
+      });
+    }
   }
 
   $beforeUnmounted() {
