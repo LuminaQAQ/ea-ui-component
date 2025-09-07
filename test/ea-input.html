@@ -5,7 +5,7 @@
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
 
     <style>
         hr {
@@ -28,49 +28,14 @@
 
 <body>
 
-    <script type='module'>
-        import '../components/ea-input/index.js'
-
-        // ------- 带输入建议 -------
-        // #region
-        const suggestion = {
-            input: document.querySelector('#trigger-on-focus'),
-            afterInput: document.querySelector('#trigger-after-input'),
-            remote: document.querySelector('#trigger-on-focus_for-remote'),
-            data: [{ value: "123" }, { value: "456" }, { value: "789" }],
-
-            handleRemoteSearch(data) {
-                this.remote.remote = true;
-                setTimeout(() => {
-                    this.remote.suggestion = data;
-                    this.remote.remote = false;
-                }, 3 * 1000);
-            },
-
-            init() {
-                this.input.suggestion = [{ value: "1" }, { value: "2" }];
-                this.afterInput.suggestion = [{ value: "456" }, { value: "789" }];
-
-                this.remote.addEventListener('change', (e) => {
-                    this.handleRemoteSearch(this.data.filter(item => item.value.includes(e.detail.value)));
-                });
-
-                this.remote.addEventListener('focus', (e) => {
-                    this.handleRemoteSearch(this.data);
-                });
-            }
-        }
-        suggestion.init();
-        // #endregion
-        // ------- end -------
-    </script>
+    <script type="module" src="../src/components/ea-input/index.js"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
     <div class="row left">
-        <ea-input placeholder="请输入内容"></ea-input>
-        <ea-input placeholder="请输入内容" value="hello"></ea-input>
+        <ea-input style="width: 240px" placeholder="Please input"></ea-input>
+        <ea-input type="textarea" style="width: 240px" placeholder="Please input"></ea-input>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -181,6 +146,41 @@
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
+
+    <script type='module'>
+        // ------- 带输入建议 -------
+        // #region
+        const suggestion = {
+            input: document.querySelector('#trigger-on-focus'),
+            afterInput: document.querySelector('#trigger-after-input'),
+            remote: document.querySelector('#trigger-on-focus_for-remote'),
+            data: [{ value: "123" }, { value: "456" }, { value: "789" }],
+
+            handleRemoteSearch(data) {
+                this.remote.remote = true;
+                setTimeout(() => {
+                    this.remote.suggestion = data;
+                    this.remote.remote = false;
+                }, 3 * 1000);
+            },
+
+            init() {
+                this.input.suggestion = [{ value: "1" }, { value: "2" }];
+                this.afterInput.suggestion = [{ value: "456" }, { value: "789" }];
+
+                this.remote.addEventListener('change', (e) => {
+                    this.handleRemoteSearch(this.data.filter(item => item.value.includes(e.detail.value)));
+                });
+
+                this.remote.addEventListener('focus', (e) => {
+                    this.handleRemoteSearch(this.data);
+                });
+            }
+        }
+        suggestion.init();
+        // #endregion
+        // ------- end -------
+    </script>
 </body>
 
 </html>
