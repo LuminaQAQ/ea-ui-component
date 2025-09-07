@@ -1,178 +1,69 @@
-@import "../ea-ui-base-style.scss";
+:host {
+  --ea-input-border-radius: var(--border-radius-sm);
+  --ea-input-border-color: var(--color-border);
+  --ea-input-border-focus-color: var(--blue-400);
+  --ea-input-padding: 0 var(--spacing-md);
 
-.ea-input_container {
+  --ea-input-height: 32px;
+
+  --ea-input-font-size: var(--font-size-md);
+
+  --ea-input-transition: var(--transition-fast);
+}
+
+:host {
+  display: block;
+}
+
+@include block(ea-input) {
   display: flex;
-  align-items: stretch;
-  width: 100%;
 
-  .ea-input_wrap {
-    position: relative;
-    display: flex;
-    align-items: stretch;
+  @include element(inner) {
+    flex: 1;
+    box-sizing: border-box;
+    box-shadow: none;
+
+    border: 1px solid var(--ea-input-border-color);
+    border-radius: var(--ea-input-border-radius);
+
     width: 100%;
 
-    .ea-input_inner {
-      flex: 1;
-      box-sizing: border-box;
-      box-shadow: none;
+    transition: border var(--ea-input-transition);
+  }
 
-      border: 1px solid $color-border;
-      outline: 0;
-      border-radius: 3px;
+  @include element(original) {
+    box-sizing: border-box;
+    margin: 0;
+    padding: var(--ea-input-padding);
+    border: 0;
+    outline: 0;
 
-      padding: 0.5rem;
-      width: 100%;
+    height: calc(var(--ea-input-height));
+    line-height: calc(var(--ea-input-height));
+    width: 100%;
 
-      line-height: 0.8;
-      font-size: 0.8rem;
+    font-size: var(--ea-input-font-size);
+  }
+
+  @include element(prepend) {
+  }
+
+  @include element(append) {
+  }
+
+  @include modifier(textarea) {
+    --ea-input-padding: var(--spacing-md);
+
+    .ea-input__original {
+      min-height: calc(var(--ea-input-height) + 8px);
+      line-height: normal;
+
+      resize: vertical;
       scrollbar-width: none;
-
-      &:focus {
-        border-color: $color-primary-border;
-      }
-
-      &::placeholder {
-        color: $color-disabled-text;
-      }
-
-      &[aria-invalid="true"] {
-        border-color: $color-danger-border;
-      }
-
-      &[disabled] {
-        background-color: $color-disabled-btn-bgc;
-        color: $color-disabled-text;
-      }
     }
+  }
 
-    .fix-icon {
-      position: absolute;
-      top: 50%;
-
-      font-size: 0.8rem;
-      line-height: 0.8rem;
-    }
-
-    &.prefix {
-      .ea-input_inner {
-        padding-left: 1.75rem;
-      }
-
-      .prefix-icon {
-        left: 1rem;
-        transform: translate(-50%, -50%);
-      }
-    }
-
-    &.surfix {
-      .ea-input_inner {
-        padding-right: 1.75rem;
-      }
-
-      .surfix-icon {
-        right: 1rem;
-        transform: translate(50%, -50%);
-      }
-    }
-
-    .ea-input_prepend-slot,
-    .ea-input_append-slot {
-      height: 100%;
-    }
-
-    .ea-input_suggestion-wrap {
-      @include clear-ul-default-style;
-
-      position: absolute;
-      box-sizing: border-box;
-
-      z-index: 3;
-
-      top: calc(100% + 5px);
-      left: 0;
-
-      transform-origin: top center;
-      transform: scaleY(0);
-
-      padding: 0.5rem 0;
-      width: 100%;
-      max-height: 10rem;
-
-      overflow-y: auto;
-      scrollbar-width: thin;
-
-      background-color: white;
-      box-shadow: 0 1px 8px 1px rgba(0, 0, 0, 0.2);
-
-      li {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-        cursor: pointer;
-
-        &:hover {
-          background-color: #f5f7fa;
-        }
-      }
-
-      .loading-icon {
-        display: none;
-      }
-
-      &.loading {
-        height: 5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        li {
-          display: none;
-        }
-
-        .loading-icon {
-          display: block;
-        }
-      }
-
-      &.is-open {
-        transform: scaleY(1);
-      }
-    }
-
-    &.word-limit {
-      border: 1px solid;
-      border-color: $color-border;
-      border-radius: 3px;
-
-      .ea-input_inner {
-        border: 0;
-      }
-
-      .ea-input_word-limit {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-
-        padding-right: 0.5rem;
-
-        font-size: 0.75rem;
-        text-align: center;
-      }
-    }
-
-    &.focus {
-      border-color: $color-primary-border;
-    }
-
-    &.with-transition {
-      transition: border 0.3s;
-
-      .ea-input_inner {
-        transition: border 0.3s;
-      }
-      \ .ea-input_suggestion-wrap {
-        transition: transform 0.3s;
-      }
-    }
+  @include state(focus) {
+    --ea-input-border-color: var(--ea-input-border-focus-color);
   }
 }
