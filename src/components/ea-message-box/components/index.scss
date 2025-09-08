@@ -32,7 +32,8 @@ $types: (
   padding: var(--ea-message-padding);
 
   .ea-message-alert-box,
-  .ea-message-confirm-box {
+  .ea-message-confirm-box,
+  .ea-message-prompt-box {
     background-color: white;
     padding: var(--ea-message-padding);
     border-radius: var(--ea-message-border-radius);
@@ -75,6 +76,10 @@ $types: (
         margin: 0;
       }
     }
+  }
+
+  .ea-message-confirm-box__input {
+    padding-top: var(--ea-message-padding-primary);
   }
 
   @include modifier(center) {

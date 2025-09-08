@@ -1,6 +1,8 @@
 import { EaOverlay } from "@/common/ea-overlay";
+import { EaInput } from "@/components/ea-input";
 
 import stylesheet from "./index.scss?inline";
+import { timeout } from "@/utils/timeout";
 
 export class EaMessageBoxElement extends EaOverlay {
   /** @type {HTMLElement} */
@@ -15,6 +17,8 @@ export class EaMessageBoxElement extends EaOverlay {
   #closeIcon;
   /** @type {HTMLElement} */
   #content;
+  /** @type {HTMLElement} */
+  #input;
   /** @type {HTMLElement} */
   #footer;
   /** @type {HTMLElement} */
@@ -333,7 +337,10 @@ export class EaMessageBoxElement extends EaOverlay {
         ".ea-message-confirm-box__icon-close"
       );
       this.#content = this.shadowRoot.querySelector(
-        ".ea-message-confirm-box__content"
+        ".ea-message-confirm-box__description"
+      );
+      this.#input = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__input"
       );
       this.#footer = this.shadowRoot.querySelector(
         ".ea-message-confirm-box__footer"
@@ -344,6 +351,10 @@ export class EaMessageBoxElement extends EaOverlay {
       this.#confirmButton = this.shadowRoot.querySelector(
         ".ea-message-confirm-box__confirm-button"
       );
+
+      timeout(() => {
+        this.#input.focus();
+      }, 0);
     },
   };
 
@@ -363,6 +374,7 @@ export class EaMessageBoxElement extends EaOverlay {
       this.#confirmButton.addEventListener(
         "click",
         () => {
+          // this.hide();
           this.#dispatchBubblesEvent("confirm");
         },
         { once: true, signal: this.#abortController.signal }
@@ -372,6 +384,7 @@ export class EaMessageBoxElement extends EaOverlay {
       this.#closeIcon.addEventListener(
         "click",
         () => {
+          this.hide();
           this.#dispatchBubblesEvent("cancel");
         },
         { once: true, signal: this.#abortController.signal }
@@ -381,6 +394,7 @@ export class EaMessageBoxElement extends EaOverlay {
       this.#cancelButton.addEventListener(
         "click",
         () => {
+          this.hide();
           this.#dispatchBubblesEvent("cancel");
         },
         { once: true, signal: this.#abortController.signal }
