@@ -15,3 +15,9 @@
     @content;
   }
 }
+
+@mixin state($name) {
+  &.is-#{$name} {
+    @content;
+  }
+}

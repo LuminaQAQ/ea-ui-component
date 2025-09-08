@@ -4,29 +4,82 @@
   --ea-input-border-focus-color: var(--blue-400);
   --ea-input-padding: 0 var(--spacing-md);
 
-  --ea-input-height: 32px;
+  --ea-input-disabled-background-color: var(--grey-100);
 
-  --ea-input-font-size: var(--font-size-md);
+  --ea-input-height-sm: 22px;
+  --ea-input-height-md: 30px;
+  --ea-input-height-lg: 38px;
+  --ea-input-height: var(--ea-input-height-md);
+
+  --ea-input-font-size-sm: var(--font-size-sm);
+  --ea-input-font-size-md: var(--font-size-md);
+  --ea-input-font-size-lg: var(--font-size-lg);
+  --ea-input-font-size: var(--ea-input-font-size-md);
+
+  --ea-input-text-color: var(--grey-700);
+  --ea-input-box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 
   --ea-input-transition: var(--transition-fast);
+
+  --ea-input-icon-color: var(--grey-500);
+
+  --ea-input-outside-fill-color: var(--grey-100);
+
+  --ea-input-resize: vertical;
 }
 
 :host {
   display: block;
 }
 
-@include block(ea-input) {
+:host([disabled]) {
+  cursor: not-allowed;
+  user-select: none;
+}
+
+::slotted([slot="prefix"]),
+::slotted([slot="suffix"]) {
+  color: var(--ea-input-icon-color);
+}
+
+@mixin outside-slot-style {
+  box-sizing: border-box;
+  padding: var(--ea-input-padding);
+  border: 1px solid var(--ea-input-border-color);
+
   display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100%;
+
+  color: var(--ea-input-text-color);
+
+  background-color: var(--ea-input-outside-fill-color);
+}
+
+@include block(ea-input) {
+  position: relative;
+  display: flex;
+
+  transition: box-shadow var(--ea-input-transition);
 
   @include element(inner) {
     flex: 1;
+
+    display: flex;
+    align-items: center;
+
     box-sizing: border-box;
     box-shadow: none;
+
+    padding: var(--ea-input-padding);
 
     border: 1px solid var(--ea-input-border-color);
     border-radius: var(--ea-input-border-radius);
 
     width: 100%;
+    overflow: hidden;
 
     transition: border var(--ea-input-transition);
   }
@@ -34,36 +87,153 @@
   @include element(original) {
     box-sizing: border-box;
     margin: 0;
-    padding: var(--ea-input-padding);
     border: 0;
     outline: 0;
 
-    height: calc(var(--ea-input-height));
-    line-height: calc(var(--ea-input-height));
+    line-height: var(--ea-input-height);
     width: 100%;
 
     font-size: var(--ea-input-font-size);
+    color: var(--ea-input-text-color);
+
+    &::placeholder {
+      color: var(--ea-input-icon-color);
+    }
   }
 
-  @include element(prepend) {
+  @include element(prefix) {
   }
 
-  @include element(append) {
+  @include element(suffix) {
+    box-sizing: border-box;
+
+    display: flex;
+  }
+
+  @include element(word-count) {
+    display: none;
+
+    font-size: var(--ea-input-font-size);
+    color: var(--ea-input-icon-color);
+
+    white-space: nowrap;
+  }
+
+  .ea-input__clear-icon,
+  .ea-input__show-password-icon {
+    display: none;
+    cursor: pointer;
+
+    color: var(--ea-input-icon-color);
+  }
+
+  .ea-input__prefix-icon,
+  .ea-input__suffix-icon {
+    color: var(--ea-input-icon-color);
   }
 
   @include modifier(textarea) {
     --ea-input-padding: var(--spacing-md);
 
+    .ea-input__inner {
+      padding-bottom: 0;
+      padding-right: 0;
+    }
+
     .ea-input__original {
       min-height: calc(var(--ea-input-height) + 8px);
       line-height: normal;
 
-      resize: vertical;
-      scrollbar-width: none;
+      resize: var(--ea-input-resize);
+      scrollbar-width: thin;
+    }
+
+    .ea-input__word-count {
+      position: absolute;
+      bottom: 0.25rem;
+      right: 0.5rem;
     }
   }
 
   @include state(focus) {
-    --ea-input-border-color: var(--ea-input-border-focus-color);
+    .ea-input__inner {
+      --ea-input-border-color: var(--ea-input-border-focus-color);
+    }
+  }
+
+  @include state(disabled) {
+    background-color: var(--ea-input-disabled-background-color);
+    cursor: not-allowed;
+    pointer-events: none;
+
+    .ea-input__original {
+      &:disabled {
+        background-color: var(--ea-input-disabled-background-color);
+      }
+    }
+  }
+
+  @include modifier(clearable) {
+    .ea-input__clear-icon {
+      display: block;
+    }
+  }
+
+  @include modifier(show-password) {
+    .ea-input__show-password-icon {
+      display: block;
+    }
+  }
+
+  @include modifier(has-prepend) {
+    --ea-input-border-radius: 0 var(--border-radius-sm) var(--border-radius-sm)
+      0;
+
+    .ea-input__prepend {
+      @include outside-slot-style;
+
+      border-right: none;
+      border-radius: var(--border-radius-sm);
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  @include modifier(has-append) {
+    --ea-input-border-radius: var(--border-radius-sm) 0 0
+      var(--border-radius-sm);
+
+    .ea-input__append {
+      @include outside-slot-style;
+
+      border-left: none;
+      border-radius: var(--border-radius-sm);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  @include modifier(size-small) {
+    --ea-input-height: var(--ea-input-height-sm);
+    --ea-input-font-size: var(--font-size-sm);
+  }
+
+  @include modifier(size-large) {
+    --ea-input-height: var(--ea-input-height-lg);
+    --ea-input-font-size: var(--font-size-lg);
+  }
+
+  @include modifier(show-word-limit) {
+    .ea-input__word-count {
+      display: block;
+    }
+  }
+
+  &.ea-input--has-prepend.ea-input--has-append {
+    --ea-input-border-radius: 0;
+  }
+
+  &:hover {
+    box-shadow: var(--ea-input-box-shadow);
   }
 }
