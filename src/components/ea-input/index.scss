@@ -6,9 +6,16 @@
 
   --ea-input-disabled-background-color: var(--grey-100);
 
-  --ea-input-height: 32px;
+  --ea-input-height-sm: 22px;
+  --ea-input-height-md: 30px;
+  --ea-input-height-lg: 38px;
+  --ea-input-height: var(--ea-input-height-md);
 
-  --ea-input-font-size: var(--font-size-md);
+  --ea-input-font-size-sm: var(--font-size-sm);
+  --ea-input-font-size-md: var(--font-size-md);
+  --ea-input-font-size-lg: var(--font-size-lg);
+  --ea-input-font-size: var(--ea-input-font-size-md);
+
   --ea-input-text-color: var(--grey-700);
   --ea-input-box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 
@@ -17,6 +24,8 @@
   --ea-input-icon-color: var(--grey-500);
 
   --ea-input-outside-fill-color: var(--grey-100);
+
+  --ea-input-resize: vertical;
 }
 
 :host {
@@ -50,6 +59,7 @@
 }
 
 @include block(ea-input) {
+  position: relative;
   display: flex;
 
   transition: box-shadow var(--ea-input-transition);
@@ -100,6 +110,15 @@
     display: flex;
   }
 
+  @include element(word-count) {
+    display: none;
+
+    font-size: var(--ea-input-font-size);
+    color: var(--ea-input-icon-color);
+
+    white-space: nowrap;
+  }
+
   .ea-input__clear-icon,
   .ea-input__show-password-icon {
     display: none;
@@ -116,12 +135,23 @@
   @include modifier(textarea) {
     --ea-input-padding: var(--spacing-md);
 
+    .ea-input__inner {
+      padding-bottom: 0;
+      padding-right: 0;
+    }
+
     .ea-input__original {
       min-height: calc(var(--ea-input-height) + 8px);
       line-height: normal;
 
-      resize: vertical;
+      resize: var(--ea-input-resize);
       scrollbar-width: thin;
+    }
+
+    .ea-input__word-count {
+      position: absolute;
+      bottom: 0.25rem;
+      right: 0.5rem;
     }
   }
 
@@ -180,6 +210,22 @@
       border-radius: var(--border-radius-sm);
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
+    }
+  }
+
+  @include modifier(size-small) {
+    --ea-input-height: var(--ea-input-height-sm);
+    --ea-input-font-size: var(--font-size-sm);
+  }
+
+  @include modifier(size-large) {
+    --ea-input-height: var(--ea-input-height-lg);
+    --ea-input-font-size: var(--font-size-lg);
+  }
+
+  @include modifier(show-word-limit) {
+    .ea-input__word-count {
+      display: block;
     }
   }
 

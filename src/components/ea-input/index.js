@@ -23,6 +23,8 @@ export class EaInput extends Base {
   /** @type {HTMLElement} */
   #showPasswordIcon;
   /** @type {HTMLElement} */
+  #wordCount;
+  /** @type {HTMLElement} */
   #append;
 
   /** @type {AbortController} */
@@ -36,18 +38,32 @@ export class EaInput extends Base {
       "placeholder",
       "maxlength",
       "minlength",
-      // "show-word-limit",
       "clearable",
       "clearIcon",
       "showPassword",
       "disabled",
       "prefixIcon",
       "suffixIcon",
+      "show-word-limit",
 
       "rows",
       "autosize",
       "minRows",
       "maxRows",
+
+      "autocomplete",
+      "name",
+      "readonly",
+      "max",
+      "min",
+      "step",
+      "resize",
+      "autofocus",
+      "form",
+      "aria-label",
+      "tabindex",
+      "validate-event",
+      "inputmode",
     ]);
   }
 
@@ -186,6 +202,20 @@ export class EaInput extends Base {
       },
     },
 
+    showWordLimit: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        if (this.type === "textarea" || this.type === "text") {
+          if (newVal && this.maxlength) {
+            this.#container.className = this.updateContainerClasslist();
+            this.#wordCount.textContent = `
+            ${this.#original.value.length} / ${this.maxlength}`;
+          }
+        }
+      },
+    },
+
     rows: {
       type: Number,
       default: 2,
@@ -220,6 +250,96 @@ export class EaInput extends Base {
         this.#original.maxRows = newVal;
       },
     },
+
+    autocomplete: {
+      type: String,
+      default: "off",
+      observer: (newVal) => {
+        this.#original.autocomplete = newVal;
+      },
+    },
+    name: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#original.name = newVal;
+      },
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#original.readOnly = newVal;
+      },
+    },
+    max: {
+      type: Number,
+      default: Infinity,
+      observer: (newVal) => {
+        this.#original.max = newVal;
+      },
+    },
+    min: {
+      type: Number,
+      default: -Infinity,
+      observer: (newVal) => {
+        this.#original.min = newVal;
+      },
+    },
+    step: {
+      type: Number,
+      default: 1,
+      observer: (newVal) => {
+        this.#original.step = newVal;
+      },
+    },
+    resize: {
+      type: ["none", "both", "horizontal", "vertical"],
+      default: "vertical",
+      observer: (newVal) => {
+        this.style.setProperty("--ea-input-resize", newVal);
+      },
+    },
+    autofocus: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#original.autofocus = newVal;
+      },
+    },
+    form: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#original.form = newVal;
+      },
+    },
+    "aria-label": {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#original.setAttribute("aria-label", newVal);
+      },
+    },
+    tabindex: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#original.tabIndex = newVal;
+      },
+    },
+    "validate-event": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {},
+    },
+    inputmode: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#original.inputMode = newVal;
+      },
+    },
   });
 
   /**
@@ -230,15 +350,19 @@ export class EaInput extends Base {
     return this.computedClasslist(
       "ea-input",
       {
-        ["--size" + this.size]:
+        ["--size-" + this.size]:
           this.type !== "textarea" && this.size !== "default",
         ["--has-prepend"]:
           this.type !== "textarea" && this.querySelector("[slot=prepend]"),
         ["--has-append"]:
           this.type !== "textarea" && this.querySelector("[slot=append]"),
         ["--textarea"]: this.type === "textarea",
-        ["--clearable"]: this.clearable && this.value,
+        ["--clearable"]:
+          this.clearable && this.value && this.type !== "textarea",
         ["--show-password"]: this["show-password"],
+        ["--show-word-limit"]:
+          this["show-word-limit"] &&
+          (this.type === "textarea" || this.type === "text"),
       },
       {
         focus: this.#states.isFocus,
@@ -276,6 +400,7 @@ export class EaInput extends Base {
                       </span>
                       <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
                       <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
+                      <span class="ea-input__word-count" part="count"></span>
                     </span>
                 </div>
                 <div class="ea-input__append" part="append">
@@ -295,6 +420,7 @@ export class EaInput extends Base {
     this.#showPasswordIcon = this.shadowRoot.querySelector(
       ".ea-input__show-password-icon"
     );
+    this.#wordCount = this.shadowRoot.querySelector(".ea-input__word-count");
     this.#append = this.shadowRoot.querySelector(".ea-input__append");
   }
 
@@ -476,6 +602,13 @@ export class EaInput extends Base {
    */
   #initClearIconClickEvent = () => {
     this.value = "";
+    if (
+      this["show-word-limit"] &&
+      (this.type === "textarea" || this.type === "text")
+    ) {
+      this.#wordCount.textContent = `
+            ${this.#original.value.length} / ${this.maxlength}`;
+    }
     this.focus();
   };
 
@@ -561,6 +694,20 @@ export class EaInput extends Base {
     this.#initInputElementEvent();
 
     if (this.type === "textarea" && this.autosize) this.#initAutosizeEvent();
+    if (
+      this["show-word-limit"] &&
+      (this.type === "textarea" || this.type === "text")
+    )
+      this.#original.addEventListener(
+        "input",
+        () => {
+          this.#wordCount.textContent = `
+            ${this.#original.value.length} / ${this.maxlength}`;
+        },
+        {
+          signal: this.#abortController.signal,
+        }
+      );
   }
 
   $beforeUnmounted() {

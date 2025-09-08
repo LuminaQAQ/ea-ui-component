@@ -27,7 +27,7 @@
         .label {
             display: block;
             margin-bottom: 1rem;
-            color: var(--el-text-color-regular);
+            color: var(--ea-text-color-regular);
         }
 
         .input-container {
@@ -104,7 +104,7 @@
     <h2>自定义清除图标</h2>
     <div class="row left">
         <ea-input style="width: 240px" placeholder="Please input" clearable
-            clear-icon="icon-cancel-circled2"></ea-input>
+            clear-icon="icon-cancea-circled2"></ea-input>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -192,51 +192,30 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
+    <!-- #region 尺寸 -->
+    <h1>尺寸</h1>
+
+    <div class="demo">
+        <ea-input style="width: 240px" size="large" placeholder="Please Input"></ea-input>
+        <ea-input style="width: 240px" placeholder="Please Input"></ea-input>
+        <ea-input style="width: 240px" size="small" placeholder="Please Input"></ea-input>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
     <!-- -------- 输入长度限制 --------  -->
     <!-- #region  -->
     <h2>输入长度限制</h2>
     <div class="col left">
-        <ea-input placeholder="请输入内容" show-word-limit maxlength="10"></ea-input>
-        <ea-input placeholder="请输入内容" show-word-limit minlength="2"></ea-input>
+        <ea-input style="width: 240px" maxlength="10" placeholder="Please input" show-word-limit type="text"
+            clearable></ea-input>
+        <ea-input maxlength="30" style="width: 240px" placeholder="Please input" show-word-limit type="textarea"
+            clearable></ea-input>
     </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
-
-    <script type='module'>
-        // ------- 带输入建议 -------
-        // #region
-        const suggestion = {
-            input: document.querySelector('#trigger-on-focus'),
-            afterInput: document.querySelector('#trigger-after-input'),
-            remote: document.querySelector('#trigger-on-focus_for-remote'),
-            data: [{ value: "123" }, { value: "456" }, { value: "789" }],
-
-            handleRemoteSearch(data) {
-                this.remote.remote = true;
-                setTimeout(() => {
-                    this.remote.suggestion = data;
-                    this.remote.remote = false;
-                }, 3 * 1000);
-            },
-
-            init() {
-                this.input.suggestion = [{ value: "1" }, { value: "2" }];
-                this.afterInput.suggestion = [{ value: "456" }, { value: "789" }];
-
-                this.remote.addEventListener('change', (e) => {
-                    this.handleRemoteSearch(this.data.filter(item => item.value.includes(e.detail.value)));
-                });
-
-                this.remote.addEventListener('focus', (e) => {
-                    this.handleRemoteSearch(this.data);
-                });
-            }
-        }
-        suggestion.init();
-        // #endregion
-        // ------- end -------
-    </script>
 </body>
 
 </html>
