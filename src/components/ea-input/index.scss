@@ -9,8 +9,12 @@
   --ea-input-height: 32px;
 
   --ea-input-font-size: var(--font-size-md);
+  --ea-input-text-color: var(--grey-700);
+  --ea-input-box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 
   --ea-input-transition: var(--transition-fast);
+
+  --ea-input-icon-color: var(--grey-500);
 }
 
 :host {
@@ -22,8 +26,15 @@
   user-select: none;
 }
 
+::slotted([slot="prefix"]),
+::slotted([slot="suffix"]) {
+  color: var(--ea-input-icon-color);
+}
+
 @include block(ea-input) {
   display: flex;
+
+  transition: box-shadow var(--ea-input-transition);
 
   @include element(inner) {
     flex: 1;
@@ -57,6 +68,11 @@
     width: 100%;
 
     font-size: var(--ea-input-font-size);
+    color: var(--ea-input-text-color);
+
+    &::placeholder {
+      color: var(--ea-input-icon-color);
+    }
   }
 
   @include element(prefix) {
@@ -72,6 +88,13 @@
   .ea-input__show-password-icon {
     display: none;
     cursor: pointer;
+
+    color: var(--ea-input-icon-color);
+  }
+
+  .ea-input__prefix-icon,
+  .ea-input__suffix-icon {
+    color: var(--ea-input-icon-color);
   }
 
   @include element(prepend) {
@@ -112,5 +135,15 @@
     .ea-input__clear-icon {
       display: block;
     }
+  }
+
+  @include modifier(show-password) {
+    .ea-input__show-password-icon {
+      display: block;
+    }
+  }
+
+  &:hover {
+    box-shadow: var(--ea-input-box-shadow);
   }
 }

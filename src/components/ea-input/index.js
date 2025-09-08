@@ -15,7 +15,9 @@ export class EaInput extends Base {
   /** @type {HTMLInputElement} */
   #original;
   /** @type {HTMLElement} */
-  #surfix;
+  #suffix;
+  /** @type {HTMLElement} */
+  #suffixIcon;
   /** @type {HTMLElement} */
   #clearIcon;
   /** @type {HTMLElement} */
@@ -34,10 +36,15 @@ export class EaInput extends Base {
       "placeholder",
       "maxlength",
       "minlength",
-      "show-word-limit",
+      // "show-word-limit",
       "clearable",
       "clearIcon",
+      "showPassword",
       "disabled",
+      "prefixIcon",
+      "suffixIcon",
+
+      "rows",
     ]);
   }
 
@@ -96,13 +103,6 @@ export class EaInput extends Base {
         this.#original.placeholder = newVal;
       },
     },
-    isFocus: {
-      type: Boolean,
-      default: false,
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
-      },
-    },
     maxlength: {
       type: Number,
       default: 0,
@@ -145,6 +145,45 @@ export class EaInput extends Base {
         this.#original.disabled = newVal;
       },
     },
+    showPassword: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        if (newVal) this.#container.className = this.updateContainerClasslist();
+
+        if (this.type === "text") {
+          this.#showPasswordIcon.icon = "icon-eye";
+        } else if (this.type === "password") {
+          this.#showPasswordIcon.icon = "icon-eye-off";
+        }
+      },
+    },
+    prefixIcon: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (newVal)
+          this.#prefix.innerHTML = `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" icon="${newVal}"></ea-icon>`;
+      },
+    },
+    suffixIcon: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (newVal)
+          this.#suffixIcon.innerHTML = `<ea-icon class="ea-input__suffix-icon" part="suffix-icon" icon="${newVal}"></ea-icon>`;
+      },
+    },
+
+    rows: {
+      type: Number,
+      default: 2,
+      observer: (newVal) => {
+        if (this.type !== "textarea") return;
+
+        this.#original.rows = newVal;
+      },
+    },
   });
 
   /**
@@ -157,6 +196,7 @@ export class EaInput extends Base {
       {
         ["--textarea"]: this.type === "textarea",
         ["--clearable"]: this.clearable && this.value,
+        ["--show-password"]: this["show-password"],
       },
       {
         focus: this.#states.isFocus,
@@ -180,13 +220,18 @@ export class EaInput extends Base {
                     <slot name="prepend"></slot>
                 </div>
                 <div class="ea-input__inner" part="inner">
-                    <span class="ea-input__prefix" part="prefix"></span>
+                    <span class="ea-input__prefix" part="prefix">
+                      <slot name="prefix"></slot>
+                    </span>
                     ${
                       this.type === "textarea"
                         ? '<textarea id="original" class="ea-input__original" part="original"></textarea>'
                         : '<input id="original" class="ea-input__original" type="text" part="original" autocomplete="off" />'
                     }
                     <span class="ea-input__suffix" part="suffix">
+                      <span class="ea-input__suffix-icon" part="suffix-icon">
+                        <slot name="suffix"></slot>
+                      </span>
                       <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
                       <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
                     </span>
@@ -202,7 +247,8 @@ export class EaInput extends Base {
     this.#inner = this.shadowRoot.querySelector(".ea-input__inner");
     this.#prefix = this.shadowRoot.querySelector(".ea-input__prefix");
     this.#original = this.shadowRoot.querySelector(".ea-input__original");
-    this.#surfix = this.shadowRoot.querySelector(".ea-input__surfix");
+    this.#suffix = this.shadowRoot.querySelector(".ea-input__suffix");
+    this.#suffixIcon = this.shadowRoot.querySelector(".ea-input__suffix-icon");
     this.#clearIcon = this.shadowRoot.querySelector(".ea-input__clear-icon");
     this.#showPasswordIcon = this.shadowRoot.querySelector(
       ".ea-input__show-password-icon"
@@ -210,36 +256,60 @@ export class EaInput extends Base {
     this.#append = this.shadowRoot.querySelector(".ea-input__append");
   }
 
+  /**
+   * 获取焦点
+   */
   focus() {
     this.#states.isFocus = true;
     this.#original.focus();
   }
 
+  /**
+   * 失去焦点
+   */
   blur() {
     this.#states.isFocus = false;
     this.#original.blur();
   }
 
+  /**
+   * 清空输入框内容
+   */
   clear() {
     this.#original.value = "";
   }
 
+  /**
+   * 选中输入框内容
+   */
   select() {
     this.#original.select();
   }
 
+  /**
+   * 输入框内容发生改变时触发
+   * @param {FocusEvent} e 事件对象
+   */
   #initFocusEvent = (e) => {
     this.#states.isFocus = true;
     this.#container.className = this.updateContainerClasslist();
     this.dispatchEvent("focus");
   };
 
+  /**
+   * 输入框失去焦点时触发
+   * @param {FocusEvent} e 事件对象
+   */
   #initBlurEvent = (e) => {
     this.#states.isFocus = false;
     this.#container.className = this.updateContainerClasslist();
     this.dispatchEvent("blur");
   };
 
+  /**
+   * 输入框内容发生改变时触发
+   * @param {InputEvent} e 事件对象
+   */
   #initInputEvent = (e) => {
     const { value } = e.target;
     this.value = value;
@@ -250,6 +320,10 @@ export class EaInput extends Base {
     });
   };
 
+  /**
+   * 键盘按下时触发
+   * @param {KeyboardEvent} e 事件对象
+   */
   #initKeydownEvent = (e) => {
     this.dispatchEvent("keydown", {
       detail: {
@@ -258,14 +332,26 @@ export class EaInput extends Base {
     });
   };
 
+  /**
+   * 鼠标进入时触发
+   * @param {MouseEvent} e 事件对象
+   */
   #initMouseenterEvent = (e) => {
     this.dispatchEvent("mouseenter");
   };
 
+  /**
+   * 鼠标离开时触发
+   * @param { MouseEvent } e 事件对象
+   */
   #initMouseleaveEvent = (e) => {
     this.dispatchEvent("mouseleave");
   };
 
+  /**
+   * 输入法开始输入时触发
+   * @param {CompositionEvent} e 事件对象
+   */
   #initCompositionstartEvent = (e) => {
     this.dispatchEvent("compositionstart", {
       detail: {
@@ -274,6 +360,10 @@ export class EaInput extends Base {
     });
   };
 
+  /**
+   * 输入法输入时触发
+   * @param {CompositionEvent} e 事件对象
+   */
   #initCompositionupdateEvent = (e) => {
     this.dispatchEvent("compositionupdate", {
       detail: {
@@ -282,6 +372,10 @@ export class EaInput extends Base {
     });
   };
 
+  /**
+   * 输入法完成输入时触发
+   * @param {CompositionEvent} e 事件对象
+   */
   #initCompositionendEvent = (e) => {
     this.dispatchEvent("compositionend", {
       detail: {
@@ -290,15 +384,10 @@ export class EaInput extends Base {
     });
   };
 
-  #initClearIconClickEvent = () => {
-    this.value = "";
-    this.focus();
-  };
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.#abortController = new AbortController();
-
+  /**
+   * 初始化基本事件
+   */
+  #initBasicEvent = () => {
     this.#original.addEventListener("focus", this.#initFocusEvent, {
       signal: this.#abortController.signal,
     });
@@ -338,11 +427,51 @@ export class EaInput extends Base {
         signal: this.#abortController.signal,
       }
     );
+  };
+
+  /**
+   * 清空按钮点击时触发
+   */
+  #initClearIconClickEvent = () => {
+    this.value = "";
+    this.focus();
+  };
+
+  /**
+   * 显示密码按钮点击时触发
+   */
+  #initShowPasswordIconClickEvent = () => {
+    if (this.type === "password") {
+      this.type = "text";
+      this.#showPasswordIcon.icon = "icon-eye";
+    } else if (this.type === "text") {
+      this.type = "password";
+      this.#showPasswordIcon.icon = "icon-eye-off";
+    }
+
+    this.focus();
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.#abortController = new AbortController();
+
+    this.#initBasicEvent();
 
     if (this.clearable) {
       this.#clearIcon.addEventListener("click", this.#initClearIconClickEvent, {
         signal: this.#abortController.signal,
       });
+    }
+
+    if (this["show-password"]) {
+      this.#showPasswordIcon.addEventListener(
+        "click",
+        this.#initShowPasswordIconClickEvent,
+        {
+          signal: this.#abortController.signal,
+        }
+      );
     }
   }
 

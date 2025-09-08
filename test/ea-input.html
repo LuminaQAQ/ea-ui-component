@@ -12,6 +12,43 @@
             margin: 3rem 0;
         }
 
+
+
+        .demo-input-with-icon {
+            width: 100%;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 1rem;
+            color: var(--el-text-color-regular);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .responsive-input {
+            width: 240px;
+        }
+
+        @media (max-width: 768px) {
+            .input-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .responsive-input {
+                width: 100%;
+            }
+        }
+
         .prepend,
         .append {
             height: 100%;
@@ -75,8 +112,7 @@
     <!-- #region  -->
     <h2>密码框</h2>
     <div class="row left">
-        <ea-input id="basicInput" placeholder="这不是空的" show-password></ea-input>
-        <ea-input id="basicInput" placeholder="这不是空的" value="这是空的" show-password></ea-input>
+        <ea-input style="width: 240px" type="password" placeholder="Please input password" show-password></ea-input>
     </div>
     <hr>
     <!-- #endregion  -->
@@ -86,12 +122,40 @@
     <!-- #region  -->
     <h2>带 icon 的输入框</h2>
     <div class="row left">
-        <ea-input placeholder="这不是空的" prefix-icon="icon-search"></ea-input>
-        <ea-input placeholder="这不是空的" suffix-icon="icon-search"></ea-input>
+    </div>
+    <div class="demo-input-with-icon">
+        <div class="input-group">
+            <span class="label">Using attributes</span>
+            <div class="input-container">
+                <ea-input class="responsive-input" placeholder="Pick a date" prefix-icon="icon-coffee"></ea-input>
+                <ea-input class="responsive-input" placeholder="Type something" suffix-icon="icon-coffee"></ea-input>
+            </div>
+        </div>
+        <div class="input-group">
+            <span class="label">Using slots</span>
+            <div class="input-container">
+                <ea-input v-model="input3" class="responsive-input" placeholder="Pick a date">
+                    <ea-icon icon="icon-search" slot="suffix"></ea-icon>
+                </ea-input>
+                <ea-input v-model="input4" class="responsive-input" placeholder="Type something">
+                    <ea-icon icon="icon-search" slot="prefix"></ea-icon>
+                </ea-input>
+            </div>
+        </div>
     </div>
     <hr>
     <!-- #endregion  -->
     <!-- -------------------  -->
+
+    <!-- #region 文本域 -->
+    <h1>文本域</h1>
+
+    <div class="demo">
+        <ea-input style="width: 240px" rows="2" type="textarea" placeholder="Please input"></ea-input>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
 
     <!-- -------- 复合型输入框 --------  -->
     <!-- #region  -->

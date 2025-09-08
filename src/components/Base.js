@@ -64,7 +64,7 @@ export default class Base extends HTMLElement {
    * @param {object} stateClassListObj 状态classList对象
    * @returns {string} classList
    */
-  computedClasslist(block, modifierClassListObj, stateClassListObj) {
+  computedClasslist(block = "", modifierClassListObj = {}, stateClassListObj = {}) {
     return [
       block,
       ...Object.entries(modifierClassListObj)
@@ -189,13 +189,13 @@ export default class Base extends HTMLElement {
   // ------- end -------
 
   /** @abstract 组件渲染 */
-  $render() {}
+  $render() { }
 
   /** @abstract 组件销毁前调用 */
-  $beforeUnmounted() {}
+  $beforeUnmounted() { }
 
   /** @abstract 组件销毁后调用 */
-  $unmounted() {}
+  $unmounted() { }
 
   /**
    *
