@@ -12,7 +12,9 @@
             margin: 3rem 0;
         }
 
-
+        ea-input {
+            margin: .5rem 0;
+        }
 
         .demo-input-with-icon {
             width: 100%;
@@ -49,7 +51,7 @@
             }
         }
 
-        .prepend,
+        /* .prepend,
         .append {
             height: 100%;
             padding: 0 0.5rem;
@@ -59,7 +61,7 @@
             justify-content: center;
 
             background-color: #f5f7fa;
-        }
+        } */
     </style>
 </head>
 
@@ -151,7 +153,19 @@
     <h1>文本域</h1>
 
     <div class="demo">
-        <ea-input style="width: 240px" rows="2" type="textarea" placeholder="Please input"></ea-input>
+        <ea-input style="width: 240px" rows="4" type="textarea" placeholder="Please input"></ea-input>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 自适应文本域 -->
+    <h1>自适应文本域</h1>
+
+    <div class="demo">
+        <ea-input style="width: 240px" rows="4" type="textarea" placeholder="Please input" autosize></ea-input>
+        <ea-input style="width: 240px" type="textarea" placeholder="Please input" autosize min-rows="2"
+            max-rows="4"></ea-input>
     </div>
 
     <hr>
@@ -161,48 +175,18 @@
     <!-- #region  -->
     <h2>复合型输入框</h2>
     <div class="col left">
-        <ea-input placeholder="假装有网址">
+        <ea-input style="max-width: 600px" placeholder="Please input">
             <div class="prepend" slot="prepend">Http://</div>
         </ea-input>
-        <ea-input placeholder="假装有网址">
+        <ea-input style="max-width: 600px" placeholder="Please input">
             <div class="append" slot="append">.com</div>
         </ea-input>
-        <ea-input placeholder="假装有网址">
+        <ea-input style="max-width: 600px" placeholder="Please input">
             <div class="prepend" slot="prepend">Http://</div>
             <div class="append" slot="append">
                 <i class="icon-search"></i>
             </div>
         </ea-input>
-    </div>
-    <hr>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <!-- -------- 带输入建议 --------  -->
-    <!-- #region  -->
-    <h2>带输入建议</h2>
-    <div class="row">
-        <section>
-            <p>激活时列出输入建议</p>
-            <ea-input id="trigger-on-focus" placeholder="请输入内容" trigger-on-focus></ea-input>
-        </section>
-        <section>
-            <p>输入后匹配输入建议</p>
-            <ea-input id="trigger-after-input" placeholder="请输入内容" trigger-after-input></ea-input>
-        </section>
-    </div>
-    <hr>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <!-- -------- 远程搜索 --------  -->
-    <!-- #region  -->
-    <h2>远程搜索</h2>
-    <div class="row">
-        <section>
-            <p>激活时列出输入建议</p>
-            <ea-input id="trigger-on-focus_for-remote" placeholder="请输入内容" trigger-on-focus remote></ea-input>
-        </section>
     </div>
     <hr>
     <!-- #endregion  -->

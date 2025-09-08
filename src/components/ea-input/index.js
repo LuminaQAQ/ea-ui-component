@@ -12,7 +12,7 @@ export class EaInput extends Base {
   #inner;
   /** @type {HTMLElement} */
   #prefix;
-  /** @type {HTMLInputElement} */
+  /** @type {HTMLInputElement | HTMLTextAreaElement} */
   #original;
   /** @type {HTMLElement} */
   #suffix;
@@ -45,12 +45,16 @@ export class EaInput extends Base {
       "suffixIcon",
 
       "rows",
+      "autosize",
+      "minRows",
+      "maxRows",
     ]);
   }
 
   #states = {
     isFocus: false,
     isMouseenter: false,
+    originTextareaHeight: 0,
   };
 
   state = this.properties({
@@ -83,6 +87,13 @@ export class EaInput extends Base {
       default: "text",
       observer: (newVal) => {
         if (newVal !== "textarea") this.#original.type = newVal;
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    size: {
+      type: ["large", "default", "small"],
+      default: "default",
+      observer: (newVal) => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
@@ -184,6 +195,31 @@ export class EaInput extends Base {
         this.#original.rows = newVal;
       },
     },
+    autosize: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        if (this.type !== "textarea") return;
+      },
+    },
+    minRows: {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        if (this.type !== "textarea") return;
+
+        this.#original.minRows = newVal;
+      },
+    },
+    maxRows: {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        if (this.type !== "textarea") return;
+
+        this.#original.maxRows = newVal;
+      },
+    },
   });
 
   /**
@@ -194,6 +230,12 @@ export class EaInput extends Base {
     return this.computedClasslist(
       "ea-input",
       {
+        ["--size" + this.size]:
+          this.type !== "textarea" && this.size !== "default",
+        ["--has-prepend"]:
+          this.type !== "textarea" && this.querySelector("[slot=prepend]"),
+        ["--has-append"]:
+          this.type !== "textarea" && this.querySelector("[slot=append]"),
         ["--textarea"]: this.type === "textarea",
         ["--clearable"]: this.clearable && this.value,
         ["--show-password"]: this["show-password"],
@@ -452,11 +494,11 @@ export class EaInput extends Base {
     this.focus();
   };
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.#abortController = new AbortController();
-
-    this.#initBasicEvent();
+  /**
+   * 初始化`type="text"`的输入框事件
+   */
+  #initInputElementEvent = () => {
+    if (this.type === "textarea") return;
 
     if (this.clearable) {
       this.#clearIcon.addEventListener("click", this.#initClearIconClickEvent, {
@@ -464,7 +506,10 @@ export class EaInput extends Base {
       });
     }
 
-    if (this["show-password"]) {
+    if (
+      this["show-password"] &&
+      (this.type === "password" || this.type === "text")
+    ) {
       this.#showPasswordIcon.addEventListener(
         "click",
         this.#initShowPasswordIconClickEvent,
@@ -473,6 +518,49 @@ export class EaInput extends Base {
         }
       );
     }
+  };
+
+  /**
+   * 自动调整高度
+   */
+  #initAutosizeEvent = () => {
+    this.#states.originTextareaHeight = this.#original.scrollHeight;
+    const lineHeight = this.#states.originTextareaHeight / this.rows;
+
+    this.#original.addEventListener(
+      "input",
+      (e) => {
+        if (
+          this["min-rows"] > 0 &&
+          this.#original.scrollHeight < this["min-rows"] * lineHeight
+        )
+          return;
+
+        if (
+          this["max-rows"] > 0 &&
+          this.#original.scrollHeight > this["max-rows"] * lineHeight
+        )
+          return;
+
+        this.#original.style.height = `${this.#states.originTextareaHeight}px`;
+        void this.#original.scrollHeight;
+        this.#original.style.height = `${e.target.scrollHeight + 2}px`;
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.#abortController = new AbortController();
+
+    this.#container.className = this.updateContainerClasslist();
+    this.#initBasicEvent();
+    this.#initInputElementEvent();
+
+    if (this.type === "textarea" && this.autosize) this.#initAutosizeEvent();
   }
 
   $beforeUnmounted() {

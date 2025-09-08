@@ -15,6 +15,8 @@
   --ea-input-transition: var(--transition-fast);
 
   --ea-input-icon-color: var(--grey-500);
+
+  --ea-input-outside-fill-color: var(--grey-100);
 }
 
 :host {
@@ -29,6 +31,22 @@
 ::slotted([slot="prefix"]),
 ::slotted([slot="suffix"]) {
   color: var(--ea-input-icon-color);
+}
+
+@mixin outside-slot-style {
+  box-sizing: border-box;
+  padding: var(--ea-input-padding);
+  border: 1px solid var(--ea-input-border-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100%;
+
+  color: var(--ea-input-text-color);
+
+  background-color: var(--ea-input-outside-fill-color);
 }
 
 @include block(ea-input) {
@@ -59,12 +77,10 @@
   @include element(original) {
     box-sizing: border-box;
     margin: 0;
-    // padding: var(--ea-input-padding);
     border: 0;
     outline: 0;
 
-    height: calc(var(--ea-input-height));
-    line-height: calc(var(--ea-input-height));
+    line-height: var(--ea-input-height);
     width: 100%;
 
     font-size: var(--ea-input-font-size);
@@ -97,12 +113,6 @@
     color: var(--ea-input-icon-color);
   }
 
-  @include element(prepend) {
-  }
-
-  @include element(append) {
-  }
-
   @include modifier(textarea) {
     --ea-input-padding: var(--spacing-md);
 
@@ -111,12 +121,14 @@
       line-height: normal;
 
       resize: vertical;
-      scrollbar-width: none;
+      scrollbar-width: thin;
     }
   }
 
   @include state(focus) {
-    --ea-input-border-color: var(--ea-input-border-focus-color);
+    .ea-input__inner {
+      --ea-input-border-color: var(--ea-input-border-focus-color);
+    }
   }
 
   @include state(disabled) {
@@ -141,6 +153,38 @@
     .ea-input__show-password-icon {
       display: block;
     }
+  }
+
+  @include modifier(has-prepend) {
+    --ea-input-border-radius: 0 var(--border-radius-sm) var(--border-radius-sm)
+      0;
+
+    .ea-input__prepend {
+      @include outside-slot-style;
+
+      border-right: none;
+      border-radius: var(--border-radius-sm);
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  @include modifier(has-append) {
+    --ea-input-border-radius: var(--border-radius-sm) 0 0
+      var(--border-radius-sm);
+
+    .ea-input__append {
+      @include outside-slot-style;
+
+      border-left: none;
+      border-radius: var(--border-radius-sm);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  &.ea-input--has-prepend.ea-input--has-append {
+    --ea-input-border-radius: 0;
   }
 
   &:hover {
