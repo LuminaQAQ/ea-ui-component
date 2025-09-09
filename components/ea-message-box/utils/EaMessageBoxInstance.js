@@ -8,7 +8,7 @@
  * @property {String} closeIcon
  * @property {(value: string, action) => any | (action) => any} callback
  * @property {Boolean} showClose
- * @property {(action, instance, done: () => void) => void} beforeClose
+ * @property {(action: string, instance: HTMLElement, done: () => void) => void} beforeClose
  * @property {Boolean} lockScroll
  * @property {Boolean} showCancelButton
  * @property {Boolean} showConfirmButton
@@ -35,6 +35,7 @@ import EaUtils from "@/utils/Utils";
 /** @type {MessageBoxOptions} */
 const defaultOptions = {
   boxType: "personalized",
+  distinguishCancelAndClose: false,
 
   title: "",
   dangerouslyUseHTMLString: false,
@@ -48,9 +49,10 @@ const defaultOptions = {
 
   showCancelButton: false,
   showConfirmButton: true,
+  confirmButtonLoading: false,
   cancelButtonText: "Cancel",
   confirmButtonText: "OK",
-  closeOnClickModal: false,
+  closeOnClickModal: true,
   closeOnPressEscape: false,
 
   showInput: false,
@@ -62,7 +64,7 @@ const defaultOptions = {
   inputErrorMessage: "",
 
   center: false,
-  // draggable: false,
+  draggable: false,
   roundButton: false,
   buttonSize: "medium",
   appendTo: "body",
@@ -70,7 +72,14 @@ const defaultOptions = {
   beforeClose: null,
 };
 
-const excluded = ["inputPattern", "inputValidator", "beforeClose"];
+const excluded = [
+  "inputPattern",
+  "inputValidator",
+  "beforeClose",
+  "confirmButtonLoading",
+  "dangerouslyUseHTMLString",
+  "distinguishCancelAndClose",
+];
 
 const appendToHandler = (el, appendTo) => {
   if (appendTo instanceof HTMLElement) {
@@ -116,8 +125,8 @@ export const EaMessageBox = (options) => {
   messageBox.addEventListener(
     "closed",
     () => {
-      controller.abort();
       messageBox.remove();
+      controller.abort();
     },
     { signal: controller.signal }
   );
@@ -125,20 +134,55 @@ export const EaMessageBox = (options) => {
   return new Promise((resolve, reject) => {
     messageBox.addEventListener(
       "confirm",
-      (e) => {
-        resolve(e);
-        messageBox.hide();
+      async (e) => {
+        if (options.beforeClose) {
+          try {
+            await options.beforeClose("confirm", messageBox, () =>
+              messageBox.hide()
+            );
+          } catch (error) {}
+        } else {
+          messageBox.hide();
+        }
+        resolve("confirm");
       },
       { signal: controller.signal }
     );
 
     messageBox.addEventListener(
       "cancel",
-      (e) => {
-        reject(e);
-        messageBox.hide();
+      async (e) => {
+        if (options.beforeClose) {
+          try {
+            await options.beforeClose("cancel", messageBox, () =>
+              messageBox.hide()
+            );
+          } catch (error) {}
+        } else {
+          messageBox.hide();
+        }
+        reject("cancel");
       },
       { signal: controller.signal }
+    );
+
+    messageBox.addEventListener(
+      "message-close",
+      async (e) => {
+        if (options.beforeClose) {
+          try {
+            await options.beforeClose("close", messageBox, () =>
+              messageBox.hide()
+            );
+          } catch (error) {}
+        } else {
+          messageBox.hide();
+        }
+        reject("close");
+      },
+      {
+        signal: controller.signal,
+      }
     );
   });
 };
@@ -147,6 +191,7 @@ EaMessageBox.alert = (message, title, options) =>
   EaMessageBox({
     message,
     title,
+    closeOnClickModal: false,
     showConfirmButton: true,
     boxType: "alert",
     ...options,
@@ -158,7 +203,6 @@ EaMessageBox.confirm = (message, title, options) =>
     title,
     showConfirmButton: true,
     showCancelButton: true,
-    closeOnClickModal: true,
     closeOnPressEscape: true,
     boxType: "confirm",
     ...options,
@@ -170,7 +214,7 @@ EaMessageBox.prompt = (message, title, options) =>
     title,
     showConfirmButton: true,
     showCancelButton: true,
-    closeOnClickModal: true,
+    showInput: true,
     closeOnPressEscape: true,
     boxType: "prompt",
     ...options,

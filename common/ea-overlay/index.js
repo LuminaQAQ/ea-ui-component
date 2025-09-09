@@ -158,13 +158,11 @@ export class EaOverlay extends Base {
   }
 
   #dispatchBubblesEvent = (customEventName, detail) => {
-    this.dispatchEvent(
-      new CustomEvent(customEventName, {
-        detail,
-        bubbles: true,
-        composed: true,
-      })
-    );
+    this.dispatchEvent(customEventName, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
   };
 
   #beforeCloseCallback = () => (this.status = false);

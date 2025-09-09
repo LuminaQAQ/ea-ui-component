@@ -4,5 +4,6 @@ import { EaMessageBox } from "./utils/EaMessageBoxInstance.js";
 window.$alert = EaMessageBox.alert;
 window.$confirm = EaMessageBox.confirm;
 window.$prompt = EaMessageBox.prompt;
+window.$msgbox = EaMessageBox;
 
 export { EaMessageBox, EaMessageBoxElement };

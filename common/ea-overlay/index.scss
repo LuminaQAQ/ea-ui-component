@@ -19,6 +19,10 @@
   --ea-overlay-transition: var(--transition-normal);
 }
 
+:host {
+  position: fixed;
+}
+
 @mixin modal-mask {
   position: fixed;
   left: 0;
