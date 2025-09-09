@@ -1,6 +1,7 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
+import { timeout } from "@/utils/timeout";
 
 export class EaOverlay extends Base {
   /** @type {HTMLElement} */
@@ -124,6 +125,11 @@ export class EaOverlay extends Base {
     this.stylesheet = stylesheet;
 
     this.$render();
+
+    document.activeElement.blur();
+    timeout(() => {
+      this.focus();
+    }, 0);
   }
 
   show() {

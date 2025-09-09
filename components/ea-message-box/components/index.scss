@@ -6,8 +6,6 @@ $types: (
   info: grey,
 );
 
-// type: ["primary", "success", "info", "warning", "error"],
-
 :host {
   --ea-message-padding: 14px;
   --ea-message-border-radius: var(--border-radius-sm);
@@ -25,57 +23,13 @@ $types: (
   @each $type, $color in $types {
     --ea-message-#{$type}-icon-color: var(--#{$color}-500);
   }
+
+  --ea-message-invalid-message-color: var(--red-500);
 }
 
 @include block(ea-message-box) {
   box-sizing: border-box;
   padding: var(--ea-message-padding);
-
-  .ea-message-alert-box,
-  .ea-message-confirm-box {
-    background-color: white;
-    padding: var(--ea-message-padding);
-    border-radius: var(--ea-message-border-radius);
-
-    &__header {
-      position: relative;
-      padding-bottom: var(--ea-message-padding-primary);
-    }
-
-    &__title {
-      font-size: var(--ea-message-title-font-size);
-      line-height: var(--ea-message-title-font-size);
-      color: var(--ea-message-title-color);
-    }
-
-    &__icon-close {
-      position: absolute;
-      right: 0;
-      top: 0;
-
-      cursor: pointer;
-      color: var(--ea-message-close-icon-color);
-    }
-
-    &__content {
-      font-size: var(--ea-message-content-font-size);
-      line-height: var(--ea-message-content-font-size);
-      color: var(--ea-message-content-color);
-    }
-
-    &__footer {
-      padding-top: var(--ea-message-padding-primary);
-      text-align: right;
-
-      ea-button {
-        margin: 0 0.25rem;
-      }
-
-      ea-button:last-child {
-        margin: 0;
-      }
-    }
-  }
 
   @include modifier(center) {
     .ea-message-alert-box,
@@ -94,6 +48,20 @@ $types: (
     }
   }
 
+  @include state(invalid) {
+    .ea-message-alert-box__invalid-message,
+    .ea-message-confirm-box__invalid-message,
+    .ea-message-prompt-box__invalid-message {
+      display: block;
+    }
+
+    .ea-message-alert-box__input,
+    .ea-message-confirm-box__input,
+    .ea-message-prompt-box__input {
+      --ea-input-border-color: var(--red-500);
+    }
+  }
+
   @each $type, $color in $types {
     @include modifier($type) {
       .ea-message-alert-box,
@@ -103,6 +71,65 @@ $types: (
         }
       }
     }
+  }
+}
+
+@include block(ea-message-box-main) {
+  background-color: white;
+  padding: var(--ea-message-padding);
+  border-radius: var(--ea-message-border-radius);
+
+  @include element(header) {
+    position: relative;
+    padding-bottom: var(--ea-message-padding-primary);
+  }
+
+  @include element(title) {
+    font-size: var(--ea-message-title-font-size);
+    line-height: var(--ea-message-title-font-size);
+    color: var(--ea-message-title-color);
+  }
+
+  @include element(icon-close) {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    cursor: pointer;
+    color: var(--ea-message-close-icon-color);
+  }
+
+  @include element(content) {
+    font-size: var(--ea-message-content-font-size);
+    line-height: var(--ea-message-content-font-size);
+    color: var(--ea-message-content-color);
+  }
+
+  @include element(input) {
+    padding-top: var(--ea-message-padding-primary);
+  }
+
+  @include element(footer) {
+    padding-top: var(--ea-message-padding-primary);
+    text-align: right;
+
+    ea-button {
+      margin: 0 0.25rem;
+    }
+
+    ea-button:last-child {
+      margin: 0;
+    }
+  }
+
+  @include element(invalid-message) {
+    display: none;
+
+    color: var(--ea-message-invalid-message-color);
+    font-size: var(--ea-message-content-font-size);
+    line-height: var(--ea-message-content-font-size);
+    text-align: left;
+    margin-top: 0.5rem;
   }
 }
 

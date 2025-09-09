@@ -30,8 +30,12 @@
  * @property {HTMLElement | string} appendTo
  */
 
+import EaUtils from "@/utils/Utils";
+
 /** @type {MessageBoxOptions} */
 const defaultOptions = {
+  boxType: "personalized",
+
   title: "",
   dangerouslyUseHTMLString: false,
   message: "",
@@ -43,26 +47,30 @@ const defaultOptions = {
   // lockScroll: true,
 
   showCancelButton: false,
-  showConfirmButton: false,
+  showConfirmButton: true,
   cancelButtonText: "Cancel",
   confirmButtonText: "OK",
   closeOnClickModal: false,
   closeOnPressEscape: false,
 
   showInput: false,
-  //   inputPlaceholder: "",
-  //   inputType: "text",
-  //   inputValue: "",
-  //   inputPattern: null,
+  inputPlaceholder: "",
+  inputType: "text",
+  inputValue: "",
+  inputPattern: null,
   //   inputValidator: null,
-  //   inputErrorMessage: "",
+  inputErrorMessage: "",
 
   center: false,
   // draggable: false,
   roundButton: false,
   buttonSize: "medium",
   appendTo: "body",
+
+  beforeClose: null,
 };
+
+const excluded = ["inputPattern", "inputValidator", "beforeClose"];
 
 const appendToHandler = (el, appendTo) => {
   if (appendTo instanceof HTMLElement) {
@@ -75,13 +83,14 @@ const appendToHandler = (el, appendTo) => {
 
 const renderer = (options) => {
   const messageBox = document.createElement("ea-message-box");
-  for (const k in options) {
-    const key = k
-      .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-      .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
-      .toLowerCase();
 
-    messageBox.setAttribute(key, options[k]);
+  for (const k in options) {
+    if (excluded.includes(k)) {
+      messageBox[k] = options[k];
+    } else {
+      const key = EaUtils.String.toLowerCamelCase(k);
+      messageBox.setAttribute(key, options[k]);
+    }
   }
 
   appendToHandler(messageBox, options.appendTo);
@@ -150,6 +159,7 @@ EaMessageBox.confirm = (message, title, options) =>
     showConfirmButton: true,
     showCancelButton: true,
     closeOnClickModal: true,
+    closeOnPressEscape: true,
     boxType: "confirm",
     ...options,
   });
@@ -161,6 +171,7 @@ EaMessageBox.prompt = (message, title, options) =>
     showConfirmButton: true,
     showCancelButton: true,
     closeOnClickModal: true,
+    closeOnPressEscape: true,
     boxType: "prompt",
     ...options,
   });
