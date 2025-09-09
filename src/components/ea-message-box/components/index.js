@@ -36,6 +36,7 @@ export class EaMessageBoxElement extends EaOverlay {
   #states = {
     inputPattern: null,
     dangerouslyUseHTMLString: false,
+    confirmButtonLoading: false,
   };
 
   // ------- inputPattern -------
@@ -62,12 +63,39 @@ export class EaMessageBoxElement extends EaOverlay {
   // #endregion
   // ------- end -------
 
+  // ------- confirmButtonLoading -------
+  // #region
+  get confirmButtonLoading() {
+    return this.#states.confirmButtonLoading;
+  }
+
+  set confirmButtonLoading(value) {
+    this.#states.confirmButtonLoading = value;
+    if (this.#confirmButton) {
+      this.#input.disabled = value;
+      this.#confirmButton.loading = value;
+    }
+  }
+  // #endregion
+  // ------- end -------
+
+  // ------- distinguishCancelAndClose -------
+  // #region
+  get distinguishCancelAndClose() {
+    return this.#states.distinguishCancelAndClose;
+  }
+
+  set distinguishCancelAndClose(value) {
+    this.#states.distinguishCancelAndClose = value;
+  }
+  // #endregion
+  // ------- end -------
+
   static get observedAttributes() {
     return EaUtils.arrayToLowerCamelCase([
       ...super.observedAttributes,
       "boxType",
       "visible",
-      // "dangerouslyUseHTMLString",
       "title",
       "message",
       "type",
@@ -90,6 +118,8 @@ export class EaMessageBoxElement extends EaOverlay {
       "inputValue",
       // "inputPattern",
       "inputErrorMessage",
+
+      "draggable",
     ]);
   }
 
@@ -113,11 +143,6 @@ export class EaMessageBoxElement extends EaOverlay {
         this.#container.className = this.updateContainerClasslist();
       },
     },
-    // dangerouslyUseHTMLString: {
-    //   type: Boolean,
-    //   default: false,
-    //   observer: (newVal) => {},
-    // },
     title: {
       type: String,
       default: "",
@@ -130,9 +155,9 @@ export class EaMessageBoxElement extends EaOverlay {
       default: "",
       observer: (newVal) => {
         if (this.dangerouslyUseHTMLString) {
-          this.#content.innerHTML = newVal;
+          this.#description.innerHTML = newVal;
         } else {
-          this.#content.textContent = newVal;
+          this.#description.textContent = newVal;
         }
       },
     },
@@ -228,6 +253,13 @@ export class EaMessageBoxElement extends EaOverlay {
       },
     },
 
+    showInput: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#input.style.display = newVal ? "block" : "none";
+      },
+    },
     inputPlaceholder: {
       type: String,
       default: "",
@@ -257,6 +289,14 @@ export class EaMessageBoxElement extends EaOverlay {
           this.#invalidMessage.textContent = newVal;
       },
     },
+
+    draggable: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -270,6 +310,7 @@ export class EaMessageBoxElement extends EaOverlay {
         ["--visible"]: this.visible,
         ["--center"]: this.center,
         [`--${this.type}`]: this.type,
+        ["--draggable"]: this.draggable,
       },
       {
         invalid: this.#input && this.#input?.invalid,
@@ -279,13 +320,11 @@ export class EaMessageBoxElement extends EaOverlay {
   }
 
   #dispatchBubblesEvent = (customEventName, detail) => {
-    this.dispatchEvent(
-      new CustomEvent(customEventName, {
-        detail,
-        bubbles: true,
-        composed: true,
-      })
-    );
+    this.dispatchEvent(customEventName, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
   };
 
   #initVariant = (type, container) => {
@@ -375,8 +414,8 @@ export class EaMessageBoxElement extends EaOverlay {
   #initConfirmEvent = async () => {
     try {
       await this.#handleInputPattern();
+      this.#abortController?.abort();
       this.#dispatchBubblesEvent("confirm");
-      this.hide();
     } catch (error) {}
   };
 
@@ -401,41 +440,91 @@ export class EaMessageBoxElement extends EaOverlay {
       this.#closeIcon.addEventListener(
         "click",
         () => {
-          this.hide();
-          this.#dispatchBubblesEvent("cancel");
+          if (!this.distinguishCancelAndClose) {
+            this.#dispatchBubblesEvent("cancel");
+          } else {
+            this.#dispatchBubblesEvent("message-close");
+          }
         },
-        { once: true, signal: this.#abortController.signal }
+        { signal: this.#abortController.signal }
       );
 
     if (this.#cancelButton)
       this.#cancelButton.addEventListener(
         "click",
         () => {
-          this.hide();
+          this.#abortController?.abort();
           this.#dispatchBubblesEvent("cancel");
         },
-        { once: true, signal: this.#abortController.signal }
+        { signal: this.#abortController.signal }
       );
 
-    if (this["close-on-press-escape"])
+    if (this["close-on-press-escape"]) {
       this.addEventListener(
         "keydown",
         (e) => {
           if (e.key === "Escape") {
-            this.hide();
-            this.#dispatchBubblesEvent("cancel");
+            if (!this.distinguishCancelAndClose) {
+              this.#dispatchBubblesEvent("cancel");
+            } else {
+              this.#dispatchBubblesEvent("message-close");
+            }
           }
         },
-        { once: true, signal: this.#abortController.signal }
+        { signal: this.#abortController.signal }
       );
+    }
 
     this.addEventListener(
       "close",
       () => {
-        this.#dispatchBubblesEvent("cancel");
+        if (!this.distinguishCancelAndClose) {
+          this.#dispatchBubblesEvent("cancel");
+        } else {
+          this.#dispatchBubblesEvent("message-close");
+        }
       },
-      { once: true, signal: this.#abortController.signal }
+      { signal: this.#abortController.signal }
     );
+
+    if (this.draggable)
+      this.shadowRoot.addEventListener(
+        "mousedown",
+        (mousedownEvent) => {
+          if (
+            !this.#header.contains(mousedownEvent.target) ||
+            this.#header === mousedownEvent.target
+          )
+            return;
+
+          const controller = new AbortController();
+          const contentElement = this.shadowRoot.querySelector(
+            ".ea-overlay__content"
+          );
+
+          window.addEventListener(
+            "mousemove",
+            (e) => {
+              contentElement.style.left = e.clientX + "px";
+              contentElement.style.top = e.clientY + "px";
+            },
+            {
+              signal: controller.signal,
+            }
+          );
+
+          window.addEventListener(
+            "mouseup",
+            () => {
+              controller.abort();
+            },
+            { signal: controller.signal }
+          );
+        },
+        {
+          signal: this.#abortController.signal,
+        }
+      );
   }
 
   $beforeUnmounted() {

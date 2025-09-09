@@ -85,11 +85,11 @@
       "    // ------- $0 -------",
       "    // #region",
       "    get $0() {",
-      "      return this.state.$0;",
+      "      return this.#states.$0;",
       "    }",
       "",
       "    set $0(value) {",
-      "      this.state.$0 = value;",
+      "      this.#states.$0 = value;",
       "    }",
       "    // #endregion",
       "    // ------- end -------"

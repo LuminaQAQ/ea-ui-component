@@ -54,8 +54,6 @@ export default class Base extends HTMLElement {
     modifierClassListObj = {},
     stateClassListObj = {}
   ) {
-    console.log(modifierClassListObj, stateClassListObj);
-
     return [
       block,
       ...Object.entries(modifierClassListObj)

@@ -27,45 +27,41 @@ $types: (
   --ea-message-invalid-message-color: var(--red-500);
 }
 
+:host([draggable]) {
+  -webkit-user-drag: none;
+}
+
 @include block(ea-message-box) {
   box-sizing: border-box;
   padding: var(--ea-message-padding);
 
   @include modifier(center) {
-    .ea-message-alert-box,
-    .ea-message-confirm-box__header {
-      text-align: center;
-    }
-
-    .ea-message-alert-box,
-    .ea-message-confirm-box {
-      text-align: center;
-    }
-
-    .ea-message-alert-box,
-    .ea-message-confirm-box__footer {
+    .ea-message-box-main__header,
+    .ea-message-box-main,
+    .ea-message-box-main__footer {
       text-align: center;
     }
   }
 
   @include state(invalid) {
-    .ea-message-alert-box__invalid-message,
-    .ea-message-confirm-box__invalid-message,
-    .ea-message-prompt-box__invalid-message {
+    .ea-message-box-main__invalid-message {
       display: block;
     }
 
-    .ea-message-alert-box__input,
-    .ea-message-confirm-box__input,
-    .ea-message-prompt-box__input {
+    .ea-message-box-main__input {
       --ea-input-border-color: var(--red-500);
+    }
+  }
+
+  @include modifier(draggable) {
+    .ea-message-box-main__header {
+      cursor: move;
     }
   }
 
   @each $type, $color in $types {
     @include modifier($type) {
-      .ea-message-alert-box,
-      .ea-message-confirm-box {
+      .ea-message-box-main {
         @include element(type-icon) {
           color: var(--ea-message-#{$type}-icon-color);
         }

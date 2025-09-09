@@ -30,11 +30,11 @@
           $alert("This is a message", "Title", {
             confirmButtonText: "OK",
           })
-            .then((e) => {
-              $message.info(`action: ${e.type}`);
+            .then((action) => {
+              $message.info(`action: ${action}`);
             })
-            .catch((e) => {
-              $message.info(`action: ${e.type}`);
+            .catch((action) => {
+              $message.info(`action: ${action}`);
             });
         });
       },
@@ -144,13 +144,146 @@
     personalizedExample.init();
     // #endregion
     // ------- end -------
+
+    // ------- 使用 HTML 片段 -------
+    // #region
+    const useHTMLExample = {
+      btn: document.querySelector('#openUseHTMLMessageBox'),
+
+      init() {
+        this.btn.addEventListener('click', () => {
+          EaMessageBox.alert(
+            '<strong>proxy is <i>HTML</i> string</strong>',
+            'HTML String',
+            {
+              dangerouslyUseHTMLString: true,
+            }
+          )
+        })
+      }
+    }
+    useHTMLExample.init()
+    // #endregion
+    // ------- end -------
+
+    // ------- 区分取消操作与关闭操作 -------
+    // #region
+    const openDistinguishCancelAndCloseExample = {
+      btn: document.querySelector('#openDistinguishCancelAndCloseMessageBox'),
+
+      init() {
+        this.btn.addEventListener('click', () => {
+          EaMessageBox.confirm(
+            'You have unsaved changes, save and proceed?',
+            'Confirm',
+            {
+              distinguishCancelAndClose: true,
+              confirmButtonText: 'Save',
+              cancelButtonText: 'Discard Changes',
+            }
+          )
+            .then(() => {
+              EaMessage({
+                type: 'info',
+                message: 'Changes saved. Proceeding to a new route.',
+              })
+            })
+            .catch((action) => {
+              console.log(action);
+
+              EaMessage({
+                type: 'info',
+                message:
+                  action === 'cancel'
+                    ? 'Changes discarded. Proceeding to a new route.'
+                    : 'Stay in the current route',
+              })
+            })
+        })
+      }
+    }
+    openDistinguishCancelAndCloseExample.init()
+    // #endregion
+    // ------- end -------
+
+    // ------- 区分取消操作与关闭操作 -------
+    // #region
+    const centerExample = {
+      btn: document.querySelector('#openCenterMessageBox'),
+
+      init() {
+        this.btn.addEventListener('click', () => {
+          EaMessageBox.confirm(
+            'proxy will permanently delete the file. Continue?',
+            'Warning',
+            {
+              confirmButtonText: 'OK',
+              cancelButtonText: 'Cancel',
+              type: 'warning',
+              center: true,
+            }
+          )
+            .then(() => {
+              EaMessage({
+                type: 'success',
+                message: 'Delete completed',
+              })
+            })
+            .catch(() => {
+              EaMessage({
+                type: 'info',
+                message: 'Delete canceled',
+              })
+            })
+        })
+      }
+    }
+    centerExample.init()
+    // #endregion
+    // ------- end -------
+
+    // ------- 可拖放 -------
+    // #region
+    const draggableExample = {
+      btn: document.querySelector('#openDraggableMessageBox'),
+
+      init() {
+        this.btn.addEventListener('click', () => {
+          EaMessageBox.confirm(
+            'proxy will permanently delete the file. Continue?',
+            'Warning',
+            {
+              confirmButtonText: 'OK',
+              cancelButtonText: 'Cancel',
+              type: 'warning',
+              draggable: true,
+            }
+          )
+            .then(() => {
+              EaMessage({
+                type: 'success',
+                message: 'Delete completed',
+              })
+            })
+            .catch(() => {
+              EaMessage({
+                type: 'info',
+                message: 'Delete canceled',
+              })
+            })
+        })
+      }
+    }
+    draggableExample.init()
+    // #endregion
+    // ------- end -------
   </script>
 
   <!-- -------- 消息提示 --------  -->
   <!-- #region  -->
   <h2>消息提示</h2>
   <div class="demo">
-    <ea-button type="primary" id="openAlertMessageBox">是否同意</ea-button>
+    <ea-button id="openAlertMessageBox" plain>Click to open Message Box</ea-button>
   </div>
   <hr />
   <!-- #endregion  -->
@@ -159,7 +292,7 @@
   <!-- -------- 确认消息 --------  -->
   <!-- #region  -->
   <h2>确认消息</h2>
-  <ea-button type="primary" id="openconfirmMessageBox">是否取消确认</ea-button>
+  <ea-button id="openconfirmMessageBox" plain>Click to open Message Box</ea-button>
   <hr />
   <!-- #endregion  -->
   <!-- -------------------  -->
@@ -168,7 +301,7 @@
   <!-- #region  -->
   <h2>提交内容</h2>
   <div class="demo">
-    <ea-button type="primary" id="openPromptMessageBox">提交内容</ea-button>
+    <ea-button id="openPromptMessageBox" plain>Click to open Message Box</ea-button>
   </div>
   <hr />
   <!-- #endregion  -->
@@ -178,7 +311,47 @@
   <h1>个性化</h1>
 
   <div class="demo">
-    <ea-button type="primary" id="openPersonalizedMessageBox">个性化</ea-button>
+    <ea-button id="openPersonalizedMessageBox" plain>Click to open Message Box</ea-button>
+  </div>
+
+  <hr>
+  <!-- #endregion  -->
+
+  <!-- #region 使用 HTML 片段 -->
+  <h1>使用 HTML 片段</h1>
+
+  <div class="demo">
+    <ea-button id="openUseHTMLMessageBox" plain>Click to open Message Box</ea-button>
+  </div>
+
+  <hr>
+  <!-- #endregion  -->
+
+  <!-- #region 区分取消操作与关闭操作 -->
+  <h1>区分取消操作与关闭操作</h1>
+
+  <div class="demo">
+    <ea-button id="openDistinguishCancelAndCloseMessageBox" plain>Click to open Message Box</ea-button>
+  </div>
+
+  <hr>
+  <!-- #endregion  -->
+
+  <!-- #region 内容居中 -->
+  <h1>内容居中</h1>
+
+  <div class="demo">
+    <ea-button id="openCenterMessageBox" plain>Click to open Message Box</ea-button>
+  </div>
+
+  <hr>
+  <!-- #endregion  -->
+
+  <!-- #region 可拖放 -->
+  <h1>可拖放</h1>
+
+  <div class="demo">
+    <ea-button id="openDraggableMessageBox" plain>Click to open Message Box</ea-button>
   </div>
 
   <hr>
