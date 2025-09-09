@@ -17,8 +17,8 @@
 <body>
   <script type="module" src="../src/components/ea-button/index.js"></script>
   <script type="module">
-    import "../src/components/ea-message/index.js";
-    import "../src/components/ea-message-box/index.js";
+    import { EaMessage } from "../src/components/ea-message/index.js";
+    import { EaMessageBox } from "../src/components/ea-message-box/index.js";
 
     // ------- 消息提示 -------
     // #region
@@ -100,6 +100,50 @@
     promptExample.init();
     // #endregion
     // ------- end -------
+
+    // ------- 个性化 -------
+    // #region
+    const personalizedExample = {
+      btn: document.querySelector("#openPersonalizedMessageBox"),
+      init() {
+        this.btn.addEventListener("click", () => {
+          EaMessageBox({
+            title: 'Message',
+            message: "This is a message",
+            showCancelButton: true,
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            beforeClose: (action, instance, done) => {
+              if (action === 'confirm') {
+                instance.confirmButtonLoading = true
+                instance.confirmButtonText = 'Loading...'
+                setTimeout(() => {
+                  done()
+                  setTimeout(() => {
+                    instance.confirmButtonLoading = false
+                  }, 300)
+                }, 3000)
+              } else {
+                done()
+              }
+            },
+          }).then((action) => {
+            EaMessage({
+              type: 'info',
+              message: `action: ${action}`,
+            })
+          }).catch((action) => {
+            EaMessage({
+              type: 'info',
+              message: `action: ${action}`,
+            })
+          })
+        })
+      }
+    };
+    personalizedExample.init();
+    // #endregion
+    // ------- end -------
   </script>
 
   <!-- -------- 消息提示 --------  -->
@@ -129,6 +173,16 @@
   <hr />
   <!-- #endregion  -->
   <!-- -------------------  -->
+
+  <!-- #region 个性化 -->
+  <h1>个性化</h1>
+
+  <div class="demo">
+    <ea-button type="primary" id="openPersonalizedMessageBox">个性化</ea-button>
+  </div>
+
+  <hr>
+  <!-- #endregion  -->
 </body>
 
 </html>

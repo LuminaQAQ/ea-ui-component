@@ -54,11 +54,13 @@ export default class Base extends HTMLElement {
     modifierClassListObj = {},
     stateClassListObj = {}
   ) {
+    console.log(modifierClassListObj, stateClassListObj);
+
     return [
       block,
       ...Object.entries(modifierClassListObj)
         .filter(([, value]) => value)
-        .map(([key]) => block + key),
+        .map(([key]) => `${block}${key}`),
       ...Object.entries(stateClassListObj)
         .filter(([, value]) => value)
         .map(([key]) => `is-${key}`),
