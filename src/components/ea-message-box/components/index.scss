@@ -6,8 +6,6 @@ $types: (
   info: grey,
 );
 
-// type: ["primary", "success", "info", "warning", "error"],
-
 :host {
   --ea-message-padding: 14px;
   --ea-message-border-radius: var(--border-radius-sm);
@@ -25,6 +23,8 @@ $types: (
   @each $type, $color in $types {
     --ea-message-#{$type}-icon-color: var(--#{$color}-500);
   }
+
+  --ea-message-invalid-message-color: var(--red-500);
 }
 
 @include block(ea-message-box) {
@@ -76,6 +76,16 @@ $types: (
         margin: 0;
       }
     }
+
+    &__invalid-message {
+      display: none;
+
+      color: var(--ea-message-invalid-message-color);
+      font-size: var(--ea-message-content-font-size);
+      line-height: var(--ea-message-content-font-size);
+      text-align: left;
+      margin-top: 0.5rem;
+    }
   }
 
   .ea-message-confirm-box__input {
@@ -96,6 +106,20 @@ $types: (
     .ea-message-alert-box,
     .ea-message-confirm-box__footer {
       text-align: center;
+    }
+  }
+
+  @include state(invalid) {
+    .ea-message-alert-box__invalid-message,
+    .ea-message-confirm-box__invalid-message,
+    .ea-message-prompt-box__invalid-message {
+      display: block;
+    }
+
+    .ea-message-alert-box__input,
+    .ea-message-confirm-box__input,
+    .ea-message-prompt-box__input {
+      --ea-input-border-color: var(--red-500);
     }
   }
 

@@ -83,7 +83,7 @@
             confirmButtonText: 'OK',
             cancelButtonText: 'Cancel',
             inputPattern:
-              /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+              /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/,
             inputErrorMessage: 'Invalid Email',
           })
             .then((e) => {

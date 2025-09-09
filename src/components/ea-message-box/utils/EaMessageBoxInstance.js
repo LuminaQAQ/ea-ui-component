@@ -50,12 +50,12 @@ const defaultOptions = {
   closeOnPressEscape: false,
 
   showInput: false,
-  //   inputPlaceholder: "",
-  //   inputType: "text",
-  //   inputValue: "",
-  //   inputPattern: null,
+  inputPlaceholder: "",
+  inputType: "text",
+  inputValue: "",
+  inputPattern: null,
   //   inputValidator: null,
-  //   inputErrorMessage: "",
+  inputErrorMessage: "111",
 
   center: false,
   // draggable: false,
@@ -150,6 +150,7 @@ EaMessageBox.confirm = (message, title, options) =>
     showConfirmButton: true,
     showCancelButton: true,
     closeOnClickModal: true,
+    closeOnPressEscape: true,
     boxType: "confirm",
     ...options,
   });
@@ -161,6 +162,7 @@ EaMessageBox.prompt = (message, title, options) =>
     showConfirmButton: true,
     showCancelButton: true,
     closeOnClickModal: true,
+    closeOnPressEscape: true,
     boxType: "prompt",
     ...options,
   });

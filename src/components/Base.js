@@ -2,22 +2,7 @@
 import { timeout } from "../utils/timeout";
 import variable from "../themes/variable.scss?inline";
 import "./ea-icon/index.js";
-
-// function toLowerCamelCase(str) {
-//   return str
-//     .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-//     .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
-//     .toLowerCase();
-// }
-
-// String.prototype.toLowerCamelCase = function toLowerCamelCase() {
-//   return this.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-//     .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
-//     .toLowerCase();
-// };
-
-// let str = "EaIcon";
-// console.log(str.toLowerCamelCase());
+import EaUtils from "@/utils/Utils";
 
 export default class Base extends HTMLElement {
   #stateConfigs = {};
@@ -64,7 +49,11 @@ export default class Base extends HTMLElement {
    * @param {object} stateClassListObj 状态classList对象
    * @returns {string} classList
    */
-  computedClasslist(block = "", modifierClassListObj = {}, stateClassListObj = {}) {
+  computedClasslist(
+    block = "",
+    modifierClassListObj = {},
+    stateClassListObj = {}
+  ) {
     return [
       block,
       ...Object.entries(modifierClassListObj)
@@ -99,6 +88,10 @@ export default class Base extends HTMLElement {
         type = "String";
       }
 
+      if (type === RegExp) {
+        type = "RegExp";
+      }
+
       return type;
     };
 
@@ -119,14 +112,15 @@ export default class Base extends HTMLElement {
         return type.includes(rawValue) ? rawValue : config.default;
       }
 
+      if (type === RegExp) {
+        return rawValue.match(type) ? JSON.stringify(rawValue) : config.default;
+      }
+
       return rawValue || config?.default;
     };
 
     for (const [key, config] of Object.entries(states)) {
-      const realKey = key
-        .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-        .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
-        .toLowerCase();
+      const realKey = EaUtils.String.toLowerCamelCase(key);
       this.#stateConfigs[realKey] = config;
 
       Object.defineProperty(this, realKey, {
@@ -189,13 +183,13 @@ export default class Base extends HTMLElement {
   // ------- end -------
 
   /** @abstract 组件渲染 */
-  $render() { }
+  $render() {}
 
   /** @abstract 组件销毁前调用 */
-  $beforeUnmounted() { }
+  $beforeUnmounted() {}
 
   /** @abstract 组件销毁后调用 */
-  $unmounted() { }
+  $unmounted() {}
 
   /**
    *
@@ -303,6 +297,12 @@ export default class Base extends HTMLElement {
     const attr = this.getAttribute(attrName);
 
     return attr ? attr : defaultValue || "";
+  }
+
+  getAttrRegExp(attrName, defaultValue) {
+    const attr = this.getAttribute(attrName);
+
+    return attr ? new RegExp(attr) : defaultValue || null;
   }
 
   setAttr(attrName, value) {

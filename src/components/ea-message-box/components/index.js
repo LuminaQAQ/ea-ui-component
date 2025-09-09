@@ -3,6 +3,7 @@ import { EaInput } from "@/components/ea-input";
 
 import stylesheet from "./index.scss?inline";
 import { timeout } from "@/utils/timeout";
+import EaUtils from "@/utils/Utils";
 
 export class EaMessageBoxElement extends EaOverlay {
   /** @type {HTMLElement} */
@@ -17,8 +18,10 @@ export class EaMessageBoxElement extends EaOverlay {
   #closeIcon;
   /** @type {HTMLElement} */
   #content;
-  /** @type {HTMLElement} */
+  /** @type {HTMLInputElement} */
   #input;
+  /** @type {HTMLElement} */
+  #invalidMessage;
   /** @type {HTMLElement} */
   #footer;
   /** @type {HTMLElement} */
@@ -29,7 +32,7 @@ export class EaMessageBoxElement extends EaOverlay {
   #abortController;
 
   static get observedAttributes() {
-    return [
+    return EaUtils.arrayToLowerCamelCase([
       ...super.observedAttributes,
       "boxType",
       "visible",
@@ -49,12 +52,14 @@ export class EaMessageBoxElement extends EaOverlay {
       "roundButton",
       "buttonSize",
       "closeOnPressEscape",
-    ].map((s) =>
-      s
-        .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-        .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
-        .toLowerCase()
-    );
+
+      "showInput",
+      "inputPlaceholder",
+      "inputType",
+      "inputValue",
+      "inputPattern",
+      "inputErrorMessage",
+    ]);
   }
 
   state = this.properties({
@@ -190,6 +195,41 @@ export class EaMessageBoxElement extends EaOverlay {
         if (this.#cancelButton) this.#cancelButton.setAttribute("size", newVal);
       },
     },
+
+    inputPlaceholder: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (this.#input) this.#input.placeholder = newVal;
+      },
+    },
+    inputType: {
+      type: String,
+      default: "text",
+      observer: (newVal) => {
+        if (this.#input) this.#input.type = newVal;
+      },
+    },
+    inputValue: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (this.#input) this.#input.value = newVal;
+      },
+    },
+    inputPattern: {
+      type: RegExp,
+      default: null,
+      observer: (newVal) => {},
+    },
+    inputErrorMessage: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (this.#input && this["input-pattern"])
+          this.#invalidMessage.textContent = newVal;
+      },
+    },
   });
 
   /**
@@ -203,6 +243,9 @@ export class EaMessageBoxElement extends EaOverlay {
         ["--visible"]: this.visible,
         ["--center"]: this.center,
         [`--${this.type}`]: this.type,
+      },
+      {
+        invalid: this.#input.invalid,
       }
     )}`;
   }
@@ -315,6 +358,7 @@ export class EaMessageBoxElement extends EaOverlay {
                     <main class="ea-message-confirm-box__content" part="content">
                         <div class="ea-message-confirm-box__description"></div>
                         <ea-input class="ea-message-confirm-box__input" part="input"></ea-input>
+                        <div class="ea-message-confirm-box__invalid-message"></div>
                     </main>
                     <footer class="ea-message-confirm-box__footer" part="footer">
                         <ea-button class="ea-message-confirm-box__cancel-button">Cancel</ea-button>
@@ -341,6 +385,9 @@ export class EaMessageBoxElement extends EaOverlay {
       );
       this.#input = this.shadowRoot.querySelector(
         ".ea-message-confirm-box__input"
+      );
+      this.#invalidMessage = this.shadowRoot.querySelector(
+        ".ea-message-confirm-box__invalid-message"
       );
       this.#footer = this.shadowRoot.querySelector(
         ".ea-message-confirm-box__footer"
@@ -376,8 +423,25 @@ export class EaMessageBoxElement extends EaOverlay {
         () => {
           // this.hide();
           this.#dispatchBubblesEvent("confirm");
+
+          if (this.#input) {
+            try {
+              if (this["input-pattern"]) {
+                const isValid = this["input-pattern"].test(this.#input.value);
+                console.log(
+                  this["input-pattern"],
+                  new RegExp(this["input-pattern"]),
+                  this.#input.value,
+                  new RegExp(this["input-pattern"]).test(this.#input.value)
+                );
+
+                this.#container.classList.toggle("is-invalid", !isValid);
+                if (isValid) this.hide();
+              }
+            } catch (error) {}
+          }
         },
-        { once: true, signal: this.#abortController.signal }
+        { signal: this.#abortController.signal }
       );
 
     if (this["show-close"])
@@ -404,7 +468,10 @@ export class EaMessageBoxElement extends EaOverlay {
       this.addEventListener(
         "keydown",
         (e) => {
-          if (e.key === "Escape") this.#dispatchBubblesEvent("cancel");
+          if (e.key === "Escape") {
+            this.hide();
+            this.#dispatchBubblesEvent("cancel");
+          }
         },
         { once: true, signal: this.#abortController.signal }
       );
