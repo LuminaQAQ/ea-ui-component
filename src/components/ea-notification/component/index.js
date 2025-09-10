@@ -44,7 +44,7 @@ export class EaNotificationElement extends Base {
       "type",
       "icon",
       "duration",
-      "position",
+      "placement",
       "showClose",
       "zIndex",
       "closeIcon",
@@ -53,9 +53,93 @@ export class EaNotificationElement extends Base {
 
   state = this.properties({
     type: {
-      //   type: ,
+      type: ["primary", "success", "warning", "info", "error"],
+      default: "info",
+      observer: (newVal) => {
+        const iconTypes = {
+          success: "icon-ok-circled",
+          error: "icon-cancel-circled",
+          warning: "icon-attention-alt",
+          info: "icon-info",
+          primary: "icon-info",
+        };
+
+        this.#messageIcon.icon = iconTypes[newVal];
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+      observer: async (newVal) => {
+        this.#visibleAbortController?.abort();
+        this.#visibleAbortController = new AbortController();
+
+        if (newVal) {
+          this.#initPosition();
+          this.#container.className = this.updateContainerClasslist();
+          this.#dispatchBubblesEvent("show");
+
+          void this.#container.offsetWidth;
+
+          this.#container.classList.add("ea-message--is-show");
+
+          this.#container.addEventListener(
+            "transitionend",
+            () => {
+              this.#dispatchBubblesEvent("shown");
+            },
+            { once: true, signal: this.#visibleAbortController.signal }
+          );
+        } else {
+          this.#handleHide();
+
+          this.#container.classList.add("ea-message--before-hide");
+          this.#dispatchBubblesEvent("hide");
+
+          this.#container.addEventListener(
+            "transitionend",
+            () => {
+              this.#container.className = this.updateContainerClasslist();
+              this.#dispatchBubblesEvent("hidden");
+            },
+            { once: true, signal: this.#visibleAbortController.signal }
+          );
+        }
+      },
+    },
+    message: {
+      type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: (newVal) => {
+        if (this.dangerouslyUseHTMLString) {
+          this.#messageContent.innerHTML = newVal;
+        } else {
+          this.#messageContent.innerText = newVal;
+        }
+      },
+    },
+    showClose: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    placement: {
+      type: [
+        "top",
+        "top-left",
+        "top-right",
+        "bottom",
+        "bottom-left",
+        "bottom-right",
+        "middle",
+      ],
+      default: "top",
+      observer: (newVal) => {
+        this.className = this.updateContainerClasslist();
+      },
     },
   });
 
@@ -88,6 +172,14 @@ export class EaNotificationElement extends Base {
   }
 
   close() {}
+
+  #dispatchBubblesEvent = (customEventName, detail) => {
+    this.dispatchEvent(customEventName, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
+  };
 
   connectedCallback() {
     super.connectedCallback();
