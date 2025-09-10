@@ -1,4 +1,4 @@
-import { EaMessageBoxElement } from "./components/index.js";
+import { EaMessageBoxElement } from "./component/index.js";
 import { EaMessageBox } from "./utils/EaMessageBoxInstance.js";
 
 window.$alert = EaMessageBox.alert;

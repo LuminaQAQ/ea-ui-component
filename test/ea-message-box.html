@@ -59,11 +59,11 @@
               type: "warning",
             }
           )
-            .then((e) => {
-              $message.info(`action: ${e.type}`);
+            .then((action) => {
+              $message.info(`action: ${action}`);
             })
-            .catch((e) => {
-              $message.info(`action: ${e.type}`);
+            .catch((action) => {
+              $message.info(`action: ${action}`);
             });
         });
       },
@@ -86,10 +86,10 @@
               /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/,
             inputErrorMessage: 'Invalid Email',
           })
-            .then((e) => {
-              $message.success(`Your email is:${value}`);
+            .then((action) => {
+              $message.success(`Your email is:${action}`);
             })
-            .catch((e) => {
+            .catch((action) => {
               $message.info('Input canceled');
             });
         });
@@ -189,8 +189,6 @@
               })
             })
             .catch((action) => {
-              console.log(action);
-
               EaMessage({
                 type: 'info',
                 message:
