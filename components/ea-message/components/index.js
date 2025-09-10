@@ -1,5 +1,4 @@
 import Base from "@components/Base.js";
-import { EaMessage } from "../utils/EaMessageInstance";
 
 import stylesheet from "./index.scss?inline";
 
@@ -15,15 +14,24 @@ export class EaMessageElement extends Base {
   /** @type {AbortController} */
   #visibleAbortController;
 
+  #states = {
+    dangerouslyUseHTMLString: false,
+  };
+
+  // ------- dangerouslyUseHTMLString -------
+  // #region
+  get dangerouslyUseHTMLString() {
+    return this.#states.dangerouslyUseHTMLString;
+  }
+
+  set dangerouslyUseHTMLString(value) {
+    this.#states.dangerouslyUseHTMLString = value;
+  }
+  // #endregion
+  // ------- end -------
+
   static get observedAttributes() {
-    return [
-      "type",
-      "visible",
-      "message",
-      "showClose",
-      "dangerouslyUseHTMLString",
-      "placement",
-    ];
+    return ["type", "visible", "message", "showClose", "placement"];
   }
 
   state = this.properties({
@@ -82,11 +90,6 @@ export class EaMessageElement extends Base {
           );
         }
       },
-    },
-    dangerouslyUseHTMLString: {
-      type: Boolean,
-      default: false,
-      observer: (newVal) => {},
     },
     message: {
       type: String,

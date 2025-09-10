@@ -31,7 +31,7 @@ export class EaInput extends Base {
   #abortController;
 
   static get observedAttributes() {
-    return EaUtils.arrayToLowerCamelCase([
+    return EaUtils.Array.toLowerCamelCase([
       "type",
       "disabled",
       "value",

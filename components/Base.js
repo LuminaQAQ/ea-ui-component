@@ -15,8 +15,6 @@ export default class Base extends HTMLElement {
 
     /** @type {HTMLElement} */
     this.shadowRoot;
-
-    String.prototype.toLowerCamelCase = this.toLowerCamelCase;
   }
 
   /**
