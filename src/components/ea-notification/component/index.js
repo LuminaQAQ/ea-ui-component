@@ -38,6 +38,7 @@ export class EaNotificationElement extends Base {
 
   static get observedAttributes() {
     return EaUtils.Array.toLowerCamelCase([
+      "visible",
       "title",
       "message",
       "type",
