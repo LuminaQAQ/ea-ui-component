@@ -92,7 +92,7 @@ export class EaMessageBoxElement extends EaOverlay {
   // ------- end -------
 
   static get observedAttributes() {
-    return EaUtils.arrayToLowerCamelCase([
+    return EaUtils.Array.toLowerCamelCase([
       ...super.observedAttributes,
       "boxType",
       "visible",
