@@ -123,6 +123,9 @@
     "./ea-message-box": {
       "import": "./dist/ea-message-box.js"
     },
+    "./ea-notification": {
+      "import": "./dist/ea-notification.js"
+    },
     "./ea-option": {
       "import": "./dist/ea-option.js"
     },

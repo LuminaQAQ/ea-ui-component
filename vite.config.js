@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, normalizePath } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import entryConfigs from "./configs/entryConfig.js";
 import path, { resolve } from "node:path";
@@ -9,12 +9,12 @@ export default defineConfig({
     port: 5173,
   },
   plugins: [
-    visualizer({
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-      filename: "dist/stats.html",
-    }),
+    // visualizer({
+    //   open: true,
+    //   gzipSize: true,
+    //   brotliSize: true,
+    //   filename: "dist/stats.html",
+    // }),
   ],
   build: {
     lib: {
@@ -41,25 +41,48 @@ export default defineConfig({
         },
         assetFileNames: "assets/icon.css",
         manualChunks(id) {
-          if (id.includes(".scss?inline") && id.includes("themes")) {
-            const name = id.split("/").pop()?.replace(".scss?inline", "");
+          const utilsPath = normalizePath(path.resolve(__dirname, "src/utils"));
+          const commonPath = normalizePath(
+            path.resolve(__dirname, "src/common")
+          );
+          const normalizedId = normalizePath(id);
+
+          if (
+            normalizedId.includes(".scss?inline") &&
+            normalizedId.includes("themes")
+          ) {
+            const name = normalizedId
+              .split("/")
+              .pop()
+              ?.replace(".scss?inline", "");
             return `themes/${name}`;
           }
 
-          if (id.includes(".scss?inline")) {
-            const fullPathChunk = id.split("/");
-            const fullName = fullPathChunk[fullPathChunk.length - 2];
+          if (normalizedId.includes(".scss?inline")) {
+            /**
+             * @param {Array<string>} pathChunks
+             * @returns
+             */
+            const findComponentName = (pathChunks) => {
+              const chunk = pathChunks.pop();
+              return chunk?.startsWith("ea-")
+                ? chunk
+                : findComponentName(pathChunks);
+            };
+
+            const fullPathChunk = normalizedId.split("/");
+            const fullName = findComponentName(fullPathChunk);
 
             return `css/${fullName}`;
           }
 
-          if (id.startsWith(path.join(__dirname, "/src/utils"))) {
-            const name = id.split("/").pop()?.replace(".js", "");
+          if (normalizedId.startsWith(utilsPath)) {
+            const name = normalizedId.split("/").pop()?.replace(".js", "");
             return `utils/${name}`;
           }
 
-          if (id.startsWith(path.join(__dirname, "/src/common"))) {
-            const name = id.split("/").pop()?.replace(".js", "");
+          if (normalizedId.startsWith(commonPath)) {
+            const name = normalizedId.split("/").pop()?.replace(".js", "");
             return `components/${name}`;
           }
         },
