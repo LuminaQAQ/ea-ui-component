@@ -6,10 +6,22 @@ import EaUtils from "@/utils/Utils";
 export class EaNotificationElement extends Base {
   /** @type {HTMLElement} */
   #container;
+  /** @type {HTMLElement} */
+  #header;
+  /** @type {HTMLElement} */
+  #notificationIcon;
+  /** @type {HTMLElement} */
+  #title;
+  /** @type {HTMLElement} */
+  #closeIcon;
+  /** @type {HTMLElement} */
+  #main;
+  /** @type {AbortController} */
+  #visibleAbortController;
 
   #states = {
     dangerouslyUseHTMLString: false,
-    appendTo: "body",
+    message: "",
   };
 
   // ------- dangerouslyUseHTMLString -------
@@ -24,14 +36,20 @@ export class EaNotificationElement extends Base {
   // #endregion
   // ------- end -------
 
-  // ------- appendTo -------
+  // ------- message -------
   // #region
-  get appendTo() {
-    return this.#states.appendTo;
+  get message() {
+    return this.#states.message;
   }
 
-  set appendTo(value) {
-    this.#states.appendTo = value;
+  set message(value) {
+    this.#states.message = value;
+
+    if (this.dangerouslyUseHTMLString) {
+      this.#main.innerHTML = value;
+    } else {
+      this.#main.innerText = value;
+    }
   }
   // #endregion
   // ------- end -------
@@ -64,8 +82,15 @@ export class EaNotificationElement extends Base {
           primary: "icon-info",
         };
 
-        this.#messageIcon.icon = iconTypes[newVal];
+        this.#notificationIcon.icon = iconTypes[newVal];
         this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    title: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#title.textContent = newVal;
       },
     },
     visible: {
@@ -82,7 +107,7 @@ export class EaNotificationElement extends Base {
 
           void this.#container.offsetWidth;
 
-          this.#container.classList.add("ea-message--is-show");
+          this.#container.classList.add("is-show");
 
           this.#container.addEventListener(
             "transitionend",
@@ -94,7 +119,7 @@ export class EaNotificationElement extends Base {
         } else {
           this.#handleHide();
 
-          this.#container.classList.add("ea-message--before-hide");
+          this.#container.classList.add("is-before-hide");
           this.#dispatchBubblesEvent("hide");
 
           this.#container.addEventListener(
@@ -108,17 +133,6 @@ export class EaNotificationElement extends Base {
         }
       },
     },
-    message: {
-      type: String,
-      default: "",
-      observer: (newVal) => {
-        if (this.dangerouslyUseHTMLString) {
-          this.#messageContent.innerHTML = newVal;
-        } else {
-          this.#messageContent.innerText = newVal;
-        }
-      },
-    },
     showClose: {
       type: Boolean,
       default: false,
@@ -127,18 +141,10 @@ export class EaNotificationElement extends Base {
       },
     },
     placement: {
-      type: [
-        "top",
-        "top-left",
-        "top-right",
-        "bottom",
-        "bottom-left",
-        "bottom-right",
-        "middle",
-      ],
-      default: "top",
+      type: ["top-right", "top-left", "bottom-right", "bottom-left"],
+      default: "top-right",
       observer: (newVal) => {
-        this.className = this.updateContainerClasslist();
+        this.#container.className = this.updateContainerClasslist();
       },
     },
   });
@@ -149,7 +155,10 @@ export class EaNotificationElement extends Base {
    */
   updateContainerClasslist() {
     return this.computedClasslist("ea-notification", {
-      // ['--' + this.type]: this.type,
+      ["--visible"]: this.visible,
+      ["--" + this.type]: this.type,
+      ["--show-close"]: this.showClose,
+      ["--" + this.placement]: this.placement,
     });
   }
 
@@ -163,15 +172,25 @@ export class EaNotificationElement extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
-      <div class='ea-notification' part='container'>
-        <slot></slot>
+      <div class="ea-notification" part='container'>
+        <header class="ea-notification__header" part='header'>
+          <ea-icon class="ea-notification__icon" part="icon"></ea-icon>
+          <span class="ea-notification__title" part="title"> </span>
+          <ea-icon class="ea-notification__close-icon" part='close-icon'></ea-icon>
+        </header>
+        <main class="ea-notification__main" part='main'> </main>
       </div>
         `;
 
     this.#container = this.shadowRoot.querySelector(".ea-notification");
+    this.#header = this.shadowRoot.querySelector(".ea-notification__header");
+    this.#notificationIcon = this.shadowRoot.querySelector(".ea-notification__icon");
+    this.#title = this.shadowRoot.querySelector(".ea-notification__title");
+    this.#closeIcon = this.shadowRoot.querySelector(
+      ".ea-notification__close-icon"
+    );
+    this.#main = this.shadowRoot.querySelector(".ea-notification__main");
   }
-
-  close() {}
 
   #dispatchBubblesEvent = (customEventName, detail) => {
     this.dispatchEvent(customEventName, {
@@ -181,8 +200,60 @@ export class EaNotificationElement extends Base {
     });
   };
 
+  close = () => {
+    this.visible = false;
+    this.#dispatchBubblesEvent("close");
+  };
+
+  #initPosition = () => {
+    /** @type {HTMLElement[]} */
+    const eaNotificationList = document.querySelectorAll(
+      `ea-notification[placement="${this.placement}"]`
+    );
+    if (eaNotificationList.length <= 1) return;
+
+    const lastEl = eaNotificationList[eaNotificationList.length - 2];
+    /** @type {string} */
+    const lastPosition = lastEl.style.getPropertyValue("--ea-notification-y");
+
+    const lastEaMessage = lastEl.shadowRoot.querySelector(".ea-notification");
+    const lastEaMessageRect = lastEaMessage.getBoundingClientRect();
+
+    this.style.setProperty(
+      "--ea-notification-y",
+      `${
+        Number(lastPosition.replace("px", "")) + lastEaMessageRect.height + 8
+      }px`
+    );
+  };
+
+  #handleHide = () => {
+    const eaNotificationList = [
+      ...document.querySelectorAll(
+        `ea-notification[placement="${this.placement}"]`
+      ),
+    ];
+    const thisIndex = eaNotificationList.findIndex((el) => el === this);
+    const els = eaNotificationList.slice(thisIndex + 1);
+    const height = this.#container.getBoundingClientRect().height;
+
+    els.forEach((message, i) => {
+      const posi = Number(
+        message.style.getPropertyValue("--ea-notification-y").replace("px", "")
+      );
+      message.style.setProperty(
+        "--ea-notification-y",
+        `${posi - height - 8}px`
+      );
+    });
+  };
+
   connectedCallback() {
     super.connectedCallback();
+  }
+
+  $beforeUnmounted() {
+    this.#visibleAbortController?.abort();
   }
 }
 

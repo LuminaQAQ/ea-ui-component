@@ -1,6 +1,7 @@
 export default class EaUtils {
   static Array = {};
   static String = {};
+  static Object = {};
 }
 
 EaUtils.Array.toLowerCamelCase = function (arr) {

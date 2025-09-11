@@ -18,20 +18,80 @@
     <script type="module" src="../src/components/ea-button/index.js"></script>
     <script type="module">
         import { EaNotification } from "../src/components/ea-notification/index.js";
-        
+
+        // ------- 基础用法 -------
+        // #region
+        const basicExample = {
+            btn1: document.querySelector("#basicSection #basic1"),
+            btn2: document.querySelector("#basicSection #basic2"),
+
+            init() {
+                this.btn1.addEventListener("click", () => {
+                    EaNotification({
+                        title: 'Title',
+                        message: 'This is a message that automatically close',
+                    });
+                });
+
+                this.btn2.addEventListener("click", () => {
+                    EaNotification({
+                        title: 'Prompt',
+                        message: 'This is a message that does not automatically close',
+                        duration: 0,
+                    })
+                })
+            }
+        }
+        basicExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 不同类型的通知 -------
+        // #region
+        const typeExample = {
+            btns: document.querySelectorAll('#typeSection ea-button'),
+
+            init() {
+                this.btns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        EaNotification({
+                            type: btn.textContent.toLowerCase(),
+                            message: 'This is a message',
+                        })
+                    })
+                })
+            }
+        }
+        typeExample.init();
+        // #endregion
+        // ------- end -------
     </script>
 
 
     <!-- #region 基础用法 -->
     <h1>基础用法</h1>
 
-    <div class="demo">
-        <ea-button plain>
+    <div id="basicSection" class="demo">
+        <ea-button id="basic1" plain>
             Closes automatically
         </ea-button>
-        <ea-button plain>
+        <ea-button id="basic2" plain>
             Won't close automatically
         </ea-button>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 不同类型的通知 -->
+    <h1>不同类型的通知</h1>
+
+    <div id="typeSection" class="demo">
+        <ea-button plain>Info</ea-button>
+        <ea-button type="primary" plain>Primary</ea-button>
+        <ea-button type="success" plain>Success</ea-button>
+        <ea-button type="warning" plain>Warning</ea-button>
+        <ea-button type="danger" plain>Error</ea-button>
     </div>
 
     <hr>
