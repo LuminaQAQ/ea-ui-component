@@ -6,10 +6,24 @@ import EaUtils from "@/utils/Utils";
 export class EaNotificationElement extends Base {
   /** @type {HTMLElement} */
   #container;
+  /** @type {HTMLElement} */
+  #header;
+  /** @type {HTMLElement} */
+  #notificationIcon;
+  /** @type {HTMLElement} */
+  #title;
+  /** @type {HTMLElement} */
+  #closeIcon;
+  /** @type {HTMLElement} */
+  #main;
+  /** @type {AbortController} */
+  #visibleAbortController;
+  /** @type {AbortController} */
+  #abortController;
 
   #states = {
     dangerouslyUseHTMLString: false,
-    appendTo: "body",
+    message: "",
   };
 
   // ------- dangerouslyUseHTMLString -------
@@ -24,14 +38,20 @@ export class EaNotificationElement extends Base {
   // #endregion
   // ------- end -------
 
-  // ------- appendTo -------
+  // ------- message -------
   // #region
-  get appendTo() {
-    return this.#states.appendTo;
+  get message() {
+    return this.#states.message;
   }
 
-  set appendTo(value) {
-    this.#states.appendTo = value;
+  set message(value) {
+    this.#states.message = value;
+
+    if (this.dangerouslyUseHTMLString) {
+      this.#main.innerHTML = value;
+    } else {
+      this.#main.innerText = value;
+    }
   }
   // #endregion
   // ------- end -------
@@ -52,88 +72,98 @@ export class EaNotificationElement extends Base {
   }
 
   state = this.properties({
-    // type: {
-    //   type: ["primary", "success", "warning", "info", "error"],
-    //   default: "info",
-    //   observer: (newVal) => {
-    //     const iconTypes = {
-    //       success: "icon-ok-circled",
-    //       error: "icon-cancel-circled",
-    //       warning: "icon-attention-alt",
-    //       info: "icon-info",
-    //       primary: "icon-info",
-    //     };
-    //     this.#messageIcon.icon = iconTypes[newVal];
-    //     this.#container.className = this.updateContainerClasslist();
-    //   },
-    // },
-    // visible: {
-    //   type: Boolean,
-    //   default: false,
-    //   observer: async (newVal) => {
-    //     this.#visibleAbortController?.abort();
-    //     this.#visibleAbortController = new AbortController();
-    //     if (newVal) {
-    //       this.#initPosition();
-    //       this.#container.className = this.updateContainerClasslist();
-    //       this.#dispatchBubblesEvent("show");
-    //       void this.#container.offsetWidth;
-    //       this.#container.classList.add("ea-message--is-show");
-    //       this.#container.addEventListener(
-    //         "transitionend",
-    //         () => {
-    //           this.#dispatchBubblesEvent("shown");
-    //         },
-    //         { once: true, signal: this.#visibleAbortController.signal }
-    //       );
-    //     } else {
-    //       this.#handleHide();
-    //       this.#container.classList.add("ea-message--before-hide");
-    //       this.#dispatchBubblesEvent("hide");
-    //       this.#container.addEventListener(
-    //         "transitionend",
-    //         () => {
-    //           this.#container.className = this.updateContainerClasslist();
-    //           this.#dispatchBubblesEvent("hidden");
-    //         },
-    //         { once: true, signal: this.#visibleAbortController.signal }
-    //       );
-    //     }
-    //   },
-    // },
-    // message: {
-    //   type: String,
-    //   default: "",
-    //   observer: (newVal) => {
-    //     if (this.dangerouslyUseHTMLString) {
-    //       this.#messageContent.innerHTML = newVal;
-    //     } else {
-    //       this.#messageContent.innerText = newVal;
-    //     }
-    //   },
-    // },
-    // showClose: {
-    //   type: Boolean,
-    //   default: false,
-    //   observer: (newVal) => {
-    //     this.#container.className = this.updateContainerClasslist();
-    //   },
-    // },
-    // placement: {
-    //   type: [
-    //     "top",
-    //     "top-left",
-    //     "top-right",
-    //     "bottom",
-    //     "bottom-left",
-    //     "bottom-right",
-    //     "middle",
-    //   ],
-    //   default: "top",
-    //   observer: (newVal) => {
-    //     this.className = this.updateContainerClasslist();
-    //   },
-    // },
+    type: {
+      type: ["primary", "success", "warning", "info", "error"],
+      default: "info",
+      observer: (newVal) => {
+        const iconTypes = {
+          success: "icon-ok-circled",
+          error: "icon-cancel-circled",
+          warning: "icon-attention-alt",
+          info: "icon-info",
+          primary: "icon-info",
+        };
+
+        this.#notificationIcon.icon = iconTypes[newVal];
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    title: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#title.textContent = newVal;
+      },
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+      observer: async (newVal) => {
+        this.#visibleAbortController?.abort();
+        this.#visibleAbortController = new AbortController();
+
+        if (newVal) {
+          this.#initPosition();
+          this.#container.className = this.updateContainerClasslist();
+          this.#dispatchBubblesEvent("show");
+
+          void this.#container.offsetWidth;
+
+          this.#container.classList.add("is-show");
+
+          this.#container.addEventListener(
+            "transitionend",
+            () => {
+              this.#dispatchBubblesEvent("shown");
+            },
+            { once: true, signal: this.#visibleAbortController.signal }
+          );
+        } else {
+          this.#handleHide();
+
+          this.#container.classList.add("is-before-hide");
+          this.#dispatchBubblesEvent("hide");
+
+          this.#container.addEventListener(
+            "transitionend",
+            () => {
+              this.#container.className = this.updateContainerClasslist();
+              this.#dispatchBubblesEvent("hidden");
+            },
+            { once: true, signal: this.#visibleAbortController.signal }
+          );
+        }
+      },
+    },
+    showClose: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+        this.#closeIcon.icon = this["close-icon"];
+      },
+    },
+    closeIcon: {
+      type: String,
+      default: "icon-cancel",
+      observer: (newVal) => {
+        if (this["show-close"]) this.#closeIcon.icon = newVal;
+      },
+    },
+    placement: {
+      type: ["top-right", "top-left", "bottom-right", "bottom-left"],
+      default: "top-right",
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    zIndex: {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        this.#container.style.setProperty("--z-index", newVal);
+      },
+    },
   });
 
   /**
@@ -142,7 +172,10 @@ export class EaNotificationElement extends Base {
    */
   updateContainerClasslist() {
     return this.computedClasslist("ea-notification", {
-      // ['--' + this.type]: this.type,
+      ["--visible"]: this.visible,
+      ["--" + this.type]: this.type,
+      ["--show-close"]: this["show-close"],
+      ["--" + this.placement]: this.placement,
     });
   }
 
@@ -156,15 +189,29 @@ export class EaNotificationElement extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
-      <div class='ea-notification' part='container'>
-        <slot></slot>
+      <div class="ea-notification" part='container'>
+        <ea-icon class="ea-notification__icon" part="icon"></ea-icon>
+        <div class="ea-notification__content">
+          <header class="ea-notification__header" part='header'>
+            <h2 class="ea-notification__title" part="title"> </h2>
+            <ea-icon class="ea-notification__close-icon" part='close-icon'></ea-icon>
+          </header>
+          <main class="ea-notification__main" part='main'> </main>
+        </div>
       </div>
         `;
 
     this.#container = this.shadowRoot.querySelector(".ea-notification");
+    this.#header = this.shadowRoot.querySelector(".ea-notification__header");
+    this.#notificationIcon = this.shadowRoot.querySelector(
+      ".ea-notification__icon"
+    );
+    this.#title = this.shadowRoot.querySelector(".ea-notification__title");
+    this.#closeIcon = this.shadowRoot.querySelector(
+      ".ea-notification__close-icon"
+    );
+    this.#main = this.shadowRoot.querySelector(".ea-notification__main");
   }
-
-  close() {}
 
   #dispatchBubblesEvent = (customEventName, detail) => {
     this.dispatchEvent(customEventName, {
@@ -174,8 +221,73 @@ export class EaNotificationElement extends Base {
     });
   };
 
+  close = () => {
+    this.visible = false;
+    this.#dispatchBubblesEvent("close");
+  };
+
+  #initPosition = () => {
+    /** @type {HTMLElement[]} */
+    const eaNotificationList = document.querySelectorAll(
+      `ea-notification[placement="${this.placement}"]`
+    );
+    if (eaNotificationList.length <= 1) return;
+
+    const lastEl = eaNotificationList[eaNotificationList.length - 2];
+    /** @type {string} */
+    const lastPosition = lastEl.style.getPropertyValue("--ea-notification-y");
+
+    const lastEaMessage = lastEl.shadowRoot.querySelector(".ea-notification");
+    const lastEaMessageRect = lastEaMessage.getBoundingClientRect();
+
+    this.style.setProperty(
+      "--ea-notification-y",
+      `${
+        Number(lastPosition.replace("px", "")) + lastEaMessageRect.height + 8
+      }px`
+    );
+  };
+
+  #handleHide = () => {
+    const eaNotificationList = [
+      ...document.querySelectorAll(
+        `ea-notification[placement="${this.placement}"]`
+      ),
+    ];
+    const thisIndex = eaNotificationList.findIndex((el) => el === this);
+    const els = eaNotificationList.slice(thisIndex + 1);
+    const height = this.#container.getBoundingClientRect().height;
+
+    els.forEach((message, i) => {
+      const posi = Number(
+        message.style.getPropertyValue("--ea-notification-y").replace("px", "")
+      );
+      message.style.setProperty(
+        "--ea-notification-y",
+        `${posi - height - 8}px`
+      );
+    });
+  };
+
+  #initCloseEvent = () => {
+    this.visible = false;
+  };
+
   connectedCallback() {
     super.connectedCallback();
+
+    const abortController = new AbortController();
+    this.#abortController = abortController;
+
+    if (this["show-close"])
+      this.#closeIcon.addEventListener("click", this.#initCloseEvent, {
+        signal: abortController.signal,
+      });
+  }
+
+  $beforeUnmounted() {
+    this.#visibleAbortController?.abort();
+    this.#abortController?.abort();
   }
 }
 
