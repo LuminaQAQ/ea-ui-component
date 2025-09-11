@@ -56,6 +56,7 @@
                     btn.addEventListener('click', () => {
                         EaNotification({
                             type: btn.textContent.toLowerCase(),
+                            title: btn.textContent,
                             message: 'This is a message',
                         })
                     })
@@ -63,6 +64,62 @@
             }
         }
         typeExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 自定义消息弹出的位置 -------
+        // #region
+        const placementExample = {
+            btns: document.querySelectorAll("#placementSection ea-button"),
+            init() {
+                this.btns.forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        EaNotification({
+                            title: 'Custom Position',
+                            message: 'This is a message',
+                            placement: btn.textContent.trim().toLowerCase().replace(" ", "-"),
+                        })
+                    })
+                })
+            }
+        }
+        placementExample.init()
+        // #endregion
+        // ------- end -------
+
+        // ------- 使用 HTML 片段作为正文内容 -------
+        // #region
+        const htmlExample = {
+            btn: document.querySelector("#useHTMLSection ea-button"),
+            init() {
+                this.btn.addEventListener("click", () => {
+                    EaNotification({
+                        title: 'HTML String',
+                        dangerouslyUseHTMLString: true,
+                        message: '<strong>This is <i>HTML</i> string</strong>',
+                    })
+                })
+            }
+        }
+        htmlExample.init()
+        // #endregion
+        // ------- end -------
+
+        // ------- 隐藏关闭按钮 -------
+        // #region
+        const hideCloseExample = {
+            btn: document.querySelector('#hideCloseSection ea-button'),
+            init() {
+                this.btn.addEventListener('click', async () => {
+                    EaNotification.success({
+                        title: 'Info',
+                        message: 'This is a message without close button',
+                        showClose: false,
+                    })
+                })
+            }
+        }
+        hideCloseExample.init()
         // #endregion
         // ------- end -------
     </script>
@@ -96,6 +153,45 @@
 
     <hr>
     <!-- #endregion  -->
+
+    <!-- 自定义消息弹出的位置 -->
+    <!-- #region -->
+    <h1>自定义消息弹出的位置</h1>
+
+    <div class="demo" id="placementSection">
+        <ea-button plain> Top Right </ea-button>
+        <ea-button plain> Bottom Right </ea-button>
+        <ea-button plain> Bottom Left </ea-button>
+        <ea-button plain> Top Left </ea-button>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end -->
+
+    <!--  使用 HTML 片段作为正文内容 -->
+    <!-- #region -->
+    <h1>使用 HTML 片段作为正文内容</h1>
+
+    <div class="demo" id="useHTMLSection">
+        <ea-button plain> Use HTML String </ea-button>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  隐藏关闭按钮 -->
+    <!-- #region -->
+    <h1>隐藏关闭按钮</h1>
+
+    <div class="demo" id="hideCloseSection">
+        <ea-button plain> Hide close button </ea-button>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
 </body>
 
 </html>

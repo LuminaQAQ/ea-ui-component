@@ -18,6 +18,8 @@ export class EaNotificationElement extends Base {
   #main;
   /** @type {AbortController} */
   #visibleAbortController;
+  /** @type {AbortController} */
+  #abortController;
 
   #states = {
     dangerouslyUseHTMLString: false,
@@ -138,6 +140,14 @@ export class EaNotificationElement extends Base {
       default: false,
       observer: (newVal) => {
         this.#container.className = this.updateContainerClasslist();
+        this.#closeIcon.icon = this["close-icon"];
+      },
+    },
+    closeIcon: {
+      type: String,
+      default: "icon-cancel",
+      observer: (newVal) => {
+        if (this["show-close"]) this.#closeIcon.icon = newVal;
       },
     },
     placement: {
@@ -145,6 +155,13 @@ export class EaNotificationElement extends Base {
       default: "top-right",
       observer: (newVal) => {
         this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    zIndex: {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        this.#container.style.setProperty("--z-index", newVal);
       },
     },
   });
@@ -157,7 +174,7 @@ export class EaNotificationElement extends Base {
     return this.computedClasslist("ea-notification", {
       ["--visible"]: this.visible,
       ["--" + this.type]: this.type,
-      ["--show-close"]: this.showClose,
+      ["--show-close"]: this["show-close"],
       ["--" + this.placement]: this.placement,
     });
   }
@@ -173,18 +190,22 @@ export class EaNotificationElement extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class="ea-notification" part='container'>
-        <header class="ea-notification__header" part='header'>
-          <ea-icon class="ea-notification__icon" part="icon"></ea-icon>
-          <span class="ea-notification__title" part="title"> </span>
-          <ea-icon class="ea-notification__close-icon" part='close-icon'></ea-icon>
-        </header>
-        <main class="ea-notification__main" part='main'> </main>
+        <ea-icon class="ea-notification__icon" part="icon"></ea-icon>
+        <div class="ea-notification__content">
+          <header class="ea-notification__header" part='header'>
+            <h2 class="ea-notification__title" part="title"> </h2>
+            <ea-icon class="ea-notification__close-icon" part='close-icon'></ea-icon>
+          </header>
+          <main class="ea-notification__main" part='main'> </main>
+        </div>
       </div>
         `;
 
     this.#container = this.shadowRoot.querySelector(".ea-notification");
     this.#header = this.shadowRoot.querySelector(".ea-notification__header");
-    this.#notificationIcon = this.shadowRoot.querySelector(".ea-notification__icon");
+    this.#notificationIcon = this.shadowRoot.querySelector(
+      ".ea-notification__icon"
+    );
     this.#title = this.shadowRoot.querySelector(".ea-notification__title");
     this.#closeIcon = this.shadowRoot.querySelector(
       ".ea-notification__close-icon"
@@ -248,12 +269,25 @@ export class EaNotificationElement extends Base {
     });
   };
 
+  #initCloseEvent = () => {
+    this.visible = false;
+  };
+
   connectedCallback() {
     super.connectedCallback();
+
+    const abortController = new AbortController();
+    this.#abortController = abortController;
+
+    if (this["show-close"])
+      this.#closeIcon.addEventListener("click", this.#initCloseEvent, {
+        signal: abortController.signal,
+      });
   }
 
   $beforeUnmounted() {
     this.#visibleAbortController?.abort();
+    this.#abortController?.abort();
   }
 }
 

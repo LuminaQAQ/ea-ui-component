@@ -28,9 +28,9 @@ class EaNotificationInstance {
     type: "info",
     duration: 3000,
     placement: "top-right",
+    zIndex: 0,
     showClose: true,
-    zIndex: 2000,
-    closeIcon: true,
+    closeIcon: "icon-cancel",
     appendTo: "body",
   };
 
@@ -41,6 +41,7 @@ class EaNotificationInstance {
     options = Object.assign({}, this.#defaultOptions, options);
 
     const el = this.#renderer(options);
+    this.instance = el;
     this.#appendTo(el, options.appendTo);
     this.#handleDisplay(el, options.duration);
   }
@@ -110,8 +111,40 @@ class EaNotificationInstance {
         el.visible = false;
       }, duration);
   };
+
+  close = () => {
+    this.instance.close();
+  };
 }
 
-export const EaNotification = (options) => {
-  new EaNotificationInstance(options);
-};
+export const EaNotification = (options) => new EaNotificationInstance(options);
+
+EaNotification.primary = (options) =>
+  EaNotification({
+    ...options,
+    type: "primary",
+  });
+
+EaNotification.success = (options) =>
+  EaNotification({
+    ...options,
+    type: "success",
+  });
+
+EaNotification.warning = (options) =>
+  EaNotification({
+    ...options,
+    type: "warning",
+  });
+
+EaNotification.info = (options) =>
+  EaNotification({
+    ...options,
+    type: "info",
+  });
+
+EaNotification.error = (options) =>
+  EaNotification({
+    ...options,
+    type: "error",
+  });

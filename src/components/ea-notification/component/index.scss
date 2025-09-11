@@ -7,50 +7,57 @@ $types: (
 );
 
 :host {
-  --ea-notification-z-index: 2000;
   --ea-notification-y: 0;
-  --ea-notification-fade-out-y: -100%;
+  --ea-notification-show-x: 16px;
+  --ea-notification-fade-out-x: 100%;
 
-  --ea-notification-spacing: var(--spacing-md);
+  --ea-notification-padding: var(--spacing-lg);
   --ea-notification-border-color: var(--grey-200);
   --ea-notification-border-radius: var(--border-radius-sm);
+  --ea-notification-box-shadow: var(--box-shadow-md);
 
-  --ea-notification-min-width: 380px;
-  --ea-notification-font-size: var(--font-size-md);
+  --ea-notification-width: 300px;
+  --ea-notification-title-font-size: var(--font-size-lg);
+  --ea-notification-message-font-size: var(--font-size-md);
+  --ea-notification-title-color: var(--grey-900);
+  --ea-notification-message-color: var(--grey-700);
+  --ea-notification-icon-size: 18px;
 
   --ea-notification-transition: var(--transition-normal);
 
   @each $type, $color in $types {
-    --ea-notification-#{$type}-bgc: var(--#{$color}-100);
+    --ea-notification-#{$type}-color: var(--#{$color}-500);
   }
 
   --ea-notification-gap: var(--spacing-md);
+
+  --ea-notification-z-index: 0;
+}
+
+:host {
+  z-index: var(--ea-notification-z-index);
 }
 
 @include block(ea-notification) {
-  position: fixed;
-  left: 50%;
-  z-index: var(--ea-notification-z-index);
-
   display: none;
   visibility: hidden;
-  align-items: center;
+
+  position: fixed;
+  z-index: var(--ea-notification-z-index);
 
   box-sizing: border-box;
-  padding: var(--ea-notification-spacing);
+  padding: var(--ea-notification-padding);
   margin: var(--ea-notification-gap) 0;
   gap: var(--ea-notification-gap);
   border: 1px solid var(--ea-notification-border-color);
   border-radius: var(--ea-notification-border-radius);
-  font-size: var(--ea-notification-font-size);
+  box-shadow: var(--ea-notification-box-shadow);
 
-  // top: var(--ea-notification-y);
-  // left: 50%;
   transform-origin: center;
-  transform: translate(-50%, var(--ea-notification-fade-out-y));
+  transform: translate(var(--ea-notification-fade-out-x), 0);
   filter: opacity(0);
 
-  width: fit-content;
+  width: var(--ea-notification-width);
   max-width: calc(100% - 32px);
   overflow: hidden;
 
@@ -60,25 +67,46 @@ $types: (
     bottom var(--ea-notification-transition);
 
   @include element(icon) {
-    font-size: var(--ea-notification-font-size);
-    line-height: var(--ea-notification-font-size);
+    font-size: var(--ea-notification-icon-size);
+    line-height: var(--ea-notification-icon-size);
   }
 
   @include element(content) {
-    line-height: var(--ea-notification-font-size);
+    flex: 1;
     vertical-align: middle;
   }
 
-  @include element(icon-close) {
-    margin-left: auto;
+  @include element(header) {
+    position: relative;
+  }
+
+  @include element(title) {
+    margin-top: 0;
+
+    color: var(--ea-notification-title-color);
+    font-size: var(--ea-notification-title-font-size);
+    line-height: var(--ea-notification-title-font-size);
+  }
+
+  @include element(close-icon) {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    cursor: pointer;
     display: none;
     color: var(--ea-notification-info-color);
   }
 
+  @include element(main) {
+    color: var(--ea-notification-message-color);
+    line-height: 1.7;
+    font-size: var(--ea-notification-message-font-size);
+  }
+
   @each $type, $color in $types {
     @include modifier($type) {
-      background-color: var(--ea-notification-#{$type}-bgc);
-      color: var(--ea-notification-#{$type}-color);
+      background-color: var(--color-white);
 
       .ea-notification__icon {
         color: var(--ea-notification-#{$type}-color);
@@ -87,64 +115,56 @@ $types: (
   }
 
   @include modifier(show-close) {
-    .ea-notification__icon-close {
+    .ea-notification__close-icon {
       display: block;
     }
   }
 
   @include modifier(visible) {
-    display: block;
+    display: flex;
+    align-items: start;
   }
 
   @include state(show) {
     visibility: visible;
     filter: opacity(1);
-    transform: translate(-50%, 0);
+    transform: translate(0, 0);
   }
 
   @include state(before-hide) {
     filter: opacity(0);
-    transform: translate(-50%, var(--ea-notification-fade-out-y));
+    transform: translate(var(--ea-notification-fade-out-x, -50%));
   }
 
   @include modifier(top) {
-    &,
     &-left,
     &-right {
       top: var(--ea-notification-y);
     }
 
     &-left {
-      left: 25%;
-    }
-
-    & {
-      left: 50%;
+      --ea-notification-fade-out-x: -100%;
+      left: var(--ea-notification-show-x);
     }
 
     &-right {
-      left: 75%;
+      right: var(--ea-notification-show-x);
     }
   }
 
   @include modifier(bottom) {
-    &,
     &-left,
     &-right {
-      --ea-notification-fade-out-y: 100%;
       bottom: var(--ea-notification-y);
     }
 
     &-left {
-      left: 25%;
-    }
-
-    & {
-      left: 50%;
+      --ea-notification-fade-out-x: -100%;
+      left: var(--ea-notification-show-x);
     }
 
     &-right {
-      left: 75%;
+      right: var(--ea-notification-show-x);
     }
   }
 }
