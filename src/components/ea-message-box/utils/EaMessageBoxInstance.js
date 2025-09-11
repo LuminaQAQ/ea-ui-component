@@ -1,4 +1,8 @@
 /**
+ * @typedef {'cancel' | 'close' | 'confirm'} Action
+ */
+
+/**
  * @typedef {Object} MessageBoxOptions
  * @property {string} title
  * @property {string} message
@@ -6,9 +10,9 @@
  * @property {'primary' | 'success' | 'info' | 'warning' | 'error'} type
  * @property {String} icon
  * @property {String} closeIcon
- * @property {(value: string, action) => any | (action) => any} callback
+ * @property {(value: string, action: Action) => any | (action: Action) => any} callback
  * @property {Boolean} showClose
- * @property {(action: string, instance: HTMLElement, done: () => void) => void} beforeClose
+ * @property {(action: Action, instance: HTMLElement, done: () => void) => void} beforeClose
  * @property {Boolean} lockScroll
  * @property {Boolean} showCancelButton
  * @property {Boolean} showConfirmButton
@@ -32,95 +36,115 @@
 
 import EaUtils from "@/utils/Utils";
 
-/** @type {MessageBoxOptions} */
-const defaultOptions = {
-  boxType: "personalized",
-  distinguishCancelAndClose: false,
+class EaMessageBoxInstance {
+  /** @type {MessageBoxOptions} */
+  #defaultOptions = {
+    boxType: "personalized",
+    distinguishCancelAndClose: false,
 
-  title: "",
-  dangerouslyUseHTMLString: false,
-  message: "",
-  icon: "",
-  type: "primary",
-  closeIcon: "icon-cancel",
-  showClose: true,
+    title: "",
+    dangerouslyUseHTMLString: false,
+    message: "",
+    icon: "",
+    type: "primary",
+    closeIcon: "icon-cancel",
+    showClose: true,
 
-  // lockScroll: true,
+    // lockScroll: true,
 
-  showCancelButton: false,
-  showConfirmButton: true,
-  confirmButtonLoading: false,
-  cancelButtonText: "Cancel",
-  confirmButtonText: "OK",
-  closeOnClickModal: true,
-  closeOnPressEscape: false,
+    showCancelButton: false,
+    showConfirmButton: true,
+    confirmButtonLoading: false,
+    cancelButtonText: "Cancel",
+    confirmButtonText: "OK",
+    closeOnClickModal: true,
+    closeOnPressEscape: false,
 
-  showInput: false,
-  inputPlaceholder: "",
-  inputType: "text",
-  inputValue: "",
-  inputPattern: null,
-  //   inputValidator: null,
-  inputErrorMessage: "",
+    showInput: false,
+    inputPlaceholder: "",
+    inputType: "text",
+    inputValue: "",
+    inputPattern: null,
+    //   inputValidator: null,
+    inputErrorMessage: "",
 
-  center: false,
-  draggable: false,
-  roundButton: false,
-  buttonSize: "medium",
-  appendTo: "body",
+    center: false,
+    draggable: false,
+    roundButton: false,
+    buttonSize: "medium",
+    appendTo: "body",
 
-  beforeClose: null,
-};
+    beforeClose: null,
+  };
+  #excluded = [
+    "inputPattern",
+    "inputValidator",
+    "beforeClose",
+    "confirmButtonLoading",
+    "dangerouslyUseHTMLString",
+    "distinguishCancelAndClose",
+  ];
 
-const excluded = [
-  "inputPattern",
-  "inputValidator",
-  "beforeClose",
-  "confirmButtonLoading",
-  "dangerouslyUseHTMLString",
-  "distinguishCancelAndClose",
-];
+  /**
+   *
+   * @param {MessageBoxOptions} options
+   */
+  constructor(options) {
+    options = Object.assign(
+      { boxType: options.boxType },
+      this.#defaultOptions,
+      options
+    );
 
-const appendToHandler = (el, appendTo) => {
-  if (appendTo instanceof HTMLElement) {
-    appendTo.appendChild(el);
-  } else {
-    const parent = document.querySelector(appendTo);
-    parent ? parent.appendChild(el) : document.body.appendChild(el);
+    const messageBox = this.#renderer(options);
+    this.instance = messageBox;
+    this.#appendToHandler(messageBox, options.appendTo);
   }
-};
 
-const renderer = (options) => {
-  const messageBox = document.createElement("ea-message-box");
-
-  for (const k in options) {
-    if (excluded.includes(k)) {
-      messageBox[k] = options[k];
+  /**
+   * 元素添加
+   * @param {HTMLElement} el
+   * @param {String | HTMLElement} appendTo
+   */
+  #appendToHandler = (el, appendTo) => {
+    if (appendTo instanceof HTMLElement) {
+      appendTo.appendChild(el);
     } else {
-      const key = EaUtils.String.toLowerCamelCase(k);
-      messageBox.setAttribute(key, options[k]);
+      const parent = document.querySelector(appendTo);
+      parent ? parent.appendChild(el) : document.body.appendChild(el);
     }
-  }
+  };
 
-  appendToHandler(messageBox, options.appendTo);
+  /**
+   * 元素渲染
+   * @param {MessageBoxOptions} options
+   * @returns
+   */
+  #renderer = (options) => {
+    const messageBox = document.createElement("ea-message-box");
 
-  return messageBox;
-};
+    for (const k in options) {
+      if (this.#excluded.includes(k)) {
+        messageBox[k] = options[k];
+      } else {
+        const key = EaUtils.String.toLowerCamelCase(k);
+        messageBox.setAttribute(key, options[k]);
+      }
+    }
+
+    return messageBox;
+  };
+}
 
 /**
  * @param {MessageBoxOptions} options
  * @param {'alert' | 'confirm' | 'prompt'} boxType
- * @returns
+ * @returns {Promise}
  */
 export const EaMessageBox = (options) => {
-  options = Object.assign(
-    { boxType: options.boxType },
-    defaultOptions,
-    options
-  );
-
   const controller = new AbortController();
-  const messageBox = renderer(options);
+  const messageBox = new EaMessageBoxInstance(options).instance;
+
   messageBox.visible = true;
   messageBox.addEventListener(
     "closed",
