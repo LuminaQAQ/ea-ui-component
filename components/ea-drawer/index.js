@@ -1,251 +1,147 @@
-import Base from '../Base.js';
-import '../ea-icon/index.js'
+import { EaOverlay } from "@/common/ea-overlay";
 
-import { timeout } from '../../utils/timeout.js';
-import { handleDefaultAttrIsTrue } from '../../utils/handleDefaultAttrIsTrue.js';
+import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
 
-import { stylesheet } from './src/style/stylesheet.js';
+export class EaDrawer extends EaOverlay {
+  /** @type {AbortController} */
+  #abortController;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #drawerContainer;
+  /** @type {HTMLElement} */
+  #header;
+  /** @type {HTMLElement} */
+  #title;
+  /** @type {HTMLElement} */
+  #cancelIcon;
+  /** @type {HTMLElement} */
+  #content;
+  /** @type {HTMLElement} */
+  #footer;
 
-export class EaDrawer extends Base {
-  #wrap;
+  static get observedAttributes() {
+    return EaUtils.Array.toLowerCamelCase([
+      ...super.observedAttributes,
+      "direction",
 
-  #drawerWrap;
-  #maskWrap;
+      "visible",
+      "append-to-body",
+      "append-to",
+      // "lock-scroll",
+      "before-close",
+      "close-on-click-modal",
+      "close-on-press-escape",
+      "open-delay",
+      "close-delay",
+      "destroy-on-close",
+      "modal",
+      // "resizable",
+      "show-close",
+      "size",
+      "title",
+      "with-header",
+      "z-index",
 
-  #headerWrap;
-  #headerTitleWrap;
-  #headerCloseIcon;
+      "header-aria-level ",
+    ]);
+  }
 
-  constructor() {
-    super();
+  state = this.properties({
+    direction: {
+      type: ["rtl", "ltr", "ttb", "btt"],
+      default: "rtl",
+      observer: (newVal) => {
+        const contentContainer = this.shadowRoot.querySelector(
+          ".ea-overlay__content"
+        );
+        this.#initDirectionDrawer(newVal, contentContainer);
+      },
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.status = newVal;
+      },
+    },
+  });
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.innerHTML = `
-      <div class="ea-drawer_wrap" part="container">
-        <div class="ea-drawer_drawer-wrap" part="drawer-wrap">
-          <div class="ea-drawer_header-wrap" part="header-wrap">
-            <span class="ea-drawer_title" part="title-wrap">
-              <slot name="title"></slot>
-            </span>
-            <ea-icon class="ea-drawer_icon" icon="icon-cancel" part="icon"></ea-icon>
-          </div>
-          <div class="ea-drawer_main-wrap" part="main-wrap">
-            <slot></slot>
-          </div>
-          <div class="ea-drawer_mask-wrap" part="mask-wrap"></div>
-        </div>
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    return `${super.updateContainerClasslist()} ${this.computedClasslist(
+      "ea-drawer",
+      {
+        ["--" + this.direction]: this.direction,
+      },
+      {
+        drawer: true,
+      }
+    )}`;
+  }
+
+  #initDirectionDrawer = (type, container) => {
+    container.innerHTML = `
+      <div class="ea-drawer-main" part="container">
+        <header class="ea-drawer-main__header" part="header">
+          <span class="ea-drawer-main__title" part="title">
+            <slot name="title"></slot>
+          </span>
+          <ea-icon class="ea-drawer-main_cancel-icon" icon="icon-cancel" part="cancel-icon"></ea-icon>
+        </header>
+        <main class="ea-drawer-main__content" part="content">
+          <slot></slot>
+        </main>
+        <footer class="ea-drawer-main__footer" part="footer">
+          <slot name="footer"></slot>
+        </footer>
       </div>
     `;
 
-
-    this.#wrap = shadowRoot.querySelector('.ea-drawer_wrap');
-    this.#drawerWrap = shadowRoot.querySelector('.ea-drawer_drawer-wrap');
-    this.#maskWrap = shadowRoot.querySelector('.ea-drawer_mask-wrap');
-
-    this.#headerWrap = shadowRoot.querySelector('.ea-drawer_header-wrap');
-    this.#headerTitleWrap = shadowRoot.querySelector('.ea-drawer_title');
-    this.#headerCloseIcon = shadowRoot.querySelector('.ea-drawer_icon');
-
-    this.build(shadowRoot, stylesheet);
-  }
-
-  get directionType() {
-    return ['ltr', 'rtl', 'ttb', 'btt'];
-  }
-
-  // ------- direction 抽屉打开方向 -------
-  // #region
-  get direction() {
-    const attr = this.getAttribute('direction');
-
-    return this.directionType.includes(attr) ? attr : 'ltr';
-  }
-
-  set direction(value) {
-    this.setAttribute('direction', value);
-
-    this.#wrap.classList.toggle('direction-ltr', value === 'ltr');
-    this.#wrap.classList.toggle('direction-rtl', value === 'rtl');
-    this.#wrap.classList.toggle('direction-ttb', value === 'ttb');
-    this.#wrap.classList.toggle('direction-btt', value === 'btt');
-
-    this.#handleDirectionAndSizeChange(this.size);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- open 是否打开 -------
-  // #region
-  get open() {
-    return this.getAttrBoolean('open') || false;
-  }
-
-  set open(value) {
-    this.toggleAttr('open', value);
-
-    timeout(() => {
-      this.#wrap.classList.toggle('is-open', value);
-    }, 20);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- size 抽屉宽度 -------
-  // #region
-
-  get size() {
-    return this.getAttribute('size') || '30%';
-  }
-
-  set size(value) {
-    this.setAttribute('size', value);
-
-    this.#handleDirectionAndSizeChange(value);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- withHeader 是否显示标题 -------
-  // #region
-  get withHeader() {
-    let attr = handleDefaultAttrIsTrue(this.getAttribute('with-header'));
-
-    return attr;
-  }
-
-  set withHeader(value) {
-    this.toggleAttr('with-header', value);
-
-    this.#headerWrap.style.display = value ? 'flex' : 'none';
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- title 标题 -------
-  // #region
-  get title() {
-    return this.getAttribute('title');
-  }
-
-  set title(value) {
-    this.setAttribute('title', value);
-
-    if (value) {
-      this.#headerTitleWrap.innerText = value;
-    }
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- show-close 是否显示关闭按钮 -------
-  // #region
-  get showClose() {
-    let attr = handleDefaultAttrIsTrue(this.getAttribute('show-close'));
-
-    return attr;
-  }
-
-  set showClose(value) {
-    this.toggleAttr('show-close', value);
-
-    this.#headerCloseIcon.style.display = value ? 'block' : 'none';
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- modal 遮罩层 -------
-  // #region
-  get modal() {
-    let attr = handleDefaultAttrIsTrue(this.getAttribute('modal'));
-
-    return attr;
-  }
-
-  set modal(value) {
-    this.toggleAttr('modal', value);
-
-    this.#maskWrap.style.display = value ? 'block' : 'none';
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- wrapperClosable 点击遮罩层是否关闭 -------
-  // #region
-  get wrapperClosable() {
-    let attr = handleDefaultAttrIsTrue(this.getAttribute('wrapper-closable'));
-
-    return attr;
-  }
-
-  set wrapperClosable(value) {
-    this.setAttribute('wrapper-closable', value);
-  }
-  // #endregion
-  // ------- end -------
-
-  #handleDirectionAndSizeChange(value) {
-
-    const directionSize = this.direction === "ltr" || this.direction === "rtl" ? 'width' : 'height';
-
-    this.#drawerWrap.style.height = 'inherit';
-    this.#drawerWrap.style.width = 'inherit';
-
-    this.#drawerWrap.style[directionSize] = value;
-  }
-
-  #initDrawerCloseEvent() {
-    const callback = () => {
-      this.open = false;
-      this.#wrap.classList.remove('will-close');
-
-      this.#drawerWrap.removeEventListener('transitionend', callback);
-    }
-
-    const handleClose = () => {
-      this.#wrap.classList.add('will-close');
-
-      this.#drawerWrap.addEventListener('transitionend', callback);
-
-      this.dispatchEvent(new CustomEvent('close', {
-        bubbles: true,
-        composed: true,
-      }));
-    }
-
-    if (this.wrapperClosable && this.modal) {
-      this.#maskWrap.addEventListener('click', () => {
-        handleClose();
-      });
-    }
-
-    if (this.showClose) {
-      this.#headerCloseIcon.addEventListener('click', () => {
-        handleClose();
-      });
-    }
-  }
+    this.#container = this.shadowRoot.querySelector(".ea-overlay");
+    this.#drawerContainer = this.shadowRoot.querySelector(".ea-drawer-main");
+    this.#header = this.shadowRoot.querySelector(".ea-drawer-main__header");
+    this.#title = this.shadowRoot.querySelector(".ea-drawer-main__title");
+    this.#cancelIcon = this.shadowRoot.querySelector(
+      ".ea-drawer-main__cancel-icon"
+    );
+    this.#content = this.shadowRoot.querySelector(".ea-drawer-main__content");
+    this.#footer = this.shadowRoot.querySelector(".ea-drawer-main__footer");
+  };
 
   connectedCallback() {
-    this.direction = this.direction;
+    this.#abortController = new AbortController();
 
-    this.size = this.size;
+    this.#drawerContainer.ariaModal = true;
+    this.#drawerContainer.role = "dialog";
+    this["close-on-click-modal"] = this.getAttrBoolean(
+      "close-on-click-modal",
+      true
+    );
 
-    this.withHeader = this.withHeader;
-    if (this.withHeader) {
-      this.showClose = this.showClose;
-      this.title = this.title;
-    }
+    this.addEventListener(
+      "closed",
+      () => {
+        this.visible = false;
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
 
-    this.modal = this.modal;
+    super.connectedCallback();
+    this.assignedStyle(stylesheet);
+  }
 
-    this.wrapperClosable = this.wrapperClosable;
-
-    this.open = false;
-
-    this.#initDrawerCloseEvent();
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 
-if (!customElements.get('ea-drawer')) {
-  customElements.define('ea-drawer', EaDrawer);
+if (!window.customElements.get("ea-drawer")) {
+  window.customElements.define("ea-drawer", EaDrawer);
 }
