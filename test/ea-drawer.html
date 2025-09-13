@@ -5,7 +5,7 @@
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
 
     <style>
         hr {
@@ -16,16 +16,14 @@
 
 <body>
 
+    <script type="module" src="../src/components/ea-drawer/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
     <script type='module'>
-        import '../components/ea-icon/index.js'
-        import '../components/ea-button/index.js'
 
-        import '../components/ea-descriptions/index.js'
-        import '../components/ea-descriptions-item/index.js'
+        // import '../components/ea-descriptions/index.js'
+        // import '../components/ea-descriptions-item/index.js'
 
-        import '../components/ea-tag/index.js'
-
-        import '../components/ea-drawer/index.js'
+        // import '../components/ea-tag/index.js'
 
         // ------- 1. 基本用法 -------
         // #region
@@ -40,22 +38,22 @@
             init() {
                 this.ltrBtn.addEventListener('click', () => {
                     this.drawer.direction = 'ltr';
-                    this.drawer.open = true;
+                    this.drawer.visible = true;
                 })
 
                 this.rtlBtn.addEventListener('click', () => {
                     this.drawer.direction = 'rtl';
-                    this.drawer.open = true;
+                    this.drawer.visible = true;
                 })
 
                 this.ttbBtn.addEventListener('click', () => {
                     this.drawer.direction = 'ttb';
-                    this.drawer.open = true;
+                    this.drawer.visible = true;
                 })
 
                 this.bttBtn.addEventListener('click', () => {
                     this.drawer.direction = 'btt';
-                    this.drawer.open = true;
+                    this.drawer.visible = true;
                 })
 
                 this.drawer.addEventListener('close', () => {
@@ -77,7 +75,7 @@
 
             init() {
                 this.openBtn.addEventListener('click', () => {
-                    this.drawer.open = true;
+                    this.drawer.visible = true;
                 })
 
                 this.drawer.addEventListener('close', () => {

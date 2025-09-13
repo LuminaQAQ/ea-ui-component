@@ -182,7 +182,6 @@ export class EaOverlay extends Base {
       });
     } else {
       this.#beforeCloseCallback();
-      this.#dispatchBubblesEvent("close");
     }
   };
 
