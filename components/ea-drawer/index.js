@@ -52,11 +52,13 @@ export class EaDrawer extends EaOverlay {
     direction: {
       type: ["rtl", "ltr", "ttb", "btt"],
       default: "rtl",
+      observer: (newVal) => {},
+    },
+    title: {
+      type: String,
+      default: "",
       observer: (newVal) => {
-        const contentContainer = this.shadowRoot.querySelector(
-          ".ea-overlay__content"
-        );
-        this.#initDirectionDrawer(newVal, contentContainer);
+        this.#title.textContent = newVal;
       },
     },
     visible: {
@@ -82,6 +84,15 @@ export class EaDrawer extends EaOverlay {
         drawer: true,
       }
     )}`;
+  }
+
+  constructor() {
+    super();
+
+    const contentContainer = this.shadowRoot.querySelector(
+      ".ea-overlay__content"
+    );
+    this.#initDirectionDrawer(this.direction, contentContainer);
   }
 
   #initDirectionDrawer = (type, container) => {
