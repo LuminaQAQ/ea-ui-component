@@ -207,7 +207,12 @@
 
                 this.confirmBtn.addEventListener('click', () => {
                     this.drawer['before-close'] = true;
+
                     this.drawer.visible = false;
+                })
+
+                this.drawer.addEventListener('before-close', e => {
+                    done = e.detail.done
 
                     $confirm(
                         "Are you confirm to chose",
@@ -222,10 +227,6 @@
                             done();
                         })
                         .catch((action) => { });
-                })
-
-                this.drawer.addEventListener('before-close', e => {
-                    done = e.detail.done
                 })
             }
         };
