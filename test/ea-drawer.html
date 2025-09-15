@@ -18,14 +18,86 @@
 
     <script type="module" src="../src/components/ea-drawer/index.js"></script>
     <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-message-box/index.js"></script>
+
+    <!--  基本用法 -->
+    <!-- #region -->
+    <h1>基本用法</h1>
+
+    <div class="demo">
+        <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
+        <ea-button type="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
+        <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
+        <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
+
+        <ea-drawer id="drawer" title="I am the title" direction="ltr" before-close>
+            <span>Hi, there!</span>
+        </ea-drawer>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  不添加 Title -->
+    <!-- #region -->
+    <h1>不添加 Title</h1>
+
+    <div class="demo">
+        <ea-button type="primary" id="noHeaderBtn">open</ea-button>
+
+        <ea-drawer id="noHeaderDrawer" title="I am the title" direction="ltr" with-header="false">
+            <span>Hi, there!</span>
+        </ea-drawer>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 自定义内容 --------  -->
+    <!-- #region  -->
+    <ea-button type="primary" id="openCustomDrawerBtn">打开自定义内容的抽屉</ea-button>
+
+    <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
+        <ea-descriptions direction="vertical" border>
+            <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
+            <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
+            <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
+            <ea-descriptions-item label="称号">
+                <ea-tag>宿命背反</ea-tag>
+            </ea-descriptions-item>
+            <ea-descriptions-item label="属性" span="1">
+                <ea-tag type="warning" style="margin-right: 1rem;">雷电</ea-tag>
+                <ea-tag type="info">物理</ea-tag>
+            </ea-descriptions-item>
+        </ea-descriptions>
+    </ea-drawer>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!--  嵌套抽屉 -->
+    <!-- #region -->
+    <h1>嵌套抽屉</h1>
+
+    <div class="demo">
+        <ea-button type="primary" id="outerBtn">open</ea-button>
+        <ea-drawer id="outerDrawer" title="I'm outer Drawer" size="50%">
+            <div>
+                <ea-button id="innerBtn">Click me!</ea-button>
+                <ea-drawer id="innerDrawer" title="I'm inner Drawer" append-to-body="true" before-close>
+                    <p>_(:зゝ∠)_</p>
+                </ea-drawer>
+            </div>
+        </ea-drawer>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
     <script type='module'>
-
-        // import '../components/ea-descriptions/index.js'
-        // import '../components/ea-descriptions-item/index.js'
-
-        // import '../components/ea-tag/index.js'
-
-        // ------- 1. 基本用法 -------
+        // ------- 基本用法 -------
         // #region
         const Drawer = {
             drawer: document.querySelector('#drawer'),
@@ -56,6 +128,23 @@
                     this.drawer.visible = true;
                 })
 
+                this.drawer.addEventListener('before-close', e => {
+                    const { done } = e.detail;
+                    $confirm(
+                        "Are you confirm to chose",
+                        "Warning",
+                        {
+                            confirmButtonText: "OK",
+                            cancelButtonText: "Cancel",
+                            type: "warning",
+                        }
+                    )
+                        .then((action) => {
+                            done();
+                        })
+                        .catch((action) => { });
+                })
+
                 this.drawer.addEventListener('close', () => {
                     console.log('close');
                 })
@@ -66,8 +155,23 @@
         // #endregion
         // ------- end -------
 
+        // ------- 不添加 Title -------
+        // #region
+        const noHeaderExample = {
+            drawer: document.querySelector('#noHeaderDrawer'),
+            openBtn: document.querySelector('#noHeaderBtn'),
 
-        // ------- 2. 自定义内容 -------
+            init() {
+                this.openBtn.addEventListener('click', () => {
+                    this.drawer.visible = true;
+                })
+            }
+        }
+        noHeaderExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 自定义内容 -------
         // #region
         const CustomDrawer = {
             drawer: document.querySelector('#customDrawer'),
@@ -87,45 +191,46 @@
         CustomDrawer.init();
         // #endregion
         // ------- end -------
+
+        // ------- 嵌套抽屉 -------
+        // #region
+        const nestingExample = {
+            outerBtn: document.querySelector('#outerBtn'),
+            innerBtn: document.querySelector('#innerBtn'),
+            outerDrawer: document.querySelector('#outerDrawer'),
+            innerDrawer: document.querySelector('#innerDrawer'),
+
+            init() {
+                this.outerBtn.addEventListener('click', () => {
+                    this.outerDrawer.visible = true;
+                })
+
+                this.innerBtn.addEventListener('click', () => {
+                    this.innerDrawer.visible = true;
+                })
+
+                this.innerDrawer.addEventListener('before-close', e => {
+                    const { done } = e.detail;
+                    $confirm(
+                        "Are you confirm to chose",
+                        "Warning",
+                        {
+                            confirmButtonText: "OK",
+                            cancelButtonText: "Cancel",
+                            type: "warning",
+                        }
+                    )
+                        .then((action) => {
+                            done();
+                        })
+                        .catch((action) => { });
+                })
+            }
+        }
+        nestingExample.init()
+        // #endregion
+        // ------- end -------
     </script>
-
-    <!-- -------- 1. 基本用法 --------  -->
-    <!-- #region  -->
-    <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
-    <ea-button type="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
-    <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
-    <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
-
-
-    <ea-drawer id="drawer" title="I am the title" direction="ltr">
-        <span>Hi, there!</span>
-    </ea-drawer>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <hr>
-
-    <!-- -------- 2. 自定义内容 --------  -->
-    <!-- #region  -->
-    <ea-button type="primary" id="openCustomDrawerBtn">打开自定义内容的抽屉</ea-button>
-
-    <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
-        <ea-descriptions direction="vertical" border>
-            <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
-            <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
-            <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
-            <ea-descriptions-item label="称号">
-                <ea-tag>宿命背反</ea-tag>
-            </ea-descriptions-item>
-            <ea-descriptions-item label="属性" span="1">
-                <ea-tag type="warning" style="margin-right: 1rem;">雷电</ea-tag>
-                <ea-tag type="info">物理</ea-tag>
-            </ea-descriptions-item>
-        </ea-descriptions>
-    </ea-drawer>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
 </body>
 
 </html>

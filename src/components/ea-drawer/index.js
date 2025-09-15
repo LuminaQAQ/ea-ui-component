@@ -15,7 +15,7 @@ export class EaDrawer extends EaOverlay {
   /** @type {HTMLElement} */
   #title;
   /** @type {HTMLElement} */
-  #cancelIcon;
+  #closeIcon;
   /** @type {HTMLElement} */
   #content;
   /** @type {HTMLElement} */
@@ -54,19 +54,48 @@ export class EaDrawer extends EaOverlay {
       default: "rtl",
       observer: (newVal) => {},
     },
-    title: {
-      type: String,
-      default: "",
-      observer: (newVal) => {
-        this.#title.textContent = newVal;
-      },
-    },
     visible: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
         this.status = newVal;
       },
+    },
+
+    "with-header": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {
+        this.#header.style.display = newVal ? "flex" : "none";
+      },
+    },
+    title: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (this["with-header"]) this.#title.textContent = newVal;
+      },
+    },
+    showClose: {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {
+        if (this["with-header"])
+          this.#closeIcon.style.display = newVal ? "block" : "none";
+      },
+    },
+    size: {
+      type: String,
+      default: "30%",
+      observer: (newVal) => {
+        this.style.setProperty("--ea-drawer-size", newVal);
+      },
+    },
+
+    "append-to-body": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {},
     },
   });
 
@@ -102,7 +131,7 @@ export class EaDrawer extends EaOverlay {
           <span class="ea-drawer-main__title" part="title">
             <slot name="title"></slot>
           </span>
-          <ea-icon class="ea-drawer-main_cancel-icon" icon="icon-cancel" part="cancel-icon"></ea-icon>
+          <ea-icon class="ea-drawer-main__close-icon" icon="icon-cancel" part="close-icon"></ea-icon>
         </header>
         <main class="ea-drawer-main__content" part="content">
           <slot></slot>
@@ -117,14 +146,18 @@ export class EaDrawer extends EaOverlay {
     this.#drawerContainer = this.shadowRoot.querySelector(".ea-drawer-main");
     this.#header = this.shadowRoot.querySelector(".ea-drawer-main__header");
     this.#title = this.shadowRoot.querySelector(".ea-drawer-main__title");
-    this.#cancelIcon = this.shadowRoot.querySelector(
-      ".ea-drawer-main__cancel-icon"
+    this.#closeIcon = this.shadowRoot.querySelector(
+      ".ea-drawer-main__close-icon"
     );
     this.#content = this.shadowRoot.querySelector(".ea-drawer-main__content");
     this.#footer = this.shadowRoot.querySelector(".ea-drawer-main__footer");
   };
 
   connectedCallback() {
+    console.log(this["append-to-body"]);
+
+    if (this["append-to-body"]) document.body.appendChild(this);
+
     this.#abortController = new AbortController();
 
     this.#drawerContainer.ariaModal = true;
@@ -143,6 +176,21 @@ export class EaDrawer extends EaOverlay {
         signal: this.#abortController.signal,
       }
     );
+
+    if (this["show-close"])
+      this.#closeIcon.addEventListener(
+        "click",
+        () => {
+          if (this["before-close"])
+            this.dispatchEvent("before-close", {
+              detail: {
+                done: () => (this.visible = false),
+              },
+            });
+          else this.visible = false;
+        },
+        { signal: this.#abortController.signal }
+      );
 
     super.connectedCallback();
     this.assignedStyle(stylesheet);
