@@ -211,7 +211,7 @@ export const EaMessageBox = (options) => {
   });
 };
 
-EaMessageBox.alert = (message, title, options) =>
+EaMessageBox.alert = (message = "", title = "", options = "") =>
   EaMessageBox({
     message,
     title,
@@ -221,7 +221,7 @@ EaMessageBox.alert = (message, title, options) =>
     ...options,
   });
 
-EaMessageBox.confirm = (message, title, options) =>
+EaMessageBox.confirm = (message = "", title = "", options = "") =>
   EaMessageBox({
     message,
     title,
@@ -232,7 +232,7 @@ EaMessageBox.confirm = (message, title, options) =>
     ...options,
   });
 
-EaMessageBox.prompt = (message, title, options) =>
+EaMessageBox.prompt = (message = "", title = "", options = "") =>
   EaMessageBox({
     message,
     title,

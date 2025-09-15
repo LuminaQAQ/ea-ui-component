@@ -160,8 +160,8 @@ export class EaOverlay extends Base {
   #dispatchBubblesEvent = (customEventName, detail) => {
     this.dispatchEvent(customEventName, {
       detail,
-      bubbles: true,
-      composed: true,
+      // bubbles: true,
+      // composed: true,
     });
   };
 
@@ -177,8 +177,8 @@ export class EaOverlay extends Base {
     if (isContent) return;
 
     if (this["before-close"]) {
-      this.#dispatchBubblesEvent("before-close", {
-        done: () => this.#beforeCloseCallback(),
+      this.dispatchEvent("before-close", {
+        detail: { done: () => this.#beforeCloseCallback() },
       });
     } else {
       this.#beforeCloseCallback();
