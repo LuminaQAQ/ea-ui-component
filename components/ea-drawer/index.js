@@ -60,7 +60,7 @@ export class EaDrawer extends EaOverlay {
       default: false,
       repeatable: true,
       observer: (newVal) => {
-        if (!newVal && this["before-close"]) {
+        if (!newVal && this["before-close"] && this.status !== this.visible) {
           return this.#handleBeforeClose();
         }
 
@@ -179,7 +179,7 @@ export class EaDrawer extends EaOverlay {
         },
       });
     } else {
-      this.visible = false;
+      this.status = false;
     }
   };
 
