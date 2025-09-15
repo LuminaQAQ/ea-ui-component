@@ -2,6 +2,7 @@ import { EaOverlay } from "@/common/ea-overlay";
 
 import stylesheet from "./index.scss?inline";
 import EaUtils from "@/utils/Utils";
+import { timeout } from "@/utils/timeout";
 
 export class EaDrawer extends EaOverlay {
   /** @type {AbortController} */
@@ -33,9 +34,9 @@ export class EaDrawer extends EaOverlay {
       "before-close",
       "close-on-click-modal",
       "close-on-press-escape",
-      "open-delay",
-      "close-delay",
-      "destroy-on-close",
+      // "open-delay",
+      // "close-delay",
+      // "destroy-on-close",
       "modal",
       // "resizable",
       "show-close",
@@ -57,7 +58,17 @@ export class EaDrawer extends EaOverlay {
     visible: {
       type: Boolean,
       default: false,
+      repeatable: true,
       observer: (newVal) => {
+        if (!newVal && this["before-close"]) {
+          return this.#handleBeforeClose();
+        }
+
+        if (newVal)
+          timeout(() => {
+            this.focus();
+          }, 0);
+
         this.status = newVal;
       },
     },
@@ -97,6 +108,11 @@ export class EaDrawer extends EaOverlay {
       default: false,
       observer: (newVal) => {},
     },
+    "close-on-press-escape": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {},
+    },
   });
 
   /**
@@ -122,6 +138,8 @@ export class EaDrawer extends EaOverlay {
       ".ea-overlay__content"
     );
     this.#initDirectionDrawer(this.direction, contentContainer);
+
+    if (this["append-to-body"]) document.body.appendChild(this);
   }
 
   #initDirectionDrawer = (type, container) => {
@@ -153,11 +171,19 @@ export class EaDrawer extends EaOverlay {
     this.#footer = this.shadowRoot.querySelector(".ea-drawer-main__footer");
   };
 
+  #handleBeforeClose = () => {
+    if (this["before-close"]) {
+      this.dispatchEvent("before-close", {
+        detail: {
+          done: () => (this.status = false),
+        },
+      });
+    } else {
+      this.visible = false;
+    }
+  };
+
   connectedCallback() {
-    console.log(this["append-to-body"]);
-
-    if (this["append-to-body"]) document.body.appendChild(this);
-
     this.#abortController = new AbortController();
 
     this.#drawerContainer.ariaModal = true;
@@ -178,19 +204,21 @@ export class EaDrawer extends EaOverlay {
     );
 
     if (this["show-close"])
-      this.#closeIcon.addEventListener(
-        "click",
-        () => {
-          if (this["before-close"])
-            this.dispatchEvent("before-close", {
-              detail: {
-                done: () => (this.visible = false),
-              },
-            });
-          else this.visible = false;
+      this.#closeIcon.addEventListener("click", this.#handleBeforeClose, {
+        signal: this.#abortController.signal,
+      });
+
+    if (this["close-on-press-escape"]) {
+      this.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.key === "Escape") {
+            this.#handleBeforeClose();
+          }
         },
         { signal: this.#abortController.signal }
       );
+    }
 
     super.connectedCallback();
     this.assignedStyle(stylesheet);

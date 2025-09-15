@@ -44,6 +44,9 @@ $directions: (
   width: 100%;
   height: 100%;
 
+  display: flex;
+  flex-direction: column;
+
   @include element(header) {
     position: relative;
 
@@ -68,6 +71,8 @@ $directions: (
   }
 
   @include element(content) {
+    flex: 1 0 auto;
+
     box-sizing: border-box;
     padding: var(--ea-drawer-padding-primary);
 

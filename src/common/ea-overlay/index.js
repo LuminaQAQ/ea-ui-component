@@ -178,7 +178,7 @@ export class EaOverlay extends Base {
 
     if (this["before-close"]) {
       this.dispatchEvent("before-close", {
-        done: () => this.#beforeCloseCallback(),
+        detail: { done: () => this.#beforeCloseCallback() },
       });
     } else {
       this.#beforeCloseCallback();

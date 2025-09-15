@@ -55,26 +55,37 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 自定义内容 --------  -->
-    <!-- #region  -->
-    <ea-button type="primary" id="openCustomDrawerBtn">打开自定义内容的抽屉</ea-button>
+    <!--  自定义内容 -->
+    <!-- #region -->
+    <h1>自定义内容</h1>
 
-    <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
-        <ea-descriptions direction="vertical" border>
-            <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
-            <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
-            <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
-            <ea-descriptions-item label="称号">
-                <ea-tag>宿命背反</ea-tag>
-            </ea-descriptions-item>
-            <ea-descriptions-item label="属性" span="1">
-                <ea-tag type="warning" style="margin-right: 1rem;">雷电</ea-tag>
-                <ea-tag type="info">物理</ea-tag>
-            </ea-descriptions-item>
-        </ea-descriptions>
-    </ea-drawer>
+    <div class="demo">
+        <ea-button type="primary" id="openCustomDrawerBtn">打开自定义内容的抽屉</ea-button>
+
+        <ea-drawer id="customDrawer" title="我是标题" direction="ltr" before-close>
+            <ea-descriptions direction="vertical" border>
+                <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
+                <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
+                <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
+                <ea-descriptions-item label="称号">
+                    <ea-tag>宿命背反</ea-tag>
+                </ea-descriptions-item>
+                <ea-descriptions-item label="属性" span="1">
+                    <ea-tag type="warning" style="margin-right: 1rem;">雷电</ea-tag>
+                    <ea-tag type="info">物理</ea-tag>
+                </ea-descriptions-item>
+            </ea-descriptions>
+
+            <footer slot="footer" style="text-align: right;">
+                <ea-button id="customCancelBtn" plain>Cancel</ea-button>
+                <ea-button id="customConfirmBtn" type="primary">Confirm</ea-button>
+            </footer>
+        </ea-drawer>
+    </div>
+
+    <hr>
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
     <!--  嵌套抽屉 -->
     <!-- #region -->
@@ -176,14 +187,45 @@
         const CustomDrawer = {
             drawer: document.querySelector('#customDrawer'),
             openBtn: document.querySelector('#openCustomDrawerBtn'),
+            cancelBtn: document.querySelector('#customCancelBtn'),
+            confirmBtn: document.querySelector('#customConfirmBtn'),
 
             init() {
+                /**
+                 * @param {() => void || null} done
+                 */
+                let done = null;
+
                 this.openBtn.addEventListener('click', () => {
                     this.drawer.visible = true;
                 })
 
-                this.drawer.addEventListener('close', () => {
-                    console.log('close');
+                this.cancelBtn.addEventListener('click', () => {
+                    this.drawer['before-close'] = false;
+                    this.drawer.visible = false;
+                })
+
+                this.confirmBtn.addEventListener('click', () => {
+                    this.drawer['before-close'] = true;
+                    this.drawer.visible = false;
+
+                    $confirm(
+                        "Are you confirm to chose",
+                        "Warning",
+                        {
+                            confirmButtonText: "OK",
+                            cancelButtonText: "Cancel",
+                            type: "warning",
+                        }
+                    )
+                        .then((action) => {
+                            done();
+                        })
+                        .catch((action) => { });
+                })
+
+                this.drawer.addEventListener('before-close', e => {
+                    done = e.detail.done
                 })
             }
         };
