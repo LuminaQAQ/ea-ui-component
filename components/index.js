@@ -18,6 +18,7 @@ import './ea-container/index.js';
 import './ea-date-picker/index.js';
 import './ea-descriptions/index.js';
 import './ea-descriptions-item/index.js';
+import './ea-dialog/index.js';
 import './ea-drawer/index.js';
 import './ea-empty/index.js';
 import './ea-form/index.js';
