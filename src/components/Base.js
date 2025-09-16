@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { timeout } from "../utils/timeout";
 import variable from "../themes/variable.scss?inline";
 import "./ea-icon/index.js";
@@ -8,6 +7,9 @@ export default class Base extends HTMLElement {
   #stateConfigs = {};
 
   isMounted = true;
+  static get observedAttributes() {
+    return [];
+  }
 
   constructor() {
     super();

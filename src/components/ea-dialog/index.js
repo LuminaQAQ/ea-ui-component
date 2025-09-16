@@ -16,6 +16,9 @@ export class EaDialog extends EaOverlay {
   /** @type {HTMLElement} */
   #footer;
 
+  /** @type {AbortController} */
+  #abortController;
+
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
@@ -59,7 +62,7 @@ export class EaDialog extends EaOverlay {
       type: String,
       default: "",
       observer: (newVal) => {
-        this.#title.textContent = newVal;
+        if (this.#title) this.#title.textContent = newVal;
       },
     },
     width: {
@@ -87,6 +90,14 @@ export class EaDialog extends EaOverlay {
       default: "body",
       observer: (newVal) => {},
     },
+
+    "show-close": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {
+        this.#closeIcon.style.display = newVal ? "block" : "none";
+      },
+    },
   });
 
   /**
@@ -109,13 +120,19 @@ export class EaDialog extends EaOverlay {
     super();
 
     const container = this.shadowRoot.querySelector(".ea-overlay__content");
+    const hasHeaderSlot = [...this.children].find(
+      (item) => item.getAttribute("slot") === "header"
+    );
     container.innerHTML = `
       <div class='ea-dialog-main' part='container'>
         <header class='ea-dialog-main__header' part='header'>
-            <span class='ea-dialog-main__title' part='title'>
-                <slot name='title'></slot>
-            </span>
-            <ea-icon class='ea-dialog-main__close-icon' icon='icon-cancel' part='close-icon'></ea-icon>
+            ${
+              hasHeaderSlot
+                ? `<slot name="header"></slot>`
+                : `
+                <span class='ea-dialog-main__title' part='title'></span>
+                <ea-icon class='ea-dialog-main__close-icon' icon='icon-cancel' part='close-icon'></ea-icon>`
+            }
         </header>
         <main class='ea-dialog-main__content' part='content'>
             <slot></slot>
@@ -139,7 +156,7 @@ export class EaDialog extends EaOverlay {
   }
 
   #handleAppendTo = () => {
-    if (this["append-to"]) {
+    if (this.getAttrString("append-to") && this["append-to"]) {
       const parent = document.querySelector(this["append-to"]);
       parent.appendChild(this);
     } else if (this["append-to-body"]) {
@@ -149,15 +166,52 @@ export class EaDialog extends EaOverlay {
 
   resetPosition = () => {};
 
-  handleClose = () => {};
+  show = () => {
+    this.visible = true;
+  };
+
+  close = () => {
+    this.visible = false;
+  };
 
   connectedCallback() {
-    this.status = true;
+    this.#abortController = new AbortController();
+
+    this["close-on-click-modal"] = this.getAttrBoolean(
+      "close-on-click-modal",
+      true
+    );
     this.setAttribute("role", "dialog");
 
     super.connectedCallback();
 
     this.assignedStyle(stylesheet);
+
+    this.addEventListener(
+      "closed",
+      () => {
+        this.visible = false;
+      },
+      { signal: this.#abortController.signal }
+    );
+
+    if (this["show-close"] && this.#closeIcon)
+      this.#closeIcon.addEventListener(
+        "click",
+        () => {
+          this.dispatchEvent("cancel");
+          this.hide();
+          //   if (!this.distinguishCancelAndClose) {
+          //   } else {
+          //     this.dispatchEvent("message-close");
+          //   }
+        },
+        { signal: this.#abortController.signal }
+      );
+  }
+
+  $beforeUnmounted() {
+    this.#abortController.abort();
   }
 }
 

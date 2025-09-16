@@ -24,12 +24,16 @@
     <h1>基础用法</h1>
 
     <div class="demo">
-        <ea-dialog title="Tips" width="500px">
+        <ea-button id="basicDialogOpenBtn" plain>
+            Click to open the Dialog
+        </ea-button>
+
+        <ea-dialog id="basicDialog" title="Tips" width="500px">
             <span>This is a message</span>
             <section slot="footer">
                 <div class="dialog-footer">
-                    <ea-button @click="dialogVisible = false">Cancel</ea-button>
-                    <ea-button type="primary" @click="dialogVisible = false">
+                    <ea-button id="basicDialogCancelBtn">Cancel</ea-button>
+                    <ea-button id="basicDialogConfirmBtn" type="primary">
                         Confirm
                     </ea-button>
                 </div>
@@ -40,6 +44,166 @@
     <hr>
     <!-- #endregion  -->
     <!-- end  -->
+
+    <!--  自定义头部 -->
+    <!-- #region -->
+    <h1>自定义头部</h1>
+
+    <style>
+        .custom-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        ea-button::part(icon) {
+            color: white;
+        }
+    </style>
+
+    <div class="demo">
+        <ea-button id="customHeaderDialogOpenBtn" plain>
+            Click to open the Dialog
+        </ea-button>
+
+        <ea-dialog id="customHeaderDialog" width="500px">
+            <header class="custom-header" slot="header">
+                <span>This is a custom header!</span>
+                <ea-button id="customHeaderDialogCloseIcon" type="danger" icon="icon-coffee" circle></ea-button>
+            </header>
+            <span>This is a message</span>
+            <footer slot="footer">
+                <div class="dialog-footer">
+                    <ea-button id="customHeaderDialogCancelBtn">Cancel</ea-button>
+                    <ea-button id="customHeaderDialogConfirmBtn" type="primary">
+                        Confirm
+                    </ea-button>
+                </div>
+            </footer>
+        </ea-dialog>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  嵌套的对话框 -->
+    <!-- #region -->
+    <h1>嵌套的对话框</h1>
+
+    <div class="demo">
+        <ea-button id="nestingDialogOpenBtn" plain>
+            Open the outer Dialog
+        </ea-button>
+
+        <ea-dialog id="nestingOuterDialog" title="Outer Dialog" width="800px">
+            <span>This is the outer Dialog</span>
+
+            <ea-dialog id="nestingInnererDialog" width="500px" title="Inner Dialog" append-to-body>
+                <span>This is the inner Dialog</span>
+            </ea-dialog>
+
+            <section class="dialog-footer" slot="footer">
+                <ea-button id="nestingDialogCancelBtn">Cancel</ea-button>
+                <ea-button id="nestingDialogInnerOpenBtn" type="primary">
+                    Open the inner Dialog
+                </ea-button>
+            </section>
+        </ea-dialog>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <script type="module">
+        // ------- 基础用法 -------
+        // #region
+        const basicExample = {
+            dialog: document.querySelector("#basicDialog"),
+            openBtn: document.querySelector("#basicDialogOpenBtn"),
+            cancelBtn: document.querySelector("#basicDialogCancelBtn"),
+            confirmBtn: document.querySelector("#basicDialogConfirmBtn"),
+
+            init() {
+                this.openBtn.addEventListener("click", () => {
+                    this.dialog.show();
+                })
+
+                this.cancelBtn.addEventListener("click", () => {
+                    this.dialog.hide();
+                })
+
+                this.confirmBtn.addEventListener("click", () => {
+                    this.dialog.hide();
+                })
+            }
+        }
+        basicExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 自定义头部 -------
+        // #region
+        const customHeaderExample = {
+            dialog: document.querySelector("#customHeaderDialog"),
+            openBtn: document.querySelector("#customHeaderDialogOpenBtn"),
+            cancelBtn: document.querySelector("#customHeaderDialogCancelBtn"),
+            confirmBtn: document.querySelector("#customHeaderDialogConfirmBtn"),
+            closeIcon: document.querySelector("#customHeaderDialogCloseIcon"),
+
+            init() {
+                this.openBtn.addEventListener("click", () => {
+                    this.dialog.visible = true;
+                })
+
+                this.cancelBtn.addEventListener("click", () => {
+                    this.dialog.visible = false;
+                })
+
+                this.confirmBtn.addEventListener("click", () => {
+                    this.dialog.visible = false;
+                })
+
+                this.closeIcon.addEventListener("click", () => {
+                    this.dialog.visible = false;
+                })
+            }
+        }
+        customHeaderExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 嵌套的对话框 -------
+        // #region
+        const nestingExample = {
+            outerDialog: document.querySelector("#nestingOuterDialog"),
+            outerOpenBtn: document.querySelector("#nestingDialogOpenBtn"),
+            innerDialog: document.querySelector("#nestingInnererDialog"),
+
+            cancelBtn: document.querySelector("#nestingDialogCancelBtn"),
+            innerOpenBtn: document.querySelector("#nestingDialogInnerOpenBtn"),
+
+            init() {
+                this.outerOpenBtn.addEventListener("click", () => {
+                    this.outerDialog.visible = true;
+                })
+
+                this.innerOpenBtn.addEventListener("click", () => {
+                    this.innerDialog.visible = true;
+                })
+
+                this.cancelBtn.addEventListener("click", () => {
+                    this.innerDialog.visible = false;
+                })
+
+                // this.openBtn.click();
+            }
+        }
+        nestingExample.init();
+        // #endregion
+        // ------- end -------
+    </script>
 </body>
 
 </html>
