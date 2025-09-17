@@ -9,6 +9,7 @@ $types: (
 :host {
   --ea-message-padding: 14px;
   --ea-message-border-radius: var(--border-radius-sm);
+  --ea-message-box-shadow: var(--box-shadow-md);
 
   --ea-message-title-font-size: var(--font-size-lg);
   --ea-message-close-icon-size: var(--font-size-lg);
@@ -34,6 +35,7 @@ $types: (
 @include block(ea-message-box) {
   box-sizing: border-box;
   padding: var(--ea-message-padding);
+  box-shadow: var(--ea-message-box-shadow);
 
   @include modifier(center) {
     .ea-message-box-main__header,

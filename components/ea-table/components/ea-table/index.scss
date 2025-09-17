@@ -1,0 +1,64 @@
+slot {
+  display: none;
+  visibility: hidden;
+}
+
+table,
+th,
+td {
+  border: 1px solid;
+}
+
+table {
+  display: block;
+  width: 100%;
+  height: 200px;
+  overflow: auto;
+  height: 240px;
+  margin: 0 auto;
+  display: block;
+  overflow-x: auto;
+  border-spacing: 0;
+}
+
+tbody {
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 5px 10px;
+  border-top-width: 0;
+  border-left-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+th:last-child,
+td:last-child {
+  border-right-width: 0;
+}
+
+tr:last-child td {
+  border-bottom-width: 0;
+}
+
+thead {
+  background-color: white;
+}
+
+.sticky {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.sticky.is-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+@include block(ea-table) {
+}
