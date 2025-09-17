@@ -1,3 +1,5 @@
+import Base from "@/components/Base";
+
 export default class EaUtils {
   static Array = {};
   static String = {};
@@ -6,15 +8,16 @@ export default class EaUtils {
   static RegExp = {};
   static Boolean = {};
   static Enum = {};
+  static EaElement = {};
 }
 
-EaUtils.Array.toLowerCamelCase = function (arr) {
+EaUtils.Array.toLowerCamelCase = (arr) => {
   if (!Array.isArray(arr)) arr = Array.from(arr);
 
   return arr.map((item) => EaUtils.String.toLowerCamelCase(item));
 };
 
-EaUtils.String.toLowerCamelCase = function (str) {
+EaUtils.String.toLowerCamelCase = (str) => {
   return str
     .toString()
     .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
@@ -22,7 +25,7 @@ EaUtils.String.toLowerCamelCase = function (str) {
     .toLowerCase();
 };
 
-EaUtils.Boolean.isBoolean = function (value) {
+EaUtils.Boolean.isBoolean = (value) => {
   return (
     typeof value === "boolean" ||
     rawValue === "" ||
@@ -31,11 +34,40 @@ EaUtils.Boolean.isBoolean = function (value) {
   );
 };
 
-EaUtils.Number.isNumber = function (value) {
+EaUtils.Number.isNumber = (value) => {
   value = Number(value);
   return typeof value === "number" && !isNaN(value);
 };
 
 EaUtils.Enum.isEnum = function (value) {
   return Array.isArray(value);
+};
+
+/**
+ * @description 定义元素
+ * @param {string} tagName 元素名称
+ * @param {Base} EaElementClass 元素类
+ */
+EaUtils.EaElement.define = (tagName, EaElementClass) => {
+  if (!customElements in window)
+    return console.warn("当前浏览器不支持自定义元素");
+
+  if (!window.customElements.get(tagName)) {
+    window.customElements.define(tagName, EaElementClass);
+  }
+};
+
+EaUtils.EaElement.addAsyncEventListener = (context, eventName, once = true) => {
+  return new Promise((resolve) => {
+    context.addEventListener(
+      eventName,
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        resolve(true);
+      },
+      { once }
+    );
+  });
 };
