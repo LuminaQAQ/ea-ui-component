@@ -419,6 +419,46 @@ export class EaMessageBoxElement extends EaOverlay {
     } catch (error) {}
   };
 
+  #initDistinguishCancelAndCloseEvent = () => {
+    if (!this.distinguishCancelAndClose) {
+      this.#dispatchBubblesEvent("cancel");
+    } else {
+      this.#dispatchBubblesEvent("message-close");
+    }
+  };
+
+  #initDraggableEvent = (mousedownEvent) => {
+    if (
+      !this.#header.contains(mousedownEvent.target) ||
+      this.#header === mousedownEvent.target
+    )
+      return;
+
+    const controller = new AbortController();
+    const contentElement = this.shadowRoot.querySelector(
+      ".ea-overlay__content"
+    );
+
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        contentElement.style.left = e.clientX + "px";
+        contentElement.style.top = e.clientY + "px";
+      },
+      {
+        signal: controller.signal,
+      }
+    );
+
+    window.addEventListener(
+      "mouseup",
+      () => {
+        controller.abort();
+      },
+      { signal: controller.signal }
+    );
+  };
+
   connectedCallback() {
     this.setAttribute("role", "dialog");
     this["content-width"] = "100%";
@@ -439,13 +479,7 @@ export class EaMessageBoxElement extends EaOverlay {
     if (this["show-close"])
       this.#closeIcon.addEventListener(
         "click",
-        () => {
-          if (!this.distinguishCancelAndClose) {
-            this.#dispatchBubblesEvent("cancel");
-          } else {
-            this.#dispatchBubblesEvent("message-close");
-          }
-        },
+        this.#initDistinguishCancelAndCloseEvent,
         { signal: this.#abortController.signal }
       );
 
@@ -463,68 +497,20 @@ export class EaMessageBoxElement extends EaOverlay {
       this.addEventListener(
         "keydown",
         (e) => {
-          if (e.key === "Escape") {
-            if (!this.distinguishCancelAndClose) {
-              this.#dispatchBubblesEvent("cancel");
-            } else {
-              this.#dispatchBubblesEvent("message-close");
-            }
-          }
+          if (e.key === "Escape") this.#initDistinguishCancelAndCloseEvent();
         },
         { signal: this.#abortController.signal }
       );
     }
 
-    this.addEventListener(
-      "close",
-      () => {
-        if (!this.distinguishCancelAndClose) {
-          this.#dispatchBubblesEvent("cancel");
-        } else {
-          this.#dispatchBubblesEvent("message-close");
-        }
-      },
-      { signal: this.#abortController.signal }
-    );
+    this.addEventListener("close", this.#initDistinguishCancelAndCloseEvent, {
+      signal: this.#abortController.signal,
+    });
 
     if (this.draggable)
-      this.shadowRoot.addEventListener(
-        "mousedown",
-        (mousedownEvent) => {
-          if (
-            !this.#header.contains(mousedownEvent.target) ||
-            this.#header !== mousedownEvent.target
-          )
-            return;
-
-          const controller = new AbortController();
-          const contentElement = this.shadowRoot.querySelector(
-            ".ea-overlay__content"
-          );
-
-          window.addEventListener(
-            "mousemove",
-            (e) => {
-              contentElement.style.left = e.clientX + "px";
-              contentElement.style.top = e.clientY + "px";
-            },
-            {
-              signal: controller.signal,
-            }
-          );
-
-          window.addEventListener(
-            "mouseup",
-            () => {
-              controller.abort();
-            },
-            { signal: controller.signal }
-          );
-        },
-        {
-          signal: this.#abortController.signal,
-        }
-      );
+      this.shadowRoot.addEventListener("mousedown", this.#initDraggableEvent, {
+        signal: this.#abortController.signal,
+      });
   }
 
   $beforeUnmounted() {
