@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="../components/ea-icon/index.css" />
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
       hr {
@@ -26,17 +26,8 @@
       src="../src//components/ea-button-group/index.js"
     ></script>
     <script type="module" src="../src//components/ea-table/index.js"></script>
-    <script type="module" src="../src//components/ea-empty/index.js"></script>
+    <!-- <script type="module" src="../src//components/ea-empty/index.js"></script> -->
     <script type="module">
-      // import '../components/ea-icon/index.js'
-
-      //   import "../components/ea-table/index.js";
-
-      //   import "../components/ea-button/index.js";
-      //   import "../components/ea-button-group/index.js";
-      //   import "../components/ea-input/index.js";
-      //   import "../components/ea-empty/index.js";
-
       const data = [
         { name: "Lumina", age: 18, address: "中国" },
         { name: "Alice", age: 18, address: "中国" },
@@ -64,7 +55,11 @@
       // ------- 1. 基础表格 -------
       // #region
       const basicTable = document.querySelector("#basicTable");
-      basicTable.data = data;
+      //   basicTable.data = data;
+      basicTable.setData(data);
+      //   basicTable.addEventListener("ea-table-render", (e) => {
+      //     basicTable.setData(data);
+      //   });
       // #endregion
       // ------- end -------
 
@@ -213,9 +208,17 @@
     <!-- -------- 1. 基础表格 --------  -->
     <!-- #region  -->
     <ea-table id="basicTable">
-      <ea-table-column prop="name" width="100">姓名</ea-table-column>
-      <ea-table-column prop="age" width="100">年龄</ea-table-column>
-      <ea-table-column prop="address">地址</ea-table-column>
+      <ea-table-column label="姓名" prop="name" width="100">
+        <img
+          src="https://ts1.tc.mm.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQHaEo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+          alt=""
+          width="100"
+          height="100"
+        />
+        <span data-scope="name" part="name-scope"></span>
+      </ea-table-column>
+      <ea-table-column label="年龄" prop="age" width="100"></ea-table-column>
+      <ea-table-column label="地址" prop="address"></ea-table-column>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->

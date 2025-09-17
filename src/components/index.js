@@ -61,7 +61,7 @@ import "./ea-steps/index.js";
 import "./ea-submenu/index.js";
 import "./ea-switch/index.js";
 import "./ea-tab/index.js";
-import "./ea-table/index.js";
+import "./ea-table/components/ea-table/index.js";
 import "./ea-table/components/ea-table-column/index.js";
 import "./ea-tabs/index.js";
 import "./ea-tag/index.js";
