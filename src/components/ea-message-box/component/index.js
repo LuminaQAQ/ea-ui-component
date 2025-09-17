@@ -493,7 +493,7 @@ export class EaMessageBoxElement extends EaOverlay {
         (mousedownEvent) => {
           if (
             !this.#header.contains(mousedownEvent.target) ||
-            this.#header === mousedownEvent.target
+            this.#header !== mousedownEvent.target
           )
             return;
 

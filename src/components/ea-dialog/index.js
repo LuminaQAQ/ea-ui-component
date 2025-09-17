@@ -1,10 +1,13 @@
 import { EaOverlay } from "@/common/ea-overlay";
 
 import stylesheet from "./index.scss?inline";
+import { timeout } from "@/utils/timeout";
 
 export class EaDialog extends EaOverlay {
   /** @type {HTMLElement} */
   #container;
+  /** @type {HTMLElement} */
+  #overlayContent;
   /** @type {HTMLElement} */
   #header;
   /** @type {HTMLElement} */
@@ -25,9 +28,10 @@ export class EaDialog extends EaOverlay {
       "visible",
       "title",
       "width",
-      //   "fullscreen",
+      "fullscreen",
       "top",
       "modal",
+      "center",
 
       "append-to-body",
       "append-to",
@@ -44,9 +48,9 @@ export class EaDialog extends EaOverlay {
       "before-close",
       //   "destroy-on-close",
       "z-index",
+      "modal-penetrable",
 
       "draggable",
-      "center",
     ];
   }
 
@@ -55,6 +59,20 @@ export class EaDialog extends EaOverlay {
       type: Boolean,
       default: false,
       observer: (newVal) => {
+        if (!newVal && this["before-close"] && this.status !== this.visible) {
+          return this.#handleBeforeClose();
+        }
+
+        if (newVal) {
+          timeout(() => {
+            this.focus();
+          }, 0);
+        } else {
+          timeout(() => {
+            this.blur();
+          }, 0);
+        }
+
         this.status = newVal;
       },
     },
@@ -79,6 +97,20 @@ export class EaDialog extends EaOverlay {
         this.style.setProperty("--ea-overlay-content-top", newVal);
       },
     },
+    center: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    fullscreen: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
 
     "append-to-body": {
       type: Boolean,
@@ -98,6 +130,19 @@ export class EaDialog extends EaOverlay {
         this.#closeIcon.style.display = newVal ? "block" : "none";
       },
     },
+    "modal-penetrable": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {},
+    },
+
+    draggable: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -108,10 +153,13 @@ export class EaDialog extends EaOverlay {
     return `${super.updateContainerClasslist()} ${this.computedClasslist(
       "ea-dialog",
       {
-        // ['--' + this.type]: this.type,
+        "--center": this.center,
+        "--draggable": this.draggable,
+        "--fullscreen": this.fullscreen,
       },
       {
         dialog: true,
+        "modal-penetrable": this["modal-penetrable"] && !this.modal,
       }
     )}`;
   }
@@ -143,7 +191,8 @@ export class EaDialog extends EaOverlay {
       </div>
     `;
 
-    this.#container = this.shadowRoot.querySelector(".ea-dialog-main");
+    this.#container = this.shadowRoot.querySelector(".ea-overlay");
+    this.#overlayContent = container;
     this.#header = this.shadowRoot.querySelector(".ea-dialog-main__header");
     this.#title = this.shadowRoot.querySelector(".ea-dialog-main__title");
     this.#closeIcon = this.shadowRoot.querySelector(
@@ -164,14 +213,61 @@ export class EaDialog extends EaOverlay {
     }
   };
 
-  resetPosition = () => {};
+  resetPosition = () => {
+    this.#overlayContent.style.left = "var(--ea-overlay-content-left)";
+    this.#overlayContent.style.top = "var(--ea-overlay-content-top)";
+  };
 
   show = () => {
     this.visible = true;
   };
 
-  close = () => {
+  hide = () => {
     this.visible = false;
+  };
+
+  #handleBeforeClose = () => {
+    if (this["before-close"]) {
+      this.dispatchEvent("before-close", {
+        detail: {
+          done: () => (this.status = false),
+        },
+      });
+    } else {
+      this.status = false;
+    }
+  };
+
+  #initDraggableEvent = (mousedownEvent) => {
+    if (
+      !this.#header.contains(mousedownEvent.target) ||
+      this.#header !== mousedownEvent.target
+    )
+      return;
+
+    const controller = new AbortController();
+    const contentElement = this.shadowRoot.querySelector(
+      ".ea-overlay__content"
+    );
+
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        contentElement.style.left = e.clientX + "px";
+        contentElement.style.top = e.clientY + "px";
+      },
+      {
+        signal: controller.signal,
+      }
+    );
+
+    window.addEventListener(
+      "mouseup",
+      () => {
+        controller.abort();
+      },
+      { signal: controller.signal }
+    );
   };
 
   connectedCallback() {
@@ -187,27 +283,19 @@ export class EaDialog extends EaOverlay {
 
     this.assignedStyle(stylesheet);
 
-    this.addEventListener(
-      "closed",
-      () => {
-        this.visible = false;
-      },
-      { signal: this.#abortController.signal }
-    );
+    this.addEventListener("closed", this.hide, {
+      signal: this.#abortController.signal,
+    });
 
     if (this["show-close"] && this.#closeIcon)
-      this.#closeIcon.addEventListener(
-        "click",
-        () => {
-          this.dispatchEvent("cancel");
-          this.hide();
-          //   if (!this.distinguishCancelAndClose) {
-          //   } else {
-          //     this.dispatchEvent("message-close");
-          //   }
-        },
-        { signal: this.#abortController.signal }
-      );
+      this.#closeIcon.addEventListener("click", this.#handleBeforeClose, {
+        signal: this.#abortController.signal,
+      });
+
+    if (this.draggable && !this.fullscreen)
+      this.shadowRoot.addEventListener("mousedown", this.#initDraggableEvent, {
+        signal: this.#abortController.signal,
+      });
   }
 
   $beforeUnmounted() {

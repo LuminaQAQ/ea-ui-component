@@ -7,6 +7,7 @@
 :host {
   --ea-dialog-padding: 14px;
   --ea-dialog-padding-primary: 12px;
+  --ea-dialog-box-shadow: var(--box-shadow-md);
   --ea-dialog-border-radius: var(--border-radius-sm);
 
   --ea-dialog-title-font-size: var(--font-size-lg);
@@ -28,12 +29,55 @@
     height: var(--ea-overlay-content-height);
     width: var(--ea-overlay-content-width);
   }
+
+  @include state(modal-penetrable) {
+    left: var(--ea-overlay-content-left);
+    top: var(--ea-overlay-content-top);
+    right: unset;
+    bottom: unset;
+    transform: var(--ea-overlay-content-transform);
+
+    width: auto;
+    height: auto;
+
+    .ea-overlay__mask {
+      display: none;
+    }
+  }
+}
+
+@include block(ea-dialog) {
+  @include modifier(center) {
+    .ea-dialog-main__header,
+    .ea-dialog-main__footer {
+      text-align: center;
+    }
+  }
+
+  @include modifier(draggable) {
+    .ea-dialog-main__header {
+      cursor: move;
+    }
+  }
+
+  @include modifier(fullscreen) {
+    --ea-overlay-content-width: 100%;
+    --ea-overlay-content-height: 100%;
+
+    .ea-dialog-main {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 @include block(ea-dialog-main) {
-  background-color: white;
+  box-sizing: border-box;
   padding: var(--ea-dialog-padding);
   border-radius: var(--ea-dialog-border-radius);
+  box-shadow: var(--ea-dialog-box-shadow);
+
+  background-color: white;
 
   @include element(header) {
     position: relative;
