@@ -42,15 +42,7 @@ const handleChildren = (children) => {
 export const h = (tagName, className, props, children) => {
   return `<${tagName} ${handleProps("class", className)} ${
     props
-      ? Object.entries(props).map(([key, value]) =>
-          key && value
-            ? typeof value === "string" ||
-              typeof value === "number" ||
-              typeof value === "boolean"
-              ? `${key}="${value}"`
-              : ""
-            : ""
-        )
+      ? Object.entries(props).map(([key, value]) => handleProps(key, value))
       : ""
   }>
     ${handleChildren(children)}

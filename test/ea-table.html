@@ -29,10 +29,26 @@
     <!-- <script type="module" src="../src//components/ea-empty/index.js"></script> -->
     <script type="module">
       const data = [
-        { name: "Lumina", age: 18, address: "中国" },
-        { name: "Alice", age: 18, address: "中国" },
-        { name: "Tom", age: 18, address: "中国" },
-        { name: "Bob", age: 18, address: "中国" },
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
       ];
 
       const moreData = [
@@ -55,18 +71,14 @@
       // ------- 1. 基础表格 -------
       // #region
       const basicTable = document.querySelector("#basicTable");
-      //   basicTable.data = data;
       basicTable.setData(data);
-      //   basicTable.addEventListener("ea-table-render", (e) => {
-      //     basicTable.setData(data);
-      //   });
       // #endregion
       // ------- end -------
 
       // ------- 2. 带斑马纹表格 -------
       // #region
       const stripeTable = document.querySelector("#stripeTable");
-      stripeTable.data = data;
+      stripeTable.setData(data);
       // #endregion
       // ------- end -------
 
@@ -208,17 +220,9 @@
     <!-- -------- 1. 基础表格 --------  -->
     <!-- #region  -->
     <ea-table id="basicTable">
-      <ea-table-column label="姓名" prop="name" width="100">
-        <img
-          src="https://ts1.tc.mm.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQHaEo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
-          alt=""
-          width="100"
-          height="100"
-        />
-        <span data-scope="name" part="name-scope"></span>
-      </ea-table-column>
-      <ea-table-column label="年龄" prop="age" width="100"></ea-table-column>
-      <ea-table-column label="地址" prop="address"></ea-table-column>
+      <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+      <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+      <ea-table-column label="Address" prop="address"></ea-table-column>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -228,9 +232,9 @@
     <!-- -------- 2. 带斑马纹表格 --------  -->
     <!-- #region  -->
     <ea-table id="stripeTable" stripe>
-      <ea-table-column prop="name" width="100">姓名</ea-table-column>
-      <ea-table-column prop="age" width="100">年龄</ea-table-column>
-      <ea-table-column prop="address">地址</ea-table-column>
+      <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+      <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+      <ea-table-column label="Address" prop="address"></ea-table-column>
     </ea-table>
     <!-- #endregion  -->
     <!-- -------------------  -->
