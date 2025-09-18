@@ -201,9 +201,6 @@
     "./ea-table": {
       "import": "./dist/ea-table.js"
     },
-    "./ea-table-column": {
-      "import": "./dist/ea-table-column.js"
-    },
     "./ea-tabs": {
       "import": "./dist/ea-tabs.js"
     },

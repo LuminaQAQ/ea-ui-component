@@ -42,7 +42,9 @@ const handleChildren = (children) => {
 export const h = (tagName, className, props, children) => {
   return `<${tagName} ${handleProps("class", className)} ${
     props
-      ? Object.entries(props).map(([key, value]) => handleProps(key, value))
+      ? Object.entries(props)
+          .map(([key, value]) => handleProps(key, value))
+          .join(" ")
       : ""
   }>
     ${handleChildren(children)}
