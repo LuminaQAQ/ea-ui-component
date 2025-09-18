@@ -32,12 +32,15 @@ export class EaTable extends Base {
   #tfoot;
 
   #states = {
+    isDataRendered: false,
+
     currentRow: {},
     columns: [],
+    dataSource: [],
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "stripe"];
+    return [...super.observedAttributes, "stripe", "border", "height"];
   }
 
   state = this.properties({
@@ -46,6 +49,23 @@ export class EaTable extends Base {
       default: false,
       observer: (newVal) => {
         this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    border: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    height: {
+      type: String,
+      default: 0,
+      observer: (newVal) => {
+        if (newVal) {
+          this.#container.style.setProperty("--ea-table-height", newVal);
+          this.#container.className = this.updateContainerClasslist();
+        }
       },
     },
   });
@@ -62,6 +82,8 @@ export class EaTable extends Base {
       },
       {
         stripe: this.stripe,
+        border: this.border,
+        "sticky-header": CSS.supports("height", this.height),
       }
     );
   }
@@ -98,37 +120,48 @@ export class EaTable extends Base {
       label: column.getAttribute("label"),
       width: column.getAttribute("width"),
       fixed:
-        column.getAttribute("fixed") || column.getAttribute("fixed") === ""
-          ? true
+        column.getAttribute("fixed") ||
+        typeof column.getAttribute("fixed") === "string"
+          ? column.getAttribute("fixed") || "left"
           : null,
       props: [...column.attributes].filter(
         (attr) => !exclude.includes(attr.name)
       ),
       template: column.template,
     }));
+    console.log(columnObject);
 
     const colgroup = h(
       "colgroup",
       "ea-table__colgroup",
-      {},
+      {
+        part: "colgroup",
+      },
       columnObject.map((column) =>
-        h("col", "ea-table__col", { width: column.width })
+        h("col", "ea-table__col", { width: column.width, part: "col" })
       )
     );
 
     const thead = h(
       "thead",
       "ea-table__thead",
-      {},
+      {
+        part: "thead",
+      },
       h(
         "tr",
         "ea-table__tr is-thead",
-        {},
+        {
+          part: "thead-tr",
+        },
         columnObject.map((column) =>
           h(
             "th",
-            "ea-table__th",
+            `ea-table__th ${
+              column.fixed ? `is-fixed fixed-${column.fixed}` : ""
+            } `,
             {
+              part: "thead-th",
               style: [
                 column.width ? `--ea-table-cell-width: ${column.width}` : "",
               ],
@@ -142,11 +175,15 @@ export class EaTable extends Base {
     const tfoot = h(
       "tfoot",
       "ea-table__tfoot",
-      {},
+      {
+        part: "tfoot",
+      },
       h("tr", "ea-table__tr is-tfoot", {})
     );
 
-    const tbody = h("tbody", "ea-table__tbody", {});
+    const tbody = h("tbody", "ea-table__tbody", {
+      part: "tbody",
+    });
 
     this.#container.innerHTML = `
         ${colgroup}
@@ -162,6 +199,8 @@ export class EaTable extends Base {
   }
 
   setData = (dataSource) => {
+    this.#states.isDataRendered = false;
+    this.#states.dataSource = dataSource;
     this.#tbody.innerHTML = "";
 
     const tbodyTemplate = document.createElement("template");
@@ -170,7 +209,10 @@ export class EaTable extends Base {
         return h(
           "tr",
           "ea-table__tr",
-          {},
+          {
+            part: "tbody-tr",
+            "data-index": i,
+          },
           this.#states.columns.map((column) => {
             let children = "";
 
@@ -191,14 +233,19 @@ export class EaTable extends Base {
                   children = item[column.prop];
                 }
               });
+            } else if (template) {
+              children = template.innerHTML;
             } else {
               children = item[column.prop];
             }
 
             return h(
               "td",
-              "ea-table__td",
+              `ea-table__td  ${
+                column.fixed ? `is-fixed fixed-${column.fixed}` : ""
+              }`,
               {
+                part: "tbody-td",
                 style: [
                   column.width ? `--ea-table-cell-width: ${column.width}` : "",
                 ],
@@ -210,13 +257,37 @@ export class EaTable extends Base {
       })
       .join("");
 
-    /**@type {HTMLTableRowElement[]} */
-    const trs = [...tbodyTemplate.content.querySelectorAll("tr")];
-    trs.forEach((tr, i) => {
-      tr.dataSource = dataSource[i];
-    });
-
     this.#tbody.appendChild(tbodyTemplate.content.cloneNode(true));
+    this.#states.isDataRendered = true;
+    this.dispatchEvent("data-rendered");
+  };
+
+  /**
+   * 设置行样式
+   * @param {Function | String} handler
+   */
+  setRowStylePart = (handler) => {
+    if (!this.#states.isDataRendered)
+      return console.warn("[EaTable] Please set data first!", this);
+
+    /** @type {HTMLElement[]} */
+    const trs = [...this.#tbody.querySelectorAll("tr")];
+    if (typeof handler === "function") {
+      trs.forEach((tr, i) => {
+        const className = handler({
+          row: this.#states.dataSource[tr.dataset.index],
+          rowIndex: i,
+        });
+
+        if (className) tr.part.add(className);
+      });
+    } else if (typeof handler === "string") {
+      if (!handler) return;
+
+      trs.forEach((tr, i) => {
+        tr.part.add(handler);
+      });
+    }
   };
 
   async getCurrentRow() {
@@ -234,8 +305,10 @@ export class EaTable extends Base {
       const tr = e.target.closest("tr");
       const td = e.target.closest("td");
       if (tr) {
-        this.#states.currentRow = tr.dataSource;
-        this.dispatchEvent("row-click", { detail: tr.dataSource });
+        this.#states.currentRow = this.#states.dataSource[tr.dataset.index];
+        this.dispatchEvent("row-click", {
+          detail: this.#states.dataSource[tr.dataset.index],
+        });
       }
       if (td) {
         this.dispatchEvent("cell-click");
