@@ -37,14 +37,16 @@ export class EaTable extends Base {
   };
 
   static get observedAttributes() {
-    return [];
+    return [...super.observedAttributes, "stripe"];
   }
 
   state = this.properties({
-    type: {
-      //   type: ,
-      default: "",
-      observer: (newVal) => {},
+    stripe: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
   });
 
@@ -53,9 +55,15 @@ export class EaTable extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-table", {
-      // ['--' + this.type]: this.type,
-    });
+    return this.computedClasslist(
+      "ea-table",
+      {
+        // ['--' + this.type]: this.type,
+      },
+      {
+        stripe: this.stripe,
+      }
+    );
   }
 
   constructor() {
@@ -120,7 +128,11 @@ export class EaTable extends Base {
           h(
             "th",
             "ea-table__th",
-            { width: column.width },
+            {
+              style: [
+                column.width ? `--ea-table-cell-width: ${column.width}` : "",
+              ],
+            },
             column.label || column.prop || ""
           )
         )
@@ -150,8 +162,11 @@ export class EaTable extends Base {
   }
 
   setData = (dataSource) => {
-    this.#tbody.innerHTML = dataSource
-      .map((item) => {
+    this.#tbody.innerHTML = "";
+
+    const tbodyTemplate = document.createElement("template");
+    tbodyTemplate.innerHTML = dataSource
+      .map((item, i) => {
         return h(
           "tr",
           "ea-table__tr",
@@ -162,23 +177,46 @@ export class EaTable extends Base {
             /** @type {HTMLElement} */
             const template = column.template;
 
-            const scope = template?.content?.querySelector(`[data-scope]`);
-            const scopeKey = scope?.getAttribute("data-scope");
+            const scopes = template?.content?.querySelectorAll(`[data-scope]`);
+            if (scopes?.length) {
+              scopes.forEach((scope) => {
+                const scopeKey = scope.getAttribute("data-scope");
 
-            if (scope && scopeKey && template) {
-              scope.innerHTML = item[scopeKey];
-              children = template.innerHTML;
-            } else if (template) {
-              children = template.innerHTML;
+                if (scope && scopeKey && template) {
+                  scope.innerHTML = item[scopeKey];
+                  children = template.innerHTML;
+                } else if (template) {
+                  children = template.innerHTML;
+                } else {
+                  children = item[column.prop];
+                }
+              });
             } else {
               children = item[column.prop];
             }
 
-            return h("td", "ea-table__td", {}, children);
+            return h(
+              "td",
+              "ea-table__td",
+              {
+                style: [
+                  column.width ? `--ea-table-cell-width: ${column.width}` : "",
+                ],
+              },
+              children
+            );
           })
         );
       })
       .join("");
+
+    /**@type {HTMLTableRowElement[]} */
+    const trs = [...tbodyTemplate.content.querySelectorAll("tr")];
+    trs.forEach((tr, i) => {
+      tr.dataSource = dataSource[i];
+    });
+
+    this.#tbody.appendChild(tbodyTemplate.content.cloneNode(true));
   };
 
   async getCurrentRow() {
@@ -191,6 +229,18 @@ export class EaTable extends Base {
     super.connectedCallback();
 
     await this.$render();
+
+    this.#container.addEventListener("click", (e) => {
+      const tr = e.target.closest("tr");
+      const td = e.target.closest("td");
+      if (tr) {
+        this.#states.currentRow = tr.dataSource;
+        this.dispatchEvent("row-click", { detail: tr.dataSource });
+      }
+      if (td) {
+        this.dispatchEvent("cell-click");
+      }
+    });
   }
 }
 

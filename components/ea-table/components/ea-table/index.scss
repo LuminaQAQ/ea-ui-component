@@ -1,64 +1,100 @@
+:host {
+  --ea-table-cell-spacing: var(--spacing-md);
+
+  --ea-table-cell-width: 100%;
+
+  --ea-table-header-color: var(--grey-700);
+  --ea-table-header-font-size: var(--font-size-lg);
+  --ea-table-body-color: var(--grey-900);
+  --ea-table-body-font-size: var(--font-size-md);
+
+  --ea-table-background-color: var(--color-white);
+  --ea-table-border-color: var(--grey-300);
+}
+
 slot {
   display: none;
   visibility: hidden;
 }
 
-table,
-th,
-td {
-  border: 1px solid;
-}
-
-table {
+@include block(ea-table) {
   display: block;
   width: 100%;
-  height: 200px;
   overflow: auto;
-  height: 240px;
   margin: 0 auto;
   display: block;
   overflow-x: auto;
   border-spacing: 0;
-}
+  background-color: var(--ea-table-background-color);
 
-tbody {
-  white-space: nowrap;
-}
+  &,
+  .ea-table__th,
+  .ea-table__td {
+    box-sizing: border-box;
+    padding: 8px;
+    border-bottom: 1px solid var(--ea-table-border-color);
+  }
 
-th,
-td {
-  padding: 5px 10px;
-  border-top-width: 0;
-  border-left-width: 0;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: white;
-}
+  .ea-table__tbody,
+  .ea-table__thead {
+    white-space: nowrap;
+  }
 
-th:last-child,
-td:last-child {
-  border-right-width: 0;
-}
+  .ea-table__th,
+  .ea-table__td {
+    padding: var(--ea-table-cell-spacing);
+    border-top-width: 0;
+    border-left-width: 0;
 
-tr:last-child td {
-  border-bottom-width: 0;
-}
+    width: var(--ea-table-cell-width);
+    min-width: var(--ea-table-cell-width);
 
-thead {
-  background-color: white;
-}
+    background-color: var(--ea-table-background-color);
 
-.sticky {
-  position: sticky;
-  left: 0;
-  z-index: 1;
-}
+    &:last-child {
+      border-right-width: 0;
+    }
+  }
 
-.sticky.is-header {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
+  @include element(thead) {
+    color: var(--ea-table-header-color);
+    font-size: var(--ea-table-header-font-size);
 
-@include block(ea-table) {
+    text-align: left;
+  }
+
+  @include element(tbody) {
+    color: var(--ea-table-body-color);
+    font-size: var(--ea-table-body-font-size);
+
+    text-align: left;
+  }
+
+  @include element(tr) {
+    &:last-child {
+      .ea-table__td {
+        border-bottom-width: 0;
+      }
+    }
+  }
+
+  @include state(sticky) {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+
+    &.is-header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+  }
+
+  @include state(stripe) {
+    .ea-table__tbody {
+      .ea-table__tr:nth-of-type(2n) {
+        --ea-table-background-color: var(--grey-100);
+      }
+    }
+  }
 }
