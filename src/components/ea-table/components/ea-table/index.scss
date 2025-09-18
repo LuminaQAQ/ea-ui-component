@@ -2,6 +2,7 @@
   --ea-table-cell-spacing: var(--spacing-md);
 
   --ea-table-cell-width: 100%;
+  --ea-table-height: auto;
 
   --ea-table-header-color: var(--grey-700);
   --ea-table-header-font-size: var(--font-size-lg);
@@ -24,12 +25,15 @@ slot {
 @include block(ea-table) {
   display: block;
   width: 100%;
+  height: var(--ea-table-height);
   overflow: auto;
   margin: 0 auto;
   display: block;
   overflow-x: auto;
   border-spacing: 0;
   background-color: var(--ea-table-background-color);
+
+  scrollbar-width: thin;
 
   .ea-table__th,
   .ea-table__td {
@@ -127,6 +131,32 @@ slot {
         .ea-table__td {
           border-bottom-width: 0;
         }
+      }
+    }
+  }
+
+  .ea-table__td,
+  .ea-table__th {
+    @include state(fixed) {
+      position: sticky;
+      z-index: 1;
+
+      &.fixed-left {
+        left: 0;
+      }
+
+      &.fixed-right {
+        right: 0;
+      }
+    }
+  }
+
+  @include state(sticky-header) {
+    .ea-table__thead {
+      .ea-table__th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
       }
     }
   }

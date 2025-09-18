@@ -40,7 +40,7 @@ export class EaTable extends Base {
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "stripe", "border"];
+    return [...super.observedAttributes, "stripe", "border", "height"];
   }
 
   state = this.properties({
@@ -58,6 +58,16 @@ export class EaTable extends Base {
         this.#container.className = this.updateContainerClasslist();
       },
     },
+    height: {
+      type: String,
+      default: 0,
+      observer: (newVal) => {
+        if (newVal) {
+          this.#container.style.setProperty("--ea-table-height", newVal);
+          this.#container.className = this.updateContainerClasslist();
+        }
+      },
+    },
   });
 
   /**
@@ -73,6 +83,7 @@ export class EaTable extends Base {
       {
         stripe: this.stripe,
         border: this.border,
+        "sticky-header": CSS.supports("height", this.height),
       }
     );
   }
@@ -109,14 +120,16 @@ export class EaTable extends Base {
       label: column.getAttribute("label"),
       width: column.getAttribute("width"),
       fixed:
-        column.getAttribute("fixed") || column.getAttribute("fixed") === ""
-          ? true
+        column.getAttribute("fixed") ||
+        typeof column.getAttribute("fixed") === "string"
+          ? column.getAttribute("fixed") || "left"
           : null,
       props: [...column.attributes].filter(
         (attr) => !exclude.includes(attr.name)
       ),
       template: column.template,
     }));
+    console.log(columnObject);
 
     const colgroup = h(
       "colgroup",
@@ -144,7 +157,9 @@ export class EaTable extends Base {
         columnObject.map((column) =>
           h(
             "th",
-            "ea-table__th",
+            `ea-table__th ${
+              column.fixed ? `is-fixed fixed-${column.fixed}` : ""
+            } `,
             {
               part: "thead-th",
               style: [
@@ -218,13 +233,17 @@ export class EaTable extends Base {
                   children = item[column.prop];
                 }
               });
+            } else if (template) {
+              children = template.innerHTML;
             } else {
               children = item[column.prop];
             }
 
             return h(
               "td",
-              "ea-table__td",
+              `ea-table__td  ${
+                column.fixed ? `is-fixed fixed-${column.fixed}` : ""
+              }`,
               {
                 part: "tbody-td",
                 style: [
@@ -259,7 +278,7 @@ export class EaTable extends Base {
           row: this.#states.dataSource[tr.dataset.index],
           rowIndex: i,
         });
-        // if (className) tr.classList.add(className);
+
         if (className) tr.part.add(className);
       });
     } else if (typeof handler === "string") {
@@ -286,8 +305,10 @@ export class EaTable extends Base {
       const tr = e.target.closest("tr");
       const td = e.target.closest("td");
       if (tr) {
-        this.#states.currentRow = tr.dataSource;
-        this.dispatchEvent("row-click", { detail: tr.dataSource });
+        this.#states.currentRow = this.#states.dataSource[tr.dataset.index];
+        this.dispatchEvent("row-click", {
+          detail: this.#states.dataSource[tr.dataset.index],
+        });
       }
       if (td) {
         this.dispatchEvent("cell-click");
