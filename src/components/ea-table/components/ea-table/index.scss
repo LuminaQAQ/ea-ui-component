@@ -14,7 +14,9 @@
   --ea-table-hover-background-color: #f5f7fa;
   --ea-table-border-color: var(--grey-200);
 
-  --ea-table-fixed-cell-box-shadow: 0px 20px 10px 5px rgba(0, 0, 0, 0.12);
+  --ea-table-fixed-x: 0;
+  --ea-table-fixed-left-cell-box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.12);
+  --ea-table-fixed-right-cell-box-shadow: -10px 10px 10px 0 rgba(0, 0, 0, 0.12);
 
   --ea-table-transition: var(--transition-fast);
 }
@@ -145,15 +147,23 @@ slot {
       z-index: 1;
 
       &.fixed-left {
-        left: 0;
+        left: var(--ea-table-fixed-x);
       }
 
       &.fixed-right {
-        right: 0;
+        right: var(--ea-table-fixed-x);
       }
 
       &.not-origin-position {
-        box-shadow: var(--ea-table-fixed-cell-box-shadow);
+        &.is-last {
+          &.fixed-left {
+            box-shadow: var(--ea-table-fixed-left-cell-box-shadow);
+          }
+
+          &.fixed-right {
+            box-shadow: var(--ea-table-fixed-right-cell-box-shadow);
+          }
+        }
       }
     }
   }

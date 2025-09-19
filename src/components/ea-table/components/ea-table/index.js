@@ -304,6 +304,9 @@ export class EaTable extends Base {
     return this.#states.currentRow;
   }
 
+  /**
+   * 处理固定列的位置和阴影（box-shadow）
+   */
   #handleFixedColumn = () => {
     /** @type {HTMLElement[]} */
     const fixedItems = [...this.#container.querySelectorAll(".is-fixed")];
@@ -314,28 +317,85 @@ export class EaTable extends Base {
       item.classList.contains("fixed-right")
     );
 
-    // console.log(
-    // );
-    const test = rightFixedItems.reduce((acc, item, index) => {
-      index += 1;
-      if (item.part.contains("thead-th")) {
-        return [
-          ...acc,
-          [
-            ...rightFixedItems.filter(
-              (item, itemIndex) => (itemIndex + 1) % index === 0
-            ),
-          ],
-        ];
+    /**
+     * 列方向分组
+     * @param {Array} initialArray
+     * @returns {Array}
+     */
+    const directionDivider = (initialArray) => {
+      const ths = initialArray.filter((item) => item.part.contains("thead-th"));
+      if (ths.length <= 1) return [initialArray];
+
+      const ary = [];
+
+      /**
+       * 按照带有fixed的th来分组
+       * eg: [[th1, th2 ...], [td1, td2 ...] ...]
+       */
+      for (
+        let i = 0, cnt = 0;
+        i < initialArray.length / ths.length;
+        i++, cnt++
+      ) {
+        if (cnt < ths.length) {
+          ary.push(
+            Array(ths.length)
+              .fill()
+              .map(
+                (_, cntIndex) => initialArray[i * cnt * ths.length + cntIndex]
+              )
+          );
+          cnt = 0;
+        }
       }
 
-      return acc;
-    }, []);
-    console.log(
-      Array(
-        rightFixedItems.filter((item) => item.part.contains("thead-th")).length
-      ).fill([])
-    );
+      /**
+       * 创建二维数组
+       * eg: [[th1, th1-td1, th1-td2 ...], [th2, th2-td1, th2-td2 ...] ...]
+       */
+      return ary.reduce((acc, item) => {
+        item.forEach((el, index) => {
+          acc[index] = [...acc[index], el];
+        });
+
+        return acc;
+      }, Array(ths.length).fill([]));
+    };
+
+    /**
+     * 处理固定列的样式：位置、box-shadow
+     * @param {Array} fixedColumnGroup
+     */
+    const handleColumnStyles = (fixedColumnGroup) => {
+      if (!fixedColumnGroup.length) return;
+
+      const lastGroup = fixedColumnGroup.slice(-1)[0];
+
+      // 如果当前列不是第一列，那么就设置其 inset 位置
+      fixedColumnGroup.forEach((group, index) => {
+        const previousGroup = fixedColumnGroup[index - 1] || [];
+        group.forEach((el) => {
+          if (lastGroup && previousGroup[0])
+            el.style.setProperty(
+              "--ea-table-fixed-x",
+              `${index * previousGroup[0].offsetWidth}px`
+            );
+        });
+      });
+
+      // 设置最后一列的样式， 确保 box-shadow 只在最后一列显示
+      lastGroup.forEach((el) => {
+        el.classList.add("is-last");
+      });
+    };
+
+    const [leftFixedColumnGroup, rightFixedColumnGroup] = [
+      directionDivider(leftFixedItems),
+      directionDivider(rightFixedItems).reverse(),
+    ];
+
+    handleColumnStyles(leftFixedColumnGroup);
+    handleColumnStyles(rightFixedColumnGroup);
   };
 
   /**
