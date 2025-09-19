@@ -43,7 +43,13 @@ export class EaTable extends Base {
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "stripe", "border", "height"];
+    return [
+      ...super.observedAttributes,
+      "stripe",
+      "border",
+      "height",
+      "max-height",
+    ];
   }
 
   state = this.properties({
@@ -63,10 +69,20 @@ export class EaTable extends Base {
     },
     height: {
       type: String,
-      default: 0,
+      default: null,
       observer: (newVal) => {
         if (newVal) {
           this.#container.style.setProperty("--ea-table-height", newVal);
+          this.#container.className = this.updateContainerClasslist();
+        }
+      },
+    },
+    "max-height": {
+      type: String,
+      default: null,
+      observer: (newVal) => {
+        if (newVal) {
+          this.#container.style.setProperty("--ea-table-max-height", newVal);
           this.#container.className = this.updateContainerClasslist();
         }
       },
@@ -86,7 +102,9 @@ export class EaTable extends Base {
       {
         stripe: this.stripe,
         border: this.border,
-        "sticky-header": CSS.supports("height", this.height),
+        "sticky-header":
+          CSS.supports("height", this.height) ||
+          CSS.supports("height", this.maxHeight),
       }
     );
   }

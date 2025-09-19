@@ -3,6 +3,7 @@
 
   --ea-table-cell-width: 100%;
   --ea-table-height: auto;
+  --ea-table-max-height: unset;
 
   --ea-table-header-color: var(--grey-700);
   --ea-table-header-font-size: var(--font-size-lg);
@@ -30,6 +31,7 @@ slot {
   display: block;
   width: 100%;
   height: var(--ea-table-height);
+  max-height: var(--ea-table-max-height);
   overflow: auto;
   margin: 0 auto;
   display: block;
