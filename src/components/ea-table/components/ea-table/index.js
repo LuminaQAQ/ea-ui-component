@@ -260,6 +260,7 @@ export class EaTable extends Base {
       .join("");
 
     this.#tbody.appendChild(tbodyTemplate.content.cloneNode(true));
+    this.#handleFixedColumn();
     this.#initScrollEvent();
     this.#states.isDataRendered = true;
     this.dispatchEvent("data-rendered");
@@ -293,12 +294,54 @@ export class EaTable extends Base {
     }
   };
 
+  /**
+   * 获取当前行数据
+   * @returns {Promise<Object>}
+   */
   async getCurrentRow() {
     await EaUtils.EaElement.addAsyncEventListener(this, "row-click");
 
     return this.#states.currentRow;
   }
 
+  #handleFixedColumn = () => {
+    /** @type {HTMLElement[]} */
+    const fixedItems = [...this.#container.querySelectorAll(".is-fixed")];
+    const leftFixedItems = fixedItems.filter((item) =>
+      item.classList.contains("fixed-left")
+    );
+    const rightFixedItems = fixedItems.filter((item) =>
+      item.classList.contains("fixed-right")
+    );
+
+    // console.log(
+    // );
+    const test = rightFixedItems.reduce((acc, item, index) => {
+      index += 1;
+      if (item.part.contains("thead-th")) {
+        return [
+          ...acc,
+          [
+            ...rightFixedItems.filter(
+              (item, itemIndex) => (itemIndex + 1) % index === 0
+            ),
+          ],
+        ];
+      }
+
+      return acc;
+    }, []);
+    console.log(
+      Array(
+        rightFixedItems.filter((item) => item.part.contains("thead-th")).length
+      ).fill([])
+    );
+  };
+
+  /**
+   * 点击事件: 行点击, 单元格点击
+   * @param {MouseEvent} e
+   */
   #initClickEvent = (e) => {
     const tr = e.target.closest("tr");
     const td = e.target.closest("td");
@@ -313,6 +356,9 @@ export class EaTable extends Base {
     }
   };
 
+  /**
+   * 滚动事件: 固定列样式
+   */
   #initScrollEvent = () => {
     /** @type {HTMLElement[]} */
     const fixedItems = [...this.#container.querySelectorAll(".is-fixed")];
