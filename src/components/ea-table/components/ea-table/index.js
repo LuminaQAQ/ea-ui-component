@@ -31,6 +31,9 @@ export class EaTable extends Base {
   /** @type {HTMLElement} */
   #tfoot;
 
+  /** @type {AbortController} */
+  #abortController;
+
   #states = {
     isDataRendered: false,
 
@@ -129,7 +132,6 @@ export class EaTable extends Base {
       ),
       template: column.template,
     }));
-    console.log(columnObject);
 
     const colgroup = h(
       "colgroup",
@@ -258,6 +260,7 @@ export class EaTable extends Base {
       .join("");
 
     this.#tbody.appendChild(tbodyTemplate.content.cloneNode(true));
+    this.#initScrollEvent();
     this.#states.isDataRendered = true;
     this.dispatchEvent("data-rendered");
   };
@@ -296,24 +299,61 @@ export class EaTable extends Base {
     return this.#states.currentRow;
   }
 
+  #initClickEvent = (e) => {
+    const tr = e.target.closest("tr");
+    const td = e.target.closest("td");
+    if (tr) {
+      this.#states.currentRow = this.#states.dataSource[tr.dataset.index];
+      this.dispatchEvent("row-click", {
+        detail: this.#states.dataSource[tr.dataset.index],
+      });
+    }
+    if (td) {
+      this.dispatchEvent("cell-click");
+    }
+  };
+
+  #initScrollEvent = () => {
+    /** @type {HTMLElement[]} */
+    const fixedItems = [...this.#container.querySelectorAll(".is-fixed")];
+    const { scrollLeft } = this.#container;
+    const endPosition =
+      Math.floor(this.#container.scrollWidth - this.#container.offsetWidth) - 1;
+    if (scrollLeft < endPosition) {
+      if (!scrollLeft) {
+        fixedItems.forEach((el) => {
+          el.classList.toggle(
+            "not-origin-position",
+            !el.classList.contains("fixed-left")
+          );
+        });
+      } else {
+        fixedItems.forEach((el) => {
+          el.classList.add("not-origin-position");
+        });
+      }
+    } else {
+      fixedItems.forEach((el) => {
+        el.classList.toggle(
+          "not-origin-position",
+          !el.classList.contains("fixed-right")
+        );
+      });
+    }
+  };
+
   async connectedCallback() {
     super.connectedCallback();
 
     await this.$render();
+    this.#abortController = new AbortController();
 
-    this.#container.addEventListener("click", (e) => {
-      const tr = e.target.closest("tr");
-      const td = e.target.closest("td");
-      if (tr) {
-        this.#states.currentRow = this.#states.dataSource[tr.dataset.index];
-        this.dispatchEvent("row-click", {
-          detail: this.#states.dataSource[tr.dataset.index],
-        });
-      }
-      if (td) {
-        this.dispatchEvent("cell-click");
-      }
-    });
+    this.#container.addEventListener("click", this.#initClickEvent);
+    this.#container.addEventListener("scroll", this.#initScrollEvent);
+  }
+
+  $beforeUnmounted() {
+    this.#abortController.abort();
   }
 }
 

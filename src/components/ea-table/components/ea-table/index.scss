@@ -14,6 +14,8 @@
   --ea-table-hover-background-color: #f5f7fa;
   --ea-table-border-color: var(--grey-200);
 
+  --ea-table-fixed-cell-box-shadow: 0px 20px 10px 5px rgba(0, 0, 0, 0.12);
+
   --ea-table-transition: var(--transition-fast);
 }
 
@@ -58,7 +60,8 @@ slot {
 
     background-color: var(--ea-table-background-color);
 
-    transition: background-color var(--ea-table-transition);
+    transition: background-color var(--ea-table-transition),
+      box-shadow var(--ea-table-transition);
 
     &:last-child {
       // border-right-width: 0;
@@ -147,6 +150,10 @@ slot {
 
       &.fixed-right {
         right: 0;
+      }
+
+      &.not-origin-position {
+        box-shadow: var(--ea-table-fixed-cell-box-shadow);
       }
     }
   }
