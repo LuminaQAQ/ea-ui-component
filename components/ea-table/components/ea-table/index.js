@@ -31,6 +31,9 @@ export class EaTable extends Base {
   /** @type {HTMLElement} */
   #tfoot;
 
+  /** @type {AbortController} */
+  #abortController;
+
   #states = {
     isDataRendered: false,
 
@@ -129,7 +132,6 @@ export class EaTable extends Base {
       ),
       template: column.template,
     }));
-    console.log(columnObject);
 
     const colgroup = h(
       "colgroup",
@@ -258,6 +260,8 @@ export class EaTable extends Base {
       .join("");
 
     this.#tbody.appendChild(tbodyTemplate.content.cloneNode(true));
+    this.#handleFixedColumn();
+    this.#initScrollEvent();
     this.#states.isDataRendered = true;
     this.dispatchEvent("data-rendered");
   };
@@ -290,30 +294,172 @@ export class EaTable extends Base {
     }
   };
 
+  /**
+   * 获取当前行数据
+   * @returns {Promise<Object>}
+   */
   async getCurrentRow() {
     await EaUtils.EaElement.addAsyncEventListener(this, "row-click");
 
     return this.#states.currentRow;
   }
 
+  /**
+   * 处理固定列的位置和阴影（box-shadow）
+   */
+  #handleFixedColumn = () => {
+    /** @type {HTMLElement[]} */
+    const fixedItems = [...this.#container.querySelectorAll(".is-fixed")];
+    const leftFixedItems = fixedItems.filter((item) =>
+      item.classList.contains("fixed-left")
+    );
+    const rightFixedItems = fixedItems.filter((item) =>
+      item.classList.contains("fixed-right")
+    );
+
+    /**
+     * 列方向分组
+     * @param {Array} initialArray
+     * @returns {Array}
+     */
+    const directionDivider = (initialArray) => {
+      const ths = initialArray.filter((item) => item.part.contains("thead-th"));
+      if (ths.length <= 1) return [initialArray];
+
+      const ary = [];
+
+      /**
+       * 按照带有fixed的th来分组
+       * eg: [[th1, th2 ...], [td1, td2 ...] ...]
+       */
+      for (
+        let i = 0, cnt = 0;
+        i < initialArray.length / ths.length;
+        i++, cnt++
+      ) {
+        if (cnt < ths.length) {
+          ary.push(
+            Array(ths.length)
+              .fill()
+              .map(
+                (_, cntIndex) => initialArray[i * cnt * ths.length + cntIndex]
+              )
+          );
+          cnt = 0;
+        }
+      }
+
+      /**
+       * 创建二维数组
+       * eg: [[th1, th1-td1, th1-td2 ...], [th2, th2-td1, th2-td2 ...] ...]
+       */
+      return ary.reduce((acc, item) => {
+        item.forEach((el, index) => {
+          acc[index] = [...acc[index], el];
+        });
+
+        return acc;
+      }, Array(ths.length).fill([]));
+    };
+
+    /**
+     * 处理固定列的样式：位置、box-shadow
+     * @param {Array} fixedColumnGroup
+     */
+    const handleColumnStyles = (fixedColumnGroup) => {
+      if (!fixedColumnGroup.length) return;
+
+      const lastGroup = fixedColumnGroup.slice(-1)[0];
+
+      // 如果当前列不是第一列，那么就设置其 inset 位置
+      fixedColumnGroup.forEach((group, index) => {
+        const previousGroup = fixedColumnGroup[index - 1] || [];
+        group.forEach((el) => {
+          if (lastGroup && previousGroup[0])
+            el.style.setProperty(
+              "--ea-table-fixed-x",
+              `${index * previousGroup[0].offsetWidth}px`
+            );
+        });
+      });
+
+      // 设置最后一列的样式， 确保 box-shadow 只在最后一列显示
+      lastGroup.forEach((el) => {
+        el.classList.add("is-last");
+      });
+    };
+
+    const [leftFixedColumnGroup, rightFixedColumnGroup] = [
+      directionDivider(leftFixedItems),
+      directionDivider(rightFixedItems).reverse(),
+    ];
+
+    handleColumnStyles(leftFixedColumnGroup);
+    handleColumnStyles(rightFixedColumnGroup);
+  };
+
+  /**
+   * 点击事件: 行点击, 单元格点击
+   * @param {MouseEvent} e
+   */
+  #initClickEvent = (e) => {
+    const tr = e.target.closest("tr");
+    const td = e.target.closest("td");
+    if (tr) {
+      this.#states.currentRow = this.#states.dataSource[tr.dataset.index];
+      this.dispatchEvent("row-click", {
+        detail: this.#states.dataSource[tr.dataset.index],
+      });
+    }
+    if (td) {
+      this.dispatchEvent("cell-click");
+    }
+  };
+
+  /**
+   * 滚动事件: 固定列样式
+   */
+  #initScrollEvent = () => {
+    /** @type {HTMLElement[]} */
+    const fixedItems = [...this.#container.querySelectorAll(".is-fixed")];
+    const { scrollLeft } = this.#container;
+    const endPosition =
+      Math.floor(this.#container.scrollWidth - this.#container.offsetWidth) - 1;
+    if (scrollLeft < endPosition) {
+      if (!scrollLeft) {
+        fixedItems.forEach((el) => {
+          el.classList.toggle(
+            "not-origin-position",
+            !el.classList.contains("fixed-left")
+          );
+        });
+      } else {
+        fixedItems.forEach((el) => {
+          el.classList.add("not-origin-position");
+        });
+      }
+    } else {
+      fixedItems.forEach((el) => {
+        el.classList.toggle(
+          "not-origin-position",
+          !el.classList.contains("fixed-right")
+        );
+      });
+    }
+  };
+
   async connectedCallback() {
     super.connectedCallback();
 
     await this.$render();
+    this.#abortController = new AbortController();
 
-    this.#container.addEventListener("click", (e) => {
-      const tr = e.target.closest("tr");
-      const td = e.target.closest("td");
-      if (tr) {
-        this.#states.currentRow = this.#states.dataSource[tr.dataset.index];
-        this.dispatchEvent("row-click", {
-          detail: this.#states.dataSource[tr.dataset.index],
-        });
-      }
-      if (td) {
-        this.dispatchEvent("cell-click");
-      }
-    });
+    this.#container.addEventListener("click", this.#initClickEvent);
+    this.#container.addEventListener("scroll", this.#initScrollEvent);
+  }
+
+  $beforeUnmounted() {
+    this.#abortController.abort();
   }
 }
 
