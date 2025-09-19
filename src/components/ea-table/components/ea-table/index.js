@@ -125,7 +125,7 @@ export class EaTable extends Base {
 
   async $render() {
     const tableColumnNodes = /** @type {EaTableColumnElement[]} */ ([
-      ...this.querySelectorAll("ea-table-column[prop]"),
+      ...this.querySelectorAll("ea-table-column"),
     ]);
 
     await Promise.all(
@@ -161,6 +161,63 @@ export class EaTable extends Base {
         h("col", "ea-table__col", { width: column.width, part: "col" })
       )
     );
+
+    if (this.id === "groupingHeadTable") {
+      const tree = (el, depth = 0) => {
+        if (!el) return;
+
+        const columns = el.querySelectorAll("& > ea-table-column");
+        const map = new Map();
+        depth++;
+
+        columns.forEach((column) => {
+          const columnTree = tree(column, depth);
+          map.set(column.getAttribute("prop") || column.getAttribute("label"), {
+            depth,
+            prop: column.getAttribute("prop"),
+            label: column.getAttribute("label"),
+            width: column.getAttribute("width"),
+            fixed:
+              column.getAttribute("fixed") ||
+              typeof column.getAttribute("fixed") === "string"
+                ? column.getAttribute("fixed") || "left"
+                : null,
+            props: [...column.attributes].filter(
+              (attr) => !exclude.includes(attr.name)
+            ),
+            template: columnTree.size
+              ? Object.fromEntries(columnTree.entries())
+              : column?.template,
+          });
+        });
+
+        return map;
+      };
+
+      // tree(this);
+      console.log(Object.fromEntries(tree(this).entries()));
+
+      // const map = new Map();
+      // columnObject.forEach((item) => {
+      //   map.set(item.prop || item.label, item);
+      // });
+
+      // this.querySelectorAll("& > ea-table-column").forEach((item) => {
+      //   console.log(
+      //     item.getAttribute("label"),
+      //     item.querySelectorAll("& > ea-table-column")
+      //   );
+      // });
+
+      // const tree = () => {};
+      // const test = columnObject.map((item) => {
+      //   if (!item.template) return item;
+      //   console.log(item, item.template?.content.children);
+
+      //   // h("th", item.label);
+      // });
+      // console.log(test);
+    }
 
     const thead = h(
       "thead",
@@ -216,6 +273,8 @@ export class EaTable extends Base {
     this.#tbody = this.shadowRoot.querySelector(".ea-table__tbody");
     this.#tfoot = this.shadowRoot.querySelector(".ea-table__tfoot");
     this.#states.columns = columnObject;
+
+    this.dispatchEvent("ea-table-rendered");
   }
 
   setData = (dataSource) => {

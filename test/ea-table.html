@@ -243,120 +243,120 @@
       // ------- 5. 多级表头 -------
       // #region
       const groupingHeadTable = document.querySelector("#groupingHeadTable");
-      groupingHeadTable.data = moreData;
+      groupingHeadTable.setData(moreData);
       // #endregion
       // ------- end -------
 
       // ------- 6. 单选 -------
       // #region
-      const radioTable = {
-        table: document.querySelector("#radioTable"),
+      // const radioTable = {
+      //   table: document.querySelector("#radioTable"),
 
-        init() {
-          this.table.data = moreData;
+      //   init() {
+      //     this.table.data = moreData;
 
-          this.table.addEventListener("current-change", (e) => {
-            console.log(e.detail);
-          });
-        },
-      };
-      radioTable.init();
+      //     this.table.addEventListener("current-change", (e) => {
+      //       console.log(e.detail);
+      //     });
+      //   },
+      // };
+      // radioTable.init();
       // #endregion
       // ------- end -------
 
       // ------- 7. 自增id序列 -------
       // #region
-      const increaseliyTable = document.querySelector("#increaseliyTable");
-      increaseliyTable.data = data;
+      // const increaseliyTable = document.querySelector("#increaseliyTable");
+      // increaseliyTable.data = data;
       // #endregion
       // ------- end -------
 
       // ------- 8. 多选 -------
       // #region
-      const checkboxTable = document.querySelector("#checkboxTable");
-      checkboxTable.data = data;
-      checkboxTable.addEventListener("body-selection-change", (e) => {
-        console.log(e.detail);
-      });
+      // const checkboxTable = document.querySelector("#checkboxTable");
+      // checkboxTable.data = data;
+      // checkboxTable.addEventListener("body-selection-change", (e) => {
+      //   console.log(e.detail);
+      // });
       // #endregion
       // ------- end -------
 
       // ------- 9. 排序 -------
       // #region
-      const sortableTable = {
-        table: document.querySelector("#sortableTable"),
+      // const sortableTable = {
+      //   table: document.querySelector("#sortableTable"),
 
-        init() {
-          this.table.data = moreData;
+      //   init() {
+      //     this.table.data = moreData;
 
-          this.table.addEventListener("sort-change", (e) => {
-            console.log(e.detail);
-          });
-        },
-      };
-      sortableTable.init();
+      //     this.table.addEventListener("sort-change", (e) => {
+      //       console.log(e.detail);
+      //     });
+      //   },
+      // };
+      // sortableTable.init();
       // #endregion
       // ------- end -------
 
       // ------- 10. 自定义插槽 -------
       // #region
-      const customTable = {
-        table: document.querySelector("#customTable"),
-        searchInput: document.querySelector("#searchInput"),
+      // const customTable = {
+      //   table: document.querySelector("#customTable"),
+      //   searchInput: document.querySelector("#searchInput"),
 
-        init() {
-          this.table.data = moreData;
+      //   init() {
+      //     this.table.data = moreData;
 
-          // 搜索
-          this.searchInput.addEventListener("change", () => {
-            const res = moreData.filter((item) =>
-              item.name.includes(this.searchInput.value)
-            );
-            this.table.data = res;
-          });
-        },
-      };
-      customTable.init();
+      //     // 搜索
+      //     this.searchInput.addEventListener("change", () => {
+      //       const res = moreData.filter((item) =>
+      //         item.name.includes(this.searchInput.value)
+      //       );
+      //       this.table.data = res;
+      //     });
+      //   },
+      // };
+      // customTable.init();
 
-      // 编辑按钮
-      class MyEditButton extends HTMLElement {
-        constructor() {
-          super();
+      // // 编辑按钮
+      // class MyEditButton extends HTMLElement {
+      //   constructor() {
+      //     super();
 
-          const shadowroot = this.attachShadow({ mode: "open" });
-          shadowroot.innerHTML = `
-                    <ea-button type="primary" size="mini">编辑</ea-button>
-                `;
-          const btn = shadowroot.querySelector("ea-button");
-          btn.addEventListener("click", (e) => {
-            setTimeout(() => {
-              console.log(customTable.table.currentRowDetail);
-            }, 0);
-          });
+      //     const shadowroot = this.attachShadow({ mode: "open" });
+      //     shadowroot.innerHTML = `
+      //               <ea-button type="primary" size="mini">编辑</ea-button>
+      //           `;
+      //     const btn = shadowroot.querySelector("ea-button");
+      //     btn.addEventListener("click", (e) => {
+      //       setTimeout(() => {
+      //         console.log(customTable.table.currentRowDetail);
+      //       }, 0);
+      //     });
 
-          shadowroot.appendChild(btn);
-        }
-      }
-      window.customElements.define("my-edit-button", MyEditButton);
+      //     shadowroot.appendChild(btn);
+      //   }
+      // }
+      // window.customElements.define("my-edit-button", MyEditButton);
 
-      // 删除按钮
-      class MyDeleteButton extends HTMLElement {
-        constructor() {
-          super();
+      // // 删除按钮
+      // class MyDeleteButton extends HTMLElement {
+      //   constructor() {
+      //     super();
 
-          const shadowroot = this.attachShadow({ mode: "open" });
-          shadowroot.innerHTML = `
-                    <ea-button type="danger" size="mini">删除</ea-button>
-                `;
-          const btn = shadowroot.querySelector("ea-button");
-          btn.addEventListener("click", (e) => {
-            setTimeout(() => {
-              console.log(customTable.table.currentRowDetail);
-            }, 0);
-          });
-        }
-      }
-      window.customElements.define("my-delete-button", MyDeleteButton);
+      //     const shadowroot = this.attachShadow({ mode: "open" });
+      //     shadowroot.innerHTML = `
+      //               <ea-button type="danger" size="mini">删除</ea-button>
+      //           `;
+      //     const btn = shadowroot.querySelector("ea-button");
+      //     btn.addEventListener("click", (e) => {
+      //       setTimeout(() => {
+      //         console.log(customTable.table.currentRowDetail);
+      //       }, 0);
+      //     });
+      //   }
+      // }
+      // window.customElements.define("my-delete-button", MyDeleteButton);
       // #endregion
       // ------- end -------
     </script>
@@ -613,36 +613,58 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 固定列和表头 --------  -->
-    <!-- #region  -->
-    <ea-table id="groupingHeadTable" border height="250">
-      <ea-table-column prop="date" width="100" rowspan="3"
-        >日期</ea-table-column
-      >
-      <ea-table-column label="详细信息" colspan="3">
-        <ea-table-column prop="name" width="100" rowspan="2"
-          >姓名</ea-table-column
-        >
-        <ea-table-column label="个人信息" colspan="2">
-          <ea-table-column prop="age" width="100">年龄</ea-table-column>
-          <ea-table-column prop="address">地址</ea-table-column>
+    <!--  多级表头 -->
+    <!-- #region -->
+    <h1>多级表头</h1>
+
+    <div class="demo">
+      <ea-table id="groupingHeadTable" style="width: 100%">
+        <ea-table-column
+          prop="date"
+          label="Date"
+          width="150px"
+        ></ea-table-column>
+        <ea-table-column label="Delivery Info">
+          <ea-table-column
+            prop="name"
+            label="Name"
+            width="120px"
+          ></ea-table-column>
+          <ea-table-column label="Address Info">
+            <ea-table-column
+              prop="state"
+              label="State"
+              width="120px"
+            ></ea-table-column>
+            <ea-table-column
+              prop="city"
+              label="City"
+              width="120px"
+            ></ea-table-column>
+            <ea-table-column prop="address" label="Address"></ea-table-column>
+            <ea-table-column
+              prop="zip"
+              label="Zip"
+              width="120px"
+            ></ea-table-column>
+          </ea-table-column>
         </ea-table-column>
-      </ea-table-column>
-    </ea-table>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
+      </ea-table>
+    </div>
 
     <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
 
     <!-- -------- 6. 单选 --------  -->
     <!-- #region  -->
     <h2>6. 单选</h2>
-    <ea-table id="radioTable" border height="250" highlight-current-row>
+    <!-- <ea-table id="radioTable" border height="250" highlight-current-row>
       <ea-table-column prop="date" width="100">日期</ea-table-column>
       <ea-table-column prop="name" width="100">姓名</ea-table-column>
       <ea-table-column prop="age" width="100">年龄</ea-table-column>
       <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
+    </ea-table> -->
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -651,12 +673,12 @@
     <!-- -------- 7. 自增id序列 --------  -->
     <!-- #region  -->
     <h2>7. 自增id序列</h2>
-    <ea-table id="increaseliyTable" border height="250" highlight-current-row>
+    <!-- <ea-table id="increaseliyTable" border height="250" highlight-current-row>
       <ea-table-column type="index" width="100">id</ea-table-column>
       <ea-table-column prop="name" width="100">姓名</ea-table-column>
       <ea-table-column prop="age" width="100">年龄</ea-table-column>
       <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
+    </ea-table> -->
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -665,13 +687,13 @@
     <!-- -------- 8. 多选 --------  -->
     <!-- #region  -->
     <h2>8. 多选</h2>
-    <ea-table id="checkboxTable" border height="250">
+    <!-- <ea-table id="checkboxTable" border height="250">
       <ea-table-column type="selection" width="100"></ea-table-column>
       <ea-table-column type="index" width="100">id</ea-table-column>
       <ea-table-column prop="name" width="100">姓名</ea-table-column>
       <ea-table-column prop="age" width="100">年龄</ea-table-column>
       <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
+    </ea-table> -->
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -680,7 +702,7 @@
     <!-- -------- 9. 排序 --------  -->
     <!-- #region  -->
     <h2>9. 排序</h2>
-    <ea-table id="sortableTable" border height="250">
+    <!-- <ea-table id="sortableTable" border height="250">
       <ea-table-column prop="date" width="100" rowspan="3" sortable
         >日期</ea-table-column
       >
@@ -693,7 +715,7 @@
           <ea-table-column prop="address">地址</ea-table-column>
         </ea-table-column>
       </ea-table-column>
-    </ea-table>
+    </ea-table> -->
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -702,7 +724,7 @@
     <!-- -------- 10. 自定义插槽 --------  -->
     <!-- #region  -->
     <h2>10. 自定义插槽</h2>
-    <ea-table id="customTable" border height="250">
+    <!-- <ea-table id="customTable" border height="250">
       <ea-table-column prop="date" width="100" rowspan="3" sortable
         >日期</ea-table-column
       >
@@ -728,7 +750,7 @@
       <div slot="empty">
         <ea-empty description="描述文字" image-size="100"></ea-empty>
       </div>
-    </ea-table>
+    </ea-table> -->
     <!-- #endregion  -->
     <!-- -------------------  -->
   </body>

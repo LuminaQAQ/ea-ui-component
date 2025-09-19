@@ -1,6 +1,7 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
 
 export class EaTableColumn extends Base {
   /** @type {HTMLElement} */
