@@ -1,156 +1,171 @@
-import Base from '../Base.js';
+import Base from "@components/Base.js";
+import EaUtils from "@/utils/Utils";
+import { defaultAvatar, errorAvatar } from "./assets/avatarPlaceholder";
 
-import "../ea-icon/index.js"
-
-import { errorAvatar } from './src/assets/errorAvatar.js';
-import { iconAvatar, textAvatar } from './src/assets/iconAndTextAvatar.js';
-
-import { stylesheet } from "./src/style/stylesheet.js"
-
+import stylesheet from "./index.scss?inline";
 
 export class EaAvatar extends Base {
-    #avatar;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #content;
 
-    constructor() {
-        super();
+  /** @type {AbortController} */
+  #srcController;
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "icon",
+      "shape",
+      "size",
+      "src",
+      "src-set",
+      "alt",
+      "fit",
+    ];
+  }
 
-        shadowRoot.innerHTML = `
-            <div class="ea-avatar_wrap" part='container'>
-                <span class="ea-avatar" part="avatar">
-                    <slot></slot>
-                </span>
-            </div>
-        `;
-
-        this.#avatar = shadowRoot.querySelector('.ea-avatar');
-
-        this.build(shadowRoot, stylesheet);
-    }
-
-    // ------- size 图片大小 -------
-    // #region
-    get size() {
-        const sizeNumber = this.getAttrNumber('size');
-        const sizeString = this.getAttribute('size');
-
-        if (sizeNumber === 0 || !sizeNumber) {
-            return ['large', 'medium', 'small'].includes(sizeString) ? sizeString : 'normal';
+  state = this.properties({
+    icon: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#content.innerHTML = `<ea-icon icon="${newVal}"></ea-icon>`;
+      },
+    },
+    shape: {
+      type: ["circle", "square"],
+      default: "circle",
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    size: {
+      type: String,
+      default: "default",
+      observer: (newVal) => {
+        const isEnumValue = EaUtils.Enum.hasEnum(
+          ["default", "small", "large"],
+          newVal
+        );
+        const isCSSValue = CSS.supports("width", newVal);
+        if (!isEnumValue && !isCSSValue) {
+          this.size = "default";
+          return console.warn(
+            "[ea-avatar] Please set size to one of [default, small, large] or a valid CSS width value"
+          );
         }
 
-        return this.getAttrNumber('size');
-    }
-
-    set size(value) {
-        this.setAttribute('size', value);
-
-        if (typeof value === "number") {
-            this.#avatar.style.width = `${value}px`;
-            this.#avatar.style.height = `${value}px`;
-            this.#avatar.style.lineHeight = `${value}px`;
-        } else if (typeof value === "string") {
-            this.#avatar.classList.add(`ea-avatar--${value}`);
-        }
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- shape 图片形状 -------
-    // #region
-    get shape() {
-        const shape = this.getAttribute('shape');
-
-        return ['circle', 'square'].includes(shape) ? shape : 'circle';
-    }
-
-    set shape(value) {
-        this.setAttribute('shape', value);
-        this.#avatar.classList.add(`ea-avatar--${this.shape}`);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- src 图片链接 -------
-    // #region
-    get src() {
-        return this.getAttribute('src');
-    }
-
-    set src(value) {
-        if (!value) return;
-
-        this.setAttribute('src', value);
+        this.style.setProperty(
+          "--ea-avatar-size",
+          isEnumValue ? `var(--ea-avatar-size-${newVal})` : newVal
+        );
+      },
+    },
+    src: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#srcController?.abort();
+        this.#srcController = new AbortController();
 
         const image = new Image();
-        image.src = value;
+        image.src = newVal;
 
-        image.onload = () => {
-            this.#avatar.innerHTML = `<img class="ea-avatar--img" src="${value}" alt="头像">`;
-        };
+        image.addEventListener(
+          "load",
+          () => {
+            this.#content.innerHTML = `<img class="ea-avatar__img" src="${newVal}" alt="${this.alt}" srcset="${this["src-set"]}" part="img-avatar" />`;
+            this.#srcController?.abort();
+          },
+          { signal: this.#srcController.signal }
+        );
 
-        image.onerror = (e) => {
-            this.#avatar.innerHTML = errorAvatar;
+        image.addEventListener(
+          "error",
+          (e) => {
+            this.#content.innerHTML = errorAvatar;
 
-            this.dispatchEvent(new CustomEvent('error', {
-                detail: {
-                    error: e,
-                },
-            }));
-        };
-    }
-    // #endregion
-    // ------- end -------
+            this.dispatchEvent("error", {
+              detail: {
+                error: e,
+              },
+            });
 
-    // ------- icon 图标 -------
-    // #region
-    get icon() {
-        return this.getAttribute('icon') || '';
-    }
+            this.#srcController?.abort();
+          },
+          { signal: this.#srcController.signal }
+        );
+      },
+    },
+    "src-set": {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        /** @type {HTMLImageElement} */
+        const img = this.shadowRoot.querySelector(".ea-avatar__img");
+        if (img) img.srcset = newVal;
+      },
+    },
+    alt: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        /** @type {HTMLImageElement} */
+        const img = this.shadowRoot.querySelector(".ea-avatar__img");
+        if (img) img.alt = newVal;
+      },
+    },
+    fit: {
+      type: ["fill", "contain", "cover", "none", "scale-down"],
+      default: "cover",
+      observer: (newVal) => {
+        /** @type {HTMLImageElement} */
+        const img = this.shadowRoot.querySelector(".ea-avatar__img");
+        if (img) img.style.setProperty("--ea-avatar-fit", newVal);
+      },
+    },
+  });
 
-    set icon(value) {
-        this.setAttribute('icon', value);
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    return this.computedClasslist("ea-avatar", {
+      ["--" + this.shape]: this.shape,
+    });
+  }
 
-        this.#avatar.innerHTML = iconAvatar(value);
-    }
-    // #endregion
-    // ------- end -------
+  constructor() {
+    super();
 
-    // ------- fit 图片容器适应 -------
-    // #region
-    get fit() {
-        return this.getAttribute('fit') || 'cover';
-    }
+    this.stylesheet = stylesheet;
 
-    set fit(value) {
-        this.setAttribute('fit', value);
+    this.$render();
+  }
 
-        this.#avatar.classList.add(`ea-avatar-fill--${value}`);
-    }
-    // #endregion
-    // ------- end -------
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class="ea-avatar" part='container'>
+          <span class="ea-avatar__content" part="avatar">
+              <slot></slot>
+          </span>
+      </div>
+    `;
 
-    connectedCallback() {
-        this.size = this.size;
+    this.#container = this.shadowRoot.querySelector(".ea-avatar");
+    this.#content = this.shadowRoot.querySelector(".ea-avatar__content");
+  }
 
-        this.shape = this.shape;
+  connectedCallback() {
+    super.connectedCallback();
 
-        this.src = this.src;
-
-        if (this.src) {
-            this.fit = this.fit;
-        }
-
-        if (!this.src && this.icon) {
-            this.icon = this.icon;
-        }
-
-        if (this.innerHTML !== "" && !this.icon && !this.src) {
-            this.#avatar.innerHTML = textAvatar(this.innerHTML);
-        }
-    }
+    this.#container.className = this.updateContainerClasslist();
+  }
 }
 
-if (!customElements.get('ea-avatar')) {
-    customElements.define('ea-avatar', EaAvatar);
+if (!window.customElements.get("ea-avatar")) {
+  window.customElements.define("ea-avatar", EaAvatar);
 }

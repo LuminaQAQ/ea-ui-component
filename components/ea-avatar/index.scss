@@ -1,59 +1,30 @@
-@import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
+$size-type: (
+  small: 24px,
+  default: 40px,
+  large: 56px,
+);
 
-@mixin ea-avatar-size($size-name, $size) {
-  &.ea-avatar--#{$size-name} {
-    width: $size;
-    height: $size;
-    line-height: $size;
+:host {
+  @each $size-name, $size in $size-type {
+    --ea-avatar-size-#{$size-name}: #{$size};
   }
+  --ea-avatar-size: var(--ea-avatar-size-default);
+  --ea-avatar-fit: cover;
 }
 
-$fit-type: fill contain cover none scale-down;
-@mixin ea-object-fit($type) {
-  &.ea-avatar-fill--#{$type} {
-    img {
-      object-fit: $type;
-    }
-  }
+:host {
+  display: inline-block;
 }
 
-.ea-avatar_wrap {
-  .ea-avatar {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
-    color: #ffffff;
+@include block(ea-avatar) {
+  background-color: grey;
+  color: #ffffff;
 
-    @each $type in $fit-type {
-      @include ea-object-fit($type);
-    }
+  @include modifier(circle) {
+    border-radius: 50%;
+  }
 
-    @include ea-avatar-size("normal", 50px);
-    @include ea-avatar-size("large", 40px);
-    @include ea-avatar-size("medium", 36px);
-    @include ea-avatar-size("small", 28px);
-
-    .ea-avatar--text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    &.ea-avatar--circle {
-      border-radius: 50%;
-    }
-
-    &.ea-avatar--square {
-      border-radius: 5px;
-    }
-
-    .ea-avatar--img {
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-    }
+  @include modifier(square) {
+    border-radius: 5px;
   }
 }
