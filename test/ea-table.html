@@ -169,6 +169,7 @@
       // #endregion
       // ------- end -------
 
+      // TODO:显示溢出工具提示的表格
       // ------- TODO: 显示溢出工具提示的表格 -------
       // #region
 
@@ -240,14 +241,15 @@
       // #endregion
       // ------- end -------
 
-      // ------- 5. 多级表头 -------
+      // ------- 多级表头 -------
       // #region
       const groupingHeadTable = document.querySelector("#groupingHeadTable");
       groupingHeadTable.setData(detailsData);
       // #endregion
       // ------- end -------
 
-      // ------- 6. 单选 -------
+      // TODO: 单选
+      // ------- 单选 -------
       // #region
       // const radioTable = {
       //   table: document.querySelector("#radioTable"),
@@ -264,20 +266,38 @@
       // #endregion
       // ------- end -------
 
-      // ------- 7. 自增id序列 -------
-      // #region
-      // const increaseliyTable = document.querySelector("#increaseliyTable");
-      // increaseliyTable.data = data;
-      // #endregion
-      // ------- end -------
-
-      // ------- 8. 多选 -------
+      // TODO: 多选
+      // ------- 多选 -------
       // #region
       // const checkboxTable = document.querySelector("#checkboxTable");
       // checkboxTable.data = data;
       // checkboxTable.addEventListener("body-selection-change", (e) => {
       //   console.log(e.detail);
       // });
+      // #endregion
+      // ------- end -------
+
+      // ------- 排序 -------
+      // #region
+      const sortableTable = {
+        table: document.querySelector("#sortableTable"),
+
+        init() {
+          this.table.setData(data);
+
+          this.table.addEventListener("sort-change", (e) => {
+            console.log(e.detail);
+          });
+        },
+      };
+      sortableTable.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 7. 自增id序列 -------
+      // #region
+      // const increaseliyTable = document.querySelector("#increaseliyTable");
+      // increaseliyTable.data = data;
       // #endregion
       // ------- end -------
 
@@ -656,19 +676,67 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 6. 单选 --------  -->
-    <!-- #region  -->
-    <h2>6. 单选</h2>
-    <!-- <ea-table id="radioTable" border height="250" highlight-current-row>
-      <ea-table-column prop="date" width="100">日期</ea-table-column>
-      <ea-table-column prop="name" width="100">姓名</ea-table-column>
-      <ea-table-column prop="age" width="100">年龄</ea-table-column>
-      <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table> -->
-    <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- TODO: 单选 -->
+    <!-- #region -->
+    <h1>单选</h1>
+
+    <div class="demo">
+      <!-- <ea-table id="radioTable" border height="250" highlight-current-row>
+        <ea-table-column prop="date" width="100">日期</ea-table-column>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+      </ea-table> -->
+    </div>
 
     <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- TODO: 多选 -->
+    <!--  多选 -->
+    <!-- #region -->
+    <h1>多选</h1>
+
+    <div class="demo">
+      <!-- <ea-table id="checkboxTable" border height="250">
+        <ea-table-column type="selection" width="100"></ea-table-column>
+        <ea-table-column type="index" width="100">id</ea-table-column>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+      </ea-table> -->
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- TODO: 排序 -->
+    <!--  排序 -->
+    <!-- #region -->
+    <h1>排序</h1>
+
+    <div class="demo">
+      <ea-table id="sortableTable" border>
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+          sortable
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
 
     <!-- -------- 7. 自增id序列 --------  -->
     <!-- #region  -->
@@ -678,43 +746,6 @@
       <ea-table-column prop="name" width="100">姓名</ea-table-column>
       <ea-table-column prop="age" width="100">年龄</ea-table-column>
       <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table> -->
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <hr />
-
-    <!-- -------- 8. 多选 --------  -->
-    <!-- #region  -->
-    <h2>8. 多选</h2>
-    <!-- <ea-table id="checkboxTable" border height="250">
-      <ea-table-column type="selection" width="100"></ea-table-column>
-      <ea-table-column type="index" width="100">id</ea-table-column>
-      <ea-table-column prop="name" width="100">姓名</ea-table-column>
-      <ea-table-column prop="age" width="100">年龄</ea-table-column>
-      <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table> -->
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <hr />
-
-    <!-- -------- 9. 排序 --------  -->
-    <!-- #region  -->
-    <h2>9. 排序</h2>
-    <!-- <ea-table id="sortableTable" border height="250">
-      <ea-table-column prop="date" width="100" rowspan="3" sortable
-        >日期</ea-table-column
-      >
-      <ea-table-column label="详细信息" colspan="3">
-        <ea-table-column prop="name" width="100" rowspan="2" sortable
-          >姓名</ea-table-column
-        >
-        <ea-table-column label="个人信息" colspan="2">
-          <ea-table-column prop="age" width="100">年龄</ea-table-column>
-          <ea-table-column prop="address">地址</ea-table-column>
-        </ea-table-column>
-      </ea-table-column>
     </ea-table> -->
     <!-- #endregion  -->
     <!-- -------------------  -->

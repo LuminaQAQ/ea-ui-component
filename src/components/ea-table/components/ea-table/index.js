@@ -14,6 +14,7 @@ import { theadRenderer } from "../thead";
 /**
  * @typedef {Object} ColumnOption
  * @property {number} depth
+ * @property {Boolean} sortable
  * @property {number} colspan
  * @property {number} rowspan
  * @property {String | null} prop
@@ -177,6 +178,40 @@ export class EaTable extends Base {
     this.#tfoot = this.shadowRoot.querySelector(".ea-table__tfoot");
     this.#states.columns = columns;
 
+    /** @type {HTMLElement[]} */
+    const sortableEls = [
+      ...this.#container.querySelectorAll(".ea-table__th.is-sortable"),
+    ];
+    if (sortableEls.length) {
+      sortableEls.forEach((el) => {
+        if (!el.dataset.prop) return;
+
+        const icon = {
+          asc: el.querySelector('[part="asc-icon"]'),
+          desc: el.querySelector('[part="desc-icon"]'),
+        };
+
+        el.addEventListener("click", (e) => {
+          const { prop, order } = el.dataset;
+
+          el.querySelectorAll(".ea-table__sort-icon").forEach((icon) => {
+            icon.classList.remove("is-active");
+          });
+          el.dataset.order = order === "asc" ? "desc" : "asc";
+          icon[el.dataset.order].classList.add("is-active");
+
+          // REFACTOR: 试试diff
+          this.setData(
+            this.#states.dataSource.sort((a, b) => {
+              return el.dataset.order === "asc"
+                ? String(a[prop]).localeCompare(b[prop])
+                : String(b[prop]).localeCompare(a[prop]);
+            })
+          );
+        });
+      });
+    }
+
     this.dispatchEvent("ea-table-rendered");
   }
 
@@ -312,6 +347,7 @@ export class EaTable extends Base {
         prop: column.getAttribute("prop"),
         label: column.getAttribute("label"),
         width: column.getAttribute("width"),
+        sortable: column.getAttribute("sortable") !== null,
         fixed:
           column.getAttribute("fixed") ||
           typeof column.getAttribute("fixed") === "string"

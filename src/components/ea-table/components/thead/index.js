@@ -1,8 +1,22 @@
 import { h } from "../../utils/h";
 
+const sortIconRenderer = (text) => [
+  h("span", null, {}, text),
+  h("span", "ea-table__sort", {}, [
+    h("ea-icon", "ea-table__sort-icon", {
+      part: "asc-icon",
+      icon: "icon-angle-up",
+    }),
+    h("ea-icon", "ea-table__sort-icon", {
+      part: "desc-icon",
+      icon: "icon-angle-down",
+    }),
+  ]),
+];
+
 /**
  * 获取 通过h函数创建的column的树结构
- * @param {Object} columns
+ * @param {import("../ea-table").ColumnOption[]} columns
  * @param {number} depth
  * @returns {String}
  */
@@ -23,7 +37,7 @@ const treeRenderer = (columns, depth) => {
           "th",
           `ea-table__th ${
             column.fixed ? `is-fixed fixed-${column.fixed}` : ""
-          } `,
+          } ${column.sortable ? "is-sortable" : ""}`,
           {
             part: "thead-th",
             colspan: column.colspan,
@@ -31,8 +45,11 @@ const treeRenderer = (columns, depth) => {
             style: [
               column.width ? `--ea-table-cell-width: ${column.width}` : "",
             ],
+            "data-prop": column.prop || "",
           },
-          column.label || column.prop || ""
+          column.sortable
+            ? sortIconRenderer(column.label || column.prop || "")
+            : column.label || column.prop || ""
         )
       )
     );
