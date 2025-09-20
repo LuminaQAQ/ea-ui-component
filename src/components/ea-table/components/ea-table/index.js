@@ -162,7 +162,43 @@ export class EaTable extends Base {
       )
     );
 
+    let thead = h(
+      "thead",
+      "ea-table__thead",
+      {
+        part: "thead",
+      },
+      h(
+        "tr",
+        "ea-table__tr is-thead",
+        {
+          part: "thead-tr",
+        },
+        columnObject.map((column) =>
+          h(
+            "th",
+            `ea-table__th ${
+              column.fixed ? `is-fixed fixed-${column.fixed}` : ""
+            } `,
+            {
+              part: "thead-th",
+              style: [
+                column.width ? `--ea-table-cell-width: ${column.width}` : "",
+              ],
+            },
+            column.label || column.prop || ""
+          )
+        )
+      )
+    );
+
     if (this.id === "groupingHeadTable") {
+      /**
+       * 递归获取所有子元素
+       * @param {HTMLElement} el
+       * @param {number} depth
+       * @returns
+       */
       const tree = (el, depth = 0) => {
         if (!el) return;
 
@@ -194,60 +230,70 @@ export class EaTable extends Base {
         return map;
       };
 
-      // tree(this);
-      console.log(Object.fromEntries(tree(this).entries()));
+      /**
+       * 获取 通过h函数创建的column的树结构
+       * @param {Object} columns
+       */
+      const treeRenderer = (columns) => {
+        let template = "";
 
-      // const map = new Map();
-      // columnObject.forEach((item) => {
-      //   map.set(item.prop || item.label, item);
-      // });
+        /**
+         * 获取column的树结构
+         * @param {Array} column
+         */
+        const flat = (column) => {
+          if (!column) return column;
 
-      // this.querySelectorAll("& > ea-table-column").forEach((item) => {
-      //   console.log(
-      //     item.getAttribute("label"),
-      //     item.querySelectorAll("& > ea-table-column")
-      //   );
-      // });
+          let ary = [];
+          Object.values(column).forEach((col) => {
+            ary.push(col);
+            if (col?.template) ary = [...ary, ...flat(col.template)];
+          });
 
-      // const tree = () => {};
-      // const test = columnObject.map((item) => {
-      //   if (!item.template) return item;
-      //   console.log(item, item.template?.content.children);
+          return ary;
+        };
 
-      //   // h("th", item.label);
-      // });
-      // console.log(test);
-    }
+        const flattenColumns = flat(columns).sort((a, b) => a.depth - b.depth);
+        const depth = flattenColumns.reduce((acc, cur) => {
+          return Math.max(acc, cur.depth);
+        }, 0);
 
-    const thead = h(
-      "thead",
-      "ea-table__thead",
-      {
-        part: "thead",
-      },
-      h(
-        "tr",
-        "ea-table__tr is-thead",
-        {
-          part: "thead-tr",
-        },
-        columnObject.map((column) =>
-          h(
-            "th",
-            `ea-table__th ${
-              column.fixed ? `is-fixed fixed-${column.fixed}` : ""
-            } `,
+        for (let i = flattenColumns[0].depth; i <= depth; i++) {
+          const currentDepthColumns = flattenColumns.filter(
+            (column) => column.depth === i
+          );
+
+          template += h(
+            "tr",
+            "ea-table__tr is-thead",
             {
-              part: "thead-th",
-              style: [
-                column.width ? `--ea-table-cell-width: ${column.width}` : "",
-              ],
+              part: "thead-tr",
             },
-            column.label || column.prop || ""
-          )
-        )
-      )
-    );
+            currentDepthColumns.map((column) =>
+              h(
+                "th",
+                `ea-table__th ${
+                  column.fixed ? `is-fixed fixed-${column.fixed}` : ""
+                } `,
+                {
+                  part: "thead-th",
+                  style: [
+                    column.width
+                      ? `--ea-table-cell-width: ${column.width}`
+                      : "",
+                  ],
+                },
+                column.label || column.prop || ""
+              )
+            )
+          );
+        }
+
+        return template;
+      };
+      thead = treeRenderer(Object.fromEntries(tree(this).entries()));
+      console.log(treeRenderer(Object.fromEntries(tree(this).entries())));
+    }
 
     const tfoot = h(
       "tfoot",
@@ -409,21 +455,8 @@ export class EaTable extends Base {
        * 按照带有fixed的th来分组
        * eg: [[th1, th2 ...], [td1, td2 ...] ...]
        */
-      for (
-        let i = 0, cnt = 0;
-        i < initialArray.length / ths.length;
-        i++, cnt++
-      ) {
-        if (cnt < ths.length) {
-          ary.push(
-            Array(ths.length)
-              .fill()
-              .map(
-                (_, cntIndex) => initialArray[i * cnt * ths.length + cntIndex]
-              )
-          );
-          cnt = 0;
-        }
+      for (let i = 0; i < initialArray.length; i += ths.length) {
+        ary.push(initialArray.slice(i, i + ths.length));
       }
 
       /**
