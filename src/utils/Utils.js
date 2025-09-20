@@ -1,4 +1,5 @@
 import Base from "@/components/Base";
+import { h } from "@/components/ea-table/utils/h";
 
 export default class EaUtils {
   static Array = {};
@@ -39,8 +40,12 @@ EaUtils.Number.isNumber = (value) => {
   return typeof value === "number" && !isNaN(value);
 };
 
-EaUtils.Enum.isEnum = function (value) {
+EaUtils.Enum.isEnum = (value) => {
   return Array.isArray(value);
+};
+
+EaUtils.Enum.hasEnum = (enumAry, prop) => {
+  return enumAry.includes(prop);
 };
 
 /**
@@ -71,3 +76,5 @@ EaUtils.EaElement.addAsyncEventListener = (context, eventName, once = true) => {
     );
   });
 };
+
+EaUtils.EaElement.h = h;

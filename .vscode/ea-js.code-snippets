@@ -28,7 +28,7 @@
       "      #container;",
       "",
       "      static get observedAttributes() {",
-      "        return [];",
+      "        return [...super.observedAttributes,];",
       "      }",
       "",
       "          state = this.properties({",
@@ -72,9 +72,9 @@
       "      }",
       "}",
       "",
-      "      if (!window.customElements.get('ea-$2')) {",
-      "          window.customElements.define('ea-$2', Ea$1);",
-      "      }"
+      "if (!window.customElements.get('ea-$2')) {",
+      "      window.customElements.define('ea-$2', Ea$1);",
+      "}"
     ],
     "description": "ea-template"
   },
