@@ -5,6 +5,9 @@
   --ea-table-height: auto;
   --ea-table-max-height: unset;
 
+  --ea-table-sort-indicator-color: var(--grey-500);
+  --ea-table-sort-indicator-active-color: var(--blue-500);
+  --ea-table-sort-icon-size: 10px;
   --ea-table-header-color: var(--grey-700);
   --ea-table-header-font-size: var(--font-size-lg);
   --ea-table-body-color: var(--grey-900);
@@ -71,6 +74,32 @@ slot {
     font-size: var(--ea-table-header-font-size);
 
     text-align: left;
+  }
+
+  @include element(sort-icon) {
+    font-size: 10px;
+    color: var(--ea-table-sort-indicator-color);
+
+    &.is-active {
+      color: var(--ea-table-sort-indicator-active-color);
+    }
+  }
+
+  @include element(th) {
+    &.is-sortable {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      .ea-table__sort {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin-left: 0.5rem;
+      }
+    }
   }
 
   @include element(tbody) {
