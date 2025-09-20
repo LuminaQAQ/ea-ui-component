@@ -12,13 +12,16 @@ import { theadRenderer } from "../thead";
  */
 
 /**
- * @typedef {Object} CulumnOption
+ * @typedef {Object} ColumnOption
+ * @property {number} depth
+ * @property {number} colspan
+ * @property {number} rowspan
  * @property {String | null} prop
  * @property {String | null} label
  * @property {String | null} width
  * @property {Boolean | String | null} fixed
  * @property {Attr[]} props
- * @property {HTMLTemplateElement} template
+ * @property {HTMLTemplateElement | ColumnOption} template
  */
 
 export class EaTable extends Base {
@@ -134,29 +137,7 @@ export class EaTable extends Base {
       )
     );
 
-    /**
-     * 获取column的树结构
-     * @param {Array} column
-     */
-    const flat = (column) => {
-      if (!column) return column;
-
-      let ary = [];
-      Object.values(column).forEach((col) => {
-        ary.push(col);
-        if (col?.template) ary = [...ary, ...flat(col.template)];
-      });
-
-      return ary;
-    };
-
-    /** @type {CulumnOption[]} */
-    const columnObject = flat(
-      Object.fromEntries(this.#getColumnTree(this).entries())
-    ).sort((a, b) => a.depth - b.depth);
-    const depth = columnObject.reduce((acc, cur) => {
-      return Math.max(acc, cur.depth);
-    }, 0);
+    const { columns, depth } = this.#getColumnTree();
 
     const colgroup = h(
       "colgroup",
@@ -164,12 +145,12 @@ export class EaTable extends Base {
       {
         part: "colgroup",
       },
-      columnObject.map((column) =>
+      columns.map((column) =>
         h("col", "ea-table__col", { width: column.width, part: "col" })
       )
     );
 
-    const thead = theadRenderer(columnObject, depth);
+    const thead = theadRenderer(columns, depth);
 
     const tfoot = h(
       "tfoot",
@@ -194,7 +175,7 @@ export class EaTable extends Base {
     this.#thead = this.shadowRoot.querySelector(".ea-table__thead");
     this.#tbody = this.shadowRoot.querySelector(".ea-table__tbody");
     this.#tfoot = this.shadowRoot.querySelector(".ea-table__tfoot");
-    this.#states.columns = columnObject;
+    this.#states.columns = columns;
 
     this.dispatchEvent("ea-table-rendered");
   }
@@ -204,8 +185,7 @@ export class EaTable extends Base {
     this.#states.dataSource = dataSource;
     this.#tbody.innerHTML = "";
 
-    const tbodyTemplate = document.createElement("template");
-    tbodyTemplate.innerHTML = dataSource
+    this.#tbody.innerHTML = dataSource
       .map((item, i) => {
         return h(
           "tr",
@@ -214,51 +194,58 @@ export class EaTable extends Base {
             part: "tbody-tr",
             "data-index": i,
           },
-          this.#states.columns.map((column) => {
-            let children = "";
+          this.#states.columns
+            .filter(
+              (item) =>
+                !item.template || item.template instanceof HTMLTemplateElement
+            )
+            .map((column) => {
+              let children = "";
 
-            /** @type {HTMLElement} */
-            const template = column.template;
+              /** @type {HTMLElement} */
+              const template = column.template;
 
-            const scopes = template?.content?.querySelectorAll(`[data-scope]`);
-            if (scopes?.length) {
-              scopes.forEach((scope) => {
-                const scopeKey = scope.getAttribute("data-scope");
+              const scopes =
+                template?.content?.querySelectorAll(`[data-scope]`);
+              if (scopes?.length) {
+                scopes.forEach((scope) => {
+                  const scopeKey = scope.getAttribute("data-scope");
 
-                if (scope && scopeKey && template) {
-                  scope.innerHTML = item[scopeKey];
-                  children = template.innerHTML;
-                } else if (template) {
-                  children = template.innerHTML;
-                } else {
-                  children = item[column.prop];
-                }
-              });
-            } else if (template) {
-              children = template.innerHTML;
-            } else {
-              children = item[column.prop];
-            }
+                  if (scope && scopeKey && template) {
+                    scope.innerHTML = item[scopeKey];
+                    children = template.innerHTML;
+                  } else if (template) {
+                    children = template.innerHTML;
+                  } else {
+                    children = item[column.prop];
+                  }
+                });
+              } else if (template) {
+                children = template.innerHTML;
+              } else {
+                children = item[column.prop];
+              }
 
-            return h(
-              "td",
-              `ea-table__td  ${
-                column.fixed ? `is-fixed fixed-${column.fixed}` : ""
-              }`,
-              {
-                part: "tbody-td",
-                style: [
-                  column.width ? `--ea-table-cell-width: ${column.width}` : "",
-                ],
-              },
-              children
-            );
-          })
+              return h(
+                "td",
+                `ea-table__td ${
+                  column.fixed ? `is-fixed fixed-${column.fixed}` : ""
+                }`,
+                {
+                  part: "tbody-td",
+                  style: [
+                    column.width
+                      ? `--ea-table-cell-width: ${column.width}`
+                      : "",
+                  ],
+                },
+                children
+              );
+            })
         );
       })
       .join("");
 
-    this.#tbody.appendChild(tbodyTemplate.content.cloneNode(true));
     this.#handleFixedColumn();
     this.#initScrollEvent();
     this.#states.isDataRendered = true;
@@ -309,7 +296,7 @@ export class EaTable extends Base {
    * @param {number} depth
    * @returns {Map}
    */
-  #getColumnTree = (el, depth = 0) => {
+  #initColumnTree = (el, depth = 0) => {
     if (!el) return;
 
     const columns = el.querySelectorAll("& > ea-table-column");
@@ -318,9 +305,10 @@ export class EaTable extends Base {
     depth++;
 
     columns.forEach((column) => {
-      const columnTree = this.#getColumnTree(column, depth);
+      const columnTree = this.#initColumnTree(column, depth);
       map.set(column.getAttribute("prop") || column.getAttribute("label"), {
         depth,
+        colspan: column.querySelectorAll("ea-table-column").length || 1,
         prop: column.getAttribute("prop"),
         label: column.getAttribute("label"),
         width: column.getAttribute("width"),
@@ -339,6 +327,43 @@ export class EaTable extends Base {
     });
 
     return map;
+  };
+
+  /**
+   * 处理真实树，同时处理配置项
+   * @returns {{columns: ColumnOption[], depth: Number}}
+   */
+  #getColumnTree = () => {
+    /**
+     * 获取column的树结构
+     * @param {Array} column
+     */
+    const flat = (column) => {
+      if (!column) return column;
+
+      let ary = [];
+      Object.values(column).forEach((col) => {
+        ary.push(col);
+        if (col?.template) ary = [...ary, ...flat(col.template)];
+      });
+
+      return ary;
+    };
+
+    /** @type {ColumnOption[]} */
+    let columns = flat(
+      Object.fromEntries(this.#initColumnTree(this).entries())
+    ).sort((a, b) => a.depth - b.depth);
+    const depth = columns.reduce((acc, cur) => {
+      return Math.max(acc, cur.depth);
+    }, 0);
+
+    columns = columns.map((col) => ({
+      ...col,
+      rowspan: col.template ? 1 : depth - col.depth + 1,
+    }));
+
+    return { columns, depth };
   };
 
   /**

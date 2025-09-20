@@ -243,7 +243,7 @@
       // ------- 5. 多级表头 -------
       // #region
       const groupingHeadTable = document.querySelector("#groupingHeadTable");
-      groupingHeadTable.setData(moreData);
+      groupingHeadTable.setData(detailsData);
       // #endregion
       // ------- end -------
 
@@ -618,7 +618,7 @@
     <h1>多级表头</h1>
 
     <div class="demo">
-      <ea-table id="groupingHeadTable" style="width: 100%">
+      <ea-table id="groupingHeadTable" border style="width: 100%">
         <ea-table-column
           prop="date"
           label="Date"

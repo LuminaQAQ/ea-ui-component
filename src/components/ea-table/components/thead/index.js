@@ -26,6 +26,8 @@ const treeRenderer = (columns, depth) => {
           } `,
           {
             part: "thead-th",
+            colspan: column.colspan,
+            rowspan: column.rowspan,
             style: [
               column.width ? `--ea-table-cell-width: ${column.width}` : "",
             ],
