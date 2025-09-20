@@ -134,22 +134,29 @@ export class EaTable extends Base {
       )
     );
 
-    const exclude = ["prop", "label", "width", "fixed"];
+    /**
+     * 获取column的树结构
+     * @param {Array} column
+     */
+    const flat = (column) => {
+      if (!column) return column;
+
+      let ary = [];
+      Object.values(column).forEach((col) => {
+        ary.push(col);
+        if (col?.template) ary = [...ary, ...flat(col.template)];
+      });
+
+      return ary;
+    };
+
     /** @type {CulumnOption[]} */
-    const columnObject = tableColumnNodes.map((column) => ({
-      prop: column.getAttribute("prop"),
-      label: column.getAttribute("label"),
-      width: column.getAttribute("width"),
-      fixed:
-        column.getAttribute("fixed") ||
-        typeof column.getAttribute("fixed") === "string"
-          ? column.getAttribute("fixed") || "left"
-          : null,
-      props: [...column.attributes].filter(
-        (attr) => !exclude.includes(attr.name)
-      ),
-      template: column.template,
-    }));
+    const columnObject = flat(
+      Object.fromEntries(this.#getColumnTree(this).entries())
+    ).sort((a, b) => a.depth - b.depth);
+    const depth = columnObject.reduce((acc, cur) => {
+      return Math.max(acc, cur.depth);
+    }, 0);
 
     const colgroup = h(
       "colgroup",
@@ -162,138 +169,7 @@ export class EaTable extends Base {
       )
     );
 
-    let thead = h(
-      "thead",
-      "ea-table__thead",
-      {
-        part: "thead",
-      },
-      h(
-        "tr",
-        "ea-table__tr is-thead",
-        {
-          part: "thead-tr",
-        },
-        columnObject.map((column) =>
-          h(
-            "th",
-            `ea-table__th ${
-              column.fixed ? `is-fixed fixed-${column.fixed}` : ""
-            } `,
-            {
-              part: "thead-th",
-              style: [
-                column.width ? `--ea-table-cell-width: ${column.width}` : "",
-              ],
-            },
-            column.label || column.prop || ""
-          )
-        )
-      )
-    );
-
-    if (this.id === "groupingHeadTable") {
-      /**
-       * 递归获取所有子元素
-       * @param {HTMLElement} el
-       * @param {number} depth
-       * @returns
-       */
-      const tree = (el, depth = 0) => {
-        if (!el) return;
-
-        const columns = el.querySelectorAll("& > ea-table-column");
-        const map = new Map();
-        depth++;
-
-        columns.forEach((column) => {
-          const columnTree = tree(column, depth);
-          map.set(column.getAttribute("prop") || column.getAttribute("label"), {
-            depth,
-            prop: column.getAttribute("prop"),
-            label: column.getAttribute("label"),
-            width: column.getAttribute("width"),
-            fixed:
-              column.getAttribute("fixed") ||
-              typeof column.getAttribute("fixed") === "string"
-                ? column.getAttribute("fixed") || "left"
-                : null,
-            props: [...column.attributes].filter(
-              (attr) => !exclude.includes(attr.name)
-            ),
-            template: columnTree.size
-              ? Object.fromEntries(columnTree.entries())
-              : column?.template,
-          });
-        });
-
-        return map;
-      };
-
-      /**
-       * 获取 通过h函数创建的column的树结构
-       * @param {Object} columns
-       */
-      const treeRenderer = (columns) => {
-        let template = "";
-
-        /**
-         * 获取column的树结构
-         * @param {Array} column
-         */
-        const flat = (column) => {
-          if (!column) return column;
-
-          let ary = [];
-          Object.values(column).forEach((col) => {
-            ary.push(col);
-            if (col?.template) ary = [...ary, ...flat(col.template)];
-          });
-
-          return ary;
-        };
-
-        const flattenColumns = flat(columns).sort((a, b) => a.depth - b.depth);
-        const depth = flattenColumns.reduce((acc, cur) => {
-          return Math.max(acc, cur.depth);
-        }, 0);
-
-        for (let i = flattenColumns[0].depth; i <= depth; i++) {
-          const currentDepthColumns = flattenColumns.filter(
-            (column) => column.depth === i
-          );
-
-          template += h(
-            "tr",
-            "ea-table__tr is-thead",
-            {
-              part: "thead-tr",
-            },
-            currentDepthColumns.map((column) =>
-              h(
-                "th",
-                `ea-table__th ${
-                  column.fixed ? `is-fixed fixed-${column.fixed}` : ""
-                } `,
-                {
-                  part: "thead-th",
-                  style: [
-                    column.width
-                      ? `--ea-table-cell-width: ${column.width}`
-                      : "",
-                  ],
-                },
-                column.label || column.prop || ""
-              )
-            )
-          );
-        }
-
-        return template;
-      };
-      thead = treeRenderer(Object.fromEntries(tree(this).entries()));
-      console.log(treeRenderer(Object.fromEntries(tree(this).entries())));
-    }
+    const thead = theadRenderer(columnObject, depth);
 
     const tfoot = h(
       "tfoot",
@@ -426,6 +302,44 @@ export class EaTable extends Base {
 
     return this.#states.currentRow;
   }
+
+  /**
+   * 递归获取所有column, 并转换成树结构
+   * @param {HTMLElement} el
+   * @param {number} depth
+   * @returns {Map}
+   */
+  #getColumnTree = (el, depth = 0) => {
+    if (!el) return;
+
+    const columns = el.querySelectorAll("& > ea-table-column");
+    const exclude = ["prop", "label", "width", "fixed"];
+    const map = new Map();
+    depth++;
+
+    columns.forEach((column) => {
+      const columnTree = this.#getColumnTree(column, depth);
+      map.set(column.getAttribute("prop") || column.getAttribute("label"), {
+        depth,
+        prop: column.getAttribute("prop"),
+        label: column.getAttribute("label"),
+        width: column.getAttribute("width"),
+        fixed:
+          column.getAttribute("fixed") ||
+          typeof column.getAttribute("fixed") === "string"
+            ? column.getAttribute("fixed") || "left"
+            : null,
+        props: [...column.attributes].filter(
+          (attr) => !exclude.includes(attr.name)
+        ),
+        template: columnTree.size
+          ? Object.fromEntries(columnTree.entries())
+          : column?.template,
+      });
+    });
+
+    return map;
+  };
 
   /**
    * 处理固定列的位置和阴影（box-shadow）
