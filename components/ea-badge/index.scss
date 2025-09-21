@@ -1,56 +1,76 @@
-@import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
+$badge-type: (
+  primary: blue,
+  success: green,
+  warning: yellow,
+  danger: red,
+  info: grey,
+);
 
-.ea-badge_wrap {
+:host {
+  --ea-badge-border-radius: var(--border-radius-round);
+  --ea-badge-spacing: 0 6px;
+  --ea-badge-size: 18px;
+  --ea-badge-dot-size: 6px;
+
+  @each $type, $color in $badge-type {
+    --ea-badge-#{$type}: var(--#{$color}-500);
+  }
+
+  --ea-badge-color: var(--ea-badge-danger);
+  --ea-badge-text-color: var(--color-white);
+  --ea-badge-font-size: var(--font-size-sm);
+
+  --ea-badge-offset-x: 0;
+  --ea-badge-offset-y: 0;
+}
+
+@include block(ea-badge) {
   position: relative;
-  vertical-align: middle;
   display: inline-block;
 
-  .ea-badge_content {
-    display: inline-block;
+  @include element(content) {
+    display: inline-flex;
+    box-sizing: border-box;
+    padding: var(--ea-badge-spacing);
 
-    padding: 0 0.375rem;
-    border-radius: 0.625rem;
-    border: 1px solid #fff;
-
-    height: 1.125rem;
-    line-height: 1.125rem;
+    height: var(--ea-badge-size);
+    line-height: var(--ea-badge-size);
 
     position: absolute;
-    right: 0.625rem;
+    right: 0;
     top: 0;
-    transform: translate(100%, -50%);
+    margin-right: var(--ea-badge-offset-x);
 
-    color: #fff;
-    font-size: 0.75rem;
-    text-align: center;
-    white-space: nowrap;
-    background-color: #f56c6c;
+    transform: translate(calc(100% - var(--ea-badge-size) / 2), -50%);
 
-    &.primary {
-      background-color: $color-primary-bgc;
+    border-radius: var(--ea-badge-border-radius);
+
+    color: var(--ea-badge-text-color);
+    font-size: var(--ea-badge-font-size);
+    background-color: var(--ea-badge-color);
+  }
+
+  @each $type, $color in $badge-type {
+    @include modifier($type) {
+      --ea-badge-color: var(--ea-badge-#{$type});
     }
+  }
 
-    &.success {
-      background-color: $color-success-bgc;
-    }
+  @include state(dot) {
+    --ea-badge-border-radius: var(--border-radius-circle);
 
-    &.warning {
-      background-color: $color-warning-bgc;
-    }
-
-    &.info {
-      background-color: $color-info-bgc;
-    }
-
-    &.dot {
-      right: 0.3125rem;
-
+    .ea-badge__content {
       padding: 0;
-      border-radius: 50%;
+      width: var(--ea-badge-dot-size);
+      height: var(--ea-badge-dot-size);
 
-      width: 0.5rem;
-      height: 0.5rem;
+      transform: translate(50%, -50%);
+    }
+  }
+
+  @include state(hidden) {
+    .ea-badge__content {
+      display: none;
     }
   }
 }

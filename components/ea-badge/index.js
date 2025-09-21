@@ -1,103 +1,173 @@
-// @ts-nocheck
-import Base from '../Base.js';
+import Base from "@components/Base.js";
 
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
 
 export class EaBadge extends Base {
-  #wrap;
-  #badgeWrap;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #content;
+
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "value",
+      "max",
+      "is-dot",
+      "data-hidden",
+      "type",
+      "show-zero",
+      "color",
+      "offset-x",
+      "offset-y",
+    ];
+  }
+
+  state = this.properties({
+    value: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (this["is-dot"]) return;
+
+        const contentTextEl = this.shadowRoot.querySelector("[data-value]");
+        const contentSlot = this.querySelector("[slot='content']");
+        /**
+         * 返回实际 value 值
+         * @returns {string | number}
+         */
+        const computedValue = () => {
+          if (!this["show-zero"] && Number(newVal) === 0) {
+            this.#container.className = this.updateContainerClasslist();
+            return "";
+          }
+          return EaUtils.Number.isNumber(newVal) && newVal > this.max
+            ? `${this.max}+`
+            : newVal;
+        };
+
+        if (contentTextEl) {
+          contentTextEl.textContent = computedValue();
+        } else if (contentSlot) {
+          const template = document.createElement("template");
+          const valueEl = contentSlot.querySelector("[data-value]");
+
+          if (valueEl) {
+            template.innerHTML = contentSlot.innerHTML;
+
+            const templateValueEl =
+              template.content.querySelector("[data-value]");
+            templateValueEl.innerText = computedValue();
+          }
+          this.#content.innerHTML = template.innerHTML;
+        } else {
+          this.#content.textContent = computedValue();
+        }
+      },
+    },
+    max: {
+      type: Number,
+      default: Infinity,
+      observer: (newVal) => {},
+    },
+    type: {
+      type: ["primary", "success", "warning", "danger", "info"],
+      default: "danger",
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    color: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.style.setProperty(`--ea-badge-color`, newVal);
+      },
+    },
+    "is-dot": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    "data-hidden": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#content.ariaHidden = newVal;
+        this.#content.hidden = newVal;
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    "offset-x": {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        this.style.setProperty("--ea-badge-offset-x", -newVal + "px");
+      },
+    },
+    "offset-y": {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        this.style.setProperty("--ea-badge-offset-y", newVal + "px");
+      },
+    },
+    "show-zero": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+  });
+
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    return this.computedClasslist(
+      "ea-badge",
+      {
+        ["--" + this.type]: this.type,
+      },
+      {
+        dot: this["is-dot"],
+        hidden:
+          this["data-hidden"] ||
+          (!this["show-zero"] && Number(this.value) === 0),
+      }
+    );
+  }
 
   constructor() {
     super();
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.innerHTML = `
-        <div class="ea-badge_wrap" part='container'>
-            <slot></slot>
-            <sup class="ea-badge_content" part='content'></sup>
-        </div>
-    `;
+    this.stylesheet = stylesheet;
 
-    this.#wrap = shadowRoot.querySelector('.ea-badge_wrap');
-    this.#badgeWrap = shadowRoot.querySelector('.ea-badge_content');
-
-    this.build(shadowRoot, stylesheet);
+    this.$render();
   }
 
-  // ------- value 徽章内的值 -------
-  // #region
-  get value() {
-    return this.getAttribute('value') || '';
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-badge' part='container'>
+        <sup class="ea-badge__content" part='content'></sup>
+        <slot></slot>
+      </div>
+        `;
+
+    this.#container = this.shadowRoot.querySelector(".ea-badge");
+    this.#content = this.shadowRoot.querySelector(".ea-badge__content");
   }
-
-  set value(value) {
-    this.setAttribute('value', value);
-
-    this.#badgeWrap.innerHTML = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- type 样式类型 -------
-  // #region
-  get type() {
-    return this.getAttribute('type') || 'normal';
-  }
-
-  set type(value) {
-    this.setAttribute('type', value);
-
-    this.#badgeWrap.classList.add(value);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- max 最大值 -------
-  // #region
-  get max() {
-    return this.getAttrNumber('max') || Infinity;
-  }
-
-  set max(value) {
-    if (value === Infinity) return;
-
-    value = parseInt(value);
-
-    this.setAttribute('max', value);
-
-    if (this.value > value) {
-      this.value = value + '+';
-    }
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- is-dot 是否为点状徽章 -------
-  // #region
-  get isDot() {
-    return this.getAttrBoolean('is-dot') || false;
-  }
-
-  set isDot(value) {
-    this.toggleAttr('is-dot', value);
-
-    this.#badgeWrap.innerText = value ? '' : this.value;
-    this.#badgeWrap.classList.toggle('dot', value);
-  }
-  // #endregion
-  // ------- end -------
 
   connectedCallback() {
-    this.value = this.value;
-
-    this.type = this.type;
-
-    this.max = this.max;
-
-    this.isDot = this.isDot;
+    super.connectedCallback();
   }
 }
 
-if (!customElements.get('ea-badge')) {
-  customElements.define('ea-badge', EaBadge);
+if (!window.customElements.get("ea-badge")) {
+  window.customElements.define("ea-badge", EaBadge);
 }
