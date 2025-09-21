@@ -9,7 +9,14 @@ $size-type: (
     --ea-avatar-size-#{$size-name}: #{$size};
   }
   --ea-avatar-size: var(--ea-avatar-size-default);
+  --ea-avatar-square-border-radius: 4px;
+  --ea-avatar-circle-border-radius: 50%;
+
   --ea-avatar-fit: cover;
+
+  --ea-avatar-color: var(--color-white);
+  --ea-avatar-font-size: var(--font-size-md);
+  --ea-avatar-background-color: var(--grey-400);
 }
 
 :host {
@@ -17,14 +24,38 @@ $size-type: (
 }
 
 @include block(ea-avatar) {
-  background-color: grey;
-  color: #ffffff;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  width: var(--ea-avatar-size);
+  height: var(--ea-avatar-size);
+  line-height: var(--ea-avatar-size);
+
+  background-color: var(--ea-avatar-background-color);
+  color: var(--ea-avatar-color);
+  font-size: var(--ea-avatar-font-size);
+
+  @include element(img) {
+    width: 100%;
+    height: 100%;
+
+    object-fit: var(--ea-avatar-fit);
+  }
+
+  @include element(icon) {
+    color: var(--ea-avatar-color);
+  }
 
   @include modifier(circle) {
     border-radius: 50%;
+
+    overflow: hidden;
   }
 
   @include modifier(square) {
-    border-radius: 5px;
+    border-radius: var(--ea-avatar-square-border-radius);
   }
 }
