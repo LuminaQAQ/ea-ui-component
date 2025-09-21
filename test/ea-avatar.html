@@ -28,108 +28,99 @@
       });
     </script>
 
-    <!-- -------- 基本用法 --------  -->
-    <!-- #region  -->
-    <h2>基本用法</h2>
-    <div class="row">
-      <ea-avatar
-        size="50px"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
-      <ea-avatar
-        size="large"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
-      <ea-avatar
-        size="default"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
-      <ea-avatar
-        size="small"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
+    <!--  基本用法 -->
+    <!-- #region -->
+    <h1>基本用法</h1>
+
+    <div class="demo">
+      <div class="row">
+        <ea-avatar size="50px"></ea-avatar>
+        <ea-avatar size="large"></ea-avatar>
+        <ea-avatar size="default"></ea-avatar>
+        <ea-avatar size="small"></ea-avatar>
+      </div>
+      <div class="row">
+        <ea-avatar shape="square" size="50px"></ea-avatar>
+        <ea-avatar shape="square" size="large"></ea-avatar>
+        <ea-avatar shape="square" size="default"></ea-avatar>
+        <ea-avatar shape="square" size="small"></ea-avatar>
+      </div>
     </div>
-    <div class="row">
-      <ea-avatar
-        shape="square"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
-      <ea-avatar
-        shape="square"
-        size="large"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
-      <ea-avatar
-        shape="square"
-        size="default"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
-      <ea-avatar
-        shape="square"
-        size="small"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-      ></ea-avatar>
-    </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
-    <!-- -------- 展示类型 --------  -->
-    <!-- #region  -->
-    <h2>展示类型</h2>
-    <div class="row">
+    <!--  展示类型 -->
+    <!-- #region -->
+    <h1>展示类型</h1>
+
+    <div class="demo row">
       <ea-avatar icon="icon-coffee"></ea-avatar>
       <ea-avatar
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       ></ea-avatar>
       <ea-avatar>user</ea-avatar>
     </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
-    <!-- -------- 展示类型 --------  -->
-    <!-- #region  -->
-    <h2>图片加载失败的 fallback 行为</h2>
-    <div class="row left">
-      <ea-avatar id="error" src="./1.png"></ea-avatar>
+    <!--  回退行为 -->
+    <!-- #region -->
+    <h1>回退行为</h1>
+
+    <div class="demo row">
+      <ea-avatar id="error" size="60px" src="https://empty"></ea-avatar>
+      <ea-avatar id="error" size="60px" src="https://empty">
+        error text
+      </ea-avatar>
     </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
-    <!-- -------- 图片如何适应容器框 --------  -->
-    <!-- #region  -->
-    <h2>图片加载失败的 fallback 行为</h2>
-    <div class="row">
+    <!--  适应容器 -->
+    <!-- #region -->
+    <h1>适应容器</h1>
+
+    <div class="demo">
       <ea-avatar
+        size="100px"
         fit="fill"
         shape="square"
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       ></ea-avatar>
       <ea-avatar
+        size="100px"
         fit="contain"
         shape="square"
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       ></ea-avatar>
       <ea-avatar
+        size="100px"
         fit="cover"
         shape="square"
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       ></ea-avatar>
       <ea-avatar
+        size="100px"
         fit="none"
         shape="square"
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       ></ea-avatar>
       <ea-avatar
+        size="100px"
         fit="scale-down"
         shape="square"
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       ></ea-avatar>
     </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
   </body>
 </html>

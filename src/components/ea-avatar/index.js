@@ -7,8 +7,6 @@ import stylesheet from "./index.scss?inline";
 export class EaAvatar extends Base {
   /** @type {HTMLElement} */
   #container;
-  /** @type {HTMLElement} */
-  #content;
 
   /** @type {AbortController} */
   #srcController;
@@ -31,7 +29,7 @@ export class EaAvatar extends Base {
       type: String,
       default: "",
       observer: (newVal) => {
-        this.#content.innerHTML = `<ea-icon icon="${newVal}"></ea-icon>`;
+        this.#container.innerHTML = `<ea-icon class="ea-avatar__icon" icon="${newVal}" part="icon-avatar"></ea-icon>`;
       },
     },
     shape: {
@@ -76,7 +74,7 @@ export class EaAvatar extends Base {
         image.addEventListener(
           "load",
           () => {
-            this.#content.innerHTML = `<img class="ea-avatar__img" src="${newVal}" alt="${this.alt}" srcset="${this["src-set"]}" part="img-avatar" />`;
+            this.#container.innerHTML = `<img class="ea-avatar__img" src="${newVal}" alt="${this.alt}" srcset="${this["src-set"]}" part="img-avatar" />`;
             this.#srcController?.abort();
           },
           { signal: this.#srcController.signal }
@@ -85,13 +83,10 @@ export class EaAvatar extends Base {
         image.addEventListener(
           "error",
           (e) => {
-            this.#content.innerHTML = errorAvatar;
+            const slot = this.#container.querySelector("slot");
+            if (slot) slot.innerHTML = errorAvatar;
 
-            this.dispatchEvent("error", {
-              detail: {
-                error: e,
-              },
-            });
+            this.dispatchEvent("error");
 
             this.#srcController?.abort();
           },
@@ -121,9 +116,7 @@ export class EaAvatar extends Base {
       type: ["fill", "contain", "cover", "none", "scale-down"],
       default: "cover",
       observer: (newVal) => {
-        /** @type {HTMLImageElement} */
-        const img = this.shadowRoot.querySelector(".ea-avatar__img");
-        if (img) img.style.setProperty("--ea-avatar-fit", newVal);
+        this.style.setProperty("--ea-avatar-fit", newVal);
       },
     },
   });
@@ -149,14 +142,11 @@ export class EaAvatar extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class="ea-avatar" part='container'>
-          <span class="ea-avatar__content" part="avatar">
-              <slot></slot>
-          </span>
+        <slot>${defaultAvatar}</slot>
       </div>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-avatar");
-    this.#content = this.shadowRoot.querySelector(".ea-avatar__content");
   }
 
   connectedCallback() {
