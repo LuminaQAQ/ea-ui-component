@@ -8,7 +8,7 @@ import './ea-button/index.js';
 import './ea-button-group/index.js';
 import './ea-calendar/index.js';
 import './ea-card/index.js';
-import './ea-carousel/index.js';
+import './ea-carousel/components/ea-carousel/index.js';
 import './ea-carousel-item/index.js';
 import './ea-checkbox/index.js';
 import './ea-checkbox-group/index.js';
