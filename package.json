@@ -42,9 +42,6 @@
     "./ea-carousel": {
       "import": "./dist/ea-carousel.js"
     },
-    "./ea-carousel-item": {
-      "import": "./dist/ea-carousel-item.js"
-    },
     "./ea-checkbox": {
       "import": "./dist/ea-checkbox.js"
     },
