@@ -10,6 +10,11 @@ export class EaCarousel extends Base {
   /** @type {HTMLElement} */
   #indicatorWrap;
 
+  #states = {
+    originLength: 0,
+    timer: null,
+  };
+
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
@@ -30,6 +35,13 @@ export class EaCarousel extends Base {
   }
 
   state = this.properties({
+    height: {
+      type: String,
+      default: "100%",
+      observer: (value) => {
+        this.style.setProperty("--ea-carousel-height", value);
+      },
+    },
     direction: {
       type: ["horizontal", "vertical"],
       default: "horizontal",
@@ -42,29 +54,12 @@ export class EaCarousel extends Base {
       default: 0,
       observer: (newVal) => {
         const length = this.querySelectorAll("ea-carousel-item").length - 1;
+
         if (newVal < 0) return (this.index = (newVal % length) + length);
         else if (newVal > length)
           return (this.index = (newVal % length) - length);
 
-        const { width, height } = this.#container.getBoundingClientRect();
-        const direction = this.direction === "horizontal" ? `X` : `Y`;
-        const step = this.direction === "horizontal" ? width : height;
-
-        this.style.setProperty(
-          "--ea-carousel-transform",
-          `translate${direction}(-${index * step}px)`
-        );
-
-        // TODO: 未完成
-        try {
-          const indicators = this.#indicatorWrap.querySelectorAll(
-            `.ea-carousel-item_indicator`
-          );
-          indicators.forEach((item) => {
-            item.classList.remove("ea-carousel-item_indicator--active");
-          });
-          indicators[index].classList.add("ea-carousel-item_indicator--active");
-        } catch (e) {}
+        this.#updateCarouselPosition(newVal);
       },
     },
     trigger: {
@@ -125,7 +120,7 @@ export class EaCarousel extends Base {
     indicators[this.index].classList.add("is-active");
     indicators.forEach((indicator, index) => {
       indicator.addEventListener(this.trigger, () => {
-        this.index = index;
+        this.index = index % (this.#states.originLength + 2);
 
         indicators.forEach((item) => {
           item.classList.remove("is-active");
@@ -135,22 +130,91 @@ export class EaCarousel extends Base {
     });
   };
 
+  /**
+   * 初始化 `轮播图元素` 结构
+   */
+  #initCarouselItem() {
+    Array.from(this.childNodes).forEach((item) => {
+      if (item.tagName !== "EA-CAROUSEL-ITEM") item.remove();
+    });
+
+    const children = this.children;
+    const firstChild = children[0].cloneNode(true);
+    const lastChild = children[children.length - 1].cloneNode(true);
+    this.#states.originLength = children.length;
+
+    this.insertBefore(lastChild, this.firstChild);
+    this.appendChild(firstChild);
+
+    this.#updateCarouselPosition();
+  }
+
+  #updateCarouselPosition(index = 0) {
+    const { width, height } = this.#container.getBoundingClientRect();
+    const direction = this.direction === "horizontal" ? `X` : `Y`;
+    const step = this.direction === "horizontal" ? width : height;
+
+    this.style.setProperty(
+      "--ea-carousel-transform",
+      `translate${direction}(-${(index + 1) * step}px)`
+    );
+  }
+
+  /**
+   * 清除轮播图自动播放
+   */
+  #handleTimerClear() {
+    if (this.#states.timer) clearInterval(this.#states.timer);
+  }
+
+  /**
+   * 处理轮播图自动播放
+   */
+  #handleAutoPlay() {
+    this.#states.timer = setInterval(() => {
+      this.next();
+    }, this.duration);
+  }
+
+  #turnOnTransition = () => {
+    this.style.removeProperty("--ea-carousel-transition");
+  };
+
+  #turnOffTransition = () => {
+    this.style.setProperty("--ea-carousel-transition", "none");
+  };
+
+  /**
+   * 上一张轮播图
+   */
+  prev = () => {
+    this.index = (this.index - 1) % this.#states.originLength;
+  };
+
+  /**
+   * 下一张轮播图
+   */
+  next() {
+    this.index = (this.index + 1) % this.#states.originLength;
+  }
+
   $render() {
+    // this.#turnOffTransition();
     const carouselItems = [...this.querySelectorAll("ea-carousel-item")];
 
     this.shadowRoot.innerHTML = `
       <div class='ea-carousel' part='container'>
-        <div class='ea-carousel__content' part='content'>
+        <ul class="ea-carousel__content" part="content">
             <slot></slot>
-        </div>
-        <div class='ea-carousel__indicator-wrap' part='indicator-wrap'>
+        </ul>
+        <footer class="ea-carousel__indicator-wrap" part="indicator-wrap">
           ${carouselItems
             .map(
-              (item) =>
+              (_) =>
                 `<div class='ea-carousel__indicator' part='indicator' tabindex="1"></div>`
             )
             .join("")}
-        </div>
+        </footer>
       </div>
     `;
 
@@ -161,10 +225,12 @@ export class EaCarousel extends Base {
     );
 
     this.#renderIndicators();
+    this.#initCarouselItem();
   }
 
   connectedCallback() {
     super.connectedCallback();
+    // this.#turnOnTransition();
   }
 }
 

@@ -306,7 +306,7 @@ export default class Base extends HTMLElement {
   }
 
   setAttr(attrName, value) {
-    if (value || this.#stateConfigs[attrName].default) {
+    if (value || this.#stateConfigs[attrName].default || value === 0) {
       this.setAttribute(attrName, value);
     } else {
       this.removeAttribute(attrName);
