@@ -1,7 +1,21 @@
 :host {
+  --ea-carousel-indicator-x: 50%;
+  --ea-carousel-indicator-y: 8px;
+
+  --ea-carousel-indicator-spacing: var(--spacing-sm);
+  --ea-carousel-arrow-border-radius: var(--border-radius-circle);
+
   --ea-carousel-height: 100%;
+  --ea-carousel-indicator-width: 16px;
+  --ea-carousel-indicator-height: 4px;
+  --ea-carousel-arrow-size: 24px;
 
   --ea-carousel-transform: translateX(0);
+
+  --ea-carousel-indicator-color: rgba(255, 255, 255, 0.4);
+  --ea-carousel-indicator-active-color: var(--grey-400);
+  --ea-carousel-arrow-color: rgba(31, 45, 61, 0.11);
+  --ea-carousel-arrow-hover-color: rgba(31, 45, 61, 0.23);
 
   --ea-carousel-transition: var(--transition-slow);
 }
@@ -24,25 +38,28 @@
 
     transform: var(--ea-carousel-transform);
 
-    text-align: center;
     transition: transform var(--ea-carousel-transition);
   }
 
   @include element(arrow) {
+    border: none;
+
     position: absolute;
     top: 50%;
     z-index: 1;
-    // transform: translateY(-50%);
+    transform: translateY(-50%);
     // opacity: 0;
 
-    width: 1.5rem;
-    height: 1.5rem;
-    line-height: 1.5;
+    width: var(--ea-carousel-arrow-size);
+    height: var(--ea-carousel-arrow-size);
+    line-height: var(--ea-carousel-arrow-size);
+
+    font-size: var(--font-size-md);
     font-weight: 800;
     text-align: center;
-    border-radius: 50%;
-    background-color: rgba(31, 45, 61, 0.11);
-    color: #fff;
+    border-radius: var(--ea-carousel-arrow-border-radius);
+    background-color: var(--ea-carousel-arrow-color);
+    color: var(--color-white);
 
     cursor: pointer;
     user-select: none;
@@ -60,14 +77,14 @@
     }
 
     &:hover {
-      background-color: rgba(31, 45, 61, 0.3);
+      background-color: var(--ea-carousel-arrow-hover-color);
     }
   }
 
   @include element(indicator-wrap) {
     position: absolute;
-    bottom: 1rem;
-    left: 50%;
+    left: var(--ea-carousel-indicator-x);
+    bottom: var(--ea-carousel-indicator-y);
     transform: translateX(-50%);
 
     display: flex;
@@ -76,15 +93,18 @@
   }
 
   @include element(indicator) {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.4);
-    margin: 0.25rem;
+    box-sizing: border-box;
+    border: none;
+    margin: var(--ea-carousel-indicator-spacing);
+
+    width: var(--ea-carousel-indicator-width);
+    height: var(--ea-carousel-indicator-height);
+
+    background-color: var(--ea-carousel-indicator-color);
     transition: background-color 0.3s;
 
     &.is-active {
-      background-color: #fff;
+      background-color: var(--ea-carousel-indicator-active-color);
     }
   }
 }

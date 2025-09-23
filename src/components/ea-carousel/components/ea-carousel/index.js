@@ -73,7 +73,7 @@ export class EaCarousel extends Base {
         if (this.#states.isEnd) return (this.#states.isEnd = false);
 
         /**
-         * 因为是通过前后各添加最后和最前的元素，
+         * 因为是通过前后各添加最后和最前的元素来实现的轮播图，
          * 所以会出现 length 和 -1 的index值（transitionend事件处理）
          * 同时还会导致到达这两个值时，会多触发一次不必要且数值错误的事件派发
          * 所以借助 isEnd 来做一个状态锁，来确保轮播图正常切换和仅派发正确值
@@ -100,7 +100,7 @@ export class EaCarousel extends Base {
     },
     trigger: {
       type: ["click", "hover"],
-      default: "click",
+      default: "hover",
       observer: (newVal) => {},
     },
     interval: {
@@ -165,12 +165,15 @@ export class EaCarousel extends Base {
 
     indicators[this.index].classList.add("is-active");
     indicators.forEach((indicator, index) => {
-      indicator.addEventListener(this.trigger, () => {
-        if (this.index === index) return;
-        this.index = index;
+      indicator.addEventListener(
+        this.trigger === "hover" ? "mouseenter" : "click",
+        () => {
+          if (this.index === index) return;
+          this.index = index;
 
-        indicator.classList.toggle("is-active", index === this.index);
-      });
+          indicator.classList.toggle("is-active", index === this.index);
+        }
+      );
     });
   };
 
@@ -264,8 +267,12 @@ export class EaCarousel extends Base {
 
     this.shadowRoot.innerHTML = `
       <div class='ea-carousel' part='container'>
-        <span class="ea-carousel__arrow arrow-left" part="arrow-left">&lt;</span>
-        <span class="ea-carousel__arrow arrow-right" part="arrow-right">&gt;</span>
+        <button class="ea-carousel__arrow arrow-left" part="arrow-left">
+          <ea-icon icon="icon-arrow-left"></ea-icon>
+        </button>
+        <button class="ea-carousel__arrow arrow-right" part="arrow-right">
+          <ea-icon icon="icon-arrow-right"></ea-icon>
+        </button>
         <ul class="ea-carousel__content" part="content">
             <slot></slot>
         </ul>
@@ -273,7 +280,7 @@ export class EaCarousel extends Base {
           ${carouselItems
             .map(
               (_) =>
-                `<div class='ea-carousel__indicator' part='indicator' tabindex="1"></div>`
+                `<button class='ea-carousel__indicator' part='indicator' tabindex="1"></button>`
             )
             .join("")}
         </footer>
