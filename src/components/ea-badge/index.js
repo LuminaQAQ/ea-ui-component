@@ -42,6 +42,7 @@ export class EaBadge extends Base {
             this.#container.className = this.updateContainerClasslist();
             return "";
           }
+
           return EaUtils.Number.isNumber(newVal) && newVal > this.max
             ? `${this.max}+`
             : newVal;
