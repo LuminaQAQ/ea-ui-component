@@ -160,7 +160,36 @@ export default class Base extends HTMLElement {
     // }
 
     try {
-      this.#stateConfigs[name]?.observer?.(this[name]);
+      const parseValue = (key, rawValue) => {
+        const config = this.#stateConfigs[key];
+        const type = config?.type;
+
+        if (type === Boolean) {
+          return rawValue === "" || rawValue === "true" || rawValue === true;
+        }
+
+        if (type === Number) {
+          const num = Number(rawValue);
+          return isNaN(num) ? config.default : num;
+        }
+
+        if (Array.isArray(type)) {
+          return type.includes(rawValue) ? rawValue : config.default;
+        }
+
+        if (type === RegExp) {
+          return rawValue.match(type)
+            ? JSON.stringify(rawValue)
+            : config.default;
+        }
+
+        return rawValue || config?.default;
+      };
+
+      this.#stateConfigs[name]?.observer?.(
+        this[name],
+        parseValue(name, oldVal)
+      );
     } catch (e) {
       if (process.env.NODE_ENV === "development" && this.isMounted) {
         console.error(e);

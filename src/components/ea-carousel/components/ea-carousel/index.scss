@@ -31,8 +31,9 @@
   @include element(arrow) {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
+    z-index: 1;
+    // transform: translateY(-50%);
+    // opacity: 0;
 
     width: 1.5rem;
     height: 1.5rem;
@@ -50,12 +51,12 @@
 
     &.arrow-left {
       left: 0;
-      transform: translate(-100%, -50%);
+      //   transform: translate(-100%, -50%);
     }
 
     &.arrow-right {
       right: 0;
-      transform: translate(100%, -50%);
+      //   transform: translate(100%, -50%);
     }
 
     &:hover {

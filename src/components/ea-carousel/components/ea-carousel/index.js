@@ -16,15 +16,19 @@ export class EaCarousel extends Base {
   #indicatorWrap;
   /** @type {HTMLElement[]} */
   #indicators = [];
+  /** @type {HTMLElement[]} */
+  #carouselItems;
 
   /** @type {AbortController} */
   #abortController;
 
   #states = {
+    prevIndex: 0,
     originLength: 0,
     timer: null,
     pause: false,
     isMouseEnter: false,
+    isEnd: false,
   };
 
   static get observedAttributes() {
@@ -64,8 +68,34 @@ export class EaCarousel extends Base {
     index: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: (newVal, oldVal) => {
         this.#updateCarouselPosition(newVal);
+        if (this.#states.isEnd) return (this.#states.isEnd = false);
+
+        /**
+         * 因为是通过前后各添加最后和最前的元素，
+         * 所以会出现 length 和 -1 的index值（transitionend事件处理）
+         * 同时还会导致到达这两个值时，会多触发一次不必要且数值错误的事件派发
+         * 所以借助 isEnd 来做一个状态锁，来确保轮播图正常切换和仅派发正确值
+         */
+        if (newVal < 0) {
+          newVal = this.#indicators.length - 1;
+          oldVal = 0;
+          this.#states.isEnd = true;
+        } else if (newVal > this.#indicators.length - 1) {
+          oldVal = this.#indicators.length - 1;
+          newVal = 0;
+          this.#states.isEnd = true;
+        }
+
+        this.#states.prevIndex = oldVal;
+
+        this.dispatchEvent("change", {
+          detail: {
+            current: newVal,
+            prev: oldVal,
+          },
+        });
       },
     },
     trigger: {
@@ -234,10 +264,8 @@ export class EaCarousel extends Base {
 
     this.shadowRoot.innerHTML = `
       <div class='ea-carousel' part='container'>
-        <section class="ea-carousel__arrow-wrap" part="arrow-wrap">
-          <span class="ea-carousel__arrow arrow-left" part="arrow-left">&lt;</span>
-          <span class="ea-carousel__arrow arrow-right" part="arrow-right">&gt;</span>
-        </section>
+        <span class="ea-carousel__arrow arrow-left" part="arrow-left">&lt;</span>
+        <span class="ea-carousel__arrow arrow-right" part="arrow-right">&gt;</span>
         <ul class="ea-carousel__content" part="content">
             <slot></slot>
         </ul>
@@ -266,6 +294,7 @@ export class EaCarousel extends Base {
     this.#indicators = [
       ...this.shadowRoot.querySelectorAll(".ea-carousel__indicator"),
     ];
+    this.#carouselItems = carouselItems;
 
     this.#renderIndicators();
     this.#initCarouselItem();

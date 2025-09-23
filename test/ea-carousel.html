@@ -15,6 +15,12 @@
 
   <body>
     <script type="module" src="../src/components/ea-carousel/index.js"></script>
+    <script type="module">
+      const eaCarousel = document.querySelector("ea-carousel");
+      eaCarousel.addEventListener("change", (e) => {
+        console.log(e.detail);
+      });
+    </script>
 
     <!--  基础用法 -->
     <!-- #region -->
