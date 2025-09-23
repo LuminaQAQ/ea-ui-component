@@ -1,6 +1,7 @@
 :host {
   --ea-carousel-indicator-x: 50%;
   --ea-carousel-indicator-y: 8px;
+  --ea-carousel-arrow-x: 8px;
 
   --ea-carousel-indicator-spacing: var(--spacing-sm);
   --ea-carousel-arrow-border-radius: var(--border-radius-circle);
@@ -13,6 +14,7 @@
   --ea-carousel-transform: translateX(0);
 
   --ea-carousel-indicator-color: rgba(255, 255, 255, 0.4);
+  --ea-carousel-indicator-outside-color: rgba(208, 208, 208, 0.4);
   --ea-carousel-indicator-active-color: var(--grey-400);
   --ea-carousel-arrow-color: rgba(31, 45, 61, 0.11);
   --ea-carousel-arrow-hover-color: rgba(31, 45, 61, 0.23);
@@ -23,6 +25,10 @@
 @include block(ea-carousel) {
   position: relative;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
 
   height: var(--ea-carousel-height);
 
@@ -44,11 +50,15 @@
   @include element(arrow) {
     border: none;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     position: absolute;
     top: 50%;
     z-index: 1;
     transform: translateY(-50%);
-    // opacity: 0;
+    opacity: 0;
 
     width: var(--ea-carousel-arrow-size);
     height: var(--ea-carousel-arrow-size);
@@ -67,17 +77,21 @@
     transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
 
     &.arrow-left {
-      left: 0;
-      //   transform: translate(-100%, -50%);
+      left: var(--ea-carousel-arrow-x);
+      transform: translate(calc(-100% - var(--ea-carousel-arrow-x)), -50%);
     }
 
     &.arrow-right {
-      right: 0;
-      //   transform: translate(100%, -50%);
+      right: var(--ea-carousel-arrow-x);
+      transform: translate(calc(100% - var(--ea-carousel-arrow-x)), -50%);
     }
 
     &:hover {
       background-color: var(--ea-carousel-arrow-hover-color);
+    }
+
+    ea-icon {
+      color: var(--color-white);
     }
   }
 
@@ -90,6 +104,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
   }
 
   @include element(indicator) {
@@ -105,6 +120,32 @@
 
     &.is-active {
       background-color: var(--ea-carousel-indicator-active-color);
+    }
+  }
+
+  &.is-arrow-hover,
+  &.is-arrow-always {
+    .arrow-left,
+    .arrow-right {
+      opacity: 1;
+      transform: translate(0, -50%);
+    }
+  }
+
+  @include state(outside-indicator) {
+    .ea-carousel__indicator-wrap {
+      position: relative;
+      bottom: unset;
+      left: unset;
+      transform: none;
+    }
+
+    .ea-carousel__indicator {
+      background-color: var(--ea-carousel-indicator-outside-color);
+
+      &.is-active {
+        background-color: var(--ea-carousel-indicator-active-color);
+      }
     }
   }
 }

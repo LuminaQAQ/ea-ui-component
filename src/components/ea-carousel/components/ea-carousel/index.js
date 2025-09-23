@@ -1,7 +1,6 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
-import { timeout } from "@/utils/timeout";
 
 export class EaCarousel extends Base {
   /** @type {HTMLElement} */
@@ -39,11 +38,11 @@ export class EaCarousel extends Base {
       "trigger",
       "autoplay",
       "interval",
-      // "indicator-position",
+      "indicator-position",
       "arrow",
       // "type",
       // "card-scale",
-      "loop",
+      // "loop",
       "direction",
       "pause-on-hover",
       // "motion-blur",
@@ -111,7 +110,9 @@ export class EaCarousel extends Base {
     arrow: {
       type: ["never", "always", "hover"],
       default: "hover",
-      observer: (newVal) => {},
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     autoplay: {
       type: Boolean,
@@ -128,6 +129,13 @@ export class EaCarousel extends Base {
       default: true,
       observer: (newVal) => {},
     },
+    "indicator-position": {
+      type: ["", "none", "outside"],
+      default: "",
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -135,9 +143,19 @@ export class EaCarousel extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-carousel", {
-      ["--" + this.direction]: this.direction,
-    });
+    return this.computedClasslist(
+      "ea-carousel",
+      {
+        ["--" + this.direction]: this.direction,
+      },
+      {
+        ["arrow-" + this.arrow]:
+          this.arrow === "always" ||
+          this.arrow === "never" ||
+          this.#states.isMouseEnter,
+        [this["indicator-position"] + "-indicator"]: this["indicator-position"],
+      }
+    );
   }
 
   constructor() {
@@ -268,10 +286,10 @@ export class EaCarousel extends Base {
     this.shadowRoot.innerHTML = `
       <div class='ea-carousel' part='container'>
         <button class="ea-carousel__arrow arrow-left" part="arrow-left">
-          <ea-icon icon="icon-arrow-left"></ea-icon>
+          <ea-icon icon="icon-angle-left" part="arrow-left-icon"></ea-icon>
         </button>
         <button class="ea-carousel__arrow arrow-right" part="arrow-right">
-          <ea-icon icon="icon-arrow-right"></ea-icon>
+          <ea-icon icon="icon-angle-right" part="arrow-right-icon"></ea-icon>
         </button>
         <ul class="ea-carousel__content" part="content">
             <slot></slot>
@@ -306,39 +324,61 @@ export class EaCarousel extends Base {
     this.#renderIndicators();
     this.#initCarouselItem();
     if (this.autoplay) this.#handleAutoPlay();
-    this.#arrowLeft.addEventListener("click", this.prev);
-    this.#arrowRight.addEventListener("click", this.next);
-    this.#container.addEventListener("mouseenter", () => {
-      this.#states.isMouseEnter = true;
-      this.#handleTimerClear();
-
-      this.#container.addEventListener(
-        "mouseleave",
-        () => {
-          this.#states.isMouseEnter = false;
-          this.#handleAutoPlay();
-        },
-        {
-          once: true,
-        }
-      );
-    });
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.#turnOnTransition();
 
-    this.#content.addEventListener("transitionend", () => {
-      this.#turnOffTransition();
-      if (this.autoplay && !this.#states.isMouseEnter) this.#handleTimerClear();
+    this.#abortController = new AbortController();
 
-      this.index = this.#handleIndexOverflow();
+    this.#container.className = this.updateContainerClasslist();
+    this.#content.addEventListener(
+      "transitionend",
+      () => {
+        this.#turnOffTransition();
+        if (this.autoplay && !this.#states.isMouseEnter)
+          this.#handleTimerClear();
 
-      if (this.autoplay && !this.#states.isMouseEnter) this.#handleAutoPlay();
-      this.#turnOnTransition();
-      this.#states.pause = false;
+        this.index = this.#handleIndexOverflow();
+
+        if (this.autoplay && !this.#states.isMouseEnter) this.#handleAutoPlay();
+        this.#turnOnTransition();
+        this.#states.pause = false;
+      },
+      { signal: this.#abortController.signal }
+    );
+
+    this.#arrowLeft.addEventListener("click", this.prev, {
+      signal: this.#abortController.signal,
     });
+    this.#arrowRight.addEventListener("click", this.next, {
+      signal: this.#abortController.signal,
+    });
+    this.#container.addEventListener(
+      "mouseenter",
+      () => {
+        this.#states.isMouseEnter = true;
+        if (this["pause-on-hover"]) this.#handleTimerClear();
+        this.#container.className = this.updateContainerClasslist();
+
+        this.#container.addEventListener(
+          "mouseleave",
+          () => {
+            this.#states.isMouseEnter = false;
+            if (this["pause-on-hover"]) this.#handleAutoPlay();
+            this.#container.className = this.updateContainerClasslist();
+          },
+          {
+            signal: this.#abortController.signal,
+            once: true,
+          }
+        );
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
   }
 }
 
