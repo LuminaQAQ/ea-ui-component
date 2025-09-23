@@ -8,11 +8,26 @@ export class EaCarousel extends Base {
   /** @type {HTMLElement} */
   #content;
   /** @type {HTMLElement} */
+  #arrowLeft;
+  /** @type {HTMLElement} */
+  #arrowRight;
+  /** @type {HTMLElement} */
   #indicatorWrap;
+  /** @type {HTMLElement[]} */
+  #indicators = [];
+  /** @type {HTMLElement[]} */
+  #carouselItems;
+
+  /** @type {AbortController} */
+  #abortController;
 
   #states = {
+    prevIndex: 0,
     originLength: 0,
     timer: null,
+    pause: false,
+    isMouseEnter: false,
+    isEnd: false,
   };
 
   static get observedAttributes() {
@@ -23,11 +38,11 @@ export class EaCarousel extends Base {
       "trigger",
       "autoplay",
       "interval",
-      // "indicator-position",
+      "indicator-position",
       "arrow",
       // "type",
       // "card-scale",
-      "loop",
+      // "loop",
       "direction",
       "pause-on-hover",
       // "motion-blur",
@@ -52,19 +67,39 @@ export class EaCarousel extends Base {
     index: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
-        const length = this.querySelectorAll("ea-carousel-item").length - 1;
-
-        if (newVal < 0) return (this.index = (newVal % length) + length);
-        else if (newVal > length)
-          return (this.index = (newVal % length) - length);
-
+      observer: (newVal, oldVal) => {
         this.#updateCarouselPosition(newVal);
+        if (this.#states.isEnd) return (this.#states.isEnd = false);
+
+        /**
+         * 因为是通过前后各添加最后和最前的元素来实现的轮播图，
+         * 所以会出现 length 和 -1 的index值（transitionend事件处理）
+         * 同时还会导致到达这两个值时，会多触发一次不必要且数值错误的事件派发
+         * 所以借助 isEnd 来做一个状态锁，来确保轮播图正常切换和仅派发正确值
+         */
+        if (newVal < 0) {
+          newVal = this.#indicators.length - 1;
+          oldVal = 0;
+          this.#states.isEnd = true;
+        } else if (newVal > this.#indicators.length - 1) {
+          oldVal = this.#indicators.length - 1;
+          newVal = 0;
+          this.#states.isEnd = true;
+        }
+
+        this.#states.prevIndex = oldVal;
+
+        this.dispatchEvent("change", {
+          detail: {
+            current: newVal,
+            prev: oldVal,
+          },
+        });
       },
     },
     trigger: {
       type: ["click", "hover"],
-      default: "click",
+      default: "hover",
       observer: (newVal) => {},
     },
     interval: {
@@ -75,7 +110,9 @@ export class EaCarousel extends Base {
     arrow: {
       type: ["never", "always", "hover"],
       default: "hover",
-      observer: (newVal) => {},
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     autoplay: {
       type: Boolean,
@@ -92,6 +129,13 @@ export class EaCarousel extends Base {
       default: true,
       observer: (newVal) => {},
     },
+    "indicator-position": {
+      type: ["", "none", "outside"],
+      default: "",
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -99,9 +143,19 @@ export class EaCarousel extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-carousel", {
-      ["--" + this.direction]: this.direction,
-    });
+    return this.computedClasslist(
+      "ea-carousel",
+      {
+        ["--" + this.direction]: this.direction,
+      },
+      {
+        ["arrow-" + this.arrow]:
+          this.arrow === "always" ||
+          this.arrow === "never" ||
+          this.#states.isMouseEnter,
+        [this["indicator-position"] + "-indicator"]: this["indicator-position"],
+      }
+    );
   }
 
   constructor() {
@@ -112,6 +166,16 @@ export class EaCarousel extends Base {
     this.$render();
   }
 
+  #handleIndexOverflow = () => {
+    if (this.index === this.#indicators.length) {
+      return 0;
+    } else if (this.index === -1) {
+      return this.#indicators.length - 1;
+    }
+
+    return this.index;
+  };
+
   #renderIndicators = () => {
     const indicators = [
       ...this.shadowRoot.querySelectorAll(".ea-carousel__indicator"),
@@ -119,14 +183,15 @@ export class EaCarousel extends Base {
 
     indicators[this.index].classList.add("is-active");
     indicators.forEach((indicator, index) => {
-      indicator.addEventListener(this.trigger, () => {
-        this.index = index % (this.#states.originLength + 2);
+      indicator.addEventListener(
+        this.trigger === "hover" ? "mouseenter" : "click",
+        () => {
+          if (this.index === index) return;
+          this.index = index;
 
-        indicators.forEach((item) => {
-          item.classList.remove("is-active");
-        });
-        indicator.classList.add("is-active");
-      });
+          indicator.classList.toggle("is-active", index === this.index);
+        }
+      );
     });
   };
 
@@ -158,25 +223,35 @@ export class EaCarousel extends Base {
       "--ea-carousel-transform",
       `translate${direction}(-${(index + 1) * step}px)`
     );
+
+    this.#updataIndicatorPosition();
   }
+
+  #updataIndicatorPosition = () => {
+    this.#indicators.forEach((item, index) => {
+      item.classList.toggle("is-active", index === this.#handleIndexOverflow());
+    });
+  };
 
   /**
    * 清除轮播图自动播放
    */
   #handleTimerClear() {
-    if (this.#states.timer) clearInterval(this.#states.timer);
+    if (this.#states.timer) {
+      clearInterval(this.#states.timer);
+      this.#states.timer = null;
+    }
   }
 
   /**
    * 处理轮播图自动播放
    */
   #handleAutoPlay() {
-    this.#states.timer = setInterval(() => {
-      this.next();
-    }, this.duration);
+    this.#states.timer = setInterval(this.next, this.interval);
   }
 
   #turnOnTransition = () => {
+    void this.clientHeight;
     this.style.removeProperty("--ea-carousel-transition");
   };
 
@@ -188,22 +263,34 @@ export class EaCarousel extends Base {
    * 上一张轮播图
    */
   prev = () => {
-    this.index = (this.index - 1) % this.#states.originLength;
+    if (this.#states.pause) return;
+
+    this.index--;
+    this.#states.pause = true;
   };
 
   /**
    * 下一张轮播图
    */
-  next() {
-    this.index = (this.index + 1) % this.#states.originLength;
-  }
+  next = () => {
+    if (this.#states.pause) return;
+
+    this.index++;
+    this.#states.pause = true;
+  };
 
   $render() {
-    // this.#turnOffTransition();
+    this.#turnOffTransition();
     const carouselItems = [...this.querySelectorAll("ea-carousel-item")];
 
     this.shadowRoot.innerHTML = `
       <div class='ea-carousel' part='container'>
+        <button class="ea-carousel__arrow arrow-left" part="arrow-left">
+          <ea-icon icon="icon-angle-left" part="arrow-left-icon"></ea-icon>
+        </button>
+        <button class="ea-carousel__arrow arrow-right" part="arrow-right">
+          <ea-icon icon="icon-angle-right" part="arrow-right-icon"></ea-icon>
+        </button>
         <ul class="ea-carousel__content" part="content">
             <slot></slot>
         </ul>
@@ -211,7 +298,7 @@ export class EaCarousel extends Base {
           ${carouselItems
             .map(
               (_) =>
-                `<div class='ea-carousel__indicator' part='indicator' tabindex="1"></div>`
+                `<button class='ea-carousel__indicator' part='indicator' tabindex="1"></button>`
             )
             .join("")}
         </footer>
@@ -223,14 +310,75 @@ export class EaCarousel extends Base {
     this.#indicatorWrap = this.shadowRoot.querySelector(
       ".ea-carousel__indicator-wrap"
     );
+    this.#arrowLeft = this.shadowRoot.querySelector(
+      ".ea-carousel__arrow.arrow-left"
+    );
+    this.#arrowRight = this.shadowRoot.querySelector(
+      ".ea-carousel__arrow.arrow-right"
+    );
+    this.#indicators = [
+      ...this.shadowRoot.querySelectorAll(".ea-carousel__indicator"),
+    ];
+    this.#carouselItems = carouselItems;
 
     this.#renderIndicators();
     this.#initCarouselItem();
+    if (this.autoplay) this.#handleAutoPlay();
   }
 
   connectedCallback() {
     super.connectedCallback();
-    // this.#turnOnTransition();
+    this.#turnOnTransition();
+
+    this.#abortController = new AbortController();
+
+    this.#container.className = this.updateContainerClasslist();
+    this.#content.addEventListener(
+      "transitionend",
+      () => {
+        this.#turnOffTransition();
+        if (this.autoplay && !this.#states.isMouseEnter)
+          this.#handleTimerClear();
+
+        this.index = this.#handleIndexOverflow();
+
+        if (this.autoplay && !this.#states.isMouseEnter) this.#handleAutoPlay();
+        this.#turnOnTransition();
+        this.#states.pause = false;
+      },
+      { signal: this.#abortController.signal }
+    );
+
+    this.#arrowLeft.addEventListener("click", this.prev, {
+      signal: this.#abortController.signal,
+    });
+    this.#arrowRight.addEventListener("click", this.next, {
+      signal: this.#abortController.signal,
+    });
+    this.#container.addEventListener(
+      "mouseenter",
+      () => {
+        this.#states.isMouseEnter = true;
+        if (this["pause-on-hover"]) this.#handleTimerClear();
+        this.#container.className = this.updateContainerClasslist();
+
+        this.#container.addEventListener(
+          "mouseleave",
+          () => {
+            this.#states.isMouseEnter = false;
+            if (this["pause-on-hover"]) this.#handleAutoPlay();
+            this.#container.className = this.updateContainerClasslist();
+          },
+          {
+            signal: this.#abortController.signal,
+            once: true,
+          }
+        );
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
   }
 }
 
