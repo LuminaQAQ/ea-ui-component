@@ -1,6 +1,7 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
+import { timeout } from "@/utils/timeout";
 
 export class EaCarousel extends Base {
   /** @type {HTMLElement} */
@@ -8,11 +9,22 @@ export class EaCarousel extends Base {
   /** @type {HTMLElement} */
   #content;
   /** @type {HTMLElement} */
+  #arrowLeft;
+  /** @type {HTMLElement} */
+  #arrowRight;
+  /** @type {HTMLElement} */
   #indicatorWrap;
+  /** @type {HTMLElement[]} */
+  #indicators = [];
+
+  /** @type {AbortController} */
+  #abortController;
 
   #states = {
     originLength: 0,
     timer: null,
+    pause: false,
+    isMouseEnter: false,
   };
 
   static get observedAttributes() {
@@ -53,12 +65,6 @@ export class EaCarousel extends Base {
       type: Number,
       default: 0,
       observer: (newVal) => {
-        const length = this.querySelectorAll("ea-carousel-item").length - 1;
-
-        if (newVal < 0) return (this.index = (newVal % length) + length);
-        else if (newVal > length)
-          return (this.index = (newVal % length) - length);
-
         this.#updateCarouselPosition(newVal);
       },
     },
@@ -112,6 +118,16 @@ export class EaCarousel extends Base {
     this.$render();
   }
 
+  #handleIndexOverflow = () => {
+    if (this.index === this.#indicators.length) {
+      return 0;
+    } else if (this.index === -1) {
+      return this.#indicators.length - 1;
+    }
+
+    return this.index;
+  };
+
   #renderIndicators = () => {
     const indicators = [
       ...this.shadowRoot.querySelectorAll(".ea-carousel__indicator"),
@@ -120,12 +136,10 @@ export class EaCarousel extends Base {
     indicators[this.index].classList.add("is-active");
     indicators.forEach((indicator, index) => {
       indicator.addEventListener(this.trigger, () => {
-        this.index = index % (this.#states.originLength + 2);
+        if (this.index === index) return;
+        this.index = index;
 
-        indicators.forEach((item) => {
-          item.classList.remove("is-active");
-        });
-        indicator.classList.add("is-active");
+        indicator.classList.toggle("is-active", index === this.index);
       });
     });
   };
@@ -158,25 +172,35 @@ export class EaCarousel extends Base {
       "--ea-carousel-transform",
       `translate${direction}(-${(index + 1) * step}px)`
     );
+
+    this.#updataIndicatorPosition();
   }
+
+  #updataIndicatorPosition = () => {
+    this.#indicators.forEach((item, index) => {
+      item.classList.toggle("is-active", index === this.#handleIndexOverflow());
+    });
+  };
 
   /**
    * 清除轮播图自动播放
    */
   #handleTimerClear() {
-    if (this.#states.timer) clearInterval(this.#states.timer);
+    if (this.#states.timer) {
+      clearInterval(this.#states.timer);
+      this.#states.timer = null;
+    }
   }
 
   /**
    * 处理轮播图自动播放
    */
   #handleAutoPlay() {
-    this.#states.timer = setInterval(() => {
-      this.next();
-    }, this.duration);
+    this.#states.timer = setInterval(this.next, this.interval);
   }
 
   #turnOnTransition = () => {
+    void this.clientHeight;
     this.style.removeProperty("--ea-carousel-transition");
   };
 
@@ -188,22 +212,32 @@ export class EaCarousel extends Base {
    * 上一张轮播图
    */
   prev = () => {
-    this.index = (this.index - 1) % this.#states.originLength;
+    if (this.#states.pause) return;
+
+    this.index--;
+    this.#states.pause = true;
   };
 
   /**
    * 下一张轮播图
    */
-  next() {
-    this.index = (this.index + 1) % this.#states.originLength;
-  }
+  next = () => {
+    if (this.#states.pause) return;
+
+    this.index++;
+    this.#states.pause = true;
+  };
 
   $render() {
-    // this.#turnOffTransition();
+    this.#turnOffTransition();
     const carouselItems = [...this.querySelectorAll("ea-carousel-item")];
 
     this.shadowRoot.innerHTML = `
       <div class='ea-carousel' part='container'>
+        <section class="ea-carousel__arrow-wrap" part="arrow-wrap">
+          <span class="ea-carousel__arrow arrow-left" part="arrow-left">&lt;</span>
+          <span class="ea-carousel__arrow arrow-right" part="arrow-right">&gt;</span>
+        </section>
         <ul class="ea-carousel__content" part="content">
             <slot></slot>
         </ul>
@@ -223,14 +257,52 @@ export class EaCarousel extends Base {
     this.#indicatorWrap = this.shadowRoot.querySelector(
       ".ea-carousel__indicator-wrap"
     );
+    this.#arrowLeft = this.shadowRoot.querySelector(
+      ".ea-carousel__arrow.arrow-left"
+    );
+    this.#arrowRight = this.shadowRoot.querySelector(
+      ".ea-carousel__arrow.arrow-right"
+    );
+    this.#indicators = [
+      ...this.shadowRoot.querySelectorAll(".ea-carousel__indicator"),
+    ];
 
     this.#renderIndicators();
     this.#initCarouselItem();
+    if (this.autoplay) this.#handleAutoPlay();
+    this.#arrowLeft.addEventListener("click", this.prev);
+    this.#arrowRight.addEventListener("click", this.next);
+    this.#container.addEventListener("mouseenter", () => {
+      this.#states.isMouseEnter = true;
+      this.#handleTimerClear();
+
+      this.#container.addEventListener(
+        "mouseleave",
+        () => {
+          this.#states.isMouseEnter = false;
+          this.#handleAutoPlay();
+        },
+        {
+          once: true,
+        }
+      );
+    });
   }
 
   connectedCallback() {
     super.connectedCallback();
-    // this.#turnOnTransition();
+    this.#turnOnTransition();
+
+    this.#content.addEventListener("transitionend", () => {
+      this.#turnOffTransition();
+      if (this.autoplay && !this.#states.isMouseEnter) this.#handleTimerClear();
+
+      this.index = this.#handleIndexOverflow();
+
+      if (this.autoplay && !this.#states.isMouseEnter) this.#handleAutoPlay();
+      this.#turnOnTransition();
+      this.#states.pause = false;
+    });
   }
 }
 
