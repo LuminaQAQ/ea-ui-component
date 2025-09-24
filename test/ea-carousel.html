@@ -19,12 +19,6 @@
 
   <body>
     <script type="module" src="../src/components/ea-carousel/index.js"></script>
-    <script type="module">
-      const eaCarousel = document.querySelector("ea-carousel");
-      eaCarousel.addEventListener("change", (e) => {
-        console.log(e.detail);
-      });
-    </script>
 
     <!--  基础用法 -->
     <!-- #region -->
@@ -56,11 +50,12 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 切换间隔 --------  -->
-    <!-- #region  -->
-    <h2>切换间隔</h2>
+    <!--  指示器 -->
+    <!-- #region -->
+    <h1>指示器</h1>
+
     <div class="demo">
-      <ea-carousel interval="5000" height="150px">
+      <ea-carousel height="150px" indicator-position="outside">
         <ea-carousel-item> 1 </ea-carousel-item>
         <ea-carousel-item> 2 </ea-carousel-item>
         <ea-carousel-item> 3 </ea-carousel-item>
@@ -68,9 +63,10 @@
         <ea-carousel-item> 5 </ea-carousel-item>
       </ea-carousel>
     </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
     <!-- -------- 切换箭头 --------  -->
     <!-- #region  -->
@@ -87,6 +83,22 @@
 
       <div class="title"><b>arrow</b> 属性值为 <b>never</b></div>
       <ea-carousel arrow="never" height="150px">
+        <ea-carousel-item> 1 </ea-carousel-item>
+        <ea-carousel-item> 2 </ea-carousel-item>
+        <ea-carousel-item> 3 </ea-carousel-item>
+        <ea-carousel-item> 4 </ea-carousel-item>
+        <ea-carousel-item> 5 </ea-carousel-item>
+      </ea-carousel>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 切换间隔 --------  -->
+    <!-- #region  -->
+    <h2>切换间隔</h2>
+    <div class="demo">
+      <ea-carousel interval="5000" height="150px">
         <ea-carousel-item> 1 </ea-carousel-item>
         <ea-carousel-item> 2 </ea-carousel-item>
         <ea-carousel-item> 3 </ea-carousel-item>

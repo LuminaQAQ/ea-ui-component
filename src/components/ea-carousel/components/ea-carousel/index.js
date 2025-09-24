@@ -154,7 +154,7 @@ export class EaCarousel extends Base {
           this.arrow === "never" ||
           this.#states.isMouseEnter,
         [this["indicator-position"] + "-indicator"]: this["indicator-position"],
-      }
+              }
     );
   }
 
@@ -214,15 +214,15 @@ export class EaCarousel extends Base {
     this.#updateCarouselPosition();
   }
 
-  #updateCarouselPosition(index = 0) {
+  #updateCarouselPosition = (index = 0) => {
     const { width, height } = this.#container.getBoundingClientRect();
     const direction = this.direction === "horizontal" ? `X` : `Y`;
     const step = this.direction === "horizontal" ? width : height;
 
-    this.style.setProperty(
-      "--ea-carousel-transform",
-      `translate${direction}(-${(index + 1) * step}px)`
-    );
+      this.style.setProperty(
+        "--ea-carousel-transform",
+        `translate${direction}(-${(index + 1) * step}px)`
+      );
 
     this.#updataIndicatorPosition();
   }
@@ -340,7 +340,7 @@ export class EaCarousel extends Base {
         if (this.autoplay && !this.#states.isMouseEnter)
           this.#handleTimerClear();
 
-        this.index = this.#handleIndexOverflow();
+          this.index = this.#handleIndexOverflow();
 
         if (this.autoplay && !this.#states.isMouseEnter) this.#handleAutoPlay();
         this.#turnOnTransition();
@@ -379,6 +379,18 @@ export class EaCarousel extends Base {
         signal: this.#abortController.signal,
       }
     );
+
+    window.addEventListener(
+      "resize",
+      () => {
+        this.#updateCarouselPosition(this.index);
+      },
+      { signal: this.#abortController.signal }
+    );
+  }
+
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 
