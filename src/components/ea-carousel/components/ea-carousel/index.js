@@ -42,7 +42,7 @@ export class EaCarousel extends Base {
       "arrow",
       // "type",
       // "card-scale",
-      // "loop",
+      "loop",
       "direction",
       "pause-on-hover",
       // "motion-blur",
@@ -61,7 +61,7 @@ export class EaCarousel extends Base {
       type: ["horizontal", "vertical"],
       default: "horizontal",
       observer: (newVal) => {
-        this.className = this.updateContainerClasslist();
+        this.#container.className = this.updateContainerClasslist();
       },
     },
     index: {
@@ -154,7 +154,7 @@ export class EaCarousel extends Base {
           this.arrow === "never" ||
           this.#states.isMouseEnter,
         [this["indicator-position"] + "-indicator"]: this["indicator-position"],
-              }
+      }
     );
   }
 
@@ -211,7 +211,9 @@ export class EaCarousel extends Base {
     this.insertBefore(lastChild, this.firstChild);
     this.appendChild(firstChild);
 
-    this.#updateCarouselPosition();
+    queueMicrotask(() => {
+      this.#updateCarouselPosition();
+    });
   }
 
   #updateCarouselPosition = (index = 0) => {
@@ -219,13 +221,13 @@ export class EaCarousel extends Base {
     const direction = this.direction === "horizontal" ? `X` : `Y`;
     const step = this.direction === "horizontal" ? width : height;
 
-      this.style.setProperty(
-        "--ea-carousel-transform",
-        `translate${direction}(-${(index + 1) * step}px)`
-      );
+    this.style.setProperty(
+      "--ea-carousel-transform",
+      `translate${direction}(-${(index + 1) * step}px)`
+    );
 
     this.#updataIndicatorPosition();
-  }
+  };
 
   #updataIndicatorPosition = () => {
     this.#indicators.forEach((item, index) => {
@@ -247,6 +249,8 @@ export class EaCarousel extends Base {
    * 处理轮播图自动播放
    */
   #handleAutoPlay() {
+    if (!this.autoplay) return;
+
     this.#states.timer = setInterval(this.next, this.interval);
   }
 
@@ -323,12 +327,11 @@ export class EaCarousel extends Base {
 
     this.#renderIndicators();
     this.#initCarouselItem();
-    if (this.autoplay) this.#handleAutoPlay();
+    this.#handleAutoPlay();
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.#turnOnTransition();
 
     this.#abortController = new AbortController();
 
@@ -340,7 +343,7 @@ export class EaCarousel extends Base {
         if (this.autoplay && !this.#states.isMouseEnter)
           this.#handleTimerClear();
 
-          this.index = this.#handleIndexOverflow();
+        this.index = this.#handleIndexOverflow();
 
         if (this.autoplay && !this.#states.isMouseEnter) this.#handleAutoPlay();
         this.#turnOnTransition();
@@ -349,12 +352,16 @@ export class EaCarousel extends Base {
       { signal: this.#abortController.signal }
     );
 
-    this.#arrowLeft.addEventListener("click", this.prev, {
-      signal: this.#abortController.signal,
-    });
-    this.#arrowRight.addEventListener("click", this.next, {
-      signal: this.#abortController.signal,
-    });
+    if (this.arrow !== "never" && this.direction !== "vertical") {
+      this.#arrowLeft.addEventListener("click", this.prev, {
+        signal: this.#abortController.signal,
+      });
+
+      this.#arrowRight.addEventListener("click", this.next, {
+        signal: this.#abortController.signal,
+      });
+    }
+
     this.#container.addEventListener(
       "mouseenter",
       () => {
@@ -387,6 +394,10 @@ export class EaCarousel extends Base {
       },
       { signal: this.#abortController.signal }
     );
+
+    queueMicrotask(() => {
+      this.#turnOnTransition();
+    });
   }
 
   $beforeUnmounted() {

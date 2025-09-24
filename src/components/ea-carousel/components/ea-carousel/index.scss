@@ -36,6 +36,7 @@
     position: relative;
 
     display: flex;
+    flex-direction: row;
     align-items: center;
     flex-wrap: nowrap;
 
@@ -97,9 +98,9 @@
 
   @include element(indicator-wrap) {
     position: absolute;
-    left: var(--ea-carousel-indicator-x);
+    right: var(--ea-carousel-indicator-x);
     bottom: var(--ea-carousel-indicator-y);
-    transform: translateX(-50%);
+    transform: translateX(50%);
 
     display: flex;
     flex-direction: row;
@@ -109,6 +110,7 @@
 
   @include element(indicator) {
     box-sizing: border-box;
+    padding: 0;
     border: none;
     margin: var(--ea-carousel-indicator-spacing);
 
@@ -120,6 +122,29 @@
 
     &.is-active {
       background-color: var(--ea-carousel-indicator-active-color);
+    }
+  }
+
+  @include modifier(vertical) {
+    .ea-carousel__arrow {
+      display: none;
+    }
+
+    .ea-carousel__content {
+      flex-direction: column;
+    }
+
+    .ea-carousel__indicator {
+      --ea-carousel-indicator-width: 4px;
+      --ea-carousel-indicator-height: 16px;
+    }
+
+    .ea-carousel__indicator-wrap {
+      --ea-carousel-indicator-x: 8px;
+      --ea-carousel-indicator-y: 50%;
+
+      flex-direction: column;
+      transform: translateY(50%);
     }
   }
 
