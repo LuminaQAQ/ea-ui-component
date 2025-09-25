@@ -84,6 +84,16 @@ EaUtils.JSON.parse = (json) => {
   try {
     return JSON.parse(json);
   } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+EaUtils.JSON.stringify = (json) => {
+  try {
+    return JSON.stringify(json);
+  } catch (error) {
+    console.error(error);
     return null;
   }
 };

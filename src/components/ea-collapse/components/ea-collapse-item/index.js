@@ -52,6 +52,11 @@ export class EaCollapseItem extends Base {
     if (this.#states.isActive === value) return;
 
     this.#states.isActive = value;
+
+    this.#container.style.setProperty(
+      "--ea-collapse-item-height",
+      value ? this.#content.scrollHeight + "px" : "0"
+    );
   }
   // #endregion
   // ------- end -------
@@ -106,6 +111,19 @@ export class EaCollapseItem extends Base {
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.#titleWrap.addEventListener("click", () => {
+      this.dispatchEvent("change", {
+        detail: {
+          name: this.name,
+          el: this,
+        },
+        bubbles: true,
+        cancelable: true,
+      });
+    });
+
+    this.dispatchEvent("ea-collapse-item-ready");
   }
 }
 

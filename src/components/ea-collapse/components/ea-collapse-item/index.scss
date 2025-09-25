@@ -1,4 +1,13 @@
+:host {
+  --ea-collapse-item-border-top: none;
+
+  --ea-collapse-item-height: 0;
+}
+
 @include block(ea-collapse-item) {
+  border-top: var(--ea-collapse-item-border-top);
+  border-bottom: 1px solid #ebeef5;
+
   @include element(title-wrap) {
     position: relative;
   }
@@ -7,8 +16,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    border-bottom: 1px solid #ebeef5;
 
     height: 48px;
     line-height: 48px;
@@ -47,7 +54,7 @@
     will-change: height;
     overflow: hidden;
 
-    // height: 0;
+    height: var(--ea-collapse-item-height);
     padding-bottom: 0;
 
     transition: height 0.3s, padding-bottom 0.3s;

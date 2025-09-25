@@ -92,6 +92,10 @@ export default class Base extends HTMLElement {
         return "RegExp";
       }
 
+      if (type === Array) {
+        return "Array";
+      }
+
       if (typeof type === "object" && type !== null) {
         try {
           const realType = Object.entries(type).filter((_) =>
@@ -110,17 +114,20 @@ export default class Base extends HTMLElement {
       return type;
     };
 
-    const parseDefaultValue = (defaultVal) => {
+    const parseDefaultValue = (defaultVal) =>
       typeof defaultVal === "function"
         ? defaultVal()
         : defaultVal
         ? defaultVal
         : null;
-    };
 
     const parseValue = (key, rawValue) => {
       const config = states[key];
       const type = config?.type;
+
+      if (key === "Array" || type === Array) {
+        return rawValue;
+      }
 
       if (type === Boolean) {
         return rawValue === "" || rawValue === "true" || rawValue === true;
@@ -129,10 +136,6 @@ export default class Base extends HTMLElement {
       if (type === Number) {
         const num = Number(rawValue);
         return isNaN(num) ? parseDefaultValue(config?.default) : num;
-      }
-
-      if (type === "Array") {
-        return EaUtils.JSON.parse(rawValue);
       }
 
       if (Array.isArray(type)) {
@@ -148,9 +151,13 @@ export default class Base extends HTMLElement {
       }
 
       if (typeof type === "object" && type !== null) {
-        const realType = Object.entries(type).filter((_) => _.v);
+        const realType = Object.entries(type).filter((_) => _[1]());
 
-        return parseValue(Object.entries(type).filter((_) => _.v));
+        console.log(realType[0][0], rawValue);
+
+        return realType && realType?.length
+          ? parseValue(realType[0][0], rawValue)
+          : [];
       }
 
       return rawValue || config?.default;
@@ -203,6 +210,10 @@ export default class Base extends HTMLElement {
       const parseValue = (key, rawValue) => {
         const config = this.#stateConfigs[key];
         const type = config?.type;
+
+        if (key === "Array" || type === Array) {
+          return rawValue;
+        }
 
         if (type === Boolean) {
           return rawValue === "" || rawValue === "true" || rawValue === true;
@@ -382,7 +393,7 @@ export default class Base extends HTMLElement {
 
   setAttr(attrName, value) {
     if (value || this.#stateConfigs[attrName].default || value === 0) {
-      this.setAttribute(attrName, value);
+      this.setAttribute(attrName, EaUtils.JSON.stringify(value));
     } else {
       this.removeAttribute(attrName);
     }
