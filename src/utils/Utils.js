@@ -10,6 +10,7 @@ export default class EaUtils {
   static Boolean = {};
   static Enum = {};
   static EaElement = {};
+  static JSON = {};
 }
 
 EaUtils.Array.toLowerCamelCase = (arr) => {
@@ -78,3 +79,11 @@ EaUtils.EaElement.addAsyncEventListener = (context, eventName, once = true) => {
 };
 
 EaUtils.EaElement.h = h;
+
+EaUtils.JSON.parse = (json) => {
+  try {
+    return JSON.parse(json);
+  } catch (error) {
+    return null;
+  }
+};

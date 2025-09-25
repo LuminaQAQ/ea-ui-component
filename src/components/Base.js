@@ -74,25 +74,48 @@ export default class Base extends HTMLElement {
    * }>} states 配置对象，每个 key 是一个响应式字段名
    * @returns {void}
    */
-  properties(states) {
+  properties = (states) => {
     const parseType = (type) => {
       if (type === Boolean) {
-        type = "Boolean";
+        return "Boolean";
       }
 
       if (type === Number) {
-        type = "Number";
+        return "Number";
       }
 
       if (type === String || Array.isArray(type)) {
-        type = "String";
+        return "String";
       }
 
       if (type === RegExp) {
-        type = "RegExp";
+        return "RegExp";
+      }
+
+      if (typeof type === "object" && type !== null) {
+        try {
+          const realType = Object.entries(type).filter((_) =>
+            typeof _[1] === "function" ? _[1]() : false
+          )[0];
+
+          return realType[0];
+        } catch (error) {
+          console.error(
+            `[${this.tagName}] Every “type” entry must be a function. Received:`,
+            type
+          );
+        }
       }
 
       return type;
+    };
+
+    const parseDefaultValue = (defaultVal) => {
+      typeof defaultVal === "function"
+        ? defaultVal()
+        : defaultVal
+        ? defaultVal
+        : null;
     };
 
     const parseValue = (key, rawValue) => {
@@ -105,15 +128,29 @@ export default class Base extends HTMLElement {
 
       if (type === Number) {
         const num = Number(rawValue);
-        return isNaN(num) ? config.default : num;
+        return isNaN(num) ? parseDefaultValue(config?.default) : num;
+      }
+
+      if (type === "Array") {
+        return EaUtils.JSON.parse(rawValue);
       }
 
       if (Array.isArray(type)) {
-        return type.includes(rawValue) ? rawValue : config.default;
+        return type.includes(rawValue)
+          ? rawValue
+          : parseDefaultValue(config?.default);
       }
 
       if (type === RegExp) {
-        return rawValue.match(type) ? JSON.stringify(rawValue) : config.default;
+        return rawValue.match(type)
+          ? JSON.stringify(rawValue)
+          : parseDefaultValue(config?.default);
+      }
+
+      if (typeof type === "object" && type !== null) {
+        const realType = Object.entries(type).filter((_) => _.v);
+
+        return parseValue(Object.entries(type).filter((_) => _.v));
       }
 
       return rawValue || config?.default;
@@ -127,14 +164,17 @@ export default class Base extends HTMLElement {
         get: () => {
           const type = parseType(config.type);
 
-          return this[`getAttr${type}`](realKey, config.default);
+          return this[`getAttr${type}`](
+            realKey,
+            parseDefaultValue(config?.default)
+          );
         },
         set: (value) => {
           this.setAttr(realKey, parseValue(realKey, value));
         },
       });
     }
-  }
+  };
 
   attributeChangedCallback(name, oldVal, newVal) {
     if (newVal === oldVal || !this.isMounted) return;
@@ -192,7 +232,7 @@ export default class Base extends HTMLElement {
       );
     } catch (e) {
       if (process.env.NODE_ENV === "development" && this.isMounted) {
-        console.error(e);
+        console.error(e, this);
       }
     }
   }
@@ -332,6 +372,12 @@ export default class Base extends HTMLElement {
     const attr = this.getAttribute(attrName);
 
     return attr ? new RegExp(attr) : defaultValue || null;
+  }
+
+  getAttrArray(attrName, defaultValue = []) {
+    const attr = EaUtils.JSON.parse(this.getAttribute(attrName));
+
+    return Array.isArray(attr) ? attr : attr ? [attr] : defaultValue;
   }
 
   setAttr(attrName, value) {

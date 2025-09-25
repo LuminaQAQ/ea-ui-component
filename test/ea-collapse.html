@@ -1,85 +1,85 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <script type="module" src="../src/components/ea-collapse/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module">
+      // ------- 基础用法 -------
+      // #region
+      const collapseControler = {
+        el: document.querySelector("#normalCollapse"),
+        collapseAll: document.querySelector("#collapse"),
+        closeAll: document.querySelector("#closeAll"),
+        init() {
+          this.collapseAll.addEventListener("click", () => {
+            // this.el.active = "1, 2, 3";
+            console.log(this.el.active);
+          });
+          //   this.closeAll.addEventListener("click", () => {
+          //     this.el.active = "";
+          //   });
+        },
+      };
+      collapseControler.init();
+      // #endregion
+      // ------- end -------
 
-    <script type='module'>
-        import '../components/ea-collapse/index.js';
-
-        import '../components/ea-button/index.js';
-
-        // ------- 基础用法 -------
-        // #region
-        const collapseControler = {
-            el: document.querySelector("#normalCollapse"),
-            collapseAll: document.querySelector("#collapse"),
-            closeAll: document.querySelector("#closeAll"),
-            init() {
-                this.collapseAll.addEventListener("click", () => {
-                    this.el.active = "1, 2, 3";
-                });
-                this.closeAll.addEventListener("click", () => {
-                    this.el.active = "";
-                });
-            },
-        };
-        collapseControler.init();
-        // #endregion
-        // ------- end -------
-
-        // ------- 手风琴效果 -------
-        // #region
-        const accordionControler = {
-            el: document.querySelector("#accordionCollapse"),
-            btn: document.querySelector("#accordion"),
-            init() {
-                this.btn.addEventListener("click", () => {
-                    this.el.active = 2;
-                });
-                this.el.addEventListener("change", (e) => {
-                    console.log(e.detail);
-                });
-            },
-        };
-        accordionControler.init();
-        // #endregion
-        // ------- end -------
+      // ------- 手风琴效果 -------
+      // #region
+      const accordionControler = {
+        el: document.querySelector("#accordionCollapse"),
+        btn: document.querySelector("#accordion"),
+        init() {
+          this.btn.addEventListener("click", () => {
+            //   this.el.active = 2;
+            console.log(this.el.active);
+          });
+          // this.el.addEventListener("change", (e) => {
+          //   console.log(e.detail);
+          // });
+        },
+      };
+      accordionControler.init();
+      // #endregion
+      // ------- end -------
     </script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
     <div class="demo">
-        <ea-button-group>
-            <ea-button id="collapse" type="primary">设置 active 为 1, 2, 3</ea-button>
-            <ea-button id="closeAll" type="primary">设置 active 为 ""</ea-button>
-        </ea-button-group>
-        <ea-collapse id="normalCollapse" active="1, 2">
-            <ea-collapse-item class="" title="标题1" name="1">
-                <div>内容1</div>
-            </ea-collapse-item>
-            <ea-collapse-item class="" title="标题2" name="2">
-                <div>内容2</div>
-            </ea-collapse-item>
-            <ea-collapse-item class="" title="标题3" name="3">
-                <div>内容3</div>
-            </ea-collapse-item>
-        </ea-collapse>
+      <ea-button-group>
+        <ea-button id="collapse" type="primary"
+          >设置 active 为 1, 2, 3</ea-button
+        >
+        <ea-button id="closeAll" type="primary">设置 active 为 ""</ea-button>
+      </ea-button-group>
+      <ea-collapse id="normalCollapse" active="[1, 2]">
+        <ea-collapse-item class="" title="标题1" name="1">
+          <div>内容1</div>
+        </ea-collapse-item>
+        <ea-collapse-item class="" title="标题2" name="2">
+          <div>内容2</div>
+        </ea-collapse-item>
+        <ea-collapse-item class="" title="标题3" name="3">
+          <div>内容3</div>
+        </ea-collapse-item>
+      </ea-collapse>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -87,23 +87,21 @@
     <!-- #region  -->
     <h2>手风琴效果</h2>
     <div class="demo">
-        <ea-button id="accordion" type="primary">设置 active 为 2</ea-button>
-        <ea-collapse id="accordionCollapse" active="1" accordion>
-            <ea-collapse-item class="" title="标题1" name="1">
-                <div>内容1</div>
-            </ea-collapse-item>
-            <ea-collapse-item class="" title="标题2" name="2">
-                <div>内容2</div>
-            </ea-collapse-item>
-            <ea-collapse-item class="" title="标题3" name="3">
-                <div>内容3</div>
-            </ea-collapse-item>
-        </ea-collapse>
+      <ea-button id="accordion" type="primary">设置 active 为 2</ea-button>
+      <ea-collapse id="accordionCollapse" active="1" accordion>
+        <ea-collapse-item class="" title="标题1" name="1">
+          <div>内容1</div>
+        </ea-collapse-item>
+        <ea-collapse-item class="" title="标题2" name="2">
+          <div>内容2</div>
+        </ea-collapse-item>
+        <ea-collapse-item class="" title="标题3" name="3">
+          <div>内容3</div>
+        </ea-collapse-item>
+      </ea-collapse>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
-
-</body>
-
+  </body>
 </html>
