@@ -51,9 +51,6 @@
     "./ea-collapse": {
       "import": "./dist/ea-collapse.js"
     },
-    "./ea-collapse-item": {
-      "import": "./dist/ea-collapse-item.js"
-    },
     "./ea-container": {
       "import": "./dist/ea-container.js"
     },
