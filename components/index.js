@@ -12,7 +12,6 @@ import './ea-carousel/index.js';
 import './ea-checkbox/index.js';
 import './ea-checkbox-group/index.js';
 import './ea-collapse/index.js';
-import './ea-collapse-item/index.js';
 import './ea-container/index.js';
 import './ea-date-picker/index.js';
 import './ea-descriptions/index.js';

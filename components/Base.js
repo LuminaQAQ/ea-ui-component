@@ -74,30 +74,60 @@ export default class Base extends HTMLElement {
    * }>} states 配置对象，每个 key 是一个响应式字段名
    * @returns {void}
    */
-  properties(states) {
+  properties = (states) => {
     const parseType = (type) => {
       if (type === Boolean) {
-        type = "Boolean";
+        return "Boolean";
       }
 
       if (type === Number) {
-        type = "Number";
+        return "Number";
       }
 
       if (type === String || Array.isArray(type)) {
-        type = "String";
+        return "String";
       }
 
       if (type === RegExp) {
-        type = "RegExp";
+        return "RegExp";
+      }
+
+      if (type === Array) {
+        return "Array";
+      }
+
+      if (typeof type === "object" && type !== null) {
+        try {
+          const realType = Object.entries(type).filter((_) =>
+            typeof _[1] === "function" ? _[1]() : false
+          )[0];
+
+          return realType[0];
+        } catch (error) {
+          console.error(
+            `[${this.tagName}] Every “type” entry must be a function. Received:`,
+            type
+          );
+        }
       }
 
       return type;
     };
 
+    const parseDefaultValue = (defaultVal) =>
+      typeof defaultVal === "function"
+        ? defaultVal()
+        : defaultVal
+        ? defaultVal
+        : null;
+
     const parseValue = (key, rawValue) => {
       const config = states[key];
       const type = config?.type;
+
+      if (key === "Array" || type === Array) {
+        return rawValue;
+      }
 
       if (type === Boolean) {
         return rawValue === "" || rawValue === "true" || rawValue === true;
@@ -105,15 +135,29 @@ export default class Base extends HTMLElement {
 
       if (type === Number) {
         const num = Number(rawValue);
-        return isNaN(num) ? config.default : num;
+        return isNaN(num) ? parseDefaultValue(config?.default) : num;
       }
 
       if (Array.isArray(type)) {
-        return type.includes(rawValue) ? rawValue : config.default;
+        return type.includes(rawValue)
+          ? rawValue
+          : parseDefaultValue(config?.default);
       }
 
       if (type === RegExp) {
-        return rawValue.match(type) ? JSON.stringify(rawValue) : config.default;
+        return rawValue.match(type)
+          ? JSON.stringify(rawValue)
+          : parseDefaultValue(config?.default);
+      }
+
+      if (typeof type === "object" && type !== null) {
+        const realType = Object.entries(type).filter((_) => _[1]());
+
+        console.log(realType[0][0], rawValue);
+
+        return realType && realType?.length
+          ? parseValue(realType[0][0], rawValue)
+          : [];
       }
 
       return rawValue || config?.default;
@@ -127,14 +171,17 @@ export default class Base extends HTMLElement {
         get: () => {
           const type = parseType(config.type);
 
-          return this[`getAttr${type}`](realKey, config.default);
+          return this[`getAttr${type}`](
+            realKey,
+            parseDefaultValue(config?.default)
+          );
         },
         set: (value) => {
           this.setAttr(realKey, parseValue(realKey, value));
         },
       });
     }
-  }
+  };
 
   attributeChangedCallback(name, oldVal, newVal) {
     if (newVal === oldVal || !this.isMounted) return;
@@ -164,6 +211,10 @@ export default class Base extends HTMLElement {
         const config = this.#stateConfigs[key];
         const type = config?.type;
 
+        if (key === "Array" || type === Array) {
+          return rawValue;
+        }
+
         if (type === Boolean) {
           return rawValue === "" || rawValue === "true" || rawValue === true;
         }
@@ -192,7 +243,7 @@ export default class Base extends HTMLElement {
       );
     } catch (e) {
       if (process.env.NODE_ENV === "development" && this.isMounted) {
-        console.error(e);
+        console.error(e, this);
       }
     }
   }
@@ -334,9 +385,15 @@ export default class Base extends HTMLElement {
     return attr ? new RegExp(attr) : defaultValue || null;
   }
 
+  getAttrArray(attrName, defaultValue = []) {
+    const attr = EaUtils.JSON.parse(this.getAttribute(attrName));
+
+    return Array.isArray(attr) ? attr : attr ? [attr] : defaultValue;
+  }
+
   setAttr(attrName, value) {
     if (value || this.#stateConfigs[attrName].default || value === 0) {
-      this.setAttribute(attrName, value);
+      this.setAttribute(attrName, EaUtils.JSON.stringify(value));
     } else {
       this.removeAttribute(attrName);
     }
