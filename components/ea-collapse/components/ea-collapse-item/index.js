@@ -19,7 +19,13 @@ export class EaCollapseItem extends Base {
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "title", "name"];
+    return [
+      ...super.observedAttributes,
+      "title",
+      "name",
+      "disabled",
+      "expand-icon-position",
+    ];
   }
 
   state = this.properties({
@@ -40,6 +46,25 @@ export class EaCollapseItem extends Base {
       default: "",
       observer: (newVal) => {},
     },
+    active: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {},
+    },
+    "expand-icon-position": {
+      type: ["left", "right"],
+      default: "right",
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
   });
 
   // ------- isActive -------
@@ -51,6 +76,7 @@ export class EaCollapseItem extends Base {
   set isActive(value) {
     if (this.#states.isActive === value) return;
 
+    this.active = value;
     this.#states.isActive = value;
 
     this.#container.style.setProperty(
@@ -66,9 +92,16 @@ export class EaCollapseItem extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-collapse-item", {
-      // ['--' + this.type]: this.type,
-    });
+    return this.computedClasslist(
+      "ea-collapse-item",
+      {
+        [`--indicator-` + this["expand-icon-position"]]:
+          this["expand-icon-position"],
+      },
+      {
+        disabled: this.disabled,
+      }
+    );
   }
 
   constructor() {
@@ -88,7 +121,7 @@ export class EaCollapseItem extends Base {
             </span>
             <span class="ea-collapse-item__indicator" part="indicator">
                 <slot name="icon">
-                    <ea-icon icon="icon-angle-down" part="icon"></ea-icon>
+                    <ea-icon class="default-expand-icon" icon="icon-angle-down" part="icon"></ea-icon>
                 </slot>
             </span>
         </div>
@@ -112,8 +145,12 @@ export class EaCollapseItem extends Base {
   connectedCallback() {
     super.connectedCallback();
 
+    this.#container.className = this.updateContainerClasslist();
+
     this.#titleWrap.addEventListener("click", () => {
-      this.dispatchEvent("change", {
+      if (this.disabled) return;
+
+      this.dispatchEvent("collapse-item-click", {
         detail: {
           name: this.name,
           el: this,
