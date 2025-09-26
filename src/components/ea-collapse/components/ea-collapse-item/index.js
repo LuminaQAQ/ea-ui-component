@@ -95,7 +95,7 @@ export class EaCollapseItem extends Base {
     return this.computedClasslist(
       "ea-collapse-item",
       {
-        [`indicator-` + this["expand-icon-position"]]:
+        [`--indicator-` + this["expand-icon-position"]]:
           this["expand-icon-position"],
       },
       {
@@ -116,13 +116,13 @@ export class EaCollapseItem extends Base {
     this.shadowRoot.innerHTML = `
       <div class='ea-collapse-item' part='container'>
         <div class="ea-collapse-item__title-wrap" part="title-wrap">
+            <span class="ea-collapse-item__title" part="title">
+                <slot name="title"></slot>
+            </span>
             <span class="ea-collapse-item__indicator" part="indicator">
                 <slot name="icon">
                     <ea-icon class="default-expand-icon" icon="icon-angle-down" part="icon"></ea-icon>
                 </slot>
-            </span>
-            <span class="ea-collapse-item__title" part="title">
-                <slot name="title"></slot>
             </span>
         </div>
         <div class="ea-collapse-item__content" part="content-wrap">

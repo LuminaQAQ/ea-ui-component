@@ -277,9 +277,28 @@
     <!-- #region -->
     <h1>自定义图标</h1>
     <style>
-      #customIconCollapseItem[active] .icon {
-        position: relative;
+      .icon {
         display: block;
+        position: relative;
+      }
+
+      .icon::after {
+        display: block;
+        content: attr(inactive-text);
+
+        font-size: 14px;
+      }
+
+      #customTextIconCollapseItem[active] .icon::after {
+        content: attr(active-text);
+      }
+
+      #customIconCollapseItem ea-icon {
+        transition: transform 0.3s ease-in-out;
+      }
+
+      #customIconCollapseItem[active] ea-icon {
+        transform: rotate(-45deg);
       }
     </style>
     <div class="demo">
@@ -298,9 +317,13 @@
             Consistent within interface: all elements should be consistent, such
             as: design style, icons and texts, position of elements, etc.
           </div>
-          <span class="icon" slot="icon" active-text="Hello"></span>
+          <ea-icon icon="icon-coffee" slot="icon"></ea-icon>
         </ea-collapse-item>
-        <ea-collapse-item title="Feedback" name="2">
+        <ea-collapse-item
+          id="customTextIconCollapseItem"
+          title="Feedback"
+          name="2"
+        >
           <div>
             Operation feedback: enable the users to clearly perceive their
             operations by style updates and interactive effects;
@@ -309,6 +332,12 @@
             Visual feedback: reflect current state by updating or rearranging
             elements of the page.
           </div>
+          <span
+            class="icon"
+            slot="icon"
+            inactive-text="Collapsed"
+            active-text="Expanded"
+          ></span>
         </ea-collapse-item>
         <ea-collapse-item title="Efficiency" name="3">
           <div>

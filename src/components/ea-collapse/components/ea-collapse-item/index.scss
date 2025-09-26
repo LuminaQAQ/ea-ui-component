@@ -20,14 +20,17 @@
 
   @include element(title-wrap) {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
 
     cursor: pointer;
   }
 
   @include element(title) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
+    flex: 1 0 auto;
 
     height: 48px;
     line-height: 48px;
@@ -38,10 +41,10 @@
   }
 
   @include element(indicator) {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    // position: absolute;
+    // right: 0;
+    // top: 50%;
+    // transform: translateY(-50%);
 
     .default-expand-icon {
       transition: transform 0.3s;
@@ -63,9 +66,13 @@
 
   @include modifier(indicator-left) {
     .ea-collapse-item__indicator {
-      position: relative;
-      inset: unset;
-      transform: unset;
+      // position: relative;
+      // inset: unset;
+      // transform: unset;
+    }
+
+    .ea-collapse-item__title-wrap {
+      flex-direction: row-reverse;
     }
   }
 
