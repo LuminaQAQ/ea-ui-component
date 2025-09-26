@@ -8,7 +8,13 @@ export class EaCollapse extends Base {
   #container;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "active", "accordion"];
+    return [
+      ...super.observedAttributes,
+      "active",
+      "accordion",
+      "expand-icon-position",
+      "before-collapse",
+    ];
   }
 
   state = this.properties({
@@ -28,6 +34,20 @@ export class EaCollapse extends Base {
         Array: () => !this.accordion,
       },
       default: () => (this.accordion ? "" : []),
+      observer: (newVal) => {},
+    },
+    "expand-icon-position": {
+      type: ["left", "right"],
+      default: "right",
+      observer: (newVal) => {
+        this.querySelectorAll("ea-collapse-item").forEach((item) => {
+          item["expand-icon-position"] = newVal;
+        });
+      },
+    },
+    "before-collapse": {
+      type: Boolean,
+      default: false,
       observer: (newVal) => {},
     },
   });
@@ -71,6 +91,10 @@ export class EaCollapse extends Base {
       ),
     ]);
 
+    els.forEach((el, index) => {
+      if (!el.name) el.name = index.toString();
+    });
+
     if (this.accordion) {
       els.forEach((el) => (el.isActive = el.name === this.active));
     } else {
@@ -80,27 +104,70 @@ export class EaCollapse extends Base {
     }
   };
 
-  #initChangeEvent = (e) => {
+  #handleBeforeCollapse = (details) => {
+    return new Promise((resolve, reject) => {
+      if (this["before-collapse"])
+        this.dispatchEvent("before-collapse", {
+          detail: {
+            resolve: () => resolve(details),
+            reject: () => reject("Canceled collapse"),
+            ...details,
+          },
+        });
+      else resolve(details);
+    });
+  };
+
+  #initChangeEvent = async (e) => {
     e.preventDefault();
     e.stopImmediatePropagation();
     e.stopPropagation();
 
     const { name, el } = e.detail;
+
+    await this.#handleBeforeCollapse({ name, el });
+
     if (this.accordion) {
       const items = [...this.querySelectorAll("ea-collapse-item")];
       items.forEach((item) => {
         item.isActive = item.name === name;
       });
+      this.active = name;
     } else {
       if (this.active.includes(name)) {
         this.active = this.active.filter((item) => item !== name);
         el.isActive = false;
-        console.log(this.active.includes(name));
       } else {
         this.active = [...this.active, name];
         el.isActive = this.active.includes(name);
       }
     }
+
+    this.dispatchEvent("change", {
+      detail: {
+        name,
+        target: el,
+        active: this.active,
+      },
+    });
+  };
+
+  setActiveNames = (newVal) => {
+    try {
+      const items = [...this.querySelectorAll("ea-collapse-item")];
+
+      if (this.accordion) {
+        items.forEach((item) => {
+          item.isActive = item.name === newVal;
+        });
+      } else {
+        items.forEach((item) => {
+          item.isActive = newVal.includes(item.name);
+        });
+      }
+
+      this.active = newVal;
+    } catch (error) {}
   };
 
   async connectedCallback() {
@@ -108,7 +175,7 @@ export class EaCollapse extends Base {
 
     this.#initCollapseStatus();
 
-    this.addEventListener("change", this.#initChangeEvent);
+    this.addEventListener("collapse-item-click", this.#initChangeEvent);
   }
 }
 

@@ -16,43 +16,68 @@
   <body>
     <script type="module" src="../src/components/ea-collapse/index.js"></script>
     <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script
+      type="module"
+      src="../src/components/ea-message-box/index.js"
+    ></script>
     <script type="module">
       // ------- 基础用法 -------
       // #region
-      const collapseControler = {
-        el: document.querySelector("#normalCollapse"),
-        collapseAll: document.querySelector("#collapse"),
-        closeAll: document.querySelector("#closeAll"),
+      const basicExample = {
+        el: document.querySelector("#basicCollapse"),
+        openAllBtn: document.querySelector("#basicCollapseOpenAllBtn"),
+        closeAllBtn: document.querySelector("#basicCollapseCloseAllBtn"),
+
         init() {
-          this.collapseAll.addEventListener("click", () => {
-            // this.el.active = "1, 2, 3";
-            console.log(this.el.active);
+          this.openAllBtn.addEventListener("click", () => {
+            this.el.setActiveNames(["1", "2", "3", "4"]);
           });
-          //   this.closeAll.addEventListener("click", () => {
-          //     this.el.active = "";
-          //   });
+
+          this.closeAllBtn.addEventListener("click", () => {
+            this.el.setActiveNames([]);
+          });
         },
       };
-      collapseControler.init();
+      basicExample.init();
       // #endregion
       // ------- end -------
 
-      // ------- 手风琴效果 -------
+      // ------- 自定义图标位置 -------
       // #region
-      const accordionControler = {
-        el: document.querySelector("#accordionCollapse"),
-        btn: document.querySelector("#accordion"),
+      const customExpandIconPositionExample = {
+        el: document.querySelector("#customExpandIconPositionCollapse"),
+        btn: document.querySelector("#customExpandIconPositionSwitch"),
         init() {
-          this.btn.addEventListener("click", () => {
-            //   this.el.active = 2;
-            console.log(this.el.active);
+          this.btn.addEventListener("change", ({ detail }) => {
+            const { value } = detail;
+
+            this.el["expand-icon-position"] = value;
           });
-          // this.el.addEventListener("change", (e) => {
-          //   console.log(e.detail);
-          // });
         },
       };
-      accordionControler.init();
+      customExpandIconPositionExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 阻止折叠 -------
+      // #region
+      const hasBeforeCollapseExample = {
+        el: document.querySelector("#hasBeforeCollapse"),
+        btn: document.querySelector("#hasBeforeCollapseSwitch"),
+        init() {
+          this.el.addEventListener("before-collapse", ({ detail }) => {
+            const { resolve, reject } = detail;
+
+            if (this.btn.checked) {
+              resolve();
+            } else {
+              reject();
+            }
+          });
+        },
+      };
+      hasBeforeCollapseExample.init();
       // #endregion
       // ------- end -------
     </script>
@@ -62,12 +87,14 @@
     <h2>基础用法</h2>
     <div class="demo">
       <ea-button-group>
-        <ea-button id="collapse" type="primary"
-          >设置 active 为 1, 2, 3</ea-button
-        >
-        <ea-button id="closeAll" type="primary">设置 active 为 ""</ea-button>
+        <ea-button id="basicCollapseOpenAllBtn" type="primary">
+          设置 active 为 ["1", "2", "3", "4"]
+        </ea-button>
+        <ea-button id="basicCollapseCloseAllBtn" type="primary">
+          设置 active 为 []
+        </ea-button>
       </ea-button-group>
-      <ea-collapse id="normalCollapse" active='["1", "2"]'>
+      <ea-collapse id="basicCollapse" active='["1", "2"]'>
         <ea-collapse-item title="Consistency" name="1">
           <div>
             Consistent with real life: in line with the process and logic of
@@ -124,21 +151,338 @@
     <!-- #region  -->
     <h2>手风琴效果</h2>
     <div class="demo">
-      <ea-button id="accordion" type="primary">设置 active 为 2</ea-button>
+      <!-- <ea-button id="accordion" type="primary">设置 active 为 2</ea-button> -->
       <ea-collapse id="accordionCollapse" active="1" accordion>
-        <ea-collapse-item class="" title="标题1" name="1">
-          <div>内容1</div>
+        <ea-collapse-item title="Consistency" name="1">
+          <div>
+            Consistent with real life: in line with the process and logic of
+            real life, and comply with languages and habits that the users are
+            used to;
+          </div>
+          <div>
+            Consistent within interface: all elements should be consistent, such
+            as: design style, icons and texts, position of elements, etc.
+          </div>
         </ea-collapse-item>
-        <ea-collapse-item class="" title="标题2" name="2">
-          <div>内容2</div>
+        <ea-collapse-item title="Feedback" name="2">
+          <div>
+            Operation feedback: enable the users to clearly perceive their
+            operations by style updates and interactive effects;
+          </div>
+          <div>
+            Visual feedback: reflect current state by updating or rearranging
+            elements of the page.
+          </div>
         </ea-collapse-item>
-        <ea-collapse-item class="" title="标题3" name="3">
-          <div>内容3</div>
+        <ea-collapse-item title="Efficiency" name="3">
+          <div>
+            Simplify the process: keep operating process simple and intuitive;
+          </div>
+          <div>
+            Definite and clear: enunciate your intentions clearly so that the
+            users can quickly understand and make decisions;
+          </div>
+          <div>
+            Easy to identify: the interface should be straightforward, which
+            helps the users to identify and frees them from memorizing and
+            recalling.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Controllability" name="4">
+          <div>
+            Decision making: giving advices about operations is acceptable, but
+            do not make decisions for the users;
+          </div>
+          <div>
+            Controlled consequences: users should be granted the freedom to
+            operate, including canceling, aborting or terminating current
+            operation.
+          </div>
         </ea-collapse-item>
       </ea-collapse>
     </div>
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
+
+    <!--  自定义面板标题 -->
+    <!-- #region -->
+    <h1>自定义面板标题</h1>
+
+    <style>
+      #customTitle[active] .header {
+        color: aqua;
+      }
+    </style>
+    <div class="demo">
+      <ea-collapse accordion>
+        <ea-collapse-item id="customTitle" name="1">
+          <div class="header" slot="title">
+            Consistency
+            <ea-icon icon="icon-coffee" class="header-icon"></ea-icon>
+          </div>
+          <div>
+            Consistent with real life: in line with the process and logic of
+            real life, and comply with languages and habits that the users are
+            used to;
+          </div>
+          <div>
+            Consistent within interface: all elements should be consistent, such
+            as: design style, icons and texts, position of elements, etc.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Feedback" name="2">
+          <div>
+            Operation feedback: enable the users to clearly perceive their
+            operations by style updates and interactive effects;
+          </div>
+          <div>
+            Visual feedback: reflect current state by updating or rearranging
+            elements of the page.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Efficiency" name="3">
+          <div>
+            Simplify the process: keep operating process simple and intuitive;
+          </div>
+          <div>
+            Definite and clear: enunciate your intentions clearly so that the
+            users can quickly understand and make decisions;
+          </div>
+          <div>
+            Easy to identify: the interface should be straightforward, which
+            helps the users to identify and frees them from memorizing and
+            recalling.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Controllability" name="4">
+          <div>
+            Decision making: giving advices about operations is acceptable, but
+            do not make decisions for the users;
+          </div>
+          <div>
+            Controlled consequences: users should be granted the freedom to
+            operate, including canceling, aborting or terminating current
+            operation.
+          </div>
+        </ea-collapse-item>
+      </ea-collapse>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义图标位置 -->
+    <!-- #region -->
+    <h1>自定义图标</h1>
+    <style>
+      #customIconCollapseItem[active] .icon {
+        position: relative;
+        display: block;
+      }
+    </style>
+    <div class="demo">
+      <ea-collapse>
+        <ea-collapse-item
+          id="customIconCollapseItem"
+          title="Consistency"
+          name="1"
+        >
+          <div>
+            Consistent with real life: in line with the process and logic of
+            real life, and comply with languages and habits that the users are
+            used to;
+          </div>
+          <div>
+            Consistent within interface: all elements should be consistent, such
+            as: design style, icons and texts, position of elements, etc.
+          </div>
+          <span class="icon" slot="icon" active-text="Hello"></span>
+        </ea-collapse-item>
+        <ea-collapse-item title="Feedback" name="2">
+          <div>
+            Operation feedback: enable the users to clearly perceive their
+            operations by style updates and interactive effects;
+          </div>
+          <div>
+            Visual feedback: reflect current state by updating or rearranging
+            elements of the page.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Efficiency" name="3">
+          <div>
+            Simplify the process: keep operating process simple and intuitive;
+          </div>
+          <div>
+            Definite and clear: enunciate your intentions clearly so that the
+            users can quickly understand and make decisions;
+          </div>
+          <div>
+            Easy to identify: the interface should be straightforward, which
+            helps the users to identify and frees them from memorizing and
+            recalling.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Controllability" name="4">
+          <div>
+            Decision making: giving advices about operations is acceptable, but
+            do not make decisions for the users;
+          </div>
+          <div>
+            Controlled consequences: users should be granted the freedom to
+            operate, including canceling, aborting or terminating current
+            operation.
+          </div>
+        </ea-collapse-item>
+      </ea-collapse>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义图标位置 -->
+    <!-- #region -->
+    <h1>自定义图标位置</h1>
+    <div class="demo">
+      <div style="margin-bottom: 1rem">
+        <span>expand icon position: </span>
+        <ea-switch
+          id="customExpandIconPositionSwitch"
+          inactive-value="left"
+          active-value="right"
+          inactive-text="left"
+          active-text="right"
+          inactive-color="#88b8fe"
+          checked
+        ></ea-switch>
+      </div>
+
+      <ea-collapse id="customExpandIconPositionCollapse">
+        <ea-collapse-item title="Consistency" name="1">
+          <div>
+            Consistent with real life: in line with the process and logic of
+            real life, and comply with languages and habits that the users are
+            used to;
+          </div>
+          <div>
+            Consistent within interface: all elements should be consistent, such
+            as: design style, icons and texts, position of elements, etc.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Feedback" name="2">
+          <div>
+            Operation feedback: enable the users to clearly perceive their
+            operations by style updates and interactive effects;
+          </div>
+          <div>
+            Visual feedback: reflect current state by updating or rearranging
+            elements of the page.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Efficiency" name="3">
+          <div>
+            Simplify the process: keep operating process simple and intuitive;
+          </div>
+          <div>
+            Definite and clear: enunciate your intentions clearly so that the
+            users can quickly understand and make decisions;
+          </div>
+          <div>
+            Easy to identify: the interface should be straightforward, which
+            helps the users to identify and frees them from memorizing and
+            recalling.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Controllability" name="4">
+          <div>
+            Decision making: giving advices about operations is acceptable, but
+            do not make decisions for the users;
+          </div>
+          <div>
+            Controlled consequences: users should be granted the freedom to
+            operate, including canceling, aborting or terminating current
+            operation.
+          </div>
+        </ea-collapse-item>
+      </ea-collapse>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  阻止折叠 -->
+    <!-- #region -->
+    <h1>阻止折叠</h1>
+
+    <div class="demo">
+      <div style="margin-bottom: 1rem">
+        <span>before collapse return: </span>
+        <ea-switch
+          id="hasBeforeCollapseSwitch"
+          inactive-value="false"
+          active-value="true"
+          inactive-text="false"
+          active-text="true"
+          inactive-color="#88b8fe"
+          checked
+        ></ea-switch>
+      </div>
+
+      <ea-collapse id="hasBeforeCollapse" active='["1"]' before-collapse>
+        <ea-collapse-item title="Consistency" name="1">
+          <div>
+            Consistent with real life: in line with the process and logic of
+            real life, and comply with languages and habits that the users are
+            used to;
+          </div>
+          <div>
+            Consistent within interface: all elements should be consistent, such
+            as: design style, icons and texts, position of elements, etc.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Feedback" name="2">
+          <div>
+            Operation feedback: enable the users to clearly perceive their
+            operations by style updates and interactive effects;
+          </div>
+          <div>
+            Visual feedback: reflect current state by updating or rearranging
+            elements of the page.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Efficiency" name="3">
+          <div>
+            Simplify the process: keep operating process simple and intuitive;
+          </div>
+          <div>
+            Definite and clear: enunciate your intentions clearly so that the
+            users can quickly understand and make decisions;
+          </div>
+          <div>
+            Easy to identify: the interface should be straightforward, which
+            helps the users to identify and frees them from memorizing and
+            recalling.
+          </div>
+        </ea-collapse-item>
+        <ea-collapse-item title="Controllability" name="4">
+          <div>
+            Decision making: giving advices about operations is acceptable, but
+            do not make decisions for the users;
+          </div>
+          <div>
+            Controlled consequences: users should be granted the freedom to
+            operate, including canceling, aborting or terminating current
+            operation.
+          </div>
+        </ea-collapse-item>
+      </ea-collapse>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
   </body>
 </html>

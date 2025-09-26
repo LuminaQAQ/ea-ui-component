@@ -153,8 +153,6 @@ export default class Base extends HTMLElement {
       if (typeof type === "object" && type !== null) {
         const realType = Object.entries(type).filter((_) => _[1]());
 
-        console.log(realType[0][0], rawValue);
-
         return realType && realType?.length
           ? parseValue(realType[0][0], rawValue)
           : [];
@@ -393,7 +391,13 @@ export default class Base extends HTMLElement {
 
   setAttr(attrName, value) {
     if (value || this.#stateConfigs[attrName].default || value === 0) {
-      this.setAttribute(attrName, EaUtils.JSON.stringify(value));
+      const stringify = EaUtils.JSON.stringify(value);
+      this.setAttribute(
+        attrName,
+        Array.isArray(value) || (typeof value === "object" && value !== null)
+          ? stringify
+          : value
+      );
     } else {
       this.removeAttribute(attrName);
     }
