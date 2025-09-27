@@ -87,7 +87,7 @@ export class EaDescriptions extends Base {
               rowspan: item.rowspan,
               colspan:
                 row.length < 3 && index === row.length - 1
-                  ? 3 - row.length + index
+                  ? 3 - row.length + (index + 1)
                   : item.colspan || 1,
             },
             [
@@ -250,7 +250,7 @@ export class EaDescriptions extends Base {
       /**
        * 处理该行是否满列
        */
-      if (currentRow <= rowspan?.rowspan && col + rowspan?.colspan >= 3) {
+      if (currentRow <= rowspan?.rowspan - 1 && col + rowspan?.colspan >= 3) {
         acc.push([]);
       }
 
