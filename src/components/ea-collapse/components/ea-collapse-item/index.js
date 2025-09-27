@@ -80,7 +80,7 @@ export class EaCollapseItem extends Base {
     this.#states.isActive = value;
 
     this.#container.style.setProperty(
-      "--ea-collapse-item-height",
+      "--ea-collapse-item-content-height",
       value ? this.#content.scrollHeight + "px" : "0"
     );
   }
