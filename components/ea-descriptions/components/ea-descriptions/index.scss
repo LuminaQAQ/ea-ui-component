@@ -1,0 +1,79 @@
+:host {
+  --ea-descriptions-border: 1px solid var(--grey-200);
+}
+
+@include block(ea-descriptions) {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+
+  @include element(title) {
+    text-align: left;
+    font-size: 20px;
+    font-weight: 700;
+
+    margin: 16px 0;
+  }
+
+  @include element(body) {
+    display: block;
+    min-width: 100%;
+  }
+
+  @include element(th) {
+    text-align: left;
+    min-width: 100%;
+  }
+
+  @include element(td) {
+    padding-bottom: 12px;
+    min-width: 100%;
+  }
+
+  @include element(tr) {
+    min-width: 100%;
+  }
+
+  @include element(label) {
+    margin-right: 16px;
+
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    color: var(--grey-900);
+  }
+
+  @include element(content) {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 300;
+
+    color: var(--grey-700);
+  }
+
+  @include modifier(border) {
+    .ea-descriptions__label {
+      margin: 0;
+      padding: 8px 11px;
+      background-color: var(--grey-100);
+      border: var(--ea-descriptions-border);
+      border-right: none;
+    }
+
+    .ea-descriptions__content {
+      padding: 8px 11px;
+      border: var(--ea-descriptions-border);
+    }
+
+    .ea-descriptions__tr:not(:last-child) {
+      .ea-descriptions__label,
+      .ea-descriptions__content {
+        border-bottom: none;
+      }
+    }
+
+    .ea-descriptions__content:not(:last-child) {
+      border-right: none;
+    }
+  }
+}
