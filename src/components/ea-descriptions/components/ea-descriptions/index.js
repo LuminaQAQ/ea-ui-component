@@ -134,7 +134,7 @@ export class EaDescriptions extends Base {
                 rowspan: item.rowspan,
                 colspan:
                   row.length < 3 && index === row.length - 1
-                    ? 3 - row.length + index + 2
+                    ? 6 - (index + 1)
                     : item.colspan || 1,
               },
               item.content
@@ -142,7 +142,7 @@ export class EaDescriptions extends Base {
           ].join("")
         )
       ),
-    vertical: (row, index) =>
+    vertical: (row, i) =>
       [
         EaUtils.EaElement.h(
           "tr",
@@ -156,10 +156,10 @@ export class EaDescriptions extends Base {
               "ea-descriptions__label ea-descriptions__th",
               {
                 part: "th",
-                rowspan: item.rowspan,
+                rowspan: 1,
                 colspan:
                   row.length < 3 && index === row.length - 1
-                    ? 3 - row.length + index
+                    ? 6 - (index + 1)
                     : item.colspan || 1,
               },
               item.label
@@ -178,10 +178,10 @@ export class EaDescriptions extends Base {
               "ea-descriptions__content ea-descriptions__td",
               {
                 part: "td",
-                rowspan: item.rowspan,
+                rowspan: item.rowspan * 2 - 1,
                 colspan:
                   row.length < 3 && index === row.length - 1
-                    ? 3 - row.length + index
+                    ? 6 - (index + 1)
                     : item.colspan || 1,
               },
               item.content
@@ -216,35 +216,43 @@ export class EaDescriptions extends Base {
     };
 
     const splitChildren = children.reduce((acc, cur, index) => {
-      const prevChildren = acc[acc.length - 2]?.reduce(
-        (a, c) => {
-          console.log(a, c);
+      const currentRow = Math.floor(index / 3);
 
-          return {
-            maxCol: Math.max(a.maxCol, c.colspan),
-            maxRow: Math.min(a.maxRow, c.rowspan),
-          };
-        },
-        { maxCol: 0, maxRow: 0 }
-      );
-
-      // console.log(prevChildren);
-
-      const isOverflow = acc[acc.length - 1]?.reduce((a, c) => {
-        return a + c.rowspan;
-      }, 0);
-
-      // const
-
-      if (isOverflow >= 3 || index === 0) {
-        // console.log(acc);
-
+      if (index % 3 === 0) {
         acc.push([]);
       }
 
-      // if (index % 3 === 0) {
-      //   acc.push([]);
-      // }
+      /**
+       * @type {{rowspan: Number, colspan: Number}}
+       * 用于获取当前单元格的跨行/跨列数
+       */
+      const rowspan = acc[acc.length - 2]?.reduce(
+        (acc, cur) => {
+          return {
+            rowspan: Math.max(acc.rowspan, cur.rowspan),
+            colspan: acc.rowspan > cur.rowspan ? acc.colspan : cur.colspan,
+          };
+        },
+        {
+          rowspan: 1,
+          colspan: 1,
+        }
+      );
+
+      /**
+       * @type {Number}
+       * 当前列的总列数
+       */
+      const col = acc[acc.length - 1].reduce((acc, cur) => {
+        return acc + cur.colspan;
+      }, 0);
+
+      /**
+       * 处理该行是否满列
+       */
+      if (currentRow <= rowspan?.rowspan && col + rowspan?.colspan >= 3) {
+        acc.push([]);
+      }
 
       acc[acc.length - 1].push({
         label: cur.label,
