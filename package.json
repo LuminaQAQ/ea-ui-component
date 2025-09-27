@@ -60,9 +60,6 @@
     "./ea-descriptions": {
       "import": "./dist/ea-descriptions.js"
     },
-    "./ea-descriptions-item": {
-      "import": "./dist/ea-descriptions-item.js"
-    },
     "./ea-dialog": {
       "import": "./dist/ea-dialog.js"
     },
