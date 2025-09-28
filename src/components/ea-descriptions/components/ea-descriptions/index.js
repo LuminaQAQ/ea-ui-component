@@ -79,32 +79,41 @@ export class EaDescriptions extends Base {
           part: "tr tr-label",
         },
         row.map((item, index) =>
-          EaUtils.EaElement.h(
-            "td",
-            "ea-descriptions__td",
-            {
-              part: "td",
-              rowspan: item.rowspan,
-              colspan:
-                row.length < 3 && index === row.length - 1
-                  ? 3 - row.length + (index + 1)
-                  : item.colspan || 1,
-            },
-            [
-              EaUtils.EaElement.h(
-                "span",
-                "ea-descriptions__label",
-                { part: "label" },
-                item.label
-              ),
-              EaUtils.EaElement.h(
-                "span",
-                "ea-descriptions__content",
-                { part: "content" },
-                item.content
-              ),
-            ]
-          )
+          item
+            ? EaUtils.EaElement.h(
+                "td",
+                "ea-descriptions__td",
+                {
+                  part: "td",
+                  rowspan: item.rowspan,
+                  colspan:
+                    row.length < 3 &&
+                    index === row.length - 1 &&
+                    row.reduce((acc, cur) => {
+                      return acc + cur.colspan;
+                    }, 0) < 3
+                      ? 3 -
+                        row.slice(0, row.length - 1).reduce((acc, cur) => {
+                          return acc + cur.colspan;
+                        }, 0)
+                      : item.colspan || 1,
+                },
+                [
+                  EaUtils.EaElement.h(
+                    "span",
+                    "ea-descriptions__label",
+                    { part: "label" },
+                    item.label
+                  ),
+                  EaUtils.EaElement.h(
+                    "span",
+                    "ea-descriptions__content",
+                    { part: "content" },
+                    item.content
+                  ),
+                ]
+              )
+            : ""
         )
       ),
     border: (row, index) =>
@@ -215,54 +224,95 @@ export class EaDescriptions extends Base {
       }
     };
 
-    const splitChildren = children.reduce((acc, cur, index) => {
-      const currentRow = Math.floor(index / 3);
+    const splitChildren = children.reduce(
+      (acc, cur, index) => {
+        /** @type {Number} 当前行数 */
+        const currentRow = Math.floor(index / 3);
+        const currentCol = index % 3;
+        if (!acc[currentRow]?.length)
+          acc[currentRow] = Array.from({
+            length: 3,
+          }).fill(null);
+        /** @type {Number} 当前列的总列数  */
+        const col = acc[currentRow].reduce((acc, cur) => {
+          return cur?.isPlaceholder ? acc : acc + cur?.colspan || acc;
+        }, 0);
+        /** @type {{ rowspan: Number, colspan: Number}} 用于获取当前单元格的跨行/跨列数 */
+        // const { rowspan, colspan } = acc[currentRow]?.reduce(
+        //   (acc, current) => {
+        //     return {
+        //       rowspan: Math.max(acc.rowspan, cur.rowspan),
+        //       colspan: acc.rowspan > cur.rowspan ? acc.colspan : cur.colspan,
+        //     };
+        //   },
+        //   {
+        //     rowspan: 1,
+        //     colspan: 1,
+        //   }
+        // );
 
-      if (index % 3 === 0) {
-        acc.push([]);
-      }
-
-      /**
-       * @type {{rowspan: Number, colspan: Number}}
-       * 用于获取当前单元格的跨行/跨列数
-       */
-      const rowspan = acc[acc.length - 2]?.reduce(
-        (acc, cur) => {
-          return {
-            rowspan: Math.max(acc.rowspan, cur.rowspan),
-            colspan: acc.rowspan > cur.rowspan ? acc.colspan : cur.colspan,
-          };
-        },
-        {
-          rowspan: 1,
-          colspan: 1,
+        if (this.title === "User Info") {
+          console.log(cur.colspan, cur.rowspan);
         }
-      );
 
-      /**
-       * @type {Number}
-       * 当前列的总列数
-       */
-      const col = acc[acc.length - 1].reduce((acc, cur) => {
-        return acc + cur.colspan;
-      }, 0);
+        if (cur.colspan > 1) {
+          for (let i = currentCol + 1; i < cur.colspan - 1; i++) {
+            acc[currentRow][currentCol + i] = {
+              label: cur.label,
+              isPlaceholder: true,
+            };
+          }
+        }
 
-      /**
-       * 处理该行是否满列
-       */
-      if (currentRow <= rowspan?.rowspan - 1 && col + rowspan?.colspan >= 3) {
-        acc.push([]);
-      }
+        if (cur.rowspan > 1) {
+          for (let i = currentRow + 1; i < cur.rowspan - 1; i++) {
+            if (!acc[currentRow + i])
+              acc[currentRow + i] = Array.from({
+                length: 3,
+              }).fill(null);
 
-      acc[acc.length - 1].push({
-        label: cur.label,
-        content: cur.innerHTML,
-        colspan: cur.colspan,
-        rowspan: cur.rowspan,
-      });
+            acc[currentRow + i][currentCol] = acc[currentRow][currentCol] = {
+              label: cur.label,
+              isPlaceholder: true,
+            };
+          }
+        }
 
-      return acc;
-    }, []);
+        // if (col + cur.colspan > 3) {
+        //   acc.push([]);
+        // }
+
+        /**
+         * 处理该行是否满列
+         */
+        // if (currentRow <= rowspan?.rowspan - 1 && col + rowspan?.colspan >= 3) {
+        //   acc.push([]);
+        // }
+
+        // acc[acc.length - 1].push({
+        //   label: cur.label,
+        //   content: cur.innerHTML,
+        //   colspan: cur.colspan,
+        //   rowspan: cur.rowspan,
+        // });
+
+        if (col + cur.colspan < 3 && !acc[currentRow][currentCol]) {
+          acc[currentRow][currentCol] = {
+            label: cur.label,
+            content: cur.innerHTML,
+            colspan: cur.colspan,
+            rowspan: cur.rowspan,
+          };
+        }
+
+        return acc;
+      },
+      [[]]
+    );
+
+    if (this.title === "User Info") {
+      console.log(splitChildren);
+    }
 
     this.#tbody.innerHTML = splitChildren
       .map(this.#variantRenderer[getVariant()])
