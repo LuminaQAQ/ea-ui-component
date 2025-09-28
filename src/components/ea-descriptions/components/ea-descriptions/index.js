@@ -79,41 +79,34 @@ export class EaDescriptions extends Base {
           part: "tr tr-label",
         },
         row.map((item, index) =>
-          item
-            ? EaUtils.EaElement.h(
-                "td",
-                "ea-descriptions__td",
-                {
-                  part: "td",
-                  rowspan: item.rowspan,
-                  colspan:
-                    row.length < 3 &&
-                    index === row.length - 1 &&
-                    row.reduce((acc, cur) => {
-                      return acc + cur.colspan;
-                    }, 0) < 3
-                      ? 3 -
-                        row.slice(0, row.length - 1).reduce((acc, cur) => {
-                          return acc + cur.colspan;
-                        }, 0)
-                      : item.colspan || 1,
-                },
-                [
-                  EaUtils.EaElement.h(
-                    "span",
-                    "ea-descriptions__label",
-                    { part: "label" },
-                    item.label
-                  ),
-                  EaUtils.EaElement.h(
-                    "span",
-                    "ea-descriptions__content",
-                    { part: "content" },
-                    item.content
-                  ),
-                ]
-              )
-            : ""
+          EaUtils.EaElement.h(
+            "td",
+            "ea-descriptions__td",
+            {
+              part: "td",
+              [item.rowspan > 1 ? "rowspan" : ""]: item.rowspan,
+              [item.colspan > 1 ? "colspan" : ""]: item.colspan,
+              // rowspan: item.rowspan,
+              // colspan:
+              //   row.length < 3 && index === row.length - 1
+              //     ? 3 - row.length + (index + 1)
+              //     : item.colspan || 1,
+            },
+            [
+              EaUtils.EaElement.h(
+                "span",
+                "ea-descriptions__label",
+                { part: "label" },
+                item.label
+              ),
+              EaUtils.EaElement.h(
+                "span",
+                "ea-descriptions__content",
+                { part: "content" },
+                item.content
+              ),
+            ]
+          )
         )
       ),
     border: (row, index) =>
@@ -224,97 +217,75 @@ export class EaDescriptions extends Base {
       }
     };
 
-    const splitChildren = children.reduce(
-      (acc, cur, index) => {
-        /** @type {Number} 当前行数 */
-        const currentRow = Math.floor(index / 3);
-        const currentCol = index % 3;
-        if (!acc[currentRow]?.length)
-          acc[currentRow] = Array.from({
-            length: 3,
-          }).fill(null);
-        /** @type {Number} 当前列的总列数  */
-        const col = acc[currentRow].reduce((acc, cur) => {
-          return cur?.isPlaceholder ? acc : acc + cur?.colspan || acc;
-        }, 0);
-        /** @type {{ rowspan: Number, colspan: Number}} 用于获取当前单元格的跨行/跨列数 */
-        // const { rowspan, colspan } = acc[currentRow]?.reduce(
-        //   (acc, current) => {
-        //     return {
-        //       rowspan: Math.max(acc.rowspan, cur.rowspan),
-        //       colspan: acc.rowspan > cur.rowspan ? acc.colspan : cur.colspan,
-        //     };
-        //   },
-        //   {
-        //     rowspan: 1,
-        //     colspan: 1,
-        //   }
-        // );
+    const splitChildren = (children) => {
+      const ary = [];
 
-        if (this.title === "User Info") {
-          console.log(cur.colspan, cur.rowspan);
-        }
+      children.forEach((item, i) => {
+        const currentRow = ary.length;
+        const currentCol = 3 % ary[currentRow]?.length || 0;
+        const option = {
+          label: item.label,
+          content: item.innerHTML,
+          colspan: item.colspan,
+          rowspan: item.rowspan,
+        };
 
-        if (cur.colspan > 1) {
-          for (let i = currentCol + 1; i < cur.colspan - 1; i++) {
-            acc[currentRow][currentCol + i] = {
-              label: cur.label,
-              isPlaceholder: true,
-            };
-          }
-        }
+        // TODO: 可能是这个循环有问题，会导致多填充占位符
+        for (let i = currentRow; i < currentRow + option.rowspan; i++) {
+          if (!ary[i]) ary[i] = [];
 
-        if (cur.rowspan > 1) {
-          for (let i = currentRow + 1; i < cur.rowspan - 1; i++) {
-            if (!acc[currentRow + i])
-              acc[currentRow + i] = Array.from({
-                length: 3,
-              }).fill(null);
-
-            acc[currentRow + i][currentCol] = acc[currentRow][currentCol] = {
-              label: cur.label,
-              isPlaceholder: true,
-            };
-          }
-        }
-
-        // if (col + cur.colspan > 3) {
-        //   acc.push([]);
-        // }
-
-        /**
-         * 处理该行是否满列
-         */
-        // if (currentRow <= rowspan?.rowspan - 1 && col + rowspan?.colspan >= 3) {
-        //   acc.push([]);
-        // }
-
-        // acc[acc.length - 1].push({
-        //   label: cur.label,
-        //   content: cur.innerHTML,
-        //   colspan: cur.colspan,
-        //   rowspan: cur.rowspan,
-        // });
-
-        if (col + cur.colspan < 3 && !acc[currentRow][currentCol]) {
-          acc[currentRow][currentCol] = {
-            label: cur.label,
-            content: cur.innerHTML,
-            colspan: cur.colspan,
-            rowspan: cur.rowspan,
+          ary[i][currentCol] = {
+            colspan: 1,
+            rowspan: 1,
+            placeholder: true,
           };
+
+          for (let j = currentCol; j < currentCol + option.colspan; j++) {
+            ary[i][j] = {
+              colspan: 1,
+              rowspan: 1,
+              placeholder: true,
+            };
+          }
         }
 
-        return acc;
-      },
-      [[]]
-    );
+        let row = ary.findIndex((item) => item.length < 3);
+        row = row === -1 ? currentRow : row;
+        const col = ary[currentRow].reduce((acc, cur) => {
+          return acc + cur.colspan;
+        }, 0);
 
-    if (this.title === "User Info") {
-      console.log(splitChildren);
+        if (this.title === "Without border") {
+          // console.log(currentRow, currentCol, row, col);
+        }
+
+        if (col + option.colspan <= 3) {
+          ary[row].push(option);
+        } else {
+          ary[row][currentCol] = option;
+        }
+      });
+
+      return ary;
+    };
+
+    if (this.title === "Without border") {
+      // console.log(
+      //   splitChildren(children)
+      //     .map((row) => row.filter((col) => !col.placeholder))
+      //     .filter((row) => row.length)
+      // );
+      console.log(splitChildren(children));
+      // console.log(
+      //   splitChildren(children)
+      //     .map((row) => row.filter((col) => !col.placeholder))
+      //     .filter((row) => row.length)
+      // );
     }
 
-    this.#tbody.innerHTML = splitChildren
+    this.#tbody.innerHTML = splitChildren(children)
+      .map((row) => row.filter((col) => !col.placeholder))
+      .filter((row) => row.length)
       .map(this.#variantRenderer[getVariant()])
       .join("");
   }
