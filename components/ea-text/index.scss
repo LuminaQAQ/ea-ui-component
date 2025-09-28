@@ -40,6 +40,9 @@
 }
 
 @include block(ea-text) {
+  font-size: var(--ea-text-medium-size);
+  line-height: var(--ea-text-medium-size);
+
   @include ea-text-type-theme(noraml);
   @include ea-text-type-theme(primary);
   @include ea-text-type-theme(success);
@@ -48,8 +51,6 @@
   @include ea-text-type-theme(info);
 
   @include ea-text-size-theme(small);
-  font-size: var(--ea-text-medium-size);
-  line-height: var(--ea-text-medium-size);
   @include ea-text-size-theme(large);
 
   @include modifier(truncated) {

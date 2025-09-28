@@ -84,11 +84,13 @@ export class EaDescriptions extends Base {
             "ea-descriptions__td",
             {
               part: "td",
-              rowspan: item.rowspan,
-              colspan:
-                row.length < 3 && index === row.length - 1
-                  ? 3 - row.length + index
-                  : item.colspan || 1,
+              [item.rowspan > 1 ? "rowspan" : ""]: item.rowspan,
+              [item.colspan > 1 ? "colspan" : ""]: item.colspan,
+              // rowspan: item.rowspan,
+              // colspan:
+              //   row.length < 3 && index === row.length - 1
+              //     ? 3 - row.length + (index + 1)
+              //     : item.colspan || 1,
             },
             [
               EaUtils.EaElement.h(
@@ -215,56 +217,75 @@ export class EaDescriptions extends Base {
       }
     };
 
-    const splitChildren = children.reduce((acc, cur, index) => {
-      const currentRow = Math.floor(index / 3);
+    const splitChildren = (children) => {
+      const ary = [];
 
-      if (index % 3 === 0) {
-        acc.push([]);
-      }
+      children.forEach((item, i) => {
+        const currentRow = ary.length;
+        const currentCol = 3 % ary[currentRow]?.length || 0;
+        const option = {
+          label: item.label,
+          content: item.innerHTML,
+          colspan: item.colspan,
+          rowspan: item.rowspan,
+        };
 
-      /**
-       * @type {{rowspan: Number, colspan: Number}}
-       * 用于获取当前单元格的跨行/跨列数
-       */
-      const rowspan = acc[acc.length - 2]?.reduce(
-        (acc, cur) => {
-          return {
-            rowspan: Math.max(acc.rowspan, cur.rowspan),
-            colspan: acc.rowspan > cur.rowspan ? acc.colspan : cur.colspan,
+        // TODO: 可能是这个循环有问题，会导致多填充占位符
+        for (let i = currentRow; i < currentRow + option.rowspan; i++) {
+          if (!ary[i]) ary[i] = [];
+
+          ary[i][currentCol] = {
+            colspan: 1,
+            rowspan: 1,
+            placeholder: true,
           };
-        },
-        {
-          rowspan: 1,
-          colspan: 1,
+
+          for (let j = currentCol; j < currentCol + option.colspan; j++) {
+            ary[i][j] = {
+              colspan: 1,
+              rowspan: 1,
+              placeholder: true,
+            };
+          }
         }
-      );
 
-      /**
-       * @type {Number}
-       * 当前列的总列数
-       */
-      const col = acc[acc.length - 1].reduce((acc, cur) => {
-        return acc + cur.colspan;
-      }, 0);
+        let row = ary.findIndex((item) => item.length < 3);
+        row = row === -1 ? currentRow : row;
+        const col = ary[currentRow].reduce((acc, cur) => {
+          return acc + cur.colspan;
+        }, 0);
 
-      /**
-       * 处理该行是否满列
-       */
-      if (currentRow <= rowspan?.rowspan && col + rowspan?.colspan >= 3) {
-        acc.push([]);
-      }
+        if (this.title === "Without border") {
+          // console.log(currentRow, currentCol, row, col);
+        }
 
-      acc[acc.length - 1].push({
-        label: cur.label,
-        content: cur.innerHTML,
-        colspan: cur.colspan,
-        rowspan: cur.rowspan,
+        if (col + option.colspan <= 3) {
+          ary[row].push(option);
+        } else {
+          ary[row][currentCol] = option;
+        }
       });
 
-      return acc;
-    }, []);
+      return ary;
+    };
 
-    this.#tbody.innerHTML = splitChildren
+    if (this.title === "Without border") {
+      // console.log(
+      //   splitChildren(children)
+      //     .map((row) => row.filter((col) => !col.placeholder))
+      //     .filter((row) => row.length)
+      // );
+      console.log(splitChildren(children));
+      // console.log(
+      //   splitChildren(children)
+      //     .map((row) => row.filter((col) => !col.placeholder))
+      //     .filter((row) => row.length)
+      // );
+    }
+
+    this.#tbody.innerHTML = splitChildren(children)
+      .map((row) => row.filter((col) => !col.placeholder))
+      .filter((row) => row.length)
       .map(this.#variantRenderer[getVariant()])
       .join("");
   }

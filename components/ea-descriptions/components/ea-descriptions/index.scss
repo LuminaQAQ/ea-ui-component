@@ -28,6 +28,10 @@
   @include element(td) {
     padding-bottom: 12px;
     min-width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 23px;
+    text-align: left;
   }
 
   @include element(tr) {
