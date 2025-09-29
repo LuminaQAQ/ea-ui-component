@@ -123,6 +123,11 @@ export class EaDescriptions extends Base {
         colspan: item.colspan,
         rowspan: item.rowspan,
         align: item.align,
+        "label-align": item["label-align"],
+        width: item.width,
+        "label-width": item["label-width"] || this["label-width"],
+        "label-part": item["label-part"],
+        "content-part": item["content-part"],
       };
 
       for (let i = currentRow; i < currentRow + option.rowspan; i++) {
@@ -208,16 +213,26 @@ export class EaDescriptions extends Base {
                     }, 0) +
                     (index < 1 ? 1 : index)
                   : item.colspan,
+              style: [
+                item.width ? `--ea-descriptions-item-width: ${item.width}` : "",
+              ],
             },
             [
               EaUtils.EaElement.h(
                 "span",
                 "ea-descriptions__label",
                 {
-                  part: "label cell",
+                  part: `label cell ${item["label-part"]}`,
                   tabindex: 1,
                   style: [
-                    row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                    item["label-align"] || item.align
+                      ? `--ea-descriptions-label-align: ${
+                          item["label-align"] || item.align
+                        };`
+                      : "",
+                    item["label-width"]
+                      ? `--ea-descriptions-label-width: ${item["label-width"]}`
+                      : "",
                   ].join(" "),
                 },
                 item.label
@@ -226,10 +241,10 @@ export class EaDescriptions extends Base {
                 "span",
                 "ea-descriptions__content",
                 {
-                  part: "content cell",
+                  part: `content cell ${item["content-part"]}`,
                   tabindex: 1,
                   style: [
-                    row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                    item.align ? `--ea-descriptions-align: ${item.align};` : "",
                   ]
                     .join(" ")
                     .trim(),
@@ -253,10 +268,24 @@ export class EaDescriptions extends Base {
               "td",
               "ea-descriptions__label",
               {
-                part: "label cell",
+                part: `label cell ${item["label-part"]}`,
                 tabindex: 1,
                 colspan: 1,
                 rowspan: item.rowspan,
+                style: [
+                  item.align ? `--ea-descriptions-align: ${item.align};` : "",
+                  item["label-align"] || item.align
+                    ? `--ea-descriptions-label-align: ${
+                        item["label-align"] || item.align
+                      };`
+                    : "",
+                  item.width
+                    ? `--ea-descriptions-item-width: ${item.width}`
+                    : "",
+                  item["label-width"]
+                    ? `--ea-descriptions-label-width: ${item["label-width"]}`
+                    : "",
+                ].join(" "),
               },
               item.label
             ),
@@ -264,7 +293,7 @@ export class EaDescriptions extends Base {
               "td",
               "ea-descriptions__content",
               {
-                part: "content cell",
+                part: `content cell ${item["content-part"]}`,
                 tabindex: 1,
                 rowspan: item.rowspan,
                 colspan:
@@ -272,7 +301,10 @@ export class EaDescriptions extends Base {
                     ? 6 - (index + 1)
                     : item.colspan || 1,
                 style: [
-                  row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                  item.align ? `--ea-descriptions-align: ${item.align};` : "",
+                  item.width
+                    ? `--ea-descriptions-item-width: ${item.width}`
+                    : "",
                 ].join(" "),
               },
               item.content
@@ -293,7 +325,7 @@ export class EaDescriptions extends Base {
               "th",
               "ea-descriptions__label ea-descriptions__th",
               {
-                part: "label cell",
+                part: `label cell ${item["label-part"]}`,
                 tabindex: 1,
                 rowspan: 1,
                 colspan:
@@ -301,7 +333,18 @@ export class EaDescriptions extends Base {
                     ? 6 - (index + 1)
                     : item.colspan || 1,
                 style: [
-                  row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                  item.align ? `--ea-descriptions-align: ${item.align};` : "",
+                  item["label-align"] || item.align
+                    ? `--ea-descriptions-label-align: ${
+                        item["label-align"] || item.align
+                      };`
+                    : "",
+                  item.width
+                    ? `--ea-descriptions-item-width: ${item.width}`
+                    : "",
+                  item["label-width"]
+                    ? `--ea-descriptions-label-width: ${item["label-width"]}`
+                    : "",
                 ].join(" "),
               },
               item.label
@@ -319,7 +362,7 @@ export class EaDescriptions extends Base {
               "td",
               "ea-descriptions__content ea-descriptions__td",
               {
-                part: "content cell",
+                part: `content cell ${item["content-part"]}`,
                 tabindex: 1,
                 rowspan: item.rowspan * 2 - 1,
                 colspan:
@@ -327,7 +370,10 @@ export class EaDescriptions extends Base {
                     ? 6 - (index + 1)
                     : item.colspan || 1,
                 style: [
-                  row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                  item.align ? `--ea-descriptions-align: ${item.align};` : "",
+                  item.width
+                    ? `--ea-descriptions-item-width: ${item.width}`
+                    : "",
                 ].join(" "),
               },
               item.content

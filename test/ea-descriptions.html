@@ -291,27 +291,54 @@
     <!-- #region -->
     <h1>自定义样式</h1>
 
+    <style>
+      ea-descriptions::part(my-label) {
+        background-color: #f0f9eb;
+      }
+
+      ea-descriptions::part(my-content) {
+        background-color: #fef0f0;
+      }
+    </style>
     <div class="demo">
-      <ea-descriptions column="3" border>
+      <ea-descriptions column="3" column="3" border>
         <span slot="title">
           <ea-icon icon="icon-info" color="#409eff"></ea-icon>Customized style
           list
         </span>
         <ea-button type="primary" slot="extra"> Operation </ea-button>
-        <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
-        <ea-descriptions-item label="Essence">
+
+        <ea-descriptions-item
+          label="Username"
+          label-align="right"
+          label-part="my-label"
+          content-part="my-content"
+          align="center"
+          width="150px"
+        >
+          Lilyiro
+        </ea-descriptions-item>
+        <ea-descriptions-item
+          label="Essence"
+          label-align="right"
+          align="center"
+        >
           Lord of the Wild
         </ea-descriptions-item>
-        <ea-descriptions-item label="Place">
+        <ea-descriptions-item label="Place" label-align="right" align="center">
           Lunacrest Continent
         </ea-descriptions-item>
-        <ea-descriptions-item label="Traits">
+        <ea-descriptions-item label="Traits" label-align="right" align="center">
           <ea-tag size="small" type="warning" style="margin-right: 1rem">
             Thunderous Veins
           </ea-tag>
           <ea-tag size="small" type="info">Daredevil</ea-tag>
         </ea-descriptions-item>
-        <ea-descriptions-item label="Description" align="center">
+        <ea-descriptions-item
+          label="Description"
+          label-align="right"
+          align="center"
+        >
           She was once an elf lord, defending the border from goblin invaders.
           She was then a goblin warrior, protecting her clan from being
           slaughtered by elves. She has the unwavering courage to uphold justice

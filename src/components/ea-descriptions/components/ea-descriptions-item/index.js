@@ -13,6 +13,11 @@ export class EaDescriptionsItem extends Base {
       "colspan",
       "rowspan",
       "align",
+      "label-align",
+      "width",
+      "label-width",
+      "label-part",
+      "content-part",
     ];
   }
 
@@ -34,7 +39,32 @@ export class EaDescriptionsItem extends Base {
     },
     align: {
       type: ["left", "center", "right"],
-      default: "left",
+      default: "",
+      observer: (newVal) => {},
+    },
+    "label-align": {
+      type: ["left", "center", "right"],
+      default: "",
+      observer: (newVal) => {},
+    },
+    width: {
+      type: String,
+      default: "",
+      observer: (newVal) => {},
+    },
+    "label-width": {
+      type: String,
+      default: "",
+      observer: (newVal) => {},
+    },
+    "label-part": {
+      type: String,
+      default: "",
+      observer: (newVal) => {},
+    },
+    "content-part": {
+      type: String,
+      default: "",
       observer: (newVal) => {},
     },
   });
