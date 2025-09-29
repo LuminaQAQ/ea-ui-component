@@ -1,30 +1,52 @@
-@import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
+:host {
+  --ea-empty-size: 120px;
 
-.ea-empty_wrap {
-  padding: 40px 0;
+  --ea-empty-image-color: var(--grey-400);
+  --ea-empty-color: var(--grey-500);
+  --ea-empty-description-font-size: var(--font-size-lg);
 
+  --ea-empty-spacing: var(--spacing-lg);
+}
+
+@include block(ea-empty) {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
-  .ea-empty_image {
-    width: 8rem;
+  @include element(default) {
+    width: 100%;
+    height: 100%;
 
-    object-fit: cover;
-    svg,
-    img {
-      width: 100%;
-      height: 100%;
+    .border {
+      stroke: var(--ea-empty-image-color);
+    }
+
+    .front {
+      fill: var(--ea-empty-image-color);
     }
   }
 
-  .ea-empty_description {
-    margin-top: 20px;
+  @include element(placeholder) {
+    width: var(--ea-empty-size);
+    height: var(--ea-empty-size);
   }
 
-  .ea-empty_bottom {
-    margin-top: 20px;
+  @include element(image) {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  @include element(description) {
+    font-size: var(--ea-empty-description-font-size);
+    color: var(--ea-empty-color);
+
+    margin-top: var(--ea-empty-spacing);
+  }
+
+  @include element(bottom) {
+    margin-top: var(--ea-empty-spacing);
   }
 }

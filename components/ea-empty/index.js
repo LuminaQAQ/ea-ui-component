@@ -1,93 +1,97 @@
-import Base from '../Base.js';
+import Base from "@components/Base.js";
 
-import { emptyStatusSVG } from './src/assets/emptyStatusSVG.js';
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from "./index.scss?inline";
+import { emptyStatusSVG } from "./assets/emptyStatusSVG";
 
 export class EaEmpty extends Base {
-    #imageWrap;
-    #descriptionWrap;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #placeholder;
+  /** @type {HTMLElement} */
+  #description;
+  /** @type {HTMLElement} */
+  #bottom;
 
-    constructor() {
-        super();
+  static get observedAttributes() {
+    return [...super.observedAttributes, "image", "image-size", "description"];
+  }
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class="ea-empty_wrap" part="container">
-                <div class="ea-empty_image" part="image-wrap">
-                    ${emptyStatusSVG}
-                </div>
-                <div class="ea-empty_description" part="description-wrap">
-                    暂无数据
-                </div>
-                <div class="ea-empty_bottom" part="bottom-wrap">
-                    <slot></slot>
-                </div>
-            </div>
-        `;
+  state = this.properties({
+    image: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#placeholder.innerHTML = `<img class="ea-empty__image" src="${newVal}" alt="empty image" part="image" />`;
+      },
+    },
+    "image-size": {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (!CSS.supports("--ea-empty-size", newVal))
+          return console.warn(
+            `[ea-empty] The size value ${newVal} is not supported.`
+          );
 
-        this.#imageWrap = shadowRoot.querySelector('.ea-empty_image');
-        this.#descriptionWrap = shadowRoot.querySelector('.ea-empty_description');
+        this.style.setProperty("--ea-empty-size", newVal);
+      },
+    },
+    description: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#description.textContent = newVal;
+      },
+    },
+  });
 
-        this.build(shadowRoot, stylesheet);
-    }
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    return this.computedClasslist("ea-empty", {
+      // ['--' + this.type]: this.type,
+    });
+  }
 
-    // ------- description 描述文字 -------
-    // #region
-    get description() {
-        return this.getAttribute('description') || "暂无数据";
-    }
+  constructor() {
+    super();
 
-    set description(value) {
-        this.setAttribute('description', value);
-        this.#descriptionWrap.innerHTML = value;
-    }
-    // #endregion
-    // ------- end -------
+    this.stylesheet = stylesheet;
 
-    // ------- image 自定义图片 -------
-    // #region
-    get image() {
-        return this.getAttribute('image') || "";
-    }
+    this.$render();
+  }
 
-    set image(value) {
-        if (!value) return;
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-empty' part='container'>
+        <div class="ea-empty__placeholder" part="placeholder">
+            <slot name="image">
+                <section class="ea-empty__default">${emptyStatusSVG}</section>
+            </slot>
+        </div>
+        <div class="ea-empty__description" part="description">
+            <slot name="description">No Data</slot>
+        </div>
+        <div class="ea-empty__bottom" part="bottom">
+            <slot></slot>
+        </div>
+      </div>
+    `;
 
-        this.setAttribute('image', value);
+    this.#container = this.shadowRoot.querySelector(".ea-empty");
+    this.#placeholder = this.shadowRoot.querySelector(".ea-empty__placeholder");
+    this.#description = this.shadowRoot.querySelector(".ea-empty__description");
+    this.#bottom = this.shadowRoot.querySelector(".ea-empty__bottom");
+  }
 
-        const image = new Image();
-        image.src = value;
-        image.onload = () => {
-            this.#imageWrap.innerHTML = `<img src="${value}" />`;
-        }
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- image-size 自定义图片大小 -------
-    // #region
-    get imageSize() {
-        return this.getAttribute('image-size') || "128";
-    }
-
-    set imageSize(value) {
-        if (!value) return;
-
-        this.setAttribute('image-size', value);
-        this.#imageWrap.style.width = value + "px";
-    }
-    // #endregion
-    // ------- end -------
-
-    connectedCallback() {
-        this.description = this.description;
-
-        this.image = this.image;
-
-        this.imageSize = this.imageSize;
-    }
+  connectedCallback() {
+    super.connectedCallback();
+  }
 }
 
-if (!customElements.get('ea-empty')) {
-    customElements.define('ea-empty', EaEmpty);
+if (!window.customElements.get("ea-empty")) {
+  window.customElements.define("ea-empty", EaEmpty);
 }

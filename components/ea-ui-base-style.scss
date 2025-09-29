@@ -1,5 +1,5 @@
 // $button-style-type: "default" "primary" "success" "info" "warning" "danger"; // 按钮样式的类型
-@import "../themes/namespace.scss";
+@use "../themes/namespace.scss" as *;
 
 // // 默认
 // $color-default-border: #dcdfe6;
