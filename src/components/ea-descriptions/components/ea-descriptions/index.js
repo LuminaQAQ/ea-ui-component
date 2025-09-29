@@ -18,6 +18,7 @@ export class EaDescriptions extends Base {
       "title",
       "border",
       "direction",
+      "size",
     ];
   }
 
@@ -46,6 +47,13 @@ export class EaDescriptions extends Base {
       default: "horizontal",
       observer: (newVal) => {},
     },
+    size: {
+      type: ["large", "default", "small"],
+      default: "default",
+      observer: (newVal) => {
+        this.#container.className = this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -56,6 +64,7 @@ export class EaDescriptions extends Base {
     return this.computedClasslist("ea-descriptions", {
       // ["--" + this.type]: this.type,
       "--border": this.border,
+      ["--" + this.size]: this.size,
     });
   }
 
@@ -81,7 +90,7 @@ export class EaDescriptions extends Base {
     this.#tbody = this.shadowRoot.querySelector(".ea-descriptions__body");
   }
 
-  #handleChildrenSp = (children, column) => {
+  #handleChildrenDivide = (children, column) => {
     const ary = [];
 
     children.forEach((item) => {
@@ -129,7 +138,9 @@ export class EaDescriptions extends Base {
       }
     });
 
-    return ary;
+    return ary
+      .map((row) => row.filter((col) => !col.placeholder))
+      .filter((row) => row.length);
   };
 
   #getVariant = () => {
@@ -148,14 +159,14 @@ export class EaDescriptions extends Base {
         "tr",
         "ea-descriptions__tr",
         {
-          part: "tr tr-label",
+          part: "row",
         },
         row.map((item, index) =>
           EaUtils.EaElement.h(
             "td",
             "ea-descriptions__td",
             {
-              part: "td",
+              part: "col-cell",
               [item.rowspan > 1 ? "rowspan" : ""]: item.rowspan,
               [item.colspan > 1 ||
               (index === row.length - 1 && row.length < this.column)
@@ -177,13 +188,13 @@ export class EaDescriptions extends Base {
               EaUtils.EaElement.h(
                 "span",
                 "ea-descriptions__label",
-                { part: "label" },
+                { part: "label cell", tabindex: 1 },
                 item.label
               ),
               EaUtils.EaElement.h(
                 "span",
                 "ea-descriptions__content",
-                { part: "content" },
+                { part: "content cell", tabindex: 1 },
                 item.content
               ),
             ]
@@ -195,7 +206,7 @@ export class EaDescriptions extends Base {
         "tr",
         "ea-descriptions__tr",
         {
-          part: "tr tr-label",
+          part: "row",
         },
         row.map((item, index) =>
           [
@@ -203,7 +214,8 @@ export class EaDescriptions extends Base {
               "td",
               "ea-descriptions__label",
               {
-                part: "label",
+                part: "label cell",
+                tabindex: 1,
                 colspan: 1,
                 rowspan: item.rowspan,
               },
@@ -213,7 +225,8 @@ export class EaDescriptions extends Base {
               "td",
               "ea-descriptions__content",
               {
-                part: "content",
+                part: "content cell",
+                tabindex: 1,
                 rowspan: item.rowspan,
                 colspan:
                   row.length < 3 && index === row.length - 1
@@ -231,14 +244,15 @@ export class EaDescriptions extends Base {
           "tr",
           "ea-descriptions__tr",
           {
-            part: "tr tr-label",
+            part: "row row-label",
           },
           row.map((item, index) =>
             EaUtils.EaElement.h(
               "th",
               "ea-descriptions__label ea-descriptions__th",
               {
-                part: "th",
+                part: "label cell",
+                tabindex: 1,
                 rowspan: 1,
                 colspan:
                   row.length < 3 && index === row.length - 1
@@ -253,14 +267,15 @@ export class EaDescriptions extends Base {
           "tr",
           "ea-descriptions__tr",
           {
-            part: "tr tr-content",
+            part: "row row-content",
           },
           row.map((item, index) =>
             EaUtils.EaElement.h(
               "td",
               "ea-descriptions__content ea-descriptions__td",
               {
-                part: "td",
+                part: "content cell",
+                tabindex: 1,
                 rowspan: item.rowspan * 2 - 1,
                 colspan:
                   row.length < 3 && index === row.length - 1
@@ -288,60 +303,7 @@ export class EaDescriptions extends Base {
       ),
     ]);
 
-    const splitChildren = (children, column) => {
-      const ary = [];
-
-      children.forEach((item) => {
-        const currentRow = ary.length;
-        const currentCol = column % ary[currentRow]?.length || 0;
-        const option = {
-          label: item.label,
-          content: item.innerHTML,
-          colspan: item.colspan,
-          rowspan: item.rowspan,
-        };
-
-        for (let i = currentRow; i < currentRow + option.rowspan; i++) {
-          if (!ary[i]) ary[i] = [];
-
-          if (option.rowspan > 1 && i !== currentRow) {
-            ary[i][currentCol] = {
-              colspan: 1,
-              rowspan: 1,
-              placeholder: true,
-            };
-          }
-
-          for (let j = currentCol; j < currentCol + option.colspan; j++) {
-            if (option.colspan > 1 && j !== currentCol) {
-              ary[i][j] = {
-                colspan: 1,
-                rowspan: 1,
-                placeholder: true,
-              };
-            }
-          }
-        }
-
-        let row = ary.findIndex((item) => item.length < column);
-        row = row === -1 ? currentRow : row;
-        const col = ary[currentRow].reduce((acc, cur) => {
-          return acc + cur.colspan;
-        }, 0);
-
-        if (col + option.colspan <= column) {
-          ary[row].push(option);
-        } else {
-          ary[row][currentCol] = option;
-        }
-      });
-
-      return ary;
-    };
-
-    this.#tbody.innerHTML = splitChildren(children, this.column)
-      .map((row) => row.filter((col) => !col.placeholder))
-      .filter((row) => row.length)
+    this.#tbody.innerHTML = this.#handleChildrenDivide(children, this.column)
       .map(this.#variantRenderer[this.#getVariant()])
       .join("");
   }

@@ -19,7 +19,7 @@
       src="../src/components/ea-descriptions/index.js"
     ></script>
     <script type="module" src="../src/components/ea-avatar/index.js"></script>
-    <script type="module"></script>
+    <script type="module" src="../src/components/ea-radio/index.js"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
@@ -113,10 +113,17 @@
     <!-- #region  -->
     <h2>垂直列表</h2>
     <div class="demo">
+      <ea-radio-group name="size" id="sizeRadioGroup" value="default">
+        <ea-radio value="large">Large</ea-radio>
+        <ea-radio value="default">Default</ea-radio>
+        <ea-radio value="small">Small</ea-radio>
+      </ea-radio-group>
+
       <ea-descriptions
         title="Vertical list with border"
-        border
         direction="vertical"
+        class="descriptions-size"
+        border
       >
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
         <ea-descriptions-item label="Essence">
@@ -144,6 +151,7 @@
       <ea-descriptions
         title="Vertical list without border"
         direction="vertical"
+        class="descriptions-size"
       >
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
         <ea-descriptions-item label="Essence">
@@ -168,6 +176,23 @@
         </ea-descriptions-item>
       </ea-descriptions>
     </div>
+
+    <script type="module">
+      const sizeExample = {
+        radiogroup: document.querySelector("#sizeRadioGroup"),
+        els: document.querySelectorAll(".descriptions-size"),
+        init() {
+          this.radiogroup.addEventListener("change", ({ detail }) => {
+            const { value } = detail;
+
+            this.els.forEach((el) => {
+              el.size = value;
+            });
+          });
+        },
+      };
+      sizeExample.init();
+    </script>
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -187,7 +212,8 @@
           <ea-avatar
             style="width: 100px; height: 100px"
             size="100%"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+            tabindex="1"
           ></ea-avatar>
         </ea-descriptions-item>
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
@@ -228,7 +254,8 @@
           <ea-avatar
             style="width: 100px; height: 100px"
             size="100%"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+            tabindex="1"
           ></ea-avatar>
         </ea-descriptions-item>
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
