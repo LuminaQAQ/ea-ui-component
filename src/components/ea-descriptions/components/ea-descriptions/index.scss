@@ -5,6 +5,9 @@ $ea-descriptions-size-options: (small, default, large);
   --ea-descriptions-default-spacing: 8px 12px;
   --ea-descriptions-large-spacing: 12px 16px;
   --ea-descriptions-border: 1px solid var(--grey-200);
+  --ea-descriptions-border-cell-color: var(--grey-100);
+
+  --ea-descriptions-label-width: auto;
 
   --ea-descriptions-cell-default-font-size: var(--font-size-md);
 
@@ -20,13 +23,20 @@ $ea-descriptions-size-options: (small, default, large);
   --ea-descriptions-content-font-weight: var(--font-weight-md);
   --ea-descriptions-content-color: var(--grey-700);
 
-  --ea-descriptions-border-cell-color: var(--grey-100);
+  --ea-descriptions-align: left;
+  --ea-descriptions-label-align: left;
 }
 
 @include block(ea-descriptions) {
   width: 100%;
   border-spacing: 0;
   border-collapse: collapse;
+
+  @include element(caption) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
   @include element(title) {
     text-align: left;
@@ -63,6 +73,8 @@ $ea-descriptions-size-options: (small, default, large);
 
   @include element(label) {
     margin-right: 16px;
+
+    width: var(--ea-descriptions-label-width);
 
     font-size: var(--ea-descriptions-label-default-font-size);
     line-height: calc(var(--ea-descriptions-label-default-font-size) * 2);

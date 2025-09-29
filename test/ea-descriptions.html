@@ -20,6 +20,7 @@
     ></script>
     <script type="module" src="../src/components/ea-avatar/index.js"></script>
     <script type="module" src="../src/components/ea-radio/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
@@ -272,6 +273,45 @@
           <ea-tag size="small" type="info">Daredevil</ea-tag>
         </ea-descriptions-item>
         <ea-descriptions-item label="Description">
+          She was once an elf lord, defending the border from goblin invaders.
+          She was then a goblin warrior, protecting her clan from being
+          slaughtered by elves. She has the unwavering courage to uphold justice
+          in her heart and she is prepared to betray or be betrayed for the
+          greater good. Despite her inner gentleness, Lilyiro, who has spilled
+          so much blood on battlefields, is more straightforward than men.
+        </ea-descriptions-item>
+      </ea-descriptions>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义样式 -->
+    <!-- #region -->
+    <h1>自定义样式</h1>
+
+    <div class="demo">
+      <ea-descriptions column="3" border>
+        <span slot="title">
+          <ea-icon icon="icon-info" color="#409eff"></ea-icon>Customized style
+          list
+        </span>
+        <ea-button type="primary" slot="extra"> Operation </ea-button>
+        <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
+        <ea-descriptions-item label="Essence">
+          Lord of the Wild
+        </ea-descriptions-item>
+        <ea-descriptions-item label="Place">
+          Lunacrest Continent
+        </ea-descriptions-item>
+        <ea-descriptions-item label="Traits">
+          <ea-tag size="small" type="warning" style="margin-right: 1rem">
+            Thunderous Veins
+          </ea-tag>
+          <ea-tag size="small" type="info">Daredevil</ea-tag>
+        </ea-descriptions-item>
+        <ea-descriptions-item label="Description" align="center">
           She was once an elf lord, defending the border from goblin invaders.
           She was then a goblin warrior, protecting her clan from being
           slaughtered by elves. She has the unwavering courage to uphold justice

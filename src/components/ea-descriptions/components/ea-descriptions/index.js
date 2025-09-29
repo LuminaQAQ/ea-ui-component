@@ -9,6 +9,10 @@ export class EaDescriptions extends Base {
   /** @type {HTMLElement} */
   #caption;
   /** @type {HTMLElement} */
+  #title;
+  /** @type {HTMLElement} */
+  #extra;
+  /** @type {HTMLElement} */
   #tbody;
 
   static get observedAttributes() {
@@ -19,6 +23,7 @@ export class EaDescriptions extends Base {
       "border",
       "direction",
       "size",
+      "label-width",
     ];
   }
 
@@ -32,7 +37,7 @@ export class EaDescriptions extends Base {
       type: String,
       default: "",
       observer: (newVal) => {
-        this.#caption.textContent = newVal;
+        this.#title.textContent = newVal;
       },
     },
     border: {
@@ -52,6 +57,13 @@ export class EaDescriptions extends Base {
       default: "default",
       observer: (newVal) => {
         this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    "label-width": {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.style.setProperty("--ea-descriptions-label-width", newVal);
       },
     },
   });
@@ -79,14 +91,23 @@ export class EaDescriptions extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <table class='ea-descriptions' part='container'>
-        <caption class='ea-descriptions__title' part='title'></caption>
+        <caption class='ea-descriptions__caption' part='caption'>
+          <section class='ea-descriptions__title' part='title'>
+            <slot name='title'></slot>
+          </section>
+          <section class='ea-descriptions__extra' part='extra'>
+            <slot name='extra'></slot>
+          </section>
+        </caption>
         <tbody class='ea-descriptions__body' part='body'>
         </tbody>
       </table>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-descriptions");
-    this.#caption = this.shadowRoot.querySelector(".ea-descriptions__title");
+    this.#caption = this.shadowRoot.querySelector(".ea-descriptions__caption");
+    this.#title = this.shadowRoot.querySelector(".ea-descriptions__title");
+    this.#extra = this.shadowRoot.querySelector(".ea-descriptions__extra");
     this.#tbody = this.shadowRoot.querySelector(".ea-descriptions__body");
   }
 
@@ -101,6 +122,7 @@ export class EaDescriptions extends Base {
         content: item.innerHTML,
         colspan: item.colspan,
         rowspan: item.rowspan,
+        align: item.align,
       };
 
       for (let i = currentRow; i < currentRow + option.rowspan; i++) {
@@ -160,6 +182,9 @@ export class EaDescriptions extends Base {
         "ea-descriptions__tr",
         {
           part: "row",
+          style: [
+            row.align ? `--ea-descriptions-align: ${row.align};` : "",
+          ].join(" "),
         },
         row.map((item, index) =>
           EaUtils.EaElement.h(
@@ -188,13 +213,27 @@ export class EaDescriptions extends Base {
               EaUtils.EaElement.h(
                 "span",
                 "ea-descriptions__label",
-                { part: "label cell", tabindex: 1 },
+                {
+                  part: "label cell",
+                  tabindex: 1,
+                  style: [
+                    row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                  ].join(" "),
+                },
                 item.label
               ),
               EaUtils.EaElement.h(
                 "span",
                 "ea-descriptions__content",
-                { part: "content cell", tabindex: 1 },
+                {
+                  part: "content cell",
+                  tabindex: 1,
+                  style: [
+                    row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                  ]
+                    .join(" ")
+                    .trim(),
+                },
                 item.content
               ),
             ]
@@ -232,6 +271,9 @@ export class EaDescriptions extends Base {
                   row.length < 3 && index === row.length - 1
                     ? 6 - (index + 1)
                     : item.colspan || 1,
+                style: [
+                  row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                ].join(" "),
               },
               item.content
             ),
@@ -258,6 +300,9 @@ export class EaDescriptions extends Base {
                   row.length < 3 && index === row.length - 1
                     ? 6 - (index + 1)
                     : item.colspan || 1,
+                style: [
+                  row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                ].join(" "),
               },
               item.label
             )
@@ -281,6 +326,9 @@ export class EaDescriptions extends Base {
                   row.length < 3 && index === row.length - 1
                     ? 6 - (index + 1)
                     : item.colspan || 1,
+                style: [
+                  row.align ? `--ea-descriptions-align: ${row.align};` : "",
+                ].join(" "),
               },
               item.content
             )
