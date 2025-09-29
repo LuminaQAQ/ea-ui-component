@@ -147,9 +147,6 @@
     "./ea-radio": {
       "import": "./dist/ea-radio.js"
     },
-    "./ea-radio-group": {
-      "import": "./dist/ea-radio-group.js"
-    },
     "./ea-rate": {
       "import": "./dist/ea-rate.js"
     },
@@ -227,7 +224,7 @@
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.32.0",
     "rollup-plugin-visualizer": "^6.0.3",
-    "sass-embedded": "^1.89.2",
+    "sass-embedded": "^1.93.2",
     "vite": "^5.4.1"
   },
   "dependencies": {

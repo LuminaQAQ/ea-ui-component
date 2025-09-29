@@ -1,93 +1,56 @@
-import Base from '../Base.js';
+import Base from "@components/Base.js";
 
-import { emptyStatusSVG } from './src/assets/emptyStatusSVG.js';
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from "./index.scss?inline";
 
 export class EaEmpty extends Base {
-    #imageWrap;
-    #descriptionWrap;
+  /** @type {HTMLElement} */
+  #container;
 
-    constructor() {
-        super();
+  static get observedAttributes() {
+    return [...super.observedAttributes];
+  }
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class="ea-empty_wrap" part="container">
-                <div class="ea-empty_image" part="image-wrap">
-                    ${emptyStatusSVG}
-                </div>
-                <div class="ea-empty_description" part="description-wrap">
-                    暂无数据
-                </div>
-                <div class="ea-empty_bottom" part="bottom-wrap">
-                    <slot></slot>
-                </div>
-            </div>
+  state = this.properties({
+    type: {
+      //   type: ,
+      default: "",
+      observer: (newVal) => {},
+    },
+  });
+
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    return this.computedClasslist("ea-empty", {
+      // ['--' + this.type]: this.type,
+    });
+  }
+
+  constructor() {
+    super();
+
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-empty' part='container'>
+        <slot></slot>
+      </div>
         `;
 
-        this.#imageWrap = shadowRoot.querySelector('.ea-empty_image');
-        this.#descriptionWrap = shadowRoot.querySelector('.ea-empty_description');
+    this.#container = this.shadowRoot.querySelector(".ea-empty");
+  }
 
-        this.build(shadowRoot, stylesheet);
-    }
-
-    // ------- description 描述文字 -------
-    // #region
-    get description() {
-        return this.getAttribute('description') || "暂无数据";
-    }
-
-    set description(value) {
-        this.setAttribute('description', value);
-        this.#descriptionWrap.innerHTML = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- image 自定义图片 -------
-    // #region
-    get image() {
-        return this.getAttribute('image') || "";
-    }
-
-    set image(value) {
-        if (!value) return;
-
-        this.setAttribute('image', value);
-
-        const image = new Image();
-        image.src = value;
-        image.onload = () => {
-            this.#imageWrap.innerHTML = `<img src="${value}" />`;
-        }
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- image-size 自定义图片大小 -------
-    // #region
-    get imageSize() {
-        return this.getAttribute('image-size') || "128";
-    }
-
-    set imageSize(value) {
-        if (!value) return;
-
-        this.setAttribute('image-size', value);
-        this.#imageWrap.style.width = value + "px";
-    }
-    // #endregion
-    // ------- end -------
-
-    connectedCallback() {
-        this.description = this.description;
-
-        this.image = this.image;
-
-        this.imageSize = this.imageSize;
-    }
+  connectedCallback() {
+    super.connectedCallback();
+  }
 }
 
-if (!customElements.get('ea-empty')) {
-    customElements.define('ea-empty', EaEmpty);
+if (!window.customElements.get("ea-empty")) {
+  window.customElements.define("ea-empty", EaEmpty);
 }

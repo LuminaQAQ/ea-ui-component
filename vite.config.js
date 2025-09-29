@@ -92,10 +92,9 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `
-                    @import "components/ea-ui-base-style.scss";
-                `,
-        includePaths: [resolve(__dirname, "src")],
+        api: "modern-compiler",
+        loadPaths: [resolve(__dirname, "src")],
+        additionalData: `@use "themes/namespace" as *;`,
       },
     },
   },
