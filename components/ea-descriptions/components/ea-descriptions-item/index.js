@@ -7,7 +7,18 @@ export class EaDescriptionsItem extends Base {
   #container;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "label", "colspan", "rowspan"];
+    return [
+      ...super.observedAttributes,
+      "label",
+      "colspan",
+      "rowspan",
+      "align",
+      "label-align",
+      "width",
+      "label-width",
+      "label-part",
+      "content-part",
+    ];
   }
 
   state = this.properties({
@@ -24,6 +35,36 @@ export class EaDescriptionsItem extends Base {
     rowspan: {
       type: Number,
       default: 1,
+      observer: (newVal) => {},
+    },
+    align: {
+      type: ["left", "center", "right"],
+      default: "",
+      observer: (newVal) => {},
+    },
+    "label-align": {
+      type: ["left", "center", "right"],
+      default: "",
+      observer: (newVal) => {},
+    },
+    width: {
+      type: String,
+      default: "",
+      observer: (newVal) => {},
+    },
+    "label-width": {
+      type: String,
+      default: "",
+      observer: (newVal) => {},
+    },
+    "label-part": {
+      type: String,
+      default: "",
+      observer: (newVal) => {},
+    },
+    "content-part": {
+      type: String,
+      default: "",
       observer: (newVal) => {},
     },
   });

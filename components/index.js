@@ -44,7 +44,6 @@ import './ea-popconfirm/index.js';
 import './ea-popover/index.js';
 import './ea-progress/index.js';
 import './ea-radio/index.js';
-import './ea-radio-group/index.js';
 import './ea-rate/index.js';
 import './ea-result/index.js';
 import './ea-scrollbar/index.js';

@@ -1,8 +1,9 @@
 const handleProps = (key, value) => {
   if (
-    typeof value === "string" ||
-    typeof value === "number" ||
-    typeof value === "boolean"
+    key &&
+    (typeof value === "string" ||
+      typeof value === "number" ||
+      typeof value === "boolean")
   ) {
     return `${key}="${value}"`;
   } else if (Array.isArray(value)) {

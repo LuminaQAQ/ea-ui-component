@@ -288,7 +288,7 @@ export default class Base extends HTMLElement {
 
   connectedCallback() {
     this.adoptedStyle(this.stylesheet);
-    this.tabIndex = 0;
+    this.tabIndex = this.getAttrNumber("tabindex") || 0;
     this["loading-full"] = this["loading-full"];
 
     this.addEventListener("keydown", (e) => {
