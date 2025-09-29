@@ -12,10 +12,21 @@ export class EaDescriptions extends Base {
   #tbody;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "title", "border", "direction"];
+    return [
+      ...super.observedAttributes,
+      "column",
+      "title",
+      "border",
+      "direction",
+    ];
   }
 
   state = this.properties({
+    column: {
+      type: Number,
+      default: 3,
+      observer: (newVal) => {},
+    },
     title: {
       type: String,
       default: "",
@@ -70,6 +81,67 @@ export class EaDescriptions extends Base {
     this.#tbody = this.shadowRoot.querySelector(".ea-descriptions__body");
   }
 
+  #handleChildrenSp = (children, column) => {
+    const ary = [];
+
+    children.forEach((item) => {
+      const currentRow = ary.length;
+      const currentCol = column % ary[currentRow]?.length || 0;
+      const option = {
+        label: item.label,
+        content: item.innerHTML,
+        colspan: item.colspan,
+        rowspan: item.rowspan,
+      };
+
+      for (let i = currentRow; i < currentRow + option.rowspan; i++) {
+        if (!ary[i]) ary[i] = [];
+
+        if (option.rowspan > 1 && i !== currentRow) {
+          ary[i][currentCol] = {
+            colspan: 1,
+            rowspan: 1,
+            placeholder: true,
+          };
+        }
+
+        for (let j = currentCol; j < currentCol + option.colspan; j++) {
+          if (option.colspan > 1 && j !== currentCol) {
+            ary[i][j] = {
+              colspan: 1,
+              rowspan: 1,
+              placeholder: true,
+            };
+          }
+        }
+      }
+
+      let row = ary.findIndex((item) => item.length < column);
+      row = row === -1 ? currentRow : row;
+      const col = ary[currentRow].reduce((acc, cur) => {
+        return acc + cur.colspan;
+      }, 0);
+
+      if (col + option.colspan <= column) {
+        ary[row].push(option);
+      } else {
+        ary[row][currentCol] = option;
+      }
+    });
+
+    return ary;
+  };
+
+  #getVariant = () => {
+    if (this.direction === "vertical") {
+      return "vertical";
+    } else if (this.border) {
+      return "border";
+    } else {
+      return "normal";
+    }
+  };
+
   #variantRenderer = {
     normal: (row, index) =>
       EaUtils.EaElement.h(
@@ -85,12 +157,21 @@ export class EaDescriptions extends Base {
             {
               part: "td",
               [item.rowspan > 1 ? "rowspan" : ""]: item.rowspan,
-              [item.colspan > 1 ? "colspan" : ""]: item.colspan,
-              // rowspan: item.rowspan,
-              // colspan:
-              //   row.length < 3 && index === row.length - 1
-              //     ? 3 - row.length + (index + 1)
-              //     : item.colspan || 1,
+              [item.colspan > 1 ||
+              (index === row.length - 1 && row.length < this.column)
+                ? "colspan"
+                : ""]:
+                index === row.length - 1 &&
+                row.length < this.column &&
+                row.reduce((acc, cur) => {
+                  return acc + cur.colspan;
+                }, 0) < this.column
+                  ? this.column -
+                    row.reduce((acc, cur) => {
+                      return acc + cur.colspan;
+                    }, 0) +
+                    (index < 1 ? 1 : index)
+                  : item.colspan,
             },
             [
               EaUtils.EaElement.h(
@@ -207,22 +288,12 @@ export class EaDescriptions extends Base {
       ),
     ]);
 
-    const getVariant = () => {
-      if (this.direction === "vertical") {
-        return "vertical";
-      } else if (this.border) {
-        return "border";
-      } else {
-        return "normal";
-      }
-    };
-
-    const splitChildren = (children) => {
+    const splitChildren = (children, column) => {
       const ary = [];
 
-      children.forEach((item, i) => {
+      children.forEach((item) => {
         const currentRow = ary.length;
-        const currentCol = 3 % ary[currentRow]?.length || 0;
+        const currentCol = column % ary[currentRow]?.length || 0;
         const option = {
           label: item.label,
           content: item.innerHTML,
@@ -230,36 +301,35 @@ export class EaDescriptions extends Base {
           rowspan: item.rowspan,
         };
 
-        // TODO: 可能是这个循环有问题，会导致多填充占位符
         for (let i = currentRow; i < currentRow + option.rowspan; i++) {
           if (!ary[i]) ary[i] = [];
 
-          ary[i][currentCol] = {
-            colspan: 1,
-            rowspan: 1,
-            placeholder: true,
-          };
-
-          for (let j = currentCol; j < currentCol + option.colspan; j++) {
-            ary[i][j] = {
+          if (option.rowspan > 1 && i !== currentRow) {
+            ary[i][currentCol] = {
               colspan: 1,
               rowspan: 1,
               placeholder: true,
             };
           }
+
+          for (let j = currentCol; j < currentCol + option.colspan; j++) {
+            if (option.colspan > 1 && j !== currentCol) {
+              ary[i][j] = {
+                colspan: 1,
+                rowspan: 1,
+                placeholder: true,
+              };
+            }
+          }
         }
 
-        let row = ary.findIndex((item) => item.length < 3);
+        let row = ary.findIndex((item) => item.length < column);
         row = row === -1 ? currentRow : row;
         const col = ary[currentRow].reduce((acc, cur) => {
           return acc + cur.colspan;
         }, 0);
 
-        if (this.title === "Without border") {
-          // console.log(currentRow, currentCol, row, col);
-        }
-
-        if (col + option.colspan <= 3) {
+        if (col + option.colspan <= column) {
           ary[row].push(option);
         } else {
           ary[row][currentCol] = option;
@@ -269,24 +339,10 @@ export class EaDescriptions extends Base {
       return ary;
     };
 
-    if (this.title === "Without border") {
-      // console.log(
-      //   splitChildren(children)
-      //     .map((row) => row.filter((col) => !col.placeholder))
-      //     .filter((row) => row.length)
-      // );
-      console.log(splitChildren(children));
-      // console.log(
-      //   splitChildren(children)
-      //     .map((row) => row.filter((col) => !col.placeholder))
-      //     .filter((row) => row.length)
-      // );
-    }
-
-    this.#tbody.innerHTML = splitChildren(children)
+    this.#tbody.innerHTML = splitChildren(children, this.column)
       .map((row) => row.filter((col) => !col.placeholder))
       .filter((row) => row.length)
-      .map(this.#variantRenderer[getVariant()])
+      .map(this.#variantRenderer[this.#getVariant()])
       .join("");
   }
 }
