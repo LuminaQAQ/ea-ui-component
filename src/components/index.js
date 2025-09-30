@@ -21,7 +21,7 @@ import './ea-empty/index.js';
 import './ea-form/index.js';
 import './ea-form-item/index.js';
 import './ea-icon/index.js';
-import './ea-image/index.js';
+import './ea-image/components/ea-image/index.js';
 import './ea-infinite-scroll/index.js';
 import './ea-infinite-scroll-item/index.js';
 import './ea-input/index.js';
