@@ -1,4 +1,7 @@
 import { EaImage } from "./components/ea-image";
-import { EaImagePreview } from "./components/ea-image-preview";
 
-export { EaImage, EaImagePreview };
+if (document.querySelector("ea-image-preview")) {
+  import("@components/ea-image/components/ea-image-preview/index.js");
+}
+
+export { EaImage };

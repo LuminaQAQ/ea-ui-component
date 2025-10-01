@@ -43,7 +43,7 @@ export class EaOverlay extends Base {
           this.#dispatchBubblesEvent("open");
 
           requestAnimationFrame(() => {
-            this.#container.classList.add("ea-overlay--is-show", newVal);
+            this.#container.classList.add("ea-overlay--is-show");
             this.#container.addEventListener(
               "transitionend",
               () => {

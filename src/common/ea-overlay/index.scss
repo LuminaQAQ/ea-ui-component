@@ -44,7 +44,7 @@
   @include element(mask) {
     @include modal-mask;
 
-    background-color: var(--ea-overlay-background-color);
+    background: var(--ea-overlay-background-color);
 
     z-index: var(--ea-overlay-z-index);
 

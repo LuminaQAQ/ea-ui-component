@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="../components/ea-icon/index.css" />
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
       hr {
@@ -69,8 +69,8 @@
     <div class="demo">
       <ea-image
         class="image"
-        width="100px"
-        height="100px"
+        width="200px"
+        height="150px"
         fit="cover"
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       >
@@ -84,53 +84,78 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 加载失败 --------  -->
-    <!-- #region  -->
-    <h2>加载失败</h2>
-    <div class="row">
-      <ea-image src="1111" fit="fill"></ea-image>
+    <!--  加载失败 -->
+    <!-- #region -->
+    <h1>加载失败</h1>
+
+    <style>
+      .error ea-image {
+        width: 150px;
+        height: 200px;
+      }
+    </style>
+
+    <div class="demo error">
+      <ea-image></ea-image>
+      <ea-image>
+        <ea-icon slot="error" icon="icon-picture" size="30"></ea-icon>
+      </ea-image>
     </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
     <!-- -------- 懒加载 --------  -->
     <!-- #region  -->
     <h2>懒加载</h2>
-    <div class="row">
+    <style>
+      .lazy {
+        height: 200px;
+        width: 500px;
+        overflow: auto;
+      }
+
+      .lazy ea-image {
+        height: 200px;
+        width: 100%;
+      }
+    </style>
+
+    <div class="demo">
       <ea-image
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
         lazy
       ></ea-image>
     </div>
 
-    <div class="demo" style="height: 120px; overflow: auto">
+    <div class="demo lazy">
       <ea-image
-        src="https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg"
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
         lazy
       ></ea-image>
       <ea-image
-        src="https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg"
+        src="https://th.bing.com/th/id/R.d88442788ee5a458d50e40f0a8cb1e05?rik=EoPp8GhejYeQfw&riu=http%3a%2f%2fimg.pconline.com.cn%2fimages%2fupload%2fupc%2ftx%2fwallpaper%2f1307%2f10%2fc2%2f23151595_1373424485102.jpg&ehk=J7xq%2f50bCmdD4jUXfnTlau2s5WiVsBxQArAjvJzqIo4%3d&risl=&pid=ImgRaw&r=0"
         lazy
       ></ea-image>
       <ea-image
-        src="https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg"
+        src="https://www.keaitupian.cn/cjpic/frombd/0/253/4061721412/2857814056.jpg"
         lazy
       ></ea-image>
       <ea-image
-        src="https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg"
+        src="https://www.keaitupian.cn/cjpic/frombd/2/253/2107631312/3178897554.jpg"
         lazy
       ></ea-image>
       <ea-image
-        src="https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg"
+        src="https://img95.699pic.com/photo/40243/5928.jpg_wh860.jpg"
         lazy
       ></ea-image>
       <ea-image
-        src="https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg"
+        src="https://tse1.mm.bing.net/th/id/OIP.VS7qtQiQgNuBk2SVdwvxagHaEk?rs=1&pid=ImgDetMain&o=7&rm=3"
         lazy
       ></ea-image>
       <ea-image
-        src="https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg"
+        src="https://www.keaitupian.cn/cjpic/frombd/1/253/2032688566/3458490751.jpg"
         lazy
       ></ea-image>
     </div>
@@ -138,20 +163,37 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 大图预览 --------  -->
-    <!-- #region  -->
-    <h2>大图预览</h2>
-    <div class="row">
+    <!--  图片预览 -->
+    <!-- #region -->
+    <h1>图片预览</h1>
+
+    <div class="demo">
       <ea-image
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-        lazy
         preview
       >
-        <div slot="placeholder">加载中...</div>
       </ea-image>
+
+      <ea-image-preview
+        visible="true"
+        url-list='[
+          "1https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain",
+          "https://th.bing.com/th/id/R.d88442788ee5a458d50e40f0a8cb1e05?rik=EoPp8GhejYeQfw&riu=http%3a%2f%2fimg.pconline.com.cn%2fimages%2fupload%2fupc%2ftx%2fwallpaper%2f1307%2f10%2fc2%2f23151595_1373424485102.jpg&ehk=J7xq%2f50bCmdD4jUXfnTlau2s5WiVsBxQArAjvJzqIo4%3d&risl=&pid=ImgRaw&r=0",
+          "https://www.keaitupian.cn/cjpic/frombd/0/253/4061721412/2857814056.jpg",
+          "https://www.keaitupian.cn/cjpic/frombd/2/253/2107631312/3178897554.jpg",
+          "https://img95.699pic.com/photo/40243/5928.jpg_wh860.jpg",
+          "https://tse1.mm.bing.net/th/id/OIP.VS7qtQiQgNuBk2SVdwvxagHaEk?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "https://www.keaitupian.cn/cjpic/frombd/1/253/2032688566/3458490751.jpg"
+        ]'
+      >
+        <section slot="viewer-error">viewer-error</section>
+        <section slot="toolbar">toolbar</section>
+        <section slot="progress">progress</section>
+      </ea-image-preview>
     </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
   </body>
 </html>

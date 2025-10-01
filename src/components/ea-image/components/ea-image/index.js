@@ -2,8 +2,6 @@ import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
 
-import { errorImageSVG } from "../../assets/errorImageSVG";
-
 export class EaImage extends Base {
   /** @type {HTMLElement} */
   #container;
@@ -13,6 +11,8 @@ export class EaImage extends Base {
   #error;
   /** @type {HTMLElement} */
   #placeholder;
+  /** @type {EaImagePreview} */
+  #imagePreview;
 
   #states = {
     /** @type {"loading" | "error" | "success"} */
@@ -29,7 +29,19 @@ export class EaImage extends Base {
       "alt",
       "referrerpolicy",
       "crossorigin",
+      "loading",
       "lazy",
+
+      "preview",
+      "z-index",
+      "initial-index",
+      "close-on-press-escape",
+      "infinite",
+      "zoom-rate",
+      "scale",
+      "min-scale",
+      "max-scale",
+      "show-progress",
     ];
   }
 
@@ -37,20 +49,36 @@ export class EaImage extends Base {
     src: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: async (newVal) => {
         const img = new Image();
-        img.src = newVal;
         this.updateContainerClasslist();
+
+        if (this.lazy) {
+          const observer = new IntersectionObserver((entries) => {
+            if (entries[0].intersectionRatio <= 0) return;
+
+            observer.disconnect();
+            img.src = this.src;
+          });
+
+          observer.observe(this);
+        } else {
+          img.src = newVal;
+        }
 
         img.onload = () => {
           this.#image.setAttribute("src", newVal);
           this.#states.imageStatus = "success";
           this.updateContainerClasslist();
+
+          this.dispatchEvent("load");
         };
 
         img.onerror = () => {
           this.#states.imageStatus = "error";
           this.updateContainerClasslist();
+
+          this.dispatchEvent("error");
         };
       },
     },
@@ -97,11 +125,11 @@ export class EaImage extends Base {
         this.#image.alt = newVal;
       },
     },
-    lazy: {
-      type: Boolean,
-      default: false,
+    loading: {
+      type: ["lazy", "eager"],
+      default: "eager",
       observer: (newVal) => {
-        this.#image.setAttribute("loading", newVal ? "lazy" : "eager");
+        this.#image.setAttribute("loading", newVal);
       },
     },
     referrerpolicy: {
@@ -116,6 +144,28 @@ export class EaImage extends Base {
       default: "",
       observer: (newVal) => {
         this.#image.setAttribute("sizes", newVal);
+      },
+    },
+    lazy: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {},
+    },
+    preview: {
+      type: Boolean,
+      default: false,
+      observer: async (newVal) => {
+        if (newVal) {
+          await import("../ea-image-preview/index.js");
+        }
+      },
+    },
+    "preview-src-list": {
+      type: Array,
+      default: [],
+      observer: async (newVal) => {
+        if (!this.preview)
+          return console.warn("[EaImage] Preview is not enabled.");
       },
     },
   });
@@ -153,16 +203,30 @@ export class EaImage extends Base {
           <slot name='placeholder'></slot>
         </section>
       </div>
+      <ea-image-preview class="ea-image-preview" part='preview'>
+      </ea-image-preview>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-image");
     this.#image = this.shadowRoot.querySelector(".ea-image__image");
     this.#error = this.shadowRoot.querySelector(".ea-image__error");
     this.#placeholder = this.shadowRoot.querySelector(".ea-image__placeholder");
+    this.#imagePreview = this.shadowRoot.querySelector(".ea-image-preview");
   }
+
+  showPreview = () => {
+    this.#imagePreview.show();
+  };
 
   connectedCallback() {
     super.connectedCallback();
+
+    if (!this.getAttribute("src")) this.setAttribute("src", "");
+
+    if (this.preview)
+      this.#container.addEventListener("click", () => {
+        this.showPreview();
+      });
   }
 }
 

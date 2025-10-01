@@ -1,16 +1,16 @@
 $ea-image-status: (loading, error, success);
 
 :host {
-  --ea-image-width: auto;
-  --ea-image-height: auto;
+  --ea-image-width: 100%;
+  --ea-image-height: 100%;
 
-  --ea-image-fit: none;
+  --ea-image-fit: inherit;
 
   --ea-image-background: var(--grey-100);
 }
 
 :host {
-  display: inline-block;
+  display: block;
 }
 
 @include block(ea-image) {
@@ -27,6 +27,10 @@ $ea-image-status: (loading, error, success);
   }
 
   @include element(error) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 100%;
     height: 100%;
   }
@@ -53,6 +57,8 @@ $ea-image-status: (loading, error, success);
       }
     } @else if($status == success) {
       @include modifier($status) {
+        --ea-image-background: transparent;
+
         .ea-image__placeholder,
         .ea-image__error {
           display: none;

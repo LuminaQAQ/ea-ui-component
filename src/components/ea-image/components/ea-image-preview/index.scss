@@ -1,0 +1,27 @@
+$ea-image-status: (loading, error, success);
+
+:host {
+  --ea-overlay-content-width: 100%;
+  --ea-overlay-content-max-width: 100%;
+  --ea-overlay-content-height: auto;
+}
+
+@include block(ea-image-preview) {
+  @include element(placeholder) {
+    width: 100%;
+    height: 100%;
+  }
+
+  @include element(img) {
+    width: 100%;
+    height: 100%;
+  }
+
+  @each $status in $ea-image-status {
+    @if ($status == loading) {
+      --ea-overlay-content-height: 50%;
+    } @else if ($status == error) {
+      --ea-overlay-content-height: 50%;
+    }
+  }
+}
