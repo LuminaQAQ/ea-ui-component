@@ -1,6 +1,7 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
 
 export class EaImage extends Base {
   /** @type {HTMLElement} */
@@ -14,9 +15,13 @@ export class EaImage extends Base {
   /** @type {EaImagePreview} */
   #imagePreview;
 
+  /** @type {AbortController} */
+  #abortController;
+
   #states = {
     /** @type {"loading" | "error" | "success"} */
     imageStatus: "loading",
+    previewQueue: [],
   };
 
   static get observedAttributes() {
@@ -33,6 +38,7 @@ export class EaImage extends Base {
       "lazy",
 
       "preview",
+      "preview-src-list",
       "z-index",
       "initial-index",
       "close-on-press-escape",
@@ -163,9 +169,19 @@ export class EaImage extends Base {
     "preview-src-list": {
       type: Array,
       default: [],
-      observer: async (newVal) => {
+      /** @param {String[]} newVal */
+      observer: (newVal) => {
         if (!this.preview)
           return console.warn("[EaImage] Preview is not enabled.");
+
+        // console.log(newVal);
+
+        // this.#imagePreview.setAttribute("url-list", newVal);
+        // this.#imagePreview.setAttribute("url-list", newVal);
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["url-list"] = newVal)
+        );
       },
     },
   });
@@ -215,7 +231,8 @@ export class EaImage extends Base {
   }
 
   showPreview = () => {
-    this.#imagePreview.show();
+    // this.#imagePreview.show();
+    this.#imagePreview.visible = true;
   };
 
   connectedCallback() {
@@ -223,10 +240,15 @@ export class EaImage extends Base {
 
     if (!this.getAttribute("src")) this.setAttribute("src", "");
 
-    if (this.preview)
+    if (this.preview) {
       this.#container.addEventListener("click", () => {
         this.showPreview();
       });
+
+      this.#imagePreview.addEventListener("ea-image-ready", () => {
+        this.#states.previewQueue.forEach((fn) => fn());
+      });
+    }
   }
 }
 
