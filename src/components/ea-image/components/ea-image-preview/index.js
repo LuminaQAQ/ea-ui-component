@@ -146,21 +146,21 @@ export class EaImagePreview extends EaOverlay {
       this.#container.innerHTML +
       `
       <header class="ea-image-preview__header" part="header">
-        <ea-icon class="ea-image-preview__icon" icon="icon-cancel" part="icon close-icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon close-icon" icon="icon-cancel" part="icon close-icon"></ea-icon>
       </header>
       <main class="ea-image-preview__main" part="main">
-        <ea-icon class="ea-image-preview__icon" icon="icon-angle-left" part="icon"></ea-icon>
-        <ea-icon class="ea-image-preview__icon" icon="icon-angle-right" part="icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon prev-icon" icon="icon-angle-left" part="icon prev-icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon next-icon" icon="icon-angle-right" part="icon next-icon"></ea-icon>
       </main>
       <footer class="ea-image-preview__footer">
         <section class="ea-image-preview__progress">
           <slot name="progress"></slot>
         </section>
         <section class="ea-image-preview__toolbar" part="toolbar">
-          <ea-icon class="ea-image-preview__icon" icon="icon-zoom-out" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" icon="icon-zoom-in" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" icon="icon-ccw" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" icon="icon-cw" part="icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon zoom-out-icon" icon="icon-zoom-out" part="icon zoom-out-icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon zoom-in-icon" icon="icon-zoom-in" part="icon zoom-in-icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon rotate-left-icon" icon="icon-ccw" part="icon rotate-left-icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon rotate-right-icon" icon="icon-cw" part="icon rotate-right-icon"></ea-icon>
           <slot name="toolbar"></slot>
         </section>
       </footer>
@@ -169,7 +169,7 @@ export class EaImagePreview extends EaOverlay {
     this.#content = this.shadowRoot.querySelector(".ea-overlay__content");
     this.#mask = this.shadowRoot.querySelector(".ea-overlay__mask");
     this.#imgContent = this.shadowRoot.querySelector(".ea-overlay__content");
-    this.#closeIcon = this.shadowRoot.querySelector("[part*='close-icon']");
+    this.#closeIcon = this.shadowRoot.querySelector(".close-icon");
   }
 
   connectedCallback() {
