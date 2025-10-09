@@ -13,7 +13,11 @@ export class EaImagePreview extends EaOverlay {
   #imgContent;
   /** @type {HTMLElement} */
   #mask;
+  /** @type {HTMLElement} */
+  #closeIcon;
 
+  /** @type {AbortController} */
+  #imgAbortController;
   /** @type {AbortController} */
   #abortController;
 
@@ -62,6 +66,7 @@ export class EaImagePreview extends EaOverlay {
       /** @param {String[]} newVal */
       observer: (newVal) => {
         this.#states.urlList = newVal;
+        this.index = this["initial-index"];
       },
     },
     index: {
@@ -84,18 +89,18 @@ export class EaImagePreview extends EaOverlay {
           );
 
           const img = this.#imgContent.querySelector(".ea-image-preview__img");
-          this.#abortController?.abort();
-          this.#abortController = new AbortController();
+          this.#imgAbortController?.abort();
+          this.#imgAbortController = new AbortController();
           img.addEventListener(
             "error",
             (e) => {
               this.#states.status = "error";
               this.#container.classList.add("ea-image-preview--error");
-              this.#abortController.abort();
+              this.#imgAbortController.abort();
             },
             {
               once: true,
-              signal: this.#abortController.signal,
+              signal: this.#imgAbortController.signal,
             }
           );
           img.addEventListener(
@@ -103,11 +108,11 @@ export class EaImagePreview extends EaOverlay {
             () => {
               this.#states.status = "success";
               this.classList.add("ea-image-preview--success");
-              this.#abortController.abort();
+              this.#imgAbortController.abort();
             },
             {
               once: true,
-              signal: this.#abortController.signal,
+              signal: this.#imgAbortController.signal,
             }
           );
         }
@@ -136,17 +141,12 @@ export class EaImagePreview extends EaOverlay {
     super();
 
     this.#container = this.shadowRoot.querySelector(".ea-overlay");
-    this.#content = this.shadowRoot.querySelector(".ea-overlay__content");
-    this.#mask = this.shadowRoot.querySelector(".ea-overlay__mask");
 
-    this.#content.innerHTML = `
-      <section class="ea-image-preview__placeholder" part="placeholder"> 
-      </section>
-    `;
-
-    this.#mask.innerHTML = `
+    this.#container.innerHTML =
+      this.#container.innerHTML +
+      `
       <header class="ea-image-preview__header" part="header">
-        <ea-icon class="ea-image-preview__icon" icon="icon-cancel" part="icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon" icon="icon-cancel" part="icon close-icon"></ea-icon>
       </header>
       <main class="ea-image-preview__main" part="main">
         <ea-icon class="ea-image-preview__icon" icon="icon-angle-left" part="icon"></ea-icon>
@@ -157,25 +157,47 @@ export class EaImagePreview extends EaOverlay {
           <slot name="progress"></slot>
         </section>
         <section class="ea-image-preview__toolbar" part="toolbar">
-          <ea-icon class="ea-image-preview__icon" icon="icon-plus" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" icon="icon-minus" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" icon="icon-cw" part="icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon" icon="icon-zoom-out" part="icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon" icon="icon-zoom-in" part="icon"></ea-icon>
           <ea-icon class="ea-image-preview__icon" icon="icon-ccw" part="icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon" icon="icon-cw" part="icon"></ea-icon>
           <slot name="toolbar"></slot>
         </section>
       </footer>
     `;
 
-    this.#imgContent = this.shadowRoot.querySelector(
-      ".ea-image-preview__placeholder"
-    );
+    this.#content = this.shadowRoot.querySelector(".ea-overlay__content");
+    this.#mask = this.shadowRoot.querySelector(".ea-overlay__mask");
+    this.#imgContent = this.shadowRoot.querySelector(".ea-overlay__content");
+    this.#closeIcon = this.shadowRoot.querySelector("[part*='close-icon']");
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.assignedStyle(stylesheet);
 
-    this.index = this.index;
+    this.#abortController = new AbortController();
+
+    // this.index = this.index;
+
+    // console.log(this);
+
+    this.#closeIcon.addEventListener(
+      "click",
+      () => {
+        this.hide();
+        this.visible = false;
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.dispatchEvent("ea-image-ready");
+  }
+
+  $beforeUnmounted() {
+    this.#abortController.abort();
   }
 }
 
