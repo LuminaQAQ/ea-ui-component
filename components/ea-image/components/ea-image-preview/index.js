@@ -159,8 +159,8 @@ export class EaImagePreview extends EaOverlay {
         <section class="ea-image-preview__toolbar" part="toolbar">
           <ea-icon class="ea-image-preview__icon" icon="icon-plus" part="icon"></ea-icon>
           <ea-icon class="ea-image-preview__icon" icon="icon-minus" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" part="icon">↺</ea-icon>
-          <ea-icon class="ea-image-preview__icon" part="icon">↻</ea-icon>
+          <ea-icon class="ea-image-preview__icon" icon="icon-cw" part="icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon" icon="icon-ccw" part="icon"></ea-icon>
           <slot name="toolbar"></slot>
         </section>
       </footer>

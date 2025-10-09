@@ -317,7 +317,6 @@ export default class Base extends HTMLElement {
       })
     );
 
-    this.remove();
     this.state = null;
   }
 
