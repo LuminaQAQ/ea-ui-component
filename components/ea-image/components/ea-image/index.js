@@ -39,6 +39,7 @@ export class EaImage extends Base {
 
       "preview",
       "preview-src-list",
+      "hide-on-click-modal",
       "z-index",
       "initial-index",
       "close-on-press-escape",
@@ -157,6 +158,7 @@ export class EaImage extends Base {
       default: false,
       observer: (newVal) => {},
     },
+
     preview: {
       type: Boolean,
       default: false,
@@ -174,13 +176,118 @@ export class EaImage extends Base {
         if (!this.preview)
           return console.warn("[EaImage] Preview is not enabled.");
 
-        // console.log(newVal);
-
-        // this.#imagePreview.setAttribute("url-list", newVal);
-        // this.#imagePreview.setAttribute("url-list", newVal);
-
         this.#states.previewQueue.push(
           () => (this.#imagePreview["url-list"] = newVal)
+        );
+      },
+    },
+    "hide-on-click-modal": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["hide-on-click-modal"] = newVal)
+        );
+      },
+    },
+    "z-index": {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["z-index"] = newVal)
+        );
+      },
+    },
+    "initial-index": {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["initial-index"] = newVal)
+        );
+      },
+    },
+    "close-on-press-escape": {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["close-on-press-escape"] = newVal)
+        );
+      },
+    },
+    infinite: {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["infinite"] = newVal)
+        );
+      },
+    },
+    "zoom-rate": {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["zoom-rate"] = newVal)
+        );
+      },
+    },
+    scale: {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview.scale = newVal)
+        );
+      },
+    },
+    "min-scale": {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["min-scale"] = newVal)
+        );
+      },
+    },
+    "max-scale": {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["max-scale"] = newVal)
+        );
+      },
+    },
+    "show-progress": {
+      type: Number,
+      default: 2000,
+      observer: (newVal) => {
+        if (!this.preview) return;
+
+        this.#states.previewQueue.push(
+          () => (this.#imagePreview["show-progress"] = newVal)
         );
       },
     },
@@ -231,11 +338,10 @@ export class EaImage extends Base {
   }
 
   showPreview = () => {
-    // this.#imagePreview.show();
     this.#imagePreview.visible = true;
   };
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback();
 
     if (!this.getAttribute("src")) this.setAttribute("src", "");
@@ -245,10 +351,15 @@ export class EaImage extends Base {
         this.showPreview();
       });
 
-      this.#imagePreview.addEventListener("ea-image-ready", () => {
-        this.#states.previewQueue.forEach((fn) => fn());
-      });
+      await EaUtils.EaElement.addAsyncEventListener(
+        this.#imagePreview,
+        "ea-image-preview-ready"
+      );
+
+      this.#states.previewQueue.forEach((fn) => fn());
     }
+
+    this.dispatchEvent("ea-image-ready");
   }
 }
 

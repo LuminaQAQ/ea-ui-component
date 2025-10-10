@@ -10,22 +10,47 @@ export class EaImagePreview extends EaOverlay {
   /** @type {HTMLElement} */
   #content;
   /** @type {HTMLElement} */
+  #header;
+  /** @type {HTMLElement} */
+  #main;
+  /** @type {HTMLElement} */
+  #footer;
+  /** @type {HTMLElement} */
   #imgContent;
   /** @type {HTMLElement} */
   #mask;
   /** @type {HTMLElement} */
   #closeIcon;
+  /** @type {HTMLElement} */
+  #prevIcon;
+  /** @type {HTMLElement} */
+  #nextIcon;
+  /** @type {HTMLElement} */
+  #progress;
+  /** @type {HTMLElement} */
+  #zoomInIcon;
+  /** @type {HTMLElement} */
+  #zoomOutIcon;
+  /** @type {HTMLElement} */
+  #rotateLeftIcon;
+  /** @type {HTMLElement} */
+  #rotateRightIcon;
 
   /** @type {AbortController} */
   #imgAbortController;
   /** @type {AbortController} */
   #abortController;
+  /** @type {AbortController} */
+  #clickModalAbortController;
 
   #states = {
-    index: this["initial-index"],
     urlList: [],
     /** @type {"loading" | "success" | "error"} */
     status: "loading",
+
+    dirtyUpdate: false,
+
+    isUrlListInit: false,
   };
 
   static get observedAttributes() {
@@ -35,14 +60,15 @@ export class EaImagePreview extends EaOverlay {
       "visible",
       "index",
       "url-list",
-      "z-index",
       "initial-index",
-      "close-on-press-escape",
       "infinite",
       "zoom-rate",
       "scale",
       "min-scale",
       "max-scale",
+      "close-on-press-escape",
+      "hide-on-click-modal",
+
       "show-progress",
     ];
   }
@@ -65,14 +91,32 @@ export class EaImagePreview extends EaOverlay {
       default: [],
       /** @param {String[]} newVal */
       observer: (newVal) => {
+        this.#states.isUrlListInit = false;
+
         this.#states.urlList = newVal;
         this.index = this["initial-index"];
+
+        this.#states.isUrlListInit = true;
       },
     },
     index: {
       type: Number,
       default: () => this["initial-index"],
-      observer: (newVal) => {
+      observer: (newVal, oldVal) => {
+        if (this.#states.dirtyUpdate) return (this.#states.dirtyUpdate = false);
+
+        if (this.infinite) {
+          if (!this["url-list"].length) return;
+
+          const length = this.#states.urlList.length - 1;
+
+          if (newVal > length) return (this.index = 0);
+          else if (newVal < 0) return (this.index = length);
+        } else if (newVal < 0 || newVal > this.#states.urlList.length - 1) {
+          this.#states.dirtyUpdate = true;
+          return (this.index = oldVal);
+        }
+
         const src = this.#states.urlList[newVal];
         this.#imgContent.innerHTML = "";
 
@@ -82,11 +126,14 @@ export class EaImagePreview extends EaOverlay {
             "ea-image-preview__img",
             {
               src,
+              fit: "contain",
             },
             `
               <slot name="viewer-error" slot="error"></slot>
             `
           );
+
+          this.#handleProgress(newVal + 1, this.#states.urlList.length);
 
           const img = this.#imgContent.querySelector(".ea-image-preview__img");
           this.#imgAbortController?.abort();
@@ -95,7 +142,13 @@ export class EaImagePreview extends EaOverlay {
             "error",
             (e) => {
               this.#states.status = "error";
+              this.classList.remove(
+                "ea-image-preview--success",
+                "ea-image-preview--loading"
+              );
               this.#container.classList.add("ea-image-preview--error");
+
+              this.dispatchEvent("error");
               this.#imgAbortController.abort();
             },
             {
@@ -107,12 +160,110 @@ export class EaImagePreview extends EaOverlay {
             "load",
             () => {
               this.#states.status = "success";
-              this.classList.add("ea-image-preview--success");
+              this.#container.classList.remove(
+                "ea-image-preview--error",
+                "ea-image-preview--loading"
+              );
+              this.#container.classList.add("ea-image-preview--success");
               this.#imgAbortController.abort();
             },
             {
               once: true,
               signal: this.#imgAbortController.signal,
+            }
+          );
+
+          if (this.visible && this.#states.isUrlListInit) {
+            this.dispatchEvent("switch", {
+              detail: {
+                index: newVal,
+                url: src,
+                imgTarget: img,
+              },
+            });
+          }
+        }
+      },
+    },
+    infinite: {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {},
+    },
+    // "append-to-body": {
+    //   type: Boolean,
+    //   default: false,
+    //   observer: (newVal) => {},
+    // },
+    zoom: {
+      type: Number,
+      default: 1,
+      observer: (newVal) => {},
+    },
+    "zoom-rate": {
+      type: Number,
+      default: 1.2,
+      observer: (newVal) => {},
+    },
+    scale: {
+      type: Number,
+      default: 1,
+      observer: (newVal, oldVal) => {
+        if (newVal < this["min-scale"] || newVal > this["max-scale"])
+          return (this.scale = oldVal);
+
+        this.#imgContent.style.setProperty("--ea-image-preview-scale", newVal);
+      },
+    },
+    "min-scale": {
+      type: Number,
+      default: 0.2,
+      observer: (newVal) => {},
+    },
+    "max-scale": {
+      type: Number,
+      default: 7,
+      observer: (newVal) => {},
+    },
+    "close-on-press-escape": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {},
+    },
+    "show-progress": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    "hide-on-click-modal": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {
+        this.#clickModalAbortController?.abort();
+
+        if (newVal) {
+          this.#clickModalAbortController = new AbortController();
+          this.#container.addEventListener(
+            "click",
+            (e) => {
+              const img = this.#imgContent.querySelector(
+                ".ea-image-preview__img"
+              );
+
+              if (
+                !img.contains(e.target) &&
+                !this.#header.contains(e.target) &&
+                !this.#main.contains(e.target) &&
+                !this.#footer.contains(e.target)
+              ) {
+                this.hide();
+                this.visible = false;
+              }
+            },
+            {
+              signal: this.#clickModalAbortController.signal,
             }
           );
         }
@@ -129,6 +280,9 @@ export class EaImagePreview extends EaOverlay {
       "ea-image-preview",
       {
         ["--" + this.#states.status]: this.#states.status,
+      },
+      {
+        "show-progress": this["show-progress"],
       }
     )}`;
 
@@ -146,21 +300,21 @@ export class EaImagePreview extends EaOverlay {
       this.#container.innerHTML +
       `
       <header class="ea-image-preview__header" part="header">
-        <ea-icon class="ea-image-preview__icon" icon="icon-cancel" part="icon close-icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon close-icon" icon="icon-cancel" part="icon close-icon"></ea-icon>
       </header>
       <main class="ea-image-preview__main" part="main">
-        <ea-icon class="ea-image-preview__icon" icon="icon-angle-left" part="icon"></ea-icon>
-        <ea-icon class="ea-image-preview__icon" icon="icon-angle-right" part="icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon prev-icon" icon="icon-angle-left" part="icon prev-icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon next-icon" icon="icon-angle-right" part="icon next-icon"></ea-icon>
       </main>
       <footer class="ea-image-preview__footer">
         <section class="ea-image-preview__progress">
           <slot name="progress"></slot>
         </section>
         <section class="ea-image-preview__toolbar" part="toolbar">
-          <ea-icon class="ea-image-preview__icon" icon="icon-zoom-out" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" icon="icon-zoom-in" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" icon="icon-ccw" part="icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon" icon="icon-cw" part="icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon zoom-out-icon" icon="icon-zoom-out" part="icon zoom-out-icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon zoom-in-icon" icon="icon-zoom-in" part="icon zoom-in-icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon rotate-left-icon" icon="icon-ccw" part="icon rotate-left-icon"></ea-icon>
+          <ea-icon class="ea-image-preview__icon rotate-right-icon" icon="icon-cw" part="icon rotate-right-icon"></ea-icon>
           <slot name="toolbar"></slot>
         </section>
       </footer>
@@ -169,18 +323,100 @@ export class EaImagePreview extends EaOverlay {
     this.#content = this.shadowRoot.querySelector(".ea-overlay__content");
     this.#mask = this.shadowRoot.querySelector(".ea-overlay__mask");
     this.#imgContent = this.shadowRoot.querySelector(".ea-overlay__content");
-    this.#closeIcon = this.shadowRoot.querySelector("[part*='close-icon']");
+    this.#closeIcon = this.shadowRoot.querySelector(".close-icon");
+    this.#prevIcon = this.shadowRoot.querySelector(".prev-icon");
+    this.#nextIcon = this.shadowRoot.querySelector(".next-icon");
+    this.#zoomInIcon = this.shadowRoot.querySelector(".zoom-in-icon");
+    this.#zoomOutIcon = this.shadowRoot.querySelector(".zoom-out-icon");
+    this.#rotateLeftIcon = this.shadowRoot.querySelector(".rotate-left-icon");
+    this.#rotateRightIcon = this.shadowRoot.querySelector(".rotate-right-icon");
+    this.#progress = this.shadowRoot.querySelector(
+      ".ea-image-preview__progress slot[name='progress']"
+    );
+
+    this.#header = this.shadowRoot.querySelector(".ea-image-preview__header");
+    this.#main = this.shadowRoot.querySelector(".ea-image-preview__main");
+    this.#footer = this.shadowRoot.querySelector(".ea-image-preview__footer");
+
+    // if (this["append-to-body"]) document.appendChild(this);
   }
+
+  /**
+   * 处理缩放
+   * @param {'in' | 'out'} action
+   */
+  #handleZoom = (action) => {
+    if (action === "in") {
+      this.scale = (this.scale * this["zoom-rate"]).toFixed(3);
+    } else if (action === "out") {
+      this.scale = (this.scale / this["zoom-rate"]).toFixed(3);
+    }
+  };
+
+  /**
+   * 处理旋转
+   * @param {'left' | 'right'} action
+   */
+  #handleRotate = (action) => {
+    const currentRotate = Number(
+      this.#imgContent.style
+        .getPropertyValue("--ea-image-preview-rotate")
+        .split("deg")[0] || 0
+    );
+    let rotate = 0;
+
+    if (action === "left") {
+      rotate = currentRotate - 90;
+    } else if (action === "right") {
+      rotate = currentRotate + 90;
+    }
+
+    this.#imgContent.style.setProperty(
+      "--ea-image-preview-rotate",
+      rotate + "deg"
+    );
+
+    this.dispatchEvent("rotate", {
+      detail: {
+        oldVal: currentRotate,
+        rotate,
+      },
+    });
+  };
+
+  /**
+   * 处理进度
+   * @param {Number} active
+   * @param {Number} total
+   * @returns
+   */
+  #handleProgress = (active, total) => {
+    const progress = this.querySelector("[slot='progress']");
+
+    if (progress) {
+      const activeEl = progress.querySelector("[data-active]");
+      const totalEl = progress.querySelector("[data-total]");
+
+      if (activeEl) activeEl.textContent = active;
+      if (totalEl) totalEl.textContent = total;
+    } else {
+      this.#progress.textContent = `${active} / ${total}`;
+    }
+  };
+
+  /**
+   * 设置当前项
+   * @param {Number} index
+   */
+  setActiveItem = (index) => {
+    this.index = index;
+  };
 
   connectedCallback() {
     super.connectedCallback();
     this.assignedStyle(stylesheet);
 
     this.#abortController = new AbortController();
-
-    // this.index = this.index;
-
-    // console.log(this);
 
     this.#closeIcon.addEventListener(
       "click",
@@ -193,11 +429,70 @@ export class EaImagePreview extends EaOverlay {
       }
     );
 
-    this.dispatchEvent("ea-image-ready");
+    this.#prevIcon.addEventListener(
+      "click",
+      () => {
+        this.index--;
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#nextIcon.addEventListener(
+      "click",
+      () => {
+        this.index++;
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#zoomInIcon.addEventListener("click", () => {
+      this.#handleZoom("in");
+    });
+    this.#zoomOutIcon.addEventListener("click", () => {
+      this.#handleZoom("out");
+    });
+    this.#container.addEventListener("wheel", (e) => {
+      e.preventDefault();
+
+      if (e.deltaY > 0) {
+        this.#handleZoom("out");
+      } else {
+        this.#handleZoom("in");
+      }
+    });
+
+    this.#rotateLeftIcon.addEventListener("click", () => {
+      this.#handleRotate("left");
+    });
+    this.#rotateRightIcon.addEventListener("click", () => {
+      this.#handleRotate("right");
+    });
+
+    this.addEventListener("closed", () => (this.index = this["intial-index"]), {
+      signal: this.#abortController.signal,
+    });
+
+    if (this["close-on-press-escape"])
+      window.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.key === "Escape") {
+            this.hide();
+          }
+        },
+        { signal: this.#abortController.signal }
+      );
+
+    this.dispatchEvent("ea-image-preview-ready");
   }
 
   $beforeUnmounted() {
     this.#abortController.abort();
+    this.#imgAbortController?.abort();
   }
 }
 

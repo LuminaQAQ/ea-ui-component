@@ -3,79 +3,160 @@ $ea-image-status: (loading, error, success);
 :host {
   --ea-overlay-content-width: 100%;
   --ea-overlay-content-max-width: 100%;
-  --ea-overlay-content-height: auto;
+  --ea-overlay-content-height: 100%;
 
-  --ea-image-preview-tool-size: 18px;
+  --ea-image-preview-tool-size: 20px;
   --ea-image-preview-tool-color: #fff;
+
+  --ea-image-preview-tool-offset-x: 1.5rem;
+  --ea-image-preview-tool-offset-y: 1.5rem;
+
+  --ea-image-preview-scale: 1;
+  --ea-image-preview-rotate: 0;
 }
 
 @include block(ea-image-preview) {
   @include element(icon) {
-    box-sizing: border-box;
-    padding: 0.5rem;
+    padding: 0.65rem;
     border-radius: 999px;
     cursor: pointer;
+
+    width: var(--ea-image-preview-tool-size);
+    height: var(--ea-image-preview-tool-size);
 
     font-size: var(--ea-image-preview-tool-size);
     color: var(--ea-image-preview-tool-color);
 
-    background: rgba(0, 0, 0, 0.5);
-  }
-
-  @include element(placeholder) {
-    width: 100%;
-    // height: 100%;
+    background: rgba(0, 0, 0, 0.4);
   }
 
   @include element(img) {
-    position: fixed;
+    --ea-image-background: transparent;
 
-    width: 100%;
-    height: 100%;
+    position: fixed;
 
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
-
-    // width: 100%;
-    // height: 100%;
+    transform-origin: center center;
+    transform: translate(-50%, -50%) scale(var(--ea-image-preview-scale))
+      rotate(var(--ea-image-preview-rotate));
 
     max-width: 100%;
     max-height: 100%;
+
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .ea-image-preview__header,
+  .ea-image-preview__main,
+  .ea-image-preview__footer {
+    filter: opacity(0);
+    z-index: calc(var(--ea-overlay-z-index) + 2);
+    transition: filter 0.3s ease-in-out;
   }
 
   @include element(header) {
     position: fixed;
-    top: 0;
-    right: 0;
-    z-index: calc(var(--ea-overlay-z-index) + 2);
+
+    top: var(--ea-image-preview-tool-offset-y);
+    right: var(--ea-image-preview-tool-offset-x);
   }
 
   @include element(main) {
-    position: fixed;
+    position: relative;
 
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-
-    z-index: calc(var(--ea-overlay-z-index) + 2);
   }
 
   @include element(footer) {
     position: fixed;
 
-    bottom: 0;
+    bottom: var(--ea-image-preview-tool-offset-y);
     left: 50%;
     transform: translateX(-50%);
+  }
 
-    z-index: calc(var(--ea-overlay-z-index) + 2);
+  @include element(progress) {
+    display: none;
+
+    margin-bottom: 1.5rem;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+    color: white;
+
+    cursor: default;
+    user-select: none;
+  }
+
+  @include element(toolbar) {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    box-sizing: border-box;
+    padding: 0.25rem 1.25rem;
+    border-radius: 999px;
+
+    background: rgba(0, 0, 0, 0.4);
+
+    font-size: var(--ea-image-preview-tool-size);
+    color: var(--ea-image-preview-tool-color);
+
+    .ea-image-preview__icon {
+      background: none;
+      margin: 0 0.25rem;
+    }
+  }
+
+  @include state(show-progress) {
+    .ea-image-preview__progress {
+      display: flex;
+    }
+  }
+
+  .next-icon,
+  .prev-icon {
+    position: fixed;
+  }
+
+  .prev-icon {
+    left: var(--ea-image-preview-tool-offset-x);
+  }
+
+  .next-icon {
+    right: var(--ea-image-preview-tool-offset-x);
   }
 
   @each $status in $ea-image-status {
     @if ($status == loading) {
-      --ea-overlay-content-height: 50%;
+      @include modifier(loading) {
+        --ea-overlay-content-height: 50%;
+      }
     } @else if ($status == error) {
-      --ea-overlay-content-height: 50%;
+      @include modifier(error) {
+        --ea-overlay-content-height: 50%;
+      }
     }
+  }
+}
+
+.ea-overlay--is-show {
+  .ea-image-preview__header,
+  .ea-image-preview__main,
+  .ea-image-preview__footer {
+    filter: opacity(1);
+  }
+}
+
+.ea-overlay--before-close {
+  .ea-image-preview__header,
+  .ea-image-preview__main,
+  .ea-image-preview__footer {
+    filter: opacity(0);
   }
 }
