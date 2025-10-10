@@ -169,6 +169,7 @@
 
     <div class="demo">
       <ea-image
+        class="viewer"
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
         preview-src-list='[
           "https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain",
@@ -180,6 +181,7 @@
           "https://www.keaitupian.cn/cjpic/frombd/1/253/2032688566/3458490751.jpg"
         ]'
         preview
+        hide-on-click-modal
       >
       </ea-image>
 
@@ -196,8 +198,10 @@
         }
       </style>
 
-      <ea-image-preview
+      <!-- <ea-image-preview
+        show-progress
         visible="true"
+        hide-on-click-modal
         url-list='[
           "https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain",
           "https://th.bing.com/th/id/R.d88442788ee5a458d50e40f0a8cb1e05?rik=EoPp8GhejYeQfw&riu=http%3a%2f%2fimg.pconline.com.cn%2fimages%2fupload%2fupc%2ftx%2fwallpaper%2f1307%2f10%2fc2%2f23151595_1373424485102.jpg&ehk=J7xq%2f50bCmdD4jUXfnTlau2s5WiVsBxQArAjvJzqIo4%3d&risl=&pid=ImgRaw&r=0",
@@ -210,9 +214,28 @@
       >
         <section class="viewer-error" slot="viewer-error">viewer-error</section>
         <section slot="toolbar">toolbar</section>
-        <section slot="progress">progress</section>
-      </ea-image-preview>
+        <section slot="progress">
+          <span data-active></span> //
+          <span data-total></span>
+        </section>
+      </ea-image-preview> -->
     </div>
+
+    <script type="module">
+      const viewer = document.querySelector(".viewer");
+
+      // TODO: 删
+      viewer.addEventListener("ea-image-ready", (e) => {
+        // viewer.showPreview();
+      });
+
+      viewer.addEventListener("switch", (e) => {
+        console.log(e.detail);
+      });
+      viewer.addEventListener("rotate", (e) => {
+        console.log(e.detail);
+      });
+    </script>
 
     <hr />
     <!-- #endregion  -->

@@ -1,11 +1,11 @@
 $ea-image-status: (loading, error, success);
 
 :host {
-  --ea-overlay-content-width: 50%;
+  --ea-overlay-content-width: 100%;
   --ea-overlay-content-max-width: 100%;
-  --ea-overlay-content-height: auto;
+  --ea-overlay-content-height: 100%;
 
-  --ea-image-preview-tool-size: 18px;
+  --ea-image-preview-tool-size: 20px;
   --ea-image-preview-tool-color: #fff;
 
   --ea-image-preview-tool-offset-x: 1.5rem;
@@ -34,9 +34,6 @@ $ea-image-status: (loading, error, success);
     --ea-image-background: transparent;
 
     position: fixed;
-
-    width: 100%;
-    height: 100%;
 
     left: 50%;
     top: 50%;
@@ -81,6 +78,21 @@ $ea-image-status: (loading, error, success);
     transform: translateX(-50%);
   }
 
+  @include element(progress) {
+    display: none;
+
+    margin-bottom: 1.5rem;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+    color: white;
+
+    cursor: default;
+    user-select: none;
+  }
+
   @include element(toolbar) {
     display: flex;
     align-items: center;
@@ -101,6 +113,12 @@ $ea-image-status: (loading, error, success);
     }
   }
 
+  @include state(show-progress) {
+    .ea-image-preview__progress {
+      display: flex;
+    }
+  }
+
   .next-icon,
   .prev-icon {
     position: fixed;
@@ -116,9 +134,13 @@ $ea-image-status: (loading, error, success);
 
   @each $status in $ea-image-status {
     @if ($status == loading) {
-      --ea-overlay-content-height: 50%;
+      @include modifier(loading) {
+        --ea-overlay-content-height: 50%;
+      }
     } @else if ($status == error) {
-      --ea-overlay-content-height: 50%;
+      @include modifier(error) {
+        --ea-overlay-content-height: 50%;
+      }
     }
   }
 }

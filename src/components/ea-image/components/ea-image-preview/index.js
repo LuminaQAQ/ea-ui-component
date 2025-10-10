@@ -10,6 +10,12 @@ export class EaImagePreview extends EaOverlay {
   /** @type {HTMLElement} */
   #content;
   /** @type {HTMLElement} */
+  #header;
+  /** @type {HTMLElement} */
+  #main;
+  /** @type {HTMLElement} */
+  #footer;
+  /** @type {HTMLElement} */
   #imgContent;
   /** @type {HTMLElement} */
   #mask;
@@ -19,6 +25,8 @@ export class EaImagePreview extends EaOverlay {
   #prevIcon;
   /** @type {HTMLElement} */
   #nextIcon;
+  /** @type {HTMLElement} */
+  #progress;
   /** @type {HTMLElement} */
   #zoomInIcon;
   /** @type {HTMLElement} */
@@ -32,11 +40,17 @@ export class EaImagePreview extends EaOverlay {
   #imgAbortController;
   /** @type {AbortController} */
   #abortController;
+  /** @type {AbortController} */
+  #clickModalAbortController;
 
   #states = {
     urlList: [],
     /** @type {"loading" | "success" | "error"} */
     status: "loading",
+
+    dirtyUpdate: false,
+
+    isUrlListInit: false,
   };
 
   static get observedAttributes() {
@@ -47,12 +61,14 @@ export class EaImagePreview extends EaOverlay {
       "index",
       "url-list",
       "initial-index",
-      "close-on-press-escape",
       "infinite",
       "zoom-rate",
       "scale",
       "min-scale",
       "max-scale",
+      "close-on-press-escape",
+      "hide-on-click-modal",
+
       "show-progress",
     ];
   }
@@ -75,18 +91,30 @@ export class EaImagePreview extends EaOverlay {
       default: [],
       /** @param {String[]} newVal */
       observer: (newVal) => {
+        this.#states.isUrlListInit = false;
+
         this.#states.urlList = newVal;
         this.index = this["initial-index"];
+
+        this.#states.isUrlListInit = true;
       },
     },
     index: {
       type: Number,
       default: () => this["initial-index"],
-      observer: (newVal) => {
+      observer: (newVal, oldVal) => {
+        if (this.#states.dirtyUpdate) return (this.#states.dirtyUpdate = false);
+
         if (this.infinite) {
           if (!this["url-list"].length) return;
 
-          this;
+          const length = this.#states.urlList.length - 1;
+
+          if (newVal > length) return (this.index = 0);
+          else if (newVal < 0) return (this.index = length);
+        } else if (newVal < 0 || newVal > this.#states.urlList.length - 1) {
+          this.#states.dirtyUpdate = true;
+          return (this.index = oldVal);
         }
 
         const src = this.#states.urlList[newVal];
@@ -105,6 +133,8 @@ export class EaImagePreview extends EaOverlay {
             `
           );
 
+          this.#handleProgress(newVal + 1, this.#states.urlList.length);
+
           const img = this.#imgContent.querySelector(".ea-image-preview__img");
           this.#imgAbortController?.abort();
           this.#imgAbortController = new AbortController();
@@ -112,7 +142,13 @@ export class EaImagePreview extends EaOverlay {
             "error",
             (e) => {
               this.#states.status = "error";
+              this.classList.remove(
+                "ea-image-preview--success",
+                "ea-image-preview--loading"
+              );
               this.#container.classList.add("ea-image-preview--error");
+
+              this.dispatchEvent("error");
               this.#imgAbortController.abort();
             },
             {
@@ -124,7 +160,11 @@ export class EaImagePreview extends EaOverlay {
             "load",
             () => {
               this.#states.status = "success";
-              this.classList.add("ea-image-preview--success");
+              this.#container.classList.remove(
+                "ea-image-preview--error",
+                "ea-image-preview--loading"
+              );
+              this.#container.classList.add("ea-image-preview--success");
               this.#imgAbortController.abort();
             },
             {
@@ -132,18 +172,102 @@ export class EaImagePreview extends EaOverlay {
               signal: this.#imgAbortController.signal,
             }
           );
+
+          if (this.visible && this.#states.isUrlListInit) {
+            this.dispatchEvent("switch", {
+              detail: {
+                index: newVal,
+                url: src,
+                imgTarget: img,
+              },
+            });
+          }
         }
       },
-    },
-    "zoom-rate": {
-      type: Number,
-      default: 0.2,
-      observer: (newVal) => {},
     },
     infinite: {
       type: Boolean,
       default: true,
       observer: (newVal) => {},
+    },
+    // "append-to-body": {
+    //   type: Boolean,
+    //   default: false,
+    //   observer: (newVal) => {},
+    // },
+    zoom: {
+      type: Number,
+      default: 1,
+      observer: (newVal) => {},
+    },
+    "zoom-rate": {
+      type: Number,
+      default: 1.2,
+      observer: (newVal) => {},
+    },
+    scale: {
+      type: Number,
+      default: 1,
+      observer: (newVal, oldVal) => {
+        if (newVal < this["min-scale"] || newVal > this["max-scale"])
+          return (this.scale = oldVal);
+
+        this.#imgContent.style.setProperty("--ea-image-preview-scale", newVal);
+      },
+    },
+    "min-scale": {
+      type: Number,
+      default: 0.2,
+      observer: (newVal) => {},
+    },
+    "max-scale": {
+      type: Number,
+      default: 7,
+      observer: (newVal) => {},
+    },
+    "close-on-press-escape": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {},
+    },
+    "show-progress": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    "hide-on-click-modal": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {
+        this.#clickModalAbortController?.abort();
+
+        if (newVal) {
+          this.#clickModalAbortController = new AbortController();
+          this.#container.addEventListener(
+            "click",
+            (e) => {
+              const img = this.#imgContent.querySelector(
+                ".ea-image-preview__img"
+              );
+
+              if (
+                !img.contains(e.target) &&
+                !this.#header.contains(e.target) &&
+                !this.#main.contains(e.target) &&
+                !this.#footer.contains(e.target)
+              ) {
+                this.hide();
+                this.visible = false;
+              }
+            },
+            {
+              signal: this.#clickModalAbortController.signal,
+            }
+          );
+        }
+      },
     },
   });
 
@@ -156,6 +280,9 @@ export class EaImagePreview extends EaOverlay {
       "ea-image-preview",
       {
         ["--" + this.#states.status]: this.#states.status,
+      },
+      {
+        "show-progress": this["show-progress"],
       }
     )}`;
 
@@ -203,17 +330,93 @@ export class EaImagePreview extends EaOverlay {
     this.#zoomOutIcon = this.shadowRoot.querySelector(".zoom-out-icon");
     this.#rotateLeftIcon = this.shadowRoot.querySelector(".rotate-left-icon");
     this.#rotateRightIcon = this.shadowRoot.querySelector(".rotate-right-icon");
+    this.#progress = this.shadowRoot.querySelector(
+      ".ea-image-preview__progress slot[name='progress']"
+    );
+
+    this.#header = this.shadowRoot.querySelector(".ea-image-preview__header");
+    this.#main = this.shadowRoot.querySelector(".ea-image-preview__main");
+    this.#footer = this.shadowRoot.querySelector(".ea-image-preview__footer");
+
+    // if (this["append-to-body"]) document.appendChild(this);
   }
+
+  /**
+   * 处理缩放
+   * @param {'in' | 'out'} action
+   */
+  #handleZoom = (action) => {
+    if (action === "in") {
+      this.scale = (this.scale * this["zoom-rate"]).toFixed(3);
+    } else if (action === "out") {
+      this.scale = (this.scale / this["zoom-rate"]).toFixed(3);
+    }
+  };
+
+  /**
+   * 处理旋转
+   * @param {'left' | 'right'} action
+   */
+  #handleRotate = (action) => {
+    const currentRotate = Number(
+      this.#imgContent.style
+        .getPropertyValue("--ea-image-preview-rotate")
+        .split("deg")[0] || 0
+    );
+    let rotate = 0;
+
+    if (action === "left") {
+      rotate = currentRotate - 90;
+    } else if (action === "right") {
+      rotate = currentRotate + 90;
+    }
+
+    this.#imgContent.style.setProperty(
+      "--ea-image-preview-rotate",
+      rotate + "deg"
+    );
+
+    this.dispatchEvent("rotate", {
+      detail: {
+        oldVal: currentRotate,
+        rotate,
+      },
+    });
+  };
+
+  /**
+   * 处理进度
+   * @param {Number} active
+   * @param {Number} total
+   * @returns
+   */
+  #handleProgress = (active, total) => {
+    const progress = this.querySelector("[slot='progress']");
+
+    if (progress) {
+      const activeEl = progress.querySelector("[data-active]");
+      const totalEl = progress.querySelector("[data-total]");
+
+      if (activeEl) activeEl.textContent = active;
+      if (totalEl) totalEl.textContent = total;
+    } else {
+      this.#progress.textContent = `${active} / ${total}`;
+    }
+  };
+
+  /**
+   * 设置当前项
+   * @param {Number} index
+   */
+  setActiveItem = (index) => {
+    this.index = index;
+  };
 
   connectedCallback() {
     super.connectedCallback();
     this.assignedStyle(stylesheet);
 
     this.#abortController = new AbortController();
-
-    // this.index = this.index;
-
-    // console.log(this);
 
     this.#closeIcon.addEventListener(
       "click",
@@ -247,58 +450,49 @@ export class EaImagePreview extends EaOverlay {
     );
 
     this.#zoomInIcon.addEventListener("click", () => {
-      const currentZoom = parseFloat(
-        this.#imgContent.style.getPropertyValue("--ea-image-preview-scale") || 1
-      ).toFixed(3);
-
-      this.#imgContent.style.setProperty(
-        "--ea-image-preview-scale",
-        Number(currentZoom) + this["zoom-rate"]
-      );
+      this.#handleZoom("in");
     });
-
     this.#zoomOutIcon.addEventListener("click", () => {
-      const currentZoom = parseFloat(
-        this.#imgContent.style.getPropertyValue("--ea-image-preview-scale") || 1
-      ).toFixed(3);
+      this.#handleZoom("out");
+    });
+    this.#container.addEventListener("wheel", (e) => {
+      e.preventDefault();
 
-      if (Number(currentZoom) > this["zoom-rate"])
-        this.#imgContent.style.setProperty(
-          "--ea-image-preview-scale",
-          Number(currentZoom) - this["zoom-rate"]
-        );
+      if (e.deltaY > 0) {
+        this.#handleZoom("out");
+      } else {
+        this.#handleZoom("in");
+      }
     });
 
     this.#rotateLeftIcon.addEventListener("click", () => {
-      const currentRotate = Number(
-        this.#imgContent.style
-          .getPropertyValue("--ea-image-preview-rotate")
-          .split("deg")[0] || 0
-      );
-
-      this.#imgContent.style.setProperty(
-        "--ea-image-preview-rotate",
-        currentRotate - 90 + "deg"
-      );
+      this.#handleRotate("left");
     });
     this.#rotateRightIcon.addEventListener("click", () => {
-      const currentRotate = Number(
-        this.#imgContent.style
-          .getPropertyValue("--ea-image-preview-rotate")
-          .split("deg")[0] || 0
-      );
-
-      this.#imgContent.style.setProperty(
-        "--ea-image-preview-rotate",
-        currentRotate + 90 + "deg"
-      );
+      this.#handleRotate("right");
     });
 
-    this.dispatchEvent("ea-image-ready");
+    this.addEventListener("closed", () => (this.index = this["intial-index"]), {
+      signal: this.#abortController.signal,
+    });
+
+    if (this["close-on-press-escape"])
+      window.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.key === "Escape") {
+            this.hide();
+          }
+        },
+        { signal: this.#abortController.signal }
+      );
+
+    this.dispatchEvent("ea-image-preview-ready");
   }
 
   $beforeUnmounted() {
     this.#abortController.abort();
+    this.#imgAbortController?.abort();
   }
 }
 

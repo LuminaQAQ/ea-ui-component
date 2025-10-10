@@ -291,9 +291,9 @@ export default class Base extends HTMLElement {
     this.tabIndex = this.getAttrNumber("tabindex") || 0;
     this["loading-full"] = this["loading-full"];
 
-    this.addEventListener("keydown", (e) => {
-      //   console.log(e.key, e.ctrlKey);
-    });
+    // this.addEventListener("keydown", (e) => {
+    //   console.log(e.key, e.ctrlKey);
+    // });
   }
 
   disconnectedCallback() {
