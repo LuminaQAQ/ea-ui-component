@@ -183,6 +183,19 @@
       >
       </ea-image>
 
+      <style>
+        .viewer-error {
+          width: 100%;
+          height: 100%;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          background-color: aliceblue;
+        }
+      </style>
+
       <ea-image-preview
         visible="true"
         url-list='[
@@ -195,7 +208,7 @@
           "https://www.keaitupian.cn/cjpic/frombd/1/253/2032688566/3458490751.jpg"
         ]'
       >
-        <section slot="viewer-error">viewer-error</section>
+        <section class="viewer-error" slot="viewer-error">viewer-error</section>
         <section slot="toolbar">toolbar</section>
         <section slot="progress">progress</section>
       </ea-image-preview>

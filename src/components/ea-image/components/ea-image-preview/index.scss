@@ -1,7 +1,7 @@
 $ea-image-status: (loading, error, success);
 
 :host {
-  --ea-overlay-content-width: 100%;
+  --ea-overlay-content-width: 50%;
   --ea-overlay-content-max-width: 100%;
   --ea-overlay-content-height: auto;
 
@@ -10,6 +10,9 @@ $ea-image-status: (loading, error, success);
 
   --ea-image-preview-tool-offset-x: 1.5rem;
   --ea-image-preview-tool-offset-y: 1.5rem;
+
+  --ea-image-preview-scale: 1;
+  --ea-image-preview-rotate: 0;
 }
 
 @include block(ea-image-preview) {
@@ -28,6 +31,8 @@ $ea-image-status: (loading, error, success);
   }
 
   @include element(img) {
+    --ea-image-background: transparent;
+
     position: fixed;
 
     width: 100%;
@@ -35,10 +40,14 @@ $ea-image-status: (loading, error, success);
 
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
+    transform-origin: center center;
+    transform: translate(-50%, -50%) scale(var(--ea-image-preview-scale))
+      rotate(var(--ea-image-preview-rotate));
 
     max-width: 100%;
     max-height: 100%;
+
+    transition: transform 0.3s ease-in-out;
   }
 
   .ea-image-preview__header,

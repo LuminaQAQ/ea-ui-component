@@ -15,6 +15,18 @@ export class EaImagePreview extends EaOverlay {
   #mask;
   /** @type {HTMLElement} */
   #closeIcon;
+  /** @type {HTMLElement} */
+  #prevIcon;
+  /** @type {HTMLElement} */
+  #nextIcon;
+  /** @type {HTMLElement} */
+  #zoomInIcon;
+  /** @type {HTMLElement} */
+  #zoomOutIcon;
+  /** @type {HTMLElement} */
+  #rotateLeftIcon;
+  /** @type {HTMLElement} */
+  #rotateRightIcon;
 
   /** @type {AbortController} */
   #imgAbortController;
@@ -22,7 +34,6 @@ export class EaImagePreview extends EaOverlay {
   #abortController;
 
   #states = {
-    index: this["initial-index"],
     urlList: [],
     /** @type {"loading" | "success" | "error"} */
     status: "loading",
@@ -35,7 +46,6 @@ export class EaImagePreview extends EaOverlay {
       "visible",
       "index",
       "url-list",
-      "z-index",
       "initial-index",
       "close-on-press-escape",
       "infinite",
@@ -73,6 +83,12 @@ export class EaImagePreview extends EaOverlay {
       type: Number,
       default: () => this["initial-index"],
       observer: (newVal) => {
+        if (this.infinite) {
+          if (!this["url-list"].length) return;
+
+          this;
+        }
+
         const src = this.#states.urlList[newVal];
         this.#imgContent.innerHTML = "";
 
@@ -82,6 +98,7 @@ export class EaImagePreview extends EaOverlay {
             "ea-image-preview__img",
             {
               src,
+              fit: "contain",
             },
             `
               <slot name="viewer-error" slot="error"></slot>
@@ -117,6 +134,16 @@ export class EaImagePreview extends EaOverlay {
           );
         }
       },
+    },
+    "zoom-rate": {
+      type: Number,
+      default: 0.2,
+      observer: (newVal) => {},
+    },
+    infinite: {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {},
     },
   });
 
@@ -170,6 +197,12 @@ export class EaImagePreview extends EaOverlay {
     this.#mask = this.shadowRoot.querySelector(".ea-overlay__mask");
     this.#imgContent = this.shadowRoot.querySelector(".ea-overlay__content");
     this.#closeIcon = this.shadowRoot.querySelector(".close-icon");
+    this.#prevIcon = this.shadowRoot.querySelector(".prev-icon");
+    this.#nextIcon = this.shadowRoot.querySelector(".next-icon");
+    this.#zoomInIcon = this.shadowRoot.querySelector(".zoom-in-icon");
+    this.#zoomOutIcon = this.shadowRoot.querySelector(".zoom-out-icon");
+    this.#rotateLeftIcon = this.shadowRoot.querySelector(".rotate-left-icon");
+    this.#rotateRightIcon = this.shadowRoot.querySelector(".rotate-right-icon");
   }
 
   connectedCallback() {
@@ -192,6 +225,74 @@ export class EaImagePreview extends EaOverlay {
         signal: this.#abortController.signal,
       }
     );
+
+    this.#prevIcon.addEventListener(
+      "click",
+      () => {
+        this.index--;
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#nextIcon.addEventListener(
+      "click",
+      () => {
+        this.index++;
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#zoomInIcon.addEventListener("click", () => {
+      const currentZoom = parseFloat(
+        this.#imgContent.style.getPropertyValue("--ea-image-preview-scale") || 1
+      ).toFixed(3);
+
+      this.#imgContent.style.setProperty(
+        "--ea-image-preview-scale",
+        Number(currentZoom) + this["zoom-rate"]
+      );
+    });
+
+    this.#zoomOutIcon.addEventListener("click", () => {
+      const currentZoom = parseFloat(
+        this.#imgContent.style.getPropertyValue("--ea-image-preview-scale") || 1
+      ).toFixed(3);
+
+      if (Number(currentZoom) > this["zoom-rate"])
+        this.#imgContent.style.setProperty(
+          "--ea-image-preview-scale",
+          Number(currentZoom) - this["zoom-rate"]
+        );
+    });
+
+    this.#rotateLeftIcon.addEventListener("click", () => {
+      const currentRotate = Number(
+        this.#imgContent.style
+          .getPropertyValue("--ea-image-preview-rotate")
+          .split("deg")[0] || 0
+      );
+
+      this.#imgContent.style.setProperty(
+        "--ea-image-preview-rotate",
+        currentRotate - 90 + "deg"
+      );
+    });
+    this.#rotateRightIcon.addEventListener("click", () => {
+      const currentRotate = Number(
+        this.#imgContent.style
+          .getPropertyValue("--ea-image-preview-rotate")
+          .split("deg")[0] || 0
+      );
+
+      this.#imgContent.style.setProperty(
+        "--ea-image-preview-rotate",
+        currentRotate + 90 + "deg"
+      );
+    });
 
     this.dispatchEvent("ea-image-ready");
   }
