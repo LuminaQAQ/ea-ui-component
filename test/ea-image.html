@@ -305,7 +305,7 @@
 
     <div class="demo">
       <ea-image
-        id="showPreviewImage"
+        id="customToolbarImage"
         style="width: 100px; height: 100px"
         class="viewer"
         src="https://tse1.mm.bing.net/th/id/OIP.rTMre-V-rMq3T1EP9W7vlAHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
@@ -327,17 +327,42 @@
         show-progress
       >
         <section slot="toolbar">
+          <ea-icon id="switchFirst" icon="icon-fast-bw"></ea-icon>
           <ea-icon icon="icon-angle-left" data-action="switch-prev"></ea-icon>
           <ea-icon icon="icon-angle-right" data-action="switch-next"></ea-icon>
-
-          <ea-icon icon="icon-zoom-out" data-action="zoom-out"></ea-icon>
+          <ea-icon id="switchLast" icon="icon-fast-fw"></ea-icon>
+          |
           <ea-icon icon="icon-zoom-in" data-action="zoom-in"></ea-icon>
-
-          <ea-icon icon="icon-ccw" data-action="switch-prev"></ea-icon>
-          <ea-icon icon="icon-cw" data-action="switch-prev"></ea-icon>
+          <ea-icon icon="icon-zoom-out" data-action="zoom-out"></ea-icon>
+          |
+          <ea-icon icon="icon-ccw" data-action="rotate-anticlockwise"></ea-icon>
+          <ea-icon icon="icon-cw" data-action="rotate-clockwise"></ea-icon>
+          |
+          <ea-icon id="reset" icon="icon-recycle"></ea-icon>
         </section>
       </ea-image>
     </div>
+
+    <script type="module">
+      const customToolbarImage = {
+        image: document.querySelector("#customToolbarImage"),
+        switchFirst: document.querySelector("#switchFirst"),
+        switchLast: document.querySelector("#switchLast"),
+        reset: document.querySelector("#reset"),
+        init() {
+          this.switchFirst.addEventListener("click", () => {
+            this.image.setActiveItem(0);
+          });
+          this.switchLast.addEventListener("click", () => {
+            this.image.setActiveItem(6);
+          });
+          this.reset.addEventListener("click", () => {
+            this.image.reset();
+          });
+        },
+      };
+      customToolbarImage.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->

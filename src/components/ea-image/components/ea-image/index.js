@@ -340,6 +340,22 @@ export class EaImage extends Base {
     this.#imagePreview = this.shadowRoot.querySelector(".ea-image-preview");
   }
 
+  /**
+   * 设置当前项
+   * @param {Number} index
+   */
+  setActiveItem = (index) => {
+    if (!this.preview) return;
+
+    this.#imagePreview.setActiveItem(index);
+  };
+
+  reset = (index) => {
+    if (!this.preview) return;
+
+    this.#imagePreview.reset();
+  };
+
   showPreview = () => {
     this.#imagePreview.visible = true;
   };
