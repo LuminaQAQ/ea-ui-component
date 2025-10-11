@@ -51,6 +51,11 @@ export class EaImagePreview extends EaOverlay {
     dirtyUpdate: false,
 
     isUrlListInit: false,
+
+    position: {
+      x: 0,
+      y: 0,
+    },
   };
 
   static get observedAttributes() {
@@ -61,7 +66,7 @@ export class EaImagePreview extends EaOverlay {
       "index",
       "url-list",
       "initial-index",
-      "infinite",
+      "infstartE",
       "zoom-rate",
       "scale",
       "min-scale",
@@ -107,7 +112,7 @@ export class EaImagePreview extends EaOverlay {
       observer: (newVal, oldVal) => {
         if (this.#states.dirtyUpdate) return (this.#states.dirtyUpdate = false);
 
-        if (this.infinite) {
+        if (this.infstartE) {
           if (!this["url-list"].length) return;
 
           const length = this.#states.urlList.length - 1;
@@ -344,6 +349,18 @@ export class EaImagePreview extends EaOverlay {
   }
 
   /**
+   * 处理切换
+   * @param {'prev' | 'next'} action
+   */
+  #handleSwitch = (action) => {
+    if (action === "prev") {
+      this.index--;
+    } else if (action === "next") {
+      this.index++;
+    }
+  };
+
+  /**
    * 处理缩放
    * @param {'in' | 'out'} action
    */
@@ -357,7 +374,7 @@ export class EaImagePreview extends EaOverlay {
 
   /**
    * 处理旋转
-   * @param {'left' | 'right'} action
+   * @param {'left' | 'right' | 'reset'} action
    */
   #handleRotate = (action) => {
     const currentRotate = Number(
@@ -417,12 +434,81 @@ export class EaImagePreview extends EaOverlay {
     }
   };
 
+  #handleImgMoveEvent = (startE) => {
+    startE.preventDefault();
+
+    const controller = new AbortController();
+
+    const startX = startE.clientX;
+    const startY = startE.clientY;
+
+    const originX = this.#states.position.x;
+    const originY = this.#states.position.y;
+
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        e.preventDefault();
+
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+
+        const newX = originX + deltaX;
+        const newY = originY + deltaY;
+
+        this.#imgContent.style.setProperty(
+          "--ea-image-preview-img-move-x",
+          `${newX}px`
+        );
+        this.#imgContent.style.setProperty(
+          "--ea-image-preview-img-move-y",
+          `${newY}px`
+        );
+      },
+      {
+        signal: controller.signal,
+      }
+    );
+
+    window.addEventListener(
+      "mouseup",
+      (e) => {
+        e.preventDefault();
+
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+
+        this.#states.position.x = originX + deltaX;
+        this.#states.position.y = originY + deltaY;
+
+        controller.abort();
+      },
+      {
+        signal: controller.signal,
+      }
+    );
+  };
+
   /**
    * 设置当前项
    * @param {Number} index
    */
   setActiveItem = (index) => {
     this.index = index;
+  };
+
+  reset = () => {
+    this.index = this["initial-index"];
+    this.scale = 1;
+    this.#handleRotate("reset");
+
+    this.#states.position = {
+      x: 0,
+      y: 0,
+    };
+
+    this.#imgContent.style.setProperty("--ea-image-preview-img-move-x", `0`);
+    this.#imgContent.style.setProperty("--ea-image-preview-img-move-y", `0`);
   };
 
   connectedCallback() {
@@ -445,17 +531,16 @@ export class EaImagePreview extends EaOverlay {
     this.#prevIcon.addEventListener(
       "click",
       () => {
-        this.index--;
+        this.#handleSwitch("prev");
       },
       {
         signal: this.#abortController.signal,
       }
     );
-
     this.#nextIcon.addEventListener(
       "click",
       () => {
-        this.index++;
+        this.#handleSwitch("next");
       },
       {
         signal: this.#abortController.signal,
@@ -516,7 +601,11 @@ export class EaImagePreview extends EaOverlay {
       }
     );
 
-    this.addEventListener("closed", () => (this.index = this["intial-index"]), {
+    this.addEventListener("closed", this.reset, {
+      signal: this.#abortController.signal,
+    });
+
+    this.#imgContent.addEventListener("mousedown", this.#handleImgMoveEvent, {
       signal: this.#abortController.signal,
     });
 
