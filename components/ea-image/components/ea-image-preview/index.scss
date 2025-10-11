@@ -5,6 +5,9 @@ $ea-image-status: (loading, error, success);
   --ea-overlay-content-max-width: 100%;
   --ea-overlay-content-height: 100%;
 
+  --ea-image-preview-img-move-x: 0;
+  --ea-image-preview-img-move-y: 0;
+
   --ea-image-preview-tool-size: 20px;
   --ea-image-preview-tool-color: #fff;
 
@@ -41,8 +44,13 @@ $ea-image-status: (loading, error, success);
     transform: translate(-50%, -50%) scale(var(--ea-image-preview-scale))
       rotate(var(--ea-image-preview-rotate));
 
+    width: 100%;
+    height: 100%;
     max-width: 100%;
     max-height: 100%;
+
+    margin-left: var(--ea-image-preview-img-move-x);
+    margin-top: var(--ea-image-preview-img-move-y);
 
     transition: transform 0.3s ease-in-out;
   }

@@ -205,7 +205,7 @@ export class EaImage extends Base {
     },
     "initial-index": {
       type: Number,
-      default: 2000,
+      default: 0,
       observer: (newVal) => {
         if (!this.preview) return;
 
@@ -215,8 +215,8 @@ export class EaImage extends Base {
       },
     },
     "close-on-press-escape": {
-      type: Number,
-      default: 2000,
+      type: Boolean,
+      default: true,
       observer: (newVal) => {
         if (!this.preview) return;
 
@@ -226,8 +226,8 @@ export class EaImage extends Base {
       },
     },
     infinite: {
-      type: Number,
-      default: 2000,
+      type: Boolean,
+      default: true,
       observer: (newVal) => {
         if (!this.preview) return;
 
@@ -238,7 +238,7 @@ export class EaImage extends Base {
     },
     "zoom-rate": {
       type: Number,
-      default: 2000,
+      default: 1.2,
       observer: (newVal) => {
         if (!this.preview) return;
 
@@ -249,7 +249,7 @@ export class EaImage extends Base {
     },
     scale: {
       type: Number,
-      default: 2000,
+      default: 1,
       observer: (newVal) => {
         if (!this.preview) return;
 
@@ -260,7 +260,7 @@ export class EaImage extends Base {
     },
     "min-scale": {
       type: Number,
-      default: 2000,
+      default: 0.2,
       observer: (newVal) => {
         if (!this.preview) return;
 
@@ -271,7 +271,7 @@ export class EaImage extends Base {
     },
     "max-scale": {
       type: Number,
-      default: 2000,
+      default: 7,
       observer: (newVal) => {
         if (!this.preview) return;
 
@@ -281,8 +281,8 @@ export class EaImage extends Base {
       },
     },
     "show-progress": {
-      type: Number,
-      default: 2000,
+      type: Boolean,
+      default: false,
       observer: (newVal) => {
         if (!this.preview) return;
 
@@ -327,6 +327,9 @@ export class EaImage extends Base {
         </section>
       </div>
       <ea-image-preview class="ea-image-preview" part='preview'>
+        <slot name='progress' slot="progress"></slot>
+        <slot name='toolbar' slot="toolbar"></slot>
+        <slot name='progress' slot="progress"></slot>
       </ea-image-preview>
     `;
 

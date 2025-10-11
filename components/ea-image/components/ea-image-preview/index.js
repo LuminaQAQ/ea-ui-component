@@ -51,6 +51,11 @@ export class EaImagePreview extends EaOverlay {
     dirtyUpdate: false,
 
     isUrlListInit: false,
+
+    position: {
+      x: 0,
+      y: 0,
+    },
   };
 
   static get observedAttributes() {
@@ -61,7 +66,7 @@ export class EaImagePreview extends EaOverlay {
       "index",
       "url-list",
       "initial-index",
-      "infinite",
+      "infstartE",
       "zoom-rate",
       "scale",
       "min-scale",
@@ -84,7 +89,9 @@ export class EaImagePreview extends EaOverlay {
     "initial-index": {
       type: Number,
       default: 0,
-      observer: () => {},
+      observer: (newVal) => {
+        this.index = newVal;
+      },
     },
     "url-list": {
       type: Array,
@@ -105,7 +112,7 @@ export class EaImagePreview extends EaOverlay {
       observer: (newVal, oldVal) => {
         if (this.#states.dirtyUpdate) return (this.#states.dirtyUpdate = false);
 
-        if (this.infinite) {
+        if (this.infstartE) {
           if (!this["url-list"].length) return;
 
           const length = this.#states.urlList.length - 1;
@@ -342,6 +349,18 @@ export class EaImagePreview extends EaOverlay {
   }
 
   /**
+   * 处理切换
+   * @param {'prev' | 'next'} action
+   */
+  #handleSwitch = (action) => {
+    if (action === "prev") {
+      this.index--;
+    } else if (action === "next") {
+      this.index++;
+    }
+  };
+
+  /**
    * 处理缩放
    * @param {'in' | 'out'} action
    */
@@ -355,7 +374,7 @@ export class EaImagePreview extends EaOverlay {
 
   /**
    * 处理旋转
-   * @param {'left' | 'right'} action
+   * @param {'left' | 'right' | 'reset'} action
    */
   #handleRotate = (action) => {
     const currentRotate = Number(
@@ -394,14 +413,80 @@ export class EaImagePreview extends EaOverlay {
     const progress = this.querySelector("[slot='progress']");
 
     if (progress) {
-      const activeEl = progress.querySelector("[data-active]");
-      const totalEl = progress.querySelector("[data-total]");
+      try {
+        const ary = progress.assignedNodes();
+        ary.forEach((el) => {
+          const activeEl = el.querySelector("[data-active]");
+          const totalEl = el.querySelector("[data-total]");
 
-      if (activeEl) activeEl.textContent = active;
-      if (totalEl) totalEl.textContent = total;
+          if (activeEl) activeEl.textContent = active;
+          if (totalEl) totalEl.textContent = total;
+        });
+      } catch (error) {
+        const activeEl = progress.querySelector("[data-active]");
+        const totalEl = progress.querySelector("[data-total]");
+
+        if (activeEl) activeEl.textContent = active;
+        if (totalEl) totalEl.textContent = total;
+      }
     } else {
       this.#progress.textContent = `${active} / ${total}`;
     }
+  };
+
+  #handleImgMoveEvent = (startE) => {
+    startE.preventDefault();
+
+    const controller = new AbortController();
+
+    const startX = startE.clientX;
+    const startY = startE.clientY;
+
+    const originX = this.#states.position.x;
+    const originY = this.#states.position.y;
+
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        e.preventDefault();
+
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+
+        const newX = originX + deltaX;
+        const newY = originY + deltaY;
+
+        this.#imgContent.style.setProperty(
+          "--ea-image-preview-img-move-x",
+          `${newX}px`
+        );
+        this.#imgContent.style.setProperty(
+          "--ea-image-preview-img-move-y",
+          `${newY}px`
+        );
+      },
+      {
+        signal: controller.signal,
+      }
+    );
+
+    window.addEventListener(
+      "mouseup",
+      (e) => {
+        e.preventDefault();
+
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+
+        this.#states.position.x = originX + deltaX;
+        this.#states.position.y = originY + deltaY;
+
+        controller.abort();
+      },
+      {
+        signal: controller.signal,
+      }
+    );
   };
 
   /**
@@ -410,6 +495,20 @@ export class EaImagePreview extends EaOverlay {
    */
   setActiveItem = (index) => {
     this.index = index;
+  };
+
+  reset = () => {
+    this.index = this["initial-index"];
+    this.scale = 1;
+    this.#handleRotate("reset");
+
+    this.#states.position = {
+      x: 0,
+      y: 0,
+    };
+
+    this.#imgContent.style.setProperty("--ea-image-preview-img-move-x", `0`);
+    this.#imgContent.style.setProperty("--ea-image-preview-img-move-y", `0`);
   };
 
   connectedCallback() {
@@ -432,47 +531,81 @@ export class EaImagePreview extends EaOverlay {
     this.#prevIcon.addEventListener(
       "click",
       () => {
-        this.index--;
+        this.#handleSwitch("prev");
       },
       {
         signal: this.#abortController.signal,
       }
     );
-
     this.#nextIcon.addEventListener(
       "click",
       () => {
-        this.index++;
+        this.#handleSwitch("next");
       },
       {
         signal: this.#abortController.signal,
       }
     );
 
-    this.#zoomInIcon.addEventListener("click", () => {
-      this.#handleZoom("in");
-    });
-    this.#zoomOutIcon.addEventListener("click", () => {
-      this.#handleZoom("out");
-    });
-    this.#container.addEventListener("wheel", (e) => {
-      e.preventDefault();
-
-      if (e.deltaY > 0) {
-        this.#handleZoom("out");
-      } else {
+    this.#zoomInIcon.addEventListener(
+      "click",
+      () => {
         this.#handleZoom("in");
+      },
+      {
+        signal: this.#abortController.signal,
       }
+    );
+    this.#zoomOutIcon.addEventListener(
+      "click",
+      () => {
+        this.#handleZoom("out");
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+    this.#container.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+
+        if (e.deltaY > 0) {
+          this.#handleZoom("out");
+        } else {
+          this.#handleZoom("in");
+        }
+      },
+      {
+        signal: this.#abortController.signal,
+        passive: false,
+      }
+    );
+
+    this.#rotateLeftIcon.addEventListener(
+      "click",
+      () => {
+        this.#handleRotate("left");
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+    this.#rotateRightIcon.addEventListener(
+      "click",
+      () => {
+        this.#handleRotate("right");
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.addEventListener("closed", this.reset, {
+      signal: this.#abortController.signal,
     });
 
-    this.#rotateLeftIcon.addEventListener("click", () => {
-      this.#handleRotate("left");
-    });
-    this.#rotateRightIcon.addEventListener("click", () => {
-      this.#handleRotate("right");
-    });
-
-    this.addEventListener("closed", () => (this.index = this["intial-index"]), {
+    this.#imgContent.addEventListener("mousedown", this.#handleImgMoveEvent, {
       signal: this.#abortController.signal,
     });
 
