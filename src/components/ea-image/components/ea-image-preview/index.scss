@@ -41,6 +41,8 @@ $ea-image-status: (loading, error, success);
     transform: translate(-50%, -50%) scale(var(--ea-image-preview-scale))
       rotate(var(--ea-image-preview-rotate));
 
+    width: 100%;
+    height: 100%;
     max-width: 100%;
     max-height: 100%;
 

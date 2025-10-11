@@ -84,7 +84,9 @@ export class EaImagePreview extends EaOverlay {
     "initial-index": {
       type: Number,
       default: 0,
-      observer: () => {},
+      observer: (newVal) => {
+        this.index = newVal;
+      },
     },
     "url-list": {
       type: Array,
@@ -394,11 +396,22 @@ export class EaImagePreview extends EaOverlay {
     const progress = this.querySelector("[slot='progress']");
 
     if (progress) {
-      const activeEl = progress.querySelector("[data-active]");
-      const totalEl = progress.querySelector("[data-total]");
+      try {
+        const ary = progress.assignedNodes();
+        ary.forEach((el) => {
+          const activeEl = el.querySelector("[data-active]");
+          const totalEl = el.querySelector("[data-total]");
 
-      if (activeEl) activeEl.textContent = active;
-      if (totalEl) totalEl.textContent = total;
+          if (activeEl) activeEl.textContent = active;
+          if (totalEl) totalEl.textContent = total;
+        });
+      } catch (error) {
+        const activeEl = progress.querySelector("[data-active]");
+        const totalEl = progress.querySelector("[data-total]");
+
+        if (activeEl) activeEl.textContent = active;
+        if (totalEl) totalEl.textContent = total;
+      }
     } else {
       this.#progress.textContent = `${active} / ${total}`;
     }
@@ -449,28 +462,59 @@ export class EaImagePreview extends EaOverlay {
       }
     );
 
-    this.#zoomInIcon.addEventListener("click", () => {
-      this.#handleZoom("in");
-    });
-    this.#zoomOutIcon.addEventListener("click", () => {
-      this.#handleZoom("out");
-    });
-    this.#container.addEventListener("wheel", (e) => {
-      e.preventDefault();
-
-      if (e.deltaY > 0) {
-        this.#handleZoom("out");
-      } else {
+    this.#zoomInIcon.addEventListener(
+      "click",
+      () => {
         this.#handleZoom("in");
+      },
+      {
+        signal: this.#abortController.signal,
       }
-    });
+    );
+    this.#zoomOutIcon.addEventListener(
+      "click",
+      () => {
+        this.#handleZoom("out");
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+    this.#container.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
 
-    this.#rotateLeftIcon.addEventListener("click", () => {
-      this.#handleRotate("left");
-    });
-    this.#rotateRightIcon.addEventListener("click", () => {
-      this.#handleRotate("right");
-    });
+        if (e.deltaY > 0) {
+          this.#handleZoom("out");
+        } else {
+          this.#handleZoom("in");
+        }
+      },
+      {
+        signal: this.#abortController.signal,
+        passive: false,
+      }
+    );
+
+    this.#rotateLeftIcon.addEventListener(
+      "click",
+      () => {
+        this.#handleRotate("left");
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+    this.#rotateRightIcon.addEventListener(
+      "click",
+      () => {
+        this.#handleRotate("right");
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
 
     this.addEventListener("closed", () => (this.index = this["intial-index"]), {
       signal: this.#abortController.signal,
