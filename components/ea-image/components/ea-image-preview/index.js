@@ -537,18 +537,28 @@ export class EaImagePreview extends EaOverlay {
 
     const slot = this.querySelector("[slot='toolbar']");
     for (const [action, options] of Object.entries(els)) {
+      let hasActionEl = false;
+
       try {
         const els = slot.assignedNodes();
 
         els.forEach((el) => {
           const actionEl = el.querySelector(`[data-action="${action}"]`);
           if (actionEl) {
+            hasActionEl = true;
             actionEl.addEventListener("click", options.callback);
             options.el.style.display = "none";
           }
         });
       } catch (error) {
-        if (options.el) options.el.addEventListener("click", options.callback);
+        if (options.el) {
+          hasActionEl = true;
+          options.el.addEventListener("click", options.callback);
+        }
+      }
+
+      if (!hasActionEl && options.el) {
+        options.el.addEventListener("click", options.callback);
       }
     }
   };
