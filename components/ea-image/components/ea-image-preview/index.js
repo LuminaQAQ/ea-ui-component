@@ -490,6 +490,70 @@ export class EaImagePreview extends EaOverlay {
   };
 
   /**
+   * 初始化工具栏的事件。
+   * 若用户传入了自定义工具，则优先使用用户元素，否则使用内置元素
+   */
+  #initToobarEvent = () => {
+    const els = {
+      "switch-prev": {
+        el: null,
+        callback: () => {
+          this.#handleSwitch("prev");
+        },
+      },
+      "switch-next": {
+        el: null,
+        callback: () => {
+          this.#handleSwitch("next");
+        },
+      },
+
+      "zoom-out": {
+        el: this.#zoomInIcon,
+        callback: () => {
+          this.#handleZoom("out");
+        },
+      },
+      "zoom-in": {
+        el: this.#zoomOutIcon,
+        callback: () => {
+          this.#handleZoom("in");
+        },
+      },
+
+      "rotate-anticlockwise": {
+        el: this.#rotateLeftIcon,
+        callback: () => {
+          this.#handleRotate("left");
+        },
+      },
+      "rotate-clockwise": {
+        el: this.#rotateRightIcon,
+        callback: () => {
+          this.#handleRotate("right");
+        },
+      },
+    };
+
+    const slot = this.querySelector("[slot='toolbar']");
+    for (const [action, options] of Object.entries(els)) {
+      try {
+        const els = slot.assignedNodes();
+
+        els.forEach((el) => {
+          const actionEl = el.querySelector(`[data-action="${action}"]`);
+          if (actionEl) {
+            actionEl.addEventListener("click", options.callback);
+            options.el.style.display = "none";
+          }
+        });
+      } catch (error) {
+        if (options.el) options.el.addEventListener("click", options.callback);
+      }
+    }
+  };
+
+  /**
    * 设置当前项
    * @param {Number} index
    */
@@ -516,6 +580,8 @@ export class EaImagePreview extends EaOverlay {
     this.assignedStyle(stylesheet);
 
     this.#abortController = new AbortController();
+
+    this.#initToobarEvent();
 
     this.#closeIcon.addEventListener(
       "click",
@@ -547,24 +613,6 @@ export class EaImagePreview extends EaOverlay {
       }
     );
 
-    this.#zoomInIcon.addEventListener(
-      "click",
-      () => {
-        this.#handleZoom("in");
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
-    this.#zoomOutIcon.addEventListener(
-      "click",
-      () => {
-        this.#handleZoom("out");
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
     this.#container.addEventListener(
       "wheel",
       (e) => {
@@ -579,25 +627,6 @@ export class EaImagePreview extends EaOverlay {
       {
         signal: this.#abortController.signal,
         passive: false,
-      }
-    );
-
-    this.#rotateLeftIcon.addEventListener(
-      "click",
-      () => {
-        this.#handleRotate("left");
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
-    this.#rotateRightIcon.addEventListener(
-      "click",
-      () => {
-        this.#handleRotate("right");
-      },
-      {
-        signal: this.#abortController.signal,
       }
     );
 
