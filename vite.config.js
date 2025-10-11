@@ -45,7 +45,27 @@ export default defineConfig({
           const commonPath = normalizePath(
             path.resolve(__dirname, "src/common")
           );
+          const componentsPath = normalizePath(
+            path.resolve(__dirname, "src/components")
+          );
           const normalizedId = normalizePath(id);
+          /**
+           * @param {Array<string>} pathChunks
+           * @returns
+           */
+          const findComponentName = (pathChunks) => {
+            const chunk = pathChunks.pop();
+            return chunk?.startsWith("ea-")
+              ? chunk
+              : findComponentName(pathChunks);
+          };
+
+          if (normalizedId.startsWith(componentsPath)) {
+            const name = normalizedId.split("/").pop()?.replace(".js", "");
+            if (name === "Base") {
+              return `${name}`;
+            }
+          }
 
           if (
             normalizedId.includes(".scss?inline") &&
@@ -59,17 +79,6 @@ export default defineConfig({
           }
 
           if (normalizedId.includes(".scss?inline")) {
-            /**
-             * @param {Array<string>} pathChunks
-             * @returns
-             */
-            const findComponentName = (pathChunks) => {
-              const chunk = pathChunks.pop();
-              return chunk?.startsWith("ea-")
-                ? chunk
-                : findComponentName(pathChunks);
-            };
-
             const fullPathChunk = normalizedId.split("/");
             const fullName = findComponentName(fullPathChunk);
 
@@ -82,8 +91,17 @@ export default defineConfig({
           }
 
           if (normalizedId.startsWith(commonPath)) {
-            const name = normalizedId.split("/").pop()?.replace(".js", "");
-            return `components/${name}`;
+            const ary = normalizedId.split("/");
+            const name = findComponentName(ary);
+
+            return `${name}`;
+          }
+
+          if (normalizedId.startsWith(componentsPath)) {
+            const ary = normalizedId.split("/");
+            const name = findComponentName(ary);
+
+            if (name?.startsWith("ea-")) return `${name}`;
           }
         },
       },
