@@ -1,81 +1,104 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
 
-        .sg-infinite-item {
-            width: 100%;
-            padding: 10px;
-            text-align: center;
-            background-color: aquamarine;
-            margin-bottom: 10px;
-        }
+      .sg-infinite-item {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+        background-color: aquamarine;
+        margin-bottom: 10px;
+      }
 
-        ea-infinite::part(wrap) {
-            display: flex;
-            flex-direction: column;
-        }
+      ea-infinite::part(wrap) {
+        display: flex;
+        flex-direction: column;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-infinite-scroll/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../src/components/ea-scrollbar/index.js"
+    ></script>
+    <script type="module">
+      const basicExample = {
+        el: document.querySelector("#basicInfinite"),
+        createTemplate(content) {
+          const item = document.createElement("div");
+          item.className = "sg-infinite-item";
+          item.innerHTML = content;
 
-    <script type='module'>
-        import '../components/ea-infinite-scroll/index.js'
+          return item;
+        },
 
-        const infiniteNodes = {
-            wrap: document.getElementById("infinite"),
-            createTemplate(content) {
-                return `<div class="sg-infinite-item">${content}</div>`;
-            },
-        };
-
-        infiniteNodes.wrap.addEventListener("bottomReached", (e) => {
-            const children = infiniteNodes.wrap.children;
-
+        init() {
+          this.el.addEventListener("loadmore", (e) => {
             for (let i = 0; i < 5; i++) {
-                const item = document.createElement("ea-infinite-item");
-                item.innerHTML = infiniteNodes.createTemplate(children.length + 1);
-
-                infiniteNodes.wrap.appendChild(item);
+              const index = this.el.children.length;
+              this.el.appendChild(this.createTemplate(index + 1));
             }
-        });
+          });
+        },
+      };
+      basicExample.init();
+      //   const infiniteNodes = {
+      //     wrap: document.getElementById("infinite"),
+      //     createTemplate(content) {
+      //       return `<div class="sg-infinite-item">${content}</div>`;
+      //     },
+      //   };
+
+      //   infiniteNodes.wrap.addEventListener("bottomReached", (e) => {
+      //     const children = infiniteNodes.wrap.children;
+
+      //     for (let i = 0; i < 5; i++) {
+      //       const item = document.createElement("ea-infinite-item");
+      //       item.innerHTML = infiniteNodes.createTemplate(children.length + 1);
+
+      //       infiniteNodes.wrap.appendChild(item);
+      //     }
+      //   });
     </script>
 
-    <!-- -------- name --------  -->
+    <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
-    <h2></h2>
-    <div class="demo" style="height: 150px; overflow: auto;">
-        <ea-infinite id="infinite">
-            <ea-infinite-item>
-                <div class="sg-infinite-item">1</div>
-            </ea-infinite-item>
-            <ea-infinite-item>
-                <div class="sg-infinite-item">2</div>
-            </ea-infinite-item>
-            <ea-infinite-item>
-                <div class="sg-infinite-item">3</div>
-            </ea-infinite-item>
-            <ea-infinite-item>
-                <div class="sg-infinite-item">4</div>
-            </ea-infinite-item>
-            <ea-infinite-item>
-                <div class="sg-infinite-item">5</div>
-            </ea-infinite-item>
-        </ea-infinite>
+    <h2>基础用法</h2>
+    <div class="demo" style="height: 150px; overflow: auto">
+      <ea-scrollbar>
+        <ea-infinite-scroll id="basicInfinite">
+          <div class="sg-infinite-item">1</div>
+          <div class="sg-infinite-item">2</div>
+          <div class="sg-infinite-item">3</div>
+          <div class="sg-infinite-item">4</div>
+          <div class="sg-infinite-item">5</div>
+
+          <!-- <section slot="loading">
+            <ea-icon icon="icon-coffee"></ea-icon> loading...
+          </section>
+          <section slot="noMore">
+            <ea-icon icon="icon-cancel"></ea-icon> no more
+          </section> -->
+        </ea-infinite-scroll>
+      </ea-scrollbar>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
-</body>
-
+  </body>
 </html>

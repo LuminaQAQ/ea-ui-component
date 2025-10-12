@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+@include block(ea-infinite-scroll) {
+  @include element(loading) {
+  }
+
+  @include element(noMore) {
+  }
+
+  @include element(placeholder) {
+    height: 1px;
+  }
+}
