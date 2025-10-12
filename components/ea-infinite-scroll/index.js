@@ -9,54 +9,26 @@ export class EaInfiniteScroll extends Base {
   #placeholder;
 
   #states = {
-    /** @type {"loading" | "finished" | "noMore"} */
-    status: "finished",
     /** @type {IntersectionObserver | null} */
     observer: null,
   };
 
-  // ------- status -------
-  // #region
-  get status() {
-    return this.#states.status;
-  }
-
-  set status(value) {
-    this.#states.status = value;
-  }
-  // #endregion
-  // ------- end -------
-
   static get observedAttributes() {
-    return [
-      ...super.observedAttributes,
-      "disabled",
-      "delay",
-      "distance",
-      "immediate",
-      "status",
-    ];
+    return [...super.observedAttributes, "distance", "status"];
   }
 
   state = this.properties({
-    disabled: {
-      type: Boolean,
-      default: false,
-      observer: (newVal) => {},
-    },
-    delay: {
-      type: Number,
-      default: 200,
-      observer: (newVal) => {},
+    status: {
+      type: ["finished", "loading", "noMore"],
+      default: "finished",
+      /** @param {"loading" | "finished" | "noMore"} newVal */
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
     },
     distance: {
       type: Number,
       default: 0,
-      observer: (newVal) => {},
-    },
-    immediate: {
-      type: Boolean,
-      default: true,
       observer: (newVal) => {},
     },
   });
@@ -66,9 +38,15 @@ export class EaInfiniteScroll extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-infinite-scroll", {
-      // ['--' + this.type]: this.type,
-    });
+    const className = this.computedClasslist(
+      "ea-infinite-scroll",
+      {
+        // ['--' + this.type]: this.type,
+      },
+      {
+        [this.status]: this.status,
+      }
+    );
 
     this.#container.className = className;
 
@@ -103,54 +81,47 @@ export class EaInfiniteScroll extends Base {
     );
   }
 
-  #setObserver = () => {
-    this.#states.observer?.disconnect();
-
-    this.#states.observer = new IntersectionObserver((entries) => {
-      entries.forEach(async (entry) => {
-        if (entry.isIntersecting) {
-          this.#states.observer.disconnect();
-
-          this.dispatchEvent("loadmore", {
-            bubbles: true,
-          });
-
-          this.#setObserver();
-
-          //   await new Promise((resolve) => {
-          //     if (this.status === "finished") {
-          //       resolve();
-          //     }
-
-          //     this.dispatchEvent("loadmore", {
-          //       detail: {
-          //         done: () => {
-          //           this.status = "finished";
-          //           resolve();
-          //         },
-          //         noMore: () => {
-          //           this.status = "noMore";
-          //           resolve();
-          //         },
-          //       },
-          //       bubbles: true,
-          //     });
-          //   });
-        }
-      });
-    });
-
-    this.#states.observer.observe(this.#placeholder);
-  };
-
   connectedCallback() {
     super.connectedCallback();
 
-    this.#setObserver();
+    this.#states.observer = new IntersectionObserver(
+      (entries) => {
+        if (this.status !== "finished") return;
+
+        entries.forEach(async (entry) => {
+          if (entry.isIntersecting) {
+            this.#states.observer.unobserve(entry.target);
+            this.status = "loading";
+            this.dispatchEvent("loadmore", {
+              detail: {
+                finished: () => {
+                  this.status = "finished";
+                  this.#states.observer.observe(entry.target);
+                },
+                noMore: () => {
+                  this.status = "noMore";
+                  this.#states.observer.observe(entry.target);
+                },
+              },
+              bubbles: true,
+            });
+          }
+        });
+      },
+      {
+        rootMargin: this.distance + "px",
+      }
+    );
+
+    this.#states.observer.observe(this.#placeholder);
 
     this.shadowRoot.addEventListener("slotchange", () => {
       this.dispatchEvent("slotchange", { bubbles: true });
     });
+  }
+
+  $beforeUnmounted() {
+    this.#states.observer.disconnect();
   }
 }
 
