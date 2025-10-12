@@ -1,119 +1,159 @@
-import Base from '../Base.js';
-import "../ea-icon/index.js"
-import "../ea-infinite-scroll-item/index.js"
+import Base from "@components/Base.js";
+
+import stylesheet from "./index.scss?inline";
 
 export class EaInfiniteScroll extends Base {
-    #loadingSlot;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #placeholder;
 
-    #noMoreSlot;
+  #states = {
+    /** @type {"loading" | "finished" | "noMore"} */
+    status: "finished",
+    /** @type {IntersectionObserver | null} */
+    observer: null,
+  };
 
-    constructor() {
-        super();
+  // ------- status -------
+  // #region
+  get status() {
+    return this.#states.status;
+  }
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class='ea-infinite_wrap' part='container'>
-                <slot></slot>
-            </div>
-            <div class='ea-infinite_loading-wrap' part='loading-wrap'>
-                <slot name='loading' style="display: none;"></slot>
-            </div>
-            <div class='ea-infinite_noMore-wrap' part='noMore-wrap'>
-                <slot name='noMore' style="display: none;"></slot>
-            </div>
-        `;
+  set status(value) {
+    this.#states.status = value;
+  }
+  // #endregion
+  // ------- end -------
 
-        this.#loadingSlot = shadowRoot.querySelector('slot[name="loading"]');
-        this.#noMoreSlot = shadowRoot.querySelector('slot[name="noMore"]');
-    }
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "disabled",
+      "delay",
+      "distance",
+      "immediate",
+      "status",
+    ];
+  }
 
-    // ------- delay 节流时延, 单位为ms -------
-    // #region
-    get delay() {
-        return this.getAttrNumber('delay') || 200;
-    }
+  state = this.properties({
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {},
+    },
+    delay: {
+      type: Number,
+      default: 200,
+      observer: (newVal) => {},
+    },
+    distance: {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {},
+    },
+    immediate: {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {},
+    },
+  });
 
-    set delay(value) {
-        this.setAttribute('delay', value);
-    }
-    // #endregion
-    // ------- end -------
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-infinite-scroll", {
+      // ['--' + this.type]: this.type,
+    });
 
-    // ------- loading 是否在加载时显示加载状态 -------
-    // #region
-    get loading() {
-        return this.getAttrBoolean('loading');
-    }
+    this.#container.className = className;
 
-    set loading(value) {
-        if (value === undefined) return;
+    return className;
+  }
 
-        this.setAttribute('loading', value);
-    }
-    // #endregion
-    // ------- end -------
+  constructor() {
+    super();
 
-    // ------- disabled 是否禁用 -------
-    // #region
-    get disabled() {
-        return this.getAttrBoolean('disabled') || false;
-    }
+    this.stylesheet = stylesheet;
 
-    set disabled(value) {
-        this.setAttribute('disabled', value);
+    this.$render();
+  }
 
-        if (value) this.#noMoreSlot.style.display = 'block';
-    }
-    // #endregion
-    // ------- end -------
+  $render() {
+    this.shadowRoot.innerHTML = `
+        <section class='ea-infinite-scroll' part='container'>
+            <slot></slot>
+            <div class='ea-infinite-scroll__placeholder' part='placeholder'></div>
+            <section class='ea-infinite-scroll__loading' part='loading'>
+                <slot name='loading'></slot>
+            </section>
+            <section class='ea-infinite-scroll__noMore' part='noMore'>
+                <slot name='noMore'></slot>
+            </section>
+        </section>
+    `;
 
-    #getLastChild() {
-        const items = this.querySelectorAll('ea-infinite-item');
-        return items[items.length - 1];
-    }
+    this.#container = this.shadowRoot.querySelector(".ea-infinite-scroll");
+    this.#placeholder = this.shadowRoot.querySelector(
+      ".ea-infinite-scroll__placeholder"
+    );
+  }
 
-    #initBottomReachedObserver() {
-        if (this.disabled) return;
+  #setObserver = () => {
+    this.#states.observer?.disconnect();
 
-        let item = this.#getLastChild();
-        let timer = null;
+    this.#states.observer = new IntersectionObserver((entries) => {
+      entries.forEach(async (entry) => {
+        if (entry.isIntersecting) {
+          this.#states.observer.disconnect();
 
-        const observer = new IntersectionObserver((entries) => {
-            const { isIntersecting } = entries[0];
-            if (this.disabled) {
-                observer.disconnect();
-                return;
-            }
+          this.dispatchEvent("loadmore", {
+            bubbles: true,
+          });
 
-            if (!isIntersecting || timer) return;
+          this.#setObserver();
 
-            if (this.loading) this.#loadingSlot.style.display = 'block';
+          //   await new Promise((resolve) => {
+          //     if (this.status === "finished") {
+          //       resolve();
+          //     }
 
-            observer.unobserve(item);
+          //     this.dispatchEvent("loadmore", {
+          //       detail: {
+          //         done: () => {
+          //           this.status = "finished";
+          //           resolve();
+          //         },
+          //         noMore: () => {
+          //           this.status = "noMore";
+          //           resolve();
+          //         },
+          //       },
+          //       bubbles: true,
+          //     });
+          //   });
+        }
+      });
+    });
 
-            timer = setTimeout(() => {
-                this.dispatchEvent(new CustomEvent('bottomReached'));
+    this.#states.observer.observe(this.#placeholder);
+  };
 
-                clearTimeout(timer);
-                timer = null;
+  connectedCallback() {
+    super.connectedCallback();
 
-                item = this.#getLastChild();
-                observer.observe(item);
-                this.#loadingSlot.style.display = 'none';
+    this.#setObserver();
 
-            }, this.delay || 200);
-        }, { root: this.parentNode, rootMargin: '10px', threshold: 0.1 });
-
-        // 初始观察
-        observer.observe(item);
-    }
-    connectedCallback() {
-        this.delay = this.delay;
-
-        this.#initBottomReachedObserver();
-    }
+    this.shadowRoot.addEventListener("slotchange", () => {
+      this.dispatchEvent("slotchange", { bubbles: true });
+    });
+  }
 }
 
-if (!customElements.get('ea-infinite')) {
-    customElements.define('ea-infinite', EaInfiniteScroll);
+if (!window.customElements.get("ea-infinite-scroll")) {
+  window.customElements.define("ea-infinite-scroll", EaInfiniteScroll);
 }
