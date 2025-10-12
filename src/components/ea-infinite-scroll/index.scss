@@ -4,12 +4,26 @@
 
 @include block(ea-infinite-scroll) {
   @include element(loading) {
+    display: none;
   }
 
   @include element(noMore) {
+    display: none;
   }
 
   @include element(placeholder) {
     height: 1px;
+  }
+
+  @include state(loading) {
+    .ea-infinite-scroll__loading {
+      display: block;
+    }
+  }
+
+  @include state(noMore) {
+    .ea-infinite-scroll__noMore {
+      display: block;
+    }
   }
 }
