@@ -84,9 +84,6 @@
     "./ea-infinite-scroll": {
       "import": "./dist/ea-infinite-scroll.js"
     },
-    "./ea-infinite-scroll-item": {
-      "import": "./dist/ea-infinite-scroll-item.js"
-    },
     "./ea-input": {
       "import": "./dist/ea-input.js"
     },
