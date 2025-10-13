@@ -1,3 +1,43 @@
+:host {
+  --ea-pagination-color: var(--grey-900);
+  --ea-pagination-active-color: var(--blue-500);
+  --ea-pagination-disabled-color: var(--grey-300);
+
+  --ea-pagination-spacing: 4px 8px;
+}
+
 @include block(ea-pagination) {
   display: flex;
+  align-items: center;
+
+  .prev-icon {
+    &.is-disabled {
+      cursor: not-allowed;
+      color: var(--ea-pagination-disabled-color);
+    }
+  }
+
+  @include element(pager) {
+    user-select: none;
+  }
+
+  @include element(page) {
+    display: inline-block;
+
+    box-sizing: border-box;
+    padding: var(--ea-pagination-spacing);
+
+    color: var(--ea-pagination-color);
+    cursor: pointer;
+    text-align: center;
+
+    &:hover {
+      color: var(--ea-pagination-active-color);
+    }
+
+    &.is-active {
+      font-weight: 500;
+      color: var(--ea-pagination-active-color);
+    }
+  }
 }
