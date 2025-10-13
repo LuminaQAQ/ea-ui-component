@@ -132,7 +132,7 @@ export class EaPagination extends Base {
    * 渲染页码部分
    * @description 这里的事件监听采用的是，通过 `this.#pagination` 点击事件中，获取到的最近的 `页码元素` 来进行事件触发
    */
-  // TODO：需要处理页码渲染逻辑，more和 
+  // TODO：需要处理页码渲染逻辑，more和
   #handlePagerRender = () => {
     if (!this.layout.includes("pager") || !this.#pagination) return;
 
@@ -143,6 +143,9 @@ export class EaPagination extends Base {
     this.#paginationAbortController?.abort();
     this.#paginationAbortController = new AbortController();
     this.#pagination.innerHTML = "";
+
+    console.log([1, ...Array(this["page-count"] - 2), totalCount]);
+    // console.log(this["current-page"] + Math.ceil(this["page-count"] / 2));
 
     for (let i = 1; i <= renderCount; i++) {
       template += getPageItem(i, this["current-page"], i);
@@ -178,27 +181,31 @@ export class EaPagination extends Base {
     this.#prevAbortController?.abort();
     this.#prevAbortController = new AbortController();
 
-    this.#prevIcon.classList.toggle(
-      "is-disabled",
-      this["current-page"] <= 1 || this.total <= 0
-    );
-    this.#prevIcon.setAttribute(
-      "aria-disabled",
-      this["current-page"] <= 1 || this.total <= 0
-    );
+    /**
+     * 当页码改变时，处理 `prev` 按钮的状态
+     * @param {Number} currentPage
+     */
+    const handlePageChange = (currentPage = this["current-page"]) => {
+      this.#prevIcon.classList.toggle(
+        "is-disabled",
+        currentPage <= 1 || this.total <= 0
+      );
+      this.#prevIcon.setAttribute(
+        "aria-disabled",
+        currentPage <= 1 || this.total <= 0
+      );
+      this.#prevIcon.setAttribute(
+        "tabindex",
+        currentPage <= 1 || this.total <= 0 ? -1 : 0
+      );
+    };
 
+    handlePageChange();
     this.addEventListener(
       "change",
       (e) => {
         const { currentPage } = e.detail;
-        this.#prevIcon.classList.toggle(
-          "is-disabled",
-          currentPage <= 1 || this.total <= 0
-        );
-        this.#prevIcon.setAttribute(
-          "aria-disabled",
-          currentPage <= 1 || this.total <= 0
-        );
+        handlePageChange(currentPage);
       },
       { signal: this.#prevAbortController?.signal }
     );
@@ -234,18 +241,21 @@ export class EaPagination extends Base {
     const computedIsOverflow = (page = this["current-page"]) =>
       page >= Math.ceil(this.total / this["page-size"]);
 
-    this.#nextIcon.classList.toggle("is-disabled", computedIsOverflow());
-    this.#nextIcon.setAttribute("aria-disabled", computedIsOverflow());
+    /**
+     * 当页码改变时，处理 `next` 按钮的状态
+     * @param {Number} currentPage
+     */
+    const handlePageChange = (currentPage = computedIsOverflow()) => {
+      this.#nextIcon.classList.toggle("is-disabled", currentPage);
+      this.#nextIcon.setAttribute("aria-disabled", currentPage);
+      this.#nextIcon.setAttribute("tabindex", currentPage ? -1 : 0);
+    };
 
     this.addEventListener(
       "change",
       (e) => {
         const { currentPage } = e.detail;
-        this.#nextIcon.classList.toggle("is-disabled");
-        this.#nextIcon.setAttribute(
-          "aria-disabled",
-          computedIsOverflow(currentPage)
-        );
+        handlePageChange(computedIsOverflow(currentPage));
       },
       { signal: this.#nextAbortController?.signal }
     );
@@ -357,9 +367,9 @@ export class EaPagination extends Base {
       ["prev", "pager", "next", "jumper", "total", "sizes", "->"].includes(item)
     );
     const layoutTemplate = {
-      prev: `<ea-icon class="ea-pagination__icon prev-icon" icon='icon-angle-left' part='icon prev-icon'></ea-icon>`,
+      prev: `<ea-icon class="ea-pagination__icon prev-icon" icon='icon-angle-left' part='icon prev-icon' tabindex="0"></ea-icon>`,
       pager: `<section class='ea-pagination__pager' part='pager'></section>`,
-      next: `<ea-icon class="ea-pagination__icon next-icon" icon='icon-angle-right' part='icon next-icon'></ea-icon>`,
+      next: `<ea-icon class="ea-pagination__icon next-icon" icon='icon-angle-right' part='icon next-icon' tabindex="0"></ea-icon>`,
     };
 
     this.shadowRoot.innerHTML = `
