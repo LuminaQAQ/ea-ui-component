@@ -90,6 +90,50 @@ export class EaPagination extends Base {
             `.ea-pagination__page[data-page="${newVal}"]`
           );
 
+          const totalCount = Math.ceil(this.total / this["page-size"]);
+          const step = Math.floor(this["page-count"] / 2);
+          const test = (start, end) => {
+            const ary = [];
+            for (let i = start; i <= end; i++) {
+              ary.push(i);
+            }
+
+            return ary;
+          };
+
+          const range = [
+            1,
+            ...test(
+              Math.max(
+                2,
+                newVal + step > totalCount
+                  ? newVal - step - Math.abs(step - newVal)
+                  : newVal - step + 1
+              ),
+              Math.min(
+                totalCount - 1,
+                newVal - step <= 0
+                  ? newVal + step + Math.abs(newVal - step)
+                  : newVal + step - 1
+              )
+            ),
+            totalCount,
+          ];
+          // if (range[0] > 2) {
+          //   range.unshift(1, "...");
+          // } else {
+          //   range.unshift(1);
+          // }
+          // if (range[range.length - 1] < totalCount) {
+          //   range.push("...", totalCount);
+          // } else {
+          //   range.push(totalCount);
+          // }
+
+          // console.log(range);
+          console.log(range);
+          // console.log(range);
+
           els.forEach((el) => {
             el.classList.toggle("is-active", el === target);
             el.setAttribute("aria-current", el === target);
@@ -144,8 +188,16 @@ export class EaPagination extends Base {
     this.#paginationAbortController = new AbortController();
     this.#pagination.innerHTML = "";
 
-    console.log([1, ...Array(this["page-count"] - 2), totalCount]);
+    // const test = (currentPage, pageCount, totalCount) => {
+    //   return (
+    //     currentPage - pageCount < 1 || currentPage + pageCount > totalCount
+    //   );
+    // };
+
+    // console.log([1, ...Array(this["page-count"] - 2), totalCount]);
     // console.log(this["current-page"] + Math.ceil(this["page-count"] / 2));
+
+    // console.log(test(this["current-page"], this["page-count"], totalCount));
 
     for (let i = 1; i <= renderCount; i++) {
       template += getPageItem(i, this["current-page"], i);
