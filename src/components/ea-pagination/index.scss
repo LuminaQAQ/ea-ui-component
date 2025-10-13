@@ -10,10 +10,17 @@
   display: flex;
   align-items: center;
 
-  .prev-icon {
+  .prev-icon,
+  .next-icon {
+    cursor: pointer;
+
     &.is-disabled {
       cursor: not-allowed;
       color: var(--ea-pagination-disabled-color);
+    }
+
+    &:not(.is-disabled):hover {
+      color: var(--ea-pagination-active-color);
     }
   }
 

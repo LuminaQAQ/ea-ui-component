@@ -2,6 +2,7 @@ import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
 import EaUtils from "@/utils/Utils";
+import { getPageItem } from "./components/pageItem";
 
 export class EaPagination extends Base {
   /** @type {HTMLElement} */
@@ -88,7 +89,11 @@ export class EaPagination extends Base {
           const target = this.#pagination.querySelector(
             `.ea-pagination__page[data-page="${newVal}"]`
           );
-          els.forEach((el) => el.classList.toggle("is-active", el === target));
+
+          els.forEach((el) => {
+            el.classList.toggle("is-active", el === target);
+            el.setAttribute("aria-current", el === target);
+          });
         }
       },
     },
@@ -127,6 +132,7 @@ export class EaPagination extends Base {
    * 渲染页码部分
    * @description 这里的事件监听采用的是，通过 `this.#pagination` 点击事件中，获取到的最近的 `页码元素` 来进行事件触发
    */
+  // TODO：需要处理页码渲染逻辑，more和 
   #handlePagerRender = () => {
     if (!this.layout.includes("pager") || !this.#pagination) return;
 
@@ -139,19 +145,7 @@ export class EaPagination extends Base {
     this.#pagination.innerHTML = "";
 
     for (let i = 1; i <= renderCount; i++) {
-      template += EaUtils.EaElement.h(
-        "span",
-        `ea-pagination__page ${
-          i === this["current-page"] ? "is-active" : ""
-        }`.trim(),
-        {
-          part: "page",
-          "data-page": i,
-          "aria-label": `page ${i}`,
-          "aria-current": false,
-        },
-        i
-      );
+      template += getPageItem(i, this["current-page"], i);
     }
 
     this.#pagination.innerHTML = template;
@@ -166,6 +160,9 @@ export class EaPagination extends Base {
           this["current-page"] = target.dataset.page;
 
           this.#dispatchChangeEvent();
+          this.dispatchEvent("current-change", {
+            detail: { value: this["current-page"] },
+          });
         }
       },
       { signal: this.#paginationAbortController?.signal }
@@ -185,6 +182,10 @@ export class EaPagination extends Base {
       "is-disabled",
       this["current-page"] <= 1 || this.total <= 0
     );
+    this.#prevIcon.setAttribute(
+      "aria-disabled",
+      this["current-page"] <= 1 || this.total <= 0
+    );
 
     this.addEventListener(
       "change",
@@ -192,6 +193,10 @@ export class EaPagination extends Base {
         const { currentPage } = e.detail;
         this.#prevIcon.classList.toggle(
           "is-disabled",
+          currentPage <= 1 || this.total <= 0
+        );
+        this.#prevIcon.setAttribute(
+          "aria-disabled",
           currentPage <= 1 || this.total <= 0
         );
       },
@@ -206,6 +211,12 @@ export class EaPagination extends Base {
         this["current-page"]--;
 
         this.#dispatchChangeEvent();
+        this.dispatchEvent("prev-click", {
+          detail: { value: this["current-page"] },
+        });
+        this.dispatchEvent("current-change", {
+          detail: { value: this["current-page"] },
+        });
       },
       { signal: this.#prevAbortController?.signal }
     );
@@ -220,20 +231,20 @@ export class EaPagination extends Base {
     this.#nextAbortController?.abort();
     this.#nextAbortController = new AbortController();
 
-    const computedLas
+    const computedIsOverflow = (page = this["current-page"]) =>
+      page >= Math.ceil(this.total / this["page-size"]);
 
-    this.#nextIcon.classList.toggle(
-      "is-disabled",
-      this["current-page"] >= Math.ceil(this.total / this["page-size"])
-    );
+    this.#nextIcon.classList.toggle("is-disabled", computedIsOverflow());
+    this.#nextIcon.setAttribute("aria-disabled", computedIsOverflow());
 
     this.addEventListener(
       "change",
       (e) => {
         const { currentPage } = e.detail;
-        this.#nextIcon.classList.toggle(
-          "is-disabled",
-          currentPage <= 1 || this.total <= 0
+        this.#nextIcon.classList.toggle("is-disabled");
+        this.#nextIcon.setAttribute(
+          "aria-disabled",
+          computedIsOverflow(currentPage)
         );
       },
       { signal: this.#nextAbortController?.signal }
@@ -242,11 +253,17 @@ export class EaPagination extends Base {
     this.#nextIcon.addEventListener(
       "click",
       () => {
-        if (this["current-page"] <= 1 || this.total <= 0) return;
+        if (computedIsOverflow()) return;
 
-        this["current-page"]--;
+        this["current-page"]++;
 
         this.#dispatchChangeEvent();
+        this.dispatchEvent("next-click", {
+          detail: { value: this["current-page"] },
+        });
+        this.dispatchEvent("current-change", {
+          detail: { value: this["current-page"] },
+        });
       },
       { signal: this.#nextAbortController?.signal }
     );
@@ -274,6 +291,7 @@ export class EaPagination extends Base {
     this.#handlePagerRender();
     this.#handlePrevRender();
     this.#handleNextRender();
+
     // const interval = Math.floor(this.pageCount / 2);
     // let start = this.currentPage - interval;
     // let end = this.currentPage + interval;
