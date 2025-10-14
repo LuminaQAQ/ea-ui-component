@@ -85,62 +85,26 @@ export class EaPagination extends Base {
       /** @param {number} newVal */
       observer: (newVal) => {
         if (this.#pagination && this.layout.includes("pager")) {
+          const getTemplate = (currentPage = 1) => {
+            let template = ``;
+
+            const range = this.#getPagerRange(currentPage);
+            range.forEach((item) => {
+              if (typeof item === "number") {
+                template += getPageItem(item, this["current-page"], item);
+              } else {
+                template += getPageItem(item, this["current-page"], "...");
+              }
+            });
+
+            return template;
+          };
+          this.#pagination.innerHTML = getTemplate(newVal);
+
           const els = this.#pagination.querySelectorAll(".ea-pagination__page");
           const target = this.#pagination.querySelector(
             `.ea-pagination__page[data-page="${newVal}"]`
           );
-
-          const totalCount = Math.ceil(this.total / this["page-size"]);
-          const step = Math.floor(this["page-count"] / 2);
-          const getRange = (start, end) => {
-            const ary = [];
-
-            for (let i = start; i <= end; i++) {
-              ary.push(i);
-            }
-
-            return ary;
-          };
-
-          const range = getRange(
-            Math.max(
-              2,
-              newVal + step > totalCount // 处理 `endRange` 超出范围
-                ? /**
-                   * 当 `endRange` 超出范围时，起始值 = 当前页 - （范围区间 + 1） - 后半多余区间
-                   * 后半多余区间 = | 总页码数 - 当前页码 - 范围区间 |
-                   */
-                  newVal - step + 1 - Math.abs(totalCount - newVal - step)
-                : // 因为单独处理开头，所以 `range` 起始要多一位
-                  newVal - step + 1
-            ),
-            Math.min(
-              totalCount - 1,
-              newVal - step < 2 // 处理 startRange 超出范围
-                ? /**
-                   * 当 `startRange` 超出范围时，终止值 = 当前页 + （范围区间 - 1） - 前半多余区间
-                   * 前半多余区间 = | 当前页码 - 范围区间 - 1 |
-                   */
-                  newVal + step - 1 + Math.abs(newVal - step - 1)
-                : // 因为单独处理结尾，所以 `range` 结束要少一位
-                  newVal + step - 1
-            )
-          );
-          if (range[0] > 2) {
-            range.unshift(1, "...");
-          } else {
-            range.unshift(1);
-          }
-          if (range[range.length - 1] < totalCount - 1) {
-            range.push("...", totalCount);
-          } else {
-            range.push(totalCount);
-          }
-
-          // console.log(range);
-          console.log(range);
-          // console.log(range);
-
           els.forEach((el) => {
             el.classList.toggle("is-active", el === target);
             el.setAttribute("aria-current", el === target);
@@ -179,6 +143,60 @@ export class EaPagination extends Base {
     this.#states.isFirstRender = false;
   }
 
+  #getPagerRange = (newVal) => {
+    const totalCount = Math.ceil(this.total / this["page-size"]);
+    const step = Math.floor(this["page-count"] / 2);
+
+    const getRange = (start, end) => {
+      const ary = [];
+
+      for (let i = start; i <= end; i++) {
+        ary.push(i);
+      }
+
+      return ary;
+    };
+
+    const range = getRange(
+      Math.max(
+        2,
+        newVal + step > totalCount // 处理 `endRange` 超出范围
+          ? /**
+             * 当 `endRange` 超出范围时，起始值 = 当前页 - （范围区间 + 1） - 后半多余区间
+             * 后半多余区间 = | 总页码数 - 当前页码 - 范围区间 |
+             */
+            newVal - step + 1 - Math.abs(totalCount - newVal - step)
+          : // 因为单独处理开头，所以 `range` 起始要多一位
+            newVal - step + 1
+      ),
+      Math.min(
+        totalCount - 1,
+        newVal - step < 2 // 处理 startRange 超出范围
+          ? /**
+             * 当 `startRange` 超出范围时，终止值 = 当前页 + （范围区间 - 1） - 前半多余区间
+             * 前半多余区间 = | 当前页码 - 范围区间 - 1 |
+             */
+            newVal + step - 1 + Math.abs(newVal - step - 1)
+          : // 因为单独处理结尾，所以 `range` 结束要少一位
+            newVal + step - 1
+      )
+    );
+
+    if (range[0] > 2) {
+      range.unshift(1, "...");
+    } else {
+      range.unshift(1);
+    }
+
+    if (range[range.length - 1] < totalCount - 1) {
+      range.push("...", totalCount);
+    } else {
+      range.push(totalCount);
+    }
+
+    return range;
+  };
+
   /**
    * 渲染页码部分
    * @description 这里的事件监听采用的是，通过 `this.#pagination` 点击事件中，获取到的最近的 `页码元素` 来进行事件触发
@@ -189,28 +207,24 @@ export class EaPagination extends Base {
 
     const totalCount = Math.ceil(this.total / this["page-size"]);
     const renderCount = Math.min(totalCount, this["page-count"]);
-    let template = ``;
 
     this.#paginationAbortController?.abort();
     this.#paginationAbortController = new AbortController();
-    this.#pagination.innerHTML = "";
+    const getTemplate = (currentPage = 1) => {
+      let template = ``;
 
-    // const test = (currentPage, pageCount, totalCount) => {
-    //   return (
-    //     currentPage - pageCount < 1 || currentPage + pageCount > totalCount
-    //   );
-    // };
+      const range = this.#getPagerRange(currentPage);
+      range.forEach((item) => {
+        if (typeof item === "number") {
+          template += getPageItem(item, this["current-page"], item);
+        } else {
+          template += getPageItem(item, this["current-page"], "...");
+        }
+      });
 
-    // console.log([1, ...Array(this["page-count"] - 2), totalCount]);
-    // console.log(this["current-page"] + Math.ceil(this["page-count"] / 2));
-
-    // console.log(test(this["current-page"], this["page-count"], totalCount));
-
-    for (let i = 1; i <= renderCount; i++) {
-      template += getPageItem(i, this["current-page"], i);
-    }
-
-    this.#pagination.innerHTML = template;
+      return template;
+    };
+    this.#pagination.innerHTML = getTemplate(1);
 
     this.#pagination.addEventListener(
       "click",
@@ -222,7 +236,7 @@ export class EaPagination extends Base {
           this["current-page"] = target.dataset.page;
 
           this.#dispatchChangeEvent();
-          this.dispatchEvent("current-change", {
+          this.emit("current-change", {
             detail: { value: this["current-page"] },
           });
         }
@@ -277,10 +291,10 @@ export class EaPagination extends Base {
         this["current-page"]--;
 
         this.#dispatchChangeEvent();
-        this.dispatchEvent("prev-click", {
+        this.emit("prev-click", {
           detail: { value: this["current-page"] },
         });
-        this.dispatchEvent("current-change", {
+        this.emit("current-change", {
           detail: { value: this["current-page"] },
         });
       },
