@@ -18,6 +18,7 @@
       type="module"
       src="../src/components/ea-pagination/index.js"
     ></script>
+    <script type="module" src="../src/components/ea-switch/index.js"></script>
     <script type="module">
       //   document
       //     .querySelector("#prevAndNext")
@@ -39,7 +40,7 @@
       <p>When you have more than 7 pages</p>
       <ea-pagination
         layout='["prev", "pager", "next"]'
-        total="100"
+        total="1000"
       ></ea-pagination>
     </div>
 
@@ -50,16 +51,12 @@
     <!-- -------- 设置最大页码按钮数 --------  -->
     <!-- #region  -->
     <h2>设置最大页码按钮数</h2>
-    <div class="col left">
+    <div class="demo">
       <ea-pagination
         layout='["prev", "pager", "next"]'
-        total="60"
-        page-count="10"
-      ></ea-pagination>
-      <ea-pagination
-        layout='["prev", "pager", "next"]'
-        total="200"
-        pager-count="1"
+        page-size="20"
+        pager-count="11"
+        total="1000"
       ></ea-pagination>
     </div>
     <hr />
@@ -69,12 +66,61 @@
     <!-- -------- 带有背景色的分页 --------  -->
     <!-- #region  -->
     <h2>带有背景色的分页</h2>
-    <div class="col left">
+    <div class="demo">
       <ea-pagination
         background
         layout='["prev", "pager", "next"]'
-        total="200"
+        total="1000"
       ></ea-pagination>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 小型分页 --------  -->
+    <!-- #region  -->
+    <h2>小型分页</h2>
+    <div class="demo">
+      <ea-pagination
+        size="small"
+        layout='["prev", "pager", "next"]'
+        total="1000"
+      ></ea-pagination>
+      <ea-pagination
+        background
+        size="small"
+        layout='["prev", "pager", "next"]'
+        total="1000"
+      ></ea-pagination>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 当只有一页时隐藏分页 --------  -->
+    <!-- #region  -->
+    <h2>当只有一页时隐藏分页</h2>
+    <div class="demo">
+      <ea-switch id="singlePageSwitch"></ea-switch>
+      <ea-pagination
+        id="singlePagePagination"
+        layout='["prev", "pager", "next"]'
+        total="5"
+      ></ea-pagination>
+
+      <script type="module">
+        const singlePageExample = {
+          el: document.querySelector("#singlePagePagination"),
+          btn: document.querySelector("#singlePageSwitch"),
+
+          init() {
+            this.btn.addEventListener("change", (e) => {
+              this.el["hide-on-single-page"] = e.detail.checked;
+            });
+          },
+        };
+        singlePageExample.init();
+      </script>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -83,8 +129,10 @@
     <!-- -------- 附加功能 --------  -->
     <!-- #region  -->
     <h2>附加功能</h2>
-    <div class="col left">
+    <div class="demo">
       <section>显示总数</section>
+
+      <div class="demonstration">Total item count</div>
       <ea-pagination
         background
         layout='["prev", "pager", "next", "total"]'

@@ -1,9 +1,22 @@
+$ea-pagination-size-options: ("large", "default", "small");
+
 :host {
   --ea-pagination-color: var(--grey-900);
   --ea-pagination-active-color: var(--blue-500);
   --ea-pagination-disabled-color: var(--grey-300);
+  --ea-pagination-background: #f0f2f5;
 
-  --ea-pagination-spacing: 4px 8px;
+  --ea-pagination-large-size: 18px;
+  --ea-pagination-default-size: 16px;
+  --ea-pagination-small-size: 14px;
+
+  --ea-pagination-large-spacing: 6px 12px;
+  --ea-pagination-default-spacing: 4px 10px;
+  --ea-pagination-small-spacing: 2px 8px;
+
+  --ea-pagination-large-control-spacing: 6px;
+  --ea-pagination-default-control-spacing: 4px;
+  --ea-pagination-small-control-spacing: 2px;
 }
 
 @include block(ea-pagination) {
@@ -14,6 +27,7 @@
   .next-icon {
     cursor: pointer;
     font-size: 16px;
+    padding: var(--ea-pagination-default-control-spacing);
 
     &.is-disabled {
       cursor: not-allowed;
@@ -27,13 +41,18 @@
 
   @include element(pager) {
     user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   @include element(page) {
     display: inline-block;
 
     box-sizing: border-box;
-    padding: var(--ea-pagination-spacing);
+    padding: var(--ea-pagination-default-spacing);
+    border-radius: 2px;
 
     font-size: 16px;
     color: var(--ea-pagination-color);
@@ -47,6 +66,41 @@
     &.is-active {
       font-weight: 500;
       color: var(--ea-pagination-active-color);
+    }
+  }
+
+  @include modifier(background) {
+    .ea-pagination__icon,
+    .ea-pagination__page {
+      background: var(--ea-pagination-background);
+    }
+
+    .ea-pagination__page {
+      margin: 0 4px;
+
+      &.is-active {
+        color: white;
+        background: var(--ea-pagination-active-color);
+      }
+    }
+  }
+
+  @include state(hide) {
+    display: none;
+  }
+
+  @each $size in $ea-pagination-size-options {
+    @include modifier(size-#{$size}) {
+      .prev-icon,
+      .next-icon {
+        font-size: var(--ea-pagination-#{$size}-size);
+        padding: var(--ea-pagination-#{$size}-control-spacing);
+      }
+
+      .ea-pagination__page {
+        font-size: var(--ea-pagination-#{$size}-size);
+        padding: var(--ea-pagination-#{$size}-spacing);
+      }
     }
   }
 }
