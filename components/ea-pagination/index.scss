@@ -1,89 +1,52 @@
-@import "../ea-ui-base-style.scss";
+:host {
+  --ea-pagination-color: var(--grey-900);
+  --ea-pagination-active-color: var(--blue-500);
+  --ea-pagination-disabled-color: var(--grey-300);
 
-.ea-pagination_wrap {
+  --ea-pagination-spacing: 4px 8px;
+}
+
+@include block(ea-pagination) {
   display: flex;
   align-items: center;
-  font-size: 0.9rem;
 
-  .ea-pagination_item_wrap {
-    display: flex;
-    align-items: center;
-
-    .ea-pagination_item,
-    .ea-pagination_more {
-      cursor: pointer;
-      box-sizing: border-box;
-
-      margin: 0 5px;
-      padding: 0 4px;
-
-      min-width: 30px;
-      height: 28px;
-      line-height: 28px;
-
-      font-size: 13px;
-
-      text-align: center;
-    }
-
-    .ea-pagination_item {
-      &.ea-pagination_item--active {
-        color: $color-primary-bgc;
-      }
-    }
-
-    .ea-pagination_more {
-      cursor: pointer;
-      user-select: none;
-
-      &.ea-pagination_more--active {
-        color: $color-primary-bgc;
-      }
-    }
-  }
-
-  .ea-pagination_arrow {
-    user-select: none;
+  .prev-icon,
+  .next-icon {
     cursor: pointer;
-    padding: 0 10px;
+    font-size: 16px;
 
-    line-height: 28px;
-
-    &.disabled {
-      cursor: default;
-      pointer-events: none;
-      color: $color-switch-disabled-text;
+    &.is-disabled {
+      cursor: not-allowed;
+      color: var(--ea-pagination-disabled-color);
     }
 
-    &:first-child {
-      margin-right: 0.25rem;
-    }
-
-    &:last-child {
-      margin-left: 0.25rem;
+    &:not(.is-disabled):hover {
+      color: var(--ea-pagination-active-color);
     }
   }
 
-  .ea-pagination_item,
-  .ea-pagination_more,
-  .ea-pagination_arrow {
-    &.background {
-      background-color: #f4f4f5;
-      border-radius: 3px;
-
-      &:hover {
-        color: $color-primary-bgc;
-      }
-
-      &.active {
-        background-color: $color-primary-bgc;
-        color: #f4f4f5;
-      }
-    }
+  @include element(pager) {
+    user-select: none;
   }
 
-  .ea-pagination_show_total {
-    margin-right: 0.5rem;
-    font-size: 13px;
+  @include element(page) {
+    display: inline-block;
+
+    box-sizing: border-box;
+    padding: var(--ea-pagination-spacing);
+
+    font-size: 16px;
+    color: var(--ea-pagination-color);
+    cursor: pointer;
+    text-align: center;
+
+    &:hover {
+      color: var(--ea-pagination-active-color);
+    }
+
+    &.is-active {
+      font-weight: 500;
+      color: var(--ea-pagination-active-color);
+    }
   }
 }

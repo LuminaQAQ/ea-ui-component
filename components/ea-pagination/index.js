@@ -1,305 +1,483 @@
-import Base from '../Base.js';
+import Base from "@components/Base.js";
 
-import { stylesheet } from './src/style/stylesheet.js';
-
-import { getMoreItem } from './src/components/getMoreItem.js';
-import { getPageItem } from './src/components/getPageItem.js';
-import { getShowTotalItem } from './src/components/getShowTotalItem.js';
+import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
+import { getPageItem } from "./components/pageItem";
 
 export class EaPagination extends Base {
-    #container;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #pagination;
+  /** @type {HTMLElement} */
+  #prevIcon;
+  /** @type {HTMLElement} */
+  #nextIcon;
 
-    // 页码元素的容器
-    #paginationWrap;
+  /** @type {AbortController} */
+  #paginationAbortController;
+  /** @type {AbortController} */
+  #prevAbortController;
+  /** @type {AbortController} */
+  #nextAbortController;
 
-    // 箭头
-    #prevArrow;
-    #nextArrow;
+  #states = {
+    isFirstRender: true,
+  };
 
-    constructor() {
-        super();
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "layout",
+      "default-page-size",
+      "page-size",
+      "pager-count",
+      "total",
+      "background",
+      "current-page",
+    ];
+  }
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+  state = this.properties({
+    // TODO: sizes 要下拉框，没写
+    layout: {
+      type: Array,
+      default: ["prev", "pager", "next", "jumper", "->", "total"],
+      /** @param {Array<'prev' | 'pager' | 'next' | '->' | 'jumper' | 'total' | 'sizes'>} newVal */
+      observer: (newVal) => {
+        if (!this.#states.isFirstRender) this.$render();
+      },
+    },
+    "default-page-size": {
+      type: Number,
+      default: 10,
+      /** @param {number} newVal */
+      observer: (newVal) => {
+        if (!this.#states.isFirstRender) this.$render();
+      },
+    },
+    "page-size": {
+      type: Number,
+      default: () => this["default-page-size"],
+      /** @param {number} newVal */
+      observer: (newVal) => {
+        if (!this.#states.isFirstRender) this.$render();
+      },
+    },
+    "pager-count": {
+      type: Number,
+      default: 7,
+      /** @param {number} newVal */
+      observer: (newVal) => {},
+    },
+    total: {
+      type: Number,
+      default: 0,
+      /** @param {number} newVal */
+      observer: (newVal) => {
+        if (this.#pagination && this.layout.includes("pager"))
+          this.#handlePaginationItemChange();
+      },
+    },
+    "current-page": {
+      type: Number,
+      default: 1,
+      /** @param {number} newVal */
+      observer: (newVal) => {
+        if (this.#pagination && this.layout.includes("pager")) {
+          const getTemplate = (currentPage = 1) => {
+            let template = ``;
 
-        shadowRoot.innerHTML = `
-            <div class="ea-pagination_wrap" part="container">
-                <span class="ea-pagination_arrow prev ${this.background ? 'background' : ''}" part="arrow">&lt;</span>
-                <div class="ea-pagination_item_wrap" part="item-wrap"></div>
-                <span class="ea-pagination_arrow next ${this.background ? 'background' : ''}" part="arrow">&gt;</span>
-            </div>
-        `;
-
-        this.#container = shadowRoot.querySelector('.ea-pagination_wrap');
-        this.#prevArrow = shadowRoot.querySelector('.prev');
-        this.#paginationWrap = shadowRoot.querySelector('.ea-pagination_item_wrap');
-        this.#nextArrow = shadowRoot.querySelector('.next');
-
-        this.build(shadowRoot, stylesheet);
-    }
-
-    // ------- layout 布局(前一页, 页码, 后一页) -------
-    // #region
-    get layout() {
-        const arr = this.getAttribute('layout').split(',').map(item => item.trim());
-
-        return arr || ['prev', 'pager', 'next'];
-    }
-
-    set layout(value) {
-        this.setAttribute('layout', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- sizes 分页中每页多少记录 -------
-    // #region
-    get sizes() {
-        return this.getAttrNumber('sizes') || 10;
-    }
-
-    set sizes(value) {
-        this.setAttribute('sizes', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- current-page 当前页码 -------
-    // #region
-    get currentPage() {
-        return this.getAttrNumber('current-page') || 1;
-    }
-
-    set currentPage(value) {
-        this.setAttribute('current-page', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- page-count 总显示的页码数量 -------
-    // #region
-    get pageCount() {
-        return this.getAttrNumber('page-count') || 6;
-    }
-
-    set pageCount(value) {
-        this.setAttribute('page-count', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- total 总记录数 -------
-    // #region
-    get total() {
-        return this.getAttrNumber('total');
-    }
-
-    set total(value) {
-        this.setAttribute('total', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- paginationCount 分页总数 -------
-    // #region
-    get paginationCount() {
-        return Math.ceil(this.total / this.sizes);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- background 背景颜色 -------
-    // #region
-    get background() {
-        return this.getAttrBoolean('background');
-    }
-
-    set background(value) {
-        if (!value) return;
-
-        this.setAttribute('background', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    #handleDispatchEvent(event, options) {
-        this.dispatchEvent(new CustomEvent(event, options));
-    }
-
-    // 初始化箭头元素
-    #initArrowItem() {
-        this.#handleArrowStatus();
-
-        if (this.layout.includes('prev')) {
-            this.#prevArrow.addEventListener('click', () => {
-                if (this.currentPage <= 1) return;
-
-                this.currentPage--;
-                this.#handlePaginationChange();
-
-                this.#handleDispatchEvent("change", { detail: { currentPage: this.currentPage } });
-            })
-        } else {
-            this.#prevArrow.style.display = 'none';
-        }
-
-        if (this.layout.includes('next')) {
-            this.#nextArrow.addEventListener('click', () => {
-                if (this.currentPage >= this.paginationCount) return;
-
-                this.currentPage++;
-                this.#handlePaginationChange();
-
-                this.#handleDispatchEvent("change", { detail: { currentPage: this.currentPage } });
-            })
-        } else {
-            this.#nextArrow.style.display = 'none';
-        }
-    }
-
-    // 处理箭头状态
-    #handleArrowStatus() {
-        if (!this.layout.includes('prev') && !this.layout.includes('next')) return;
-
-        if (this.currentPage === 1 && this.layout.includes('prev')) this.#prevArrow.classList.add('disabled');
-        else if (this.currentPage >= this.paginationCount && this.layout.includes('next')) this.#nextArrow.classList.add('disabled');
-        else {
-            this.#prevArrow.classList.remove('disabled');
-            this.#nextArrow.classList.remove('disabled');
-        }
-    }
-
-    // 处理分页点击事件
-    #handlePaginationClick(pageItem, index) {
-        pageItem.addEventListener('click', (e) => {
-            this.currentPage = index;
-            this.#handlePaginationChange();
-
-            this.#handleDispatchEvent('change', {
-                detail: {
-                    currentPage: this.currentPage
-                }
+            const range = this.#getPagerRange(currentPage);
+            range.forEach((item) => {
+              if (typeof item === "number") {
+                template += getPageItem(item, this["current-page"], item);
+              } else {
+                template += getPageItem(item, this["current-page"], "...");
+              }
             });
-        })
-    }
 
-    // 处理更多按钮点击事件
-    #handleMoreItemClick(moreItem, arrow) {
-        moreItem.addEventListener('click', (e) => {
+            return template;
+          };
+          this.#pagination.innerHTML = getTemplate(newVal);
 
-            // 跳转到指定页码
-            this.currentPage += arrow === "prev" ? -5 : 5;
+          const els = this.#pagination.querySelectorAll(".ea-pagination__page");
+          const target = this.#pagination.querySelector(
+            `.ea-pagination__page[data-page="${newVal}"]`
+          );
+          els.forEach((el) => {
+            el.classList.toggle("is-active", el === target);
+            el.setAttribute("aria-current", el === target);
+          });
+        }
+      },
+    },
+    background: {
+      type: Boolean,
+      default: false,
+      /** @param {boolean} newVal */
+      observer: (newVal) => {},
+    },
+  });
 
-            /**
-             * 边界处理: 
-             * 页码数量小于1, 跳转到第一页
-             * 页码数量大于总页数, 跳转到最后一页
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-pagination", {
+      // ['--' + this.type]: this.type,
+    });
+
+    this.#container.className = className;
+
+    return className;
+  }
+
+  constructor() {
+    super();
+
+    this.stylesheet = stylesheet;
+
+    this.$render();
+    this.#states.isFirstRender = false;
+  }
+
+  #getPagerRange = (newVal) => {
+    const totalCount = Math.ceil(this.total / this["page-size"]);
+    const step = Math.floor(this["pager-count"] / 2);
+
+    const getRange = (start, end) => {
+      const ary = [];
+
+      for (let i = start; i <= end; i++) {
+        ary.push(i);
+      }
+
+      return ary;
+    };
+
+    const range = getRange(
+      Math.max(
+        2,
+        newVal + step > totalCount // 处理 `endRange` 超出范围
+          ? /**
+             * 当 `endRange` 超出范围时，起始值 = 当前页 - （范围区间 + 1） - 后半多余区间
+             * 后半多余区间 = | 总页码数 - 当前页码 - 范围区间 |
              */
-            if (this.currentPage < 1) this.currentPage = 1;
-            else if (this.currentPage > this.paginationCount) this.currentPage = this.paginationCount;
+            newVal - step + 1 - Math.abs(totalCount - newVal - step)
+          : // 因为单独处理开头，所以 `range` 起始要多一位
+            newVal - step + 1
+      ),
+      Math.min(
+        totalCount - 1,
+        newVal - step < 2 // 处理 startRange 超出范围
+          ? /**
+             * 当 `startRange` 超出范围时，终止值 = 当前页 + （范围区间 - 1） - 前半多余区间
+             * 前半多余区间 = | 当前页码 - 范围区间 - 1 |
+             */
+            newVal + step - 1 + Math.abs(newVal - step - 1)
+          : // 因为单独处理结尾，所以 `range` 结束要少一位
+            newVal + step - 1
+      )
+    );
 
-            this.#handlePaginationChange();
-
-            this.#handleDispatchEvent('change', {
-                detail: {
-                    currentPage: this.currentPage
-                }
-            });
-        })
+    if (range[0] > 2 || step === 0) {
+      range.unshift(1, "...");
+    } else {
+      range.unshift(1);
     }
 
-    // 处理分页的页码
-    #handlePaginationItemChange() {
-        if (!this.layout.includes('pager')) return;
+    if (step === 0 && newVal > 1 && newVal < totalCount) {
+      range.push(newVal);
+    }
 
-        this.#paginationWrap.innerHTML = '';
+    if (
+      range[range.length - 1] < totalCount - 1 ||
+      (step === 0 && newVal === totalCount - 1)
+    ) {
+      range.push("...", totalCount);
+    } else {
+      range.push(totalCount);
+    }
 
-        const interval = Math.floor(this.pageCount / 2);
-        let start = this.currentPage - interval;
-        let end = this.currentPage + interval;
+    return range;
+  };
 
-        // 边界处理
-        if (start <= 1) {
-            start = 1;
-            end = this.pageCount < this.paginationCount ? this.pageCount : this.paginationCount;
-        } else if (end >= this.paginationCount) {
-            start = this.paginationCount - this.pageCount + 1;
-            end = this.paginationCount;
+  /**
+   * 渲染页码部分
+   * @description 这里的事件监听采用的是，通过 `this.#pagination` 点击事件中，获取到的最近的 `页码元素` 来进行事件触发
+   */
+  // TODO：需要处理页码渲染逻辑，more和
+  #handlePagerRender = () => {
+    if (!this.layout.includes("pager") || !this.#pagination) return;
+
+    const totalCount = Math.ceil(this.total / this["page-size"]);
+    const renderCount = Math.min(totalCount, this["pager-count"]);
+
+    this.#paginationAbortController?.abort();
+    this.#paginationAbortController = new AbortController();
+    const getTemplate = (currentPage = 1) => {
+      let template = ``;
+
+      const range = this.#getPagerRange(currentPage);
+      range.forEach((item) => {
+        if (typeof item === "number") {
+          template += getPageItem(item, this["current-page"], item);
         } else {
-            end--;
+          template += getPageItem(item, this["current-page"], "...");
         }
+      });
 
-        // 添加页码
-        for (let i = start; i <= end; i++) {
-            const pageItem = getPageItem(i, this.background);
-            this.#paginationWrap.appendChild(pageItem);
+      return template;
+    };
+    this.#pagination.innerHTML = getTemplate(1);
 
-            // 设置当前页码选中后的样式
-            if (i === this.currentPage) {
-                pageItem.classList.add('ea-pagination_item--active');
-                if (this.background) pageItem.classList.add('active');
-            }
+    this.#pagination.addEventListener(
+      "click",
+      (e) => {
+        const target = e.target.closest(".ea-pagination__page");
+        const targetPage = Number(target?.dataset?.page) || 1;
 
-            // 添加点击事件
-            this.#handlePaginationClick(pageItem, i);
+        if (target && this["current-page"] !== targetPage) {
+          this["current-page"] = target.dataset.page;
+
+          this.#dispatchChangeEvent();
+          this.emit("current-change", {
+            detail: { value: this["current-page"] },
+          });
         }
+      },
+      { signal: this.#paginationAbortController?.signal }
+    );
+  };
 
-        // 添加 更多(左) + 第一页
-        if (this.total > this.pageCount && this.currentPage >= this.pageCount && this.paginationCount !== this.pageCount) {
-            const more = getMoreItem('prev', this.background);
-            this.#handleMoreItemClick(more, 'prev');
+  /**
+   * 渲染 prev 按钮
+   */
+  #handlePrevRender = () => {
+    if (!this.layout.includes("prev") || !this.#prevIcon) return;
 
-            const firstPage = getPageItem(1, this.background);
-            this.#handlePaginationClick(firstPage, 1);
+    this.#prevAbortController?.abort();
+    this.#prevAbortController = new AbortController();
 
-            this.#paginationWrap.insertBefore(more, this.#paginationWrap.firstChild);
-            this.#paginationWrap.insertBefore(firstPage, this.#paginationWrap.firstChild);
-        }
+    /**
+     * 当页码改变时，处理 `prev` 按钮的状态
+     * @param {Number} currentPage
+     */
+    const handlePageChange = (currentPage = this["current-page"]) => {
+      this.#prevIcon.classList.toggle(
+        "is-disabled",
+        currentPage <= 1 || this.total <= 0
+      );
+      this.#prevIcon.setAttribute(
+        "aria-disabled",
+        currentPage <= 1 || this.total <= 0
+      );
+      this.#prevIcon.setAttribute(
+        "tabindex",
+        currentPage <= 1 || this.total <= 0 ? -1 : 0
+      );
+    };
 
-        // 添加 更多(右) + 最后一页
-        if (this.total > this.pageCount && this.currentPage < this.paginationCount - interval && this.paginationCount !== this.pageCount) {
-            const more = getMoreItem('next', this.background);
-            this.#handleMoreItemClick(more, 'next');
+    handlePageChange();
+    this.addEventListener(
+      "change",
+      (e) => {
+        const { currentPage } = e.detail;
+        handlePageChange(currentPage);
+      },
+      { signal: this.#prevAbortController?.signal }
+    );
 
-            const lastPage = getPageItem(this.paginationCount, this.background);
-            this.#handlePaginationClick(lastPage, this.paginationCount);
+    this.#prevIcon.addEventListener(
+      "click",
+      () => {
+        if (this["current-page"] <= 1 || this.total <= 0) return;
 
-            this.#paginationWrap.appendChild(more);
-            this.#paginationWrap.appendChild(lastPage);
-        }
-    }
+        this["current-page"]--;
 
-    // 处理分页变化
-    #handlePaginationChange() {
-        this.#handleArrowStatus();
-        this.#handlePaginationItemChange();
-    }
+        this.#dispatchChangeEvent();
+        this.emit("prev-click", {
+          detail: { value: this["current-page"] },
+        });
+        this.emit("current-change", {
+          detail: { value: this["current-page"] },
+        });
+      },
+      { signal: this.#prevAbortController?.signal }
+    );
+  };
 
-    // 处理显示总数
-    #initTotalShow() {
-        if (!this.layout.includes('total')) return;
+  /**
+   * 渲染 next 按钮
+   */
+  #handleNextRender = () => {
+    if (!this.layout.includes("next") || !this.#nextIcon) return;
 
-        const totalItem = getShowTotalItem();
-        totalItem.innerHTML = `共 ${this.total} 条`;
+    this.#nextAbortController?.abort();
+    this.#nextAbortController = new AbortController();
 
-        this.#container.insertBefore(totalItem, this.#container.firstChild);
-    }
+    const computedIsOverflow = (page = this["current-page"]) =>
+      page >= Math.ceil(this.total / this["page-size"]);
 
-    connectedCallback() {
-        // 设置sizes
-        this.sizes = this.sizes;
+    /**
+     * 当页码改变时，处理 `next` 按钮的状态
+     * @param {Number} currentPage
+     */
+    const handlePageChange = (currentPage = computedIsOverflow()) => {
+      this.#nextIcon.classList.toggle("is-disabled", currentPage);
+      this.#nextIcon.setAttribute("aria-disabled", currentPage);
+      this.#nextIcon.setAttribute("tabindex", currentPage ? -1 : 0);
+    };
 
-        // 设置current-page
-        this.currentPage = this.currentPage;
+    this.addEventListener(
+      "change",
+      (e) => {
+        const { currentPage } = e.detail;
+        handlePageChange(computedIsOverflow(currentPage));
+      },
+      { signal: this.#nextAbortController?.signal }
+    );
 
-        // 设置total
-        this.total = this.total;
+    this.#nextIcon.addEventListener(
+      "click",
+      () => {
+        if (computedIsOverflow()) return;
 
-        this.#initArrowItem();
-        this.#handlePaginationItemChange();
-        this.#initTotalShow();
-    }
+        this["current-page"]++;
+
+        this.#dispatchChangeEvent();
+        this.dispatchEvent("next-click", {
+          detail: { value: this["current-page"] },
+        });
+        this.dispatchEvent("current-change", {
+          detail: { value: this["current-page"] },
+        });
+      },
+      { signal: this.#nextAbortController?.signal }
+    );
+  };
+
+  /**
+   *
+   * @param {Number} currentPage 当前页码
+   * @param {Number} pageSize 每页数量
+   */
+  #dispatchChangeEvent(
+    currentPage = this["current-page"],
+    pageSize = this["page-size"]
+  ) {
+    this.dispatchEvent("change", {
+      detail: {
+        currentPage,
+        pageSize,
+      },
+    });
+  }
+
+  // 处理分页的页码
+  #handlePaginationItemChange() {
+    this.#handlePagerRender();
+    this.#handlePrevRender();
+    this.#handleNextRender();
+
+    // const interval = Math.floor(this.pageCount / 2);
+    // let start = this.currentPage - interval;
+    // let end = this.currentPage + interval;
+    // // 边界处理
+    // if (start <= 1) {
+    //   start = 1;
+    //   end =
+    //     this.pageCount < this.paginationCount
+    //       ? this.pageCount
+    //       : this.paginationCount;
+    // } else if (end >= this.paginationCount) {
+    //   start = this.paginationCount - this.pageCount + 1;
+    //   end = this.paginationCount;
+    // } else {
+    //   end--;
+    // }
+    // 添加页码
+    // for (let i = start; i <= end; i++) {
+    //   const pageItem = getPageItem(i, this.background);
+    //   this.#paginationWrap.appendChild(pageItem);
+    //   // 设置当前页码选中后的样式
+    //   if (i === this.currentPage) {
+    //     pageItem.classList.add("ea-pagination_item--active");
+    //     if (this.background) pageItem.classList.add("active");
+    //   }
+    //   // 添加点击事件
+    //   this.#handlePaginationClick(pageItem, i);
+    // }
+    // 添加 更多(左) + 第一页
+    // if (
+    //   this.total > this.pageCount &&
+    //   this.currentPage >= this.pageCount &&
+    //   this.paginationCount !== this.pageCount
+    // ) {
+    //   const more = getMoreItem("prev", this.background);
+    //   this.#handleMoreItemClick(more, "prev");
+    //   const firstPage = getPageItem(1, this.background);
+    //   this.#handlePaginationClick(firstPage, 1);
+    //   this.#paginationWrap.insertBefore(more, this.#paginationWrap.firstChild);
+    //   this.#paginationWrap.insertBefore(
+    //     firstPage,
+    //     this.#paginationWrap.firstChild
+    //   );
+    // }
+    // 添加 更多(右) + 最后一页
+    // if (
+    //   this.total > this.pageCount &&
+    //   this.currentPage < this.paginationCount - interval &&
+    //   this.paginationCount !== this.pageCount
+    // ) {
+    //   const more = getMoreItem("next", this.background);
+    //   this.#handleMoreItemClick(more, "next");
+    //   const lastPage = getPageItem(this.paginationCount, this.background);
+    //   this.#handlePaginationClick(lastPage, this.paginationCount);
+    //   this.#paginationWrap.appendChild(more);
+    //   this.#paginationWrap.appendChild(lastPage);
+    // }
+  }
+
+  $render() {
+    /** @type {Array<'prev' | 'pager' | 'next' | '->' | 'jumper' | 'total' | 'sizes'>} */
+    const validLayout = this.layout.filter((item) =>
+      ["prev", "pager", "next", "jumper", "total", "sizes", "->"].includes(item)
+    );
+    const layoutTemplate = {
+      prev: `<ea-icon class="ea-pagination__icon prev-icon" icon='icon-angle-left' part='icon prev-icon' tabindex="0"></ea-icon>`,
+      pager: `<section class='ea-pagination__pager' part='pager'></section>`,
+      next: `<ea-icon class="ea-pagination__icon next-icon" icon='icon-angle-right' part='icon next-icon' tabindex="0"></ea-icon>`,
+    };
+
+    this.shadowRoot.innerHTML = `
+      <div class='ea-pagination' part='container'>
+        ${validLayout.map((item) => layoutTemplate[item]).join("")}
+      </div>
+    `;
+
+    this.#container = this.shadowRoot.querySelector(".ea-pagination");
+    this.#pagination = this.shadowRoot.querySelector(".ea-pagination__pager");
+    this.#prevIcon = this.shadowRoot.querySelector(
+      ".ea-pagination__icon.prev-icon"
+    );
+    this.#nextIcon = this.shadowRoot.querySelector(
+      ".ea-pagination__icon.next-icon"
+    );
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
+  $beforeUnmounted() {
+    this.#paginationAbortController?.abort();
+    this.#prevAbortController?.abort();
+  }
 }
 
-if (!customElements.get('ea-pagination')) {
-    customElements.define('ea-pagination', EaPagination);
+if (!window.customElements.get("ea-pagination")) {
+  window.customElements.define("ea-pagination", EaPagination);
 }
