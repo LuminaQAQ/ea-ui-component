@@ -92,8 +92,9 @@ export class EaPagination extends Base {
 
           const totalCount = Math.ceil(this.total / this["page-size"]);
           const step = Math.floor(this["page-count"] / 2);
-          const test = (start, end) => {
+          const getRange = (start, end) => {
             const ary = [];
+
             for (let i = start; i <= end; i++) {
               ary.push(i);
             }
@@ -101,34 +102,40 @@ export class EaPagination extends Base {
             return ary;
           };
 
-          const range = [
-            1,
-            ...test(
-              Math.max(
-                2,
-                newVal + step > totalCount
-                  ? newVal - step - Math.abs(step - newVal)
-                  : newVal - step + 1
-              ),
-              Math.min(
-                totalCount - 1,
-                newVal - step <= 0
-                  ? newVal + step + Math.abs(newVal - step)
-                  : newVal + step - 1
-              )
+          const range = getRange(
+            Math.max(
+              2,
+              newVal + step > totalCount // 处理 `endRange` 超出范围
+                ? /**
+                   * 当 `endRange` 超出范围时，起始值 = 当前页 - （范围区间 + 1） - 后半多余区间
+                   * 后半多余区间 = | 总页码数 - 当前页码 - 范围区间 |
+                   */
+                  newVal - step + 1 - Math.abs(totalCount - newVal - step)
+                : // 因为单独处理开头，所以 `range` 起始要多一位
+                  newVal - step + 1
             ),
-            totalCount,
-          ];
-          // if (range[0] > 2) {
-          //   range.unshift(1, "...");
-          // } else {
-          //   range.unshift(1);
-          // }
-          // if (range[range.length - 1] < totalCount) {
-          //   range.push("...", totalCount);
-          // } else {
-          //   range.push(totalCount);
-          // }
+            Math.min(
+              totalCount - 1,
+              newVal - step < 2 // 处理 startRange 超出范围
+                ? /**
+                   * 当 `startRange` 超出范围时，终止值 = 当前页 + （范围区间 - 1） - 前半多余区间
+                   * 前半多余区间 = | 当前页码 - 范围区间 - 1 |
+                   */
+                  newVal + step - 1 + Math.abs(newVal - step - 1)
+                : // 因为单独处理结尾，所以 `range` 结束要少一位
+                  newVal + step - 1
+            )
+          );
+          if (range[0] > 2) {
+            range.unshift(1, "...");
+          } else {
+            range.unshift(1);
+          }
+          if (range[range.length - 1] < totalCount - 1) {
+            range.push("...", totalCount);
+          } else {
+            range.push(totalCount);
+          }
 
           // console.log(range);
           console.log(range);
