@@ -31,7 +31,7 @@ export class EaPagination extends Base {
       "layout",
       "default-page-size",
       "page-size",
-      "page-count",
+      "pager-count",
       "total",
       "background",
       "current-page",
@@ -64,7 +64,7 @@ export class EaPagination extends Base {
         if (!this.#states.isFirstRender) this.$render();
       },
     },
-    "page-count": {
+    "pager-count": {
       type: Number,
       default: 7,
       /** @param {number} newVal */
@@ -145,7 +145,7 @@ export class EaPagination extends Base {
 
   #getPagerRange = (newVal) => {
     const totalCount = Math.ceil(this.total / this["page-size"]);
-    const step = Math.floor(this["page-count"] / 2);
+    const step = Math.floor(this["pager-count"] / 2);
 
     const getRange = (start, end) => {
       const ary = [];
@@ -182,13 +182,20 @@ export class EaPagination extends Base {
       )
     );
 
-    if (range[0] > 2) {
+    if (range[0] > 2 || step === 0) {
       range.unshift(1, "...");
     } else {
       range.unshift(1);
     }
 
-    if (range[range.length - 1] < totalCount - 1) {
+    if (step === 0 && newVal > 1 && newVal < totalCount) {
+      range.push(newVal);
+    }
+
+    if (
+      range[range.length - 1] < totalCount - 1 ||
+      (step === 0 && newVal === totalCount - 1)
+    ) {
       range.push("...", totalCount);
     } else {
       range.push(totalCount);
@@ -206,7 +213,7 @@ export class EaPagination extends Base {
     if (!this.layout.includes("pager") || !this.#pagination) return;
 
     const totalCount = Math.ceil(this.total / this["page-size"]);
-    const renderCount = Math.min(totalCount, this["page-count"]);
+    const renderCount = Math.min(totalCount, this["pager-count"]);
 
     this.#paginationAbortController?.abort();
     this.#paginationAbortController = new AbortController();
