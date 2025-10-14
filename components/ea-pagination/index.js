@@ -3,6 +3,7 @@ import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
 import EaUtils from "@/utils/Utils";
 import { getPageItem } from "./components/pageItem";
+import { getMoreItem } from "./components/moreItem";
 
 export class EaPagination extends Base {
   /** @type {HTMLElement} */
@@ -35,6 +36,7 @@ export class EaPagination extends Base {
       "total",
       "background",
       "current-page",
+      "hide-on-single-page",
     ];
   }
 
@@ -77,6 +79,8 @@ export class EaPagination extends Base {
       observer: (newVal) => {
         if (this.#pagination && this.layout.includes("pager"))
           this.#handlePaginationItemChange();
+
+        if (this["hide-on-single-page"]) this.updateContainerClasslist();
       },
     },
     "current-page": {
@@ -93,7 +97,7 @@ export class EaPagination extends Base {
               if (typeof item === "number") {
                 template += getPageItem(item, this["current-page"], item);
               } else {
-                template += getPageItem(item, this["current-page"], "...");
+                template += getMoreItem("...");
               }
             });
 
@@ -115,8 +119,24 @@ export class EaPagination extends Base {
     background: {
       type: Boolean,
       default: false,
-      /** @param {boolean} newVal */
-      observer: (newVal) => {},
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    size: {
+      type: ["large", "default", "small"],
+      default: "",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    "hide-on-single-page": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        if (this.#pagination && this.layout.includes("pager"))
+          this.updateContainerClasslist();
+      },
     },
   });
 
@@ -125,9 +145,18 @@ export class EaPagination extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-pagination", {
-      // ['--' + this.type]: this.type,
-    });
+    const className = this.computedClasslist(
+      "ea-pagination",
+      {
+        ["--background"]: this.background,
+        [`--size-${this.size}`]: this.size,
+      },
+      {
+        hide:
+          this["hide-on-single-page"] &&
+          Math.ceil(this.total / this["page-size"]) <= 1,
+      }
+    );
 
     this.#container.className = className;
 
@@ -140,6 +169,7 @@ export class EaPagination extends Base {
     this.stylesheet = stylesheet;
 
     this.$render();
+
     this.#states.isFirstRender = false;
   }
 
@@ -198,7 +228,7 @@ export class EaPagination extends Base {
     ) {
       range.push("...", totalCount);
     } else {
-      range.push(totalCount);
+      if (totalCount > 1) range.push(totalCount);
     }
 
     return range;
@@ -208,12 +238,10 @@ export class EaPagination extends Base {
    * 渲染页码部分
    * @description 这里的事件监听采用的是，通过 `this.#pagination` 点击事件中，获取到的最近的 `页码元素` 来进行事件触发
    */
-  // TODO：需要处理页码渲染逻辑，more和
+  // TODO：需要处理页码点击逻辑，more和步进器
   #handlePagerRender = () => {
     if (!this.layout.includes("pager") || !this.#pagination) return;
-
-    const totalCount = Math.ceil(this.total / this["page-size"]);
-    const renderCount = Math.min(totalCount, this["pager-count"]);
+    // if (this["current-page"] === 1 && this["hide-on-single-page"]) return;
 
     this.#paginationAbortController?.abort();
     this.#paginationAbortController = new AbortController();
@@ -225,7 +253,7 @@ export class EaPagination extends Base {
         if (typeof item === "number") {
           template += getPageItem(item, this["current-page"], item);
         } else {
-          template += getPageItem(item, this["current-page"], "...");
+          template += getMoreItem(item, this["current-page"], "...");
         }
       });
 
@@ -331,6 +359,8 @@ export class EaPagination extends Base {
       this.#nextIcon.setAttribute("tabindex", currentPage ? -1 : 0);
     };
 
+    handlePageChange();
+
     this.addEventListener(
       "change",
       (e) => {
@@ -368,7 +398,7 @@ export class EaPagination extends Base {
     currentPage = this["current-page"],
     pageSize = this["page-size"]
   ) {
-    this.dispatchEvent("change", {
+    this.emit("change", {
       detail: {
         currentPage,
         pageSize,
@@ -381,64 +411,6 @@ export class EaPagination extends Base {
     this.#handlePagerRender();
     this.#handlePrevRender();
     this.#handleNextRender();
-
-    // const interval = Math.floor(this.pageCount / 2);
-    // let start = this.currentPage - interval;
-    // let end = this.currentPage + interval;
-    // // 边界处理
-    // if (start <= 1) {
-    //   start = 1;
-    //   end =
-    //     this.pageCount < this.paginationCount
-    //       ? this.pageCount
-    //       : this.paginationCount;
-    // } else if (end >= this.paginationCount) {
-    //   start = this.paginationCount - this.pageCount + 1;
-    //   end = this.paginationCount;
-    // } else {
-    //   end--;
-    // }
-    // 添加页码
-    // for (let i = start; i <= end; i++) {
-    //   const pageItem = getPageItem(i, this.background);
-    //   this.#paginationWrap.appendChild(pageItem);
-    //   // 设置当前页码选中后的样式
-    //   if (i === this.currentPage) {
-    //     pageItem.classList.add("ea-pagination_item--active");
-    //     if (this.background) pageItem.classList.add("active");
-    //   }
-    //   // 添加点击事件
-    //   this.#handlePaginationClick(pageItem, i);
-    // }
-    // 添加 更多(左) + 第一页
-    // if (
-    //   this.total > this.pageCount &&
-    //   this.currentPage >= this.pageCount &&
-    //   this.paginationCount !== this.pageCount
-    // ) {
-    //   const more = getMoreItem("prev", this.background);
-    //   this.#handleMoreItemClick(more, "prev");
-    //   const firstPage = getPageItem(1, this.background);
-    //   this.#handlePaginationClick(firstPage, 1);
-    //   this.#paginationWrap.insertBefore(more, this.#paginationWrap.firstChild);
-    //   this.#paginationWrap.insertBefore(
-    //     firstPage,
-    //     this.#paginationWrap.firstChild
-    //   );
-    // }
-    // 添加 更多(右) + 最后一页
-    // if (
-    //   this.total > this.pageCount &&
-    //   this.currentPage < this.paginationCount - interval &&
-    //   this.paginationCount !== this.pageCount
-    // ) {
-    //   const more = getMoreItem("next", this.background);
-    //   this.#handleMoreItemClick(more, "next");
-    //   const lastPage = getPageItem(this.paginationCount, this.background);
-    //   this.#handlePaginationClick(lastPage, this.paginationCount);
-    //   this.#paginationWrap.appendChild(more);
-    //   this.#paginationWrap.appendChild(lastPage);
-    // }
   }
 
   $render() {
@@ -466,6 +438,8 @@ export class EaPagination extends Base {
     this.#nextIcon = this.shadowRoot.querySelector(
       ".ea-pagination__icon.next-icon"
     );
+
+    this.updateContainerClasslist();
   }
 
   connectedCallback() {
