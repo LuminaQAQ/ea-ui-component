@@ -47,6 +47,8 @@ export class EaPagination extends Base {
       "background",
       "current-page",
       "hide-on-single-page",
+      "size",
+      "disabled",
     ];
   }
 
@@ -139,6 +141,17 @@ export class EaPagination extends Base {
           this.updateContainerClasslist();
       },
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+
+        if (this.layout.includes("jumper") && this.#jumper) {
+          this.#jumper.disabled = newVal;
+        }
+      },
+    },
   });
 
   /**
@@ -156,6 +169,7 @@ export class EaPagination extends Base {
         hide:
           this["hide-on-single-page"] &&
           Math.ceil(this.total / this["page-size"]) <= 1,
+        disabled: this.disabled,
       }
     );
 
@@ -265,7 +279,6 @@ export class EaPagination extends Base {
    * 渲染页码部分
    * @description 这里的事件监听采用的是，通过 `this.#pagination` 点击事件中，获取到的最近的 `页码元素` 来进行事件触发
    */
-  // TODO：需要处理页码点击逻辑，more和步进器
   #handlePagerRender = () => {
     if (!this.layout.includes("pager") || !this.#pagination) return;
 
@@ -290,7 +303,14 @@ export class EaPagination extends Base {
             detail: { value: this["current-page"] },
           });
         } else if (moreItem) {
-          // TODO: 处理 moreItem
+          const action = moreItem.dataset.action;
+          const totalPage = Math.ceil(this.total / this["page-size"]);
+          let realPage = this["current-page"] + (action === "next" ? 5 : -5);
+
+          if (realPage < 1) realPage = 1;
+          else if (realPage > totalPage) realPage = totalPage;
+
+          this["current-page"] = realPage;
         }
       },
       { signal: this.#paginationAbortController?.signal }

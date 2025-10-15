@@ -5,6 +5,7 @@
   --ea-input-padding: 0 var(--spacing-md);
 
   --ea-input-disabled-background-color: var(--grey-100);
+  --ea-input-disabled-color: var(--grey-300);
 
   --ea-input-height-sm: 22px;
   --ea-input-height-md: 30px;
@@ -169,6 +170,7 @@
     .ea-input__original {
       &:disabled {
         background-color: var(--ea-input-disabled-background-color);
+        color: var(--ea-input-disabled-color);
       }
     }
   }

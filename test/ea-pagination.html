@@ -19,6 +19,7 @@
       src="../src/components/ea-pagination/index.js"
     ></script>
     <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script type="module" src="../src/components/ea-radio/index.js"></script>
 
     <!--  基础用法 -->
     <!-- #region -->
@@ -123,10 +124,21 @@
     <!-- #region  -->
     <h2>附加功能</h2>
     <div class="demo">
-      <section>显示总数</section>
+      <ea-radio-group id="additionalFunctionsSize" name="size">
+        <ea-radio value="large">large</ea-radio>
+        <ea-radio value="default" checked>default</ea-radio>
+        <ea-radio value="small">small</ea-radio>
+      </ea-radio-group>
+      <div>
+        background: <ea-switch id="additionalFunctionsBackground"></ea-switch>
+      </div>
+      <div>
+        disabled: <ea-switch id="additionalFunctionsDisabled"></ea-switch>
+      </div>
 
       <div class="demonstration">Total item count</div>
       <ea-pagination
+        id="additionalFunctionsPagination1"
         layout='["prev", "pager", "next", "total"]'
         total="1000"
         page-size="100"
@@ -134,6 +146,7 @@
 
       <div class="demonstration">Change page size</div>
       <ea-pagination
+        id="additionalFunctionsPagination2"
         layout='["sizes", "prev", "pager", "next"]'
         page-sizes="[100, 200, 300, 400]"
         total="1000"
@@ -141,16 +154,63 @@
 
       <div class="demonstration">Jump to</div>
       <ea-pagination
+        id="additionalFunctionsPagination3"
         layout='["prev", "pager", "next", "jumper"]'
         total="1000"
       ></ea-pagination>
 
       <div class="demonstration">All combined</div>
       <ea-pagination
+        id="additionalFunctionsPagination4"
         page-sizes="[100, 200, 300, 400]"
         layout='["total", "sizes", "prev", "pager", "next", "jumper"]'
         total="400"
       ></ea-pagination>
+
+      <script type="module">
+        const additionalFunctionsExample = {
+          sizeBtn: document.querySelector("#additionalFunctionsSize"),
+          backgroundBtn: document.querySelector(
+            "#additionalFunctionsBackground"
+          ),
+          disabledBtn: document.querySelector("#additionalFunctionsDisabled"),
+
+          els: [
+            document.querySelector("#additionalFunctionsPagination1"),
+            document.querySelector("#additionalFunctionsPagination2"),
+            document.querySelector("#additionalFunctionsPagination3"),
+            document.querySelector("#additionalFunctionsPagination4"),
+          ],
+
+          init() {
+            this.sizeBtn.addEventListener("change", (e) => {
+              const { value } = e.detail;
+
+              this.els.forEach((el) => {
+                el.size = value;
+              });
+            });
+
+            this.backgroundBtn.addEventListener("change", (e) => {
+              const { value } = e.detail;
+
+              this.els.forEach((el) => {
+                el.background = value;
+              });
+            });
+
+            this.disabledBtn.addEventListener("change", (e) => {
+              const { value } = e.detail;
+
+              this.els.forEach((el) => {
+                el.disabled = value;
+              });
+            });
+          },
+        };
+
+        additionalFunctionsExample.init();
+      </script>
     </div>
     <hr />
     <!-- #endregion  -->
