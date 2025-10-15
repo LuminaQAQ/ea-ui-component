@@ -19,13 +19,6 @@
       src="../src/components/ea-pagination/index.js"
     ></script>
     <script type="module" src="../src/components/ea-switch/index.js"></script>
-    <script type="module">
-      //   document
-      //     .querySelector("#prevAndNext")
-      //     .addEventListener("change", function (e) {
-      //       alert(`当前页码为: ${e.detail.currentPage}`);
-      //     });
-    </script>
 
     <!--  基础用法 -->
     <!-- #region -->
@@ -134,9 +127,29 @@
 
       <div class="demonstration">Total item count</div>
       <ea-pagination
-        background
         layout='["prev", "pager", "next", "total"]'
-        total="200"
+        total="1000"
+        page-size="100"
+      ></ea-pagination>
+
+      <div class="demonstration">Change page size</div>
+      <ea-pagination
+        layout='["sizes", "prev", "pager", "next"]'
+        page-sizes="[100, 200, 300, 400]"
+        total="1000"
+      ></ea-pagination>
+
+      <div class="demonstration">Jump to</div>
+      <ea-pagination
+        layout='["prev", "pager", "next", "jumper"]'
+        total="1000"
+      ></ea-pagination>
+
+      <div class="demonstration">All combined</div>
+      <ea-pagination
+        page-sizes="[100, 200, 300, 400]"
+        layout='["total", "sizes", "prev", "pager", "next", "jumper"]'
+        total="400"
       ></ea-pagination>
     </div>
     <hr />

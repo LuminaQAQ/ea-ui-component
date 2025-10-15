@@ -459,9 +459,12 @@ export class EaInput extends Base {
    * @param {FocusEvent} e 事件对象
    */
   #initFocusEvent = (e) => {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
     this.#states.isFocus = true;
     this.#container.className = this.updateContainerClasslist();
-    this.dispatchEvent("focus");
+    this.emit("focus");
   };
 
   /**
@@ -469,9 +472,12 @@ export class EaInput extends Base {
    * @param {FocusEvent} e 事件对象
    */
   #initBlurEvent = (e) => {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
     this.#states.isFocus = false;
     this.#container.className = this.updateContainerClasslist();
-    this.dispatchEvent("blur");
+    this.emit("blur");
   };
 
   /**
@@ -708,6 +714,8 @@ export class EaInput extends Base {
           signal: this.#abortController.signal,
         }
       );
+
+    this.emit("ea-input-ready");
   }
 
   $beforeUnmounted() {

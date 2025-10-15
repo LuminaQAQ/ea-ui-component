@@ -54,7 +54,7 @@ $ea-pagination-size-options: ("large", "default", "small");
     padding: var(--ea-pagination-default-spacing);
     border-radius: 2px;
 
-    font-size: 16px;
+    font-size: var(--ea-pagination-default-size);
     color: var(--ea-pagination-color);
     cursor: pointer;
     text-align: center;
@@ -66,6 +66,32 @@ $ea-pagination-size-options: ("large", "default", "small");
     &.is-active {
       font-weight: 500;
       color: var(--ea-pagination-active-color);
+    }
+  }
+
+  @include element(total) {
+    color: var(--ea-pagination-color);
+    font-size: var(--ea-pagination-default-size);
+  }
+
+  @include element(wrapper) {
+    display: flex;
+    align-items: center;
+
+    color: var(--ea-pagination-color);
+    font-size: var(--ea-pagination-default-size);
+  }
+
+  @include element(jumper) {
+    margin-left: 0.5rem;
+
+    width: 56px;
+
+    color: var(--ea-pagination-color);
+    font-size: var(--ea-pagination-default-size);
+
+    &::part(original) {
+      text-align: center;
     }
   }
 
@@ -100,6 +126,10 @@ $ea-pagination-size-options: ("large", "default", "small");
       .ea-pagination__page {
         font-size: var(--ea-pagination-#{$size}-size);
         padding: var(--ea-pagination-#{$size}-spacing);
+      }
+
+      .ea-pagination__total {
+        font-size: var(--ea-pagination-#{$size}-size);
       }
     }
   }
