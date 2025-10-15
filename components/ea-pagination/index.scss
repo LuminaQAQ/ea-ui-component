@@ -3,12 +3,17 @@ $ea-pagination-size-options: ("large", "default", "small");
 :host {
   --ea-pagination-color: var(--grey-900);
   --ea-pagination-active-color: var(--blue-500);
+  --ea-pagination-disabled-active-color: var(--blue-300);
   --ea-pagination-disabled-color: var(--grey-300);
   --ea-pagination-background: #f0f2f5;
 
   --ea-pagination-large-size: 18px;
   --ea-pagination-default-size: 16px;
   --ea-pagination-small-size: 14px;
+
+  --ea-pagination-jumper-large-size: 30px;
+  --ea-pagination-jumper-default-size: 28px;
+  --ea-pagination-jumper-small-size: 22px;
 
   --ea-pagination-large-spacing: 6px 12px;
   --ea-pagination-default-spacing: 4px 10px;
@@ -54,7 +59,7 @@ $ea-pagination-size-options: ("large", "default", "small");
     padding: var(--ea-pagination-default-spacing);
     border-radius: 2px;
 
-    font-size: 16px;
+    font-size: var(--ea-pagination-default-size);
     color: var(--ea-pagination-color);
     cursor: pointer;
     text-align: center;
@@ -66,6 +71,39 @@ $ea-pagination-size-options: ("large", "default", "small");
     &.is-active {
       font-weight: 500;
       color: var(--ea-pagination-active-color);
+    }
+  }
+
+  @include element(total) {
+    color: var(--ea-pagination-color);
+    font-size: var(--ea-pagination-default-size);
+
+    margin: 0 0.5rem;
+  }
+
+  @include element(wrapper) {
+    display: flex;
+    align-items: center;
+
+    margin: 0 0.5rem;
+
+    color: var(--ea-pagination-color);
+    font-size: var(--ea-pagination-default-size);
+  }
+
+  @include element(jumper) {
+    margin-left: 0.5rem;
+
+    height: var(--ea-pagination-jumper-default-size);
+    width: 56px;
+
+    color: var(--ea-pagination-color);
+    font-size: var(--ea-pagination-default-size);
+
+    &::part(original),
+    &::part(inner) {
+      text-align: center;
+      height: var(--ea-pagination-jumper-default-size);
     }
   }
 
@@ -89,6 +127,35 @@ $ea-pagination-size-options: ("large", "default", "small");
     display: none;
   }
 
+  @include state(disabled) {
+    cursor: not-allowed;
+
+    .ea-pagination__icon,
+    .ea-pagination__page,
+    .ea-pagination__total,
+    .ea-pagination__wrapper {
+      color: var(--ea-pagination-disabled-color);
+      pointer-events: none;
+    }
+
+    .ea-pagination__page {
+      &.is-active {
+        cursor: not-allowed;
+        color: var(--ea-pagination-disabled-active-color);
+      }
+    }
+
+    &.ea-pagination--background {
+      .ea-pagination__page {
+        &.is-active {
+          cursor: not-allowed;
+          color: white;
+          background-color: var(--ea-pagination-disabled-active-color);
+        }
+      }
+    }
+  }
+
   @each $size in $ea-pagination-size-options {
     @include modifier(size-#{$size}) {
       .prev-icon,
@@ -100,6 +167,19 @@ $ea-pagination-size-options: ("large", "default", "small");
       .ea-pagination__page {
         font-size: var(--ea-pagination-#{$size}-size);
         padding: var(--ea-pagination-#{$size}-spacing);
+      }
+
+      .ea-pagination__total {
+        font-size: var(--ea-pagination-#{$size}-size);
+      }
+
+      .ea-pagination__jumper {
+        height: var(--ea-pagination-jumper-#{$size}-size);
+
+        &::part(original),
+        &::part(inner) {
+          height: var(--ea-pagination-jumper-#{$size}-size);
+        }
       }
     }
   }
