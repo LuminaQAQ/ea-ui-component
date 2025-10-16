@@ -3,7 +3,7 @@
   align-items: center;
 
   ::slotted(ea-button) {
-    --border-radius: 0;
+    --ea-button-border-radius: 0;
   }
 
   ::slotted(ea-button:not([type="normal"])) {
@@ -11,10 +11,10 @@
   }
 
   ::slotted(ea-button:first-of-type) {
-    --border-radius: 4px 0 0 4px;
+    --ea-button-border-radius: 4px 0 0 4px;
   }
 
   ::slotted(ea-button:last-of-type) {
-    --border-radius: 0 4px 4px 0;
+    --ea-button-border-radius: 0 4px 4px 0;
   }
 }
