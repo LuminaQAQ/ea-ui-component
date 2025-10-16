@@ -1,10 +1,22 @@
 import Base from "../Base.js";
 
-import stylesheet from "./index.scss?inline"
+import stylesheet from "./index.scss?inline";
 
 export class EaButton extends Base {
   static get observedAttributes() {
-    return ["disabled", "type", "text", "plain", "round", "circle", "link", "href", "size", "loading", "icon"];
+    return [
+      "disabled",
+      "type",
+      "text",
+      "plain",
+      "round",
+      "circle",
+      "link",
+      "href",
+      "size",
+      "loading",
+      "icon",
+    ];
   }
 
   /** @type {HTMLButtonElement | HTMLLinkElement} */
@@ -15,17 +27,15 @@ export class EaButton extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist('ea-button',
-      {
-        ['--' + this.type]: this.type,
-        ['--disabled']: this.disabled || this.loading,
-        ['--text']: this.text || this.link,
-        ['--plain']: this.plain,
-        ['--round']: this.round,
-        ['--circle']: this.circle,
-        ['--' + this.size]: this.size
-      }
-    );
+    return this.computedClasslist("ea-button", {
+      ["--" + this.type]: this.type,
+      ["--disabled"]: this.disabled || this.loading,
+      ["--text"]: this.text || this.link,
+      ["--plain"]: this.plain,
+      ["--round"]: this.round,
+      ["--circle"]: this.circle,
+      ["--" + this.size]: this.size,
+    });
   }
 
   /**
@@ -50,108 +60,108 @@ export class EaButton extends Base {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
+        this.#container.className = this.updateContainerClasslist();
       },
     },
     type: {
-      type: ['normal', 'primary', 'success', 'warning', 'danger'],
-      default: 'normal',
+      type: ["normal", "primary", "success", "warning", "danger"],
+      default: "normal",
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
-      }
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     text: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
-      }
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     plain: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
-      }
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     round: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
-      }
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     circle: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
-      }
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     link: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
-      }
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     href: {
       type: String,
-      default: '',
+      default: "",
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
+        this.#container.className = this.updateContainerClasslist();
 
-        this.#container.setAttribute('href', newVal)
-      }
+        this.#container.setAttribute("href", newVal);
+      },
     },
     size: {
-      type: ['small', 'medium', 'large'],
-      default: 'medium',
+      type: ["small", "medium", "large"],
+      default: "medium",
       observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
-      }
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     loading: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
         newVal = newVal === "true" || newVal === true;
-        this.setAttr("disabled", newVal)
-
+        this.setAttr("disabled", newVal);
 
         if (newVal) {
-          const i = document.createElement('ea-icon');
-          i.id = 'ea-loading-icon';
-          i.icon = 'icon-spin6 animate-spin';
+          const i = document.createElement("ea-icon");
+          i.id = "ea-loading-icon";
+          i.icon = "icon-spin6 animate-spin";
           i.size = this.size;
-          i.part = 'loading-icon';
+          i.part = "loading-icon";
 
-          this.#container.insertBefore(i, this.#container.firstChild)
+          this.#container.insertBefore(i, this.#container.firstChild);
         } else {
-          const loadingIcon = this.#container?.querySelectorAll('#ea-loading-icon');
+          const loadingIcon =
+            this.#container?.querySelectorAll("#ea-loading-icon");
           if (loadingIcon?.length > 0) {
-            loadingIcon?.forEach(item => item.remove());
+            loadingIcon?.forEach((item) => item.remove());
           }
         }
 
-        this.#container.className = this.updateContainerClasslist()
-      }
+        this.#container.className = this.updateContainerClasslist();
+      },
     },
     icon: {
       type: String,
-      default: '',
+      default: "",
       observer: (newVal) => {
-        if (newVal && !this.#container.querySelector('ea-icon')) {
-          const eaIcon = document.createElement('ea-icon');
+        if (newVal && !this.#container.querySelector("ea-icon")) {
+          const eaIcon = document.createElement("ea-icon");
           eaIcon.size = this.size;
           eaIcon.icon = newVal;
           eaIcon.part = "icon";
 
           this.#container.insertBefore(eaIcon, this.#container.firstChild);
         }
-      }
+      },
     },
-  })
+  });
 
   constructor() {
     super();
@@ -162,18 +172,20 @@ export class EaButton extends Base {
   }
 
   $render() {
-    const tag = this.getAttrBoolean('link') ? "a" : "button";
+    const tag = this.getAttrBoolean("link") ? "a" : "button";
     this.shadowRoot.innerHTML = `
       <${tag} class="ea-button" part="container">
         <slot></slot>
       </${tag}>
     `;
 
-    this.#container = this.shadowRoot.querySelector('.ea-button');
+    this.#container = this.shadowRoot.querySelector(".ea-button");
   }
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.emit("ea-button-ready");
   }
 }
 

@@ -277,13 +277,11 @@ export default class Base extends HTMLElement {
    * @param {any} data.oldVal 旧值
    */
   $updated(data) {
-    this.dispatchEvent(
-      new CustomEvent("updated", {
-        detail: data,
-        bubbles: false,
-        composed: true,
-      })
-    );
+    this.emit("updated", {
+      detail: data,
+      bubbles: false,
+      composed: true,
+    });
   }
 
   connectedCallback() {
@@ -299,23 +297,19 @@ export default class Base extends HTMLElement {
   disconnectedCallback() {
     // 组件销毁前
     this.$beforeUnmounted?.();
-    this.dispatchEvent(
-      new CustomEvent("beforeUnmount", {
-        detail: this,
-        bubbles: false,
-        composed: true,
-      })
-    );
+    this.emit("beforeUnmount", {
+      detail: this,
+      bubbles: false,
+      composed: true,
+    });
 
     // 组件销毁
     this.$unmounted?.();
-    this.dispatchEvent(
-      new CustomEvent("unmounted", {
-        detail: this,
-        bubbles: false,
-        composed: true,
-      })
-    );
+    this.emit("unmounted", {
+      detail: this,
+      bubbles: false,
+      composed: true,
+    });
 
     this.state = null;
   }

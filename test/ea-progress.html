@@ -113,11 +113,22 @@
     <h1>自定义进度条的颜色</h1>
 
     <div class="demo">
-      <ea-progress percentage="50" color="[]"></ea-progress>
-      <ea-progress percentage="100" color="[]"></ea-progress>
-      <ea-progress percentage="100" status="success"></ea-progress>
-      <ea-progress percentage="100" status="warning"></ea-progress>
-      <ea-progress percentage="100" status="exception"></ea-progress>
+      <ea-progress percentage="20" color="#409eff"></ea-progress>
+      <ea-progress
+        percentage="20"
+        color='[
+          { "color": "#f56c6c", "percentage": 20 },
+          { "color": "#e6a23c", "percentage": 40 },
+          { "color": "#5cb87a", "percentage": 60 },
+          { "color": "#1989fa", "percentage": 80 },
+          { "color": "#6f7ad3", "percentage": 100 }
+        ]'
+      ></ea-progress>
+
+      <ea-button-group>
+        <ea-button id="ea-progress_dashboard-change-btn-add">-</ea-button>
+        <ea-button id="ea-progress_dashboard-change-btn-minus">+</ea-button>
+      </ea-button-group>
     </div>
 
     <hr />
@@ -168,12 +179,8 @@
         percentage="25"
       ></ea-progress>
       <ea-button-group>
-        <ea-button id="ea-progress_dashboard-change-btn-add" type="primary"
-          >-</ea-button
-        >
-        <ea-button id="ea-progress_dashboard-change-btn-minus" type="primary"
-          >+</ea-button
-        >
+        <ea-button id="ea-progress_dashboard-change-btn-add">-</ea-button>
+        <ea-button id="ea-progress_dashboard-change-btn-minus">+</ea-button>
       </ea-button-group>
     </div>
 

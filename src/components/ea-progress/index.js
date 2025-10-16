@@ -1,6 +1,7 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
 
 export class EaProgress extends Base {
   /** @type {HTMLElement} */
@@ -98,21 +99,12 @@ export class EaProgress extends Base {
     },
     color: {
       type: {
-        Array: () => Array.isArray(this.color),
-        String: () => typeof this.color === "string",
+        Array: () =>
+          Array.isArray(EaUtils.JSON.parse(this.getAttrString("color"), true)),
+        String: () => typeof this.getAttrString("color") === "string",
       },
-      default: [],
-      observer: (newVal) => {
-        console.log(
-          JSON.parse([
-            { color: "#f56c6c", percentage: 20 },
-            { color: "#e6a23c", percentage: 40 },
-            { color: "#5cb87a", percentage: 60 },
-            { color: "#1989fa", percentage: 80 },
-            { color: "#6f7ad3", percentage: 100 },
-          ])
-        );
-      },
+      default: "",
+      observer: (newVal) => {},
     },
   });
 

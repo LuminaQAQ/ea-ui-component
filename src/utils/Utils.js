@@ -80,20 +80,20 @@ EaUtils.EaElement.addAsyncEventListener = (context, eventName, once = true) => {
 
 EaUtils.EaElement.h = h;
 
-EaUtils.JSON.parse = (json) => {
+EaUtils.JSON.parse = (json, isIgnoreError = false) => {
   try {
     return JSON.parse(json);
   } catch (error) {
-    console.error(error);
+    if (!isIgnoreError) console.error(error);
     return null;
   }
 };
 
-EaUtils.JSON.stringify = (json) => {
+EaUtils.JSON.stringify = (json, isIgnoreError = false) => {
   try {
     return JSON.stringify(json);
   } catch (error) {
-    console.error(error);
+    if (!isIgnoreError) console.error(error);
     return null;
   }
 };
