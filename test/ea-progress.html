@@ -113,8 +113,13 @@
     <h1>自定义进度条的颜色</h1>
 
     <div class="demo">
-      <ea-progress percentage="20" color="#409eff"></ea-progress>
       <ea-progress
+        class="custom-color-progress"
+        percentage="20"
+        color="#6f7ad3"
+      ></ea-progress>
+      <ea-progress
+        class="custom-color-progress"
         percentage="20"
         color='[
           { "color": "#f56c6c", "percentage": 20 },
@@ -126,10 +131,36 @@
       ></ea-progress>
 
       <ea-button-group>
-        <ea-button id="ea-progress_dashboard-change-btn-add">-</ea-button>
-        <ea-button id="ea-progress_dashboard-change-btn-minus">+</ea-button>
+        <ea-button id="customColorMinusBtn">-</ea-button>
+        <ea-button id="customColorPlusBtn">+</ea-button>
       </ea-button-group>
     </div>
+
+    <script type="module">
+      const customColorExample = {
+        els: document.querySelectorAll(".custom-color-progress"),
+        minus: document.querySelector("#customColorMinusBtn"),
+        plus: document.querySelector("#customColorPlusBtn"),
+
+        init() {
+          this.minus.addEventListener("click", () => {
+            this.els.forEach((el) => {
+              const percentage = Number(el.getAttribute("percentage"));
+              el.setAttribute("percentage", percentage - 10);
+            });
+          });
+
+          this.plus.addEventListener("click", () => {
+            this.els.forEach((el) => {
+              const percentage = Number(el.getAttribute("percentage"));
+              el.setAttribute("percentage", percentage + 10);
+            });
+          });
+        },
+      };
+
+      customColorExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->

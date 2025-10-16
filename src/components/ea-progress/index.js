@@ -60,6 +60,24 @@ export class EaProgress extends Base {
         } else {
           this.#text.textContent = strategies[this.type]();
         }
+
+        if (Array.isArray(this.color)) {
+          let nearItem = newVal;
+
+          for (let i = 0; i < this.color.length; i++) {
+            const item = this.color[i];
+
+            if (newVal <= item.percentage) {
+              nearItem = item;
+
+              break;
+            }
+          }
+
+          this.#path.style.background = nearItem.color;
+        } else if (typeof this.color === "string") {
+          this.#path.style.background = this.color;
+        }
       },
     },
     type: {
