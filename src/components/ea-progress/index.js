@@ -1,249 +1,165 @@
-import Base from '../Base.js';
-import "../ea-icon/index.js"
+import Base from "@components/Base.js";
 
-import { stylesheet } from './src/style/stylesheet.js';
-
-import { SVGComm } from "./src/components/SVGComm.js";
+import stylesheet from "./index.scss?inline";
 
 export class EaProgress extends Base {
-    #wrap;
-    #track;
-    #path;
-    #progressText;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #track;
+  /** @type {HTMLElement} */
+  #path;
+  /** @type {HTMLElement} */
+  #text;
 
-    constructor() {
-        super();
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "percentage",
+      "status",
+      "stroke-width",
+      "text-inside",
+      "color",
+    ];
+  }
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class="ea-progress_wrap" part="container">
-                <section class="ea-progress_track" part="track-wrap">
-                    <section class="ea-progress_path" part="path"></section>
-                </section>
-                <section class="ea-progress_text" part="text-wrap"></section>
-            </div>
-        `;
+  state = this.properties({
+    percentage: {
+      type: Number,
+      default: 0,
+      observer: (newVal) => {
+        if (newVal < 0) return (this.percentage = 0);
+        else if (newVal > 100) return (this.percentage = 100);
 
-        this.#wrap = shadowRoot.querySelector('.ea-progress_wrap');
-        this.#track = shadowRoot.querySelector('.ea-progress_track');
-        this.#path = shadowRoot.querySelector('.ea-progress_path');
-        this.#progressText = shadowRoot.querySelector('.ea-progress_text');
+        const strategies = {
+          line: () => newVal + "%",
+          circle: () => (302 * (100 - newVal)) / 100 + "px",
+          dashboard: () => (152 * (100 - newVal)) / 100 + 100 + "px",
+        };
 
-        this.build(shadowRoot, stylesheet);
-    }
+        const statusIcon = {
+          success: "icon-ok-circled",
+          warning: "icon-attention-circled",
+          exception: "icon-cancel-circled",
+        };
 
-    // ------- type 进度条类型 -------
-    // #region
-    get type() {
-        return this.getAttribute('type');
-    }
+        this.#container.style.setProperty(
+          "--ea-progress-percentage",
+          strategies[this.type]()
+        );
 
-    set type(value) {
-        if (!value) return;
-
-        this.setAttribute('type', value);
-
-        switch (this.type) {
-            case "circle":
-                this.#handleSVGTemplate("circle");
-                break;
-            case "dashboard":
-                this.#handleSVGTemplate("dashboard");
-                break;
-        }
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- percentage 进度百分比 -------
-    // #region
-    get percentage() {
-        return this.getAttribute('percentage') || 0;
-    }
-
-    #getCirclePercentageValue(value) {
-        return 302 * (100 - Number(value)) / 100;
-    }
-
-    #getDashboardPercentageValue(value) {
-        return 152 * (100 - Number(value)) / 100 + 100;
-    }
-
-    set percentage(value) {
-        if (isNaN(Number(value))) return;
-        else if (Number(value) < 0) value = 0;
-        else if (Number(value) > 100) value = 100;
-
-        this.setAttribute('percentage', value);
-        if (this.textInside || this.type === "dashboard" || this.type === "circle") this.#progressText.innerHTML = `${value}%`;
-
-        switch (this.type) {
-            case "circle": {
-                this.#path.style.strokeDashoffset = `${this.#getCirclePercentageValue(value)}px`;
-                break;
-            }
-            case "dashboard": {
-                this.#path.style.strokeDashoffset = `${this.#getDashboardPercentageValue(value)}px`;
-                break;
-            }
-            default: {
-                this.#path.style.width = `${value}%`;
-
-                if (this.textInside) this.#handleTextInside(value);
-                break;
-            }
-        }
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- status 进度条状态样式 -------
-    // #region
-
-    // 样式配置
-    get statusList() {
-        return {
-            success: {
-                icon: 'icon-ok-circled',
-                color: '#67c23a'
-            },
-            warning: {
-                icon: 'icon-attention-circled',
-                color: '#e6a23c'
-            },
-            exception: {
-                icon: 'icon-cancel-circled',
-                color: '#f56c6c'
-            },
-            primary: {},
-        }
-    }
-
-    // 状态处理
-    #handleStatusStyle(value, className) {
-        if ((!this.type && this.textInside) || (this.type === 'dashboard' || this.type === 'circle')) {
-            this.#progressText.innerText = `${this.percentage}%`;
+        // TODO: 兼容其他type和status
+        if (
+          ["success", "exception", "warning"].includes(this.status) &&
+          !this["text-inside"]
+        ) {
+          this.#text.innerHTML = `<ea-icon class="ea-progress__status" icon="${
+            statusIcon[this.status]
+          }" part="status-icon"></ea-icon>`;
         } else {
-            this.#progressText.innerText = '';
+          this.#text.textContent = strategies[this.type]();
         }
+      },
+    },
+    type: {
+      type: ["line", "circle", "dashboard"],
+      default: "line",
+      observer: (newVal) => {},
+    },
+    status: {
+      type: ["success", "exception", "warning"],
+      default: "",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    "stroke-width": {
+      type: String,
+      default: "8px",
+      observer: (newVal) => {
+        if (!CSS.supports("width", newVal))
+          return console.warn(
+            `[EaProgress] The width value ${newVal} is not supported.`
+          );
 
-        this.#progressText.className = `${className} ${this.statusList[value].icon || ''}`;
-        this.#progressText.style.color = this.statusList[value].color;
-    }
+        this.#container.style.setProperty("--ea-progress-stroke-width", newVal);
+      },
+    },
+    "text-inside": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        try {
+          if (newVal) this.#path.appendChild(this.#text);
+        } catch (error) {}
 
-    get status() {
-        return this.getAttribute('status') || 'primary';
-    }
+        this.updateContainerClasslist();
+      },
+    },
+    color: {
+      type: {
+        Array: () => Array.isArray(this.color),
+        String: () => typeof this.color === "string",
+      },
+      default: [],
+      observer: (newVal) => {
+        console.log(
+          JSON.parse([
+            { color: "#f56c6c", percentage: 20 },
+            { color: "#e6a23c", percentage: 40 },
+            { color: "#5cb87a", percentage: 60 },
+            { color: "#1989fa", percentage: 80 },
+            { color: "#6f7ad3", percentage: 100 },
+          ])
+        );
+      },
+    },
+  });
 
-    set status(value) {
-        this.setAttribute('status', value);
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-progress", {
+      ["--" + this.status]: this.status,
+      ["--text-inside"]: this["text-inside"],
+    });
 
-        switch (this.type) {
-            case "circle":
-                this.#handleStatusStyle(value, 'ea-progress_text--circle');
-                this.#path.style.stroke = this.statusList[value].color;
-                break;
-            case "dashboard":
-                this.#handleStatusStyle(value, 'ea-progress_text--dashboard');
-                this.#path.style.stroke = this.statusList[value].color;
-                break;
-            default:
-                this.#handleStatusStyle(value, 'ea-progress_text');
-                this.#path.style.backgroundColor = this.statusList[value].color;
-                break;
-        }
-    }
-    // #endregion
-    // ------- end -------
+    this.#container.className = className;
 
-    // ------- text-inside 进度文字内显 -------
-    // #region
-    get textInside() {
-        return this.getAttrBoolean("text-inside");
-    }
+    return className;
+  }
 
-    set textInside(value) {
-        if (this.type === "circle" || !value) return;
+  constructor() {
+    super();
 
-        this.setAttribute("text-inside", value);
+    this.stylesheet = stylesheet;
 
-        this.#handleTextInside(value);
-    }
-    // #endregion
-    // ------- end -------
+    this.$render();
+  }
 
-    // ------- stroke-width 进度条高度 -------
-    // #region
-    get strokeWidth() {
-        return this.getAttribute("stroke-width");
-    }
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-progress' part='container'>
+        <section class="ea-progress__track" part="track">
+            <section class="ea-progress__path" part="path"></section>
+        </section>
+        <section class="ea-progress__percentage" part="percentage"></section>
+      </div>
+    `;
 
-    set strokeWidth(value) {
-        value = value ? Number(value) : 4;
+    this.#container = this.shadowRoot.querySelector(".ea-progress");
+    this.#track = this.shadowRoot.querySelector(".ea-progress__track");
+    this.#path = this.shadowRoot.querySelector(".ea-progress__path");
+    this.#text = this.shadowRoot.querySelector(".ea-progress__percentage");
+  }
 
-        this.toggleAttr("stroke-width", value);
-
-        if (this.type === "circle" || this.type === "dashboard") {
-            this.#track.style.strokeWidth = `${value}px`;
-            this.#path.style.strokeWidth = `${value}px`;
-        } else {
-            value = value + 4;
-
-            this.#track.style.height = `${value}px`;
-            this.#track.style.lineHeight = `${value}px`;
-            this.#path.style.height = `${value}px`;
-            this.#path.style.lineHeight = `${value}px`;
-
-            this.#wrap.style.height = `${value}px`;
-            this.#wrap.style.lineHeight = `${value}px`;
-        }
-    }
-    // #endregion
-    // ------- end -------
-
-    #handleSVGTemplate(type) {
-        this.#wrap.style.height = '126px';
-        this.#wrap.style.width = '126px';
-
-        this.#wrap.innerHTML = SVGComm[type];
-
-        const track = this.#wrap.querySelector(`circle[class="track--${type}"]`);
-        const path = this.#wrap.querySelector(`circle[class="path--${type}"]`);
-        const progressText = this.#wrap.querySelector(`span[class="ea-progress_text--${type}"]`);
-
-        this.#track = track;
-        this.#path = path;
-        this.#progressText = progressText;
-    }
-
-    #handleTextInside(value) {
-        if (value) {
-            this.#progressText.style.display = "none";
-            this.#path.innerText = `${this.percentage}%`;
-        } else {
-            this.#progressText.style.display = "block";
-            this.#path.innerText = ``;
-        }
-    }
-
-    connectedCallback() {
-        // type 进度条类型
-        this.type = this.type;
-
-        // percentage 百分比
-        this.percentage = this.percentage;
-
-        // status 状态
-        this.status = this.status;
-
-        // text-inside 文本内显
-        this.textInside = this.textInside;
-
-        // stroke-width 进度条的高度
-        this.strokeWidth = this.strokeWidth;
-    }
+  connectedCallback() {
+    super.connectedCallback();
+  }
 }
 
-if (!customElements.get("ea-progress")) {
-    customElements.define("ea-progress", EaProgress);
+if (!window.customElements.get("ea-progress")) {
+  window.customElements.define("ea-progress", EaProgress);
 }

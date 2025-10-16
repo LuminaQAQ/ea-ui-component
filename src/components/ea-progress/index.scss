@@ -1,50 +1,101 @@
-@import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
+$ea-progress-type: (
+  "default": blue,
+  "success": green,
+  "exception": red,
+  "warning": yellow,
+);
 
-.ea-progress_wrap {
+:host {
+  --ea-progress-percentage: 0;
+  --ea-progress-stroke-width: 8px;
+
+  @each $type, $color in $ea-progress-type {
+    --ea-progress-#{$type}-color: var(--#{$color}-500);
+  }
+}
+
+:host {
+  display: block;
+}
+
+@include block(ea-progress) {
   position: relative;
 
   display: flex;
   align-items: center;
 
   width: 100%;
-  line-height: 1;
-  height: 1rem;
 
-  .ea-progress_track,
-  .ea-progress_path {
-    height: 0.5rem;
+  .ea-progress__track,
+  .ea-progress__path {
+    height: var(--ea-progress-stroke-width);
     line-height: 1;
-    background-color: rgb(235, 238, 245);
     border-radius: 999px;
   }
 
-  .ea-progress_track {
+  @include element(track) {
     width: 100%;
-
-    .ea-progress_path {
-      box-sizing: border-box;
-      padding-right: 0.5rem;
-      color: aliceblue;
-
-      font-size: 0.8rem;
-      text-align: right;
-
-      width: 0%;
-      background-color: $color-primary-bgc;
-
-      transition: width 0.2s;
-    }
+    background-color: rgb(235, 238, 245);
   }
 
-  .ea-progress_text {
-    margin-left: 0.5rem;
+  @include element(path) {
+    position: relative;
+
+    box-sizing: border-box;
+    padding-right: 0.5rem;
+    color: aliceblue;
+
+    font-size: 0.8rem;
+    text-align: right;
+
+    width: var(--ea-progress-percentage);
+    background-color: var(--ea-progress-default-color);
+
+    transition: width 0.2s;
+  }
+
+  @include element(percentage) {
+    margin-left: 0.25rem;
     font-size: 0.8rem;
     width: 3rem;
   }
 
-  .ea-progress_text--circle,
-  .ea-progress_text--dashboard {
+  @each $type, $color in $ea-progress-type {
+    @include modifier($type) {
+      .ea-progress__percentage {
+        color: var(--ea-progress-#{$type}-color);
+      }
+
+      .ea-progress__path {
+        background-color: var(--ea-progress-#{$type}-color);
+      }
+    }
+  }
+
+  @include modifier(text-inside) {
+    .ea-progress__percentage {
+      position: absolute;
+      right: 0;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      margin-right: 0.5rem;
+
+      color: white;
+    }
+  }
+
+  @include state(circle) {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+  }
+
+  @include state(dashboard) {
     position: absolute;
 
     left: 50%;
