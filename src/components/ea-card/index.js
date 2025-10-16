@@ -11,7 +11,7 @@ export class EaCard extends Base {
   #footer;
 
   static get observedAttributes() {
-    return ['shadow', 'header', 'footer'];
+    return [...super.observedAttributes, "shadow", "header", "footer"];
   }
 
   state = this.properties({

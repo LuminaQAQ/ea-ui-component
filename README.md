@@ -44,13 +44,13 @@
 - [x] Avatar 头像
 - [x] Badge 徽章
 - [ ] Calendar 日历
-- [ ] Card 卡片
+- [x] Card 卡片
 - [x] Carousel 走马灯
 - [x] Collapse 折叠面板
 - [x] Descriptions 描述列表
 - [x] Empty 空状态
-- [ ] Image 图片
-- [ ] Infinite Scroll 无限滚动
+- [x] Image 图片
+- [x] Infinite Scroll 无限滚动
 - [ ] Pagination 分页
 - [ ] Progress 进度条
 - [ ] Result 结果
