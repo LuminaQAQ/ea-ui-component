@@ -311,6 +311,11 @@ export class EaPagination extends Base {
           else if (realPage > totalPage) realPage = totalPage;
 
           this["current-page"] = realPage;
+
+          this.#dispatchChangeEvent();
+          this.emit("current-change", {
+            detail: { value: this["current-page"] },
+          });
         }
       },
       { signal: this.#paginationAbortController?.signal }
