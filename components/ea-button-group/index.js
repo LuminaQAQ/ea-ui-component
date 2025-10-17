@@ -64,6 +64,8 @@ export class EaButtonGroup extends Base {
 
   async connectedCallback() {
     super.connectedCallback();
+
+    this.type = this.type;
   }
 }
 
