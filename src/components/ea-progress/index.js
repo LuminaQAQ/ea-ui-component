@@ -61,7 +61,7 @@ export class EaProgress extends Base {
             statusIcon[this.status]
           }" part="status-icon"></ea-icon>`;
         } else {
-          this.#text.textContent = strategies[this.type]();
+          this.#text.textContent = newVal + "%";
         }
 
         if (Array.isArray(this.color)) {

@@ -5,6 +5,36 @@ $ea-progress-type: (
   "warning": yellow,
 );
 
+%progress-base {
+  width: var(--ea-progress-size);
+  height: var(--ea-progress-size);
+
+  .ea-progress__path,
+  .ea-progress__track {
+    stroke-width: var(--ea-progress-stroke-width);
+    stroke-linecap: round;
+    transform-origin: center;
+  }
+
+  .ea-progress__percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    margin: 0;
+
+    width: auto;
+    height: auto;
+
+    font-size: 16px;
+  }
+
+  .ea-progress__status {
+    font-size: 16px;
+  }
+}
+
 :host {
   --ea-progress-percentage: 0;
   --ea-progress-stroke-width: 8px;
@@ -16,6 +46,8 @@ $ea-progress-type: (
   --ea-progress-percentage-color: var(--grey-900);
   --ea-progress-track-color: var(--grey-200);
   --ea-progress-path-color: var(--ea-progress-default-color);
+
+  --ea-progress-size: 170px;
 }
 
 :host([type="circle"]) {
@@ -39,6 +71,8 @@ $ea-progress-type: (
     height: var(--ea-progress-stroke-width);
     line-height: 1;
     border-radius: 999px;
+
+    transition: stroke-dashoffset 0.3s;
   }
 
   @include element(track) {
@@ -91,12 +125,12 @@ $ea-progress-type: (
   }
 
   @include state(circle) {
+    @extend %progress-base;
+
     .ea-progress__path,
     .ea-progress__track {
-      stroke-width: var(--ea-progress-stroke-width);
-      stroke-linecap: round;
-
       r: calc(49px - var(--ea-progress-stroke-width) / 2);
+      transform: rotate(-90deg);
     }
 
     .ea-progress__track {
@@ -105,34 +139,29 @@ $ea-progress-type: (
 
     .ea-progress__path {
       stroke: var(--ea-progress-path-color);
+      stroke-dashoffset: var(--ea-progress-percentage);
     }
   }
 
   @include state(dashboard) {
-    // position: absolute;
+    @extend %progress-base;
 
-    // left: 50%;
-    // top: 50%;
-
-    // transform: translate(-50%, -50%);
-  }
-
-  svg {
-    circle {
-      stroke-width: 4px;
-
-      transform-origin: center center;
-      transition: stroke-dashoffset 0.2s;
+    .ea-progress__path,
+    .ea-progress__track {
+      r: calc(40px - var(--ea-progress-stroke-width) / 2);
+      transform: rotate(145deg);
     }
 
-    .track--circle,
-    .path--circle {
-      transform: rotate(-90deg);
+    .ea-progress__track {
+      stroke: var(--ea-progress-track-color);
+      stroke-dasharray: 125px;
     }
 
-    .track--dashboard,
-    .path--dashboard {
-      transform: rotate(161deg);
+    .ea-progress__path {
+      stroke: var(--ea-progress-path-color);
+      stroke-dasharray: 125px;
+
+      stroke-dashoffset: var(--ea-progress-percentage);
     }
   }
 }

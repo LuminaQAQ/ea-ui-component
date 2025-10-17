@@ -24,40 +24,6 @@
       src="../src/components/ea-button-group/index.js"
     ></script>
     <script type="module" src="../src/components/ea-button/index.js"></script>
-    <script type="module">
-      // ------- 环形进度条 -------
-      // #region
-      document
-        .querySelector("#ea-progress_circle-change-btn")
-        .addEventListener("click", function (e) {
-          document.querySelector("#ea-progress_circle").percentage = 100;
-        });
-      // #endregion
-      // ------- end -------
-
-      // ------- 仪表盘形进度条 -------
-      // #region
-      document
-        .querySelector("#ea-progress_dashboard-change-btn-add")
-        .addEventListener("click", function (e) {
-          const dashboardPercentage = Number(
-            document.querySelector("#ea-progress_dashboard").percentage
-          );
-          document.querySelector("#ea-progress_dashboard").percentage =
-            dashboardPercentage - 10;
-        });
-      document
-        .querySelector("#ea-progress_dashboard-change-btn-minus")
-        .addEventListener("click", function (e) {
-          const dashboardPercentage = Number(
-            document.querySelector("#ea-progress_dashboard").percentage
-          );
-          document.querySelector("#ea-progress_dashboard").percentage =
-            dashboardPercentage + 10;
-        });
-      // #endregion
-      // ------- end -------
-    </script>
 
     <!--  直线进度条 -->
     <!-- #region -->
@@ -170,16 +136,7 @@
     <!-- #region -->
     <h1>环形进度条</h1>
 
-    <div class="demo">
-      <ea-progress
-        id="ea-progress_circle"
-        type="circle"
-        percentage="0"
-      ></ea-progress>
-      <ea-button id="ea-progress_circle-change-btn" type="primary"
-        >修改值为 100</ea-button
-      >
-
+    <div class="demo row">
       <ea-progress type="circle" percentage="0"></ea-progress>
       <ea-progress type="circle" percentage="25"></ea-progress>
       <ea-progress
@@ -199,44 +156,73 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 仪表盘形进度条 --------  -->
-    <!-- #region  -->
-    <h2>仪表盘形进度条</h2>
-    <!-- 示例: html + js -->
-    <div class="row left">
+    <!--  仪表盘形进度条 -->
+    <!-- #region -->
+    <h1>仪表盘形进度条</h1>
+
+    <div class="demo">
       <ea-progress
-        id="ea-progress_dashboard"
+        id="dashboardProgress1"
         type="dashboard"
         percentage="25"
+        stroke-width="24px"
       ></ea-progress>
       <ea-button-group>
-        <ea-button id="ea-progress_dashboard-change-btn-add">-</ea-button>
-        <ea-button id="ea-progress_dashboard-change-btn-minus">+</ea-button>
+        <ea-button id="dashboardMinus">-</ea-button>
+        <ea-button id="dashboardPlus">+</ea-button>
       </ea-button-group>
+      <ea-progress
+        id="dashboardProgress2"
+        type="dashboard"
+        percentage="0"
+        color='[
+          { "color": "#f56c6c", "percentage": 20 },
+          { "color": "#e6a23c", "percentage": 40 },
+          { "color": "#5cb87a", "percentage": 60 },
+          { "color": "#1989fa", "percentage": 80 },
+          { "color": "#6f7ad3", "percentage": 100 }
+        ]'
+      ></ea-progress>
     </div>
 
-    <!-- 实例 -->
-    <div class="row left">
-      <ea-progress type="dashboard" percentage="0"></ea-progress>
-      <ea-progress type="dashboard" percentage="25"></ea-progress>
-      <ea-progress
-        type="dashboard"
-        percentage="100"
-        status="success"
-      ></ea-progress>
-      <ea-progress
-        type="dashboard"
-        percentage="70"
-        status="warning"
-      ></ea-progress>
-      <ea-progress
-        type="dashboard"
-        percentage="50"
-        status="exception"
-      ></ea-progress>
-    </div>
+    <script type="module">
+      const dashboardExample = {
+        el1: document.querySelector("#dashboardProgress1"),
+        el2: document.querySelector("#dashboardProgress2"),
+        minus: document.querySelector("#dashboardMinus"),
+        plus: document.querySelector("#dashboardPlus"),
+
+        init() {
+          this.minus.addEventListener("click", () => {
+            const percentage = Number(this.el1.getAttribute("percentage"));
+            this.el1.setAttribute("percentage", percentage - 10);
+          });
+
+          this.plus.addEventListener("click", () => {
+            const percentage = Number(this.el1.getAttribute("percentage"));
+            this.el1.setAttribute("percentage", percentage + 10);
+          });
+
+          let timer = setInterval(() => {
+            const percentage = Number(this.el2.getAttribute("percentage"));
+            this.el2.setAttribute("percentage", percentage + 10);
+
+            if (percentage >= 100) {
+              this.el2.setAttribute("percentage", 0);
+            }
+          }, 500);
+
+          this.el2.addEventListener("beforeUnmount", () => {
+            clearInterval(timer);
+            timer = null;
+          });
+        },
+      };
+      dashboardExample.init();
+    </script>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
   </body>
 </html>
