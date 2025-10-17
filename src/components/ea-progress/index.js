@@ -1,7 +1,10 @@
 import Base from "@components/Base.js";
+import { circleItem } from "./components/circleItem";
+import { dashboardItem } from "./components/dashboardItem";
+
+import EaUtils from "@/utils/Utils";
 
 import stylesheet from "./index.scss?inline";
-import EaUtils from "@/utils/Utils";
 
 export class EaProgress extends Base {
   /** @type {HTMLElement} */
@@ -74,16 +77,21 @@ export class EaProgress extends Base {
             }
           }
 
-          this.#path.style.background = nearItem.color;
+          this.#path.style.setProperty(
+            "--ea-progress-path-color",
+            nearItem.color
+          );
         } else if (typeof this.color === "string") {
-          this.#path.style.background = this.color;
+          this.#path.style.setProperty("--ea-progress-path-color", this.color);
         }
       },
     },
     type: {
       type: ["line", "circle", "dashboard"],
       default: "line",
-      observer: (newVal) => {},
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
     },
     status: {
       type: ["success", "exception", "warning"],
@@ -131,10 +139,16 @@ export class EaProgress extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-progress", {
-      ["--" + this.status]: this.status,
-      ["--text-inside"]: this["text-inside"],
-    });
+    const className = this.computedClasslist(
+      "ea-progress",
+      {
+        ["--" + this.status]: this.status,
+        ["--text-inside"]: this["text-inside"],
+      },
+      {
+        [this.type]: this.type,
+      }
+    );
 
     this.#container.className = className;
 
@@ -149,13 +163,23 @@ export class EaProgress extends Base {
     this.$render();
   }
 
-  $render() {
+  async $render() {
+    const itemOptions = {
+      line: `
+        <div class='ea-progress' part='container'>
+          <section class="ea-progress__track" part="track">
+              <section class="ea-progress__path" part="path"></section>
+          </section>
+          <section class="ea-progress__percentage" part="percentage"></section>
+        </div>
+      `,
+      circle: circleItem,
+      dashboard: dashboardItem,
+    };
+
     this.shadowRoot.innerHTML = `
       <div class='ea-progress' part='container'>
-        <section class="ea-progress__track" part="track">
-            <section class="ea-progress__path" part="path"></section>
-        </section>
-        <section class="ea-progress__percentage" part="percentage"></section>
+        ${itemOptions[this.type]}
       </div>
     `;
 
@@ -163,6 +187,8 @@ export class EaProgress extends Base {
     this.#track = this.shadowRoot.querySelector(".ea-progress__track");
     this.#path = this.shadowRoot.querySelector(".ea-progress__path");
     this.#text = this.shadowRoot.querySelector(".ea-progress__percentage");
+
+    this.updateContainerClasslist();
   }
 
   connectedCallback() {

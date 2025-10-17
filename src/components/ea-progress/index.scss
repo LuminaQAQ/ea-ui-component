@@ -12,6 +12,14 @@ $ea-progress-type: (
   @each $type, $color in $ea-progress-type {
     --ea-progress-#{$type}-color: var(--#{$color}-500);
   }
+
+  --ea-progress-percentage-color: var(--grey-900);
+  --ea-progress-track-color: var(--grey-200);
+  --ea-progress-path-color: var(--ea-progress-default-color);
+}
+
+:host([type="circle"]) {
+  --ea-progress-stroke-width: 4px;
 }
 
 :host {
@@ -35,7 +43,7 @@ $ea-progress-type: (
 
   @include element(track) {
     width: 100%;
-    background-color: rgb(235, 238, 245);
+    background-color: var(--ea-progress-track-color);
   }
 
   @include element(path) {
@@ -43,13 +51,12 @@ $ea-progress-type: (
 
     box-sizing: border-box;
     padding-right: 0.5rem;
-    color: aliceblue;
 
     font-size: 0.8rem;
     text-align: right;
 
     width: var(--ea-progress-percentage);
-    background-color: var(--ea-progress-default-color);
+    background-color: var(--ea-progress-path-color);
 
     transition: width 0.2s;
   }
@@ -58,17 +65,14 @@ $ea-progress-type: (
     margin-left: 0.25rem;
     font-size: 0.8rem;
     width: 3rem;
+
+    color: var(--ea-progress-percentage-color);
   }
 
   @each $type, $color in $ea-progress-type {
     @include modifier($type) {
-      .ea-progress__percentage {
-        color: var(--ea-progress-#{$type}-color);
-      }
-
-      .ea-progress__path {
-        background-color: var(--ea-progress-#{$type}-color);
-      }
+      --ea-progress-percentage-color: var(--ea-progress-#{$type}-color);
+      --ea-progress-path-color: var(--ea-progress-#{$type}-color);
     }
   }
 
@@ -87,21 +91,30 @@ $ea-progress-type: (
   }
 
   @include state(circle) {
-    position: absolute;
+    .ea-progress__path,
+    .ea-progress__track {
+      stroke-width: var(--ea-progress-stroke-width);
+      stroke-linecap: round;
 
-    left: 50%;
-    top: 50%;
+      r: calc(49px - var(--ea-progress-stroke-width) / 2);
+    }
 
-    transform: translate(-50%, -50%);
+    .ea-progress__track {
+      stroke: var(--ea-progress-track-color);
+    }
+
+    .ea-progress__path {
+      stroke: var(--ea-progress-path-color);
+    }
   }
 
   @include state(dashboard) {
-    position: absolute;
+    // position: absolute;
 
-    left: 50%;
-    top: 50%;
+    // left: 50%;
+    // top: 50%;
 
-    transform: translate(-50%, -50%);
+    // transform: translate(-50%, -50%);
   }
 
   svg {
