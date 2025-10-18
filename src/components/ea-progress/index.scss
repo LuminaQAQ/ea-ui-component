@@ -72,7 +72,7 @@ $ea-progress-type: (
     line-height: 1;
     border-radius: 999px;
 
-    transition: stroke-dashoffset 0.3s;
+    transition: stroke-dashoffset 0.3s ease-in-out, stroke 0.3s ease-in-out;
   }
 
   @include element(track) {
@@ -149,17 +149,17 @@ $ea-progress-type: (
     .ea-progress__path,
     .ea-progress__track {
       r: calc(40px - var(--ea-progress-stroke-width) / 2);
-      transform: rotate(145deg);
+      transform: rotate(135deg);
     }
 
     .ea-progress__track {
       stroke: var(--ea-progress-track-color);
-      stroke-dasharray: 125px;
+      stroke-dasharray: 157px;
     }
 
     .ea-progress__path {
       stroke: var(--ea-progress-path-color);
-      stroke-dasharray: 125px;
+      stroke-dasharray: 314px;
 
       stroke-dashoffset: var(--ea-progress-percentage);
     }

@@ -37,8 +37,18 @@ export class EaProgress extends Base {
 
         const strategies = {
           line: () => newVal + "%",
-          circle: () => (302 * (100 - newVal)) / 100 + "px",
-          dashboard: () => (152 * (100 - newVal)) / 100 + 100 + "px",
+          circle: () => 302 * ((100 - newVal) / 100) + "px",
+          dashboard: () => {
+            const width = Number(this["stroke-width"].replace("px", ""));
+            const r = 40 - width / 2;
+            const C = 2 * Math.PI * r;
+            const progress = (100 - newVal) / 100;
+
+            this.#path.style.strokeDasharray = C * (270 / 360) + "px";
+            this.#track.style.strokeDasharray = C * (270 / 360) + "px";
+
+            return C * (270 / 360) * progress + "px";
+          },
         };
 
         const statusIcon = {
@@ -52,7 +62,6 @@ export class EaProgress extends Base {
           strategies[this.type]()
         );
 
-        // TODO: 兼容其他type和status
         if (
           ["success", "exception", "warning"].includes(this.status) &&
           !this["text-inside"]
