@@ -16,6 +16,11 @@ $ea-progress-type: (
     transform-origin: center;
   }
 
+  .ea-progress__path {
+    transition: stroke-dashoffset 0.3s ease-in-out, stroke 0.3s ease-in-out;
+    animation: none;
+  }
+
   .ea-progress__percentage {
     position: absolute;
     top: 50%;
@@ -23,6 +28,7 @@ $ea-progress-type: (
     transform: translate(-50%, -50%);
 
     margin: 0;
+    min-width: auto;
 
     width: auto;
     height: auto;
@@ -47,7 +53,9 @@ $ea-progress-type: (
   --ea-progress-track-color: var(--grey-200);
   --ea-progress-path-color: var(--ea-progress-default-color);
 
-  --ea-progress-size: 170px;
+  --ea-progress-size: 126px;
+
+  --ea-progress-animation-duration: 3s;
 }
 
 :host([type="circle"]) {
@@ -56,6 +64,26 @@ $ea-progress-type: (
 
 :host {
   display: block;
+}
+
+@keyframes indeterminate {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes striped-flow {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 100% 0;
+  }
 }
 
 @include block(ea-progress) {
@@ -72,19 +100,20 @@ $ea-progress-type: (
     line-height: 1;
     border-radius: 999px;
 
-    transition: stroke-dashoffset 0.3s ease-in-out, stroke 0.3s ease-in-out;
+    transition: width 0.3s ease-in-out;
   }
 
   @include element(track) {
     width: 100%;
     background-color: var(--ea-progress-track-color);
+
+    overflow: hidden;
   }
 
   @include element(path) {
     position: relative;
 
     box-sizing: border-box;
-    padding-right: 0.5rem;
 
     font-size: 0.8rem;
     text-align: right;
@@ -92,13 +121,16 @@ $ea-progress-type: (
     width: var(--ea-progress-percentage);
     background-color: var(--ea-progress-path-color);
 
-    transition: width 0.2s;
+    transition: width 0.3s;
   }
 
   @include element(percentage) {
+    display: none;
+
+    min-width: 50px;
+
     margin-left: 0.25rem;
     font-size: 0.8rem;
-    width: 3rem;
 
     color: var(--ea-progress-percentage-color);
   }
@@ -121,6 +153,40 @@ $ea-progress-type: (
       margin-right: 0.5rem;
 
       color: white;
+    }
+  }
+
+  @include modifier(striped) {
+    .ea-progress__path {
+      background-image: linear-gradient(
+        60deg,
+        transparent 40%,
+        rgba(0, 0, 0, 0.15) 40%,
+        rgba(0, 0, 0, 0.15) 60%,
+        transparent 60%
+      );
+
+      background-size: var(--ea-progress-stroke-width);
+    }
+  }
+
+  @include state(striped-flow) {
+    .ea-progress__path {
+      animation: striped-flow var(--ea-progress-animation-duration) infinite
+        linear;
+    }
+  }
+
+  @include state(indeterminate) {
+    .ea-progress__path {
+      animation: indeterminate var(--ea-progress-animation-duration) infinite
+        ease-in-out;
+    }
+  }
+
+  @include state(show-text) {
+    .ea-progress__percentage {
+      display: block;
     }
   }
 
@@ -148,7 +214,7 @@ $ea-progress-type: (
 
     .ea-progress__path,
     .ea-progress__track {
-      r: calc(40px - var(--ea-progress-stroke-width) / 2);
+      r: calc(49px - var(--ea-progress-stroke-width) / 2);
       transform: rotate(135deg);
     }
 
@@ -162,6 +228,14 @@ $ea-progress-type: (
       stroke-dasharray: 314px;
 
       stroke-dashoffset: var(--ea-progress-percentage);
+    }
+
+    .mask {
+      transform-origin: center;
+      height: 100%;
+      width: 100%;
+
+      transform: rotate(-135deg) translateY(-30%);
     }
   }
 }
