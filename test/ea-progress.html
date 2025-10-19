@@ -164,7 +164,7 @@
       <ea-progress
         id="dashboardProgress1"
         type="dashboard"
-        percentage="100"
+        percentage="10"
         stroke-width="4px"
       ></ea-progress>
       <ea-button-group>
@@ -175,7 +175,7 @@
         id="dashboardProgress2"
         type="dashboard"
         percentage="0"
-        stroke-width="24px"
+        stroke-width="10px"
         color='[
           { "color": "#f56c6c", "percentage": 20 },
           { "color": "#e6a23c", "percentage": 40 },
@@ -220,6 +220,151 @@
         },
       };
       dashboardExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义内容 -->
+    <!-- #region -->
+    <h1>自定义内容</h1>
+
+    <style>
+      .percentage-value {
+        display: block;
+        font-size: 28px;
+      }
+      .percentage-label {
+        display: block;
+        font-size: 12px;
+      }
+      .demo-progress .el-progress--line {
+        margin-bottom: 15px;
+        max-width: 600px;
+      }
+      .demo-progress .el-progress--circle {
+        margin-right: 15px;
+      }
+    </style>
+
+    <div class="demo">
+      <ea-progress percentage="50">
+        <ea-button text>Content</ea-button>
+      </ea-progress>
+      <ea-progress
+        text-inside="true"
+        stroke-width="20px"
+        percentage="50"
+        status="exception"
+      >
+        <span>Content</span>
+      </ea-progress>
+      <ea-progress type="circle" percentage="100" status="success">
+        <ea-button type="success" icon="icon-coffee" circle />
+      </ea-progress>
+      <ea-progress type="dashboard" percentage="80">
+        <div class="percentage-value"><span data-percentage></span>%</div>
+        <span class="percentage-label">Progressing</span>
+      </ea-progress>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  动画进度条 -->
+    <!-- #region -->
+    <h1>动画进度条</h1>
+
+    <div class="demo">
+      <ea-progress percentage="50" indeterminate></ea-progress>
+      <ea-progress percentage="100" indeterminate></ea-progress>
+      <ea-progress
+        percentage="100"
+        status="success"
+        indeterminate
+        duration="5"
+      ></ea-progress>
+      <ea-progress
+        percentage="100"
+        status="warning"
+        indeterminate
+        duration="1"
+      ></ea-progress>
+      <ea-progress
+        percentage="50"
+        status="exception"
+        indeterminate
+      ></ea-progress>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  条纹进度条 -->
+    <!-- #region -->
+    <h1>条纹进度条</h1>
+
+    <div class="demo">
+      <ea-progress percentage="50" stroke-width="15px" striped></ea-progress>
+      <ea-progress
+        percentage="30"
+        status="success"
+        stroke-width="15px"
+        striped
+        striped-flow
+      ></ea-progress>
+      <ea-progress
+        percentage="100"
+        status="warning"
+        stroke-width="15px"
+        striped
+        striped-flow
+        duration="10"
+      ></ea-progress>
+      <ea-progress
+        id="stripedProgress"
+        percentage="70"
+        status="exception"
+        stroke-width="15px"
+        duration="7"
+        striped
+        striped-flow
+      ></ea-progress>
+
+      <ea-button-group>
+        <ea-button id="stripedMinus">-</ea-button>
+        <ea-button id="stripedPlus">+</ea-button>
+      </ea-button-group>
+    </div>
+
+    <script type="module">
+      const stripedExample = {
+        el: document.querySelector("#stripedProgress"),
+        minus: document.querySelector("#stripedMinus"),
+        plus: document.querySelector("#stripedPlus"),
+
+        init() {
+          this.minus.addEventListener("click", () => {
+            const percentage = Number(this.el.getAttribute("percentage"));
+            this.el.setAttribute("percentage", percentage - 10);
+          });
+
+          this.plus.addEventListener("click", () => {
+            const percentage = Number(this.el.getAttribute("percentage"));
+            this.el.setAttribute("percentage", percentage + 10);
+          });
+
+          this.el.addEventListener("change", (e) => {
+            const { percentage } = e.detail;
+
+            this.el.setAttribute("duration", percentage / 10);
+          });
+        },
+      };
+      stripedExample.init();
     </script>
 
     <hr />

@@ -24,6 +24,12 @@ export class EaProgress extends Base {
       "stroke-width",
       "text-inside",
       "color",
+      "indeterminate",
+      "duration",
+      "striped",
+      "striped-flow",
+      "width",
+      "show-text",
     ];
   }
 
@@ -35,12 +41,13 @@ export class EaProgress extends Base {
         if (newVal < 0) return (this.percentage = 0);
         else if (newVal > 100) return (this.percentage = 100);
 
+        const percentageSlot = this.querySelector("[data-percentage]");
         const strategies = {
           line: () => newVal + "%",
           circle: () => 302 * ((100 - newVal) / 100) + "px",
           dashboard: () => {
             const width = Number(this["stroke-width"].replace("px", ""));
-            const r = 40 - width / 2;
+            const r = 49 - width / 2;
             const C = 2 * Math.PI * r;
             const progress = (100 - newVal) / 100;
 
@@ -73,6 +80,10 @@ export class EaProgress extends Base {
           this.#text.textContent = newVal + "%";
         }
 
+        if (percentageSlot) {
+          percentageSlot.textContent = this.percentage;
+        }
+
         if (Array.isArray(this.color)) {
           let nearItem = newVal;
 
@@ -93,6 +104,12 @@ export class EaProgress extends Base {
         } else if (typeof this.color === "string") {
           this.#path.style.setProperty("--ea-progress-path-color", this.color);
         }
+
+        this.emit("change", {
+          detail: {
+            percentage: newVal,
+          },
+        });
       },
     },
     type: {
@@ -141,6 +158,51 @@ export class EaProgress extends Base {
       default: "",
       observer: (newVal) => {},
     },
+    indeterminate: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {},
+    },
+    duration: {
+      type: Number,
+      default: 3,
+      observer: (newVal) => {
+        this.#container.style.setProperty(
+          "--ea-progress-animation-duration",
+          `${newVal}s`
+        );
+      },
+    },
+    striped: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    "striped-flow": {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    size: {
+      type: String,
+      default: "126px",
+      observer: (newVal) => {
+        if (this.type === "line") return;
+
+        this.#container.style.setProperty("--ea-progress-size", newVal);
+      },
+    },
+    "show-text": {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -153,9 +215,14 @@ export class EaProgress extends Base {
       {
         ["--" + this.status]: this.status,
         ["--text-inside"]: this["text-inside"],
+        ["--striped"]: this.striped,
       },
       {
         [this.type]: this.type,
+        indeterminate:
+          this.indeterminate && this.type === "line" && !this["striped-flow"],
+        "striped-flow": this["striped-flow"],
+        "show-text": this["show-text"],
       }
     );
 
@@ -179,7 +246,9 @@ export class EaProgress extends Base {
           <section class="ea-progress__track" part="track">
               <section class="ea-progress__path" part="path"></section>
           </section>
-          <section class="ea-progress__percentage" part="percentage"></section>
+          <section class="ea-progress__percentage" part="percentage">
+            <slot class="ea-progress__percentage"></slot>
+          </section>
         </div>
       `,
       circle: circleItem,
@@ -195,7 +264,7 @@ export class EaProgress extends Base {
     this.#container = this.shadowRoot.querySelector(".ea-progress");
     this.#track = this.shadowRoot.querySelector(".ea-progress__track");
     this.#path = this.shadowRoot.querySelector(".ea-progress__path");
-    this.#text = this.shadowRoot.querySelector(".ea-progress__percentage");
+    this.#text = this.shadowRoot.querySelector(".ea-progress__percentage slot");
 
     this.updateContainerClasslist();
   }
