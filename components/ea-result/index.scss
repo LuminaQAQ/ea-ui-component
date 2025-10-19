@@ -1,46 +1,70 @@
-@import "../ea-ui-base-style.scss";
+$ea-types-colors: (
+  info: var(--grey-500),
+  primary: var(--blue-500),
+  success: var(--green-500),
+  warning: var(--yellow-500),
+  error: var(--red-500),
+);
 
-.ea-result_wrap {
+:host {
+  --ea-result-icon-size: 64px;
+  --ea-result-spacing: 40px 30px;
+
+  --ea-result-title-spacing: 20px;
+  --ea-result-title-font-size: 20px;
+  --ea-result-title-color: var(--grey-900);
+
+  --ea-result-subtitle-spacing: 10px;
+  --ea-result-subtitle-font-size: 14px;
+  --ea-result-subtitle-color: var(--grey-700);
+
+  --ea-result-extra-spacing: 30px;
+
+  @each $type, $color in $ea-types-colors {
+    --ea-result-#{$type}-color: #{$color};
+  }
+}
+
+:host {
+  display: block;
+}
+
+@include block(ea-result) {
+  box-sizing: border-box;
+  padding: var(--ea-result-spacing);
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  box-sizing: border-box;
-  padding: 40px 30px;
-
-  .ea-result_icon {
-    font-size: 3rem;
-
-    ea-icon[icon="icon-ok-circled"] {
-      color: $color-success-bgc;
-    }
-    ea-icon[icon="icon-cancel-circled"] {
-      color: $color-danger-bgc;
-    }
-    ea-icon[icon="icon-attention-alt"] {
-      color: $color-warning-bgc;
-    }
-    ea-icon[icon="icon-info"] {
-      color: $color-info-bgc;
-    }
+  @include element(icon) {
+    font-size: var(--ea-result-icon-size);
   }
 
-  .ea-result_title,
-  .ea-result_subtitle {
-    color: #5e6d82;
-    font-size: 14px;
+  @include element(title) {
+    margin-top: var(--ea-result-title-spacing);
+
+    color: var(--ea-result-title-color);
+    font-size: var(--ea-result-title-font-size);
   }
 
-  .ea-result_title {
-    margin-top: 20px;
+  @include element(sub-title) {
+    margin-top: var(--ea-result-subtitle-spacing);
+
+    color: var(--ea-result-subtitle-color);
+    font-size: var(--ea-result-subtitle-font-size);
   }
 
-  .ea-result_subtitle {
-    margin-top: 10px;
+  @include element(extra) {
+    margin-top: var(--ea-result-extra-spacing);
   }
 
-  .ea-result_extra {
-    margin-top: 30px;
+  @each $type, $color in $ea-types-colors {
+    @include modifier($type) {
+      .ea-result__icon {
+        color: var(--ea-result-#{$type}-color);
+      }
+    }
   }
 }
