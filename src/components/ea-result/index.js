@@ -1,109 +1,103 @@
-// @ts-nocheck
-import Base from '../Base.js';
-import "../ea-icon/index.js"
+import Base from "@components/Base.js";
 
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from "./index.scss?inline";
+import { typesIcon } from "@/utils/Variables";
 
 export class EaResult extends Base {
-  #wrap;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #icon;
+  /** @type {HTMLElement} */
+  #title;
+  /** @type {HTMLElement} */
+  #subTitle;
+  /** @type {HTMLElement} */
+  #extra;
 
-  #resultIcon;
-  #resultTitle;
-  #resultSubtitle;
-  #resultExtraWrap;
+  static get observedAttributes() {
+    return [...super.observedAttributes, "type", "title", "sub-title"];
+  }
 
-  #resultIconSlot;
-  #resultTitleSlot;
-  #resultSubtitleSlot;
-  #resultExtraSlot;
+  state = this.properties({
+    type: {
+      type: ["primary", "success", "warning", "info", "error"],
+      default: "",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+        this.#icon.innerHTML = `<ea-icon class="ea-result__icon" icon="icon-${typesIcon[newVal]}" part="icon"></ea-icon>`;
+      },
+    },
+    title: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#title.textContent = newVal;
+      },
+    },
+    "sub-title": {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#subTitle.textContent = newVal;
+      },
+    },
+  });
+
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-result", {
+      ["--" + this.type]: this.type,
+    });
+
+    this.#container.className = className;
+
+    return className;
+  }
 
   constructor() {
     super();
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
-    shadowRoot.innerHTML = `
-      <div class="ea-result_wrap" part="container">
-        <div class="ea-result_icon" part="icon-wrap">
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-result' part='container'>
+        <div class="ea-result__icon" part="icon">
           <slot name="icon"></slot>
         </div>
-        <div class="ea-result_title" part="title-wrap">
+        <div class="ea-result__title" part="title">
           <slot name="title"></slot>
         </div>
-        <div class="ea-result_subtitle" part="subTitle-wrap">
-          <slot name="subTitle"></slot>
+        <div class="ea-result__sub-title" part="sub-title">
+          <slot name="sub-title"></slot>
         </div>
-        <div class="ea-result_extra" part="extra-wrap">
+        <div class="ea-result__extra" part="extra">
           <slot name="extra"></slot>
         </div>
       </div>
     `;
 
-    this.#wrap = shadowRoot.querySelector('.ea-result_wrap');
-    this.#resultIcon = shadowRoot.querySelector('.ea-result_icon');
-    this.#resultTitle = shadowRoot.querySelector('.ea-result_title');
-    this.#resultSubtitle = shadowRoot.querySelector('.ea-result_subtitle');
-    this.#resultExtraWrap = shadowRoot.querySelector('.ea-result_extra');
-
-    this.#resultIconSlot = shadowRoot.querySelector('slot[name="icon"]');
-    this.#resultTitleSlot = shadowRoot.querySelector('slot[name="title"]');
-    this.#resultSubtitleSlot = shadowRoot.querySelector('slot[name="subTitle"]');
-    this.#resultExtraSlot = shadowRoot.querySelector('slot[name="extra"]');
-
-    this.build(shadowRoot, stylesheet);
+    this.#container = this.shadowRoot.querySelector(".ea-result");
+    this.#icon = this.shadowRoot.querySelector(".ea-result__icon slot");
+    this.#title = this.shadowRoot.querySelector(".ea-result__title slot");
+    this.#subTitle = this.shadowRoot.querySelector(
+      ".ea-result__sub-title slot"
+    );
+    this.#extra = this.shadowRoot.querySelector(".ea-result__extra slot");
   }
-
-  // ------- icon 设置自定义icon -------
-  // #region
-  get icon() {
-    return this.getAttribute('icon') || '';
-  }
-
-  set icon(value) {
-    if (!value) return;
-    this.setAttribute('icon', value);
-
-    this.#resultIcon.innerHTML = `<ea-icon icon="${value}"></ea-icon>`;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- title 设置标题 -------
-  // #region
-  get title() {
-    return this.getAttribute('title') || '';
-  }
-
-  set title(value) {
-    if (!value) return;
-    this.setAttribute('title', value);
-
-    this.#resultTitle.innerText = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- sub-title 设置副标题 -------
-  // #region
-  get subtitle() {
-    return this.getAttribute('sub-title') || '';
-  }
-
-  set subtitle(value) {
-    if (!value) return;
-    this.setAttribute('sub-title', value);
-
-    this.#resultSubtitle.innerText = value;
-  }
-  // #endregion
-  // ------- end -------
 
   connectedCallback() {
-    this.icon = this.icon;
-    this.title = this.title;
-    this.subtitle = this.subtitle;
+    super.connectedCallback();
   }
 }
 
-if (!customElements.get('ea-result')) {
-  customElements.define('ea-result', EaResult);
+if (!window.customElements.get("ea-result")) {
+  window.customElements.define("ea-result", EaResult);
 }
