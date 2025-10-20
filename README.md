@@ -51,10 +51,10 @@
 - [x] Empty 空状态
 - [x] Image 图片
 - [x] Infinite Scroll 无限滚动
-- [ ] Pagination 分页
-- [ ] Progress 进度条
-- [ ] Result 结果
-- [ ] Skeleton 骨架屏
+- [x] Pagination 分页
+- [x] Progress 进度条
+- [x] Result 结果
+- [x] Skeleton 骨架屏
 - [ ] Table 表格
 - [ ] Tag 标签
 - [ ] Timeline 时间线
