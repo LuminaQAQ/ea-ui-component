@@ -1,6 +1,7 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
+import { skeletonImageSVG } from "./assets/imageSVG";
 
 export class EaSkeletonItem extends Base {
   /** @type {HTMLElement} */
@@ -25,6 +26,9 @@ export class EaSkeletonItem extends Base {
       ],
       default: "p",
       observer: (newVal) => {
+        if (newVal === "image") {
+          this.#container.innerHTML = skeletonImageSVG;
+        }
         this.updateContainerClasslist();
       },
     },
@@ -67,9 +71,7 @@ export class EaSkeletonItem extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
-      <div class='ea-skeleton-item' part='container'>
-        <slot></slot>
-      </div>
+      <div class='ea-skeleton-item' part='container'></div>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-skeleton-item");

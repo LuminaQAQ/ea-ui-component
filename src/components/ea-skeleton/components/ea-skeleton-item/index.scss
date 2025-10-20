@@ -14,6 +14,8 @@ $ea-skeleton-item-variant: (
   --ea-skeleton-item-color: var(--grey-100);
   --ea-skeleton-item-border-radius: var(--border-radius-sm);
 
+  --ea-skeleton-item-image-color: var(--grey-300);
+
   --ea-skeleton-item-circle-size: auto;
 }
 
@@ -51,6 +53,17 @@ $ea-skeleton-item-variant: (
   @include modifier(p) {
     margin-bottom: 10px;
     height: 16px;
+  }
+
+  @include modifier(image) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #skeletonImagePlaceholder {
+      width: 22%;
+      height: 22%;
+    }
   }
 
   @include modifier(text) {

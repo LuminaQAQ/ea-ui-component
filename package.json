@@ -159,9 +159,6 @@
     "./ea-skeleton": {
       "import": "./dist/ea-skeleton.js"
     },
-    "./ea-skeleton-item": {
-      "import": "./dist/ea-skeleton-item.js"
-    },
     "./ea-space": {
       "import": "./dist/ea-space.js"
     },
