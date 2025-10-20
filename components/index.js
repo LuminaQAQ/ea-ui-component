@@ -48,7 +48,6 @@ import './ea-result/index.js';
 import './ea-scrollbar/index.js';
 import './ea-select/index.js';
 import './ea-skeleton/index.js';
-import './ea-skeleton-item/index.js';
 import './ea-space/index.js';
 import './ea-splitter/index.js';
 import './ea-step/index.js';

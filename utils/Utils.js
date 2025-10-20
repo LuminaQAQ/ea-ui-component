@@ -11,6 +11,8 @@ export default class EaUtils {
   static Enum = {};
   static EaElement = {};
   static JSON = {};
+
+  static timeout;
 }
 
 EaUtils.Array.toLowerCamelCase = (arr) => {
@@ -96,4 +98,14 @@ EaUtils.JSON.stringify = (json, isIgnoreError = false) => {
     if (!isIgnoreError) console.error(error);
     return null;
   }
+};
+
+EaUtils.timeout = (fn, time = 0) => {
+  let timer = setTimeout(() => {
+    clearTimeout(timer);
+    timer = null;
+    fn();
+  }, time);
+
+  return timer;
 };
