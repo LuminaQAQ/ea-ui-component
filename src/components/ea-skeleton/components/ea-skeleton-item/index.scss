@@ -14,7 +14,7 @@ $ea-skeleton-item-variant: (
   --ea-skeleton-item-color: var(--grey-100);
   --ea-skeleton-item-border-radius: var(--border-radius-sm);
 
-  --ea-skeleton-item-circle-size: 100px;
+  --ea-skeleton-item-circle-size: auto;
 }
 
 :host {

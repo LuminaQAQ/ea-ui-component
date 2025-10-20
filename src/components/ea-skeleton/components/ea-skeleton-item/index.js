@@ -7,7 +7,7 @@ export class EaSkeletonItem extends Base {
   #container;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "variant"];
+    return [...super.observedAttributes, "variant", "animated"];
   }
 
   state = this.properties({
@@ -28,6 +28,13 @@ export class EaSkeletonItem extends Base {
         this.updateContainerClasslist();
       },
     },
+    animated: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -35,9 +42,15 @@ export class EaSkeletonItem extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-skeleton-item", {
-      ["--" + this.variant]: this.variant,
-    });
+    const className = this.computedClasslist(
+      "ea-skeleton-item",
+      {
+        ["--" + this.variant]: this.variant,
+      },
+      {
+        animated: this.animated,
+      }
+    );
 
     this.#container.className = className;
 

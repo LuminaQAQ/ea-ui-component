@@ -15,31 +15,24 @@
 
   <body>
     <script type="module" src="../src/components/ea-skeleton/index.js"></script>
-    <script type="module" src="../src/components/ea-avatar/index.js"></script>
+    <script type="module" src="../src/components/ea-card/index.js"></script>
+    <script type="module" src="../src/components/ea-image/index.js"></script>
     <script type="module" src="../src/components/ea-switch/index.js"></script>
-    <script type="module">
-      document
-        .querySelector("#handleLoadingStatusSwitch")
-        .addEventListener("change", (e) => {
-          const isChecked = e.detail.checked;
-          const wrap = document.querySelector("#loadingStatusNodeWrap");
-          wrap.loading = isChecked;
-        });
-
-      document
-        .querySelector("#handleMultipleLoadingStatusSwitch")
-        .addEventListener("change", (e) => {
-          const isChecked = e.detail.checked;
-          const wrap = document.querySelector("#multipleLoadingStatusNodeWrap");
-          wrap.loading = isChecked;
-        });
-    </script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
 
     <!-- -------- 骨架屏 --------  -->
     <!-- #region  -->
     <h2>骨架屏</h2>
     <div class="demo">
       <ea-skeleton></ea-skeleton>
+      <br />
+      <ea-skeleton>
+        <ea-skeleton-item
+          slot="template"
+          variant="circle"
+          style="--ea-skeleton-item-circle-size: 100px"
+        ></ea-skeleton-item>
+      </ea-skeleton>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -49,7 +42,7 @@
     <!-- #region  -->
     <h2>更多参数</h2>
     <div class="demo">
-      <ea-skeleton row="6"></ea-skeleton>
+      <ea-skeleton rows="6"></ea-skeleton>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -68,7 +61,7 @@
     <!-- -------- 自定义样式 --------  -->
     <!-- #region  -->
     <h2>自定义样式</h2>
-    <div style="width: 240px">
+    <div class="demo" style="width: 240px">
       <ea-skeleton animated>
         <div slot="template">
           <ea-skeleton-item
@@ -96,45 +89,79 @@
     <!-- -------- Loading 状态 --------  -->
     <!-- #region  -->
     <h2>Loading 状态</h2>
-    <div style="width: 240px">
-      <p>
-        切换状态: <ea-switch id="handleLoadingStatusSwitch" checked></ea-switch>
-      </p>
-      <ea-skeleton id="loadingStatusNodeWrap" animated>
+
+    <div class="demo" style="width: 240px">
+      <p>切换状态: <ea-switch id="loadingSwitch" checked></ea-switch></p>
+      <ea-skeleton id="loadingSkeleton" style="width: 240px" animated>
         <div slot="template">
           <ea-skeleton-item
             variant="image"
-            style="width: 240px; height: 240px"
+            style="width: 240px; height: 150px"
           ></ea-skeleton-item>
-          <div style="height: 90px; padding: 14px">
-            <ea-skeleton-item
-              variant="text"
-              style="height: 20.67px; width: 50%"
-            ></ea-skeleton-item>
-            <ea-skeleton-item
-              variant="text"
-              style="height: 20.67px; margin-right: 16px"
-            ></ea-skeleton-item>
-            <ea-skeleton-item
-              variant="text"
-              style="height: 20.67px; width: 30%"
-            ></ea-skeleton-item>
-          </div>
-        </div>
-        <div>
-          <ea-avatar
-            size="240"
-            shape="square"
-            src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-          ></ea-avatar>
           <div style="padding: 14px">
-            <div>Hello World!</div>
-            <div>Hello World! Hello World!</div>
-            <div>Hello!</div>
+            <ea-skeleton-item
+              variant="h3"
+              style="width: 50%"
+            ></ea-skeleton-item>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-items: space-between;
+                margin-top: 16px;
+                height: 16px;
+              "
+            >
+              <ea-skeleton-item
+                variant="text"
+                style="margin-right: 16px"
+              ></ea-skeleton-item>
+              <ea-skeleton-item
+                variant="text"
+                style="width: 30%"
+              ></ea-skeleton-item>
+            </div>
           </div>
         </div>
+        <ea-card style="--ea-card-padding: 0">
+          <ea-image
+            src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+          ></ea-image>
+          <div style="padding: 14px">
+            <span>Wonderful scenery</span>
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <span class="time">2025-10-20</span>
+              <ea-button text class="button">Operation</ea-button>
+            </div>
+          </div>
+        </ea-card>
       </ea-skeleton>
     </div>
+
+    <script type="module">
+      const loadingExample = {
+        el: document.querySelector("#loadingSkeleton"),
+        switch: document.querySelector("#loadingSwitch"),
+
+        init() {
+          this.switch.addEventListener("change", (e) => {
+            const { checked } = e.target;
+
+            this.el.loading = checked;
+          });
+        },
+      };
+
+      loadingExample.init();
+    </script>
+
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -142,16 +169,16 @@
     <!-- -------- 渲染多条数据 --------  -->
     <!-- #region  -->
     <h2>渲染多条数据</h2>
-    <div style="width: 240px">
+    <div class="demo" style="width: 240px">
       <p>
         切换状态:
-        <ea-switch id="handleMultipleLoadingStatusSwitch" checked></ea-switch>
+        <ea-switch id="multipleDataSwitch" checked></ea-switch>
       </p>
-      <ea-skeleton id="multipleLoadingStatusNodeWrap" animated count="2">
+      <ea-skeleton id="multipleDataSkeleton" animated count="2">
         <div slot="template">
           <ea-skeleton-item
             variant="image"
-            style="width: 240px; height: 240px"
+            style="width: 240px; height: 140px"
           ></ea-skeleton-item>
           <div style="padding: 14px">
             <ea-skeleton-item
@@ -164,47 +191,129 @@
             ></ea-skeleton-item>
           </div>
         </div>
-        <div>
-          <ea-avatar
-            size="240"
-            shape="square"
-            src="https://b0.bdstatic.com/2bb3119a584a173526df6da5ee42754b.jpg@h_1280"
-          ></ea-avatar>
+        <ea-card style="--ea-card-padding: 0">
+          <ea-image
+            src="https://tse1.mm.bing.net/th/id/OIP.rTMre-V-rMq3T1EP9W7vlAHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3"
+          ></ea-image>
           <div style="padding: 14px">
-            <div>牛马</div>
-            <div style="font-size: 12px; color: gray">这是一只牛马</div>
+            <div>Scenery 1</div>
+            <div style="font-size: 12px; color: gray">2025-10-20</div>
           </div>
-        </div>
-        <div>
-          <ea-avatar
-            size="240"
-            shape="square"
-            src="https://pic4.zhimg.com/v2-c2bdf8d900f904e7ff1f3e7d7cdc665b_r.jpg"
-          ></ea-avatar>
+        </ea-card>
+        <ea-card style="--ea-card-padding: 0">
+          <ea-image
+            src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+          ></ea-image>
           <div style="padding: 14px">
-            <div>吗喽</div>
-            <div style="font-size: 12px; color: gray">这是一只吗喽</div>
+            <div>Scenery 2</div>
+            <div style="font-size: 12px; color: gray">2025-10-20</div>
           </div>
-        </div>
+        </ea-card>
       </ea-skeleton>
     </div>
+
+    <script type="module">
+      const multipleDataExample = {
+        el: document.querySelector("#multipleDataSkeleton"),
+        switch: document.querySelector("#multipleDataSwitch"),
+
+        init() {
+          this.switch.addEventListener("change", (e) => {
+            const { checked } = e.detail;
+            this.el.loading = checked;
+          });
+        },
+      };
+      multipleDataExample.init();
+    </script>
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <div style="width: 240px">
-      <ea-skeleton id="multipleLoadingStatusNodeWrap" animated count="2">
+    <!--  切换显示/隐藏时避免渲染抖动 -->
+    <!-- #region -->
+    <h1>切换显示/隐藏时避免渲染抖动</h1>
+
+    <div class="demo" style="width: 240px">
+      <p>切换状态: <ea-switch id="throttleSwitch" checked></ea-switch></p>
+      <ea-skeleton
+        id="throttleSkeleton"
+        style="width: 240px"
+        animated
+        throttle-trailing="500"
+        throttle-leading="500"
+      >
         <div slot="template">
+          <ea-skeleton-item
+            variant="image"
+            style="width: 240px; height: 150px"
+          ></ea-skeleton-item>
           <div style="padding: 14px">
-            <ea-skeleton-item variant="h1"></ea-skeleton-item>
-            <ea-skeleton-item variant="h2"></ea-skeleton-item>
-            <ea-skeleton-item variant="h3"></ea-skeleton-item>
-            <ea-skeleton-item variant="h4"></ea-skeleton-item>
-            <ea-skeleton-item variant="h5"></ea-skeleton-item>
-            <ea-skeleton-item variant="h6"></ea-skeleton-item>
+            <ea-skeleton-item
+              variant="h3"
+              style="width: 50%"
+            ></ea-skeleton-item>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-items: space-between;
+                margin-top: 16px;
+                height: 16px;
+              "
+            >
+              <ea-skeleton-item
+                variant="text"
+                style="margin-right: 16px"
+              ></ea-skeleton-item>
+              <ea-skeleton-item
+                variant="text"
+                style="width: 30%"
+              ></ea-skeleton-item>
+            </div>
           </div>
         </div>
+        <ea-card style="--ea-card-padding: 0">
+          <ea-image
+            src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+          ></ea-image>
+          <div style="padding: 14px">
+            <span>Wonderful scenery</span>
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+              "
+            >
+              <span class="time">2025-10-20</span>
+              <ea-button text class="button">Operation</ea-button>
+            </div>
+          </div>
+        </ea-card>
       </ea-skeleton>
     </div>
+
+    <script type="module">
+      const throttleExample = {
+        el: document.querySelector("#throttleSkeleton"),
+        switch: document.querySelector("#throttleSwitch"),
+
+        init() {
+          this.switch.addEventListener("change", (e) => {
+            const { checked } = e.target;
+
+            this.el.loading = checked;
+          });
+        },
+      };
+
+      throttleExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
   </body>
 </html>

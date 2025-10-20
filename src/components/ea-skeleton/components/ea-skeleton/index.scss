@@ -13,4 +13,18 @@
     width: 66%;
     margin-bottom: 0;
   }
+
+  #template {
+    display: none;
+  }
+
+  @include state(loading) {
+    #template {
+      display: block;
+    }
+
+    #default {
+      display: none;
+    }
+  }
 }
