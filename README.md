@@ -30,7 +30,6 @@
 - [ ] Radio 单选框
 - [ ] Rate 评分
 - [ ] Select 选择器
-- [ ] Virtualized Select 虚拟化选择器
 - [ ] Slider 滑块
 - [ ] Switch 开关
 - [ ] Time Picker 时间选择器
