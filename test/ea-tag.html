@@ -1,103 +1,126 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
-    <script type='module'>
-        import '../components/ea-tag/index.js'
-
-        // ------- 动态编辑标签 -------
-        // #region
-        document.querySelectorAll(".dynamic-closable-tag").forEach((item) => {
-            item.addEventListener("close", function (e) {
-                // 移除该dom
-                this.remove();
-
-                // e.target: 当前标签; e.detail.value: 当前标签的 value 值
-                console.log("标签被移除", e.target, e.detail.value);
-            });
-        });
-        // #endregion
-        // ------- end -------
-    </script>
+  <body>
+    <script type="module" src="../src/components/ea-tag/index.js"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
-    <div class="row left">
-        <ea-tag>默认标签</ea-tag>
-        <ea-tag type="success">成功标签</ea-tag>
-        <ea-tag type="info">信息标签</ea-tag>
-        <ea-tag type="warning">警告标签</ea-tag>
-        <ea-tag type="danger">危险标签</ea-tag>
+    <div class="demo">
+      <ea-tag type="primary">Tag 1</ea-tag>
+      <ea-tag type="success">Tag 2</ea-tag>
+      <ea-tag type="info">Tag 3</ea-tag>
+      <ea-tag type="warning">Tag 4</ea-tag>
+      <ea-tag type="danger">Tag 5</ea-tag>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 带关闭图标的标签 --------  -->
+    <!-- -------- 可移除标签 --------  -->
     <!-- #region  -->
-    <h2>带关闭图标的标签</h2>
-    <div class="row left">
-        <ea-tag class="dynamic-closable-tag" closable>默认标签</ea-tag>
-        <ea-tag class="dynamic-closable-tag" type="success" closable>成功标签</ea-tag>
-        <ea-tag class="dynamic-closable-tag" type="info" closable>信息标签</ea-tag>
-        <ea-tag class="dynamic-closable-tag" type="warning" closable>警告标签</ea-tag>
-        <ea-tag class="dynamic-closable-tag" type="danger" closable>危险标签</ea-tag>
+    <h2>可移除标签</h2>
+    <div class="demo">
+      <ea-tag type="primary" closable>Tag 1</ea-tag>
+      <ea-tag type="success" closable>Tag 2</ea-tag>
+      <ea-tag type="info" closable>Tag 3</ea-tag>
+      <ea-tag type="warning" closable>Tag 4</ea-tag>
+      <ea-tag type="danger" closable>Tag 5</ea-tag>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 动态编辑标签 --------  -->
-    <!-- #region  -->
-    <h2>动态编辑标签</h2>
-    <div class="row left">
-        <ea-tag class="dynamic-closable-tag" closable>默认标签</ea-tag>
-        <ea-tag class="dynamic-closable-tag" type="success" closable>成功标签</ea-tag>
-        <ea-tag class="dynamic-closable-tag" type="info" closable>信息标签</ea-tag>
-        <ea-tag class="dynamic-closable-tag" type="warning" closable>警告标签</ea-tag>
-        <ea-tag class="dynamic-closable-tag" type="danger" closable>危险标签</ea-tag>
+    <!--  不同尺寸 -->
+    <!-- #region -->
+    <h1>不同尺寸</h1>
+
+    <div class="demo">
+      <ea-tag size="large">Large</ea-tag>
+      <ea-tag>Default</ea-tag>
+      <ea-tag size="small">Small</ea-tag>
     </div>
-    <hr>
+
+    <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
     <!-- -------- 不同主题 --------  -->
     <!-- #region  -->
     <h2>不同主题</h2>
-    <p>Dark 主题:</p>
-    <div class="row left">
-        <ea-tag effect="dark">dark: 默认标签</ea-tag>
-        <ea-tag effect="dark" type="success">dark: 成功标签</ea-tag>
-        <ea-tag effect="dark" type="info">dark: 信息标签</ea-tag>
-        <ea-tag effect="dark" type="warning">dark: 警告标签</ea-tag>
-        <ea-tag effect="dark" type="danger">dark: 危险标签</ea-tag>
+    <div class="demo">
+      <p>
+        <span>Dark</span>
+        <ea-tag effect="dark" type="primary">Tag 1</ea-tag>
+        <ea-tag effect="dark" type="success">Tag 2</ea-tag>
+        <ea-tag effect="dark" type="info">Tag 3</ea-tag>
+        <ea-tag effect="dark" type="warning">Tag 4</ea-tag>
+        <ea-tag effect="dark" type="danger">Tag 5</ea-tag>
+      </p>
+      <p>
+        <span>Light</span>
+        <ea-tag effect="light" type="primary">Tag 1</ea-tag>
+        <ea-tag effect="light" type="success">Tag 2</ea-tag>
+        <ea-tag effect="light" type="info">Tag 3</ea-tag>
+        <ea-tag effect="light" type="warning">Tag 4</ea-tag>
+        <ea-tag effect="light" type="danger">Tag 5</ea-tag>
+      </p>
+      <p>
+        <span>Plain</span>
+        <ea-tag effect="plain" type="primary">Tag 1</ea-tag>
+        <ea-tag effect="plain" type="success">Tag 2</ea-tag>
+        <ea-tag effect="plain" type="info">Tag 3</ea-tag>
+        <ea-tag effect="plain" type="warning">Tag 4</ea-tag>
+        <ea-tag effect="plain" type="danger">Tag 5</ea-tag>
+      </p>
     </div>
-    <p>Plain 主题:</p>
-    <div class="row left">
-        <ea-tag effect="plain">plain: 默认标签</ea-tag>
-        <ea-tag effect="plain" type="success">plain: 成功标签</ea-tag>
-        <ea-tag effect="plain" type="info">plain: 信息标签</ea-tag>
-        <ea-tag effect="plain" type="warning">plain: 警告标签</ea-tag>
-        <ea-tag effect="plain" type="danger">plain: 危险标签</ea-tag>
-    </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
-</body>
 
+    <!--  圆形标签 -->
+    <!-- #region -->
+    <h1>圆形标签</h1>
+
+    <div class="demo">
+      <p>
+        <ea-tag effect="dark" round type="primary">Tag 1</ea-tag>
+        <ea-tag effect="dark" round type="success">Tag 2</ea-tag>
+        <ea-tag effect="dark" round type="info">Tag 3</ea-tag>
+        <ea-tag effect="dark" round type="warning">Tag 4</ea-tag>
+        <ea-tag effect="dark" round type="danger">Tag 5</ea-tag>
+      </p>
+      <p>
+        <ea-tag effect="light" round type="primary">Tag 1</ea-tag>
+        <ea-tag effect="light" round type="success">Tag 2</ea-tag>
+        <ea-tag effect="light" round type="info">Tag 3</ea-tag>
+        <ea-tag effect="light" round type="warning">Tag 4</ea-tag>
+        <ea-tag effect="light" round type="danger">Tag 5</ea-tag>
+      </p>
+      <p>
+        <ea-tag effect="plain" round type="primary">Tag 1</ea-tag>
+        <ea-tag effect="plain" round type="success">Tag 2</ea-tag>
+        <ea-tag effect="plain" round type="info">Tag 3</ea-tag>
+        <ea-tag effect="plain" round type="warning">Tag 4</ea-tag>
+        <ea-tag effect="plain" round type="danger">Tag 5</ea-tag>
+      </p>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
 </html>

@@ -5,3 +5,21 @@ export const typesIcon = {
   warning: "attention-alt",
   error: "cancel-circled",
 };
+
+/**
+ * @constant
+ * @type {["primary", "info", "success", "warning", "error"]}
+ */
+export const componentTypes = [
+  "primary",
+  "info",
+  "success",
+  "warning",
+  "error",
+];
+
+/**
+ * @constant
+ * @type {["large", "default", "small"]}
+ */
+export const componentSizes = ["large", "default", "small"];

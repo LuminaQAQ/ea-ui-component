@@ -1,71 +1,100 @@
-@import "../ea-ui-base-style.scss";
+$ea-tag-types: (
+  "primary": blue,
+  "info": grey,
+  "success": green,
+  "warning": "yellow",
+  "danger": "red",
+);
 
-@mixin ea-tag-theme($theme-name, $text-color, $bgc-color, $border-color) {
-  &.ea-tag--#{$theme-name} {
-    color: $text-color;
-    background-color: $bgc-color;
-    border-color: $border-color;
+$ea-tag-sizes: ("large", "default", "small");
 
-    &.ea-tag--dark {
-      color: #fff;
-      background-color: $text-color;
-      border-color: $text-color;
-    }
+$ea-tag-effect: ("plain", "dark", "light");
 
-    &.ea-tag--plain {
-      color: $text-color;
-      background-color: #fff;
-      border-color: $border-color;
+:host {
+  --ea-tag-spacing-small: 2px 6px;
+  --ea-tag-spacing-default: 4px 8px;
+  --ea-tag-spacing-large: 6px 12px;
+  --ea-tag-border-radius: var(--border-radius-sm);
+
+  @each $type, $color in $ea-tag-types {
+    @each $effect in $ea-tag-effect {
+      @if ($effect == "light") {
+        --ea-tag-#{$type}-#{$effect}-theme-color: var(--#{$color}-100);
+        --ea-tag-#{$type}-#{$effect}-text-color: var(--#{$color}-500);
+      } @else {
+        --ea-tag-#{$type}-#{$effect}-theme-color: var(--#{$color}-500);
+      }
     }
   }
+
+  --ea-tag-font-size: var(--font-size-sm);
+
+  --ea-tag-transition: var(--transition-normal);
 }
 
-.ea-tag_wrap {
+:host {
   display: inline-block;
+}
 
-  height: 2rem;
-  line-height: 30px;
-  white-space: nowrap;
+@include block(ea-tag) {
+  box-sizing: border-box;
+  border-radius: var(--ea-tag-border-radius);
+  border: 1px solid transparent;
 
-  padding: 0 0.625rem;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 4px;
+  font-size: var(--ea-tag-font-size);
 
-  ea-icon {
-    font-size: 1rem;
-    margin-left: 0.5rem;
-    cursor: pointer;
+  @include element(close) {
+    display: none;
   }
 
-  @include ea-tag-theme(
-    "default",
-    $color-tag-default-text,
-    $color-tag-default-bgc,
-    $color-tag-default-border
-  );
-  @include ea-tag-theme(
-    "success",
-    $color-tag-success-text,
-    $color-tag-success-bgc,
-    $color-tag-success-border
-  );
-  @include ea-tag-theme(
-    "info",
-    $color-tag-info-text,
-    $color-tag-info-bgc,
-    $color-tag-info-border
-  );
-  @include ea-tag-theme(
-    "warning",
-    $color-tag-warning-text,
-    $color-tag-warning-bgc,
-    $color-tag-warning-border
-  );
-  @include ea-tag-theme(
-    "danger",
-    $color-tag-danger-text,
-    $color-tag-danger-bgc,
-    $color-tag-danger-border
-  );
+  @include state(closable) {
+    display: flex;
+    align-items: center;
+
+    .ea-tag__close {
+      display: inline-block;
+
+      margin-left: var(--spacing-sm);
+
+      cursor: pointer;
+      font-size: var(--ea-tag-font-size);
+    }
+  }
+
+  @include state(round) {
+    border-radius: 999px;
+  }
+
+  &.before-close {
+    filter: opacity(0);
+
+    transition: filter var(--ea-tag-transition);
+  }
+
+  @each $size in $ea-tag-sizes {
+    @include modifier(#{$size}-size) {
+      padding: var(--ea-tag-spacing-#{$size});
+    }
+  }
+
+  @each $type, $color in $ea-tag-types {
+    @include modifier($type) {
+      color: var(--ea-tag-#{$type}-light-text-color);
+      background-color: var(--ea-tag-#{$type}-light-theme-color);
+      border-color: var(--ea-tag-#{$type}-light-theme-color);
+
+      @each $effect in $ea-tag-effect {
+        &.ea-tag--#{$effect} {
+          @if ($effect == "dark") {
+            color: var(--white);
+            background-color: var(--ea-tag-#{$type}-#{$effect}-theme-color);
+          } @else if($effect == "plain") {
+            background-color: var(--color-transparent);
+            color: var(--ea-tag-#{$type}-#{$effect}-theme-color);
+            border-color: var(--ea-tag-#{$type}-#{$effect}-theme-color);
+          }
+        }
+      }
+    }
+  }
 }
