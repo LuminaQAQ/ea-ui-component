@@ -1,9 +1,9 @@
 // @ts-nocheck
-import Base from '../Base.js';
+import Base from "../../../Base.js";
 
-import "../ea-icon/index.js"
+import "../../../ea-icon/index.js";
 
-import { stylesheet } from './src/style/stylesheet.js';
+import { stylesheet } from "./src/style/stylesheet.js";
 
 export class EaTag extends Base {
   #wrap;
@@ -11,14 +11,14 @@ export class EaTag extends Base {
   constructor() {
     super();
 
-    const shadowRoot = this.attachShadow({ mode: 'open' });
+    const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.innerHTML = `
       <div class="ea-tag_wrap" part="container">
         <slot></slot>
       </div>
     `;
 
-    this.#wrap = shadowRoot.querySelector('.ea-tag_wrap');
+    this.#wrap = shadowRoot.querySelector(".ea-tag_wrap");
 
     this.build(shadowRoot, stylesheet);
   }
@@ -26,11 +26,11 @@ export class EaTag extends Base {
   // ------- type tag类型样式 -------
   // #region
   get type() {
-    return this.getAttribute('type') || "default";
+    return this.getAttribute("type") || "default";
   }
 
   set type(value) {
-    this.setAttribute('type', value);
+    this.setAttribute("type", value);
     this.#wrap.classList.add(`ea-tag--${value}`);
   }
   // #endregion
@@ -39,11 +39,11 @@ export class EaTag extends Base {
   // ------- closable 是否显示可关闭 -------
   // #region
   get closable() {
-    return this.getAttrBoolean('closable');
+    return this.getAttrBoolean("closable");
   }
 
   set closable(value) {
-    this.toggleAttr('closable', value);
+    this.toggleAttr("closable", value);
   }
   // #endregion
   // ------- end -------
@@ -51,13 +51,13 @@ export class EaTag extends Base {
   // ------- effect 不同主题 -------
   // #region
   get effect() {
-    return this.getAttribute('effect') || "light";
+    return this.getAttribute("effect") || "light";
   }
 
   set effect(value) {
     if (value === "light") return;
 
-    this.setAttribute('effect', value);
+    this.setAttribute("effect", value);
     this.#wrap.classList.add(`ea-tag--${value}`);
   }
   // #endregion
@@ -65,25 +65,27 @@ export class EaTag extends Base {
   #initCloseEvent() {
     if (!this.closable) return;
 
-    const closeIcon = document.createElement('ea-icon');
-    closeIcon.icon = 'icon-cancel-circled2';
-    closeIcon.part = 'close-icon';
+    const closeIcon = document.createElement("ea-icon");
+    closeIcon.icon = "icon-cancel-circled2";
+    closeIcon.part = "close-icon";
 
-    closeIcon.addEventListener('mouseenter', (e) => {
-      closeIcon.icon = 'icon-cancel-circled';
+    closeIcon.addEventListener("mouseenter", (e) => {
+      closeIcon.icon = "icon-cancel-circled";
     });
 
-    closeIcon.addEventListener('mouseleave', (e) => {
-      closeIcon.icon = 'icon-cancel-circled2';
+    closeIcon.addEventListener("mouseleave", (e) => {
+      closeIcon.icon = "icon-cancel-circled2";
     });
 
-    closeIcon.addEventListener('click', (e) => {
-      this.dispatchEvent(new CustomEvent('close', {
-        detail: {
-          value: this.innerText
-        },
-        bubbles: true,
-      }));
+    closeIcon.addEventListener("click", (e) => {
+      this.dispatchEvent(
+        new CustomEvent("close", {
+          detail: {
+            value: this.innerText,
+          },
+          bubbles: true,
+        })
+      );
     });
 
     this.#wrap.appendChild(closeIcon);
@@ -102,6 +104,6 @@ export class EaTag extends Base {
   }
 }
 
-if (!customElements.get('ea-tag')) {
-  customElements.define('ea-tag', EaTag);
+if (!customElements.get("ea-tag")) {
+  customElements.define("ea-tag", EaTag);
 }
