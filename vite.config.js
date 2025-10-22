@@ -112,7 +112,10 @@ export default defineConfig({
       scss: {
         api: "modern-compiler",
         loadPaths: [resolve(__dirname, "src")],
-        additionalData: `@use "themes/namespace" as *;`,
+        additionalData: `
+          @use "themes/namespace" as *;
+          @use "themes/mixins" as *;
+        `,
       },
     },
   },

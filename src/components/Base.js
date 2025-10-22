@@ -1,5 +1,5 @@
 import { timeout } from "../utils/timeout";
-import variable from "../themes/variable.scss?inline";
+import variable from "../themes/variables.scss?inline";
 import "./ea-icon/index.js";
 import EaUtils from "@/utils/Utils";
 
