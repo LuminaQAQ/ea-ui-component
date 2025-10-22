@@ -3,5 +3,10 @@
 }
 
 ::slotted(ea-timeline-item:first-child) {
-  --is-last-child-top: 50%;
+  --is-last-child-top: calc(50% - 20px);
+}
+
+::slotted(ea-timeline-item:last-child[center]) {
+  --is-last-child-display: block;
+  --is-last-child-top: calc(-50% - 20px);
 }

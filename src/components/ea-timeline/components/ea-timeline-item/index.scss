@@ -13,6 +13,7 @@ $ea-timeline-item-placement: (top, bottom);
 @include block(ea-timeline-item) {
   position: relative;
   box-sizing: border-box;
+
   padding-bottom: 20px;
   padding-left: 28px;
 
@@ -85,7 +86,7 @@ $ea-timeline-item-placement: (top, bottom);
     overflow: hidden;
 
     .ea-timeline-item__dot {
-      top: 50%;
+      top: calc(50% - 20px);
     }
 
     .ea-timeline-item__tail {
