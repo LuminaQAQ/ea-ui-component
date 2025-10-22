@@ -1,0 +1,7 @@
+::slotted(ea-timeline-item:last-child) {
+  --is-last-child-display: none;
+}
+
+::slotted(ea-timeline-item:first-child) {
+  --is-last-child-top: 50%;
+}

@@ -1,0 +1,13 @@
+$component-types: (
+  "primary": blue,
+  "info": grey,
+  "success": green,
+  "warning": "yellow",
+  "danger": "red",
+);
+
+@mixin component-types-defination($component-name, $level: 5) {
+  @each $type, $color in $component-types {
+    --#{$component-name}-#{$type}-color: var(--#{$color}-#{$level}00);
+  }
+}

@@ -1,0 +1,134 @@
+$ea-timeline-item-placement: (top, bottom);
+
+:host {
+  --is-last-child-display: block;
+  --is-last-child-top: 0;
+
+  --ea-timeline-item-dot-size-normal: 12px;
+  --ea-timeline-item-dot-size-large: 14px;
+
+  @include component-types-defination(ea-timeline-item, 5);
+}
+
+@include block(ea-timeline-item) {
+  position: relative;
+  box-sizing: border-box;
+  padding-bottom: 20px;
+  padding-left: 28px;
+
+  @include element(dot) {
+    position: absolute;
+    left: 0;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid transparent;
+
+    width: var(--ea-timeline-item-dot-size-normal);
+    height: var(--ea-timeline-item-dot-size-normal);
+    font-size: var(--ea-timeline-item-dot-size-normal);
+    line-height: var(--ea-timeline-item-dot-size-normal);
+
+    border-radius: 50%;
+    background-color: #e4e7ed;
+    color: #e4e7ed;
+  }
+
+  @include element(icon-dot) {
+    font-size: calc(var(--ea-timeline-item-dot-size-normal) - 4px);
+    color: white;
+  }
+
+  @include element(tail) {
+    display: var(--is-last-child-display);
+
+    position: absolute;
+    left: calc(var(--ea-timeline-item-dot-size-normal) / 2 + 2px);
+    transform: translate(-50%, 0);
+
+    width: 2px;
+    height: 100%;
+
+    background-color: #e4e7ed;
+
+    z-index: 0;
+  }
+
+  @include element(content) {
+    position: relative;
+    top: -4px;
+    font-size: 14px;
+
+    display: flex;
+    flex-direction: column;
+
+    color: #303133;
+  }
+
+  @include element(timestamp) {
+    color: #909399;
+    line-height: 1;
+    margin-top: 8px;
+  }
+
+  @include modifier(large) {
+    .ea-timeline-item__dot {
+      width: var(--ea-timeline-item-dot-size-large);
+      height: var(--ea-timeline-item-dot-size-large);
+    }
+  }
+
+  @include modifier(center) {
+    overflow: hidden;
+
+    .ea-timeline-item__dot {
+      top: 50%;
+    }
+
+    .ea-timeline-item__tail {
+      top: var(--is-last-child-top);
+    }
+
+    .ea-timeline-item__dot {
+      transform: translateY(-50%);
+    }
+  }
+
+  @each $placment in $ea-timeline-item-placement {
+    @include modifier($placment) {
+      .right-wrapper {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+
+      .ea-timeline-item__timestamp {
+        margin-top: 0;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  @include state(hollow-dot) {
+    .ea-timeline-item__dot {
+      background-color: var(--white);
+      border-width: 2px;
+      border-style: solid;
+    }
+  }
+
+  @each $type, $color in $component-types {
+    @include modifier($type) {
+      .ea-timeline-item__dot {
+        background-color: var(--ea-timeline-item-#{$type}-color);
+        border-color: var(--ea-timeline-item-#{$type}-color);
+      }
+
+      .ea-timeline-item__dot[part*="icon-dot"] {
+        color: var(--color-white);
+      }
+    }
+  }
+}
