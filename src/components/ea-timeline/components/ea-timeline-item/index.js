@@ -27,6 +27,8 @@ export class EaTimelineItem extends Base {
       "hide-timestamp",
       "color",
       "hollow",
+      "icon",
+      "size",
     ];
   }
 
@@ -60,11 +62,42 @@ export class EaTimelineItem extends Base {
           return console.warn(
             `[EaTag] The color value ${newVal} is not supported.`
           );
+        if (!this.#dot) return;
 
         this.#dot.style.backgroundColor = newVal;
+        this.#dot.style.color = newVal;
+        this.#dot.style.borderColor = newVal;
       },
     },
     hollow: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    icon: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#dot.innerHTML = `<ea-icon class="ea-timeline-item__icon-dot" part='icon-dot' icon="${newVal}"></ea-icon>`;
+      },
+    },
+    size: {
+      type: ["normal", "large"],
+      default: "",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    placement: {
+      type: ["top", "bottom"],
+      default: "",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    center: {
       type: Boolean,
       default: false,
       observer: (newVal) => {
@@ -82,6 +115,9 @@ export class EaTimelineItem extends Base {
       "ea-timeline-item",
       {
         ["--" + this.type]: this.type,
+        ["--" + this.size]: this.size,
+        ["--" + this.placement]: this.placement,
+        ["--center"]: this.center,
       },
       {
         "hollow-dot": this.hollow,
@@ -110,7 +146,7 @@ export class EaTimelineItem extends Base {
           </slot>
           <section class="ea-timeline-item__tail" part='tail'></section>
         </aside>
-        <main class="ea-timeline-item__wrapper" part='right-wrapper'>
+        <main class="ea-timeline-item__wrapper right-wrapper" part='right-wrapper'>
           <header class="ea-timeline-item__content" part='content'>
             <slot></slot>
           </header>

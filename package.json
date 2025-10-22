@@ -201,9 +201,6 @@
     "./ea-timeline": {
       "import": "./dist/ea-timeline.js"
     },
-    "./ea-timeline-item": {
-      "import": "./dist/ea-timeline-item.js"
-    },
     "./ea-tooltip": {
       "import": "./dist/ea-tooltip.js"
     }
