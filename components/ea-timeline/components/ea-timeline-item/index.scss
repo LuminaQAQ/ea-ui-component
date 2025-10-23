@@ -1,11 +1,23 @@
 $ea-timeline-item-placement: (top, bottom);
+$name: ea-timeline-item;
 
 :host {
   --is-last-child-display: block;
   --is-last-child-top: 0;
 
+  --#{$name}-bottom-spacing: 20px;
+  --#{$name}-spacing: 0 0 20px 28px;
+  --#{$name}-timestamp-spacing: 8px;
+
   --ea-timeline-item-dot-size-normal: 12px;
   --ea-timeline-item-dot-size-large: 14px;
+
+  --#{$name}-dot-color: var(--grey-300);
+  --#{$name}-tail-color: var(--grey-300);
+  --#{$name}-content-color: var(--grey-900);
+  --#{$name}-timestamp-color: var(--grey-500);
+
+  --#{$name}-font-size: var(--font-size-md);
 
   @include component-types-defination(ea-timeline-item, 5);
 }
@@ -14,8 +26,7 @@ $ea-timeline-item-placement: (top, bottom);
   position: relative;
   box-sizing: border-box;
 
-  padding-bottom: 20px;
-  padding-left: 28px;
+  padding: var(--#{$name}-spacing);
 
   @include element(dot) {
     position: absolute;
@@ -34,8 +45,8 @@ $ea-timeline-item-placement: (top, bottom);
     line-height: var(--ea-timeline-item-dot-size-normal);
 
     border-radius: 50%;
-    background-color: #e4e7ed;
-    color: #e4e7ed;
+    background-color: var(--#{$name}-dot-color);
+    color: var(--#{$name}-dot-color);
   }
 
   @include element(icon-dot) {
@@ -53,7 +64,7 @@ $ea-timeline-item-placement: (top, bottom);
     width: 2px;
     height: 100%;
 
-    background-color: #e4e7ed;
+    background-color: var(--#{$name}-tail-color);
 
     z-index: 0;
   }
@@ -61,18 +72,19 @@ $ea-timeline-item-placement: (top, bottom);
   @include element(content) {
     position: relative;
     top: -4px;
-    font-size: 14px;
 
     display: flex;
     flex-direction: column;
 
-    color: #303133;
+    font-size: var(--#{$name}-font-size);
+    color: var(--#{$name}-content-color);
   }
 
   @include element(timestamp) {
-    color: #909399;
-    line-height: 1;
-    margin-top: 8px;
+    margin-top: var(--#{$name}-timestamp-spacing);
+
+    font-size: var(--#{$name}-font-size);
+    color: var(--#{$name}-timestamp-color);
   }
 
   @include modifier(large) {
@@ -86,7 +98,7 @@ $ea-timeline-item-placement: (top, bottom);
     overflow: hidden;
 
     .ea-timeline-item__dot {
-      top: calc(50% - 20px);
+      top: calc(50% - var(--#{$name}-bottom-spacing));
     }
 
     .ea-timeline-item__tail {
@@ -107,7 +119,7 @@ $ea-timeline-item-placement: (top, bottom);
 
       .ea-timeline-item__timestamp {
         margin-top: 0;
-        margin-bottom: 8px;
+        margin-bottom: var(--#{$name}-timestamp-spacing);
       }
     }
   }

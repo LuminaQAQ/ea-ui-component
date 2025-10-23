@@ -1,0 +1,16 @@
+$name: ea-tour-step;
+
+:host {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  z-index: 3000;
+}
+
+@include block($name) {
+  box-sizing: border-box;
+  padding: 0.5rem;
+
+  background-color: white;
+}
