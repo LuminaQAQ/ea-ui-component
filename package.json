@@ -203,6 +203,9 @@
     },
     "./ea-tooltip": {
       "import": "./dist/ea-tooltip.js"
+    },
+    "./ea-tour": {
+      "import": "./dist/ea-tour.js"
     }
   },
   "scripts": {
