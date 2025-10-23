@@ -14,6 +14,7 @@
   </head>
 
   <body>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
     <script type="module" src="../src/components/ea-tour/index.js"></script>
 
     <!--  基本用法 -->
@@ -21,7 +22,32 @@
     <h1>基本用法</h1>
 
     <div class="demo">
-      <ea-tour></ea-tour>
+      <ea-button type="primary">Begin Tour</ea-button>
+      <hr />
+      <ea-button id="basicEl1">Upload</ea-button>
+      <ea-button id="basicEl2" type="primary">Save</ea-button>
+      <ea-button id="basicEl3" icon="icon-share"></ea-button>
+
+      <ea-tour visible>
+        <ea-tour-step target="#basicEl1" title="Upload File">
+          <img
+            style="width: 240px"
+            src="https://element-plus.org/images/element-plus-logo.svg"
+            alt="tour.png"
+          />
+          <div>Put you files here.</div>
+        </ea-tour-step>
+        <ea-tour-step
+          target="#basicEl2"
+          title="Save"
+          description="Save your changes"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#basicEl3"
+          title="Other Actions"
+          description="Click to see other"
+        ></ea-tour-step>
+      </ea-tour>
     </div>
 
     <hr />
