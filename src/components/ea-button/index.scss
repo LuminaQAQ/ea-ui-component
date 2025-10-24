@@ -66,6 +66,7 @@
 
 :host {
   cursor: var(--cursor-type);
+  display: inline-block;
 }
 
 @mixin button-disabled-type($type) {

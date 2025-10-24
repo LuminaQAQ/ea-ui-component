@@ -22,13 +22,13 @@
     <h1>基本用法</h1>
 
     <div class="demo">
-      <ea-button type="primary">Begin Tour</ea-button>
+      <ea-button id="basicTourBtn" type="primary">Begin Tour</ea-button>
       <hr />
       <ea-button id="basicEl1">Upload</ea-button>
       <ea-button id="basicEl2" type="primary">Save</ea-button>
       <ea-button id="basicEl3" icon="icon-share"></ea-button>
 
-      <ea-tour visible>
+      <ea-tour id="basicTour">
         <ea-tour-step target="#basicEl1" title="Upload File">
           <img
             style="width: 240px"
@@ -49,6 +49,21 @@
         ></ea-tour-step>
       </ea-tour>
     </div>
+
+    <script type="module">
+      const basicExample = {
+        el: document.querySelector("#basicTour"),
+        btn: document.querySelector("#basicTourBtn"),
+
+        init() {
+          this.btn.addEventListener("click", () => {
+            this.el.visible = true;
+          });
+          this.btn.click();
+        },
+      };
+      basicExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->
