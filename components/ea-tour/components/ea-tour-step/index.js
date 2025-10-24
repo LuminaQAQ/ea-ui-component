@@ -1,15 +1,23 @@
 import Base from "@components/Base.js";
+import { EaButton } from "@/components/ea-button";
 
 import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
 
 export class EaTourStep extends Base {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
   #title;
+  /** @type {EaButton} */
+  #previousBtn;
+  /** @type {EaButton} */
+  #nextBtn;
+  /** @type {EaButton} */
+  #finishBtn;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "title"];
+    return [...super.observedAttributes, "title", "target"];
   }
 
   state = this.properties({
@@ -18,6 +26,17 @@ export class EaTourStep extends Base {
       default: "",
       observer: (newVal) => {
         this.#title.textContent = newVal;
+      },
+    },
+    target: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        if (!document.querySelector(newVal))
+          return console.warn(
+            `[EaTour] target ${targetSelector} not found`,
+            this
+          );
       },
     },
   });
@@ -45,22 +64,62 @@ export class EaTourStep extends Base {
   }
 
   $render() {
+    const parent = this.closest("ea-tour");
+    /** @type {HTMLElement[]} */
+    const tourItems = [...parent.querySelectorAll("ea-tour-step")];
+
     this.shadowRoot.innerHTML = `
       <div class='ea-tour-step' part='container'>
-        <header class='ea-tour-step__title' part='title'>
-          <slot name='title'></slot>
+        <header class='ea-tour-step__header' part='header'>
+          <slot name='header'></slot>
         </header>
         <main class='ea-tour-step__content' part='content'>
-            <slot></slot>
+          <slot></slot>
         </main>
         <footer class='ea-tour-step__footer' part='footer'>
-            <slot></slot>
+          <div class='ea-tour-step__indicator-group' part='indicator-group'>
+            <slot name='indicator'>
+              ${tourItems
+                .map((item) =>
+                  EaUtils.EaElement.h("span", null, {
+                    class: [
+                      "ea-tour-step__indicator",
+                      item === this ? "is-active" : "",
+                    ],
+                    part: "indicator",
+                  })
+                )
+                .join("")}
+            </slot>
+          </div>
+          <div class='ea-tour-step__switch-group' part='switch-group'>
+            <slot name='footer'>
+              <ea-button class="ea-tour-step__btn ea-tour-step__previous" part="previous">Previous</ea-button>
+              <ea-button class="ea-tour-step__btn ea-tour-step__next" type="primary" part="next">Next</ea-button>
+              <ea-button class="ea-tour-step__btn ea-tour-step__finish" type="primary" part="finish">Finish</ea-button>
+            </slot>
+          </div>
         </footer>
       </div>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-tour-step");
-    this.#title = this.shadowRoot.querySelector(".ea-tour-step__title slot");
+    this.#title = this.shadowRoot.querySelector(".ea-tour-step__header slot");
+    this.#nextBtn = this.shadowRoot.querySelector(".ea-tour-step__next");
+    this.#previousBtn = this.shadowRoot.querySelector(
+      ".ea-tour-step__previous"
+    );
+    this.#finishBtn = this.shadowRoot.querySelector(".ea-tour-step__finish");
+
+    this.#nextBtn.addEventListener("click", () => {
+      this.emit("next", { bubbles: true });
+    });
+    this.#previousBtn.addEventListener("click", () => {
+      this.emit("previous", { bubbles: true });
+    });
+    this.#finishBtn.addEventListener("click", () => {
+      this.emit("finish", { bubbles: true });
+    });
   }
 
   connectedCallback() {

@@ -1,10 +1,23 @@
 $name: ea-tour;
 
 :host {
+  --#{$name}-transition: var(--transition-normal);
+}
+
+:host {
   position: fixed;
   inset: 0px;
   z-index: 2001;
   pointer-events: none;
+}
+
+::slotted(ea-tour-step:first-child) {
+  --previous-button-visible: none;
+}
+
+::slotted(ea-tour-step:last-child) {
+  --next-button-visible: none;
+  --finish-button-visible: block;
 }
 
 @include block($name) {
@@ -29,13 +42,18 @@ $name: ea-tour;
     pointer-events: none;
   }
 
+  @include element(hollow) {
+    transition: x var(--#{$name}-transition), y var(--#{$name}-transition),
+      width var(--#{$name}-transition), height var(--#{$name}-transition);
+  }
+
   @include element(divider) {
     pointer-events: auto;
-    fill: none;
-    fill: rgba(0, 0, 0, 0.5);
+    fill: transparent;
   }
 
   @include element(content) {
+    display: none;
     pointer-events: auto;
   }
 
@@ -43,6 +61,10 @@ $name: ea-tour;
     display: block;
 
     .ea-tour__svg {
+      display: block;
+    }
+
+    & + .ea-tour__content {
       display: block;
     }
   }
