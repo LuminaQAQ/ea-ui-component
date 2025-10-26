@@ -15,9 +15,11 @@ export class EaTourStep extends Base {
   #nextBtn;
   /** @type {EaButton} */
   #finishBtn;
+  /** @type {EaButton} */
+  #closeIcon;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "title", "target"];
+    return [...super.observedAttributes, "title", "target", "type"];
   }
 
   state = this.properties({
@@ -39,6 +41,13 @@ export class EaTourStep extends Base {
           );
       },
     },
+    type: {
+      type: ["default", "primary"],
+      default: "default",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -47,7 +56,7 @@ export class EaTourStep extends Base {
    */
   updateContainerClasslist() {
     const className = this.computedClasslist("ea-tour-step", {
-      // ['--' + this.type]: this.type,
+      ["--" + this.type]: this.type,
     });
 
     this.#container.className = className;
@@ -72,6 +81,7 @@ export class EaTourStep extends Base {
       <div class='ea-tour-step' part='container'>
         <header class='ea-tour-step__header' part='header'>
           <slot name='header'></slot>
+          <ea-icon class='ea-tour-step__close-icon' part='close-icon' icon="icon-cancel"></ea-icon>
         </header>
         <main class='ea-tour-step__content' part='content'>
           <slot></slot>
@@ -94,9 +104,15 @@ export class EaTourStep extends Base {
           </div>
           <div class='ea-tour-step__switch-group' part='switch-group'>
             <slot name='footer'>
-              <ea-button class="ea-tour-step__btn ea-tour-step__previous" part="previous">Previous</ea-button>
-              <ea-button class="ea-tour-step__btn ea-tour-step__next" type="primary" part="next">Next</ea-button>
-              <ea-button class="ea-tour-step__btn ea-tour-step__finish" type="primary" part="finish">Finish</ea-button>
+              <ea-button class="ea-tour-step__btn ea-tour-step__previous" ${
+                this.type === "primary" ? `type="primary"` : ""
+              } part="previous">Previous</ea-button>
+              <ea-button class="ea-tour-step__btn ea-tour-step__next" ${
+                this.type === "primary" ? "" : `type="primary"`
+              } part="next">Next</ea-button>
+              <ea-button class="ea-tour-step__btn ea-tour-step__finish" ${
+                this.type === "primary" ? "" : `type="primary"`
+              } part="finish">Finish</ea-button>
             </slot>
           </div>
         </footer>
@@ -110,6 +126,13 @@ export class EaTourStep extends Base {
       ".ea-tour-step__previous"
     );
     this.#finishBtn = this.shadowRoot.querySelector(".ea-tour-step__finish");
+    this.#closeIcon = this.shadowRoot.querySelector(
+      ".ea-tour-step__close-icon"
+    );
+
+    this.#closeIcon.addEventListener("click", () => {
+      this.emit("close", { bubbles: true });
+    });
 
     this.#nextBtn.addEventListener("click", () => {
       this.emit("next", { bubbles: true });

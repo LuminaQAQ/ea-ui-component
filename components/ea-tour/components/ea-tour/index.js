@@ -1,5 +1,4 @@
 import Base from "@components/Base.js";
-
 import stylesheet from "./index.scss?inline";
 import EaUtils from "@/utils/Utils";
 
@@ -22,10 +21,23 @@ export class EaTour extends Base {
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "visible", "current", "gap"];
+    return [
+      ...super.observedAttributes,
+      "append-to",
+      "visible",
+      "current",
+      "gap",
+      "mask",
+      "type",
+    ];
   }
 
   state = this.properties({
+    "append-to": {
+      type: String,
+      default: "body",
+      observer: (newVal) => {},
+    },
     visible: {
       type: Boolean,
       default: "",
@@ -63,6 +75,23 @@ export class EaTour extends Base {
         });
       },
     },
+    mask: {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    type: {
+      type: ["default", "primary"],
+      default: "default",
+      observer: (newVal) => {
+        if (newVal !== "default")
+          this.querySelectorAll("ea-tour-step").forEach((item) => {
+            item.setAttribute("type", newVal);
+          });
+      },
+    },
   });
 
   /**
@@ -77,6 +106,7 @@ export class EaTour extends Base {
       },
       {
         visible: this.visible,
+        mask: this.mask,
       }
     );
 
@@ -92,7 +122,7 @@ export class EaTour extends Base {
 
     this.$render();
 
-    document.body.appendChild(this);
+    this.#handleAppendTo(this["append-to"]);
   }
 
   $render() {
@@ -130,6 +160,10 @@ export class EaTour extends Base {
       ".ea-tour__divider.left-mask"
     );
 
+    this.addEventListener("close", (e) => {
+      this.visible = false;
+    });
+
     this.addEventListener("next", (e) => {
       this.current++;
     });
@@ -140,6 +174,16 @@ export class EaTour extends Base {
       this.visible = false;
     });
   }
+
+  #handleAppendTo = (selector) => {
+    const target = document.querySelector(selector);
+    if (target) {
+      target.appendChild(this);
+    } else {
+      document.body.appendChild(this);
+      console.warn(`[EaTour] append-to ${selector} not found.`, this);
+    }
+  };
 
   /**
    * 更新 提示容器 的位置
@@ -160,8 +204,45 @@ export class EaTour extends Base {
 
     const { width, height, x, y, top, right, bottom, left } =
       target.getBoundingClientRect();
+    const child = children[current];
+    const childWidth =
+      child.style.getPropertyValue("--ea-tour-step-width") || "520px";
+    // console.log(left, childWidth);
+    const computedChildLeft = (targetWidth, targetLeft) => {
+      const windowWidth = window.innerWidth;
+      const originLeft = targetLeft - targetWidth / 2;
+      let left = 0;
+
+      if (originLeft < 0) {
+        left = 0;
+      }
+
+      if (originLeft > windowWidth) {
+        left = windowWidth - targetWidth;
+      }
+
+      if (originLeft < windowWidth && originLeft > 0) {
+        left = originLeft;
+      }
+
+      return left;
+
+      // if (windowWidth - targetWidth < targetLeft) {
+      //   // return Math.abs(windowWidth - (targetWidth + targetLeft));
+      //   return Math.abs(windowWidth - targetWidth);
+      // } else if (targetLeft + targetWidth > windowWidth) {
+      //   return Math.abs(targetLeft - (windowWidth - targetWidth));
+      // } else {
+      //   return 0;
+      // }
+    };
+
     // 更新 提示容器 的位置
-    children[current].style.top = `${top + height + 18}px`;
+    child.style.top = `${top + height + 18}px`;
+    child.style.left = `${computedChildLeft(
+      EaUtils.CSS.px2num(childWidth),
+      left
+    )}px`;
 
     // 更新 穿透部分 的位置
     this.#hollow.style.width = `${width + this.gap}px`;
