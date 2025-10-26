@@ -11,6 +11,7 @@ export default class EaUtils {
   static Enum = {};
   static EaElement = {};
   static JSON = {};
+  static CSS = {};
 
   static timeout;
 }
@@ -104,8 +105,16 @@ EaUtils.timeout = (fn, time = 0) => {
   let timer = setTimeout(() => {
     clearTimeout(timer);
     timer = null;
-    fn();
+    if (fn) fn();
   }, time);
 
   return timer;
+};
+
+EaUtils.CSS.px2num = (px) => {
+  return Number(px?.replace("px", ""));
+};
+
+EaUtils.CSS.rem2num = (rem) => {
+  return Number(rem.replace("rem", ""));
 };

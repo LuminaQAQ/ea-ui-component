@@ -59,10 +59,57 @@
           this.btn.addEventListener("click", () => {
             this.el.visible = true;
           });
-          this.btn.click();
         },
       };
       basicExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  非模态 -->
+    <!-- #region -->
+    <h1>非模态</h1>
+
+    <div class="demo">
+      <ea-button id="noMaskTourBtn" type="primary">Begin Tour</ea-button>
+      <hr />
+      <ea-button id="noMaskEl1">Upload</ea-button>
+      <ea-button id="noMaskEl2" type="primary">Save</ea-button>
+      <ea-button id="noMaskEl3" icon="icon-share"></ea-button>
+
+      <ea-tour id="noMaskTour" type="primary" mask="false">
+        <ea-tour-step target="#noMaskEl1" title="Upload File">
+          <div>Put you files here.</div>
+        </ea-tour-step>
+        <ea-tour-step
+          target="#noMaskEl2"
+          title="Save"
+          description="Save your changes"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#noMaskEl3"
+          title="Other Actions"
+          description="Click to see other"
+        ></ea-tour-step>
+      </ea-tour>
+    </div>
+
+    <script type="module">
+      const noMaskExample = {
+        el: document.querySelector("#noMaskTour"),
+        btn: document.querySelector("#noMaskTourBtn"),
+
+        init() {
+          this.btn.addEventListener("click", () => {
+            this.el.visible = true;
+          });
+
+          this.btn.click();
+        },
+      };
+      noMaskExample.init();
     </script>
 
     <hr />
