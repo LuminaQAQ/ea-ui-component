@@ -69,6 +69,8 @@ export class EaTour extends Base {
   #states = {
     isChildrenLoaded: false,
     isCenter: false,
+
+    queueTask: [],
   };
 
   static get observedAttributes() {
@@ -336,37 +338,10 @@ export class EaTour extends Base {
     const childWidth = child.clientWidth || 520;
     const childHeight = child.clientHeight;
 
-    // const computedChildLeft = (targetWidth, targetLeft) => {
-    //   const windowWidth = window.innerWidth;
-    //   const originLeft = targetLeft - targetWidth / 2;
-    //   let left = 0;
-
-    //   if (originLeft < 0) {
-    //     left = 0;
-    //   }
-
-    //   if (originLeft > windowWidth) {
-    //     left = windowWidth - targetWidth;
-    //   }
-
-    //   if (originLeft < windowWidth && originLeft > 0) {
-    //     left = originLeft;
-    //   }
-
-    //   return left;
-    // };
-
-    // 更新 提示容器 的位置
-    // child.style.top = `${top + height + 18}px`;
-    // child.style.left = `${computedChildLeft(
-    //   EaUtils.CSS.px2num(childWidth),
-    //   left
-    // )}px`;
-
     const placementStrategies = {
       top: {
         top: top - childHeight - this.gap,
-        left: left - width + this.gap,
+        left: left - childWidth / 2 + this.gap,
       },
       "top-start": {
         top: 0,
@@ -377,8 +352,8 @@ export class EaTour extends Base {
         left: 0,
       },
       bottom: {
-        top: 0,
-        left: 0,
+        top: top + height + this.gap,
+        left: left - childWidth / 2 + this.gap,
       },
       "bottom-start": {
         top: 0,
@@ -389,8 +364,8 @@ export class EaTour extends Base {
         left: 0,
       },
       left: {
-        top: 0,
-        left: 0,
+        top: top - this.gap - childHeight / 2 + height / 2,
+        left: left - childWidth - this.gap,
       },
       "left-start": {
         top: 0,
@@ -414,8 +389,14 @@ export class EaTour extends Base {
       },
     };
 
-    child.style.top = `${placementStrategies[child.placement].top}px`;
-    child.style.left = `${placementStrategies[child.placement].left}px`;
+    try {
+      child.style.top = `${placementStrategies[child.placement].top}px`;
+      child.style.left = `${placementStrategies[child.placement].left}px`;
+    } catch (error) {
+      console.warn(
+        `[EaTourStep] placement ${child.placement} is not supported.`
+      );
+    }
 
     // 更新 穿透部分 的位置
     this.#hollow.style.width = `${width + this.gap}px`;
@@ -434,6 +415,17 @@ export class EaTour extends Base {
     // if (current === 0) {
     //   this.#previousBtn.style.display = "none";
     // }
+  };
+
+  #waitChildLoaded = async () => {
+    if (this.#states.isChildrenLoaded) return;
+
+    await Promise.all(
+      [...this.querySelectorAll("ea-tour-step")].map((item) =>
+        EaUtils.EaElement.addAsyncEventListener(item, "ea-tour-step-ready")
+      )
+    );
+    this.#states.isChildrenLoaded = true;
   };
 
   connectedCallback() {
