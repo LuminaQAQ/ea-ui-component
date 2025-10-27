@@ -19,7 +19,13 @@ export class EaTourStep extends Base {
   #closeIcon;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "title", "target", "type"];
+    return [
+      ...super.observedAttributes,
+      "title",
+      "target",
+      "type",
+      "placement",
+    ];
   }
 
   state = this.properties({
@@ -34,9 +40,11 @@ export class EaTourStep extends Base {
       type: String,
       default: "",
       observer: (newVal) => {
+        if (newVal === "") return;
+
         if (!document.querySelector(newVal))
           return console.warn(
-            `[EaTour] target ${targetSelector} not found`,
+            `[EaTour] target ${targetSelector} not a valid element selector.`,
             this
           );
       },
@@ -47,6 +55,24 @@ export class EaTourStep extends Base {
       observer: (newVal) => {
         this.updateContainerClasslist();
       },
+    },
+    placement: {
+      type: [
+        "top",
+        "top-start",
+        "top-end",
+        "bottom",
+        "bottom-start",
+        "bottom-end",
+        "left",
+        "left-start",
+        "left-end",
+        "right",
+        "right-start",
+        "right-end",
+      ],
+      default: "bottom",
+      observer: (newVal) => {},
     },
   });
 

@@ -2,6 +2,54 @@ import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
 import EaUtils from "@/utils/Utils";
 
+/**
+ * 检查视口可见
+ * @param {HTMLElement} el
+ * @returns
+ */
+const isIntersecting = (el, scale = 0) => {
+  const rect = el.getBoundingClientRect();
+
+  return (
+    rect.top >= scale &&
+    rect.left >= scale &&
+    rect.bottom <= window.innerHeight - scale &&
+    rect.right <= window.innerWidth - scale
+  );
+};
+
+/**
+ * 根据视口情况翻转 placement
+ * @param {HTMLElement} el
+ * @param {string} placement
+ * @returns {string}
+ */
+const flipPlacement = (el, placement) => {
+  const antiPlacement = {
+    left: "right",
+    right: "left",
+    top: "bottom",
+    bottom: "top",
+  };
+
+  const rect = el.getBoundingClientRect();
+  const strategies = {
+    top: rect.top < 0 && placement.includes("top"),
+    bottom: rect.bottom > window.innerHeight && placement.includes("bottom"),
+    left: rect.left < 0 && placement.includes("left"),
+    right: rect.right > window.innerWidth && placement.includes("right"),
+  };
+
+  if (isIntersecting(el)) return placement;
+
+  for (const strategy in strategies) {
+    if (strategies[strategy])
+      return placement.replace(strategy, antiPlacement[strategy]);
+  }
+
+  return placement;
+};
+
 export class EaTour extends Base {
   /** @type {HTMLElement} */
   #container;
@@ -15,9 +63,14 @@ export class EaTour extends Base {
   #bottomMask;
   /** @type {HTMLElement} */
   #leftMask;
+  /** @type {AbortController} */
+  #abortController;
 
   #states = {
     isChildrenLoaded: false,
+    isCenter: false,
+
+    queueTask: [],
   };
 
   static get observedAttributes() {
@@ -42,8 +95,33 @@ export class EaTour extends Base {
       type: Boolean,
       default: "",
       observer: async (newVal) => {
+        this.#abortController?.abort();
         this.current = 0;
         this.updateContainerClasslist();
+
+        if (newVal) {
+          this.#abortController = new AbortController();
+
+          if (this.mask) document.body.style.overflow = "hidden";
+
+          window.addEventListener(
+            "resize",
+            () => {
+              this.#updateHollowPosition(this.current);
+            },
+            { signal: this.#abortController.signal }
+          );
+
+          // window.addEventListener(
+          //   "scroll",
+          //   (e) => {
+          //     this.#updateHollowPosition(this.current);
+          //   },
+          //   { signal: this.#abortController.signal }
+          // );
+        } else {
+          if (this.mask) document.body.style.overflow = "auto";
+        }
       },
     },
     gap: {
@@ -64,15 +142,15 @@ export class EaTour extends Base {
           return (this.visible = false);
         }
 
-        this.#updateHollowPosition(newVal);
-        this.#updateSwitchvisibleStatus(newVal);
-
         children.forEach((child, index) => {
           child.style.setProperty(
             "--ea-tour-step-visible",
             index === newVal ? "block" : "none"
           );
         });
+
+        this.#updateHollowPosition(newVal);
+        this.#updateSwitchvisibleStatus(newVal);
       },
     },
     mask: {
@@ -92,6 +170,29 @@ export class EaTour extends Base {
           });
       },
     },
+    placement: {
+      type: [
+        "top",
+        "top-start",
+        "top-end",
+        "bottom",
+        "bottom-start",
+        "bottom-end",
+        "left",
+        "left-start",
+        "left-end",
+        "right",
+        "right-start",
+        "right-end",
+      ],
+      default: "bottom",
+      observer: (newVal) => {
+        this.querySelectorAll("ea-tour-step").forEach((item) => {
+          if (!item.getAttribute("placement"))
+            item.setAttribute("placement", newVal);
+        });
+      },
+    },
   });
 
   /**
@@ -107,6 +208,7 @@ export class EaTour extends Base {
       {
         visible: this.visible,
         mask: this.mask,
+        center: this.#states.isCenter,
       }
     );
 
@@ -196,53 +298,105 @@ export class EaTour extends Base {
 
     const targetSelector = children[current].getAttribute("target");
     const target = document.querySelector(targetSelector);
-    if (!target)
+
+    children[current].removeAttribute("center");
+    this.#states.isCenter = false;
+
+    if (!targetSelector) {
+      this.#states.isCenter = true;
+      children[current].setAttribute("center", true);
+
+      this.#hollow.style.width = `0px`;
+      this.#hollow.style.height = `0px`;
+      this.#hollow.style.x = `0px`;
+      this.#hollow.style.y = `0px`;
+
+      this.#topMask.style.height = `100%`;
+      this.#rightMask.style.x = `0`;
+      this.#bottomMask.style.y = `0`;
+      this.#leftMask.style.width = `100%`;
+
+      this.updateContainerClasslist();
+      return;
+    } else if (!target) {
       return console.warn(
         `[EaTour] target ${targetSelector} not found`,
         children[current]
       );
+    }
+
+    if (!isIntersecting(target)) {
+      window.scrollTo({
+        top: target.getBoundingClientRect().top,
+      });
+    }
 
     const { width, height, x, y, top, right, bottom, left } =
       target.getBoundingClientRect();
     const child = children[current];
-    const childWidth =
-      child.style.getPropertyValue("--ea-tour-step-width") || "520px";
-    // console.log(left, childWidth);
-    const computedChildLeft = (targetWidth, targetLeft) => {
-      const windowWidth = window.innerWidth;
-      const originLeft = targetLeft - targetWidth / 2;
-      let left = 0;
+    const childContainer = child.shadowRoot.querySelector(".ea-tour-step");
+    const childWidth = child.clientWidth || 520;
+    const childHeight = child.clientHeight;
 
-      if (originLeft < 0) {
-        left = 0;
-      }
-
-      if (originLeft > windowWidth) {
-        left = windowWidth - targetWidth;
-      }
-
-      if (originLeft < windowWidth && originLeft > 0) {
-        left = originLeft;
-      }
-
-      return left;
-
-      // if (windowWidth - targetWidth < targetLeft) {
-      //   // return Math.abs(windowWidth - (targetWidth + targetLeft));
-      //   return Math.abs(windowWidth - targetWidth);
-      // } else if (targetLeft + targetWidth > windowWidth) {
-      //   return Math.abs(targetLeft - (windowWidth - targetWidth));
-      // } else {
-      //   return 0;
-      // }
+    const placementStrategies = {
+      top: {
+        top: top - childHeight - this.gap,
+        left: left - childWidth / 2 + this.gap,
+      },
+      "top-start": {
+        top: 0,
+        left: 0,
+      },
+      "top-end": {
+        top: 0,
+        left: 0,
+      },
+      bottom: {
+        top: top + height + this.gap,
+        left: left - childWidth / 2 + this.gap,
+      },
+      "bottom-start": {
+        top: 0,
+        left: 0,
+      },
+      "bottom-end": {
+        top: 0,
+        left: 0,
+      },
+      left: {
+        top: top - this.gap - childHeight / 2 + height / 2,
+        left: left - childWidth - this.gap,
+      },
+      "left-start": {
+        top: 0,
+        left: 0,
+      },
+      "left-end": {
+        top: 0,
+        left: 0,
+      },
+      right: {
+        top: top - this.gap - childHeight / 2 + height / 2,
+        left: left + width + this.gap,
+      },
+      "right-start": {
+        top: top - this.gap,
+        left: left + width + this.gap,
+      },
+      "right-end": {
+        top: left + width + this.gap,
+        left: left + width + this.gap,
+      },
     };
 
-    // 更新 提示容器 的位置
-    child.style.top = `${top + height + 18}px`;
-    child.style.left = `${computedChildLeft(
-      EaUtils.CSS.px2num(childWidth),
-      left
-    )}px`;
+    try {
+      child.style.top = `${placementStrategies[child.placement].top}px`;
+      child.style.left = `${placementStrategies[child.placement].left}px`;
+    } catch (error) {
+      console.warn(
+        `[EaTourStep] placement ${child.placement} is not supported.`
+      );
+    }
 
     // 更新 穿透部分 的位置
     this.#hollow.style.width = `${width + this.gap}px`;
@@ -263,8 +417,23 @@ export class EaTour extends Base {
     // }
   };
 
+  #waitChildLoaded = async () => {
+    if (this.#states.isChildrenLoaded) return;
+
+    await Promise.all(
+      [...this.querySelectorAll("ea-tour-step")].map((item) =>
+        EaUtils.EaElement.addAsyncEventListener(item, "ea-tour-step-ready")
+      )
+    );
+    this.#states.isChildrenLoaded = true;
+  };
+
   connectedCallback() {
     super.connectedCallback();
+  }
+
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 
