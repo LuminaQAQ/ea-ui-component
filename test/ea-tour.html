@@ -105,8 +105,6 @@
           this.btn.addEventListener("click", () => {
             this.el.visible = true;
           });
-
-          this.btn.click();
         },
       };
       noMaskExample.init();
@@ -115,5 +113,67 @@
     <hr />
     <!-- #endregion  -->
     <!-- end  -->
+
+    <!--  位置 -->
+    <!-- #region -->
+    <h1>位置</h1>
+
+    <div class="demo" style="text-align: center">
+      <ea-button id="placementTourBtn" type="primary">Begin Tour</ea-button>
+
+      <ea-tour id="placementTour">
+        <ea-tour-step
+          title="Center"
+          description="Displayed in the center of screen."
+        >
+        </ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Top"
+          description="On the top of target."
+          placement="top"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Right"
+          description="On the right of target."
+          placement="right"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Bottom"
+          description="On the bottom of target."
+          placement="bottom"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Left"
+          description="On the Left of target."
+          placement="Left"
+        ></ea-tour-step>
+      </ea-tour>
+    </div>
+
+    <script type="module">
+      const placementExample = {
+        el: document.querySelector("#placementTour"),
+        btn: document.querySelector("#placementTourBtn"),
+
+        init() {
+          this.btn.addEventListener("click", () => {
+            this.el.visible = true;
+          });
+
+          this.btn.click();
+        },
+      };
+      placementExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <div style="height: 30rem"></div>
   </body>
 </html>

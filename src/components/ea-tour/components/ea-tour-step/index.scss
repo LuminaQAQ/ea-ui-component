@@ -22,13 +22,18 @@ $name: ea-tour-step;
   display: var(--#{$name}-visible);
 
   position: fixed;
-  bottom: 0;
-  left: 0;
 
   max-width: 100vw;
   width: var(--#{$name}-width);
 
   z-index: 3000;
+}
+
+:host([center]) {
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
 }
 
 @include block($name) {
