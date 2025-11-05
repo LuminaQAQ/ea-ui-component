@@ -10,11 +10,13 @@ import EaUtils from "@/utils/Utils";
 const isIntersecting = (el, scale = 0) => {
   const rect = el.getBoundingClientRect();
 
+  console.log(el);
+
   return (
-    rect.top >= scale &&
-    rect.left >= scale &&
-    rect.bottom <= window.innerHeight - scale &&
-    rect.right <= window.innerWidth - scale
+    rect.top < scale &&
+    rect.left < scale &&
+    rect.bottom > window.innerHeight - scale &&
+    rect.right > window.innerWidth - scale
   );
 };
 
@@ -25,22 +27,23 @@ const isIntersecting = (el, scale = 0) => {
  * @returns {string}
  */
 const flipPlacement = (el, placement) => {
+  const rect = el.getBoundingClientRect();
   const antiPlacement = {
     left: "right",
     right: "left",
     top: "bottom",
     bottom: "top",
   };
-
-  const rect = el.getBoundingClientRect();
   const strategies = {
     top: rect.top < 0 && placement.includes("top"),
-    bottom: rect.bottom > window.innerHeight && placement.includes("bottom"),
+    bottom:
+      rect.bottom + rect.height > window.innerHeight &&
+      placement.includes("bottom"),
     left: rect.left < 0 && placement.includes("left"),
     right: rect.right > window.innerWidth && placement.includes("right"),
   };
 
-  if (isIntersecting(el)) return placement;
+  // if (isIntersecting(el)) return placement;
 
   for (const strategy in strategies) {
     if (strategies[strategy])
@@ -112,13 +115,13 @@ export class EaTour extends Base {
             { signal: this.#abortController.signal }
           );
 
-          // window.addEventListener(
-          //   "scroll",
-          //   (e) => {
-          //     this.#updateHollowPosition(this.current);
-          //   },
-          //   { signal: this.#abortController.signal }
-          // );
+          window.addEventListener(
+            "scroll",
+            (e) => {
+              this.#updateHollowPosition(this.current);
+            },
+            { signal: this.#abortController.signal }
+          );
         } else {
           if (this.mask) document.body.style.overflow = "auto";
         }
@@ -325,6 +328,8 @@ export class EaTour extends Base {
       );
     }
 
+    console.log(isIntersecting(target));
+
     if (!isIntersecting(target)) {
       window.scrollTo({
         top: target.getBoundingClientRect().top,
@@ -333,6 +338,7 @@ export class EaTour extends Base {
 
     const { width, height, x, y, top, right, bottom, left } =
       target.getBoundingClientRect();
+    const gap = this.gap * 2;
     const child = children[current];
     const childContainer = child.shadowRoot.querySelector(".ea-tour-step");
     const childWidth = child.clientWidth || 520;
@@ -340,58 +346,71 @@ export class EaTour extends Base {
 
     const placementStrategies = {
       top: {
-        top: top - childHeight - this.gap,
-        left: left - childWidth / 2 + this.gap,
+        top: top - childHeight - gap,
+        left: left - childWidth / 2 + gap,
       },
       "top-start": {
-        top: 0,
-        left: 0,
+        top: top - childHeight - gap,
+        left: left - gap,
       },
       "top-end": {
-        top: 0,
-        left: 0,
-      },
-      bottom: {
-        top: top + height + this.gap,
-        left: left - childWidth / 2 + this.gap,
-      },
-      "bottom-start": {
-        top: 0,
-        left: 0,
-      },
-      "bottom-end": {
-        top: 0,
-        left: 0,
-      },
-      left: {
-        top: top - this.gap - childHeight / 2 + height / 2,
-        left: left - childWidth - this.gap,
-      },
-      "left-start": {
-        top: 0,
-        left: 0,
-      },
-      "left-end": {
-        top: 0,
-        left: 0,
+        top: top - childHeight - gap,
+        left: left - childWidth + width + gap,
       },
       right: {
-        top: top - this.gap - childHeight / 2 + height / 2,
-        left: left + width + this.gap,
+        top: top - gap - childHeight / 2 + height / 2,
+        left: left + width + gap,
       },
       "right-start": {
-        top: top - this.gap,
-        left: left + width + this.gap,
+        top: top - gap,
+        left: left + width + gap,
       },
       "right-end": {
-        top: left + width + this.gap,
-        left: left + width + this.gap,
+        top: top - childHeight / 2 - gap,
+        left: left + width + gap,
+      },
+      bottom: {
+        top: bottom + gap,
+        left: left - childWidth / 2 + gap,
+      },
+      "bottom-start": {
+        top: bottom + gap,
+        left: left - gap,
+      },
+      "bottom-end": {
+        top: bottom + gap,
+        left: left - childWidth + width + gap,
+      },
+      left: {
+        top: top - gap - childHeight / 2 + height / 2,
+        left: left - childWidth - gap,
+      },
+      "left-start": {
+        top: top - gap,
+        left: left - childWidth - gap,
+      },
+      "left-end": {
+        top: top - childHeight / 2 - gap,
+        left: left - childWidth - gap,
       },
     };
 
     try {
-      child.style.top = `${placementStrategies[child.placement].top}px`;
-      child.style.left = `${placementStrategies[child.placement].left}px`;
+      const realPlacement = flipPlacement(child, child.placement);
+      let realTop = placementStrategies[realPlacement].top;
+      let realLeft = placementStrategies[realPlacement].left;
+
+      console.log(realTop, realLeft);
+
+      // if (realTop < 0) realTop = 0;
+      // else if (realTop + childHeight > window.innerHeight) {
+      //   realTop = window.innerHeight - childHeight;
+      // }
+
+      // if (realLeft < 0) realLeft = 0;
+
+      child.style.top = `${realTop}px`;
+      child.style.left = `${realLeft}px`;
     } catch (error) {
       console.warn(
         `[EaTourStep] placement ${child.placement} is not supported.`

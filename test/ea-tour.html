@@ -135,9 +135,33 @@
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
+          title="Top-Start"
+          description="On the top-start of target."
+          placement="top-start"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Top-End"
+          description="On the top-end of target."
+          placement="top-end"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
           title="Right"
           description="On the right of target."
           placement="right"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Right-Start"
+          description="On the right-start of target."
+          placement="right-start"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Right-End"
+          description="On the right-end of target."
+          placement="right-end"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
@@ -147,9 +171,33 @@
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
+          title="Bottom-Start"
+          description="On the bottom-start of target."
+          placement="bottom-start"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Bottom-End"
+          description="On the bottom-end of target."
+          placement="bottom-end"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
           title="Left"
           description="On the Left of target."
           placement="left"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Left-Start"
+          description="On the left-start of target."
+          placement="left-start"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Left-End"
+          description="On the left-end of target."
+          placement="left-end"
         ></ea-tour-step>
       </ea-tour>
     </div>
@@ -163,8 +211,6 @@
           this.btn.addEventListener("click", () => {
             this.el.visible = true;
           });
-
-          this.btn.click();
         },
       };
       placementExample.init();
@@ -174,6 +220,54 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <div style="height: 30rem"></div>
+    <!--  自定义指示器 -->
+    <!-- #region -->
+    <h1>自定义指示器</h1>
+
+    <div class="demo">
+      <ea-button id="customIndicatorTourBtn" type="primary">
+        Begin Tour
+      </ea-button>
+      <hr />
+      <ea-button id="customIndicatorEl1">Upload</ea-button>
+      <ea-button id="customIndicatorEl2" type="primary">Save</ea-button>
+      <ea-button id="customIndicatorEl3" icon="icon-share"></ea-button>
+
+      <ea-tour id="customIndicatorTour">
+        <ea-tour-step target="#customIndicatorEl1" title="Upload File">
+          <div>Put you files here.</div>
+        </ea-tour-step>
+        <ea-tour-step
+          target="#customIndicatorEl2"
+          title="Save"
+          description="Save your changes"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#customIndicatorEl3"
+          title="Other Actions"
+          description="Click to see other"
+        ></ea-tour-step>
+      </ea-tour>
+    </div>
+
+    <script type="module">
+      const customIndicatorExample = {
+        el: document.querySelector("#customIndicatorTour"),
+        btn: document.querySelector("#customIndicatorTourBtn"),
+
+        init() {
+          this.btn.addEventListener("click", () => {
+            this.el.visible = true;
+          });
+
+          this.btn.click();
+        },
+      };
+      customIndicatorExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
   </body>
 </html>
