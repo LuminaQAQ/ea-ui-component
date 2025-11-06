@@ -10,13 +10,11 @@ import EaUtils from "@/utils/Utils";
 const isIntersecting = (el, scale = 0) => {
   const rect = el.getBoundingClientRect();
 
-  console.log(el);
-
   return (
-    rect.top < scale &&
-    rect.left < scale &&
-    rect.bottom > window.innerHeight - scale &&
-    rect.right > window.innerWidth - scale
+    rect.top > 0 &&
+    rect.left > 0 &&
+    rect.bottom <= window.innerHeight - scale &&
+    rect.right <= window.innerWidth - scale
   );
 };
 
@@ -74,6 +72,8 @@ export class EaTour extends Base {
     isCenter: false,
 
     queueTask: [],
+
+    originalPlacement: [],
   };
 
   static get observedAttributes() {
@@ -85,6 +85,7 @@ export class EaTour extends Base {
       "gap",
       "mask",
       "type",
+      "placement",
     ];
   }
 
@@ -106,6 +107,8 @@ export class EaTour extends Base {
           this.#abortController = new AbortController();
 
           if (this.mask) document.body.style.overflow = "hidden";
+
+          this.#updateHollowPosition(this.current);
 
           window.addEventListener(
             "resize",
@@ -191,8 +194,9 @@ export class EaTour extends Base {
       default: "bottom",
       observer: (newVal) => {
         this.querySelectorAll("ea-tour-step").forEach((item) => {
-          if (!item.getAttribute("placement"))
+          if (!item.getAttribute("placement")) {
             item.setAttribute("placement", newVal);
+          }
         });
       },
     },
@@ -291,58 +295,68 @@ export class EaTour extends Base {
   };
 
   /**
-   * 更新 提示容器 的位置
-   * @param {number} [current] 当前步骤
+   * 当未传入目标元素时，居中处理
    */
-  #updateHollowPosition = (current = this.current) => {
+  #handleCenterPosition = () => {
     /** @type {HTMLElement[]} */
     const children = [...this.querySelectorAll("ea-tour-step")];
-    const halfGap = this.gap / 2;
 
-    const targetSelector = children[current].getAttribute("target");
-    const target = document.querySelector(targetSelector);
+    this.#states.isCenter = true;
+    children[this.current].setAttribute("center", true);
 
-    children[current].removeAttribute("center");
-    this.#states.isCenter = false;
+    this.#hollow.style.width = `0px`;
+    this.#hollow.style.height = `0px`;
+    this.#hollow.style.x = `0px`;
+    this.#hollow.style.y = `0px`;
 
-    if (!targetSelector) {
-      this.#states.isCenter = true;
-      children[current].setAttribute("center", true);
+    this.#topMask.style.height = `100%`;
+    this.#rightMask.style.x = `0`;
+    this.#bottomMask.style.y = `0`;
+    this.#leftMask.style.width = `100%`;
 
-      this.#hollow.style.width = `0px`;
-      this.#hollow.style.height = `0px`;
-      this.#hollow.style.x = `0px`;
-      this.#hollow.style.y = `0px`;
+    this.updateContainerClasslist();
+  };
 
-      this.#topMask.style.height = `100%`;
-      this.#rightMask.style.x = `0`;
-      this.#bottomMask.style.y = `0`;
-      this.#leftMask.style.width = `100%`;
+  /**
+   * 根据视口情况翻转 placement
+   * @param {HTMLElement} el
+   * @param {string} placement
+   * @returns {string}
+   */
+  #handleFlipPlacement = (el, placement) => {
+    const rect = el.getBoundingClientRect();
+    const antiPlacement = {
+      left: "right",
+      right: "left",
+      top: "bottom",
+      bottom: "top",
+    };
+    const strategies = {
+      top: rect.top < 0 && placement.includes("top"),
+      bottom:
+        rect.bottom + rect.height > window.innerHeight &&
+        placement.includes("bottom"),
+      left: rect.left < 0 && placement.includes("left"),
+      right: rect.right > window.innerWidth && placement.includes("right"),
+    };
 
-      this.updateContainerClasslist();
-      return;
-    } else if (!target) {
-      return console.warn(
-        `[EaTour] target ${targetSelector} not found`,
-        children[current]
-      );
+    for (const strategy in strategies) {
+      if (strategies[strategy]) {
+        let temp = placement.replace(strategy, antiPlacement[strategy]);
+
+        return placement.replace(strategy, antiPlacement[strategy]);
+      }
     }
 
-    console.log(isIntersecting(target));
+    return placement;
+  };
 
-    if (!isIntersecting(target)) {
-      window.scrollTo({
-        top: target.getBoundingClientRect().top,
-      });
-    }
-
+  #updateStepPosition = (target, step) => {
     const { width, height, x, y, top, right, bottom, left } =
       target.getBoundingClientRect();
     const gap = this.gap * 2;
-    const child = children[current];
-    const childContainer = child.shadowRoot.querySelector(".ea-tour-step");
-    const childWidth = child.clientWidth || 520;
-    const childHeight = child.clientHeight;
+    const childWidth = step.clientWidth || 520;
+    const childHeight = step.clientHeight;
 
     const placementStrategies = {
       top: {
@@ -396,26 +410,75 @@ export class EaTour extends Base {
     };
 
     try {
-      const realPlacement = flipPlacement(child, child.placement);
-      let realTop = placementStrategies[realPlacement].top;
-      let realLeft = placementStrategies[realPlacement].left;
+      const [placement, direction] = step.placement.split("-");
+      let realTop = placementStrategies[step.placement].top;
+      let realLeft = placementStrategies[step.placement].left;
 
-      console.log(realTop, realLeft);
+      if (realTop + childHeight > window.innerHeight) {
+        realTop =
+          placementStrategies[placement === "bottom" ? "top" : "bottom"];
+        
+        step.style.left = `${realLeft}px`;
+        step.style.top = `${realTop}px`;
+      }
 
-      // if (realTop < 0) realTop = 0;
-      // else if (realTop + childHeight > window.innerHeight) {
-      //   realTop = window.innerHeight - childHeight;
-      // }
+      if (realLeft + childWidth > window.innerWidth) {
+        realLeft =
+          placementStrategies[placement === "right" ? "left" : "right"];
+        
+        step.style.left = `${realLeft}px`;
+        step.style.top = `${realTop}px`;
+      }
 
-      // if (realLeft < 0) realLeft = 0;
+      if (realLeft < 0) {
+        realLeft =
+          placementStrategies[placement === "left" ? "right" : "left"];
+        
+        step.style.left = `${realLeft}px`;
+        step.style.top = `${realTop}px`;
+      }
 
-      child.style.top = `${realTop}px`;
-      child.style.left = `${realLeft}px`;
+
+        
     } catch (error) {
       console.warn(
-        `[EaTourStep] placement ${child.placement} is not supported.`
+        `[EaTourStep] placement ${step.placement} is not supported.`
       );
     }
+  };
+
+  /**
+   * 更新 提示容器 的位置
+   * @param {number} [current] 当前步骤
+   */
+  #updateHollowPosition = (current = this.current) => {
+    /** @type {HTMLElement[]} */
+    const children = [...this.querySelectorAll("ea-tour-step")];
+    const halfGap = this.gap / 2;
+
+    const targetSelector = children[current].getAttribute("target");
+    const target = document.querySelector(targetSelector);
+
+    children[current].removeAttribute("center");
+    this.#states.isCenter = false;
+
+    if (!targetSelector) {
+      return this.#handleCenterPosition();
+    } else if (!target) {
+      return console.warn(
+        `[EaTour] target ${targetSelector} not found`,
+        children[current]
+      );
+    }
+
+    if (!isIntersecting(target)) {
+      window.scrollTo({
+        top: target.getBoundingClientRect().top,
+      });
+    }
+
+    const { width, height, x, y, top, right, bottom, left } =
+      target.getBoundingClientRect();
 
     // 更新 穿透部分 的位置
     this.#hollow.style.width = `${width + this.gap}px`;
@@ -428,6 +491,9 @@ export class EaTour extends Base {
     this.#rightMask.style.x = `${right + halfGap}px`;
     this.#bottomMask.style.y = `${bottom + halfGap}px`;
     this.#leftMask.style.width = `${x - halfGap}px`;
+
+    // 更新 步骤条 位置
+    this.#updateStepPosition(target, children[current]);
   };
 
   #updateSwitchvisibleStatus = (current = this.current) => {
