@@ -165,6 +165,9 @@
     "./ea-splitter": {
       "import": "./dist/ea-splitter.js"
     },
+    "./ea-statistic": {
+      "import": "./dist/ea-statistic.js"
+    },
     "./ea-step": {
       "import": "./dist/ea-step.js"
     },

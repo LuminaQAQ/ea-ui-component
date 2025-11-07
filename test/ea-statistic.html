@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ea-statistic</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-statistic/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-layout/index.js"></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <ea-statistic title="Daily active users" value="268500"></ea-statistic>
+      <ea-statistic value="138">
+        <div slot="title" style="display: inline-flex; align-items: center">
+          Ratio of men to women
+          <ea-icon style="margin-left: 4px" size="12px" icon="icon-mars">
+          </ea-icon>
+        </div>
+        <div slot="suffix">/100</div>
+      </ea-statistic>
+      <ea-statistic title="Total Transactions" value="172000"></ea-statistic>
+      <ea-statistic title="Feedback number" value="562">
+        <div slot="suffix">
+          <ea-icon style="vertical-align: -0.125em" icon="icon-comment-empty">
+          </ea-icon>
+        </div>
+      </ea-statistic>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>
