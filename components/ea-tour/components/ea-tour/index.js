@@ -11,43 +11,11 @@ const isIntersecting = (el, scale = 0) => {
   const rect = el.getBoundingClientRect();
 
   return (
-    rect.top >= scale &&
-    rect.left >= scale &&
+    rect.top > 0 &&
+    rect.left > 0 &&
     rect.bottom <= window.innerHeight - scale &&
     rect.right <= window.innerWidth - scale
   );
-};
-
-/**
- * 根据视口情况翻转 placement
- * @param {HTMLElement} el
- * @param {string} placement
- * @returns {string}
- */
-const flipPlacement = (el, placement) => {
-  const antiPlacement = {
-    left: "right",
-    right: "left",
-    top: "bottom",
-    bottom: "top",
-  };
-
-  const rect = el.getBoundingClientRect();
-  const strategies = {
-    top: rect.top < 0 && placement.includes("top"),
-    bottom: rect.bottom > window.innerHeight && placement.includes("bottom"),
-    left: rect.left < 0 && placement.includes("left"),
-    right: rect.right > window.innerWidth && placement.includes("right"),
-  };
-
-  if (isIntersecting(el)) return placement;
-
-  for (const strategy in strategies) {
-    if (strategies[strategy])
-      return placement.replace(strategy, antiPlacement[strategy]);
-  }
-
-  return placement;
 };
 
 export class EaTour extends Base {
@@ -71,6 +39,8 @@ export class EaTour extends Base {
     isCenter: false,
 
     queueTask: [],
+
+    originalPlacement: [],
   };
 
   static get observedAttributes() {
@@ -82,6 +52,7 @@ export class EaTour extends Base {
       "gap",
       "mask",
       "type",
+      "placement",
     ];
   }
 
@@ -104,6 +75,8 @@ export class EaTour extends Base {
 
           if (this.mask) document.body.style.overflow = "hidden";
 
+          this.#updateHollowPosition(this.current);
+
           window.addEventListener(
             "resize",
             () => {
@@ -112,13 +85,13 @@ export class EaTour extends Base {
             { signal: this.#abortController.signal }
           );
 
-          // window.addEventListener(
-          //   "scroll",
-          //   (e) => {
-          //     this.#updateHollowPosition(this.current);
-          //   },
-          //   { signal: this.#abortController.signal }
-          // );
+          window.addEventListener(
+            "scroll",
+            (e) => {
+              this.#updateHollowPosition(this.current);
+            },
+            { signal: this.#abortController.signal }
+          );
         } else {
           if (this.mask) document.body.style.overflow = "auto";
         }
@@ -188,8 +161,9 @@ export class EaTour extends Base {
       default: "bottom",
       observer: (newVal) => {
         this.querySelectorAll("ea-tour-step").forEach((item) => {
-          if (!item.getAttribute("placement"))
+          if (!item.getAttribute("placement")) {
             item.setAttribute("placement", newVal);
+          }
         });
       },
     },
@@ -277,6 +251,10 @@ export class EaTour extends Base {
     });
   }
 
+  /**
+   * 处理 append-to 属性
+   * @param {string} selector
+   */
   #handleAppendTo = (selector) => {
     const target = document.querySelector(selector);
     if (target) {
@@ -284,6 +262,120 @@ export class EaTour extends Base {
     } else {
       document.body.appendChild(this);
       console.warn(`[EaTour] append-to ${selector} not found.`, this);
+    }
+  };
+
+  /**
+   * 当未传入目标元素时，居中处理
+   */
+  #handleCenterPosition = () => {
+    /** @type {HTMLElement[]} */
+    const children = [...this.querySelectorAll("ea-tour-step")];
+
+    this.#states.isCenter = true;
+    children[this.current].setAttribute("center", true);
+
+    this.#hollow.style.width = `0px`;
+    this.#hollow.style.height = `0px`;
+    this.#hollow.style.x = `0px`;
+    this.#hollow.style.y = `0px`;
+
+    this.#topMask.style.height = `100%`;
+    this.#rightMask.style.x = `0`;
+    this.#bottomMask.style.y = `0`;
+    this.#leftMask.style.width = `100%`;
+
+    this.updateContainerClasslist();
+  };
+
+  /**
+   * 更新 提示元素 的位置
+   * @param {HTMLElement} target 目标元素，即被聚焦的元素
+   * @param {import("../ea-tour-step").EaTourStep} step 提示元素，即 step 元素
+   * @returns {void}
+   */
+  #updateStepPosition = (target, step) => {
+    const { width, height, x, y, top, right, bottom, left } =
+      target.getBoundingClientRect();
+    const gap = this.gap * 2;
+    const childWidth = step.clientWidth || 520;
+    const childHeight = step.clientHeight;
+
+    const placementStrategies = {
+      top: {
+        top: top - childHeight - gap,
+        left: left - childWidth / 2 + gap,
+      },
+      "top-start": {
+        top: top - childHeight - gap,
+        left: left - gap,
+      },
+      "top-end": {
+        top: top - childHeight - gap,
+        left: left - childWidth + width + gap,
+      },
+      right: {
+        top: top - gap - childHeight / 2 + height / 2,
+        left: left + width + gap,
+      },
+      "right-start": {
+        top: top - gap,
+        left: left + width + gap,
+      },
+      "right-end": {
+        top: top - childHeight / 2 - gap,
+        left: left + width + gap,
+      },
+      bottom: {
+        top: bottom + gap,
+        left: left - childWidth / 2 + gap,
+      },
+      "bottom-start": {
+        top: bottom + gap,
+        left: left - gap,
+      },
+      "bottom-end": {
+        top: bottom + gap,
+        left: left - childWidth + width + gap,
+      },
+      left: {
+        top: top - gap - childHeight / 2 + height / 2,
+        left: left - childWidth - gap * 2,
+      },
+      "left-start": {
+        top: top - gap,
+        left: left - childWidth - gap * 2,
+      },
+      "left-end": {
+        top: top - childHeight / 2 - gap,
+        left: left - childWidth - gap * 2,
+      },
+    };
+
+    try {
+      let realTop = placementStrategies[step.placement].top;
+      let realLeft = placementStrategies[step.placement].left;
+
+      if (realTop < 0) {
+        realTop = Math.max(realTop, y + gap + height);
+      } else if (realTop + childHeight > window.innerHeight) {
+        realTop = Math.min(realTop, y - childHeight - gap);
+      }
+
+      if (realLeft < 0) {
+        realLeft = Math.max(realLeft, x + width + gap);
+      } else if (realLeft + childWidth > window.innerWidth) {
+        realLeft = Math.min(realLeft, x - childWidth - gap);
+      }
+
+      step.style.left = `${realLeft}px`;
+      step.style.top = `${realTop}px`;
+    } catch (error) {
+      console.log(error);
+
+      console.warn(
+        `[EaTourStep] placement ${step.placement} is not supported.`
+      );
     }
   };
 
@@ -303,21 +395,7 @@ export class EaTour extends Base {
     this.#states.isCenter = false;
 
     if (!targetSelector) {
-      this.#states.isCenter = true;
-      children[current].setAttribute("center", true);
-
-      this.#hollow.style.width = `0px`;
-      this.#hollow.style.height = `0px`;
-      this.#hollow.style.x = `0px`;
-      this.#hollow.style.y = `0px`;
-
-      this.#topMask.style.height = `100%`;
-      this.#rightMask.style.x = `0`;
-      this.#bottomMask.style.y = `0`;
-      this.#leftMask.style.width = `100%`;
-
-      this.updateContainerClasslist();
-      return;
+      return this.#handleCenterPosition();
     } else if (!target) {
       return console.warn(
         `[EaTour] target ${targetSelector} not found`,
@@ -333,70 +411,6 @@ export class EaTour extends Base {
 
     const { width, height, x, y, top, right, bottom, left } =
       target.getBoundingClientRect();
-    const child = children[current];
-    const childContainer = child.shadowRoot.querySelector(".ea-tour-step");
-    const childWidth = child.clientWidth || 520;
-    const childHeight = child.clientHeight;
-
-    const placementStrategies = {
-      top: {
-        top: top - childHeight - this.gap,
-        left: left - childWidth / 2 + this.gap,
-      },
-      "top-start": {
-        top: 0,
-        left: 0,
-      },
-      "top-end": {
-        top: 0,
-        left: 0,
-      },
-      bottom: {
-        top: top + height + this.gap,
-        left: left - childWidth / 2 + this.gap,
-      },
-      "bottom-start": {
-        top: 0,
-        left: 0,
-      },
-      "bottom-end": {
-        top: 0,
-        left: 0,
-      },
-      left: {
-        top: top - this.gap - childHeight / 2 + height / 2,
-        left: left - childWidth - this.gap,
-      },
-      "left-start": {
-        top: 0,
-        left: 0,
-      },
-      "left-end": {
-        top: 0,
-        left: 0,
-      },
-      right: {
-        top: top - this.gap - childHeight / 2 + height / 2,
-        left: left + width + this.gap,
-      },
-      "right-start": {
-        top: top - this.gap,
-        left: left + width + this.gap,
-      },
-      "right-end": {
-        top: left + width + this.gap,
-        left: left + width + this.gap,
-      },
-    };
-
-    try {
-      child.style.top = `${placementStrategies[child.placement].top}px`;
-      child.style.left = `${placementStrategies[child.placement].left}px`;
-    } catch (error) {
-      console.warn(
-        `[EaTourStep] placement ${child.placement} is not supported.`
-      );
-    }
 
     // 更新 穿透部分 的位置
     this.#hollow.style.width = `${width + this.gap}px`;
@@ -409,6 +423,9 @@ export class EaTour extends Base {
     this.#rightMask.style.x = `${right + halfGap}px`;
     this.#bottomMask.style.y = `${bottom + halfGap}px`;
     this.#leftMask.style.width = `${x - halfGap}px`;
+
+    // 更新 步骤条 位置
+    this.#updateStepPosition(target, children[current]);
   };
 
   #updateSwitchvisibleStatus = (current = this.current) => {
