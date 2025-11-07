@@ -8,7 +8,7 @@ $name: ea-tour-step;
 
 :host {
   --#{$name}-visible: none;
-  --#{$name}-width: 520px;
+  --#{$name}-width: 400px;
   --#{$name}-indicator-size: 6px;
 
   --#{$name}-indicator-color: var(--grey-200);

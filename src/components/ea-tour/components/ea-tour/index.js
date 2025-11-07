@@ -18,39 +18,6 @@ const isIntersecting = (el, scale = 0) => {
   );
 };
 
-/**
- * 根据视口情况翻转 placement
- * @param {HTMLElement} el
- * @param {string} placement
- * @returns {string}
- */
-const flipPlacement = (el, placement) => {
-  const rect = el.getBoundingClientRect();
-  const antiPlacement = {
-    left: "right",
-    right: "left",
-    top: "bottom",
-    bottom: "top",
-  };
-  const strategies = {
-    top: rect.top < 0 && placement.includes("top"),
-    bottom:
-      rect.bottom + rect.height > window.innerHeight &&
-      placement.includes("bottom"),
-    left: rect.left < 0 && placement.includes("left"),
-    right: rect.right > window.innerWidth && placement.includes("right"),
-  };
-
-  // if (isIntersecting(el)) return placement;
-
-  for (const strategy in strategies) {
-    if (strategies[strategy])
-      return placement.replace(strategy, antiPlacement[strategy]);
-  }
-
-  return placement;
-};
-
 export class EaTour extends Base {
   /** @type {HTMLElement} */
   #container;
@@ -284,6 +251,10 @@ export class EaTour extends Base {
     });
   }
 
+  /**
+   * 处理 append-to 属性
+   * @param {string} selector
+   */
   #handleAppendTo = (selector) => {
     const target = document.querySelector(selector);
     if (target) {
@@ -318,39 +289,11 @@ export class EaTour extends Base {
   };
 
   /**
-   * 根据视口情况翻转 placement
-   * @param {HTMLElement} el
-   * @param {string} placement
-   * @returns {string}
+   * 更新 提示元素 的位置
+   * @param {HTMLElement} target 目标元素，即被聚焦的元素
+   * @param {import("../ea-tour-step").EaTourStep} step 提示元素，即 step 元素
+   * @returns {void}
    */
-  #handleFlipPlacement = (el, placement) => {
-    const rect = el.getBoundingClientRect();
-    const antiPlacement = {
-      left: "right",
-      right: "left",
-      top: "bottom",
-      bottom: "top",
-    };
-    const strategies = {
-      top: rect.top < 0 && placement.includes("top"),
-      bottom:
-        rect.bottom + rect.height > window.innerHeight &&
-        placement.includes("bottom"),
-      left: rect.left < 0 && placement.includes("left"),
-      right: rect.right > window.innerWidth && placement.includes("right"),
-    };
-
-    for (const strategy in strategies) {
-      if (strategies[strategy]) {
-        let temp = placement.replace(strategy, antiPlacement[strategy]);
-
-        return placement.replace(strategy, antiPlacement[strategy]);
-      }
-    }
-
-    return placement;
-  };
-
   #updateStepPosition = (target, step) => {
     const { width, height, x, y, top, right, bottom, left } =
       target.getBoundingClientRect();
@@ -397,50 +340,39 @@ export class EaTour extends Base {
       },
       left: {
         top: top - gap - childHeight / 2 + height / 2,
-        left: left - childWidth - gap,
+        left: left - childWidth - gap * 2,
       },
       "left-start": {
         top: top - gap,
-        left: left - childWidth - gap,
+        left: left - childWidth - gap * 2,
       },
       "left-end": {
         top: top - childHeight / 2 - gap,
-        left: left - childWidth - gap,
+        left: left - childWidth - gap * 2,
       },
     };
 
     try {
-      const [placement, direction] = step.placement.split("-");
       let realTop = placementStrategies[step.placement].top;
       let realLeft = placementStrategies[step.placement].left;
 
-      if (realTop + childHeight > window.innerHeight) {
-        realTop =
-          placementStrategies[placement === "bottom" ? "top" : "bottom"];
-        
-        step.style.left = `${realLeft}px`;
-        step.style.top = `${realTop}px`;
-      }
-
-      if (realLeft + childWidth > window.innerWidth) {
-        realLeft =
-          placementStrategies[placement === "right" ? "left" : "right"];
-        
-        step.style.left = `${realLeft}px`;
-        step.style.top = `${realTop}px`;
+      if (realTop < 0) {
+        realTop = Math.max(realTop, y + gap + height);
+      } else if (realTop + childHeight > window.innerHeight) {
+        realTop = Math.min(realTop, y - childHeight - gap);
       }
 
       if (realLeft < 0) {
-        realLeft =
-          placementStrategies[placement === "left" ? "right" : "left"];
-        
-        step.style.left = `${realLeft}px`;
-        step.style.top = `${realTop}px`;
+        realLeft = Math.max(realLeft, x + width + gap);
+      } else if (realLeft + childWidth > window.innerWidth) {
+        realLeft = Math.min(realLeft, x - childWidth - gap);
       }
 
-
-        
+      step.style.left = `${realLeft}px`;
+      step.style.top = `${realTop}px`;
     } catch (error) {
+      console.log(error);
+
       console.warn(
         `[EaTourStep] placement ${step.placement} is not supported.`
       );
