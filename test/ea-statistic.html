@@ -30,7 +30,7 @@
       <ea-statistic value="138">
         <div slot="title" style="display: inline-flex; align-items: center">
           Ratio of men to women
-          <ea-icon style="margin-left: 4px" size="12px" icon="icon-mars">
+          <ea-icon style="margin-left: 4px" size="12" icon="icon-mars">
           </ea-icon>
         </div>
         <div slot="suffix">/100</div>
@@ -38,7 +38,7 @@
       <ea-statistic title="Total Transactions" value="172000"></ea-statistic>
       <ea-statistic title="Feedback number" value="562">
         <div slot="suffix">
-          <ea-icon style="vertical-align: -0.125em" icon="icon-comment-empty">
+          <ea-icon style="vertical-align: middle" icon="icon-comment-empty">
           </ea-icon>
         </div>
       </ea-statistic>
@@ -68,21 +68,25 @@
           Reset
         </ea-button>
       </div>
-      <ea-countdown
-        id="countdown3"
-        title="Countdown"
-        format="DD [days] HH:mm:ss"
-      >
-        <div style="display: inline-flex; align-items: center" slot="title">
-          <ea-icon
-            style="margin-right: 4px"
-            size="12"
-            icon="icon-calendar-times-o"
-          >
-          </ea-icon>
-          Still to go until next month
-        </div>
-      </ea-countdown>
+
+      <div>
+        <ea-countdown
+          id="countdown3"
+          title="Countdown"
+          format="DD [days] HH:mm:ss"
+        >
+          <div style="display: inline-flex; align-items: center" slot="title">
+            <ea-icon
+              style="margin-right: 4px"
+              size="12"
+              icon="icon-calendar-times-o"
+            >
+            </ea-icon>
+            <span> Still to go until next month </span>
+          </div>
+        </ea-countdown>
+        <span id="countdownFooter"></span>
+      </div>
     </div>
 
     <script type="module">
@@ -91,14 +95,26 @@
         countdown2: document.querySelector("#countdown2"),
         countdown3: document.querySelector("#countdown3"),
 
+        countdownFooter: document.querySelector("#countdownFooter"),
+
         init() {
-          const now = Date.now();
-          this.countdown1.setAttribute("value", now + 1000 * 60 * 60 * 7);
-          this.countdown2.setAttribute("value", now + 1000 * 60 * 60 * 24 * 2);
+          this.countdown1.setAttribute(
+            "value",
+            Date.now() + 1000 * 60 * 60 * 7
+          );
+          this.countdown2.setAttribute(
+            "value",
+            Date.now() + 1000 * 60 * 60 * 24 * 2
+          );
           this.countdown3.setAttribute(
             "value",
-            dayjs(now).add(1, "month").startOf("month").toDate()
+            dayjs().add(1, "month").startOf("month")
           );
+
+          this.countdownFooter.textContent = dayjs()
+            .add(12, "month")
+            .startOf("month")
+            .format("YYYY-MM-DD");
         },
       };
       countdownExample.init();

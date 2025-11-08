@@ -27,16 +27,71 @@ export class EaCountdown extends EaStatistic {
       observer: (newVal) => {
         if (this.#timer) clearInterval(this.#timer);
 
-        let value = dayjs(newVal).unix();
+        /**
+         * 获取时间差
+         * @param {dayjs} date
+         * @param {string} format
+         * @return {string}
+         */
+        const getDiffTime = (date, format) => {
+          const now = dayjs();
+          const end = dayjs(date);
+          const diff = dayjs(end).diff(now);
+          const duration = dayjs.duration(diff);
+          const pad = (num, len = 2) => `${num}`.padStart(len, "0");
 
-        this.#number.textContent = dayjs(value).format(this.format);
+          if (diff <= 0 || end.isBefore(now)) return "00:00:00";
 
-        // TODO: 处理 倒计时更新
+          let years = duration.years();
+          let months = duration.months();
+          let days = duration.days();
+          let hours = duration.hours();
+          let minutes = duration.minutes();
+          let seconds = duration.seconds();
+          let milliseconds = duration.milliseconds();
+
+          if (!format.includes("YY") && format.includes("MM")) {
+            months = Math.floor(duration.asMonths());
+          }
+
+          if (!format.includes("MM") && format.includes("DD")) {
+            days = Math.floor(duration.asDays());
+          }
+
+          if (!format.includes("DD") && format.includes("HH")) {
+            hours = Math.floor(duration.asHours());
+          }
+
+          if (!format.includes("HH") && format.includes("mm")) {
+            minutes = Math.floor(duration.asMinutes());
+          }
+
+          if (!format.includes("mm") && format.includes("ss")) {
+            seconds = Math.floor(duration.asSeconds());
+          }
+
+          if (!format.includes("ss") && format.includes("SSS")) {
+            milliseconds = Math.floor(duration.asMilliseconds());
+          }
+
+          return format
+            .replace("YYYY", pad(years))
+            .replace("MM", pad(months))
+            .replace("DD", pad(days))
+            .replace("HH", pad(hours))
+            .replace("mm", pad(minutes))
+            .replace("ss", pad(seconds))
+            .replace("SSS", pad(milliseconds, 3))
+            .replace(/\[|\]/g, "");
+        };
+
+        this.#number.textContent = getDiffTime(newVal, this.format);
+
         this.#timer = setInterval(() => {
-          value--;
-          console.log(value);
+          const diff = getDiffTime(newVal, this.format);
+          this.#number.textContent = diff;
 
-          this.#number.textContent = dayjs(value).format(this.format);
+          if (diff <= 0) clearInterval(this.#timer);
         }, 1000);
       },
     },

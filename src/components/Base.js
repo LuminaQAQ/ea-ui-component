@@ -2,7 +2,10 @@ import { timeout } from "../utils/timeout";
 import variable from "../themes/variables.scss?inline";
 import "./ea-icon/index.js";
 import EaUtils from "@/utils/Utils";
+
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 
 export default class Base extends HTMLElement {
   #stateConfigs = {};
@@ -399,9 +402,13 @@ export default class Base extends HTMLElement {
   }
 
   getAttrDate(attrName, defaultValue) {
-    const attr = this.getAttribute(attrName);
+    /** @type {dayjs.Dayjs | Date | number} */
+    let attr = this.getAttrNumber(attrName);
 
-    return attr ? dayjs(attr).unix() : defaultValue || null;
+    if (isNaN(attr) || !attr) attr = dayjs(this.getAttrString(attrName));
+    else attr = dayjs(attr);
+
+    return attr.isValid() ? attr.valueOf() : defaultValue || null;
   }
 
   setAttr(attrName, value) {
