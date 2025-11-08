@@ -1,0 +1,40 @@
+$name: ea-statistic;
+
+:host {
+  --#{$name}-title-size: var(--font-size-md);
+  --#{$name}-number-size: 22px;
+
+  --#{$name}-title-color: var(--grey-700);
+  --#{$name}-number-color: var(--grey-900);
+}
+
+:host {
+  display: block;
+}
+
+@include block(ea-statistic) {
+  @include element(header) {
+    color: var(--#{$name}-title-color);
+    font-size: var(--#{$name}-title-size);
+
+    text-align: center;
+  }
+
+  @include element(content) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--#{$name}-number-size);
+  }
+
+  @include element(prefix) {
+  }
+
+  @include element(number) {
+    color: var(--#{$name}-number-color);
+  }
+
+  @include element(suffix) {
+  }
+}
