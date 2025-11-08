@@ -65,26 +65,22 @@ export class EaStatistic extends Base {
           <slot name='title'></slot>
         </header>
         <main class='ea-statistic__content' part='content'>
-          <div class='ea-statistic__prefix' part='prefix'>
+          <span class='ea-statistic__prefix' part='prefix'>
             <slot name='prefix'></slot>
-          </div>
-          <div class='ea-statistic__number' part='number'>
-            <slot>
-              <span></span>
-            </slot>
-          </div>
-          <div class='ea-statistic__suffix' part='suffix'>
+          </span>
+          <span class='ea-statistic__number' part='number'>
+            <slot></slot>
+          </span>
+          <span class='ea-statistic__suffix' part='suffix'>
             <slot name='suffix'></slot>
-          </div>
+          </span>
         </main>
       </div>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-statistic");
     this.#title = this.shadowRoot.querySelector(".ea-statistic__header slot");
-    this.#number = this.shadowRoot.querySelector(
-      ".ea-statistic__number slot span"
-    );
+    this.#number = this.shadowRoot.querySelector(".ea-statistic__number");
     this.#prefix = this.shadowRoot.querySelector(".ea-statistic__prefix slot");
     this.#suffix = this.shadowRoot.querySelector(".ea-statistic__suffix slot");
   }

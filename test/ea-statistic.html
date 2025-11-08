@@ -18,7 +18,8 @@
       type="module"
       src="../src/components/ea-statistic/index.js"
     ></script>
-    <script type="module" src="../src/components/ea-layout/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../node_modules/dayjs/dayjs.min.js"></script>
 
     <!--  基础用法 -->
     <!-- #region -->
@@ -42,6 +43,66 @@
         </div>
       </ea-statistic>
     </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  倒计时 -->
+    <!-- #region -->
+    <h1>倒计时</h1>
+
+    <div class="demo">
+      <ea-countdown id="countdown1" title="Start to grab"></ea-countdown>
+      <div>
+        <ea-countdown
+          id="countdown2"
+          title="Remaining VIP time"
+          format="HH:mm:ss"
+        >
+        </ea-countdown>
+        <ea-button
+          type="primary"
+          onclick="document.getElementById('countdown2').setAttribute('value', Date.now() + 1000 * 60 * 60 * 24 * 2);"
+        >
+          Reset
+        </ea-button>
+      </div>
+      <ea-countdown
+        id="countdown3"
+        title="Countdown"
+        format="DD [days] HH:mm:ss"
+      >
+        <div style="display: inline-flex; align-items: center" slot="title">
+          <ea-icon
+            style="margin-right: 4px"
+            size="12"
+            icon="icon-calendar-times-o"
+          >
+          </ea-icon>
+          Still to go until next month
+        </div>
+      </ea-countdown>
+    </div>
+
+    <script type="module">
+      const countdownExample = {
+        countdown1: document.querySelector("#countdown1"),
+        countdown2: document.querySelector("#countdown2"),
+        countdown3: document.querySelector("#countdown3"),
+
+        init() {
+          const now = Date.now();
+          this.countdown1.setAttribute("value", now + 1000 * 60 * 60 * 7);
+          this.countdown2.setAttribute("value", now + 1000 * 60 * 60 * 24 * 2);
+          this.countdown3.setAttribute(
+            "value",
+            dayjs(now).add(1, "month").startOf("month").toDate()
+          );
+        },
+      };
+      countdownExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->

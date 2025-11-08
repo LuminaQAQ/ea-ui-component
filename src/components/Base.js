@@ -2,6 +2,7 @@ import { timeout } from "../utils/timeout";
 import variable from "../themes/variables.scss?inline";
 import "./ea-icon/index.js";
 import EaUtils from "@/utils/Utils";
+import dayjs from "dayjs";
 
 export default class Base extends HTMLElement {
   #stateConfigs = {};
@@ -92,6 +93,10 @@ export default class Base extends HTMLElement {
         return "RegExp";
       }
 
+      if (type === Date) {
+        return "Date";
+      }
+
       if (type === Array) {
         return "Array";
       }
@@ -105,7 +110,7 @@ export default class Base extends HTMLElement {
           return realType[0];
         } catch (error) {
           console.error(
-            `[${this.tagName}] Every “type” entry must be a function. Received:`,
+            `[${this.tagName}] Every "type" entry must be a function. Received:`,
             type
           );
         }
@@ -138,6 +143,10 @@ export default class Base extends HTMLElement {
         return isNaN(num) ? parseDefaultValue(config?.default) : num;
       }
 
+      if (type === Date) {
+        return new dayjs(rawValue);
+      }
+
       if (Array.isArray(type)) {
         return type.includes(rawValue)
           ? rawValue
@@ -163,7 +172,12 @@ export default class Base extends HTMLElement {
 
     for (const [key, config] of Object.entries(states)) {
       const realKey = EaUtils.String.toLowerCamelCase(key);
+
       this.#stateConfigs[realKey] = config;
+
+      if (Object.getOwnPropertyDescriptor(this, realKey)) {
+        delete this[realKey];
+      }
 
       Object.defineProperty(this, realKey, {
         get: () => {
@@ -177,6 +191,8 @@ export default class Base extends HTMLElement {
         set: (value) => {
           this.setAttr(realKey, parseValue(realKey, value));
         },
+        configurable: true,
+        enumerable: true,
       });
     }
   };
@@ -380,6 +396,12 @@ export default class Base extends HTMLElement {
     const attr = EaUtils.JSON.parse(this.getAttribute(attrName));
 
     return Array.isArray(attr) ? attr : attr ? [attr] : defaultValue;
+  }
+
+  getAttrDate(attrName, defaultValue) {
+    const attr = this.getAttribute(attrName);
+
+    return attr ? dayjs(attr).unix() : defaultValue || null;
   }
 
   setAttr(attrName, value) {

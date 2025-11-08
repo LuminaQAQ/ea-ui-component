@@ -16,11 +16,14 @@ $name: ea-statistic;
   @include element(header) {
     color: var(--#{$name}-title-color);
     font-size: var(--#{$name}-title-size);
+
+    text-align: center;
   }
 
   @include element(content) {
     display: flex;
     align-items: center;
+    justify-content: center;
 
     font-size: var(--#{$name}-number-size);
   }
