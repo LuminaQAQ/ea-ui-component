@@ -1,6 +1,6 @@
 import Base from "@components/Base.js";
 
-import stylesheet from "./index.scss?inline";
+import stylesheet from "../../index.scss?inline";
 
 export class EaStatistic extends Base {
   /** @type {HTMLElement} */

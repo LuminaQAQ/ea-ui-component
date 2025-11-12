@@ -19,6 +19,7 @@
       src="../src/components/ea-statistic/index.js"
     ></script>
     <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-tooltip/index.js"></script>
     <script type="module" src="../node_modules/dayjs/dayjs.min.js"></script>
 
     <!--  基础用法 -->
@@ -54,7 +55,14 @@
 
     <div class="demo">
       <ea-countdown id="countdown1" title="Start to grab"></ea-countdown>
-      <div>
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        "
+      >
         <ea-countdown
           id="countdown2"
           title="Remaining VIP time"
@@ -69,7 +77,14 @@
         </ea-button>
       </div>
 
-      <div>
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        "
+      >
         <ea-countdown
           id="countdown3"
           title="Countdown"
@@ -108,17 +123,148 @@
           );
           this.countdown3.setAttribute(
             "value",
-            dayjs().add(1, "month").startOf("month")
+            dayjs().add(1, "month").startOf("month").format("YYYY-MM-DD")
           );
 
           this.countdownFooter.textContent = dayjs()
-            .add(12, "month")
+            .add(1, "month")
             .startOf("month")
             .format("YYYY-MM-DD");
         },
       };
       countdownExample.init();
     </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  统计卡片 -->
+    <!-- #region -->
+    <h1>统计卡片</h1>
+
+    <style>
+      .statistic-card {
+        box-sizing: border-box;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        height: 100%;
+        padding: 20px;
+        border-radius: 4px;
+      }
+
+      .statistic-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: 12px;
+        margin-top: 16px;
+      }
+
+      .statistic-footer .footer-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .statistic-footer .footer-item span:last-child {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 4px;
+      }
+
+      .green {
+        color: #67c23a;
+      }
+      .red {
+        color: #f56c6c;
+      }
+    </style>
+
+    <div class="demo row">
+      <div class="statistic-card">
+        <ea-statistic value="98500">
+          <div style="display: inline-flex; align-items: center" slot="title">
+            Daily active users
+            <ea-tooltip
+              effect="dark"
+              content="Number of users who logged into the product in one day"
+              placement="top"
+            >
+              <ea-icon
+                style="margin-left: 4px"
+                slot="reference"
+                size="12"
+                icon="icon-attention-alt"
+              ></ea-icon>
+            </ea-tooltip>
+          </div>
+        </ea-statistic>
+        <div class="statistic-footer">
+          <div class="footer-item">
+            <span>than yesterday</span>
+            <span class="green">
+              24%
+              <ea-icon icon="icon-angle-up"> </ea-icon>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="statistic-card">
+        <ea-statistic value="693700">
+          <div style="display: inline-flex; align-items: center" slot="title">
+            Monthly Active Users
+            <ea-tooltip
+              effect="dark"
+              content="Number of users who logged into the product in one month"
+              placement="top"
+            >
+              <ea-icon
+                style="margin-left: 4px"
+                slot="reference"
+                size="12"
+                icon="icon-attention-alt"
+              ></ea-icon>
+            </ea-tooltip>
+          </div>
+        </ea-statistic>
+        <div class="statistic-footer">
+          <div class="footer-item">
+            <span>month on month</span>
+            <span class="red">
+              12%
+              <ea-icon icon="icon-angle-down"></ea-icon>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="statistic-card">
+        <ea-statistic value="72000" title="New transactions today">
+          <div style="display: inline-flex; align-items: center" slot="title">
+            New transactions today
+          </div>
+        </ea-statistic>
+        <div class="statistic-footer">
+          <div class="footer-item">
+            <span>than yesterday</span>
+            <span class="green">
+              16%
+              <ea-icon icon="icon-angle-up"> </ea-icon>
+            </span>
+          </div>
+          <div class="footer-item">
+            <ea-icon size="14">
+              <ArrowRight />
+            </ea-icon>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <hr />
     <!-- #endregion  -->
