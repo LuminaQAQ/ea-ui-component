@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ea-segmented</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-segmented/index.js"
+    ></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <ea-segmented
+        id="basicSegmentedLarge"
+        value="Mon"
+        size="large"
+      ></ea-segmented>
+      <ea-segmented
+        id="basicSegmentedDefault"
+        value="Mon"
+        size="default"
+      ></ea-segmented>
+      <ea-segmented
+        id="basicSegmentedSmall"
+        value="Mon"
+        size="small"
+      ></ea-segmented>
+    </div>
+
+    <script type="module">
+      const basicExample = {
+        els: [
+          document.querySelector("#basicSegmentedLarge"),
+          document.querySelector("#basicSegmentedDefault"),
+          document.querySelector("#basicSegmentedSmall"),
+        ],
+        options: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+
+        init() {
+          this.els.forEach((el) => {
+            el.setAttribute("options", JSON.stringify(this.options));
+          });
+        },
+      };
+
+      basicExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

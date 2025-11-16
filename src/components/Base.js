@@ -224,6 +224,7 @@ export default class Base extends HTMLElement {
     // }
 
     try {
+      if (this.#stateConfigs[name]?.props) return;
       const parseValue = (key, rawValue) => {
         const config = this.#stateConfigs[key];
         const type = config?.type;

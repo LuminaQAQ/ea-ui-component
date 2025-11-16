@@ -100,5 +100,23 @@
       "    // ------- end -------"
     ],
     "description": "getter+setter"
+  },
+  "ea-prop": {
+    "scope": "javascript,typescript",
+    "prefix": "ea-prop",
+    "body": [
+      "    // ------- $0 -------",
+      "    // #region",
+      "    get $0() {",
+      "      return this.#props.$0;",
+      "    }",
+      "",
+      "    set $0(value) {",
+      "      this.#props.$0 = value;",
+      "    }",
+      "    // #endregion",
+      "    // ------- end -------"
+    ],
+    "description": "getter+setter"
   }
 }

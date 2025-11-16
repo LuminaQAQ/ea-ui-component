@@ -153,6 +153,9 @@
     "./ea-scrollbar": {
       "import": "./dist/ea-scrollbar.js"
     },
+    "./ea-segmented": {
+      "import": "./dist/ea-segmented.js"
+    },
     "./ea-select": {
       "import": "./dist/ea-select.js"
     },
