@@ -55,11 +55,11 @@
 - [x] Result 结果
 - [x] Skeleton 骨架屏
 - [ ] Table 表格
-- [ ] Tag 标签
-- [ ] Timeline 时间线
-- [ ] Tour 漫游式引导
+- [x] Tag 标签
+- [x] Timeline 时间线
+- [x] Tour 漫游式引导
 - [ ] Tree 树形控件
-- [ ] Statistic 统计组件
+- [x] Statistic 统计组件
 - [ ] Segmented 分段控制器
 
 ## Navigation 导航

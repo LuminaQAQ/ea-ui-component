@@ -200,19 +200,12 @@ export class EaTable extends Base {
           el.dataset.order = order === "asc" ? "desc" : "asc";
           icon[el.dataset.order].classList.add("is-active");
 
-          // REFACTOR: 试试diff
-          this.setData(
-            this.#states.dataSource.sort((a, b) => {
-              return el.dataset.order === "asc"
-                ? String(a[prop]).localeCompare(b[prop])
-                : String(b[prop]).localeCompare(a[prop]);
-            })
-          );
+          this.sort(prop, el.dataset.order);
         });
       });
     }
 
-    this.dispatchEvent("ea-table-rendered");
+    this.emit("ea-table-rendered");
   }
 
   setData = (dataSource) => {
@@ -284,7 +277,30 @@ export class EaTable extends Base {
     this.#handleFixedColumn();
     this.#initScrollEvent();
     this.#states.isDataRendered = true;
-    this.dispatchEvent("data-rendered");
+    this.emit("ea-table-data-rendered");
+  };
+
+  sort = (prop, order = "asc") => {
+    const rows = [...this.#tbody.querySelectorAll(".ea-table__tr")];
+    const template = document.createDocumentFragment();
+    const sortRes = rows.sort((a, b) => {
+      const aIndex = a.dataset.index;
+      const bIndex = b.dataset.index;
+
+      return order === "asc"
+        ? String(this.#states.dataSource[aIndex][prop]).localeCompare(
+            this.#states.dataSource[bIndex][prop]
+          )
+        : String(this.#states.dataSource[bIndex][prop]).localeCompare(
+            this.#states.dataSource[aIndex][prop]
+          );
+    });
+
+    sortRes.forEach((tr) => {
+      template.appendChild(tr);
+    });
+
+    this.#tbody.appendChild(template);
   };
 
   /**
@@ -492,12 +508,12 @@ export class EaTable extends Base {
     const td = e.target.closest("td");
     if (tr) {
       this.#states.currentRow = this.#states.dataSource[tr.dataset.index];
-      this.dispatchEvent("row-click", {
+      this.emit("row-click", {
         detail: this.#states.dataSource[tr.dataset.index],
       });
     }
     if (td) {
-      this.dispatchEvent("cell-click");
+      this.emit("cell-click");
     }
   };
 
