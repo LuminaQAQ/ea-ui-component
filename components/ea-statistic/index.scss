@@ -18,6 +18,8 @@ $name: ea-statistic;
     font-size: var(--#{$name}-title-size);
 
     text-align: center;
+
+    margin-bottom: 6px;
   }
 
   @include element(content) {
@@ -26,6 +28,8 @@ $name: ea-statistic;
     justify-content: center;
 
     font-size: var(--#{$name}-number-size);
+
+    margin-bottom: 8px;
   }
 
   @include element(prefix) {
