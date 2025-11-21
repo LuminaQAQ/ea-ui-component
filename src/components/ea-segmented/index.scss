@@ -1,0 +1,133 @@
+$name: ea-segmented;
+$size-type: (small, large);
+
+:host {
+  --#{$name}-item-small-spacing: 0 7px;
+  --#{$name}-item-default-spacing: 0 11px;
+  --#{$name}-item-large-spacing: 0 11px;
+
+  --#{$name}-item-small-size: var(--font-size-sm);
+  --#{$name}-item-default-size: var(--font-size-md);
+  --#{$name}-item-large-size: var(--font-size-lg);
+
+  --#{$name}-item-small-height: 24px;
+  --#{$name}-item-default-height: 32px;
+  --#{$name}-item-large-height: 40px;
+
+  --#{$name}-bgc: var(--grey-100);
+  --#{$name}-hover-bgc: var(--grey-200);
+  --#{$name}-checked-bgc: var(--blue-600);
+
+  --#{$name}-item-disabled-color: var(--grey-400);
+
+  --#{$name}-indicator-color: var(--blue-500);
+  --#{$name}-item-checked-color: var(--color-white);
+
+  --#{$name}-indicator-height: 100%;
+  --#{$name}-indicator-width: 0;
+  --#{$name}-indicator-position-x: 0;
+  --#{$name}-indicator-position-y: 0;
+
+  --#{$name}-transition: var(--transition-normal);
+}
+
+@include block($name) {
+  position: relative;
+  display: inline-flex;
+  background-color: var(--#{$name}-bgc);
+  min-height: var(--#{$name}-item-default-height);
+
+  #defaultSlot {
+    display: none;
+  }
+
+  @include element(item) {
+    box-sizing: border-box;
+    padding: var(--#{$name}-item-default-spacing);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    font-size: var(--#{$name}-item-default-size);
+
+    z-index: 1;
+
+    transition: color var(--#{$name}-transition);
+
+    &:hover {
+      background-color: var(--#{$name}-hover-bgc);
+    }
+
+    &.is-checked {
+      color: var(--#{$name}-item-checked-color);
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
+    &.is-disabled {
+      cursor: not-allowed;
+      color: var(--#{$name}-item-disabled-color);
+      background-color: var(--#{$name}-item-disabled-bgc);
+      &:hover {
+        background-color: var(--#{$name}-item-disabled-bgc);
+      }
+    }
+  }
+
+  @include element(original) {
+    display: none;
+  }
+
+  @include element(label) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include element(indicator) {
+    position: absolute;
+    top: var(--#{$name}-indicator-position-y);
+    left: var(--#{$name}-indicator-position-x);
+
+    width: var(--#{$name}-indicator-width);
+    height: var(--#{$name}-indicator-height);
+    background-color: var(--#{$name}-indicator-color);
+
+    transform-style: preserve-3d;
+    z-index: 0;
+
+    transition: var(--#{$name}-transition);
+  }
+
+  @each $type in $size-type {
+    @include modifier($type) {
+      min-height: var(--#{$name}-item-#{$type}-height);
+
+      .ea-segmented__item {
+        padding: var(--#{$name}-item-#{$type}-spacing);
+        font-size: var(--#{$name}-item-#{$type}-size);
+      }
+    }
+  }
+
+  @include state(vertical) {
+    flex-direction: column;
+    min-height: auto;
+
+    .ea-segmented__item {
+      min-height: var(--#{$name}-item-default-height);
+    }
+
+    @each $type in $size-type {
+      &.ea-segmented--#{$type} {
+        .ea-segmented__item {
+          min-height: var(--#{$name}-item-#{$type}-height);
+        }
+      }
+    }
+  }
+}

@@ -23,19 +23,22 @@
     <!-- #region -->
     <h1>基础用法</h1>
 
-    <div class="demo">
+    <div class="demo" style="display: flex; flex-direction: column">
       <ea-segmented
         id="basicSegmentedLarge"
+        name="week"
         value="Mon"
         size="large"
       ></ea-segmented>
       <ea-segmented
         id="basicSegmentedDefault"
+        name="week"
         value="Mon"
         size="default"
       ></ea-segmented>
       <ea-segmented
         id="basicSegmentedSmall"
+        name="week"
         value="Mon"
         size="small"
       ></ea-segmented>
@@ -52,12 +55,102 @@
 
         init() {
           this.els.forEach((el) => {
-            el.setAttribute("options", JSON.stringify(this.options));
+            el.options = this.options;
+
+            el.addEventListener("change", (e) => {
+              console.log(e.detail.value);
+            });
           });
         },
       };
 
       basicExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  配置方向 -->
+    <!-- #region -->
+    <h1>配置方向</h1>
+
+    <div class="demo" style="display: flex; flex-direction: column">
+      <ea-segmented
+        id="sizeSegmented"
+        name="size"
+        value="default"
+      ></ea-segmented>
+      <ea-segmented
+        id="directionSegmented"
+        name="direction"
+        value="horizontal"
+      ></ea-segmented>
+      <ea-segmented
+        id="directionSegmentedOptions"
+        name="fruit"
+        value="Apple"
+      ></ea-segmented>
+    </div>
+
+    <script type="module">
+      const directionExample = {
+        sizeSegmented: document.querySelector("#sizeSegmented"),
+        directionSegmented: document.querySelector("#directionSegmented"),
+        directionSegmentedOptions: document.querySelector(
+          "#directionSegmentedOptions"
+        ),
+        sizeOptions: ["large", "default", "small"],
+        directionOptions: [
+          { label: "Horizontal", value: "horizontal" },
+          { label: "Vertical", value: "vertical" },
+        ],
+        options: [
+          {
+            label: "Apple",
+            value: "Apple",
+          },
+          {
+            label: "Cherry",
+            value: "Cherry",
+          },
+          {
+            label: "Grape",
+            value: "Grape",
+          },
+          {
+            label: "Orange",
+            value: "Orange",
+          },
+          {
+            label: "Pear",
+            value: "Pear",
+          },
+          {
+            label: "Watermelon",
+            value: "Watermelon",
+            disabled: true,
+          },
+        ],
+
+        init() {
+          this.sizeSegmented.options = this.sizeOptions;
+          this.directionSegmented.options = this.directionOptions;
+          this.directionSegmentedOptions.options = this.options;
+
+          this.sizeSegmented.addEventListener("change", (e) => {
+            this.directionSegmentedOptions.size = e.detail.value;
+          });
+
+          this.directionSegmented.addEventListener("change", (e) => {
+            console.log(e.detail.value);
+
+            this.directionSegmentedOptions.direction = e.detail.value;
+          });
+        },
+      };
+
+      directionExample.init();
     </script>
 
     <hr />
