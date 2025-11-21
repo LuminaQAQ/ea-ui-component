@@ -41,13 +41,19 @@ const handleChildren = (children) => {
  * @returns
  */
 export const h = (tagName, className, props, children) => {
+  const notEndTag = ["input"];
+
   return `<${tagName} ${handleProps("class", className)} ${
     props
       ? Object.entries(props)
           .map(([key, value]) => handleProps(key, value))
           .join(" ")
       : ""
-  }>
+  }${
+    notEndTag.includes(tagName)
+      ? "/>"
+      : `${`>
     ${handleChildren(children)}
-  </${tagName}>`;
+  </${tagName}>`}`
+  }`;
 };

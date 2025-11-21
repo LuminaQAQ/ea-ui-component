@@ -15,6 +15,8 @@ export default class Base extends HTMLElement {
     return [];
   }
 
+  props = {};
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -184,6 +186,9 @@ export default class Base extends HTMLElement {
 
       Object.defineProperty(this, realKey, {
         get: () => {
+          if (config?.props)
+            return parseValue(realKey, this.props?.[realKey] || config.default);
+
           const type = parseType(config.type);
 
           return this[`getAttr${type}`](
@@ -192,6 +197,13 @@ export default class Base extends HTMLElement {
           );
         },
         set: (value) => {
+          if (config?.props) {
+            const oldValue = this.props?.[realKey];
+            this.props[realKey] = value;
+            config?.observer?.(value, oldValue);
+            return;
+          }
+
           this.setAttr(realKey, parseValue(realKey, value));
         },
         configurable: true,
@@ -224,6 +236,7 @@ export default class Base extends HTMLElement {
     // }
 
     try {
+      if (this.#stateConfigs[name]?.props) return;
       const parseValue = (key, rawValue) => {
         const config = this.#stateConfigs[key];
         const type = config?.type;

@@ -46,6 +46,7 @@ import './ea-radio/index.js';
 import './ea-rate/index.js';
 import './ea-result/index.js';
 import './ea-scrollbar/index.js';
+import './ea-segmented/index.js';
 import './ea-select/index.js';
 import './ea-skeleton/index.js';
 import './ea-space/index.js';
