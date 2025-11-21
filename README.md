@@ -60,13 +60,13 @@
 - [x] Tour 漫游式引导
 - [ ] Tree 树形控件
 - [x] Statistic 统计组件
-- [ ] Segmented 分段控制器
+- [x] Segmented 分段控制器
 
 ## Navigation 导航
 
 - [ ] Affix 固钉
 - [ ] Anchor 锚点
-- [ ] Backtop 回到顶部
+- [x] Backtop 回到顶部
 - [ ] Breadcrumb 面包屑
 - [ ] Dropdown 下拉菜单
 - [ ] Menu 菜单

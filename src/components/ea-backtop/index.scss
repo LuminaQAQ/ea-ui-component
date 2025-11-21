@@ -1,29 +1,57 @@
-@import "../ea-ui-base-style.scss";
-@import "../ea-icon/index.scss";
+$name: ea-backtop;
 
-.ea-backtop_wrap {
+:host {
+  --#{$name}-right: 40px;
+  --#{$name}-bottom: 40px;
+
+  --#{$name}-size: 40px;
+  --#{$name}-border-radius: var(--border-radius-circle);
+
+  --#{$name}-font-size: var(--font-size-md);
+
+  --#{$name}-color: var(--blue-500);
+  --#{$name}-background-color: var(--grey-100);
+  --#{$name}-box-shadow: var(--box-shadow-md);
+
+  --#{$name}-transition: var(--transition-normal);
+
+  --#{$name}-z-index: 1000;
+}
+
+@include block($name) {
   position: fixed;
 
-  display: flex;
+  opacity: 0;
+  display: none;
   align-items: center;
   justify-content: center;
 
-  width: 40px;
-  height: 40px;
+  width: var(--#{$name}-size);
+  height: var(--#{$name}-size);
 
-  right: 40px;
-  bottom: 40px;
+  right: var(--#{$name}-right);
+  bottom: var(--#{$name}-bottom);
   cursor: pointer;
 
-  background-color: #fff;
-  border-radius: 50%;
-  color: #409eff;
-  font-size: 14px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+  font-size: var(--#{$name}-font-size);
+  color: var(--#{$name}-color);
+  background-color: var(--#{$name}-background-color);
+  box-shadow: var(--#{$name}-box-shadow);
+  border-radius: var(--#{$name}-border-radius);
 
-  opacity: 1;
+  z-index: var(--#{$name}-z-index);
+  transition: opacity var(--#{$name}-transition);
 
-  z-index: 5;
+  &.before-enter {
+    display: flex;
+  }
 
-  transition: opacity 0.3s ease-in-out;
+  @include state(visible) {
+    display: flex;
+    opacity: 1;
+  }
+
+  &.before-leave {
+    opacity: 0;
+  }
 }
