@@ -76,6 +76,7 @@ export default class Base extends HTMLElement {
    * @param {Object.<string, {
    *   type: (Function|Array<*>),
    *   default: any,
+   *   props?: Boolean,
    *   observer?: (newVal: any, oldVal?: any) => void
    * }>} states 配置对象，每个 key 是一个响应式字段名
    * @returns {void}
@@ -184,31 +185,36 @@ export default class Base extends HTMLElement {
         delete this[realKey];
       }
 
-      Object.defineProperty(this, realKey, {
-        get: () => {
-          if (config?.props)
-            return parseValue(realKey, this.props?.[realKey] || config.default);
-
-          const type = parseType(config.type);
-
-          return this[`getAttr${type}`](
-            realKey,
-            parseDefaultValue(config?.default)
-          );
-        },
-        set: (value) => {
-          if (config?.props) {
-            const oldValue = this.props?.[realKey];
-            this.props[realKey] = value;
+      if (config?.props) {
+        Object.defineProperty(this, key, {
+          get: () => {
+            return parseValue(key, this.props?.[key] || config.default);
+          },
+          set: (value) => {
+            const oldValue = this.props?.[key];
+            this.props[key] = value;
             config?.observer?.(value, oldValue);
-            return;
-          }
+          },
+          configurable: true,
+          enumerable: true,
+        });
+      } else {
+        Object.defineProperty(this, realKey, {
+          get: () => {
+            const type = parseType(config.type);
 
-          this.setAttr(realKey, parseValue(realKey, value));
-        },
-        configurable: true,
-        enumerable: true,
-      });
+            return this[`getAttr${type}`](
+              realKey,
+              parseDefaultValue(config?.default)
+            );
+          },
+          set: (value) => {
+            this.setAttr(realKey, parseValue(realKey, value));
+          },
+          configurable: true,
+          enumerable: true,
+        });
+      }
     }
   };
 
