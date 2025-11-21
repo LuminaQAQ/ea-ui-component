@@ -10,7 +10,7 @@ export class EaSegmented extends Base {
   #abortController;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "value", "size", "direction"];
+    return [...super.observedAttributes, "value", "size", "direction", "block"];
   }
 
   state = this.properties({
@@ -24,6 +24,16 @@ export class EaSegmented extends Base {
 
         this.#renderOptions(newVal);
       },
+    },
+    propsConfiguration: {
+      props: true,
+      type: Object,
+      default: {
+        label: "label",
+        value: "value",
+        disabled: "disabled",
+      },
+      observer: (newVal) => {},
     },
     value: {
       type: String,
@@ -48,6 +58,20 @@ export class EaSegmented extends Base {
         this.#updateIndicatorPosition(this.value);
       },
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    block: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -60,7 +84,10 @@ export class EaSegmented extends Base {
       {
         ["--" + this.size]: this.size,
       },
-      { [this.direction]: this.direction }
+      {
+        [this.direction]: this.direction,
+        block: this.block,
+      }
     );
 
     this.#container.className = className;
@@ -79,7 +106,6 @@ export class EaSegmented extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class='ea-segmented' part='container'></div>
-      <slot id="defaultSlot"></slot>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-segmented");
@@ -87,13 +113,15 @@ export class EaSegmented extends Base {
   }
 
   /**
-   * 渲染选项
+   * 渲染选项列表
    * @param {Array<{label: string, value: string, disabled: Boolean}> | Array<String>} options
    */
   #renderOptions(options) {
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
+    const config = this.propsConfiguration;
+    /** @type {String} 选项列表的模板 */
     const optionsTemplate = options
       .map((item) =>
         EaUtils.EaElement.h(
@@ -102,13 +130,13 @@ export class EaSegmented extends Base {
           {
             class: [
               "ea-segmented__item",
-              item.disabled || this.disabled ? "is-disabled" : "",
+              item[config.disabled] || this.disabled ? "is-disabled" : "",
               item.checked || this.value === (item.value || item)
                 ? "is-checked"
                 : "",
             ],
             part: "item",
-            for: item.label || item.value || item,
+            for: item[config.label] || item[config.value] || item,
           },
           [
             EaUtils.EaElement.h(
@@ -118,10 +146,10 @@ export class EaSegmented extends Base {
                 part: "input",
                 type: "radio",
                 name: this.name || this.getAttrString("name"),
-                id: item.label || item.value || item,
-                value: item.value || item,
+                id: item[config.label] || item[config.value] || item,
+                value: item[config.value] || item,
                 checked: item.checked,
-                disabled: item.disabled || this.disabled,
+                disabled: item[config.disabled] || this.disabled,
               },
               ""
             ),
@@ -130,15 +158,15 @@ export class EaSegmented extends Base {
               "ea-segmented__label",
               {
                 part: "label",
-                "aria-label": item.label || item.value || item,
+                "aria-label": item[config.label] || item[config.value] || item,
               },
-              item.label || item.value || item
+              item[config.label] || item[config.value] || item
             ),
           ]
         )
       )
       .join("");
-
+    /** @type {String} 指示器的模板（蓝色浮层）  */
     const indicatorTemplate = EaUtils.EaElement.h(
       "span",
       "ea-segmented__indicator",
@@ -152,9 +180,19 @@ export class EaSegmented extends Base {
     this.#container.addEventListener("change", this.#onChange, {
       signal: this.#abortController.signal,
     });
+    window.addEventListener(
+      "resize",
+      () => {
+        this.#updateIndicatorPosition(this.value);
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
   }
 
   /**
+   * change 事件
    * @param {Event} e
    */
   #onChange = (e) => {
@@ -166,13 +204,13 @@ export class EaSegmented extends Base {
   };
 
   /**
-   *
+   * 更新指示器位置
    * @param {string} value
    */
-  #updateIndicatorPosition = (value) => {
+  #updateIndicatorPosition = (value = this.value) => {
     if (
       this.options?.includes(value) ||
-      this.options.some((item) => item.value === value)
+      this.options.some((item) => item[this.propsConfiguration.value] === value)
     ) {
       /** @type {HTMLLabelElement[]} */
       const children = [

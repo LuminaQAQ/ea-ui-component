@@ -6,6 +6,8 @@ $size-type: (small, large);
   --#{$name}-item-default-spacing: 0 11px;
   --#{$name}-item-large-spacing: 0 11px;
 
+  --#{$name}-border-radius: 2px;
+
   --#{$name}-item-small-size: var(--font-size-sm);
   --#{$name}-item-default-size: var(--font-size-md);
   --#{$name}-item-large-size: var(--font-size-lg);
@@ -32,10 +34,16 @@ $size-type: (small, large);
 }
 
 @include block($name) {
+  box-sizing: border-box;
+  padding: 2px;
+  border-radius: var(--#{$name}-border-radius);
+
   position: relative;
   display: inline-flex;
   background-color: var(--#{$name}-bgc);
   min-height: var(--#{$name}-item-default-height);
+
+  overflow: hidden;
 
   #defaultSlot {
     display: none;
@@ -44,6 +52,8 @@ $size-type: (small, large);
   @include element(item) {
     box-sizing: border-box;
     padding: var(--#{$name}-item-default-spacing);
+
+    border-radius: var(--#{$name}-border-radius);
 
     display: inline-flex;
     align-items: center;
@@ -93,6 +103,8 @@ $size-type: (small, large);
     top: var(--#{$name}-indicator-position-y);
     left: var(--#{$name}-indicator-position-x);
 
+    border-radius: var(--#{$name}-border-radius);
+
     width: var(--#{$name}-indicator-width);
     height: var(--#{$name}-indicator-height);
     background-color: var(--#{$name}-indicator-color);
@@ -128,6 +140,15 @@ $size-type: (small, large);
           min-height: var(--#{$name}-item-#{$type}-height);
         }
       }
+    }
+  }
+
+  @include state(block) {
+    width: 100%;
+
+    .ea-segmented__item {
+      min-width: 0;
+      flex: 1 1 0;
     }
   }
 }
