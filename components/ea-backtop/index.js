@@ -1,167 +1,158 @@
-import { timeout } from '../../utils/timeout.js';
-import Base from '../Base.js';
-import "../ea-icon/index.js"
+import Base from "@components/Base.js";
 
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
 
 export class EaBacktop extends Base {
-    #wrap;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {AbortController} */
+  #abortController;
+  /** @type {AbortController} */
+  #beforeLeaveAbortController;
 
-    constructor() {
-        super();
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "target",
+      "visibility-height",
+      "right",
+      "bottom",
+      "smooth",
+    ];
+  }
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class="ea-backtop_wrap" part='container' style='display: none'>
-                <slot></slot>
-            </div>
-        `;
+  #states = {
+    isLeave: false,
+  };
 
-        this.#wrap = shadowRoot.querySelector('.ea-backtop_wrap');
+  state = this.properties({
+    target: {
+      type: String,
+      default: "window",
+      observer: (newVal) => {},
+    },
+    "visibility-height": {
+      type: Number,
+      default: 200,
+      observer: (newVal) => {},
+    },
+    right: {
+      type: String,
+      default: "40px",
+      observer: (newVal) => {
+        this.style.setProperty("--ea-backtop-right", newVal);
+      },
+    },
+    bottom: {
+      type: String,
+      default: "40px",
+      observer: (newVal) => {
+        this.style.setProperty("--ea-backtop-bottom", newVal);
+      },
+    },
+    smooth: {
+      type: Boolean,
+      default: true,
+      observer: (newVal) => {},
+    },
+  });
 
-        this.build(shadowRoot, stylesheet);
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const scrollTop =
+      document.querySelector(this.target)?.scrollTop || window.scrollY;
+    const className = this.computedClasslist(
+      "ea-backtop",
+      {
+        // ['--' + this.type]: this.type,
+      },
+      {
+        visible: scrollTop > this["visibility-height"],
+      }
+    );
+
+    this.#container.className = className;
+
+    return className;
+  }
+
+  constructor() {
+    super();
+
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  #onClick = () => {
+    const el = document.querySelector(this.target) || window;
+    el.scrollTo({
+      top: 0,
+      behavior: this.smooth ? "smooth" : "auto",
+    });
+  };
+
+  #onScroll = async () => {
+    const scrollTop =
+      document.querySelector(this.target)?.scrollTop || window.scrollY;
+
+    if (scrollTop > this["visibility-height"]) {
+      this.#container.classList.add("before-enter");
+
+      void this.#container.offsetWidth;
+
+      this.updateContainerClasslist();
+    } else {
+      this.#beforeLeaveAbortController?.abort();
+      this.#beforeLeaveAbortController = new AbortController();
+
+      this.#container.classList.add("before-leave");
+      this.#container.addEventListener(
+        "transitionend",
+        () => {
+          this.updateContainerClasslist();
+        },
+        { once: true, signal: this.#beforeLeaveAbortController.signal }
+      );
     }
+  };
 
-    // ------- target 触发滚动的对象 -------
-    // #region
-    get target() {
-        return this.getAttribute('target') || '';
-    }
+  $render() {
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-    set target(value) {
-        this.setAttribute('target', value);
-    }
-    // #endregion
-    // ------- end -------
+    this.shadowRoot.innerHTML = `
+      <div class='ea-backtop' part='container'>
+        <slot></slot>
+      </div>
+    `;
 
-    // ------- right 滚动按钮距离右边的距离 -------
-    // #region
-    get right() {
-        return this.getAttribute('right') || '40px';
-    }
+    this.#container = this.shadowRoot.querySelector(".ea-backtop");
 
-    set right(value) {
-        this.setAttribute('right', value);
+    this.addEventListener("click", this.#onClick, {
+      signal: this.#abortController.signal,
+    });
 
-        this.#wrap.style.right = value;
-    }
-    // #endregion
-    // ------- end -------
+    const el = document.querySelector(this.target) || window;
+    el.addEventListener("scroll", this.#onScroll, {
+      signal: this.#abortController.signal,
+    });
+  }
 
-    // ------- bottom 滚动按钮距离下边的距离 -------
-    // #region
-    get bottom() {
-        return this.getAttribute('bottom') || '40px';
-    }
+  connectedCallback() {
+    super.connectedCallback();
+  }
 
-    set bottom(value) {
-        this.setAttribute('bottom', value);
-
-        this.#wrap.style.bottom = value;
-    }
-    // #endregion
-    // ------- end ------- 
-
-    // ------- icon 图标类名 -------
-    // #region
-    get icon() {
-        return this.getAttribute('icon') || "icon-angle-up";
-    }
-
-    set icon(value) {
-        this.setAttribute('icon', value);
-
-        this.#wrap.innerHTML = `
-            <ea-icon icon="${value}" part='icon'></ea-icon>
-        `;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- visibility-height 滚动按钮显示和隐藏的触发条件 -------
-    // #region
-    get visibilityHeight() {
-        return this.getAttribute('visibility-height') || 200;
-    }
-
-    set visibilityHeight(value) {
-        this.setAttribute('visibility-height', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    #handleScrollEvent(targetName) {
-        let dom = null;
-        let scrollDom = null;
-
-        if (targetName === "null" || targetName === '' || targetName === null || targetName === undefined || targetName === 'undefined') {
-            dom = document;
-            scrollDom = document.documentElement;
-        } else {
-            dom = document.querySelector(targetName);
-            scrollDom = document.querySelector(targetName);
-        }
-
-        return { dom, scrollDom };
-    }
-
-    #handleBackTopBtnShow(scrollDom) {
-        if (scrollDom.scrollTop > this.visibilityHeight) {
-            this.#wrap.style.display = 'flex';
-            this.#wrap.ontransitionend = null;
-
-            timeout(() => {
-                this.#wrap.style.opacity = 1;
-            }, 10);
-        } else {
-            this.#wrap.style.opacity = 0;
-
-            this.#wrap.ontransitionend = () => {
-                this.#wrap.style.display = 'none';
-            };
-        }
-    }
-
-    #initScrollBtn() {
-        const { dom, scrollDom } = this.#handleScrollEvent(this.target);
-
-        this.#handleBackTopBtnShow(scrollDom);
-
-        dom.addEventListener('scroll', () => {
-            this.#handleBackTopBtnShow(scrollDom);
-        });
-
-        this.#wrap.addEventListener('click', function () {
-            let step = 10;
-
-            let timer = setInterval(() => {
-                step += 5;
-                scrollDom.scrollTop -= step;
-
-                if (scrollDom.scrollTop <= 0) {
-                    scrollDom.scrollTop = 0;
-                    clearInterval(timer);
-                    timer = null;
-
-                    this.dispatchEvent(new CustomEvent('reachedTop', {}));
-                }
-            }, 12);
-
-            this.dispatchEvent(new CustomEvent('backtop', {}));
-        });
-    }
-
-    connectedCallback() {
-        this.target = this.target;
-        this.right = this.right;
-        this.bottom = this.bottom;
-        this.visibilityHeight = this.visibilityHeight;
-        this.icon = this.icon;
-        
-        this.#initScrollBtn();
-    }
+  $beforeUnmounted() {
+    this.#abortController?.abort();
+    this.#beforeLeaveAbortController?.abort();
+  }
 }
 
-if (!customElements.get('ea-backtop')) {
-    customElements.define('ea-backtop', EaBacktop);
+if (!window.customElements.get("ea-backtop")) {
+  window.customElements.define("ea-backtop", EaBacktop);
 }
