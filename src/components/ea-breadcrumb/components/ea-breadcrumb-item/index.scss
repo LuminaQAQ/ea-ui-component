@@ -1,0 +1,48 @@
+$name: ea-breadcrumb-item;
+
+:host {
+  --#{$name}-separator-color: var(--grey-700);
+  --#{$name}-separator-size: var(--font-size-md);
+  --#{$name}-separator-spacing: var(--spacing-md);
+
+  --#{$name}-link-color: var(--grey-900);
+  --#{$name}-link-hover-color: var(--blue-500);
+  --#{$name}-link-font-weight: var(--font-weight-bold);
+
+  --#{$name}-transition: var(--transition-normal);
+}
+
+::slotted(ea-icon) {
+  margin: 0 -8px;
+}
+
+@include block($name) {
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  font-size: var(--#{$name}-separator-size);
+  color: var(--#{$name}-separator-color);
+
+  @include element(separator) {
+    margin: 0 var(--#{$name}-separator-spacing);
+    color: var(--#{$name}-separator-color);
+  }
+
+  @include element(content) {
+    color: var(--#{$name}-separator-color);
+
+    &.is-link {
+      text-decoration: none;
+      color: var(--#{$name}-link-color);
+      font-weight: var(--#{$name}-link-font-weight);
+
+      transition: color var(--#{$name}-transition);
+
+      &:hover {
+        color: var(--#{$name}-link-hover-color);
+      }
+    }
+  }
+}

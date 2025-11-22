@@ -24,9 +24,6 @@
     "./ea-breadcrumb": {
       "import": "./dist/ea-breadcrumb.js"
     },
-    "./ea-breadcrumb-item": {
-      "import": "./dist/ea-breadcrumb-item.js"
-    },
     "./ea-button": {
       "import": "./dist/ea-button.js"
     },
