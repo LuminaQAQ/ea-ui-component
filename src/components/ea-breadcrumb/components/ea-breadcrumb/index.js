@@ -75,6 +75,9 @@ export class EaBreadcrumb extends Base {
     return separator;
   };
 
+  /**
+   * 渲染分隔符
+   */
   #renderSeparator = () => {
     /** @type {HTMLSlotElement} */
     const defaultSlot = this.shadowRoot.querySelector("#defaultSlot");
