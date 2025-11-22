@@ -3,7 +3,6 @@ import './ea-avatar/index.js';
 import './ea-backtop/index.js';
 import './ea-badge/index.js';
 import './ea-breadcrumb/index.js';
-import './ea-breadcrumb-item/index.js';
 import './ea-button/index.js';
 import './ea-button-group/index.js';
 import './ea-calendar/index.js';

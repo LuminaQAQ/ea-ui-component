@@ -1,0 +1,13 @@
+$name: ea-breadcrumb;
+
+:host {
+}
+
+#separatorSlot {
+  display: none;
+}
+
+@include block($name) {
+  display: inline-flex;
+  align-items: center;
+}
