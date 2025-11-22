@@ -40,7 +40,7 @@
     padding: var(--ea-popper-spacing);
     border: 1px solid var(--ea-popper-border-color);
 
-    width: var(--ea-popper-width);
+    min-width: var(--ea-popper-width);
 
     background-color: var(--ea-popper-background-color);
 
