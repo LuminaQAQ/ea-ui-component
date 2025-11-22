@@ -67,8 +67,8 @@
 - [ ] Affix 固钉
 - [ ] Anchor 锚点
 - [x] Backtop 回到顶部
-- [ ] Breadcrumb 面包屑
-- [ ] Dropdown 下拉菜单
+- [x] Breadcrumb 面包屑
+- [x] Dropdown 下拉菜单
 - [ ] Menu 菜单
 - [ ] Page Header 页头
 - [ ] Steps 步骤条

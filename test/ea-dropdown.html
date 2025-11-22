@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ea-dropdown</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-dropdown/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+
+    <style>
+      .ea-dropdown-reference {
+        cursor: pointer;
+        color: #409eff;
+      }
+    </style>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <ea-dropdown>
+        <span slot="reference" class="ea-dropdown-reference">
+          Dropdown List
+          <ea-icon class="icon-angle-down"></ea-icon>
+        </span>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+          <ea-dropdown-item>Action 4</ea-dropdown-item>
+          <ea-dropdown-item>Action 5</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+    </div>
+
+    <script type="module">
+      setTimeout(() => {
+        document.querySelector("ea-dropdown");
+      }, 3000);
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  位置 -->
+    <!-- #region -->
+    <h1>位置</h1>
+
+    <div class="demo">
+      <ea-dropdown placement="top-start">
+        <ea-button slot="reference"> top-start </ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+      <ea-dropdown placement="top">
+        <ea-button slot="reference"> top </ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+      <ea-dropdown placement="top-end">
+        <ea-button slot="reference"> top-end </ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+      <ea-dropdown placement="bottom-start">
+        <ea-button slot="reference"> bottom-start </ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+      <ea-dropdown placement="bottom">
+        <ea-button slot="reference"> bottom </ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+      <ea-dropdown placement="bottom-end">
+        <ea-button slot="reference"> bottom-end </ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  分割线 -->
+    <!-- #region -->
+    <h1>分割线</h1>
+
+    <div class="demo">
+      <ea-dropdown>
+        <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item divided>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  触发方式 -->
+    <!-- #region -->
+    <h1>触发方式</h1>
+
+    <div class="demo">
+      <ea-dropdown trigger="hover">
+        <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item divided>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+      <ea-dropdown trigger="click">
+        <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item divided>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+      <ea-dropdown trigger="contextmenu">
+        <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item divided>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  菜单隐藏方式 -->
+    <!-- #region -->
+    <h1>菜单隐藏方式</h1>
+
+    <div class="demo">
+      <ea-dropdown hide-on-click="false">
+        <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+          <ea-dropdown-item disabled> Action 4 </ea-dropdown-item>
+          <ea-dropdown-item divided>Action 5</ea-dropdown-item>
+          <ea-dropdown-item divided>Action 6</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  指令事件 -->
+    <!-- #region -->
+    <h1>指令事件</h1>
+
+    <div class="demo">
+      <ea-dropdown id="commandDropdown">
+        <span slot="reference" class="ea-dropdown-reference">
+          Dropdown List
+          <ea-icon class="icon-angle-down"></ea-icon>
+        </span>
+        <ea-dropdown-menu>
+          <ea-dropdown-item command="a">Action 1</ea-dropdown-item>
+          <ea-dropdown-item command="b">Action 2</ea-dropdown-item>
+          <ea-dropdown-item command="c">Action 3</ea-dropdown-item>
+          <ea-dropdown-item command="d" disabled>Action 4</ea-dropdown-item>
+          <ea-dropdown-item command="e" divided>Action 5</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+    </div>
+
+    <script type="module">
+      const commandExample = {
+        el: document.querySelector("#commandDropdown"),
+
+        init() {
+          this.el.addEventListener("command", (e) => {
+            console.log(e.detail);
+          });
+        },
+      };
+      commandExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  下拉方法 -->
+    <!-- #region -->
+    <h1>下拉方法</h1>
+
+    <div class="demo">
+      <ea-button id="methodsDropdownShowBtn">show</ea-button>
+      <ea-button id="methodsDropdownHideBtn">hide</ea-button>
+      <ea-dropdown id="methodsDropdown">
+        <span slot="reference" class="ea-dropdown-reference">
+          Dropdown List <ea-icon icon="icon-angle-down"></ea-icon>
+        </span>
+        <ea-dropdown-menu>
+          <ea-dropdown-item>Action 1</ea-dropdown-item>
+          <ea-dropdown-item>Action 2</ea-dropdown-item>
+          <ea-dropdown-item>Action 3</ea-dropdown-item>
+        </ea-dropdown-menu>
+      </ea-dropdown>
+    </div>
+
+    <script type="module">
+      const methodsExample = {
+        dropdown: document.querySelector("#methodsDropdown"),
+        showBtn: document.querySelector("#methodsDropdownShowBtn"),
+        hideBtn: document.querySelector("#methodsDropdownHideBtn"),
+
+        init() {
+          this.showBtn.addEventListener("click", () => {
+            this.dropdown.show();
+          });
+
+          this.hideBtn.addEventListener("click", () => {
+            this.dropdown.hide();
+          });
+        },
+      };
+
+      methodsExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

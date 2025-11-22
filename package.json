@@ -63,6 +63,9 @@
     "./ea-drawer": {
       "import": "./dist/ea-drawer.js"
     },
+    "./ea-dropdown": {
+      "import": "./dist/ea-dropdown.js"
+    },
     "./ea-empty": {
       "import": "./dist/ea-empty.js"
     },

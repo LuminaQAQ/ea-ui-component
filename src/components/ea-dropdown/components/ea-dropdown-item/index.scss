@@ -1,0 +1,62 @@
+$name: ea-dropdown-item;
+
+:host {
+  --#{$name}-spacing: var(--spacing-sm);
+  --#{$name}-divider-spacing: var(--spacing-md);
+
+  --#{$name}-divider-color: var(--grey-200);
+
+  --#{$name}-color: var(--grey-900);
+  --#{$name}-disabled-color: var(--grey-300);
+  --#{$name}-hover-color: var(--blue-500);
+  --#{$name}-hover-background-color: var(--blue-100);
+
+  --#{$name}-font-size: var(--font-size-md);
+}
+
+:host {
+  display: block;
+}
+
+@include block($name) {
+  @include element(divider) {
+    display: none;
+    height: 1px;
+    width: 100%;
+
+    background-color: var(--#{$name}-divider-color);
+    margin: var(--#{$name}-divider-spacing) 0;
+  }
+
+  @include element(content) {
+    box-sizing: border-box;
+    padding: var(--#{$name}-spacing);
+
+    font-size: var(--#{$name}-font-size);
+    text-align: center;
+    color: var(--#{$name}-color);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--#{$name}-hover-color);
+      background-color: var(--#{$name}-hover-background-color);
+    }
+  }
+
+  @include state(divided) {
+    .ea-dropdown-item__divider {
+      display: block;
+    }
+  }
+
+  @include modifier(disabled) {
+    .ea-dropdown-item__content {
+      cursor: not-allowed;
+      color: var(--#{$name}-disabled-color);
+
+      &:hover {
+        background-color: unset;
+      }
+    }
+  }
+}
