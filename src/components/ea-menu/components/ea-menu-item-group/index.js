@@ -1,0 +1,65 @@
+import Base from "@components/Base.js";
+
+import stylesheet from "./index.scss?inline";
+
+export class EaMenuItemGroup extends Base {
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {AbortController} */
+  #abortController = new AbortController();
+
+  static get observedAttributes() {
+    return [...super.observedAttributes, "title"];
+  }
+
+  state = this.properties({
+    title: {
+      type: String,
+      default: "",
+      observer: (newVal) => {},
+    },
+  });
+
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-menu-item-group", {
+      // ['--' + this.type]: this.type,
+    });
+
+    this.#container.className = className;
+
+    return className;
+  }
+
+  constructor() {
+    super();
+
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-menu-item-group' part='container'>
+        <slot></slot>
+      </div>
+        `;
+
+    this.#container = this.shadowRoot.querySelector(".ea-menu-item-group");
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+  $beforeUnmounted() {
+    this.#abortController.abort();
+  }
+}
+
+if (!window.customElements.get("ea-menu-item-group")) {
+  window.customElements.define("ea-menu-item-group", EaMenuItemGroup);
+}

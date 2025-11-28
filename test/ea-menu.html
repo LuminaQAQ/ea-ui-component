@@ -5,7 +5,7 @@
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
     <style>
         hr {
             margin: 3rem 0;
@@ -14,22 +14,64 @@
 </head>
 
 <body>
-    <script type='module'>
-        import "../components/ea-container/index.js"
-        import "../components/ea-aside/index.js"
-        import "../components/ea-main/index.js"
-
-        import '../components/ea-menu/index.js'
-        import "../components/ea-switch/index.js"
-
-
+    <script type="module" src="../src/components/ea-container/index.js"></script>
+    <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script type="module" src="../src/components/ea-menu/index.js"></script>
+    <!-- <script type='module'>
         const menu = document.querySelector('#ea-menu-collapse');
         const switchBtn = document.querySelector('#switch');
 
         switchBtn.addEventListener('change', (e) => {
             menu.collapse = e.detail.checked;
         });
-    </script>
+    </script> -->
+
+    <!--  顶栏 -->
+    <!-- #region -->
+    <h1>顶栏</h1>
+
+    <div class="demo">
+        <ea-menu default-active="1" class="ea-menu-demo" mode="horizontal">
+            <ea-menu-item index="1">Processing Center</ea-menu-item>
+            <ea-sub-menu index="2">
+                <span slot="title">Workspace</span>
+                <ea-menu-item index="2-1">item one</ea-menu-item>
+                <ea-menu-item index="2-2">item two</ea-menu-item>
+                <ea-menu-item index="2-3">item three</ea-menu-item>
+                <ea-sub-menu index="2-4">
+                    <span slot="title">item four</span>
+                    <ea-menu-item index="2-4-1">item one</ea-menu-item>
+                    <ea-menu-item index="2-4-2">item two</ea-menu-item>
+                    <ea-menu-item index="2-4-3">item three</ea-menu-item>
+                </ea-sub-menu>
+            </ea-sub-menu>
+            <ea-menu-item index="3" disabled>Info</ea-menu-item>
+            <ea-menu-item index="4">Orders</ea-menu-item>
+        </ea-menu>
+        <ea-menu default-active="1" class="ea-menu-demo" mode="horizontal" background-color="#545c64"
+            text-color="#fff" active-text-color="#ffd04b">
+            <ea-menu-item index="1">Processing Center</ea-menu-item>
+            <ea-sub-menu index="2">
+                <span slot="title">Workspace</span>
+                <ea-menu-item index="2-1">item one</ea-menu-item>
+                <ea-menu-item index="2-2">item two</ea-menu-item>
+                <ea-menu-item index="2-3">item three</ea-menu-item>
+                <ea-sub-menu index="2-4">
+                    <span slot="title">item four</span>
+                    <ea-menu-item index="2-4-1">item one</ea-menu-item>
+                    <ea-menu-item index="2-4-2">item two</ea-menu-item>
+                    <ea-menu-item index="2-4-3">item three</ea-menu-item>
+                </ea-sub-menu>
+            </ea-sub-menu>
+            <ea-menu-item index="3" disabled>Info</ea-menu-item>
+            <ea-menu-item index="4">Orders</ea-menu-item>
+        </ea-menu>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
 
     <!-- -------- 顶栏 --------  -->
     <!-- #region  -->
@@ -189,7 +231,7 @@
             </ea-header>
             <ea-main>
                 04. 这个示例在 Header 下方嵌套了一个包含 Aside 和 Main 的
-                el-container。
+                ea-container。
             </ea-main>
         </ea-container>
     </ea-container>

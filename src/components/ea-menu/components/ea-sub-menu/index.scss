@@ -1,0 +1,99 @@
+$name: ea-sub-menu;
+
+::slotted(ea-menu-item) {
+  --ea-menu-item-border-color: transparent;
+}
+
+:host {
+  --#{$name}-spacing: 20px;
+
+  --#{$name}-height: 56px;
+
+  --#{$name}-font-size: var(--font-size-md);
+
+  --#{$name}-bg-color: var(--color-white);
+  --#{$name}-text-color: var(--grey-900);
+  --#{$name}-border-color: var(--blue-500);
+  --#{$name}-active-text-color: var(--blue-500);
+  --#{$name}-active-bg-color: var(--blue-100);
+
+  --#{$name}-dropdown-box-shadow: var(--box-shadow-md);
+
+  --#{$name}-transition: var(--transition-normal);
+  --#{$name}-z-index: 100;
+}
+
+:host {
+  display: block;
+}
+
+@include block($name) {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding: 0 var(--#{$name}-spacing);
+  border-bottom: 2px solid transparent;
+
+  height: var(--#{$name}-height);
+  line-height: var(--#{$name}-height);
+
+  font-size: var(--#{$name}-font-size);
+  color: var(--#{$name}-text-color);
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: border-color var(--#{$name}-transition),
+    background-color var(--#{$name}-transition),
+    color var(--#{$name}-transition);
+
+  @include element(arrow) {
+    margin-left: 8px;
+    transition: transform var(--#{$name}-transition);
+  }
+
+  @include element(title) {
+    &:hover {
+      .ea-sub-menu__arrow {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  @include element(content) {
+    position: absolute;
+    display: none;
+
+    left: 0;
+    bottom: 0;
+
+    transform-origin: top center;
+    transform: translateY(calc(100% + 3px)) scale(0);
+
+    background-color: var(--#{$name}-bg-color);
+    box-shadow: var(--#{$name}-dropdown-box-shadow);
+
+    transition: transform var(--#{$name}-transition);
+
+    z-index: var(--#{$name}-z-index);
+  }
+
+  @include state(active) {
+    color: var(--#{$name}-active-text-color);
+
+    border-bottom-color: var(--#{$name}-border-color);
+  }
+
+  @include state(open) {
+    .ea-sub-menu__arrow {
+      transform: rotate(180deg);
+    }
+
+    .ea-sub-menu__content {
+      display: block;
+      transform: translateY(calc(100% + 3px)) scale(1);
+    }
+  }
+}
