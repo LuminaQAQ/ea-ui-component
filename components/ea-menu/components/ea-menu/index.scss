@@ -1,0 +1,37 @@
+$name: ea-menu;
+
+:host {
+  --#{$name}-bg-color: var(--color-white);
+  --#{$name}-border-color: var(--grey-100);
+
+  --#{$name}-text-color: var(--grey-900);
+  --#{$name}-active-text-color: var(--blue-500);
+}
+
+:host {
+  display: block;
+}
+
+::slotted(ea-sub-menu) {
+  --ea-sub-menu-text-color: var(--#{$name}-text-color);
+  --ea-sub-menu-active-text-color: var(--#{$name}-active-text-color);
+  --ea-sub-menu-bg-color: var(--#{$name}-bg-color);
+}
+
+::slotted(ea-menu-item) {
+  --ea-menu-item-text-color: var(--#{$name}-text-color);
+}
+
+@include block($name) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding: 0 20px;
+
+  background-color: var(--#{$name}-bg-color);
+  color: var(--#{$name}-text-color);
+
+  border-bottom: 2px solid var(--#{$name}-border-color);
+}
