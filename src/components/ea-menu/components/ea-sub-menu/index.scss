@@ -40,8 +40,8 @@ $name: ea-sub-menu;
   height: var(--#{$name}-height);
   line-height: var(--#{$name}-height);
 
-  font-size: var(--#{$name}-font-size);
-  color: var(--#{$name}-text-color);
+  font-size: var(--ea-menu-font-size);
+  color: var(--ea-menu-text-color);
   cursor: pointer;
   white-space: nowrap;
 
@@ -55,7 +55,9 @@ $name: ea-sub-menu;
   }
 
   @include element(title) {
+    color: var(--ea-menu-text-color);
     &:hover {
+      color: var(--ea-menu-active-text-color);
       .ea-sub-menu__arrow {
         transform: rotate(180deg);
       }
@@ -64,7 +66,7 @@ $name: ea-sub-menu;
 
   @include element(content) {
     position: absolute;
-    display: none;
+    height: 0;
 
     left: 0;
     bottom: 0;
@@ -72,7 +74,7 @@ $name: ea-sub-menu;
     transform-origin: top center;
     transform: translateY(calc(100% + 3px)) scale(0);
 
-    background-color: var(--#{$name}-bg-color);
+    background-color: var(--ea-menu-bg-color);
     box-shadow: var(--#{$name}-dropdown-box-shadow);
 
     transition: transform var(--#{$name}-transition);
@@ -83,7 +85,7 @@ $name: ea-sub-menu;
   @include state(active) {
     color: var(--#{$name}-active-text-color);
 
-    border-bottom-color: var(--#{$name}-border-color);
+    border-bottom-color: var(--ea-menu-active-text-color);
   }
 
   @include state(open) {
@@ -92,7 +94,8 @@ $name: ea-sub-menu;
     }
 
     .ea-sub-menu__content {
-      display: block;
+      // display: block;
+      height: auto;
       transform: translateY(calc(100% + 3px)) scale(1);
     }
   }

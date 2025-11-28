@@ -8,7 +8,6 @@ $name: ea-menu-item;
   --#{$name}-font-size: var(--font-size-md);
 
   --#{$name}-bg-color: var(--color-white);
-  --#{$name}-text-color: var(--grey-900);
   --#{$name}-border-color: var(--blue-500);
   --#{$name}-active-text-color: var(--blue-500);
   --#{$name}-active-bg-color: var(--blue-100);
@@ -34,7 +33,7 @@ $name: ea-menu-item;
   line-height: var(--#{$name}-height);
 
   font-size: var(--#{$name}-font-size);
-  color: var(--#{$name}-text-color);
+  color: var(--ea-menu-text-color);
   cursor: pointer;
   white-space: nowrap;
 
@@ -43,13 +42,13 @@ $name: ea-menu-item;
     color var(--#{$name}-transition);
 
   &:hover {
-    color: var(--#{$name}-active-text-color);
-    background-color: var(--#{$name}-active-bg-color);
+    color: var(--ea-menu-active-text-color);
+    background-color: var(--ea-menu-hover-bg-color);
   }
 
   @include state(active) {
-    color: var(--#{$name}-active-text-color);
+    color: var(--ea-menu-active-text-color);
 
-    border-bottom-color: var(--#{$name}-border-color);
+    border-bottom-color: var(--ea-menu-active-text-color);
   }
 }
