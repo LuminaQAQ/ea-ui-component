@@ -58,6 +58,10 @@ $name: ea-sub-menu;
     height: var(--#{$name}-height);
     line-height: var(--#{$name}-height);
 
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
     &:hover {
       color: var(--ea-menu-active-text-color);
     }
@@ -93,6 +97,7 @@ $name: ea-sub-menu;
 
     .ea-sub-menu__content {
       position: absolute;
+      // position: fixed;
       left: 0;
       bottom: 0;
 
