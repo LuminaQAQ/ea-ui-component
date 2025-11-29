@@ -1,11 +1,29 @@
 $name: ea-menu-item-group;
 
 :host {
-  --#{$name}-transition: var(--transition-normal);
+  --#{$name}-spacing: 20px;
+
+  --#{$name}-height: 36px;
+
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-text-color: var(--grey-500);
 }
 
-:host {
-  //   padding: 0 var(--ea-menu-item-spacing);
+@include block($name) {
+  color: var(--#{$name}-text-color);
 
-  transition: height var(--#{$name}-transition);
+  @include element(title) {
+    box-sizing: border-box;
+    padding: 0 var(--#{$name}-spacing);
+
+    height: var(--#{$name}-height);
+    line-height: var(--#{$name}-height);
+
+    font-size: var(--#{$name}-font-size);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    cursor: default;
+  }
 }

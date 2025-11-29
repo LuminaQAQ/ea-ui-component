@@ -24,8 +24,8 @@ $name: ea-menu-item;
 @include block($name) {
   position: relative;
 
-  display: flex;
-  align-items: center;
+  align-content: center;
+  vertical-align: middle;
 
   box-sizing: border-box;
   padding: 0 var(--#{$name}-spacing);
@@ -37,7 +37,10 @@ $name: ea-menu-item;
   font-size: var(--#{$name}-font-size);
   color: var(--ea-menu-text-color);
   cursor: pointer;
+
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
   transition: border-color var(--#{$name}-transition),
     background-color var(--#{$name}-transition),

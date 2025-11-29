@@ -1,7 +1,6 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
-import { timeout } from "@/utils/timeout";
 
 export class EaSubMenu extends Base {
   /** @type {HTMLElement | null} */
@@ -162,12 +161,13 @@ export class EaSubMenu extends Base {
     super.connectedCallback();
 
     const mode = this.#hostMenu?.mode || "vertical";
+    const collapse = this.#hostMenu?.collapse || false;
 
     this.addEventListener("click", this.#onMenuItemClick, {
       signal: this.#abortController.signal,
     });
 
-    if (mode === "vertical") {
+    if (mode === "vertical" && !collapse) {
       this.#titleEl.addEventListener(
         "click",
         (e) => {
