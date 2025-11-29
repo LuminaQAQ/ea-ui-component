@@ -102,12 +102,6 @@
     "./ea-menu": {
       "import": "./dist/ea-menu.js"
     },
-    "./ea-menu-item": {
-      "import": "./dist/ea-menu-item.js"
-    },
-    "./ea-menu-item-group": {
-      "import": "./dist/ea-menu-item-group.js"
-    },
     "./ea-message": {
       "import": "./dist/ea-message.js"
     },
@@ -176,9 +170,6 @@
     },
     "./ea-steps": {
       "import": "./dist/ea-steps.js"
-    },
-    "./ea-submenu": {
-      "import": "./dist/ea-submenu.js"
     },
     "./ea-switch": {
       "import": "./dist/ea-switch.js"

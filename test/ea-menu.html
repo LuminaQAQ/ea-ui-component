@@ -102,6 +102,88 @@
     <!-- #endregion  -->
     <!-- end  -->
 
+    <!--  侧栏 -->
+    <!-- #region -->
+    <h1>侧栏</h1>
+
+    <div class="demo">
+        <ea-menu default-active="2" class="ea-menu-vertical-demo">
+            <ea-sub-menu index="1">
+                <span slot="title">
+                    <ea-icon icon="icon-location"></ea-icon>
+                    <span>Navigator One</span>
+                </span>
+                <ea-menu-item-group title="Group One">
+                    <ea-menu-item index="1-1">item one</ea-menu-item>
+                    <ea-menu-item index="1-2">item two</ea-menu-item>
+                </ea-menu-item-group>
+                <ea-menu-item-group title="Group Two">
+                    <ea-menu-item index="1-3">item three</ea-menu-item>
+                </ea-menu-item-group>
+                <ea-sub-menu index="1-4">
+                    <span slot="title">
+                        <span>item four</span>
+                    </span>
+                    <ea-menu-item index="1-4-1">item one</ea-menu-item>
+                </ea-sub-menu>
+            </ea-sub-menu>
+            <ea-menu-item index="2">
+                <ea-icon icon="icon-th-large"></ea-icon>
+                <span>Navigator Two</span>
+            </ea-menu-item>
+            <ea-menu-item index="3" disabled>
+                <ea-icon icon="icon-table"></ea-icon>
+                <span>Navigator Three</span>
+            </ea-menu-item>
+            <ea-menu-item index="4">
+                <ea-icon icon="icon-cog"></ea-icon>
+                <span>Navigator Four</span>
+            </ea-menu-item>
+        </ea-menu>
+        <ea-menu active-text-color="#ffd04b" background-color="#545c64" class="ea-menu-vertical-demo"
+            default-active="2" text-color="#fff"  style="--ea-menu-hover-bg-color: rgb(67, 74, 80);">
+            <ea-sub-menu index="1">
+                <template #title>
+                    <ea-icon>
+                        <icon-cog />
+                    </ea-icon>
+                    <span>Navigator One</span>
+                </template>
+                <ea-menu-item-group title="Group One">
+                    <ea-menu-item index="1-1">item one</ea-menu-item>
+                    <ea-menu-item index="1-2">item two</ea-menu-item>
+                </ea-menu-item-group>
+                <ea-menu-item-group title="Group Two">
+                    <ea-menu-item index="1-3">item three</ea-menu-item>
+                </ea-menu-item-group>
+                <ea-sub-menu index="1-4">
+                    <template #title>item four</template>
+                    <ea-menu-item index="1-4-1">item one</ea-menu-item>
+                </ea-sub-menu>
+            </ea-sub-menu>
+            <ea-menu-item index="2">
+                <ea-icon><icon-menu /></ea-icon>
+                <span>Navigator Two</span>
+            </ea-menu-item>
+            <ea-menu-item index="3" disabled>
+                <ea-icon>
+                    <document />
+                </ea-icon>
+                <span>Navigator Three</span>
+            </ea-menu-item>
+            <ea-menu-item index="4">
+                <ea-icon>
+                    <setting />
+                </ea-icon>
+                <span>Navigator Four</span>
+            </ea-menu-item>
+        </ea-menu>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+    <!-- end  -->
+
     <!-- -------- 侧栏 --------  -->
     <!-- #region  -->
     <h2>侧栏</h2>

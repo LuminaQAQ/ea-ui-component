@@ -69,7 +69,7 @@ export class EaMenu extends Base {
       "ea-menu",
       {
         // ['--' + this.type]: this.type,
-        ["--horizontal"]: this.mode === "horizontal",
+        ["--" + this.mode]: this.mode,
       },
       {}
     );
@@ -95,6 +95,8 @@ export class EaMenu extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-menu");
+
+    this.updateContainerClasslist();
   }
 
   #onMenuItemClick = (e) => {

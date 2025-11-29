@@ -27,4 +27,14 @@ $name: ea-menu;
   color: var(--#{$name}-text-color);
 
   border-bottom: 2px solid var(--#{$name}-border-color);
+
+  @include modifier(horizontal) {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  @include modifier(vertical) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

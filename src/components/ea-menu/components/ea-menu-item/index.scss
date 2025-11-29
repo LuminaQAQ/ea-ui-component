@@ -17,6 +17,8 @@ $name: ea-menu-item;
 
 :host {
   display: block;
+
+  transition: height var(--#{$name}-transition);
 }
 
 @include block($name) {

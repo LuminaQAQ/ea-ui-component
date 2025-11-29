@@ -37,8 +37,7 @@ $name: ea-sub-menu;
   padding: 0 var(--#{$name}-spacing);
   border-bottom: 2px solid transparent;
 
-  height: var(--#{$name}-height);
-  line-height: var(--#{$name}-height);
+  width: 100%;
 
   font-size: var(--ea-menu-font-size);
   color: var(--ea-menu-text-color);
@@ -47,7 +46,7 @@ $name: ea-sub-menu;
 
   transition: border-color var(--#{$name}-transition),
     background-color var(--#{$name}-transition),
-    color var(--#{$name}-transition);
+    color var(--#{$name}-transition), height var(--#{$name}-transition);
 
   @include element(arrow) {
     margin-left: 8px;
@@ -56,47 +55,91 @@ $name: ea-sub-menu;
 
   @include element(title) {
     color: var(--ea-menu-text-color);
+    height: var(--#{$name}-height);
+    line-height: var(--#{$name}-height);
+
     &:hover {
       color: var(--ea-menu-active-text-color);
-      .ea-sub-menu__arrow {
-        transform: rotate(180deg);
-      }
     }
   }
 
   @include element(content) {
-    position: absolute;
-    height: 0;
+    will-change: transform, height, min-height;
 
-    left: 0;
-    bottom: 0;
-
-    transform-origin: top center;
-    transform: translateY(calc(100% + 3px)) scale(0);
+    width: 100%;
 
     background-color: var(--ea-menu-bg-color);
-    box-shadow: var(--#{$name}-dropdown-box-shadow);
 
-    transition: transform var(--#{$name}-transition);
+    transition: transform var(--#{$name}-transition),
+      height var(--#{$name}-transition), min-height var(--#{$name}-transition);
 
     z-index: var(--#{$name}-z-index);
   }
 
   @include state(active) {
     color: var(--#{$name}-active-text-color);
-
-    border-bottom-color: var(--ea-menu-active-text-color);
   }
 
   @include state(open) {
     .ea-sub-menu__arrow {
       transform: rotate(180deg);
     }
+  }
+
+  @include modifier(horizontal) {
+    flex-direction: row;
+    align-items: center;
+    border-bottom-color: transparent;
 
     .ea-sub-menu__content {
-      // display: block;
-      height: auto;
-      transform: translateY(calc(100% + 3px)) scale(1);
+      position: absolute;
+      left: 0;
+      bottom: 0;
+
+      transform-origin: top center;
+      transform: translateY(calc(100% + 3px)) scale(0);
+
+      box-shadow: var(--#{$name}-dropdown-box-shadow);
     }
+
+    &.is-active {
+      border-bottom-color: var(--ea-menu-active-text-color);
+    }
+
+    &.is-open {
+      .ea-sub-menu__content {
+        transform: translateY(calc(100% + 3px)) scale(1);
+      }
+    }
+  }
+
+  @include modifier(vertical) {
+    flex-direction: column;
+    align-items: flex-start;
+    border-bottom-color: transparent;
+
+    .ea-sub-menu__title {
+      width: 100%;
+    }
+
+    .ea-sub-menu__content {
+      position: relative;
+      box-shadow: none;
+      // height: var(--dropdown-size);
+      height: 0;
+
+      overflow: hidden;
+
+      transform-origin: top left;
+    }
+
+    &.is-active {
+      border-bottom-color: transparent;
+    }
+
+    // &.is-open {
+    //   .ea-sub-menu__content {
+    //   }
+    // }
   }
 }

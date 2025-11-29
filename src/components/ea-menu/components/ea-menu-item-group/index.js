@@ -45,9 +45,12 @@ export class EaMenuItemGroup extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class='ea-menu-item-group' part='container'>
-        <slot></slot>
+        <header class='ea-menu-item-group__title' part='title'>${this.title}</header>
+        <div class='ea-menu-item-group__content' part='content'>
+          <slot></slot>
+        </div>
       </div>
-        `;
+    `;
 
     this.#container = this.shadowRoot.querySelector(".ea-menu-item-group");
   }
