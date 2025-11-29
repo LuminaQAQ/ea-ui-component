@@ -1,0 +1,11 @@
+$name: ea-menu-item-group;
+
+:host {
+  --#{$name}-transition: var(--transition-normal);
+}
+
+:host {
+  //   padding: 0 var(--ea-menu-item-spacing);
+
+  transition: height var(--#{$name}-transition);
+}

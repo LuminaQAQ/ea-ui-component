@@ -2,6 +2,9 @@ $name: ea-menu;
 
 :host {
   --#{$name}-bg-color: var(--color-white);
+  --#{$name}-hover-bg-color: var(--blue-100);
+  --#{$name}-active-bg-color: var(--blue-100);
+
   --#{$name}-border-color: var(--grey-100);
 
   --#{$name}-text-color: var(--grey-900);
@@ -10,16 +13,6 @@ $name: ea-menu;
 
 :host {
   display: block;
-}
-
-::slotted(ea-sub-menu) {
-  --ea-sub-menu-text-color: var(--#{$name}-text-color);
-  --ea-sub-menu-active-text-color: var(--#{$name}-active-text-color);
-  --ea-sub-menu-bg-color: var(--#{$name}-bg-color);
-}
-
-::slotted(ea-menu-item) {
-  --ea-menu-item-text-color: var(--#{$name}-text-color);
 }
 
 @include block($name) {
@@ -34,4 +27,14 @@ $name: ea-menu;
   color: var(--#{$name}-text-color);
 
   border-bottom: 2px solid var(--#{$name}-border-color);
+
+  @include modifier(horizontal) {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  @include modifier(vertical) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

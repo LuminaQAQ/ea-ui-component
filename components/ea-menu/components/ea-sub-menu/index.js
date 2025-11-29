@@ -1,8 +1,12 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
+import { timeout } from "@/utils/timeout";
 
 export class EaSubMenu extends Base {
+  /** @type {HTMLElement | null} */
+  #hostMenu;
+
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
@@ -54,10 +58,12 @@ export class EaSubMenu extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
+    const mode = this.#hostMenu?.mode || "vertical";
+
     const className = this.computedClasslist(
       "ea-sub-menu",
       {
-        // ['--' + this.type]: this.type,
+        ["--" + mode]: mode,
       },
       {
         disabled: this.disabled,
@@ -81,6 +87,7 @@ export class EaSubMenu extends Base {
 
   $render() {
     const isChild = this.parentElement.closest("ea-sub-menu");
+    const hostMenu = this.closest("ea-menu");
 
     this.shadowRoot.innerHTML = `
       <div class='ea-sub-menu' part='container'>
@@ -96,9 +103,12 @@ export class EaSubMenu extends Base {
       </div>
     `;
 
+    this.#hostMenu = hostMenu;
     this.#container = this.shadowRoot.querySelector(".ea-sub-menu");
     this.#titleEl = this.shadowRoot.querySelector(".ea-sub-menu__title");
     this.#contentEl = this.shadowRoot.querySelector(".ea-sub-menu__content");
+
+    this.updateContainerClasslist();
   }
 
   /**
@@ -124,38 +134,77 @@ export class EaSubMenu extends Base {
 
     this.setAttribute("active", "true");
     if (isChild) isChild.setAttribute("active", "true");
+
+    target.setAttribute("active", "true");
+  };
+
+  /**
+   * 鼠标悬停事件
+   * @param {MouseEvent} e
+   */
+  #onHoverEvent = (e) => {
+    this.#dropdownAbortController?.abort();
+    this.#dropdownAbortController = new AbortController();
+
+    this.open = true;
+
+    const onLeaveEvent = (e) => {
+      this.open = false;
+      this.#dropdownAbortController?.abort();
+    };
+
+    this.addEventListener("mouseleave", onLeaveEvent, {
+      signal: this.#dropdownAbortController.signal,
+    });
   };
 
   connectedCallback() {
     super.connectedCallback();
 
+    const mode = this.#hostMenu?.mode || "vertical";
+
     this.addEventListener("click", this.#onMenuItemClick, {
       signal: this.#abortController.signal,
     });
 
-    this.addEventListener(
-      "mouseover",
-      (e) => {
-        this.#dropdownAbortController?.abort();
-        this.#dropdownAbortController = new AbortController();
+    if (mode === "vertical") {
+      this.#titleEl.addEventListener(
+        "click",
+        (e) => {
+          this.open = !this.open;
 
-        this.open = true;
-
-        this.addEventListener(
-          "mouseout",
-          (e) => {
-            this.open = false;
-            this.#dropdownAbortController?.abort();
-          },
-          {
-            signal: this.#dropdownAbortController.signal,
+          if (!this.open) {
+            this.#contentEl.style.setProperty(
+              "--ea-sub-menu-transition",
+              "none"
+            );
+            void this.#contentEl.offsetHeight;
+            this.#contentEl.style.height = `${this.#contentEl.scrollHeight}px`;
+            void this.#contentEl.offsetHeight;
+            this.#contentEl.style.removeProperty("--ea-sub-menu-transition");
           }
-        );
-      },
-      {
+
+          this.#contentEl.style.height = `${
+            this.open ? this.#contentEl.scrollHeight : 0
+          }px`;
+
+          this.#contentEl.addEventListener(
+            "transitionend",
+            () => {
+              this.#contentEl.style.height = this.open ? "100%" : 0;
+            },
+            { once: true }
+          );
+        },
+        {
+          signal: this.#abortController.signal,
+        }
+      );
+    } else {
+      this.addEventListener("mouseenter", this.#onHoverEvent, {
         signal: this.#abortController.signal,
-      }
-    );
+      });
+    }
   }
 
   $beforeUnmounted() {
