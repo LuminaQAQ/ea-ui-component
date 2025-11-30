@@ -4,6 +4,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
+    i {
+        font-style: normal;
+    }
 }
 
 :host-context(ea-button) {

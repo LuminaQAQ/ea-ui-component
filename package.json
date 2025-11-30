@@ -165,9 +165,6 @@
     "./ea-statistic": {
       "import": "./dist/ea-statistic.js"
     },
-    "./ea-step": {
-      "import": "./dist/ea-step.js"
-    },
     "./ea-steps": {
       "import": "./dist/ea-steps.js"
     },

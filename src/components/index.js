@@ -50,7 +50,6 @@ import './ea-skeleton/index.js';
 import './ea-space/index.js';
 import './ea-splitter/index.js';
 import './ea-statistic/index.js';
-import './ea-step/index.js';
 import './ea-steps/index.js';
 import './ea-switch/index.js';
 import './ea-tab/index.js';

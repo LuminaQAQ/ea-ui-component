@@ -1,0 +1,10 @@
+$name: ea-steps;
+
+::slotted(ea-step:last-child) {
+  --ea-step-tail-flex: 0;
+}
+
+@include block($name) {
+  display: flex;
+  align-items: center;
+}
