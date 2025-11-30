@@ -1,0 +1,47 @@
+$name: ea-step;
+
+:host {
+  --#{$name}-tail-flex: 1;
+}
+
+@include block($name) {
+  @include element(head) {
+    display: flex;
+    align-items: center;
+  }
+
+  @include element(icon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 1px solid #c0c4cc;
+
+    width: 24px;
+    height: 24px;
+
+    font-size: 14px;
+
+    user-select: none;
+  }
+
+  @include element(tail) {
+    flex: var(--#{$name}-tail-flex);
+    height: 1px;
+    background-color: #c0c4cc;
+  }
+
+  @include state(wait) {
+    color: #a8abb2;
+  }
+
+  @include state(finish) {
+    color: #409eff;
+  }
+
+  @include state(success) {
+    color: #67c23a;
+  }
+}
