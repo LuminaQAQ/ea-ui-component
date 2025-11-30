@@ -6,15 +6,17 @@ export class EaIcon extends HTMLElement {
   /** @type {HTMLElement} */
   #container;
 
+  static observedAttributes = ["icon", "color", "size"];
+
   constructor() {
     super();
 
     this.attachShadow({ mode: "open" });
     this.shadowRoot.innerHTML = `
-            <i class="ea-icon" part="container">
-                <slot></slot>
-            </i>
-        `;
+      <i class="ea-icon" part="container">
+          <slot></slot>
+      </i>
+    `;
 
     this.#container = this.shadowRoot.querySelector(".ea-icon");
   }
@@ -35,8 +37,6 @@ export class EaIcon extends HTMLElement {
 
   set icon(value) {
     this.setAttr("icon", value);
-
-    this.#container.className = `${value}`;
   }
   // #endregion
   // ------- end -------
@@ -49,8 +49,6 @@ export class EaIcon extends HTMLElement {
 
   set color(value) {
     this.setAttr("color", value);
-
-    this.style.setProperty("--ea-icon-color", value);
   }
   // #endregion
   // ------- end -------
@@ -63,8 +61,6 @@ export class EaIcon extends HTMLElement {
 
   set size(value) {
     if (value !== "14" || value !== 14) this.setAttr("size", value);
-
-    this.style.setProperty("--ea-icon-size", `${value || 14}px`);
   }
   // #endregion
   // ------- end -------
@@ -77,12 +73,18 @@ export class EaIcon extends HTMLElement {
     variableSheet.replaceSync(variable);
     hostSheet.replaceSync(host);
     this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet, hostSheet];
+  }
 
-    this.icon = this.icon;
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (oldVal === newVal) return;
 
-    this.color = this.color;
-
-    this.size = this.size;
+    if (name === "icon") {
+      this.#container.className = `${newVal}`;
+    } else if (name === "color") {
+      this.style.setProperty("--ea-icon-color", newVal);
+    } else if (name === "size") {
+      this.style.setProperty("--ea-icon-size", `${newVal || 14}px`);
+    }
   }
 }
 
