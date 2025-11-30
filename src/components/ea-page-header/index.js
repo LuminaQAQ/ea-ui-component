@@ -1,91 +1,136 @@
-// @ts-nocheck
-import Base from '../Base.js';
-import '../ea-icon/index.js'
-import { createSlotElement, createElement } from '../../utils/createElement.js';
+import Base from "@components/Base.js";
 
-import { stylesheet } from './src/style/stylesheet.js';
+import stylesheet from "./index.scss?inline";
 
 export class EaPageHeader extends Base {
-    #wrap;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #backEl;
+  /** @type {HTMLSlotElement} */
+  #backIconSlot;
+  /** @type {HTMLSlotElement} */
+  #titleSlot;
+  /** @type {HTMLSlotElement} */
+  #contentSlot;
+  /** @type {AbortController} */
+  #abortController = new AbortController();
 
-    #titleWrap;
-    #contentWrap
+  static get observedAttributes() {
+    return [...super.observedAttributes, "icon", "title", "content"];
+  }
 
-    #titleSlot;
-    #contentSlot;
-    constructor() {
-        super();
+  state = this.properties({
+    icon: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        const iconEl = this.#backIconSlot.querySelector("ea-icon");
+        if (iconEl) {
+          iconEl.setAttribute("icon", newVal);
+        }
+      },
+    },
+    title: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#titleSlot.textContent = newVal;
+      },
+    },
+    content: {
+      type: String,
+      default: "",
+      observer: (newVal) => {
+        this.#contentSlot.textContent = newVal;
+      },
+    },
+  });
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class='ea-page-header_wrap' part='container'>
-                <div class='ea-page-header_title-wrap' part='title-wrap'>
-                    <ea-icon class='ea-page-header_back-icon' part='back-icon' icon="icon-angle-left"></ea-icon>
-                    <slot name="title"></slot>
-                </div>
-                <div class='ea-page-header_divider' part='divider'>|</div>
-                <div class='ea-page-header_content-wrap' part='content-wrap'>
-                    <slot name="content"></slot>
-                </div>
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-page-header", {
+      // ['--' + this.type]: this.type,
+    });
+
+    this.#container.className = className;
+
+    return className;
+  }
+
+  constructor() {
+    super();
+
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-page-header' part='container'>
+        <section class="ea-page-header__breadcrumb" part="breadcrumb">
+            <slot name="breadcrumb"></slot>
+        </section>
+        <section class="ea-page-header__wrapper" part="header-wrapper">
+            <div class="ea-page-header__back" part="back">
+                <span class="ea-page-header__icon" part="icon">
+                    <slot name="icon">
+                        <ea-icon icon="icon-angle-left" part="back-icon"></ea-icon>
+                    </slot>
+                </span>
+                <span class="ea-page-header__title" part="title">
+                    <slot name="title">Back</slot>
+                </span>
             </div>
-        `;
+            <ea-icon class="ea-page-header__divider" part="divider">|</ea-icon>
+            <div class="ea-page-header__content" part="content">
+                <slot name="content"></slot>
+            </div>
+            <div class="ea-page-header__extra" part="extra">
+                <slot name="extra"></slot>
+            </div>
+        </section>
+        <slot></slot>
+      </div>
+    `;
 
-        this.#wrap = shadowRoot.querySelector('.ea-page-header_wrap');
-        this.#titleWrap = shadowRoot.querySelector('.ea-page-header_title-wrap');
-        this.#titleSlot = shadowRoot.querySelector('slot[name="title"]');
-        this.#contentWrap = shadowRoot.querySelector('.ea-page-header_content-wrap');
-        this.#contentSlot = shadowRoot.querySelector('slot[name="content"]');
+    this.#container = this.shadowRoot.querySelector(".ea-page-header");
+    this.#backEl = this.shadowRoot.querySelector(".ea-page-header__back");
+    this.#backIconSlot = this.shadowRoot.querySelector(
+      ".ea-page-header__icon slot[name='icon']"
+    );
+    this.#titleSlot = this.shadowRoot.querySelector(
+      ".ea-page-header__title slot[name='title']"
+    );
+    this.#contentSlot = this.shadowRoot.querySelector(
+      ".ea-page-header__content slot[name='content']"
+    );
+  }
 
-        this.build(shadowRoot, stylesheet);
-    }
+  #onBackEvent = () => {
+    this.emit("back");
+  };
 
-    // ------- title 返回区域的内容 -------
-    // #region
-    get title() {
-        return this.getAttribute('title') || '';
-    }
+  connectedCallback() {
+    super.connectedCallback();
 
-    set title(value) {
-        if (value) {
-            this.setAttribute('title', value);
-            this.#titleSlot.innerText = value;
-        } else {
-            this.setAttribute('title', '返回');
-            this.#titleSlot.innerText = '返回';
-        }
-    }
-    // #endregion
-    // ------- end -------
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-    // ------- content 页面标题 -------
-    // #region
-    get content() {
-        return this.getAttribute('content') || '';
-    }
+    this.#backEl.addEventListener("click", this.#onBackEvent, {
+      signal: this.#abortController.signal,
+    });
+  }
 
-    set content(value) {
-        if (value) {
-            this.setAttribute('content', value);
-            this.#contentSlot.innerText = value;
-        } else {
-            this.setAttribute('content', '');
-            this.#contentSlot.innerText = '';
-        }
-    }
-    // #endregion
-    // ------- end -------
-
-    connectedCallback() {
-        this.title = this.title;
-
-        this.content = this.content;
-
-        this.#titleWrap.addEventListener('click', () => {
-            this.dispatchEvent(new CustomEvent('back'));
-        });
-    }
+  $beforeUnmounted() {
+    this.#abortController.abort();
+  }
 }
 
-if (!customElements.get('ea-page-header')) {
-    customElements.define('ea-page-header', EaPageHeader);
+if (!window.customElements.get("ea-page-header")) {
+  window.customElements.define("ea-page-header", EaPageHeader);
 }

@@ -1,24 +1,265 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
-</head>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+  </head>
 
-<body>
-    <script type='module'>
-        import '../components/ea-page-header/index.js'
-
-        const pageHeader = document.querySelector('#pageHeader');
-        pageHeader.addEventListener('back', () => {
-            console.log('go back');
-        })
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-page-header/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../src/components/ea-breadcrumb/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../src/components/ea-descriptions/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-tag/index.js"></script>
+    <script type="module" src="../src/components/ea-avatar/index.js"></script>
+    <script type="module">
+      //   const pageHeader = document.querySelector("#pageHeader");
+      //   pageHeader.addEventListener("back", () => {
+      //     console.log("go back");
+      //   });
     </script>
 
-    <ea-page-header id="pageHeader" content="详情页面"></ea-page-header>
-</body>
+    <style>
+      .flex {
+        display: flex;
+      }
 
+      .items-center {
+        align-items: center;
+      }
+
+      .ml-2 {
+        margin-left: 0.5rem;
+      }
+
+      .mr-2 {
+        margin-right: 0.5rem;
+      }
+
+      .mr-3 {
+        margin-right: 0.75rem;
+      }
+
+      .text-large {
+        font-size: 1.25rem;
+      }
+
+      .font-600 {
+        font-weight: 600;
+      }
+    </style>
+
+    <!--  完整示例 -->
+    <!-- #region -->
+    <h1>完整示例</h1>
+
+    <div aria-label="A complete example of page header" class="demo">
+      <ea-page-header id="completePageHeader">
+        <ea-breadcrumb slot="breadcrumb" separator="/">
+          <ea-breadcrumb-item href="#"> homepage </ea-breadcrumb-item>
+          <ea-breadcrumb-item href="#"> route 1 </ea-breadcrumb-item>
+          <ea-breadcrumb-item>route 2</ea-breadcrumb-item>
+        </ea-breadcrumb>
+        <div class="flex items-center" slot="content">
+          <ea-avatar
+            class="mr-3"
+            size="32px"
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          ></ea-avatar>
+          <span class="text-large font-600 mr-3"> Title </span>
+          <span class="text-sm mr-2"> Sub title </span>
+          <ea-tag>Default</ea-tag>
+        </div>
+        <div class="flex items-center" slot="extra">
+          <ea-button>Print</ea-button>
+          <ea-button type="primary" class="ml-2">Edit</ea-button>
+        </div>
+        <ea-descriptions>
+          <ea-descriptions-item label="Username">
+            Lilyiro
+          </ea-descriptions-item>
+          <ea-descriptions-item label="Essence">
+            Lord of the Wild
+          </ea-descriptions-item>
+          <ea-descriptions-item label="Place">
+            Lunacrest Continent
+          </ea-descriptions-item>
+          <ea-descriptions-item label="Traits">
+            <ea-tag size="small" type="warning" style="margin-right: 1rem">
+              Thunderous Veins
+            </ea-tag>
+            <ea-tag size="small" type="info">Daredevil</ea-tag>
+          </ea-descriptions-item>
+          <ea-descriptions-item label="Description">
+            She was once an elf lord, defending the border from goblin invaders.
+            She was then a goblin warrior, protecting her clan from being
+            slaughtered by elves. She has the unwavering courage to uphold
+            justice in her heart and she is prepared to betray or be betrayed
+            for the greater good. Despite her inner gentleness, Lilyiro, who has
+            spilled so much blood on battlefields, is more straightforward than
+            men.
+          </ea-descriptions-item>
+        </ea-descriptions>
+      </ea-page-header>
+    </div>
+
+    <script type="module">
+      import { EaNotification } from "../src/components/ea-notification/index.js";
+
+      const completeExample = {
+        pageHeader: document.querySelector("#completePageHeader"),
+
+        init() {
+          this.pageHeader.addEventListener("back", () => {
+            EaNotification({
+              type: "info",
+              title: "Back",
+              message: "Go back clicked!",
+            });
+          });
+        },
+      };
+      completeExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <ea-page-header id="basicPageHeader">
+        <span class="text-large font-600 mr-3" slot="content"> Title </span>
+      </ea-page-header>
+    </div>
+
+    <script type="module">
+      import { EaNotification } from "../src/components/ea-notification/index.js";
+
+      const basicExample = {
+        pageHeader: document.querySelector("#basicPageHeader"),
+
+        init() {
+          this.pageHeader.addEventListener("back", () => {
+            EaNotification({
+              type: "info",
+              title: "Back",
+              message: "Go back clicked!",
+            });
+          });
+        },
+      };
+      basicExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义图标 -->
+    <!-- #region -->
+    <h1>自定义图标</h1>
+
+    <div class="demo">
+      <ea-page-header icon="icon-ccw">
+        <span class="text-large font-600 mr-3" slot="content"> Title </span>
+      </ea-page-header>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  无图标 -->
+    <!-- #region -->
+    <h1>无图标</h1>
+
+    <div class="demo">
+      <ea-page-header icon="">
+        <span class="text-large font-600 mr-3" slot="content"> Title </span>
+      </ea-page-header>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  面包屑导航 -->
+    <!-- #region -->
+    <h1>面包屑导航</h1>
+
+    <div class="demo">
+      <ea-page-header>
+        <ea-breadcrumb slot="breadcrumb" separator="/">
+          <ea-breadcrumb-item href="#"> homepage </ea-breadcrumb-item>
+          <ea-breadcrumb-item href="#"> route 1 </ea-breadcrumb-item>
+          <ea-breadcrumb-item>route 2</ea-breadcrumb-item>
+        </ea-breadcrumb>
+        <span class="text-large font-600 mr-3" slot="content"> Title </span>
+      </ea-page-header>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  额外操作部分 -->
+    <!-- #region -->
+    <h1>额外操作部分</h1>
+
+    <div class="demo">
+      <ea-page-header>
+        <div class="flex items-center" slot="content">
+          <ea-avatar
+            class="mr-3"
+            size="32px"
+            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          ></ea-avatar>
+          <span class="text-large font-600 mr-3"> Title </span>
+          <span class="text-sm mr-2"> Sub title </span>
+          <ea-tag>Default</ea-tag>
+        </div>
+        <div class="flex items-center" slot="extra">
+          <ea-button>Print</ea-button>
+          <ea-button type="primary" class="ml-2">Edit</ea-button>
+        </div>
+      </ea-page-header>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  主要内容 -->
+    <!-- #region -->
+    <h1>主要内容</h1>
+
+    <div class="demo">
+      <ea-page-header>
+        <span class="text-large font-600 mr-3" slot="content"> Title </span>
+        <strong>
+          Your additional content can be added with default slot, You may put as
+          many content as you want here.
+        </strong>
+      </ea-page-header>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
 </html>
