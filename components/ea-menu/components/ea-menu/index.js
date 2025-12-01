@@ -66,6 +66,7 @@ export class EaMenu extends Base {
         // this.#container.classList.toggle("is-collapse", newVal);
       },
     },
+    // TODO: 没写disabled😋
   });
 
   /**

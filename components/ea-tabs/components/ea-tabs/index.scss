@@ -1,0 +1,88 @@
+$name: ea-tabs;
+
+:host {
+  --#{$name}-tab-spacing: 20px;
+  --#{$name}-border-color: var(--grey-300);
+
+  --#{$name}-border-card-bg-color: var(--grey-100);
+
+  --#{$name}-content-spacing: 15px;
+
+  --#{$name}-indicator-color: var(--blue-500);
+  --#{$name}-indicator-width: 0;
+  --#{$name}-indicator-x: 0;
+
+  --#{$name}-transition: var(--transition-normal);
+}
+
+@include block($name) {
+  position: relative;
+
+  @include element(nav) {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  @include element(line) {
+    position: relative;
+
+    height: 2px;
+    width: 100%;
+
+    background-color: var(--grey-300);
+  }
+
+  @include element(indicator) {
+    position: absolute;
+
+    display: block;
+    height: 100%;
+
+    width: var(--#{$name}-indicator-width);
+
+    transform: translateX(var(--#{$name}-indicator-x));
+
+    background-color: var(--#{$name}-indicator-color);
+
+    transition: transform var(--#{$name}-transition);
+  }
+
+  @include element(content) {
+    padding: var(--#{$name}-content-spacing);
+  }
+
+  &.ea-tabs--card,
+  &.ea-tabs--border-card {
+    .ea-tabs__line {
+      display: none;
+    }
+
+    .ea-tabs__nav {
+      &::after {
+        content: "";
+        position: relative;
+
+        margin-top: auto;
+
+        width: 100%;
+        height: 1px;
+
+        background-color: var(--#{$name}-border-color);
+      }
+    }
+  }
+
+  @include modifier(card) {
+  }
+
+  @include modifier(border-card) {
+    border: 1px solid var(--#{$name}-border-color);
+
+    .ea-tabs__nav {
+      background-color: var(--#{$name}-border-card-bg-color);
+    }
+  }
+}
