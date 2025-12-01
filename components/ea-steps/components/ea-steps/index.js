@@ -25,13 +25,18 @@ export class EaSteps extends Base {
     space: {
       type: String,
       default: "50%",
-      observer: (newVal) => {},
+      observer: (newVal) => {
+        this.style.setProperty("--ea-step-tail-spacing", newVal);
+      },
     },
-    direction: {
-      type: ["vertical", "horizontal"],
-      default: "horizontal",
-      observer: (newVal) => {},
-    },
+    //   TODO: 没写😋
+    // direction: {
+    //   type: ["vertical", "horizontal"],
+    //   default: "horizontal",
+    //   observer: (newVal) => {
+    //     this.updateContainerClasslist();
+    //   },
+    // },
     active: {
       type: Number,
       default: 0,
@@ -57,7 +62,33 @@ export class EaSteps extends Base {
     simple: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: (newVal) => {
+        /** @type {HTMLElement[]} */
+        const steps = [...this.querySelectorAll("ea-step")];
+        if (newVal) {
+          steps.forEach((item) => {
+            try {
+              item.querySelector('[slot="simple-arrow"]')?.remove();
+            } catch (error) {}
+
+            try {
+              const arrow = document.createElement("ea-icon");
+              arrow.setAttribute("slot", "simple-arrow");
+              arrow.setAttribute("icon", "icon-angle-right");
+              arrow.part = "simple-arrow";
+              item.appendChild(arrow);
+            } catch {}
+          });
+        } else {
+          steps.forEach((item) => {
+            try {
+              item.querySelector('[slot="simple-arrow"]')?.remove();
+            } catch {}
+          });
+        }
+
+        this.updateContainerClasslist();
+      },
     },
   });
 
@@ -66,9 +97,16 @@ export class EaSteps extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-steps", {
-      // ['--' + this.type]: this.type,
-    });
+    const className = this.computedClasslist(
+      "ea-steps",
+      {
+        // ["--" + this.direction]: this.direction,
+      },
+      {
+        simple: this.simple,
+        "align-center": this["align-center"],
+      }
+    );
 
     this.#container.className = className;
 

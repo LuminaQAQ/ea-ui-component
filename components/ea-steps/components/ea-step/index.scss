@@ -1,47 +1,200 @@
 $name: ea-step;
 
+$status-theme: (
+  process: var(--grey-900),
+  wait: var(--grey-500),
+  finish: var(--blue-500),
+  success: var(--green-500),
+  error: var(--red-500),
+);
+
 :host {
-  --#{$name}-tail-flex: 1;
+  --#{$name}-icon-border-radius: var(--border-radius-circle);
+
+  --#{$name}-icon-wrapper-size: 24px;
+  --#{$name}-icon-size: var(--font-size-md);
+  --#{$name}-arrow-icon-size: 24px;
+
+  --#{$name}-tail-size: 2px;
+
+  @each $status, $color in $status-theme {
+    --#{$name}-#{$status}-color: #{$color};
+  }
+
+  --#{$name}-tail-color: var(--grey-500);
+
+  --#{$name}-icon-bg-color: var(--color-white);
+
+  --#{$name}-icon-font-weight: var(--font-weight-bold);
 }
 
 @include block($name) {
   @include element(head) {
+    position: relative;
+
     display: flex;
     align-items: center;
   }
 
+  @include element(icon-wrapper) {
+    position: relative;
+    background-color: var(--#{$name}-icon-bg-color);
+  }
+
   @include element(icon) {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
     box-sizing: border-box;
-    border-radius: 50%;
-    border: 1px solid #c0c4cc;
+    border-radius: var(--#{$name}-icon-border-radius);
+    border: 2px solid;
 
-    width: 24px;
-    height: 24px;
+    background-color: var(--#{$name}-icon-bg-color);
 
-    font-size: 14px;
+    width: var(--#{$name}-icon-wrapper-size);
+    height: var(--#{$name}-icon-wrapper-size);
+
+    font-size: var(--#{$name}-icon-size);
+    font-weight: var(--#{$name}-icon-font-weight);
 
     user-select: none;
+    z-index: 1;
   }
 
   @include element(tail) {
-    flex: var(--#{$name}-tail-flex);
-    height: 1px;
-    background-color: #c0c4cc;
+    position: relative;
+
+    flex: 1 0 var(--#{$name}-tail-spacing);
+    width: var(--#{$name}-tail-spacing);
+    height: var(--#{$name}-tail-size);
+
+    background-color: var(--#{$name}-tail-color);
+
+    z-index: -1;
   }
 
-  @include state(wait) {
-    color: #a8abb2;
+  @include element(simple-arrow) {
+    display: none;
   }
 
-  @include state(finish) {
-    color: #409eff;
+  // @include modifier(vertical) {
+  //   .ea-step__head {
+  //     flex-direction: column;
+  //     align-items: start;
+  //   }
+
+  //   .ea-step__tail {
+  //     width: 2px;
+  //     height: var(--#{$name}-tail-spacing);
+  //   }
+  // }
+
+  @each $status, $color in $status-theme {
+    @include state($status) {
+      color: $color;
+
+      .ea-step__icon,
+      .ea-step__tail {
+        border-color: $color;
+      }
+    }
   }
 
-  @include state(success) {
-    color: #67c23a;
+  @include state(icon) {
+    .ea-step__icon {
+      border-color: transparent;
+    }
+  }
+
+  &:not(.is-simple) {
+    @include state(align-center) {
+      text-align: center;
+
+      .ea-step__tail {
+        flex: 1 0 100%;
+        margin-left: calc(0px - var(--#{$name}-icon-wrapper-size));
+      }
+
+      .ea-step__icon-wrapper {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      &.is-first {
+        .ea-step__icon-wrapper {
+          flex: 1 0 calc(50% + var(--#{$name}-icon-wrapper-size) / 2);
+
+          position: relative;
+          inset: unset;
+          text-align: end;
+          transform: unset;
+        }
+
+        .ea-step__tail {
+          flex: 1 0 50%;
+        }
+      }
+
+      &.is-last {
+        .ea-step__head {
+          flex-direction: row-reverse;
+        }
+
+        .ea-step__icon-wrapper {
+          flex: 1 0 calc(50% + var(--#{$name}-icon-size) / 2);
+
+          position: relative;
+          inset: unset;
+          text-align: start;
+          transform: unset;
+        }
+
+        .ea-step__tail {
+          flex: 1 0 50%;
+
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  @include state(simple) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .ea-step__tail {
+      display: none;
+    }
+
+    .ea-step__icon-wrapper {
+      background-color: transparent;
+    }
+
+    .ea-step__icon {
+      border-color: transparent;
+      background-color: transparent;
+    }
+
+    .ea-step__simple-arrow {
+      display: inline-block;
+
+      flex: 1 0 auto;
+
+      text-align: center;
+
+      ::slotted(ea-icon) {
+        font-size: var(--#{$name}-arrow-icon-size);
+      }
+    }
+  }
+
+  @include state(last) {
+    .ea-step__tail,
+    .ea-step__simple-arrow {
+      display: none;
+    }
   }
 }

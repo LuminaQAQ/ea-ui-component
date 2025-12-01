@@ -1,10 +1,45 @@
 $name: ea-steps;
 
+:host {
+  --ea-step-tail-spacing: 50%;
+
+  --ea-steps-simple-padding: 13px 8%;
+  --ea-steps-simple-bg-color: var(--grey-100);
+}
+
+::slotted(ea-step) {
+  flex: 1 0 auto;
+}
+
 ::slotted(ea-step:last-child) {
-  --ea-step-tail-flex: 0;
+  flex: 0 1 auto;
+}
+
+:host([align-center]:not([simple])) {
+  ::slotted(ea-step:last-child) {
+    flex: 1 0 auto;
+  }
+}
+
+:host {
+  display: block;
 }
 
 @include block($name) {
   display: flex;
   align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  box-sizing: border-box;
+
+  @include state(simple) {
+    padding: var(--ea-steps-simple-padding);
+    background-color: var(--ea-steps-simple-bg-color);
+  }
+
+  @include state(align-center) {
+    justify-content: center;
+  }
 }
