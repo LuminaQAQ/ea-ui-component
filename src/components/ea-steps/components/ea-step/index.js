@@ -50,13 +50,17 @@ export class EaStep extends Base {
     icon: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: (newVal) => {
+        this.#stepIcon.setAttribute("icon", newVal);
+      },
     },
     status: {
       type: ["", "wait", "process", "finish", "error", "success"],
       default: "",
       observer: (newVal) => {
         this.updateContainerClasslist();
+        if (this.icon) return;
+
         if (newVal === this.#hostContextSteps.getAttribute("finish-status")) {
           this.#stepIcon.setAttribute("icon", "icon-ok");
           this.#stepIcon.textContent = "";
@@ -74,6 +78,26 @@ export class EaStep extends Base {
         ),
       observer: (newVal) => {},
     },
+    simple: {
+      type: Boolean,
+      default: () => this.#hostContextSteps.hasAttribute("simple"),
+      observer: (newVal) => {},
+    },
+    "align-center": {
+      type: Boolean,
+      default: () => this.#hostContextSteps.hasAttribute("align-center"),
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    direction: {
+      type: ["vertical", "horizontal"],
+      default: () =>
+        this.#hostContextSteps.getAttribute("direction") || "horizontal",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -84,10 +108,17 @@ export class EaStep extends Base {
     const className = this.computedClasslist(
       "ea-step",
       {
-        // ["--" + ]: this.status,
+        ["--" + this.direction]: this.direction,
       },
       {
         [this.status]: this.status,
+        "align-center": this["align-center"],
+        icon: this.icon,
+        simple: this.simple,
+        last:
+          this.#hostContextSteps.querySelectorAll("ea-step").length - 1 ===
+          this.index,
+        first: this.index === 0,
       }
     );
 
@@ -110,9 +141,7 @@ export class EaStep extends Base {
         <section class="ea-step__head" part="head">
           <div class="ea-step__icon-wrapper" part="icon-wrapper">
             <slot name="icon">
-              <ea-icon class="ea-step__icon" part="icon">${
-                this.index + 1
-              }</ea-icon>
+              <ea-icon class="ea-step__icon" part="icon"></ea-icon>
             </slot>
           </div>
           <div class="ea-step__tail" part="tail"></div>
@@ -125,6 +154,9 @@ export class EaStep extends Base {
             <slot name="description"></slot>
           </div>
         </section>
+        <span class="ea-step__simple-arrow" part="simple-arrow">
+          <slot name="simple-arrow"></slot>
+        </span>
       </div>
     `;
 
@@ -135,6 +167,8 @@ export class EaStep extends Base {
     this.#descriptionSlot = this.shadowRoot.querySelector(
       'slot[name="description"]'
     );
+
+    this.updateContainerClasslist();
   }
 
   connectedCallback() {
