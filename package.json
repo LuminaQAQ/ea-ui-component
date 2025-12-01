@@ -123,9 +123,6 @@
     "./ea-pagination": {
       "import": "./dist/ea-pagination.js"
     },
-    "./ea-pane": {
-      "import": "./dist/ea-pane.js"
-    },
     "./ea-popconfirm": {
       "import": "./dist/ea-popconfirm.js"
     },
@@ -170,9 +167,6 @@
     },
     "./ea-switch": {
       "import": "./dist/ea-switch.js"
-    },
-    "./ea-tab": {
-      "import": "./dist/ea-tab.js"
     },
     "./ea-table": {
       "import": "./dist/ea-table.js"

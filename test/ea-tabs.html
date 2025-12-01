@@ -1,124 +1,139 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
-
-        ea-tabs::part(pane-wrap) {
-            min-height: 10rem;
-        }
+      hr {
+        margin: 3rem 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <script type='module'>
-        import "../components/ea-icon/index.js"
-        import '../components/ea-tabs/index.js'
+  <body>
+    <script type="module" src="../src/components/ea-tabs/index.js"></script>
+    <script type="module">
+      const editableObj = {
+        wrap: document.querySelector("#editable"),
+        paneSlot: document.querySelector("#editableSlot"),
+        addBtn: document.querySelector("#addBtn"),
 
-        const editableObj = {
-            wrap: document.querySelector('#editable'),
-            paneSlot: document.querySelector('#editableSlot'),
-            addBtn: document.querySelector('#addBtn'),
+        handleTabclose(wrap) {
+          wrap.addEventListener("tab-close", (e) => {
+            console.log("close", e.detail);
+          });
+        },
 
-            handleTabclose(wrap) {
-                wrap.addEventListener('tab-close', (e) => {
-                    console.log('close', e.detail);
-                })
-            },
+        handleTabAdd(btn, wrap, slotWrap) {
+          btn.addEventListener("click", () => {
+            const tab = document.createElement("ea-tab");
+            tab.innerText = "新增标签";
 
-            handleTabAdd(btn, wrap, slotWrap) {
-                btn.addEventListener('click', () => {
-                    const tab = document.createElement('ea-tab');
-                    tab.innerText = '新增标签';
+            const pane = document.createElement("ea-pane");
+            pane.innerText = "新增标签内容";
 
-                    const pane = document.createElement('ea-pane');
-                    pane.innerText = '新增标签内容';
+            wrap.appendChild(tab);
+            slotWrap.appendChild(pane);
+          });
 
-                    wrap.appendChild(tab);
-                    slotWrap.appendChild(pane);
-                })
+          wrap.addEventListener("tab-add", (e) => {
+            console.log("add", e.detail);
+          });
+        },
 
-                wrap.addEventListener('tab-add', (e) => {
-                    console.log('add', e.detail);
-                })
-            },
+        init() {
+          this.handleTabclose(this.wrap);
+          this.handleTabAdd(this.addBtn, this.wrap, this.paneSlot);
+        },
+      };
 
-            init() {
-                this.handleTabclose(this.wrap);
-                this.handleTabAdd(this.addBtn, this.wrap, this.paneSlot);
-            }
-        }
-
-        editableObj.init();
+      editableObj.init();
     </script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <ea-tabs>
+        <ea-tab panel="first">User</ea-tab>
+        <ea-tab panel="second">Config</ea-tab>
+        <ea-tab panel="third">Role</ea-tab>
+        <ea-tab panel="fourth">Task</ea-tab>
+
+        <ea-tab-panel name="first">User</ea-tab-panel>
+        <ea-tab-panel name="second">Config</ea-tab-panel>
+        <ea-tab-panel name="third">Role</ea-tab-panel>
+        <ea-tab-panel name="fourth">Task</ea-tab-panel>
+      </ea-tabs>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
 
     <!-- -------- 1 基础用法 --------  -->
     <!-- #region  -->
     <ea-tabs id="clickEvent--normal-card" actived="second">
-        <ea-tab name="first">用户管理</ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
+      <ea-tab name="first">用户管理</ea-tab>
+      <ea-tab name="second">配置管理</ea-tab>
+      <ea-tab name="third">角色管理</ea-tab>
+      <ea-tab name="fourth">定时任务补偿</ea-tab>
 
-        <div slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
+      <div slot="pane">
+        <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+        <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+        <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+        <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+      </div>
     </ea-tabs>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
+    <hr />
 
     <!-- -------- 2 选项卡样式 --------  -->
     <!-- #region  -->
     <ea-tabs id="clickEvent--card" actived="second" type="card">
-        <ea-tab name="first">用户管理</ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
+      <ea-tab name="first">用户管理</ea-tab>
+      <ea-tab name="second">配置管理</ea-tab>
+      <ea-tab name="third">角色管理</ea-tab>
+      <ea-tab name="fourth">定时任务补偿</ea-tab>
 
-        <div slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
+      <div slot="pane">
+        <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+        <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+        <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+        <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+      </div>
     </ea-tabs>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
+    <hr />
 
     <!-- -------- 3 卡片化 --------  -->
     <!-- #region  -->
     <ea-tabs id="clickEvent--border-card" actived="second" type="border-card">
-        <ea-tab name="first">用户管理</ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
+      <ea-tab name="first">用户管理</ea-tab>
+      <ea-tab name="second">配置管理</ea-tab>
+      <ea-tab name="third">角色管理</ea-tab>
+      <ea-tab name="fourth">定时任务补偿</ea-tab>
 
-        <div slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
+      <div slot="pane">
+        <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+        <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+        <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+        <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+      </div>
     </ea-tabs>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
+    <hr />
 
     <!-- -------- 4 增减标签页 --------  -->
     <!-- #region  -->
@@ -126,41 +141,40 @@
     <p>在tabs组件上</p>
     <button id="addBtn">add</button>
     <ea-tabs actived="second" type="border-card" editable id="editable">
-        <ea-tab name="first">
-            <ea-icon icon="icon-coffee"></ea-icon>
-            用户管理
-        </ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
+      <ea-tab name="first">
+        <ea-icon icon="icon-coffee"></ea-icon>
+        用户管理
+      </ea-tab>
+      <ea-tab name="second">配置管理</ea-tab>
+      <ea-tab name="third">角色管理</ea-tab>
+      <ea-tab name="fourth">定时任务补偿</ea-tab>
 
-        <div id="editableSlot" slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
+      <div id="editableSlot" slot="pane">
+        <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+        <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+        <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+        <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+      </div>
     </ea-tabs>
 
     <p>在tab组件上</p>
     <ea-tabs actived="second" type="border-card" id="editable">
-        <ea-tab name="first" editable>
-            <ea-icon icon="icon-coffee"></ea-icon>
-            用户管理
-        </ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
+      <ea-tab name="first" editable>
+        <ea-icon icon="icon-coffee"></ea-icon>
+        用户管理
+      </ea-tab>
+      <ea-tab name="second">配置管理</ea-tab>
+      <ea-tab name="third">角色管理</ea-tab>
+      <ea-tab name="fourth">定时任务补偿</ea-tab>
 
-        <div id="editableSlot" slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
+      <div id="editableSlot" slot="pane">
+        <ea-pane class="tab-page" name="first">用户管理</ea-pane>
+        <ea-pane class="tab-page" name="second">配置管理</ea-pane>
+        <ea-pane class="tab-page" name="third">角色管理</ea-pane>
+        <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
+      </div>
     </ea-tabs>
     <!-- #endregion  -->
     <!-- -------------------  -->
-</body>
-
+  </body>
 </html>

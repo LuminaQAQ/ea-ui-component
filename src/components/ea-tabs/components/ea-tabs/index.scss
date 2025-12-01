@@ -1,0 +1,9 @@
+$name: ea-tabs;
+
+@include block($name) {
+  @include element(nav) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+}
