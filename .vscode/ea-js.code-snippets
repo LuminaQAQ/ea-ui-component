@@ -76,6 +76,11 @@
       "",
       "      connectedCallback() {",
       "        super.connectedCallback();",
+
+      "    this.#abortController?.abort();",
+      "    this.#abortController = new AbortController();",
+      "",
+      "",
       "      }",
       "",
       "  \\$beforeUnmounted() {",

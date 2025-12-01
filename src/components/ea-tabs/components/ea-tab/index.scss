@@ -1,4 +1,72 @@
 $name: ea-tab;
 
+:host {
+  --#{$name}-active-color: var(--blue-500);
+  --#{$name}-disabled-color: var(--grey-400);
+
+  --#{$name}-border-card-bg-color: var(--color-white);
+
+  --#{$name}-height: 40px;
+}
+
+:host {
+  cursor: pointer;
+}
+
+:host([disabled]) {
+  cursor: not-allowed;
+}
+
 @include block($name) {
+  box-sizing: border-box;
+  padding: 0 var(--ea-tabs-tab-spacing);
+
+  height: var(--#{$name}-height);
+  line-height: var(--#{$name}-height);
+
+  border: 1px solid transparent;
+
+  @include state(disabled) {
+    pointer-events: none;
+    color: var(--#{$name}-disabled-color);
+  }
+
+  @include state(active) {
+    color: var(--#{$name}-active-color);
+  }
+
+  @include modifier(card) {
+    border-color: var(--ea-tabs-border-color);
+    border-right-color: transparent;
+
+    &.is-active {
+      border-bottom-color: transparent;
+    }
+  }
+
+  @include state(last) {
+    &.ea-tab--card {
+      border-right-color: var(--ea-tabs-border-color);
+    }
+  }
+
+  @include modifier(border-card) {
+    border-bottom-color: var(--ea-tabs-border-color);
+
+    transition: background var(--ea-tabs-transition),
+      color var(--ea-tabs-transition), border-color var(--ea-tabs-transition);
+
+    &.is-active {
+      background-color: var(--#{$name}-border-card-bg-color);
+
+      border: 1px solid transparent;
+
+      border-left-color: var(--ea-tabs-border-color);
+      border-right-color: var(--ea-tabs-border-color);
+
+      &.is-first {
+        border-left-color: transparent;
+      }
+    }
+  }
 }

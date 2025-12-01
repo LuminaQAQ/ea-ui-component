@@ -4,19 +4,24 @@ import stylesheet from "./index.scss?inline";
 
 export class EaTabPanel extends Base {
   /** @type {HTMLElement} */
+  #hostTabsContext = this.closest("ea-tabs");
+
+  /** @type {HTMLElement} */
   #container;
   /** @type {AbortController} */
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes];
+    return [...super.observedAttributes, "type"];
   }
 
   state = this.properties({
     type: {
-      // type: ,
-      default: "",
-      observer: (newVal) => {},
+      type: ["", "card", "border-card"],
+      default: () => this.#hostTabsContext.getAttribute("type") || "",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
     },
   });
 
@@ -26,7 +31,7 @@ export class EaTabPanel extends Base {
    */
   updateContainerClasslist() {
     const className = this.computedClasslist("ea-tab-panel", {
-      // ['--' + this.type]: this.type,
+      ["--" + this.type]: this.type,
     });
 
     this.#container.className = className;
@@ -47,7 +52,7 @@ export class EaTabPanel extends Base {
       <div class='ea-tab-panel' part='container'>
         <slot></slot>
       </div>
-        `;
+    `;
 
     this.#container = this.shadowRoot.querySelector(".ea-tab-panel");
   }

@@ -4,19 +4,38 @@ import stylesheet from "./index.scss?inline";
 
 export class EaTab extends Base {
   /** @type {HTMLElement} */
+  #hostTabsContext = this.closest("ea-tabs");
+
+  /** @type {HTMLElement} */
   #container;
   /** @type {AbortController} */
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes];
+    return [...super.observedAttributes, "type", "disabled", "active"];
   }
 
   state = this.properties({
     type: {
-      // type: ,
-      default: "",
-      observer: (newVal) => {},
+      type: ["", "card", "border-card"],
+      default: () => this.#hostTabsContext.getAttribute("type") || "",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
+    active: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
     },
   });
 
@@ -25,9 +44,20 @@ export class EaTab extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-tab", {
-      // ['--' + this.type]: this.type,
-    });
+    const tabEls = [...this.#hostTabsContext.querySelectorAll("ea-tab")];
+
+    const className = this.computedClasslist(
+      "ea-tab",
+      {
+        ["--" + this.type]: this.type,
+      },
+      {
+        disabled: this.disabled,
+        active: this.active,
+        last: tabEls.slice(-1)[0] === this,
+        first: tabEls.slice(0)[0] === this,
+      }
+    );
 
     this.#container.className = className;
 
@@ -50,6 +80,8 @@ export class EaTab extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-tab");
+
+    this.updateContainerClasslist();
   }
 
   connectedCallback() {
