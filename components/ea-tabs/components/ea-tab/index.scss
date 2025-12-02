@@ -26,6 +26,87 @@ $name: ea-tab;
 
   border: 1px solid transparent;
 
+  @include modifier(card) {
+    border-color: var(--ea-tabs-border-color);
+    border-right-color: transparent;
+
+    &.is-active {
+      &.ea-tab--top,
+      &.ea-tab--bottom {
+        border-bottom-color: transparent;
+      }
+
+      &.ea-tab--left {
+        border-right-color: transparent;
+      }
+
+      &.ea-tab--right {
+        border-left-color: transparent;
+      }
+    }
+
+    &.ea-tab--left,
+    &.ea-tab--right {
+      border-bottom-color: transparent;
+      border-right-color: var(--ea-tabs-border-color);
+      &.is-last {
+        border-bottom-color: var(--ea-tabs-border-color);
+      }
+    }
+  }
+
+  @include modifier(border-card) {
+    transition: background var(--ea-tabs-transition),
+      color var(--ea-tabs-transition), border-color var(--ea-tabs-transition);
+
+    &.ea-tab--top,
+    &.ea-tab--bottom {
+      border-bottom-color: var(--ea-tabs-border-color);
+    }
+
+    &.ea-tab--left {
+      border-right-color: var(--ea-tabs-border-color);
+    }
+
+    &.ea-tab--right {
+      border-left-color: var(--ea-tabs-border-color);
+    }
+
+    &.is-active {
+      background-color: var(--#{$name}-border-card-bg-color);
+
+      border: 1px solid transparent;
+
+      &.ea-tab--top,
+      &.ea-tab--bottom {
+        border-left-color: var(--ea-tabs-border-color);
+        border-right-color: var(--ea-tabs-border-color);
+
+        &.is-first {
+          border-left-color: transparent;
+        }
+      }
+
+      &.ea-tab--left,
+      &.ea-tab--right {
+        border-top-color: var(--ea-tabs-border-color);
+        border-bottom-color: var(--ea-tabs-border-color);
+
+        &.is-first {
+          border-top-color: transparent;
+        }
+      }
+
+      &.ea-tab--left {
+        border-right-color: transparent;
+      }
+
+      &.ea-tab--right {
+        border-left-color: transparent;
+      }
+    }
+  }
+
   @include state(disabled) {
     pointer-events: none;
     color: var(--#{$name}-disabled-color);
@@ -35,38 +116,9 @@ $name: ea-tab;
     color: var(--#{$name}-active-color);
   }
 
-  @include modifier(card) {
-    border-color: var(--ea-tabs-border-color);
-    border-right-color: transparent;
-
-    &.is-active {
-      border-bottom-color: transparent;
-    }
-  }
-
   @include state(last) {
-    &.ea-tab--card {
+    &.ea-tab--card:not(.ea-tab--left) {
       border-right-color: var(--ea-tabs-border-color);
-    }
-  }
-
-  @include modifier(border-card) {
-    border-bottom-color: var(--ea-tabs-border-color);
-
-    transition: background var(--ea-tabs-transition),
-      color var(--ea-tabs-transition), border-color var(--ea-tabs-transition);
-
-    &.is-active {
-      background-color: var(--#{$name}-border-card-bg-color);
-
-      border: 1px solid transparent;
-
-      border-left-color: var(--ea-tabs-border-color);
-      border-right-color: var(--ea-tabs-border-color);
-
-      &.is-first {
-        border-left-color: transparent;
-      }
     }
   }
 }

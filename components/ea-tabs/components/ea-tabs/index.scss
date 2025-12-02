@@ -9,14 +9,23 @@ $name: ea-tabs;
   --#{$name}-content-spacing: 15px;
 
   --#{$name}-indicator-color: var(--blue-500);
-  --#{$name}-indicator-width: 0;
+  --#{$name}-indicator-size: 0;
   --#{$name}-indicator-x: 0;
 
   --#{$name}-transition: var(--transition-normal);
 }
 
+:host {
+  display: block;
+}
+
 @include block($name) {
   position: relative;
+
+  display: flex;
+
+  width: 100%;
+  height: 100%;
 
   @include element(nav) {
     position: relative;
@@ -41,9 +50,7 @@ $name: ea-tabs;
     display: block;
     height: 100%;
 
-    width: var(--#{$name}-indicator-width);
-
-    transform: translateX(var(--#{$name}-indicator-x));
+    width: var(--#{$name}-indicator-size);
 
     background-color: var(--#{$name}-indicator-color);
 
@@ -51,7 +58,11 @@ $name: ea-tabs;
   }
 
   @include element(content) {
+    box-sizing: border-box;
+
     padding: var(--#{$name}-content-spacing);
+
+    width: 100%;
   }
 
   &.ea-tabs--card,
@@ -60,17 +71,29 @@ $name: ea-tabs;
       display: none;
     }
 
-    .ea-tabs__nav {
-      &::after {
-        content: "";
-        position: relative;
+    .ea-tabs__nav::after {
+      content: "";
+      position: relative;
 
-        margin-top: auto;
+      margin-top: auto;
 
-        width: 100%;
-        height: 1px;
+      width: 100%;
+      height: 1px;
 
-        background-color: var(--#{$name}-border-color);
+      background-color: var(--#{$name}-border-color);
+    }
+
+    &.ea-tabs--right,
+    &.ea-tabs--left {
+      .ea-tabs__nav::after {
+        width: 1px;
+        height: 100%;
+      }
+    }
+
+    &.ea-tabs--left {
+      .ea-tabs__nav::after {
+        margin-left: auto;
       }
     }
   }
@@ -84,5 +107,62 @@ $name: ea-tabs;
     .ea-tabs__nav {
       background-color: var(--#{$name}-border-card-bg-color);
     }
+  }
+
+  &.ea-tabs--bottom,
+  &.ea-tabs--top {
+    .ea-tabs__indicator {
+      transform: translateX(var(--#{$name}-indicator-x));
+    }
+  }
+
+  @include modifier(top) {
+    flex-direction: column;
+  }
+
+  @include modifier(bottom) {
+    flex-direction: column-reverse;
+
+    .ea-tabs__content {
+      order: 3;
+    }
+
+    .ea-tabs__nav {
+      order: 2;
+    }
+
+    .ea-tabs__line {
+      order: 1;
+    }
+  }
+
+  &.ea-tabs--right,
+  &.ea-tabs--left {
+    align-items: stretch;
+
+    .ea-tabs__nav {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .ea-tabs__line {
+      height: auto;
+      width: 2px;
+    }
+
+    .ea-tabs__indicator {
+      height: var(--#{$name}-indicator-size);
+      width: 2px;
+
+      transform: translateY(var(--#{$name}-indicator-x));
+    }
+  }
+
+  @include modifier(right) {
+    flex-direction: row-reverse;
+  }
+
+  @include modifier(left) {
+    flex-direction: row;
   }
 }

@@ -12,7 +12,13 @@ export class EaTab extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "type", "disabled", "active"];
+    return [
+      ...super.observedAttributes,
+      "type",
+      "disabled",
+      "active",
+      "tab-position",
+    ];
   }
 
   state = this.properties({
@@ -37,6 +43,14 @@ export class EaTab extends Base {
         this.updateContainerClasslist();
       },
     },
+    "tab-position": {
+      type: ["", "card", "border-card"],
+      default: () =>
+        this.#hostTabsContext.getAttribute("tab-position") || "top",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -49,7 +63,11 @@ export class EaTab extends Base {
     const className = this.computedClasslist(
       "ea-tab",
       {
-        ["--" + this.type]: this.type,
+        ["--" + this.type]:
+          this.type === this.#hostTabsContext.getAttribute("type") || "",
+        ["--" + this["tab-position"]]:
+          this["tab-position"] ===
+            this.#hostTabsContext.getAttribute("tab-position") || "top",
       },
       {
         disabled: this.disabled,
