@@ -1,8 +1,0 @@
-export const stylesheet = `
-.ea-pane_wrap {
-  display: none;
-}
-.ea-pane_wrap.is-actived {
-  display: block;
-}
-`;
