@@ -20,7 +20,7 @@ export class EaTabs extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "type", "active"];
+    return [...super.observedAttributes, "type", "active", "tab-position"];
   }
 
   state = this.properties({
@@ -55,6 +55,19 @@ export class EaTabs extends Base {
         });
       },
     },
+    "tab-position": {
+      type: ["top", "bottom", "left", "right"],
+      default: "top",
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+        this.#updateTabsActive(this.active);
+
+        [
+          ...this.querySelectorAll("ea-tab-panel"),
+          ...this.querySelectorAll("ea-tab"),
+        ].forEach((item) => item.setAttribute("tab-position", newVal));
+      },
+    },
   });
 
   /**
@@ -64,6 +77,7 @@ export class EaTabs extends Base {
   updateContainerClasslist() {
     const className = this.computedClasslist("ea-tabs", {
       ["--" + this.type]: this.type,
+      ["--" + this["tab-position"]]: this["tab-position"],
     });
 
     this.#container.className = className;
@@ -90,17 +104,23 @@ export class EaTabs extends Base {
     const tabEls = [...this.querySelectorAll("ea-tab")];
 
     tabEls.forEach((tab, index) => {
+      const isVertical =
+        this["tab-position"] === "top" || this["tab-position"] === "bottom";
       const isActive = tab.getAttribute("panel") === activeName;
+
       tab.toggleAttribute("active", isActive);
 
       if (isActive && this.type === "") {
+        const tabRect = tab.getBoundingClientRect();
+        const lineRect = this.#line.getBoundingClientRect();
+
         this.style.setProperty(
-          "--ea-tabs-indicator-width",
-          `${tab.offsetWidth}px`
+          "--ea-tabs-indicator-size",
+          `${isVertical ? tab.offsetWidth : tab.offsetHeight}px`
         );
         this.style.setProperty(
           "--ea-tabs-indicator-x",
-          `${tab.offsetLeft - this.#line.getBoundingClientRect().left}px`
+          `${isVertical ? tabRect.x - lineRect.x : tabRect.y - lineRect.y}px`
         );
       }
     });
@@ -154,7 +174,7 @@ export class EaTabs extends Base {
         <nav class='ea-tabs__nav' part='nav'>
           <slot name='nav'></slot>
         </nav>
-        <div class="ea-tabs__line" part="line">
+        <div class="ea-tabs__line" part="line" tabindex="-1">
             <span class="ea-tabs__indicator" part="indicator"></span>
         </div>
         <main class='ea-tabs__content' part='content'>
@@ -173,6 +193,8 @@ export class EaTabs extends Base {
     this.#content = this.shadowRoot.querySelector(".ea-tabs__content");
 
     this.#onTabsSlotChange();
+
+    this.updateContainerClasslist();
   }
 
   connectedCallback() {
