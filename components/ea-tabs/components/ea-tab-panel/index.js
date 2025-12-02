@@ -12,10 +12,15 @@ export class EaTabPanel extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "type"];
+    return [...super.observedAttributes, "name", "type"];
   }
 
   state = this.properties({
+    name: {
+      type: String,
+      default: "",
+      observer: (newVal) => {},
+    },
     type: {
       type: ["", "card", "border-card"],
       default: () => this.#hostTabsContext.getAttribute("type") || "",
