@@ -4,6 +4,9 @@ $name: ea-tabs;
   --#{$name}-tab-spacing: 20px;
   --#{$name}-border-color: var(--grey-300);
 
+  --#{$name}-nav-height: 40px;
+  --#{$name}-width: 40px;
+
   --#{$name}-border-card-bg-color: var(--grey-100);
 
   --#{$name}-content-spacing: 15px;
@@ -29,10 +32,38 @@ $name: ea-tabs;
 
   @include element(nav) {
     position: relative;
+    box-sizing: border-box;
 
     display: flex;
     align-items: center;
     flex-direction: row;
+
+    overflow-y: hidden;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    height: var(--#{$name}-nav-height);
+    line-height: var(--#{$name}-nav-height);
+  }
+
+  @include element(scroll) {
+    display: none;
+
+    position: sticky;
+    height: var(--#{$name}-nav-height);
+    line-height: var(--#{$name}-nav-height);
+
+    cursor: pointer;
+
+    background-color: var(--color-white);
+  }
+
+  @include element(prev) {
+    left: 0;
+  }
+
+  @include element(next) {
+    right: 0;
   }
 
   @include element(line) {
@@ -164,5 +195,11 @@ $name: ea-tabs;
 
   @include modifier(left) {
     flex-direction: row;
+  }
+
+  @include state(overflow) {
+    .ea-tabs__scroll {
+      display: block;
+    }
   }
 }

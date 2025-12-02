@@ -5,8 +5,6 @@ $name: ea-tab;
   --#{$name}-disabled-color: var(--grey-400);
 
   --#{$name}-border-card-bg-color: var(--color-white);
-
-  --#{$name}-height: 40px;
 }
 
 :host {
@@ -21,10 +19,21 @@ $name: ea-tab;
   box-sizing: border-box;
   padding: 0 var(--ea-tabs-tab-spacing);
 
-  height: var(--#{$name}-height);
-  line-height: var(--#{$name}-height);
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  height: calc(var(--ea-tabs-nav-height) - 5px);
+  line-height: calc(var(--ea-tabs-nav-height) - 5px);
 
   border: 1px solid transparent;
+
+  white-space: nowrap;
+
+  @include element(close-icon) {
+    display: none;
+  }
 
   @include modifier(card) {
     border-color: var(--ea-tabs-border-color);
@@ -119,6 +128,12 @@ $name: ea-tab;
   @include state(last) {
     &.ea-tab--card:not(.ea-tab--left) {
       border-right-color: var(--ea-tabs-border-color);
+    }
+  }
+
+  @include state(closable) {
+    .ea-tab__close-icon {
+      display: block;
     }
   }
 }

@@ -14,6 +14,7 @@
   </head>
 
   <body>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
     <script type="module" src="../src/components/ea-tabs/index.js"></script>
     <script
       type="module"
@@ -237,64 +238,92 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 1 基础用法 --------  -->
-    <!-- #region  -->
-    <!-- <ea-tabs id="clickEvent--normal-card" actived="second">
-      <ea-tab name="first">用户管理</ea-tab>
-      <ea-tab name="second">配置管理</ea-tab>
-      <ea-tab name="third">角色管理</ea-tab>
-      <ea-tab name="fourth">定时任务补偿</ea-tab>
+    <!--  自定义标签页的内容 -->
+    <!-- #region -->
+    <h1>自定义标签页的内容</h1>
 
-      <div slot="pane">
-        <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-        <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-        <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-        <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-      </div>
-    </ea-tabs> -->
+    <div class="demo">
+      <ea-tabs class="basic-tabs-demo" type="border-card">
+        <ea-tab panel="first">User</ea-tab>
+        <ea-tab panel="second">Config</ea-tab>
+        <ea-tab panel="third">Role</ea-tab>
+        <ea-tab panel="fourth">Task</ea-tab>
+
+        <ea-tab-panel name="first">User</ea-tab-panel>
+        <ea-tab-panel name="second">Config</ea-tab-panel>
+        <ea-tab-panel name="third">Role</ea-tab-panel>
+        <ea-tab-panel name="fourth">Task</ea-tab-panel>
+      </ea-tabs>
+    </div>
+
+    <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
-    <!-- -------- 4 增减标签页 --------  -->
-    <!-- #region  -->
-    <h2>增减标签页</h2>
-    <p>在tabs组件上</p>
-    <button id="addBtn">add</button>
-    <!-- <ea-tabs actived="second" type="border-card" editable id="editable">
-      <ea-tab name="first">
-        <ea-icon icon="icon-coffee"></ea-icon>
-        用户管理
-      </ea-tab>
-      <ea-tab name="second">配置管理</ea-tab>
-      <ea-tab name="third">角色管理</ea-tab>
-      <ea-tab name="fourth">定时任务补偿</ea-tab>
+    <!--  动态增减标签页 -->
+    <!-- #region -->
+    <h1>动态增减标签页</h1>
 
-      <div id="editableSlot" slot="pane">
-        <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-        <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-        <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-        <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-      </div>
-    </ea-tabs>
+    <div class="demo">
+      <p>
+        <ea-button id="editableAddBtn">add tab</ea-button>
+      </p>
+      <ea-tabs id="editableTabs" class="basic-tabs-demo" type="card" editable>
+        <ea-tab panel="first">User</ea-tab>
+        <ea-tab panel="second">Config</ea-tab>
+        <ea-tab panel="third" closable="false">Role</ea-tab>
+        <ea-tab panel="fourth">Task</ea-tab>
 
-    <p>在tab组件上</p>
-    <ea-tabs actived="second" type="border-card" id="editable">
-      <ea-tab name="first" editable>
-        <ea-icon icon="icon-coffee"></ea-icon>
-        用户管理
-      </ea-tab>
-      <ea-tab name="second">配置管理</ea-tab>
-      <ea-tab name="third">角色管理</ea-tab>
-      <ea-tab name="fourth">定时任务补偿</ea-tab>
+        <ea-tab-panel name="first">User</ea-tab-panel>
+        <ea-tab-panel name="second">Config</ea-tab-panel>
+        <ea-tab-panel name="third">Role</ea-tab-panel>
+        <ea-tab-panel name="fourth">Task</ea-tab-panel>
+      </ea-tabs>
+    </div>
 
-      <div id="editableSlot" slot="pane">
-        <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-        <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-        <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-        <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-      </div>
-    </ea-tabs> -->
+    <script type="module">
+      const editableExample = {
+        addBtn: document.querySelector("#editableAddBtn"),
+        tabs: document.querySelector("#editableTabs"),
+
+        /**
+         * @param {string} panelName
+         * @param {string} tabName
+         * @param {string} content
+         */
+        renderTemplate: (panelName, tabName, content) => `
+            <ea-tab panel="${panelName}">${tabName}</ea-tab>
+            <ea-tab-panel name="${panelName}">${content}</ea-tab-panel>
+        `,
+
+        init() {
+          const templateEl = document.createElement("template");
+
+          this.addBtn.addEventListener("click", () => {
+            const id = Date.now();
+
+            templateEl.innerHTML = this.renderTemplate(
+              id,
+              "New Tab",
+              "New Tab content<br/>" + id
+            );
+
+            this.tabs.appendChild(templateEl.content.cloneNode(true));
+            this.tabs.setAttribute("active", id);
+          });
+
+          for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+              this.addBtn.click();
+            }, 10);
+          }
+        },
+      };
+      editableExample.init();
+    </script>
+
+    <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
   </body>
 </html>

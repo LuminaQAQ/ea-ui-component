@@ -72,7 +72,7 @@
 - [x] Menu 菜单
 - [x] Page Header 页头
 - [x] Steps 步骤条
-- [ ] Tabs 标签页
+- [x] Tabs 标签页
 
 ## Feedback 反馈组件
 
