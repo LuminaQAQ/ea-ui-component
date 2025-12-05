@@ -1,12 +1,19 @@
-import Base from "../Base.js";
+import FormAssociatedBase from "@/core/FormBase/index.js";
 
 import stylesheet from "./index.scss?inline";
 
-export class EaButton extends Base {
+export class EaButton extends FormAssociatedBase {
+  /** @type {HTMLButtonElement | HTMLLinkElement} */
+  #container;
+
+  /** @type {AbortController} */
+  #abortController;
+
   static get observedAttributes() {
     return [
       "disabled",
       "type",
+      "button-type", // 暂定为原生 type 属性
       "text",
       "plain",
       "round",
@@ -18,9 +25,6 @@ export class EaButton extends Base {
       "icon",
     ];
   }
-
-  /** @type {HTMLButtonElement | HTMLLinkElement} */
-  #container;
 
   /**
    * 获取 classlist 列表
@@ -161,6 +165,13 @@ export class EaButton extends Base {
         }
       },
     },
+    "button-type": {
+      type: ["button", "submit", "reset"],
+      default: "button",
+      observer: (newVal) => {
+        this.#container.type = newVal;
+      },
+    },
   });
 
   constructor() {
@@ -174,7 +185,7 @@ export class EaButton extends Base {
   $render() {
     const tag = this.getAttrBoolean("link") ? "a" : "button";
     this.shadowRoot.innerHTML = `
-      <${tag} class="ea-button" part="container">
+      <${tag} class="ea-button" part="container" tabindex="-1">
         <slot></slot>
       </${tag}>
     `;
@@ -182,10 +193,50 @@ export class EaButton extends Base {
     this.#container = this.shadowRoot.querySelector(".ea-button");
   }
 
+  /**
+   * @param {KeyboardEvent} e
+   */
+  #onEnterKeyPress = (e) => {
+    if (e.key === "Enter") {
+      this.click();
+    }
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    this.addEventListener("keypress", this.#onEnterKeyPress, {
+      signal: this.#abortController.signal,
+    });
+
+    this.addEventListener("click", (e) => {
+      if (this["button-type"] === "submit") {
+        const form = this.getForm();
+        if (form) {
+          e.preventDefault();
+
+          // form.onsubmit = (e) => {
+          //   e.preventDefault();
+          // };
+          form.dispatchEvent(new Event("submit"));
+        }
+      } else if (this["button-type"] === "reset") {
+        const form = this.getForm();
+        if (form) {
+          e.preventDefault();
+          form.reset();
+        }
+      }
+    });
+
     this.emit("ea-button-ready");
+  }
+
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 

@@ -1,9 +1,9 @@
-import Base from "@components/Base.js";
-
-import stylesheet from "./index.scss?inline";
+import FormAssociatedBase from "@/core/FormBase";
 import EaUtils from "@/utils/Utils";
 
-export class EaInput extends Base {
+import stylesheet from "./index.scss?inline";
+
+export class EaInput extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
@@ -115,9 +115,10 @@ export class EaInput extends Base {
     },
     value: {
       type: String,
-      default: "",
+      default: () => this.#container?.value || "",
       observer: (newVal) => {
         this.#original.value = newVal;
+        this.setValue(newVal, "value");
 
         if (this.clearable)
           this.#container.className = this.updateContainerClasslist();
@@ -144,14 +145,6 @@ export class EaInput extends Base {
         this.#original.minLength = newVal;
       },
     },
-    // "show-word-limit": {
-    //   type: Boolean,
-    //   default: false,
-    //   observer: (newVal) => {
-    //     if (this.type === "textarea" || this.type === "text")
-    //       this.#container.className = this.updateContainerClasslist();
-    //   },
-    // },
     clearable: {
       type: Boolean,
       default: false,
@@ -202,7 +195,7 @@ export class EaInput extends Base {
       },
     },
 
-    showWordLimit: {
+    "show-word-limit": {
       type: Boolean,
       default: false,
       observer: (newVal) => {
@@ -381,33 +374,37 @@ export class EaInput extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
-            <div class="ea-input" part="container">
-                <div class="ea-input__prepend" part="prepend">
-                    <slot name="prepend"></slot>
-                </div>
-                <div class="ea-input__inner" part="inner">
-                    <span class="ea-input__prefix" part="prefix">
-                      <slot name="prefix"></slot>
-                    </span>
-                    ${
-                      this.type === "textarea"
-                        ? '<textarea id="original" class="ea-input__original" part="original"></textarea>'
-                        : '<input id="original" class="ea-input__original" type="text" part="original" autocomplete="off" />'
-                    }
-                    <span class="ea-input__suffix" part="suffix">
-                      <span class="ea-input__suffix-icon" part="suffix-icon">
-                        <slot name="suffix"></slot>
-                      </span>
-                      <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
-                      <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
-                      <span class="ea-input__word-count" part="count"></span>
-                    </span>
-                </div>
-                <div class="ea-input__append" part="append">
-                    <slot name="append"></slot>
-                </div>
-            </div>
-        `;
+      <div class="ea-input" part="container">
+          <div class="ea-input__prepend" part="prepend">
+              <slot name="prepend"></slot>
+          </div>
+          <div class="ea-input__inner" part="inner">
+              <span class="ea-input__prefix" part="prefix">
+                <slot name="prefix"></slot>
+              </span>
+              ${
+                this.type === "textarea"
+                  ? `<textarea id="${
+                      this.id || "original"
+                    }" class="ea-input__original" part="original"></textarea>`
+                  : `<input id="${
+                      this.id || "original"
+                    }" class="ea-input__original" type="text" part="original" autocomplete="off" />`
+              }
+              <span class="ea-input__suffix" part="suffix">
+                <span class="ea-input__suffix-icon" part="suffix-icon">
+                  <slot name="suffix"></slot>
+                </span>
+                <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
+                <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
+                <span class="ea-input__word-count" part="count"></span>
+              </span>
+          </div>
+          <div class="ea-input__append" part="append">
+              <slot name="append"></slot>
+          </div>
+      </div>
+    `;
 
     this.#container = this.shadowRoot.querySelector(".ea-input");
     this.#prepend = this.shadowRoot.querySelector(".ea-input__prepend");
@@ -487,7 +484,7 @@ export class EaInput extends Base {
   #initInputEvent = (e) => {
     const { value } = e.target;
     this.value = value;
-    this.dispatchEvent("input", {
+    this.emit("input", {
       detail: {
         value,
       },
@@ -499,7 +496,7 @@ export class EaInput extends Base {
    * @param {KeyboardEvent} e 事件对象
    */
   #initKeydownEvent = (e) => {
-    this.dispatchEvent("keydown", {
+    this.emit("keydown", {
       detail: {
         value: e.target.value,
       },
@@ -511,7 +508,7 @@ export class EaInput extends Base {
    * @param {MouseEvent} e 事件对象
    */
   #initMouseenterEvent = (e) => {
-    this.dispatchEvent("mouseenter");
+    this.emit("mouseenter");
   };
 
   /**
@@ -519,7 +516,7 @@ export class EaInput extends Base {
    * @param { MouseEvent } e 事件对象
    */
   #initMouseleaveEvent = (e) => {
-    this.dispatchEvent("mouseleave");
+    this.emit("mouseleave");
   };
 
   /**
@@ -527,7 +524,7 @@ export class EaInput extends Base {
    * @param {CompositionEvent} e 事件对象
    */
   #initCompositionstartEvent = (e) => {
-    this.dispatchEvent("compositionstart", {
+    this.emit("compositionstart", {
       detail: {
         value: e.target.value,
       },
@@ -539,7 +536,7 @@ export class EaInput extends Base {
    * @param {CompositionEvent} e 事件对象
    */
   #initCompositionupdateEvent = (e) => {
-    this.dispatchEvent("compositionupdate", {
+    this.emit("compositionupdate", {
       detail: {
         value: e.target.value,
       },
@@ -551,7 +548,7 @@ export class EaInput extends Base {
    * @param {CompositionEvent} e 事件对象
    */
   #initCompositionendEvent = (e) => {
-    this.dispatchEvent("compositionend", {
+    this.emit("compositionend", {
       detail: {
         value: e.target.value,
       },
