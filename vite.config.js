@@ -33,6 +33,10 @@ export default defineConfig({
             return `${chunkInfo.name}.js`;
           }
 
+          if (chunkInfo.name.startsWith("core/")) {
+            return `${chunkInfo.name}.js`;
+          }
+
           if (chunkInfo.name.startsWith("themes/")) {
             return `${chunkInfo.name}.style.js`;
           }
@@ -59,12 +63,29 @@ export default defineConfig({
               ? chunk
               : findComponentName(pathChunks);
           };
+          /**
+           * @param {Array<string>} pathChunks
+           * @returns
+           */
+          const findCoreComponentName = (pathChunks) => {
+            const chunk = pathChunks.pop();
+            return chunk?.includes("Base")
+              ? chunk
+              : findCoreComponentName(pathChunks);
+          };
 
           if (normalizedId.startsWith(componentsPath)) {
             const name = normalizedId.split("/").pop()?.replace(".js", "");
             if (name === "Base") {
               return `${name}`;
             }
+          }
+
+          if (normalizedId.includes("core") && normalizedId.includes("Base")) {
+            const fullPathChunk = normalizedId.split("/");
+            const fullName = findCoreComponentName(fullPathChunk);
+
+            return `core/${fullName}`;
           }
 
           if (
