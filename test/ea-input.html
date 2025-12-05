@@ -1,57 +1,56 @@
 <!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../dist/assets/icon.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
 
-        ea-input {
-            margin: .5rem 0;
-        }
+      ea-input {
+        margin: 0.5rem 0;
+      }
 
-        .demo-input-with-icon {
-            width: 100%;
-        }
+      .demo-input-with-icon {
+        width: 100%;
+      }
 
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
+      .input-group {
+        margin-bottom: 1.5rem;
+      }
 
-        .label {
-            display: block;
-            margin-bottom: 1rem;
-            color: var(--ea-text-color-regular);
-        }
+      .label {
+        display: block;
+        margin-bottom: 1rem;
+        color: var(--ea-text-color-regular);
+      }
 
+      .input-container {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .responsive-input {
+        width: 240px;
+      }
+
+      @media (max-width: 768px) {
         .input-container {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+          flex-direction: column;
+          gap: 1rem;
         }
 
         .responsive-input {
-            width: 240px;
+          width: 100%;
         }
+      }
 
-        @media (max-width: 768px) {
-            .input-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .responsive-input {
-                width: 100%;
-            }
-        }
-
-        /* .prepend,
+      /* .prepend,
         .append {
             height: 100%;
             padding: 0 0.5rem;
@@ -63,19 +62,19 @@
             background-color: #f5f7fa;
         } */
     </style>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <script type="module" src="../src/components/ea-input/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
     <div class="row left">
-        <ea-input style="width: 240px" placeholder="Please input"></ea-input>
+      <ea-input style="width: 240px" placeholder="Please input"></ea-input>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -83,9 +82,13 @@
     <!-- #region  -->
     <h2>禁用状态</h2>
     <div class="row left">
-        <ea-input style="width: 240px" disabled placeholder="Please input"></ea-input>
+      <ea-input
+        style="width: 240px"
+        disabled
+        placeholder="Please input"
+      ></ea-input>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -93,9 +96,13 @@
     <!-- #region  -->
     <h2>可清空</h2>
     <div class="row left">
-        <ea-input style="width: 240px" placeholder="Please input" clearable></ea-input>
+      <ea-input
+        style="width: 240px"
+        placeholder="Please input"
+        clearable
+      ></ea-input>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -103,10 +110,14 @@
     <!-- #region  -->
     <h2>自定义清除图标</h2>
     <div class="row left">
-        <ea-input style="width: 240px" placeholder="Please input" clearable
-            clear-icon="icon-cancea-circled2"></ea-input>
+      <ea-input
+        style="width: 240px"
+        placeholder="Please input"
+        clearable
+        clear-icon="icon-cancea-circled2"
+      ></ea-input>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -114,38 +125,58 @@
     <!-- #region  -->
     <h2>密码框</h2>
     <div class="row left">
-        <ea-input style="width: 240px" type="password" placeholder="Please input password" show-password></ea-input>
+      <ea-input
+        style="width: 240px"
+        type="password"
+        placeholder="Please input password"
+        show-password
+      ></ea-input>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
     <!-- -------- 带 icon 的输入框 --------  -->
     <!-- #region  -->
     <h2>带 icon 的输入框</h2>
-    <div class="row left">
-    </div>
+    <div class="row left"></div>
     <div class="demo-input-with-icon">
-        <div class="input-group">
-            <span class="label">Using attributes</span>
-            <div class="input-container">
-                <ea-input class="responsive-input" placeholder="Pick a date" prefix-icon="icon-coffee"></ea-input>
-                <ea-input class="responsive-input" placeholder="Type something" suffix-icon="icon-coffee"></ea-input>
-            </div>
+      <div class="input-group">
+        <span class="label">Using attributes</span>
+        <div class="input-container">
+          <ea-input
+            class="responsive-input"
+            placeholder="Pick a date"
+            prefix-icon="icon-coffee"
+          ></ea-input>
+          <ea-input
+            class="responsive-input"
+            placeholder="Type something"
+            suffix-icon="icon-coffee"
+          ></ea-input>
         </div>
-        <div class="input-group">
-            <span class="label">Using slots</span>
-            <div class="input-container">
-                <ea-input v-model="input3" class="responsive-input" placeholder="Pick a date">
-                    <ea-icon icon="icon-search" slot="suffix"></ea-icon>
-                </ea-input>
-                <ea-input v-model="input4" class="responsive-input" placeholder="Type something">
-                    <ea-icon icon="icon-search" slot="prefix"></ea-icon>
-                </ea-input>
-            </div>
+      </div>
+      <div class="input-group">
+        <span class="label">Using slots</span>
+        <div class="input-container">
+          <ea-input
+            v-model="input3"
+            class="responsive-input"
+            placeholder="Pick a date"
+          >
+            <ea-icon icon="icon-search" slot="suffix"></ea-icon>
+          </ea-input>
+          <ea-input
+            v-model="input4"
+            class="responsive-input"
+            placeholder="Type something"
+          >
+            <ea-icon icon="icon-search" slot="prefix"></ea-icon>
+          </ea-input>
         </div>
+      </div>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -153,42 +184,59 @@
     <h1>文本域</h1>
 
     <div class="demo">
-        <ea-input style="width: 240px" rows="4" type="textarea" placeholder="Please input"></ea-input>
+      <ea-input
+        style="width: 240px"
+        rows="4"
+        type="textarea"
+        placeholder="Please input"
+      ></ea-input>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
     <!-- #region 自适应文本域 -->
     <h1>自适应文本域</h1>
 
     <div class="demo">
-        <ea-input style="width: 240px" rows="4" type="textarea" placeholder="Please input" autosize></ea-input>
-        <ea-input style="width: 240px" type="textarea" placeholder="Please input" autosize min-rows="2"
-            max-rows="4"></ea-input>
+      <ea-input
+        style="width: 240px"
+        rows="4"
+        type="textarea"
+        placeholder="Please input"
+        autosize
+      ></ea-input>
+      <ea-input
+        style="width: 240px"
+        type="textarea"
+        placeholder="Please input"
+        autosize
+        min-rows="2"
+        max-rows="4"
+      ></ea-input>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
     <!-- -------- 复合型输入框 --------  -->
     <!-- #region  -->
     <h2>复合型输入框</h2>
     <div class="col left">
-        <ea-input style="max-width: 600px" placeholder="Please input">
-            <div class="prepend" slot="prepend">Http://</div>
-        </ea-input>
-        <ea-input style="max-width: 600px" placeholder="Please input">
-            <div class="append" slot="append">.com</div>
-        </ea-input>
-        <ea-input style="max-width: 600px" placeholder="Please input">
-            <div class="prepend" slot="prepend">Http://</div>
-            <div class="append" slot="append">
-                <i class="icon-search"></i>
-            </div>
-        </ea-input>
+      <ea-input style="max-width: 600px" placeholder="Please input">
+        <div class="prepend" slot="prepend">Http://</div>
+      </ea-input>
+      <ea-input style="max-width: 600px" placeholder="Please input">
+        <div class="append" slot="append">.com</div>
+      </ea-input>
+      <ea-input style="max-width: 600px" placeholder="Please input">
+        <div class="prepend" slot="prepend">Http://</div>
+        <div class="append" slot="append">
+          <i class="icon-search"></i>
+        </div>
+      </ea-input>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -196,26 +244,45 @@
     <h1>尺寸</h1>
 
     <div class="demo">
-        <ea-input style="width: 240px" size="large" placeholder="Please Input"></ea-input>
-        <ea-input style="width: 240px" placeholder="Please Input"></ea-input>
-        <ea-input style="width: 240px" size="small" placeholder="Please Input"></ea-input>
+      <ea-input
+        style="width: 240px"
+        size="large"
+        placeholder="Please Input"
+      ></ea-input>
+      <ea-input style="width: 240px" placeholder="Please Input"></ea-input>
+      <ea-input
+        style="width: 240px"
+        size="small"
+        placeholder="Please Input"
+      ></ea-input>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
     <!-- -------- 输入长度限制 --------  -->
     <!-- #region  -->
     <h2>输入长度限制</h2>
     <div class="col left">
-        <ea-input style="width: 240px" maxlength="10" placeholder="Please input" show-word-limit type="text"
-            clearable></ea-input>
-        <ea-input maxlength="30" style="width: 240px" placeholder="Please input" show-word-limit type="textarea"
-            clearable></ea-input>
+      <ea-input
+        style="width: 240px"
+        maxlength="10"
+        placeholder="Please input"
+        show-word-limit
+        type="text"
+        clearable
+      ></ea-input>
+      <ea-input
+        maxlength="30"
+        style="width: 240px"
+        placeholder="Please input"
+        show-word-limit
+        type="textarea"
+        clearable
+      ></ea-input>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
-</body>
-
+  </body>
 </html>
