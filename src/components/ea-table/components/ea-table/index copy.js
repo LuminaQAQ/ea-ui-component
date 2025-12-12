@@ -4,7 +4,7 @@ import "../../../ea-icon/index.js";
 import { createElement } from "../../../../utils/createElement.js";
 
 import "../ea-table-column/index.js";
-import "../../../ea-checkbox/index.js";
+import "../../../ea-checkbox/components/ea-checkbox/index.js";
 
 import { stylesheet } from "./src/style/stylesheet.js";
 import { timeout } from "../../../../utils/timeout.js";

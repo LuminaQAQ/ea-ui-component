@@ -42,9 +42,6 @@
     "./ea-checkbox": {
       "import": "./dist/ea-checkbox.js"
     },
-    "./ea-checkbox-group": {
-      "import": "./dist/ea-checkbox-group.js"
-    },
     "./ea-collapse": {
       "import": "./dist/ea-collapse.js"
     },
