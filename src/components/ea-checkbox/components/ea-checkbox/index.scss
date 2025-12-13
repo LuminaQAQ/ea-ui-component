@@ -7,6 +7,8 @@ $name: ea-checkbox;
 
   --#{$name}-box-spacing: 8px;
 
+  --#{$name}-disabled-color: var(--grey-500);
+
   --#{$name}-box-bg-color: var(--blue-500);
   --#{$name}-box-bg-disabled-color: var(--grey-100);
 
@@ -51,7 +53,7 @@ $name: ea-checkbox;
       top: 50%;
       left: 50%;
       // transition: background-color var(--#{$name}-animation-duration) ease-in-out;
-      transition: background-color 0.3s ease-in-out;
+      //   transition: background-color 0.3s ease-in-out;
     }
   }
 
@@ -64,6 +66,25 @@ $name: ea-checkbox;
     line-height: var(--#{$name}-default-size);
 
     font-size: var(--#{$name}-default-size);
+
+    white-space: nowrap;
+  }
+
+  @include state(indeterminate) {
+    .ea-checkbox__inner {
+      background-color: var(--#{$name}-box-bg-color);
+
+      &::after {
+        display: block;
+
+        width: 50%;
+        height: 3px;
+
+        transform: translate(-50%, -50%);
+
+        background-color: var(--#{$name}-check-color);
+      }
+    }
   }
 
   @include state(checked) {
@@ -79,11 +100,12 @@ $name: ea-checkbox;
         border: 2px solid transparent;
         border-left-color: var(--#{$name}-check-color);
         border-top-color: var(--#{$name}-check-color);
+        border-radius: 2px;
 
         transform-origin: left top;
         transform: rotate(-135deg) translate(-30%, -40%);
 
-        border-radius: 2px;
+        background-color: unset;
       }
     }
   }
@@ -96,6 +118,10 @@ $name: ea-checkbox;
         border-left-color: var(--#{$name}-check-disabled-color);
         border-top-color: var(--#{$name}-check-disabled-color);
       }
+    }
+
+    .ea-checkbox__label {
+      color: var(--#{$name}-disabled-color);
     }
   }
 }

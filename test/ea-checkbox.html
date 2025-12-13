@@ -90,34 +90,62 @@
 
     <!-- -------- 多选框组 --------  -->
     <!-- #region  -->
-    <h2>基础用法</h2>
+    <h2>多选框组</h2>
     <div class="row left">
-      <ea-checkbox-group id="cityGroup" name="city">
-        <ea-checkbox value="北京">北京</ea-checkbox>
-        <ea-checkbox value="上海">上海</ea-checkbox>
-        <ea-checkbox value="广州">广州</ea-checkbox>
-        <ea-checkbox value="深圳" disabled>深圳</ea-checkbox>
-        <ea-checkbox value="成都" disabled checked>成都</ea-checkbox>
+      <ea-checkbox-group id="mulipleGroup" name="mulipleGroup">
+        <ea-checkbox label="Option A" value="Value A"></ea-checkbox>
+        <ea-checkbox label="Option B" value="Value B"></ea-checkbox>
+        <ea-checkbox label="Option C" value="Value C"></ea-checkbox>
+        <ea-checkbox
+          label="disabled"
+          value="Value disabled"
+          disabled
+        ></ea-checkbox>
+        <ea-checkbox
+          label="selected and disabled"
+          value="Value selected and disabled"
+          disabled
+        ></ea-checkbox>
       </ea-checkbox-group>
     </div>
-    <div class="row left">
-      <ea-button id="cityGroupBtn" type="primary"
-        >点击获取 checkbox 值</ea-button
-      >
-    </div>
+
+    <script type="module">
+      const multipleGroupExample = {
+        gruop: document.querySelector("#mulipleGroup"),
+
+        init() {
+          this.gruop.value = ["Value selected and disabled", "Value A"];
+        },
+      };
+
+      multipleGroupExample.init();
+    </script>
+
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
+    <!--  中间状态 -->
+    <!-- #region -->
+    <h1>中间状态</h1>
+
+    <div class="demo">
+      <ea-checkbox label="Check all" indeterminate></ea-checkbox>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
     <!-- -------- indeterminate 状态 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
-    <div class="row left">
+    <!-- <div class="row left">
       <ea-checkbox id="checkAll" name="food">全选</ea-checkbox>
       <ea-button id="setIndeterminate" type="primary">
         设置 indeterminate 状态
       </ea-button>
-    </div>
+    </div> -->
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -125,7 +153,7 @@
     <!-- -------- 多选框组 value 属性 --------  -->
     <!-- #region  -->
     <h2>多选框组 value 属性</h2>
-    <div class="row left">
+    <!-- <div class="row left">
       <ea-checkbox-group
         id="ea-checkbox-group"
         name="day"
@@ -138,7 +166,7 @@
         <ea-checkbox value="明天">明天</ea-checkbox>
         <ea-checkbox value="后天">后天</ea-checkbox>
       </ea-checkbox-group>
-    </div>
+    </div> -->
     <div class="row left">
       <ea-button id="day-group" type="primary">点击获取 checkbox 值</ea-button>
     </div>

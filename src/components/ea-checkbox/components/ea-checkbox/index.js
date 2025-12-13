@@ -21,6 +21,7 @@ export class EaCheckbox extends FormAssociatedBase {
       "name",
       "checked",
       "disabled",
+      "indeterminate",
     ];
   }
 
@@ -61,6 +62,13 @@ export class EaCheckbox extends FormAssociatedBase {
         this.updateContainerClasslist();
       },
     },
+    indeterminate: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -76,6 +84,7 @@ export class EaCheckbox extends FormAssociatedBase {
       {
         checked: this.checked,
         disabled: this.disabled,
+        indeterminate: this.indeterminate,
       }
     );
 
@@ -112,11 +121,6 @@ export class EaCheckbox extends FormAssociatedBase {
     this.#container = this.shadowRoot.querySelector(".ea-checkbox");
     this.#labelSlot = this.shadowRoot.querySelector(".ea-checkbox__label");
     this.#original = this.shadowRoot.querySelector(".ea-checkbox__orignal");
-
-    if (!this.getAttrString("name"))
-      console.warn(
-        `[${this.tagName.toLocaleLowerCase()}] Please set name attribute.`
-      );
   }
 
   // TODO:

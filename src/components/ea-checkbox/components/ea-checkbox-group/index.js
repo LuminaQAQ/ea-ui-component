@@ -12,7 +12,7 @@ export class EaCheckboxGroup extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "name"];
+    return [...super.observedAttributes, "name", "value"];
   }
 
   state = this.properties({
@@ -20,7 +20,15 @@ export class EaCheckboxGroup extends Base {
       type: String,
       default: "",
       observer: (newVal) => {
-        this.#updateCheckboxChildren();
+        this.#updateCheckboxChildrenName();
+      },
+    },
+    value: {
+      props: true,
+      type: Array,
+      default: [],
+      observer: (newVal) => {
+        this.#updateCheckboxChildrenValue();
       },
     },
   });
@@ -58,9 +66,16 @@ export class EaCheckboxGroup extends Base {
     this.#defaultSlot = this.shadowRoot.querySelector("slot");
   }
 
-  #updateCheckboxChildren = () => {
+  #updateCheckboxChildrenName = () => {
     this.querySelectorAll("ea-checkbox").forEach((checkbox) => {
       checkbox.setAttribute("name", this.name);
+    });
+  };
+
+  #updateCheckboxChildrenValue = () => {
+    this.querySelectorAll("ea-checkbox").forEach((checkbox) => {
+      const isChecked = this.value.includes(checkbox.getAttribute("value"));
+      checkbox.toggleAttribute("checked", isChecked);
     });
   };
 
@@ -73,7 +88,7 @@ export class EaCheckboxGroup extends Base {
 
     this.#defaultSlot.addEventListener(
       "slotchange",
-      this.#updateCheckboxChildren,
+      this.#updateCheckboxChildrenName,
       {
         signal: this.#abortController.signal,
       }
