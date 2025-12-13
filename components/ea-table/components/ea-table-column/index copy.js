@@ -2,7 +2,7 @@
 import Base from "../../../Base.js";
 import "../../../ea-icon/index.js";
 
-import "../../../ea-checkbox/index.js";
+import "../../../ea-checkbox/components/ea-checkbox/index.js";
 
 const stylesheet = ``;
 
