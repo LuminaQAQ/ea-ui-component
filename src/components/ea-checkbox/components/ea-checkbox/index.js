@@ -14,7 +14,14 @@ export class EaCheckbox extends FormAssociatedBase {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "value", "label", "name", "checked"];
+    return [
+      ...super.observedAttributes,
+      "value",
+      "label",
+      "name",
+      "checked",
+      "disabled",
+    ];
   }
 
   state = this.properties({
@@ -45,6 +52,15 @@ export class EaCheckbox extends FormAssociatedBase {
         this.updateContainerClasslist();
       },
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: (newVal) => {
+        this.#original.disabled = newVal;
+
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -52,9 +68,16 @@ export class EaCheckbox extends FormAssociatedBase {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-checkbox", {
-      // ['--' + this.type]: this.type,
-    });
+    const className = this.computedClasslist(
+      "ea-checkbox",
+      {
+        // ["--" + this.type]: this.type,
+      },
+      {
+        checked: this.checked,
+        disabled: this.disabled,
+      }
+    );
 
     this.#container.className = className;
 

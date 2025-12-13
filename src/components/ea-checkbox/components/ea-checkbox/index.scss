@@ -1,0 +1,101 @@
+$name: ea-checkbox;
+
+:host {
+  --#{$name}-large-size: var(--font-size-lg);
+  --#{$name}-default-size: var(--font-size-md);
+  --#{$name}-small-size: var(--font-size-sm);
+
+  --#{$name}-box-spacing: 8px;
+
+  --#{$name}-box-bg-color: var(--blue-500);
+  --#{$name}-box-bg-disabled-color: var(--grey-100);
+
+  --#{$name}-box-border-color: var(--grey-300);
+
+  --#{$name}-check-color: var(--color-white);
+  --#{$name}-check-disabled-color: var(--grey-400);
+}
+
+@include block($name) {
+  display: inline-flex;
+  align-items: center;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  @include element(orignal) {
+    display: none;
+  }
+
+  @include element(inner) {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+
+    width: var(--#{$name}-default-size);
+    height: var(--#{$name}-default-size);
+    line-height: var(--#{$name}-default-size);
+
+    border: 1px solid var(--#{$name}-box-border-color);
+    border-radius: 2px;
+
+    margin-right: var(--#{$name}-box-spacing);
+
+    transition: background-color 0.3s ease-in-out;
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: none;
+      top: 50%;
+      left: 50%;
+      // transition: background-color var(--#{$name}-animation-duration) ease-in-out;
+      transition: background-color 0.3s ease-in-out;
+    }
+  }
+
+  @include element(label) {
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+
+    height: var(--#{$name}-default-size);
+    line-height: var(--#{$name}-default-size);
+
+    font-size: var(--#{$name}-default-size);
+  }
+
+  @include state(checked) {
+    .ea-checkbox__inner {
+      background-color: var(--#{$name}-box-bg-color);
+
+      &::after {
+        display: block;
+
+        width: 15%;
+        height: 35%;
+
+        border: 2px solid transparent;
+        border-left-color: var(--#{$name}-check-color);
+        border-top-color: var(--#{$name}-check-color);
+
+        transform-origin: left top;
+        transform: rotate(-135deg) translate(-30%, -40%);
+
+        border-radius: 2px;
+      }
+    }
+  }
+
+  @include state(disabled) {
+    .ea-checkbox__inner {
+      background-color: var(--#{$name}-box-bg-disabled-color);
+
+      &::after {
+        border-left-color: var(--#{$name}-check-disabled-color);
+        border-top-color: var(--#{$name}-check-disabled-color);
+      }
+    }
+  }
+}
