@@ -8,6 +8,8 @@ export class EaCheckbox extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #original;
   /** @type {HTMLElement} */
+  #innerEl;
+  /** @type {HTMLElement} */
   #labelSlot;
 
   /** @type {AbortController} */
@@ -29,7 +31,7 @@ export class EaCheckbox extends FormAssociatedBase {
     value: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.value = newVal;
 
         this.#updateCheckboxValue();
@@ -38,14 +40,14 @@ export class EaCheckbox extends FormAssociatedBase {
     label: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#labelSlot.textContent = newVal;
       },
     },
     checked: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.checked = newVal;
 
         this.#updateCheckboxValue();
@@ -56,7 +58,7 @@ export class EaCheckbox extends FormAssociatedBase {
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.disabled = newVal;
 
         this.updateContainerClasslist();
@@ -65,7 +67,7 @@ export class EaCheckbox extends FormAssociatedBase {
     indeterminate: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
@@ -111,8 +113,8 @@ export class EaCheckbox extends FormAssociatedBase {
         <input id="${
           this.getAttribute("id") || randomId
         }" type="checkbox" class="ea-checkbox__orignal" part="orignal" />
-        <span class="ea-checkbox__inner" part="input"></span>
-        <span class="ea-checkbox__label" part="label">
+        <span class="ea-checkbox__inner" part="input" tabindex="1"></span>
+        <span class="ea-checkbox__label" part="label" tabindex="1">
           <slot></slot>
         </span>
       </label>
@@ -120,6 +122,7 @@ export class EaCheckbox extends FormAssociatedBase {
 
     this.#container = this.shadowRoot.querySelector(".ea-checkbox");
     this.#labelSlot = this.shadowRoot.querySelector(".ea-checkbox__label");
+    this.#innerEl = this.shadowRoot.querySelector(".ea-checkbox__inner");
     this.#original = this.shadowRoot.querySelector(".ea-checkbox__orignal");
   }
 
@@ -135,6 +138,8 @@ export class EaCheckbox extends FormAssociatedBase {
   connectedCallback() {
     super.connectedCallback();
 
+    // this.tabIndex = 0;
+
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
@@ -142,9 +147,23 @@ export class EaCheckbox extends FormAssociatedBase {
       "change",
       () => {
         this.checked = this.#original.checked;
+        this.emit("change", {
+          detail: {
+            value: this.value,
+            checked: Boolean(this.checked),
+          },
+          bubbles: true,
+        });
       },
       { signal: this.#abortController.signal }
     );
+
+    this.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        this.#original.checked = !this.checked;
+        this.#original.dispatchEvent(new Event("change"));
+      }
+    });
   }
 
   $beforeUnmounted() {

@@ -111,6 +111,8 @@ $name: ea-checkbox;
   }
 
   @include state(disabled) {
+    cursor: not-allowed;
+
     .ea-checkbox__inner {
       background-color: var(--#{$name}-box-bg-disabled-color);
 

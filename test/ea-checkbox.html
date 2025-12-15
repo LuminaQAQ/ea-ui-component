@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -111,10 +111,10 @@
 
     <script type="module">
       const multipleGroupExample = {
-        gruop: document.querySelector("#mulipleGroup"),
+        gruop: document.querySelector('#mulipleGroup'),
 
         init() {
-          this.gruop.value = ["Value selected and disabled", "Value A"];
+          this.gruop.value = ['Value selected and disabled', 'Value A'];
         },
       };
 
@@ -130,8 +130,46 @@
     <h1>中间状态</h1>
 
     <div class="demo">
-      <ea-checkbox label="Check all" indeterminate></ea-checkbox>
+      <ea-checkbox
+        id="indeterminateCheckbox"
+        label="Check all"
+        indeterminate
+      ></ea-checkbox>
+      <ea-checkbox-group id="indeterminateGroup" name="city">
+        <ea-checkbox label="Shanghai" value="Shanghai"></ea-checkbox>
+        <ea-checkbox label="Beijing" value="Beijing"></ea-checkbox>
+        <ea-checkbox label="Guangzhou" value="Guangzhou"></ea-checkbox>
+        <ea-checkbox label="Shenzhen" value="Shenzhen"></ea-checkbox>
+      </ea-checkbox-group>
     </div>
+
+    <script type="module">
+      const indeterminateExample = {
+        indeterminateCheckbox: document.querySelector('#indeterminateCheckbox'),
+        group: document.querySelector('#indeterminateGroup'),
+
+        cities: ['Shanghai', 'Beijing', 'Guangzhou', 'Shenzhen'],
+
+        init() {
+          this.group.value = ['Guangzhou', 'Shenzhen'];
+
+          this.indeterminateCheckbox.addEventListener('change', e => {
+            const { checked } = e.target;
+            if (checked) this.group.value = this.cities;
+            else this.group.value = [];
+          });
+
+          this.group.addEventListener('change', e => {
+            console.log(this.group.value);
+
+            // const { value } = e.target;
+            // this.indeterminateCheckbox.checked =
+            //   value.length > 0 && value.length < this.cities.length;
+          });
+        },
+      };
+      indeterminateExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->
