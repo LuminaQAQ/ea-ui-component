@@ -1,3 +1,5 @@
+$ea-radio-size-type: ();
+
 :host {
   --ea-radio-input-size: var(--font-size-md);
   --ea-radio-inner-size: 5px;
@@ -13,7 +15,7 @@
   --ea-radio-disabled-color: var(--grey-300);
 }
 
-:host([disabled="true"]) {
+:host([disabled]) {
   cursor: not-allowed;
 }
 
@@ -78,7 +80,7 @@
     line-height: var(--ea-radio-input-size);
   }
 
-  @include modifier(border) {
+  @include state(border) {
     border: var(--ea-radio-border);
     padding: var(--ea-radio-space);
     border-radius: var(--ea-radio-border-radius);
@@ -86,7 +88,7 @@
     transition: border var(--transition-fast);
   }
 
-  @include modifier(checked) {
+  @include state(checked) {
     .ea-radio__inner {
       border-color: var(--ea-radio-border-hover);
       background-color: var(--ea-radio-border-hover);
@@ -100,12 +102,12 @@
       color: var(--ea-radio-border-hover);
     }
 
-    &.ea-radio--border {
+    &:not(.is-disabled).is-border {
       border-color: var(--ea-radio-border-hover);
     }
   }
 
-  @include modifier(disabled) {
+  @include state(disabled) {
     pointer-events: none;
 
     .ea-radio__inner {
@@ -116,7 +118,7 @@
       color: var(--ea-radio-disabled-color);
     }
 
-    &.ea-radio--checked {
+    &.is-checked {
       .ea-radio__inner {
         background-color: var(--ea-radio-disabled-color);
       }
