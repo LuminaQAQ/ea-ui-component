@@ -8,6 +8,8 @@ export class EaCheckbox extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #original;
   /** @type {HTMLElement} */
+  #innerEl;
+  /** @type {HTMLElement} */
   #labelSlot;
 
   /** @type {AbortController} */
@@ -16,19 +18,31 @@ export class EaCheckbox extends FormAssociatedBase {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "size",
       "value",
       "label",
       "name",
       "checked",
       "disabled",
+      "indeterminate",
+      "border",
+
+      "limit-disabled",
     ];
   }
 
   state = this.properties({
+    size: {
+      type: ["small", "default", "large"],
+      default: "",
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
+    },
     value: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.value = newVal;
 
         this.#updateCheckboxValue();
@@ -37,14 +51,14 @@ export class EaCheckbox extends FormAssociatedBase {
     label: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#labelSlot.textContent = newVal;
       },
     },
     checked: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.checked = newVal;
 
         this.#updateCheckboxValue();
@@ -55,7 +69,31 @@ export class EaCheckbox extends FormAssociatedBase {
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
+        this.#original.disabled = newVal;
+
+        this.updateContainerClasslist();
+      },
+    },
+    indeterminate: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
+    },
+    border: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
+    },
+
+    "limit-disabled": {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
         this.#original.disabled = newVal;
 
         this.updateContainerClasslist();
@@ -71,11 +109,14 @@ export class EaCheckbox extends FormAssociatedBase {
     const className = this.computedClasslist(
       "ea-checkbox",
       {
-        // ["--" + this.type]: this.type,
+        ["--" + this.size]: this.size,
       },
       {
         checked: this.checked,
         disabled: this.disabled,
+        indeterminate: this.indeterminate,
+        "limit-disabled": this["limit-disabled"],
+        border: this.border,
       }
     );
 
@@ -102,8 +143,8 @@ export class EaCheckbox extends FormAssociatedBase {
         <input id="${
           this.getAttribute("id") || randomId
         }" type="checkbox" class="ea-checkbox__orignal" part="orignal" />
-        <span class="ea-checkbox__inner" part="input"></span>
-        <span class="ea-checkbox__label" part="label">
+        <span class="ea-checkbox__inner" part="input" tabindex="1"></span>
+        <span class="ea-checkbox__label" part="label" tabindex="1">
           <slot></slot>
         </span>
       </label>
@@ -111,12 +152,8 @@ export class EaCheckbox extends FormAssociatedBase {
 
     this.#container = this.shadowRoot.querySelector(".ea-checkbox");
     this.#labelSlot = this.shadowRoot.querySelector(".ea-checkbox__label");
+    this.#innerEl = this.shadowRoot.querySelector(".ea-checkbox__inner");
     this.#original = this.shadowRoot.querySelector(".ea-checkbox__orignal");
-
-    if (!this.getAttrString("name"))
-      console.warn(
-        `[${this.tagName.toLocaleLowerCase()}] Please set name attribute.`
-      );
   }
 
   // TODO:
@@ -138,9 +175,23 @@ export class EaCheckbox extends FormAssociatedBase {
       "change",
       () => {
         this.checked = this.#original.checked;
+        this.emit("change", {
+          detail: {
+            value: this.value,
+            checked: Boolean(this.checked),
+          },
+          bubbles: true,
+        });
       },
       { signal: this.#abortController.signal }
     );
+
+    this.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        this.#original.checked = !this.checked;
+        this.#original.dispatchEvent(new Event("change"));
+      }
+    });
   }
 
   $beforeUnmounted() {
