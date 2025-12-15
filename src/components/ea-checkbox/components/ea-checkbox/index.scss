@@ -1,9 +1,18 @@
 $name: ea-checkbox;
+$ea-checkbox-size-type: (large, default, small);
 
 :host {
   --#{$name}-large-size: var(--font-size-lg);
+  --#{$name}-large-spacing: 12px;
+  --#{$name}-large-font-size: var(--font-size-lg);
+
   --#{$name}-default-size: var(--font-size-md);
+  --#{$name}-default-spacing: 8px;
+  --#{$name}-default-font-size: var(--font-size-md);
+
   --#{$name}-small-size: var(--font-size-sm);
+  --#{$name}-small-spacing: 4px;
+  --#{$name}-small-font-size: var(--font-size-sm);
 
   --#{$name}-box-spacing: 8px;
 
@@ -13,14 +22,26 @@ $name: ea-checkbox;
   --#{$name}-box-bg-disabled-color: var(--grey-100);
 
   --#{$name}-box-border-color: var(--grey-300);
+  --#{$name}-box-border-disabled-color: var(--grey-200);
+  --#{$name}-box-border-active-color: var(--blue-500);
 
   --#{$name}-check-color: var(--color-white);
   --#{$name}-check-disabled-color: var(--grey-400);
+
+  --#{$name}-label-color: var(--blue-500);
+}
+
+:host([disabled]),
+:host([limit-disabled]) {
+  cursor: not-allowed;
 }
 
 @include block($name) {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+
+  padding: var(--#{$name}-default-spacing);
 
   cursor: pointer;
 
@@ -52,8 +73,6 @@ $name: ea-checkbox;
       display: none;
       top: 50%;
       left: 50%;
-      // transition: background-color var(--#{$name}-animation-duration) ease-in-out;
-      //   transition: background-color 0.3s ease-in-out;
     }
   }
 
@@ -62,12 +81,32 @@ $name: ea-checkbox;
     position: relative;
     display: inline-block;
 
+    font-size: var(--#{$name}-default-size);
     height: var(--#{$name}-default-size);
     line-height: var(--#{$name}-default-size);
 
-    font-size: var(--#{$name}-default-size);
-
     white-space: nowrap;
+  }
+
+  @each $size in $ea-checkbox-size-type {
+    @include modifier($size) {
+      padding: var(--#{$name}-#{$size}-spacing);
+
+      .ea-checkbox__label {
+        height: var(--#{$name}-#{$size}-size);
+        line-height: var(--#{$name}-#{$size}-size);
+        font-size: var(--#{$name}-#{$size}-font-size);
+      }
+
+      .ea-checkbox__inner {
+        height: var(--#{$name}-#{$size}-size);
+        width: var(--#{$name}-#{$size}-size);
+      }
+    }
+  }
+
+  @include state(border) {
+    border: 1px solid var(--#{$name}-box-border-color);
   }
 
   @include state(indeterminate) {
@@ -108,10 +147,19 @@ $name: ea-checkbox;
         background-color: unset;
       }
     }
+
+    .ea-checkbox__label {
+      color: var(--#{$name}-label-color);
+    }
+
+    &.is-border {
+      border-color: var(--#{$name}-box-border-active-color);
+    }
   }
 
-  @include state(disabled) {
-    cursor: not-allowed;
+  &.is-disabled,
+  &.is-limit-disabled {
+    pointer-events: none;
 
     .ea-checkbox__inner {
       background-color: var(--#{$name}-box-bg-disabled-color);
@@ -124,6 +172,10 @@ $name: ea-checkbox;
 
     .ea-checkbox__label {
       color: var(--#{$name}-disabled-color);
+    }
+
+    &.is-border {
+      border-color: var(--#{$name}-box-border-disabled-color);
     }
   }
 }

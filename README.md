@@ -16,7 +16,7 @@
 
 - [ ] Autocomplete 自动补全输入框
 - [ ] Cascader 级联选择器
-- [ ] Checkbox 多选框
+- [x] Checkbox 多选框
 - [ ] ColorPickerPanel 颜色选择器面板
 - [ ] Color Picker 颜色选择器
 - [ ] Date Picker Panel 日期选择器面板

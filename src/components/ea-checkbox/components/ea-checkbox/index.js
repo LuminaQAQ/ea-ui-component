@@ -18,16 +18,27 @@ export class EaCheckbox extends FormAssociatedBase {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "size",
       "value",
       "label",
       "name",
       "checked",
       "disabled",
       "indeterminate",
+      "border",
+
+      "limit-disabled",
     ];
   }
 
   state = this.properties({
+    size: {
+      type: ["small", "default", "large"],
+      default: "",
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
+    },
     value: {
       type: String,
       default: "",
@@ -71,6 +82,23 @@ export class EaCheckbox extends FormAssociatedBase {
         this.updateContainerClasslist();
       },
     },
+    border: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
+    },
+
+    "limit-disabled": {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.#original.disabled = newVal;
+
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
@@ -81,12 +109,14 @@ export class EaCheckbox extends FormAssociatedBase {
     const className = this.computedClasslist(
       "ea-checkbox",
       {
-        // ["--" + this.type]: this.type,
+        ["--" + this.size]: this.size,
       },
       {
         checked: this.checked,
         disabled: this.disabled,
         indeterminate: this.indeterminate,
+        "limit-disabled": this["limit-disabled"],
+        border: this.border,
       }
     );
 
@@ -137,8 +167,6 @@ export class EaCheckbox extends FormAssociatedBase {
 
   connectedCallback() {
     super.connectedCallback();
-
-    // this.tabIndex = 0;
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
