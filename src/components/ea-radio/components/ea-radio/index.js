@@ -1,8 +1,8 @@
-import Base from "@components/Base.js";
+import FormAssociatedBase from "@/core/FormBase";
 
 import stylesheet from "./index.scss?inline";
 
-export class EaRadio extends Base {
+export class EaRadio extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
@@ -20,6 +20,7 @@ export class EaRadio extends Base {
       "value",
       "disabled",
       "border",
+      "label",
     ];
   }
 
@@ -27,42 +28,51 @@ export class EaRadio extends Base {
     checked: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#label.toggleAttribute("checked", newVal);
         this.#radio.checked = newVal;
 
-        this.#container.className = this.updateContainerClasslist();
+        newVal ? this.setValue(this.value) : this.removeValue();
+
+        this.updateContainerClasslist();
       },
     },
     name: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
+        this.#label.setAttribute("for", newVal);
+        this.#radio.setAttribute("id", newVal);
         this.#radio.setAttribute("name", newVal);
       },
     },
     value: {
       type: String,
       default: "",
-      observer: (newVal) => {
-        this.#label.setAttribute("for", newVal);
-        this.#radio.setAttribute("id", newVal);
+      observer: newVal => {
         this.#radio.setAttribute("value", newVal);
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#radio.disabled = newVal;
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     border: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    label: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#label.textContent = newVal;
       },
     },
   });
@@ -72,11 +82,19 @@ export class EaRadio extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-radio", {
-      ["--checked"]: this.checked,
-      ["--disabled"]: this.disabled,
-      ["--border"]: this.border,
-    });
+    const className = this.computedClasslist(
+      "ea-radio",
+      {},
+      {
+        checked: this.checked,
+        disabled: this.disabled,
+        border: this.border,
+      }
+    );
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -106,42 +124,36 @@ export class EaRadio extends Base {
     this.#radio = this.shadowRoot.querySelector(".ea-radio__original");
   }
 
-  #changeEvent = (e) => {
-    const sameGroupRadio = document.querySelectorAll(
-      `ea-radio[name="${this.name}"]`
-    );
-    [...sameGroupRadio].forEach((btn) => {
-      btn.checked = btn === this;
-    });
+  /**
+   * radio change 事件
+   */
+  #changeEvent = () => {
+    if (!this.closest("ea-radio-group")) {
+      const sameGroupRadio = document.querySelectorAll(
+        `ea-radio[name="${this.name}"]`
+      );
+      sameGroupRadio.forEach(radio => {
+        radio.toggleAttribute("checked", radio === this);
+      });
+    }
 
-    this.dispatchEvent("change", {
+    this.emit("change", {
       detail: {
         value: this.value,
         checked: this.checked,
       },
+      bubbles: true,
     });
-
-    if (this.parentElement.tagName === "EA-RADIO-GROUP") {
-      this.parentElement.dispatchEvent("change", {
-        detail: {
-          value: this.value,
-          checked: this.checked,
-          target: this,
-        },
-      });
-    }
   };
 
   connectedCallback() {
     super.connectedCallback();
 
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.checked = this.checked;
-    this.name = this.name;
-    this.value = this.value;
-    this.disabled = this.disabled;
-    this.border = this.border;
+    if (!this.name)
+      this.setAttribute("name", Math.random().toString(36).substring(2, 15));
 
     this.#radio.addEventListener("change", this.#changeEvent, {
       signal: this.#abortController.signal,
@@ -149,7 +161,7 @@ export class EaRadio extends Base {
   }
 
   $beforeUnmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
   }
 }
 

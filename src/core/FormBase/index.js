@@ -7,39 +7,39 @@ export default class FormAssociatedBase extends Base {
     form: {
       type: HTMLFormElement,
       default: () => this.internals.form,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     name: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     type: {
       type: String,
       default: () => this.localName,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     validity: {
       type: String,
       default: () => this.internals.validity,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     validationMessage: {
       type: String,
       default: () => this.internals.validationMessage,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     willValidate: {
       type: String,
       default: () => this.internals.willValidate,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
 
     /** @abstract 依组件需求实现 */
     value: {
       type: null,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.internals.setFormValue(newVal, "value");
       },
     },
@@ -65,6 +65,13 @@ export default class FormAssociatedBase extends Base {
     this.internals.setFormValue(value);
   }
 
+  /**
+   * 移除表单值
+   */
+  removeValue() {
+    this.internals.setFormValue(null);
+  }
+
   checkValidity() {
     return this.internals.checkValidity();
   }
@@ -82,7 +89,7 @@ export default class FormAssociatedBase extends Base {
     super.connectedCallback();
 
     if (this.internals.form) {
-      this.internals.form.addEventListener("submit", (e) => {
+      this.internals.form.addEventListener("submit", e => {
         e.preventDefault();
       });
     }
@@ -94,7 +101,7 @@ export default class FormAssociatedBase extends Base {
    * @returns {void}
    */
   formAssociatedCallback(form) {
-    this.internals.form.onsubmit = (e) => {
+    this.internals.form.onsubmit = e => {
       e.preventDefault();
     };
   }
