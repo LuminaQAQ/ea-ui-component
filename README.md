@@ -27,7 +27,7 @@
 - [ ] Input Number 数字输入框
 - [ ] Input Tag 标签输入框
 - [ ] Mention 提及
-- [ ] Radio 单选框
+- [x] Radio 单选框
 - [ ] Rate 评分
 - [ ] Select 选择器
 - [ ] Slider 滑块
