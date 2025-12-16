@@ -1,4 +1,8 @@
 :host {
+  display: inline-block;
+}
+
+:host {
   --ea-switch-space: 0 var(--spacing-md);
 
   --ea-switch-width: 40px;
@@ -118,7 +122,8 @@
       border-radius: var(--border-radius-circle);
       background-color: var(--ea-switch-indicator-color);
 
-      transition: left var(--transition-normal),
+      transition:
+        left var(--transition-normal),
         transform var(--transition-normal);
     }
   }

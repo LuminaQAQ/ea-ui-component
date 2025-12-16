@@ -1,8 +1,8 @@
-import Base from "@components/Base.js";
+import FormAssociatedBase from "@/core/FormBase";
 
 import stylesheet from "./index.scss?inline";
 
-export class EaSwitch extends Base {
+export class EaSwitch extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
@@ -19,14 +19,24 @@ export class EaSwitch extends Base {
 
   static get observedAttributes() {
     return [
+      ...super.observedAttributes,
+
       "name",
       "value",
+      "active-value",
+      "inactive-value",
+
+      // "size",
+      // "width",
       "inactive-text",
       "inactive-color",
       "active-text",
       "active-color",
+
       "checked",
       "disabled",
+
+      // "loading",
     ];
   }
 
@@ -34,61 +44,102 @@ export class EaSwitch extends Base {
     name: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.setAttribute("for", newVal);
         this.#originalInput.setAttribute("name", newVal);
         this.#originalInput.setAttribute("id", newVal);
       },
     },
+    value: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#originalInput.setAttribute("value", newVal);
+      },
+    },
+    "active-value": {
+      type: {
+        Number: () =>
+          this.hasAttribute("active-value") &&
+          (this.getAttrNumber("active-value") ||
+            this.getAttrNumber("active-value") === 0),
+        String: () =>
+          this.hasAttribute("active-value") &&
+          (this.getAttrString("active-value") ||
+            this.getAttrString("active-value") === ""),
+        Boolean: () =>
+          this.hasAttribute("active-value") ||
+          !this.hasAttribute("active-value"),
+      },
+      default: true,
+      observer: () => {},
+    },
+    "inactive-value": {
+      type: {
+        Number: () =>
+          this.hasAttribute("active-value") &&
+          (this.getAttrNumber("active-value") ||
+            this.getAttrNumber("active-value") === 0),
+        String: () =>
+          this.hasAttribute("active-value") &&
+          (this.getAttrString("active-value") ||
+            this.getAttrString("active-value") === ""),
+        Boolean: () =>
+          this.hasAttribute("active-value") ||
+          !this.hasAttribute("active-value"),
+      },
+      default: () => false,
+      observer: () => {},
+    },
+
     "inactive-text": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#labelLeft.innerText = newVal;
       },
     },
     "inactive-color": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-switch-inactive-checkbox-bgc", newVal);
       },
     },
     "active-text": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#labelRight.innerText = newVal;
       },
     },
     "active-color": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-switch-active-checkbox-bgc", newVal);
       },
     },
+
     checked: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
+        newVal = Boolean(newVal);
+
         this.#originalInput.toggleAttribute("checked", newVal);
+
+        this.setValue(newVal ? this["active-value"] : this["inactive-value"]);
+
         this.#container.className = this.updateContainerClasslist();
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#originalInput.toggleAttribute("disabled", newVal);
         this.#container.className = this.updateContainerClasslist();
-      },
-    },
-    value: {
-      type: String,
-      default: "",
-      observer: (newVal) => {
-        this.#originalInput.setAttribute("value", newVal);
       },
     },
   });
@@ -133,7 +184,7 @@ export class EaSwitch extends Base {
     );
   }
 
-  #changeEvent = (e) => {
+  #changeEvent = e => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -143,11 +194,11 @@ export class EaSwitch extends Base {
         ? this["active-text"]
         : this.checked
       : this["inactive-text"]
-      ? this["inactive-text"]
-      : this.checked;
+        ? this["inactive-text"]
+        : this.checked;
     this.value = value;
 
-    this.dispatchEvent("change", {
+    this.emit("change", {
       detail: {
         checked: this.checked,
         value: value,
@@ -158,17 +209,9 @@ export class EaSwitch extends Base {
   connectedCallback() {
     super.connectedCallback();
 
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
-
-    this.name = this.name;
-    this.value = this.value;
-    this.checked = this.checked;
-    this.disabled = this.disabled;
-
-    this["active-text"] = this["active-text"];
-    this["inactive-text"] = this["inactive-text"];
-    this["active-color"] = this["active-color"];
-    this["inactive-color"] = this["inactive-color"];
+    this.setValue(this.checked ? this["active-value"] : this["inactive-value"]);
 
     this.#originalInput.addEventListener("change", this.#changeEvent, {
       signal: this.#abortController.signal,

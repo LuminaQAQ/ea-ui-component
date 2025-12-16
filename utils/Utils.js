@@ -1,6 +1,3 @@
-import Base from "@/components/Base";
-import { h } from "@/components/ea-table/utils/h";
-
 export default class EaUtils {
   static Array = {};
   static String = {};
@@ -16,13 +13,13 @@ export default class EaUtils {
   static timeout;
 }
 
-EaUtils.Array.toLowerCamelCase = (arr) => {
+EaUtils.Array.toLowerCamelCase = arr => {
   if (!Array.isArray(arr)) arr = Array.from(arr);
 
-  return arr.map((item) => EaUtils.String.toLowerCamelCase(item));
+  return arr.map(item => EaUtils.String.toLowerCamelCase(item));
 };
 
-EaUtils.String.toLowerCamelCase = (str) => {
+EaUtils.String.toLowerCamelCase = str => {
   return str
     .toString()
     .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
@@ -30,21 +27,21 @@ EaUtils.String.toLowerCamelCase = (str) => {
     .toLowerCase();
 };
 
-EaUtils.Boolean.isBoolean = (value) => {
+EaUtils.Boolean.isBoolean = value => {
   return (
     typeof value === "boolean" ||
-    rawValue === "" ||
-    rawValue === "true" ||
-    rawValue === true
+    value === "" ||
+    value === "true" ||
+    value === true
   );
 };
 
-EaUtils.Number.isNumber = (value) => {
+EaUtils.Number.isNumber = value => {
   value = Number(value);
   return typeof value === "number" && !isNaN(value);
 };
 
-EaUtils.Enum.isEnum = (value) => {
+EaUtils.Enum.isEnum = value => {
   return Array.isArray(value);
 };
 
@@ -58,7 +55,7 @@ EaUtils.Enum.hasEnum = (enumAry, prop) => {
  * @param {Base} EaElementClass 元素类
  */
 EaUtils.EaElement.define = (tagName, EaElementClass) => {
-  if (!customElements in window)
+  if (!("customElements" in window))
     return console.warn("当前浏览器不支持自定义元素");
 
   if (!window.customElements.get(tagName)) {
@@ -67,10 +64,10 @@ EaUtils.EaElement.define = (tagName, EaElementClass) => {
 };
 
 EaUtils.EaElement.addAsyncEventListener = (context, eventName, once = true) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     context.addEventListener(
       eventName,
-      (e) => {
+      e => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -81,7 +78,55 @@ EaUtils.EaElement.addAsyncEventListener = (context, eventName, once = true) => {
   });
 };
 
-EaUtils.EaElement.h = h;
+EaUtils.EaElement.h = (tagName, className, props, children) => {
+  const notEndTag = ["input"];
+  const handleProps = (key, value) => {
+    if (
+      key &&
+      (typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean")
+    ) {
+      return `${key}="${value}"`;
+    } else if (Array.isArray(value)) {
+      return `${key}="${value.join(" ")}"`;
+    } else if (typeof value === "object" && value) {
+      return Object.entries(value)
+        .map(([key, value]) => handleProps(key, value))
+        .join(" ");
+    } else if (typeof value === "function") {
+      return `${key}="${value()}"`;
+    }
+
+    return "";
+  };
+
+  const handleChildren = children => {
+    if (
+      typeof children === "string" ||
+      typeof children === "number" ||
+      typeof children === "boolean"
+    ) {
+      return children;
+    } else if (Array.isArray(children)) {
+      return children.join("");
+    }
+
+    return "";
+  };
+
+  return `<${tagName} ${handleProps("class", className)} ${
+    props
+      ? Object.entries(props)
+          .map(([key, value]) => handleProps(key, value))
+          .join(" ")
+      : ""
+  }${
+    notEndTag.includes(tagName)
+      ? "/>"
+      : `${`>\n    ${handleChildren(children)}\n  </${tagName}>`}`
+  }`;
+};
 
 EaUtils.JSON.parse = (json, isIgnoreError = false) => {
   try {
@@ -111,10 +156,10 @@ EaUtils.timeout = (fn, time = 0) => {
   return timer;
 };
 
-EaUtils.CSS.px2num = (px) => {
+EaUtils.CSS.px2num = px => {
   return Number(px?.replace("px", ""));
 };
 
-EaUtils.CSS.rem2num = (rem) => {
+EaUtils.CSS.rem2num = rem => {
   return Number(rem.replace("rem", ""));
 };
