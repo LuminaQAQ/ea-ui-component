@@ -161,7 +161,7 @@ export class EaInputNumber extends FormAssociatedBase {
       props: true,
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -169,7 +169,7 @@ export class EaInputNumber extends FormAssociatedBase {
       props: true,
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -177,7 +177,7 @@ export class EaInputNumber extends FormAssociatedBase {
       props: true,
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },

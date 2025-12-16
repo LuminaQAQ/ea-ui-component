@@ -201,7 +201,7 @@
     "lint:fix": "eslint . --ext .js --fix",
     "format": "prettier --write \"**/*.{js,json,scss,css,md}\"",
     "prepare": "husky install",
-    "commit": "git-cz"
+    "commit": "git add . && git-cz"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.2.0",
