@@ -1,0 +1,132 @@
+@import "../ea-ui-base-style.scss";
+
+@mixin sign-size($size-type, $size) {
+  &.ea-input-number_sign--#{$size-type} {
+    height: $size;
+    width: $size;
+  }
+}
+
+@mixin input-size($size-type, $size) {
+  &.ea-input-number_inner--#{$size-type} {
+    height: $size;
+    line-height: $size;
+  }
+}
+
+@mixin input-number-size($size) {
+  .ea-input-number_sign {
+    height: $size;
+    width: $size;
+  }
+
+  .ea-input-number_inner {
+    height: $size;
+    line-height: $size;
+  }
+}
+
+.ea-input-number_wrap {
+  display: flex;
+  align-items: center;
+
+  border: 1px solid transparent;
+  border-radius: 3px;
+  transition: border 0.2s;
+
+  .ea-input-number_sign {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: 1px solid $color-border;
+    background-color: $color-counter-bgc;
+
+    height: 2rem;
+    width: 2rem;
+
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+
+    user-select: none;
+
+    &:first-child {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+      border-right: 0;
+    }
+
+    &:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-left: 0;
+    }
+
+    &:hover {
+      color: $color-counter-hover-text;
+    }
+
+    &.disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+      color: $color-counter-disabled-text;
+    }
+  }
+
+  .ea-input-number_inner {
+    @include input-default-theme;
+
+    width: 5rem;
+    height: 2rem;
+
+    border-radius: 0;
+
+    text-align: center;
+
+    &:focus {
+      border-color: #dcdfe6;
+    }
+
+    &.disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+
+      color: $color-counter-disabled-text;
+      background-color: $color-counter-bgc;
+    }
+  }
+
+  &.focus {
+    border: 1px solid $color-primary-border;
+
+    .ea-input-number_sign {
+      border-color: transparent;
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+
+    .ea-input-number_sign,
+    .ea-input-number_inner {
+      color: $color-counter-disabled-text;
+      border-color: $color-border;
+    }
+  }
+
+  &.ea-input-number--medium {
+    @include input-number-size(1.75rem);
+  }
+
+  &.ea-input-number--small {
+    @include input-number-size(1.5rem);
+  }
+
+  &.ea-input-number--mini {
+    @include input-number-size(1.25rem);
+  }
+}

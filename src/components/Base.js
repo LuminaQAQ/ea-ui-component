@@ -81,8 +81,8 @@ export default class Base extends HTMLElement {
    * }>} states 配置对象，每个 key 是一个响应式字段名
    * @returns {void}
    */
-  properties = (states) => {
-    const parseType = (type) => {
+  properties = states => {
+    const parseType = type => {
       if (type === Boolean) {
         return "Boolean";
       }
@@ -109,7 +109,7 @@ export default class Base extends HTMLElement {
 
       if (typeof type === "object" && type !== null) {
         try {
-          const realType = Object.entries(type).filter((_) =>
+          const realType = Object.entries(type).filter(_ =>
             typeof _[1] === "function" ? _[1]() : false
           )[0];
 
@@ -125,12 +125,12 @@ export default class Base extends HTMLElement {
       return type;
     };
 
-    const parseDefaultValue = (defaultVal) =>
+    const parseDefaultValue = defaultVal =>
       typeof defaultVal === "function"
         ? defaultVal()
         : defaultVal
-        ? defaultVal
-        : null;
+          ? defaultVal
+          : null;
 
     const parseValue = (key, rawValue) => {
       const config = states[key];
@@ -166,7 +166,7 @@ export default class Base extends HTMLElement {
       }
 
       if (typeof type === "object" && type !== null) {
-        const realType = Object.entries(type).filter((_) => _[1]());
+        const realType = Object.entries(type).filter(_ => _[1]());
 
         return realType && realType?.length
           ? parseValue(realType[0][0], rawValue)
@@ -190,7 +190,7 @@ export default class Base extends HTMLElement {
           get: () => {
             return parseValue(key, this.props?.[key] || config.default);
           },
-          set: (value) => {
+          set: value => {
             const oldValue = this.props?.[key];
             this.props[key] = value;
             config?.observer?.(value, oldValue);
@@ -208,7 +208,7 @@ export default class Base extends HTMLElement {
               parseDefaultValue(config?.default)
             );
           },
-          set: (value) => {
+          set: value => {
             this.setAttr(realKey, parseValue(realKey, value));
           },
           configurable: true,

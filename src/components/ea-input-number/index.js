@@ -1,308 +1,380 @@
-// @ts-nocheck
-import Base from '../Base.js';
+import FormAssociatedBase from "@/core/FormBase";
 
-import { stylesheet } from './src/style/stylesheet.js';
-import { handleCustomEvent } from './src/utils/handleCustomEvent.js';
+import stylesheet from "./index.scss?inline";
 
-export class EaInputNumber extends Base {
-    #wrap;
-    #input;
-    #signMinus;
-    #signPlus;
-    constructor() {
-        super();
+export class EaInputNumber extends FormAssociatedBase {
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLInputElement} */
+  #inputEl;
+  /** @type {HTMLElement} */
+  #operatorMinus;
+  /** @type {HTMLElement} */
+  #operatorPlus;
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class="ea-input-number_wrap" part="container">
-                <span class="ea-input-number_sign minus" part="minus-wrap">-</span>
-                <input class="ea-input-number_inner" part="input" type="text" />
-                <span class="ea-input-number_sign plus" part="plus-wrap">+</span>
-            </div>
-        `;
+  /** @type {AbortController} */
+  #abortController = new AbortController();
 
-        this.#wrap = shadowRoot.querySelector('.ea-input-number_wrap');
-        this.#input = shadowRoot.querySelector('.ea-input-number_inner');
-        this.#signMinus = shadowRoot.querySelector('.minus');
-        this.#signPlus = shadowRoot.querySelector('.plus');
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "value",
+      "value-on-clear",
 
-        this.build(shadowRoot, stylesheet);
-    }
+      "min",
+      "max",
 
-    // 处理输入框加减事件
-    #signEvent(sign, precision, eventName) {
-        if (this.getAttrBoolean('disabled')) return;
+      "step",
+      "step-strictly",
 
-        const val = Number(this.#input.value);
+      "precision",
+      "size",
+      "name",
+      "align",
+      "placeholder",
+      "inputmode",
 
-        const defaultStepPrecision = this.#input.value.split('.')[1]; // 简单处理精度问题
-        const res = sign === "minus" ? val - this.step : val + this.step; // 处理加减问题
+      "readonly",
+      "disabled",
+      "controls",
+    ];
+  }
 
-        if (precision) {
-            this.#input.value = (res).toFixed(precision);
+  state = this.properties({
+    value: {
+      type: Number,
+      default: 0,
+      /** @param {number} newVal */
+      observer: newVal => {
+        newVal = Number(newVal).toFixed(this.precision);
+
+        this.#inputEl.value = newVal;
+        this.setValue(newVal);
+
+        if (newVal >= this.max) this.isMax = true;
+        else this.isMax = false;
+
+        if (newVal <= this.min) this.isMin = true;
+        else this.isMin = false;
+
+        this.updateContainerClasslist();
+      },
+    },
+    defaultValue: {
+      props: true,
+      type: Number,
+      default: this.getAttrNumber("value", 0).toFixed(this.precision),
+      observer: () => {},
+    },
+
+    min: {
+      type: Number,
+      default: Number.MIN_SAFE_INTEGER,
+      observer: () => {},
+    },
+    max: {
+      type: Number,
+      default: Number.MAX_SAFE_INTEGER,
+      observer: () => {},
+    },
+    step: {
+      type: Number,
+      default: 1,
+      observer: () => {},
+    },
+    "step-strictly": {
+      type: Boolean,
+      default: false,
+      observer: () => {},
+    },
+    precision: {
+      type: Number,
+      default: 0,
+      observer: () => {},
+    },
+    size: {
+      type: ["large", "default", "small"],
+      default: "",
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.#inputEl.readOnly = newVal;
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    controls: {
+      type: Boolean,
+      default: true,
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    "value-on-clear": {
+      type: Number,
+      default: "",
+      observer: () => {},
+    },
+    align: {
+      type: ["left", "center", "right"],
+      default: "center",
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    name: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#inputEl.setAttribute("name", newVal);
+        this.#inputEl.setAttribute("id", newVal);
+      },
+    },
+    placeholder: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#inputEl.setAttribute("placeholder", newVal);
+      },
+    },
+    inputmode: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#inputEl.setAttribute("inputmode", newVal);
+      },
+    },
+  });
+
+  componentStatusState = this.properties({
+    isFocus: {
+      props: true,
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
+    },
+    isMin: {
+      props: true,
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
+    },
+    isMax: {
+      props: true,
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
+    },
+  });
+
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist(
+      "ea-input-number",
+      {
+        ["--" + this.align]: this.align,
+        ["--" + this.size]: this.size,
+      },
+      {
+        focus: this.isFocus,
+        min: this.isMin,
+        max: this.isMax,
+        disabled: this.disabled,
+        "no-controls": !this.controls,
+      }
+    );
+
+    this.#container.className = className;
+
+    return className;
+  }
+
+  constructor() {
+    super();
+
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-input-number' part='container'>
+        <ea-icon class="ea-input-number__operator decrease" part="decrease" icon="icon-minus"></ea-icon>
+        <span class="ea-input-number__prefix" part="prefix">
+            <slot name="prefix"></slot>
+        </span>
+        <input class="ea-input-number__inner" part="input" type="text" />
+        <span class="ea-input-number__suffix" part="input">
+            <slot name="suffix"></slot>
+        </span>
+        <ea-icon class="ea-input-number__operator increase" part="increase" icon="icon-plus"></ea-icon>
+      </div>
+    `;
+
+    this.#container = this.shadowRoot.querySelector(".ea-input-number");
+    this.#inputEl = this.shadowRoot.querySelector(".ea-input-number__inner");
+    this.#operatorMinus = this.shadowRoot.querySelector(
+      ".ea-input-number__operator.decrease"
+    );
+    this.#operatorPlus = this.shadowRoot.querySelector(
+      ".ea-input-number__operator.increase"
+    );
+
+    this.updateContainerClasslist();
+  }
+
+  /**
+   * 处理数值的安全边界
+   * @param {Number} value
+   * @param {Object} param1
+   * @param {Number} [param1.precision]
+   * @param {Number} [param1.min]
+   * @param {Number} [param1.max]
+   * @param {Number | String} [param1.defaultValue]
+   */
+  #handleSanitizeNumber = (
+    value = this.value,
+    { precision, min, max, defaultValue }
+  ) => {
+    value = Number(value);
+
+    if (isNaN(value) || !Number.isFinite(value))
+      return defaultValue?.toFixed(precision) || "";
+
+    if (value < min) value = min;
+    else if (value > max) value = max;
+
+    return value.toFixed(precision);
+  };
+
+  /**
+   * 加
+   */
+  #handleValuePlus = () => {
+    this.setAttribute(
+      "value",
+      this.#handleSanitizeNumber(this.value - this.step, {
+        precision: this.precision,
+        min: this.min,
+        max: this.max,
+        defaultValue: this.defaultValue,
+      })
+    );
+  };
+
+  /**
+   * 减
+   */
+  #handleValueMinus = () => {
+    this.setAttribute(
+      "value",
+      this.#handleSanitizeNumber(this.value + this.step, {
+        precision: this.precision,
+        min: this.min,
+        max: this.max,
+        defaultValue: this.defaultValue,
+      })
+    );
+  };
+
+  /**
+   * 当用户可能进行过手动输入时，进行输入框值校验
+   */
+  #ensureInputValueIsCorrect = e => {
+    let correctValue = this.#handleSanitizeNumber(e.target.value, {
+      precision: this.precision,
+      min: this.min,
+      max: this.max,
+      defaultValue: this.defaultValue,
+    });
+
+    if (this["step-strictly"] && Number(correctValue) % this.step !== 0) {
+      correctValue = this.#handleSanitizeNumber(
+        Number(correctValue) + (correctValue % this.step),
+        {
+          precision: this.precision,
+          min: this.min,
+          max: this.max,
+          defaultValue: this.defaultValue,
         }
-        // 简单处理精度问题
-        else if (defaultStepPrecision?.length) {
-            this.#input.value = (res).toFixed(defaultStepPrecision.length);
-        } else {
-            this.#input.value = res;
-        }
-
-        // 限制输入框的值
-        this.#handleLimitVal();
-
-        // 为外部dom添加事件监听
-        if (eventName) this.#handleCustomEvent('change', res);
+      );
     }
 
-    // 处理连加连减事件
-    #handleCounterEvent(sign) {
-        let timer = setInterval(() => {
-            this.#signEvent(sign, this.precision);
-            this.#handleLimitVal();
-        }, 100);
+    this.setAttribute("value", correctValue);
 
-        this.addEventListener('mouseup', function () {
-            clearInterval(timer);
-            timer = null;
-        })
-    }
+    if (correctValue !== e.target.value) e.target.value = correctValue;
 
-    #handleLimitVal() {
-        if (this.min === false && this.max === false) return;
+    this.isFocus = false;
+  };
 
-        // 限制输入框的值
-        if (this.min !== undefined && this.#input.value < this.min) {
-            this.#input.value = this.min;
-        } else if (this.max !== undefined && this.#input.value > this.max) {
-            this.#input.value = this.max;
-        }
+  connectedCallback() {
+    super.connectedCallback();
 
-        // 当达到限制值时, 禁用加减按钮
-        this.#signMinus.classList.toggle('disabled', this.#input.value == this.min);
-        this.#signPlus.classList.toggle('disabled', this.#input.value == this.max);
-    }
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-    #handleValueUpdate() {
-        if (isNaN(Number(this.#input.value))) this.#input.value = this.value;
-        else this.value = Number(this.#input.value);
-    }
+    this.value = this.getAttrNumber("value", 0).toFixed(this.precision);
+    if (!this.name)
+      this.setAttribute("name", Math.random().toString(36).substring(2, 15));
 
-    #handleCustomEvent(eventName, value = this.value) {
-        handleCustomEvent.call(this, eventName, {
-            value
-        });
-    }
+    // 增加 的 事件
+    const increaseEvent = () => {
+      if (this.disabled || !this.controls) return;
+      this.#handleValuePlus();
+    };
 
-    // ------- value 值 -------
-    // #region
-    get value() {
-        return Number(this.getAttribute('value')) || 0;
-    }
+    // 减少 的 事件
+    const decreaseEvent = () => {
+      if (this.disabled || !this.controls) return;
+      this.#handleValueMinus();
+    };
 
-    set value(val) {
-        val = this.precision ? Number(val).toFixed(this.precision) : Number(val);
-        this.setAttribute('value', val);
+    this.#operatorMinus.addEventListener("click", increaseEvent, {
+      signal: this.#abortController.signal,
+    });
+    this.#operatorPlus.addEventListener("click", decreaseEvent, {
+      signal: this.#abortController.signal,
+    });
+    this.#inputEl.addEventListener("blur", this.#ensureInputValueIsCorrect, {
+      signal: this.#abortController.signal,
+    });
 
-        this.#input.value = val;
-    }
-    // #endregion
-    // ------- end -------
+    this.#inputEl.addEventListener(
+      "focus",
+      () => {
+        this.isFocus = true;
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+  }
 
-    // ------- disabled 禁用 -------
-    // #region
-    get disabled() {
-        return this.getAttrBoolean('disabled');
-    }
-
-    set disabled(flag) {
-        this.toggleAttr('disabled', flag);
-
-        this.#input.disabled = flag;
-        this.#wrap.classList.toggle('disabled', flag);
-        this.style.cursor = flag ? 'not-allowed' : 'pointer';
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- readonly 只读 -------
-    // #region
-    get readonly() {
-        return this.getAttrBoolean('readonly');
-    }
-
-    set readonly(value) {
-        if (!value) return;
-
-        this.#input.readOnly = value;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- step 加减的步长 -------
-    // #region
-    get step() {
-        return this.getAttrNumber('step') || 1;
-    }
-
-    set step(value) {
-        if (!value) return;
-
-        this.setAttribute('step', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- step-strictly 严格步长 -------
-    // #region
-    get stepStrictly() {
-        return this.getAttrBoolean('step-strictly');
-    }
-
-    set stepStrictly(flag) {
-        this.toggleAttr('step-strictly', flag);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- min/max 限制最大/最小值 -------
-    // #region
-    get min() {
-        return this.getAttrNumber('min') || -Infinity;
-    }
-
-    set min(value) {
-        if (!Number.isNaN(value) || Number.isFinite(value)) return;
-
-        this.setAttribute('min', value);
-    }
-
-    get max() {
-        return this.getAttrNumber('max') || Infinity;
-    }
-
-    set max(value) {
-        if (!value) return;
-        this.setAttribute('max', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- precision 精度 -------
-    // #region
-    get precision() {
-        const num = this.getAttrNumber('precision');
-
-        if (num < 0 || !Number.isInteger(num)) return 0;
-        return num;
-    }
-
-    set precision(value) {
-        if (!value) return;
-
-        this.setAttribute('precision', value);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- size 按钮大小(medium、small、mini) -------
-    // #region
-    get sizeType() {
-        return ['medium', 'small', 'mini']
-    }
-
-    get size() {
-        const attr = this.getAttribute('size');
-        return this.sizeType.includes(attr) ? attr : 'medium';
-    }
-
-    set size(size) {
-        this.setAttribute('size', size);
-        this.#wrap.classList.add(`ea-input-number--${size}`);
-    }
-    // #endregion
-    // ------- end -------
-
-    connectedCallback() {
-        this.style.display = 'inline-block';
-
-        // 禁用
-        this.disabled = this.disabled;
-
-        this.readonly = this.readonly;
-
-        // 大小
-        this.size = this.size;
-
-        // 默认值
-        this.value = this.value;
-
-        if (this.min !== -Infinity) this.value = this.min;
-
-        // 限制值初始化
-        this.#handleLimitVal();
-
-        // 输入框获取焦点
-        this.#input.addEventListener('focus', e => {
-            this.#wrap.classList.add('focus');
-
-            this.#handleCustomEvent("focus");
-        })
-
-        // 输入框失去焦点
-        this.#input.addEventListener('blur', e => {
-            this.#wrap.classList.remove('focus');
-
-            if (this.stepStrictly) {
-                const step = that.step;
-                const val = Number(that.#input.value);
-                const mod = val % step;
-
-                if (val < 0 && mod !== 0) that.#input.value = val - mod - step;
-                else if (val < 0 && mod === 0) that.#input.value = val;
-                else if (mod === 0) that.#input.value = val;
-                else this.#input.value = val - mod + step;
-            }
-
-            this.#handleLimitVal();
-
-            this.#handleCustomEvent("blur");
-        })
-
-        // 减号
-        this.#signMinus.addEventListener('click', () => {
-            this.#handleValueUpdate();
-            this.#signEvent("minus", this.precision, "minus");
-        })
-
-        // 加号
-        this.#signPlus.addEventListener('click', () => {
-            this.#handleValueUpdate();
-            this.#signEvent("plus", this.precision, "plus");
-        })
-
-        // 连减
-        this.#signMinus.addEventListener('mousedown', () => {
-            this.#handleValueUpdate();
-            this.#handleCounterEvent("minus", this.precision);
-        })
-
-        // 连加
-        this.#signPlus.addEventListener('mousedown', () => {
-            this.#handleValueUpdate();
-            this.#handleCounterEvent("plus", this.precision);
-        })
-
-        // 输入框值改变时
-        this.#input.addEventListener('input', () => {
-            this.#handleValueUpdate();
-            this.#handleLimitVal();
-
-            this.#handleCustomEvent("change");
-        })
-    }
+  $beforeUnmounted() {
+    this.#abortController.abort();
+  }
 }
 
 if (!window.customElements.get("ea-input-number")) {
-    window.customElements.define("ea-input-number", EaInputNumber);
+  window.customElements.define("ea-input-number", EaInputNumber);
 }
