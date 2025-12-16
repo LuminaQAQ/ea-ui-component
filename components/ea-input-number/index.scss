@@ -1,132 +1,170 @@
-@import "../ea-ui-base-style.scss";
+$name: ea-input-number;
+$ea-input-number-align-type: (left, center, right);
+$ea-input-number-size-type: (large, default, small);
 
-@mixin sign-size($size-type, $size) {
-  &.ea-input-number_sign--#{$size-type} {
-    height: $size;
-    width: $size;
+@mixin operator-disabled-style {
+  cursor: not-allowed;
+  color: var(--#{$name}-operator-disabled-color);
+
+  &:hover {
+    color: var(--#{$name}-operator-disabled-color);
   }
 }
 
-@mixin input-size($size-type, $size) {
-  &.ea-input-number_inner--#{$size-type} {
-    height: $size;
-    line-height: $size;
-  }
+:host {
+  --#{$name}-large-width: 180px;
+  --#{$name}-default-width: 150px;
+  --#{$name}-small-width: 120px;
+
+  --#{$name}-large-height: 40px;
+  --#{$name}-default-height: 32px;
+  --#{$name}-small-height: 24px;
+
+  --#{$name}-large-font-size: var(--font-size-lg);
+  --#{$name}-default-font-size: var(--font-size-md);
+  --#{$name}-small-font-size: var(--font-size-sm);
+
+  --#{$name}-border-color: var(--grey-300);
+  --#{$name}-text-color: var(--grey-700);
+
+  --#{$name}-operator-color: var(--grey-500);
+  --#{$name}-operator-bg-color: var(--grey-100);
+  --#{$name}-operator-disabled-color: var(--grey-300);
+
+  --#{$name}-input-disabled-color: var(--grey-400);
+  --#{$name}-input-disabled-bg-color: var(--grey-100);
+
+  --#{$name}-active-color: var(--blue-500);
+
+  --#{$name}-transition: var(--transition-normal);
 }
 
-@mixin input-number-size($size) {
-  .ea-input-number_sign {
-    height: $size;
-    width: $size;
-  }
-
-  .ea-input-number_inner {
-    height: $size;
-    line-height: $size;
-  }
+:host {
+  display: inline-block;
 }
 
-.ea-input-number_wrap {
-  display: flex;
-  align-items: center;
+:host([disabled]) {
+  cursor: not-allowed;
+}
 
-  border: 1px solid transparent;
-  border-radius: 3px;
-  transition: border 0.2s;
+@include block($name) {
+  box-sizing: border-box;
+  user-select: none;
 
-  .ea-input-number_sign {
+  display: inline-flex;
+  align-items: stretch;
+
+  width: calc(var(--#{$name}-default-width) - 2px);
+
+  border: 1px solid var(--#{$name}-border-color);
+  border-radius: 4px;
+
+  overflow: hidden;
+
+  transition: border var(--#{$name}-transition);
+
+  @include element(operator) {
     display: flex;
     align-items: center;
     justify-content: center;
 
     box-sizing: border-box;
+    padding: 0.5rem;
 
-    border: 1px solid $color-border;
-    background-color: $color-counter-bgc;
+    height: calc(var(--#{$name}-default-height) - 2px);
+    line-height: calc(var(--#{$name}-default-height) - 2px);
 
-    height: 2rem;
-    width: 2rem;
+    color: var(--#{$name}-operator-color);
+
+    background-color: var(--#{$name}-operator-bg-color);
 
     cursor: pointer;
-    font-size: 1rem;
-    line-height: 1;
 
-    user-select: none;
-
-    &:first-child {
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-      border-right: 0;
+    &.decrease,
+    &.increase {
+      &:hover {
+        color: var(--#{$name}-active-color);
+      }
     }
 
-    &:last-child {
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-      border-left: 0;
+    &.decrease {
+      border-right: 1px solid var(--#{$name}-border-color);
     }
 
-    &:hover {
-      color: $color-counter-hover-text;
-    }
-
-    &.disabled {
-      pointer-events: none;
-      cursor: not-allowed;
-      color: $color-counter-disabled-text;
+    &.increase {
+      border-left: 1px solid var(--#{$name}-border-color);
     }
   }
 
-  .ea-input-number_inner {
-    @include input-default-theme;
+  @include element(inner) {
+    box-sizing: border-box;
 
-    width: 5rem;
-    height: 2rem;
+    outline: 0;
+    border: 0;
 
-    border-radius: 0;
+    width: 100%;
+    height: calc(var(--#{$name}-default-height) - 2px);
+    line-height: calc(var(--#{$name}-default-height) - 2px);
 
-    text-align: center;
+    color: var(--#{$name}-text-color);
+  }
 
-    &:focus {
-      border-color: #dcdfe6;
-    }
-
-    &.disabled {
-      pointer-events: none;
-      cursor: not-allowed;
-
-      color: $color-counter-disabled-text;
-      background-color: $color-counter-bgc;
+  @each $align in $ea-input-number-align-type {
+    @include modifier($align) {
+      .ea-input-number__inner {
+        text-align: #{$align};
+      }
     }
   }
 
-  &.focus {
-    border: 1px solid $color-primary-border;
+  @each $size in $ea-input-number-size-type {
+    @include modifier($size) {
+      width: calc(var(--#{$name}-#{$size}-width) - 2px);
 
-    .ea-input-number_sign {
-      border-color: transparent;
+      .ea-input-number__operator,
+      .ea-input-number__inner {
+        height: calc(var(--#{$name}-#{$size}-height) - 2px);
+        line-height: calc(var(--#{$name}-#{$size}-height) - 2px);
+
+        font-size: var(--#{$name}-#{$size}-font-size);
+      }
     }
   }
 
-  &.disabled {
+  @include state(focus) {
+    border-color: var(--#{$name}-active-color);
+  }
+
+  @include state(min) {
+    .ea-input-number__operator.decrease {
+      @include operator-disabled-style;
+    }
+  }
+
+  @include state(max) {
+    .ea-input-number__operator.increase {
+      @include operator-disabled-style;
+    }
+  }
+
+  @include state(disabled) {
     pointer-events: none;
-    cursor: not-allowed;
 
-    .ea-input-number_sign,
-    .ea-input-number_inner {
-      color: $color-counter-disabled-text;
-      border-color: $color-border;
+    .ea-input-number__operator {
+      @include operator-disabled-style;
+    }
+
+    .ea-input-number__inner {
+      color: var(--#{$name}-input-disabled-color);
+      background-color: var(--#{$name}-input-disabled-bg-color);
     }
   }
 
-  &.ea-input-number--medium {
-    @include input-number-size(1.75rem);
-  }
+  @include state(no-controls) {
+    display: inline-block;
 
-  &.ea-input-number--small {
-    @include input-number-size(1.5rem);
-  }
-
-  &.ea-input-number--mini {
-    @include input-number-size(1.25rem);
+    .ea-input-number__operator {
+      display: none;
+    }
   }
 }

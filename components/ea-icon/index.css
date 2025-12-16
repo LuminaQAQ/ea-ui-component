@@ -1,12 +1,28 @@
 @import "./css/fontello.css";
 
 :host {
+    --ea-icon-size: var(--font-size-md);
+}
+
+:host {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    i {
-        font-style: normal;
+    font-size: var(--ea-icon-size);
+}
+
+i {
+    width: var(--ea-icon-size);
+    height: var(--ea-icon-size);
+
+    line-height: var(--ea-icon-size);
+    font-style: normal;
+
+    &::before,
+    &::after {
+        box-sizing: border-box;
+        margin: 0 !important;
     }
 }
 
