@@ -24,7 +24,7 @@
 - [ ] DateTime Picker 日期时间选择器
 - [ ] Form 表单组件
 - [x] Input 输入框
-- [ ] Input Number 数字输入框
+- [x] Input Number 数字输入框
 - [ ] Input Tag 标签输入框
 - [ ] Mention 提及
 - [x] Radio 单选框

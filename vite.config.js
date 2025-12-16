@@ -24,7 +24,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         entryFileNames: "components/[name].js",
-        chunkFileNames: (chunkInfo) => {
+        chunkFileNames: chunkInfo => {
           if (chunkInfo.name.startsWith("css/")) {
             return `${chunkInfo.name}.style.js`;
           }
@@ -57,7 +57,7 @@ export default defineConfig({
            * @param {Array<string>} pathChunks
            * @returns
            */
-          const findComponentName = (pathChunks) => {
+          const findComponentName = pathChunks => {
             const chunk = pathChunks.pop();
             return chunk?.startsWith("ea-")
               ? chunk
@@ -67,7 +67,7 @@ export default defineConfig({
            * @param {Array<string>} pathChunks
            * @returns
            */
-          const findCoreComponentName = (pathChunks) => {
+          const findCoreComponentName = pathChunks => {
             const chunk = pathChunks.pop();
             return chunk?.includes("Base")
               ? chunk
@@ -115,14 +115,14 @@ export default defineConfig({
             const ary = normalizedId.split("/");
             const name = findComponentName(ary);
 
-            return `${name}`;
+            if (name) return `chunk/${name}`;
           }
 
           if (normalizedId.startsWith(componentsPath)) {
             const ary = normalizedId.split("/");
             const name = findComponentName(ary);
 
-            if (name?.startsWith("ea-")) return `${name}`;
+            if (name?.startsWith("ea-")) return `chunk/${name}`;
           }
         },
       },
