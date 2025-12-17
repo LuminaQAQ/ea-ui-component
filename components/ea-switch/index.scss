@@ -1,3 +1,5 @@
+$ea-switch-size-type: (small, default, large);
+
 :host {
   display: inline-block;
 }
@@ -5,22 +7,36 @@
 :host {
   --ea-switch-space: 0 var(--spacing-md);
 
-  --ea-switch-width: 40px;
-  --ea-switch-height: 20px;
+  --ea-switch-large-width: 50px;
+  --ea-switch-default-width: 40px;
+  --ea-switch-small-width: 30px;
 
-  --ea-switch-indicator-size: 16px;
+  --ea-switch-large-height: 24px;
+  --ea-switch-default-height: 20px;
+  --ea-switch-small-height: 16px;
+
+  --ea-switch-indicator-large-size: 20px;
+  --ea-switch-indicator-default-size: 16px;
+  --ea-switch-indicator-small-size: 12px;
+
+  --ea-switch-large-font-size: 18px;
+  --ea-switch-default-font-size: 16px;
+  --ea-switch-small-font-size: 14px;
+
   --ea-switch-indicator-color: var(--color-white);
   --ea-switch-indicator-start: 2px;
-  --ea-switch-indicator-end: calc(100% - 1rem - 2px);
+  --ea-switch-indicator-end: calc(
+    100% - var(--ea-switch-indicator-default-size) - 2px
+  );
 
-  --ea-switch-inactive-checkbox-bgc: var(--grey-300);
+  --ea-switch-inactive-bg-color: var(--grey-300);
   --ea-switch-inactive-text-color: var(--color-black);
-  --ea-switch-active-checkbox-bgc: var(--blue-500);
+  --ea-switch-active-bg-color: var(--blue-500);
   --ea-switch-active-text-color: var(--blue-500);
 
   --ea-switch-disabled-text-color: var(--grey-300);
-  --ea-switch-disabled-checkbox-bgc: var(--grey-200);
-  --ea-switch-disabled-checked-checkbox-bgc: var(--blue-300);
+  --ea-switch-disabled-bg-color: var(--grey-200);
+  --ea-switch-disabled-checked-bg-color: var(--blue-300);
   --ea-switch-disabled-checked-text-color: var(--blue-300);
 
   --ea-switch-border-radius: var(--border-radius-round);
@@ -36,7 +52,7 @@
       }
     }
 
-    @include modifier(checked) {
+    @include state(checked) {
       .label-left {
         color: var(--ea-switch-inactive-text-color);
       }
@@ -46,7 +62,7 @@
       }
     }
 
-    @include modifier(disabled) {
+    @include state(disabled) {
       .label-left {
         color: var(--ea-switch-disabled-checked-text-color);
       }
@@ -60,22 +76,6 @@
 
 :host([disabled]) {
   cursor: not-allowed;
-
-  @include block(ea-switch) {
-    @include modifier(checked) {
-      .ea-switch__inner {
-        background-color: var(--ea-switch-disabled-checked-checkbox-bgc);
-      }
-
-      .label-left {
-        color: var(--ea-switch-disabled-text-color);
-      }
-
-      .label-right {
-        color: var(--ea-switch-disabled-checked-text-color);
-      }
-    }
-  }
 }
 
 :host {
@@ -97,12 +97,10 @@
     position: relative;
 
     margin: var(--ea-switch-space);
+    height: var(--ea-switch-default-height);
+    line-height: var(--ea-switch-default-height);
 
-    width: var(--ea-switch-width);
-    height: var(--ea-switch-height);
-    line-height: var(--ea-switch-height);
-
-    background-color: var(--ea-switch-inactive-checkbox-bgc);
+    background-color: var(--ea-switch-inactive-bg-color);
     border-radius: var(--ea-switch-border-radius);
 
     transition: background-color var(--transition-normal);
@@ -114,13 +112,16 @@
       position: absolute;
       left: var(--ea-switch-indicator-start);
       top: 50%;
+      transform-origin: center center;
       transform: translate(0, -50%);
 
-      width: var(--ea-switch-indicator-size);
-      height: var(--ea-switch-indicator-size);
+      width: var(--ea-switch-indicator-default-size);
+      height: var(--ea-switch-indicator-default-size);
 
       border-radius: var(--border-radius-circle);
       background-color: var(--ea-switch-indicator-color);
+
+      z-index: 1;
 
       transition:
         left var(--transition-normal),
@@ -129,30 +130,74 @@
   }
 
   @include element(label) {
+    &.label-left {
+      color: var(--ea-switch-active-text-color);
+    }
+
     transition: color var(--transition-normal);
   }
 
-  @include modifier(checked) {
-    .ea-switch__inner {
-      background-color: var(--ea-switch-active-checkbox-bgc);
+  @each $size in $ea-switch-size-type {
+    @include modifier($size) {
+      font-size: var(--ea-switch-#{$size}-font-size);
 
-      &::after {
-        left: var(--ea-switch-indicator-end);
+      .ea-switch__inner {
+        flex: 1 0 var(--ea-switch-#{$size}-width);
+        width: var(--ea-switch-#{$size}-width);
+        height: var(--ea-switch-#{$size}-height);
+
+        min-width: calc(var(--ea-switch-#{$size}-width));
+
+        &::after {
+          width: var(--ea-switch-indicator-#{$size}-size);
+          height: var(--ea-switch-indicator-#{$size}-size);
+        }
       }
+
+      &.is-checked {
+        .ea-switch__inner::after {
+          color: var(--ea-switch-active-bg-color);
+          left: calc(100% - var(--ea-switch-indicator-#{$size}-size) - 2px);
+        }
+      }
+    }
+  }
+
+  @include state(checked) {
+    .ea-switch__inner {
+      background-color: var(--ea-switch-active-bg-color);
     }
 
     .label-right {
       color: var(--ea-switch-active-text-color);
     }
+
+    .label-left {
+      color: var(--ea-switch-inactive-text-color);
+    }
   }
 
-  @include modifier(disabled) {
+  @include state(disabled) {
     pointer-events: none;
 
     color: var(--ea-switch-disabled-text-color);
 
     .ea-switch__inner {
-      background-color: var(--ea-switch-disabled-checkbox-bgc);
+      background-color: var(--ea-switch-disabled-bg-color);
+    }
+
+    &.is-checked {
+      .ea-switch__inner {
+        background-color: var(--ea-switch-disabled-checked-bg-color);
+      }
+
+      .label-left {
+        color: var(--ea-switch-disabled-text-color);
+      }
+
+      .label-right {
+        color: var(--ea-switch-disabled-checked-text-color);
+      }
     }
   }
 }
