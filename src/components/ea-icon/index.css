@@ -1,4 +1,5 @@
 @import "./css/fontello.css";
+@import "./css/animation.css";
 
 :host {
     --ea-icon-size: var(--font-size-md);

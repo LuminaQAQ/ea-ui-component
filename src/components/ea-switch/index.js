@@ -1,11 +1,12 @@
 import FormAssociatedBase from "@/core/FormBase";
 
 import stylesheet from "./index.scss?inline";
+import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
 export class EaSwitch extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
-  /** @type {HTMLElement} */
+  /** @type {HTMLInputElement} */
   #originalInput;
   /** @type {HTMLElement} */
   #innerInput;
@@ -16,6 +17,8 @@ export class EaSwitch extends FormAssociatedBase {
 
   /** @type {AbortController} */
   #abortController;
+  /** @type {AbortController} */
+  #beforeChangeAbortController;
 
   static get observedAttributes() {
     return [
@@ -26,8 +29,7 @@ export class EaSwitch extends FormAssociatedBase {
       "active-value",
       "inactive-value",
 
-      // "size",
-      // "width",
+      "size",
       "inactive-text",
       "inactive-color",
       "active-text",
@@ -35,8 +37,6 @@ export class EaSwitch extends FormAssociatedBase {
 
       "checked",
       "disabled",
-
-      // "loading",
     ];
   }
 
@@ -51,10 +51,38 @@ export class EaSwitch extends FormAssociatedBase {
       },
     },
     value: {
-      type: String,
-      default: "",
+      type: {
+        Number: () =>
+          this.hasAttribute("active-value") &&
+          (this.getAttrNumber("active-value") ||
+            this.getAttrNumber("active-value") === 0 ||
+            this.getAttrNumber("inactive-value") ||
+            this.getAttrNumber("inactive-value") === 0),
+        String: () =>
+          this.hasAttribute("active-value") &&
+          (this.getAttrString("active-value") ||
+            this.getAttrString("active-value") === "" ||
+            this.getAttrString("inactive-value") ||
+            this.getAttrString("inactive-value") === ""),
+        Boolean: () =>
+          this.hasAttribute("active-value") ||
+          !this.hasAttribute("active-value") ||
+          this.hasAttribute("inactive-value") ||
+          !this.hasAttribute("inactive-value"),
+      },
+      default: () => false,
       observer: newVal => {
-        this.#originalInput.setAttribute("value", newVal);
+        const realValue =
+          newVal === this["active-value"]
+            ? this["active-value"]
+            : this["inactive-value"];
+
+        this.#originalInput.value = realValue;
+        this.#originalInput.toggleAttribute("checked", realValue);
+
+        this.setValue(realValue);
+
+        this.updateContainerClasslist();
       },
     },
     "active-value": {
@@ -77,21 +105,28 @@ export class EaSwitch extends FormAssociatedBase {
     "inactive-value": {
       type: {
         Number: () =>
-          this.hasAttribute("active-value") &&
-          (this.getAttrNumber("active-value") ||
-            this.getAttrNumber("active-value") === 0),
+          this.hasAttribute("inactive-value") &&
+          (this.getAttrNumber("inactive-value") ||
+            this.getAttrNumber("inactive-value") === 0),
         String: () =>
-          this.hasAttribute("active-value") &&
-          (this.getAttrString("active-value") ||
-            this.getAttrString("active-value") === ""),
+          this.hasAttribute("inactive-value") &&
+          (this.getAttrString("inactive-value") ||
+            this.getAttrString("inactive-value") === ""),
         Boolean: () =>
-          this.hasAttribute("active-value") ||
-          !this.hasAttribute("active-value"),
+          this.hasAttribute("inactive-value") ||
+          !this.hasAttribute("inactive-value"),
       },
       default: () => false,
       observer: () => {},
     },
 
+    size: {
+      type: EA_COMPONENT_SIZES,
+      default: "default",
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
     "inactive-text": {
       type: String,
       default: "",
@@ -103,7 +138,7 @@ export class EaSwitch extends FormAssociatedBase {
       type: String,
       default: "",
       observer: newVal => {
-        this.style.setProperty("--ea-switch-inactive-checkbox-bgc", newVal);
+        this.style.setProperty("--ea-switch-inactive-bg-color", newVal);
       },
     },
     "active-text": {
@@ -117,29 +152,49 @@ export class EaSwitch extends FormAssociatedBase {
       type: String,
       default: "",
       observer: newVal => {
-        this.style.setProperty("--ea-switch-active-checkbox-bgc", newVal);
+        this.style.setProperty("--ea-switch-active-bg-color", newVal);
       },
     },
 
-    checked: {
-      type: Boolean,
-      default: false,
-      observer: newVal => {
-        newVal = Boolean(newVal);
-
-        this.#originalInput.toggleAttribute("checked", newVal);
-
-        this.setValue(newVal ? this["active-value"] : this["inactive-value"]);
-
-        this.#container.className = this.updateContainerClasslist();
-      },
-    },
     disabled: {
       type: Boolean,
       default: false,
       observer: newVal => {
         this.#originalInput.toggleAttribute("disabled", newVal);
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
+      },
+    },
+  });
+
+  funcState = this.properties({
+    "before-change": {
+      props: true,
+      type: Function,
+      default: null,
+      /**
+       * @param {() => Promise} cb
+       */
+      observer: cb => {
+        this.#beforeChangeAbortController?.abort();
+        this.#beforeChangeAbortController = new AbortController();
+
+        this.#originalInput.addEventListener(
+          "click",
+          async e => {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            if (cb) {
+              cb()
+                .then(() => {
+                  this.#originalInput.checked = !this.value;
+                  this.#originalInput.dispatchEvent(new CustomEvent("change"));
+                })
+                .catch(() => {});
+            }
+          },
+          { signal: this.#beforeChangeAbortController.signal }
+        );
       },
     },
   });
@@ -149,10 +204,21 @@ export class EaSwitch extends FormAssociatedBase {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-switch", {
-      ["--checked"]: this.checked,
-      ["--disabled"]: this.disabled,
-    });
+    const className = this.computedClasslist(
+      "ea-switch",
+      {
+        [`--${this.size}`]: this.size,
+      },
+      {
+        checked: this.value === this["active-value"],
+        disabled: this.disabled || this.loading,
+        loading: this.loading,
+      }
+    );
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -165,13 +231,20 @@ export class EaSwitch extends FormAssociatedBase {
 
   $render() {
     this.shadowRoot.innerHTML = `
-            <label class="ea-switch" part="container">
-                <input class="ea-switch__original" type="checkbox">
-                <span class="ea-switch__label label-left" part="label-left"></span>
-                <span class="ea-switch__inner" part="switch"></span>
-                <span class="ea-switch__label label-right" part="label-right"></span>
-            </label>
-        `;
+      <template id="loadingTpl">
+        <ea-icon class="ea-switch__spiner" icon="animate-spin">↻</ea-icon>
+      </template>
+      <label class="ea-switch" part="container">
+        <input class="ea-switch__original" type="checkbox" />
+        <span class="ea-switch__label label-left" part="label-left">
+          <slot name="inactive"></slot>
+        </span>
+        <span class="ea-switch__inner" part="switch"></span>
+        <span class="ea-switch__label label-right" part="label-right">
+          <slot name="active"></slot>
+        </span>
+      </label>
+    `;
 
     this.#container = this.shadowRoot.querySelector(".ea-switch");
     this.#originalInput = this.shadowRoot.querySelector(".ea-switch__original");
@@ -182,27 +255,30 @@ export class EaSwitch extends FormAssociatedBase {
     this.#labelRight = this.shadowRoot.querySelector(
       ".ea-switch__label.label-right"
     );
+
+    this.updateContainerClasslist();
   }
 
+  /**
+   * 改变事件
+   * @param {Event} e
+   */
   #changeEvent = e => {
     e.preventDefault();
     e.stopPropagation();
 
-    this.checked = e.target.checked;
-    const value = this.checked
-      ? this["active-text"]
-        ? this["active-text"]
-        : this.checked
-      : this["inactive-text"]
-        ? this["inactive-text"]
-        : this.checked;
-    this.value = value;
+    const value = e.target.checked
+      ? this["active-value"]
+      : this["inactive-value"];
+
+    this.setAttribute("value", value);
 
     this.emit("change", {
       detail: {
-        checked: this.checked,
-        value: value,
+        checked: Boolean(this.checked),
+        value,
       },
+      bubbles: true,
     });
   };
 
@@ -211,7 +287,14 @@ export class EaSwitch extends FormAssociatedBase {
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
-    this.setValue(this.checked ? this["active-value"] : this["inactive-value"]);
+
+    if (!this.name)
+      this.setAttribute("name", Math.random().toString(36).substring(2, 15));
+    this.setValue(
+      this.#originalInput.checked
+        ? this["active-value"]
+        : this["inactive-value"]
+    );
 
     this.#originalInput.addEventListener("change", this.#changeEvent, {
       signal: this.#abortController.signal,
@@ -219,7 +302,8 @@ export class EaSwitch extends FormAssociatedBase {
   }
 
   $unmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
+    this.#beforeChangeAbortController?.abort();
   }
 }
 

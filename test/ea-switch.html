@@ -15,51 +15,20 @@
 
   <body>
     <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script type="module" src="../src/components/ea-tooltip/index.js"></script>
 
     <!-- -------- 基本用法 --------  -->
     <!-- #region  -->
     <h2>基本用法</h2>
     <div class="row">
-      <ea-switch name="basic"></ea-switch>
+      <ea-switch name="basic" value="true"></ea-switch>
       <ea-switch
         name="basicHasText"
-        inactive-text="按年付费"
-        active-text="按月付费"
-      ></ea-switch>
-    </div>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <form>
-      <ea-switch name="test"></ea-switch>
-
-      <button type="submit">Submit</button>
-    </form>
-
-    <script type="module">
-      const basicExample = {
-        form: document.querySelector("form"),
-        init() {
-          this.form.addEventListener("submit", e => {
-            e.preventDefault();
-
-            console.log(new FormData(this.form).get("test"));
-          });
-        },
-      };
-      basicExample.init();
-    </script>
-
-    <!-- -------- 默认选中状态 --------  -->
-    <!-- #region  -->
-    <h2>默认选中状态</h2>
-    <div class="row">
-      <ea-switch checked></ea-switch>
-      <ea-switch
-        inactive-text="按年付费"
-        active-text="按月付费"
-        checked
+        value="true"
+        style="
+          --ea-switch-active-bg-color: #13ce66;
+          --ea-switch-inactive-bg-color: #ff4949;
+        "
       ></ea-switch>
     </div>
     <hr />
@@ -72,14 +41,9 @@
     <div class="row">
       <ea-switch disabled></ea-switch>
       <ea-switch
-        inactive-text="按年付费"
-        active-text="按月付费"
-        checked
-        disabled
-      ></ea-switch>
-      <ea-switch
-        inactive-text="按年付费"
-        active-text="按月付费"
+        value="true"
+        active-text="Pay by month"
+        inactive-text="Pay by year"
         disabled
       ></ea-switch>
     </div>
@@ -87,43 +51,169 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 指定背景色 --------  -->
-    <!-- #region  -->
-    <h2>指定背景色</h2>
-    <div class="row">
-      <ea-switch inactive-color="#ff4949" active-color="#13ce66"></ea-switch>
+    <!--  尺寸 -->
+    <!-- #region -->
+    <h1>尺寸</h1>
+
+    <div class="demo">
       <ea-switch
-        inactive-color="#ff4949"
-        active-color="#13ce66"
-        inactive-text="按年付费"
-        active-text="按月付费"
-        checked
+        name="basic"
+        value="true"
+        size="large"
+        active-text="Open"
+        inactive-text="Close"
+      ></ea-switch>
+      <br />
+      <ea-switch
+        name="basic"
+        value="true"
+        active-text="Open"
+        inactive-text="Close"
+      ></ea-switch>
+      <br />
+      <ea-switch
+        name="basic"
+        value="true"
+        size="small"
+        active-text="Open"
+        inactive-text="Close"
       ></ea-switch>
     </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
-    <!-- -------- change 事件 --------  -->
-    <!-- #region  -->
-    <h2>change 事件</h2>
-    <div class="row">
+    <!--  文字描述 -->
+    <!-- #region -->
+    <h1>文字描述</h1>
+
+    <div class="demo">
       <ea-switch
-        id="switch"
-        inactive-text="按年付费"
-        active-text="按月付费"
+        value="true"
+        active-text="Pay by month"
+        inactive-text="Pay by year"
       ></ea-switch>
+      <br />
+      <ea-switch
+        value="true"
+        active-text="Pay by month"
+        inactive-text="Pay by year"
+        style="
+          --ea-switch-active-bg-color: #13ce66;
+          --ea-switch-inactive-bg-color: #ff4949;
+        "
+      ></ea-switch>
+      <br />
+      <ea-switch
+        value="true"
+        style="
+          --ea-switch-active-bg-color: #13ce66;
+          --ea-switch-inactive-bg-color: #ff4949;
+        "
+      >
+        <ea-icon icon="icon-cancel" slot="inactive"></ea-icon>
+        <ea-icon icon="icon-ok" slot="active"></ea-icon>
+      </ea-switch>
     </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
-    <script>
-      document
-        .querySelector("#switch")
-        .addEventListener("change", function (e) {
-          console.log(e.detail.checked, e.detail.value);
-        });
+    <!--  扩展的 value 类型 -->
+    <!-- #region -->
+    <h1>扩展的 value 类型</h1>
+
+    <div class="demo">
+      <ea-tooltip id="extTooltip" content="1111" placement="top-start">
+        <ea-switch
+          id="extSwitch"
+          slot="reference"
+          value="100"
+          style="
+            --ea-switch-active-bg-color: #13ce66;
+            --ea-switch-inactive-bg-color: #ff4949;
+          "
+          active-value="100"
+          inactive-value="0"
+        ></ea-switch>
+      </ea-tooltip>
+    </div>
+
+    <script type="module">
+      const extExample = {
+        tooltip: document.querySelector("#extTooltip"),
+        switch: document.querySelector("#extSwitch"),
+
+        init() {
+          const getContentString = value =>
+            `Switch value: ${value === 100 ? "100" : "0"}`;
+
+          this.tooltip.setAttribute(
+            "content",
+            getContentString(this.switch.value)
+          );
+
+          this.switch.addEventListener("change", e => {
+            this.tooltip.setAttribute(
+              "content",
+              getContentString(e.detail.value)
+            );
+          });
+        },
+      };
+      extExample.init();
     </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  阻止切换 -->
+    <!-- #region -->
+    <h1>阻止切换</h1>
+
+    <div class="demo">
+      <ea-switch id="forbiddenSwitch1"></ea-switch>
+      <ea-switch id="forbiddenSwitch2"></ea-switch>
+    </div>
+
+    <script type="module">
+      const forbiddenExample = {
+        switch1: document.querySelector("#forbiddenSwitch1"),
+        switch2: document.querySelector("#forbiddenSwitch2"),
+
+        init() {
+          this.switch1["before-change"] = () => {
+            this.switch1.toggleAttribute("disabled", true);
+
+            return new Promise(resolve => {
+              setTimeout(() => {
+                this.switch1.toggleAttribute("disabled", false);
+                return resolve(true);
+              }, 1000);
+            });
+          };
+
+          this.switch2["before-change"] = () => {
+            this.switch2.toggleAttribute("disabled", true);
+
+            return new Promise(resolve => {
+              setTimeout(() => {
+                this.switch2.toggleAttribute("disabled", false);
+
+                return reject(new Error("Error"));
+              }, 1000);
+            });
+          };
+        },
+      };
+      forbiddenExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
   </body>
 </html>
