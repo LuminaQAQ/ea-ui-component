@@ -1,243 +1,125 @@
-import Base from '../Base.js';
-import "../ea-icon/index.js"
+import FormAssociatedBase from "@/core/FormBase";
 
-import { initRateTempalte } from './src/components/rateComm.js';
+import stylesheet from "./index.scss?inline";
 
-import { stylesheet } from './src/style/stylesheet.js';
+export class EaRate extends FormAssociatedBase {
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {AbortController} */
+  #abortController = new AbortController();
 
-export class EaRate extends Base {
-    #wrap;
-    #itemWrap;
-    #textContent;
+  static get observedAttributes() {
+    return [...super.observedAttributes, "label", "value", "max"];
+  }
 
-    #iconItems;
-    #icons;
+  state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: newVal => {},
+    },
+    value: {
+      type: Number,
+      default: 0,
+      observer: newVal => {
+        this.setValue(newVal);
+      },
+    },
+    max: {
+      type: Number,
+      default: 5,
+      observer: newVal => {},
+    },
+    type: {
+      // type: ,
+      default: "",
+      observer: newVal => {},
+    },
+  });
 
-    #textList = ["极差", "失望", "一般", "满意", "惊喜"];
+  funcStates = this.properties({
+    getSymbol: {
+      props: true,
+      type: Function,
+      default: (value, isSelected) =>
+        `<ea-icon icon="icon-star-empty"></ea-icon>`,
+      /** @param {Function} cb */
+      observer: cb => {
+        if (cb) this.#container.innerHTML = this.#renderRateEl(cb);
+      },
+    },
+  });
 
-    constructor() {
-        super();
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-rate", {
+      // ['--' + this.type]: this.type,
+    });
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class="ea-rate_wrap" part="container">
-                <section class="ea-rate_item-wrap" part="item-wrap">
-                </section>
-                <span class="ea-rate_text" part="text-wrap"></span>
-            </div>
-        `;
+    this.#container.className = className;
 
-        this.#wrap = shadowRoot.querySelector('.ea-rate_wrap');
-        this.#itemWrap = shadowRoot.querySelector('.ea-rate_item-wrap');
-        this.#textContent = shadowRoot.querySelector('.ea-rate_text');
+    return className;
+  }
 
-        initRateTempalte(this.#itemWrap);
+  constructor() {
+    super();
 
-        this.#iconItems = shadowRoot.querySelectorAll('.ea-rate_item');
-        this.#icons = shadowRoot.querySelectorAll('ea-icon');
+    this.stylesheet = stylesheet;
 
+    this.$render();
+  }
 
-        this.build(shadowRoot, stylesheet);
-    }
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-rate' part='container'></div>
+    `;
 
-    // ------- value rate值 -------
-    // #region
-    get value() {
-        const value = this.getAttrNumber('value') || 0;
+    this.#container = this.shadowRoot.querySelector(".ea-rate");
 
-        if (value < 1 || value > 5 || !value) return 0;
+    this.#renderRateEl(this.getSymbol);
+  }
 
-        return value
-    }
+  /**
+   * 渲染 rate 元素
+   * @param {(value: Number, isSelected: Boolean) => String} renderer
+   * @param {Number} activeValue
+   * @return {String}
+   */
+  #renderRateEl = (renderer, activeValue = this.value, length = this.max) => {
+    if (!renderer) return;
 
-    set value(val) {
-        if (!val || isNaN(Number(val))) return;
+    const tpl = Array.from({ length })
+      .map(
+        (value, index) => `
+            <span class='ea-rate__symbol' part='symbol-wrap'>
+                ${renderer(index, activeValue)}
+            </span>`
+      )
+      .join("");
 
-        this.setAttribute('value', val);
+    this.#container.innerHTML = tpl;
 
-        this.#clearCheckedStatus();
+    return tpl;
+  };
 
-        this.#setCheckedStatus(val);
-    }
-    // #endregion
-    // ------- end -------
+  connectedCallback() {
+    super.connectedCallback();
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-    // ------- color 图标颜色 -------
-    // #region
-    get color() {
-        return this.getAttribute('color');
-    }
+    // this.#container.addEventListener("mousemove", e => {
+    //   console.log(e.target);
+    // });
+  }
 
-    set color(val) {
-        if (!val) return;
-
-        this.setAttribute('color', val);
-        this.#itemWrap.style.setProperty('--i-color', val);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- disabled 禁用 -------
-    // #region
-    get disabled() {
-        return this.getAttrBoolean('disabled');
-    }
-
-    set disabled(val) {
-        this.toggleAttr('disabled', val);
-
-        this.#iconItems.forEach(item => {
-            item.classList.toggle('disabled', val);
-        })
-
-        this.#wrap.style.cursor = val ? 'not-allowed' : 'pointer';
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- show-text 显示文本 -------
-    // #region
-    get showText() {
-        return this.getAttrBoolean('show-text');
-    }
-
-    set showText(val) {
-        this.toggleAttr('show-text', val);
-    }
-
-    get showTextList() {
-        return this.#textList;
-    }
-
-    set showTextList(val) {
-        if (typeof val === "object" && val.length === 5) this.#textList = val;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- void-icon 未选中时展示的图标 -------
-    // #region
-    get voidIcon() {
-        return this.getAttribute('void-icon') || 'icon-star-empty';
-    }
-
-    set voidIcon(val) {
-        this.setAttribute('void-icon', val);
-
-        this.#handleIcon(val);
-
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- active-icon 选中时展示的图标 -------
-    // #region
-    get activeIcon() {
-        return this.getAttribute('active-icon') || 'icon-star';
-    }
-
-    set activeIcon(val) {
-        this.setAttribute('active-icon', val);
-
-        this.#handleIcon(val);
-    }
-    // #endregion
-    // ------- end -------
-
-    // 处理图标
-    #handleIcon(val) {
-        this.#icons.forEach(icon => {
-            icon.icon = val;
-        })
-    }
-
-    // 设置/显示选中状态
-    #setCheckedStatus(index) {
-        for (let i = 0; i < index; i++) {
-            this.#iconItems[i].classList.add('active');
-            this.#icons[i].icon = this.activeIcon;
-
-            if (this.showText) {
-                this.#textContent.innerText = this.showTextList[index - 1];
-            }
-        }
-    }
-
-    // 当未选中时, 清除选中状态
-    #clearCheckedStatus() {
-        this.#iconItems.forEach((item, index) => {
-            item.classList.remove('active');
-            this.#icons[index].icon = this.voidIcon;
-
-            if (this.showText) {
-                this.#textContent.innerText = "";
-            }
-        })
-    }
-
-    // 初始化鼠标事件
-    #initRateEvent() {
-        this.#iconItems.forEach(dom => {
-            const { index } = dom;
-
-            // 鼠标移入: 显示选中状态
-            dom.addEventListener('mouseenter', () => {
-
-                this.#clearCheckedStatus();
-                this.#setCheckedStatus(index + 1);
-
-                this.dispatchEvent(new CustomEvent("hover", {
-                    detail: {
-                        value: index + 1,
-                        rateText: this.#textList[index]
-                    }
-                }));
-            })
-
-            // 鼠标移出: 清除选中状态
-            dom.addEventListener('mouseleave', () => {
-                this.#clearCheckedStatus();
-
-                this.#setCheckedStatus(this.value);
-            })
-
-            // 点击: 设置选中状态
-            dom.addEventListener('click', () => {
-                this.value = index + 1;
-                this.dispatchEvent(new CustomEvent("change", {
-                    detail: {
-                        value: index + 1,
-                        rateText: this.#textList[index]
-                    }
-                }))
-            })
-        })
-    }
-
-    connectedCallback() {
-        // icon-class 自定图标样式类初始化
-        this.activeIconClass = this.activeIconClass;
-
-        // void-icon-class 自定空图标样式类初始化
-        this.voidIconClass = this.voidIconClass;
-
-        // show-text 显示文本初始化
-        this.showText = this.showText;
-
-        // color 颜色初始化
-        this.color = this.color;
-
-        // value 星级初始化
-        this.value = this.value;
-
-        // disabled 禁用初始化
-        this.disabled = this.disabled;
-
-        // 初始化鼠标事件
-        if (!this.disabled) this.#initRateEvent();
-    }
+  $beforeUnmounted() {
+    this.#abortController.abort();
+  }
 }
 
-if (!customElements.get('ea-rate')) {
-    customElements.define('ea-rate', EaRate);
+if (!window.customElements.get("ea-rate")) {
+  window.customElements.define("ea-rate", EaRate);
 }

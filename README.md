@@ -31,7 +31,7 @@
 - [ ] Rate 评分
 - [ ] Select 选择器
 - [ ] Slider 滑块
-- [ ] Switch 开关
+- [x] Switch 开关
 - [ ] Time Picker 时间选择器
 - [ ] Time Select 时间选择
 - [ ] Transfer 穿梭框
