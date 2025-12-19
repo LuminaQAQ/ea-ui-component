@@ -1,243 +1,270 @@
-import Base from '../Base.js';
-import "../ea-icon/index.js"
+import FormAssociatedBase from "@/core/FormBase";
 
-import { initRateTempalte } from './src/components/rateComm.js';
+import stylesheet from "./index.scss?inline";
+import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
-import { stylesheet } from './src/style/stylesheet.js';
+export class EaRate extends FormAssociatedBase {
+  /** @type {HTMLElement} */
+  #container;
 
-export class EaRate extends Base {
-    #wrap;
-    #itemWrap;
-    #textContent;
+  /** @type {AbortController} */
+  #abortController = new AbortController();
+  /** @type {AbortController} */
+  #hoverAbortController = new AbortController();
 
-    #iconItems;
-    #icons;
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "label",
+      "value",
+      "max",
+      "size",
+      "readonly",
+      "disabled",
+    ];
+  }
 
-    #textList = ["极差", "失望", "一般", "满意", "惊喜"];
+  state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: () => {},
+    },
+    value: {
+      type: Number,
+      default: 0,
+      observer: newVal => {
+        const displayValue = Math.max(newVal - 1, 0);
 
-    constructor() {
-        super();
+        this.setValue(displayValue);
+        this.#setRateStatus(displayValue);
+      },
+    },
+    max: {
+      type: Number,
+      default: 5,
+      observer: () => {},
+    },
+    size: {
+      type: EA_COMPONENT_SIZES,
+      default: "",
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <div class="ea-rate_wrap" part="container">
-                <section class="ea-rate_item-wrap" part="item-wrap">
-                </section>
-                <span class="ea-rate_text" part="text-wrap"></span>
-            </div>
-        `;
+    readonly: {
+      type: Boolean,
+      default: false,
+      observer: () => {},
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+  });
 
-        this.#wrap = shadowRoot.querySelector('.ea-rate_wrap');
-        this.#itemWrap = shadowRoot.querySelector('.ea-rate_item-wrap');
-        this.#textContent = shadowRoot.querySelector('.ea-rate_text');
+  funcStates = this.properties({
+    getSymbol: {
+      props: true,
+      type: Function,
+      /**
+       * 获取图标
+       * @param {string} [value]
+       * @param {boolean} [isSelected]
+       * @returns {string}
+       */
+      default: () => `<ea-icon icon="icon-star" part="icon"></ea-icon>`,
+      /** @param {Function} cb */
+      observer: cb => {
+        if (!cb || typeof cb !== "function") return;
 
-        initRateTempalte(this.#itemWrap);
+        this.#container.innerHTML = this.#renderRateEl(cb);
+        this.#setRateStatus(this.value - 1);
+      },
+    },
+  });
 
-        this.#iconItems = shadowRoot.querySelectorAll('.ea-rate_item');
-        this.#icons = shadowRoot.querySelectorAll('ea-icon');
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist(
+      "ea-rate",
+      {
+        ["--" + this.size]: this.size,
+      },
+      {
+        disabled: this.disabled,
+      }
+    );
 
+    this.#container.className = className;
 
-        this.build(shadowRoot, stylesheet);
+    return className;
+  }
+
+  constructor() {
+    super();
+
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-rate' part='container'></div>
+    `;
+
+    this.#container = this.shadowRoot.querySelector(".ea-rate");
+
+    this.#renderRateEl(this.getSymbol);
+
+    this.updateContainerClasslist();
+  }
+
+  /**
+   * 渲染 rate 元素
+   * @param {(value: Number, isSelected: Boolean) => String} renderer
+   * @param {Number} activeValue
+   * @return {String}
+   */
+  #renderRateEl = (renderer, activeValue = this.value, length = this.max) => {
+    if (!renderer) return;
+
+    const tpl = Array.from({ length })
+      .map(
+        (value, index) => `
+            <span class='ea-rate__symbol' part='symbol-wrap'>
+                ${renderer(index, activeValue)}
+            </span>`
+      )
+      .join("");
+
+    this.#container.innerHTML = tpl;
+
+    return tpl;
+  };
+
+  /**
+   * 设置 rate 元素选中状态
+   * @param {Number} index
+   */
+  #setRateStatus = (index = this.value - 1) => {
+    const children = [...this.#container.children];
+
+    children.forEach((el, i) => {
+      el.classList.toggle("is-selected", i <= index);
+    });
+  };
+
+  /**
+   * 取消 rate 元素选中状态
+   * @param {Number} [currentValue]
+   */
+  #unsetRateStatus = (currentValue = this.value - 1) => {
+    /** @type {HTMLElement[]} */
+    const children = [...this.#container.children];
+
+    children.forEach((el, i) => {
+      el.classList.toggle("is-selected", i <= currentValue);
+    });
+  };
+
+  /**
+   * 触发 hover 事件
+   * @param {Number} [value]
+   * @param {HTMLElement} [target]
+   */
+  #emitHoverEvent = (value = this.value, target = null) => {
+    this.emit("hover", {
+      detail: {
+        value,
+        target,
+      },
+    });
+  };
+
+  /**
+   * 当鼠标移入父元素时，设置子元素的选中状态
+   */
+  #onMousemove = () => {
+    if (this.readonly || this.disabled) return;
+
+    this.#hoverAbortController?.abort();
+    this.#hoverAbortController = new AbortController();
+
+    const onMousemove = e => {
+      const target = e.target.closest(".ea-rate__symbol");
+      const children = [...this.#container.children];
+      const index = children.indexOf(target);
+
+      this.#setRateStatus(index);
+
+      if (target) this.#emitHoverEvent(index, target);
+    };
+
+    const onMouseout = () => {
+      const value = this.hasAttribute("value") ? this.value - 1 : null;
+      const target = this.children[value];
+
+      this.#unsetRateStatus();
+
+      this.#emitHoverEvent(value, target);
+    };
+
+    this.#container.addEventListener("mousemove", onMousemove, {
+      signal: this.#hoverAbortController.signal,
+    });
+    this.#container.addEventListener("mouseout", onMouseout, {
+      signal: this.#hoverAbortController.signal,
+    });
+  };
+
+  /**
+   * 通过监听父元素的点击事件，设置子元素的选中状态
+   */
+  #onClick = e => {
+    if (this.readonly || this.disabled) return;
+
+    const target = e.target.closest(".ea-rate__symbol");
+    const children = [...this.#container.children];
+    const index = children.indexOf(target);
+    const displayValue = index + 1;
+
+    if (this.value === displayValue) {
+      this.value = 0;
+      this.#unsetRateStatus(0);
+    } else {
+      this.value = displayValue;
     }
+  };
 
-    // ------- value rate值 -------
-    // #region
-    get value() {
-        const value = this.getAttrNumber('value') || 0;
+  connectedCallback() {
+    super.connectedCallback();
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-        if (value < 1 || value > 5 || !value) return 0;
+    this.#container.addEventListener("mouseover", this.#onMousemove, {
+      signal: this.#abortController.signal,
+    });
 
-        return value
-    }
+    this.#container.addEventListener("click", this.#onClick, {
+      signal: this.#abortController.signal,
+    });
+  }
 
-    set value(val) {
-        if (!val || isNaN(Number(val))) return;
-
-        this.setAttribute('value', val);
-
-        this.#clearCheckedStatus();
-
-        this.#setCheckedStatus(val);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- color 图标颜色 -------
-    // #region
-    get color() {
-        return this.getAttribute('color');
-    }
-
-    set color(val) {
-        if (!val) return;
-
-        this.setAttribute('color', val);
-        this.#itemWrap.style.setProperty('--i-color', val);
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- disabled 禁用 -------
-    // #region
-    get disabled() {
-        return this.getAttrBoolean('disabled');
-    }
-
-    set disabled(val) {
-        this.toggleAttr('disabled', val);
-
-        this.#iconItems.forEach(item => {
-            item.classList.toggle('disabled', val);
-        })
-
-        this.#wrap.style.cursor = val ? 'not-allowed' : 'pointer';
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- show-text 显示文本 -------
-    // #region
-    get showText() {
-        return this.getAttrBoolean('show-text');
-    }
-
-    set showText(val) {
-        this.toggleAttr('show-text', val);
-    }
-
-    get showTextList() {
-        return this.#textList;
-    }
-
-    set showTextList(val) {
-        if (typeof val === "object" && val.length === 5) this.#textList = val;
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- void-icon 未选中时展示的图标 -------
-    // #region
-    get voidIcon() {
-        return this.getAttribute('void-icon') || 'icon-star-empty';
-    }
-
-    set voidIcon(val) {
-        this.setAttribute('void-icon', val);
-
-        this.#handleIcon(val);
-
-    }
-    // #endregion
-    // ------- end -------
-
-    // ------- active-icon 选中时展示的图标 -------
-    // #region
-    get activeIcon() {
-        return this.getAttribute('active-icon') || 'icon-star';
-    }
-
-    set activeIcon(val) {
-        this.setAttribute('active-icon', val);
-
-        this.#handleIcon(val);
-    }
-    // #endregion
-    // ------- end -------
-
-    // 处理图标
-    #handleIcon(val) {
-        this.#icons.forEach(icon => {
-            icon.icon = val;
-        })
-    }
-
-    // 设置/显示选中状态
-    #setCheckedStatus(index) {
-        for (let i = 0; i < index; i++) {
-            this.#iconItems[i].classList.add('active');
-            this.#icons[i].icon = this.activeIcon;
-
-            if (this.showText) {
-                this.#textContent.innerText = this.showTextList[index - 1];
-            }
-        }
-    }
-
-    // 当未选中时, 清除选中状态
-    #clearCheckedStatus() {
-        this.#iconItems.forEach((item, index) => {
-            item.classList.remove('active');
-            this.#icons[index].icon = this.voidIcon;
-
-            if (this.showText) {
-                this.#textContent.innerText = "";
-            }
-        })
-    }
-
-    // 初始化鼠标事件
-    #initRateEvent() {
-        this.#iconItems.forEach(dom => {
-            const { index } = dom;
-
-            // 鼠标移入: 显示选中状态
-            dom.addEventListener('mouseenter', () => {
-
-                this.#clearCheckedStatus();
-                this.#setCheckedStatus(index + 1);
-
-                this.dispatchEvent(new CustomEvent("hover", {
-                    detail: {
-                        value: index + 1,
-                        rateText: this.#textList[index]
-                    }
-                }));
-            })
-
-            // 鼠标移出: 清除选中状态
-            dom.addEventListener('mouseleave', () => {
-                this.#clearCheckedStatus();
-
-                this.#setCheckedStatus(this.value);
-            })
-
-            // 点击: 设置选中状态
-            dom.addEventListener('click', () => {
-                this.value = index + 1;
-                this.dispatchEvent(new CustomEvent("change", {
-                    detail: {
-                        value: index + 1,
-                        rateText: this.#textList[index]
-                    }
-                }))
-            })
-        })
-    }
-
-    connectedCallback() {
-        // icon-class 自定图标样式类初始化
-        this.activeIconClass = this.activeIconClass;
-
-        // void-icon-class 自定空图标样式类初始化
-        this.voidIconClass = this.voidIconClass;
-
-        // show-text 显示文本初始化
-        this.showText = this.showText;
-
-        // color 颜色初始化
-        this.color = this.color;
-
-        // value 星级初始化
-        this.value = this.value;
-
-        // disabled 禁用初始化
-        this.disabled = this.disabled;
-
-        // 初始化鼠标事件
-        if (!this.disabled) this.#initRateEvent();
-    }
+  $beforeUnmounted() {
+    this.#abortController?.abort();
+    this.#hoverAbortController?.abort();
+  }
 }
 
-if (!customElements.get('ea-rate')) {
-    customElements.define('ea-rate', EaRate);
+if (!window.customElements.get("ea-rate")) {
+  window.customElements.define("ea-rate", EaRate);
 }
