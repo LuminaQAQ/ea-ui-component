@@ -15,54 +15,45 @@
 
   <body>
     <script type="module" src="../src/components/ea-rate/index.js"></script>
-    <script type="module">
-      // ------- 基础用法 -------
-      // #region
-      // 获取分数
-      document
-        .getElementById("ea-rate")
-        .addEventListener("change", function (e) {
-          console.log(e.detail.value);
-        });
-
-      // 设置分数
-      document.getElementById("ea-rate").value = 5;
-      // #endregion
-      // ------- end -------
-
-      // ------- 辅助文字 -------
-      // #region
-      // get: 获取评分描述: e.detail.rateText
-      document
-        .getElementById("ea-rate-show-text")
-        .addEventListener("hover", function (e) {
-          console.log(e.detail.value, e.detail.rateText);
-        });
-
-      // set: 设置评分值描述: element.showTextList = []
-      document.getElementById("ea-rate-show-text").showTextList = [
-        "极差",
-        "差",
-        "中",
-        "良",
-        "优",
-      ];
-      // #endregion
-      // ------- end -------
-    </script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
     <div class="row">
       <section>
-        <p>默认颜色</p>
-        <ea-rate id="ea-rate"></ea-rate>
+        <p>Default</p>
+        <ea-rate></ea-rate>
       </section>
       <section>
-        <p>自定义颜色</p>
-        <ea-rate id="ea-rate-different-color" color="#f56c6c"></ea-rate>
+        <p>Custom color</p>
+        <ea-rate style="--ea-rate-active-color: red"></ea-rate>
       </section>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!--  尺寸 -->
+    <!-- #region -->
+    <h1>尺寸</h1>
+
+    <div class="demo">
+      <ea-rate size="large"></ea-rate>
+      <br />
+      <ea-rate></ea-rate>
+      <br />
+      <ea-rate size="small"></ea-rate>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 只读 --------  -->
+    <!-- #region  -->
+    <h2>只读</h2>
+    <div class="col left">
+      <ea-rate value="2" readonly></ea-rate>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -72,7 +63,17 @@
     <!-- #region  -->
     <h2>禁用状态</h2>
     <div class="col left">
-      <ea-rate id="ea-rate-disabled" value="1" disabled></ea-rate>
+      <ea-rate value="2" disabled></ea-rate>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 最大值 --------  -->
+    <!-- #region  -->
+    <h2>最大值</h2>
+    <div class="row">
+      <ea-rate max="3"></ea-rate>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -81,44 +82,111 @@
     <!-- -------- 辅助文字 --------  -->
     <!-- #region  -->
     <h2>辅助文字</h2>
+
+    <style>
+      .hover-rate-text {
+        position: absolute;
+
+        display: inline-block;
+        box-sizing: border-box;
+
+        padding: 4px 6px;
+
+        border-radius: 8px;
+        background: black;
+        color: white;
+        text-align: center;
+      }
+
+      .hover-rate-text:empty {
+        display: none;
+      }
+    </style>
+
     <div class="row">
-      <section>
-        <p>默认颜色</p>
-        <ea-rate id="ea-rate-show-text" show-text></ea-rate>
-      </section>
-      <section>
-        <p>默认颜色</p>
-        <ea-rate id="ea-rate-show-text-customization" show-text></ea-rate>
+      <section style="position: relative">
+        <ea-rate id="hoverRate"></ea-rate>
+        <span class="hover-rate-text"></span>
       </section>
     </div>
+
+    <script type="module">
+      const hoverExample = {
+        rate: document.querySelector("#hoverRate"),
+        content: document.querySelector(".hover-rate-text"),
+
+        text: ["oops", "disappointed", "normal", "good", "great"],
+
+        init() {
+          this.rate.addEventListener("hover", e => {
+            this.content.textContent = this.text[e.detail.value];
+          });
+        },
+      };
+
+      hoverExample.init();
+    </script>
+
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 其它 icon --------  -->
+    <!-- -------- 自定义图标 --------  -->
     <!-- #region  -->
-    <h2>其它 icon</h2>
+    <h2>自定义图标</h2>
     <div class="col left">
-      <ea-rate value="1"></ea-rate>
       <ea-rate
-        void-icon="icon-heart-empty"
-        active-icon="icon-heart"
-        color="#f56c6c"
+        id="customIconRate"
         value="2"
-      ></ea-rate>
-      <ea-rate
-        void-icon="icon-ok-circled2"
-        active-icon="icon-ok-circled"
-        color="#67c23a"
-        value="3"
-      ></ea-rate>
-      <ea-rate
-        void-icon="icon-cancel-circled2"
-        active-icon="icon-cancel-circled"
-        color="red"
-        value="4"
+        style="--ea-rate-active-color: red"
       ></ea-rate>
     </div>
+
+    <script type="module">
+      const customIconExample = {
+        rate: document.querySelector("#customIconRate"),
+
+        init() {
+          this.rate.getSymbol = () =>
+            `<ea-icon icon="icon-heart" part="icon"></ea-icon>`;
+        },
+      };
+      customIconExample.init();
+    </script>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 自定义图标渲染 --------  -->
+    <!-- #region  -->
+    <h2>自定义图标渲染</h2>
+    <div class="col left">
+      <ea-rate
+        id="customIconRendererRate"
+        style="--ea-rate-spacing: 4px"
+      ></ea-rate>
+    </div>
+
+    <script type="module">
+      const customIconRendererExample = {
+        rate: document.querySelector("#customIconRendererRate"),
+        color: ["red", "orange", "yellow", "green", "blue"],
+
+        init() {
+          this.rate.getSymbol = (value, isSelected) =>
+            `<ea-icon icon="icon-battery-${value}" part="icon"></ea-icon>`;
+
+          this.rate.addEventListener("hover", e => {
+            this.rate.style.setProperty(
+              "--ea-rate-active-color",
+              this.color[e.detail.value]
+            );
+          });
+        },
+      };
+
+      customIconRendererExample.init();
+    </script>
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->

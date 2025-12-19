@@ -1,5 +1,93 @@
 $name: ea-rate;
+$ea-rate-size-type: (small, default, large);
+
+:host {
+  --#{$name}-spacing: 2px;
+
+  --#{$name}-large-size: 20px;
+  --#{$name}-default-size: 16px;
+  --#{$name}-small-size: 12px;
+
+  --#{$name}-active-color: var(--yellow-500);
+  --#{$name}-inactive-color: var(--grey-400);
+
+  --#{$name}-disabled-active-color: var(--yellow-300);
+  --#{$name}-disabled-inactive-color: var(--grey-200);
+}
+
+:host {
+  display: inline-block;
+}
+
+:host([readonly]) {
+  pointer-events: none;
+}
+
+:host([disabled]) {
+  cursor: not-allowed;
+
+  @include block($name) {
+    pointer-events: none;
+  }
+}
 
 @include block($name) {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
   cursor: pointer;
+
+  @include element(symbol) {
+    display: block;
+
+    padding: 0 var(--#{$name}-spacing);
+
+    width: var(--#{$name}-default-size);
+    height: var(--#{$name}-default-size);
+    line-height: var(--#{$name}-default-size);
+
+    font-size: var(--#{$name}-default-size);
+
+    color: var(--#{$name}-inactive-color);
+
+    &.is-selected {
+      color: var(--#{$name}-active-color);
+    }
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    transition:
+      color var(--transition-normal),
+      transform var(--transition-normal);
+  }
+
+  @each $size in $ea-rate-size-type {
+    @include modifier($size) {
+      .ea-rate__symbol {
+        width: var(--#{$name}-#{$size}-size);
+        height: var(--#{$name}-#{$size}-size);
+        line-height: var(--#{$name}-#{$size}-size);
+
+        font-size: var(--#{$name}-#{$size}-size);
+
+        ea-icon {
+          font-size: var(--#{$name}-#{$size}-size);
+        }
+      }
+    }
+  }
+
+  @include state(disabled) {
+    .ea-rate__symbol {
+      color: var(--#{$name}-disabled-inactive-color);
+
+      &.is-selected {
+        color: var(--#{$name}-disabled-active-color);
+      }
+    }
+  }
 }
