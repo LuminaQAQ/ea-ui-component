@@ -28,7 +28,7 @@
 - [ ] Input Tag 标签输入框
 - [ ] Mention 提及
 - [x] Radio 单选框
-- [ ] Rate 评分
+- [x] Rate 评分
 - [ ] Select 选择器
 - [ ] Slider 滑块
 - [x] Switch 开关
