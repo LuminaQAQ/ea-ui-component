@@ -41,9 +41,15 @@ export class EaTable extends Base {
   #states = {
     isDataRendered: false,
 
-    currentRow: {},
+    currentRow: {
+      target: null,
+      value: {},
+    },
+
     columns: [],
+
     dataSource: new WeakMap(),
+    dataIndex: new WeakMap(),
   };
 
   static get observedAttributes() {
@@ -53,6 +59,8 @@ export class EaTable extends Base {
       "border",
       "height",
       "max-height",
+
+      "highlight-current-row",
     ];
   }
 
@@ -90,6 +98,12 @@ export class EaTable extends Base {
           this.#container.className = this.updateContainerClasslist();
         }
       },
+    },
+
+    "highlight-current-row": {
+      type: Boolean,
+      default: false,
+      observer: () => {},
     },
   });
 
@@ -267,6 +281,9 @@ export class EaTable extends Base {
       bodyTemplate.appendChild(trNode);
 
       this.#states.dataSource.set(trNode, item);
+      if (item && typeof item === "object") {
+        this.#states.dataIndex.set(item, trNode);
+      }
     });
 
     this.#tbody.appendChild(bodyTemplate);
@@ -334,6 +351,32 @@ export class EaTable extends Base {
     await EaUtils.EaElement.addAsyncEventListener(this, "row-click");
 
     return this.#states.currentRow;
+  }
+
+  /**
+   * 设置当前行数据
+   * @param {any} row 当前行数据
+   */
+  setCurrentRow(row) {
+    let tr = null;
+    let dataValue = null;
+
+    if (row && typeof row === "object") {
+      tr = this.#states.dataIndex.get(row) || null;
+      dataValue = row;
+    }
+
+    if (tr && dataValue) {
+      this.#setHighlightCurrentRowStyle(tr, this.#states.currentRow.target);
+
+      this.#states.currentRow.target = tr;
+      this.#states.currentRow.value = dataValue;
+    } else {
+      this.#unsetHighlightCurrentRowStyle(this.#states.currentRow.target);
+
+      this.#states.currentRow.value = null;
+      this.#states.currentRow.target = null;
+    }
   }
 
   /**
@@ -495,18 +538,53 @@ export class EaTable extends Base {
   };
 
   /**
+   * 设置高亮当前行样式
+   * @param {HTMLTableRowElement} currentRow
+   * @param {HTMLTableRowElement} [oldRow]
+   */
+  #setHighlightCurrentRowStyle = (
+    currentRow,
+    oldRow = this.#states.currentRow.target
+  ) => {
+    if (!this["highlight-current-row"]) return;
+
+    oldRow?.classList?.remove("is-current");
+    currentRow?.classList?.add("is-current");
+  };
+
+  #unsetHighlightCurrentRowStyle = currentRow => {
+    if (!this["highlight-current-row"]) return;
+
+    currentRow?.classList?.remove("is-current");
+  };
+
+  /**
    * 点击事件: 行点击, 单元格点击
    * @param {MouseEvent} e
    */
   #initClickEvent = e => {
+    /** @type {HTMLTableRowElement} */
     const tr = e.target.closest("tr[part='tbody-tr']");
+    /** @type {HTMLTableCellElement} */
     const td = e.target.closest("td[part='tbody-td']");
 
     if (tr) {
       const value = this.#states.dataSource.get(tr);
-      this.#states.currentRow = value;
+
+      this.#setHighlightCurrentRowStyle(tr, this.#states.currentRow.target);
+
+      this.#states.currentRow.target = tr;
+      this.#states.currentRow.value = value;
 
       this.emit("row-click", {
+        detail: {
+          target: tr,
+          column: td.dataset.scope,
+          row: value,
+        },
+      });
+
+      this.emit("current-change", {
         detail: {
           target: tr,
           column: td.dataset.scope,
