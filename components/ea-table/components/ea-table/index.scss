@@ -13,9 +13,10 @@
   --ea-table-body-color: var(--grey-900);
   --ea-table-body-font-size: var(--font-size-md);
 
-  --ea-table-background-color: var(--color-white);
-  --ea-table-stripe-background-color: #fafafa;
-  --ea-table-hover-background-color: #f5f7fa;
+  --ea-table-bg-color: var(--color-white);
+  --ea-table-stripe-bg-color: #fafafa;
+  --ea-table-hover-bg-color: #f5f7fa;
+  --ea-table-selected-bg-color: var(--blue-100);
   --ea-table-border-color: var(--grey-200);
 
   --ea-table-fixed-x: 0;
@@ -40,7 +41,7 @@ slot {
   display: block;
   overflow-x: auto;
   border-spacing: 0;
-  background-color: var(--ea-table-background-color);
+  background-color: var(--ea-table-bg-color);
 
   scrollbar-width: thin;
 
@@ -63,9 +64,10 @@ slot {
     width: var(--ea-table-cell-width);
     min-width: var(--ea-table-cell-width);
 
-    background-color: var(--ea-table-background-color);
+    background-color: var(--ea-table-bg-color);
 
-    transition: background-color var(--ea-table-transition),
+    transition:
+      background-color var(--ea-table-transition),
       box-shadow var(--ea-table-transition);
   }
 
@@ -109,9 +111,15 @@ slot {
     text-align: left;
 
     .ea-table__tr {
+      &.is-current {
+        .ea-table__td {
+          background-color: var(--ea-table-selected-bg-color);
+        }
+      }
+
       &:hover {
         .ea-table__td {
-          background-color: var(--ea-table-hover-background-color);
+          background-color: var(--ea-table-hover-bg-color);
         }
       }
     }
@@ -132,10 +140,10 @@ slot {
   @include state(stripe) {
     .ea-table__tbody {
       .ea-table__tr:nth-of-type(2n) {
-        --ea-table-background-color: var(--ea-table-stripe-background-color);
+        --ea-table-bg-color: var(--ea-table-stripe-bg-color);
 
         &:hover {
-          --ea-table-background-color: var(--ea-table-hover-background-color);
+          --ea-table-bg-color: var(--ea-table-hover-bg-color);
         }
       }
     }
