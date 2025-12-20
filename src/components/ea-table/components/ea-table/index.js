@@ -43,7 +43,7 @@ export class EaTable extends Base {
 
     currentRow: {},
     columns: [],
-    dataSource: [],
+    dataSource: new WeakMap(),
   };
 
   static get observedAttributes() {
@@ -60,21 +60,21 @@ export class EaTable extends Base {
     stripe: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     border: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     height: {
       type: String,
       default: null,
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal) {
           this.#container.style.setProperty("--ea-table-height", newVal);
           this.#container.className = this.updateContainerClasslist();
@@ -84,7 +84,7 @@ export class EaTable extends Base {
     "max-height": {
       type: String,
       default: null,
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal) {
           this.#container.style.setProperty("--ea-table-max-height", newVal);
           this.#container.className = this.updateContainerClasslist();
@@ -119,10 +119,14 @@ export class EaTable extends Base {
     this.stylesheet = stylesheet;
 
     this.shadowRoot.innerHTML = `
+      <template id="rowTpl">
+        <tr class="ea-table__tr" part="tbody-tr">
+        </tr>
+      </template>
       <table class='ea-table' part='container'>
         <slot></slot>
       </table>
-        `;
+    `;
 
     this.#container = this.shadowRoot.querySelector(".ea-table");
   }
@@ -133,7 +137,7 @@ export class EaTable extends Base {
     ]);
 
     await Promise.all(
-      tableColumnNodes.map((column) =>
+      tableColumnNodes.map(column =>
         EaUtils.EaElement.addAsyncEventListener(column, "ea-table-column-ready")
       )
     );
@@ -146,7 +150,7 @@ export class EaTable extends Base {
       {
         part: "colgroup",
       },
-      columns.map((column) =>
+      columns.map(column =>
         h("col", "ea-table__col", { width: column.width, part: "col" })
       )
     );
@@ -183,7 +187,7 @@ export class EaTable extends Base {
       ...this.#container.querySelectorAll(".ea-table__th.is-sortable"),
     ];
     if (sortableEls.length) {
-      sortableEls.forEach((el) => {
+      sortableEls.forEach(el => {
         if (!el.dataset.prop) return;
 
         const icon = {
@@ -191,10 +195,10 @@ export class EaTable extends Base {
           desc: el.querySelector('[part="desc-icon"]'),
         };
 
-        el.addEventListener("click", (e) => {
+        el.addEventListener("click", e => {
           const { prop, order } = el.dataset;
 
-          el.querySelectorAll(".ea-table__sort-icon").forEach((icon) => {
+          el.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
             icon.classList.remove("is-active");
           });
           el.dataset.order = order === "asc" ? "desc" : "asc";
@@ -208,71 +212,64 @@ export class EaTable extends Base {
     this.emit("ea-table-rendered");
   }
 
-  setData = (dataSource) => {
+  setData = dataSource => {
+    /** @type {DocumentFragment} */
+    const bodyTemplate = document.createDocumentFragment();
+    /** @type {HTMLTemplateElement} */
+    const rowTpl = this.shadowRoot.querySelector("#rowTpl");
+
+    const columns = this.#states.columns.filter(
+      item => !item.template || item.template instanceof HTMLTemplateElement
+    );
+
     this.#states.isDataRendered = false;
-    this.#states.dataSource = dataSource;
     this.#tbody.innerHTML = "";
+    this.#states.dataSource = new WeakMap();
 
-    this.#tbody.innerHTML = dataSource
-      .map((item, i) => {
-        return h(
-          "tr",
-          "ea-table__tr",
-          {
-            part: "tbody-tr",
-            "data-index": i,
-          },
-          this.#states.columns
-            .filter(
-              (item) =>
-                !item.template || item.template instanceof HTMLTemplateElement
-            )
-            .map((column) => {
-              let children = "";
+    // 处理行模板
+    columns.forEach(column => {
+      const row = rowTpl.content.querySelector(".ea-table__tr");
+      const { template } = column;
+      const td = document.createElement("td");
 
-              /** @type {HTMLElement} */
-              const template = column.template;
+      td.part = "tbody-td";
+      td.className = "ea-table__td";
+      td.classList.toggle(`is-fixed`, column.fixed);
+      td.classList.toggle(`fixed-${column.fixed}`, column.fixed);
+      if (column.width)
+        td.style.setProperty("--ea-table-cell-width", column.width);
 
-              const scopes =
-                template?.content?.querySelectorAll(`[data-scope]`);
-              if (scopes?.length) {
-                scopes.forEach((scope) => {
-                  const scopeKey = scope.getAttribute("data-scope");
+      if (template) {
+        td.appendChild(template.content.cloneNode(true));
+      } else {
+        td.dataset.scope = column.prop;
+      }
 
-                  if (scope && scopeKey && template) {
-                    scope.innerHTML = item[scopeKey];
-                    children = template.innerHTML;
-                  } else if (template) {
-                    children = template.innerHTML;
-                  } else {
-                    children = item[column.prop];
-                  }
-                });
-              } else if (template) {
-                children = template.innerHTML;
-              } else {
-                children = item[column.prop];
-              }
+      row.appendChild(td);
+    });
 
-              return h(
-                "td",
-                `ea-table__td ${
-                  column.fixed ? `is-fixed fixed-${column.fixed}` : ""
-                }`,
-                {
-                  part: "tbody-td",
-                  style: [
-                    column.width
-                      ? `--ea-table-cell-width: ${column.width}`
-                      : "",
-                  ],
-                },
-                children
-              );
-            })
-        );
-      })
-      .join("");
+    // 渲染表格实际样式
+    dataSource.forEach((item, i) => {
+      /** @type {HTMLTableRowElement} */
+      const trNode = rowTpl.content
+        .querySelector(".ea-table__tr")
+        .cloneNode(true);
+
+      trNode.querySelectorAll("[data-scope]").forEach(td => {
+        const column = columns.find(column => column.prop === td.dataset.scope);
+        if (column) {
+          td.innerHTML = item[column.prop];
+        }
+      });
+
+      trNode.dataset.index = i;
+
+      bodyTemplate.appendChild(trNode);
+
+      this.#states.dataSource.set(trNode, item);
+    });
+
+    this.#tbody.appendChild(bodyTemplate);
 
     this.#handleFixedColumn();
     this.#initScrollEvent();
@@ -281,33 +278,31 @@ export class EaTable extends Base {
   };
 
   sort = (prop, order = "asc") => {
-    const rows = [...this.#tbody.querySelectorAll(".ea-table__tr")];
     const template = document.createDocumentFragment();
-    const sortRes = rows.sort((a, b) => {
-      const aIndex = a.dataset.index;
-      const bIndex = b.dataset.index;
+    const originalPosi = this.#tbody.nextElementSibling;
 
+    template.appendChild(this.#tbody);
+
+    const res = [...template.querySelectorAll("tr")].sort((a, b) => {
+      const aData = this.#states.dataSource.get(a);
+      const bData = this.#states.dataSource.get(b);
       return order === "asc"
-        ? String(this.#states.dataSource[aIndex][prop]).localeCompare(
-            this.#states.dataSource[bIndex][prop]
-          )
-        : String(this.#states.dataSource[bIndex][prop]).localeCompare(
-            this.#states.dataSource[aIndex][prop]
-          );
+        ? String(aData[prop]).localeCompare(bData[prop])
+        : String(bData[prop]).localeCompare(aData[prop]);
     });
 
-    sortRes.forEach((tr) => {
-      template.appendChild(tr);
+    res.forEach(tr => {
+      this.#tbody.appendChild(tr);
     });
 
-    this.#tbody.appendChild(template);
+    this.#container.insertBefore(template, originalPosi);
   };
 
   /**
    * 设置行样式
    * @param {Function | String} handler
    */
-  setRowStylePart = (handler) => {
+  setRowStylePart = handler => {
     if (!this.#states.isDataRendered)
       return console.warn("[EaTable] Please set data first!", this);
 
@@ -316,7 +311,7 @@ export class EaTable extends Base {
     if (typeof handler === "function") {
       trs.forEach((tr, i) => {
         const className = handler({
-          row: this.#states.dataSource[tr.dataset.index],
+          row: this.#states.dataSource.get(tr),
           rowIndex: i,
         });
 
@@ -325,7 +320,7 @@ export class EaTable extends Base {
     } else if (typeof handler === "string") {
       if (!handler) return;
 
-      trs.forEach((tr, i) => {
+      trs.forEach(tr => {
         tr.part.add(handler);
       });
     }
@@ -355,7 +350,7 @@ export class EaTable extends Base {
     const map = new Map();
     depth++;
 
-    columns.forEach((column) => {
+    columns.forEach(column => {
       const columnTree = this.#initColumnTree(column, depth);
       map.set(column.getAttribute("prop") || column.getAttribute("label"), {
         depth,
@@ -370,7 +365,7 @@ export class EaTable extends Base {
             ? column.getAttribute("fixed") || "left"
             : null,
         props: [...column.attributes].filter(
-          (attr) => !exclude.includes(attr.name)
+          attr => !exclude.includes(attr.name)
         ),
         template: columnTree.size
           ? Object.fromEntries(columnTree.entries())
@@ -390,11 +385,11 @@ export class EaTable extends Base {
      * 获取column的树结构
      * @param {Array} column
      */
-    const flat = (column) => {
+    const flat = column => {
       if (!column) return column;
 
       let ary = [];
-      Object.values(column).forEach((col) => {
+      Object.values(column).forEach(col => {
         ary.push(col);
         if (col?.template) ary = [...ary, ...flat(col.template)];
       });
@@ -410,7 +405,7 @@ export class EaTable extends Base {
       return Math.max(acc, cur.depth);
     }, 0);
 
-    columns = columns.map((col) => ({
+    columns = columns.map(col => ({
       ...col,
       rowspan: col.template ? 1 : depth - col.depth + 1,
     }));
@@ -424,10 +419,10 @@ export class EaTable extends Base {
   #handleFixedColumn = () => {
     /** @type {HTMLElement[]} */
     const fixedItems = [...this.#container.querySelectorAll(".is-fixed")];
-    const leftFixedItems = fixedItems.filter((item) =>
+    const leftFixedItems = fixedItems.filter(item =>
       item.classList.contains("fixed-left")
     );
-    const rightFixedItems = fixedItems.filter((item) =>
+    const rightFixedItems = fixedItems.filter(item =>
       item.classList.contains("fixed-right")
     );
 
@@ -436,8 +431,8 @@ export class EaTable extends Base {
      * @param {Array} initialArray
      * @returns {Array}
      */
-    const directionDivider = (initialArray) => {
-      const ths = initialArray.filter((item) => item.part.contains("thead-th"));
+    const directionDivider = initialArray => {
+      const ths = initialArray.filter(item => item.part.contains("thead-th"));
       if (ths.length <= 1) return [initialArray];
 
       const ary = [];
@@ -467,7 +462,7 @@ export class EaTable extends Base {
      * 处理固定列的样式：位置、box-shadow
      * @param {Array} fixedColumnGroup
      */
-    const handleColumnStyles = (fixedColumnGroup) => {
+    const handleColumnStyles = fixedColumnGroup => {
       if (!fixedColumnGroup.length) return;
 
       const lastGroup = fixedColumnGroup.slice(-1)[0];
@@ -475,7 +470,7 @@ export class EaTable extends Base {
       // 如果当前列不是第一列，那么就设置其 inset 位置
       fixedColumnGroup.forEach((group, index) => {
         const previousGroup = fixedColumnGroup[index - 1] || [];
-        group.forEach((el) => {
+        group.forEach(el => {
           if (lastGroup && previousGroup[0])
             el.style.setProperty(
               "--ea-table-fixed-x",
@@ -485,7 +480,7 @@ export class EaTable extends Base {
       });
 
       // 设置最后一列的样式， 确保 box-shadow 只在最后一列显示
-      lastGroup.forEach((el) => {
+      lastGroup.forEach(el => {
         el.classList.add("is-last");
       });
     };
@@ -503,17 +498,31 @@ export class EaTable extends Base {
    * 点击事件: 行点击, 单元格点击
    * @param {MouseEvent} e
    */
-  #initClickEvent = (e) => {
-    const tr = e.target.closest("tr");
-    const td = e.target.closest("td");
+  #initClickEvent = e => {
+    const tr = e.target.closest("tr[part='tbody-tr']");
+    const td = e.target.closest("td[part='tbody-td']");
+
     if (tr) {
-      this.#states.currentRow = this.#states.dataSource[tr.dataset.index];
+      const value = this.#states.dataSource.get(tr);
+      this.#states.currentRow = value;
+
       this.emit("row-click", {
-        detail: this.#states.dataSource[tr.dataset.index],
+        detail: {
+          target: tr,
+          column: td.dataset.scope,
+          row: value,
+        },
       });
-    }
-    if (td) {
-      this.emit("cell-click");
+
+      if (td) {
+        this.emit("cell-click", {
+          detail: {
+            target: td,
+            column: td.dataset.scope,
+            row: value,
+          },
+        });
+      }
     }
   };
 
@@ -528,19 +537,19 @@ export class EaTable extends Base {
       Math.floor(this.#container.scrollWidth - this.#container.offsetWidth) - 1;
     if (scrollLeft < endPosition) {
       if (!scrollLeft) {
-        fixedItems.forEach((el) => {
+        fixedItems.forEach(el => {
           el.classList.toggle(
             "not-origin-position",
             !el.classList.contains("fixed-left")
           );
         });
       } else {
-        fixedItems.forEach((el) => {
+        fixedItems.forEach(el => {
           el.classList.add("not-origin-position");
         });
       }
     } else {
-      fixedItems.forEach((el) => {
+      fixedItems.forEach(el => {
         el.classList.toggle(
           "not-origin-position",
           !el.classList.contains("fixed-right")
@@ -553,14 +562,24 @@ export class EaTable extends Base {
     super.connectedCallback();
 
     await this.$render();
+
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.#container.addEventListener("click", this.#initClickEvent);
-    this.#container.addEventListener("scroll", this.#initScrollEvent);
+    this.#container.addEventListener("click", this.#initClickEvent, {
+      signal: this.#abortController.signal,
+    });
+    this.#container.addEventListener("scroll", this.#initScrollEvent, {
+      signal: this.#abortController.signal,
+    });
   }
 
   $beforeUnmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
+
+    for (const key in this.#states) {
+      this.#states[key] = null;
+    }
   }
 }
 

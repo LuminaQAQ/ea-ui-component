@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -286,7 +286,7 @@
         init() {
           this.table.setData(data);
 
-          this.table.addEventListener("sort-change", (e) => {
+          this.table.addEventListener("sort-change", e => {
             console.log(e.detail);
           });
         },
@@ -390,7 +390,7 @@
     </script>
 
     <script>
-      const getRowData = async (table) => {
+      const getRowData = async table => {
         console.log(await table.getCurrentRow());
       };
     </script>
@@ -474,10 +474,6 @@
     <style>
       #statusTable::part(warning-row) {
         --ea-table-background-color: rgb(253, 246, 236);
-      }
-
-      #statusTable::part(warning-row):hover {
-        /* --ea-table-background-color: black !important; */
       }
 
       #statusTable::part(success-row) {
