@@ -194,23 +194,22 @@ function resolveHeaders(headers, range) {
     resolvedHeaders.push({ element, link });
   }
   const ret = [];
-  outer:
-    for (let i = 0; i < headers.length; i++) {
-      const cur = headers[i];
-      if (i === 0) {
-        ret.push(cur);
-      } else {
-        for (let j = i - 1; j >= 0; j--) {
-          const prev = headers[j];
-          if (prev.level < cur.level) {
-            ;
-            (prev.children || (prev.children = [])).push(cur);
-            continue outer;
-          }
+  outer: for (let i = 0; i < headers.length; i++) {
+    const cur = headers[i];
+    if (i === 0) {
+      ret.push(cur);
+    } else {
+      for (let j = i - 1; j >= 0; j--) {
+        const prev = headers[j];
+        if (prev.level < cur.level) {
+          ;
+          (prev.children || (prev.children = [])).push(cur);
+          continue outer;
         }
-        ret.push(cur);
       }
+      ret.push(cur);
     }
+  }
   return ret;
 }
 

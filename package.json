@@ -5,16 +5,234 @@
     "sass": "^1.77.2",
     "scss": "^0.2.4",
     "scss-loader": "^0.0.1",
-    "vitepress": "^1.2.0"
+    "vitepress": "^1.2.0",
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^24.0.14",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.7.4",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "sass-embedded": "^1.93.2",
+    "vite": "^5.4.1"
   },
   "scripts": {
-    "dev": "vitepress dev docs",
-    "build": "vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e && vitepress preview docs",
-    "preview": "vitepress preview docs",
+    "dev": "vite",
+    "dev:doc": "vitepress dev docs",
+    "build": "node tools/index.js && vite build",
+    "build:doc": "vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e && vitepress preview docs",
+    "preview": "vite preview",
+    "preview:doc": "vitepress preview docs",
     "deploy": "gh-pages -d docs/.vitepress/dist",
-    "commit": "git add . && git commit && git push"
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix",
+    "format": "prettier --write \"**/*.{js,json,scss,css,md}\"",
+    "prepare": "husky install",
+    "commit": "git add . && git-cz"
   },
   "dependencies": {
+    "dayjs": "^1.11.19",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5",
     "path": "^0.12.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./ea-alert": {
+      "import": "./dist/ea-alert.js"
+    },
+    "./ea-avatar": {
+      "import": "./dist/ea-avatar.js"
+    },
+    "./ea-backtop": {
+      "import": "./dist/ea-backtop.js"
+    },
+    "./ea-badge": {
+      "import": "./dist/ea-badge.js"
+    },
+    "./ea-breadcrumb": {
+      "import": "./dist/ea-breadcrumb.js"
+    },
+    "./ea-button": {
+      "import": "./dist/ea-button.js"
+    },
+    "./ea-button-group": {
+      "import": "./dist/ea-button-group.js"
+    },
+    "./ea-calendar": {
+      "import": "./dist/ea-calendar.js"
+    },
+    "./ea-card": {
+      "import": "./dist/ea-card.js"
+    },
+    "./ea-carousel": {
+      "import": "./dist/ea-carousel.js"
+    },
+    "./ea-checkbox": {
+      "import": "./dist/ea-checkbox.js"
+    },
+    "./ea-collapse": {
+      "import": "./dist/ea-collapse.js"
+    },
+    "./ea-container": {
+      "import": "./dist/ea-container.js"
+    },
+    "./ea-date-picker": {
+      "import": "./dist/ea-date-picker.js"
+    },
+    "./ea-descriptions": {
+      "import": "./dist/ea-descriptions.js"
+    },
+    "./ea-dialog": {
+      "import": "./dist/ea-dialog.js"
+    },
+    "./ea-drawer": {
+      "import": "./dist/ea-drawer.js"
+    },
+    "./ea-dropdown": {
+      "import": "./dist/ea-dropdown.js"
+    },
+    "./ea-empty": {
+      "import": "./dist/ea-empty.js"
+    },
+    "./ea-form": {
+      "import": "./dist/ea-form.js"
+    },
+    "./ea-form-item": {
+      "import": "./dist/ea-form-item.js"
+    },
+    "./ea-icon": {
+      "import": "./dist/ea-icon.js"
+    },
+    "./ea-image": {
+      "import": "./dist/ea-image.js"
+    },
+    "./ea-infinite-scroll": {
+      "import": "./dist/ea-infinite-scroll.js"
+    },
+    "./ea-input": {
+      "import": "./dist/ea-input.js"
+    },
+    "./ea-input-number": {
+      "import": "./dist/ea-input-number.js"
+    },
+    "./ea-layout": {
+      "import": "./dist/ea-layout.js"
+    },
+    "./ea-link": {
+      "import": "./dist/ea-link.js"
+    },
+    "./ea-loading": {
+      "import": "./dist/ea-loading.js"
+    },
+    "./ea-menu": {
+      "import": "./dist/ea-menu.js"
+    },
+    "./ea-message": {
+      "import": "./dist/ea-message.js"
+    },
+    "./ea-message-box": {
+      "import": "./dist/ea-message-box.js"
+    },
+    "./ea-notification": {
+      "import": "./dist/ea-notification.js"
+    },
+    "./ea-option": {
+      "import": "./dist/ea-option.js"
+    },
+    "./ea-option-gropu": {
+      "import": "./dist/ea-option-gropu.js"
+    },
+    "./ea-page-header": {
+      "import": "./dist/ea-page-header.js"
+    },
+    "./ea-pagination": {
+      "import": "./dist/ea-pagination.js"
+    },
+    "./ea-popconfirm": {
+      "import": "./dist/ea-popconfirm.js"
+    },
+    "./ea-popover": {
+      "import": "./dist/ea-popover.js"
+    },
+    "./ea-progress": {
+      "import": "./dist/ea-progress.js"
+    },
+    "./ea-radio": {
+      "import": "./dist/ea-radio.js"
+    },
+    "./ea-rate": {
+      "import": "./dist/ea-rate.js"
+    },
+    "./ea-result": {
+      "import": "./dist/ea-result.js"
+    },
+    "./ea-scrollbar": {
+      "import": "./dist/ea-scrollbar.js"
+    },
+    "./ea-segmented": {
+      "import": "./dist/ea-segmented.js"
+    },
+    "./ea-select": {
+      "import": "./dist/ea-select.js"
+    },
+    "./ea-skeleton": {
+      "import": "./dist/ea-skeleton.js"
+    },
+    "./ea-space": {
+      "import": "./dist/ea-space.js"
+    },
+    "./ea-splitter": {
+      "import": "./dist/ea-splitter.js"
+    },
+    "./ea-statistic": {
+      "import": "./dist/ea-statistic.js"
+    },
+    "./ea-steps": {
+      "import": "./dist/ea-steps.js"
+    },
+    "./ea-switch": {
+      "import": "./dist/ea-switch.js"
+    },
+    "./ea-table": {
+      "import": "./dist/ea-table.js"
+    },
+    "./ea-tabs": {
+      "import": "./dist/ea-tabs.js"
+    },
+    "./ea-tag": {
+      "import": "./dist/ea-tag.js"
+    },
+    "./ea-text": {
+      "import": "./dist/ea-text.js"
+    },
+    "./ea-textarea": {
+      "import": "./dist/ea-textarea.js"
+    },
+    "./ea-time-picker": {
+      "import": "./dist/ea-time-picker.js"
+    },
+    "./ea-timeline": {
+      "import": "./dist/ea-timeline.js"
+    },
+    "./ea-tooltip": {
+      "import": "./dist/ea-tooltip.js"
+    },
+    "./ea-tour": {
+      "import": "./dist/ea-tour.js"
+    }
   }
 }

@@ -2,24 +2,20 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../components/ea-avatar/index.js')
-    import('./index.scss')
-
-    document.querySelector('#error').addEventListener('error', (e) => {
-        console.log(e)
-    })
+  import('../dist/components/index.js')
+  import('../dist/assets/icon.css')
 })
 </script>
 
 # Avatar 头像
 
-用图标、图片或者字符的形式展示用户或事物信息。
+以图标、图片或字符的形式展示用户或实体的标识信息。
 
 ## 引入
 
 > `js`
 
-```js
+```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-avatar/index.js";
 </script>
@@ -28,7 +24,7 @@ onMounted(() => {
 > `css`
 
 ::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+如果使用到图标（通过 `icon` 属性），请提前使用 `link` 标签引入图标样式文件
 :::
 
 ```html
@@ -38,77 +34,42 @@ onMounted(() => {
 />
 ```
 
-## 自定义样式
-
-移步到 [CSS Part](#css-part)。
-
 ## 基本用法
 
-通过 `shape` 和 `size` 设置头像的形状和大小。
+使用 `shape`（`circle` | `square`）和 `size` 控制头像的形状与大小。`size` 支持预设字符串或像素值。
 
-> `size` 默认为 `normal`, 可选 `large`、`medium`、`small`。
+示例：
 
-<div class="row">
-    <ea-avatar src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
-    <ea-avatar size="large" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
-    <ea-avatar size="medium" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
-    <ea-avatar size="small" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
+<div class="demo">
+  <div class="row">
+    <ea-avatar size="50px"></ea-avatar>
+    <ea-avatar size="large"></ea-avatar>
+    <ea-avatar size="default"></ea-avatar>
+    <ea-avatar size="small"></ea-avatar>
+  </div>
+  <div class="row">
+    <ea-avatar shape="square" size="50px"></ea-avatar>
+    <ea-avatar shape="square" size="large"></ea-avatar>
+    <ea-avatar shape="square" size="default"></ea-avatar>
+    <ea-avatar shape="square" size="small"></ea-avatar>
+  </div>
 </div>
 
-<div class="row">
-    <ea-avatar shape="square" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain" ></ea-avatar>
-    <ea-avatar shape="square" size="large" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain" ></ea-avatar>
-    <ea-avatar shape="square" size="medium" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"  ></ea-avatar>
-    <ea-avatar shape="square" size="small" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"  ></ea-avatar>
-</div>
-
-::: details 查看代码 | `shape` 属性为 `circle`
+::: details 查看代码
 
 ```html
 <div class="row">
-  <ea-avatar
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-avatar>
-  <ea-avatar
-    size="large"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-avatar>
-  <ea-avatar
-    size="medium"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-avatar>
-  <ea-avatar
-    size="small"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-avatar>
+  <ea-avatar size="50px"></ea-avatar>
+  <ea-avatar size="large"></ea-avatar>
+  <ea-avatar size="default"></ea-avatar>
+  <ea-avatar size="small"></ea-avatar>
 </div>
-```
 
-:::
-
-::: details 查看代码 | `shape` 属性为 `square`
-
-```html
 <div class="row">
-  <ea-avatar
-    shape="square"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-avatar>
-  <ea-avatar
-    shape="square"
-    size="large"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-avatar>
-  <ea-avatar
-    shape="square"
-    size="medium"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-avatar>
-  <ea-avatar
-    shape="square"
-    size="small"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-avatar>
+  <ea-avatar shape="square" size="50px"></ea-avatar>
+  <ea-avatar shape="square" size="large"></ea-avatar>
+  <ea-avatar shape="square" size="default"></ea-avatar>
+  <ea-avatar shape="square" size="small"></ea-avatar>
 </div>
 ```
 
@@ -116,15 +77,21 @@ onMounted(() => {
 
 ## 展示类型
 
-支持三种类型：图标`icon`、图片`src`和字符
+支持三种展示类型：图标（`icon`）、图片（`src`）和字符（slot）。
 
-<div class="row">
+示例：
+
+<div class="demo">
+  <div class="row">
     <ea-avatar icon="icon-coffee"></ea-avatar>
-    <ea-avatar src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
+    <ea-avatar
+      src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+    ></ea-avatar>
     <ea-avatar>user</ea-avatar>
+  </div>
 </div>
 
-::: details 示例代码
+::: details 查看代码
 
 ```html
 <div class="row">
@@ -138,77 +105,111 @@ onMounted(() => {
 
 :::
 
-## 图片加载失败的 fallback 行为
+## 图片加载失败的回退（fallback）
 
-当展示类型为图片的时候，图片加载失败的 `fallback` 行为。可以在元素上添加 `error` 事件来进行后续操作。
+当 `src` 指定的图片加载失败时，组件会触发 `error` 事件。你可以监听该事件来替换图片、显示文本或其它占位内容。
 
-<div class="row left">
-    <ea-avatar id="error" src="./1.png"  ></ea-avatar>
+示例（HTML + JS）：
+
+<div class="demo">
+  <div class="row">
+    <ea-avatar id="error" size="60px" src="https://empty"></ea-avatar>
+    <ea-avatar id="error-with-text" size="60px" src="https://empty">error text</ea-avatar>
+  </div>
 </div>
 
 ::: details 查看代码
 
-`html`
-
 ```html
-<div class="row left">
-  <ea-avatar id="error" src="./1.png"></ea-avatar>
+<div class="row">
+  <ea-avatar id="error" size="60px" src="https://empty"></ea-avatar>
+  <ea-avatar id="error-with-text" size="60px" src="https://empty"
+    >error text</ea-avatar
+  >
 </div>
-```
 
-`js`: `error` 事件
+<script type="module">
+  import "../src/components/ea-avatar/index.js";
 
-```js
-const avatar = document.querySelector("#error");
-avatar.addEventListener("error", (e) => {
-  console.log(e);
-});
+  const avatar = document.querySelector("#error");
+  avatar.addEventListener("error", e => {
+    console.log("avatar load error", e);
+    // 例如：avatar.removeAttribute('src') 或 avatar.textContent = 'U'
+  });
+</script>
 ```
 
 :::
 
-## 图片如何适应容器框
+## 图片如何适应容器（fit）
 
-当展示类型为图片的时候，使用 `fit` 属性定义图片如何适应容器框，同原生 [MDN: object-fit](https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit)。
+使用 `fit` 属性控制图片的 object-fit 行为，支持：`fill` / `contain` / `cover` / `none` / `scale-down`。
 
-<div class="row">
-    <ea-avatar fit="fill" shape="square"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
-    <ea-avatar fit="contain" shape="square"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
-    <ea-avatar fit="cover" shape="square"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
-    <ea-avatar fit="none" shape="square"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
-    <ea-avatar fit="scale-down" shape="square"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-avatar>
-</div>
+示例：
 
-::: details 查看代码
-
-```html
-<div class="row">
+<div class="demo">
   <ea-avatar
+    size="100px"
     fit="fill"
     shape="square"
     src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
   ></ea-avatar>
   <ea-avatar
+    size="100px"
     fit="contain"
     shape="square"
     src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
   ></ea-avatar>
   <ea-avatar
+    size="100px"
     fit="cover"
     shape="square"
     src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
   ></ea-avatar>
   <ea-avatar
+    size="100px"
     fit="none"
     shape="square"
     src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
   ></ea-avatar>
   <ea-avatar
+    size="100px"
+    fit="scale-down"
+    shape="square"
+    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-avatar>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="row">
+  <ea-avatar
+    size="100px"
+    fit="fill"
+    shape="square"
+    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-avatar>
+  <ea-avatar
+    size="100px"
+    fit="contain"
+    shape="square"
+    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-avatar>
+  <ea-avatar
+    size="100px"
+    fit="cover"
+    shape="square"
+    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-avatar>
+  <ea-avatar
+    size="100px"
+    fit="none"
+    shape="square"
+    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-avatar>
+  <ea-avatar
+    size="100px"
     fit="scale-down"
     shape="square"
     src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
@@ -220,24 +221,49 @@ avatar.addEventListener("error", (e) => {
 
 ## Attributes
 
-| 参数  | 说明 | 类型   | 可选值                          | 默认值 |
-| ----- | ---- | ------ | ------------------------------- | ------ |
-| size  | 尺寸 | string | normal / large / medium / small | normal |
-| src   | 图片 | string | -                               | -      |
-| shape | 形状 | string | circle / square                 | circle |
-| icon  | 图标 | string | -                               | -      |
+| **参数** | **说明**     | **类型** | **可选值**                                           | **默认值** |
+| -------- | ------------ | -------- | ---------------------------------------------------- | ---------- |
+| size     | 尺寸         | `string` | `large` / `default` / `small` / 像素值（如 `50px`）  | `default`  |
+| src      | 图片地址     | `string` | —                                                    | —          |
+| shape    | 形状         | `string` | `circle` / `square`                                  | `circle`   |
+| icon     | 图标类名     | `string` | —                                                    | —          |
+| fit      | 图片适应方式 | `string` | `fill` / `contain` / `cover` / `none` / `scale-down` | `cover`    |
 
-## CSS Part
-
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
-
-| 名称      | 说明                                               |
-| --------- | -------------------------------------------------- |
-| container | avatar 外层容器                                    |
-| avatar    | 图片外层容器(适用于类型为 `icon` 与 `字符` 的情况) |
-
-## Event
+## Events
 
 | 事件名 | 说明         | 回调参数 |
 | ------ | ------------ | -------- |
-| error  | 图片加载失败 | -        |
+| error  | 图片加载失败 | `Event`  |
+
+示例：
+
+```js
+const avatar = document.querySelector("#error");
+avatar.addEventListener("error", e => {
+  console.log(e);
+});
+```
+
+## CSS Part
+
+组件暴露的 `part`，可通过 `::part` 自定义样式：
+
+| 名称      | 说明                    |
+| --------- | ----------------------- |
+| container | avatar 外层容器         |
+| avatar    | 图片/图标/文本 外层容器 |
+
+示例：
+
+```css
+ea-avatar::part(container) {
+  border: 1px solid #eee;
+}
+ea-avatar::part(avatar) {
+  background-color: #fafafa;
+}
+```
+
+## 参考
+
+- MDN: object-fit（用于理解 `fit` 属性）https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit
