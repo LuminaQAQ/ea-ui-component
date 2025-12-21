@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted} from "vue"
-import configs from "../components/ea-icon/config.json"
+import configs from "../src/components/ea-icon/config.json"
 
 onMounted(() => {
   import("../dist/components/index.js")
