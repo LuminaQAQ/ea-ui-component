@@ -127,7 +127,7 @@ export class EaMessageBoxElement extends EaOverlay {
     boxType: {
       type: ["alert", "confirm", "prompt", "personalized"],
       default: "personalized",
-      observer: async (newVal) => {
+      observer: async newVal => {
         const contentContainer = this.shadowRoot.querySelector(
           ".ea-overlay__content"
         );
@@ -138,7 +138,7 @@ export class EaMessageBoxElement extends EaOverlay {
     visible: {
       type: Boolean,
       default: false,
-      observer: async (newVal) => {
+      observer: async newVal => {
         this.status = newVal;
         this.#container.className = this.updateContainerClasslist();
       },
@@ -146,14 +146,14 @@ export class EaMessageBoxElement extends EaOverlay {
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#title.textContent = newVal;
       },
     },
     message: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.dangerouslyUseHTMLString) {
           this.#description.innerHTML = newVal;
         } else {
@@ -164,7 +164,7 @@ export class EaMessageBoxElement extends EaOverlay {
     type: {
       type: ["primary", "success", "info", "warning", "error"],
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         const iconType = {
           primary: "info",
           success: "ok-circled",
@@ -180,28 +180,28 @@ export class EaMessageBoxElement extends EaOverlay {
     icon: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#typeIcon) this.#typeIcon.icon = newVal;
       },
     },
     closeIcon: {
       type: String,
       default: "icon-cancel",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#closeIcon.icon = newVal;
       },
     },
     showClose: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#closeIcon.style.display = newVal ? "block" : "none";
       },
     },
     showCancelButton: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#cancelButton)
           this.#cancelButton.style.display = newVal ? "inline-block" : "none";
       },
@@ -209,7 +209,7 @@ export class EaMessageBoxElement extends EaOverlay {
     showConfirmButton: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#confirmButton)
           this.#confirmButton.style.display = newVal ? "inline-block" : "none";
       },
@@ -217,26 +217,26 @@ export class EaMessageBoxElement extends EaOverlay {
     confirmButtonText: {
       type: String,
       default: "OK",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#confirmButton.textContent = newVal;
       },
     },
     closeOnPressEscape: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     center: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     roundButton: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#confirmButton)
           this.#confirmButton.setAttribute("round", newVal);
         if (this.#cancelButton)
@@ -246,7 +246,7 @@ export class EaMessageBoxElement extends EaOverlay {
     buttonSize: {
       type: ["small", "medium", "large"],
       default: "medium",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#confirmButton)
           this.#confirmButton.setAttribute("size", newVal);
         if (this.#cancelButton) this.#cancelButton.setAttribute("size", newVal);
@@ -256,35 +256,35 @@ export class EaMessageBoxElement extends EaOverlay {
     showInput: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#input.style.display = newVal ? "block" : "none";
       },
     },
     inputPlaceholder: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#input) this.#input.placeholder = newVal;
       },
     },
     inputType: {
       type: String,
       default: "text",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#input) this.#input.type = newVal;
       },
     },
     inputValue: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#input) this.#input.value = newVal;
       },
     },
     inputErrorMessage: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#input && this.inputPattern)
           this.#invalidMessage.textContent = newVal;
       },
@@ -293,7 +293,7 @@ export class EaMessageBoxElement extends EaOverlay {
     draggable: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
@@ -319,8 +319,13 @@ export class EaMessageBoxElement extends EaOverlay {
     )}`;
   }
 
+  /**
+   * 派发事件
+   * @param {string} customEventName 自定义事件名称
+   * @param {object} detail 自定义事件详情
+   */
   #dispatchBubblesEvent = (customEventName, detail) => {
-    this.dispatchEvent(customEventName, {
+    this.emit(customEventName, {
       detail,
       bubbles: true,
       composed: true,
@@ -331,20 +336,20 @@ export class EaMessageBoxElement extends EaOverlay {
     container.innerHTML = `
       <div class="ea-message-box-main" part="container">
         <header class="ea-message-box-main__header" part="header">
-          <div class="ea-message-box-main__title-container">
+          <div class="ea-message-box-main__title-container" part="title-wrap">
             <ea-icon class="ea-message-box-main__type-icon" part="type-icon"></ea-icon>
             <span class="ea-message-box-main__title" part="title"></span>
           </div>
           <ea-icon class="ea-message-box-main__icon-close" icon="icon-cancel" part="close-icon"></ea-icon>
         </header>
         <main class="ea-message-box-main__content" part="content">
-          <div class="ea-message-box-main__description"></div>
+          <div class="ea-message-box-main__description" part="description"></div>
           <ea-input class="ea-message-box-main__input" part="input"></ea-input>
-          <div class="ea-message-box-main__invalid-message"></div>
+          <div class="ea-message-box-main__invalid-message" part="invalid-message"></div>
         </main>
         <footer class="ea-message-box-main__footer" part="footer">
-          <ea-button class="ea-message-box-main__cancel-button">Cancel</ea-button>
-          <ea-button class="ea-message-box-main__confirm-button" type="primary">OK</ea-button>
+          <ea-button class="ea-message-box-main__cancel-button" part="cancel-button">Cancel</ea-button>
+          <ea-button class="ea-message-box-main__confirm-button" type="primary" part="confirm-button">OK</ea-button>
         </footer>
       </div>
     `;
@@ -419,6 +424,9 @@ export class EaMessageBoxElement extends EaOverlay {
     } catch (error) {}
   };
 
+  /**
+   * 触发取消事件
+   */
   #initDistinguishCancelAndCloseEvent = () => {
     if (!this.distinguishCancelAndClose) {
       this.#dispatchBubblesEvent("cancel");
@@ -427,7 +435,10 @@ export class EaMessageBoxElement extends EaOverlay {
     }
   };
 
-  #initDraggableEvent = (mousedownEvent) => {
+  /**
+   * 初始化拖拽事件
+   */
+  #initDraggableEvent = mousedownEvent => {
     if (
       !this.#header.contains(mousedownEvent.target) ||
       this.#header === mousedownEvent.target
@@ -441,7 +452,7 @@ export class EaMessageBoxElement extends EaOverlay {
 
     window.addEventListener(
       "mousemove",
-      (e) => {
+      e => {
         contentElement.style.left = e.clientX + "px";
         contentElement.style.top = e.clientY + "px";
       },
@@ -469,6 +480,7 @@ export class EaMessageBoxElement extends EaOverlay {
 
     this.assignedStyle(stylesheet);
 
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
 
     if (this.#confirmButton)
@@ -496,7 +508,7 @@ export class EaMessageBoxElement extends EaOverlay {
     if (this["close-on-press-escape"]) {
       this.addEventListener(
         "keydown",
-        (e) => {
+        e => {
           if (e.key === "Escape") this.#initDistinguishCancelAndCloseEvent();
         },
         { signal: this.#abortController.signal }
