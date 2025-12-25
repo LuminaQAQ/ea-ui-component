@@ -31,14 +31,21 @@ export class EaMessageElement extends Base {
   // ------- end -------
 
   static get observedAttributes() {
-    return ["type", "visible", "message", "showClose", "placement"];
+    return [
+      ...super.observedAttributes,
+      "type",
+      "visible",
+      "message",
+      "showClose",
+      "placement",
+    ];
   }
 
   state = this.properties({
     type: {
       type: ["primary", "success", "warning", "info", "error"],
       default: "info",
-      observer: (newVal) => {
+      observer: newVal => {
         const iconTypes = {
           success: "icon-ok-circled",
           error: "icon-cancel-circled",
@@ -54,7 +61,7 @@ export class EaMessageElement extends Base {
     visible: {
       type: Boolean,
       default: false,
-      observer: async (newVal) => {
+      observer: async newVal => {
         this.#visibleAbortController?.abort();
         this.#visibleAbortController = new AbortController();
 
@@ -94,7 +101,7 @@ export class EaMessageElement extends Base {
     message: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.dangerouslyUseHTMLString) {
           this.#messageContent.innerHTML = newVal;
         } else {
@@ -105,7 +112,7 @@ export class EaMessageElement extends Base {
     showClose: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
@@ -120,7 +127,7 @@ export class EaMessageElement extends Base {
         "middle",
       ],
       default: "top",
-      observer: (newVal) => {
+      observer: () => {
         this.className = this.updateContainerClasslist();
       },
     },
@@ -149,12 +156,12 @@ export class EaMessageElement extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
-            <div class="ea-message" part="container">
-                <ea-icon class="ea-message__icon" part="icon"></ea-icon>
-                <div class="ea-message__content" part="content-wrap"></div>
-                <ea-icon class="ea-message__icon-close" icon="icon-cancel"></ea-icon>
-            </div>
-        `;
+      <div class="ea-message" part="container">
+        <ea-icon class="ea-message__icon" part="icon"></ea-icon>
+        <div class="ea-message__content" part="content-wrap"></div>
+        <ea-icon class="ea-message__icon-close" icon="icon-cancel" part="close-icon"></ea-icon>
+      </div>
+    `;
 
     this.#container = this.shadowRoot.querySelector(".ea-message");
     this.#messageIcon = this.shadowRoot.querySelector(".ea-message__icon");
@@ -167,7 +174,7 @@ export class EaMessageElement extends Base {
   }
 
   #dispatchBubblesEvent = (customEventName, detail) => {
-    this.dispatchEvent(customEventName, {
+    this.emit(customEventName, {
       detail,
       bubbles: true,
       composed: true,
@@ -205,7 +212,7 @@ export class EaMessageElement extends Base {
     const eaMessageList = [
       ...document.querySelectorAll(`ea-message[placement="${this.placement}"]`),
     ];
-    const thisIndex = eaMessageList.findIndex((el) => el === this);
+    const thisIndex = eaMessageList.findIndex(el => el === this);
     const els = eaMessageList.slice(thisIndex + 1);
     const height = this.#container.getBoundingClientRect().height;
 

@@ -2,11 +2,8 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import('../components/ea-loading/index.js')
-  import('../components/ea-button/index.js')
-  import('../components/ea-descriptions/index.js')
-
-  import('./index.scss')
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
 
   const areaController = {
     btn: document.querySelector("#btn"),
@@ -146,7 +143,7 @@ const areaController = {
   loading: document.querySelector("#loading"),
 
   init() {
-    this.btn.addEventListener("click", (e) => {
+    this.btn.addEventListener("click", e => {
       this.loading.loading = !this.loading.loading;
     });
   },
@@ -213,7 +210,7 @@ const customizationController = {
   loading: document.querySelector("#customizationLoading"),
 
   init() {
-    this.btn.addEventListener("click", (e) => {
+    this.btn.addEventListener("click", e => {
       this.loading.loading = !this.loading.loading;
     });
   },
@@ -270,7 +267,7 @@ const fullscreenController = {
   loading: document.querySelector("#fullscreenLoading"),
 
   init() {
-    this.btn.addEventListener("click", (e) => {
+    this.btn.addEventListener("click", e => {
       this.loading.loading = !this.loading.loading;
       handleRemoveLoadingStatus(this.loading);
     });
@@ -283,7 +280,7 @@ const fullscreenLockController = {
   loading: document.querySelector("#fullscreenLockLoading"),
 
   init() {
-    this.btn.addEventListener("click", (e) => {
+    this.btn.addEventListener("click", e => {
       this.loading.loading = !this.loading.loading;
       handleRemoveLoadingStatus(this.loading);
     });
