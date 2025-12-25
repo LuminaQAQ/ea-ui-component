@@ -7,7 +7,7 @@
   // Placeholders with the same ids are connected.
   // Example:
   "ea-md-template": {
-    "scope": "javascript",
+    "scope": "md,markdown",
     "prefix": "ea-md",
     "body": [
       "<script setup>",
@@ -17,8 +17,8 @@
       "import('../index.js')",
       "import('./index.scss')",
       "})",
-      "</script>"
+      "</script>",
     ],
-    "description": "ea-md-template"
-  }
+    "description": "ea-md-template",
+  },
 }

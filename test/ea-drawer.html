@@ -1,41 +1,103 @@
-<!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../dist/assets/icon.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <script type="module" src="../src/components/ea-drawer/index.js"></script>
     <script type="module" src="../src/components/ea-button/index.js"></script>
-    <script type="module" src="../src/components/ea-message-box/index.js"></script>
+    <script
+      type="module"
+      src="../src/components/ea-message-box/index.js"
+    ></script>
 
     <!--  基本用法 -->
     <!-- #region -->
     <h1>基本用法</h1>
 
     <div class="demo">
-        <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
-        <ea-button type="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
-        <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
-        <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
+      <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
+      <ea-button type="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
+      <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
+      <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
-        <ea-drawer id="drawer" title="I am the title" direction="ltr" before-close>
-            <span>Hi, there!</span>
-        </ea-drawer>
+      <ea-drawer
+        id="drawer"
+        title="I am the title"
+        direction="ltr"
+        before-close
+      >
+        <span>Hi, there!</span>
+      </ea-drawer>
     </div>
 
-    <hr>
+    <script type="module">
+      // ------- 基本用法 -------
+      // #region
+      const Drawer = {
+        drawer: document.querySelector("#drawer"),
+
+        ltrBtn: document.querySelector("#openDrawerBtn--ltr"),
+        rtlBtn: document.querySelector("#openDrawerBtn--rtl"),
+        ttbBtn: document.querySelector("#openDrawerBtn--ttb"),
+        bttBtn: document.querySelector("#openDrawerBtn--btt"),
+
+        init() {
+          this.ltrBtn.addEventListener("click", () => {
+            this.drawer.direction = "ltr";
+            this.drawer.visible = true;
+          });
+
+          this.rtlBtn.addEventListener("click", () => {
+            this.drawer.direction = "rtl";
+            this.drawer.visible = true;
+          });
+
+          this.ttbBtn.addEventListener("click", () => {
+            this.drawer.direction = "ttb";
+            this.drawer.visible = true;
+          });
+
+          this.bttBtn.addEventListener("click", () => {
+            this.drawer.direction = "btt";
+            this.drawer.visible = true;
+          });
+
+          this.drawer.addEventListener("before-close", e => {
+            const { done } = e.detail;
+            $confirm("Are you confirm to chose", "Warning", {
+              confirmButtonText: "OK",
+              cancelButtonText: "Cancel",
+              type: "warning",
+            })
+              .then(action => {
+                done();
+              })
+              .catch(action => {});
+          });
+
+          this.drawer.addEventListener("close", () => {
+            console.log("close");
+          });
+        },
+      };
+
+      Drawer.init();
+      // #endregion
+      // ------- end -------
+    </script>
+
+    <hr />
     <!-- #endregion  -->
     <!-- end  -->
 
@@ -44,14 +106,37 @@
     <h1>不添加 Title</h1>
 
     <div class="demo">
-        <ea-button type="primary" id="noHeaderBtn">open</ea-button>
+      <ea-button type="primary" id="noHeaderBtn">open</ea-button>
 
-        <ea-drawer id="noHeaderDrawer" title="I am the title" direction="ltr" with-header="false">
-            <span>Hi, there!</span>
-        </ea-drawer>
+      <ea-drawer
+        id="noHeaderDrawer"
+        title="I am the title"
+        direction="ltr"
+        with-header="false"
+      >
+        <span>Hi, there!</span>
+      </ea-drawer>
     </div>
 
-    <hr>
+    <script type="module">
+      // ------- 不添加 Title -------
+      // #region
+      const noHeaderExample = {
+        drawer: document.querySelector("#noHeaderDrawer"),
+        openBtn: document.querySelector("#noHeaderBtn"),
+
+        init() {
+          this.openBtn.addEventListener("click", () => {
+            this.drawer.visible = true;
+          });
+        },
+      };
+      noHeaderExample.init();
+      // #endregion
+      // ------- end -------
+    </script>
+
+    <hr />
     <!-- #endregion  -->
     <!-- end  -->
 
@@ -60,30 +145,88 @@
     <h1>自定义内容</h1>
 
     <div class="demo">
-        <ea-button type="primary" id="openCustomDrawerBtn">打开自定义内容的抽屉</ea-button>
+      <ea-button type="primary" id="openCustomDrawerBtn"
+        >打开自定义内容的抽屉</ea-button
+      >
 
-        <ea-drawer id="customDrawer" title="我是标题" direction="ltr" before-close>
-            <ea-descriptions direction="vertical" border>
-                <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
-                <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
-                <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
-                <ea-descriptions-item label="称号">
-                    <ea-tag>宿命背反</ea-tag>
-                </ea-descriptions-item>
-                <ea-descriptions-item label="属性" span="1">
-                    <ea-tag type="warning" style="margin-right: 1rem;">雷电</ea-tag>
-                    <ea-tag type="info">物理</ea-tag>
-                </ea-descriptions-item>
-            </ea-descriptions>
+      <ea-drawer
+        id="customDrawer"
+        title="我是标题"
+        direction="ltr"
+        before-close
+      >
+        <ea-descriptions direction="vertical" border>
+          <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
+          <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
+          <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
+          <ea-descriptions-item label="称号">
+            <ea-tag>宿命背反</ea-tag>
+          </ea-descriptions-item>
+          <ea-descriptions-item label="属性" span="1">
+            <ea-tag type="warning" style="margin-right: 1rem">雷电</ea-tag>
+            <ea-tag type="info">物理</ea-tag>
+          </ea-descriptions-item>
+        </ea-descriptions>
 
-            <footer slot="footer" style="text-align: right;">
-                <ea-button id="customCancelBtn" plain>Cancel</ea-button>
-                <ea-button id="customConfirmBtn" type="primary">Confirm</ea-button>
-            </footer>
-        </ea-drawer>
+        <footer slot="footer" style="text-align: right">
+          <ea-button id="customCancelBtn" plain>Cancel</ea-button>
+          <ea-button id="customConfirmBtn" type="primary">Confirm</ea-button>
+        </footer>
+      </ea-drawer>
     </div>
 
-    <hr>
+    <script type="module">
+      // ------- 自定义内容 -------
+      // #region
+      const CustomDrawer = {
+        drawer: document.querySelector("#customDrawer"),
+        openBtn: document.querySelector("#openCustomDrawerBtn"),
+        cancelBtn: document.querySelector("#customCancelBtn"),
+        confirmBtn: document.querySelector("#customConfirmBtn"),
+
+        init() {
+          /**
+           * @param {() => void || null} done
+           */
+          let done = null;
+
+          this.openBtn.addEventListener("click", () => {
+            this.drawer.visible = true;
+          });
+
+          this.cancelBtn.addEventListener("click", () => {
+            this.drawer["before-close"] = false;
+            this.drawer.visible = false;
+          });
+
+          this.confirmBtn.addEventListener("click", () => {
+            this.drawer["before-close"] = true;
+
+            this.drawer.visible = false;
+          });
+
+          this.drawer.addEventListener("before-close", e => {
+            done = e.detail.done;
+
+            $confirm("Are you confirm to chose", "Warning", {
+              confirmButtonText: "OK",
+              cancelButtonText: "Cancel",
+              type: "warning",
+            })
+              .then(action => {
+                done();
+              })
+              .catch(action => {});
+          });
+        },
+      };
+
+      CustomDrawer.init();
+      // #endregion
+      // ------- end -------
+    </script>
+
+    <hr />
     <!-- #endregion  -->
     <!-- end  -->
 
@@ -92,188 +235,60 @@
     <h1>嵌套抽屉</h1>
 
     <div class="demo">
-        <ea-button type="primary" id="outerBtn">open</ea-button>
-        <ea-drawer id="outerDrawer" title="I'm outer Drawer" size="50%">
-            <div>
-                <ea-button id="innerBtn">Click me!</ea-button>
-                <ea-drawer id="innerDrawer" title="I'm inner Drawer" append-to-body="true" before-close>
-                    <p>_(:зゝ∠)_</p>
-                </ea-drawer>
-            </div>
-        </ea-drawer>
+      <ea-button type="primary" id="outerBtn">open</ea-button>
+      <ea-drawer id="outerDrawer" title="I'm outer Drawer" size="50%">
+        <div>
+          <ea-button id="innerBtn">Click me!</ea-button>
+          <ea-drawer
+            id="innerDrawer"
+            title="I'm inner Drawer"
+            append-to-body="true"
+            before-close
+          >
+            <p>_(:зゝ∠)_</p>
+          </ea-drawer>
+        </div>
+      </ea-drawer>
     </div>
 
-    <hr>
+    <script type="module">
+      // ------- 嵌套抽屉 -------
+      // #region
+      const nestingExample = {
+        outerBtn: document.querySelector("#outerBtn"),
+        innerBtn: document.querySelector("#innerBtn"),
+        outerDrawer: document.querySelector("#outerDrawer"),
+        innerDrawer: document.querySelector("#innerDrawer"),
+
+        init() {
+          this.outerBtn.addEventListener("click", () => {
+            this.outerDrawer.visible = true;
+          });
+
+          this.innerBtn.addEventListener("click", () => {
+            this.innerDrawer.visible = true;
+          });
+
+          this.innerDrawer.addEventListener("before-close", e => {
+            const { done } = e.detail;
+            $confirm("Are you confirm to chose", "Warning", {
+              confirmButtonText: "OK",
+              cancelButtonText: "Cancel",
+              type: "warning",
+            })
+              .then(action => {
+                done();
+              })
+              .catch(action => {});
+          });
+        },
+      };
+      nestingExample.init();
+      // #endregion
+      // ------- end -------
+    </script>
+    <hr />
     <!-- #endregion  -->
     <!-- end  -->
-
-    <script type='module'>
-        // ------- 基本用法 -------
-        // #region
-        const Drawer = {
-            drawer: document.querySelector('#drawer'),
-
-            ltrBtn: document.querySelector('#openDrawerBtn--ltr'),
-            rtlBtn: document.querySelector('#openDrawerBtn--rtl'),
-            ttbBtn: document.querySelector('#openDrawerBtn--ttb'),
-            bttBtn: document.querySelector('#openDrawerBtn--btt'),
-
-            init() {
-                this.ltrBtn.addEventListener('click', () => {
-                    this.drawer.direction = 'ltr';
-                    this.drawer.visible = true;
-                })
-
-                this.rtlBtn.addEventListener('click', () => {
-                    this.drawer.direction = 'rtl';
-                    this.drawer.visible = true;
-                })
-
-                this.ttbBtn.addEventListener('click', () => {
-                    this.drawer.direction = 'ttb';
-                    this.drawer.visible = true;
-                })
-
-                this.bttBtn.addEventListener('click', () => {
-                    this.drawer.direction = 'btt';
-                    this.drawer.visible = true;
-                })
-
-                this.drawer.addEventListener('before-close', e => {
-                    const { done } = e.detail;
-                    $confirm(
-                        "Are you confirm to chose",
-                        "Warning",
-                        {
-                            confirmButtonText: "OK",
-                            cancelButtonText: "Cancel",
-                            type: "warning",
-                        }
-                    )
-                        .then((action) => {
-                            done();
-                        })
-                        .catch((action) => { });
-                })
-
-                this.drawer.addEventListener('close', () => {
-                    console.log('close');
-                })
-            }
-        };
-
-        Drawer.init();
-        // #endregion
-        // ------- end -------
-
-        // ------- 不添加 Title -------
-        // #region
-        const noHeaderExample = {
-            drawer: document.querySelector('#noHeaderDrawer'),
-            openBtn: document.querySelector('#noHeaderBtn'),
-
-            init() {
-                this.openBtn.addEventListener('click', () => {
-                    this.drawer.visible = true;
-                })
-            }
-        }
-        noHeaderExample.init();
-        // #endregion
-        // ------- end -------
-
-        // ------- 自定义内容 -------
-        // #region
-        const CustomDrawer = {
-            drawer: document.querySelector('#customDrawer'),
-            openBtn: document.querySelector('#openCustomDrawerBtn'),
-            cancelBtn: document.querySelector('#customCancelBtn'),
-            confirmBtn: document.querySelector('#customConfirmBtn'),
-
-            init() {
-                /**
-                 * @param {() => void || null} done
-                 */
-                let done = null;
-
-                this.openBtn.addEventListener('click', () => {
-                    this.drawer.visible = true;
-                })
-
-                this.cancelBtn.addEventListener('click', () => {
-                    this.drawer['before-close'] = false;
-                    this.drawer.visible = false;
-                })
-
-                this.confirmBtn.addEventListener('click', () => {
-                    this.drawer['before-close'] = true;
-
-                    this.drawer.visible = false;
-                })
-
-                this.drawer.addEventListener('before-close', e => {
-                    done = e.detail.done
-
-                    $confirm(
-                        "Are you confirm to chose",
-                        "Warning",
-                        {
-                            confirmButtonText: "OK",
-                            cancelButtonText: "Cancel",
-                            type: "warning",
-                        }
-                    )
-                        .then((action) => {
-                            done();
-                        })
-                        .catch((action) => { });
-                })
-            }
-        };
-
-        CustomDrawer.init();
-        // #endregion
-        // ------- end -------
-
-        // ------- 嵌套抽屉 -------
-        // #region
-        const nestingExample = {
-            outerBtn: document.querySelector('#outerBtn'),
-            innerBtn: document.querySelector('#innerBtn'),
-            outerDrawer: document.querySelector('#outerDrawer'),
-            innerDrawer: document.querySelector('#innerDrawer'),
-
-            init() {
-                this.outerBtn.addEventListener('click', () => {
-                    this.outerDrawer.visible = true;
-                })
-
-                this.innerBtn.addEventListener('click', () => {
-                    this.innerDrawer.visible = true;
-                })
-
-                this.innerDrawer.addEventListener('before-close', e => {
-                    const { done } = e.detail;
-                    $confirm(
-                        "Are you confirm to chose",
-                        "Warning",
-                        {
-                            confirmButtonText: "OK",
-                            cancelButtonText: "Cancel",
-                            type: "warning",
-                        }
-                    )
-                        .then((action) => {
-                            done();
-                        })
-                        .catch((action) => { });
-                })
-            }
-        }
-        nestingExample.init()
-        // #endregion
-        // ------- end -------
-    </script>
-</body>
-
+  </body>
 </html>

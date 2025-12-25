@@ -14,10 +14,6 @@ export class EaDialog extends EaOverlay {
   #title;
   /** @type {HTMLElement} */
   #closeIcon;
-  /** @type {HTMLElement} */
-  #content;
-  /** @type {HTMLElement} */
-  #footer;
 
   /** @type {AbortController} */
   #abortController;
@@ -58,7 +54,7 @@ export class EaDialog extends EaOverlay {
     visible: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         if (!newVal && this["before-close"] && this.status !== this.visible) {
           return this.#handleBeforeClose();
         }
@@ -79,35 +75,35 @@ export class EaDialog extends EaOverlay {
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#title) this.#title.textContent = newVal;
       },
     },
     width: {
       type: String,
       default: "50%",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-overlay-content-width", newVal);
       },
     },
     top: {
       type: String,
       default: "50%",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-overlay-content-top", newVal);
       },
     },
     center: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     fullscreen: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
@@ -115,35 +111,37 @@ export class EaDialog extends EaOverlay {
     "append-to-body": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "append-to": {
       type: String,
       default: "body",
-      observer: (newVal) => {},
+      observer: () => {},
     },
 
     "show-close": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#closeIcon.style.display = newVal ? "block" : "none";
       },
     },
     "modal-penetrable": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: () => {},
     },
 
     draggable: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
   });
+
+  
 
   /**
    * 获取 classlist 列表
@@ -168,19 +166,14 @@ export class EaDialog extends EaOverlay {
     super();
 
     const container = this.shadowRoot.querySelector(".ea-overlay__content");
-    const hasHeaderSlot = [...this.children].find(
-      (item) => item.getAttribute("slot") === "header"
-    );
+
     container.innerHTML = `
       <div class='ea-dialog-main' part='container'>
         <header class='ea-dialog-main__header' part='header'>
-            ${
-              hasHeaderSlot
-                ? `<slot name="header"></slot>`
-                : `
-                <span class='ea-dialog-main__title' part='title'></span>
-                <ea-icon class='ea-dialog-main__close-icon' icon='icon-cancel' part='close-icon'></ea-icon>`
-            }
+          <slot name="header">
+            <span class='ea-dialog-main__title' part='title'></span>
+            <ea-icon class='ea-dialog-main__close-icon' icon='icon-cancel' part='close-icon'></ea-icon>          
+          </slot>
         </header>
         <main class='ea-dialog-main__content' part='content'>
             <slot></slot>
@@ -198,12 +191,13 @@ export class EaDialog extends EaOverlay {
     this.#closeIcon = this.shadowRoot.querySelector(
       ".ea-dialog-main__close-icon"
     );
-    this.#content = this.shadowRoot.querySelector(".ea-dialog-main__content");
-    this.#footer = this.shadowRoot.querySelector(".ea-dialog-main__footer");
 
     this.#handleAppendTo();
   }
 
+  /**
+   * 通过 append-to 属性，将组件插入到指定元素中
+   */
   #handleAppendTo = () => {
     if (this.getAttrString("append-to") && this["append-to"]) {
       const parent = document.querySelector(this["append-to"]);
@@ -213,22 +207,34 @@ export class EaDialog extends EaOverlay {
     }
   };
 
+  /**
+   * 重置 dialog 位置
+   */
   resetPosition = () => {
     this.#overlayContent.style.left = "var(--ea-overlay-content-left)";
     this.#overlayContent.style.top = "var(--ea-overlay-content-top)";
   };
 
+  /**
+   * 打开 dialog
+   */
   show = () => {
     this.visible = true;
   };
 
+  /**
+   * 关闭 dialog
+   */
   hide = () => {
     this.visible = false;
   };
 
+  /**
+   * 触发 before-close 事件
+   */
   #handleBeforeClose = () => {
     if (this["before-close"]) {
-      this.dispatchEvent("before-close", {
+      this.emit("before-close", {
         detail: {
           done: () => (this.status = false),
         },
@@ -238,7 +244,7 @@ export class EaDialog extends EaOverlay {
     }
   };
 
-  #initDraggableEvent = (mousedownEvent) => {
+  #initDraggableEvent = mousedownEvent => {
     if (
       !this.#header.contains(mousedownEvent.target) ||
       this.#header !== mousedownEvent.target
@@ -252,7 +258,7 @@ export class EaDialog extends EaOverlay {
 
     window.addEventListener(
       "mousemove",
-      (e) => {
+      e => {
         contentElement.style.left = e.clientX + "px";
         contentElement.style.top = e.clientY + "px";
       },
