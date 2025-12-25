@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-badge/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo row">
+      <ea-badge value="12">
+        <ea-button>comments</ea-button>
+      </ea-badge>
+      <ea-badge value="3" type="primary">
+        <ea-button>replies</ea-button>
+      </ea-badge>
+      <ea-badge value="12" type="success">
+        <ea-button>comments</ea-button>
+      </ea-badge>
+      <ea-badge value="3" type="warning">
+        <ea-button>replies</ea-button>
+      </ea-badge>
+      <ea-badge value="3" type="info">
+        <ea-button>comments</ea-button>
+      </ea-badge>
+      <ea-badge value="3" color="green">
+        <ea-button>custom background</ea-button>
+      </ea-badge>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  最大值 -->
+    <!-- #region -->
+    <h1>最大值</h1>
+
+    <div class="demo row">
+      <ea-badge value="200" max="99">
+        <ea-button>comments</ea-button>
+      </ea-badge>
+      <ea-badge value="100" max="10">
+        <ea-button>replies</ea-button>
+      </ea-badge>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 自定义显示内容 --------  -->
+    <!-- #region  -->
+    <h2>自定义显示内容</h2>
+    <style>
+      ea-badge::part(custom-icon) {
+        color: white;
+        font-size: 12px;
+        margin-right: 2px;
+      }
+      ea-badge::part(custom-value) {
+        font-size: 14px;
+      }
+    </style>
+    <div class="demo">
+      <div class="row">
+        <ea-badge value="new">
+          <ea-button>comments</ea-button>
+        </ea-badge>
+        <ea-badge value="hot">
+          <ea-button>replies</ea-button>
+        </ea-badge>
+      </div>
+      <ea-badge value="99">
+        <ea-button>share</ea-button>
+        <div slot="content">
+          <ea-icon icon="icon-share" part="custom-icon"></ea-icon>
+          <span data-value part="custom-value"></span>
+        </div>
+      </ea-badge>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!--  小红点 -->
+    <!-- #region -->
+    <h1>小红点</h1>
+
+    <div class="demo row">
+      <ea-badge is-dot>query</ea-badge>
+      <ea-badge id="hiddenBadge" is-dot>
+        <ea-button icon="icon-share">share</ea-button>
+      </ea-badge>
+      <ea-badge is-dot>
+        <ea-button icon="icon-mail"></ea-button>
+      </ea-badge>
+    </div>
+
+    <script>
+      const hiddenExample = {
+        badge: document.querySelector("#hiddenBadge"),
+
+        init() {
+          this.badge.addEventListener("mouseover", () => {
+            this.badge.setAttribute("data-hidden", true);
+
+            this.badge.addEventListener(
+              "mouseout",
+              () => {
+                this.badge.removeAttribute("data-hidden");
+              },
+              { once: true }
+            );
+          });
+        },
+      };
+      hiddenExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  偏移量 -->
+    <!-- #region -->
+    <h1>偏移量</h1>
+
+    <div class="demo">
+      <ea-badge class="item" value="0" offset-x="10" offset-y="5">
+        <ea-button>offset</ea-button>
+      </ea-badge>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

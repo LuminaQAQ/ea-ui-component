@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-result/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-image/index.js"></script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row space-between">
+      <ea-result
+        type="primary"
+        title="Primary Tip"
+        sub-title="Please follow the instructions"
+        sub-title="请根据提示进行操作"
+      >
+        <div slot="extra">
+          <ea-button type="primary">Back</ea-button>
+        </div>
+      </ea-result>
+      <ea-result
+        type="success"
+        title="Success Tip"
+        sub-title="Please follow the instructions"
+      >
+        <div slot="extra">
+          <ea-button type="primary">Back</ea-button>
+        </div>
+      </ea-result>
+      <ea-result
+        type="warning"
+        title="Warning Tip"
+        sub-title="Please follow the instructions"
+      >
+        <div slot="extra">
+          <ea-button type="primary">Back</ea-button>
+        </div>
+      </ea-result>
+      <ea-result
+        type="error"
+        title="Error Tip"
+        sub-title="Please follow the instructions"
+      >
+        <div slot="extra">
+          <ea-button type="primary">Back</ea-button>
+        </div>
+      </ea-result>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 自定义内容 --------  -->
+    <!-- #region  -->
+    <h2>自定义内容</h2>
+    <ea-result title="404" sub-title="Sorry, request error">
+      <div slot="icon">
+        <ea-image
+          src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+        ></ea-image>
+      </div>
+      <div slot="extra">
+        <ea-button type="primary">Back</ea-button>
+      </div>
+    </ea-result>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+  </body>
+</html>

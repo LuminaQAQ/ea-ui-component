@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rea="stylesheet" href="/dist/assets/icon.css" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            height: 100%;
+            width: 100%;
+        }
+
+        ea-header::part(container),
+        ea-main::part(container),
+        ea-footer::part(container),
+        ea-aside::part(container) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        ea-header::part(container) {
+            text-align: center;
+            background-color: #b3c0d1;
+        }
+
+        ea-main::part(container) {
+            text-align: center;
+            background-color: #e9eef3;
+        }
+
+        ea-footer::part(container) {
+            text-align: center;
+            background-color: #b3c0d1;
+        }
+
+        ea-aside::part(container) {
+            background-color: #d3dce6;
+            text-align: center;
+        }
+
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="module" src="/src/components/ea-container/index.js"></script>
+    <!-- <script type="module">
+        import "../components/ea-container/index.js"
+        import "../components/ea-header/index.js"
+        import "../components/ea-main/index.js"
+        import "../components/ea-footer/index.js"
+        import "../components/ea-aside/index.js"
+    </script> -->
+
+    <ea-container>
+        <ea-header>Header</ea-header>
+        <ea-main>Main</ea-main>
+    </ea-container>
+
+    <hr>
+
+    <ea-container>
+        <ea-header>Header</ea-header>
+        <ea-main>Main</ea-main>
+        <ea-footer>Footer</ea-footer>
+    </ea-container>
+
+    <hr>
+
+    <ea-container>
+        <ea-aside width="150px">Aside</ea-aside>
+        <ea-main>Main</ea-main>
+        <ea-aside width="150px">Aside</ea-aside>
+    </ea-container>
+
+    <hr>
+
+    <ea-container>
+        <ea-header>Header</ea-header>
+        <ea-container>
+            <ea-aside width="200px">Aside</ea-aside>
+            <ea-main>Main</ea-main>
+        </ea-container>
+    </ea-container>
+
+    <hr>
+
+    <ea-container>
+        <ea-header>Header</ea-header>
+        <ea-container>
+            <ea-aside width="200px">Aside</ea-aside>
+            <ea-container>
+                <ea-main>Main</ea-main>
+                <ea-footer>Footer</ea-footer>
+            </ea-container>
+        </ea-container>
+    </ea-container>
+
+    <hr>
+
+    <ea-container>
+        <ea-aside width="200px">Aside</ea-aside>
+        <ea-container>
+            <ea-header>Header</ea-header>
+            <ea-main>Main</ea-main>
+        </ea-container>
+    </ea-container>
+
+    <hr>
+
+    <ea-container>
+        <ea-aside width="200px">Aside</ea-aside>
+        <ea-container>
+            <ea-header>Header</ea-header>
+            <ea-main>Main</ea-main>
+            <ea-footer>Footer</ea-footer>
+        </ea-container>
+    </ea-container>
+</body>
+
+</html>

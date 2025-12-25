@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>icon</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+
+      body {
+        width: 100%;
+        height: 100%;
+
+        margin: 0;
+        padding: 0;
+
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .icon {
+        box-sizing: border-box;
+
+        padding: 0.5rem;
+        width: 33%;
+        flex: 1 0 33%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-icon/index.js"></script>
+    <script type="module">
+      try {
+        let html = ``;
+        const { css_prefix_text, glyphs } = await fetch(
+          "../src/components/ea-icon/config.json"
+        ).then((res) => res.json());
+
+        glyphs.forEach((item) => {
+          const el = document.createElement("span");
+          el.className = "icon";
+
+          el.innerHTML = `
+            <ea-icon icon="${css_prefix_text + item.css}"></ea-icon>
+            <span>${css_prefix_text + item.css}</span>
+          `;
+
+          document.body.appendChild(el);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>

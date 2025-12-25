@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-time-picker/index.js';
+        import '../components/ea-button/index.js';
+
+        // ------- 1. 基础用法 -------
+        // #region
+        const basicTimePicker = document.querySelector('#basicTimePicker');
+        basicTimePicker.addEventListener('change', (e) => {
+            console.log(e.detail);
+        });
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- -------- 1. 基础用法 --------  -->
+    <!-- #region  -->
+    <ea-time-picker id="basicTimePicker" time="2:1:11"></ea-time-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 2. 禁用 --------  -->
+    <!-- #region  -->
+    <ea-time-picker time="8:0:0" disabled></ea-time-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 3. 对齐方式 --------  -->
+    <!-- #region  -->
+    <ea-time-picker time="8:0:0" align="center"></ea-time-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr>
+
+    <!-- -------- 4. 时间限定 --------  -->
+    <!-- #region  -->
+    <ea-time-picker limit-range-start="3:0:0" limit-range-end="3:10:0"></ea-time-picker>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

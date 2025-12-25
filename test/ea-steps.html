@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-icon/index.js"></script>
+    <script type="module" src="../src/components/ea-steps/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script
+      type="module"
+      src="../src/components/ea-button-group/index.js"
+    ></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <p>
+        <ea-button id="basicStepsPrevBtn">上一步</ea-button>
+        <ea-button id="basicStepsNextBtn">下一步</ea-button>
+      </p>
+      <ea-steps id="basicSteps" active="0" finish-status="success">
+        <ea-step title="Step 1"></ea-step>
+        <ea-step title="Step 2"></ea-step>
+        <ea-step title="Step 3"></ea-step>
+        <ea-step title="Step 4"></ea-step>
+      </ea-steps>
+    </div>
+
+    <script type="module">
+      const basicExample = {
+        steps: document.querySelector("#basicSteps"),
+
+        prevBtn: document.querySelector("#basicStepsPrevBtn"),
+        nextBtn: document.querySelector("#basicStepsNextBtn"),
+
+        stepChildren: [...document.querySelectorAll("#basicSteps > ea-step")],
+
+        init() {
+          let active = new Proxy(
+            { value: parseInt(this.steps.getAttribute("active")) },
+            {
+              get: (target, prop) => {
+                return target[prop];
+              },
+              set: (target, prop, value) => {
+                if (value < 0) value = this.stepChildren.length;
+                if (value > this.stepChildren.length) value = 0;
+
+                target[prop] = value;
+                this.steps.setAttribute("active", value);
+                return true;
+              },
+            }
+          );
+
+          this.prevBtn.addEventListener("click", () => {
+            active.value--;
+          });
+
+          this.nextBtn.addEventListener("click", () => {
+            active.value++;
+          });
+        },
+      };
+
+      basicExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  含状态的步骤条 -->
+    <!-- #region -->
+    <h1>含状态的步骤条</h1>
+
+    <div class="demo">
+      <ea-steps
+        style="max-width: 600px"
+        active="1"
+        finish-status="success"
+        space="200px"
+      >
+        <ea-step title="Done"></ea-step>
+        <ea-step title="Processing"></ea-step>
+        <ea-step title="Step 3"></ea-step>
+      </ea-steps>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  居中的步骤条 -->
+    <!-- #region -->
+    <h1>居中的步骤条</h1>
+
+    <div class="demo">
+      <ea-steps style="max-width: 600px" active="2" align-center>
+        <ea-step title="Step 1" description="Some description"></ea-step>
+        <ea-step title="Step 2" description="Some description"></ea-step>
+        <ea-step title="Step 3" description="Some description"></ea-step>
+      </ea-steps>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  带描述的步骤栏 -->
+    <!-- #region -->
+    <h1>带描述的步骤栏</h1>
+
+    <div class="demo">
+      <ea-steps style="max-width: 600px" active="2">
+        <ea-step title="Step 1" description="Some description"></ea-step>
+        <ea-step title="Step 2" description="Some description"></ea-step>
+        <ea-step title="Step 3" description="Some description"></ea-step>
+      </ea-steps>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  带图标的步骤条 -->
+    <!-- #region -->
+    <h1>带图标的步骤条</h1>
+
+    <div class="demo">
+      <ea-steps style="max-width: 600px" active="1">
+        <ea-step title="Step 1" icon="icon-coffee">
+          <ea-icon
+            slot="icon"
+            class="ea-step__icon"
+            icon="icon-note-beamed"
+          ></ea-icon>
+        </ea-step>
+        <ea-step title="Step 2" icon="icon-videocam"></ea-step>
+        <ea-step title="Step 3" icon="icon-camera"></ea-step>
+      </ea-steps>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  垂直的步骤条 -->
+    <!-- #region -->
+    <!-- <h1>垂直的步骤条</h1>
+
+    <div class="demo">
+      <ea-steps
+        style="height: 300px; max-width: 600px"
+        active="1"
+        direction="vertical"
+      >
+        <ea-step title="Step 1" description="Some description"></ea-step>
+        <ea-step title="Step 2" description="Some description"></ea-step>
+        <ea-step title="Step 3" description="Some description"></ea-step>
+      </ea-steps>
+    </div>
+
+    <hr /> -->
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  简洁风格的步骤条 -->
+    <!-- #region -->
+    <h1>简洁风格的步骤条</h1>
+
+    <div class="demo">
+      <ea-steps style="max-width: 600px" active="1" simple align-center>
+        <ea-step title="Step 1" icon="icon-coffee">
+          <ea-icon
+            slot="icon"
+            class="ea-step__icon"
+            icon="icon-note-beamed"
+          ></ea-icon>
+        </ea-step>
+        <ea-step title="Step 2" icon="icon-videocam"></ea-step>
+        <ea-step title="Step 3" icon="icon-camera"></ea-step>
+      </ea-steps>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

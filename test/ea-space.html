@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rea="stylesheet" href="/dist/assets/icon.css" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            height: 100%;
+            width: 100%;
+        }
+
+        hr {
+            margin: 3rem 0;
+        }
+
+        .alignment-container {
+            width: 240px;
+            margin-bottom: 20px;
+            padding: 8px;
+
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="module" src="/src/components/ea-space/index.js"></script>
+    <script type="module" src="/src/components/ea-card/index.js"></script>
+    <script type="module" src="/src/components/ea-button/index.js"></script>
+    <script type="module" src="/src/components/ea-radio/index.js"></script>
+    <script type="module" src="/src/components/ea-radio-group/index.js"></script>
+    <script type="module" src="/src/components/ea-switch/index.js"></script>
+
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
+
+    <div>
+        <ea-space wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 垂直布局 -->
+    <h1>垂直布局</h1>
+
+    <div>
+        <ea-space direction="vertical" wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 控制间距的大小 -->
+    <h1>控制间距的大小</h1>
+
+    <div>
+        <ea-space direction="vertical" alignment="start" size="30px">
+            <ea-radio-group id="controllableRadioGroup" name="salary">
+                <ea-radio value="large" checked>Large</ea-radio>
+                <ea-radio value="default">Default</ea-radio>
+                <ea-radio value="small">Small</ea-radio>
+            </ea-radio-group>
+            <ea-space id="controllableSpace" size="large" wrap>
+                <ea-card style="width: 250px;">
+                    <div slot="header">
+                        卡片标题 <ea-button>操作</ea-button>
+                    </div>
+                    <ol>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                    </ol>
+                </ea-card>
+                <ea-card style="width: 250px;">
+                    <span slot="header">
+                        卡片标题 <ea-button>操作</ea-button>
+                    </span>
+                    <ol>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                    </ol>
+                </ea-card>
+                <ea-card style="width: 250px;">
+                    <span slot="header">
+                        卡片标题 <ea-button>操作</ea-button>
+                    </span>
+                    <ol>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                        <li>List item</li>
+                    </ol>
+                </ea-card>
+            </ea-space>
+        </ea-space>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 自动换行 -->
+    <h1>自动换行</h1>
+
+    <div>
+        <ea-space wrap>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+            <ea-button text>Text button</ea-button>
+        </ea-space>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 行间分隔符 -->
+    <h1>行间分隔符</h1>
+
+    <div>
+        <ea-space size="10px" spacer="|">
+            <ea-button> button 1 </ea-button>
+            <ea-button> button 2 </ea-button>
+            <ea-button> button 3 </ea-button>
+        </ea-space>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 对齐方式 -->
+    <h1>对齐方式</h1>
+
+    <div>
+        <div class="alignment-container">
+            <ea-space>
+                string
+                <ea-button> button </ea-button>
+                <ea-card header="header">
+                    body
+                </ea-card>
+            </ea-space>
+        </div>
+        <div class="alignment-container">
+            <ea-space alignment="flex-start">
+                string
+                <ea-button> button </ea-button>
+                <ea-card header="header">
+                    body
+                </ea-card>
+            </ea-space>
+        </div>
+        <div class="alignment-container">
+            <ea-space alignment="flex-end">
+                string
+                <ea-button> button </ea-button>
+                <ea-card header="header">
+                    body
+                </ea-card>
+            </ea-space>
+        </div>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 填充容器 -->
+    <h1>填充容器</h1>
+
+    <div class="demo">
+        <div style="margin-bottom: 15px">
+            fill: <ea-switch id="fillSwitch"></ea-switch>
+        </div>
+        <ea-space id="fillSpace" wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
+    </div>
+
+    <div class="demo">
+        <div style="margin-bottom: 15px">
+            direction:
+            <ea-radio-group id="fillRadioGroup" name="direction">
+                <ea-radio value="horizontal" checked>horizontal</ea-radio>
+                <ea-radio value="vertical">vertical</ea-radio>
+            </ea-radio-group>
+        </div>
+        <div style="margin-bottom: 15px">
+            fill(ratio): <ea-switch id="fillRatioSwitch"></ea-switch>
+        </div>
+        <ea-space id="fillRatioSpace" fill-ratio="49" wrap>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <span slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </span>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+            <ea-card style="width: 250px;">
+                <div slot="header">
+                    卡片标题 <ea-button>操作</ea-button>
+                </div>
+                <ol>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                    <li>List item</li>
+                </ol>
+            </ea-card>
+        </ea-space>
+    </div>
+
+
+    <hr>
+    <!-- #endregion  -->
+
+    <script>
+        // ------- 控制间距的大小 -------
+        // #region
+        const controllableExample = {
+            radioGroup: document.querySelector('#controllableRadioGroup'),
+            container: document.querySelector('#controllableSpace'),
+
+            init() {
+                this.radioGroup.addEventListener('change', (e) => {
+                    this.container.setAttribute('size', e.detail.value);
+                });
+            }
+        };
+        controllableExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- 填充容器 -------
+        // #region
+        const fillExample = {
+            fillSwitch: document.querySelector('#fillSwitch'),
+            fillContainer: document.querySelector('#fillSpace'),
+
+            fillRadioGroup: document.querySelector('#fillRadioGroup'),
+            fillRatioSwitch: document.querySelector('#fillRatioSwitch'),
+            fillRatioContainer: document.querySelector('#fillRatioSpace'),
+
+            init() {
+                this.fillSwitch.addEventListener('change', (e) => {
+                    this.fillContainer.setAttribute('fill', e.detail.checked);
+                });
+
+                this.fillRadioGroup.addEventListener('change', (e) => {
+                    this.fillRatioContainer.setAttribute('direction', e.detail.value);
+                });
+
+                this.fillRatioSwitch.addEventListener('change', (e) => {
+                    this.fillRatioContainer.setAttribute('fill', e.detail.checked);
+                });
+            }
+        };
+        fillExample.init();
+        // #endregion
+        // ------- end -------
+    </script>
+
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../components/ea-icon/index.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-radio/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <div>
+        <ea-radio-group value="1">
+          <ea-radio value="1" size="large">Option 1</ea-radio>
+          <ea-radio value="2" size="large">Option 2</ea-radio>
+        </ea-radio-group>
+      </div>
+      <div>
+        <ea-radio-group value="1">
+          <ea-radio value="1">Option 1</ea-radio>
+          <ea-radio value="2">Option 2</ea-radio>
+        </ea-radio-group>
+      </div>
+      <div>
+        <ea-radio-group value="1">
+          <ea-radio value="1" size="small">Option 1</ea-radio>
+          <ea-radio value="2" size="small">Option 2</ea-radio>
+        </ea-radio-group>
+      </div>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  禁用状态 -->
+    <!-- #region -->
+    <h1>禁用状态</h1>
+
+    <div class="demo">
+      <ea-radio-group value="selected and disabled">
+        <ea-radio value="disabled" disabled>Option A</ea-radio>
+        <ea-radio value="selected and disabled" disabled>Option B</ea-radio>
+      </ea-radio-group>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  单选框组 -->
+    <!-- #region -->
+    <h1>单选框组</h1>
+
+    <div class="demo">
+      <ea-radio-group value="3">
+        <ea-radio value="3">Option A</ea-radio>
+        <ea-radio value="6">Option B</ea-radio>
+        <ea-radio value="9">Option C</ea-radio>
+      </ea-radio-group>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  带有边框 -->
+    <!-- #region -->
+    <h1>带有边框</h1>
+
+    <div class="demo">
+      <div>
+        <ea-radio-group value="1">
+          <ea-radio value="1" size="large" border>Option A</ea-radio>
+          <ea-radio value="2" size="large" border>Option B</ea-radio>
+        </ea-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <ea-radio-group value="1">
+          <ea-radio value="1" border>Option A</ea-radio>
+          <ea-radio value="2" border>Option B</ea-radio>
+        </ea-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <ea-radio-group value="1" size="small">
+          <ea-radio value="1" border>Option A</ea-radio>
+          <ea-radio value="2" border disabled>Option B</ea-radio>
+        </ea-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <ea-radio-group value="1" size="small" disabled>
+          <ea-radio value="1" border>Option A</ea-radio>
+          <ea-radio value="2" border>Option B</ea-radio>
+        </ea-radio-group>
+      </div>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

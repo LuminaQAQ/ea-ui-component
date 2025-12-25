@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-checkbox/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+      <div>
+        <ea-checkbox label="Option 1" size="large"></ea-checkbox>
+        <ea-checkbox label="Option 2" size="large"></ea-checkbox>
+      </div>
+      <div>
+        <ea-checkbox label="Option 1"></ea-checkbox>
+        <ea-checkbox label="Option 2"></ea-checkbox>
+      </div>
+      <div>
+        <ea-checkbox label="Option 1" size="small"></ea-checkbox>
+        <ea-checkbox label="Option 2" size="small"></ea-checkbox>
+      </div>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!--  禁用状态 -->
+    <!-- #region -->
+    <h1>禁用状态</h1>
+
+    <div class="demo">
+      <ea-checkbox size="large" disabled>Disabled</ea-checkbox>
+      <ea-checkbox size="large" disabled checked>
+        selected and disabled
+      </ea-checkbox>
+      <ea-checkbox size="large">Not disabled</ea-checkbox>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 多选框组 --------  -->
+    <!-- #region  -->
+    <h2>多选框组</h2>
+    <div class="row left">
+      <ea-checkbox-group id="mulipleGroup" name="mulipleGroup">
+        <ea-checkbox label="Option A" value="Value A"></ea-checkbox>
+        <ea-checkbox label="Option B" value="Value B"></ea-checkbox>
+        <ea-checkbox label="Option C" value="Value C"></ea-checkbox>
+        <ea-checkbox
+          label="disabled"
+          value="Value disabled"
+          disabled
+        ></ea-checkbox>
+        <ea-checkbox
+          label="selected and disabled"
+          value="Value selected and disabled"
+          disabled
+        ></ea-checkbox>
+      </ea-checkbox-group>
+    </div>
+
+    <script type="module">
+      const multipleGroupExample = {
+        gruop: document.querySelector("#mulipleGroup"),
+
+        init() {
+          this.gruop.value = ["Value selected and disabled", "Value A"];
+        },
+      };
+
+      multipleGroupExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!--  中间状态 -->
+    <!-- #region -->
+    <h1>中间状态</h1>
+
+    <div class="demo">
+      <ea-checkbox
+        id="indeterminateCheckbox"
+        label="Check all"
+        indeterminate
+      ></ea-checkbox>
+      <ea-checkbox-group id="indeterminateGroup" name="city">
+        <ea-checkbox label="Shanghai" value="Shanghai"></ea-checkbox>
+        <ea-checkbox label="Beijing" value="Beijing"></ea-checkbox>
+        <ea-checkbox label="Guangzhou" value="Guangzhou"></ea-checkbox>
+        <ea-checkbox label="Shenzhen" value="Shenzhen"></ea-checkbox>
+      </ea-checkbox-group>
+    </div>
+
+    <script type="module">
+      const indeterminateExample = {
+        indeterminateCheckbox: document.querySelector("#indeterminateCheckbox"),
+        group: document.querySelector("#indeterminateGroup"),
+
+        cities: ["Shanghai", "Beijing", "Guangzhou", "Shenzhen"],
+
+        init() {
+          this.group.value = ["Guangzhou", "Shenzhen"];
+
+          const getValueLength = () => {
+            return this.group.value.length;
+          };
+
+          this.indeterminateCheckbox.addEventListener("change", e => {
+            const { checked } = e.target;
+
+            if (checked) this.group.value = this.cities;
+            else this.group.value = [];
+
+            this.indeterminateCheckbox.indeterminate =
+              getValueLength() > 0 && getValueLength() < this.cities.length;
+          });
+
+          this.group.addEventListener("change", e => {
+            this.indeterminateCheckbox.indeterminate =
+              getValueLength() > 0 && getValueLength() < this.cities.length;
+            this.indeterminateCheckbox.checked =
+              getValueLength() === this.cities.length;
+          });
+        },
+      };
+      indeterminateExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  可选项目数量的限制 -->
+    <!-- #region -->
+    <h1>可选项目数量的限制</h1>
+
+    <div class="demo">
+      <ea-checkbox-group id="limitGroup" name="city" min="1" max="2">
+        <ea-checkbox label="Shanghai" value="Shanghai"></ea-checkbox>
+        <ea-checkbox label="Beijing" value="Beijing"></ea-checkbox>
+        <ea-checkbox label="Guangzhou" value="Guangzhou"></ea-checkbox>
+        <ea-checkbox label="Shenzhen" value="Shenzhen"></ea-checkbox>
+        <ea-checkbox label="Fujian" value="Fujian" disabled></ea-checkbox>
+      </ea-checkbox-group>
+    </div>
+
+    <script type="module">
+      const limitExample = {
+        group: document.querySelector("#limitGroup"),
+
+        cities: ["Shanghai", "Beijing", "Guangzhou", "Shenzhen", "Fujian"],
+
+        init() {
+          this.group.value = ["Guangzhou", "Shenzhen"];
+        },
+      };
+      limitExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  带有边框 -->
+    <!-- #region -->
+    <h1>带有边框</h1>
+
+    <div class="demo">
+      <div>
+        <ea-checkbox label="Option 1" size="large" border checked></ea-checkbox>
+        <ea-checkbox label="Option 2" size="large" border></ea-checkbox>
+      </div>
+      <div>
+        <ea-checkbox label="Option 1" border checked></ea-checkbox>
+        <ea-checkbox label="Option 2" border></ea-checkbox>
+      </div>
+      <div>
+        <ea-checkbox label="Option 1" size="small" border checked></ea-checkbox>
+        <ea-checkbox label="Option 2" size="small" border></ea-checkbox>
+      </div>
+      <div>
+        <ea-checkbox
+          label="Option 1"
+          size="small"
+          border
+          disabled
+          checked
+        ></ea-checkbox>
+        <ea-checkbox
+          label="Option 2"
+          size="small"
+          border
+          disabled
+        ></ea-checkbox>
+      </div>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

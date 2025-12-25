@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-container/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script type="module" src="../src/components/ea-menu/index.js"></script>
+
+    <!--  顶栏 -->
+    <!-- #region -->
+    <h1>顶栏</h1>
+
+    <div class="demo">
+      <ea-menu default-active="1" class="ea-menu-demo" mode="horizontal">
+        <ea-menu-item index="1">Processing Center</ea-menu-item>
+        <ea-sub-menu index="2">
+          <span slot="title">Workspace</span>
+          <ea-menu-item index="2-1">item one</ea-menu-item>
+          <ea-menu-item index="2-2">item two</ea-menu-item>
+          <ea-menu-item index="2-3">item three</ea-menu-item>
+          <ea-sub-menu index="2-4">
+            <span slot="title">item four</span>
+            <ea-menu-item index="2-4-1">item one</ea-menu-item>
+            <ea-menu-item index="2-4-2">item two</ea-menu-item>
+            <ea-menu-item index="2-4-3">item three</ea-menu-item>
+          </ea-sub-menu>
+        </ea-sub-menu>
+        <ea-menu-item index="3" disabled>Info</ea-menu-item>
+        <ea-menu-item index="4">Orders</ea-menu-item>
+      </ea-menu>
+      <ea-menu
+        default-active="1"
+        class="ea-menu-demo"
+        mode="horizontal"
+        background-color="#545c64"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+        style="--ea-menu-hover-bg-color: rgb(67, 74, 80)"
+      >
+        <ea-menu-item index="1">Processing Center</ea-menu-item>
+        <ea-sub-menu index="2">
+          <span slot="title">Workspace</span>
+          <ea-menu-item index="2-1">item one</ea-menu-item>
+          <ea-menu-item index="2-2">item two</ea-menu-item>
+          <ea-menu-item index="2-3">item three</ea-menu-item>
+          <ea-sub-menu index="2-4">
+            <span slot="title">item four</span>
+            <ea-menu-item index="2-4-1">item one</ea-menu-item>
+            <ea-menu-item index="2-4-2">item two</ea-menu-item>
+            <ea-menu-item index="2-4-3">item three</ea-menu-item>
+          </ea-sub-menu>
+        </ea-sub-menu>
+        <ea-menu-item index="3" disabled>Info</ea-menu-item>
+        <ea-menu-item index="4">Orders</ea-menu-item>
+      </ea-menu>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  左右 -->
+    <!-- #region -->
+    <h1>左右</h1>
+
+    <div class="demo">
+      <ea-menu default-active="1" class="ea-menu-demo" mode="horizontal">
+        <ea-menu-item index="0" style="margin-right: auto">
+          <img
+            style="width: 100px"
+            src="https://github.com/LuminaQAQ/ea-ui-component/raw/master/public/logo.png"
+            alt="EasyUI logo"
+          />
+        </ea-menu-item>
+        <ea-menu-item index="1">Processing Center</ea-menu-item>
+        <ea-sub-menu index="2">
+          <span slot="title">Workspace</span>
+          <ea-menu-item index="2-1">item one</ea-menu-item>
+          <ea-menu-item index="2-2">item two</ea-menu-item>
+          <ea-menu-item index="2-3">item three</ea-menu-item>
+          <ea-sub-menu index="2-4">
+            <span slot="title">item four</span>
+            <ea-menu-item index="2-4-1">item one</ea-menu-item>
+            <ea-menu-item index="2-4-2">item two</ea-menu-item>
+            <ea-menu-item index="2-4-3">item three</ea-menu-item>
+          </ea-sub-menu>
+        </ea-sub-menu>
+      </ea-menu>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  侧栏 -->
+    <!-- #region -->
+    <h1>侧栏</h1>
+
+    <div class="demo">
+      <ea-menu default-active="2" class="ea-menu-vertical-demo">
+        <ea-sub-menu index="1">
+          <span slot="title">
+            <ea-icon icon="icon-location"></ea-icon>
+            <span>Navigator One</span>
+          </span>
+          <ea-menu-item-group title="Group One">
+            <ea-menu-item index="1-1">item one</ea-menu-item>
+            <ea-menu-item index="1-2">item two</ea-menu-item>
+          </ea-menu-item-group>
+          <ea-menu-item-group title="Group Two">
+            <ea-menu-item index="1-3">item three</ea-menu-item>
+          </ea-menu-item-group>
+          <ea-sub-menu index="1-4">
+            <span slot="title">
+              <span>item four</span>
+            </span>
+            <ea-menu-item index="1-4-1">item one</ea-menu-item>
+          </ea-sub-menu>
+        </ea-sub-menu>
+        <ea-menu-item index="2">
+          <ea-icon icon="icon-th-large"></ea-icon>
+          <span>Navigator Two</span>
+        </ea-menu-item>
+        <ea-menu-item index="3" disabled>
+          <ea-icon icon="icon-table"></ea-icon>
+          <span>Navigator Three</span>
+        </ea-menu-item>
+        <ea-menu-item index="4">
+          <ea-icon icon="icon-cog"></ea-icon>
+          <span>Navigator Four</span>
+        </ea-menu-item>
+      </ea-menu>
+      <ea-menu
+        active-text-color="#ffd04b"
+        background-color="#545c64"
+        class="ea-menu-vertical-demo"
+        default-active="2"
+        text-color="#fff"
+        style="--ea-menu-hover-bg-color: rgb(67, 74, 80)"
+      >
+        <ea-sub-menu index="1">
+          <span slot="title">
+            <ea-icon icon="icon-location"></ea-icon>
+            <span>Navigator One</span>
+          </span>
+          <ea-menu-item-group title="Group One">
+            <ea-menu-item index="1-1">item one</ea-menu-item>
+            <ea-menu-item index="1-2">item two</ea-menu-item>
+          </ea-menu-item-group>
+          <ea-menu-item-group title="Group Two">
+            <ea-menu-item index="1-3">item three</ea-menu-item>
+          </ea-menu-item-group>
+          <ea-sub-menu index="1-4">
+            <span slot="title">
+              <span>item four</span>
+            </span>
+            <ea-menu-item index="1-4-1">item one</ea-menu-item>
+          </ea-sub-menu>
+        </ea-sub-menu>
+        <ea-menu-item index="2">
+          <ea-icon icon="icon-th-large"></ea-icon>
+          <span>Navigator Two</span>
+        </ea-menu-item>
+        <ea-menu-item index="3" disabled>
+          <ea-icon icon="icon-table"></ea-icon>
+          <span>Navigator Three</span>
+        </ea-menu-item>
+        <ea-menu-item index="4">
+          <ea-icon icon="icon-cog"></ea-icon>
+          <span>Navigator Four</span>
+        </ea-menu-item>
+      </ea-menu>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  实例 -->
+    <!-- #region -->
+    <h1>实例</h1>
+
+    <div class="demo">
+      <style>
+        .ea-container {
+          display: block;
+          height: 100vh;
+        }
+
+        .ea-aside {
+          flex: 1 0 0;
+          min-width: 0;
+        }
+
+        .ea-container-left {
+          --ea-container-direction: column;
+          flex: 1 0 0;
+          width: 100%;
+          overflow: auto;
+        }
+      </style>
+      <ea-container
+        class="ea-container"
+        direction="vertical"
+        style="display: block; height: 100vh"
+      >
+        <ea-aside width="300px">
+          <ea-menu default-active="2" class="ea-menu-vertical-demo">
+            <ea-sub-menu index="1">
+              <span slot="title">
+                <ea-icon icon="icon-location"></ea-icon>
+                <span>Navigator One</span>
+              </span>
+              <ea-menu-item-group title="Group One">
+                <ea-menu-item index="1-1">item one</ea-menu-item>
+                <ea-menu-item index="1-2">item two</ea-menu-item>
+              </ea-menu-item-group>
+              <ea-menu-item-group title="Group Two">
+                <ea-menu-item index="1-3">item three</ea-menu-item>
+              </ea-menu-item-group>
+              <ea-sub-menu index="1-4">
+                <span slot="title">
+                  <span>item four</span>
+                </span>
+                <ea-menu-item index="1-4-1">item one</ea-menu-item>
+              </ea-sub-menu>
+            </ea-sub-menu>
+            <ea-menu-item index="2">
+              <ea-icon icon="icon-th-large"></ea-icon>
+              <span>Navigator Two</span>
+            </ea-menu-item>
+            <ea-menu-item index="3" disabled>
+              <ea-icon icon="icon-table"></ea-icon>
+              <span>Navigator Three</span>
+            </ea-menu-item>
+            <ea-menu-item index="4">
+              <ea-icon icon="icon-cog"></ea-icon>
+              <span>Navigator Four</span>
+            </ea-menu-item>
+          </ea-menu>
+        </ea-aside>
+        <ea-container class="ea-container-left" direction="vertical">
+          <ea-header>
+            <ea-menu
+              default-active="2"
+              mode="horizontal"
+              class="ea-menu-vertical-demo"
+            >
+              <ea-sub-menu index="1">
+                <span slot="title">
+                  <ea-icon icon="icon-location"></ea-icon>
+                  <span>Navigator One</span>
+                </span>
+                <ea-menu-item-group title="Group One">
+                  <ea-menu-item index="1-1">item one</ea-menu-item>
+                  <ea-menu-item index="1-2">item two</ea-menu-item>
+                </ea-menu-item-group>
+                <ea-menu-item-group title="Group Two">
+                  <ea-menu-item index="1-3">item three</ea-menu-item>
+                </ea-menu-item-group>
+                <ea-sub-menu index="1-4">
+                  <span slot="title">
+                    <span>item four</span>
+                  </span>
+                  <ea-menu-item index="1-4-1">item one</ea-menu-item>
+                </ea-sub-menu>
+              </ea-sub-menu>
+              <ea-menu-item index="2">
+                <ea-icon icon="icon-th-large"></ea-icon>
+                <span>Navigator Two</span>
+              </ea-menu-item>
+              <ea-menu-item index="3" disabled>
+                <ea-icon icon="icon-table"></ea-icon>
+                <span>Navigator Three</span>
+              </ea-menu-item>
+              <ea-menu-item index="4">
+                <ea-icon icon="icon-cog"></ea-icon>
+                <span>Navigator Four</span>
+              </ea-menu-item>
+            </ea-menu>
+          </ea-header>
+          <ea-main>
+            04. 这个示例在 Header 下方嵌套了一个包含 Aside 和 Main 的
+            ea-container。
+          </ea-main>
+        </ea-container>
+      </ea-container>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

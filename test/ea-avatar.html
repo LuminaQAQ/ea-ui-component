@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module">
+      import "../src/components/ea-avatar/index.js";
+
+      document.querySelector("#error").addEventListener("error", (e) => {
+        console.log(e);
+      });
+    </script>
+
+    <!--  基本用法 -->
+    <!-- #region -->
+    <h1>基本用法</h1>
+
+    <div class="demo">
+      <div class="row">
+        <ea-avatar size="50px"></ea-avatar>
+        <ea-avatar size="large"></ea-avatar>
+        <ea-avatar size="default"></ea-avatar>
+        <ea-avatar size="small"></ea-avatar>
+      </div>
+      <div class="row">
+        <ea-avatar shape="square" size="50px"></ea-avatar>
+        <ea-avatar shape="square" size="large"></ea-avatar>
+        <ea-avatar shape="square" size="default"></ea-avatar>
+        <ea-avatar shape="square" size="small"></ea-avatar>
+      </div>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  展示类型 -->
+    <!-- #region -->
+    <h1>展示类型</h1>
+
+    <div class="demo row">
+      <ea-avatar icon="icon-coffee"></ea-avatar>
+      <ea-avatar
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+      ></ea-avatar>
+      <ea-avatar>user</ea-avatar>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  回退行为 -->
+    <!-- #region -->
+    <h1>回退行为</h1>
+
+    <div class="demo row">
+      <ea-avatar id="error" size="60px" src="https://empty"></ea-avatar>
+      <ea-avatar id="error" size="60px" src="https://empty">
+        error text
+      </ea-avatar>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  适应容器 -->
+    <!-- #region -->
+    <h1>适应容器</h1>
+
+    <div class="demo">
+      <ea-avatar
+        size="100px"
+        fit="fill"
+        shape="square"
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+      ></ea-avatar>
+      <ea-avatar
+        size="100px"
+        fit="contain"
+        shape="square"
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+      ></ea-avatar>
+      <ea-avatar
+        size="100px"
+        fit="cover"
+        shape="square"
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+      ></ea-avatar>
+      <ea-avatar
+        size="100px"
+        fit="none"
+        shape="square"
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+      ></ea-avatar>
+      <ea-avatar
+        size="100px"
+        fit="scale-down"
+        shape="square"
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+      ></ea-avatar>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

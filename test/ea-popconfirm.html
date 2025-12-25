@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+
+        .demo {
+            box-sizing: border-box;
+            padding: 5rem;
+        }
+
+        ea-popconfirm {
+            margin: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script src="../src/components/ea-button/index.js" type='module'></script>
+    <script src="../src/components/ea-card/index.js" type='module'></script>
+    <script src="../src/components/ea-layout/index.js" type='module'></script>
+    <script src="../src/components/ea-popconfirm/index.js" type='module'></script>
+
+    <!-- #region 展示位置 -->
+    <h1>展示位置</h1>
+
+    <div id="referenceSection" class="demo">
+        <ea-row justify="center">
+            <ea-col span="6">
+                <ea-popconfirm title="Top Left prompts info" placement="top-start">
+                    <ea-button type="primary" slot="reference">top-start</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popconfirm title="Top Center prompts info" placement="top">
+                    top
+                    <ea-button type="primary" slot="reference">top</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popconfirm title="Top Right prompts info" placement="top-end">
+                    <ea-button type="primary" slot="reference">top-end</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popconfirm title="Left Top prompts info" placement="left-start">
+                    <ea-button type="primary" slot="reference">left-start</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popconfirm title="Right Top prompts info" placement="right-start">
+                    <ea-button type="primary" slot="reference">right-start</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popconfirm title="Left Center prompts info" placement="left">
+                    <ea-button type="primary" slot="reference">left</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popconfirm title="Right Center prompts info" placement="right">
+                    <ea-button type="primary" slot="reference">right</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="space-between">
+            <ea-col span="6">
+                <ea-popconfirm title="Left Bottom prompts info" placement="left-end">
+                    <ea-button type="primary" slot="reference">left-end</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popconfirm title="Right Bottom prompts info" placement="right-end">
+                    <ea-button type="primary" slot="reference">right-end</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+        </ea-row>
+
+        <ea-row justify="center">
+            <ea-col span="6">
+                <ea-popconfirm title="Bottom Left prompts info" placement="bottom-start">
+                    <ea-button type="primary" slot="reference">bottom-start</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popconfirm title="Bottom Center prompts info" placement="bottom">
+                    <ea-button type="primary" slot="reference">bottom</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+            <ea-col span="6">
+                <ea-popconfirm title="Bottom Right prompts info" placement="bottom-end">
+                    <ea-button type="primary" slot="reference">bottom-end</ea-button>
+                </ea-popconfirm>
+            </ea-col>
+        </ea-row>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
+
+    <div id="triggerSection" class="demo">
+        <ea-popconfirm title="Are you sure to delete this?" confirm-button-text="Yes" cancel-button-text="No">
+            <ea-button slot="reference">Delete</ea-button>
+        </ea-popconfirm>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 自定义弹出框的内容 -->
+    <h1>自定义弹出框的内容</h1>
+
+    <div id="scalableSection" class="demo">
+        <ea-popconfirm id="customizedPopconfirm" placement="right" width="220" icon="icon-info" icon-color="#626AEF"
+            title="Are you sure to delete this?">
+            <ea-button slot="reference">Delete</ea-button>
+
+            <footer slot="actions">
+                <ea-button size="small" type="default" data-cancel>No!</ea-button>
+                <ea-button size="small" type="danger" data-confirm>Yes?</ea-button>
+            </footer>
+        </ea-popconfirm>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <script>
+        // -------自定义弹出框的内容  -------
+        // #region
+        const customizedPopconfirmExample = {
+            el: document.querySelector('#customizedPopconfirm'),
+
+            init() {
+                this.el.addEventListener('confirm', (e) => {
+                    console.log('confirm');
+                })
+
+                this.el.addEventListener('cancel', (e) => {
+                    console.log('cancel');
+                })
+            }
+        }
+        customizedPopconfirmExample.init();
+        // #endregion
+        // ------- end -------
+    </script>
+</body>
+
+</html>

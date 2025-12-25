@@ -1,5 +1,5 @@
 :host {
-  --ea-overlay-z-index: 1000;
+  --ea-overlay-z-index: 3000;
   --ea-overlay-background-color: rgba(0, 0, 0, 0.4);
 
   --ea-overlay-content-left: 50%;
@@ -21,6 +21,7 @@
 
 :host {
   position: fixed;
+  z-index: var(--ea-overlay-z-index);
 }
 
 @mixin modal-mask {

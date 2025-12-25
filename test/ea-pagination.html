@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-pagination/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script type="module" src="../src/components/ea-radio/index.js"></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <p>When you have few pages</p>
+      <ea-pagination
+        layout='["prev", "pager", "next"]'
+        total="50"
+      ></ea-pagination>
+      <p>When you have more than 7 pages</p>
+      <ea-pagination
+        layout='["prev", "pager", "next"]'
+        total="1000"
+      ></ea-pagination>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 设置最大页码按钮数 --------  -->
+    <!-- #region  -->
+    <h2>设置最大页码按钮数</h2>
+    <div class="demo">
+      <ea-pagination
+        layout='["prev", "pager", "next"]'
+        page-size="20"
+        pager-count="11"
+        total="1000"
+      ></ea-pagination>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 带有背景色的分页 --------  -->
+    <!-- #region  -->
+    <h2>带有背景色的分页</h2>
+    <div class="demo">
+      <ea-pagination
+        background
+        layout='["prev", "pager", "next"]'
+        total="1000"
+      ></ea-pagination>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 小型分页 --------  -->
+    <!-- #region  -->
+    <h2>小型分页</h2>
+    <div class="demo">
+      <ea-pagination
+        size="small"
+        layout='["prev", "pager", "next"]'
+        total="1000"
+      ></ea-pagination>
+      <ea-pagination
+        background
+        size="small"
+        layout='["prev", "pager", "next"]'
+        total="1000"
+      ></ea-pagination>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 当只有一页时隐藏分页 --------  -->
+    <!-- #region  -->
+    <h2>当只有一页时隐藏分页</h2>
+    <div class="demo">
+      <ea-switch id="singlePageSwitch"></ea-switch>
+      <ea-pagination
+        id="singlePagePagination"
+        layout='["prev", "pager", "next"]'
+        total="5"
+      ></ea-pagination>
+
+      <script type="module">
+        const singlePageExample = {
+          el: document.querySelector("#singlePagePagination"),
+          btn: document.querySelector("#singlePageSwitch"),
+
+          init() {
+            this.btn.addEventListener("change", (e) => {
+              this.el["hide-on-single-page"] = e.detail.checked;
+            });
+          },
+        };
+        singlePageExample.init();
+      </script>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 附加功能 --------  -->
+    <!-- #region  -->
+    <h2>附加功能</h2>
+    <div class="demo">
+      <ea-radio-group id="additionalFunctionsSize" name="size">
+        <ea-radio value="large">large</ea-radio>
+        <ea-radio value="default" checked>default</ea-radio>
+        <ea-radio value="small">small</ea-radio>
+      </ea-radio-group>
+      <div>
+        background: <ea-switch id="additionalFunctionsBackground"></ea-switch>
+      </div>
+      <div>
+        disabled: <ea-switch id="additionalFunctionsDisabled"></ea-switch>
+      </div>
+
+      <div class="demonstration">Total item count</div>
+      <ea-pagination
+        id="additionalFunctionsPagination1"
+        layout='["prev", "pager", "next", "total"]'
+        total="1000"
+        page-size="100"
+      ></ea-pagination>
+
+      <div class="demonstration">Change page size</div>
+      <ea-pagination
+        id="additionalFunctionsPagination2"
+        layout='["sizes", "prev", "pager", "next"]'
+        page-sizes="[100, 200, 300, 400]"
+        total="1000"
+      ></ea-pagination>
+
+      <div class="demonstration">Jump to</div>
+      <ea-pagination
+        id="additionalFunctionsPagination3"
+        layout='["prev", "pager", "next", "jumper"]'
+        total="1000"
+      ></ea-pagination>
+
+      <div class="demonstration">All combined</div>
+      <ea-pagination
+        id="additionalFunctionsPagination4"
+        page-sizes="[100, 200, 300, 400]"
+        layout='["total", "sizes", "prev", "pager", "next", "jumper"]'
+        total="400"
+      ></ea-pagination>
+
+      <script type="module">
+        const additionalFunctionsExample = {
+          sizeBtn: document.querySelector("#additionalFunctionsSize"),
+          backgroundBtn: document.querySelector(
+            "#additionalFunctionsBackground"
+          ),
+          disabledBtn: document.querySelector("#additionalFunctionsDisabled"),
+
+          els: [
+            document.querySelector("#additionalFunctionsPagination1"),
+            document.querySelector("#additionalFunctionsPagination2"),
+            document.querySelector("#additionalFunctionsPagination3"),
+            document.querySelector("#additionalFunctionsPagination4"),
+          ],
+
+          init() {
+            this.sizeBtn.addEventListener("change", (e) => {
+              const { value } = e.detail;
+
+              this.els.forEach((el) => {
+                el.size = value;
+              });
+            });
+
+            this.backgroundBtn.addEventListener("change", (e) => {
+              const { value } = e.detail;
+
+              this.els.forEach((el) => {
+                el.background = value;
+              });
+            });
+
+            this.disabledBtn.addEventListener("change", (e) => {
+              const { value } = e.detail;
+
+              this.els.forEach((el) => {
+                el.disabled = value;
+              });
+            });
+          },
+        };
+
+        additionalFunctionsExample.init();
+      </script>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+  </body>
+</html>

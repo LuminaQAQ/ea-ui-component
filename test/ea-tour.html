@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tour</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-tour/index.js"></script>
+
+    <!--  基本用法 -->
+    <!-- #region -->
+    <h1>基本用法</h1>
+
+    <div class="demo">
+      <ea-button id="basicTourBtn" type="primary">Begin Tour</ea-button>
+      <hr />
+      <ea-button id="basicEl1">Upload</ea-button>
+      <ea-button id="basicEl2" type="primary">Save</ea-button>
+      <ea-button id="basicEl3" icon="icon-share"></ea-button>
+
+      <ea-tour id="basicTour">
+        <ea-tour-step target="#basicEl1" title="Upload File">
+          <img
+            style="width: 240px"
+            src="https://element-plus.org/images/element-plus-logo.svg"
+            alt="tour.png"
+          />
+          <div>Put you files here.</div>
+        </ea-tour-step>
+        <ea-tour-step
+          target="#basicEl2"
+          title="Save"
+          description="Save your changes"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#basicEl3"
+          title="Other Actions"
+          description="Click to see other"
+        ></ea-tour-step>
+      </ea-tour>
+    </div>
+
+    <script type="module">
+      const basicExample = {
+        el: document.querySelector("#basicTour"),
+        btn: document.querySelector("#basicTourBtn"),
+
+        init() {
+          this.btn.addEventListener("click", () => {
+            this.el.visible = true;
+          });
+        },
+      };
+      basicExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  非模态 -->
+    <!-- #region -->
+    <h1>非模态</h1>
+
+    <div class="demo">
+      <ea-button id="noMaskTourBtn" type="primary">Begin Tour</ea-button>
+      <hr />
+      <ea-button id="noMaskEl1">Upload</ea-button>
+      <ea-button id="noMaskEl2" type="primary">Save</ea-button>
+      <ea-button id="noMaskEl3" icon="icon-share"></ea-button>
+
+      <ea-tour id="noMaskTour" type="primary" mask="false">
+        <ea-tour-step target="#noMaskEl1" title="Upload File">
+          <div>Put you files here.</div>
+        </ea-tour-step>
+        <ea-tour-step
+          target="#noMaskEl2"
+          title="Save"
+          description="Save your changes"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#noMaskEl3"
+          title="Other Actions"
+          description="Click to see other"
+        ></ea-tour-step>
+      </ea-tour>
+    </div>
+
+    <script type="module">
+      const noMaskExample = {
+        el: document.querySelector("#noMaskTour"),
+        btn: document.querySelector("#noMaskTourBtn"),
+
+        init() {
+          this.btn.addEventListener("click", () => {
+            this.el.visible = true;
+          });
+        },
+      };
+      noMaskExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  位置 -->
+    <!-- #region -->
+    <h1>位置</h1>
+
+    <div class="demo" style="text-align: center">
+      <ea-button id="placementTourBtn" type="primary">Begin Tour</ea-button>
+
+      <ea-tour id="placementTour">
+        <ea-tour-step
+          title="Center"
+          description="Displayed in the center of screen."
+        >
+        </ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Top"
+          description="On the top of target."
+          placement="top"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Top-Start"
+          description="On the top-start of target."
+          placement="top-start"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Top-End"
+          description="On the top-end of target."
+          placement="top-end"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Right"
+          description="On the right of target."
+          placement="right"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Right-Start"
+          description="On the right-start of target."
+          placement="right-start"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Right-End"
+          description="On the right-end of target."
+          placement="right-end"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Bottom"
+          description="On the bottom of target."
+          placement="bottom"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Bottom-Start"
+          description="On the bottom-start of target."
+          placement="bottom-start"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Bottom-End"
+          description="On the bottom-end of target."
+          placement="bottom-end"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Left"
+          description="On the Left of target."
+          placement="left"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Left-Start"
+          description="On the left-start of target."
+          placement="left-start"
+        ></ea-tour-step>
+        <ea-tour-step
+          target="#placementTourBtn"
+          title="Left-End"
+          description="On the left-end of target."
+          placement="left-end"
+        ></ea-tour-step>
+      </ea-tour>
+    </div>
+
+    <script type="module">
+      const placementExample = {
+        el: document.querySelector("#placementTour"),
+        btn: document.querySelector("#placementTourBtn"),
+
+        init() {
+          this.btn.addEventListener("click", () => {
+            this.el.visible = true;
+          });
+        },
+      };
+      placementExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

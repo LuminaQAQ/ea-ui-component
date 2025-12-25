@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+
+      ea-progress {
+        margin: 0.5rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-progress/index.js"></script>
+    <script
+      type="module"
+      src="../src/components/ea-button-group/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+
+    <!--  直线进度条 -->
+    <!-- #region -->
+    <h1>直线进度条</h1>
+
+    <div class="demo">
+      <ea-progress percentage="50"></ea-progress>
+      <ea-progress percentage="100"></ea-progress>
+      <ea-progress percentage="100" status="success"></ea-progress>
+      <ea-progress percentage="100" status="warning"></ea-progress>
+      <ea-progress percentage="100" status="exception"></ea-progress>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  进度条内显示百分比标识 -->
+    <!-- #region -->
+    <h1>进度条内显示百分比标识</h1>
+    <div class="demo">
+      <ea-progress
+        stroke-width="26px"
+        percentage="25"
+        text-inside
+      ></ea-progress>
+      <ea-progress
+        stroke-width="24px"
+        percentage="60"
+        status="success"
+        text-inside
+      ></ea-progress>
+      <ea-progress
+        stroke-width="22px"
+        percentage="75"
+        status="warning"
+        text-inside
+      ></ea-progress>
+      <ea-progress
+        stroke-width="20px"
+        percentage="90"
+        status="exception"
+        text-inside
+      ></ea-progress>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义进度条的颜色 -->
+    <!-- #region -->
+    <h1>自定义进度条的颜色</h1>
+
+    <div class="demo">
+      <ea-progress
+        class="custom-color-progress"
+        percentage="20"
+        color="#6f7ad3"
+      ></ea-progress>
+      <ea-progress
+        class="custom-color-progress"
+        percentage="20"
+        color='[
+          { "color": "#f56c6c", "percentage": 20 },
+          { "color": "#e6a23c", "percentage": 40 },
+          { "color": "#5cb87a", "percentage": 60 },
+          { "color": "#1989fa", "percentage": 80 },
+          { "color": "#6f7ad3", "percentage": 100 }
+        ]'
+      ></ea-progress>
+
+      <ea-button-group>
+        <ea-button id="customColorMinusBtn">-</ea-button>
+        <ea-button id="customColorPlusBtn">+</ea-button>
+      </ea-button-group>
+    </div>
+
+    <script type="module">
+      const customColorExample = {
+        els: document.querySelectorAll(".custom-color-progress"),
+        minus: document.querySelector("#customColorMinusBtn"),
+        plus: document.querySelector("#customColorPlusBtn"),
+
+        init() {
+          this.minus.addEventListener("click", () => {
+            this.els.forEach((el) => {
+              const percentage = Number(el.getAttribute("percentage"));
+              el.setAttribute("percentage", percentage - 10);
+            });
+          });
+
+          this.plus.addEventListener("click", () => {
+            this.els.forEach((el) => {
+              const percentage = Number(el.getAttribute("percentage"));
+              el.setAttribute("percentage", percentage + 10);
+            });
+          });
+        },
+      };
+
+      customColorExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  环形进度条 -->
+    <!-- #region -->
+    <h1>环形进度条</h1>
+
+    <div class="demo row">
+      <ea-progress type="circle" percentage="0"></ea-progress>
+      <ea-progress type="circle" percentage="25"></ea-progress>
+      <ea-progress
+        type="circle"
+        percentage="100"
+        status="success"
+      ></ea-progress>
+      <ea-progress type="circle" percentage="70" status="warning"></ea-progress>
+      <ea-progress
+        type="circle"
+        percentage="50"
+        status="exception"
+      ></ea-progress>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  仪表盘形进度条 -->
+    <!-- #region -->
+    <h1>仪表盘形进度条</h1>
+
+    <div class="demo">
+      <ea-progress
+        id="dashboardProgress1"
+        type="dashboard"
+        percentage="10"
+        stroke-width="4px"
+      ></ea-progress>
+      <ea-button-group>
+        <ea-button id="dashboardMinus">-</ea-button>
+        <ea-button id="dashboardPlus">+</ea-button>
+      </ea-button-group>
+      <ea-progress
+        id="dashboardProgress2"
+        type="dashboard"
+        percentage="0"
+        stroke-width="10px"
+        color='[
+          { "color": "#f56c6c", "percentage": 20 },
+          { "color": "#e6a23c", "percentage": 40 },
+          { "color": "#5cb87a", "percentage": 60 },
+          { "color": "#1989fa", "percentage": 80 },
+          { "color": "#6f7ad3", "percentage": 100 }
+        ]'
+      ></ea-progress>
+    </div>
+
+    <script type="module">
+      const dashboardExample = {
+        el1: document.querySelector("#dashboardProgress1"),
+        el2: document.querySelector("#dashboardProgress2"),
+        minus: document.querySelector("#dashboardMinus"),
+        plus: document.querySelector("#dashboardPlus"),
+
+        init() {
+          this.minus.addEventListener("click", () => {
+            const percentage = Number(this.el1.getAttribute("percentage"));
+            this.el1.setAttribute("percentage", percentage - 10);
+          });
+
+          this.plus.addEventListener("click", () => {
+            const percentage = Number(this.el1.getAttribute("percentage"));
+            this.el1.setAttribute("percentage", percentage + 10);
+          });
+
+          let timer = setInterval(() => {
+            const percentage = Number(this.el2.getAttribute("percentage"));
+            this.el2.setAttribute("percentage", percentage + 10);
+
+            if (percentage >= 100) {
+              this.el2.setAttribute("percentage", 0);
+            }
+          }, 500);
+
+          this.el2.addEventListener("beforeUnmount", () => {
+            clearInterval(timer);
+            timer = null;
+          });
+        },
+      };
+      dashboardExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  自定义内容 -->
+    <!-- #region -->
+    <h1>自定义内容</h1>
+
+    <style>
+      .percentage-value {
+        display: block;
+        font-size: 28px;
+      }
+      .percentage-label {
+        display: block;
+        font-size: 12px;
+      }
+      .demo-progress .el-progress--line {
+        margin-bottom: 15px;
+        max-width: 600px;
+      }
+      .demo-progress .el-progress--circle {
+        margin-right: 15px;
+      }
+    </style>
+
+    <div class="demo">
+      <ea-progress percentage="50">
+        <ea-button text>Content</ea-button>
+      </ea-progress>
+      <ea-progress
+        text-inside="true"
+        stroke-width="20px"
+        percentage="50"
+        status="exception"
+      >
+        <span>Content</span>
+      </ea-progress>
+      <ea-progress type="circle" percentage="100" status="success">
+        <ea-button type="success" icon="icon-coffee" circle />
+      </ea-progress>
+      <ea-progress type="dashboard" percentage="80">
+        <div class="percentage-value"><span data-percentage></span>%</div>
+        <span class="percentage-label">Progressing</span>
+      </ea-progress>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  动画进度条 -->
+    <!-- #region -->
+    <h1>动画进度条</h1>
+
+    <div class="demo">
+      <ea-progress percentage="50" indeterminate></ea-progress>
+      <ea-progress percentage="100" indeterminate></ea-progress>
+      <ea-progress
+        percentage="100"
+        status="success"
+        indeterminate
+        duration="5"
+      ></ea-progress>
+      <ea-progress
+        percentage="100"
+        status="warning"
+        indeterminate
+        duration="1"
+      ></ea-progress>
+      <ea-progress
+        percentage="50"
+        status="exception"
+        indeterminate
+      ></ea-progress>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  条纹进度条 -->
+    <!-- #region -->
+    <h1>条纹进度条</h1>
+
+    <div class="demo">
+      <ea-progress percentage="50" stroke-width="15px" striped></ea-progress>
+      <ea-progress
+        percentage="30"
+        status="success"
+        stroke-width="15px"
+        striped
+        striped-flow
+      ></ea-progress>
+      <ea-progress
+        percentage="100"
+        status="warning"
+        stroke-width="15px"
+        striped
+        striped-flow
+        duration="10"
+      ></ea-progress>
+      <ea-progress
+        id="stripedProgress"
+        percentage="70"
+        status="exception"
+        stroke-width="15px"
+        duration="7"
+        striped
+        striped-flow
+      ></ea-progress>
+
+      <ea-button-group>
+        <ea-button id="stripedMinus">-</ea-button>
+        <ea-button id="stripedPlus">+</ea-button>
+      </ea-button-group>
+    </div>
+
+    <script type="module">
+      const stripedExample = {
+        el: document.querySelector("#stripedProgress"),
+        minus: document.querySelector("#stripedMinus"),
+        plus: document.querySelector("#stripedPlus"),
+
+        init() {
+          this.minus.addEventListener("click", () => {
+            const percentage = Number(this.el.getAttribute("percentage"));
+            this.el.setAttribute("percentage", percentage - 10);
+          });
+
+          this.plus.addEventListener("click", () => {
+            const percentage = Number(this.el.getAttribute("percentage"));
+            this.el.setAttribute("percentage", percentage + 10);
+          });
+
+          this.el.addEventListener("change", (e) => {
+            const { percentage } = e.detail;
+
+            this.el.setAttribute("duration", percentage / 10);
+          });
+        },
+      };
+      stripedExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

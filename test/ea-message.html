@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../dist/assets/icon.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <script type="module" src="../src/components/ea-message/index.js"></script> -->
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+
+    <!-- <script type='module'>
+        // ------- close 事件 -------
+        // #region
+        document.getElementById("closeEventBtn").addEventListener("click", () => {
+            $message
+                .open({
+                    text: "close 事件",
+                    showClose: true,
+                    center: true,
+                })
+                .onClose(() => {
+                    alert("关闭了");
+                });
+        });
+        // #endregion
+        // ------- end -------
+    </script> -->
+
+    <script type="module">
+        import { EaMessage } from "../src/components/ea-message/index.js";
+
+        // ------- 基础用法 -------
+        // #region
+        const basicExample = {
+            moduleInstanceBtn: document.getElementById("moduleInstanceBtn"),
+            chainInstanceBtn: document.getElementById("chainInstanceBtn"),
+
+            init() {
+                this.moduleInstanceBtn.addEventListener("click", () => {
+                    EaMessage({
+                        message: "This is a message.",
+                        type: "info",
+                        showClose: false,
+                        duration: 3000,
+                    });
+                });
+
+                this.chainInstanceBtn.addEventListener("click", () => {
+                    EaMessage.info('This is a message.');
+                });
+            }
+        }
+        basicExample.init();
+        // #endregion
+        // ------- end -------
+
+        // ------- Placement -------
+        // #region
+        let topCount = 0
+        let bottomCount = 0
+        let topLeftCount = 0
+        let topRightCount = 0
+        let bottomLeftCount = 0
+        let bottomRightCount = 0
+        const openMsg = (placement = 'top') => {
+            let count = 0
+            let type = 'success'
+
+            switch (placement) {
+                case 'top':
+                    count = ++topCount
+                    type = 'success'
+                    break
+                case 'bottom':
+                    count = ++bottomCount
+                    type = 'warning'
+                    break
+                case 'top-left':
+                    count = ++topLeftCount
+                    type = 'info'
+                    break
+                case 'top-right':
+                    count = ++topRightCount
+                    type = 'primary'
+                    break
+                case 'bottom-left':
+                    count = ++bottomLeftCount
+                    type = 'warning'
+                    break
+                case 'bottom-right':
+                    count = ++bottomRightCount
+                    type = 'error'
+                    break
+            }
+
+            EaMessage({
+                message: `This is a message from the ${placement} ${count}`,
+                type,
+                placement,
+            })
+        }
+        const placementExample = {
+            els: document.querySelectorAll("#placementSection ea-button"),
+
+            init() {
+                this.els.forEach(el => {
+                    el.addEventListener("click", () => {
+                        const placement = el.textContent.trim().toLocaleLowerCase()?.replace(' ', '-');
+
+                        openMsg(placement)
+                    })
+                })
+            }
+        }
+        placementExample.init();
+        // #endregion
+        // ------- end -------
+    </script>
+
+    <!-- #region 基础用法 -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+        <ea-button plain onclick='window.$message({
+            message: "This is a message.",
+            type: "info",
+            showClose: false,
+            duration: 3000,
+        })'>
+            Show message
+        </ea-button>
+        <ea-button id="moduleInstanceBtn" plain>
+            Module-Instance message
+        </ea-button>
+        <ea-button id="chainInstanceBtn" plain>
+            Chain-Instance message
+        </ea-button>
+    </div>
+
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- -------- 不同状态 --------  -->
+    <!-- #region  -->
+    <h2>不同状态</h2>
+    <div class="demo">
+        <ea-button plain onclick="window.$message.info('This is a info message.')">info</ea-button>
+        <ea-button type="primary" plain onclick="window.$message.primary('This is a info message.')">Primary</ea-button>
+        <ea-button type="success" plain
+            onclick="window.$message.success('Congrats, this is a success message.')">Success</ea-button>
+        <ea-button type="warning" plain
+            onclick="window.$message.warning('Warning, this is a warning message.')">Warning</ea-button>
+        <ea-button type="danger" plain
+            onclick="window.$message.error('Oops, this is a error message.')">Error</ea-button>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 可关闭 --------  -->
+    <!-- #region  -->
+    <h2>可关闭</h2>
+    <div class="demo">
+        <ea-button plain
+            onclick="window.$message({ message: 'This is a info message.', showClose: true })">info</ea-button>
+        <ea-button type="primary" plain
+            onclick="window.$message({ type: 'primary', message: 'This is a info message.', showClose: true })">Primary</ea-button>
+        <ea-button type="success" plain
+            onclick="window.$message({ type: 'success', message: 'Congrats, this is a success message.', showClose: true })">Success</ea-button>
+        <ea-button type="warning" plain
+            onclick="window.$message({ type: 'warning', message: 'Warning, this is a warning message.', showClose: true })">Warning</ea-button>
+        <ea-button type="danger" plain
+            onclick="window.$message({ type: 'error', message: 'Oops, this is a error message.', showClose: true })">Error</ea-button>
+        <ea-button plain
+            onclick="window.$message({ message: 'This is a info message.', showClose: true , duration: 0})">Won't close
+            automatically</ea-button>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 使用 HTML 片段作为正文内容 --------  -->
+    <!-- #region  -->
+    <h2>使用 HTML 片段作为正文内容</h2>
+    <div class="demo">
+        <ea-button plain
+            onclick="window.$message({ dangerouslyUseHTMLString: true, message: '<strong>This is <i>HTML</i> string</strong>',})">
+            Use HTML string
+        </ea-button>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- Placement --------  -->
+    <!-- #region  -->
+    <h2>Placement</h2>
+    <div id="placementSection" class="demo">
+        <ea-button plain> Top </ea-button>
+        <ea-button plain>
+            Top Left
+        </ea-button>
+        <ea-button plain>
+            Top Right
+        </ea-button>
+        <ea-button plain>
+            Bottom
+        </ea-button>
+        <ea-button plain>
+            Bottom Left
+        </ea-button>
+        <ea-button plain>
+            Bottom Right
+        </ea-button>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

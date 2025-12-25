@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-tag/index.js"></script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="demo">
+      <ea-tag type="primary">Tag 1</ea-tag>
+      <ea-tag type="success">Tag 2</ea-tag>
+      <ea-tag type="info">Tag 3</ea-tag>
+      <ea-tag type="warning">Tag 4</ea-tag>
+      <ea-tag type="danger">Tag 5</ea-tag>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 可移除标签 --------  -->
+    <!-- #region  -->
+    <h2>可移除标签</h2>
+    <div class="demo">
+      <ea-tag type="primary" closable>Tag 1</ea-tag>
+      <ea-tag type="success" closable>Tag 2</ea-tag>
+      <ea-tag type="info" closable>Tag 3</ea-tag>
+      <ea-tag type="warning" closable>Tag 4</ea-tag>
+      <ea-tag type="danger" closable>Tag 5</ea-tag>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!--  不同尺寸 -->
+    <!-- #region -->
+    <h1>不同尺寸</h1>
+
+    <div class="demo">
+      <ea-tag size="large">Large</ea-tag>
+      <ea-tag>Default</ea-tag>
+      <ea-tag size="small">Small</ea-tag>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 不同主题 --------  -->
+    <!-- #region  -->
+    <h2>不同主题</h2>
+    <div class="demo">
+      <p>
+        <span>Dark</span>
+        <ea-tag effect="dark" type="primary">Tag 1</ea-tag>
+        <ea-tag effect="dark" type="success">Tag 2</ea-tag>
+        <ea-tag effect="dark" type="info">Tag 3</ea-tag>
+        <ea-tag effect="dark" type="warning">Tag 4</ea-tag>
+        <ea-tag effect="dark" type="danger">Tag 5</ea-tag>
+      </p>
+      <p>
+        <span>Light</span>
+        <ea-tag effect="light" type="primary">Tag 1</ea-tag>
+        <ea-tag effect="light" type="success">Tag 2</ea-tag>
+        <ea-tag effect="light" type="info">Tag 3</ea-tag>
+        <ea-tag effect="light" type="warning">Tag 4</ea-tag>
+        <ea-tag effect="light" type="danger">Tag 5</ea-tag>
+      </p>
+      <p>
+        <span>Plain</span>
+        <ea-tag effect="plain" type="primary">Tag 1</ea-tag>
+        <ea-tag effect="plain" type="success">Tag 2</ea-tag>
+        <ea-tag effect="plain" type="info">Tag 3</ea-tag>
+        <ea-tag effect="plain" type="warning">Tag 4</ea-tag>
+        <ea-tag effect="plain" type="danger">Tag 5</ea-tag>
+      </p>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!--  圆形标签 -->
+    <!-- #region -->
+    <h1>圆形标签</h1>
+
+    <div class="demo">
+      <p>
+        <ea-tag effect="dark" round type="primary">Tag 1</ea-tag>
+        <ea-tag effect="dark" round type="success">Tag 2</ea-tag>
+        <ea-tag effect="dark" round type="info">Tag 3</ea-tag>
+        <ea-tag effect="dark" round type="warning">Tag 4</ea-tag>
+        <ea-tag effect="dark" round type="danger">Tag 5</ea-tag>
+      </p>
+      <p>
+        <ea-tag effect="light" round type="primary">Tag 1</ea-tag>
+        <ea-tag effect="light" round type="success">Tag 2</ea-tag>
+        <ea-tag effect="light" round type="info">Tag 3</ea-tag>
+        <ea-tag effect="light" round type="warning">Tag 4</ea-tag>
+        <ea-tag effect="light" round type="danger">Tag 5</ea-tag>
+      </p>
+      <p>
+        <ea-tag effect="plain" round type="primary">Tag 1</ea-tag>
+        <ea-tag effect="plain" round type="success">Tag 2</ea-tag>
+        <ea-tag effect="plain" round type="info">Tag 3</ea-tag>
+        <ea-tag effect="plain" round type="warning">Tag 4</ea-tag>
+        <ea-tag effect="plain" round type="danger">Tag 5</ea-tag>
+      </p>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  可选中的标签 -->
+    <!-- #region -->
+    <h1>可选中的标签</h1>
+
+    <div class="demo">
+      <p>
+        <ea-check-tag checked>Checked</ea-check-tag>
+        <ea-check-tag>Toggle me</ea-check-tag>
+        <ea-check-tag disabled>Disabled</ea-check-tag>
+      </p>
+      <p>
+        <ea-check-tag checked type="primary"> Tag 1 </ea-check-tag>
+        <ea-check-tag checked type="success"> Tag 2 </ea-check-tag>
+        <ea-check-tag checked type="info"> Tag 3 </ea-check-tag>
+        <ea-check-tag checked type="warning"> Tag 4 </ea-check-tag>
+        <ea-check-tag checked type="danger"> Tag 5 </ea-check-tag>
+        <ea-check-tag checked disabled type="success"> Tag 6 </ea-check-tag>
+      </p>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+
+      .prepend,
+      .append {
+        background-color: #f5f7fa;
+        padding: 0.5rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script
+      type="module"
+      src="../src/components/ea-button-group/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-table/index.js"></script>
+
+    <!--  基础表格 -->
+    <!-- #region -->
+    <h1>基础表格</h1>
+
+    <div class="demo">
+      <ea-table id="basicTable">
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  带斑马纹表格 -->
+    <!-- #region -->
+    <h1>带斑马纹表格</h1>
+
+    <div class="demo">
+      <ea-table id="stripeTable" stripe>
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  带边框表格 -->
+    <!-- #region -->
+    <h1>带边框表格</h1>
+
+    <div class="demo">
+      <ea-table id="borderTable" border>
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  带状态表格 -->
+    <!-- #region -->
+    <h1>带状态表格</h1>
+
+    <style>
+      #statusTable::part(warning-row) {
+        --ea-table-background-color: rgb(253, 246, 236);
+      }
+
+      #statusTable::part(success-row) {
+        --ea-table-background-color: rgb(240, 249, 235);
+      }
+    </style>
+    <div class="demo">
+      <ea-table id="statusTable">
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  固定表头 -->
+    <!-- #region -->
+    <h1>固定表头</h1>
+
+    <div class="demo">
+      <ea-table id="fixedHeaderTable" height="200px">
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- 固定列 -->
+    <!-- #region -->
+    <h1>固定列</h1>
+
+    <div class="demo">
+      <ea-table id="fixedColumnTable">
+        <ea-table-column
+          fixed
+          prop="date"
+          label="Date"
+          width="150px"
+          fixed
+        ></ea-table-column>
+        <ea-table-column
+          prop="name"
+          label="Name"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="state"
+          label="State"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="city"
+          label="City"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="address"
+          label="Address"
+          width="600px"
+        ></ea-table-column>
+        <ea-table-column prop="zip" label="Zip" width="120px"></ea-table-column>
+        <ea-table-column prop="action" fixed="right" label="Operations">
+          <ea-button
+            link
+            type="primary"
+            size="small"
+            onclick="getRowData(document.querySelector('#fixedColumnTable'))"
+          >
+            Detail
+          </ea-button>
+          <ea-button
+            link
+            type="primary"
+            size="small"
+            onclick="console.log('click')"
+          >
+            Edit
+          </ea-button>
+        </ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  固定列和表头 -->
+    <!-- #region -->
+    <h1>固定列和表头</h1>
+
+    <div class="demo">
+      <ea-table
+        id="fixedColumnAndHeaderTable"
+        style="width: 100%"
+        height="200px"
+      >
+        <ea-table-column
+          fixed
+          prop="date"
+          label="Date"
+          width="150px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="name"
+          label="Name"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="state"
+          label="State"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="city"
+          label="City"
+          width="320px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="address"
+          label="Address"
+          width="600px"
+        ></ea-table-column>
+        <ea-table-column prop="zip" label="Zip"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  多级表头 -->
+    <!-- #region -->
+    <h1>多级表头</h1>
+
+    <div class="demo">
+      <ea-table id="groupingHeadTable" border style="width: 100%">
+        <ea-table-column
+          prop="date"
+          label="Date"
+          width="150px"
+        ></ea-table-column>
+        <ea-table-column label="Delivery Info">
+          <ea-table-column
+            prop="name"
+            label="Name"
+            width="120px"
+          ></ea-table-column>
+          <ea-table-column label="Address Info">
+            <ea-table-column
+              prop="state"
+              label="State"
+              width="120px"
+            ></ea-table-column>
+            <ea-table-column
+              prop="city"
+              label="City"
+              width="120px"
+            ></ea-table-column>
+            <ea-table-column prop="address" label="Address"></ea-table-column>
+            <ea-table-column
+              prop="zip"
+              label="Zip"
+              width="120px"
+            ></ea-table-column>
+          </ea-table-column>
+        </ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- TODO: 单选 -->
+    <!-- #region -->
+    <h1>单选</h1>
+
+    <div class="demo">
+      <ea-table id="radioTable" border highlight-current-row>
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
+      <div style="margin-top: 20px">
+        <ea-button id="radioTableSelectBtn">Select second row</ea-button>
+        <ea-button id="radioTableClearBtn">Clear selection</ea-button>
+      </div>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- TODO: 多选 -->
+    <!--  多选 -->
+    <!-- #region -->
+    <h1>多选</h1>
+
+    <div class="demo">
+      <!-- <ea-table id="checkboxTable" border height="250">
+        <ea-table-column type="selection" width="100"></ea-table-column>
+        <ea-table-column type="index" width="100">id</ea-table-column>
+        <ea-table-column prop="name" width="100">姓名</ea-table-column>
+        <ea-table-column prop="age" width="100">年龄</ea-table-column>
+        <ea-table-column prop="address">地址</ea-table-column>
+      </ea-table> -->
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- TODO: 排序 -->
+    <!--  排序 -->
+    <!-- #region -->
+    <h1>排序</h1>
+
+    <div class="demo">
+      <ea-table id="sortableTable" border>
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+          sortable
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- TODO: 筛选 -->
+    <!--  筛选 -->
+    <!-- #region -->
+    <h1>筛选</h1>
+
+    <div class="demo"></div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- TODO: 自定义列模板 -->
+    <!--  自定义列模板 -->
+    <!-- #region -->
+    <h1>自定义列模板</h1>
+
+    <div class="demo"></div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- TODO: 自定义表头 -->
+    <!--  自定义表头 -->
+    <!-- #region -->
+    <h1>自定义表头</h1>
+
+    <div class="demo"></div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 7. 自增id序列 --------  -->
+    <!-- #region  -->
+    <h2>7. 自增id序列</h2>
+    <!-- <ea-table id="increaseliyTable" border height="250" highlight-current-row>
+      <ea-table-column type="index" width="100">id</ea-table-column>
+      <ea-table-column prop="name" width="100">姓名</ea-table-column>
+      <ea-table-column prop="age" width="100">年龄</ea-table-column>
+      <ea-table-column prop="address">地址</ea-table-column>
+    </ea-table> -->
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <hr />
+
+    <!-- -------- 10. 自定义插槽 --------  -->
+    <!-- #region  -->
+    <h2>10. 自定义插槽</h2>
+    <!-- <ea-table id="customTable" border height="250">
+      <ea-table-column prop="date" width="100" rowspan="3" sortable
+        >日期</ea-table-column
+      >
+      <ea-table-column label="详细信息" colspan="3">
+        <ea-table-column prop="name" width="100" rowspan="2" sortable
+          >姓名</ea-table-column
+        >
+        <ea-table-column label="个人信息" colspan="2">
+          <ea-table-column prop="age" width="100">年龄</ea-table-column>
+          <ea-table-column prop="address">地址</ea-table-column>
+        </ea-table-column>
+      </ea-table-column>
+
+      <div slot="header">
+        <ea-input id="searchInput" placeholder="搜索名字"></ea-input>
+      </div>
+      <div slot="body">
+        <div style="display: flex; justify-content: space-evenly">
+          <my-edit-button></my-edit-button>
+          <my-delete-button></my-delete-button>
+        </div>
+      </div>
+      <div slot="empty">
+        <ea-empty description="描述文字" image-size="100"></ea-empty>
+      </div>
+    </ea-table> -->
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <script type="module">
+      const data = [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+      ];
+
+      const moreData = [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-08",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-06",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-07",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+      ];
+
+      const detailsData = [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-08",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-06",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-07",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+      ];
+
+      window.getRowData = async table => {
+        /** @type {{target: HTMLTableRowElement, value: any}} */
+        const res = await table.getCurrentRow();
+        console.log(res.value);
+      };
+
+      // ------- 基础表格 -------
+      // #region
+      const basicTable = document.querySelector("#basicTable");
+      basicTable.setData(data);
+      // #endregion
+      // ------- end -------
+
+      // ------- 带斑马纹表格 -------
+      // #region
+      const stripeTable = document.querySelector("#stripeTable");
+      stripeTable.setData(data);
+      // #endregion
+      // ------- end -------
+
+      // ------- 带边框表格 -------
+      // #region
+      const borderTable = document.querySelector("#borderTable");
+      borderTable.setData(data);
+      // #endregion
+      // ------- end -------
+
+      // ------- 带状态表格 -------
+      // #region
+      /**
+       * @typedef {Object} User
+       * @property {string} date
+       * @property {string} name
+       * @property {string} address
+       */
+      const statusTable = document.querySelector("#statusTable");
+      statusTable.setData(data);
+      statusTable.setRowStylePart(
+        /**
+         * @param {object} param0
+         * @param {User} param0.row
+         * @param {number} param0.rowIndex
+         */
+        ({ row, rowIndex }) => {
+          if (rowIndex === 1) {
+            return "warning-row";
+          } else if (rowIndex === 3) {
+            return "success-row";
+          }
+
+          return "";
+        }
+      );
+      // #endregion
+      // ------- end -------
+
+      // ------- 固定表头 -------
+      // #region
+      const fixedHeaderExample = {
+        table: document.querySelector("#fixedHeaderTable"),
+        init() {
+          this.table.setData(moreData);
+        },
+      };
+      fixedHeaderExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 固定列 -------
+      // #region
+      const fixedColumnExample = {
+        table: document.querySelector("#fixedColumnTable"),
+        init() {
+          this.table.setData(detailsData);
+        },
+      };
+      fixedColumnExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 固定列和表头 -------
+      // #region
+      const fixedColumnAndHeaderExample = {
+        table: document.querySelector("#fixedColumnAndHeaderTable"),
+        init() {
+          this.table.setData(detailsData);
+        },
+      };
+      fixedColumnAndHeaderExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 多级表头 -------
+      // #region
+      const groupingHeadTable = document.querySelector("#groupingHeadTable");
+      groupingHeadTable.setData(detailsData);
+      // #endregion
+      // ------- end -------
+
+      // ------- 单选 -------
+      // #region
+      const radioTable = {
+        table: document.querySelector("#radioTable"),
+
+        selectBtn: document.querySelector("#radioTableSelectBtn"),
+        clearBtn: document.querySelector("#radioTableClearBtn"),
+
+        init() {
+          this.table.setData(data);
+
+          this.table.addEventListener("current-change", e => {
+            console.log(e.detail.row);
+          });
+
+          this.selectBtn.addEventListener("click", () => {
+            this.table.setCurrentRow(data[1]);
+          });
+
+          this.clearBtn.addEventListener("click", () => {
+            this.table.setCurrentRow();
+          });
+        },
+      };
+      radioTable.init();
+      // #endregion
+      // ------- end -------
+
+      // TODO: 多选
+      // ------- 多选 -------
+      // #region
+      // const checkboxTable = document.querySelector("#checkboxTable");
+      // checkboxTable.data = data;
+      // checkboxTable.addEventListener("body-selection-change", (e) => {
+      //   console.log(e.detail);
+      // });
+      // #endregion
+      // ------- end -------
+
+      // ------- 排序 -------
+      // #region
+      const sortableTable = {
+        table: document.querySelector("#sortableTable"),
+
+        init() {
+          this.table.setData(data);
+
+          this.table.addEventListener("sort-change", e => {
+            console.log(e.detail);
+          });
+        },
+      };
+      sortableTable.init();
+      // #endregion
+      // ------- end -------
+
+      // TODO: 筛选
+      // ------- 筛选 -------
+      // #region
+
+      // #endregion
+      // ------- end -------
+
+      // ------- 7. 自增id序列 -------
+      // #region
+      // const increaseliyTable = document.querySelector("#increaseliyTable");
+      // increaseliyTable.data = data;
+      // #endregion
+      // ------- end -------
+
+      // ------- 9. 排序 -------
+      // #region
+      // const sortableTable = {
+      //   table: document.querySelector("#sortableTable"),
+
+      //   init() {
+      //     this.table.data = moreData;
+
+      //     this.table.addEventListener("sort-change", (e) => {
+      //       console.log(e.detail);
+      //     });
+      //   },
+      // };
+      // sortableTable.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 10. 自定义插槽 -------
+      // #region
+      // const customTable = {
+      //   table: document.querySelector("#customTable"),
+      //   searchInput: document.querySelector("#searchInput"),
+
+      //   init() {
+      //     this.table.data = moreData;
+
+      //     // 搜索
+      //     this.searchInput.addEventListener("change", () => {
+      //       const res = moreData.filter((item) =>
+      //         item.name.includes(this.searchInput.value)
+      //       );
+      //       this.table.data = res;
+      //     });
+      //   },
+      // };
+      // customTable.init();
+
+      // // 编辑按钮
+      // class MyEditButton extends HTMLElement {
+      //   constructor() {
+      //     super();
+
+      //     const shadowroot = this.attachShadow({ mode: "open" });
+      //     shadowroot.innerHTML = `
+      //               <ea-button type="primary" size="mini">编辑</ea-button>
+      //           `;
+      //     const btn = shadowroot.querySelector("ea-button");
+      //     btn.addEventListener("click", (e) => {
+      //       setTimeout(() => {
+      //         console.log(customTable.table.currentRowDetail);
+      //       }, 0);
+      //     });
+
+      //     shadowroot.appendChild(btn);
+      //   }
+      // }
+      // window.customElements.define("my-edit-button", MyEditButton);
+
+      // // 删除按钮
+      // class MyDeleteButton extends HTMLElement {
+      //   constructor() {
+      //     super();
+
+      //     const shadowroot = this.attachShadow({ mode: "open" });
+      //     shadowroot.innerHTML = `
+      //               <ea-button type="danger" size="mini">删除</ea-button>
+      //           `;
+      //     const btn = shadowroot.querySelector("ea-button");
+      //     btn.addEventListener("click", (e) => {
+      //       setTimeout(() => {
+      //         console.log(customTable.table.currentRowDetail);
+      //       }, 0);
+      //     });
+      //   }
+      // }
+      // window.customElements.define("my-delete-button", MyDeleteButton);
+      // #endregion
+      // ------- end -------
+    </script>
+  </body>
+</html>

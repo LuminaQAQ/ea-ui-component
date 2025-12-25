@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+  </head>
+
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-breadcrumb/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-icon/index.js"></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <ea-breadcrumb separator="/">
+        <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
+        <ea-breadcrumb-item href="javascript:;">
+          promotion management
+        </ea-breadcrumb-item>
+        <ea-breadcrumb-item>promotion list</ea-breadcrumb-item>
+        <ea-breadcrumb-item>promotion detail</ea-breadcrumb-item>
+      </ea-breadcrumb>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 2. 图标分隔符 --------  -->
+    <!-- #region  -->
+    <h2>图标分隔符</h2>
+    <ea-breadcrumb>
+      <ea-icon icon="icon-angle-right" slot="separator"></ea-icon>
+
+      <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
+      <ea-breadcrumb-item href="javascript:;">
+        <span slot="separator">→</span>
+        promotion management
+      </ea-breadcrumb-item>
+      <ea-breadcrumb-item>promotion list</ea-breadcrumb-item>
+      <ea-breadcrumb-item>promotion detail</ea-breadcrumb-item>
+    </ea-breadcrumb>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+  </body>
+</html>

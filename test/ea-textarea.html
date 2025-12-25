@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+
+    <style>
+        hr {
+            margin: 3rem 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type='module'>
+        import '../components/ea-textarea/index.js'
+    </script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="row left">
+        <ea-textarea type="textarea" rows="2" placeholder="这不是空的"></ea-textarea>
+        <ea-textarea type="textarea" rows="2" placeholder="这不是空的" disabled></ea-textarea>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 可自适应文本高度的文本域 --------  -->
+    <!-- #region  -->
+    <h2>可自适应文本高度的文本域</h2>
+    <div class="col left">
+        <ea-textarea type="textarea" placeholder="这不是空的" autosize></ea-textarea>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 设置高度的最值 --------  -->
+    <!-- #region  -->
+    <h2>设置高度的最值</h2>
+    <div class="col left">
+        <ea-textarea type="textarea" placeholder="这不是空的" min-rows="2" max-rows="10"></ea-textarea>
+        <ea-textarea type="textarea" placeholder="这不是空的" min-rows="5" max-rows="20"></ea-textarea>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 输入长度限制 --------  -->
+    <!-- #region  -->
+    <h2>输入长度限制</h2>
+    <div class="col left">
+        <ea-textarea type="textarea" placeholder="这不是空的" min-length="2" max-length="10"></ea-textarea>
+        <ea-textarea type="textarea" placeholder="这不是空的" min-length="5" max-length="20"></ea-textarea>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 展示字数统计 --------  -->
+    <!-- #region  -->
+    <h2>展示字数统计</h2>
+    <div class="col left">
+        <ea-textarea type="textarea" placeholder="这不是空的" min-length="2" max-length="10" show-word-limit></ea-textarea>
+        <ea-textarea type="textarea" placeholder="这不是空的" min-length="5" max-length="20" show-word-limit></ea-textarea>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+</body>
+
+</html>

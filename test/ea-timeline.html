@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+
+      ea-timeline::part(container) {
+        min-height: 15rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-timeline/index.js"></script>
+    <script type="module" src="../src/components/ea-card/index.js"></script>
+    <script type="module" src="../src/components/ea-radio/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+
+    <!-- -------- 基础用法 --------  -->
+    <!-- #region  -->
+    <h2>基础用法</h2>
+    <div class="demo">
+      <ea-timeline>
+        <ea-timeline-item timestamp="2024-7-1">
+          Open the refrigerator
+        </ea-timeline-item>
+        <ea-timeline-item timestamp="2024-7-2">
+          Put the elephant inside
+        </ea-timeline-item>
+        <ea-timeline-item timestamp="2024-7-3">
+          Close the refrigerator
+        </ea-timeline-item>
+      </ea-timeline>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 定义节点样式 --------  -->
+    <!-- #region  -->
+    <h2>定义节点样式</h2>
+    <div class="demo">
+      <ea-timeline>
+        <ea-timeline-item
+          type="primary"
+          size="large"
+          timestamp="2024-7-1"
+          icon="icon-coffee"
+        >
+          Custom icon
+        </ea-timeline-item>
+        <ea-timeline-item type="primary" color="#0bbd87" timestamp="2024-7-2">
+          Custom color
+        </ea-timeline-item>
+        <ea-timeline-item timestamp="2024-7-3"> Custom size </ea-timeline-item>
+        <ea-timeline-item type="primary" timestamp="2024-7-4" hollow>
+          Custom hollow
+        </ea-timeline-item>
+        <ea-timeline-item timestamp="2024-7-5"> Default node </ea-timeline-item>
+      </ea-timeline>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- ⾃定义时间戳 --------  -->
+    <!-- #region  -->
+    <h2>⾃定义时间戳</h2>
+    <style>
+      .header {
+        font-weight: 800;
+        font-size: 18px;
+      }
+    </style>
+    <div class="demo">
+      <ea-timeline>
+        <ea-timeline-item type="success" placement="top">
+          <ea-card>
+            <header class="header">打开冰箱</header>
+            <p>Open the refrigerator</p>
+          </ea-card>
+          <div slot="timestamp">2025-10-21</div>
+        </ea-timeline-item>
+        <ea-timeline-item type="primary" placement="top">
+          <ea-card>
+            <header class="header">把大象放进去</header>
+            <p>Put the elephant inside</p>
+          </ea-card>
+          <div slot="timestamp">2025-10-22</div>
+        </ea-timeline-item>
+        <ea-timeline-item type="warning" placement="top">
+          <ea-card>
+            <header class="header">关上冰箱</header>
+            <p>Close the refrigerator</p>
+          </ea-card>
+          <div slot="timestamp">2025-10-23</div>
+        </ea-timeline-item>
+        <ea-timeline-item type="danger" placement="top">
+          <ea-card>
+            <header class="header">
+              由于违反动物保护法，该组件库将被无限期停更
+            </header>
+            <p>
+              Due to violation of the Animal Protection Law, this component
+              library will be suspended indefinitely
+            </p>
+          </ea-card>
+          <div slot="timestamp">2025-10-24</div>
+        </ea-timeline-item>
+        <ea-timeline-item color="black" placement="top">
+          <ea-card>
+            <header class="header">该组件库已无法访问</header>
+            <p>This component library is no longer accessible</p>
+          </ea-card>
+          <div slot="timestamp">2025-10-24</div>
+        </ea-timeline-item>
+      </ea-timeline>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!--  ⾃定义时间戳 -->
+    <!-- #region -->
+    <h1>⾃定义时间戳</h1>
+
+    <div class="demo">
+      <ea-timeline style="max-width: 600px">
+        <ea-timeline-item timestamp="2024/6/1" placement="top">
+          <ea-card>
+            <h4>Update Github template</h4>
+            <p>LuminaQAQ committed on 2024/6/1 04:38</p>
+          </ea-card>
+        </ea-timeline-item>
+        <ea-timeline-item timestamp="2024/5/21" placement="top">
+          <ea-card>
+            <h4>Update Github template</h4>
+            <p>LuminaQAQ committed on 2024/5/21 04:38</p>
+          </ea-card>
+        </ea-timeline-item>
+        <ea-timeline-item timestamp="2024/5/20" placement="top">
+          <ea-card>
+            <h4>Update Github template</h4>
+            <p>LuminaQAQ committed on 2024/5/20 04:38</p>
+          </ea-card>
+        </ea-timeline-item>
+      </ea-timeline>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  垂直居中 -->
+    <!-- #region -->
+    <h1>垂直居中</h1>
+
+    <div class="demo">
+      <ea-timeline style="max-width: 600px">
+        <ea-timeline-item center timestamp="2024/6/1" placement="top">
+          <ea-card>
+            <h4>Update Github template</h4>
+            <p>LuminaQAQ committed on 2024/6/1 04:38</p>
+          </ea-card>
+        </ea-timeline-item>
+        <ea-timeline-item timestamp="2024/5/21" placement="top">
+          <ea-card>
+            <h4>Update Github template</h4>
+            <p>LuminaQAQ committed on 2024/5/21 04:38</p>
+          </ea-card>
+        </ea-timeline-item>
+        <ea-timeline-item center timestamp="2024/5/20" placement="top">
+          <p>Update Github template</p>
+        </ea-timeline-item>
+        <ea-timeline-item timestamp="2024/5/20" placement="top">
+          <p>Update Github template</p>
+        </ea-timeline-item>
+      </ea-timeline>
+    </div>
+
+    
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+  </body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../dist//assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+
+      ea-carousel-item {
+        background-color: #d3dce6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-carousel/index.js"></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <!-- Hover 指示器触发 -->
+      <div class="title">默认 Hover 指示器触发</div>
+      <ea-carousel height="150px">
+        <ea-carousel-item> 1 </ea-carousel-item>
+        <ea-carousel-item> 2 </ea-carousel-item>
+        <ea-carousel-item> 3 </ea-carousel-item>
+        <ea-carousel-item> 4 </ea-carousel-item>
+        <ea-carousel-item> 5 </ea-carousel-item>
+      </ea-carousel>
+
+      <!-- Click 指示器触发 -->
+      <div class="title">Click 指示器触发</div>
+      <ea-carousel trigger="click" height="150px">
+        <ea-carousel-item> 1 </ea-carousel-item>
+        <ea-carousel-item> 2 </ea-carousel-item>
+        <ea-carousel-item> 3 </ea-carousel-item>
+        <ea-carousel-item> 4 </ea-carousel-item>
+        <ea-carousel-item> 5 </ea-carousel-item>
+      </ea-carousel>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  指示器 -->
+    <!-- #region -->
+    <h1>指示器</h1>
+
+    <div class="demo">
+      <ea-carousel height="150px" indicator-position="outside">
+        <ea-carousel-item> 1 </ea-carousel-item>
+        <ea-carousel-item> 2 </ea-carousel-item>
+        <ea-carousel-item> 3 </ea-carousel-item>
+        <ea-carousel-item> 4 </ea-carousel-item>
+        <ea-carousel-item> 5 </ea-carousel-item>
+      </ea-carousel>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 切换箭头 --------  -->
+    <!-- #region  -->
+    <h2>切换箭头</h2>
+    <div class="demo">
+      <div class="title"><b>arrow</b> 属性值为 <b>always</b></div>
+      <ea-carousel arrow="always" height="150px">
+        <ea-carousel-item> 1 </ea-carousel-item>
+        <ea-carousel-item> 2 </ea-carousel-item>
+        <ea-carousel-item> 3 </ea-carousel-item>
+        <ea-carousel-item> 4 </ea-carousel-item>
+        <ea-carousel-item> 5 </ea-carousel-item>
+      </ea-carousel>
+
+      <div class="title"><b>arrow</b> 属性值为 <b>never</b></div>
+      <ea-carousel arrow="never" height="150px">
+        <ea-carousel-item> 1 </ea-carousel-item>
+        <ea-carousel-item> 2 </ea-carousel-item>
+        <ea-carousel-item> 3 </ea-carousel-item>
+        <ea-carousel-item> 4 </ea-carousel-item>
+        <ea-carousel-item> 5 </ea-carousel-item>
+      </ea-carousel>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 切换间隔 --------  -->
+    <!-- #region  -->
+    <h2>切换间隔</h2>
+    <div class="demo">
+      <ea-carousel interval="5000" height="150px">
+        <ea-carousel-item> 1 </ea-carousel-item>
+        <ea-carousel-item> 2 </ea-carousel-item>
+        <ea-carousel-item> 3 </ea-carousel-item>
+        <ea-carousel-item> 4 </ea-carousel-item>
+        <ea-carousel-item> 5 </ea-carousel-item>
+      </ea-carousel>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 方向 --------  -->
+    <!-- #region  -->
+    <h2>方向</h2>
+    <ea-carousel direction="vertical" height="150px">
+      <ea-carousel-item> 1 </ea-carousel-item>
+      <ea-carousel-item> 2 </ea-carousel-item>
+      <ea-carousel-item> 3 </ea-carousel-item>
+      <ea-carousel-item> 4 </ea-carousel-item>
+      <ea-carousel-item> 5 </ea-carousel-item>
+    </ea-carousel>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+  </body>
+</html>

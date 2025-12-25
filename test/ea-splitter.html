@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rea="stylesheet" href="/dist/assets/icon.css" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+
+            height: 100%;
+            width: 100%;
+        }
+
+        hr {
+            margin: 3rem 0;
+        }
+
+        .demo-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 100%;
+
+            font-size: 1.5rem;
+
+            overflow: hidden;
+        }
+
+        .section {
+            height: 300px;
+            box-shadow: #ccc 0px 0px 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="module" src="/src/components/ea-splitter/index.js"></script>
+
+    <!-- #region 垂直布局 -->
+    <h1>基础用法</h1>
+    <div class="demo">
+        <div class="section">
+            <ea-splitter class="section">
+                <ea-splitter-panel min="30%">
+                    <div class="demo-panel">1</div>
+                </ea-splitter-panel>
+                <ea-splitter-panel size="20%" min="20%">
+                    <div class="demo-panel">2</div>
+                </ea-splitter-panel>
+                <ea-splitter-panel size="10%">
+                    <div class="demo-panel">3</div>
+                </ea-splitter-panel>
+            </ea-splitter>
+        </div>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+
+    <!-- #region 垂直布局 -->
+    <h1>垂直布局</h1>
+    <div class="demo">
+        <div class="section">
+            <ea-splitter layout="vertical">
+                <ea-splitter-panel min="30%">
+                    <div class="demo-panel">1</div>
+                </ea-splitter-panel>
+                <ea-splitter-panel size="20%" min="20%">
+                    <div class="demo-panel">2</div>
+                </ea-splitter-panel>
+                <ea-splitter-panel size="10%">
+                    <div class="demo-panel">3</div>
+                </ea-splitter-panel>
+            </ea-splitter>
+        </div>
+    </div>
+    <hr>
+    <!-- #endregion  -->
+
+    <script>
+        const eaSplitter = document.querySelector('ea-splitter');
+        eaSplitter.addEventListener('panel-resize-start', (e) => {
+            console.log('panel-resize-start', e.detail.size);
+        });
+        eaSplitter.addEventListener('panel-resize', (e) => {
+            console.log('panel-resize', e.detail.size);
+        });
+        eaSplitter.addEventListener('panel-resize-end', (e) => {
+            console.log('panel-resize-end', e.detail.size);
+        });
+    </script>
+
+</html>
