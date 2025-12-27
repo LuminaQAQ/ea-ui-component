@@ -12,6 +12,10 @@ $name: ea-breadcrumb-item;
   --#{$name}-transition: var(--transition-normal);
 }
 
+:host([href]) {
+  cursor: pointer;
+}
+
 ::slotted(ea-icon) {
   margin: 0 -8px;
 }

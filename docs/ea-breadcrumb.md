@@ -2,10 +2,8 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('./index.scss')
-
-    import('../components/ea-breadcrumb/index.js')
-    import('../components/ea-link/index.js')
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
 })
 </script>
 
@@ -40,45 +38,35 @@ onMounted(() => {
 
 ## 基础用法
 
-适用广泛的基础用法。
-
-> 在 `ea-breadcrumb` 中使用 `ea-breadcrumb-item` 标签表示从首页开始的每一级。`ea-breadcrumb` 提供了一个 separator 属性，在 `ea-breadcrumb` 标签中设置它来决定分隔符，它只能是字符串，默认为斜杠 `/`。
+在 `ea-breadcrumb` 中使用 `ea-breadcrumb-item` 标签表示从首页开始的每一级。`ea-breadcrumb` 提供了一个 separator 属性，在 `ea-breadcrumb` 标签中设置它来决定分隔符，它只能是字符串，默认为斜杠 `/`。
 
 <!-- -------- 1. 基础用法 --------  -->
 <!-- #region  -->
 <div class="demo">
-    <ea-breadcrumb separator="/" separator-color="#c0c4cc">
-        <ea-breadcrumb-item>
-          <ea-link href="javascript:;" type="primary" underline>首页</ea-link>
-        </ea-breadcrumb-item>
-        <ea-breadcrumb-item>
-          <ea-link href="javascript:;" type="primary" underline>一级</ea-link>
-        </ea-breadcrumb-item>
-        <ea-breadcrumb-item>二级</ea-breadcrumb-item>
-        <ea-breadcrumb-item>三级</ea-breadcrumb-item>
-    </ea-breadcrumb>
+  <ea-breadcrumb separator="/">
+    <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
+    <ea-breadcrumb-item href="javascript:;">
+      promotion management
+    </ea-breadcrumb-item>
+    <ea-breadcrumb-item>promotion list</ea-breadcrumb-item>
+    <ea-breadcrumb-item>promotion detail</ea-breadcrumb-item>
+  </ea-breadcrumb>
 </div>
 <!-- #endregion  -->
 <!-- -------------------  -->
 
-::: details 查看代码
-
 ```html
 <div class="demo">
-  <ea-breadcrumb separator="/" separator-color="#c0c4cc">
-    <ea-breadcrumb-item>
-      <ea-link href="javascript:;" type="primary" underline>首页</ea-link>
+  <ea-breadcrumb separator="/">
+    <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
+    <ea-breadcrumb-item href="javascript:;">
+      promotion management
     </ea-breadcrumb-item>
-    <ea-breadcrumb-item>
-      <ea-link href="javascript:;" type="primary" underline>一级</ea-link>
-    </ea-breadcrumb-item>
-    <ea-breadcrumb-item>二级</ea-breadcrumb-item>
-    <ea-breadcrumb-item>三级</ea-breadcrumb-item>
+    <ea-breadcrumb-item>promotion list</ea-breadcrumb-item>
+    <ea-breadcrumb-item>promotion detail</ea-breadcrumb-item>
   </ea-breadcrumb>
 </div>
 ```
-
-:::
 
 ## 图标分隔符
 
@@ -87,44 +75,51 @@ onMounted(() => {
 <!-- -------- 2. 图标分隔符 --------  -->
 <!-- #region  -->
 <div class="demo">
-    <ea-breadcrumb separator-class="icon-angle-right" separator-color="#c0c4cc">
-        <ea-breadcrumb-item>
-          <ea-link href="javascript:;" type="primary" underline>一级</ea-link>
-        </ea-breadcrumb-item>
-        <ea-breadcrumb-item>一级</ea-breadcrumb-item>
-        <ea-breadcrumb-item>二级</ea-breadcrumb-item>
-        <ea-breadcrumb-item>三级</ea-breadcrumb-item>
-    </ea-breadcrumb>
+  <ea-breadcrumb>
+    <ea-icon icon="icon-angle-right" slot="separator"></ea-icon>
+    <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
+    <ea-breadcrumb-item href="javascript:;">
+      <span slot="separator">→</span>
+      promotion management
+    </ea-breadcrumb-item>
+    <ea-breadcrumb-item>promotion list</ea-breadcrumb-item>
+    <ea-breadcrumb-item>promotion detail</ea-breadcrumb-item>
+  </ea-breadcrumb>
 </div>
 <!-- #endregion  -->
 <!-- -------------------  -->
 
-::: details 查看代码
-
 ```html
 <div class="demo">
-  <ea-breadcrumb separator-class="icon-angle-right" separator-color="#c0c4cc">
-    <ea-breadcrumb-item>
-      <a href="javascript:;">首页</a>
+  <ea-breadcrumb>
+    <ea-icon icon="icon-angle-right" slot="separator"></ea-icon>
+    <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
+    <ea-breadcrumb-item href="javascript:;">
+      <span slot="separator">→</span>
+      promotion management
     </ea-breadcrumb-item>
-    <ea-breadcrumb-item>一级</ea-breadcrumb-item>
-    <ea-breadcrumb-item>二级</ea-breadcrumb-item>
-    <ea-breadcrumb-item>三级</ea-breadcrumb-item>
+    <ea-breadcrumb-item>promotion list</ea-breadcrumb-item>
+    <ea-breadcrumb-item>promotion detail</ea-breadcrumb-item>
   </ea-breadcrumb>
 </div>
 ```
 
-:::
+## Breadcrumb API
 
-## Breadcrumb Attributes
+### Breadcrumb Attributes
 
-| 参数            | 说明         | 类型   | 可选值 | 默认值    |
-| --------------- | ------------ | ------ | ------ | --------- |
-| separator       | 分隔符       | string | -      | `/`       |
-| separator-class | 分隔符的类名 | string | -      | -         |
-| separator-color | 分隔符颜色   | string | -      | `#c0c4cc` |
+| 参数      | 说明   | 类型   | 可选值 | 默认值 |
+| --------- | ------ | ------ | ------ | ------ |
+| separator | 分隔符 | string | -      | `/`    |
 
-## Breadcrumb CSS Part
+### Breadcrumb Slots
+
+| 名称      | 说明     |
+| --------- | -------- |
+| -         | 默认插槽 |
+| separator | 分隔符   |
+
+### Breadcrumb CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -132,8 +127,26 @@ onMounted(() => {
 | --------- | ---- |
 | container | 容器 |
 
-## BreadcrumbItem CSS Part
+## BreadcrumbItem API
 
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+### BreadcrumbItem Attributes
+
+| 参数 | 说明 | 类型   | 可选值 | 默认值 |
+| ---- | ---- | ------ | ------ | ------ |
+| href | 链接 | string | -      | -      |
+
+### Breadcrumb Slots
+
+| 名称      | 说明     |
+| --------- | -------- |
+| -         | 默认插槽 |
+| separator | 分隔符   |
+
+### Breadcrumb CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称      | 说明   |
+| --------- | ------ |
+| container | 容器   |
+| separator | 分隔符 |

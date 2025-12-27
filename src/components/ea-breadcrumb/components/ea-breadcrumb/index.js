@@ -18,7 +18,7 @@ export class EaBreadcrumb extends Base {
     separator: {
       type: String,
       default: "/",
-      observer: (newVal) => {},
+      observer: () => {},
     },
   });
 
