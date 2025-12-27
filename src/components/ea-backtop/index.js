@@ -1,7 +1,6 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
-import EaUtils from "@/utils/Utils";
 
 export class EaBacktop extends Base {
   /** @type {HTMLElement} */
@@ -22,39 +21,35 @@ export class EaBacktop extends Base {
     ];
   }
 
-  #states = {
-    isLeave: false,
-  };
-
   state = this.properties({
     target: {
       type: String,
       default: "window",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "visibility-height": {
       type: Number,
       default: 200,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     right: {
       type: String,
       default: "40px",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-backtop-right", newVal);
       },
     },
     bottom: {
       type: String,
       default: "40px",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-backtop-bottom", newVal);
       },
     },
     smooth: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {},
+      observer: () => {},
     },
   });
 
@@ -63,8 +58,8 @@ export class EaBacktop extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const scrollTop =
-      document.querySelector(this.target)?.scrollTop || window.scrollY;
+    const scrollTop = this.#getCurrentScrollTop();
+
     const className = this.computedClasslist(
       "ea-backtop",
       {
@@ -88,17 +83,32 @@ export class EaBacktop extends Base {
     this.$render();
   }
 
+  /**
+   * 获取当前滚动位置
+   * @return {number} 滚动位置
+   */
+  #getCurrentScrollTop = () => {
+    const el = document.querySelector(this.target);
+    return el ? el.scrollTop : window.scrollY;
+  };
+
+  /**
+   * 点击事件处理
+   */
   #onClick = () => {
     const el = document.querySelector(this.target) || window;
+
     el.scrollTo({
       top: 0,
       behavior: this.smooth ? "smooth" : "auto",
     });
   };
 
+  /**
+   * 滚动事件处理
+   */
   #onScroll = async () => {
-    const scrollTop =
-      document.querySelector(this.target)?.scrollTop || window.scrollY;
+    const scrollTop = this.#getCurrentScrollTop();
 
     if (scrollTop > this["visibility-height"]) {
       this.#container.classList.add("before-enter");
@@ -122,9 +132,6 @@ export class EaBacktop extends Base {
   };
 
   $render() {
-    this.#abortController?.abort();
-    this.#abortController = new AbortController();
-
     this.shadowRoot.innerHTML = `
       <div class='ea-backtop' part='container'>
         <slot></slot>
@@ -132,6 +139,13 @@ export class EaBacktop extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-backtop");
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
     this.addEventListener("click", this.#onClick, {
       signal: this.#abortController.signal,
@@ -141,10 +155,6 @@ export class EaBacktop extends Base {
     el.addEventListener("scroll", this.#onScroll, {
       signal: this.#abortController.signal,
     });
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
   }
 
   $beforeUnmounted() {
