@@ -3,8 +3,6 @@ import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
 
 export class EaSubMenu extends Base {
-  /** @type {HTMLElement | null} */
-  #hostMenu;
 
   /** @type {HTMLElement} */
   #container;
@@ -17,9 +15,11 @@ export class EaSubMenu extends Base {
   #abortController = new AbortController();
   /** @type {AbortController} */
   #dropdownAbortController = new AbortController();
+  /** @type {AbortController} */
+  #modeAbortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "active", "index", "disabled"];
+    return [...super.observedAttributes, "active", "index", "disabled", "mode"];
   }
 
   state = this.properties({
@@ -27,26 +27,35 @@ export class EaSubMenu extends Base {
       props: true,
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     index: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     active: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    mode: {
+      type: ["horizontal", "vertical"],
+      default: "vertical",
+      observer: newVal => {
+        this.#handleModeChange(newVal);
+
         this.updateContainerClasslist();
       },
     },
@@ -57,12 +66,10 @@ export class EaSubMenu extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const mode = this.#hostMenu?.mode || "vertical";
-
     const className = this.computedClasslist(
       "ea-sub-menu",
       {
-        ["--" + mode]: mode,
+        ["--" + this.mode]: this.mode,
       },
       {
         disabled: this.disabled,
@@ -85,8 +92,7 @@ export class EaSubMenu extends Base {
   }
 
   $render() {
-    const isChild = this.parentElement.closest("ea-sub-menu");
-    const hostMenu = this.closest("ea-menu");
+    const isChild = this.parentElement?.closest("ea-sub-menu");
 
     this.shadowRoot.innerHTML = `
       <div class='ea-sub-menu' part='container'>
@@ -102,7 +108,6 @@ export class EaSubMenu extends Base {
       </div>
     `;
 
-    this.#hostMenu = hostMenu;
     this.#container = this.shadowRoot.querySelector(".ea-sub-menu");
     this.#titleEl = this.shadowRoot.querySelector(".ea-sub-menu__title");
     this.#contentEl = this.shadowRoot.querySelector(".ea-sub-menu__content");
@@ -114,7 +119,7 @@ export class EaSubMenu extends Base {
    * 菜单项点击事件
    * @param {MouseEvent} e
    */
-  #onMenuItemClick = (e) => {
+  #onMenuItemClick = e => {
     e.stopImmediatePropagation();
     e.preventDefault();
 
@@ -141,13 +146,13 @@ export class EaSubMenu extends Base {
    * 鼠标悬停事件
    * @param {MouseEvent} e
    */
-  #onHoverEvent = (e) => {
+  #onHoverEvent = () => {
     this.#dropdownAbortController?.abort();
     this.#dropdownAbortController = new AbortController();
 
     this.open = true;
 
-    const onLeaveEvent = (e) => {
+    const onLeaveEvent = () => {
       this.open = false;
       this.#dropdownAbortController?.abort();
     };
@@ -157,58 +162,70 @@ export class EaSubMenu extends Base {
     });
   };
 
+  /**
+   * 垂直菜单折叠事件
+   */
+  #onVerticalCollapseEvent = () => {
+    this.open = !this.open;
+
+    if (!this.open) {
+      this.#contentEl.style.setProperty("--ea-sub-menu-transition", "none");
+      void this.#contentEl.offsetHeight;
+      this.#contentEl.style.height = `${this.#contentEl.scrollHeight}px`;
+      void this.#contentEl.offsetHeight;
+      this.#contentEl.style.removeProperty("--ea-sub-menu-transition");
+    }
+
+    this.#contentEl.style.height = `${
+      this.open ? this.#contentEl.scrollHeight : 0
+    }px`;
+
+    this.#contentEl.addEventListener(
+      "transitionend",
+      () => {
+        this.#contentEl.style.height = this.open ? "100%" : 0;
+      },
+      { once: true }
+    );
+  };
+
+  /**
+   * 菜单模式切换
+   * @param {string} [mode]
+   */
+  #handleModeChange = (mode = this.mode) => {
+    this.#modeAbortController?.abort();
+    this.#modeAbortController = new AbortController();
+
+    if (mode === "vertical") {
+      this.#titleEl.addEventListener("click", this.#onVerticalCollapseEvent, {
+        signal: this.#modeAbortController.signal,
+      });
+    } else {
+      this.addEventListener("mouseenter", this.#onHoverEvent, {
+        signal: this.#modeAbortController.signal,
+      });
+    }
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
-    const mode = this.#hostMenu?.mode || "vertical";
-    const collapse = this.#hostMenu?.collapse || false;
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
     this.addEventListener("click", this.#onMenuItemClick, {
       signal: this.#abortController.signal,
     });
 
-    if (mode === "vertical" && !collapse) {
-      this.#titleEl.addEventListener(
-        "click",
-        (e) => {
-          this.open = !this.open;
-
-          if (!this.open) {
-            this.#contentEl.style.setProperty(
-              "--ea-sub-menu-transition",
-              "none"
-            );
-            void this.#contentEl.offsetHeight;
-            this.#contentEl.style.height = `${this.#contentEl.scrollHeight}px`;
-            void this.#contentEl.offsetHeight;
-            this.#contentEl.style.removeProperty("--ea-sub-menu-transition");
-          }
-
-          this.#contentEl.style.height = `${
-            this.open ? this.#contentEl.scrollHeight : 0
-          }px`;
-
-          this.#contentEl.addEventListener(
-            "transitionend",
-            () => {
-              this.#contentEl.style.height = this.open ? "100%" : 0;
-            },
-            { once: true }
-          );
-        },
-        {
-          signal: this.#abortController.signal,
-        }
-      );
-    } else {
-      this.addEventListener("mouseenter", this.#onHoverEvent, {
-        signal: this.#abortController.signal,
-      });
-    }
+    this.#handleModeChange();
+    this.updateContainerClasslist();
   }
 
   $beforeUnmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
+    this.#dropdownAbortController?.abort();
+    this.#modeAbortController?.abort();
   }
 }
 

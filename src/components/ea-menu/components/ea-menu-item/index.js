@@ -5,8 +5,6 @@ import stylesheet from "./index.scss?inline";
 export class EaMenuItem extends Base {
   /** @type {HTMLElement} */
   #container;
-  /** @type {AbortController} */
-  #abortController = new AbortController();
 
   static get observedAttributes() {
     return [...super.observedAttributes, "index", "disabled", "active"];
@@ -16,21 +14,19 @@ export class EaMenuItem extends Base {
     index: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
-        // this.#container.classList.toggle("is-disabled", newVal);
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     active: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
-        // this.#container.classList.toggle("is-active", newVal);
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -43,9 +39,7 @@ export class EaMenuItem extends Base {
   updateContainerClasslist() {
     const className = this.computedClasslist(
       "ea-menu-item",
-      {
-        // ['--' + this.type]: this.type,
-      },
+      {},
       {
         disabled: this.disabled,
         active: this.active,
@@ -77,10 +71,6 @@ export class EaMenuItem extends Base {
 
   connectedCallback() {
     super.connectedCallback();
-  }
-
-  $beforeUnmounted() {
-    this.#abortController.abort();
   }
 }
 

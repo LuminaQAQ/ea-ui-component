@@ -5,6 +5,8 @@ import stylesheet from "./index.scss?inline";
 export class EaMenuItemGroup extends Base {
   /** @type {HTMLElement} */
   #container;
+  /** @type {HTMLSlotElement} */
+  #titleSlot;
   /** @type {AbortController} */
   #abortController = new AbortController();
 
@@ -16,23 +18,11 @@ export class EaMenuItemGroup extends Base {
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: newVal => {
+        this.#titleSlot.textContent = newVal;
+      },
     },
   });
-
-  /**
-   * 获取 classlist 列表
-   * @return {string} 属性值
-   */
-  updateContainerClasslist() {
-    const className = this.computedClasslist("ea-menu-item-group", {
-      // ['--' + this.type]: this.type,
-    });
-
-    this.#container.className = className;
-
-    return className;
-  }
 
   constructor() {
     super();
@@ -55,6 +45,7 @@ export class EaMenuItemGroup extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-menu-item-group");
+    this.#titleSlot = this.shadowRoot.querySelector("slot[name='title']");
   }
 
   connectedCallback() {

@@ -24,28 +24,30 @@ export class EaMenu extends Base {
     mode: {
       type: ["horizontal", "vertical"],
       default: "vertical",
-      observer: (newVal) => {
+      observer: newVal => {
+        this.#updateChildrenMode(newVal);
+
         this.updateContainerClasslist();
       },
     },
     "background-color": {
       type: String,
       default: "#ffffff",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.style.setProperty("--ea-menu-bg-color", newVal);
       },
     },
     "text-color": {
       type: String,
       default: "#303133",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.style.setProperty("--ea-menu-text-color", newVal);
       },
     },
     "active-text-color": {
       type: String,
       default: "#409eff",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.style.setProperty(
           "--ea-menu-active-text-color",
           newVal
@@ -55,13 +57,13 @@ export class EaMenu extends Base {
     "default-active": {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     // TODO: 没写😋
     collapse: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         // console.log(newVal);
         // this.#container.classList.toggle("is-collapse", newVal);
       },
@@ -77,7 +79,6 @@ export class EaMenu extends Base {
     const className = this.computedClasslist(
       "ea-menu",
       {
-        // ['--' + this.type]: this.type,
         ["--" + this.mode]: this.mode,
       },
       {}
@@ -109,10 +110,20 @@ export class EaMenu extends Base {
   }
 
   /**
+   * 更新子菜单模式
+   * @param {string} mode
+   */
+  #updateChildrenMode = mode => {
+    this.querySelectorAll("ea-sub-menu").forEach(subMenu => {
+      subMenu.setAttribute("mode", mode);
+    });
+  };
+
+  /**
    * 处理菜单项点击事件
    * @param {MouseEvent} e
    */
-  #onMenuItemClick = (e) => {
+  #onMenuItemClick = e => {
     /** @type {HTMLElement[]} */
     const items = [...this.querySelectorAll("ea-menu-item")];
     /** @type {HTMLElement[]} */
@@ -123,14 +134,26 @@ export class EaMenu extends Base {
     const subMenu = e.target.closest("ea-sub-menu");
 
     if (subMenu || target) {
-      const cb = (item) => item.removeAttribute("active");
+      const cb = item => item.removeAttribute("active");
       items.forEach(cb);
       subMenus.forEach(cb);
     }
 
-    if (target) target.setAttribute("active", "true");
+    if (target) {
+      target.toggleAttribute("active", true);
+
+      this.emit("select", {
+        detail: {
+          index: target.index || target.getAttribute("index"),
+          target,
+        },
+      });
+    }
   };
 
+  /**
+   * 初始化默认激活项
+   */
   #initDefaultActiveItem = () => {
     /** @type {HTMLElement | null} */
     const defaultActiveItem = this.querySelector(
