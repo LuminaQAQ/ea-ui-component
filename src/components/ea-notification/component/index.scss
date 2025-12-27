@@ -31,7 +31,7 @@ $types: (
 
   --ea-notification-gap: var(--spacing-md);
 
-  --ea-notification-z-index: 0;
+  --ea-notification-z-index: 2000;
 }
 
 :host {
@@ -61,7 +61,8 @@ $types: (
   max-width: calc(100% - 32px);
   overflow: hidden;
 
-  transition: filter var(--ea-notification-transition),
+  transition:
+    filter var(--ea-notification-transition),
     transform var(--ea-notification-transition),
     top var(--ea-notification-transition),
     bottom var(--ea-notification-transition);

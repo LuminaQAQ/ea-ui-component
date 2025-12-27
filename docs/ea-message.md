@@ -583,8 +583,6 @@ placementExample.init();
 
 ## Events
 
-> Message 是基于 Overlay 组件实现的，具体事件可参考 [Overlay](./ea-overlay.md#events) 组件
-
 | 事件名称 | 说明             |
 | -------- | ---------------- |
 | show     | 显示时触发。     |
