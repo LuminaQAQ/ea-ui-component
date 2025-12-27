@@ -336,7 +336,7 @@ basicExample.init();
 
 :::
 
-## Overlay API
+## Overlay Attributes API
 
 ### Main API
 

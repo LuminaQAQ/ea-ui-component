@@ -16,14 +16,14 @@ export class EaDropdownItem extends Base {
     divided: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.setAttr("aria-disabled", newVal);
         this.updateContainerClasslist();
       },
@@ -31,7 +31,7 @@ export class EaDropdownItem extends Base {
     command: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
   });
 
@@ -77,33 +77,51 @@ export class EaDropdownItem extends Base {
     this.updateContainerClasslist();
   }
 
+  /**
+   * 点击事件
+   * @param {Event} e
+   */
+  #onClickEvent = e => {
+    if (this.hasAttribute("disabled")) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      return;
+    }
+
+    /**
+     * 派发点击事件
+     */
+    const emitClickEvent = () => {
+      this.emit("ea-dropdown-item-click", {
+        bubbles: true,
+      });
+    };
+
+    /**
+     * 派发 command 事件
+     */
+    const emitCommandEvent = () => {
+      this.emit("command", {
+        detail: {
+          command: this.command,
+        },
+        bubbles: true,
+      });
+    };
+
+    emitClickEvent();
+    if (this.command) emitCommandEvent();
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
-    this.addEventListener(
-      "click",
-      (e) => {
-        if (this.hasAttribute("disabled")) {
-          e.stopImmediatePropagation();
-          e.preventDefault();
-          return;
-        }
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-        this.emit("ea-dropdown-item-click", {
-          bubbles: true,
-        });
-
-        if (this.command) {
-          this.emit("command", {
-            detail: {
-              command: this.command,
-            },
-            bubbles: true,
-          });
-        }
-      },
-      { signal: this.#abortController.signal }
-    );
+    this.addEventListener("click", this.#onClickEvent, {
+      signal: this.#abortController.signal,
+    });
   }
 
   $beforeUnmounted() {

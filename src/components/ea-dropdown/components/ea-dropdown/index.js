@@ -4,8 +4,6 @@ import stylesheet from "./index.scss?inline";
 
 export class EaDropdown extends EaPopper {
   /** @type {HTMLElement} */
-  #container;
-  /** @type {HTMLElement} */
   #referenceEl;
 
   /** @type {AbortController} */
@@ -23,17 +21,17 @@ export class EaDropdown extends EaPopper {
     trigger: {
       type: ["click", "hover", "contextmenu"],
       default: "hover",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "hide-on-click": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     size: {
       type: ["small", "default", "large"],
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
   });
 
@@ -54,7 +52,7 @@ export class EaDropdown extends EaPopper {
 
       this.addEventListener(
         "mouseover",
-        (e) => {
+        () => {
           abortController?.abort();
           abortController = new AbortController();
 
@@ -62,7 +60,7 @@ export class EaDropdown extends EaPopper {
 
           this.addEventListener(
             "mouseout",
-            (e) => {
+            () => {
               this.hide();
             },
             { signal: abortController.signal, once: true }
@@ -85,32 +83,41 @@ export class EaDropdown extends EaPopper {
     contextmenu: () => {
       let abortController = new AbortController();
 
-      this.addEventListener(
-        "contextmenu",
-        (e) => {
-          e.preventDefault();
-          abortController?.abort();
-          abortController = new AbortController();
+      /**
+       * 关闭事件
+       * @param {MouseEvent} e
+       */
+      const onCloseEvent = e => {
+        const isThis = this.contains(e.target);
 
-          this.toggle();
+        if (!isThis) {
+          abortController.abort();
+          this.hide();
+        }
+      };
 
-          window.addEventListener(
-            "click",
-            (e) => {
-              const isThis = this.contains(e.target);
+      /**
+       * 打开事件（contextmenu）
+       * @param {MouseEvent} e
+       */
+      const onContextmenuEvent = e => {
+        e.preventDefault();
+        abortController?.abort();
+        abortController = new AbortController();
 
-              if (!isThis) {
-                abortController.abort();
-                this.hide();
-              }
-            },
-            { signal: abortController.signal, once: true }
-          );
+        this.toggle();
 
-          if (!this.status) abortController.abort();
-        },
-        { signal: this.#abortController.signal }
-      );
+        window.addEventListener("click", onCloseEvent, {
+          signal: abortController.signal,
+          once: true,
+        });
+
+        if (!this.status) abortController.abort();
+      };
+
+      this.addEventListener("contextmenu", onContextmenuEvent, {
+        signal: this.#abortController.signal,
+      });
     },
   };
 
@@ -125,7 +132,7 @@ export class EaDropdown extends EaPopper {
 
     this.addEventListener(
       "ea-dropdown-item-click",
-      (e) => {
+      e => {
         e.stopPropagation();
 
         if (this["hide-on-click"]) this.hide();

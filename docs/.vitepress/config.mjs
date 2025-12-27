@@ -159,6 +159,13 @@ export default defineConfig({
         ],
       },
       {
+        text: "Foundation 基础元件",
+        items: [
+          { text: "Popper 气泡", link: "/ea-popper" },
+          { text: "Overlay 遮罩层", link: "/ea-overlay" },
+        ],
+      },
+      {
         text: "Others 其他",
         items: [
           { text: "Divider 分割线", link: "/ea-divider" },

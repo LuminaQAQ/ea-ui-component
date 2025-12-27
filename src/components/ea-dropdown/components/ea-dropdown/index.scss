@@ -1,3 +1,9 @@
 :host {
   --ea-popper-width: 100px;
+
+  --ea-drowdown-z-index: 2000;
+}
+
+.ea-popper__original {
+  z-index: var(--ea-drowdown-z-index);
 }
