@@ -4,7 +4,13 @@ import stylesheet from "./index.scss?inline";
 
 export class EaStep extends Base {
   /** @type {HTMLElement} */
-  #hostContextSteps = this.closest("ea-steps");
+  get #hostContextSteps() {
+    try {
+      return this.closest("ea-steps");
+    } catch {
+      return null;
+    }
+  }
 
   /** @type {HTMLElement} */
   #container;
@@ -36,32 +42,32 @@ export class EaStep extends Base {
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#titleSlot.textContent = newVal;
       },
     },
     description: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#descriptionSlot.textContent = newVal;
       },
     },
     icon: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#stepIcon.setAttribute("icon", newVal);
       },
     },
     status: {
       type: ["", "wait", "process", "finish", "error", "success"],
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
         if (this.icon) return;
 
-        if (newVal === this.#hostContextSteps.getAttribute("finish-status")) {
+        if (newVal === this.#hostContextSteps?.getAttribute("finish-status")) {
           this.#stepIcon.setAttribute("icon", "icon-ok");
           this.#stepIcon.textContent = "";
         } else {
@@ -72,29 +78,29 @@ export class EaStep extends Base {
     },
     index: {
       type: Number,
-      default: () =>
-        Array.from(this.#hostContextSteps.querySelectorAll("ea-step")).indexOf(
-          this
-        ),
-      observer: (newVal) => {},
+      default: () => {
+        const list = this.#hostContextSteps?.querySelectorAll("ea-step");
+        return list ? Array.from(list).indexOf(this) : 0;
+      },
+      observer: () => {},
     },
     simple: {
       type: Boolean,
-      default: () => this.#hostContextSteps.hasAttribute("simple"),
-      observer: (newVal) => {},
+      default: () => !!this.#hostContextSteps?.hasAttribute("simple"),
+      observer: () => {},
     },
     "align-center": {
       type: Boolean,
-      default: () => this.#hostContextSteps.hasAttribute("align-center"),
-      observer: (newVal) => {
+      default: () => !!this.#hostContextSteps?.hasAttribute("align-center"),
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     direction: {
       type: ["vertical", "horizontal"],
       default: () =>
-        this.#hostContextSteps.getAttribute("direction") || "horizontal",
-      observer: (newVal) => {
+        this.#hostContextSteps?.getAttribute("direction") || "horizontal",
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -115,14 +121,15 @@ export class EaStep extends Base {
         "align-center": this["align-center"],
         icon: this.icon,
         simple: this.simple,
-        last:
-          this.#hostContextSteps.querySelectorAll("ea-step").length - 1 ===
-          this.index,
+        last: (() => {
+          const list = this.#hostContextSteps?.querySelectorAll("ea-step");
+          return list ? list.length - 1 === this.index : false;
+        })(),
         first: this.index === 0,
       }
     );
 
-    this.#container.className = className;
+    if (this.#container) this.#container.className = className;
 
     return className;
   }

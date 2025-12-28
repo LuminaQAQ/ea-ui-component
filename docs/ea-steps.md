@@ -2,62 +2,48 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('./index.scss')
-    
-    import('../components/ea-icon/index.js')
-    import('../components/ea-icon/index.css')
-    import('../components/ea-button/index.js')
-    
-    import('../components/ea-steps/index.js')
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
 
-    // ------- 1. 基础用法 -------
-    // #region
-    const basicObj = {
-        wrap: document.querySelector('#basicObj'),
+  const basicExample = {
+    steps: document.querySelector("#basicSteps"),
 
-        nextBtn: document.querySelector('#basicObj_next-btn'),
-        prevBtn: document.querySelector('#basicObj_pre-btn'),
+    prevBtn: document.querySelector("#basicStepsPrevBtn"),
+    nextBtn: document.querySelector("#basicStepsNextBtn"),
 
-        stepChildren: document.querySelectorAll('#basicObj ea-step'),
+    stepChildren: [...document.querySelectorAll("#basicSteps > ea-step")],
 
-        handleActiveChange(flag) {
-            let cur = this.wrap.active;
+    init() {
+      let active = new Proxy(
+        { value: parseInt(this.steps.getAttribute("active")) },
+        {
+          get: (target, prop) => {
+            return target[prop];
+          },
+          set: (target, prop, value) => {
+            if (value < 0) value = this.stepChildren.length;
+            if (value > this.stepChildren.length) value = 0;
 
-            if (flag === "prev") {
-                if (--cur < 0) return this.wrap.active = 3;
-
-                this.wrap.active = cur;
-            } else {
-                if (++cur > this.stepChildren.length) return this.wrap.active = 0;
-
-                this.wrap.active = cur;
-            }
-        },
-
-        init() {
-            const { length } = this.stepChildren;
-
-
-            this.prevBtn.addEventListener('click', () => {
-                this.handleActiveChange("prev");
-            });
-
-            this.nextBtn.addEventListener('click', () => {
-                this.handleActiveChange("next");
-            });
+            target[prop] = value;
+            this.steps.setAttribute("active", value);
+            return true;
+          },
         }
-    };
-    basicObj.init();
-    // #endregion
-    // ------- end -------
+      );
+
+      this.prevBtn.addEventListener("click", () => {
+        active.value--;
+      });
+
+      this.nextBtn.addEventListener("click", () => {
+        active.value++;
+      });
+    },
+  };
+
+  basicExample.init();
 })
 </script>
-
-<style>
-  ea-steps::part(container) {
-      min-height: 90px;
-  }
-</style>
 
 # Steps 步骤条
 
@@ -68,7 +54,7 @@ onMounted(() => {
 > `js`
 
 ```js
-<script type="module">
+<script type='module'>
   import "./node_modules/easy-component-ui/components/ea-steps/index.js";
 </script>
 ```
@@ -92,95 +78,76 @@ onMounted(() => {
 
 ## 基础用法
 
-简单的步骤条。 设置 `active` 属性，接受一个 `Number`，表明步骤的 `index`，从 0 开始。
+设置 `active` 属性，接受一个 `Number`，表明步骤的 `index`，从 `0` 开始。 需要定宽的步骤条时，设置 `space` 属性即可，它接受 `String`， 单位为 `px`， 如果不设置，则为自适应。 设置 `finish-status` 属性可以改变已经完成的步骤的状态。
 
-::: tip
-步骤条可能会出现页面抖动的情况，建议设置最小高度
-
-```html
-<style>
-  ea-steps::part(container) {
-    min-height: 90px;
-  }
-</style>
-```
-
-:::
-
-<!-- -------- 1. 基础用法 --------  -->
-<!-- #region  -->
 <div class="demo">
-    <p>
-        <ea-button id="basicObj_pre-btn">上一步</ea-button>
-        <ea-button id="basicObj_next-btn">下一步</ea-button>
-    </p>
-    <ea-steps id="basicObj" active="0">
-        <ea-step title="步骤一" description="这是步骤一的描述"></ea-step>
-        <ea-step title="步骤二" description="这是步骤二的描述"></ea-step>
-        <ea-step title="步骤三" description="这是步骤三的描述"></ea-step>
-        <ea-step title="步骤四" description="这是步骤四的描述"></ea-step>
-    </ea-steps>
+  <p>
+    <ea-button id="basicStepsPrevBtn">上一步</ea-button>
+    <ea-button id="basicStepsNextBtn">下一步</ea-button>
+  </p>
+  <ea-steps id="basicSteps" active="0" finish-status="success">
+    <ea-step title="Step 1"></ea-step>
+    <ea-step title="Step 2"></ea-step>
+    <ea-step title="Step 3"></ea-step>
+    <ea-step title="Step 4"></ea-step>
+  </ea-steps>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 示例代码-`html`
+::: code-group
 
 ```html
 <div class="demo">
   <p>
-    <ea-button id="basicObj_pre-btn">上一步</ea-button>
-    <ea-button id="basicObj_next-btn">下一步</ea-button>
+    <ea-button id="basicStepsPrevBtn">上一步</ea-button>
+    <ea-button id="basicStepsNextBtn">下一步</ea-button>
   </p>
-  <ea-steps id="basicObj" active="0">
-    <ea-step title="步骤一" description="这是步骤一的描述"></ea-step>
-    <ea-step title="步骤二" description="这是步骤二的描述"></ea-step>
-    <ea-step title="步骤三" description="这是步骤三的描述"></ea-step>
-    <ea-step title="步骤四" description="这是步骤四的描述"></ea-step>
+  <ea-steps id="basicSteps" active="0" finish-status="success">
+    <ea-step title="Step 1"></ea-step>
+    <ea-step title="Step 2"></ea-step>
+    <ea-step title="Step 3"></ea-step>
+    <ea-step title="Step 4"></ea-step>
   </ea-steps>
 </div>
 ```
 
-:::
-
-::: details 示例代码-`js`
-
 ```js
-const basicObj = {
-  wrap: document.querySelector("#basicObj"),
+const basicExample = {
+  steps: document.querySelector("#basicSteps"),
 
-  nextBtn: document.querySelector("#basicObj_next-btn"),
-  prevBtn: document.querySelector("#basicObj_pre-btn"),
+  prevBtn: document.querySelector("#basicStepsPrevBtn"),
+  nextBtn: document.querySelector("#basicStepsNextBtn"),
 
-  stepChildren: document.querySelectorAll("#basicObj ea-step"),
-
-  handleActiveChange(flag) {
-    let cur = this.wrap.active;
-
-    if (flag === "prev") {
-      if (--cur < 0) return (this.wrap.active = 3);
-
-      this.wrap.active = cur;
-    } else {
-      if (++cur > this.stepChildren.length) return (this.wrap.active = 0);
-
-      this.wrap.active = cur;
-    }
-  },
+  stepChildren: [...document.querySelectorAll("#basicSteps > ea-step")],
 
   init() {
-    const { length } = this.stepChildren;
+    let active = new Proxy(
+      { value: parseInt(this.steps.getAttribute("active")) },
+      {
+        get: (target, prop) => {
+          return target[prop];
+        },
+        set: (target, prop, value) => {
+          if (value < 0) value = this.stepChildren.length;
+          if (value > this.stepChildren.length) value = 0;
+
+          target[prop] = value;
+          this.steps.setAttribute("active", value);
+          return true;
+        },
+      }
+    );
 
     this.prevBtn.addEventListener("click", () => {
-      this.handleActiveChange("prev");
+      active.value--;
     });
 
     this.nextBtn.addEventListener("click", () => {
-      this.handleActiveChange("next");
+      active.value++;
     });
   },
 };
-basicObj.init();
+
+basicExample.init();
 ```
 
 :::
@@ -194,64 +161,76 @@ basicObj.init();
 <!-- -------- 2. 含状态步骤条 --------  -->
 <!-- #region  -->
 <div class="demo">
-  <ea-steps active="1">
-    <ea-step title="已完成"></ea-step>
-    <ea-step title="进行中"></ea-step>
-    <ea-step title="步骤 3"></ea-step>
+  <ea-steps
+    style="max-width: 600px"
+    active="1"
+    finish-status="success"
+    space="200px"
+  >
+    <ea-step title="Done"></ea-step>
+    <ea-step title="Processing"></ea-step>
+    <ea-step title="Step 3"></ea-step>
   </ea-steps>
 </div>
 <!-- #endregion  -->
 <!-- -------------------  -->
 
-::: details 示例代码-`html`
-
 ```html
 <div class="demo">
-  <ea-steps active="1">
-    <ea-step title="已完成"></ea-step>
-    <ea-step title="进行中"></ea-step>
-    <ea-step title="步骤 3"></ea-step>
+  <ea-steps
+    style="max-width: 600px"
+    active="1"
+    finish-status="success"
+    space="200px"
+  >
+    <ea-step title="Done"></ea-step>
+    <ea-step title="Processing"></ea-step>
+    <ea-step title="Step 3"></ea-step>
   </ea-steps>
 </div>
 ```
 
-:::
+## 居中的步骤条
+
+<div class="demo">
+  <ea-steps style="max-width: 600px" active="2" align-center>
+    <ea-step title="Step 1" description="Some description"></ea-step>
+    <ea-step title="Step 2" description="Some description"></ea-step>
+    <ea-step title="Step 3" description="Some description"></ea-step>
+  </ea-steps>
+</div>
+
+```html
+<div class="demo">
+  <ea-steps style="max-width: 600px" active="2" align-center>
+    <ea-step title="Step 1" description="Some description"></ea-step>
+    <ea-step title="Step 2" description="Some description"></ea-step>
+    <ea-step title="Step 3" description="Some description"></ea-step>
+  </ea-steps>
+</div>
+```
 
 ## 有描述的步骤条
 
 每个步骤有其对应的步骤状态描述。
 
-<!-- -------- 3. 有描述的步骤条 --------  -->
-<!-- #region  -->
 <div class="demo">
-    <ea-steps active="1">
-        <ea-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></ea-step>
-        <ea-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></ea-step>
-        <ea-step title="步骤 3" description="这段就没那么长了"></ea-step>
-    </ea-steps>
+  <ea-steps style="max-width: 600px" active="2">
+    <ea-step title="Step 1" description="Some description"></ea-step>
+    <ea-step title="Step 2" description="Some description"></ea-step>
+    <ea-step title="Step 3" description="Some description"></ea-step>
+  </ea-steps>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
-
-::: details 示例代码-`html`
 
 ```html
 <div class="demo">
-  <ea-steps active="1">
-    <ea-step
-      title="步骤 1"
-      description="这是一段很长很长很长的描述性文字"
-    ></ea-step>
-    <ea-step
-      title="步骤 2"
-      description="这是一段很长很长很长的描述性文字"
-    ></ea-step>
-    <ea-step title="步骤 3" description="这段就没那么长了"></ea-step>
+  <ea-steps style="max-width: 600px" active="2">
+    <ea-step title="Step 1" description="Some description"></ea-step>
+    <ea-step title="Step 2" description="Some description"></ea-step>
+    <ea-step title="Step 3" description="Some description"></ea-step>
   </ea-steps>
 </div>
 ```
-
-:::
 
 ## 带图标的步骤条
 
@@ -265,98 +244,70 @@ basicObj.init();
     </ea-steps>
 </div>
 
-::: details 示例代码-`html`
-
 ```html
 <div class="demo">
-  <ea-steps active="1">
-    <ea-step title="步骤 1" icon="icon-music"></ea-step>
-    <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
-    <ea-step title="步骤 3" icon="icon-camera"></ea-step>
+  <ea-steps style="max-width: 600px" active="1">
+    <ea-step title="Step 1" icon="icon-coffee">
+      <ea-icon
+        slot="icon"
+        class="ea-step__icon"
+        icon="icon-note-beamed"
+      ></ea-icon>
+    </ea-step>
+    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
+    <ea-step title="Step 3" icon="icon-camera"></ea-step>
   </ea-steps>
 </div>
 ```
-
-:::
-
-## 自定义每个 step 的间距
-
-每个步骤有其对应的步骤状态描述。
-
-<!-- -------- 4. 自定义每个 step 的间距 --------  -->
-<!-- #region  -->
-<div class="demo">
-    <ea-steps active="1" space="100px">
-        <ea-step title="步骤 1" icon="icon-music"></ea-step>
-        <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
-        <ea-step title="步骤 3" icon="icon-camera"></ea-step>
-    </ea-steps>
-</div>
-<!-- #endregion  -->
-<!-- -------------------  -->
-
-::: details 示例代码-`html`
-
-```html
-<div class="demo">
-  <ea-steps active="1" space="300px">
-    <ea-step title="步骤 1" icon="icon-music"></ea-step>
-    <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
-    <ea-step title="步骤 3" icon="icon-camera"></ea-step>
-  </ea-steps>
-</div>
-```
-
-:::
 
 ## 简洁风格的步骤条
 
 设置 `simple` 可应用简洁风格，该条件下 `description` / `space` 都将失效。
 
-<!-- -------- 4. 自定义每个 step 的间距 --------  -->
-<!-- #region  -->
 <div class="demo">
-    <ea-steps active="1" space="300px">
-        <ea-step title="步骤 1" icon="icon-music"></ea-step>
-        <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
-        <ea-step title="步骤 3" icon="icon-camera"></ea-step>
-    </ea-steps>
+  <ea-steps style="max-width: 600px" active="1" simple align-center>
+    <ea-step title="Step 1" icon="icon-coffee">
+      <ea-icon
+        slot="icon"
+        class="ea-step__icon"
+        icon="icon-note-beamed"
+      ></ea-icon>
+    </ea-step>
+    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
+    <ea-step title="Step 3" icon="icon-camera"></ea-step>
+  </ea-steps>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
-
-::: details 示例代码-`html`
 
 ```html
 <div class="demo">
-  <ea-steps active="1" space="300px">
-    <ea-step title="步骤 1" icon="icon-music"></ea-step>
-    <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
-    <ea-step title="步骤 3" icon="icon-camera"></ea-step>
+  <ea-steps style="max-width: 600px" active="1" simple align-center>
+    <ea-step title="Step 1" icon="icon-coffee">
+      <ea-icon
+        slot="icon"
+        class="ea-step__icon"
+        icon="icon-note-beamed"
+      ></ea-icon>
+    </ea-step>
+    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
+    <ea-step title="Step 3" icon="icon-camera"></ea-step>
   </ea-steps>
 </div>
 ```
 
-:::
+## Steps API
 
-## Steps Attributes
+### Steps Attributes
 
-| 参数   | 说明                                | 类型    | 可选值 | 默认值 |
-| ------ | ----------------------------------- | ------- | ------ | ------ |
-| active | 当前激活步骤的 index，从 0 开始记数 | number  | —      | 0      |
-| space  | 每个 step 的间距，不设置则自动计算  | string  | —      | —      |
-| simple | 简洁模式                            | boolean | —      | false  |
+| 参数           | 说明                                              | 类型    | 可选值                                          | 默认值  |
+| -------------- | ------------------------------------------------- | ------- | ----------------------------------------------- | ------- |
+| space          | 每个 step 的间距（影响连接线长度），支持 CSS 值   | string  | —                                               | 50%     |
+| active         | 当前激活步骤的 index，从 0 开始记数               | number  | —                                               | 0       |
+| process-status | 正在进行中的步骤状态展示                          | string  | `wait \| process \| finish \| error \| success` | process |
+| finish-status  | 已完成步骤的状态展示                              | string  | `wait \| process \| finish \| error \| success` | finish  |
+| align-center   | 是否居中对齐步骤内容                              | boolean | —                                               | false   |
+| simple         | 简洁模式（启用后会为每个 step 注入简洁箭头 slot） | boolean | —                                               | false   |
 
-## Step Attributes
-
-| 参数        | 说明           | 类型   | 可选值                  | 默认值  |
-| ----------- | -------------- | ------ | ----------------------- | ------- |
-| title       | 标题           | string | —                       | —       |
-| description | 步骤的详细描述 | string | —                       | —       |
-| icon        | 图标           | string | —                       | —       |
-| status      | 步骤的状态     | string | wait / process / finish | process |
-
-## Steps CSS Part
+### Steps CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -364,23 +315,49 @@ basicObj.init();
 | --------- | -------- |
 | container | 外层容器 |
 
-## Step CSS Part
+### Steps Slot
 
-| 名称             | 说明     |
-| ---------------- | -------- |
-| container        | 外层容器 |
-| head-wrap        | 头部容器 |
-| step-bar         | 步骤条   |
-| head-icon        | 图标     |
-| main-wrap        | 主体容器 |
-| title-wrap       | 标题容器 |
-| description-wrap | 描述容器 |
+| 名称 | 说明     | 子元素    |
+| ---- | -------- | --------- |
+| —    | 默认插槽 | `ea-step` |
 
-## Step Slot
+## Step API
 
-| 名称        | 说明     |
-| ----------- | -------- |
-| —           | 步骤内容 |
-| title       | 步骤标题 |
-| description | 步骤描述 |
-| icon        | 步骤图标 |
+### Step Attributes
+
+| 参数         | 说明                                           | 类型    | 可选值                                           | 默认值                         |
+| ------------ | ---------------------------------------------- | ------- | ------------------------------------------------ | ------------------------------ |
+| title        | 标题                                           | string  | —                                                | ""                             |
+| description  | 步骤的详细描述                                 | string  | —                                                | ""                             |
+| icon         | 图标（会传给内部的 `ea-icon`）                 | string  | —                                                | ""                             |
+| status       | 步骤的状态（可由父组件根据 active 自动设置）   | string  | `wait \| process \| finish \| error \| success` | ""                             |
+| index        | 当前步骤的索引（只读，组件内部计算）           | number  | —                                                | 自动计算                       |
+| simple       | 是否为简洁模式（继承自父级 `ea-steps` 的属性） | boolean | —                                                | 与父组件同步                   |
+| align-center | 是否居中（继承自父级 `ea-steps` 的属性）       | boolean | —                                                | 与父组件同步                   |
+| direction    | 步骤方向（继承自父级 `ea-steps`）              | string  | `vertical \| horizontal`                         | horizontal（来自父组件或默认） |
+
+### Step CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
+| 名称         | 说明                         |
+| ------------ | ---------------------------- |
+| container    | 外层容器                     |
+| head         | 头部容器 (包含图标与连接线)  |
+| icon-wrapper | 图标包裹容器                 |
+| icon         | 图标（内部 ea-icon）         |
+| tail         | 步骤之间的连接线             |
+| main         | 主体容器                     |
+| title        | 标题容器                     |
+| description  | 描述容器                     |
+| simple-arrow | 简洁模式下的箭头 slot 的容器 |
+
+### Step Slot
+
+| 名称         | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| —            | 步骤内容（默认插槽，通常为空）                               |
+| title        | 步骤标题（具名插槽，优先于 `title` 属性）                    |
+| description  | 步骤描述（具名插槽，优先于 `description` 属性）              |
+| icon         | 步骤图标（具名插槽，优先于 `icon` 属性，内部为 `<ea-icon>`） |
+| simple-arrow | 简洁模式下的箭头插槽（由父组件在 `simple` 模式下自动注入）   |

@@ -25,7 +25,7 @@ export class EaSteps extends Base {
     space: {
       type: String,
       default: "50%",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-step-tail-spacing", newVal);
       },
     },
@@ -40,36 +40,38 @@ export class EaSteps extends Base {
     active: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#updateStepStatus(newVal);
       },
     },
     "process-status": {
       type: ["wait", "process", "finish", "error", "success"],
       default: "process",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "finish-status": {
       type: ["wait", "process", "finish", "error", "success"],
       default: "finish",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "align-center": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     simple: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         /** @type {HTMLElement[]} */
         const steps = [...this.querySelectorAll("ea-step")];
         if (newVal) {
-          steps.forEach((item) => {
+          steps.forEach(item => {
             try {
               item.querySelector('[slot="simple-arrow"]')?.remove();
-            } catch (error) {}
+            } catch {
+              /* empty */
+            }
 
             try {
               const arrow = document.createElement("ea-icon");
@@ -77,13 +79,17 @@ export class EaSteps extends Base {
               arrow.setAttribute("icon", "icon-angle-right");
               arrow.part = "simple-arrow";
               item.appendChild(arrow);
-            } catch {}
+            } catch {
+              /* empty */
+            }
           });
         } else {
-          steps.forEach((item) => {
+          steps.forEach(item => {
             try {
               item.querySelector('[slot="simple-arrow"]')?.remove();
-            } catch {}
+            } catch {
+              /* empty */
+            }
           });
         }
 
@@ -135,11 +141,11 @@ export class EaSteps extends Base {
    * 更新步骤状态
    * @param {number} active
    */
-  #updateStepStatus = (active) => {
+  #updateStepStatus = active => {
     /** @type {HTMLElement[]} */
     const stepItems = [...this.querySelectorAll("ea-step")];
 
-    stepItems.forEach((item) => {
+    stepItems.forEach(item => {
       if (item.index < active) {
         item.setAttribute("status", this["finish-status"]);
       } else if (item.index > active) {
