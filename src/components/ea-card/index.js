@@ -1,6 +1,6 @@
-import Base from '@components/Base.js'
+import Base from "@components/Base.js";
 
-import stylesheet from './index.scss?inline';
+import stylesheet from "./index.scss?inline";
 
 export class EaCard extends Base {
   /** @type {HTMLElement} */
@@ -16,36 +16,40 @@ export class EaCard extends Base {
 
   state = this.properties({
     shadow: {
-      type: ['always', 'never', 'hover'],
-      default: 'always',
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist()
-      }
+      type: ["always", "never", "hover"],
+      default: "always",
+      observer: () => {
+        this.updateContainerClasslist();
+      },
     },
     header: {
       type: String,
-      default: '',
-      observer: (newVal) => {
+      default: "",
+      observer: newVal => {
         this.#header.innerText = newVal;
-      }
+      },
     },
     footer: {
       type: String,
-      default: '',
-      observer: (newVal) => {
+      default: "",
+      observer: newVal => {
         this.#footer.innerText = newVal;
-      }
-    }
-  })
+      },
+    },
+  });
 
   /**
    * 获取 classlist 列表
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist('ea-card', {
+    const className = this.computedClasslist("ea-card", {
       [`--${this.shadow}-shadow`]: this.shadow,
     });
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -59,33 +63,32 @@ export class EaCard extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class="ea-card" part="container">
-        <div class="ea-card__header" part="header-wrap">
+        <div class="ea-card__header" part="header">
           <slot name="header"></slot>
         </div>
-        <div class="ea-card__content" part="content-wrap">
+        <div class="ea-card__content" part="content">
           <slot></slot>
         </div>
-        <div class="ea-card__footer" part="footer-wrap">
+        <div class="ea-card__footer" part="footer">
           <slot name="footer"></slot>
         </div>
       </div>
     `;
 
-    this.#container = this.shadowRoot.querySelector('.ea-card');
-    this.#header = this.shadowRoot.querySelector('.ea-card__header');
-    this.#footer = this.shadowRoot.querySelector('.ea-card__footer');
+    this.#container = this.shadowRoot.querySelector(".ea-card");
+    this.#header = this.shadowRoot.querySelector(
+      ".ea-card__header > slot[name='header']"
+    );
+    this.#footer = this.shadowRoot.querySelector(
+      ".ea-card__footer > slot[name='footer']"
+    );
   }
 
   connectedCallback() {
     super.connectedCallback();
-
-    this.header = this.header;
-    this.footer = this.footer;
-
-    this.shadow = this.shadow;
   }
 }
 
-if (!window.customElements.get('ea-card')) {
-  window.customElements.define('ea-card', EaCard);
+if (!window.customElements.get("ea-card")) {
+  window.customElements.define("ea-card", EaCard);
 }

@@ -2,30 +2,29 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+  import('../dist/components/index.js')
+  import('../dist/assets/icon.css')
 })
 </script>
 
-<style lang="scss" scoped>
-ea-card::part(header-wrap) {
-  text-align: center;
-}
-
-.footer {
-  text-align: right;
+<style scoped>
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid #ebeef5;
+  box-sizing: border-box;
 }
 
 .ea-card-demo {
-  width: 300px;
+  width: 400px;
 }
 
-.image {
+.img {
   width: 100%;
-
-  img {
-    width: 100%;
-  }
+  height: 200px;
+  object-fit: cover;
 }
 </style>
 
@@ -60,6 +59,31 @@ ea-card::part(header-wrap) {
 
 移步到 [CSS Part](#css-part)。
 
+::: tip
+示例中使用的样式
+:::
+
+```css
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid #ebeef5;
+  box-sizing: border-box;
+}
+
+.ea-card-demo {
+  width: 400px;
+}
+
+.img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+```
+
 ## 基础用法
 
 卡片包含标题，内容以及操作区域。
@@ -67,55 +91,36 @@ ea-card::part(header-wrap) {
 Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是可选的，其内容取决于一个具名的 slot。
 
 <div class="demo">
-  <ea-card class="ea-card-demo " header="卡片标题">
-    <ul>
-      <li>List item 1</li>
-      <li>List item 2</li>
-      <li>List item 3</li>
-      <li>List item 4</li>
-    </ul>
-    <div class="footer" slot="footer">
-      <ea-button type="primary">确认</ea-button>
-      <ea-button>取消</ea-button>
+  <ea-card class="ea-card-demo">
+    <div slot="header" class="header">
+      <span>Card name</span>
+    </div>
+    <p class="ea-card-content">content1</p>
+    <p class="ea-card-content">content2</p>
+    <p class="ea-card-content">content3</p>
+    <p class="ea-card-content">content4</p>
+    <div slot="footer" class="footer">
+      <span>Footer content</span>
     </div>
   </ea-card>
 </div>
 
 ::: details 查看代码
 
-`css`
-
-```css
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.ea-card-demo {
-  width: 300px;
-}
-```
-
-`html`
-
 ```html
-<script type="module">
-  import "./node_modules/easy-component-ui/components/ea-card/index.js";
-</script>
-
 <div class="demo">
-  <ea-card class="ea-card-demo" header="卡片标题">
-    <ul>
-      <li>List item 1</li>
-      <li>List item 2</li>
-      <li>List item 3</li>
-      <li>List item 4</li>
-    </ul>
-    <div class="footer" slot="footer">
-      <ea-button type="primary">确认</ea-button>
-      <ea-button>取消</ea-button>
+  <ea-card class="ea-card-demo">
+    <div slot="header" class="header">
+      <span>Card name</span>
+    </div>
+
+    <p class="ea-card-content">content1</p>
+    <p class="ea-card-content">content2</p>
+    <p class="ea-card-content">content3</p>
+    <p class="ea-card-content">content4</p>
+
+    <div slot="footer" class="footer">
+      <span>Footer content</span>
     </div>
   </ea-card>
 </div>
@@ -129,65 +134,53 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
 
 <div class="demo">
   <ea-card class="ea-card-demo">
-    <ul>
-      <li>List item 1</li>
-      <li>List item 2</li>
-      <li>List item 3</li>
-      <li>List item 4</li>
-    </ul>
+    <p class="ea-card-content">content1</p>
+    <p class="ea-card-content">content2</p>
+    <p class="ea-card-content">content3</p>
+    <p class="ea-card-content">content4</p>
   </ea-card>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
   <ea-card class="ea-card-demo">
-    <ul>
-      <li>List item 1</li>
-      <li>List item 2</li>
-      <li>List item 3</li>
-      <li>List item 4</li>
-    </ul>
+    <p class="ea-card-content">content1</p>
+    <p class="ea-card-content">content2</p>
+    <p class="ea-card-content">content3</p>
+    <p class="ea-card-content">content4</p>
   </ea-card>
 </div>
 ```
 
-:::
-
-## 带图片
+## 有图片内容的卡片​
 
 可配置定义更丰富的内容展示。
 
-<div class="demo ">
-  <div class="ea-card-demo">
-    <ea-card header="风景">
-      <div class="image">
-        <img
-          src="https://th.bing.com/th/id/R.b0ea268fa1be279d112489ce83ad4696?rik=qItsh%2fBiy33hlg&riu=http%3a%2f%2fwww.quazero.com%2fuploads%2fallimg%2f140303%2f1-140303215009.jpg&ehk=S6PLWamt%2bMzQV8uO9ugcU5d5M19BpXtCpNz2cRJ7q9M%3d&risl=&pid=ImgRaw&r=0"
-        />
-      </div>
-    </ea-card>
-  </div>
+<div class="demo">
+  <ea-card class="ea-card-demo">
+    <div class="header" slot="header" style="padding: 14px">
+      <span>view</span>
+    </div>
+    <img
+      class="img"
+      src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+    />
+  </ea-card>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
-  <div class="ea-card-demo">
-    <ea-card header="风景">
-      <div class="image">
-        <img
-          src="https://th.bing.com/th/id/R.b0ea268fa1be279d112489ce83ad4696?rik=qItsh%2fBiy33hlg&riu=http%3a%2f%2fwww.quazero.com%2fuploads%2fallimg%2f140303%2f1-140303215009.jpg&ehk=S6PLWamt%2bMzQV8uO9ugcU5d5M19BpXtCpNz2cRJ7q9M%3d&risl=&pid=ImgRaw&r=0"
-        />
-      </div>
-    </ea-card>
-  </div>
+  <ea-card class="ea-card-demo">
+    <div class="header" slot="header" style="padding: 14px">
+      <span>view</span>
+    </div>
+    <img
+      class="img"
+      src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+    />
+  </ea-card>
 </div>
 ```
-
-:::
 
 ## 卡片阴影
 
@@ -196,45 +189,41 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
 通过 `shadow` 属性设置卡片阴影出现的时机。 该属性的值可以是：`always`、`hover` 或 `never`。
 
 <div class="demo">
-  <ea-space direction="vertical">
-    <ea-card shadow="always">总是显示</ea-card>
-    <ea-card shadow="hover">鼠标移入显示</ea-card>
-    <ea-card shadow="never">从不显示</ea-card>
-  </ea-space>
+  <ea-card shadow="always">总是显示</ea-card>
+  <p></p>
+  <ea-card shadow="hover">鼠标移入显示</ea-card>
+  <p></p>
+  <ea-card shadow="never">从不显示</ea-card>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-space direction="vertical">
-    <ea-card shadow="always">总是显示</ea-card>
-    <ea-card shadow="hover">鼠标移入显示</ea-card>
-    <ea-card shadow="never">从不显示</ea-card>
-  </ea-space>
+  <ea-card shadow="always">总是显示</ea-card>
+  <p></p>
+  <ea-card shadow="hover">鼠标移入显示</ea-card>
+  <p></p>
+  <ea-card shadow="never">从不显示</ea-card>
 </div>
 ```
 
-:::
-
 ## Attributes
 
-| 参数   | 说明                                                                                            | 类型   | 可选值                 | 默认值 |
-| ------ | ----------------------------------------------------------------------------------------------- | ------ | ---------------------- | ------ |
-| header | 卡片的标题 你既可以通过设置 header 来修改标题，也可以通过 `slot="header"` 传入 DOM 节点         | string | —                      | —      |
-| footer | 卡片页脚。 你既可以通过设置 footer 来修改卡片底部内容，也可以通过 `slot="footer"` 传入 DOM 节点 | string | —                      | —      |
-| shadow | 卡片阴影                                                                                        | string | always / hover / never | always |
+| 参数   | 说明                                                                                            | 类型   | 可选值                     | 默认值 |
+| ------ | ----------------------------------------------------------------------------------------------- | ------ | -------------------------- | ------ |
+| header | 卡片的标题 你既可以通过设置 header 来修改标题，也可以通过 `slot="header"` 传入 DOM 节点         | string | —                          | —      |
+| footer | 卡片页脚。 你既可以通过设置 footer 来修改卡片底部内容，也可以通过 `slot="footer"` 传入 DOM 节点 | string | —                          | —      |
+| shadow | 卡片阴影                                                                                        | string | `always \| hover \| never` | always |
 
 ## CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称         | 说明      |
-| ------------ | --------- |
-| container    | card 容器 |
-| header-wrap  | 标题容器  |
-| content-wrap | 内容容器  |
-| footer-wrap  | 页脚容器  |
+| 名称      | 说明      |
+| --------- | --------- |
+| container | card 容器 |
+| header    | 标题容器  |
+| content   | 内容容器  |
+| footer    | 页脚容器  |
 
 ## Slot
 
