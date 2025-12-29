@@ -28,7 +28,7 @@ export class EaBadge extends Base {
     value: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this["is-dot"]) return;
 
         const contentTextEl = this.shadowRoot.querySelector("[data-value]");
@@ -70,33 +70,33 @@ export class EaBadge extends Base {
     max: {
       type: Number,
       default: Infinity,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     type: {
       type: ["primary", "success", "warning", "danger", "info"],
       default: "danger",
-      observer: (newVal) => {
+      observer: () => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     color: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty(`--ea-badge-color`, newVal);
       },
     },
     "is-dot": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     "data-hidden": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#content.ariaHidden = newVal;
         this.#content.hidden = newVal;
         this.#container.className = this.updateContainerClasslist();
@@ -105,21 +105,21 @@ export class EaBadge extends Base {
     "offset-x": {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-badge-offset-x", -newVal + "px");
       },
     },
     "offset-y": {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-badge-offset-y", newVal + "px");
       },
     },
     "show-zero": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: () => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
