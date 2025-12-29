@@ -1,6 +1,6 @@
 // @import "../components/ea-icon/css/fontello.css";
 // @import "../components/ea-icon/css/animation.css";
-@import "../components/ea-ui-base-style.scss";
+// @import "../components/ea-ui-base-style.scss";
 
 // @font-face {
 //   font-size: 1rem;
@@ -68,7 +68,7 @@
 
   p {
     text-align: center;
-    color: darken(#c0c4cc, 20);
+    color: adjust(#c0c4cc, -20%);
   }
 
   .title {
@@ -108,7 +108,7 @@
 
   p {
     text-align: center;
-    color: darken(#c0c4cc, 20);
+    color: adjust(#c0c4cc, 20%);
   }
 
   section {
