@@ -43,16 +43,16 @@ export class EaTabs extends Base {
     type: {
       type: ["", "card", "border-card"],
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
 
         [...this.#defaultSlot.assignedElements()]
           .filter(
-            (item) =>
+            item =>
               item.tagName.toLowerCase() === "ea-tab-panel" ||
               item.tagName.toLowerCase() === "ea-tab"
           )
-          .forEach((item) => item.setAttribute("type", newVal));
+          .forEach(item => item.setAttribute("type", newVal));
       },
     },
     active: {
@@ -67,7 +67,7 @@ export class EaTabs extends Base {
           return active;
         }
       },
-      observer: (newVal) => {
+      observer: newVal => {
         this.#updateTabsActive(newVal);
 
         this.emit("tabs-change", {
@@ -78,23 +78,25 @@ export class EaTabs extends Base {
     "tab-position": {
       type: ["top", "bottom", "left", "right"],
       default: "top",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
+
+        this.#updateTabNavigationPosition(newVal);
         this.#updateTabsActive(this.active);
 
-        [...this.#defaultSlot.assignedElements()]
+        [...this.#navSlot.assignedElements()]
           .filter(
-            (item) =>
+            item =>
               item.tagName.toLowerCase() === "ea-tab-panel" ||
               item.tagName.toLowerCase() === "ea-tab"
           )
-          .forEach((item) => item.setAttribute("tab-position", newVal));
+          .forEach(item => item.setAttribute("tab-position", newVal));
       },
     },
     editable: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: () => {},
     },
   });
 
@@ -159,8 +161,8 @@ export class EaTabs extends Base {
   /**
    * 更新指示器位置
    * @param {HTMLElement} tabEl
-   * @param {HTMLElement} lineEl
-   * @param {HTMLElement} tabPosition
+   * @param {HTMLElement} [lineEl]
+   * @param {HTMLElement} [tabPosition]
    */
   #updateNavPosition = (
     tabEl,
@@ -186,7 +188,7 @@ export class EaTabs extends Base {
     /** @type {HTMLElement[]} */
     const tabEls = [...this.querySelectorAll("ea-tab")];
 
-    tabEls.forEach((tab, index) => {
+    tabEls.forEach(tab => {
       const isActive = tab.getAttribute("panel") === activeName;
 
       tab.toggleAttribute("active", isActive);
@@ -196,7 +198,7 @@ export class EaTabs extends Base {
       if (isActive) this.#updateNavPosition(tab);
     });
 
-    panelEls.forEach((panel, index) => {
+    panelEls.forEach(panel => {
       panel.toggleAttribute(
         "active",
         activeName === panel.getAttribute("name")
@@ -209,24 +211,39 @@ export class EaTabs extends Base {
    * @param {Boolean} isEditable
    */
   #updateTabEditable = (isEditable = this.editable) => {
-    this.querySelectorAll("ea-tab").forEach((tab) => {
+    this.querySelectorAll("ea-tab").forEach(tab => {
       tab.toggleAttribute("editable", isEditable);
     });
+  };
+
+  /**
+   * @param {"top" | "bottom" | "left" | "right"} tabPosition
+   */
+  #updateTabNavigationPosition = (tabPosition = this["tab-position"]) => {
+    if (tabPosition === "left" || tabPosition === "right") {
+      this.#prevBtn.setAttribute("icon", "icon-arrow-left");
+      this.#nextBtn.setAttribute("icon", "icon-arrow-right");
+    } else if (tabPosition === "top" || tabPosition === "bottom") {
+      this.#prevBtn.setAttribute("icon", "icon-arrow-up");
+      this.#nextBtn.setAttribute("icon", "icon-arrow-down");
+    }
   };
 
   /**
    * 当 tab slot 内容变化时触发
    * @param {Event} e
    */
-  #onTabsSlotChange = (e) => {
+  #onTabsSlotChange = () => {
     /** @type {HTMLElement[]} */
     const tabEls = [...this.querySelectorAll("ea-tab")];
 
-    tabEls.forEach((tab, index) => {
+    tabEls.forEach(tab => {
       tab.setAttribute("slot", "nav");
       try {
         tab.updateContainerClasslist();
-      } catch (error) {}
+      } catch {
+        /* empty */
+      }
     });
 
     this.#updateTabsActive(this.active);
@@ -235,7 +252,7 @@ export class EaTabs extends Base {
 
     timeout(() => {
       /** @type {HTMLElement} */
-      const activeTab = [...this.querySelectorAll("ea-tab")].find((tab) =>
+      const activeTab = [...this.querySelectorAll("ea-tab")].find(tab =>
         tab.hasAttribute("active")
       );
 
@@ -253,7 +270,7 @@ export class EaTabs extends Base {
    * 标签切换事件
    * @param {MouseEvent} e
    */
-  #onTabClick = (e) => {
+  #onTabClick = e => {
     const target = e.target.closest("ea-tab");
     if (!target || target?.hasAttribute("disabled")) return;
 
@@ -291,7 +308,11 @@ export class EaTabs extends Base {
     });
   };
 
-  #onTabRemove = (e) => {
+  /**
+   * 删除标签
+   * @param {CustomEvent} e
+   */
+  #onTabRemove = e => {
     e.preventDefault();
     e.stopImmediatePropagation();
 

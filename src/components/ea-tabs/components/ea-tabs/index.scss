@@ -38,8 +38,7 @@ $name: ea-tabs;
     align-items: center;
     flex-direction: row;
 
-    overflow-y: hidden;
-    overflow-x: auto;
+    overflow: auto;
     scrollbar-width: none;
 
     height: var(--#{$name}-nav-height);
@@ -174,6 +173,7 @@ $name: ea-tabs;
     .ea-tabs__nav {
       flex-direction: column;
       align-items: stretch;
+      height: auto;
     }
 
     .ea-tabs__line {
@@ -198,8 +198,11 @@ $name: ea-tabs;
   }
 
   @include state(overflow) {
-    .ea-tabs__scroll {
-      display: block;
+    &.ea-tabs--bottom,
+    &.ea-tabs--top {
+      .ea-tabs__scroll {
+        display: block;
+      }
     }
   }
 }

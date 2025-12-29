@@ -3,8 +3,14 @@ import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
 
 export class EaTabPanel extends Base {
-  /** @type {HTMLElement} */
-  #hostTabsContext = this.closest("ea-tabs");
+  /** @returns {HTMLElement | null} */
+  get #hostTabsContext() {
+    try {
+      return this.closest("ea-tabs");
+    } catch {
+      return null;
+    }
+  }
 
   /** @type {HTMLElement} */
   #container;
@@ -19,12 +25,12 @@ export class EaTabPanel extends Base {
     name: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     type: {
       type: ["", "card", "border-card"],
-      default: () => this.#hostTabsContext.getAttribute("type") || "",
-      observer: (newVal) => {
+      default: () => this.#hostTabsContext?.getAttribute("type") || "",
+      observer: () => {
         this.updateContainerClasslist();
       },
     },

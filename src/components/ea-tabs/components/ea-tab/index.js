@@ -3,8 +3,14 @@ import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
 
 export class EaTab extends Base {
-  /** @type {HTMLElement} */
-  #hostTabsContext = this.closest("ea-tabs");
+  /** @returns {HTMLElement | null} */
+  get #hostTabsContext() {
+    try {
+      return this.closest("ea-tabs");
+    } catch {
+      return null;
+    }
+  }
 
   /** @type {HTMLElement} */
   #container;
@@ -32,48 +38,48 @@ export class EaTab extends Base {
     panel: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     type: {
       type: ["", "card", "border-card"],
-      default: () => this.#hostTabsContext.getAttribute("type") || "",
-      observer: (newVal) => {
+      default: () => this.#hostTabsContext?.getAttribute("type") || "",
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     active: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     "tab-position": {
       type: ["", "card", "border-card"],
       default: () =>
-        this.#hostTabsContext.getAttribute("tab-position") || "top",
-      observer: (newVal) => {
+        this.#hostTabsContext?.getAttribute("tab-position") || "top",
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     editable: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     closable: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -84,16 +90,17 @@ export class EaTab extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const tabEls = [...this.#hostTabsContext.querySelectorAll("ea-tab")];
+    let tabEls = this.#hostTabsContext?.querySelectorAll("ea-tab");
+    tabEls = tabEls?.length > 0 ? [...tabEls] : [];
 
     const className = this.computedClasslist(
       "ea-tab",
       {
         ["--" + this.type]:
-          this.type === this.#hostTabsContext.getAttribute("type") || "",
+          this.type === this.#hostTabsContext?.getAttribute("type") || "",
         ["--" + this["tab-position"]]:
           this["tab-position"] ===
-            this.#hostTabsContext.getAttribute("tab-position") || "top",
+            this.#hostTabsContext?.getAttribute("tab-position") || "top",
       },
       {
         disabled: this.disabled,
@@ -131,29 +138,31 @@ export class EaTab extends Base {
     this.updateContainerClasslist();
   }
 
+  /**
+   * 关闭事件，为了避免click事件优先触发。
+   * @param {MouseEvent} e
+   */
+  #onCloseEvent = e => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    this.emit("ea-tab-close-icon-click", {
+      detail: {
+        panel: this.panel,
+      },
+      bubbles: true,
+    });
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.#closeIcon.addEventListener(
-      "click",
-      (e) => {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        this.emit("ea-tab-close-icon-click", {
-          detail: {
-            panel: this.panel,
-          },
-          bubbles: true,
-        });
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
+    this.#closeIcon.addEventListener("click", this.#onCloseEvent, {
+      signal: this.#abortController.signal,
+    });
   }
 
   $beforeUnmounted() {

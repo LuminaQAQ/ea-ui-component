@@ -2,55 +2,94 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('./index.scss')
-    
-    import('../components/ea-icon/index.js')
-    import('../components/ea-icon/index.css')
-    
-    import('../components/ea-button/index.js')
-    import('../components/ea-tabs/index.js')
+  import("../dist/components/index.js")
+  import("../dist/assets/icon.css")
+  
+  const directionExample = {
+    selector: document.querySelector("#tabDirectionSegmented"),
+    placement: ["top", "right", "bottom", "left"],
 
-    const editableObj = {
-        wrap: document.querySelector('#editable'),
-        paneSlot: document.querySelector('#editableSlot'),
-        addBtn: document.querySelector('#addBtn'),
+    normalTabs: document.querySelector("#directionNormalTabs"),
+    cardTabs: document.querySelector("#directionCardTabs"),
+    borderCardTabs: document.querySelector("#directionBorderCardTabs"),
 
-        handleTabclose(wrap) {
-            wrap.addEventListener('tab-close', (e) => {
-                console.log('close', e.detail);
-            })
-        },
+    init() {
+      const direction = new Proxy(
+        { value: "top" },
+        {
+          get: (target, property) => {
+            return target[property];
+          },
+          set: (target, property, value) => {
+            if (property === "value") {
+              this.normalTabs.setAttribute("tab-position", value);
+              this.cardTabs.setAttribute("tab-position", value);
+              this.borderCardTabs.setAttribute("tab-position", value);
+            }
 
-        handleTabAdd(btn, wrap, slotWrap) {
-            btn.addEventListener('click', () => {
-                const tab = document.createElement('ea-tab');
-                tab.innerText = '新增标签';
-
-                const pane = document.createElement('ea-pane');
-                pane.innerText = '新增标签内容';
-
-                wrap.appendChild(tab);
-                slotWrap.appendChild(pane);
-            })
-
-            wrap.addEventListener('tab-add', (e) => {
-                console.log('add', e.detail);
-            })
-        },
-
-        init() {
-            this.handleTabclose(this.wrap);
-            this.handleTabAdd(this.addBtn, this.wrap, this.paneSlot);
+            target[property] = value;
+            return true;
+          },
         }
-    }
+      );
 
-    editableObj.init();
+      this.selector.options = this.placement;
+
+      this.selector.addEventListener("change", e => {
+        direction.value = e.detail.value;
+      });
+    },
+  };
+
+  directionExample.init();
+
+  const editableExample = {
+    addBtn: document.querySelector("#editableAddBtn"),
+    tabs: document.querySelector("#editableTabs"),
+
+    /**
+     * @param {string} panelName
+     * @param {string} tabName
+     * @param {string} content
+     */
+    renderTemplate: (panelName, tabName, content) => `
+      <ea-tab panel="${panelName}">${tabName}</ea-tab>
+      <ea-tab-panel name="${panelName}">${content}</ea-tab-panel>
+    `,
+
+    init() {
+      const templateEl = document.createElement("template");
+
+      this.addBtn.addEventListener("click", () => {
+        const id = Date.now();
+
+        templateEl.innerHTML = this.renderTemplate(
+          id,
+          "New Tab",
+          "New Tab content<br/>" + id
+        );
+
+        this.tabs.appendChild(templateEl.content.cloneNode(true));
+        this.tabs.setAttribute("active", id);
+      });
+
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          this.addBtn.click();
+        }, 10);
+      }
+    },
+  };
+  editableExample.init();
 })
 </script>
 
 <style>
-ea-tabs::part(pane-wrap) {
-    min-height: 10rem;
+.basic-tabs-demo::part(content) {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
 }
 </style>
 
@@ -63,7 +102,7 @@ ea-tabs::part(pane-wrap) {
 > `js`
 
 ```js
-<script type="module">
+<script type='module'>
   import "./node_modules/easy-component-ui/components/ea-tabs/index.js";
 </script>
 ```
@@ -85,288 +124,478 @@ ea-tabs::part(pane-wrap) {
 
 移步到 [CSS Part](#tabs-css-part)。
 
-::: tip
-建议给 `ea-tabs` 设置最小高度，避免某些情况下出现页面抖动。
-
-```css
-ea-tabs::part(pane-wrap) {
-  min-height: 10rem;
-}
-```
-
-:::
-
 ## 基础用法
 
 基础的、简洁的标签页。
 
 > `Tabs` 组件提供了选项卡功能，默认选中第一个标签页，你也可以通过 `actived` 属性来指定当前选中的标签页。
 
-<!-- -------- 1 基础用法 --------  -->
-<!-- #region  -->
 <div class="demo">
-    <ea-tabs id="clickEvent--normal-card" actived="second">
-        <ea-tab name="first">用户管理</ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
-        <div slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
-    </ea-tabs>
+  <ea-tabs class="basic-tabs-demo">
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
+  </ea-tabs>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 查看代码
+::: code-group
 
 ```html
 <div class="demo">
-  <ea-tabs id="clickEvent--normal-card" actived="second">
-    <ea-tab name="first">用户管理</ea-tab>
-    <ea-tab name="second">配置管理</ea-tab>
-    <ea-tab name="third">角色管理</ea-tab>
-    <ea-tab name="fourth">定时任务补偿</ea-tab>
-    <div slot="pane">
-      <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-      <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-      <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-      <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-    </div>
+  <ea-tabs class="basic-tabs-demo">
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
   </ea-tabs>
 </div>
 ```
 
-:::
-
-## 选项卡样式
-
-选项卡样式的标签页。
-
-> 只需要设置 `type` 属性为 `card` 就可以使选项卡改变为标签风格。
-
-<div class="demo">
-    <ea-tabs id="clickEvent--card" actived="second" type="card">
-        <ea-tab name="first">用户管理</ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
-        <div slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
-    </ea-tabs>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="demo">
-  <ea-tabs id="clickEvent--card" actived="second" type="card">
-    <ea-tab name="first">用户管理</ea-tab>
-    <ea-tab name="second">配置管理</ea-tab>
-    <ea-tab name="third">角色管理</ea-tab>
-    <ea-tab name="fourth">定时任务补偿</ea-tab>
-    <div slot="pane">
-      <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-      <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-      <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-      <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-    </div>
-  </ea-tabs>
-</div>
+```css
+.basic-tabs-demo::part(content) {
+  padding: 32px;
+  color: #6b778c;
+  font-size: 32px;
+  font-weight: 600;
+}
 ```
 
 :::
 
-## 卡片化
+## 卡片风格的标签​
 
-卡片化的标签页。
+你可以设置具有卡片风格的标签。
+
+只需要设置 `type` 属性为 `card` 就可以使选项卡改变为标签风格。
 
 > 将 `type` 设置为 `border-card`。
 
 <div class="demo">
-    <ea-tabs id="clickEvent--border-card" actived="second" type="border-card">
-        <ea-tab name="first">用户管理</ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
-        <div slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
-    </ea-tabs>
+  <ea-tabs class="basic-tabs-demo" type="card">
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
+  </ea-tabs>
 </div>
 
-::: details 查看代码
+```html
+<div class="demo">
+  <ea-tabs class="basic-tabs-demo" type="card">
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
+  </ea-tabs>
+</div>
+```
+
+## 带有边框的卡片风格​
+
+你还可以设置标签页为带有边框的卡片
+
+将 `type` 设置为 `border-card`。
+
+<div class="demo">
+  <ea-tabs type="border-card">
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
+  </ea-tabs>
+</div>
 
 ```html
-<ea-tabs id="clickEvent--border-card" actived="second" type="border-card">
-  <ea-tab name="first">用户管理</ea-tab>
-  <ea-tab name="second">配置管理</ea-tab>
-  <ea-tab name="third">角色管理</ea-tab>
-  <ea-tab name="fourth">定时任务补偿</ea-tab>
+<div class="demo">
+  <ea-tabs type="border-card">
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
 
-  <div slot="pane">
-    <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-    <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-    <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-    <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-  </div>
-</ea-tabs>
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
+  </ea-tabs>
+</div>
+```
+
+## 标签位置的设置​
+
+可以通过 `tab-position` 设置标签的位置
+
+标签一共有四个方向的设置 `tabPosition="left|right|top|bottom"`
+
+<div class="demo">
+  <p>
+    <ea-segmented
+      id="tabDirectionSegmented"
+      name="direction"
+      value="top"
+    ></ea-segmented>
+    <ea-tabs
+      id="directionNormalTabs"
+      class="basic-tabs-demo"
+      style="height: 200px"
+    >
+      <ea-tab panel="first">User</ea-tab>
+      <ea-tab panel="second">Config</ea-tab>
+      <ea-tab panel="third">Role</ea-tab>
+      <ea-tab panel="fourth">Task</ea-tab>
+      <ea-tab-panel name="first">User</ea-tab-panel>
+      <ea-tab-panel name="second">Config</ea-tab-panel>
+      <ea-tab-panel name="third">Role</ea-tab-panel>
+      <ea-tab-panel name="fourth">Task</ea-tab-panel>
+    </ea-tabs>
+    <br />
+    <ea-tabs
+      id="directionCardTabs"
+      class="basic-tabs-demo"
+      type="card"
+      style="height: 200px"
+    >
+      <ea-tab panel="first">User</ea-tab>
+      <ea-tab panel="second">Config</ea-tab>
+      <ea-tab panel="third">Role</ea-tab>
+      <ea-tab panel="fourth">Task</ea-tab>
+      <ea-tab-panel name="first">User</ea-tab-panel>
+      <ea-tab-panel name="second">Config</ea-tab-panel>
+      <ea-tab-panel name="third">Role</ea-tab-panel>
+      <ea-tab-panel name="fourth">Task</ea-tab-panel>
+    </ea-tabs>
+    <br />
+    <ea-tabs
+      id="directionBorderCardTabs"
+      class="basic-tabs-demo"
+      type="border-card"
+      style="height: 200px"
+    >
+      <ea-tab panel="first">User</ea-tab>
+      <ea-tab panel="second">Config</ea-tab>
+      <ea-tab panel="third">Role</ea-tab>
+      <ea-tab panel="fourth">Task</ea-tab>
+      <ea-tab-panel name="first">User</ea-tab-panel>
+      <ea-tab-panel name="second">Config</ea-tab-panel>
+      <ea-tab-panel name="third">Role</ea-tab-panel>
+      <ea-tab-panel name="fourth">Task</ea-tab-panel>
+    </ea-tabs>
+  </p>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <p>
+    <ea-segmented
+      id="tabDirectionSegmented"
+      name="direction"
+      value="top"
+    ></ea-segmented>
+    <ea-tabs
+      id="directionNormalTabs"
+      class="basic-tabs-demo"
+      style="height: 200px"
+    >
+      <ea-tab panel="first">User</ea-tab>
+      <ea-tab panel="second">Config</ea-tab>
+      <ea-tab panel="third">Role</ea-tab>
+      <ea-tab panel="fourth">Task</ea-tab>
+      <ea-tab-panel name="first">User</ea-tab-panel>
+      <ea-tab-panel name="second">Config</ea-tab-panel>
+      <ea-tab-panel name="third">Role</ea-tab-panel>
+      <ea-tab-panel name="fourth">Task</ea-tab-panel>
+    </ea-tabs>
+    <br />
+    <ea-tabs
+      id="directionCardTabs"
+      class="basic-tabs-demo"
+      type="card"
+      style="height: 200px"
+    >
+      <ea-tab panel="first">User</ea-tab>
+      <ea-tab panel="second">Config</ea-tab>
+      <ea-tab panel="third">Role</ea-tab>
+      <ea-tab panel="fourth">Task</ea-tab>
+      <ea-tab-panel name="first">User</ea-tab-panel>
+      <ea-tab-panel name="second">Config</ea-tab-panel>
+      <ea-tab-panel name="third">Role</ea-tab-panel>
+      <ea-tab-panel name="fourth">Task</ea-tab-panel>
+    </ea-tabs>
+    <br />
+    <ea-tabs
+      id="directionBorderCardTabs"
+      class="basic-tabs-demo"
+      type="border-card"
+      style="height: 200px"
+    >
+      <ea-tab panel="first">User</ea-tab>
+      <ea-tab panel="second">Config</ea-tab>
+      <ea-tab panel="third">Role</ea-tab>
+      <ea-tab panel="fourth">Task</ea-tab>
+      <ea-tab-panel name="first">User</ea-tab-panel>
+      <ea-tab-panel name="second">Config</ea-tab-panel>
+      <ea-tab-panel name="third">Role</ea-tab-panel>
+      <ea-tab-panel name="fourth">Task</ea-tab-panel>
+    </ea-tabs>
+  </p>
+</div>
+```
+
+```js
+const directionExample = {
+  selector: document.querySelector("#tabDirectionSegmented"),
+  placement: ["top", "right", "bottom", "left"],
+
+  normalTabs: document.querySelector("#directionNormalTabs"),
+  cardTabs: document.querySelector("#directionCardTabs"),
+  borderCardTabs: document.querySelector("#directionBorderCardTabs"),
+
+  init() {
+    const direction = new Proxy(
+      { value: "top" },
+      {
+        get: (target, property) => {
+          return target[property];
+        },
+        set: (target, property, value) => {
+          if (property === "value") {
+            this.normalTabs.setAttribute("tab-position", value);
+            this.cardTabs.setAttribute("tab-position", value);
+            this.borderCardTabs.setAttribute("tab-position", value);
+          }
+
+          target[property] = value;
+          return true;
+        },
+      }
+    );
+
+    this.selector.options = this.placement;
+
+    this.selector.addEventListener("change", e => {
+      direction.value = e.detail.value;
+    });
+  },
+};
+
+directionExample.init();
 ```
 
 :::
+
+## 自定义标签页的内容​
+
+可以通过具名插槽来实现自定义标签页的内容
+
+<div class="demo">
+  <ea-tabs class="basic-tabs-demo" type="border-card">
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
+  </ea-tabs>
+</div>
+
+```html
+<div class="demo">
+  <ea-tabs class="basic-tabs-demo" type="border-card">
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
+  </ea-tabs>
+</div>
+```
 
 ## 动态增减标签页
 
 通过设置 `editable`，标签页可以动态增删。
 
 <div class="demo">
-    <ea-button id="addBtn" type="primary" size="small">添加标签页</ea-button>
-    <ea-tabs id="editable" actived="second" editable>
-        <ea-tab name="first">
-            <ea-icon icon="icon-coffee"></ea-icon>
-            用户管理
-        </ea-tab>
-        <ea-tab name="second">配置管理</ea-tab>
-        <ea-tab name="third">角色管理</ea-tab>
-        <ea-tab name="fourth">定时任务补偿</ea-tab>
-        <div id="editableSlot" slot="pane">
-            <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-            <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-            <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-            <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-        </div>
-    </ea-tabs>
+  <p>
+    <ea-button id="editableAddBtn">add tab</ea-button>
+  </p>
+  <ea-tabs id="editableTabs" class="basic-tabs-demo" type="card" editable>
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third" closable="false">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
+  </ea-tabs>
 </div>
 
-::: details 查看代码 `html`
+::: code-group
 
 ```html
 <div class="demo">
-  <ea-tabs id="clickEvent--normal-card" actived="second">
-    <ea-tab name="first">
-      <ea-icon icon="icon-coffee"></ea-icon>
-      用户管理
-    </ea-tab>
-    <ea-tab name="second">配置管理</ea-tab>
-    <ea-tab name="third">角色管理</ea-tab>
-    <ea-tab name="fourth">定时任务补偿</ea-tab>
-    <div slot="pane">
-      <ea-pane class="tab-page" name="first">用户管理</ea-pane>
-      <ea-pane class="tab-page" name="second">配置管理</ea-pane>
-      <ea-pane class="tab-page" name="third">角色管理</ea-pane>
-      <ea-pane class="tab-page" name="fourth">定时任务补偿</ea-pane>
-    </div>
+  <p>
+    <ea-button id="editableAddBtn">add tab</ea-button>
+  </p>
+  <ea-tabs id="editableTabs" class="basic-tabs-demo" type="card" editable>
+    <ea-tab panel="first">User</ea-tab>
+    <ea-tab panel="second">Config</ea-tab>
+    <ea-tab panel="third" closable="false">Role</ea-tab>
+    <ea-tab panel="fourth">Task</ea-tab>
+
+    <ea-tab-panel name="first">User</ea-tab-panel>
+    <ea-tab-panel name="second">Config</ea-tab-panel>
+    <ea-tab-panel name="third">Role</ea-tab-panel>
+    <ea-tab-panel name="fourth">Task</ea-tab-panel>
   </ea-tabs>
 </div>
 ```
 
-:::
-
-::: details 查看代码 `js`
-
 ```js
-const editableObj = {
-  wrap: document.querySelector("#editable"),
-  paneSlot: document.querySelector("#editableSlot"),
-  addBtn: document.querySelector("#addBtn"),
+const editableExample = {
+  addBtn: document.querySelector("#editableAddBtn"),
+  tabs: document.querySelector("#editableTabs"),
 
-  handleTabclose(wrap) {
-    wrap.addEventListener("tab-close", (e) => {
-      console.log("close", e.detail);
-    });
-  },
-
-  handleTabAdd(btn, wrap, slotWrap) {
-    btn.addEventListener("click", () => {
-      const tab = document.createElement("ea-tab");
-      tab.innerText = "新增标签";
-
-      const pane = document.createElement("ea-pane");
-      pane.innerText = "新增标签内容";
-
-      wrap.appendChild(tab);
-      slotWrap.appendChild(pane);
-    });
-
-    wrap.addEventListener("tab-add", (e) => {
-      console.log("add", e.detail);
-    });
-  },
+  /**
+   * @param {string} panelName
+   * @param {string} tabName
+   * @param {string} content
+   */
+  renderTemplate: (panelName, tabName, content) => `
+            <ea-tab panel="${panelName}">${tabName}</ea-tab>
+            <ea-tab-panel name="${panelName}">${content}</ea-tab-panel>
+        `,
 
   init() {
-    this.handleTabclose(this.wrap);
-    this.handleTabAdd(this.addBtn, this.wrap, this.paneSlot);
+    const templateEl = document.createElement("template");
+
+    this.addBtn.addEventListener("click", () => {
+      const id = Date.now();
+
+      templateEl.innerHTML = this.renderTemplate(
+        id,
+        "New Tab",
+        "New Tab content<br/>" + id
+      );
+
+      this.tabs.appendChild(templateEl.content.cloneNode(true));
+      this.tabs.setAttribute("active", id);
+    });
+
+    for (let i = 0; i < 10; i++) {
+      setTimeout(() => {
+        this.addBtn.click();
+      }, 10);
+    }
   },
 };
-
-editableObj.init();
+editableExample.init();
 ```
 
 :::
 
-## Tabs Attributes
+## Tabs API
 
-| 参数     | 说明             | 类型    | 可选值                  | 默认值 |
-| -------- | ---------------- | ------- | ----------------------- | ------ |
-| actived  | 默认激活的标签页 | String  | -                       | -      |
-| type     | 标签页类型       | String  | normal/border-card/card | normal |
-| editable | 是否可删除标签页 | Boolean | -                       | false  |
+### Tabs Attributes
 
-## Tab Attributes
+| 参数         | 说明                                                       | 类型    | 可选值                      | 默认值 |
+| ------------ | ---------------------------------------------------------- | ------- | --------------------------- | ------ |
+| active       | 当前激活的标签页（panel 名称或索引），可用于设置默认激活项 | String  | -                           | -      |
+| type         | 标签页风格                                                 | String  | `‘’ \| card \| border-card` | ''     |
+| editable     | 是否启用可编辑（增删）模式                                 | Boolean | -                           | false  |
+| tab-position | 标签栏的位置（水平或垂直）                                 | String  | top / right / bottom / left | top    |
 
-| 参数 | 说明           | 类型   | 可选值 | 默认值                                                |
-| ---- | -------------- | ------ | ------ | ----------------------------------------------------- |
-| name | 标签页唯一标识 | String | -      | 该选项卡在选项卡列表中的顺序值，如第一个选项卡则为'1' |
+### Tabs CSS Part
 
-## Pane Attributes
+| 名称      | 说明                 |
+| --------- | -------------------- |
+| container | 外层容器             |
+| nav       | 标签栏容器           |
+| prev      | 上一个标签按钮       |
+| next      | 下一个标签按钮       |
+| line      | 标签栏下方的连接线   |
+| indicator | 标签栏下方的指示器   |
+| content   | 标签栏下方的标签内容 |
 
-| 参数 | 说明               | 类型   | 可选值 | 默认值                                                |
-| ---- | ------------------ | ------ | ------ | ----------------------------------------------------- |
-| name | 标签页名称唯一标识 | String | -      | 该选项卡在选项卡列表中的顺序值，如第一个选项卡则为'1' |
+### Tabs Events
 
-## Tabs CSS Part
+| 事件名      | 说明               | 回调参数                            |
+| ----------- | ------------------ | ----------------------------------- |
+| tab-click   | 点击切换标签时触发 | event.detail (目标 panel 名称/索引) |
+| tabs-change | 标签页切换时触发   | event.detail (目标 panel 索引)      |
+| tab-remove  | 点击删除标签时触发 | event.detail (目标 panel 索引)      |
 
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+### Tabs Slot
 
-| 名称           | 说明               |
-| -------------- | ------------------ |
-| container      | 外层容器           |
-| tab-wrap       | 标签页容器         |
-| tab-bottom-bar | 标签页底部的移动线 |
-| pane-wrap      | 内容容器           |
+| 名称 | 说明                                         | 子标签         |
+| ---- | -------------------------------------------- | -------------- |
+| nav  | 放置标签项的容器（无须手动设置）             | `ea-tab`       |
+| -    | 默认插槽，用于放置面板子元素（无须手动设置） | `ea-tab-panel` |
 
-## Tab CSS Part
+## Tab API
 
-| 名称      | 说明     |
-| --------- | -------- |
-| container | 外层容器 |
+### Tab Attributes
 
-## Pane CSS Part
+| 参数     | 说明                                                 | 类型    | 可选值 | 默认值 |
+| -------- | ---------------------------------------------------- | ------- | ------ | ------ |
+| panel    | 选项卡对应的面板标识，用于与 `ea-tab-panel` 配对     | String  | -      | -      |
+| closable | 是否允许当前标签被关闭（仅在 `editable` 模式下生效） | Boolean | -      | true   |
+| disabled | 是否禁用该标签（不可点击/切换）                      | Boolean | -      | false  |
 
-| 名称      | 说明     |
-| --------- | -------- |
-| container | 外层容器 |
+### Tab CSS Part
 
-## Tabs Events
+| 名称       | 说明                 |
+| ---------- | -------------------- |
+| container  | 单个标签项的外层容器 |
+| close-icon | 关闭图标             |
 
-| 事件名    | 说明       | 回调参数     |
-| --------- | ---------- | ------------ |
-| tab-add   | 标签页增加 | event.detail |
-| tab-close | 标签页关闭 | event.detail |
-| tab-click | 标签页点击 | event.detail |
+## TabPanel API
 
-## Tabs Slot
+### TabPanel Attributes
 
-| 名称 | 说明       |
-| ---- | ---------- |
-| pane | 标签页内容 |
+| 参数 | 说明                                            | 类型   | 可选值 | 默认值 |
+| ---- | ----------------------------------------------- | ------ | ------ | ------ |
+| name | 面板的唯一标识，用于与 `ea-tab` 的 `panel` 配对 | String | -      | -      |
+
+### TabPanel CSS Part
+
+| 名称      | 说明               |
+| --------- | ------------------ |
+| container | 面板内容的外层容器 |
+
+### TabPanel Slot
+
+| 名称 | 说明                             |
+| ---- | -------------------------------- |
+| —    | 默认插槽，用于放置面板的实际内容 |

@@ -30,6 +30,8 @@ $name: ea-tab;
   border: 1px solid transparent;
 
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
   @include element(close-icon) {
     display: none;
@@ -65,8 +67,10 @@ $name: ea-tab;
   }
 
   @include modifier(border-card) {
-    transition: background var(--ea-tabs-transition),
-      color var(--ea-tabs-transition), border-color var(--ea-tabs-transition);
+    transition:
+      background var(--ea-tabs-transition),
+      color var(--ea-tabs-transition),
+      border-color var(--ea-tabs-transition);
 
     &.ea-tab--top,
     &.ea-tab--bottom {
