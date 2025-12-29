@@ -34,6 +34,8 @@ $size-type: (
   height: var(--ea-avatar-size);
   line-height: var(--ea-avatar-size);
 
+  white-space: nowrap;
+
   background-color: var(--ea-avatar-background-color);
   color: var(--ea-avatar-color);
   font-size: var(--ea-avatar-font-size);

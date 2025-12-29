@@ -4,6 +4,12 @@ import { onMounted } from 'vue'
 onMounted(() => {
   import('../dist/components/index.js')
   import('../dist/assets/icon.css')
+
+
+  const avatar = document.querySelector("#error");
+  avatar.addEventListener("error", e => {
+    console.log("avatar load error", e);
+  });
 })
 </script>
 
@@ -37,8 +43,6 @@ onMounted(() => {
 ## 基本用法
 
 使用 `shape`（`circle` | `square`）和 `size` 控制头像的形状与大小。`size` 支持预设字符串或像素值。
-
-示例：
 
 <div class="demo">
   <div class="row">
@@ -79,8 +83,6 @@ onMounted(() => {
 
 支持三种展示类型：图标（`icon`）、图片（`src`）和字符（slot）。
 
-示例：
-
 <div class="demo">
   <div class="row">
     <ea-avatar icon="icon-coffee"></ea-avatar>
@@ -91,8 +93,6 @@ onMounted(() => {
   </div>
 </div>
 
-::: details 查看代码
-
 ```html
 <div class="row">
   <ea-avatar icon="icon-coffee"></ea-avatar>
@@ -102,8 +102,6 @@ onMounted(() => {
   <ea-avatar>user</ea-avatar>
 </div>
 ```
-
-:::
 
 ## 图片加载失败的回退（fallback）
 
@@ -118,7 +116,7 @@ onMounted(() => {
   </div>
 </div>
 
-::: details 查看代码
+::: code-group
 
 ```html
 <div class="row">
@@ -127,27 +125,22 @@ onMounted(() => {
     >error text</ea-avatar
   >
 </div>
+```
 
-<script type="module">
-  import "../src/components/ea-avatar/index.js";
-
-  const avatar = document.querySelector("#error");
-  avatar.addEventListener("error", e => {
-    console.log("avatar load error", e);
-    // 例如：avatar.removeAttribute('src') 或 avatar.textContent = 'U'
-  });
-</script>
+```js
+const avatar = document.querySelector("#error");
+avatar.addEventListener("error", e => {
+  console.log("avatar load error", e);
+});
 ```
 
 :::
 
-## 图片如何适应容器（fit）
+## 适应容器
 
-使用 `fit` 属性控制图片的 object-fit 行为，支持：`fill` / `contain` / `cover` / `none` / `scale-down`。
+使用 `fit` 属性控制图片的 [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/object-fit) 行为，支持：`fill` / `contain` / `cover` / `none` / `scale-down`。
 
-示例：
-
-<div class="demo">
+<div class="demo row">
   <ea-avatar
     size="100px"
     fit="fill"
@@ -221,49 +214,32 @@ onMounted(() => {
 
 ## Attributes
 
-| **参数** | **说明**     | **类型** | **可选值**                                           | **默认值** |
-| -------- | ------------ | -------- | ---------------------------------------------------- | ---------- |
-| size     | 尺寸         | `string` | `large` / `default` / `small` / 像素值（如 `50px`）  | `default`  |
-| src      | 图片地址     | `string` | —                                                    | —          |
-| shape    | 形状         | `string` | `circle` / `square`                                  | `circle`   |
-| icon     | 图标类名     | `string` | —                                                    | —          |
-| fit      | 图片适应方式 | `string` | `fill` / `contain` / `cover` / `none` / `scale-down` | `cover`    |
+| **参数** | **说明**     | **类型**                                                   | **可选值**                            | **默认值** |
+| -------- | ------------ | ---------------------------------------------------------- | ------------------------------------- | ---------- |
+| icon     | 图标类名     | `string`                                                   | —                                     | —          |
+| size     | 尺寸         | `string`                                                   | `large \| default \| small \| 像素值` | `default`  |
+| shape    | 形状         | `string`                                                   | `circle \| square`                    | `circle`   |
+| src      | 图片地址     | `string`                                                   | —                                     | —          |
+| src-set  | 图片地址集   | `string`                                                   | —                                     | —          |
+| alt      | 替代文本     | `string`                                                   | —                                     | —          |
+| fit      | 图片适应方式 | `string \| fill \| contain \| cover \| none \| scale-down` | `cover`                               |
 
 ## Events
 
-| 事件名 | 说明         | 回调参数 |
-| ------ | ------------ | -------- |
-| error  | 图片加载失败 | `Event`  |
-
-示例：
-
-```js
-const avatar = document.querySelector("#error");
-avatar.addEventListener("error", e => {
-  console.log(e);
-});
-```
+| 事件名 | 说明               |
+| ------ | ------------------ |
+| error  | 图片加载失败时触发 |
 
 ## CSS Part
 
-组件暴露的 `part`，可通过 `::part` 自定义样式：
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明                    |
-| --------- | ----------------------- |
-| container | avatar 外层容器         |
-| avatar    | 图片/图标/文本 外层容器 |
+| 名称      | 说明            |
+| --------- | --------------- |
+| container | avatar 外层容器 |
 
-示例：
+## Slots
 
-```css
-ea-avatar::part(container) {
-  border: 1px solid #eee;
-}
-ea-avatar::part(avatar) {
-  background-color: #fafafa;
-}
-```
-
-## 参考
-
-- MDN: object-fit（用于理解 `fit` 属性）https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit
+| 名称 | 说明     |
+| ---- | -------- |
+| —    | 默认插槽 |

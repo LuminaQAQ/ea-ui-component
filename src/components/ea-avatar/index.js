@@ -28,21 +28,21 @@ export class EaAvatar extends Base {
     icon: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.innerHTML = `<ea-icon class="ea-avatar__icon" icon="${newVal}" part="icon-avatar"></ea-icon>`;
       },
     },
     shape: {
       type: ["circle", "square"],
       default: "circle",
-      observer: (newVal) => {
+      observer: () => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     size: {
       type: String,
       default: "default",
-      observer: (newVal) => {
+      observer: newVal => {
         const isEnumValue = EaUtils.Enum.hasEnum(
           ["default", "small", "large"],
           newVal
@@ -64,7 +64,7 @@ export class EaAvatar extends Base {
     src: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#srcController?.abort();
         this.#srcController = new AbortController();
 
@@ -82,11 +82,11 @@ export class EaAvatar extends Base {
 
         image.addEventListener(
           "error",
-          (e) => {
+          () => {
             const slot = this.#container.querySelector("slot");
             if (slot) slot.innerHTML = errorAvatar;
 
-            this.dispatchEvent("error");
+            this.emit("error");
 
             this.#srcController?.abort();
           },
@@ -97,7 +97,7 @@ export class EaAvatar extends Base {
     "src-set": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         /** @type {HTMLImageElement} */
         const img = this.shadowRoot.querySelector(".ea-avatar__img");
         if (img) img.srcset = newVal;
@@ -106,7 +106,7 @@ export class EaAvatar extends Base {
     alt: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         /** @type {HTMLImageElement} */
         const img = this.shadowRoot.querySelector(".ea-avatar__img");
         if (img) img.alt = newVal;
@@ -115,7 +115,7 @@ export class EaAvatar extends Base {
     fit: {
       type: ["fill", "contain", "cover", "none", "scale-down"],
       default: "cover",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-avatar-fit", newVal);
       },
     },

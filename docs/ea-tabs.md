@@ -538,6 +538,8 @@ editableExample.init();
 
 ### Tabs CSS Part
 
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
 | 名称      | 说明                 |
 | --------- | -------------------- |
 | container | 外层容器             |
@@ -575,6 +577,8 @@ editableExample.init();
 
 ### Tab CSS Part
 
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
 | 名称       | 说明                 |
 | ---------- | -------------------- |
 | container  | 单个标签项的外层容器 |
@@ -589,6 +593,8 @@ editableExample.init();
 | name | 面板的唯一标识，用于与 `ea-tab` 的 `panel` 配对 | String | -      | -      |
 
 ### TabPanel CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
 | 名称      | 说明               |
 | --------- | ------------------ |
