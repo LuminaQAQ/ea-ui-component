@@ -2,15 +2,20 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../components/ea-carousel/index.js')
-
-    import('./index.scss')
+  import('../dist/components/index.js')
+  import('../dist/assets/icon.css')
 })
 </script>
 
+<style scoped>
+ea-carousel-item {
+  background-color: #d3dce6;
+}
+</style>
+
 # Carousel 走马灯
 
-在有限空间内，循环播放同一类型的图片、文字等内容
+在有限空间内，循环播放同一类型的图片、文字等内容。
 
 ## 引入
 
@@ -39,267 +44,195 @@ onMounted(() => {
 
 移步到 [CSS Part](#carousel-css-part)。
 
+::: tip
+示例中使用到的样式
+:::
+
+```css
+ea-carousel-item {
+  background-color: #d3dce6;
+}
+```
+
 ## 基础用法
-
-适用广泛的基础用法
-
-:::tip
 
 结合使用 `ea-carousel` 和 `ea-carousel-item` 标签就得到了一个轮播图。轮播图的内容是任意的，需要放在 `el-carousel-item` 标签中。默认情况下，在鼠标 `hover` 底部的指示器时就会触发切换。通过设置 `trigger` 属性为 `click`，可以达到点击触发的效果。
 
-:::
-
 <div class="demo">
-    <div class="title">默认 Hover 指示器触发</div>
-    <ea-carousel>
-        <template v-for="i in 5" :key="i">
-            <ea-carousel-item>
-                <div>{{i}}</div>
-            </ea-carousel-item>
-        </template>
-    </ea-carousel>
-    <hr/>
-    <div class="title">Click 指示器触发</div>
-    <ea-carousel trigger="click">
-        <template v-for="i in 5" :key="i">
-            <ea-carousel-item>
-                <div>{{i}}</div>
-            </ea-carousel-item>
-        </template>
-    </ea-carousel>
+  <!-- Hover 指示器触发 -->
+  <div class="title">默认 Hover 指示器触发</div>
+  <ea-carousel height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+  <!-- Click 指示器触发 -->
+  <div class="title">Click 指示器触发</div>
+  <ea-carousel trigger="click" height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
 </div>
 
 ::: details 查看代码
 
-`html` - 默认 `Hover` 指示器触发
-
 ```html
-<ea-carousel>
-  <ea-carousel-item>
-    <div>1</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>2</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>3</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>4</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>5</div>
-  </ea-carousel-item>
-</ea-carousel>
+<div class="demo">
+  <!-- Hover 指示器触发 -->
+  <div class="title">默认 Hover 指示器触发</div>
+  <ea-carousel height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+
+  <!-- Click 指示器触发 -->
+  <div class="title">Click 指示器触发</div>
+  <ea-carousel trigger="click" height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+</div>
 ```
 
-`html` - 默认 `Click` 指示器触发
+:::
+
+## 指示器
+
+可以将指示器的显示位置设置在容器外部
+
+`indicator-position` 属性定义了指示器的位置。 默认情况下，它会显示在走马灯内部，设置为 outside 则会显示在外部；设置为 `none` 则不会显示指示器。
+
+<div class="demo">
+  <ea-carousel height="150px" indicator-position="outside">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+</div>
 
 ```html
-<ea-carousel trigger="click">
-  <ea-carousel-item>
-    <div>1</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>2</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>3</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>4</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>5</div>
-  </ea-carousel-item>
-</ea-carousel>
+<div class="demo">
+  <ea-carousel height="150px" indicator-position="outside">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+</div>
+```
+
+## 切换箭头
+
+可以设置切换箭头的显示时机
+
+`arrow` 属性定义了切换箭头的显示时机。 默认情况下，切换箭头只有在鼠标 `hover` 到走马灯上时才会显示。 若将 `arrow` 设置为 `always`，则会一直显示；设置为 `never`，则会一直隐藏。
+
+<div class="demo">
+  <div class="title"><b>arrow</b> 属性值为 <b>always</b></div>
+  <ea-carousel arrow="always" height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+  <div class="title"><b>arrow</b> 属性值为 <b>never</b></div>
+  <ea-carousel arrow="never" height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <div class="title"><b>arrow</b> 属性值为 <b>always</b></div>
+  <ea-carousel arrow="always" height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+
+  <div class="title"><b>arrow</b> 属性值为 <b>never</b></div>
+  <ea-carousel arrow="never" height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
+</div>
 ```
 
 :::
 
 ## 切换间隔
 
-通过设置 `interval` 属性可以设置切换间隔。单位为 `s`。
+通过设置 `interval` 属性可以设置切换间隔。单位为 `ms`。
 
 <div class="demo">
-    <ea-carousel interval="5">
-        <template v-for="i in 5" :key="i">
-            <ea-carousel-item>
-                <div>{{i}}</div>
-            </ea-carousel-item>
-        </template>
-    </ea-carousel>
+  <ea-carousel interval="5000" height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
 </div>
 
-::: details 查看代码
-
 ```html
-<ea-carousel interval="5">
-  <ea-carousel-item>
-    <div>1</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>2</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>3</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>4</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>5</div>
-  </ea-carousel-item>
-</ea-carousel>
-```
-
-:::
-
-## 切换箭头
-
-可以通过 `arrow` 属性设置切换箭头的显示时机
-
-:::tip
-`arrow` 属性定义了切换箭头的显示时机。默认情况下，切换箭头只有在鼠标 `hover` 到走马灯上时才会显示；若将 `arrow` 设置为 `always`，则会一直显示；设置为 `never`，则会一直隐藏。
-:::
-
 <div class="demo">
-    <div class="title"><b>arrow</b> 属性值为 <b>always</b></div>
-    <ea-carousel arrow="always">
-        <ea-carousel-item>
-            <div>1</div>
-        </ea-carousel-item>
-        <ea-carousel-item>
-            <div>2</div>
-        </ea-carousel-item>
-        <ea-carousel-item>
-            <div>3</div>
-        </ea-carousel-item>
-        <ea-carousel-item>
-            <div>4</div>
-        </ea-carousel-item>
-        <ea-carousel-item>
-            <div>5</div>
-        </ea-carousel-item>
-    </ea-carousel>
-    <hr/>
-    <div class="title"><b>arrow</b> 属性值为 <b>never</b></div>
-    <ea-carousel arrow="never">
-        <ea-carousel-item>
-            <div>1</div>
-        </ea-carousel-item>
-        <ea-carousel-item>
-            <div>2</div>
-        </ea-carousel-item>
-        <ea-carousel-item>
-            <div>3</div>
-        </ea-carousel-item>
-        <ea-carousel-item>
-            <div>4</div>
-        </ea-carousel-item>
-        <ea-carousel-item>
-            <div>5</div>
-        </ea-carousel-item>
-    </ea-carousel>
+  <ea-carousel interval="5000" height="150px">
+    <ea-carousel-item> 1 </ea-carousel-item>
+    <ea-carousel-item> 2 </ea-carousel-item>
+    <ea-carousel-item> 3 </ea-carousel-item>
+    <ea-carousel-item> 4 </ea-carousel-item>
+    <ea-carousel-item> 5 </ea-carousel-item>
+  </ea-carousel>
 </div>
-
-::: details 查看代码
-
-`html` - `arrow` 属性值为 `always`
-
-```html
-<ea-carousel arrow="always">
-  <ea-carousel-item>
-    <div>1</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>2</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>3</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>4</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>5</div>
-  </ea-carousel-item>
-</ea-carousel>
 ```
-
-`html` - `arrow` 属性值为 `never`
-
-```html
-<ea-carousel arrow="never">
-  <ea-carousel-item>
-    <div>1</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>2</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>3</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>4</div>
-  </ea-carousel-item>
-  <ea-carousel-item>
-    <div>5</div>
-  </ea-carousel-item>
-</ea-carousel>
-```
-
-:::
 
 ## 方向
 
 通过设置 `direction` 属性可以设置轮播图的方向。可选值为 `horizontal`（水平）和 `vertical`（垂直）。
 
-<div class="demo">
-  <ea-carousel direction="vertical">
-    <ea-carousel-item>
-        <div>1</div>
-    </ea-carousel-item>
-    <ea-carousel-item>
-        <div>2</div>
-    </ea-carousel-item>
-    <ea-carousel-item>
-        <div>3</div>
-    </ea-carousel-item>
-    <ea-carousel-item>
-        <div>4</div>
-    </ea-carousel-item>
-    <ea-carousel-item>
-        <div>5</div>
-    </ea-carousel-item>
-  </ea-carousel>
-</div>
-
-::: details 查看代码
+<ea-carousel direction="vertical" height="150px">
+  <ea-carousel-item> 1 </ea-carousel-item>
+  <ea-carousel-item> 2 </ea-carousel-item>
+  <ea-carousel-item> 3 </ea-carousel-item>
+  <ea-carousel-item> 4 </ea-carousel-item>
+  <ea-carousel-item> 5 </ea-carousel-item>
+</ea-carousel>
 
 ```html
-<div class="demo">
-  <ea-carousel direction="vertical">
-    <ea-carousel-item>
-      <div>1</div>
-    </ea-carousel-item>
-    <ea-carousel-item>
-      <div>2</div>
-    </ea-carousel-item>
-    <ea-carousel-item>
-      <div>3</div>
-    </ea-carousel-item>
-    <ea-carousel-item>
-      <div>4</div>
-    </ea-carousel-item>
-    <ea-carousel-item>
-      <div>5</div>
-    </ea-carousel-item>
-  </ea-carousel>
-</div>
+<ea-carousel direction="vertical" height="150px">
+  <ea-carousel-item> 1 </ea-carousel-item>
+  <ea-carousel-item> 2 </ea-carousel-item>
+  <ea-carousel-item> 3 </ea-carousel-item>
+  <ea-carousel-item> 4 </ea-carousel-item>
+  <ea-carousel-item> 5 </ea-carousel-item>
+</ea-carousel>
 ```
-
-:::
 
 ## Carousel Attributes
 

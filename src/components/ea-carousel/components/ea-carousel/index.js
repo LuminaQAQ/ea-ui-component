@@ -15,11 +15,13 @@ export class EaCarousel extends Base {
   #indicatorWrap;
   /** @type {HTMLElement[]} */
   #indicators = [];
-  /** @type {HTMLElement[]} */
-  #carouselItems;
 
   /** @type {AbortController} */
   #abortController;
+
+  #AbortControllers = {
+    triggerAbortControllers: new AbortController(),
+  };
 
   #states = {
     prevIndex: 0,
@@ -53,15 +55,15 @@ export class EaCarousel extends Base {
     height: {
       type: String,
       default: "100%",
-      observer: (value) => {
+      observer: value => {
         this.style.setProperty("--ea-carousel-height", value);
       },
     },
     direction: {
       type: ["horizontal", "vertical"],
       default: "horizontal",
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
       },
     },
     index: {
@@ -89,7 +91,7 @@ export class EaCarousel extends Base {
 
         this.#states.prevIndex = oldVal;
 
-        this.dispatchEvent("change", {
+        this.emit("change", {
           detail: {
             current: newVal,
             prev: oldVal,
@@ -100,40 +102,58 @@ export class EaCarousel extends Base {
     trigger: {
       type: ["click", "hover"],
       default: "hover",
-      observer: (newVal) => {},
+      /** @param {'click' | 'hover'} newVal */
+      observer: newVal => {
+        this.#AbortControllers.triggerAbortControllers?.abort();
+        this.#AbortControllers.triggerAbortControllers = new AbortController();
+
+        this.#indicatorWrap.addEventListener(
+          newVal === "hover" ? "mouseover" : "click",
+          this.#onIndicatorHandleEvent,
+          {
+            signal: this.#AbortControllers.triggerAbortControllers.signal,
+          }
+        );
+      },
     },
     interval: {
       type: Number,
       default: 3000,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     arrow: {
       type: ["never", "always", "hover"],
       default: "hover",
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
       },
     },
     autoplay: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {},
+      observer: newVal => {
+        if (newVal) {
+          this.#handleAutoPlay();
+        } else {
+          this.#handleTimerClear();
+        }
+      },
     },
     loop: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "pause-on-hover": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "indicator-position": {
       type: ["", "none", "outside"],
       default: "",
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
       },
     },
   });
@@ -143,7 +163,7 @@ export class EaCarousel extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist(
+    const className = this.computedClasslist(
       "ea-carousel",
       {
         ["--" + this.direction]: this.direction,
@@ -156,6 +176,10 @@ export class EaCarousel extends Base {
         [this["indicator-position"] + "-indicator"]: this["indicator-position"],
       }
     );
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -166,6 +190,45 @@ export class EaCarousel extends Base {
     this.$render();
   }
 
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-carousel' part='container'>
+        <button class="ea-carousel__arrow arrow-left" part="arrow-left">
+          <ea-icon icon="icon-angle-left" part="arrow-left-icon"></ea-icon>
+        </button>
+        <button class="ea-carousel__arrow arrow-right" part="arrow-right">
+          <ea-icon icon="icon-angle-right" part="arrow-right-icon"></ea-icon>
+        </button>
+        <ul class="ea-carousel__content" part="content">
+            <slot></slot>
+        </ul>
+        <footer class="ea-carousel__indicator-wrap" part="indicator-wrap">
+          
+        </footer>
+      </div>
+    `;
+
+    this.#container = this.shadowRoot.querySelector(".ea-carousel");
+    this.#content = this.shadowRoot.querySelector(".ea-carousel__content");
+    this.#indicatorWrap = this.shadowRoot.querySelector(
+      ".ea-carousel__indicator-wrap"
+    );
+    this.#arrowLeft = this.shadowRoot.querySelector(
+      ".ea-carousel__arrow.arrow-left"
+    );
+    this.#arrowRight = this.shadowRoot.querySelector(
+      ".ea-carousel__arrow.arrow-right"
+    );
+
+    this.#renderIndicatorItems();
+
+    this.updateContainerClasslist();
+  }
+
+  /**
+   * 处理 index 溢出的情况
+   * @return {number}
+   */
   #handleIndexOverflow = () => {
     if (this.index === this.#indicators.length) {
       return 0;
@@ -176,46 +239,52 @@ export class EaCarousel extends Base {
     return this.index;
   };
 
-  #renderIndicators = () => {
-    const indicators = [
-      ...this.shadowRoot.querySelectorAll(".ea-carousel__indicator"),
+  /**
+   * 渲染 轮播图指示器，为了避免vue组件缓存，所以在初始化和组件挂载时都进行渲染
+   */
+  #renderIndicatorItems = () => {
+    const carouselItems = Array.from(
+      this.querySelectorAll("ea-carousel-item"),
+      (el, i) =>
+        `<button class='ea-carousel__indicator' part='indicator' tabindex="1" data-index="${i}"></button>`
+    ).join("");
+
+    this.#indicatorWrap.innerHTML = carouselItems;
+
+    this.#indicators = [
+      ...this.#indicatorWrap.querySelectorAll(".ea-carousel__indicator"),
     ];
-
-    indicators[this.index].classList.add("is-active");
-    indicators.forEach((indicator, index) => {
-      indicator.addEventListener(
-        this.trigger === "hover" ? "mouseenter" : "click",
-        () => {
-          if (this.index === index) return;
-          this.index = index;
-
-          indicator.classList.toggle("is-active", index === this.index);
-        }
-      );
-    });
   };
 
   /**
    * 初始化 `轮播图元素` 结构
    */
   #initCarouselItem() {
-    Array.from(this.childNodes).forEach((item) => {
-      if (item.tagName !== "EA-CAROUSEL-ITEM") item.remove();
-    });
+    try {
+      this.childNodes.forEach(item => {
+        if (item.tagName !== "EA-CAROUSEL-ITEM") item.remove();
+      });
 
-    const children = this.children;
-    const firstChild = children[0].cloneNode(true);
-    const lastChild = children[children.length - 1].cloneNode(true);
-    this.#states.originLength = children.length;
+      const children = this.children;
+      const firstChild = children[0].cloneNode(true);
+      const lastChild = children[children.length - 1].cloneNode(true);
+      this.#states.originLength = children.length;
 
-    this.insertBefore(lastChild, this.firstChild);
-    this.appendChild(firstChild);
+      this.insertBefore(lastChild, this.firstChild);
+      this.appendChild(firstChild);
 
-    queueMicrotask(() => {
-      this.#updateCarouselPosition();
-    });
+      queueMicrotask(() => {
+        this.#updateCarouselPosition();
+      });
+    } catch {
+      void 0;
+    }
   }
 
+  /**
+   * 更新轮播图位置
+   * @param {number} index
+   */
   #updateCarouselPosition = (index = 0) => {
     const { width, height } = this.#container.getBoundingClientRect();
     const direction = this.direction === "horizontal" ? `X` : `Y`;
@@ -229,6 +298,9 @@ export class EaCarousel extends Base {
     this.#updataIndicatorPosition();
   };
 
+  /**
+   * 更新指示器位置
+   */
   #updataIndicatorPosition = () => {
     this.#indicators.forEach((item, index) => {
       item.classList.toggle("is-active", index === this.#handleIndexOverflow());
@@ -254,13 +326,97 @@ export class EaCarousel extends Base {
     this.#states.timer = setInterval(this.next, this.interval);
   }
 
+  /**
+   * 开启轮播图过渡属性
+   */
   #turnOnTransition = () => {
     void this.clientHeight;
     this.style.removeProperty("--ea-carousel-transition");
   };
 
+  /**
+   * 关闭轮播图过渡属性
+   */
   #turnOffTransition = () => {
     this.style.setProperty("--ea-carousel-transition", "none");
+    void this.clientHeight;
+  };
+
+  /**
+   * 指示器 处理事件，需要按照 `this.trigger` 来确定事件名
+   * @param {MouseEvent} e
+   */
+  #onIndicatorHandleEvent = e => {
+    const indicators = this.#indicatorWrap.querySelectorAll(
+      ".ea-carousel__indicator"
+    );
+    const currentIndicator = e.target.closest(".ea-carousel__indicator");
+    if (!currentIndicator) return;
+
+    indicators.forEach((indicator, index) => {
+      indicator.classList.toggle("is-active", indicator === currentIndicator);
+      if (indicator === currentIndicator) {
+        this.index = index;
+      }
+    });
+  };
+
+  /**
+   * 轮播图切换结束事件，即能确保轮播图在视觉上连续
+   */
+  #onCarouselChangeEndEvent = () => {
+    this.#turnOffTransition();
+
+    if (this.autoplay && !this.#states.isMouseEnter) this.#handleTimerClear();
+
+    this.index = this.#handleIndexOverflow();
+
+    if (this.autoplay && !this.#states.isMouseEnter) this.#handleAutoPlay();
+
+    this.#turnOnTransition();
+
+    this.#states.pause = false;
+  };
+
+  /**
+   * 箭头显示事件
+   */
+  #onArrowShowEvent = () => {
+    const onArrowHideEvent = () => {
+      this.#states.isMouseEnter = false;
+      if (this["pause-on-hover"]) this.#handleAutoPlay();
+      this.updateContainerClasslist();
+    };
+
+    this.#states.isMouseEnter = true;
+    if (this["pause-on-hover"]) this.#handleTimerClear();
+    this.updateContainerClasslist();
+
+    this.#container.addEventListener("mouseleave", onArrowHideEvent, {
+      signal: this.#abortController.signal,
+      once: true,
+    });
+  };
+
+  /**
+   * 当窗口大小变化时，更新轮播图位置
+   */
+  #onCarouselResizeEvent = () => {
+    let resizeTimeout = null;
+
+    return {
+      listener: () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = null;
+        resizeTimeout = setTimeout(() => {
+          this.#updateCarouselPosition(this.index);
+        }, 100);
+      },
+      unsetHandler: () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = null;
+      },
+    };
   };
 
   /**
@@ -283,72 +439,32 @@ export class EaCarousel extends Base {
     this.#states.pause = true;
   };
 
-  $render() {
-    this.#turnOffTransition();
-    const carouselItems = [...this.querySelectorAll("ea-carousel-item")];
-
-    this.shadowRoot.innerHTML = `
-      <div class='ea-carousel' part='container'>
-        <button class="ea-carousel__arrow arrow-left" part="arrow-left">
-          <ea-icon icon="icon-angle-left" part="arrow-left-icon"></ea-icon>
-        </button>
-        <button class="ea-carousel__arrow arrow-right" part="arrow-right">
-          <ea-icon icon="icon-angle-right" part="arrow-right-icon"></ea-icon>
-        </button>
-        <ul class="ea-carousel__content" part="content">
-            <slot></slot>
-        </ul>
-        <footer class="ea-carousel__indicator-wrap" part="indicator-wrap">
-          ${carouselItems
-            .map(
-              (_) =>
-                `<button class='ea-carousel__indicator' part='indicator' tabindex="1"></button>`
-            )
-            .join("")}
-        </footer>
-      </div>
-    `;
-
-    this.#container = this.shadowRoot.querySelector(".ea-carousel");
-    this.#content = this.shadowRoot.querySelector(".ea-carousel__content");
-    this.#indicatorWrap = this.shadowRoot.querySelector(
-      ".ea-carousel__indicator-wrap"
-    );
-    this.#arrowLeft = this.shadowRoot.querySelector(
-      ".ea-carousel__arrow.arrow-left"
-    );
-    this.#arrowRight = this.shadowRoot.querySelector(
-      ".ea-carousel__arrow.arrow-right"
-    );
-    this.#indicators = [
-      ...this.shadowRoot.querySelectorAll(".ea-carousel__indicator"),
-    ];
-    this.#carouselItems = carouselItems;
-
-    this.#renderIndicators();
-    this.#initCarouselItem();
-    this.#handleAutoPlay();
-  }
-
   connectedCallback() {
     super.connectedCallback();
 
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
+    for (const key in this.#AbortControllers) {
+      this.#AbortControllers[key]?.abort();
+      this.#AbortControllers[key] = new AbortController();
+    }
 
-    this.#container.className = this.updateContainerClasslist();
+    this.#turnOffTransition();
+    this.#renderIndicatorItems();
+    this.#initCarouselItem();
+    if (this.autoplay) this.#handleAutoPlay();
+
+    this.#indicatorWrap.addEventListener(
+      this.trigger === "hover" ? "mouseover" : "click",
+      this.#onIndicatorHandleEvent,
+      {
+        signal: this.#AbortControllers.triggerAbortControllers.signal,
+      }
+    );
+
     this.#content.addEventListener(
       "transitionend",
-      () => {
-        this.#turnOffTransition();
-        if (this.autoplay && !this.#states.isMouseEnter)
-          this.#handleTimerClear();
-
-        this.index = this.#handleIndexOverflow();
-
-        if (this.autoplay && !this.#states.isMouseEnter) this.#handleAutoPlay();
-        this.#turnOnTransition();
-        this.#states.pause = false;
-      },
+      this.#onCarouselChangeEndEvent,
       { signal: this.#abortController.signal }
     );
 
@@ -362,38 +478,13 @@ export class EaCarousel extends Base {
       });
     }
 
-    this.#container.addEventListener(
-      "mouseenter",
-      () => {
-        this.#states.isMouseEnter = true;
-        if (this["pause-on-hover"]) this.#handleTimerClear();
-        this.#container.className = this.updateContainerClasslist();
+    this.#container.addEventListener("mouseenter", this.#onArrowShowEvent, {
+      signal: this.#abortController.signal,
+    });
 
-        this.#container.addEventListener(
-          "mouseleave",
-          () => {
-            this.#states.isMouseEnter = false;
-            if (this["pause-on-hover"]) this.#handleAutoPlay();
-            this.#container.className = this.updateContainerClasslist();
-          },
-          {
-            signal: this.#abortController.signal,
-            once: true,
-          }
-        );
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
-
-    window.addEventListener(
-      "resize",
-      () => {
-        this.#updateCarouselPosition(this.index);
-      },
-      { signal: this.#abortController.signal }
-    );
+    window.addEventListener("resize", this.#onCarouselResizeEvent().listener, {
+      signal: this.#abortController.signal,
+    });
 
     queueMicrotask(() => {
       this.#turnOnTransition();
@@ -402,6 +493,12 @@ export class EaCarousel extends Base {
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+
+    for (const key in this.#AbortControllers) {
+      this.#AbortControllers[key]?.abort();
+    }
+
+    this.#onCarouselResizeEvent()?.unsetHandler();
   }
 }
 

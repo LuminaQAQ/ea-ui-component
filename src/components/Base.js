@@ -1,4 +1,3 @@
-import { timeout } from "../utils/timeout";
 import variable from "../themes/variables.scss?inline";
 import "./ea-icon/index.js";
 import EaUtils from "@/utils/Utils";
@@ -114,7 +113,7 @@ export default class Base extends HTMLElement {
           )[0];
 
           return realType[0];
-        } catch (error) {
+        } catch  {
           console.error(
             `[${this.tagName}] Every "type" entry must be a function. Received:`,
             type
@@ -278,6 +277,7 @@ export default class Base extends HTMLElement {
         parseValue(name, oldVal)
       );
     } catch (e) {
+      // eslint-disable-next-line no-undef
       if (process.env.NODE_ENV === "development" && this.isMounted) {
         console.error(e, this);
       }
@@ -325,7 +325,7 @@ export default class Base extends HTMLElement {
   connectedCallback() {
     this.adoptedStyle(this.stylesheet);
     this.tabIndex = this.getAttrNumber("tabindex") || 0;
-    this["loading-full"] = this["loading-full"];
+    // this["loading-full"] = this["loading-full"];
 
     // this.addEventListener("keydown", (e) => {
     //   console.log(e.key, e.ctrlKey);

@@ -147,6 +147,7 @@ export default defineConfig({
       "@themes": resolve(__dirname, "src/themes"),
       "@utils": resolve(__dirname, "src/utils"),
       "@common": resolve(__dirname, "src/common"),
+      "@events": resolve(__dirname, "src/events"),
     },
   },
 });

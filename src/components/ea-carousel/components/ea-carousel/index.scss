@@ -75,7 +75,10 @@
     cursor: pointer;
     user-select: none;
 
-    transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+    transition:
+      background-color 0.3s,
+      transform 0.3s,
+      opacity 0.3s;
 
     &.arrow-left {
       left: var(--ea-carousel-arrow-x);
@@ -162,7 +165,6 @@
       position: relative;
       bottom: unset;
       left: unset;
-      transform: none;
     }
 
     .ea-carousel__indicator {
