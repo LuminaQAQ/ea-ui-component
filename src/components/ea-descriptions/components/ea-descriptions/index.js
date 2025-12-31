@@ -31,38 +31,38 @@ export class EaDescriptions extends Base {
     column: {
       type: Number,
       default: 3,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#title.textContent = newVal;
       },
     },
     border: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
       },
     },
     direction: {
       type: ["horizontal", "vertical"],
       default: "horizontal",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     size: {
       type: ["large", "default", "small"],
       default: "default",
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
       },
     },
     "label-width": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-descriptions-label-width", newVal);
       },
     },
@@ -73,11 +73,14 @@ export class EaDescriptions extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-descriptions", {
-      // ["--" + this.type]: this.type,
+    const className = this.computedClasslist("ea-descriptions", {
       "--border": this.border,
       ["--" + this.size]: this.size,
     });
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -111,10 +114,16 @@ export class EaDescriptions extends Base {
     this.#tbody = this.shadowRoot.querySelector(".ea-descriptions__body");
   }
 
+  /**
+   * 处理子元素分割，将 HTML 描述转换为行列描述
+   * @param {HTMLElement[]} children 子元素
+   * @param {number} column 列数
+   * @return {Array<Array<Object>>} 分割后的二维数组
+   */
   #handleChildrenDivide = (children, column) => {
     const ary = [];
 
-    children.forEach((item) => {
+    children.forEach(item => {
       const currentRow = ary.length;
       const currentCol = column % ary[currentRow]?.length || 0;
       const option = {
@@ -152,7 +161,7 @@ export class EaDescriptions extends Base {
         }
       }
 
-      let row = ary.findIndex((item) => item.length < column);
+      let row = ary.findIndex(item => item.length < column);
       row = row === -1 ? currentRow : row;
       const col = ary[currentRow].reduce((acc, cur) => {
         return acc + cur.colspan;
@@ -166,10 +175,14 @@ export class EaDescriptions extends Base {
     });
 
     return ary
-      .map((row) => row.filter((col) => !col.placeholder))
-      .filter((row) => row.length);
+      .map(row => row.filter(col => !col.placeholder))
+      .filter(row => row.length);
   };
 
+  /**
+   * 获取 Descriptions 组件的样式类型
+   * @return {string} 变体名称
+   */
   #getVariant = () => {
     if (this.direction === "vertical") {
       return "vertical";
@@ -180,8 +193,11 @@ export class EaDescriptions extends Base {
     }
   };
 
+  /**
+   * Descriptions 组件的样式类型渲染器
+   */
   #variantRenderer = {
-    normal: (row, index) =>
+    normal: row =>
       EaUtils.EaElement.h(
         "tr",
         "ea-descriptions__tr",
@@ -255,7 +271,7 @@ export class EaDescriptions extends Base {
           )
         )
       ),
-    border: (row, index) =>
+    border: row =>
       EaUtils.EaElement.h(
         "tr",
         "ea-descriptions__tr",
@@ -312,7 +328,7 @@ export class EaDescriptions extends Base {
           ].join("")
         )
       ),
-    vertical: (row, i) =>
+    vertical: row =>
       [
         EaUtils.EaElement.h(
           "tr",
@@ -389,7 +405,7 @@ export class EaDescriptions extends Base {
     /** @type {HTMLElement[]} */
     const children = [...this.querySelectorAll("ea-descriptions-item")];
     await Promise.all([
-      children.map((item) =>
+      children.map(item =>
         EaUtils.EaElement.addAsyncEventListener(
           item,
           "ea-descriptions-item-ready"

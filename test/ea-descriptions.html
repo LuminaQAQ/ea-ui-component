@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,6 +17,10 @@
     <script
       type="module"
       src="../src/components/ea-descriptions/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../src/components/ea-segmented/index.js"
     ></script>
     <script type="module" src="../src/components/ea-avatar/index.js"></script>
     <script type="module" src="../src/components/ea-radio/index.js"></script>
@@ -58,7 +62,12 @@
     <!-- #region  -->
     <h2>不同尺寸</h2>
     <div class="demo">
-      <ea-descriptions title="With border" border>
+      <ea-radio-group name="size" id="sizeRadioGroup" value="default">
+        <ea-radio value="large">Large</ea-radio>
+        <ea-radio value="default">Default</ea-radio>
+        <ea-radio value="small">Small</ea-radio>
+      </ea-radio-group>
+      <ea-descriptions class="descriptions-size" title="With border" border>
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
         <ea-descriptions-item label="Essence">
           Lord of the Wild
@@ -106,6 +115,24 @@
         </ea-descriptions-item>
       </ea-descriptions>
     </div>
+
+    <script type="module">
+      const sizeExample = {
+        radiogroup: document.querySelector("#sizeRadioGroup"),
+        els: document.querySelectorAll(".descriptions-size"),
+        init() {
+          this.radiogroup.addEventListener("change", ({ detail }) => {
+            const { value } = detail;
+
+            this.els.forEach(el => {
+              el.size = value;
+            });
+          });
+        },
+      };
+      sizeExample.init();
+    </script>
+
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -114,16 +141,9 @@
     <!-- #region  -->
     <h2>垂直列表</h2>
     <div class="demo">
-      <ea-radio-group name="size" id="sizeRadioGroup" value="default">
-        <ea-radio value="large">Large</ea-radio>
-        <ea-radio value="default">Default</ea-radio>
-        <ea-radio value="small">Small</ea-radio>
-      </ea-radio-group>
-
       <ea-descriptions
         title="Vertical list with border"
         direction="vertical"
-        class="descriptions-size"
         border
       >
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
@@ -178,22 +198,6 @@
       </ea-descriptions>
     </div>
 
-    <script type="module">
-      const sizeExample = {
-        radiogroup: document.querySelector("#sizeRadioGroup"),
-        els: document.querySelectorAll(".descriptions-size"),
-        init() {
-          this.radiogroup.addEventListener("change", ({ detail }) => {
-            const { value } = detail;
-
-            this.els.forEach((el) => {
-              el.size = value;
-            });
-          });
-        },
-      };
-      sizeExample.init();
-    </script>
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -300,8 +304,9 @@
         background-color: #fef0f0;
       }
     </style>
+
     <div class="demo">
-      <ea-descriptions column="3" column="3" border>
+      <ea-descriptions column="3" border>
         <span slot="title">
           <ea-icon icon="icon-info" color="#409eff"></ea-icon>Customized style
           list

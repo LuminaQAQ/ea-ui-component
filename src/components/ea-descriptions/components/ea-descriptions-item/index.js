@@ -3,9 +3,6 @@ import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
 
 export class EaDescriptionsItem extends Base {
-  /** @type {HTMLElement} */
-  #container;
-
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
@@ -25,59 +22,49 @@ export class EaDescriptionsItem extends Base {
     label: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     colspan: {
       type: Number,
       default: 1,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     rowspan: {
       type: Number,
       default: 1,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     align: {
       type: ["left", "center", "right"],
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "label-align": {
       type: ["left", "center", "right"],
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     width: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "label-width": {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "label-part": {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "content-part": {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: () => {},
     },
   });
-
-  /**
-   * 获取 classlist 列表
-   * @return {string} 属性值
-   */
-  updateContainerClasslist() {
-    return this.computedClasslist("ea-descriptions-item", {
-      // ['--' + this.type]: this.type,
-    });
-  }
 
   constructor() {
     super();
@@ -92,15 +79,13 @@ export class EaDescriptionsItem extends Base {
       <div class='ea-descriptions-item' part='container'>
         <slot></slot>
       </div>
-        `;
-
-    this.#container = this.shadowRoot.querySelector(".ea-descriptions-item");
+    `;
   }
 
   connectedCallback() {
     super.connectedCallback();
 
-    this.dispatchEvent("ea-descriptions-item-ready", {
+    this.emit("ea-descriptions-item-ready", {
       bubbles: true,
       composed: true,
     });
