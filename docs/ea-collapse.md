@@ -1153,6 +1153,12 @@ hasBeforeCollapseExample.init();
 | --------- | -------- |
 | container | 外层容器 |
 
+### Collapse Slots
+
+| 名称 | 说明     |
+| ---- | -------- |
+| -    | 默认插槽 |
+
 ### Collapse Events
 
 | 事件名称 | 说明                                       | 回调参数                                                                       |
@@ -1187,3 +1193,11 @@ hasBeforeCollapseExample.init();
 | content-wrap  | 内容容器                                           |
 
                                                                   |
+
+### CollapseItem Slots
+
+| 名称  | 说明         |
+| ----- | ------------ |
+| -     | 默认插槽     |
+| title | 标题插槽     |
+| icon  | 标题图标插槽 |
