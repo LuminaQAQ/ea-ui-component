@@ -2,10 +2,8 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../components/ea-empty/index.js')
-    import('../components/ea-button/index.js')
-
-    import('./index.scss')
+  import('../dist/components/index.js')
+  import('../dist/assets/icon.css')
 })
 </script>
 
@@ -18,7 +16,7 @@ onMounted(() => {
 > `js`
 
 ```js
-<script type="module">
+<script type='module'>
   import "./node_modules/easy-component-ui/components/ea-empty/index.js";
 </script>
 ```
@@ -45,28 +43,24 @@ onMounted(() => {
 通过设置 `description` 属性来配置描述文字。
 
 <div class="demo">
-    <ea-empty description="描述文字"></ea-empty>
+  <ea-empty description="description"></ea-empty>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-empty description="描述文字"></ea-empty>
+  <ea-empty description="description"></ea-empty>
 </div>
 ```
-
-:::
 
 ## 自定义图片
 
 通过设置 `image` 属性传入图片 URL。
 
 <div class="demo">
-    <ea-empty image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-empty>
+  <ea-empty
+    image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-empty>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
@@ -76,30 +70,25 @@ onMounted(() => {
 </div>
 ```
 
-:::
-
 ## 图片尺寸
 
 通过设置 `image-size` 属性来控制图片大小。
 
 <div class="row">
-    <ea-empty image-size="100" image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"></ea-empty>
-    <ea-empty image-size="100"></ea-empty>
+  <ea-empty
+    image-size="200px"
+    image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-empty>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="row">
   <ea-empty
-    image-size="100"
+    image-size="200px"
     image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
   ></ea-empty>
-  <ea-empty image-size="100"></ea-empty>
 </div>
 ```
-
-:::
 
 ## 底部内容
 
@@ -107,21 +96,17 @@ onMounted(() => {
 
 <div class="demo">
   <ea-empty>
-    <ea-button type="primary">刷新</ea-button>
+    <ea-button type="primary">Button</ea-button>
   </ea-empty>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
   <ea-empty>
-    <ea-button type="primary">刷新</ea-button>
+    <ea-button type="primary">Button</ea-button>
   </ea-empty>
 </div>
 ```
-
-:::
 
 ## Attributes
 
@@ -135,15 +120,17 @@ onMounted(() => {
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称             | 说明                                                                                   |
-| ---------------- | -------------------------------------------------------------------------------------- |
-| container        | 外层容器, 包含 图片容器`image-wrap`、描述容器`description-wrap`和底部容器`bottom-wrap` |
-| image-wrap       | 图片容器                                                                               |
-| description-wrap | 描述容器                                                                               |
-| bottom-wrap      | 底部容器                                                                               |
+| 名称        | 说明                                                                                   |
+| ----------- | -------------------------------------------------------------------------------------- |
+| container   | 外层容器, 包含 图片容器`image-wrap`、描述容器`description-wrap`和底部容器`bottom-wrap` |
+| placeholder | 图片容器                                                                               |
+| description | 描述容器                                                                               |
+| bottom      | 底部容器                                                                               |
 
 ## Slots
 
-| 名称    | 说明                 |
-| ------- | -------------------- |
-| default | 底部内容(非具名插槽) |
+| 名称        | 说明     |
+| ----------- | -------- |
+| -           | 默认插槽 |
+| image       | 图片插槽 |
+| description | 描述插槽 |

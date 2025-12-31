@@ -46,16 +46,6 @@ export class EaEmpty extends Base {
     },
   });
 
-  /**
-   * 获取 classlist 列表
-   * @return {string} 属性值
-   */
-  updateContainerClasslist() {
-    return this.computedClasslist("ea-empty", {
-      // ['--' + this.type]: this.type,
-    });
-  }
-
   constructor() {
     super();
 
