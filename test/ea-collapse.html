@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -43,15 +43,52 @@
       // #endregion
       // ------- end -------
 
+      // ------- 手风琴效果 -------
+      // #region
+      const accordionCollapseExample = {
+        el: document.querySelector("#accordionCollapse"),
+        init() {
+          this.el.active = "1";
+        },
+      };
+      accordionCollapseExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 自定义面板标题 -------
+      // #region
+      const customTitleCollapseExample = {
+        el: document.querySelector("#customTitleCollapse"),
+        init() {
+          this.el.active = "1";
+        },
+      };
+      customTitleCollapseExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 自定义图标 -------
+      // #region
+      const customIconCollapseExample = {
+        el: document.querySelector("#customIconCollapse"),
+        init() {
+          this.el.active = ["1"];
+        },
+      };
+      customIconCollapseExample.init();
+      // #endregion
+      // ------- end -------
+
       // ------- 自定义图标位置 -------
       // #region
       const customExpandIconPositionExample = {
         el: document.querySelector("#customExpandIconPositionCollapse"),
         btn: document.querySelector("#customExpandIconPositionSwitch"),
         init() {
+          this.el.active = ["1"];
+
           this.btn.addEventListener("change", ({ detail }) => {
             const { value } = detail;
-
             this.el["expand-icon-position"] = value;
           });
         },
@@ -65,14 +102,53 @@
       const hasBeforeCollapseExample = {
         el: document.querySelector("#hasBeforeCollapse"),
         btn: document.querySelector("#hasBeforeCollapseSwitch"),
-        init() {
-          this.el.addEventListener("before-collapse", ({ detail }) => {
-            const { resolve, reject } = detail;
 
-            if (this.btn.checked) {
-              resolve();
+        loadingTemplate: `
+          <div id="loadingInstance" class="loading-example">
+            <ea-icon icon="icon-cw"></ea-icon>
+          </div>
+        `,
+
+        init() {
+          let loadingTarget = null;
+          const loading = new Proxy(
+            { value: false },
+            {
+              get: (target, key) => {
+                return target[key];
+              },
+              set: (target, key, value) => {
+                if (value) {
+                  const tpl = document.createElement("template");
+                  tpl.innerHTML = this.loadingTemplate.trim();
+                  this.el.appendChild(tpl.content.cloneNode(true));
+                } else {
+                  document.querySelector("#loadingInstance").remove();
+                }
+                target[key] = value;
+                return true;
+              },
+            }
+          );
+
+          const beforeCollapse = () => {
+            loading.value = true;
+            return new Promise(resolve => {
+              setTimeout(() => {
+                loading.value = false;
+                return resolve(true);
+              }, 1000);
+            });
+          };
+
+          this.el.active = ["1"];
+
+          this.btn.addEventListener("change", ({ detail }) => {
+            const { value } = detail;
+            if (value === "true") {
+              this.el.beforeCollapse = beforeCollapse;
             } else {
-              reject();
+              this.el.beforeCollapse = null;
             }
           });
         },
@@ -94,7 +170,7 @@
           设置 active 为 []
         </ea-button>
       </ea-button-group>
-      <ea-collapse id="basicCollapse" active='["1", "2"]'>
+      <ea-collapse id="basicCollapse">
         <ea-collapse-item title="Consistency" name="1">
           <div>
             Consistent with real life: in line with the process and logic of
@@ -151,8 +227,7 @@
     <!-- #region  -->
     <h2>手风琴效果</h2>
     <div class="demo">
-      <!-- <ea-button id="accordion" type="primary">设置 active 为 2</ea-button> -->
-      <ea-collapse id="accordionCollapse" active="1" accordion>
+      <ea-collapse id="accordionCollapse" accordion>
         <ea-collapse-item title="Consistency" name="1">
           <div>
             Consistent with real life: in line with the process and logic of
@@ -215,7 +290,7 @@
       }
     </style>
     <div class="demo">
-      <ea-collapse accordion>
+      <ea-collapse id="customTitleCollapse" accordion>
         <ea-collapse-item id="customTitle" name="1">
           <div class="header" slot="title">
             Consistency
@@ -302,7 +377,7 @@
       }
     </style>
     <div class="demo">
-      <ea-collapse>
+      <ea-collapse id="customIconCollapse">
         <ea-collapse-item
           id="customIconCollapseItem"
           title="Consistency"
@@ -379,12 +454,12 @@
         <span>expand icon position: </span>
         <ea-switch
           id="customExpandIconPositionSwitch"
+          value="right"
           inactive-value="left"
           active-value="right"
           inactive-text="left"
           active-text="right"
           inactive-color="#88b8fe"
-          checked
         ></ea-switch>
       </div>
 
@@ -446,7 +521,40 @@
     <!-- #region -->
     <h1>阻止折叠</h1>
 
-    <div class="demo">
+    <style>
+      .loading-collapse-example {
+        position: relative;
+      }
+
+      .loading-example {
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        height: 100%;
+
+        background-color: aliceblue;
+
+        opacity: 0.7;
+      }
+
+      .loading-example ea-icon[icon="icon-cw"] {
+        animation: rotate 1s linear infinite;
+      }
+
+      @keyframes rotate {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+
+    <div class="demo loading-collapse-example">
       <div style="margin-bottom: 1rem">
         <span>before collapse return: </span>
         <ea-switch
@@ -456,11 +564,10 @@
           inactive-text="false"
           active-text="true"
           inactive-color="#88b8fe"
-          checked
         ></ea-switch>
       </div>
 
-      <ea-collapse id="hasBeforeCollapse" active='["1"]' before-collapse>
+      <ea-collapse id="hasBeforeCollapse">
         <ea-collapse-item title="Consistency" name="1">
           <div>
             Consistent with real life: in line with the process and logic of

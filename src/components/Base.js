@@ -113,7 +113,7 @@ export default class Base extends HTMLElement {
           )[0];
 
           return realType[0];
-        } catch  {
+        } catch {
           console.error(
             `[${this.tagName}] Every "type" entry must be a function. Received:`,
             type
@@ -187,7 +187,10 @@ export default class Base extends HTMLElement {
       if (config?.props) {
         Object.defineProperty(this, key, {
           get: () => {
-            return parseValue(key, this.props?.[key] || config.default);
+            return parseValue(
+              key,
+              this.props?.[key] || parseDefaultValue(config.default)
+            );
           },
           set: value => {
             const oldValue = this.props?.[key];

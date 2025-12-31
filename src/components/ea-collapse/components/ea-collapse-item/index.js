@@ -14,9 +14,8 @@ export class EaCollapseItem extends Base {
   /** @type {HTMLElement} */
   #content;
 
-  #states = {
-    isActive: false,
-  };
+  /** @type {AbortController} */
+  #abortController;
 
   static get observedAttributes() {
     return [
@@ -25,74 +24,54 @@ export class EaCollapseItem extends Base {
       "name",
       "disabled",
       "expand-icon-position",
+
+      "active",
     ];
   }
 
   state = this.properties({
-    type: {
-      //   type: ,
-      default: "",
-      observer: (newVal) => {},
-    },
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#title.textContent = newVal;
       },
     },
     name: {
       type: String,
       default: "",
-      observer: (newVal) => {},
-    },
-    active: {
-      type: Boolean,
-      default: false,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "expand-icon-position": {
       type: ["left", "right"],
       default: "right",
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+
+    active: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.#updateCollapseHeight(newVal);
       },
     },
   });
-
-  // ------- isActive -------
-  // #region
-  get isActive() {
-    return this.#states.isActive;
-  }
-
-  set isActive(value) {
-    if (this.#states.isActive === value) return;
-
-    this.active = value;
-    this.#states.isActive = value;
-
-    this.#container.style.setProperty(
-      "--ea-collapse-item-content-height",
-      value ? this.#content.scrollHeight + "px" : "0"
-    );
-  }
-  // #endregion
-  // ------- end -------
 
   /**
    * 获取 classlist 列表
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist(
+    const className = this.computedClasslist(
       "ea-collapse-item",
       {
         [`--indicator-` + this["expand-icon-position"]]:
@@ -102,6 +81,10 @@ export class EaCollapseItem extends Base {
         disabled: this.disabled,
       }
     );
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -116,17 +99,17 @@ export class EaCollapseItem extends Base {
     this.shadowRoot.innerHTML = `
       <div class='ea-collapse-item' part='container'>
         <div class="ea-collapse-item__title-wrap" part="title-wrap">
-            <span class="ea-collapse-item__title" part="title">
-                <slot name="title"></slot>
-            </span>
-            <span class="ea-collapse-item__indicator" part="indicator">
-                <slot name="icon">
-                    <ea-icon class="default-expand-icon" icon="icon-angle-down" part="icon"></ea-icon>
-                </slot>
-            </span>
+          <span class="ea-collapse-item__title" part="title">
+            <slot name="title"></slot>
+          </span>
+          <span class="ea-collapse-item__indicator" part="indicator">
+            <slot name="icon">
+              <ea-icon class="default-expand-icon" icon="icon-angle-down" part="icon"></ea-icon>
+            </slot>
+          </span>
         </div>
         <div class="ea-collapse-item__content" part="content-wrap">
-            <slot></slot>
+          <slot></slot>
         </div>
       </div>
     `;
@@ -140,27 +123,54 @@ export class EaCollapseItem extends Base {
       ".ea-collapse-item__title-icon"
     );
     this.#content = this.shadowRoot.querySelector(".ea-collapse-item__content");
+
+    this.updateContainerClasslist();
   }
+
+  /**
+   * 更新折叠面板高度
+   * @param {boolean} isActive
+   */
+  #updateCollapseHeight = (isActive = this.active) => {
+    this.#container.style.setProperty(
+      "--ea-collapse-item-content-height",
+      isActive ? `${this.#content.scrollHeight}px` : "0"
+    );
+  };
+
+  /**
+   * 折叠面板 展开/收起 事件处理
+   * @param {Event} e
+   */
+  #onCollapseEvent = e => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    if (this.disabled) return;
+
+    this.emit("collapse-item-click", {
+      detail: {
+        name: this.name,
+        el: this,
+      },
+      bubbles: true,
+      cancelable: true,
+    });
+  };
 
   connectedCallback() {
     super.connectedCallback();
 
-    this.#container.className = this.updateContainerClasslist();
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-    this.#titleWrap.addEventListener("click", () => {
-      if (this.disabled) return;
-
-      this.dispatchEvent("collapse-item-click", {
-        detail: {
-          name: this.name,
-          el: this,
-        },
-        bubbles: true,
-        cancelable: true,
-      });
+    this.#titleWrap.addEventListener("click", this.#onCollapseEvent, {
+      signal: this.#abortController.signal,
     });
+  }
 
-    this.dispatchEvent("ea-collapse-item-ready");
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 
