@@ -234,20 +234,53 @@ ea-carousel-item {
 </ea-carousel>
 ```
 
-## Carousel Attributes
+## Carousel API
 
-| 参数     | 说明               | 类型   | 可选值             | 默认值 |
-| -------- | ------------------ | ------ | ------------------ | ------ |
-| interval | 切换间隔，单位为秒 | number | —                  | 3      |
-| trigger  | 指示器触发方式     | string | hover/click        | hover  |
-| arrow    | 切换箭头显示时机   | string | always/hover/never | hover  |
+### Carousel Attributes
 
-## Carousel CSS Part
+| 参数               | 说明                                                             | 类型    | 可选值                     | 默认值     |
+| ------------------ | ---------------------------------------------------------------- | ------- | -------------------------- | ---------- |
+| height             | 轮播图高度，支持任意 CSS 长度值，会设置到 `--ea-carousel-height` | string  | —                          | 100%       |
+| direction          | 轮播方向                                                         | string  | `horizontal \| vertical`   | horizontal |
+| index              | 当前激活项索引（从 0 开始）                                      | number  | —                          | 0          |
+| trigger            | 指示器触发方式                                                   | string  | `hover \| click`           | hover      |
+| interval           | 自动轮播时间间隔，单位 ms                                        | number  | —                          | 3000       |
+| arrow              | 切换箭头显示时机                                                 | string  | `never \| always \| hover` | hover      |
+| autoplay           | 是否自动播放                                                     | boolean | —                          | true       |
+| loop               | 是否循环播放（到达末尾是否回绕）                                 | boolean | —                          | true       |
+| pause-on-hover     | 鼠标移入是否暂停自动播放                                         | boolean | —                          | true       |
+| indicator-position | 指示器位置/显示控制                                              | string  | `"" \| none \| outside`    | ""         |
 
-| 名称           | 说明                                                                         |
-| -------------- | ---------------------------------------------------------------------------- |
-| container      | 轮播图外层容器, 包含轮播图容器(`content-wrap`)和指示器容器(`indicator-wrap`) |
-| content-wrap   | 轮播图内容容器                                                               |
-| indicator-wrap | 指示器容器                                                                   |
-| indicator      | 指示器                                                                       |
-| arrow          | 切换箭头                                                                     |
+### Carousel Events
+
+| 事件名称 | 说明                                 | 回调参数                                      |
+| -------- | ------------------------------------ | --------------------------------------------- |
+| change   | 当前索引变化时触发（变更为有效索引） | e.detail: `{ current: number, prev: number }` |
+
+### Carousel Methods
+
+| 方法名 | 说明                           |
+| ------ | ------------------------------ |
+| prev() | 切换到上一项（会修改 `index`） |
+| next() | 切换到下一项（会修改 `index`） |
+
+### Carousel CSS Part
+
+| 名称             | 说明                                                                    |
+| ---------------- | ----------------------------------------------------------------------- |
+| container        | 轮播图外层容器, 包含内容容器(`content`)、指示器容器(`indicator-wrap`)等 |
+| content          | 轮播图内容容器（滑动承载层）                                            |
+| indicator-wrap   | 指示器容器                                                              |
+| indicator        | 单个指示器项                                                            |
+| arrow-left       | 左侧切换箭头（`part="arrow-left"`）                                     |
+| arrow-left-icon  | 左侧切换箭头图标（`part="arrow-left-icon"`）                            |
+| arrow-right      | 右侧切换箭头（`part="arrow-right"`）                                    |
+| arrow-right-icon | 右侧切换箭头图标（`part="arrow-right-icon"`）                           |
+
+## CarouselItem API
+
+### CarouselItem CSS Part
+
+| 名称      | 说明                 |
+| --------- | -------------------- |
+| container | 单个轮播项的外层容器 |

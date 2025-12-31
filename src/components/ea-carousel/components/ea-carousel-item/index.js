@@ -24,14 +24,6 @@ export class EaCarouselItem extends Base {
 
   connectedCallback() {
     super.connectedCallback();
-
-    // queueMicrotask(() => {
-    //   this.emit("ea-load", {
-    //     bubbles: true,
-    //     cancelable: false,
-    //     composed: true,
-    //   });
-    // });
   }
 }
 
