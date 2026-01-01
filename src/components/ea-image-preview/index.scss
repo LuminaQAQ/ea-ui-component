@@ -20,6 +20,8 @@ $ea-image-status: (loading, error, success);
 
 @include block(ea-image-preview) {
   @include element(icon) {
+    --ea-icon-size: var(--ea-image-preview-tool-size);
+
     padding: 0.65rem;
     border-radius: 999px;
     cursor: pointer;

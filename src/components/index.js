@@ -21,6 +21,7 @@ import './ea-form/index.js';
 import './ea-form-item/index.js';
 import './ea-icon/index.js';
 import './ea-image/index.js';
+import './ea-image-preview/index.js';
 import './ea-infinite-scroll/index.js';
 import './ea-input/index.js';
 import './ea-input-number/index.js';

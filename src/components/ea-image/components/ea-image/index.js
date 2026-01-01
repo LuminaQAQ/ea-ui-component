@@ -1,7 +1,6 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
-import EaUtils from "@/utils/Utils";
 
 export class EaImage extends Base {
   /** @type {HTMLElement} */
@@ -38,7 +37,6 @@ export class EaImage extends Base {
       "lazy",
 
       "preview",
-      "preview-src-list",
       "hide-on-click-modal",
       "z-index",
       "initial-index",
@@ -56,12 +54,12 @@ export class EaImage extends Base {
     src: {
       type: String,
       default: "",
-      observer: async (newVal) => {
+      observer: async newVal => {
         const img = new Image();
         this.updateContainerClasslist();
 
         if (this.lazy) {
-          const observer = new IntersectionObserver((entries) => {
+          const observer = new IntersectionObserver(entries => {
             if (entries[0].intersectionRatio <= 0) return;
 
             observer.disconnect();
@@ -78,21 +76,21 @@ export class EaImage extends Base {
           this.#states.imageStatus = "success";
           this.updateContainerClasslist();
 
-          this.dispatchEvent("load");
+          this.emit("load");
         };
 
         img.onerror = () => {
           this.#states.imageStatus = "error";
           this.updateContainerClasslist();
 
-          this.dispatchEvent("error");
+          this.emit("error");
         };
       },
     },
     width: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (!CSS.supports("width", newVal))
           return console.warn(
             `[EaImage] The width value ${newVal} is not supported.`
@@ -104,7 +102,7 @@ export class EaImage extends Base {
     height: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (!CSS.supports("height", newVal))
           return console.warn(
             `[EaImage] The height value ${newVal} is not supported.`
@@ -116,7 +114,7 @@ export class EaImage extends Base {
     fit: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (!CSS.supports("object-fit", newVal))
           return console.warn(
             `[EaImage] The object-fit value ${newVal} is not supported.`
@@ -128,167 +126,171 @@ export class EaImage extends Base {
     alt: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#image.alt = newVal;
       },
     },
     loading: {
       type: ["lazy", "eager"],
       default: "eager",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#image.setAttribute("loading", newVal);
       },
     },
     referrerpolicy: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#image.setAttribute("referrerpolicy", newVal);
       },
     },
     crossorigin: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#image.setAttribute("sizes", newVal);
       },
     },
     lazy: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: () => {},
     },
 
     preview: {
       type: Boolean,
       default: false,
-      observer: async (newVal) => {
+      observer: async newVal => {
         if (newVal) {
-          await import("../ea-image-preview/index.js");
+          await import("@/components/ea-image-preview/index.js");
         }
-      },
-    },
-    "preview-src-list": {
-      type: Array,
-      default: [],
-      /** @param {String[]} newVal */
-      observer: (newVal) => {
-        if (!this.preview)
-          return console.warn("[EaImage] Preview is not enabled.");
-
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["url-list"] = newVal)
-        );
       },
     },
     "hide-on-click-modal": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["hide-on-click-modal"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["hide-on-click-modal"] = newVal;
       },
     },
     "z-index": {
       type: Number,
       default: 2000,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["z-index"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["z-index"] = newVal;
       },
     },
     "initial-index": {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["initial-index"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["initial-index"] = newVal;
       },
     },
     "close-on-press-escape": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["close-on-press-escape"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["close-on-press-escape"] = newVal;
       },
     },
     infinite: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["infinite"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["infinite"] = newVal;
       },
     },
     "zoom-rate": {
       type: Number,
       default: 1.2,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["zoom-rate"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["zoom-rate"] = newVal;
       },
     },
     scale: {
       type: Number,
       default: 1,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview.scale = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview.scale = newVal;
       },
     },
     "min-scale": {
       type: Number,
       default: 0.2,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["min-scale"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["min-scale"] = newVal;
       },
     },
     "max-scale": {
       type: Number,
       default: 7,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["max-scale"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["max-scale"] = newVal;
       },
     },
     "show-progress": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: async newVal => {
         if (!this.preview) return;
 
-        this.#states.previewQueue.push(
-          () => (this.#imagePreview["show-progress"] = newVal)
-        );
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview["show-progress"] = newVal;
+      },
+    },
+  });
+
+  propState = this.properties({
+    previewSrcList: {
+      props: true,
+      type: Array,
+      default: () => [],
+      /** @param {String[]} newVal */
+      observer: async newVal => {
+        if (!this.preview)
+          return console.warn("[EaImage] Preview is not enabled.");
+
+        await customElements.whenDefined("ea-image-preview");
+
+        this.#imagePreview.urlList = newVal;
       },
     },
   });
@@ -344,18 +346,24 @@ export class EaImage extends Base {
    * 设置当前项
    * @param {Number} index
    */
-  setActiveItem = (index) => {
+  setActiveItem = index => {
     if (!this.preview) return;
 
     this.#imagePreview.setActiveItem(index);
   };
 
-  reset = (index) => {
+  /**
+   * 重置预览器的所有状态
+   */
+  reset = () => {
     if (!this.preview) return;
 
     this.#imagePreview.reset();
   };
 
+  /**
+   * 显示预览（ea-image-preview）
+   */
   showPreview = () => {
     this.#imagePreview.visible = true;
   };
@@ -363,22 +371,26 @@ export class EaImage extends Base {
   async connectedCallback() {
     super.connectedCallback();
 
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
     if (!this.getAttribute("src")) this.setAttribute("src", "");
 
     if (this.preview) {
-      this.#container.addEventListener("click", () => {
-        this.showPreview();
-      });
+      await customElements.whenDefined("ea-image-preview");
 
-      await EaUtils.EaElement.addAsyncEventListener(
-        this.#imagePreview,
-        "ea-image-preview-ready"
+      this.#container.addEventListener(
+        "click",
+        () => {
+          this.showPreview();
+        },
+        { signal: this.#abortController.signal }
       );
-
-      this.#states.previewQueue.forEach((fn) => fn());
     }
+  }
 
-    this.dispatchEvent("ea-image-ready");
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 

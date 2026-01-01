@@ -120,6 +120,9 @@
     "./ea-image": {
       "import": "./dist/ea-image.js"
     },
+    "./ea-image-preview": {
+      "import": "./dist/ea-image-preview.js"
+    },
     "./ea-infinite-scroll": {
       "import": "./dist/ea-infinite-scroll.js"
     },

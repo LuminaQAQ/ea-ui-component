@@ -115,14 +115,14 @@ export default defineConfig({
             const ary = normalizedId.split("/");
             const name = findComponentName(ary);
 
-            if (name) return `chunk/${name}`;
+            if (name) return `${name}`;
           }
 
           if (normalizedId.startsWith(componentsPath)) {
             const ary = normalizedId.split("/");
             const name = findComponentName(ary);
 
-            if (name?.startsWith("ea-")) return `chunk/${name}`;
+            if (name?.startsWith("ea-")) return `${name}`;
           }
         },
       },
