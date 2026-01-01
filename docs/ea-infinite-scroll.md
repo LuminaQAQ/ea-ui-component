@@ -2,62 +2,80 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-    import('../components/ea-infinite-scroll/index.js')
-    import('./index.scss')
+  import('../dist/components/index.js')
+  import('../dist/assets/icon.css')
+  
+const basicExample = {
+  el: document.querySelector("#basicInfinite"),
+  createTemplate(content) {
+    const item = document.createElement("div");
+    item.className = "sg-infinite-item";
+    item.innerHTML = content;
 
-    const infiniteNodes = {
-      wrap: document.getElementById('infinite'),
-      disabledWrap: document.getElementById('infinite-disabled'),
+    return item;
+  },
 
-      createTemplate(content) {
-        return `<div class="sg-infinite-item">${content}</div>`
-      },
-      appendChild(wrap) {
-        const children = wrap.querySelectorAll('ea-infinite-item');
-        const item = document.createElement('ea-infinite-item');
-        item.innerHTML = this.createTemplate(children.length + 1);
+  init() {
+    this.el.addEventListener("loadmore", async e => {
+      const { finished } = e.detail;
+      const length = this.el.querySelectorAll(".sg-infinite-item").length;
 
-        wrap.appendChild(item);
-      }
-    }
-
-    infiniteNodes.wrap.addEventListener('bottomReached', (e) => {
-      for(let i = 0; i < 2; i++) {
-        infiniteNodes.appendChild(infiniteNodes.wrap);
-      }
-    })
-
-    infiniteNodes.disabledWrap.addEventListener('bottomReached', (e) => {
-      if(infiniteNodes.disabledWrap.children.length > 15) {
-        infiniteNodes.disabledWrap.disabled = true;
-        return;
+      for (let i = length; i < length + 5; i++) {
+        this.el.appendChild(this.createTemplate(i + 1));
       }
 
-      for(let i = 0; i < 5; i++) {
-        infiniteNodes.appendChild(infiniteNodes.disabledWrap);
-      }
-    })
+      finished();
+    });
+  },
+};
+basicExample.init();
+
+
+      const statusExample = {
+        el: document.querySelector("#statusInfinite"),
+        createTemplate(content) {
+          const item = document.createElement("div");
+          item.className = "sg-infinite-item";
+          item.innerHTML = content;
+
+          return item;
+        },
+
+        init() {
+          this.el.addEventListener("loadmore", async (e) => {
+            const { finished, noMore } = e.detail;
+            const length = this.el.querySelectorAll(".sg-infinite-item").length;
+
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            if (length >= 20) return noMore();
+
+            for (let i = length; i < length + 5; i++) {
+              this.el.appendChild(this.createTemplate(i + 1));
+            }
+
+            finished();
+          });
+        },
+      };
+      statusExample.init();
 })
 </script>
 
 <style lang="scss">
-.sg-infinite-item {
+  .sg-infinite-item {
+    box-sizing: border-box;
     width: 100%;
     padding: 10px;
     text-align: center;
     background-color: aquamarine;
     margin-bottom: 10px;
-}
+  }
 
-ea-infinite::part(wrap) {
-  display: flex;
-  flex-direction: column;
-}
-
-.loading-status,
-.no-more-status {
-  text-align: center;
-}
+  ea-infinite::part(wrap) {
+    display: flex;
+    flex-direction: column;
+  }
 </style>
 
 # InfiniteScroll 无限滚动
@@ -95,19 +113,25 @@ ea-infinite::part(wrap) {
 
 通过 `ea-infinite` 与 `ea-infinite-item` 组件配合实现无限滚动。通过监听 `bottomReached` 事件可实现滚动到底部时自动执行加载方法。
 
-<div class="demo" style="height: 150px; overflow: auto;">
-    <ea-infinite id="infinite">
-        <template v-for="i in 5">
-            <ea-infinite-item>
-                <div class="sg-infinite-item">{{i}}</div>
-            </ea-infinite-item>
-        </template>
-    </ea-infinite>
+<div class="demo" style="height: 150px; overflow: auto">
+  <ea-scrollbar>
+    <ea-infinite-scroll id="basicInfinite">
+      <div class="sg-infinite-item">1</div>
+      <div class="sg-infinite-item">2</div>
+      <div class="sg-infinite-item">3</div>
+      <div class="sg-infinite-item">4</div>
+      <div class="sg-infinite-item">5</div>
+      <section slot="loading">
+        <ea-icon icon="icon-coffee"></ea-icon> loading...
+      </section>
+      <section slot="noMore">
+        <ea-icon icon="icon-cancel"></ea-icon> no more
+      </section>
+    </ea-infinite-scroll>
+  </ea-scrollbar>
 </div>
 
-::: details 查看代码
-
-> `css`: 通过使用 `::part()` 伪类修改 `ea-infinite` 样式
+::: code-group
 
 ```css
 .sg-infinite-item {
@@ -124,50 +148,52 @@ ea-infinite::part(wrap) {
 }
 ```
 
-> `html`
-
 ```html
-<div class="demo" style="height: 150px; overflow: auto;">
-  <ea-infinite id="infinite">
-    <ea-infinite-item>
+<div class="demo" style="height: 150px; overflow: auto">
+  <ea-scrollbar>
+    <ea-infinite-scroll id="basicInfinite">
       <div class="sg-infinite-item">1</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">2</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">3</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">4</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">5</div>
-    </ea-infinite-item>
-  </ea-infinite>
+
+      <section slot="loading">
+        <ea-icon icon="icon-coffee"></ea-icon> loading...
+      </section>
+      <section slot="noMore">
+        <ea-icon icon="icon-cancel"></ea-icon> no more
+      </section>
+    </ea-infinite-scroll>
+  </ea-scrollbar>
 </div>
 ```
 
-> `js`: 通过监听 `bottomReached` 事件来处理相应事件
-
 ```js
-const infiniteNodes = {
-  wrap: document.getElementById("infinite"),
+const basicExample = {
+  el: document.querySelector("#basicInfinite"),
   createTemplate(content) {
-    return `<div class="sg-infinite-item">${content}</div>`;
+    const item = document.createElement("div");
+    item.className = "sg-infinite-item";
+    item.innerHTML = content;
+
+    return item;
+  },
+
+  init() {
+    this.el.addEventListener("loadmore", async e => {
+      const { finished } = e.detail;
+      const length = this.el.querySelectorAll(".sg-infinite-item").length;
+
+      for (let i = length; i < length + 5; i++) {
+        this.el.appendChild(this.createTemplate(i + 1));
+      }
+
+      finished();
+    });
   },
 };
-
-infiniteNodes.wrap.addEventListener("bottomReached", (e) => {
-  const children = infiniteNodes.wrap.children;
-
-  for (let i = 0; i < 5; i++) {
-    const item = document.createElement("ea-infinite-item");
-    item.innerHTML = infiniteNodes.createTemplate(children.length + 1);
-
-    infiniteNodes.wrap.appendChild(item);
-  }
-});
+basicExample.init();
 ```
 
 :::
@@ -176,137 +202,122 @@ infiniteNodes.wrap.addEventListener("bottomReached", (e) => {
 
 通过设置 `disabled` 属性，可以禁用无限加载功能。若同时使用了插槽名为 `noMore` 的插槽，则会显示 `noMore` 插槽的内容。
 
-<div class="demo" style="height: 150px; overflow: auto;">
-  <ea-infinite id="infinite-disabled" delay="500" loading>
-    <ea-infinite-item>
+<div class="demo" style="height: 150px; overflow: auto">
+  <ea-scrollbar>
+    <ea-infinite-scroll id="statusInfinite">
       <div class="sg-infinite-item">1</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">2</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">3</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">4</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">5</div>
-    </ea-infinite-item>
-    <div class="loading-status" slot="loading">加载中...</div>
-    <div class="no-more-status" slot="noMore">到底啦~</div>
-  </ea-infinite>
+      <section slot="loading" style="text-align: center">
+        <ea-icon icon="icon-coffee"></ea-icon> loading...
+      </section>
+      <section slot="noMore" style="text-align: center">
+        <ea-icon icon="icon-cancel"></ea-icon> no more
+      </section>
+    </ea-infinite-scroll>
+  </ea-scrollbar>
 </div>
 
-```js
-infinite.disabled = true;
-```
-
-::: details 查看代码
-
-`css`
+::: code-group
 
 ```css
-.loading-status,
-.no-more-status {
+.sg-infinite-item {
+  width: 100%;
+  padding: 10px;
   text-align: center;
+  background-color: aquamarine;
+  margin-bottom: 10px;
+}
+
+ea-infinite::part(wrap) {
+  display: flex;
+  flex-direction: column;
 }
 ```
 
-`html`
-
 ```html
-<div class="demo" style="height: 150px; overflow: auto;">
-  <ea-infinite id="infinite-disabled" delay="500" loading>
-    <ea-infinite-item>
+<div class="demo" style="height: 150px; overflow: auto">
+  <ea-scrollbar>
+    <ea-infinite-scroll id="statusInfinite">
       <div class="sg-infinite-item">1</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">2</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">3</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">4</div>
-    </ea-infinite-item>
-    <ea-infinite-item>
       <div class="sg-infinite-item">5</div>
-    </ea-infinite-item>
-    <div class="loading-status" slot="loading">加载中...</div>
-    <div class="no-more-status" slot="noMore">到底啦~</div>
-  </ea-infinite>
+      <section slot="loading" style="text-align: center">
+        <ea-icon icon="icon-coffee"></ea-icon> loading...
+      </section>
+      <section slot="noMore" style="text-align: center">
+        <ea-icon icon="icon-cancel"></ea-icon> no more
+      </section>
+    </ea-infinite-scroll>
+  </ea-scrollbar>
 </div>
 ```
 
-`js`
-
 ```js
-// 定义一个对象用于管理无限加载的节点
-const infiniteNodes = {
-  // 获取页面上用于无限加载的容器元素
-  disabledWrap: document.getElementById("infinite-disabled"),
-
-  // 创建一个新的无限加载项模板
+const statusExample = {
+  el: document.querySelector("#statusInfinite"),
   createTemplate(content) {
-    return `<div class="sg-infinite-item">${content}</div>`;
+    const item = document.createElement("div");
+    item.className = "sg-infinite-item";
+    item.innerHTML = content;
+
+    return item;
   },
 
-  // 向指定容器中追加子元素
-  appendChild(wrap) {
-    const children = wrap.querySelectorAll(".sg-infinite-item");
-    const item = document.createElement("ea-infinite-item");
-    item.innerHTML = this.createTemplate(children.length + 1);
+  init() {
+    this.el.addEventListener("loadmore", async e => {
+      const { finished, noMore } = e.detail;
+      const length = this.el.querySelectorAll(".sg-infinite-item").length;
 
-    wrap.appendChild(item);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      if (length >= 20) return noMore();
+
+      for (let i = length; i < length + 5; i++) {
+        this.el.appendChild(this.createTemplate(i + 1));
+      }
+
+      finished();
+    });
   },
 };
-
-// 监听容器上的"bottomReached"事件，该事件在容器底部到达视口时触发
-infiniteNodes.disabledWrap.addEventListener("bottomReached", (e) => {
-  // 检查容器中的子元素数量是否超过15个
-  if (infiniteNodes.disabledWrap.children.length > 15) {
-    // 如果超过15个，则禁用容器，停止无限加载
-    infiniteNodes.disabledWrap.disabled = true;
-    return;
-  }
-
-  for (let i = 0; i < 5; i++) {
-    infiniteNodes.appendChild(infiniteNodes.disabledWrap);
-  }
-});
+statusExample.init();
 ```
 
 :::
 
 ## Attributes
 
-| 参数     | 说明                                                          | 类型    | 可选值 | 默认值 |
-| -------- | ------------------------------------------------------------- | ------- | ------ | ------ |
-| disabled | 是否禁用无限加载                                              | Boolean | -      | false  |
-| loading  | 加载中时显示的内容<br/>(需要配合 `slot="loading"` 的容器使用) | String  | -      | -      |
-| delay    | 延迟加载的时间(ms)                                            | Number  | -      | 200    |
+| 参数     | 说明                                                          | 类型   | 可选值                        | 默认值     |
+| -------- | ------------------------------------------------------------- | ------ | ----------------------------- | ---------- |
+| status   | 当前状态，控制显示的状态类（`finished`、`loading`、`noMore`） | String | `finished` `loading` `noMore` | `finished` |
+| distance | 占位元素与视口交叉的 rootMargin（像素），用于触发加载         | Number | -                             | `0`        |
 
 ## CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称         | 说明                                              |
-| ------------ | ------------------------------------------------- |
-| container    | 内容容器                                          |
-| loading-wrap | 显示加载中的内容的容器(`slot="loading"`的容器)    |
-| noMore-wrap  | 显示无更多数据的内容的容器(`slot="noMore"`的容器) |
+| 名称        | 说明                                                           |
+| ----------- | -------------------------------------------------------------- |
+| container   | 根容器（组件外层 section，part='container'）                   |
+| placeholder | 占位元素（用于 IntersectionObserver 观察，part='placeholder'） |
+| loading     | 加载状态显示容器（slot="loading" 的外层，part='loading'）      |
+| noMore      | 无更多数据显示容器（slot="noMore" 的外层，part='noMore'）      |
 
 ## Events
 
-| 事件名        | 说明           | 回调参数 |
-| ------------- | -------------- | -------- |
-| bottomReached | 到达底部时触发 | -        |
+| 事件名   | 说明                                                               | 回调参数                                                                       |
+| -------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| loadmore | 占位元素进入可视区并且组件处于可加载（status 为 `finished`）时触发 | Object，包含回调函数：{ finished: () => void, noMore: () => void }，事件可冒泡 |
 
 ## Slots
 
-| 名称    | 说明                                                 |
-| ------- | ---------------------------------------------------- |
-| -       | 滚动区域的内容                                       |
-| noMore  | 无更多数据时显示的内容(需要配合 `disabled` 属性使用) |
-| loading | 加载中的内容(需要配合 `loading` 属性使用)            |
+| 名称    | 说明                                                                       |
+| ------- | -------------------------------------------------------------------------- |
+| -       | 默认插槽：滚动列表的内容（列表项通常直接作为子元素放入）                   |
+| loading | 加载中显示内容（放置加载中提示或自定义 loading UI）                        |
+| noMore  | 无更多数据时显示内容（当组件通过回调或 disabled 状态切换到 noMore 时显示） |

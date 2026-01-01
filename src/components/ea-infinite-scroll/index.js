@@ -8,6 +8,9 @@ export class EaInfiniteScroll extends Base {
   /** @type {HTMLElement} */
   #placeholder;
 
+  /** @type {AbortController} */
+  #abortController;
+
   #states = {
     /** @type {IntersectionObserver | null} */
     observer: null,
@@ -22,14 +25,14 @@ export class EaInfiniteScroll extends Base {
       type: ["finished", "loading", "noMore"],
       default: "finished",
       /** @param {"loading" | "finished" | "noMore"} newVal */
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     distance: {
       type: Number,
       default: 0,
-      observer: (newVal) => {},
+      observer: () => {},
     },
   });
 
@@ -40,9 +43,7 @@ export class EaInfiniteScroll extends Base {
   updateContainerClasslist() {
     const className = this.computedClasslist(
       "ea-infinite-scroll",
-      {
-        // ['--' + this.type]: this.type,
-      },
+      {},
       {
         [this.status]: this.status,
       }
@@ -63,16 +64,16 @@ export class EaInfiniteScroll extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
-        <section class='ea-infinite-scroll' part='container'>
-            <slot></slot>
-            <div class='ea-infinite-scroll__placeholder' part='placeholder'></div>
-            <section class='ea-infinite-scroll__loading' part='loading'>
-                <slot name='loading'></slot>
-            </section>
-            <section class='ea-infinite-scroll__noMore' part='noMore'>
-                <slot name='noMore'></slot>
-            </section>
+      <section class='ea-infinite-scroll' part='container'>
+        <slot></slot>
+        <div class='ea-infinite-scroll__placeholder' part='placeholder'></div>
+        <section class='ea-infinite-scroll__loading' part='loading'>
+          <slot name='loading'></slot>
         </section>
+        <section class='ea-infinite-scroll__noMore' part='noMore'>
+          <slot name='noMore'></slot>
+        </section>
+      </section>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-infinite-scroll");
@@ -84,15 +85,18 @@ export class EaInfiniteScroll extends Base {
   connectedCallback() {
     super.connectedCallback();
 
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
     this.#states.observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (this.status !== "finished") return;
 
-        entries.forEach(async (entry) => {
+        entries.forEach(async entry => {
           if (entry.isIntersecting) {
             this.#states.observer.unobserve(entry.target);
             this.status = "loading";
-            this.dispatchEvent("loadmore", {
+            this.emit("loadmore", {
               detail: {
                 finished: () => {
                   this.status = "finished";
@@ -115,12 +119,14 @@ export class EaInfiniteScroll extends Base {
 
     this.#states.observer.observe(this.#placeholder);
 
+    // 当被 滚动条组件 包裹时，以确保滚动条视图更新
     this.shadowRoot.addEventListener("slotchange", () => {
-      this.dispatchEvent("slotchange", { bubbles: true });
+      this.emit("slotchange", { bubbles: true, composed: true });
     });
   }
 
   $beforeUnmounted() {
+    this.#abortController?.abort();
     this.#states.observer.disconnect();
   }
 }

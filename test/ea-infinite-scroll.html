@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -72,7 +72,7 @@
         },
 
         init() {
-          this.el.addEventListener("loadmore", async (e) => {
+          this.el.addEventListener("loadmore", async e => {
             const { finished } = e.detail;
             const length = this.el.querySelectorAll(".sg-infinite-item").length;
 
@@ -110,7 +110,6 @@
         </ea-infinite-scroll>
       </ea-scrollbar>
     </div>
-    <hr />
 
     <script type="module">
       const statusExample = {
@@ -124,11 +123,11 @@
         },
 
         init() {
-          this.el.addEventListener("loadmore", async (e) => {
+          this.el.addEventListener("loadmore", async e => {
             const { finished, noMore } = e.detail;
             const length = this.el.querySelectorAll(".sg-infinite-item").length;
 
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
             if (length >= 20) return noMore();
 
@@ -142,6 +141,8 @@
       };
       statusExample.init();
     </script>
+
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
   </body>
