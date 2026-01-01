@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -27,16 +27,25 @@
 
     <div class="demo">
       <p>When you have few pages</p>
-      <ea-pagination
-        layout='["prev", "pager", "next"]'
-        total="50"
-      ></ea-pagination>
+      <ea-pagination id="basicNoMorePagination" total="50"></ea-pagination>
       <p>When you have more than 7 pages</p>
-      <ea-pagination
-        layout='["prev", "pager", "next"]'
-        total="1000"
-      ></ea-pagination>
+      <ea-pagination id="basicMorePagination" total="1000"></ea-pagination>
     </div>
+
+    <script type="module">
+      const basicExample = {
+        noMoreEl: document.querySelector("#basicNoMorePagination"),
+        moreEl: document.querySelector("#basicMorePagination"),
+
+        layout: ["prev", "pager", "next"],
+
+        init() {
+          this.noMoreEl.layout = this.layout;
+          this.moreEl.layout = this.layout;
+        },
+      };
+      basicExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->
@@ -45,14 +54,28 @@
     <!-- -------- 设置最大页码按钮数 --------  -->
     <!-- #region  -->
     <h2>设置最大页码按钮数</h2>
+
     <div class="demo">
       <ea-pagination
-        layout='["prev", "pager", "next"]'
+        id="maxPagerCountPagination"
         page-size="20"
         pager-count="11"
         total="1000"
       ></ea-pagination>
     </div>
+
+    <script type="module">
+      const maxPagerCountExample = {
+        el: document.querySelector("#maxPagerCountPagination"),
+
+        init() {
+          this.el.layout = ["prev", "pager", "next"];
+          this.el.pagerCount = 11;
+        },
+      };
+      maxPagerCountExample.init();
+    </script>
+
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -62,11 +85,23 @@
     <h2>带有背景色的分页</h2>
     <div class="demo">
       <ea-pagination
+        id="backgroundPagination"
         background
-        layout='["prev", "pager", "next"]'
         total="1000"
       ></ea-pagination>
     </div>
+
+    <script type="module">
+      const backgroundExample = {
+        el: document.querySelector("#backgroundPagination"),
+
+        init() {
+          this.el.layout = ["prev", "pager", "next"];
+        },
+      };
+      backgroundExample.init();
+    </script>
+
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -76,17 +111,34 @@
     <h2>小型分页</h2>
     <div class="demo">
       <ea-pagination
+        id="smallPagination1"
         size="small"
-        layout='["prev", "pager", "next"]'
         total="1000"
       ></ea-pagination>
       <ea-pagination
+        id="smallPagination2"
         background
         size="small"
-        layout='["prev", "pager", "next"]'
         total="1000"
       ></ea-pagination>
     </div>
+
+    <script type="module">
+      const smallExample = {
+        els: [
+          document.querySelector("#smallPagination1"),
+          document.querySelector("#smallPagination2"),
+        ],
+
+        init() {
+          this.els.forEach(el => {
+            el.layout = ["prev", "pager", "next"];
+          });
+        },
+      };
+      smallExample.init();
+    </script>
+
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -96,26 +148,24 @@
     <h2>当只有一页时隐藏分页</h2>
     <div class="demo">
       <ea-switch id="singlePageSwitch"></ea-switch>
-      <ea-pagination
-        id="singlePagePagination"
-        layout='["prev", "pager", "next"]'
-        total="5"
-      ></ea-pagination>
-
-      <script type="module">
-        const singlePageExample = {
-          el: document.querySelector("#singlePagePagination"),
-          btn: document.querySelector("#singlePageSwitch"),
-
-          init() {
-            this.btn.addEventListener("change", (e) => {
-              this.el["hide-on-single-page"] = e.detail.checked;
-            });
-          },
-        };
-        singlePageExample.init();
-      </script>
+      <ea-pagination id="singlePagePagination" total="5"></ea-pagination>
     </div>
+
+    <script type="module">
+      const singlePageExample = {
+        el: document.querySelector("#singlePagePagination"),
+        btn: document.querySelector("#singlePageSwitch"),
+
+        init() {
+          this.el.layout = ["prev", "pager", "next"];
+
+          this.btn.addEventListener("change", e => {
+            this.el["hide-on-single-page"] = e.detail.value;
+          });
+        },
+      };
+      singlePageExample.init();
+    </script>
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
@@ -124,7 +174,7 @@
     <!-- #region  -->
     <h2>附加功能</h2>
     <div class="demo">
-      <ea-radio-group id="additionalFunctionsSize" name="size">
+      <ea-radio-group id="additionalFunctionsSize" name="size" value="default">
         <ea-radio value="large">large</ea-radio>
         <ea-radio value="default" checked>default</ea-radio>
         <ea-radio value="small">small</ea-radio>
@@ -139,7 +189,6 @@
       <div class="demonstration">Total item count</div>
       <ea-pagination
         id="additionalFunctionsPagination1"
-        layout='["prev", "pager", "next", "total"]'
         total="1000"
         page-size="100"
       ></ea-pagination>
@@ -147,7 +196,6 @@
       <div class="demonstration">Change page size</div>
       <ea-pagination
         id="additionalFunctionsPagination2"
-        layout='["sizes", "prev", "pager", "next"]'
         page-sizes="[100, 200, 300, 400]"
         total="1000"
       ></ea-pagination>
@@ -155,7 +203,6 @@
       <div class="demonstration">Jump to</div>
       <ea-pagination
         id="additionalFunctionsPagination3"
-        layout='["prev", "pager", "next", "jumper"]'
         total="1000"
       ></ea-pagination>
 
@@ -163,55 +210,52 @@
       <ea-pagination
         id="additionalFunctionsPagination4"
         page-sizes="[100, 200, 300, 400]"
-        layout='["total", "sizes", "prev", "pager", "next", "jumper"]'
         total="400"
       ></ea-pagination>
-
-      <script type="module">
-        const additionalFunctionsExample = {
-          sizeBtn: document.querySelector("#additionalFunctionsSize"),
-          backgroundBtn: document.querySelector(
-            "#additionalFunctionsBackground"
-          ),
-          disabledBtn: document.querySelector("#additionalFunctionsDisabled"),
-
-          els: [
-            document.querySelector("#additionalFunctionsPagination1"),
-            document.querySelector("#additionalFunctionsPagination2"),
-            document.querySelector("#additionalFunctionsPagination3"),
-            document.querySelector("#additionalFunctionsPagination4"),
-          ],
-
-          init() {
-            this.sizeBtn.addEventListener("change", (e) => {
-              const { value } = e.detail;
-
-              this.els.forEach((el) => {
-                el.size = value;
-              });
-            });
-
-            this.backgroundBtn.addEventListener("change", (e) => {
-              const { value } = e.detail;
-
-              this.els.forEach((el) => {
-                el.background = value;
-              });
-            });
-
-            this.disabledBtn.addEventListener("change", (e) => {
-              const { value } = e.detail;
-
-              this.els.forEach((el) => {
-                el.disabled = value;
-              });
-            });
-          },
-        };
-
-        additionalFunctionsExample.init();
-      </script>
     </div>
+
+    <script type="module">
+      const additionalFunctionsExample = {
+        sizeBtn: document.querySelector("#additionalFunctionsSize"),
+        backgroundBtn: document.querySelector("#additionalFunctionsBackground"),
+        disabledBtn: document.querySelector("#additionalFunctionsDisabled"),
+
+        els: [
+          document.querySelector("#additionalFunctionsPagination1"),
+          document.querySelector("#additionalFunctionsPagination2"),
+          document.querySelector("#additionalFunctionsPagination3"),
+          document.querySelector("#additionalFunctionsPagination4"),
+        ],
+
+        init() {
+          this.sizeBtn.addEventListener("change", e => {
+            const { value } = e.detail;
+
+            this.els.forEach(el => {
+              el.size = value;
+            });
+          });
+
+          this.backgroundBtn.addEventListener("change", e => {
+            const { value } = e.detail;
+
+            this.els.forEach(el => {
+              el.background = value;
+            });
+          });
+
+          this.disabledBtn.addEventListener("change", e => {
+            const { value } = e.detail;
+
+            this.els.forEach(el => {
+              el.disabled = value;
+            });
+          });
+        },
+      };
+
+      additionalFunctionsExample.init();
+    </script>
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->

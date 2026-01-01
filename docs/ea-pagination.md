@@ -1,13 +1,112 @@
 <script setup>
 import { onMounted } from 'vue'
 
-onMounted(() => {
-    import('../components/ea-pagination/index.js')
-    import('./index.scss')
+onMounted(async () => {
+  import('../dist/components/index.js')
+  import('../dist/assets/icon.css') 
 
-    document.querySelector('#prevAndNext').addEventListener('change', function (e) {
-        alert(`当前页码为: ${e.detail.currentPage}`);
-    })
+  await customElements.whenDefined('ea-pagination')
+
+const basicExample = {
+  noMoreEl: document.querySelector("#basicNoMorePagination"),
+  moreEl: document.querySelector("#basicMorePagination"),
+
+  layout: ["prev", "pager", "next"],
+
+  init() {
+    this.noMoreEl.layout = this.layout;
+    this.moreEl.layout = this.layout;
+  },
+};
+basicExample.init();
+
+const maxPagerCountExample = {
+  el: document.querySelector("#maxPagerCountPagination"),
+
+  init() {
+    this.el.layout = ["prev", "pager", "next"];
+    this.el.pagerCount = 11;
+  },
+};
+maxPagerCountExample.init();
+
+const backgroundExample = {
+  el: document.querySelector("#backgroundPagination"),
+
+  init() {
+    this.el.layout = ["prev", "pager", "next"];
+  },
+};
+backgroundExample.init();
+
+const smallExample = {
+  els: [
+    document.querySelector("#smallPagination1"),
+    document.querySelector("#smallPagination2"),
+  ],
+
+  init() {
+    this.els.forEach(el => {
+      el.layout = ["prev", "pager", "next"];
+    });
+  },
+};
+smallExample.init();
+
+const singlePageExample = {
+  el: document.querySelector("#singlePagePagination"),
+  btn: document.querySelector("#singlePageSwitch"),
+
+  init() {
+    this.el.layout = ["prev", "pager", "next"];
+
+    this.btn.addEventListener("change", e => {
+      this.el["hide-on-single-page"] = e.detail.value;
+    });
+  },
+};
+singlePageExample.init();
+
+const additionalFunctionsExample = {
+  sizeBtn: document.querySelector("#additionalFunctionsSize"),
+  backgroundBtn: document.querySelector("#additionalFunctionsBackground"),
+  disabledBtn: document.querySelector("#additionalFunctionsDisabled"),
+
+  els: [
+    document.querySelector("#additionalFunctionsPagination1"),
+    document.querySelector("#additionalFunctionsPagination2"),
+    document.querySelector("#additionalFunctionsPagination3"),
+    document.querySelector("#additionalFunctionsPagination4"),
+  ],
+
+  init() {
+    this.sizeBtn.addEventListener("change", e => {
+      const { value } = e.detail;
+
+      this.els.forEach(el => {
+        el.size = value;
+      });
+    });
+
+    this.backgroundBtn.addEventListener("change", e => {
+      const { value } = e.detail;
+
+      this.els.forEach(el => {
+        el.background = value;
+      });
+    });
+
+    this.disabledBtn.addEventListener("change", e => {
+      const { value } = e.detail;
+
+      this.els.forEach(el => {
+        el.disabled = value;
+      });
+    });
+  },
+};
+
+additionalFunctionsExample.init();
 })
 </script>
 
@@ -15,12 +114,21 @@ onMounted(() => {
 
 当数据量过多时，使用分页分解数据。
 
+::: tip
+若需自定义`layout`，请在等待 `ea-pagination` 组件定义完成之后再进行 js 操作。(特别在 Vue 环境中)
+
+```js
+await customElements.whenDefined("ea-pagination");
+```
+
+:::
+
 ## 引入
 
 > `js`
 
 ```js
-<script type="module">
+<script type='module'>
   import "./node_modules/easy-component-ui/components/ea-pagination/index.js";
 </script>
 ```
@@ -44,78 +152,79 @@ onMounted(() => {
 
 ## 基础用法
 
-需要设置`total`属性来设置数据总数。可以设置`layout`属性来控制显示的内容。
+需要设置`total`属性来设置数据总数。可以设置`layout`属性来控制显示的内容。 分页元素包括：`prev`（跳转到上一页的按钮）、`next`（跳转到下一页的按钮）、`pager`（页码列表）、`jumper`（跳转输入框）、`total`（总条目数）、`sizes`（用于设置每页条数的选择器）以及 `->`（该符号之后的所有元素将被靠右对齐）。
 
-> 可以利用`change`事件监听当前页码的变化。
-
-<div class="col left">
-    <ea-pagination layout="prev,pager,next" total="60" />
-    <ea-pagination layout="prev,pager,next" total="200" />
+<div class="demo">
+  <p>When you have few pages</p>
+  <ea-pagination id="basicNoMorePagination" total="50"></ea-pagination>
+  <p>When you have more than 7 pages</p>
+  <ea-pagination id="basicMorePagination" total="1000"></ea-pagination>
 </div>
 
-::: details 查看代码
+::: code-group
 
 ```html
-<div class="col left">
-  <ea-pagination layout="prev,pager,next" total="60"></ea-pagination>
-  <ea-pagination layout="prev,pager,next" total="200"></ea-pagination>
+<div class="demo">
+  <p>When you have few pages</p>
+  <ea-pagination id="basicNoMorePagination" total="50"></ea-pagination>
+  <p>When you have more than 7 pages</p>
+  <ea-pagination id="basicMorePagination" total="1000"></ea-pagination>
 </div>
 ```
-
-:::
-
-> 当只显示前后按钮时，也可以通过`change`事件监听当前页码的变化。
-
-<div class="col left">
-    <ea-pagination id="prevAndNext" layout="prev,next" total="80"></ea-pagination>
-</div>
-
-::: details 查看代码
-
-`html`
-
-```html
-<div class="col left">
-  <ea-pagination id="prevAndNext" layout="prev,next" total="80"></ea-pagination>
-</div>
-```
-
-`js`
 
 ```js
-document.querySelector("#prevAndNext").addEventListener("change", function (e) {
-  alert(`当前页码为: ${e.detail.currentPage}`);
-});
+const basicExample = {
+  noMoreEl: document.querySelector("#basicNoMorePagination"),
+  moreEl: document.querySelector("#basicMorePagination"),
+
+  layout: ["prev", "pager", "next"],
+
+  init() {
+    this.noMoreEl.layout = this.layout;
+    this.moreEl.layout = this.layout;
+  },
+};
+basicExample.init();
 ```
 
 :::
 
 ## 设置最大页码按钮数
 
-通过设置`page-count`属性来设置最大页码按钮数。
+默认情况下，当总页数超过 7 页时，Pagination 会折叠多余的页码按钮。通过设置`page-count`属性来设置最大页码按钮数。
 
-<div class="col left">
-    <ea-pagination layout="prev,pager,next" total="60" page-count="10"></ea-pagination>
-    <ea-pagination layout="prev,pager,next" total="200" page-count="10"></ea-pagination>
+<div class="demo">
+  <ea-pagination
+    id="maxPagerCountPagination"
+    page-size="20"
+    pager-count="11"
+    total="1000"
+  ></ea-pagination>
 </div>
 
-::: details 查看代码
-
-`html`
+::: code-group
 
 ```html
-<div class="col left">
+<div class="demo">
   <ea-pagination
-    layout="prev,pager,next"
-    total="60"
-    page-count="10"
-  ></ea-pagination>
-  <ea-pagination
-    layout="prev,pager,next"
-    total="200"
-    page-count="10"
+    id="maxPagerCountPagination"
+    page-size="20"
+    pager-count="11"
+    total="1000"
   ></ea-pagination>
 </div>
+```
+
+```js
+const maxPagerCountExample = {
+  el: document.querySelector("#maxPagerCountPagination"),
+
+  init() {
+    this.el.layout = ["prev", "pager", "next"];
+    this.el.pagerCount = 11;
+  },
+};
+maxPagerCountExample.init();
 ```
 
 :::
@@ -124,73 +233,299 @@ document.querySelector("#prevAndNext").addEventListener("change", function (e) {
 
 通过设置`background`属性来设置背景色。
 
-<div class="col left">
-    <ea-pagination background layout="prev,pager,next" total="200"></ea-pagination>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="col left">
+<div class="demo">
   <ea-pagination
+    id="backgroundPagination"
     background
-    layout="prev,pager,next"
-    total="200"
+    total="1000"
   ></ea-pagination>
 </div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-pagination
+    id="backgroundPagination"
+    background
+    total="1000"
+  ></ea-pagination>
+</div>
+```
+
+```js
+const backgroundExample = {
+  el: document.querySelector("#backgroundPagination"),
+
+  init() {
+    this.el.layout = ["prev", "pager", "next"];
+  },
+};
+backgroundExample.init();
+```
+
+:::
+
+## 小型分页​
+
+在空间有限的情况下，可以使用简单的小型分页。
+
+通过 `size` 更改大小 这是个 `small` 的例子
+
+<div class="demo">
+  <ea-pagination
+    id="smallPagination1"
+    size="small"
+    total="1000"
+  ></ea-pagination>
+  <ea-pagination
+    id="smallPagination2"
+    background
+    size="small"
+    total="1000"
+  ></ea-pagination>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-pagination
+    id="smallPagination1"
+    size="small"
+    total="1000"
+  ></ea-pagination>
+  <ea-pagination
+    id="smallPagination2"
+    background
+    size="small"
+    total="1000"
+  ></ea-pagination>
+</div>
+```
+
+```js
+const smallExample = {
+  els: [
+    document.querySelector("#smallPagination1"),
+    document.querySelector("#smallPagination2"),
+  ],
+
+  init() {
+    this.els.forEach(el => {
+      el.layout = ["prev", "pager", "next"];
+    });
+  },
+};
+smallExample.init();
+```
+
+:::
+
+## 当只有一页时隐藏分页​
+
+当只有一页时，通过设置 `hide-on-single-page` 属性来隐藏分页。
+
+<div class="demo">
+  <ea-switch id="singlePageSwitch"></ea-switch>
+  <ea-pagination id="singlePagePagination" total="5"></ea-pagination>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-switch id="singlePageSwitch"></ea-switch>
+  <ea-pagination id="singlePagePagination" total="5"></ea-pagination>
+</div>
+```
+
+```js
+const singlePageExample = {
+  el: document.querySelector("#singlePagePagination"),
+  btn: document.querySelector("#singlePageSwitch"),
+
+  init() {
+    this.el.layout = ["prev", "pager", "next"];
+
+    this.btn.addEventListener("change", e => {
+      this.el["hide-on-single-page"] = e.detail.value;
+    });
+  },
+};
+singlePageExample.init();
 ```
 
 :::
 
 ## 附加功能
 
-根据场景需要，可以添加其他功能模块。
+<div class="demo">
+  <ea-radio-group id="additionalFunctionsSize" name="size" value="default">
+    <ea-radio value="large">large</ea-radio>
+    <ea-radio value="default" checked>default</ea-radio>
+    <ea-radio value="small">small</ea-radio>
+  </ea-radio-group>
+  <div>
+    background: <ea-switch id="additionalFunctionsBackground"></ea-switch>
+  </div>
+  <div>disabled: <ea-switch id="additionalFunctionsDisabled"></ea-switch></div>
 
-<div class="col left">
-    <ea-pagination background layout="total,prev,pager,next" total="200"></ea-pagination>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="col left">
-  <section>显示总数</section>
+  <div class="demonstration">Total item count</div>
   <ea-pagination
-    background
-    layout="total,prev,pager,next"
-    total="200"
+    id="additionalFunctionsPagination1"
+    total="1000"
+    page-size="100"
+  ></ea-pagination>
+
+  <div class="demonstration">Change page size</div>
+  <ea-pagination
+    id="additionalFunctionsPagination2"
+    page-sizes="[100, 200, 300, 400]"
+    total="1000"
+  ></ea-pagination>
+
+  <div class="demonstration">Jump to</div>
+  <ea-pagination
+    id="additionalFunctionsPagination3"
+    total="1000"
+  ></ea-pagination>
+
+  <div class="demonstration">All combined</div>
+  <ea-pagination
+    id="additionalFunctionsPagination4"
+    page-sizes="[100, 200, 300, 400]"
+    total="400"
   ></ea-pagination>
 </div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-radio-group id="additionalFunctionsSize" name="size" value="default">
+    <ea-radio value="large">large</ea-radio>
+    <ea-radio value="default" checked>default</ea-radio>
+    <ea-radio value="small">small</ea-radio>
+  </ea-radio-group>
+  <div>
+    background: <ea-switch id="additionalFunctionsBackground"></ea-switch>
+  </div>
+  <div>disabled: <ea-switch id="additionalFunctionsDisabled"></ea-switch></div>
+
+  <div class="demonstration">Total item count</div>
+  <ea-pagination
+    id="additionalFunctionsPagination1"
+    total="1000"
+    page-size="100"
+  ></ea-pagination>
+
+  <div class="demonstration">Change page size</div>
+  <ea-pagination
+    id="additionalFunctionsPagination2"
+    page-sizes="[100, 200, 300, 400]"
+    total="1000"
+  ></ea-pagination>
+
+  <div class="demonstration">Jump to</div>
+  <ea-pagination
+    id="additionalFunctionsPagination3"
+    total="1000"
+  ></ea-pagination>
+
+  <div class="demonstration">All combined</div>
+  <ea-pagination
+    id="additionalFunctionsPagination4"
+    page-sizes="[100, 200, 300, 400]"
+    total="400"
+  ></ea-pagination>
+</div>
+```
+
+```js
+const additionalFunctionsExample = {
+  sizeBtn: document.querySelector("#additionalFunctionsSize"),
+  backgroundBtn: document.querySelector("#additionalFunctionsBackground"),
+  disabledBtn: document.querySelector("#additionalFunctionsDisabled"),
+
+  els: [
+    document.querySelector("#additionalFunctionsPagination1"),
+    document.querySelector("#additionalFunctionsPagination2"),
+    document.querySelector("#additionalFunctionsPagination3"),
+    document.querySelector("#additionalFunctionsPagination4"),
+  ],
+
+  init() {
+    this.sizeBtn.addEventListener("change", e => {
+      const { value } = e.detail;
+
+      this.els.forEach(el => {
+        el.size = value;
+      });
+    });
+
+    this.backgroundBtn.addEventListener("change", e => {
+      const { value } = e.detail;
+
+      this.els.forEach(el => {
+        el.background = value;
+      });
+    });
+
+    this.disabledBtn.addEventListener("change", e => {
+      const { value } = e.detail;
+
+      this.els.forEach(el => {
+        el.disabled = value;
+      });
+    });
+  },
+};
+
+additionalFunctionsExample.init();
 ```
 
 :::
 
 ## Attributes
 
-| 参数        | 说明           | 类型    | 可选值 | 默认值          |
-| ----------- | -------------- | ------- | ------ | --------------- |
-| total       | 总数           | number  | -      | 0               |
-| page-count  | 最大页码按钮数 | number  | -      | 7               |
-| layout      | 显示的内容     | string  | -      | prev,pager,next |
-| background  | 显示背景色     | boolean | -      | false           |
-| page-size   | 每页显示条数   | number  | -      | 10              |
-| pager-count | 页码按钮的数量 | number  | -      | 7               |
+| 参数                | 说明                                                          | 类型           | 可选值                                            | 默认值                               |
+| ------------------- | ------------------------------------------------------------- | -------------- | ------------------------------------------------- | ------------------------------------ |
+| total               | 数据总条目数，用于计算总页数                                  | number         | -                                                 | 0                                    |
+| pager-count         | 设置最大页码按钮数。 页码按钮的数量，当总页数超过该值时会折叠 | number         | -                                                 | 7                                    |
+| layout              | 控制显示的元素顺序与种类（字符串数组或逗号分隔）              | string / Array | prev / pager / next / jumper / total / sizes / -> | prev, pager, next, jumper, ->, total |
+| background          | 是否显示带背景样式                                            | boolean        | -                                                 | false                                |
+| default-page-size   | 默认每页显示条数（用于 `page-size` 未设置时的回退值）         | number         | -                                                 | 10                                   |
+| page-size           | 当前每页显示条数                                              | number         | -                                                 | 10 (继承 default-page-size)          |
+| current-page        | 当前页码                                                      | number         | -                                                 | 1                                    |
+| hide-on-single-page | 当仅有一页时是否隐藏分页组件                                  | boolean        | -                                                 | false                                |
+| size                | 组件尺寸，会影响样式类                                        | string         | large / default / small                           | "" (默认尺寸)                        |
+| disabled            | 是否禁用分页交互                                              | boolean        | -                                                 | false                                |
 
 ## CSS Part
 
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+> 用法可参考 [MDN ::part() 伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称       | 说明                                                      |
-| ---------- | --------------------------------------------------------- |
-| container  | 外层容器                                                  |
-| item-wrap  | 页码按钮容器 **(仅在`layout`属性中包含`pager`时生效)**    |
-| arrow      | 箭头按钮 **(仅在`layout`属性中包含`prev`或`next`时生效)** |
-| total-wrap | 总数容器 **(仅在`layout`属性中包含`total`时生效)**        |
-| page-item  | 页码按钮 **(仅在`layout`属性中包含`pager`时生效)**        |
-| more-item  | 省略页码按钮 **(仅在`layout`属性中包含`pager`时生效)**    |
+| 名称        | 说明                                                               |
+| ----------- | ------------------------------------------------------------------ |
+| container   | 组件根容器，part="container"，用于整体样式定制                     |
+| pager       | 页码列表容器，part="pager"，仅在 layout 包含 `pager` 时存在        |
+| item-wrap   | 页码按钮外层容器（与 pager 配合），用于布局页码按钮                |
+| page-item   | 单个页码按钮，part="page-item"（或 `.ea-pagination__page`）        |
+| more-item   | 省略号/更多 按钮，part="more-item"（或 `.ea-pagination__more`）    |
+| prev-icon   | 上一页箭头图标，part="icon prev-icon"（或 `.prev-icon`）           |
+| next-icon   | 下一页箭头图标，part="icon next-icon"（或 `.next-icon`）           |
+| jumper-wrap | 跳转输入容器，part="jumper-wrap"（当 layout 包含 `jumper` 时存在） |
+| jumper      | 跳转输入控件，part="jumper"（对应内部 `ea-input`）                 |
+| total       | 总数显示容器，part="total"（当 layout 包含 `total` 时存在）        |
+| sizes       | 每页大小选择控件，part="sizes"（当 layout 包含 `sizes` 时存在）    |
+| separator   | 右对齐分隔占位，part="separator"（对应 `->` 在 layout 中的位置）   |
 
 ## Events
 
-| 事件名称 | 说明           | 回调参数                |
-| -------- | -------------- | ----------------------- |
-| change   | 页码改变时触发 | { currentPage: number } |
+| 事件名称       | 说明                                       | 回调参数                                    |
+| -------------- | ------------------------------------------ | ------------------------------------------- |
+| change         | 当分页信息（页码或每页数量）改变时触发     | `{ currentPage: number, pageSize: number }` |
+| current-change | 当 current-page 变化时触发（作为补充事件） | `{ value: number }`                         |
+| prev-click     | 点击上一页按钮时触发                       | `{ value: number }`                         |
+| next-click     | 点击下一页按钮时触发                       | `{ value: number }`                         |

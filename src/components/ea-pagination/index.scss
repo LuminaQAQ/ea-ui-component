@@ -42,6 +42,10 @@ $ea-pagination-size-options: ("large", "default", "small");
     &:not(.is-disabled):hover {
       color: var(--ea-pagination-active-color);
     }
+
+    &.is-hidden {
+      display: none;
+    }
   }
 
   @include element(pager) {

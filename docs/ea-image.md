@@ -148,7 +148,7 @@ onMounted(() => {
 图片容器，在保留原生 img 的特性下，支持懒加载，自定义占位、加载失败等
 
 ::: tip
-若在 `Image` 上启用 `preview` 功能，或单独使用 `ea-image-preview` 组件，请在等待 `ea-image-preview` 组件加载完成之后再进行 js 操作。
+若在 `Image` 上启用 `preview` 功能，或单独使用 `ea-image-preview` 组件，请在等待 `ea-image-preview` 组件定义完成之后再进行 js 操作。(特别在 Vue 环境中)
 
 ```js
 await customElements.whenDefined("ea-image-preview");

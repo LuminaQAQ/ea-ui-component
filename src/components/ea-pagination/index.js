@@ -21,27 +21,28 @@ export class EaPagination extends Base {
   /** @type {HTMLElement} */
   #sizes;
 
-  /** @type {AbortController} */
-  #paginationAbortController;
-  /** @type {AbortController} */
-  #prevAbortController;
-  /** @type {AbortController} */
-  #nextAbortController;
-  /** @type {AbortController} */
-  #jumperAbortController;
-
   #states = {
     isFirstRender: true,
     isEaInputImported: false,
   };
 
+  #AbortControllerStates = {
+    /** @type {AbortController | null} */
+    paginationAbortController: null,
+    /** @type {AbortController | null} */
+    prevAbortController: null,
+    /** @type {AbortController | null} */
+    nextAbortController: null,
+    /** @type {AbortController | null} */
+    jumperAbortController: null,
+  };
+
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
-      "layout",
       "default-page-size",
       "page-size",
-      "page-sizes",
+      // "page-sizes",
       "pager-count",
       "total",
       "background",
@@ -53,47 +54,33 @@ export class EaPagination extends Base {
   }
 
   state = this.properties({
-    // TODO: sizes 要下拉框，没写
-    layout: {
-      type: Array,
-      default: ["prev", "pager", "next", "jumper", "->", "total"],
-      /** @param {Array<'prev' | 'pager' | 'next' | '->' | 'jumper' | 'total' | 'sizes'>} newVal */
-      observer: async (newVal) => {
-        if (!this.#states.isFirstRender) this.$render();
-
-        if (newVal.includes("jumper") && !this.#states.isEaInputImported) {
-          await import("@components/ea-input/index.js");
-          this.#states.isEaInputImported = true;
-        }
-      },
-    },
     "default-page-size": {
       type: Number,
       default: 10,
       /** @param {number} newVal */
-      observer: (newVal) => {
-        if (!this.#states.isFirstRender) this.$render();
+      observer: () => {
+        if (!this.#states.isFirstRender) this.#handlePaginationItemChange();
       },
     },
     "page-size": {
       type: Number,
       default: () => this["default-page-size"],
       /** @param {number} newVal */
-      observer: (newVal) => {
-        if (!this.#states.isFirstRender) this.$render();
+      observer: () => {
+        if (!this.#states.isFirstRender) this.#handlePaginationItemChange();
       },
     },
     "pager-count": {
       type: Number,
       default: 7,
       /** @param {number} newVal */
-      observer: (newVal) => {},
+      observer: () => {},
     },
     total: {
       type: Number,
       default: 0,
       /** @param {number} newVal */
-      observer: (newVal) => {
+      observer: () => {
         if (this.#pagination && this.layout.includes("pager"))
           this.#handlePaginationItemChange();
 
@@ -104,7 +91,7 @@ export class EaPagination extends Base {
       type: Number,
       default: 1,
       /** @param {number} newVal */
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.#pagination && this.layout.includes("pager")) {
           this.#pagination.innerHTML = this.#getPagerTemplate(newVal);
 
@@ -112,7 +99,7 @@ export class EaPagination extends Base {
           const target = this.#pagination.querySelector(
             `.ea-pagination__page[data-page="${newVal}"]`
           );
-          els.forEach((el) => {
+          els.forEach(el => {
             el.classList.toggle("is-active", el === target);
             el.setAttribute("aria-current", el === target);
           });
@@ -122,34 +109,55 @@ export class EaPagination extends Base {
     background: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     size: {
       type: ["large", "default", "small"],
       default: "",
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     "hide-on-single-page": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
-        if (this.#pagination && this.layout.includes("pager"))
+      observer: () => {
+        if (this.#pagination && this.layout.includes("pager")) {
           this.updateContainerClasslist();
+        }
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
 
         if (this.layout.includes("jumper") && this.#jumper) {
           this.#jumper.disabled = newVal;
         }
+      },
+    },
+  });
+
+  propState = this.properties({
+    // TODO: sizes 要下拉框，没写
+    layout: {
+      props: true,
+      type: Array,
+      default: ["prev", "pager", "next", "jumper", "->", "total"],
+      /** @param {Array<'prev' | 'pager' | 'next' | '->' | 'jumper' | 'total' | 'sizes'>} newVal */
+      observer: async newVal => {
+        if (!this.#states.isFirstRender) this.#handlePaginationItemChange();
+
+        if (newVal.includes("jumper") && !this.#states.isEaInputImported) {
+          await import("@components/ea-input/index.js");
+          this.#states.isEaInputImported = true;
+        }
+
+        this.#handlePaginationItemChange();
       },
     },
   });
@@ -173,7 +181,7 @@ export class EaPagination extends Base {
       }
     );
 
-    this.#container.className = className;
+    if (!this.#states.isFirstRender) this.#container.className = className;
 
     return className;
   }
@@ -182,8 +190,42 @@ export class EaPagination extends Base {
     super();
 
     this.stylesheet = stylesheet;
+  }
 
-    this.$render();
+  $render() {
+    /** @type {Array<'prev' | 'pager' | 'next' | '->' | 'jumper' | 'total' | 'sizes'>} */
+    const validLayout = this.layout.filter(item =>
+      ["prev", "pager", "next", "jumper", "total", "sizes", "->"].includes(item)
+    );
+    const layoutTemplate = {
+      prev: `<ea-icon class="ea-pagination__icon prev-icon" icon='icon-angle-left' part='icon prev-icon' tabindex="0"></ea-icon>`,
+      pager: `<section class='ea-pagination__pager' part='pager'></section>`,
+      next: `<ea-icon class="ea-pagination__icon next-icon" icon='icon-angle-right' part='icon next-icon' tabindex="0"></ea-icon>`,
+      total: `<span class='ea-pagination__total' part='total'></span>`,
+      jumper: `<span class="ea-pagination__wrapper" part='jumper-wrap'>Go to <ea-input class='ea-pagination__jumper' part='jumper'></ea-input> </span>`,
+      sizes: `<ea-select class='ea-pagination__sizes' part='sizes'></ea-select>`,
+      "->": `<span class='ea-pagination__separator' part='separator'></span>`,
+    };
+
+    this.shadowRoot.innerHTML = `
+      <div class='ea-pagination' part='container'>
+        ${validLayout.map(item => layoutTemplate[item]).join("")}
+      </div>
+    `;
+
+    this.#container = this.shadowRoot.querySelector(".ea-pagination");
+    this.#pagination = this.shadowRoot.querySelector(".ea-pagination__pager");
+    this.#prevIcon = this.shadowRoot.querySelector(
+      ".ea-pagination__icon.prev-icon"
+    );
+    this.#nextIcon = this.shadowRoot.querySelector(
+      ".ea-pagination__icon.next-icon"
+    );
+    this.#jumper = this.shadowRoot.querySelector(".ea-pagination__jumper");
+    this.#total = this.shadowRoot.querySelector(".ea-pagination__total");
+    this.#sizes = this.shadowRoot.querySelector(".ea-pagination__sizes");
+
+    this.updateContainerClasslist();
   }
 
   /**
@@ -191,10 +233,16 @@ export class EaPagination extends Base {
    * @param {number} newVal 当前页码
    * @return {Array<number | string>} 分页器范围
    */
-  #getPagerRange = (newVal) => {
+  #getPagerRange = newVal => {
     const totalCount = Math.ceil(this.total / this["page-size"]);
     const step = Math.floor(this["pager-count"] / 2);
 
+    /**
+     * 获取范围
+     * @param {number} start 开始值
+     * @param {number} end 结束值
+     * @return {Array<number>} 范围数组
+     */
     const getRange = (start, end) => {
       const ary = [];
 
@@ -280,56 +328,58 @@ export class EaPagination extends Base {
    * @description 这里的事件监听采用的是，通过 `this.#pagination` 点击事件中，获取到的最近的 `页码元素` 来进行事件触发
    */
   #handlePagerRender = () => {
-    if (!this.layout.includes("pager") || !this.#pagination) return;
+    if (!this.#pagination) return;
+    if (!this.layout.includes("pager")) {
+      this.#pagination.innerHTML = "";
+      return;
+    }
 
-    this.#paginationAbortController?.abort();
-    this.#paginationAbortController = new AbortController();
+    /**
+     * 处理页码点击事件，通过父元素确定是 `页码` 还是 `More` 元素
+     * @param {MouseEvent} e
+     */
+    const onPagerClickEvent = e => {
+      const target = e.target.closest(
+        ".ea-pagination__page:not(.ea-pagination__more)"
+      );
+      const moreItem = e.target.closest(".ea-pagination__more");
+      const targetPage = Number(target?.dataset?.page);
+
+      if (target && this["current-page"] !== targetPage) {
+        this["current-page"] = target.dataset.page;
+
+        this.#dispatchChangeEvent();
+        this.emit("current-change", {
+          detail: { value: this["current-page"] },
+        });
+      } else if (moreItem) {
+        const action = moreItem.dataset.action;
+        const totalPage = Math.ceil(this.total / this["page-size"]);
+        let realPage = this["current-page"] + (action === "next" ? 5 : -5);
+
+        if (realPage < 1) realPage = 1;
+        else if (realPage > totalPage) realPage = totalPage;
+
+        this["current-page"] = realPage;
+
+        this.#dispatchChangeEvent();
+        this.emit("current-change", {
+          detail: { value: this["current-page"] },
+        });
+      }
+    };
 
     this.#pagination.innerHTML = this.#getPagerTemplate(1);
-    this.#pagination.addEventListener(
-      "click",
-      (e) => {
-        const target = e.target.closest(
-          ".ea-pagination__page:not(.ea-pagination__more)"
-        );
-        const moreItem = e.target.closest(".ea-pagination__more");
-        const targetPage = Number(target?.dataset?.page);
-
-        if (target && this["current-page"] !== targetPage) {
-          this["current-page"] = target.dataset.page;
-
-          this.#dispatchChangeEvent();
-          this.emit("current-change", {
-            detail: { value: this["current-page"] },
-          });
-        } else if (moreItem) {
-          const action = moreItem.dataset.action;
-          const totalPage = Math.ceil(this.total / this["page-size"]);
-          let realPage = this["current-page"] + (action === "next" ? 5 : -5);
-
-          if (realPage < 1) realPage = 1;
-          else if (realPage > totalPage) realPage = totalPage;
-
-          this["current-page"] = realPage;
-
-          this.#dispatchChangeEvent();
-          this.emit("current-change", {
-            detail: { value: this["current-page"] },
-          });
-        }
-      },
-      { signal: this.#paginationAbortController?.signal }
-    );
+    this.#pagination.addEventListener("click", onPagerClickEvent, {
+      signal: this.#AbortControllerStates.paginationAbortController.signal,
+    });
   };
 
   /**
    * 渲染 prev 按钮
    */
   #handlePrevRender = () => {
-    if (!this.layout.includes("prev") || !this.#prevIcon) return;
-
-    this.#prevAbortController?.abort();
-    this.#prevAbortController = new AbortController();
+    if (!this.#prevIcon || !this.layout.includes("prev")) return;
 
     /**
      * 当页码改变时，处理 `prev` 按钮的状态
@@ -351,13 +401,14 @@ export class EaPagination extends Base {
     };
 
     handlePageChange();
+
     this.addEventListener(
       "change",
-      (e) => {
+      e => {
         const { currentPage } = e.detail;
         handlePageChange(currentPage);
       },
-      { signal: this.#prevAbortController?.signal }
+      { signal: this.#AbortControllerStates.prevAbortController.signal }
     );
 
     this.#prevIcon.addEventListener(
@@ -375,7 +426,7 @@ export class EaPagination extends Base {
           detail: { value: this["current-page"] },
         });
       },
-      { signal: this.#prevAbortController?.signal }
+      { signal: this.#AbortControllerStates.prevAbortController.signal }
     );
   };
 
@@ -384,9 +435,6 @@ export class EaPagination extends Base {
    */
   #handleNextRender = () => {
     if (!this.layout.includes("next") || !this.#nextIcon) return;
-
-    this.#nextAbortController?.abort();
-    this.#nextAbortController = new AbortController();
 
     const computedIsOverflow = (page = this["current-page"]) =>
       page >= Math.ceil(this.total / this["page-size"]);
@@ -405,11 +453,11 @@ export class EaPagination extends Base {
 
     this.addEventListener(
       "change",
-      (e) => {
+      e => {
         const { currentPage } = e.detail;
         handlePageChange(computedIsOverflow(currentPage));
       },
-      { signal: this.#nextAbortController?.signal }
+      { signal: this.#AbortControllerStates.nextAbortController.signal }
     );
 
     this.#nextIcon.addEventListener(
@@ -427,7 +475,7 @@ export class EaPagination extends Base {
           detail: { value: this["current-page"] },
         });
       },
-      { signal: this.#nextAbortController?.signal }
+      { signal: this.#AbortControllerStates.nextAbortController.signal }
     );
   };
 
@@ -446,16 +494,11 @@ export class EaPagination extends Base {
   #handleJumperRender = async () => {
     if (!this.layout.includes("jumper") || !this.#jumper) return;
 
-    this.#jumperAbortController?.abort();
-    this.#jumperAbortController = new AbortController();
+    await customElements.whenDefined("ea-input");
 
-    await EaUtils.EaElement.addAsyncEventListener(
-      this.#jumper,
-      "ea-input-ready"
-    );
-
-    this.#jumper.value = this["current-page"];
-
+    /**
+     * 当输入框内容改变时，处理跳转
+     */
     const handleJumperChange = () => {
       const value = this.#jumper.value;
       const totalCount = Math.ceil(this.total / this["page-size"]);
@@ -476,27 +519,41 @@ export class EaPagination extends Base {
       }
     };
 
-    this.#jumper.addEventListener("blur", handleJumperChange, {
-      signal: this.#jumperAbortController?.signal,
-    });
-    this.#jumper.addEventListener(
-      "keydown",
-      (e) => {
-        if (e.key === "Enter") {
-          handleJumperChange();
-        }
-      },
-      { signal: this.#jumperAbortController?.signal }
-    );
-    this.addEventListener(
-      "change",
-      (e) => {
-        this.#jumper.value = e.detail.currentPage;
-      },
-      {
-        signal: this.#jumperAbortController.signal,
+    /**
+     * 当按下回车键时，处理跳转
+     * @param {KeyboardEvent} e
+     */
+    const onJumpEvent = e => {
+      if (e.key === "Enter") {
+        handleJumperChange();
       }
-    );
+    };
+
+    /**
+     * 当分页改变时，处理跳转
+     * @param {CustomEvent} e
+     */
+    const onPaginationChangeEvent = e => {
+      this.#jumper.value = e.detail.currentPage;
+    };
+
+    try {
+      this.#jumper.setAttribute("value", this["current-page"]);
+
+      this.#jumper.addEventListener("blur", handleJumperChange, {
+        signal: this.#AbortControllerStates.jumperAbortController.signal,
+      });
+
+      this.#jumper.addEventListener("keydown", onJumpEvent, {
+        signal: this.#AbortControllerStates.jumperAbortController.signal,
+      });
+
+      this.addEventListener("change", onPaginationChangeEvent, {
+        signal: this.#AbortControllerStates.jumperAbortController.signal,
+      });
+    } catch {
+      /* empty */
+    }
   };
 
   /**
@@ -516,8 +573,24 @@ export class EaPagination extends Base {
     });
   }
 
-  // 处理分页的页码
+  // 初始化页码带有的元素
   #handlePaginationItemChange() {
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key]?.abort();
+      this.#AbortControllerStates[key] = null;
+      this.#AbortControllerStates[key] = new AbortController();
+    }
+
+    this.#container = null;
+    this.#pagination = null;
+    this.#prevIcon = null;
+    this.#nextIcon = null;
+    this.#jumper = null;
+    this.#total = null;
+    this.#sizes = null;
+
+    this.$render();
+
     this.#handlePagerRender();
     this.#handlePrevRender();
     this.#handleNextRender();
@@ -525,51 +598,19 @@ export class EaPagination extends Base {
     this.#handleJumperRender();
   }
 
-  $render() {
-    /** @type {Array<'prev' | 'pager' | 'next' | '->' | 'jumper' | 'total' | 'sizes'>} */
-    const validLayout = this.layout.filter((item) =>
-      ["prev", "pager", "next", "jumper", "total", "sizes", "->"].includes(item)
-    );
-    const layoutTemplate = {
-      prev: `<ea-icon class="ea-pagination__icon prev-icon" icon='icon-angle-left' part='icon prev-icon' tabindex="0"></ea-icon>`,
-      pager: `<section class='ea-pagination__pager' part='pager'></section>`,
-      next: `<ea-icon class="ea-pagination__icon next-icon" icon='icon-angle-right' part='icon next-icon' tabindex="0"></ea-icon>`,
-      total: `<span class='ea-pagination__total' part='total'></span>`,
-      jumper: `<span class="ea-pagination__wrapper" part='jumper-wrap'>Go to <ea-input class='ea-pagination__jumper' part='jumper'></ea-input> </span>`,
-      sizes: `<ea-select class='ea-pagination__sizes' part='sizes'></ea-select>`,
-      "->": `<span class='ea-pagination__separator' part='separator'></span>`,
-    };
-
-    this.shadowRoot.innerHTML = `
-      <div class='ea-pagination' part='container'>
-        ${validLayout.map((item) => layoutTemplate[item]).join("")}
-      </div>
-    `;
-
-    this.#container = this.shadowRoot.querySelector(".ea-pagination");
-    this.#pagination = this.shadowRoot.querySelector(".ea-pagination__pager");
-    this.#prevIcon = this.shadowRoot.querySelector(
-      ".ea-pagination__icon.prev-icon"
-    );
-    this.#nextIcon = this.shadowRoot.querySelector(
-      ".ea-pagination__icon.next-icon"
-    );
-    this.#jumper = this.shadowRoot.querySelector(".ea-pagination__jumper");
-    this.#total = this.shadowRoot.querySelector(".ea-pagination__total");
-    this.#sizes = this.shadowRoot.querySelector(".ea-pagination__sizes");
-
-    this.updateContainerClasslist();
-  }
-
   connectedCallback() {
     super.connectedCallback();
+
+    this.#handlePaginationItemChange();
 
     this.#states.isFirstRender = false;
   }
 
   $beforeUnmounted() {
-    this.#paginationAbortController?.abort();
-    this.#prevAbortController?.abort();
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key]?.abort();
+      this.#AbortControllerStates[key] = null;
+    }
   }
 }
 
