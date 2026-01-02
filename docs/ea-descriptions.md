@@ -1,10 +1,9 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
 onMounted(() => {
-  import('../dist/components/index.js')
-  import('../dist/assets/icon.css')
-
   const sizeExample = {
     radiogroup: document.querySelector("#sizeRadioGroup"),
     els: document.querySelectorAll(".descriptions-size"),

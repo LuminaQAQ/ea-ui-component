@@ -16,30 +16,37 @@ export class EaResult extends Base {
   #extra;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "type", "title", "sub-title"];
+    return [...super.observedAttributes, "type", "title", "sub-title", "icon"];
   }
 
   state = this.properties({
     type: {
       type: ["primary", "success", "warning", "info", "error"],
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
+        this.#icon.setAttribute("icon", `icon-${typesIcon[newVal]}`);
         this.updateContainerClasslist();
-        this.#icon.innerHTML = `<ea-icon class="ea-result__icon" icon="icon-${typesIcon[newVal]}" part="icon"></ea-icon>`;
       },
     },
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#title.textContent = newVal;
       },
     },
     "sub-title": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#subTitle.textContent = newVal;
+      },
+    },
+    icon: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#icon.setAttribute("icon", newVal);
       },
     },
   });
@@ -69,8 +76,10 @@ export class EaResult extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class='ea-result' part='container'>
-        <div class="ea-result__icon" part="icon">
-          <slot name="icon"></slot>
+        <div class="ea-result__icon ea-result__icon-wrap" part="icon-wrap">
+          <slot name="icon">
+            <ea-icon class="ea-result__icon ea-result__default-icon" part="icon"></ea-icon>
+          </slot>
         </div>
         <div class="ea-result__title" part="title">
           <slot name="title"></slot>
@@ -85,7 +94,7 @@ export class EaResult extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-result");
-    this.#icon = this.shadowRoot.querySelector(".ea-result__icon slot");
+    this.#icon = this.shadowRoot.querySelector(".ea-result__default-icon");
     this.#title = this.shadowRoot.querySelector(".ea-result__title slot");
     this.#subTitle = this.shadowRoot.querySelector(
       ".ea-result__sub-title slot"

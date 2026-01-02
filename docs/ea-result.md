@@ -1,11 +1,9 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
 onMounted(() => {
-    import('../components/ea-result/index.js')
-    import('../components/ea-button/index.js')
-    import('../components/ea-avatar/index.js')
-    import('./index.scss')
 })
 </script>
 
@@ -43,26 +41,42 @@ onMounted(() => {
 ## 基础用法
 
 <div class="row space-between">
-    <ea-result icon="icon-ok-circled" title="成功提示" sub-title="请根据提示进行操作">
-        <template slot="extra">
-            <ea-button type="success" size="small">确定</ea-button>
-        </template>
-    </ea-result>
-    <ea-result icon="icon-attention-alt" title="警告提示" sub-title="请根据提示进行操作">
-        <template slot="extra">
-            <ea-button type="warning" size="small">确定</ea-button>
-        </template>
-    </ea-result>
-    <ea-result icon="icon-cancel-circled" title="错误提示" sub-title="请根据提示进行操作">
-        <template slot="extra">
-            <ea-button type="danger" size="small">返回</ea-button>
-        </template>
-    </ea-result>
-    <ea-result icon="icon-info" title="信息提示" sub-title="请根据提示进行操作">
-        <template slot="extra">
-            <ea-button type="primary" size="small">朕已阅</ea-button>
-        </template>
-    </ea-result>
+  <ea-result
+    type="primary"
+    title="Primary Tip"
+    sub-title="Please follow the instructions"
+  >
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
+  </ea-result>
+  <ea-result
+    type="success"
+    title="Success Tip"
+    sub-title="Please follow the instructions"
+  >
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
+  </ea-result>
+  <ea-result
+    type="warning"
+    title="Warning Tip"
+    sub-title="Please follow the instructions"
+  >
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
+  </ea-result>
+  <ea-result
+    type="error"
+    title="Error Tip"
+    sub-title="Please follow the instructions"
+  >
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
+  </ea-result>
 </div>
 
 ::: details 查看代码
@@ -70,36 +84,40 @@ onMounted(() => {
 ```html
 <div class="row space-between">
   <ea-result
-    icon="icon-ok-circled"
-    title="成功提示"
-    sub-title="请根据提示进行操作"
+    type="primary"
+    title="Primary Tip"
+    sub-title="Please follow the instructions"
   >
-    <template slot="extra">
-      <ea-button type="success" size="small">确定</ea-button>
-    </template>
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
   </ea-result>
   <ea-result
-    icon="icon-attention-alt"
-    title="警告提示"
-    sub-title="请根据提示进行操作"
+    type="success"
+    title="Success Tip"
+    sub-title="Please follow the instructions"
   >
-    <template slot="extra">
-      <ea-button type="warning" size="small">确定</ea-button>
-    </template>
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
   </ea-result>
   <ea-result
-    icon="icon-cancel-circled"
-    title="错误提示"
-    sub-title="请根据提示进行操作"
+    type="warning"
+    title="Warning Tip"
+    sub-title="Please follow the instructions"
   >
-    <template slot="extra">
-      <ea-button type="danger" size="small">返回</ea-button>
-    </template>
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
   </ea-result>
-  <ea-result icon="icon-info" title="信息提示" sub-title="请根据提示进行操作">
-    <template slot="extra">
-      <ea-button type="primary" size="small">朕已阅</ea-button>
-    </template>
+  <ea-result
+    type="error"
+    title="Error Tip"
+    sub-title="Please follow the instructions"
+  >
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
   </ea-result>
 </div>
 ```
@@ -108,57 +126,42 @@ onMounted(() => {
 
 ## 自定义内容
 
-<ea-result>
-  <div slot="icon">  
-    <ea-avatar
-        size="100"
-        shape="square"
+<div class="demo">
+  <ea-result title="404" sub-title="Sorry, request error">
+    <div slot="icon">
+      <ea-image
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-    ></ea-avatar>
-  </div>
-  <div slot="title">
-    <div>404</div>
-  </div>
-  <div slot="subTitle">
-    <div>抱歉，请求错误</div>  
-  </div>
-  <div slot="extra">
-    <ea-button type="primary" size="medium">返回</ea-button>
-  </div>
-</ea-result>
-
-::: details 查看代码
+      ></ea-image>
+    </div>
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
+  </ea-result>
+</div>
 
 ```html
-<ea-result>
-  <template slot="icon">
-    <ea-avatar
-      size="100"
-      shape="square"
-      src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-    ></ea-avatar>
-  </template>
-  <template slot="title">
-    <div>404</div>
-  </template>
-  <template slot="subTitle">
-    <div>抱歉，请求错误</div>
-  </template>
-  <template slot="extra">
-    <ea-button type="primary" size="medium">返回</ea-button>
-  </template>
-</ea-result>
+<div class="demo">
+  <ea-result title="404" sub-title="Sorry, request error">
+    <div slot="icon">
+      <ea-image
+        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+      ></ea-image>
+    </div>
+    <div slot="extra">
+      <ea-button type="primary">Back</ea-button>
+    </div>
+  </ea-result>
+</div>
 ```
-
-:::
 
 ## Attributes
 
-| 参数      | 说明 | 类型   | 可选值 | 默认值 |
-| --------- | ---- | ------ | ------ | ------ |
-| icon      | 图标 | string | -      | -      |
-| title     | 标题 | string | -      | -      |
-| sub-title | 描述 | string | -      | -      |
+| 参数      | 说明                  | 类型   | 可选值                                                     | 默认值 |
+| --------- | --------------------- | ------ | ---------------------------------------------------------- | ------ |
+| title     | result 组件的标题     | string | -                                                          | -      |
+| sub-title | result 组件的副标题   | string | -                                                          | -      |
+| type      | 类型                  | string | `"primary" \| "success" \| "warning" \| "info" \| "error"` | ""     |
+| icon      | result 组件的图标类型 | string | -                                                          | -      |
 
 ## CSS Part
 
@@ -168,15 +171,16 @@ onMounted(() => {
 | ------------- | -------------- |
 | container     | 外层容器       |
 | icon-wrap     | 图标容器       |
-| title-wrap    | 标题容器       |
+| icon          | 图标           |
+| title         | 标题容器       |
 | subTitle-wrap | 描述容器       |
 | extra-wrap    | 额外内容的容器 |
 
 ## Slots
 
-| 名称     | 说明     |
-| -------- | -------- |
-| icon     | 图标插槽 |
-| title    | 标题插槽 |
-| subTitle | 描述插槽 |
-| extra    | 操作插槽 |
+| 名称      | 说明                |
+| --------- | ------------------- |
+| icon      | icon 内容           |
+| title     | result title 的内容 |
+| sub-title | sub title 的内容    |
+| extra     | 内容额外区域的内容  |

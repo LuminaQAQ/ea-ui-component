@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -26,7 +26,6 @@
         type="primary"
         title="Primary Tip"
         sub-title="Please follow the instructions"
-        sub-title="请根据提示进行操作"
       >
         <div slot="extra">
           <ea-button type="primary">Back</ea-button>
@@ -64,21 +63,25 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 自定义内容 --------  -->
-    <!-- #region  -->
-    <h2>自定义内容</h2>
-    <ea-result title="404" sub-title="Sorry, request error">
-      <div slot="icon">
-        <ea-image
-          src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-        ></ea-image>
-      </div>
-      <div slot="extra">
-        <ea-button type="primary">Back</ea-button>
-      </div>
-    </ea-result>
+    <!--  自定义内容  -->
+    <!-- #region -->
+    <h1>自定义内容</h1>
+
+    <div class="demo">
+      <ea-result title="404" sub-title="Sorry, request error">
+        <div slot="icon">
+          <ea-image
+            src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+          ></ea-image>
+        </div>
+        <div slot="extra">
+          <ea-button type="primary">Back</ea-button>
+        </div>
+      </ea-result>
+    </div>
+
     <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
   </body>
 </html>

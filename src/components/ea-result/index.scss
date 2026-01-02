@@ -39,6 +39,7 @@ $ea-types-colors: (
   align-items: center;
 
   @include element(icon) {
+    --ea-icon-size: var(--ea-result-icon-size);
     font-size: var(--ea-result-icon-size);
   }
 
