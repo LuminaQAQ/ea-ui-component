@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -44,6 +44,7 @@
     <!--  进度条内显示百分比标识 -->
     <!-- #region -->
     <h1>进度条内显示百分比标识</h1>
+
     <div class="demo">
       <ea-progress
         stroke-width="26px"
@@ -79,21 +80,22 @@
     <h1>自定义进度条的颜色</h1>
 
     <div class="demo">
+      <ea-progress class="custom-color-progress" percentage="20"></ea-progress>
       <ea-progress
+        id="customStringColorProgress"
         class="custom-color-progress"
         percentage="20"
         color="#6f7ad3"
       ></ea-progress>
       <ea-progress
+        id="customFunctionColorProgress"
         class="custom-color-progress"
         percentage="20"
-        color='[
-          { "color": "#f56c6c", "percentage": 20 },
-          { "color": "#e6a23c", "percentage": 40 },
-          { "color": "#5cb87a", "percentage": 60 },
-          { "color": "#1989fa", "percentage": 80 },
-          { "color": "#6f7ad3", "percentage": 100 }
-        ]'
+      ></ea-progress>
+      <ea-progress
+        id="customArrayColorProgress"
+        class="custom-color-progress"
+        percentage="20"
       ></ea-progress>
 
       <ea-button-group>
@@ -105,26 +107,56 @@
     <script type="module">
       const customColorExample = {
         els: document.querySelectorAll(".custom-color-progress"),
+        stringColorProgress: document.querySelector(
+          "#customStringColorProgress"
+        ),
+        arrayColorProgress: document.querySelector("#customArrayColorProgress"),
+        functionColorProgress: document.querySelector(
+          "#customFunctionColorProgress"
+        ),
+
         minus: document.querySelector("#customColorMinusBtn"),
         plus: document.querySelector("#customColorPlusBtn"),
 
+        colors: [
+          { color: "#f56c6c", percentage: 20 },
+          { color: "#e6a23c", percentage: 40 },
+          { color: "#5cb87a", percentage: 60 },
+          { color: "#1989fa", percentage: 80 },
+          { color: "#6f7ad3", percentage: 100 },
+        ],
+
+        customColorMethod: () => {
+          const percentage = customColorExample.stringColorProgress.percentage;
+
+          if (percentage < 30) {
+            return "#909399";
+          }
+          if (percentage < 70) {
+            return "#e6a23c";
+          }
+          return "#67c23a";
+        },
+
         init() {
+          this.arrayColorProgress.color = this.colors;
+          this.functionColorProgress.color = this.customColorMethod;
+
           this.minus.addEventListener("click", () => {
-            this.els.forEach((el) => {
+            this.els.forEach(el => {
               const percentage = Number(el.getAttribute("percentage"));
               el.setAttribute("percentage", percentage - 10);
             });
           });
 
           this.plus.addEventListener("click", () => {
-            this.els.forEach((el) => {
+            this.els.forEach(el => {
               const percentage = Number(el.getAttribute("percentage"));
               el.setAttribute("percentage", percentage + 10);
             });
           });
         },
       };
-
       customColorExample.init();
     </script>
 
@@ -176,13 +208,6 @@
         type="dashboard"
         percentage="0"
         stroke-width="10px"
-        color='[
-          { "color": "#f56c6c", "percentage": 20 },
-          { "color": "#e6a23c", "percentage": 40 },
-          { "color": "#5cb87a", "percentage": 60 },
-          { "color": "#1989fa", "percentage": 80 },
-          { "color": "#6f7ad3", "percentage": 100 }
-        ]'
       ></ea-progress>
     </div>
 
@@ -357,7 +382,7 @@
             this.el.setAttribute("percentage", percentage + 10);
           });
 
-          this.el.addEventListener("change", (e) => {
+          this.el.addEventListener("change", e => {
             const { percentage } = e.detail;
 
             this.el.setAttribute("duration", percentage / 10);

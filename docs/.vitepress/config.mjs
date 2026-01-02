@@ -43,15 +43,19 @@ export default defineConfig({
     },
 
     sidebar: [
-      // {
-      //   text: '开发指南',
-      //   items: [
-      //     { text: '安装', link: '/guide/install' },
-      //     { text: '快速上手', link: '/guide/example' },
-      //     { text: '如何改变图标链接？', link: '/guide/customIconFontHref' },
-      //     { text: '如何处理图标丢失的问题？', link: '/guide/HowDoIDealWithIconLoss' },
-      //   ]
-      // },
+      {
+        text: "开始",
+        items: [
+          // { text: "安装", link: "/guide/install" },
+          // { text: "快速上手", link: "/guide/example" },
+          { text: "使用", link: "/guide/Usage" },
+          // { text: "如何改变图标链接？", link: "/guide/customIconFontHref" },
+          // {
+          //   text: "如何处理图标丢失的问题？",
+          //   link: "/guide/HowDoIDealWithIconLoss",
+          // },
+        ],
+      },
       {
         text: "Basic 基础组件",
         items: [

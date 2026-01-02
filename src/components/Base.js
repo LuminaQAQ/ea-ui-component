@@ -135,6 +135,10 @@ export default class Base extends HTMLElement {
       const config = states[key];
       const type = config?.type;
 
+      if (key === "Function" || type === Function) {
+        return rawValue();
+      }
+
       if (key === "Array" || type === Array) {
         return rawValue;
       }
@@ -169,7 +173,7 @@ export default class Base extends HTMLElement {
 
         return realType && realType?.length
           ? parseValue(realType[0][0], rawValue)
-          : [];
+          : parseDefaultValue(config?.default);
       }
 
       return rawValue || config?.default;

@@ -2,8 +2,6 @@ import Base from "@components/Base.js";
 import { circleItem } from "./components/circleItem";
 import { dashboardItem } from "./components/dashboardItem";
 
-import EaUtils from "@/utils/Utils";
-
 import stylesheet from "./index.scss?inline";
 
 export class EaProgress extends Base {
@@ -19,29 +17,51 @@ export class EaProgress extends Base {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "type",
       "percentage",
       "status",
       "stroke-width",
       "text-inside",
-      "color",
       "indeterminate",
       "duration",
       "striped",
       "striped-flow",
-      "width",
+      // "width",
       "show-text",
     ];
   }
+
+  propState = this.properties({
+    color: {
+      props: true,
+      type: {
+        Array: () => this.props?.color?.length > 0,
+        Function: () => typeof this.props?.color === "function",
+        String: () =>
+          typeof this.getAttribute("color") === "string" ||
+          typeof this.props?.color === "string",
+      },
+      default: () => this.getAttribute("color") || "",
+      observer: newVal => {
+        this.#handleColorChange(newVal, newVal);
+      },
+    },
+  });
 
   state = this.properties({
     percentage: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal < 0) return (this.percentage = 0);
         else if (newVal > 100) return (this.percentage = 100);
 
         const percentageSlot = this.querySelector("[data-percentage]");
+        const statusIcon = {
+          success: "icon-ok-circled",
+          warning: "icon-attention-circled",
+          exception: "icon-cancel-circled",
+        };
         const strategies = {
           line: () => newVal + "%",
           circle: () => 302 * ((100 - newVal) / 100) + "px",
@@ -56,12 +76,6 @@ export class EaProgress extends Base {
 
             return C * (270 / 360) * progress + "px";
           },
-        };
-
-        const statusIcon = {
-          success: "icon-ok-circled",
-          warning: "icon-attention-circled",
-          exception: "icon-cancel-circled",
         };
 
         this.#container.style.setProperty(
@@ -84,26 +98,7 @@ export class EaProgress extends Base {
           percentageSlot.textContent = this.percentage;
         }
 
-        if (Array.isArray(this.color)) {
-          let nearItem = newVal;
-
-          for (let i = 0; i < this.color.length; i++) {
-            const item = this.color[i];
-
-            if (newVal <= item.percentage) {
-              nearItem = item;
-
-              break;
-            }
-          }
-
-          this.#path.style.setProperty(
-            "--ea-progress-path-color",
-            nearItem.color
-          );
-        } else if (typeof this.color === "string") {
-          this.#path.style.setProperty("--ea-progress-path-color", this.color);
-        }
+        this.#handleColorChange(this.color, newVal);
 
         this.emit("change", {
           detail: {
@@ -115,21 +110,22 @@ export class EaProgress extends Base {
     type: {
       type: ["line", "circle", "dashboard"],
       default: "line",
-      observer: (newVal) => {
+      observer: () => {
+        this.$render();
         this.updateContainerClasslist();
       },
     },
     status: {
       type: ["success", "exception", "warning"],
       default: "",
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     "stroke-width": {
       type: String,
       default: "8px",
-      observer: (newVal) => {
+      observer: newVal => {
         if (!CSS.supports("width", newVal))
           return console.warn(
             `[EaProgress] The width value ${newVal} is not supported.`
@@ -141,32 +137,27 @@ export class EaProgress extends Base {
     "text-inside": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         try {
           if (newVal) this.#path.appendChild(this.#text);
-        } catch (error) {}
+        } catch {
+          /* empty */
+        }
 
         this.updateContainerClasslist();
       },
     },
-    color: {
-      type: {
-        Array: () =>
-          Array.isArray(EaUtils.JSON.parse(this.getAttrString("color"), true)),
-        String: () => typeof this.getAttrString("color") === "string",
-      },
-      default: "",
-      observer: (newVal) => {},
-    },
     indeterminate: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: () => {
+        this.updateContainerClasslist();
+      },
     },
     duration: {
       type: Number,
       default: 3,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.style.setProperty(
           "--ea-progress-animation-duration",
           `${newVal}s`
@@ -176,21 +167,21 @@ export class EaProgress extends Base {
     striped: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     "striped-flow": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     size: {
       type: String,
       default: "126px",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.type === "line") return;
 
         this.#container.style.setProperty("--ea-progress-size", newVal);
@@ -199,7 +190,7 @@ export class EaProgress extends Base {
     "show-text": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -239,7 +230,7 @@ export class EaProgress extends Base {
     this.$render();
   }
 
-  async $render() {
+  $render() {
     const itemOptions = {
       line: `
         <div class='ea-progress' part='container'>
@@ -268,6 +259,38 @@ export class EaProgress extends Base {
 
     this.updateContainerClasslist();
   }
+
+  /**
+   * 处理颜色变化
+   * @param {string | string[] | function} color 颜色值或函数
+   * @param {number} [percentage] 百分比
+   */
+  #handleColorChange = (color, percentage = this.percentage) => {
+    if (!color || typeof color === "undefined") return;
+
+    if (Array.isArray(color)) {
+      let nearItem = color[0];
+
+      for (let i = 0; i < color.length; i++) {
+        const item = color[i];
+
+        if (percentage <= item.percentage) {
+          nearItem = item;
+
+          break;
+        }
+      }
+
+      this.#path.style.setProperty("--ea-progress-path-color", nearItem?.color);
+    } else if (typeof color === "string") {
+      this.#path.style.setProperty("--ea-progress-path-color", color);
+    } else if (typeof color === "function") {
+      this.#path.style.setProperty(
+        "--ea-progress-path-color",
+        color(percentage)
+      );
+    }
+  };
 
   connectedCallback() {
     super.connectedCallback();

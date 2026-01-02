@@ -17,7 +17,9 @@ $ea-progress-type: (
   }
 
   .ea-progress__path {
-    transition: stroke-dashoffset 0.3s ease-in-out, stroke 0.3s ease-in-out;
+    transition:
+      stroke-dashoffset 0.3s ease-in-out,
+      stroke 0.3s ease-in-out;
     animation: none;
   }
 
