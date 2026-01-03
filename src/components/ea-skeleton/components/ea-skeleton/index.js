@@ -11,6 +11,9 @@ export class EaSkeleton extends Base {
   /** @type {HTMLElement} */
   #templateSlot;
 
+  /** @type {AbortController} */
+  #abortController;
+
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
@@ -34,22 +37,21 @@ export class EaSkeleton extends Base {
     rows: {
       type: Number,
       default: 4,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     animated: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
-        const children = [...this.querySelectorAll("ea-skeleton-item")];
-        children.forEach((child) => child.setAttribute("animated", newVal));
+      observer: newVal => {
+        this.#updateAnimatedStatus(newVal);
       },
     },
     count: {
       type: Number,
       default: 1,
-      observer: async (newVal) => {
+      observer: async newVal => {
         if (!this.#states.isChildrenReady) {
-          await this.#waitChildrenReady();
+          await customElements.whenDefined("ea-skeleton-item");
           this.#states.isChildrenReady = true;
         }
 
@@ -58,7 +60,7 @@ export class EaSkeleton extends Base {
         if (!container.length) container = [this.#templateSlot];
         if (!this.#states.templateNode) {
           const fragment = document.createDocumentFragment();
-          container.forEach((el) => {
+          container.forEach(el => {
             fragment.appendChild(el.cloneNode(true));
           });
           this.#states.templateNode = fragment;
@@ -71,7 +73,7 @@ export class EaSkeleton extends Base {
           realFragment.appendChild(clone);
         }
         if (container.length > 1) {
-          container.forEach((el) => {
+          container.forEach(el => {
             el.remove();
           });
 
@@ -91,27 +93,32 @@ export class EaSkeleton extends Base {
     "throttle-leading": {
       type: Number,
       default: 0,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     "throttle-trailing": {
       type: Number,
       default: 0,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     loading: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this["throttle-trailing"] || this["throttle-leading"]) {
           try {
             clearTimeout(this.#states.loadingThrottle);
             this.#states.loadingThrottle = null;
-          } catch (error) {}
+          } catch {
+            /* empty */
+          }
         }
 
-        this.#states.loadingThrottle = EaUtils.timeout(() => {
-          this.updateContainerClasslist();
-        }, (newVal ? this["throttle-trailing"] : this["throttle-leading"]) || 0);
+        this.#states.loadingThrottle = EaUtils.timeout(
+          () => {
+            this.updateContainerClasslist();
+          },
+          (newVal ? this["throttle-trailing"] : this["throttle-leading"]) || 0
+        );
       },
     },
   });
@@ -123,9 +130,7 @@ export class EaSkeleton extends Base {
   updateContainerClasslist() {
     const className = this.computedClasslist(
       "ea-skeleton",
-      {
-        // ['--' + this.type]: this.type,
-      },
+      {},
       {
         loading: this.loading,
       }
@@ -144,8 +149,23 @@ export class EaSkeleton extends Base {
     this.$render();
   }
 
+  async $render() {
+    this.shadowRoot.innerHTML = `
+      <div class='ea-skeleton' part='container'>
+        <slot id="default"></slot>
+        <slot id="template" name="template"></slot>
+      </div>
+    `;
+
+    this.#container = this.shadowRoot.querySelector(".ea-skeleton");
+    this.#defaultSlot = this.shadowRoot.querySelector("#default");
+    this.#templateSlot = this.shadowRoot.querySelector("#template");
+
+    this.updateContainerClasslist();
+  }
+
   /**
-   *
+   * 初始化默认骨架屏
    * @param {Number} rows
    * @returns
    */
@@ -164,39 +184,35 @@ export class EaSkeleton extends Base {
         .join("")}`;
   };
 
-  #waitChildrenReady = () =>
-    new Promise(async (resolve) => {
-      const children = [...this.querySelectorAll("ea-skeleton-item")];
-      await Promise.all(
-        children.map((item) =>
-          EaUtils.EaElement.addAsyncEventListener(
-            item,
-            "ea-skeleton-item-ready"
-          )
-        )
-      );
-
-      resolve();
-    });
-
-  async $render() {
-    this.shadowRoot.innerHTML = `
-      <div class='ea-skeleton' part='container'>
-        <slot id="default"></slot>
-        <slot id="template" name="template"></slot>
-      </div>
-    `;
-
-    this.#container = this.shadowRoot.querySelector(".ea-skeleton");
-    this.#defaultSlot = this.shadowRoot.querySelector("#default");
-    this.#templateSlot = this.shadowRoot.querySelector("#template");
-
-    this.#initDefaultSkeleton();
-    this.updateContainerClasslist();
-  }
+  /**
+   * 更新动画状态
+   * @param {boolean} isAnimated
+   */
+  #updateAnimatedStatus = isAnimated => {
+    /** @type {HTMLElement[]} */
+    const children = [...this.querySelectorAll("ea-skeleton-item")];
+    children.forEach(child => child.toggleAttribute("animated", isAnimated));
+  };
 
   async connectedCallback() {
     super.connectedCallback();
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    const onTemplateSlotChange = () => {
+      this.#updateAnimatedStatus(this.animated);
+    };
+
+    this.#initDefaultSkeleton();
+
+    this.#templateSlot.addEventListener("slotchange", onTemplateSlotChange, {
+      signal: this.#abortController.signal,
+    });
+  }
+
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 

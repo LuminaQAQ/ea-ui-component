@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -61,8 +61,8 @@
     <!-- -------- 自定义样式 --------  -->
     <!-- #region  -->
     <h2>自定义样式</h2>
-    <div class="demo" style="width: 240px">
-      <ea-skeleton animated>
+    <div class="demo">
+      <ea-skeleton style="width: 240px" animated>
         <div slot="template">
           <ea-skeleton-item
             variant="image"
@@ -90,8 +90,8 @@
     <!-- #region  -->
     <h2>Loading 状态</h2>
 
-    <div class="demo" style="width: 240px">
-      <p>切换状态: <ea-switch id="loadingSwitch" checked></ea-switch></p>
+    <div class="demo">
+      <p>切换状态: <ea-switch id="loadingSwitch" value="true"></ea-switch></p>
       <ea-skeleton id="loadingSkeleton" style="width: 240px" animated>
         <div slot="template">
           <ea-skeleton-item
@@ -151,10 +151,10 @@
         switch: document.querySelector("#loadingSwitch"),
 
         init() {
-          this.switch.addEventListener("change", (e) => {
-            const { checked } = e.target;
+          this.switch.addEventListener("change", e => {
+            const { value } = e.target;
 
-            this.el.loading = checked;
+            this.el.loading = value;
           });
         },
       };
@@ -169,10 +169,14 @@
     <!-- -------- 渲染多条数据 --------  -->
     <!-- #region  -->
     <h2>渲染多条数据</h2>
-    <div class="demo" style="width: 240px">
+    <div class="demo">
       <p>
         切换状态:
-        <ea-switch id="multipleDataSwitch" checked></ea-switch>
+        <ea-switch
+          id="multipleDataSwitch"
+          style="width: 240px"
+          value="true"
+        ></ea-switch>
       </p>
       <ea-skeleton id="multipleDataSkeleton" animated count="2">
         <div slot="template">
@@ -218,9 +222,9 @@
         switch: document.querySelector("#multipleDataSwitch"),
 
         init() {
-          this.switch.addEventListener("change", (e) => {
-            const { checked } = e.detail;
-            this.el.loading = checked;
+          this.switch.addEventListener("change", e => {
+            const { value } = e.detail;
+            this.el.loading = value;
           });
         },
       };
@@ -234,8 +238,8 @@
     <!-- #region -->
     <h1>切换显示/隐藏时避免渲染抖动</h1>
 
-    <div class="demo" style="width: 240px">
-      <p>切换状态: <ea-switch id="throttleSwitch" checked></ea-switch></p>
+    <div class="demo">
+      <p>切换状态: <ea-switch id="throttleSwitch" value="true"></ea-switch></p>
       <ea-skeleton
         id="throttleSkeleton"
         style="width: 240px"
@@ -301,10 +305,10 @@
         switch: document.querySelector("#throttleSwitch"),
 
         init() {
-          this.switch.addEventListener("change", (e) => {
-            const { checked } = e.target;
+          this.switch.addEventListener("change", e => {
+            const { value } = e.target;
 
-            this.el.loading = checked;
+            this.el.loading = value;
           });
         },
       };

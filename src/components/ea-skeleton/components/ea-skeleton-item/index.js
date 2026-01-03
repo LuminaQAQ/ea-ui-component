@@ -35,7 +35,7 @@ export class EaSkeletonItem extends Base {
     animated: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -79,8 +79,6 @@ export class EaSkeletonItem extends Base {
 
   connectedCallback() {
     super.connectedCallback();
-
-    this.emit("ea-skeleton-item-ready");
   }
 }
 
