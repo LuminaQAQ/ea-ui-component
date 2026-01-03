@@ -3,7 +3,6 @@ import EaUtils from "@/utils/Utils";
 
 import stylesheet from "./index.scss?inline";
 
-import { colgroupRenderer } from "../colgroup";
 import { h } from "../../utils/h";
 import { theadRenderer } from "../thead";
 
@@ -68,15 +67,15 @@ export class EaTable extends Base {
     stripe: {
       type: Boolean,
       default: false,
-      observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
       },
     },
     border: {
       type: Boolean,
       default: false,
-      observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: () => {
+        this.updateContainerClasslist();
       },
     },
     height: {
@@ -85,7 +84,7 @@ export class EaTable extends Base {
       observer: newVal => {
         if (newVal) {
           this.#container.style.setProperty("--ea-table-height", newVal);
-          this.#container.className = this.updateContainerClasslist();
+          this.updateContainerClasslist();
         }
       },
     },
@@ -95,7 +94,7 @@ export class EaTable extends Base {
       observer: newVal => {
         if (newVal) {
           this.#container.style.setProperty("--ea-table-max-height", newVal);
-          this.#container.className = this.updateContainerClasslist();
+          this.updateContainerClasslist();
         }
       },
     },
@@ -112,11 +111,9 @@ export class EaTable extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist(
+    const className = this.computedClasslist(
       "ea-table",
-      {
-        // ['--' + this.type]: this.type,
-      },
+      {},
       {
         stripe: this.stripe,
         border: this.border,
@@ -125,6 +122,10 @@ export class EaTable extends Base {
           CSS.supports("height", this.maxHeight),
       }
     );
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -146,15 +147,7 @@ export class EaTable extends Base {
   }
 
   async $render() {
-    const tableColumnNodes = /** @type {EaTableColumnElement[]} */ ([
-      ...this.querySelectorAll("ea-table-column"),
-    ]);
-
-    await Promise.all(
-      tableColumnNodes.map(column =>
-        EaUtils.EaElement.addAsyncEventListener(column, "ea-table-column-ready")
-      )
-    );
+    await customElements.whenDefined("ea-table-column");
 
     const { columns, depth } = this.#getColumnTree();
 
@@ -209,17 +202,21 @@ export class EaTable extends Base {
           desc: el.querySelector('[part="desc-icon"]'),
         };
 
-        el.addEventListener("click", e => {
-          const { prop, order } = el.dataset;
+        el.addEventListener(
+          "click",
+          () => {
+            const { prop, order } = el.dataset;
 
-          el.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
-            icon.classList.remove("is-active");
-          });
-          el.dataset.order = order === "asc" ? "desc" : "asc";
-          icon[el.dataset.order].classList.add("is-active");
+            el.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
+              icon.classList.remove("is-active");
+            });
+            el.dataset.order = order === "asc" ? "desc" : "asc";
+            icon[el.dataset.order].classList.add("is-active");
 
-          this.sort(prop, el.dataset.order);
-        });
+            this.sort(prop, el.dataset.order);
+          },
+          { signal: this.#abortController.signal }
+        );
       });
     }
 

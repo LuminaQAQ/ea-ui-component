@@ -1,6 +1,4 @@
-# 重构中，当前分支非文档主分支
-
-- 组件主要更新分支暂时独立于 [package_2.0 分支](https://github.com/LuminaQAQ/ea-ui-component/tree/package_dev2.0)
+# 重构中，暂未提交至主分支
 
 ## 已知问题
 

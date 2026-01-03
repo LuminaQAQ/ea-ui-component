@@ -1,243 +1,383 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
-const data = [
-    { name: 'Lumina', age: 18, address: '中国' },
-    { name: 'Alice', age: 18, address: '中国' },
-    { name: 'Tom', age: 18, address: '中国' },
-    { name: 'Bob', age: 18, address: '中国' },
-];
+onMounted(async () => {
+  await customElements.whenDefined("ea-table");
 
-const moreData = [
-    { date: "2024-08-01", name: 'Lumina', age: 18, address: '中国' },
-    { date: "2024-08-02", name: 'Alice', age: 18, address: '中国' },
-    { date: "2024-08-03", name: 'Tom', age: 18, address: '中国' },
-    { date: "2024-08-04", name: 'Bob', age: 18, address: '中国' },
-    { date: "2024-08-05", name: 'Jerry', age: 18, address: '中国' },
-    { date: "2024-08-06", name: 'Lucy', age: 18, address: '中国' },
-    { date: "2024-08-07", name: 'Tom', age: 18, address: '中国' },
-    { date: "2024-08-08", name: 'Bob', age: 18, address: '中国' },
-    { date: "2024-08-09", name: 'Jerry', age: 18, address: '中国' },
-    { date: "2024-08-10", name: 'Lucy', age: 18, address: '中国' },
-    { date: "2024-08-11", name: 'Tom', age: 18, address: '中国' },
-    { date: "2024-08-12", name: 'Bob', age: 18, address: '中国' },
-    { date: "2024-08-13", name: 'Jerry', age: 18, address: '中国' },
-    { date: "2024-08-14", name: 'Lucy', age: 18, address: '中国' },
-]
+      const data = [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+      ];
 
-onMounted(() => {
-  import('./index.scss')
-  
-  import('../components/ea-icon/index.js')
-  import('../components/ea-icon/index.css')
-  import('../components/ea-button/index.js')
-  import('../components/ea-button-group/index.js')
-  
-  import('../components/ea-input/index.js')
-  import('../components/ea-empty/index.js')
+      const moreData = [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-08",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-06",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-07",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+      ];
 
-  import('../components/ea-table/index.js')
-    
-  const data = [
-      { name: 'Lumina', age: 18, address: '中国' },
-      { name: 'Alice', age: 18, address: '中国' },
-      { name: 'Tom', age: 18, address: '中国' },
-      { name: 'Bob', age: 18, address: '中国' },
-  ];
+      const detailsData = [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-02",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-04",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-01",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-08",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-06",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+        {
+          date: "2016-05-07",
+          name: "Tom",
+          state: "California",
+          city: "Los Angeles",
+          address: "No. 189, Grove St, Los Angeles",
+          zip: "CA 90036",
+        },
+      ];
 
-  const moreData = [
-      { date: "2024-08-01", name: 'Lumina', age: 18, address: '中国' },
-      { date: "2024-08-02", name: 'Alice', age: 18, address: '中国' },
-      { date: "2024-08-03", name: 'Tom', age: 18, address: '中国' },
-      { date: "2024-08-04", name: 'Bob', age: 18, address: '中国' },
-      { date: "2024-08-05", name: 'Jerry', age: 18, address: '中国' },
-      { date: "2024-08-06", name: 'Lucy', age: 18, address: '中国' },
-      { date: "2024-08-07", name: 'Tom', age: 18, address: '中国' },
-      { date: "2024-08-08", name: 'Bob', age: 18, address: '中国' },
-      { date: "2024-08-09", name: 'Jerry', age: 18, address: '中国' },
-      { date: "2024-08-10", name: 'Lucy', age: 18, address: '中国' },
-      { date: "2024-08-11", name: 'Tom', age: 18, address: '中国' },
-      { date: "2024-08-12", name: 'Bob', age: 18, address: '中国' },
-      { date: "2024-08-13", name: 'Jerry', age: 18, address: '中国' },
-      { date: "2024-08-14", name: 'Lucy', age: 18, address: '中国' },
-  ]
+      window.getRowData = async table => {
+        /** @type {{target: HTMLTableRowElement, value: any}} */
+        const res = await table.getCurrentRow();
+        console.log(res.value);
+      };
 
-  // ------- 1. 基础表格 -------
-  // #region
-  const basicTable = document.querySelector('#basicTable');
-  basicTable.addEventListener('table-ready', (e) => {
-    basicTable.data = data;
-  });
+      // ------- 基础表格 -------
+      // #region
+      const basicTable = document.querySelector("#basicTable");
+      basicTable.setData(data);
+      // #endregion
+      // ------- end -------
 
-  // #endregion
-  // ------- end -------
+      // ------- 带斑马纹表格 -------
+      // #region
+      const stripeTable = document.querySelector("#stripeTable");
+      stripeTable.setData(data);
+      // #endregion
+      // ------- end -------
 
-  // ------- 2. 带斑马纹表格 -------
-  // #region
-  const stripeTable = document.querySelector('#stripeTable');
-  stripeTable.addEventListener('table-ready', (e) => {
-    stripeTable.data = data;
-  });
-  // #endregion
-  // ------- end -------
+      // ------- 带边框表格 -------
+      // #region
+      const borderTable = document.querySelector("#borderTable");
+      borderTable.setData(data);
+      // #endregion
+      // ------- end -------
 
-  // ------- 3. 带边框表格 -------
-  // #region
-  const borderTable = document.querySelector('#borderTable');
-  borderTable.addEventListener('table-ready', (e) => {
-    borderTable.data = data;
-  });
-  // #endregion
-  // ------- end -------
+      // ------- 带状态表格 -------
+      // #region
+      const statusTable = document.querySelector("#statusTable");
+      statusTable.setData(data);
+      statusTable.setRowStylePart(
+        /**
+         * @param {object} param0
+         * @param {User} param0.row
+         * @param {number} param0.rowIndex
+         */
+        ({ row, rowIndex }) => {
+          if (rowIndex === 1) {
+            return "warning-row";
+          } else if (rowIndex === 3) {
+            return "success-row";
+          }
 
-  // ------- 4. 固定表头 -------
-  // #region
-  const fixedHeaderTable = document.querySelector('#fixedHeaderTable');
-  fixedHeaderTable.addEventListener('table-ready', (e) => {
-    fixedHeaderTable.data = moreData;
-  });
-  // #endregion
-  // ------- end -------
+          return "";
+        }
+      );
+      // #endregion
+      // ------- end -------
 
-  // ------- 5. 多级表头 -------
-  // #region
-  const groupingHeadTable = document.querySelector('#groupingHeadTable');
-  groupingHeadTable.addEventListener('table-ready', (e) => {
-    groupingHeadTable.data = moreData;
-  });
-  // #endregion
-  // ------- end -------
+      // ------- 固定表头 -------
+      // #region
+      const fixedHeaderExample = {
+        table: document.querySelector("#fixedHeaderTable"),
+        init() {
+          this.table.setData(moreData);
+        },
+      };
+      fixedHeaderExample.init();
+      // #endregion
+      // ------- end -------
 
-  // ------- 6. 单选 -------
-  // #region
-  const radioTable = {
-      table: document.querySelector('#radioTable'),
+      // ------- 固定列 -------
+      // #region
+      const fixedColumnExample = {
+        table: document.querySelector("#fixedColumnTable"),
+        init() {
+          this.table.setData(detailsData);
+        },
+      };
+      fixedColumnExample.init();
+      // #endregion
+      // ------- end -------
 
-      init() {
-          this.table.addEventListener('table-ready', (e) => {
-            this.table.data = moreData;
+      // ------- 固定列和表头 -------
+      // #region
+      const fixedColumnAndHeaderExample = {
+        table: document.querySelector("#fixedColumnAndHeaderTable"),
+        init() {
+          this.table.setData(detailsData);
+        },
+      };
+      fixedColumnAndHeaderExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 多级表头 -------
+      // #region
+      const groupingHeadTable = document.querySelector("#groupingHeadTable");
+      groupingHeadTable.setData(detailsData);
+      // #endregion
+      // ------- end -------
+
+      // ------- 单选 -------
+      // #region
+      const radioTable = {
+        table: document.querySelector("#radioTable"),
+
+        selectBtn: document.querySelector("#radioTableSelectBtn"),
+        clearBtn: document.querySelector("#radioTableClearBtn"),
+
+        init() {
+          this.table.setData(data);
+
+          this.table.addEventListener("current-change", e => {
+            console.log(e.detail.row);
           });
 
-          this.table.addEventListener('current-change', (e) => {
-              console.log(e.detail);
-          });
-      }
-  }
-  radioTable.init();
-  // #endregion
-  // ------- end -------
-
-  // ------- 7. 自增id序列 -------
-  // #region
-  const increaseliyTable = document.querySelector('#increaseliyTable');
-  increaseliyTable.addEventListener('table-ready', (e) => {
-    increaseliyTable.data = data;
-  });
-  // #endregion
-  // ------- end -------
-
-  // ------- 8. 多选 -------
-  // #region
-  const checkboxTable = document.querySelector('#checkboxTable');
-  checkboxTable.addEventListener('table-ready', (e) => {
-    checkboxTable.data = data;
-  });
-  checkboxTable.addEventListener('body-selection-change', (e) => {
-      console.log(e.detail);
-  });
-  // #endregion
-  // ------- end -------
-
-  // ------- 9. 排序 -------
-  // #region
-  const sortableTable = {
-      table: document.querySelector('#sortableTable'),
-
-      init() {
-          this.table.addEventListener('table-ready', (e) => {
-            this.table.data = moreData;
+          this.selectBtn.addEventListener("click", () => {
+            this.table.setCurrentRow(data[1]);
           });
 
-          this.table.addEventListener('sort-change', (e) => {
-              console.log(e.detail);
+          this.clearBtn.addEventListener("click", () => {
+            this.table.setCurrentRow();
           });
-      }
-  }
-  sortableTable.init();
-  // #endregion
-  // ------- end -------
+        },
+      };
+      radioTable.init();
+      // #endregion
+      // ------- end -------
 
-  // ------- 10. 自定义插槽 -------
-  // #region
+      // TODO: 多选
+      // ------- 多选 -------
+      // #region
+      // const checkboxTable = document.querySelector("#checkboxTable");
+      // checkboxTable.data = data;
+      // checkboxTable.addEventListener("body-selection-change", (e) => {
+      //   console.log(e.detail);
+      // });
+      // #endregion
+      // ------- end -------
 
-  const customTable = {
-      table: document.querySelector('#customTable'),
-      searchInput: document.querySelector('#searchInput'),
+      // ------- 排序 -------
+      // #region
+      const sortableTable = {
+        table: document.querySelector("#sortableTable"),
 
-      init() {
-          this.table.addEventListener('table-ready', (e) => {
-            this.table.data = moreData;
+        init() {
+          this.table.setData(data);
+
+          this.table.addEventListener("sort-change", e => {
+            console.log(e.detail);
           });
-          
-          // 搜索
-          this.searchInput.addEventListener('change', () => {
-              const res = moreData.filter(item => item.name.includes(this.searchInput.value));
-              this.table.data = res;
-          });
-      }
-  }
-  customTable.init();
+        },
+      };
+      sortableTable.init();
+      // #endregion
+      // ------- end -------
 
-  // 编辑按钮
-  class MyEditButton extends HTMLElement {
-      constructor() {
-          super();
+      // TODO: 筛选
+      // ------- 筛选 -------
+      // #region
 
-          const shadowroot = this.attachShadow({ mode: 'open' });
-          shadowroot.innerHTML = `
-              <ea-button type="primary" size="mini">编辑</ea-button>
-          `;
-          const btn = shadowroot.querySelector('ea-button');
-          btn.addEventListener('click', (e) => {
-              setTimeout(() => {
-                  console.log(customTable.table.currentRowDetail);
-              }, 0);
-          })
+      // #endregion
+      // ------- end -------
 
-          shadowroot.appendChild(btn);
-      }
-  }
-  if(!window.customElements.get('ea-my-edit-button')) window.customElements.define('ea-my-edit-button', MyEditButton);
+      // ------- 7. 自增id序列 -------
+      // #region
+      // const increaseliyTable = document.querySelector("#increaseliyTable");
+      // increaseliyTable.data = data;
+      // #endregion
+      // ------- end -------
 
-  // 删除按钮
-  class MyDeleteButton extends HTMLElement {
-      constructor() {
-          super();
+      // ------- 9. 排序 -------
+      // #region
+      // const sortableTable = {
+      //   table: document.querySelector("#sortableTable"),
 
-          const shadowroot = this.attachShadow({ mode: 'open' });
-          shadowroot.innerHTML = `
-              <ea-button type="danger" size="mini">删除</ea-button>
-          `;
-          const btn = shadowroot.querySelector('ea-button');
-          btn.addEventListener('click', (e) => {
-              setTimeout(() => {
-                  console.log(customTable.table.currentRowDetail);
-              }, 0);
-          })
-      }
-  }
-  if(!window.customElements.get('ea-my-delete-button')) window.customElements.define('ea-my-delete-button', MyDeleteButton);
-  // #endregion
-  // ------- end -------
+      //   init() {
+      //     this.table.data = moreData;
+
+      //     this.table.addEventListener("sort-change", (e) => {
+      //       console.log(e.detail);
+      //     });
+      //   },
+      // };
+      // sortableTable.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 10. 自定义插槽 -------
+      // #region
+      // const customTable = {
+      //   table: document.querySelector("#customTable"),
+      //   searchInput: document.querySelector("#searchInput"),
+
+      //   init() {
+      //     this.table.data = moreData;
+
+      //     // 搜索
+      //     this.searchInput.addEventListener("change", () => {
+      //       const res = moreData.filter((item) =>
+      //         item.name.includes(this.searchInput.value)
+      //       );
+      //       this.table.data = res;
+      //     });
+      //   },
+      // };
+      // customTable.init();
+
+      // // 编辑按钮
+      // class MyEditButton extends HTMLElement {
+      //   constructor() {
+      //     super();
+
+      //     const shadowroot = this.attachShadow({ mode: "open" });
+      //     shadowroot.innerHTML = `
+      //               <ea-button type="primary" size="mini">编辑</ea-button>
+      //           `;
+      //     const btn = shadowroot.querySelector("ea-button");
+      //     btn.addEventListener("click", (e) => {
+      //       setTimeout(() => {
+      //         console.log(customTable.table.currentRowDetail);
+      //       }, 0);
+      //     });
+
+      //     shadowroot.appendChild(btn);
+      //   }
+      // }
+      // window.customElements.define("my-edit-button", MyEditButton);
+
+      // // 删除按钮
+      // class MyDeleteButton extends HTMLElement {
+      //   constructor() {
+      //     super();
+
+      //     const shadowroot = this.attachShadow({ mode: "open" });
+      //     shadowroot.innerHTML = `
+      //               <ea-button type="danger" size="mini">删除</ea-button>
+      //           `;
+      //     const btn = shadowroot.querySelector("ea-button");
+      //     btn.addEventListener("click", (e) => {
+      //       setTimeout(() => {
+      //         console.log(customTable.table.currentRowDetail);
+      //       }, 0);
+      //     });
+      //   }
+      // }
+      // window.customElements.define("my-delete-button", MyDeleteButton);
+      // #endregion
+      // ------- end -------
 })
 </script>
 
 <style>
-    .prepend,
-    .append {
-        background-color: #f5f7fa;
-        padding: 0.5rem;
-    }
+#statusTable::part(warning-row) {
+  --ea-table-bg-color: rgb(253, 246, 236);
+}
+
+#statusTable::part(success-row) {
+  --ea-table-bg-color: rgb(240, 249, 235);
+}
 </style>
 
 # Table 表格
@@ -247,7 +387,7 @@ onMounted(() => {
 > `js`
 
 ```js
-<script type="module">
+<script type='module'>
   import "./node_modules/easy-component-ui/components/ea-table/index.js";
 </script>
 ```
@@ -274,46 +414,63 @@ onMounted(() => {
 基础的表格展示用法。
 
 ::: warning
-注意: 在 `VUE` 环境下, `data` 的设置推荐在 `table-ready` 事件触发时设置，否则可能会导致表格数据不渲染。**此后示例同此情况。**<br/>
+注意: 在 `VUE` 环境下, `data` 的设置推荐在 Table 定义后触发时设置，否则可能会导致表格数据不渲染。**此后示例同此情况。**<br/>
 
 同理, 若原生环境出现该问题, 也可使用该方法。
+
+```js
+await customElements.whenDefined("ea-table");
+```
+
 :::
 
-<!-- -------- 1. 基础表格 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="basicTable">
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
+<div class="demo">
+  <ea-table id="basicTable">
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<div>
+<div class="demo">
   <ea-table id="basicTable">
-    <ea-table-column prop="name" width="100">姓名</ea-table-column>
-    <ea-table-column prop="age" width="100">年龄</ea-table-column>
-    <ea-table-column prop="address">地址</ea-table-column>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
 ```
 
----
-
-`js`
-
 ```js
 const basicTable = document.querySelector("#basicTable");
-basicTable.addEventListener("table-ready", (e) => {
-  basicTable.data = data;
-});
+
+const data = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
+basicTable.setData(data);
 ```
 
 :::
@@ -322,82 +479,186 @@ basicTable.addEventListener("table-ready", (e) => {
 
 使用带斑马纹的表格，可以更容易区分出不同行的数据。
 
-<!-- -------- 2. 带斑马纹表格 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="stripeTable" stripe>
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
+<div class="demo">
+  <ea-table id="stripeTable" stripe>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<div>
+<div class="demo">
   <ea-table id="stripeTable" stripe>
-    <ea-table-column prop="name" width="100">姓名</ea-table-column>
-    <ea-table-column prop="age" width="100">年龄</ea-table-column>
-    <ea-table-column prop="address">地址</ea-table-column>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
 ```
 
----
-
-`js`
-
 ```js
 const stripeTable = document.querySelector("#stripeTable");
-stripeTable.addEventListener("table-ready", (e) => {
-  stripeTable.data = data;
-});
+
+const data = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
+stripeTable.setData(data);
 ```
 
 :::
 
 ## 带边框表格
 
-<!-- -------- 3. 带边框表格 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="borderTable" border>
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
+<div class="demo">
+  <ea-table id="borderTable" border>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<div>
+<div class="demo">
   <ea-table id="borderTable" border>
-    <ea-table-column prop="name" width="100">姓名</ea-table-column>
-    <ea-table-column prop="age" width="100">年龄</ea-table-column>
-    <ea-table-column prop="address">地址</ea-table-column>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
 ```
 
----
-
-`js`
-
 ```js
 const borderTable = document.querySelector("#borderTable");
-borderTable.addEventListener("table-ready", (e) => {
-  borderTable.data = data;
-});
+
+const data = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
+borderTable.setData(data);
+```
+
+:::
+
+## 带状态表格
+
+<div class="demo">
+  <ea-table id="statusTable">
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-table id="statusTable">
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
+</div>
+```
+
+```css
+#statusTable::part(warning-row) {
+  --ea-table-bg-color: rgb(253, 246, 236);
+}
+
+#statusTable::part(success-row) {
+  --ea-table-bg-color: rgb(240, 249, 235);
+}
+```
+
+```js
+const statusTable = document.querySelector("#statusTable");
+
+const data = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
+statusTable.setData(data);
+
+statusTable.setRowStylePart(
+  /**
+   * @param {object} param0
+   * @param {User} param0.row
+   * @param {number} param0.rowIndex
+   */
+  ({ row, rowIndex }) => {
+    if (rowIndex === 1) {
+      return "warning-row";
+    } else if (rowIndex === 3) {
+      return "success-row";
+    }
+
+    return "";
+  }
+);
 ```
 
 :::
@@ -406,43 +667,327 @@ borderTable.addEventListener("table-ready", (e) => {
 
 纵向内容过多时，可选择固定表头。
 
-<!-- -------- 4. 固定表头 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="fixedHeaderTable" border height="250">
-        <ea-table-column prop="date" width="100">日期</ea-table-column>
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
+<div class="demo">
+  <ea-table id="fixedHeaderTable" height="200px">
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<div>
-  <ea-table id="fixedHeaderTable" border height="250">
-    <ea-table-column prop="date" width="100">日期</ea-table-column>
-    <ea-table-column prop="name" width="100">姓名</ea-table-column>
-    <ea-table-column prop="age" width="100">年龄</ea-table-column>
-    <ea-table-column prop="address">地址</ea-table-column>
+<div class="demo">
+  <ea-table id="fixedHeaderTable" height="200px">
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
 ```
 
----
+```js
+const moreData = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-08",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-06",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-07",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
 
-`js`
+const fixedHeaderExample = {
+  table: document.querySelector("#fixedHeaderTable"),
+  init() {
+    this.table.setData(moreData);
+  },
+};
+fixedHeaderExample.init();
+```
+
+:::
+
+## 固定列
+
+横向内容过多时，可选择固定列。
+
+<div class="demo">
+  <ea-table id="fixedColumnTable">
+    <ea-table-column
+      prop="date"
+      label="Date"
+      width="150px"
+      fixed
+    ></ea-table-column>
+    <ea-table-column prop="name" label="Name" width="120px"></ea-table-column>
+    <ea-table-column prop="state" label="State" width="120px"></ea-table-column>
+    <ea-table-column prop="city" label="City" width="120px"></ea-table-column>
+    <ea-table-column
+      prop="address"
+      label="Address"
+      width="600px"
+    ></ea-table-column>
+    <ea-table-column prop="zip" label="Zip" width="120px"></ea-table-column>
+    <ea-table-column prop="action" fixed="right" label="Operations">
+      <ea-button
+        link
+        type="primary"
+        size="small"
+        onclick="getRowData(document.querySelector('#fixedColumnTable'))"
+      >
+        Detail
+      </ea-button>
+      <ea-button
+        link
+        type="primary"
+        size="small"
+        onclick="console.log('click')"
+      >
+        Edit
+      </ea-button>
+    </ea-table-column>
+  </ea-table>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-table id="fixedColumnTable">
+    <ea-table-column
+      prop="date"
+      label="Date"
+      width="150px"
+      fixed
+    ></ea-table-column>
+    <ea-table-column prop="name" label="Name" width="120px"></ea-table-column>
+    <ea-table-column prop="state" label="State" width="120px"></ea-table-column>
+    <ea-table-column prop="city" label="City" width="120px"></ea-table-column>
+    <ea-table-column
+      prop="address"
+      label="Address"
+      width="600px"
+    ></ea-table-column>
+    <ea-table-column prop="zip" label="Zip" width="120px"></ea-table-column>
+    <ea-table-column prop="action" fixed="right" label="Operations">
+      <ea-button
+        link
+        type="primary"
+        size="small"
+        onclick="getRowData(document.querySelector('#fixedColumnTable'))"
+      >
+        Detail
+      </ea-button>
+      <ea-button
+        link
+        type="primary"
+        size="small"
+        onclick="console.log('click')"
+      >
+        Edit
+      </ea-button>
+    </ea-table-column>
+  </ea-table>
+</div>
+```
 
 ```js
-const fixedHeaderTable = document.querySelector("#fixedHeaderTable");
-fixedHeaderTable.addEventListener("table-ready", (e) => {
-  fixedHeaderTable.data = moreData;
-});
+const moreData = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-08",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-06",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-07",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
+const fixedHeaderExample = {
+  table: document.querySelector("#fixedHeaderTable"),
+  init() {
+    this.table.setData(moreData);
+  },
+};
+fixedHeaderExample.init();
+```
+
+:::
+
+## 固定列和表头
+
+当您有大量数据块放入表中，您可以同时固定表头和列。
+
+固定列和表头可以同时使用，只需要将上述两个属性分别设置好即可。
+
+<div class="demo">
+  <ea-table id="fixedColumnAndHeaderTable" style="width: 100%" height="200px">
+    <ea-table-column
+      fixed
+      prop="date"
+      label="Date"
+      width="150px"
+    ></ea-table-column>
+    <ea-table-column prop="name" label="Name" width="120px"></ea-table-column>
+    <ea-table-column prop="state" label="State" width="120px"></ea-table-column>
+    <ea-table-column prop="city" label="City" width="320px"></ea-table-column>
+    <ea-table-column
+      prop="address"
+      label="Address"
+      width="600px"
+    ></ea-table-column>
+    <ea-table-column prop="zip" label="Zip"></ea-table-column>
+  </ea-table>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-table id="fixedColumnAndHeaderTable" style="width: 100%" height="200px">
+    <ea-table-column
+      fixed
+      prop="date"
+      label="Date"
+      width="150px"
+    ></ea-table-column>
+    <ea-table-column prop="name" label="Name" width="120px"></ea-table-column>
+    <ea-table-column prop="state" label="State" width="120px"></ea-table-column>
+    <ea-table-column prop="city" label="City" width="320px"></ea-table-column>
+    <ea-table-column
+      prop="address"
+      label="Address"
+      width="600px"
+    ></ea-table-column>
+    <ea-table-column prop="zip" label="Zip"></ea-table-column>
+  </ea-table>
+</div>
+```
+
+```js
+const detailsData = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-08",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-06",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-07",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+];
+
+const fixedColumnAndHeaderExample = {
+  table: document.querySelector("#fixedColumnAndHeaderTable"),
+  init() {
+    this.table.setData(detailsData);
+  },
+};
+fixedColumnAndHeaderExample.init();
 ```
 
 :::
@@ -451,53 +996,120 @@ fixedHeaderTable.addEventListener("table-ready", (e) => {
 
 数据结构比较复杂的时候，可使用多级表头来展现数据的层次关系。
 
-<!-- -------- 5. 多级表头 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="groupingHeadTable" border height="250">
-        <ea-table-column prop="date" width="100" rowspan="3">日期</ea-table-column>
-        <ea-table-column label="详细信息" colspan="3">
-            <ea-table-column prop="name" width="100" rowspan="2">姓名</ea-table-column>
-            <ea-table-column label="个人信息" colspan="2">
-                <ea-table-column prop="age" width="100">年龄</ea-table-column>
-                <ea-table-column prop="address">地址</ea-table-column>
-            </ea-table-column>
-        </ea-table-column>
-    </ea-table>
+只需要将 `ea-table-column` 放置于 `ea-table-column` 中，你可以实现组头。
+
+<div class="demo">
+  <ea-table id="groupingHeadTable" border style="width: 100%">
+    <ea-table-column prop="date" label="Date" width="150px"></ea-table-column>
+    <ea-table-column label="Delivery Info">
+      <ea-table-column prop="name" label="Name" width="120px"></ea-table-column>
+      <ea-table-column label="Address Info">
+        <ea-table-column
+          prop="state"
+          label="State"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="city"
+          label="City"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column prop="address" label="Address"></ea-table-column>
+        <ea-table-column prop="zip" label="Zip" width="120px"></ea-table-column>
+      </ea-table-column>
+    </ea-table-column>
+  </ea-table>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<div>
-  <ea-table id="groupingHeadTable" border height="250">
-    <ea-table-column prop="date" width="100" rowspan="3">日期</ea-table-column>
-    <ea-table-column label="详细信息" colspan="3">
-      <ea-table-column prop="name" width="100" rowspan="2"
-        >姓名</ea-table-column
-      >
-      <ea-table-column label="个人信息" colspan="2">
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
+<div class="demo">
+  <ea-table id="groupingHeadTable" border style="width: 100%">
+    <ea-table-column prop="date" label="Date" width="150px"></ea-table-column>
+    <ea-table-column label="Delivery Info">
+      <ea-table-column prop="name" label="Name" width="120px"></ea-table-column>
+      <ea-table-column label="Address Info">
+        <ea-table-column
+          prop="state"
+          label="State"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="city"
+          label="City"
+          width="120px"
+        ></ea-table-column>
+        <ea-table-column prop="address" label="Address"></ea-table-column>
+        <ea-table-column prop="zip" label="Zip" width="120px"></ea-table-column>
       </ea-table-column>
     </ea-table-column>
   </ea-table>
 </div>
 ```
 
----
-
-`js`
-
 ```js
+const detailsData = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-08",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-06",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-07",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+];
+
 const groupingHeadTable = document.querySelector("#groupingHeadTable");
-groupingHeadTable.addEventListener("table-ready", (e) => {
-  groupingHeadTable.data = moreData;
-});
+groupingHeadTable.setData(detailsData);
 ```
 
 :::
@@ -506,49 +1118,77 @@ groupingHeadTable.addEventListener("table-ready", (e) => {
 
 选择单行数据时使用色块表示。
 
-<!-- -------- 6. 单选 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="radioTable" border height="250" highlight-current-row>
-        <ea-table-column prop="date" width="100">日期</ea-table-column>
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
+<div class="demo">
+  <ea-table id="radioTable" border highlight-current-row>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
+  <div style="margin-top: 20px">
+    <ea-button id="radioTableSelectBtn">Select second row</ea-button>
+    <ea-button id="radioTableClearBtn">Clear selection</ea-button>
+  </div>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<div>
-  <ea-table id="radioTable" border height="250" highlight-current-row>
-    <ea-table-column prop="date" width="100">日期</ea-table-column>
-    <ea-table-column prop="name" width="100">姓名</ea-table-column>
-    <ea-table-column prop="age" width="100">年龄</ea-table-column>
-    <ea-table-column prop="address">地址</ea-table-column>
+<div class="demo">
+  <ea-table id="radioTable" border highlight-current-row>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
+  <div style="margin-top: 20px">
+    <ea-button id="radioTableSelectBtn">Select second row</ea-button>
+    <ea-button id="radioTableClearBtn">Clear selection</ea-button>
+  </div>
 </div>
 ```
 
----
-
-`js`
-
 ```js
+const data = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
 const radioTable = {
   table: document.querySelector("#radioTable"),
 
+  selectBtn: document.querySelector("#radioTableSelectBtn"),
+  clearBtn: document.querySelector("#radioTableClearBtn"),
+
   init() {
-    this.table.addEventListener("table-ready", (e) => {
-      this.table.data = moreData;
+    this.table.setData(data);
+
+    this.table.addEventListener("current-change", e => {
+      console.log(e.detail.row);
     });
 
-    this.table.addEventListener("current-change", (e) => {
-      console.log(e.detail);
+    this.selectBtn.addEventListener("click", () => {
+      this.table.setCurrentRow(data[1]);
+    });
+
+    this.clearBtn.addEventListener("click", () => {
+      this.table.setCurrentRow();
     });
   },
 };
@@ -557,93 +1197,18 @@ radioTable.init();
 
 :::
 
-## 自增 id 序列
-
-设置 `type` 属性为 `index` 即可显示从 `1` 开始的索引号。。
-
-<!-- -------- 7. 自增id序列 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="increaseliyTable" border height="250" highlight-current-row>
-        <ea-table-column type="index" width="100">id</ea-table-column>
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
-</div>
-<!-- #endregion  -->
-<!-- -------------------  -->
-
-::: details 示例代码
-
-`html`
-
-```html
-<ea-table id="increaseliyTable" border height="250" highlight-current-row>
-  <ea-table-column type="index" width="100">id</ea-table-column>
-  <ea-table-column prop="name" width="100">姓名</ea-table-column>
-  <ea-table-column prop="age" width="100">年龄</ea-table-column>
-  <ea-table-column prop="address">地址</ea-table-column>
-</ea-table>
-```
-
----
-
-`js`
-
-```js
-const increaseliyTable = document.querySelector("#increaseliyTable");
-increaseliyTable.addEventListener("table-ready", (e) => {
-  increaseliyTable.data = data;
-});
-```
-
-:::
-
-## 多选
+## [-] 多选
 
 选择多行数据时使用 Checkbox。
 
-<!-- -------- 8. 多选 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="checkboxTable" border height="250">
-        <ea-table-column type="selection" width="100"></ea-table-column>
-        <ea-table-column type="index" width="100">id</ea-table-column>
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table>
-</div>
-<!-- #endregion  -->
-<!-- -------------------  -->
-
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<ea-table id="checkboxTable" border height="250">
-  <ea-table-column type="selection" width="100"></ea-table-column>
-  <ea-table-column type="index" width="100">id</ea-table-column>
-  <ea-table-column prop="name" width="100">姓名</ea-table-column>
-  <ea-table-column prop="age" width="100">年龄</ea-table-column>
-  <ea-table-column prop="address">地址</ea-table-column>
-</ea-table>
+
 ```
 
----
-
-`js`
-
 ```js
-const checkboxTable = document.querySelector("#checkboxTable");
-checkboxTable.addEventListener("table-ready", (e) => {
-  checkboxTable.data = data;
-});
-checkboxTable.addEventListener("body-selection-change", (e) => {
-  console.log(e.detail);
-});
+
 ```
 
 :::
@@ -652,58 +1217,44 @@ checkboxTable.addEventListener("body-selection-change", (e) => {
 
 对表格进行排序，可快速查找或对比数据。
 
-<!-- -------- 9. 排序 --------  -->
-<!-- #region  -->
-<div>
-    <ea-table id="sortableTable" border height="250">
-        <ea-table-column prop="date" width="100" rowspan="3" sortable>日期</ea-table-column>
-        <ea-table-column label="详细信息" colspan="3">
-            <ea-table-column prop="name" width="100" rowspan="2" sortable>姓名</ea-table-column>
-            <ea-table-column label="个人信息" colspan="2">
-                <ea-table-column prop="age" width="100">年龄</ea-table-column>
-                <ea-table-column prop="address">地址</ea-table-column>
-            </ea-table-column>
-        </ea-table-column>
-    </ea-table>
+<div class="demo">
+  <ea-table id="sortableTable" border>
+    <ea-table-column
+      label="Date"
+      prop="date"
+      width="180px"
+      sortable
+    ></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
 
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<ea-table id="sortableTable" border height="250">
-  <ea-table-column prop="date" width="100" rowspan="3" sortable
-    >日期</ea-table-column
-  >
-  <ea-table-column label="详细信息" colspan="3">
-    <ea-table-column prop="name" width="100" rowspan="2" sortable
-      >姓名</ea-table-column
-    >
-    <ea-table-column label="个人信息" colspan="2">
-      <ea-table-column prop="age" width="100">年龄</ea-table-column>
-      <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table-column>
-  </ea-table-column>
-</ea-table>
+<div class="demo">
+  <ea-table id="sortableTable" border>
+    <ea-table-column
+      label="Date"
+      prop="date"
+      width="180px"
+      sortable
+    ></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
+</div>
 ```
-
----
-
-`js`
 
 ```js
 const sortableTable = {
   table: document.querySelector("#sortableTable"),
 
   init() {
-    this.table.addEventListener("table-ready", (e) => {
-      this.table.data = moreData;
-    });
+    this.table.setData(data);
 
-    this.table.addEventListener("sort-change", (e) => {
+    this.table.addEventListener("sort-change", e => {
       console.log(e.detail);
     });
   },
@@ -713,158 +1264,27 @@ sortableTable.init();
 
 :::
 
-## 自定义插槽
+## [-] 自定义插槽
 
 自定义某列或表头的显示内容，可组合其他组件使用。
 
 :::danger
-注意: 若 `slot="body"` 中的元素要带有业务逻辑且开启了排序功能，则该元素必须以 `WebComponent` 的形式存在，且`事件`需要在组件中已经定义和绑定。否则会在排序后丢失元素事件。
+<!-- 注意: 若 `slot="body"` 中的元素要带有业务逻辑且开启了排序功能，则该元素必须以 `WebComponent` 的形式存在，且`事件`需要在组件中已经定义和绑定。否则会在排序后丢失元素事件。 -->
 :::
 
-<!-- -------- 9. 排序 --------  -->
-<!-- #region  -->
-<div class="demo">
-  <ea-table id="customTable" border height="250">
-    <ea-table-column prop="date" width="100" rowspan="3" sortable
-      >日期</ea-table-column
-    >
-    <ea-table-column label="详细信息" colspan="3">
-      <ea-table-column prop="name" width="100" rowspan="2" sortable
-        >姓名</ea-table-column
-      >
-      <ea-table-column label="个人信息" colspan="2">
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-      </ea-table-column>
-    </ea-table-column>
-    <div slot="header">
-      <ea-input id="searchInput" placeholder="搜索名字"></ea-input>
-    </div>
-    <div slot="body">
-      <div style="display: flex;justify-content: space-evenly;flex-wrap: wrap;">
-        <ea-my-edit-button></ea-my-edit-button>
-        <ea-my-delete-button></ea-my-delete-button>
-      </div>
-    </div>
-    <div slot="empty">
-      <ea-empty description="描述文字" image-size="100"></ea-empty>
-    </div>
-  </ea-table>
-</div>
-<!-- #endregion  -->
-<!-- -------------------  -->
-
-::: details 示例代码
-
-`html`
+::: code-group
 
 ```html
-<div class="demo">
-  <ea-table id="customTable" border height="250">
-    <ea-table-column prop="date" width="100" rowspan="3" sortable
-      >日期</ea-table-column
-    >
-    <ea-table-column label="详细信息" colspan="3">
-      <ea-table-column prop="name" width="100" rowspan="2" sortable
-        >姓名</ea-table-column
-      >
-      <ea-table-column label="个人信息" colspan="2">
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-      </ea-table-column>
-    </ea-table-column>
-    <div slot="header">
-      <ea-input id="searchInput" placeholder="搜索名字"></ea-input>
-    </div>
-    <div slot="body">
-      <div style="display: flex; justify-content: space-evenly;">
-        <my-edit-button></my-edit-button>
-        <my-delete-button></my-delete-button>
-      </div>
-    </div>
-    <div slot="empty">
-      <ea-empty description="描述文字" image-size="100"></ea-empty>
-    </div>
-  </ea-table>
-</div>
+
 ```
 
----
-
-`js`
-
-> [!NOTE]
-> 示例中的自定义组件，其中的逻辑使用了异步操作，因为其本身调用的是 `Table` 组件上的事件，所以需要等待 `Table` 组件自身的事件触发完成。
-
 ```js
-const customTable = {
-  table: document.querySelector("#customTable"),
-  searchInput: document.querySelector("#searchInput"),
 
-  init() {
-    this.table.addEventListener("table-ready", (e) => {
-      console.log(this.table.data, e);
-      console.log(this.table.data);
-      this.table.data = moreData;
-    });
-
-    // 搜索
-    this.searchInput.addEventListener("change", () => {
-      const res = moreData.filter((item) =>
-        item.name.includes(this.searchInput.value)
-      );
-      this.table.data = res;
-    });
-  },
-};
-customTable.init();
-
-// 编辑按钮
-class MyEditButton extends HTMLElement {
-  constructor() {
-    super();
-
-    const shadowroot = this.attachShadow({ mode: "open" });
-    shadowroot.innerHTML = `
-              <ea-button type="primary" size="mini">编辑</ea-button>
-          `;
-    const btn = shadowroot.querySelector("ea-button");
-    btn.addEventListener("click", (e) => {
-      setTimeout(() => {
-        console.log(customTable.table.currentRowDetail);
-      }, 0);
-    });
-
-    shadowroot.appendChild(btn);
-  }
-}
-if (!window.customElements.get("ea-my-edit-button"))
-  window.customElements.define("ea-my-edit-button", MyEditButton);
-
-// 删除按钮
-class MyDeleteButton extends HTMLElement {
-  constructor() {
-    super();
-
-    const shadowroot = this.attachShadow({ mode: "open" });
-    shadowroot.innerHTML = `
-              <ea-button type="danger" size="mini">删除</ea-button>
-          `;
-    const btn = shadowroot.querySelector("ea-button");
-    btn.addEventListener("click", (e) => {
-      setTimeout(() => {
-        console.log(customTable.table.currentRowDetail);
-      }, 0);
-    });
-  }
-}
-if (!window.customElements.get("ea-my-delete-button"))
-  window.customElements.define("ea-my-delete-button", MyDeleteButton);
 ```
 
 :::
 
-## Table Attributes
+<!-- ## Table Attributes
 
 | 参数                  | 说明       | 类型 | 可选值 | 默认值 |
 | --------------------- | ---------- | ---- | ------ | ------ |
@@ -931,4 +1351,4 @@ if (!window.customElements.get("ea-my-delete-button"))
 
 | 名称 | 说明      |
 | ---- | --------- |
-| -    | `th` 内容 |
+| -    | `th` 内容 | -->
