@@ -153,12 +153,6 @@
     "./ea-notification": {
       "import": "./dist/ea-notification.js"
     },
-    "./ea-option": {
-      "import": "./dist/ea-option.js"
-    },
-    "./ea-option-gropu": {
-      "import": "./dist/ea-option-gropu.js"
-    },
     "./ea-page-header": {
       "import": "./dist/ea-page-header.js"
     },

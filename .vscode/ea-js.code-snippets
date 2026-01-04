@@ -84,7 +84,7 @@
       "      }",
       "",
       "  \\$beforeUnmounted() {",
-      "    this.#abortController.abort();",
+      "    this.#abortController?.abort();",
       "  }",
       "}",
       "",

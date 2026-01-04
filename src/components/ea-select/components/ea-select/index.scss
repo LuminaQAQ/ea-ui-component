@@ -1,0 +1,37 @@
+$name: ea-select;
+
+:host {
+  --#{$name}-dropdown-bg-color: var(--color-white);
+
+  --#{$name}-transition: var(--transition-fast);
+}
+
+@include block($name) {
+  position: relative;
+
+  @include element(dropdown) {
+    position: absolute;
+    width: 100%;
+
+    transform-origin: top center;
+    transform: scaleY(0);
+
+    background-color: var(--#{$name}-dropdown-bg-color);
+
+    transition: transform var(--#{$name}-transition);
+  }
+
+  @include element(dropdown-icon) {
+    transition: transform var(--#{$name}-transition);
+  }
+
+  @include state(focus) {
+    .ea-select__dropdown {
+      transform: scaleY(1);
+    }
+
+    .ea-select__dropdown-icon {
+      transform: rotate(180deg);
+    }
+  }
+}

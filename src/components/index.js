@@ -32,8 +32,6 @@ import './ea-menu/index.js';
 import './ea-message/index.js';
 import './ea-message-box/index.js';
 import './ea-notification/index.js';
-import './ea-option/index.js';
-import './ea-option-gropu/index.js';
 import './ea-page-header/index.js';
 import './ea-pagination/index.js';
 import './ea-popconfirm/index.js';
