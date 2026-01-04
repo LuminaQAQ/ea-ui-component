@@ -10,10 +10,21 @@ export class EaOption extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "value"];
+    return [
+      ...super.observedAttributes,
+      "label",
+      "value",
+      "active",
+      "disabled",
+    ];
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: () => {},
+    },
     value: {
       type: {
         Number: () => this.getAttrNumber("value", null),
@@ -21,8 +32,22 @@ export class EaOption extends Base {
           EaUtils.Boolean.isBoolean(this.getAttrBoolean("value", null)),
         String: () => this.getAttrString("value", "") || true,
       },
-      default: "",
-      observer: newVal => {},
+      default: null,
+      observer: () => {},
+    },
+    active: {
+      type: Boolean,
+      default: false,
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: () => {
+        this.updateContainerClasslist();
+      },
     },
   });
 
@@ -31,9 +56,16 @@ export class EaOption extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-option", {
-      // ['--' + this.type]: this.type,
-    });
+    const className = this.computedClasslist(
+      "ea-option",
+      {
+        // ['--' + this.type]: this.type,
+      },
+      {
+        active: this.active,
+        disabled: this.disabled,
+      }
+    );
 
     this.#container.className = className;
 
@@ -68,9 +100,11 @@ export class EaOption extends Base {
       "click",
       e => {
         e.preventDefault();
+        if (this.disabled) return;
 
         this.emit("ea-option-click", {
           detail: {
+            label: this.label,
             value: this.value,
             target: e.target,
           },

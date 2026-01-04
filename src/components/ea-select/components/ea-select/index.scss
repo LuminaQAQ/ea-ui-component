@@ -6,12 +6,19 @@ $name: ea-select;
   --#{$name}-transition: var(--transition-fast);
 }
 
+:host {
+  display: inline-block;
+}
+
 @include block($name) {
   position: relative;
 
   @include element(dropdown) {
     position: absolute;
+
     width: 100%;
+
+    border: 1px solid var(--grey-200);
 
     transform-origin: top center;
     transform: scaleY(0);
@@ -19,6 +26,8 @@ $name: ea-select;
     background-color: var(--#{$name}-dropdown-bg-color);
 
     transition: transform var(--#{$name}-transition);
+
+    z-index: 1000;
   }
 
   @include element(dropdown-icon) {

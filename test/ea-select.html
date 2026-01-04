@@ -18,55 +18,72 @@
     <script type="module" src="../src/components/ea-button/index.js"></script>
     <script type="module" src="../src/components/ea-empty/index.js"></script>
 
-    <!--  基础用法 -->
-    <!-- #region -->
-    <h1>基础用法</h1>
-
-    <!-- <div class="demo">
-      <ea-select placeholder="请选择">
-        <ea-option value="1">选项1</ea-option>
-        <ea-option value="2">选项2</ea-option>
-        <ea-option value="3">选项3</ea-option>
-        <ea-option value="4">选项4</ea-option>
-      </ea-select>
-    </div> -->
-
     <form>
-      <ea-select placeholder="请选择">
-        <ea-option value="1">选项1</ea-option>
-        <ea-option value="2">选项2</ea-option>
-        <ea-option value="3">选项3</ea-option>
-        <ea-option value="4">选项4</ea-option>
+      <ea-select placeholder="Select" style="width: 240px">
+        <ea-option label="Option 1" value="Option1">Option 1</ea-option>
+        <ea-option label="Option 2" value="Option2">Option 2</ea-option>
+        <ea-option label="Option 3" value="Option3">Option 3</ea-option>
+        <ea-option label="Option 4" value="Option4">Option 4</ea-option>
+        <ea-option label="Option 5" value="Option5">Option 5</ea-option>
       </ea-select>
 
       <ea-button button-type="submit">submit</ea-button>
+      <ea-button id="show">show</ea-button>
     </form>
 
     <script type="module">
       const form = document.querySelector("form");
       const select = document.querySelector("ea-select");
-      const button = document.querySelector("ea-button");
+      const button = document.querySelector("ea-button[button-type='button']");
+      const button2 = document.querySelector("#show");
 
       form.addEventListener("submit", e => {
         e.preventDefault();
         console.log(select.value);
       });
+
+      button2.addEventListener("click", e => {
+        select.show();
+      });
     </script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
+
+    <div class="demo">
+      <ea-select placeholder="Select" style="width: 240px">
+        <ea-option label="Option 1" value="Option1">Option 1</ea-option>
+        <ea-option label="Option 2" value="Option2">Option 2</ea-option>
+        <ea-option label="Option 3" value="Option3">Option 3</ea-option>
+        <ea-option label="Option 4" value="Option4">Option 4</ea-option>
+        <ea-option label="Option 5" value="Option5">Option 5</ea-option>
+      </ea-select>
+    </div>
 
     <hr />
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 2. 有禁用选项 --------  -->
-    <!-- #region  -->
-    <ea-select placeholder="请选择">
-      <ea-option value="1">选项1</ea-option>
-      <ea-option value="2">选项2</ea-option>
-      <ea-option value="3" disabled>选项3</ea-option>
-      <ea-option value="4">选项4</ea-option>
-    </ea-select>
+    <!--  有禁用选项 -->
+    <!-- #region -->
+    <h1>有禁用选项</h1>
+
+    <div class="demo">
+      <ea-select placeholder="Select" style="width: 240px">
+        <ea-option label="Option 1" value="Option1">Option 1</ea-option>
+        <ea-option label="Option 2" value="Option2" disabled>
+          Option 2
+        </ea-option>
+        <ea-option label="Option 3" value="Option3">Option 3</ea-option>
+        <ea-option label="Option 4" value="Option4">Option 4</ea-option>
+        <ea-option label="Option 5" value="Option5">Option 5</ea-option>
+      </ea-select>
+    </div>
+
+    <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
     <hr />
 

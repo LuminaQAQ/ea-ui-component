@@ -2,6 +2,7 @@ import FormAssociatedBase from "@/core/FormBase";
 import "@components/ea-input/index.js";
 
 import stylesheet from "./index.scss?inline";
+import EaUtils from "@/utils/Utils";
 
 export class EaSelect extends FormAssociatedBase {
   /** @type {HTMLElement} */
@@ -14,20 +15,36 @@ export class EaSelect extends FormAssociatedBase {
   /** @type {AbortController} */
   #abortController = new AbortController();
 
+  #AbortControllerStates = {
+    /** @type {AbortController|null} */
+    closeAbortController: null,
+  };
+
   #states = {
     isFocus: false,
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "value"];
+    return [...super.observedAttributes, "name", "value", "placeholder"];
   }
 
   state = this.properties({
-    // value: {
-    //   type: String,
-    //   default: "",
-    //   observer: newVal => {},
-    // },
+    name: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.setAttribute("name", newVal);
+      },
+    },
+    placeholder: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        await customElements.whenDefined("ea-input");
+
+        this.#input.placeholder = newVal;
+      },
+    },
   });
 
   propStates = this.properties({
@@ -37,9 +54,7 @@ export class EaSelect extends FormAssociatedBase {
         String: () => typeof this.props?.value === "string",
         Number: () => typeof this.props?.value === "number",
         Boolean: () => typeof this.props?.value === "boolean",
-        Array: () => Array.isArray(this.props?.value),
-        Object: () =>
-          typeof this.props?.value === "object" && this.props?.value !== null,
+        Array: () => this.multiple && Array.isArray(this.props?.value),
       },
       default: "",
       observer: newVal => {
@@ -93,31 +108,57 @@ export class EaSelect extends FormAssociatedBase {
     this.#dropdown = this.shadowRoot.querySelector(".ea-select__dropdown");
   }
 
+  /**
+   * 显示下拉框
+   */
+  show = () => {
+    this.#states.isFocus = true;
+    this.updateContainerClasslist();
+  };
+
+  /**
+   * 隐藏下拉框
+   */
+  hide = () => {
+    this.#states.isFocus = false;
+    this.updateContainerClasslist();
+  };
+
   async connectedCallback() {
     super.connectedCallback();
 
     await customElements.whenDefined("ea-input");
+    await customElements.whenDefined("ea-option");
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    document.addEventListener(
-      "click",
-      e => {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+    if (!this.name) this.name = crypto.randomUUID();
 
-        if (!this.multiple) {
-          this.#states.isFocus =
-            this.contains(e.target) &&
-            e.target.tagName.toLowerCase() !== "ea-option";
-        } else {
-          this.#states.isFocus = this.contains(e.target);
-        }
+    this.#input.addEventListener(
+      "focus",
+      () => {
+        this.#AbortControllerStates.closeAbortController?.abort();
+        this.#AbortControllerStates.closeAbortController =
+          new AbortController();
 
-        this.updateContainerClasslist();
+        this.show();
+
+        document.addEventListener(
+          "click",
+          e => {
+            if (this.contains(e.target)) return;
+
+            this.hide();
+
+            this.#AbortControllerStates.closeAbortController?.abort();
+          },
+          { signal: this.#AbortControllerStates.closeAbortController.signal }
+        );
       },
-      { signal: this.#abortController.signal }
+      {
+        signal: this.#abortController.signal,
+      }
     );
 
     this.addEventListener(
@@ -126,15 +167,18 @@ export class EaSelect extends FormAssociatedBase {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        const { value, target } = e.detail;
+        const { label, value, target } = e.detail;
 
         if (!this.multiple) {
-          this.#states.isFocus = false;
-          this.updateContainerClasslist();
+          this.hide();
         }
 
         this.value = value;
-        this.#input.value = value;
+        this.#input.value = label || value;
+
+        this.querySelectorAll("ea-option").forEach(option => {
+          option.toggleAttribute("active", option === target);
+        });
       },
       { signal: this.#abortController.signal }
     );

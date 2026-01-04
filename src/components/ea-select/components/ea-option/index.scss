@@ -2,13 +2,10 @@ $name: ea-option;
 
 :host {
   --#{$name}-spacing: var(--spacing-sm);
-  --#{$name}-divider-spacing: var(--spacing-md);
-
-  --#{$name}-divider-color: var(--grey-200);
 
   --#{$name}-color: var(--grey-900);
   --#{$name}-disabled-color: var(--grey-300);
-  --#{$name}-hover-color: var(--blue-500);
+  --#{$name}-active-color: var(--blue-500);
   --#{$name}-hover-bg-color: var(--blue-100);
 
   --#{$name}-font-size: var(--font-size-md);
@@ -32,12 +29,16 @@ $name: ea-option;
     background-color: var(--#{$name}-hover-bg-color);
   }
 
-  @include modifier(disabled) {
+  @include state(disabled) {
     cursor: not-allowed;
     color: var(--#{$name}-disabled-color);
 
     &:hover {
       background-color: unset;
     }
+  }
+
+  @include state(active) {
+    color: var(--#{$name}-active-color);
   }
 }
