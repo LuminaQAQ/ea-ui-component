@@ -1,6 +1,11 @@
 $name: ea-select;
+$ea-select-size-types: (small, default, large);
 
 :host {
+  --#{$name}-height-small: 22px;
+  --#{$name}-height-default: 30px;
+  --#{$name}-height-large: 38px;
+
   --#{$name}-dropdown-bg-color: var(--color-white);
 
   --#{$name}-transition: var(--transition-fast);
@@ -12,6 +17,9 @@ $name: ea-select;
 
 @include block($name) {
   position: relative;
+
+  @include element(tag-wrap) {
+  }
 
   @include element(dropdown) {
     position: absolute;
@@ -47,6 +55,16 @@ $name: ea-select;
 
     .ea-select__dropdown-icon {
       transform: rotate(180deg);
+    }
+  }
+
+  @include state(multiple) {
+    .ea-select__input::part(prefix) {
+      width: 100%;
+    }
+
+    .ea-select__input::part(original) {
+      display: none;
     }
   }
 }

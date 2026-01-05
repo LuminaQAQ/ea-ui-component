@@ -10,6 +10,8 @@ export class EaSelect extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #input;
   /** @type {HTMLElement} */
+  #tagWrap;
+  /** @type {HTMLElement} */
   #dropdown;
   /** @type {HTMLElement} */
   #dropdownIcon;
@@ -24,6 +26,7 @@ export class EaSelect extends FormAssociatedBase {
 
   #states = {
     isFocus: false,
+    isTagImport: false,
   };
 
   static get observedAttributes() {
@@ -35,6 +38,8 @@ export class EaSelect extends FormAssociatedBase {
       "disabled",
       "clearable",
       "size",
+
+      "multiple",
     ];
   }
 
@@ -76,6 +81,7 @@ export class EaSelect extends FormAssociatedBase {
       default: "",
       observer: newVal => {
         this.#input.setAttribute("size", newVal);
+        this.updateContainerClasslist();
       },
     },
     multiple: {
@@ -95,9 +101,42 @@ export class EaSelect extends FormAssociatedBase {
         Array: () => this.multiple && Array.isArray(this.props?.value),
       },
       default: "",
-      observer: newVal => {
+      observer: async newVal => {
         this.setValue(newVal);
-        this.#input.value = newVal;
+
+        if (this.multiple) {
+          this.#tagWrap.innerHTML = "";
+
+          if (!this.#states.isTagImport) {
+            await import("@components/ea-tag/index.js");
+            await customElements.whenDefined("ea-tag");
+            this.#states.isTagImport = true;
+          }
+
+          this.#input.value = newVal?.length > 0 ? " " : "";
+
+          const docFrag = document.createDocumentFragment();
+          newVal.forEach(v => {
+            const option = this.querySelector(`ea-option[value="${v}"]`);
+
+            if (!option) return;
+
+            const tag = document.createElement("ea-tag");
+            tag.toggleAttribute("closable", true);
+            tag.setAttribute("type", "info");
+            tag.setAttribute("shape", "circle");
+
+            tag.innerText = option.label;
+
+            docFrag.appendChild(tag);
+          });
+
+          this.#tagWrap.appendChild(docFrag);
+        } else {
+          this.#input.value = newVal;
+        }
+
+        this.updateContainerClasslist();
       },
     },
   });
@@ -110,11 +149,13 @@ export class EaSelect extends FormAssociatedBase {
     const className = this.computedClasslist(
       "ea-select",
       {
-        // ['--' + this.type]: this.type,
+        ["--" + this.size]: this.size,
       },
       {
         focus: this.#states.isFocus,
         disabled: this.disabled,
+        multiple:
+          this.multiple && this.value?.length > 0 && Array.isArray(this.value),
       }
     );
 
@@ -135,9 +176,8 @@ export class EaSelect extends FormAssociatedBase {
     this.shadowRoot.innerHTML = `
       <div class='ea-select' part='container' tabindex='-1'>
         <ea-input class="ea-select__input" part="input" readonly>
-          <span class="ea-select__icon-wrap" part="" slot="suffix">
-            <ea-icon class="ea-select__dropdown-icon" part="dropdown-icon" icon='icon-angle-down'></ea-icon>
-          </span>
+          <section slot="prefix" class="ea-select__tag-wrap" part="tag-wrap"></section>
+          <ea-icon slot="suffix" class="ea-select__dropdown-icon" part="dropdown-icon" icon='icon-angle-down'></ea-icon>
         </ea-input>
         <section class="ea-select__dropdown" part="dropdown">
           <slot></slot>
@@ -147,6 +187,7 @@ export class EaSelect extends FormAssociatedBase {
 
     this.#container = this.shadowRoot.querySelector(".ea-select");
     this.#input = this.shadowRoot.querySelector(".ea-select__input");
+    this.#tagWrap = this.shadowRoot.querySelector(".ea-select__tag-wrap");
     this.#dropdown = this.shadowRoot.querySelector(".ea-select__dropdown");
     this.#dropdownIcon = this.shadowRoot.querySelector(
       ".ea-select__dropdown-icon"
@@ -158,7 +199,10 @@ export class EaSelect extends FormAssociatedBase {
    * @param {Event} e
    */
   #onDropdownVisibleChangeEvent = async e => {
-    if (e.target.tagName !== "INPUT") return;
+    console.log(e.target, this.#tagWrap.contains(e.target));
+
+    if (e.target.tagName !== "INPUT" && !this.#tagWrap.contains(e.target))
+      return;
 
     this.#AbortControllerStates.closeAbortController?.abort();
     this.#AbortControllerStates.closeAbortController = new AbortController();
@@ -173,15 +217,27 @@ export class EaSelect extends FormAssociatedBase {
       if (target.disabled) return;
 
       if (!this.multiple) {
+        this.value = target.value;
+        this.#input.value = target.label || target.value;
+
+        this.querySelectorAll("ea-option").forEach(option => {
+          option.toggleAttribute("active", option === target);
+        });
+
         this.hide();
+      } else {
+        if (!Array.isArray(this.value)) this.value = [];
+
+        if (this.value.includes(target.value)) {
+          this.value = this.value.filter(v => v !== target.value);
+        } else {
+          this.value = [...this.value, target.value];
+        }
+
+        this.querySelectorAll("ea-option").forEach(option => {
+          option.toggleAttribute("active", this.value.includes(option.value));
+        });
       }
-
-      this.value = target.value;
-      this.#input.value = target.label || target.value;
-
-      this.querySelectorAll("ea-option").forEach(option => {
-        option.toggleAttribute("active", option === target);
-      });
     };
 
     /**

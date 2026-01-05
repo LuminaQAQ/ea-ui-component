@@ -71,7 +71,7 @@
     display: flex;
     align-items: center;
 
-    box-sizing: border-box;
+    // box-sizing: border-box;
     box-shadow: none;
 
     padding: var(--ea-input-padding);
@@ -80,6 +80,7 @@
     border-radius: var(--ea-input-border-radius);
 
     width: 100%;
+    min-height: var(--ea-input-height);
     overflow: hidden;
 
     transition: border var(--ea-input-transition);
@@ -88,6 +89,7 @@
   @include element(original) {
     box-sizing: border-box;
     margin: 0;
+    padding: 0;
     border: 0;
     outline: 0;
 

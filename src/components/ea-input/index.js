@@ -116,8 +116,6 @@ export class EaInput extends FormAssociatedBase {
       type: ["large", "default", "small"],
       default: "default",
       observer: newVal => {
-        console.log(newVal);
-
         this.#container.className = this.updateContainerClasslist();
       },
     },
