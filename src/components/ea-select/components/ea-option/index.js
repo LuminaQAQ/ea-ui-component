@@ -46,6 +46,7 @@ export class EaOption extends Base {
       type: Boolean,
       default: false,
       observer: () => {
+        this.setAttribute("tabindex", this.disabled ? "-1" : "0");
         this.updateContainerClasslist();
       },
     },
@@ -93,6 +94,8 @@ export class EaOption extends Base {
   connectedCallback() {
     super.connectedCallback();
 
+    this.removeAttribute("tabindex");
+
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
@@ -114,6 +117,23 @@ export class EaOption extends Base {
       },
       { signal: this.#abortController.signal }
     );
+
+    this.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (this.disabled) return;
+
+        this.emit("ea-option-click", {
+          detail: {
+            label: this.label,
+            value: this.value,
+            target: e.target,
+          },
+          bubbles: true,
+          composed: true,
+        });
+      }
+    });
   }
 
   $beforeUnmounted() {

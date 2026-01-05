@@ -11,6 +11,11 @@ export default class EaUtils {
   static CSS = {};
 
   static timeout;
+  static sleep = time => {
+    return new Promise(resolve => {
+      EaUtils.timeout(() => resolve(), time);
+    });
+  };
 }
 
 EaUtils.Array.toLowerCamelCase = arr => {

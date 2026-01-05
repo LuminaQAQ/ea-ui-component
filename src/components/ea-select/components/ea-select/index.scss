@@ -30,7 +30,13 @@ $name: ea-select;
     z-index: 1000;
   }
 
+  @include element(icon-wrap) {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
   @include element(dropdown-icon) {
+    display: inline-block;
     transition: transform var(--#{$name}-transition);
   }
 

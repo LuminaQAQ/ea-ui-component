@@ -188,6 +188,10 @@ export default class Base extends HTMLElement {
         delete this[realKey];
       }
 
+      if (Object.getOwnPropertyDescriptor(this, key)) {
+        delete this[key];
+      }
+
       if (config?.props) {
         Object.defineProperty(this, key, {
           get: () => {

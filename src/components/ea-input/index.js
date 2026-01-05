@@ -30,11 +30,17 @@ export class EaInput extends FormAssociatedBase {
   /** @type {AbortController} */
   #abortController;
 
+  #AbortControllerStates = {
+    /** @type {AbortController} */
+    clearableController: null,
+  };
+
   static get observedAttributes() {
     return EaUtils.Array.toLowerCamelCase([
       "type",
       "disabled",
       "value",
+      "size",
       "placeholder",
       "maxlength",
       "minlength",
@@ -101,7 +107,7 @@ export class EaInput extends FormAssociatedBase {
         "week",
       ],
       default: "text",
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal !== "textarea") this.#original.type = newVal;
         this.#container.className = this.updateContainerClasslist();
       },
@@ -109,16 +115,18 @@ export class EaInput extends FormAssociatedBase {
     size: {
       type: ["large", "default", "small"],
       default: "default",
-      observer: (newVal) => {
+      observer: newVal => {
+        console.log(newVal);
+
         this.#container.className = this.updateContainerClasslist();
       },
     },
     value: {
       type: String,
-      default: () => this.#container?.value || "",
-      observer: (newVal) => {
+      default: "",
+      observer: newVal => {
         this.#original.value = newVal;
-        this.setValue(newVal, "value");
+        this.setValue(newVal);
 
         if (this.clearable)
           this.#container.className = this.updateContainerClasslist();
@@ -127,40 +135,55 @@ export class EaInput extends FormAssociatedBase {
     placeholder: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.placeholder = newVal;
       },
     },
     maxlength: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.maxLength = newVal;
       },
     },
     minlength: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.minLength = newVal;
       },
     },
     clearable: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: newVal => {
+        this.#AbortControllerStates.clearableController?.abort();
+
+        if (newVal) {
+          this.#AbortControllerStates.clearableController =
+            new AbortController();
+
+          this.#clearIcon.addEventListener(
+            "click",
+            this.#initClearIconClickEvent,
+            {
+              signal: this.#AbortControllerStates.clearableController.signal,
+            }
+          );
+        }
+      },
     },
     clearIcon: {
       type: String,
       default: "icon-cancel",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.clearable) this.#clearIcon.icon = newVal;
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
         this.#original.disabled = newVal;
       },
@@ -168,7 +191,7 @@ export class EaInput extends FormAssociatedBase {
     showPassword: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal) this.#container.className = this.updateContainerClasslist();
 
         if (this.type === "text") {
@@ -181,7 +204,7 @@ export class EaInput extends FormAssociatedBase {
     prefixIcon: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal)
           this.#prefix.innerHTML = `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" icon="${newVal}"></ea-icon>`;
       },
@@ -189,7 +212,7 @@ export class EaInput extends FormAssociatedBase {
     suffixIcon: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal)
           this.#suffixIcon.innerHTML = `<ea-icon class="ea-input__suffix-icon" part="suffix-icon" icon="${newVal}"></ea-icon>`;
       },
@@ -198,7 +221,7 @@ export class EaInput extends FormAssociatedBase {
     "show-word-limit": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.type === "textarea" || this.type === "text") {
           if (newVal && this.maxlength) {
             this.#container.className = this.updateContainerClasslist();
@@ -212,7 +235,7 @@ export class EaInput extends FormAssociatedBase {
     rows: {
       type: Number,
       default: 2,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.type !== "textarea") return;
 
         this.#original.rows = newVal;
@@ -221,14 +244,14 @@ export class EaInput extends FormAssociatedBase {
     autosize: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.type !== "textarea") return;
       },
     },
     minRows: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.type !== "textarea") return;
 
         this.#original.minRows = newVal;
@@ -237,7 +260,7 @@ export class EaInput extends FormAssociatedBase {
     maxRows: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this.type !== "textarea") return;
 
         this.#original.maxRows = newVal;
@@ -247,89 +270,89 @@ export class EaInput extends FormAssociatedBase {
     autocomplete: {
       type: String,
       default: "off",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.autocomplete = newVal;
       },
     },
     name: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.name = newVal;
       },
     },
     readonly: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.readOnly = newVal;
       },
     },
     max: {
       type: Number,
       default: Infinity,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.max = newVal;
       },
     },
     min: {
       type: Number,
       default: -Infinity,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.min = newVal;
       },
     },
     step: {
       type: Number,
       default: 1,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.step = newVal;
       },
     },
     resize: {
       type: ["none", "both", "horizontal", "vertical"],
       default: "vertical",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-input-resize", newVal);
       },
     },
     autofocus: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.autofocus = newVal;
       },
     },
     form: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.form = newVal;
       },
     },
     "aria-label": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.setAttribute("aria-label", newVal);
       },
     },
     tabindex: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.tabIndex = newVal;
       },
     },
     "validate-event": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     inputmode: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#original.inputMode = newVal;
       },
     },
@@ -455,7 +478,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入框内容发生改变时触发
    * @param {FocusEvent} e 事件对象
    */
-  #initFocusEvent = (e) => {
+  #initFocusEvent = e => {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
@@ -468,7 +491,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入框失去焦点时触发
    * @param {FocusEvent} e 事件对象
    */
-  #initBlurEvent = (e) => {
+  #initBlurEvent = e => {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
@@ -481,7 +504,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入框内容发生改变时触发
    * @param {InputEvent} e 事件对象
    */
-  #initInputEvent = (e) => {
+  #initInputEvent = e => {
     const { value } = e.target;
     this.value = value;
     this.emit("input", {
@@ -495,7 +518,7 @@ export class EaInput extends FormAssociatedBase {
    * 键盘按下时触发
    * @param {KeyboardEvent} e 事件对象
    */
-  #initKeydownEvent = (e) => {
+  #initKeydownEvent = e => {
     this.emit("keydown", {
       detail: {
         value: e.target.value,
@@ -507,7 +530,7 @@ export class EaInput extends FormAssociatedBase {
    * 鼠标进入时触发
    * @param {MouseEvent} e 事件对象
    */
-  #initMouseenterEvent = (e) => {
+  #initMouseenterEvent = e => {
     this.emit("mouseenter");
   };
 
@@ -515,7 +538,7 @@ export class EaInput extends FormAssociatedBase {
    * 鼠标离开时触发
    * @param { MouseEvent } e 事件对象
    */
-  #initMouseleaveEvent = (e) => {
+  #initMouseleaveEvent = e => {
     this.emit("mouseleave");
   };
 
@@ -523,7 +546,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入法开始输入时触发
    * @param {CompositionEvent} e 事件对象
    */
-  #initCompositionstartEvent = (e) => {
+  #initCompositionstartEvent = e => {
     this.emit("compositionstart", {
       detail: {
         value: e.target.value,
@@ -535,7 +558,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入法输入时触发
    * @param {CompositionEvent} e 事件对象
    */
-  #initCompositionupdateEvent = (e) => {
+  #initCompositionupdateEvent = e => {
     this.emit("compositionupdate", {
       detail: {
         value: e.target.value,
@@ -547,7 +570,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入法完成输入时触发
    * @param {CompositionEvent} e 事件对象
    */
-  #initCompositionendEvent = (e) => {
+  #initCompositionendEvent = e => {
     this.emit("compositionend", {
       detail: {
         value: e.target.value,
@@ -605,12 +628,12 @@ export class EaInput extends FormAssociatedBase {
    */
   #initClearIconClickEvent = () => {
     this.value = "";
+
     if (
       this["show-word-limit"] &&
       (this.type === "textarea" || this.type === "text")
     ) {
-      this.#wordCount.textContent = `
-            ${this.#original.value.length} / ${this.maxlength}`;
+      this.#wordCount.textContent = `${this.#original.value.length} / ${this.maxlength}`;
     }
     this.focus();
   };
@@ -636,12 +659,6 @@ export class EaInput extends FormAssociatedBase {
   #initInputElementEvent = () => {
     if (this.type === "textarea") return;
 
-    if (this.clearable) {
-      this.#clearIcon.addEventListener("click", this.#initClearIconClickEvent, {
-        signal: this.#abortController.signal,
-      });
-    }
-
     if (
       this["show-password"] &&
       (this.type === "password" || this.type === "text")
@@ -665,7 +682,7 @@ export class EaInput extends FormAssociatedBase {
 
     this.#original.addEventListener(
       "input",
-      (e) => {
+      e => {
         if (
           this["min-rows"] > 0 &&
           this.#original.scrollHeight < this["min-rows"] * lineHeight
