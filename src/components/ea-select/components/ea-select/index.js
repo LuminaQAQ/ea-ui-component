@@ -44,6 +44,8 @@ export class EaSelect extends FormAssociatedBase {
       "size",
 
       "multiple",
+      "collapse-tags",
+      "max-collapse-tags",
     ];
   }
 
@@ -108,7 +110,7 @@ export class EaSelect extends FormAssociatedBase {
     multiple: {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: async newVal => {
         this.#AbortControllerStates.tagRemoveAbortController?.abort();
 
         if (newVal) {
@@ -123,8 +125,24 @@ export class EaSelect extends FormAssociatedBase {
                 this.#AbortControllerStates.tagRemoveAbortController.signal,
             }
           );
+
+          if (!this.#states.isTagImport) {
+            await import("@components/ea-tag/index.js");
+            await customElements.whenDefined("ea-tag");
+            this.#states.isTagImport = true;
+          }
         }
       },
+    },
+    "collapse-tags": {
+      type: Boolean,
+      default: false,
+      observer: () => {},
+    },
+    "max-collapse-tags": {
+      type: Number,
+      default: 1,
+      observer: () => {},
     },
   });
 
@@ -142,12 +160,6 @@ export class EaSelect extends FormAssociatedBase {
         this.setValue(newVal);
 
         if (this.multiple) {
-          if (!this.#states.isTagImport) {
-            await import("@components/ea-tag/index.js");
-            await customElements.whenDefined("ea-tag");
-            this.#states.isTagImport = true;
-          }
-
           this.#input.value = newVal?.length > 0 ? " " : "";
 
           this.#handleSelectValuesRender(newVal);
@@ -246,30 +258,64 @@ export class EaSelect extends FormAssociatedBase {
    * @param {string[] | number[]} selectValue
    */
   #handleSelectValuesRender = selectValue => {
-    const docFrag = document.createDocumentFragment();
+    let template = "";
+    /**
+     * 渲染tag标签
+     * @param {boolean} isClosable
+     * @param {string | number | boolean} value
+     * @returns
+     */
+    const tagRenderer = (isClosable, value) => {
+      return EaUtils.EaElement.h(
+        "ea-tag",
+        "ea-select__tag",
+        {
+          closable: isClosable,
+          "disable-transitions": true,
+          type: "info",
+          "data-value": isClosable ? value : null,
+        },
+        value
+      );
+    };
+    /**
+     * 渲染所有tag的模板
+     * @param {string[] | number[] | boolean[]} selectValue
+     * @returns
+     */
+    const templateRenderer = selectValue => {
+      let template = "";
+
+      selectValue.forEach(v => {
+        const option = this.querySelector(`ea-option[value="${v}"]`);
+        if (!option) return;
+
+        option.toggleAttribute("selected", true);
+
+        template += tagRenderer(true, option.innerText);
+      });
+
+      return template;
+    };
 
     this.#tagWrap.innerHTML = "";
 
-    selectValue.forEach(v => {
-      const option = this.querySelector(`ea-option[value="${v}"]`);
+    if (this["collapse-tags"] && Array.isArray(selectValue)) {
+      const max = Number(this["max-collapse-tags"]) || 1;
+      const total = selectValue.length;
 
-      if (!option) return;
+      template += templateRenderer(selectValue.slice(0, max));
 
-      option.toggleAttribute("selected", true);
+      if (total > max) {
+        const remaining = total - max;
 
-      const tag = document.createElement("ea-tag");
-      tag.toggleAttribute("closable", true);
-      tag.toggleAttribute("disable-transitions", true);
-      tag.setAttribute("type", "info");
-      tag.setAttribute("shape", "circle");
-      tag.setAttribute("data-value", v);
+        template += tagRenderer(false, `+${remaining}`);
+      }
+    } else {
+      template += templateRenderer(selectValue);
+    }
 
-      tag.innerText = option.innerText;
-
-      docFrag.appendChild(tag);
-    });
-
-    this.#tagWrap.appendChild(docFrag);
+    this.#tagWrap.innerHTML = template;
   };
 
   /**
@@ -365,6 +411,10 @@ export class EaSelect extends FormAssociatedBase {
     });
   };
 
+  /**
+   * 移除选中标签事件
+   * @param {Event} e
+   */
   #onMultipleTagRemoveEvent = e => {
     const target = e.target;
     const value = target.getAttribute("data-value");

@@ -1,1 +1,21 @@
+$name: ea-option-group;
 
+:host {
+  --#{$name}-spacing: var(--spacing-lg);
+  --#{$name}-color: var(--grey-500);
+  --#{$name}-size: var(--font-size-md);
+}
+
+@include block($name) {
+  @include element(header) {
+    box-sizing: border-box;
+    padding: var(--#{$name}-spacing);
+
+    color: var(--#{$name}-color);
+    font-size: var(--#{$name}-size);
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}

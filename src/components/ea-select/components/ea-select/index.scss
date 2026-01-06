@@ -20,15 +20,17 @@ $ea-select-size-types: (small, default, large);
 
   @include element(dropdown) {
     position: absolute;
+    bottom: 0;
 
     box-sizing: border-box;
-    padding: 6px;
     border: 1px solid var(--grey-200);
 
     width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
 
-    transform-origin: top center;
-    transform: scaleY(0);
+    transform-origin: bottom center;
+    transform: scaleY(0) translateY(100%);
 
     background-color: var(--#{$name}-dropdown-bg-color);
 
@@ -49,7 +51,7 @@ $ea-select-size-types: (small, default, large);
 
   @include state(focus) {
     .ea-select__dropdown {
-      transform: scaleY(1);
+      transform: scaleY(1) translateY(100%);
     }
 
     .ea-select__dropdown-icon {

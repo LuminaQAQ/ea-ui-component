@@ -1,7 +1,7 @@
 $name: ea-option;
 
 :host {
-  --#{$name}-spacing: var(--spacing-md);
+  --#{$name}-spacing: var(--spacing-md) var(--spacing-lg);
 
   --#{$name}-color: var(--grey-900);
   --#{$name}-disabled-color: var(--grey-300);

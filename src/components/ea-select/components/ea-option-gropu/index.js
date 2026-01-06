@@ -5,18 +5,23 @@ import stylesheet from "./index.scss?inline";
 export class EaOptionGroup extends Base {
   /** @type {HTMLElement} */
   #container;
+  /** @type {HTMLSlotElement} */
+  #headerSlot;
+
   /** @type {AbortController} */
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes];
+    return [...super.observedAttributes, "label"];
   }
 
   state = this.properties({
-    type: {
-      // type: ,
+    label: {
+      type: String,
       default: "",
-      observer: newVal => {},
+      observer: newVal => {
+        this.#headerSlot.textContent = newVal;
+      },
     },
   });
 
@@ -45,11 +50,17 @@ export class EaOptionGroup extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class='ea-option-group' part='container'>
-        <slot></slot>
+        <header class='ea-option-group__header' part='header'>
+          <slot name='header'></slot>
+        </header>
+        <section class='ea-option-group__content' part='content'>
+          <slot></slot>
+        </section>
       </div>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-option-group");
+    this.#headerSlot = this.shadowRoot.querySelector("slot[name='header']");
   }
 
   connectedCallback() {
