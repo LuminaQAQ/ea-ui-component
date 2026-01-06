@@ -4,6 +4,7 @@ import stylesheet from "./index.scss?inline";
 
 import { componentSizes, componentTypes } from "@/utils/Variables";
 import EaUtils from "@/utils/Utils";
+import { EaRemoveEvent } from "../../events/EaRemoveEvent";
 
 export class EaTag extends Base {
   /** @type {HTMLElement} */
@@ -151,13 +152,9 @@ export class EaTag extends Base {
       );
     }
 
+    this.dispatchEvent(new EaRemoveEvent({ text: this.textContent }));
+
     this.remove();
-
-    /** @deprecated */ this.emit("close", {
-      detail: { text: this.textContent },
-    });
-
-    this.emit("remove", { detail: { text: this.textContent } });
   };
 
   connectedCallback() {

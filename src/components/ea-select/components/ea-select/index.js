@@ -97,9 +97,9 @@ export class EaSelect extends FormAssociatedBase {
             new AbortController();
 
           this.#tagWrap.addEventListener(
-            "remove",
-            () => {
-              console.log("remove");
+            "ea-remove",
+            e => {
+              console.log("ea-remove", e.target);
             },
             {
               signal:
