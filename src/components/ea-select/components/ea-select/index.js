@@ -159,6 +159,10 @@ export class EaSelect extends FormAssociatedBase {
       }
     );
 
+    this.#input.shadowRoot
+      .querySelector(".ea-input")
+      .classList.toggle("is-focus", this.#states.isFocus);
+
     this.#container.className = className;
 
     return className;
@@ -199,10 +203,7 @@ export class EaSelect extends FormAssociatedBase {
    * @param {Event} e
    */
   #onDropdownVisibleChangeEvent = async e => {
-    console.log(e.target, this.#tagWrap.contains(e.target));
-
-    if (e.target.tagName !== "INPUT" && !this.#tagWrap.contains(e.target))
-      return;
+    if (e.target?.classList?.contains("ea-input__clear-icon")) return;
 
     this.#AbortControllerStates.closeAbortController?.abort();
     this.#AbortControllerStates.closeAbortController = new AbortController();
@@ -296,7 +297,7 @@ export class EaSelect extends FormAssociatedBase {
    * 显示下拉框
    */
   show = () => {
-    this.#input.click();
+    this.#input.shadowRoot.dispatchEvent(new CustomEvent("click"));
   };
 
   /**
