@@ -2,6 +2,7 @@ import FormAssociatedBase from "@/core/FormBase";
 import EaUtils from "@/utils/Utils";
 
 import stylesheet from "./index.scss?inline";
+import { EaClearEvent } from "./events/EaClearEvent";
 
 export class EaInput extends FormAssociatedBase {
   /** @type {HTMLElement} */
@@ -413,11 +414,11 @@ export class EaInput extends FormAssociatedBase {
                     }" class="ea-input__original" type="text" part="original" autocomplete="off" />`
               }
               <span class="ea-input__suffix" part="suffix">
+                <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
+                <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
                 <span class="ea-input__suffix-icon" part="suffix-icon">
                   <slot name="suffix"></slot>
                 </span>
-                <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
-                <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
                 <span class="ea-input__word-count" part="count"></span>
               </span>
           </div>
@@ -625,6 +626,8 @@ export class EaInput extends FormAssociatedBase {
    * 清空按钮点击时触发
    */
   #initClearIconClickEvent = () => {
+    const oldValue = this.value;
+
     this.value = "";
 
     if (
@@ -633,7 +636,10 @@ export class EaInput extends FormAssociatedBase {
     ) {
       this.#wordCount.textContent = `${this.#original.value.length} / ${this.maxlength}`;
     }
+
     this.focus();
+
+    this.dispatchEvent(new EaClearEvent({ oldValue }));
   };
 
   /**

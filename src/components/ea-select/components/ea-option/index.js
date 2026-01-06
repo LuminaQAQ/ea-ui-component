@@ -14,7 +14,7 @@ export class EaOption extends Base {
       ...super.observedAttributes,
       "label",
       "value",
-      "active",
+      "seleted",
       "disabled",
     ];
   }
@@ -35,7 +35,7 @@ export class EaOption extends Base {
       default: null,
       observer: () => {},
     },
-    active: {
+    seleted: {
       type: Boolean,
       default: false,
       observer: () => {
@@ -63,7 +63,7 @@ export class EaOption extends Base {
         // ['--' + this.type]: this.type,
       },
       {
-        active: this.active,
+        seleted: this.seleted,
         disabled: this.disabled,
       }
     );

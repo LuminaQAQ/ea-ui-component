@@ -24,6 +24,8 @@ export class EaSelect extends FormAssociatedBase {
     closeAbortController: null,
     /** @type {AbortController|null} */
     tagRemoveAbortController: null,
+    /** @type {AbortController|null} */
+    inputClearAbortController: null,
   };
 
   #states = {
@@ -74,8 +76,25 @@ export class EaSelect extends FormAssociatedBase {
       type: Boolean,
       default: false,
       observer: newVal => {
+        this.#AbortControllerStates.inputClearAbortController?.abort();
         this.#input.toggleAttribute("clearable", newVal);
         this.updateContainerClasslist();
+
+        if (newVal) {
+          this.#AbortControllerStates.inputClearAbortController =
+            new AbortController();
+
+          this.#input.addEventListener(
+            "ea-clear",
+            () => {
+              this.value = this.multiple ? [] : "";
+            },
+            {
+              signal:
+                this.#AbortControllerStates.inputClearAbortController.signal,
+            }
+          );
+        }
       },
     },
     size: {
@@ -98,9 +117,7 @@ export class EaSelect extends FormAssociatedBase {
 
           this.#tagWrap.addEventListener(
             "ea-remove",
-            e => {
-              console.log("ea-remove", e.target);
-            },
+            this.#onMultipleTagRemoveEvent,
             {
               signal:
                 this.#AbortControllerStates.tagRemoveAbortController.signal,
@@ -137,6 +154,8 @@ export class EaSelect extends FormAssociatedBase {
         } else {
           this.#input.value = newVal;
         }
+
+        this.#handleSelectedValueStyle(newVal);
 
         this.updateContainerClasslist();
       },
@@ -201,6 +220,28 @@ export class EaSelect extends FormAssociatedBase {
   }
 
   /**
+   * 设置已选项样式
+   * @param {string | number | boolean | string[] | number[] | boolean[]} selectedValue
+   */
+  #handleSelectedValueStyle = selectedValue => {
+    const options = this.querySelectorAll("ea-option");
+
+    if (
+      typeof selectedValue === "string" ||
+      typeof selectedValue === "number" ||
+      typeof selectedValue === "boolean"
+    ) {
+      options.forEach(option => {
+        option.toggleAttribute("seleted", option.value === selectedValue);
+      });
+    } else if (Array.isArray(selectedValue)) {
+      options.forEach(option => {
+        option.toggleAttribute("seleted", selectedValue.includes(option.value));
+      });
+    }
+  };
+
+  /**
    * 渲染已选项
    * @param {string[] | number[]} selectValue
    */
@@ -214,11 +255,14 @@ export class EaSelect extends FormAssociatedBase {
 
       if (!option) return;
 
+      option.toggleAttribute("selected", true);
+
       const tag = document.createElement("ea-tag");
       tag.toggleAttribute("closable", true);
       tag.toggleAttribute("disable-transitions", true);
       tag.setAttribute("type", "info");
       tag.setAttribute("shape", "circle");
+      tag.setAttribute("data-value", v);
 
       tag.innerText = option.label;
 
@@ -233,7 +277,13 @@ export class EaSelect extends FormAssociatedBase {
    * @param {Event} e
    */
   #onDropdownVisibleChangeEvent = async e => {
-    if (e.target?.classList?.contains("ea-input__clear-icon")) return;
+    const target = e.target === this.#input.shadowRoot ? this.#input : e.target;
+
+    if (
+      target.classList?.contains("ea-input__clear-icon") ||
+      target.closest("ea-tag")
+    )
+      return;
 
     this.#AbortControllerStates.closeAbortController?.abort();
     this.#AbortControllerStates.closeAbortController = new AbortController();
@@ -251,10 +301,6 @@ export class EaSelect extends FormAssociatedBase {
         this.value = target.value;
         this.#input.value = target.label || target.value;
 
-        this.querySelectorAll("ea-option").forEach(option => {
-          option.toggleAttribute("active", option === target);
-        });
-
         this.hide();
       } else {
         if (!Array.isArray(this.value)) this.value = [];
@@ -264,10 +310,6 @@ export class EaSelect extends FormAssociatedBase {
         } else {
           this.value = [...this.value, target.value];
         }
-
-        this.querySelectorAll("ea-option").forEach(option => {
-          option.toggleAttribute("active", this.value.includes(option.value));
-        });
       }
     };
 
@@ -323,6 +365,13 @@ export class EaSelect extends FormAssociatedBase {
     });
   };
 
+  #onMultipleTagRemoveEvent = e => {
+    const target = e.target;
+    const value = target.getAttribute("data-value");
+
+    this.value = this.value.filter(v => v !== value);
+  };
+
   /**
    * 显示下拉框
    */
@@ -374,6 +423,10 @@ export class EaSelect extends FormAssociatedBase {
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key]?.abort();
+    }
   }
 }
 
