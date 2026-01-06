@@ -10,21 +10,10 @@ export class EaOption extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [
-      ...super.observedAttributes,
-      "label",
-      "value",
-      "seleted",
-      "disabled",
-    ];
+    return [...super.observedAttributes, "value", "seleted", "disabled"];
   }
 
   state = this.properties({
-    label: {
-      type: String,
-      default: "",
-      observer: () => {},
-    },
     value: {
       type: {
         Number: () => this.getAttrNumber("value", null),
@@ -107,7 +96,6 @@ export class EaOption extends Base {
 
         this.emit("ea-option-click", {
           detail: {
-            label: this.label,
             value: this.value,
             target: e.target,
           },
@@ -125,7 +113,6 @@ export class EaOption extends Base {
 
         this.emit("ea-option-click", {
           detail: {
-            label: this.label,
             value: this.value,
             target: e.target,
           },

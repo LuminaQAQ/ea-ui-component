@@ -20,11 +20,11 @@
 
     <form>
       <ea-select placeholder="Select" style="width: 240px" multiple clearable>
-        <ea-option label="Option 1" value="Option1">Option 1</ea-option>
-        <ea-option label="Option 2" value="Option2">Option 2</ea-option>
-        <ea-option label="Option 3" value="Option3">Option 3</ea-option>
-        <ea-option label="Option 4" value="Option4">Option 4</ea-option>
-        <ea-option label="Option 5" value="Option5">Option 5</ea-option>
+        <ea-option value="Option1">Option 1</ea-option>
+        <ea-option value="Option2">Option 2</ea-option>
+        <ea-option value="Option3">Option 3</ea-option>
+        <ea-option value="Option4">Option 4</ea-option>
+        <ea-option value="Option5">Option 5</ea-option>
       </ea-select>
 
       <ea-button button-type="submit">submit</ea-button>
@@ -177,49 +177,54 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- -------- 5. 自定义模板 --------  -->
-    <!-- #region  -->
-    <ea-select placeholder="请选择" clearable>
-      <style>
-        .ea-select_option-wrap {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
+    <!--  自定义模板 -->
+    <!-- #region -->
+    <h1>自定义模板</h1>
 
-        .ea-select_option-eng {
-          font-size: 10px;
-        }
-      </style>
-      <ea-option value="北京">
-        <div class="ea-select_option-wrap">
-          <div class="ea-select_option-text">北京</div>
-          <div class="ea-select_option-eng">Beijing</div>
-        </div>
-      </ea-option>
-      <ea-option value="上海">
-        <div class="ea-select_option-wrap">
-          <div class="ea-select_option-text">上海</div>
-          <div class="ea-select_option-eng">Shanghai</div>
-        </div>
-      </ea-option>
-      <ea-option value="广州">
-        <div class="ea-select_option-wrap">
-          <div class="ea-select_option-text">广州</div>
-          <div class="ea-select_option-eng">Guangzhou</div>
-        </div>
-      </ea-option>
-      <ea-option value="深圳">
-        <div class="ea-select_option-wrap">
-          <div class="ea-select_option-text">深圳</div>
-          <div class="ea-select_option-eng">Shenzhen</div>
-        </div>
-      </ea-option>
-    </ea-select>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
+    <style>
+      .ea-select_option-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .ea-select_option-eng {
+        font-size: 10px;
+      }
+    </style>
+
+    <div class="demo">
+      <ea-select style="width: 240px" placeholder="Select" clearable>
+        <ea-option value="北京">
+          <div class="ea-select_option-wrap">
+            <div class="ea-select_option-text">北京</div>
+            <div class="ea-select_option-eng">Beijing</div>
+          </div>
+        </ea-option>
+        <ea-option value="上海">
+          <div class="ea-select_option-wrap">
+            <div class="ea-select_option-text">上海</div>
+            <div class="ea-select_option-eng">Shanghai</div>
+          </div>
+        </ea-option>
+        <ea-option value="广州">
+          <div class="ea-select_option-wrap">
+            <div class="ea-select_option-text">广州</div>
+            <div class="ea-select_option-eng">Guangzhou</div>
+          </div>
+        </ea-option>
+        <ea-option value="深圳">
+          <div class="ea-select_option-wrap">
+            <div class="ea-select_option-text">深圳</div>
+            <div class="ea-select_option-eng">Shenzhen</div>
+          </div>
+        </ea-option>
+      </ea-select>
+    </div>
 
     <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
 
     <!-- -------- 6. 分组 --------  -->
     <!-- #region  -->

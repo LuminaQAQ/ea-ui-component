@@ -1,7 +1,7 @@
 $name: ea-option;
 
 :host {
-  --#{$name}-spacing: var(--spacing-sm);
+  --#{$name}-spacing: var(--spacing-md);
 
   --#{$name}-color: var(--grey-900);
   --#{$name}-disabled-color: var(--grey-300);
@@ -20,7 +20,6 @@ $name: ea-option;
   padding: var(--#{$name}-spacing);
 
   font-size: var(--#{$name}-font-size);
-  text-align: center;
   color: var(--#{$name}-color);
   cursor: pointer;
 

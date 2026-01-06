@@ -264,7 +264,7 @@ export class EaSelect extends FormAssociatedBase {
       tag.setAttribute("shape", "circle");
       tag.setAttribute("data-value", v);
 
-      tag.innerText = option.label;
+      tag.innerText = option.innerText;
 
       docFrag.appendChild(tag);
     });
@@ -299,7 +299,7 @@ export class EaSelect extends FormAssociatedBase {
 
       if (!this.multiple) {
         this.value = target.value;
-        this.#input.value = target.label || target.value;
+        this.#input.value = target.value;
 
         this.hide();
       } else {

@@ -18,15 +18,14 @@ $ea-select-size-types: (small, default, large);
 @include block($name) {
   position: relative;
 
-  @include element(tag-wrap) {
-  }
-
   @include element(dropdown) {
     position: absolute;
 
-    width: 100%;
-
+    box-sizing: border-box;
+    padding: 6px;
     border: 1px solid var(--grey-200);
+
+    width: 100%;
 
     transform-origin: top center;
     transform: scaleY(0);
