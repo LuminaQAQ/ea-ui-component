@@ -123,6 +123,7 @@ export class EaSelect extends FormAssociatedBase {
 
             const tag = document.createElement("ea-tag");
             tag.toggleAttribute("closable", true);
+            tag.toggleAttribute("disable-transitions", true);
             tag.setAttribute("type", "info");
             tag.setAttribute("shape", "circle");
 

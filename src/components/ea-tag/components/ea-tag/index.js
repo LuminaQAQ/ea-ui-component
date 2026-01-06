@@ -11,7 +11,7 @@ export class EaTag extends Base {
   /** @type {HTMLElement | null} */
   #closeIcon;
   /** @type {AbortController} */
-  #abortController;
+  #closableAbortController;
 
   static get observedAttributes() {
     return [
@@ -31,55 +31,66 @@ export class EaTag extends Base {
     type: {
       type: componentTypes,
       default: "primary",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     closable: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
+        this.#closableAbortController?.abort();
+
+        this.#closeIcon.setAttribute("closable", newVal ? "icon-cancel" : "");
+
         this.updateContainerClasslist();
+
+        if (newVal) {
+          this.#closableAbortController = new AbortController();
+          this.#closeIcon.addEventListener("click", this.#onTagRemoveEvent, {
+            signal: this.#closableAbortController.signal,
+          });
+        }
       },
     },
     "disable-transitions": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     hit: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     color: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (!CSS.supports("background", newVal))
           return console.warn(
             `[EaTag] The color value ${newVal} is not supported.`
           );
-        
+
         this.#container.style.background = newVal;
       },
     },
     size: {
       type: componentSizes,
       default: "default",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     effect: {
       type: ["dark", "light", "plain"],
       default: "light",
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     round: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
   });
 
@@ -118,44 +129,31 @@ export class EaTag extends Base {
     this.shadowRoot.innerHTML = `
       <div class='ea-tag' part='container'>
         <slot></slot>
-        ${
-          this.closable
-            ? `<ea-icon class="ea-tag__close" part="close-icon" icon="icon-cancel"></ea-icon>`
-            : ""
-        }
+        <ea-icon class="ea-tag__close" part="close-icon" icon="icon-cancel"></ea-icon>
       </div>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-tag");
     this.#closeIcon = this.shadowRoot.querySelector(".ea-tag__close");
 
-    this.#abortController = new AbortController();
-
-    this.#handleClose();
     this.updateContainerClasslist();
   }
 
-  #handleClose = () => {
-    if (!this.closable || !this.#closeIcon) return;
+  /**
+   * 标签移除事件
+   */
+  #onTagRemoveEvent = async () => {
+    if (!this["disable-transitions"]) {
+      this.#container.classList.add("before-close");
+      await EaUtils.EaElement.addAsyncEventListener(
+        this.#container,
+        "transitionend"
+      );
+    }
 
-    this.#closeIcon.addEventListener(
-      "click",
-      async (e) => {
-        if (!this["disable-transitions"]) {
-          this.#container.classList.add("before-close");
-          await EaUtils.EaElement.addAsyncEventListener(
-            this.#container,
-            "transitionend"
-          );
-        }
+    this.remove();
 
-        this.remove();
-        this.emit("close", { detail: { text: this.textContent } });
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
+    this.emit("close", { detail: { text: this.textContent } });
   };
 
   connectedCallback() {
@@ -163,7 +161,7 @@ export class EaTag extends Base {
   }
 
   $beforeUnmounted() {
-    this.#abortController?.abort();
+    this.#closableAbortController?.abort();
   }
 }
 
