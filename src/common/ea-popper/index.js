@@ -70,7 +70,7 @@ export class EaPopper extends Base {
     width: {
       type: Number,
       default: "150",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#originalPopper.style.setProperty(
           "--ea-popper-width",
           `${newVal}px`
@@ -93,21 +93,21 @@ export class EaPopper extends Base {
         "right-end",
       ],
       default: "top",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     "show-arrow": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     status: {
       type: Boolean,
       default: false,
-      observer: async (newVal) => {
+      observer: async newVal => {
         this.#statusAbortController?.abort();
         this.#statusAbortController = new AbortController();
 
@@ -161,9 +161,9 @@ export class EaPopper extends Base {
     offset: {
       type: String,
       default: "0 0",
-      observer: (newVal) => {
+      observer: newVal => {
         try {
-          let [x, y] = newVal.split(" ").map((_) => Number(_.trim()));
+          let [x, y] = newVal.split(" ").map(_ => Number(_.trim()));
 
           if (x && typeof y === "undefined") {
             y = x;
@@ -190,7 +190,7 @@ export class EaPopper extends Base {
     flip: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
   });
 
@@ -248,7 +248,7 @@ export class EaPopper extends Base {
   }
 
   #dispatchBubblesEvent = (customEventName, detail) => {
-    this.dispatchEvent(customEventName, {
+    this.emit(customEventName, {
       detail,
       bubbles: true,
       composed: true,

@@ -43,7 +43,7 @@ export class EaTableColumn extends Base {
       this.template = null;
     }
 
-    this.dispatchEvent("ea-table-column-ready");
+    this.emit("ea-table-column-ready");
   }
 
   connectedCallback() {

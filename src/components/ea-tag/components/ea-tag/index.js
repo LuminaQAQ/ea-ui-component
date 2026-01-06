@@ -153,7 +153,11 @@ export class EaTag extends Base {
 
     this.remove();
 
-    this.emit("close", { detail: { text: this.textContent } });
+    /** @deprecated */ this.emit("close", {
+      detail: { text: this.textContent },
+    });
+
+    this.emit("remove", { detail: { text: this.textContent } });
   };
 
   connectedCallback() {

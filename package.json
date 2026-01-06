@@ -216,9 +216,6 @@
     "./ea-text": {
       "import": "./dist/ea-text.js"
     },
-    "./ea-textarea": {
-      "import": "./dist/ea-textarea.js"
-    },
     "./ea-time-picker": {
       "import": "./dist/ea-time-picker.js"
     },

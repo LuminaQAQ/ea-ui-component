@@ -53,13 +53,13 @@ export class EaDrawer extends EaOverlay {
     direction: {
       type: ["rtl", "ltr", "ttb", "btt"],
       default: "rtl",
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     visible: {
       type: Boolean,
       default: false,
       repeatable: true,
-      observer: (newVal) => {
+      observer: newVal => {
         if (!newVal && this["before-close"] && this.status !== this.visible) {
           return this.#handleBeforeClose();
         }
@@ -76,21 +76,21 @@ export class EaDrawer extends EaOverlay {
     "with-header": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#header.style.display = newVal ? "flex" : "none";
       },
     },
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this["with-header"]) this.#title.textContent = newVal;
       },
     },
     showClose: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         if (this["with-header"])
           this.#closeIcon.style.display = newVal ? "block" : "none";
       },
@@ -98,7 +98,7 @@ export class EaDrawer extends EaOverlay {
     size: {
       type: String,
       default: "30%",
-      observer: (newVal) => {
+      observer: newVal => {
         this.style.setProperty("--ea-drawer-size", newVal);
       },
     },
@@ -106,12 +106,12 @@ export class EaDrawer extends EaOverlay {
     "append-to-body": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     "close-on-press-escape": {
       type: Boolean,
       default: true,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
   });
 
@@ -173,7 +173,7 @@ export class EaDrawer extends EaOverlay {
 
   #handleBeforeClose = () => {
     if (this["before-close"]) {
-      this.dispatchEvent("before-close", {
+      this.emit("before-close", {
         detail: {
           done: () => (this.status = false),
         },
@@ -211,7 +211,7 @@ export class EaDrawer extends EaOverlay {
     if (this["close-on-press-escape"]) {
       this.addEventListener(
         "keydown",
-        (e) => {
+        e => {
           if (e.key === "Escape") {
             this.#handleBeforeClose();
           }

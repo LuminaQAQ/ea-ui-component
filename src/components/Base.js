@@ -455,15 +455,15 @@ export default class Base extends HTMLElement {
     }
   }
 
-  /**
-   * 触发事件
-   * @deprecated 使用 emit 代替
-   * @param {String} eventName
-   * @param {CustomEventInit} options
-   */
-  dispatchEvent(eventName, options) {
-    super.dispatchEvent(new CustomEvent(eventName, options));
-  }
+  // /**
+  //  * 触发事件
+  //  * @deprecated 使用 emit 代替
+  //  * @param {String} eventName
+  //  * @param {CustomEventInit} options
+  //  */
+  // dispatchEvent(eventName, options) {
+  //   super.dispatchEvent(new CustomEvent(eventName, options));
+  // }
 
   /**
    * 触发事件

@@ -41,7 +41,7 @@ export class EaAlert extends Base {
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#alertTitle.innerHTML = newVal
           ? newVal
           : `<slot name="title"></slot>`;
@@ -52,28 +52,28 @@ export class EaAlert extends Base {
     description: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#alertDescription.innerHTML = newVal ? newVal : `<slot></slot>`;
       },
     },
     type: {
       type: ["primary", "info", "success", "warning", "error"],
       default: "info",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     effect: {
       type: ["light", "dark"],
       default: "light",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     "close-text": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         try {
           this.#alertCloseBtn.textContent = newVal;
         } catch (error) {}
@@ -82,7 +82,7 @@ export class EaAlert extends Base {
     closable: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#alertCloseBtn.innerHTML = newVal
           ? this["close-text"]
             ? this["close-text"]
@@ -93,7 +93,7 @@ export class EaAlert extends Base {
     "show-icon": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         const iconType = {
           primary: "info",
           success: "ok-circled",
@@ -122,12 +122,12 @@ export class EaAlert extends Base {
     "show-after": {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         newVal = Math.abs(newVal);
         this.#container.classList.toggle("ea-alert--hide", newVal > 0);
 
         timeout(() => {
-          this.dispatchEvent(new CustomEvent("open"));
+          this.emit("open");
 
           this.#container.classList.remove("ea-alert--hide");
         }, newVal);
@@ -136,12 +136,12 @@ export class EaAlert extends Base {
     "hide-after": {
       type: Number,
       default: 300,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     "auto-close": {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal && this.isMounted)
           timeout(() => this.#closeEvent(), this["auto-close"]);
       },
@@ -202,7 +202,7 @@ export class EaAlert extends Base {
     this.#alertCloseBtn = this.shadowRoot.querySelector(".ea-alert__close-btn");
   }
 
-  #closeEvent = (e) => {
+  #closeEvent = e => {
     timeout(() => {
       this.#abortController.abort();
 
@@ -211,13 +211,11 @@ export class EaAlert extends Base {
       this.#container.addEventListener(
         "transitionend",
         () => {
-          this.dispatchEvent(
-            new CustomEvent("close", {
-              detail: {
-                visible: false,
-              },
-            })
-          );
+          this.emit("close", {
+            detail: {
+              visible: false,
+            },
+          });
           this.remove();
         },
         { once: true }

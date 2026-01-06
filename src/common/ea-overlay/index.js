@@ -37,7 +37,7 @@ export class EaOverlay extends Base {
     status: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal) {
           this.#container.className = this.updateContainerClasslist();
           this.#dispatchBubblesEvent("open");
@@ -70,19 +70,19 @@ export class EaOverlay extends Base {
     modal: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     "before-close": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     "close-on-click-modal": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
 
     ...[
@@ -100,7 +100,7 @@ export class EaOverlay extends Base {
       acc[name] = {
         type: String,
         default: "",
-        observer: (newVal) => {
+        observer: newVal => {
           this.style.setProperty(`--ea-overlay-${name}`, newVal);
         },
       };
@@ -158,7 +158,7 @@ export class EaOverlay extends Base {
   }
 
   #dispatchBubblesEvent = (customEventName, detail) => {
-    this.dispatchEvent(customEventName, {
+    this.emit(customEventName, {
       detail,
       // bubbles: true,
       // composed: true,
@@ -167,17 +167,17 @@ export class EaOverlay extends Base {
 
   #beforeCloseCallback = () => (this.status = false);
 
-  #maskCloseEvent = (e) => {
+  #maskCloseEvent = e => {
     const isContent =
       [...this.children].find(
-        (child) => child === e.target || child.contains(e.target)
+        child => child === e.target || child.contains(e.target)
       ) ||
       this.#overlayContent === e.target ||
       this.#overlayContent.contains(e.target);
     if (isContent) return;
 
     if (this["before-close"]) {
-      this.dispatchEvent("before-close", {
+      this.emit("before-close", {
         detail: { done: () => this.#beforeCloseCallback() },
       });
     } else {

@@ -75,7 +75,7 @@ export class EaNotificationElement extends Base {
     type: {
       type: ["primary", "success", "warning", "info", "error"],
       default: "info",
-      observer: (newVal) => {
+      observer: newVal => {
         const iconTypes = {
           success: "icon-ok-circled",
           error: "icon-cancel-circled",
@@ -91,14 +91,14 @@ export class EaNotificationElement extends Base {
     title: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#title.textContent = newVal;
       },
     },
     visible: {
       type: Boolean,
       default: false,
-      observer: async (newVal) => {
+      observer: async newVal => {
         this.#visibleAbortController?.abort();
         this.#visibleAbortController = new AbortController();
 
@@ -138,7 +138,7 @@ export class EaNotificationElement extends Base {
     showClose: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
         this.#closeIcon.icon = this["close-icon"];
       },
@@ -146,21 +146,21 @@ export class EaNotificationElement extends Base {
     closeIcon: {
       type: String,
       default: "icon-cancel",
-      observer: (newVal) => {
+      observer: newVal => {
         if (this["show-close"]) this.#closeIcon.icon = newVal;
       },
     },
     placement: {
       type: ["top-right", "top-left", "bottom-right", "bottom-left"],
       default: "top-right",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
       },
     },
     zIndex: {
       type: Number,
       default: 0,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.style.setProperty("--z-index", newVal);
       },
     },
@@ -214,7 +214,7 @@ export class EaNotificationElement extends Base {
   }
 
   #dispatchBubblesEvent = (customEventName, detail) => {
-    this.dispatchEvent(customEventName, {
+    this.emit(customEventName, {
       detail,
       bubbles: true,
       composed: true,
@@ -254,7 +254,7 @@ export class EaNotificationElement extends Base {
         `ea-notification[placement="${this.placement}"]`
       ),
     ];
-    const thisIndex = eaNotificationList.findIndex((el) => el === this);
+    const thisIndex = eaNotificationList.findIndex(el => el === this);
     const els = eaNotificationList.slice(thisIndex + 1);
     const height = this.#container.getBoundingClientRect().height;
 

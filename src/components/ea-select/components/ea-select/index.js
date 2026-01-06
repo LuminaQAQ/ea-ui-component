@@ -22,6 +22,8 @@ export class EaSelect extends FormAssociatedBase {
   #AbortControllerStates = {
     /** @type {AbortController|null} */
     closeAbortController: null,
+    /** @type {AbortController|null} */
+    tagRemoveAbortController: null,
   };
 
   #states = {
@@ -87,7 +89,25 @@ export class EaSelect extends FormAssociatedBase {
     multiple: {
       type: Boolean,
       default: false,
-      observer: newVal => {},
+      observer: newVal => {
+        this.#AbortControllerStates.tagRemoveAbortController?.abort();
+
+        if (newVal) {
+          this.#AbortControllerStates.tagRemoveAbortController =
+            new AbortController();
+
+          this.#tagWrap.addEventListener(
+            "remove",
+            () => {
+              console.log("remove");
+            },
+            {
+              signal:
+                this.#AbortControllerStates.tagRemoveAbortController.signal,
+            }
+          );
+        }
+      },
     },
   });
 
@@ -105,8 +125,6 @@ export class EaSelect extends FormAssociatedBase {
         this.setValue(newVal);
 
         if (this.multiple) {
-          this.#tagWrap.innerHTML = "";
-
           if (!this.#states.isTagImport) {
             await import("@components/ea-tag/index.js");
             await customElements.whenDefined("ea-tag");
@@ -115,24 +133,7 @@ export class EaSelect extends FormAssociatedBase {
 
           this.#input.value = newVal?.length > 0 ? " " : "";
 
-          const docFrag = document.createDocumentFragment();
-          newVal.forEach(v => {
-            const option = this.querySelector(`ea-option[value="${v}"]`);
-
-            if (!option) return;
-
-            const tag = document.createElement("ea-tag");
-            tag.toggleAttribute("closable", true);
-            tag.toggleAttribute("disable-transitions", true);
-            tag.setAttribute("type", "info");
-            tag.setAttribute("shape", "circle");
-
-            tag.innerText = option.label;
-
-            docFrag.appendChild(tag);
-          });
-
-          this.#tagWrap.appendChild(docFrag);
+          this.#handleSelectValuesRender(newVal);
         } else {
           this.#input.value = newVal;
         }
@@ -198,6 +199,34 @@ export class EaSelect extends FormAssociatedBase {
       ".ea-select__dropdown-icon"
     );
   }
+
+  /**
+   * 渲染已选项
+   * @param {string[] | number[]} selectValue
+   */
+  #handleSelectValuesRender = selectValue => {
+    const docFrag = document.createDocumentFragment();
+
+    this.#tagWrap.innerHTML = "";
+
+    selectValue.forEach(v => {
+      const option = this.querySelector(`ea-option[value="${v}"]`);
+
+      if (!option) return;
+
+      const tag = document.createElement("ea-tag");
+      tag.toggleAttribute("closable", true);
+      tag.toggleAttribute("disable-transitions", true);
+      tag.setAttribute("type", "info");
+      tag.setAttribute("shape", "circle");
+
+      tag.innerText = option.label;
+
+      docFrag.appendChild(tag);
+    });
+
+    this.#tagWrap.appendChild(docFrag);
+  };
 
   /**
    * 下拉框折叠事件
