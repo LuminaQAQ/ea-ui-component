@@ -157,6 +157,9 @@ export class EaInput extends FormAssociatedBase {
       default: false,
       observer: newVal => {
         this.#AbortControllerStates.clearableController?.abort();
+        this.updateContainerClasslist();
+
+        console.log(newVal);
 
         if (newVal) {
           this.#AbortControllerStates.clearableController =
@@ -372,8 +375,6 @@ export class EaInput extends FormAssociatedBase {
         ["--has-append"]:
           this.type !== "textarea" && this.querySelector("[slot=append]"),
         ["--textarea"]: this.type === "textarea",
-        ["--clearable"]:
-          this.clearable && this.value && this.type !== "textarea",
         ["--show-password"]: this["show-password"],
         ["--show-word-limit"]:
           this["show-word-limit"] &&
@@ -382,6 +383,7 @@ export class EaInput extends FormAssociatedBase {
       {
         focus: this.#states.isFocus,
         disabled: this.disabled,
+        clearable: this.clearable && this.value && this.type !== "textarea",
       }
     );
   }

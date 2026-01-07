@@ -8,7 +8,20 @@ $ea-select-size-types: (small, default, large);
 
   --#{$name}-dropdown-bg-color: var(--color-white);
 
+  --#{$name}-color: var(--grey-700);
+  --#{$name}-placeholder-color: var(--grey-500);
+
   --#{$name}-transition: var(--transition-fast);
+}
+
+:host([filterable][multiple]) {
+  .ea-select__input::part(prefix) {
+    width: 100%;
+  }
+
+  .ea-select__input::part(original) {
+    display: block;
+  }
 }
 
 :host {
@@ -49,6 +62,25 @@ $ea-select-size-types: (small, default, large);
     transition: transform var(--#{$name}-transition);
   }
 
+  @include element(input) {
+    &::part(inner) {
+      padding-top: 1px;
+    }
+
+    &::part(suffix-icon) {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      flex-direction: row;
+    }
+  }
+
+  @include element(clear-icon) {
+    display: none;
+
+    cursor: pointer;
+  }
+
   @include state(focus) {
     .ea-select__dropdown {
       transform: scaleY(1) translateY(100%);
@@ -59,13 +91,41 @@ $ea-select-size-types: (small, default, large);
     }
   }
 
-  @include state(multiple) {
-    .ea-select__input::part(prefix) {
-      width: 100%;
+  @include state(clearable) {
+    .ea-select__clear-icon {
+      display: block;
     }
+  }
 
+  @include state(multiple) {
     .ea-select__input::part(original) {
       display: none;
+    }
+
+    .ea-select__tag {
+      box-sizing: border-box;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    &.is-has-value {
+      .ea-select__input::part(prefix) {
+        width: 100%;
+      }
+    }
+  }
+
+  @include state(filterable) {
+    &.is-has-value {
+      .ea-select__input::part(original)::placeholder {
+        color: var(--#{$name}-color);
+      }
+
+      &.is-focus {
+        .ea-select__input::part(original)::placeholder {
+          color: var(--#{$name}-placeholder-color);
+        }
+      }
     }
   }
 }

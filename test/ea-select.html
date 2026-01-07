@@ -19,12 +19,19 @@
     <script type="module" src="../src/components/ea-empty/index.js"></script>
 
     <form>
-      <ea-select placeholder="Select" style="width: 240px" multiple clearable>
+      <ea-select
+        placeholder="Select"
+        style="width: 240px"
+        multiple
+        clearable
+        filterable
+      >
         <ea-option value="Option1">Option 1</ea-option>
         <ea-option value="Option2">Option 2</ea-option>
         <ea-option value="Option3">Option 3</ea-option>
         <ea-option value="Option4">Option 4</ea-option>
-        <ea-option value="Option5">Option 5</ea-option>
+        <ea-option value="Option5">Options 5</ea-option>
+        <ea-option value="Option6">Options 6</ea-option>
       </ea-select>
 
       <ea-button button-type="submit">submit</ea-button>
@@ -288,10 +295,20 @@
         <ea-option value="Option 4">Option 4</ea-option>
         <ea-option value="Option 5">Option 5</ea-option>
       </ea-select>
+
+      <ea-select style="width: 240px" placeholder="Select" multiple filterable>
+        <ea-option value="Option 1">Option 1</ea-option>
+        <ea-option value="Option 2">Option 2</ea-option>
+        <ea-option value="Option 3">Option 3</ea-option>
+        <ea-option value="Option 4">Option 4</ea-option>
+        <ea-option value="Option 5">Option 5</ea-option>
+      </ea-select>
     </div>
 
     <hr />
     <!-- #endregion  -->
     <!-- end  -->
+
+    <div style="height: 10rem"></div>
   </body>
 </html>

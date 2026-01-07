@@ -178,7 +178,7 @@
     }
   }
 
-  @include modifier(clearable) {
+  @include state(clearable) {
     .ea-input__clear-icon {
       display: block;
     }
