@@ -10,7 +10,7 @@ export class EaOption extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "value", "seleted", "disabled"];
+    return [...super.observedAttributes, "value", "selected", "disabled"];
   }
 
   state = this.properties({
@@ -24,7 +24,7 @@ export class EaOption extends Base {
       default: null,
       observer: () => {},
     },
-    seleted: {
+    selected: {
       type: Boolean,
       default: false,
       observer: () => {
@@ -52,7 +52,7 @@ export class EaOption extends Base {
         // ['--' + this.type]: this.type,
       },
       {
-        seleted: this.seleted,
+        selected: this.selected,
         disabled: this.disabled,
       }
     );

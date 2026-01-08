@@ -506,6 +506,9 @@ export class EaInput extends FormAssociatedBase {
    * @param {InputEvent} e 事件对象
    */
   #initInputEvent = e => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
     const { value } = e.target;
     this.value = value;
     this.emit("input", {

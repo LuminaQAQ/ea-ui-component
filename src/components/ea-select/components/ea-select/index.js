@@ -3,6 +3,9 @@ import "@components/ea-input/index.js";
 
 import stylesheet from "./index.scss?inline";
 import EaUtils from "@/utils/Utils";
+import { EaSelectVisibleChangeEvent } from "../../events/EaSelectVisibleChangeEvent";
+import { EaSelectRemoveTagEvent } from "../../events/EaSelectRemoveTagEvent";
+import { EaSelectClearEvent } from "../../events/EaSelectClearEvent";
 
 export class EaSelect extends FormAssociatedBase {
   /** @type {HTMLElement} */
@@ -88,19 +91,18 @@ export class EaSelect extends FormAssociatedBase {
         this.updateContainerClasslist();
 
         if (newVal) {
+          const onClearEvent = () => {
+            this.value = this.multiple ? [] : "";
+            this.dispatchEvent(new EaSelectClearEvent());
+          };
+
           this.#AbortControllerStates.inputClearAbortController =
             new AbortController();
 
-          this.#clearIcon.addEventListener(
-            "click",
-            () => {
-              this.value = this.multiple ? [] : "";
-            },
-            {
-              signal:
-                this.#AbortControllerStates.inputClearAbortController.signal,
-            }
-          );
+          this.#clearIcon.addEventListener("click", onClearEvent, {
+            signal:
+              this.#AbortControllerStates.inputClearAbortController.signal,
+          });
         }
       },
     },
@@ -155,6 +157,33 @@ export class EaSelect extends FormAssociatedBase {
       type: Boolean,
       default: false,
       observer: async newVal => {
+        /**
+         * 处理筛选事件
+         * @param {Event} e
+         */
+        const onFilterEvent = e => {
+          const { value } = e.detail;
+          if (typeof value === "string") {
+            this.querySelectorAll("ea-option").forEach(option => {
+              option.style.display = option.innerText.includes(value)
+                ? "block"
+                : "none";
+            });
+          }
+        };
+
+        /**
+         * 处理多选标签删除事件
+         * @param {Event} e
+         */
+        const onMultipleDeleteEvent = e => {
+          const { key } = e;
+
+          if (key === "Backspace" && this.#input.value === "") {
+            this.value = this.value?.slice(0, this.value.length - 1);
+          }
+        };
+
         this.#AbortControllerStates.inputFilterAbortController?.abort();
 
         this.#input.toggleAttribute("readonly", !newVal);
@@ -173,42 +202,19 @@ export class EaSelect extends FormAssociatedBase {
           this.#AbortControllerStates.inputFilterAbortController =
             new AbortController();
 
-          this.#input.addEventListener(
-            "input",
-            e => {
-              const { value } = e.detail;
-              if (typeof value === "string") {
-                this.querySelectorAll("ea-option").forEach(option => {
-                  option.style.display = option.innerText.includes(value)
-                    ? "block"
-                    : "none";
-                });
-              }
-            },
-            {
-              signal:
-                this.#AbortControllerStates.inputFilterAbortController.signal,
-            }
-          );
+          this.#input.addEventListener("input", onFilterEvent, {
+            signal:
+              this.#AbortControllerStates.inputFilterAbortController.signal,
+          });
         }
 
         if (this.multiple && newVal) {
           prefix.appendChild(input);
 
-          this.#input.addEventListener(
-            "keydown",
-            e => {
-              const { key } = e;
-
-              if (key === "Backspace" && this.#input.value === "") {
-                this.value = this.value?.slice(0, this.value.length - 1);
-              }
-            },
-            {
-              signal:
-                this.#AbortControllerStates.inputFilterAbortController.signal,
-            }
-          );
+          this.#input.addEventListener("keydown", onMultipleDeleteEvent, {
+            signal:
+              this.#AbortControllerStates.inputFilterAbortController.signal,
+          });
         } else {
           innerWrap.insertBefore(input, prefix.nextSibling);
         }
@@ -233,15 +239,17 @@ export class EaSelect extends FormAssociatedBase {
           if (this.filterable) {
             this.#input.focus();
           } else {
-            this.#input.value =
-              newVal?.length > 0 && !this.filterable ? " " : "";
+            this.#input.value = newVal?.length > 0 ? " " : "";
           }
 
           this.#handleSelectValuesRender(newVal || []);
         } else {
           if (this.filterable) {
             this.#input.value = "";
-            this.#input.setAttribute("placeholder", newVal);
+            this.#input.setAttribute(
+              "placeholder",
+              newVal?.length > 0 ? newVal : this.placeholder
+            );
 
             this.#handleFilteredOptionStyle("");
           } else {
@@ -251,13 +259,10 @@ export class EaSelect extends FormAssociatedBase {
 
         this.#handleSelectedValueStyle(newVal);
 
+        this.emit("change", { detail: { value: newVal } });
+
         this.updateContainerClasslist();
       },
-    },
-    filterMethod: {
-      type: Function,
-      default: query => {},
-      observer: () => {},
     },
   });
 
@@ -335,11 +340,14 @@ export class EaSelect extends FormAssociatedBase {
       typeof selectedValue === "boolean"
     ) {
       options.forEach(option => {
-        option.toggleAttribute("seleted", option.value === selectedValue);
+        option.toggleAttribute("selected", option.value === selectedValue);
       });
     } else if (Array.isArray(selectedValue)) {
       options.forEach(option => {
-        option.toggleAttribute("seleted", selectedValue.includes(option.value));
+        option.toggleAttribute(
+          "selected",
+          selectedValue.includes(option.value)
+        );
       });
     }
   };
@@ -393,14 +401,14 @@ export class EaSelect extends FormAssociatedBase {
     this.#tagWrap.innerHTML = "";
 
     if (this["collapse-tags"] && Array.isArray(selectValue)) {
-      const max = Number(this["max-collapse-tags"]) || 1;
-      const total = selectValue.length;
+      const max = Math.max(0, Number(this["max-collapse-tags"]) || 1);
+      const remaining = Math.max(0, selectValue.length - max);
 
-      template += templateRenderer(selectValue.slice(0, max));
+      if (max > 0) {
+        template += templateRenderer(selectValue.slice(0, max));
+      }
 
-      if (total > max) {
-        const remaining = total - max;
-
+      if (remaining > 0) {
         template += tagRenderer(false, `+${remaining}`, null);
       }
     } else {
@@ -416,9 +424,7 @@ export class EaSelect extends FormAssociatedBase {
    */
   #handleFilteredOptionStyle = filterValue => {
     this.querySelectorAll("ea-option").forEach(option => {
-      option.style.display = option.innerText.includes(filterValue)
-        ? "block"
-        : "none";
+      this.filterMethod(option, filterValue);
     });
   };
 
@@ -430,7 +436,7 @@ export class EaSelect extends FormAssociatedBase {
     const target = e.target === this.#input.shadowRoot ? this.#input : e.target;
 
     if (
-      target.classList?.contains("ea-input__clear-icon") ||
+      target.classList?.contains("ea-select__clear-icon") ||
       target.closest("ea-tag")
     )
       return;
@@ -498,17 +504,7 @@ export class EaSelect extends FormAssociatedBase {
 
     this.#states.isFocus = true;
     this.updateContainerClasslist();
-
-    if (this.filterable) {
-      if (this.multiple) {
-      } else {
-        if (this.value) {
-          this.#input.setAttribute("placeholder", this.value);
-        } else {
-          this.#input.setAttribute("placeholder", this.placeholder);
-        }
-      }
-    }
+    this.dispatchEvent(new EaSelectVisibleChangeEvent({ visible: true }));
 
     await EaUtils.sleep(100);
 
@@ -534,6 +530,19 @@ export class EaSelect extends FormAssociatedBase {
     const value = target.getAttribute("data-value");
 
     this.value = this.value.filter(v => v !== value);
+
+    this.dispatchEvent(
+      new EaSelectRemoveTagEvent({ tag: target, tagValue: value })
+    );
+  };
+
+  /**
+   * 过滤选项
+   * @param {import("../ea-option/index.js").EaOption} option
+   * @param {string} query
+   */
+  filterMethod = (option, query) => {
+    option.style.display = option.innerText?.includes(query) ? "block" : "none";
   };
 
   /**
@@ -549,6 +558,7 @@ export class EaSelect extends FormAssociatedBase {
   hide = () => {
     this.#states.isFocus = false;
     this.updateContainerClasslist();
+    this.dispatchEvent(new EaSelectVisibleChangeEvent({ visible: false }));
   };
 
   async connectedCallback() {
@@ -584,6 +594,18 @@ export class EaSelect extends FormAssociatedBase {
         if (e.key === "Enter") {
           this.click();
         }
+      },
+      { signal: this.#abortController.signal }
+    );
+
+    this.#input.addEventListener(
+      "input",
+      e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        if (typeof e.target.value === "string")
+          this.emit("input", { value: e.target.value });
       },
       { signal: this.#abortController.signal }
     );

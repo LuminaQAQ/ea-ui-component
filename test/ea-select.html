@@ -25,6 +25,7 @@
         multiple
         clearable
         filterable
+        allow-create
       >
         <ea-option value="Option1">Option 1</ea-option>
         <ea-option value="Option2">Option 2</ea-option>
@@ -58,6 +59,10 @@
       button3.addEventListener("click", e => {
         select.hide();
       });
+
+      // select.addEventListener("input", e => {
+      //   console.log("change", e);
+      // });
     </script>
 
     <!--  基础用法 -->
@@ -304,6 +309,67 @@
         <ea-option value="Option 5">Option 5</ea-option>
       </ea-select>
     </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  创建新的选项 -->
+    <!-- #region -->
+    <h1>创建新的选项</h1>
+
+    <div class="demo">
+      <section class="create-example">
+        <p>Single select</p>
+        <ea-select style="width: 240px" placeholder="Select">
+          <ea-option value="Option 1">Option 1</ea-option>
+          <ea-option value="Option 2">Option 2</ea-option>
+          <ea-option value="Option 3">Option 3</ea-option>
+          <ea-option value="Option 4">Option 4</ea-option>
+          <ea-option value="Option 5">Option 5</ea-option>
+        </ea-select>
+        <br />
+        <ea-button>Add "Option 6" option</ea-button>
+      </section>
+      <section class="create-example">
+        <p>Multiple Select</p>
+        <ea-select style="width: 240px" placeholder="Select" multiple>
+          <ea-option value="Option 1">Option 1</ea-option>
+          <ea-option value="Option 2">Option 2</ea-option>
+          <ea-option value="Option 3">Option 3</ea-option>
+          <ea-option value="Option 4">Option 4</ea-option>
+          <ea-option value="Option 5">Option 5</ea-option>
+        </ea-select>
+        <br />
+        <ea-button>Add "Option 6" option</ea-button>
+      </section>
+    </div>
+
+    <script type="module">
+      const createOptionExample = {
+        examples: document.querySelectorAll(".create-example"),
+
+        init() {
+          this.examples.forEach(example => {
+            const button = example.querySelector("ea-button");
+            const select = example.querySelector("ea-select");
+            const isMultiple = select.hasAttribute("multiple");
+
+            button.addEventListener("click", () => {
+              if (select.querySelector("ea-option[value='Option 6']")) return;
+
+              const option = document.createElement("ea-option");
+              option.value = "Option 6";
+              option.textContent = "Option 6";
+              select.appendChild(option);
+
+              select.value = isMultiple ? ["Option 6"] : "Option 6";
+            });
+          });
+        },
+      };
+      createOptionExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->
