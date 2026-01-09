@@ -8,6 +8,9 @@ export class EaCheckTag extends Base {
   /** @type {HTMLElement} */
   #container;
 
+  /** @type {AbortController} */
+  #abortController;
+
   static get observedAttributes() {
     return [...super.observedAttributes, "checked", "disabled", "type"];
   }
@@ -16,21 +19,21 @@ export class EaCheckTag extends Base {
     checked: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     type: {
       type: componentTypes,
       default: "primary",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
@@ -72,17 +75,31 @@ export class EaCheckTag extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-check-tag");
-
-    this.#container.addEventListener("click", () => {
-      if (this.disabled) return;
-
-      this.checked = !this.checked;
-      this.emit("change", { detail: { checked: this.checked } });
-    });
   }
+
+  /**
+   * 点击切换选中状态
+   */
+  #onCheckChangeEvent = () => {
+    if (this.disabled) return;
+
+    this.checked = !this.checked;
+    this.emit("change", { detail: { checked: this.checked } });
+  };
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    this.#container.addEventListener("click", this.#onCheckChangeEvent, {
+      signal: this.#abortController.signal,
+    });
+  }
+
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 

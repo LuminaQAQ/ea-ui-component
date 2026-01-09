@@ -1,20 +1,9 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
 onMounted(() => {
-    import('../components/ea-tag/index.js')
-    import('./index.scss')
-    
-    document.querySelectorAll(".dynamic-closable-tag").forEach(item => {
-        item.addEventListener("close", function (e) {
-            this.remove();
-            console.log('标签被移除', e.target, e.detail.value);
-        })
-    })
-
-    document.querySelector("#click").addEventListener("click", function (e) {
-        console.log('标签被点击', e.target);
-    })
 })
 </script>
 
@@ -27,7 +16,7 @@ onMounted(() => {
 > `js`
 
 ```js
-<script type="module">
+<script type='module'>
   import "./node_modules/easy-component-ui/components/ea-tag/index.js";
 </script>
 ```
@@ -51,177 +40,288 @@ onMounted(() => {
 
 ## 基础用法
 
-<div class="row left">
-    <ea-tag id="click">默认标签</ea-tag>
-    <ea-tag type="success">成功标签</ea-tag>
-    <ea-tag type="info">信息标签</ea-tag>
-    <ea-tag type="warning">警告标签</ea-tag>
-    <ea-tag type="danger">危险标签</ea-tag>
-</div>
+由 `type` 属性来选择 tag 的类型。 也可以通过 `color` 属性来自定义背景色。
 
-::: details 查看代码
+<div class="demo row left">
+  <ea-tag type="primary">Tag 1</ea-tag>
+  <ea-tag type="success">Tag 2</ea-tag>
+  <ea-tag type="info">Tag 3</ea-tag>
+  <ea-tag type="warning">Tag 4</ea-tag>
+  <ea-tag type="danger">Tag 5</ea-tag>
+</div>
 
 ```html
-<div class="row left">
-  <ea-tag>默认标签</ea-tag>
-  <ea-tag type="success">成功标签</ea-tag>
-  <ea-tag type="info">信息标签</ea-tag>
-  <ea-tag type="warning">警告标签</ea-tag>
-  <ea-tag type="danger">危险标签</ea-tag>
+<div class="demo">
+  <ea-tag type="primary">Tag 1</ea-tag>
+  <ea-tag type="success">Tag 2</ea-tag>
+  <ea-tag type="info">Tag 3</ea-tag>
+  <ea-tag type="warning">Tag 4</ea-tag>
+  <ea-tag type="danger">Tag 5</ea-tag>
 </div>
 ```
 
-`JS`: 点击事件
+## 可移除标签
 
-```js
-document.querySelector("#click").addEventListener("click", function (e) {
-  console.log("标签被点击", e.target);
-});
-```
+设置 `closable` 属性可以定义一个标签是否可移除。 它接受一个 `Boolean`。 默认的标签移除时会附带渐变动画。 如果不想使用，可以设置 `disable-transitions` 属性，它接受一个 `Boolean`，`true` 为关闭。 当 Tag 被移除时会触发 `ea-remove` 事件。
 
-:::
-
-## 带关闭图标的标签
-
-<div class="row left">
-    <ea-tag closable>默认标签</ea-tag>
-    <ea-tag type="success" closable>成功标签</ea-tag>
-    <ea-tag type="info" closable>信息标签</ea-tag>
-    <ea-tag type="warning" closable>警告标签</ea-tag>
-    <ea-tag type="danger" closable>危险标签</ea-tag>
+<div class="demo row left">
+  <ea-tag type="primary" closable>Tag 1</ea-tag>
+  <ea-tag type="success" closable>Tag 2</ea-tag>
+  <ea-tag type="info" closable>Tag 3</ea-tag>
+  <ea-tag type="warning" closable>Tag 4</ea-tag>
+  <ea-tag type="danger" closable>Tag 5</ea-tag>
 </div>
-
-::: details 查看代码
 
 ```html
-<div class="row left">
-  <ea-tag closable>默认标签</ea-tag>
-  <ea-tag type="success" closable>成功标签</ea-tag>
-  <ea-tag type="info" closable>信息标签</ea-tag>
-  <ea-tag type="warning" closable>警告标签</ea-tag>
-  <ea-tag type="danger" closable>危险标签</ea-tag>
+<div class="demo">
+  <ea-tag type="primary" closable>Tag 1</ea-tag>
+  <ea-tag type="success" closable>Tag 2</ea-tag>
+  <ea-tag type="info" closable>Tag 3</ea-tag>
+  <ea-tag type="warning" closable>Tag 4</ea-tag>
+  <ea-tag type="danger" closable>Tag 5</ea-tag>
 </div>
 ```
 
-:::
+## 不同尺寸
 
-## 动态编辑标签
+Tag 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。
 
-动态编辑标签可以通过点击标签关闭按钮后触发的 close 事件来实现
-
-<div class="row left">
-    <ea-tag class="dynamic-closable-tag" closable>默认标签</ea-tag>
-    <ea-tag class="dynamic-closable-tag" type="success" closable>成功标签</ea-tag>
-    <ea-tag class="dynamic-closable-tag" type="info" closable>信息标签</ea-tag>
-    <ea-tag class="dynamic-closable-tag" type="warning" closable>警告标签</ea-tag>
-    <ea-tag class="dynamic-closable-tag" type="danger" closable>危险标签</ea-tag>
+<div class="demo row left">
+  <ea-tag size="large">Large</ea-tag>
+  <ea-tag>Default</ea-tag>
+  <ea-tag size="small">Small</ea-tag>
 </div>
-
-::: details 查看代码
 
 ```html
-<div class="row left">
-  <ea-tag class="dynamic-closable-tag" closable>默认标签</ea-tag>
-  <ea-tag class="dynamic-closable-tag" type="success" closable>成功标签</ea-tag>
-  <ea-tag class="dynamic-closable-tag" type="info" closable>信息标签</ea-tag>
-  <ea-tag class="dynamic-closable-tag" type="warning" closable>警告标签</ea-tag>
-  <ea-tag class="dynamic-closable-tag" type="danger" closable>危险标签</ea-tag>
+<div class="demo">
+  <ea-tag size="large">Large</ea-tag>
+  <ea-tag>Default</ea-tag>
+  <ea-tag size="small">Small</ea-tag>
 </div>
 ```
-
-`JS`: `close` 事件
-
-> 为了适应可能出现的特殊场景, 所以并未在框架内部添加 `DOM` 移除事件
-
-```js
-document.querySelectorAll(".dynamic-closable-tag").forEach((item) => {
-  item.addEventListener("close", function (e) {
-    // 移除该dom
-    this.remove();
-
-    // e.target: 当前标签; e.detail.value: 当前标签的 value 值
-    console.log("标签被移除", e.target, e.detail.value);
-  });
-});
-```
-
-:::
-
-<!-- ## 不同尺寸
-
-Tag 组件提供除了默认值以外的三种尺寸，可以在不同场景下选择合适的按钮尺寸。 -->
 
 ## 不同主题
 
 Tag 组件提供了三个不同的主题：`dark`、`light` 和 `plain`。通过设置 `effect` 属性来改变主题, 默认主题为 `light`
 
-`Dark 主题:`
-
-<div class="row left">
-    <ea-tag effect="dark">dark: 默认标签</ea-tag>
-    <ea-tag effect="dark" type="success">dark: 成功标签</ea-tag>
-    <ea-tag effect="dark" type="info">dark: 信息标签</ea-tag>
-    <ea-tag effect="dark" type="warning">dark: 警告标签</ea-tag>
-    <ea-tag effect="dark" type="danger">dark: 危险标签</ea-tag>
+<div class="demo">
+  <p class="row left is-not-demo">
+    Dark：
+    <ea-tag effect="dark" type="primary">Tag 1</ea-tag>
+    <ea-tag effect="dark" type="success">Tag 2</ea-tag>
+    <ea-tag effect="dark" type="info">Tag 3</ea-tag>
+    <ea-tag effect="dark" type="warning">Tag 4</ea-tag>
+    <ea-tag effect="dark" type="danger">Tag 5</ea-tag>
+  </p>
+  <p class="row left is-not-demo">
+    Light：
+    <ea-tag effect="light" type="primary">Tag 1</ea-tag>
+    <ea-tag effect="light" type="success">Tag 2</ea-tag>
+    <ea-tag effect="light" type="info">Tag 3</ea-tag>
+    <ea-tag effect="light" type="warning">Tag 4</ea-tag>
+    <ea-tag effect="light" type="danger">Tag 5</ea-tag>
+  </p>
+  <p class="row left is-not-demo">
+    Plain：
+    <ea-tag effect="plain" type="primary">Tag 1</ea-tag>
+    <ea-tag effect="plain" type="success">Tag 2</ea-tag>
+    <ea-tag effect="plain" type="info">Tag 3</ea-tag>
+    <ea-tag effect="plain" type="warning">Tag 4</ea-tag>
+    <ea-tag effect="plain" type="danger">Tag 5</ea-tag>
+  </p>
 </div>
 
 ::: details 查看代码
 
 ```html
-<div class="row left">
-  <ea-tag effect="dark">dark: 默认标签</ea-tag>
-  <ea-tag effect="dark" type="success">dark: 成功标签</ea-tag>
-  <ea-tag effect="dark" type="info">dark: 信息标签</ea-tag>
-  <ea-tag effect="dark" type="warning">dark: 警告标签</ea-tag>
-  <ea-tag effect="dark" type="danger">dark: 危险标签</ea-tag>
+<div class="demo">
+  <p>
+    Dark：
+    <ea-tag effect="dark" type="primary">Tag 1</ea-tag>
+    <ea-tag effect="dark" type="success">Tag 2</ea-tag>
+    <ea-tag effect="dark" type="info">Tag 3</ea-tag>
+    <ea-tag effect="dark" type="warning">Tag 4</ea-tag>
+    <ea-tag effect="dark" type="danger">Tag 5</ea-tag>
+  </p>
+  <p>
+    Light：
+    <ea-tag effect="light" type="primary">Tag 1</ea-tag>
+    <ea-tag effect="light" type="success">Tag 2</ea-tag>
+    <ea-tag effect="light" type="info">Tag 3</ea-tag>
+    <ea-tag effect="light" type="warning">Tag 4</ea-tag>
+    <ea-tag effect="light" type="danger">Tag 5</ea-tag>
+  </p>
+  <p>
+    Plain：
+    <ea-tag effect="plain" type="primary">Tag 1</ea-tag>
+    <ea-tag effect="plain" type="success">Tag 2</ea-tag>
+    <ea-tag effect="plain" type="info">Tag 3</ea-tag>
+    <ea-tag effect="plain" type="warning">Tag 4</ea-tag>
+    <ea-tag effect="plain" type="danger">Tag 5</ea-tag>
+  </p>
 </div>
 ```
 
 :::
 
-`Plain 主题:`
+## 圆形标签​
 
-<div class="row left">
-    <ea-tag effect="plain">plain: 默认标签</ea-tag>
-    <ea-tag effect="plain" type="success">plain: 成功标签</ea-tag>
-    <ea-tag effect="plain" type="info">plain: 信息标签</ea-tag>
-    <ea-tag effect="plain" type="warning">plain: 警告标签</ea-tag>
-    <ea-tag effect="plain" type="danger">plain: 危险标签</ea-tag>
+Tag 可以向按钮组件一样变为完全圆形。
+
+<div class="demo">
+  <p class="row left is-not-demo">
+    <ea-tag effect="dark" round type="primary">Tag 1</ea-tag>
+    <ea-tag effect="dark" round type="success">Tag 2</ea-tag>
+    <ea-tag effect="dark" round type="info">Tag 3</ea-tag>
+    <ea-tag effect="dark" round type="warning">Tag 4</ea-tag>
+    <ea-tag effect="dark" round type="danger">Tag 5</ea-tag>
+  </p>
+  <p class="row left is-not-demo">
+    <ea-tag effect="light" round type="primary">Tag 1</ea-tag>
+    <ea-tag effect="light" round type="success">Tag 2</ea-tag>
+    <ea-tag effect="light" round type="info">Tag 3</ea-tag>
+    <ea-tag effect="light" round type="warning">Tag 4</ea-tag>
+    <ea-tag effect="light" round type="danger">Tag 5</ea-tag>
+  </p>
+  <p class="row left is-not-demo">
+    <ea-tag effect="plain" round type="primary">Tag 1</ea-tag>
+    <ea-tag effect="plain" round type="success">Tag 2</ea-tag>
+    <ea-tag effect="plain" round type="info">Tag 3</ea-tag>
+    <ea-tag effect="plain" round type="warning">Tag 4</ea-tag>
+    <ea-tag effect="plain" round type="danger">Tag 5</ea-tag>
+  </p>
 </div>
 
 ::: details 查看代码
 
 ```html
-<div class="row left">
-  <ea-tag effect="plain">plain: 默认标签</ea-tag>
-  <ea-tag effect="plain" type="success">plain: 成功标签</ea-tag>
-  <ea-tag effect="plain" type="info">plain: 信息标签</ea-tag>
-  <ea-tag effect="plain" type="warning">plain: 警告标签</ea-tag>
-  <ea-tag effect="plain" type="danger">plain: 危险标签</ea-tag>
+<div class="demo">
+  <p>
+    <ea-tag effect="dark" round type="primary">Tag 1</ea-tag>
+    <ea-tag effect="dark" round type="success">Tag 2</ea-tag>
+    <ea-tag effect="dark" round type="info">Tag 3</ea-tag>
+    <ea-tag effect="dark" round type="warning">Tag 4</ea-tag>
+    <ea-tag effect="dark" round type="danger">Tag 5</ea-tag>
+  </p>
+  <p>
+    <ea-tag effect="light" round type="primary">Tag 1</ea-tag>
+    <ea-tag effect="light" round type="success">Tag 2</ea-tag>
+    <ea-tag effect="light" round type="info">Tag 3</ea-tag>
+    <ea-tag effect="light" round type="warning">Tag 4</ea-tag>
+    <ea-tag effect="light" round type="danger">Tag 5</ea-tag>
+  </p>
+  <p>
+    <ea-tag effect="plain" round type="primary">Tag 1</ea-tag>
+    <ea-tag effect="plain" round type="success">Tag 2</ea-tag>
+    <ea-tag effect="plain" round type="info">Tag 3</ea-tag>
+    <ea-tag effect="plain" round type="warning">Tag 4</ea-tag>
+    <ea-tag effect="plain" round type="danger">Tag 5</ea-tag>
+  </p>
 </div>
 ```
 
 :::
 
-## Attributes
+## 可选中的标签​
 
-| 参数     | 说明       | 类型    | 可选值                              | 默认值  |
-| -------- | ---------- | ------- | ----------------------------------- | ------- |
-| type     | 主题类型   | string  | default/success/info/warning/danger | default |
-| closable | 是否可关闭 | boolean | true/false                          | false   |
-| effect   | 主题效果   | string  | dark/light/plain                    | light   |
+有时候因为业务需求，我们可能会需要用到类似复选框的标签，但是按钮式的复选框的样式又不满足需求，此时我们就可以用到 `check-tag` 组件。
 
-## CSS Part
+<div class="demo">
+  <p class="row left is-not-demo">
+    <ea-check-tag checked>Checked</ea-check-tag>
+    <ea-check-tag>Toggle me</ea-check-tag>
+    <ea-check-tag disabled>Disabled</ea-check-tag>
+  </p>
+  <p class="row left is-not-demo">
+    <ea-check-tag checked type="primary"> Tag 1 </ea-check-tag>
+    <ea-check-tag checked type="success"> Tag 2 </ea-check-tag>
+    <ea-check-tag checked type="info"> Tag 3 </ea-check-tag>
+    <ea-check-tag checked type="warning"> Tag 4 </ea-check-tag>
+    <ea-check-tag checked type="danger"> Tag 5 </ea-check-tag>
+    <ea-check-tag checked disabled type="success"> Tag 6 </ea-check-tag>
+  </p>
+</div>
 
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+::: details 查看代码
 
-| 名称      | 说明     |
-| --------- | -------- |
-| container | 外层容器 |
+```html
+<div class="demo">
+  <p>
+    <ea-check-tag checked>Checked</ea-check-tag>
+    <ea-check-tag>Toggle me</ea-check-tag>
+    <ea-check-tag disabled>Disabled</ea-check-tag>
+  </p>
+  <p>
+    <ea-check-tag checked type="primary"> Tag 1 </ea-check-tag>
+    <ea-check-tag checked type="success"> Tag 2 </ea-check-tag>
+    <ea-check-tag checked type="info"> Tag 3 </ea-check-tag>
+    <ea-check-tag checked type="warning"> Tag 4 </ea-check-tag>
+    <ea-check-tag checked type="danger"> Tag 5 </ea-check-tag>
+    <ea-check-tag checked disabled type="success"> Tag 6 </ea-check-tag>
+  </p>
+</div>
+```
 
-## Events
+:::
 
-| 事件名称 | 说明             | 回调参数                            |
-| -------- | ---------------- | ----------------------------------- |
-| close    | 关闭时触发的事件 | event: (e.detail.value: 该标签的值) |
-| click    | 点击时触发的事件 | event                               |
+## Tag API
+
+### Tag Attributes
+
+| 参数                | 说明                                         | 类型    | 可选值                                                       | 默认值  |
+| ------------------- | -------------------------------------------- | ------- | ------------------------------------------------------------ | ------- |
+| type                | 主题类型，用于选择预设样式                   | string  | `default \| primary \| success \| info \| warning \| danger` | primary |
+| size                | 组件尺寸，影响内边距与字体大小               | string  | `large \| default \| small`                                  | default |
+| effect              | 主题效果，控制背景与边框样式                 | string  | `dark \| light \| plain`                                     | light   |
+| closable            | 是否显示关闭图标，支持用户移除标签           | boolean | -                                                            | false   |
+| color               | 自定义背景色或文字色（依据 effect/样式而定） | string  | CSS color value                                              | -       |
+| disabled            | 是否禁用交互（禁用时不触发事件）             | boolean | -                                                            | false   |
+| round               | 是否为圆角/圆形样式                          | boolean | -                                                            | false   |
+| disable-transitions | 是否禁用移除时的动画过渡                     | boolean | -                                                            | false   |
+
+### Tag CSS Part
+
+| 名称       | 说明                                    |
+| ---------- | --------------------------------------- |
+| container  | Tag 根容器，包含文本与可选图标/关闭按钮 |
+| close-icon | 关闭图标按钮                            |
+
+### Tag Slots
+
+| 名称 | 说明                                   |
+| ---- | -------------------------------------- |
+| -    | 默认插槽，用于放置标签文本或自定义内容 |
+
+### Tag Events
+
+| 事件名称  | 说明             | 回调参数                                    |
+| --------- | ---------------- | ------------------------------------------- |
+| ea-remove | 标签被移除后触发 | event: (被移除标签的相关信息，可包含 value) |
+
+## CheckTag API
+
+### CheckTag Attributes
+
+| 参数     | 说明               | 类型    | 可选值                                                       | 默认值  |
+| -------- | ------------------ | ------- | ------------------------------------------------------------ | ------- |
+| checked  | 是否选中状态       | boolean | -                                                            | false   |
+| disabled | 是否禁用交互       | boolean | -                                                            | false   |
+| type     | 选中状态的主题样式 | string  | `default \| primary \| success \| info \| warning \| danger` | default |
+
+### CheckTag CSS Part
+
+| 名称      | 说明                                |
+| --------- | ----------------------------------- |
+| container | CheckTag 根容器，包含可选图标与文本 |
+
+### CheckTag Slots
+
+| 名称 | 说明                                   |
+| ---- | -------------------------------------- |
+| -    | 默认插槽，用于放置标签文本或自定义内容 |
+
+### CheckTag Events
+
+| 事件名称 | 说明               | 回调参数                           |
+| -------- | ------------------ | ---------------------------------- |
+| change   | 选中状态改变时触发 | event.detail: `{ value: boolean }` |
