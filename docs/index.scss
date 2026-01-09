@@ -175,3 +175,17 @@
   width: 1rem;
   height: 1rem;
 }
+
+.vp-doc thead tr:first-child {
+  border-top: none;
+}
+
+.vp-doc tr:nth-child(2n),
+.vp-doc th {
+  background: none;
+}
+
+.vp-doc th,
+.vp-doc td {
+  border: none !important;
+}

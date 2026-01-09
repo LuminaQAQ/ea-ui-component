@@ -28,7 +28,9 @@ export class EaTimelineItem extends Base {
       "color",
       "hollow",
       "icon",
+      "placement",
       "size",
+      "center",
     ];
   }
 
@@ -36,71 +38,70 @@ export class EaTimelineItem extends Base {
     type: {
       type: componentTypes,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     timestamp: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#timestampSlot.textContent = newVal;
       },
     },
     "hide-timestamp": {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#timestampSlot.style.display = newVal ? "none" : "block";
       },
     },
     color: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (!CSS.supports("color", newVal))
           return console.warn(
             `[EaTag] The color value ${newVal} is not supported.`
           );
         if (!this.#dot) return;
 
-        this.#dot.style.backgroundColor = newVal;
-        this.#dot.style.color = newVal;
+        this.style.setProperty("--ea-timeline-item-dot-color", newVal);
         this.#dot.style.borderColor = newVal;
       },
     },
     hollow: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     icon: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#dot.innerHTML = `<ea-icon class="ea-timeline-item__icon-dot" part='icon-dot' icon="${newVal}"></ea-icon>`;
       },
     },
     size: {
       type: ["normal", "large"],
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     placement: {
       type: ["top", "bottom"],
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     center: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },

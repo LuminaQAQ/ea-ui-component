@@ -650,6 +650,8 @@ ea-descriptions::part(my-content) {
 
 ### Descriptions CSS Part
 
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+
 | 名称             | 说明                                                              |
 | ---------------- | ----------------------------------------------------------------- |
 | container        | 外层表格容器，part="container"（对应组件根元素）                  |
@@ -686,6 +688,8 @@ ea-descriptions::part(my-content) {
 | content-part | 自定义 content 对应的 part 名称（会被附加到 content 的 part 属性） | string            | -                           | ""     |
 
 ### DescriptionsItem CSS Part
+
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
 | 名称      | 说明                            |
 | --------- | ------------------------------- |
