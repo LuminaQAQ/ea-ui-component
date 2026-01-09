@@ -11,9 +11,9 @@ $ea-tag-sizes: ("large", "default", "small");
 $ea-tag-effect: ("plain", "dark", "light");
 
 :host {
-  --ea-tag-spacing-small: 2px 6px;
-  --ea-tag-spacing-default: 4px 8px;
-  --ea-tag-spacing-large: 6px 12px;
+  --ea-tag-spacing-small: 0 6px;
+  --ea-tag-spacing-default: 2px 8px;
+  --ea-tag-spacing-large: 4px 12px;
   --ea-tag-border-radius: var(--border-radius-sm);
 
   @each $type, $color in $ea-tag-types {

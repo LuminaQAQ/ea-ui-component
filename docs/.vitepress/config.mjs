@@ -22,7 +22,7 @@ export default defineConfig({
       },
     ],
     ["link", { rel: "stylesheet", href: `${base}dist/assets/icon.css` }],
-    ["link", { rel: "stylesheet", href: `${base}index.css` }],
+    ["link", { rel: "stylesheet", href: `${base}index.scss` }],
 
     // ['link', { rel: 'stylesheet', href: '/ea-ui-component/ea-icon/css/fontello.css' }],
     // ['link', { rel: 'stylesheet', href: '/ea-ui-component/index.scss' }],
@@ -192,12 +192,7 @@ export default defineConfig({
   vite: {
     css: {
       preprocessorOptions: {
-        scss: {
-          additionalData: `
-              @use "../index.scss" as *;
-          `,
-          includePaths: [resolve(__dirname)],
-        },
+        scss: {},
       },
     },
   },
