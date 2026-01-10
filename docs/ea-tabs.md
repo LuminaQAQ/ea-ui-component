@@ -1,87 +1,86 @@
 <script setup>
-import { onMounted } from 'vue'
+  import { onMounted } from 'vue'
+  import "../dist/components/index.js";
+  import "../dist/assets/icon.css";
 
-onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
-  
-  const directionExample = {
-    selector: document.querySelector("#tabDirectionSegmented"),
-    placement: ["top", "right", "bottom", "left"],
+  onMounted(() => {  
+    const directionExample = {
+      selector: document.querySelector("#tabDirectionSegmented"),
+      placement: ["top", "right", "bottom", "left"],
 
-    normalTabs: document.querySelector("#directionNormalTabs"),
-    cardTabs: document.querySelector("#directionCardTabs"),
-    borderCardTabs: document.querySelector("#directionBorderCardTabs"),
+      normalTabs: document.querySelector("#directionNormalTabs"),
+      cardTabs: document.querySelector("#directionCardTabs"),
+      borderCardTabs: document.querySelector("#directionBorderCardTabs"),
 
-    init() {
-      const direction = new Proxy(
-        { value: "top" },
-        {
-          get: (target, property) => {
-            return target[property];
-          },
-          set: (target, property, value) => {
-            if (property === "value") {
-              this.normalTabs.setAttribute("tab-position", value);
-              this.cardTabs.setAttribute("tab-position", value);
-              this.borderCardTabs.setAttribute("tab-position", value);
-            }
+      init() {
+        const direction = new Proxy(
+          { value: "top" },
+          {
+            get: (target, property) => {
+              return target[property];
+            },
+            set: (target, property, value) => {
+              if (property === "value") {
+                this.normalTabs.setAttribute("tab-position", value);
+                this.cardTabs.setAttribute("tab-position", value);
+                this.borderCardTabs.setAttribute("tab-position", value);
+              }
 
-            target[property] = value;
-            return true;
-          },
-        }
-      );
-
-      this.selector.options = this.placement;
-
-      this.selector.addEventListener("change", e => {
-        direction.value = e.detail.value;
-      });
-    },
-  };
-
-  directionExample.init();
-
-  const editableExample = {
-    addBtn: document.querySelector("#editableAddBtn"),
-    tabs: document.querySelector("#editableTabs"),
-
-    /**
-     * @param {string} panelName
-     * @param {string} tabName
-     * @param {string} content
-     */
-    renderTemplate: (panelName, tabName, content) => `
-      <ea-tab panel="${panelName}">${tabName}</ea-tab>
-      <ea-tab-panel name="${panelName}">${content}</ea-tab-panel>
-    `,
-
-    init() {
-      const templateEl = document.createElement("template");
-
-      this.addBtn.addEventListener("click", () => {
-        const id = Date.now();
-
-        templateEl.innerHTML = this.renderTemplate(
-          id,
-          "New Tab",
-          "New Tab content<br/>" + id
+              target[property] = value;
+              return true;
+            },
+          }
         );
 
-        this.tabs.appendChild(templateEl.content.cloneNode(true));
-        this.tabs.setAttribute("active", id);
-      });
+        this.selector.options = this.placement;
 
-      for (let i = 0; i < 10; i++) {
-        setTimeout(() => {
-          this.addBtn.click();
-        }, 10);
-      }
-    },
-  };
-  editableExample.init();
-})
+        this.selector.addEventListener("change", e => {
+          direction.value = e.detail.value;
+        });
+      },
+    };
+
+    directionExample.init();
+
+    const editableExample = {
+      addBtn: document.querySelector("#editableAddBtn"),
+      tabs: document.querySelector("#editableTabs"),
+
+      /**
+       * @param {string} panelName
+       * @param {string} tabName
+       * @param {string} content
+       */
+      renderTemplate: (panelName, tabName, content) => `
+        <ea-tab panel="${panelName}">${tabName}</ea-tab>
+        <ea-tab-panel name="${panelName}">${content}</ea-tab-panel>
+      `,
+
+      init() {
+        const templateEl = document.createElement("template");
+
+        this.addBtn.addEventListener("click", () => {
+          const id = Date.now();
+
+          templateEl.innerHTML = this.renderTemplate(
+            id,
+            "New Tab",
+            "New Tab content<br/>" + id
+          );
+
+          this.tabs.appendChild(templateEl.content.cloneNode(true));
+          this.tabs.setAttribute("active", id);
+        });
+
+        for (let i = 0; i < 10; i++) {
+          setTimeout(() => {
+            this.addBtn.click();
+          }, 10);
+        }
+      },
+    };
+    editableExample.init();
+  })
 </script>
 
 <style>
