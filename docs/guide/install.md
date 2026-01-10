@@ -81,10 +81,6 @@ npm i easy-component-ui
 │ │ ├─globalConfig.js
 │ │ └─index.js
 │ └─utils
-│   ├─createElement.js
-│   ├─handleDefaultAttrIsTrue.js
-│   ├─handleTemplate.js
-│   ├─setStyle.js
 │   ├─timeout.js
 │   └─Validator.js
 ├─components

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,6 +17,10 @@
     <script
       type="module"
       src="../src/components/ea-statistic/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../src/components/ea-countdown/index.js"
     ></script>
     <script type="module" src="../src/components/ea-button/index.js"></script>
     <script type="module" src="../src/components/ea-tooltip/index.js"></script>
@@ -71,7 +75,11 @@
         </ea-countdown>
         <ea-button
           type="primary"
-          onclick="document.getElementById('countdown2').setAttribute('value', Date.now() + 1000 * 60 * 60 * 24 * 2);"
+          onclick="
+            document
+              .getElementById('countdown2')
+              .setAttribute('value', Date.now() + 1000 * 60 * 60 * 24 * 2)
+          "
         >
           Reset
         </ea-button>
@@ -258,9 +266,7 @@
             </span>
           </div>
           <div class="footer-item">
-            <ea-icon size="14">
-              <ArrowRight />
-            </ea-icon>
+            <ea-icon icon="icon-angle-up" size="14"> </ea-icon>
           </div>
         </div>
       </div>
