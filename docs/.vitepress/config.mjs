@@ -4,8 +4,6 @@ import { defineConfig } from "vitepress";
 // https://vitepress.dev/reference/site-config
 
 const base = process.env.NODE_ENV === "production" ? "/ea-ui-component/" : "";
-const iconHref =
-  process.env.NODE_ENV === "production" ? "/ea-ui-component/" : "";
 
 export default defineConfig({
   base,
@@ -13,20 +11,8 @@ export default defineConfig({
   description: "基于 WebComponent 的 ui 库",
 
   head: [
-    [
-      "link",
-      {
-        rel: "shortcut icon",
-        href: `${iconHref}/favicon.ico`,
-        type: "image/x-icon",
-      },
-    ],
     ["link", { rel: "stylesheet", href: `${base}dist/assets/icon.css` }],
     ["link", { rel: "stylesheet", href: `${base}index.scss` }],
-
-    // ['link', { rel: 'stylesheet', href: '/ea-ui-component/ea-icon/css/fontello.css' }],
-    // ['link', { rel: 'stylesheet', href: '/ea-ui-component/index.scss' }],
-    // ['link', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/easy-component-ui/components/ea-icon/css/fontello.min.css' }],
   ],
 
   cleanUrls: true,

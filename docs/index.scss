@@ -14,12 +14,16 @@
 //     url("../components/ea-icon/font/fontello.svg") format("svg");
 // }
 
-.demo {
+.demo,
+.row,
+.col {
   margin-bottom: 0.5rem;
   padding: 1rem;
   border: 1px solid rgba(204, 204, 204, 0.5);
   border-radius: 8px;
+}
 
+.demo {
   .title {
     text-align: center;
     margin: 0.5rem 0;
@@ -31,11 +35,6 @@
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-
-  margin-bottom: 0.5rem;
-  padding: 1rem;
-  border: 1px solid rgba(204, 204, 204, 0.5);
-  border-radius: 8px;
 
   &.is-not-demo {
     border: none !important;
@@ -91,11 +90,6 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
-  margin-bottom: 0.5rem;
-  padding: 1rem;
-  border: 1px solid rgba(204, 204, 204, 0.5);
-  border-radius: 8px;
 
   &.left {
     align-items: flex-start;
@@ -188,4 +182,9 @@
 .vp-doc th,
 .vp-doc td {
   border: none !important;
+}
+
+.vp-doc table {
+  display: table;
+  width: 100%;
 }

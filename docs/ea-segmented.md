@@ -163,6 +163,12 @@
     display: flex;
     flex-direction: column;
   }
+
+  #customStyleSegmented {
+    --ea-segmented-item-checked-color: black;
+    --ea-segmented-indicator-color: #ffd100;
+    --ea-segmented-border-radius: 16px;
+  }
 </style>
 
 # Segmented 分段选择器
@@ -194,13 +200,13 @@
 
 ## 基础用法
 
-<div class="demo">
+设置 `options` 为选项值。
+
+<div class="demo col left">
   <ea-segmented id="basicSegmentedLarge" name="week" value="Mon" size="large"></ea-segmented>
   <ea-segmented id="basicSegmentedDefault" name="week" value="Mon" size="default"></ea-segmented>
   <ea-segmented id="basicSegmentedSmall" name="week" value="Mon" size="small"></ea-segmented>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
@@ -225,11 +231,11 @@
 </div>
 ```
 
-:::
+## 配置方向
 
-## 配置方向 / 大小
+设置 `vertical` 来改变方向。
 
-<div class="demo">
+<div class="demo col left">
   <ea-segmented id="sizeSegmented" name="size" value="default"></ea-segmented>
   <ea-segmented id="directionSegmented" name="direction" value="horizontal"></ea-segmented>
   <ea-segmented id="directionSegmentedOptions" name="fruit" value="Apple"></ea-segmented>
@@ -257,12 +263,12 @@
 
 ## 禁用状态
 
-<div class="demo">
+设置 `disabled` 属性来禁用一些选项。
+
+<div class="demo col left">
   <ea-segmented id="disabledSegmented1" name="week" value="Mon" disabled></ea-segmented>
   <ea-segmented id="disabledSegmented2" name="week" value="Mon"></ea-segmented>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
@@ -276,15 +282,13 @@
 </div>
 ```
 
-:::
-
 ## 自定义选项
 
-<div class="demo">
+当您的 `options` 格式不同于默认格式时，可通过 `propsConfiguration` 属性自定义 `options`
+
+<div class="demo col left">
   <ea-segmented id="customSegmented" name="week" value="Mon"></ea-segmented>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
@@ -292,15 +296,13 @@
 </div>
 ```
 
-:::
-
 ## Block 分段选择器
 
-<div class="demo">
+设置 `block` 为 `true` 以适应父元素的宽度。
+
+<div class="demo col left">
   <ea-segmented id="blockSegmented" name="week" value="Mon" block></ea-segmented>
 </div>
-
-::: details 查看代码
 
 ```html
 <div class="demo">
@@ -313,33 +315,15 @@
 </div>
 ```
 
-:::
-
 ## 自定义样式
-
-<style>
-  #customStyleSegmented {
-    --ea-segmented-item-checked-color: black;
-    --ea-segmented-indicator-color: #ffd100;
-    --ea-segmented-border-radius: 16px;
-  }
-</style>
 
 <div class="demo">
   <ea-segmented id="customStyleSegmented" name="fruit" value="Apple"></ea-segmented>
 </div>
 
-::: details 查看代码
+::: code-group
 
 ```html
-<style>
-  #customStyleSegmented {
-    --ea-segmented-item-checked-color: black;
-    --ea-segmented-indicator-color: #ffd100;
-    --ea-segmented-border-radius: 16px;
-  }
-</style>
-
 <div class="demo">
   <ea-segmented
     id="customStyleSegmented"
@@ -349,24 +333,31 @@
 </div>
 ```
 
+```css
+#customStyleSegmented {
+  --ea-segmented-item-checked-color: black;
+  --ea-segmented-indicator-color: #ffd100;
+  --ea-segmented-border-radius: 16px;
+}
+```
+
 :::
 
-## Segmented API
+## API
 
-### Segmented Attributes
+### Attributes
 
-| 参数               | 说明                                 | 类型    | 可选值                        | 默认值                                                     |
-| ------------------ | ------------------------------------ | ------- | ----------------------------- | ---------------------------------------------------------- |
-| name               | 分段组名，必需，用于 radio name      | string  | -                             | -                                                          |
-| value              | 当前选中值                           | string  | -                             | ""                                                         |
-| size               | 组件尺寸                             | string  | `large` / `default` / `small` | default                                                    |
-| direction          | 排列方向                             | string  | `horizontal` / `vertical`     | horizontal                                                 |
-| disabled           | 是否禁用整个组件                     | boolean | -                             | false                                                      |
-| block              | 是否在父容器内占满宽度（块级）       | boolean | -                             | false                                                      |
-| options            | 选项列表（可为字符串数组或对象数组） | array   | -                             | []                                                         |
-| propsConfiguration | 自定义选项字段映射                   | object  | `{ label, value, disabled }`  | `{ label: 'label', value: 'value', disabled: 'disabled' }` |
+| 参数                                     | 说明                                 | 类型    | 可选值                       | 默认值                                                     |
+| ---------------------------------------- | ------------------------------------ | ------- | ---------------------------- | ---------------------------------------------------------- |
+| value                                    | 当前选中值                           | string  | -                            | ""                                                         |
+| options <ea-tag>prop</ea-tag>            | 选项列表（可为字符串数组或对象数组） | array   | -                            | `[ ]`                                                      |
+| propsConfiguration <ea-tag>prop</ea-tag> | 自定义选项字段映射                   | object  | `{ label, value, disabled }` | `{ label: 'label', value: 'value', disabled: 'disabled' }` |
+| size                                     | 组件尺寸                             | string  | `large \| default \| small`  | default                                                    |
+| block                                    | 是否在父容器内占满宽度（块级）       | boolean | -                            | false                                                      |
+| direction                                | 排列方向                             | string  | `horizontal \| vertical`     | horizontal                                                 |
+| disabled                                 | 是否禁用整个组件                     | boolean | -                            | false                                                      |
 
-### Segmented CSS Part
+### CSS Part
 
 | 名称      | 说明                             |
 | --------- | -------------------------------- |
@@ -376,6 +367,8 @@
 | input     | 原生 input，part="input"         |
 | indicator | 当前选中指示器，part="indicator" |
 
-### Segmented Slots
+### Events
 
-本组件主要通过属性配置 options 或直接使用默认插槽渲染项。
+| 事件名 | 说明           |
+| ------ | -------------- |
+| change | 选项改变时触发 |

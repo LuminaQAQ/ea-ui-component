@@ -13,12 +13,12 @@ export class EaSegmented extends Base {
     return [...super.observedAttributes, "value", "size", "direction", "block"];
   }
 
-  state = this.properties({
+  propsState = this.properties({
     options: {
       props: true,
       type: Array,
       default: [],
-      observer: (newVal) => {
+      observer: newVal => {
         if (!this.getAttrString("name"))
           console.warn(`[${this.tagName}] name attribute is required.`, this);
 
@@ -33,19 +33,22 @@ export class EaSegmented extends Base {
         value: "value",
         disabled: "disabled",
       },
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
+  });
+
+  state = this.properties({
     value: {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.#updateIndicatorPosition(newVal);
       },
     },
     size: {
       type: ["large", "default", "small"],
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
         this.#updateIndicatorPosition(this.value);
       },
@@ -53,7 +56,7 @@ export class EaSegmented extends Base {
     direction: {
       type: ["horizontal", "vertical"],
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
         this.#updateIndicatorPosition(this.value);
       },
@@ -61,14 +64,14 @@ export class EaSegmented extends Base {
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
     block: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.updateContainerClasslist();
       },
     },
@@ -121,9 +124,10 @@ export class EaSegmented extends Base {
     this.#abortController = new AbortController();
 
     const config = this.propsConfiguration;
+
     /** @type {String} 选项列表的模板 */
     const optionsTemplate = options
-      .map((item) =>
+      .map(item =>
         EaUtils.EaElement.h(
           "label",
           null,
@@ -166,13 +170,21 @@ export class EaSegmented extends Base {
         )
       )
       .join("");
+
     /** @type {String} 指示器的模板（蓝色浮层）  */
     const indicatorTemplate = EaUtils.EaElement.h(
       "span",
       "ea-segmented__indicator",
-      null,
+      { part: "indicator" },
       null
     );
+
+    /**
+     * 监听窗口大小变化，更新指示器位置
+     */
+    const onResizeEvent = () => {
+      this.#updateIndicatorPosition(this.value);
+    };
 
     this.#container.innerHTML = [optionsTemplate, indicatorTemplate].join("");
     this.#updateIndicatorPosition(this.value);
@@ -180,22 +192,16 @@ export class EaSegmented extends Base {
     this.#container.addEventListener("change", this.#onChange, {
       signal: this.#abortController.signal,
     });
-    window.addEventListener(
-      "resize",
-      () => {
-        this.#updateIndicatorPosition(this.value);
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
+    window.addEventListener("resize", onResizeEvent, {
+      signal: this.#abortController.signal,
+    });
   }
 
   /**
    * change 事件
    * @param {Event} e
    */
-  #onChange = (e) => {
+  #onChange = e => {
     const value = e.target.value;
 
     this.value = value;
@@ -210,13 +216,13 @@ export class EaSegmented extends Base {
   #updateIndicatorPosition = (value = this.value) => {
     if (
       this.options?.includes(value) ||
-      this.options.some((item) => item[this.propsConfiguration.value] === value)
+      this.options.some(item => item[this.propsConfiguration.value] === value)
     ) {
       /** @type {HTMLLabelElement[]} */
       const children = [
         ...this.#container.querySelectorAll(".ea-segmented__item"),
       ];
-      children.forEach((child) => {
+      children.forEach(child => {
         const input = child.querySelector(".ea-segmented__original");
         child.classList.toggle("is-checked", input?.value === value);
 
