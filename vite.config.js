@@ -2,6 +2,7 @@ import { defineConfig, normalizePath } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import entryConfigs from "./configs/entryConfig.js";
 import path, { resolve } from "node:path";
+import dtsPlugin from "vite-plugin-dts";
 
 export default defineConfig({
   server: {
@@ -15,6 +16,7 @@ export default defineConfig({
     //   brotliSize: true,
     //   filename: "dist/stats.html",
     // }),
+    dtsPlugin({ outDir: "dist/types" }),
   ],
   build: {
     lib: {

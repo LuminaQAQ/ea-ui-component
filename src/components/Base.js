@@ -2,10 +2,6 @@ import variable from "../themes/variables.scss?inline";
 import "./ea-icon/index.js";
 import EaUtils from "@/utils/Utils";
 
-import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
-dayjs.extend(duration);
-
 export default class Base extends HTMLElement {
   #stateConfigs = {};
 
@@ -153,7 +149,7 @@ export default class Base extends HTMLElement {
       }
 
       if (type === Date) {
-        return new dayjs(rawValue);
+        return new Date(rawValue);
       }
 
       if (Array.isArray(type)) {
@@ -432,13 +428,12 @@ export default class Base extends HTMLElement {
   }
 
   getAttrDate(attrName, defaultValue) {
-    /** @type {dayjs.Dayjs | Date | number} */
+    /** @type { Date | number} */
     let attr = this.getAttrNumber(attrName);
 
-    if (isNaN(attr) || !attr) attr = dayjs(this.getAttrString(attrName));
-    else attr = dayjs(attr);
-
-    return attr.isValid() ? attr.valueOf() : defaultValue || null;
+    if (isNaN(attr) || !attr) attr = this.getAttrString(attrName);
+    
+    return isNaN(new Date(attr)) ? defaultValue || null : new Date(attr);
   }
 
   setAttr(attrName, value) {

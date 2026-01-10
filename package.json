@@ -1,11 +1,5 @@
 {
   "devDependencies": {
-    "gh-pages": "^6.1.1",
-    "nanoid": "^5.0.7",
-    "sass": "^1.77.2",
-    "scss": "^0.2.4",
-    "scss-loader": "^0.0.1",
-    "vitepress": "^1.2.0",
     "@commitlint/cli": "^20.2.0",
     "@commitlint/config-conventional": "^20.2.0",
     "@eslint/js": "^9.39.2",
@@ -17,12 +11,18 @@
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
+    "gh-pages": "^6.1.1",
     "globals": "^16.5.0",
     "husky": "^9.1.7",
+    "nanoid": "^5.0.7",
     "prettier": "^3.7.4",
     "rollup-plugin-visualizer": "^6.0.3",
+    "sass": "^1.77.2",
     "sass-embedded": "^1.93.2",
-    "vite": "^5.4.1"
+    "scss": "^0.2.4",
+    "scss-loader": "^0.0.1",
+    "vite": "^5.4.1",
+    "vitepress": "^1.2.0"
   },
   "scripts": {
     "dev": "vite",
@@ -40,9 +40,10 @@
   },
   "dependencies": {
     "dayjs": "^1.11.19",
+    "path": "^0.12.7",
     "sass": "^1.89.2",
     "sass-loader": "^16.0.5",
-    "path": "^0.12.7"
+    "vite-plugin-dts": "^4.5.4"
   },
   "config": {
     "commitizen": {
@@ -89,6 +90,9 @@
     },
     "./ea-container": {
       "import": "./dist/ea-container.js"
+    },
+    "./ea-countdown": {
+      "import": "./dist/ea-countdown.js"
     },
     "./ea-date-picker": {
       "import": "./dist/ea-date-picker.js"
