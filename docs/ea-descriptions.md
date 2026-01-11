@@ -639,30 +639,30 @@ ea-descriptions::part(my-content) {
 
 ### Descriptions Attributes
 
-| 参数        | 说明                                                                     | 类型                          | 可选值                        | 默认值     |
-| ----------- | ------------------------------------------------------------------------ | ----------------------------- | ----------------------------- | ---------- |
-| title       | 标题                                                                     | string                        | -                             | -          |
-| direction   | 列表排列方向                                                             | string                        | `vertical` / `horizontal`     | horizontal |
-| border      | 是否显示边框                                                             | boolean                       | -                             | false      |
-| column      | 每行预期列数（用于分配单元格 colspan/rowspan）                           | number                        | -                             | 3          |
-| size        | 组件尺寸，影响间距与字号                                                 | string                        | `large` / `default` / `small` | default    |
-| label-width | 全局 label 宽度（如设置会作为 item 的默认 label 宽度，单个 item 可覆盖） | string (CSS 长度，如 `150px`) | -                             | ""         |
+| 参数        | 说明                                                                     | 类型                          | 可选值                      | 默认值     |
+| ----------- | ------------------------------------------------------------------------ | ----------------------------- | --------------------------- | ---------- |
+| title       | 标题                                                                     | string                        | -                           | -          |
+| direction   | 列表排列方向                                                             | string                        | `vertical \| horizontal`    | horizontal |
+| border      | 是否显示边框                                                             | boolean                       | -                           | false      |
+| column      | 每行预期列数（用于分配单元格 colspan/rowspan）                           | number                        | -                           | 3          |
+| size        | 组件尺寸，影响间距与字号                                                 | string                        | `large \| default \| small` | default    |
+| label-width | 全局 label 宽度（如设置会作为 item 的默认 label 宽度，单个 item 可覆盖） | string (CSS 长度，如 `150px`) | -                           | ""         |
 
 ### Descriptions CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称             | 说明                                                              |
-| ---------------- | ----------------------------------------------------------------- |
-| container        | 外层表格容器，part="container"（对应组件根元素）                  |
-| caption          | 标题与额外操作区容器，part="caption"                              |
-| title            | 标题区域，part="title"                                            |
-| extra            | 右侧额外插槽区域，part="extra"                                    |
-| body             | 表格 body（tbody），part="body"                                   |
-| row              | 行（tr）部分，part="row"（在不同布局下会生成 label / content 行） |
-| col-cell         | 单元格（td）部分，part="col-cell"                                 |
-| `label & cell`   | 标签单元格的 part（渲染为 th/td 时携带 label 标识）               |
-| `content & cell` | 内容单元格的 part（渲染为 td 时携带 content 标识）                |
+| 名称             | 说明                                                                               |
+| ---------------- | ---------------------------------------------------------------------------------- |
+| container        | 外层表格容器，`part="container"`（对应组件根元素）                                 |
+| caption          | 标题与额外操作区容器，`part="caption"`                                             |
+| title            | 标题区域，`part="title" `                                                          |
+| extra            | 右侧额外插槽区域，`part="extra" `                                                  |
+| body             | 表格 body（tbody），`part="body"`                                                  |
+| row              | 行（tr）部分，`part="row"`（在不同布局下会生成 label / content 行）                |
+| col-cell         | 单元格（td）部分，`part="col-cell"`                                                |
+| `label & cell`   | 标签单元格的 part（渲染为 th/td 时携带 label 标识） `part="label" \| part="cell"`  |
+| `content & cell` | 内容单元格的 part（渲染为 td 时携带 content 标识） `part="content" \| part="cell"` |
 
 ### Descriptions Slots
 
@@ -675,25 +675,25 @@ ea-descriptions::part(my-content) {
 
 ### DescriptionsItem Attributes
 
-| 参数         | 说明                                                               | 类型              | 可选值                      | 默认值 |
-| ------------ | ------------------------------------------------------------------ | ----------------- | --------------------------- | ------ |
-| label        | 描述项的标签文本                                                   | string            | -                           | -      |
-| colspan      | 单元格横向占据的列数                                               | number            | -                           | 1      |
-| rowspan      | 单元格纵向占据的行数                                               | number            | -                           | 1      |
-| align        | 单元格对齐方式（同时影响 label 与 content）                        | string            | `left` / `center` / `right` | ""     |
-| label-align  | label 文本对齐（优先于 align）                                     | string            | `left` / `center` / `right` | ""     |
-| width        | 单元格宽度（CSS 长度）                                             | string (CSS 长度) | -                           | ""     |
-| label-width  | 单个 label 宽度（覆盖 `ea-descriptions` 的 `label-width`）         | string (CSS 长度) | -                           | ""     |
-| label-part   | 自定义 label 对应的 part 名称（会被附加到 label 的 part 属性）     | string            | -                           | ""     |
-| content-part | 自定义 content 对应的 part 名称（会被附加到 content 的 part 属性） | string            | -                           | ""     |
+| 参数         | 说明                                                               | 类型              | 可选值                    | 默认值 |
+| ------------ | ------------------------------------------------------------------ | ----------------- | ------------------------- | ------ |
+| label        | 描述项的标签文本                                                   | string            | -                         | -      |
+| colspan      | 单元格横向占据的列数                                               | number            | -                         | 1      |
+| rowspan      | 单元格纵向占据的行数                                               | number            | -                         | 1      |
+| align        | 单元格对齐方式（同时影响 label 与 content）                        | string            | `left \| center \| right` | ""     |
+| label-align  | label 文本对齐（优先于 align）                                     | string            | `left \| center \| right` | ""     |
+| width        | 单元格宽度（CSS 长度）                                             | string (CSS 长度) | -                         | ""     |
+| label-width  | 单个 label 宽度（覆盖 `ea-descriptions` 的 `label-width`）         | string (CSS 长度) | -                         | ""     |
+| label-part   | 自定义 label 对应的 part 名称（会被附加到 label 的 part 属性）     | string            | -                         | ""     |
+| content-part | 自定义 content 对应的 part 名称（会被附加到 content 的 part 属性） | string            | -                         | ""     |
 
 ### DescriptionsItem CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明                            |
-| --------- | ------------------------------- |
-| container | item 外层容器，part="container" |
+| 名称      | 说明                              |
+| --------- | --------------------------------- |
+| container | item 外层容器，`part="container"` |
 
 ### DescriptionsItem Slots
 

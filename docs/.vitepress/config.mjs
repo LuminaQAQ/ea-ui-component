@@ -61,7 +61,7 @@ export default defineConfig({
         items: [
           // { text: "Autocomplete 自动补全输入框", link: "/ea-autocomplete" },
           // { text: "Cascader 级联选择器", link: "/ea-cascader" },
-          // { text: "Checkbox 多选框", link: "/ea-checkbox" },
+          { text: "Checkbox 多选框", link: "/ea-checkbox" },
           // {
           //   text: "ColorPickerPanel 颜色选择器面板",
           //   link: "/ea-color-picker-panel",
