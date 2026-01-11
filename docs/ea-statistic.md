@@ -284,6 +284,8 @@ ea-statistic {
 
 ::: details 查看代码
 
+`HTML`
+
 ```html
 <div class="demo row">
   <div class="statistic-card">
@@ -355,6 +357,51 @@ ea-statistic {
     </div>
   </div>
 </div>
+```
+
+`css`
+
+```css
+.statistic-card {
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  height: 100%;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.statistic-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 12px;
+  margin-top: 16px;
+}
+
+.statistic-footer .footer-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statistic-footer .footer-item span:last-child {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.green {
+  color: #67c23a;
+}
+.red {
+  color: #f56c6c;
+}
 ```
 
 :::

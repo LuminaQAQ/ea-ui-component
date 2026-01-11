@@ -636,10 +636,10 @@ export class EaTable extends Base {
   async connectedCallback() {
     super.connectedCallback();
 
-    await this.$render();
-
     this.#abortController?.abort();
     this.#abortController = new AbortController();
+
+    await this.$render();
 
     this.#container.addEventListener("click", this.#initClickEvent, {
       signal: this.#abortController.signal,

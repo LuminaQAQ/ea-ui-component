@@ -3,6 +3,9 @@ import { visualizer } from "rollup-plugin-visualizer";
 import entryConfigs from "./configs/entryConfig.js";
 import path, { resolve } from "node:path";
 import dtsPlugin from "vite-plugin-dts";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   server: {
@@ -76,10 +79,24 @@ export default defineConfig({
               : findCoreComponentName(pathChunks);
           };
 
-          if (normalizedId.startsWith(componentsPath)) {
-            const name = normalizedId.split("/").pop()?.replace(".js", "");
+          if (normalizedId.includes(".scss?inline")) {
+            const fullPathChunk = normalizedId.split("/");
+            const fullName = findComponentName(fullPathChunk);
+
+            return `css/${fullName}`;
+          }
+
+          if (normalizedId.startsWith(componentsPath + "/")) {
+            const name = normalizedId
+              .slice(componentsPath.length + 1)
+              .replace(".js", "");
+
             if (name === "Base") {
               return `${name}`;
+            } else {
+              const parts = name.split("/");
+              const comp = parts[0];
+              if (comp && comp.startsWith("ea-")) return comp;
             }
           }
 
@@ -99,13 +116,6 @@ export default defineConfig({
               .pop()
               ?.replace(".scss?inline", "");
             return `themes/${name}`;
-          }
-
-          if (normalizedId.includes(".scss?inline")) {
-            const fullPathChunk = normalizedId.split("/");
-            const fullName = findComponentName(fullPathChunk);
-
-            return `css/${fullName}`;
           }
 
           if (normalizedId.startsWith(utilsPath)) {

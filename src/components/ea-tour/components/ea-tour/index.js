@@ -1,6 +1,5 @@
 import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
-import EaUtils from "@/utils/Utils";
 
 /**
  * 检查视口可见
@@ -31,8 +30,14 @@ export class EaTour extends Base {
   #bottomMask;
   /** @type {HTMLElement} */
   #leftMask;
+
   /** @type {AbortController} */
   #abortController;
+
+  #AbortControllerStates = {
+    /** @type {AbortController} */
+    currentChangeAbortController: null,
+  };
 
   #states = {
     isChildrenLoaded: false,
@@ -60,59 +65,74 @@ export class EaTour extends Base {
     "append-to": {
       type: String,
       default: "body",
-      observer: (newVal) => {},
+      observer: () => {},
     },
     visible: {
       type: Boolean,
       default: "",
-      observer: async (newVal) => {
-        this.#abortController?.abort();
+      observer: async newVal => {
+        if (!this.#states.isChildrenLoaded) {
+          await customElements.whenDefined("ea-tour-step");
+          this.#states.isChildrenLoaded = true;
+        }
+
+        this.#AbortControllerStates.currentChangeAbortController?.abort();
         this.current = 0;
-        this.updateContainerClasslist();
 
         if (newVal) {
-          this.#abortController = new AbortController();
+          this.#AbortControllerStates.currentChangeAbortController =
+            new AbortController();
+
+          /**
+           * 更新可穿透位置
+           */
+          const onHollowShouldChangeEvent = () => {
+            this.#updateHollowPosition(this.current);
+          };
 
           if (this.mask) document.body.style.overflow = "hidden";
 
           this.#updateHollowPosition(this.current);
 
-          window.addEventListener(
-            "resize",
-            () => {
-              this.#updateHollowPosition(this.current);
-            },
-            { signal: this.#abortController.signal }
-          );
-
-          window.addEventListener(
-            "scroll",
-            (e) => {
-              this.#updateHollowPosition(this.current);
-            },
-            { signal: this.#abortController.signal }
-          );
+          window.addEventListener("resize", onHollowShouldChangeEvent, {
+            signal:
+              this.#AbortControllerStates.currentChangeAbortController.signal,
+          });
+          window.addEventListener("scroll", onHollowShouldChangeEvent, {
+            signal:
+              this.#AbortControllerStates.currentChangeAbortController.signal,
+          });
         } else {
           if (this.mask) document.body.style.overflow = "auto";
         }
+
+        this.updateContainerClasslist();
       },
     },
     gap: {
       type: Number,
       default: 6,
-      observer: (newVal) => {},
+      observer: () => {},
     },
     current: {
       type: Number,
       default: 0,
-      observer: async (newVal) => {
+      observer: async newVal => {
+        if (!this.#states.isChildrenLoaded) {
+          await customElements.whenDefined("ea-tour-step");
+          this.#states.isChildrenLoaded = true;
+        }
+
         /** @type {HTMLElement[]} */
         const children = [...this.querySelectorAll("ea-tour-step")];
+
         if (children.length === 0) return;
         if (newVal < 0) {
-          return (this.current = 0);
+          this.current = 0;
+          return;
         } else if (newVal >= children.length) {
-          return (this.visible = false);
+          this.visible = false;
+          return;
         }
 
         children.forEach((child, index) => {
@@ -123,24 +143,24 @@ export class EaTour extends Base {
         });
 
         this.#updateHollowPosition(newVal);
-        this.#updateSwitchvisibleStatus(newVal);
       },
     },
     mask: {
       type: Boolean,
       default: true,
-      observer: (newVal) => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     type: {
       type: ["default", "primary"],
       default: "default",
-      observer: (newVal) => {
-        if (newVal !== "default")
-          this.querySelectorAll("ea-tour-step").forEach((item) => {
-            item.setAttribute("type", newVal);
-          });
+      /** @param {"default" | "primary"} newVal */
+      observer: newVal => {
+        this.querySelectorAll("ea-tour-step").forEach(item => {
+          if (newVal === "primary") item.setAttribute("type", newVal);
+          else item.removeAttribute("type");
+        });
       },
     },
     placement: {
@@ -159,8 +179,8 @@ export class EaTour extends Base {
         "right-end",
       ],
       default: "bottom",
-      observer: (newVal) => {
-        this.querySelectorAll("ea-tour-step").forEach((item) => {
+      observer: newVal => {
+        this.querySelectorAll("ea-tour-step").forEach(item => {
           if (!item.getAttribute("placement")) {
             item.setAttribute("placement", newVal);
           }
@@ -176,9 +196,7 @@ export class EaTour extends Base {
   updateContainerClasslist() {
     const className = this.computedClasslist(
       "ea-tour",
-      {
-        // ["--visible"]: this.visible,
-      },
+      {},
       {
         visible: this.visible,
         mask: this.mask,
@@ -235,33 +253,23 @@ export class EaTour extends Base {
     this.#leftMask = this.shadowRoot.querySelector(
       ".ea-tour__divider.left-mask"
     );
-
-    this.addEventListener("close", (e) => {
-      this.visible = false;
-    });
-
-    this.addEventListener("next", (e) => {
-      this.current++;
-    });
-    this.addEventListener("previous", (e) => {
-      this.current--;
-    });
-    this.addEventListener("finish", (e) => {
-      this.visible = false;
-    });
   }
 
   /**
    * 处理 append-to 属性
    * @param {string} selector
    */
-  #handleAppendTo = (selector) => {
+  #handleAppendTo = async selector => {
+    await customElements.whenDefined("ea-tour");
+
     const target = document.querySelector(selector);
+    if (!target)
+      console.warn(`[EaTour] append-to ${selector} not found.`, this);
+
     if (target) {
       target.appendChild(this);
     } else {
       document.body.appendChild(this);
-      console.warn(`[EaTour] append-to ${selector} not found.`, this);
     }
   };
 
@@ -295,11 +303,16 @@ export class EaTour extends Base {
    * @returns {void}
    */
   #updateStepPosition = (target, step) => {
-    const { width, height, x, y, top, right, bottom, left } =
+    const { width, height, x, y, top, bottom, left } =
       target.getBoundingClientRect();
+
     const gap = this.gap * 2;
-    const childWidth = step.clientWidth || 520;
-    const childHeight = step.clientHeight;
+
+    const childWidth = step.clientWidth || step.offsetWidth || 520;
+    const childHeight = step.clientHeight || step.offsetHeight || 0;
+
+    const innerW = window.innerWidth;
+    const innerH = window.innerHeight;
 
     const placementStrategies = {
       top: {
@@ -352,31 +365,32 @@ export class EaTour extends Base {
       },
     };
 
-    try {
-      let realTop = placementStrategies[step.placement].top;
-      let realLeft = placementStrategies[step.placement].left;
+    const placement =
+      step.placement || step.getAttribute?.("placement") || this.placement;
+    const strategy = placementStrategies[placement];
 
-      if (realTop < 0) {
-        realTop = Math.max(realTop, y + gap + height);
-      } else if (realTop + childHeight > window.innerHeight) {
-        realTop = Math.min(realTop, y - childHeight - gap);
-      }
-
-      if (realLeft < 0) {
-        realLeft = Math.max(realLeft, x + width + gap);
-      } else if (realLeft + childWidth > window.innerWidth) {
-        realLeft = Math.min(realLeft, x - childWidth - gap);
-      }
-
-      step.style.left = `${realLeft}px`;
-      step.style.top = `${realTop}px`;
-    } catch (error) {
-      console.log(error);
-
-      console.warn(
-        `[EaTourStep] placement ${step.placement} is not supported.`
-      );
+    if (!strategy) {
+      console.warn(`[EaTourStep] placement ${placement} is not supported.`);
+      return;
     }
+
+    let realTop = Number(strategy.top);
+    let realLeft = Number(strategy.left);
+
+    if (realTop < 0) {
+      realTop = Math.max(realTop, y + gap + height);
+    } else if (realTop + childHeight > innerH) {
+      realTop = Math.min(realTop, y - childHeight - gap);
+    }
+
+    if (realLeft < 0) {
+      realLeft = Math.max(realLeft, x + width + gap);
+    } else if (realLeft + childWidth > innerW) {
+      realLeft = Math.min(realLeft, x - childWidth - gap);
+    }
+
+    step.style.left = `${realLeft}px`;
+    step.style.top = `${realTop}px`;
   };
 
   /**
@@ -409,7 +423,7 @@ export class EaTour extends Base {
       });
     }
 
-    const { width, height, x, y, top, right, bottom, left } =
+    const { width, height, x, y, right, bottom } =
       target.getBoundingClientRect();
 
     // 更新 穿透部分 的位置
@@ -428,29 +442,69 @@ export class EaTour extends Base {
     this.#updateStepPosition(target, children[current]);
   };
 
-  #updateSwitchvisibleStatus = (current = this.current) => {
-    // if (current === 0) {
-    //   this.#previousBtn.style.display = "none";
-    // }
-  };
-
-  #waitChildLoaded = async () => {
-    if (this.#states.isChildrenLoaded) return;
-
-    await Promise.all(
-      [...this.querySelectorAll("ea-tour-step")].map((item) =>
-        EaUtils.EaElement.addAsyncEventListener(item, "ea-tour-step-ready")
-      )
-    );
-    this.#states.isChildrenLoaded = true;
-  };
-
   connectedCallback() {
     super.connectedCallback();
+
+    const dispatchChangeEvent = () => {
+      this.emit("change", {
+        detail: { current: this.current },
+        bubbles: true,
+        composed: true,
+      });
+    };
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    this.addEventListener(
+      "ea-close",
+      () => {
+        this.visible = false;
+      },
+      { signal: this.#abortController.signal }
+    );
+
+    this.addEventListener(
+      "next",
+      e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        this.current++;
+
+        dispatchChangeEvent();
+      },
+      { signal: this.#abortController.signal }
+    );
+    this.addEventListener(
+      "previous",
+      e => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        this.current--;
+
+        dispatchChangeEvent();
+      },
+      { signal: this.#abortController.signal }
+    );
+    this.addEventListener(
+      "finish",
+      () => {
+        this.visible = false;
+      },
+      { signal: this.#abortController.signal }
+    );
   }
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key] = null;
+    }
   }
 }
 
