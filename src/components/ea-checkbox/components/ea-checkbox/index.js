@@ -156,13 +156,46 @@ export class EaCheckbox extends FormAssociatedBase {
     this.#original = this.shadowRoot.querySelector(".ea-checkbox__orignal");
   }
 
-  // TODO:
+  /**
+   * 更新 checkbox 值
+   */
   #updateCheckboxValue = () => {
-    const checkboxList = [document.querySelectorAll(`[name="${this.name}"]`)];
-
     if (this.checked)
       this.setValue(this.value || this.hasAttribute("checked"), "value");
     else this.setValue(null, "value");
+  };
+
+  /**
+   * 派发 change 事件
+   */
+  #dispatchChangeEvent = () => {
+    this.emit("change", {
+      detail: {
+        value: this.value,
+        checked: Boolean(this.checked),
+      },
+      bubbles: true,
+    });
+  };
+
+  /**
+   * change 事件
+   */
+  #onChangeEvent = () => {
+    this.checked = this.#original.checked;
+
+    this.#dispatchChangeEvent();
+  };
+
+  /**
+   * enter 事件
+   */
+  #onEnterEvent = e => {
+    if (e.key === "Enter") {
+      this.#original.checked = !this.checked;
+
+      this.#dispatchChangeEvent();
+    }
   };
 
   connectedCallback() {
@@ -171,31 +204,17 @@ export class EaCheckbox extends FormAssociatedBase {
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.#original.addEventListener(
-      "change",
-      () => {
-        this.checked = this.#original.checked;
-        this.emit("change", {
-          detail: {
-            value: this.value,
-            checked: Boolean(this.checked),
-          },
-          bubbles: true,
-        });
-      },
-      { signal: this.#abortController.signal }
-    );
+    this.#original.addEventListener("change", this.#onChangeEvent, {
+      signal: this.#abortController.signal,
+    });
 
-    this.addEventListener("keydown", e => {
-      if (e.key === "Enter") {
-        this.#original.checked = !this.checked;
-        this.#original.dispatchEvent(new Event("change"));
-      }
+    this.addEventListener("keydown", this.#onEnterEvent, {
+      signal: this.#abortController.signal,
     });
   }
 
   $beforeUnmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
   }
 }
 

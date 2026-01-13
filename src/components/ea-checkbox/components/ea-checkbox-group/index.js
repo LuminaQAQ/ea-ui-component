@@ -12,7 +12,15 @@ export class EaCheckboxGroup extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "name", "value", "min", "max", "size"];
+    return [
+      ...super.observedAttributes,
+      "name",
+      "value",
+      "disabled",
+      "min",
+      "max",
+      "size",
+    ];
   }
 
   state = this.properties({
@@ -30,6 +38,15 @@ export class EaCheckboxGroup extends Base {
       observer: newVal => {
         this.#updateCheckboxChildrenValue();
         this.#updateLimitStatus();
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.querySelectorAll("ea-checkbox").forEach(checkbox => {
+          checkbox.toggleAttribute("disabled", newVal);
+        });
       },
     },
     min: {
@@ -207,7 +224,7 @@ export class EaCheckboxGroup extends Base {
   }
 
   $beforeUnmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
   }
 }
 
