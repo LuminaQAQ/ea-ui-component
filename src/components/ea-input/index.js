@@ -12,7 +12,9 @@ export class EaInput extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #inner;
   /** @type {HTMLElement} */
-  #prefix;
+  #prefixSlot;
+  /** @type {HTMLElement} */
+  #originalWrapper;
   /** @type {HTMLInputElement | HTMLTextAreaElement} */
   #original;
   /** @type {HTMLElement} */
@@ -34,6 +36,12 @@ export class EaInput extends FormAssociatedBase {
   #AbortControllerStates = {
     /** @type {AbortController} */
     clearableController: null,
+    /** @type {AbortController} */
+    showPasswordController: null,
+    /** @type {AbortController} */
+    autosizeController: null,
+    /** @type {AbortController} */
+    wordCountController: null,
   };
 
   static get observedAttributes() {
@@ -46,17 +54,17 @@ export class EaInput extends FormAssociatedBase {
       "maxlength",
       "minlength",
       "clearable",
-      "clearIcon",
-      "showPassword",
+      "clear-icon",
+      "show-password",
       "disabled",
-      "prefixIcon",
-      "suffixIcon",
+      "prefix-icon",
+      "suffix-icon",
       "show-word-limit",
 
       "rows",
       "autosize",
-      "minRows",
-      "maxRows",
+      "min-rows",
+      "max-rows",
 
       "autocomplete",
       "name",
@@ -78,6 +86,21 @@ export class EaInput extends FormAssociatedBase {
     isFocus: false,
     isMouseenter: false,
     originTextareaHeight: 0,
+
+    isOriginalRendered: false,
+  };
+
+  #renderedStates = {
+    isOriginalRenderedPromise: new Promise(resolve => {
+      this.#states = new Proxy(this.#states, {
+        set: (target, key, value) => {
+          if (key === "isOriginalRendered" && value) {
+            resolve(true);
+          }
+          return Reflect.set(target, key, value);
+        },
+      });
+    }),
   };
 
   state = this.properties({
@@ -108,47 +131,54 @@ export class EaInput extends FormAssociatedBase {
         "week",
       ],
       default: "text",
-      observer: newVal => {
-        if (newVal !== "textarea") this.#original.type = newVal;
-        this.#container.className = this.updateContainerClasslist();
+      observer: async newVal => {
+        this.#renderOriginal(newVal);
+        this.updateContainerClasslist();
       },
     },
     size: {
       type: ["large", "default", "small"],
       default: "default",
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     value: {
       type: String,
       default: "",
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
+
         this.#original.value = newVal;
         this.setValue(newVal);
 
-        if (this.clearable)
-          this.#container.className = this.updateContainerClasslist();
+        if (this.clearable || this["show-password"]) {
+          this.updateContainerClasslist();
+        }
       },
     },
     placeholder: {
       type: String,
       default: "",
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
+
         this.#original.placeholder = newVal;
       },
     },
     maxlength: {
       type: Number,
       default: 0,
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.maxLength = newVal;
       },
     },
     minlength: {
       type: Number,
       default: 0,
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.minLength = newVal;
       },
     },
@@ -159,15 +189,13 @@ export class EaInput extends FormAssociatedBase {
         this.#AbortControllerStates.clearableController?.abort();
         this.updateContainerClasslist();
 
-        console.log(newVal);
-
         if (newVal) {
           this.#AbortControllerStates.clearableController =
             new AbortController();
 
           this.#clearIcon.addEventListener(
             "click",
-            this.#initClearIconClickEvent,
+            this.#onClearIconClickEvent,
             {
               signal: this.#AbortControllerStates.clearableController.signal,
             }
@@ -175,43 +203,61 @@ export class EaInput extends FormAssociatedBase {
         }
       },
     },
-    clearIcon: {
+    "clear-icon": {
       type: String,
       default: "icon-cancel",
       observer: newVal => {
-        if (this.clearable) this.#clearIcon.icon = newVal;
+        if (this.clearable) this.#clearIcon.setAttribute("icon", newVal);
       },
     },
     disabled: {
       type: Boolean,
       default: false,
-      observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.disabled = newVal;
+        this.updateContainerClasslist();
       },
     },
-    showPassword: {
+    "show-password": {
       type: Boolean,
       default: false,
       observer: newVal => {
-        if (newVal) this.#container.className = this.updateContainerClasslist();
+        if (this.type === "textarea") return;
+
+        this.#AbortControllerStates.showPasswordController?.abort();
 
         if (this.type === "text") {
           this.#showPasswordIcon.icon = "icon-eye";
         } else if (this.type === "password") {
           this.#showPasswordIcon.icon = "icon-eye-off";
         }
+
+        if (newVal && (this.type === "password" || this.type === "text")) {
+          this.#AbortControllerStates.showPasswordController =
+            new AbortController();
+
+          this.#showPasswordIcon.addEventListener(
+            "click",
+            this.#onShowPasswordIconClickEvent,
+            {
+              signal: this.#AbortControllerStates.showPasswordController.signal,
+            }
+          );
+        }
+
+        this.updateContainerClasslist();
       },
     },
-    prefixIcon: {
+    "prefix-icon": {
       type: String,
       default: "",
       observer: newVal => {
         if (newVal)
-          this.#prefix.innerHTML = `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" icon="${newVal}"></ea-icon>`;
+          this.#prefixSlot.innerHTML = `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" icon="${newVal}"></ea-icon>`;
       },
     },
-    suffixIcon: {
+    "suffix-icon": {
       type: String,
       default: "",
       observer: newVal => {
@@ -223,22 +269,38 @@ export class EaInput extends FormAssociatedBase {
     "show-word-limit": {
       type: Boolean,
       default: false,
-      observer: newVal => {
-        if (this.type === "textarea" || this.type === "text") {
-          if (newVal && this.maxlength) {
-            this.#container.className = this.updateContainerClasslist();
-            this.#wordCount.textContent = `
-            ${this.#original.value.length} / ${this.maxlength}`;
-          }
+      observer: async newVal => {
+        if (this.type !== "textarea" && this.type !== "text") return;
+
+        await this.#renderedStates.isOriginalRenderedPromise;
+
+        this.#AbortControllerStates.wordCountController?.abort();
+
+        if (newVal && this.hasAttribute("maxlength")) {
+          this.#AbortControllerStates.wordCountController =
+            new AbortController();
+
+          this.#onWordLimitTextShouldUpdate();
+          this.#original.addEventListener(
+            "input",
+            this.#onWordLimitTextShouldUpdate,
+            {
+              signal: this.#AbortControllerStates.wordCountController.signal,
+            }
+          );
         }
+
+        this.updateContainerClasslist();
       },
     },
 
     rows: {
       type: Number,
       default: 2,
-      observer: newVal => {
+      observer: async newVal => {
         if (this.type !== "textarea") return;
+
+        await this.#renderedStates.isOriginalRenderedPromise;
 
         this.#original.rows = newVal;
       },
@@ -246,24 +308,45 @@ export class EaInput extends FormAssociatedBase {
     autosize: {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: async newVal => {
         if (this.type !== "textarea") return;
+
+        await this.#renderedStates.isOriginalRenderedPromise;
+
+        this.#AbortControllerStates.autosizeController?.abort();
+
+        void this.#original.clientHeight;
+
+        this.#states.originTextareaHeight = this.#original.scrollHeight;
+
+        if (newVal) {
+          this.#AbortControllerStates.autosizeController =
+            new AbortController();
+
+          this.#original.addEventListener("input", this.#onAutosizeEvent, {
+            signal: this.#AbortControllerStates.autosizeController.signal,
+          });
+        }
       },
     },
-    minRows: {
+    "min-rows": {
       type: Number,
       default: 0,
-      observer: newVal => {
+      observer: async newVal => {
         if (this.type !== "textarea") return;
+
+        await this.#renderedStates.isOriginalRenderedPromise;
 
         this.#original.minRows = newVal;
       },
     },
-    maxRows: {
+    "max-rows": {
       type: Number,
       default: 0,
-      observer: newVal => {
+      observer: async newVal => {
         if (this.type !== "textarea") return;
+
+        await this.#renderedStates.isOriginalRenderedPromise;
 
         this.#original.maxRows = newVal;
       },
@@ -272,34 +355,38 @@ export class EaInput extends FormAssociatedBase {
     autocomplete: {
       type: String,
       default: "off",
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.autocomplete = newVal;
       },
     },
     name: {
       type: String,
       default: "",
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.name = newVal;
       },
     },
     readonly: {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.readOnly = newVal;
       },
     },
     max: {
       type: Number,
-      default: Infinity,
-      observer: newVal => {
+      default: Number.MAX_SAFE_INTEGER,
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.max = newVal;
       },
     },
     min: {
       type: Number,
-      default: -Infinity,
+      default: Number.MIN_SAFE_INTEGER,
       observer: newVal => {
         this.#original.min = newVal;
       },
@@ -307,7 +394,8 @@ export class EaInput extends FormAssociatedBase {
     step: {
       type: Number,
       default: 1,
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.step = newVal;
       },
     },
@@ -321,28 +409,32 @@ export class EaInput extends FormAssociatedBase {
     autofocus: {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.autofocus = newVal;
       },
     },
     form: {
       type: String,
       default: "",
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.form = newVal;
       },
     },
     "aria-label": {
       type: String,
       default: "",
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.setAttribute("aria-label", newVal);
       },
     },
     tabindex: {
       type: String,
       default: "",
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.tabIndex = newVal;
       },
     },
@@ -354,7 +446,8 @@ export class EaInput extends FormAssociatedBase {
     inputmode: {
       type: String,
       default: "",
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.inputMode = newVal;
       },
     },
@@ -365,7 +458,7 @@ export class EaInput extends FormAssociatedBase {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist(
+    const className = this.computedClasslist(
       "ea-input",
       {
         ["--size-" + this.size]:
@@ -375,7 +468,8 @@ export class EaInput extends FormAssociatedBase {
         ["--has-append"]:
           this.type !== "textarea" && this.querySelector("[slot=append]"),
         ["--textarea"]: this.type === "textarea",
-        ["--show-password"]: this["show-password"],
+        ["--show-password"]:
+          this["show-password"] && this.value && this.type !== "textarea",
         ["--show-word-limit"]:
           this["show-word-limit"] &&
           (this.type === "textarea" || this.type === "text"),
@@ -386,6 +480,10 @@ export class EaInput extends FormAssociatedBase {
         clearable: this.clearable && this.value && this.type !== "textarea",
       }
     );
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -396,45 +494,60 @@ export class EaInput extends FormAssociatedBase {
     this.$render();
   }
 
+  /**
+   * 渲染函数，因为在 vue 环境下 constructor 中，有概率获取不到 type，所以渲染会出问题。
+   * 所以最后的办法就是 将与 original 相关的 js 逻辑，需要等待 original 渲染完成之后再执行。
+   * @param {String} type
+   */
+  #renderOriginal = type => {
+    const id = this.id || crypto.randomUUID();
+    const tpl =
+      type === "textarea"
+        ? `<textarea id="${id}" class="ea-input__original" part="original"></textarea>`
+        : `<input id="${id}" class="ea-input__original" type="${type}" part="original" />`;
+
+    this.#originalWrapper.innerHTML = tpl;
+    this.#original = this.#originalWrapper.querySelector(".ea-input__original");
+
+    this.#states.isOriginalRendered = true;
+  };
+
   $render() {
     this.shadowRoot.innerHTML = `
       <div class="ea-input" part="container">
-          <div class="ea-input__prepend" part="prepend">
-              <slot name="prepend"></slot>
-          </div>
-          <div class="ea-input__inner" part="inner">
-              <span class="ea-input__prefix" part="prefix">
-                <slot name="prefix"></slot>
-              </span>
-              ${
-                this.type === "textarea"
-                  ? `<textarea id="${
-                      this.id || "original"
-                    }" class="ea-input__original" part="original"></textarea>`
-                  : `<input id="${
-                      this.id || "original"
-                    }" class="ea-input__original" type="text" part="original" autocomplete="off" />`
-              }
-              <span class="ea-input__suffix" part="suffix">
-                <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
-                <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
-                <span class="ea-input__suffix-icon" part="suffix-icon">
-                  <slot name="suffix"></slot>
-                </span>
-                <span class="ea-input__word-count" part="count"></span>
-              </span>
-          </div>
-          <div class="ea-input__append" part="append">
-              <slot name="append"></slot>
-          </div>
+        <div class="ea-input__prepend" part="prepend">
+          <slot name="prepend"></slot>
+        </div>
+        <div class="ea-input__inner" part="inner">
+          <span class="ea-input__prefix" part="prefix">
+            <slot name="prefix"></slot>
+          </span>
+          <span class="ea-input__original-wrapper" part="original-wrapper">
+          </span>
+          <span class="ea-input__suffix" part="suffix">
+            <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
+            <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
+            <span class="ea-input__suffix-icon" part="suffix-icon">
+              <slot name="suffix"></slot>
+            </span>
+            <span class="ea-input__word-count" part="count"></span>
+          </span>
+        </div>
+        <div class="ea-input__append" part="append">
+          <slot name="append"></slot>
+        </div>
       </div>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-input");
     this.#prepend = this.shadowRoot.querySelector(".ea-input__prepend");
     this.#inner = this.shadowRoot.querySelector(".ea-input__inner");
-    this.#prefix = this.shadowRoot.querySelector(".ea-input__prefix");
-    this.#original = this.shadowRoot.querySelector(".ea-input__original");
+    this.#prefixSlot = this.shadowRoot.querySelector(
+      ".ea-input__prefix slot[name='prefix']"
+    );
+    this.#originalWrapper = this.shadowRoot.querySelector(
+      ".ea-input__original-wrapper"
+    );
     this.#suffix = this.shadowRoot.querySelector(".ea-input__suffix");
     this.#suffixIcon = this.shadowRoot.querySelector(".ea-input__suffix-icon");
     this.#clearIcon = this.shadowRoot.querySelector(".ea-input__clear-icon");
@@ -465,7 +578,11 @@ export class EaInput extends FormAssociatedBase {
    * 清空输入框内容
    */
   clear() {
+    this.value = "";
     this.#original.value = "";
+    if (this["show-word-limit"] && this.maxlength) {
+      this.#onWordLimitTextShouldUpdate();
+    }
   }
 
   /**
@@ -479,12 +596,12 @@ export class EaInput extends FormAssociatedBase {
    * 输入框内容发生改变时触发
    * @param {FocusEvent} e 事件对象
    */
-  #initFocusEvent = e => {
+  #onFocusEvent = e => {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
     this.#states.isFocus = true;
-    this.#container.className = this.updateContainerClasslist();
+    this.updateContainerClasslist();
     this.emit("focus");
   };
 
@@ -492,12 +609,12 @@ export class EaInput extends FormAssociatedBase {
    * 输入框失去焦点时触发
    * @param {FocusEvent} e 事件对象
    */
-  #initBlurEvent = e => {
+  #onBlurEvent = e => {
     e.stopPropagation();
     e.stopImmediatePropagation();
 
     this.#states.isFocus = false;
-    this.#container.className = this.updateContainerClasslist();
+    this.updateContainerClasslist();
     this.emit("blur");
   };
 
@@ -505,10 +622,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入框内容发生改变时触发
    * @param {InputEvent} e 事件对象
    */
-  #initInputEvent = e => {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
+  #onInputEvent = e => {
     const { value } = e.target;
     this.value = value;
     this.emit("input", {
@@ -522,7 +636,7 @@ export class EaInput extends FormAssociatedBase {
    * 键盘按下时触发
    * @param {KeyboardEvent} e 事件对象
    */
-  #initKeydownEvent = e => {
+  #onKeydownEvent = e => {
     this.emit("keydown", {
       detail: {
         value: e.target.value,
@@ -532,17 +646,15 @@ export class EaInput extends FormAssociatedBase {
 
   /**
    * 鼠标进入时触发
-   * @param {MouseEvent} e 事件对象
    */
-  #initMouseenterEvent = e => {
+  #onMouseenterEvent = () => {
     this.emit("mouseenter");
   };
 
   /**
    * 鼠标离开时触发
-   * @param { MouseEvent } e 事件对象
    */
-  #initMouseleaveEvent = e => {
+  #onMouseleaveEvent = () => {
     this.emit("mouseleave");
   };
 
@@ -550,7 +662,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入法开始输入时触发
    * @param {CompositionEvent} e 事件对象
    */
-  #initCompositionstartEvent = e => {
+  #onCompositionstartEvent = e => {
     this.emit("compositionstart", {
       detail: {
         value: e.target.value,
@@ -562,7 +674,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入法输入时触发
    * @param {CompositionEvent} e 事件对象
    */
-  #initCompositionupdateEvent = e => {
+  #onCompositionupdateEvent = e => {
     this.emit("compositionupdate", {
       detail: {
         value: e.target.value,
@@ -574,7 +686,7 @@ export class EaInput extends FormAssociatedBase {
    * 输入法完成输入时触发
    * @param {CompositionEvent} e 事件对象
    */
-  #initCompositionendEvent = e => {
+  #onCompositionendEvent = e => {
     this.emit("compositionend", {
       detail: {
         value: e.target.value,
@@ -586,41 +698,41 @@ export class EaInput extends FormAssociatedBase {
    * 初始化基本事件
    */
   #initBasicEvent = () => {
-    this.#original.addEventListener("focus", this.#initFocusEvent, {
+    this.#original.addEventListener("focus", this.#onFocusEvent, {
       signal: this.#abortController.signal,
     });
-    this.#original.addEventListener("blur", this.#initBlurEvent, {
+    this.#original.addEventListener("blur", this.#onBlurEvent, {
       signal: this.#abortController.signal,
     });
-    this.#original.addEventListener("input", this.#initInputEvent, {
+    this.#original.addEventListener("input", this.#onInputEvent, {
       signal: this.#abortController.signal,
     });
-    this.#original.addEventListener("keydown", this.#initKeydownEvent, {
+    this.#original.addEventListener("keydown", this.#onKeydownEvent, {
       signal: this.#abortController.signal,
     });
-    this.#original.addEventListener("mouseenter", this.#initMouseenterEvent, {
+    this.#original.addEventListener("mouseenter", this.#onMouseenterEvent, {
       signal: this.#abortController.signal,
     });
-    this.#original.addEventListener("mouseleave", this.#initMouseleaveEvent, {
+    this.#original.addEventListener("mouseleave", this.#onMouseleaveEvent, {
       signal: this.#abortController.signal,
     });
     this.#original.addEventListener(
       "compositionstart",
-      this.#initCompositionstartEvent,
+      this.#onCompositionstartEvent,
       {
         signal: this.#abortController.signal,
       }
     );
     this.#original.addEventListener(
       "compositionupdate",
-      this.#initCompositionupdateEvent,
+      this.#onCompositionupdateEvent,
       {
         signal: this.#abortController.signal,
       }
     );
     this.#original.addEventListener(
       "compositionend",
-      this.#initCompositionendEvent,
+      this.#onCompositionendEvent,
       {
         signal: this.#abortController.signal,
       }
@@ -630,16 +742,16 @@ export class EaInput extends FormAssociatedBase {
   /**
    * 清空按钮点击时触发
    */
-  #initClearIconClickEvent = () => {
+  #onClearIconClickEvent = () => {
     const oldValue = this.value;
 
-    this.value = "";
+    this.clear();
 
     if (
       this["show-word-limit"] &&
       (this.type === "textarea" || this.type === "text")
     ) {
-      this.#wordCount.textContent = `${this.#original.value.length} / ${this.maxlength}`;
+      this.#onWordLimitTextShouldUpdate();
     }
 
     this.focus();
@@ -650,7 +762,7 @@ export class EaInput extends FormAssociatedBase {
   /**
    * 显示密码按钮点击时触发
    */
-  #initShowPasswordIconClickEvent = () => {
+  #onShowPasswordIconClickEvent = () => {
     if (this.type === "password") {
       this.type = "text";
       this.#showPasswordIcon.icon = "icon-eye";
@@ -663,86 +775,59 @@ export class EaInput extends FormAssociatedBase {
   };
 
   /**
-   * 初始化`type="text"`的输入框事件
+   * 自动调整高度
+   * @param {InputEvent} e
    */
-  #initInputElementEvent = () => {
-    if (this.type === "textarea") return;
+  #onAutosizeEvent = e => {
+    const lineHeight = this.#states.originTextareaHeight / this.rows;
 
     if (
-      this["show-password"] &&
-      (this.type === "password" || this.type === "text")
-    ) {
-      this.#showPasswordIcon.addEventListener(
-        "click",
-        this.#initShowPasswordIconClickEvent,
-        {
-          signal: this.#abortController.signal,
-        }
-      );
-    }
+      this["min-rows"] > 0 &&
+      this.#original.scrollHeight < this["min-rows"] * lineHeight
+    )
+      return;
+
+    if (
+      this["max-rows"] > 0 &&
+      this.#original.scrollHeight > this["max-rows"] * lineHeight
+    )
+      return;
+
+    this.#original.style.height = `${this.#states.originTextareaHeight}px`;
+    void this.#original.scrollHeight;
+    this.#original.style.height = `${e.target.scrollHeight + 2}px`;
   };
 
   /**
-   * 自动调整高度
+   * 当包含 show-word-limit 属性时，更新字数统计
    */
-  #initAutosizeEvent = () => {
-    this.#states.originTextareaHeight = this.#original.scrollHeight;
-    const lineHeight = this.#states.originTextareaHeight / this.rows;
-
-    this.#original.addEventListener(
-      "input",
-      e => {
-        if (
-          this["min-rows"] > 0 &&
-          this.#original.scrollHeight < this["min-rows"] * lineHeight
-        )
-          return;
-
-        if (
-          this["max-rows"] > 0 &&
-          this.#original.scrollHeight > this["max-rows"] * lineHeight
-        )
-          return;
-
-        this.#original.style.height = `${this.#states.originTextareaHeight}px`;
-        void this.#original.scrollHeight;
-        this.#original.style.height = `${e.target.scrollHeight + 2}px`;
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
+  #onWordLimitTextShouldUpdate = () => {
+    this.#wordCount.textContent = `${this.#original.value.length} / ${this.maxlength}`;
   };
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.#container.className = this.updateContainerClasslist();
+    if (!this.hasAttribute("type")) {
+      this.type = this.type; // eslint-disable-line no-self-assign
+    }
+
+    this.updateContainerClasslist();
+
     this.#initBasicEvent();
-    this.#initInputElementEvent();
-
-    if (this.type === "textarea" && this.autosize) this.#initAutosizeEvent();
-    if (
-      this["show-word-limit"] &&
-      (this.type === "textarea" || this.type === "text")
-    )
-      this.#original.addEventListener(
-        "input",
-        () => {
-          this.#wordCount.textContent = `
-            ${this.#original.value.length} / ${this.maxlength}`;
-        },
-        {
-          signal: this.#abortController.signal,
-        }
-      );
-
-    this.emit("ea-input-ready");
   }
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+    this.#abortController = null;
+
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key]?.abort();
+      this.#AbortControllerStates[key] = null;
+    }
   }
 }
 

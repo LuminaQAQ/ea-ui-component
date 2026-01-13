@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -49,18 +49,6 @@
           width: 100%;
         }
       }
-
-      /* .prepend,
-        .append {
-            height: 100%;
-            padding: 0 0.5rem;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background-color: #f5f7fa;
-        } */
     </style>
   </head>
 
@@ -71,7 +59,7 @@
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
-    <div class="row left">
+    <div class="demo">
       <ea-input style="width: 240px" placeholder="Please input"></ea-input>
     </div>
     <hr />
@@ -81,7 +69,7 @@
     <!-- -------- 禁用状态 --------  -->
     <!-- #region  -->
     <h2>禁用状态</h2>
-    <div class="row left">
+    <div class="demo">
       <ea-input
         style="width: 240px"
         disabled
@@ -95,7 +83,7 @@
     <!-- -------- 可清空 --------  -->
     <!-- #region  -->
     <h2>可清空</h2>
-    <div class="row left">
+    <div class="demo">
       <ea-input
         style="width: 240px"
         placeholder="Please input"
@@ -109,12 +97,12 @@
     <!-- -------- 自定义清除图标 --------  -->
     <!-- #region  -->
     <h2>自定义清除图标</h2>
-    <div class="row left">
+    <div class="demo">
       <ea-input
         style="width: 240px"
         placeholder="Please input"
         clearable
-        clear-icon="icon-cancea-circled2"
+        clear-icon="icon-cancel-circled2"
       ></ea-input>
     </div>
     <hr />
@@ -124,7 +112,7 @@
     <!-- -------- 密码框 --------  -->
     <!-- #region  -->
     <h2>密码框</h2>
-    <div class="row left">
+    <div class="demo">
       <ea-input
         style="width: 240px"
         type="password"
@@ -139,10 +127,9 @@
     <!-- -------- 带 icon 的输入框 --------  -->
     <!-- #region  -->
     <h2>带 icon 的输入框</h2>
-    <div class="row left"></div>
-    <div class="demo-input-with-icon">
+    <div class="demo demo-input-with-icon">
       <div class="input-group">
-        <span class="label">Using attributes</span>
+        <p class="label">Using attributes</p>
         <div class="input-container">
           <ea-input
             class="responsive-input"
@@ -157,20 +144,12 @@
         </div>
       </div>
       <div class="input-group">
-        <span class="label">Using slots</span>
+        <p class="label">Using slots</p>
         <div class="input-container">
-          <ea-input
-            v-model="input3"
-            class="responsive-input"
-            placeholder="Pick a date"
-          >
+          <ea-input class="responsive-input" placeholder="Pick a date">
             <ea-icon icon="icon-search" slot="suffix"></ea-icon>
           </ea-input>
-          <ea-input
-            v-model="input4"
-            class="responsive-input"
-            placeholder="Type something"
-          >
+          <ea-input class="responsive-input" placeholder="Type something">
             <ea-icon icon="icon-search" slot="prefix"></ea-icon>
           </ea-input>
         </div>
@@ -222,7 +201,7 @@
     <!-- -------- 复合型输入框 --------  -->
     <!-- #region  -->
     <h2>复合型输入框</h2>
-    <div class="col left">
+    <div class="demo">
       <ea-input style="max-width: 600px" placeholder="Please input">
         <div class="prepend" slot="prepend">Http://</div>
       </ea-input>

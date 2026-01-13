@@ -77,7 +77,7 @@ export default defineConfig({
           //   link: "/ea-date-time-picker",
           // },
           // { text: "Form 表单组件", link: "/ea-form" },
-          // { text: "Input 输入框", link: "/ea-input" },
+          { text: "Input 输入框", link: "/ea-input" },
           // { text: "Input Number 数字输入框", link: "/ea-input-number" },
           // { text: "Input Tag 标签输入框", link: "/ea-input-tag" },
           // { text: "Mention 提及", link: "/ea-mention" },

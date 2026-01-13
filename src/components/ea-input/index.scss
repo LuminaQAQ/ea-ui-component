@@ -43,6 +43,13 @@
   color: var(--ea-input-icon-color);
 }
 
+::slotted([slot="prefix"]) {
+  margin-right: 8px;
+}
+::slotted([slot="suffix"]) {
+  margin-left: 4px;
+}
+
 @mixin outside-slot-style {
   box-sizing: border-box;
   padding: var(--ea-input-padding);
@@ -86,6 +93,12 @@
     transition: border var(--ea-input-transition);
   }
 
+  @include element(original-wrapper) {
+    width: 100%;
+
+    line-height: var(--ea-input-height);
+  }
+
   @include element(original) {
     box-sizing: border-box;
     margin: 0;
@@ -93,8 +106,8 @@
     border: 0;
     outline: 0;
 
-    line-height: var(--ea-input-height);
     width: 100%;
+    height: 100%;
 
     font-size: var(--ea-input-font-size);
     color: var(--ea-input-text-color);
@@ -104,7 +117,8 @@
     }
   }
 
-  @include element(prefix) {
+  @include element(prefix-icon) {
+    margin-right: 8px;
   }
 
   @include element(suffix) {
@@ -112,6 +126,10 @@
 
     display: flex;
     align-items: center;
+  }
+
+  @include element(suffix-icon) {
+    margin-left: 4px;
   }
 
   @include element(word-count) {
@@ -140,7 +158,10 @@
     --ea-input-padding: var(--spacing-md);
 
     .ea-input__inner {
-      padding-bottom: 0;
+      padding: 0;
+    }
+
+    .ea-input__prefix {
       padding-right: 0;
     }
 
@@ -150,12 +171,14 @@
 
       resize: var(--ea-input-resize);
       scrollbar-width: thin;
+
+      padding: 8px;
     }
 
     .ea-input__word-count {
       position: absolute;
-      bottom: 0.25rem;
-      right: 0.5rem;
+      bottom: 4px;
+      right: 16px;
     }
   }
 

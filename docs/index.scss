@@ -21,6 +21,12 @@
   padding: 1rem;
   border: 1px solid rgba(204, 204, 204, 0.5);
   border-radius: 8px;
+
+  &.is-not-demo {
+    border: none !important;
+
+    padding: 0;
+  }
 }
 
 .demo {
@@ -35,12 +41,6 @@
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-
-  &.is-not-demo {
-    border: none !important;
-
-    padding: 0;
-  }
 
   &.left {
     justify-content: flex-start;
@@ -187,4 +187,8 @@
 .vp-doc table {
   display: table;
   width: 100%;
+}
+
+.vp-doc :not(pre, h1, h2, h3, h4, h5, h6) > code {
+  color: #484848;
 }
