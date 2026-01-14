@@ -1,6 +1,7 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
+import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
 export class EaRadioGroup extends Base {
   /** @type {HTMLElement} */
@@ -12,7 +13,14 @@ export class EaRadioGroup extends Base {
   #abortController;
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "name", "value", "border", "disabled"];
+    return [
+      ...super.observedAttributes,
+      "name",
+      "value",
+      "border",
+      "disabled",
+      "size",
+    ];
   }
 
   state = this.properties({
@@ -42,6 +50,13 @@ export class EaRadioGroup extends Base {
       default: false,
       observer: newVal => {
         this.#updateGroupDisabled(newVal);
+      },
+    },
+    size: {
+      type: EA_COMPONENT_SIZES,
+      default: "default",
+      observer: newVal => {
+        this.#updateGroupSize(newVal);
       },
     },
   });
@@ -113,31 +128,48 @@ export class EaRadioGroup extends Base {
     });
   };
 
+  /**
+   * 批量更新 radios size 属性
+   * @param {'large' | 'default' | 'small'} size
+   */
+  #updateGroupSize = size => {
+    this.querySelectorAll("ea-radio").forEach(radio => {
+      if (!radio.getAttribute("size")) radio.setAttribute("size", size);
+    });
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.addEventListener(
-      "change",
-      e => {
-        this.value = e.detail.value;
-      },
-      { signal: this.#abortController.signal }
-    );
+    /**
+     * 监听 value 改变
+     */
+    const onValueChangeEvent = e => {
+      this.value = e.detail.value;
+    };
 
-    this.#defaultSlot.addEventListener(
-      "slotchange",
-      () => {
-        this.#updateCurrentValue(this.value);
+    /**
+     * 监听 slot 改变
+     */
+    const onSlotChangeEvent = () => {
+      this.#updateCurrentValue(this.value);
 
-        if (this.name) this.#updateGroupName();
-        if (this.border) this.#updateGroupBorder(this.border);
-        if (this.disabled) this.#updateGroupDisabled(this.disabled);
-      },
-      { signal: this.#abortController.signal }
-    );
+      if (this.name) this.#updateGroupName();
+      if (this.border) this.#updateGroupBorder(this.border);
+      if (this.disabled) this.#updateGroupDisabled(this.disabled);
+      if (this.size) this.#updateGroupSize(this.size);
+    };
+
+    this.addEventListener("change", onValueChangeEvent, {
+      signal: this.#abortController.signal,
+    });
+
+    this.#defaultSlot.addEventListener("slotchange", onSlotChangeEvent, {
+      signal: this.#abortController.signal,
+    });
   }
 
   $beforeUnmounted() {

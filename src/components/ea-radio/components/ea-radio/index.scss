@@ -1,8 +1,13 @@
-$ea-radio-size-type: ();
+$ea-radio-size-type: ("large", "default", "small");
 
 :host {
-  --ea-radio-input-size: var(--font-size-md);
-  --ea-radio-inner-size: 5px;
+  --ea-radio-input-size-large: var(--font-size-lg);
+  --ea-radio-input-size-default: var(--font-size-md);
+  --ea-radio-input-size-small: var(--font-size-sm);
+
+  --ea-radio-inner-size-large: 7px;
+  --ea-radio-inner-size-default: 5px;
+  --ea-radio-inner-size-small: 4px;
 
   --ea-radio-space: var(--spacing-md);
 
@@ -28,9 +33,9 @@ $ea-radio-size-type: ();
   margin-right: var(--ea-radio-space);
 
   @include element(input) {
-    width: var(--ea-radio-input-size);
-    height: var(--ea-radio-input-size);
-    line-height: var(--ea-radio-input-size);
+    width: var(--ea-radio-input-size-default);
+    height: var(--ea-radio-input-size-default);
+    line-height: var(--ea-radio-input-size-default);
   }
 
   @include element(original) {
@@ -43,7 +48,7 @@ $ea-radio-size-type: ();
 
     width: 100%;
     height: 100%;
-    line-height: var(--ea-radio-input-size);
+    line-height: var(--ea-radio-input-size-default);
 
     box-sizing: border-box;
     border-radius: 50%;
@@ -57,8 +62,8 @@ $ea-radio-size-type: ();
 
       content: "";
 
-      width: var(--ea-radio-inner-size);
-      height: var(--ea-radio-inner-size);
+      width: var(--ea-radio-inner-size-default);
+      height: var(--ea-radio-inner-size-default);
 
       border-radius: 50%;
       background-color: var(--ea-radio-inner-background);
@@ -76,8 +81,29 @@ $ea-radio-size-type: ();
     padding-left: var(--ea-radio-space);
 
     color: var(--color-black);
-    font-size: var(--ea-radio-input-size);
-    line-height: var(--ea-radio-input-size);
+    font-size: var(--ea-radio-input-size-default);
+    line-height: var(--ea-radio-input-size-default);
+  }
+
+  @each $size in $ea-radio-size-type {
+    @include modifier($size) {
+      .ea-radio__input {
+        width: var(--ea-radio-input-size-#{$size});
+        height: var(--ea-radio-input-size-#{$size});
+        line-height: var(--ea-radio-input-size-#{$size});
+      }
+
+      .ea-radio__label {
+        font-size: var(--ea-radio-input-size-#{$size});
+      }
+
+      .ea-radio__inner {
+        &::before {
+          width: var(--ea-radio-inner-size-#{$size});
+          height: var(--ea-radio-inner-size-#{$size});
+        }
+      }
+    }
   }
 
   @include state(border) {

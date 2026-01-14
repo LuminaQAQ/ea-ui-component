@@ -1,65 +1,33 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-
-const btn = ref(null);
+import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
-  // import('../components/ea-radio/index.js')
-  // import('../components/ea-radio-group/index.js')
-  // import('./index.scss')
-
-  const getGroupCheckedValueObj = {
-    btn: document.querySelector("#getGroupCheckedValue"),
-    group: document.querySelector("#radioGroup"),
-
-    init() {
-      this.btn.addEventListener("click", (e) => {
-        alert(this.group.value);
-      });
-    },
-  };
-  getGroupCheckedValueObj.init();
-
-  const getCheckedValueObj = {
-    btn: document.querySelector("#getCheckedValue"),
-    name: "gender",
-
-    init() {
-      this.btn.addEventListener("click", (e) => {
-        const node = document.querySelector(
-          `ea-radio[name=${this.name}][checked="true"]`
-        );
-        window.alert(
-          `您选中的是: name 为 ${this.name}, 值为 ${node.value} 的单选框选项`
-        );
-      });
-    },
-  };
-  getCheckedValueObj.init();
 })
 </script>
 
+<style scoped>
+</style>
+
 # Radio 单选框
 
-在一组备选项中进行单选
+在一组备选项中进行单选。
 
 ## 引入
 
-> `js`
+`js`
 
 ```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-radio/index.js";
-  import "./node_modules/easy-component-ui/components/ea-radio-group/index.js";
 </script>
 ```
 
-> `css`
+`css`
 
 ::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+如果使用到带图标的属性/组件，请提前通过 `link` 引入图标样式文件。
 :::
 
 ```html
@@ -71,23 +39,55 @@ onMounted(() => {
 
 ## 自定义样式
 
-移步到 [CSS Part](#radiogroup-css-part)。
+移步到 [Radio CSS Part](#radio-css-part) 和 [RadioGroup CSS Part](#radiogroup-css-part)。
 
 ## 基础用法
 
-由于选项默认可见，不宜过多，若选项过多，建议使用 Select 选择器。
+以下展示三种尺寸的基本用法
 
-<div class="row left">
-    <ea-radio name="city" value="福州" checked>福州</ea-radio>
-    <ea-radio name="city" value="厦门">厦门</ea-radio>
+<div class="demo col left">
+  <div>
+    <ea-radio-group value="1">
+      <ea-radio value="1" size="large">Option 1</ea-radio>
+      <ea-radio value="2" size="large">Option 2</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div>
+    <ea-radio-group value="1">
+      <ea-radio value="1">Option 1</ea-radio>
+      <ea-radio value="2">Option 2</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div>
+    <ea-radio-group value="1">
+      <ea-radio value="1" size="small">Option 1</ea-radio>
+      <ea-radio value="2" size="small">Option 2</ea-radio>
+    </ea-radio-group>
+  </div>
 </div>
 
 ::: details 查看代码
 
 ```html
-<div class="row left">
-  <ea-radio name="city" value="福州" checked>福州</ea-radio>
-  <ea-radio name="city" value="厦门">厦门</ea-radio>
+<div class="demo">
+  <div>
+    <ea-radio-group value="1">
+      <ea-radio value="1" size="large">Option 1</ea-radio>
+      <ea-radio value="2" size="large">Option 2</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div>
+    <ea-radio-group value="1">
+      <ea-radio value="1">Option 1</ea-radio>
+      <ea-radio value="2">Option 2</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div>
+    <ea-radio-group value="1">
+      <ea-radio value="1" size="small">Option 1</ea-radio>
+      <ea-radio value="2" size="small">Option 2</ea-radio>
+    </ea-radio-group>
+  </div>
 </div>
 ```
 
@@ -95,167 +95,172 @@ onMounted(() => {
 
 ## 禁用状态
 
-单选框不可用的状态。
+展示禁用和已禁用且选中状态
 
-<div class="row left">
-  <ea-radio name="work" value="前端切图仔" checked disabled>前端切图仔</ea-radio>
-  <ea-radio name="work" value="后端CRUD工程师" disabled>后端CRUD工程师</ea-radio>
+<div class="demo row left">
+  <ea-radio-group value="selected and disabled">
+    <ea-radio value="disabled" disabled>Option A</ea-radio>
+    <ea-radio value="selected and disabled" disabled>Option B</ea-radio>
+  </ea-radio-group>
 </div>
-
-::: details 查看代码
 
 ```html
-<div class="row left">
-  <ea-radio name="work" value="前端切图工程师" checked disabled>
-    前端切图仔
-  </ea-radio>
-  <ea-radio name="work" value="后端CRUD工程师" disabled>
-    后端CRUD工程师
-  </ea-radio>
+<div class="demo">
+  <ea-radio-group value="selected and disabled">
+    <ea-radio value="disabled" disabled>Option A</ea-radio>
+    <ea-radio value="selected and disabled" disabled>Option B</ea-radio>
+  </ea-radio-group>
 </div>
 ```
-
-:::
 
 ## 单选框组
 
-适用于在多个互斥的选项中选择的场景
+基础的互斥选项组
 
-<div class="row left">
-  <ea-radio-group id="radioGroup" name="salary">
-    <ea-radio value="月入3000笑哈哈" checked>月入3000笑哈哈</ea-radio>
-    <ea-radio value="月薪过万不是梦">月薪过万不是梦</ea-radio>
+<div class="demo">
+  <ea-radio-group value="3">
+    <ea-radio value="3">Option A</ea-radio>
+    <ea-radio value="6">Option B</ea-radio>
+    <ea-radio value="9">Option C</ea-radio>
   </ea-radio-group>
-  <ea-button type="primary" id="getGroupCheckedValue">获取选中值</ea-button>
 </div>
 
-::: details 查看代码
-
-`html`
-
 ```html
-<ea-radio-group name="salary">
-  <ea-radio value="月入3000笑哈哈" checked>月入3000笑哈哈</ea-radio>
-  <ea-radio value="月薪过万不是梦">月薪过万不是梦</ea-radio>
-</ea-radio-group>
+<div class="demo">
+  <ea-radio-group value="3">
+    <ea-radio value="3">Option A</ea-radio>
+    <ea-radio value="6">Option B</ea-radio>
+    <ea-radio value="9">Option C</ea-radio>
+  </ea-radio-group>
+</div>
 ```
-
-`js`
-
-```js
-const getGroupCheckedValueObj = {
-  btn: document.querySelector("#getGroupCheckedValue"),
-  group: document.querySelector("#radioGroup"),
-
-  init() {
-    this.btn.addEventListener("click", (e) => {
-      alert(this.group.value);
-    });
-  },
-};
-getGroupCheckedValueObj.init();
-```
-
-:::
 
 ## 带有边框
 
-<div class="row left">
-  <ea-radio name="age" value="Relife" checked border>Relife</ea-radio>
-  <ea-radio name="age" value="重返未来1999" border>重返未来1999</ea-radio>
+展示不同尺寸和禁用情况下的边框样式
+
+<div class="demo col left">
+  <div>
+    <ea-radio-group value="1">
+      <ea-radio value="1" size="large" border>Option A</ea-radio>
+      <ea-radio value="2" size="large" border>Option B</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <ea-radio-group value="1">
+      <ea-radio value="1" border>Option A</ea-radio>
+      <ea-radio value="2" border>Option B</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <ea-radio-group value="1" size="small">
+      <ea-radio value="1" border>Option A</ea-radio>
+      <ea-radio value="2" border disabled>Option B</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <ea-radio-group value="1" size="small" disabled>
+      <ea-radio value="1" border>Option A</ea-radio>
+      <ea-radio value="2" border>Option B</ea-radio>
+    </ea-radio-group>
+  </div>
 </div>
 
 ::: details 查看代码
 
 ```html
-<div class="row left">
-  <ea-radio name="age" value="重返18岁" checked border>Relife</ea-radio>
-  <ea-radio name="age" value="重返未来1999" border>重返未来1999</ea-radio>
+<div class="demo">
+  <div>
+    <ea-radio-group value="1">
+      <ea-radio value="1" size="large" border>Option A</ea-radio>
+      <ea-radio value="2" size="large" border>Option B</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <ea-radio-group value="1">
+      <ea-radio value="1" border>Option A</ea-radio>
+      <ea-radio value="2" border>Option B</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <ea-radio-group value="1" size="small">
+      <ea-radio value="1" border>Option A</ea-radio>
+      <ea-radio value="2" border disabled>Option B</ea-radio>
+    </ea-radio-group>
+  </div>
+  <div style="margin-top: 20px">
+    <ea-radio-group value="1" size="small" disabled>
+      <ea-radio value="1" border>Option A</ea-radio>
+      <ea-radio value="2" border>Option B</ea-radio>
+    </ea-radio-group>
+  </div>
 </div>
 ```
 
 :::
 
-## 获取选中值
+## Radio API
 
-获取该组值的方式
+### Attributes
 
-:::tip
-虽然给出了这个示例，不过建议使用 [单选框组](#单选框组) 给出的示例来获取选中值。
-:::
+| 参数     | 说明                                            | 类型    | 可选值                      | 默认值  |
+| -------- | ----------------------------------------------- | ------- | --------------------------- | ------- |
+| name     | 绑定的组名（提交或选择时的分组依据）            | string  | —                           | ''      |
+| value    | 选项的值                                        | string  | —                           | ''      |
+| disabled | 是否禁用                                        | boolean | —                           | false   |
+| label    | 选项的显示文本（未指定时以 slot 或 value 为准） | string  | —                           | ''      |
+| border   | 是否显示边框样式                                | boolean | —                           | false   |
+| size     | 组件尺寸                                        | string  | `large \| default \| small` | default |
 
-<div class="row left">
-  <ea-radio name="gender" value="武装直升机" checked border>武装直升机</ea-radio>
-  <ea-radio name="gender" value="沃尔玛购物袋" border>沃尔玛购物袋</ea-radio>
-</div>
+### Events
 
-<div class="row left">
-  <ea-button type="primary" id="getCheckedValue">获取选中值</ea-button>
-</div>
+| 事件名 | 说明                                                 | 回调参数（event.detail） |
+| ------ | ---------------------------------------------------- | ------------------------ |
+| change | 单个选项被点击并成为选中项时可能触发（委托给 group） | `{ value: string }`      |
 
-::: details 查看代码
+### Slots
 
-`html`
+| 名称 | 说明                        |
+| ---- | --------------------------- |
+| -    | 单个选项的显示内容（label） |
 
-```html
-<div class="row left">
-  <ea-radio name="gender" value="武装直升机" checked border>
-    武装直升机
-  </ea-radio>
-  <ea-radio name="gender" value="沃尔玛购物袋" border> 沃尔玛购物袋 </ea-radio>
-</div>
-<div class="row left">
-  <ea-button type="primary" id="getCheckedValue">获取选中值</ea-button>
-</div>
-```
+### CSS Part
 
-`js`: 通过绑定的 `name` 来进行获取。
+| 名称       | 说明                   |
+| ---------- | ---------------------- |
+| container  | 外层容器               |
+| input-wrap | 输入框容器             |
+| input      | 输入框（非原生 input） |
+| label-wrap | label 容器             |
 
-```js
-const getCheckedValueObj = {
-  btn: document.querySelector("#getCheckedValue"),
-  name: "gender",
+## RadioGroup API
 
-  init() {
-    this.btn.addEventListener("click", (e) => {
-      const node = document.querySelector(
-        `ea-radio[name=${this.name}][checked="true"]`
-      );
-      window.alert(
-        `您选中的是: name 为 ${this.name}, 值为 ${node.value} 的单选框选项`
-      );
-    });
-  },
-};
-getCheckedValueObj.init();
-```
+### Attributes
 
-:::
+| 参数     | 说明                   | 类型    | 可选值                      | 默认值  |
+| -------- | ---------------------- | ------- | --------------------------- | ------- |
+| name     | 组名（表单提交时使用） | string  | —                           | ''      |
+| value    | 当前选中值             | string  | —                           | ''      |
+| disabled | 是否整体禁用           | boolean | —                           | false   |
+| size     | 组件尺寸               | string  | `large \| default \| small` | default |
+| border   | 是否显示边框样式       | boolean | —                           | false   |
 
-## Attributes
+### Events
 
-| 参数     | 说明                                    | 类型    | 可选值 | 默认值 |
-| -------- | --------------------------------------- | ------- | ------ | ------ |
-| name     | 绑定的唯一单选值，选中时提交该值        | string  | —      | ''     |
-| value    | 选中时的值                              | string  | —      | ''     |
-| disabled | 是否禁用                                | boolean | —      | false  |
-| checked  | 当前是否为选中状态                      | boolean | —      | false  |
-| label    | 选项的标签，若未设置则默认与 value 相同 | string  | —      | ''     |
-| border   | 是否有边框                              | boolean | —      | false  |
+| 事件名 | 说明                 | 回调参数（event.detail） |
+| ------ | -------------------- | ------------------------ |
+| change | 组内选中值变化时触发 | `{ value: string }`      |
 
-## RadioGroup CSS Part
+### Slots
+
+| 名称 | 说明                       |
+| ---- | -------------------------- |
+| -    | 包含若干 `ea-radio` 子节点 |
+
+## CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
 | 名称      | 说明     |
 | --------- | -------- |
 | container | 外层容器 |
-
-## Radio CSS Part
-
-| 名称       | 说明                          |
-| ---------- | ----------------------------- |
-| container  | 外层容器                      |
-| input-wrap | 输入框容器                    |
-| input      | 输入框(非 `input:radio` 本身) |
-| label-wrap | label 容器                    |

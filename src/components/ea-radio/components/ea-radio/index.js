@@ -1,12 +1,15 @@
 import FormAssociatedBase from "@/core/FormBase";
 
 import stylesheet from "./index.scss?inline";
+import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
 export class EaRadio extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
   #label;
+  /** @type {HTMLElement} */
+  #labelSlot;
   /** @type {HTMLInputElement} */
   #radio;
   /** @type {AbortController} */
@@ -15,6 +18,7 @@ export class EaRadio extends FormAssociatedBase {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "size",
       "checked",
       "name",
       "value",
@@ -25,6 +29,13 @@ export class EaRadio extends FormAssociatedBase {
   }
 
   state = this.properties({
+    size: {
+      type: EA_COMPONENT_SIZES,
+      default: "",
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
     checked: {
       type: Boolean,
       default: false,
@@ -72,7 +83,7 @@ export class EaRadio extends FormAssociatedBase {
       type: String,
       default: "",
       observer: newVal => {
-        this.#label.textContent = newVal;
+        this.#labelSlot.textContent = newVal;
       },
     },
   });
@@ -84,7 +95,9 @@ export class EaRadio extends FormAssociatedBase {
   updateContainerClasslist() {
     const className = this.computedClasslist(
       "ea-radio",
-      {},
+      {
+        [`--${this.size}`]: this.size,
+      },
       {
         checked: this.checked,
         disabled: this.disabled,
@@ -121,17 +134,22 @@ export class EaRadio extends FormAssociatedBase {
     this.#container = this.shadowRoot.querySelector(".ea-radio");
 
     this.#label = this.shadowRoot.querySelector(".ea-radio__label");
+    this.#labelSlot = this.shadowRoot.querySelector(".ea-radio__label slot");
     this.#radio = this.shadowRoot.querySelector(".ea-radio__original");
   }
 
   /**
    * radio change 事件
+   * @param {Event} e
    */
-  #changeEvent = () => {
+  #onCheckedChangeEvent = e => {
+    e.stopImmediatePropagation();
+
     if (!this.closest("ea-radio-group")) {
       const sameGroupRadio = document.querySelectorAll(
         `ea-radio[name="${this.name}"]`
       );
+
       sameGroupRadio.forEach(radio => {
         radio.toggleAttribute("checked", radio === this);
       });
@@ -140,7 +158,6 @@ export class EaRadio extends FormAssociatedBase {
     this.emit("change", {
       detail: {
         value: this.value,
-        checked: this.checked,
       },
       bubbles: true,
     });
@@ -155,7 +172,7 @@ export class EaRadio extends FormAssociatedBase {
     if (!this.name)
       this.setAttribute("name", Math.random().toString(36).substring(2, 15));
 
-    this.#radio.addEventListener("change", this.#changeEvent, {
+    this.#radio.addEventListener("change", this.#onCheckedChangeEvent, {
       signal: this.#abortController.signal,
     });
   }
