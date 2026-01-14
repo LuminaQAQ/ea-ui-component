@@ -83,7 +83,7 @@ export default defineConfig({
           // { text: "Mention 提及 [ ]", link: "/ea-mention" },
           { text: "Radio 单选框", link: "/ea-radio" },
           { text: "Rate 评分", link: "/ea-rate" },
-          // { text: "Select 选择器", link: "/ea-select" },
+          { text: "Select 选择器", link: "/ea-select" },
           // { text: "Slider 滑块", link: "/ea-slider" },
           // { text: "Switch 开关", link: "/ea-switch" },
           // { text: "Time Picker 时间选择器", link: "/ea-time-picker" },

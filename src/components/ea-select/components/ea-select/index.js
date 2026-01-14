@@ -196,7 +196,9 @@ export class EaSelect extends FormAssociatedBase {
           this.#input.shadowRoot.querySelector(".ea-input__inner");
         const prefix =
           this.#input.shadowRoot.querySelector(".ea-input__prefix");
-        const input = this.#input.shadowRoot.querySelector("#original");
+        const input = this.#input.shadowRoot.querySelector(
+          ".ea-input__original-wrapper"
+        );
 
         if (newVal) {
           this.#AbortControllerStates.inputFilterAbortController =

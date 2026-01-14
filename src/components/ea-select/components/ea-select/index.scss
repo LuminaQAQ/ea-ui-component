@@ -67,6 +67,15 @@ $ea-select-size-types: (small, default, large);
       padding-top: 1px;
     }
 
+    &::part(original) {
+      padding: 0.5rem 0;
+    }
+
+    &::part(original-wrapper) {
+      display: block;
+      height: 100%;
+    }
+
     &::part(suffix-icon) {
       display: flex;
       align-items: center;
@@ -79,6 +88,10 @@ $ea-select-size-types: (small, default, large);
     display: none;
 
     cursor: pointer;
+  }
+
+  @include element(tag-wrap) {
+    margin-right: 0;
   }
 
   @include state(focus) {
