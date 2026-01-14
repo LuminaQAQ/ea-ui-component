@@ -71,13 +71,14 @@ export class EaRate extends FormAssociatedBase {
     getSymbol: {
       props: true,
       type: Function,
+      rawFunction: true,
       /**
        * 获取图标
        * @param {string} [value]
        * @param {boolean} [isSelected]
        * @returns {string}
        */
-      default: () => `<ea-icon icon="icon-star" part="icon"></ea-icon>`,
+      default: () => () => `<ea-icon icon="icon-star" part="icon"></ea-icon>`,
       /** @param {Function} cb */
       observer: cb => {
         if (!cb || typeof cb !== "function") return;
@@ -140,9 +141,9 @@ export class EaRate extends FormAssociatedBase {
     const tpl = Array.from({ length })
       .map(
         (value, index) => `
-            <span class='ea-rate__symbol' part='symbol-wrap'>
-                ${renderer(index, activeValue)}
-            </span>`
+          <span class='ea-rate__symbol' part='symbol-wrap'>
+              ${renderer(index, activeValue)}
+          </span>`
       )
       .join("");
 
@@ -243,10 +244,13 @@ export class EaRate extends FormAssociatedBase {
     } else {
       this.value = displayValue;
     }
+
+    this.emit("change", { detail: { value: displayValue } });
   };
 
   connectedCallback() {
     super.connectedCallback();
+
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 

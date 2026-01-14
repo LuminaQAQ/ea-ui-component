@@ -82,7 +82,7 @@ export default defineConfig({
           // { text: "Input Tag 标签输入框 [ ]", link: "/ea-input-tag" },
           // { text: "Mention 提及 [ ]", link: "/ea-mention" },
           { text: "Radio 单选框", link: "/ea-radio" },
-          // { text: "Rate 评分", link: "/ea-rate" },
+          { text: "Rate 评分", link: "/ea-rate" },
           // { text: "Select 选择器", link: "/ea-select" },
           // { text: "Slider 滑块", link: "/ea-slider" },
           // { text: "Switch 开关", link: "/ea-switch" },

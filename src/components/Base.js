@@ -72,6 +72,7 @@ export default class Base extends HTMLElement {
    *   type: (Function|Array<*>),
    *   default: any,
    *   props?: Boolean,
+   *   rawFunction?: Boolean,
    *   observer?: (newVal: any, oldVal?: any) => void
    * }>} states 配置对象，每个 key 是一个响应式字段名
    * @returns {void}
@@ -132,7 +133,7 @@ export default class Base extends HTMLElement {
       const type = config?.type;
 
       if (key === "Function" || type === Function) {
-        return rawValue();
+        return config.rawFunction ? rawValue : rawValue();
       }
 
       if (key === "Array" || type === Array) {
@@ -432,7 +433,7 @@ export default class Base extends HTMLElement {
     let attr = this.getAttrNumber(attrName);
 
     if (isNaN(attr) || !attr) attr = this.getAttrString(attrName);
-    
+
     return isNaN(new Date(attr)) ? defaultValue || null : new Date(attr);
   }
 
