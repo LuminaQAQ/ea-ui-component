@@ -1,6 +1,6 @@
 import FormAssociatedBase from "@/core/FormBase";
-
 import stylesheet from "./index.scss?inline";
+import { EaInputNumberChangeEvent } from "./events/EaInputNumberChangeEvent";
 
 export class EaInputNumber extends FormAssociatedBase {
   /** @type {HTMLElement} */
@@ -45,8 +45,9 @@ export class EaInputNumber extends FormAssociatedBase {
       type: Number,
       default: 0,
       /** @param {number} newVal */
-      observer: newVal => {
+      observer: (newVal, oldVal) => {
         newVal = Number(newVal).toFixed(this.precision);
+        oldVal = Number(oldVal).toFixed(this.precision);
 
         this.#inputEl.value = newVal;
         this.setValue(newVal);
@@ -57,14 +58,15 @@ export class EaInputNumber extends FormAssociatedBase {
         if (newVal <= this.min) this.isMin = true;
         else this.isMin = false;
 
+        this.dispatchEvent(
+          new EaInputNumberChangeEvent({
+            currentValue: Number(newVal),
+            oldValue: Number(oldVal),
+          })
+        );
+
         this.updateContainerClasslist();
       },
-    },
-    defaultValue: {
-      props: true,
-      type: Number,
-      default: this.getAttrNumber("value", 0).toFixed(this.precision),
-      observer: () => {},
     },
 
     min: {
@@ -157,6 +159,12 @@ export class EaInputNumber extends FormAssociatedBase {
   });
 
   componentStatusState = this.properties({
+    defaultValue: {
+      props: true,
+      type: Number,
+      default: this.getAttrNumber("value", 0).toFixed(this.precision),
+      observer: () => {},
+    },
     isFocus: {
       props: true,
       type: Boolean,
@@ -221,11 +229,11 @@ export class EaInputNumber extends FormAssociatedBase {
       <div class='ea-input-number' part='container'>
         <ea-icon class="ea-input-number__operator decrease" part="decrease" icon="icon-minus"></ea-icon>
         <span class="ea-input-number__prefix" part="prefix">
-            <slot name="prefix"></slot>
+          <slot name="prefix"></slot>
         </span>
         <input class="ea-input-number__inner" part="input" type="text" />
         <span class="ea-input-number__suffix" part="input">
-            <slot name="suffix"></slot>
+          <slot name="suffix"></slot>
         </span>
         <ea-icon class="ea-input-number__operator increase" part="increase" icon="icon-plus"></ea-icon>
       </div>
@@ -242,6 +250,20 @@ export class EaInputNumber extends FormAssociatedBase {
 
     this.updateContainerClasslist();
   }
+
+  /**
+   * 获取焦点
+   */
+  focus = () => {
+    this.#inputEl.focus();
+  };
+
+  /**
+   * 失去焦点
+   */
+  blur = () => {
+    this.#inputEl.blur();
+  };
 
   /**
    * 处理数值的安全边界
@@ -330,12 +352,12 @@ export class EaInputNumber extends FormAssociatedBase {
   connectedCallback() {
     super.connectedCallback();
 
-    this.#abortController?.abort();
-    this.#abortController = new AbortController();
-
     this.value = this.getAttrNumber("value", 0).toFixed(this.precision);
     if (!this.name)
       this.setAttribute("name", Math.random().toString(36).substring(2, 15));
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
     // 增加 的 事件
     const increaseEvent = () => {
@@ -371,7 +393,7 @@ export class EaInputNumber extends FormAssociatedBase {
   }
 
   $beforeUnmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
   }
 }
 
