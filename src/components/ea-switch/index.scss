@@ -1,10 +1,6 @@
 $ea-switch-size-type: (small, default, large);
 
 :host {
-  display: inline-block;
-}
-
-:host {
   --ea-switch-space: 0 var(--spacing-md);
 
   --ea-switch-large-width: 50px;
@@ -30,7 +26,7 @@ $ea-switch-size-type: (small, default, large);
   );
 
   --ea-switch-inactive-bg-color: var(--grey-300);
-  --ea-switch-inactive-text-color: var(--color-black);
+  --ea-switch-inactive-text-color: var(--grey-900);
   --ea-switch-active-bg-color: var(--blue-500);
   --ea-switch-active-text-color: var(--blue-500);
 
@@ -83,7 +79,7 @@ $ea-switch-size-type: (small, default, large);
 }
 
 @include block(ea-switch) {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   cursor: pointer;
 

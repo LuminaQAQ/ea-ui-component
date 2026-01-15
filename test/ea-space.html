@@ -363,7 +363,7 @@
 
             init() {
                 this.fillSwitch.addEventListener('change', (e) => {
-                    this.fillContainer.setAttribute('fill', e.detail.checked);
+                    this.fillContainer.setAttribute('fill', e.detail.value);
                 });
 
                 this.fillRadioGroup.addEventListener('change', (e) => {

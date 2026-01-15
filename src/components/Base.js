@@ -133,7 +133,7 @@ export default class Base extends HTMLElement {
       const type = config?.type;
 
       if (key === "Function" || type === Function) {
-        return config.rawFunction ? rawValue : rawValue();
+        return config.rawFunction ? rawValue : rawValue?.();
       }
 
       if (key === "Array" || type === Array) {

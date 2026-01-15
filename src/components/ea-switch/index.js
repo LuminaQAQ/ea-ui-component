@@ -11,9 +11,9 @@ export class EaSwitch extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #innerInput;
   /** @type {HTMLElement} */
-  #labelRight;
+  #labelRightSlot;
   /** @type {HTMLElement} */
-  #labelLeft;
+  #labelLeftSlot;
 
   /** @type {AbortController} */
   #abortController;
@@ -35,7 +35,6 @@ export class EaSwitch extends FormAssociatedBase {
       "active-text",
       "active-color",
 
-      "checked",
       "disabled",
     ];
   }
@@ -131,7 +130,7 @@ export class EaSwitch extends FormAssociatedBase {
       type: String,
       default: "",
       observer: newVal => {
-        this.#labelLeft.innerText = newVal;
+        this.#labelLeftSlot.innerText = newVal;
       },
     },
     "inactive-color": {
@@ -145,7 +144,7 @@ export class EaSwitch extends FormAssociatedBase {
       type: String,
       default: "",
       observer: newVal => {
-        this.#labelRight.innerText = newVal;
+        this.#labelRightSlot.innerText = newVal;
       },
     },
     "active-color": {
@@ -167,7 +166,7 @@ export class EaSwitch extends FormAssociatedBase {
   });
 
   funcState = this.properties({
-    "before-change": {
+    beforeChange: {
       props: true,
       type: Function,
       default: null,
@@ -231,11 +230,8 @@ export class EaSwitch extends FormAssociatedBase {
 
   $render() {
     this.shadowRoot.innerHTML = `
-      <template id="loadingTpl">
-        <ea-icon class="ea-switch__spiner" icon="animate-spin">↻</ea-icon>
-      </template>
       <label class="ea-switch" part="container">
-        <input class="ea-switch__original" type="checkbox" />
+        <input class="ea-switch__original" type="checkbox" part="original" />
         <span class="ea-switch__label label-left" part="label-left">
           <slot name="inactive"></slot>
         </span>
@@ -249,11 +245,11 @@ export class EaSwitch extends FormAssociatedBase {
     this.#container = this.shadowRoot.querySelector(".ea-switch");
     this.#originalInput = this.shadowRoot.querySelector(".ea-switch__original");
     this.#innerInput = this.shadowRoot.querySelector(".ea-switch__inner");
-    this.#labelLeft = this.shadowRoot.querySelector(
-      ".ea-switch__label.label-left"
+    this.#labelLeftSlot = this.shadowRoot.querySelector(
+      ".ea-switch__label.label-left > slot[name='inactive']"
     );
-    this.#labelRight = this.shadowRoot.querySelector(
-      ".ea-switch__label.label-right"
+    this.#labelRightSlot = this.shadowRoot.querySelector(
+      ".ea-switch__label.label-right slot[name='active']"
     );
 
     this.updateContainerClasslist();
@@ -274,10 +270,7 @@ export class EaSwitch extends FormAssociatedBase {
     this.setAttribute("value", value);
 
     this.emit("change", {
-      detail: {
-        checked: Boolean(this.checked),
-        value,
-      },
+      detail: { value },
       bubbles: true,
     });
   };
@@ -290,6 +283,7 @@ export class EaSwitch extends FormAssociatedBase {
 
     if (!this.name)
       this.setAttribute("name", Math.random().toString(36).substring(2, 15));
+
     this.setValue(
       this.#originalInput.checked
         ? this["active-value"]

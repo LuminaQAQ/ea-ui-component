@@ -12,7 +12,7 @@ onMounted(() => {
     .addEventListener("change", function (e) {
       const btn = document.querySelector("#ea-button-loading");
 
-      e.target.checked
+      e.target.value
         ? btn.loading = true
         : btn.loading = false;
     });
@@ -484,7 +484,7 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 通过设置 loading 属性为 true 来显示加载中状态。
 
 <div class="row left">
-  <ea-switch id="ea-radio-loading" checked></ea-switch>
+  <ea-switch id="ea-radio-loading" value="true"></ea-switch>
   <ea-button id="ea-button-loading" type="primary" loading>加载中按钮</ea-button>
 </div>
 
@@ -494,7 +494,7 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 
 ```html
 <div class="row">
-  <ea-switch id="ea-radio-loading" checked></ea-switch>
+  <ea-switch id="ea-radio-loading" value="true"></ea-switch>
   <ea-button id="ea-button-loading" type="primary" loading
     >加载中按钮</ea-button
   >
@@ -504,12 +504,13 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 `js`: 操作 `loading` 属性。
 
 ```js
-const btn = document.querySelector("#ea-button-loading");
-btn.addEventListener("click", function (e) {
-  btn.loading = e.detail.checked;
-  // 或者
-  // btn.setAttribute("loading", e.detail.checked);
-});
+document
+  .querySelector("#ea-radio-loading")
+  .addEventListener("change", function (e) {
+    const btn = document.querySelector("#ea-button-loading");
+
+    e.target.value ? (btn.loading = true) : (btn.loading = false);
+  });
 ```
 
 :::

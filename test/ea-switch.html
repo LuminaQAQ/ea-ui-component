@@ -16,11 +16,12 @@
   <body>
     <script type="module" src="../src/components/ea-switch/index.js"></script>
     <script type="module" src="../src/components/ea-tooltip/index.js"></script>
+    <script type="module" src="../src/components/ea-message/index.js"></script>
 
     <!-- -------- 基本用法 --------  -->
     <!-- #region  -->
     <h2>基本用法</h2>
-    <div class="row">
+    <div class="demo">
       <ea-switch name="basic" value="true"></ea-switch>
       <ea-switch
         name="basicHasText"
@@ -29,22 +30,6 @@
           --ea-switch-active-bg-color: #13ce66;
           --ea-switch-inactive-bg-color: #ff4949;
         "
-      ></ea-switch>
-    </div>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <!-- -------- 禁用状态 --------  -->
-    <!-- #region  -->
-    <h2>禁用状态</h2>
-    <div class="row">
-      <ea-switch disabled></ea-switch>
-      <ea-switch
-        value="true"
-        active-text="Pay by month"
-        inactive-text="Pay by year"
-        disabled
       ></ea-switch>
     </div>
     <hr />
@@ -130,6 +115,7 @@
         <ea-switch
           id="extSwitch"
           slot="reference"
+          placement="top"
           value="100"
           style="
             --ea-switch-active-bg-color: #13ce66;
@@ -170,6 +156,22 @@
     <!-- #endregion  -->
     <!-- end  -->
 
+    <!-- -------- 禁用状态 --------  -->
+    <!-- #region  -->
+    <h2>禁用状态</h2>
+    <div class="demo">
+      <ea-switch disabled></ea-switch>
+      <ea-switch
+        value="true"
+        active-text="Pay by month"
+        inactive-text="Pay by year"
+        disabled
+      ></ea-switch>
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
     <!--  阻止切换 -->
     <!-- #region -->
     <h1>阻止切换</h1>
@@ -185,24 +187,25 @@
         switch2: document.querySelector("#forbiddenSwitch2"),
 
         init() {
-          this.switch1["before-change"] = () => {
+          this.switch1.beforeChange = () => {
             this.switch1.toggleAttribute("disabled", true);
 
             return new Promise(resolve => {
               setTimeout(() => {
                 this.switch1.toggleAttribute("disabled", false);
+                window.$message.success("Switch success");
                 return resolve(true);
               }, 1000);
             });
           };
 
-          this.switch2["before-change"] = () => {
+          this.switch2.beforeChange = () => {
             this.switch2.toggleAttribute("disabled", true);
 
-            return new Promise(resolve => {
+            return new Promise((resolve, reject) => {
               setTimeout(() => {
                 this.switch2.toggleAttribute("disabled", false);
-
+                window.$message.error("Switch failed");
                 return reject(new Error("Error"));
               }, 1000);
             });

@@ -4,6 +4,7 @@
 
 - [ ] layout 组件中，col 未设置 span 时，span 为 24。不会按照 slot 的 col 平分。
 - [ ] Button 的 loading 因为当时更新了图标库，导致 loading 图标有问题
+- [ ] Collapse 组件中，面板展开报错。
 
 ## Basic 基础组件
 

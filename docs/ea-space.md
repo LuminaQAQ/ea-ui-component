@@ -29,7 +29,7 @@ onMounted(() => {
 
         init() {
             this.fillSwitch.addEventListener('change', (e) => {
-                this.fillContainer.setAttribute('fill', e.detail.checked);
+                this.fillContainer.setAttribute('fill', e.detail.value);
             });
 
             this.fillRadioGroup.addEventListener('change', (e) => {
@@ -37,7 +37,7 @@ onMounted(() => {
             });
 
             this.fillRatioSwitch.addEventListener('change', (e) => {
-                this.fillRatioContainer.setAttribute('fill', e.detail.checked);
+                this.fillRatioContainer.setAttribute('fill', e.detail.value);
             });
         }
     };
@@ -271,7 +271,7 @@ const controllableExample = {
   container: document.querySelector("#controllableSpace"),
 
   init() {
-    this.radioGroup.addEventListener("change", (e) => {
+    this.radioGroup.addEventListener("change", e => {
       this.container.setAttribute("size", e.detail.value);
     });
   },
@@ -595,16 +595,16 @@ const fillExample = {
   fillRatioContainer: document.querySelector("#fillRatioSpace"),
 
   init() {
-    this.fillSwitch.addEventListener("change", (e) => {
-      this.fillContainer.setAttribute("fill", e.detail.checked);
+    this.fillSwitch.addEventListener("change", e => {
+      this.fillContainer.setAttribute("fill", e.detail.value);
     });
 
-    this.fillRadioGroup.addEventListener("change", (e) => {
+    this.fillRadioGroup.addEventListener("change", e => {
       this.fillRatioContainer.setAttribute("direction", e.detail.value);
     });
 
-    this.fillRatioSwitch.addEventListener("change", (e) => {
-      this.fillRatioContainer.setAttribute("fill", e.detail.checked);
+    this.fillRatioSwitch.addEventListener("change", e => {
+      this.fillRatioContainer.setAttribute("fill", e.detail.value);
     });
   },
 };
