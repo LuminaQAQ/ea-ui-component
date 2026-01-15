@@ -2,6 +2,7 @@ import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
 import EaUtils from "@/utils/Utils";
+import { EaOptionClickEvent } from "../../events/EaOptionClickEvent";
 
 export class EaOption extends Base {
   /** @type {HTMLElement} */
@@ -48,9 +49,7 @@ export class EaOption extends Base {
   updateContainerClasslist() {
     const className = this.computedClasslist(
       "ea-option",
-      {
-        // ['--' + this.type]: this.type,
-      },
+      {},
       {
         selected: this.selected,
         disabled: this.disabled,
@@ -80,6 +79,22 @@ export class EaOption extends Base {
     this.#container = this.shadowRoot.querySelector(".ea-option");
   }
 
+  /**
+   * 选项选择事件
+   * @param {MouseEvent | KeyboardEvent} e
+   */
+  #onOptionSelectedEvent = e => {
+    e.preventDefault();
+    if (this.disabled) return;
+
+    this.dispatchEvent(
+      new EaOptionClickEvent({
+        value: this.value,
+        target: e.target,
+      })
+    );
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -88,38 +103,22 @@ export class EaOption extends Base {
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.addEventListener(
-      "click",
-      e => {
-        e.preventDefault();
-        if (this.disabled) return;
-
-        this.emit("ea-option-click", {
-          detail: {
-            value: this.value,
-            target: e.target,
-          },
-          bubbles: true,
-          composed: true,
-        });
-      },
-      { signal: this.#abortController.signal }
-    );
-
-    this.addEventListener("keydown", e => {
+    /**
+     * 选项选择事件
+     * @param {KeyboardEvent} e
+     */
+    const onEnterEvent = e => {
       if (e.key === "Enter") {
-        e.preventDefault();
-        if (this.disabled) return;
-
-        this.emit("ea-option-click", {
-          detail: {
-            value: this.value,
-            target: e.target,
-          },
-          bubbles: true,
-          composed: true,
-        });
+        this.#onOptionSelectedEvent(e);
       }
+    };
+
+    this.addEventListener("click", this.#onOptionSelectedEvent, {
+      signal: this.#abortController.signal,
+    });
+
+    this.addEventListener("keydown", onEnterEvent, {
+      signal: this.#abortController.signal,
     });
   }
 

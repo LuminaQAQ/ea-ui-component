@@ -25,20 +25,6 @@ export class EaOptionGroup extends Base {
     },
   });
 
-  /**
-   * 获取 classlist 列表
-   * @return {string} 属性值
-   */
-  updateContainerClasslist() {
-    const className = this.computedClasslist("ea-option-group", {
-      // ['--' + this.type]: this.type,
-    });
-
-    this.#container.className = className;
-
-    return className;
-  }
-
   constructor() {
     super();
 

@@ -6,6 +6,7 @@ import EaUtils from "@/utils/Utils";
 import { EaSelectVisibleChangeEvent } from "../../events/EaSelectVisibleChangeEvent";
 import { EaSelectRemoveTagEvent } from "../../events/EaSelectRemoveTagEvent";
 import { EaSelectClearEvent } from "../../events/EaSelectClearEvent";
+import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
 export class EaSelect extends FormAssociatedBase {
   /** @type {HTMLElement} */
@@ -63,7 +64,7 @@ export class EaSelect extends FormAssociatedBase {
       type: String,
       default: "",
       observer: newVal => {
-        this.setAttribute("name", newVal);
+        this.#input.setAttribute("name", newVal);
       },
     },
     placeholder: {
@@ -91,6 +92,9 @@ export class EaSelect extends FormAssociatedBase {
         this.updateContainerClasslist();
 
         if (newVal) {
+          /**
+           * 处理清除事件
+           */
           const onClearEvent = () => {
             this.value = this.multiple ? [] : "";
             this.dispatchEvent(new EaSelectClearEvent());
@@ -107,7 +111,7 @@ export class EaSelect extends FormAssociatedBase {
       },
     },
     size: {
-      type: String,
+      type: EA_COMPONENT_SIZES,
       default: "",
       observer: newVal => {
         this.#input.setAttribute("size", newVal);
@@ -120,6 +124,24 @@ export class EaSelect extends FormAssociatedBase {
       default: false,
       observer: async newVal => {
         this.#AbortControllerStates.tagRemoveAbortController?.abort();
+
+        await customElements.whenDefined("ea-input");
+
+        const innerWrap =
+          this.#input.shadowRoot.querySelector(".ea-input__inner");
+        const prefix =
+          this.#input.shadowRoot.querySelector(".ea-input__prefix");
+        const input = this.#input.shadowRoot.querySelector(
+          ".ea-input__original-wrapper"
+        );
+
+        if (newVal) {
+          prefix.appendChild(input);
+        } else {
+          innerWrap.insertBefore(input, prefix.nextSibling);
+        }
+
+        this.updateContainerClasslist();
 
         if (newVal) {
           this.#AbortControllerStates.tagRemoveAbortController =
@@ -594,20 +616,8 @@ export class EaSelect extends FormAssociatedBase {
       "keydown",
       e => {
         if (e.key === "Enter") {
-          this.click();
+          this.#input.shadowRoot.dispatchEvent(new CustomEvent("click"));
         }
-      },
-      { signal: this.#abortController.signal }
-    );
-
-    this.#input.addEventListener(
-      "input",
-      e => {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        if (typeof e.target.value === "string")
-          this.emit("input", { value: e.target.value });
       },
       { signal: this.#abortController.signal }
     );

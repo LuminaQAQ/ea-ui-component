@@ -25,8 +25,8 @@
     "vitepress": "^1.2.0"
   },
   "scripts": {
-    "dev": "vite",
-    "dev:doc": "vitepress dev docs",
+    "dev": "vite --host 0.0.0.0",
+    "dev:doc": "vitepress dev docs --host 0.0.0.0",
     "build": "node tools/index.js && vite build",
     "build:doc": "vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e && vitepress preview docs",
     "preview": "vite preview",

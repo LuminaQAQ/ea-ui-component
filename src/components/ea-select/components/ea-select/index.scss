@@ -24,6 +24,12 @@ $ea-select-size-types: (small, default, large);
   }
 }
 
+:host([multiple]) {
+  .ea-select__input::part(prefix) {
+    width: 100%;
+  }
+}
+
 :host {
   display: inline-block;
 }
@@ -63,14 +69,6 @@ $ea-select-size-types: (small, default, large);
   }
 
   @include element(input) {
-    &::part(inner) {
-      padding-top: 1px;
-    }
-
-    &::part(original) {
-      padding: 0.5rem 0;
-    }
-
     &::part(original-wrapper) {
       display: block;
       height: 100%;
@@ -121,9 +119,17 @@ $ea-select-size-types: (small, default, large);
       margin-bottom: 4px;
     }
 
+    .ea-select__input::part(original-wrapper) {
+      display: none;
+    }
+
     &.is-has-value {
-      .ea-select__input::part(prefix) {
-        width: 100%;
+      .ea-select__input::part(original-wrapper) {
+        display: block;
+      }
+
+      .ea-select__input::part(original) {
+        padding: 8px 0;
       }
     }
   }
