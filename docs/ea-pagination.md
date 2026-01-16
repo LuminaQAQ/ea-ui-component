@@ -1,10 +1,9 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
 onMounted(async () => {
-  import('../dist/components/index.js')
-  import('../dist/assets/icon.css') 
-
   await customElements.whenDefined('ea-pagination')
 
 const basicExample = {
@@ -67,6 +66,7 @@ const singlePageExample = {
 };
 singlePageExample.init();
 
+
 const additionalFunctionsExample = {
   sizeBtn: document.querySelector("#additionalFunctionsSize"),
   backgroundBtn: document.querySelector("#additionalFunctionsBackground"),
@@ -80,6 +80,14 @@ const additionalFunctionsExample = {
   ],
 
   init() {
+    const layout = ["prev", "pager", "next", "jumper", "->", "total"];
+    const sizes = [100, 200, 300, 400];
+
+    this.els[1].layout = ["total", "sizes", "prev", "pager", "next"];
+    this.els[1].pageSizes = sizes;
+    this.els[3].layout = ["sizes", "prev", "pager", "next", "jumper"];
+    this.els[3].pageSizes = sizes;
+
     this.sizeBtn.addEventListener("change", e => {
       const { value } = e.detail;
 
@@ -360,7 +368,7 @@ singlePageExample.init();
 
 ## 附加功能
 
-<div class="demo">
+<div class="demo col left">
   <ea-radio-group id="additionalFunctionsSize" name="size" value="default">
     <ea-radio value="large">large</ea-radio>
     <ea-radio value="default" checked>default</ea-radio>
@@ -371,27 +379,27 @@ singlePageExample.init();
   </div>
   <div>disabled: <ea-switch id="additionalFunctionsDisabled"></ea-switch></div>
 
-  <div class="demonstration">Total item count</div>
+  <p class="demonstration">Total item count</p>
   <ea-pagination
     id="additionalFunctionsPagination1"
     total="1000"
     page-size="100"
   ></ea-pagination>
 
-  <div class="demonstration">Change page size</div>
+  <p class="demonstration">Change page size</p>
   <ea-pagination
     id="additionalFunctionsPagination2"
     page-sizes="[100, 200, 300, 400]"
     total="1000"
   ></ea-pagination>
 
-  <div class="demonstration">Jump to</div>
+  <p class="demonstration">Jump to</p>
   <ea-pagination
     id="additionalFunctionsPagination3"
     total="1000"
   ></ea-pagination>
 
-  <div class="demonstration">All combined</div>
+  <p class="demonstration">All combined</p>
   <ea-pagination
     id="additionalFunctionsPagination4"
     page-sizes="[100, 200, 300, 400]"
@@ -413,30 +421,28 @@ singlePageExample.init();
   </div>
   <div>disabled: <ea-switch id="additionalFunctionsDisabled"></ea-switch></div>
 
-  <div class="demonstration">Total item count</div>
+  <p class="demonstration">Total item count</p>
   <ea-pagination
     id="additionalFunctionsPagination1"
     total="1000"
     page-size="100"
   ></ea-pagination>
 
-  <div class="demonstration">Change page size</div>
+  <p class="demonstration">Change page size</p>
   <ea-pagination
     id="additionalFunctionsPagination2"
-    page-sizes="[100, 200, 300, 400]"
     total="1000"
   ></ea-pagination>
 
-  <div class="demonstration">Jump to</div>
+  <p class="demonstration">Jump to</p>
   <ea-pagination
     id="additionalFunctionsPagination3"
     total="1000"
   ></ea-pagination>
 
-  <div class="demonstration">All combined</div>
+  <p class="demonstration">All combined</p>
   <ea-pagination
     id="additionalFunctionsPagination4"
-    page-sizes="[100, 200, 300, 400]"
     total="400"
   ></ea-pagination>
 </div>
@@ -456,6 +462,14 @@ const additionalFunctionsExample = {
   ],
 
   init() {
+    const layout = ["prev", "pager", "next", "jumper", "->", "total"];
+    const sizes = [100, 200, 300, 400];
+
+    this.els[1].layout = ["total", "sizes", "prev", "pager", "next"];
+    this.els[1].pageSizes = sizes;
+    this.els[3].layout = ["sizes", "prev", "pager", "next", "jumper"];
+    this.els[3].pageSizes = sizes;
+
     this.sizeBtn.addEventListener("change", e => {
       const { value } = e.detail;
 
@@ -489,43 +503,43 @@ additionalFunctionsExample.init();
 
 ## Attributes
 
-| 参数                | 说明                                                          | 类型           | 可选值                                            | 默认值                               |
-| ------------------- | ------------------------------------------------------------- | -------------- | ------------------------------------------------- | ------------------------------------ |
-| total               | 数据总条目数，用于计算总页数                                  | number         | -                                                 | 0                                    |
-| pager-count         | 设置最大页码按钮数。 页码按钮的数量，当总页数超过该值时会折叠 | number         | -                                                 | 7                                    |
-| layout              | 控制显示的元素顺序与种类（字符串数组或逗号分隔）              | string / Array | prev / pager / next / jumper / total / sizes / -> | prev, pager, next, jumper, ->, total |
-| background          | 是否显示带背景样式                                            | boolean        | -                                                 | false                                |
-| default-page-size   | 默认每页显示条数（用于 `page-size` 未设置时的回退值）         | number         | -                                                 | 10                                   |
-| page-size           | 当前每页显示条数                                              | number         | -                                                 | 10 (继承 default-page-size)          |
-| current-page        | 当前页码                                                      | number         | -                                                 | 1                                    |
-| hide-on-single-page | 当仅有一页时是否隐藏分页组件                                  | boolean        | -                                                 | false                                |
-| size                | 组件尺寸，会影响样式类                                        | string         | large / default / small                           | "" (默认尺寸)                        |
-| disabled            | 是否禁用分页交互                                              | boolean        | -                                                 | false                                |
+| 参数                                          | 说明                                                          | 类型    | 可选值                                                                         | 默认值                                               |
+| --------------------------------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| total                                         | 数据总条目数，用于计算总页数                                  | number  | -                                                                              | 0                                                    |
+| pager-count                                   | 设置最大页码按钮数。 页码按钮的数量，当总页数超过该值时会折叠 | number  | -                                                                              | 7                                                    |
+| layout <ea-tag type="primary">prop</ea-tag>   | 控制显示的元素顺序与种类（字符串数组或逗号分隔）              | Array   | `Array<'prev' \| 'pager' \| 'next' \| '->' \| 'jumper' \| 'total' \| 'sizes'>` | `["prev", "pager", "next", "jumper", "->", "total"]` |
+| background                                    | 是否显示带背景样式                                            | boolean | -                                                                              | false                                                |
+| default-page-size                             | 默认每页显示条数（用于 `page-size` 未设置时的回退值）         | number  | -                                                                              | 10                                                   |
+| pageSize <ea-tag type="primary">prop</ea-tag> | 当前每页显示条数                                              | number  | -                                                                              | 10                                                   |
+| current-page                                  | 当前页码                                                      | number  | -                                                                              | 1                                                    |
+| hide-on-single-page                           | 当仅有一页时是否隐藏分页组件                                  | boolean | -                                                                              | false                                                |
+| size                                          | 组件尺寸，会影响样式类                                        | string  | `large \| default \| small`                                                    | ""                                                   |
+| disabled                                      | 是否禁用分页交互                                              | boolean | -                                                                              | false                                                |
 
 ## CSS Part
 
 > 用法可参考 [MDN ::part() 伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称        | 说明                                                               |
-| ----------- | ------------------------------------------------------------------ |
-| container   | 组件根容器，part="container"，用于整体样式定制                     |
-| pager       | 页码列表容器，part="pager"，仅在 layout 包含 `pager` 时存在        |
-| item-wrap   | 页码按钮外层容器（与 pager 配合），用于布局页码按钮                |
-| page-item   | 单个页码按钮，part="page-item"（或 `.ea-pagination__page`）        |
-| more-item   | 省略号/更多 按钮，part="more-item"（或 `.ea-pagination__more`）    |
-| prev-icon   | 上一页箭头图标，part="icon prev-icon"（或 `.prev-icon`）           |
-| next-icon   | 下一页箭头图标，part="icon next-icon"（或 `.next-icon`）           |
-| jumper-wrap | 跳转输入容器，part="jumper-wrap"（当 layout 包含 `jumper` 时存在） |
-| jumper      | 跳转输入控件，part="jumper"（对应内部 `ea-input`）                 |
-| total       | 总数显示容器，part="total"（当 layout 包含 `total` 时存在）        |
-| sizes       | 每页大小选择控件，part="sizes"（当 layout 包含 `sizes` 时存在）    |
-| separator   | 右对齐分隔占位，part="separator"（对应 `->` 在 layout 中的位置）   |
+| 名称        | 说明                                                                 |
+| ----------- | -------------------------------------------------------------------- |
+| container   | 组件根容器，`part="container"`，用于整体样式定制                     |
+| pager       | 页码列表容器，`part="pager"`，仅在 layout 包含 `pager` 时存在        |
+| page        | 单个页码按钮，`part="page"`                                          |
+| more        | 省略号/更多 按钮，`part="more"`                                      |
+| prev-icon   | 上一页箭头图标，`part="icon prev-icon"`                              |
+| next-icon   | 下一页箭头图标，`part="icon next-icon"`                              |
+| total       | 总数显示容器，part="total"（当 layout 包含 `total` 时存在）          |
+| jumper-wrap | 跳转输入容器，`part="jumper-wrap"`（当 layout 包含 `jumper` 时存在） |
+| jumper      | 跳转输入控件，`part="jumper"`（对应内部 `ea-input`）                 |
+| sizes       | 每页大小选择控件，part="sizes"（当 layout 包含 `sizes` 时存在）      |
+| separator   | 右对齐分隔占位，part="separator"（对应 `->` 在 layout 中的位置）     |
 
 ## Events
 
-| 事件名称       | 说明                                       | 回调参数                                    |
-| -------------- | ------------------------------------------ | ------------------------------------------- |
-| change         | 当分页信息（页码或每页数量）改变时触发     | `{ currentPage: number, pageSize: number }` |
-| current-change | 当 current-page 变化时触发（作为补充事件） | `{ value: number }`                         |
-| prev-click     | 点击上一页按钮时触发                       | `{ value: number }`                         |
-| next-click     | 点击下一页按钮时触发                       | `{ value: number }`                         |
+| 事件名称          | 说明                       | 回调参数                                    |
+| ----------------- | -------------------------- | ------------------------------------------- |
+| change            | 当页码改变时触发           | `{ currentPage: number, pageSize: number }` |
+| ea-size-change    | 当 page-size 改变时触发    | `{ pageSize: number }`                      |
+| ea-current-change | 当 current-page 变化时触发 | `{ value: number }`                         |
+| ea-prev-click     | 点击上一页按钮时触发       | `{ value: number }`                         |
+| ea-next-click     | 点击下一页按钮时触发       | `{ value: number }`                         |

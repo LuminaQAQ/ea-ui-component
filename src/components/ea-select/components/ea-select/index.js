@@ -277,13 +277,17 @@ export class EaSelect extends FormAssociatedBase {
 
             this.#handleFilteredOptionStyle("");
           } else {
-            this.#input.value = newVal;
+            this.#input.value = this.#findDisplayValue(newVal);
           }
         }
 
         this.#handleSelectedValueStyle(newVal);
 
-        this.emit("change", { detail: { value: newVal } });
+        this.emit("change", {
+          detail: { value: newVal },
+          bubbles: true,
+          composed: true,
+        });
 
         this.updateContainerClasslist();
       },
@@ -350,6 +354,18 @@ export class EaSelect extends FormAssociatedBase {
     );
     this.#clearIcon = this.shadowRoot.querySelector(".ea-select__clear-icon");
   }
+
+  /**
+   * 获取当前选中值对应的标签
+   * @param {string} value
+   */
+  #findDisplayValue = value => {
+    const option = [...this.querySelectorAll("ea-option")].find(
+      item => item.value === value
+    );
+
+    return option ? option.textContent.trim() : value;
+  };
 
   /**
    * 设置已选项样式
@@ -606,7 +622,9 @@ export class EaSelect extends FormAssociatedBase {
 
     this.#input.addEventListener(
       "change",
-      () => {
+      e => {
+        e.stopImmediatePropagation();
+
         this.show();
       },
       { signal: this.#abortController.signal }

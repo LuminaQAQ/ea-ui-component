@@ -59,8 +59,8 @@ export default defineConfig({
       {
         text: "Form 表单组件",
         items: [
-          // { text: "Autocomplete 自动补全输入框", link: "/ea-autocomplete" },
-          // { text: "Cascader 级联选择器", link: "/ea-cascader" },
+          // { text: "Autocomplete 自动补全输入框 [ ]", link: "/ea-autocomplete" },
+          // { text: "Cascader 级联选择器 [ ]", link: "/ea-cascader" },
           { text: "Checkbox 多选框", link: "/ea-checkbox" },
           // {
           //   text: "ColorPickerPanel 颜色选择器面板",
@@ -106,7 +106,7 @@ export default defineConfig({
           { text: "Empty 空状态", link: "/ea-empty" },
           { text: "Image 图片", link: "/ea-image" },
           { text: "Infinite Scroll 无限滚动", link: "/ea-infinite-scroll" },
-          { text: "Pagination 分页 [ ]", link: "/ea-pagination" },
+          { text: "Pagination 分页", link: "/ea-pagination" },
           { text: "Progress 进度条", link: "/ea-progress" },
           { text: "Result 结果", link: "/ea-result" },
           { text: "Segmented 分段控制器", link: "/ea-segmented" },

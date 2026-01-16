@@ -30,9 +30,18 @@ $ea-pagination-size-options: ("large", "default", "small");
 
   .prev-icon,
   .next-icon {
+    display: inline-block;
+
+    box-sizing: border-box;
+    padding: var(--ea-pagination-default-spacing);
+    border-radius: 2px;
+
+    font-size: var(--ea-pagination-default-size);
+    line-height: var(--ea-pagination-default-size);
+
+    color: var(--ea-pagination-color);
     cursor: pointer;
-    font-size: 16px;
-    padding: var(--ea-pagination-default-control-spacing);
+    text-align: center;
 
     &.is-disabled {
       cursor: not-allowed;
@@ -64,6 +73,8 @@ $ea-pagination-size-options: ("large", "default", "small");
     border-radius: 2px;
 
     font-size: var(--ea-pagination-default-size);
+    line-height: var(--ea-pagination-default-size);
+
     color: var(--ea-pagination-color);
     cursor: pointer;
     text-align: center;
@@ -83,6 +94,8 @@ $ea-pagination-size-options: ("large", "default", "small");
     font-size: var(--ea-pagination-default-size);
 
     margin: 0 0.5rem;
+
+    white-space: nowrap;
   }
 
   @include element(wrapper) {
@@ -93,6 +106,8 @@ $ea-pagination-size-options: ("large", "default", "small");
 
     color: var(--ea-pagination-color);
     font-size: var(--ea-pagination-default-size);
+
+    white-space: nowrap;
   }
 
   @include element(jumper) {
@@ -109,6 +124,12 @@ $ea-pagination-size-options: ("large", "default", "small");
       text-align: center;
       height: var(--ea-pagination-jumper-default-size);
     }
+  }
+
+  @include element(sizes) {
+    margin: 0 0.5rem;
+
+    width: 128px;
   }
 
   @include modifier(background) {
@@ -163,18 +184,16 @@ $ea-pagination-size-options: ("large", "default", "small");
   @each $size in $ea-pagination-size-options {
     @include modifier(size-#{$size}) {
       .prev-icon,
+      .ea-pagination__page,
       .next-icon {
         font-size: var(--ea-pagination-#{$size}-size);
-        padding: var(--ea-pagination-#{$size}-control-spacing);
-      }
-
-      .ea-pagination__page {
-        font-size: var(--ea-pagination-#{$size}-size);
+        line-height: var(--ea-pagination-#{$size}-size);
         padding: var(--ea-pagination-#{$size}-spacing);
       }
 
       .ea-pagination__total {
         font-size: var(--ea-pagination-#{$size}-size);
+        line-height: var(--ea-pagination-#{$size}-size);
       }
 
       .ea-pagination__jumper {
