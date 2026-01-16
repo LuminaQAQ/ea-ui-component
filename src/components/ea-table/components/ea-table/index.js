@@ -3,7 +3,6 @@ import EaUtils from "@/utils/Utils";
 
 import stylesheet from "./index.scss?inline";
 
-import { h } from "../../utils/h";
 import { theadRenderer } from "../thead";
 
 /**
@@ -38,9 +37,13 @@ export class EaTable extends Base {
   /** @type {AbortController} */
   #abortController;
 
+  #AbortControllerStates = {
+    /** @type {AbortController | null} */
+    selectionChangeAbortController: null,
+  };
+
   #states = {
     isDataRendered: false,
-    isCheckboxImported: false,
 
     currentRow: {
       target: null,
@@ -200,6 +203,16 @@ export class EaTable extends Base {
   async $render() {
     await customElements.whenDefined("ea-table-column");
 
+    console.log(
+      this.id,
+      [...this.querySelectorAll("& > ea-table-column")].map(
+        column => column.getColumnTree
+      )
+    );
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
     this.#handleTableStructRender();
 
     /** @type {HTMLElement[]} */
@@ -237,6 +250,12 @@ export class EaTable extends Base {
         });
       });
     }
+    this.#container.addEventListener("click", this.#initClickEvent, {
+      signal: this.#abortController.signal,
+    });
+    this.#container.addEventListener("scroll", this.#onScrollEvent, {
+      signal: this.#abortController.signal,
+    });
   }
 
   setData = async dataSource => {
@@ -248,9 +267,11 @@ export class EaTable extends Base {
     const columns = this.#states.columns.filter(
       item => !item.template || item.template instanceof HTMLTemplateElement
     );
+    const hasSelectionColumn = columns.some(item => item.type === "selection");
 
-    if (this.id === "checkboxTable") {
-      console.log(columns);
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key]?.abort();
+      this.#AbortControllerStates[key] = new AbortController();
     }
 
     this.#states.isDataRendered = false;
@@ -275,6 +296,8 @@ export class EaTable extends Base {
       } else if (column.type) {
         if (column.type === "selection") {
           const checkboxEl = document.createElement("ea-checkbox");
+          if (column.type) checkboxEl.dataset.type = column.type;
+
           td.appendChild(checkboxEl);
         }
       } else {
@@ -310,8 +333,14 @@ export class EaTable extends Base {
 
     this.#tbody.appendChild(bodyTemplate);
 
+    if (hasSelectionColumn) {
+      this.#container.addEventListener("change", this.#onSelectionChangeEvent, {
+        signal: this.#abortController.signal,
+      });
+    }
+
     this.#handleFixedColumn();
-    this.#initScrollEvent();
+    this.#onScrollEvent();
     this.#states.isDataRendered = true;
     this.emit("ea-table-data-rendered");
   };
@@ -417,6 +446,9 @@ export class EaTable extends Base {
 
     columns.forEach(column => {
       const columnTree = this.#initColumnTree(column, depth);
+      const option = column.option;
+      option.depth = depth;
+
       map.set(column.getAttribute("prop") || column.getAttribute("label"), {
         depth,
         type: column.getAttribute("type"),
@@ -634,12 +666,13 @@ export class EaTable extends Base {
   /**
    * 滚动事件: 固定列样式
    */
-  #initScrollEvent = () => {
+  #onScrollEvent = () => {
     /** @type {HTMLElement[]} */
     const fixedItems = [...this.#container.querySelectorAll(".is-fixed")];
     const { scrollLeft } = this.#container;
     const endPosition =
       Math.floor(this.#container.scrollWidth - this.#container.offsetWidth) - 1;
+
     if (scrollLeft < endPosition) {
       if (!scrollLeft) {
         fixedItems.forEach(el => {
@@ -663,29 +696,59 @@ export class EaTable extends Base {
     }
   };
 
+  /**
+   * 当存在 selection 列时，checkbox 的改变事件
+   * @param {Event} e
+   */
+  #onSelectionChangeEvent = e => {
+    if (e.target.dataset.type !== "selection") return;
+
+    /** @type {{checked: boolean}} */
+    const { checked } = e.detail;
+
+    const isTheadCheckbox = e.target.closest(".ea-table__thead");
+    /** @type {HTMLElement[]} */
+    const selectionCheckboxEls = [
+      ...this.#tbody.querySelectorAll(`ea-checkbox[data-type="selection"]`),
+    ];
+
+    if (isTheadCheckbox) {
+      e.target.removeAttribute("indeterminate");
+      selectionCheckboxEls.forEach(checkbox => {
+        checkbox.toggleAttribute("checked", checked);
+      });
+    } else {
+      const selectionCheckbox = this.#thead.querySelector(
+        `ea-checkbox[data-type="selection"]`
+      );
+
+      const isAllChecked = selectionCheckboxEls.every(checkbox =>
+        checkbox.hasAttribute("checked")
+      );
+      const isSomeChecked = selectionCheckboxEls.some(checkbox =>
+        checkbox.hasAttribute("checked")
+      );
+
+      if (isAllChecked) {
+        selectionCheckbox.toggleAttribute("checked", true);
+        selectionCheckbox.removeAttribute("indeterminate");
+      } else if (isSomeChecked) {
+        selectionCheckbox.removeAttribute("checked");
+        selectionCheckbox.toggleAttribute("indeterminate", true);
+      } else {
+        selectionCheckbox.removeAttribute("checked");
+        selectionCheckbox.removeAttribute("indeterminate");
+      }
+    }
+  };
+
   async connectedCallback() {
     super.connectedCallback();
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    await this.$render();
-
-    if (this.#states.columns.find(column => column.type === "selection")) {
-      if (!this.#states.isCheckboxImported) {
-        await import("@components/ea-checkbox/index.js");
-        await customElements.whenDefined("ea-checkbox");
-
-        this.#states.isCheckboxImported = true;
-      }
-    }
-
-    this.#container.addEventListener("click", this.#initClickEvent, {
-      signal: this.#abortController.signal,
-    });
-    this.#container.addEventListener("scroll", this.#initScrollEvent, {
-      signal: this.#abortController.signal,
-    });
+    this.$render();
   }
 
   $beforeUnmounted() {

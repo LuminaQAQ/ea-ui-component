@@ -19,6 +19,7 @@ const selectionRenderer = () =>
     "ea-checkbox",
     "ea-table__checkbox",
     {
+      "data-type": "selection",
       part: "checkbox",
     },
     null
