@@ -302,6 +302,7 @@
     <!-- #endregion  -->
     <!-- end  -->
 
+    <!-- 单选 -->
     <!-- #region -->
     <h1>单选</h1>
 
@@ -335,13 +336,20 @@
     <h1>多选</h1>
 
     <div class="demo">
-      <!-- <ea-table id="checkboxTable" border height="250">
-        <ea-table-column type="selection" width="100"></ea-table-column>
-        <ea-table-column type="index" width="100">id</ea-table-column>
-        <ea-table-column prop="name" width="100">姓名</ea-table-column>
-        <ea-table-column prop="age" width="100">年龄</ea-table-column>
-        <ea-table-column prop="address">地址</ea-table-column>
-      </ea-table> -->
+      <ea-table id="checkboxTable" border>
+        <ea-table-column type="selection" width="55px"></ea-table-column>
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          label="Name"
+          prop="name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column label="Address" prop="address"></ea-table-column>
+      </ea-table>
     </div>
 
     <hr />
@@ -704,11 +712,8 @@
       // TODO: 多选
       // ------- 多选 -------
       // #region
-      // const checkboxTable = document.querySelector("#checkboxTable");
-      // checkboxTable.data = data;
-      // checkboxTable.addEventListener("body-selection-change", (e) => {
-      //   console.log(e.detail);
-      // });
+      const checkboxTable = document.querySelector("#checkboxTable");
+      checkboxTable.setData(data);
       // #endregion
       // ------- end -------
 

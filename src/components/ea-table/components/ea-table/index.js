@@ -13,6 +13,7 @@ import { theadRenderer } from "../thead";
 /**
  * @typedef {Object} ColumnOption
  * @property {number} depth
+ * @property {'selection'} type
  * @property {Boolean} sortable
  * @property {number} colspan
  * @property {number} rowspan
@@ -39,6 +40,7 @@ export class EaTable extends Base {
 
   #states = {
     isDataRendered: false,
+    isCheckboxImported: false,
 
     currentRow: {
       target: null,
@@ -146,92 +148,110 @@ export class EaTable extends Base {
     this.#container = this.shadowRoot.querySelector(".ea-table");
   }
 
-  async $render() {
-    await customElements.whenDefined("ea-table-column");
-
+  /**
+   * 渲染表格的基本结构
+   */
+  #handleTableStructRender = () => {
     const { columns, depth } = this.#getColumnTree();
 
-    const colgroup = h(
+    this.#states.columns = columns;
+
+    const colgroup = EaUtils.EaElement.h(
       "colgroup",
       "ea-table__colgroup",
       {
         part: "colgroup",
       },
       columns.map(column =>
-        h("col", "ea-table__col", { width: column.width, part: "col" })
+        EaUtils.EaElement.h("col", "ea-table__col", {
+          width: column.width,
+          part: "col",
+        })
       )
     );
 
     const thead = theadRenderer(columns, depth);
 
-    const tfoot = h(
+    const tfoot = EaUtils.EaElement.h(
       "tfoot",
       "ea-table__tfoot",
       {
         part: "tfoot",
       },
-      h("tr", "ea-table__tr is-tfoot", {})
+      EaUtils.EaElement.h("tr", "ea-table__tr is-tfoot", {})
     );
 
-    const tbody = h("tbody", "ea-table__tbody", {
+    const tbody = EaUtils.EaElement.h("tbody", "ea-table__tbody", {
       part: "tbody",
     });
 
     this.#container.innerHTML = `
-        ${colgroup}
-        ${thead}
-        ${tbody}
-        ${tfoot}
+      ${colgroup}
+      ${thead}
+      ${tbody}
+      ${tfoot}
     `;
 
     this.#thead = this.shadowRoot.querySelector(".ea-table__thead");
     this.#tbody = this.shadowRoot.querySelector(".ea-table__tbody");
     this.#tfoot = this.shadowRoot.querySelector(".ea-table__tfoot");
-    this.#states.columns = columns;
+  };
+
+  async $render() {
+    await customElements.whenDefined("ea-table-column");
+
+    this.#handleTableStructRender();
 
     /** @type {HTMLElement[]} */
     const sortableEls = [
       ...this.#container.querySelectorAll(".ea-table__th.is-sortable"),
     ];
+
+    /**
+     * 可筛选的列的筛选事件
+     * @param {HTMLElement} el
+     */
+    const onSortItemClickEvent = el => {
+      const icon = {
+        asc: el.querySelector('[part="asc-icon"]'),
+        desc: el.querySelector('[part="desc-icon"]'),
+      };
+      const { prop, order } = el.dataset;
+
+      el.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
+        icon.classList.remove("is-active");
+      });
+      el.dataset.order = order === "asc" ? "desc" : "asc";
+
+      icon[el.dataset.order].classList.add("is-active");
+
+      this.sort(prop, el.dataset.order);
+    };
+
     if (sortableEls.length) {
       sortableEls.forEach(el => {
         if (!el.dataset.prop) return;
 
-        const icon = {
-          asc: el.querySelector('[part="asc-icon"]'),
-          desc: el.querySelector('[part="desc-icon"]'),
-        };
-
-        el.addEventListener(
-          "click",
-          () => {
-            const { prop, order } = el.dataset;
-
-            el.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
-              icon.classList.remove("is-active");
-            });
-            el.dataset.order = order === "asc" ? "desc" : "asc";
-            icon[el.dataset.order].classList.add("is-active");
-
-            this.sort(prop, el.dataset.order);
-          },
-          { signal: this.#abortController.signal }
-        );
+        el.addEventListener("click", onSortItemClickEvent.bind(this, el), {
+          signal: this.#abortController.signal,
+        });
       });
     }
-
-    this.emit("ea-table-rendered");
   }
 
-  setData = dataSource => {
+  setData = async dataSource => {
     /** @type {DocumentFragment} */
     const bodyTemplate = document.createDocumentFragment();
     /** @type {HTMLTemplateElement} */
     const rowTpl = this.shadowRoot.querySelector("#rowTpl");
-
+    /** @type {ColumnOption[]} */
     const columns = this.#states.columns.filter(
       item => !item.template || item.template instanceof HTMLTemplateElement
     );
+
+    if (this.id === "checkboxTable") {
+      console.log(columns);
+    }
 
     this.#states.isDataRendered = false;
     this.#tbody.innerHTML = "";
@@ -252,6 +272,11 @@ export class EaTable extends Base {
 
       if (template) {
         td.appendChild(template.content.cloneNode(true));
+      } else if (column.type) {
+        if (column.type === "selection") {
+          const checkboxEl = document.createElement("ea-checkbox");
+          td.appendChild(checkboxEl);
+        }
       } else {
         td.dataset.scope = column.prop;
       }
@@ -394,6 +419,7 @@ export class EaTable extends Base {
       const columnTree = this.#initColumnTree(column, depth);
       map.set(column.getAttribute("prop") || column.getAttribute("label"), {
         depth,
+        type: column.getAttribute("type"),
         colspan: column.querySelectorAll("ea-table-column").length || 1,
         prop: column.getAttribute("prop"),
         label: column.getAttribute("label"),
@@ -549,8 +575,12 @@ export class EaTable extends Base {
     currentRow?.classList?.add("is-current");
   };
 
+  /**
+   * 取消高亮当前行样式
+   * @param {HTMLTableRowElement} currentRow
+   */
   #unsetHighlightCurrentRowStyle = currentRow => {
-    if (!this["highlight-current-row"]) return;
+    if (!this["highlight-current-row"] || !currentRow) return;
 
     currentRow?.classList?.remove("is-current");
   };
@@ -640,6 +670,15 @@ export class EaTable extends Base {
     this.#abortController = new AbortController();
 
     await this.$render();
+
+    if (this.#states.columns.find(column => column.type === "selection")) {
+      if (!this.#states.isCheckboxImported) {
+        await import("@components/ea-checkbox/index.js");
+        await customElements.whenDefined("ea-checkbox");
+
+        this.#states.isCheckboxImported = true;
+      }
+    }
 
     this.#container.addEventListener("click", this.#initClickEvent, {
       signal: this.#abortController.signal,
