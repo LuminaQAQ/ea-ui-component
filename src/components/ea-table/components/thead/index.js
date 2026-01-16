@@ -1,19 +1,35 @@
 import EaUtils from "@/utils/Utils";
 
-const sortIconRenderer = text => [
-  EaUtils.EaElement.h("span", null, {}, text),
-  EaUtils.EaElement.h("span", "ea-table__sort", {}, [
-    EaUtils.EaElement.h("ea-icon", "ea-table__sort-icon", {
-      part: "asc-icon",
-      icon: "icon-angle-up",
-    }),
-    EaUtils.EaElement.h("ea-icon", "ea-table__sort-icon", {
-      part: "desc-icon",
-      icon: "icon-angle-down",
-    }),
-  ]),
-];
+/**
+ * 排序图标渲染器
+ * @param {string} text
+ * @return {string}
+ */
+const sortIconRenderer = text => {
+  return [
+    EaUtils.EaElement.h("span", null, {}, text),
+    EaUtils.EaElement.h(
+      "span",
+      "ea-table__sort",
+      {},
+      [
+        EaUtils.EaElement.h("ea-icon", "ea-table__sort-icon", {
+          part: "asc-icon",
+          icon: "icon-angle-up",
+        }),
+        EaUtils.EaElement.h("ea-icon", "ea-table__sort-icon", {
+          part: "desc-icon",
+          icon: "icon-angle-down",
+        }),
+      ].join("")
+    ),
+  ].join("");
+};
 
+/**
+ * 当前列是选择列时，返回渲染 ea-checkbox 结果
+ * @returns {string}
+ */
 const selectionRenderer = () =>
   EaUtils.EaElement.h(
     "ea-checkbox",
@@ -26,106 +42,110 @@ const selectionRenderer = () =>
   );
 
 /**
- * 获取 通过h函数创建的column的树结构
- * @param {import("../ea-table").ColumnOption[]} columns
- * @param {number} depth
- * @returns {String}
+ * 主要逻辑为 thead 行结构 下的 th 列结构
+ * @param {import("../ea-table").ColumnOption} col
+ * @returns {string}
  */
-const treeRenderer = (columns, depth) => {
-  let template = "";
+const renderThCell = col => {
+  /**
+   * 获取应渲染的 type 对应的 元素或内容
+   * @param {'selection'} type
+   * @returns {String | null}
+   */
+  const getColumnType = type => {
+    if (type === "selection") {
+      return selectionRenderer();
+    }
 
-  for (let i = columns[0]?.depth; i <= depth; i++) {
-    const currentDepthColumns = columns.filter(column => column.depth === i);
+    return null;
+  };
 
-    /**
-     * 获取column的默认内容
-     * @param {import("../ea-table").ColumnOption} column
-     */
-    const getDefaultContent = column => column.label || column.prop || "";
+  /**
+   * 获取应渲染的 sortable 对应的 元素或内容
+   * @param {Boolean} sortable
+   * @param {String} text
+   * @returns {String | null}
+   */
+  const getColumnSortable = (sortable, text) => {
+    if (sortable) {
+      return sortIconRenderer(text);
+    }
 
-    /**
-     * 获取应渲染的 type 对应的 元素或内容
-     * @param {'selection'} type
-     * @returns {String | null}
-     */
-    const getColumnType = type => {
-      if (type === "selection") {
-        return selectionRenderer();
-      }
+    return null;
+  };
 
-      return null;
-    };
+  let content = null;
 
-    /**
-     * 获取应渲染的 sortable 对应的 元素或内容
-     * @param {import("../ea-table").ColumnOption} column
-     * @returns {String | null}
-     */
-    const getColumnSortable = column => {
-      if (column.sortable) {
-        return sortIconRenderer(getDefaultContent(column));
-      }
+  const defaultContent = col.label || col.prop || "";
+  const typeTemplate = getColumnType(col.type);
+  const sortableTemplate = getColumnSortable(col.sortable, defaultContent);
 
-      return null;
-    };
+  if (typeTemplate) {
+    content = typeTemplate;
+  } else if (sortableTemplate) {
+    content = sortableTemplate;
+  } else {
+    content = defaultContent;
+  }
 
-    template += EaUtils.EaElement.h(
+  return EaUtils.EaElement.h(
+    "th",
+    `ea-table__th ${
+      col.fixed ? `is-fixed fixed-${col.fixed}` : ""
+    } ${col.sortable ? "is-sortable" : ""}`,
+    {
+      part: "thead-th",
+      colspan: col.colspan,
+      rowspan: col.rowspan,
+      style: [col.width ? `--ea-table-cell-width: ${col.width}` : ""],
+      "data-prop": col.prop || "",
+    },
+    content
+  );
+};
+
+/**
+ * 主要逻辑为 thead 行结构
+ * @param {import("../ea-table").ColumnOption[][]} struct
+ * @returns {string}
+ */
+const renderTheadRows = struct =>
+  struct.map(row =>
+    EaUtils.EaElement.h(
       "tr",
       "ea-table__tr is-thead",
       {
         part: "thead-tr",
       },
-      currentDepthColumns.map(column => {
-        let content = null;
-
-        const typeTemplate = getColumnType(column.type);
-        const sortableTemplate = getColumnSortable(column);
-        const defaultTemplate = getDefaultContent(column);
-
-        if (typeTemplate) {
-          content = typeTemplate;
-        } else if (sortableTemplate) {
-          content = sortableTemplate;
-        } else {
-          content = defaultTemplate;
-        }
-
-        return EaUtils.EaElement.h(
-          "th",
-          `ea-table__th ${
-            column.fixed ? `is-fixed fixed-${column.fixed}` : ""
-          } ${column.sortable ? "is-sortable" : ""}`,
-          {
-            part: "thead-th",
-            colspan: column.colspan,
-            rowspan: column.rowspan,
-            style: [
-              column.width ? `--ea-table-cell-width: ${column.width}` : "",
-            ],
-            "data-prop": column.prop || "",
-          },
-          content
-        );
-      })
-    );
-  }
-
-  return template;
-};
+      row.map(renderThCell)
+    )
+  );
 
 /**
- *
- * @param {Array} columns
+ * 获取 表头 HTML
+ * @param {import("../ea-table").ColumnOption[]} columns
  * @param {number} depth
  * @returns
  */
-export const theadRenderer = (columns, depth) => {
+export const theadRenderer = columns => {
+  /**
+   * 将列结构转换成表头结构，按照视觉逻辑排数组列结构
+   * @type {import("../ea-table").ColumnOption[][]}
+   */
+  const theadStruct = columns.reduce((acc, col) => {
+    if (!acc[col.depth]) acc[col.depth] = [];
+
+    acc[col.depth].push(col);
+
+    return acc;
+  }, []);
+
   return EaUtils.EaElement.h(
     "thead",
     "ea-table__thead",
     {
       part: "thead",
     },
-    treeRenderer(columns, depth)
+    renderTheadRows(theadStruct)
   );
 };

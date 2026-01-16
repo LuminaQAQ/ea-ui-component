@@ -63,18 +63,6 @@ export class EaTableColumn extends Base {
         const exclude = ["prop", "label", "width", "fixed"];
         let template = null;
 
-        const getDepth = (el, root) => {
-          let depth = 0;
-
-          if (el.parentElement === root) {
-            depth = 0;
-          } else {
-            depth = getDepth(el.parentElement, root) + 1;
-          }
-
-          return depth;
-        };
-
         if (columns.length) {
           template = columns.map(columns => columns.getColumnTree);
         } else if (this.innerHTML) {
@@ -89,12 +77,17 @@ export class EaTableColumn extends Base {
           label: this.label,
           prop: this.prop,
           type: this.type,
+
           colspan: this.colspan,
+          rowspan: template
+            ? 1
+            : this.#getMaxDepth(table) - this.#getThisDepth(this, table) + 1,
+
           width: this.width,
           sortable: this.sortable,
           fixed: this.fixed,
 
-          depth: getDepth(this, table),
+          depth: this.#getThisDepth(this, table),
 
           props: [...this.attributes].filter(
             attr => !exclude.includes(attr.name)
@@ -106,54 +99,44 @@ export class EaTableColumn extends Base {
     },
   });
 
+  /**
+   * 获取当前组件的深度
+   * @param {EaTableColumn} el
+   * @param {import("../ea-table/index.js").EaTable} root
+   * @returns {number}
+   */
+  #getThisDepth = (el, root) => {
+    let depth = 0;
+
+    while (el !== root) {
+      el = el.parentElement;
+      depth++;
+    }
+
+    return depth;
+  };
+
+  /**
+   * 获取最大深度
+   * @param {import("../ea-table/index.js").EaTable} root
+   * @returns {number}
+   */
+  #getMaxDepth = root => {
+    let depth = 0;
+
+    root.querySelectorAll("ea-table-column").forEach(el => {
+      depth = Math.max(depth, this.#getThisDepth(el, root));
+    });
+
+    return depth;
+  };
+
   constructor() {
     super();
   }
 
-  $render() {
-    if (this.innerHTML) {
-      const template = document.createElement("template");
-      template.innerHTML = this.innerHTML;
-      this.template = template;
-    } else {
-      this.template = null;
-    }
-  }
-
   connectedCallback() {
     super.connectedCallback();
-
-    // console.log("ready");
-
-    // const columns = [...this.querySelectorAll("& > ea-table-column")];
-    // const exclude = ["prop", "label", "width", "fixed"];
-    // let template = null;
-
-    // if (columns.length) {
-    //   template = columns.map(columns => columns.option);
-    // } else if (this.innerHTML) {
-    //   const tpl = document.createElement("template");
-    //   tpl.innerHTML = this.innerHTML;
-    //   template = tpl;
-    // } else {
-    //   template = null;
-    // }
-
-    // this.$render();
-
-    // this.option = {
-    //   label: this.label,
-    //   prop: this.prop,
-    //   type: this.type,
-    //   colspan: this.colspan,
-    //   width: this.width,
-    //   sortable: this.sortable,
-    //   fixed: this.fixed,
-
-    //   props: [...this.attributes].filter(attr => !exclude.includes(attr.name)),
-
-    //   template,
-    // };
   }
 }
 

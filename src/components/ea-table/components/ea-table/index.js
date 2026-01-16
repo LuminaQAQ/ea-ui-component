@@ -155,7 +155,10 @@ export class EaTable extends Base {
    * 渲染表格的基本结构
    */
   #handleTableStructRender = () => {
-    const { columns, depth } = this.#getColumnTree();
+    /** @type {ColumnOption[]} */
+    const columns = [...this.querySelectorAll("ea-table-column")].map(
+      column => column.getColumnTree
+    );
 
     this.#states.columns = columns;
 
@@ -173,7 +176,7 @@ export class EaTable extends Base {
       )
     );
 
-    const thead = theadRenderer(columns, depth);
+    const thead = theadRenderer(columns);
 
     const tfoot = EaUtils.EaElement.h(
       "tfoot",
@@ -202,13 +205,6 @@ export class EaTable extends Base {
 
   async $render() {
     await customElements.whenDefined("ea-table-column");
-
-    console.log(
-      this.id,
-      [...this.querySelectorAll("& > ea-table-column")].map(
-        column => column.getColumnTree
-      )
-    );
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
@@ -429,87 +425,6 @@ export class EaTable extends Base {
       this.#states.currentRow.target = null;
     }
   }
-
-  /**
-   * 递归获取所有column, 并转换成树结构
-   * @param {HTMLElement} el
-   * @param {number} depth
-   * @returns {Map}
-   */
-  #initColumnTree = (el, depth = 0) => {
-    if (!el) return;
-
-    const columns = el.querySelectorAll("& > ea-table-column");
-    const exclude = ["prop", "label", "width", "fixed"];
-    const map = new Map();
-    depth++;
-
-    columns.forEach(column => {
-      const columnTree = this.#initColumnTree(column, depth);
-      const option = column.option;
-      option.depth = depth;
-
-      map.set(column.getAttribute("prop") || column.getAttribute("label"), {
-        depth,
-        type: column.getAttribute("type"),
-        colspan: column.querySelectorAll("ea-table-column").length || 1,
-        prop: column.getAttribute("prop"),
-        label: column.getAttribute("label"),
-        width: column.getAttribute("width"),
-        sortable: column.getAttribute("sortable") !== null,
-        fixed:
-          column.getAttribute("fixed") ||
-          typeof column.getAttribute("fixed") === "string"
-            ? column.getAttribute("fixed") || "left"
-            : null,
-        props: [...column.attributes].filter(
-          attr => !exclude.includes(attr.name)
-        ),
-        template: columnTree.size
-          ? Object.fromEntries(columnTree.entries())
-          : column?.template,
-      });
-    });
-
-    return map;
-  };
-
-  /**
-   * 处理真实树，同时处理配置项
-   * @returns {{columns: ColumnOption[], depth: Number}}
-   */
-  #getColumnTree = () => {
-    /**
-     * 获取column的树结构
-     * @param {Array} column
-     */
-    const flat = column => {
-      if (!column) return column;
-
-      let ary = [];
-      Object.values(column).forEach(col => {
-        ary.push(col);
-        if (col?.template) ary = [...ary, ...flat(col.template)];
-      });
-
-      return ary;
-    };
-
-    /** @type {ColumnOption[]} */
-    let columns = flat(
-      Object.fromEntries(this.#initColumnTree(this).entries())
-    ).sort((a, b) => a.depth - b.depth);
-    const depth = columns.reduce((acc, cur) => {
-      return Math.max(acc, cur.depth);
-    }, 0);
-
-    columns = columns.map(col => ({
-      ...col,
-      rowspan: col.template ? 1 : depth - col.depth + 1,
-    }));
-
-    return { columns, depth };
-  };
 
   /**
    * 处理固定列的位置和阴影（box-shadow）
@@ -742,7 +657,7 @@ export class EaTable extends Base {
     }
   };
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback();
 
     this.#abortController?.abort();
