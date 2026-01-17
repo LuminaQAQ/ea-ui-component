@@ -7,7 +7,7 @@
 
   --ea-table-sort-indicator-color: var(--grey-500);
   --ea-table-sort-indicator-active-color: var(--blue-500);
-  --ea-table-sort-icon-size: 10px;
+  --ea-table-sort-icon-size: 14px;
   --ea-table-header-color: var(--grey-700);
   --ea-table-header-font-size: var(--font-size-lg);
   --ea-table-body-color: var(--grey-900);
@@ -79,7 +79,7 @@ slot {
   }
 
   @include element(sort-icon) {
-    font-size: 10px;
+    font-size: var(--ea-table-sort-icon-size);
     color: var(--ea-table-sort-indicator-color);
 
     &.is-active {

@@ -330,13 +330,12 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- TODO: 多选 -->
     <!--  多选 -->
     <!-- #region -->
     <h1>多选</h1>
 
     <div class="demo">
-      <ea-table id="checkboxTable" border>
+      <ea-table id="selectionTable" border>
         <ea-table-column type="selection" width="55px"></ea-table-column>
         <ea-table-column
           label="Date"
@@ -350,6 +349,17 @@
         ></ea-table-column>
         <ea-table-column label="Address" prop="address"></ea-table-column>
       </ea-table>
+      <div style="margin-top: 20px">
+        <ea-button id="selectionTableToggleSelection1">
+          Toggle selection status of second and third rows
+        </ea-button>
+        <ea-button id="selectionTableToggleSelection2">
+          Toggle selection status based on selectable
+        </ea-button>
+        <ea-button id="selectionTableClearSelection">
+          Clear selection
+        </ea-button>
+      </div>
     </div>
 
     <hr />
@@ -464,21 +474,25 @@
     <script type="module">
       const data = [
         {
+          id: 1,
           date: "2016-05-03",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
         },
         {
+          id: 2,
           date: "2016-05-02",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
         },
         {
+          id: 3,
           date: "2016-05-04",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
         },
         {
+          id: 4,
           date: "2016-05-01",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
@@ -709,11 +723,44 @@
       // #endregion
       // ------- end -------
 
-      // TODO: 多选
       // ------- 多选 -------
       // #region
-      const checkboxTable = document.querySelector("#checkboxTable");
-      checkboxTable.setData(data);
+      const selectionTable = {
+        table: document.querySelector("#selectionTable"),
+        secondAndThirdBtn: document.querySelector(
+          "#selectionTableToggleSelection1"
+        ),
+        thirdBtn: document.querySelector("#selectionTableToggleSelection2"),
+        clearBtn: document.querySelector("#selectionTableClearSelection"),
+
+        toggleSelection(rows, ignoreSelectable) {
+          if (rows) {
+            rows.forEach(row => {
+              this.table.toggleRowSelection(row, undefined, ignoreSelectable);
+            });
+          } else {
+            this.table.clearSelection();
+          }
+        },
+
+        init() {
+          this.table.selectable = row => ![1, 2].includes(row.id);
+          this.table.setData(data);
+
+          this.secondAndThirdBtn.addEventListener("click", () => {
+            this.toggleSelection([data[1], data[2]]);
+          });
+
+          this.thirdBtn.addEventListener("click", () => {
+            this.toggleSelection([data[1], data[2]], false);
+          });
+
+          this.clearBtn.addEventListener("click", () => {
+            this.toggleSelection();
+          });
+        },
+      };
+      selectionTable.init();
       // #endregion
       // ------- end -------
 

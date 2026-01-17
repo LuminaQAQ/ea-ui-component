@@ -8,26 +8,31 @@ onMounted(async () => {
 
       const data = [
         {
+          id: 1,
           date: "2016-05-03",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
         },
         {
+          id: 2,
           date: "2016-05-02",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
         },
         {
+          id: 3,
           date: "2016-05-04",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
         },
         {
+          id: 4,
           date: "2016-05-01",
           name: "Tom",
           address: "No. 189, Grove St, Los Angeles",
         },
       ];
+
 
       const moreData = [
         {
@@ -247,14 +252,44 @@ onMounted(async () => {
       // #endregion
       // ------- end -------
 
-      // TODO: 多选
       // ------- 多选 -------
       // #region
-      // const checkboxTable = document.querySelector("#checkboxTable");
-      // checkboxTable.data = data;
-      // checkboxTable.addEventListener("body-selection-change", (e) => {
-      //   console.log(e.detail);
-      // });
+      const selectionTable = {
+        table: document.querySelector("#selectionTable"),
+        secondAndThirdBtn: document.querySelector(
+          "#selectionTableToggleSelection1"
+        ),
+        thirdBtn: document.querySelector("#selectionTableToggleSelection2"),
+        clearBtn: document.querySelector("#selectionTableClearSelection"),
+
+        toggleSelection(rows, ignoreSelectable) {
+          if (rows) {
+            rows.forEach(row => {
+              this.table.toggleRowSelection(row, undefined, ignoreSelectable);
+            });
+          } else {
+            this.table.clearSelection();
+          }
+        },
+
+        init() {
+          this.table.selectable = row => ![1, 2].includes(row.id);
+          this.table.setData(data);
+
+          this.secondAndThirdBtn.addEventListener("click", () => {
+            this.toggleSelection([data[1], data[2]]);
+          });
+
+          this.thirdBtn.addEventListener("click", () => {
+            this.toggleSelection([data[1], data[2]], false);
+          });
+
+          this.clearBtn.addEventListener("click", () => {
+            this.toggleSelection();
+          });
+        },
+      };
+      selectionTable.init();
       // #endregion
       // ------- end -------
 
@@ -1197,18 +1232,112 @@ radioTable.init();
 
 :::
 
-## [-] 多选
+## 多选
 
 选择多行数据时使用 Checkbox。
+
+<div class="demo">
+  <ea-table id="selectionTable" border>
+    <ea-table-column type="selection" width="55px"></ea-table-column>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
+  <div style="margin-top: 20px">
+    <ea-button id="selectionTableToggleSelection1">
+      Toggle selection status of second and third rows
+    </ea-button>
+    <ea-button id="selectionTableToggleSelection2">
+      Toggle selection status based on selectable
+    </ea-button>
+    <ea-button id="selectionTableClearSelection"> Clear selection </ea-button>
+  </div>
+</div>
 
 ::: code-group
 
 ```html
-
+<div class="demo">
+  <ea-table id="selectionTable" border>
+    <ea-table-column type="selection" width="55px"></ea-table-column>
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name" width="180px"></ea-table-column>
+    <ea-table-column label="Address" prop="address"></ea-table-column>
+  </ea-table>
+  <div style="margin-top: 20px">
+    <ea-button id="selectionTableToggleSelection1">
+      Toggle selection status of second and third rows
+    </ea-button>
+    <ea-button id="selectionTableToggleSelection2">
+      Toggle selection status based on selectable
+    </ea-button>
+    <ea-button id="selectionTableClearSelection"> Clear selection </ea-button>
+  </div>
+</div>
 ```
 
 ```js
+const data = [
+  {
+    id: 1,
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 2,
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 3,
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 4,
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
 
+const selectionTable = {
+  table: document.querySelector("#selectionTable"),
+  secondAndThirdBtn: document.querySelector("#selectionTableToggleSelection1"),
+  thirdBtn: document.querySelector("#selectionTableToggleSelection2"),
+  clearBtn: document.querySelector("#selectionTableClearSelection"),
+
+  toggleSelection(rows, ignoreSelectable) {
+    if (rows) {
+      rows.forEach(row => {
+        this.table.toggleRowSelection(row, undefined, ignoreSelectable);
+      });
+    } else {
+      this.table.clearSelection();
+    }
+  },
+
+  init() {
+    this.table.selectable = row => ![1, 2].includes(row.id);
+    this.table.setData(data);
+
+    this.secondAndThirdBtn.addEventListener("click", () => {
+      this.toggleSelection([data[1], data[2]]);
+    });
+
+    this.thirdBtn.addEventListener("click", () => {
+      this.toggleSelection([data[1], data[2]], false);
+    });
+
+    this.clearBtn.addEventListener("click", () => {
+      this.toggleSelection();
+    });
+  },
+};
+selectionTable.init();
 ```
 
 :::
@@ -1248,6 +1377,33 @@ radioTable.init();
 ```
 
 ```js
+const data = [
+  {
+    id: 1,
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 2,
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 3,
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 4,
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
 const sortableTable = {
   table: document.querySelector("#sortableTable"),
 
@@ -1269,7 +1425,9 @@ sortableTable.init();
 自定义某列或表头的显示内容，可组合其他组件使用。
 
 :::danger
+
 <!-- 注意: 若 `slot="body"` 中的元素要带有业务逻辑且开启了排序功能，则该元素必须以 `WebComponent` 的形式存在，且`事件`需要在组件中已经定义和绑定。否则会在排序后丢失元素事件。 -->
+
 :::
 
 ::: code-group

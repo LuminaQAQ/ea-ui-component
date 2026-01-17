@@ -4,6 +4,9 @@ import EaUtils from "@/utils/Utils";
 import stylesheet from "./index.scss?inline";
 
 import { theadRenderer } from "../thead";
+import { EaTableSelectionChangeEvent } from "../../events/EaTableSelectionChangeEvent";
+import { EaTableSelectEvent } from "../../events/EaTableSelectEvent";
+import { EaTableSelectAllEvent } from "../../events/EaTableSelectAllEvent";
 
 /**
  * @typedef {Element & {template: HTMLTemplateElement}} EaTableColumnElement
@@ -111,6 +114,15 @@ export class EaTable extends Base {
     },
   });
 
+  funcStates = this.properties({
+    selectable: {
+      props: true,
+      type: Function,
+      rawFunction: true,
+      default: null,
+    },
+  });
+
   /**
    * 获取 classlist 列表
    * @return {string} 属性值
@@ -178,14 +190,9 @@ export class EaTable extends Base {
 
     const thead = theadRenderer(columns);
 
-    const tfoot = EaUtils.EaElement.h(
-      "tfoot",
-      "ea-table__tfoot",
-      {
-        part: "tfoot",
-      },
-      EaUtils.EaElement.h("tr", "ea-table__tr is-tfoot", {})
-    );
+    const tfoot = EaUtils.EaElement.h("tfoot", "ea-table__tfoot", {
+      part: "tfoot",
+    });
 
     const tbody = EaUtils.EaElement.h("tbody", "ea-table__tbody", {
       part: "tbody",
@@ -203,6 +210,50 @@ export class EaTable extends Base {
     this.#tfoot = this.shadowRoot.querySelector(".ea-table__tfoot");
   };
 
+  /**
+   * 初始化带有筛选的列
+   */
+  #handleSortableColumnsInit = () => {
+    /** @type {HTMLElement[]} */
+    const sortableEls = [
+      ...this.#container.querySelectorAll(".ea-table__th.is-sortable"),
+    ];
+
+    if (!sortableEls.length) return;
+
+    /**
+     * 可筛选的列的筛选事件
+     * @param {MouseEvent} e
+     */
+    const onSortItemClickEvent = e => {
+      const sortableEl = e.target.closest(".is-sortable");
+      if (!sortableEl) return;
+
+      const { prop, order } = sortableEl.dataset;
+      if (!prop) return;
+
+      const icon = {
+        asc: sortableEl.querySelector('[part="asc-icon"]'),
+        desc: sortableEl.querySelector('[part="desc-icon"]'),
+      };
+
+      const newOrder = order === "asc" ? "desc" : "asc";
+
+      sortableEl.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
+        icon.classList.remove("is-active");
+      });
+      icon[newOrder].classList.add("is-active");
+
+      sortableEl.dataset.order = newOrder;
+
+      this.sort(prop, newOrder);
+    };
+
+    this.#thead.addEventListener("click", onSortItemClickEvent, {
+      signal: this.#abortController.signal,
+    });
+  };
+
   async $render() {
     await customElements.whenDefined("ea-table-column");
 
@@ -210,42 +261,8 @@ export class EaTable extends Base {
     this.#abortController = new AbortController();
 
     this.#handleTableStructRender();
+    this.#handleSortableColumnsInit();
 
-    /** @type {HTMLElement[]} */
-    const sortableEls = [
-      ...this.#container.querySelectorAll(".ea-table__th.is-sortable"),
-    ];
-
-    /**
-     * 可筛选的列的筛选事件
-     * @param {HTMLElement} el
-     */
-    const onSortItemClickEvent = el => {
-      const icon = {
-        asc: el.querySelector('[part="asc-icon"]'),
-        desc: el.querySelector('[part="desc-icon"]'),
-      };
-      const { prop, order } = el.dataset;
-
-      el.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
-        icon.classList.remove("is-active");
-      });
-      el.dataset.order = order === "asc" ? "desc" : "asc";
-
-      icon[el.dataset.order].classList.add("is-active");
-
-      this.sort(prop, el.dataset.order);
-    };
-
-    if (sortableEls.length) {
-      sortableEls.forEach(el => {
-        if (!el.dataset.prop) return;
-
-        el.addEventListener("click", onSortItemClickEvent.bind(this, el), {
-          signal: this.#abortController.signal,
-        });
-      });
-    }
     this.#container.addEventListener("click", this.#initClickEvent, {
       signal: this.#abortController.signal,
     });
@@ -320,6 +337,14 @@ export class EaTable extends Base {
       trNode.dataset.index = i;
 
       bodyTemplate.appendChild(trNode);
+
+      if (typeof this.selectable === "function") {
+        const selectable = !this.selectable(item);
+        const selectionCheckbox = trNode.querySelector(
+          `ea-checkbox[data-type="selection"]`
+        );
+        selectionCheckbox.toggleAttribute("disabled", selectable);
+      }
 
       this.#states.dataSource.set(trNode, item);
       if (item && typeof item === "object") {
@@ -425,6 +450,98 @@ export class EaTable extends Base {
       this.#states.currentRow.target = null;
     }
   }
+
+  /**
+   * 设置当前行是否被选中
+   * @param {any} row
+   * @param {Boolean} selected
+   * @param {boolean} [ignoreSelectable]
+   */
+  toggleRowSelection = (row, selected, ignoreSelectable = true) => {
+    const hasSelection = this.#states.columns.some(
+      column => column.type === "selection"
+    );
+    if (!hasSelection) return;
+
+    const tr = this.#states.dataIndex.get(row);
+    if (!tr) return;
+
+    const selector = `ea-checkbox[data-type="selection"]${!ignoreSelectable ? ":not([disabled])" : ""}`;
+    /** @type {import("@components/ea-checkbox/index.js").EaCheckbox} */
+    const checkbox = tr.querySelector(selector);
+    if (!checkbox) return;
+
+    if (selected) {
+      checkbox.toggleAttribute("checked", selected);
+    } else {
+      checkbox.toggleAttribute("checked", !checkbox.checked);
+    }
+
+    this.#handleSelectionUpdate();
+    this.#dispatchSlectionChangeEvent();
+  };
+
+  /**
+   * 清空选择
+   */
+  clearSelection = () => {
+    /** @type {HTMLElement[]} */
+    const selectionCheckboxEls = [
+      ...this.#container.querySelectorAll(`ea-checkbox[data-type="selection"]`),
+    ];
+
+    selectionCheckboxEls.forEach(el => {
+      el.removeAttribute("checked");
+      el.removeAttribute("indeterminate");
+    });
+
+    this.#dispatchSlectionChangeEvent();
+  };
+
+  /**
+   * 获取当前选中的行
+   * @returns {any[]}
+   */
+  #getCurrentSelectionRows = () => {
+    return [
+      ...this.#tbody.querySelectorAll(
+        `ea-checkbox[data-type="selection"][checked]`
+      ),
+    ].map(el =>
+      this.#states.dataSource.get(el.closest(`.ea-table__tr[part="tbody-tr"]`))
+    );
+  };
+
+  /**
+   * 更新选中状态
+   */
+  #handleSelectionUpdate = () => {
+    /** @type {import("@components/ea-checkbox/index.js").EaCheckbox} */
+    const theadCheckboxEl = this.#thead.querySelector(
+      `ea-checkbox[data-type="selection"]`
+    );
+
+    const isAllChecked = [
+      ...this.#tbody.querySelectorAll(
+        `ea-checkbox[data-type="selection"]:not([disabled])`
+      ),
+    ].every(checkbox => checkbox.hasAttribute("checked"));
+
+    const isSomeChecked = [
+      ...this.#tbody.querySelectorAll(`ea-checkbox[data-type="selection"]`),
+    ].some(checkbox => checkbox.hasAttribute("checked"));
+
+    if (isAllChecked) {
+      theadCheckboxEl.toggleAttribute("checked", true);
+      theadCheckboxEl.removeAttribute("indeterminate");
+    } else if (isSomeChecked) {
+      theadCheckboxEl.removeAttribute("checked");
+      theadCheckboxEl.toggleAttribute("indeterminate", true);
+    } else {
+      theadCheckboxEl.removeAttribute("checked");
+      theadCheckboxEl.removeAttribute("indeterminate");
+    }
+  };
 
   /**
    * 处理固定列的位置和阴影（box-shadow）
@@ -533,6 +650,19 @@ export class EaTable extends Base {
   };
 
   /**
+   * 派发选择改变事件
+   */
+  #dispatchSlectionChangeEvent = () => {
+    const newSelection = this.#getCurrentSelectionRows();
+
+    this.dispatchEvent(
+      new EaTableSelectionChangeEvent({
+        newSelection,
+      })
+    );
+  };
+
+  /**
    * 点击事件: 行点击, 单元格点击
    * @param {MouseEvent} e
    */
@@ -618,43 +748,42 @@ export class EaTable extends Base {
   #onSelectionChangeEvent = e => {
     if (e.target.dataset.type !== "selection") return;
 
+    e.stopImmediatePropagation();
+
     /** @type {{checked: boolean}} */
     const { checked } = e.detail;
 
     const isTheadCheckbox = e.target.closest(".ea-table__thead");
-    /** @type {HTMLElement[]} */
-    const selectionCheckboxEls = [
-      ...this.#tbody.querySelectorAll(`ea-checkbox[data-type="selection"]`),
-    ];
 
     if (isTheadCheckbox) {
-      e.target.removeAttribute("indeterminate");
+      /** @type {HTMLElement[]} */
+      const selectionCheckboxEls = [
+        ...this.#tbody.querySelectorAll(`ea-checkbox[data-type="selection"]`),
+      ];
+
+      e.target.toggleAttribute("checked", e.target.hasAttribute("checked"));
+
       selectionCheckboxEls.forEach(checkbox => {
-        checkbox.toggleAttribute("checked", checked);
+        if (!checkbox.hasAttribute("disabled")) {
+          checkbox.toggleAttribute("checked", checked);
+        }
       });
+
+      const selection = this.#getCurrentSelectionRows();
+      this.dispatchEvent(new EaTableSelectAllEvent({ selection }));
     } else {
-      const selectionCheckbox = this.#thead.querySelector(
-        `ea-checkbox[data-type="selection"]`
+      const selection = this.#getCurrentSelectionRows();
+      const currentRow = this.#states.dataSource.get(
+        e.target.closest(`.ea-table__tr[part="tbody-tr"]`)
       );
 
-      const isAllChecked = selectionCheckboxEls.every(checkbox =>
-        checkbox.hasAttribute("checked")
+      this.#handleSelectionUpdate();
+      this.dispatchEvent(
+        new EaTableSelectEvent({ selection, row: currentRow })
       );
-      const isSomeChecked = selectionCheckboxEls.some(checkbox =>
-        checkbox.hasAttribute("checked")
-      );
-
-      if (isAllChecked) {
-        selectionCheckbox.toggleAttribute("checked", true);
-        selectionCheckbox.removeAttribute("indeterminate");
-      } else if (isSomeChecked) {
-        selectionCheckbox.removeAttribute("checked");
-        selectionCheckbox.toggleAttribute("indeterminate", true);
-      } else {
-        selectionCheckbox.removeAttribute("checked");
-        selectionCheckbox.removeAttribute("indeterminate");
-      }
     }
+
+    this.#dispatchSlectionChangeEvent();
   };
 
   connectedCallback() {
