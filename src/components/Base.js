@@ -165,6 +165,10 @@ export default class Base extends HTMLElement {
           : parseDefaultValue(config?.default);
       }
 
+      if (type === String) {
+        return typeof rawValue === "function" ? rawValue() : rawValue;
+      }
+
       if (typeof type === "object" && type !== null) {
         const realType = Object.entries(type).filter(_ => _[1]());
 

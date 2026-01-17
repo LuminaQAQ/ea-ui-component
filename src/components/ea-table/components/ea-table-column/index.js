@@ -38,10 +38,11 @@ export class EaTableColumn extends Base {
     },
     fixed: {
       type: String,
-      default: () =>
-        this.hasAttribute("fixed")
+      default: () => {
+        return this.hasAttribute("fixed")
           ? this.getAttribute("fixed") || "left"
-          : null,
+          : null;
+      },
     },
   });
 
