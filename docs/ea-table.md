@@ -293,6 +293,21 @@ onMounted(async () => {
       // #endregion
       // ------- end -------
 
+      // ------- 自定义索引 -------
+      // #region
+      const increaseliyTable = {
+        table: document.querySelector("#increaseliyTable"),
+
+        init() {
+          this.table.indexMethod = index => index * 2;
+
+          this.table.setData(data);
+        },
+      };
+      increaseliyTable.init();
+      // #endregion
+      // ------- end -------
+
       // ------- 排序 -------
       // #region
       const sortableTable = {
@@ -314,13 +329,6 @@ onMounted(async () => {
       // ------- 筛选 -------
       // #region
 
-      // #endregion
-      // ------- end -------
-
-      // ------- 7. 自增id序列 -------
-      // #region
-      // const increaseliyTable = document.querySelector("#increaseliyTable");
-      // increaseliyTable.data = data;
       // #endregion
       // ------- end -------
 
@@ -1338,6 +1346,74 @@ const selectionTable = {
   },
 };
 selectionTable.init();
+```
+
+:::
+
+## 自定义索引
+
+自定义 `type=index` 列的行号。
+
+<div class="demo">
+  <ea-table id="increaseliyTable" style="width: 100%">
+    <ea-table-column type="index"></ea-table-column>
+    <ea-table-column prop="date" label="Date" width="180px"></ea-table-column>
+    <ea-table-column prop="name" label="Name" width="180px"></ea-table-column>
+    <ea-table-column prop="address" label="Address"></ea-table-column>
+  </ea-table>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-table id="increaseliyTable" style="width: 100%">
+    <ea-table-column type="index"></ea-table-column>
+    <ea-table-column prop="date" label="Date" width="180px"></ea-table-column>
+    <ea-table-column prop="name" label="Name" width="180px"></ea-table-column>
+    <ea-table-column prop="address" label="Address"></ea-table-column>
+  </ea-table>
+</div>
+```
+
+```js
+const data = [
+  {
+    id: 1,
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 2,
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 3,
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 4,
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
+const increaseliyTable = {
+  table: document.querySelector("#increaseliyTable"),
+
+  init() {
+    this.table.indexMethod = index => index * 2;
+
+    this.table.setData(data);
+  },
+};
+increaseliyTable.init();
 ```
 
 :::

@@ -41,6 +41,8 @@ const selectionRenderer = () =>
     null
   );
 
+const indexRenderer = () => "";
+
 /**
  * 主要逻辑为 thead 行结构 下的 th 列结构
  * @param {import("../ea-table").ColumnOption} col
@@ -55,6 +57,8 @@ const renderThCell = col => {
   const getColumnType = type => {
     if (type === "selection") {
       return selectionRenderer();
+    } else if (type === "index") {
+      return indexRenderer();
     }
 
     return null;

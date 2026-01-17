@@ -366,6 +366,31 @@
     <!-- #endregion  -->
     <!-- end  -->
 
+    <!--  自定义索引 -->
+    <!-- #region -->
+    <h1>自定义索引</h1>
+
+    <div class="demo">
+      <ea-table id="increaseliyTable" style="width: 100%">
+        <ea-table-column type="index"></ea-table-column>
+        <ea-table-column
+          prop="date"
+          label="Date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="name"
+          label="Name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column prop="address" label="Address"></ea-table-column>
+      </ea-table>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
     <!--  排序 -->
     <!-- #region -->
     <h1>排序</h1>
@@ -423,20 +448,6 @@
     <hr />
     <!-- #endregion  -->
     <!-- end  -->
-
-    <!-- -------- 7. 自增id序列 --------  -->
-    <!-- #region  -->
-    <h2>7. 自增id序列</h2>
-    <!-- <ea-table id="increaseliyTable" border height="250" highlight-current-row>
-      <ea-table-column type="index" width="100">id</ea-table-column>
-      <ea-table-column prop="name" width="100">姓名</ea-table-column>
-      <ea-table-column prop="age" width="100">年龄</ea-table-column>
-      <ea-table-column prop="address">地址</ea-table-column>
-    </ea-table> -->
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <hr />
 
     <!-- -------- 10. 自定义插槽 --------  -->
     <!-- #region  -->
@@ -764,6 +775,21 @@
       // #endregion
       // ------- end -------
 
+      // ------- 自定义索引 -------
+      // #region
+      const increaseliyTable = {
+        table: document.querySelector("#increaseliyTable"),
+
+        init() {
+          this.table.indexMethod = index => index * 2;
+
+          this.table.setData(data);
+        },
+      };
+      increaseliyTable.init();
+      // #endregion
+      // ------- end -------
+
       // ------- 排序 -------
       // #region
       const sortableTable = {
@@ -785,30 +811,6 @@
       // ------- 筛选 -------
       // #region
 
-      // #endregion
-      // ------- end -------
-
-      // ------- 7. 自增id序列 -------
-      // #region
-      // const increaseliyTable = document.querySelector("#increaseliyTable");
-      // increaseliyTable.data = data;
-      // #endregion
-      // ------- end -------
-
-      // ------- 9. 排序 -------
-      // #region
-      // const sortableTable = {
-      //   table: document.querySelector("#sortableTable"),
-
-      //   init() {
-      //     this.table.data = moreData;
-
-      //     this.table.addEventListener("sort-change", (e) => {
-      //       console.log(e.detail);
-      //     });
-      //   },
-      // };
-      // sortableTable.init();
       // #endregion
       // ------- end -------
 

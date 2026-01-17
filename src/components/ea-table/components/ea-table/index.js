@@ -114,12 +114,29 @@ export class EaTable extends Base {
     },
   });
 
+  propStates = this.properties({
+    data: {
+      props: true,
+      type: Object,
+      default: null,
+      observer: newVal => {
+        this.setData(newVal);
+      },
+    },
+  });
+
   funcStates = this.properties({
     selectable: {
       props: true,
       type: Function,
       rawFunction: true,
       default: null,
+    },
+    indexMethod: {
+      props: true,
+      type: Function,
+      rawFunction: true,
+      default: index => index => index,
     },
   });
 
@@ -308,10 +325,23 @@ export class EaTable extends Base {
         td.appendChild(template.content.cloneNode(true));
       } else if (column.type) {
         if (column.type === "selection") {
-          const checkboxEl = document.createElement("ea-checkbox");
-          if (column.type) checkboxEl.dataset.type = column.type;
-
-          td.appendChild(checkboxEl);
+          td.innerHTML = EaUtils.EaElement.h(
+            "ea-checkbox",
+            "ea-table__selection",
+            {
+              "data-type": column.type,
+            },
+            null
+          );
+        } else if (column.type === "index") {
+          td.innerHTML = EaUtils.EaElement.h(
+            "span",
+            "ea-table__index",
+            {
+              "data-type": column.type,
+            },
+            null
+          );
         }
       } else {
         td.dataset.scope = column.prop;
@@ -344,6 +374,14 @@ export class EaTable extends Base {
           `ea-checkbox[data-type="selection"]`
         );
         selectionCheckbox.toggleAttribute("disabled", selectable);
+      }
+
+      if (
+        columns.some(column => column.type === "index") &&
+        typeof this.indexMethod === "function"
+      ) {
+        const indexEl = trNode.querySelector(`.ea-table__index`);
+        indexEl.textContent = this.indexMethod(i);
       }
 
       this.#states.dataSource.set(trNode, item);
