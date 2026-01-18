@@ -218,7 +218,7 @@ export class EaTable extends Base {
     this.#container.innerHTML = `
       ${colgroup}
       ${thead}
-      ${tbody}
+      ${tbody} 
       ${tfoot}
     `;
 
@@ -288,6 +288,9 @@ export class EaTable extends Base {
     });
   }
 
+  /**
+   * @param {any[]} dataSource
+   */
   setData = async dataSource => {
     /** @type {DocumentFragment} */
     const bodyTemplate = document.createDocumentFragment();
@@ -349,7 +352,6 @@ export class EaTable extends Base {
 
       row.appendChild(td);
     });
-
     // 渲染表格实际样式
     dataSource.forEach((item, i) => {
       /** @type {HTMLTableRowElement} */
@@ -358,9 +360,12 @@ export class EaTable extends Base {
         .cloneNode(true);
 
       trNode.querySelectorAll("[data-scope]").forEach(td => {
-        const column = columns.find(column => column.prop === td.dataset.scope);
+        const scope = td.getAttribute("data-scope");
+        const column = columns.find(column => column.prop === scope);
         if (column) {
           td.innerHTML = item[column.prop];
+        } else if (item?.hasOwnProperty(scope)) {
+          td.innerHTML = item[scope];
         }
       });
 

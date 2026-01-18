@@ -332,6 +332,18 @@ onMounted(async () => {
       // #endregion
       // ------- end -------
 
+      // ------- 固定列 -------
+      // #region
+      const customColumnExample = {
+        table: document.querySelector("#customColumnTable"),
+        init() {
+          this.table.setData(detailsData);
+        },
+      };
+      customColumnExample.init();
+      // #endregion
+      // ------- end -------
+
       // ------- 9. 排序 -------
       // #region
       // const sortableTable = {
@@ -1496,24 +1508,147 @@ sortableTable.init();
 
 :::
 
-## [-] 自定义插槽
+## 自定义列模板
 
-自定义某列或表头的显示内容，可组合其他组件使用。
+自定义某列的显示内容，可组合其他组件使用。通过设置 `data-scope="dataKey"` 来指定数据源字段。
 
-:::danger
-
-<!-- 注意: 若 `slot="body"` 中的元素要带有业务逻辑且开启了排序功能，则该元素必须以 `WebComponent` 的形式存在，且`事件`需要在组件中已经定义和绑定。否则会在排序后丢失元素事件。 -->
-
-:::
+<div class="demo">
+  <div class="demo">
+    <ea-table id="customColumnTable">
+      <ea-table-column prop="date" label="Date" width="180px">
+        <ea-icon icon="icon-clock"></ea-icon>
+        <span data-scope="date"></span>
+      </ea-table-column>
+      <ea-table-column prop="name" label="Info" width="180px">
+        <ea-tag data-scope="city"></ea-tag>
+        <span data-scope="name"></span>
+      </ea-table-column>
+      <ea-table-column prop="action" fixed="right" label="Operations">
+        <ea-button
+          link
+          type="primary"
+          size="small"
+          onclick="getRowData(document.querySelector('#customColumnTable'))"
+        >
+          Detail
+        </ea-button>
+        <ea-button
+          link
+          type="primary"
+          size="small"
+          onclick="console.log('click')"
+        >
+          Edit
+        </ea-button>
+      </ea-table-column>
+    </ea-table>
+  </div>
+</div>
 
 ::: code-group
 
 ```html
-
+<div class="demo">
+  <div class="demo">
+    <ea-table id="customColumnTable">
+      <ea-table-column prop="date" label="Date" width="180px">
+        <ea-icon icon="icon-clock"></ea-icon>
+        <span data-scope="date"></span>
+      </ea-table-column>
+      <ea-table-column prop="name" label="Info" width="180px">
+        <ea-tag data-scope="city"></ea-tag>
+        <span data-scope="name"></span>
+      </ea-table-column>
+      <ea-table-column prop="action" fixed="right" label="Operations">
+        <ea-button
+          link
+          type="primary"
+          size="small"
+          onclick="getRowData(document.querySelector('#customColumnTable'))"
+        >
+          Detail
+        </ea-button>
+        <ea-button
+          link
+          type="primary"
+          size="small"
+          onclick="console.log('click')"
+        >
+          Edit
+        </ea-button>
+      </ea-table-column>
+    </ea-table>
+  </div>
+</div>
 ```
 
 ```js
+const detailsData = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-02",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-04",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-01",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-08",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-06",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+  {
+    date: "2016-05-07",
+    name: "Tom",
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  },
+];
 
+const customColumnExample = {
+  table: document.querySelector("#customColumnTable"),
+  init() {
+    this.table.setData(detailsData);
+  },
+};
+customColumnExample.init();
 ```
 
 :::

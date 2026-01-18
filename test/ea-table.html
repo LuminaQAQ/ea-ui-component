@@ -22,6 +22,8 @@
   <body>
     <script type="module" src="../src/components/ea-button/index.js"></script>
     <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script type="module" src="../src/components/ea-tag/index.js"></script>
+    <script type="module" src="../src/components/ea-tooltip/index.js"></script>
     <script
       type="module"
       src="../src/components/ea-button-group/index.js"
@@ -419,20 +421,50 @@
     <!-- TODO: 筛选 -->
     <!--  筛选 -->
     <!-- #region -->
-    <h1>筛选</h1>
+    <!-- <h1>筛选</h1>
 
     <div class="demo"></div>
 
-    <hr />
+    <hr /> -->
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- TODO: 自定义列模板 -->
     <!--  自定义列模板 -->
     <!-- #region -->
     <h1>自定义列模板</h1>
 
-    <div class="demo"></div>
+    <div class="demo">
+      <div class="demo">
+        <ea-table id="customColumnTable">
+          <ea-table-column prop="date" label="Date" width="180px">
+            <ea-icon icon="icon-clock"></ea-icon>
+            <span data-scope="date"></span>
+          </ea-table-column>
+          <ea-table-column prop="name" label="Info" width="180px">
+            <ea-tag data-scope="city"></ea-tag>
+            <span data-scope="name"></span>
+          </ea-table-column>
+          <ea-table-column prop="action" fixed="right" label="Operations">
+            <ea-button
+              link
+              type="primary"
+              size="small"
+              onclick="getRowData(document.querySelector('#customColumnTable'))"
+            >
+              Detail
+            </ea-button>
+            <ea-button
+              link
+              type="primary"
+              size="small"
+              onclick="console.log('click')"
+            >
+              Edit
+            </ea-button>
+          </ea-table-column>
+        </ea-table>
+      </div>
+    </div>
 
     <hr />
     <!-- #endregion  -->
@@ -449,9 +481,20 @@
     <!-- #endregion  -->
     <!-- end  -->
 
+    <!-- TODO: 表尾合计行 -->
+    <!--  表尾合计行 -->
+    <!-- #region -->
+    <h1>表尾合计行</h1>
+
+    <div class="demo"></div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
     <!-- -------- 10. 自定义插槽 --------  -->
     <!-- #region  -->
-    <h2>10. 自定义插槽</h2>
+    <!-- <h2>10. 自定义插槽</h2> -->
     <!-- <ea-table id="customTable" border height="250">
       <ea-table-column prop="date" width="100" rowspan="3" sortable
         >日期</ea-table-column
@@ -811,6 +854,18 @@
       // ------- 筛选 -------
       // #region
 
+      // #endregion
+      // ------- end -------
+
+      // ------- 固定列 -------
+      // #region
+      const customColumnExample = {
+        table: document.querySelector("#customColumnTable"),
+        init() {
+          this.table.setData(detailsData);
+        },
+      };
+      customColumnExample.init();
       // #endregion
       // ------- end -------
 
