@@ -500,7 +500,7 @@ export class EaInput extends FormAssociatedBase {
    * @param {String} type
    */
   #renderOriginal = type => {
-    const id = this.id || crypto.randomUUID();
+    const id = this.id || Math.random().toString(36).substring(2, 7);
     const tpl =
       type === "textarea"
         ? `<textarea id="${id}" class="ea-input__original" part="original"></textarea>`
@@ -597,12 +597,8 @@ export class EaInput extends FormAssociatedBase {
    * @param {FocusEvent} e 事件对象
    */
   #onFocusEvent = e => {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
     this.#states.isFocus = true;
     this.updateContainerClasslist();
-    this.emit("focus");
   };
 
   /**
@@ -610,12 +606,8 @@ export class EaInput extends FormAssociatedBase {
    * @param {FocusEvent} e 事件对象
    */
   #onBlurEvent = e => {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
     this.#states.isFocus = false;
     this.updateContainerClasslist();
-    this.emit("blur");
   };
 
   /**
@@ -625,73 +617,6 @@ export class EaInput extends FormAssociatedBase {
   #onInputEvent = e => {
     const { value } = e.target;
     this.value = value;
-    this.emit("input", {
-      detail: {
-        value,
-      },
-    });
-  };
-
-  /**
-   * 键盘按下时触发
-   * @param {KeyboardEvent} e 事件对象
-   */
-  #onKeydownEvent = e => {
-    this.emit("keydown", {
-      detail: {
-        value: e.target.value,
-      },
-    });
-  };
-
-  /**
-   * 鼠标进入时触发
-   */
-  #onMouseenterEvent = () => {
-    this.emit("mouseenter");
-  };
-
-  /**
-   * 鼠标离开时触发
-   */
-  #onMouseleaveEvent = () => {
-    this.emit("mouseleave");
-  };
-
-  /**
-   * 输入法开始输入时触发
-   * @param {CompositionEvent} e 事件对象
-   */
-  #onCompositionstartEvent = e => {
-    this.emit("compositionstart", {
-      detail: {
-        value: e.target.value,
-      },
-    });
-  };
-
-  /**
-   * 输入法输入时触发
-   * @param {CompositionEvent} e 事件对象
-   */
-  #onCompositionupdateEvent = e => {
-    this.emit("compositionupdate", {
-      detail: {
-        value: e.target.value,
-      },
-    });
-  };
-
-  /**
-   * 输入法完成输入时触发
-   * @param {CompositionEvent} e 事件对象
-   */
-  #onCompositionendEvent = e => {
-    this.emit("compositionend", {
-      detail: {
-        value: e.target.value,
-      },
-    });
   };
 
   /**
@@ -707,36 +632,6 @@ export class EaInput extends FormAssociatedBase {
     this.#original.addEventListener("input", this.#onInputEvent, {
       signal: this.#abortController.signal,
     });
-    this.#original.addEventListener("keydown", this.#onKeydownEvent, {
-      signal: this.#abortController.signal,
-    });
-    this.#original.addEventListener("mouseenter", this.#onMouseenterEvent, {
-      signal: this.#abortController.signal,
-    });
-    this.#original.addEventListener("mouseleave", this.#onMouseleaveEvent, {
-      signal: this.#abortController.signal,
-    });
-    this.#original.addEventListener(
-      "compositionstart",
-      this.#onCompositionstartEvent,
-      {
-        signal: this.#abortController.signal,
-      }
-    );
-    this.#original.addEventListener(
-      "compositionupdate",
-      this.#onCompositionupdateEvent,
-      {
-        signal: this.#abortController.signal,
-      }
-    );
-    this.#original.addEventListener(
-      "compositionend",
-      this.#onCompositionendEvent,
-      {
-        signal: this.#abortController.signal,
-      }
-    );
   };
 
   /**

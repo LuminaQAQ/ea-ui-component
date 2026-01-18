@@ -130,10 +130,41 @@ onMounted(async () => {
           zip: "CA 90036",
         },
       ];
+      
+      const searchData = [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "John",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Morgan",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Jessy",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+      ];
 
-      window.getRowData = async table => {
+      window.handleSearch = keywords => {
+        const res = searchData.filter(item => {
+          return item.name.includes(keywords);
+        });
+
+        customHeaderTableExample.table.setData(res);
+      };
+
+      window.getRowData = table => {
         /** @type {{target: HTMLTableRowElement, value: any}} */
-        const res = await table.getCurrentRow();
+        const res = table.getCurrentRow();
         console.log(res.value);
       };
 
@@ -332,7 +363,7 @@ onMounted(async () => {
       // #endregion
       // ------- end -------
 
-      // ------- 固定列 -------
+      // ------- 自定义列模板 -------
       // #region
       const customColumnExample = {
         table: document.querySelector("#customColumnTable"),
@@ -341,6 +372,19 @@ onMounted(async () => {
         },
       };
       customColumnExample.init();
+      // #endregion
+      // ------- end -------
+
+      // ------- 自定义表头 -------
+      // #region
+      const customHeaderTableExample = {
+        table: document.querySelector("#customHeaderTable"),
+
+        init() {
+          this.table.setData(searchData);
+        },
+      };
+      customHeaderTableExample.init();
       // #endregion
       // ------- end -------
 
@@ -500,8 +544,6 @@ await customElements.whenDefined("ea-table");
 ```
 
 ```js
-const basicTable = document.querySelector("#basicTable");
-
 const data = [
   {
     date: "2016-05-03",
@@ -525,6 +567,7 @@ const data = [
   },
 ];
 
+const basicTable = document.querySelector("#basicTable");
 basicTable.setData(data);
 ```
 
@@ -555,8 +598,6 @@ basicTable.setData(data);
 ```
 
 ```js
-const stripeTable = document.querySelector("#stripeTable");
-
 const data = [
   {
     date: "2016-05-03",
@@ -580,6 +621,7 @@ const data = [
   },
 ];
 
+const stripeTable = document.querySelector("#stripeTable");
 stripeTable.setData(data);
 ```
 
@@ -608,8 +650,6 @@ stripeTable.setData(data);
 ```
 
 ```js
-const borderTable = document.querySelector("#borderTable");
-
 const data = [
   {
     date: "2016-05-03",
@@ -633,6 +673,7 @@ const data = [
   },
 ];
 
+const borderTable = document.querySelector("#borderTable");
 borderTable.setData(data);
 ```
 
@@ -671,8 +712,6 @@ borderTable.setData(data);
 ```
 
 ```js
-const statusTable = document.querySelector("#statusTable");
-
 const data = [
   {
     date: "2016-05-03",
@@ -696,6 +735,7 @@ const data = [
   },
 ];
 
+const statusTable = document.querySelector("#statusTable");
 statusTable.setData(data);
 
 statusTable.setRowStylePart(
@@ -818,6 +858,7 @@ fixedHeaderExample.init();
         link
         type="primary"
         size="small"
+        style="margin-right: 0.5rem"
         onclick="getRowData(document.querySelector('#fixedColumnTable'))"
       >
         Detail
@@ -859,6 +900,7 @@ fixedHeaderExample.init();
         link
         type="primary"
         size="small"
+        style="margin-right: 0.5rem"
         onclick="getRowData(document.querySelector('#fixedColumnTable'))"
       >
         Detail
@@ -914,6 +956,14 @@ const moreData = [
     address: "No. 189, Grove St, Los Angeles",
   },
 ];
+
+window.handleSearch = keywords => {
+  const res = searchData.filter(item => {
+    return item.name.toLowerCase().includes(keywords.toLowerCase());
+  });
+
+  customHeaderTableExample.table.setData(res);
+};
 
 const fixedHeaderExample = {
   table: document.querySelector("#fixedHeaderTable"),
@@ -1513,72 +1563,64 @@ sortableTable.init();
 自定义某列的显示内容，可组合其他组件使用。通过设置 `data-scope="dataKey"` 来指定数据源字段。
 
 <div class="demo">
-  <div class="demo">
-    <ea-table id="customColumnTable">
-      <ea-table-column prop="date" label="Date" width="180px">
-        <ea-icon icon="icon-clock"></ea-icon>
-        <span data-scope="date"></span>
-      </ea-table-column>
-      <ea-table-column prop="name" label="Info" width="180px">
-        <ea-tag data-scope="city"></ea-tag>
-        <span data-scope="name"></span>
-      </ea-table-column>
-      <ea-table-column prop="action" fixed="right" label="Operations">
-        <ea-button
-          link
-          type="primary"
-          size="small"
-          onclick="getRowData(document.querySelector('#customColumnTable'))"
-        >
-          Detail
-        </ea-button>
-        <ea-button
-          link
-          type="primary"
-          size="small"
-          onclick="console.log('click')"
-        >
-          Edit
-        </ea-button>
-      </ea-table-column>
-    </ea-table>
-  </div>
+  <ea-table id="customColumnTable">
+    <ea-table-column prop="date" label="Date" width="180px">
+      <ea-icon icon="icon-clock"></ea-icon>
+      <span data-scope="date"></span>
+    </ea-table-column>
+    <ea-table-column prop="name" label="Info" width="180px">
+      <ea-tag data-scope="city"></ea-tag>
+      <span data-scope="name"></span>
+    </ea-table-column>
+    <ea-table-column prop="action" fixed="right" label="Operations">
+      <ea-button
+        size="small"
+        style="margin-right: 0.5rem"
+        onclick="getRowData(document.querySelector('#customColumnTable'))"
+      >
+        Detail
+      </ea-button>
+      <ea-button
+        type="danger"
+        size="small"
+        onclick="getRowData(document.querySelector('#customColumnTable'))"
+      >
+        Edit
+      </ea-button>
+    </ea-table-column>
+  </ea-table>
 </div>
 
 ::: code-group
 
 ```html
 <div class="demo">
-  <div class="demo">
-    <ea-table id="customColumnTable">
-      <ea-table-column prop="date" label="Date" width="180px">
-        <ea-icon icon="icon-clock"></ea-icon>
-        <span data-scope="date"></span>
-      </ea-table-column>
-      <ea-table-column prop="name" label="Info" width="180px">
-        <ea-tag data-scope="city"></ea-tag>
-        <span data-scope="name"></span>
-      </ea-table-column>
-      <ea-table-column prop="action" fixed="right" label="Operations">
-        <ea-button
-          link
-          type="primary"
-          size="small"
-          onclick="getRowData(document.querySelector('#customColumnTable'))"
-        >
-          Detail
-        </ea-button>
-        <ea-button
-          link
-          type="primary"
-          size="small"
-          onclick="console.log('click')"
-        >
-          Edit
-        </ea-button>
-      </ea-table-column>
-    </ea-table>
-  </div>
+  <ea-table id="customColumnTable">
+    <ea-table-column prop="date" label="Date" width="180px">
+      <ea-icon icon="icon-clock"></ea-icon>
+      <span data-scope="date"></span>
+    </ea-table-column>
+    <ea-table-column prop="name" label="Info" width="180px">
+      <ea-tag data-scope="city"></ea-tag>
+      <span data-scope="name"></span>
+    </ea-table-column>
+    <ea-table-column prop="action" fixed="right" label="Operations">
+      <ea-button
+        size="small"
+        style="margin-right: 0.5rem"
+        onclick="getRowData(document.querySelector('#customColumnTable'))"
+      >
+        Detail
+      </ea-button>
+      <ea-button
+        type="danger"
+        size="small"
+        onclick="getRowData(document.querySelector('#customColumnTable'))"
+      >
+        Edit
+      </ea-button>
+    </ea-table-column>
+  </ea-table>
 </div>
 ```
 
@@ -1642,6 +1684,12 @@ const detailsData = [
   },
 ];
 
+window.getRowData = table => {
+  /** @type {{target: HTMLTableRowElement, value: any}} */
+  const res = table.getCurrentRow();
+  console.log(res.value);
+};
+
 const customColumnExample = {
   table: document.querySelector("#customColumnTable"),
   init() {
@@ -1652,6 +1700,115 @@ customColumnExample.init();
 ```
 
 :::
+
+## 自定义表头
+
+表头支持自定义。
+
+<div class="demo">
+  <ea-table id="customHeaderTable">
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column prop="name" label="Name" width="180px"></ea-table-column>
+    <ea-table-column prop="action" label="Operations" align="right">
+      <ea-input
+        id="customHeaderTableSearch"
+        slot="header"
+        size="small"
+        placeholder="Type to search"
+        oninput="handleSearch(this.value)"
+      ></ea-input>
+      <ea-button
+        style="margin-right: 0.5rem"
+        onclick="getRowData(document.querySelector('#customHeaderTable'))"
+      >
+        Detail
+      </ea-button>
+      <ea-button
+        type="danger"
+        onclick="getRowData(document.querySelector('#customHeaderTable'))"
+      >
+        Delete
+      </ea-button>
+    </ea-table-column>
+  </ea-table>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-table id="customHeaderTable">
+    <ea-table-column label="Date" prop="date" width="180px"></ea-table-column>
+    <ea-table-column prop="name" label="Name" width="180px"></ea-table-column>
+    <ea-table-column prop="action" label="Operations" align="right">
+      <ea-input
+        id="customHeaderTableSearch"
+        slot="header"
+        size="small"
+        placeholder="Type to search"
+        oninput="handleSearch(this.value)"
+      ></ea-input>
+      <ea-button
+        style="margin-right: 0.5rem"
+        onclick="getRowData(document.querySelector('#customHeaderTable'))"
+      >
+        Detail
+      </ea-button>
+      <ea-button
+        type="danger"
+        onclick="getRowData(document.querySelector('#customHeaderTable'))"
+      >
+        Delete
+      </ea-button>
+    </ea-table-column>
+  </ea-table>
+</div>
+```
+
+```js
+const searchData = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-02",
+    name: "John",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-04",
+    name: "Morgan",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    date: "2016-05-01",
+    name: "Jessy",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+];
+
+window.getRowData = table => {
+  /** @type {{target: HTMLTableRowElement, value: any}} */
+  const res = table.getCurrentRow();
+  console.log(res.value);
+};
+
+const customColumnExample = {
+  table: document.querySelector("#customColumnTable"),
+  init() {
+    this.table.setData(detailsData);
+  },
+};
+customColumnExample.init();
+```
+
+:::
+
+## 表尾合计行​
+
+若表格展示的是各类数字，可以在表尾显示各列的合计。
 
 <!-- ## Table Attributes
 

@@ -7,6 +7,11 @@ import { theadRenderer } from "../thead";
 import { EaTableSelectionChangeEvent } from "../../events/EaTableSelectionChangeEvent";
 import { EaTableSelectEvent } from "../../events/EaTableSelectEvent";
 import { EaTableSelectAllEvent } from "../../events/EaTableSelectAllEvent";
+import { EaTableRowClickEvent } from "../../events/EaTableRowClickEvent";
+import { EaTableCurrentChangeEvent } from "../../events/EaTableCurrentChangeEvent";
+import { EaTableCellClickEvent } from "../../events/EaTableCellClickEvent";
+
+import "@components/ea-empty/index";
 
 /**
  * @typedef {Element & {template: HTMLTemplateElement}} EaTableColumnElement
@@ -24,6 +29,7 @@ import { EaTableSelectAllEvent } from "../../events/EaTableSelectAllEvent";
  * @property {String | null} width
  * @property {Boolean | String | null} fixed
  * @property {Attr[]} props
+ * @property {string} header
  * @property {HTMLTemplateElement | ColumnOption} template
  */
 
@@ -43,6 +49,8 @@ export class EaTable extends Base {
   #AbortControllerStates = {
     /** @type {AbortController | null} */
     selectionChangeAbortController: null,
+    /** @type {AbortController | null} */
+    selectAbortController: null,
   };
 
   #states = {
@@ -55,6 +63,7 @@ export class EaTable extends Base {
 
     columns: [],
 
+    originData: [],
     dataSource: new WeakMap(),
     dataIndex: new WeakMap(),
   };
@@ -117,8 +126,8 @@ export class EaTable extends Base {
   propStates = this.properties({
     data: {
       props: true,
-      type: Object,
-      default: null,
+      type: Array,
+      default: () => this.#states.originData,
       observer: newVal => {
         this.setData(newVal);
       },
@@ -154,6 +163,7 @@ export class EaTable extends Base {
         "sticky-header":
           CSS.supports("height", this.height) ||
           CSS.supports("height", this.maxHeight),
+        data: this.#states.originData.length > 0,
       }
     );
 
@@ -173,8 +183,9 @@ export class EaTable extends Base {
         </tr>
       </template>
       <table class='ea-table' part='container'>
-        <slot></slot>
       </table>
+      <slot></slot>
+      <slot name="header"></slot>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-table");
@@ -218,7 +229,8 @@ export class EaTable extends Base {
     this.#container.innerHTML = `
       ${colgroup}
       ${thead}
-      ${tbody} 
+      ${tbody}
+      <slot class="ea-table__empty" name="empty">No Data</slot> 
       ${tfoot}
     `;
 
@@ -280,7 +292,7 @@ export class EaTable extends Base {
     this.#handleTableStructRender();
     this.#handleSortableColumnsInit();
 
-    this.#container.addEventListener("click", this.#initClickEvent, {
+    this.#container.addEventListener("mousedown", this.#onClickEvent, {
       signal: this.#abortController.signal,
     });
     this.#container.addEventListener("scroll", this.#onScrollEvent, {
@@ -295,7 +307,7 @@ export class EaTable extends Base {
     /** @type {DocumentFragment} */
     const bodyTemplate = document.createDocumentFragment();
     /** @type {HTMLTemplateElement} */
-    const rowTpl = this.shadowRoot.querySelector("#rowTpl");
+    const rowTpl = this.shadowRoot.querySelector("#rowTpl").cloneNode(true);
     /** @type {ColumnOption[]} */
     const columns = this.#states.columns.filter(
       item => !item.template || item.template instanceof HTMLTemplateElement
@@ -310,6 +322,7 @@ export class EaTable extends Base {
     this.#states.isDataRendered = false;
     this.#tbody.innerHTML = "";
     this.#states.dataSource = new WeakMap();
+    this.#states.originData = dataSource;
 
     // 处理行模板
     columns.forEach(column => {
@@ -321,6 +334,10 @@ export class EaTable extends Base {
       td.className = "ea-table__td";
       td.classList.toggle(`is-fixed`, column.fixed);
       td.classList.toggle(`fixed-${column.fixed}`, column.fixed);
+      td.classList.toggle(
+        `ea-table__cell--align-${column.align}`,
+        column.align
+      );
       if (column.width)
         td.style.setProperty("--ea-table-cell-width", column.width);
 
@@ -352,6 +369,7 @@ export class EaTable extends Base {
 
       row.appendChild(td);
     });
+
     // 渲染表格实际样式
     dataSource.forEach((item, i) => {
       /** @type {HTMLTableRowElement} */
@@ -359,20 +377,9 @@ export class EaTable extends Base {
         .querySelector(".ea-table__tr")
         .cloneNode(true);
 
-      trNode.querySelectorAll("[data-scope]").forEach(td => {
-        const scope = td.getAttribute("data-scope");
-        const column = columns.find(column => column.prop === scope);
-        if (column) {
-          td.innerHTML = item[column.prop];
-        } else if (item?.hasOwnProperty(scope)) {
-          td.innerHTML = item[scope];
-        }
-      });
-
       trNode.dataset.index = i;
 
-      bodyTemplate.appendChild(trNode);
-
+      // 处理 type="selection" 的列
       if (typeof this.selectable === "function") {
         const selectable = !this.selectable(item);
         const selectionCheckbox = trNode.querySelector(
@@ -381,6 +388,7 @@ export class EaTable extends Base {
         selectionCheckbox.toggleAttribute("disabled", selectable);
       }
 
+      // 处理 type="index" 的列
       if (
         columns.some(column => column.type === "index") &&
         typeof this.indexMethod === "function"
@@ -388,6 +396,18 @@ export class EaTable extends Base {
         const indexEl = trNode.querySelector(`.ea-table__index`);
         indexEl.textContent = this.indexMethod(i);
       }
+
+      trNode.querySelectorAll("[data-scope]").forEach(td => {
+        const scope = td.getAttribute("data-scope");
+        const column = columns.find(column => column.prop === scope);
+        if (column) {
+          td.innerHTML = item[column.prop];
+        } else if (scope in item) {
+          td.innerHTML = item[scope];
+        }
+      });
+
+      bodyTemplate.appendChild(trNode);
 
       this.#states.dataSource.set(trNode, item);
       if (item && typeof item === "object") {
@@ -405,6 +425,7 @@ export class EaTable extends Base {
 
     this.#handleFixedColumn();
     this.#onScrollEvent();
+    this.updateContainerClasslist();
     this.#states.isDataRendered = true;
     this.emit("ea-table-data-rendered");
   };
@@ -462,9 +483,7 @@ export class EaTable extends Base {
    * 获取当前行数据
    * @returns {Promise<Object>}
    */
-  async getCurrentRow() {
-    await EaUtils.EaElement.addAsyncEventListener(this, "row-click");
-
+  getCurrentRow() {
     return this.#states.currentRow;
   }
 
@@ -709,46 +728,80 @@ export class EaTable extends Base {
    * 点击事件: 行点击, 单元格点击
    * @param {MouseEvent} e
    */
-  #initClickEvent = e => {
+  #onClickEvent = e => {
     /** @type {HTMLTableRowElement} */
     const tr = e.target.closest("tr[part='tbody-tr']");
-    /** @type {HTMLTableCellElement} */
-    const td = e.target.closest("td[part='tbody-td']");
 
-    if (tr) {
+    this.#AbortControllerStates.selectAbortController?.abort();
+
+    if (!tr) return;
+
+    /**
+     * 用于提前阻止事件
+     */
+    const onControllerShouldAbortEvent = () => {
+      this.#AbortControllerStates.selectAbortController?.abort();
+    };
+
+    /**
+     * 鼠标抬起事件，这里是避免 click 事件时，鼠标移动至其他行，导致元素获取错误的问题
+     * @param {MouseEvent} e
+     */
+    const onMouseUpEvent = e => {
+      /** @type {HTMLTableRowElement} */
+      const endTr = e.target.closest("tr[part='tbody-tr']");
+      /** @type {HTMLTableCellElement} */
+      const endTd = e.target.closest("td[part='tbody-td']");
+
+      onControllerShouldAbortEvent();
+
+      if (endTr !== tr) return;
+
       const value = this.#states.dataSource.get(tr);
+      const columnKey = endTd?.dataset?.scope;
 
       this.#setHighlightCurrentRowStyle(tr, this.#states.currentRow.target);
 
       this.#states.currentRow.target = tr;
       this.#states.currentRow.value = value;
 
-      this.emit("row-click", {
-        detail: {
+      this.dispatchEvent(
+        new EaTableRowClickEvent({
           target: tr,
-          column: td.dataset.scope,
+          column: columnKey,
           row: value,
-        },
-      });
+        })
+      );
 
-      this.emit("current-change", {
-        detail: {
+      this.dispatchEvent(
+        new EaTableCurrentChangeEvent({
           target: tr,
-          column: td.dataset.scope,
+          column: columnKey,
           row: value,
-        },
-      });
+        })
+      );
 
-      if (td) {
-        this.emit("cell-click", {
-          detail: {
-            target: td,
-            column: td.dataset.scope,
+      if (endTd) {
+        this.dispatchEvent(
+          new EaTableCellClickEvent({
+            target: endTd,
+            column: columnKey,
             row: value,
-          },
-        });
+          })
+        );
       }
-    }
+    };
+
+    this.#AbortControllerStates.selectAbortController = new AbortController();
+
+    this.addEventListener("mouseout", onControllerShouldAbortEvent, {
+      once: true,
+      signal: this.#AbortControllerStates.selectAbortController.signal,
+    });
+    this.#container.addEventListener("mouseup", onMouseUpEvent, {
+      once: true,
+      signal: this.#AbortControllerStates.selectAbortController.signal,
+    });
   };
 
   /**

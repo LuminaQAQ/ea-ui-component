@@ -16,6 +16,10 @@ export class EaTableColumn extends Base {
         }
       },
     },
+    align: {
+      type: ["left", "center", "right"],
+      default: "left",
+    },
     label: {
       type: String,
       default: "",
@@ -59,8 +63,13 @@ export class EaTableColumn extends Base {
       props: true,
       type: Object,
       default: () => {
-        const columns = [...this.querySelectorAll("& > ea-table-column")];
         const table = this.closest("ea-table");
+        const columns = [...this.querySelectorAll("& > ea-table-column")];
+        /** @type {HTMLSlotElement} */
+        const headerSlot = this.shadowRoot.querySelector(`slot[name="header"]`);
+        /** @type {HTMLSlotElement} */
+        const defaultSlot = this.shadowRoot.querySelector(`#defaultSlot`);
+
         const exclude = ["prop", "label", "width", "fixed"];
         let template = null;
 
@@ -68,7 +77,12 @@ export class EaTableColumn extends Base {
           template = columns.map(columns => columns.getColumnTree);
         } else if (this.innerHTML) {
           const tpl = document.createElement("template");
-          tpl.innerHTML = this.innerHTML;
+          const html = Array.from(defaultSlot.assignedNodes(), item =>
+            item.outerHTML?.trim()
+          )
+            .filter(item => item)
+            .join("");
+          tpl.innerHTML = html;
           template = tpl;
         } else {
           template = null;
@@ -83,7 +97,7 @@ export class EaTableColumn extends Base {
           rowspan: template
             ? 1
             : this.#getMaxDepth(table) - this.#getThisDepth(this, table) + 1,
-
+          align: this.align,
           width: this.width,
           sortable: this.sortable,
           fixed: this.fixed,
@@ -94,6 +108,7 @@ export class EaTableColumn extends Base {
             attr => !exclude.includes(attr.name)
           ),
 
+          header: headerSlot.assignedNodes()[0]?.outerHTML?.trim() || null,
           template,
         };
       },
@@ -134,6 +149,11 @@ export class EaTableColumn extends Base {
 
   constructor() {
     super();
+
+    this.shadowRoot.innerHTML = `
+      <slot name="header"></slot>
+      <slot id="defaultSlot"></slot>
+    `;
   }
 
   connectedCallback() {

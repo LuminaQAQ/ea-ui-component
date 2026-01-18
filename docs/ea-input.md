@@ -464,15 +464,15 @@ onMounted(() => {
 
 | 事件名            | 说明                                                             | 获取值                               |
 | ----------------- | ---------------------------------------------------------------- | ------------------------------------ |
-| input             | 输入内容时触发                                                   | e.detail：`{ value: String }`        |
+| input             | 输入内容时触发                                                   | -                                    |
 | focus             | 原生 focus 时触发（组件聚焦）                                    | -                                    |
 | blur              | 原生 blur 时触发（组件失去焦点）                                 | -                                    |
-| keydown           | 原生 keydown 时触发                                              | e.detail：`{ value: String }`        |
-| mouseenter        | 鼠标进入输入区域时触发                                           | -                                    |
-| mouseleave        | 鼠标离开输入区域时触发                                           | -                                    |
-| compositionstart  | 输入法开始输入时触发                                             | e.detail：`{ value: String }`        |
-| compositionupdate | 输入法输入过程中触发                                             | e.detail：`{ value: String }`        |
-| compositionend    | 输入法结束时触发                                                 | e.detail：`{ value: String }`        |
+| keydown           | 原生 keydown 时触发                                              | -                                    |
+| mouseenter        | 原生 mouseenter 时触发，鼠标进入输入区域时触发                   | -                                    |
+| mouseleave        | 原生 mouseleave 时触发，鼠标离开输入区域时触发                   | -                                    |
+| compositionstart  | 原生 compositionstart 时触发，输入法开始输入时触发               | e.detail：`{ value: String }`        |
+| compositionupdate | 原生 compositionupdate 时触发，输入法输入过程中触发                                             | e.detail：`{ value: String }`        |
+| compositionend    | 原生 compositionend 时触发，输入法结束时触发                                                 | e.detail：`{ value: String }`        |
 | ea-clear          | 当用户通过清除图标清空输入时分发（自定义 Event: `EaClearEvent`） | event.detail：`{ oldValue: String }` |
 
 ## Methods

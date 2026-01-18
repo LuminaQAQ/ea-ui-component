@@ -21,6 +21,7 @@
 
   <body>
     <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-input/index.js"></script>
     <script type="module" src="../src/components/ea-switch/index.js"></script>
     <script type="module" src="../src/components/ea-tag/index.js"></script>
     <script type="module" src="../src/components/ea-tooltip/index.js"></script>
@@ -434,48 +435,77 @@
     <h1>自定义列模板</h1>
 
     <div class="demo">
-      <div class="demo">
-        <ea-table id="customColumnTable">
-          <ea-table-column prop="date" label="Date" width="180px">
-            <ea-icon icon="icon-clock"></ea-icon>
-            <span data-scope="date"></span>
-          </ea-table-column>
-          <ea-table-column prop="name" label="Info" width="180px">
-            <ea-tag data-scope="city"></ea-tag>
-            <span data-scope="name"></span>
-          </ea-table-column>
-          <ea-table-column prop="action" fixed="right" label="Operations">
-            <ea-button
-              link
-              type="primary"
-              size="small"
-              onclick="getRowData(document.querySelector('#customColumnTable'))"
-            >
-              Detail
-            </ea-button>
-            <ea-button
-              link
-              type="primary"
-              size="small"
-              onclick="console.log('click')"
-            >
-              Edit
-            </ea-button>
-          </ea-table-column>
-        </ea-table>
-      </div>
+      <ea-table id="customColumnTable">
+        <ea-table-column prop="date" label="Date" width="180px">
+          <ea-icon icon="icon-clock"></ea-icon>
+          <span data-scope="date"></span>
+        </ea-table-column>
+        <ea-table-column prop="name" label="Info" width="180px">
+          <ea-tag data-scope="city"></ea-tag>
+          <span data-scope="name"></span>
+        </ea-table-column>
+        <ea-table-column prop="action" fixed="right" label="Operations">
+          <ea-button
+            size="small"
+            style="margin-right: 0.5rem"
+            onclick="getRowData(document.querySelector('#customColumnTable'))"
+          >
+            Detail
+          </ea-button>
+          <ea-button
+            type="danger"
+            size="small"
+            onclick="getRowData(document.querySelector('#customColumnTable'))"
+          >
+            Edit
+          </ea-button>
+        </ea-table-column>
+      </ea-table>
     </div>
 
     <hr />
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!-- TODO: 自定义表头 -->
     <!--  自定义表头 -->
     <!-- #region -->
     <h1>自定义表头</h1>
 
-    <div class="demo"></div>
+    <div class="demo">
+      <ea-table id="customHeaderTable">
+        <ea-table-column
+          label="Date"
+          prop="date"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column
+          prop="name"
+          label="Name"
+          width="180px"
+        ></ea-table-column>
+        <ea-table-column prop="action" label="Operations" align="right">
+          <ea-input
+            id="customHeaderTableSearch"
+            slot="header"
+            size="small"
+            placeholder="Type to search"
+            oninput="handleSearch(this.value)"
+          ></ea-input>
+          <ea-button
+            style="margin-right: 0.5rem"
+            onclick="getRowData(document.querySelector('#customHeaderTable'))"
+          >
+            Detail
+          </ea-button>
+          <ea-button
+            type="danger"
+            onclick="getRowData(document.querySelector('#customHeaderTable'))"
+          >
+            Delete
+          </ea-button>
+        </ea-table-column>
+      </ea-table>
+    </div>
 
     <hr />
     <!-- #endregion  -->
@@ -491,39 +521,6 @@
     <hr />
     <!-- #endregion  -->
     <!-- end  -->
-
-    <!-- -------- 10. 自定义插槽 --------  -->
-    <!-- #region  -->
-    <!-- <h2>10. 自定义插槽</h2> -->
-    <!-- <ea-table id="customTable" border height="250">
-      <ea-table-column prop="date" width="100" rowspan="3" sortable
-        >日期</ea-table-column
-      >
-      <ea-table-column label="详细信息" colspan="3">
-        <ea-table-column prop="name" width="100" rowspan="2" sortable
-          >姓名</ea-table-column
-        >
-        <ea-table-column label="个人信息" colspan="2">
-          <ea-table-column prop="age" width="100">年龄</ea-table-column>
-          <ea-table-column prop="address">地址</ea-table-column>
-        </ea-table-column>
-      </ea-table-column>
-
-      <div slot="header">
-        <ea-input id="searchInput" placeholder="搜索名字"></ea-input>
-      </div>
-      <div slot="body">
-        <div style="display: flex; justify-content: space-evenly">
-          <my-edit-button></my-edit-button>
-          <my-delete-button></my-delete-button>
-        </div>
-      </div>
-      <div slot="empty">
-        <ea-empty description="描述文字" image-size="100"></ea-empty>
-      </div>
-    </ea-table> -->
-    <!-- #endregion  -->
-    <!-- -------------------  -->
 
     <script type="module">
       const data = [
@@ -650,10 +647,41 @@
         },
       ];
 
-      window.getRowData = async table => {
+      const searchData = [
+        {
+          date: "2016-05-03",
+          name: "Tom",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-02",
+          name: "John",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-04",
+          name: "Morgan",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+        {
+          date: "2016-05-01",
+          name: "Jessy",
+          address: "No. 189, Grove St, Los Angeles",
+        },
+      ];
+
+      window.getRowData = table => {
         /** @type {{target: HTMLTableRowElement, value: any}} */
-        const res = await table.getCurrentRow();
+        const res = table.getCurrentRow();
         console.log(res.value);
+      };
+
+      window.handleSearch = keywords => {
+        const res = searchData.filter(item => {
+          return item.name.toLowerCase().includes(keywords.toLowerCase());
+        });
+
+        customHeaderTableExample.table.setData(res);
       };
 
       // ------- 基础表格 -------
@@ -857,7 +885,7 @@
       // #endregion
       // ------- end -------
 
-      // ------- 固定列 -------
+      // ------- 自定义列模板 -------
       // #region
       const customColumnExample = {
         table: document.querySelector("#customColumnTable"),
@@ -869,65 +897,16 @@
       // #endregion
       // ------- end -------
 
-      // ------- 10. 自定义插槽 -------
+      // ------- 自定义表头 -------
       // #region
-      // const customTable = {
-      //   table: document.querySelector("#customTable"),
-      //   searchInput: document.querySelector("#searchInput"),
+      const customHeaderTableExample = {
+        table: document.querySelector("#customHeaderTable"),
 
-      //   init() {
-      //     this.table.data = moreData;
-
-      //     // 搜索
-      //     this.searchInput.addEventListener("change", () => {
-      //       const res = moreData.filter((item) =>
-      //         item.name.includes(this.searchInput.value)
-      //       );
-      //       this.table.data = res;
-      //     });
-      //   },
-      // };
-      // customTable.init();
-
-      // // 编辑按钮
-      // class MyEditButton extends HTMLElement {
-      //   constructor() {
-      //     super();
-
-      //     const shadowroot = this.attachShadow({ mode: "open" });
-      //     shadowroot.innerHTML = `
-      //               <ea-button type="primary" size="mini">编辑</ea-button>
-      //           `;
-      //     const btn = shadowroot.querySelector("ea-button");
-      //     btn.addEventListener("click", (e) => {
-      //       setTimeout(() => {
-      //         console.log(customTable.table.currentRowDetail);
-      //       }, 0);
-      //     });
-
-      //     shadowroot.appendChild(btn);
-      //   }
-      // }
-      // window.customElements.define("my-edit-button", MyEditButton);
-
-      // // 删除按钮
-      // class MyDeleteButton extends HTMLElement {
-      //   constructor() {
-      //     super();
-
-      //     const shadowroot = this.attachShadow({ mode: "open" });
-      //     shadowroot.innerHTML = `
-      //               <ea-button type="danger" size="mini">删除</ea-button>
-      //           `;
-      //     const btn = shadowroot.querySelector("ea-button");
-      //     btn.addEventListener("click", (e) => {
-      //       setTimeout(() => {
-      //         console.log(customTable.table.currentRowDetail);
-      //       }, 0);
-      //     });
-      //   }
-      // }
-      // window.customElements.define("my-delete-button", MyDeleteButton);
+        init() {
+          this.table.setData(searchData);
+        },
+      };
+      customHeaderTableExample.init();
       // #endregion
       // ------- end -------
     </script>

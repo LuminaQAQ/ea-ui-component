@@ -88,6 +88,8 @@ const renderThCell = col => {
     content = typeTemplate;
   } else if (sortableTemplate) {
     content = sortableTemplate;
+  } else if (col.header) {
+    content = col.header;
   } else {
     content = defaultContent;
   }
