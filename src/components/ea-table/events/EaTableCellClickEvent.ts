@@ -8,7 +8,7 @@ export class EaTableCellClickEvent extends Event {
 
 interface EaTableCellClickEventDetail {
   /** @description 选中行的元素 */
-  target: HTMLTableCellElement;
+  cell: HTMLTableCellElement;
   /** @description 所有选中的列的键名 */
   column: string;
   /** @description 当前选中的行数据 */

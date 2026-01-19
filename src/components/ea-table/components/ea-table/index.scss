@@ -29,6 +29,20 @@ $ea-table-align-types: (left, center, right);
   --ea-table-transition: var(--transition-fast);
 }
 
+:host([show-summary]) {
+  .ea-table.is-data {
+    .ea-table__tfoot {
+      display: table-footer-group;
+    }
+
+    .ea-table__td[part="tfoot-td"] {
+      border-top: 1px solid var(--ea-table-border-color);
+      border-bottom-width: 0px;
+      background-color: var(--ea-table-hover-bg-color);
+    }
+  }
+}
+
 slot:not([name="empty"]) {
   display: none;
   visibility: hidden;
@@ -62,7 +76,6 @@ slot:not([name="empty"]) {
   .ea-table__td {
     padding: var(--ea-table-cell-spacing);
 
-    width: var(--ea-table-cell-width);
     min-width: var(--ea-table-cell-width);
 
     background-color: var(--ea-table-bg-color);
@@ -70,6 +83,10 @@ slot:not([name="empty"]) {
     transition:
       background-color var(--ea-table-transition),
       box-shadow var(--ea-table-transition);
+  }
+
+  .ea-table__th:not(.is-width) {
+    width: var(--ea-table-cell-width);
   }
 
   @include element(thead) {
@@ -90,17 +107,19 @@ slot:not([name="empty"]) {
 
   @include element(th) {
     &.is-sortable {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-
-      .ea-table__sort {
+      .ea-table__sort-wrapper {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        cursor: pointer;
 
-        margin-left: 0.5rem;
+        .ea-table__sort {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          margin-left: 0.5rem;
+        }
       }
     }
   }
@@ -123,6 +142,23 @@ slot:not([name="empty"]) {
           background-color: var(--ea-table-hover-bg-color);
         }
       }
+    }
+  }
+
+  @include element(tfoot) {
+    display: none;
+
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+
+    color: var(--ea-table-body-color);
+    font-size: var(--ea-table-body-font-size);
+
+    text-align: left;
+
+    .ea-table__td[part="tfoot-td"] {
+      border: 0;
     }
   }
 

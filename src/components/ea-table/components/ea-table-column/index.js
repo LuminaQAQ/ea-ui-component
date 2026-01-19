@@ -1,5 +1,22 @@
 import Base from "@components/Base.js";
 
+/**
+ * @typedef TableColumnCtx 表格列对象
+ * @property {string} label
+ * @property {string} prop
+ * @property {string} type
+ * @property {number} colspan
+ * @property {number} rowspan
+ * @property {string} align
+ * @property {string} width
+ * @property {boolean} sortable
+ * @property {string} fixed
+ * @property {number} depth
+ * @property {Attr[]} props
+ * @property {string} header
+ * @property {TableColumnCtx | HTMLTemplateElement | string} template
+ */
+
 export class EaTableColumn extends Base {
   static get observedAttributes() {
     return [...super.observedAttributes, "type"];
@@ -62,6 +79,9 @@ export class EaTableColumn extends Base {
     getColumnTree: {
       props: true,
       type: Object,
+      /**
+       * @returns {TableColumnCtx}
+       */
       default: () => {
         const table = this.closest("ea-table");
         const columns = [...this.querySelectorAll("& > ea-table-column")];
@@ -70,18 +90,20 @@ export class EaTableColumn extends Base {
         /** @type {HTMLSlotElement} */
         const defaultSlot = this.shadowRoot.querySelector(`#defaultSlot`);
 
-        const exclude = ["prop", "label", "width", "fixed"];
+        const exclude = ["prop", "label", "width", "fixed", "sortable"];
         let template = null;
 
         if (columns.length) {
           template = columns.map(columns => columns.getColumnTree);
         } else if (this.innerHTML) {
           const tpl = document.createElement("template");
-          const html = Array.from(defaultSlot.assignedNodes(), item =>
-            item.outerHTML?.trim()
-          )
-            .filter(item => item)
-            .join("");
+          const html = this.html(
+            Array.from(defaultSlot.assignedNodes(), item =>
+              item.outerHTML?.trim()
+            )
+              .filter(item => item)
+              .join("")
+          );
           tpl.innerHTML = html;
           template = tpl;
         } else {

@@ -6,7 +6,7 @@ import EaUtils from "@/utils/Utils";
  * @return {string}
  */
 const sortIconRenderer = text => {
-  return [
+  return EaUtils.EaElement.h("span", "ea-table__sort-wrapper", {}, [
     EaUtils.EaElement.h("span", null, {}, text),
     EaUtils.EaElement.h(
       "span",
@@ -23,7 +23,7 @@ const sortIconRenderer = text => {
         }),
       ].join("")
     ),
-  ].join("");
+  ]);
 };
 
 /**
@@ -96,15 +96,15 @@ const renderThCell = col => {
 
   return EaUtils.EaElement.h(
     "th",
-    `ea-table__th ${
-      col.fixed ? `is-fixed fixed-${col.fixed}` : ""
-    } ${col.sortable ? "is-sortable" : ""}`,
+    `ea-table__th${
+      col.fixed ? ` is-fixed fixed-${col.fixed}` : ""
+    }${col.sortable ? " is-sortable" : ""}${col.width ? " is-width" : ""}`.trim(),
     {
       part: "thead-th",
       colspan: col.colspan,
       rowspan: col.rowspan,
       style: [col.width ? `--ea-table-cell-width: ${col.width}` : ""],
-      "data-prop": col.prop || "",
+      "data-scope": col.prop || "",
     },
     content
   );

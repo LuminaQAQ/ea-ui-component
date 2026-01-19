@@ -1,3 +1,4 @@
+import { html } from "@/directives/html";
 import variable from "../themes/variables.scss?inline";
 import "./ea-icon/index.js";
 import EaUtils from "@/utils/Utils";
@@ -309,6 +310,10 @@ export default class Base extends HTMLElement {
   }
   // #endregion
   // ------- end -------
+
+  html(value) {
+    return html(value);
+  }
 
   /** @abstract 组件渲染 */
   $render() {}

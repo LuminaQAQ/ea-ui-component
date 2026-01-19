@@ -7,7 +7,6 @@ import {
   shallowRef,
   watch
 } from "./chunk-RY5ODQAQ.js";
-import "./chunk-BUSYA2B4.js";
 
 // node_modules/vitepress/dist/client/theme-default/index.js
 import "/home/lumina/文档/ea-ui-doc/ea-ui-component/node_modules/vitepress/dist/client/theme-default/styles/fonts.css";

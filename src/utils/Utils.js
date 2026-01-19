@@ -84,9 +84,22 @@ EaUtils.EaElement.addAsyncEventListener = (context, eventName, once = true) => {
 };
 
 EaUtils.EaElement.h = (tagName, className, props, children) => {
+  if (tagName === "script" || tagName === "style") return "";
+
   const notEndTag = ["input"];
+
+  /**
+   * 处理属性
+   * @param { String } key
+   * @param { String | Object } value
+   * @returns
+   */
   const handleProps = (key, value) => {
-    if (
+    key = key ? key : "";
+
+    if (key.startsWith("on")) {
+      return "";
+    } else if (
       key &&
       (typeof value === "string" ||
         typeof value === "number" ||
@@ -106,15 +119,30 @@ EaUtils.EaElement.h = (tagName, className, props, children) => {
     return "";
   };
 
+  /**
+   * 处理子组件
+   * @param {string | Array} children
+   * @returns {string}
+   */
   const handleChildren = children => {
+    /**
+     * 删除特殊标签
+     * @param {string} rawHTML
+     * @returns {string}
+     */
+    const sanitize = rawHTML =>
+      rawHTML
+        .replace(/<\/?script.*?>/g, "&lt;script&gt;")
+        .replace(/<\/?style.*?>/g, "&lt;style&gt;");
+
     if (
       typeof children === "string" ||
       typeof children === "number" ||
       typeof children === "boolean"
     ) {
-      return children;
+      return sanitize(children);
     } else if (Array.isArray(children)) {
-      return children.join("");
+      return sanitize(children.join(""));
     }
 
     return "";

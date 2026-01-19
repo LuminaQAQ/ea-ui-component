@@ -154,6 +154,45 @@ onMounted(async () => {
         },
       ];
 
+      const summaryData = [
+        {
+          id: "12987122",
+          name: "Tom",
+          amount1: "234",
+          amount2: "3.2",
+          amount3: 10,
+        },
+        {
+          id: "12987123",
+          name: "Tom",
+          amount1: "165",
+          amount2: "4.43",
+          amount3: 12,
+        },
+        {
+          id: "12987124",
+          name: "Tom",
+          amount1: "324",
+          amount2: "1.9",
+          amount3: 9,
+        },
+        {
+          id: "12987125",
+          name: "Tom",
+          amount1: "621",
+          amount2: "2.2",
+          amount3: 17,
+        },
+        {
+          id: "12987126",
+          name: "Tom",
+          amount1: "539",
+          amount2: "4.1",
+          amount3: 15,
+        },
+      ];
+
+
       window.handleSearch = keywords => {
         const res = searchData.filter(item => {
           return item.name.includes(keywords);
@@ -387,83 +426,48 @@ onMounted(async () => {
       customHeaderTableExample.init();
       // #endregion
       // ------- end -------
-
-      // ------- 9. 排序 -------
+      
+      // ------- 表尾合计行 -------
       // #region
-      // const sortableTable = {
-      //   table: document.querySelector("#sortableTable"),
+      const summaryExample = {
+        table: document.querySelector("#summaryTable"),
+        summaryMethodsTable: document.querySelector("#summaryMethodsTable"),
 
-      //   init() {
-      //     this.table.data = moreData;
+        init() {
+          this.summaryMethodsTable.summaryMethod = /**
+           * @param {{columns: ColumnOption, data: any[]}} param
+           */ param => {
+            const { columns, data } = param;
+            const sums = [];
 
-      //     this.table.addEventListener("sort-change", (e) => {
-      //       console.log(e.detail);
-      //     });
-      //   },
-      // };
-      // sortableTable.init();
-      // #endregion
-      // ------- end -------
+            columns.forEach((column, index) => {
+              if (index === 0) {
+                sums[index] = "Total Cost";
+                return;
+              }
+              const values = data.map(item => Number(item[column.prop]));
+              if (!values.every(value => Number.isNaN(value))) {
+                sums[index] = `$ ${values.reduce((prev, curr) => {
+                  const value = Number(curr);
+                  if (!Number.isNaN(value)) {
+                    return prev + curr;
+                  } else {
+                    return prev;
+                  }
+                }, 0)}`;
+              } else {
+                sums[index] = "N/A";
+              }
+            });
 
-      // ------- 10. 自定义插槽 -------
-      // #region
-      // const customTable = {
-      //   table: document.querySelector("#customTable"),
-      //   searchInput: document.querySelector("#searchInput"),
+            return sums;
+          };
 
-      //   init() {
-      //     this.table.data = moreData;
-
-      //     // 搜索
-      //     this.searchInput.addEventListener("change", () => {
-      //       const res = moreData.filter((item) =>
-      //         item.name.includes(this.searchInput.value)
-      //       );
-      //       this.table.data = res;
-      //     });
-      //   },
-      // };
-      // customTable.init();
-
-      // // 编辑按钮
-      // class MyEditButton extends HTMLElement {
-      //   constructor() {
-      //     super();
-
-      //     const shadowroot = this.attachShadow({ mode: "open" });
-      //     shadowroot.innerHTML = `
-      //               <ea-button type="primary" size="mini">编辑</ea-button>
-      //           `;
-      //     const btn = shadowroot.querySelector("ea-button");
-      //     btn.addEventListener("click", (e) => {
-      //       setTimeout(() => {
-      //         console.log(customTable.table.currentRowDetail);
-      //       }, 0);
-      //     });
-
-      //     shadowroot.appendChild(btn);
-      //   }
-      // }
-      // window.customElements.define("my-edit-button", MyEditButton);
-
-      // // 删除按钮
-      // class MyDeleteButton extends HTMLElement {
-      //   constructor() {
-      //     super();
-
-      //     const shadowroot = this.attachShadow({ mode: "open" });
-      //     shadowroot.innerHTML = `
-      //               <ea-button type="danger" size="mini">删除</ea-button>
-      //           `;
-      //     const btn = shadowroot.querySelector("ea-button");
-      //     btn.addEventListener("click", (e) => {
-      //       setTimeout(() => {
-      //         console.log(customTable.table.currentRowDetail);
-      //       }, 0);
-      //     });
-      //   }
-      // }
-      // window.customElements.define("my-delete-button", MyDeleteButton);
+          this.table.setData(summaryData);
+          this.summaryMethodsTable.setData(summaryData);
+        },
+      };
+      summaryExample.init();
       // #endregion
       // ------- end -------
 })
@@ -1810,71 +1814,222 @@ customColumnExample.init();
 
 若表格展示的是各类数字，可以在表尾显示各列的合计。
 
-<!-- ## Table Attributes
+<div class="demo">
+  <ea-table id="summaryTable" border show-summary>
+    <ea-table-column label="ID" prop="id" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name"></ea-table-column>
+    <ea-table-column label="Amount 1" prop="amount1"></ea-table-column>
+    <ea-table-column label="Amount 2" prop="amount2"></ea-table-column>
+    <ea-table-column label="Amount 3" prop="amount3"></ea-table-column>
+  </ea-table>
+  <br />
+  <ea-table id="summaryMethodsTable" border show-summary>
+    <ea-table-column label="ID" prop="id" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name"></ea-table-column>
+    <ea-table-column label="Amount 1" prop="amount1"></ea-table-column>
+    <ea-table-column label="Amount 2" prop="amount2"></ea-table-column>
+    <ea-table-column label="Amount 3" prop="amount3"></ea-table-column>
+  </ea-table>
+</div>
 
-| 参数                  | 说明       | 类型 | 可选值 | 默认值 |
-| --------------------- | ---------- | ---- | ------ | ------ |
-| data                  | 数据       | -    | -      | []     |
-| height                | 高度       | -    | -      | -      |
-| border                | 边框       | -    | -      | false  |
-| stripe                | 斑马纹     | -    | -      | false  |
-| highlight-current-row | 当前行高亮 | -    | -      | false  |
-| currentRow            | 当前行     | -    | -      | -      |
-| currentRowDetail      | 当前行详情 | -    | -      | -      |
+::: code-group
 
-## Table CSS Part
+```html
+<div class="demo">
+  <ea-table id="summaryTable" border show-summary>
+    <ea-table-column label="ID" prop="id" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name"></ea-table-column>
+    <ea-table-column label="Amount 1" prop="amount1"></ea-table-column>
+    <ea-table-column label="Amount 2" prop="amount2"></ea-table-column>
+    <ea-table-column label="Amount 3" prop="amount3"></ea-table-column>
+  </ea-table>
+  <br />
+  <ea-table id="summaryMethodsTable" border show-summary>
+    <ea-table-column label="ID" prop="id" width="180px"></ea-table-column>
+    <ea-table-column label="Name" prop="name"></ea-table-column>
+    <ea-table-column label="Amount 1" prop="amount1"></ea-table-column>
+    <ea-table-column label="Amount 2" prop="amount2"></ea-table-column>
+    <ea-table-column label="Amount 3" prop="amount3"></ea-table-column>
+  </ea-table>
+</div>
+```
+
+```js
+const summaryData = [
+  {
+    id: "12987122",
+    name: "Tom",
+    amount1: "234",
+    amount2: "3.2",
+    amount3: 10,
+  },
+  {
+    id: "12987123",
+    name: "Tom",
+    amount1: "165",
+    amount2: "4.43",
+    amount3: 12,
+  },
+  {
+    id: "12987124",
+    name: "Tom",
+    amount1: "324",
+    amount2: "1.9",
+    amount3: 9,
+  },
+  {
+    id: "12987125",
+    name: "Tom",
+    amount1: "621",
+    amount2: "2.2",
+    amount3: 17,
+  },
+  {
+    id: "12987126",
+    name: "Tom",
+    amount1: "539",
+    amount2: "4.1",
+    amount3: 15,
+  },
+];
+
+const summaryExample = {
+  table: document.querySelector("#summaryTable"),
+  summaryMethodsTable: document.querySelector("#summaryMethodsTable"),
+
+  init() {
+    this.summaryMethodsTable.summaryMethod = /**
+     * @param {{columns: ColumnOption, data: any[]}} param
+     */ param => {
+      const { columns, data } = param;
+      const sums = [];
+
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = "Total Cost";
+          return;
+        }
+        const values = data.map(item => Number(item[column.prop]));
+        if (!values.every(value => Number.isNaN(value))) {
+          sums[index] = `$ ${values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!Number.isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0)}`;
+        } else {
+          sums[index] = "N/A";
+        }
+      });
+
+      return sums;
+    };
+
+    this.table.setData(summaryData);
+    this.summaryMethodsTable.setData(summaryData);
+  },
+};
+summaryExample.init();
+```
+
+:::
+
+## Table API
+
+### Table Attributes
+
+| 参数                  | 说明                                          | 类型    | 可选值 | 默认值 |
+| --------------------- | --------------------------------------------- | ------- | ------ | ------ |
+| data                  | 表格数据 ( 等同于 [setData](#table-methods) ) | Array   | -      | []     |
+| stripe                | 是否显示斑马纹                                | Boolean | -      | false  |
+| border                | 是否显示边框                                  | Boolean | -      | false  |
+| height                | 表格高度                                      | String  | -      | -      |
+| max-height            | 表格最大高度                                  | String  | -      | -      |
+| highlight-current-row | 是否高亮当前行                                | Boolean | -      | false  |
+| show-summary          | 是否显示合计行                                | Boolean | -      | false  |
+
+### Table Methods
+
+| 方法名             | 说明             | 参数                                                                 |
+| ------------------ | ---------------- | -------------------------------------------------------------------- |
+| setData            | 设置表格数据     | `(dataSource: any[]) => void`                                        |
+| sort               | 对指定列进行排序 | `(prop: string, order?: 'asc' \| 'desc') => void`                    |
+| setRowStylePart    | 设置行样式       | `(handler: Function \| string) => void`                              |
+| getCurrentRow      | 获取当前行数据   | `() => any`                                                          |
+| setCurrentRow      | 设置当前行数据   | `(row: any) => void`                                                 |
+| toggleRowSelection | 切换行选中状态   | `(row: any, selected?: boolean, ignoreSelectable?: boolean) => void` |
+| clearSelection     | 清空选择         | `() => void`                                                         |
+
+### Table Events
+
+| 事件名                 | 说明                     | 参数                                                                      |
+| ---------------------- | ------------------------ | ------------------------------------------------------------------------- |
+| ea-select              | 选择某一行时触发         | event.detail: `{ selection: any[], row: any }`                            |
+| ea-select-all          | 全选时触发               | event.detail: `{ selection: any[] }`                                      |
+| ea-selection-change    | 多选发生变化时触发       | event.detail: `{ newSelection: any[] }`                                   |
+| ea-cell-mouse-enter    | 单元格鼠标进入时触发     | event.detail: `{ row: any, column: string, cell: HTMLTableCellElement }`  |
+| ea-cell-mouse-leave    | 单元格鼠标离开时触发     | event.detail: `{ row: any, column: string, cell: HTMLTableCellElement }`  |
+| ea-cell-click          | 点击单元格时触发         | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`  |
+| ea-cell-dblclick       | 双击单元格时触发         | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`  |
+| ea-cell-contextmenu    | 右键点击单元格时触发     | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`  |
+| ea-row-click           | 点击行时触发             | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }` |
+| ea-row-dblclick        | 双击行时触发             | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }` |
+| ea-row-contextmenu     | 右键点击行时触发         | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }` |
+| ea-header-click        | 点击表头时触发           | event.detail: `{ cell: HTMLTableCellElement, column: string }`            |
+| ea-header-contextmenu  | 右键点击表头时触发       | event.detail: `{ cell: HTMLTableCellElement, column: string }`            |
+| ea-sort-change         | 排序变化时触发           | event.detail: `{ prop: string, order: 'ascend' \| 'descend' }`            |
+| ea-current-change      | 当前行变化时触发         | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }` |
+| ea-table-data-rendered | 表格在数据渲染完成后触发 | -                                                                         |
+
+### Table CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称         | 说明                                                                                       |
-| ------------ | ------------------------------------------------------------------------------------------ |
-| container    | 外层容器                                                                                   |
-| header-wrap  | 表格的`thead`容器(内部为一个 `table` 元素, 仅含 `colgroup` 和 `thead`)                     |
-| header-table | 表头表格                                                                                   |
-| body-wrap    | 表格的`tbody`容器(内部为一个`table`元素, 仅含`colgroup`, `tbody` 和 `slot [name="empty"]`) |
-| row          | 表格行                                                                                     |
-| th-cell      | 表头单元格                                                                                 |
-| td-cell      | 表格单元格                                                                                 |
+| 名称      | 说明                                                         |
+| --------- | ------------------------------------------------------------ |
+| container | 外层容器，即整个表格容器                                     |
+| colgroup  | 表格列（colgroup）部分                                       |
+| col       | 表格列（col）部分                                            |
+| thead     | 表格头部（thead）部分                                        |
+| thead-tr  | 表格头部行（tr）部分                                         |
+| thead-th  | 表格头部列（th）部分                                         |
+| checkbox  | 表格复选框（checkbox）`当存在 type="selection" 的列时有效`   |
+| asc-icon  | 表格排序图标（asc-icon）`当存在 sortable="true" 的列时有效`  |
+| desc-icon | 表格排序图标（desc-icon）`当存在 sortable="true" 的列时有效` |
+| tbody     | 表格主体（tbody）部分                                        |
+| tbody-tr  | 表格行（tr）部分                                             |
+| tbody-td  | 表格单元格（td）部分                                         |
+| tfoot     | 表格尾部（tfoot）部分                                        |
+| tfoot-tr  | 表格行（tr）部分                                             |
+| tfoot-td  | 表格单元格（td）部分                                         |
 
-## TableColumn CSS Part
+### Table Slot
 
-| 名称      | 说明     |
-| --------- | -------- |
-| container | 外层容器 |
+| 名称   | 说明                                     |
+| ------ | ---------------------------------------- |
+| -      | 表格列定义插槽，仅支持 `ea-table-column` |
+| header | 表格外头部插槽                           |
+| empty  | 表格无数据时显示插槽                     |
 
-## Table Events
+## TableColumn API
 
-| 事件名                | 说明                           | 参数 |
-| --------------------- | ------------------------------ | ---- |
-| sort-change           | 排序                           | -    |
-| current-change        | 当前行变化                     | -    |
-| click                 | 点击行                         | -    |
-| body-selection-change | `type=selection`时, 选中行变化 | -    |
+### TableColumn Attributes
 
-## Table Slot
+| 参数     | 说明                 | 类型    | 可选值                    | 默认值 |
+| -------- | -------------------- | ------- | ------------------------- | ------ |
+| label    | 表头标题             | String  | -                         | -      |
+| prop     | 表头对应的数据的键值 | String  | -                         | -      |
+| type     | 列类型               | String  | `selection \| index`      | -      |
+| align    | 对齐方式             | String  | `left \| center \| right` | left   |
+| width    | 列宽                 | String  | -                         | -      |
+| sortable | 是否可排序           | Boolean | -                         | false  |
+| fixed    | 是否固定列           | String  | `left \| right`           | -      |
 
-| 名称   | 说明                               |
-| ------ | ---------------------------------- |
-| -      | 表头内容, 仅支持 `ea-table-column` |
-| header | 表头额外内容                       |
-| body   | 表格主体额外列                     |
-| empty  | 空数据                             |
+### TableColumn Slot
 
-## Table-column Attributes
-
-| 参数     | 说明                 | 类型   | 可选值                  | 默认值  |
-| -------- | -------------------- | ------ | ----------------------- | ------- |
-| prop     | 表头对应的数据的键值 | -      | -                       | -       |
-| label    | `th` 的内容          | -      | -                       | -       |
-| width    | 列宽                 | -      | -                       | 100     |
-| sortable | 排序                 | -      | -                       | false   |
-| type     | 类型                 | String | default/index/selection | default |
-| rowspan  | 跨行数               | Number | -                       | 1       |
-| colspan  | 跨列数               | Number | -                       | 1       |
-| order    | 排序顺序             | String | asc/desc                | asc     |
-
-## Table-column Slot
-
-| 名称 | 说明      |
-| ---- | --------- |
-| -    | `th` 内容 | -->
+| 名称   | 说明                         |
+| ------ | ---------------------------- |
+| -      | 默认插槽，用于自定义列内容   |
+| header | 表头插槽，用于自定义表头内容 |

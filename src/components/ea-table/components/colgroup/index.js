@@ -1,21 +1,22 @@
-import { h } from "../../utils/h";
+import EaUtils from "@/utils/Utils";
 
 /**
- * 渲染col
- * @param {import("../ea-table").EaTableColumnElement[]} columns
- * @param {TheadAttributes} attributes
- * @returns {string}
- */
-export const colRenderer = (columns) => {
-  return columns.map((column) => h("col", { width: column.width })).join("");
-};
-
-/**
- * 渲染colgroup
- * @param {import("../ea-table").EaTableColumnElement[]} columns
- * @param {TheadAttributes} attributes
+ * 获取 colgroup HTML
+ * @param {import("../ea-table").ColumnOption[]} columns
  * @returns
  */
-export const colgroupRenderer = (columns, attributes) => {
-  return h("colgroup", attributes, colRenderer(columns));
+export const colgroupRenderer = columns => {
+  return EaUtils.EaElement.h(
+    "colgroup",
+    "ea-table__colgroup",
+    {
+      part: "colgroup",
+    },
+    columns.map(column =>
+      EaUtils.EaElement.h("col", "ea-table__col", {
+        width: column.width,
+        part: "col",
+      })
+    )
+  );
 };
