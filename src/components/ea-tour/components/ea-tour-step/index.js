@@ -1,5 +1,5 @@
 import Base from "@components/Base.js";
-import { EaButton } from "@/components/ea-button";
+import { EaButton } from "@/components/ea-button/components/ea-button";
 
 import stylesheet from "./index.scss?inline";
 import EaUtils from "@/utils/Utils";

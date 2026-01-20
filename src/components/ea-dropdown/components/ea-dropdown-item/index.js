@@ -24,7 +24,7 @@ export class EaDropdownItem extends Base {
       type: Boolean,
       default: false,
       observer: newVal => {
-        this.setAttr("aria-disabled", newVal);
+        this.toggleAttribute("aria-disabled", newVal);
         this.updateContainerClasslist();
       },
     },

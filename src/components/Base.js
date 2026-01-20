@@ -8,10 +8,12 @@ export default class Base extends HTMLElement {
 
   isMounted = true;
   static get observedAttributes() {
-    return [];
+    return ["locale"];
   }
 
-  props = {};
+  props = {
+    locale: "en-US",
+  };
 
   constructor() {
     super();
@@ -20,6 +22,18 @@ export default class Base extends HTMLElement {
     /** @type {HTMLElement} */
     this.shadowRoot;
   }
+
+  // ------- locale -------
+  // #region
+  get locale() {
+    return this.getAttrString("locale") || this.props.locale || "en-US";
+  }
+
+  set locale(locale) {
+    this.setAttribute("locale", locale);
+  }
+  // #endregion
+  // ------- end -------
 
   /**
    * 样式导入
@@ -119,7 +133,7 @@ export default class Base extends HTMLElement {
         }
       }
 
-      return type;
+      return type || "String";
     };
 
     const parseDefaultValue = defaultVal =>
@@ -253,6 +267,12 @@ export default class Base extends HTMLElement {
     //     return;
     // }
 
+    if (name === "locale") {
+      this.props.locale = newVal;
+      this.$updateLocalization(newVal);
+      return;
+    }
+
     try {
       if (this.#stateConfigs[name]?.props) return;
       const parseValue = (key, rawValue) => {
@@ -315,6 +335,13 @@ export default class Base extends HTMLElement {
     return html(value);
   }
 
+  /**
+   * @abstract 更新组件语言
+   * @param {string} locale
+   */
+  // eslint-disable-next-line no-unused-vars
+  $updateLocalization(locale) {}
+
   /** @abstract 组件渲染 */
   $render() {}
 
@@ -345,6 +372,10 @@ export default class Base extends HTMLElement {
     // this["loading-full"] = this["loading-full"];
 
     // this.addEventListener("keydown", (e) => {
+    //   console.log(e.key, e.ctrlKey);
+    // });
+
+    // this.addEventListener("keydown", e => {
     //   console.log(e.key, e.ctrlKey);
     // });
   }
@@ -423,18 +454,6 @@ export default class Base extends HTMLElement {
     const attr = this.getAttribute(attrName);
 
     return attr ? attr : defaultValue || "";
-  }
-
-  getAttrRegExp(attrName, defaultValue) {
-    const attr = this.getAttribute(attrName);
-
-    return attr ? new RegExp(attr) : defaultValue || null;
-  }
-
-  getAttrArray(attrName, defaultValue = []) {
-    const attr = EaUtils.JSON.parse(this.getAttribute(attrName));
-
-    return Array.isArray(attr) ? attr : attr ? [attr] : defaultValue;
   }
 
   getAttrDate(attrName, defaultValue) {

@@ -1,11 +1,9 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
 onMounted(() => {
-    // import('../index.js')
-    import('../components/ea-calendar/index.js')
-    import('./index.scss')
-
     document.querySelector('ea-calendar').addEventListener('select', (e) => {
         console.log(e.detail)
     })
@@ -63,7 +61,7 @@ onMounted(() => {
 
 ```js
 const calendar = document.querySelector("ea-calendar");
-calendar.addEventListener("select", (e) => {
+calendar.addEventListener("select", e => {
   console.log(e.detail);
 });
 ```

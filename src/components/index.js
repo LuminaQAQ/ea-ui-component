@@ -4,7 +4,6 @@ import './ea-backtop/index.js';
 import './ea-badge/index.js';
 import './ea-breadcrumb/index.js';
 import './ea-button/index.js';
-import './ea-button-group/index.js';
 import './ea-calendar/index.js';
 import './ea-card/index.js';
 import './ea-carousel/index.js';

@@ -140,7 +140,7 @@ EaUtils.EaElement.h = (tagName, className, props, children) => {
       typeof children === "number" ||
       typeof children === "boolean"
     ) {
-      return sanitize(children);
+      return sanitize(String(children));
     } else if (Array.isArray(children)) {
       return sanitize(children.join(""));
     }

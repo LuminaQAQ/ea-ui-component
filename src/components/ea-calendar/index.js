@@ -1,298 +1,467 @@
-// @ts-nocheck
-import Base from '../Base.js';
-import { createElement, createSlotElement } from '../../utils/createElement.js';
+import { namespace } from "@/directives/namespace";
+import Base from "@components/Base.js";
+import stylesheet from "./index.scss?inline";
+import "@/components/ea-button/index";
+import "@/components/ea-select/index";
+import { i18nManager } from "@/utils/I18nManager";
+import EaUtils from "@/utils/Utils";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
 
-import "../ea-button-group/index.js";
-import "../ea-button/index.js";
-
-import { createChangerElement } from './src/utils/createChangerElement.js';
-import { createThead } from './src/utils/createThead.js';
-import { getToday, getUserToday } from './src/utils/getDate.js';
-import { getUserWeekStart } from './src/utils/getUserWeekStart.js';
-
-import { stylesheet } from './src/style/stylesheet.js';
+/**
+ * @typedef DayOption
+ * @property {number[]} lastMonRemainingDays
+ * @property {number[]} currentMonDays
+ * @property {number[]} nextMonRemainingDays
+ */
 
 export class EaCalendar extends Base {
-    #container;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #header;
+  /** @type {HTMLElement} */
+  #title;
+  /** @type {HTMLElement} */
+  #controllerWrapper;
+  /** @type {HTMLTableElement} */
+  #body;
+  /** @type {HTMLTableSectionElement} */
+  #thead;
+  /** @type {HTMLTableSectionElement} */
+  #tbody;
 
-    #headerDateWrap;
-    #headerDateContent;
-    #headerChangerWrap;
+  /** @type {AbortController} */
+  #abortController = new AbortController();
 
-    #lastMonthBtn;
-    #todayBtn;
-    #nextMonthBtn;
+  #AbortControllerStates = {
+    /** @type {AbortController | null} */
+    dateChangeAbortController: null,
+  };
 
-    #tableHead;
-    #tableContent;
-    constructor() {
-        super();
+  #states = {
+    isEaSelectImported: false,
+    isEaButtonImported: false,
+  };
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
+  static get observedAttributes() {
+    return [...super.observedAttributes, "controller-type"];
+  }
 
-        shadowRoot.innerHTML = `
-            <div class='ea-calendar_wrap' part='container'>
-                <div class='ea-calendar-header_wrap' part='header-wrap'>
-                    <span class='ea-calendar-header_content' part='header-content'></span>
-                    <ea-button-group class='ea-calendar-header_changer' part='header-changer'>
-                        <ea-button class='ea-calendar-header_sg-changer ea-calendar-header_changer-lastMonth' part='header-changer-lastMonth' size="small">上个月</ea-button>
-                        <ea-button class='ea-calendar-header_sg-changer ea-calendar-header_changer-today' part='header-changer-today' size="small">今天</ea-button>
-                        <ea-button class='ea-calendar-header_sg-changer ea-calendar-header_changer-nextMonth' part='header-changer-nextMonth' size="small">下个月</ea-button>
-                    </ea-button-group>
-                </div>
-                <div class='ea-calendar_calendar-wrap' part='calendar-wrap'>
-                    <table class='ea-calendar_table' part='table'>
-                        <thead class='ea-calendar_table-head' part='table-head'></thead>
-                        <tbody class='ea-calendar_table-body' part='table-body'></tbody>
-                    </table>
-                </div>
-            </div>
-        `;
+  state = this.properties({
+    "controller-type": {
+      type: ["button", "select"],
+      default: "button",
+      observer: newVal => {
+        this.#handleControllerRender(newVal);
+      },
+    },
+  });
 
-        this.#container = this.shadowRoot.querySelector('.ea-calendar_wrap');
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-calendar", {
+      // ['--' + this.type]: this.type,
+    });
 
-        this.#headerDateContent = shadowRoot.querySelector('.ea-calendar-header_content');
-        this.#headerDateWrap = shadowRoot.querySelector('.ea-calendar-header_wrap');
+    this.#container.className = className;
 
-        this.#headerChangerWrap = shadowRoot.querySelector('.ea-calendar-header_changer');
-        this.#lastMonthBtn = shadowRoot.querySelector('.ea-calendar-header_changer-lastMonth');
-        this.#todayBtn = shadowRoot.querySelector('.ea-calendar-header_changer-today');
-        this.#nextMonthBtn = shadowRoot.querySelector('.ea-calendar-header_changer-nextMonth');
+    return className;
+  }
 
-        this.#tableHead = shadowRoot.querySelector('.ea-calendar_table-head');
-        this.#tableContent = shadowRoot.querySelector('.ea-calendar_table-body');
+  constructor() {
+    super();
 
-        this.build(shadowRoot, stylesheet);
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  /**
+   * controller-type 的渲染器
+   * @param {'button' | 'select'} [controllerType] 控制器类型
+   * @return {string} 属性值
+   */
+  #handleControllerRender = async (
+    controllerType = this["controller-type"]
+  ) => {
+    const ns = this.ns;
+
+    const currentYear = new Date().getFullYear();
+
+    const controllerTypeStrategies = {
+      button: () =>
+        this.html(`
+        <ea-button-group class='${ns.e("controller-group")}' part='controller-group' size="small">
+          <ea-button class='${ns.e("controller")} ${ns.e("controller-prev")}' part='controller prev'>
+            ${i18nManager.t("calendar.prevMonth")}
+          </ea-button>
+          <ea-button class='${ns.e("controller")} ${ns.e("controller-today")}' part='controller current'>
+            ${i18nManager.t("calendar.today")}
+          </ea-button>
+          <ea-button class='${ns.e("controller")} ${ns.e("controller-next")}' part='controller next'>
+            ${i18nManager.t("calendar.nextMonth")}
+          </ea-button>
+        </ea-button-group>
+      `),
+      select: () => {
+        const yearOptions = Array.from(
+          { length: 20 },
+          (_, i) =>
+            `<ea-option value="${currentYear - 10 + i}">${currentYear - 10 + i}</ea-option>`
+        ).join("");
+        const monthOptions = Array.from(
+          { length: 12 },
+          (_, i) => `<ea-option value="${i + 1}">${i + 1}</ea-option>`
+        ).join("");
+
+        return this.html(`
+          <section class='${ns.e("controller-group")}' part='controller-group'>
+            <ea-select class='${ns.e("controller")} ${ns.e("controller-year")}' part='controller year' placeholder='${i18nManager.t("calendar.selectYear")}' size="small">
+              ${yearOptions}
+            </ea-select>
+            <ea-select class='${ns.e("controller")} ${ns.e("controller-month")}' part='controller month' placeholder='${i18nManager.t("calendar.selectMonth")}' size="small">
+              ${monthOptions}
+            </ea-select>
+            <ea-button class='${ns.e("controller")} ${ns.e("controller-today")}' part='controller current' size="small">
+              ${i18nManager.t("calendar.today")}
+            </ea-button>
+          </section>
+        `);
+      },
+    };
+
+    this.#AbortControllerStates.dateChangeAbortController?.abort();
+    this.#AbortControllerStates.dateChangeAbortController =
+      new AbortController();
+
+    this.#controllerWrapper.innerHTML =
+      controllerTypeStrategies[controllerType]();
+
+    if (controllerType === "select") {
+      this.#initSelectControllerEvent();
     }
+  };
 
-    // ------- week-start 用户传入的每周起始日 -------
-    // #region
-    get weekStart() {
-        return this.getAttribute('week-start') || "一";
-    }
+  /**
+   * 初始化控制器为 select 的事件
+   */
+  #initSelectControllerEvent = async () => {
+    await customElements.whenDefined("ea-select");
 
-    set weekStart(weekStart) {
-        this.setAttribute('week-start', weekStart);
+    const ns = this.ns;
 
-        this.#tableHead.innerHTML = createThead(getUserWeekStart(this.week, weekStart)).innerHTML;
-    }
-    // #endregion
-    // ------- end -------
+    const date = new Date();
 
-    // ------- date 用户传入日期 -------
-    // #region
-    get date() {
-        const myDate = new Date();
+    const currentYear = date.getFullYear();
+    const currentMonth = date.getMonth() + 1;
 
-        return this.getAttribute('date') || getToday();
-    }
+    const yearEl = this.shadowRoot.querySelector(ns.ce("controller-year"));
+    const monthEl = this.shadowRoot.querySelector(ns.ce("controller-month"));
+    const todayEl = this.shadowRoot.querySelector(ns.ce("controller-today"));
 
-    set date(date) {
-        this.setAttribute('date', date);
+    if (yearEl) yearEl.value = currentYear;
+    if (monthEl) monthEl.value = currentMonth;
 
-        this.#headerDateContent.innerHTML = date = isNaN(new Date(date)) ? getToday() : getUserToday(date);
+    await EaUtils.sleep(0);
 
-        this.#handleDateChange(this.#tableContent, date, this.weekStart);
-    }
-    // #endregion
-    // ------- end -------
+    yearEl.addEventListener(
+      "change",
+      e => {
+        e.stopImmediatePropagation();
+        console.log(e.detail);
+      },
+      {
+        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
+      }
+    );
 
-    // ------- size 用户传入尺寸 -------
-    // #region
-    get size() {
-        const attr = this.getAttribute('size');
-        return ["mini"].includes(attr) ? attr : "medium";
-    }
+    monthEl.addEventListener(
+      "change",
+      e => {
+        e.stopImmediatePropagation();
+        console.log(e.detail);
+      },
+      {
+        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
+      }
+    );
 
-    set size(size) {
-        this.setAttribute('size', size);
+    todayEl.addEventListener(
+      "click",
+      e => {
+        e.stopImmediatePropagation();
+        console.log(e);
+      },
+      {
+        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
+      }
+    );
+  };
 
-        this.#container.classList.add(size);
+  /**
+   * 处理周渲染
+   * @param {Array} weekList
+   */
+  #getWeekHTMLString = weekList => {
+    return weekList
+      .map(day => `<th class='${this.ns.e("th")}' part='th'>${day}</th>`)
+      .join("");
+  };
 
-        if (size === "mini") {
-            const prevIcon = createElement("span", "prev-btn");
-            prevIcon.innerText = "<";
-            const nextIcon = createElement("span", "next-btn");
-            nextIcon.innerText = ">";
+  /**
+   * 获取日期数组
+   * @return {DayOption}
+   */
+  #getDayOption = () => {
+    const currentDate = dayjs();
 
-            this.#lastMonthBtn = prevIcon;
-            this.#nextMonthBtn = nextIcon;
+    const lastMonDate = currentDate.add(-1, "month");
+    const lastMonTotalDays = lastMonDate.daysInMonth();
 
-            this.#headerDateWrap.insertBefore(prevIcon, this.#headerDateWrap.firstChild);
-            this.#headerDateWrap.appendChild(nextIcon);
-        }
-    }
-    // #endregion
-    // ------- end -------
+    const currentMonFirstDay = currentDate.startOf("month").day();
+    const currentMonLastDay = currentDate.endOf("month").day();
+    const currentMonTotalDays = currentDate.daysInMonth();
 
-    get week() {
-        return ["日", "一", "二", "三", "四", "五", "六"];
-    }
+    const weekStart = dayjs().startOf("week").get("day");
+
+    const lastMonRemainingDays = Array.from(
+      { length: currentMonFirstDay - weekStart },
+      (_, i) => lastMonTotalDays - i
+    ).reverse();
+    const currentMonDays = Array.from(
+      { length: currentMonTotalDays },
+      (_, i) => i + 1
+    );
+    const nextMonRemainingDays = Array.from(
+      { length: 6 - currentMonLastDay + weekStart },
+      (_, i) => i + 1
+    );
+
+    return { lastMonRemainingDays, currentMonDays, nextMonRemainingDays };
+  };
+
+  /**
+   * 处理天渲染
+   * @param {Array} weekList
+   * @returns {String}
+   */
+  #getDayHTMLString = weekList => {
+    const ns = this.ns;
+
+    const date = dayjs();
+    const currentMonth = date.get("month") + 1;
+
+    const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
+      this.#getDayOption();
 
     /**
-     * 处理日历项的选择事件。
-     * 当日历项被点击时，此函数被调用。它的目的是切换所点击项的选中状态，并取消其他项的选中状态。
-     * @param {HTMLElement} node - 日历项元素节点。这个节点代表日历中的一个日期单元格。
+     * 渲染日历项
+     * @param {'last-mon' | 'current-mon' | 'next-mon'} dayType
+     * @param {any} content
+     * @param {boolean} [isSelected]
+     * @returns {string}
      */
-    #handleCalendarItemSelect(node) {
-        // 为日历项添加点击事件监听器
-        node.addEventListener('click', (e) => {
-            // 遍历日历表中的所有单元格，并移除它们的 'is-selected' 类，以取消选中状态
-            this.#tableContent.querySelectorAll('td').forEach(el => {
-                el.classList.remove('is-selected');
-            });
+    const cellRenderer = (
+      dayType,
+      content,
+      option = { isSelected: false, isToday: false }
+    ) => {
+      let month;
 
-            // 如果当前点击的节点已经选中，则取消选中状态，否则选中当前节点
-            if (node.classList.contains('is-selected')) {
-                node.classList.remove('is-selected');
-            } else {
-                node.classList.add('is-selected');
-            }
+      if (dayType === "last-mon") {
+        month = date.add(-1, "month").get("month") + 1;
+      } else if (dayType === "current-mon") {
+        month = currentMonth;
+      } else {
+        month = date.add(1, "month").get("month") + 1;
+      }
 
-            const myDate = new Date(this.date);
-            this.dispatchEvent(new CustomEvent('select', {
-                detail: {
-                    year: myDate.getFullYear(),
-                    month: myDate.getMonth() + 1,
-                    date: Number(node.innerText),
-                    day: this.week[Number(node.innerText) % 7],
-                }
-            }));
-        });
+      return EaUtils.EaElement.h(
+        "td",
+        null,
+        {
+          class: [
+            ns.e("day"),
+            ns.s(dayType),
+            option.isSelected ? ns.s("selected") : "",
+            option.isToday ? ns.s("today") : "",
+          ],
+          part: ["day", dayType],
+          "data-month": month,
+          "data-date": content,
+        },
+        content
+      );
+    };
+
+    const lastMon = lastMonRemainingDays.map(content =>
+      cellRenderer("last-mon", content)
+    );
+    const currentMon = currentMonDays.map(content =>
+      cellRenderer("current-mon", content, {
+        isToday: content === date.get("date"),
+      })
+    );
+    const nextMon = nextMonRemainingDays.map(content =>
+      cellRenderer("next-mon", content)
+    );
+
+    const calendarDays = lastMon
+      .concat(currentMon)
+      .concat(nextMon)
+      .reduce((acc, day, i) => {
+        if (i % 7 === 0) acc.push([]);
+
+        acc[acc.length - 1].push(day);
+
+        return acc;
+      }, [])
+      .map(row => `<tr class="${ns.e("row")}">${row.join("")}</tr>`)
+      .join("");
+
+    return calendarDays;
+  };
+
+  $render() {
+    const ns = namespace("calendar");
+
+    const date = new Date();
+
+    const currentYear = date.getFullYear();
+    const currentMonth = date.getMonth();
+
+    i18nManager.locale = this.locale;
+    dayjs.locale(this.locale);
+
+    this.ns = ns;
+
+    this.shadowRoot.innerHTML = this.html(`
+      <div class='${ns.b()}' part='container'>
+        <header class='${ns.e("header")}' part='header'>
+          <span class='${ns.e("title")}' part='title'>
+            ${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}
+          </span>
+          <section class='${ns.e("controller-wrapper")}' part='controller-wrapper'>
+          </section>
+        </header>
+        <table class='${ns.e("body")}' part='body'>
+          <thead class='${ns.e("thead")}' part='thead'>
+            <tr class='${ns.e("week")}' part='thead-tr tr'>
+              ${this.#getWeekHTMLString(i18nManager.t("calendar.weekDays"))}
+            </tr>
+          </thead>
+          <tbody class='${ns.e("tbody")}' part='tbody'>${this.#getDayHTMLString(i18nManager.t("calendar.weekDays"))}</tbody>
+        </table>
+      </div>
+    `);
+
+    this.#container = this.shadowRoot.querySelector(ns.cb());
+    this.#header = this.shadowRoot.querySelector(ns.ce("header"));
+    this.#title = this.shadowRoot.querySelector(ns.ce("title"));
+    this.#controllerWrapper = this.shadowRoot.querySelector(
+      ns.ce("controller-wrapper")
+    );
+
+    this.#body = this.shadowRoot.querySelector(ns.ce("body"));
+    this.#thead = this.shadowRoot.querySelector(ns.ce("thead"));
+    this.#tbody = this.shadowRoot.querySelector(ns.ce("tbody"));
+  }
+
+  $updateLocalization(locale) {
+    const ns = this.ns;
+
+    const prev = this.shadowRoot.querySelector(ns.ce("controller-prev"));
+    const today = this.shadowRoot.querySelector(ns.ce("controller-today"));
+    const next = this.shadowRoot.querySelector(ns.ce("controller-next"));
+    const year = this.shadowRoot.querySelector(ns.ce("controller-year"));
+    const month = this.shadowRoot.querySelector(ns.ce("controller-month"));
+
+    const date = dayjs();
+    const currentYear = date.get("year");
+    const currentMonth = date.get("month") + 1;
+    const todayDate = date.get("date");
+
+    i18nManager.locale = locale;
+    dayjs.locale(this.locale.toLowerCase());
+
+    const week = i18nManager.t("calendar.weekDays");
+    const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
+      this.#getDayOption();
+    const days = lastMonRemainingDays
+      .concat(currentMonDays)
+      .concat(nextMonRemainingDays);
+    /** @type {HTMLTableCellElement[]<NodeListOf>} */
+    const ths = this.#thead.querySelectorAll(".ea-calendar__th");
+    /** @type {HTMLTableCellElement[]<NodeListOf>} */
+    const tds = this.#tbody.querySelectorAll(".ea-calendar__day");
+
+    if (prev) prev.textContent = i18nManager.t("calendar.prevMonth");
+    if (today) today.textContent = i18nManager.t("calendar.today");
+    if (next) next.textContent = i18nManager.t("calendar.nextMonth");
+    if (year) year.placeholder = i18nManager.t("calendar.selectYear");
+    if (month) month.placeholder = i18nManager.t("calendar.selectMonth");
+
+    this.#title.textContent = `${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}`;
+
+    ths.forEach((th, index) => {
+      th.textContent = week[index];
+    });
+    tds.forEach((td, index) => {
+      const newDate = days[index];
+
+      let monthValue;
+      /** @type {'last' | 'current' | 'next'} */
+      let monthType;
+      if (index < lastMonRemainingDays.length) {
+        monthValue = date.add(-1, "month").get("month") + 1;
+        monthType = "last";
+      } else if (index < lastMonRemainingDays.length + currentMonDays.length) {
+        monthValue = currentMonth;
+        monthType = "current";
+      } else {
+        monthValue = date.add(1, "month").get("month") + 1;
+        monthType = "next";
+      }
+
+      td.dataset.month = monthValue;
+      td.dataset.date = newDate;
+      td.textContent = newDate;
+
+      td.classList.toggle("is-today", todayDate === newDate);
+
+      td.classList.toggle("is-last-mon", monthType === "last");
+      td.classList.toggle("is-current-mon", monthType === "current");
+      td.classList.toggle("is-next-mon", monthType === "next");
+
+      td.part.toggle("last-mon", monthType === "last");
+      td.part.toggle("current-mon", monthType === "current");
+      td.part.toggle("next-mon", monthType === "next");
+    });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    this.#handleControllerRender();
+  }
+
+  $beforeUnmounted() {
+    this.#abortController?.abort();
+
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key]?.abort();
+      this.#AbortControllerStates[key] = null;
     }
-
-    #handleMonthChange(flag) {
-        const date = new Date(this.date);
-        date.setMonth(date.getMonth() + (flag === "next" ? 1 : -1));
-
-        this.date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    }
-
-    /**
-     * 根据给定的日期更新页面上的日历视图。
-     * @param {HTMLElement} content - 用于展示日历的HTML元素。
-     * @param {string|number|Date} date - 需要展示的月份的日期对象。
-     */
-    #handleDateChange(content, date, weekStart = "一") {
-        date = isNaN(new Date(date)) ? new Date() : new Date(date);
-
-        // 清空内容区域，为展示新月份做准备
-        content.innerHTML = "";
-
-        // 创建当前月份的日期对象
-        const userDate = new Date(date);
-        // 获取月份，月份从0开始，因此需要加1
-        const month = userDate.getMonth() + 1;
-
-        // 初始化当前日期为月份的第一天
-        const currentDate = new Date(date);
-        currentDate.setDate(1);
-
-        // 计算上个月的最后一天
-        const lastDate = new Date(date);
-        lastDate.setMonth(month);
-        lastDate.setDate(0);
-
-        // 计算下个月的第一天
-        const nextDate = new Date(date);
-        nextDate.setMonth(month);
-        nextDate.setDate(1);
-
-        // 定义星期的中文简写数组
-        const weekArr = getUserWeekStart(this.week, weekStart);
-
-        // 构建日历的行，每行7天
-        for (let i = 0; i < 6; i++) {
-            const tr = createElement('tr');
-            tr.part = 'table-body-row';
-
-            // 构建每一天的单元格
-            for (let j = 0; j < 7; j++) {
-                const { length } = tr.children;
-                const td = createElement('td');
-                td.part = 'table-body-cell';
-                const span = createElement('span');
-                span.part = 'table-body-cell-content';
-
-                // 获取当前日期是星期几
-                const day = currentDate.getDay();
-                const myDate = new Date();
-
-                // 判断当前单元格应展示哪一天的日期
-                if (weekArr[length] === this.week[day] && month === currentDate.getMonth() + 1) {
-                    // 如果是当前月的日期，则展示当前月的日期
-                    span.innerText = currentDate.getDate();
-                    currentDate.setDate(currentDate.getDate() + 1);
-                    this.#handleCalendarItemSelect(td);
-                } else if (month == currentDate.getMonth()) {
-                    // 如果是下个月的日期，则展示下个月的日期
-                    span.innerText = currentDate.getDate();
-                    currentDate.setDate(currentDate.getDate() + 1);
-                    td.classList.add("is-disabled");
-                    td.part = "table-body-cell-disabled";
-                } else {
-                    // 如果是上个月的日期，则展示上个月的日期
-                    const lastMonthDateStep = j - day + 2;
-                    const step = weekArr.findIndex((item, index) => {
-                        if (item === "一") return index;
-                    })
-
-                    lastDate.setMonth(month - 1);
-                    lastDate.setDate(lastMonthDateStep > 0 ? (day + length) - step : lastMonthDateStep);
-                    span.innerText = lastDate.getDate();
-                    td.part = "table-body-cell-disabled";
-                    td.classList.add("is-disabled");
-                }
-
-                const userToday = new Date(this.date);
-                if (currentDate.getFullYear() === myDate.getFullYear() && currentDate.getMonth() === myDate.getMonth() && currentDate.getDate() === myDate.getDate() + 1) {
-                    td.part = "table-body-cell-today";
-                    td.classList.add("is-today");
-                }
-
-                if (currentDate.getFullYear() === userDate.getFullYear() && currentDate.getMonth() === userDate.getMonth() && currentDate.getDate() === userDate.getDate() + 1) {
-                    td.part = "table-body-cell-selected";
-                    td.classList.add("is-selected");
-                }
-
-
-                // 将日期单元格添加到行中
-                td.appendChild(span);
-                tr.appendChild(td);
-            }
-
-            // 将行添加到日历表格中
-            content.appendChild(tr);
-        }
-    }
-
-
-    connectedCallback() {
-        const that = this;
-
-        this.weekStart = this.weekStart;
-
-        this.date = this.date;
-
-        this.size = this.size;
-
-        // 上个月按钮
-        this.#lastMonthBtn.addEventListener('click', () => {
-            this.#handleMonthChange("last");
-        });
-
-        // 今天按钮
-        this.#todayBtn.addEventListener('click', () => {
-            this.date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-        });
-
-        // 下个月按钮
-        this.#nextMonthBtn.addEventListener('click', () => {
-            this.#handleMonthChange("next");
-        });
-    }
+  }
 }
 
-if (!customElements.get('ea-calendar')) {
-    customElements.define('ea-calendar', EaCalendar);
+if (!window.customElements.get("ea-calendar")) {
+  window.customElements.define("ea-calendar", EaCalendar);
 }

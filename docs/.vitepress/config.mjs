@@ -98,7 +98,7 @@ export default defineConfig({
         items: [
           { text: "Avatar 头像", link: "/ea-avatar" },
           { text: "Badge 徽章", link: "/ea-badge" },
-          // { text: 'Calendar 日历', link: '/ea-calendar' },
+          { text: 'Calendar 日历', link: '/ea-calendar' },
           { text: "Card 卡片", link: "/ea-card" },
           { text: "Carousel 走马灯", link: "/ea-carousel" },
           { text: "Collapse 折叠面板", link: "/ea-collapse" },
@@ -112,7 +112,7 @@ export default defineConfig({
           { text: "Segmented 分段控制器", link: "/ea-segmented" },
           { text: "Skeleton 骨架屏", link: "/ea-skeleton" },
           { text: "Statistic 统计组件", link: "/ea-statistic" },
-          { text: "Table 表格 [ ]", link: "/ea-table" },
+          { text: "Table 表格", link: "/ea-table" },
           { text: "Tag 标签", link: "/ea-tag" },
           { text: "Timeline 时间线", link: "/ea-timeline" },
           { text: "Tour 漫游式引导", link: "/ea-tour" },

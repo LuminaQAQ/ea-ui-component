@@ -250,10 +250,10 @@ export class EaSelect extends FormAssociatedBase {
     value: {
       props: true,
       type: {
-        String: () => typeof this.props?.value === "string",
+        Array: () => this.multiple && Array.isArray(this.props?.value),
         Number: () => typeof this.props?.value === "number",
         Boolean: () => typeof this.props?.value === "boolean",
-        Array: () => this.multiple && Array.isArray(this.props?.value),
+        String: () => typeof this.props?.value === "string",
       },
       default: "",
       observer: async newVal => {
@@ -610,7 +610,8 @@ export class EaSelect extends FormAssociatedBase {
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    if (!this.name) this.name = crypto.randomUUID();
+    if (!this.name) this.name = Math.random().toString(36).substring(2, 15);
+    if (this.hasAttribute("value")) this.value = this.getAttrString("value");
 
     this.#input.shadowRoot.addEventListener(
       "click",

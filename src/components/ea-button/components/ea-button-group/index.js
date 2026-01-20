@@ -1,6 +1,4 @@
-// @ts-nocheck
-import EaUtils from "@/utils/Utils.js";
-import Base from "../Base.js";
+import Base from "@components/Base";
 
 import stylesheet from "./index.scss?inline";
 
@@ -21,8 +19,8 @@ export class EaButtonGroup extends Base {
     disabled: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
-        this.querySelectorAll("ea-button").forEach((button) => {
+      observer: newVal => {
+        this.querySelectorAll("ea-button").forEach(button => {
           button.setAttribute("disabled", newVal);
         });
       },
@@ -30,8 +28,8 @@ export class EaButtonGroup extends Base {
     size: {
       type: ["small", "normal", "large"],
       default: "normal",
-      observer: (newVal) => {
-        this.querySelectorAll("ea-button").forEach((button) => {
+      observer: newVal => {
+        this.querySelectorAll("ea-button").forEach(button => {
           button.setAttribute("size", newVal);
         });
       },
@@ -39,8 +37,8 @@ export class EaButtonGroup extends Base {
     type: {
       type: ["primary", "success", "warning", "danger", "normal"],
       default: "normal",
-      observer: (newVal) => {
-        this.querySelectorAll("ea-button").forEach((button) => {
+      observer: newVal => {
+        this.querySelectorAll("ea-button").forEach(button => {
           button.setAttribute("type", newVal);
         });
       },
@@ -55,17 +53,15 @@ export class EaButtonGroup extends Base {
   }
 
   $render() {
-    this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML = this.html(`
       <div class="ea-button-group">
         <slot></slot>
       </div>
-    `;
+    `);
   }
 
   async connectedCallback() {
     super.connectedCallback();
-
-    this.type = this.type;
   }
 }
 

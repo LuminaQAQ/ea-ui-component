@@ -71,9 +71,6 @@
     "./ea-button": {
       "import": "./dist/ea-button.js"
     },
-    "./ea-button-group": {
-      "import": "./dist/ea-button-group.js"
-    },
     "./ea-calendar": {
       "import": "./dist/ea-calendar.js"
     },
