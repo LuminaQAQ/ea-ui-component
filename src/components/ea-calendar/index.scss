@@ -1,33 +1,164 @@
 $name: ea-calendar;
 
 :host {
+  --#{$name}-border-color: var(--grey-200);
+  --#{$name}-border-radius: var(--border-radius);
+  --#{$name}-shadow: var(--box-shadow-sm);
+  --#{$name}-background-color: var(--white);
+
+  --#{$name}-header-padding: var(--spacing-md);
+  --#{$name}-header-title-font-size: var(--font-size-lg);
+  --#{$name}-header-title-font-weight: var(--font-weight-bold);
+  --#{$name}-header-title-color: var(--grey-900);
+
+  --#{$name}-body-padding: var(--spacing-md);
+
+  --#{$name}-thead-background-color: var(--grey-100);
+  --#{$name}-th-color: var(--grey-700);
+  --#{$name}-th-font-weight: var(--font-weight-md);
+  --#{$name}-th-padding: var(--spacing-md) 0;
+  --#{$name}-th-border-color: var(--grey-200);
+
+  --#{$name}-day-height: 40px;
+  --#{$name}-day-hover-bg-color: var(--grey-100);
+  --#{$name}-day-selected-bg-color: var(--blue-100);
+  --#{$name}-day-selected-color: var(--blue-500);
+  --#{$name}-day-selected-font-weight: var(--font-weight-bold);
+  --#{$name}-day-today-color: var(--blue-500);
+  --#{$name}-day-current-bg-color: var(--blue-500);
+  --#{$name}-day-current-color: var(--white);
+  --#{$name}-day-current-border-color: var(--blue-500);
+  --#{$name}-day-out-of-range-color: var(--grey-400);
+  --#{$name}-day-out-of-range-hover-color: var(--grey-500);
+  --#{$name}-day-out-of-range-hover-bg-color: var(--grey-100);
+
+  --#{$name}-controller-year-width: 120px;
+  --#{$name}-controller-month-width: 100px;
+  --#{$name}-controller-group-gap: var(--spacing-sm);
+}
+
+:host {
+  display: block;
 }
 
 @include block($name) {
+  border: 1px solid var(--#{$name}-border-color);
+  border-radius: var(--#{$name}-border-radius);
+  background-color: var(--#{$name}-bg-color);
+  box-shadow: var(--#{$name}-shadow);
+  overflow: hidden;
+
   @include element(header) {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: var(--#{$name}-header-padding);
+    border-bottom: 1px solid var(--#{$name}-border-color);
+  }
+
+  @include element(title) {
+    font-size: var(--#{$name}-header-title-font-size);
+    font-weight: var(--#{$name}-header-title-font-weight);
+    color: var(--#{$name}-header-title-color);
+  }
+
+  @include element(controller-wrapper) {
   }
 
   @include element(controller-group) {
     display: flex;
     align-items: center;
+    gap: var(--#{$name}-controller-group-gap);
   }
 
   @include element(controller-year) {
-    width: 120px;
-    margin-right: 8px;
+    width: var(--#{$name}-controller-year-width);
   }
 
   @include element(controller-month) {
-    width: 80px;
-    margin-right: 8px;
+    width: var(--#{$name}-controller-month-width);
+  }
+
+  @include element(body) {
+    box-sizing: border-box;
+    padding: var(--#{$name}-body-padding);
+
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+
+  @include element(thead) {
+    background-color: var(--#{$name}-thead-bg-color);
+  }
+
+  @include element(th) {
+    padding: var(--#{$name}-th-padding);
+    text-align: center;
+    font-weight: var(--#{$name}-th-font-weight);
+    color: var(--#{$name}-th-color);
+    border-bottom: 1px solid var(--#{$name}-th-border-color);
+  }
+
+  @include element(tbody) {
+  }
+
+  @include element(row) {
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--#{$name}-border-color);
+    }
   }
 
   @include element(day) {
+    position: relative;
+    height: var(--#{$name}-day-height);
+    text-align: center;
+    line-height: var(--#{$name}-day-height);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border: 1px solid transparent;
+    vertical-align: middle;
+
+    &:hover {
+      background-color: var(--#{$name}-day-hover-bg-color);
+    }
+
+    &.is-selected {
+      background-color: var(--#{$name}-day-selected-bg-color);
+      color: var(--#{$name}-day-selected-color);
+      font-weight: var(--#{$name}-day-selected-font-weight);
+    }
+
     &.is-today {
-      background-color: skyblue;
+      color: var(--#{$name}-day-today-color);
+      font-weight: var(--font-weight-bold);
+    }
+
+    &.is-current {
+      background-color: var(--#{$name}-day-current-bg-color);
+      color: var(--#{$name}-day-current-color);
+      border: 1px solid var(--#{$name}-day-current-border-color);
+
+      &:not(.is-selected):hover {
+        background-color: var(--blue-400);
+      }
+    }
+
+    &.is-last-mon,
+    &.is-next-mon {
+      color: var(--#{$name}-day-out-of-range-color);
+    }
+
+    &[part~="last-mon"]:not(.is-selected):not(.is-current),
+    &[part~="next-mon"]:not(.is-selected):not(.is-current) {
+      &:hover {
+        background-color: var(--#{$name}-day-out-of-range-hover-bg-color);
+        color: var(--#{$name}-day-out-of-range-hover-color);
+      }
+    }
+
+    &:empty {
+      display: none;
     }
   }
 }

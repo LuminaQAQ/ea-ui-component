@@ -18,38 +18,12 @@
       import "../src/components/ea-calendar/index.js";
     </script>
 
-    <div class="demo">
-      <ea-calendar controller-type="select"></ea-calendar>
-      <ea-button id="btn1">lang</ea-button>
-      <ea-button id="btn2">type</ea-button>
-    </div>
-
-    <script type="module">
-      const calendar = document.querySelector("ea-calendar");
-      const btn = document.querySelector("#btn1");
-      const btn2 = document.querySelector("#btn2");
-
-      btn.addEventListener("click", () => {
-        const locale = calendar.locale;
-
-        calendar.locale = locale === "en-US" ? "zh-CN" : "en-US";
-      });
-      btn2.addEventListener("click", () => {
-        calendar.setAttribute(
-          "controller-type",
-          calendar.getAttribute("controller-type") === "select"
-            ? "button"
-            : "select"
-        );
-      });
-    </script>
-
     <!--  基础用法 -->
     <!-- #region -->
     <h1>基础用法</h1>
 
     <div class="demo">
-      <ea-calendar locale="en-US"></ea-calendar>
+      <ea-calendar></ea-calendar>
     </div>
 
     <hr />

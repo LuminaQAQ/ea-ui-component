@@ -42,10 +42,11 @@ export class EaCalendar extends Base {
   #states = {
     isEaSelectImported: false,
     isEaButtonImported: false,
+    displayDate: dayjs(),
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "controller-type"];
+    return [...super.observedAttributes, "value", "controller-type"];
   }
 
   state = this.properties({
@@ -57,6 +58,29 @@ export class EaCalendar extends Base {
       },
     },
   });
+
+  // ------- value -------
+  // #region
+  get value() {
+    return this.#states.displayDate;
+  }
+
+  set value(value) {
+    this.setAttribute("value", dayjs(value));
+  }
+  // #endregion
+  // ------- end -------
+
+  attributeChangedCallback(name, oldVal, newVal) {
+    super.attributeChangedCallback(name, oldVal, newVal);
+
+    if (newVal === oldVal) return;
+
+    if (name === "value") {
+      this.#states.displayDate = dayjs(newVal);
+      this.#updateCalendarDays(this.#states.displayDate);
+    }
+  }
 
   /**
    * 获取 classlist 列表
@@ -81,6 +105,29 @@ export class EaCalendar extends Base {
   }
 
   /**
+   * 今天按钮点击时的事件
+   */
+  #onTodayBtnClickEvent = () => {
+    const today = dayjs();
+
+    this.#states.displayDate = today;
+
+    this.#title.textContent = `${today.get("year")} ${i18nManager.t("calendar.months")[today.get("month")]}`;
+
+    this.value = today;
+
+    const todayCell = this.#findDateCell(
+      today.get("year"),
+      today.get("month") + 1,
+      today.get("date")
+    );
+
+    if (todayCell) {
+      this.#selectDate(todayCell);
+    }
+  };
+
+  /**
    * controller-type 的渲染器
    * @param {'button' | 'select'} [controllerType] 控制器类型
    * @return {string} 属性值
@@ -90,7 +137,7 @@ export class EaCalendar extends Base {
   ) => {
     const ns = this.ns;
 
-    const currentYear = new Date().getFullYear();
+    const currentYear = this.#states.displayDate.get("year");
 
     const controllerTypeStrategies = {
       button: () =>
@@ -143,6 +190,52 @@ export class EaCalendar extends Base {
 
     if (controllerType === "select") {
       this.#initSelectControllerEvent();
+    } else {
+      this.#initButtonControllerEvent();
+    }
+
+    const todayBtn = this.shadowRoot.querySelector(ns.ce("controller-today"));
+    if (todayBtn) {
+      todayBtn.addEventListener("click", this.#onTodayBtnClickEvent, {
+        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
+      });
+    }
+  };
+
+  /**
+   * 初始化控制器为 button 的事件
+   */
+  #initButtonControllerEvent = async () => {
+    if (!this.#states.isEaButtonImported) {
+      await customElements.whenDefined("ea-button");
+      this.#states.isEaButtonImported = true;
+    }
+
+    const ns = this.ns;
+
+    const prevBtn = this.shadowRoot.querySelector(ns.ce("controller-prev"));
+    const nextBtn = this.shadowRoot.querySelector(ns.ce("controller-next"));
+
+    /** 上个月 */
+    const onPrevMonthBtnClickEvent = () => {
+      this.value = this.#states.displayDate.subtract(1, "month").set("date", 1);
+    };
+
+    /** 下个月 */
+    const onNextMonthBtnClickEvent = () => {
+      this.value = this.#states.displayDate.add(1, "month").set("date", 1);
+    };
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", onPrevMonthBtnClickEvent, {
+        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", onNextMonthBtnClickEvent, {
+        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
+      });
     }
   };
 
@@ -150,61 +243,59 @@ export class EaCalendar extends Base {
    * 初始化控制器为 select 的事件
    */
   #initSelectControllerEvent = async () => {
-    await customElements.whenDefined("ea-select");
+    if (!this.#states.isEaSelectImported) {
+      await customElements.whenDefined("ea-select");
+      this.#states.isEaSelectImported = true;
+    }
 
     const ns = this.ns;
 
-    const date = new Date();
-
-    const currentYear = date.getFullYear();
-    const currentMonth = date.getMonth() + 1;
+    const currentYear = this.#states.displayDate.get("year");
+    const currentMonth = this.#states.displayDate.get("month") + 1;
 
     const yearEl = this.shadowRoot.querySelector(ns.ce("controller-year"));
     const monthEl = this.shadowRoot.querySelector(ns.ce("controller-month"));
-    const todayEl = this.shadowRoot.querySelector(ns.ce("controller-today"));
+
+    /**
+     * 年份改变事件
+     * @param {CustomEvent} e
+     */
+    const onYearChangeEvent = e => {
+      e.stopImmediatePropagation();
+      const newYear = parseInt(e.target.value);
+      const currentMonth = this.#states.displayDate.get("month") + 1;
+      this.value = dayjs(`${newYear}-${currentMonth}-01`);
+    };
+
+    /**
+     * 月份改变事件
+     * @param {CustomEvent} e
+     */
+    const onMonthChangeEvent = e => {
+      e.stopImmediatePropagation();
+      const currentYear = this.#states.displayDate.get("year");
+      const newMonth = parseInt(e.target.value).toString().padStart(2, "0");
+      this.value = dayjs(`${currentYear}-${newMonth}-01`);
+    };
 
     if (yearEl) yearEl.value = currentYear;
     if (monthEl) monthEl.value = currentMonth;
 
     await EaUtils.sleep(0);
 
-    yearEl.addEventListener(
-      "change",
-      e => {
-        e.stopImmediatePropagation();
-        console.log(e.detail);
-      },
-      {
-        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
-      }
-    );
+    yearEl.addEventListener("change", onYearChangeEvent, {
+      signal: this.#AbortControllerStates.dateChangeAbortController.signal,
+    });
 
-    monthEl.addEventListener(
-      "change",
-      e => {
-        e.stopImmediatePropagation();
-        console.log(e.detail);
-      },
-      {
-        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
-      }
-    );
-
-    todayEl.addEventListener(
-      "click",
-      e => {
-        e.stopImmediatePropagation();
-        console.log(e);
-      },
-      {
-        signal: this.#AbortControllerStates.dateChangeAbortController.signal,
-      }
-    );
+    monthEl.addEventListener("change", onMonthChangeEvent, {
+      signal: this.#AbortControllerStates.dateChangeAbortController.signal,
+    });
   };
 
   /**
    * 处理周渲染
    * @param {Array} weekList
+   * @return {String}
    */
   #getWeekHTMLString = weekList => {
     return weekList
@@ -213,20 +304,162 @@ export class EaCalendar extends Base {
   };
 
   /**
+   * 渲染日历天数
+   * @param {dayjs.Dayjs} date
+   */
+  #updateCalendarDays(date) {
+    /** @type {HTMLTableCellElement[]<NodeListOf>} */
+    const tds = [...this.#tbody.querySelectorAll(".ea-calendar__day")];
+
+    const currentYear = date.get("year");
+    const currentMonth = date.get("month");
+    const currentDate = date.get("date");
+
+    const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
+      this.#getDayOption(date);
+    const days = lastMonRemainingDays
+      .concat(currentMonDays)
+      .concat(nextMonRemainingDays);
+
+    this.#title.textContent = `${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}`;
+
+    tds.forEach((td, index) => {
+      const newDate = days[index];
+
+      const isToday = this.#isToday(currentYear, currentMonth, newDate);
+
+      /** @type {number} */
+      let yearValue;
+      /** @type {number} */
+      let monthValue;
+      /** @type {'last' | 'current' | 'next'} */
+      let monthType;
+
+      if (index < lastMonRemainingDays.length) {
+        const tempMonth = date.subtract(1, "month");
+
+        yearValue = tempMonth.get("year");
+        monthValue = tempMonth.get("month") + 1;
+        monthType = "last";
+      } else if (index < lastMonRemainingDays.length + currentMonDays.length) {
+        yearValue = currentYear;
+        monthValue = currentMonth + 1;
+        monthType = "current";
+      } else {
+        const tempMonth = date.add(1, "month");
+
+        yearValue = tempMonth.get("year");
+        monthValue = tempMonth.get("month") + 1;
+        monthType = "next";
+      }
+
+      td.dataset.year = yearValue;
+      td.dataset.month = monthValue;
+      td.dataset.date = newDate;
+      td.textContent = newDate;
+
+      td.classList.toggle("is-today", isToday);
+      td.classList.toggle("is-current", isToday);
+
+      td.classList.toggle("is-last-mon", monthType === "last");
+      td.classList.toggle("is-current-mon", monthType === "current");
+      td.classList.toggle("is-next-mon", monthType === "next");
+
+      td.part.toggle("last-mon", monthType === "last");
+      td.part.toggle("current-mon", monthType === "current");
+      td.part.toggle("next-mon", monthType === "next");
+    });
+
+    const currentTd = tds.some(td => td.classList.contains("is-current"));
+    if (!currentTd) {
+      const td = this.#findDateCell(currentYear, currentMonth + 1, currentDate);
+      if (td) td.classList.add("is-current");
+    }
+  }
+
+  /**
+   * 判断是否是今天
+   */
+  #isToday(year, month, date) {
+    const now = dayjs();
+    return (
+      year === now.get("year") &&
+      month === now.get("month") &&
+      date === now.get("date")
+    );
+  }
+
+  /**
+   * 处理tbody点击事件
+   * @param {MouseEvent} e
+   */
+  #onDayCellClickEvent = e => {
+    let target = e.target.closest(this.ns.ce("day"));
+
+    if (!target || target === this.#tbody) return;
+
+    const yearData = parseInt(target.dataset.year);
+    const monthData = parseInt(target.dataset.month);
+    const dateData = parseInt(target.dataset.date);
+
+    const currentDisplayMonth = this.#states.displayDate.get("month") + 1;
+
+    if (monthData !== currentDisplayMonth) {
+      this.value = dayjs(`${yearData}-${monthData}-${dateData}`);
+      return;
+    }
+
+    this.#selectDate(target);
+  };
+
+  /**
+   * 选择日期
+   * @param {HTMLTableCellElement} target
+   */
+  #selectDate(target) {
+    const previouslySelected = this.#tbody.querySelector(
+      `.${this.ns.e("day")}.${this.ns.s("current")}`
+    );
+
+    if (previouslySelected) {
+      previouslySelected.classList.remove(this.ns.s("current"));
+    }
+    target.classList.add(this.ns.s("current"));
+
+    this.#states.displayDate = this.#states.displayDate.set(
+      "date",
+      target.dataset.date
+    );
+  }
+
+  /**
+   * 查找指定日期的单元格
+   * @param {Number} year
+   * @param {Number} month
+   * @param {Number} date
+   */
+  #findDateCell = (year, month, date) => {
+    return this.#tbody.querySelector(
+      `td[data-year="${year}"][data-month="${month}"][data-date="${date}"]`
+    );
+  };
+
+  /**
    * 获取日期数组
+   * @param {dayjs.Dayjs} [refDate] 参考日期，默认为当前日期
    * @return {DayOption}
    */
-  #getDayOption = () => {
-    const currentDate = dayjs();
+  #getDayOption = (refDate = dayjs()) => {
+    const currentDate = refDate;
 
-    const lastMonDate = currentDate.add(-1, "month");
+    const lastMonDate = currentDate.subtract(1, "month");
     const lastMonTotalDays = lastMonDate.daysInMonth();
 
     const currentMonFirstDay = currentDate.startOf("month").day();
     const currentMonLastDay = currentDate.endOf("month").day();
     const currentMonTotalDays = currentDate.daysInMonth();
 
-    const weekStart = dayjs().startOf("week").get("day");
+    const weekStart = currentDate.startOf("week").get("day");
 
     const lastMonRemainingDays = Array.from(
       { length: currentMonFirstDay - weekStart },
@@ -246,13 +479,13 @@ export class EaCalendar extends Base {
 
   /**
    * 处理天渲染
-   * @param {Array} weekList
    * @returns {String}
    */
-  #getDayHTMLString = weekList => {
+  #getDayHTMLString = () => {
     const ns = this.ns;
 
     const date = dayjs();
+    const currentYear = date.get("year");
     const currentMonth = date.get("month") + 1;
 
     const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
@@ -268,16 +501,22 @@ export class EaCalendar extends Base {
     const cellRenderer = (
       dayType,
       content,
-      option = { isSelected: false, isToday: false }
+      option = { isSelected: false, isToday: false, isCurrent: false }
     ) => {
+      let year;
       let month;
 
       if (dayType === "last-mon") {
-        month = date.add(-1, "month").get("month") + 1;
+        const m = date.subtract(1, "month");
+        year = m.get("year");
+        month = m.get("month") + 1;
       } else if (dayType === "current-mon") {
+        year = currentYear;
         month = currentMonth;
       } else {
-        month = date.add(1, "month").get("month") + 1;
+        const m = date.add(1, "month");
+        year = m.get("year");
+        month = m.get("month") + 1;
       }
 
       return EaUtils.EaElement.h(
@@ -289,8 +528,10 @@ export class EaCalendar extends Base {
             ns.s(dayType),
             option.isSelected ? ns.s("selected") : "",
             option.isToday ? ns.s("today") : "",
+            option.isCurrent ? ns.s("current") : "",
           ],
           part: ["day", dayType],
+          "data-year": year,
           "data-month": month,
           "data-date": content,
         },
@@ -304,6 +545,7 @@ export class EaCalendar extends Base {
     const currentMon = currentMonDays.map(content =>
       cellRenderer("current-mon", content, {
         isToday: content === date.get("date"),
+        isCurrent: content === date.get("date"),
       })
     );
     const nextMon = nextMonRemainingDays.map(content =>
@@ -342,11 +584,13 @@ export class EaCalendar extends Base {
     this.shadowRoot.innerHTML = this.html(`
       <div class='${ns.b()}' part='container'>
         <header class='${ns.e("header")}' part='header'>
-          <span class='${ns.e("title")}' part='title'>
-            ${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}
-          </span>
-          <section class='${ns.e("controller-wrapper")}' part='controller-wrapper'>
-          </section>
+          <slot name="header">
+            <span class='${ns.e("title")}' part='title'>
+              ${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}
+            </span>
+            <section class='${ns.e("controller-wrapper")}' part='controller-wrapper'>
+            </section>
+          </slot>
         </header>
         <table class='${ns.e("body")}' part='body'>
           <thead class='${ns.e("thead")}' part='thead'>
@@ -354,7 +598,7 @@ export class EaCalendar extends Base {
               ${this.#getWeekHTMLString(i18nManager.t("calendar.weekDays"))}
             </tr>
           </thead>
-          <tbody class='${ns.e("tbody")}' part='tbody'>${this.#getDayHTMLString(i18nManager.t("calendar.weekDays"))}</tbody>
+          <tbody class='${ns.e("tbody")}' part='tbody'>${this.#getDayHTMLString()}</tbody>
         </table>
       </div>
     `);
@@ -372,6 +616,9 @@ export class EaCalendar extends Base {
   }
 
   $updateLocalization(locale) {
+    i18nManager.locale = locale;
+    dayjs.locale(this.locale.toLowerCase());
+
     const ns = this.ns;
 
     const prev = this.shadowRoot.querySelector(ns.ce("controller-prev"));
@@ -382,22 +629,10 @@ export class EaCalendar extends Base {
 
     const date = dayjs();
     const currentYear = date.get("year");
-    const currentMonth = date.get("month") + 1;
-    const todayDate = date.get("date");
-
-    i18nManager.locale = locale;
-    dayjs.locale(this.locale.toLowerCase());
-
+    const currentMonth = date.get("month");
     const week = i18nManager.t("calendar.weekDays");
-    const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
-      this.#getDayOption();
-    const days = lastMonRemainingDays
-      .concat(currentMonDays)
-      .concat(nextMonRemainingDays);
     /** @type {HTMLTableCellElement[]<NodeListOf>} */
     const ths = this.#thead.querySelectorAll(".ea-calendar__th");
-    /** @type {HTMLTableCellElement[]<NodeListOf>} */
-    const tds = this.#tbody.querySelectorAll(".ea-calendar__day");
 
     if (prev) prev.textContent = i18nManager.t("calendar.prevMonth");
     if (today) today.textContent = i18nManager.t("calendar.today");
@@ -410,37 +645,8 @@ export class EaCalendar extends Base {
     ths.forEach((th, index) => {
       th.textContent = week[index];
     });
-    tds.forEach((td, index) => {
-      const newDate = days[index];
 
-      let monthValue;
-      /** @type {'last' | 'current' | 'next'} */
-      let monthType;
-      if (index < lastMonRemainingDays.length) {
-        monthValue = date.add(-1, "month").get("month") + 1;
-        monthType = "last";
-      } else if (index < lastMonRemainingDays.length + currentMonDays.length) {
-        monthValue = currentMonth;
-        monthType = "current";
-      } else {
-        monthValue = date.add(1, "month").get("month") + 1;
-        monthType = "next";
-      }
-
-      td.dataset.month = monthValue;
-      td.dataset.date = newDate;
-      td.textContent = newDate;
-
-      td.classList.toggle("is-today", todayDate === newDate);
-
-      td.classList.toggle("is-last-mon", monthType === "last");
-      td.classList.toggle("is-current-mon", monthType === "current");
-      td.classList.toggle("is-next-mon", monthType === "next");
-
-      td.part.toggle("last-mon", monthType === "last");
-      td.part.toggle("current-mon", monthType === "current");
-      td.part.toggle("next-mon", monthType === "next");
-    });
+    this.#updateCalendarDays(date);
   }
 
   connectedCallback() {
@@ -450,6 +656,10 @@ export class EaCalendar extends Base {
     this.#abortController = new AbortController();
 
     this.#handleControllerRender();
+
+    this.#tbody.addEventListener("click", this.#onDayCellClickEvent, {
+      signal: this.#abortController.signal,
+    });
   }
 
   $beforeUnmounted() {
