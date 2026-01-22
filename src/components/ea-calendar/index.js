@@ -108,6 +108,9 @@ export class EaCalendar extends Base {
    * 今天按钮点击时的事件
    */
   #onTodayBtnClickEvent = () => {
+    i18nManager.locale = this.locale;
+    dayjs.locale(this.locale.toLowerCase());
+
     const today = dayjs();
 
     this.#states.displayDate = today;
@@ -115,16 +118,6 @@ export class EaCalendar extends Base {
     this.#title.textContent = `${today.get("year")} ${i18nManager.t("calendar.months")[today.get("month")]}`;
 
     this.value = today;
-
-    const todayCell = this.#findDateCell(
-      today.get("year"),
-      today.get("month") + 1,
-      today.get("date")
-    );
-
-    if (todayCell) {
-      this.#selectDate(todayCell);
-    }
   };
 
   /**
@@ -135,6 +128,9 @@ export class EaCalendar extends Base {
   #handleControllerRender = async (
     controllerType = this["controller-type"]
   ) => {
+    i18nManager.locale = this.locale;
+    dayjs.locale(this.locale.toLowerCase());
+
     const ns = this.ns;
 
     const currentYear = this.#states.displayDate.get("year");
@@ -308,85 +304,15 @@ export class EaCalendar extends Base {
    * @param {dayjs.Dayjs} date
    */
   #updateCalendarDays(date) {
-    /** @type {HTMLTableCellElement[]<NodeListOf>} */
-    const tds = [...this.#tbody.querySelectorAll(".ea-calendar__day")];
-
+    i18nManager.locale = this.locale;
+    dayjs.locale(this.locale.toLowerCase());
+    
     const currentYear = date.get("year");
     const currentMonth = date.get("month");
-    const currentDate = date.get("date");
-
-    const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
-      this.#getDayOption(date);
-    const days = lastMonRemainingDays
-      .concat(currentMonDays)
-      .concat(nextMonRemainingDays);
 
     this.#title.textContent = `${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}`;
 
-    tds.forEach((td, index) => {
-      const newDate = days[index];
-
-      const isToday = this.#isToday(currentYear, currentMonth, newDate);
-
-      /** @type {number} */
-      let yearValue;
-      /** @type {number} */
-      let monthValue;
-      /** @type {'last' | 'current' | 'next'} */
-      let monthType;
-
-      if (index < lastMonRemainingDays.length) {
-        const tempMonth = date.subtract(1, "month");
-
-        yearValue = tempMonth.get("year");
-        monthValue = tempMonth.get("month") + 1;
-        monthType = "last";
-      } else if (index < lastMonRemainingDays.length + currentMonDays.length) {
-        yearValue = currentYear;
-        monthValue = currentMonth + 1;
-        monthType = "current";
-      } else {
-        const tempMonth = date.add(1, "month");
-
-        yearValue = tempMonth.get("year");
-        monthValue = tempMonth.get("month") + 1;
-        monthType = "next";
-      }
-
-      td.dataset.year = yearValue;
-      td.dataset.month = monthValue;
-      td.dataset.date = newDate;
-      td.textContent = newDate;
-
-      td.classList.toggle("is-today", isToday);
-      td.classList.toggle("is-current", isToday);
-
-      td.classList.toggle("is-last-mon", monthType === "last");
-      td.classList.toggle("is-current-mon", monthType === "current");
-      td.classList.toggle("is-next-mon", monthType === "next");
-
-      td.part.toggle("last-mon", monthType === "last");
-      td.part.toggle("current-mon", monthType === "current");
-      td.part.toggle("next-mon", monthType === "next");
-    });
-
-    const currentTd = tds.some(td => td.classList.contains("is-current"));
-    if (!currentTd) {
-      const td = this.#findDateCell(currentYear, currentMonth + 1, currentDate);
-      if (td) td.classList.add("is-current");
-    }
-  }
-
-  /**
-   * 判断是否是今天
-   */
-  #isToday(year, month, date) {
-    const now = dayjs();
-    return (
-      year === now.get("year") &&
-      month === now.get("month") &&
-      date === now.get("date")
-    );
+    this.#tbody.innerHTML = this.#getDayHTMLString();
   }
 
   /**
@@ -402,46 +328,7 @@ export class EaCalendar extends Base {
     const monthData = parseInt(target.dataset.month);
     const dateData = parseInt(target.dataset.date);
 
-    const currentDisplayMonth = this.#states.displayDate.get("month") + 1;
-
-    if (monthData !== currentDisplayMonth) {
-      this.value = dayjs(`${yearData}-${monthData}-${dateData}`);
-      return;
-    }
-
-    this.#selectDate(target);
-  };
-
-  /**
-   * 选择日期
-   * @param {HTMLTableCellElement} target
-   */
-  #selectDate(target) {
-    const previouslySelected = this.#tbody.querySelector(
-      `.${this.ns.e("day")}.${this.ns.s("current")}`
-    );
-
-    if (previouslySelected) {
-      previouslySelected.classList.remove(this.ns.s("current"));
-    }
-    target.classList.add(this.ns.s("current"));
-
-    this.#states.displayDate = this.#states.displayDate.set(
-      "date",
-      target.dataset.date
-    );
-  }
-
-  /**
-   * 查找指定日期的单元格
-   * @param {Number} year
-   * @param {Number} month
-   * @param {Number} date
-   */
-  #findDateCell = (year, month, date) => {
-    return this.#tbody.querySelector(
-      `td[data-year="${year}"][data-month="${month}"][data-date="${date}"]`
-    );
+    this.value = dayjs(`${yearData}-${monthData}-${dateData}`);
   };
 
   /**
@@ -478,18 +365,42 @@ export class EaCalendar extends Base {
   };
 
   /**
+   * 查找指定日期的单元格
+   * @param {Number} year
+   * @param {Number} month
+   * @param {Number} date
+   */
+  #findDateCell = (year, month, date) => {
+    return this.#tbody.querySelector(
+      `td[data-year="${year}"][data-month="${month}"][data-date="${date}"]`
+    );
+  };
+
+  /**
+   * 判断是否是今天
+   */
+  #isToday(year, month, date) {
+    const now = dayjs();
+    return (
+      year === now.get("year") &&
+      month === now.get("month") &&
+      date === now.get("date")
+    );
+  }
+
+  /**
    * 处理天渲染
    * @returns {String}
    */
   #getDayHTMLString = () => {
     const ns = this.ns;
 
-    const date = dayjs();
+    const date = this.#states.displayDate;
     const currentYear = date.get("year");
     const currentMonth = date.get("month") + 1;
 
     const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
-      this.#getDayOption();
+      this.#getDayOption(date);
 
     /**
      * 渲染日历项
@@ -630,9 +541,19 @@ export class EaCalendar extends Base {
     const date = dayjs();
     const currentYear = date.get("year");
     const currentMonth = date.get("month");
+    const currentDate = date.get("date");
+
+    const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
+      this.#getDayOption(date);
+    const days = lastMonRemainingDays
+      .concat(currentMonDays)
+      .concat(nextMonRemainingDays);
+
     const week = i18nManager.t("calendar.weekDays");
     /** @type {HTMLTableCellElement[]<NodeListOf>} */
     const ths = this.#thead.querySelectorAll(".ea-calendar__th");
+    /** @type {HTMLTableCellElement[]<NodeListOf>} */
+    const tds = [...this.#tbody.querySelectorAll(".ea-calendar__day")];
 
     if (prev) prev.textContent = i18nManager.t("calendar.prevMonth");
     if (today) today.textContent = i18nManager.t("calendar.today");
@@ -646,7 +567,58 @@ export class EaCalendar extends Base {
       th.textContent = week[index];
     });
 
-    this.#updateCalendarDays(date);
+    tds.forEach((td, index) => {
+      const newDate = days[index];
+
+      const isToday = this.#isToday(currentYear, currentMonth, newDate);
+
+      /** @type {number} */
+      let yearValue;
+      /** @type {number} */
+      let monthValue;
+      /** @type {'last' | 'current' | 'next'} */
+      let monthType;
+
+      if (index < lastMonRemainingDays.length) {
+        const tempMonth = date.subtract(1, "month");
+
+        yearValue = tempMonth.get("year");
+        monthValue = tempMonth.get("month") + 1;
+        monthType = "last";
+      } else if (index < lastMonRemainingDays.length + currentMonDays.length) {
+        yearValue = currentYear;
+        monthValue = currentMonth + 1;
+        monthType = "current";
+      } else {
+        const tempMonth = date.add(1, "month");
+
+        yearValue = tempMonth.get("year");
+        monthValue = tempMonth.get("month") + 1;
+        monthType = "next";
+      }
+
+      td.dataset.year = yearValue;
+      td.dataset.month = monthValue;
+      td.dataset.date = newDate;
+      td.textContent = newDate;
+
+      td.classList.toggle("is-today", isToday);
+      td.classList.toggle("is-current", isToday);
+
+      td.classList.toggle("is-last-mon", monthType === "last");
+      td.classList.toggle("is-current-mon", monthType === "current");
+      td.classList.toggle("is-next-mon", monthType === "next");
+
+      td.part.toggle("last-mon", monthType === "last");
+      td.part.toggle("current-mon", monthType === "current");
+      td.part.toggle("next-mon", monthType === "next");
+    });
+
+    const currentTd = tds.some(td => td.classList.contains("is-current"));
+    if (!currentTd) {
+      const td = this.#findDateCell(currentYear, currentMonth + 1, currentDate);
+      if (td) td.classList.add("is-current");
+    }
   }
 
   connectedCallback() {

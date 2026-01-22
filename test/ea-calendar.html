@@ -14,8 +14,34 @@
   </head>
 
   <body>
+    <script type="module" src="../src/components/ea-calendar/index.js"></script>
+    <script type="module" src="../src/components/ea-radio/index.js"></script>
+
+    <div class="demo">
+      <!-- <ea-calendar controller-type="select"></ea-calendar> -->
+      <ea-calendar></ea-calendar>
+      <ea-button id="btn1">lang</ea-button>
+      <ea-button id="btn2">type</ea-button>
+    </div>
+
     <script type="module">
-      import "../src/components/ea-calendar/index.js";
+      const calendar = document.querySelector("ea-calendar");
+      const btn = document.querySelector("#btn1");
+      const btn2 = document.querySelector("#btn2");
+
+      btn.addEventListener("click", () => {
+        const locale = calendar.locale;
+
+        calendar.locale = locale === "en-US" ? "zh-CN" : "en-US";
+      });
+      btn2.addEventListener("click", () => {
+        calendar.setAttribute(
+          "controller-type",
+          calendar.getAttribute("controller-type") === "select"
+            ? "button"
+            : "select"
+        );
+      });
     </script>
 
     <!--  基础用法 -->
@@ -25,6 +51,72 @@
     <div class="demo">
       <ea-calendar></ea-calendar>
     </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  控制器类型 -->
+    <!-- #region -->
+    <h1>控制器类型</h1>
+
+    <div class="demo">
+      <p>
+        <ea-radio-group id="controllerCalendarRadio" value="button">
+          <ea-radio value="button">button</ea-radio>
+          <ea-radio value="select">select</ea-radio>
+        </ea-radio-group>
+      </p>
+      <ea-calendar id="controllerCalendarCalendar"></ea-calendar>
+    </div>
+
+    <script type="module">
+      const controllerExample = {
+        radio: document.querySelector("#controllerCalendarRadio"),
+        calendar: document.querySelector("#controllerCalendarCalendar"),
+
+        init() {
+          this.radio.addEventListener("change", e => {
+            this.calendar.setAttribute("controller-type", e.detail.value);
+          });
+        },
+      };
+
+      controllerExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  国际化 -->
+    <!-- #region -->
+    <h1>国际化</h1>
+
+    <div class="demo">
+      <p>
+        <ea-radio-group id="localeCalendarRadio" value="en-US">
+          <ea-radio value="en-US">en-US</ea-radio>
+          <ea-radio value="zh-CN">zh-CN</ea-radio>
+        </ea-radio-group>
+      </p>
+      <ea-calendar id="localeCalendarCalendar"></ea-calendar>
+    </div>
+
+    <script type="module">
+      const localeExample = {
+        radio: document.querySelector("#localeCalendarRadio"),
+        calendar: document.querySelector("#localeCalendarCalendar"),
+
+        init() {
+          this.radio.addEventListener("change", e => {
+            this.calendar.setAttribute("locale", e.detail.value);
+          });
+        },
+      };
+
+      localeExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->
