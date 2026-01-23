@@ -229,6 +229,9 @@
     },
     "./ea-tour": {
       "import": "./dist/ea-tour.js"
+    },
+    "./ea-tree": {
+      "import": "./dist/ea-tree.js"
     }
   }
 }

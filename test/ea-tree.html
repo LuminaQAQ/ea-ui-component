@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tree</title>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 3rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-tree/index.js"></script>
+
+    <ea-tree></ea-tree>
+
+    <script type="module">
+      const data = [
+        {
+          label: "Level one 1",
+          children: [
+            {
+              label: "Level two 1-1",
+              children: [
+                {
+                  label: "Level three 1-1-1",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: "Level one 2",
+          children: [
+            {
+              label: "Level two 2-1",
+              children: [
+                {
+                  label: "Level three 2-1-1",
+                },
+              ],
+            },
+            {
+              label: "Level two 2-2",
+              children: [
+                {
+                  label: "Level three 2-2-1",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: "Level one 3",
+          children: [
+            {
+              label: "Level two 3-1",
+              children: [
+                {
+                  label: "Level three 3-1-1",
+                },
+              ],
+            },
+            {
+              label: "Level two 3-2",
+              children: [
+                {
+                  label: "Level three 3-2-1",
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      const tree = document.querySelector("ea-tree");
+
+      tree.data = data;
+    </script>
+  </body>
+</html>

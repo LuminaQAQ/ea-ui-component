@@ -57,4 +57,5 @@ import './ea-time-picker/index.js';
 import './ea-timeline/index.js';
 import './ea-tooltip/index.js';
 import './ea-tour/index.js';
+import './ea-tree/index.js';
 import './ea-icon/index.css';
