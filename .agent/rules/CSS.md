@@ -3,10 +3,6 @@ trigger: glob
 glob: src/components/*.scss
 ---
 
-好的，我将为您生成一份更通用的CSS样式开发提示词，这是一份给AI的详细指导说明：
-
----
-
 ## CSS样式开发规范提示词
 
 ### 任务概述
@@ -17,8 +13,8 @@ glob: src/components/*.scss
 
 在开始生成样式之前，请执行以下步骤：
 
-1. 读取 `/home/lumina/文档/ea-ui-doc/ea-ui-component/src/themes/variables.scss` 以获取可用的颜色、间距、字体等设计变量
-2. 读取 `/home/lumina/文档/ea-ui-doc/ea-ui-component/src/themes/namespace.scss` 以了解BEM命名规范
+1. 读取 `src/themes/variables.scss` 以获取可用的颜色、间距、字体等设计变量
+2. 读取 `src/themes/namespace.scss` 以了解BEM命名规范
 3. 分析提供的组件JavaScript文件，如果包含子组件引用，请逐一读取这些子组件文件以完全理解组件结构
 
 ### 样式文件结构规范
@@ -33,16 +29,11 @@ $name: ea-component-name; // 根据实际组件名称替换
 
 #### 2. 自定义属性定义块
 
-在 `:host` 块中定义所有可能被用户自定义的样式值，格式为 `--#{$name}-属性描述`，如果是使用 [variables.scss](file:///home/lumina/文档/ea-ui-doc/ea-ui-component/src/themes/variables.scss) 中存在的变量 如：
+在 `:host` 块中定义所有可能被用户自定义的样式值，格式为 `--#{$name}-属性描述`，如果是使用 [variables.scss](src/themes/variables.scss) 中存在的变量 如：
 
 ```scss
 :host {
-  --#{$name}-border-color: var(--grey-300);ar(--white);
-  --#{$name}-text-color: var(--grey-700);
-  --#{$name}-font-size: var(--font-size-md);
-  --#{$name}-gap: var(--spacing-sm);
-  --#{$name}-width: auto;
-  --#{$name}-transition: var(--transition-normal);
+  --#{$name}-foo: var(--bar);
 }
 ```
 
@@ -52,38 +43,42 @@ $name: ea-component-name; // 根据实际组件名称替换
 :host {
   display: block; // 或其他适当的显示类型，按照组件实现也可以不添加这部分
 }
+
+:host([disabled]) {
+  cursor: not-allow; // 或其他适当的显示类型，按照组件实现也可以不添加这部分
+}
 ```
 
 #### 4. BEM结构样式定义
 
-使用mixins函数来定义BEM结构，但仅在block内部使用elements、modifiers和states的mixin函数，不在elements、modifiers和states内使用elements、modifiers和states的mixin函数。例如：
+使用mixins函数来定义BEM结构，但仅在block内部使用elements、modifiers和states的mixin函数，且不在elements、modifiers和states内使用elements、modifiers和states的mixin函数。例如：
 
 ```scss
 @include block($name) {
   // 组件根元素样式
-  color: var(--#{$name}-text-color);
+  foo: var(--#{$name}-bar);
 
-  @include element(header) {
-    padding: var(--#{$name}-padding);
+  @include element(foo) {
+    foo: var(--#{$name}-bar);
   }
 
-  @include state(disabled) {
-    // 禁用状态样式
+  @include modifier(large) {
+    // 大尺寸样式
+    font-size: var(--#{$name}-font-size-large);
   }
 
   @include state(active) {
     // 激活状态样式
     .#[$name]__content {
-      color: var(--#{$name}-text-active-color);
+      color: var(--#{$name}-active-color);
     }
   }
 
   @include element(button) {
-    cursor: var(--#{$name}-cursor);
     transition: var(--#{$name}-transition);
 
     &:hover {
-      background-color: var(--#{$name}-background-color-hover);
+      background-color: var(--#{$name}-bg-color-hover);
     }
   }
 }
@@ -91,7 +86,7 @@ $name: ea-component-name; // 根据实际组件名称替换
 
 ### 设计变量使用原则
 
-1. **优先使用变量**：在 [variables.scss](file:///home/lumina/文档/ea-ui-doc/ea-ui-component/src/themes/variables.scss) 中存在的颜色、尺寸、间距等值，必须使用其对应的CSS变量，例如：
+1. **优先使用变量**：若在 [variables.scss](src/themes/variables.scss) 中存在的颜色、尺寸、间距等值，必须使用其对应的CSS变量，例如：
    - 使用 `var(--blue-500)` 而不是硬编码 `#409eff`
    - 使用 `var(--spacing-md)` 而不是硬编码 `8px`
    - 使用 `var(--font-size-lg)` 而不是硬编码 `16px`
@@ -104,7 +99,7 @@ $name: ea-component-name; // 根据实际组件名称替换
 - 使用 `@include element(element-name)` 定义元素
 - 使用 `@include modifier(modifier-name)` 定义修饰符
 - 使用 `@include state(state-name)` 定义状态
-- 仅在 `@include block($name)` 内部使用 elements、modifiers 和 states 的mixin函数
+- 仅在 `@include block($name)` 内部使用 elements、modifiers 和 states 的mixin函数，且不在elements、modifiers和states内使用elements、modifiers和states的mixin函数
 
 ### 注意事项
 

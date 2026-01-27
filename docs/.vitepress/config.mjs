@@ -98,7 +98,7 @@ export default defineConfig({
         items: [
           { text: "Avatar 头像", link: "/ea-avatar" },
           { text: "Badge 徽章", link: "/ea-badge" },
-          { text: 'Calendar 日历', link: '/ea-calendar' },
+          { text: "Calendar 日历", link: "/ea-calendar" },
           { text: "Card 卡片", link: "/ea-card" },
           { text: "Carousel 走马灯", link: "/ea-carousel" },
           { text: "Collapse 折叠面板", link: "/ea-collapse" },
@@ -155,13 +155,13 @@ export default defineConfig({
           { text: "Overlay 遮罩层", link: "/ea-overlay" },
         ],
       },
-      {
-        text: "Others 其他",
-        items: [
-          { text: "Divider 分割线", link: "/ea-divider" },
-          { text: "Watermark 水印", link: "/ea-watermark" },
-        ],
-      },
+      // {
+      //   text: "Others 其他",
+      //   items: [
+      //     { text: "Divider 分割线", link: "/ea-divider" },
+      //     { text: "Watermark 水印", link: "/ea-watermark" },
+      //   ],
+      // },
     ],
 
     socialLinks: [{ icon: "github", link: "https://github.com/LuminaQAQ" }],
