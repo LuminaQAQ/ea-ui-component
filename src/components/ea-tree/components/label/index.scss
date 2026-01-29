@@ -1,0 +1,104 @@
+$name: ea-tree-label;
+
+:host {
+  display: block;
+  --#{$name}-toggle-size: 16px;
+  --#{$name}-toggle-spacing: var(--spacing-sm);
+  --#{$name}-cursor: pointer;
+  --#{$name}-padding-vertical: var(--spacing-sm);
+  --#{$name}-padding-horizontal: var(--spacing-md);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-hover-bg: var(--grey-100);
+  --#{$name}-selected-bg: var(--blue-100);
+  --#{$name}-selected-text-color: var(--blue-600);
+  --#{$name}-selected-border-color: var(--blue-500);
+  --#{$name}-transition: var(--transition-normal);
+  --#{$name}-text-color: var(--grey-700);
+  --#{$name}-icon-color: var(--grey-500);
+  --#{$name}-icon-hover-color: var(--blue-500);
+}
+
+:host {
+  display: block;
+}
+
+@include block($name) {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--#{$name}-padding-vertical) var(--#{$name}-padding-horizontal);
+  cursor: var(--#{$name}-cursor);
+  border-radius: var(--#{$name}-border-radius);
+  transition: all var(--#{$name}-transition);
+  color: var(--#{$name}-text-color);
+  min-height: 36px;
+  position: relative;
+
+  &:hover {
+    background-color: var(--#{$name}-hover-bg);
+  }
+
+  @include element(toggle-icon) {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: var(--#{$name}-toggle-size);
+    height: var(--#{$name}-toggle-size);
+    color: var(--#{$name}-icon-color);
+    border-radius: 2px;
+    transition: all var(--#{$name}-transition);
+
+    &:hover {
+      color: var(--#{$name}-icon-hover-color);
+      background-color: var(--grey-100);
+    }
+  }
+
+  @include element(text) {
+    flex: 1;
+    min-width: 0;
+    font-weight: inherit;
+    transition: color var(--#{$name}-transition);
+  }
+
+  @include state(has-children) {
+    .ea-tree-label__toggle-icon {
+      display: flex;
+    }
+  }
+
+  @include state(expanded) {
+    .ea-tree-label__toggle-icon {
+      transform: rotate(90deg);
+      color: var(--#{$name}-icon-hover-color);
+    }
+  }
+
+  @include state(selected) {
+    background-color: var(--#{$name}-selected-bg);
+    color: var(--#{$name}-selected-text-color);
+    font-weight: var(--font-weight-bold);
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -2px;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 60%;
+      background-color: var(--#{$name}-selected-border-color);
+      border-radius: var(--border-radius-round);
+      transition: all var(--#{$name}-transition);
+    }
+
+    &:hover {
+      background-color: var(--blue-200);
+
+      &::after {
+        height: 80%;
+      }
+    }
+  }
+}

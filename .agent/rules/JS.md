@@ -100,6 +100,7 @@ if (!customElements.get("ea-component")) {
 - 使用 Shadow DOM 实现样式隔离
 - 使用 `namespace()` 生成 BEM 命名空间
 - 样式导入使用 `?inline` 后缀
+- 主要以 `properties` 定义组件的 attr 或 prop，特殊情况才使用 `data-` 作为前缀定义属性
 - 文件末尾注册自定义元素
 
 ---
