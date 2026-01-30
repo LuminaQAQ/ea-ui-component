@@ -3,6 +3,7 @@ import Base from "@components/Base.js";
 import { EaTreeNodeExpandEvent } from "./events/EaTreeNodeExpandEvent";
 import { EaTreeNodeCollapseEvent } from "./events/EaTreeNodeCollapseEvent";
 import { EaTreeNodeSelectEvent } from "./events/EaTreeNodeSelectEvent";
+import { EaTreeNodeClickEvent } from "./events/EaTreeNodeClickEvent";
 import stylesheet from "./index.scss?inline";
 import "./components/label/index";
 import "./components/child/index";
@@ -18,7 +19,6 @@ export class EaTree extends Base {
   }
 
   #dataStates = {
-    nodes: new Map(),
     expandedNodes: new Set(),
     selectedNode: null,
   };
@@ -64,7 +64,6 @@ export class EaTree extends Base {
         children: "children",
         label: "label",
       },
-      observer: newVal => {},
     },
   });
 
@@ -73,13 +72,7 @@ export class EaTree extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist(
-      "ea-tree",
-      {
-        // ['--' + this.type]: this.type,
-      },
-      {}
-    );
+    const className = this.computedClasslist("ea-tree", {}, {});
 
     this.#container.className = className;
 
@@ -121,10 +114,11 @@ export class EaTree extends Base {
       const treeLabel = document.createElement("ea-tree-label");
 
       sec.className = "ea-tree__children";
-      sec.part = "children";
+      sec.part = "children-wrapper";
+      tree.part = "children";
+      treeLabel.part = "label";
 
       treeLabel.label = item[label];
-      treeLabel.item = item;
       tree.dataProps = this.dataProps;
       tree.data = item[children];
 
@@ -155,12 +149,13 @@ export class EaTree extends Base {
       return;
     }
 
+    this.dispatchEvent(
+      new EaTreeNodeClickEvent({
+        data: label.item,
+      })
+    );
+
     if (label.hasChildren) {
-      const isExpanded = this.#dataStates.expandedNodes.has(label);
-
-      tree.toggleAttribute("hidden", isExpanded ? true : false);
-      label.toggleAttribute("expanded", isExpanded ? false : true);
-
       if (this.#dataStates.expandedNodes.has(label)) {
         this.#dataStates.expandedNodes.delete(label);
         this.#collapseNode(tree, label);
@@ -179,6 +174,9 @@ export class EaTree extends Base {
    * @param {HTMLElement} label 标签元素
    */
   #expandNode = (tree, label) => {
+    tree.toggleAttribute("hidden", false);
+    label.toggleAttribute("expanded", true);
+
     this.dispatchEvent(
       new EaTreeNodeExpandEvent({
         node: label.item,
@@ -193,6 +191,9 @@ export class EaTree extends Base {
    * @param {HTMLElement} label 标签元素
    */
   #collapseNode = (tree, label) => {
+    tree.toggleAttribute("hidden", true);
+    label.toggleAttribute("expanded", false);
+
     this.dispatchEvent(
       new EaTreeNodeCollapseEvent({
         node: label.item,

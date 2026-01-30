@@ -32,24 +32,18 @@ export class EaTreeLabel extends Base {
         this.updateContainerClasslist();
       },
     },
-  });
-
-  propStates = this.properties({
-    hasChildren: {
-      props: true,
+    expanded: {
       type: Boolean,
       default: false,
       observer: newVal => {
         this.updateContainerClasslist();
       },
     },
-    item: {
+  });
+
+  propStates = this.properties({
+    hasChildren: {
       props: true,
-      type: Object,
-      default: null,
-    },
-    expanded: {
-      props: false,
       type: Boolean,
       default: false,
       observer: newVal => {

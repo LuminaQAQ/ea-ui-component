@@ -1,9 +1,6 @@
 $name: ea-tree-child;
 
 :host {
-  --#{$name}-text-color: var(--grey-700);
-  --#{$name}-font-size: var(--font-size-md);
-  --#{$name}-line-height: 1.5;
   --#{$name}-indent-size: 16px;
   --#{$name}-padding-vertical: var(--spacing-sm);
   --#{$name}-padding-horizontal: var(--spacing-md);
@@ -17,9 +14,6 @@ $name: ea-tree-child;
 }
 
 @include block($name) {
-  font-size: var(--#{$name}-font-size);
-  line-height: var(--#{$name}-line-height);
-  color: var(--#{$name}-text-color);
 
   @include element(item) {
     display: flex;

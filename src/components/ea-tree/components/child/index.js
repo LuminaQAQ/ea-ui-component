@@ -108,10 +108,11 @@ export class EaTreeChild extends Base {
       const treeLabel = document.createElement("ea-tree-label");
 
       sec.className = this.ns.e("children");
-      sec.part = "children";
+      sec.part = "children-wrapper";
+      tree.part = "children";
+      treeLabel.part = "label";
 
       treeLabel.label = item[label];
-      treeLabel.item = item;
       tree.dataProps = this.dataProps;
       tree.data = item[children];
 
