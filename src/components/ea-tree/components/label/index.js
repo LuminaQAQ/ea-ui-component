@@ -112,6 +112,27 @@ export class EaTreeLabel extends Base {
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
+
+    this.addEventListener(
+      "click",
+      e => {
+        e.stopImmediatePropagation();
+
+        const child = this.parentElement.querySelector("ea-tree-child");
+
+        this.emit("ea-tree-label-click", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            label: this,
+            child,
+          },
+        });
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
   }
 
   $beforeUnmounted() {

@@ -1,13 +1,12 @@
 import { namespace } from "@/directives/namespace";
 import Base from "@components/Base.js";
-import { EaTreeNodeExpandEvent } from "./events/EaTreeNodeExpandEvent";
-import { EaTreeNodeCollapseEvent } from "./events/EaTreeNodeCollapseEvent";
-import { EaTreeNodeSelectEvent } from "./events/EaTreeNodeSelectEvent";
+import { EaTreeNodeExpandEvent } from "../../events/EaTreeNodeExpandEvent";
+import { EaTreeNodeCollapseEvent } from "../../events/EaTreeNodeCollapseEvent";
+import { EaTreeNodeSelectEvent } from "../../events/EaTreeNodeSelectEvent";
 import stylesheet from "./index.scss?inline";
-import "./components/label/index";
-import "./components/child/index";
+import "../label/index";
 
-export class EaTree extends Base {
+export class EaTreeChild extends Base {
   /** @type {HTMLElement} */
   #container;
   /** @type {AbortController} */
@@ -50,14 +49,6 @@ export class EaTree extends Base {
           // this.#container.addEventListener("click", this.#onLabelClick, {
           //   signal: this.#AbortControllerStates.dataAC.signal,
           // });
-
-          this.#container.addEventListener(
-            "ea-tree-label-click",
-            this.#onLabelClick,
-            {
-              signal: this.#AbortControllerStates.dataAC.signal,
-            }
-          );
         }
       },
     },
@@ -104,11 +95,10 @@ export class EaTree extends Base {
     this.ns = ns;
 
     this.shadowRoot.innerHTML = `
-      <div class='${ns.b("tree")}' part='container'></div>
-      <slot></slot>
+      <div class='${ns.b("tree-child")}' part='container'></div>
     `;
 
-    this.#container = this.shadowRoot.querySelector(`.${ns.b("tree")}`);
+    this.#container = this.shadowRoot.querySelector(`.${ns.b("tree-child")}`);
   }
 
   /**
@@ -151,31 +141,28 @@ export class EaTree extends Base {
    * @param {MouseEvent} e 事件对象
    */
   #onLabelClick = e => {
-    e.stopImmediatePropagation();
-
-    const label = e.detail.label;
-    const tree = e.detail.child;
-    if (!label) {
-      return;
-    }
-
-    // 处理节点展开/收起
-    if (label.hasChildren) {
-      const isExpanded = this.#dataStates.expandedNodes.has(label);
-
-      tree.toggleAttribute("hidden", isExpanded ? true : false);
-      label.toggleAttribute("expanded", isExpanded ? false : true);
-
-      if (this.#dataStates.expandedNodes.has(label)) {
-        this.#dataStates.expandedNodes.delete(label);
-        this.#collapseNode(tree, label);
-      } else {
-        this.#dataStates.expandedNodes.add(label);
-        this.#expandNode(tree, label);
-      }
-    }
-
-    this.#selectNode(label);
+    // const label = e.target.closest("ea-tree-label");
+    // // this.#dataStates.nodes
+    // if (!label) {
+    //   return;
+    // }
+    // // 处理节点展开/收起
+    // if (label.hasChildren) {
+    //   const sec = label.parentElement;
+    //   const tree = sec.querySelector("ea-tree");
+    //   const isExpanded = this.#dataStates.expandedNodes.has(label);
+    //   tree.hidden = isExpanded ? true : false;
+    //   label.toggleAttribute("expanded", isExpanded ? false : true);
+    //   if (this.#dataStates.expandedNodes.has(label)) {
+    //     this.#dataStates.expandedNodes.delete(label);
+    //     this.#collapseNode(tree, label);
+    //   } else {
+    //     this.#dataStates.expandedNodes.add(label);
+    //     this.#expandNode(tree, label);
+    //   }
+    // }
+    // // this.#deselectNode(this.#expandNode.get(this.#selectNode));
+    // this.#selectNode(label);
   };
 
   /**
@@ -272,6 +259,6 @@ export class EaTree extends Base {
   }
 }
 
-if (!customElements.get("ea-tree")) {
-  customElements.define("ea-tree", EaTree);
+if (!customElements.get("ea-tree-child")) {
+  customElements.define("ea-tree-child", EaTreeChild);
 }
