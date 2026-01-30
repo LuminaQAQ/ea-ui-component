@@ -10,11 +10,11 @@ export class EaTreeChild extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes];
+    return [...super.observedAttributes, "show-checkbox", "checked"];
   }
 
   #dataStates = {
-    nodes: new Map(),
+    nodes: new WeakMap(),
     expandedNodes: new Set(),
     selectedNode: null,
   };
@@ -54,12 +54,38 @@ export class EaTreeChild extends Base {
       },
       observer: newVal => {},
     },
+    "show-checkbox": {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.#updateCheckboxVisibility();
+      },
+    },
+    checked: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.#updateCheckboxState(newVal);
+
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   /**
    * 获取 classlist 列表
    * @return {string} 属性值
    */
+  /**
+   * 更新 checkbox 可见性
+   */
+  #updateCheckboxVisibility = () => {
+    const labels = this.#container.querySelectorAll("ea-tree-label");
+    labels.forEach(label => {
+      label["show-checkbox"] = this["show-checkbox"];
+    });
+  };
+
   updateContainerClasslist() {
     const className = this.computedClasslist(
       "ea-tree",
@@ -115,6 +141,11 @@ export class EaTreeChild extends Base {
       treeLabel.label = item[label];
       tree.dataProps = this.dataProps;
       tree.data = item[children];
+      treeLabel["show-checkbox"] = this["show-checkbox"];
+
+      if (this["show-checkbox"]) {
+        tree.setAttribute("show-checkbox", "");
+      }
 
       const hasChildren = item[children] && item[children].length > 0;
       if (hasChildren) {
@@ -125,9 +156,25 @@ export class EaTreeChild extends Base {
       sec.appendChild(treeLabel);
       sec.appendChild(tree);
       frag.appendChild(sec);
+
+      this.#dataStates.nodes.set(sec, {
+        label: treeLabel,
+        child: tree,
+        data: item,
+      });
     });
 
     this.#container.appendChild(frag);
+  };
+
+  #updateCheckboxState = checked => {
+    this.#container.querySelectorAll("ea-tree-label").forEach(label => {
+      label.checked = checked;
+    });
+
+    this.#container.querySelectorAll("ea-tree-child").forEach(child => {
+      child.checked = checked;
+    });
   };
 
   connectedCallback() {
@@ -135,6 +182,32 @@ export class EaTreeChild extends Base {
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
+
+    this.#container.addEventListener(
+      "ea-tree-checkbox-click",
+      e => {
+        e.stopImmediatePropagation();
+
+        const { label } = e.detail;
+        const parentWrapper = label.closest(".ea-tree-child__children");
+        if (!parentWrapper) return;
+
+        if (this.#dataStates.nodes.get(parentWrapper)) {
+          const { label: treeLabel, child: tree } =
+            this.#dataStates.nodes.get(parentWrapper);
+
+          treeLabel.checked = e.detail.checked;
+          tree.checked = e.detail.checked;
+        }
+
+        this.emit("ea-tree-checkbox-click", {
+          detail: e.detail,
+          bubbles: true,
+          composed: true,
+        });
+      },
+      { signal: this.#abortController.signal }
+    );
 
     this.updateContainerClasslist();
   }

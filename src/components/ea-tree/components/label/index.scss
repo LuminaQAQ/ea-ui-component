@@ -22,6 +22,12 @@ $name: ea-tree-label;
   display: block;
 }
 
+:host([show-checkbox]) {
+  .ea-tree-label__checkbox {
+    display: flex;
+  }
+}
+
 @include block($name) {
   display: flex;
   align-items: center;
@@ -36,6 +42,11 @@ $name: ea-tree-label;
 
   &:hover {
     background-color: var(--#{$name}-hover-bg);
+  }
+
+  @include element(checkbox) {
+    display: none;
+    flex-shrink: 0;
   }
 
   @include element(toggle-icon) {
@@ -75,9 +86,5 @@ $name: ea-tree-label;
   @include state(selected) {
     background-color: var(--#{$name}-selected-bg);
     color: var(--#{$name}-selected-text-color);
-
-    &:hover {
-      background-color: var(--blue-200);
-    }
   }
 }
