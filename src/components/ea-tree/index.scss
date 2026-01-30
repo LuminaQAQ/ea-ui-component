@@ -1,74 +1,12 @@
 $name: ea-tree;
 
 :host {
-  --#{$name}-text-color: var(--grey-700);
   --#{$name}-font-size: var(--font-size-md);
-  --#{$name}-line-height: 1.5;
-  --#{$name}-indent-size: 16px;
-  --#{$name}-padding-vertical: var(--spacing-sm);
-  --#{$name}-padding-horizontal: var(--spacing-md);
-  --#{$name}-border-radius: var(--border-radius-sm);
-  --#{$name}-transition: var(--transition-normal);
-  --#{$name}-item-hover-bg: var(--grey-100);
-  --#{$name}-item-height: 36px;
-  --#{$name}-icon-size: 16px;
-  --#{$name}-icon-color: var(--grey-500);
-  --#{$name}-icon-hover-color: var(--blue-500);
+  --#{$name}-text-color: var(--grey-700);
 }
 
 @include block($name) {
   font-size: var(--#{$name}-font-size);
-  line-height: var(--#{$name}-line-height);
+  line-height: var(--#{$name}-font-size);
   color: var(--#{$name}-text-color);
-
-  @include element(item) {
-    display: flex;
-    align-items: center;
-    min-height: var(--#{$name}-item-height);
-    padding: var(--#{$name}-padding-vertical) var(--#{$name}-padding-horizontal);
-    margin: 2px 0;
-    border-radius: var(--#{$name}-border-radius);
-    cursor: pointer;
-    transition: all var(--#{$name}-transition);
-    position: relative;
-
-    &:hover {
-      background-color: var(--#{$name}-item-hover-bg);
-      transform: translateX(2px);
-    }
-  }
-
-  @include element(children) {
-    margin-left: var(--#{$name}-indent-size);
-    padding-left: 0;
-    list-style: none;
-    position: relative;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: -12px;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      height: 100%;
-      background: var(--grey-200);
-    }
-  }
-
-  @include element(expand-icon) {
-    width: var(--#{$name}-icon-size);
-    height: var(--#{$name}-icon-size);
-    color: var(--#{$name}-icon-color);
-    transition: all var(--#{$name}-transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 2px;
-
-    &:hover {
-      color: var(--#{$name}-icon-hover-color);
-      background-color: var(--grey-100);
-    }
-  }
 }

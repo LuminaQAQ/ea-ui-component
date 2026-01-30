@@ -1,8 +1,5 @@
 import { namespace } from "@/directives/namespace";
 import Base from "@components/Base.js";
-import { EaTreeNodeExpandEvent } from "../../events/EaTreeNodeExpandEvent";
-import { EaTreeNodeCollapseEvent } from "../../events/EaTreeNodeCollapseEvent";
-import { EaTreeNodeSelectEvent } from "../../events/EaTreeNodeSelectEvent";
 import stylesheet from "./index.scss?inline";
 import "../label/index";
 
@@ -45,10 +42,6 @@ export class EaTreeChild extends Base {
           this.#AbortControllerStates.dataAC = new AbortController();
 
           this.#handleTreeRender(newVal);
-
-          // this.#container.addEventListener("click", this.#onLabelClick, {
-          //   signal: this.#AbortControllerStates.dataAC.signal,
-          // });
         }
       },
     },
@@ -90,15 +83,15 @@ export class EaTreeChild extends Base {
   }
 
   $render() {
-    const ns = namespace("tree");
+    const ns = namespace("tree-child");
 
     this.ns = ns;
 
     this.shadowRoot.innerHTML = `
-      <div class='${ns.b("tree-child")}' part='container'></div>
+      <div class='${ns.b()}' part='container'></div>
     `;
 
-    this.#container = this.shadowRoot.querySelector(`.${ns.b("tree-child")}`);
+    this.#container = this.shadowRoot.querySelector(ns.cb());
   }
 
   /**
@@ -114,7 +107,7 @@ export class EaTreeChild extends Base {
       const tree = document.createElement("ea-tree-child");
       const treeLabel = document.createElement("ea-tree-label");
 
-      sec.className = "ea-tree__children";
+      sec.className = this.ns.e("children");
       sec.part = "children";
 
       treeLabel.label = item[label];
@@ -134,111 +127,6 @@ export class EaTreeChild extends Base {
     });
 
     this.#container.appendChild(frag);
-  };
-
-  /**
-   * 点击标签事件
-   * @param {MouseEvent} e 事件对象
-   */
-  #onLabelClick = e => {
-    // const label = e.target.closest("ea-tree-label");
-    // // this.#dataStates.nodes
-    // if (!label) {
-    //   return;
-    // }
-    // // 处理节点展开/收起
-    // if (label.hasChildren) {
-    //   const sec = label.parentElement;
-    //   const tree = sec.querySelector("ea-tree");
-    //   const isExpanded = this.#dataStates.expandedNodes.has(label);
-    //   tree.hidden = isExpanded ? true : false;
-    //   label.toggleAttribute("expanded", isExpanded ? false : true);
-    //   if (this.#dataStates.expandedNodes.has(label)) {
-    //     this.#dataStates.expandedNodes.delete(label);
-    //     this.#collapseNode(tree, label);
-    //   } else {
-    //     this.#dataStates.expandedNodes.add(label);
-    //     this.#expandNode(tree, label);
-    //   }
-    // }
-    // // this.#deselectNode(this.#expandNode.get(this.#selectNode));
-    // this.#selectNode(label);
-  };
-
-  /**
-   * 展开节点
-   * @param {HTMLElement} tree 树元素
-   * @param {HTMLElement} label 标签元素
-   */
-  #expandNode = (tree, label) => {
-    this.dispatchEvent(
-      new EaTreeNodeExpandEvent({
-        node: label.item,
-        expanded: true,
-      })
-    );
-  };
-
-  /**
-   * 收起节点
-   * @param {HTMLElement} tree 树元素
-   * @param {HTMLElement} label 标签元素
-   */
-  #collapseNode = (tree, label) => {
-    this.dispatchEvent(
-      new EaTreeNodeCollapseEvent({
-        node: label.item,
-        expanded: false,
-      })
-    );
-  };
-
-  /**
-   * 选中节点
-   * @param {HTMLElement} label 标签元素
-   */
-  #selectNode = label => {
-    // 如果点击的是已选中的节点，则取消选中
-    if (this.#dataStates.selectedNode === label) {
-      this.#deselectNode();
-      return;
-    }
-
-    // 取消之前选中的节点
-    if (this.#dataStates.selectedNode) {
-      this.#dataStates.selectedNode.selected = false;
-    }
-
-    // 选中新节点
-    this.#dataStates.selectedNode = label;
-    label.selected = true;
-
-    // 触发选中事件
-    this.dispatchEvent(
-      new EaTreeNodeSelectEvent({
-        node: label.item,
-        selected: true,
-      })
-    );
-  };
-
-  /**
-   * 取消选中节点
-   */
-  #deselectNode = () => {
-    if (this.#dataStates.selectedNode) {
-      const deselectedNode = this.#dataStates.selectedNode;
-      this.#dataStates.selectedNode.selected = false;
-      this.#dataStates.selectedNode = null;
-
-      // 触发取消选中事件
-      this.dispatchEvent(
-        new EaTreeNodeSelectEvent({
-          node: deselectedNode.item,
-          selected: false,
-        })
-      );
-    }
   };
 
   connectedCallback() {

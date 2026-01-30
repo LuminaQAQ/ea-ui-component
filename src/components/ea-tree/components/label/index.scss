@@ -43,16 +43,13 @@ $name: ea-tree-label;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
+
     width: var(--#{$name}-toggle-size);
     height: var(--#{$name}-toggle-size);
-    color: var(--#{$name}-icon-color);
-    border-radius: 2px;
-    transition: all var(--#{$name}-transition);
 
-    &:hover {
-      color: var(--#{$name}-icon-hover-color);
-      background-color: var(--grey-100);
-    }
+    color: var(--#{$name}-icon-color);
+
+    transition: all var(--#{$name}-transition);
   }
 
   @include element(text) {
@@ -78,27 +75,9 @@ $name: ea-tree-label;
   @include state(selected) {
     background-color: var(--#{$name}-selected-bg);
     color: var(--#{$name}-selected-text-color);
-    font-weight: var(--font-weight-bold);
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: -2px;
-      transform: translateY(-50%);
-      width: 3px;
-      height: 60%;
-      background-color: var(--#{$name}-selected-border-color);
-      border-radius: var(--border-radius-round);
-      transition: all var(--#{$name}-transition);
-    }
 
     &:hover {
       background-color: var(--blue-200);
-
-      &::after {
-        height: 80%;
-      }
     }
   }
 }

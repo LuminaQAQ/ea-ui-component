@@ -14,7 +14,7 @@ export class EaTreeLabel extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "label", "expanded"];
+    return [...super.observedAttributes, "label", "expanded", "selected"];
   }
 
   state = this.properties({

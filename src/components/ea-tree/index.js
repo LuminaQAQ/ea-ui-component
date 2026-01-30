@@ -47,10 +47,6 @@ export class EaTree extends Base {
 
           this.#handleTreeRender(newVal);
 
-          // this.#container.addEventListener("click", this.#onLabelClick, {
-          //   signal: this.#AbortControllerStates.dataAC.signal,
-          // });
-
           this.#container.addEventListener(
             "ea-tree-label-click",
             this.#onLabelClick,
@@ -159,7 +155,6 @@ export class EaTree extends Base {
       return;
     }
 
-    // 处理节点展开/收起
     if (label.hasChildren) {
       const isExpanded = this.#dataStates.expandedNodes.has(label);
 
@@ -211,47 +206,19 @@ export class EaTree extends Base {
    * @param {HTMLElement} label 标签元素
    */
   #selectNode = label => {
-    // 如果点击的是已选中的节点，则取消选中
-    if (this.#dataStates.selectedNode === label) {
-      this.#deselectNode();
-      return;
-    }
-
-    // 取消之前选中的节点
     if (this.#dataStates.selectedNode) {
       this.#dataStates.selectedNode.selected = false;
     }
 
-    // 选中新节点
     this.#dataStates.selectedNode = label;
     label.selected = true;
 
-    // 触发选中事件
     this.dispatchEvent(
       new EaTreeNodeSelectEvent({
         node: label.item,
         selected: true,
       })
     );
-  };
-
-  /**
-   * 取消选中节点
-   */
-  #deselectNode = () => {
-    if (this.#dataStates.selectedNode) {
-      const deselectedNode = this.#dataStates.selectedNode;
-      this.#dataStates.selectedNode.selected = false;
-      this.#dataStates.selectedNode = null;
-
-      // 触发取消选中事件
-      this.dispatchEvent(
-        new EaTreeNodeSelectEvent({
-          node: deselectedNode.item,
-          selected: false,
-        })
-      );
-    }
   };
 
   connectedCallback() {

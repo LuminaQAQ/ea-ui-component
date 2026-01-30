@@ -55,20 +55,4 @@ $name: ea-tree-child;
       background: var(--grey-200);
     }
   }
-
-  @include element(expand-icon) {
-    width: var(--#{$name}-icon-size);
-    height: var(--#{$name}-icon-size);
-    color: var(--#{$name}-icon-color);
-    transition: all var(--#{$name}-transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 2px;
-
-    &:hover {
-      color: var(--#{$name}-icon-hover-color);
-      background-color: var(--grey-100);
-    }
-  }
 }
