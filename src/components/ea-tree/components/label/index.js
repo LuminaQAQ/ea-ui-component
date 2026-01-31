@@ -25,10 +25,17 @@ export class EaTreeLabel extends Base {
       "checked",
       "indeterminate",
       "show-checkbox",
+
+      "path",
     ];
   }
 
   state = this.properties({
+    path: {
+      type: String,
+      default: "",
+    },
+
     label: {
       type: String,
       default: "",
@@ -210,6 +217,39 @@ export class EaTreeLabel extends Base {
   $beforeUnmounted() {
     this.#abortController?.abort();
   }
+
+  /**
+   * 获取节点深度
+   * @returns {number} 节点深度
+   */
+  getDepth = () => {
+    const path = this.path;
+    return path ? path.split("-").length : 0;
+  };
+
+  /**
+   * 判断是否为根节点
+   * @returns {boolean} 是否为根节点
+   */
+  isRoot = () => {
+    return this.getDepth() === 1;
+  };
+
+  /**
+   * 判断是否为叶子节点
+   * @returns {boolean} 是否为叶子节点
+   */
+  isLeaf = () => {
+    // 通过检查是否有子节点来判断是否为叶子节点
+    const parentSection = this.parentElement;
+    if (!parentSection) return true;
+
+    const childTree = parentSection.querySelector("ea-tree-child");
+    if (!childTree) return true;
+
+    const childLabels = childTree.querySelectorAll("ea-tree-label");
+    return childLabels.length === 0;
+  };
 }
 
 if (!window.customElements.get("ea-tree-label")) {

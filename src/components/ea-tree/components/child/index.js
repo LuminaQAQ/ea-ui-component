@@ -36,7 +36,8 @@ export class EaTreeChild extends Base {
 
         this.#AbortControllerStates.dataAC?.abort();
 
-        this.#container.innerHTML = "";
+        let childrenSlotEl = this.querySelector("slot[name='children']");
+        if (childrenSlotEl) childrenSlotEl.innerHTML = "";
 
         if (newVal) {
           this.#AbortControllerStates.dataAC = new AbortController();
@@ -88,7 +89,7 @@ export class EaTreeChild extends Base {
 
   updateContainerClasslist() {
     const className = this.computedClasslist(
-      "ea-tree",
+      this.ns.b(),
       {
         // ['--' + this.type]: this.type,
       },
@@ -114,7 +115,9 @@ export class EaTreeChild extends Base {
     this.ns = ns;
 
     this.shadowRoot.innerHTML = `
-      <div class='${ns.b()}' part='container'></div>
+      <div class='${ns.b()}' part='container'>
+        <slot name="children"></slot>
+      </div>
     `;
 
     this.#container = this.shadowRoot.querySelector(ns.cb());
@@ -128,7 +131,29 @@ export class EaTreeChild extends Base {
     const { label, children } = this.dataProps;
     const frag = document.createDocumentFragment();
 
-    treeData.forEach(item => {
+    /**
+     * 获取或创建 slot=children 的元素
+     * @return {HTMLElement} slot=children 的元素
+     */
+    const getLightChildrenSlot = () => {
+      let childrenSlotEl = this.querySelector("slot[name='children']");
+      if (!childrenSlotEl) {
+        const childrenWrapper = document.createElement("div");
+        childrenWrapper.slot = "children";
+        this.appendChild(childrenWrapper);
+
+        childrenSlotEl = childrenWrapper;
+      }
+
+      return childrenSlotEl;
+    };
+
+    const childrenSlotEl = getLightChildrenSlot();
+
+    // 获取当前节点的父标签（如果有）
+    const parentLabel = this.parentElement?.querySelector("ea-tree-label");
+
+    treeData.forEach((item, index) => {
       const sec = document.createElement("section");
       const tree = document.createElement("ea-tree-child");
       const treeLabel = document.createElement("ea-tree-label");
@@ -142,6 +167,15 @@ export class EaTreeChild extends Base {
       tree.dataProps = this.dataProps;
       tree.data = item[children];
       treeLabel["show-checkbox"] = this["show-checkbox"];
+
+      // 设置节点路径
+      if (parentLabel) {
+        const parentPath = parentLabel.getAttribute("path");
+        const currentPath = `${parentPath}-${index + 1}`;
+        treeLabel.setAttribute("path", currentPath);
+      } else {
+        treeLabel.setAttribute("path", (index + 1).toString());
+      }
 
       if (this["show-checkbox"]) {
         tree.setAttribute("show-checkbox", "");
@@ -164,7 +198,7 @@ export class EaTreeChild extends Base {
       });
     });
 
-    this.#container.appendChild(frag);
+    childrenSlotEl.appendChild(frag);
   };
 
   #updateCheckboxState = checked => {
@@ -182,32 +216,6 @@ export class EaTreeChild extends Base {
 
     this.#abortController?.abort();
     this.#abortController = new AbortController();
-
-    this.#container.addEventListener(
-      "ea-tree-checkbox-click",
-      e => {
-        e.stopImmediatePropagation();
-
-        const { label } = e.detail;
-        const parentWrapper = label.closest(".ea-tree-child__children");
-        if (!parentWrapper) return;
-
-        if (this.#dataStates.nodes.get(parentWrapper)) {
-          const { label: treeLabel, child: tree } =
-            this.#dataStates.nodes.get(parentWrapper);
-
-          treeLabel.checked = e.detail.checked;
-          tree.checked = e.detail.checked;
-        }
-
-        this.emit("ea-tree-checkbox-click", {
-          detail: e.detail,
-          bubbles: true,
-          composed: true,
-        });
-      },
-      { signal: this.#abortController.signal }
-    );
 
     this.updateContainerClasslist();
   }

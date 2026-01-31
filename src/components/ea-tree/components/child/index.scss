@@ -1,39 +1,39 @@
-$name: ea-tree-child;
+$child-name: ea-tree-child;
 
 :host {
-  --#{$name}-indent-size: 16px;
-  --#{$name}-padding-vertical: var(--spacing-sm);
-  --#{$name}-padding-horizontal: var(--spacing-md);
-  --#{$name}-border-radius: var(--border-radius-sm);
-  --#{$name}-transition: var(--transition-normal);
-  --#{$name}-item-hover-bg: var(--grey-100);
-  --#{$name}-item-height: 36px;
-  --#{$name}-icon-size: 16px;
-  --#{$name}-icon-color: var(--grey-500);
-  --#{$name}-icon-hover-color: var(--blue-500);
+  --#{$child-name}-indent-size: 16px;
+  --#{$child-name}-padding-vertical: var(--spacing-sm);
+  --#{$child-name}-padding-horizontal: var(--spacing-md);
+  --#{$child-name}-border-radius: var(--border-radius-sm);
+  --#{$child-name}-transition: var(--transition-normal);
+  --#{$child-name}-item-hover-bg: var(--grey-100);
+  --#{$child-name}-item-height: 36px;
+  --#{$child-name}-icon-size: 16px;
+  --#{$child-name}-icon-color: var(--grey-500);
+  --#{$child-name}-icon-hover-color: var(--blue-500);
 }
 
-@include block($name) {
+@include block($child-name) {
 
   @include element(item) {
     display: flex;
     align-items: center;
-    min-height: var(--#{$name}-item-height);
-    padding: var(--#{$name}-padding-vertical) var(--#{$name}-padding-horizontal);
+    min-height: var(--#{$child-name}-item-height);
+    padding: var(--#{$child-name}-padding-vertical) var(--#{$child-name}-padding-horizontal);
     margin: 2px 0;
-    border-radius: var(--#{$name}-border-radius);
+    border-radius: var(--#{$child-name}-border-radius);
     cursor: pointer;
-    transition: all var(--#{$name}-transition);
+    transition: all var(--#{$child-name}-transition);
     position: relative;
 
     &:hover {
-      background-color: var(--#{$name}-item-hover-bg);
+      background-color: var(--#{$child-name}-item-hover-bg);
       transform: translateX(2px);
     }
   }
 
   @include element(children) {
-    margin-left: var(--#{$name}-indent-size);
+    margin-left: var(--#{$child-name}-indent-size);
     padding-left: 0;
     list-style: none;
     position: relative;
