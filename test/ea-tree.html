@@ -74,6 +74,46 @@
           ],
         },
       ];
+
+      window.disabledData = [
+        {
+          id: 1,
+          label: "Level one 1",
+          children: [
+            {
+              id: 3,
+              label: "Level two 2-1",
+              children: [
+                {
+                  id: 4,
+                  label: "Level three 3-1-1",
+                },
+                {
+                  id: 5,
+                  label: "Level three 3-1-2",
+                  disabled: true,
+                },
+              ],
+            },
+            {
+              id: 2,
+              label: "Level two 2-2",
+              disabled: true,
+              children: [
+                {
+                  id: 6,
+                  label: "Level three 3-2-1",
+                },
+                {
+                  id: 7,
+                  label: "Level three 3-2-2",
+                  disabled: true,
+                },
+              ],
+            },
+          ],
+        },
+      ];
     </script>
 
     <!--  基础用法 -->
@@ -105,6 +145,23 @@
     <script type="module">
       const tree = document.querySelector("#checkboxTree");
       tree.data = window.data;
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  禁用复选框 -->
+    <!-- #region -->
+    <h1>禁用复选框</h1>
+
+    <div class="demo">
+      <ea-tree id="disabledCheckboxTree" show-checkbox></ea-tree>
+    </div>
+
+    <script type="module">
+      const tree = document.querySelector("#disabledCheckboxTree");
+      tree.data = window.disabledData;
     </script>
 
     <hr />

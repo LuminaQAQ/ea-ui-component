@@ -18,17 +18,17 @@ export class EaTree extends Base {
     return [...super.observedAttributes, "show-checkbox", "check-strictly"];
   }
 
-  #dataStates = {
-    nodes: new WeakMap(),
+  #treeState = {
+    nodeMap: new WeakMap(),
     expandedNodes: new Set(),
     selectedNode: null,
     checkedNodes: new Set(),
     indeterminateNodes: new Set(),
   };
 
-  #AbortControllerStates = {
+  #abortControllers = {
     /** @type {AbortController} */
-    dataAC: null,
+    dataController: null,
   };
 
   propState = this.properties({
@@ -41,30 +41,15 @@ export class EaTree extends Base {
         await customElements.whenDefined("ea-tree");
         await customElements.whenDefined("ea-tree-label");
 
-        this.#AbortControllerStates.dataAC?.abort();
+        this.#abortControllers.dataController?.abort();
 
         this.#container.innerHTML = "";
 
         if (newVal) {
-          this.#AbortControllerStates.dataAC = new AbortController();
+          this.#abortControllers.dataController = new AbortController();
 
           this.#handleTreeRender(newVal);
-
-          this.#container.addEventListener(
-            "ea-tree-label-click",
-            this.#onLabelClick,
-            {
-              signal: this.#AbortControllerStates.dataAC.signal,
-            }
-          );
-
-          this.#container.addEventListener(
-            "ea-tree-checkbox-click",
-            this.#onCheckboxClick,
-            {
-              signal: this.#AbortControllerStates.dataAC.signal,
-            }
-          );
+          this.#bindTreeEvents();
         }
       },
     },
@@ -74,12 +59,13 @@ export class EaTree extends Base {
       default: {
         children: "children",
         label: "label",
+        disabled: "disabled",
       },
     },
     "show-checkbox": {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.#updateCheckboxVisibility();
       },
     },
@@ -123,45 +109,60 @@ export class EaTree extends Base {
   }
 
   /**
+   * 创建树节点元素
+   * @param {Object} item 数据项
+   * @param {number} index 索引
+   * @returns {Object} 包含section、treeLabel和tree的对象
+   */
+  #createTreeNode = (item, index) => {
+    const { label, children, disabled } = this.dataProps;
+    const sec = document.createElement("section");
+    const tree = document.createElement("ea-tree-child");
+    const treeLabel = document.createElement("ea-tree-label");
+
+    sec.className = "ea-tree__children";
+    sec.part = "children-wrapper";
+    tree.part = "children";
+    treeLabel.part = "label";
+
+    treeLabel.label = item[label];
+    tree.dataProps = this.dataProps;
+    tree.data = item[children];
+    treeLabel["show-checkbox"] = this["show-checkbox"];
+    treeLabel.setAttribute("path", (index + 1).toString().concat("$"));
+
+    if (disabled && item[disabled] === true) {
+      treeLabel.toggleAttribute("disabled", true);
+    }
+
+    if (this["show-checkbox"]) {
+      tree.setAttribute("show-checkbox", "");
+    }
+
+    const hasChildren = item[children] && item[children].length > 0;
+    if (hasChildren) {
+      treeLabel.hasChildren = true;
+      tree.hidden = !this.#treeState.expandedNodes.has(treeLabel);
+    }
+
+    return { sec, treeLabel, tree };
+  };
+
+  /**
    * 渲染树节点
    * @param {Array} treeData 树数据
    */
   #handleTreeRender = treeData => {
-    const { label, children } = this.dataProps;
     const frag = document.createDocumentFragment();
 
     treeData.forEach((item, index) => {
-      const sec = document.createElement("section");
-      const tree = document.createElement("ea-tree-child");
-      const treeLabel = document.createElement("ea-tree-label");
-
-      sec.className = "ea-tree__children";
-      sec.part = "children-wrapper";
-      tree.part = "children";
-      treeLabel.part = "label";
-
-      treeLabel.label = item[label];
-      tree.dataProps = this.dataProps;
-      tree.data = item[children];
-      treeLabel["show-checkbox"] = this["show-checkbox"];
-
-      treeLabel.setAttribute("path", (index + 1).toString().concat("$"));
-
-      if (this["show-checkbox"]) {
-        tree.setAttribute("show-checkbox", "");
-      }
-
-      const hasChildren = item[children] && item[children].length > 0;
-      if (hasChildren) {
-        treeLabel.hasChildren = true;
-        tree.hidden = !this.#dataStates.expandedNodes.has(treeLabel);
-      }
+      const { sec, treeLabel, tree } = this.#createTreeNode(item, index);
 
       sec.appendChild(treeLabel);
       sec.appendChild(tree);
       frag.appendChild(sec);
 
-      this.#dataStates.nodes.set(sec, {
+      this.#treeState.nodeMap.set(sec, {
         label: treeLabel,
         child: tree,
         data: item,
@@ -191,11 +192,11 @@ export class EaTree extends Base {
     );
 
     if (label.hasChildren) {
-      if (this.#dataStates.expandedNodes.has(label)) {
-        this.#dataStates.expandedNodes.delete(label);
+      if (this.#treeState.expandedNodes.has(label)) {
+        this.#treeState.expandedNodes.delete(label);
         this.#collapseNode(tree, label);
       } else {
-        this.#dataStates.expandedNodes.add(label);
+        this.#treeState.expandedNodes.add(label);
         this.#expandNode(tree, label);
       }
     }
@@ -242,11 +243,11 @@ export class EaTree extends Base {
    * @param {HTMLElement} label 标签元素
    */
   #selectNode = label => {
-    if (this.#dataStates.selectedNode) {
-      this.#dataStates.selectedNode.selected = false;
+    if (this.#treeState.selectedNode) {
+      this.#treeState.selectedNode.selected = false;
     }
 
-    this.#dataStates.selectedNode = label;
+    this.#treeState.selectedNode = label;
     label.selected = true;
 
     this.dispatchEvent(
@@ -268,6 +269,158 @@ export class EaTree extends Base {
   };
 
   /**
+   * 获取相同树路径下的所有节点
+   * @param {string} treeRootPath 树路径
+   * @returns {Array} 相同树路径的节点数组
+   */
+  #getSameTreeNodes = treeRootPath => {
+    const sameTreeNodes = [];
+    const pathAry = treeRootPath.split("-");
+
+    sameTreeNodes.push(this.#container.querySelector(`[path="${pathAry[0]}"]`));
+
+    while (pathAry.length > 1) {
+      const treePath = pathAry.join("-");
+      pathAry.pop();
+
+      sameTreeNodes.push(
+        ...this.#container.querySelectorAll(`[path^="${treePath}"]`)
+      );
+    }
+
+    return sameTreeNodes;
+  };
+
+  /**
+   * 检查节点状态
+   * @param {Array} labelEls 标签元素数组
+   * @param {HTMLElement} currentNode 当前节点
+   * @returns {Object} 包含isAllChecked和isAnyChecked的对象
+   */
+  #checkNodeStatus = (labelEls, currentNode) => {
+    const isAllChecked = labelEls.every(
+      label => label.getAttribute("checked") || label === currentNode
+    );
+    const isAnyChecked = labelEls.some(
+      label => label.getAttribute("checked") && label !== currentNode
+    );
+
+    return { isAllChecked, isAnyChecked };
+  };
+
+  /**
+   * 更新节点复选框状态
+   * @param {HTMLElement} node 节点元素
+   * @param {boolean} isAllChecked 是否全部选中
+   * @param {boolean} isAnyChecked 是否有选中
+   */
+  #updateNodeCheckboxState = (node, isAllChecked, isAnyChecked) => {
+    if (isAllChecked) {
+      node.toggleAttribute("checked", true);
+      node.toggleAttribute("indeterminate", false);
+    } else if (isAnyChecked) {
+      node.toggleAttribute("checked", false);
+      node.toggleAttribute("indeterminate", true);
+    } else {
+      node.toggleAttribute("checked", false);
+      node.toggleAttribute("indeterminate", false);
+    }
+  };
+
+  /**
+   * 绑定树组件事件
+   */
+  #bindTreeEvents = () => {
+    this.#container.addEventListener(
+      "ea-tree-label-click",
+      this.#onLabelClick,
+      {
+        signal: this.#abortControllers.dataController.signal,
+      }
+    );
+
+    this.#container.addEventListener(
+      "ea-tree-checkbox-click",
+      this.#onCheckboxClick,
+      {
+        signal: this.#abortControllers.dataController.signal,
+      }
+    );
+  };
+
+  /**
+   * 绑定复选框状态管理事件
+   */
+  #bindCheckboxStateEvents = () => {
+    this.#container.addEventListener(
+      "ea-tree-checkbox-click",
+      this.#handleCheckboxStateChange,
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+  };
+
+  /**
+   * 处理复选框状态变化
+   * @param {CustomEvent} e 事件对象
+   */
+  #handleCheckboxStateChange = e => {
+    e.stopImmediatePropagation();
+
+    const { label, checked } = e.detail;
+
+    if (label.disabled) return;
+
+    const targetPath = label.getAttribute("path");
+    const sameTreeNodes = this.#getSameTreeNodes(targetPath);
+    const ancestorNodes = sameTreeNodes.filter(
+      node => node.getAttribute("path").startsWith(targetPath) && node !== label
+    );
+    const descendantNodes = sameTreeNodes.filter(
+      node => node !== label && !ancestorNodes.includes(node)
+    );
+
+    ancestorNodes.forEach(node => {
+      if (!node.disabled) {
+        node.checked = checked;
+      }
+    });
+
+    descendantNodes.reverse().forEach(node => {
+      if (node.disabled) return;
+
+      const childWrapper = node.closest(".ea-tree-child__children");
+      const rootWrapper = node.closest(".ea-tree__children");
+      const labelEls = childWrapper
+        ? [...childWrapper.querySelectorAll("ea-tree-label")]
+        : [...rootWrapper.querySelectorAll("ea-tree-label")];
+
+      const { isAllChecked, isAnyChecked } = this.#checkNodeStatus(
+        labelEls,
+        node
+      );
+      this.#updateNodeCheckboxState(node, isAllChecked, isAnyChecked);
+    });
+
+    if (label?.isRoot?.()) {
+      this.#container
+        .querySelectorAll(`[path^="${targetPath}"]`)
+        .forEach(label => {
+          if (!label.disabled) {
+            label.checked = checked;
+          }
+        });
+    }
+
+    this.emit("ea-check-change", {
+      detail: e.detail,
+      bubbles: true,
+      composed: true,
+    });
+  };
+
+  /**
    * 复选框点击事件
    * @param {CustomEvent} e 事件对象
    */
@@ -284,7 +437,7 @@ export class EaTree extends Base {
         detail: {
           node: label.item,
           checked: checked,
-          checkedNodes: Array.from(this.#dataStates.checkedNodes).map(
+          checkedNodes: Array.from(this.#treeState.checkedNodes).map(
             node => node.item
           ),
         },
@@ -298,122 +451,14 @@ export class EaTree extends Base {
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.#container.addEventListener(
-      "ea-tree-checkbox-click",
-      e => {
-        e.stopImmediatePropagation();
-
-        const { label, checked } = e.detail;
-
-        const getSameTreeNodes = treeRootPath => {
-          const sameTreeNodes = [];
-          const pathAry = treeRootPath.split("-");
-
-          sameTreeNodes.push(
-            this.#container.querySelector(`[path="${pathAry[0]}"]`)
-          );
-
-          while (pathAry.length > 1) {
-            const treePath = pathAry.join("-");
-
-            pathAry.pop();
-
-            sameTreeNodes.push(
-              ...this.#container.querySelectorAll(`[path^="${treePath}"]`)
-            );
-          }
-
-          return sameTreeNodes;
-        };
-
-        const targetPath = label.getAttribute("path");
-        const sameTreeNodes = getSameTreeNodes(targetPath);
-        const ancestorNodes = sameTreeNodes.filter(
-          node =>
-            node.getAttribute("path").startsWith(targetPath) && node !== label
-        );
-        const descendantNodes = sameTreeNodes.filter(
-          node => node !== label && !ancestorNodes.includes(node)
-        );
-
-        ancestorNodes.forEach(node => {
-          node.checked = checked;
-        });
-
-        descendantNodes.reverse().forEach(node => {
-          const childWrapper = node.closest(".ea-tree-child__children");
-          const rootWrapper = node.closest(".ea-tree__children");
-          if (childWrapper) {
-            const labelEls = [
-              ...childWrapper.querySelectorAll("ea-tree-label"),
-            ];
-
-            const isAllChecked = labelEls.every(
-              label => label.getAttribute("checked") || label === node
-            );
-            const isAnyChecked = labelEls.some(
-              label => label.getAttribute("checked") && label !== node
-            );
-
-            if (isAllChecked) {
-              node.toggleAttribute("checked", true);
-              node.toggleAttribute("indeterminate", false);
-            } else if (isAnyChecked) {
-              node.toggleAttribute("checked", false);
-              node.toggleAttribute("indeterminate", true);
-            } else {
-              node.toggleAttribute("checked", false);
-              node.toggleAttribute("indeterminate", false);
-            }
-          } else {
-            const labelEls = [...rootWrapper.querySelectorAll("ea-tree-label")];
-
-            const isAllChecked = labelEls.every(
-              childLabel =>
-                childLabel.getAttribute("checked") || childLabel === node
-            );
-            const isAnyChecked = labelEls.some(
-              childLabel =>
-                childLabel.getAttribute("checked") && childLabel !== node
-            );
-
-            if (isAllChecked) {
-              node.toggleAttribute("checked", true);
-              node.toggleAttribute("indeterminate", false);
-            } else if (isAnyChecked) {
-              node.toggleAttribute("checked", false);
-              node.toggleAttribute("indeterminate", true);
-            } else {
-              node.toggleAttribute("checked", false);
-              node.toggleAttribute("indeterminate", false);
-            }
-          }
-        });
-
-        if (label?.isRoot?.()) {
-          this.#container
-            .querySelectorAll(`[path^="${targetPath}"]`)
-            .forEach(label => {
-              label.checked = checked;
-            });
-        }
-
-        this.emit("ea-check-change", {
-          detail: e.detail,
-          bubbles: true,
-          composed: true,
-        });
-      },
-      { signal: this.#abortController.signal }
-    );
-
+    this.#bindCheckboxStateEvents();
     this.updateContainerClasslist();
   }
 
   $beforeUnmounted() {
     this.#abortController?.abort();
 
-    for (const ac of Object.values(this.#AbortControllerStates)) {
+    for (const ac of Object.values(this.#abortControllers)) {
       ac?.abort();
     }
   }

@@ -13,15 +13,15 @@ export class EaTreeChild extends Base {
     return [...super.observedAttributes, "show-checkbox", "checked"];
   }
 
-  #dataStates = {
-    nodes: new WeakMap(),
+  #treeState = {
+    nodeMap: new WeakMap(),
     expandedNodes: new Set(),
     selectedNode: null,
   };
 
-  #AbortControllerStates = {
+  #abortControllers = {
     /** @type {AbortController} */
-    dataAC: null,
+    dataController: null,
   };
 
   propState = this.properties({
@@ -34,13 +34,13 @@ export class EaTreeChild extends Base {
         await customElements.whenDefined("ea-tree");
         await customElements.whenDefined("ea-tree-label");
 
-        this.#AbortControllerStates.dataAC?.abort();
+        this.#abortControllers.dataController?.abort();
 
         let childrenSlotEl = this.querySelector("slot[name='children']");
         if (childrenSlotEl) childrenSlotEl.innerHTML = "";
 
         if (newVal) {
-          this.#AbortControllerStates.dataAC = new AbortController();
+          this.#abortControllers.dataController = new AbortController();
 
           this.#handleTreeRender(newVal);
         }
@@ -52,13 +52,14 @@ export class EaTreeChild extends Base {
       default: {
         children: "children",
         label: "label",
+        disabled: "disabled",
       },
-      observer: newVal => {},
+      observer: () => {},
     },
     "show-checkbox": {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.#updateCheckboxVisibility();
       },
     },
@@ -124,74 +125,90 @@ export class EaTreeChild extends Base {
   }
 
   /**
+   * 获取或创建子节点插槽元素
+   * @return {HTMLElement} 子节点插槽元素
+   */
+  #getChildrenSlotElement = () => {
+    let childrenSlotEl = this.querySelector("slot[name='children']");
+    if (!childrenSlotEl) {
+      const childrenWrapper = document.createElement("div");
+      childrenWrapper.slot = "children";
+      this.appendChild(childrenWrapper);
+      childrenSlotEl = childrenWrapper;
+    }
+    return childrenSlotEl;
+  };
+
+  /**
+   * 创建树节点路径
+   * @param {number} index 节点索引
+   * @returns {string} 节点路径
+   */
+  #createNodePath = index => {
+    const parentLabel = this.parentElement?.querySelector("ea-tree-label");
+    if (parentLabel) {
+      const parentPath = parentLabel.getAttribute("path");
+      return `${parentPath}-${index + 1}`;
+    }
+    return (index + 1).toString();
+  };
+
+  /**
+   * 创建子节点元素
+   * @param {Object} item 数据项
+   * @param {number} index 索引
+   * @returns {Object} 包含section、treeLabel和tree的对象
+   */
+  #createChildNode = (item, index) => {
+    const { label, children, disabled } = this.dataProps;
+    const sec = document.createElement("section");
+    const tree = document.createElement("ea-tree-child");
+    const treeLabel = document.createElement("ea-tree-label");
+
+    sec.className = this.ns.e("children");
+    sec.part = "children-wrapper";
+    tree.part = "children";
+    treeLabel.part = "label";
+
+    treeLabel.label = item[label];
+    tree.dataProps = this.dataProps;
+    tree.data = item[children];
+    treeLabel["show-checkbox"] = this["show-checkbox"];
+    treeLabel.setAttribute("path", this.#createNodePath(index));
+
+    if (disabled && item[disabled] === true) {
+      treeLabel.toggleAttribute("disabled", true);
+    }
+
+    if (this["show-checkbox"]) {
+      tree.setAttribute("show-checkbox", "");
+    }
+
+    const hasChildren = item[children] && item[children].length > 0;
+    if (hasChildren) {
+      treeLabel.hasChildren = true;
+      tree.hidden = !this.#treeState.expandedNodes.has(treeLabel);
+    }
+
+    return { sec, treeLabel, tree };
+  };
+
+  /**
    * 渲染树节点
    * @param {Array} treeData 树数据
    */
   #handleTreeRender = treeData => {
-    const { label, children } = this.dataProps;
     const frag = document.createDocumentFragment();
-
-    /**
-     * 获取或创建 slot=children 的元素
-     * @return {HTMLElement} slot=children 的元素
-     */
-    const getLightChildrenSlot = () => {
-      let childrenSlotEl = this.querySelector("slot[name='children']");
-      if (!childrenSlotEl) {
-        const childrenWrapper = document.createElement("div");
-        childrenWrapper.slot = "children";
-        this.appendChild(childrenWrapper);
-
-        childrenSlotEl = childrenWrapper;
-      }
-
-      return childrenSlotEl;
-    };
-
-    const childrenSlotEl = getLightChildrenSlot();
-
-    // 获取当前节点的父标签（如果有）
-    const parentLabel = this.parentElement?.querySelector("ea-tree-label");
+    const childrenSlotEl = this.#getChildrenSlotElement();
 
     treeData.forEach((item, index) => {
-      const sec = document.createElement("section");
-      const tree = document.createElement("ea-tree-child");
-      const treeLabel = document.createElement("ea-tree-label");
-
-      sec.className = this.ns.e("children");
-      sec.part = "children-wrapper";
-      tree.part = "children";
-      treeLabel.part = "label";
-
-      treeLabel.label = item[label];
-      tree.dataProps = this.dataProps;
-      tree.data = item[children];
-      treeLabel["show-checkbox"] = this["show-checkbox"];
-
-      // 设置节点路径
-      if (parentLabel) {
-        const parentPath = parentLabel.getAttribute("path");
-        const currentPath = `${parentPath}-${index + 1}`;
-        treeLabel.setAttribute("path", currentPath);
-      } else {
-        treeLabel.setAttribute("path", (index + 1).toString());
-      }
-
-      if (this["show-checkbox"]) {
-        tree.setAttribute("show-checkbox", "");
-      }
-
-      const hasChildren = item[children] && item[children].length > 0;
-      if (hasChildren) {
-        treeLabel.hasChildren = true;
-        tree.hidden = !this.#dataStates.expandedNodes.has(treeLabel);
-      }
+      const { sec, treeLabel, tree } = this.#createChildNode(item, index);
 
       sec.appendChild(treeLabel);
       sec.appendChild(tree);
       frag.appendChild(sec);
 
-      this.#dataStates.nodes.set(sec, {
+      this.#treeState.nodeMap.set(sec, {
         label: treeLabel,
         child: tree,
         data: item,
@@ -223,7 +240,7 @@ export class EaTreeChild extends Base {
   $beforeUnmounted() {
     this.#abortController?.abort();
 
-    for (const ac of Object.values(this.#AbortControllerStates)) {
+    for (const ac of Object.values(this.#abortControllers)) {
       ac?.abort();
     }
   }

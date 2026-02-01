@@ -25,7 +25,7 @@ export class EaTreeLabel extends Base {
       "checked",
       "indeterminate",
       "show-checkbox",
-
+      "disabled",
       "path",
     ];
   }
@@ -46,14 +46,14 @@ export class EaTreeLabel extends Base {
     selected: {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     expanded: {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -68,8 +68,16 @@ export class EaTreeLabel extends Base {
     indeterminate: {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.#updateCheckboxState();
+        this.updateContainerClasslist();
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: () => {
+        this.#updateDisabledState();
         this.updateContainerClasslist();
       },
     },
@@ -80,14 +88,14 @@ export class EaTreeLabel extends Base {
       props: true,
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
     "show-checkbox": {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: () => {
         this.updateContainerClasslist();
       },
     },
@@ -109,6 +117,21 @@ export class EaTreeLabel extends Base {
   };
 
   /**
+   * 更新禁用状态
+   */
+  #updateDisabledState = () => {
+    if (!this.#checkboxElement) return;
+
+    this.#checkboxElement.disabled = this.disabled;
+
+    // if (this.disabled) {
+    //   this.#container.setAttribute("disabled", "");
+    // } else {
+    //   this.#container.removeAttribute("disabled");
+    // }
+  };
+
+  /**
    * 获取 classlist 列表
    * @return {string} 属性值
    */
@@ -125,6 +148,7 @@ export class EaTreeLabel extends Base {
         checked: this.checked,
         indeterminate: this.indeterminate,
         "show-checkbox": this["show-checkbox"],
+        disabled: this.disabled,
       }
     );
 
@@ -160,7 +184,68 @@ export class EaTreeLabel extends Base {
     this.#toggleElement = this.shadowRoot.querySelector(`.${ns.e("toggle")}`);
 
     this.updateContainerClasslist();
+    this.#updateDisabledState();
   }
+
+  /**
+   * 处理复选框变化事件
+   * @param {Event} e 事件对象
+   */
+  #handleCheckboxChange = e => {
+    e.stopImmediatePropagation();
+
+    if (this.disabled) return;
+
+    this.checked = e.detail.checked;
+
+    this.emit("ea-tree-checkbox-click", {
+      bubbles: true,
+      composed: true,
+      detail: {
+        label: this,
+        checked: e.detail.checked,
+      },
+    });
+  };
+
+  /**
+   * 处理标签点击事件
+   * @param {Event} e 事件对象
+   */
+  #handleLabelClick = e => {
+    e.stopImmediatePropagation();
+
+    const checkbox = e.target.closest(this.ns.ce("checkbox"));
+    if (checkbox) return;
+
+    const child = this.parentElement.querySelector("ea-tree-child");
+
+    this.emit("ea-tree-label-click", {
+      bubbles: true,
+      composed: true,
+      detail: {
+        label: this,
+        child,
+      },
+    });
+  };
+
+  /**
+   * 绑定事件监听器
+   */
+  #bindEventListeners = () => {
+    this.#checkboxElement.addEventListener(
+      "change",
+      this.#handleCheckboxChange,
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#container.addEventListener("click", this.#handleLabelClick, {
+      signal: this.#abortController.signal,
+    });
+  };
 
   connectedCallback() {
     super.connectedCallback();
@@ -168,50 +253,7 @@ export class EaTreeLabel extends Base {
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    this.#checkboxElement.addEventListener(
-      "change",
-      e => {
-        e.stopImmediatePropagation();
-
-        this.checked = e.detail.checked;
-
-        this.emit("ea-tree-checkbox-click", {
-          bubbles: true,
-          composed: true,
-          detail: {
-            label: this,
-            checked: e.detail.checked,
-          },
-        });
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
-
-    this.#container.addEventListener(
-      "click",
-      e => {
-        e.stopImmediatePropagation();
-
-        const checkbox = e.target.closest(this.ns.ce("checkbox"));
-        if (checkbox) return;
-
-        const child = this.parentElement.querySelector("ea-tree-child");
-
-        this.emit("ea-tree-label-click", {
-          bubbles: true,
-          composed: true,
-          detail: {
-            label: this,
-            child,
-          },
-        });
-      },
-      {
-        signal: this.#abortController.signal,
-      }
-    );
+    this.#bindEventListeners();
   }
 
   $beforeUnmounted() {
