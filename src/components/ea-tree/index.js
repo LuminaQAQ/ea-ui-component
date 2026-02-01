@@ -305,35 +305,98 @@ export class EaTree extends Base {
 
         const { label, checked } = e.detail;
 
-        const treeRootPath = label.getAttribute("path")?.split("-")?.[0];
+        const getSameTreeNodes = treeRootPath => {
+          const sameTreeNodes = [];
+          const pathAry = treeRootPath.split("-");
+
+          sameTreeNodes.push(
+            this.#container.querySelector(`[path="${pathAry[0]}"]`)
+          );
+
+          while (pathAry.length > 1) {
+            const treePath = pathAry.join("-");
+
+            pathAry.pop();
+
+            sameTreeNodes.push(
+              ...this.#container.querySelectorAll(`[path^="${treePath}"]`)
+            );
+          }
+
+          return sameTreeNodes;
+        };
+
         const targetPath = label.getAttribute("path");
-        const sameTreeNodes = [
-          ...this.#container.querySelectorAll(`[path^="${treeRootPath}"]`),
-        ];
-        const ancestorNodes = sameTreeNodes.filter(node =>
-          node.getAttribute("path").startsWith(targetPath)
+        const sameTreeNodes = getSameTreeNodes(targetPath);
+        const ancestorNodes = sameTreeNodes.filter(
+          node =>
+            node.getAttribute("path").startsWith(targetPath) && node !== label
         );
         const descendantNodes = sameTreeNodes.filter(
           node => node !== label && !ancestorNodes.includes(node)
         );
 
-        console.log(
-          targetPath,
-          treeRootPath,
-          sameTreeNodes,
-          ancestorNodes,
-          descendantNodes
-        );
+        ancestorNodes.forEach(node => {
+          node.checked = checked;
+        });
 
-        // const parentWrapper = label.closest(".ea-tree__children");
+        descendantNodes.reverse().forEach(node => {
+          const childWrapper = node.closest(".ea-tree-child__children");
+          const rootWrapper = node.closest(".ea-tree__children");
+          if (childWrapper) {
+            const labelEls = [
+              ...childWrapper.querySelectorAll("ea-tree-label"),
+            ];
 
-        // if (!parentWrapper) return;
+            const isAllChecked = labelEls.every(
+              label => label.getAttribute("checked") || label === node
+            );
+            const isAnyChecked = labelEls.some(
+              label => label.getAttribute("checked") && label !== node
+            );
 
-        // const { label: treeLabel, child: tree } =
-        //   this.#dataStates.nodes.get(parentWrapper);
+            if (isAllChecked) {
+              node.toggleAttribute("checked", true);
+              node.toggleAttribute("indeterminate", false);
+            } else if (isAnyChecked) {
+              node.toggleAttribute("checked", false);
+              node.toggleAttribute("indeterminate", true);
+            } else {
+              node.toggleAttribute("checked", false);
+              node.toggleAttribute("indeterminate", false);
+            }
+          } else {
+            const labelEls = [...rootWrapper.querySelectorAll("ea-tree-label")];
 
-        // treeLabel.checked = e.detail.checked;
-        // tree.checked = e.detail.checked;
+            const isAllChecked = labelEls.every(
+              childLabel =>
+                childLabel.getAttribute("checked") || childLabel === node
+            );
+            const isAnyChecked = labelEls.some(
+              childLabel =>
+                childLabel.getAttribute("checked") && childLabel !== node
+            );
+
+            if (isAllChecked) {
+              node.toggleAttribute("checked", true);
+              node.toggleAttribute("indeterminate", false);
+            } else if (isAnyChecked) {
+              node.toggleAttribute("checked", false);
+              node.toggleAttribute("indeterminate", true);
+            } else {
+              node.toggleAttribute("checked", false);
+              node.toggleAttribute("indeterminate", false);
+            }
+          }
+        });
+
+        if (label?.isRoot?.()) {
+          this.#container
+            .querySelectorAll(`[path^="${targetPath}"]`)
+            .forEach(label => {
+              label.checked = checked;
+            });
+        }
 
         this.emit("ea-check-change", {
           detail: e.detail,
