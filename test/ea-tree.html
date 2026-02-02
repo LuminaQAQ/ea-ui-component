@@ -75,7 +75,7 @@
         },
       ];
 
-      window.disabledData = [
+      window.idData = [
         {
           id: 1,
           label: "Level one 1",
@@ -161,7 +161,26 @@
 
     <script type="module">
       const tree = document.querySelector("#disabledCheckboxTree");
-      tree.data = window.disabledData;
+      tree.data = window.idData;
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  默认展开以及默认选中 -->
+    <!-- #region -->
+    <h1>默认展开以及默认选中</h1>
+
+    <div class="demo">
+      <ea-tree id="defaultExpandedTree" node-key="id" show-checkbox></ea-tree>
+    </div>
+
+    <script type="module">
+      const tree = document.querySelector("#defaultExpandedTree");
+      tree.defaultExpandedKeys = [1, 2];
+      tree.defaultCheckedKeys = [3, 4];
+      tree.data = window.idData;
     </script>
 
     <hr />

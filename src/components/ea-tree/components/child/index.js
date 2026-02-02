@@ -31,7 +31,6 @@ export class EaTreeChild extends Base {
       default: "",
       /** @param {Array} newVal */
       observer: async newVal => {
-        await customElements.whenDefined("ea-tree");
         await customElements.whenDefined("ea-tree-label");
 
         this.#abortControllers.dataController?.abort();
@@ -55,6 +54,11 @@ export class EaTreeChild extends Base {
         disabled: "disabled",
       },
       observer: () => {},
+    },
+    "node-key": {
+      props: true,
+      type: String,
+      default: "id",
     },
     "show-checkbox": {
       type: Boolean,
@@ -171,6 +175,7 @@ export class EaTreeChild extends Base {
     treeLabel.part = "label";
 
     treeLabel.label = item[label];
+    treeLabel.data = item;
     tree.dataProps = this.dataProps;
     tree.data = item[children];
     treeLabel["show-checkbox"] = this["show-checkbox"];
@@ -181,7 +186,7 @@ export class EaTreeChild extends Base {
     }
 
     if (this["show-checkbox"]) {
-      tree.setAttribute("show-checkbox", "");
+      tree.toggleAttribute("show-checkbox", true);
     }
 
     const hasChildren = item[children] && item[children].length > 0;

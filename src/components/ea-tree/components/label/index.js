@@ -81,6 +81,13 @@ export class EaTreeLabel extends Base {
         this.updateContainerClasslist();
       },
     },
+    "show-checkbox": {
+      type: Boolean,
+      default: false,
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
   });
 
   propStates = this.properties({
@@ -92,12 +99,10 @@ export class EaTreeLabel extends Base {
         this.updateContainerClasslist();
       },
     },
-    "show-checkbox": {
-      type: Boolean,
-      default: false,
-      observer: () => {
-        this.updateContainerClasslist();
-      },
+    data: {
+      props: true,
+      type: Object,
+      default: {},
     },
   });
 
@@ -123,12 +128,6 @@ export class EaTreeLabel extends Base {
     if (!this.#checkboxElement) return;
 
     this.#checkboxElement.disabled = this.disabled;
-
-    // if (this.disabled) {
-    //   this.#container.setAttribute("disabled", "");
-    // } else {
-    //   this.#container.removeAttribute("disabled");
-    // }
   };
 
   /**
@@ -275,22 +274,6 @@ export class EaTreeLabel extends Base {
    */
   isRoot = () => {
     return this.getDepth() === 1;
-  };
-
-  /**
-   * 判断是否为叶子节点
-   * @returns {boolean} 是否为叶子节点
-   */
-  isLeaf = () => {
-    // 通过检查是否有子节点来判断是否为叶子节点
-    const parentSection = this.parentElement;
-    if (!parentSection) return true;
-
-    const childTree = parentSection.querySelector("ea-tree-child");
-    if (!childTree) return true;
-
-    const childLabels = childTree.querySelectorAll("ea-tree-label");
-    return childLabels.length === 0;
   };
 }
 

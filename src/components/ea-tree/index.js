@@ -7,6 +7,7 @@ import { EaTreeNodeClickEvent } from "./events/EaTreeNodeClickEvent";
 import stylesheet from "./index.scss?inline";
 import "./components/label/index";
 import "./components/child/index";
+import { timeout } from "@/utils/timeout";
 
 export class EaTree extends Base {
   /** @type {HTMLElement} */
@@ -15,21 +16,42 @@ export class EaTree extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "show-checkbox", "check-strictly"];
+    return [
+      ...super.observedAttributes,
+      "show-checkbox",
+      "check-strictly",
+      "node-key",
+    ];
   }
 
   #treeState = {
-    nodeMap: new WeakMap(),
     expandedNodes: new Set(),
     selectedNode: null,
     checkedNodes: new Set(),
-    indeterminateNodes: new Set(),
   };
 
   #abortControllers = {
     /** @type {AbortController} */
     dataController: null,
   };
+
+  attrState = this.properties({
+    "show-checkbox": {
+      type: Boolean,
+      default: false,
+      observer: () => {
+        this.#updateCheckboxVisibility();
+      },
+    },
+    "check-strictly": {
+      type: Boolean,
+      default: false,
+    },
+    "node-key": {
+      type: String,
+      default: null,
+    },
+  });
 
   propState = this.properties({
     data: {
@@ -50,6 +72,12 @@ export class EaTree extends Base {
 
           this.#handleTreeRender(newVal);
           this.#bindTreeEvents();
+
+          // 因为子树的元素在渲染时需要设置 prop 属性，因此渲染有些延迟，所以此处等待约一帧
+          timeout(() => {
+            this.#handleDefaultExpandedKeys(this.defaultExpandedKeys);
+            this.#handleDefaultCheckedKeys(this.defaultCheckedKeys);
+          }, 16);
         }
       },
     },
@@ -62,16 +90,17 @@ export class EaTree extends Base {
         disabled: "disabled",
       },
     },
-    "show-checkbox": {
-      type: Boolean,
-      default: false,
-      observer: () => {
-        this.#updateCheckboxVisibility();
-      },
+    defaultExpandedKeys: {
+      props: true,
+      type: Array,
+      default: [],
+      observer: newVal => {},
     },
-    "check-strictly": {
-      type: Boolean,
-      default: false,
+    defaultCheckedKeys: {
+      props: true,
+      type: Array,
+      default: [],
+      observer: newVal => {},
     },
   });
 
@@ -126,6 +155,7 @@ export class EaTree extends Base {
     treeLabel.part = "label";
 
     treeLabel.label = item[label];
+    treeLabel.data = item;
     tree.dataProps = this.dataProps;
     tree.data = item[children];
     treeLabel["show-checkbox"] = this["show-checkbox"];
@@ -161,15 +191,45 @@ export class EaTree extends Base {
       sec.appendChild(treeLabel);
       sec.appendChild(tree);
       frag.appendChild(sec);
-
-      this.#treeState.nodeMap.set(sec, {
-        label: treeLabel,
-        child: tree,
-        data: item,
-      });
     });
 
     this.#container.appendChild(frag);
+  };
+
+  /**
+   * 处理默认展开键
+   * @param {Array} expandedKeys 展开键数组
+   */
+  #handleDefaultExpandedKeys = expandedKeys => {
+    const nodeKey = this["node-key"];
+    if (!nodeKey) return;
+    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
+
+    expandedKeys.forEach(key => {
+      const label = labels.find(label => label.data[nodeKey] === key);
+      if (label) {
+        this.#treeState.expandedNodes.add(label);
+        this.#expandNode(label.nextElementSibling, label);
+      }
+    });
+  };
+
+  /**
+   * 处理默认选中键
+   * @param {Array} checkedKeys 选中键数组
+   */
+  #handleDefaultCheckedKeys = checkedKeys => {
+    const nodeKey = this["node-key"];
+    if (!nodeKey) return;
+
+    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
+
+    checkedKeys.forEach(key => {
+      const label = labels.find(label => label.data[nodeKey] === key);
+      if (label) {
+        label.checked = true;
+      }
+    });
   };
 
   /**
@@ -187,7 +247,7 @@ export class EaTree extends Base {
 
     this.dispatchEvent(
       new EaTreeNodeClickEvent({
-        data: label.item,
+        data: label.data,
       })
     );
 
@@ -404,6 +464,8 @@ export class EaTree extends Base {
     });
 
     if (label?.isRoot?.()) {
+      this.#updateNodeCheckboxState(label, checked, checked);
+
       this.#container
         .querySelectorAll(`[path^="${targetPath}"]`)
         .forEach(label => {
