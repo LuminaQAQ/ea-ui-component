@@ -99,10 +99,27 @@ export class EaTreeLabel extends Base {
         this.updateContainerClasslist();
       },
     },
+    dataProps: {
+      props: true,
+      type: Object,
+      default: {
+        children: "children",
+        label: "label",
+        disabled: "disabled",
+      },
+      observer: () => {},
+    },
     data: {
       props: true,
       type: Object,
       default: {},
+      observer: newVal => {
+        const { children, label, disabled } = this.dataProps;
+
+        this.label = newVal?.[label] || this.label;
+        this.hasChildren = newVal?.[children]?.length > 0;
+        this.disabled = newVal?.[disabled] || false;
+      },
     },
   });
 
@@ -274,6 +291,17 @@ export class EaTreeLabel extends Base {
    */
   isRoot = () => {
     return this.getDepth() === 1;
+  };
+
+  /**
+   * 判断是否为叶子节点
+   * @returns {boolean} 是否为叶子节点
+   */
+  isLeaf = () => {
+    if (!this.hasChildren) return true;
+
+    const childLabels = childTree.querySelectorAll("ea-tree-label");
+    return childLabels.length === 0;
   };
 }
 

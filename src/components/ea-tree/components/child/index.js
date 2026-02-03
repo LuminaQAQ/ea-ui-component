@@ -35,9 +35,6 @@ export class EaTreeChild extends Base {
 
         this.#abortControllers.dataController?.abort();
 
-        let childrenSlotEl = this.querySelector("slot[name='children']");
-        if (childrenSlotEl) childrenSlotEl.innerHTML = "";
-
         if (newVal) {
           this.#abortControllers.dataController = new AbortController();
 
@@ -133,12 +130,15 @@ export class EaTreeChild extends Base {
    * @return {HTMLElement} 子节点插槽元素
    */
   #getChildrenSlotElement = () => {
-    let childrenSlotEl = this.querySelector("slot[name='children']");
+    let childrenSlotEl = this.querySelector('[slot="children"]');
+
     if (!childrenSlotEl) {
       const childrenWrapper = document.createElement("div");
       childrenWrapper.slot = "children";
       this.appendChild(childrenWrapper);
       childrenSlotEl = childrenWrapper;
+    } else {
+      childrenSlotEl.innerHTML = "";
     }
     return childrenSlotEl;
   };
@@ -164,7 +164,7 @@ export class EaTreeChild extends Base {
    * @returns {Object} 包含section、treeLabel和tree的对象
    */
   #createChildNode = (item, index) => {
-    const { label, children, disabled } = this.dataProps;
+    const { children, disabled } = this.dataProps;
     const sec = document.createElement("section");
     const tree = document.createElement("ea-tree-child");
     const treeLabel = document.createElement("ea-tree-label");
@@ -174,10 +174,11 @@ export class EaTreeChild extends Base {
     tree.part = "children";
     treeLabel.part = "label";
 
-    treeLabel.label = item[label];
-    treeLabel.data = item;
+    treeLabel.dataProps = this.dataProps;
     tree.dataProps = this.dataProps;
+    treeLabel.data = item;
     tree.data = item[children];
+    tree.hidden = true;
     treeLabel["show-checkbox"] = this["show-checkbox"];
     treeLabel.setAttribute("path", this.#createNodePath(index));
 

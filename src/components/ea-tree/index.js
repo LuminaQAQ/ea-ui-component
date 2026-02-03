@@ -154,7 +154,8 @@ export class EaTree extends Base {
     tree.part = "children";
     treeLabel.part = "label";
 
-    treeLabel.label = item[label];
+    // treeLabel.label = item[label];
+    tree.dataProps = this.dataProps;
     treeLabel.data = item;
     tree.dataProps = this.dataProps;
     tree.data = item[children];
@@ -228,6 +229,17 @@ export class EaTree extends Base {
       const label = labels.find(label => label.data[nodeKey] === key);
       if (label) {
         label.checked = true;
+
+        label.dispatchEvent(
+          new CustomEvent("ea-tree-checkbox-click", {
+            bubbles: true,
+            composed: true,
+            detail: {
+              label,
+              checked: true,
+            },
+          })
+        );
       }
     });
   };
@@ -388,6 +400,40 @@ export class EaTree extends Base {
   };
 
   /**
+   * 根据节点键值查找标签元素
+   * @param {*} key 节点键值
+   * @returns {HTMLElement|null} 找到的标签元素或null
+   */
+  #findLabelByKey = key => {
+    if (!this["node-key"]) return null;
+    const nodeKey = this["node-key"];
+    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
+    return labels.find(label => label.data && label.data[nodeKey] === key);
+  };
+
+  /**
+   * 根据节点数据查找标签元素
+   * @param {Object} data 节点数据
+   * @returns {HTMLElement|null} 找到的标签元素或null
+   */
+  #findLabelByData = data => {
+    if (!this["node-key"]) return null;
+    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
+    return labels.find(label => {
+      if (!label.data) return false;
+      return JSON.stringify(label.data) === JSON.stringify(data);
+    });
+  };
+
+  /**
+   * 获取所有标签元素
+   * @returns {Array} 所有标签元素数组
+   */
+  #getAllLabels = () => {
+    return [...this.#container.querySelectorAll("ea-tree-label")];
+  };
+
+  /**
    * 绑定树组件事件
    */
   #bindTreeEvents = () => {
@@ -524,6 +570,322 @@ export class EaTree extends Base {
       ac?.abort();
     }
   }
+
+  /**
+   * 获取半选中节点数据
+   * @returns {Array} 半选中节点数据数组
+   */
+  getHalfCheckedNodes = () => {
+    if (!this["show-checkbox"]) {
+      return [];
+    }
+
+    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
+    const halfCheckedNodes = [];
+
+    labels.forEach(label => {
+      if (label.hasAttribute("indeterminate")) {
+        halfCheckedNodes.push(label.data);
+      }
+    });
+
+    return halfCheckedNodes;
+  };
+
+  /**
+   * 获取半选中节点键值
+   * @returns {Array} 半选中节点键值数组
+   */
+  getHalfCheckedKeys = () => {
+    if (!this["show-checkbox"] || !this["node-key"]) {
+      return [];
+    }
+
+    const labels = this.#container.querySelectorAll("ea-tree-label");
+    const halfCheckedKeys = [];
+    const nodeKey = this["node-key"];
+
+    labels.forEach(label => {
+      if (
+        label.hasAttribute("indeterminate") &&
+        label.data &&
+        label.data[nodeKey]
+      ) {
+        halfCheckedKeys.push(label.data[nodeKey]);
+      }
+    });
+
+    return halfCheckedKeys;
+  };
+
+  /**
+   * 获取当前选中节点键值
+   * @returns {*} 当前选中节点键值或null
+   */
+  getCurrentKey = () => {
+    if (!this["node-key"] || !this.#treeState.selectedNode) {
+      return null;
+    }
+
+    const nodeKey = this["node-key"];
+    const selectedNodeData = this.#treeState.selectedNode.data;
+
+    return selectedNodeData && selectedNodeData[nodeKey]
+      ? selectedNodeData[nodeKey]
+      : null;
+  };
+
+  /**
+   * 获取当前选中节点数据
+   * @returns {*} 当前选中节点数据或null
+   */
+  getCurrentNode = () => {
+    if (!this.#treeState.selectedNode) {
+      return null;
+    }
+
+    return this.#treeState.selectedNode.data;
+  };
+
+  /**
+   * 更新节点键值的子节点数据
+   * @param {*} key 节点键值
+   * @param {Array} data 子节点数据数组
+   * @returns {boolean} 是否更新成功
+   */
+  updateKeyChildren = (key, data) => {
+    if (!this["node-key"]) {
+      console.warn("updateKeyChildren requires node-key to be set");
+      return false;
+    }
+
+    const label = this.#findLabelByKey(key);
+    if (!label) {
+      console.warn(`Node with key ${key} not found`);
+      return false;
+    }
+
+    const tree = label.nextElementSibling;
+    if (!tree || tree.tagName !== "EA-TREE-CHILD") {
+      console.warn("Target node is not a parent node");
+      return false;
+    }
+
+    const { children } = this.dataProps;
+
+    label.data = { ...label.data, [children]: data };
+    tree.data = data;
+
+    timeout(() => {
+      label.emit("ea-tree-checkbox-click", {
+        bubbles: true,
+        composed: true,
+        detail: {
+          label,
+          checked: label.checked,
+        },
+      });
+    }, 16);
+
+    return true;
+  };
+
+  /**
+   * 获取选中节点数据
+   * @param {boolean} leafOnly 是否仅返回叶子节点
+   * @param {boolean} includeHalfChecked 是否包含半选中节点
+   * @returns {Array} 选中节点数据数组
+   */
+  getCheckedNodes = (leafOnly = false, includeHalfChecked = false) => {
+    if (!this["show-checkbox"]) {
+      return [];
+    }
+
+    const labels = this.#getAllLabels();
+    const checkedNodes = [];
+
+    labels.forEach(label => {
+      const isChecked = label.hasAttribute("checked");
+      const isIndeterminate = label.hasAttribute("indeterminate");
+
+      if (isChecked || (includeHalfChecked && isIndeterminate)) {
+        if (leafOnly && !label.hasChildren) {
+          return;
+        }
+        checkedNodes.push(label.data);
+      }
+    });
+
+    return checkedNodes;
+  };
+
+  /**
+   * 设置选中节点数据
+   * @param {Array} nodes 选中节点数据数组
+   * @param {boolean} leafOnly 是否仅选中叶子节点
+   * @returns {boolean} 是否设置成功
+   */
+  setCheckedNodes = (nodes, leafOnly = false) => {
+    if (!this["show-checkbox"] || !this["node-key"]) {
+      console.warn(
+        "setCheckedNodes requires show-checkbox and node-key to be set"
+      );
+      return false;
+    }
+
+    const labels = this.#getAllLabels();
+
+    labels.forEach(label => {
+      if (label.disabled) return;
+
+      const shouldBeChecked = nodes.some(node => {
+        if (leafOnly && label.hasChildren) {
+          return false;
+        }
+        return JSON.stringify(label.data) === JSON.stringify(node);
+      });
+
+      label.checked = shouldBeChecked;
+      label.indeterminate = false;
+
+      if (!this["check-strictly"] && shouldBeChecked) {
+        label.dispatchEvent(
+          new CustomEvent("ea-tree-checkbox-click", {
+            bubbles: true,
+            composed: true,
+            detail: {
+              label,
+              checked: shouldBeChecked,
+            },
+          })
+        );
+      }
+    });
+
+    return true;
+  };
+
+  /**
+   * 获取选中节点键值
+   * @param {boolean} leafOnly 是否仅返回叶子节点
+   * @returns {Array} 选中节点键值数组
+   */
+  getCheckedKeys = (leafOnly = false) => {
+    if (!this["show-checkbox"] || !this["node-key"]) {
+      return [];
+    }
+
+    const labels = this.#getAllLabels();
+    const checkedKeys = [];
+    const nodeKey = this["node-key"];
+
+    labels.forEach(label => {
+      if (label.hasAttribute("checked") && label.data && label.data[nodeKey]) {
+        if (leafOnly && !label.hasChildren) {
+          return;
+        }
+        checkedKeys.push(label.data[nodeKey]);
+      }
+    });
+
+    return checkedKeys;
+  };
+
+  /**
+   * 设置选中节点键值
+   * @param {Array} keys 选中节点键值数组
+   * @param {boolean} leafOnly 是否仅选中叶子节点
+   * @returns {boolean} 是否设置成功
+   */
+  setCheckedKeys = (keys, leafOnly = false) => {
+    if (!this["show-checkbox"] || !this["node-key"]) {
+      console.warn(
+        "setCheckedKeys requires show-checkbox and node-key to be set"
+      );
+      return false;
+    }
+
+    const nodeKey = this["node-key"];
+
+    console.log(keys);
+
+    keys.forEach(key => {
+      const label = this.#findLabelByKey(key);
+      if (label.disabled) return;
+
+      let shouldBeChecked = label.data && label.data[nodeKey] === key;
+      if (leafOnly && label.hasChildren) {
+        shouldBeChecked = false;
+      }
+
+      console.log(label, label.data);
+
+      label.checked = shouldBeChecked;
+      label.indeterminate = false;
+
+      if (!this["check-strictly"]) {
+        label.dispatchEvent(
+          new CustomEvent("ea-tree-checkbox-click", {
+            bubbles: true,
+            composed: true,
+            detail: {
+              label,
+              checked: shouldBeChecked,
+            },
+          })
+        );
+      }
+    });
+
+    return true;
+  };
+
+  /**
+   * 设置节点选中状态
+   * @param {*} keyOrData 节点键值或数据对象
+   * @param {boolean} checked 是否选中
+   * @returns {boolean} 是否设置成功
+   */
+  setChecked = (keyOrData, checked) => {
+    if (!this["show-checkbox"] || !this["node-key"]) {
+      console.warn("setChecked requires show-checkbox and node-key to be set");
+      return false;
+    }
+
+    let label;
+    if (typeof keyOrData === "object") {
+      label = this.#findLabelByData(keyOrData);
+    } else {
+      label = this.#findLabelByKey(keyOrData);
+    }
+
+    if (!label) {
+      console.warn("Node not found");
+      return false;
+    }
+
+    if (label.disabled) {
+      console.warn("Cannot set checked state for disabled node");
+      return false;
+    }
+
+    label.checked = checked;
+
+    if (!this["check-strictly"]) {
+      label.dispatchEvent(
+        new CustomEvent("ea-tree-checkbox-click", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            label,
+            checked,
+          },
+        })
+      );
+    }
+
+    return true;
+  };
 }
 
 if (!customElements.get("ea-tree")) {
