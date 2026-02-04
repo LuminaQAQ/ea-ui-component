@@ -154,7 +154,6 @@ export class EaTree extends Base {
     tree.part = "children";
     treeLabel.part = "label";
 
-    // treeLabel.label = item[label];
     tree.dataProps = this.dataProps;
     treeLabel.data = item;
     tree.dataProps = this.dataProps;
@@ -207,10 +206,10 @@ export class EaTree extends Base {
     const labels = [...this.#container.querySelectorAll("ea-tree-label")];
 
     expandedKeys.forEach(key => {
-      const label = labels.find(label => label.data[nodeKey] === key);
-      if (label) {
-        this.#treeState.expandedNodes.add(label);
-        this.#expandNode(label.nextElementSibling, label);
+      const foundLabel = labels.find(label => label.data[nodeKey] === key);
+      if (foundLabel) {
+        this.#treeState.expandedNodes.add(foundLabel);
+        this.#expandNode(foundLabel.nextElementSibling, foundLabel);
       }
     });
   };
@@ -226,16 +225,16 @@ export class EaTree extends Base {
     const labels = [...this.#container.querySelectorAll("ea-tree-label")];
 
     checkedKeys.forEach(key => {
-      const label = labels.find(label => label.data[nodeKey] === key);
-      if (label) {
-        label.checked = true;
+      const foundLabel = labels.find(label => label.data[nodeKey] === key);
+      if (foundLabel) {
+        foundLabel.checked = true;
 
-        label.dispatchEvent(
+        foundLabel.dispatchEvent(
           new CustomEvent("ea-tree-checkbox-click", {
             bubbles: true,
             composed: true,
             detail: {
-              label,
+              label: foundLabel,
               checked: true,
             },
           })
@@ -324,7 +323,7 @@ export class EaTree extends Base {
 
     this.dispatchEvent(
       new EaTreeNodeSelectEvent({
-        node: label.item,
+        node: label.data,
         selected: true,
       })
     );
@@ -886,6 +885,271 @@ export class EaTree extends Base {
 
     return true;
   };
+
+  #expandParentNodes = label => {
+    if (label.disabled) return;
+
+    const targetPath = label.getAttribute("path");
+    const sameTreeNodes = this.#getSameTreeNodes(targetPath);
+    const ancestorNodes = sameTreeNodes.filter(
+      node => node.getAttribute("path").startsWith(targetPath) && node !== label
+    );
+    const descendantNodes = sameTreeNodes.filter(
+      node => !ancestorNodes.includes(node) && node !== label
+    );
+
+    descendantNodes.forEach(node => {
+      node.expanded = true;
+    });
+  };
+
+  #resolveNode = nodeOrDataOrKey => {
+    if (!nodeOrDataOrKey) return null;
+
+    if (typeof nodeOrDataOrKey === "object") {
+      return this.#findLabelByData(nodeOrDataOrKey);
+    } else if (
+      typeof nodeOrDataOrKey === "number" ||
+      typeof nodeOrDataOrKey === "string"
+    ) {
+      return this.#findLabelByKey(nodeOrDataOrKey);
+    }
+
+    return null;
+  };
+
+  // #getParentTreeElement = label => {
+  //   if (!label) return null;
+
+  //   const parentSection = label.closest("section");
+  //   if (!parentSection) return null;
+
+  //   const parentLabel = parentSection.previousElementSibling;
+  //   if (parentLabel && parentLabel.tagName === "EA-TREE-LABEL") {
+  //     return parentLabel.nextElementSibling;
+  //   }
+
+  //   return null;
+  // };
+
+  setCurrentKey = (key, shouldAutoExpandParent = true) => {
+    if (!this["node-key"]) {
+      console.warn("setCurrentKey requires node-key to be set");
+      return false;
+    }
+
+    if (!key) {
+      if (this.#treeState.selectedNode) {
+        this.#treeState.selectedNode.selected = false;
+        this.#treeState.selectedNode = null;
+      }
+      return true;
+    }
+
+    const label = this.#findLabelByKey(key);
+    if (!label) {
+      console.warn(`Node with key ${key} not found`);
+      return false;
+    }
+
+    if (label.disabled) {
+      console.warn("Cannot select disabled node");
+      return false;
+    }
+
+    this.#selectNode(label);
+
+    if (shouldAutoExpandParent) {
+      this.#expandParentNodes(label);
+    }
+
+    return true;
+  };
+
+  setCurrentNode = (node, shouldAutoExpandParent = true) => {
+    if (!this["node-key"]) {
+      console.warn("setCurrentNode requires node-key to be set");
+      return false;
+    }
+
+    if (!node) {
+      if (this.#treeState.selectedNode) {
+        this.#treeState.selectedNode.selected = false;
+        this.#treeState.selectedNode = null;
+      }
+      return true;
+    }
+
+    const label = this.#findLabelByData(node);
+    if (!label) {
+      console.warn("Node not found");
+      return false;
+    }
+
+    if (label.disabled) {
+      console.warn("Cannot select disabled node");
+      return false;
+    }
+
+    this.#selectNode(label);
+
+    if (shouldAutoExpandParent) {
+      this.#expandParentNodes(label);
+    }
+
+    return true;
+  };
+
+  getNode = data => {
+    if (!this["node-key"]) {
+      console.warn("getNode requires node-key to be set");
+      return null;
+    }
+
+    const label = this.#resolveNode(data);
+    if (!label) {
+      return null;
+    }
+
+    return {
+      label,
+      child: label.nextElementSibling,
+      data,
+    };
+  };
+
+  remove = data => {
+    if (!this["node-key"]) {
+      console.warn("remove requires node-key to be set");
+      return false;
+    }
+
+    const label = this.#resolveNode(data);
+    if (!label) {
+      console.warn("Node not found");
+      return false;
+    }
+
+    const parentSection = label.closest("section");
+    if (!parentSection) {
+      console.warn("Cannot find parent section");
+      return false;
+    }
+
+    // 如果是选中的节点，取消选中
+    if (this.#treeState.selectedNode === label) {
+      this.#treeState.selectedNode = null;
+    }
+
+    label.dispatchEvent(
+      new CustomEvent("ea-tree-child-change", {
+        bubbles: true,
+        composed: true,
+        detail: { action: "remove", nodeKey: this["node-key"], data },
+      })
+    );
+
+    return true;
+  };
+
+  append = (data, parentNode) => {
+    if (!this["node-key"]) {
+      console.warn("append requires node-key to be set");
+      return false;
+    }
+
+    const parentLabel = this.#resolveNode(parentNode);
+    if (!parentLabel) {
+      console.warn("Parent node not found");
+      return false;
+    }
+
+    const tree = parentLabel.nextElementSibling;
+    if (!tree || tree.tagName !== "EA-TREE-CHILD") {
+      console.warn("Parent node is not a container node");
+      return false;
+    }
+
+    parentLabel.dispatchEvent(
+      new CustomEvent("ea-tree-child-change", {
+        bubbles: true,
+        composed: true,
+        detail: { action: "append", nodeKey: this["node-key"], data },
+      })
+    );
+
+    return true;
+  };
+
+  // insertBefore = (data, refNode) => {
+  //   if (!this["node-key"]) {
+  //     console.warn("insertBefore requires node-key to be set");
+  //     return false;
+  //   }
+
+  //   const refLabel = this.#resolveNode(refNode);
+  //   if (!refLabel) {
+  //     console.warn("Reference node not found");
+  //     return false;
+  //   }
+
+  //   const parentSection = refLabel.closest("section");
+  //   if (!parentSection) {
+  //     console.warn("Cannot find parent section");
+  //     return false;
+  //   }
+
+  //   const parentTree = this.#getParentTreeElement(refLabel);
+  //   if (!parentTree) {
+  //     console.warn("Cannot find parent tree");
+  //     return false;
+  //   }
+
+  //   refLabel.dispatchEvent(
+  //     new CustomEvent("ea-tree-child-change", {
+  //       bubbles: true,
+  //       composed: true,
+  //       detail: { action: "insert-before", nodeKey: this["node-key"], data },
+  //     })
+  //   );
+
+  //   return true;
+  // };
+
+  // insertAfter = (data, refNode) => {
+  //   if (!this["node-key"]) {
+  //     console.warn("insertAfter requires node-key to be set");
+  //     return false;
+  //   }
+
+  //   const refLabel = this.#resolveNode(refNode);
+  //   if (!refLabel) {
+  //     console.warn("Reference node not found");
+  //     return false;
+  //   }
+
+  //   const parentSection = refLabel.closest("section");
+  //   if (!parentSection) {
+  //     console.warn("Cannot find parent section");
+  //     return false;
+  //   }
+
+  //   const parentTree = this.#getParentTreeElement(refLabel);
+  //   if (!parentTree) {
+  //     console.warn("Cannot find parent tree");
+  //     return false;
+  //   }
+
+  //   refLabel.dispatchEvent(
+  //     new CustomEvent("ea-tree-child-change", {
+  //       bubbles: true,
+  //       composed: true,
+  //       detail: { action: "insert-after", nodeKey: this["node-key"], data },
+  //     })
+  //   );
+
+  //   return true;
+  // };
 }
 
 if (!customElements.get("ea-tree")) {

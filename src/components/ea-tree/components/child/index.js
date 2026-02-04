@@ -10,11 +10,15 @@ export class EaTreeChild extends Base {
   #abortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "show-checkbox", "checked"];
+    return [
+      ...super.observedAttributes,
+      "show-checkbox",
+      "checked",
+      "expanded",
+    ];
   }
 
   #treeState = {
-    nodeMap: new WeakMap(),
     expandedNodes: new Set(),
     selectedNode: null,
   };
@@ -35,10 +39,21 @@ export class EaTreeChild extends Base {
 
         this.#abortControllers.dataController?.abort();
 
-        if (newVal) {
+        if (Array.isArray(newVal)) {
           this.#abortControllers.dataController = new AbortController();
 
+          const childrenSlotEl = this.#getChildrenSlotElement();
+          childrenSlotEl.innerHTML = "";
+
           this.#handleTreeRender(newVal);
+        } else if (typeof newVal === "object" && newVal) {
+          const { action, children } = newVal;
+
+          if (action === "append") {
+            this.#handleTreeRender(children);
+          } else if (action === "insert-before") {
+            // this.#handleInsertBefore(nodeKey, data);
+          }
         }
       },
     },
@@ -69,6 +84,15 @@ export class EaTreeChild extends Base {
       default: false,
       observer: newVal => {
         this.#updateCheckboxState(newVal);
+
+        this.updateContainerClasslist();
+      },
+    },
+    expanded: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.hidden = newVal ? false : true;
 
         this.updateContainerClasslist();
       },
@@ -138,7 +162,6 @@ export class EaTreeChild extends Base {
       this.appendChild(childrenWrapper);
       childrenSlotEl = childrenWrapper;
     } else {
-      childrenSlotEl.innerHTML = "";
     }
     return childrenSlotEl;
   };
@@ -164,6 +187,8 @@ export class EaTreeChild extends Base {
    * @returns {Object} 包含section、treeLabel和tree的对象
    */
   #createChildNode = (item, index) => {
+    if (!item) return { sec: null, treeLabel: null, tree: null };
+
     const { children, disabled } = this.dataProps;
     const sec = document.createElement("section");
     const tree = document.createElement("ea-tree-child");
@@ -213,12 +238,6 @@ export class EaTreeChild extends Base {
       sec.appendChild(treeLabel);
       sec.appendChild(tree);
       frag.appendChild(sec);
-
-      this.#treeState.nodeMap.set(sec, {
-        label: treeLabel,
-        child: tree,
-        data: item,
-      });
     });
 
     childrenSlotEl.appendChild(frag);

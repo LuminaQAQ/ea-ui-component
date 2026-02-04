@@ -216,6 +216,15 @@
       <button onclick="testGetCheckedKeys()">测试 getCheckedKeys</button>
       <button onclick="testSetCheckedKeys()">测试 setCheckedKeys</button>
       <button onclick="testSetChecked()">测试 setChecked</button>
+
+      <h3 style="margin-top: 20px">最新方法测试</h3>
+      <button onclick="testSetCurrentKey()">测试 setCurrentKey</button>
+      <button onclick="testSetCurrentNode()">测试 setCurrentNode</button>
+      <button onclick="testGetNode()">测试 getNode</button>
+      <button onclick="testRemove()">测试 remove</button>
+      <button onclick="testAppend()">测试 append</button>
+      <button onclick="testInsertBefore()">测试 insertBefore</button>
+      <button onclick="testInsertAfter()">测试 insertAfter</button>
       <button onclick="runAllTests()">运行所有测试</button>
     </div>
 
@@ -459,10 +468,10 @@
         let testResults = [];
 
         // 测试1: 正常场景 - 通过key设置选中状态
-        // const result1 = tree.setChecked(1, true);
-        // testResults.push(
-        //   `测试1 - 通过key设置选中: ${result1 ? "成功" : "失败"}`
-        // );
+        const result1 = tree.setChecked(1, true);
+        testResults.push(
+          `测试1 - 通过key设置选中: ${result1 ? "成功" : "失败"}`
+        );
 
         // 测试2: 通过数据对象设置选中状态
         const nodeData = {
@@ -526,11 +535,299 @@
         const test6 = tree.setChecked(4, true);
         allTestResults.push(`setChecked: ${test6 ? "通过" : "失败"}`);
 
+        // 测试7: setCurrentKey
+        const test7 = tree.setCurrentKey(3);
+        allTestResults.push(`setCurrentKey: ${test7 ? "通过" : "失败"}`);
+
+        // 测试8: setCurrentNode
+        const test8 = tree.setCurrentNode(4);
+        allTestResults.push(`setCurrentNode: ${test8 ? "通过" : "失败"}`);
+
+        // 测试9: getNode
+        const test9 = tree.getNode(3);
+        allTestResults.push(`getNode: ${test9 ? "通过" : "失败"}`);
+
+        // 测试10: append
+        const test10 = tree.append({ id: 50, label: "批量测试节点" }, 3);
+        allTestResults.push(`append: ${test10 ? "通过" : "失败"}`);
+
+        // 测试11: insertBefore
+        const test11 = tree.insertBefore({ id: 51, label: "前插节点" }, 4);
+        allTestResults.push(`insertBefore: ${test11 ? "通过" : "失败"}`);
+
+        // 测试12: insertAfter
+        const test12 = tree.insertAfter({ id: 52, label: "后插节点" }, 4);
+        allTestResults.push(`insertAfter: ${test12 ? "通过" : "失败"}`);
+
+        // 测试13: remove
+        const test13 = tree.remove(6);
+        allTestResults.push(`remove: ${test13 ? "通过" : "失败"}`);
+
         allTestResults.push("=== 测试完成 ===");
 
         resultDiv.innerHTML = `
           <h3>所有测试结果：</h3>
           <ul>${allTestResults.map(r => `<li>${r}</li>`).join("")}</ul>
+        `;
+      };
+
+      // 最新方法测试函数
+      window.testSetCurrentKey = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+        let testResults = [];
+
+        // 测试1: 正常场景 - 通过key设置选中状态
+        const result1 = tree.setCurrentKey(3);
+        testResults.push(
+          `测试1 - 通过key设置选中: ${result1 ? "成功" : "失败"}`
+        );
+
+        // 测试2: 取消选中状态
+        const result2 = tree.setCurrentKey(null);
+        testResults.push(`测试2 - 取消选中状态: ${result2 ? "成功" : "失败"}`);
+
+        // 测试3: 不自动展开父节点
+        const result3 = tree.setCurrentKey(4, false);
+        testResults.push(
+          `测试3 - 不自动展开父节点: ${result3 ? "成功" : "失败"}`
+        );
+
+        // 测试4: 异常场景 - 不存在的节点
+        const result4 = tree.setCurrentKey(999);
+        testResults.push(
+          `测试4 - 设置不存在节点: ${result4 ? "失败" : "成功（预期失败）"}`
+        );
+
+        // 测试5: 异常场景 - 禁用节点
+        const result5 = tree.setCurrentKey(2);
+        testResults.push(
+          `测试5 - 设置禁用节点: ${result5 ? "失败" : "成功（预期失败）"}`
+        );
+
+        resultDiv.innerHTML = `
+          <h3>setCurrentKey() 测试结果：</h3>
+          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
+        `;
+      };
+
+      window.testSetCurrentNode = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+        let testResults = [];
+
+        // 测试1: 正常场景 - 通过数据对象设置选中状态
+        const nodeData = {
+          id: 3,
+          label: "Level two 2-1",
+          children: [
+            {
+              id: 4,
+              label: "Level three 3-1-1",
+            },
+            {
+              id: 5,
+              label: "Level three 3-1-2",
+              disabled: true,
+            },
+          ],
+        };
+        const result1 = tree.setCurrentNode(nodeData);
+        testResults.push(
+          `测试1 - 通过数据设置选中: ${result1 ? "成功" : "失败"}`
+        );
+
+        // 测试2: 通过key设置选中状态
+        const result2 = tree.setCurrentNode(4);
+        testResults.push(
+          `测试2 - 通过key设置选中: ${result2 ? "成功" : "失败"}`
+        );
+
+        // 测试3: 不自动展开父节点
+        const result3 = tree.setCurrentNode(6, false);
+        testResults.push(
+          `测试3 - 不自动展开父节点: ${result3 ? "成功" : "失败"}`
+        );
+
+        // 测试4: 异常场景 - 不存在的节点
+        const result4 = tree.setCurrentNode({ id: 999, label: "不存在" });
+        testResults.push(
+          `测试4 - 设置不存在节点: ${result4 ? "失败" : "成功（预期失败）"}`
+        );
+
+        resultDiv.innerHTML = `
+          <h3>setCurrentNode() 测试结果：</h3>
+          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
+        `;
+      };
+
+      window.testGetNode = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+        let testResults = [];
+
+        // 测试1: 正常场景 - 通过key获取节点
+        const result1 = tree.getNode(3);
+        testResults.push(
+          `测试1 - 通过key获取节点: ${result1 ? "成功" : "失败"}`
+        );
+
+        // 测试2: 通过数据对象获取节点
+        const nodeData = { id: 4, label: "Level three 3-1-1" };
+        const result2 = tree.getNode(nodeData);
+        testResults.push(
+          `测试2 - 通过数据获取节点: ${result2 ? "成功" : "失败"}`
+        );
+
+        // 测试3: 异常场景 - 不存在的节点
+        const result3 = tree.getNode(999);
+        testResults.push(
+          `测试3 - 获取不存在节点: ${result3 === null ? "成功（返回null）" : "失败"}`
+        );
+
+        // 测试4: 异常场景 - 未设置node-key
+        const tempTree = document.createElement("ea-tree");
+        const result4 = tempTree.getNode(3);
+        testResults.push(
+          `测试4 - 未设置node-key: ${result4 === null ? "成功（返回null）" : "失败"}`
+        );
+
+        resultDiv.innerHTML = `
+          <h3>getNode() 测试结果：</h3>
+          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
+          <h4>获取的节点详情：</h4>
+          <pre>${JSON.stringify(result1, null, 2)}</pre>
+        `;
+      };
+
+      window.testRemove = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+        let testResults = [];
+
+        // 测试1: 正常场景 - 通过key删除节点
+        const result1 = tree.remove(6);
+        testResults.push(
+          `测试1 - 通过key删除节点: ${result1 ? "成功" : "失败"}`
+        );
+
+        // 测试2: 通过数据对象删除节点
+        const nodeData = { id: 7, label: "Level three 3-2-2", disabled: true };
+        const result2 = tree.remove(nodeData);
+        testResults.push(
+          `测试2 - 通过数据删除节点: ${result2 ? "成功" : "失败"}`
+        );
+
+        // 测试3: 异常场景 - 不存在的节点;
+        const result3 = tree.remove(999);
+        testResults.push(
+          `测试3 - 删除不存在节点: ${result3 ? "失败" : "成功（预期失败）"}`
+        );
+
+        // 测试4: 异常场景 - 未设置node-key
+        const tempTree = document.createElement("ea-tree");
+        const result4 = tempTree.remove(3);
+        testResults.push(
+          `测试4 - 未设置node-key: ${result4 ? "失败" : "成功（预期失败）"}`
+        );
+
+        resultDiv.innerHTML = `
+          <h3>remove() 测试结果：</h3>
+          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
+        `;
+      };
+
+      window.testAppend = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+        let testResults = [];
+
+        // 测试1: 正常场景 - 通过key追加子节点
+        const newNode = { id: 20, label: "追加的子节点" };
+        const result1 = tree.append(newNode, 3);
+        testResults.push(
+          `测试1 - 通过key追加子节点: ${result1 ? "成功" : "失败"}`
+        );
+
+        // 测试2: 通过数据对象追加子节点
+        const newNode2 = { id: 21, label: "追加的子节点2" };
+        const parentData = { id: 3, label: "Level two 2-1" };
+        const result2 = tree.append(newNode2, parentData);
+        testResults.push(
+          `测试2 - 通过数据追加子节点: ${result2 ? "成功" : "失败"}`
+        );
+
+        // 测试3: 异常场景 - 不存在的父节点
+        const result3 = tree.append(newNode, 999);
+        testResults.push(
+          `测试3 - 向不存在父节点追加: ${result3 ? "失败" : "成功（预期失败）"}`
+        );
+
+        // 测试4: 异常场景 - 叶子节点（不能有子节点）
+        const result4 = tree.append(newNode, 4);
+        testResults.push(
+          `测试4 - 向叶子节点追加: ${result4 ? "失败" : "成功（预期失败）"}`
+        );
+
+        resultDiv.innerHTML = `
+          <h3>append() 测试结果：</h3>
+          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
+        `;
+      };
+
+      window.testInsertBefore = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+        let testResults = [];
+
+        // 测试1: 正常场景 - 在节点前插入
+        const newNode = { id: 30, label: "前插入的节点" };
+        const result1 = tree.insertBefore(newNode, 4);
+        testResults.push(`测试1 - 在节点前插入: ${result1 ? "成功" : "失败"}`);
+
+        // 测试2: 通过数据对象插入
+        const newNode2 = { id: 31, label: "前插入的节点2" };
+        const refData = { id: 6, label: "Level three 3-2-1" };
+        const result2 = tree.insertBefore(newNode2, refData);
+        testResults.push(`测试2 - 通过数据插入: ${result2 ? "成功" : "失败"}`);
+
+        // 测试3: 异常场景 - 不存在的参考节点
+        const result3 = tree.insertBefore(newNode, 999);
+        testResults.push(
+          `测试3 - 向不存在节点前插入: ${result3 ? "失败" : "成功（预期失败）"}`
+        );
+
+        resultDiv.innerHTML = `
+          <h3>insertBefore() 测试结果：</h3>
+          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
+        `;
+      };
+
+      window.testInsertAfter = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+        let testResults = [];
+
+        // 测试1: 正常场景 - 在节点后插入
+        const newNode = { id: 40, label: "后插入的节点" };
+        const result1 = tree.insertAfter(newNode, 4);
+        testResults.push(`测试1 - 在节点后插入: ${result1 ? "成功" : "失败"}`);
+
+        // 测试2: 通过数据对象插入
+        const newNode2 = { id: 41, label: "后插入的节点2" };
+        const refData = { id: 6, label: "Level three 3-2-1" };
+        const result2 = tree.insertAfter(newNode2, refData);
+        testResults.push(`测试2 - 通过数据插入: ${result2 ? "成功" : "失败"}`);
+
+        // 测试3: 异常场景 - 不存在的参考节点
+        const result3 = tree.insertAfter(newNode, 999);
+        testResults.push(
+          `测试3 - 向不存在节点后插入: ${result3 ? "失败" : "成功（预期失败）"}`
+        );
+
+        resultDiv.innerHTML = `
+          <h3>insertAfter() 测试结果：</h3>
+          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
         `;
       };
     </script>
