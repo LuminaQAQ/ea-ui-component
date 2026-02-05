@@ -7,7 +7,9 @@ export class EaTreeNodeExpandEvent extends Event {
 }
 
 interface EaTreeNodeExpandEventDetail {
-  /** @description 展开的节点数据 */
+  /** @description 节点数据对象 */
+  data: any;
+  /** @description 节点实例对象 */
   node: any;
   /** @description 节点是否展开 */
   expanded: boolean;

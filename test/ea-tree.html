@@ -205,9 +205,6 @@
       </button>
       <button onclick="testGetCurrentKey()">测试 getCurrentKey</button>
       <button onclick="testGetCurrentNode()">测试 getCurrentNode</button>
-      <button onclick="selectNode3()">选中节点3</button>
-      <button onclick="selectNode4()">选中节点4</button>
-      <button onclick="setHalfCheckedState()">设置半选中状态</button>
 
       <h3 style="margin-top: 20px">新增方法测试</h3>
       <button onclick="testUpdateKeyChildren()">测试 updateKeyChildren</button>
@@ -221,10 +218,17 @@
       <button onclick="testSetCurrentKey()">测试 setCurrentKey</button>
       <button onclick="testSetCurrentNode()">测试 setCurrentNode</button>
       <button onclick="testGetNode()">测试 getNode</button>
-      <button onclick="testRemove()">测试 remove</button>
-      <button onclick="testAppend()">测试 append</button>
-      <button onclick="testInsertBefore()">测试 insertBefore</button>
-      <button onclick="testInsertAfter()">测试 insertAfter</button>
+
+      <h3 style="margin-top: 20px">事件监听测试</h3>
+      <button onclick="testNodeClickEvent()">测试 ea-node-click</button>
+      <button onclick="testNodeContextmenuEvent()">
+        测试 ea-node-contextmenu
+      </button>
+      <button onclick="testCheckChangeEvent()">测试 ea-check-change</button>
+      <button onclick="testCheckEvent()">测试 ea-check</button>
+      <button onclick="testCurrentChangeEvent()">测试 ea-current-change</button>
+      <button onclick="testNodeExpandEvent()">测试 ea-node-expand</button>
+      <button onclick="testNodeCollapseEvent()">测试 ea-node-collapse</button>
       <button onclick="runAllTests()">运行所有测试</button>
     </div>
 
@@ -547,27 +551,34 @@
         const test9 = tree.getNode(3);
         allTestResults.push(`getNode: ${test9 ? "通过" : "失败"}`);
 
-        // 测试10: append
-        const test10 = tree.append({ id: 50, label: "批量测试节点" }, 3);
-        allTestResults.push(`append: ${test10 ? "通过" : "失败"}`);
+        // 事件监听器测试 - 验证事件是否已注册
+        const eventNames = [
+          "ea-node-click",
+          "ea-node-contextmenu",
+          "ea-check-change",
+          "ea-check",
+          "ea-current-change",
+          "ea-node-expand",
+          "ea-node-collapse",
+        ];
 
-        // 测试11: insertBefore
-        const test11 = tree.insertBefore({ id: 51, label: "前插节点" }, 4);
-        allTestResults.push(`insertBefore: ${test11 ? "通过" : "失败"}`);
+        const eventTestResults = [];
+        eventNames.forEach(eventName => {
+          const hasListener = tree.hasEventListener(eventName);
+          eventTestResults.push(
+            `${eventName}: ${hasListener ? "已注册" : "未注册"}`
+          );
+        });
 
-        // 测试12: insertAfter
-        const test12 = tree.insertAfter({ id: 52, label: "后插节点" }, 4);
-        allTestResults.push(`insertAfter: ${test12 ? "通过" : "失败"}`);
-
-        // 测试13: remove
-        const test13 = tree.remove(6);
-        allTestResults.push(`remove: ${test13 ? "通过" : "失败"}`);
+        allTestResults.push("=== 事件监听器状态 ===");
+        allTestResults = allTestResults.concat(eventTestResults);
 
         allTestResults.push("=== 测试完成 ===");
 
         resultDiv.innerHTML = `
           <h3>所有测试结果：</h3>
           <ul>${allTestResults.map(r => `<li>${r}</li>`).join("")}</ul>
+          <p><strong>注意：</strong>事件测试需要用户交互，请使用单独的事件测试按钮进行详细测试</p>
         `;
       };
 
@@ -700,135 +711,152 @@
         `;
       };
 
-      window.testRemove = function () {
+      // 事件监听测试函数
+      window.testNodeClickEvent = function () {
         const tree = document.querySelector("#methodTestTree");
         const resultDiv = document.getElementById("testResult");
-        let testResults = [];
 
-        // 测试1: 正常场景 - 通过key删除节点
-        const result1 = tree.remove(6);
-        testResults.push(
-          `测试1 - 通过key删除节点: ${result1 ? "成功" : "失败"}`
-        );
+        resultDiv.innerHTML = "<p>请点击树节点测试 ea-node-click 事件...</p>";
 
-        // 测试2: 通过数据对象删除节点
-        const nodeData = { id: 7, label: "Level three 3-2-2", disabled: true };
-        const result2 = tree.remove(nodeData);
-        testResults.push(
-          `测试2 - 通过数据删除节点: ${result2 ? "成功" : "失败"}`
-        );
+        const eventHandler = e => {
+          resultDiv.innerHTML = `
+            <h3>ea-node-click 事件触发：</h3>
+            <p>节点数据：</p>
+            <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
+          `;
+          tree.removeEventListener("ea-node-click", eventHandler);
+        };
 
-        // 测试3: 异常场景 - 不存在的节点;
-        const result3 = tree.remove(999);
-        testResults.push(
-          `测试3 - 删除不存在节点: ${result3 ? "失败" : "成功（预期失败）"}`
-        );
-
-        // 测试4: 异常场景 - 未设置node-key
-        const tempTree = document.createElement("ea-tree");
-        const result4 = tempTree.remove(3);
-        testResults.push(
-          `测试4 - 未设置node-key: ${result4 ? "失败" : "成功（预期失败）"}`
-        );
-
-        resultDiv.innerHTML = `
-          <h3>remove() 测试结果：</h3>
-          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
-        `;
+        tree.addEventListener("ea-node-click", eventHandler);
       };
 
-      window.testAppend = function () {
+      window.testNodeContextmenuEvent = function () {
         const tree = document.querySelector("#methodTestTree");
         const resultDiv = document.getElementById("testResult");
-        let testResults = [];
 
-        // 测试1: 正常场景 - 通过key追加子节点
-        const newNode = { id: 20, label: "追加的子节点" };
-        const result1 = tree.append(newNode, 3);
-        testResults.push(
-          `测试1 - 通过key追加子节点: ${result1 ? "成功" : "失败"}`
-        );
+        resultDiv.innerHTML =
+          "<p>请在树节点上右键点击测试 ea-node-contextmenu 事件...</p>";
 
-        // 测试2: 通过数据对象追加子节点
-        const newNode2 = { id: 21, label: "追加的子节点2" };
-        const parentData = { id: 3, label: "Level two 2-1" };
-        const result2 = tree.append(newNode2, parentData);
-        testResults.push(
-          `测试2 - 通过数据追加子节点: ${result2 ? "成功" : "失败"}`
-        );
+        const eventHandler = e => {
+          resultDiv.innerHTML = `
+            <h3>ea-node-contextmenu 事件触发：</h3>
+            <p>事件类型：${e.detail.event.type}</p>
+            <p>节点数据：</p>
+            <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
+            <p>节点实例：${e.detail.node ? "存在" : "不存在"}</p>
+            <p>组件实例：${e.detail.component ? "存在" : "不存在"}</p>
+          `;
+          tree.removeEventListener("ea-node-contextmenu", eventHandler);
+        };
 
-        // 测试3: 异常场景 - 不存在的父节点
-        const result3 = tree.append(newNode, 999);
-        testResults.push(
-          `测试3 - 向不存在父节点追加: ${result3 ? "失败" : "成功（预期失败）"}`
-        );
-
-        // 测试4: 异常场景 - 叶子节点（不能有子节点）
-        const result4 = tree.append(newNode, 4);
-        testResults.push(
-          `测试4 - 向叶子节点追加: ${result4 ? "失败" : "成功（预期失败）"}`
-        );
-
-        resultDiv.innerHTML = `
-          <h3>append() 测试结果：</h3>
-          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
-        `;
+        tree.addEventListener("ea-node-contextmenu", eventHandler);
       };
 
-      window.testInsertBefore = function () {
+      window.testCheckChangeEvent = function () {
         const tree = document.querySelector("#methodTestTree");
         const resultDiv = document.getElementById("testResult");
-        let testResults = [];
 
-        // 测试1: 正常场景 - 在节点前插入
-        const newNode = { id: 30, label: "前插入的节点" };
-        const result1 = tree.insertBefore(newNode, 4);
-        testResults.push(`测试1 - 在节点前插入: ${result1 ? "成功" : "失败"}`);
+        resultDiv.innerHTML =
+          "<p>请点击节点复选框测试 ea-check-change 事件...</p>";
 
-        // 测试2: 通过数据对象插入
-        const newNode2 = { id: 31, label: "前插入的节点2" };
-        const refData = { id: 6, label: "Level three 3-2-1" };
-        const result2 = tree.insertBefore(newNode2, refData);
-        testResults.push(`测试2 - 通过数据插入: ${result2 ? "成功" : "失败"}`);
+        const eventHandler = e => {
+          resultDiv.innerHTML = `
+            <h3>ea-check-change 事件触发：</h3>
+            <p>节点数据：</p>
+            <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
+            <p>选中状态：${e.detail.checked ? "选中" : "未选中"}</p>
+            <p>子树选中状态：${e.detail.hasCheckedChildren ? "有选中节点" : "无选中节点"}</p>
+          `;
+          tree.removeEventListener("ea-check-change", eventHandler);
+        };
 
-        // 测试3: 异常场景 - 不存在的参考节点
-        const result3 = tree.insertBefore(newNode, 999);
-        testResults.push(
-          `测试3 - 向不存在节点前插入: ${result3 ? "失败" : "成功（预期失败）"}`
-        );
-
-        resultDiv.innerHTML = `
-          <h3>insertBefore() 测试结果：</h3>
-          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
-        `;
+        tree.addEventListener("ea-check-change", eventHandler);
       };
 
-      window.testInsertAfter = function () {
+      window.testCheckEvent = function () {
         const tree = document.querySelector("#methodTestTree");
         const resultDiv = document.getElementById("testResult");
-        let testResults = [];
 
-        // 测试1: 正常场景 - 在节点后插入
-        const newNode = { id: 40, label: "后插入的节点" };
-        const result1 = tree.insertAfter(newNode, 4);
-        testResults.push(`测试1 - 在节点后插入: ${result1 ? "成功" : "失败"}`);
+        resultDiv.innerHTML = "<p>请点击节点复选框测试 ea-check 事件...</p>";
 
-        // 测试2: 通过数据对象插入
-        const newNode2 = { id: 41, label: "后插入的节点2" };
-        const refData = { id: 6, label: "Level three 3-2-1" };
-        const result2 = tree.insertAfter(newNode2, refData);
-        testResults.push(`测试2 - 通过数据插入: ${result2 ? "成功" : "失败"}`);
+        const eventHandler = e => {
+          resultDiv.innerHTML = `
+            <h3>ea-check 事件触发：</h3>
+            <p>节点数据：</p>
+            <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
+            <h4>选中状态对象：</h4>
+            <p>选中节点数量：${e.detail.checkedState.checkedNodes.length}</p>
+            <p>选中键值数量：${e.detail.checkedState.checkedKeys.length}</p>
+            <p>半选中节点数量：${e.detail.checkedState.halfCheckedNodes.length}</p>
+            <p>半选中键值数量：${e.detail.checkedState.halfCheckedKeys.length}</p>
+            <pre>${JSON.stringify(e.detail.checkedState, null, 2)}</pre>
+          `;
+          tree.removeEventListener("ea-check", eventHandler);
+        };
 
-        // 测试3: 异常场景 - 不存在的参考节点
-        const result3 = tree.insertAfter(newNode, 999);
-        testResults.push(
-          `测试3 - 向不存在节点后插入: ${result3 ? "失败" : "成功（预期失败）"}`
-        );
+        tree.addEventListener("ea-check", eventHandler);
+      };
 
-        resultDiv.innerHTML = `
-          <h3>insertAfter() 测试结果：</h3>
-          <ul>${testResults.map(r => `<li>${r}</li>`).join("")}</ul>
-        `;
+      window.testCurrentChangeEvent = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+
+        resultDiv.innerHTML =
+          "<p>请点击不同节点测试 ea-current-change 事件...</p>";
+
+        const eventHandler = e => {
+          resultDiv.innerHTML = `
+            <h3>ea-current-change 事件触发：</h3>
+            <p>当前选中节点数据：</p>
+            <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
+            <p>节点实例：${e.detail.node ? "存在" : "不存在"}</p>
+          `;
+          tree.removeEventListener("ea-current-change", eventHandler);
+        };
+
+        tree.addEventListener("ea-current-change", eventHandler);
+      };
+
+      window.testNodeExpandEvent = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+
+        resultDiv.innerHTML =
+          "<p>请点击展开节点测试 ea-node-expand 事件...</p>";
+
+        const eventHandler = e => {
+          resultDiv.innerHTML = `
+            <h3>ea-node-expand 事件触发：</h3>
+            <p>展开节点数据：</p>
+            <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
+            <p>节点实例：${e.detail.node ? "存在" : "不存在"}</p>
+            <p>组件实例：${e.detail.component ? "存在" : "不存在"}</p>
+          `;
+          tree.removeEventListener("ea-node-expand", eventHandler);
+        };
+
+        tree.addEventListener("ea-node-expand", eventHandler);
+      };
+
+      window.testNodeCollapseEvent = function () {
+        const tree = document.querySelector("#methodTestTree");
+        const resultDiv = document.getElementById("testResult");
+
+        resultDiv.innerHTML =
+          "<p>请点击收起节点测试 ea-node-collapse 事件...</p>";
+
+        const eventHandler = e => {
+          resultDiv.innerHTML = `
+            <h3>ea-node-collapse 事件触发：</h3>
+            <p>收起节点数据：</p>
+            <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
+            <p>节点实例：${e.detail.node ? "存在" : "不存在"}</p>
+            <p>组件实例：${e.detail.component ? "存在" : "不存在"}</p>
+          `;
+          tree.removeEventListener("ea-node-collapse", eventHandler);
+        };
+
+        tree.addEventListener("ea-node-collapse", eventHandler);
       };
     </script>
 

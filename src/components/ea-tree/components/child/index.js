@@ -46,14 +46,6 @@ export class EaTreeChild extends Base {
           childrenSlotEl.innerHTML = "";
 
           this.#handleTreeRender(newVal);
-        } else if (typeof newVal === "object" && newVal) {
-          const { action, children } = newVal;
-
-          if (action === "append") {
-            this.#handleTreeRender(children);
-          } else if (action === "insert-before") {
-            // this.#handleInsertBefore(nodeKey, data);
-          }
         }
       },
     },
@@ -187,15 +179,15 @@ export class EaTreeChild extends Base {
    * @returns {Object} 包含section、treeLabel和tree的对象
    */
   #createChildNode = (item, index) => {
-    if (!item) return { sec: null, treeLabel: null, tree: null };
+    if (!item) return { section: null, treeLabel: null, tree: null };
 
     const { children, disabled } = this.dataProps;
-    const sec = document.createElement("section");
+    const section = document.createElement("section");
     const tree = document.createElement("ea-tree-child");
     const treeLabel = document.createElement("ea-tree-label");
 
-    sec.className = this.ns.e("children");
-    sec.part = "children-wrapper";
+    section.className = this.ns.e("children");
+    section.part = "children-wrapper";
     tree.part = "children";
     treeLabel.part = "label";
 
@@ -221,7 +213,7 @@ export class EaTreeChild extends Base {
       tree.hidden = !this.#treeState.expandedNodes.has(treeLabel);
     }
 
-    return { sec, treeLabel, tree };
+    return { section, treeLabel, tree };
   };
 
   /**
@@ -229,18 +221,18 @@ export class EaTreeChild extends Base {
    * @param {Array} treeData 树数据
    */
   #handleTreeRender = treeData => {
-    const frag = document.createDocumentFragment();
+    const fragment = document.createDocumentFragment();
     const childrenSlotEl = this.#getChildrenSlotElement();
 
     treeData.forEach((item, index) => {
-      const { sec, treeLabel, tree } = this.#createChildNode(item, index);
+      const { section, treeLabel, tree } = this.#createChildNode(item, index);
 
-      sec.appendChild(treeLabel);
-      sec.appendChild(tree);
-      frag.appendChild(sec);
+      section.appendChild(treeLabel);
+      section.appendChild(tree);
+      fragment.appendChild(section);
     });
 
-    childrenSlotEl.appendChild(frag);
+    childrenSlotEl.appendChild(fragment);
   };
 
   #updateCheckboxState = checked => {

@@ -4,6 +4,10 @@ import { EaTreeNodeExpandEvent } from "./events/EaTreeNodeExpandEvent";
 import { EaTreeNodeCollapseEvent } from "./events/EaTreeNodeCollapseEvent";
 import { EaTreeNodeSelectEvent } from "./events/EaTreeNodeSelectEvent";
 import { EaTreeNodeClickEvent } from "./events/EaTreeNodeClickEvent";
+import { EaTreeNodeContextmenuEvent } from "./events/EaTreeNodeContextmenuEvent";
+import { EaTreeCheckChangeEvent } from "./events/EaTreeCheckChangeEvent";
+import { EaTreeCheckEvent } from "./events/EaTreeCheckEvent";
+import { EaTreeCurrentChangeEvent } from "./events/EaTreeCurrentChangeEvent";
 import stylesheet from "./index.scss?inline";
 import "./components/label/index";
 import "./components/child/index";
@@ -94,13 +98,13 @@ export class EaTree extends Base {
       props: true,
       type: Array,
       default: [],
-      observer: newVal => {},
+      observer: () => {},
     },
     defaultCheckedKeys: {
       props: true,
       type: Array,
       default: [],
-      observer: newVal => {},
+      observer: () => {},
     },
   });
 
@@ -138,25 +142,66 @@ export class EaTree extends Base {
   }
 
   /**
+   * 根据节点键值查找标签元素
+   * @param {*} key 节点键值
+   * @returns {HTMLElement|null} 找到的标签元素或null
+   */
+  #findLabelByKey = key => {
+    if (!this["node-key"]) return null;
+    const nodeKey = this["node-key"];
+    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
+    return labels.find(label => label.data && label.data[nodeKey] === key);
+  };
+
+  /**
+   * 根据节点数据查找标签元素
+   * @param {Object} data 节点数据
+   * @returns {HTMLElement|null} 找到的标签元素或null
+   */
+  #findLabelByData = data => {
+    if (!this["node-key"]) return null;
+    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
+    return labels.find(label => {
+      if (!label.data) return false;
+      return JSON.stringify(label.data) === JSON.stringify(data);
+    });
+  };
+
+  #resolveNode = nodeOrDataOrKey => {
+    if (!nodeOrDataOrKey) return null;
+
+    if (typeof nodeOrDataOrKey === "object") {
+      return this.#findLabelByData(nodeOrDataOrKey);
+    } else if (
+      typeof nodeOrDataOrKey === "number" ||
+      typeof nodeOrDataOrKey === "string"
+    ) {
+      return this.#findLabelByKey(nodeOrDataOrKey);
+    }
+
+    return null;
+  };
+
+  /**
    * 创建树节点元素
    * @param {Object} item 数据项
    * @param {number} index 索引
    * @returns {Object} 包含section、treeLabel和tree的对象
    */
   #createTreeNode = (item, index) => {
-    const { label, children, disabled } = this.dataProps;
-    const sec = document.createElement("section");
+    const { children, disabled } = this.dataProps;
+    const section = document.createElement("section");
     const tree = document.createElement("ea-tree-child");
     const treeLabel = document.createElement("ea-tree-label");
 
-    sec.className = "ea-tree__children";
-    sec.part = "children-wrapper";
+    section.className = "ea-tree__children";
+    section.part = "children-wrapper";
     tree.part = "children";
     treeLabel.part = "label";
 
+    treeLabel.dataProps = this.dataProps;
     tree.dataProps = this.dataProps;
     treeLabel.data = item;
-    tree.dataProps = this.dataProps;
     tree.data = item[children];
     treeLabel["show-checkbox"] = this["show-checkbox"];
     treeLabel.setAttribute("path", (index + 1).toString().concat("$"));
@@ -175,7 +220,7 @@ export class EaTree extends Base {
       tree.hidden = !this.#treeState.expandedNodes.has(treeLabel);
     }
 
-    return { sec, treeLabel, tree };
+    return { section, treeLabel, tree };
   };
 
   /**
@@ -183,17 +228,17 @@ export class EaTree extends Base {
    * @param {Array} treeData 树数据
    */
   #handleTreeRender = treeData => {
-    const frag = document.createDocumentFragment();
+    const fragment = document.createDocumentFragment();
 
     treeData.forEach((item, index) => {
-      const { sec, treeLabel, tree } = this.#createTreeNode(item, index);
+      const { section, treeLabel, tree } = this.#createTreeNode(item, index);
 
-      sec.appendChild(treeLabel);
-      sec.appendChild(tree);
-      frag.appendChild(sec);
+      section.appendChild(treeLabel);
+      section.appendChild(tree);
+      fragment.appendChild(section);
     });
 
-    this.#container.appendChild(frag);
+    this.#container.appendChild(fragment);
   };
 
   /**
@@ -276,6 +321,27 @@ export class EaTree extends Base {
   };
 
   /**
+   * 右键点击事件
+   * @param {MouseEvent} e 事件对象
+   */
+  #onContextmenu = e => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const label = e.target.closest("ea-tree-label");
+    if (!label || label.disabled) {
+      return;
+    }
+
+    this.dispatchEvent(
+      new EaTreeNodeContextmenuEvent({
+        data: label.data,
+        node: label,
+      })
+    );
+  };
+
+  /**
    * 展开节点
    * @param {HTMLElement} tree 树元素
    * @param {HTMLElement} label 标签元素
@@ -286,7 +352,8 @@ export class EaTree extends Base {
 
     this.dispatchEvent(
       new EaTreeNodeExpandEvent({
-        node: label.item,
+        data: label.data,
+        node: label,
         expanded: true,
       })
     );
@@ -303,7 +370,8 @@ export class EaTree extends Base {
 
     this.dispatchEvent(
       new EaTreeNodeCollapseEvent({
-        node: label.item,
+        data: label.data,
+        node: label,
         expanded: false,
       })
     );
@@ -325,6 +393,14 @@ export class EaTree extends Base {
       new EaTreeNodeSelectEvent({
         node: label.data,
         selected: true,
+      })
+    );
+
+    // 触发 ea-current-change 事件
+    this.dispatchEvent(
+      new EaTreeCurrentChangeEvent({
+        data: label.data,
+        node: label,
       })
     );
   };
@@ -399,37 +475,28 @@ export class EaTree extends Base {
   };
 
   /**
-   * 根据节点键值查找标签元素
-   * @param {*} key 节点键值
-   * @returns {HTMLElement|null} 找到的标签元素或null
-   */
-  #findLabelByKey = key => {
-    if (!this["node-key"]) return null;
-    const nodeKey = this["node-key"];
-    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
-    return labels.find(label => label.data && label.data[nodeKey] === key);
-  };
-
-  /**
-   * 根据节点数据查找标签元素
-   * @param {Object} data 节点数据
-   * @returns {HTMLElement|null} 找到的标签元素或null
-   */
-  #findLabelByData = data => {
-    if (!this["node-key"]) return null;
-    const labels = [...this.#container.querySelectorAll("ea-tree-label")];
-    return labels.find(label => {
-      if (!label.data) return false;
-      return JSON.stringify(label.data) === JSON.stringify(data);
-    });
-  };
-
-  /**
    * 获取所有标签元素
    * @returns {Array} 所有标签元素数组
    */
   #getAllLabels = () => {
     return [...this.#container.querySelectorAll("ea-tree-label")];
+  };
+
+  #expandParentNodes = label => {
+    if (label.disabled) return;
+
+    const targetPath = label.getAttribute("path");
+    const sameTreeNodes = this.#getSameTreeNodes(targetPath);
+    const ancestorNodes = sameTreeNodes.filter(
+      node => node.getAttribute("path").startsWith(targetPath) && node !== label
+    );
+    const descendantNodes = sameTreeNodes.filter(
+      node => !ancestorNodes.includes(node) && node !== label
+    );
+
+    descendantNodes.forEach(node => {
+      node.expanded = true;
+    });
   };
 
   /**
@@ -451,6 +518,10 @@ export class EaTree extends Base {
         signal: this.#abortControllers.dataController.signal,
       }
     );
+
+    this.#container.addEventListener("contextmenu", this.#onContextmenu, {
+      signal: this.#abortControllers.dataController.signal,
+    });
   };
 
   /**
@@ -463,6 +534,49 @@ export class EaTree extends Base {
       {
         signal: this.#abortController.signal,
       }
+    );
+  };
+
+  /**
+   * 检查节点子树中是否存在被选中的节点
+   * @param {HTMLElement} label 标签元素
+   * @returns {boolean} 子树中是否存在被选中的节点
+   */
+  #hasCheckedChildren = label => {
+    const targetPath = label.getAttribute("path");
+    const descendantNodes = this.#container.querySelectorAll(
+      `[path^="${targetPath}-"]`
+    );
+
+    for (const node of descendantNodes) {
+      if (node.hasAttribute("checked")) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  /**
+   * 触发 ea-check 事件
+   * @param {HTMLElement} label 标签元素
+   * @param {boolean} checked 选中状态
+   */
+  #emitCheckEvent = (label, checked) => {
+    const checkedNodes = this.getCheckedNodes();
+    const checkedKeys = this.getCheckedKeys();
+    const halfCheckedNodes = this.getHalfCheckedNodes();
+    const halfCheckedKeys = this.getHalfCheckedKeys();
+
+    this.dispatchEvent(
+      new EaTreeCheckEvent({
+        data: label.data,
+        checkedState: {
+          checkedNodes,
+          checkedKeys,
+          halfCheckedNodes,
+          halfCheckedKeys,
+        },
+      })
     );
   };
 
@@ -520,11 +634,18 @@ export class EaTree extends Base {
         });
     }
 
-    this.emit("ea-check-change", {
-      detail: e.detail,
-      bubbles: true,
-      composed: true,
-    });
+    // 触发 ea-check-change 事件
+    const hasCheckedChildren = this.#hasCheckedChildren(label);
+    this.dispatchEvent(
+      new EaTreeCheckChangeEvent({
+        data: label.data,
+        checked: checked,
+        hasCheckedChildren: hasCheckedChildren,
+      })
+    );
+
+    // 触发 ea-check 事件
+    this.#emitCheckEvent(label, checked);
   };
 
   /**
@@ -708,7 +829,7 @@ export class EaTree extends Base {
       const isIndeterminate = label.hasAttribute("indeterminate");
 
       if (isChecked || (includeHalfChecked && isIndeterminate)) {
-        if (leafOnly && !label.hasChildren) {
+        if (leafOnly && label.hasChildren) {
           return;
         }
         checkedNodes.push(label.data);
@@ -732,29 +853,22 @@ export class EaTree extends Base {
       return false;
     }
 
-    const labels = this.#getAllLabels();
-
-    labels.forEach(label => {
+    nodes.forEach(node => {
+      const label = this.#resolveNode(node);
+      if (!label) return;
       if (label.disabled) return;
 
-      const shouldBeChecked = nodes.some(node => {
-        if (leafOnly && label.hasChildren) {
-          return false;
-        }
-        return JSON.stringify(label.data) === JSON.stringify(node);
-      });
-
-      label.checked = shouldBeChecked;
+      label.checked = true;
       label.indeterminate = false;
 
-      if (!this["check-strictly"] && shouldBeChecked) {
+      if (!this["check-strictly"]) {
         label.dispatchEvent(
           new CustomEvent("ea-tree-checkbox-click", {
             bubbles: true,
             composed: true,
             detail: {
               label,
-              checked: shouldBeChecked,
+              checked: true,
             },
           })
         );
@@ -780,7 +894,7 @@ export class EaTree extends Base {
 
     labels.forEach(label => {
       if (label.hasAttribute("checked") && label.data && label.data[nodeKey]) {
-        if (leafOnly && !label.hasChildren) {
+        if (leafOnly && label.hasChildren) {
           return;
         }
         checkedKeys.push(label.data[nodeKey]);
@@ -804,22 +918,13 @@ export class EaTree extends Base {
       return false;
     }
 
-    const nodeKey = this["node-key"];
-
-    console.log(keys);
-
     keys.forEach(key => {
-      const label = this.#findLabelByKey(key);
+      const label = this.#resolveNode(key);
+      if (!label) return;
       if (label.disabled) return;
+      if (leafOnly && label.hasChildren) return;
 
-      let shouldBeChecked = label.data && label.data[nodeKey] === key;
-      if (leafOnly && label.hasChildren) {
-        shouldBeChecked = false;
-      }
-
-      console.log(label, label.data);
-
-      label.checked = shouldBeChecked;
+      label.checked = true;
       label.indeterminate = false;
 
       if (!this["check-strictly"]) {
@@ -829,7 +934,7 @@ export class EaTree extends Base {
             composed: true,
             detail: {
               label,
-              checked: shouldBeChecked,
+              checked: true,
             },
           })
         );
@@ -886,52 +991,6 @@ export class EaTree extends Base {
     return true;
   };
 
-  #expandParentNodes = label => {
-    if (label.disabled) return;
-
-    const targetPath = label.getAttribute("path");
-    const sameTreeNodes = this.#getSameTreeNodes(targetPath);
-    const ancestorNodes = sameTreeNodes.filter(
-      node => node.getAttribute("path").startsWith(targetPath) && node !== label
-    );
-    const descendantNodes = sameTreeNodes.filter(
-      node => !ancestorNodes.includes(node) && node !== label
-    );
-
-    descendantNodes.forEach(node => {
-      node.expanded = true;
-    });
-  };
-
-  #resolveNode = nodeOrDataOrKey => {
-    if (!nodeOrDataOrKey) return null;
-
-    if (typeof nodeOrDataOrKey === "object") {
-      return this.#findLabelByData(nodeOrDataOrKey);
-    } else if (
-      typeof nodeOrDataOrKey === "number" ||
-      typeof nodeOrDataOrKey === "string"
-    ) {
-      return this.#findLabelByKey(nodeOrDataOrKey);
-    }
-
-    return null;
-  };
-
-  // #getParentTreeElement = label => {
-  //   if (!label) return null;
-
-  //   const parentSection = label.closest("section");
-  //   if (!parentSection) return null;
-
-  //   const parentLabel = parentSection.previousElementSibling;
-  //   if (parentLabel && parentLabel.tagName === "EA-TREE-LABEL") {
-  //     return parentLabel.nextElementSibling;
-  //   }
-
-  //   return null;
-  // };
-
   setCurrentKey = (key, shouldAutoExpandParent = true) => {
     if (!this["node-key"]) {
       console.warn("setCurrentKey requires node-key to be set");
@@ -946,7 +1005,7 @@ export class EaTree extends Base {
       return true;
     }
 
-    const label = this.#findLabelByKey(key);
+    const label = this.#resolveNode(key);
     if (!label) {
       console.warn(`Node with key ${key} not found`);
       return false;
@@ -980,7 +1039,7 @@ export class EaTree extends Base {
       return true;
     }
 
-    const label = this.#findLabelByData(node);
+    const label = this.#resolveNode(node);
     if (!label) {
       console.warn("Node not found");
       return false;
@@ -1017,139 +1076,6 @@ export class EaTree extends Base {
       data,
     };
   };
-
-  remove = data => {
-    if (!this["node-key"]) {
-      console.warn("remove requires node-key to be set");
-      return false;
-    }
-
-    const label = this.#resolveNode(data);
-    if (!label) {
-      console.warn("Node not found");
-      return false;
-    }
-
-    const parentSection = label.closest("section");
-    if (!parentSection) {
-      console.warn("Cannot find parent section");
-      return false;
-    }
-
-    // 如果是选中的节点，取消选中
-    if (this.#treeState.selectedNode === label) {
-      this.#treeState.selectedNode = null;
-    }
-
-    label.dispatchEvent(
-      new CustomEvent("ea-tree-child-change", {
-        bubbles: true,
-        composed: true,
-        detail: { action: "remove", nodeKey: this["node-key"], data },
-      })
-    );
-
-    return true;
-  };
-
-  append = (data, parentNode) => {
-    if (!this["node-key"]) {
-      console.warn("append requires node-key to be set");
-      return false;
-    }
-
-    const parentLabel = this.#resolveNode(parentNode);
-    if (!parentLabel) {
-      console.warn("Parent node not found");
-      return false;
-    }
-
-    const tree = parentLabel.nextElementSibling;
-    if (!tree || tree.tagName !== "EA-TREE-CHILD") {
-      console.warn("Parent node is not a container node");
-      return false;
-    }
-
-    parentLabel.dispatchEvent(
-      new CustomEvent("ea-tree-child-change", {
-        bubbles: true,
-        composed: true,
-        detail: { action: "append", nodeKey: this["node-key"], data },
-      })
-    );
-
-    return true;
-  };
-
-  // insertBefore = (data, refNode) => {
-  //   if (!this["node-key"]) {
-  //     console.warn("insertBefore requires node-key to be set");
-  //     return false;
-  //   }
-
-  //   const refLabel = this.#resolveNode(refNode);
-  //   if (!refLabel) {
-  //     console.warn("Reference node not found");
-  //     return false;
-  //   }
-
-  //   const parentSection = refLabel.closest("section");
-  //   if (!parentSection) {
-  //     console.warn("Cannot find parent section");
-  //     return false;
-  //   }
-
-  //   const parentTree = this.#getParentTreeElement(refLabel);
-  //   if (!parentTree) {
-  //     console.warn("Cannot find parent tree");
-  //     return false;
-  //   }
-
-  //   refLabel.dispatchEvent(
-  //     new CustomEvent("ea-tree-child-change", {
-  //       bubbles: true,
-  //       composed: true,
-  //       detail: { action: "insert-before", nodeKey: this["node-key"], data },
-  //     })
-  //   );
-
-  //   return true;
-  // };
-
-  // insertAfter = (data, refNode) => {
-  //   if (!this["node-key"]) {
-  //     console.warn("insertAfter requires node-key to be set");
-  //     return false;
-  //   }
-
-  //   const refLabel = this.#resolveNode(refNode);
-  //   if (!refLabel) {
-  //     console.warn("Reference node not found");
-  //     return false;
-  //   }
-
-  //   const parentSection = refLabel.closest("section");
-  //   if (!parentSection) {
-  //     console.warn("Cannot find parent section");
-  //     return false;
-  //   }
-
-  //   const parentTree = this.#getParentTreeElement(refLabel);
-  //   if (!parentTree) {
-  //     console.warn("Cannot find parent tree");
-  //     return false;
-  //   }
-
-  //   refLabel.dispatchEvent(
-  //     new CustomEvent("ea-tree-child-change", {
-  //       bubbles: true,
-  //       composed: true,
-  //       detail: { action: "insert-after", nodeKey: this["node-key"], data },
-  //     })
-  //   );
-
-  //   return true;
-  // };
 }
 
 if (!customElements.get("ea-tree")) {
