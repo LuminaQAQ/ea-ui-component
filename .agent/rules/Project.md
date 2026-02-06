@@ -35,7 +35,7 @@ export class EaComponent extends Base {
         <slot></slot>
       </div>
     `);
-    this.#container = this.shadowRoot.querySelector(`.${ns.b("component")}`);
+    this.#container = this.shadowRoot.querySelector(ns.cb("component"));
   }
 
   connectedCallback() {
@@ -328,11 +328,13 @@ $name: ea-component-name;
      - ### Parent CSS Part
      - ### Parent Slots
      - ### Parent Methods
+     - ### Parent Events
    - ## Child API
      - ### Child Attributes
      - ### Child CSS Part
      - ### Child Slots
      - ### Child Methods
+     - ### Child Events
 
 4. 如果某个部分不存在（如无 Methods），则不写该部分
 
@@ -348,17 +350,27 @@ $name: ea-component-name;
 
 **Slots 表格：**
 | 名称 | 说明 |
-|------|------|
+|-|-|
 
 **Methods 表格：**
 | 方法名 | 说明 | 参数 |
-|--------|------|------|
+|-|-|-|
+
+**Event 表格：**
+| 事件名 | 说明 | 回调参数(event.detail) |
+|-|-|-|
 
 ### 示例处理规则
 
 1. 每个示例需包含简略示例描述和 HTML 示例代码
 2. 示例必须与 `.html` 文件中 `#region` 标记的内容和顺序完全对齐
-3. 示例代码如果过长，使用折叠格式：
+3. 如果示例代码带有多个语言版本（如 HTML、JavaScript、CSS），每个版本都需要单独的代码块。格式为vitepress的代码组格式：
+   ```markdown
+   ::: code-group
+   [代码内容]
+   :::
+   ```
+4. 示例代码如果过长，使用折叠格式：
    ```markdown
    ::: details 查看代码
    [代码内容]
@@ -369,7 +381,7 @@ $name: ea-component-name;
 
 ### 代码风格
 
-- 不添加任何注释（除非用户明确要求）
+- 除函数的 jsdoc 注释外不添加任何注释（除非用户明确要求）
 - 保持代码简洁、清晰
 - 遵循现有的代码风格和命名约定
 
@@ -377,11 +389,6 @@ $name: ea-component-name;
 
 - 优先编辑现有文件，而不是创建新文件
 - 不要主动创建文档文件（\*.md）或 README 文件，除非用户明确要求
-
-### 测试和构建
-
-- 完成任务后，必须运行 lint 和 typecheck 命令（如果存在）
-- 如果找不到正确的命令，询问用户并建议将其写入 `.trae/rules/project_rules.md`
 
 ### 开发流程
 

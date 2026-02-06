@@ -116,7 +116,7 @@ export default defineConfig({
           { text: "Tag 标签", link: "/ea-tag" },
           { text: "Timeline 时间线", link: "/ea-timeline" },
           { text: "Tour 漫游式引导", link: "/ea-tour" },
-          // { text: "Tree 树形控件", link: "/ea-tree" },
+          { text: "Tree 树形控件", link: "/ea-tree" },
         ],
       },
       {
