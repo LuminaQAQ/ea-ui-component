@@ -230,6 +230,9 @@
     "./ea-tour": {
       "import": "./dist/ea-tour.js"
     },
+    "./ea-transfer": {
+      "import": "./dist/ea-transfer.js"
+    },
     "./ea-tree": {
       "import": "./dist/ea-tree.js"
     }

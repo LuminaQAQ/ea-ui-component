@@ -22,9 +22,13 @@ export const namespace = name => {
     cb: () => `.${block}`,
     e: elementName => `${block}__${elementName}`,
     ce: elementName => `.${block}__${elementName}`,
-    m: modifierName => `${block}--${modifierName}`,
-    cm: modifierName => `.${block}--${modifierName}`,
-    s: stateName => `is-${stateName}`,
-    cs: stateName => `.is-${stateName}`,
+    m: (...modifierNames) =>
+      modifierNames.map(modifierName => `${block}--${modifierName}`).join(" "),
+    cm: (...modifierNames) =>
+      modifierNames.map(modifierName => `.${block}--${modifierName}`).join(" "),
+    s: (...stateNames) =>
+      stateNames.map(stateName => `is-${stateName}`).join(" "),
+    cs: (...stateNames) =>
+      stateNames.map(stateName => `.is-${stateName}`).join(" "),
   };
 };

@@ -1,0 +1,121 @@
+$name: ea-transfer-panel;
+
+:host {
+    --#{$name}-width: 200px;
+    --#{$name}-height: 300px;
+    --#{$name}-border-color: var(--grey-300);
+    --#{$name}-background-color: var(--white);
+    --#{$name}-header-height: 40px;
+    --#{$name}-header-background: var(--grey-50);
+    --#{$name}-item-height: 32px;
+    --#{$name}-item-hover-background: var(--grey-100);
+    --#{$name}-item-selected-background: var(--blue-50);
+    --#{$name}-item-selected-color: var(--blue-600);
+    --#{$name}-item-disabled-color: var(--grey-400);
+    --#{$name}-filter-height: 40px;
+}
+
+@include block($name) {
+    width: var(--#{$name}-width);
+    height: var(--#{$name}-height);
+    border: 1px solid var(--#{$name}-border-color);
+    border-radius: var(--border-radius-base);
+    background-color: var(--#{$name}-background-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    @include element(header) {
+        height: var(--#{$name}-header-height);
+        padding: 0 var(--spacing-sm);
+        background-color: var(--#{$name}-header-background);
+        border-bottom: 1px solid var(--#{$name}-border-color);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        flex-shrink: 0;
+    }
+
+    @include element(checkbox) {
+        flex-shrink: 0;
+    }
+
+    @include element(title) {
+        flex: 1;
+        font-weight: var(--font-weight-medium);
+        color: var(--grey-700);
+        font-size: var(--font-size-sm);
+    }
+
+    @include element(count) {
+        color: var(--grey-500);
+        font-size: var(--font-size-xs);
+        flex-shrink: 0;
+    }
+
+    @include element(body) {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    @include element(filter) {
+        height: var(--#{$name}-filter-height);
+        padding: var(--spacing-sm);
+        border-bottom: 1px solid var(--#{$name}-border-color);
+        flex-shrink: 0;
+    }
+
+    @include element(filter-input) {
+        width: 100%;
+    }
+
+    @include element(list) {
+        flex: 1;
+        overflow-y: auto;
+        padding: var(--spacing-xs) 0;
+    }
+
+    @include element(item) {
+        height: var(--#{$name}-item-height);
+        padding: 0 var(--spacing-sm);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        cursor: pointer;
+        transition: background-color var(--transition-duration-fast);
+
+        &:hover {
+            background-color: var(--#{$name}-item-hover-background);
+        }
+
+        @include state(selected) {
+            background-color: var(--#{$name}-item-selected-background);
+            color: var(--#{$name}-item-selected-color);
+
+            &:hover {
+                background-color: var(--#{$name}-item-selected-background);
+            }
+        }
+
+        @include state(disabled) {
+            color: var(--#{$name}-item-disabled-color);
+            cursor: not-allowed;
+
+            &:hover {
+                background-color: transparent;
+            }
+        }
+    }
+
+    @include element(item-label) {
+        flex: 1;
+        font-size: var(--font-size-sm);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    // source 和 target 修饰符已移除，无实际意义
+}

@@ -1,0 +1,91 @@
+$name: ea-transfer;
+
+:host {
+  --#{$name}-width: 200px;
+  --#{$name}-height: 300px;
+  --#{$name}-border-color: var(--grey-200);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-bg-color: var(--color-white);
+  --#{$name}-button-bg-color: var(--primary-color);
+  --#{$name}-button-disabled-bg-color: var(--grey-200);
+  --#{$name}-button-hover-bg-color: var(--primary-color-hover);
+  --#{$name}-transition: var(--transition-fast);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-line-height: var(--line-height-md);
+}
+
+:host {
+  display: inline-block;
+  font-size: var(--#{$name}-font-size);
+  line-height: var(--#{$name}-line-height);
+}
+
+@include block($name) {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  @include element(panels) {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  @include element(buttons) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 8px;
+
+    @include element(button) {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--border-radius-sm);
+      transition: all var(--#{$name}-transition);
+
+      &:hover:not(:disabled) {
+        background-color: var(--#{$name}-button-hover-bg-color);
+      }
+
+      &:disabled {
+        background-color: var(--#{$name}-button-disabled-bg-color);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  @include state(disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+
+    .#{$name}__button {
+      cursor: not-allowed;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  @include block($name) {
+    flex-direction: column;
+    align-items: stretch;
+
+    @include element(panels) {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    @include element(buttons) {
+      flex-direction: row;
+      justify-content: center;
+      order: 1;
+      margin-top: 12px;
+    }
+  }
+}
