@@ -16,94 +16,50 @@
   <body>
     <script type="module" src="../src/components/ea-transfer/index.js"></script>
 
-    <div class="container">
-      <h1>Transfer 穿梭框组件测试</h1>
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
 
-      <div class="test-section">
-        <div class="test-title">基本功能测试</div>
-        <div class="test-description">
-          测试基本的穿梭功能、选择功能和事件触发
-        </div>
-
-        <ea-transfer id="basic-transfer"></ea-transfer>
-
-        <div style="margin-top: 10px">
-          <button onclick="getCurrentValue()">获取当前值</button>
-          <button onclick="resetTransfer()">重置</button>
-          <button onclick="setCustomData()">设置自定义数据</button>
-        </div>
-      </div>
-
-      <div class="test-section">
-        <div class="test-title">字段映射测试</div>
-        <div class="test-description">测试自定义字段映射功能</div>
-
-        <ea-transfer id="custom-transfer"></ea-transfer>
-      </div>
-
-      <div class="test-section">
-        <div class="test-title">事件监听测试</div>
-        <div class="test-description">监听 change 事件并显示日志</div>
-
-        <ea-transfer id="event-transfer"></ea-transfer>
-
-        <div style="margin-top: 10px">
-          <div class="event-log" id="event-log"></div>
-        </div>
-      </div>
+    <div class="demo">
+      <ea-transfer id="basicTransfer"></ea-transfer>
+      <button id="setDataBtn">set data</button>
     </div>
 
-    <script>
-      // 基本功能测试
-      function getCurrentValue() {
-        const transfer = document.getElementById("basic-transfer");
-        alert("当前值: " + JSON.stringify(transfer.value));
-      }
+    <script type="module">
+      const basicExample = {
+        transfer: document.querySelector("#basicTransfer"),
+        setDataBtn: document.querySelector("#setDataBtn"),
 
-      function resetTransfer() {
-        const transfer = document.getElementById("basic-transfer");
-        transfer.value = ["1"];
-        addLog("重置 transfer 组件");
-      }
+        generateData: () => {
+          const data = [];
+          for (let i = 1; i <= 15; i++) {
+            data.push({
+              key: i,
+              label: `Option ${i}`,
+              disabled: i % 4 === 0,
+            });
+          }
+          return data;
+        },
 
-      function setCustomData() {
-        const transfer = document.getElementById("basic-transfer");
-        transfer.data = [
-          { key: "10", label: "新选项10", disabled: false },
-          { key: "11", label: "新选项11", disabled: false },
-          { key: "12", label: "新选项12", disabled: true },
-        ];
-        transfer.value = ["10"];
-        addLog("设置自定义数据");
-      }
+        init() {
+          const data = this.generateData();
+          this.transfer.data = data;
 
-      // 事件监听
-      const eventTransfer = document.getElementById("event-transfer");
-      eventTransfer.addEventListener("change", event => {
-        addLog(`Change 事件触发: ${JSON.stringify(event.detail)}`);
-      });
+          this.setDataBtn.addEventListener("click", () => {
+            this.transfer.data = this.generateData();
+          });
 
-      // 日志功能
-      function addLog(message) {
-        const log = document.getElementById("event-log");
-        const entry = document.createElement("div");
-        entry.className = "log-entry";
-        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-        log.appendChild(entry);
-        log.scrollTop = log.scrollHeight;
-      }
-
-      // 页面加载完成后的初始化
-      document.addEventListener("DOMContentLoaded", () => {
-        addLog("页面加载完成，Transfer 组件已初始化");
-
-        // 检查组件是否正常注册
-        if (customElements.get("ea-transfer")) {
-          addLog("ea-transfer 组件已成功注册");
-        } else {
-          addLog("警告: ea-transfer 组件未注册");
-        }
-      });
+          this.transfer.addEventListener("change", e => {
+            console.log(e.detail.value, this.transfer.value);
+          });
+        },
+      };
+      basicExample.init();
     </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
   </body>
 </html>

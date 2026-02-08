@@ -57,6 +57,10 @@ class I18nManager {
         empty: {
           description: "暂无数据",
         },
+        transfer: {
+          list1: "列表 1",
+          list2: "列表 2",
+        },
       },
       "en-US": {
         calendar: {
@@ -112,6 +116,10 @@ class I18nManager {
         },
         empty: {
           description: "No Data",
+        },
+        transfer: {
+          list1: "List 1",
+          list2: "List 2",
         },
       },
     },

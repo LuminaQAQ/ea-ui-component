@@ -1,5 +1,6 @@
 import Base from "@components/Base.js";
 import { namespace } from "@/directives/namespace";
+import { i18nManager } from "@utils/I18nManager.js";
 import stylesheet from "./index.scss?inline";
 import "./components/panel/index.js";
 import "@components/ea-checkbox/index.js";
@@ -36,14 +37,16 @@ export class EaTransfer extends Base {
   };
 
   #states = {
+    isPanelDefined: false,
+
     sourceSelectedKeys: new Set(),
     targetSelectedKeys: new Set(),
     dataMap: new Map(),
-    fieldMapping: {
-      key: "key",
-      label: "label",
-      disabled: "disabled",
-    },
+    // fieldMapping: {
+    //   key: "key",
+    //   label: "label",
+    //   disabled: "disabled",
+    // },
   };
 
   static get observedAttributes() {
@@ -65,7 +68,12 @@ export class EaTransfer extends Base {
       props: true,
       type: Array,
       default: [],
-      observer: newVal => {
+      observer: async newVal => {
+        if (!this.#states.isPanelDefined) {
+          await customElements.whenDefined("ea-transfer-panel");
+          this.#states.isPanelDefined = true;
+        }
+
         this.#handleDataUpdate(newVal);
       },
     },
@@ -73,14 +81,25 @@ export class EaTransfer extends Base {
       props: true,
       type: Array,
       default: [],
-      observer: newVal => {
+      observer: async newVal => {
+        if (!this.#states.isPanelDefined) {
+          await customElements.whenDefined("ea-transfer-panel");
+          this.#states.isPanelDefined = true;
+        }
+
         this.#handleValueUpdate(newVal);
+
+        this.emit("change", { detail: { value: newVal } });
       },
     },
     dataProps: {
       props: true,
       type: Object,
-      default: () => ({}),
+      default: () => ({
+        key: "key",
+        label: "label",
+        disabled: "disabled",
+      }),
       observer: newVal => {
         this.#updateFieldMapping(newVal);
       },
@@ -88,7 +107,7 @@ export class EaTransfer extends Base {
     titles: {
       props: true,
       type: Array,
-      default: () => ["列表 1", "列表 2"],
+      default: [],
       observer: newVal => {
         this.#updateTitles(newVal);
       },
@@ -105,7 +124,7 @@ export class EaTransfer extends Base {
       props: true,
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: async newVal => {
         this.#handleFilterableUpdate(newVal);
       },
     },
@@ -113,7 +132,7 @@ export class EaTransfer extends Base {
       props: true,
       type: String,
       default: "请输入搜索内容",
-      observer: newVal => {
+      observer: async newVal => {
         this.#updateFilterPlaceholder(newVal);
       },
     },
@@ -122,6 +141,23 @@ export class EaTransfer extends Base {
       type: Function,
       rawFunction: true,
       default: null,
+      observer: async newVal => {
+        if (!this.#states.isPanelDefined) {
+          await customElements.whenDefined("ea-transfer-panel");
+          this.#states.isPanelDefined = true;
+        }
+      },
+    },
+    leftDefaultChecked: {
+      props: true,
+      type: Array,
+      default: [],
+      observer: newVal => {},
+    },
+    rightDefaultChecked: {
+      props: true,
+      type: Array,
+      default: [],
       observer: newVal => {},
     },
   });
@@ -156,44 +192,46 @@ export class EaTransfer extends Base {
     const ns = namespace("transfer");
     this.ns = ns;
 
+    i18nManager.locale = this.locale;
+
     this.shadowRoot.innerHTML = this.html(`
       <div class='${ns.b()}' part='container'>
-        <div class='${ns.e("panels")}' part='panels'>
-          <ea-transfer-panel 
-            class='${ns.e("panel")} ${ns.m("panel", "source")}' 
-            part='panel source-panel'
-            title="${this.titles?.[0] || "列表 1"}"
-            filterable="${this.filterable}"
-            filter-placeholder="${this["filter-placeholder"]}"
-          ></ea-transfer-panel>
-          <div class='${ns.e("buttons")}' part='buttons'>
-            <ea-button 
-              class='${ns.e("button")} ${ns.e("move-to-right-btn")}' 
-              part='button move-to-right-btn'
-              type="primary" 
-              size="small" 
-              disabled
-            >
-              <ea-icon icon="icon-angle-right"></ea-icon>
-            </ea-button>
-            <ea-button 
-              class='${ns.e("button")} ${ns.e("move-to-left-btn")}' 
-              part='button move-to-left-btn'
-              type="primary" 
-              size="small" 
-              disabled
-            >
-              <ea-icon icon="icon-angle-left"></ea-icon>
-            </ea-button>
-          </div>
-          <ea-transfer-panel 
-            class='${ns.e("panel")} ${ns.m("panel", "target")}' 
-            part='panel target-panel'
-            title="${this.titles?.[1] || "列表 2"}"
-            filterable="${this.filterable}"
-            filter-placeholder="${this["filter-placeholder"]}"
-          ></ea-transfer-panel>
+        <ea-transfer-panel 
+          class='${ns.e("panel")} ${ns.m("panel", "source")}' 
+          part='panel source-panel'
+          type="source"
+          data-title="${this.#getDefaultTitle("source")}"
+          filter-placeholder="${this["filter-placeholder"]}"
+        ></ea-transfer-panel>
+
+        <div class='${ns.e("buttons")}' part='buttons'>
+          <ea-button 
+            class='${ns.e("button")} ${ns.e("move-to-right-btn")}' 
+            part='button move-to-right-btn'
+            type="primary" 
+            size="small" 
+            disabled
+          >
+            <ea-icon icon="icon-angle-right"></ea-icon>
+          </ea-button>
+          <ea-button 
+            class='${ns.e("button")} ${ns.e("move-to-left-btn")}' 
+            part='button move-to-left-btn'
+            type="primary" 
+            size="small" 
+            disabled
+          >
+            <ea-icon icon="icon-angle-left"></ea-icon>
+          </ea-button>
         </div>
+
+        <ea-transfer-panel 
+          class='${ns.e("panel")} ${ns.m("panel", "target")}' 
+          part='panel target-panel'
+          type="target"
+          data-title="${this.#getDefaultTitle("target")}"
+          filter-placeholder="${this["filter-placeholder"]}"
+        ></ea-transfer-panel>
       </div>
     `);
 
@@ -233,243 +271,375 @@ export class EaTransfer extends Base {
     this.#abortController?.abort();
     this.#abortController = new AbortController();
 
-    // 绑定源面板事件
-    if (this.#sourcePanel) {
-      this.#sourcePanel.addEventListener(
-        "item-click",
-        this.#onSourceItemClick.bind(this),
-        { signal: this.#abortController.signal }
-      );
-      this.#sourcePanel.addEventListener(
-        "item-dblclick",
-        this.#onSourceItemDblClick.bind(this),
-        { signal: this.#abortController.signal }
-      );
-      this.#sourcePanel.addEventListener(
-        "checkbox-change",
-        this.#onSourceHeaderCheckboxChange.bind(this),
-        { signal: this.#abortController.signal }
-      );
-    }
+    this.#container.addEventListener(
+      "ea-transfer-panel-item-change",
+      e => {
+        e.stopImmediatePropagation();
 
-    // 绑定目标面板事件
-    if (this.#targetPanel) {
-      this.#targetPanel.addEventListener(
-        "item-click",
-        this.#onTargetItemClick.bind(this),
-        { signal: this.#abortController.signal }
-      );
-      this.#targetPanel.addEventListener(
-        "item-dblclick",
-        this.#onTargetItemDblClick.bind(this),
-        { signal: this.#abortController.signal }
-      );
-      this.#targetPanel.addEventListener(
-        "checkbox-change",
-        this.#onTargetHeaderCheckboxChange.bind(this),
-        { signal: this.#abortController.signal }
-      );
-    }
+        const { type, selectedKey, isChecked } = e.detail;
 
-    // 绑定按钮点击事件
-    this.#AbortControllerStates.buttonClickAbortController?.abort();
-    this.#AbortControllerStates.buttonClickAbortController =
-      new AbortController();
+        if (isChecked) {
+          this.#states[`${type}SelectedKeys`].add(selectedKey);
+        } else {
+          this.#states[`${type}SelectedKeys`].delete(selectedKey);
+        }
 
-    this.#moveToRightBtn.addEventListener("click", this.#onMoveToRight, {
-      signal: this.#AbortControllerStates.buttonClickAbortController.signal,
-    });
+        if (this.#states.sourceSelectedKeys.size > 0) {
+          this.#moveToRightBtn.disabled = false;
+        } else {
+          this.#moveToRightBtn.disabled = true;
+        }
 
-    this.#moveToLeftBtn.addEventListener("click", this.#onMoveToLeft, {
-      signal: this.#AbortControllerStates.buttonClickAbortController.signal,
-    });
+        if (this.#states.targetSelectedKeys.size > 0) {
+          this.#moveToLeftBtn.disabled = false;
+        } else {
+          this.#moveToLeftBtn.disabled = true;
+        }
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#container.addEventListener(
+      "ea-transfer-panel-select-all",
+      e => {
+        e.stopImmediatePropagation();
+
+        const { type, selectedKeys, isChecked } = e.detail;
+
+        if (isChecked) {
+          selectedKeys.forEach(li => {
+            this.#states[`${type}SelectedKeys`].add(li);
+          });
+        } else {
+          selectedKeys.forEach(li => {
+            this.#states[`${type}SelectedKeys`].delete(li);
+          });
+        }
+
+        if (this.#states.sourceSelectedKeys.size > 0) {
+          this.#moveToRightBtn.disabled = false;
+        } else {
+          this.#moveToRightBtn.disabled = true;
+        }
+
+        if (this.#states.targetSelectedKeys.size > 0) {
+          this.#moveToLeftBtn.disabled = false;
+        } else {
+          this.#moveToLeftBtn.disabled = true;
+        }
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#moveToRightBtn.addEventListener(
+      "click",
+      e => {
+        e.stopImmediatePropagation();
+
+        const { key, label, disabled } = this.dataProps;
+        const selectedKeys = [...this.#states.sourceSelectedKeys];
+
+        selectedKeys.forEach(li => {
+          const checkbox = li.querySelector(
+            ".ea-transfer-panel__item-checkbox"
+          );
+          checkbox.checked = false;
+
+          checkbox.dispatchEvent(
+            new CustomEvent("change", {
+              bubbles: true,
+              composed: true,
+              detail: {
+                checkbox: false,
+              },
+            })
+          );
+
+          this.#states.sourceSelectedKeys.delete(li);
+        });
+
+        this.#targetPanel.data = [
+          ...new Set(
+            [...this.#targetPanel.data, ...selectedKeys].sort((a, b) => {
+              const aData = this.#states.dataMap.get(a);
+              const bData = this.#states.dataMap.get(b);
+
+              return aData[key] - bData[key] || 0;
+            })
+          ),
+        ];
+
+        this.#sourcePanel.data = [
+          ...this.#sourcePanel.data
+            .filter(li => !selectedKeys.includes(li))
+            .sort((a, b) => {
+              const aData = this.#states.dataMap.get(a);
+              const bData = this.#states.dataMap.get(b);
+
+              return aData[key] - bData[key] || 0;
+            }),
+        ];
+
+        const targetDataKeys = this.#targetPanel.data.map(li => {
+          const data = this.#states.dataMap.get(li);
+          return data[key];
+        });
+        this.value = targetDataKeys;
+
+        if (this.#states.sourceSelectedKeys.size > 0) {
+          this.#moveToRightBtn.disabled = false;
+        } else {
+          this.#moveToRightBtn.disabled = true;
+        }
+
+        if (this.#states.targetSelectedKeys.size > 0) {
+          this.#moveToLeftBtn.disabled = false;
+        } else {
+          this.#moveToLeftBtn.disabled = true;
+        }
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#moveToLeftBtn.addEventListener(
+      "click",
+      e => {
+        e.stopImmediatePropagation();
+
+        const { key, label, disabled } = this.dataProps;
+        const selectedKeys = [...this.#states.targetSelectedKeys];
+
+        selectedKeys.forEach(li => {
+          const checkbox = li.querySelector(
+            ".ea-transfer-panel__item-checkbox"
+          );
+          checkbox.checked = false;
+
+          checkbox.dispatchEvent(
+            new CustomEvent("change", {
+              bubbles: true,
+              composed: true,
+              detail: {
+                checkbox: false,
+              },
+            })
+          );
+
+          this.#states.targetSelectedKeys.delete(li);
+        });
+
+        this.#sourcePanel.data = [
+          ...new Set(
+            [...this.#sourcePanel.data, ...selectedKeys].sort((a, b) => {
+              const aData = this.#states.dataMap.get(a);
+              const bData = this.#states.dataMap.get(b);
+
+              return aData[key] - bData[key] || 0;
+            })
+          ),
+        ];
+
+        this.#targetPanel.data = [
+          ...this.#targetPanel.data
+            .filter(li => !selectedKeys.includes(li))
+            .sort((a, b) => {
+              const aData = this.#states.dataMap.get(a);
+              const bData = this.#states.dataMap.get(b);
+
+              return aData[key] - bData[key] || 0;
+            }),
+        ];
+
+        const targetDataKeys = this.#targetPanel.data.map(li => {
+          const data = this.#states.dataMap.get(li);
+          return data[key];
+        });
+        this.value = targetDataKeys;
+
+        if (this.#states.sourceSelectedKeys.size > 0) {
+          this.#moveToRightBtn.disabled = false;
+        } else {
+          this.#moveToRightBtn.disabled = true;
+        }
+
+        if (this.#states.targetSelectedKeys.size > 0) {
+          this.#moveToLeftBtn.disabled = false;
+        } else {
+          this.#moveToLeftBtn.disabled = true;
+        }
+      },
+      {
+        signal: this.#abortController.signal,
+      }
+    );
   }
-
-  /**
-   * 处理数据更新
-   * @param {Array} newData
-   */
-  #handleDataUpdate = newData => {
-    if (!Array.isArray(newData)) return;
-
-    // 更新源面板数据
-    if (this.#sourcePanel) {
-      this.#sourcePanel.data = newData;
-      this.#sourcePanel.selected = [];
-    }
-
-    // 更新目标面板数据
-    if (this.#targetPanel) {
-      this.#targetPanel.data = newData;
-      this.#targetPanel.selected = this.value;
-    }
-
-    this.#updateButtonStates();
-  };
-
-  /**
-   * 处理值更新
-   * @param {Array} newValue
-   */
-  #handleValueUpdate = newValue => {
-    if (!Array.isArray(newValue)) return;
-
-    // 更新目标面板选中项
-    if (this.#targetPanel) {
-      this.#targetPanel.selected = newValue;
-    }
-
-    this.#updateButtonStates();
-  };
 
   /**
    * 更新字段映射
    * @param {Object} newProps
    */
   #updateFieldMapping = newDataProps => {
-    if (newDataProps && typeof newDataProps === "object") {
-      this.#states.fieldMapping = {
-        ...this.#states.fieldMapping,
-        ...newDataProps,
-      };
+    if (this.#sourcePanel) {
+      this.#sourcePanel.dataProps = newDataProps;
     }
 
-    this.#updateButtonStates();
+    if (this.#targetPanel) {
+      this.#targetPanel.dataProps = newDataProps;
+    }
   };
 
   /**
-   * 更新按钮状态
+   * 处理数据更新
+   * @param {Array} newData
    */
-  #updateButtonStates = () => {
-    const hasSourceSelected = this.#states.sourceSelectedKeys.size > 0;
-    const hasTargetSelected = this.#states.targetSelectedKeys.size > 0;
+  #handleDataUpdate = newData => {
+    const { key } = this.dataProps;
 
-    this.#moveToRightBtn.disabled = !hasSourceSelected || this.disabled;
-    this.#moveToLeftBtn.disabled = !hasTargetSelected || this.disabled;
-  };
-
-  /**
-   * 源面板项点击事件
-   * @param {CustomEvent} e
-   */
-  #onSourceItemClick = e => {
-    const { key, item } = e.detail;
-
-    if (this.#states.sourceSelectedKeys.has(key)) {
-      this.#states.sourceSelectedKeys.delete(key);
-    } else {
-      this.#states.sourceSelectedKeys.add(key);
+    if (this.#sourcePanel) {
+      const sourceData = newData.filter(item => {
+        const itemKey = item[key];
+        return !this.value.includes(itemKey);
+      });
+      this.#sourcePanel.clearList();
+      this.#sourcePanel.data = this.#createPanelData(
+        sourceData,
+        this.leftDefaultChecked
+      );
+      this.#sourcePanel.selected = this.leftDefaultChecked;
     }
 
-    this.#updateButtonStates();
-    this.#emitChangeEvent();
+    if (this.#targetPanel) {
+      const targetData = newData.filter(item => {
+        const itemKey = item[key];
+        return this.value.includes(itemKey);
+      });
+      this.#targetPanel.clearList();
+      this.#targetPanel.data = this.#createPanelData(
+        targetData,
+        this.rightDefaultChecked
+      );
+      this.#targetPanel.selected = this.rightDefaultChecked;
+    }
   };
 
   /**
-   * 目标面板项点击事件
-   * @param {CustomEvent} e
+   * 处理 value 值更新，确保数据一致性
+   * @param {Array} newValue - 新的 value 值
    */
-  #onTargetItemClick = e => {
-    const { key, item } = e.detail;
+  #handleValueUpdate = newValue => {
+    const { key } = this.dataProps;
 
-    if (this.#states.targetSelectedKeys.has(key)) {
-      this.#states.targetSelectedKeys.delete(key);
-    } else {
-      this.#states.targetSelectedKeys.add(key);
+    if (!this.data || this.data.length === 0) {
+      return;
     }
 
-    this.#updateButtonStates();
-    this.#emitChangeEvent();
+    if (this.#sourcePanel) {
+      const sourceData = this.data.filter(item => {
+        const itemKey = item[key];
+        return !newValue.includes(itemKey);
+      });
+
+      this.#sourcePanel.clearList();
+      this.#sourcePanel.data = this.#createPanelData(
+        sourceData,
+        this.leftDefaultChecked
+      );
+      this.#sourcePanel.selected = this.leftDefaultChecked;
+    }
+
+    if (this.#targetPanel) {
+      const targetData = this.data
+        .filter(item => {
+          const itemKey = item[key];
+          return newValue.includes(itemKey);
+        })
+        .sort((a, b) => {
+          const aIndex = newValue.indexOf(a[key]);
+          const bIndex = newValue.indexOf(b[key]);
+          return aIndex - bIndex;
+        });
+
+      // 更新 targetPanel 的数据和选中状态
+      this.#targetPanel.clearList();
+      this.#targetPanel.data = this.#createPanelData(
+        targetData,
+        this.rightDefaultChecked
+      );
+      this.#targetPanel.selected = this.rightDefaultChecked;
+    }
   };
 
   /**
-   * 向右移动按钮点击事件
+   * 创建面板数据
+   * @param {Array} data - 数据数组
+   * @param {Array} defaultChecked - 默认选中项数组
+   * @returns {Array} 列表项数组
    */
-  #onMoveToRight = () => {
-    if (this.#states.sourceSelectedKeys.size === 0) return;
+  #createPanelData = (data, defaultChecked) => {
+    const { key, label, disabled } = this.dataProps;
+    const ns = namespace("transfer-panel");
 
-    const newValue = [...this.value, ...this.#states.sourceSelectedKeys];
-    this.value = newValue;
-    this.#states.targetSelectedKeys.clear();
+    return Array.from({ length: data.length }, (_, index) => {
+      const li = document.createElement("li");
+      const dataItem = data[index];
+      const isDisabled = dataItem[disabled];
+      const isChecked = defaultChecked.includes(dataItem[key]);
 
-    this.#updateButtonStates();
-    this.#emitChangeEvent();
-  };
+      li.className = this.computedClasslist(
+        ns.e("item"),
+        {},
+        {
+          disabled: isDisabled,
+          checked: isChecked,
+        }
+      );
 
-  /**
-   * 向左移动按钮点击事件
-   */
-  #onMoveToLeft = () => {
-    if (this.#states.targetSelectedKeys.size === 0) return;
+      li.innerHTML = this.html(`
+        <ea-checkbox 
+          class="${ns.e("item-checkbox")}"
+          ${isDisabled ? "disabled" : ""}
+          ${isChecked && !isDisabled ? "checked" : ""}
+          part="item-checkbox"
+        >
+          <span class="${ns.e("item-label")}" part="item-label">${dataItem[label]}</span>
+        </ea-checkbox>
+      `);
 
-    const newValue = this.value.filter(
-      key => !this.#states.targetSelectedKeys.has(key)
-    );
-    this.value = newValue;
-    this.#states.targetSelectedKeys.clear();
+      this.#states.dataMap.set(li, dataItem);
 
-    this.#updateButtonStates();
-    this.#emitChangeEvent();
-  };
-
-  /**
-   * 触发 change 事件
-   */
-  #emitChangeEvent = () => {
-    this.emit("change", {
-      detail: {
-        value: this.value,
-        sourceSelectedKeys: Array.from(this.#states.sourceSelectedKeys),
-        targetSelectedKeys: Array.from(this.#states.targetSelectedKeys),
-      },
-      bubbles: true,
-      composed: true,
+      return li;
+    }).sort((a, b) => {
+      const aKey = this.#states.dataMap.get(a)[key];
+      const bKey = this.#states.dataMap.get(b)[key];
+      return aKey - bKey;
     });
-  };
-
-  /**
-   * 更新标题
-   * @param {Array} titles
-   */
-  #updateTitles = titles => {
-    if (Array.isArray(titles) && titles.length >= 2) {
-      // 更新源面板标题
-      if (this.#sourcePanel) {
-        this.#sourcePanel.title = titles[0];
-      }
-
-      // 更新目标面板标题
-      if (this.#targetPanel) {
-        this.#targetPanel.title = titles[1];
-      }
-    }
   };
 
   /**
    * 更新按钮文本
    * @param {Array} buttonTexts
    */
-  #updateButtonTexts = buttonTexts => {
-    // 按钮文本现在由 TransferPanel 组件管理，此方法保留为空
-  };
+  #updateButtonTexts = buttonTexts => {};
 
   /**
    * 处理可过滤更新
    * @param {boolean} filterable
    */
   #handleFilterableUpdate = filterable => {
-    // 重新渲染以显示/隐藏过滤输入框
-    this.$render();
-    this.#bindEvents();
+    if (!this.filterable) return;
 
-    // 更新面板数据
     if (this.#sourcePanel) {
-      this.#sourcePanel.data = this.data;
-      this.#sourcePanel.selected = [];
+      this.#sourcePanel.toggleAttribute("filterable", filterable);
     }
+
     if (this.#targetPanel) {
-      this.#targetPanel.data = this.data;
-      this.#targetPanel.selected = this.value;
+      this.#targetPanel.toggleAttribute("filterable", filterable);
     }
   };
 
@@ -478,62 +648,57 @@ export class EaTransfer extends Base {
    * @param {string} placeholder
    */
   #updateFilterPlaceholder = placeholder => {
-    // 过滤占位符现在由 TransferPanel 组件管理，此方法保留为空
+    if (!this.filterable) return;
+
+    if (this.#sourcePanel) {
+      this.#sourcePanel.setAttribute("filter-placeholder", placeholder);
+    }
+
+    if (this.#targetPanel) {
+      this.#targetPanel.setAttribute("filter-placeholder", placeholder);
+    }
   };
 
   /**
-   * 源面板全选复选框变化事件
-   * @param {CustomEvent} e
+   * 获取默认标题
+   * @param {"source" | "target"} type - 面板类型
+   * @returns {string} 默认标题
    */
-  #onSourceHeaderCheckboxChange = e => {
-    const { checked, selectedKeys } = e.detail;
-
-    this.#states.sourceSelectedKeys = new Set(selectedKeys);
-    this.#updateButtonStates();
-    this.#emitChangeEvent();
-  };
+  #getDefaultTitle(type) {
+    return type === "source"
+      ? i18nManager.t("transfer.list1")
+      : i18nManager.t("transfer.list2");
+  }
 
   /**
-   * 目标面板全选复选框变化事件
-   * @param {CustomEvent} e
+   * 更新标题
+   * @param {Array} titles
    */
-  #onTargetHeaderCheckboxChange = e => {
-    const { checked, selectedKeys } = e.detail;
+  #updateTitles = titles => {
+    if (Array.isArray(titles) && titles.length >= 2) {
+      const [sourceTitle, targetTitle] = titles;
 
-    this.#states.targetSelectedKeys = new Set(selectedKeys);
-    this.#updateButtonStates();
-    this.#emitChangeEvent();
+      if (this.#sourcePanel) {
+        this.#sourcePanel.setAttribute("data-title", sourceTitle);
+      }
+
+      if (this.#targetPanel) {
+        this.#targetPanel.setAttribute("data-title", targetTitle);
+      }
+    }
   };
 
-  /**
-   * 源面板项双击事件
-   * @param {CustomEvent} e
-   */
-  #onSourceItemDblClick = e => {
-    const { key, item } = e.detail;
+  $updateLocalization(locale) {
+    this.locale = locale;
+    i18nManager.locale = locale;
 
-    // 双击快速移动到目标列表
-    const newValue = [...this.value, key];
-    this.value = newValue;
-
-    this.#updateButtonStates();
-    this.#emitChangeEvent();
-  };
-
-  /**
-   * 目标面板项双击事件
-   * @param {CustomEvent} e
-   */
-  #onTargetItemDblClick = e => {
-    const { key, item } = e.detail;
-
-    // 双击快速移回源列表
-    const newValue = this.value.filter(k => k !== key);
-    this.value = newValue;
-
-    this.#updateButtonStates();
-    this.#emitChangeEvent();
-  };
+    if (!this.titles || this.titles.length === 0) {
+      this.#updateTitles([
+        this.#getDefaultTitle("source"),
+        this.#getDefaultTitle("target"),
+      ]);
+    }
+  }
 }
 
 if (!customElements.get("ea-transfer")) {

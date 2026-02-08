@@ -22,14 +22,8 @@ $name: ea-transfer;
 
 @include block($name) {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
-
-  @include element(panels) {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
 
   @include element(buttons) {
     display: flex;

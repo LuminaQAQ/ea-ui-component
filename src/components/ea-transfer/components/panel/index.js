@@ -27,25 +27,32 @@ export class EaTransferPanel extends Base {
     selectedKeys: new Set(),
     filteredData: [],
     filterText: "",
+    lastDataHash: "", // 数据哈希值，用于检测数据变化
+    itemElements: new Map(), // 缓存 DOM 元素
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "title", "filterable"];
+    return [...super.observedAttributes, "data-title", "type", "filterable"];
   }
 
   state = this.properties({
-    // type 属性已移除，无实际意义
-  });
-
-  propStates = this.properties({
-    title: {
-      props: true,
+    "data-title": {
       type: String,
       default: "",
       observer: newVal => {
-        this.#updateTitle(newVal);
+        if (this.#title) {
+          this.#title.textContent = newVal || "";
+        }
       },
     },
+    type: {
+      type: ["source", "target"],
+      default: "source",
+      observer: newVal => {},
+    },
+  });
+
+  propStates = this.properties({
     data: {
       props: true,
       type: Array,
@@ -54,20 +61,12 @@ export class EaTransferPanel extends Base {
         this.#handleDataUpdate(newVal);
       },
     },
-    selected: {
-      props: true,
-      type: Array,
-      default: [],
-      observer: newVal => {
-        this.#handleSelectedUpdate(newVal);
-      },
-    },
     filterable: {
       props: true,
       type: Boolean,
       default: false,
       observer: newVal => {
-        this.#handleFilterableUpdate(newVal);
+        // this.#handleFilterableUpdate(newVal);
       },
     },
     "filter-placeholder": {
@@ -92,9 +91,7 @@ export class EaTransferPanel extends Base {
         label: "label",
         disabled: "disabled",
       }),
-      observer: newVal => {
-        this.#updateFieldMapping(newVal);
-      },
+      observer: newVal => {},
     },
   });
 
@@ -129,20 +126,21 @@ export class EaTransferPanel extends Base {
     this.shadowRoot.innerHTML = this.html(`
       <div class='${ns.b()}' part='container'>
         <div class='${ns.e("header")}' part='header'>
-          <ea-checkbox class='${ns.e("checkbox")}' part='checkbox'></ea-checkbox>
-          <span class='${ns.e("title")}' part='title'></span>
+          <ea-checkbox class='${ns.e("checkbox")}' part='checkbox'>
+            <span class='${ns.e("title")}' part='title'></span>
+          </ea-checkbox>
           <span class='${ns.e("count")}' part='count'></span>
         </div>
         <div class='${ns.e("body")}' part='body'>
-            <div class='${ns.e("filter-wrapper")}' part='filter-wrapper'>
-              <ea-input 
-                class='${ns.e("filter")}' 
-                part='filter'
-                placeholder="${this["filter-placeholder"]}"
-                clearable
-              ></ea-input>
-            </div>
-          <div class='${ns.e("list")}' part='list'></div>
+          <div class='${ns.e("filter-wrapper")}' part='filter-wrapper'>
+            <ea-input 
+              class='${ns.e("filter")}' 
+              part='filter'
+              placeholder="${this["filter-placeholder"]}"
+              clearable
+            ></ea-input>
+          </div>
+          <ul class='${ns.e("list")}' part='list'></ul>
         </div>
       </div>
     `);
@@ -161,8 +159,6 @@ export class EaTransferPanel extends Base {
 
   connectedCallback() {
     super.connectedCallback();
-    this.#abortController?.abort();
-    this.#abortController = new AbortController();
 
     this.#bindEvents();
   }
@@ -172,212 +168,141 @@ export class EaTransferPanel extends Base {
   }
 
   /**
+   * 清空列表项
+   */
+  clearList() {
+    this.#list.innerHTML = "";
+  }
+
+  /**
    * 绑定事件
    */
   #bindEvents() {
-    // 绑定列表点击事件
-    this.#list.addEventListener("click", this.#onItemClick.bind(this), {
-      signal: this.#abortController.signal,
-    });
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-    // 绑定双击事件
-    this.#list.addEventListener("dblclick", this.#onItemDblClick.bind(this), {
-      signal: this.#abortController.signal,
-    });
+    this.#list.addEventListener(
+      "change",
+      e => {
+        e.stopImmediatePropagation();
 
-    // 绑定全选复选框事件
-    if (this.#checkbox) {
-      this.#checkbox.addEventListener(
-        "change",
-        this.#onHeaderCheckboxChange.bind(this),
-        {
-          signal: this.#abortController.signal,
+        const li = e.target.closest(".ea-transfer-panel__item");
+        const isChecked = Boolean(e.target.checked);
+
+        if (isChecked) {
+          this.#states.selectedKeys.add(li);
+        } else {
+          this.#states.selectedKeys.delete(li);
         }
-      );
-    }
 
-    // 绑定搜索输入事件
-    if (this.#filterInput) {
-      this.#filterInput.addEventListener(
-        "input",
-        this.#onFilterInput.bind(this),
-        {
-          signal: this.#abortController.signal,
+        const isAllChecked =
+          this.#states.selectedKeys.size >=
+          this.#list.querySelectorAll(
+            ".ea-transfer-panel__item:not(.is-disabled)"
+          ).length;
+        const isSomeChecked = this.#states.selectedKeys.size > 0;
+
+        if (isAllChecked) {
+          this.#checkbox.checked = true;
+          this.#checkbox.indeterminate = false;
+        } else if (isSomeChecked) {
+          this.#checkbox.checked = false;
+          this.#checkbox.indeterminate = true;
+        } else {
+          this.#checkbox.checked = false;
+          this.#checkbox.indeterminate = false;
         }
-      );
-    }
-  }
 
-  /**
-   * 列表项点击事件
-   * @param {Event} e
-   */
-  #onItemClick(e) {
-    const item = e.target.closest(`.${this.ns.e("item")}`);
-    if (!item) return;
+        this.emit("ea-transfer-panel-item-change", {
+          detail: {
+            type: this.type,
+            selectedKey: li,
+            isChecked,
+          },
+          bubbles: true,
+          composed: true,
+        });
 
-    const key = item.getAttribute("data-key");
-    const disabled = item.classList.contains("is-disabled");
-
-    if (disabled) return;
-
-    this.#toggleItemSelection(key);
-    this.emit("item-click", {
-      detail: {
-        key,
-        item: this.#getItemByKey(key),
-        type: this.type,
+        // 更新计数显示
+        this.#updateCount();
       },
-    });
-  }
+      {
+        signal: this.#abortController.signal,
+      }
+    );
 
-  /**
-   * 列表项双击事件
-   * @param {Event} e
-   */
-  #onItemDblClick(e) {
-    const item = e.target.closest(`.${this.ns.e("item")}`);
-    if (!item) return;
+    this.#checkbox.addEventListener(
+      "change",
+      e => {
+        e.stopImmediatePropagation();
 
-    const key = item.getAttribute("data-key");
-    const disabled = item.classList.contains("is-disabled");
+        const isChecked = Boolean(e.target.checked);
+        const listItems = [
+          ...this.#list.querySelectorAll(
+            ".ea-transfer-panel__item:not(.is-disabled)"
+          ),
+        ];
 
-    if (disabled) return;
+        listItems.forEach(li => {
+          const checkbox = li.querySelector(
+            ".ea-transfer-panel__item-checkbox:not([disabled])"
+          );
+          if (!checkbox) return;
 
-    this.emit("item-dblclick", {
-      detail: {
-        key,
-        item: this.#getItemByKey(key),
-        type: this.type,
+          checkbox.checked = isChecked;
+
+          if (isChecked) {
+            this.#states.selectedKeys.add(li);
+          } else {
+            this.#states.selectedKeys.delete(li);
+          }
+        });
+
+        this.emit("ea-transfer-panel-select-all", {
+          detail: {
+            type: this.type,
+            selectedKeys: listItems,
+            isChecked,
+          },
+          bubbles: true,
+          composed: true,
+        });
+
+        // 更新计数显示
+        this.#updateCount();
       },
-    });
+      {
+        signal: this.#abortController.signal,
+      }
+    );
   }
 
   /**
-   * 全选复选框变化事件
-   * @param {Event} e
+   * 更新计数显示
    */
-  #onHeaderCheckboxChange(e) {
-    const checked = e.target.checked;
-    this.#toggleAllSelection(checked);
-    this.emit("checkbox-change", {
-      detail: {
-        checked,
-        selectedKeys: Array.from(this.#states.selectedKeys),
-        type: this.type,
-      },
-    });
-  }
+  #updateCount = () => {
+    if (!this.#count) return;
 
-  /**
-   * 搜索输入事件
-   * @param {Event} e
-   */
-  #onFilterInput(e) {
-    const filterText = e.target.value.trim();
-    this.#states.filterText = filterText;
-    this.#applyFilter();
-    this.emit("filter", {
-      detail: {
-        filterText,
-        type: this.type,
-      },
-    });
-  }
+    const totalItems = this.#list.querySelectorAll(
+      ".ea-transfer-panel__item:not(.is-disabled)"
+    ).length;
+    const checkedItems = this.#states.selectedKeys.size;
 
-  /**
-   * 切换单个项的选择状态
-   * @param {string} key
-   */
-  #toggleItemSelection(key) {
-    if (this.#states.selectedKeys.has(key)) {
-      this.#states.selectedKeys.delete(key);
-    } else {
-      this.#states.selectedKeys.add(key);
-    }
-
-    this.#updateSelectionState();
-    this.#renderList();
-  }
-
-  /**
-   * 切换全选状态
-   * @param {boolean} checked
-   */
-  #toggleAllSelection(checked) {
-    const availableItems = this.#getAvailableItems();
-
-    if (checked) {
-      availableItems.forEach(item => {
-        const key = this.#getFieldValue(item, "key");
-        this.#states.selectedKeys.add(key);
-      });
-    } else {
-      this.#states.selectedKeys.clear();
-    }
-
-    this.#renderList();
-  }
-
-  /**
-   * 更新选择状态
-   */
-  #updateSelectionState() {
-    if (!this.#checkbox) return;
-
-    const availableItems = this.#getAvailableItems();
-    const selectedCount = this.#states.selectedKeys.size;
-    const availableCount = availableItems.length;
-
-    if (selectedCount === 0) {
-      this.#checkbox.checked = false;
-      this.#checkbox.indeterminate = false;
-    } else if (selectedCount === availableCount) {
-      this.#checkbox.checked = true;
-      this.#checkbox.indeterminate = false;
-    } else {
-      this.#checkbox.checked = false;
-      this.#checkbox.indeterminate = true;
-    }
-  }
+    this.#count.textContent = `${checkedItems}/${totalItems}`;
+  };
 
   /**
    * 处理数据更新
    * @param {Array} newData
    */
-  #handleDataUpdate(newData) {
-    this.#states.filteredData = newData || [];
-    this.#applyFilter();
-  }
+  #handleDataUpdate = newData => {
+    newData.forEach(item => {
+      this.#list.appendChild(item);
+    });
 
-  /**
-   * 处理选中项更新
-   * @param {Array} newSelected
-   */
-  #handleSelectedUpdate(newSelected) {
-    this.#states.selectedKeys = new Set(newSelected || []);
-    this.#updateSelectionState();
-    this.#renderList();
-  }
-
-  /**
-   * 处理可过滤状态更新
-   * @param {boolean} newFilterable
-   */
-  #handleFilterableUpdate(newFilterable) {
-    // 重新渲染以显示/隐藏搜索框
-    this.$render();
-  }
-
-  /**
-   * 更新标题
-   * @param {string} newTitle
-   */
-  #updateTitle(newTitle) {
-    if (this.#title) {
-      this.#title.textContent = newTitle || "";
-    }
-  }
+    // 数据更新后更新计数
+    this.#updateCount();
+  };
 
   /**
    * 更新搜索框占位符
@@ -387,163 +312,6 @@ export class EaTransferPanel extends Base {
     if (this.#filterInput) {
       this.#filterInput.placeholder = newPlaceholder || "请输入搜索内容";
     }
-  }
-
-  /**
-   * 更新字段映射
-   * @param {Object} newDataProps
-   */
-  #updateFieldMapping(newDataProps) {
-    // 字段映射更新后重新渲染列表
-    this.#renderList();
-  }
-
-  /**
-   * 应用过滤
-   */
-  #applyFilter() {
-    if (!this.data || !Array.isArray(this.data)) {
-      this.#states.filteredData = [];
-      return;
-    }
-
-    if (!this.#states.filterText) {
-      this.#states.filteredData = this.data;
-    } else {
-      const filterMethod = this["filter-method"];
-
-      if (filterMethod && typeof filterMethod === "function") {
-        // 使用自定义过滤方法
-        this.#states.filteredData = this.data.filter(item =>
-          filterMethod(this.#states.filterText, item)
-        );
-      } else {
-        // 使用默认过滤方法
-        this.#states.filteredData = this.data.filter(item => {
-          const label = this.#getFieldValue(item, "label") || "";
-          return label
-            .toLowerCase()
-            .includes(this.#states.filterText.toLowerCase());
-        });
-      }
-    }
-
-    this.#renderList();
-  }
-
-  /**
-   * 渲染列表
-   */
-  #renderList() {
-    if (!this.#list || !Array.isArray(this.#states.filteredData)) return;
-
-    const items = this.#states.filteredData.map(item => {
-      const key = this.#getFieldValue(item, "key");
-      const label = this.#getFieldValue(item, "label") || "";
-      const disabled = this.#getFieldValue(item, "disabled") || false;
-      const selected = this.#states.selectedKeys.has(key);
-
-      const className = this.computedClasslist(this.ns.e("item"), {
-        "is-selected": selected,
-        "is-disabled": disabled,
-      });
-
-      return `
-        <div class="${className}" data-key="${key}" part="item">
-          <ea-checkbox 
-            ${selected ? "checked" : ""} 
-            ${disabled ? "disabled" : ""}
-            part="item-checkbox"
-          ></ea-checkbox>
-          <span class="${this.ns.e("item-label")}" part="item-label">${label}</span>
-        </div>
-      `;
-    });
-
-    this.#list.innerHTML = items.join("");
-    this.#updateCount();
-  }
-
-  /**
-   * 更新计数显示
-   */
-  #updateCount() {
-    if (!this.#count) return;
-
-    const total = this.#states.filteredData.length;
-    const selected = this.#states.selectedKeys.size;
-
-    this.#count.textContent = `${selected}/${total}`;
-  }
-
-  /**
-   * 获取字段值
-   * @param {Object} item
-   * @param {string} field
-   * @returns {any}
-   */
-  #getFieldValue(item, field) {
-    const fieldName = this.dataProps[field] || field;
-    return item?.[fieldName];
-  }
-
-  /**
-   * 根据key获取数据项
-   * @param {string} key
-   * @returns {Object|null}
-   */
-  #getItemByKey(key) {
-    return (
-      this.data.find(item => this.#getFieldValue(item, "key") === key) || null
-    );
-  }
-
-  /**
-   * 获取可用的数据项（非禁用的）
-   * @returns {Array}
-   */
-  #getAvailableItems() {
-    return (this.#states.filteredData || []).filter(
-      item => !this.#getFieldValue(item, "disabled")
-    );
-  }
-
-  /**
-   * 获取当前选中的key列表
-   * @returns {Array}
-   */
-  getSelectedKeys() {
-    return Array.from(this.#states.selectedKeys);
-  }
-
-  /**
-   * 设置选中项
-   * @param {Array} keys
-   */
-  setSelectedKeys(keys) {
-    this.#states.selectedKeys = new Set(keys || []);
-    this.#updateSelectionState();
-    this.#renderList();
-  }
-
-  /**
-   * 清除选中项
-   */
-  clearSelection() {
-    this.#states.selectedKeys.clear();
-    this.#updateSelectionState();
-    this.#renderList();
-  }
-
-  /**
-   * 清除搜索过滤
-   */
-  clearFilter() {
-    if (this.#filterInput) {
-      this.#filterInput.value = "";
-    }
-    this.#states.filterText = "";
-    this.#applyFilter();
   }
 }
 

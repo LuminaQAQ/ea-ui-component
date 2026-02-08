@@ -75,7 +75,7 @@
       "      </div>",
       "      `;",
       "",
-      "        this.#container = this.shadowRoot.querySelector(`.${ns.b()}`);",
+      "        this.#container = this.shadowRoot.querySelector(`${ns.cb()}`);",
       "      }",
       "",
       "      connectedCallback() {",
