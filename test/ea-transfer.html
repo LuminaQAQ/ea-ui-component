@@ -22,7 +22,6 @@
 
     <div class="demo">
       <ea-transfer id="basicTransfer"></ea-transfer>
-      <button id="setDataBtn">set data</button>
     </div>
 
     <script type="module">
@@ -45,17 +44,44 @@
         init() {
           const data = this.generateData();
           this.transfer.data = data;
-
-          this.setDataBtn.addEventListener("click", () => {
-            this.transfer.data = this.generateData();
-          });
-
-          this.transfer.addEventListener("change", e => {
-            console.log(e.detail.value, this.transfer.value);
-          });
         },
       };
       basicExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+
+    <!--  可搜索过滤 -->
+    <!-- #region -->
+    <h1>可搜索过滤</h1>
+
+    <div class="demo">
+      <ea-transfer id="filterableTransfer" filterable></ea-transfer>
+    </div>
+
+    <script type="module">
+      const filterableExample = {
+        transfer: document.querySelector("#filterableTransfer"),
+
+        generateData: () => {
+          const data = [];
+          for (let i = 1; i <= 15; i++) {
+            data.push({
+              key: i,
+              label: `Option ${i}`,
+              disabled: i % 4 === 0,
+            });
+          }
+          return data;
+        },
+
+        init() {
+          const data = this.generateData();
+          this.transfer.data = data;
+        },
+      };
+      filterableExample.init();
     </script>
 
     <hr />

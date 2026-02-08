@@ -42,15 +42,10 @@ export class EaTransfer extends Base {
     sourceSelectedKeys: new Set(),
     targetSelectedKeys: new Set(),
     dataMap: new Map(),
-    // fieldMapping: {
-    //   key: "key",
-    //   label: "label",
-    //   disabled: "disabled",
-    // },
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "disabled"];
+    return [...super.observedAttributes, "disabled", "filterable"];
   }
 
   state = this.properties({
@@ -59,6 +54,13 @@ export class EaTransfer extends Base {
       default: false,
       observer: newVal => {
         this.updateContainerClasslist();
+      },
+    },
+    filterable: {
+      type: Boolean,
+      default: false,
+      observer: async newVal => {
+        this.#handleFilterableUpdate(newVal);
       },
     },
   });
@@ -120,14 +122,6 @@ export class EaTransfer extends Base {
         this.#updateButtonTexts(newVal);
       },
     },
-    filterable: {
-      props: true,
-      type: Boolean,
-      default: false,
-      observer: async newVal => {
-        this.#handleFilterableUpdate(newVal);
-      },
-    },
     "filter-placeholder": {
       props: true,
       type: String,
@@ -136,7 +130,7 @@ export class EaTransfer extends Base {
         this.#updateFilterPlaceholder(newVal);
       },
     },
-    "filter-method": {
+    filterMethod: {
       props: true,
       type: Function,
       rawFunction: true,
@@ -512,6 +506,10 @@ export class EaTransfer extends Base {
         this.leftDefaultChecked
       );
       this.#sourcePanel.selected = this.leftDefaultChecked;
+
+      this.#sourcePanel.originalData = newData;
+      this.#sourcePanel.dataMap = this.#states.dataMap;
+      this.#sourcePanel.dataProps = this.dataProps;
     }
 
     if (this.#targetPanel) {
@@ -525,6 +523,10 @@ export class EaTransfer extends Base {
         this.rightDefaultChecked
       );
       this.#targetPanel.selected = this.rightDefaultChecked;
+
+      this.#targetPanel.originalData = newData;
+      this.#targetPanel.dataMap = this.#states.dataMap;
+      this.#targetPanel.dataProps = this.dataProps;
     }
   };
 
@@ -551,6 +553,10 @@ export class EaTransfer extends Base {
         this.leftDefaultChecked
       );
       this.#sourcePanel.selected = this.leftDefaultChecked;
+
+      this.#sourcePanel.originalData = this.data;
+      this.#sourcePanel.dataMap = this.#states.dataMap;
+      this.#sourcePanel.dataProps = this.dataProps;
     }
 
     if (this.#targetPanel) {
@@ -572,6 +578,10 @@ export class EaTransfer extends Base {
         this.rightDefaultChecked
       );
       this.#targetPanel.selected = this.rightDefaultChecked;
+
+      this.#targetPanel.originalData = this.data;
+      this.#targetPanel.dataMap = this.#states.dataMap;
+      this.#targetPanel.dataProps = this.dataProps;
     }
   };
 

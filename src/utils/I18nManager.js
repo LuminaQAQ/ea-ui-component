@@ -60,6 +60,7 @@ class I18nManager {
         transfer: {
           list1: "列表 1",
           list2: "列表 2",
+          filterPlaceholder: "输入关键词",
         },
       },
       "en-US": {
@@ -120,6 +121,7 @@ class I18nManager {
         transfer: {
           list1: "List 1",
           list2: "List 2",
+          filterPlaceholder: "Enter keyword",
         },
       },
     },

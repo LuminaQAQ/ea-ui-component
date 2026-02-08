@@ -1,6 +1,7 @@
 import { namespace } from "@/directives/namespace";
 import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
+import { i18nManager } from "@/utils/I18nManager";
 
 export class EaTransferPanel extends Base {
   /** @type {HTMLElement} */
@@ -24,15 +25,26 @@ export class EaTransferPanel extends Base {
   #abortController = new AbortController();
 
   #states = {
+    isEaInputDefined: false,
+
     selectedKeys: new Set(),
-    filteredData: [],
     filterText: "",
-    lastDataHash: "", // 数据哈希值，用于检测数据变化
-    itemElements: new Map(), // 缓存 DOM 元素
+    filteredData: [],
+  };
+
+  #AbortControllerStates = {
+    /** @type {AbortController} */
+    filter: new AbortController(),
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "data-title", "type", "filterable"];
+    return [
+      ...super.observedAttributes,
+      "data-title",
+      "type",
+      "filterable",
+      "filter-placeholder",
+    ];
   }
 
   state = this.properties({
@@ -43,6 +55,57 @@ export class EaTransferPanel extends Base {
         if (this.#title) {
           this.#title.textContent = newVal || "";
         }
+      },
+    },
+    filterable: {
+      type: Boolean,
+      default: false,
+      observer: async newVal => {
+        if (!this.#states.isEaInputDefined) {
+          await customElements.whenDefined("ea-input");
+          this.#states.isEaInputDefined = true;
+        }
+
+        this.#handleFilterableUpdate(newVal);
+
+        this.#AbortControllerStates.filter?.abort();
+
+        if (newVal) {
+          this.#AbortControllerStates.filter = new AbortController();
+
+          this.#filterInput.addEventListener(
+            "input",
+            e => {
+              e.stopImmediatePropagation();
+              const value = e.target.value.trim();
+              this.#handleFilterChange(value);
+            },
+            {
+              signal: this.#AbortControllerStates.filter.signal,
+            }
+          );
+
+          this.#filterInput.addEventListener(
+            "ea-clear",
+            e => {
+              e.stopImmediatePropagation();
+
+              this.#handleFilterChange("");
+            },
+            {
+              signal: this.#AbortControllerStates.filter.signal,
+            }
+          );
+        }
+      },
+    },
+    "filter-placeholder": {
+      type: String,
+      default: "",
+      observer: newVal => {
+        if (!this.filterable) return;
+
+        this.#updateFilterPlaceholder(newVal);
       },
     },
     type: {
@@ -61,23 +124,7 @@ export class EaTransferPanel extends Base {
         this.#handleDataUpdate(newVal);
       },
     },
-    filterable: {
-      props: true,
-      type: Boolean,
-      default: false,
-      observer: newVal => {
-        // this.#handleFilterableUpdate(newVal);
-      },
-    },
-    "filter-placeholder": {
-      props: true,
-      type: String,
-      default: "请输入搜索内容",
-      observer: newVal => {
-        this.#updateFilterPlaceholder(newVal);
-      },
-    },
-    "filter-method": {
+    filterMethod: {
       props: true,
       type: Function,
       rawFunction: true,
@@ -91,6 +138,12 @@ export class EaTransferPanel extends Base {
         label: "label",
         disabled: "disabled",
       }),
+      observer: newVal => {},
+    },
+    dataMap: {
+      props: true,
+      type: Object,
+      default: () => new Map(),
       observer: newVal => {},
     },
   });
@@ -122,6 +175,7 @@ export class EaTransferPanel extends Base {
   $render() {
     const ns = namespace("transfer-panel");
     this.ns = ns;
+    i18nManager.locale = this.locale;
 
     this.shadowRoot.innerHTML = this.html(`
       <div class='${ns.b()}' part='container'>
@@ -134,9 +188,10 @@ export class EaTransferPanel extends Base {
         <div class='${ns.e("body")}' part='body'>
           <div class='${ns.e("filter-wrapper")}' part='filter-wrapper'>
             <ea-input 
-              class='${ns.e("filter")}' 
+              class='${ns.e("filter")}'
+              placeholder="${i18nManager.t("transfer.filterPlaceholder")}"
               part='filter'
-              placeholder="${this["filter-placeholder"]}"
+              prefix-icon="icon-search"
               clearable
             ></ea-input>
           </div>
@@ -155,6 +210,8 @@ export class EaTransferPanel extends Base {
       ns.ce("filter-wrapper")
     );
     this.#filterInput = this.shadowRoot.querySelector(ns.ce("filter"));
+
+    this.updateContainerClasslist();
   }
 
   connectedCallback() {
@@ -165,6 +222,10 @@ export class EaTransferPanel extends Base {
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+
+    for (controller of Object.values(this.#AbortControllerStates)) {
+      controller?.abort();
+    }
   }
 
   /**
@@ -223,7 +284,6 @@ export class EaTransferPanel extends Base {
           composed: true,
         });
 
-        // 更新计数显示
         this.#updateCount();
       },
       {
@@ -268,7 +328,6 @@ export class EaTransferPanel extends Base {
           composed: true,
         });
 
-        // 更新计数显示
         this.#updateCount();
       },
       {
@@ -284,7 +343,7 @@ export class EaTransferPanel extends Base {
     if (!this.#count) return;
 
     const totalItems = this.#list.querySelectorAll(
-      ".ea-transfer-panel__item:not(.is-disabled)"
+      ".ea-transfer-panel__item"
     ).length;
     const checkedItems = this.#states.selectedKeys.size;
 
@@ -296,11 +355,84 @@ export class EaTransferPanel extends Base {
    * @param {Array} newData
    */
   #handleDataUpdate = newData => {
+    this.clearList();
+
     newData.forEach(item => {
       this.#list.appendChild(item);
     });
 
-    // 数据更新后更新计数
+    this.#filterData();
+
+    if (newData.length === 0) {
+      this.#checkbox.disabled = true;
+      this.#checkbox.checked = false;
+      this.#checkbox.indeterminate = false;
+    } else {
+      this.#checkbox.disabled = false;
+    }
+  };
+
+  /**
+   * 处理可筛选状态更新
+   * @param {boolean} filterable
+   */
+  #handleFilterableUpdate = filterable => {
+    if (this.#filterWrapper) {
+      if (filterable) {
+        this.#updateFilterPlaceholder(this["filter-placeholder"]);
+      } else {
+        this.#handleFilterChange("");
+      }
+
+      this.updateContainerClasslist();
+    }
+  };
+
+  /**
+   * 处理筛选条件变化
+   * @param {string} filterText
+   */
+  #handleFilterChange = filterText => {
+    this.#states.filterText = filterText;
+
+    this.#filterData();
+  };
+
+  /**
+   * 执行数据筛选
+   */
+  #filterData = () => {
+    const { key, label, disabled } = this.dataProps;
+    const filterText = this.#states.filterText || "";
+    const filterTextLower = filterText.toLowerCase();
+
+    const allItems = [
+      ...this.#list.querySelectorAll(".ea-transfer-panel__item"),
+    ];
+
+    if (!filterText) {
+      allItems.forEach(item => {
+        item.style.display = "block";
+      });
+      this.#updateCount();
+      return;
+    }
+
+    if (this.filterMethod && typeof this.filterMethod === "function") {
+      allItems.forEach(item => {
+        const data = this.dataMap?.get(item) || {};
+        const shouldShow = this.filterMethod(filterText, data);
+        item.style.display = shouldShow ? "block" : "none";
+      });
+    } else {
+      allItems.forEach(item => {
+        const data = this.dataMap?.get(item) || {};
+        const itemLabel = data[label] || "";
+        const shouldShow = itemLabel.toLowerCase().includes(filterTextLower);
+        item.style.display = shouldShow ? "block" : "none";
+      });
+    }
+
     this.#updateCount();
   };
 
@@ -310,8 +442,17 @@ export class EaTransferPanel extends Base {
    */
   #updateFilterPlaceholder(newPlaceholder) {
     if (this.#filterInput) {
-      this.#filterInput.placeholder = newPlaceholder || "请输入搜索内容";
+      if (!this.hasAttribute("filter-placeholder")) {
+        this.#filterInput.placeholder =
+          newPlaceholder || i18nManager.t("transfer.filterPlaceholder");
+      }
     }
+  }
+
+  $updateLocalization(locale) {
+    i18nManager.locale = locale;
+
+    this.#updateFilterPlaceholder();
   }
 }
 
