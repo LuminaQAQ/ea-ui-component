@@ -71,6 +71,7 @@ $name: ea-transfer-panel;
   @include element(filter) {
     height: var(--#{$name}-filter-height);
     padding: var(--spacing-sm);
+    padding-bottom: 0;
     border-bottom: 1px solid var(--#{$name}-border-color);
     flex-shrink: 0;
   }
@@ -83,6 +84,15 @@ $name: ea-transfer-panel;
     flex: 1;
     overflow-y: auto;
     padding: var(--spacing-xs) 0;
+  }
+
+  @include element(empty) {
+    display: none;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    color: var(--grey-500);
+    padding: var(--spacing-lg);
   }
 
   @include element(item) {
@@ -108,6 +118,10 @@ $name: ea-transfer-panel;
         background-color: transparent;
       }
     }
+
+    @include state(filtered-out) {
+      display: none;
+    }
   }
 
   @include element(item-checkbox) {
@@ -121,6 +135,13 @@ $name: ea-transfer-panel;
   @include state(filterable) {
     .#{$name}__filter-wrapper {
       display: block;
+    }
+  }
+
+  // 当数据为空且没有过滤文本时显示empty状态
+  &:not(:has(.ea-transfer-panel__item:not(.is-filtered-out))) {
+    .#{$name}__empty {
+      display: flex;
     }
   }
 }

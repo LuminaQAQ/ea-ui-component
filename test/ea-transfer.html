@@ -86,6 +86,135 @@
 
     <hr />
     <!-- #endregion  -->
+
+    <!--  自定义用法 -->
+    <!-- #region -->
+    <h1>自定义用法</h1>
+
+    <div class="demo">
+      <p style="text-align: center; margin: 0 0 20px">
+        Customize data items using render-content
+      </p>
+      <div style="text-align: center">
+        <ea-transfer
+          id="customTransfer"
+          style="text-align: left; display: inline-block"
+          filterable
+        >
+          <div slot="left-footer">
+            <ea-button size="small" style="margin-left: 15px; padding: 6px 5px">
+              Operation
+            </ea-button>
+          </div>
+          <div slot="right-footer">
+            <ea-button size="small" style="margin-left: 15px; padding: 6px 5px">
+              Operation
+            </ea-button>
+          </div>
+        </ea-transfer>
+      </div>
+    </div>
+
+    <script type="module">
+      const customExample = {
+        transfer: document.querySelector("#customTransfer"),
+
+        generateData: () => {
+          const data = [];
+          for (let i = 1; i <= 15; i++) {
+            data.push({
+              key: i,
+              label: `Option ${i}`,
+              disabled: i % 4 === 0,
+            });
+          }
+          return data;
+        },
+
+        init() {
+          const data = this.generateData();
+
+          this.transfer.titles = ["Source", "Target"];
+          this.transfer.buttonTexts = ["To right", "To left"];
+
+          this.transfer.data = data;
+
+          this.transfer.value = [1, 2, 3];
+
+          this.transfer.addEventListener("change", event => {
+            console.log("Selection changed:", event.detail.value);
+          });
+
+          this.transfer.addEventListener("ea-left-check-change", event => {
+            console.log("Left check changed:", event.detail);
+          });
+
+          this.transfer.addEventListener("ea-right-check-change", event => {
+            console.log("Right check changed:", event.detail);
+          });
+        },
+      };
+      customExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+
+    <!--  自定义空内容 -->
+    <!-- #region -->
+    <h1>自定义空内容</h1>
+
+    <div class="demo">
+      <p style="text-align: center; margin: 0 0 20px">
+        Customize empty content for both panels
+      </p>
+      <div style="text-align: center">
+        <ea-transfer id="emptyTransfer">
+          <div slot="left-empty">
+            <div style="text-align: center; padding: 20px; color: #909399">
+              <div style="font-size: 60px; margin-bottom: 10px">📭</div>
+              <div>No data</div>
+            </div>
+          </div>
+          <div slot="right-empty">
+            <div style="text-align: center; padding: 20px; color: #909399">
+              <div style="font-size: 60px; margin-bottom: 10px">📭</div>
+              <div>No data</div>
+            </div>
+          </div>
+        </ea-transfer>
+      </div>
+    </div>
+
+    <script type="module">
+      const emptyExample = {
+        transfer: document.querySelector("#emptyTransfer"),
+
+        generateData: () => {
+          const data = [];
+          for (let i = 1; i <= 15; i++) {
+            data.push({
+              key: i,
+              label: `Option ${i}`,
+              disabled: i % 4 === 0,
+            });
+          }
+          return data;
+        },
+
+        init() {
+          this.transfer.data = this.generateData();
+
+          this.transfer.addEventListener("change", event => {
+            console.log("Selection changed:", event.detail.value);
+          });
+        },
+      };
+      emptyExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
     <!-- end  -->
   </body>
 </html>
