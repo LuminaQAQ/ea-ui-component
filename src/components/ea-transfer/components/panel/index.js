@@ -20,6 +20,8 @@ export class EaTransferPanel extends Base {
   #filterWrapper;
   /** @type {HTMLElement} */
   #filterInput;
+  /** @type {HTMLSlotElement} */
+  #footerSlot;
 
   /** @type {AbortController} */
   #abortController = new AbortController();
@@ -150,10 +152,15 @@ export class EaTransferPanel extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
+    const slot = this.#footerSlot.assignedElements()[0];
+
     const className = this.computedClasslist(
       "ea-transfer-panel",
       {},
-      { filterable: this.filterable }
+      {
+        filterable: this.filterable,
+        "has-footer": slot?.assignedElements?.()?.length > 0,
+      }
     );
 
     this.#container.className = className;
@@ -196,6 +203,9 @@ export class EaTransferPanel extends Base {
             <slot name="empty"></slot>
           </div>
           <ul class='${ns.e("list")}' part='list'></ul>
+          <div class='${ns.e("footer")}' part='footer'>
+            <slot name="footer"></slot>
+          </div>
         </div>
       </div>
     `);
@@ -210,6 +220,7 @@ export class EaTransferPanel extends Base {
       ns.ce("filter-wrapper")
     );
     this.#filterInput = this.shadowRoot.querySelector(ns.ce("filter"));
+    this.#footerSlot = this.shadowRoot.querySelector("slot[name='footer']");
 
     this.updateContainerClasslist();
   }
@@ -218,6 +229,8 @@ export class EaTransferPanel extends Base {
     super.connectedCallback();
 
     this.#bindEvents();
+
+    this.updateContainerClasslist();
   }
 
   $beforeUnmounted() {

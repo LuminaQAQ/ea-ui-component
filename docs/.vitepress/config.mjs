@@ -7,7 +7,7 @@ const base = process.env.NODE_ENV === "production" ? "/ea-ui-component/" : "";
 
 export default defineConfig({
   base,
-  title: "ea-ui",
+  title: "Easy UI",
   description: "基于 WebComponent 的 ui 库",
 
   head: [

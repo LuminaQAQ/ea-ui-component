@@ -13,6 +13,9 @@ $name: ea-transfer-panel;
   --#{$name}-item-selected-color: var(--blue-600);
   --#{$name}-item-disabled-color: var(--grey-400);
   --#{$name}-filter-height: 40px;
+  --#{$name}-footer-height: 40px;
+  --#{$name}-footer-background: var(--white);
+  --#{$name}-footer-border-color: var(--grey-300);
 }
 
 @include block($name) {
@@ -95,6 +98,18 @@ $name: ea-transfer-panel;
     padding: var(--spacing-lg);
   }
 
+  @include element(footer) {
+    flex-shrink: 0;
+    display: none;
+    align-items: center;
+
+    height: var(--#{$name}-footer-height);
+    background: var(--#{$name}-footer-background);
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--#{$name}-footer-border-color);
+  }
+
   @include element(item) {
     box-sizing: border-box;
     width: 100%;
@@ -138,7 +153,12 @@ $name: ea-transfer-panel;
     }
   }
 
-  // 当数据为空且没有过滤文本时显示empty状态
+  @include state(has-footer) {
+    .#{$name}__footer {
+      display: flex;
+    }
+  }
+
   &:not(:has(.ea-transfer-panel__item:not(.is-filtered-out))) {
     .#{$name}__empty {
       display: flex;
