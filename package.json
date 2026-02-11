@@ -86,6 +86,9 @@
     "./ea-collapse": {
       "import": "./dist/ea-collapse.js"
     },
+    "./ea-color-picker": {
+      "import": "./dist/ea-color-picker.js"
+    },
     "./ea-container": {
       "import": "./dist/ea-container.js"
     },

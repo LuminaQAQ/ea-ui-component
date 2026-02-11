@@ -62,11 +62,11 @@ export default defineConfig({
           // { text: "Autocomplete 自动补全输入框 [ ]", link: "/ea-autocomplete" },
           // { text: "Cascader 级联选择器 [ ]", link: "/ea-cascader" },
           { text: "Checkbox 多选框", link: "/ea-checkbox" },
-          // {
-          //   text: "ColorPickerPanel 颜色选择器面板",
-          //   link: "/ea-color-picker-panel",
-          // },
-          // { text: "Color Picker 颜色选择器", link: "/ea-color-picker" },
+          {
+            text: "ColorPickerPanel 颜色选择器面板",
+            link: "/ea-color-picker-panel",
+          },
+          { text: "Color Picker 颜色选择器", link: "/ea-color-picker" },
           // {
           //   text: "Date Picker Panel 日期选择器面板",
           //   link: "/ea-date-picker-panel",

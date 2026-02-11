@@ -1,0 +1,143 @@
+$name: ea-color-picker;
+
+:host {
+  --#{$name}-size: 32px;
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-border-color: var(--grey-200);
+  --#{$name}-border-color-focus: var(--primary-color);
+  --#{$name}-background-color: var(--white);
+  --#{$name}-background-color-disabled: var(--grey-100);
+  --#{$name}-text-color: var(--grey-700);
+  --#{$name}-text-color-disabled: var(--grey-400);
+  --#{$name}-placeholder-color: var(--grey-400);
+  --#{$name}-padding: 0;
+  --#{$name}-font-size: var(--font-size-md);
+
+  --#{$name}-outer-size: 100%;
+  --#{$name}-outer-border-radius: var(--border-radius-sm);
+  --#{$name}-outer-border: 1px solid var(--grey-200);
+  --#{$name}-outer-padding: 2px;
+
+  --#{$name}-inner-size: calc(100% - 4px);
+  --#{$name}-inner-border-radius: var(--border-radius-sm);
+  --#{$name}-inner-border: 1px solid var(--grey-300);
+  --#{$name}-inner-background-color: transparent;
+
+  --#{$name}-icon-size: 14px;
+  --#{$name}-icon-color: var(--white);
+  --#{$name}-icon-color-empty: var(--grey-400);
+  --#{$name}-icon-color-hover: var(--white);
+
+  --#{$name}-panel-z-index: 1000;
+  --#{$name}-panel-margin-top: var(--spacing-xs);
+}
+
+@include block($name) {
+
+  position: relative;
+  display: inline-block;
+  width: var(--#{$name}-size);
+  height: var(--#{$name}-size);
+  background-color: var(--#{$name}-background-color);
+  border-radius: var(--#{$name}-border-radius);
+  padding: var(--#{$name}-padding);
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: var(--grey-400);
+  }
+
+  @include element(outer) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--#{$name}-outer-size);
+    height: var(--#{$name}-outer-size);
+    border: var(--#{$name}-outer-border);
+    border-radius: var(--#{$name}-outer-border-radius);
+    padding: var(--#{$name}-outer-padding);
+    box-sizing: border-box;
+    background-color: transparent;
+  }
+
+  @include element(inner) {
+    width: var(--#{$name}-inner-size);
+    height: var(--#{$name}-inner-size);
+    border: var(--#{$name}-inner-border);
+    border-radius: var(--#{$name}-inner-border-radius);
+    background-color: var(--#{$name}-inner-background-color);
+    box-sizing: border-box;
+  }
+
+  @include element(icon) {
+    --ea-icon-size: 10px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+
+    color: var(--#{$name}-icon-color-empty);
+    width: var(--#{$name}-icon-size);
+    height: var(--#{$name}-icon-size);
+    transition: color 0.2s ease;
+  }
+
+  @include element(panel) {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: var(--#{$name}-panel-margin-top);
+    z-index: var(--#{$name}-panel-z-index);
+    display: none;
+  }
+
+  @include state(focus) {
+    border-color: var(--#{$name}-border-color-focus);
+    box-shadow: 0 0 0 1px var(--#{$name}-border-color-focus);
+  }
+
+  @include state(disabled) {
+    background-color: var(--#{$name}-background-color-disabled);
+    border-color: var(--grey-300);
+    cursor: not-allowed;
+
+    .ea-color-picker__trigger {
+      opacity: 0.6;
+    }
+
+    .ea-color-picker__icon {
+      opacity: 0.6;
+    }
+  }
+
+  @include state(open) {
+    .ea-color-picker__panel {
+      display: block;
+    }
+  }
+
+  @include modifier(small) {
+    --#{$name}-size: 24px;
+    --#{$name}-icon-size: 14px;
+  }
+
+  @include modifier(large) {
+    --#{$name}-size: 40px;
+    --#{$name}-icon-size: 18px;
+  }
+
+  @include state(has-value) {
+    .#{$name}__icon {
+      color: var(--#{$name}-icon-color);
+    }
+
+    .#{$name}__inner {
+      border-color: transparent;
+    }
+  }
+}
