@@ -22,161 +22,151 @@
     ></script>
     <script type="module" src="../src/components/ea-button/index.js"></script>
 
-    <h1>ea-color-picker 颜色选择器示例</h1>
-
     <!-- 基础用法 -->
     <!-- #region -->
-    <div class="demo">
-      <h2>基础用法</h2>
+    <h2>基础用法</h2>
 
-      <div class="row">
-        <ea-color-picker></ea-color-picker>
-        <ea-color-picker value="#409eff"></ea-color-picker>
-        <ea-color-picker value="rgb(64, 158, 255)"></ea-color-picker>
-        <ea-color-picker value="hsl(210, 100%, 63%)"></ea-color-picker>
-      </div>
+    <div class="demo">
+      <ea-color-picker></ea-color-picker>
+      <ea-color-picker value="#409eff"></ea-color-picker>
+      <ea-color-picker value="rgb(64, 158, 255)"></ea-color-picker>
+      <ea-color-picker value="hsl(210, 100%, 63%)"></ea-color-picker>
     </div>
+
+    <hr />
     <!-- #endregion -->
     <!-- end -->
 
-    <!-- 禁用状态 -->
+    <!--  独立面板 -->
     <!-- #region -->
+    <h1>独立面板</h1>
+
     <div class="demo">
-      <h2>禁用状态</h2>
-      <p>设置 disabled 属性可以禁用颜色选择器</p>
-
-      <div class="row">
-        <ea-color-picker value="#409eff" disabled></ea-color-picker>
-        <ea-color-picker value="#67c23a" disabled></ea-color-picker>
-      </div>
+      <ea-color-picker-panel value="#409eff"></ea-color-picker-panel>
+      <ea-color-picker-panel
+        value="rgba(64, 158, 255, 0.5)"
+        show-alpha
+      ></ea-color-picker-panel>
     </div>
-    <!-- #endregion -->
-    <!-- end -->
 
-    <!-- 可清除 -->
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  禁用状态 -->
     <!-- #region -->
+    <h1>禁用状态</h1>
+
     <div class="demo">
-      <h2>可清除</h2>
-      <p>设置 clearable 属性可以显示清除按钮</p>
-
-      <div class="row">
-        <ea-color-picker value="#409eff" clearable></ea-color-picker>
-        <ea-color-picker value="" clearable></ea-color-picker>
-      </div>
+      <ea-color-picker value="#409eff" disabled></ea-color-picker>
+      <ea-color-picker value="#67c23a" disabled></ea-color-picker>
     </div>
-    <!-- #endregion -->
-    <!-- end -->
 
-    <!-- 不同尺寸 -->
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  可清除 -->
     <!-- #region -->
+    <h1>可清除</h1>
+
     <div class="demo">
-      <h2>不同尺寸</h2>
-      <p>通过 size 属性设置不同尺寸的组件</p>
-
-      <div class="row">
-        <ea-color-picker
-          value="#409eff"
-          size="small"
-          style="width: 180px"
-        ></ea-color-picker>
-        <ea-color-picker value="#409eff"></ea-color-picker>
-        <ea-color-picker
-          value="#409eff"
-          size="large"
-          style="width: 220px"
-        ></ea-color-picker>
-      </div>
+      <ea-color-picker value="#409eff" clearable></ea-color-picker>
+      <ea-color-picker value="" clearable></ea-color-picker>
     </div>
-    <!-- #endregion -->
-    <!-- end -->
 
-    <!-- 透明度支持 -->
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  不同尺寸 -->
     <!-- #region -->
+    <h1>不同尺寸</h1>
+
     <div class="demo">
-      <h2>透明度支持</h2>
-      <p>设置 color-format 为 rgb 或 rgba 可以支持透明度选择</p>
-
-      <div class="row">
-        <ea-color-picker
-          value="rgba(64, 158, 255, 0.5)"
-          color-format="rgb"
-        ></ea-color-picker>
-        <ea-color-picker
-          value="hsla(210, 100%, 63%, 0.3)"
-          color-format="hsl"
-        ></ea-color-picker>
-      </div>
+      <ea-color-picker
+        value="#409eff"
+        size="small"
+        style="width: 180px"
+      ></ea-color-picker>
+      <ea-color-picker value="#409eff"></ea-color-picker>
+      <ea-color-picker
+        value="#409eff"
+        size="large"
+        style="width: 220px"
+      ></ea-color-picker>
     </div>
-    <!-- #endregion -->
-    <!-- end -->
 
-    <!-- 预定义颜色 -->
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  透明度支持 -->
     <!-- #region -->
+    <h1>透明度支持</h1>
+
     <div class="demo">
-      <h2>预定义颜色</h2>
-      <p>通过 predefine 属性设置预定义颜色数组</p>
-
-      <div class="row">
-        <ea-color-picker
-          value="#409eff"
-          predefine="['#ff4500','#ff8c00','#ffd700','#90ee90','#00ced1','#1e90ff','#c71585']"
-        >
-        </ea-color-picker>
-      </div>
+      <ea-color-picker
+        value="rgba(64, 158, 255, 0.5)"
+        color-format="rgb"
+      ></ea-color-picker>
+      <ea-color-picker
+        value="hsla(210, 100%, 63%, 0.3)"
+        color-format="hsl"
+      ></ea-color-picker>
     </div>
-    <!-- #endregion -->
-    <!-- end -->
 
-    <!-- 独立面板 -->
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  预定义颜色 -->
     <!-- #region -->
+    <h1>预定义颜色</h1>
+
     <div class="demo">
-      <h2>独立面板使用</h2>
-      <p>ea-color-picker-panel 可以独立使用</p>
-
-      <div class="row">
-        <ea-color-picker-panel value="#409eff"></ea-color-picker-panel>
-        <ea-color-picker-panel
-          value="rgba(64, 158, 255, 0.5)"
-          show-alpha
-        ></ea-color-picker-panel>
-      </div>
+      <ea-color-picker
+        value="#409eff"
+        predefine="['#ff4500','#ff8c00','#ffd700','#90ee90','#00ced1','#1e90ff','#c71585']"
+      >
+      </ea-color-picker>
     </div>
-    <!-- #endregion -->
-    <!-- end -->
 
-    <!-- 事件监听 -->
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  事件监听 -->
     <!-- #region -->
+    <h1>事件监听</h1>
+
     <div class="demo">
-      <h2>事件监听</h2>
-      <p>监听 change、ea-active-change、focus、blur、clear 等事件</p>
-
-      <div class="row">
-        <ea-color-picker
-          id="eventPicker"
-          value="#409eff"
-          clearable
-        ></ea-color-picker>
-      </div>
+      <ea-color-picker
+        id="eventPicker"
+        value="#409eff"
+        clearable
+      ></ea-color-picker>
     </div>
-    <!-- #endregion -->
-    <!-- end -->
 
-    <!-- 方法调用 -->
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  方法调用 -->
     <!-- #region -->
-    <div class="demo">
-      <h2>方法调用</h2>
-      <p>通过 JavaScript 调用组件的方法</p>
+    <h1>方法调用</h1>
 
-      <div class="row">
-        <ea-color-picker id="methodPicker" value="#409eff"></ea-color-picker>
-        <ea-button id="showBtn">显示面板</ea-button>
-        <ea-button id="hideBtn">隐藏面板</ea-button>
-        <ea-button id="focusBtn">聚焦</ea-button>
-        <ea-button id="blurBtn">失焦</ea-button>
-        <ea-button id="getColorBtn">获取颜色对象</ea-button>
-      </div>
+    <div class="demo">
+      <ea-color-picker id="methodPicker" value="#409eff"></ea-color-picker>
+      <ea-button id="showBtn">显示面板</ea-button>
+      <ea-button id="hideBtn">隐藏面板</ea-button>
+      <ea-button id="focusBtn">聚焦</ea-button>
+      <ea-button id="blurBtn">失焦</ea-button>
+      <ea-button id="getColorBtn">获取颜色对象</ea-button>
     </div>
-    <!-- #endregion -->
-    <!-- end -->
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
   </body>
 </html>

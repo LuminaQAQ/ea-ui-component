@@ -4,6 +4,8 @@ import { Color } from "@/utils/Color";
 import stylesheet from "./index.scss?inline";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
+import "../ea-color-picker-panel/index";
+
 export class EaColorPicker extends FormAssociatedBase {
   #container;
   #outer;
@@ -112,7 +114,7 @@ export class EaColorPicker extends FormAssociatedBase {
         <div class="${ns.e("icon-wrapper")}" part="icon-wrapper">
           <ea-icon class="${ns.e("icon", "status")}" part="status-icon" icon="icon-cancel"></ea-icon>
         </div>
-        <div class="${ns.e("panel")}" part="panel"></div>
+        <ea-color-picker-panel class="${ns.e("panel")}" part="panel"></ea-color-picker-panel>
       </div>
     `);
 
@@ -131,6 +133,10 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#abortController = new AbortController();
   }
 
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
   updateContainerClasslist() {
     const className = this.computedClasslist(
       this.ns.b("container"),
@@ -147,6 +153,8 @@ export class EaColorPicker extends FormAssociatedBase {
     );
 
     this.#container.className = className;
+
+    return className;
   }
 
   $beforeUnmounted() {
