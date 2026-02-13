@@ -37,6 +37,7 @@ export class EaColorPickerPanel extends Base {
 
   #states = {
     isEaInputDefined: false,
+    isFirstValueUpdate: false,
 
     hue: 0,
     saturation: 1,
@@ -62,7 +63,7 @@ export class EaColorPickerPanel extends Base {
   state = this.properties({
     value: {
       type: String,
-      default: "#409eff",
+      default: "",
       observer: async newVal => {
         this.#updateCursorPosition();
         this.#updateSvpanelStatus();
@@ -76,8 +77,8 @@ export class EaColorPickerPanel extends Base {
       },
     },
     "color-format": {
-      type: ["hsl", "hsv", "hex", "rgb"],
-      default: "hex",
+      type: ["hsl", "hsv", "hex", "rgb", "rgba"],
+      default: () => (this.hasAttribute("show-alpha") ? "rgba" : "hex"),
       observer: newVal => {
         this.value = this.#states.color.toString(newVal);
       },
@@ -85,7 +86,9 @@ export class EaColorPickerPanel extends Base {
     "show-alpha": {
       type: Boolean,
       default: false,
-      observer: newVal => {},
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
     },
     disabled: {
       type: Boolean,
@@ -129,7 +132,6 @@ export class EaColorPickerPanel extends Base {
             <div class="${ns.e("cursor")} ${ns.e("svpanel-cursor")}" part="svpanel-cursor"></div>
           </div>
           <div class="${ns.e("hue-slider")} ${ns.m("vertical")}" part="hue-slider">
-            <div class="${ns.e("bar")} ${ns.e("hue-slider-bar")}" part="hue-slider-bar"></div>
             <div class="${ns.e("thumb")} ${ns.e("hue-slider-thumb")}" part="hue-slider-thumb"></div>
           </div>
         </div>
@@ -141,6 +143,9 @@ export class EaColorPickerPanel extends Base {
         </div>
         <div class="${ns.e("footer")}" part="footer">
           <ea-input class="${ns.e("color-input")}" part="color-input" type="text" size="small"></ea-input>
+          <section class="${ns.e("append")}" part="append">
+            <slot name="footer"></slot>
+          </section>
         </div>
       </div>
     `);
@@ -185,6 +190,7 @@ export class EaColorPickerPanel extends Base {
       {
         disabled: this.disabled,
         border: this.border,
+        "show-alpha": this["show-alpha"],
       }
     );
 
@@ -205,6 +211,14 @@ export class EaColorPickerPanel extends Base {
     this.#hue.addEventListener("mousedown", this.#onHueMouseDown.bind(this), {
       signal: this.#abortController.signal,
     });
+
+    this.#alpha.addEventListener(
+      "mousedown",
+      this.#onAlphaMouseDown.bind(this),
+      {
+        signal: this.#abortController.signal,
+      }
+    );
   }
 
   /**
@@ -244,6 +258,9 @@ export class EaColorPickerPanel extends Base {
       });
 
       this.value = this.#states.color.toString(this["color-format"]);
+
+      this.#saturationThumb.style.left = saturation * rect.width + "px";
+      this.#saturationThumb.style.top = (1 - value) * rect.height + "px";
     };
 
     handleValueUpdate(e);
@@ -296,9 +313,11 @@ export class EaColorPickerPanel extends Base {
         a: this.#states.alpha,
       });
 
-      this.#hueThumb.style.top = (1 - hue) * rect.height + "px";
-
       this.value = this.#states.color.toString(this["color-format"]);
+
+      this.#hueThumb.style.top = (1 - hue / 360) * rect.height + "px";
+
+      this.#updateSvpanelStatus();
     };
 
     handleHueUpdate(e);
@@ -319,9 +338,89 @@ export class EaColorPickerPanel extends Base {
   }
 
   /**
+   * 处理透明度的更新
+   * @param {MouseEvent} e
+   */
+  #onAlphaMouseDown(e) {
+    this.#AbortControllerStates.alphaMove?.abort();
+    this.#AbortControllerStates.saturationMove?.abort();
+    this.#AbortControllerStates.hueMove?.abort();
+    if (this.disabled) return;
+
+    e.preventDefault();
+
+    this.#AbortControllerStates.alphaMove = new AbortController();
+    this.#states.isDragging = true;
+
+    /**
+     * 处理透明度的更新
+     * @param {MouseEvent} e
+     */
+    const handleAlphaUpdate = e => {
+      const rect = this.#alpha.getBoundingClientRect();
+      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+
+      const alpha = Number((x / rect.width).toFixed(2));
+
+      if (Math.abs(this.#states.alpha - alpha) > 0.001) {
+        this.#states.alpha = alpha;
+
+        this.#states.color.setValue({
+          h: this.#states.hue,
+          s: this.#states.saturation,
+          v: this.#states.value,
+          a: alpha,
+        });
+
+        this.value = this.#states.color.toString(this["color-format"]);
+
+        this.#alphaThumb.style.left = alpha * rect.width + "px";
+      }
+    };
+
+    handleAlphaUpdate(e);
+    window.addEventListener("mousemove", handleAlphaUpdate, {
+      signal: this.#AbortControllerStates.alphaMove.signal,
+    });
+
+    window.addEventListener(
+      "mouseup",
+      () => {
+        this.#AbortControllerStates.alphaMove?.abort();
+        this.#states.isDragging = false;
+      },
+      {
+        signal: this.#AbortControllerStates.alphaMove.signal,
+      }
+    );
+  }
+
+  /**
    * 更新光标位置
    */
   #updateCursorPosition() {
+    if (!this.#states.isFirstValueUpdate) {
+      this.#states.color.setValue(this.value);
+
+      const match = this.#states.color.hsvStrToHsvObject(
+        this.#states.color.toHsv(true)
+      );
+
+      if (match) {
+        const h = parseInt(match.h);
+        const s = match.s;
+        const v = match.v;
+        const a = match.a ? parseFloat(match.a) : 1;
+
+        this.#states.hue = h;
+        this.#states.saturation = s;
+        this.#states.value = v;
+        this.#states.alpha = a;
+      }
+
+      this.#states.isFirstValueUpdate = true;
+    }
+
     if (this.#saturationThumb && this.#saturation) {
       const saturation = this.#states.saturation;
       const value = this.#states.value;
@@ -339,9 +438,18 @@ export class EaColorPickerPanel extends Base {
 
       const rect = this.#hue.getBoundingClientRect();
 
-      const y = (1 - hue) * rect.height;
+      const y = (1 - hue / 360) * rect.height;
 
       this.#hueThumb.style.top = y + "px";
+    }
+
+    if (this.#alphaThumb && this.#alpha) {
+      const alpha = this.#states.alpha;
+
+      const rect = this.#alpha.getBoundingClientRect();
+      const x = alpha * rect.width;
+
+      this.#alphaThumb.style.left = x + "px";
     }
   }
 

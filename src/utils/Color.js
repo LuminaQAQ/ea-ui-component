@@ -141,20 +141,35 @@ export class Color {
     return this.#getDefaultColor();
   }
 
+  hsvStrToHsvObject(hsvStr) {
+    const match = hsvStr.match(
+      /hsv\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
+    );
+
+    if (match) {
+      const h = parseInt(match[1]);
+      const s = parseInt(match[2]) / 100;
+      const v = parseInt(match[3]) / 100;
+      const a = match[4] ? parseFloat(match[4]) : 1;
+
+      return { h, s, v, a };
+    }
+
+    return null;
+  }
+
   /**
    * 解析 HSV 颜色
    * @param {string} hsvStr - HSV 颜色字符串
    * @returns {Object} 颜色对象
    */
   #parseHsv(hsvStr) {
-    const match = hsvStr.match(
-      /hsv\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
-    );
+    const match = this.hsvStrToHsvObject(hsvStr);
     if (match) {
-      const h = parseInt(match[1]);
-      const s = parseInt(match[2]) / 100;
-      const v = parseInt(match[3]) / 100;
-      const a = match[4] ? parseFloat(match[4]) : 1;
+      const h = parseInt(match.h);
+      const s = parseInt(match.s);
+      const v = parseInt(match.v);
+      const a = match.a ? parseFloat(match.a) : 1;
 
       return this.#hsvToRgb({ h, s, v, a });
     }
