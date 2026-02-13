@@ -32,28 +32,37 @@ $name: ea-color-picker;
   --#{$name}-panel-margin-top: var(--spacing-xs);
 }
 
-@include block($name) {
-
-  position: relative;
+:host {
   display: inline-block;
-  width: var(--#{$name}-size);
-  height: var(--#{$name}-size);
-  background-color: var(--#{$name}-background-color);
-  border-radius: var(--#{$name}-border-radius);
-  padding: var(--#{$name}-padding);
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
+}
+
+@include block($name) {
+  position: relative;
 
   &:hover {
     border-color: var(--grey-400);
+  }
+
+  @include element(trigger) {
+    // position: relative;
+    // width: 100%;
+    // height: 100%;
+    // cursor: pointer;
+
+    width: var(--#{$name}-size);
+    height: var(--#{$name}-size);
+    background-color: var(--#{$name}-background-color);
+    border-radius: var(--#{$name}-border-radius);
+    padding: var(--#{$name}-padding);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
   }
 
   @include element(outer) {
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: var(--#{$name}-outer-size);
     height: var(--#{$name}-outer-size);
     border: var(--#{$name}-outer-border);
@@ -87,14 +96,6 @@ $name: ea-color-picker;
     transition: color 0.2s ease;
   }
 
-  @include element(panel) {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: var(--#{$name}-panel-margin-top);
-    z-index: var(--#{$name}-panel-z-index);
-    display: none;
-  }
 
   @include state(focus) {
     border-color: var(--#{$name}-border-color-focus);
@@ -108,6 +109,7 @@ $name: ea-color-picker;
 
     .ea-color-picker__trigger {
       opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .ea-color-picker__icon {
@@ -116,9 +118,8 @@ $name: ea-color-picker;
   }
 
   @include state(open) {
-    .ea-color-picker__panel {
-      display: block;
-    }
+    border-color: var(--#{$name}-border-color-focus);
+    box-shadow: 0 0 0 1px var(--#{$name}-border-color-focus);
   }
 
   @include modifier(small) {

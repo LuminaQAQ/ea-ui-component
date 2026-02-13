@@ -26,9 +26,12 @@ $name: ea-color-picker-panel;
   --#{$name}-input-focus-border-color: var(--primary-color);
 }
 
+:host {
+  display: block;
+}
+
 @include block($name) {
   display: inline-block;
-  border: 1px solid var(--#{$name}-border-color);
   border-radius: var(--#{$name}-border-radius);
   box-shadow: var(--#{$name}-box-shadow);
   padding: var(--#{$name}-padding);

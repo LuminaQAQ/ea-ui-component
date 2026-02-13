@@ -5,9 +5,13 @@ import stylesheet from "./index.scss?inline";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
 import "../ea-color-picker-panel/index";
+import "@/common/ea-popper/index";
 
 export class EaColorPicker extends FormAssociatedBase {
   #container;
+  /** @type {import("@/common/ea-popper").EaPopper} */
+  #popper;
+  #trigger;
   #outer;
   #inner;
   /** @type {import("@/components/ea-icon").EaIcon} */
@@ -21,6 +25,13 @@ export class EaColorPicker extends FormAssociatedBase {
     isFocus: false,
     color: new Color(),
     panel: null,
+
+    isPanelDefined: false,
+  };
+
+  #AbortControllerStates = {
+    /** @type {AbortController | null} */
+    close: null,
   };
 
   static get observedAttributes() {
@@ -33,6 +44,7 @@ export class EaColorPicker extends FormAssociatedBase {
       "color-format",
       "predefine",
       "tabindex",
+      "placement",
     ];
   }
 
@@ -43,6 +55,7 @@ export class EaColorPicker extends FormAssociatedBase {
       observer: newVal => {
         this.#updateTriggerColor();
         this.#updateStatusIcon(newVal);
+        this.#panel.setAttribute("value", newVal);
       },
     },
     disabled: {
@@ -71,7 +84,7 @@ export class EaColorPicker extends FormAssociatedBase {
       type: ["hsl", "hsv", "hex", "rgb"],
       default: "hex",
       observer: newVal => {
-        // this.#updateInputValue();
+        this.#panel.setAttribute("color-format", newVal);
       },
     },
     tabindex: {
@@ -89,9 +102,32 @@ export class EaColorPicker extends FormAssociatedBase {
       type: Array,
       default: () => [],
       observer: newVal => {
-        // if (this.#states.panel) {
-        //   this.#states.panel.predefine = newVal;
+        // if (this.#panel) {
+        //   this.#panel.predefine = newVal;
         // }
+      },
+    },
+  });
+
+  popperState = this.properties({
+    placement: {
+      type: [
+        "top",
+        "top-start",
+        "top-end",
+        "bottom",
+        "bottom-start",
+        "bottom-end",
+        "left",
+        "left-start",
+        "left-end",
+        "right",
+        "right-start",
+        "right-end",
+      ],
+      default: "bottom-start",
+      observer: newVal => {
+        this.#popper.setAttribute("placement", newVal);
       },
     },
   });
@@ -108,17 +144,27 @@ export class EaColorPicker extends FormAssociatedBase {
 
     this.shadowRoot.innerHTML = this.html(`
       <div class="${ns.b("container")}" part="container" tabindex="${this.tabindex}">
-        <div class="${ns.e("outer")}" part="outer">
-          <div class="${ns.e("inner")}" part="inner"></div>
-        </div>
-        <div class="${ns.e("icon-wrapper")}" part="icon-wrapper">
-          <ea-icon class="${ns.e("icon", "status")}" part="status-icon" icon="icon-cancel"></ea-icon>
-        </div>
-        <ea-color-picker-panel class="${ns.e("panel")}" part="panel"></ea-color-picker-panel>
+        <ea-popper 
+          class="${ns.e("popper")}" 
+          part="popper"
+          show-arrow="false"
+        >
+          <div class="${ns.e("trigger")}" part="trigger" slot="reference">
+            <div class="${ns.e("outer")}" part="outer">
+              <div class="${ns.e("inner")}" part="inner"></div>
+            </div>
+            <div class="${ns.e("icon-wrapper")}" part="icon-wrapper">
+              <ea-icon class="${ns.e("icon", "status")}" part="status-icon" icon="icon-cancel"></ea-icon>
+            </div>
+          </div>
+          <ea-color-picker-panel class="${ns.e("panel")}" part="panel"></ea-color-picker-panel>
+        </ea-popper>
       </div>
     `);
 
     this.#container = this.shadowRoot.querySelector(ns.cb());
+    this.#popper = this.shadowRoot.querySelector(ns.ce("popper"));
+    this.#trigger = this.shadowRoot.querySelector(ns.ce("trigger"));
     this.#outer = this.shadowRoot.querySelector(ns.ce("outer"));
     this.#inner = this.shadowRoot.querySelector(ns.ce("inner"));
     this.#statusIcon = this.shadowRoot.querySelector(ns.ce("icon", "status"));
@@ -131,6 +177,28 @@ export class EaColorPicker extends FormAssociatedBase {
     super.connectedCallback();
     this.#abortController?.abort();
     this.#abortController = new AbortController();
+
+    this.#bindEvents();
+  }
+
+  #bindEvents() {
+    if (!this.#trigger || !this.#popper) return;
+
+    this.#trigger.addEventListener("click", this.#onTriggerClick.bind(this), {
+      signal: this.#abortController.signal,
+    });
+
+    this.#popper.addEventListener("show", this.#onPopperShow.bind(this), {
+      signal: this.#abortController.signal,
+    });
+
+    this.#popper.addEventListener("hide", this.#onPopperHide.bind(this), {
+      signal: this.#abortController.signal,
+    });
+
+    this.#panel.addEventListener("change", this.#onPanelChange.bind(this), {
+      signal: this.#abortController.signal,
+    });
   }
 
   /**
@@ -161,6 +229,59 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#abortController?.abort();
   }
 
+  #onTriggerClick(e) {
+    if (this.disabled) return;
+    e.stopPropagation();
+
+    this.#AbortControllerStates.close?.abort();
+    this.#AbortControllerStates.close = new AbortController();
+
+    this.#showPopper();
+
+    document.addEventListener("click", this.#onDocumentClick.bind(this), {
+      signal: this.#AbortControllerStates.close.signal,
+    });
+  }
+
+  #onPopperShow() {
+    this.#states.isOpen = true;
+    this.updateContainerClasslist();
+    this.emit("show");
+  }
+
+  #onPopperHide() {
+    this.#states.isOpen = false;
+    this.updateContainerClasslist();
+    this.emit("hide");
+  }
+
+  #onPanelChange(e) {
+    const { value } = e.detail;
+    this.value = value;
+    this.#updateTriggerColor();
+    this.#updateStatusIcon();
+    this.emit("change", { detail: { value } });
+  }
+
+  #onDocumentClick(e) {
+    if (!this.#states.isOpen) return;
+    if (!this.contains(e.target) && e.target !== this) {
+      this.#hidePopper();
+    }
+  }
+
+  #showPopper() {
+    if (this.#popper) {
+      this.#popper.show();
+    }
+  }
+
+  #hidePopper() {
+    if (this.#popper) {
+      this.#popper.hide();
+    }
+  }
+
   /**
    * 更新触发元素的背景颜色
    */
@@ -182,7 +303,6 @@ export class EaColorPicker extends FormAssociatedBase {
         color.toRgb(true)
       );
     } catch (error) {
-      // 无效颜色值时内部方框背景色为透明
       this.#inner.style.setProperty(
         "--ea-color-picker-inner-background-color",
         "transparent"

@@ -80,7 +80,9 @@ export class EaColorPickerPanel extends Base {
       type: ["hsl", "hsv", "hex", "rgb", "rgba"],
       default: () => (this.hasAttribute("show-alpha") ? "rgba" : "hex"),
       observer: newVal => {
-        this.value = this.#states.color.toString(newVal);
+        if (this.value) {
+          this.value = this.#states.color.toString(newVal);
+        }
       },
     },
     "show-alpha": {
@@ -176,7 +178,6 @@ export class EaColorPickerPanel extends Base {
     this.#abortController = new AbortController();
 
     this.#bindEvents();
-    this.#updateCursorPosition();
   }
 
   /**
@@ -215,6 +216,14 @@ export class EaColorPickerPanel extends Base {
     this.#alpha.addEventListener(
       "mousedown",
       this.#onAlphaMouseDown.bind(this),
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#colorInput.addEventListener(
+      "change",
+      this.#onColorInputChange.bind(this),
       {
         signal: this.#abortController.signal,
       }
@@ -258,6 +267,7 @@ export class EaColorPickerPanel extends Base {
       });
 
       this.value = this.#states.color.toString(this["color-format"]);
+      this.#emitChangeEvent();
 
       this.#saturationThumb.style.left = saturation * rect.width + "px";
       this.#saturationThumb.style.top = (1 - value) * rect.height + "px";
@@ -314,6 +324,7 @@ export class EaColorPickerPanel extends Base {
       });
 
       this.value = this.#states.color.toString(this["color-format"]);
+      this.#emitChangeEvent();
 
       this.#hueThumb.style.top = (1 - hue / 360) * rect.height + "px";
 
@@ -373,6 +384,7 @@ export class EaColorPickerPanel extends Base {
         });
 
         this.value = this.#states.color.toString(this["color-format"]);
+        this.#emitChangeEvent();
 
         this.#alphaThumb.style.left = alpha * rect.width + "px";
       }
@@ -473,6 +485,30 @@ export class EaColorPickerPanel extends Base {
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+  }
+
+  #onColorInputChange(e) {
+    const value = e.target.value;
+    try {
+      const color = new Color(value);
+      this.value = color.toString(this["color-format"]);
+      this.#emitChangeEvent();
+    } catch (error) {
+      this.#colorInput.value = this.value;
+    }
+  }
+
+  #emitChangeEvent() {
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        detail: {
+          value: this.value,
+          color: this.#states.color,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 }
 
