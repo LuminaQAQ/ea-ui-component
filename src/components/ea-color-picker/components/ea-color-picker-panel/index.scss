@@ -1,8 +1,6 @@
 $name: ea-color-picker-panel;
 
 :host {
-  --#{$name}-width: 300px;
-  --#{$name}-height: auto;
   --#{$name}-border-radius: var(--border-radius-md);
   --#{$name}-box-shadow: var(--shadow-lg);
   --#{$name}-background-color: transparent;
@@ -15,6 +13,7 @@ $name: ea-color-picker-panel;
   --#{$name}-svpanel-width: 280px;
   --#{$name}-svpanel-height: 180px;
   --#{$name}-alpha-slider-height: 12px;
+  --#{$name}-alpha-slider-width: 280px;
   --#{$name}-alpha-slider-border-radius: var(--border-radius-sm);
   --#{$name}-predefine-gap: var(--spacing-xs);
   --#{$name}-predefine-item-size: 20px;
@@ -110,7 +109,7 @@ $name: ea-color-picker-panel;
   @include element(alpha-slider) {
     display: none;
     position: relative;
-    width: 100%;
+    width: var(--#{$name}-alpha-slider-width);
     height: var(--#{$name}-alpha-slider-height);
     border-radius: var(--#{$name}-alpha-slider-border-radius);
     background-image:

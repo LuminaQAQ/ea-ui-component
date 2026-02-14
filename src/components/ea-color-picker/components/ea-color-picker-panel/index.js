@@ -3,6 +3,7 @@ import { namespace } from "@/directives/namespace";
 import { Color } from "@/utils/Color";
 import stylesheet from "./index.scss?inline";
 import "@components/ea-input/index";
+import EaUtils from "@/utils/Utils";
 
 export class EaColorPickerPanel extends Base {
   /** @type {HTMLDivElement} */
@@ -29,22 +30,28 @@ export class EaColorPickerPanel extends Base {
   #abortController = new AbortController();
 
   #AbortControllerStates = {
-    /** @type {AbortController | null} */
+    /** @type {AbortController | null} 饱和度拖拽控制器 */
     saturationMove: null,
-    /** @type {AbortController | null} */
+    /** @type {AbortController | null} 色调拖拽控制器 */
     hueMove: null,
+    /** @type {AbortController | null} 透明度拖拽控制器 */
+    alphaMove: null,
   };
 
   #states = {
-    isEaInputDefined: false,
+    /** @type {boolean} 是否首次更新值 */
     isFirstValueUpdate: false,
-
+    /** @type {number} 色调值 (0-360) */
     hue: 0,
+    /** @type {number} 饱和度值 (0-1) */
     saturation: 1,
+    /** @type {number} 亮度值 (0-1) */
     value: 1,
+    /** @type {number} 透明度值 (0-1) */
     alpha: 1,
+    /** @type {import("@/utils/Color").Color} 当前颜色对象 */
     color: new Color(),
-    format: "hex",
+    /** @type {boolean} 是否正在拖拽 */
     isDragging: false,
   };
 
@@ -64,15 +71,9 @@ export class EaColorPickerPanel extends Base {
     value: {
       type: String,
       default: "",
-      observer: async newVal => {
+      observer: newVal => {
         this.#updateCursorPosition();
         this.#updateSvpanelStatus();
-
-        if (!this.#states.isEaInputDefined) {
-          await customElements.whenDefined("ea-input");
-          this.#states.isEaInputDefined = true;
-        }
-
         this.#colorInput.value = newVal;
       },
     },
@@ -200,6 +201,9 @@ export class EaColorPickerPanel extends Base {
     return className;
   }
 
+  /**
+   * 绑定组件事件监听器
+   */
   #bindEvents() {
     this.#saturation.addEventListener(
       "mousedown",
@@ -232,7 +236,7 @@ export class EaColorPickerPanel extends Base {
 
   /**
    * 处理饱和度和值的更新
-   * @param {MouseEvent} e
+   * @param {MouseEvent} e - 鼠标事件对象
    */
   #onSaturationMouseDown(e) {
     this.#AbortControllerStates.saturationMove?.abort();
@@ -246,7 +250,7 @@ export class EaColorPickerPanel extends Base {
 
     /**
      * 处理饱和度和值的更新
-     * @param {MouseEvent} e
+     * @param {MouseEvent} e - 鼠标事件对象
      */
     const handleValueUpdate = e => {
       const rect = this.#saturation.getBoundingClientRect();
@@ -292,7 +296,7 @@ export class EaColorPickerPanel extends Base {
 
   /**
    * 处理色调的更新
-   * @param {MouseEvent} e
+   * @param {MouseEvent} e - 鼠标事件对象
    */
   #onHueMouseDown(e) {
     this.#AbortControllerStates.hueMove?.abort();
@@ -306,7 +310,7 @@ export class EaColorPickerPanel extends Base {
 
     /**
      * 处理色调的更新
-     * @param {MouseEvent} e
+     * @param {MouseEvent} e - 鼠标事件对象
      */
     const handleHueUpdate = e => {
       const rect = this.#hue.getBoundingClientRect();
@@ -350,7 +354,7 @@ export class EaColorPickerPanel extends Base {
 
   /**
    * 处理透明度的更新
-   * @param {MouseEvent} e
+   * @param {MouseEvent} e - 鼠标事件对象
    */
   #onAlphaMouseDown(e) {
     this.#AbortControllerStates.alphaMove?.abort();
@@ -365,7 +369,7 @@ export class EaColorPickerPanel extends Base {
 
     /**
      * 处理透明度的更新
-     * @param {MouseEvent} e
+     * @param {MouseEvent} e - 鼠标事件对象
      */
     const handleAlphaUpdate = e => {
       const rect = this.#alpha.getBoundingClientRect();
@@ -438,8 +442,26 @@ export class EaColorPickerPanel extends Base {
       const value = this.#states.value;
 
       const rect = this.#saturation.getBoundingClientRect();
-      const x = saturation * rect.width;
-      const y = (1 - value) * rect.height;
+      const svpanelWidth =
+        EaUtils.CSS.px2num(
+          this.style.getPropertyValue("--ea-color-picker-panel-svpanel-width")
+        ) || 280;
+      const svpanelHeight =
+        EaUtils.CSS.px2num(
+          this.style.getPropertyValue("--ea-color-picker-panel-svpanel-height")
+        ) || 180;
+      const width = Math.max(
+        0,
+        Math.min(rect.width, svpanelWidth),
+        svpanelWidth
+      );
+      const height = Math.max(
+        0,
+        Math.min(rect.height, svpanelHeight),
+        svpanelHeight
+      );
+      const x = saturation * width;
+      const y = (1 - value) * height;
 
       this.#saturationThumb.style.left = x + "px";
       this.#saturationThumb.style.top = y + "px";
@@ -449,8 +471,14 @@ export class EaColorPickerPanel extends Base {
       const hue = this.#states.hue;
 
       const rect = this.#hue.getBoundingClientRect();
-
-      const y = (1 - hue / 360) * rect.height;
+      const hueHeight =
+        EaUtils.CSS.px2num(
+          this.style.getPropertyValue(
+            "--ea-color-picker-panel-hue-slider-height"
+          )
+        ) || 180;
+      const height = Math.max(0, Math.min(rect.height, hueHeight), hueHeight);
+      const y = (1 - hue / 360) * height;
 
       this.#hueThumb.style.top = y + "px";
     }
@@ -459,7 +487,14 @@ export class EaColorPickerPanel extends Base {
       const alpha = this.#states.alpha;
 
       const rect = this.#alpha.getBoundingClientRect();
-      const x = alpha * rect.width;
+      const alphaWidth =
+        EaUtils.CSS.px2num(
+          this.style.getPropertyValue(
+            "--ea-color-picker-panel-alpha-slider-width"
+          )
+        ) || 280;
+      const width = Math.max(0, Math.min(rect.width, alphaWidth), alphaWidth);
+      const x = alpha * width;
 
       this.#alphaThumb.style.left = x + "px";
     }
@@ -467,7 +502,6 @@ export class EaColorPickerPanel extends Base {
 
   /**
    * 更新饱和度面板的背景颜色
-   * @param {string} color - 颜色值
    */
   #updateSvpanelStatus = () => {
     const color = new Color({
@@ -487,6 +521,10 @@ export class EaColorPickerPanel extends Base {
     this.#abortController?.abort();
   }
 
+  /**
+   * 处理颜色输入框变化事件
+   * @param {Event} e - 事件对象
+   */
   #onColorInputChange(e) {
     const value = e.target.value;
     try {
@@ -498,6 +536,9 @@ export class EaColorPickerPanel extends Base {
     }
   }
 
+  /**
+   * 触发颜色变化事件
+   */
   #emitChangeEvent() {
     this.dispatchEvent(
       new CustomEvent("change", {

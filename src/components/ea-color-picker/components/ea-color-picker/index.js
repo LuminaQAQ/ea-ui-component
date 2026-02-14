@@ -21,16 +21,14 @@ export class EaColorPicker extends FormAssociatedBase {
   #abortController = new AbortController();
 
   #states = {
+    /** @type {boolean} 弹窗是否打开 */
     isOpen: false,
-    isFocus: false,
+    /** @type {import("@/utils/Color").Color} 当前颜色对象 */
     color: new Color(),
-    panel: null,
-
-    isPanelDefined: false,
   };
 
   #AbortControllerStates = {
-    /** @type {AbortController | null} */
+    /** @type {AbortController | null} 关闭弹窗的控制器 */
     close: null,
   };
 
@@ -45,6 +43,7 @@ export class EaColorPicker extends FormAssociatedBase {
       "predefine",
       "tabindex",
       "placement",
+      "show-alpha"
     ];
   }
 
@@ -62,7 +61,6 @@ export class EaColorPicker extends FormAssociatedBase {
       type: Boolean,
       default: false,
       observer: newVal => {
-        // this.#input.toggleAttribute("disabled", newVal);
         this.updateContainerClasslist();
       },
     },
@@ -87,6 +85,13 @@ export class EaColorPicker extends FormAssociatedBase {
         this.#panel.setAttribute("color-format", newVal);
       },
     },
+    "show-alpha": {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.#panel.setAttribute("show-alpha", newVal);
+      },
+    },
     tabindex: {
       type: Number,
       default: 0,
@@ -101,11 +106,7 @@ export class EaColorPicker extends FormAssociatedBase {
       props: true,
       type: Array,
       default: () => [],
-      observer: newVal => {
-        // if (this.#panel) {
-        //   this.#panel.predefine = newVal;
-        // }
-      },
+      observer: newVal => {},
     },
   });
 
@@ -125,7 +126,7 @@ export class EaColorPicker extends FormAssociatedBase {
         "right-start",
         "right-end",
       ],
-      default: "bottom-start",
+      default: "bottom",
       observer: newVal => {
         this.#popper.setAttribute("placement", newVal);
       },
@@ -181,6 +182,9 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#bindEvents();
   }
 
+  /**
+   * 绑定组件事件监听器
+   */
   #bindEvents() {
     if (!this.#trigger || !this.#popper) return;
 
@@ -213,10 +217,7 @@ export class EaColorPicker extends FormAssociatedBase {
       },
       {
         "has-value": this.value,
-        // disabled: this.disabled,
-        // focus: this.#states.isFocus,
-        // clearable: this.clearable && this.value,
-        // open: this.#states.isOpen,
+        disabled: this.disabled,
       }
     );
 
@@ -229,9 +230,12 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#abortController?.abort();
   }
 
+  /**
+   * 处理触发器点击事件
+   * @param {MouseEvent} e - 鼠标事件对象
+   */
   #onTriggerClick(e) {
     if (this.disabled) return;
-    e.stopPropagation();
 
     this.#AbortControllerStates.close?.abort();
     this.#AbortControllerStates.close = new AbortController();
@@ -243,18 +247,28 @@ export class EaColorPicker extends FormAssociatedBase {
     });
   }
 
+  /**
+   * 处理弹窗显示事件
+   */
   #onPopperShow() {
     this.#states.isOpen = true;
     this.updateContainerClasslist();
     this.emit("show");
   }
 
+  /**
+   * 处理弹窗隐藏事件
+   */
   #onPopperHide() {
     this.#states.isOpen = false;
     this.updateContainerClasslist();
     this.emit("hide");
   }
 
+  /**
+   * 处理面板颜色变化事件
+   * @param {CustomEvent} e - 自定义事件对象
+   */
   #onPanelChange(e) {
     const { value } = e.detail;
     this.value = value;
@@ -263,19 +277,29 @@ export class EaColorPicker extends FormAssociatedBase {
     this.emit("change", { detail: { value } });
   }
 
+  /**
+   * 处理文档点击事件（用于关闭弹窗）
+   * @param {MouseEvent} e - 鼠标事件对象
+   */
   #onDocumentClick(e) {
     if (!this.#states.isOpen) return;
-    if (!this.contains(e.target) && e.target !== this) {
+    if (!this.contains(e.target) || e.target !== this) {
       this.#hidePopper();
     }
   }
 
+  /**
+   * 显示颜色选择器弹窗
+   */
   #showPopper() {
     if (this.#popper) {
       this.#popper.show();
     }
   }
 
+  /**
+   * 隐藏颜色选择器弹窗
+   */
   #hidePopper() {
     if (this.#popper) {
       this.#popper.hide();
@@ -317,11 +341,10 @@ export class EaColorPicker extends FormAssociatedBase {
   #updateStatusIcon(colorValue = this.value) {
     if (!this.#statusIcon) return;
 
-    if (colorValue) {
-      this.#statusIcon.setAttribute("icon", "icon-angle-down");
-    } else {
-      this.#statusIcon.setAttribute("icon", "icon-cancel");
-    }
+    this.#statusIcon.setAttribute(
+      "icon",
+      colorValue ? "icon-angle-down" : "icon-cancel"
+    );
   }
 }
 

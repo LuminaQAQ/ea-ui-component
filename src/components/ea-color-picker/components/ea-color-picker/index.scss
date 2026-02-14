@@ -88,12 +88,17 @@ $name: ea-color-picker;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1;
 
     color: var(--#{$name}-icon-color-empty);
     width: var(--#{$name}-icon-size);
     height: var(--#{$name}-icon-size);
     transition: color 0.2s ease;
+  }
+
+  @include element(popper) {
+    &::part(original) {
+      z-index: var(--#{$name}-panel-z-index);
+    }
   }
 
 
