@@ -114,7 +114,9 @@ export class EaColorPickerPanel extends Base {
       props: true,
       type: Array,
       default: () => [],
-      observer: newVal => {},
+      observer: newVal => {
+        this.#renderPredefineColors();
+      },
     },
   });
 
@@ -179,6 +181,7 @@ export class EaColorPickerPanel extends Base {
     this.#abortController = new AbortController();
 
     this.#bindEvents();
+    this.#renderPredefineColors();
   }
 
   /**
@@ -550,6 +553,74 @@ export class EaColorPickerPanel extends Base {
         composed: true,
       })
     );
+
+    // 触发 active-change 事件
+    this.dispatchEvent(
+      new CustomEvent("active-change", {
+        detail: {
+          value: this.value,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  /**
+   * 渲染预设颜色列表
+   */
+  #renderPredefineColors() {
+    if (
+      !this.#predefineList ||
+      !this.predefine ||
+      this.predefine.length === 0
+    ) {
+      return;
+    }
+
+    this.#predefineList.innerHTML = this.predefine
+      .map(
+        color => `
+          <div class="${this.ns.e("predefine-color")}" 
+               part="predefine-color" 
+               style="background-color: ${color}"
+               data-color="${color}">
+          </div>
+        `
+      )
+      .join("");
+
+    // 绑定预设颜色点击事件
+    const colorElements = this.#predefineList.querySelectorAll(
+      this.ns.ce("predefine-color")
+    );
+
+    colorElements.forEach(element => {
+      element.addEventListener(
+        "click",
+        this.#onPredefineColorClick.bind(this),
+        {
+          signal: this.#abortController.signal,
+        }
+      );
+    });
+  }
+
+  /**
+   * 处理预设颜色点击事件
+   * @param {MouseEvent} e - 鼠标事件对象
+   */
+  #onPredefineColorClick(e) {
+    if (this.disabled) return;
+
+    const colorElement = e.target.closest(this.ns.ce("predefine-color"));
+    if (!colorElement) return;
+
+    const colorValue = colorElement.getAttribute("data-color");
+    if (colorValue) {
+      this.value = colorValue;
+      this.#emitChangeEvent();
+    }
   }
 }
 

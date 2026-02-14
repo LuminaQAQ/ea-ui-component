@@ -101,6 +101,11 @@ $name: ea-color-picker;
     }
   }
 
+  @include element(panel) {
+    &::part(append) {
+      margin-left: auto;
+    }
+  }
 
   @include state(focus) {
     border-color: var(--#{$name}-border-color-focus);

@@ -6,6 +6,7 @@ import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
 import "../ea-color-picker-panel/index";
 import "@/common/ea-popper/index";
+import "@components/ea-button/index";
 
 export class EaColorPicker extends FormAssociatedBase {
   #container;
@@ -43,7 +44,7 @@ export class EaColorPicker extends FormAssociatedBase {
       "predefine",
       "tabindex",
       "placement",
-      "show-alpha"
+      "show-alpha",
     ];
   }
 
@@ -158,7 +159,12 @@ export class EaColorPicker extends FormAssociatedBase {
               <ea-icon class="${ns.e("icon", "status")}" part="status-icon" icon="icon-cancel"></ea-icon>
             </div>
           </div>
-          <ea-color-picker-panel class="${ns.e("panel")}" part="panel"></ea-color-picker-panel>
+          <ea-color-picker-panel class="${ns.e("panel")}" part="panel">
+            <div slot="footer" class="${ns.e("footer-actions")}" part="footer-actions">
+              <ea-button class="${ns.e("clear-btn")}" part="clear-btn" plain text>clear</ea-button>
+              <ea-button class="${ns.e("confirm-btn")}" part="confirm-btn" plain>ok</ea-button>
+            </div>
+          </ea-color-picker-panel>
         </ea-popper>
       </div>
     `);
@@ -180,6 +186,7 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#abortController = new AbortController();
 
     this.#bindEvents();
+    this.#bindFooterActions();
   }
 
   /**
@@ -201,6 +208,22 @@ export class EaColorPicker extends FormAssociatedBase {
     });
 
     this.#panel.addEventListener("change", this.#onPanelChange.bind(this), {
+      signal: this.#abortController.signal,
+    });
+
+    this.#panel.addEventListener(
+      "active-change",
+      this.#onPanelActiveChange.bind(this),
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    this.#container.addEventListener("focus", this.#onFocus.bind(this), {
+      signal: this.#abortController.signal,
+    });
+
+    this.#container.addEventListener("blur", this.#onBlur.bind(this), {
       signal: this.#abortController.signal,
     });
   }
@@ -253,7 +276,6 @@ export class EaColorPicker extends FormAssociatedBase {
   #onPopperShow() {
     this.#states.isOpen = true;
     this.updateContainerClasslist();
-    this.emit("show");
   }
 
   /**
@@ -262,7 +284,6 @@ export class EaColorPicker extends FormAssociatedBase {
   #onPopperHide() {
     this.#states.isOpen = false;
     this.updateContainerClasslist();
-    this.emit("hide");
   }
 
   /**
@@ -278,6 +299,15 @@ export class EaColorPicker extends FormAssociatedBase {
   }
 
   /**
+   * 处理面板活动颜色变化事件
+   * @param {CustomEvent} e - 自定义事件对象
+   */
+  #onPanelActiveChange(e) {
+    const { value } = e.detail;
+    this.emit("ea-active-change", { detail: { value } });
+  }
+
+  /**
    * 处理文档点击事件（用于关闭弹窗）
    * @param {MouseEvent} e - 鼠标事件对象
    */
@@ -286,6 +316,22 @@ export class EaColorPicker extends FormAssociatedBase {
     if (!this.contains(e.target) || e.target !== this) {
       this.#hidePopper();
     }
+  }
+
+  /**
+   * 处理焦点事件
+   * @param {FocusEvent} e - 焦点事件对象
+   */
+  #onFocus(e) {
+    this.emit("focus");
+  }
+
+  /**
+   * 处理失去焦点事件
+   * @param {FocusEvent} e - 焦点事件对象
+   */
+  #onBlur(e) {
+    this.emit("blur");
   }
 
   /**
@@ -345,6 +391,76 @@ export class EaColorPicker extends FormAssociatedBase {
       "icon",
       colorValue ? "icon-angle-down" : "icon-cancel"
     );
+  }
+
+  /**
+   * 绑定底部操作按钮事件
+   */
+  #bindFooterActions() {
+    const clearBtn = this.shadowRoot.querySelector(this.ns.ce("clear-btn"));
+    const confirmBtn = this.shadowRoot.querySelector(this.ns.ce("confirm-btn"));
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", this.#onClearClick.bind(this), {
+        signal: this.#abortController.signal,
+      });
+    }
+
+    if (confirmBtn) {
+      confirmBtn.addEventListener("click", this.#onConfirmClick.bind(this), {
+        signal: this.#abortController.signal,
+      });
+    }
+  }
+
+  /**
+   * 处理清除按钮点击事件
+   */
+  #onClearClick() {
+    this.value = "";
+    this.#updateTriggerColor();
+    this.#updateStatusIcon();
+    this.emit("change", { detail: { value: "" } });
+    this.emit("ea-clear");
+  }
+
+  /**
+   * 处理确认按钮点击事件
+   */
+  #onConfirmClick() {
+    this.#hidePopper();
+  }
+
+  /**
+   * 手动显示颜色选择器面板
+   */
+  show() {
+    this.#showPopper();
+  }
+
+  /**
+   * 手动隐藏颜色选择器面板
+   */
+  hide() {
+    this.#hidePopper();
+  }
+
+  /**
+   * 使颜色选择器获得焦点
+   */
+  focus() {
+    if (this.#container) {
+      this.#container.focus();
+    }
+  }
+
+  /**
+   * 使颜色选择器失去焦点
+   */
+  blur() {
+    if (this.#container) {
+      this.#container.blur();
+    }
   }
 }
 

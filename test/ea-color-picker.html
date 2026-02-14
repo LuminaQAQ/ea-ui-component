@@ -130,6 +130,23 @@
     <!-- #endregion  -->
     <!-- end  -->
 
+    <!--  操作按钮 -->
+    <!-- #region -->
+    <h1>操作按钮</h1>
+
+    <div class="demo">
+      <ea-color-picker
+        id="actionPicker"
+        value="#409eff"
+        clearable
+      ></ea-color-picker>
+      <p>点击颜色选择器查看底部操作按钮</p>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
     <!--  事件监听 -->
     <!-- #region -->
     <h1>事件监听</h1>
@@ -140,7 +157,51 @@
         value="#409eff"
         clearable
       ></ea-color-picker>
+      <div
+        id="eventLog"
+        style="
+          margin-top: 10px;
+          padding: 10px;
+          border: 1px solid #ccc;
+          max-height: 200px;
+          overflow-y: auto;
+        "
+      >
+        <p>事件日志：</p>
+      </div>
     </div>
+
+    <script>
+      const eventPicker = document.getElementById("eventPicker");
+      const eventLog = document.getElementById("eventLog");
+
+      function logEvent(eventName, detail) {
+        const logEntry = document.createElement("p");
+        logEntry.textContent = `${new Date().toLocaleTimeString()} - ${eventName}: ${JSON.stringify(detail)}`;
+        eventLog.appendChild(logEntry);
+        eventLog.scrollTop = eventLog.scrollHeight;
+      }
+
+      eventPicker.addEventListener("change", e => {
+        logEvent("change", e.detail);
+      });
+
+      eventPicker.addEventListener("ea-active-change", e => {
+        logEvent("ea-active-change", e.detail);
+      });
+
+      eventPicker.addEventListener("focus", () => {
+        logEvent("focus", {});
+      });
+
+      eventPicker.addEventListener("blur", () => {
+        logEvent("blur", {});
+      });
+
+      eventPicker.addEventListener("ea-clear", () => {
+        logEvent("ea-clear", {});
+      });
+    </script>
 
     <hr />
     <!-- #endregion  -->
@@ -156,8 +217,37 @@
       <ea-button id="hideBtn">隐藏面板</ea-button>
       <ea-button id="focusBtn">聚焦</ea-button>
       <ea-button id="blurBtn">失焦</ea-button>
-      <ea-button id="getColorBtn">获取颜色对象</ea-button>
+      <ea-button id="clearBtn">清除颜色</ea-button>
     </div>
+
+    <script>
+      const methodPicker = document.getElementById("methodPicker");
+      const showBtn = document.getElementById("showBtn");
+      const hideBtn = document.getElementById("hideBtn");
+      const focusBtn = document.getElementById("focusBtn");
+      const blurBtn = document.getElementById("blurBtn");
+      const clearBtn = document.getElementById("clearBtn");
+
+      showBtn.addEventListener("click", () => {
+        methodPicker.show();
+      });
+
+      hideBtn.addEventListener("click", () => {
+        methodPicker.hide();
+      });
+
+      focusBtn.addEventListener("click", () => {
+        methodPicker.focus();
+      });
+
+      blurBtn.addEventListener("click", () => {
+        methodPicker.blur();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        methodPicker.value = "";
+      });
+    </script>
 
     <hr />
     <!-- #endregion  -->
