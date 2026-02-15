@@ -7,17 +7,28 @@ import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 import "../ea-color-picker-panel/index";
 import "@/common/ea-popper/index";
 import "@components/ea-button/index";
+import { EaColorPickerClearEvent } from "../../events/EaColorPickerClearEvent";
 
 export class EaColorPicker extends FormAssociatedBase {
+  /** @type {HTMLDivElement} */
   #container;
   /** @type {import("@/common/ea-popper").EaPopper} */
   #popper;
+  /** @type {HTMLDivElement} */
   #trigger;
+  /** @type {HTMLDivElement} */
   #outer;
+  /** @type {HTMLDivElement} */
   #inner;
   /** @type {import("@/components/ea-icon").EaIcon} */
   #statusIcon;
+  /** @type {import("@/components/ea-color-picker-panel").EaColorPickerPanel} */
   #panel;
+
+  /** @type {import("@/components/ea-button").EaButton} */
+  #clearBtn;
+  /** @type {import("@/components/ea-button").EaButton} */
+  #confirmBtn;
 
   #abortController = new AbortController();
 
@@ -26,6 +37,10 @@ export class EaColorPicker extends FormAssociatedBase {
     isOpen: false,
     /** @type {import("@/utils/Color").Color} 当前颜色对象 */
     color: new Color(),
+
+    isPanelDefined: false,
+    /** @type {string} 打开面板前的颜色值 */
+    previousValue: "",
   };
 
   #AbortControllerStates = {
@@ -45,6 +60,7 @@ export class EaColorPicker extends FormAssociatedBase {
       "tabindex",
       "placement",
       "show-alpha",
+      "clearable",
     ];
   }
 
@@ -93,6 +109,13 @@ export class EaColorPicker extends FormAssociatedBase {
         this.#panel.setAttribute("show-alpha", newVal);
       },
     },
+    clearable: {
+      type: Boolean,
+      default: true,
+      observer: newVal => {
+        this.#panel.setAttribute("clearable", newVal);
+      },
+    },
     tabindex: {
       type: Number,
       default: 0,
@@ -106,8 +129,15 @@ export class EaColorPicker extends FormAssociatedBase {
     predefine: {
       props: true,
       type: Array,
-      default: () => [],
-      observer: newVal => {},
+      default: [],
+      observer: async newVal => {
+        if (!this.#states.isPanelDefined) {
+          await customElements.whenDefined("ea-color-picker-panel");
+          this.#states.isPanelDefined = true;
+        }
+
+        this.#panel.predefine = newVal;
+      },
     },
   });
 
@@ -176,6 +206,8 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#inner = this.shadowRoot.querySelector(ns.ce("inner"));
     this.#statusIcon = this.shadowRoot.querySelector(ns.ce("icon", "status"));
     this.#panel = this.shadowRoot.querySelector(ns.ce("panel"));
+    this.#clearBtn = this.shadowRoot.querySelector(this.ns.ce("clear-btn"));
+    this.#confirmBtn = this.shadowRoot.querySelector(this.ns.ce("confirm-btn"));
 
     this.updateContainerClasslist();
   }
@@ -186,7 +218,6 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#abortController = new AbortController();
 
     this.#bindEvents();
-    this.#bindFooterActions();
   }
 
   /**
@@ -211,21 +242,17 @@ export class EaColorPicker extends FormAssociatedBase {
       signal: this.#abortController.signal,
     });
 
-    this.#panel.addEventListener(
-      "active-change",
-      this.#onPanelActiveChange.bind(this),
+    this.#clearBtn.addEventListener("click", this.#onClearClick.bind(this), {
+      signal: this.#abortController.signal,
+    });
+
+    this.#confirmBtn.addEventListener(
+      "click",
+      this.#onConfirmClick.bind(this),
       {
         signal: this.#abortController.signal,
       }
     );
-
-    this.#container.addEventListener("focus", this.#onFocus.bind(this), {
-      signal: this.#abortController.signal,
-    });
-
-    this.#container.addEventListener("blur", this.#onBlur.bind(this), {
-      signal: this.#abortController.signal,
-    });
   }
 
   /**
@@ -263,6 +290,8 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#AbortControllerStates.close?.abort();
     this.#AbortControllerStates.close = new AbortController();
 
+    this.#states.previousValue = this.value;
+
     this.#showPopper();
 
     document.addEventListener("click", this.#onDocumentClick.bind(this), {
@@ -284,6 +313,15 @@ export class EaColorPicker extends FormAssociatedBase {
   #onPopperHide() {
     this.#states.isOpen = false;
     this.updateContainerClasslist();
+
+    if (
+      this.#states.previousValue !== undefined &&
+      this.#states.previousValue !== this.value
+    ) {
+      this.value = this.#states.previousValue;
+      this.#updateTriggerColor();
+      this.#updateStatusIcon();
+    }
   }
 
   /**
@@ -295,16 +333,6 @@ export class EaColorPicker extends FormAssociatedBase {
     this.value = value;
     this.#updateTriggerColor();
     this.#updateStatusIcon();
-    this.emit("change", { detail: { value } });
-  }
-
-  /**
-   * 处理面板活动颜色变化事件
-   * @param {CustomEvent} e - 自定义事件对象
-   */
-  #onPanelActiveChange(e) {
-    const { value } = e.detail;
-    this.emit("ea-active-change", { detail: { value } });
   }
 
   /**
@@ -316,22 +344,6 @@ export class EaColorPicker extends FormAssociatedBase {
     if (!this.contains(e.target) || e.target !== this) {
       this.#hidePopper();
     }
-  }
-
-  /**
-   * 处理焦点事件
-   * @param {FocusEvent} e - 焦点事件对象
-   */
-  #onFocus(e) {
-    this.emit("focus");
-  }
-
-  /**
-   * 处理失去焦点事件
-   * @param {FocusEvent} e - 焦点事件对象
-   */
-  #onBlur(e) {
-    this.emit("blur");
   }
 
   /**
@@ -394,26 +406,6 @@ export class EaColorPicker extends FormAssociatedBase {
   }
 
   /**
-   * 绑定底部操作按钮事件
-   */
-  #bindFooterActions() {
-    const clearBtn = this.shadowRoot.querySelector(this.ns.ce("clear-btn"));
-    const confirmBtn = this.shadowRoot.querySelector(this.ns.ce("confirm-btn"));
-
-    if (clearBtn) {
-      clearBtn.addEventListener("click", this.#onClearClick.bind(this), {
-        signal: this.#abortController.signal,
-      });
-    }
-
-    if (confirmBtn) {
-      confirmBtn.addEventListener("click", this.#onConfirmClick.bind(this), {
-        signal: this.#abortController.signal,
-      });
-    }
-  }
-
-  /**
    * 处理清除按钮点击事件
    */
   #onClearClick() {
@@ -421,13 +413,17 @@ export class EaColorPicker extends FormAssociatedBase {
     this.#updateTriggerColor();
     this.#updateStatusIcon();
     this.emit("change", { detail: { value: "" } });
-    this.emit("ea-clear");
+    this.dispatchEvent(new EaColorPickerClearEvent());
+
+    this.#states.previousValue = "";
+    this.#hidePopper();
   }
 
   /**
    * 处理确认按钮点击事件
    */
   #onConfirmClick() {
+    this.#states.previousValue = this.value;
     this.#hidePopper();
   }
 

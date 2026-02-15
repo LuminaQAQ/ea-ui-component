@@ -26,32 +26,31 @@
     <!-- #region -->
     <h2>基础用法</h2>
 
+    <style>
+      .demo-color-block {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .demo-color-block .demonstration {
+        margin-right: 16px;
+      }
+    </style>
+
     <div class="demo">
-      <ea-color-picker></ea-color-picker>
-      <ea-color-picker value="#409eff"></ea-color-picker>
-      <ea-color-picker value="rgb(64, 158, 255)"></ea-color-picker>
-      <ea-color-picker value="hsl(210, 100%, 63%)"></ea-color-picker>
+      <div class="demo-color-block">
+        <span class="demonstration">With default value</span>
+        <ea-color-picker value="#409eff"></ea-color-picker>
+      </div>
+      <div class="demo-color-block">
+        <span class="demonstration">With no default value</span>
+        <ea-color-picker clearable="false"></ea-color-picker>
+      </div>
     </div>
 
     <hr />
     <!-- #endregion -->
     <!-- end -->
-
-    <!--  独立面板 -->
-    <!-- #region -->
-    <h1>独立面板</h1>
-
-    <div class="demo">
-      <ea-color-picker-panel value="#409eff"></ea-color-picker-panel>
-      <ea-color-picker-panel
-        value="rgba(64, 158, 255, 0.5)"
-        show-alpha
-      ></ea-color-picker-panel>
-    </div>
-
-    <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
 
     <!--  禁用状态 -->
     <!-- #region -->
@@ -66,14 +65,48 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!--  可清除 -->
+    <!--  选择透明度 -->
     <!-- #region -->
-    <h1>可清除</h1>
+    <h1>透明度支持</h1>
 
     <div class="demo">
-      <ea-color-picker value="#409eff" clearable></ea-color-picker>
-      <ea-color-picker value="" clearable></ea-color-picker>
+      <ea-color-picker
+        value="rgba(19, 206, 102, 0.8)"
+        show-alpha
+      ></ea-color-picker>
     </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  预定义颜色 -->
+    <!-- #region -->
+    <h1>预定义颜色</h1>
+
+    <div class="demo">
+      <ea-color-picker id="predefinePicker" value="#409eff"></ea-color-picker>
+    </div>
+
+    <script type="module">
+      const predefineExample = {
+        picker: document.querySelector("#predefinePicker"),
+        predefineList: [
+          "#ff4500",
+          "#ff8c00",
+          "#ffd700",
+          "#90ee90",
+          "#00ced1",
+          "#1e90ff",
+          "#c71585",
+        ],
+
+        init() {
+          this.picker.predefine = this.predefineList;
+        },
+      };
+      predefineExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->
@@ -93,161 +126,17 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!--  透明度支持 -->
+    <!--  独立面板 -->
     <!-- #region -->
-    <h1>透明度支持</h1>
+    <h1>独立面板</h1>
 
     <div class="demo">
-      <ea-color-picker
+      <ea-color-picker-panel value="#409eff" clearable></ea-color-picker-panel>
+      <ea-color-picker-panel
         value="rgba(64, 158, 255, 0.5)"
-        color-format="rgb"
         show-alpha
-      ></ea-color-picker>
-      <ea-color-picker
-        value="hsla(210, 100%, 63%, 0.3)"
-        color-format="hsl"
-        show-alpha
-      ></ea-color-picker>
+      ></ea-color-picker-panel>
     </div>
-
-    <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
-
-    <!--  预定义颜色 -->
-    <!-- #region -->
-    <h1>预定义颜色</h1>
-
-    <div class="demo">
-      <ea-color-picker
-        value="#409eff"
-        predefine="['#ff4500','#ff8c00','#ffd700','#90ee90','#00ced1','#1e90ff','#c71585']"
-      >
-      </ea-color-picker>
-    </div>
-
-    <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
-
-    <!--  操作按钮 -->
-    <!-- #region -->
-    <h1>操作按钮</h1>
-
-    <div class="demo">
-      <ea-color-picker
-        id="actionPicker"
-        value="#409eff"
-        clearable
-      ></ea-color-picker>
-      <p>点击颜色选择器查看底部操作按钮</p>
-    </div>
-
-    <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
-
-    <!--  事件监听 -->
-    <!-- #region -->
-    <h1>事件监听</h1>
-
-    <div class="demo">
-      <ea-color-picker
-        id="eventPicker"
-        value="#409eff"
-        clearable
-      ></ea-color-picker>
-      <div
-        id="eventLog"
-        style="
-          margin-top: 10px;
-          padding: 10px;
-          border: 1px solid #ccc;
-          max-height: 200px;
-          overflow-y: auto;
-        "
-      >
-        <p>事件日志：</p>
-      </div>
-    </div>
-
-    <script>
-      const eventPicker = document.getElementById("eventPicker");
-      const eventLog = document.getElementById("eventLog");
-
-      function logEvent(eventName, detail) {
-        const logEntry = document.createElement("p");
-        logEntry.textContent = `${new Date().toLocaleTimeString()} - ${eventName}: ${JSON.stringify(detail)}`;
-        eventLog.appendChild(logEntry);
-        eventLog.scrollTop = eventLog.scrollHeight;
-      }
-
-      eventPicker.addEventListener("change", e => {
-        logEvent("change", e.detail);
-      });
-
-      eventPicker.addEventListener("ea-active-change", e => {
-        logEvent("ea-active-change", e.detail);
-      });
-
-      eventPicker.addEventListener("focus", () => {
-        logEvent("focus", {});
-      });
-
-      eventPicker.addEventListener("blur", () => {
-        logEvent("blur", {});
-      });
-
-      eventPicker.addEventListener("ea-clear", () => {
-        logEvent("ea-clear", {});
-      });
-    </script>
-
-    <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
-
-    <!--  方法调用 -->
-    <!-- #region -->
-    <h1>方法调用</h1>
-
-    <div class="demo">
-      <ea-color-picker id="methodPicker" value="#409eff"></ea-color-picker>
-      <ea-button id="showBtn">显示面板</ea-button>
-      <ea-button id="hideBtn">隐藏面板</ea-button>
-      <ea-button id="focusBtn">聚焦</ea-button>
-      <ea-button id="blurBtn">失焦</ea-button>
-      <ea-button id="clearBtn">清除颜色</ea-button>
-    </div>
-
-    <script>
-      const methodPicker = document.getElementById("methodPicker");
-      const showBtn = document.getElementById("showBtn");
-      const hideBtn = document.getElementById("hideBtn");
-      const focusBtn = document.getElementById("focusBtn");
-      const blurBtn = document.getElementById("blurBtn");
-      const clearBtn = document.getElementById("clearBtn");
-
-      showBtn.addEventListener("click", () => {
-        methodPicker.show();
-      });
-
-      hideBtn.addEventListener("click", () => {
-        methodPicker.hide();
-      });
-
-      focusBtn.addEventListener("click", () => {
-        methodPicker.focus();
-      });
-
-      blurBtn.addEventListener("click", () => {
-        methodPicker.blur();
-      });
-
-      clearBtn.addEventListener("click", () => {
-        methodPicker.value = "";
-      });
-    </script>
 
     <hr />
     <!-- #endregion  -->

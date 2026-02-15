@@ -23,11 +23,6 @@ $name: ea-color-picker;
   --#{$name}-inner-border: 1px solid var(--grey-300);
   --#{$name}-inner-background-color: transparent;
 
-  --#{$name}-icon-size: 14px;
-  --#{$name}-icon-color: var(--white);
-  --#{$name}-icon-color-empty: var(--grey-400);
-  --#{$name}-icon-color-hover: var(--white);
-
   --#{$name}-panel-z-index: 1000;
   --#{$name}-panel-margin-top: var(--spacing-xs);
 }
@@ -44,11 +39,6 @@ $name: ea-color-picker;
   }
 
   @include element(trigger) {
-    // position: relative;
-    // width: 100%;
-    // height: 100%;
-    // cursor: pointer;
-
     width: var(--#{$name}-size);
     height: var(--#{$name}-size);
     background-color: var(--#{$name}-background-color);
@@ -107,6 +97,11 @@ $name: ea-color-picker;
     }
   }
 
+  @include element(footer-actions) {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+
   @include state(focus) {
     border-color: var(--#{$name}-border-color-focus);
     box-shadow: 0 0 0 1px var(--#{$name}-border-color-focus);
@@ -122,7 +117,7 @@ $name: ea-color-picker;
       cursor: not-allowed;
     }
 
-    .ea-color-picker__icon {
+    .ea-color-picker__icon-wrapper {
       opacity: 0.6;
     }
   }
@@ -134,7 +129,6 @@ $name: ea-color-picker;
 
   @include modifier(small) {
     --#{$name}-size: 24px;
-    --#{$name}-icon-size: 14px;
   }
 
   @include modifier(large) {
@@ -143,8 +137,8 @@ $name: ea-color-picker;
   }
 
   @include state(has-value) {
-    .#{$name}__icon {
-      color: var(--#{$name}-icon-color);
+    .#{$name}__icon-wrapper {
+      color: var(--white);
     }
 
     .#{$name}__inner {

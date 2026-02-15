@@ -4,6 +4,8 @@ import { Color } from "@/utils/Color";
 import stylesheet from "./index.scss?inline";
 import "@components/ea-input/index";
 import EaUtils from "@/utils/Utils";
+import { EaColorPickerActiveChangeEvent } from "../../events/EaColorPickerActiveChangeEvent";
+import { EaColorPickerPanelInvalidColorEvent } from "../../events/EaColorPickerPanelInvalidColorEvent";
 
 export class EaColorPickerPanel extends Base {
   /** @type {HTMLDivElement} */
@@ -26,6 +28,8 @@ export class EaColorPickerPanel extends Base {
   #predefineList;
   /** @type {HTMLInputElement} */
   #colorInput;
+  /** @type {HTMLDivElement} */
+  #textDisplay;
 
   #abortController = new AbortController();
 
@@ -53,6 +57,8 @@ export class EaColorPickerPanel extends Base {
     color: new Color(),
     /** @type {boolean} 是否正在拖拽 */
     isDragging: false,
+    /** @type {string} 上一个验证通过的颜色值 */
+    lastValidValue: "",
   };
 
   static get observedAttributes() {
@@ -64,6 +70,7 @@ export class EaColorPickerPanel extends Base {
       "show-alpha",
       "disabled",
       "border",
+      "clearable",
     ];
   }
 
@@ -72,9 +79,10 @@ export class EaColorPickerPanel extends Base {
       type: String,
       default: "",
       observer: newVal => {
+        this.#states.lastValidValue = newVal;
         this.#updateCursorPosition();
         this.#updateSvpanelStatus();
-        this.#colorInput.value = newVal;
+        this.#updateColorInputValue();
       },
     },
     "color-format": {
@@ -107,15 +115,22 @@ export class EaColorPickerPanel extends Base {
         this.updateContainerClasslist();
       },
     },
+    clearable: {
+      type: Boolean,
+      default: true,
+      observer: newVal => {
+        this.#updateTextDisplayMode();
+      },
+    },
   });
 
   propStates = this.properties({
     predefine: {
       props: true,
       type: Array,
-      default: () => [],
+      default: [],
       observer: newVal => {
-        this.#renderPredefineColors();
+        this.#renderPredefineColors(newVal);
       },
     },
   });
@@ -147,6 +162,7 @@ export class EaColorPickerPanel extends Base {
           <div class="${ns.e("colors")}" part="predefine-colors"></div>
         </div>
         <div class="${ns.e("footer")}" part="footer">
+          <div class="${ns.e("text-display")}" part="text-display"></div>
           <ea-input class="${ns.e("color-input")}" part="color-input" type="text" size="small"></ea-input>
           <section class="${ns.e("append")}" part="append">
             <slot name="footer"></slot>
@@ -169,10 +185,12 @@ export class EaColorPickerPanel extends Base {
     this.#alphaThumb = this.shadowRoot.querySelector(
       ns.ce("alpha-slider-thumb")
     );
-    this.#predefineList = this.shadowRoot.querySelector(
-      ns.ce("predefine-colors")
-    );
+    this.#predefineList = this.shadowRoot.querySelector(ns.ce("predefine"));
     this.#colorInput = this.shadowRoot.querySelector(ns.ce("color-input"));
+    this.#textDisplay = this.shadowRoot.querySelector(ns.ce("text-display"));
+
+    this.updateContainerClasslist();
+    this.#updateTextDisplayMode();
   }
 
   connectedCallback() {
@@ -181,7 +199,6 @@ export class EaColorPickerPanel extends Base {
     this.#abortController = new AbortController();
 
     this.#bindEvents();
-    this.#renderPredefineColors();
   }
 
   /**
@@ -196,6 +213,7 @@ export class EaColorPickerPanel extends Base {
         disabled: this.disabled,
         border: this.border,
         "show-alpha": this["show-alpha"],
+        clearable: this.clearable,
       }
     );
 
@@ -235,6 +253,24 @@ export class EaColorPickerPanel extends Base {
         signal: this.#abortController.signal,
       }
     );
+
+    this.#colorInput.addEventListener(
+      "blur",
+      this.#onColorInputBlur.bind(this),
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+
+    if (this.#predefineList) {
+      this.#predefineList.addEventListener(
+        "click",
+        this.#onPredefineListClick.bind(this),
+        {
+          signal: this.#abortController.signal,
+        }
+      );
+    }
   }
 
   /**
@@ -554,63 +590,40 @@ export class EaColorPickerPanel extends Base {
       })
     );
 
-    // 触发 active-change 事件
     this.dispatchEvent(
-      new CustomEvent("active-change", {
-        detail: {
-          value: this.value,
-        },
-        bubbles: true,
-        composed: true,
-      })
+      new EaColorPickerActiveChangeEvent({ value: this.value })
     );
   }
 
   /**
    * 渲染预设颜色列表
+   * @param {Array} list - 预设颜色列表
    */
-  #renderPredefineColors() {
-    if (
-      !this.#predefineList ||
-      !this.predefine ||
-      this.predefine.length === 0
-    ) {
+  #renderPredefineColors(list) {
+    if (!list || list.length === 0) {
       return;
     }
 
-    this.#predefineList.innerHTML = this.predefine
-      .map(
-        color => `
+    this.#predefineList.innerHTML = this.html(
+      list
+        .map(
+          color => `
           <div class="${this.ns.e("predefine-color")}" 
-               part="predefine-color" 
-               style="background-color: ${color}"
-               data-color="${color}">
-          </div>
+            part="predefine-color" 
+            style="background-color: ${color}"
+            data-color="${color}"
+          ></div>
         `
-      )
-      .join("");
-
-    // 绑定预设颜色点击事件
-    const colorElements = this.#predefineList.querySelectorAll(
-      this.ns.ce("predefine-color")
+        )
+        .join("")
     );
-
-    colorElements.forEach(element => {
-      element.addEventListener(
-        "click",
-        this.#onPredefineColorClick.bind(this),
-        {
-          signal: this.#abortController.signal,
-        }
-      );
-    });
   }
 
   /**
    * 处理预设颜色点击事件
    * @param {MouseEvent} e - 鼠标事件对象
    */
-  #onPredefineColorClick(e) {
+  #onPredefineListClick(e) {
     if (this.disabled) return;
 
     const colorElement = e.target.closest(this.ns.ce("predefine-color"));
@@ -618,9 +631,101 @@ export class EaColorPickerPanel extends Base {
 
     const colorValue = colorElement.getAttribute("data-color");
     if (colorValue) {
-      this.value = colorValue;
-      this.#emitChangeEvent();
+      this.#updateColorFromValue(colorValue);
     }
+  }
+
+  /**
+   * 根据颜色值更新所有相关状态
+   * @param {string} colorValue - 颜色值字符串
+   */
+  #updateColorFromValue(colorValue) {
+    this.#updateColorInputValue();
+
+    this.value = colorValue;
+
+    this.#states.color.setValue(colorValue);
+
+    const match = this.#states.color.hsvStrToHsvObject(
+      this.#states.color.toHsv(true)
+    );
+
+    if (match) {
+      const h = parseInt(match.h);
+      const s = match.s;
+      const v = match.v;
+      const a = match.a ? parseFloat(match.a) : 1;
+
+      this.#states.hue = h;
+      this.#states.saturation = s;
+      this.#states.value = v;
+      this.#states.alpha = a;
+    }
+
+    this.#updateCursorPosition();
+    this.#updateSvpanelStatus();
+
+    this.#emitChangeEvent();
+  }
+
+  /**
+   * 更新文字展示模式
+   */
+  #updateTextDisplayMode() {
+    if (!this.#colorInput || !this.#textDisplay) return;
+
+    this.#updateColorInputValue();
+
+    this.updateContainerClasslist();
+  }
+
+  /**
+   * 更新颜色输入框的值
+   */
+  #updateColorInputValue() {
+    if (this.clearable && this.#colorInput) {
+      this.#colorInput.setAttribute("value", this.value);
+    } else if (!this.clearable && this.#textDisplay) {
+      this.#textDisplay.textContent = this.value;
+    }
+  }
+
+  /**
+   * 处理颜色输入框blur事件
+   * @param {FocusEvent} e - 焦点事件对象
+   */
+  #onColorInputBlur(e) {
+    if (!this.#colorInput) return;
+
+    const inputValue = this.#colorInput.getAttribute("value") || "";
+
+    if (!inputValue) {
+      this.value = "";
+      this.#states.lastValidValue = "";
+      return;
+    }
+
+    const isValid = this.#validateColor(inputValue);
+
+    if (isValid) {
+      this.#states.lastValidValue = inputValue;
+      this.#updateColorFromValue(inputValue);
+    } else {
+      this.#colorInput.setAttribute("value", this.#states.lastValidValue || "");
+
+      this.dispatchEvent(
+        new EaColorPickerPanelInvalidColorEvent({ value: inputValue })
+      );
+    }
+  }
+
+  /**
+   * 验证颜色格式是否合法
+   * @param {string} colorValue - 颜色值
+   * @returns {boolean} 是否合法
+   */
+  #validateColor(colorValue) {
+    return Color.isValidColor(colorValue);
   }
 }
 

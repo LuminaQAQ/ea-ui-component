@@ -24,7 +24,8 @@ export class Color {
     }
 
     if (typeof color === "string") {
-      return this.#parseString(color);
+      const result = this.#parseString(color);
+      return result || this.#getDefaultColor();
     }
 
     if (typeof color === "object") {
@@ -35,45 +36,76 @@ export class Color {
   }
 
   /**
-   * 解析字符串颜色值
+   * 解析字符串颜色值（严格模式，返回null表示非法）
    * @param {string} colorStr - 颜色字符串
-   * @returns {Object} 颜色对象
+   * @returns {Object|null} 颜色对象，非法时返回null
    */
-  #parseString(colorStr) {
+  #parseStringStrict(colorStr) {
     colorStr = colorStr.trim().toLowerCase();
 
-    // HEX 格式
     if (colorStr.startsWith("#")) {
       return this.#parseHex(colorStr);
     }
 
-    // RGB 格式
     if (colorStr.startsWith("rgb")) {
       return this.#parseRgb(colorStr);
     }
 
-    // HSL 格式
     if (colorStr.startsWith("hsl")) {
       return this.#parseHsl(colorStr);
     }
 
-    // HSV 格式
     if (colorStr.startsWith("hsv")) {
       return this.#parseHsv(colorStr);
     }
 
-    return this.#getDefaultColor();
+    return null;
   }
 
   /**
-   * 解析 HEX 颜色
-   * @param {string} hex - HEX 颜色值
-   * @returns {Object} 颜色对象
+   * 静态方法：严格解析字符串颜色值
+   * @param {string} colorStr - 颜色字符串
+   * @returns {Object|null} 颜色对象，非法时返回null
    */
-  #parseHex(hex) {
+  static parseStringStrict(colorStr) {
+    if (!colorStr || typeof colorStr !== "string") {
+      return null;
+    }
+
+    colorStr = colorStr.trim().toLowerCase();
+
+    if (colorStr.startsWith("#")) {
+      return Color.#parseHexStatic(colorStr);
+    }
+
+    if (colorStr.startsWith("rgb")) {
+      return Color.#parseRgbStatic(colorStr);
+    }
+
+    if (colorStr.startsWith("hsl")) {
+      return Color.#parseHslStatic(colorStr);
+    }
+
+    if (colorStr.startsWith("hsv")) {
+      return Color.#parseHsvStatic(colorStr);
+    }
+
+    return null;
+  }
+
+  /**
+   * 静态方法：解析 HEX 颜色
+   * @param {string} hex - HEX 颜色值
+   * @returns {Object|null} 颜色对象，非法时返回null
+   */
+  static #parseHexStatic(hex) {
     hex = hex.replace("#", "");
 
-    // 处理简写格式
+    const validLengths = [3, 6, 8];
+    if (!validLengths.includes(hex.length)) {
+      return null;
+    }
+
     if (hex.length === 3) {
       hex = hex
         .split("")
@@ -98,33 +130,274 @@ export class Color {
       return { r, g, b, a };
     }
 
-    return this.#getDefaultColor();
+    return null;
+  }
+
+  /**
+   * 静态方法：解析 RGB 颜色
+   * @param {string} rgbStr - RGB 颜色字符串
+   * @returns {Object|null} 颜色对象，非法时返回null
+   */
+  static #parseRgbStatic(rgbStr) {
+    const match = rgbStr.match(
+      /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
+    );
+    if (match) {
+      const r = parseInt(match[1]);
+      const g = parseInt(match[2]);
+      const b = parseInt(match[3]);
+      const a = match[4] ? parseFloat(match[4]) : 1;
+
+      if (
+        r < 0 ||
+        r > 255 ||
+        g < 0 ||
+        g > 255 ||
+        b < 0 ||
+        b > 255 ||
+        a < 0 ||
+        a > 1
+      ) {
+        return null;
+      }
+
+      return { r, g, b, a };
+    }
+    return null;
+  }
+
+  /**
+   * 静态方法：解析 HSL 颜色
+   * @param {string} hslStr - HSL 颜色字符串
+   * @returns {Object|null} 颜色对象，非法时返回null
+   */
+  static #parseHslStatic(hslStr) {
+    const match = hslStr.match(
+      /hsla?\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
+    );
+    if (match) {
+      const h = parseInt(match[1]);
+      const s = parseInt(match[2]) / 100;
+      const l = parseInt(match[3]) / 100;
+      const a = match[4] ? parseFloat(match[4]) : 1;
+
+      if (
+        h < 0 ||
+        h > 360 ||
+        s < 0 ||
+        s > 1 ||
+        l < 0 ||
+        l > 1 ||
+        a < 0 ||
+        a > 1
+      ) {
+        return null;
+      }
+
+      return Color.#hslToRgbStatic({ h, s, l, a });
+    }
+    return null;
+  }
+
+  /**
+   * 静态方法：解析 HSV 颜色
+   * @param {string} hsvStr - HSV 颜色字符串
+   * @returns {Object|null} 颜色对象，非法时返回null
+   */
+  static #parseHsvStatic(hsvStr) {
+    const match = hsvStr.match(
+      /hsv\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
+    );
+
+    if (match) {
+      const h = parseInt(match[1]);
+      const s = parseInt(match[2]) / 100;
+      const v = parseInt(match[3]) / 100;
+      const a = match[4] ? parseFloat(match[4]) : 1;
+
+      if (
+        h < 0 ||
+        h > 360 ||
+        s < 0 ||
+        s > 1 ||
+        v < 0 ||
+        v > 1 ||
+        a < 0 ||
+        a > 1
+      ) {
+        return null;
+      }
+
+      return Color.#hsvToRgbStatic({ h, s, v, a });
+    }
+
+    return null;
+  }
+
+  /**
+   * 静态方法：HSL 转 RGB
+   * @param {Object} hsl - HSL 颜色对象
+   * @returns {Object} RGB 颜色对象
+   */
+  static #hslToRgbStatic(hsl) {
+    const { h, s, l, a = 1 } = hsl;
+
+    if (s === 0) {
+      const gray = Math.round(l * 255);
+      return { r: gray, g: gray, b: gray, a };
+    }
+
+    const hueToRgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const hk = h / 360;
+
+    const r = Math.round(hueToRgb(p, q, hk + 1 / 3) * 255);
+    const g = Math.round(hueToRgb(p, q, hk) * 255);
+    const b = Math.round(hueToRgb(p, q, hk - 1 / 3) * 255);
+
+    return { r, g, b, a };
+  }
+
+  /**
+   * 静态方法：HSV 转 RGB
+   * @param {Object} hsv - HSV 颜色对象
+   * @returns {Object} RGB 颜色对象
+   */
+  static #hsvToRgbStatic(hsv) {
+    const { h, s, v, a = 1 } = hsv;
+
+    const hi = Math.floor(h / 60) % 6;
+    const f = h / 60 - hi;
+    const p = v * (1 - s);
+    const q = v * (1 - f * s);
+    const t = v * (1 - (1 - f) * s);
+
+    let r, g, b;
+
+    switch (hi) {
+      case 0:
+        [r, g, b] = [v, t, p];
+        break;
+      case 1:
+        [r, g, b] = [q, v, p];
+        break;
+      case 2:
+        [r, g, b] = [p, v, t];
+        break;
+      case 3:
+        [r, g, b] = [p, q, v];
+        break;
+      case 4:
+        [r, g, b] = [t, p, v];
+        break;
+      case 5:
+        [r, g, b] = [v, p, q];
+        break;
+    }
+
+    return {
+      r: Math.round(r * 255),
+      g: Math.round(g * 255),
+      b: Math.round(b * 255),
+      a,
+    };
+  }
+
+  /**
+   * 解析字符串颜色值
+   * @param {string} colorStr - 颜色字符串
+   * @returns {Object} 颜色对象
+   */
+  #parseString(colorStr) {
+    return this.#parseStringStrict(colorStr);
+  }
+
+  /**
+   * 解析 HEX 颜色
+   * @param {string} hex - HEX 颜色值
+   * @returns {Object|null} 颜色对象，非法时返回null
+   */
+  #parseHex(hex) {
+    hex = hex.replace("#", "");
+
+    const validLengths = [3, 6, 8];
+    if (!validLengths.includes(hex.length)) {
+      return null;
+    }
+
+    if (hex.length === 3) {
+      hex = hex
+        .split("")
+        .map(c => c + c)
+        .join("");
+    }
+
+    if (hex.length === 6) {
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+
+      return { r, g, b, a: 1 };
+    }
+
+    if (hex.length === 8) {
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      const a = parseInt(hex.substring(6, 8), 16) / 255;
+
+      return { r, g, b, a };
+    }
+
+    return null;
   }
 
   /**
    * 解析 RGB 颜色
    * @param {string} rgbStr - RGB 颜色字符串
-   * @returns {Object} 颜色对象
+   * @returns {Object|null} 颜色对象，非法时返回null
    */
   #parseRgb(rgbStr) {
     const match = rgbStr.match(
       /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
     );
     if (match) {
-      return {
-        r: parseInt(match[1]),
-        g: parseInt(match[2]),
-        b: parseInt(match[3]),
-        a: match[4] ? parseFloat(match[4]) : 1,
-      };
+      const r = parseInt(match[1]);
+      const g = parseInt(match[2]);
+      const b = parseInt(match[3]);
+      const a = match[4] ? parseFloat(match[4]) : 1;
+
+      if (
+        r < 0 ||
+        r > 255 ||
+        g < 0 ||
+        g > 255 ||
+        b < 0 ||
+        b > 255 ||
+        a < 0 ||
+        a > 1
+      ) {
+        return null;
+      }
+
+      return { r, g, b, a };
     }
-    return this.#getDefaultColor();
+    return null;
   }
 
   /**
    * 解析 HSL 颜色
    * @param {string} hslStr - HSL 颜色字符串
-   * @returns {Object} 颜色对象
+   * @returns {Object|null} 颜色对象，非法时返回null
    */
   #parseHsl(hslStr) {
     const match = hslStr.match(
@@ -136,9 +409,22 @@ export class Color {
       const l = parseInt(match[3]) / 100;
       const a = match[4] ? parseFloat(match[4]) : 1;
 
+      if (
+        h < 0 ||
+        h > 360 ||
+        s < 0 ||
+        s > 1 ||
+        l < 0 ||
+        l > 1 ||
+        a < 0 ||
+        a > 1
+      ) {
+        return null;
+      }
+
       return this.#hslToRgb({ h, s, l, a });
     }
-    return this.#getDefaultColor();
+    return null;
   }
 
   hsvStrToHsvObject(hsvStr) {
@@ -161,7 +447,7 @@ export class Color {
   /**
    * 解析 HSV 颜色
    * @param {string} hsvStr - HSV 颜色字符串
-   * @returns {Object} 颜色对象
+   * @returns {Object|null} 颜色对象，非法时返回null
    */
   #parseHsv(hsvStr) {
     const match = this.hsvStrToHsvObject(hsvStr);
@@ -171,9 +457,22 @@ export class Color {
       const v = parseInt(match.v);
       const a = match.a ? parseFloat(match.a) : 1;
 
+      if (
+        h < 0 ||
+        h > 360 ||
+        s < 0 ||
+        s > 1 ||
+        v < 0 ||
+        v > 1 ||
+        a < 0 ||
+        a > 1
+      ) {
+        return null;
+      }
+
       return this.#hsvToRgb({ h, s, v, a });
     }
-    return this.#getDefaultColor();
+    return null;
   }
 
   /**
@@ -519,5 +818,19 @@ export class Color {
    */
   isDark() {
     return this.getBrightness() <= 0.5;
+  }
+
+  /**
+   * 静态方法：验证颜色字符串是否合法
+   * @param {string} colorValue - 颜色值
+   * @returns {boolean} 是否合法
+   */
+  static isValidColor(colorValue) {
+    if (!colorValue || typeof colorValue !== "string") {
+      return false;
+    }
+
+    const result = Color.parseStringStrict(colorValue);
+    return result !== null;
   }
 }

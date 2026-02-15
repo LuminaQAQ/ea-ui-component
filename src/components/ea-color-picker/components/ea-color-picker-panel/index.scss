@@ -23,10 +23,14 @@ $name: ea-color-picker-panel;
   --#{$name}-input-border-radius: var(--border-radius-sm);
   --#{$name}-input-border-color: var(--grey-300);
   --#{$name}-input-focus-border-color: var(--primary-color);
+
+  --#{$name}-text-display-font-size: var(--font-size-sm);
+  --#{$name}-text-display-color: var(--grey-700);
+  --#{$name}-text-display-padding: 0 8px;
 }
 
 :host {
-  display: block;
+  display: inline-block;
 }
 
 @include block($name) {
@@ -40,15 +44,6 @@ $name: ea-color-picker-panel;
     display: flex;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-md);
-  }
-
-  @include element(bar) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: inherit;
   }
 
   @include element(thumb) {
@@ -122,10 +117,6 @@ $name: ea-color-picker-panel;
     cursor: pointer;
     margin-bottom: var(--spacing-md);
 
-    .#{$name}__bar {
-      border-radius: inherit;
-    }
-
     .#{$name}__thumb {
       top: 0;
       width: 6px;
@@ -137,13 +128,11 @@ $name: ea-color-picker-panel;
   @include element(predefine) {
     margin-bottom: var(--spacing-md);
 
-    .#{$name}__colors {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: var(--#{$name}-predefine-gap);
-    }
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: var(--#{$name}-predefine-gap);
 
-    .#{$name}__color-selector {
+    .#{$name}__predefine-color {
       width: var(--#{$name}-predefine-item-size);
       height: var(--#{$name}-predefine-item-size);
       border-radius: var(--#{$name}-predefine-item-border-radius);
@@ -171,29 +160,29 @@ $name: ea-color-picker-panel;
     gap: var(--spacing-sm);
   }
 
-  @include element(color-input) {}
-
-  @include state(selected) {
-    .#{$name}__color-selector {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 1px var(--primary-color);
-    }
+  @include element(text-display) {
+    display: block;
+    font-size: var(--#{$name}-text-display-font-size);
+    color: var(--#{$name}-text-display-color);
+    padding: var(--#{$name}-text-display-padding);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
   }
 
-  @include state(alpha) {
-    .#{$name}__color-selector {
-      position: relative;
+  @include element(color-input) {
+    display: none;
+    flex: 1;
+  }
 
-      &::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: var(--grey-600);
-        transform: rotate(-45deg);
-      }
+  @include state(clearable) {
+    .#{$name}__color-input {
+      display: block;
+    }
+
+    .#{$name}__text-display {
+      display: none;
     }
   }
 
