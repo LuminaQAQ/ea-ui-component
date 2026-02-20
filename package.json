@@ -194,6 +194,9 @@
     "./ea-skeleton": {
       "import": "./dist/ea-skeleton.js"
     },
+    "./ea-slider": {
+      "import": "./dist/ea-slider.js"
+    },
     "./ea-space": {
       "import": "./dist/ea-space.js"
     },

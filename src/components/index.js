@@ -45,6 +45,7 @@ import './ea-scrollbar/index.js';
 import './ea-segmented/index.js';
 import './ea-select/index.js';
 import './ea-skeleton/index.js';
+import './ea-slider/index.js';
 import './ea-space/index.js';
 import './ea-splitter/index.js';
 import './ea-statistic/index.js';

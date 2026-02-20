@@ -1,0 +1,176 @@
+$name: ea-slider;
+$ea-slider-size-types: (
+  small,
+  default,
+  large
+);
+
+:host {
+  --#{$name}-height: 6px;
+  --#{$name}-height-small: 4px;
+  --#{$name}-height-large: 8px;
+
+  --#{$name}-thumb-size: 20px;
+  --#{$name}-thumb-size-small: 16px;
+  --#{$name}-thumb-size-large: 24px;
+
+  --#{$name}-rail-bg-color: var(--grey-200);
+  --#{$name}-track-bg-color: var(--primary-color);
+  --#{$name}-thumb-bg-color: var(--color-white);
+  --#{$name}-thumb-border-color: var(--blue-300);
+  --#{$name}-thumb-hover-bg-color: var(--primary-color-light-9);
+
+  --#{$name}-tooltip-bg-color: var(--grey-900);
+  --#{$name}-tooltip-color: var(--color-white);
+
+  --#{$name}-mark-color: var(--grey-500);
+
+  --#{$name}-transition: var(--transition-fast);
+}
+
+:host {
+  display: inline-block;
+  width: 100%;
+}
+
+@include block($name) {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 var(--#{$name}-thumb-size);
+  width: 100%;
+
+  @include element(runway) {
+    position: relative;
+    flex: 1;
+    height: 100%;
+  }
+
+  @include element(rail) {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: var(--#{$name}-height);
+    background-color: var(--#{$name}-rail-bg-color);
+    border-radius: var(--border-radius-pill);
+    transform: translateY(-50%);
+  }
+
+  @include element(thumb) {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: var(--#{$name}-thumb-size);
+    height: var(--#{$name}-thumb-size);
+    background-color: var(--#{$name}-thumb-bg-color);
+    border: 2px solid var(--#{$name}-thumb-border-color);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: background-color var(--#{$name}-transition),
+    transform var(--#{$name}-transition);
+    z-index: 1;
+
+    &:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+  }
+
+  @include element(tooltip) {
+    position: absolute;
+    bottom: calc(100% + var(--spacing-sm));
+    left: 50%;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--#{$name}-tooltip-bg-color);
+    color: var(--#{$name}-tooltip-color);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+    border-radius: var(--border-radius-base);
+    transform: translateX(-50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--#{$name}-transition);
+  }
+
+  @include state(vertical) {
+    flex-direction: column;
+    height: 100%;
+    width: auto;
+
+    .ea-slider__runway {
+      height: 100%;
+      width: 100%;
+    }
+
+    .ea-slider__rail {
+      top: 0;
+      left: 50%;
+      width: var(--#{$name}-height);
+      height: 100%;
+      transform: translateX(-50%);
+    }
+
+    .ea-slider__track {
+      top: 0;
+      left: 50%;
+      width: var(--#{$name}-height);
+      transform: translateX(-50%);
+    }
+
+    .ea-slider__thumb {
+      top: 0;
+      left: 50%;
+    }
+
+    .ea-slider__tooltip {
+      bottom: auto;
+      left: calc(100% + var(--spacing-sm));
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .ea-slider__mark {
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .ea-slider__mark-label {
+      margin-top: 0;
+      margin-left: var(--spacing-xs);
+      text-align: left;
+    }
+  }
+
+  @include state(show-input) {
+    .ea-slider__input-wrap {
+      display: flex;
+    }
+  }
+
+  @include state(disabled) {
+    .ea-slider__rail {
+      background-color: var(--grey-100);
+    }
+
+    .ea-slider__track {
+      background-color: var(--grey-300);
+    }
+
+    .ea-slider__thumb {
+      cursor: not-allowed;
+      border-color: var(--grey-300);
+    }
+  }
+
+  @include modifier(small) {
+    --#{$name}-height: var(--#{$name}-height-small);
+    --#{$name}-thumb-size: var(--#{$name}-thumb-size-small);
+  }
+
+  @include modifier(large) {
+    --#{$name}-height: var(--#{$name}-height-large);
+    --#{$name}-thumb-size: var(--#{$name}-thumb-size-large);
+  }
+}
