@@ -35,8 +35,51 @@
     <!-- #region -->
     <h1>基础用法</h1>
 
+    <style>
+      .slider-demo-block {
+        max-width: 600px;
+        display: flex;
+        align-items: center;
+      }
+      .slider-demo-block .el-slider {
+        margin-top: 0;
+        margin-left: 12px;
+      }
+      .slider-demo-block .demonstration {
+        font-size: 14px;
+        line-height: 44px;
+        flex: 1 0 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 0;
+      }
+    </style>
+
     <div class="demo">
-      <ea-slider value="50"></ea-slider>
+      <div class="slider-demo-block">
+        <span class="demonstration">Default value</span>
+        <ea-slider value="50"></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Customized initial value</span>
+        <ea-slider value="70"></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Hide Tooltip</span>
+        <ea-slider value="50" show-tooltip="false"></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Format Tooltip</span>
+        <ea-slider
+          value="50"
+          format-tooltip="(value) => value + '%'"
+        ></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Disabled</span>
+        <ea-slider value="50" disabled></ea-slider>
+      </div>
     </div>
 
     <hr />

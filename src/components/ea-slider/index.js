@@ -1,12 +1,16 @@
 import FormAssociatedBase from "@/core/FormBase";
 import stylesheet from "./index.scss?inline";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
+import "@/components/ea-tooltip";
+import { namespace } from "@/directives/namespace";
 
 export class EaSlider extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
   #rail;
+  /** @type {HTMLElement} */
+  #trigger;
   /** @type {HTMLElement} */
   #thumb;
   /** @type {HTMLElement} */
@@ -75,7 +79,7 @@ export class EaSlider extends FormAssociatedBase {
       type: Boolean,
       default: true,
       observer: () => {
-        this.#updateSlider();
+        this.updateContainerClasslist();
       },
     },
     size: {
@@ -109,6 +113,7 @@ export class EaSlider extends FormAssociatedBase {
       {
         disabled: this.disabled,
         vertical: this.vertical,
+        "show-tooltip": this["show-tooltip"],
       }
     );
 
@@ -124,21 +129,25 @@ export class EaSlider extends FormAssociatedBase {
   }
 
   $render() {
+    const ns = namespace("slider");
+
     this.shadowRoot.innerHTML = `
-      <div class='ea-slider' part='container'>
-        <div class='ea-slider__runway' part='runway'>
-          <div class='ea-slider__rail' part='rail'></div>
-          <div class='ea-slider__thumb' part='thumb'>
-            <div class='ea-slider__tooltip' part='tooltip'></div>
-          </div>
+      <div class='${ns.b()}' part='container'>
+        <div class='${ns.e("runway")}' part='runway'>
+          <div class='${ns.e("rail")}' part='rail'></div>
+          <ea-tooltip class='${ns.e("trigger")}' part='trigger'>
+            <div class='${ns.e("thumb")}' part='thumb' slot="reference"></div>
+            <div class='${ns.e("tooltip")}' part='tooltip'></div>
+          </ea-tooltip>
         </div>
       </div>
     `;
 
-    this.#container = this.shadowRoot.querySelector(".ea-slider");
-    this.#rail = this.shadowRoot.querySelector(".ea-slider__rail");
-    this.#thumb = this.shadowRoot.querySelector(".ea-slider__thumb");
-    this.#tooltip = this.shadowRoot.querySelector(".ea-slider__tooltip");
+    this.#container = this.shadowRoot.querySelector(ns.cb());
+    this.#rail = this.shadowRoot.querySelector(ns.ce("rail"));
+    this.#trigger = this.shadowRoot.querySelector(ns.ce("trigger"));
+    this.#thumb = this.shadowRoot.querySelector(ns.ce("thumb"));
+    this.#tooltip = this.shadowRoot.querySelector(ns.ce("tooltip"));
   }
 
   #getValueFromPosition = position => {
@@ -157,11 +166,11 @@ export class EaSlider extends FormAssociatedBase {
     const percentage = ((value - this.min) / (this.max - this.min)) * 100;
 
     if (this.vertical) {
-      this.#thumb.style.top = `${percentage}%`;
-      this.#thumb.style.left = "50%";
+      this.#trigger.style.top = `${percentage}%`;
+      this.#trigger.style.left = "50%";
     } else {
-      this.#thumb.style.left = `${percentage}%`;
-      this.#thumb.style.top = "50%";
+      this.#trigger.style.left = `${percentage}%`;
+      this.#trigger.style.top = "50%";
     }
 
     this.#tooltip.textContent = value;
