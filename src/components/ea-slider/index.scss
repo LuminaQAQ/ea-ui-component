@@ -44,6 +44,8 @@ $ea-slider-size-types: (
     position: relative;
     flex: 1;
     height: 100%;
+
+    margin-right: calc(var(--spacing-md) + var(--#{$name}-thumb-size));
   }
 
   @include element(rail) {
@@ -53,8 +55,24 @@ $ea-slider-size-types: (
     width: 100%;
     height: var(--#{$name}-height);
     background-color: var(--#{$name}-rail-bg-color);
-    border-radius: var(--border-radius-pill);
+    border-radius: var(--border-radius-round);
     transform: translateY(-50%);
+  }
+
+  @include element(stop) {
+    display: none;
+
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 1rem;
+    height: 1rem;
+
+    background-color: var(--#{$name}-rail-bg-color);
+    border-radius: var(--border-radius-circle);
+
+    z-index: 0;
   }
 
   @include element(trigger) {
@@ -77,6 +95,8 @@ $ea-slider-size-types: (
   }
 
   @include element(thumb) {
+    position: relative;
+
     width: var(--#{$name}-thumb-size);
     height: var(--#{$name}-thumb-size);
     background-color: var(--#{$name}-thumb-bg-color);
@@ -85,6 +105,10 @@ $ea-slider-size-types: (
     cursor: pointer;
     transition: background-color var(--#{$name}-transition);
     z-index: 1;
+  }
+
+  @include element(input) {
+    display: none;
   }
 
   @include state(vertical) {
@@ -137,9 +161,23 @@ $ea-slider-size-types: (
     }
   }
 
+  @include state(show-stops) {
+    .ea-slider__stop {
+      display: block;
+    }
+  }
+
   @include state(show-tooltip) {
     .ea-slider__trigger::part(original) {
       display: block;
+    }
+  }
+
+  @include state(show-input) {
+    .ea-slider__input {
+      display: inline-block;
+      left: auto;
+      right: calc(100% + var(--spacing-sm));
     }
   }
 

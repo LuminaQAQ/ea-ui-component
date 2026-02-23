@@ -2,7 +2,9 @@ import FormAssociatedBase from "@/core/FormBase";
 import stylesheet from "./index.scss?inline";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 import "@/components/ea-tooltip";
+import "@/components/ea-input-number";
 import { namespace } from "@/directives/namespace";
+import EaUtils from "@/utils/Utils";
 
 export class EaSlider extends FormAssociatedBase {
   /** @type {HTMLElement} */
@@ -15,6 +17,8 @@ export class EaSlider extends FormAssociatedBase {
   #thumb;
   /** @type {HTMLElement} */
   #tooltip;
+  /** @type {HTMLElement} */
+  #input;
 
   /** @type {AbortController} */
   #abortController = new AbortController();
@@ -36,6 +40,8 @@ export class EaSlider extends FormAssociatedBase {
       "vertical",
       "show-tooltip",
       "size",
+      "show-stops",
+      "show-input",
     ];
   }
 
@@ -54,10 +60,19 @@ export class EaSlider extends FormAssociatedBase {
         this.#updateSlider();
       },
     },
+    "show-stops": {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.updateContainerClasslist();
+
+        if (newVal) this.#updateStepNodes(this.step);
+      },
+    },
     step: {
       type: Number,
       default: 1,
-      observer: () => {
+      observer: newVal => {
         this.#updateSlider();
       },
     },
@@ -79,6 +94,15 @@ export class EaSlider extends FormAssociatedBase {
       type: Boolean,
       default: true,
       observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    "show-input": {
+      type: Boolean,
+      default: false,
+      observer: async () => {
+
+        await 
         this.updateContainerClasslist();
       },
     },
@@ -104,6 +128,18 @@ export class EaSlider extends FormAssociatedBase {
     },
   });
 
+  funcStates = this.properties({
+    formatTooltip: {
+      rawFunction: true,
+      props: true,
+      type: Function,
+      default: value => value => value,
+      observer: () => {
+        this.#updateSlider();
+      },
+    },
+  });
+
   updateContainerClasslist() {
     const className = this.computedClasslist(
       "ea-slider",
@@ -114,6 +150,8 @@ export class EaSlider extends FormAssociatedBase {
         disabled: this.disabled,
         vertical: this.vertical,
         "show-tooltip": this["show-tooltip"],
+        "show-stops": this["show-stops"],
+        "show-input": this["show-input"],
       }
     );
 
@@ -131,6 +169,8 @@ export class EaSlider extends FormAssociatedBase {
   $render() {
     const ns = namespace("slider");
 
+    this.ns = ns;
+
     this.shadowRoot.innerHTML = `
       <div class='${ns.b()}' part='container'>
         <div class='${ns.e("runway")}' part='runway'>
@@ -140,6 +180,7 @@ export class EaSlider extends FormAssociatedBase {
             <div class='${ns.e("tooltip")}' part='tooltip'></div>
           </ea-tooltip>
         </div>
+        <ea-input-number class='${ns.e("input")}' part='input'></ea-input-number>
       </div>
     `;
 
@@ -148,7 +189,19 @@ export class EaSlider extends FormAssociatedBase {
     this.#trigger = this.shadowRoot.querySelector(ns.ce("trigger"));
     this.#thumb = this.shadowRoot.querySelector(ns.ce("thumb"));
     this.#tooltip = this.shadowRoot.querySelector(ns.ce("tooltip"));
+    this.#input = this.shadowRoot.querySelector(ns.ce("input"));
   }
+
+  #updateStepNodes = (step = this.step) => {
+    this.#rail.innerHTML = this.html(
+      Array.from({ length: (this.max - this.min) / step + 1 }, (_, index) =>
+        EaUtils.EaElement.h("div", this.ns.e("stop"), {
+          part: "stop",
+          style: [`left: ${(100 / step) * index}%;`],
+        })
+      ).join("")
+    );
+  };
 
   #getValueFromPosition = position => {
     const rect = this.#rail.getBoundingClientRect();
@@ -173,7 +226,7 @@ export class EaSlider extends FormAssociatedBase {
       this.#trigger.style.top = "50%";
     }
 
-    this.#tooltip.textContent = value;
+    this.#tooltip.textContent = this.formatTooltip(value);
     this.#tooltip.style.display = this["show-tooltip"] ? "block" : "none";
 
     this.updateContainerClasslist();

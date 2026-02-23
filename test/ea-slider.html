@@ -71,16 +71,27 @@
       </div>
       <div class="slider-demo-block">
         <span class="demonstration">Format Tooltip</span>
-        <ea-slider
-          value="50"
-          format-tooltip="(value) => value + '%'"
-        ></ea-slider>
+        <ea-slider id="formatTooltipSlider" value="50"></ea-slider>
       </div>
       <div class="slider-demo-block">
         <span class="demonstration">Disabled</span>
         <ea-slider value="50" disabled></ea-slider>
       </div>
     </div>
+
+    <script type="module">
+      const formatTooltipExample = {
+        slider: document.querySelector("#formatTooltipSlider"),
+
+        tooltipFormat: value => value + "%",
+
+        init() {
+          this.slider.formatTooltip = this.tooltipFormat;
+        },
+      };
+
+      formatTooltipExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->
@@ -91,7 +102,14 @@
     <h1>离散值</h1>
 
     <div class="demo">
-      <ea-slider value="0" step="10"></ea-slider>
+      <div class="slider-demo-block">
+        <span class="demonstration">Breakpoints not displayed</span>
+        <ea-slider value="0" step="10"></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Breakpoints displayed</span>
+        <ea-slider value="0" step="10" show-stops></ea-slider>
+      </div>
     </div>
 
     <hr />
@@ -132,18 +150,6 @@
 
     <div class="demo">
       <ea-slider value="50" show-tooltip tooltip-placement="top"></ea-slider>
-    </div>
-
-    <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
-
-    <!--  范围选择 -->
-    <!-- #region -->
-    <h1>范围选择</h1>
-
-    <div class="demo">
-      <ea-slider value="[30, 70]" range></ea-slider>
     </div>
 
     <hr />
