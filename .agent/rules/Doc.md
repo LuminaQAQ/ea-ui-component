@@ -11,24 +11,25 @@ glob: docs/*.md
 
 文档应遵循以下结构：
 
-````
+```markdown
 # [组件名称] [中文描述]
 
 [组件功能简介]
 
 ## 引入
 
-`js`
+> `js`
+
 ```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/[组件名]/index.js";
 </script>
-````
+```
 
-> [css](file:///home/lumina/文档/ea-ui-doc/ea-ui-component/vite.config.js#L142-L153)
+> `css`
 
 ::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 [link](file:///home/lumina/文档/ea-ui-doc/ea-ui-component/src/utils/setStyle.js#L1-L1) 标签引入图标文件
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
 :::
 
 ```html
@@ -38,13 +39,39 @@ glob: docs/*.md
 />
 ```
 
+## 自定义样式
+
+移步到 [CSS Part](#[组件名小写]-css-part)。
+
 ## [示例标题 1]
 
-[示例内容及代码]
+[示例描述]
+
+<div class="demo">
+  [示例HTML代码]
+</div>
+
+::: details 查看代码
+
+::: code-group
+
+```html
+[HTML代码]
+```
+
+```js
+[JavaScript代码]
+```
+
+```css
+[CSS代码]
+```
+
+:::
+
+:::
 
 ## [示例标题 2]
-
-[示例内容及代码]
 
 ...
 
@@ -66,139 +93,76 @@ glob: docs/*.md
 
 [方法表格]
 
-[如果有子组件，则按如下格式]
+### [组件名] Events
 
-## Parent API
-
-### Parent Attributes
-
-[父组件属性表格]
-
-### Parent CSS Part
-
-[父组件CSS Part表格]
-
-### Parent Slots
-
-[父组件插槽表格]
-
-### Parent Methods
-
-[父组件方法表格]
-
-## Child API
-
-### Child Attributes
-
-[子组件属性表格]
-
-### Child CSS Part
-
-[子组件CSS Part表格]
-
-### Child Slots
-
-[子组件插槽表格]
-
-### Child Methods
-
-[子组件方法表格]
-
+[事件表格]
 ```
 
 ### 示例处理规则
 
-1. 每个示例需包含：
-   - 简略示例描述
-   - HTML 示例代码
-   - 对应的 HTML/JS/CSS 代码展示
+1. **示例结构**：
+   - 示例标题使用 `##` 格式
+   - 示例描述简要说明功能
+   - 示例展示使用 `<div class="demo">` 包裹
+   - 代码块使用 `::: details 查看代码` 包裹
 
-2. 示例必须与 `.html` 文件中 `#region` 标记的内容和顺序完全对齐
+2. **布局规范**：
+   - 使用 `.slider-demo-block` 布局结构
+   - 包含 `.demonstration` 标签用于说明
+   - 参考 ea-slider.html 的示例布局
 
-3. 示例代码如果过长，使用以下格式：
-```
+3. **代码分组**：
+   - 使用 `::: code-group` 分组 HTML/CSS/JS 代码
+   - 较长示例必须折叠
 
-::: details 查看代码
-[代码内容]
-:::
+4. **与 HTML 文件对齐**：
+   - 示例标题与 HTML 文件中的 `h1` 标签对应
+   - 示例顺序与 `#region` 标记顺序一致
+   - 示例代码与 `#region` 内的代码一致
 
-```
-
-4. 如果示例代码包含多种语言，使用以下格式：
-```
-
-::: code-group
-
-```lang
-[代码内容]
-```
-
-```lang
-[代码内容]
-```
-
-:::
-
-```
+5. **垂直模式示例**：
+   - 使用 `.vertical-demo` 类名
+   - 需要设置固定高度
 
 ### API部分生成规则
 
-1. **组件的 Attributes&Props** 部分，以 `.js` 文件中 `this.properties` 函数里的键名、type、default 为准
+1. **Attributes 表格**：以 `.js` 文件中 `this.properties` 函数里的键名为准
 
-2. **单组件 API 结构**：
-   - ## Attributes（如果有属性）
-   - ## CSS Part（如果有CSS Part）
-   - ## Slots（如果有插槽）
-   - ## Methods（如果有方法）
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+|------|------|------|--------|--------|
 
-3. **父子组件 API 结构**：
-   - ## Parent API
-     - ### Parent Attributes
-     - ### Parent CSS Part
-     - ### Parent Slots
-     - ### Parent Methods
-   - ## Child API
-     - ### Child Attributes
-     - ### Child CSS Part
-     - ### Child Slots
-     - ### Child Methods
+2. **CSS Part 表格**：
 
-4. 如果某个部分不存在（如无 Methods），则不写该部分
+| 名称 | 说明 |
+|------|------|
 
-5. **属性表格格式**：
-   | 参数 | 说明 | 类型 | 可选值 | 默认值 |
-   |------|------|------|--------|--------|
+3. **Slots 表格**：
 
-6. **CSS Part 表格格式**：
-   | 名称 | 说明 |
-   |------|------|
+| 名称 | 说明 |
+|------|------|
 
-7. **Slots 表格格式**：
-   | 名称 | 说明 |
-   |------|------|
+4. **Methods 表格**：
 
-8. **Methods 表格格式**：
-   | 方法名 | 说明 | 参数 |
-   |--------|------|------|
+| 方法名 | 说明 | 参数 |
+|--------|------|------|
+
+5. **Events 表格**：
+
+| 事件名 | 说明 | 回调参数(event.detail) |
+|--------|------|------------------------|
 
 ### 特殊情况处理
 
-1. 如果组件没有子组件，只需读取该组件相关的引入文件
+1. **Props 标记**：对于需要通过 JavaScript 设置的属性（props），在表格中标记 `<PropTag />`
 
-2. 如果组件包含子组件，提供的 `.js` 文件通常是带有本组件和子组件的引入语句的文件，需要逐级逐个读取
+2. **无某个 API 部分**：如果组件没有 Methods 或 Slots，则不写该部分
 
-3. 从 HTML 文件中提取所有被 `#region` 包围的示例代码，并与文档中的示例标题匹配
-
-4. 注意提取示例中的 JavaScript 代码块和 CSS 样式块
-
-5. 在 CSS Part 部分说明如何使用 `::part()` 伪类选择器
-
-### 输出要求
-
-- 所有内容使用 Markdown 格式编写
-- 使用中文编写文档内容
-- 保持代码语法高亮
-- 合理使用折叠和分组展示代码
-- 确保文档结构清晰、易于阅读
-
-```
+3. **父子组件结构**：
+   ```markdown
+   ## Parent API
+   ### Parent Attributes
+   ...
+   ## Child API
+   ### Child Attributes
+   ...
+   ```

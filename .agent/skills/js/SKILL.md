@@ -39,31 +39,12 @@ export class EaComponent extends Base {
   }
 
   state = this.properties({
-    prop1: {
-      type: String,
-      default: "",
-      observer: newVal => {
-        this.updateContainerClasslist();
-      },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: () => this.updateContainerClasslist(),
     },
   });
-
-  propStates = this.properties({
-    data: {
-      props: true,
-      type: Array,
-      default: [],
-      observer: newVal => {
-        this.#handleDataUpdate(newVal);
-      },
-    },
-  });
-
-  updateContainerClasslist() {
-    const className = this.computedClasslist("ea-component", {}, {});
-    this.#container.className = className;
-    return className;
-  }
 
   constructor() {
     super();
@@ -98,9 +79,21 @@ if (!customElements.get("ea-component")) {
 }
 ```
 
+### 结构说明
+
+1. **导入模块**：命名空间、基类、样式
+2. **私有属性**：`#container` 容器、`#abortController` 事件管理
+3. **observedAttributes**：继承父类属性
+4. **state/propStates/funcStates**：使用 `this.properties()` 定义响应式属性
+5. **constructor**：设置样式表并调用 `$render()`
+6. **$render()**：创建 Shadow DOM 结构，使用 `namespace()` 生成 BEM 类名
+7. **connectedCallback()**：初始化 AbortController
+8. **$beforeUnmounted()**：清理事件监听
+9. **注册组件**：文件末尾注册自定义元素
+
 ### 核心要点
 
-- 继承 `Base` 类
+- 继承 `Base` 类（表单组件继承 `FormAssociatedBase`）
 - 私有属性使用 `#` 前缀
 - 使用 Shadow DOM 实现样式隔离
 - 使用 `namespace()` 生成 BEM 命名空间
@@ -174,6 +167,14 @@ propStates = this.properties({
       this.emit("change", { detail: { value: newVal } });
     },
   },
+  marks: {
+    props: true,
+    type: Object,
+    default: null,
+    observer: () => {
+      this.#renderMarks();
+    },
+  },
 });
 
 // 函数属性（funcStates）
@@ -188,7 +189,16 @@ funcStates = this.properties({
     props: true,
     type: Function,
     rawFunction: true,
-    default: () => index => index,
+    default: index => index,
+  },
+  formatTooltip: {
+    props: true,
+    type: Function,
+    rawFunction: true,
+    default: value => value,
+    observer: () => {
+      this.#updateSlider();
+    },
   },
 });
 ```
@@ -222,6 +232,10 @@ default: () => {
   const active = this.getAttribute("active");
   return active || "";
 }
+
+// 函数类型默认值（rawFunction: true）
+default: value => value
+default: index => index
 ```
 
 ### Observer 函数规范
@@ -364,6 +378,20 @@ state = this.properties({
     `${this.#tabElement.offsetWidth}px`
   );
 };
+
+// 4. 根据方向更新位置（水平/垂直）
+#updateSlider = () => {
+  const value = this.value;
+  const percentage = ((value - this.min) / (this.max - this.min)) * 100;
+
+  if (this.vertical) {
+    this.#trigger.style.top = `${percentage}%`;
+    this.#trigger.style.left = "50%";
+  } else {
+    this.#trigger.style.left = `${percentage}%`;
+    this.#trigger.style.top = "50%";
+  }
+};
 ```
 
 ### 响应式样式更新
@@ -387,13 +415,14 @@ $beforeUnmounted() {
 
 ### 命名约定
 
-| 函数类型 | 前缀  | 示例                                      | 说明          |
-| -------- | ----- | ----------------------------------------- | ------------- |
-| 事件函数 | `#on` | `#onClick`, `#onScroll`                   | 处理 DOM 事件 |
-| 私有函数 | `#`   | `#handleDataUpdate`, `#handleStyleUpdate` | 组件内部使用  |
-| 暴露函数 | 无    | `setData`, `show`, `hide`                 | 对外 API      |
-| 生命周期 | `$`   | `$render`, `$beforeUnmounted`             | 生命周期钩子  |
-| 辅助函数 | 无    | `computedClasslist`, `findDisplayValue`   | 工具函数      |
+| 函数类型 | 前缀      | 示例                                      | 说明          |
+| -------- | --------- | ----------------------------------------- | ------------- |
+| 事件函数 | `#on`     | `#onClick`, `#onScroll`                   | 处理 DOM 事件 |
+| 私有函数 | `#`       | `#handleDataUpdate`, `#handleStyleUpdate` | 组件内部使用  |
+| 暴露函数 | 无        | `setData`, `show`, `hide`                 | 对外 API      |
+| 生命周期 | `$`       | `$render`, `$beforeUnmounted`             | 生命周期钩子  |
+| 渲染函数 | `#render` | `#renderStops`, `#renderMarkLabels`       | 渲染相关      |
+| 辅助函数 | 无        | `computedClasslist`, `findDisplayValue`   | 工具函数      |
 
 ### 事件函数命名
 
@@ -413,6 +442,36 @@ $beforeUnmounted() {
     this.hide();
   }
 };
+
+// 拖拽相关事件
+#onMouseDown = e => {
+  if (this.disabled) return;
+  e.preventDefault();
+  e.stopPropagation();
+  this.#states.isDragging = true;
+  // ...
+};
+
+#onMouseMove = e => {
+  if (!this.#states.isDragging || this.disabled) return;
+  e.preventDefault();
+  e.stopPropagation();
+  // ...
+};
+
+#onMouseUp = () => {
+  if (!this.#states.isDragging) return;
+  this.#states.isDragging = false;
+  // ...
+};
+
+// 子组件事件
+#onInputChange = e => {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  const newValue = parseFloat(e.detail.currentValue);
+  // ...
+};
 ```
 
 ### 私有函数命名
@@ -429,6 +488,24 @@ $beforeUnmounted() {
 
 #handleValidation = (value) => {
   return typeof value === "string" && value.length > 0;
+};
+
+// 渲染相关
+#renderStops = () => {
+  // 渲染 stop 元素
+};
+
+#renderMarkLabels = () => {
+  // 渲染 mark 标签
+};
+
+// 计算相关
+#getValueFromPosition = position => {
+  // 根据位置计算值
+};
+
+#updateSlider = () => {
+  // 更新滑块位置
 };
 ```
 
@@ -543,6 +620,43 @@ $beforeUnmounted() {
 }
 ```
 
+### 多 AbortController 管理
+
+```javascript
+#AbortControllerStates = {
+  /** @type {AbortController} */
+  input: null,
+};
+
+// 在 observer 中使用
+"show-input": {
+  type: Boolean,
+  default: false,
+  observer: async newVal => {
+    if (!this.#states.isInputNumberDefined) {
+      await customElements.whenDefined("ea-input-number");
+      this.#states.isInputNumberDefined = true;
+    }
+
+    this.#AbortControllerStates.input?.abort();
+
+    if (newVal) {
+      this.#AbortControllerStates.input = new AbortController();
+      this.#input.addEventListener("ea-change", this.#onInputChange, {
+        signal: this.#AbortControllerStates.input.signal,
+      });
+    }
+  },
+}
+
+$beforeUnmounted() {
+  this.#abortController?.abort();
+  for (const key in this.#AbortControllerStates) {
+    this.#AbortControllerStates[key]?.abort();
+  }
+}
+```
+
 ### 观察器管理
 
 ```javascript
@@ -597,6 +711,175 @@ $beforeUnmounted() {
 
 ---
 
+## 拖拽交互规范
+
+### 拖拽状态管理
+
+```javascript
+#states = {
+  isDragging: false,
+  startX: 0,
+  startY: 0,
+};
+```
+
+### 拖拽事件处理
+
+```javascript
+#onMouseDown = e => {
+  if (this.disabled) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  this.#states.isDragging = true;
+  this.#states.startX = e.clientX;
+  this.#states.startY = e.clientY;
+
+  // 显示 tooltip
+  this.#trigger.setAttribute("visible", "true");
+
+  // 计算并更新值
+  const newValue = this.#getValueFromPosition(
+    this.vertical ? e.clientY : e.clientX
+  );
+  this.value = newValue;
+
+  this.emit("input", { detail: { value: this.value } });
+};
+
+#onMouseMove = e => {
+  if (!this.#states.isDragging || this.disabled) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const newValue = this.#getValueFromPosition(
+    this.vertical ? e.clientY : e.clientX
+  );
+  this.value = newValue;
+
+  this.emit("input", { detail: { value: this.value } });
+};
+
+#onMouseUp = () => {
+  if (!this.#states.isDragging) return;
+
+  this.#states.isDragging = false;
+  this.#trigger.setAttribute("visible", "false");
+  this.emit("change", { detail: { value: this.value } });
+};
+```
+
+### 位置计算
+
+```javascript
+#getValueFromPosition = position => {
+  const rect = this.#rail.getBoundingClientRect();
+  const percentage = this.vertical
+    ? (position - rect.top) / rect.height
+    : (position - rect.left) / rect.width;
+  const clampedPercentage = Math.max(0, Math.min(1, percentage));
+  const value = this.min + clampedPercentage * (this.max - this.min);
+  const steppedValue = Math.round(value / this.step) * this.step;
+  return Math.max(this.min, Math.min(this.max, steppedValue));
+};
+```
+
+### 事件绑定
+
+```javascript
+#bindEvents = () => {
+  this.#abortController?.abort();
+  this.#abortController = new AbortController();
+
+  // 组件内部事件
+  this.#rail.addEventListener("mousedown", this.#onMouseDown, {
+    signal: this.#abortController.signal,
+  });
+  this.#thumb.addEventListener("mousedown", this.#onMouseDown, {
+    signal: this.#abortController.signal,
+  });
+  this.#thumb.addEventListener("mouseenter", this.#onThumbMouseEnter, {
+    signal: this.#abortController.signal,
+  });
+  this.#thumb.addEventListener("mouseleave", this.#onThumbMouseLeave, {
+    signal: this.#abortController.signal,
+  });
+
+  // 全局事件（用于拖拽时鼠标移出组件）
+  document.addEventListener("mousemove", this.#onMouseMove, {
+    signal: this.#abortController.signal,
+  });
+  document.addEventListener("mouseup", this.#onMouseUp, {
+    signal: this.#abortController.signal,
+  });
+};
+```
+
+---
+
+## 子组件集成规范
+
+### 等待子组件定义
+
+```javascript
+"show-input": {
+  type: Boolean,
+  default: false,
+  observer: async newVal => {
+    // 等待子组件定义完成
+    if (!this.#states.isInputNumberDefined) {
+      await customElements.whenDefined("ea-input-number");
+      this.#states.isInputNumberDefined = true;
+    }
+
+    // 清理之前的事件监听
+    this.#AbortControllerStates.input?.abort();
+
+    this.#updateSlider();
+
+    if (newVal) {
+      this.#AbortControllerStates.input = new AbortController();
+      this.#input.addEventListener("ea-change", this.#onInputChange, {
+        signal: this.#AbortControllerStates.input.signal,
+      });
+    }
+  },
+}
+```
+
+### 子组件属性同步
+
+```javascript
+size: {
+  type: EA_COMPONENT_SIZES,
+  default: "",
+  observer: async newVal => {
+    this.updateContainerClasslist();
+
+    // 同步子组件属性
+    if (this["show-input"]) this.#input.setAttribute("size", newVal);
+  },
+}
+```
+
+### 子组件事件处理
+
+```javascript
+#onInputChange = e => {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+
+  const newValue = parseFloat(e.detail.currentValue);
+  const clampedValue = Math.max(this.min, Math.min(this.max, newValue));
+  this.value = clampedValue;
+  this.emit("change", { detail: { value: this.value } });
+};
+```
+
+---
+
 ## 数据处理规范
 
 ### 私有状态管理
@@ -605,6 +888,10 @@ $beforeUnmounted() {
 #states = {
   isMounted: false,
   isDataRendered: false,
+  isInputNumberDefined: false,
+  isDragging: false,
+  startX: 0,
+  startY: 0,
   currentRow: {
     target: null,
     value: {},
@@ -720,6 +1007,63 @@ propStates = this.properties({
     },
   },
 });
+```
+
+### 合并数据渲染
+
+```javascript
+#renderStops = () => {
+  const stops = [];
+
+  // 生成 step stops
+  const step = this.step;
+  const count = (this.max - this.min) / step + 1;
+
+  if (this["show-stops"]) {
+    for (let index = 0; index < count; index++) {
+      const value = this.min + step * index;
+      const percentage = ((value - this.min) / (this.max - this.min)) * 100;
+
+      stops.push({
+        value,
+        percentage,
+        type: "stop",
+        className: this.ns.e("stop"),
+        part: "stop",
+      });
+    }
+  }
+
+  // 添加 mark stops
+  if (this.marks) {
+    for (const key in this.marks) {
+      const value = parseFloat(key);
+      if (isNaN(value) || value < this.min || value > this.max) continue;
+
+      const percentage = ((value - this.min) / (this.max - this.min)) * 100;
+
+      stops.push({
+        value,
+        percentage,
+        type: "mark-stop",
+        className: `${this.ns.e("stop")} ${this.ns.e("mark-stop")}`,
+        part: "stop mark-stop",
+        label: this.marks[key],
+      });
+    }
+  }
+
+  stops.sort((a, b) => a.value - b.value);
+
+  const stopElements = stops.map(stop =>
+    EaUtils.EaElement.h("div", stop.className, {
+      part: stop.part,
+      style: [`${this.vertical ? "top" : "left"}: ${stop.percentage}%;`],
+    })
+  );
+
+  this.#rail.innerHTML = this.html(stopElements.join(""));
+};
 ```
 
 ---
@@ -1049,21 +1393,24 @@ connectedCallback() {
 ### 导入顺序
 
 ```javascript
-// 1. 第三方库导入
+// 1. 核心模块导入
+import FormAssociatedBase from "@/core/FormBase";
 import { namespace } from "@/directives/namespace";
 import { html } from "@/directives/html";
 
 // 2. 内部模块导入
 import Base from "@components/Base.js";
-import FormAssociatedBase from "@/core/FormBase";
 
 // 3. 组件导入
+import "@/components/ea-tooltip";
+import "@/components/ea-input-number";
 import "@components/ea-icon/index.js";
 import "@components/ea-input/index.js";
 
 // 4. 工具函数导入
 import EaUtils from "@/utils/Utils";
 import { timeout } from "@/utils/timeout";
+import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
 // 5. 事件导入
 import { EaComponentChangeEvent } from "./events/EaComponentChangeEvent";
@@ -1078,6 +1425,8 @@ import stylesheet from "./index.scss?inline";
 export class EaComponent extends Base {
   // 1. 私有属性声明
   #container;
+  #rail;
+  #trigger;
   #abortController = new AbortController();
 
   // 2. 私有状态
@@ -1102,6 +1451,7 @@ export class EaComponent extends Base {
 
   // 7. 私有方法
   #handleDataUpdate() {}
+  #renderStops() {}
 
   // 8. 事件处理方法
   #onClick() {}
@@ -1139,6 +1489,15 @@ setData = (data, silent = false) => {
 getCurrentRow() {
   return this.#states.currentRow;
 };
+
+/**
+ * 根据鼠标位置计算滑块值
+ * @param {number} position - 鼠标位置
+ * @returns {number} 滑块值
+ */
+#getValueFromPosition = position => {
+  // ...
+};
 ```
 
 ### 类型注释
@@ -1146,6 +1505,12 @@ getCurrentRow() {
 ```javascript
 /** @type {HTMLElement} */
 #container;
+
+/** @type {HTMLElement} */
+#rail;
+
+/** @type {HTMLElement} */
+#trigger;
 
 /** @type {AbortController} */
 #abortController;
@@ -1168,8 +1533,9 @@ getCurrentRow() {
 
 ## 参考组件
 
-- [ea-tree](file:///c:/Users/Administrator/Desktop/github/ea-ui-component/src/components/ea-tree/index.js) - 树形组件
-- [ea-table](file:///c:/Users/Administrator/Desktop/github/ea-ui-component/src/components/ea-table/components/ea-table/index.js) - 表格组件
-- [ea-tabs](file:///c:/Users/Administrator/Desktop/github/ea-ui-component/src/components/ea-tabs/components/ea-tabs/index.js) - 标签页组件
-- [ea-select](file:///c:/Users/Administrator/Desktop/github/ea-ui-component/src/components/ea-select/components/ea-select/index.js) - 选择器组件
-- [Base](file:///c:/Users/Administrator/Desktop/github/ea-ui-component/src/components/Base.js) - 基类组件
+- [ea-slider](file:///e:/repo/ea-ui-component/src/components/ea-slider/index.js) - 滑块组件（拖拽交互、子组件集成）
+- [ea-tree](file:///e:/repo/ea-ui-component/src/components/ea-tree/index.js) - 树形组件
+- [ea-table](file:///e:/repo/ea-ui-component/src/components/ea-table/components/ea-table/index.js) - 表格组件
+- [ea-tabs](file:///e:/repo/ea-ui-component/src/components/ea-tabs/components/ea-tabs/index.js) - 标签页组件
+- [ea-select](file:///e:/repo/ea-ui-component/src/components/ea-select/components/ea-select/index.js) - 选择器组件
+- [Base](file:///e:/repo/ea-ui-component/src/components/Base.js) - 基类组件

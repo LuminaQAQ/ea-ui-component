@@ -167,6 +167,17 @@ export class EaSlider extends FormAssociatedBase {
     },
   });
 
+  propState = this.properties({
+    marks: {
+      props: true,
+      type: Object,
+      default: null,
+      observer: () => {
+        this.#renderMarks();
+      },
+    },
+  });
+
   funcStates = this.properties({
     formatTooltip: {
       rawFunction: true,
@@ -175,14 +186,6 @@ export class EaSlider extends FormAssociatedBase {
       default: value => value => value,
       observer: () => {
         this.#updateSlider();
-      },
-    },
-    marks: {
-      props: true,
-      type: Object,
-      default: null,
-      observer: () => {
-        this.#renderMarks();
       },
     },
   });
