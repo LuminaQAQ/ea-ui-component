@@ -25,23 +25,13 @@
       .vertical-demo ea-slider {
         height: 200px;
       }
-    </style>
-  </head>
 
-  <body>
-    <script type="module" src="../src/components/ea-slider/index.js"></script>
-
-    <!--  基础用法 -->
-    <!-- #region -->
-    <h1>基础用法</h1>
-
-    <style>
       .slider-demo-block {
         max-width: 600px;
         display: flex;
         align-items: center;
       }
-      .slider-demo-block .el-slider {
+      .slider-demo-block ea-slider {
         margin-top: 0;
         margin-left: 12px;
       }
@@ -55,6 +45,14 @@
         margin-bottom: 0;
       }
     </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-slider/index.js"></script>
+
+    <!--  基础用法 -->
+    <!-- #region -->
+    <h1>基础用法</h1>
 
     <div class="demo">
       <div class="slider-demo-block">
@@ -133,11 +131,18 @@
     <h1>不同尺寸</h1>
 
     <div class="demo">
-      <ea-slider value="50" size="small"></ea-slider>
-      <br />
-      <ea-slider value="50"></ea-slider>
-      <br />
-      <ea-slider value="50" size="large"></ea-slider>
+      <div class="slider-demo-block">
+        <span class="demonstration">Small size</span>
+        <ea-slider value="50" show-input size="small"></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Default size</span>
+        <ea-slider value="50" show-input></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Large size</span>
+        <ea-slider value="50" show-input size="large"></ea-slider>
+      </div>
     </div>
 
     <hr />
@@ -149,7 +154,22 @@
     <h1>自定义 Tooltip 提示的位置</h1>
 
     <div class="demo">
-      <ea-slider value="50" show-tooltip tooltip-placement="top"></ea-slider>
+      <div class="slider-demo-block">
+        <span class="demonstration">Top placement</span>
+        <ea-slider value="50"></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Right placement</span>
+        <ea-slider value="50" placement="right"></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Left placement</span>
+        <ea-slider value="50" placement="left"></ea-slider>
+      </div>
+      <div class="slider-demo-block">
+        <span class="demonstration">Bottom placement</span>
+        <ea-slider value="50" placement="bottom"></ea-slider>
+      </div>
     </div>
 
     <hr />
@@ -162,7 +182,7 @@
 
     <div class="demo vertical-demo">
       <ea-slider value="50" vertical></ea-slider>
-      <ea-slider value="[30, 70]" range vertical></ea-slider>
+      <ea-slider value="50" vertical step="10" show-stops></ea-slider>
     </div>
 
     <hr />
@@ -173,7 +193,7 @@
     <!-- #region -->
     <h1>设置 marks 属性可以在滑块上显示标记</h1>
 
-    <div class="demo">
+    <div class="demo vertical-demo">
       <ea-slider value="0" id="marksSlider"></ea-slider>
     </div>
 

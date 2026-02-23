@@ -10,20 +10,13 @@ $ea-slider-size-types: (
   --#{$name}-height-small: 4px;
   --#{$name}-height-large: 8px;
 
-  --#{$name}-thumb-size: 20px;
-  --#{$name}-thumb-size-small: 16px;
-  --#{$name}-thumb-size-large: 24px;
+  --#{$name}-thumb-size: 16px;
+  --#{$name}-thumb-size-small: 12px;
+  --#{$name}-thumb-size-large: 20px;
 
   --#{$name}-rail-bg-color: var(--grey-200);
-  --#{$name}-track-bg-color: var(--primary-color);
   --#{$name}-thumb-bg-color: var(--color-white);
   --#{$name}-thumb-border-color: var(--blue-300);
-  --#{$name}-thumb-hover-bg-color: var(--primary-color-light-9);
-
-  --#{$name}-tooltip-bg-color: var(--grey-900);
-  --#{$name}-tooltip-color: var(--color-white);
-
-  --#{$name}-mark-color: var(--grey-500);
 
   --#{$name}-transition: var(--transition-fast);
 }
@@ -34,7 +27,7 @@ $ea-slider-size-types: (
 }
 
 @include block($name) {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   box-sizing: border-box;
   padding: 0 var(--#{$name}-thumb-size);
@@ -45,34 +38,27 @@ $ea-slider-size-types: (
     flex: 1;
     height: 100%;
 
-    margin-right: calc(var(--spacing-md) + var(--#{$name}-thumb-size));
+    margin:0 calc(var(--spacing-md) + var(--#{$name}-thumb-size));
   }
 
   @include element(rail) {
-    position: absolute;
-    top: 50%;
-    left: 0;
     width: 100%;
     height: var(--#{$name}-height);
     background-color: var(--#{$name}-rail-bg-color);
     border-radius: var(--border-radius-round);
-    transform: translateY(-50%);
   }
 
   @include element(stop) {
     display: none;
 
     position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
 
-    width: 1rem;
-    height: 1rem;
+    width: var(--#{$name}-height);
+    height: var(--#{$name}-height);
 
-    background-color: var(--#{$name}-rail-bg-color);
+    background-color: var(--color-white);
     border-radius: var(--border-radius-circle);
-
-    z-index: 0;
   }
 
   @include element(trigger) {
@@ -104,7 +90,32 @@ $ea-slider-size-types: (
     border-radius: 50%;
     cursor: pointer;
     transition: background-color var(--#{$name}-transition);
-    z-index: 1;
+  }
+
+  @include element(marks) {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  @include element(mark-stop) {
+    display: block;
+  }
+
+  @include element(mark) {
+    position: absolute;
+    transform: translateX(-50%);
+    margin-top: calc(var(--#{$name}-thumb-size) / 2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @include element(mark-label) {
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--grey-500);
+    white-space: nowrap;
   }
 
   @include element(input) {
@@ -118,40 +129,41 @@ $ea-slider-size-types: (
 
     .ea-slider__runway {
       height: 100%;
-      width: 100%;
+      width: auto;
+
+      display: flex;
     }
 
     .ea-slider__rail {
+      width: var(--#{$name}-height);
+      height: 100%;
+    }
+
+    .ea-slider__trigger {
       top: 0;
       left: 50%;
-      width: var(--#{$name}-height);
+      transform: translate(-50%, -50%);
+    }
+
+    .#{$name}__stop {
+      transform: translateY(-50%);
+    }
+
+    .ea-slider__marks {
+      top: 0;
+      left: 50%;
+      width: auto;
       height: 100%;
       transform: translateX(-50%);
     }
 
-    .ea-slider__track {
-      top: 0;
-      left: 50%;
-      width: var(--#{$name}-height);
-      transform: translateX(-50%);
-    }
-
-    .ea-slider__thumb {
-      top: 0;
-      left: 50%;
-    }
-
-    .ea-slider__tooltip {
-      bottom: auto;
-      left: calc(100% + var(--spacing-sm));
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
     .ea-slider__mark {
-      top: 0;
+      top: auto;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateY(-50%);
+      flex-direction: column;
+      margin-top: 0;
+      margin-left: calc(var(--#{$name}-thumb-size) / 2);
     }
 
     .ea-slider__mark-label {
@@ -184,10 +196,6 @@ $ea-slider-size-types: (
   @include state(disabled) {
     .ea-slider__rail {
       background-color: var(--grey-100);
-    }
-
-    .ea-slider__track {
-      background-color: var(--grey-300);
     }
 
     .ea-slider__thumb {
