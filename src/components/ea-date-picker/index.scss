@@ -1,29 +1,249 @@
-.ea-date-picker_wrap {
-  .ea-date-picker_input-wrap {
+$name: ea-date-picker;
+
+:host {
+  --ea-#{$name}-bg-color: var(--color-white);
+  --ea-#{$name}-shadow: var(--shadow-sm);
+  --ea-#{$name}-z-index: 2;
+  --ea-#{$name}-transition: var(--transition-fast);
+  --ea-#{$name}-header-height: 40px;
+  --ea-#{$name}-header-text-color: var(--text-color-primary);
+  --ea-#{$name}-header-text-hover: var(--primary-color);
+  --ea-#{$name}-panel-item-size: 60px;
+  --ea-#{$name}-panel-item-hover: var(--grey-100);
+  --ea-#{$name}-panel-item-selected: var(--primary-color);
+  --ea-#{$name}-panel-item-selected-bg: var(--primary-color-light);
+}
+
+:host {
+  display: inline-block;
+}
+
+@include block($name) {
+  position: relative;
+
+  @include element(input-wrap) {
     position: relative;
 
-    .ea-date-picker_input {
+    .ea-date-picker__input {
+      width: 100%;
     }
   }
-  .ea-date-picker_dropdown-wrap {
+
+  @include element(dropdown-wrap) {
     position: absolute;
-    background-color: #fff;
+    top: 100%;
+    left: 0;
+    margin-top: var(--spacing-xs);
+    background-color: var(--ea-#{$name}-bg-color);
+    box-shadow: var(--ea-#{$name}-shadow);
+    border-radius: var(--border-radius-md);
+    z-index: var(--ea-#{$name}-z-index);
     transform-origin: top center;
     transform: scaleY(0);
-
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    padding: var(--spacing-sm);
   }
 
-  &.is-open {
-    .ea-date-picker_dropdown-wrap {
-      transform: scaleY(1);
+  @include element(calendar-wrapper) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // 自定义Header样式
+  @include element(custom-header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--ea-#{$name}-header-height);
+    padding: 0 var(--spacing-xs);
+    border-bottom: 1px solid var(--border-color-light);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  @include element(header-left) {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  @include element(header-right) {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  @include element(header-btn) {
+    --ea-button-padding-vertical: 0;
+    --ea-button-padding-horizontal: 0;
+    min-width: 24px;
+    height: 24px;
+    font-size: var(--font-size-sm);
+  }
+
+  @include element(header-center) {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--ea-#{$name}-header-text-color);
+  }
+
+  @include element(header-year) {
+    cursor: pointer;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--ea-#{$name}-transition);
+
+    &:hover {
+      color: var(--ea-#{$name}-header-text-hover);
+      background-color: var(--ea-#{$name}-panel-item-hover);
     }
   }
 
-  &.with-transition {
-    .ea-date-picker_dropdown-wrap {
-      transition: transform 0.3s;
+  @include element(header-month) {
+    cursor: pointer;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--ea-#{$name}-transition);
+
+    &:hover {
+      color: var(--ea-#{$name}-header-text-hover);
+      background-color: var(--ea-#{$name}-panel-item-hover);
+    }
+  }
+
+  // 年份面板
+  @include element(year-panel) {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+
+  @include element(year-item) {
+    height: var(--ea-#{$name}-panel-item-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: var(--text-color-regular);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    transition: all var(--ea-#{$name}-transition);
+
+    &:hover {
+      background-color: var(--ea-#{$name}-panel-item-hover);
+    }
+
+    @include state(selected) {
+      color: var(--ea-#{$name}-panel-item-selected);
+      background-color: var(--ea-#{$name}-panel-item-selected-bg);
+      font-weight: var(--font-weight-medium);
+
+      &:hover {
+        background-color: var(--ea-#{$name}-panel-item-selected-bg);
+      }
+    }
+  }
+
+  // 月份面板
+  @include element(month-panel) {
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+
+  @include element(month-item) {
+    height: calc(var(--ea-#{$name}-panel-item-size) * 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: var(--text-color-regular);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
+    transition: all var(--ea-#{$name}-transition);
+
+    &:hover {
+      background-color: var(--ea-#{$name}-panel-item-hover);
+    }
+
+    @include state(selected) {
+      color: var(--ea-#{$name}-panel-item-selected);
+      background-color: var(--ea-#{$name}-panel-item-selected-bg);
+      font-weight: var(--font-weight-medium);
+
+      &:hover {
+        background-color: var(--ea-#{$name}-panel-item-selected-bg);
+      }
+    }
+  }
+
+  @include element(calendar-wrapper) {
+    box-shadow: var(--box-shadow-md);
+  }
+
+  @include element(calendar-body) {
+    display: block;
+  }
+
+  @include element(calendar) {
+    width: 100%;
+
+    &::part(header) {
+      display: none;
+    }
+
+    &::part(body) {
+      font-size: var(--font-size-sm);
+    }
+  }
+
+  @include state(open) {
+    .ea-date-picker__dropdown-wrap {
+      transform: scaleY(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  @include state(disabled) {
+    cursor: not-allowed;
+
+    .ea-date-picker__input-wrap {
+      pointer-events: none;
+    }
+  }
+}
+
+// 响应式适配
+@media (max-width: 768px) {
+  @include block($name) {
+    @include element(dropdown-wrap) {
+      left: 0;
+      right: 0;
+      width: auto;
+    }
+
+    @include element(header-btn) {
+      width: 32px;
+      height: 32px;
+      font-size: var(--font-size-lg);
+    }
+
+    @include element(year-item) {
+      height: 48px;
+    }
+
+    @include element(month-item) {
+      height: 40px;
     }
   }
 }

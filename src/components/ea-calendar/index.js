@@ -306,7 +306,7 @@ export class EaCalendar extends Base {
   #updateCalendarDays(date) {
     i18nManager.locale = this.locale;
     dayjs.locale(this.locale.toLowerCase());
-    
+
     const currentYear = date.get("year");
     const currentMonth = date.get("month");
 
@@ -328,7 +328,21 @@ export class EaCalendar extends Base {
     const monthData = parseInt(target.dataset.month);
     const dateData = parseInt(target.dataset.date);
 
-    this.value = dayjs(`${yearData}-${monthData}-${dateData}`);
+    const selectedDate = dayjs(`${yearData}-${monthData}-${dateData}`);
+
+    this.value = selectedDate;
+
+    this.emit("select", {
+      detail: {
+        year: yearData,
+        month: monthData,
+        date: dateData,
+        day: selectedDate.day(),
+        fullDate: `${yearData}-${monthData}-${dateData}`,
+      },
+      bubbles: true,
+      composed: true,
+    });
   };
 
   /**

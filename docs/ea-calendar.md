@@ -185,6 +185,12 @@ controllerExample.init();
 | row                                                               | 日期行       |
 | day & `"last-mon" \| "current-mon" \| "next-mon"`                 | 日期单元格   |
 
+## Events
+
+| 事件名称 | 说明           | 回调参数                                               |
+| -------- | -------------- | ------------------------------------------------------ |
+| select   | 选择日期时触发 | `{ year, month, date, day, fullDate }`                 |
+
 ## Slots
 
 | 名称   | 说明                         |

@@ -1,23 +1,21 @@
-<!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+    <link rel="stylesheet" href="/src/components/ea-icon/index.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
-    <script type='module'>
-        import '../components/ea-date-picker/index.js'
+  <body>
+    <script type="module">
+      import "/src/components/ea-date-picker/index.js";
     </script>
 
     <!-- -------- 1. 任意时间点  --------  -->
@@ -26,21 +24,24 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
+    <hr />
 
     <!-- -------- 2. 禁用  --------  -->
     <!-- #region  -->
-    <ea-date-picker placeholder="选择日期" value="2024-1-1" disabled></ea-date-picker>
+    <ea-date-picker
+      placeholder="选择日期"
+      value="2024-1-1"
+      disabled
+    ></ea-date-picker>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <hr>
+    <hr />
 
     <!-- -------- 3. 对齐方式  --------  -->
     <!-- #region  -->
     <ea-date-picker placeholder="选择日期" align="center"></ea-date-picker>
     <!-- #endregion  -->
     <!-- -------------------  -->
-</body>
-
+  </body>
 </html>
