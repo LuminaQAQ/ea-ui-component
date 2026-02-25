@@ -106,16 +106,16 @@ document.querySelector("ea-date-picker").addEventListener("change", e => {
 
 :::
 
-## 自定义 Header 交互
+## 选择器类型
 
-日期选择器提供了自定义的 Header 交互功能，支持以下操作：
+通过 `type` 属性可以设置选择器的类型，支持三种模式：
 
-1. **基础日期视图**：显示年份和月份，点击年份进入年份选择模式，点击月份进入月份选择模式
-2. **年份选择模式**：显示近10年的年份列表（如 2020~2029），点击年份进入月份选择模式
-3. **月份选择模式**：显示12个月的英文简写（Jan, Feb...），点击月份返回日期视图
+### 日期选择（type="date"，默认）
+
+完整的日期选择流程，选择年份后进入月份选择，选择月份后进入日期选择。
 
 <div class="demo">
-    <ea-date-picker placeholder="点击选择日期，体验自定义Header"></ea-date-picker>
+    <ea-date-picker type="date" placeholder="选择日期"></ea-date-picker>
 </div>
 
 ::: details 查看代码
@@ -124,22 +124,157 @@ document.querySelector("ea-date-picker").addEventListener("change", e => {
 
 ```html
 <div class="demo">
-  <ea-date-picker placeholder="点击选择日期"></ea-date-picker>
+  <ea-date-picker type="date" placeholder="选择日期"></ea-date-picker>
 </div>
+```
+
+:::
+
+### 月份选择（type="month"）
+
+仅选择年份和月份，选择后保持月份面板，返回年月信息。
+
+<div class="demo">
+    <ea-date-picker type="month" placeholder="选择月份" display-format="YYYY年MM月" value-format="YYYY-MM"></ea-date-picker>
+</div>
+
+::: details 查看代码
+
+`html`
+
+```html
+<div class="demo">
+  <ea-date-picker
+    type="month"
+    placeholder="选择月份"
+    display-format="YYYY年MM月"
+    value-format="YYYY-MM"
+  >
+  </ea-date-picker>
+</div>
+```
+
+`js`: `change` 事件
+
+```js
+document.querySelector("ea-date-picker").addEventListener("change", e => {
+  console.log(e.detail.fullDate); // "2024-01"
+  console.log(e.detail.year); // 2024
+  console.log(e.detail.month); // 1
+  console.log(e.detail.date); // null
+});
+```
+
+:::
+
+### 年份选择（type="year"）
+
+仅选择年份，选择后保持年份面板，返回年份信息。
+
+<div class="demo">
+    <ea-date-picker type="year" placeholder="选择年份" display-format="YYYY年" value-format="YYYY"></ea-date-picker>
+</div>
+
+::: details 查看代码
+
+`html`
+
+```html
+<div class="demo">
+  <ea-date-picker
+    type="year"
+    placeholder="选择年份"
+    display-format="YYYY年"
+    value-format="YYYY"
+  >
+  </ea-date-picker>
+</div>
+```
+
+`js`: `change` 事件
+
+```js
+document.querySelector("ea-date-picker").addEventListener("change", e => {
+  console.log(e.detail.fullDate); // "2024"
+  console.log(e.detail.year); // 2024
+  console.log(e.detail.month); // null
+  console.log(e.detail.date); // null
+});
+```
+
+:::
+
+## 日期格式
+
+通过 `display-format` 和 `value-format` 属性可以自定义日期格式。
+
+<div class="demo">
+    <ea-date-picker 
+      placeholder="选择日期" 
+      display-format="YYYY/MM/DD" 
+      value-format="YYYY-MM-DD">
+    </ea-date-picker>
+</div>
+
+::: details 查看代码
+
+`html`
+
+```html
+<div class="demo">
+  <ea-date-picker
+    placeholder="选择日期"
+    display-format="YYYY/MM/DD"
+    value-format="YYYY-MM-DD"
+  >
+  </ea-date-picker>
+</div>
+```
+
+`js`: `change` 事件
+
+```js
+document.querySelector("ea-date-picker").addEventListener("change", e => {
+  // 根据 value-format 格式化
+  console.log(e.detail.fullDate); // "2024-01-15"
+});
 ```
 
 :::
 
 ## Attributes
 
-| 参数        | 说明               | 类型    | 可选值            | 默认值 |
-| ----------- | ------------------ | ------- | ----------------- | ------ |
-| name        | 输入框的 name 属性 | string  | -                 | -      |
-| value       | 初始值/当前值      | string  | -                 | -      |
-| width       | 选择器宽度         | string  | -                 | 280px  |
-| disabled    | 是否禁用           | boolean | -                 | false  |
-| align       | 对齐方式           | string  | left/center/right | left   |
-| placeholder | 占位提示文本       | string  | -                 | -      |
+| 参数           | 说明                     | 类型    | 可选值            | 默认值     |
+| -------------- | ------------------------ | ------- | ----------------- | ---------- |
+| name           | 输入框的 name 属性       | string  | -                 | -          |
+| value          | 初始值/当前值            | string  | -                 | -          |
+| width          | 选择器宽度               | string  | -                 | 280px      |
+| disabled       | 是否禁用                 | boolean | -                 | false      |
+| align          | 对齐方式                 | string  | left/center/right | left       |
+| placeholder    | 占位提示文本             | string  | -                 | -          |
+| display-format | 输入框中显示的日期格式   | string  | 见下方格式说明    | YYYY-MM-DD |
+| value-format   | change事件返回的日期格式 | string  | 见下方格式说明    | YYYY-MM-DD |
+| type           | 选择器类型               | string  | date/month/year   | date       |
+
+### 格式说明
+
+使用 [dayjs 格式字符串](https://day.js.org/docs/en/display/format)：
+
+| 格式 | 说明          | 示例  |
+| ---- | ------------- | ----- |
+| YYYY | 四位年份      | 2024  |
+| MM   | 两位月份      | 01-12 |
+| DD   | 两位日期      | 01-31 |
+| HH   | 两位小时(24h) | 00-23 |
+| mm   | 两位分钟      | 00-59 |
+| ss   | 两位秒        | 00-59 |
+
+**常用格式示例**：
+
+- `YYYY-MM-DD` → 2024-01-15
+- `YYYY/MM/DD` → 2024/01/15
+- `DD/MM/YYYY` → 15/01/2024
+- `MM-DD-YYYY` → 01-15-2024
 
 ## CSS Part
 

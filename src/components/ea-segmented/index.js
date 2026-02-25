@@ -19,8 +19,13 @@ export class EaSegmented extends Base {
       type: Array,
       default: [],
       observer: newVal => {
-        if (!this.getAttrString("name"))
+        if (!this.hasAttribute("name")) {
+          this.setAttribute(
+            "name",
+            this.tagName + "-" + EaUtils.String.randomString()
+          );
           console.warn(`[${this.tagName}] name attribute is required.`, this);
+        }
 
         this.#renderOptions(newVal);
       },

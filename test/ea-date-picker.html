@@ -10,38 +10,202 @@
       hr {
         margin: 3rem 0;
       }
+
+      .demo-date-picker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 1rem 0;
+      }
+
+      .demo-date-picker .block {
+        flex: 1;
+        min-width: 240px;
+        max-width: 320px;
+        padding: 1.5rem;
+      }
+
+      .demo-date-picker .demonstration {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-size: 14px;
+        text-align: center;
+        color: #606266;
+      }
+
+      .demo-date-picker .demonstration:first-child {
+        font-weight: 600;
+        color: #303133;
+      }
+
+      .demo-date-picker ea-date-picker {
+        width: 100%;
+      }
     </style>
   </head>
 
   <body>
+    <script
+      type="module"
+      src="../src/components/ea-date-picker/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../src/components/ea-segmented/index.js"
+    ></script>
+
+    <!-- 选择某一天  -->
+    <!-- #region -->
+    <h1>选择某一天</h1>
+
+    <div class="demo">
+      <p>
+        <ea-segmented id="sizeSegmented" value="default"></ea-segmented>
+      </p>
+      <div class="demo-date-picker">
+        <div class="block">
+          <span class="demonstration">Default</span>
+          <ea-date-picker
+            id="defaultDatePicker"
+            type="date"
+            placeholder="Pick a Date"
+          ></ea-date-picker>
+        </div>
+        <div class="block">
+          <span class="demonstration">Disabled</span>
+          <ea-date-picker
+            id="disabledDatePicker"
+            type="date"
+            placeholder="Pick a Date"
+            value="2026-01-01"
+            disabled
+          ></ea-date-picker>
+        </div>
+        <div class="block">
+          <span class="demonstration">Center Aligned</span>
+          <ea-date-picker
+            id="centerDatePicker"
+            placeholder="Pick a Date"
+            align="center"
+          ></ea-date-picker>
+        </div>
+      </div>
+    </div>
+
     <script type="module">
-      import "/src/components/ea-date-picker/index.js";
+      const basicExample = {
+        sizeSegmented: document.getElementById("sizeSegmented"),
+        defaultDatePicker: document.getElementById("defaultDatePicker"),
+        disabledDatePicker: document.getElementById("disabledDatePicker"),
+        centerDatePicker: document.getElementById("centerDatePicker"),
+
+        init() {
+          this.sizeSegmented.options = ["small", "default", "large"];
+
+          this.sizeSegmented.addEventListener("change", e => {
+            this.defaultDatePicker.size = e.detail.value;
+            this.disabledDatePicker.size = e.detail.value;
+            this.centerDatePicker.size = e.detail.value;
+          });
+        },
+      };
+
+      basicExample.init();
     </script>
 
-    <!-- -------- 1. 任意时间点  --------  -->
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  其他日期单位 -->
+    <!-- #region -->
+    <h1>其他日期单位</h1>
+
+    <div class="demo demo-date-picker">
+      <div class="block">
+        <span class="demonstration">Year</span>
+        <ea-date-picker placeholder="Pick a Year" type="year"></ea-date-picker>
+      </div>
+      <div class="block">
+        <span class="demonstration">Month</span>
+        <ea-date-picker
+          placeholder="Pick a Month"
+          type="month"
+        ></ea-date-picker>
+      </div>
+      <div class="block">
+        <span class="demonstration">Date</span>
+        <ea-date-picker placeholder="Pick a Date" type="date"></ea-date-picker>
+      </div>
+    </div>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!-- -------- 日期格式  --------  -->
     <!-- #region  -->
-    <ea-date-picker placeholder="选择日期"></ea-date-picker>
+    <h1>日期格式</h1>
+
+    <div class="demo demo-date-picker">
+      <div class="block">
+        <span class="demonstration">Emits Date object</span>
+        <div class="demonstration" id="value1">Value:</div>
+        <ea-date-picker
+          id="formatPicker1"
+          type="date"
+          placeholder="Pick a Date"
+          display-format="YYYY/MM/DD"
+        ></ea-date-picker>
+      </div>
+      <div class="block">
+        <span class="demonstration">Use value-format</span>
+        <div class="demonstration" id="value2">Value:</div>
+        <ea-date-picker
+          id="formatPicker2"
+          type="date"
+          placeholder="Pick a Date"
+          display-format="YYYY/MM/DD"
+          value-format="YYYY-MM-DD"
+        ></ea-date-picker>
+      </div>
+      <div class="block">
+        <span class="demonstration">Timestamp</span>
+        <div class="demonstration" id="value3">Value:</div>
+        <ea-date-picker
+          id="formatPicker3"
+          type="date"
+          placeholder="Pick a Date"
+          display-format="YYYY/MM/DD"
+          value-format="x"
+        ></ea-date-picker>
+      </div>
+    </div>
+
+    <script>
+      const formatExample = {
+        formatPicker1: document.getElementById("formatPicker1"),
+        formatPicker2: document.getElementById("formatPicker2"),
+        formatPicker3: document.getElementById("formatPicker3"),
+
+        onChange: e => {
+          const { target } = e;
+          const valueEl = target.previousElementSibling;
+
+          valueEl.textContent = "Value: " + target.value;
+        },
+
+        init() {
+          this.formatPicker1.addEventListener("change", this.onChange);
+          this.formatPicker2.addEventListener("change", this.onChange);
+          this.formatPicker3.addEventListener("change", this.onChange);
+        },
+      };
+      formatExample.init();
+    </script>
     <!-- #endregion  -->
     <!-- -------------------  -->
 
     <hr />
-
-    <!-- -------- 2. 禁用  --------  -->
-    <!-- #region  -->
-    <ea-date-picker
-      placeholder="选择日期"
-      value="2024-1-1"
-      disabled
-    ></ea-date-picker>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <hr />
-
-    <!-- -------- 3. 对齐方式  --------  -->
-    <!-- #region  -->
-    <ea-date-picker placeholder="选择日期" align="center"></ea-date-picker>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
   </body>
 </html>

@@ -7,7 +7,10 @@ import "@/components/ea-input/index.js";
 import "@/components/ea-button/index.js";
 
 import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+dayjs.extend(advancedFormat);
 import "dayjs/locale/zh-cn";
+import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
 export class EaDatePicker extends Base {
   /** @type {HTMLElement} */
@@ -42,28 +45,33 @@ export class EaDatePicker extends Base {
 
   #states = {
     currentDate: dayjs(),
-    viewMode: "day", // 'day' | 'month' | 'year'
+    /** @type {'day' | 'month' | 'year'} */
+    viewMode: "day",
     selectedYear: null,
     selectedMonth: null,
   };
 
   static get observedAttributes() {
-    return [...super.observedAttributes];
+    return [
+      ...super.observedAttributes,
+      "width",
+      "value",
+      "placeholder",
+      "disabled",
+      "align",
+      "display-format",
+      "value-format",
+      "size",
+    ];
   }
 
   state = this.properties({
-    name: {
-      type: String,
-      default: "datePicker",
-    },
     width: {
       type: String,
       default: "280px",
       observer: newVal => {
         this.#container.style.width = newVal;
         this.#dropdownWrap.style.width = newVal;
-        this.style.display = "inline-block";
-        this.style.width = newVal;
       },
     },
     value: {
@@ -75,11 +83,15 @@ export class EaDatePicker extends Base {
           const date = new Date(Date.now());
           dateValue = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
         }
-        this.#inputElement.value = dateValue;
         if (dateValue) {
           this.#states.currentDate = dayjs(dateValue);
           this.#states.selectedYear = this.#states.currentDate.year();
           this.#states.selectedMonth = this.#states.currentDate.month() + 1;
+          this.#inputElement.value = this.#states.currentDate.format(
+            this.#getDisplayFormat()
+          );
+        } else {
+          this.#inputElement.value = dateValue;
         }
       },
     },
@@ -87,27 +99,58 @@ export class EaDatePicker extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        this.#inputElement.placeholder = newVal;
+        this.#inputElement.setAttribute("placeholder", newVal);
       },
     },
     disabled: {
       type: Boolean,
       default: false,
       observer: newVal => {
-        this.#inputElement.disabled = newVal;
+        this.#inputElement.toggleAttribute("disabled", newVal);
         this.updateContainerClasslist();
       },
     },
     align: {
       type: ["left", "center", "right"],
       default: "left",
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    "display-format": {
+      type: String,
+      default: "YYYY-MM-DD",
+    },
+    "value-format": {
+      type: String,
+      default: "YYYY-MM-DD",
+    },
+    type: {
+      type: ["date", "month", "year"],
+      default: "date",
       observer: newVal => {
-        const inputOriginal = this.#inputElement.shadowRoot?.querySelector(
-          '.ea-input__original, input[type="text"]'
-        );
-        if (inputOriginal) {
-          inputOriginal.style.textAlign = newVal;
+        if (newVal === "year") {
+          this.#switchToYearMode();
+        } else if (newVal === "month") {
+          this.#switchToMonthMode();
+        } else {
+          this.#switchToDayMode();
         }
+      },
+    },
+    size: {
+      type: EA_COMPONENT_SIZES,
+      default: "default",
+      observer: newVal => {
+        this.#inputElement.setAttribute("size", newVal);
+        this.#yearBtn.setAttribute("size", newVal);
+        this.#monthBtn.setAttribute("size", newVal);
+        this.#prevYearBtn.setAttribute("size", newVal);
+        this.#prevMonthBtn.setAttribute("size", newVal);
+        this.#nextMonthBtn.setAttribute("size", newVal);
+        this.#nextYearBtn.setAttribute("size", newVal);
+
+        this.updateContainerClasslist();
       },
     },
   });
@@ -117,18 +160,46 @@ export class EaDatePicker extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
+    const viewMode = this.#states?.viewMode || "day";
     const className = this.computedClasslist(
       "ea-date-picker",
-      {},
+      {
+        [`--${this.size}`]: this.size,
+      },
       {
         disabled: this.disabled,
+        [`align-${this.align}`]: this.align,
         open: this.#container?.classList.contains("is-open"),
+        [`view-${viewMode}`]: viewMode,
       }
     );
 
     this.#container.className = className;
 
     return className;
+  }
+
+  /**
+   * 获取实际的显示格式
+   * 如果用户设置了自定义格式，则使用自定义格式
+   * 否则根据type使用默认格式
+   * @return {string} 显示格式
+   */
+  #getDisplayFormat() {
+    const userFormat = this["display-format"];
+    // 如果用户设置了非默认格式，优先使用用户设置
+    if (userFormat && userFormat !== "YYYY-MM-DD") {
+      return userFormat;
+    }
+    // 使用type对应的默认格式
+    switch (this.type) {
+      case "year":
+        return "YYYY";
+      case "month":
+        return "YYYY-MM";
+      default:
+        return "YYYY-MM-DD";
+    }
   }
 
   constructor() {
@@ -159,8 +230,8 @@ export class EaDatePicker extends Base {
                 <ea-button class='${ns.e("header-btn")} ${ns.e("btn-prev-month")}' aria-label="Previous month" text>‹</ea-button>
               </div>
               <div class='${ns.e("header-center")}'>
-                <span class='${ns.e("header-year")}' part='header-year'></span>
-                <span class='${ns.e("header-month")}' part='header-month'></span>
+                <ea-button class='${ns.e("header-year")}' part='header-year' aria-label="Year" text></ea-button>
+                <ea-button class='${ns.e("header-month")}' part='header-month' aria-label="Month" text></ea-button>
               </div>
               <div class='${ns.e("header-right")}'>
                 <ea-button class='${ns.e("header-btn")} ${ns.e("btn-next-month")}' aria-label="Next month" text>›</ea-button>
@@ -196,7 +267,6 @@ export class EaDatePicker extends Base {
    * 更新header显示
    */
   #updateHeaderDisplay = () => {
-    const ns = this.ns;
     const year = this.#states.currentDate.year();
     const month = this.#states.currentDate.month() + 1;
 
@@ -221,11 +291,7 @@ export class EaDatePicker extends Base {
     this.#states.viewMode = "year";
     this.#updateHeaderDisplay();
     this.#renderYearPanel();
-    this.#calendarBody.style.display = "none";
-    this.shadowRoot.querySelector(this.ns.ce("year-panel")).style.display =
-      "grid";
-    this.shadowRoot.querySelector(this.ns.ce("month-panel")).style.display =
-      "none";
+    this.updateContainerClasslist();
     this.#updateHeaderButtons("year");
   };
 
@@ -236,11 +302,7 @@ export class EaDatePicker extends Base {
     this.#states.viewMode = "month";
     this.#updateHeaderDisplay();
     this.#renderMonthPanel();
-    this.#calendarBody.style.display = "none";
-    this.shadowRoot.querySelector(this.ns.ce("year-panel")).style.display =
-      "none";
-    this.shadowRoot.querySelector(this.ns.ce("month-panel")).style.display =
-      "grid";
+    this.updateContainerClasslist();
     this.#updateHeaderButtons("month");
   };
 
@@ -250,46 +312,30 @@ export class EaDatePicker extends Base {
   #switchToDayMode = () => {
     this.#states.viewMode = "day";
     this.#updateHeaderDisplay();
-    this.#calendarBody.style.display = "block";
-    this.shadowRoot.querySelector(this.ns.ce("year-panel")).style.display =
-      "none";
-    this.shadowRoot.querySelector(this.ns.ce("month-panel")).style.display =
-      "none";
+
+    this.updateContainerClasslist();
     this.#updateHeaderButtons("day");
 
-    // 更新calendar的value
     const dateStr = this.#states.currentDate.format("YYYY-MM-DD");
     this.#calendarElement.setAttribute("value", dateStr);
   };
 
   /**
    * 更新header按钮
+   * @param {'year' | 'month' | 'day'} mode
    */
   #updateHeaderButtons = mode => {
-    const ns = this.ns;
-    const prevYearBtn = this.shadowRoot.querySelector(ns.ce("btn-prev-year"));
-    const nextYearBtn = this.shadowRoot.querySelector(ns.ce("btn-next-year"));
-    const prevMonthBtn = this.shadowRoot.querySelector(ns.ce("btn-prev-month"));
-    const nextMonthBtn = this.shadowRoot.querySelector(ns.ce("btn-next-month"));
-
     if (mode === "year") {
-      prevYearBtn.ariaLabel = "Previous decade";
-      nextYearBtn.ariaLabel = "Next decade";
-
-      prevMonthBtn.style.display = "none";
-      nextMonthBtn.style.display = "none";
+      this.#prevYearBtn.ariaLabel = "Previous decade";
+      this.#nextYearBtn.ariaLabel = "Next decade";
     } else if (mode === "month") {
-      prevYearBtn.ariaLabel = "Previous year";
-      nextYearBtn.ariaLabel = "Next year";
-      prevMonthBtn.style.display = "none";
-      nextMonthBtn.style.display = "none";
+      this.#prevYearBtn.ariaLabel = "Previous year";
+      this.#nextYearBtn.ariaLabel = "Next year";
     } else {
-      prevYearBtn.ariaLabel = "Previous year";
-      nextYearBtn.ariaLabel = "Next year";
-      prevMonthBtn.ariaLabel = "Previous month";
-      nextMonthBtn.ariaLabel = "Next month";
-      prevMonthBtn.style.display = "inline-flex";
-      nextMonthBtn.style.display = "inline-flex";
+      this.#prevYearBtn.ariaLabel = "Previous year";
+      this.#nextYearBtn.ariaLabel = "Next year";
+      this.#prevMonthBtn.ariaLabel = "Previous month";
+      this.#nextMonthBtn.ariaLabel = "Next month";
     }
   };
 
@@ -395,7 +441,39 @@ export class EaDatePicker extends Base {
     const year = parseInt(yearItem.dataset.year);
     this.#states.selectedYear = year;
     this.#states.currentDate = this.#states.currentDate.year(year);
-    this.#switchToMonthMode();
+
+    // type为year时，不切换视图，直接完成选择
+    if (this.type === "year") {
+      this.#handleYearSelect(year);
+    } else {
+      this.#switchToMonthMode();
+    }
+  };
+
+  /**
+   * 处理年份选择（type=year）
+   */
+  #handleYearSelect = year => {
+    const selectedDate = this.#states.currentDate;
+    const displayValue = selectedDate.format(this.#getDisplayFormat());
+    const valueStr = selectedDate.format(this["value-format"]);
+
+    this.#inputElement.value = displayValue;
+    this.setAttribute("value", valueStr);
+
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        detail: {
+          fullDate: valueStr,
+          year,
+          month: null,
+          date: null,
+          week: null,
+        },
+      })
+    );
+
+    this.#container.classList.remove("is-open");
   };
 
   /**
@@ -408,7 +486,39 @@ export class EaDatePicker extends Base {
     const month = parseInt(monthItem.dataset.month);
     this.#states.selectedMonth = month;
     this.#states.currentDate = this.#states.currentDate.month(month - 1);
-    this.#switchToDayMode();
+
+    // type为month时，不切换视图，直接完成选择
+    if (this.type === "month") {
+      this.#handleMonthSelect(month);
+    } else {
+      this.#switchToDayMode();
+    }
+  };
+
+  /**
+   * 处理月份选择（type=month）
+   */
+  #handleMonthSelect = month => {
+    const selectedDate = this.#states.currentDate;
+    const displayValue = selectedDate.format(this.#getDisplayFormat());
+    const valueStr = selectedDate.format(this["value-format"]);
+
+    this.#inputElement.value = displayValue;
+    this.setAttribute("value", valueStr);
+
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        detail: {
+          fullDate: valueStr,
+          year: this.#states.selectedYear,
+          month,
+          date: null,
+          week: null,
+        },
+      })
+    );
+
+    this.#container.classList.remove("is-open");
   };
 
   /**
@@ -434,18 +544,22 @@ export class EaDatePicker extends Base {
    */
   #onCalendarSelect = e => {
     const { year, month, date, day } = e.detail;
-    const dateStr = `${year}-${month}-${date}`;
+    const selectedDate = dayjs(`${year}-${month}-${date}`);
 
-    this.value = dateStr;
-    this.#inputElement.value = dateStr;
     this.#states.selectedYear = year;
     this.#states.selectedMonth = month;
-    this.#states.currentDate = dayjs(dateStr);
+    this.#states.currentDate = selectedDate;
+
+    const displayValue = selectedDate.format(this.#getDisplayFormat());
+    const valueStr = selectedDate.format(this["value-format"]);
+
+    this.#inputElement.value = displayValue;
+    this.setAttribute("value", valueStr);
 
     this.dispatchEvent(
       new CustomEvent("change", {
         detail: {
-          fullDate: dateStr,
+          fullDate: valueStr,
           year,
           month,
           date,
@@ -464,8 +578,14 @@ export class EaDatePicker extends Base {
     if (this.disabled) return;
     this.#container.classList.toggle("is-open");
     if (this.#container.classList.contains("is-open")) {
-      // 重置到日期视图
-      this.#switchToDayMode();
+      // 根据type设置初始视图
+      if (this.type === "year") {
+        this.#switchToYearMode();
+      } else if (this.type === "month") {
+        this.#switchToMonthMode();
+      } else {
+        this.#switchToDayMode();
+      }
     }
   };
 

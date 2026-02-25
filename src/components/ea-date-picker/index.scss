@@ -1,17 +1,28 @@
 $name: ea-date-picker;
 
+$ea-date-picker-align-types: left, center, right;
+$ea-date-picker-sizes: small, large;
+
 :host {
-  --ea-#{$name}-bg-color: var(--color-white);
-  --ea-#{$name}-shadow: var(--shadow-sm);
-  --ea-#{$name}-z-index: 2;
-  --ea-#{$name}-transition: var(--transition-fast);
-  --ea-#{$name}-header-height: 40px;
-  --ea-#{$name}-header-text-color: var(--text-color-primary);
-  --ea-#{$name}-header-text-hover: var(--primary-color);
-  --ea-#{$name}-panel-item-size: 60px;
-  --ea-#{$name}-panel-item-hover: var(--grey-100);
-  --ea-#{$name}-panel-item-selected: var(--primary-color);
-  --ea-#{$name}-panel-item-selected-bg: var(--primary-color-light);
+  --#{$name}-bg-color: var(--color-white);
+  --#{$name}-shadow: var(--shadow-sm);
+  --#{$name}-z-index: 2;
+  --#{$name}-transition: var(--transition-fast);
+  --#{$name}-header-height: 40px;
+  --#{$name}-header-text-color: var(--text-color-primary);
+  --#{$name}-header-text-hover: var(--primary-color);
+  --#{$name}-panel-item-size: 60px;
+  --#{$name}-panel-item-hover: var(--grey-100);
+  --#{$name}-panel-item-selected: var(--primary-color);
+  --#{$name}-panel-item-selected-bg: var(--primary-color-light);
+
+  --#{$name}-font-size: var(--font-size-sm);
+  --#{$name}-font-size-small: var(--font-size-xs);
+  --#{$name}-font-size-large: var(--font-size-md);
+  --#{$name}-header-height-small: 32px;
+  --#{$name}-header-height-large: 48px;
+  --#{$name}-panel-item-size-small: 48px;
+  --#{$name}-panel-item-size-large: 72px;
 }
 
 :host {
@@ -31,18 +42,19 @@ $name: ea-date-picker;
 
   @include element(dropdown-wrap) {
     position: absolute;
+    width: 100%;
     top: 100%;
     left: 0;
     margin-top: var(--spacing-xs);
-    background-color: var(--ea-#{$name}-bg-color);
-    box-shadow: var(--ea-#{$name}-shadow);
+    background-color: var(--#{$name}-bg-color);
+    box-shadow: var(--#{$name}-shadow);
     border-radius: var(--border-radius-md);
-    z-index: var(--ea-#{$name}-z-index);
+    z-index: var(--#{$name}-z-index);
     transform-origin: top center;
     transform: scaleY(0);
     opacity: 0;
     pointer-events: none;
-    padding: var(--spacing-sm);
+
   }
 
   @include element(calendar-wrapper) {
@@ -55,7 +67,7 @@ $name: ea-date-picker;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: var(--ea-#{$name}-header-height);
+    height: var(--#{$name}-header-height);
     padding: 0 var(--spacing-xs);
     border-bottom: 1px solid var(--border-color-light);
     margin-bottom: var(--spacing-xs);
@@ -74,10 +86,8 @@ $name: ea-date-picker;
   }
 
   @include element(header-btn) {
-    --ea-button-padding-vertical: 0;
-    --ea-button-padding-horizontal: 0;
-    min-width: 24px;
-    height: 24px;
+    --button-padding-vertical: 0;
+    --button-padding-horizontal: 0;
     font-size: var(--font-size-sm);
   }
 
@@ -87,34 +97,9 @@ $name: ea-date-picker;
     gap: var(--spacing-xs);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-medium);
-    color: var(--ea-#{$name}-header-text-color);
+    color: var(--#{$name}-header-text-color);
   }
 
-  @include element(header-year) {
-    cursor: pointer;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--border-radius-sm);
-    transition: all var(--ea-#{$name}-transition);
-
-    &:hover {
-      color: var(--ea-#{$name}-header-text-hover);
-      background-color: var(--ea-#{$name}-panel-item-hover);
-    }
-  }
-
-  @include element(header-month) {
-    cursor: pointer;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--border-radius-sm);
-    transition: all var(--ea-#{$name}-transition);
-
-    &:hover {
-      color: var(--ea-#{$name}-header-text-hover);
-      background-color: var(--ea-#{$name}-panel-item-hover);
-    }
-  }
-
-  // 年份面板
   @include element(year-panel) {
     display: none;
     grid-template-columns: repeat(3, 1fr);
@@ -123,7 +108,7 @@ $name: ea-date-picker;
   }
 
   @include element(year-item) {
-    height: var(--ea-#{$name}-panel-item-size);
+    height: var(--#{$name}-panel-item-size);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -133,19 +118,19 @@ $name: ea-date-picker;
     font-size: var(--font-size-sm);
     cursor: pointer;
     border-radius: var(--border-radius-md);
-    transition: all var(--ea-#{$name}-transition);
+    transition: all var(--#{$name}-transition);
 
     &:hover {
-      background-color: var(--ea-#{$name}-panel-item-hover);
+      background-color: var(--#{$name}-panel-item-hover);
     }
 
     @include state(selected) {
-      color: var(--ea-#{$name}-panel-item-selected);
-      background-color: var(--ea-#{$name}-panel-item-selected-bg);
+      color: var(--#{$name}-panel-item-selected);
+      background-color: var(--#{$name}-panel-item-selected-bg);
       font-weight: var(--font-weight-medium);
 
       &:hover {
-        background-color: var(--ea-#{$name}-panel-item-selected-bg);
+        background-color: var(--#{$name}-panel-item-selected-bg);
       }
     }
   }
@@ -159,7 +144,7 @@ $name: ea-date-picker;
   }
 
   @include element(month-item) {
-    height: calc(var(--ea-#{$name}-panel-item-size) * 0.8);
+    height: calc(var(--#{$name}-panel-item-size) * 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -169,19 +154,19 @@ $name: ea-date-picker;
     font-size: var(--font-size-sm);
     cursor: pointer;
     border-radius: var(--border-radius-md);
-    transition: all var(--ea-#{$name}-transition);
+    transition: all var(--#{$name}-transition);
 
     &:hover {
-      background-color: var(--ea-#{$name}-panel-item-hover);
+      background-color: var(--#{$name}-panel-item-hover);
     }
 
     @include state(selected) {
-      color: var(--ea-#{$name}-panel-item-selected);
-      background-color: var(--ea-#{$name}-panel-item-selected-bg);
+      color: var(--#{$name}-panel-item-selected);
+      background-color: var(--#{$name}-panel-item-selected-bg);
       font-weight: var(--font-weight-medium);
 
       &:hover {
-        background-color: var(--ea-#{$name}-panel-item-selected-bg);
+        background-color: var(--#{$name}-panel-item-selected-bg);
       }
     }
   }
@@ -190,8 +175,67 @@ $name: ea-date-picker;
     box-shadow: var(--box-shadow-md);
   }
 
-  @include element(calendar-body) {
-    display: block;
+  @include state(view-year) {
+    .ea-date-picker__calendar-body {
+      display: none;
+    }
+
+    .ea-date-picker__year-panel {
+      display: grid;
+    }
+
+    .ea-date-picker__month-panel {
+      display: none;
+    }
+
+    .ea-date-picker__header-month {
+      display: none;
+    }
+
+    .ea-date-picker__btn-prev-month,
+    .ea-date-picker__btn-next-month {
+      display: none;
+    }
+  }
+
+  @include state(view-month) {
+    .ea-date-picker__calendar-body {
+      display: none;
+    }
+
+    .ea-date-picker__year-panel {
+      display: none;
+    }
+
+    .ea-date-picker__month-panel {
+      display: grid;
+    }
+
+    // 月份模式下隐藏月份按钮
+    .ea-date-picker__btn-prev-month,
+    .ea-date-picker__btn-next-month {
+      display: none;
+    }
+  }
+
+  @include state(view-day) {
+    .ea-date-picker__calendar-body {
+      display: block;
+    }
+
+    .ea-date-picker__year-panel {
+      display: none;
+    }
+
+    .ea-date-picker__month-panel {
+      display: none;
+    }
+
+    // 日期模式下显示月份按钮
+    .ea-date-picker__btn-prev-month,
+    .ea-date-picker__btn-next-month {
+      display: inline-flex;
+    }
   }
 
   @include element(calendar) {
@@ -202,7 +246,7 @@ $name: ea-date-picker;
     }
 
     &::part(body) {
-      font-size: var(--font-size-sm);
+      font-size: var(--#{$name}-font-size);
     }
   }
 
@@ -221,29 +265,30 @@ $name: ea-date-picker;
       pointer-events: none;
     }
   }
-}
 
-// 响应式适配
-@media (max-width: 768px) {
-  @include block($name) {
-    @include element(dropdown-wrap) {
-      left: 0;
-      right: 0;
-      width: auto;
+  @each $type in $ea-date-picker-align-types {
+    @include state(align-#{$type}) {
+      .ea-date-picker__input::part(original) {
+        text-align: #{$type};
+      }
     }
+  }
 
-    @include element(header-btn) {
-      width: 32px;
-      height: 32px;
-      font-size: var(--font-size-lg);
-    }
+  @each $size in $ea-date-picker-sizes {
+    @include modifier(#{$size}) {
+      --#{$name}-input-height: var(--#{$name}-input-height-#{$size});
+      --#{$name}-font-size: var(--#{$name}-font-size-#{$size});
+      --#{$name}-header-height: var(--#{$name}-header-height-#{$size});
+      --#{$name}-panel-item-size: var(--#{$name}-panel-item-size-#{$size});
 
-    @include element(year-item) {
-      height: 48px;
-    }
+      .ea-date-picker__input {
+        --input-height: var(--#{$name}-input-height-#{$size});
+        --input-font-size: var(--#{$name}-font-size-#{$size});
+      }
 
-    @include element(month-item) {
-      height: 40px;
+      .ea-date-picker__header-btn {
+        --button-font-size: var(--#{$name}-font-size-#{$size});
+      }
     }
   }
 }

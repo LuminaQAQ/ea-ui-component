@@ -46,6 +46,12 @@ EaUtils.Number.isNumber = value => {
   return typeof value === "number" && !isNaN(value);
 };
 
+EaUtils.String.randomString = (length = 6) => {
+  return Math.random()
+    .toString(36)
+    .substring(2, length + 2);
+};
+
 EaUtils.Enum.isEnum = value => {
   return Array.isArray(value);
 };
