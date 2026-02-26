@@ -4,21 +4,27 @@ $ea-date-picker-align-types: left, center, right;
 $ea-date-picker-sizes: small, large;
 
 :host {
-  --#{$name}-bg-color: var(--color-white);
+  --#{$name}-bg-color: var(--white);
   --#{$name}-shadow: var(--shadow-sm);
   --#{$name}-z-index: 2;
   --#{$name}-transition: var(--transition-fast);
+
   --#{$name}-header-height: 40px;
-  --#{$name}-header-text-color: var(--text-color-primary);
-  --#{$name}-header-text-hover: var(--primary-color);
+  --#{$name}-header-text-color: var(--grey-900);
+  --#{$name}-header-text-hover: var(--blue-500);
+  --#{$name}-header-border-color: var(--grey-200);
+
   --#{$name}-panel-item-size: 60px;
+  --#{$name}-panel-item-bg-color: transparent;
+  --#{$name}-panel-item-text-color: var(--grey-700);
   --#{$name}-panel-item-hover: var(--grey-100);
-  --#{$name}-panel-item-selected: var(--primary-color);
-  --#{$name}-panel-item-selected-bg: var(--primary-color-light);
+  --#{$name}-panel-item-selected: var(--blue-500);
+  --#{$name}-panel-item-selected-bg: var(--blue-100);
 
   --#{$name}-font-size: var(--font-size-sm);
   --#{$name}-font-size-small: var(--font-size-xs);
   --#{$name}-font-size-large: var(--font-size-md);
+
   --#{$name}-header-height-small: 32px;
   --#{$name}-header-height-large: 48px;
   --#{$name}-panel-item-size-small: 48px;
@@ -62,14 +68,13 @@ $ea-date-picker-sizes: small, large;
     flex-direction: column;
   }
 
-  // 自定义Header样式
   @include element(custom-header) {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: var(--#{$name}-header-height);
     padding: 0 var(--spacing-xs);
-    border-bottom: 1px solid var(--border-color-light);
+    border-bottom: 1px solid var(--#{$name}-header-border-color);
     margin-bottom: var(--spacing-xs);
   }
 
@@ -107,14 +112,14 @@ $ea-date-picker-sizes: small, large;
     padding: var(--spacing-sm);
   }
 
-  @include element(year-item) {
-    height: var(--#{$name}-panel-item-size);
+  .#{$name}__year-item,
+  .#{$name}__month-item {
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
-    background-color: transparent;
-    color: var(--text-color-regular);
+    background-color: var(--#{$name}-panel-item-bg-color);
+    color: var(--#{$name}-panel-item-text-color);
     font-size: var(--font-size-sm);
     cursor: pointer;
     border-radius: var(--border-radius-md);
@@ -124,7 +129,7 @@ $ea-date-picker-sizes: small, large;
       background-color: var(--#{$name}-panel-item-hover);
     }
 
-    @include state(selected) {
+    &.is-selected {
       color: var(--#{$name}-panel-item-selected);
       background-color: var(--#{$name}-panel-item-selected-bg);
       font-weight: var(--font-weight-medium);
@@ -135,7 +140,10 @@ $ea-date-picker-sizes: small, large;
     }
   }
 
-  // 月份面板
+  @include element(year-item) {
+    height: var(--#{$name}-panel-item-size);
+  }
+
   @include element(month-panel) {
     display: none;
     grid-template-columns: repeat(4, 1fr);
@@ -145,97 +153,10 @@ $ea-date-picker-sizes: small, large;
 
   @include element(month-item) {
     height: calc(var(--#{$name}-panel-item-size) * 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background-color: transparent;
-    color: var(--text-color-regular);
-    font-size: var(--font-size-sm);
-    cursor: pointer;
-    border-radius: var(--border-radius-md);
-    transition: all var(--#{$name}-transition);
-
-    &:hover {
-      background-color: var(--#{$name}-panel-item-hover);
-    }
-
-    @include state(selected) {
-      color: var(--#{$name}-panel-item-selected);
-      background-color: var(--#{$name}-panel-item-selected-bg);
-      font-weight: var(--font-weight-medium);
-
-      &:hover {
-        background-color: var(--#{$name}-panel-item-selected-bg);
-      }
-    }
   }
 
   @include element(calendar-wrapper) {
     box-shadow: var(--box-shadow-md);
-  }
-
-  @include state(view-year) {
-    .ea-date-picker__calendar-body {
-      display: none;
-    }
-
-    .ea-date-picker__year-panel {
-      display: grid;
-    }
-
-    .ea-date-picker__month-panel {
-      display: none;
-    }
-
-    .ea-date-picker__header-month {
-      display: none;
-    }
-
-    .ea-date-picker__btn-prev-month,
-    .ea-date-picker__btn-next-month {
-      display: none;
-    }
-  }
-
-  @include state(view-month) {
-    .ea-date-picker__calendar-body {
-      display: none;
-    }
-
-    .ea-date-picker__year-panel {
-      display: none;
-    }
-
-    .ea-date-picker__month-panel {
-      display: grid;
-    }
-
-    // 月份模式下隐藏月份按钮
-    .ea-date-picker__btn-prev-month,
-    .ea-date-picker__btn-next-month {
-      display: none;
-    }
-  }
-
-  @include state(view-day) {
-    .ea-date-picker__calendar-body {
-      display: block;
-    }
-
-    .ea-date-picker__year-panel {
-      display: none;
-    }
-
-    .ea-date-picker__month-panel {
-      display: none;
-    }
-
-    // 日期模式下显示月份按钮
-    .ea-date-picker__btn-prev-month,
-    .ea-date-picker__btn-next-month {
-      display: inline-flex;
-    }
   }
 
   @include element(calendar) {
@@ -247,6 +168,54 @@ $ea-date-picker-sizes: small, large;
 
     &::part(body) {
       font-size: var(--#{$name}-font-size);
+    }
+  }
+
+  &.is-view-year,
+  &.is-view-month {
+
+    .ea-date-picker__calendar-body,
+    .ea-date-picker__month-panel,
+    .ea-date-picker__header-month,
+    .ea-date-picker__btn-prev-month,
+    .ea-date-picker__btn-next-month {
+      display: none;
+    }
+  }
+
+  @include state(view-year) {
+    .ea-date-picker__month-panel {
+      display: none;
+    }
+
+    .ea-date-picker__year-panel {
+      display: grid;
+    }
+  }
+
+  @include state(view-month) {
+    .ea-date-picker__year-panel {
+      display: none;
+    }
+
+    .ea-date-picker__month-panel {
+      display: grid;
+    }
+  }
+
+  @include state(view-day) {
+    .ea-date-picker__calendar-body {
+      display: block;
+    }
+
+    .ea-date-picker__year-panel,
+    .ea-date-picker__month-panel {
+      display: none;
+    }
+
+    .ea-date-picker__btn-prev-month,
+    .ea-date-picker__btn-next-month {
+      display: inline-flex;
     }
   }
 

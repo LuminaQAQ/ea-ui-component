@@ -11,6 +11,8 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 dayjs.extend(advancedFormat);
 import "dayjs/locale/zh-cn";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
+import EaUtils from "@/utils/Utils";
+import { i18nManager } from "@/utils/I18nManager";
 
 export class EaDatePicker extends Base {
   /** @type {HTMLElement} */
@@ -39,6 +41,10 @@ export class EaDatePicker extends Base {
   #nextMonthBtn;
   /** @type {HTMLElement} */
   #nextYearBtn;
+  /** @type {HTMLElement} */
+  #yearPanel;
+  /** @type {HTMLElement} */
+  #monthPanel;
 
   /** @type {AbortController} */
   #abortController = new AbortController();
@@ -187,11 +193,10 @@ export class EaDatePicker extends Base {
    */
   #getDisplayFormat() {
     const userFormat = this["display-format"];
-    // 如果用户设置了非默认格式，优先使用用户设置
-    if (userFormat && userFormat !== "YYYY-MM-DD") {
+    if (this.hasAttribute("display-format")) {
       return userFormat;
     }
-    // 使用type对应的默认格式
+
     switch (this.type) {
       case "year":
         return "YYYY";
@@ -216,6 +221,11 @@ export class EaDatePicker extends Base {
   $render() {
     const ns = namespace("date-picker");
     this.ns = ns;
+
+    i18nManager.locale = this.locale;
+    dayjs.locale(this.locale.toLowerCase());
+
+    const monthsShort = i18nManager.t("calendar.monthsShort");
 
     this.shadowRoot.innerHTML = this.html(`
       <div class='${ns.b()}' part='container'>
@@ -242,7 +252,12 @@ export class EaDatePicker extends Base {
               <ea-calendar class="${ns.e("calendar")}" size="small" part='calendar'></ea-calendar>
             </div>
             <div class='${ns.e("year-panel")}' part='year-panel'></div>
-            <div class='${ns.e("month-panel")}' part='month-panel'></div>
+            <div class='${ns.e("month-panel")}' part='month-panel'>${monthsShort
+              .map(
+                (month, i) =>
+                  `<button class='${ns.e("month-item")}' data-month='${i + 1}'>${month}</button>`
+              )
+              .join("")}</div>
           </div>
         </div>
       </div>
@@ -261,6 +276,8 @@ export class EaDatePicker extends Base {
     this.#prevMonthBtn = this.shadowRoot.querySelector(ns.ce("btn-prev-month"));
     this.#nextMonthBtn = this.shadowRoot.querySelector(ns.ce("btn-next-month"));
     this.#nextYearBtn = this.shadowRoot.querySelector(ns.ce("btn-next-year"));
+    this.#yearPanel = this.shadowRoot.querySelector(ns.ce("year-panel"));
+    this.#monthPanel = this.shadowRoot.querySelector(ns.ce("month-panel"));
   }
 
   /**
@@ -346,49 +363,63 @@ export class EaDatePicker extends Base {
     const ns = this.ns;
     const year = this.#states.currentDate.year();
     const decadeStart = Math.floor(year / 10) * 10;
-    const yearPanel = this.shadowRoot.querySelector(ns.ce("year-panel"));
+    const yearPanel = this.#yearPanel;
 
-    let html = "";
-    for (let i = 0; i < 10; i++) {
+    let html = Array.from({ length: 10 }, (_, i) => {
       const y = decadeStart + i;
       const isSelected = y === this.#states.selectedYear;
-      html += `<button class='${ns.e("year-item")} ${isSelected ? ns.s("selected") : ""}' data-year='${y}'>${y}</button>`;
-    }
+      return EaUtils.EaElement.h(
+        "button",
+        null,
+        {
+          class: `${ns.e("year-item")} ${isSelected ? ns.s("selected") : ""}`,
+          "data-year": y,
+        },
+        y
+      );
+    }).join("");
 
-    yearPanel.innerHTML = html;
+    yearPanel.innerHTML = this.html(html);
   };
+
+  /**
+   * 更新本地化
+   * @param {string} locale
+   */
+  $updateLocalization(locale) {
+    i18nManager.locale = locale;
+    dayjs.locale(locale.toLowerCase());
+
+    const ns = this.ns;
+    const monthsShort = i18nManager.t("calendar.monthsShort");
+    const monthItems = this.#monthPanel.querySelectorAll(
+      `.${ns.e("month-item")}`
+    );
+
+    monthItems.forEach((item, index) => {
+      if (monthsShort[index]) {
+        item.textContent = monthsShort[index];
+      }
+    });
+  }
 
   /**
    * 渲染月份面板
    */
   #renderMonthPanel = () => {
     const ns = this.ns;
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const monthPanel = this.shadowRoot.querySelector(ns.ce("month-panel"));
+    const monthItems = this.#monthPanel.querySelectorAll(
+      `.${ns.e("month-item")}`
+    );
 
-    let html = "";
-    months.forEach((month, index) => {
-      const monthNum = index + 1;
+    monthItems.forEach(item => {
+      const monthNum = parseInt(item.dataset.month, 10);
       const isSelected =
         monthNum === this.#states.selectedMonth &&
         this.#states.currentDate.year() === this.#states.selectedYear;
-      html += `<button class='${ns.e("month-item")} ${isSelected ? ns.s("selected") : ""}' data-month='${monthNum}'>${month}</button>`;
-    });
 
-    monthPanel.innerHTML = html;
+      item.classList.toggle(ns.s("selected"), isSelected);
+    });
   };
 
   /**
@@ -442,7 +473,6 @@ export class EaDatePicker extends Base {
     this.#states.selectedYear = year;
     this.#states.currentDate = this.#states.currentDate.year(year);
 
-    // type为year时，不切换视图，直接完成选择
     if (this.type === "year") {
       this.#handleYearSelect(year);
     } else {
@@ -487,7 +517,6 @@ export class EaDatePicker extends Base {
     this.#states.selectedMonth = month;
     this.#states.currentDate = this.#states.currentDate.month(month - 1);
 
-    // type为month时，不切换视图，直接完成选择
     if (this.type === "month") {
       this.#handleMonthSelect(month);
     } else {
@@ -533,7 +562,6 @@ export class EaDatePicker extends Base {
       this.#renderMonthPanel();
     }
 
-    // 始终更新calendar的value以同步显示
     const dateStr = this.#states.currentDate.format("YYYY-MM-DD");
     this.#calendarElement.setAttribute("value", dateStr);
   };
@@ -578,7 +606,6 @@ export class EaDatePicker extends Base {
     if (this.disabled) return;
     this.#container.classList.toggle("is-open");
     if (this.#container.classList.contains("is-open")) {
-      // 根据type设置初始视图
       if (this.type === "year") {
         this.#switchToYearMode();
       } else if (this.type === "month") {
@@ -621,7 +648,6 @@ export class EaDatePicker extends Base {
       signal: this.#abortController.signal,
     });
 
-    // Header按钮事件
     this.#prevYearBtn.addEventListener("click", this.#onPrevYearClick, {
       signal: this.#abortController.signal,
     });
@@ -635,7 +661,6 @@ export class EaDatePicker extends Base {
       signal: this.#abortController.signal,
     });
 
-    // 年份/月份文本点击事件
     this.#yearBtn.addEventListener("click", this.#switchToYearMode, {
       signal: this.#abortController.signal,
     });
@@ -644,13 +669,11 @@ export class EaDatePicker extends Base {
       signal: this.#abortController.signal,
     });
 
-    // 年份面板点击事件
     const yearPanel = this.shadowRoot.querySelector(this.ns.ce("year-panel"));
     yearPanel.addEventListener("click", this.#onYearClick, {
       signal: this.#abortController.signal,
     });
 
-    // 月份面板点击事件
     const monthPanel = this.shadowRoot.querySelector(this.ns.ce("month-panel"));
     monthPanel.addEventListener("click", this.#onMonthClick, {
       signal: this.#abortController.signal,
