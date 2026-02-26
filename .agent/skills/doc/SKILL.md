@@ -296,6 +296,119 @@ description: 需要为某个组件编写文档时
 }
 ```
 
+---
+
+## JavaScript 代码风格规范
+
+### 示例代码组织方式
+
+文档中的 JavaScript 代码应使用对象模式组织，与 HTML 测试文件保持一致：
+
+```javascript
+<script setup>
+import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
+
+onMounted(() => {
+  // 示例 1
+  const example1 = {
+    element: document.getElementById("elementId"),
+
+    init() {
+      // 初始化逻辑
+      this.element.addEventListener("change", this.onChange);
+    },
+
+    onChange: (e) => {
+      // 事件处理
+      console.log(e.detail.value);
+    },
+  };
+  example1.init();
+
+  // 示例 2
+  const example2 = {
+    picker: document.getElementById("pickerId"),
+    valueEl: document.getElementById("valueId"),
+
+    onChange: (e) => {
+      const { target } = e;
+      this.valueEl.textContent = "Value: " + target.value;
+    },
+
+    init() {
+      this.picker.addEventListener("change", this.onChange);
+    },
+  };
+  example2.init();
+})
+</script>
+```
+
+### 代码风格要点
+
+1. **使用 `document.getElementById`** 获取 DOM 元素，不使用 Vue 的 `ref`
+2. **对象模式组织代码**：每个示例一个对象，包含 `init()` 方法
+3. **箭头函数定义事件处理**：`onChange: (e) => { ... }`
+4. **使用 `this` 访问对象属性**：在对象方法中使用 `this.element`
+5. **调用 `init()` 初始化**：每个示例对象最后调用 `init()`
+
+### HTML 属性使用
+
+示例中的 HTML 应使用 `id` 属性，不使用 `ref`：
+
+```html
+<!-- 正确 -->
+<ea-component id="myComponent"></ea-component>
+
+<!-- 错误 -->
+<ea-component ref="myComponent"></ea-component>
+```
+
+---
+
+## API 表格更新规范
+
+### Methods 表格
+
+当组件添加公共方法时，需要更新 Methods 表格：
+
+```markdown
+### Component Methods
+
+| 方法名 | 说明 | 参数 |
+| ------ | ---- | ---- |
+| focus | 使组件获取焦点 | — |
+| blur | 使组件失去焦点 | — |
+| handleOpen | 打开下拉面板 | — |
+| handleClose | 关闭下拉面板 | — |
+| setData | 设置数据 | (data: Array) |
+```
+
+### Events 表格
+
+当组件添加事件时，需要更新 Events 表格：
+
+```markdown
+### Component Events
+
+| 事件名 | 说明 | 回调参数(event.detail) |
+| ------ | ---- | ------------------------ |
+| change | 值改变时触发 | `{ value, label }` |
+| focus | 获得焦点时触发 | — |
+| blur | 失去焦点时触发 | — |
+| ea-visible-change | 可见性改变时触发 | `{ visible: boolean }` |
+| ea-panel-change | 面板改变时触发 | `{ date: Date, mode: string }` |
+```
+
+**注意**：
+- "ea-" 前缀的事件需要详细描述 event.detail 结构
+- 普通事件（如 focus, blur）无 detail 时写 "—"
+- 复杂对象类型需要注明属性类型
+
+---
+
 ## 输出要求
 
 - 所有内容使用 Markdown 格式编写
@@ -304,3 +417,4 @@ description: 需要为某个组件编写文档时
 - 合理使用折叠和分组展示代码
 - 确保文档结构清晰、易于阅读
 - **示例必须与 HTML 文件中的 `#region` 标记完全对齐**
+- **JavaScript 代码风格必须与 HTML 测试文件保持一致**

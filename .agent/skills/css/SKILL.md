@@ -547,6 +547,96 @@ $name: ea-component-name;
 
 ---
 
+## CSS 变量使用规范
+
+### 变量命名层级
+
+CSS 变量应遵循以下层级关系，避免嵌套引用：
+
+```scss
+// 正确：直接引用基础变量
+:host {
+  --#{$name}-bg-color: var(--grey-100);
+  --#{$name}-text-color: var(--grey-700);
+  --#{$name}-primary-color: var(--blue-500);
+}
+
+// 错误：避免嵌套变量引用
+:host {
+  --#{$name}-item-bg: var(--#{$name}-bg-color);  // 不要这样嵌套
+}
+```
+
+### 变量定义位置
+
+组件级变量应在 `:host` 选择器中定义：
+
+```scss
+:host {
+  // 尺寸变量
+  --#{$name}-height: 32px;
+  --#{$name}-height-small: 24px;
+  --#{$name}-height-large: 40px;
+
+  // 颜色变量
+  --#{$name}-bg-color: var(--grey-100);
+  --#{$name}-bg-color-hover: var(--grey-200);
+  --#{$name}-text-color: var(--grey-700);
+
+  // 其他变量
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-transition: var(--transition-fast);
+}
+```
+
+### 尺寸变体实现
+
+使用 CSS 变量切换尺寸变体：
+
+```scss
+:host {
+  --#{$name}-height: 32px;
+  --#{$name}-height-small: 24px;
+  --#{$name}-height-large: 40px;
+}
+
+@include block($name) {
+  height: var(--#{$name}-height);
+
+  @include modifier(small) {
+    --#{$name}-height: var(--#{$name}-height-small);
+  }
+
+  @include modifier(large) {
+    --#{$name}-height: var(--#{$name}-height-large);
+  }
+}
+```
+
+### 设计变量使用原则
+
+1. **优先使用基础变量**：
+   - 使用 `var(--blue-500)` 而不是硬编码 `#409eff`
+   - 使用 `var(--grey-200)` 而不是硬编码 `#e0e0e0`
+   - 使用 `var(--spacing-md)` 而不是硬编码 `8px`
+
+2. **组件变量命名**：
+   - 必须以 `--#{$name}-` 开头
+   - 使用有意义的描述性名称
+   - 避免缩写，保持可读性
+
+3. **变量引用规范**：
+   ```scss
+   // 正确
+   --#{$name}-rail-bg-color: var(--grey-200);
+   --#{$name}-thumb-border-color: var(--blue-300);
+
+   // 错误
+   --#{$name}-rail-bg-color: #e0e0e0;  // 硬编码。当不存在包含定义的变量时，才可以使用硬编码。
+   ```
+
+---
+
 ## 注意事项
 
 1. **变量化设计**：任何可能被用户自定义的样式属性都应提供 CSS 变量接口
@@ -555,6 +645,7 @@ $name: ea-component-name;
 4. **性能优化**：合理使用 CSS 过渡和变换，避免复杂选择器
 5. **兼容性**：确保使用的 CSS 特性在目标浏览器中得到支持
 6. **BEM 规范**：严格遵循 BEM 命名规范，保持代码一致性
+7. **避免嵌套变量**：不要创建引用其他组件变量的嵌套变量
 
 ---
 

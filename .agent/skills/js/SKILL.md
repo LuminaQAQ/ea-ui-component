@@ -38,13 +38,44 @@ export class EaComponent extends Base {
     return [...super.observedAttributes];
   }
 
-  state = this.properties({
-    disabled: {
-      type: Boolean,
-      default: false,
-      observer: () => this.updateContainerClasslist(),
+  attrState = this.properties({
+    attr: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
     },
   });
+
+  propStates = this.properties({
+    data: {
+      props: true,
+      type: Array,
+      default: [],
+      observer: newVal => {
+        this.#handleDataUpdate(newVal);
+      },
+    },
+  });
+
+  funcStates = this.properties({
+    fun: {
+      rawFunction: true,
+      props: true,
+      type: Function,
+      default: value => value => value,
+      observer: newVal => {
+        this.#handleDataUpdate(newVal);
+      },
+    },
+  });
+
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-component", {}, {});
+    this.#container.className = className;
+    return className;
+  }
 
   constructor() {
     super();
@@ -234,8 +265,8 @@ default: () => {
 }
 
 // 函数类型默认值（rawFunction: true）
-default: value => value
-default: index => index
+default: value => value => value
+default: index => index => index
 ```
 
 ### Observer 函数规范
@@ -558,6 +589,188 @@ $updateLocalization(locale) {
 
 ---
 
+## 自定义事件实现
+
+### 事件类定义规范
+
+对于 "ea-" 前缀的自定义事件，需要创建专用的事件类：
+
+#### 1. 创建事件类文件
+
+在 `events/` 目录下创建事件类文件：
+
+```typescript
+/**
+ * 组件可见性改变事件
+ * @event EaComponentFooEvent
+ * @property {boolean} visible - 当前可见状态
+ */
+export class EaComponentFooEvent extends Event {
+  readonly detail: EaComponentFooEventDetail;
+
+  constructor(detail: EaComponentFooEventDetail) {
+    super("ea-visible-change", {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+    });
+    this.detail = detail;
+  }
+}
+
+interface EaComponentFooEventDetail {
+  /** @description 当前可见状态 */
+  visible: boolean;
+}
+
+declare global {
+  interface GlobalEventHandlersEventMap {
+    "ea-visible-change": EaComponentFooEvent;
+  }
+}
+```
+
+#### 2. 在组件中导入和使用
+
+```javascript
+import { EaComponentFooEvent } from "./events/EaComponentFooEvent";
+
+export class EaComponent extends Base {
+  // ...
+
+  #onBar = () => {
+    this.dispatchEvent(new EaComponentFooEvent({ visible: true }));
+  };
+}
+```
+
+### 普通事件派发（this.emit）
+
+对于非 "ea-" 前缀的事件，使用 `this.emit` 方法：
+
+```javascript
+// 简单事件，无 detail
+this.emit("focus");
+this.emit("blur");
+
+// 带 detail 的事件
+this.emit("change", {
+  detail: {
+    value: newVal,
+    label: item.label,
+  },
+});
+```
+
+### 事件监听示例
+
+```javascript
+// 监听普通事件
+element.addEventListener("change", e => {
+  console.log(e.detail.value);
+});
+
+// 监听 ea- 前缀事件
+element.addEventListener("ea-visible-change", e => {
+  console.log(e.detail.visible);
+});
+```
+
+---
+
+## 国际化（i18n）实现
+
+### I18nManager 使用规范
+
+#### 1. 导入 I18nManager
+
+```javascript
+import { i18nManager } from "@/utils/I18nManager";
+```
+
+#### 2. 在组件中设置 locale
+
+```javascript
+export class EaComponent extends Base {
+  static get observedAttributes() {
+    return [...super.observedAttributes];
+  }
+
+  constructor() {
+    super();
+    this.$render();
+  }
+
+  $render() {
+    // 初始化时设置 locale
+    i18nManager.locale = this.locale;
+
+    // ...
+  }
+
+  /**
+   * 更新本地化
+   * @param {string} locale - 语言代码
+   */
+  $updateLocalization = locale => {
+    i18nManager.locale = locale;
+    dayjs.locale(locale.toLowerCase());
+
+    // 更新界面文本
+    const monthsShort = i18nManager.t("foo.bar");
+    // ... 更新 DOM 文本
+  };
+}
+```
+
+#### 3. 使用翻译
+
+```javascript
+// 获取翻译文本
+const monthsShort = i18nManager.t("calendar.monthsShort");
+const months = i18nManager.t("calendar.months");
+const weekdays = i18nManager.t("calendar.weekdays");
+
+// 在渲染时使用
+this.shadowRoot.innerHTML = this.html(`
+  <div class='${ns.e("month-panel")}'>
+    ${monthsShort
+      .map(
+        (month, i) =>
+          `<button class='${ns.e("month-item")}' data-month='${i + 1}'>${month}</button>`
+      )
+      .join("")}
+  </div>
+`);
+```
+
+#### 4. I18nManager 配置
+
+确保 `src/utils/I18nManager.js` 中包含所需的翻译键：
+
+```javascript
+const resources = {
+  "en-US": {
+    calendar: {
+      months: ["January", "February", ...],
+      monthsShort: ["Jan", "Feb", ...],
+      weekdays: ["Sunday", "Monday", ...],
+      weekdaysShort: ["Sun", "Mon", ...],
+    },
+  },
+  "zh-CN": {
+    calendar: {
+      months: ["一月", "二月", ...],
+      monthsShort: ["1月", "2月", ...],
+      weekdays: ["星期日", "星期一", ...],
+      weekdaysShort: ["日", "一", ...],
+    },
+  },
+};
+```
+
+---
+
 ## 生命周期管理
 
 ### 完整生命周期流程
@@ -633,11 +846,13 @@ $beforeUnmounted() {
   type: Boolean,
   default: false,
   observer: async newVal => {
+    // 等待子组件定义完成
     if (!this.#states.isInputNumberDefined) {
       await customElements.whenDefined("ea-input-number");
       this.#states.isInputNumberDefined = true;
     }
 
+    // 清理之前的事件监听
     this.#AbortControllerStates.input?.abort();
 
     if (newVal) {
@@ -776,13 +991,13 @@ $beforeUnmounted() {
 ```javascript
 #getValueFromPosition = position => {
   const rect = this.#rail.getBoundingClientRect();
-  const percentage = this.vertical
-    ? (position - rect.top) / rect.height
-    : (position - rect.left) / rect.width;
-  const clampedPercentage = Math.max(0, Math.min(1, percentage));
-  const value = this.min + clampedPercentage * (this.max - this.min);
-  const steppedValue = Math.round(value / this.step) * this.step;
-  return Math.max(this.min, Math.min(this.max, steppedValue));
+  const offset = this.vertical
+    ? rect.bottom - position
+    : position - rect.left;
+  const size = this.vertical ? rect.height : rect.width;
+  const percentage = Math.max(0, Math.min(1, offset / size));
+
+  return this.min + percentage * (this.max - this.min);
 };
 ```
 
