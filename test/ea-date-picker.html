@@ -207,5 +207,65 @@
     <!-- -------------------  -->
 
     <hr />
+
+    <!-- 公共方法测试 -->
+    <!-- #region -->
+    <h1>公共方法测试</h1>
+
+    <div class="demo">
+      <p>
+        <ea-date-picker
+          id="methodTestPicker"
+          type="date"
+          placeholder="Pick a Date"
+        ></ea-date-picker>
+      </p>
+      <p>
+        <button id="focusBtn">focus()</button>
+        <button id="blurBtn">blur()</button>
+        <button id="openBtn">handleOpen()</button>
+        <button id="closeBtn">handleClose()</button>
+      </p>
+    </div>
+
+    <script type="module">
+      const methodTestExample = {
+        picker: document.getElementById("methodTestPicker"),
+        focusBtn: document.getElementById("focusBtn"),
+        blurBtn: document.getElementById("blurBtn"),
+        openBtn: document.getElementById("openBtn"),
+        closeBtn: document.getElementById("closeBtn"),
+
+        init() {
+          this.focusBtn.addEventListener("click", () => {
+            this.picker.focus();
+            console.log("focus() called");
+          });
+
+          this.blurBtn.addEventListener("click", () => {
+            this.picker.blur();
+            console.log("blur() called");
+          });
+
+          this.openBtn.addEventListener("click", e => {
+            e.stopImmediatePropagation();
+            this.picker.handleOpen();
+            console.log("handleOpen() called");
+          });
+
+          this.closeBtn.addEventListener("click", e => {
+            e.stopImmediatePropagation();
+            this.picker.handleClose();
+            console.log("handleClose() called");
+          });
+        },
+      };
+
+      methodTestExample.init();
+    </script>
+    <!-- #endregion -->
+    <!-- end -->
+
+    <hr />
   </body>
 </html>
