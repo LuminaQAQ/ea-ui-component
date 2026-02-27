@@ -180,6 +180,30 @@ export class EaRadio extends FormAssociatedBase {
   $beforeUnmounted() {
     this.#abortController?.abort();
   }
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLInputElement}
+   */
+  get validationTarget() {
+    return this.#radio;
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  checkValidity() {
+    return this.#radio.checkValidity();
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  reportValidity() {
+    return this.#radio.reportValidity();
+  }
 }
 
 if (!window.customElements.get("ea-radio")) {

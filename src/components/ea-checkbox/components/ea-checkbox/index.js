@@ -216,6 +216,30 @@ export class EaCheckbox extends FormAssociatedBase {
   $beforeUnmounted() {
     this.#abortController?.abort();
   }
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this.#original;
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  checkValidity() {
+    return this.#original.checkValidity();
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  reportValidity() {
+    return this.#original.reportValidity();
+  }
 }
 
 if (!window.customElements.get("ea-checkbox")) {

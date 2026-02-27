@@ -29,6 +29,8 @@ export class EaInput extends FormAssociatedBase {
   #wordCount;
   /** @type {HTMLElement} */
   #append;
+  /** @type {HTMLElement} */
+  #label;
 
   /** @type {AbortController} */
   #abortController;
@@ -46,6 +48,8 @@ export class EaInput extends FormAssociatedBase {
 
   static get observedAttributes() {
     return EaUtils.Array.toLowerCamelCase([
+      ...super.observedAttributes,
+      "label",
       "type",
       "disabled",
       "value",
@@ -104,6 +108,14 @@ export class EaInput extends FormAssociatedBase {
   };
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
+        this.#label.textContent = newVal;
+      },
+    },
     type: {
       type: [
         "textarea",
@@ -514,32 +526,36 @@ export class EaInput extends FormAssociatedBase {
 
   $render() {
     this.shadowRoot.innerHTML = `
-      <div class="ea-input" part="container">
-        <div class="ea-input__prepend" part="prepend">
-          <slot name="prepend"></slot>
-        </div>
-        <div class="ea-input__inner" part="inner">
-          <span class="ea-input__prefix" part="prefix">
-            <slot name="prefix"></slot>
-          </span>
-          <span class="ea-input__original-wrapper" part="original-wrapper">
-          </span>
-          <span class="ea-input__suffix" part="suffix">
-            <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
-            <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
-            <span class="ea-input__suffix-icon" part="suffix-icon">
-              <slot name="suffix"></slot>
+      <label class="ea-input" part="container">
+        <span class="ea-input__label" part="label"></span>
+        <section class="ea-input__region" part="region">
+          <div class="ea-input__prepend" part="prepend">
+            <slot name="prepend"></slot>
+          </div>
+          <div class="ea-input__inner" part="inner">
+            <span class="ea-input__prefix" part="prefix">
+              <slot name="prefix"></slot>
             </span>
-            <span class="ea-input__word-count" part="count"></span>
-          </span>
-        </div>
-        <div class="ea-input__append" part="append">
-          <slot name="append"></slot>
-        </div>
+            <span class="ea-input__original-wrapper" part="original-wrapper">
+            </span>
+            <span class="ea-input__suffix" part="suffix">
+              <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
+              <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
+              <span class="ea-input__suffix-icon" part="suffix-icon">
+                <slot name="suffix"></slot>
+              </span>
+              <span class="ea-input__word-count" part="count"></span>
+            </span>
+          </div>
+          <div class="ea-input__append" part="append">
+            <slot name="append"></slot>
+          </div>
+        </section>
       </div>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-input");
+    this.#label = this.shadowRoot.querySelector(".ea-input__label");
     this.#prepend = this.shadowRoot.querySelector(".ea-input__prepend");
     this.#inner = this.shadowRoot.querySelector(".ea-input__inner");
     this.#prefixSlot = this.shadowRoot.querySelector(
@@ -723,6 +739,30 @@ export class EaInput extends FormAssociatedBase {
       this.#AbortControllerStates[key]?.abort();
       this.#AbortControllerStates[key] = null;
     }
+  }
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this.#original;
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  checkValidity() {
+    return this.#original.checkValidity();
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  reportValidity() {
+    return this.#original.reportValidity();
   }
 }
 

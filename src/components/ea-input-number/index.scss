@@ -1,6 +1,14 @@
 $name: ea-input-number;
-$ea-input-number-align-type: (left, center, right);
-$ea-input-number-size-type: (large, default, small);
+$ea-input-number-align-type: (
+  left,
+  center,
+  right
+);
+$ea-input-number-size-type: (
+  large,
+  default,
+  small
+);
 
 @mixin operator-disabled-style {
   cursor: not-allowed;
@@ -40,7 +48,7 @@ $ea-input-number-size-type: (large, default, small);
 }
 
 :host {
-  display: inline-block;
+  display: block;
 }
 
 :host([disabled]) {
@@ -48,6 +56,28 @@ $ea-input-number-size-type: (large, default, small);
 }
 
 @include block($name) {
+  box-sizing: border-box;
+  user-select: none;
+
+  display: inline-flex;
+  align-items: stretch;
+
+  width: calc(var(--#{$name}-default-width) - 2px);
+
+  border: 1px solid var(--#{$name}-border-color);
+
+  @include element(form-label) {
+    display: block;
+    padding-bottom: var(--spacing-md);
+
+    font-size: var(--font-size-md);
+    color: var(--grey-700);
+
+    &:empty {
+      display: none;
+    }
+  }
+
   box-sizing: border-box;
   user-select: none;
 

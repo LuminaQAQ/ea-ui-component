@@ -1,7 +1,25 @@
+:host {
+  display: block;
+}
+
 ::slotted(ea-radio) {
   margin-right: 4px;
 }
 
-.ea-radio-group {
+@include block(ea-radio-group) {
   display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+
+  @include element(form-label) {
+    display: block;
+    padding-bottom: var(--spacing-md);
+
+    font-size: var(--font-size-md);
+    color: var(--grey-700);
+
+    &:empty {
+      display: none;
+    }
+  }
 }

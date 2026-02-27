@@ -45,6 +45,7 @@ export class EaSelect extends FormAssociatedBase {
     return [
       ...super.observedAttributes,
       "name",
+      "label",
       "value",
       "placeholder",
       "disabled",
@@ -60,6 +61,14 @@ export class EaSelect extends FormAssociatedBase {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        await customElements.whenDefined("ea-input");
+        this.#input.setAttribute("label", newVal);
+      },
+    },
     name: {
       type: String,
       default: "",
@@ -648,6 +657,30 @@ export class EaSelect extends FormAssociatedBase {
     for (const key in this.#AbortControllerStates) {
       this.#AbortControllerStates[key]?.abort();
     }
+  }
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this.#input;
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  checkValidity() {
+    return this.#input.checkValidity();
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  reportValidity() {
+    return this.#input.reportValidity();
   }
 }
 

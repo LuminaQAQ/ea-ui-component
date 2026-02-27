@@ -6,6 +6,8 @@ import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 export class EaRate extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
+  /** @type {HTMLElement} */
+  #label;
 
   /** @type {AbortController} */
   #abortController = new AbortController();
@@ -28,16 +30,16 @@ export class EaRate extends FormAssociatedBase {
     label: {
       type: String,
       default: "",
-      observer: () => {},
+      observer: async newVal => {
+        this.#label.textContent = newVal;
+      },
     },
     value: {
       type: Number,
       default: 0,
       observer: newVal => {
-        const displayValue = Math.max(newVal - 1, 0);
-
-        this.setValue(displayValue);
-        this.#setRateStatus(displayValue);
+        this.setValue(newVal);
+        this.#setRateStatus(newVal - 1);
       },
     },
     max: {
@@ -119,9 +121,11 @@ export class EaRate extends FormAssociatedBase {
 
   $render() {
     this.shadowRoot.innerHTML = `
+      <label class="ea-rate__label" part="label"></label>
       <div class='ea-rate' part='container'></div>
     `;
 
+    this.#label = this.shadowRoot.querySelector(".ea-rate__label");
     this.#container = this.shadowRoot.querySelector(".ea-rate");
 
     this.#renderRateEl(this.getSymbol);

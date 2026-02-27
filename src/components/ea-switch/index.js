@@ -14,6 +14,8 @@ export class EaSwitch extends FormAssociatedBase {
   #labelRightSlot;
   /** @type {HTMLElement} */
   #labelLeftSlot;
+  /** @type {HTMLElement} */
+  #label;
 
   /** @type {AbortController} */
   #abortController;
@@ -28,6 +30,7 @@ export class EaSwitch extends FormAssociatedBase {
       "value",
       "active-value",
       "inactive-value",
+      "label",
 
       "size",
       "inactive-text",
@@ -40,6 +43,13 @@ export class EaSwitch extends FormAssociatedBase {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        this.#label.textContent = newVal;
+      },
+    },
     name: {
       type: String,
       default: "",
@@ -230,18 +240,22 @@ export class EaSwitch extends FormAssociatedBase {
 
   $render() {
     this.shadowRoot.innerHTML = `
-      <label class="ea-switch" part="container">
-        <input class="ea-switch__original" type="checkbox" part="original" />
-        <span class="ea-switch__label label-left" part="label-left">
-          <slot name="inactive"></slot>
-        </span>
-        <span class="ea-switch__inner" part="switch"></span>
-        <span class="ea-switch__label label-right" part="label-right">
-          <slot name="active"></slot>
-        </span>
+      <label class="ea-switch-wrapper" part="wrapper">
+        <span class="ea-switch__form-label" part="label form-label"></span>
+        <section class="ea-switch" part="container">
+          <input class="ea-switch__original" type="checkbox" part="original" />
+          <span class="ea-switch__label label-left" part="label-left">
+            <slot name="inactive"></slot>
+          </span>
+          <span class="ea-switch__inner" part="switch"></span>
+          <span class="ea-switch__label label-right" part="label-right">
+            <slot name="active"></slot>
+          </span>
+        </section>
       </label>
     `;
 
+    this.#label = this.shadowRoot.querySelector(".ea-switch__form-label");
     this.#container = this.shadowRoot.querySelector(".ea-switch");
     this.#originalInput = this.shadowRoot.querySelector(".ea-switch__original");
     this.#innerInput = this.shadowRoot.querySelector(".ea-switch__inner");
@@ -298,6 +312,30 @@ export class EaSwitch extends FormAssociatedBase {
   $unmounted() {
     this.#abortController?.abort();
     this.#beforeChangeAbortController?.abort();
+  }
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLInputElement}
+   */
+  get validationTarget() {
+    return this.#originalInput;
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  checkValidity() {
+    return this.#originalInput.checkValidity();
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  reportValidity() {
+    return this.#originalInput.reportValidity();
   }
 }
 

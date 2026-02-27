@@ -62,6 +62,7 @@ export class EaDatePicker extends Base {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "label",
       "width",
       "value",
       "placeholder",
@@ -74,6 +75,14 @@ export class EaDatePicker extends Base {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        await customElements.whenDefined("ea-input");
+        this.#inputElement.label = newVal;
+      },
+    },
     width: {
       type: String,
       default: "auto",

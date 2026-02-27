@@ -21,6 +21,8 @@ export class EaSlider extends FormAssociatedBase {
   #marks;
   /** @type {HTMLElement} */
   #input;
+  /** @type {HTMLElement} */
+  #label;
 
   /** @type {AbortController} */
   #abortController = new AbortController();
@@ -40,6 +42,7 @@ export class EaSlider extends FormAssociatedBase {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "label",
       "value",
       "min",
       "max",
@@ -55,6 +58,13 @@ export class EaSlider extends FormAssociatedBase {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        this.#label.textContent = newVal;
+      },
+    },
     value: {
       type: Number,
       default: 0,
@@ -228,6 +238,7 @@ export class EaSlider extends FormAssociatedBase {
     this.ns = ns;
 
     this.shadowRoot.innerHTML = `
+      <label class='${ns.e("form-label")}' part='form-label'></label>
       <div class='${ns.b()}' part='container'>
         <div class='${ns.e("runway")}' part='runway'>
           <div class='${ns.e("rail")}' part='rail'></div>
@@ -241,6 +252,7 @@ export class EaSlider extends FormAssociatedBase {
       </div>
     `;
 
+    this.#label = this.shadowRoot.querySelector(ns.ce("form-label"));
     this.#container = this.shadowRoot.querySelector(ns.cb());
     this.#rail = this.shadowRoot.querySelector(ns.ce("rail"));
     this.#trigger = this.shadowRoot.querySelector(ns.ce("trigger"));

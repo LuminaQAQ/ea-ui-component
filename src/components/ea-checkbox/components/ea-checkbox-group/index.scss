@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+@include block(ea-checkbox-group) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+
+  @include element(form-label) {
+    display: block;
+    padding-bottom: var(--spacing-md);
+
+    font-size: var(--font-size-md);
+    color: var(--grey-700);
+
+    &:empty {
+      display: none;
+    }
+  }
+}

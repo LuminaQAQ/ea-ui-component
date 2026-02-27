@@ -24,6 +24,8 @@ export class EaColorPicker extends FormAssociatedBase {
   #statusIcon;
   /** @type {import("@/components/ea-color-picker-panel").EaColorPickerPanel} */
   #panel;
+  /** @type {HTMLLabelElement} */
+  #label;
 
   /** @type {import("@/components/ea-button").EaButton} */
   #clearBtn;
@@ -51,6 +53,7 @@ export class EaColorPicker extends FormAssociatedBase {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "label",
       "value",
       "disabled",
       "clearable",
@@ -65,6 +68,13 @@ export class EaColorPicker extends FormAssociatedBase {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        this.#label.textContent = newVal;
+      },
+    },
     value: {
       type: String,
       default: "",
@@ -175,6 +185,7 @@ export class EaColorPicker extends FormAssociatedBase {
     this.ns = ns;
 
     this.shadowRoot.innerHTML = this.html(`
+      <label class="${ns.e("label")}" part="label"></label>
       <div class="${ns.b("container")}" part="container" tabindex="${this.tabindex}">
         <ea-popper 
           class="${ns.e("popper")}" 
@@ -199,6 +210,7 @@ export class EaColorPicker extends FormAssociatedBase {
       </div>
     `);
 
+    this.#label = this.shadowRoot.querySelector(ns.ce("label"));
     this.#container = this.shadowRoot.querySelector(ns.cb());
     this.#popper = this.shadowRoot.querySelector(ns.ce("popper"));
     this.#trigger = this.shadowRoot.querySelector(ns.ce("trigger"));

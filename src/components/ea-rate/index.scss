@@ -1,5 +1,9 @@
 $name: ea-rate;
-$ea-rate-size-type: (small, default, large);
+$ea-rate-size-type: (
+  small,
+  default,
+  large
+);
 
 :host {
   --#{$name}-spacing: 2px;
@@ -39,6 +43,18 @@ $ea-rate-size-type: (small, default, large);
 
   cursor: pointer;
 
+  @include element(label) {
+    display: block;
+    padding-bottom: var(--spacing-md);
+
+    font-size: var(--font-size-md);
+    color: var(--grey-700);
+
+    &:empty {
+      display: none;
+    }
+  }
+
   @include element(symbol) {
     display: block;
 
@@ -60,9 +76,8 @@ $ea-rate-size-type: (small, default, large);
       transform: scale(1.2);
     }
 
-    transition:
-      color var(--transition-normal),
-      transform var(--transition-normal);
+    transition: color var(--transition-normal),
+    transform var(--transition-normal);
   }
 
   @each $size in $ea-rate-size-type {

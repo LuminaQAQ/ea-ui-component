@@ -22,8 +22,7 @@ $ea-slider-size-types: (
 }
 
 :host {
-  display: inline-block;
-  width: 100%;
+  display: block;
 }
 
 @include block($name) {
@@ -32,6 +31,18 @@ $ea-slider-size-types: (
   box-sizing: border-box;
   padding: 0 var(--#{$name}-thumb-size);
   width: 100%;
+
+  @include element(form-label) {
+    display: block;
+    padding-bottom: var(--spacing-md);
+
+    font-size: var(--font-size-md);
+    color: var(--grey-700);
+
+    &:empty {
+      display: none;
+    }
+  }
 
   @include element(runway) {
     position: relative;

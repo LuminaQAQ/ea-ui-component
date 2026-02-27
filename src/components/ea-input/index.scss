@@ -46,6 +46,7 @@
 ::slotted([slot="prefix"]) {
   margin-right: 8px;
 }
+
 ::slotted([slot="suffix"]) {
   margin-left: 4px;
 }
@@ -69,8 +70,23 @@
 @include block(ea-input) {
   position: relative;
   display: flex;
+  flex-direction: column;
 
-  transition: box-shadow var(--ea-input-transition);
+  @include element(region) {
+    display: flex;
+    align-items: center;
+  }
+
+  @include element(label) {
+    padding-bottom: var(--spacing-md);
+
+    font-size: var(--ea-input-font-size);
+    color: var(--ea-input-text-color);
+
+    &:empty {
+      display: none;
+    }
+  }
 
   @include element(inner) {
     flex: 1;
@@ -214,8 +230,7 @@
   }
 
   @include modifier(has-prepend) {
-    --ea-input-border-radius: 0 var(--border-radius-sm) var(--border-radius-sm)
-      0;
+    --ea-input-border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
 
     .ea-input__prepend {
       @include outside-slot-style;
@@ -228,8 +243,7 @@
   }
 
   @include modifier(has-append) {
-    --ea-input-border-radius: var(--border-radius-sm) 0 0
-      var(--border-radius-sm);
+    --ea-input-border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
 
     .ea-input__append {
       @include outside-slot-style;
@@ -259,9 +273,5 @@
 
   &.ea-input--has-prepend.ea-input--has-append {
     --ea-input-border-radius: 0;
-  }
-
-  &:hover {
-    box-shadow: var(--ea-input-box-shadow);
   }
 }

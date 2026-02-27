@@ -11,6 +11,8 @@ export class EaInputNumber extends FormAssociatedBase {
   #operatorMinus;
   /** @type {HTMLElement} */
   #operatorPlus;
+  /** @type {HTMLLabelElement} */
+  #label;
 
   /** @type {AbortController} */
   #abortController = new AbortController();
@@ -19,6 +21,7 @@ export class EaInputNumber extends FormAssociatedBase {
     return [
       ...super.observedAttributes,
       "value",
+      "label",
       "value-on-clear",
 
       "min",
@@ -41,6 +44,13 @@ export class EaInputNumber extends FormAssociatedBase {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        this.#label.textContent = newVal;
+      },
+    },
     value: {
       type: Number,
       default: 0,
@@ -226,6 +236,7 @@ export class EaInputNumber extends FormAssociatedBase {
 
   $render() {
     this.shadowRoot.innerHTML = `
+      <label class="ea-input-number__form-label" part="form-label"></label>
       <div class='ea-input-number' part='container'>
         <ea-icon class="ea-input-number__operator decrease" part="decrease" icon="icon-minus"></ea-icon>
         <span class="ea-input-number__prefix" part="prefix">
@@ -239,6 +250,7 @@ export class EaInputNumber extends FormAssociatedBase {
       </div>
     `;
 
+    this.#label = this.shadowRoot.querySelector(".ea-input-number__form-label");
     this.#container = this.shadowRoot.querySelector(".ea-input-number");
     this.#inputEl = this.shadowRoot.querySelector(".ea-input-number__inner");
     this.#operatorMinus = this.shadowRoot.querySelector(

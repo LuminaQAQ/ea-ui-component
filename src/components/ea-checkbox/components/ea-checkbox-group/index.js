@@ -7,6 +7,8 @@ export class EaCheckboxGroup extends Base {
   #container;
   /** @type {HTMLSlotElement} */
   #defaultSlot;
+  /** @type {HTMLLabelElement} */
+  #label;
 
   /** @type {AbortController} */
   #abortController = new AbortController();
@@ -14,6 +16,7 @@ export class EaCheckboxGroup extends Base {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "label",
       "name",
       "value",
       "disabled",
@@ -24,6 +27,13 @@ export class EaCheckboxGroup extends Base {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#label.textContent = newVal;
+      },
+    },
     name: {
       type: String,
       default: "",
@@ -96,11 +106,15 @@ export class EaCheckboxGroup extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
+      <label class='ea-checkbox-group__form-label' part='form-label'></label>
       <div class='ea-checkbox-group' part='container'>
         <slot></slot>
       </div>
     `;
 
+    this.#label = this.shadowRoot.querySelector(
+      ".ea-checkbox-group__form-label"
+    );
     this.#container = this.shadowRoot.querySelector(".ea-checkbox-group");
     this.#defaultSlot = this.shadowRoot.querySelector("slot");
   }

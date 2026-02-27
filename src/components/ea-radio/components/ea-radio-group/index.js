@@ -8,6 +8,8 @@ export class EaRadioGroup extends Base {
   #container;
   /** @type {HTMLSlotElement} */
   #defaultSlot;
+  /** @type {HTMLLabelElement} */
+  #label;
 
   /** @type {AbortController} */
   #abortController;
@@ -15,6 +17,7 @@ export class EaRadioGroup extends Base {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "label",
       "name",
       "value",
       "border",
@@ -24,6 +27,13 @@ export class EaRadioGroup extends Base {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#label.textContent = newVal;
+      },
+    },
     name: {
       type: String,
       default: "",
@@ -79,11 +89,13 @@ export class EaRadioGroup extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
+      <label class='ea-radio-group__form-label' part='form-label'></label>
       <div class='ea-radio-group' part='container' role='radiogroup'>
         <slot></slot>
       </div>
     `;
 
+    this.#label = this.shadowRoot.querySelector(".ea-radio-group__form-label");
     this.#container = this.shadowRoot.querySelector(".ea-radio-group");
     this.#defaultSlot = this.#container.querySelector("slot");
   }

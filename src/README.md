@@ -17,10 +17,10 @@
 - [ ] Autocomplete 自动补全输入框
 - [ ] Cascader 级联选择器
 - [x] Checkbox 多选框
-- [ ] ColorPickerPanel 颜色选择器面板
-- [ ] Color Picker 颜色选择器
+- [x] ColorPickerPanel 颜色选择器面板
+- [x] Color Picker 颜色选择器
 - [ ] Date Picker Panel 日期选择器面板
-- [ ] Date Picker 日期选择器
+- [x] Date Picker 日期选择器
 - [ ] DateTime Picker 日期时间选择器
 - [ ] Form 表单组件
 - [x] Input 输入框
@@ -29,12 +29,12 @@
 - [ ] Mention 提及
 - [x] Radio 单选框
 - [x] Rate 评分
-- [ ] Select 选择器
-- [ ] Slider 滑块
+- [x] Select 选择器
+- [x] Slider 滑块
 - [x] Switch 开关
-- [ ] Time Picker 时间选择器
+- [x] Time Picker 时间选择器
 - [ ] Time Select 时间选择
-- [ ] Transfer 穿梭框
+- [x] Transfer 穿梭框
 - [ ] TreeSelect 树形选择
 - [ ] Upload 上传器
 
@@ -42,7 +42,7 @@
 
 - [x] Avatar 头像
 - [x] Badge 徽章
-- [ ] Calendar 日历
+- [x] Calendar 日历
 - [x] Card 卡片
 - [x] Carousel 走马灯
 - [x] Collapse 折叠面板
@@ -54,11 +54,11 @@
 - [x] Progress 进度条
 - [x] Result 结果
 - [x] Skeleton 骨架屏
-- [ ] Table 表格
+- [x] Table 表格
 - [x] Tag 标签
 - [x] Timeline 时间线
 - [x] Tour 漫游式引导
-- [ ] Tree 树形控件
+- [x] Tree 树形控件
 - [x] Statistic 统计组件
 - [x] Segmented 分段控制器
 

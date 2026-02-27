@@ -28,7 +28,7 @@ $name: ea-color-picker;
 }
 
 :host {
-  display: inline-block;
+  display: block;
 }
 
 @include block($name) {
@@ -36,6 +36,18 @@ $name: ea-color-picker;
 
   &:hover {
     border-color: var(--grey-400);
+  }
+
+  @include element(form-label) {
+    display: block;
+    padding-bottom: var(--spacing-md);
+
+    font-size: var(--font-size-md);
+    color: var(--grey-700);
+
+    &:empty {
+      display: none;
+    }
   }
 
   @include element(trigger) {

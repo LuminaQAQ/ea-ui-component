@@ -38,6 +38,7 @@ export class EaTimePicker extends FormAssociatedBase {
   static get observedAttributes() {
     return [
       ...super.observedAttributes,
+      "label",
       "value",
       "width",
       "size",
@@ -49,6 +50,14 @@ export class EaTimePicker extends FormAssociatedBase {
   }
 
   state = this.properties({
+    label: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        await customElements.whenDefined("ea-input");
+        this.#input.label = newVal;
+      },
+    },
     value: {
       type: String,
       default: "",
