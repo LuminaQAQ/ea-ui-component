@@ -1,110 +1,161 @@
-.ea-time-picker_wrap {
-  position: relative;
+$name: ea-time-picker;
 
-  .ea-time-picker_dropdown-wrap {
+$ea-time-picker-sizes: small, large;
+
+$ea-time-picker-align-types: left, center, right;
+
+:host {
+  --#{$name}-dropdown-bg-color: var(--color-white);
+  --#{$name}-dropdown-shadow: var(--box-shadow-lg);
+  --#{$name}-dropdown-border-color: var(--grey-200);
+  --#{$name}-item-height: 32px;
+  --#{$name}-item-font-size: var(--font-size-sm);
+  --#{$name}-item-color: var(--grey-700);
+  --#{$name}-item-active-color: var(--blue-500);
+  --#{$name}-item-disabled-color: var(--grey-400);
+  --#{$name}-item-hover-bg-color: var(--grey-100);
+  --#{$name}-transition: var(--transition-normal);
+  --#{$name}-dropdown-max-height: 190px;
+  --#{$name}-dropdown-padding: var(--spacing-lg);
+  --#{$name}-width: auto;
+
+  --#{$name}-item-height-small: 24px;
+  --#{$name}-item-height-large: 40px;
+  --#{$name}-item-font-size-small: var(--font-size-xs);
+  --#{$name}-item-font-size-large: var(--font-size-md);
+  --#{$name}-dropdown-max-height-small: 150px;
+  --#{$name}-dropdown-max-height-large: 230px;
+}
+
+:host {
+  display: inline-block;
+}
+
+@include block($name) {
+  position: relative;
+  width: var(--#{$name}-width);
+
+  @include state(open) {
+    .#{$name}__dropdown {
+      transform: translateY(100%) scaleY(1);
+    }
+  }
+
+  @include state(disabled) {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  @include element(input) {
+    width: 100%;
+  }
+
+  @include element(dropdown) {
+    width: 100%;
     position: absolute;
     bottom: -12px;
     left: 0;
     transform-origin: center top;
     transform: translateY(100%) scaleY(0);
+    transition: transform var(--#{$name}-transition) ease-in-out;
 
     box-sizing: border-box;
 
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--#{$name}-dropdown-bg-color);
+    box-shadow: var(--#{$name}-dropdown-shadow);
+    border-radius: var(--border-radius);
 
     z-index: 2;
+  }
 
-    &::before {
+  @include element(dropdown-inner-wrap) {
+    display: flex;
+    position: relative;
+    margin: var(--#{$name}-dropdown-padding) 0;
+
+    &::before,
+    &::after {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0.5rem;
-      border: 0.5rem solid transparent;
-      border-bottom-color: #fff;
+      left: 0;
 
-      transform: translateY(-100%);
+      transform: translateY(-50%);
+
+      width: 100%;
     }
 
-    .ea-time-picker_dropdown-inner-wrap {
-      display: flex;
-      position: relative;
-      margin: 1rem 0;
-
-      &::before,
-      &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-
-        transform: translateY(-50%);
-
-        width: 100%;
-      }
-
-      &::before {
-        top: calc(50% - 16px);
-        border-bottom: 1px solid #e4e7ed;
-      }
-
-      &::after {
-        top: calc(50% + 16px);
-        border-bottom: 1px solid #e4e7ed;
-      }
-
-      .ea-time-picker_dropdown-inner {
-        flex: 1;
-        max-height: 190px;
-
-        box-sizing: border-box;
-        padding: 5rem 0;
-
-        text-align: center;
-
-        overflow: auto;
-        scrollbar-width: none;
-
-        margin-block-start: 0;
-        margin-block-end: 0;
-        margin-inline-start: 0px;
-        margin-inline-end: 0px;
-        padding-inline-start: 0px;
-        list-style-type: none;
-
-        .ea-time-picker_dropdown-item {
-          height: 32px;
-          line-height: 32px;
-          font-size: 12px;
-          color: #606266;
-          transition: color 0.3s;
-
-          &.is-active {
-            color: #409eff;
-          }
-
-          &.is-disabled {
-            color: #c0c4cc;
-          }
-        }
-      }
+    &::before {
+      top: calc(50% - var(--#{$name}-item-height) / 2);
+      border-bottom: 1px solid var(--#{$name}-dropdown-border-color);
     }
 
-    .ea-time-picker_dropdown-button-group {
-      text-align: right;
-      box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    &::after {
+      top: calc(50% + var(--#{$name}-item-height) / 2);
+      border-bottom: 1px solid var(--#{$name}-dropdown-border-color);
     }
   }
 
-  &.is-open {
-    .ea-time-picker_dropdown-wrap {
-      transform: translateY(100%) scaleY(1);
+  @include element(dropdown-inner) {
+    flex: 1;
+    max-height: var(--#{$name}-dropdown-max-height);
+
+    box-sizing: border-box;
+    padding: calc(var(--#{$name}-dropdown-max-height) / 2 - var(--#{$name}-item-height) / 2) 0;
+
+    text-align: center;
+
+    overflow: auto;
+    scrollbar-width: none;
+
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 0px;
+    list-style-type: none;
+  }
+
+  @include element(dropdown-item) {
+    height: var(--#{$name}-item-height);
+    line-height: var(--#{$name}-item-height);
+    font-size: var(--#{$name}-item-font-size);
+    color: var(--#{$name}-item-color);
+    transition: color var(--#{$name}-transition);
+    cursor: pointer;
+
+    &:hover:not(.is-disabled) {
+      background-color: var(--#{$name}-item-hover-bg-color);
+    }
+
+    &.is-active {
+      color: var(--#{$name}-item-active-color);
+      font-weight: var(--font-weight-bold);
+    }
+
+    &.is-disabled {
+      color: var(--#{$name}-item-disabled-color);
+      cursor: not-allowed;
     }
   }
 
-  &.with-transition {
-    .ea-time-picker_dropdown-wrap {
-      transition: transform 0.3s ease-in-out;
+  @each $size in $ea-time-picker-sizes {
+    @include modifier(#{$size}) {
+      --#{$name}-item-height: var(--#{$name}-item-height-#{$size});
+      --#{$name}-item-font-size: var(--#{$name}-item-font-size-#{$size});
+      --#{$name}-dropdown-max-height: var(--#{$name}-dropdown-max-height-#{$size});
+
+      .#{$name}__input {
+        --input-height: var(--input-height-#{$size});
+        --input-font-size: var(--input-font-size-#{$size});
+      }
+    }
+  }
+
+  @each $type in $ea-time-picker-align-types {
+    @include state(align-#{$type}) {
+      .#{$name}__input::part(original) {
+        text-align: #{$type};
+      }
     }
   }
 }

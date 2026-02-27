@@ -1,21 +1,78 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
 onMounted(() => {
-    import('./index.scss')
-    
-    import('../components/ea-icon/index.js')
-    import('../components/ea-icon/index.css')
-    
-    import('../components/ea-time-picker/index.js')
+  
+      const basicExample = {
+        sizeSegmented: document.getElementById("sizeSegmented"),
+        defaultTimePicker: document.getElementById("defaultTimePicker"),
+        valueTimePicker: document.getElementById("valueTimePicker"),
+        disabledTimePicker: document.getElementById("disabledTimePicker"),
+        centerTimePicker: document.getElementById("centerTimePicker"),
 
-    
-    const basicTimePicker = document.querySelector('#basicTimePicker');
-    basicTimePicker.addEventListener('change', (e) => {
-        console.log(e.detail);
-    });
+        init() {
+          this.sizeSegmented.options = ["small", "default", "large"];
+
+          this.sizeSegmented.addEventListener("change", e => {
+            this.defaultTimePicker.size = e.detail.value;
+            this.valueTimePicker.size = e.detail.value;
+            this.disabledTimePicker.size = e.detail.value;
+            this.centerTimePicker.size = e.detail.value;
+          });
+        },
+      };
+
+      basicExample.init();
+
+  const eventExample = {
+    eventTimePicker: document.getElementById("eventTimePicker"),
+    changeValue: document.getElementById("changeValue"),
+
+    init() {
+      this.eventTimePicker.addEventListener("change", e => {
+        this.changeValue.textContent = "Value: " + e.detail.value;
+      });
+    },
+  };
+
+  eventExample.init();
 })
 </script>
+
+<style>
+.demo-time-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.demo-time-picker .block {
+  flex: 1;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 1.5rem;
+}
+
+.demo-time-picker .demonstration {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 14px;
+  text-align: center;
+  color: #606266;
+}
+
+.demo-time-picker .demonstration:first-child {
+  font-weight: 600;
+  color: #303133;
+}
+
+.demo-time-picker ea-time-picker {
+  width: 100%;
+}
+</style>
 
 # TimePicker 时间选择器
 
@@ -46,126 +103,343 @@ onMounted(() => {
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#time-picker-css-part)。
 
 ## 任意时间点
 
 可以选择任意时间
 
 <div class="demo">
-    <ea-time-picker id="basicTimePicker" time="11:11:11"></ea-time-picker>
+  <p>
+    <ea-segmented id="sizeSegmented" value="default"></ea-segmented>
+  </p>
+  <div class="demo-time-picker">
+    <div class="block">
+      <span class="demonstration">Default</span>
+      <ea-time-picker
+        id="defaultTimePicker"
+        placeholder="Select time"
+      ></ea-time-picker>
+    </div>
+    <div class="block">
+      <span class="demonstration">With Value</span>
+      <ea-time-picker
+        id="valueTimePicker"
+        value="08:00:00"
+        placeholder="Select time"
+      ></ea-time-picker>
+    </div>
+    <div class="block">
+      <span class="demonstration">Disabled</span>
+      <ea-time-picker
+        id="disabledTimePicker"
+        value="12:30:00"
+        disabled
+      ></ea-time-picker>
+    </div>
+    <div class="block">
+      <span class="demonstration">Center Aligned</span>
+      <ea-time-picker
+        id="centerTimePicker"
+        value="18:45:30"
+        align="center"
+      ></ea-time-picker>
+    </div>
+  </div>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
 
-`html`
+::: code-group
 
 ```html
 <div class="demo">
-  <ea-time-picker id="basicTimePicker" time="11:11:11"></ea-time-picker>
+  <p>
+    <ea-segmented id="sizeSegmented" value="default"></ea-segmented>
+  </p>
+  <div class="demo-time-picker">
+    <div class="block">
+      <span class="demonstration">Default</span>
+      <ea-time-picker
+        id="defaultTimePicker"
+        placeholder="Select time"
+      ></ea-time-picker>
+    </div>
+    <div class="block">
+      <span class="demonstration">With Value</span>
+      <ea-time-picker
+        id="valueTimePicker"
+        value="08:00:00"
+        placeholder="Select time"
+      ></ea-time-picker>
+    </div>
+    <div class="block">
+      <span class="demonstration">Disabled</span>
+      <ea-time-picker
+        id="disabledTimePicker"
+        value="12:30:00"
+        disabled
+      ></ea-time-picker>
+    </div>
+    <div class="block">
+      <span class="demonstration">Center Aligned</span>
+      <ea-time-picker
+        id="centerTimePicker"
+        value="18:45:30"
+        align="center"
+      ></ea-time-picker>
+    </div>
+  </div>
 </div>
 ```
 
-`js`: `change` 事件
+```css
+.demo-time-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.demo-time-picker .block {
+  flex: 1;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 1.5rem;
+}
+
+.demo-time-picker .demonstration {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 14px;
+  text-align: center;
+  color: #606266;
+}
+
+.demo-time-picker .demonstration:first-child {
+  font-weight: 600;
+  color: #303133;
+}
+
+.demo-time-picker ea-time-picker {
+  width: 100%;
+}
+```
 
 ```js
-const basicTimePicker = document.querySelector("#basicTimePicker");
-basicTimePicker.addEventListener("change", (e) => {
-  console.log(e.detail);
-});
+const basicExample = {
+  sizeSegmented: document.getElementById("sizeSegmented"),
+  defaultTimePicker: document.getElementById("defaultTimePicker"),
+  valueTimePicker: document.getElementById("valueTimePicker"),
+  disabledTimePicker: document.getElementById("disabledTimePicker"),
+  centerTimePicker: document.getElementById("centerTimePicker"),
+
+  init() {
+    this.sizeSegmented.options = ["small", "default", "large"];
+
+    this.sizeSegmented.addEventListener("change", e => {
+      this.defaultTimePicker.size = e.detail.value;
+      this.valueTimePicker.size = e.detail.value;
+      this.disabledTimePicker.size = e.detail.value;
+      this.centerTimePicker.size = e.detail.value;
+    });
+  },
+};
+
+basicExample.init();
 ```
 
 :::
 
-## 禁用状态
+::::
 
-通过设置 `disabled` 属性，可以禁用时间选择器
+## 限制时间选择范围
 
-<div class="demo">
-    <ea-time-picker time="8:0:0" disabled></ea-time-picker>
+可以限制时间选择的范围
+
+<div class="demo demo-time-picker">
+  <div class="block">
+    <span class="demonstration">Limited Range (09:00 - 18:00)</span>
+    <ea-time-picker
+      placeholder="Select time"
+      limit-range-start="09:00:00"
+      limit-range-end="18:00:00"
+    ></ea-time-picker>
+  </div>
+  <div class="block">
+    <span class="demonstration">Limited Range (12:30 - 14:30)</span>
+    <ea-time-picker
+      placeholder="Select time"
+      limit-range-start="12:30:00"
+      limit-range-end="14:30:00"
+    ></ea-time-picker>
+  </div>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
 
-`html`
+::: code-group
 
 ```html
-<div class="demo">
-  <ea-time-picker time="8:0:0" disabled></ea-time-picker>
+<div class="demo demo-time-picker">
+  <div class="block">
+    <span class="demonstration">Limited Range (09:00 - 18:00)</span>
+    <ea-time-picker
+      placeholder="Select time"
+      limit-range-start="09:00:00"
+      limit-range-end="18:00:00"
+    ></ea-time-picker>
+  </div>
+  <div class="block">
+    <span class="demonstration">Limited Range (12:30 - 14:30)</span>
+    <ea-time-picker
+      placeholder="Select time"
+      limit-range-start="12:30:00"
+      limit-range-end="14:30:00"
+    ></ea-time-picker>
+  </div>
 </div>
+```
+
+```css
+.demo-time-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.demo-time-picker .block {
+  flex: 1;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 1.5rem;
+}
+
+.demo-time-picker .demonstration {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 14px;
+  text-align: center;
+  color: #606266;
+}
 ```
 
 :::
 
-## 对齐方式
+::::
 
-通过设置 `align` 属性，可以设置时间选择器的对齐方式
+## 事件监听
 
-<div class="demo">
-    <ea-time-picker time="8:0:0" align="center"></ea-time-picker>
+监听时间选择器的事件
+
+<div class="demo demo-time-picker">
+  <div class="block">
+    <span class="demonstration">Change Event</span>
+    <div class="demonstration" id="changeValue">Value: -</div>
+    <ea-time-picker id="eventTimePicker" placeholder="Select time"></ea-time-picker>
+  </div>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
 
-`html`
+::: code-group
 
 ```html
-<div class="demo">
-  <ea-time-picker time="8:0:0" align="center"></ea-time-picker>
+<div class="demo demo-time-picker">
+  <div class="block">
+    <span class="demonstration">Change Event</span>
+    <div class="demonstration" id="changeValue">Value: -</div>
+    <ea-time-picker
+      id="eventTimePicker"
+      placeholder="Select time"
+    ></ea-time-picker>
+  </div>
 </div>
+```
+
+```js
+const eventExample = {
+  eventTimePicker: document.getElementById("eventTimePicker"),
+  changeValue: document.getElementById("changeValue"),
+
+  init() {
+    this.eventTimePicker.addEventListener("change", e => {
+      this.changeValue.textContent = "Value: " + e.detail.value;
+    });
+  },
+};
+
+eventExample.init();
+```
+
+```css
+.demo-time-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.demo-time-picker .block {
+  flex: 1;
+  min-width: 240px;
+  max-width: 320px;
+  padding: 1.5rem;
+}
+
+.demo-time-picker .demonstration {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 14px;
+  text-align: center;
+  color: #606266;
+}
 ```
 
 :::
 
-## 固定时间范围
+::::
 
-通过设置 `limit-range-start` 和 `limit-range-end` 属性，可以设置时间选择器的最小值和最大值
+## Time Picker API
 
-<div class="demo">
-    <ea-time-picker time="3:0:0" limit-range-start="3:0:0" limit-range-end="3:10:0"></ea-time-picker>
-</div>
+### Time Picker Attributes
 
-::: details 查看代码
+| 参数              | 说明             | 类型    | 可选值                | 默认值   |
+| ----------------- | ---------------- | ------- | --------------------- | -------- |
+| value             | 绑定值           | String  | —                     | —        |
+| width             | 输入框宽度       | String  | —                     | —        |
+| disabled          | 是否禁用         | Boolean | —                     | false    |
+| align             | 对齐方式         | String  | left / center / right | left     |
+| placeholder       | 占位符           | String  | —                     | —        |
+| limit-range-start | 限制范围开始时间 | String  | —                     | 00:00:00 |
+| limit-range-end   | 限制范围结束时间 | String  | —                     | 23:59:59 |
 
-`html`
+### Time Picker CSS Part
 
-```html
-<div class="demo">
-  <ea-time-picker
-    time="3:0:0"
-    limit-range-start="3:0:0"
-    limit-range-end="3:10:0"
-  ></ea-time-picker>
-</div>
-```
+| 名称                | 说明             |
+| ------------------- | ---------------- |
+| container           | 组件容器         |
+| input               | 输入框元素       |
+| dropdown            | 下拉面板         |
+| dropdown-inner-wrap | 下拉面板内部容器 |
+| dropdown-time       | 时间列表         |
+| dropdown-item       | 时间项           |
 
-:::
+### Time Picker Methods
 
-## Attributes
+| 方法名      | 说明           | 参数 |
+| ----------- | -------------- | ---- |
+| focus       | 使组件获取焦点 | —    |
+| blur        | 使组件失去焦点 | —    |
+| handleOpen  | 打开下拉面板   | —    |
+| handleClose | 关闭下拉面板   | —    |
 
-| 参数              | 说明               | 类型    | 可选值            | 默认值 |
-| ----------------- | ------------------ | ------- | ----------------- | ------ |
-| name              | 输入框的 name 属性 | string  | -                 | -      |
-| time              | 初始值/当前值      | string  | -                 | -      |
-| disabled          | 是否禁用           | boolean | -                 | false  |
-| align             | 对齐方式           | string  | left/center/right | left   |
-| limit-range-start | 固定时间范围开始值 | string  | -                 | -      |
-| limit-range-end   | 固定时间范围结束值 | string  | -                 | -      |
+### Time Picker Events
 
-## CSS Part
-
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
-
-| 名称                | 说明           |
-| ------------------- | -------------- |
-| container           | 外层容器       |
-| input               | 输入框         |
-| dropdown-wrap       | 下拉框外层容器 |
-| dropdown-inner-wrap | 下拉框容器     |
-| dropdown-time       | 下拉框内的元素 |
-
-## Events
-
-| 事件名称 | 说明         | 回调参数 |
-| -------- | ------------ | -------- |
-| change   | 值改变时触发 | e.detail |
+| 事件名            | 说明                     | 回调参数(event.detail) |
+| ----------------- | ------------------------ | ---------------------- |
+| change            | 值改变时触发             | `{ value: string }`    |
+| focus             | 获得焦点时触发           | —                      |
+| blur              | 失去焦点时触发           | —                      |
+| ea-visible-change | 下拉面板可见性改变时触发 | `{ visible: boolean }` |

@@ -1,64 +1,188 @@
-<!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Document</title>
-    <link rel='stylesheet' href='../components/ea-icon/index.css'>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Picker Component</title>
+    <link rel="stylesheet" href="/src/components/ea-icon/index.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
+
+      .demo-time-picker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 1rem 0;
+      }
+
+      .demo-time-picker .block {
+        flex: 1;
+        min-width: 240px;
+        max-width: 320px;
+        padding: 1.5rem;
+      }
+
+      .demo-time-picker .demonstration {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-size: 14px;
+        text-align: center;
+        color: #606266;
+      }
+
+      .demo-time-picker .demonstration:first-child {
+        font-weight: 600;
+        color: #303133;
+      }
+
+      .demo-time-picker ea-time-picker {
+        width: 100%;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-time-picker/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../src/components/ea-segmented/index.js"
+    ></script>
 
-    <script type='module'>
-        import '../components/ea-time-picker/index.js';
-        import '../components/ea-button/index.js';
+    <!--  任意时间点 -->
+    <!-- #region -->
+    <h1>任意时间点</h1>
 
-        // ------- 1. 基础用法 -------
-        // #region
-        const basicTimePicker = document.querySelector('#basicTimePicker');
-        basicTimePicker.addEventListener('change', (e) => {
-            console.log(e.detail);
-        });
-        // #endregion
-        // ------- end -------
+    <div class="demo">
+      <p>
+        <ea-segmented id="sizeSegmented" value="default"></ea-segmented>
+      </p>
+      <div class="demo-time-picker">
+        <div class="block">
+          <span class="demonstration">Default</span>
+          <ea-time-picker
+            id="defaultTimePicker"
+            placeholder="Select time"
+          ></ea-time-picker>
+        </div>
+        <div class="block">
+          <span class="demonstration">With Value</span>
+          <ea-time-picker
+            id="valueTimePicker"
+            value="08:00:00"
+            placeholder="Select time"
+          ></ea-time-picker>
+        </div>
+        <div class="block">
+          <span class="demonstration">Disabled</span>
+          <ea-time-picker
+            id="disabledTimePicker"
+            value="12:30:00"
+            disabled
+          ></ea-time-picker>
+        </div>
+        <div class="block">
+          <span class="demonstration">Center Aligned</span>
+          <ea-time-picker
+            id="centerTimePicker"
+            value="18:45:30"
+            align="center"
+          ></ea-time-picker>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const basicExample = {
+        sizeSegmented: document.getElementById("sizeSegmented"),
+        defaultTimePicker: document.getElementById("defaultTimePicker"),
+        valueTimePicker: document.getElementById("valueTimePicker"),
+        disabledTimePicker: document.getElementById("disabledTimePicker"),
+        centerTimePicker: document.getElementById("centerTimePicker"),
+
+        init() {
+          this.sizeSegmented.options = ["small", "default", "large"];
+
+          this.sizeSegmented.addEventListener("change", e => {
+            this.defaultTimePicker.size = e.detail.value;
+            this.valueTimePicker.size = e.detail.value;
+            this.disabledTimePicker.size = e.detail.value;
+            this.centerTimePicker.size = e.detail.value;
+          });
+        },
+      };
+
+      basicExample.init();
     </script>
 
-    <!-- -------- 1. 基础用法 --------  -->
-    <!-- #region  -->
-    <ea-time-picker id="basicTimePicker" time="2:1:11"></ea-time-picker>
+    <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
-    <hr>
+    <!--  限制时间选择范围 -->
+    <!-- #region -->
+    <h1>限制时间选择范围</h1>
 
-    <!-- -------- 2. 禁用 --------  -->
-    <!-- #region  -->
-    <ea-time-picker time="8:0:0" disabled></ea-time-picker>
+    <div class="demo demo-time-picker">
+      <div class="block">
+        <span class="demonstration">Limited Range (09:00 - 18:00)</span>
+        <ea-time-picker
+          placeholder="Select time"
+          limit-range-start="09:00:00"
+          limit-range-end="18:00:00"
+        ></ea-time-picker>
+      </div>
+      <div class="block">
+        <span class="demonstration">Limited Range (12:30 - 14:30)</span>
+        <ea-time-picker
+          placeholder="Select time"
+          limit-range-start="12:30:00"
+          limit-range-end="14:30:00"
+        ></ea-time-picker>
+      </div>
+    </div>
+
+    <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- end  -->
 
-    <hr>
+    <!--  事件监听 -->
+    <!-- #region -->
+    <h1>事件监听</h1>
 
-    <!-- -------- 3. 对齐方式 --------  -->
-    <!-- #region  -->
-    <ea-time-picker time="8:0:0" align="center"></ea-time-picker>
+    <div class="demo demo-time-picker">
+      <div class="block">
+        <span class="demonstration">Change Event</span>
+        <div class="demonstration" id="changeValue">Value: -</div>
+        <ea-time-picker
+          id="eventTimePicker"
+          placeholder="Select time"
+        ></ea-time-picker>
+      </div>
+    </div>
+
+    <script>
+      const eventExample = {
+        eventTimePicker: document.getElementById("eventTimePicker"),
+        changeValue: document.getElementById("changeValue"),
+
+        init() {
+          this.eventTimePicker.addEventListener("change", e => {
+            this.changeValue.textContent = "Value: " + e.detail.value;
+          });
+        },
+      };
+
+      eventExample.init();
+    </script>
+
+    <hr />
     <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <hr>
-
-    <!-- -------- 4. 时间限定 --------  -->
-    <!-- #region  -->
-    <ea-time-picker limit-range-start="3:0:0" limit-range-end="3:10:0"></ea-time-picker>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-</body>
-
+    <!-- end  -->
+  </body>
 </html>

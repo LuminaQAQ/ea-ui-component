@@ -320,17 +320,19 @@ this.emit("change", {
 
 #### "ea-" 前缀事件派发（事件类）
 
-```javascript
+- 注意此类事件声明是 typescript 的，同时需要在 `GlobalEventHandlersEventMap` 中声明
+
+```typescript
 /**
- * 组件可见性改变事件
+ * 组件 Foo 事件
  * @event EaComponentFooEvent
- * @property {boolean} visible - 当前可见状态
+ * @property {boolean} visible - 当前 Foo 状态
  */
 export class EaComponentFooEvent extends Event {
   readonly detail: EaComponentFooEventDetail;
 
   constructor(detail: EaComponentFooEventDetail) {
-    super("ea-visible-change", {
+    super("ea-foo-change", {
       bubbles: true,
       cancelable: true,
       composed: true,
@@ -340,16 +342,18 @@ export class EaComponentFooEvent extends Event {
 }
 
 interface EaComponentFooEventDetail {
-  /** @description 当前可见状态 */
+  /** @description 当前 Foo 状态 */
   visible: boolean;
 }
 
 declare global {
   interface GlobalEventHandlersEventMap {
-    "ea-visible-change": EaComponentFooEvent;
+    "ea-foo-change": EaComponentFooEvent;
   }
 }
+```
 
+```javascript
 // 2. 在组件中导入并使用
 import { EaComponentFooEvent } from "./events/EaComponentFooEvent";
 
@@ -773,3 +777,4 @@ $ea-component-size-types: (small, default, large);
 2. 使用 `SearchCodebase` 工具搜索和理解代码库
 3. 遵循项目现有的库和框架
 4. 遵循安全最佳实践，不暴露或记录密钥和机密信息
+```

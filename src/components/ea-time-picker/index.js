@@ -1,422 +1,677 @@
-// @ts-nocheck
-import Base from "../Base.js";
-import "../ea-icon/index.js";
+import FormAssociatedBase from "@/core/FormBase";
+import stylesheet from "./index.scss?inline";
+import { namespace } from "@/directives/namespace";
 
-import { createElement } from "../../utils/createElement.js";
-import { timeout } from "../../utils/timeout.js";
-import { stylesheet } from "./src/style/stylesheet.js";
+import "@components/ea-icon/index.js";
+import "@components/ea-input/index.js";
+import { timeout } from "@/utils/timeout";
+import { EA_COMPONENT_SIZES } from "@/utils/Variables";
+import { EaTimePickerVisibleChangeEvent } from "./events/EaTimePickerVisibleChangeEvent";
 
-import "../ea-input/index.js";
-import "../ea-button/components/ea-button/index.js";
-
-export class EaTimePicker extends Base {
+export class EaTimePicker extends FormAssociatedBase {
+  /** @type {HTMLElement} */
   #container;
-  #timePickerInput;
+  /** @type {HTMLElement} */
+  #input;
 
-  #dropdownWrap;
-  #timePickerHourWrap;
-  #timePickerMinuteWrap;
-  #timePickerSecondWrap;
+  /** @type {HTMLElement} */
+  #dropdown;
+  /** @type {HTMLElement} */
+  #hourWrap;
+  /** @type {HTMLElement} */
+  #minuteWrap;
+  /** @type {HTMLElement} */
+  #secondWrap;
 
-  #timePickerIsInit = false;
+  #abortController = new AbortController();
+
+  #states = {
+    hour: 0,
+    minute: 0,
+    second: 0,
+    isScrolling: false,
+    isAutoScrolling: false,
+    scrollTimeout: null,
+    isFirstOpen: true,
+  };
+
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "value",
+      "width",
+      "size",
+      "disabled",
+      "align",
+      "limit-range-start",
+      "limit-range-end",
+    ];
+  }
+
+  state = this.properties({
+    value: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.setValue(newVal);
+        if (newVal) {
+          this.#parseValue(newVal);
+          this.#updateInputValue();
+          this.#updateSelectionState();
+        }
+      },
+    },
+    width: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        if (this.#container) {
+          this.#container.style.setProperty("--ea-time-picker-width", newVal);
+        }
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        if (this.#input) {
+          this.#input.toggleAttribute("disabled", newVal);
+        }
+        this.updateContainerClasslist();
+      },
+    },
+    align: {
+      type: ["left", "center", "right"],
+      default: "left",
+      observer: () => {
+        this.updateContainerClasslist();
+      },
+    },
+    size: {
+      type: EA_COMPONENT_SIZES,
+      default: "",
+      observer: newVal => {
+        this.#input.setAttribute("size", newVal);
+      },
+    },
+    "limit-range-start": {
+      type: String,
+      default: "00:00:00",
+    },
+    "limit-range-end": {
+      type: String,
+      default: "23:59:59",
+    },
+  });
+
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist(
+      "ea-time-picker",
+      {},
+      {
+        disabled: this.disabled,
+        open: this.#container?.classList.contains("is-open"),
+        [`align-${this.align}`]: this.align,
+      }
+    );
+
+    if (this.#container) {
+      this.#container.className = className;
+    }
+
+    return className;
+  }
 
   constructor() {
     super();
-
-    const shadowRoot = this.attachShadow({ mode: "open" });
-
-    shadowRoot.innerHTML = `
-            <div class='ea-time-picker_wrap' part='container'>
-                <ea-input part='input' autocomplete="off" readonly prefix-icon="icon-clock"></ea-input>
-                <div class="ea-time-picker_dropdown-wrap" part='dropdown-wrap'>
-                    <div class="ea-time-picker_dropdown-inner-wrap" part='dropdown-inner-wrap'>
-                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-hour" part='dropdown-time'>
-                        </ul>
-                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-minute" part='dropdown-time'>
-                        </ul>
-                        <ul class="ea-time-picker_dropdown-inner ea-time-picker_dropdown-inner-second" part='dropdown-time'>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        `;
-
-    this.#container = shadowRoot.querySelector(".ea-time-picker_wrap");
-    this.#timePickerInput = shadowRoot.querySelector("ea-input");
-
-    this.#dropdownWrap = shadowRoot.querySelector(
-      ".ea-time-picker_dropdown-wrap"
-    );
-    this.#timePickerHourWrap = shadowRoot.querySelector(
-      ".ea-time-picker_dropdown-inner-hour"
-    );
-    this.#timePickerMinuteWrap = shadowRoot.querySelector(
-      ".ea-time-picker_dropdown-inner-minute"
-    );
-    this.#timePickerSecondWrap = shadowRoot.querySelector(
-      ".ea-time-picker_dropdown-inner-second"
-    );
-
-    this.build(shadowRoot, stylesheet);
+    this.stylesheet = stylesheet;
+    this.$render();
   }
 
-  // ------- width 宽度 -------
-  // #region
-  get width() {
-    return this.getAttribute("width") || "200px";
-  }
+  /**
+   * 生成时间项HTML
+   * @param {number} start
+   * @param {number} end
+   * @param {string} type
+   * @return {string}
+   */
+  #generateTimeItems = (start, end, type) => {
+    const ns = this.ns;
+    const items = [];
+    const max = type === "hour" ? 23 : 59;
 
-  set width(value) {
-    this.setAttribute("width", value);
-
-    this.#container.style.width = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- time 时间 -------
-  // #region
-  get time() {
-    return this.getAttribute("time") || "00:00:00";
-  }
-
-  set time(value) {
-    this.setAttribute("time", value);
-
-    const [hour, minute, second] = value.split(":");
-
-    this.hour = hour;
-    this.minute = minute;
-    this.second = second;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- name 属性 -------
-  // #region
-  get name() {
-    return this.getAttribute("name") || "timePicker";
-  }
-
-  set name(value) {
-    this.setAttribute("name", value);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- hour 小时 -------
-  // #region
-  get hour() {
-    const attr = this.getAttrNumber("hour");
-    return this.#handleLessThanTen(attr);
-  }
-
-  set hour(value) {
-    this.setAttribute("hour", value);
-
-    this.#handleTimeItemPicker(this.#timePickerHourWrap, value);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- minute 分钟 -------
-  // #region
-  get minute() {
-    const attr = this.getAttrNumber("minute");
-    return this.#handleLessThanTen(attr);
-  }
-
-  set minute(value) {
-    this.setAttribute("minute", value);
-
-    this.#handleTimeItemPicker(this.#timePickerMinuteWrap, value);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- second 秒 -------
-  // #region
-  get second() {
-    const attr = this.getAttrNumber("second");
-    return this.#handleLessThanTen(attr);
-  }
-
-  set second(value) {
-    this.setAttribute("second", value);
-
-    this.#handleTimeItemPicker(this.#timePickerSecondWrap, value);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- value 时间 -------
-  // #region
-  get value() {
-    return this.time;
-  }
-
-  set value(value) {
-    this.time = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- disabled 禁用 -------
-  // #region
-  get disabled() {
-    return this.getAttrBoolean("disabled") || false;
-  }
-
-  set disabled(value) {
-    this.setAttribute("disabled", value);
-
-    this.#timePickerInput.disabled = value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- align 对齐方式 -------
-  // #region
-  get align() {
-    return this.getAttribute("align") || "left";
-  }
-
-  set align(value) {
-    this.setAttribute("align", value);
-
-    this.#timePickerInput.shadowRoot.querySelector("input").style.textAlign =
-      value;
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- limit-range-start 限制起始时间 -------
-  // #region
-  get limitRangeStart() {
-    const attr = this.getAttribute("limit-range-start");
-    if (!attr) return "00:00:00";
-    else {
-      const [hour, minute, second] =
-        this.getAttribute("limit-range-start")?.split(":");
-      return `${this.#handleLessThanTen(hour)}:${this.#handleLessThanTen(minute)}:${this.#handleLessThanTen(second)}`;
-    }
-  }
-
-  set limitRangeStart(value) {
-    this.setAttribute("limit-range-start", value);
-  }
-  // #endregion
-  // ------- end -------
-
-  // ------- limit-range-end 限制结束时间 -------
-  // #region
-  get limitRangeEnd() {
-    const attr = this.getAttribute("limit-range-end");
-    if (!attr) return "23:59:59";
-    else {
-      const [hour, minute, second] =
-        this.getAttribute("limit-range-end")?.split(":");
-      return `${this.#handleLessThanTen(hour)}:${this.#handleLessThanTen(minute)}:${this.#handleLessThanTen(second)}`;
-    }
-  }
-
-  set limitRangeEnd(value) {
-    this.setAttribute("limit-range-end", value);
-  }
-  // #endregion
-  // ------- end -------
-
-  #handleLessThanTen(num, defaultNum = "00") {
-    num = Number(num);
-    return num < 10 ? `0${num}` : num || defaultNum;
-  }
-
-  #handleTimeItemPicker(wrap, value) {
-    wrap.querySelectorAll("li").forEach(li => {
-      if (Number(li.innerText) === Number(this.#handleLessThanTen(value)))
-        li.click();
-    });
-  }
-
-  #initElementsStyle() {
-    this.#dropdownWrap.style.width =
-      this.#timePickerInput.getBoundingClientRect().width + "px";
-
-    timeout(() => {
-      this.#container.classList.add("with-transition");
-    }, 50);
-  }
-
-  #handleTimeItemClickEvent(li, index, timeItemWrap, type) {
-    li.addEventListener("click", () => {
-      const lis = timeItemWrap.querySelectorAll("li");
-      lis.forEach(li => {
-        li.classList.remove("is-active");
-      });
-      li.classList.add("is-active");
-
-      const value = this.#handleLessThanTen(index);
-      switch (type) {
-        case "hour":
-          this.hour = value;
-          break;
-        case "minute":
-          this.minute = value;
-          break;
-        case "second":
-          this.second = value;
-          break;
-      }
-
-      if (this.#timePickerIsInit)
-        this.dispatchEvent(
-          new CustomEvent("change", { detail: { time: this.time } })
-        );
-
-      this.#timePickerInput.value = `${this.hour}:${this.minute}:${this.second}`;
-      this.time = `${this.hour}:${this.minute}:${this.second}`;
-
-      const top = li.getBoundingClientRect().height * index;
-      timeItemWrap.scrollTo({
-        top,
-        behavior: "smooth",
-      });
-    });
-  }
-
-  #handleTimeWrapScroll(wrap) {
-    wrap.addEventListener("wheel", () => {
-      timeout(() => {
-        const lis = wrap.querySelectorAll("li");
-        const height = lis[0].getBoundingClientRect().height;
-        const { scrollTop } = wrap;
-        const index = Math.floor(scrollTop / height);
-
-        if (lis[index]) lis[index].click();
-      }, 100);
-    });
-  }
-
-  #initTimerPickerTimeItem() {
-    const [startHour, startMinute, startSecond] =
-      this.limitRangeStart.split(":");
-    const [endHour, endMinute, endSecond] = this.limitRangeEnd.split(":");
-
-    const todayDate = new Date();
-    const startDate = new Date(
-      todayDate.getFullYear(),
-      todayDate.getMonth(),
-      todayDate.getDate(),
-      startHour,
-      startMinute,
-      startSecond
-    );
-    const endDate = new Date(
-      todayDate.getFullYear(),
-      todayDate.getMonth(),
-      todayDate.getDate(),
-      endHour,
-      endMinute,
-      endSecond
-    );
-    if (startDate > endDate)
-      throw new Error("limit-range-start must be less than limit-range-end");
-
-    const initTimeItem = (startTime, endTime, wrap, type) => {
-      startTime = Number(startTime);
-      endTime = Number(endTime);
-      let start = 0;
-      let end = 0;
-
-      switch (type) {
-        case "hour":
-          start = 0;
-          end = 23;
-          break;
-        default:
-          start = 0;
-          end = 59;
-          if (
-            !String(startTime).localeCompare(endTime) &&
-            startHour !== endHour
-          )
-            endTime = endTime === 0 ? 59 : endTime;
-      }
-
-      for (let i = start; i <= end; i++) {
-        const li = createElement("li", "ea-time-picker_dropdown-item");
-        li.innerText = this.#handleLessThanTen(i);
-        wrap.appendChild(li);
-
-        if (i >= startTime && i <= endTime)
-          this.#handleTimeItemClickEvent(li, i, wrap, type);
-        else li.classList.add("is-disabled");
-      }
-    };
-
-    initTimeItem(startHour, endHour, this.#timePickerHourWrap, "hour");
-    initTimeItem(startMinute, endMinute, this.#timePickerMinuteWrap, "minute");
-    initTimeItem(startSecond, endSecond, this.#timePickerSecondWrap, "second");
-
-    this.#handleTimeWrapScroll(this.#timePickerHourWrap);
-    this.#handleTimeWrapScroll(this.#timePickerMinuteWrap);
-    this.#handleTimeWrapScroll(this.#timePickerSecondWrap);
-  }
-
-  #initToggleDropdownWrapShow() {
-    let timePickerIsInit = false;
-
-    const dropdownWrapInitCallback = () => {
-      this.time = this.time;
-      timePickerIsInit = true;
-      this.#timePickerIsInit = true;
-      this.#dropdownWrap.removeEventListener(
-        "transitionend",
-        dropdownWrapInitCallback
+    for (let i = 0; i <= max; i++) {
+      const isDisabled = i < start || i > end;
+      const formattedValue = this.#formatNumber(i);
+      items.push(
+        `<li class="${ns.e("dropdown-item")} ${isDisabled ? "is-disabled" : ""}" data-value="${i}" part="dropdown-item">${formattedValue}</li>`
       );
-    };
-    this.#timePickerInput.addEventListener("focus", () => {
-      this.#container.classList.add("is-open");
+    }
 
-      if (!timePickerIsInit)
-        this.#dropdownWrap.addEventListener(
-          "transitionend",
-          dropdownWrapInitCallback
-        );
+    return items.join("");
+  };
+
+  $render() {
+    const ns = namespace("time-picker");
+    this.ns = ns;
+
+    this.shadowRoot.innerHTML = this.html(`
+      <div class='${ns.b()}' part='container'>
+        <ea-input 
+          class="${ns.e("input")}"
+          part='input' 
+          autocomplete="off" 
+          readonly 
+          prefix-icon="icon-clock"
+        ></ea-input>
+        <div class="${ns.e("dropdown")}" part='dropdown'>
+          <div class="${ns.e("dropdown-inner-wrap")}" part='dropdown-inner-wrap'>
+            <ul class="${ns.e("dropdown-inner")} ${ns.m("hour")}" part='dropdown-time'>
+              ${this.#generateTimeItems(0, 23, "hour")}
+            </ul>
+            <ul class="${ns.e("dropdown-inner")} ${ns.m("minute")}" part='dropdown-time'>
+              ${this.#generateTimeItems(0, 59, "minute")}
+            </ul>
+            <ul class="${ns.e("dropdown-inner")} ${ns.m("second")}" part='dropdown-time'>
+              ${this.#generateTimeItems(0, 59, "second")}
+            </ul>
+          </div>
+        </div>
+      </div>
+    `);
+
+    this.#container = this.shadowRoot.querySelector(ns.cb());
+    this.#input = this.shadowRoot.querySelector(ns.ce("input"));
+
+    this.#dropdown = this.shadowRoot.querySelector(ns.ce("dropdown"));
+    this.#hourWrap = this.shadowRoot.querySelector(ns.cm("hour"));
+    this.#minuteWrap = this.shadowRoot.querySelector(ns.cm("minute"));
+    this.#secondWrap = this.shadowRoot.querySelector(ns.cm("second"));
+  }
+
+  /**
+   * 解析时间值
+   * @param {string} value
+   */
+  #parseValue = value => {
+    const [hour = 0, minute = 0, second = 0] = value.split(":").map(Number);
+    this.#states.hour = hour;
+    this.#states.minute = minute;
+    this.#states.second = second;
+  };
+
+  /**
+   * 获取当前时间值
+   * @return {string}
+   */
+  get #timeValue() {
+    return `${this.#formatNumber(this.#states.hour)}:${this.#formatNumber(this.#states.minute)}:${this.#formatNumber(this.#states.second)}`;
+  }
+
+  /**
+   * 格式化数字
+   * @param {number} num
+   * @return {string}
+   */
+  #formatNumber = num => {
+    return num < 10 ? `0${num}` : String(num);
+  };
+
+  /**
+   * 更新输入框值
+   */
+  #updateInputValue = () => {
+    if (this.#input) {
+      this.#input.value = this.#timeValue;
+    }
+  };
+
+  /**
+   * 更新选中状态
+   */
+  #updateSelectionState = () => {
+    this.#updateWrapSelection(this.#hourWrap, this.#states.hour);
+    this.#updateWrapSelection(this.#minuteWrap, this.#states.minute);
+    this.#updateWrapSelection(this.#secondWrap, this.#states.second);
+  };
+
+  /**
+   * 更新单个容器的选中状态
+   * @param {HTMLElement} wrap
+   * @param {number} value
+   */
+  #updateWrapSelection = (wrap, value) => {
+    if (!wrap) return;
+    const items = wrap.querySelectorAll("li");
+    items.forEach(item => {
+      const itemValue = parseInt(item.dataset.value, 10);
+      item.classList.toggle("is-active", itemValue === value);
     });
+  };
 
-    window.addEventListener("click", e => {
-      if (!this.contains(e.target)) {
-        this.#container.classList.remove("is-open");
-      } else {
-        this.#timePickerInput.shadowRoot
-          .querySelector(".ea-input_inner")
-          .focus();
+  /**
+   * 获取最接近目标值的可用选项
+   * @param {HTMLElement} wrap
+   * @param {number} targetValue
+   * @return {number|null}
+   */
+  #getClosestAvailableValue = (wrap, targetValue) => {
+    if (!wrap) return null;
+    const enabledItems = wrap.querySelectorAll("li:not(.is-disabled)");
+    if (!enabledItems.length) return null;
+
+    let closestValue = null;
+    let minDiff = Infinity;
+
+    enabledItems.forEach(item => {
+      const value = parseInt(item.dataset.value, 10);
+      const diff = Math.abs(value - targetValue);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestValue = value;
       }
     });
-  }
+
+    return closestValue;
+  };
+
+  /**
+   * 检查是否设置了 Limited Range
+   * @return {boolean}
+   */
+  #hasLimitedRange = () => {
+    return (
+      this.hasAttribute("limit-range-start") ||
+      this.hasAttribute("limit-range-end")
+    );
+  };
+
+  /**
+   * 根据 limit-range 设置时间项的禁用状态
+   */
+  #applyLimitRange = () => {
+    const [startHour, startMinute, startSecond] = this["limit-range-start"]
+      .split(":")
+      .map(Number);
+    const [endHour, endMinute, endSecond] = this["limit-range-end"]
+      .split(":")
+      .map(Number);
+
+    this.#applyRangeToWrap(this.#hourWrap, startHour, endHour);
+    this.#applyRangeToWrap(this.#minuteWrap, startMinute, endMinute);
+    this.#applyRangeToWrap(this.#secondWrap, startSecond, endSecond);
+  };
+
+  /**
+   * 应用范围到指定容器
+   * @param {HTMLElement} wrap
+   * @param {number} start
+   * @param {number} end
+   */
+  #applyRangeToWrap = (wrap, start, end) => {
+    if (!wrap) return;
+    const items = wrap.querySelectorAll("li");
+    items.forEach(item => {
+      const value = parseInt(item.dataset.value, 10);
+      const isDisabled = value < start || value > end;
+      item.classList.toggle("is-disabled", isDisabled);
+    });
+  };
+
+  /**
+   * 打开下拉框
+   */
+  #openDropdown = () => {
+    if (this.disabled) return;
+    const wasOpen = this.#container.classList.contains("is-open");
+    this.#container.classList.add("is-open");
+    this.updateContainerClasslist();
+
+    if (!wasOpen) {
+      this.dispatchEvent(new EaTimePickerVisibleChangeEvent({ visible: true }));
+    }
+
+    if (this.#states.isFirstOpen) {
+      const hasValue = this.value && this.value.trim() !== "";
+      const hasLimitedRange = this.#hasLimitedRange();
+
+      if (!hasValue && hasLimitedRange) {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        const currentSecond = now.getSeconds();
+
+        const closestHour = this.#getClosestAvailableValue(
+          this.#hourWrap,
+          currentHour
+        );
+        const closestMinute = this.#getClosestAvailableValue(
+          this.#minuteWrap,
+          currentMinute
+        );
+        const closestSecond = this.#getClosestAvailableValue(
+          this.#secondWrap,
+          currentSecond
+        );
+
+        if (closestHour !== null) {
+          this.#states.hour = closestHour;
+          this.#scrollToValue(this.#hourWrap, closestHour, false);
+        }
+        if (closestMinute !== null) {
+          this.#states.minute = closestMinute;
+          this.#scrollToValue(this.#minuteWrap, closestMinute, false);
+        }
+        if (closestSecond !== null) {
+          this.#states.second = closestSecond;
+          this.#scrollToValue(this.#secondWrap, closestSecond, false);
+        }
+
+        this.#updateSelectionState();
+      } else {
+        this.#scrollToValue(this.#hourWrap, this.#states.hour, false);
+        this.#scrollToValue(this.#minuteWrap, this.#states.minute, false);
+        this.#scrollToValue(this.#secondWrap, this.#states.second, false);
+      }
+
+      this.#states.isFirstOpen = false;
+    }
+  };
+
+  /**
+   * 关闭下拉框
+   */
+  #closeDropdown = () => {
+    const wasOpen = this.#container.classList.contains("is-open");
+    this.#container.classList.remove("is-open");
+    this.updateContainerClasslist();
+
+    if (wasOpen) {
+      this.dispatchEvent(
+        new EaTimePickerVisibleChangeEvent({ visible: false })
+      );
+    }
+  };
+
+  /**
+   * 切换下拉框显示状态
+   */
+  #toggleDropdown = () => {
+    if (this.disabled) return;
+    if (this.#container.classList.contains("is-open")) {
+      this.#closeDropdown();
+    } else {
+      this.#openDropdown();
+    }
+  };
+
+  /**
+   * 点击外部关闭下拉
+   * @param {MouseEvent} e
+   */
+  #onWindowClick = e => {
+    const path = e.composedPath();
+    const isInsideTimePicker =
+      path.includes(this) || path.includes(this.shadowRoot);
+    if (!isInsideTimePicker) {
+      this.#closeDropdown();
+    }
+  };
+
+  /**
+   * 输入框焦点事件
+   */
+  #onInputFocus = () => {
+    this.emit("focus");
+  };
+
+  /**
+   * 输入框失焦事件
+   */
+  #onInputBlur = () => {
+    this.emit("blur");
+  };
+
+  /**
+   * 滚动到指定值
+   * @param {HTMLElement} wrap
+   * @param {number} value
+   * @param {boolean} smooth
+   */
+  #scrollToValue = (wrap, value, smooth = true) => {
+    if (!wrap) return;
+    const items = wrap.querySelectorAll("li:not(.is-disabled)");
+    if (!items.length) return;
+
+    const itemHeight = items[0].getBoundingClientRect().height;
+    const targetItem = wrap.querySelector(`li[data-value="${value}"]`);
+
+    if (targetItem && !targetItem.classList.contains("is-disabled")) {
+      const top = itemHeight * value - 1;
+      wrap.scrollTo({ top, behavior: smooth ? "smooth" : "auto" });
+    }
+  };
+
+  /**
+   * 处理时间列表滚动停止
+   * @param {HTMLElement} wrap
+   * @param {string} type
+   */
+  #handleScrollStop = (wrap, type) => {
+    if (this.#states.scrollTimeout) {
+      clearTimeout(this.#states.scrollTimeout);
+    }
+
+    this.#states.scrollTimeout = timeout(() => {
+      if (this.#states.isAutoScrolling) return;
+
+      const allItems = wrap.querySelectorAll("li");
+      const enabledItems = wrap.querySelectorAll("li:not(.is-disabled)");
+      if (!enabledItems.length) return;
+
+      const itemHeight = enabledItems[0].getBoundingClientRect().height;
+      const { scrollTop } = wrap;
+
+      const index = Math.round(scrollTop / itemHeight);
+      const clampedIndex = Math.max(0, Math.min(allItems.length - 1, index));
+      let targetItem = allItems[clampedIndex];
+
+      if (targetItem && targetItem.classList.contains("is-disabled")) {
+        for (let i = clampedIndex; i < allItems.length; i++) {
+          if (!allItems[i].classList.contains("is-disabled")) {
+            targetItem = allItems[i];
+            break;
+          }
+        }
+        if (targetItem.classList.contains("is-disabled")) {
+          for (let i = clampedIndex; i >= 0; i--) {
+            if (!allItems[i].classList.contains("is-disabled")) {
+              targetItem = allItems[i];
+              break;
+            }
+          }
+        }
+      }
+
+      if (targetItem && !targetItem.classList.contains("is-disabled")) {
+        const value = parseInt(targetItem.dataset.value, 10);
+        this.#setTimeValue(type, value);
+
+        const top = itemHeight * value;
+        this.#states.isAutoScrolling = true;
+        wrap.scrollTo({ top, behavior: "smooth" });
+
+        timeout(() => {
+          this.#states.isAutoScrolling = false;
+        }, 300);
+      }
+
+      this.#states.isScrolling = false;
+    }, 150);
+  };
+
+  /**
+   * 设置时间值
+   * @param {string} type
+   * @param {number} value
+   */
+  #setTimeValue = (type, value) => {
+    switch (type) {
+      case "hour":
+        this.#states.hour = value;
+        break;
+      case "minute":
+        this.#states.minute = value;
+        break;
+      case "second":
+        this.#states.second = value;
+        break;
+    }
+
+    const newValue = this.#timeValue;
+    this.setAttribute("value", newValue);
+    this.#updateInputValue();
+    this.#updateSelectionState();
+
+    this.emit("change", { detail: { value: newValue } });
+  };
+
+  /**
+   * 处理时间项点击
+   * @param {HTMLElement} wrap
+   * @param {string} type
+   */
+  #handleTimeItemClick = (wrap, type) => {
+    wrap.addEventListener(
+      "click",
+      e => {
+        const item = e.target.closest("li");
+        if (!item || item.classList.contains("is-disabled")) return;
+
+        const value = parseInt(item.dataset.value, 10);
+        this.#setTimeValue(type, value);
+
+        const itemHeight = item.getBoundingClientRect().height;
+        const top = itemHeight * value;
+
+        this.#states.isAutoScrolling = true;
+        if (this.#states.scrollTimeout) {
+          clearTimeout(this.#states.scrollTimeout);
+        }
+        wrap.scrollTo({ top, behavior: "smooth" });
+
+        timeout(() => {
+          this.#states.isAutoScrolling = false;
+        }, 1000);
+      },
+      { signal: this.#abortController.signal }
+    );
+  };
+
+  /**
+   * 处理时间列表滚动
+   * @param {HTMLElement} wrap
+   * @param {string} type
+   */
+  #handleTimeWrapScroll = (wrap, type) => {
+    wrap.addEventListener(
+      "scroll",
+      () => {
+        this.#states.isScrolling = true;
+        this.#handleScrollStop(wrap, type);
+      },
+      { signal: this.#abortController.signal }
+    );
+  };
+
+  /**
+   * 绑定事件
+   */
+  #bindEvents = () => {
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    this.#input.addEventListener("click", this.#toggleDropdown, {
+      signal: this.#abortController.signal,
+    });
+
+    this.#input.addEventListener("focus", this.#onInputFocus, {
+      signal: this.#abortController.signal,
+    });
+
+    this.#input.addEventListener("blur", this.#onInputBlur, {
+      signal: this.#abortController.signal,
+    });
+
+    window.addEventListener("click", this.#onWindowClick, {
+      signal: this.#abortController.signal,
+    });
+
+    this.#handleTimeItemClick(this.#hourWrap, "hour");
+    this.#handleTimeItemClick(this.#minuteWrap, "minute");
+    this.#handleTimeItemClick(this.#secondWrap, "second");
+
+    this.#handleTimeWrapScroll(this.#hourWrap, "hour");
+    this.#handleTimeWrapScroll(this.#minuteWrap, "minute");
+    this.#handleTimeWrapScroll(this.#secondWrap, "second");
+  };
+
+  /**
+   * 使组件获取焦点
+   * @return {void}
+   */
+  focus = () => {
+    this.#input.focus();
+  };
+
+  /**
+   * 使组件失去焦点
+   * @return {void}
+   */
+  blur = () => {
+    this.#input.blur();
+  };
+
+  /**
+   * 打开时间选择器弹窗
+   * @return {void}
+   */
+  handleOpen = () => {
+    this.#openDropdown();
+  };
+
+  /**
+   * 关闭时间选择器弹窗
+   * @return {void}
+   */
+  handleClose = () => {
+    this.#closeDropdown();
+  };
 
   connectedCallback() {
-    this.setAttribute("data-ea-component", true);
+    super.connectedCallback();
 
-    this.name = this.name;
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
 
-    this.width = this.width;
+    this.#applyLimitRange();
 
-    this.disabled = this.disabled;
+    this.#bindEvents();
 
-    this.align = this.align;
+    if (this.hasAttribute("value")) {
+      this.#parseValue(this.value);
+    }
+  }
 
-    this.limitRangeStart = this.limitRangeStart;
-    this.limitRangeEnd = this.limitRangeEnd;
-
-    this.#initElementsStyle();
-    this.#initTimerPickerTimeItem();
-
-    this.time = this.time;
-    this.#timePickerInput.value = `${this.hour}:${this.minute}:${this.second}`;
-
-    this.#initToggleDropdownWrapShow();
+  $beforeUnmounted() {
+    this.#abortController?.abort();
+    if (this.#states.scrollTimeout) {
+      clearTimeout(this.#states.scrollTimeout);
+    }
   }
 }
 
