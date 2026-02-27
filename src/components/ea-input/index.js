@@ -107,6 +107,14 @@ export class EaInput extends FormAssociatedBase {
     }),
   };
 
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this.#original;
+  }
+
   state = this.properties({
     label: {
       type: String,
@@ -161,12 +169,21 @@ export class EaInput extends FormAssociatedBase {
       observer: async newVal => {
         await this.#renderedStates.isOriginalRenderedPromise;
 
+        newVal = typeof newVal === "string" && newVal === "" ? null : newVal;
         this.#original.value = newVal;
         this.setValue(newVal);
 
         if (this.clearable || this["show-password"]) {
           this.updateContainerClasslist();
         }
+      },
+    },
+    required: {
+      type: Boolean,
+      default: false,
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
+        this.#original.required = newVal;
       },
     },
     placeholder: {
@@ -399,7 +416,8 @@ export class EaInput extends FormAssociatedBase {
     min: {
       type: Number,
       default: Number.MIN_SAFE_INTEGER,
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.min = newVal;
       },
     },
@@ -409,6 +427,14 @@ export class EaInput extends FormAssociatedBase {
       observer: async newVal => {
         await this.#renderedStates.isOriginalRenderedPromise;
         this.#original.step = newVal;
+      },
+    },
+    pattern: {
+      type: String,
+      default: "",
+      observer: async newVal => {
+        await this.#renderedStates.isOriginalRenderedPromise;
+        this.#original.pattern = newVal;
       },
     },
     resize: {
@@ -739,30 +765,6 @@ export class EaInput extends FormAssociatedBase {
       this.#AbortControllerStates[key]?.abort();
       this.#AbortControllerStates[key] = null;
     }
-  }
-
-  /**
-   * 获取验证目标元素
-   * @returns {HTMLElement}
-   */
-  get validationTarget() {
-    return this.#original;
-  }
-
-  /**
-   * 检查表单字段的有效性
-   * @returns {boolean} 如果字段有效返回 true，否则返回 false
-   */
-  checkValidity() {
-    return this.#original.checkValidity();
-  }
-
-  /**
-   * 报告表单字段的有效性（显示验证提示）
-   * @returns {boolean} 如果字段有效返回 true，否则返回 false
-   */
-  reportValidity() {
-    return this.#original.reportValidity();
   }
 }
 

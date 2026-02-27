@@ -134,7 +134,7 @@
       <h2>1. 基本表单</h2>
       <p>使用原生 form 元素，组件自动与表单关联。</p>
 
-      <form id="basicForm" action="/api/submit" method="POST">
+      <form id="basicForm">
         <div class="form-row">
           <div class="form-field">
             <ea-input
@@ -142,7 +142,7 @@
               name="username"
               label="用户名"
               placeholder="请输入用户名"
-              value=""
+              required
               autocomplete="username"
             ></ea-input>
             <div class="hint">普通文本输入</div>
@@ -154,6 +154,7 @@
               name="email"
               label="邮箱"
               type="email"
+              required
               placeholder="请输入邮箱"
               autocomplete="email"
             ></ea-input>
@@ -168,6 +169,7 @@
               name="phone"
               label="手机号"
               type="tel"
+              required
               placeholder="请输入手机号"
               pattern="^1[3-9]\d{9}$"
               autocomplete="tel"
@@ -181,6 +183,8 @@
               id="age"
               name="age"
               label="年龄"
+              required
+              value="1"
               min="18"
               max="120"
               value="18"
@@ -785,7 +789,16 @@
         const controls = getFormControls(validationForm);
         controls.forEach(control => {
           if (control.reportValidity) {
-            control.reportValidity();
+            console.log(
+              "Checking control:",
+              control.name,
+              "validity:",
+              control.validity,
+              "validationMessage:",
+              control.validationMessage
+            );
+            const result = control.reportValidity();
+            console.log("reportValidity result:", result);
           }
         });
       });

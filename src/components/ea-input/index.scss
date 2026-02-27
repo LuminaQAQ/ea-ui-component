@@ -2,6 +2,7 @@
   --ea-input-border-radius: var(--border-radius-sm);
   --ea-input-border-color: var(--color-border);
   --ea-input-border-focus-color: var(--blue-400);
+  --ea-input-border-invalid-color: var(--red-500);
   --ea-input-padding: 0 var(--spacing-md);
 
   --ea-input-disabled-background-color: var(--grey-100);
@@ -36,6 +37,19 @@
 :host([disabled]) {
   cursor: not-allowed;
   user-select: none;
+}
+
+:host(:invalid) {
+  .ea-input__inner {
+    --ea-input-border-color: var(--ea-input-border-invalid-color);
+  }
+}
+
+:host(:invalid:focus) {
+  .ea-input__inner {
+    --ea-input-border-color: var(--ea-input-border-invalid-color);
+    box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
+  }
 }
 
 ::slotted([slot="prefix"]),
