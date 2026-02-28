@@ -19,6 +19,8 @@ export default class FormAssociatedBase extends Base {
       "maxlength",
       "min",
       "max",
+
+      "validation-message",
     ];
   }
 
@@ -47,10 +49,6 @@ export default class FormAssociatedBase extends Base {
       type: String,
       default: () => this.internals.willValidate,
     },
-    required: {
-      type: Boolean,
-      default: false,
-    },
     disabled: {
       type: Boolean,
       default: false,
@@ -65,6 +63,54 @@ export default class FormAssociatedBase extends Base {
     required: {
       type: Boolean,
       default: false,
+    },
+
+    "validation-message": {
+      type: String,
+      default: "",
+    },
+
+    required: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.validationTarget.toggleAttribute("required", newVal);
+      },
+    },
+    minlength: {
+      type: Number,
+      default: 0,
+      observer: newVal => {
+        this.validationTarget.setAttribute("minlength", newVal);
+      },
+    },
+    maxlength: {
+      type: Number,
+      default: 0,
+      observer: newVal => {
+        this.validationTarget.setAttribute("maxlength", newVal);
+      },
+    },
+    min: {
+      type: Number,
+      default: 0,
+      observer: newVal => {
+        this.validationTarget.setAttribute("min", newVal);
+      },
+    },
+    max: {
+      type: Number,
+      default: 0,
+      observer: newVal => {
+        this.validationTarget.setAttribute("max", newVal);
+      },
+    },
+    pattern: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.validationTarget.setAttribute("pattern", newVal);
+      },
     },
   });
 
@@ -93,6 +139,10 @@ export default class FormAssociatedBase extends Base {
     this.internals.setFormValue(value);
   };
 
+  removeValue = () => {
+    this.internals.setFormValue(null);
+  };
+
   /**
    * 更新表单验证状态
    * 使用内部 input 元素的 validity 状态
@@ -104,7 +154,7 @@ export default class FormAssociatedBase extends Base {
 
     if (formControl && formControl.validity) {
       if (formControl.validity.valid) {
-        this.internals.setValidity({}, "", formControl);
+        this.resetCustomValidity();
       } else {
         const flags = {};
         for (const key in formControl.validity) {
@@ -112,7 +162,12 @@ export default class FormAssociatedBase extends Base {
             flags[key] = true;
           }
         }
-        this.internals.setValidity(flags, formControl.validationMessage);
+
+        this.setValidity(
+          flags,
+          this["validation-message"] || formControl.validationMessage
+        );
+
         this.internals.reportValidity();
       }
     }
@@ -143,8 +198,35 @@ export default class FormAssociatedBase extends Base {
   /**
    * 设置自定义验证错误消息
    * @param {string} message - 自定义错误消息
+   * @param {object} flags - 验证状态标志
    */
-  setCustomValidity = message => {
+  setValidity(flags = {}, message = "") {
+    const hasError = Object.values(flags).some(v => v === true);
+
+    if (message) {
+      flags.customError = true;
+    } else if (hasError) {
+      message = this.validationTarget?.validationMessage || "";
+    }
+
+    this.internals.setValidity(flags, message, this.validationTarget);
+  }
+
+  /**
+   * 设置自定义验证错误消息
+   * @param {string} message - 自定义错误消息，空字符串表示清除错误
+   */
+  setCustomValidity(message) {
+    if (this.tagName === "EA-BUTTON") return;
+
+    if (
+      this.validationTarget &&
+      this.validationTarget !== this &&
+      typeof this.validationTarget.setCustomValidity === "function"
+    ) {
+      this.validationTarget.setCustomValidity(message);
+    }
+
     if (message) {
       this.internals.setValidity(
         { customError: true },
@@ -152,13 +234,27 @@ export default class FormAssociatedBase extends Base {
         this.validationTarget
       );
     } else {
-      this.internals.setValidity({});
+      this.internals.setValidity({}, "", this.validationTarget);
     }
-  };
+  }
+
+  /**
+   * 重置自定义验证错误消息
+   */
+  resetCustomValidity() {
+    this.internals.setValidity({}, "", this.validationTarget);
+
+    if (
+      this.validationTarget &&
+      this.validationTarget !== this &&
+      typeof this.validationTarget.setCustomValidity === "function"
+    ) {
+      this.validationTarget.setCustomValidity("");
+    }
+  }
 
   connectedCallback() {
     super.connectedCallback();
-    this.updateValidity();
   }
 
   disconnectedCallback() {
@@ -175,14 +271,18 @@ export default class FormAssociatedBase extends Base {
       this.#abortController?.abort();
       this.#abortController = new AbortController();
 
-      this.internals.form.addEventListener(
+      form.addEventListener(
         "submit",
         e => {
-          if (!this.checkValidity()) {
-            e.preventDefault();
-          }
+          this.setCustomValidity("");
+
           this.updateValidity();
-          this.reportValidity();
+
+          if (!this.checkValidity() && this.tagName !== "EA-BUTTON") {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            this.reportValidity();
+          }
         },
         { signal: this.#abortController.signal }
       );
@@ -202,7 +302,7 @@ export default class FormAssociatedBase extends Base {
    * 表单重置回调，处理表单重置事件
    */
   formResetCallback() {
-    this.value = this.getAttribute("value") || "";
-    this.internals.setValidity({});
+    this.value = null;
+    this.setValidity({});
   }
 }

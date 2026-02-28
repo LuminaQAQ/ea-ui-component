@@ -26,8 +26,8 @@ export class EaCheckbox extends FormAssociatedBase {
       "disabled",
       "indeterminate",
       "border",
-
       "limit-disabled",
+      "required",
     ];
   }
 
@@ -97,6 +97,13 @@ export class EaCheckbox extends FormAssociatedBase {
         this.#original.disabled = newVal;
 
         this.updateContainerClasslist();
+      },
+    },
+    required: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.#original.toggleAttribute("required", newVal);
       },
     },
   });
@@ -222,23 +229,41 @@ export class EaCheckbox extends FormAssociatedBase {
    * @returns {HTMLElement}
    */
   get validationTarget() {
-    return this.#original;
+    return this.#container;
+  }
+
+  /**
+   * 更新表单验证状态
+   * checkbox 的验证逻辑：当 required 为 true 时，必须处于选中状态
+   */
+  updateValidity() {
+    if (this.required && !this.checked) {
+      this.internals.setValidity(
+        { valueMissing: true },
+        "请勾选此项",
+        this.#container
+      );
+    } else {
+      this.internals.setValidity({}, "", this.#container);
+    }
   }
 
   /**
    * 检查表单字段的有效性
-   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   * @returns {boolean}
    */
   checkValidity() {
-    return this.#original.checkValidity();
+    this.updateValidity();
+    return this.internals.validity.valid;
   }
 
   /**
    * 报告表单字段的有效性（显示验证提示）
-   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   * @returns {boolean}
    */
   reportValidity() {
-    return this.#original.reportValidity();
+    this.updateValidity();
+    return this.internals.reportValidity();
   }
 }
 

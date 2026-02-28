@@ -39,6 +39,7 @@ export class EaSwitch extends FormAssociatedBase {
       "active-color",
 
       "disabled",
+      "required",
     ];
   }
 
@@ -171,6 +172,13 @@ export class EaSwitch extends FormAssociatedBase {
       observer: newVal => {
         this.#originalInput.toggleAttribute("disabled", newVal);
         this.updateContainerClasslist();
+      },
+    },
+    required: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.#originalInput.toggleAttribute("required", newVal);
       },
     },
   });
@@ -316,26 +324,45 @@ export class EaSwitch extends FormAssociatedBase {
 
   /**
    * 获取验证目标元素
-   * @returns {HTMLInputElement}
+   * @returns {HTMLElement}
    */
   get validationTarget() {
-    return this.#originalInput;
+    return this.#container;
+  }
+
+  /**
+   * 更新表单验证状态
+   * switch 的验证逻辑：当 required 为 true 时，必须处于选中状态（value 等于 active-value）
+   */
+  updateValidity() {
+    const isChecked = this.value === this["active-value"];
+
+    if (this.required && !isChecked) {
+      this.internals.setValidity(
+        { valueMissing: true },
+        "请开启此选项",
+        this.#container
+      );
+    } else {
+      this.internals.setValidity({}, "", this.#container);
+    }
   }
 
   /**
    * 检查表单字段的有效性
-   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   * @returns {boolean}
    */
   checkValidity() {
-    return this.#originalInput.checkValidity();
+    this.updateValidity();
+    return this.internals.validity.valid;
   }
 
   /**
    * 报告表单字段的有效性（显示验证提示）
-   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   * @returns {boolean}
    */
   reportValidity() {
-    return this.#originalInput.reportValidity();
+    return this.internals.reportValidity();
   }
 }
 

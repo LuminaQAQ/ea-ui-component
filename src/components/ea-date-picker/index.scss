@@ -35,6 +35,19 @@ $ea-date-picker-sizes: small, large;
   display: inline-block;
 }
 
+:host(:invalid) {
+  .ea-date-picker__input::part(inner) {
+    border-color: var(--red-500);
+  }
+}
+
+:host(:invalid:focus-within) {
+  .ea-date-picker__input::part(inner) {
+    border-color: var(--red-500);
+    box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
+  }
+}
+
 @include block($name) {
   position: relative;
   width: var(--#{$name}-width);

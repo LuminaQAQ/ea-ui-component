@@ -81,7 +81,6 @@ export class EaInput extends FormAssociatedBase {
       "form",
       "aria-label",
       "tabindex",
-      "validate-event",
       "inputmode",
     ]);
   }
@@ -172,6 +171,8 @@ export class EaInput extends FormAssociatedBase {
         newVal = typeof newVal === "string" && newVal === "" ? null : newVal;
         this.#original.value = newVal;
         this.setValue(newVal);
+
+        this.resetCustomValidity();
 
         if (this.clearable || this["show-password"]) {
           this.updateContainerClasslist();
@@ -476,11 +477,6 @@ export class EaInput extends FormAssociatedBase {
         this.#original.tabIndex = newVal;
       },
     },
-    "validate-event": {
-      type: Boolean,
-      default: true,
-      observer: newVal => {},
-    },
     inputmode: {
       type: String,
       default: "",
@@ -553,7 +549,7 @@ export class EaInput extends FormAssociatedBase {
   $render() {
     this.shadowRoot.innerHTML = `
       <label class="ea-input" part="container">
-        <span class="ea-input__label" part="label"></span>
+        <span class="ea-input__form-label" part="label"></span>
         <section class="ea-input__region" part="region">
           <div class="ea-input__prepend" part="prepend">
             <slot name="prepend"></slot>
@@ -581,7 +577,7 @@ export class EaInput extends FormAssociatedBase {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-input");
-    this.#label = this.shadowRoot.querySelector(".ea-input__label");
+    this.#label = this.shadowRoot.querySelector(".ea-input__form-label");
     this.#prepend = this.shadowRoot.querySelector(".ea-input__prepend");
     this.#inner = this.shadowRoot.querySelector(".ea-input__inner");
     this.#prefixSlot = this.shadowRoot.querySelector(
@@ -765,6 +761,56 @@ export class EaInput extends FormAssociatedBase {
       this.#AbortControllerStates[key]?.abort();
       this.#AbortControllerStates[key] = null;
     }
+  }
+
+  /**
+   * 更新表单验证状态
+   */
+  updateValidity() {
+    super.updateValidity();
+
+    const value = this.value || "";
+    if (
+      this.minlength > 0 &&
+      value.length > 0 &&
+      value.length < this.minlength
+    ) {
+      this.internals.setValidity(
+        { tooShort: true },
+        `请至少输入 ${this.minlength} 个字符`,
+        this.#original
+      );
+
+      this.internals.reportValidity();
+    }
+
+    if (this.maxlength > 0 && value.length > this.maxlength) {
+      this.internals.setValidity(
+        { tooLong: true },
+        `请最多输入 ${this.maxlength} 个字符`,
+        this.#original
+      );
+
+      this.internals.reportValidity();
+    }
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean}
+   */
+  checkValidity() {
+    this.updateValidity();
+    return this.internals.validity.valid;
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean}
+   */
+  reportValidity() {
+    this.updateValidity();
+    return this.internals.reportValidity();
   }
 }
 

@@ -3,53 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>原生表单 + Web Components 示例</title>
+    <title>Form 表单示例</title>
     <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          "Helvetica Neue", Arial, sans-serif;
-        padding: 2rem;
-        background-color: #f5f7fa;
-      }
-
-      h1 {
-        color: #303133;
-        margin-bottom: 1rem;
-      }
-
-      h2 {
-        color: #606266;
-        margin: 2rem 0 1rem;
-        font-size: 1.25rem;
-      }
-
       hr {
         margin: 3rem 0;
-        border: none;
-        border-top: 1px solid #dcdfe6;
       }
 
-      .demo-section {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;
+      .demo {
+        margin: 1rem 0;
       }
 
       .form-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
-        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
       }
 
       .form-field {
@@ -57,36 +27,10 @@
         min-width: 200px;
       }
 
-      .form-field label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: #606266;
-        font-size: 14px;
-        font-weight: 500;
-      }
-
-      .form-field .hint {
-        font-size: 12px;
-        color: #909399;
-        margin-top: 0.25rem;
-      }
-
-      .form-field .error {
-        font-size: 12px;
-        color: #f56c6c;
-        margin-top: 0.25rem;
-        display: none;
-      }
-
-      .form-field:has(:invalid:not(:placeholder-shown)) .error,
-      .form-field.invalid .error {
-        display: block;
-      }
-
       .button-group {
         display: flex;
-        gap: 1rem;
-        margin-top: 1.5rem;
+        gap: 0.5rem;
+        margin-top: 1rem;
       }
 
       .output {
@@ -97,393 +41,322 @@
         font-family: monospace;
         font-size: 14px;
         white-space: pre-wrap;
-        word-break: break-all;
-      }
-
-      /* 自定义验证样式 */
-      .custom-invalid {
-        outline: 2px solid #f56c6c;
-        outline-offset: 2px;
-      }
-
-      .validation-summary {
-        background: #fef0f0;
-        border: 1px solid #fde2e2;
-        color: #f56c6c;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-top: 1rem;
-        display: none;
-      }
-
-      .validation-summary.show {
-        display: block;
       }
     </style>
   </head>
 
   <body>
-    <h1>原生表单 + Web Components 示例</h1>
-    <p>
-      本示例展示如何使用原生 &lt;form&gt; 元素结合 ea-ui-component
-      的表单组件，利用 ElementInternals API 实现原生表单验证。
-    </p>
+    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-input/index.js"></script>
+    <script
+      type="module"
+      src="../src/components/ea-input-number/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-radio/index.js"></script>
+    <script type="module" src="../src/components/ea-checkbox/index.js"></script>
+    <script type="module" src="../src/components/ea-select/index.js"></script>
+    <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script
+      type="module"
+      src="../src/components/ea-date-picker/index.js"
+    ></script>
+    <script
+      type="module"
+      src="../src/components/ea-time-picker/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-rate/index.js"></script>
+    <script type="module" src="../src/components/ea-slider/index.js"></script>
+    <script
+      type="module"
+      src="../src/components/ea-color-picker/index.js"
+    ></script>
+    <script type="module" src="../src/components/ea-transfer/index.js"></script>
 
-    <!-- -------- 1. 基本表单 -------- -->
-    <div class="demo-section">
-      <h2>1. 基本表单</h2>
-      <p>使用原生 form 元素，组件自动与表单关联。</p>
-
+    <!-- -------- 基础表单 -------- -->
+    <!-- #region  -->
+    <h2>基础表单</h2>
+    <div class="demo">
       <form id="basicForm">
         <div class="form-row">
-          <div class="form-field">
-            <ea-input
-              id="username"
-              name="username"
-              label="用户名"
-              placeholder="请输入用户名"
-              required
-              autocomplete="username"
-            ></ea-input>
-            <div class="hint">普通文本输入</div>
-          </div>
-
-          <div class="form-field">
-            <ea-input
-              id="email"
-              name="email"
-              label="邮箱"
-              type="email"
-              required
-              placeholder="请输入邮箱"
-              autocomplete="email"
-            ></ea-input>
-            <div class="hint">type="email" 自动验证邮箱格式</div>
-          </div>
+          <ea-input
+            name="username"
+            label="用户名"
+            required
+            placeholder="请输入用户名"
+            style="width: 240px"
+          ></ea-input>
+          <ea-input
+            name="email"
+            label="邮箱"
+            type="email"
+            required
+            placeholder="请输入邮箱"
+            style="width: 240px"
+          ></ea-input>
         </div>
-
         <div class="form-row">
-          <div class="form-field">
-            <ea-input
-              id="phone"
-              name="phone"
-              label="手机号"
-              type="tel"
-              required
-              placeholder="请输入手机号"
-              pattern="^1[3-9]\d{9}$"
-              autocomplete="tel"
-            >
-            </ea-input>
-            <div class="hint">pattern 属性验证手机号格式</div>
-          </div>
-
-          <div class="form-field">
-            <ea-input-number
-              id="age"
-              name="age"
-              label="年龄"
-              required
-              value="1"
-              min="18"
-              max="120"
-              value="18"
-            ></ea-input-number>
-            <div class="hint">min="18" max="120" 限制范围</div>
-          </div>
-        </div>
-
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交表单</ea-button>
-          <ea-button button-type="reset">重置</ea-button>
-        </div>
-      </form>
-
-      <div class="output" id="basicFormOutput"></div>
-    </div>
-
-    <hr />
-
-    <!-- -------- 2. 表单验证 -------- -->
-    <div class="demo-section">
-      <h2>2. 表单验证</h2>
-      <p>使用 required、minlength、maxlength、pattern 等属性进行验证。</p>
-
-      <form id="validationForm" novalidate>
-        <div class="form-row">
-          <div class="form-field">
-            <ea-input
-              id="realName"
-              name="realName"
-              label="真实姓名 *"
-              required
-              minlength="2"
-              maxlength="10"
-              placeholder="请输入真实姓名"
-              autocomplete="name"
-            ></ea-input>
-            <div class="hint">必填，2-10个字符</div>
-            <div class="error">请输入2-10个字符的真实姓名</div>
-          </div>
-
-          <div class="form-field">
-            <ea-input
-              id="idCard"
-              name="idCard"
-              label="身份证号 *"
-              required
-              pattern="^\d{17}[\dXx]$"
-              placeholder="请输入身份证号"
-              autocomplete="off"
-            ></ea-input>
-            <div class="hint">必填，18位身份证号</div>
-            <div class="error">请输入有效的18位身份证号</div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-input
-              id="password"
-              name="password"
-              label="密码 *"
-              type="password"
-              required
-              minlength="6"
-              maxlength="20"
-              placeholder="请输入密码"
-              autocomplete="new-password"
-            ></ea-input>
-            <div class="hint">必填，6-20个字符</div>
-            <div class="error">密码长度必须在6-20个字符之间</div>
-          </div>
-
-          <div class="form-field">
-            <ea-input
-              id="confirmPassword"
-              name="confirmPassword"
-              label="确认密码 *"
-              type="password"
-              required
-              placeholder="请再次输入密码"
-              autocomplete="new-password"
-            ></ea-input>
-            <div class="hint">必填，需与密码一致</div>
-            <div class="error">密码不一致</div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-radio-group
-              id="gender"
-              name="gender"
-              label="性别 *"
-              required
-              value=""
-            >
-              <ea-radio value="male" label="男"></ea-radio>
-              <ea-radio value="female" label="女"></ea-radio>
-            </ea-radio-group>
-            <div class="hint">必选项</div>
-          </div>
-
-          <div class="form-field">
-            <ea-checkbox-group
-              id="hobbies"
-              name="hobbies"
-              label="兴趣爱好"
-              value=""
-            >
-              <ea-checkbox value="reading" label="阅读"></ea-checkbox>
-              <ea-checkbox value="sports" label="运动"></ea-checkbox>
-              <ea-checkbox value="music" label="音乐"></ea-checkbox>
-              <ea-checkbox value="travel" label="旅行"></ea-checkbox>
-            </ea-checkbox-group>
-            <div class="hint">可多选</div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-select
-              id="city"
-              name="city"
-              label="所在城市 *"
-              required
-              placeholder="请选择城市"
-            >
-              <ea-option value="">请选择</ea-option>
-              <ea-option value="beijing">北京</ea-option>
-              <ea-option value="shanghai">上海</ea-option>
-              <ea-option value="guangzhou">广州</ea-option>
-              <ea-option value="shenzhen">深圳</ea-option>
-            </ea-select>
-            <div class="hint">必选项</div>
-          </div>
-
-          <div class="form-field">
-            <ea-date-picker
-              id="birthDate"
-              name="birthDate"
-              label="出生日期 *"
-              required
-              placeholder="选择日期"
-            ></ea-date-picker>
-            <div class="hint">必选项</div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-rate id="score" name="score" label="评分" value="0"></ea-rate>
-            <div class="hint">点击星星进行评分</div>
-          </div>
-
-          <div class="form-field">
-            <ea-switch
-              id="notification"
-              name="notification"
-              label="接收通知"
-              value="on"
-            ></ea-switch>
-            <div class="hint">开关状态</div>
-          </div>
-        </div>
-
-        <div class="validation-summary" id="validationSummary"></div>
-
-        <div class="button-group">
-          <ea-button type="primary" id="validateBtn" button-type="submit"
-            >验证表单</ea-button
+          <ea-input-number
+            name="age"
+            label="年龄"
+            value="18"
+            min="18"
+            max="150"
+          ></ea-input-number>
+          <ea-select
+            name="city"
+            label="城市"
+            required
+            placeholder="请选择城市"
+            style="width: 240px"
           >
-          <ea-button id="reportValidityBtn">显示验证提示</ea-button>
-          <ea-button button-type="reset">重置</ea-button>
+            <ea-option value="beijing">北京</ea-option>
+            <ea-option value="shanghai">上海</ea-option>
+            <ea-option value="guangzhou">广州</ea-option>
+          </ea-select>
         </div>
-      </form>
-
-      <div class="output" id="validationFormOutput"></div>
-    </div>
-
-    <hr />
-
-    <!-- -------- 3. 自定义验证 -------- -->
-    <div class="demo-section">
-      <h2>3. 自定义验证</h2>
-      <p>使用 setCustomValidity() 方法进行自定义验证。</p>
-
-      <form id="customValidationForm">
-        <div class="form-row">
-          <div class="form-field">
-            <ea-input
-              id="customEmail"
-              name="customEmail"
-              label="邮箱地址"
-              type="email"
-              required
-              placeholder="请输入邮箱"
-              autocomplete="email"
-            ></ea-input>
-            <div class="hint">将验证是否为常见邮箱域名</div>
-          </div>
-
-          <div class="form-field">
-            <ea-input
-              id="customPhone"
-              name="customPhone"
-              label="手机号"
-              type="tel"
-              required
-              pattern="^1[3-9]\d{9}$"
-              placeholder="请输入手机号"
-              autocomplete="tel"
-            ></ea-input>
-            <div class="hint">将验证运营商号段</div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-date-picker
-              id="appointmentDate"
-              name="appointmentDate"
-              label="预约日期"
-              required
-              placeholder="选择预约日期"
-            ></ea-date-picker>
-            <div class="hint">不能选择过去的日期</div>
-          </div>
-
-          <div class="form-field">
-            <ea-time-picker
-              id="appointmentTime"
-              name="appointmentTime"
-              label="预约时间"
-              required
-              placeholder="选择时间"
-            ></ea-time-picker>
-            <div class="hint">工作时间 9:00-18:00</div>
-          </div>
-        </div>
-
         <div class="button-group">
-          <ea-button type="primary" id="customValidateBtn"
-            >自定义验证</ea-button
-          >
+          <ea-button type="primary" button-type="submit">提交</ea-button>
           <ea-button button-type="reset">重置</ea-button>
         </div>
       </form>
-
-      <div class="output" id="customValidationFormOutput"></div>
+      <div class="output" id="basicOutput"></div>
     </div>
 
+    <script type="module">
+      const basicForm = document.getElementById("basicForm");
+      const basicOutput = document.getElementById("basicOutput");
+
+      basicForm.addEventListener("submit", e => {
+        // 验证表单
+        if (!basicForm.checkValidity()) {
+          basicForm.reportValidity();
+          return;
+        }
+        const formData = new FormData(basicForm);
+        const data = Object.fromEntries(formData.entries());
+        basicOutput.textContent =
+          "表单数据：\n" + JSON.stringify(data, null, 2);
+      });
+
+      basicForm.addEventListener("reset", e => {
+        basicOutput.textContent = "";
+      });
+    </script>
+
     <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
-    <!-- -------- 4. 表单事件 -------- -->
-    <div class="demo-section">
-      <h2>4. 表单事件</h2>
-      <p>监听表单的各种事件。</p>
-
-      <form id="eventForm">
+    <!-- -------- 表单验证 -------- -->
+    <!-- #region  -->
+    <h2>表单验证</h2>
+    <div class="demo">
+      <form id="validationForm">
         <div class="form-row">
-          <div class="form-field">
-            <ea-input
-              id="eventInput"
-              name="eventInput"
-              label="输入框"
-              placeholder="输入内容查看事件"
-            ></ea-input>
-          </div>
+          <ea-input
+            name="realName"
+            label="真实姓名"
+            required
+            minlength="2"
+            maxlength="10"
+            placeholder="请输入真实姓名"
+            style="width: 240px"
+          ></ea-input>
+          <ea-input
+            name="phone"
+            label="手机号"
+            type="tel"
+            required
+            pattern="^1[3-9]\d{9}$"
+            placeholder="请输入手机号"
+            style="width: 240px"
+          ></ea-input>
+        </div>
+        <div class="form-row">
+          <ea-input
+            name="password"
+            label="密码"
+            type="password"
+            required
+            minlength="6"
+            placeholder="请输入密码"
+            style="width: 240px"
+          ></ea-input>
+          <ea-input
+            name="confirmPassword"
+            label="确认密码"
+            type="password"
+            required
+            placeholder="请再次输入密码"
+            style="width: 240px"
+          ></ea-input>
+        </div>
+        <div class="form-row">
+          <ea-radio-group name="gender" label="性别" required>
+            <ea-radio value="male" label="男"></ea-radio>
+            <ea-radio value="female" label="女"></ea-radio>
+          </ea-radio-group>
+        </div>
+        <div class="form-row">
+          <ea-date-picker
+            name="birthDate"
+            label="出生日期"
+            required
+            placeholder="选择日期"
+          ></ea-date-picker>
+        </div>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+          <ea-button button-type="reset">重置</ea-button>
+        </div>
+      </form>
+      <div class="output" id="validationOutput"></div>
+    </div>
 
-          <div class="form-field">
-            <ea-select
-              id="eventSelect"
-              name="eventSelect"
-              label="选择器"
-              placeholder="选择选项"
-            >
-              <ea-option value="option1">选项 1</ea-option>
-              <ea-option value="option2">选项 2</ea-option>
-              <ea-option value="option3">选项 3</ea-option>
-            </ea-select>
-          </div>
+    <script type="module">
+      const validationForm = document.getElementById("validationForm");
+
+      validationForm.addEventListener("submit", e => {
+        e.preventDefault();
+
+        let isValid = true;
+
+        const password = validationForm.querySelector('[name="password"]');
+        const confirmPassword = validationForm.querySelector(
+          '[name="confirmPassword"]'
+        );
+
+        if (password.value !== confirmPassword.value) {
+          isValid = false;
+          confirmPassword.setCustomValidity("密码不一致");
+          confirmPassword.reportValidity();
+        } else {
+          confirmPassword.setCustomValidity("");
+        }
+
+        if (isValid) {
+          alert("Success");
+        }
+      });
+    </script>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+
+    <!-- -------- 复杂表单 -------- -->
+    <!-- #region -->
+    <h2>复杂表单（涵盖所有组件）</h2>
+    <div class="demo">
+      <form id="complexForm">
+        <!-- 第一行：输入类组件 -->
+        <div class="form-row">
+          <ea-input
+            name="username"
+            label="用户名"
+            required
+            minlength="3"
+            maxlength="20"
+            placeholder="请输入用户名"
+            style="width: 240px"
+          ></ea-input>
+          <ea-input
+            name="email"
+            label="邮箱"
+            type="email"
+            required
+            placeholder="请输入邮箱"
+            style="width: 240px"
+          ></ea-input>
+          <ea-input-number
+            name="age"
+            label="年龄"
+            required
+            min="18"
+            max="100"
+            value="25"
+          ></ea-input-number>
         </div>
 
+        <!-- 第二行：选择类组件 -->
         <div class="form-row">
-          <div class="form-field">
-            <ea-radio-group id="eventRadio" name="eventRadio" label="单选">
-              <ea-radio value="a" label="选项 A"></ea-radio>
-              <ea-radio value="b" label="选项 B"></ea-radio>
-            </ea-radio-group>
-          </div>
+          <ea-select
+            name="city"
+            label="城市"
+            required
+            placeholder="请选择城市"
+            style="width: 200px"
+          >
+            <ea-option value="beijing">北京</ea-option>
+            <ea-option value="shanghai">上海</ea-option>
+            <ea-option value="guangzhou">广州</ea-option>
+            <ea-option value="shenzhen">深圳</ea-option>
+          </ea-select>
+          <ea-date-picker
+            name="birthDate"
+            label="出生日期"
+            required
+            placeholder="选择日期"
+          ></ea-date-picker>
+          <ea-time-picker
+            name="workTime"
+            label="工作时间"
+            required
+            placeholder="选择时间"
+          ></ea-time-picker>
+        </div>
 
-          <div class="form-field">
-            <ea-switch
-              id="eventSwitch"
-              name="eventSwitch"
-              label="开关"
-            ></ea-switch>
-          </div>
+        <!-- 第三行：单选和复选 -->
+        <div class="form-row">
+          <ea-radio-group name="gender" label="性别" required value="">
+            <ea-radio value="male" label="男"></ea-radio>
+            <ea-radio value="female" label="女"></ea-radio>
+          </ea-radio-group>
+          <ea-checkbox-group name="hobbies" label="兴趣爱好" required value="">
+            <ea-checkbox value="reading" label="阅读"></ea-checkbox>
+            <ea-checkbox value="sports" label="运动"></ea-checkbox>
+            <ea-checkbox value="music" label="音乐"></ea-checkbox>
+            <ea-checkbox value="travel" label="旅行"></ea-checkbox>
+          </ea-checkbox-group>
+        </div>
+
+        <!-- 第四行：滑块和评分 -->
+        <div class="form-row">
+          <ea-slider
+            name="satisfaction"
+            label="满意度"
+            min="0"
+            max="100"
+            value="80"
+            show-input
+          ></ea-slider>
+          <ea-rate
+            name="serviceScore"
+            label="服务评分"
+            required
+            value="0"
+          ></ea-rate>
+        </div>
+
+        <!-- 第五行：颜色和开关 -->
+        <div class="form-row">
+          <ea-color-picker
+            name="themeColor"
+            label="主题颜色"
+            required
+            value="#409EFF"
+          ></ea-color-picker>
+          <ea-switch name="agreement" label="同意用户协议" required></ea-switch>
+        </div>
+
+        <!-- 第六行：穿梭框 -->
+        <div class="form-row">
+          <ea-transfer
+            id="complexTransfer"
+            name="selectedSkills"
+            label="技能选择"
+            required
+            style="width: 600px"
+          ></ea-transfer>
         </div>
 
         <div class="button-group">
@@ -491,539 +364,274 @@
           <ea-button button-type="reset">重置</ea-button>
         </div>
       </form>
-
-      <div
-        class="output"
-        id="eventFormOutput"
-        style="max-height: 300px; overflow-y: auto"
-      ></div>
+      <div class="output" id="complexOutput"></div>
+      <script type="module">
+        const complexTransfer = document.getElementById("complexTransfer");
+        complexTransfer.data = [
+          { key: 1, label: "JavaScript" },
+          { key: 2, label: "Python" },
+          { key: 3, label: "Java" },
+          { key: 4, label: "C++" },
+          { key: 5, label: "Go" },
+          { key: 6, label: "Rust" },
+          { key: 7, label: "TypeScript" },
+          { key: 8, label: "Vue" },
+        ];
+      </script>
     </div>
-
     <hr />
 
-    <!-- -------- 5. 复杂表单 -------- -->
-    <div class="demo-section">
-      <h2>5. 复杂表单 - 用户注册</h2>
-      <p>综合使用多种表单组件的完整示例。</p>
+    <script type="module">
+      const complexForm = document.getElementById("complexForm");
+      const complexOutput = document.getElementById("complexOutput");
 
-      <form id="registerForm">
-        <div class="form-row">
-          <div class="form-field" style="flex: 2">
-            <ea-input
-              id="regUsername"
-              name="username"
-              label="用户名 *"
-              required
-              minlength="3"
-              maxlength="20"
-              pattern="^[a-zA-Z][a-zA-Z0-9_]*$"
-              placeholder="字母开头，可包含数字和下划线"
-              autocomplete="username"
-            ></ea-input>
-            <div class="hint">3-20个字符，字母开头</div>
-          </div>
+      complexForm.addEventListener("submit", e => {
+        e.preventDefault();
+        const formData = new FormData(complexForm);
+        const data = Object.fromEntries(formData.entries());
+        complexOutput.textContent =
+          "表单数据：\n" + JSON.stringify(data, null, 2);
+      });
+    </script>
+    <!-- #endregion  -->
+    <!-- -------------------  -->
 
-          <div class="form-field">
-            <ea-input-number
-              id="regAge"
-              name="age"
-              label="年龄"
-              min="1"
-              max="150"
-              value="25"
-            ></ea-input-number>
-          </div>
-        </div>
+    <!-- -------- 各组件单独验证示例 -------- -->
+    <!-- #region  -->
+    <h2>各组件单独验证示例</h2>
 
-        <div class="form-row">
-          <div class="form-field">
-            <ea-input
-              id="regEmail"
-              name="email"
-              label="邮箱 *"
-              type="email"
-              required
-              placeholder="your@email.com"
-              autocomplete="email"
-            >
-            </ea-input>
-          </div>
-
-          <div class="form-field">
-            <ea-input
-              id="regPhone"
-              name="phone"
-              label="手机号 *"
-              type="tel"
-              required
-              pattern="^1[3-9]\d{9}$"
-              placeholder="13800138000"
-              autocomplete="tel"
-            ></ea-input>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-input
-              id="regPassword"
-              name="password"
-              label="密码 *"
-              type="password"
-              required
-              minlength="8"
-              placeholder="至少8位字符"
-              autocomplete="new-password"
-            ></ea-input>
-          </div>
-
-          <div class="form-field">
-            <ea-input
-              id="regConfirmPwd"
-              name="confirmPassword"
-              label="确认密码 *"
-              type="password"
-              required
-              placeholder="再次输入密码"
-              autocomplete="new-password"
-            ></ea-input>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-radio-group
-              id="regGender"
-              name="gender"
-              label="性别 *"
-              required
-              value=""
-            >
-              <ea-radio value="male" label="男"></ea-radio>
-              <ea-radio value="female" label="女"></ea-radio>
-              <ea-radio value="other" label="其他"></ea-radio>
-            </ea-radio-group>
-          </div>
-
-          <div class="form-field">
-            <ea-checkbox-group
-              id="regHobbies"
-              name="hobbies"
-              label="兴趣爱好"
-              value=""
-            >
-              <ea-checkbox value="tech" label="科技"></ea-checkbox>
-              <ea-checkbox value="design" label="设计"></ea-checkbox>
-              <ea-checkbox value="business" label="商业"></ea-checkbox>
-            </ea-checkbox-group>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-select
-              id="regCity"
-              name="city"
-              label="所在城市 *"
-              required
-              placeholder="请选择"
-            >
-              <ea-option value="">请选择城市</ea-option>
-              <ea-option value="beijing">北京</ea-option>
-              <ea-option value="shanghai">上海</ea-option>
-              <ea-option value="guangzhou">广州</ea-option>
-              <ea-option value="shenzhen">深圳</ea-option>
-              <ea-option value="hangzhou">杭州</ea-option>
-              <ea-option value="chengdu">成都</ea-option>
-            </ea-select>
-          </div>
-
-          <div class="form-field">
-            <ea-date-picker
-              id="regBirthDate"
-              name="birthDate"
-              label="出生日期 *"
-              required
-              placeholder="选择日期"
-            >
-            </ea-date-picker>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-slider
-              id="regSatisfaction"
-              name="satisfaction"
-              label="满意度"
-              min="0"
-              max="100"
-              step="1"
-              value="80"
-              show-input
-            ></ea-slider>
-          </div>
-
-          <div class="form-field">
-            <ea-color-picker
-              id="regColor"
-              name="color"
-              label="喜欢的颜色"
-              value="#409EFF"
-            ></ea-color-picker>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <ea-switch
-              id="regNotification"
-              name="notification"
-              label="接收邮件通知"
-              value="on"
-              checked
-            ></ea-switch>
-          </div>
-
-          <div class="form-field">
-            <ea-rate id="regRate" name="rate" label="评分" value="5"></ea-rate>
-          </div>
-        </div>
-
+    <h3>ea-input 验证</h3>
+    <div class="demo">
+      <form id="inputForm">
+        <ea-input
+          name="username"
+          label="用户名"
+          required
+          minlength="3"
+          maxlength="10"
+          placeholder="请输入用户名（至少3个字符）"
+          style="width: 240px"
+        ></ea-input>
         <div class="button-group">
-          <ea-button type="primary" button-type="submit">注册</ea-button>
-          <ea-button button-type="reset">重置</ea-button>
+          <ea-button type="primary" button-type="submit">提交</ea-button>
         </div>
       </form>
+    </div>
 
-      <div class="output" id="registerFormOutput"></div>
+    <h3>ea-input-number 验证</h3>
+    <div class="demo">
+      <form id="inputNumberForm">
+        <ea-input-number
+          name="age"
+          label="年龄"
+          required
+          min="18"
+          max="60"
+          placeholder="请输入年龄（18-60）"
+        ></ea-input-number>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-select 验证</h3>
+    <div class="demo">
+      <form id="selectForm">
+        <ea-select
+          name="city"
+          label="城市"
+          required
+          placeholder="请选择城市"
+          style="width: 240px"
+        >
+          <ea-option value="beijing">北京</ea-option>
+          <ea-option value="shanghai">上海</ea-option>
+          <ea-option value="guangzhou">广州</ea-option>
+        </ea-select>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-radio-group 验证</h3>
+    <div class="demo">
+      <form id="radioForm">
+        <ea-radio-group name="gender" label="性别" required>
+          <ea-radio value="male" label="男"></ea-radio>
+          <ea-radio value="female" label="女"></ea-radio>
+        </ea-radio-group>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-checkbox-group 验证</h3>
+    <div class="demo">
+      <form id="checkboxForm">
+        <ea-checkbox-group name="hobbies" label="兴趣爱好" required>
+          <ea-checkbox value="reading" label="阅读"></ea-checkbox>
+          <ea-checkbox value="sports" label="运动"></ea-checkbox>
+          <ea-checkbox value="music" label="音乐"></ea-checkbox>
+        </ea-checkbox-group>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-checkbox 单选验证（同意协议场景）</h3>
+    <div class="demo">
+      <form id="singleCheckboxForm">
+        <ea-checkbox name="agreement" value="agreed" required>
+          我已阅读并同意《用户协议》和《隐私政策》
+        </ea-checkbox>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-date-picker 验证</h3>
+    <div class="demo">
+      <form id="datePickerForm">
+        <ea-date-picker
+          name="birthDate"
+          label="出生日期"
+          required
+          placeholder="选择日期"
+        ></ea-date-picker>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-time-picker 验证</h3>
+    <div class="demo">
+      <form id="timePickerForm">
+        <ea-time-picker
+          name="time"
+          label="时间"
+          required
+          placeholder="选择时间"
+        ></ea-time-picker>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-rate 验证</h3>
+    <div class="demo">
+      <form id="rateForm">
+        <ea-rate name="score" label="评分" required value="0"></ea-rate>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-switch 验证</h3>
+    <div class="demo">
+      <form id="switchForm">
+        <ea-switch name="agreement" label="同意协议" required></ea-switch>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-color-picker 验证</h3>
+    <div class="demo">
+      <form id="colorPickerForm">
+        <ea-color-picker
+          name="color"
+          label="喜欢的颜色"
+          required
+          placeholder="选择颜色"
+        ></ea-color-picker>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-slider 验证</h3>
+    <div class="demo">
+      <form id="sliderForm">
+        <ea-slider
+          name="satisfaction"
+          label="满意度"
+          required
+          min="0"
+          max="100"
+          value="0"
+          show-input
+        ></ea-slider>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+    </div>
+
+    <h3>ea-transfer 验证</h3>
+    <div class="demo">
+      <form id="transferForm">
+        <ea-transfer
+          id="transferValidate"
+          name="selectedItems"
+          required
+          style="width: 500px"
+        ></ea-transfer>
+        <div class="button-group">
+          <ea-button type="primary" button-type="submit">提交</ea-button>
+        </div>
+      </form>
+      <script type="module">
+        const transfer = document.getElementById("transferValidate");
+        transfer.data = [
+          { key: 1, label: "选项 1" },
+          { key: 2, label: "选项 2" },
+          { key: 3, label: "选项 3" },
+          { key: 4, label: "选项 4" },
+          { key: 5, label: "选项 5" },
+        ];
+      </script>
     </div>
 
     <script type="module">
-      // 导入组件
-      import "../src/components/ea-button/index.js";
-      import "../src/components/ea-input/index.js";
-      import "../src/components/ea-input-number/index.js";
-      import "../src/components/ea-radio/index.js";
-      import "../src/components/ea-checkbox/index.js";
-      import "../src/components/ea-select/index.js";
-      import "../src/components/ea-switch/index.js";
-      import "../src/components/ea-date-picker/index.js";
-      import "../src/components/ea-time-picker/index.js";
-      import "../src/components/ea-rate/index.js";
-      import "../src/components/ea-slider/index.js";
-      import "../src/components/ea-color-picker/index.js";
+      // 为所有单独验证表单添加提交处理
+      const forms = [
+        { id: "inputForm", name: "ea-input" },
+        { id: "inputNumberForm", name: "ea-input-number" },
+        { id: "selectForm", name: "ea-select" },
+        { id: "radioForm", name: "ea-radio-group" },
+        { id: "checkboxForm", name: "ea-checkbox-group" },
+        { id: "singleCheckboxForm", name: "ea-checkbox" },
+        { id: "datePickerForm", name: "ea-date-picker" },
+        { id: "timePickerForm", name: "ea-time-picker" },
+        { id: "rateForm", name: "ea-rate" },
+        { id: "switchForm", name: "ea-switch" },
+        { id: "colorPickerForm", name: "ea-color-picker" },
+        { id: "sliderForm", name: "ea-slider" },
+        { id: "transferForm", name: "ea-transfer" },
+      ];
 
-      // ------- 1. 基本表单 -------
-      const basicForm = document.getElementById("basicForm");
-      const basicFormOutput = document.getElementById("basicFormOutput");
-
-      basicForm.addEventListener("submit", e => {
-        e.preventDefault();
-        const formData = new FormData(basicForm);
-        const data = Object.fromEntries(formData.entries());
-        basicFormOutput.textContent =
-          "表单提交数据：\n" + JSON.stringify(data, null, 2);
-      });
-
-      // ------- 2. 表单验证 -------
-      const validationForm = document.getElementById("validationForm");
-      const validationFormOutput = document.getElementById(
-        "validationFormOutput"
-      );
-      const validateBtn = document.getElementById("validateBtn");
-      const reportValidityBtn = document.getElementById("reportValidityBtn");
-      const validationSummary = document.getElementById("validationSummary");
-
-      // 获取所有表单控件
-      function getFormControls(form) {
-        return Array.from(
-          form.querySelectorAll(
-            "ea-input, ea-input-number, ea-radio-group, ea-checkbox-group, ea-select, ea-date-picker, ea-rate, ea-switch"
-          )
-        );
-      }
-
-      validateBtn.addEventListener("click", () => {
-        const controls = getFormControls(validationForm);
-        let isValid = true;
-        const errors = [];
-
-        controls.forEach(control => {
-          if (control.checkValidity && !control.checkValidity()) {
-            isValid = false;
-            const label =
-              control.closest(".form-field")?.querySelector("label")
-                ?.textContent || control.name;
-            errors.push(`${label}: ${control.validationMessage}`);
-          }
-        });
-
-        // 验证密码一致性
-        const password = document.getElementById("password");
-        const confirmPassword = document.getElementById("confirmPassword");
-        if (password.value !== confirmPassword.value) {
-          isValid = false;
-          confirmPassword.setCustomValidity("密码不一致");
-          errors.push("确认密码: 密码不一致");
-        } else {
-          confirmPassword.setCustomValidity("");
-        }
-
-        if (isValid) {
-          validationSummary.classList.remove("show");
-          validationFormOutput.textContent =
-            "验证通过！\n表单数据：\n" +
-            JSON.stringify(
-              Object.fromEntries(new FormData(validationForm).entries()),
-              null,
-              2
-            );
-        } else {
-          validationSummary.textContent = "验证失败：\n" + errors.join("\n");
-          validationSummary.classList.add("show");
+      forms.forEach(({ id, name }) => {
+        const form = document.getElementById(id);
+        if (form) {
+          form.addEventListener("submit", e => {
+            e.preventDefault();
+            alert(`${name} 验证通过！`);
+          });
         }
       });
-
-      reportValidityBtn.addEventListener("click", () => {
-        const controls = getFormControls(validationForm);
-        controls.forEach(control => {
-          if (control.reportValidity) {
-            console.log(
-              "Checking control:",
-              control.name,
-              "validity:",
-              control.validity,
-              "validationMessage:",
-              control.validationMessage
-            );
-            const result = control.reportValidity();
-            console.log("reportValidity result:", result);
-          }
-        });
-      });
-
-      // 密码一致性实时验证
-      const password = document.getElementById("password");
-      const confirmPassword = document.getElementById("confirmPassword");
-
-      function validatePasswordMatch() {
-        if (confirmPassword.value && password.value !== confirmPassword.value) {
-          confirmPassword.setCustomValidity("密码不一致");
-        } else {
-          confirmPassword.setCustomValidity("");
-        }
-        confirmPassword.updateValidity?.();
-      }
-
-      password.addEventListener("change", validatePasswordMatch);
-      confirmPassword.addEventListener("input", validatePasswordMatch);
-
-      // ------- 3. 自定义验证 -------
-      const customValidationForm = document.getElementById(
-        "customValidationForm"
-      );
-      const customValidationFormOutput = document.getElementById(
-        "customValidationFormOutput"
-      );
-      const customValidateBtn = document.getElementById("customValidateBtn");
-
-      customValidateBtn.addEventListener("click", () => {
-        const customEmail = document.getElementById("customEmail");
-        const customPhone = document.getElementById("customPhone");
-        const appointmentDate = document.getElementById("appointmentDate");
-        const appointmentTime = document.getElementById("appointmentTime");
-
-        let isValid = true;
-        const errors = [];
-
-        // 自定义邮箱验证（检查常见域名）
-        const emailValue = customEmail.value;
-        const commonDomains = [
-          "gmail.com",
-          "qq.com",
-          "163.com",
-          "outlook.com",
-          "126.com",
-          "sina.com",
-        ];
-        const domain = emailValue.split("@")[1];
-        if (domain && !commonDomains.includes(domain.toLowerCase())) {
-          customEmail.setCustomValidity("请使用常见邮箱域名");
-          isValid = false;
-          errors.push("邮箱: 请使用常见邮箱域名");
-        } else {
-          customEmail.setCustomValidity("");
-        }
-
-        // 自定义手机号验证（检查运营商号段）
-        const phoneValue = customPhone.value;
-        const validPrefixes = ["13", "14", "15", "16", "17", "18", "19"];
-        const prefix = phoneValue.substring(0, 2);
-        if (phoneValue && !validPrefixes.includes(prefix)) {
-          customPhone.setCustomValidity("请输入有效的手机号号段");
-          isValid = false;
-          errors.push("手机号: 请输入有效的手机号号段");
-        } else {
-          customPhone.setCustomValidity("");
-        }
-
-        // 日期验证（不能选择过去）
-        const selectedDate = new Date(appointmentDate.value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (selectedDate < today) {
-          appointmentDate.setCustomValidity("不能选择过去的日期");
-          isValid = false;
-          errors.push("预约日期: 不能选择过去的日期");
-        } else {
-          appointmentDate.setCustomValidity("");
-        }
-
-        // 时间验证（工作时间 9:00-18:00）
-        const timeValue = appointmentTime.value;
-        if (timeValue) {
-          const [hours] = timeValue.split(":").map(Number);
-          if (hours < 9 || hours >= 18) {
-            appointmentTime.setCustomValidity("请选择工作时间（9:00-18:00）");
-            isValid = false;
-            errors.push("预约时间: 请选择工作时间（9:00-18:00）");
-          } else {
-            appointmentTime.setCustomValidity("");
-          }
-        }
-
-        // 更新所有控件的验证状态
-        [customEmail, customPhone, appointmentDate, appointmentTime].forEach(
-          control => {
-            control.updateValidity?.();
-          }
-        );
-
-        if (isValid) {
-          customValidationFormOutput.textContent =
-            "自定义验证通过！\n表单数据：\n" +
-            JSON.stringify(
-              Object.fromEntries(new FormData(customValidationForm).entries()),
-              null,
-              2
-            );
-        } else {
-          customValidationFormOutput.textContent =
-            "自定义验证失败：\n" + errors.join("\n");
-        }
-      });
-
-      // ------- 4. 表单事件 -------
-      const eventForm = document.getElementById("eventForm");
-      const eventFormOutput = document.getElementById("eventFormOutput");
-      const events = [];
-
-      function logEvent(message) {
-        const time = new Date().toLocaleTimeString();
-        events.unshift(`[${time}] ${message}`);
-        eventFormOutput.textContent = events.slice(0, 50).join("\n");
-      }
-
-      eventForm.addEventListener("submit", e => {
-        e.preventDefault();
-        logEvent("表单提交");
-      });
-
-      eventForm.addEventListener("reset", () => {
-        logEvent("表单重置");
-      });
-
-      // 监听各控件事件
-      const eventInput = document.getElementById("eventInput");
-      const eventSelect = document.getElementById("eventSelect");
-      const eventRadio = document.getElementById("eventRadio");
-      const eventSwitch = document.getElementById("eventSwitch");
-
-      eventInput.addEventListener("input", e => {
-        logEvent(`Input 输入: ${e.target.value}`);
-      });
-
-      eventInput.addEventListener("change", e => {
-        logEvent(`Input 变更: ${e.target.value}`);
-      });
-
-      eventInput.addEventListener("focus", () => {
-        logEvent("Input 获得焦点");
-      });
-
-      eventInput.addEventListener("blur", () => {
-        logEvent("Input 失去焦点");
-      });
-
-      eventSelect.addEventListener("change", e => {
-        logEvent(`Select 变更: ${e.detail?.value || e.target.value}`);
-      });
-
-      eventRadio.addEventListener("change", e => {
-        logEvent(`Radio 变更: ${e.detail?.value || e.target.value}`);
-      });
-
-      eventSwitch.addEventListener("change", e => {
-        logEvent(`Switch 变更: ${e.detail?.checked || e.target.checked}`);
-      });
-
-      // ------- 5. 复杂表单 -------
-      const registerForm = document.getElementById("registerForm");
-      const registerFormOutput = document.getElementById("registerFormOutput");
-
-      registerForm.addEventListener("submit", async e => {
-        e.preventDefault();
-
-        // 验证密码一致性
-        const regPassword = document.getElementById("regPassword");
-        const regConfirmPwd = document.getElementById("regConfirmPwd");
-
-        if (regPassword.value !== regConfirmPwd.value) {
-          regConfirmPwd.setCustomValidity("密码不一致");
-          regConfirmPwd.reportValidity?.();
-          return;
-        } else {
-          regConfirmPwd.setCustomValidity("");
-        }
-
-        // 验证所有控件
-        const controls = getFormControls(registerForm);
-        let isValid = true;
-
-        for (const control of controls) {
-          if (control.checkValidity && !control.checkValidity()) {
-            isValid = false;
-            control.reportValidity?.();
-          }
-        }
-
-        if (!isValid) {
-          registerFormOutput.textContent = "请检查表单填写是否正确";
-          return;
-        }
-
-        // 收集表单数据
-        const formData = new FormData(registerForm);
-        const data = Object.fromEntries(formData.entries());
-
-        // 处理多选值
-        const hobbies = Array.from(
-          document.querySelectorAll("#regHobbies ea-checkbox[checked]")
-        ).map(cb => cb.value);
-        data.hobbies = hobbies;
-
-        registerFormOutput.textContent =
-          "注册信息：\n" + JSON.stringify(data, null, 2);
-      });
-
-      // 监听表单重置
-      registerForm.addEventListener("reset", () => {
-        registerFormOutput.textContent = "表单已重置";
-      });
-
-      // 页面加载完成提示
-      logEvent("页面加载完成，表单组件已初始化");
     </script>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
   </body>
 </html>

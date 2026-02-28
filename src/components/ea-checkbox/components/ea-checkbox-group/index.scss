@@ -2,6 +2,12 @@
   display: block;
 }
 
+:host(:invalid) {
+  .ea-checkbox-group__form-label {
+    color: var(--red-500);
+  }
+}
+
 @include block(ea-checkbox-group) {
   display: flex;
   flex-wrap: wrap;

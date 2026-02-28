@@ -91,7 +91,7 @@
     align-items: center;
   }
 
-  @include element(label) {
+  @include element(form-label) {
     padding-bottom: var(--spacing-md);
 
     font-size: var(--ea-input-font-size);

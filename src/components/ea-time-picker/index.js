@@ -111,6 +111,14 @@ export class EaTimePicker extends FormAssociatedBase {
       type: String,
       default: "23:59:59",
     },
+    required: {
+      type: Boolean,
+      default: false,
+      observer: async newVal => {
+        await customElements.whenDefined("ea-input");
+        this.#input.toggleAttribute("required", newVal);
+      },
+    },
   });
 
   /**
@@ -660,6 +668,49 @@ export class EaTimePicker extends FormAssociatedBase {
   handleClose = () => {
     this.#closeDropdown();
   };
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this.#input;
+  }
+
+  /**
+   * 更新表单验证状态
+   */
+  updateValidity() {
+    const hasValue = this.value !== "" && this.value != null;
+
+    if (this.required && !hasValue) {
+      this.internals.setValidity(
+        { valueMissing: true },
+        "请选择时间",
+        this
+      );
+    } else {
+      this.internals.setValidity({}, "", this);
+    }
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean}
+   */
+  checkValidity() {
+    this.updateValidity();
+    return this.internals.validity.valid;
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean}
+   */
+  reportValidity() {
+    this.updateValidity();
+    return this.internals.reportValidity();
+  }
 
   connectedCallback() {
     super.connectedCallback();

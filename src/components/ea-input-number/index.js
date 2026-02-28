@@ -26,6 +26,7 @@ export class EaInputNumber extends FormAssociatedBase {
 
       "min",
       "max",
+      "required",
 
       "step",
       "step-strictly",
@@ -41,6 +42,22 @@ export class EaInputNumber extends FormAssociatedBase {
       "disabled",
       "controls",
     ];
+  }
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this.#inputEl;
+  }
+
+  /**
+   * 表单重置回调，处理表单重置事件
+   */
+  formResetCallback() {
+    this.value = this.min;
+    this.internals.setValidity({});
   }
 
   state = this.properties({
@@ -82,12 +99,23 @@ export class EaInputNumber extends FormAssociatedBase {
     min: {
       type: Number,
       default: Number.MIN_SAFE_INTEGER,
-      observer: () => {},
+      observer: newVal => {
+        if (this.#inputEl) this.#inputEl.min = newVal;
+      },
     },
     max: {
       type: Number,
       default: Number.MAX_SAFE_INTEGER,
-      observer: () => {},
+      observer: newVal => {
+        if (this.#inputEl) this.#inputEl.max = newVal;
+      },
+    },
+    required: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        if (this.#inputEl) this.#inputEl.required = newVal;
+      },
     },
     step: {
       type: Number,
@@ -236,22 +264,24 @@ export class EaInputNumber extends FormAssociatedBase {
 
   $render() {
     this.shadowRoot.innerHTML = `
-      <label class="ea-input-number__form-label" part="form-label"></label>
-      <div class='ea-input-number' part='container'>
-        <ea-icon class="ea-input-number__operator decrease" part="decrease" icon="icon-minus"></ea-icon>
-        <span class="ea-input-number__prefix" part="prefix">
-          <slot name="prefix"></slot>
-        </span>
-        <input class="ea-input-number__inner" part="input" type="text" />
-        <span class="ea-input-number__suffix" part="input">
-          <slot name="suffix"></slot>
-        </span>
-        <ea-icon class="ea-input-number__operator increase" part="increase" icon="icon-plus"></ea-icon>
-      </div>
+      <label class="ea-input-number" part="container">
+        <span class="ea-input-number__form-label" part="label"></span>
+        <section class="ea-input-number__region" part="region">
+          <ea-icon class="ea-input-number__operator decrease" part="decrease" icon="icon-minus"></ea-icon>
+          <span class="ea-input-number__prefix" part="prefix">
+            <slot name="prefix"></slot>
+          </span>
+          <input class="ea-input-number__inner" part="input" type="number" />
+          <span class="ea-input-number__suffix" part="suffix">
+            <slot name="suffix"></slot>
+          </span>
+          <ea-icon class="ea-input-number__operator increase" part="increase" icon="icon-plus"></ea-icon>
+        </section>
+      </label>
     `;
 
-    this.#label = this.shadowRoot.querySelector(".ea-input-number__form-label");
     this.#container = this.shadowRoot.querySelector(".ea-input-number");
+    this.#label = this.shadowRoot.querySelector(".ea-input-number__form-label");
     this.#inputEl = this.shadowRoot.querySelector(".ea-input-number__inner");
     this.#operatorMinus = this.shadowRoot.querySelector(
       ".ea-input-number__operator.decrease"

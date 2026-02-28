@@ -1,8 +1,8 @@
-import Base from "@components/Base.js";
+import FormAssociatedBase from "@/core/FormBase";
 
 import stylesheet from "./index.scss?inline";
 
-export class EaCheckboxGroup extends Base {
+export class EaCheckboxGroup extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLSlotElement} */
@@ -23,6 +23,7 @@ export class EaCheckboxGroup extends Base {
       "min",
       "max",
       "size",
+      "required",
     ];
   }
 
@@ -79,6 +80,10 @@ export class EaCheckboxGroup extends Base {
       observer: newVal => {
         this.#updateChildrenSize();
       },
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
   });
 
@@ -239,6 +244,51 @@ export class EaCheckboxGroup extends Base {
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+  }
+
+  /**
+   * 获取验证目标元素
+   * 返回第一个 ea-checkbox
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    const firstCheckbox = this.querySelector("ea-checkbox");
+    return firstCheckbox || this.#container;
+  }
+
+  /**
+   * 更新表单验证状态
+   */
+  updateValidity() {
+    const hasValue = Array.isArray(this.value) && this.value.length > 0;
+
+    if (this.required && !hasValue) {
+      this.internals.setValidity(
+        { valueMissing: true },
+        "请至少选择一个选项",
+        this
+      );
+    } else {
+      this.internals.setValidity({}, "", this);
+    }
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean}
+   */
+  checkValidity() {
+    this.updateValidity();
+    return this.internals.validity.valid;
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean}
+   */
+  reportValidity() {
+    this.updateValidity();
+    return this.internals.reportValidity();
   }
 }
 

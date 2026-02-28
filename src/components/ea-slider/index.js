@@ -54,6 +54,7 @@ export class EaSlider extends FormAssociatedBase {
       "size",
       "show-stops",
       "show-input",
+      "required",
     ];
   }
 
@@ -174,6 +175,10 @@ export class EaSlider extends FormAssociatedBase {
 
         if (this["show-input"]) this.#input.setAttribute("size", newVal);
       },
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
   });
 
@@ -512,6 +517,45 @@ export class EaSlider extends FormAssociatedBase {
       signal: this.#abortController.signal,
     });
   };
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this.#input;
+  }
+
+  /**
+   * 更新表单验证状态
+   */
+  updateValidity() {
+    const hasValue = this.value !== null && this.value !== undefined;
+
+    if (this.required && !hasValue) {
+      this.internals.setValidity({ valueMissing: true }, "请设置一个值", this);
+    } else {
+      this.internals.setValidity({}, "", this);
+    }
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean}
+   */
+  checkValidity() {
+    this.updateValidity();
+    return this.internals.validity.valid;
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean}
+   */
+  reportValidity() {
+    this.updateValidity();
+    return this.internals.reportValidity();
+  }
 
   connectedCallback() {
     super.connectedCallback();

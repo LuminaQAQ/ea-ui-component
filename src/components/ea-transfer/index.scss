@@ -20,6 +20,12 @@ $name: ea-transfer;
   line-height: var(--#{$name}-line-height);
 }
 
+:host(:invalid) {
+  .#{$name}__target-panel {
+    border-color: var(--red-500);
+  }
+}
+
 @include block($name) {
   display: flex;
   align-items: center;

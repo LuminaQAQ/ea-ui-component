@@ -1,5 +1,9 @@
 $name: ea-select;
-$ea-select-size-types: (small, default, large);
+$ea-select-size-types: (
+  small,
+  default,
+  large
+);
 
 :host {
   --#{$name}-height-small: 22px;
@@ -12,6 +16,15 @@ $ea-select-size-types: (small, default, large);
   --#{$name}-placeholder-color: var(--grey-500);
 
   --#{$name}-transition: var(--transition-fast);
+
+  --#{$name}-border-color: var(--grey-300);
+  --#{$name}-border-invalid-color: var(--red-500);
+}
+
+:host(:invalid) {
+  .ea-select__input::part(inner) {
+    border-color: var(--#{$name}-border-invalid-color);
+  }
 }
 
 :host([filterable][multiple]) {

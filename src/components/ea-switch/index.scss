@@ -40,6 +40,16 @@ $ea-switch-size-type: (
   --ea-switch-border-radius: var(--border-radius-round);
 }
 
+:host(:invalid) {
+  .ea-switch__form-label {
+    color: var(--red-500);
+  }
+
+  .ea-switch__inner {
+    box-shadow: 0 0 0 2px var(--red-500);
+  }
+}
+
 :host([inactive-text]) {
   @include block(ea-switch) {
     @include element(label) {

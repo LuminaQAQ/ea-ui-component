@@ -36,6 +36,17 @@ $ea-checkbox-size-type: (large, default, small);
   cursor: not-allowed;
 }
 
+:host(:invalid) {
+  .#{$name}__inner {
+    border-color: var(--red-500);
+    box-shadow: 0 0 0 2px var(--red-200);
+  }
+
+  .#{$name}__label {
+    color: var(--red-500);
+  }
+}
+
 @include block($name) {
   box-sizing: border-box;
   display: inline-flex;

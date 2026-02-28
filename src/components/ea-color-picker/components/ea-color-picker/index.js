@@ -63,7 +63,7 @@ export class EaColorPicker extends FormAssociatedBase {
       "tabindex",
       "placement",
       "show-alpha",
-      "clearable",
+      "required",
     ];
   }
 
@@ -133,6 +133,10 @@ export class EaColorPicker extends FormAssociatedBase {
         // this.#container.tabIndex = newVal;
       },
     },
+    required: {
+      type: Boolean,
+      default: false,
+    },
   });
 
   propState = this.properties({
@@ -185,7 +189,7 @@ export class EaColorPicker extends FormAssociatedBase {
     this.ns = ns;
 
     this.shadowRoot.innerHTML = this.html(`
-      <label class="${ns.e("label")}" part="label"></label>
+      <label class="${ns.e("form-label")}" part="form-label"></label>
       <div class="${ns.b("container")}" part="container" tabindex="${this.tabindex}">
         <ea-popper 
           class="${ns.e("popper")}" 
@@ -210,7 +214,7 @@ export class EaColorPicker extends FormAssociatedBase {
       </div>
     `);
 
-    this.#label = this.shadowRoot.querySelector(ns.ce("label"));
+    this.#label = this.shadowRoot.querySelector(ns.ce("form-label"));
     this.#container = this.shadowRoot.querySelector(ns.cb());
     this.#popper = this.shadowRoot.querySelector(ns.ce("popper"));
     this.#trigger = this.shadowRoot.querySelector(ns.ce("trigger"));
@@ -469,6 +473,47 @@ export class EaColorPicker extends FormAssociatedBase {
     if (this.#container) {
       this.#container.blur();
     }
+  }
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this;
+  }
+
+  /**
+   * 更新表单验证状态
+   */
+  updateValidity() {
+    if (this.required && !this.value) {
+      this.internals.setValidity(
+        { valueMissing: true },
+        "请选择一个颜色",
+        this
+      );
+    } else {
+      this.internals.setValidity({}, "", this);
+    }
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  checkValidity() {
+    this.updateValidity();
+    return this.internals.checkValidity();
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  reportValidity() {
+    this.updateValidity();
+    return this.internals.reportValidity();
   }
 }
 

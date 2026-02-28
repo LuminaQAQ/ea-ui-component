@@ -35,6 +35,7 @@ export default defineConfig({
           // { text: "安装", link: "/guide/install" },
           // { text: "快速上手", link: "/guide/example" },
           { text: "使用", link: "/guide/Usage" },
+          { text: "Form 表单", link: "/ea-form" },
           // { text: "如何改变图标链接？", link: "/guide/customIconFontHref" },
           // {
           //   text: "如何处理图标丢失的问题？",
@@ -68,7 +69,6 @@ export default defineConfig({
           //   link: "/ea-date-picker-panel",
           // },
           { text: "Date Picker 日期选择器", link: "/ea-date-picker" },
-          // { text: "Form 表单组件 [ ]", link: "/ea-form" },
           { text: "Input 输入框", link: "/ea-input" },
           { text: "Input Number 数字输入框", link: "/ea-input-number" },
           // { text: "Input Tag 标签输入框 [ ]", link: "/ea-input-tag" },

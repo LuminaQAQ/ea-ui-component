@@ -252,6 +252,47 @@ export class EaRate extends FormAssociatedBase {
     this.emit("change", { detail: { value: displayValue } });
   };
 
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this;
+  }
+
+  /**
+   * 更新表单验证状态
+   */
+  updateValidity() {
+    if (this.required && !this.value) {
+      this.internals.setValidity(
+        { valueMissing: true },
+        "请选择一个评分",
+        this
+      );
+    } else {
+      this.internals.setValidity({}, "", this);
+    }
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  checkValidity() {
+    this.updateValidity();
+    return this.internals.checkValidity();
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   */
+  reportValidity() {
+    this.updateValidity();
+    return this.internals.reportValidity();
+  }
+
   connectedCallback() {
     super.connectedCallback();
 

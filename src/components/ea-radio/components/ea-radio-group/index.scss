@@ -6,6 +6,12 @@
   margin-right: 4px;
 }
 
+:host(:invalid) {
+  .ea-radio-group__form-label {
+    color: var(--red-500);
+  }
+}
+
 @include block(ea-radio-group) {
   display: inline-flex;
   flex-wrap: wrap;

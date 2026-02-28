@@ -28,7 +28,24 @@ $name: ea-color-picker;
 }
 
 :host {
-  display: block;
+  display: inline-block;
+}
+
+:host(:invalid) {
+  .#{$name}__form-label {
+    color: var(--red-500);
+  }
+
+  .#{$name}__trigger {
+    border-color: var(--red-500);
+  }
+}
+
+:host(:invalid:focus-within) {
+  .#{$name}__trigger {
+    border-color: var(--red-500);
+    box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
+  }
 }
 
 @include block($name) {

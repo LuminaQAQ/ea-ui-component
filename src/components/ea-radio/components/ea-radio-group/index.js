@@ -1,9 +1,9 @@
-import Base from "@components/Base.js";
+import FormAssociatedBase from "@/core/FormBase";
 
 import stylesheet from "./index.scss?inline";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
-export class EaRadioGroup extends Base {
+export class EaRadioGroup extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLSlotElement} */
@@ -23,6 +23,7 @@ export class EaRadioGroup extends Base {
       "border",
       "disabled",
       "size",
+      "required",
     ];
   }
 
@@ -46,6 +47,7 @@ export class EaRadioGroup extends Base {
       default: "",
       observer: newVal => {
         this.#updateCurrentValue(newVal);
+        this.setValue(newVal);
       },
     },
     border: {
@@ -68,6 +70,10 @@ export class EaRadioGroup extends Base {
       observer: newVal => {
         this.#updateGroupSize(newVal);
       },
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
   });
 
@@ -186,6 +192,54 @@ export class EaRadioGroup extends Base {
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+  }
+
+  /**
+   * 获取验证目标元素
+   * 返回当前选中的 ea-radio，如果没有选中则返回第一个 ea-radio
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    const checkedRadio = this.querySelector("ea-radio[checked]");
+    if (checkedRadio) return checkedRadio;
+
+    const firstRadio = this.querySelector("ea-radio");
+    return firstRadio || this.#container;
+  }
+
+  /**
+   * 更新表单验证状态
+   */
+  updateValidity() {
+    const hasValue = this.value !== "" && this.value != null;
+
+    if (this.required && !hasValue) {
+      this.internals.setValidity(
+        { valueMissing: true },
+        "请选择一个选项",
+        this
+      );
+    } else {
+      this.internals.setValidity({}, "", this);
+    }
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean}
+   */
+  checkValidity() {
+    this.updateValidity();
+    return this.internals.validity.valid;
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean}
+   */
+  reportValidity() {
+    this.updateValidity();
+    return this.internals.reportValidity();
   }
 }
 

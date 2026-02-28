@@ -299,6 +299,12 @@ export class EaSelect extends FormAssociatedBase {
         });
 
         this.updateContainerClasslist();
+
+        if (!newVal) {
+          this.querySelectorAll("ea-option").forEach(option => {
+            option.toggleAttribute("selected", false);
+          });
+        }
       },
     },
   });
@@ -668,19 +674,41 @@ export class EaSelect extends FormAssociatedBase {
   }
 
   /**
+   * 更新表单验证状态
+   * 根据 ea-select 的实际 value 进行验证，而不是内部 input 的显示值
+   */
+  updateValidity() {
+    const hasValue = this.multiple
+      ? Array.isArray(this.value) && this.value.length > 0
+      : this.value !== "" && this.value != null;
+
+    if (this.required && !hasValue) {
+      this.internals.setValidity(
+        { valueMissing: true },
+        "请选择一个选项",
+        this
+      );
+    } else {
+      this.internals.setValidity({}, "", this);
+    }
+  }
+
+  /**
    * 检查表单字段的有效性
-   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   * @returns {boolean}
    */
   checkValidity() {
-    return this.#input.checkValidity();
+    this.updateValidity();
+    return this.internals.validity.valid;
   }
 
   /**
    * 报告表单字段的有效性（显示验证提示）
-   * @returns {boolean} 如果字段有效返回 true，否则返回 false
+   * @returns {boolean}
    */
   reportValidity() {
-    return this.#input.reportValidity();
+    this.updateValidity();
+    return this.internals.reportValidity();
   }
 }
 

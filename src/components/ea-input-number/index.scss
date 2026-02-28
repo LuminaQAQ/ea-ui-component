@@ -56,42 +56,37 @@ $ea-input-number-size-type: (
 }
 
 @include block($name) {
-  box-sizing: border-box;
-  user-select: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 
-  display: inline-flex;
-  align-items: stretch;
+  @include element(region) {
+    display: flex;
+    align-items: center;
 
-  width: calc(var(--#{$name}-default-width) - 2px);
+    box-sizing: border-box;
+    user-select: none;
 
-  border: 1px solid var(--#{$name}-border-color);
+    width: calc(var(--#{$name}-default-width) - 2px);
+
+    border: 1px solid var(--#{$name}-border-color);
+    border-radius: 4px;
+
+    overflow: hidden;
+
+    transition: border var(--#{$name}-transition);
+  }
 
   @include element(form-label) {
-    display: block;
     padding-bottom: var(--spacing-md);
 
-    font-size: var(--font-size-md);
-    color: var(--grey-700);
+    font-size: var(--#{$name}-default-font-size);
+    color: var(--#{$name}-text-color);
 
     &:empty {
       display: none;
     }
   }
-
-  box-sizing: border-box;
-  user-select: none;
-
-  display: inline-flex;
-  align-items: stretch;
-
-  width: calc(var(--#{$name}-default-width) - 2px);
-
-  border: 1px solid var(--#{$name}-border-color);
-  border-radius: 4px;
-
-  overflow: hidden;
-
-  transition: border var(--#{$name}-transition);
 
   @include element(operator) {
     display: flex;
@@ -127,6 +122,21 @@ $ea-input-number-size-type: (
   }
 
   @include element(inner) {
+    flex: 1;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &::-ms-clear {
+      display: none;
+    }
+
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+
     box-sizing: border-box;
 
     outline: 0;
@@ -149,7 +159,9 @@ $ea-input-number-size-type: (
 
   @each $size in $ea-input-number-size-type {
     @include modifier($size) {
-      width: calc(var(--#{$name}-#{$size}-width) - 2px);
+      .ea-input-number__region {
+        width: calc(var(--#{$name}-#{$size}-width) - 2px);
+      }
 
       .ea-input-number__operator,
       .ea-input-number__inner {
@@ -162,7 +174,9 @@ $ea-input-number-size-type: (
   }
 
   @include state(focus) {
-    border-color: var(--#{$name}-active-color);
+    .ea-input-number__region {
+      border-color: var(--#{$name}-active-color);
+    }
   }
 
   @include state(min) {
@@ -180,6 +194,10 @@ $ea-input-number-size-type: (
   @include state(disabled) {
     pointer-events: none;
 
+    .ea-input-number__region {
+      border-color: var(--#{$name}-border-color);
+    }
+
     .ea-input-number__operator {
       @include operator-disabled-style;
     }
@@ -191,7 +209,9 @@ $ea-input-number-size-type: (
   }
 
   @include state(no-controls) {
-    display: inline-block;
+    .ea-input-number__region {
+      display: inline-block;
+    }
 
     .ea-input-number__operator {
       display: none;

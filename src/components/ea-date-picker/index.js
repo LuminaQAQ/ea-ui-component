@@ -1,5 +1,5 @@
 import { namespace } from "@/directives/namespace";
-import Base from "@components/Base.js";
+import FormAssociatedBase from "@/core/FormBase";
 import stylesheet from "./index.scss?inline";
 
 import "@/components/ea-calendar/index.js";
@@ -16,7 +16,7 @@ import { i18nManager } from "@/utils/I18nManager";
 import { EaDatePickerPanelChangeEvent } from "./events/EaDatePickerPanelChangeEvent";
 import { EaDatePickerVisibleChangeEvent } from "./events/EaDatePickerVisibleChangeEvent";
 
-export class EaDatePicker extends Base {
+export class EaDatePicker extends FormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
@@ -71,6 +71,7 @@ export class EaDatePicker extends Base {
       "display-format",
       "value-format",
       "size",
+      "required",
     ];
   }
 
@@ -109,6 +110,8 @@ export class EaDatePicker extends Base {
         } else {
           this.#inputElement.value = dateValue;
         }
+        // 同步表单值
+        this.setValue(newVal);
       },
     },
     placeholder: {
@@ -167,6 +170,14 @@ export class EaDatePicker extends Base {
         this.#nextYearBtn.setAttribute("size", newVal);
 
         this.updateContainerClasslist();
+      },
+    },
+    required: {
+      type: Boolean,
+      default: false,
+      observer: async newVal => {
+        await customElements.whenDefined("ea-input");
+        this.#inputElement.toggleAttribute("required", newVal);
       },
     },
   });
@@ -808,6 +819,45 @@ export class EaDatePicker extends Base {
   $beforeUnmounted() {
     this.#abortController?.abort();
     this.#abortController = null;
+  }
+
+  /**
+   * 获取验证目标元素
+   * @returns {HTMLElement}
+   */
+  get validationTarget() {
+    return this.#inputElement;
+  }
+
+  /**
+   * 更新表单验证状态
+   */
+  updateValidity() {
+    const hasValue = this.value !== "" && this.value != null;
+
+    if (this.required && !hasValue) {
+      this.internals.setValidity({ valueMissing: true }, "请选择日期", this);
+    } else {
+      this.internals.setValidity({}, "", this);
+    }
+  }
+
+  /**
+   * 检查表单字段的有效性
+   * @returns {boolean}
+   */
+  checkValidity() {
+    this.updateValidity();
+    return this.internals.validity.valid;
+  }
+
+  /**
+   * 报告表单字段的有效性（显示验证提示）
+   * @returns {boolean}
+   */
+  reportValidity() {
+    this.updateValidity();
+    return this.internals.reportValidity();
   }
 }
 

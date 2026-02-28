@@ -23,6 +23,17 @@ $ea-slider-size-types: (
 
 :host {
   display: block;
+  width: 100%;
+}
+
+:host(:invalid) {
+  .#{$name}__form-label {
+    color: var(--danger-color);
+  }
+
+  .#{$name}__thumb {
+    border-color: var(--red-500);
+  }
 }
 
 @include block($name) {
