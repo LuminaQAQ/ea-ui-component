@@ -14,96 +14,139 @@ npm i easy-component-ui
 
 ## 在线引入
 
-> `js`: 相应组件的引入, 需考虑修改`/components/ea-button/index.js`部分.
+通过 unpkg CDN 引入最新版本：
 
 ```html
+<!-- 引入全部组件 -->
 <script type="module">
-  import "https://unpkg.com/easy-component-ui@1.0.3/components/ea-button/index.js";
-<script>
+  import "https://unpkg.com/easy-component-ui/dist/components/index.js";
+</script>
+
+<!-- 或引入单个组件 -->
+<script type="module">
+  import "https://unpkg.com/easy-component-ui/dist/components/ea-button.js";
+</script>
 ```
 
 ## 在原生环境引入
 
-这里的路径是 `node_modules` 目录下的 `easy-component-ui` 目录, 即默认下载路径.
+安装后，在 HTML 文件中直接引入：
 
 :::warning
-`css`: 特别的, 如果项目中会使用到带有图标的 `属性/组件`, 需要使用 `link` 标签引入图标文件
+如果项目中会使用到带有图标的组件，需要先引入图标样式文件
 :::
 
 ```html
+<!-- 引入图标样式（如果需要使用图标） -->
 <link
   rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+  href="./node_modules/easy-component-ui/dist/assets/icon.css"
 />
+
+<!-- 引入全部组件 -->
+<script type="module">
+  import "./node_modules/easy-component-ui/dist/components/index.js";
+</script>
+
+<!-- 或按需引入单个组件 -->
+<script type="module">
+  import "./node_modules/easy-component-ui/dist/components/ea-button.js";
+</script>
 ```
 
-> `js`: 相应组件的引入, 请看对应组件的文档. 格式通常如下:
+## 在 Vite + Vue 项目中引入
 
-```html
-<script type="module">
-  import "./node_modules/easy-component-ui/components/ea-button/index.js";
-<script>
+### 全部引入
+
+在 `main.js` 或 `main.ts` 中引入：
+
+```js
+import { createApp } from "vue";
+import "./style.css";
+
+// 引入图标样式（如果需要使用图标）
+import "easy-component-ui/icon.css";
+
+// 全部引入组件
+import "easy-component-ui";
+
+import App from "./App.vue";
+
+createApp(App).mount("#app");
+```
+
+### 按需引入
+
+```js
+import { createApp } from "vue";
+import "./style.css";
+
+// 引入图标样式（如果需要使用图标）
+import "easy-component-ui/icon.css";
+
+// 按需引入单个组件
+import "easy-component-ui/dist/components/ea-button.js";
+import "easy-component-ui/dist/components/ea-input.js";
+
+import App from "./App.vue";
+
+createApp(App).mount("#app");
+```
+
+### 配置 vite.config.js
+
+在 Vue 中使用自定义元素时，需要配置 Vue 编译器以识别 `ea-` 开头的标签：
+
+```js
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+
+export default defineConfig({
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: tag => tag.startsWith("ea-"),
+        },
+      },
+    }),
+  ],
+});
 ```
 
 ## 如何获取单独的图标组件
 
-> 1.  [npm 安装](#npm-安装)
-> 2.  [jsdelivr](https://www.jsdelivr.com/package/npm/easy-component-ui?tab=files)
-> 3.  [github 发布页](https://github.com/LuminaQAQ/ea-ui-component/releases)
+> 1. [npm 安装](#npm-安装)
+> 2. [jsdelivr](https://www.jsdelivr.com/package/npm/easy-component-ui?tab=files)
+> 3. [github 发布页](https://github.com/LuminaQAQ/ea-ui-component/releases)
 
-:::tip
-以下为文件目录结构。其中：
-
-- 不在 `build` 目录下的`components`和`utils`，为未进行压缩源文件。
-- 在 `build` 目录下的`components`和`utils`，为压缩后的文件。
-
-> 因为先写的文档后发的包, 虽然不规范, 暂时先这样吧。
-
-:::
+## 文件目录结构
 
 ```txt
-├─.gitignore
-├─build
-│ ├─components
-│ │ ├─Base.js
-│ │ ├─ea-icon
-│ │ │ ├─config.json
-│ │ │ ├─css
-│ │ │ │ └─fontello.css
-│ │ │ ├─font
-│ │ │ │ ├─fontello.eot
-│ │ │ │ ├─fontello.svg
-│ │ │ │ ├─fontello.ttf
-│ │ │ │ ├─fontello.woff
-│ │ │ │ └─fontello.woff2
-│ │ │ ├─index.css
-│ │ │ └─index.js
-│ │ ├─globalConfig.js
-│ │ └─index.js
-│ └─utils
-│   ├─timeout.js
-│   └─Validator.js
-├─components
-│ ├─Base.js
-│ ├─ea-icon
-│ │ ├─config.json
-│ │ ├─css
-│ │ │ └─fontello.css
-│ │ ├─font
-│ │ │ ├─fontello.eot
-│ │ │ ├─fontello.svg
-│ │ │ ├─fontello.ttf
-│ │ │ ├─fontello.woff
-│ │ │ └─fontello.woff2
-│ │ ├─index.css
-│ │ └─index.js
-│ ├─globalConfig.js
-│ └─index.js
-│ ├─ea-ui-base-style.css
-│ ├─ea-ui-base-style.scss
-│ ├─globalConfig.js
-│ └─index.js
+easy-component-ui/
+├─dist/
+│  ├─assets/
+│  │  └─icon.css              # 图标字体样式
+│  ├─components/
+│  │  ├─index.js              # 全部组件入口
+│  │  ├─Base.js               # 组件基类
+│  │  ├─ea-button.js          # 按钮组件
+│  │  ├─ea-icon.js            # 图标组件
+│  │  └─...                   # 其他组件
+│  ├─core/
+│  │  └─FormBase.js           # 表单组件基类
+│  ├─css/
+│  │  └─*.style.js            # 组件样式
+│  └─utils/
+│     └─*.js                  # 工具函数
+├─README.md
 ├─LICENSE
-├─package.json
-└─utils
+└─package.json
 ```
+
+:::tip
+
+- `dist/components/index.js` - 全部组件入口，引入后会注册所有组件
+- `dist/components/ea-*.js` - 单个组件文件，可按需引入
+- `dist/assets/icon.css` - 图标字体样式，使用图标组件时需要引入
+  :::
