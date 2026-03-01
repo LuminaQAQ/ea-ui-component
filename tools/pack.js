@@ -1,7 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const handleImportModules = () => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const handleImportModules = () => {
     const dir = path.join(process.cwd(), 'src/components');
     const entryPath = path.join(process.cwd(), 'src/components/index.js');
     fs.writeFileSync(entryPath, '');
@@ -21,14 +25,14 @@ const handleImportModules = () => {
     fs.appendFileSync(entryPath, `import './ea-icon/index.css';\n`)
 }
 
-const handlePackageExport = () => {
+export const handlePackageExport = () => {
     const dir = path.resolve(process.cwd(), 'src/components');
     const entryConfigs = {
         index: path.resolve(process.cwd(), 'src/components/index.js'),
     };
 
     const exportsConfig = {
-        ".": "./dist/index.js"
+        ".": "./dist/components/index.js"
     };
 
     fs.readdirSync(dir).forEach((file) => {
@@ -40,7 +44,7 @@ const handlePackageExport = () => {
             entryConfigs[file] = entryPath;
 
             exportsConfig[`./${file}`] = {
-                import: `./dist/${file}.js`
+                import: `./dist/components/${file}.js`
             };
         }
     });
@@ -51,7 +55,7 @@ const handlePackageExport = () => {
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
 
-const handleImportChildPages = () => {
+export const handleImportChildPages = () => {
     const dir = path.join(process.cwd(), 'test');
     const entryPath = path.join(process.cwd(), 'index.html');
     const files = [];
@@ -79,5 +83,3 @@ const handleImportChildPages = () => {
     `);
 
 }
-
-module.exports = { handleImportModules, handlePackageExport, handleImportChildPages }

@@ -48,7 +48,7 @@ export default defineConfig({
       {
         text: "开始",
         items: [
-          // { text: "安装", link: "/guide/install" },
+          { text: "安装", link: "/guide/install" },
           // { text: "快速上手", link: "/guide/example" },
           { text: "使用", link: "/guide/Usage" },
           { text: "Form 表单", link: "/ea-form" },
