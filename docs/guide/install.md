@@ -65,7 +65,7 @@ import { createApp } from "vue";
 import "./style.css";
 
 // 引入图标样式（如果需要使用图标）
-import "easy-component-ui/icon.css";
+import "easy-component-ui/icon-assets";
 
 // 全部引入组件
 import "easy-component-ui";
@@ -82,11 +82,11 @@ import { createApp } from "vue";
 import "./style.css";
 
 // 引入图标样式（如果需要使用图标）
-import "easy-component-ui/icon.css";
+import "easy-component-ui/icon-assets";
 
 // 按需引入单个组件
-import "easy-component-ui/dist/components/ea-button.js";
-import "easy-component-ui/dist/components/ea-input.js";
+import "easy-component-ui/ea-button";
+import "easy-component-ui/ea-input";
 
 import App from "./App.vue";
 
