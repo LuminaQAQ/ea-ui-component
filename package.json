@@ -111,7 +111,7 @@
   },
   "exports": {
     ".": "./dist/components/index.js",
-    "./icon.css": {
+    "./icon-assets": {
       "import": "./dist/assets/icon.css"
     },
     "./ea-alert": {
