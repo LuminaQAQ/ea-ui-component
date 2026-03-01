@@ -27,10 +27,10 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "dev:doc": "vitepress dev docs --host 0.0.0.0",
-    "build": "node tools/index.js && vite build",
-    "build:doc": "vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e && vitepress preview docs",
+    "build": "node tools/index.js && vite build && powershell -Command \"New-Item -ItemType Directory -Force -Path .\\docs\\.vitepress\\public\\dist\\assets | Out-Null; Copy-Item .\\dist\\assets\\icon.css .\\docs\\.vitepress\\public\\dist\\assets\\icon.css -Force | Out-Null\"",
+    "build:doc": "xcopy .\\docs\\index.css .\\docs\\.vitepress\\public\\index.css /y >nul && vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e /y >nul",
+    "preview:doc": "set VITEPRESS_BASE=___EMPTY___&& xcopy .\\docs\\index.css .\\docs\\.vitepress\\public\\index.css /y >nul && vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e /y >nul && vitepress preview docs",
     "preview": "vite preview",
-    "preview:doc": "vitepress preview docs",
     "deploy": "gh-pages -d docs/.vitepress/dist",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
@@ -112,12 +112,6 @@
     },
     "./ea-empty": {
       "import": "./dist/ea-empty.js"
-    },
-    "./ea-form": {
-      "import": "./dist/ea-form.js"
-    },
-    "./ea-form-item": {
-      "import": "./dist/ea-form-item.js"
     },
     "./ea-icon": {
       "import": "./dist/ea-icon.js"

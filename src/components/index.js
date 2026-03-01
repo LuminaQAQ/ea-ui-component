@@ -18,8 +18,6 @@ import './ea-dialog/index.js';
 import './ea-drawer/index.js';
 import './ea-dropdown/index.js';
 import './ea-empty/index.js';
-import './ea-form/index.js';
-import './ea-form-item/index.js';
 import './ea-icon/index.js';
 import './ea-image/index.js';
 import './ea-image-preview/index.js';

@@ -7,40 +7,84 @@
     <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-      hr {
-        margin: 3rem 0;
+      * {
+        box-sizing: border-box;
       }
 
-      .demo {
-        margin: 1rem 0;
+      body {
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        color: #303133;
+        margin: 0 0 1.5rem 0;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e4e7ed;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+        color: #606266;
+        margin: 1.5rem 0 1rem 0;
+        padding-left: 0.75rem;
+        border-left: 4px solid #409eff;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
       }
 
       .form-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 1rem;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        align-items: flex-start;
       }
 
-      .form-field {
+      .form-row > * {
         flex: 1;
         min-width: 200px;
       }
 
       .button-group {
         display: flex;
-        gap: 0.5rem;
-        margin-top: 1rem;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e4e7ed;
       }
 
       .output {
-        background: #f5f7fa;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-top: 1rem;
-        font-family: monospace;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ed 100%);
+        padding: 1.25rem;
+        border-radius: 8px;
+        margin-top: 1.5rem;
+        font-family: "Consolas", "Monaco", monospace;
         font-size: 14px;
         white-space: pre-wrap;
+        border-left: 4px solid #409eff;
+        color: #303133;
+      }
+
+      .component-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .component-card h4 {
+        margin: 0 0 1rem 0;
+        color: #606266;
+        font-size: 0.95rem;
       }
     </style>
   </head>
@@ -72,302 +116,529 @@
     ></script>
     <script type="module" src="../src/components/ea-transfer/index.js"></script>
 
-    <!-- -------- 基础表单 -------- -->
-    <!-- #region  -->
-    <h2>基础表单</h2>
-    <div class="demo">
-      <form id="basicForm">
-        <div class="form-row">
-          <ea-input
-            name="username"
-            label="用户名"
-            required
-            placeholder="请输入用户名"
-            style="width: 240px"
-          ></ea-input>
-          <ea-input
-            name="email"
-            label="邮箱"
-            type="email"
-            required
-            placeholder="请输入邮箱"
-            style="width: 240px"
-          ></ea-input>
+    <div class="container">
+      <h1 class="page-title">📝 Form 表单组件示例</h1>
+
+      <!-- 基础表单 -->
+      <div class="card">
+        <h2 class="card-title">基础表单</h2>
+        <form id="basicForm" class="demo-form">
+          <div class="form-row">
+            <ea-input
+              name="username"
+              label="用户名"
+              placeholder="请输入用户名"
+              style="width: 100%"
+            ></ea-input>
+            <ea-input
+              name="email"
+              label="邮箱"
+              type="email"
+              placeholder="请输入邮箱"
+              style="width: 100%"
+            ></ea-input>
+          </div>
+          <div class="form-row">
+            <ea-input-number
+              name="age"
+              label="年龄"
+              min="1"
+              max="150"
+              value="25"
+              style="width: 100%"
+            ></ea-input-number>
+            <ea-select
+              name="city"
+              label="城市"
+              placeholder="请选择城市"
+              style="width: 100%"
+            >
+              <ea-option value="beijing">北京</ea-option>
+              <ea-option value="shanghai">上海</ea-option>
+              <ea-option value="guangzhou">广州</ea-option>
+              <ea-option value="shenzhen">深圳</ea-option>
+            </ea-select>
+          </div>
+          <div class="button-group">
+            <ea-button type="primary" button-type="submit">提交</ea-button>
+            <ea-button button-type="reset">重置</ea-button>
+          </div>
+        </form>
+        <div class="output" id="basicFormOutput"></div>
+      </div>
+
+      <!-- 复杂表单 -->
+      <div class="card">
+        <h2 class="card-title">复杂表单（涵盖所有组件）</h2>
+        <form id="complexForm" class="demo-form">
+          <div class="section-title">基本信息</div>
+          <div class="form-row">
+            <ea-input
+              name="username"
+              label="用户名"
+              required
+              minlength="3"
+              maxlength="20"
+              placeholder="请输入用户名"
+              style="width: 100%"
+            ></ea-input>
+            <ea-input
+              name="email"
+              label="邮箱"
+              type="email"
+              required
+              placeholder="请输入邮箱"
+              style="width: 100%"
+            ></ea-input>
+            <ea-input-number
+              name="age"
+              label="年龄"
+              required
+              min="18"
+              max="100"
+              value="25"
+              style="width: 100%"
+            ></ea-input-number>
+          </div>
+
+          <div class="section-title">选择信息</div>
+          <div class="form-row">
+            <ea-select
+              name="city"
+              label="城市"
+              required
+              placeholder="请选择城市"
+              style="width: 100%"
+            >
+              <ea-option value="beijing">北京</ea-option>
+              <ea-option value="shanghai">上海</ea-option>
+              <ea-option value="guangzhou">广州</ea-option>
+              <ea-option value="shenzhen">深圳</ea-option>
+            </ea-select>
+            <ea-date-picker
+              name="birthDate"
+              label="出生日期"
+              required
+              placeholder="选择日期"
+              style="width: 100%"
+            ></ea-date-picker>
+            <ea-time-picker
+              name="workTime"
+              label="工作时间"
+              required
+              placeholder="选择时间"
+              style="width: 100%"
+            ></ea-time-picker>
+          </div>
+
+          <div class="section-title">偏好设置</div>
+          <div class="form-row">
+            <ea-radio-group name="gender" label="性别" required style="flex: 1">
+              <ea-radio value="male" label="男"></ea-radio>
+              <ea-radio value="female" label="女"></ea-radio>
+            </ea-radio-group>
+            <ea-checkbox-group
+              name="hobbies"
+              label="兴趣爱好"
+              required
+              style="flex: 2"
+            >
+              <ea-checkbox value="reading" label="阅读"></ea-checkbox>
+              <ea-checkbox value="sports" label="运动"></ea-checkbox>
+              <ea-checkbox value="music" label="音乐"></ea-checkbox>
+              <ea-checkbox value="travel" label="旅行"></ea-checkbox>
+            </ea-checkbox-group>
+          </div>
+
+          <div class="form-row">
+            <ea-slider
+              name="satisfaction"
+              label="满意度"
+              min="0"
+              max="100"
+              value="80"
+              show-input
+              style="flex: 2"
+            ></ea-slider>
+            <ea-rate
+              name="serviceScore"
+              label="服务评分"
+              required
+              value="0"
+              style="flex: 1"
+            ></ea-rate>
+          </div>
+
+          <div class="form-row">
+            <ea-color-picker
+              name="themeColor"
+              label="主题颜色"
+              required
+              value="#409EFF"
+              style="flex: 1"
+            ></ea-color-picker>
+            <ea-switch
+              name="agreement"
+              label="同意用户协议"
+              required
+              style="flex: 1"
+            ></ea-switch>
+          </div>
+
+          <div class="section-title">技能选择</div>
+          <div class="form-row">
+            <ea-transfer
+              id="complexTransfer"
+              name="selectedSkills"
+              label="技能选择"
+              required
+              style="width: 100%"
+            ></ea-transfer>
+          </div>
+
+          <div class="button-group">
+            <ea-button type="primary" button-type="submit">提交</ea-button>
+            <ea-button button-type="reset">重置</ea-button>
+          </div>
+        </form>
+        <div class="output" id="complexOutput"></div>
+      </div>
+
+      <!-- 各组件单独验证示例 -->
+      <div class="card">
+        <h2 class="card-title">各组件单独验证示例</h2>
+        <div class="component-grid">
+          <div class="component-card">
+            <h4>输入框验证</h4>
+            <form id="inputForm">
+              <ea-input
+                name="username"
+                label="用户名"
+                required
+                minlength="3"
+                maxlength="10"
+                placeholder="至少3个字符"
+                style="width: 100%"
+              ></ea-input>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>数字输入验证</h4>
+            <form id="inputNumberForm">
+              <ea-input-number
+                name="age"
+                label="年龄"
+                required
+                min="18"
+                max="60"
+                placeholder="18-60"
+                style="width: 100%"
+              ></ea-input-number>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>选择器验证</h4>
+            <form id="selectForm">
+              <ea-select
+                name="city"
+                label="城市"
+                required
+                placeholder="请选择"
+                style="width: 100%"
+              >
+                <ea-option value="beijing">北京</ea-option>
+                <ea-option value="shanghai">上海</ea-option>
+                <ea-option value="guangzhou">广州</ea-option>
+              </ea-select>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>日期选择验证</h4>
+            <form id="datePickerForm">
+              <ea-date-picker
+                name="birthDate"
+                label="出生日期"
+                required
+                placeholder="选择日期"
+                style="width: 100%"
+              ></ea-date-picker>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>时间选择验证</h4>
+            <form id="timePickerForm">
+              <ea-time-picker
+                name="time"
+                label="时间"
+                required
+                placeholder="选择时间"
+                style="width: 100%"
+              ></ea-time-picker>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>单选组验证</h4>
+            <form id="radioForm">
+              <ea-radio-group name="gender" label="性别" required>
+                <ea-radio value="male" label="男"></ea-radio>
+                <ea-radio value="female" label="女"></ea-radio>
+              </ea-radio-group>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>复选组验证</h4>
+            <form id="checkboxForm">
+              <ea-checkbox-group name="hobbies" label="兴趣爱好" required>
+                <ea-checkbox value="reading" label="阅读"></ea-checkbox>
+                <ea-checkbox value="sports" label="运动"></ea-checkbox>
+                <ea-checkbox value="music" label="音乐"></ea-checkbox>
+              </ea-checkbox-group>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>评分验证</h4>
+            <form id="rateForm">
+              <ea-rate name="score" label="评分" required value="0"></ea-rate>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>开关验证</h4>
+            <form id="switchForm">
+              <ea-switch name="agreement" label="同意协议" required></ea-switch>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>颜色选择验证</h4>
+            <form id="colorPickerForm">
+              <ea-color-picker
+                name="color"
+                label="喜欢的颜色"
+                required
+                placeholder="选择颜色"
+                style="width: 100%"
+              ></ea-color-picker>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card">
+            <h4>滑块验证</h4>
+            <form id="sliderForm">
+              <ea-slider
+                name="satisfaction"
+                label="满意度"
+                required
+                min="0"
+                max="100"
+                value="0"
+                show-input
+                style="width: 100%"
+              ></ea-slider>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card" style="grid-column: 1 / -1">
+            <h4>穿梭框验证</h4>
+            <form id="transferForm">
+              <ea-transfer
+                id="transferValidate"
+                name="selectedItems"
+                required
+                style="width: 100%"
+              ></ea-transfer>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
+
+          <div class="component-card" style="grid-column: 1 / -1">
+            <h4>单选复选框（同意协议场景）</h4>
+            <form id="singleCheckboxForm">
+              <ea-checkbox name="agreement" value="agreed" required>
+                我已阅读并同意《用户协议》和《隐私政策》
+              </ea-checkbox>
+              <div
+                class="button-group"
+                style="margin-top: 1rem; padding-top: 0; border: none"
+              >
+                <ea-button type="primary" button-type="submit" size="small"
+                  >提交</ea-button
+                >
+              </div>
+            </form>
+          </div>
         </div>
-        <div class="form-row">
-          <ea-input-number
-            name="age"
-            label="年龄"
-            value="18"
-            min="18"
-            max="150"
-          ></ea-input-number>
-          <ea-select
-            name="city"
-            label="城市"
-            required
-            placeholder="请选择城市"
-            style="width: 240px"
-          >
-            <ea-option value="beijing">北京</ea-option>
-            <ea-option value="shanghai">上海</ea-option>
-            <ea-option value="guangzhou">广州</ea-option>
-          </ea-select>
-        </div>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-          <ea-button button-type="reset">重置</ea-button>
-        </div>
-      </form>
-      <div class="output" id="basicOutput"></div>
+      </div>
     </div>
 
     <script type="module">
-      const basicForm = document.getElementById("basicForm");
-      const basicOutput = document.getElementById("basicOutput");
+      // 单例模式：FormManager
+      const FormManager = {
+        forms: new Map(),
 
-      basicForm.addEventListener("submit", e => {
-        // 验证表单
-        if (!basicForm.checkValidity()) {
-          basicForm.reportValidity();
-          return;
-        }
-        const formData = new FormData(basicForm);
-        const data = Object.fromEntries(formData.entries());
-        basicOutput.textContent =
-          "表单数据：\n" + JSON.stringify(data, null, 2);
-      });
+        register(id, handler) {
+          const form = document.getElementById(id);
+          if (form) {
+            this.forms.set(id, { form, handler });
+            form.addEventListener("submit", handler);
+          }
+        },
 
-      basicForm.addEventListener("reset", e => {
-        basicOutput.textContent = "";
-      });
-    </script>
+        init() {
+          // 基础表单
+          this.register("basicForm", e => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            document.getElementById("basicFormOutput").textContent =
+              "表单数据：\n" + JSON.stringify(data, null, 2);
+          });
 
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
+          // 复杂表单
+          this.register("complexForm", e => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            document.getElementById("complexOutput").textContent =
+              "表单数据：\n" + JSON.stringify(data, null, 2);
+          });
 
-    <!-- -------- 表单验证 -------- -->
-    <!-- #region  -->
-    <h2>表单验证</h2>
-    <div class="demo">
-      <form id="validationForm">
-        <div class="form-row">
-          <ea-input
-            name="realName"
-            label="真实姓名"
-            required
-            minlength="2"
-            maxlength="10"
-            placeholder="请输入真实姓名"
-            style="width: 240px"
-          ></ea-input>
-          <ea-input
-            name="phone"
-            label="手机号"
-            type="tel"
-            required
-            pattern="^1[3-9]\d{9}$"
-            placeholder="请输入手机号"
-            style="width: 240px"
-          ></ea-input>
-        </div>
-        <div class="form-row">
-          <ea-input
-            name="password"
-            label="密码"
-            type="password"
-            required
-            minlength="6"
-            placeholder="请输入密码"
-            style="width: 240px"
-          ></ea-input>
-          <ea-input
-            name="confirmPassword"
-            label="确认密码"
-            type="password"
-            required
-            placeholder="请再次输入密码"
-            style="width: 240px"
-          ></ea-input>
-        </div>
-        <div class="form-row">
-          <ea-radio-group name="gender" label="性别" required>
-            <ea-radio value="male" label="男"></ea-radio>
-            <ea-radio value="female" label="女"></ea-radio>
-          </ea-radio-group>
-        </div>
-        <div class="form-row">
-          <ea-date-picker
-            name="birthDate"
-            label="出生日期"
-            required
-            placeholder="选择日期"
-          ></ea-date-picker>
-        </div>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-          <ea-button button-type="reset">重置</ea-button>
-        </div>
-      </form>
-      <div class="output" id="validationOutput"></div>
-    </div>
+          // 各组件验证表单
+          const componentForms = [
+            { id: "inputForm", name: "输入框" },
+            { id: "inputNumberForm", name: "数字输入" },
+            { id: "selectForm", name: "选择器" },
+            { id: "radioForm", name: "单选组" },
+            { id: "checkboxForm", name: "复选组" },
+            { id: "singleCheckboxForm", name: "单选复选框" },
+            { id: "datePickerForm", name: "日期选择" },
+            { id: "timePickerForm", name: "时间选择" },
+            { id: "rateForm", name: "评分" },
+            { id: "switchForm", name: "开关" },
+            { id: "colorPickerForm", name: "颜色选择" },
+            { id: "sliderForm", name: "滑块" },
+            { id: "transferForm", name: "穿梭框" },
+          ];
 
-    <script type="module">
-      const validationForm = document.getElementById("validationForm");
+          componentForms.forEach(({ id, name }) => {
+            this.register(id, e => {
+              e.preventDefault();
+              alert(`${name} 验证通过！`);
+            });
+          });
+        },
+      };
 
-      validationForm.addEventListener("submit", e => {
-        e.preventDefault();
-
-        let isValid = true;
-
-        const password = validationForm.querySelector('[name="password"]');
-        const confirmPassword = validationForm.querySelector(
-          '[name="confirmPassword"]'
-        );
-
-        if (password.value !== confirmPassword.value) {
-          isValid = false;
-          confirmPassword.setCustomValidity("密码不一致");
-          confirmPassword.reportValidity();
-        } else {
-          confirmPassword.setCustomValidity("");
-        }
-
-        if (isValid) {
-          alert("Success");
-        }
-      });
-    </script>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <!-- -------- 复杂表单 -------- -->
-    <!-- #region -->
-    <h2>复杂表单（涵盖所有组件）</h2>
-    <div class="demo">
-      <form id="complexForm">
-        <!-- 第一行：输入类组件 -->
-        <div class="form-row">
-          <ea-input
-            name="username"
-            label="用户名"
-            required
-            minlength="3"
-            maxlength="20"
-            placeholder="请输入用户名"
-            style="width: 240px"
-          ></ea-input>
-          <ea-input
-            name="email"
-            label="邮箱"
-            type="email"
-            required
-            placeholder="请输入邮箱"
-            style="width: 240px"
-          ></ea-input>
-          <ea-input-number
-            name="age"
-            label="年龄"
-            required
-            min="18"
-            max="100"
-            value="25"
-          ></ea-input-number>
-        </div>
-
-        <!-- 第二行：选择类组件 -->
-        <div class="form-row">
-          <ea-select
-            name="city"
-            label="城市"
-            required
-            placeholder="请选择城市"
-            style="width: 200px"
-          >
-            <ea-option value="beijing">北京</ea-option>
-            <ea-option value="shanghai">上海</ea-option>
-            <ea-option value="guangzhou">广州</ea-option>
-            <ea-option value="shenzhen">深圳</ea-option>
-          </ea-select>
-          <ea-date-picker
-            name="birthDate"
-            label="出生日期"
-            required
-            placeholder="选择日期"
-          ></ea-date-picker>
-          <ea-time-picker
-            name="workTime"
-            label="工作时间"
-            required
-            placeholder="选择时间"
-          ></ea-time-picker>
-        </div>
-
-        <!-- 第三行：单选和复选 -->
-        <div class="form-row">
-          <ea-radio-group name="gender" label="性别" required value="">
-            <ea-radio value="male" label="男"></ea-radio>
-            <ea-radio value="female" label="女"></ea-radio>
-          </ea-radio-group>
-          <ea-checkbox-group name="hobbies" label="兴趣爱好" required value="">
-            <ea-checkbox value="reading" label="阅读"></ea-checkbox>
-            <ea-checkbox value="sports" label="运动"></ea-checkbox>
-            <ea-checkbox value="music" label="音乐"></ea-checkbox>
-            <ea-checkbox value="travel" label="旅行"></ea-checkbox>
-          </ea-checkbox-group>
-        </div>
-
-        <!-- 第四行：滑块和评分 -->
-        <div class="form-row">
-          <ea-slider
-            name="satisfaction"
-            label="满意度"
-            min="0"
-            max="100"
-            value="80"
-            show-input
-          ></ea-slider>
-          <ea-rate
-            name="serviceScore"
-            label="服务评分"
-            required
-            value="0"
-          ></ea-rate>
-        </div>
-
-        <!-- 第五行：颜色和开关 -->
-        <div class="form-row">
-          <ea-color-picker
-            name="themeColor"
-            label="主题颜色"
-            required
-            value="#409EFF"
-          ></ea-color-picker>
-          <ea-switch name="agreement" label="同意用户协议" required></ea-switch>
-        </div>
-
-        <!-- 第六行：穿梭框 -->
-        <div class="form-row">
-          <ea-transfer
-            id="complexTransfer"
-            name="selectedSkills"
-            label="技能选择"
-            required
-            style="width: 600px"
-          ></ea-transfer>
-        </div>
-
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-          <ea-button button-type="reset">重置</ea-button>
-        </div>
-      </form>
-      <div class="output" id="complexOutput"></div>
-      <script type="module">
+      // 初始化穿梭框数据
+      const initTransferData = () => {
         const complexTransfer = document.getElementById("complexTransfer");
-        complexTransfer.data = [
+        const transferValidate = document.getElementById("transferValidate");
+
+        const data = [
           { key: 1, label: "JavaScript" },
           { key: 2, label: "Python" },
           { key: 3, label: "Java" },
@@ -377,261 +648,21 @@
           { key: 7, label: "TypeScript" },
           { key: 8, label: "Vue" },
         ];
-      </script>
-    </div>
-    <hr />
 
-    <script type="module">
-      const complexForm = document.getElementById("complexForm");
-      const complexOutput = document.getElementById("complexOutput");
+        if (complexTransfer) complexTransfer.data = data;
+        if (transferValidate)
+          transferValidate.data = [
+            { key: 1, label: "选项 1" },
+            { key: 2, label: "选项 2" },
+            { key: 3, label: "选项 3" },
+            { key: 4, label: "选项 4" },
+            { key: 5, label: "选项 5" },
+          ];
+      };
 
-      complexForm.addEventListener("submit", e => {
-        e.preventDefault();
-        const formData = new FormData(complexForm);
-        const data = Object.fromEntries(formData.entries());
-        complexOutput.textContent =
-          "表单数据：\n" + JSON.stringify(data, null, 2);
-      });
+      // 初始化
+      FormManager.init();
+      initTransferData();
     </script>
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-
-    <!-- -------- 各组件单独验证示例 -------- -->
-    <!-- #region  -->
-    <h2>各组件单独验证示例</h2>
-
-    <h3>ea-input 验证</h3>
-    <div class="demo">
-      <form id="inputForm">
-        <ea-input
-          name="username"
-          label="用户名"
-          required
-          minlength="3"
-          maxlength="10"
-          placeholder="请输入用户名（至少3个字符）"
-          style="width: 240px"
-        ></ea-input>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-input-number 验证</h3>
-    <div class="demo">
-      <form id="inputNumberForm">
-        <ea-input-number
-          name="age"
-          label="年龄"
-          required
-          min="18"
-          max="60"
-          placeholder="请输入年龄（18-60）"
-        ></ea-input-number>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-select 验证</h3>
-    <div class="demo">
-      <form id="selectForm">
-        <ea-select
-          name="city"
-          label="城市"
-          required
-          placeholder="请选择城市"
-          style="width: 240px"
-        >
-          <ea-option value="beijing">北京</ea-option>
-          <ea-option value="shanghai">上海</ea-option>
-          <ea-option value="guangzhou">广州</ea-option>
-        </ea-select>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-radio-group 验证</h3>
-    <div class="demo">
-      <form id="radioForm">
-        <ea-radio-group name="gender" label="性别" required>
-          <ea-radio value="male" label="男"></ea-radio>
-          <ea-radio value="female" label="女"></ea-radio>
-        </ea-radio-group>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-checkbox-group 验证</h3>
-    <div class="demo">
-      <form id="checkboxForm">
-        <ea-checkbox-group name="hobbies" label="兴趣爱好" required>
-          <ea-checkbox value="reading" label="阅读"></ea-checkbox>
-          <ea-checkbox value="sports" label="运动"></ea-checkbox>
-          <ea-checkbox value="music" label="音乐"></ea-checkbox>
-        </ea-checkbox-group>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-checkbox 单选验证（同意协议场景）</h3>
-    <div class="demo">
-      <form id="singleCheckboxForm">
-        <ea-checkbox name="agreement" value="agreed" required>
-          我已阅读并同意《用户协议》和《隐私政策》
-        </ea-checkbox>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-date-picker 验证</h3>
-    <div class="demo">
-      <form id="datePickerForm">
-        <ea-date-picker
-          name="birthDate"
-          label="出生日期"
-          required
-          placeholder="选择日期"
-        ></ea-date-picker>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-time-picker 验证</h3>
-    <div class="demo">
-      <form id="timePickerForm">
-        <ea-time-picker
-          name="time"
-          label="时间"
-          required
-          placeholder="选择时间"
-        ></ea-time-picker>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-rate 验证</h3>
-    <div class="demo">
-      <form id="rateForm">
-        <ea-rate name="score" label="评分" required value="0"></ea-rate>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-switch 验证</h3>
-    <div class="demo">
-      <form id="switchForm">
-        <ea-switch name="agreement" label="同意协议" required></ea-switch>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-color-picker 验证</h3>
-    <div class="demo">
-      <form id="colorPickerForm">
-        <ea-color-picker
-          name="color"
-          label="喜欢的颜色"
-          required
-          placeholder="选择颜色"
-        ></ea-color-picker>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-slider 验证</h3>
-    <div class="demo">
-      <form id="sliderForm">
-        <ea-slider
-          name="satisfaction"
-          label="满意度"
-          required
-          min="0"
-          max="100"
-          value="0"
-          show-input
-        ></ea-slider>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-    </div>
-
-    <h3>ea-transfer 验证</h3>
-    <div class="demo">
-      <form id="transferForm">
-        <ea-transfer
-          id="transferValidate"
-          name="selectedItems"
-          required
-          style="width: 500px"
-        ></ea-transfer>
-        <div class="button-group">
-          <ea-button type="primary" button-type="submit">提交</ea-button>
-        </div>
-      </form>
-      <script type="module">
-        const transfer = document.getElementById("transferValidate");
-        transfer.data = [
-          { key: 1, label: "选项 1" },
-          { key: 2, label: "选项 2" },
-          { key: 3, label: "选项 3" },
-          { key: 4, label: "选项 4" },
-          { key: 5, label: "选项 5" },
-        ];
-      </script>
-    </div>
-
-    <script type="module">
-      // 为所有单独验证表单添加提交处理
-      const forms = [
-        { id: "inputForm", name: "ea-input" },
-        { id: "inputNumberForm", name: "ea-input-number" },
-        { id: "selectForm", name: "ea-select" },
-        { id: "radioForm", name: "ea-radio-group" },
-        { id: "checkboxForm", name: "ea-checkbox-group" },
-        { id: "singleCheckboxForm", name: "ea-checkbox" },
-        { id: "datePickerForm", name: "ea-date-picker" },
-        { id: "timePickerForm", name: "ea-time-picker" },
-        { id: "rateForm", name: "ea-rate" },
-        { id: "switchForm", name: "ea-switch" },
-        { id: "colorPickerForm", name: "ea-color-picker" },
-        { id: "sliderForm", name: "ea-slider" },
-        { id: "transferForm", name: "ea-transfer" },
-      ];
-
-      forms.forEach(({ id, name }) => {
-        const form = document.getElementById(id);
-        if (form) {
-          form.addEventListener("submit", e => {
-            e.preventDefault();
-            alert(`${name} 验证通过！`);
-          });
-        }
-      });
-    </script>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
   </body>
 </html>

@@ -1,0 +1,153 @@
+.demo,
+.row,
+.col {
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+  border-radius: 8px;
+}
+.demo.is-not-demo,
+.row.is-not-demo,
+.col.is-not-demo {
+  border: none !important;
+  padding: 0;
+}
+
+.demo .title {
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.row.left {
+  justify-content: flex-start;
+}
+.row.left > *:not(ea-result) {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.row.left > ea-tag {
+  margin-right: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.row.left > ea-badge {
+  margin-right: 1.5rem;
+}
+.row.right {
+  justify-content: flex-end;
+}
+.row.center {
+  justify-content: center;
+}
+.row.flex-start {
+  align-items: flex-start;
+}
+.row p {
+  text-align: center;
+  color: adjust(#c0c4cc, -20%);
+}
+.row .title {
+  text-align: center;
+  display: block;
+  color: #8492a6;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.col.left {
+  align-items: flex-start;
+}
+.col.left > * {
+  margin-bottom: 0.5rem;
+}
+.col.left > ea-input {
+  margin-bottom: 0.5rem;
+}
+.col.left > ea-progress {
+  margin-bottom: 2rem;
+}
+.col p {
+  text-align: center;
+  color: adjust(#c0c4cc, 20%);
+}
+.col section {
+  text-align: center;
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-icon-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.main-icon-wrap section {
+  box-sizing: border-box;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 16.66%;
+  color: #666;
+  border: 1px solid #eee;
+  transition: color 0.2s;
+}
+.main-icon-wrap section span {
+  line-height: 1;
+  font-size: 0.7rem;
+}
+.main-icon-wrap section:hover {
+  color: #5cb6ff;
+}
+.main-icon-wrap section i {
+  font-size: 2rem;
+  margin: 0.5rem 0;
+}
+
+.color-picker {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+}
+
+.vp-doc thead tr:first-child {
+  border-top: none;
+}
+
+.vp-doc tr:nth-child(2n),
+.vp-doc th {
+  background: none;
+}
+
+.vp-doc th,
+.vp-doc td {
+  border: none !important;
+}
+
+.vp-doc table {
+  width: 100%;
+}
+
+.vp-doc :not(pre, h1, h2, h3, h4, h5, h6) > code {
+  color: #484848;
+}

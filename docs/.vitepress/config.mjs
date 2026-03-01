@@ -3,16 +3,32 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 
-const base = process.env.NODE_ENV === "production" ? "/ea-ui-component/" : "";
+/**
+ * 获取 base 路径
+ * - 生产构建（npm run build:doc）: /ea-ui-component/
+ * - 开发（npm run dev:doc）: /
+ * - 预览（npm run preview:doc）: / (空字符串)
+ */
+const getBase = () => {
+  if (process.env.VITEPRESS_BASE === "___EMPTY___") return "";
+  if (process.env.VITEPRESS_BASE !== undefined)
+    return process.env.VITEPRESS_BASE;
+  return process.env.NODE_ENV === "production" ? "/ea-ui-component/" : "";
+};
+const base = getBase();
 
 export default defineConfig({
-  base,
+  base: "/ea-ui-component/",
   title: "Easy UI",
   description: "基于 WebComponent 的 ui 库",
 
   head: [
-    ["link", { rel: "stylesheet", href: `${base}dist/assets/icon.css` }],
-    ["link", { rel: "stylesheet", href: `${base}index.scss` }],
+    [
+      "link",
+      { rel: "stylesheet", href: `/ea-ui-component/dist/assets/icon.css` },
+    ],
+    ["link", { rel: "stylesheet", href: `/ea-ui-component/index.css` }],
+    ["link", { rel: "shortcut icon", href: `/ea-ui-component/favicon.ico` }],
   ],
 
   cleanUrls: true,
@@ -171,6 +187,43 @@ export default defineConfig({
     css: {
       preprocessorOptions: {
         scss: {},
+      },
+    },
+    plugins: [
+      {
+        name: "web-components-ssr",
+        enforce: "pre",
+        resolveId(id, importer, options) {
+          // 只在 SSR 构建阶段替换 Web Components 模块
+          // 通过 options.ssr 判断是否在 SSR 环境中
+          if (
+            options?.ssr &&
+            (id.includes("/dist/components/") ||
+              id.includes("\\dist\\components\\"))
+          ) {
+            return `__web-component-${id.replace(/[^a-zA-Z0-9]/g, "_")}`;
+          }
+        },
+        load(id) {
+          if (id.startsWith("__web-component-")) {
+            // 导出默认导出和所有可能的命名导出
+            return `
+export default {};
+export const EaMessage = {};
+export const EaMessageBox = {};
+export const EaNotification = {};
+export const EaDropdown = {};
+`;
+          }
+        },
+      },
+    ],
+    ssr: {
+      noExternal: [],
+    },
+    build: {
+      rollupOptions: {
+        external: [],
       },
     },
   },
