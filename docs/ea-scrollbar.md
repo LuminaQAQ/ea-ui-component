@@ -9,50 +9,23 @@ onMounted(() => {
 
 <style>
 ea-header::part(container) {
-    text-align: center;
-    background-color: #b3c0d1;
+  text-align: center;
+  background-color: #b3c0d1;
 }
 
 ea-main::part(container) {
-    text-align: center;
-    background-color: #e9eef3;
+  text-align: center;
+  background-color: #e9eef3;
 }
 
 ea-footer::part(container) {
-    text-align: center;
-    background-color: #b3c0d1;
+  text-align: center;
+  background-color: #b3c0d1;
 }
 
 ea-aside::part(container) {
-    background-color: #d3dce6;
-    text-align: center;
-}
-
-.example {
-    height: 100%;
-    width: 100%;
-
-    display: block;
-}
-
-p {
-    white-space: nowrap;
-}
-
-.scrollbar-item {
-    box-sizing: border-box;
-    padding: 50px;
-    margin: 10px;
-
-    background-color: rgb(236, 245, 255);
-    color: black;
-
-    text-align: center;
-}
-
-.horizontal-section{
-    display: flex;
-    align-items: center;
+  background-color: #d3dce6;
+  text-align: center;
 }
 </style>
 
@@ -68,17 +41,112 @@ p {
   <ea-container class="example" direction="vertical">
     <ea-aside width="200px">
       <ea-header>
-        <p>header</p>
+        <p style="margin-top: 0;">header</p>
       </ea-header>
       <ea-main>
         <ea-scrollbar>
-          <div class="scrollbar-item">aside</div>
-          <div class="scrollbar-item">aside</div>
-          <div class="scrollbar-item">aside</div>
-          <div class="scrollbar-item">aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
         </ea-scrollbar>
       </ea-main>
       <ea-footer>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
         <p>footer</p>
         <p>footer</p>
         <p>footer</p>
@@ -86,28 +154,126 @@ p {
     </ea-aside>
     <ea-container>
       <ea-header>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
+        <p style="margin-top: 0;">header</p>
       </ea-header>
       <ea-main>
         <ea-scrollbar>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
         </ea-scrollbar>
       </ea-main>
       <ea-footer>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
         <p>footer</p>
         <p>footer</p>
         <p>footer</p>
@@ -124,17 +290,112 @@ p {
   <ea-container class="example" direction="vertical">
     <ea-aside width="200px">
       <ea-header>
-        <p>header</p>
+        <p style="margin-top: 0;">header</p>
       </ea-header>
       <ea-main>
         <ea-scrollbar>
-          <div class="scrollbar-item">aside</div>
-          <div class="scrollbar-item">aside</div>
-          <div class="scrollbar-item">aside</div>
-          <div class="scrollbar-item">aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
+          <div>aside</div>
         </ea-scrollbar>
       </ea-main>
       <ea-footer>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
         <p>footer</p>
         <p>footer</p>
         <p>footer</p>
@@ -142,28 +403,126 @@ p {
     </ea-aside>
     <ea-container>
       <ea-header>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
+        <p style="margin-top: 0;">header</p>
       </ea-header>
       <ea-main>
         <ea-scrollbar>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
-          <div class="scrollbar-item">main</div>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
+          <p>main</p>
         </ea-scrollbar>
       </ea-main>
       <ea-footer>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
+        <p>footer</p>
         <p>footer</p>
         <p>footer</p>
         <p>footer</p>
@@ -196,24 +555,6 @@ ea-footer::part(container) {
 
 ea-aside::part(container) {
   background-color: #d3dce6;
-  text-align: center;
-}
-
-.example {
-  height: 100%;
-  width: 100%;
-
-  display: block;
-}
-
-.scrollbar-item {
-  box-sizing: border-box;
-  padding: 50px;
-  margin: 10px;
-
-  background-color: rgb(236, 245, 255);
-  color: black;
-
   text-align: center;
 }
 ```
