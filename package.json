@@ -28,9 +28,6 @@
     "major": "npm version major && git push --follow-tags",
     "publish:github": "npm run build && npm publish --registry=https://npm.pkg.github.com"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LuminaQAQ/ea-ui-component.git"
