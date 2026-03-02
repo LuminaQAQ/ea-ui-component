@@ -55,7 +55,6 @@ export class EaButton extends FormAssociatedBase {
    * @property {string} size
    * @property {boolean} loading
    * @property {string} icon
-   * @property {boolean} loading
    */
 
   /** @type {state} */
@@ -135,7 +134,7 @@ export class EaButton extends FormAssociatedBase {
         if (newVal) {
           const i = document.createElement("ea-icon");
           i.id = "ea-loading-icon";
-          i.icon = "icon-spin6 animate-spin";
+          i.icon = "icon-cw animate-spin";
           i.size = this.size;
           i.part = "loading-icon";
 

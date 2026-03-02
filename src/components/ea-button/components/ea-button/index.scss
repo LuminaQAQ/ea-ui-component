@@ -3,6 +3,19 @@
   --font-size: var(--font-size-md);
   --ea-button-border-radius: var(--border-radius-sm);
 
+  /* === 公共变量 === */
+  --ea-button-text: var(--ea-button-normal-text);
+  --ea-button-bg: var(--ea-button-normal-background);
+  --ea-button-border-color: var(--ea-button-normal-border);
+  --ea-button-text-hover: var(--ea-button-primary-600);
+  --ea-button-bg-hover: var(--ea-button-primary-100);
+  --ea-button-border-color-hover: var(--ea-button-primary-100);
+  --ea-button-text-active: var(--ea-button-primary-700);
+  --ea-button-border-color-active: var(--ea-button-primary-700);
+  --ea-button-text-disabled: var(--ea-button-normal-text-disabled);
+  --ea-button-bg-disabled: var(--ea-button-normal-background-disabled);
+  --ea-button-border-color-disabled: var(--ea-button-normal-border);
+
   /* === Normal === */
   --ea-button-normal-text: var(--grey-900);
   --ea-button-normal-background: var(--color-white);
@@ -14,9 +27,9 @@
   /* === Primary（Blue）=== */
   --ea-button-primary-100: #d9ecff;
   --ea-button-primary-300: #a0cfff;
-  --ea-button-primary-500: var(--color-blue); /* 默认 */
-  --ea-button-primary-600: #66b1ff; /* hover */
-  --ea-button-primary-700: #3a8ee6; /* active */
+  --ea-button-primary-500: var(--color-blue);
+  --ea-button-primary-600: #66b1ff;
+  --ea-button-primary-700: #3a8ee6;
   --ea-button-primary-text: #ffffff;
   --ea-button-primary-disabled: var(--ea-button-primary-300);
   --ea-button-primary-text-disabled: #ffffff;
@@ -73,16 +86,9 @@
 @mixin button-disabled-type($type) {
   &.ea-button--disabled {
     --cursor-type: not-allowed;
-
-    color: var(--ea-button-#{$type}-text-disabled);
-
-    @if ($type == "normal") {
-      border-color: var(--ea-button-normal-border);
-      background-color: var(--ea-button-normal-background-disabled);
-    } @else {
-      border-color: var(--ea-button-#{$type}-disabled);
-      background-color: var(--ea-button-#{$type}-disabled);
-    }
+    --ea-button-text: var(--ea-button-text-disabled);
+    --ea-button-bg: var(--ea-button-bg-disabled);
+    --ea-button-border-color: var(--ea-button-border-color-disabled);
 
     pointer-events: none;
   }
@@ -90,105 +96,94 @@
 
 @mixin button-hover-type($type) {
   &:hover {
-    @if ($type == "normal") {
-      color: var(--ea-button-primary-600);
-      border-color: var(--ea-button-primary-100);
-      background-color: var(--ea-button-primary-100);
-    } @else {
-      color: var(--color-white);
-      border-color: var(--ea-button-#{$type}-600);
-      background-color: var(--ea-button-#{$type}-600);
-    }
+    --ea-button-text: var(--ea-button-text-hover);
+    --ea-button-bg: var(--ea-button-bg-hover);
+    --ea-button-border-color: var(--ea-button-border-color-hover);
   }
 }
 
 @mixin button-active-type($type) {
   &:active {
-    @if ($type == "normal") {
-      color: var(--ea-button-primary-700);
-      border-color: var(--ea-button-primary-700);
-    } @else {
-      background-color: var(--ea-button-#{$type}-700);
-    }
+    --ea-button-text: var(--ea-button-text-active);
+    --ea-button-border-color: var(--ea-button-border-color-active);
   }
 }
 
 @mixin button-text-type($type) {
   &.ea-button--text {
-    @if ($type == "normal") {
-      color: var(--ea-button-normal-text);
-    } @else {
-      color: var(--ea-button-#{$type}-500);
+    --ea-button-bg: unset;
+    --ea-button-border-color: transparent;
+
+    @if ($type =="normal") {
+      --ea-button-text: var(--ea-button-normal-text);
+      --ea-button-text-hover: var(--ea-button-primary-600);
+      --ea-button-text-active: var(--ea-button-primary-700);
+      --ea-button-text-disabled: var(--ea-button-info-300);
     }
 
-    border: none;
-    background-color: unset;
+    @else {
+      --ea-button-text: var(--ea-button-#{$type}-500);
+      --ea-button-text-hover: var(--ea-button-#{$type}-600);
+      --ea-button-text-active: var(--ea-button-#{$type}-700);
+      --ea-button-text-disabled: var(--ea-button-#{$type}-300);
+    }
 
     &:hover {
-      background-color: unset;
-      @if ($type == "normal") {
-        color: var(--ea-button-primary-600);
-      } @else {
-        color: var(--ea-button-#{$type}-600);
-      }
-    }
-
-    &:active {
-      @if ($type == "normal") {
-        border-color: var(--ea-button-primary-700);
-        color: var(--ea-button-primary-700);
-      } @else {
-        color: var(--ea-button-#{$type}-700);
-      }
+      --ea-button-bg: unset;
+      --ea-button-border-color: transparent;
     }
 
     &.ea-button--disabled {
-      background-color: unset;
-
-      @if ($type == "normal") {
-        color: var(--ea-button-info-300);
-      } @else {
-        color: var(--ea-button-#{$type}-300);
-      }
+      --ea-button-bg: unset;
+      --ea-button-border-color: transparent;
     }
   }
 }
 
 @mixin button-plain-type($type) {
   &.ea-button--plain {
-    background-color: var(--ea-button-#{$type}-100);
+    --ea-button-bg: var(--ea-button-#{$type}-100);
 
-    @if ($type == "normal") {
-      color: var(--ea-button-normal-text);
-    } @else {
-      color: var(--ea-button-#{$type}-500);
-      border-color: var(--ea-button-#{$type}-300);
+    @if ($type =="normal") {
+      --ea-button-text: var(--ea-button-normal-text);
+      --ea-button-text-hover: var(--ea-button-primary-500);
+      --ea-button-text-active: var(--ea-button-primary-700);
+      --ea-button-text-disabled: var(--ea-button-info-300);
+    }
+
+    @else {
+      --ea-button-text: var(--ea-button-#{$type}-500);
+      --ea-button-border-color: var(--ea-button-#{$type}-300);
+      --ea-button-text-hover: var(--color-white);
+      --ea-button-bg-hover: var(--ea-button-#{$type}-600);
+      --ea-button-bg-active: var(--ea-button-#{$type}-700);
+      --ea-button-text-disabled: var(--ea-button-#{$type}-300);
     }
 
     &:hover {
-      @if ($type == "normal") {
-        color: var(--ea-button-primary-500);
-      } @else {
-        color: var(--color-white);
+      @if ($type =="normal") {
+        --ea-button-text: var(--ea-button-primary-500);
       }
 
-      background-color: var(--ea-button-#{$type}-600);
+      @else {
+        --ea-button-text: var(--color-white);
+      }
+
+      --ea-button-bg: var(--ea-button-bg-hover);
     }
 
     &:active {
-      @if ($type == "normal") {
-        color: var(--ea-button-primary-700);
-      } @else {
-        background-color: var(--ea-button-#{$type}-700);
+      @if ($type =="normal") {
+        --ea-button-text: var(--ea-button-primary-700);
+      }
+
+      @else {
+        --ea-button-bg: var(--ea-button-bg-active);
       }
     }
 
     &.ea-button--disabled {
-      @if ($type == "normal") {
-        color: var(--ea-button-info-300);
-      } @else {
-        color: var(--ea-button-#{$type}-300);
-      }
+      --ea-button-text: var(--ea-button-text-disabled);
     }
   }
 }
@@ -209,8 +204,8 @@
 
 @mixin button-link-type($type) {
   &.ea-button--link {
-    background: none;
-    border: none;
+    --ea-button-bg: unset;
+    --ea-button-border-color: unset;
     padding: 0;
   }
 }
@@ -228,14 +223,32 @@
 }
 
 @mixin button-type($type) {
-  color: var(--ea-button-#{$type}-text);
-  background-color: var(--ea-button-#{$type}-500);
+  --ea-button-text: var(--ea-button-#{$type}-text);
+  --ea-button-bg: var(--ea-button-#{$type}-500);
 
-  @if ($type == "normal") {
-    border-color: var(--ea-button-normal-border);
-  } @else {
-    border-color: var(--ea-button-#{$type}-500);
+  @if ($type =="normal") {
+    --ea-button-border-color: var(--ea-button-normal-border);
+    --ea-button-text-hover: var(--ea-button-primary-600);
+    --ea-button-bg-hover: var(--ea-button-primary-100);
+    --ea-button-border-color-hover: var(--ea-button-primary-100);
+    --ea-button-text-active: var(--ea-button-primary-700);
+    --ea-button-border-color-active: var(--ea-button-primary-700);
+    --ea-button-text-disabled: var(--ea-button-normal-text-disabled);
+    --ea-button-bg-disabled: var(--ea-button-normal-background-disabled);
+    --ea-button-border-color-disabled: var(--ea-button-normal-border);
   }
+
+  @else {
+    --ea-button-border-color: var(--ea-button-#{$type}-500);
+    --ea-button-text-hover: var(--color-white);
+    --ea-button-bg-hover: var(--ea-button-#{$type}-600);
+    --ea-button-border-color-hover: var(--ea-button-#{$type}-600);
+    --ea-button-bg-active: var(--ea-button-#{$type}-700);
+    --ea-button-text-disabled: var(--ea-button-#{$type}-text-disabled);
+    --ea-button-bg-disabled: var(--ea-button-#{$type}-disabled);
+    --ea-button-border-color-disabled: var(--ea-button-#{$type}-disabled);
+  }
+
   @include button-text-type($type);
   @include button-disabled-type($type);
   @include button-plain-type($type);
@@ -253,12 +266,13 @@
 
   padding: var(--spacing-md);
   border: 1px solid;
-  border-color: var(--ea-button-normal-border);
-  background-color: var(--ea-button-normal-background);
+  border-color: var(--ea-button-border-color);
+  background-color: var(--ea-button-bg);
   border-radius: var(--ea-button-border-radius);
 
   cursor: var(--cursor-type);
 
+  color: var(--ea-button-text);
   font-size: var(--font-size);
   line-height: var(--font-size);
   text-decoration: none;
