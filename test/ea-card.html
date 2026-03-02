@@ -1,109 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
-    <style>
-      hr {
-        margin: 3rem 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="../dist/assets/icon.css" />
 
-      .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 18px 20px;
-        border-bottom: 1px solid #ebeef5;
-        box-sizing: border-box;
-      }
+  <style>
+    hr {
+      margin: 3rem 0;
+    }
 
-      .ea-card-demo {
-        width: 400px;
-      }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid #ebeef5;
+      box-sizing: border-box;
+    }
 
-      .img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-      }
-    </style>
-  </head>
+    .ea-card-demo {
+      width: 400px;
+    }
 
-  <body>
-    <script type="module" src="../src/components/ea-card/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    .img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
+</head>
 
-    <!-- -------- 基础用法 --------  -->
-    <!-- #region  -->
-    <h2>基础用法</h2>
-    <div class="demo">
-      <ea-card class="ea-card-demo">
-        <div slot="header" class="header">
-          <span>Card name</span>
-        </div>
+<body>
+  <script type="module" src="../src/components/ea-card/index.js"></script>
+  <script type="module" src="../src/components/ea-button/index.js"></script>
 
-        <p class="ea-card-content">content1</p>
-        <p class="ea-card-content">content2</p>
-        <p class="ea-card-content">content3</p>
-        <p class="ea-card-content">content4</p>
+  <!-- -------- 基础用法 --------  -->
+  <!-- #region  -->
+  <h2>基础用法</h2>
+  <div class="demo">
+    <ea-card class="ea-card-demo">
+      <div slot="header" class="header">
+        <span>Card name</span>
+      </div>
 
-        <div slot="footer" class="footer">
-          <span>Footer content</span>
-        </div>
-      </ea-card>
-    </div>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
+      <p class="ea-card-content">content1</p>
+      <p class="ea-card-content">content2</p>
+      <p class="ea-card-content">content3</p>
+      <p class="ea-card-content">content4</p>
 
-    <!-- -------- 简单卡片 --------  -->
-    <!-- #region  -->
-    <h2>简单卡片</h2>
-    <div class="demo">
-      <ea-card class="ea-card-demo">
-        <p class="ea-card-content">content1</p>
-        <p class="ea-card-content">content2</p>
-        <p class="ea-card-content">content3</p>
-        <p class="ea-card-content">content4</p>
-      </ea-card>
-    </div>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
+      <div slot="footer" class="footer">
+        <span>Footer content</span>
+      </div>
+    </ea-card>
+  </div>
+  <hr />
+  <!-- #endregion  -->
+  <!-- -------------------  -->
 
-    <!-- -------- 带图片 --------  -->
-    <!-- #region  -->
-    <h2>带图片</h2>
-    <div class="demo">
-      <ea-card class="ea-card-demo">
-        <div class="header" slot="header" style="padding: 14px">
-          <span>view</span>
-        </div>
-        <img
-          class="img"
-          src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-        />
-      </ea-card>
-    </div>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
+  <!-- -------- 简单卡片 --------  -->
+  <!-- #region  -->
+  <h2>简单卡片</h2>
+  <div class="demo">
+    <ea-card class="ea-card-demo">
+      <p class="ea-card-content">content1</p>
+      <p class="ea-card-content">content2</p>
+      <p class="ea-card-content">content3</p>
+      <p class="ea-card-content">content4</p>
+    </ea-card>
+    <ea-card class="ea-card-demo" header="test">
+      <p class="ea-card-content">content1</p>
+      <p class="ea-card-content">content2</p>
+      <p class="ea-card-content">content3</p>
+      <p class="ea-card-content">content4</p>
+    </ea-card>
+  </div>
+  <hr />
+  <!-- #endregion  -->
+  <!-- -------------------  -->
 
-    <!-- -------- 卡片阴影 --------  -->
-    <!-- #region  -->
-    <h2>卡片阴影</h2>
-    <div class="demo">
-      <ea-card shadow="always">总是显示</ea-card>
-      <p></p>
-      <ea-card shadow="hover">鼠标移入显示</ea-card>
-      <p></p>
-      <ea-card shadow="never">从不显示</ea-card>
-    </div>
-    <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
-  </body>
+  <!-- -------- 带图片 --------  -->
+  <!-- #region  -->
+  <h2>带图片</h2>
+  <div class="demo">
+    <ea-card class="ea-card-demo">
+      <div class="header" slot="header" style="padding: 14px">
+        <span>view</span>
+      </div>
+      <img class="img" src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain" />
+    </ea-card>
+  </div>
+  <hr />
+  <!-- #endregion  -->
+  <!-- -------------------  -->
+
+  <!-- -------- 卡片阴影 --------  -->
+  <!-- #region  -->
+  <h2>卡片阴影</h2>
+  <div class="demo">
+    <ea-card shadow="always">总是显示</ea-card>
+    <p></p>
+    <ea-card shadow="hover">鼠标移入显示</ea-card>
+    <p></p>
+    <ea-card shadow="never">从不显示</ea-card>
+  </div>
+  <hr />
+  <!-- #endregion  -->
+  <!-- -------------------  -->
+</body>
+
 </html>

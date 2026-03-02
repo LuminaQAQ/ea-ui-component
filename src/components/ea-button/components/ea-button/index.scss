@@ -114,14 +114,12 @@
     --ea-button-bg: unset;
     --ea-button-border-color: transparent;
 
-    @if ($type =="normal") {
+    @if ($type == "normal") {
       --ea-button-text: var(--ea-button-normal-text);
       --ea-button-text-hover: var(--ea-button-primary-600);
       --ea-button-text-active: var(--ea-button-primary-700);
       --ea-button-text-disabled: var(--ea-button-info-300);
-    }
-
-    @else {
+    } @else {
       --ea-button-text: var(--ea-button-#{$type}-500);
       --ea-button-text-hover: var(--ea-button-#{$type}-600);
       --ea-button-text-active: var(--ea-button-#{$type}-700);
@@ -144,14 +142,12 @@
   &.ea-button--plain {
     --ea-button-bg: var(--ea-button-#{$type}-100);
 
-    @if ($type =="normal") {
+    @if ($type == "normal") {
       --ea-button-text: var(--ea-button-normal-text);
       --ea-button-text-hover: var(--ea-button-primary-500);
       --ea-button-text-active: var(--ea-button-primary-700);
       --ea-button-text-disabled: var(--ea-button-info-300);
-    }
-
-    @else {
+    } @else {
       --ea-button-text: var(--ea-button-#{$type}-500);
       --ea-button-border-color: var(--ea-button-#{$type}-300);
       --ea-button-text-hover: var(--color-white);
@@ -161,11 +157,9 @@
     }
 
     &:hover {
-      @if ($type =="normal") {
+      @if ($type == "normal") {
         --ea-button-text: var(--ea-button-primary-500);
-      }
-
-      @else {
+      } @else {
         --ea-button-text: var(--color-white);
       }
 
@@ -173,11 +167,9 @@
     }
 
     &:active {
-      @if ($type =="normal") {
+      @if ($type == "normal") {
         --ea-button-text: var(--ea-button-primary-700);
-      }
-
-      @else {
+      } @else {
         --ea-button-bg: var(--ea-button-bg-active);
       }
     }
@@ -226,7 +218,7 @@
   --ea-button-text: var(--ea-button-#{$type}-text);
   --ea-button-bg: var(--ea-button-#{$type}-500);
 
-  @if ($type =="normal") {
+  @if ($type == "normal") {
     --ea-button-border-color: var(--ea-button-normal-border);
     --ea-button-text-hover: var(--ea-button-primary-600);
     --ea-button-bg-hover: var(--ea-button-primary-100);
@@ -236,9 +228,7 @@
     --ea-button-text-disabled: var(--ea-button-normal-text-disabled);
     --ea-button-bg-disabled: var(--ea-button-normal-background-disabled);
     --ea-button-border-color-disabled: var(--ea-button-normal-border);
-  }
-
-  @else {
+  } @else {
     --ea-button-border-color: var(--ea-button-#{$type}-500);
     --ea-button-text-hover: var(--color-white);
     --ea-button-bg-hover: var(--ea-button-#{$type}-600);
@@ -263,6 +253,8 @@
 
 @include block(ea-button) {
   box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 
   padding: var(--spacing-md);
   border: 1px solid;
@@ -277,7 +269,8 @@
   line-height: var(--font-size);
   text-decoration: none;
 
-  transition: background-color var(--transition-fast),
+  transition:
+    background-color var(--transition-fast),
     color var(--transition-fast);
 
   will-change: width;

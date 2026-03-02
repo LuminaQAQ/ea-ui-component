@@ -44,7 +44,7 @@
   .ea-card__footer {
     padding: var(--ea-card-padding);
 
-    &:has(slot) {
+    &:has(slot:empty) {
       padding: 0;
       border: none;
     }
