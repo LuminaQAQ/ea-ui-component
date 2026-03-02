@@ -1,6 +1,6 @@
 {
   "name": "easy-component-ui",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "使用 WebComponent 编写的原生组件库",
   "main": "dist/components/index.js",
   "module": "dist/components/index.js",
@@ -112,6 +112,11 @@
   },
   "exports": {
     ".": "./dist/components/index.js",
+    "./icon-assets": {
+      "import": "./dist/assets/icon.css",
+      "require": "./dist/assets/icon.css",
+      "default": "./dist/assets/icon.css"
+    },
     "./ea-alert": {
       "import": "./dist/components/ea-alert.js"
     },
