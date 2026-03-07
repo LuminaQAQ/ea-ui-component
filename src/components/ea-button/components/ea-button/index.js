@@ -105,6 +105,7 @@ export class EaButton extends FormAssociatedBase {
       type: Boolean,
       default: false,
       observer: newVal => {
+        this.$render();
         this.#container.className = this.updateContainerClasslist();
       },
     },
@@ -190,6 +191,8 @@ export class EaButton extends FormAssociatedBase {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-button");
+
+    this.#container.className = this.updateContainerClasslist();
   }
 
   /**
@@ -217,9 +220,6 @@ export class EaButton extends FormAssociatedBase {
         if (form) {
           e.preventDefault();
 
-          // form.onsubmit = (e) => {
-          //   e.preventDefault();
-          // };
           form.dispatchEvent(new Event("submit"));
         }
       } else if (this["button-type"] === "reset") {
@@ -230,8 +230,6 @@ export class EaButton extends FormAssociatedBase {
         }
       }
     });
-
-    this.emit("ea-button-ready");
   }
 
   $beforeUnmounted() {
