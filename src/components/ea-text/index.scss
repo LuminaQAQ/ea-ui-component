@@ -36,6 +36,11 @@
   @include modifier($theme-name) {
     font-size: var(--ea-text-#{$theme-name}-size);
     line-height: var(--ea-text-#{$theme-name}-size);
+
+    ::slotted(*) {
+      font-size: var(--ea-text-#{$theme-name}-size);
+      line-height: var(--ea-text-#{$theme-name}-size);
+    }
   }
 }
 
