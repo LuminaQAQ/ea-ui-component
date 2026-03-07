@@ -5,6 +5,8 @@ import stylesheet from "./index.scss?inline";
 export class EaButton extends FormAssociatedBase {
   /** @type {HTMLButtonElement | HTMLLinkElement} */
   #container;
+  /** @type {HTMLIconElement} */
+  #icon;
 
   /** @type {AbortController} */
   #abortController;
@@ -31,15 +33,19 @@ export class EaButton extends FormAssociatedBase {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-button", {
-      ["--" + this.type]: this.type,
-      ["--disabled"]: this.disabled || this.loading,
-      ["--text"]: this.text || this.link,
-      ["--plain"]: this.plain,
-      ["--round"]: this.round,
-      ["--circle"]: this.circle,
-      ["--" + this.size]: this.size,
-    });
+    return this.computedClasslist(
+      "ea-button",
+      {
+        ["--" + this.type]: this.type,
+        ["--disabled"]: this.disabled || this.loading,
+        ["--text"]: this.text || this.link,
+        ["--plain"]: this.plain,
+        ["--round"]: this.round,
+        ["--circle"]: this.circle,
+        ["--" + this.size]: this.size,
+      },
+      { icon: this.icon?.length }
+    );
   }
 
   /**
@@ -106,6 +112,7 @@ export class EaButton extends FormAssociatedBase {
       default: false,
       observer: newVal => {
         this.$render();
+        this.#container.href = this.getAttribute("href");
         this.#container.className = this.updateContainerClasslist();
       },
     },
@@ -155,14 +162,10 @@ export class EaButton extends FormAssociatedBase {
       type: String,
       default: "",
       observer: newVal => {
-        if (newVal && !this.#container.querySelector("ea-icon")) {
-          const eaIcon = document.createElement("ea-icon");
-          eaIcon.size = this.size;
-          eaIcon.icon = newVal;
-          eaIcon.part = "icon";
+        this.#icon.setAttribute("icon", newVal);
+        this.#icon.setAttribute("size", this.size);
 
-          this.#container.insertBefore(eaIcon, this.#container.firstChild);
-        }
+        this.#container.className = this.updateContainerClasslist();
       },
     },
     "button-type": {
@@ -186,11 +189,13 @@ export class EaButton extends FormAssociatedBase {
     const tag = this.getAttrBoolean("link") ? "a" : "button";
     this.shadowRoot.innerHTML = `
       <${tag} class="ea-button" part="container" tabindex="-1">
+        <ea-icon class="ea-button__icon" part="icon"></ea-icon>
         <slot></slot>
       </${tag}>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-button");
+    this.#icon = this.shadowRoot.querySelector(".ea-button__icon");
 
     this.#container.className = this.updateContainerClasslist();
   }
