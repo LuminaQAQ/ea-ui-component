@@ -182,6 +182,12 @@ onMounted(() => {
 
 | **属性名** | **说明** | **类型** | **可选值** | **默认值** |
 | ---------- | -------- | -------- | ---------- | ---------- |
+| title | 标题 | string | — | — |
+| type | 文本类型 | string | normal / primary / success / warning / danger / info | normal |
+| size | 文本大小 | string | large / medium / small | medium |
+| truncated | 文本是否截断 | boolean | — | false |
+| line-clamp | 截断的行数 | number | — | 0 |
+| tag | 文本标签 | string | — | span |
 
 ### Text Slots
 
