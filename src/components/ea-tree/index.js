@@ -25,6 +25,7 @@ export class EaTree extends Base {
       "show-checkbox",
       "check-strictly",
       "node-key",
+      "expand-on-icon-click",
     ];
   }
 
@@ -54,6 +55,10 @@ export class EaTree extends Base {
     "node-key": {
       type: String,
       default: null,
+    },
+    "expand-on-icon-click": {
+      type: Boolean,
+      default: false,
     },
   });
 
@@ -297,10 +302,38 @@ export class EaTree extends Base {
 
     const label = e.detail.label;
     const tree = e.detail.child;
+    const isIconClick = e.detail.isIconClick;
+
     if (!label) {
       return;
     }
 
+    // 当 expand-on-icon-click 为 true 时
+    if (this["expand-on-icon-click"]) {
+      if (isIconClick) {
+        // 点击 icon：只展开/收起，不选中
+        if (label.hasChildren) {
+          if (this.#treeState.expandedNodes.has(label)) {
+            this.#treeState.expandedNodes.delete(label);
+            this.#collapseNode(tree, label);
+          } else {
+            this.#treeState.expandedNodes.add(label);
+            this.#expandNode(tree, label);
+          }
+        }
+      } else {
+        // 点击 label：触发点击事件并选中
+        this.dispatchEvent(
+          new EaTreeNodeClickEvent({
+            data: label.data,
+          })
+        );
+        this.#selectNode(label);
+      }
+      return;
+    }
+
+    // 默认行为：点击整个 label 都触发事件
     this.dispatchEvent(
       new EaTreeNodeClickEvent({
         data: label.data,

@@ -205,7 +205,9 @@ export class EaTreeLabel extends Base {
     this.#container = this.shadowRoot.querySelector(`.${ns.b()}`);
     this.#textElement = this.shadowRoot.querySelector(`.${ns.e("text")}`);
     this.#checkboxElement = this.shadowRoot.querySelector(ns.ce("checkbox"));
-    this.#toggleElement = this.shadowRoot.querySelector(`.${ns.e("toggle")}`);
+    this.#toggleElement = this.shadowRoot.querySelector(
+      `.${ns.e("toggle-icon")}`
+    );
 
     this.updateContainerClasslist();
     this.#updateDisabledState();
@@ -242,6 +244,7 @@ export class EaTreeLabel extends Base {
     const checkbox = e.target.closest(this.ns.ce("checkbox"));
     if (checkbox) return;
 
+    const toggleIcon = e.target.closest(this.ns.e("toggle-icon"));
     const child = this.parentElement.querySelector("ea-tree-child");
 
     this.emit("ea-tree-label-click", {
@@ -250,6 +253,30 @@ export class EaTreeLabel extends Base {
       detail: {
         label: this,
         child,
+        isIconClick: !!toggleIcon,
+      },
+    });
+  };
+
+  /**
+   * 处理展开/收起图标点击事件
+   * @param {Event} e 事件对象
+   */
+  #handleToggleClick = e => {
+    e.stopImmediatePropagation();
+
+    if (!this.hasChildren) return;
+
+    const child = this.parentElement.querySelector("ea-tree-child");
+
+    // 直接触发 label-click 事件，标记为 icon 点击
+    this.emit("ea-tree-label-click", {
+      bubbles: true,
+      composed: true,
+      detail: {
+        label: this,
+        child,
+        isIconClick: true,
       },
     });
   };
@@ -267,6 +294,10 @@ export class EaTreeLabel extends Base {
     );
 
     this.#container.addEventListener("click", this.#handleLabelClick, {
+      signal: this.#abortController.signal,
+    });
+
+    this.#toggleElement.addEventListener("click", this.#handleToggleClick, {
       signal: this.#abortController.signal,
     });
   };

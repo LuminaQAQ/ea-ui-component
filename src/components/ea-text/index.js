@@ -96,6 +96,8 @@ export class EaText extends Base {
 
         this.#container = this.shadowRoot.querySelector('.ea-text')
 
+        this.#container.className = this.updateContainerClasslist()
+
         this.isMounted = true;
     }
 

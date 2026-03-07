@@ -133,6 +133,13 @@ onMounted(async () => {
   defaultExpandedTree.data = idData;
   // #endregion
   // ------- end -------
+
+  // ------- 点击图标展开 -------
+  // #region
+  const expandOnIconClickTree = document.querySelector("#expandOnIconClickTree");
+  expandOnIconClickTree.data = data;
+  // #endregion
+  // ------- end -------
 })
 </script>
 
@@ -350,6 +357,66 @@ disabledCheckboxTree.data = idData;
 
 :::
 
+## 点击图标展开
+
+通过设置 `expand-on-icon-click` 属性，可以只在点击节点图标时展开/收起子节点，点击节点文字时仅选中节点而不展开。
+
+<div class="demo">
+  <ea-tree id="expandOnIconClickTree" expand-on-icon-click></ea-tree>
+</div>
+
+::: code-group
+
+```html
+<div class="demo">
+  <ea-tree id="expandOnIconClickTree" expand-on-icon-click></ea-tree>
+</div>
+```
+
+```js
+const data = [
+  {
+    label: "Level one 1",
+    children: [
+      {
+        label: "Level two 1-1",
+        children: [
+          {
+            label: "Level three 1-1-1",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Level one 2",
+    children: [
+      {
+        label: "Level two 2-1",
+        children: [
+          {
+            label: "Level three 2-1-1",
+          },
+        ],
+      },
+      {
+        label: "Level two 2-2",
+        children: [
+          {
+            label: "Level three 2-2-1",
+          },
+        ],
+      },
+    ],
+  },
+];
+
+const expandOnIconClickTree = document.querySelector("#expandOnIconClickTree");
+expandOnIconClickTree.data = data;
+```
+
+:::
+
 ## 默认展开以及默认选中
 
 通过 `defaultExpandedKeys` 和 `defaultCheckedKeys` 属性设置默认展开和选中的节点。
@@ -419,15 +486,16 @@ defaultExpandedTree.data = idData;
 
 ### Tree Attributes
 
-| 参数                | 说明                           | 类型    | 可选值 | 默认值                                                         |
-| ------------------- | ------------------------------ | ------- | ------ | -------------------------------------------------------------- |
-| show-checkbox       | 是否显示复选框                 | boolean | -      | false                                                          |
-| check-strictly      | 是否严格模式（不关联父子节点） | boolean | -      | false                                                          |
-| node-key            | 节点唯一标识字段名             | string  | -      | -                                                              |
-| data                | 树形数据                       | array   | -      | []                                                             |
-| dataProps           | 数据字段配置                   | object  | -      | { children: "children", label: "label", disabled: "disabled" } |
-| defaultExpandedKeys | 默认展开的节点键值数组         | array   | -      | []                                                             |
-| defaultCheckedKeys  | 默认选中的节点键值数组         | array   | -      | []                                                             |
+| 参数                 | 说明                            | 类型    | 可选值 | 默认值                                                         |
+| -------------------- | ------------------------------- | ------- | ------ | -------------------------------------------------------------- |
+| show-checkbox        | 是否显示复选框                  | boolean | -      | false                                                          |
+| check-strictly       | 是否严格模式（不关联父子节点）  | boolean | -      | false                                                          |
+| node-key             | 节点唯一标识字段名              | string  | -      | -                                                              |
+| data                 | 树形数据                        | array   | -      | []                                                             |
+| dataProps            | 数据字段配置                    | object  | -      | { children: "children", label: "label", disabled: "disabled" } |
+| defaultExpandedKeys  | 默认展开的节点键值数组          | array   | -      | []                                                             |
+| defaultCheckedKeys   | 默认选中的节点键值数组          | array   | -      | []                                                             |
+| expand-on-icon-click | 是否只在点击图标时展开/收起节点 | boolean | -      | false                                                          |
 
 ### Tree Methods
 
