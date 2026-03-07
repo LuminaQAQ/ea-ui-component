@@ -88,4 +88,14 @@
   @include link-theme(warning);
   @include link-theme(danger);
   @include link-theme(info);
+
+  @include element(icon) {
+    display: none;
+  }
+
+  @include state(icon) {
+    .ea-link__icon {
+      display: inline-block;
+    }
+  }
 }
