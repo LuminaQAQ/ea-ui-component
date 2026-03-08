@@ -85,7 +85,10 @@ export class EaText extends Base {
         this.$render();
 
         if (this.hasAttribute("line-clamp")) {
-          this.#container.style.setProperty("--ea-text-line-clamp", newVal);
+          this.#container.style.setProperty(
+            "--ea-text-line-clamp",
+            this["line-clamp"]
+          );
         }
 
         if (this.hasAttribute("truncated") || this.hasAttribute("line-clamp")) {
