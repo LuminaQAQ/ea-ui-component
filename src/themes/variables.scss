@@ -136,7 +136,14 @@
   --default-font-size: 16px;
   --default-loading-icon-color: var(--blue-300);
 
-  // font-size: var(--default-font-size);
+  input,
+  textarea,
+  button,
+  select,
+  optgroup,
+  fieldset {
+    background: none;
+  }
 }
 
 ul {
