@@ -81,7 +81,19 @@ export class EaText extends Base {
     tag: {
       type: String,
       default: "span",
-      observer: newVal => {},
+      observer: newVal => {
+        this.$render();
+
+        if (this.hasAttribute("line-clamp")) {
+          this.#container.style.setProperty("--ea-text-line-clamp", newVal);
+        }
+
+        if (this.hasAttribute("truncated") || this.hasAttribute("line-clamp")) {
+          this.title = this.innerText || "";
+        }
+
+        this.updateContainerClasslist();
+      },
     },
   });
 
