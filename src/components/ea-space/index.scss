@@ -51,7 +51,7 @@
 
   @include modifier(fill) {
     ::slotted(*) {
-      flex-grow: 1;
+      flex-grow: var(--ea-space-fill-ratio);
       min-width: var(--ea-space-fill-ratio);
     }
   }

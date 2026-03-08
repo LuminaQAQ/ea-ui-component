@@ -85,10 +85,14 @@ export class EaSpace extends Base {
         this.updateContainerClasslist();
       },
     },
-    fillRatio: {
+    "fill-ratio": {
       type: Number,
       default: 100,
       observer: newVal => {
+        if (!Number.isNaN(Number(newVal))) {
+          this.toggleAttribute("fill", true);
+        }
+
         this.style.setProperty("--ea-space-fill-ratio", `${newVal}%`);
       },
     },
