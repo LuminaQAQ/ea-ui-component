@@ -110,7 +110,7 @@
 
 @mixin button-text-type($type) {
   &.ea-button--text {
-    --ea-button-bg: unset;
+    --ea-button-bg: none;
     --ea-button-border-color: transparent;
 
     @if ($type =="normal") {
@@ -128,12 +128,11 @@
     }
 
     &:hover {
-      --ea-button-bg: unset;
       --ea-button-border-color: transparent;
     }
 
     &.ea-button--disabled {
-      --ea-button-bg: unset;
+      --ea-button-bg: none;
       --ea-button-border-color: transparent;
     }
   }
