@@ -30,6 +30,7 @@ export class EaCarousel extends Base {
     pause: false,
     isMouseEnter: false,
     isEnd: false,
+    isInitializing: false,
   };
 
   static get observedAttributes() {
@@ -261,6 +262,8 @@ export class EaCarousel extends Base {
    */
   #initCarouselItem() {
     try {
+      this.#states.isInitializing = true;
+
       this.childNodes.forEach(item => {
         if (item.tagName !== "EA-CAROUSEL-ITEM") item.remove();
       });
@@ -275,9 +278,10 @@ export class EaCarousel extends Base {
 
       queueMicrotask(() => {
         this.#updateCarouselPosition();
+        this.#states.isInitializing = false;
       });
     } catch {
-      void 0;
+      this.#states.isInitializing = false;
     }
   }
 
@@ -420,6 +424,35 @@ export class EaCarousel extends Base {
   };
 
   /**
+   * 处理 slotchange 事件，当 slot 内容变化时重新渲染
+   */
+  #onSlotChangeEvent = () => {
+    if (this.#states.isInitializing) return;
+
+    this.#turnOffTransition();
+
+    this.#handleTimerClear();
+
+    this.#states.prevIndex = 0;
+    this.#states.originLength = 0;
+    this.#states.pause = false;
+    this.#states.isEnd = false;
+
+    this.index = 0;
+
+    this.#renderIndicatorItems();
+    this.#initCarouselItem();
+
+    this.#updataIndicatorPosition();
+
+    if (this.autoplay) this.#handleAutoPlay();
+
+    queueMicrotask(() => {
+      this.#turnOnTransition();
+    });
+  };
+
+  /**
    * 上一张轮播图
    */
   prev = () => {
@@ -485,6 +518,12 @@ export class EaCarousel extends Base {
     window.addEventListener("resize", this.#onCarouselResizeEvent().listener, {
       signal: this.#abortController.signal,
     });
+
+    this.#content
+      .querySelector("slot")
+      .addEventListener("slotchange", this.#onSlotChangeEvent, {
+        signal: this.#abortController.signal,
+      });
 
     queueMicrotask(() => {
       this.#turnOnTransition();
