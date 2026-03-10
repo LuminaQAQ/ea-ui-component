@@ -30,7 +30,7 @@ export class EaCarousel extends Base {
     pause: false,
     isMouseEnter: false,
     isEnd: false,
-    isInitializing: false,
+    isProcessingSlotChange: false,
   };
 
   static get observedAttributes() {
@@ -201,7 +201,9 @@ export class EaCarousel extends Base {
           <ea-icon icon="icon-angle-right" part="arrow-right-icon"></ea-icon>
         </button>
         <ul class="ea-carousel__content" part="content">
+            <slot name="clone-last"></slot>
             <slot></slot>
+            <slot name="clone-first"></slot>
         </ul>
         <footer class="ea-carousel__indicator-wrap" part="indicator-wrap">
           
@@ -245,7 +247,7 @@ export class EaCarousel extends Base {
    */
   #renderIndicatorItems = () => {
     const carouselItems = Array.from(
-      this.querySelectorAll("ea-carousel-item"),
+      this.querySelectorAll("ea-carousel-item:not([slot])"),
       (el, i) =>
         `<button class='ea-carousel__indicator' part='indicator' tabindex="1" data-index="${i}"></button>`
     ).join("");
@@ -262,26 +264,30 @@ export class EaCarousel extends Base {
    */
   #initCarouselItem() {
     try {
-      this.#states.isInitializing = true;
+      const children = this.querySelectorAll("ea-carousel-item:not([slot])");
+      if (children.length === 0) return;
 
-      this.childNodes.forEach(item => {
-        if (item.tagName !== "EA-CAROUSEL-ITEM") item.remove();
-      });
-
-      const children = this.children;
-      const firstChild = children[0].cloneNode(true);
-      const lastChild = children[children.length - 1].cloneNode(true);
       this.#states.originLength = children.length;
 
-      this.insertBefore(lastChild, this.firstChild);
+      const existingClones = this.querySelectorAll(
+        'ea-carousel-item[slot^="clone-"]'
+      );
+      existingClones.forEach(clone => clone.remove());
+
+      const firstChild = children[0].cloneNode(true);
+      const lastChild = children[children.length - 1].cloneNode(true);
+
+      firstChild.setAttribute("slot", "clone-first");
+      lastChild.setAttribute("slot", "clone-last");
+
       this.appendChild(firstChild);
+      this.appendChild(lastChild);
 
       queueMicrotask(() => {
         this.#updateCarouselPosition();
-        this.#states.isInitializing = false;
       });
     } catch {
-      this.#states.isInitializing = false;
+      void 0;
     }
   }
 
@@ -427,7 +433,10 @@ export class EaCarousel extends Base {
    * 处理 slotchange 事件，当 slot 内容变化时重新渲染
    */
   #onSlotChangeEvent = () => {
-    if (this.#states.isInitializing) return;
+    if (this.#states.isProcessingSlotChange) return;
+    console.log(1);
+
+    this.#states.isProcessingSlotChange = true;
 
     this.#turnOffTransition();
 
@@ -449,6 +458,7 @@ export class EaCarousel extends Base {
 
     queueMicrotask(() => {
       this.#turnOnTransition();
+      this.#states.isProcessingSlotChange = false;
     });
   };
 
@@ -520,7 +530,7 @@ export class EaCarousel extends Base {
     });
 
     this.#content
-      .querySelector("slot")
+      .querySelector("slot:not([name])")
       .addEventListener("slotchange", this.#onSlotChangeEvent, {
         signal: this.#abortController.signal,
       });
