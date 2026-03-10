@@ -22,6 +22,10 @@
   --ea-carousel-transition: var(--transition-slow);
 }
 
+:host {
+  display: block;
+}
+
 @include block(ea-carousel) {
   position: relative;
   overflow: hidden;
@@ -153,6 +157,7 @@
 
   &.is-arrow-hover,
   &.is-arrow-always {
+
     .arrow-left,
     .arrow-right {
       opacity: 1;

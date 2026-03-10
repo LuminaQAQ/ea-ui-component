@@ -23,6 +23,9 @@ export class EaCarousel extends Base {
     triggerAbortControllers: new AbortController(),
   };
 
+  /** @type {MutationObserver | null} */
+  #itemObserver = null;
+
   #states = {
     prevIndex: 0,
     originLength: 0,
@@ -283,11 +286,65 @@ export class EaCarousel extends Base {
       this.appendChild(firstChild);
       this.appendChild(lastChild);
 
+      this.#setupItemObserver();
+
       queueMicrotask(() => {
         this.#updateCarouselPosition();
       });
     } catch {
       void 0;
+    }
+  }
+
+  /**
+   * 设置 MutationObserver 监听 item 内容变化
+   */
+  #setupItemObserver() {
+    if (this.#itemObserver) {
+      this.#itemObserver.disconnect();
+    }
+
+    this.#itemObserver = new MutationObserver(mutations => {
+      const shouldUpdate = mutations.some(mutation => {
+        return (
+          mutation.type === "childList" &&
+          mutation.target.closest("ea-carousel-item:not([slot])")
+        );
+      });
+
+      if (shouldUpdate) {
+        this.#syncClonedItems();
+      }
+    });
+
+    const items = this.querySelectorAll("ea-carousel-item:not([slot])");
+    items.forEach(item => {
+      this.#itemObserver.observe(item, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
+    });
+  }
+
+  /**
+   * 同步克隆节点的内容
+   */
+  #syncClonedItems() {
+    const items = this.querySelectorAll("ea-carousel-item:not([slot])");
+    if (items.length === 0) return;
+
+    const firstClone = this.querySelector(
+      'ea-carousel-item[slot="clone-first"]'
+    );
+    const lastClone = this.querySelector('ea-carousel-item[slot="clone-last"]');
+
+    if (firstClone && items[0]) {
+      firstClone.innerHTML = items[0].innerHTML;
+    }
+
+    if (lastClone && items[items.length - 1]) {
+      lastClone.innerHTML = items[items.length - 1].innerHTML;
     }
   }
 
@@ -547,6 +604,9 @@ export class EaCarousel extends Base {
     }
 
     this.#onCarouselResizeEvent()?.unsetHandler();
+
+    this.#itemObserver?.disconnect();
+    this.#itemObserver = null;
   }
 }
 
