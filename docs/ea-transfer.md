@@ -431,19 +431,19 @@ emptyExample.init();
 
 ### Transfer Attributes
 
-| 参数                           | 说明             | 类型     | 可选值 | 默认值                                               |
-| ------------------------------ | ---------------- | -------- | ------ | ---------------------------------------------------- |
-| data <PropTag/>                | 数据源           | Array    | -      | []                                                   |
-| value <PropTag/>               | 已选中的数据项   | Array    | -      | []                                                   |
-| disabled                       | 是否禁用         | Boolean  | -      | false                                                |
-| filterable                     | 是否可搜索       | Boolean  | -      | false                                                |
-| filter-placeholder             | 搜索框占位符     | String   | -      | "请输入搜索内容"                                     |
-| dataProps <PropTag/>           | 数据字段映射配置 | Object   | -      | { key: "key", label: "label", disabled: "disabled" } |
-| titles                         | 面板标题         | Array    | -      | []                                                   |
-| buttonTexts <PropTag/>         | 按钮文本         | Array    | -      | []                                                   |
-| filterMethod <PropTag/>        | 自定义筛选方法   | Function | -      | null                                                 |
-| leftDefaultChecked <PropTag/>  | 左侧默认选中项   | Array    | -      | []                                                   |
-| rightDefaultChecked <PropTag/> | 右侧默认选中项   | Array    | -      | []                                                   |
+| 参数                           | 说明             | 类型          | 可选值 | 默认值                                                 |
+| ------------------------------ | ---------------- | ------------- | ------ | ------------------------------------------------------ |
+| data <PropTag/>                | 数据源           | `dataProps[]` | -      | []                                                     |
+| value <PropTag/>               | 已选中的数据项   | Array         | -      | []                                                     |
+| disabled                       | 是否禁用         | Boolean       | -      | false                                                  |
+| filterable                     | 是否可搜索       | Boolean       | -      | false                                                  |
+| filter-placeholder             | 搜索框占位符     | String        | -      | "请输入搜索内容"                                       |
+| dataProps <PropTag/>           | 数据字段映射配置 | Object        | -      | `{ key: "key", label: "label", disabled: "disabled" }` |
+| titles                         | 面板标题         | Array         | -      | []                                                     |
+| buttonTexts <PropTag/>         | 按钮文本         | Array         | -      | []                                                     |
+| filterMethod <PropTag/>        | 自定义筛选方法   | Function      | -      | null                                                   |
+| leftDefaultChecked <PropTag/>  | 左侧默认选中项   | Array         | -      | []                                                     |
+| rightDefaultChecked <PropTag/> | 右侧默认选中项   | Array         | -      | []                                                     |
 
 ### Transfer Methods
 
