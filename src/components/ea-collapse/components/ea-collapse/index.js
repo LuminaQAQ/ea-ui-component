@@ -44,6 +44,7 @@ export class EaCollapse extends Base {
   fnState = this.properties({
     beforeCollapse: {
       props: true,
+      rawFunction: true,
       type: Function,
       default: null,
       observer: () => {},

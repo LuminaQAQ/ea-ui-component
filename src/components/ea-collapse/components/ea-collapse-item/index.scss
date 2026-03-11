@@ -30,13 +30,15 @@
   border-top: var(--ea-collapse-item-border-top);
   border-bottom: var(--ea-collapse-item-border);
 
+  margin: 0 4px;
+
   @include element(title-wrap) {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
 
-    width: 100%;
+    width: calc(100% - 2px);
 
     cursor: pointer;
   }
@@ -54,6 +56,7 @@
   }
 
   @include element(indicator) {
+
     .default-expand-icon {
       transform: rotate(-90deg);
 

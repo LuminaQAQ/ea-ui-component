@@ -15,6 +15,8 @@ export class EaCollapseItem extends Base {
   #titleIcon;
   /** @type {HTMLElement} */
   #content;
+  /** @type {HTMLSlotElement} */
+  #defaultSlot;
 
   /** @type {AbortController} */
   #abortController;
@@ -128,6 +130,7 @@ export class EaCollapseItem extends Base {
       ".ea-collapse-item__title-icon"
     );
     this.#content = this.shadowRoot.querySelector(".ea-collapse-item__content");
+    this.#defaultSlot = this.shadowRoot.querySelector("slot:not([name])");
 
     this.updateContainerClasslist();
   }
@@ -165,6 +168,17 @@ export class EaCollapseItem extends Base {
     });
   };
 
+  /**
+   * 插槽变化事件处理
+   */
+  #onSlotChange = () => {
+    this.#container.style.setProperty(
+      "--ea-collapse-item-content-height",
+      "auto"
+    );
+    this.#updateCollapseHeight();
+  };
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -175,22 +189,9 @@ export class EaCollapseItem extends Base {
       signal: this.#abortController.signal,
     });
 
-    const defaultSlot = this.shadowRoot.querySelector("slot:not([name])");
-    if (defaultSlot) {
-      defaultSlot.addEventListener(
-        "slotchange",
-        () => {
-          this.#container.style.setProperty(
-            "--ea-collapse-item-content-height",
-            "auto"
-          );
-          this.#updateCollapseHeight();
-        },
-        {
-          signal: this.#abortController.signal,
-        }
-      );
-    }
+    this.#defaultSlot.addEventListener("slotchange", this.#onSlotChange, {
+      signal: this.#abortController.signal,
+    });
   }
 
   $beforeUnmounted() {
