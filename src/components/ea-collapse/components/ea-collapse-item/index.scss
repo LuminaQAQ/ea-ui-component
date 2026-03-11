@@ -11,7 +11,7 @@
   --ea-collapse-item-content-height: 0;
   --ea-collapse-item-content-font-size: var(--font-size-md);
   --ea-collapse-item-content-color: var(--grey-900);
-  --ea-collapse-item-content-padding-bottom: 25px;
+  --ea-collapse-item-content-padding-bottom: 12px;
 
   --ea-collapse-item-transition: var(--transition-normal);
 }
@@ -78,6 +78,10 @@
   @include modifier(indicator-left) {
     .ea-collapse-item__title-wrap {
       flex-direction: row-reverse;
+    }
+
+    .ea-collapse-item__indicator {
+      margin-right: 12px;
     }
   }
 

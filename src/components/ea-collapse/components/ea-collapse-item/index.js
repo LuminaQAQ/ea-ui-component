@@ -9,6 +9,8 @@ export class EaCollapseItem extends Base {
   #titleWrap;
   /** @type {HTMLElement} */
   #title;
+  /** @type {HTMLSlotElement} */
+  #titleSlot;
   /** @type {HTMLElement} */
   #titleIcon;
   /** @type {HTMLElement} */
@@ -34,7 +36,7 @@ export class EaCollapseItem extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        this.#title.textContent = newVal;
+        this.#titleSlot.textContent = newVal;
       },
     },
     name: {
@@ -119,6 +121,9 @@ export class EaCollapseItem extends Base {
       ".ea-collapse-item__title-wrap"
     );
     this.#title = this.shadowRoot.querySelector(".ea-collapse-item__title");
+    this.#titleSlot = this.shadowRoot.querySelector(
+      ".ea-collapse-item__title slot"
+    );
     this.#titleIcon = this.shadowRoot.querySelector(
       ".ea-collapse-item__title-icon"
     );
@@ -132,10 +137,12 @@ export class EaCollapseItem extends Base {
    * @param {boolean} isActive
    */
   #updateCollapseHeight = (isActive = this.active) => {
-    this.#container.style.setProperty(
-      "--ea-collapse-item-content-height",
-      isActive ? `${this.#content.scrollHeight}px` : "0"
-    );
+    queueMicrotask(() => {
+      this.#container.style.setProperty(
+        "--ea-collapse-item-content-height",
+        isActive ? `${this.#content.scrollHeight}px` : "0"
+      );
+    });
   };
 
   /**
@@ -167,6 +174,23 @@ export class EaCollapseItem extends Base {
     this.#titleWrap.addEventListener("click", this.#onCollapseEvent, {
       signal: this.#abortController.signal,
     });
+
+    const defaultSlot = this.shadowRoot.querySelector("slot:not([name])");
+    if (defaultSlot) {
+      defaultSlot.addEventListener(
+        "slotchange",
+        () => {
+          this.#container.style.setProperty(
+            "--ea-collapse-item-content-height",
+            "auto"
+          );
+          this.#updateCollapseHeight();
+        },
+        {
+          signal: this.#abortController.signal,
+        }
+      );
+    }
   }
 
   $beforeUnmounted() {
