@@ -136,10 +136,10 @@ export class EaCarousel extends Base {
       type: Boolean,
       default: true,
       observer: newVal => {
+        this.#handleTimerClear();
+
         if (newVal) {
           this.#handleAutoPlay();
-        } else {
-          this.#handleTimerClear();
         }
       },
     },
