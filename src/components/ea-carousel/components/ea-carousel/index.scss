@@ -180,4 +180,10 @@
       }
     }
   }
+
+  @include state(none-indicator) {
+    .ea-carousel__indicator-wrap {
+      display: none;
+    }
+  }
 }

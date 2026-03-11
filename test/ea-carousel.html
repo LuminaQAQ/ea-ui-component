@@ -127,5 +127,302 @@
     <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
+
+    <!-- -------- 属性切换测试 --------  -->
+    <!-- #region  -->
+    <h2>属性切换测试</h2>
+    <div class="demo">
+      <ea-carousel id="attr-test-carousel" height="150px">
+        <ea-carousel-item> 1 </ea-carousel-item>
+        <ea-carousel-item> 2 </ea-carousel-item>
+        <ea-carousel-item> 3 </ea-carousel-item>
+      </ea-carousel>
+
+      <div
+        style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem"
+      >
+        <!-- direction -->
+        <div>
+          <label>direction:</label>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('direction', 'horizontal')
+            "
+          >
+            horizontal
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('direction', 'vertical')
+            "
+          >
+            vertical
+          </button>
+        </div>
+
+        <!-- trigger -->
+        <div>
+          <label>trigger:</label>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('trigger', 'hover')
+            "
+          >
+            hover
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('trigger', 'click')
+            "
+          >
+            click
+          </button>
+        </div>
+
+        <!-- interval -->
+        <div>
+          <label>interval:</label>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('interval', '1000')
+            "
+          >
+            1000ms
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('interval', '3000')
+            "
+          >
+            3000ms
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('interval', '5000')
+            "
+          >
+            5000ms
+          </button>
+        </div>
+
+        <!-- arrow -->
+        <div>
+          <label>arrow:</label>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('arrow', 'always')
+            "
+          >
+            always
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('arrow', 'hover')
+            "
+          >
+            hover
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('arrow', 'never')
+            "
+          >
+            never
+          </button>
+        </div>
+
+        <!-- autoplay -->
+        <div>
+          <label>autoplay:</label>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('autoplay', 'true')
+            "
+          >
+            true
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('autoplay', 'false')
+            "
+          >
+            false
+          </button>
+        </div>
+
+        <!-- indicator-position -->
+        <div>
+          <label>indicator-position:</label>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('indicator-position', '')
+            "
+          >
+            default
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('indicator-position', 'none')
+            "
+          >
+            none
+          </button>
+          <button
+            onclick="
+              document
+                .getElementById('attr-test-carousel')
+                .setAttribute('indicator-position', 'outside')
+            "
+          >
+            outside
+          </button>
+        </div>
+
+        <!-- slotchange 操作 -->
+        <div
+          style="
+            width: 100%;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #ddd;
+          "
+        >
+          <label>slotchange 操作（动态增删 Item）:</label>
+          <button id="slotchange-add">添加 Item</button>
+          <button id="slotchange-remove">删除最后一个</button>
+          <button id="slotchange-insert">在开头插入</button>
+          <button id="slotchange-replace">替换所有</button>
+          <button id="slotchange-clear">清空</button>
+        </div>
+      </div>
+
+      <div
+        id="slotchange-log"
+        style="
+          margin-top: 1rem;
+          padding: 1rem;
+          background: #f5f5f5;
+          border-radius: 4px;
+          font-family: monospace;
+          font-size: 12px;
+          max-height: 150px;
+          overflow-y: auto;
+        "
+      >
+        <div>事件日志：</div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        const carousel = document.getElementById("attr-test-carousel");
+        const logContainer = document.getElementById("slotchange-log");
+        let itemCounter = 3;
+
+        function log(message) {
+          const entry = document.createElement("div");
+          entry.style.marginTop = "4px";
+          entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+          logContainer.appendChild(entry);
+          logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // 监听 slotchange 事件
+        carousel.addEventListener("slotchange", e => {
+          log("slotchange 事件触发！指示器和克隆节点已重新渲染");
+        });
+
+        document
+          .getElementById("slotchange-add")
+          .addEventListener("click", () => {
+            itemCounter++;
+            const newItem = document.createElement("ea-carousel-item");
+            newItem.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+            newItem.textContent = `Item ${itemCounter}`;
+            carousel.appendChild(newItem);
+            log(`添加 Item ${itemCounter}`);
+          });
+
+        document
+          .getElementById("slotchange-remove")
+          .addEventListener("click", () => {
+            const items = carousel.querySelectorAll(
+              "ea-carousel-item:not([slot])"
+            );
+            if (items.length > 0) {
+              const lastItem = items[items.length - 1];
+              const itemText = lastItem.textContent.trim();
+              lastItem.remove();
+              log(`删除 ${itemText}`);
+            } else {
+              log("没有可删除的 Item");
+            }
+          });
+
+        document
+          .getElementById("slotchange-insert")
+          .addEventListener("click", () => {
+            itemCounter++;
+            const newItem = document.createElement("ea-carousel-item");
+            newItem.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+            newItem.textContent = `Item ${itemCounter} (新)`;
+            carousel.insertBefore(newItem, carousel.firstElementChild);
+            log(`在开头插入 Item ${itemCounter}`);
+          });
+
+        document
+          .getElementById("slotchange-replace")
+          .addEventListener("click", () => {
+            carousel.innerHTML = "";
+            itemCounter = 0;
+            const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4"];
+            for (let i = 0; i < 4; i++) {
+              itemCounter++;
+              const item = document.createElement("ea-carousel-item");
+              item.style.background = colors[i];
+              item.textContent = `新 Item ${itemCounter}`;
+              carousel.appendChild(item);
+            }
+            log("替换所有 Items（4个新Item）");
+          });
+
+        document
+          .getElementById("slotchange-clear")
+          .addEventListener("click", () => {
+            carousel.innerHTML = "";
+            log("清空所有 Items");
+          });
+      })();
+    </script>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
   </body>
 </html>

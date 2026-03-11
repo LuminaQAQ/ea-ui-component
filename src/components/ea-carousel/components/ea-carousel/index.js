@@ -123,7 +123,13 @@ export class EaCarousel extends Base {
     interval: {
       type: Number,
       default: 3000,
-      observer: () => {},
+      observer: () => {
+        this.#handleTimerClear();
+
+        if (this.autoplay) {
+          this.#handleAutoPlay();
+        }
+      },
     },
     arrow: {
       type: ["never", "always", "hover"],
@@ -390,6 +396,7 @@ export class EaCarousel extends Base {
   #handleAutoPlay() {
     if (!this.autoplay) return;
 
+    this.#handleTimerClear();
     this.#states.timer = setInterval(this.next, this.interval);
   }
 
@@ -434,7 +441,7 @@ export class EaCarousel extends Base {
   #onCarouselChangeEndEvent = () => {
     this.#turnOffTransition();
 
-    if (this.autoplay && !this.#states.isMouseEnter) this.#handleTimerClear();
+    this.#handleTimerClear();
 
     this.index = this.#handleIndexOverflow();
 
@@ -549,6 +556,8 @@ export class EaCarousel extends Base {
     }
 
     this.#turnOffTransition();
+    this.#handleTimerClear();
+
     this.#renderIndicatorItems();
     this.#initCarouselItem();
     if (this.autoplay) this.#handleAutoPlay();
