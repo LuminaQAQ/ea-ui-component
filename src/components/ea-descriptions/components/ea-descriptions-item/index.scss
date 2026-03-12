@@ -21,11 +21,15 @@
     color: var(--ea-descriptions-item-label-color);
     font-weight: var(--ea-descriptions-item-label-weight);
     white-space: nowrap;
+
+    vertical-align: middle;
   }
 
   @include element(content) {
     color: var(--ea-descriptions-item-content-color);
     font-weight: var(--ea-descriptions-item-content-weight);
     flex: 1;
+
+    vertical-align: middle;
   }
 }

@@ -28,6 +28,10 @@
   }
 
   @include element(placeholder) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: var(--ea-empty-size);
     height: var(--ea-empty-size);
   }

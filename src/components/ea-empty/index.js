@@ -21,14 +21,22 @@ export class EaEmpty extends Base {
     image: {
       type: String,
       default: "",
-      observer: (newVal) => {
-        this.#placeholder.innerHTML = `<img class="ea-empty__image" src="${newVal}" alt="empty image" part="image" />`;
+      observer: newVal => {
+        if (!newVal) {
+          this.#placeholder.innerHTML = this.html(`
+            <section class="ea-empty__default">${emptyStatusSVG}</section>
+          `);
+        } else {
+          this.#placeholder.innerHTML = this.html(`
+            <img class="ea-empty__image" src="${newVal}" alt="empty image" part="image" />
+          `);
+        }
       },
     },
     "image-size": {
       type: String,
       default: "",
-      observer: (newVal) => {
+      observer: newVal => {
         if (!CSS.supports("--ea-empty-size", newVal))
           return console.warn(
             `[ea-empty] The size value ${newVal} is not supported.`
@@ -40,8 +48,12 @@ export class EaEmpty extends Base {
     description: {
       type: String,
       default: "",
-      observer: (newVal) => {
-        this.#description.textContent = newVal;
+      observer: newVal => {
+        if (!newVal) {
+          this.#description.innerText = `No Data`;
+        } else {
+          this.#description.textContent = newVal;
+        }
       },
     },
   });
@@ -55,11 +67,11 @@ export class EaEmpty extends Base {
   }
 
   $render() {
-    this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML = this.html(`
       <div class='ea-empty' part='container'>
         <div class="ea-empty__placeholder" part="placeholder">
             <slot name="image">
-                <section class="ea-empty__default">${emptyStatusSVG}</section>
+              <section class="ea-empty__default">${emptyStatusSVG}</section>
             </slot>
         </div>
         <div class="ea-empty__description" part="description">
@@ -69,11 +81,15 @@ export class EaEmpty extends Base {
             <slot></slot>
         </div>
       </div>
-    `;
+    `);
 
     this.#container = this.shadowRoot.querySelector(".ea-empty");
-    this.#placeholder = this.shadowRoot.querySelector(".ea-empty__placeholder");
-    this.#description = this.shadowRoot.querySelector(".ea-empty__description");
+    this.#placeholder = this.shadowRoot.querySelector(
+      ".ea-empty__placeholder slot[name='image']"
+    );
+    this.#description = this.shadowRoot.querySelector(
+      ".ea-empty__description slot[name='description']"
+    );
     this.#bottom = this.shadowRoot.querySelector(".ea-empty__bottom");
   }
 

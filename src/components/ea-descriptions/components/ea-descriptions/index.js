@@ -36,7 +36,9 @@ export class EaDescriptions extends Base {
     column: {
       type: Number,
       default: 3,
-      observer: () => {},
+      observer: () => {
+        this.#render();
+      },
     },
     title: {
       type: String,
@@ -55,7 +57,9 @@ export class EaDescriptions extends Base {
     direction: {
       type: ["horizontal", "vertical"],
       default: "horizontal",
-      observer: () => {},
+      observer: () => {
+        this.#render();
+      },
     },
     size: {
       type: ["large", "default", "small"],
@@ -115,7 +119,9 @@ export class EaDescriptions extends Base {
 
     this.#container = this.shadowRoot.querySelector(".ea-descriptions");
     this.#caption = this.shadowRoot.querySelector(".ea-descriptions__caption");
-    this.#title = this.shadowRoot.querySelector(".ea-descriptions__title");
+    this.#title = this.shadowRoot.querySelector(
+      ".ea-descriptions__title slot[name='title']"
+    );
     this.#extra = this.shadowRoot.querySelector(".ea-descriptions__extra");
     this.#tbody = this.shadowRoot.querySelector(".ea-descriptions__body");
     this.#defaultSlot = this.shadowRoot.querySelector("#defaultSlot");
@@ -406,10 +412,26 @@ export class EaDescriptions extends Base {
       ].join(""),
   };
 
+  /**
+   * 监听默认插槽变化
+   */
   #slotChangeHandler = () => {
     this.#render();
   };
 
+  /**
+   * 监听子元素变化
+   * @param {Event} e
+   */
+  #childChangeHandler = e => {
+    e.stopImmediatePropagation();
+
+    this.#render();
+  };
+
+  /**
+   * 渲染默认插槽内容
+   */
   #render() {
     /** @type {HTMLElement[]} */
     const children = [...this.querySelectorAll("ea-descriptions-item")];
@@ -437,16 +459,6 @@ export class EaDescriptions extends Base {
       signal: this.#abortController.signal,
     });
   }
-
-  /**
-   * 监听子元素变化
-   * @param {Event} e
-   */
-  #childChangeHandler = e => {
-    e.stopImmediatePropagation();
-
-    this.#render();
-  };
 
   $beforeUnmounted() {
     this.#abortController?.abort();
