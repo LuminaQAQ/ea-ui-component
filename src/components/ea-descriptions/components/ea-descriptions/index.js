@@ -14,6 +14,11 @@ export class EaDescriptions extends Base {
   #extra;
   /** @type {HTMLElement} */
   #tbody;
+  /** @type {HTMLSlotElement} */
+  #defaultSlot;
+
+  /** @type {AbortController | null} */
+  #abortController;
 
   static get observedAttributes() {
     return [
@@ -105,6 +110,7 @@ export class EaDescriptions extends Base {
         <tbody class='ea-descriptions__body' part='body'>
         </tbody>
       </table>
+      <slot id='defaultSlot' part='default-slot'></slot>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-descriptions");
@@ -112,6 +118,7 @@ export class EaDescriptions extends Base {
     this.#title = this.shadowRoot.querySelector(".ea-descriptions__title");
     this.#extra = this.shadowRoot.querySelector(".ea-descriptions__extra");
     this.#tbody = this.shadowRoot.querySelector(".ea-descriptions__body");
+    this.#defaultSlot = this.shadowRoot.querySelector("#defaultSlot");
   }
 
   /**
@@ -399,23 +406,50 @@ export class EaDescriptions extends Base {
       ].join(""),
   };
 
-  async connectedCallback() {
-    super.connectedCallback();
+  #slotChangeHandler = () => {
+    this.#render();
+  };
 
+  #render() {
     /** @type {HTMLElement[]} */
     const children = [...this.querySelectorAll("ea-descriptions-item")];
-    await Promise.all([
-      children.map(item =>
-        EaUtils.EaElement.addAsyncEventListener(
-          item,
-          "ea-descriptions-item-ready"
-        )
-      ),
-    ]);
 
     this.#tbody.innerHTML = this.#handleChildrenDivide(children, this.column)
       .map(this.#variantRenderer[this.#getVariant()])
       .join("");
+  }
+
+  async connectedCallback() {
+    super.connectedCallback();
+
+    await customElements.whenDefined("ea-descriptions-item");
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    this.#render();
+    this.addEventListener(
+      "ea-descriptions-item-change",
+      this.#childChangeHandler,
+      { signal: this.#abortController.signal }
+    );
+    this.#defaultSlot.addEventListener("slotchange", this.#slotChangeHandler, {
+      signal: this.#abortController.signal,
+    });
+  }
+
+  /**
+   * 监听子元素变化
+   * @param {Event} e
+   */
+  #childChangeHandler = e => {
+    e.stopImmediatePropagation();
+
+    this.#render();
+  };
+
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 

@@ -18,51 +18,72 @@ export class EaDescriptionsItem extends Base {
     ];
   }
 
+  /** @type {MutationObserver | null} */
+  #contentObserver = null;
+
   state = this.properties({
     label: {
       type: String,
       default: "",
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     colspan: {
       type: Number,
       default: 1,
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     rowspan: {
       type: Number,
       default: 1,
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     align: {
       type: ["left", "center", "right"],
       default: "",
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     "label-align": {
       type: ["left", "center", "right"],
       default: "",
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     width: {
       type: String,
       default: "",
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     "label-width": {
       type: String,
       default: "",
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     "label-part": {
       type: String,
       default: "",
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     "content-part": {
       type: String,
       default: "",
-      observer: () => {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
   });
 
@@ -82,13 +103,36 @@ export class EaDescriptionsItem extends Base {
     `;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    this.emit("ea-descriptions-item-ready", {
+  #notifyParent() {
+    this.emit("ea-descriptions-item-change", {
       bubbles: true,
       composed: true,
     });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.#setupContentObserver();
+  }
+
+  #setupContentObserver() {
+    this.#contentObserver = new MutationObserver(() => {
+      this.#notifyParent();
+    });
+
+    this.#contentObserver.observe(this, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+  }
+
+  $beforeUnmounted() {
+    if (this.#contentObserver) {
+      this.#contentObserver.disconnect();
+      this.#contentObserver = null;
+    }
   }
 }
 
