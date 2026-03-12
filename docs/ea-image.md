@@ -860,7 +860,6 @@ customProgressExample.init();
 | placeholder                            | 图片未加载时的占位内容（slot="placeholder"） |
 | progress <ea-tag>preview 属性</ea-tag> | 图片加载过程中的进度（slot="progress"）      |
 | toolbar <ea-tag>preview 属性</ea-tag>  | 图片预览工具栏（slot="toolbar"）             |
-| progress <ea-tag>preview 属性</ea-tag> | 图片加载过程中的进度（slot="progress"）      |
 
 ## ImagePreview API
 
