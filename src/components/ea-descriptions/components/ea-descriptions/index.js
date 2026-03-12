@@ -98,6 +98,7 @@ export class EaDescriptions extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
+      <slot id='defaultSlot' part='default-slot'></slot>
       <table class='ea-descriptions' part='container'>
         <caption class='ea-descriptions__caption' part='caption'>
           <section class='ea-descriptions__title' part='title'>
@@ -110,7 +111,6 @@ export class EaDescriptions extends Base {
         <tbody class='ea-descriptions__body' part='body'>
         </tbody>
       </table>
-      <slot id='defaultSlot' part='default-slot'></slot>
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-descriptions");

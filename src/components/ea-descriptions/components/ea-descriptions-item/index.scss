@@ -1,0 +1,31 @@
+:host {
+  --ea-descriptions-item-label-color: var(--grey-900);
+  --ea-descriptions-item-content-color: var(--grey-700);
+  --ea-descriptions-item-border-color: var(--grey-200);
+  --ea-descriptions-item-spacing: 12px 16px;
+  --ea-descriptions-item-font-size: var(--font-size-md);
+  --ea-descriptions-item-label-weight: var(--font-weight-bold);
+  --ea-descriptions-item-content-weight: var(--font-weight-md);
+}
+
+@include block(ea-descriptions-item) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--ea-descriptions-item-spacing);
+  border: 1px solid var(--ea-descriptions-item-border-color);
+  font-size: var(--ea-descriptions-item-font-size);
+  line-height: 1.5;
+
+  @include element(label) {
+    color: var(--ea-descriptions-item-label-color);
+    font-weight: var(--ea-descriptions-item-label-weight);
+    white-space: nowrap;
+  }
+
+  @include element(content) {
+    color: var(--ea-descriptions-item-content-color);
+    font-weight: var(--ea-descriptions-item-content-weight);
+    flex: 1;
+  }
+}

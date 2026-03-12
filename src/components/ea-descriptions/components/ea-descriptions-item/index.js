@@ -18,6 +18,9 @@ export class EaDescriptionsItem extends Base {
     ];
   }
 
+  /** @type {HTMLSpanElement | null} */
+  #label;
+
   /** @type {MutationObserver | null} */
   #contentObserver = null;
 
@@ -26,6 +29,7 @@ export class EaDescriptionsItem extends Base {
       type: String,
       default: "",
       observer: () => {
+        this.#label.textContent = this.label;
         this.#notifyParent();
       },
     },
@@ -98,9 +102,14 @@ export class EaDescriptionsItem extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class='ea-descriptions-item' part='container'>
-        <slot></slot>
+        <span class='ea-descriptions-item__label' part='label'>${this.label}</span>
+        <span class='ea-descriptions-item__content' part='content'>
+          <slot></slot>
+        </span>
       </div>
     `;
+
+    this.#label = this.shadowRoot.querySelector(".ea-descriptions-item__label");
   }
 
   #notifyParent() {
