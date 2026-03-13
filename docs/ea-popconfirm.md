@@ -10,11 +10,11 @@ onMounted(async () => {
 
         init() {
             this.el.addEventListener("confirm", (e) => {
-            console.log("confirm");
+                console.log("confirm");
             });
 
             this.el.addEventListener("cancel", (e) => {
-            console.log("cancel");
+                console.log("cancel");
             });
         },
     };
@@ -315,11 +315,11 @@ const customizedPopconfirmExample = {
   el: document.querySelector("#customizedPopconfirm"),
 
   init() {
-    this.el.addEventListener("confirm", (e) => {
+    this.el.addEventListener("confirm", e => {
       console.log("confirm");
     });
 
-    this.el.addEventListener("cancel", (e) => {
+    this.el.addEventListener("cancel", e => {
       console.log("cancel");
     });
   },
@@ -373,6 +373,8 @@ customizedPopconfirmExample.init();
 
 | 名称   | 详情                  | 类型         |
 | ------ | --------------------- | ------------ |
+| open   | 显示 Popconfirm       | `() => void` |
+| close  | 隐藏 Popconfirm       | `() => void` |
 | show   | 显示 Popover          | `() => void` |
 | hide   | 隐藏 Popover          | `() => void` |
 | toggle | 切换 Popover 显示状态 | `() => void` |

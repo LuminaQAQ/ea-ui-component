@@ -881,6 +881,13 @@ customProgressExample.init();
 | show-progress                 | 是否显示进度（progress 区域会渲染 slot 或文本）      | boolean | -      | false         |
 | append-to-body                | 是否插入到 body                                      | boolean | -      | false         |
 
+### ImagePreview Scopes
+
+| 名称        | 说明                 |
+| ----------- | -------------------- |
+| data-active | 当前预览图片的索引值 |
+| data-total  | 预览图片的总数       |
+
 ### ImagePreview CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)

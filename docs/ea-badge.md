@@ -286,6 +286,12 @@ hiddenExample.init();
 | offset-x    | 徽章在 X 轴上的偏移（像素），内部会设置 `--ea-badge-offset-x`              | Number             | —                                                 | 0        |
 | offset-y    | 徽章在 Y 轴上的偏移（像素），内部会设置 `--ea-badge-offset-y`              | Number             | —                                                 | 0        |
 
+## Scopes
+
+| 名称       | 说明         |
+| ---------- | ------------ |
+| data-value | 徽章显示的值 |
+
 ## CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
