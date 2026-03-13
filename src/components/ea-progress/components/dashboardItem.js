@@ -9,7 +9,7 @@ export const dashboardItem = `
     <circle class="ea-progress__track" part="track" cx="50" cy="50" fill="none" clip-path="url(#myClip)" />
     <circle class="ea-progress__path" part="path" cx="50" cy="50" fill="none" clip-path="url(#myClip)" />
 </svg>
-<section class="ea-progress__percentage" part="percentage">
-    <slot></slot>
+<section class="ea-progress__percentage-wrapper" part="percentage">
+    <slot class="ea-progress__percentage"></slot>
 </section>
 `;

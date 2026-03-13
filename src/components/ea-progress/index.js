@@ -12,6 +12,8 @@ export class EaProgress extends Base {
   /** @type {HTMLElement} */
   #path;
   /** @type {HTMLElement} */
+  #percentageWrapper;
+  /** @type {HTMLElement} */
   #text;
 
   static get observedAttributes() {
@@ -53,58 +55,7 @@ export class EaProgress extends Base {
       type: Number,
       default: 0,
       observer: newVal => {
-        if (newVal < 0) return (this.percentage = 0);
-        else if (newVal > 100) return (this.percentage = 100);
-
-        const percentageSlot = this.querySelector("[data-percentage]");
-        const statusIcon = {
-          success: "icon-ok-circled",
-          warning: "icon-attention-circled",
-          exception: "icon-cancel-circled",
-        };
-        const strategies = {
-          line: () => newVal + "%",
-          circle: () => 302 * ((100 - newVal) / 100) + "px",
-          dashboard: () => {
-            const width = Number(this["stroke-width"].replace("px", ""));
-            const r = 49 - width / 2;
-            const C = 2 * Math.PI * r;
-            const progress = (100 - newVal) / 100;
-
-            this.#path.style.strokeDasharray = C * (270 / 360) + "px";
-            this.#track.style.strokeDasharray = C * (270 / 360) + "px";
-
-            return C * (270 / 360) * progress + "px";
-          },
-        };
-
-        this.#container.style.setProperty(
-          "--ea-progress-percentage",
-          strategies[this.type]()
-        );
-
-        if (
-          ["success", "exception", "warning"].includes(this.status) &&
-          !this["text-inside"]
-        ) {
-          this.#text.innerHTML = `<ea-icon class="ea-progress__status" icon="${
-            statusIcon[this.status]
-          }" part="status-icon"></ea-icon>`;
-        } else {
-          this.#text.textContent = newVal + "%";
-        }
-
-        if (percentageSlot) {
-          percentageSlot.textContent = this.percentage;
-        }
-
-        this.#handleColorChange(this.color, newVal);
-
-        this.emit("change", {
-          detail: {
-            percentage: newVal,
-          },
-        });
+        this.#updatePercentage(newVal);
       },
     },
     type: {
@@ -113,6 +64,7 @@ export class EaProgress extends Base {
       observer: () => {
         this.$render();
         this.updateContainerClasslist();
+        this.#updatePercentage();
       },
     },
     status: {
@@ -120,6 +72,7 @@ export class EaProgress extends Base {
       default: "",
       observer: () => {
         this.updateContainerClasslist();
+        this.#updateStatusText();
       },
     },
     "stroke-width": {
@@ -139,7 +92,11 @@ export class EaProgress extends Base {
       default: false,
       observer: newVal => {
         try {
-          if (newVal) this.#path.appendChild(this.#text);
+          if (newVal) {
+            this.#path.appendChild(this.#text);
+          } else {
+            this.#percentageWrapper.appendChild(this.#text);
+          }
         } catch {
           /* empty */
         }
@@ -211,7 +168,7 @@ export class EaProgress extends Base {
       {
         [this.type]: this.type,
         indeterminate:
-          this.indeterminate && this.type === "line" && !this["striped-flow"],
+          this.indeterminate && this.type === "line",
         "striped-flow": this["striped-flow"],
         "show-text": this["show-text"],
       }
@@ -235,9 +192,9 @@ export class EaProgress extends Base {
       line: `
         <div class='ea-progress' part='container'>
           <section class="ea-progress__track" part="track">
-              <section class="ea-progress__path" part="path"></section>
+            <section class="ea-progress__path" part="path"></section>
           </section>
-          <section class="ea-progress__percentage" part="percentage">
+          <section class="ea-progress__percentage-wrapper" part="percentage">
             <slot class="ea-progress__percentage"></slot>
           </section>
         </div>
@@ -255,7 +212,10 @@ export class EaProgress extends Base {
     this.#container = this.shadowRoot.querySelector(".ea-progress");
     this.#track = this.shadowRoot.querySelector(".ea-progress__track");
     this.#path = this.shadowRoot.querySelector(".ea-progress__path");
-    this.#text = this.shadowRoot.querySelector(".ea-progress__percentage slot");
+    this.#percentageWrapper = this.shadowRoot.querySelector(
+      ".ea-progress__percentage-wrapper"
+    );
+    this.#text = this.shadowRoot.querySelector(".ea-progress__percentage");
 
     this.updateContainerClasslist();
   }
@@ -291,6 +251,73 @@ export class EaProgress extends Base {
       );
     }
   };
+
+  /**
+   * 更新状态文本/图标
+   */
+  #updateStatusText() {
+    const statusIcon = {
+      success: "icon-ok-circled",
+      warning: "icon-attention-circled",
+      exception: "icon-cancel-circled",
+    };
+
+    if (
+      ["success", "exception", "warning"].includes(this.status) &&
+      !this["text-inside"]
+    ) {
+      this.#text.innerHTML = `<ea-icon class="ea-progress__status" icon="${
+        statusIcon[this.status]
+      }" part="status-icon"></ea-icon>`;
+    } else {
+      this.#text.textContent = this.percentage + "%";
+    }
+  }
+
+  /**
+   * 更新进度条百分比
+   * @param {number} [newVal] 新的百分比值
+   */
+  #updatePercentage(newVal = this.percentage) {
+    if (newVal < 0) return (this.percentage = 0);
+    else if (newVal > 100) return (this.percentage = 100);
+
+    const percentageSlot = this.querySelector("[data-percentage]");
+    const strategies = {
+      line: () => newVal + "%",
+      circle: () => 302 * ((100 - newVal) / 100) + "px",
+      dashboard: () => {
+        const width = Number(this["stroke-width"].replace("px", ""));
+        const r = 49 - width / 2;
+        const C = 2 * Math.PI * r;
+        const progress = (100 - newVal) / 100;
+
+        this.#path.style.strokeDasharray = C * (270 / 360) + "px";
+        this.#track.style.strokeDasharray = C * (270 / 360) + "px";
+
+        return C * (270 / 360) * progress + "px";
+      },
+    };
+
+    this.#container.style.setProperty(
+      "--ea-progress-percentage",
+      strategies[this.type]()
+    );
+
+    this.#updateStatusText();
+
+    if (percentageSlot) {
+      percentageSlot.textContent = this.percentage;
+    }
+
+    this.#handleColorChange(this.color, newVal);
+
+    this.emit("change", {
+      detail: {
+        percentage: newVal,
+      },
+    });
+  }
 
   connectedCallback() {
     super.connectedCallback();
