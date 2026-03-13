@@ -1,5 +1,9 @@
 $name: ea-table;
-$ea-table-align-types: (left, center, right);
+$ea-table-align-types: (
+  left,
+  center,
+  right
+);
 
 :host {
   --ea-table-cell-spacing: var(--spacing-md);
@@ -43,9 +47,14 @@ $ea-table-align-types: (left, center, right);
   }
 }
 
-slot:not([name="empty"]) {
+#defaultSlot {
   display: none;
-  visibility: hidden;
+}
+
+.ea-table__empty {
+  &.is-data {
+    display: none;
+  }
 }
 
 @include block(ea-table) {
@@ -211,6 +220,7 @@ slot:not([name="empty"]) {
 
     .ea-table__tbody {
       .ea-table__tr:last-child {
+
         .ea-table__th,
         .ea-table__td {
           border-bottom-width: 0;

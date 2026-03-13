@@ -25,10 +25,6 @@
     <script type="module" src="../src/components/ea-switch/index.js"></script>
     <script type="module" src="../src/components/ea-tag/index.js"></script>
     <script type="module" src="../src/components/ea-tooltip/index.js"></script>
-    <script
-      type="module"
-      src="../src/components/ea-button-group/index.js"
-    ></script>
     <script type="module" src="../src/components/ea-table/index.js"></script>
 
     <!--  基础表格 -->
@@ -195,7 +191,7 @@
         <ea-table-column prop="zip" label="Zip" width="120px"></ea-table-column>
         <ea-table-column prop="action" fixed="right" label="Operations">
           <ea-button
-            link
+            text
             type="primary"
             size="small"
             onclick="getRowData(document.querySelector('#fixedColumnTable'))"
@@ -203,7 +199,7 @@
             Detail
           </ea-button>
           <ea-button
-            link
+            text
             type="primary"
             size="small"
             onclick="console.log('click')"

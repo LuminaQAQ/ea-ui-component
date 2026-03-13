@@ -1,5 +1,7 @@
 import Base from "@components/Base.js";
 
+import stylesheet from "./index.scss?inline";
+
 /**
  * @typedef TableColumnCtx 表格列对象
  * @property {string} label
@@ -19,8 +21,24 @@ import Base from "@components/Base.js";
 
 export class EaTableColumn extends Base {
   static get observedAttributes() {
-    return [...super.observedAttributes, "type"];
+    return [
+      ...super.observedAttributes,
+      "type",
+      "align",
+      "label",
+      "prop",
+      "colspan",
+      "width",
+      "sortable",
+      "fixed",
+    ];
   }
+
+  /** @type {HTMLSpanElement | null} */
+  #label;
+
+  /** @type {MutationObserver | null} */
+  #contentObserver = null;
 
   state = this.properties({
     type: {
@@ -31,31 +49,51 @@ export class EaTableColumn extends Base {
         if (newVal === "selection" && !customElements.get("ea-checkbox")) {
           import("@components/ea-checkbox/index.js");
         }
+        this.#notifyParent();
       },
     },
     align: {
       type: ["left", "center", "right"],
       default: "left",
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     label: {
       type: String,
       default: "",
+      observer: () => {
+        if (this.#label) this.#label.textContent = this.label;
+        this.#notifyParent();
+      },
     },
     prop: {
       type: String,
       default: "",
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     colspan: {
       type: Number,
       default: () => this.querySelectorAll("ea-table-column").length || 1,
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     width: {
       type: String,
       default: "",
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     sortable: {
       type: Boolean,
       default: false,
+      observer: () => {
+        this.#notifyParent();
+      },
     },
     fixed: {
       type: String,
@@ -63,6 +101,9 @@ export class EaTableColumn extends Base {
         return this.hasAttribute("fixed")
           ? this.getAttribute("fixed") || "left"
           : null;
+      },
+      observer: () => {
+        this.#notifyParent();
       },
     },
   });
@@ -72,6 +113,9 @@ export class EaTableColumn extends Base {
       props: true,
       type: Object,
       default: {},
+      observer: () => {
+        this.#notifyParent();
+      },
     },
   });
 
@@ -95,19 +139,19 @@ export class EaTableColumn extends Base {
 
         if (columns.length) {
           template = columns.map(columns => columns.getColumnTree);
-        } else if (this.innerHTML) {
-          const tpl = document.createElement("template");
-          const html = this.html(
-            Array.from(defaultSlot.assignedNodes(), item =>
-              item.outerHTML?.trim()
-            )
-              .filter(item => item)
-              .join("")
-          );
-          tpl.innerHTML = html;
-          template = tpl;
         } else {
-          template = null;
+          const assignedNodes = Array.from(defaultSlot.assignedNodes() || [])
+            .filter(node => node.nodeType === Node.ELEMENT_NODE)
+            .map(item => item.outerHTML?.trim())
+            .filter(item => item)
+            .join("");
+          if (assignedNodes) {
+            const tpl = document.createElement("template");
+            tpl.innerHTML = this.html(assignedNodes);
+            template = tpl;
+          } else {
+            template = null;
+          }
         }
 
         return {
@@ -172,14 +216,61 @@ export class EaTableColumn extends Base {
   constructor() {
     super();
 
+    this.stylesheet = stylesheet;
+
+    this.$render();
+  }
+
+  $render() {
     this.shadowRoot.innerHTML = `
-      <slot name="header"></slot>
-      <slot id="defaultSlot"></slot>
+      <div class='ea-table-column' part='container'>
+        <span class='ea-table-column__label' part='label'>${this.label}</span>
+        <span class='ea-table-column__content' part='content'>
+          <slot name="header"></slot>
+          <slot id="defaultSlot" part="default-slot"></slot>
+        </span>
+      </div>
     `;
+
+    this.#label = this.shadowRoot.querySelector(".ea-table-column__label");
+  }
+
+  /**
+   * 通知父组件更新
+   */
+  #notifyParent() {
+    this.emit("ea-table-column-change", {
+      bubbles: true,
+      composed: true,
+    });
+  }
+
+  /**
+   * 监听默认插槽变化
+   */
+  #setupContentObserver() {
+    this.#contentObserver = new MutationObserver(() => {
+      this.#notifyParent();
+    });
+
+    this.#contentObserver.observe(this, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
   }
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.#setupContentObserver();
+  }
+
+  $beforeUnmounted() {
+    if (this.#contentObserver) {
+      this.#contentObserver.disconnect();
+      this.#contentObserver = null;
+    }
   }
 }
 

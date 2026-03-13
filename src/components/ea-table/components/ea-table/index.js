@@ -50,6 +50,10 @@ export class EaTable extends Base {
   #tbody;
   /** @type {HTMLElement} */
   #tfoot;
+  /** @type {HTMLSlotElement} */
+  #defaultSlot;
+  /** @type {HTMLElement} */
+  #emptySlot;
 
   /** @type {AbortController} */
   #abortController;
@@ -142,6 +146,7 @@ export class EaTable extends Base {
       type: Array,
       default: () => this.#states.originData,
       observer: newVal => {
+        this.#states.originData = newVal;
         this.setData(newVal);
       },
     },
@@ -215,6 +220,13 @@ export class EaTable extends Base {
     );
 
     this.#container.className = className;
+    this.#emptySlot.className = this.computedClasslist(
+      "ea-table__empty",
+      {},
+      {
+        data: this.#states.originData.length > 0,
+      }
+    );
 
     return className;
   }
@@ -224,12 +236,24 @@ export class EaTable extends Base {
 
     this.stylesheet = stylesheet;
 
-    this.shadowRoot.innerHTML = this.html`
-      <table class='ea-table' part='container'></table>
-      <slot></slot>
-    `;
+    this.shadowRoot.innerHTML = this.html(`
+      <slot id='defaultSlot' part='default-slot'></slot>
+      <table class='ea-table' part='container'>
+        <colgroup class='ea-table__colgroup' part='colgroup'></colgroup>
+        <thead class='ea-table__thead' part='thead'></thead>
+        <tbody class='ea-table__tbody' part='tbody'></tbody>
+        <tfoot class='ea-table__tfoot' part='tfoot'></tfoot>
+      </table>
+      <slot class="ea-table__empty" name="empty">No Data</slot>
+    `);
 
     this.#container = this.shadowRoot.querySelector(".ea-table");
+    this.#defaultSlot = this.shadowRoot.querySelector("#defaultSlot");
+    this.#thead = this.shadowRoot.querySelector(".ea-table__thead");
+    this.#tbody = this.shadowRoot.querySelector(".ea-table__tbody");
+    this.#tfoot = this.shadowRoot.querySelector(".ea-table__tfoot");
+
+    this.#emptySlot = this.shadowRoot.querySelector(".ea-table__empty");
   }
 
   /**
@@ -245,24 +269,16 @@ export class EaTable extends Base {
 
     const colgroup = colgroupRenderer(columns);
     const thead = theadRenderer(columns);
-    const tbody = EaUtils.EaElement.h("tbody", "ea-table__tbody", {
-      part: "tbody",
-    });
     const tfoot = tfootRenderer(columns);
 
-    this.#container.innerHTML = this.html(`
-      <table>
-        ${colgroup}
-        ${thead}
-        ${tbody}
-        ${tfoot}
-      </table>
-      <slot class="ea-table__empty" name="empty">No Data</slot> 
-    `);
+    // 更新各部分内容
+    const colgroupEl = this.shadowRoot.querySelector(".ea-table__colgroup");
+    const theadEl = this.shadowRoot.querySelector(".ea-table__thead");
+    const tfootEl = this.shadowRoot.querySelector(".ea-table__tfoot");
 
-    this.#thead = this.shadowRoot.querySelector(".ea-table__thead");
-    this.#tbody = this.shadowRoot.querySelector(".ea-table__tbody");
-    this.#tfoot = this.shadowRoot.querySelector(".ea-table__tfoot");
+    if (colgroupEl) colgroupEl.innerHTML = colgroup;
+    if (theadEl) theadEl.innerHTML = thead;
+    if (tfootEl) tfootEl.innerHTML = tfoot;
   };
 
   /**
@@ -293,7 +309,7 @@ export class EaTable extends Base {
         desc: sortableEl.querySelector('[part="desc-icon"]'),
       };
 
-      sortableEl.dataset.order = newOrder;
+      sortableEl.setAttribute("data-order", newOrder);
 
       sortableEl.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
         icon.classList.toggle("is-active", orderEls[newOrder] === icon);
@@ -315,6 +331,10 @@ export class EaTable extends Base {
 
     this.#handleTableStructRender();
     this.#handleSortableColumnsInit();
+
+    this.addEventListener("ea-table-column-change", this.#childChangeHandler, {
+      signal: this.#abortController.signal,
+    });
 
     this.#container.addEventListener("mousedown", this.#onClickEvent, {
       signal: this.#abortController.signal,
@@ -350,6 +370,14 @@ export class EaTable extends Base {
    * @param {any[]} dataSource
    */
   setData = async dataSource => {
+    await customElements.whenDefined("ea-table");
+    await customElements.whenDefined("ea-table-column");
+
+    if (this.#states.columns.length === 0) {
+      this.#handleTableStructRender();
+      this.#handleSortableColumnsInit();
+    }
+
     /** @type {DocumentFragment} */
     const bodyTemplate = document.createDocumentFragment();
     /** @type {HTMLTableRowElement} */
@@ -420,7 +448,7 @@ export class EaTable extends Base {
       } else if (column.type) {
         td.innerHTML = typeTemplate[column.type]?.();
       } else {
-        td.dataset.scope = column.prop;
+        td.setAttribute("data-scope", column.prop);
       }
 
       row.appendChild(td);
@@ -431,7 +459,7 @@ export class EaTable extends Base {
       /** @type {HTMLTableRowElement} */
       const trNode = rowTpl.cloneNode(true);
 
-      trNode.dataset.index = i;
+      trNode.setAttribute("data-index", i);
 
       // 处理 type="selection" 的列
       if (typeof this.selectable === "function") {
@@ -838,7 +866,7 @@ export class EaTable extends Base {
       if (endTr !== tr) return;
 
       const value = this.#states.dataSource.get(tr);
-      const columnKey = endTd?.dataset?.scope;
+      const columnKey = endTd?.getAttribute("data-scope");
 
       this.#setHighlightCurrentRowStyle(tr, this.#states.currentRow.target);
 
@@ -909,7 +937,7 @@ export class EaTable extends Base {
     const td = e.target.closest(`${cellTag}[part='t${part}-${cellTag}']`);
 
     const value = this.#states.dataSource.get(tr);
-    const columnKey = td?.dataset?.scope;
+    const columnKey = td?.getAttribute("data-scope");
 
     if (part === "body") {
       this.#setHighlightCurrentRowStyle(tr, this.#states.currentRow.target);
@@ -1086,11 +1114,34 @@ export class EaTable extends Base {
   };
 
   /**
+   * 监听默认插槽变化
+   */
+  #slotChangeHandler = () => {
+    this.$render();
+    if (this.#states.originData.length > 0) {
+      this.setData(this.#states.originData);
+    }
+  };
+
+  /**
+   * 监听子元素变化
+   * @param {Event} e
+   */
+  #childChangeHandler = e => {
+    e.stopImmediatePropagation();
+
+    this.$render();
+    if (this.#states.originData.length > 0) {
+      this.setData(this.#states.originData);
+    }
+  };
+
+  /**
    * 当存在 selection 列时，checkbox 的改变事件
    * @param {Event} e
    */
   #onSelectionChangeEvent = e => {
-    if (e.target.dataset.type !== "selection") return;
+    if (e.target.getAttribute("data-type") !== "selection") return;
 
     e.stopImmediatePropagation();
 
@@ -1137,6 +1188,10 @@ export class EaTable extends Base {
     this.#abortController = new AbortController();
 
     this.$render();
+
+    this.#defaultSlot.addEventListener("slotchange", this.#slotChangeHandler, {
+      signal: this.#abortController.signal,
+    });
   }
 
   $beforeUnmounted() {

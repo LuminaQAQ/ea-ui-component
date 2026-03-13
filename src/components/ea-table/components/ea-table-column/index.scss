@@ -1,0 +1,39 @@
+:host {
+  --ea-table-column-label-color: var(--grey-900);
+  --ea-table-column-content-color: var(--grey-700);
+  --ea-table-column-border-color: var(--grey-200);
+  --ea-table-column-spacing: 12px 16px;
+  --ea-table-column-font-size: var(--font-size-md);
+  --ea-table-column-label-weight: var(--font-weight-bold);
+  --ea-table-column-content-weight: var(--font-weight-md);
+}
+
+:host {
+  display: inline-block;
+}
+
+@include block(ea-table-column) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--ea-table-column-spacing);
+  border: 1px solid var(--ea-table-column-border-color);
+  font-size: var(--ea-table-column-font-size);
+  line-height: 1.5;
+
+  @include element(label) {
+    color: var(--ea-table-column-label-color);
+    font-weight: var(--ea-table-column-label-weight);
+    white-space: nowrap;
+
+    vertical-align: middle;
+  }
+
+  @include element(content) {
+    color: var(--ea-table-column-content-color);
+    font-weight: var(--ea-table-column-content-weight);
+    flex: 1;
+
+    vertical-align: middle;
+  }
+}
