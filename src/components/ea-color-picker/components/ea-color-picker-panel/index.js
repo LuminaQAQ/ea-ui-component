@@ -141,6 +141,27 @@ export class EaColorPickerPanel extends Base {
     this.$render();
   }
 
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist(
+      this.ns.b("container"),
+      {},
+      {
+        disabled: this.disabled,
+        border: this.border,
+        "show-alpha": this["show-alpha"],
+        clearable: this.clearable,
+      }
+    );
+
+    this.#container.className = className;
+
+    return className;
+  }
+
   $render() {
     const ns = namespace("color-picker-panel");
     this.ns = ns;
@@ -200,28 +221,6 @@ export class EaColorPickerPanel extends Base {
 
     this.#bindEvents();
   }
-
-  /**
-   * 获取 classlist 列表
-   * @return {string} 属性值
-   */
-  updateContainerClasslist() {
-    const className = this.computedClasslist(
-      this.ns.b("container"),
-      {},
-      {
-        disabled: this.disabled,
-        border: this.border,
-        "show-alpha": this["show-alpha"],
-        clearable: this.clearable,
-      }
-    );
-
-    this.#container.className = className;
-
-    return className;
-  }
-
   /**
    * 绑定组件事件监听器
    */
@@ -550,7 +549,7 @@ export class EaColorPickerPanel extends Base {
       a: 1,
     });
 
-    this.#saturation.style.setProperty(
+    this.style.setProperty(
       "--ea-color-picker-panel-background-color",
       color.toString(this["color-format"])
     );
@@ -726,6 +725,32 @@ export class EaColorPickerPanel extends Base {
    */
   #validateColor(colorValue) {
     return Color.isValidColor(colorValue);
+  }
+
+  /**
+   * 重置光标和滑块位置到初始状态
+   */
+  resetCursorPosition() {
+    this.#states.hue = 0;
+    this.#states.saturation = 1;
+    this.#states.value = 1;
+    this.#states.alpha = 1;
+    this.#states.isFirstValueUpdate = false;
+
+    if (this.#saturationThumb) {
+      this.#saturationThumb.style.left = "";
+      this.#saturationThumb.style.top = "";
+    }
+
+    if (this.#hueThumb) {
+      this.#hueThumb.style.top = "";
+    }
+
+    if (this.#alphaThumb) {
+      this.#alphaThumb.style.left = "";
+    }
+
+    this.#updateSvpanelStatus();
   }
 }
 

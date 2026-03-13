@@ -22,7 +22,7 @@ export class EaColorPicker extends FormAssociatedBase {
   #inner;
   /** @type {import("@/components/ea-icon").EaIcon} */
   #statusIcon;
-  /** @type {import("@/components/ea-color-picker-panel").EaColorPickerPanel} */
+  /** @type {import("@/components/ea-color-picker/components/ea-color-picker-panel").EaColorPickerPanel} */
   #panel;
   /** @type {HTMLLabelElement} */
   #label;
@@ -96,6 +96,7 @@ export class EaColorPicker extends FormAssociatedBase {
       default: false,
       observer: newVal => {
         this.updateContainerClasslist();
+        this.#panel.setAttribute("clearable", newVal);
       },
     },
     size: {
@@ -117,13 +118,6 @@ export class EaColorPicker extends FormAssociatedBase {
       default: false,
       observer: newVal => {
         this.#panel.setAttribute("show-alpha", newVal);
-      },
-    },
-    clearable: {
-      type: Boolean,
-      default: true,
-      observer: newVal => {
-        this.#panel.setAttribute("clearable", newVal);
       },
     },
     tabindex: {
@@ -426,8 +420,16 @@ export class EaColorPicker extends FormAssociatedBase {
    */
   #onClearClick() {
     this.value = "";
+
+    this.#panel.style.setProperty(
+      "--ea-color-picker-panel-background-color",
+      "#ff0000"
+    );
+
+    this.#panel.resetCursorPosition?.();
     this.#updateTriggerColor();
     this.#updateStatusIcon();
+
     this.emit("change", { detail: { value: "" } });
     this.dispatchEvent(new EaColorPickerClearEvent());
 

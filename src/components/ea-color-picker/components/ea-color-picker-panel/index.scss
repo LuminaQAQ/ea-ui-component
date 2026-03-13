@@ -3,7 +3,7 @@ $name: ea-color-picker-panel;
 :host {
   --#{$name}-border-radius: var(--border-radius-md);
   --#{$name}-box-shadow: var(--shadow-lg);
-  --#{$name}-background-color: transparent;
+  --#{$name}-background-color: #ff0000;
   --#{$name}-border-color: var(--grey-200);
   --#{$name}-padding: var(--spacing-md);
 

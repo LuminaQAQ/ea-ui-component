@@ -31,7 +31,7 @@ export class EaCheckTag extends Base {
       },
     },
     type: {
-      type: componentTypes,
+      type: ["primary", "info", "success", "warning", "danger"],
       default: "primary",
       observer: newVal => {
         this.updateContainerClasslist();

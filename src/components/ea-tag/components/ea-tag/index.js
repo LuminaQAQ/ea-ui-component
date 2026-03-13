@@ -20,7 +20,6 @@ export class EaTag extends Base {
       "type",
       "closable",
       "disable-transitions",
-      "hit",
       "color",
       "size",
       "effect",
@@ -30,7 +29,7 @@ export class EaTag extends Base {
 
   state = this.properties({
     type: {
-      type: componentTypes,
+      type: ["primary", "info", "success", "warning", "danger"],
       default: "primary",
       observer: newVal => {
         this.updateContainerClasslist();
@@ -59,21 +58,18 @@ export class EaTag extends Base {
       default: false,
       observer: newVal => {},
     },
-    hit: {
-      type: Boolean,
-      default: false,
-      observer: newVal => {},
-    },
     color: {
       type: String,
       default: "",
       observer: newVal => {
+        if (newVal && CSS.supports("background", newVal))
+          this.#container.style.background = newVal;
+        else this.#container.style.background = "";
+
         if (!CSS.supports("background", newVal))
           return console.warn(
             `[EaTag] The color value ${newVal} is not supported.`
           );
-
-        this.#container.style.background = newVal;
       },
     },
     size: {
@@ -86,12 +82,16 @@ export class EaTag extends Base {
     effect: {
       type: ["dark", "light", "plain"],
       default: "light",
-      observer: newVal => {},
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
     },
     round: {
       type: Boolean,
       default: false,
-      observer: newVal => {},
+      observer: newVal => {
+        this.updateContainerClasslist();
+      },
     },
   });
 
