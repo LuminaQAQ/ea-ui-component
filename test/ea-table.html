@@ -444,16 +444,12 @@
           <ea-button
             size="small"
             style="margin-right: 0.5rem"
-            onclick="getRowData(document.querySelector('#customColumnTable'))"
+            data-action="detail"
           >
             Detail
           </ea-button>
-          <ea-button
-            type="danger"
-            size="small"
-            onclick="getRowData(document.querySelector('#customColumnTable'))"
-          >
-            Edit
+          <ea-button type="danger" size="small" data-action="delete">
+            Delete
           </ea-button>
         </ea-table-column>
       </ea-table>
@@ -940,6 +936,23 @@
         table: document.querySelector("#customColumnTable"),
         init() {
           this.table.setData(detailsData);
+
+          this.table.addEventListener("ea-template-cell-click", e => {
+            const { target, rowData, rowIndex, originalEvent } = e.detail;
+            console.log("Template cell clicked:", {
+              target: target,
+              rowData: rowData,
+              rowIndex: rowIndex,
+              originalEvent: originalEvent,
+            });
+
+            const action = target.getAttribute("data-action");
+            if (action === "detail") {
+              alert(`查看详情: ${rowData.name}, 行索引: ${rowIndex}`);
+            } else if (action === "delete") {
+              alert(`删除操作: ${rowData.name}, 行索引: ${rowIndex}`);
+            }
+          });
         },
       };
       customColumnExample.init();

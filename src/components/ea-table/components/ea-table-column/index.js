@@ -63,7 +63,8 @@ export class EaTableColumn extends Base {
       type: String,
       default: "",
       observer: () => {
-        if (this.#label) this.#label.textContent = this.label;
+        if (this.#label)
+          this.#label.textContent = `${this.label}[$${this.prop}]`;
         this.#notifyParent();
       },
     },
@@ -71,6 +72,8 @@ export class EaTableColumn extends Base {
       type: String,
       default: "",
       observer: () => {
+        if (this.#label)
+          this.#label.textContent = `${this.label}[$${this.prop}]`;
         this.#notifyParent();
       },
     },
@@ -96,9 +99,10 @@ export class EaTableColumn extends Base {
       },
     },
     fixed: {
-      type: String,
+      type: ["left", "right", "false"],
       default: () => {
-        return this.hasAttribute("fixed")
+        return this.hasAttribute("fixed") &&
+          this.getAttribute("fixed") !== "false"
           ? this.getAttribute("fixed") || "left"
           : null;
       },
@@ -140,10 +144,8 @@ export class EaTableColumn extends Base {
         if (columns.length) {
           template = columns.map(columns => columns.getColumnTree);
         } else {
-          const assignedNodes = Array.from(defaultSlot.assignedNodes() || [])
-            .filter(node => node.nodeType === Node.ELEMENT_NODE)
+          const assignedNodes = Array.from(defaultSlot.assignedElements() || [])
             .map(item => item.outerHTML?.trim())
-            .filter(item => item)
             .join("");
           if (assignedNodes) {
             const tpl = document.createElement("template");
@@ -174,7 +176,11 @@ export class EaTableColumn extends Base {
             attr => !exclude.includes(attr.name)
           ),
 
-          header: headerSlot.assignedNodes()[0]?.outerHTML?.trim() || null,
+          header:
+            headerSlot
+              .assignedElements()
+              .map(item => item.outerHTML?.trim())
+              .join("") || null,
           template,
         };
       },
@@ -224,7 +230,7 @@ export class EaTableColumn extends Base {
   $render() {
     this.shadowRoot.innerHTML = `
       <div class='ea-table-column' part='container'>
-        <span class='ea-table-column__label' part='label'>${this.label}</span>
+        <header class='ea-table-column__label' part='label'>${this.label}[$${this.prop}]</header>
         <span class='ea-table-column__content' part='content'>
           <slot name="header"></slot>
           <slot id="defaultSlot" part="default-slot"></slot>

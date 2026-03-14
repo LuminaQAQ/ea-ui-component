@@ -1580,16 +1580,16 @@ sortableTable.init();
       <ea-button
         size="small"
         style="margin-right: 0.5rem"
-        onclick="getRowData(document.querySelector('#customColumnTable'))"
+        data-action="detail"
       >
         Detail
       </ea-button>
       <ea-button
         type="danger"
         size="small"
-        onclick="getRowData(document.querySelector('#customColumnTable'))"
+        data-action="delete"
       >
-        Edit
+        Delete
       </ea-button>
     </ea-table-column>
   </ea-table>
@@ -1609,19 +1609,11 @@ sortableTable.init();
       <span data-scope="name"></span>
     </ea-table-column>
     <ea-table-column prop="action" fixed="right" label="Operations">
-      <ea-button
-        size="small"
-        style="margin-right: 0.5rem"
-        onclick="getRowData(document.querySelector('#customColumnTable'))"
-      >
+      <ea-button size="small" style="margin-right: 0.5rem" data-action="detail">
         Detail
       </ea-button>
-      <ea-button
-        type="danger"
-        size="small"
-        onclick="getRowData(document.querySelector('#customColumnTable'))"
-      >
-        Edit
+      <ea-button type="danger" size="small" data-action="delete">
+        Delete
       </ea-button>
     </ea-table-column>
   </ea-table>
@@ -1688,21 +1680,30 @@ const detailsData = [
   },
 ];
 
-window.getRowData = table => {
-  /** @type {{target: HTMLTableRowElement, value: any}} */
-  const res = table.getCurrentRow();
-  console.log(res.value);
-};
-
 const customColumnExample = {
   table: document.querySelector("#customColumnTable"),
   init() {
     this.table.setData(detailsData);
+
+    // 监听模板单元格点击事件
+    this.table.addEventListener("ea-template-cell-click", e => {
+      const { target, rowData, rowIndex, originalEvent } = e.detail;
+
+      // 根据点击的元素执行不同的操作
+      const action = target.getAttribute("data-action");
+      if (action === "detail") {
+        console.log("查看详情:", rowData);
+      } else if (action === "delete") {
+        console.log("删除操作:", rowData);
+      }
+    });
   },
 };
 customColumnExample.init();
 ```
 
+::: tip
+通过 `ea-template-cell-click` 事件，可以方便地处理自定义模板中元素的点击事件，无需为每个元素单独绑定点击事件。
 :::
 
 ## 自定义表头
@@ -1964,24 +1965,25 @@ summaryExample.init();
 
 ### Table Events
 
-| 事件名                 | 说明                     | 参数                                                                      |
-| ---------------------- | ------------------------ | ------------------------------------------------------------------------- |
-| ea-select              | 选择某一行时触发         | event.detail: `{ selection: any[], row: any }`                            |
-| ea-select-all          | 全选时触发               | event.detail: `{ selection: any[] }`                                      |
-| ea-selection-change    | 多选发生变化时触发       | event.detail: `{ newSelection: any[] }`                                   |
-| ea-cell-mouse-enter    | 单元格鼠标进入时触发     | event.detail: `{ row: any, column: string, cell: HTMLTableCellElement }`  |
-| ea-cell-mouse-leave    | 单元格鼠标离开时触发     | event.detail: `{ row: any, column: string, cell: HTMLTableCellElement }`  |
-| ea-cell-click          | 点击单元格时触发         | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`  |
-| ea-cell-dblclick       | 双击单元格时触发         | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`  |
-| ea-cell-contextmenu    | 右键点击单元格时触发     | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`  |
-| ea-row-click           | 点击行时触发             | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }` |
-| ea-row-dblclick        | 双击行时触发             | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }` |
-| ea-row-contextmenu     | 右键点击行时触发         | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }` |
-| ea-header-click        | 点击表头时触发           | event.detail: `{ cell: HTMLTableCellElement, column: string }`            |
-| ea-header-contextmenu  | 右键点击表头时触发       | event.detail: `{ cell: HTMLTableCellElement, column: string }`            |
-| ea-sort-change         | 排序变化时触发           | event.detail: `{ prop: string, order: 'ascend' \| 'descend' }`            |
-| ea-current-change      | 当前行变化时触发         | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }` |
-| ea-table-data-rendered | 表格在数据渲染完成后触发 | -                                                                         |
+| 事件名                 | 说明                       | 参数                                                                                               |
+| ---------------------- | -------------------------- | -------------------------------------------------------------------------------------------------- |
+| ea-select              | 选择某一行时触发           | event.detail: `{ selection: any[], row: any }`                                                     |
+| ea-select-all          | 全选时触发                 | event.detail: `{ selection: any[] }`                                                               |
+| ea-selection-change    | 多选发生变化时触发         | event.detail: `{ newSelection: any[] }`                                                            |
+| ea-cell-mouse-enter    | 单元格鼠标进入时触发       | event.detail: `{ row: any, column: string, cell: HTMLTableCellElement }`                           |
+| ea-cell-mouse-leave    | 单元格鼠标离开时触发       | event.detail: `{ row: any, column: string, cell: HTMLTableCellElement }`                           |
+| ea-cell-click          | 点击单元格时触发           | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`                           |
+| ea-template-cell-click | 点击自定义模板单元格时触发 | event.detail: `{ target: HTMLElement, rowData: any, rowIndex: number, originalEvent: MouseEvent }` |
+| ea-cell-dblclick       | 双击单元格时触发           | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`                           |
+| ea-cell-contextmenu    | 右键点击单元格时触发       | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`                           |
+| ea-row-click           | 点击行时触发               | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }`                          |
+| ea-row-dblclick        | 双击行时触发               | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }`                          |
+| ea-row-contextmenu     | 右键点击行时触发           | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }`                          |
+| ea-header-click        | 点击表头时触发             | event.detail: `{ cell: HTMLTableCellElement, column: string }`                                     |
+| ea-header-contextmenu  | 右键点击表头时触发         | event.detail: `{ cell: HTMLTableCellElement, column: string }`                                     |
+| ea-sort-change         | 排序变化时触发             | event.detail: `{ prop: string, order: 'ascend' \| 'descend' }`                                     |
+| ea-current-change      | 当前行变化时触发           | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }`                          |
+| ea-table-data-rendered | 表格在数据渲染完成后触发   | -                                                                                                  |
 
 ### Table CSS Part
 

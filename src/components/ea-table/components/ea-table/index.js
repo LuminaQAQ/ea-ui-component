@@ -20,6 +20,7 @@ import { EaTableRowContextmenuEvent } from "../../events/EaTableRowContextmenuEv
 import { EaTableCellContextmenuEvent } from "../../events/EaTableCellContextmenuEvent";
 import { EaTableHeaderContextmenuEvent } from "../../events/EaTableHeaderContextmenuEvent";
 import { EaTableHeaderClickEvent } from "../../events/EaTableHeaderClickEvent";
+import { EaTableTemplateCellClickEvent } from "../../events/EaTableTemplateCellClickEvent";
 
 /**
  * @typedef {Element & {template: HTMLTemplateElement}} EaTableColumnElement
@@ -444,7 +445,12 @@ export class EaTable extends Base {
       }
 
       if (template) {
-        td.appendChild(template.content.cloneNode(true));
+        const templateContent = template.content.cloneNode(true);
+        const childElements = templateContent.querySelectorAll("*");
+        childElements.forEach(el => {
+          el.setAttribute("data-template-cell", "");
+        });
+        td.appendChild(templateContent);
       } else if (column.type) {
         td.innerHTML = typeTemplate[column.type]?.();
       } else {
@@ -897,6 +903,19 @@ export class EaTable extends Base {
             row: value,
           })
         );
+
+        const templateTarget = e.target.closest("[data-template-cell]");
+        if (templateTarget) {
+          const rowIndex = Number(tr.getAttribute("data-index"));
+          this.dispatchEvent(
+            new EaTableTemplateCellClickEvent({
+              target: templateTarget,
+              rowData: value,
+              rowIndex: rowIndex,
+              originalEvent: e,
+            })
+          );
+        }
       }
     };
 
