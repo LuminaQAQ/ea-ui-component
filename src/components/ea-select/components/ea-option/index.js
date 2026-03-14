@@ -85,6 +85,7 @@ export class EaOption extends Base {
    */
   #onOptionSelectedEvent = e => {
     e.preventDefault();
+    e.stopImmediatePropagation();
     if (this.disabled) return;
 
     this.dispatchEvent(

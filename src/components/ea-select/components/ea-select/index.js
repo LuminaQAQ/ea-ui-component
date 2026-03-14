@@ -105,7 +105,15 @@ export class EaSelect extends FormAssociatedBase {
            * 处理清除事件
            */
           const onClearEvent = () => {
-            this.value = this.multiple ? [] : "";
+            const newVal = this.multiple ? [] : "";
+            this.value = newVal;
+
+            this.emit("change", {
+              detail: { value: newVal },
+              bubbles: true,
+              composed: true,
+            });
+
             this.dispatchEvent(new EaSelectClearEvent());
           };
 
@@ -291,12 +299,6 @@ export class EaSelect extends FormAssociatedBase {
         }
 
         this.#handleSelectedValueStyle(newVal);
-
-        this.emit("change", {
-          detail: { value: newVal },
-          bubbles: true,
-          composed: true,
-        });
 
         this.updateContainerClasslist();
 
@@ -490,37 +492,48 @@ export class EaSelect extends FormAssociatedBase {
   #onDropdownVisibleChangeEvent = async e => {
     const target = e.target === this.#input.shadowRoot ? this.#input : e.target;
 
+    this.#AbortControllerStates.closeAbortController?.abort();
+
     if (
       target.classList?.contains("ea-select__clear-icon") ||
       target.closest("ea-tag")
     )
       return;
 
-    this.#AbortControllerStates.closeAbortController?.abort();
-    this.#AbortControllerStates.closeAbortController = new AbortController();
-
     /**
      * 选项点击事件
      * @param {Event} e
      */
     const onOptionClick = e => {
+      e.stopImmediatePropagation();
+
       const target = e.target.closest("ea-option");
+
       if (!target) return;
       if (target.disabled) return;
 
+      let newVal;
       if (!this.multiple) {
-        this.value = target.value;
+        newVal = target.value;
+        this.value = newVal;
 
         this.hide();
       } else {
         if (!Array.isArray(this.value)) this.value = [];
 
         if (this.value.includes(target.value)) {
-          this.value = this.value.filter(v => v !== target.value);
+          newVal = this.value.filter(v => v !== target.value);
         } else {
-          this.value = [...this.value, target.value];
+          newVal = [...this.value, target.value];
         }
+        this.value = newVal;
       }
+
+      this.emit("change", {
+        detail: { value: newVal },
+        bubbles: true,
+        composed: true,
+      });
     };
 
     /**
@@ -563,6 +576,8 @@ export class EaSelect extends FormAssociatedBase {
 
     await EaUtils.sleep(100);
 
+    this.#AbortControllerStates.closeAbortController = new AbortController();
+
     this.addEventListener("ea-option-click", onOptionClick, {
       signal: this.#AbortControllerStates.closeAbortController.signal,
     });
@@ -584,7 +599,14 @@ export class EaSelect extends FormAssociatedBase {
     const target = e.target;
     const value = target.getAttribute("data-value");
 
-    this.value = this.value.filter(v => v !== value);
+    const newVal = this.value.filter(v => v !== value);
+    this.value = newVal;
+
+    this.emit("change", {
+      detail: { value: newVal },
+      bubbles: true,
+      composed: true,
+    });
 
     this.dispatchEvent(
       new EaSelectRemoveTagEvent({ tag: target, tagValue: value })

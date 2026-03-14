@@ -176,6 +176,7 @@ export class EaPagination extends Base {
 
   propState = this.properties({
     pageSizes: {
+      props: true,
       type: Array,
       default: [10, 20, 30, 40, 50, 100],
       /** @param {Array<number>} newVal */

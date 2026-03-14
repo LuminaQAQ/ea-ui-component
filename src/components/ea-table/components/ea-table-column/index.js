@@ -147,6 +147,7 @@ export class EaTableColumn extends Base {
           const assignedNodes = Array.from(defaultSlot.assignedElements() || [])
             .map(item => item.outerHTML?.trim())
             .join("");
+
           if (assignedNodes) {
             const tpl = document.createElement("template");
             tpl.innerHTML = this.html(assignedNodes);

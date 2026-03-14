@@ -1,14 +1,14 @@
 import { EaOption } from "../components/ea-option";
 
 export class EaOptionClickEvent extends Event {
-  readonly detail: EaSelectRemoveTagEventDetail;
-  constructor(detail: EaSelectRemoveTagEventDetail) {
+  readonly detail: EaOptionClickEventDetail;
+  constructor(detail: EaOptionClickEventDetail) {
     super("ea-option-click", { bubbles: true, composed: true });
     this.detail = detail;
   }
 }
 
-interface EaSelectRemoveTagEventDetail {
-  tag: EaOption;
-  tagValue: string;
+interface EaOptionClickEventDetail {
+  value: string;
+  target: EaOption;
 }
