@@ -1,7 +1,8 @@
-import { timeout } from "@/utils/timeout";
+import { EaStatistic } from "@components/ea-statistic/index";
+
 import dayjs from "dayjs";
-import { EaCountdownFinishEvent } from "../ea-statistic/events/EaCountdownFinishEvent";
-import { EaStatistic } from "../ea-statistic/index";
+import { timeout } from "@/utils/timeout";
+import { EaCountdownFinishEvent } from "./events/EaCountdownFinishEvent";
 
 export class EaCountdown extends EaStatistic {
   /** @type {HTMLElement} */
@@ -53,9 +54,6 @@ export class EaCountdown extends EaStatistic {
           this.#alignTimeout = null;
         }
 
-        /**
-         * 更新 显示的时间
-         */
         const handleValueUpdate = () => {
           const { diff, currentTime, displayValue } = this.#getDiffTime(
             newVal,
@@ -83,12 +81,13 @@ export class EaCountdown extends EaStatistic {
           }
         };
 
+        handleValueUpdate();
+
         const refresh = Number(this["refresh-interval"]) || 1000;
         const now = Date.now();
         let delay = refresh - (now % refresh);
         if (delay === 0) delay = refresh;
 
-        handleValueUpdate();
         this.#alignTimeout = timeout(() => {
           this.#alignTimeout = null;
           handleValueUpdate();
@@ -109,14 +108,28 @@ export class EaCountdown extends EaStatistic {
     },
   });
 
+  /**
+   * 获取 classlist 列表
+   * @return {string} 属性值
+   */
+  updateContainerClasslist() {
+    const className = this.computedClasslist("ea-countdown", {
+      // ['--' + this.type]: this.type,
+    });
+
+    this.#container.className = className;
+
+    return className;
+  }
+
   constructor() {
     super();
 
     this.#container = this.shadowRoot.querySelector(".ea-statistic");
-    this.#title = this.shadowRoot.querySelector(".ea-statistic__number");
+    this.#title = this.shadowRoot.querySelector(".ea-statistic__number slot");
     this.#number = this.shadowRoot.querySelector(".ea-statistic__number");
-    this.#prefix = this.shadowRoot.querySelector(".ea-statistic__prefix");
-    this.#suffix = this.shadowRoot.querySelector(".ea-statistic__suffix");
+    this.#prefix = this.shadowRoot.querySelector(".ea-statistic__prefix slot");
+    this.#suffix = this.shadowRoot.querySelector(".ea-statistic__suffix slot");
   }
 
   /**

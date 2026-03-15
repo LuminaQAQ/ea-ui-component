@@ -1,7 +1,6 @@
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
-import { componentTypes } from "@/utils/Variables";
 
 export class EaTimelineItem extends Base {
   /** @type {HTMLElement} */
@@ -36,7 +35,7 @@ export class EaTimelineItem extends Base {
 
   state = this.properties({
     type: {
-      type: componentTypes,
+      type: ["primary", "info", "success", "warning", "danger"],
       default: "",
       observer: newVal => {
         this.updateContainerClasslist();

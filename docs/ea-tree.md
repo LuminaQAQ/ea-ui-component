@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import "../dist/components/index.js"
 import "../dist/assets/icon.css"
+import PropType from "./components/PropTag.vue"
 
 onMounted(async () => {
   await customElements.whenDefined("ea-tree");
@@ -486,16 +487,16 @@ defaultExpandedTree.data = idData;
 
 ### Tree Attributes
 
-| 参数                 | 说明                            | 类型    | 可选值 | 默认值                                                         |
-| -------------------- | ------------------------------- | ------- | ------ | -------------------------------------------------------------- |
-| show-checkbox        | 是否显示复选框                  | boolean | -      | false                                                          |
-| check-strictly       | 是否严格模式（不关联父子节点）  | boolean | -      | false                                                          |
-| node-key             | 节点唯一标识字段名              | string  | -      | -                                                              |
-| data                 | 树形数据                        | array   | -      | []                                                             |
-| dataProps            | 数据字段配置                    | object  | -      | { children: "children", label: "label", disabled: "disabled" } |
-| defaultExpandedKeys  | 默认展开的节点键值数组          | array   | -      | []                                                             |
-| defaultCheckedKeys   | 默认选中的节点键值数组          | array   | -      | []                                                             |
-| expand-on-icon-click | 是否只在点击图标时展开/收起节点 | boolean | -      | false                                                          |
+| 参数                             | 说明                            | 类型    | 可选值 | 默认值                                                           |
+| -------------------------------- | ------------------------------- | ------- | ------ | ---------------------------------------------------------------- |
+| show-checkbox                    | 是否显示复选框                  | boolean | -      | false                                                            |
+| check-strictly                   | 是否严格模式（不关联父子节点）  | boolean | -      | false                                                            |
+| node-key                         | 节点唯一标识字段名              | string  | -      | -                                                                |
+| expand-on-icon-click             | 是否只在点击图标时展开/收起节点 | boolean | -      | false                                                            |
+| data <PropType />                | 树形数据                        | array   | -      | []                                                               |
+| dataProps <PropType />           | 数据字段配置                    | object  | -      | `{ children: "children", label: "label", disabled: "disabled" }` |
+| defaultExpandedKeys <PropType /> | 默认展开的节点键值数组          | array   | -      | []                                                               |
+| defaultCheckedKeys <PropType />  | 默认选中的节点键值数组          | array   | -      | []                                                               |
 
 ### Tree Methods
 

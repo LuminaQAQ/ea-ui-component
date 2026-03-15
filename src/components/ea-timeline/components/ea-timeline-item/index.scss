@@ -114,7 +114,12 @@ $name: ea-timeline-item;
     @include modifier($placment) {
       .right-wrapper {
         display: flex;
-        flex-direction: column-reverse;
+
+        @if $placment == top {
+          flex-direction: column-reverse;
+        } @else {
+          flex-direction: column;
+        }
       }
 
       .ea-timeline-item__timestamp {
