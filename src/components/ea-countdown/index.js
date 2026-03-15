@@ -2,6 +2,7 @@ import { EaStatistic } from "@components/ea-statistic/index";
 
 import dayjs from "dayjs";
 import { timeout } from "@/utils/timeout";
+import { parseToDate } from "@/utils/parseTime";
 import { EaCountdownFinishEvent } from "./events/EaCountdownFinishEvent";
 
 export class EaCountdown extends EaStatistic {
@@ -41,7 +42,7 @@ export class EaCountdown extends EaStatistic {
 
   state = this.properties({
     value: {
-      type: Date,
+      type: String,
       default: "",
       observer: newVal => {
         if (this.#timer) {
@@ -54,9 +55,11 @@ export class EaCountdown extends EaStatistic {
           this.#alignTimeout = null;
         }
 
+        const targetDate = parseToDate(newVal) || newVal;
+
         const handleValueUpdate = () => {
           const { diff, currentTime, displayValue } = this.#getDiffTime(
-            newVal,
+            targetDate,
             this.format
           );
 
