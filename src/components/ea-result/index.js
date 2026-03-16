@@ -46,7 +46,8 @@ export class EaResult extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        this.#icon.setAttribute("icon", newVal);
+        if (newVal) this.#icon.setAttribute("icon", newVal);
+        else this.#icon.setAttribute("icon", `icon-${typesIcon[this.type]}`);
       },
     },
   });

@@ -135,8 +135,8 @@ export class EaSkeleton extends Base {
   async $render() {
     this.shadowRoot.innerHTML = `
       <div class='ea-skeleton' part='container'>
-        <slot id="default"></slot>
-        <slot id="template" name="template"></slot>
+        <slot id="default" part="default-slot"></slot>
+        <slot id="template" name="template" part="template-slot"></slot>
       </div>
     `;
 
