@@ -5,13 +5,18 @@
 }
 
 @include block(ea-skeleton) {
-  ea-skeleton-item[variant="p"]:first-child {
-    width: 33%;
-  }
 
-  ea-skeleton-item[variant="p"]:last-child {
-    width: 66%;
-    margin-bottom: 0;
+  #template {
+    ea-skeleton-item[variant="p"]:first-child {
+      width: 33%;
+      display: block;
+    }
+
+    ea-skeleton-item[variant="p"]:last-child {
+      width: 66%;
+      margin-bottom: 0;
+      display: block;
+    }
   }
 
   #template {

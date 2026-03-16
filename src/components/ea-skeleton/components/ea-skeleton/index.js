@@ -6,9 +6,9 @@ import EaUtils from "@/utils/Utils";
 export class EaSkeleton extends Base {
   /** @type {HTMLElement} */
   #container;
-  /** @type {HTMLElement} */
+  /** @type {HTMLSlotElement} */
   #defaultSlot;
-  /** @type {HTMLElement} */
+  /** @type {HTMLSlotElement} */
   #templateSlot;
 
   /** @type {AbortController} */
@@ -37,12 +37,17 @@ export class EaSkeleton extends Base {
     rows: {
       type: Number,
       default: 4,
-      observer: () => {},
+      observer: async newVal => {
+        await this.#ensureChildrenReady();
+        this.#initDefaultSkeleton(newVal);
+        this.#updateAnimatedStatus(this.animated);
+      },
     },
     animated: {
       type: Boolean,
       default: false,
-      observer: newVal => {
+      observer: async newVal => {
+        await this.#ensureChildrenReady();
         this.#updateAnimatedStatus(newVal);
       },
     },
@@ -50,43 +55,21 @@ export class EaSkeleton extends Base {
       type: Number,
       default: 1,
       observer: async newVal => {
-        if (!this.#states.isChildrenReady) {
-          await customElements.whenDefined("ea-skeleton-item");
-          this.#states.isChildrenReady = true;
-        }
+        await this.#ensureChildrenReady();
 
-        /** @type {HTMLElement[] | import("../ea-skeleton-item").EaSkeletonItem[]} */
-        let container = [...this.querySelectorAll("[slot='template']")];
-        if (!container.length) container = [this.#templateSlot];
-        if (!this.#states.templateNode) {
-          const fragment = document.createDocumentFragment();
-          container.forEach(el => {
-            fragment.appendChild(el.cloneNode(true));
-          });
-          this.#states.templateNode = fragment;
-        }
+        const elements = this.#getTemplateElements();
+        const fragment = this.#renderTemplates(newVal, elements);
 
-        const realFragment = document.createDocumentFragment();
+        const [first] = elements;
+        const hasMultiple = elements.length > 1;
+        const isSkeletonItem = first?.tagName === "EA-SKELETON-ITEM";
 
-        for (let i = 0; i < newVal; i++) {
-          const clone = this.#states.templateNode.cloneNode(true);
-          realFragment.appendChild(clone);
-        }
-        if (container.length > 1) {
-          container.forEach(el => {
-            el.remove();
-          });
-
-          this.appendChild(realFragment);
-        } else if (
-          container.length === 1 &&
-          container[0].tagName === "EA-SKELETON-ITEM"
-        ) {
-          container[0]?.remove();
-          this.appendChild(realFragment);
+        if (hasMultiple || isSkeletonItem) {
+          elements.forEach(el => el.remove());
+          this.appendChild(fragment);
         } else {
-          container[0].innerHTML = "";
-          container[0].appendChild(realFragment);
+          first.innerHTML = "";
+          first.appendChild(fragment);
         }
       },
     },
@@ -165,6 +148,55 @@ export class EaSkeleton extends Base {
   }
 
   /**
+   * 子元素定义
+   */
+  async #ensureChildrenReady() {
+    if (this.#states.isChildrenReady) return;
+    await customElements.whenDefined("ea-skeleton-item");
+    this.#states.isChildrenReady = true;
+  }
+
+  /**
+   * 获取模板元素
+   * @returns {HTMLElement[]}
+   */
+  #getTemplateElements() {
+    const slotted = [...this.querySelectorAll("[slot='template']")];
+    return slotted.length ? slotted : [this.#templateSlot];
+  }
+
+  /**
+   * 克隆模板元素
+   * @param {HTMLElement[]} elements
+   * @returns {DocumentFragment}
+   */
+  #cloneTemplate(elements) {
+    if (this.#states.templateNode) return this.#states.templateNode;
+
+    const fragment = document.createDocumentFragment();
+    elements.forEach(el => fragment.appendChild(el.cloneNode(true)));
+    this.#states.templateNode = fragment;
+    return fragment;
+  }
+
+  /**
+   * 渲染模板元素
+   * @param {number} count
+   * @param {HTMLElement[]} elements
+   * @returns {DocumentFragment}
+   */
+  #renderTemplates(count, elements) {
+    const template = this.#cloneTemplate(elements);
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < count; i++) {
+      fragment.appendChild(template.cloneNode(true));
+    }
+
+    return fragment;
+  }
+
+  /**
    * 初始化默认骨架屏
    * @param {Number} rows
    * @returns
@@ -173,7 +205,7 @@ export class EaSkeleton extends Base {
     const children = this.querySelectorAll("ea-skeleton-item");
     if (children.length) return;
 
-    this.#templateSlot.innerHTML = `
+    this.#templateSlot.innerHTML = this.html(`
       ${Array.from({ length: rows })
         .map(() =>
           EaUtils.EaElement.h("ea-skeleton-item", null, {
@@ -181,7 +213,7 @@ export class EaSkeleton extends Base {
             animated: this.animated,
           })
         )
-        .join("")}`;
+        .join("")}`);
   };
 
   /**
@@ -190,7 +222,10 @@ export class EaSkeleton extends Base {
    */
   #updateAnimatedStatus = isAnimated => {
     /** @type {HTMLElement[]} */
-    const children = [...this.querySelectorAll("ea-skeleton-item")];
+    const children = this.#templateSlot
+      .assignedElements()
+      .filter(el => el.tagName.toLocaleLowerCase() === "ea-skeleton-item")
+      .concat([...this.#templateSlot.querySelectorAll("ea-skeleton-item")]);
     children.forEach(child => child.toggleAttribute("animated", isAnimated));
   };
 
