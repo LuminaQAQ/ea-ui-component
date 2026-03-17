@@ -17,7 +17,7 @@ export class EaOverlay extends Base {
     return [
       "status",
       "modal",
-      "before-close",
+      // "before-close",
       "close-on-click-modal",
 
       "z-index",
@@ -108,6 +108,15 @@ export class EaOverlay extends Base {
     }, {}),
   });
 
+  funcStates = this.properties({
+    beforeClose: {
+      rawFunction: true,
+      props: true,
+      type: Function,
+      default: null,
+    },
+  });
+
   /**
    * 获取 classlist 列表
    * @return {string} 属性值
@@ -176,10 +185,8 @@ export class EaOverlay extends Base {
       this.#overlayContent.contains(e.target);
     if (isContent) return;
 
-    if (this["before-close"]) {
-      this.emit("before-close", {
-        detail: { done: () => this.#beforeCloseCallback() },
-      });
+    if (this.beforeClose) {
+      this.beforeClose(() => (this.status = false));
     } else {
       this.#beforeCloseCallback();
     }

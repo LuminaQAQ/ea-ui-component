@@ -18,6 +18,10 @@
     <script type="module" src="../src/components/ea-button/index.js"></script>
     <script
       type="module"
+      src="../src/components/ea-descriptions/index.js"
+    ></script>
+    <script
+      type="module"
       src="../src/components/ea-message-box/index.js"
     ></script>
 
@@ -31,12 +35,7 @@
       <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
       <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
-      <ea-drawer
-        id="drawer"
-        title="I am the title"
-        direction="ltr"
-        before-close
-      >
+      <ea-drawer id="drawer" title="I am the title" direction="ltr">
         <span>Hi, there!</span>
       </ea-drawer>
     </div>
@@ -73,9 +72,8 @@
             this.drawer.visible = true;
           });
 
-          this.drawer.addEventListener("before-close", e => {
-            const { done } = e.detail;
-            $confirm("Are you confirm to chose", "Warning", {
+          this.drawer.beforeClose = done => {
+            $confirm("Are you confirm to close?", "Warning", {
               confirmButtonText: "OK",
               cancelButtonText: "Cancel",
               type: "warning",
@@ -84,7 +82,7 @@
                 done();
               })
               .catch(action => {});
-          });
+          };
 
           this.drawer.addEventListener("close", () => {
             console.log("close");
@@ -149,22 +147,31 @@
         >打开自定义内容的抽屉</ea-button
       >
 
-      <ea-drawer
-        id="customDrawer"
-        title="我是标题"
-        direction="ltr"
-        before-close
-      >
-        <ea-descriptions direction="vertical" border>
-          <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
-          <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
-          <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
-          <ea-descriptions-item label="称号">
-            <ea-tag>宿命背反</ea-tag>
+      <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
+        <ea-descriptions title="User Info">
+          <ea-descriptions-item label="Username">
+            Lilyiro
           </ea-descriptions-item>
-          <ea-descriptions-item label="属性" span="1">
-            <ea-tag type="warning" style="margin-right: 1rem">雷电</ea-tag>
-            <ea-tag type="info">物理</ea-tag>
+          <ea-descriptions-item label="Essence">
+            Lord of the Wild
+          </ea-descriptions-item>
+          <ea-descriptions-item label="Place">
+            Lunacrest Continent
+          </ea-descriptions-item>
+          <ea-descriptions-item label="Traits">
+            <ea-tag size="small" type="warning" style="margin-right: 1rem">
+              Thunderous Veins
+            </ea-tag>
+            <ea-tag size="small" type="info">Daredevil</ea-tag>
+          </ea-descriptions-item>
+          <ea-descriptions-item label="Description">
+            She was once an elf lord, defending the border from goblin invaders.
+            She was then a goblin warrior, protecting her clan from being
+            slaughtered by elves. She has the unwavering courage to uphold
+            justice in her heart and she is prepared to betray or be betrayed
+            for the greater good. Despite her inner gentleness, Lilyiro, who has
+            spilled so much blood on battlefields, is more straightforward than
+            men.
           </ea-descriptions-item>
         </ea-descriptions>
 
@@ -188,27 +195,9 @@
           /**
            * @param {() => void || null} done
            */
-          let done = null;
-
-          this.openBtn.addEventListener("click", () => {
-            this.drawer.visible = true;
-          });
-
-          this.cancelBtn.addEventListener("click", () => {
-            this.drawer["before-close"] = false;
-            this.drawer.visible = false;
-          });
-
-          this.confirmBtn.addEventListener("click", () => {
-            this.drawer["before-close"] = true;
-
-            this.drawer.visible = false;
-          });
-
-          this.drawer.addEventListener("before-close", e => {
-            done = e.detail.done;
-
-            $confirm("Are you confirm to chose", "Warning", {
+          // let done = null;
+          this.drawer.beforeClose = done => {
+            $confirm("Are you confirm to submit?", "Warning", {
               confirmButtonText: "OK",
               cancelButtonText: "Cancel",
               type: "warning",
@@ -217,6 +206,18 @@
                 done();
               })
               .catch(action => {});
+          };
+
+          this.openBtn.addEventListener("click", () => {
+            this.drawer.visible = true;
+          });
+
+          this.cancelBtn.addEventListener("click", () => {
+            this.drawer.visible = false;
+          });
+
+          this.confirmBtn.addEventListener("click", () => {
+            this.drawer.visible = false;
           });
         },
       };
@@ -243,7 +244,6 @@
             id="innerDrawer"
             title="I'm inner Drawer"
             append-to-body="true"
-            before-close
           >
             <p>_(:зゝ∠)_</p>
           </ea-drawer>
@@ -269,9 +269,8 @@
             this.innerDrawer.visible = true;
           });
 
-          this.innerDrawer.addEventListener("before-close", e => {
-            const { done } = e.detail;
-            $confirm("Are you confirm to chose", "Warning", {
+          this.innerDrawer.beforeClose = done => {
+            $confirm("Are you confirm to close inner drawer?", "Warning", {
               confirmButtonText: "OK",
               cancelButtonText: "Cancel",
               type: "warning",
@@ -280,7 +279,7 @@
                 done();
               })
               .catch(action => {});
-          });
+          };
         },
       };
       nestingExample.init();

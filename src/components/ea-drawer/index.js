@@ -5,8 +5,6 @@ import EaUtils from "@/utils/Utils";
 import { timeout } from "@/utils/timeout";
 
 export class EaDrawer extends EaOverlay {
-  /** @type {AbortController} */
-  #abortController;
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
@@ -22,30 +20,32 @@ export class EaDrawer extends EaOverlay {
   /** @type {HTMLElement} */
   #footer;
 
+  /** @type {AbortController} */
+  #abortController;
+
+  #AbortControllerStates = {
+    /** @type {AbortController | null} */
+    showClose: null,
+    /** @type {AbortController | null} */
+    closeOnPressEscape: null,
+  };
+
   static get observedAttributes() {
     return EaUtils.Array.toLowerCamelCase([
       ...super.observedAttributes,
       "direction",
-
       "visible",
       "append-to-body",
       "append-to",
-      // "lock-scroll",
-      "before-close",
       "close-on-click-modal",
       "close-on-press-escape",
-      // "open-delay",
-      // "close-delay",
-      // "destroy-on-close",
       "modal",
-      // "resizable",
       "show-close",
       "size",
       "title",
       "with-header",
       "z-index",
-
-      "header-aria-level ",
+      "header-aria-level",
     ]);
   }
 
@@ -53,26 +53,27 @@ export class EaDrawer extends EaOverlay {
     direction: {
       type: ["rtl", "ltr", "ttb", "btt"],
       default: "rtl",
-      observer: newVal => {},
     },
     visible: {
       type: Boolean,
       default: false,
       repeatable: true,
       observer: newVal => {
-        if (!newVal && this["before-close"] && this.status !== this.visible) {
-          return this.#handleBeforeClose();
+        if (!newVal && this.beforeClose && this.status !== this.visible) {
+          this.visible = !newVal;
+          this.#handleBeforeClose();
+          return;
         }
 
-        if (newVal)
-          timeout(() => {
-            this.focus();
-          }, 0);
+        if (newVal) {
+          timeout(() => this.focus(), 0);
+        }
 
-        this.status = newVal;
+        if (newVal || !this.beforeClose) {
+          this.status = newVal;
+        }
       },
     },
-
     "with-header": {
       type: Boolean,
       default: true,
@@ -84,15 +85,28 @@ export class EaDrawer extends EaOverlay {
       type: String,
       default: "",
       observer: newVal => {
-        if (this["with-header"]) this.#title.textContent = newVal;
+        if (this["with-header"]) {
+          this.#title.textContent = newVal;
+        }
       },
     },
     showClose: {
       type: Boolean,
       default: true,
       observer: newVal => {
-        if (this["with-header"])
+        this.#AbortControllerStates.showClose?.abort();
+        this.#AbortControllerStates.showClose = null;
+
+        if (this["with-header"]) {
           this.#closeIcon.style.display = newVal ? "block" : "none";
+        }
+
+        if (newVal) {
+          this.#AbortControllerStates.showClose = new AbortController();
+          this.#closeIcon.addEventListener("click", this.#handleBeforeClose, {
+            signal: this.#AbortControllerStates.showClose.signal,
+          });
+        }
       },
     },
     size: {
@@ -102,16 +116,35 @@ export class EaDrawer extends EaOverlay {
         this.style.setProperty("--ea-drawer-size", newVal);
       },
     },
-
     "append-to-body": {
       type: Boolean,
       default: false,
-      observer: newVal => {},
     },
     "close-on-press-escape": {
       type: Boolean,
       default: true,
-      observer: newVal => {},
+      observer: newVal => {
+        this.#AbortControllerStates.closeOnPressEscape?.abort();
+        this.#AbortControllerStates.closeOnPressEscape = null;
+
+        if (newVal) {
+          this.#AbortControllerStates.closeOnPressEscape =
+            new AbortController();
+
+          document.addEventListener("keydown", this.#handleKeydown, {
+            signal: this.#AbortControllerStates.closeOnPressEscape.signal,
+          });
+        }
+      },
+    },
+  });
+
+  funcStates = this.properties({
+    beforeClose: {
+      rawFunction: true,
+      props: true,
+      type: Function,
+      default: null,
     },
   });
 
@@ -134,15 +167,19 @@ export class EaDrawer extends EaOverlay {
   constructor() {
     super();
 
+    if (this["append-to-body"]) document.body.appendChild(this);
+
     const contentContainer = this.shadowRoot.querySelector(
       ".ea-overlay__content"
     );
-    this.#initDirectionDrawer(this.direction, contentContainer);
-
-    if (this["append-to-body"]) document.body.appendChild(this);
+    this.#initDrawerDOM(contentContainer);
   }
 
-  #initDirectionDrawer = (type, container) => {
+  /**
+   * 初始化抽屉 DOM 结构
+   * @param {HTMLElement} container - 抽屉内容容器
+   */
+  #initDrawerDOM = container => {
     container.innerHTML = `
       <div class="ea-drawer-main" part="container">
         <header class="ea-drawer-main__header" part="header">
@@ -171,19 +208,33 @@ export class EaDrawer extends EaOverlay {
     this.#footer = this.shadowRoot.querySelector(".ea-drawer-main__footer");
   };
 
+  /**
+   * 处理抽屉关闭前的回调
+   */
   #handleBeforeClose = () => {
-    if (this["before-close"]) {
-      this.emit("before-close", {
-        detail: {
-          done: () => (this.status = false),
-        },
+    if (this.beforeClose) {
+      this.beforeClose(() => {
+        this.status = false;
+        this.visible = false;
       });
     } else {
       this.status = false;
+      this.visible = false;
+    }
+  };
+
+  /**
+   * 处理键盘事件
+   * @param {KeyboardEvent} e - 键盘事件对象
+   */
+  #handleKeydown = e => {
+    if (e.key === "Escape" && this.visible) {
+      this.#handleBeforeClose();
     }
   };
 
   connectedCallback() {
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
 
     this.#drawerContainer.ariaModal = true;
@@ -202,23 +253,6 @@ export class EaDrawer extends EaOverlay {
         signal: this.#abortController.signal,
       }
     );
-
-    if (this["show-close"])
-      this.#closeIcon.addEventListener("click", this.#handleBeforeClose, {
-        signal: this.#abortController.signal,
-      });
-
-    if (this["close-on-press-escape"]) {
-      this.addEventListener(
-        "keydown",
-        e => {
-          if (e.key === "Escape") {
-            this.#handleBeforeClose();
-          }
-        },
-        { signal: this.#abortController.signal }
-      );
-    }
 
     super.connectedCallback();
     this.assignedStyle(stylesheet);

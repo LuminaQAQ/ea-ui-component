@@ -87,6 +87,7 @@ export default class Base extends HTMLElement {
    *   type: (Function|Array<*>),
    *   default: any,
    *   props?: Boolean,
+   *   repeatable?: Boolean,
    *   rawFunction?: Boolean,
    *   observer?: (newVal: any, oldVal?: any) => void
    * }>} states 配置对象，每个 key 是一个响应式字段名
@@ -245,7 +246,11 @@ export default class Base extends HTMLElement {
   };
 
   attributeChangedCallback(name, oldVal, newVal) {
-    if (newVal === oldVal || !this.isMounted) return;
+    if (
+      (newVal === oldVal || !this.isMounted) &&
+      !this.#stateConfigs[name]?.repeatable
+    )
+      return;
 
     // if (name === "loading-full") {
 

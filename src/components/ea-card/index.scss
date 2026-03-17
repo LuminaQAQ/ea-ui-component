@@ -27,6 +27,7 @@
 
 @include block(ea-card) {
   width: 100%;
+  height: 100%;
 
   box-sizing: border-box;
   border-radius: var(--ea-card-border-radius);
