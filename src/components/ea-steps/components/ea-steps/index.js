@@ -5,6 +5,9 @@ import stylesheet from "./index.scss?inline";
 export class EaSteps extends Base {
   /** @type {HTMLElement} */
   #container;
+  /** @type {HTMLSlotElement} */
+  #defaultSlot;
+
   /** @type {AbortController} */
   #abortController = new AbortController();
 
@@ -63,36 +66,7 @@ export class EaSteps extends Base {
       type: Boolean,
       default: false,
       observer: newVal => {
-        /** @type {HTMLElement[]} */
-        const steps = [...this.querySelectorAll("ea-step")];
-        if (newVal) {
-          steps.forEach(item => {
-            try {
-              item.querySelector('[slot="simple-arrow"]')?.remove();
-            } catch {
-              /* empty */
-            }
-
-            try {
-              const arrow = document.createElement("ea-icon");
-              arrow.setAttribute("slot", "simple-arrow");
-              arrow.setAttribute("icon", "icon-angle-right");
-              arrow.part = "simple-arrow";
-              item.appendChild(arrow);
-            } catch {
-              /* empty */
-            }
-          });
-        } else {
-          steps.forEach(item => {
-            try {
-              item.querySelector('[slot="simple-arrow"]')?.remove();
-            } catch {
-              /* empty */
-            }
-          });
-        }
-
+        this.#updateSimpleStatus(newVal);
         this.updateContainerClasslist();
       },
     },
@@ -135,6 +109,7 @@ export class EaSteps extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-steps");
+    this.#defaultSlot = this.shadowRoot.querySelector("slot");
   }
 
   /**
@@ -156,12 +131,78 @@ export class EaSteps extends Base {
     });
   };
 
+  /**
+   * 更新简单步骤状态
+   * @param {boolean} isSimple
+   */
+  #updateSimpleStatus = (isSimple = this.simple) => {
+    /** @type {HTMLElement[]} */
+    const steps = [...this.querySelectorAll("ea-step")];
+    if (isSimple) {
+      steps.forEach(item => {
+        try {
+          item.querySelector('[slot="simple-arrow"]')?.remove();
+        } catch {
+          /* empty */
+        }
+
+        try {
+          const arrow = document.createElement("ea-icon");
+          arrow.setAttribute("slot", "simple-arrow");
+          arrow.setAttribute("icon", "icon-angle-right");
+          arrow.part = "simple-arrow";
+          item.appendChild(arrow);
+        } catch {
+          /* empty */
+        }
+      });
+    } else {
+      steps.forEach(item => {
+        try {
+          item.querySelector('[slot="simple-arrow"]')?.remove();
+        } catch {
+          /* empty */
+        }
+      });
+    }
+  };
+
+  /**
+   * 处理 slot 变化
+   * 更新所有子 ea-step 组件的 index、first、last 状态和 status
+   */
+  #handleSlotChange = () => {
+    /** @type {HTMLElement[]} */
+    const steps = [...this.querySelectorAll("ea-step")];
+
+    steps.forEach((step, index) => {
+      step.index = index;
+      step.toggleAttribute("first", index === 0);
+      step.toggleAttribute("last", index === steps.length - 1);
+    });
+
+    this.#updateStepStatus(this.active);
+
+    this.#updateSimpleStatus();
+  };
+
   connectedCallback() {
     super.connectedCallback();
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    this.#defaultSlot.addEventListener(
+      "slotchange",
+      () => {
+        this.#handleSlotChange();
+      },
+      { signal: this.#abortController.signal }
+    );
   }
 
   $beforeUnmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
   }
 }
 

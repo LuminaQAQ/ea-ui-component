@@ -39,6 +39,7 @@ $status-theme: (
   @include element(icon-wrapper) {
     position: relative;
     background-color: var(--#{$name}-icon-bg-color);
+    z-index: 1;
   }
 
   @include element(icon) {
@@ -72,7 +73,7 @@ $status-theme: (
 
     background-color: var(--#{$name}-tail-color);
 
-    z-index: -1;
+    z-index: 0;
   }
 
   @include element(simple-arrow) {
@@ -192,6 +193,7 @@ $status-theme: (
   }
 
   @include state(last) {
+
     .ea-step__tail,
     .ea-step__simple-arrow {
       display: none;

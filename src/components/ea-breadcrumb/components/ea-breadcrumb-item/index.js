@@ -17,9 +17,9 @@ export class EaBreadcrumbItem extends Base {
     href: {
       type: String,
       default: "",
-      observer: (newVal) => {
-        this.#content.setAttribute("href", newVal);
-        this.#content.classList.add("is-link");
+      observer: newVal => {
+        this.$render();
+        this.#content.href = this.getAttribute("href");
       },
     },
   });
@@ -70,6 +70,8 @@ export class EaBreadcrumbItem extends Base {
     this.#content = this.shadowRoot.querySelector(
       ".ea-breadcrumb-item__content"
     );
+
+    this.updateContainerClasslist();
   }
 
   connectedCallback() {

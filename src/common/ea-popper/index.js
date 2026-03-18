@@ -216,15 +216,15 @@ export class EaPopper extends Base {
 
   $render() {
     this.shadowRoot.innerHTML = `
-            <div class='ea-popper' part='container' tabindex='-1'>
-                <div class='ea-popper__reference' part='reference' tabindex='-1'>
-                    <div class='ea-popper__original' part='original' tabindex='0'>
-                        <slot></slot>
-                    </div>
-                    <slot name='reference'></slot>
-                </div>
-            </div>
-        `;
+      <div class='ea-popper' part='container' tabindex='-1'>
+        <div class='ea-popper__reference' part='reference' tabindex='-1'>
+          <div class='ea-popper__original' part='original' tabindex='0'>
+            <slot></slot>
+          </div>
+          <slot name='reference'></slot>
+        </div>
+      </div>
+    `;
 
     this.#container = this.shadowRoot.querySelector(".ea-popper");
     this.#originalPopper = this.shadowRoot.querySelector(

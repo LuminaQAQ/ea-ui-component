@@ -3,11 +3,12 @@ import Base from "@components/Base.js";
 import stylesheet from "./index.scss?inline";
 
 export class EaSubMenu extends Base {
-
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */
   #titleEl;
+  /** @type {HTMLSlotElement} */
+  #titleSlot;
   /** @type {HTMLElement} */
   #contentEl;
 
@@ -19,7 +20,14 @@ export class EaSubMenu extends Base {
   #modeAbortController = new AbortController();
 
   static get observedAttributes() {
-    return [...super.observedAttributes, "active", "index", "disabled", "mode"];
+    return [
+      ...super.observedAttributes,
+      "active",
+      "index",
+      "disabled",
+      "mode",
+      "label",
+    ];
   }
 
   state = this.properties({
@@ -57,6 +65,13 @@ export class EaSubMenu extends Base {
         this.#handleModeChange(newVal);
 
         this.updateContainerClasslist();
+      },
+    },
+    label: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#titleSlot.textContent = newVal;
       },
     },
   });
@@ -110,6 +125,7 @@ export class EaSubMenu extends Base {
 
     this.#container = this.shadowRoot.querySelector(".ea-sub-menu");
     this.#titleEl = this.shadowRoot.querySelector(".ea-sub-menu__title");
+    this.#titleSlot = this.shadowRoot.querySelector("slot[name='title']");
     this.#contentEl = this.shadowRoot.querySelector(".ea-sub-menu__content");
 
     this.updateContainerClasslist();

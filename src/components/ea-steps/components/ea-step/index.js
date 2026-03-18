@@ -67,13 +67,7 @@ export class EaStep extends Base {
         this.updateContainerClasslist();
         if (this.icon) return;
 
-        if (newVal === this.#hostContextSteps?.getAttribute("finish-status")) {
-          this.#stepIcon.setAttribute("icon", "icon-ok");
-          this.#stepIcon.textContent = "";
-        } else {
-          this.#stepIcon.setAttribute("icon", "");
-          this.#stepIcon.textContent = this.index + 1;
-        }
+        this.#updateStatus(newVal);
       },
     },
     index: {
@@ -177,6 +171,20 @@ export class EaStep extends Base {
 
     this.updateContainerClasslist();
   }
+
+  /**
+   * 更新步骤状态
+   * @param {string} status 活动步骤状态
+   */
+  #updateStatus = (status = this.status) => {
+    if (status === this.#hostContextSteps?.getAttribute("finish-status")) {
+      this.#stepIcon.setAttribute("icon", "icon-ok");
+      this.#stepIcon.textContent = "";
+    } else {
+      this.#stepIcon.setAttribute("icon", "");
+      this.#stepIcon.textContent = this.index + 1;
+    }
+  };
 
   connectedCallback() {
     super.connectedCallback();
