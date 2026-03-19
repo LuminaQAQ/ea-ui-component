@@ -20,7 +20,7 @@ const base = getBase();
 export default defineConfig({
   base: "/ea-ui-component/",
   title: "Easy UI",
-  description: "基于 WebComponent 的 ui 库",
+  description: "基于 WebComponent 的 UI 组件库",
 
   head: [
     [
