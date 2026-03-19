@@ -10,9 +10,17 @@ export class EaCard extends Base {
   /** @type {HTMLElement} */
   #footer;
 
+  /** @type {AbortController} */
+  #abortController = null;
+
   static get observedAttributes() {
     return [...super.observedAttributes, "shadow", "header", "footer"];
   }
+
+  #states = {
+    isHeaderEmpty: true,
+    isFooterEmpty: true,
+  };
 
   state = this.properties({
     shadow: {
@@ -43,9 +51,17 @@ export class EaCard extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    const className = this.computedClasslist("ea-card", {
-      [`--${this.shadow}-shadow`]: this.shadow,
-    });
+    const className = this.computedClasslist(
+      "ea-card",
+      {
+        [`--${this.shadow}-shadow`]: this.shadow,
+      },
+      // 因为在 vue 下，某些场景会出现 css 的 ::slotted 选择器无效，因此这里使用 js 来更新空状态
+      {
+        "header-empty": this.#states.isHeaderEmpty,
+        "footer-empty": this.#states.isFooterEmpty,
+      }
+    );
 
     this.#container.className = className;
 
@@ -82,10 +98,48 @@ export class EaCard extends Base {
     this.#footer = this.shadowRoot.querySelector(
       ".ea-card__footer > slot[name='footer']"
     );
+
+    this.updateContainerClasslist();
   }
+
+  /**
+   * 更新空状态
+   * @param {Event} e 事件
+   */
+  #updateEmptyStatus = e => {
+    /** @type {HTMLSlotElement} */
+    const target = e.target;
+    let name = target.getAttribute("name") || "";
+    name = name
+      .split("")
+      .map((item, index) =>
+        index === 0 ? item.toUpperCase() : item.toLowerCase()
+      )
+      .join("");
+
+    const isEmpty = target.assignedElements().length === 0;
+    this.#states[`is${name}Empty`] = isEmpty;
+
+    this.updateContainerClasslist();
+  };
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    this.#header.addEventListener("slotchange", this.#updateEmptyStatus, {
+      signal: this.#abortController.signal,
+    });
+
+    this.#footer.addEventListener("slotchange", this.#updateEmptyStatus, {
+      signal: this.#abortController.signal,
+    });
+  }
+
+  $beforeUnmounted() {
+    this.#abortController?.abort();
   }
 }
 

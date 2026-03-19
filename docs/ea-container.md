@@ -119,7 +119,7 @@ hr {
 ## 常见页面布局
 
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px">
     <ea-header>Header</ea-header>
     <ea-main>Main</ea-main>
   </ea-container>
@@ -129,7 +129,7 @@ hr {
 
 ```html
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px">
     <ea-header>Header</ea-header>
     <ea-main>Main</ea-main>
   </ea-container>
@@ -141,7 +141,7 @@ hr {
 ---
 
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px">
     <ea-header>Header</ea-header>
     <ea-main>Main</ea-main>
     <ea-footer>Footer</ea-footer>
@@ -152,7 +152,7 @@ hr {
 
 ```html
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px">
     <ea-header>Header</ea-header>
     <ea-main>Main</ea-main>
     <ea-footer>Footer</ea-footer>
@@ -165,7 +165,7 @@ hr {
 ---
 
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px" direction="horizontal">
     <ea-aside width="150px">Aside</ea-aside>
     <ea-main>Main</ea-main>
     <ea-aside width="150px">Aside</ea-aside>
@@ -176,10 +176,10 @@ hr {
 
 ```html
 <div class="demo">
-  <ea-container>
-    <ea-aside width="200px">Aside</ea-aside>
+  <ea-container style="height: 500px" direction="horizontal">
+    <ea-aside width="150px">Aside</ea-aside>
     <ea-main>Main</ea-main>
-    <ea-aside width="200px">Aside</ea-aside>
+    <ea-aside width="150px">Aside</ea-aside>
   </ea-container>
 </div>
 ```
@@ -189,9 +189,9 @@ hr {
 ---
 
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px">
     <ea-header>Header</ea-header>
-    <ea-container>
+    <ea-container direction="horizontal">
       <ea-aside width="200px">Aside</ea-aside>
       <ea-main>Main</ea-main>
     </ea-container>
@@ -202,9 +202,9 @@ hr {
 
 ```html
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px">
     <ea-header>Header</ea-header>
-    <ea-container>
+    <ea-container direction="horizontal">
       <ea-aside width="200px">Aside</ea-aside>
       <ea-main>Main</ea-main>
     </ea-container>
@@ -217,9 +217,9 @@ hr {
 ---
 
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px">
     <ea-header>Header</ea-header>
-    <ea-container>
+    <ea-container direction="horizontal">
       <ea-aside width="200px">Aside</ea-aside>
       <ea-container>
         <ea-main>Main</ea-main>
@@ -233,9 +233,9 @@ hr {
 
 ```html
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px">
     <ea-header>Header</ea-header>
-    <ea-container>
+    <ea-container direction="horizontal">
       <ea-aside width="200px">Aside</ea-aside>
       <ea-container>
         <ea-main>Main</ea-main>
@@ -251,7 +251,7 @@ hr {
 ---
 
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px" direction="horizontal">
     <ea-aside width="200px">Aside</ea-aside>
     <ea-container>
       <ea-header>Header</ea-header>
@@ -264,7 +264,7 @@ hr {
 
 ```html
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px" direction="horizontal">
     <ea-aside width="200px">Aside</ea-aside>
     <ea-container>
       <ea-header>Header</ea-header>
@@ -279,7 +279,7 @@ hr {
 ---
 
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px" direction="horizontal">
     <ea-aside width="200px">Aside</ea-aside>
     <ea-container>
       <ea-header>Header</ea-header>
@@ -293,7 +293,7 @@ hr {
 
 ```html
 <div class="demo">
-  <ea-container>
+  <ea-container style="height: 500px" direction="horizontal">
     <ea-aside width="200px">Aside</ea-aside>
     <ea-container>
       <ea-header>Header</ea-header>
@@ -308,12 +308,10 @@ hr {
 
 ## 例子
 
-<div class="demo" style="height: 500px;">
-  <ea-container class="example" direction="vertical">
+<div class="demo">
+  <ea-container class="example" direction="horizontal" style="height: 500px;">
     <ea-aside width="200px">
-      <ea-header>
-        <p>header</p>
-      </ea-header>
+      <ea-header>header</ea-header>
       <ea-main>
         <div>aside</div>
         <div>aside</div>
@@ -372,118 +370,10 @@ hr {
         <div>aside</div>
         <div>aside</div>
       </ea-main>
-      <ea-footer>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-      </ea-footer>
+      <ea-footer>footer</ea-footer>
     </ea-aside>
     <ea-container>
-      <ea-header>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-      </ea-header>
+      <ea-header>header</ea-header>
       <ea-main>
         <p>main</p>
         <p>main</p>
@@ -557,54 +447,7 @@ hr {
         <p>main</p>
         <p>main</p>
       </ea-main>
-      <ea-footer>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-      </ea-footer>
+      <ea-footer>footer</ea-footer>
     </ea-container>
   </ea-container>
 </div>
@@ -612,8 +455,8 @@ hr {
 ::: details 查看代码
 
 ```html
-<div class="demo" style="height: 500px;">
-  <ea-container class="example" direction="vertical">
+<div class="demo">
+  <ea-container class="example" direction="vertical" style="height: 500px;">
     <ea-aside width="200px">
       <ea-header>
         <p>header</p>

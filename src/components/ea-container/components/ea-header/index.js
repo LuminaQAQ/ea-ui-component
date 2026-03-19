@@ -1,49 +1,50 @@
-import Base from '../../../Base.js'
-
-import stylesheet from './index.scss?inline';
+import Base from "@/components/Base";
+import stylesheet from "./index.scss?inline";
 
 export class EaHeader extends Base {
+  static get observedAttributes() {
+    return ["height"];
+  }
 
-    static get observedAttributes() {
-        return ['height'];
-    }
+  /**
+   * @typedef {Object} State
+   * @property {string} height
+   */
+  /** @type {State} */
+  state = this.properties({
+    height: {
+      type: String,
+      default: "60px",
+      observer: newVal => {
+        if (newVal && CSS.supports("height", newVal))
+          this.style.setProperty("--ea-header-height", newVal);
+        else if (newVal) this.style.setProperty("--ea-header-height", "60px");
+        else this.style.setProperty("--ea-header-height", "auto");
+      },
+    },
+  });
 
-    /** 
-     * @typedef {Object} State
-     * @property {string} height
-     */
-    /** @type {State} */
-    state = this.properties({
-        height: {
-            type: String,
-            default: '60px',
-            observer: (newVal) => {
-                this.style.setProperty('--ea-header-height', newVal);
-            }
-        },
-    })
+  constructor() {
+    super();
 
-    constructor() {
-        super();
+    this.stylesheet = stylesheet;
 
-        this.stylesheet = stylesheet;
+    this.$render();
+  }
 
-        this.$render();
-    }
+  $render() {
+    this.shadowRoot.innerHTML = `
+      <header class="ea-header" part="container">
+        <slot></slot>
+      </header>
+    `;
+  }
 
-    $render() {
-        this.shadowRoot.innerHTML = `
-            <header class="ea-header" part="container">
-                <slot></slot>
-            </header>
-        `;
-    }
-
-    connectedCallback() {
-        super.connectedCallback();
-    }
+  connectedCallback() {
+    super.connectedCallback();
+  }
 }
 
-if (!window.customElements.get('ea-header')) {
-    window.customElements.define('ea-header', EaHeader);
+if (!window.customElements.get("ea-header")) {
+  window.customElements.define("ea-header", EaHeader);
 }
