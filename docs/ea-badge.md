@@ -52,19 +52,6 @@ ea-badge::part(custom-value) {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -181,7 +168,7 @@ ea-badge::part(custom-value) {
   <ea-badge value="99">
     <ea-button>share</ea-button>
     <div slot="content">
-      <ea-icon icon="icon-share" part="custom-icon"></ea-icon>
+      <ea-icon name="share-nodes" part="custom-icon"></ea-icon>
       <span data-value part="custom-value"></span>
     </div>
   </ea-badge>
@@ -210,10 +197,10 @@ ea-badge::part(custom-value) {
 <div class="demo row">
   <ea-badge is-dot>query</ea-badge>
   <ea-badge id="hiddenBadge" is-dot>
-    <ea-button icon="icon-share">share</ea-button>
+    <ea-button icon="share-nodes">share</ea-button>
   </ea-badge>
   <ea-badge is-dot>
-    <ea-button icon="icon-mail"></ea-button>
+    <ea-button icon="envelope"></ea-button>
   </ea-badge>
 </div>
 
@@ -223,10 +210,10 @@ ea-badge::part(custom-value) {
 <div class="demo row">
   <ea-badge is-dot>query</ea-badge>
   <ea-badge id="hiddenBadge" is-dot>
-    <ea-button icon="icon-share">share</ea-button>
+    <ea-button icon="share-nodes">share</ea-button>
   </ea-badge>
   <ea-badge is-dot>
-    <ea-button icon="icon-mail"></ea-button>
+    <ea-button icon="envelope"></ea-button>
   </ea-badge>
 </div>
 ```

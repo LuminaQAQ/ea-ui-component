@@ -73,19 +73,6 @@ ea-alert:first-child {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -208,7 +195,7 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 
 ```js
 const callbackAlert = document.querySelector("#callback");
-callbackAlert.addEventListener("close", (e) => {
+callbackAlert.addEventListener("close", e => {
   alert("Hello World");
 });
 ```
@@ -228,7 +215,7 @@ callbackAlert.addEventListener("close", (e) => {
   <ea-alert title="Warning alert" type="warning" show-icon></ea-alert>
   <ea-alert title="Error alert" type="error" show-icon></ea-alert>
   <ea-alert title="Error alert with custom icon" type="error" show-icon>
-    <ea-icon slot="icon" icon="icon-bell" color="red" style=""></ea-icon>
+    <ea-icon slot="icon" name="bell" color="red" style=""></ea-icon>
   </ea-alert>
 </div>
 
@@ -242,7 +229,7 @@ callbackAlert.addEventListener("close", (e) => {
   <ea-alert title="Warning alert" type="warning" show-icon></ea-alert>
   <ea-alert title="Error alert" type="error" show-icon></ea-alert>
   <ea-alert title="Error alert with custom icon" type="error" show-icon>
-    <ea-icon slot="icon" icon="icon-bell" color="red" style=""></ea-icon>
+    <ea-icon slot="icon" name="bell" color="red" style=""></ea-icon>
   </ea-alert>
 </div>
 ```

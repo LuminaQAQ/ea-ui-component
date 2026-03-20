@@ -25,19 +25,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -180,14 +167,14 @@ onMounted(() => {
 
 ### Text Attributes
 
-| **属性名** | **说明** | **类型** | **可选值** | **默认值** |
-| ---------- | -------- | -------- | ---------- | ---------- |
-| title | 标题 | string | — | — |
-| type | 文本类型 | string | normal / primary / success / warning / danger / info | normal |
-| size | 文本大小 | string | large / medium / small | medium |
-| truncated | 文本是否截断 | boolean | — | false |
-| line-clamp | 截断的行数 | number | — | 0 |
-| tag | 文本标签 | string | — | span |
+| **属性名** | **说明**     | **类型** | **可选值**                                           | **默认值** |
+| ---------- | ------------ | -------- | ---------------------------------------------------- | ---------- |
+| title      | 标题         | string   | —                                                    | —          |
+| type       | 文本类型     | string   | normal / primary / success / warning / danger / info | normal     |
+| size       | 文本大小     | string   | large / medium / small                               | medium     |
+| truncated  | 文本是否截断 | boolean  | —                                                    | false      |
+| line-clamp | 截断的行数   | number   | —                                                    | 0          |
+| tag        | 文本标签     | string   | —                                                    | span       |
 
 ### Text Slots
 

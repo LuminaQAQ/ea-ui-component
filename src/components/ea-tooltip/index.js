@@ -1,154 +1,196 @@
-import { EaPopper } from "@common/ea-popper/index.js"
+import { EaPopper } from "@common/ea-popper/index.js";
 
-import stylesheet from './index.scss?inline';
+import stylesheet from "./index.scss?inline";
 
 export class EaTooltip extends EaPopper {
-    /** @type {HTMLElement} */
-    #container;
-    /** @type {HTMLElement} */
-    #originalPopper;
-    /** @type {HTMLElement} */
-    #referenceElement;
-    /** @type {HTMLElement} */
-    #contentElement;
-    /** @type {AbortController} */
-    #abortController;
+  /** @type {HTMLElement} */
+  #container;
+  /** @type {HTMLElement} */
+  #originalPopper;
+  /** @type {HTMLElement} */
+  #referenceElement;
+  /** @type {HTMLElement} */
+  #contentElement;
+  /** @type {AbortController} */
+  #abortController;
 
-    #isMounted;
+  #isMounted;
 
-    static get observedAttributes() {
-        return [...super.observedAttributes, 'trigger', 'content', 'visible', 'effect'];
-    }
+  static get observedAttributes() {
+    return [
+      ...super.observedAttributes,
+      "trigger",
+      "content",
+      "visible",
+      "effect",
+    ];
+  }
 
-    state = this.properties({
-        trigger: {
-            type: ['click', 'focus', 'hover', 'contextmenu', 'customized'],
-            default: 'hover',
-            observer: (newVal) => { }
+  state = this.properties({
+    trigger: {
+      type: ["click", "focus", "hover", "contextmenu", "customized"],
+      default: "hover",
+      observer: newVal => {},
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+      observer: newVal => {
+        this.status = newVal;
+      },
+    },
+    effect: {
+      type: ["dark", "light", "customized"],
+      default: "dark",
+      observer: newVal => {
+        if (newVal !== "customized")
+          this.#container.className = this.updateContainerClasslist();
+      },
+    },
+    content: {
+      type: String,
+      default: "",
+      observer: newVal => {
+        if (!this.#contentElement) {
+          const contentElement = document.createElement("div");
+          const contentSlot = this.#originalPopper.querySelector("slot");
+          contentElement.classList.add("ea-tooltip__content");
+          contentElement.part = "content";
+          contentElement.innerText = newVal;
+
+          this.#originalPopper.appendChild(contentElement);
+
+          this.#contentElement = contentElement;
+          contentSlot.remove();
+        } else {
+          this.#contentElement.innerText = newVal;
+        }
+      },
+    },
+  });
+
+  constructor() {
+    super();
+
+    this.#container = this.shadowRoot.querySelector(".ea-popper");
+    this.#originalPopper = this.shadowRoot.querySelector(
+      ".ea-popper__original"
+    );
+    this.#referenceElement = this.shadowRoot.querySelector(
+      ".ea-popper__reference"
+    );
+  }
+
+  #triggerEventStrategies = {
+    hover: () => {
+      this.addEventListener(
+        "mouseover",
+        e => {
+          this.show();
+
+          this.addEventListener(
+            "mouseout",
+            e => {
+              this.hide();
+            },
+            { once: true }
+          );
         },
-        visible: {
-            type: Boolean,
-            default: false,
-            observer: (newVal) => {
-                this.status = newVal;
-            }
+        { signal: this.#abortController.signal }
+      );
+    },
+    click: () => {
+      this.addEventListener(
+        "click",
+        () => {
+          this.toggle();
         },
-        effect: {
-            type: ['dark', 'light', 'customized'],
-            default: 'dark',
-            observer: (newVal) => {
-                if (newVal !== 'customized') this.#container.className = this.updateContainerClasslist();
-            }
+        { signal: this.#abortController.signal }
+      );
+    },
+    focus: () => {
+      this.addEventListener(
+        "focus",
+        () => {
+          this.show();
+
+          this.addEventListener(
+            "blur",
+            e => {
+              this.hide();
+            },
+            { once: true }
+          );
         },
-        content: {
-            type: String,
-            default: '',
-            observer: (newVal) => {
-                if (!this.#contentElement) {
-                    const contentElement = document.createElement('div');
-                    const contentSlot = this.#originalPopper.querySelector('slot');
-                    contentElement.classList.add('ea-tooltip__content');
-                    contentElement.part = 'content';
-                    contentElement.innerText = newVal;
+        { signal: this.#abortController.signal }
+      );
+    },
+    contextmenu: () => {
+      this.addEventListener(
+        "contextmenu",
+        e => {
+          e.preventDefault();
+          const abortController = new AbortController();
+          this.show();
 
-                    this.#originalPopper.appendChild(contentElement);
+          window.addEventListener(
+            "click",
+            e => {
+              const isThis = this.contains(e.target);
 
-                    this.#contentElement = contentElement;
-                    contentSlot.remove();
-                } else {
-                    this.#contentElement.innerText = newVal;
-                }
-            }
+              if (!isThis) {
+                abortController.abort();
+                this.hide();
+              }
+            },
+            { signal: abortController.signal }
+          );
         },
-    })
+        { signal: this.#abortController.signal }
+      );
+    },
+  };
 
-    constructor() {
-        super();
+  updateContainerClasslist() {
+    const originClasslist = super.updateContainerClasslist();
 
-        this.#container = this.shadowRoot.querySelector('.ea-popper');
-        this.#originalPopper = this.shadowRoot.querySelector('.ea-popper__original');
-        this.#referenceElement = this.shadowRoot.querySelector('.ea-popper__reference');
-    }
+    return `${originClasslist} ${this.computedClasslist("ea-tooltip", {
+      ["--" + this.effect]: this.effect && this.effect !== "customized",
+    })}`;
+  }
 
-    #triggerEventStrategies = {
-        'hover': () => {
-            this.addEventListener('mouseover', (e) => {
-                this.show();
+  #init = () => {
+    const abortController = new AbortController();
+    this.#abortController = abortController;
 
-                this.addEventListener('mouseout', (e) => {
-                    this.hide();
-                }, { once: true });
-            }, { signal: this.#abortController.signal });
-        },
-        'click': () => {
-            this.addEventListener('click', () => {
-                this.toggle();
-            }, { signal: this.#abortController.signal });
-        },
-        'focus': () => {
-            this.addEventListener('focus', () => {
-                this.show();
+    this.assignedStyle(stylesheet);
+  };
 
-                this.addEventListener('blur', (e) => {
-                    this.hide();
-                }, { once: true })
-            }, { signal: this.#abortController.signal });
-        },
-        'contextmenu': () => {
-            this.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                const abortController = new AbortController();
-                this.show();
+  #initTriggerEvent = () => {
+    if (this.trigger === "customized") return;
 
-                window.addEventListener('click', (e) => {
-                    const isThis = this.contains(e.target);
+    const isExist = Object.keys(this.#triggerEventStrategies).find(
+      key => this.trigger === key
+    );
+    this.#triggerEventStrategies[isExist || "hover"]?.();
 
-                    if (!isThis) {
-                        abortController.abort();
-                        this.hide();
-                    }
-                }, { signal: abortController.signal })
-            }, { signal: this.#abortController.signal });
-        },
-    }
+    if (!isExist)
+      console.warn(`[EaPopper] trigger event ${this.trigger} is not exist`);
+  };
 
-    updateContainerClasslist() {
-        const originClasslist = super.updateContainerClasslist();
+  connectedCallback() {
+    super.connectedCallback();
 
-        return `${originClasslist} ${this.computedClasslist('ea-tooltip', {
-            ['--' + this.effect]: this.effect && this.effect !== 'customized',
-        })}`
-    }
+    this.#init();
+    this.#initTriggerEvent();
+  }
 
-    #init = () => {
-        const abortController = new AbortController();
-        this.#abortController = abortController;
-
-        this.assignedStyle(stylesheet);
-    }
-
-    #initTriggerEvent = () => {
-        if (this.trigger === "customized") return;
-
-        const isExist = Object.keys(this.#triggerEventStrategies).find(key => this.trigger === key);
-        this.#triggerEventStrategies[isExist || 'hover']?.();
-
-        if (!isExist) console.warn(`[EaPopper] trigger event ${this.trigger} is not exist`);
-    }
-
-    connectedCallback() {
-        super.connectedCallback();
-
-        this.#init();
-        this.#initTriggerEvent();
-    }
-
-    $beforeUnmounted() {
-        super.$beforeUnmounted();
-        this.#abortController?.abort();
-    }
+  $beforeUnmounted() {
+    super.$beforeUnmounted();
+    this.#abortController?.abort();
+  }
 }
 
-if (!window.customElements.get('ea-tooltip')) {
-    window.customElements.define('ea-tooltip', EaTooltip);
+if (!window.customElements.get("ea-tooltip")) {
+  window.customElements.define("ea-tooltip", EaTooltip);
 }

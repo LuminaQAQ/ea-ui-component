@@ -1,14 +1,6 @@
 $name: ea-input-number;
-$ea-input-number-align-type: (
-  left,
-  center,
-  right
-);
-$ea-input-number-size-type: (
-  large,
-  default,
-  small
-);
+$ea-input-number-align-type: (left, center, right);
+$ea-input-number-size-type: (large, default, small);
 
 @mixin operator-disabled-style {
   cursor: not-allowed;

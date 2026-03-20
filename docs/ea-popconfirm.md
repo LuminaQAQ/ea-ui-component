@@ -42,19 +42,6 @@ ea-popconfirm {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -272,7 +259,7 @@ Popconfirm 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 
     id="customizedPopconfirm"
     placement="right"
     width="220"
-    icon="icon-info"
+    icon="circle-info"
     icon-color="#626AEF"
     title="Are you sure to delete this?"
   >
@@ -294,7 +281,7 @@ Popconfirm 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 
     id="customizedPopconfirm"
     placement="right"
     width="220"
-    icon="icon-info"
+    icon="circle-info"
     icon-color="#626AEF"
     title="Are you sure to delete this?"
   >

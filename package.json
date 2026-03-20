@@ -98,6 +98,7 @@
     "vitepress": "^1.2.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.2.0",
     "dayjs": "^1.11.19",
     "dompurify": "^3.3.1",
     "path": "^0.12.7",
@@ -200,9 +201,6 @@
     },
     "./ea-link": {
       "import": "./dist/components/ea-link.js"
-    },
-    "./ea-loading": {
-      "import": "./dist/components/ea-loading.js"
     },
     "./ea-menu": {
       "import": "./dist/components/ea-menu.js"

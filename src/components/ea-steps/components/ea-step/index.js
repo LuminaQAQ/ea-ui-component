@@ -57,7 +57,7 @@ export class EaStep extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        this.#stepIcon.setAttribute("icon", newVal);
+        this.#stepIcon.setAttribute("name", newVal);
       },
     },
     status: {
@@ -178,10 +178,10 @@ export class EaStep extends Base {
    */
   #updateStatus = (status = this.status) => {
     if (status === this.#hostContextSteps?.getAttribute("finish-status")) {
-      this.#stepIcon.setAttribute("icon", "icon-ok");
+      this.#stepIcon.setAttribute("name", "check");
       this.#stepIcon.textContent = "";
     } else {
-      this.#stepIcon.setAttribute("icon", "");
+      this.#stepIcon.setAttribute("name", "");
       this.#stepIcon.textContent = this.index + 1;
     }
   };

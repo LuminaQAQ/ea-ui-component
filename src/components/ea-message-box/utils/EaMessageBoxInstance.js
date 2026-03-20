@@ -120,7 +120,7 @@ class EaMessageBoxInstance {
    * @param {MessageBoxOptions} options
    * @returns
    */
-  #renderer = (options) => {
+  #renderer = options => {
     const messageBox = document.createElement("ea-message-box");
 
     for (const k in options) {
@@ -141,7 +141,7 @@ class EaMessageBoxInstance {
  * @param {'alert' | 'confirm' | 'prompt'} boxType
  * @returns {Promise}
  */
-export const EaMessageBox = (options) => {
+export const EaMessageBox = options => {
   const controller = new AbortController();
   const messageBox = new EaMessageBoxInstance(options).instance;
 
@@ -158,7 +158,7 @@ export const EaMessageBox = (options) => {
   return new Promise((resolve, reject) => {
     messageBox.addEventListener(
       "confirm",
-      async (e) => {
+      async e => {
         if (options.beforeClose) {
           try {
             await options.beforeClose("confirm", messageBox, () =>
@@ -175,7 +175,7 @@ export const EaMessageBox = (options) => {
 
     messageBox.addEventListener(
       "cancel",
-      async (e) => {
+      async e => {
         if (options.beforeClose) {
           try {
             await options.beforeClose("cancel", messageBox, () =>
@@ -192,7 +192,7 @@ export const EaMessageBox = (options) => {
 
     messageBox.addEventListener(
       "message-close",
-      async (e) => {
+      async e => {
         if (options.beforeClose) {
           try {
             await options.beforeClose("close", messageBox, () =>

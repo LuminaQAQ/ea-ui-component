@@ -112,19 +112,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -342,6 +329,7 @@ basicExample.init();
             message: 'This is a info message.',
             showClose: true,
             duration: 0,
+            icon: 'circle-info',
           })
         "
     >Won't close automatically</ea-button
@@ -417,6 +405,7 @@ basicExample.init();
             message: 'This is a info message.',
             showClose: true,
             duration: 0,
+            icon: 'circle-info',
           })
         "
     >Won't close automatically</ea-button
@@ -555,19 +544,19 @@ placementExample.init();
 
 :::
 
-## Attributes
+## Properties
 
 | 参数                     | 说明                                                                          | 类型        | 可选值                                                                              | 默认值 |
 | ------------------------ | ----------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------- | ------ |
 | message                  | 消息文字                                                                      | string      | —                                                                                   | ''     |
-| type                     | 消息类型                                                                      | enum        | `'success' \| 'warning' \| 'info' \| 'error' \| info`                               | 'info' |
-| showClose                | 是否显示关闭按钮                                                              | boolean     | —                                                                                   | false  |
+| type                     | 消息类型                                                                      | enum        | `'success' \| 'warning' \| 'info' \| 'error' \| 'primary'`                          | 'info' |
+| icon                     | 自定义图标                                                                    | string      | —                                                                                   | ''     |
 | dangerouslyUseHTMLString | 是否将 `message` 作为 HTML 片段渲染                                           | boolean     | —                                                                                   | false  |
 | duration                 | 显示时间（毫秒）。设为 0 则不会自动关闭                                       | number      | —                                                                                   | 3000   |
 | onClose                  | 关闭回调函数（消息关闭或被手动关闭时调用），回调接收事件对象                  | Function    | —                                                                                   | —      |
 | showClose                | 是否显示关闭按钮                                                              | boolean     | —                                                                                   | false  |
 | offset                   | 设置到视口边缘的距离（当位置为`'top'`时为顶部，当位置为`'bottom'`时为底部）） | number      | —                                                                                   | 16     |
-| placement                | 出现位置                                                                      | enum        | `'top' \| 'top-left' \| 'top-right' \| 'bottom' \| 'bottom-left' \| 'bottom-right'` | top    |
+| placement                | 出现位置                                                                      | enum        | `'top' \| 'top-left' \| 'top-right' \| 'bottom' \| 'bottom-left' \| 'bottom-right'` | 'top'  |
 | appendTo                 | 设置 `message` 的根元素，默认为 `document.body`                               | CSSSelector | -                                                                                   | —      |
 
 ## CSS Part

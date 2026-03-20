@@ -495,19 +495,6 @@ onMounted(async () => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#table-css-part)。
@@ -1569,7 +1556,7 @@ sortableTable.init();
 <div class="demo">
   <ea-table id="customColumnTable">
     <ea-table-column prop="date" label="Date" width="180px">
-      <ea-icon icon="icon-clock"></ea-icon>
+      <ea-icon name="clock"></ea-icon>
       <span data-scope="date"></span>
     </ea-table-column>
     <ea-table-column prop="name" label="Info" width="180px">
@@ -1601,7 +1588,7 @@ sortableTable.init();
 <div class="demo">
   <ea-table id="customColumnTable">
     <ea-table-column prop="date" label="Date" width="180px">
-      <ea-icon icon="icon-clock"></ea-icon>
+      <ea-icon name="clock"></ea-icon>
       <span data-scope="date"></span>
     </ea-table-column>
     <ea-table-column prop="name" label="Info" width="180px">

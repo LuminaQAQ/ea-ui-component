@@ -284,19 +284,6 @@ onMounted(() => {
 </script>
 ```
 
-> css
-
-::: tip
-如果需要使用内置图标，请提前引入图标样式文件：
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 消息提示
 
 使用 `$alert` 打开一个消息提示框，用户必须确认才能关闭。`$alert`、`$confirm`、`$prompt` 都会返回 Promise，便于链式处理。

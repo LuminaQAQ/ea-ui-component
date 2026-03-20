@@ -12,8 +12,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 20px;
-  border-bottom: 1px solid #ebeef5;
   box-sizing: border-box;
 }
 
@@ -40,19 +38,6 @@ onMounted(() => {
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-card/index.js";
 </script>
-```
-
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
 ```
 
 ## 自定义样式
@@ -158,7 +143,7 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
 
 <div class="demo">
   <ea-card class="ea-card-demo">
-    <div class="header" slot="header" style="padding: 14px">
+    <div class="header" slot="header">
       <span>view</span>
     </div>
     <img
@@ -171,7 +156,7 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
 ```html
 <div class="demo">
   <ea-card class="ea-card-demo">
-    <div class="header" slot="header" style="padding: 14px">
+    <div class="header" slot="header">
       <span>view</span>
     </div>
     <img

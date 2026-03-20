@@ -69,9 +69,9 @@ export class EaPopconfirm extends EaPopper {
     },
     icon: {
       type: String,
-      default: "icon-help",
+      default: "circle-question",
       observer: newVal => {
-        this.#titleIcon.icon = newVal;
+        this.#titleIcon.name = newVal;
       },
     },
     "icon-color": {
@@ -162,7 +162,7 @@ export class EaPopconfirm extends EaPopper {
     container.part = "title";
 
     container.innerHTML = `
-      ${this.icon ? `<ea-icon icon="${this.icon}" part="icon"></ea-icon>` : ""}
+      ${this.icon ? `<ea-icon name="${this.icon}" part="icon"></ea-icon>` : ""}
       <span class="ea-popconfirm__title-content" part="title-content">${
         this.title
       }</span>

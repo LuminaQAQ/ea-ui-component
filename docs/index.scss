@@ -44,6 +44,7 @@
 
   &.left {
     justify-content: flex-start;
+
     & > *:not(ea-result) {
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
@@ -93,6 +94,7 @@
 
   &.left {
     align-items: flex-start;
+
     & > * {
       margin-bottom: 0.5rem;
     }
@@ -190,4 +192,9 @@
 
 .vp-doc :not(pre, h1, h2, h3, h4, h5, h6) > code {
   color: #484848;
+}
+
+.vp-doc th,
+.vp-doc td {
+  min-width: 120px;
 }

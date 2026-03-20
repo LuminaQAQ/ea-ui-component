@@ -185,19 +185,6 @@
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#segmented-css-part)。
@@ -554,15 +541,15 @@ customStyleExample.init();
 
 ### Segmented Attributes
 
-| 参数                           | 说明                                 | 类型    | 可选值                  | 默认值                                                     |
-| ------------------------------ | ------------------------------------ | ------- | ----------------------- | ---------------------------------------------------------- |
-| value                          | 当前选中值                           | string  | —                       | ""                                                         |
-| options <PropTag />            | 选项列表（可为字符串数组或对象数组） | array   | —                       | []                                                         |
-| propsConfiguration <PropTag /> | 自定义选项字段映射                   | object  | —                       | `{ label: 'label', value: 'value', disabled: 'disabled' }` |
+| 参数                           | 说明                                 | 类型    | 可选值                      | 默认值                                                     |
+| ------------------------------ | ------------------------------------ | ------- | --------------------------- | ---------------------------------------------------------- |
+| value                          | 当前选中值                           | string  | —                           | ""                                                         |
+| options <PropTag />            | 选项列表（可为字符串数组或对象数组） | array   | —                           | []                                                         |
+| propsConfiguration <PropTag /> | 自定义选项字段映射                   | object  | —                           | `{ label: 'label', value: 'value', disabled: 'disabled' }` |
 | size                           | 组件尺寸                             | string  | `large \| default \| small` | default                                                    |
-| direction                      | 排列方向                             | string  | `horizontal \| vertical`   | horizontal                                                 |
-| block                          | 是否在父容器内占满宽度（块级）       | boolean | —                       | false                                                      |
-| disabled                       | 是否禁用整个组件                     | boolean | —                       | false                                                      |
+| direction                      | 排列方向                             | string  | `horizontal \| vertical`    | horizontal                                                 |
+| block                          | 是否在父容器内占满宽度（块级）       | boolean | —                           | false                                                      |
+| disabled                       | 是否禁用整个组件                     | boolean | —                           | false                                                      |
 
 ### Segmented CSS Part
 

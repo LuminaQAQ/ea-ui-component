@@ -11,7 +11,7 @@ description: 需要为某个组件编写文档时
 
 文档应遵循以下结构：
 
-```markdown
+````markdown
 # [组件名称] [中文描述]
 
 [组件功能简介]
@@ -25,6 +25,7 @@ description: 需要为某个组件编写文档时
   import "./node_modules/easy-component-ui/components/[组件名]/index.js";
 </script>
 ```
+````
 
 > `css`
 
@@ -60,7 +61,7 @@ description: 需要为某个组件编写文档时
 ```
 
 ```js
-[JavaScript代码]
+[JavaScript代码];
 ```
 
 ```css
@@ -96,7 +97,8 @@ description: 需要为某个组件编写文档时
 ### [组件名] Events
 
 [事件表格]
-```
+
+````
 
 ## 示例处理规则
 
@@ -120,7 +122,7 @@ description: 需要为某个组件编写文档时
     <ea-component [属性]></ea-component>
   </div>
 </div>
-```
+````
 
 对应的 CSS 样式：
 
@@ -154,7 +156,7 @@ description: 需要为某个组件编写文档时
 
 使用 `::: code-group` 来分组不同语言的代码：
 
-```markdown
+````markdown
 ::: details 查看代码
 
 ::: code-group
@@ -162,6 +164,7 @@ description: 需要为某个组件编写文档时
 ```html
 <!-- HTML代码 -->
 ```
+````
 
 ```js
 // JavaScript代码
@@ -174,7 +177,8 @@ description: 需要为某个组件编写文档时
 :::
 
 :::
-```
+
+````
 
 ### 5. 示例与 HTML 文件对齐规则
 
@@ -202,7 +206,7 @@ description: 需要为某个组件编写文档时
 <hr />
 <!-- #endregion  -->
 <!-- end  -->
-```
+````
 
 ### 6. Props 标记规范
 
@@ -220,9 +224,10 @@ description: 需要为某个组件编写文档时
 以 `.js` 文件中 `this.properties` 函数里的键名为准：
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|------|--------|--------|
+| ---- | ---- | ---- | ------ | ------ |
 
 **注意事项**：
+
 - 类型为 Boolean 且默认值为 false 的属性，可选值列写 `—`
 - 类型为枚举值的属性，可选值列写出所有可选值
 - Props 类型的属性需要标记 `<PropTag />`
@@ -230,26 +235,27 @@ description: 需要为某个组件编写文档时
 ### 2. CSS Part 表格
 
 | 名称 | 说明 |
-|------|------|
+| ---- | ---- |
 
 **说明**：
+
 - 列出所有在组件中定义的 `part` 属性
 - 说明应简洁明了，描述该 part 对应的元素
 
 ### 3. Slots 表格
 
 | 名称 | 说明 |
-|------|------|
+| ---- | ---- |
 
 ### 4. Methods 表格
 
 | 方法名 | 说明 | 参数 |
-|--------|------|------|
+| ------ | ---- | ---- |
 
 ### 5. Events 表格
 
 | 事件名 | 说明 | 回调参数(event.detail) |
-|--------|------|------------------------|
+| ------ | ---- | ---------------------- |
 
 ## 特殊情况处理
 
@@ -265,17 +271,21 @@ description: 需要为某个组件编写文档时
 ## Parent API
 
 ### Parent Attributes
+
 ...
 
 ### Parent CSS Part
+
 ...
 
 ## Child API
 
 ### Child Attributes
+
 ...
 
 ### Child CSS Part
+
 ...
 ```
 
@@ -377,13 +387,13 @@ onMounted(() => {
 ```markdown
 ### Component Methods
 
-| 方法名 | 说明 | 参数 |
-| ------ | ---- | ---- |
-| focus | 使组件获取焦点 | — |
-| blur | 使组件失去焦点 | — |
-| handleOpen | 打开下拉面板 | — |
-| handleClose | 关闭下拉面板 | — |
-| setData | 设置数据 | (data: Array) |
+| 方法名      | 说明           | 参数          |
+| ----------- | -------------- | ------------- |
+| focus       | 使组件获取焦点 | —             |
+| blur        | 使组件失去焦点 | —             |
+| handleOpen  | 打开下拉面板   | —             |
+| handleClose | 关闭下拉面板   | —             |
+| setData     | 设置数据       | (data: Array) |
 ```
 
 ### Events 表格
@@ -393,16 +403,17 @@ onMounted(() => {
 ```markdown
 ### Component Events
 
-| 事件名 | 说明 | 回调参数(event.detail) |
-| ------ | ---- | ------------------------ |
-| change | 值改变时触发 | `{ value, label }` |
-| focus | 获得焦点时触发 | — |
-| blur | 失去焦点时触发 | — |
-| ea-visible-change | 可见性改变时触发 | `{ visible: boolean }` |
-| ea-panel-change | 面板改变时触发 | `{ date: Date, mode: string }` |
+| 事件名            | 说明             | 回调参数(event.detail)         |
+| ----------------- | ---------------- | ------------------------------ |
+| change            | 值改变时触发     | `{ value, label }`             |
+| focus             | 获得焦点时触发   | —                              |
+| blur              | 失去焦点时触发   | —                              |
+| ea-visible-change | 可见性改变时触发 | `{ visible: boolean }`         |
+| ea-panel-change   | 面板改变时触发   | `{ date: Date, mode: string }` |
 ```
 
 **注意**：
+
 - "ea-" 前缀的事件需要详细描述 event.detail 结构
 - 普通事件（如 focus, blur）无 detail 时写 "—"
 - 复杂对象类型需要注明属性类型

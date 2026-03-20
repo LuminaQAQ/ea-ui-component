@@ -85,13 +85,13 @@ eaSplitter.addEventListener('panel-resize-end', (e) => {
 
 ```js [<b>resize</b>  监听]
 const eaSplitter = document.querySelector("ea-splitter");
-eaSplitter.addEventListener("panel-resize-start", (e) => {
+eaSplitter.addEventListener("panel-resize-start", e => {
   console.log("panel-resize-start", e.detail.size);
 });
-eaSplitter.addEventListener("panel-resize", (e) => {
+eaSplitter.addEventListener("panel-resize", e => {
   console.log("panel-resize", e.detail.size);
 });
-eaSplitter.addEventListener("panel-resize-end", (e) => {
+eaSplitter.addEventListener("panel-resize-end", e => {
   console.log("panel-resize-end", e.detail.size);
 });
 ```

@@ -1,9 +1,5 @@
 $name: ea-select;
-$ea-select-size-types: (
-  small,
-  default,
-  large
-);
+$ea-select-size-types: (small, default, large);
 
 :host {
   --#{$name}-height-small: 22px;

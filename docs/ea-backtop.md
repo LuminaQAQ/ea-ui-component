@@ -21,19 +21,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -42,7 +29,7 @@ onMounted(() => {
 
 通过滑动来查看容器右下角的按钮。
 
-<ea-backtop><ea-icon icon="icon-angle-up"></ea-icon></ea-backtop>
+<ea-backtop><ea-icon name="angle-up"></ea-icon></ea-backtop>
 
 <div class="demo">
   <p>Scroll down to see the bottom-right button.</p> 
@@ -51,7 +38,7 @@ onMounted(() => {
 ::: details 查看代码
 
 ```html
-<ea-backtop><ea-icon icon="icon-angle-up"></ea-icon></ea-backtop>
+<ea-backtop><ea-icon name="angle-up"></ea-icon></ea-backtop>
 ```
 
 :::

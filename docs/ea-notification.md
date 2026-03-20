@@ -129,19 +129,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-如果需要使用图标，请提前引入图标样式文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 基础用法
 
 从 `placement` 指定的位置出现，默认 3 秒后自动消失。

@@ -25,7 +25,7 @@ export class EaSkeletonItem extends Base {
         "rect",
       ],
       default: "p",
-      observer: (newVal) => {
+      observer: newVal => {
         if (newVal === "image") {
           this.#container.innerHTML = skeletonImageSVG;
         }

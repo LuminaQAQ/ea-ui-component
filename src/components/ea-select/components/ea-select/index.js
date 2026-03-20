@@ -353,8 +353,8 @@ export class EaSelect extends FormAssociatedBase {
       <div class='ea-select' part='container' tabindex='-1'>
         <ea-input class="ea-select__input" part="input" readonly>
           <section slot="prefix" class="ea-select__tag-wrap" part="tag-wrap"></section>
-          <ea-icon slot="suffix" class="ea-select__clear-icon" part="clear-icon" icon='icon-cancel'></ea-icon>
-          <ea-icon slot="suffix" class="ea-select__dropdown-icon" part="dropdown-icon" icon='icon-angle-down'></ea-icon>
+          <ea-icon slot="suffix" class="ea-select__clear-icon" part="clear-icon" name='xmark'></ea-icon>
+          <ea-icon slot="suffix" class="ea-select__dropdown-icon" part="dropdown-icon" name='angle-down'></ea-icon>
         </ea-input>
         <section class="ea-select__dropdown" part="dropdown">
           <slot></slot>

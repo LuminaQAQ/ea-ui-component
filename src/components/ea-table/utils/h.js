@@ -19,7 +19,7 @@ const handleProps = (key, value) => {
   return "";
 };
 
-const handleChildren = (children) => {
+const handleChildren = children => {
   if (
     typeof children === "string" ||
     typeof children === "number" ||

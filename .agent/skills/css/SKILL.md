@@ -563,7 +563,7 @@ CSS 变量应遵循以下层级关系，避免嵌套引用：
 
 // 错误：避免嵌套变量引用
 :host {
-  --#{$name}-item-bg: var(--#{$name}-bg-color);  // 不要这样嵌套
+  --#{$name}-item-bg: var(--#{$name}-bg-color); // 不要这样嵌套
 }
 ```
 
@@ -626,13 +626,14 @@ CSS 变量应遵循以下层级关系，避免嵌套引用：
    - 避免缩写，保持可读性
 
 3. **变量引用规范**：
+
    ```scss
    // 正确
    --#{$name}-rail-bg-color: var(--grey-200);
    --#{$name}-thumb-border-color: var(--blue-300);
 
    // 错误
-   --#{$name}-rail-bg-color: #e0e0e0;  // 硬编码。当不存在包含定义的变量时，才可以使用硬编码。
+   --#{$name}-rail-bg-color: #e0e0e0; // 硬编码。当不存在包含定义的变量时，才可以使用硬编码。
    ```
 
 ---

@@ -153,7 +153,7 @@ export class EaDrawer extends EaOverlay {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return `${super.updateContainerClasslist()} ${this.computedClasslist(
+    const className = `${super.updateContainerClasslist()} ${this.computedClasslist(
       "ea-drawer",
       {
         ["--" + this.direction]: this.direction,
@@ -162,6 +162,10 @@ export class EaDrawer extends EaOverlay {
         drawer: true,
       }
     )}`;
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -186,7 +190,7 @@ export class EaDrawer extends EaOverlay {
           <span class="ea-drawer-main__title" part="title">
             <slot name="title"></slot>
           </span>
-          <ea-icon class="ea-drawer-main__close-icon" icon="icon-cancel" part="close-icon"></ea-icon>
+          <ea-icon class="ea-drawer-main__close-icon" name="xmark" part="close-icon"></ea-icon>
         </header>
         <main class="ea-drawer-main__content" part="content">
           <slot></slot>
@@ -254,12 +258,24 @@ export class EaDrawer extends EaOverlay {
       }
     );
 
+    if (this["show-close"]) {
+      this.#AbortControllerStates.showClose?.abort();
+      this.#AbortControllerStates.showClose = new AbortController();
+      this.#closeIcon.addEventListener("click", this.#handleBeforeClose, {
+        signal: this.#AbortControllerStates.showClose.signal,
+      });
+    }
+
     super.connectedCallback();
     this.assignedStyle(stylesheet);
   }
 
   $beforeUnmounted() {
     this.#abortController?.abort();
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key]?.abort();
+      this.#AbortControllerStates[key] = null;
+    }
   }
 }
 

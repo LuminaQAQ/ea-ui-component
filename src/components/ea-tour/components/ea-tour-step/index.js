@@ -151,7 +151,7 @@ export class EaTourStep extends Base {
       <div class='ea-tour-step' part='container'>
         <header class='ea-tour-step__header' part='header'>
           <slot name='header'></slot>
-          <ea-icon class='ea-tour-step__close-icon' part='close-icon' icon="icon-cancel"></ea-icon>
+          <ea-icon class='ea-tour-step__close-icon' part='close-icon' name="xmark"></ea-icon>
         </header>
         <main class='ea-tour-step__content' part='content'>
           <slot></slot>

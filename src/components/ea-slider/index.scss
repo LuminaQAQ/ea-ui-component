@@ -1,9 +1,5 @@
 $name: ea-slider;
-$ea-slider-size-types: (
-  small,
-  default,
-  large
-);
+$ea-slider-size-types: (small, default, large);
 
 :host {
   --#{$name}-height: 6px;
@@ -60,7 +56,7 @@ $ea-slider-size-types: (
     flex: 1;
     height: 100%;
 
-    margin:0 calc(var(--spacing-md) + var(--#{$name}-thumb-size));
+    margin: 0 calc(var(--spacing-md) + var(--#{$name}-thumb-size));
   }
 
   @include element(rail) {

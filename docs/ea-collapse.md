@@ -88,7 +88,7 @@ onMounted(() => {
 
     loadingTemplate: `
       <div id="loadingInstance" class="loading-example">
-        <ea-icon icon="icon-cw"></ea-icon>
+        <ea-icon name="rotate"></ea-icon>
       </div>
     `,
 
@@ -189,7 +189,7 @@ onMounted(() => {
 
     opacity: 0.7;
 
-    ea-icon[icon="icon-cw"] {
+    ea-icon[name="rotate"] {
       animation: rotate 1s linear infinite;
     }
   }
@@ -213,19 +213,6 @@ onMounted(() => {
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-collapse/index.js";
 </script>
-```
-
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
 ```
 
 ## 自定义样式
@@ -498,7 +485,7 @@ accordionCollapseExample.init();
     <ea-collapse-item id="customTitle" name="1">
       <div class="header" slot="title">
         Consistency
-        <ea-icon icon="icon-coffee" class="header-icon"></ea-icon>
+        <ea-icon name="mug-hot" class="header-icon"></ea-icon>
       </div>
       <div>
         Consistent with real life: in line with the process and logic of real
@@ -553,7 +540,7 @@ accordionCollapseExample.init();
     <ea-collapse-item id="customTitle" name="1">
       <div class="header" slot="title">
         Consistency
-        <ea-icon icon="icon-coffee" class="header-icon"></ea-icon>
+        <ea-icon name="mug-hot" class="header-icon"></ea-icon>
       </div>
       <div>
         Consistent with real life: in line with the process and logic of real
@@ -634,7 +621,7 @@ customTitleCollapseExample.init();
         Consistent within interface: all elements should be consistent, such as:
         design style, icons and texts, position of elements, etc.
       </div>
-      <ea-icon icon="icon-coffee" slot="icon"></ea-icon>
+      <ea-icon name="mug-hot" slot="icon"></ea-icon>
     </ea-collapse-item>
     <ea-collapse-item id="customTextIconCollapseItem" title="Feedback" name="2">
       <div>
@@ -692,7 +679,7 @@ customTitleCollapseExample.init();
         Consistent within interface: all elements should be consistent, such as:
         design style, icons and texts, position of elements, etc.
       </div>
-      <ea-icon icon="icon-coffee" slot="icon"></ea-icon>
+      <ea-icon name="mug-hot" slot="icon"></ea-icon>
     </ea-collapse-item>
     <ea-collapse-item id="customTextIconCollapseItem" title="Feedback" name="2">
       <div>
@@ -1072,7 +1059,7 @@ customExpandIconPositionExample.init();
   opacity: 0.7;
 }
 
-.loading-example ea-icon[icon="icon-cw"] {
+.loading-example ea-icon[name="rotate"] {
   animation: rotate 1s linear infinite;
 }
 

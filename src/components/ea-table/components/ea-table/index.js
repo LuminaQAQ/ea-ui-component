@@ -569,9 +569,14 @@ export class EaTable extends Base {
    * 设置行样式
    * @param {Function | String} handler
    */
-  setRowStylePart = handler => {
-    if (!this.#states.isDataRendered)
-      return console.warn("[EaTable] Please set data first!", this);
+  setRowStylePart = async handler => {
+    if (!this.#states.isDataRendered) {
+      await EaUtils.EaElement.addAsyncEventListener(
+        this,
+        "ea-table-data-rendered",
+        true
+      );
+    }
 
     /** @type {HTMLElement[]} */
     const trs = [...this.#tbody.querySelectorAll("tr")];
@@ -959,10 +964,6 @@ export class EaTable extends Base {
     const columnKey = td?.getAttribute("data-scope");
 
     if (part === "body") {
-      this.#setHighlightCurrentRowStyle(tr, this.#states.currentRow.target);
-      this.#states.currentRow.target = tr;
-      this.#states.currentRow.value = value;
-
       return {
         cell: td,
         row: tr,

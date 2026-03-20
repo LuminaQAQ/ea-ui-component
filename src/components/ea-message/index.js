@@ -1,6 +1,6 @@
-import { EaMessageElement } from "./components/index.js"
-import { EaMessage } from "./utils/EaMessageInstance.js"
+import { EaMessageElement } from "./components/index.js";
+import { EaMessage } from "./utils/EaMessageInstance.js";
 
-window.$message = EaMessage
+window.$message = EaMessage;
 
-export { EaMessageElement, EaMessage }
+export { EaMessageElement, EaMessage };

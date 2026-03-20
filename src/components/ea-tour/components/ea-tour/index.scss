@@ -45,8 +45,11 @@ $name: ea-tour;
   }
 
   @include element(hollow) {
-    transition: x var(--#{$name}-transition), y var(--#{$name}-transition),
-      width var(--#{$name}-transition), height var(--#{$name}-transition);
+    transition:
+      x var(--#{$name}-transition),
+      y var(--#{$name}-transition),
+      width var(--#{$name}-transition),
+      height var(--#{$name}-transition);
   }
 
   @include element(divider) {

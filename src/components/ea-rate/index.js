@@ -80,7 +80,7 @@ export class EaRate extends FormAssociatedBase {
        * @param {boolean} [isSelected]
        * @returns {string}
        */
-      default: () => () => `<ea-icon icon="icon-star" part="icon"></ea-icon>`,
+      default: () => () => `<ea-icon name="star" part="icon"></ea-icon>`,
       /** @param {Function} cb */
       observer: cb => {
         if (!cb || typeof cb !== "function") return;

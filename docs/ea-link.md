@@ -22,22 +22,9 @@ onMounted(() => {
 > `js`
 
 ```js
-<script type="module">
+<script type='module'>
   import "./node_modules/easy-component-ui/components/ea-link/index.js";
 </script>
-```
-
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
 ```
 
 ## 自定义样式
@@ -157,16 +144,16 @@ onMounted(() => {
 带图标的文字链接可增强辨识度。
 
 <div class="row left">
-  <ea-link icon="icon-eye">查看</ea-link>
-  <ea-link>分享<ea-icon icon="icon-share"></ea-icon></ea-link>
+  <ea-link icon="eye">查看</ea-link>
+  <ea-link>分享<ea-icon name="share"></ea-icon></ea-link>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="row left">
-  <ea-link icon="icon-eye">查看</ea-link>
-  <ea-link icon="icon-share">分享</ea-link>
+  <ea-link icon="eye">查看</ea-link>
+  <ea-link icon="share">分享</ea-link>
 </div>
 ```
 

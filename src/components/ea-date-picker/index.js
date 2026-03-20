@@ -251,7 +251,7 @@ export class EaDatePicker extends FormAssociatedBase {
     this.shadowRoot.innerHTML = this.html(`
       <div class='${ns.b()}' part='container'>
         <div class='${ns.e("input-wrap")}' part='input-wrap'>
-          <ea-input class="${ns.e("input")}" part='input' prefix-icon="icon-calendar-times-o" readonly></ea-input>
+          <ea-input class="${ns.e("input")}" part='input' prefix-icon="calendar-xmark" readonly></ea-input>
         </div>
         <div class='${ns.e("dropdown-wrap")}' part='dropdown-wrap'>
           <div class='${ns.e("calendar-wrapper")}'>

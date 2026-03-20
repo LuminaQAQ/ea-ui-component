@@ -168,19 +168,6 @@ await customElements.whenDefined("ea-image-preview");
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -310,7 +297,7 @@ await customElements.whenDefined("ea-image-preview");
 <div class="demo row left error">
   <ea-image></ea-image>
   <ea-image>
-    <ea-icon slot="error" icon="icon-picture" size="30"></ea-icon>
+    <ea-icon slot="error" name="image" size="30"></ea-icon>
   </ea-image>
 </div>
 
@@ -320,7 +307,7 @@ await customElements.whenDefined("ea-image-preview");
 <div class="demo error">
   <ea-image></ea-image>
   <ea-image>
-    <ea-icon slot="error" icon="icon-picture" size="30"></ea-icon>
+    <ea-icon slot="error" name="image" size="30"></ea-icon>
   </ea-image>
 </div>
 ```
@@ -648,18 +635,18 @@ customToolbarImage.init();
     show-progress
   >
     <section slot="toolbar">
-      <ea-icon id="switchFirst" icon="icon-fast-bw"></ea-icon>
-      <ea-icon icon="icon-angle-left" data-action="switch-prev"></ea-icon>
-      <ea-icon icon="icon-angle-right" data-action="switch-next"></ea-icon>
-      <ea-icon id="switchLast" icon="icon-fast-fw"></ea-icon>
+      <ea-icon id="switchFirst" name="backward-fast"></ea-icon>
+      <ea-icon name="angle-left" data-action="switch-prev"></ea-icon>
+      <ea-icon name="angle-right" data-action="switch-next"></ea-icon>
+      <ea-icon id="switchLast" name="forward-fast"></ea-icon>
       |
-      <ea-icon icon="icon-zoom-in" data-action="zoom-in"></ea-icon>
-      <ea-icon icon="icon-zoom-out" data-action="zoom-out"></ea-icon>
+      <ea-icon name="magnifying-glass-plus" data-action="zoom-in"></ea-icon>
+      <ea-icon name="magnifying-glass-minus" data-action="zoom-out"></ea-icon>
       |
-      <ea-icon icon="icon-ccw" data-action="rotate-anticlockwise"></ea-icon>
-      <ea-icon icon="icon-cw" data-action="rotate-clockwise"></ea-icon>
+      <ea-icon name="rotate-left" data-action="rotate-anticlockwise"></ea-icon>
+      <ea-icon name="rotate-right" data-action="rotate-clockwise"></ea-icon>
       |
-      <ea-icon id="reset" icon="icon-recycle"></ea-icon>
+      <ea-icon id="reset" name="recycle"></ea-icon>
     </section>
   </ea-image>
 </div>
@@ -682,18 +669,18 @@ customToolbarImage.init();
     show-progress
   >
     <section slot="toolbar">
-      <ea-icon id="switchFirst" icon="icon-fast-bw"></ea-icon>
-      <ea-icon icon="icon-angle-left" data-action="switch-prev"></ea-icon>
-      <ea-icon icon="icon-angle-right" data-action="switch-next"></ea-icon>
-      <ea-icon id="switchLast" icon="icon-fast-fw"></ea-icon>
+      <ea-icon id="switchFirst" name="backward-fast"></ea-icon>
+      <ea-icon name="angle-left" data-action="switch-prev"></ea-icon>
+      <ea-icon name="angle-right" data-action="switch-next"></ea-icon>
+      <ea-icon id="switchLast" name="forward-fast"></ea-icon>
       |
-      <ea-icon icon="icon-zoom-in" data-action="zoom-in"></ea-icon>
-      <ea-icon icon="icon-zoom-out" data-action="zoom-out"></ea-icon>
+      <ea-icon name="magnifying-glass-plus" data-action="zoom-in"></ea-icon>
+      <ea-icon name="magnifying-glass-minus" data-action="zoom-out"></ea-icon>
       |
-      <ea-icon icon="icon-ccw" data-action="rotate-anticlockwise"></ea-icon>
-      <ea-icon icon="icon-cw" data-action="rotate-clockwise"></ea-icon>
+      <ea-icon name="rotate-left" data-action="rotate-anticlockwise"></ea-icon>
+      <ea-icon name="rotate-right" data-action="rotate-clockwise"></ea-icon>
       |
-      <ea-icon id="reset" icon="icon-recycle"></ea-icon>
+      <ea-icon id="reset" name="recycle"></ea-icon>
     </section>
   </ea-image>
 </div>

@@ -30,7 +30,7 @@ class EaNotificationInstance {
     placement: "top-right",
     zIndex: 0,
     showClose: true,
-    closeIcon: "icon-cancel",
+    closeIcon: "xmark",
     appendTo: "body",
   };
 
@@ -52,7 +52,7 @@ class EaNotificationInstance {
    * @param {EaNotificationOptions} options
    * @returns
    */
-  #renderer = (options) => {
+  #renderer = options => {
     const el = document.createElement("ea-notification");
 
     for (const k in options) {
@@ -117,33 +117,33 @@ class EaNotificationInstance {
   };
 }
 
-export const EaNotification = (options) => new EaNotificationInstance(options);
+export const EaNotification = options => new EaNotificationInstance(options);
 
-EaNotification.primary = (options) =>
+EaNotification.primary = options =>
   EaNotification({
     ...options,
     type: "primary",
   });
 
-EaNotification.success = (options) =>
+EaNotification.success = options =>
   EaNotification({
     ...options,
     type: "success",
   });
 
-EaNotification.warning = (options) =>
+EaNotification.warning = options =>
   EaNotification({
     ...options,
     type: "warning",
   });
 
-EaNotification.info = (options) =>
+EaNotification.info = options =>
   EaNotification({
     ...options,
     type: "info",
   });
 
-EaNotification.error = (options) =>
+EaNotification.error = options =>
   EaNotification({
     ...options,
     type: "error",

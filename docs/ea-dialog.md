@@ -272,15 +272,6 @@ ea-button::part(icon) {
 </script>
 ```
 
-> `css`
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 基础用法
 
 使用 `ea-dialog` 包裹对话框内容，通过 `show()` / `hide()` 或 `visible` / `visible = true/false` 控制显示。
@@ -373,7 +364,7 @@ basicExample.init();
   <ea-dialog id="customHeaderDialog" width="500px">
     <header class="custom-header" slot="header">
       <span>This is a custom header!</span>
-      <ea-button id="customHeaderDialogCloseIcon" type="danger" icon="icon-coffee" circle></ea-button>
+      <ea-button id="customHeaderDialogCloseIcon" type="danger" icon="xmark" circle></ea-button>
     </header>
     <span>This is a message</span>
     <footer slot="footer">
@@ -399,7 +390,7 @@ basicExample.init();
       <ea-button
         id="customHeaderDialogCloseIcon"
         type="danger"
-        icon="icon-coffee"
+        icon="xmark"
         circle
       ></ea-button>
     </header>

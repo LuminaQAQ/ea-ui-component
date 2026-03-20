@@ -10,6 +10,8 @@ export class EaAlert extends Base {
   #alertIcon;
   /** @type {HTMLElement} */
   #alertContent;
+  /** @type {HTMLSlotElement} */
+  #iconSlot;
   /** @type {HTMLElement} */
   #alertTitle;
   /** @type {HTMLElement} */
@@ -42,11 +44,7 @@ export class EaAlert extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        this.#alertTitle.innerHTML = newVal
-          ? newVal
-          : `<slot name="title"></slot>`;
-
-        // console.log(newVal);
+        this.#alertTitle.innerHTML = newVal;
       },
     },
     description: {
@@ -60,14 +58,14 @@ export class EaAlert extends Base {
       type: ["primary", "info", "success", "warning", "error"],
       default: "info",
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     effect: {
       type: ["light", "dark"],
       default: "light",
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     "close-text": {
@@ -83,40 +81,44 @@ export class EaAlert extends Base {
       type: Boolean,
       default: true,
       observer: newVal => {
+        this.#abortController?.abort();
+
         this.#alertCloseBtn.innerHTML = newVal
           ? this["close-text"]
             ? this["close-text"]
-            : `<ea-icon class="ea-alert__close-icon" icon="icon-cancel" part="close-icon"></ea-icon>`
+            : `<ea-icon class="ea-alert__close-icon" name="xmark" part="close-icon"></ea-icon>`
           : "";
+
+        if (newVal) {
+          this.#abortController = new AbortController();
+          this.#alertCloseBtn.addEventListener("click", this.#closeEvent, {
+            signal: this.#abortController.signal,
+          });
+        }
       },
     },
     "show-icon": {
       type: Boolean,
       default: false,
-      observer: newVal => {
-        const iconType = {
-          primary: "info",
-          success: "ok-circled",
-          info: "info",
-          warning: "attention-alt",
-          error: "cancel-circled",
+      observer: () => {
+        const faIconType = {
+          primary: "circle-info",
+          success: "circle-check",
+          info: "circle-info",
+          warning: "triangle-exclamation",
+          error: "circle-xmark",
         };
 
-        const hasSlot = this.querySelector("[slot=icon]");
-
-        this.#alertIcon.innerHTML =
-          newVal && !hasSlot
-            ? `<ea-icon class="ea-alert__icon" icon="icon-${
-                iconType[this.type]
-              }" part="icon"></ea-icon>`
-            : '<slot name="icon"></slot>';
+        this.#alertIcon.innerHTML = `<ea-icon class="ea-alert__icon" name="${
+          faIconType[this.type]
+        }" part="icon"></ea-icon>`;
       },
     },
     center: {
       type: Boolean,
       default: false,
       observer: () => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     "show-after": {
@@ -153,11 +155,15 @@ export class EaAlert extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-alert", {
+    const className = this.computedClasslist("ea-alert", {
       ["--" + this.type]: this.type,
       ["--" + this.effect]: this.effect,
       ["--center"]: this.center,
     });
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -175,7 +181,9 @@ export class EaAlert extends Base {
           <slot name='icon'></slot>
         </span>
         <div class="ea-alert__content" part='content-wrap'>
-          <span class="ea-alert__title" part='title'></span>
+          <span class="ea-alert__title" part='title'>
+            <slot name="title"></slot>
+          </span>
           <p class="ea-alert__description" part='description'>
             <slot></slot>
           </p>
@@ -184,7 +192,7 @@ export class EaAlert extends Base {
               this.closable
                 ? this["close-text"]
                   ? this["close-text"]
-                  : `<ea-icon class="ea-alert__close-icon" icon="icon-cancel" part="close-icon"></ea-icon>`
+                  : `<ea-icon class="ea-alert__close-icon" name="xmark" part="close-icon"></ea-icon>`
                 : ""
             }
           </span>
@@ -193,49 +201,59 @@ export class EaAlert extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-alert");
-    this.#alertIcon = this.shadowRoot.querySelector(".ea-alert__icon-wrap");
+    this.#alertIcon = this.shadowRoot.querySelector(
+      ".ea-alert__icon-wrap slot[name=icon]"
+    );
     this.#alertContent = this.shadowRoot.querySelector(".ea-alert__content");
-    this.#alertTitle = this.shadowRoot.querySelector(".ea-alert__title");
+    this.#alertTitle = this.shadowRoot.querySelector(
+      ".ea-alert__title slot[name=title]"
+    );
     this.#alertDescription = this.shadowRoot.querySelector(
-      ".ea-alert__description"
+      ".ea-alert__description slot"
     );
     this.#alertCloseBtn = this.shadowRoot.querySelector(".ea-alert__close-btn");
   }
 
-  #closeEvent = e => {
+  /**
+   * 关闭事件
+   */
+  #closeEvent = () => {
     timeout(() => {
-      this.#abortController.abort();
-
       this.#container.classList.add("ea-alert--before-close");
 
-      this.#container.addEventListener(
-        "transitionend",
-        () => {
-          this.emit("close", {
-            detail: {
-              visible: false,
-            },
-          });
-          this.remove();
-        },
-        { once: true }
-      );
+      /**
+       * 过渡结束事件
+       */
+      const onTransitionEnd = () => {
+        this.emit("close", {
+          detail: {
+            visible: false,
+          },
+        });
+        this.remove();
+      };
+
+      this.#container.addEventListener("transitionend", onTransitionEnd, {
+        once: true,
+      });
     }, this["hide-after"]);
   };
 
   connectedCallback() {
     super.connectedCallback();
 
-    this.#abortController = new AbortController();
+    this.#abortController?.abort();
 
-    if (this.closable)
+    if (this.closable) {
+      this.#abortController = new AbortController();
       this.#alertCloseBtn.addEventListener("click", this.#closeEvent, {
         signal: this.#abortController.signal,
       });
+    }
   }
 
   $beforeUnmounted() {
-    this.#abortController.abort();
+    this.#abortController?.abort();
   }
 }
 

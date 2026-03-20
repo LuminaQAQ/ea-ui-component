@@ -33,26 +33,26 @@ export class EaScrollbar extends Base {
     height: {
       type: String,
       default: "",
-      observer: (newVal) => {},
+      observer: newVal => {},
     },
     native: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.classList.toggle("ea-scrollbar--native", newVal);
       },
     },
     noresize: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.classList.toggle("ea-scrollbar--noresize", newVal);
       },
     },
     always: {
       type: Boolean,
       default: false,
-      observer: (newVal) => {
+      observer: newVal => {
         this.#container.classList.toggle("ea-scrollbar--always", newVal);
       },
     },
@@ -128,7 +128,7 @@ export class EaScrollbar extends Base {
       bottom: this.#view.scrollLeft / this.#view.scrollWidth >= 1,
     };
 
-    Object.keys(directions).forEach((direction) => {
+    Object.keys(directions).forEach(direction => {
       if (directions[direction]) {
         this.dispatchEvent(
           new CustomEvent("end-reached", {
@@ -176,7 +176,7 @@ export class EaScrollbar extends Base {
    * 垂直滚动条拖动事件
    * @param {MouseEvent} e
    */
-  #verticalMouseMoveEvent = (e) => {
+  #verticalMouseMoveEvent = e => {
     const trackRect = this.#verticalTrack.getBoundingClientRect();
 
     const relativeY = e.clientY - trackRect.top;
@@ -196,7 +196,7 @@ export class EaScrollbar extends Base {
    * 水平滚动条拖动事件
    * @param {MouseEvent} e
    */
-  #horizontalMouseMoveEvent = (e) => {
+  #horizontalMouseMoveEvent = e => {
     const trackRect = this.#horizontalTrack.getBoundingClientRect();
 
     const relativeX = e.clientX - trackRect.left;
@@ -216,7 +216,7 @@ export class EaScrollbar extends Base {
    * 鼠标按下事件
    * @param {MouseEvent} e
    */
-  #mouseDownEvent = (e) => {
+  #mouseDownEvent = e => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -247,7 +247,7 @@ export class EaScrollbar extends Base {
    * 键盘事件
    * @param {KeyboardEvent} e
    */
-  #mouseKeyDownEvent = (e) => {
+  #mouseKeyDownEvent = e => {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") {
       this.#view.scrollTo({
         top:

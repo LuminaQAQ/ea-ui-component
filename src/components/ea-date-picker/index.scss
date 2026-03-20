@@ -74,7 +74,6 @@ $ea-date-picker-sizes: small, large;
     transform: scaleY(0);
     opacity: 0;
     pointer-events: none;
-
   }
 
   @include element(calendar-wrapper) {
@@ -186,7 +185,6 @@ $ea-date-picker-sizes: small, large;
 
   &.is-view-year,
   &.is-view-month {
-
     .ea-date-picker__calendar-body,
     .ea-date-picker__month-panel,
     .ea-date-picker__header-month,

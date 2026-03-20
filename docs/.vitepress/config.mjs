@@ -1,21 +1,6 @@
-import { resolve } from "path";
 import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
-
-/**
- * 获取 base 路径
- * - 生产构建（npm run build:doc）: /ea-ui-component/
- * - 开发（npm run dev:doc）: /
- * - 预览（npm run preview:doc）: / (空字符串)
- */
-const getBase = () => {
-  if (process.env.VITEPRESS_BASE === "___EMPTY___") return "";
-  if (process.env.VITEPRESS_BASE !== undefined)
-    return process.env.VITEPRESS_BASE;
-  return process.env.NODE_ENV === "production" ? "/ea-ui-component/" : "";
-};
-const base = getBase();
 
 export default defineConfig({
   base: "/ea-ui-component/",
@@ -23,11 +8,14 @@ export default defineConfig({
   description: "基于 WebComponent 的 UI 组件库",
 
   head: [
+    ["link", { rel: "stylesheet", href: `/ea-ui-component/index.css` }],
     [
       "link",
-      { rel: "stylesheet", href: `/ea-ui-component/dist/assets/icon.css` },
+      {
+        rel: "stylesheet",
+        href: `/ea-ui-component/dist/assets/icon.css`,
+      },
     ],
-    ["link", { rel: "stylesheet", href: `/ea-ui-component/index.css` }],
     ["link", { rel: "shortcut icon", href: `/ea-ui-component/favicon.ico` }],
   ],
 
@@ -147,7 +135,6 @@ export default defineConfig({
           { text: "Alert 提示", link: "/ea-alert" },
           { text: "Dialog 对话框", link: "/ea-dialog" },
           { text: "Drawer 抽屉", link: "/ea-drawer" },
-          { text: "Loading 加载", link: "/ea-loading" },
           { text: "Message 消息提示", link: "/ea-message" },
           { text: "Message Box 消息弹出框", link: "/ea-message-box" },
           { text: "Notification 通知", link: "/ea-notification" },

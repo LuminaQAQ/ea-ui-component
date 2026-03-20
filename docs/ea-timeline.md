@@ -28,19 +28,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#timeline-css-part)。
@@ -89,7 +76,7 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
       type="primary"
       size="large"
       timestamp="2024-7-1"
-      icon="icon-coffee"
+      icon="mug-hot"
     >
       Custom icon
     </ea-timeline-item>
@@ -113,7 +100,7 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
       type="primary"
       size="large"
       timestamp="2024-7-1"
-      icon="icon-coffee"
+      icon="mug-hot"
     >
       Custom icon
     </ea-timeline-item>

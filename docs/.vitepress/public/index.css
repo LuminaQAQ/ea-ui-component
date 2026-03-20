@@ -142,6 +142,7 @@
 .vp-doc th,
 .vp-doc td {
   border: none !important;
+  min-width: 120px;
 }
 
 .vp-doc table {

@@ -183,7 +183,7 @@ export class EaTimePicker extends FormAssociatedBase {
           part='input' 
           autocomplete="off" 
           readonly 
-          prefix-icon="icon-clock"
+          prefix-icon="clock"
         ></ea-input>
         <div class="${ns.e("dropdown")}" part='dropdown'>
           <div class="${ns.e("dropdown-inner-wrap")}" part='dropdown-inner-wrap'>
@@ -684,11 +684,7 @@ export class EaTimePicker extends FormAssociatedBase {
     const hasValue = this.value !== "" && this.value != null;
 
     if (this.required && !hasValue) {
-      this.internals.setValidity(
-        { valueMissing: true },
-        "请选择时间",
-        this
-      );
+      this.internals.setValidity({ valueMissing: true }, "请选择时间", this);
     } else {
       this.internals.setValidity({}, "", this);
     }

@@ -25,7 +25,7 @@ export class EaPageHeader extends Base {
       observer: newVal => {
         const iconEl = this.#backIconSlot.querySelector("ea-icon");
         if (iconEl) {
-          iconEl.setAttribute("icon", newVal);
+          iconEl.setAttribute("name", newVal);
         }
       },
     },
@@ -63,7 +63,7 @@ export class EaPageHeader extends Base {
           <div class="ea-page-header__back" part="back">
             <span class="ea-page-header__icon" part="icon">
               <slot name="icon">
-                <ea-icon icon="icon-angle-left" part="back-icon"></ea-icon>
+                <ea-icon name="angle-left" part="back-icon"></ea-icon>
               </slot>
             </span>
             <span class="ea-page-header__title" part="title">

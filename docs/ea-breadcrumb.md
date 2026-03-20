@@ -19,19 +19,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#breadcrumb-css-part)。
@@ -76,7 +63,7 @@ onMounted(() => {
 <!-- #region  -->
 <div class="demo">
   <ea-breadcrumb>
-    <ea-icon icon="icon-angle-right" slot="separator"></ea-icon>
+    <ea-icon name="angle-right" slot="separator"></ea-icon>
     <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
     <ea-breadcrumb-item href="javascript:;">
       <span slot="separator">→</span>
@@ -86,13 +73,13 @@ onMounted(() => {
     <ea-breadcrumb-item>promotion detail</ea-breadcrumb-item>
   </ea-breadcrumb>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
+<!-- #endregion -->
+<!-- ------------------- -->
 
 ```html
 <div class="demo">
   <ea-breadcrumb>
-    <ea-icon icon="icon-angle-right" slot="separator"></ea-icon>
+    <ea-icon name="angle-right" slot="separator"></ea-icon>
     <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
     <ea-breadcrumb-item href="javascript:;">
       <span slot="separator">→</span>

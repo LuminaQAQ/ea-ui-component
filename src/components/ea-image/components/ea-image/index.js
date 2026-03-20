@@ -14,6 +14,11 @@ export class EaImage extends Base {
   /** @type {EaImagePreview} */
   #imagePreview;
 
+  /** @type {HTMLSlotElement} */
+  #progressSlot;
+  /** @type {HTMLSlotElement} */
+  #toolbarSlot;
+
   /** @type {AbortController} */
   #abortController;
 
@@ -329,9 +334,8 @@ export class EaImage extends Base {
         </section>
       </div>
       <ea-image-preview class="ea-image-preview" part='preview'>
-        <slot name='progress' slot="progress"></slot>
-        <slot name='toolbar' slot="toolbar"></slot>
-        <slot name='progress' slot="progress"></slot>
+        <slot name='progress'></slot>
+        <slot name='toolbar'></slot>
       </ea-image-preview>
     `;
 
@@ -340,7 +344,30 @@ export class EaImage extends Base {
     this.#error = this.shadowRoot.querySelector(".ea-image__error");
     this.#placeholder = this.shadowRoot.querySelector(".ea-image__placeholder");
     this.#imagePreview = this.shadowRoot.querySelector(".ea-image-preview");
+
+    this.#progressSlot = this.shadowRoot.querySelector('slot[name="progress"]');
+    this.#toolbarSlot = this.shadowRoot.querySelector('slot[name="toolbar"]');
   }
+
+  /**
+   * 处理 slotchange 事件，动态设置 slot 属性以传递给 ea-image-preview
+   * @param {HTMLSlotElement} slotElement
+   * @param {string} slotName
+   */
+  #handleSlotChange = (slotElement, slotName) => {
+    const assignedNodes = slotElement.assignedNodes({ flatten: true });
+    const hasContent = assignedNodes.some(
+      node =>
+        node.nodeType === Node.ELEMENT_NODE ||
+        (node.nodeType === Node.TEXT_NODE && node.textContent.trim())
+    );
+
+    if (hasContent) {
+      slotElement.setAttribute("slot", slotName);
+    } else {
+      slotElement.removeAttribute("slot");
+    }
+  };
 
   /**
    * 设置当前项
@@ -375,6 +402,21 @@ export class EaImage extends Base {
     this.#abortController = new AbortController();
 
     if (!this.getAttribute("src")) this.setAttribute("src", "");
+
+    this.#progressSlot.addEventListener(
+      "slotchange",
+      () => this.#handleSlotChange(this.#progressSlot, "progress"),
+      {
+        signal: this.#abortController.signal,
+      }
+    );
+    this.#toolbarSlot.addEventListener(
+      "slotchange",
+      () => this.#handleSlotChange(this.#toolbarSlot, "toolbar"),
+      {
+        signal: this.#abortController.signal,
+      }
+    );
 
     if (this.preview) {
       await customElements.whenDefined("ea-image-preview");

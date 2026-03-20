@@ -24,19 +24,6 @@ onMounted(() => {
 </script>
 ```
 
-`css`
-
-::: tip
-如果使用到带图标的属性/组件，请提前通过 `link` 引入图标样式文件。
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [Radio CSS Part](#radio-css-part) 和 [RadioGroup CSS Part](#radiogroup-css-part)。

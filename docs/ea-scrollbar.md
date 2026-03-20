@@ -27,6 +27,22 @@ ea-aside::part(container) {
   background-color: #d3dce6;
   text-align: center;
 }
+
+.scrollbar-item {
+  box-sizing: border-box;
+  padding: 50px;
+  margin: 10px;
+
+  background-color: rgb(236, 245, 255);
+  color: black;
+
+  text-align: center;
+}
+
+.horizontal-section {
+  display: flex;
+  align-items: center;
+}
 </style>
 
 # Scrollbar 滚动条 ​
@@ -37,8 +53,8 @@ ea-aside::part(container) {
 
 通过 height 属性设置滚动条高度，若不设置则根据父容器高度自适应。
 
-<div class="demo" style="height: 500px;">
-  <ea-container class="example" direction="vertical">
+<div class="demo">
+  <ea-container class="example" direction="horizontal" style="height: 500px;">
     <ea-aside width="200px">
       <ea-header>
         <p style="margin-top: 0;">header</p>
@@ -286,8 +302,8 @@ ea-aside::part(container) {
 :::details 查看代码 - html
 
 ```html
-<div class="demo" style="height: 500px;">
-  <ea-container class="example" direction="vertical">
+<div class="demo">
+  <ea-container class="example" direction="horizontal" style="height: 500px;">
     <ea-aside width="200px">
       <ea-header>
         <p style="margin-top: 0;">header</p>

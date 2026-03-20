@@ -221,11 +221,11 @@ export class EaTabs extends Base {
    */
   #updateTabNavigationPosition = (tabPosition = this["tab-position"]) => {
     if (tabPosition === "left" || tabPosition === "right") {
-      this.#prevBtn.setAttribute("icon", "icon-arrow-left");
-      this.#nextBtn.setAttribute("icon", "icon-arrow-right");
+      this.#prevBtn.setAttribute("name", "arrow-left");
+      this.#nextBtn.setAttribute("name", "arrow-right");
     } else if (tabPosition === "top" || tabPosition === "bottom") {
-      this.#prevBtn.setAttribute("icon", "icon-arrow-up");
-      this.#nextBtn.setAttribute("icon", "icon-arrow-down");
+      this.#prevBtn.setAttribute("name", "arrow-up");
+      this.#nextBtn.setAttribute("name", "arrow-down");
     }
   };
 
@@ -342,9 +342,9 @@ export class EaTabs extends Base {
     this.shadowRoot.innerHTML = `
       <div class='ea-tabs' part='container'>
         <nav class='ea-tabs__nav' part='nav'>
-            <ea-icon icon="icon-angle-left" class="ea-tabs__prev ea-tabs__scroll" part='prev'></ea-icon>
+            <ea-icon name="angle-left" class="ea-tabs__prev ea-tabs__scroll" part='prev'></ea-icon>
             <slot name='nav'></slot>
-            <ea-icon icon="icon-angle-right" class="ea-tabs__next ea-tabs__scroll" part='next'></ea-icon>
+            <ea-icon name="angle-right" class="ea-tabs__next ea-tabs__scroll" part='next'></ea-icon>
         </nav>
         <div class="ea-tabs__line" part="line" tabindex="-1">
             <span class="ea-tabs__indicator" part="indicator"></span>

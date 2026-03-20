@@ -45,19 +45,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#descriptions-css-part)。
@@ -536,7 +523,7 @@ onMounted(() => {
 <div class="demo">
   <ea-descriptions column="3" border>
     <span slot="title">
-      <ea-icon icon="icon-info" color="#409eff"></ea-icon>Customized style list
+      <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style list
     </span>
     <ea-button type="primary" slot="extra"> Operation </ea-button>
     <ea-descriptions-item
@@ -582,7 +569,8 @@ onMounted(() => {
 <div class="demo">
   <ea-descriptions column="3" border>
     <span slot="title">
-      <ea-icon icon="icon-info" color="#409eff"></ea-icon>Customized style list
+      <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style
+      list
     </span>
     <ea-button type="primary" slot="extra"> Operation </ea-button>
     <ea-descriptions-item

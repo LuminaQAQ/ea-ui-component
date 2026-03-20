@@ -458,7 +458,8 @@ export default class Base extends HTMLElement {
   getAttrString(attrName, defaultValue) {
     const attr = this.getAttribute(attrName);
 
-    return attr ? attr : defaultValue || "";
+    if (!attr || attr === "null") return defaultValue || "";
+    return attr;
   }
 
   getAttrDate(attrName, defaultValue) {

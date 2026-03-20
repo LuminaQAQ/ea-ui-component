@@ -83,7 +83,7 @@ export class EaBreadcrumb extends Base {
     const defaultSlot = this.shadowRoot.querySelector("#defaultSlot");
     /** @type {import("../ea-breadcrumb-item/index.js").EaBreadcrumbItem[]} */
     const breadcrumbItems = [...defaultSlot.assignedElements()].filter(
-      (item) => item.tagName.toLowerCase() === "ea-breadcrumb-item"
+      item => item.tagName.toLowerCase() === "ea-breadcrumb-item"
     );
     const separator = this.#getSeparatorItem(this.separator);
 

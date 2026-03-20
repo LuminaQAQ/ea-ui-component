@@ -36,13 +36,31 @@ export class EaImagePreview extends EaOverlay {
   #rotateRightIcon;
 
   /** @type {AbortController} */
-  #imgAbortController;
-  /** @type {AbortController} */
-  #abortController;
-  /** @type {AbortController} */
-  #clickModalAbortController;
-  /** @type {AbortController} */
-  #imgMoveAbortController;
+
+  #AbortControllerStates = {
+    /** @type {AbortController | null} */
+    main: null,
+    /** @type {AbortController | null} */
+    img: null,
+    /** @type {AbortController | null} */
+    clickModal: null,
+    /** @type {AbortController | null} */
+    imgMove: null,
+    /** @type {AbortController | null} */
+    toolbar: null,
+    /** @type {AbortController | null} */
+    switchPrev: null,
+    /** @type {AbortController | null} */
+    switchNext: null,
+    /** @type {AbortController | null} */
+    zoomOut: null,
+    /** @type {AbortController | null} */
+    zoomIn: null,
+    /** @type {AbortController | null} */
+    rotateLeft: null,
+    /** @type {AbortController | null} */
+    rotateRight: null,
+  };
 
   #states = {
     urlList: [],
@@ -86,6 +104,15 @@ export class EaImagePreview extends EaOverlay {
       default: false,
       observer: newVal => {
         this.status = newVal;
+
+        if (newVal && this.urlList.length > 0) {
+          const currentImg = this.#imgContent.querySelector(
+            ".ea-image-preview__img"
+          );
+          if (!currentImg) {
+            this.#renderImage(this.index);
+          }
+        }
       },
     },
     "initial-index": {
@@ -104,85 +131,16 @@ export class EaImagePreview extends EaOverlay {
         if (this.infinite) {
           if (!this.urlList.length) return;
 
-          const length = this.#states.urlList.length - 1;
+          const length = this.urlList.length - 1;
 
           if (newVal > length) return (this.index = 0);
           else if (newVal < 0) return (this.index = length);
-        } else if (newVal < 0 || newVal > this.#states.urlList.length - 1) {
+        } else if (newVal < 0 || newVal > this.urlList.length - 1) {
           this.#states.dirtyUpdate = true;
           return (this.index = oldVal);
         }
 
-        const src = this.#states.urlList[newVal];
-        this.#imgContent.innerHTML = "";
-
-        if (src) {
-          this.#imgAbortController?.abort();
-          this.#imgAbortController = new AbortController();
-
-          this.#imgContent.innerHTML = EaUtils.EaElement.h(
-            "ea-image",
-            "ea-image-preview__img",
-            {
-              src,
-              fit: "contain",
-            },
-            `
-              <slot name="viewer-error" slot="error"></slot>
-            `
-          );
-
-          const img = this.#imgContent.querySelector(".ea-image-preview__img");
-
-          /**
-           * 处理图片加载错误
-           */
-          const onImgErrorEvent = () => {
-            this.#states.status = "error";
-            this.classList.remove(
-              "ea-image-preview--success",
-              "ea-image-preview--loading"
-            );
-            this.#container.classList.add("ea-image-preview--error");
-
-            this.emit("error");
-            this.#imgAbortController.abort();
-          };
-
-          /**
-           * 处理图片加载完成
-           */
-          const onImageLoadEvent = () => {
-            this.#states.status = "success";
-            this.#container.classList.remove(
-              "ea-image-preview--error",
-              "ea-image-preview--loading"
-            );
-            this.#container.classList.add("ea-image-preview--success");
-            this.#imgAbortController.abort();
-          };
-
-          this.#handleProgress(newVal + 1, this.#states.urlList.length);
-
-          img.addEventListener("error", onImgErrorEvent, {
-            once: true,
-            signal: this.#imgAbortController.signal,
-          });
-          img.addEventListener("load", onImageLoadEvent, {
-            once: true,
-            signal: this.#imgAbortController.signal,
-          });
-
-          if (this.visible && this.#states.isUrlListInit) {
-            this.emit("switch", {
-              detail: {
-                index: newVal,
-                url: src,
-                imgTarget: img,
-              },
-            });
-          }
-        }
+        this.#renderImage(newVal);
       },
     },
     infinite: {
@@ -255,12 +213,12 @@ export class EaImagePreview extends EaOverlay {
           }
         };
 
-        this.#clickModalAbortController?.abort();
+        this.#AbortControllerStates.clickModal?.abort();
 
         if (newVal) {
-          this.#clickModalAbortController = new AbortController();
+          this.#AbortControllerStates.clickModal = new AbortController();
           this.#container.addEventListener("click", onModalClickEvent, {
-            signal: this.#clickModalAbortController.signal,
+            signal: this.#AbortControllerStates.clickModal.signal,
           });
         }
       },
@@ -313,22 +271,23 @@ export class EaImagePreview extends EaOverlay {
       this.#container.innerHTML +
       `
       <header class="ea-image-preview__header" part="header">
-        <ea-icon class="ea-image-preview__icon close-icon" icon="icon-cancel" part="icon close-icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon close-icon" name="xmark" part="icon close-icon"></ea-icon>
       </header>
       <main class="ea-image-preview__main" part="main">
-        <ea-icon class="ea-image-preview__icon prev-icon" icon="icon-angle-left" part="icon prev-icon"></ea-icon>
-        <ea-icon class="ea-image-preview__icon next-icon" icon="icon-angle-right" part="icon next-icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon prev-icon" name="angle-left" part="icon prev-icon"></ea-icon>
+        <ea-icon class="ea-image-preview__icon next-icon" name="angle-right" part="icon next-icon"></ea-icon>
       </main>
       <footer class="ea-image-preview__footer" part="footer">
         <section class="ea-image-preview__progress" part="progress">
           <slot name="progress"></slot>
         </section>
         <section class="ea-image-preview__toolbar" part="toolbar">
-          <ea-icon class="ea-image-preview__icon zoom-out-icon" icon="icon-zoom-out" part="icon zoom-out-icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon zoom-in-icon" icon="icon-zoom-in" part="icon zoom-in-icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon rotate-left-icon" icon="icon-ccw" part="icon rotate-left-icon"></ea-icon>
-          <ea-icon class="ea-image-preview__icon rotate-right-icon" icon="icon-cw" part="icon rotate-right-icon"></ea-icon>
-          <slot name="toolbar"></slot>
+          <slot name="toolbar">
+            <ea-icon class="ea-image-preview__icon zoom-out-icon" name="magnifying-glass-minus" part="icon zoom-out-icon"></ea-icon>
+            <ea-icon class="ea-image-preview__icon zoom-in-icon" name="magnifying-glass-plus" part="icon zoom-in-icon"></ea-icon>
+            <ea-icon class="ea-image-preview__icon rotate-left-icon" name="rotate-left" part="icon rotate-left-icon"></ea-icon>
+            <ea-icon class="ea-image-preview__icon rotate-right-icon" name="rotate-right" part="icon rotate-right-icon"></ea-icon>
+          </slot>
         </section>
       </footer>
     `;
@@ -462,8 +421,8 @@ export class EaImagePreview extends EaOverlay {
   #onImgMoveEvent = startE => {
     startE.preventDefault();
 
-    this.#imgMoveAbortController?.abort();
-    this.#imgMoveAbortController = new AbortController();
+    this.#AbortControllerStates.imgMove?.abort();
+    this.#AbortControllerStates.imgMove = new AbortController();
 
     const startX = startE.clientX;
     const startY = startE.clientY;
@@ -507,15 +466,15 @@ export class EaImagePreview extends EaOverlay {
       this.#states.position.x = originX + deltaX;
       this.#states.position.y = originY + deltaY;
 
-      this.#imgMoveAbortController?.abort();
+      this.#AbortControllerStates.imgMove?.abort();
     };
 
     window.addEventListener("mousemove", moveEvent, {
-      signal: this.#imgMoveAbortController.signal,
+      signal: this.#AbortControllerStates.imgMove.signal,
     });
 
     window.addEventListener("mouseup", mouseupEvent, {
-      signal: this.#imgMoveAbortController.signal,
+      signal: this.#AbortControllerStates.imgMove.signal,
     });
   };
 
@@ -524,7 +483,27 @@ export class EaImagePreview extends EaOverlay {
    * 若用户传入了自定义工具，则优先使用用户元素，否则使用内置元素
    */
   #initToobarEvent = () => {
-    const slot = this.querySelector("[slot='toolbar']");
+    /** @type {HTMLSlotElement} */
+    let toolbarSlot = this.shadowRoot.querySelector("slot[name='toolbar']");
+    const isImageChild = this.closest(".ea-image-preview");
+    if (isImageChild) {
+      toolbarSlot = isImageChild.querySelector("slot[name='toolbar']");
+    }
+
+    for (const key in this.#AbortControllerStates) {
+      this.#AbortControllerStates[key]?.abort();
+      this.#AbortControllerStates[key] = new AbortController();
+    }
+
+    const abortControllers = {
+      "switch-prev": this.#AbortControllerStates.switchPrev,
+      "switch-next": this.#AbortControllerStates.switchNext,
+      "zoom-out": this.#AbortControllerStates.zoomOut,
+      "zoom-in": this.#AbortControllerStates.zoomIn,
+      "rotate-anticlockwise": this.#AbortControllerStates.rotateLeft,
+      "rotate-clockwise": this.#AbortControllerStates.rotateRight,
+    };
+
     const els = {
       "switch-prev": {
         el: null,
@@ -538,20 +517,18 @@ export class EaImagePreview extends EaOverlay {
           this.#handleSwitch("next");
         },
       },
-
       "zoom-out": {
-        el: this.#zoomInIcon,
+        el: this.#zoomOutIcon,
         callback: () => {
           this.#handleZoom("out");
         },
       },
       "zoom-in": {
-        el: this.#zoomOutIcon,
+        el: this.#zoomInIcon,
         callback: () => {
           this.#handleZoom("in");
         },
       },
-
       "rotate-anticlockwise": {
         el: this.#rotateLeftIcon,
         callback: () => {
@@ -566,39 +543,66 @@ export class EaImagePreview extends EaOverlay {
       },
     };
 
-    for (const [action, options] of Object.entries(els)) {
-      let hasActionEl = false;
-
-      try {
-        /** @type {NodeListOf<HTMLElement>} */
-        const els = slot.assignedNodes();
-
-        els.forEach(el => {
-          const actionEl = el.querySelector(`[data-action="${action}"]`);
-          if (actionEl) {
-            hasActionEl = true;
-            options.el.style.display = "none";
-
-            actionEl.addEventListener("click", options.callback, {
-              signal: this.#abortController.signal,
-            });
-          }
-        });
-      } catch {
+    /**
+     * 绑定工具栏事件
+     */
+    const bindToolbarEvents = () => {
+      // 重置内置图标显示状态
+      Object.values(els).forEach(options => {
         if (options.el) {
-          hasActionEl = true;
+          options.el.style.display = "";
+        }
+      });
+
+      const assignedNodes = toolbarSlot.assignedElements();
+
+      // 收集所有自定义工具栏元素
+      /** @type {Map<string, HTMLElement>} */
+      const customActionEls = new Map();
+
+      assignedNodes.forEach(node => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          // 查找所有带有 data-action 属性的元素
+          const actionEls = node.querySelectorAll("[data-action]");
+          actionEls.forEach(el => {
+            const action = el.getAttribute("data-action");
+            if (action && !customActionEls.has(action)) {
+              customActionEls.set(action, el);
+            }
+          });
+        }
+      });
+
+      // 绑定事件
+      for (const [action, options] of Object.entries(els)) {
+        const customEl = customActionEls.get(action);
+
+        if (customEl) {
+          // 隐藏对应的内置图标
+          if (options.el) {
+            options.el.style.display = "none";
+          }
+
+          // 绑定自定义元素事件
+          customEl.addEventListener("click", options.callback, {
+            signal: abortControllers[action].signal,
+          });
+        } else if (options.el) {
+          // 如果没有自定义元素，绑定内置图标事件
           options.el.addEventListener("click", options.callback, {
-            signal: this.#abortController.signal,
+            signal: abortControllers[action].signal,
           });
         }
       }
+    };
 
-      if (!hasActionEl && options.el) {
-        options.el.addEventListener("click", options.callback, {
-          signal: this.#abortController.signal,
-        });
-      }
-    }
+    // 监听 slotchange 事件，动态重新绑定
+    toolbarSlot.addEventListener("slotchange", bindToolbarEvents, {
+      signal: this.#AbortControllerStates.toolbar.signal,
+    });
+
+    // 初始绑定 - 使用 setTimeout 确保 slot 内容已分配
+    setTimeout(() => bindToolbarEvents(), 0);
   };
 
   /**
@@ -615,6 +619,83 @@ export class EaImagePreview extends EaOverlay {
    */
   setActiveItem = index => {
     this.index = index;
+  };
+
+  /**
+   * 渲染指定索引的图片
+   * @param {number} index - 图片索引
+   */
+  #renderImage = index => {
+    const src = this.urlList[index];
+    this.#imgContent.innerHTML = "";
+
+    if (src) {
+      this.#AbortControllerStates.img?.abort();
+      this.#AbortControllerStates.img = new AbortController();
+
+      this.#imgContent.innerHTML = EaUtils.EaElement.h(
+        "ea-image",
+        "ea-image-preview__img",
+        {
+          src,
+          fit: "contain",
+        },
+        `
+          <slot name="viewer-error" slot="error"></slot>
+        `
+      );
+
+      const img = this.#imgContent.querySelector(".ea-image-preview__img");
+
+      /**
+       * 处理图片加载错误
+       */
+      const onImgErrorEvent = () => {
+        this.#states.status = "error";
+        this.classList.remove(
+          "ea-image-preview--success",
+          "ea-image-preview--loading"
+        );
+        this.#container.classList.add("ea-image-preview--error");
+
+        this.emit("error");
+        this.#AbortControllerStates.img.abort();
+      };
+
+      /**
+       * 处理图片加载完成
+       */
+      const onImageLoadEvent = () => {
+        this.#states.status = "success";
+        this.#container.classList.remove(
+          "ea-image-preview--error",
+          "ea-image-preview--loading"
+        );
+        this.#container.classList.add("ea-image-preview--success");
+        this.#AbortControllerStates.img.abort();
+      };
+
+      this.#handleProgress(index + 1, this.urlList.length);
+
+      img.addEventListener("error", onImgErrorEvent, {
+        once: true,
+        signal: this.#AbortControllerStates.img.signal,
+      });
+      img.addEventListener("load", onImageLoadEvent, {
+        once: true,
+        signal: this.#AbortControllerStates.img.signal,
+      });
+
+      if (this.visible && this.#states.isUrlListInit) {
+        this.emit("switch", {
+          detail: {
+            index,
+            url: src,
+            imgTarget: img,
+          },
+        });
+      }
+    }
   };
 
   /**
@@ -638,8 +719,8 @@ export class EaImagePreview extends EaOverlay {
     super.connectedCallback();
     this.assignedStyle(stylesheet);
 
-    this.#abortController?.abort();
-    this.#abortController = new AbortController();
+    this.#AbortControllerStates.main?.abort();
+    this.#AbortControllerStates.main = new AbortController();
 
     // 上一张图片
     const onPrevEvent = () => {
@@ -663,27 +744,27 @@ export class EaImagePreview extends EaOverlay {
     this.#initToobarEvent();
 
     this.#closeIcon.addEventListener("click", this.#handlePreviewClose, {
-      signal: this.#abortController.signal,
+      signal: this.#AbortControllerStates.main.signal,
     });
 
     this.#prevIcon.addEventListener("click", onPrevEvent, {
-      signal: this.#abortController.signal,
+      signal: this.#AbortControllerStates.main.signal,
     });
     this.#nextIcon.addEventListener("click", onNextEvent, {
-      signal: this.#abortController.signal,
+      signal: this.#AbortControllerStates.main.signal,
     });
 
     this.#container.addEventListener("wheel", onZoomEvent, {
-      signal: this.#abortController.signal,
+      signal: this.#AbortControllerStates.main.signal,
       passive: false,
     });
 
     this.addEventListener("closed", this.reset, {
-      signal: this.#abortController.signal,
+      signal: this.#AbortControllerStates.main.signal,
     });
 
     this.#imgContent.addEventListener("mousedown", this.#onImgMoveEvent, {
-      signal: this.#abortController.signal,
+      signal: this.#AbortControllerStates.main.signal,
     });
 
     if (this["close-on-press-escape"])
@@ -694,15 +775,14 @@ export class EaImagePreview extends EaOverlay {
             this.hide();
           }
         },
-        { signal: this.#abortController.signal }
+        { signal: this.#AbortControllerStates.main.signal }
       );
   }
 
   $beforeUnmounted() {
-    this.#abortController?.abort();
-    this.#imgAbortController?.abort();
-    this.#imgMoveAbortController?.abort();
-    this.#clickModalAbortController?.abort();
+    for (const controller of Object.values(this.#AbortControllerStates)) {
+      controller?.abort();
+    }
   }
 }
 

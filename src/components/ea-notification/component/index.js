@@ -77,14 +77,14 @@ export class EaNotificationElement extends Base {
       default: "info",
       observer: newVal => {
         const iconTypes = {
-          success: "icon-ok-circled",
-          error: "icon-cancel-circled",
-          warning: "icon-attention-alt",
-          info: "icon-info",
-          primary: "icon-info",
+          success: "circle-check",
+          error: "circle-xmark",
+          warning: "triangle-exclamation",
+          info: "circle-info",
+          primary: "circle-info",
         };
 
-        this.#notificationIcon.icon = iconTypes[newVal];
+        this.#notificationIcon.name = iconTypes[newVal];
         this.#container.className = this.updateContainerClasslist();
       },
     },
@@ -140,14 +140,14 @@ export class EaNotificationElement extends Base {
       default: false,
       observer: newVal => {
         this.#container.className = this.updateContainerClasslist();
-        this.#closeIcon.icon = this["close-icon"];
+        this.#closeIcon.name = this["close-icon"];
       },
     },
     closeIcon: {
       type: String,
-      default: "icon-cancel",
+      default: "xmark",
       observer: newVal => {
-        if (this["show-close"]) this.#closeIcon.icon = newVal;
+        if (this["show-close"]) this.#closeIcon.name = newVal;
       },
     },
     placement: {
@@ -194,7 +194,7 @@ export class EaNotificationElement extends Base {
         <div class="ea-notification__content">
           <header class="ea-notification__header" part='header'>
             <h2 class="ea-notification__title" part="title"> </h2>
-            <ea-icon class="ea-notification__close-icon" part='close-icon'></ea-icon>
+            <ea-icon class="ea-notification__close-icon" name="xmark" part='close-icon'></ea-icon>
           </header>
           <main class="ea-notification__main" part='main'> </main>
         </div>

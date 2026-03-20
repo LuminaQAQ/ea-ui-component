@@ -1,9 +1,10 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
-onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+onMounted(async () => {
+  await customElements.whenDefined('ea-overlay');
 
     // ------- 基本用法 -------
     // #region
@@ -80,27 +81,27 @@ onMounted(() => {
     // ------- end -------
 
 
-    // ------- 模态效果 -------
-    // #region
-    const beforeCloseExample = {
-        overlay: document.querySelector('#beforeCloseOverlay'),
-        openButton: document.querySelector('#beforeCloseOverlayOpenButton'),
+      // ------- 关闭前触发 -------
+      // #region
+      const beforeCloseExample = {
+        overlay: document.querySelector("#beforeCloseOverlay"),
+        openButton: document.querySelector("#beforeCloseOverlayOpenButton"),
 
         init() {
-            this.openButton.addEventListener('click', () => {
-                this.overlay.show();
-            });
+          this.openButton.addEventListener("click", () => {
+            this.overlay.show();
+          });
 
-            this.overlay.addEventListener("before-close", async (e) => {
-                console.log("before-close");
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                e.detail.done();
-            });
-        }
-    }
-    beforeCloseExample.init();
-    // #endregion
-    // ------- end -------
+          this.overlay.beforeClose = async done => {
+            console.log("before-close");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            done();
+          };
+        },
+      };
+      beforeCloseExample.init();
+      // #endregion
+      // ------- end -------
 })
 </script>
 
@@ -139,19 +140,6 @@ ea-card::part(content-wrap) {
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-overlay/index.js";
 </script>
-```
-
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
 ```
 
 ## 自定义样式
@@ -300,14 +288,14 @@ basicExample.init();
 
 ## 关闭前触发
 
-关闭前触发，可以拦截关闭，需调用 `e.detail.done()` 才能完成关闭。需要设置`before-close`属性。
+关闭前触发，可以拦截关闭，需调用 `done()` 回调函数才能完成关闭。通过设置 `beforeClose` 属性为一个函数来实现。
 
 ::: tip
 \< 手动调用 `overlay.hide()` \> + \< 设置 `close-on-click-modal="false"` \>可达到同样的效果。
 :::
 
 <div class="demo">
-  <ea-overlay id="beforeCloseOverlay" before-close>
+  <ea-overlay id="beforeCloseOverlay" close-on-click-modal>
     <ea-card header="title">
       <p>
         This Overlay will be hidden 2000 milliseconds after clicking on the mask
@@ -322,7 +310,7 @@ basicExample.init();
 
 ```html
 <div class="demo">
-  <ea-overlay id="beforeCloseOverlay" before-close>
+  <ea-overlay id="beforeCloseOverlay" close-on-click-modal>
     <ea-card header="title">
       <p>
         This Overlay will be hidden 2000 milliseconds after clicking on the mask
@@ -334,18 +322,33 @@ basicExample.init();
 </div>
 ```
 
+```js
+const overlay = document.querySelector("#beforeCloseOverlay");
+
+overlay.beforeClose = async done => {
+  console.log("before-close");
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  done();
+};
+```
+
 :::
 
 ## Overlay Attributes API
 
 ### Main API
 
-| 参数                 | 说明                       | 类型    | 可选值 | 默认值 |
-| -------------------- | -------------------------- | ------- | ------ | ------ |
-| status               | 控制 Overlay 显隐的属性    | boolean | —      | false  |
-| modal                | 是否显示遮罩层。           | boolean | —      | true   |
-| before-close         | 关闭前触发，可以拦截关闭。 | boolean | —      | false  |
-| close-on-click-modal | 点击遮罩层是否关闭。       | boolean | —      | true   |
+| 参数                 | 说明                    | 类型    | 可选值 | 默认值 |
+| -------------------- | ----------------------- | ------- | ------ | ------ |
+| status               | 控制 Overlay 显隐的属性 | boolean | —      | false  |
+| modal                | 是否显示遮罩层。        | boolean | —      | true   |
+| close-on-click-modal | 点击遮罩层是否关闭。    | boolean | —      | true   |
+
+### 属性（Properties）
+
+| 参数        | 说明                                                       | 类型       | 默认值 |
+| ----------- | ---------------------------------------------------------- | ---------- | ------ |
+| beforeClose | 关闭前触发的回调函数，接收 `done` 回调作为参数用于完成关闭 | `Function` | —      |
 
 ### CSS API
 
@@ -399,13 +402,12 @@ ea-overlay {
 
 ## Events
 
-| 事件名称     | 说明                          | 回调参数                              |
-| ------------ | ----------------------------- | ------------------------------------- |
-| open         | 开启 Overlay 时触发的事件     | `() => void`                          |
-| opened       | 开启 Overlay 的动画结束时触发 | `() => void`                          |
-| close        | 关闭 Overlay 时触发的事件     | `() => void`                          |
-| closed       | 关闭 Overlay 的动画结束时触发 | `() => void`                          |
-| before-close | 关闭 Overlay 前触发的事件     | `(e.detail.done: () => void) => void` |
+| 事件名称 | 说明                          | 回调参数     |
+| -------- | ----------------------------- | ------------ |
+| open     | 开启 Overlay 时触发的事件     | `() => void` |
+| opened   | 开启 Overlay 的动画结束时触发 | `() => void` |
+| close    | 关闭 Overlay 时触发的事件     | `() => void` |
+| closed   | 关闭 Overlay 的动画结束时触发 | `() => void` |
 
 ## Methods
 

@@ -52,19 +52,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -236,7 +223,7 @@ basicExample.init();
 默认图标可能无法满足您的需求，您可以通过设置`icon`属性来自定义图标，示例如下。
 
 <div class="demo">
-  <ea-page-header icon="icon-ccw">
+  <ea-page-header icon="rotate-left">
     <span class="text-large font-600 mr-3" slot="content"> Title </span>
   </ea-page-header>
   <br />
@@ -248,7 +235,7 @@ basicExample.init();
 ```html
 <div class="demo">
   <!-- 自定义图标 -->
-  <ea-page-header icon="icon-ccw">
+  <ea-page-header icon="rotate-left">
     <span class="text-large font-600 mr-3" slot="content"> Title </span>
   </ea-page-header>
   <br />

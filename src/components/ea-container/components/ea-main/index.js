@@ -1,28 +1,28 @@
-import Base from '../../../Base.js'
+import Base from "../../../Base.js";
 
-import stylesheet from './index.scss?inline';
+import stylesheet from "./index.scss?inline";
 
 export class EaMain extends Base {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this.stylesheet = stylesheet;
+    this.stylesheet = stylesheet;
 
-        this.$render();
-    }
+    this.$render();
+  }
 
-    $render() {
-        this.shadowRoot.innerHTML = `
+  $render() {
+    this.shadowRoot.innerHTML = `
             <main class="ea-main" part="container">
                 <slot></slot>
             </main>
         `;
-    }
+  }
 
-    connectedCallback() {
-        super.connectedCallback();
-    }
+  connectedCallback() {
+    super.connectedCallback();
+  }
 }
-if (!window.customElements.get('ea-main')) {
-    window.customElements.define('ea-main', EaMain);
+if (!window.customElements.get("ea-main")) {
+  window.customElements.define("ea-main", EaMain);
 }

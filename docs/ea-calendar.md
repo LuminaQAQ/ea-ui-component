@@ -50,19 +50,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 基础用法
 
 <div class="demo">
@@ -187,9 +174,9 @@ controllerExample.init();
 
 ## Events
 
-| 事件名称 | 说明           | 回调参数                                               |
-| -------- | -------------- | ------------------------------------------------------ |
-| select   | 选择日期时触发 | `{ year, month, date, day, fullDate }`                 |
+| 事件名称 | 说明           | 回调参数                               |
+| -------- | -------------- | -------------------------------------- |
+| select   | 选择日期时触发 | `{ year, month, date, day, fullDate }` |
 
 ## Slots
 

@@ -6,17 +6,9 @@ $ea-tag-types: (
   "danger": "red",
 );
 
-$ea-tag-sizes: (
-  "large",
-  "default",
-  "small"
-);
+$ea-tag-sizes: ("large", "default", "small");
 
-$ea-tag-effect: (
-  "plain",
-  "dark",
-  "light"
-);
+$ea-tag-effect: ("plain", "dark", "light");
 
 :host {
   --ea-tag-spacing-small: 0 6px;
@@ -26,12 +18,10 @@ $ea-tag-effect: (
 
   @each $type, $color in $ea-tag-types {
     @each $effect in $ea-tag-effect {
-      @if ($effect =="light") {
+      @if ($effect == "light") {
         --ea-tag-#{$type}-#{$effect}-theme-color: var(--#{$color}-100);
         --ea-tag-#{$type}-#{$effect}-text-color: var(--#{$color}-500);
-      }
-
-      @else {
+      } @else {
         --ea-tag-#{$type}-#{$effect}-theme-color: var(--#{$color}-500);
       }
     }
@@ -65,6 +55,7 @@ $ea-tag-effect: (
       display: inline-block;
 
       margin-left: var(--spacing-sm);
+      margin-top: var(--spacing-sm);
 
       cursor: pointer;
       font-size: var(--ea-tag-font-size);
@@ -95,12 +86,10 @@ $ea-tag-effect: (
 
       @each $effect in $ea-tag-effect {
         &.ea-tag--#{$effect} {
-          @if ($effect =="dark") {
+          @if ($effect == "dark") {
             color: var(--white);
             background-color: var(--ea-tag-#{$type}-#{$effect}-theme-color);
-          }
-
-          @else if($effect =="plain") {
+          } @else if($effect == "plain") {
             background-color: var(--color-transparent);
             color: var(--ea-tag-#{$type}-#{$effect}-theme-color);
             border-color: var(--ea-tag-#{$type}-#{$effect}-theme-color);

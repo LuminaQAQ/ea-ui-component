@@ -1,9 +1,5 @@
 $name: ea-table;
-$ea-table-align-types: (
-  left,
-  center,
-  right
-);
+$ea-table-align-types: (left, center, right);
 
 :host {
   --ea-table-cell-spacing: var(--spacing-md);
@@ -220,7 +216,6 @@ $ea-table-align-types: (
 
     .ea-table__tbody {
       .ea-table__tr:last-child {
-
         .ea-table__th,
         .ea-table__td {
           border-bottom-width: 0;

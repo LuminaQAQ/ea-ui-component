@@ -204,10 +204,10 @@ export class EaCarousel extends Base {
     this.shadowRoot.innerHTML = `
       <div class='ea-carousel' part='container'>
         <button class="ea-carousel__arrow arrow-left" part="arrow-left">
-          <ea-icon icon="icon-angle-left" part="arrow-left-icon"></ea-icon>
+          <ea-icon name="angle-left" part="arrow-left-icon"></ea-icon>
         </button>
         <button class="ea-carousel__arrow arrow-right" part="arrow-right">
-          <ea-icon icon="icon-angle-right" part="arrow-right-icon"></ea-icon>
+          <ea-icon name="angle-right" part="arrow-right-icon"></ea-icon>
         </button>
         <ul class="ea-carousel__content" part="content">
             <slot name="clone-last"></slot>

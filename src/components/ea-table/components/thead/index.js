@@ -15,11 +15,13 @@ const sortIconRenderer = text => {
       [
         EaUtils.EaElement.h("ea-icon", "ea-table__sort-icon", {
           part: "asc-icon",
-          icon: "icon-angle-up",
+          name: "angle-up",
+          size: "small",
         }),
         EaUtils.EaElement.h("ea-icon", "ea-table__sort-icon", {
           part: "desc-icon",
-          icon: "icon-angle-down",
+          name: "angle-down",
+          size: "small",
         }),
       ].join("")
     ),
@@ -105,6 +107,8 @@ const renderThCell = col => {
       rowspan: col.rowspan,
       style: [col.width ? `--ea-table-cell-width: ${col.width}` : ""],
       "data-scope": col.prop || "",
+      "data-prop": col.prop || "",
+      "data-order": "asc",
     },
     content
   );

@@ -59,19 +59,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -238,24 +225,20 @@ basicExample.init();
 
 <div class="demo">
     <ea-steps active="1">
-        <ea-step title="步骤 1" icon="icon-music"></ea-step>
-        <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
-        <ea-step title="步骤 3" icon="icon-camera"></ea-step>
+        <ea-step title="步骤 1" icon="music"></ea-step>
+        <ea-step title="步骤 2" icon="video"></ea-step>
+        <ea-step title="步骤 3" icon="camera"></ea-step>
     </ea-steps>
 </div>
 
 ```html
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1">
-    <ea-step title="Step 1" icon="icon-coffee">
-      <ea-icon
-        slot="icon"
-        class="ea-step__icon"
-        icon="icon-note-beamed"
-      ></ea-icon>
+    <ea-step title="Step 1" icon="mug-hot">
+      <ea-icon slot="icon" class="ea-step__icon" name="music"></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
-    <ea-step title="Step 3" icon="icon-camera"></ea-step>
+    <ea-step title="Step 2" icon="video"></ea-step>
+    <ea-step title="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -266,30 +249,26 @@ basicExample.init();
 
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1" simple align-center>
-    <ea-step title="Step 1" icon="icon-coffee">
+    <ea-step title="Step 1" icon="mug-hot">
       <ea-icon
         slot="icon"
         class="ea-step__icon"
-        icon="icon-note-beamed"
+        name="music"
       ></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
-    <ea-step title="Step 3" icon="icon-camera"></ea-step>
+    <ea-step title="Step 2" icon="video"></ea-step>
+    <ea-step title="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 
 ```html
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1" simple align-center>
-    <ea-step title="Step 1" icon="icon-coffee">
-      <ea-icon
-        slot="icon"
-        class="ea-step__icon"
-        icon="icon-note-beamed"
-      ></ea-icon>
+    <ea-step title="Step 1" icon="mug-hot">
+      <ea-icon slot="icon" class="ea-step__icon" name="music"></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
-    <ea-step title="Step 3" icon="icon-camera"></ea-step>
+    <ea-step title="Step 2" icon="video"></ea-step>
+    <ea-step title="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -325,16 +304,16 @@ basicExample.init();
 
 ### Step Attributes
 
-| 参数         | 说明                                           | 类型    | 可选值                                           | 默认值                         |
-| ------------ | ---------------------------------------------- | ------- | ------------------------------------------------ | ------------------------------ |
-| title        | 标题                                           | string  | —                                                | ""                             |
-| description  | 步骤的详细描述                                 | string  | —                                                | ""                             |
-| icon         | 图标（会传给内部的 `ea-icon`）                 | string  | —                                                | ""                             |
+| 参数         | 说明                                           | 类型    | 可选值                                          | 默认值                         |
+| ------------ | ---------------------------------------------- | ------- | ----------------------------------------------- | ------------------------------ |
+| title        | 标题                                           | string  | —                                               | ""                             |
+| description  | 步骤的详细描述                                 | string  | —                                               | ""                             |
+| icon         | 图标（会传给内部的 `ea-icon`）                 | string  | —                                               | ""                             |
 | status       | 步骤的状态（可由父组件根据 active 自动设置）   | string  | `wait \| process \| finish \| error \| success` | ""                             |
-| index        | 当前步骤的索引（只读，组件内部计算）           | number  | —                                                | 自动计算                       |
-| simple       | 是否为简洁模式（继承自父级 `ea-steps` 的属性） | boolean | —                                                | 与父组件同步                   |
-| align-center | 是否居中（继承自父级 `ea-steps` 的属性）       | boolean | —                                                | 与父组件同步                   |
-| direction    | 步骤方向（继承自父级 `ea-steps`）              | string  | `vertical \| horizontal`                         | horizontal（来自父组件或默认） |
+| index        | 当前步骤的索引（只读，组件内部计算）           | number  | —                                               | 自动计算                       |
+| simple       | 是否为简洁模式（继承自父级 `ea-steps` 的属性） | boolean | —                                               | 与父组件同步                   |
+| align-center | 是否居中（继承自父级 `ea-steps` 的属性）       | boolean | —                                               | 与父组件同步                   |
+| direction    | 步骤方向（继承自父级 `ea-steps`）              | string  | `vertical \| horizontal`                        | horizontal（来自父组件或默认） |
 
 ### Step CSS Part
 

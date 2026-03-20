@@ -78,19 +78,6 @@ ea-statistic {
 </script>
 ```
 
-> `css`
-
-::: tip
-如果示例使用到图标，需提前使用 `link` 标签引入图标样式文件。
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 基础用法
 
 用于突出某个或某组数字时，如统计数值、金额、排名等，数值和标题前后都可以加icon、单位等元素。
@@ -100,14 +87,14 @@ ea-statistic {
   <ea-statistic value="138">
     <div slot="title" style="display: inline-flex; align-items: center">
       Ratio of men to women
-      <ea-icon style="margin-left: 4px" size="12" icon="icon-mars"></ea-icon>
+      <ea-icon style="margin-left: 4px" size="12" name="mars"></ea-icon>
     </div>
     <div slot="suffix">/100</div>
   </ea-statistic>
   <ea-statistic title="Total Transactions" value="172000"></ea-statistic>
   <ea-statistic title="Feedback number" value="562">
     <div slot="suffix">
-      <ea-icon style="vertical-align: middle" icon="icon-comment-empty"></ea-icon>
+      <ea-icon style="vertical-align: middle" name="comment"></ea-icon>
     </div>
   </ea-statistic>
 </div>
@@ -120,17 +107,14 @@ ea-statistic {
   <ea-statistic value="138">
     <div slot="title" style="display: inline-flex; align-items: center">
       Ratio of men to women
-      <ea-icon style="margin-left: 4px" size="12" icon="icon-mars"></ea-icon>
+      <ea-icon style="margin-left: 4px" size="12" name="mars"></ea-icon>
     </div>
     <div slot="suffix">/100</div>
   </ea-statistic>
   <ea-statistic title="Total Transactions" value="172000"></ea-statistic>
   <ea-statistic title="Feedback number" value="562">
     <div slot="suffix">
-      <ea-icon
-        style="vertical-align: middle"
-        icon="icon-comment-empty"
-      ></ea-icon>
+      <ea-icon style="vertical-align: middle" name="comment"></ea-icon>
     </div>
   </ea-statistic>
 </div>
@@ -152,7 +136,7 @@ ea-statistic {
   <div style="display:flex;align-items:center;justify-content:center;flex-direction:column;">
     <ea-countdown id="countdown3" title="Countdown" format="DD [days] HH:mm:ss">
       <div style="display: inline-flex; align-items: center" slot="title">
-        <ea-icon style="margin-right: 4px" size="12" icon="icon-calendar-times-o"></ea-icon>
+        <ea-icon style="margin-right: 4px" size="12" name="calendar-xmark"></ea-icon>
         <span> Still to go until next month </span>
       </div>
     </ea-countdown>
@@ -188,7 +172,7 @@ ea-statistic {
         <ea-icon
           style="margin-right: 4px"
           size="12"
-          icon="icon-calendar-times-o"
+          name="calendar-xmark"
         ></ea-icon>
         <span> Still to go until next month </span>
       </div>
@@ -237,14 +221,14 @@ ea-statistic {
       <div style="display: inline-flex; align-items: center" slot="title">
         Daily active users
         <ea-tooltip effect="dark" content="Number of users who logged into the product in one day" placement="top">
-          <ea-icon style="margin-left: 4px" slot="reference" size="12" icon="icon-attention-alt"></ea-icon>
+          <ea-icon style="margin-left: 4px" slot="reference" size="12" name="circle-exclamation"></ea-icon>
         </ea-tooltip>
       </div>
     </ea-statistic>
     <div class="statistic-footer">
       <div class="footer-item">
         <span>than yesterday</span>
-        <span class="green">24%<ea-icon icon="icon-angle-up"></ea-icon></span>
+        <span class="green">24%<ea-icon name="angle-up"></ea-icon></span>
       </div>
     </div>
   </div>
@@ -254,14 +238,14 @@ ea-statistic {
       <div style="display: inline-flex; align-items: center" slot="title">
         Monthly Active Users
         <ea-tooltip effect="dark" content="Number of users who logged into the product in one month" placement="top">
-          <ea-icon style="margin-left: 4px" slot="reference" size="12" icon="icon-attention-alt"></ea-icon>
+          <ea-icon style="margin-left: 4px" slot="reference" size="12" name="circle-exclamation"></ea-icon>
         </ea-tooltip>
       </div>
     </ea-statistic>
     <div class="statistic-footer">
       <div class="footer-item">
         <span>month on month</span>
-        <span class="red">12%<ea-icon icon="icon-angle-down"></ea-icon></span>
+        <span class="red">12%<ea-icon name="angle-down"></ea-icon></span>
       </div>
     </div>
   </div>
@@ -273,10 +257,10 @@ ea-statistic {
     <div class="statistic-footer">
       <div class="footer-item">
         <span>than yesterday</span>
-        <span class="green">16%<ea-icon icon="icon-angle-up"></ea-icon></span>
+        <span class="green">16%<ea-icon name="angle-up"></ea-icon></span>
       </div>
       <div class="footer-item">
-        <ea-icon icon="icon-angle-up" size="14"> </ea-icon>
+        <ea-icon name="angle-up" size="14"> </ea-icon>
       </div>
     </div>
   </div>
@@ -301,7 +285,7 @@ ea-statistic {
             style="margin-left: 4px"
             slot="reference"
             size="12"
-            icon="icon-attention-alt"
+            name="circle-exclamation"
           ></ea-icon>
         </ea-tooltip>
       </div>
@@ -309,7 +293,7 @@ ea-statistic {
     <div class="statistic-footer">
       <div class="footer-item">
         <span>than yesterday</span>
-        <span class="green">24%<ea-icon icon="icon-angle-up"></ea-icon></span>
+        <span class="green">24%<ea-icon name="angle-up"></ea-icon></span>
       </div>
     </div>
   </div>
@@ -327,7 +311,7 @@ ea-statistic {
             style="margin-left: 4px"
             slot="reference"
             size="12"
-            icon="icon-attention-alt"
+            name="circle-exclamation"
           ></ea-icon>
         </ea-tooltip>
       </div>
@@ -335,7 +319,7 @@ ea-statistic {
     <div class="statistic-footer">
       <div class="footer-item">
         <span>month on month</span>
-        <span class="red">12%<ea-icon icon="icon-angle-down"></ea-icon></span>
+        <span class="red">12%<ea-icon name="angle-down"></ea-icon></span>
       </div>
     </div>
   </div>
@@ -349,10 +333,10 @@ ea-statistic {
     <div class="statistic-footer">
       <div class="footer-item">
         <span>than yesterday</span>
-        <span class="green">16%<ea-icon icon="icon-angle-up"></ea-icon></span>
+        <span class="green">16%<ea-icon name="angle-up"></ea-icon></span>
       </div>
       <div class="footer-item">
-        <ea-icon icon="icon-angle-up" size="14"> </ea-icon>
+        <ea-icon name="angle-up" size="14"> </ea-icon>
       </div>
     </div>
   </div>

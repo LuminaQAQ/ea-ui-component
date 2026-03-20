@@ -113,7 +113,11 @@ $ea-time-picker-align-types: left, center, right;
     max-height: var(--#{$name}-dropdown-max-height);
 
     box-sizing: border-box;
-    padding: calc(var(--#{$name}-dropdown-max-height) / 2 - var(--#{$name}-item-height) / 2) 0;
+    padding: calc(
+        var(--#{$name}-dropdown-max-height) / 2 - var(--#{$name}-item-height) /
+          2
+      )
+      0;
 
     text-align: center;
 
@@ -155,7 +159,9 @@ $ea-time-picker-align-types: left, center, right;
     @include modifier(#{$size}) {
       --#{$name}-item-height: var(--#{$name}-item-height-#{$size});
       --#{$name}-item-font-size: var(--#{$name}-item-font-size-#{$size});
-      --#{$name}-dropdown-max-height: var(--#{$name}-dropdown-max-height-#{$size});
+      --#{$name}-dropdown-max-height: var(
+        --#{$name}-dropdown-max-height-#{$size}
+      );
 
       .#{$name}__input {
         --input-height: var(--input-height-#{$size});

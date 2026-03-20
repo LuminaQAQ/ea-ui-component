@@ -14,12 +14,12 @@ $child-name: ea-tree-child;
 }
 
 @include block($child-name) {
-
   @include element(item) {
     display: flex;
     align-items: center;
     min-height: var(--#{$child-name}-item-height);
-    padding: var(--#{$child-name}-padding-vertical) var(--#{$child-name}-padding-horizontal);
+    padding: var(--#{$child-name}-padding-vertical)
+      var(--#{$child-name}-padding-horizontal);
     margin: 2px 0;
     border-radius: var(--#{$child-name}-border-radius);
     cursor: pointer;

@@ -1,36 +1,23 @@
-@import "./css/fontello.css";
-@import "./css/animation.css";
-
 :host {
-    --ea-icon-size: var(--font-size-md);
+  --ea-icon-size: var(--font-size-md);
 }
 
 :host {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
-    font-size: var(--ea-icon-size);
-}
+  font-size: var(--ea-icon-size);
 
-i {
-    width: var(--ea-icon-size);
+  i {
+    display: block;
+
+    width: calc(var(--ea-icon-size) * 1.25);
     height: var(--ea-icon-size);
 
     line-height: var(--ea-icon-size);
+
     font-style: normal;
-
-    &::before,
-    &::after {
-        box-sizing: border-box;
-        margin: 0 !important;
-    }
-}
-
-:host-context(ea-button) {
-    font-size: var(--font-size);
-    line-height: var(--font-size);
-    width: var(--font-size);
-    height: var(--font-size);
+  }
 }

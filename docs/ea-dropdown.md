@@ -56,19 +56,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 基本用法
 
 悬停在下拉菜单上以展开更多操作。
@@ -79,7 +66,7 @@ onMounted(() => {
   <ea-dropdown>
     <span slot="reference" class="ea-dropdown-reference">
       Dropdown List
-      <ea-icon class="icon-angle-down"></ea-icon>
+      <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item>Action 1</ea-dropdown-item>
@@ -98,7 +85,7 @@ onMounted(() => {
   <ea-dropdown>
     <span slot="reference" class="ea-dropdown-reference">
       Dropdown List
-      <ea-icon class="icon-angle-down"></ea-icon>
+      <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item>Action 1</ea-dropdown-item>
@@ -372,7 +359,7 @@ onMounted(() => {
   <ea-dropdown id="commandDropdown">
     <span slot="reference" class="ea-dropdown-reference">
       Dropdown List
-      <ea-icon class="icon-angle-down"></ea-icon>
+      <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item command="a">Action 1</ea-dropdown-item>
@@ -391,7 +378,7 @@ onMounted(() => {
   <ea-dropdown id="commandDropdown">
     <span slot="reference" class="ea-dropdown-reference">
       Dropdown List
-      <ea-icon class="icon-angle-down"></ea-icon>
+      <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item command="a">Action 1</ea-dropdown-item>
@@ -428,7 +415,7 @@ commandExample.init();
   <ea-button id="methodsDropdownHideBtn">hide</ea-button>
   <ea-dropdown id="methodsDropdown">
     <span slot="reference" class="ea-dropdown-reference">
-      Dropdown List <ea-icon icon="icon-angle-down"></ea-icon>
+      Dropdown List <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item>Action 1</ea-dropdown-item>
@@ -446,7 +433,7 @@ commandExample.init();
   <ea-button id="methodsDropdownHideBtn">hide</ea-button>
   <ea-dropdown id="methodsDropdown">
     <span slot="reference" class="ea-dropdown-reference">
-      Dropdown List <ea-icon icon="icon-angle-down"></ea-icon>
+      Dropdown List <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item>Action 1</ea-dropdown-item>

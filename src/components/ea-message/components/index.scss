@@ -59,8 +59,10 @@ $types: (success, info, warning, error, primary);
   max-width: calc(100% - 32px);
   overflow: hidden;
 
-  transition: filter var(--ea-message-transition),
-    transform var(--ea-message-transition), top var(--ea-message-transition),
+  transition:
+    filter var(--ea-message-transition),
+    transform var(--ea-message-transition),
+    top var(--ea-message-transition),
     bottom var(--ea-message-transition);
 
   @include element(icon) {

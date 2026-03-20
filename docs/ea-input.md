@@ -29,19 +29,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -103,7 +90,7 @@ onMounted(() => {
     style="width: 240px"
     placeholder="Please input"
     clearable
-    clear-icon="icon-cancel-circled2"
+    clear-icon="circle-xmark"
   ></ea-input>
 </div>
 
@@ -113,7 +100,7 @@ onMounted(() => {
     style="width: 240px"
     placeholder="Please input"
     clearable
-    clear-icon="icon-cancel-circled2"
+    clear-icon="circle-xmark"
   ></ea-input>
 </div>
 ```
@@ -151,12 +138,12 @@ onMounted(() => {
       <ea-input
         class="responsive-input"
         placeholder="Pick a date"
-        prefix-icon="icon-coffee"
+        prefix-icon="mug-hot"
       ></ea-input>
       <ea-input
         class="responsive-input"
         placeholder="Type something"
-        suffix-icon="icon-coffee"
+        suffix-icon="mug-hot"
       ></ea-input>
     </div>
   </div>
@@ -167,13 +154,13 @@ onMounted(() => {
         class="responsive-input"
         placeholder="Pick a date"
       >
-        <ea-icon icon="icon-search" slot="suffix"></ea-icon>
+        <ea-icon name="magnifying-glass" slot="suffix"></ea-icon>
       </ea-input>
       <ea-input
         class="responsive-input"
         placeholder="Type something"
       >
-        <ea-icon icon="icon-search" slot="prefix"></ea-icon>
+        <ea-icon name="magnifying-glass" slot="prefix"></ea-icon>
       </ea-input>
     </div>
   </div>
@@ -189,12 +176,12 @@ onMounted(() => {
       <ea-input
         class="responsive-input"
         placeholder="Pick a date"
-        prefix-icon="icon-coffee"
+        prefix-icon="mug-hot"
       ></ea-input>
       <ea-input
         class="responsive-input"
         placeholder="Type something"
-        suffix-icon="icon-coffee"
+        suffix-icon="mug-hot"
       ></ea-input>
     </div>
   </div>
@@ -202,10 +189,10 @@ onMounted(() => {
     <p class="label">Using slots</p>
     <div class="input-container">
       <ea-input class="responsive-input" placeholder="Pick a date">
-        <ea-icon icon="icon-search" slot="suffix"></ea-icon>
+        <ea-icon name="magnifying-glass" slot="suffix"></ea-icon>
       </ea-input>
       <ea-input class="responsive-input" placeholder="Type something">
-        <ea-icon icon="icon-search" slot="prefix"></ea-icon>
+        <ea-icon name="magnifying-glass" slot="prefix"></ea-icon>
       </ea-input>
     </div>
   </div>
@@ -298,7 +285,7 @@ onMounted(() => {
   <ea-input style="max-width: 600px" placeholder="Please input">
     <div class="prepend" slot="prepend">Http://</div>
     <div class="append" slot="append">
-      <i class="icon-search"></i>
+      <ea-icon name="magnifying-glass"></ea-icon>
     </div>
   </ea-input>
 </div>
@@ -314,7 +301,7 @@ onMounted(() => {
   <ea-input style="max-width: 600px" placeholder="Please input">
     <div class="prepend" slot="prepend">Http://</div>
     <div class="append" slot="append">
-      <i class="icon-search"></i>
+      <ea-icon name="magnifying-glass"></ea-icon>
     </div>
   </ea-input>
 </div>
@@ -407,7 +394,7 @@ onMounted(() => {
 | placeholder     | 占位符                                                                         | String  | -                                                                                                                                                     | -                         |
 | disabled        | 是否禁用                                                                       | Boolean | -                                                                                                                                                     | false                     |
 | clearable       | 是否显示一键清空图标（仅在非 textarea 时生效）                                 | Boolean | -                                                                                                                                                     | false                     |
-| clear-icon      | 自定义清除图标名称（使用图标字体时的类名）                                     | String  | -                                                                                                                                                     | icon-cancel               |
+| clear-icon      | 自定义清除图标名称（使用图标字体时的类名）                                     | String  | -                                                                                                                                                     | circle-xmark              |
 | show-password   | 是否显示切换明文/密文图标（仅在非 textarea 且 type 为 text/password 等时生效） | Boolean | -                                                                                                                                                     | false                     |
 | prefix-icon     | 在输入框前显示的图标名称（同样可使用 `slot="prefix"` 插入自定义内容）          | String  | -                                                                                                                                                     | -                         |
 | suffix-icon     | 在输入框后显示的图标名称（同样可使用 `slot="suffix"` 插入自定义内容）          | String  | -                                                                                                                                                     | -                         |
@@ -471,8 +458,8 @@ onMounted(() => {
 | mouseenter        | 原生 mouseenter 时触发，鼠标进入输入区域时触发                   | -                                    |
 | mouseleave        | 原生 mouseleave 时触发，鼠标离开输入区域时触发                   | -                                    |
 | compositionstart  | 原生 compositionstart 时触发，输入法开始输入时触发               | e.detail：`{ value: String }`        |
-| compositionupdate | 原生 compositionupdate 时触发，输入法输入过程中触发                                             | e.detail：`{ value: String }`        |
-| compositionend    | 原生 compositionend 时触发，输入法结束时触发                                                 | e.detail：`{ value: String }`        |
+| compositionupdate | 原生 compositionupdate 时触发，输入法输入过程中触发              | e.detail：`{ value: String }`        |
+| compositionend    | 原生 compositionend 时触发，输入法结束时触发                     | e.detail：`{ value: String }`        |
 | ea-clear          | 当用户通过清除图标清空输入时分发（自定义 Event: `EaClearEvent`） | event.detail：`{ oldValue: String }` |
 
 ## Methods

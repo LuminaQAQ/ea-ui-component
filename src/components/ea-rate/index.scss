@@ -1,9 +1,5 @@
 $name: ea-rate;
-$ea-rate-size-type: (
-  small,
-  default,
-  large
-);
+$ea-rate-size-type: (small, default, large);
 
 :host {
   --#{$name}-spacing: 2px;
@@ -76,8 +72,9 @@ $ea-rate-size-type: (
       transform: scale(1.2);
     }
 
-    transition: color var(--transition-normal),
-    transform var(--transition-normal);
+    transition:
+      color var(--transition-normal),
+      transform var(--transition-normal);
   }
 
   @each $size in $ea-rate-size-type {

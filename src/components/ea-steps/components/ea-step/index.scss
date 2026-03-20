@@ -38,7 +38,6 @@ $status-theme: (
 
   @include element(icon-wrapper) {
     position: relative;
-    background-color: var(--#{$name}-icon-bg-color);
     z-index: 1;
   }
 
@@ -79,18 +78,6 @@ $status-theme: (
   @include element(simple-arrow) {
     display: none;
   }
-
-  // @include modifier(vertical) {
-  //   .ea-step__head {
-  //     flex-direction: column;
-  //     align-items: start;
-  //   }
-
-  //   .ea-step__tail {
-  //     width: 2px;
-  //     height: var(--#{$name}-tail-spacing);
-  //   }
-  // }
 
   @each $status, $color in $status-theme {
     @include state($status) {
@@ -193,7 +180,6 @@ $status-theme: (
   }
 
   @include state(last) {
-
     .ea-step__tail,
     .ea-step__simple-arrow {
       display: none;

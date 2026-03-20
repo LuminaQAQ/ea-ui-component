@@ -26,7 +26,6 @@ import './ea-input/index.js';
 import './ea-input-number/index.js';
 import './ea-layout/index.js';
 import './ea-link/index.js';
-import './ea-loading/index.js';
 import './ea-menu/index.js';
 import './ea-message/index.js';
 import './ea-message-box/index.js';

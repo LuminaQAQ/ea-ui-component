@@ -141,19 +141,6 @@ await customElements.whenDefined("ea-pagination");
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -503,18 +490,18 @@ additionalFunctionsExample.init();
 
 ## Attributes
 
-| 参数                                          | 说明                                                          | 类型    | 可选值                                                                         | 默认值                                               |
-| --------------------------------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------ | ---------------------------------------------------- |
-| total                                         | 数据总条目数，用于计算总页数                                  | number  | -                                                                              | 0                                                    |
-| pager-count                                   | 设置最大页码按钮数。 页码按钮的数量，当总页数超过该值时会折叠 | number  | -                                                                              | 7                                                    |
-| layout <ea-tag type="primary">prop</ea-tag>   | 控制显示的元素顺序与种类（字符串数组或逗号分隔）              | Array   | `Array<'prev' \| 'pager' \| 'next' \| '->' \| 'jumper' \| 'total' \| 'sizes'>` | `["prev", "pager", "next", "jumper", "->", "total"]` |
-| background                                    | 是否显示带背景样式                                            | boolean | -                                                                              | false                                                |
-| default-page-size                             | 默认每页显示条数（用于 `page-size` 未设置时的回退值）         | number  | -                                                                              | 10                                                   |
+| 参数                                           | 说明                                                          | 类型    | 可选值                                                                         | 默认值                                               |
+| ---------------------------------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| total                                          | 数据总条目数，用于计算总页数                                  | number  | -                                                                              | 0                                                    |
+| pager-count                                    | 设置最大页码按钮数。 页码按钮的数量，当总页数超过该值时会折叠 | number  | -                                                                              | 7                                                    |
+| layout <ea-tag type="primary">prop</ea-tag>    | 控制显示的元素顺序与种类（字符串数组或逗号分隔）              | Array   | `Array<'prev' \| 'pager' \| 'next' \| '->' \| 'jumper' \| 'total' \| 'sizes'>` | `["prev", "pager", "next", "jumper", "->", "total"]` |
+| background                                     | 是否显示带背景样式                                            | boolean | -                                                                              | false                                                |
+| default-page-size                              | 默认每页显示条数（用于 `page-size` 未设置时的回退值）         | number  | -                                                                              | 10                                                   |
 | pageSizes <ea-tag type="primary">prop</ea-tag> | 当前每页显示条数                                              | number  | -                                                                              | 10                                                   |
-| current-page                                  | 当前页码                                                      | number  | -                                                                              | 1                                                    |
-| hide-on-single-page                           | 当仅有一页时是否隐藏分页组件                                  | boolean | -                                                                              | false                                                |
-| size                                          | 组件尺寸，会影响样式类                                        | string  | `large \| default \| small`                                                    | ""                                                   |
-| disabled                                      | 是否禁用分页交互                                              | boolean | -                                                                              | false                                                |
+| current-page                                   | 当前页码                                                      | number  | -                                                                              | 1                                                    |
+| hide-on-single-page                            | 当仅有一页时是否隐藏分页组件                                  | boolean | -                                                                              | false                                                |
+| size                                           | 组件尺寸，会影响样式类                                        | string  | `large \| default \| small`                                                    | ""                                                   |
+| disabled                                       | 是否禁用分页交互                                              | boolean | -                                                                              | false                                                |
 
 ## CSS Part
 

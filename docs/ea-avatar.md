@@ -27,19 +27,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-如果使用到图标（通过 `icon` 属性），请提前使用 `link` 标签引入图标样式文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 基本用法
 
 使用 `shape`（`circle` | `square`）和 `size` 控制头像的形状与大小。`size` 支持预设字符串或像素值。
@@ -85,7 +72,7 @@ onMounted(() => {
 
 <div class="demo">
   <div class="row">
-    <ea-avatar icon="icon-coffee"></ea-avatar>
+    <ea-avatar icon="coffee"></ea-avatar>
     <ea-avatar
       src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
     ></ea-avatar>
@@ -95,7 +82,7 @@ onMounted(() => {
 
 ```html
 <div class="row">
-  <ea-avatar icon="icon-coffee"></ea-avatar>
+  <ea-avatar icon="coffee"></ea-avatar>
   <ea-avatar
     src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
   ></ea-avatar>

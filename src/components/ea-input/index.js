@@ -235,9 +235,9 @@ export class EaInput extends FormAssociatedBase {
     },
     "clear-icon": {
       type: String,
-      default: "icon-cancel",
+      default: "xmark",
       observer: newVal => {
-        if (this.clearable) this.#clearIcon.setAttribute("icon", newVal);
+        if (this.clearable) this.#clearIcon.setAttribute("name", newVal);
       },
     },
     disabled: {
@@ -258,9 +258,9 @@ export class EaInput extends FormAssociatedBase {
         this.#AbortControllerStates.showPasswordController?.abort();
 
         if (this.type === "text") {
-          this.#showPasswordIcon.icon = "icon-eye";
+          this.#showPasswordIcon.name = "eye";
         } else if (this.type === "password") {
-          this.#showPasswordIcon.icon = "icon-eye-off";
+          this.#showPasswordIcon.name = "eye-slash";
         }
 
         if (newVal && (this.type === "password" || this.type === "text")) {
@@ -284,7 +284,7 @@ export class EaInput extends FormAssociatedBase {
       default: "",
       observer: newVal => {
         if (newVal)
-          this.#prefixSlot.innerHTML = `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" icon="${newVal}"></ea-icon>`;
+          this.#prefixSlot.innerHTML = `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" name="${newVal}"></ea-icon>`;
       },
     },
     "suffix-icon": {
@@ -292,7 +292,7 @@ export class EaInput extends FormAssociatedBase {
       default: "",
       observer: newVal => {
         if (newVal)
-          this.#suffixIcon.innerHTML = `<ea-icon class="ea-input__suffix-icon" part="suffix-icon" icon="${newVal}"></ea-icon>`;
+          this.#suffixIcon.innerHTML = `<ea-icon class="ea-input__suffix-icon" part="suffix-icon" name="${newVal}"></ea-icon>`;
       },
     },
 
@@ -542,6 +542,7 @@ export class EaInput extends FormAssociatedBase {
 
     this.#originalWrapper.innerHTML = tpl;
     this.#original = this.#originalWrapper.querySelector(".ea-input__original");
+    this.#original.value = this.value;
 
     this.#states.isOriginalRendered = true;
   };
@@ -561,8 +562,8 @@ export class EaInput extends FormAssociatedBase {
             <span class="ea-input__original-wrapper" part="original-wrapper">
             </span>
             <span class="ea-input__suffix" part="suffix">
-              <ea-icon class="ea-input__clear-icon" icon="icon-cancel" part="clear-icon"></ea-icon>
-              <ea-icon class="ea-input__show-password-icon" icon="icon-eye-off" part="show-password-icon"></ea-icon>
+              <ea-icon class="ea-input__clear-icon" name="xmark" part="clear-icon"></ea-icon>
+              <ea-icon class="ea-input__show-password-icon" name="eye-slash" part="show-password-icon"></ea-icon>
               <span class="ea-input__suffix-icon" part="suffix-icon">
                 <slot name="suffix"></slot>
               </span>
@@ -698,10 +699,10 @@ export class EaInput extends FormAssociatedBase {
   #onShowPasswordIconClickEvent = () => {
     if (this.type === "password") {
       this.type = "text";
-      this.#showPasswordIcon.icon = "icon-eye";
+      this.#showPasswordIcon.name = "eye";
     } else if (this.type === "text") {
       this.type = "password";
-      this.#showPasswordIcon.icon = "icon-eye-off";
+      this.#showPasswordIcon.name = "eye-slash";
     }
 
     this.focus();

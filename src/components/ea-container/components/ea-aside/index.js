@@ -1,52 +1,52 @@
-import Base from '../../../Base.js'
+import Base from "../../../Base.js";
 
-import stylesheet from './index.scss?inline';
+import stylesheet from "./index.scss?inline";
 
 export class EaAside extends Base {
-    /** @type {HTMLElement} */
-    #container;
+  /** @type {HTMLElement} */
+  #container;
 
-    static get observedAttributes() {
-        return ["width"];
-    }
+  static get observedAttributes() {
+    return ["width"];
+  }
 
-    /** 
-     * @typedef {Object} State
-     */
-    /** @type {State} */
-    state = this.properties({
-        width: {
-            type: String,
-            default: "300px",
-            observer: (newVal) => {
-                this.style.setProperty('--ea-aside-width', newVal);
-            }
-        },
-    })
+  /**
+   * @typedef {Object} State
+   */
+  /** @type {State} */
+  state = this.properties({
+    width: {
+      type: String,
+      default: "300px",
+      observer: newVal => {
+        this.style.setProperty("--ea-aside-width", newVal);
+      },
+    },
+  });
 
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this.stylesheet = stylesheet;
+    this.stylesheet = stylesheet;
 
-        this.$render();
-    }
+    this.$render();
+  }
 
-    $render() {
-        this.shadowRoot.innerHTML = `
+  $render() {
+    this.shadowRoot.innerHTML = `
             <aside class="ea-aside" part="container">
                 <slot></slot>
             </aside>
         `;
 
-        this.#container = this.shadowRoot.querySelector('.ea-aside');
-    }
+    this.#container = this.shadowRoot.querySelector(".ea-aside");
+  }
 
-    connectedCallback() {
-        super.connectedCallback();
-    }
+  connectedCallback() {
+    super.connectedCallback();
+  }
 }
 
-if (!window.customElements.get('ea-aside')) {
-    window.customElements.define('ea-aside', EaAside);
+if (!window.customElements.get("ea-aside")) {
+  window.customElements.define("ea-aside", EaAside);
 }

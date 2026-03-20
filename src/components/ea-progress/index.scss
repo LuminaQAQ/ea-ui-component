@@ -160,11 +160,13 @@ $ea-progress-type: (
 
   @include modifier(striped) {
     .ea-progress__path {
-      background-image: linear-gradient(60deg,
-          transparent 40%,
-          rgba(0, 0, 0, 0.15) 40%,
-          rgba(0, 0, 0, 0.15) 60%,
-          transparent 60%);
+      background-image: linear-gradient(
+        60deg,
+        transparent 40%,
+        rgba(0, 0, 0, 0.15) 40%,
+        rgba(0, 0, 0, 0.15) 60%,
+        transparent 60%
+      );
 
       background-size: var(--ea-progress-stroke-width);
     }
@@ -172,20 +174,23 @@ $ea-progress-type: (
 
   @include state(striped-flow) {
     .ea-progress__path {
-      animation: striped-flow var(--ea-progress-animation-duration) infinite linear;
+      animation: striped-flow var(--ea-progress-animation-duration) infinite
+        linear;
     }
   }
 
   @include state(indeterminate) {
     .ea-progress__path {
-      animation: indeterminate var(--ea-progress-animation-duration) infinite ease-in-out;
+      animation: indeterminate var(--ea-progress-animation-duration) infinite
+        ease-in-out;
     }
   }
 
   &.is-striped-flow.is-indeterminate,
   &.is-indeterminate.is-striped-flow {
     .ea-progress__path {
-      animation: indeterminate var(--ea-progress-animation-duration) infinite ease-in-out,
+      animation:
+        indeterminate var(--ea-progress-animation-duration) infinite ease-in-out,
         striped-flow var(--ea-progress-animation-duration) infinite linear;
     }
   }
@@ -193,6 +198,7 @@ $ea-progress-type: (
   @include state(show-text) {
     .ea-progress__percentage {
       display: flex;
+      flex-direction: column;
     }
   }
 

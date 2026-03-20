@@ -1,6 +1,9 @@
 docs/.vitepress/dist/
 docs/.vitepress/cache/
 
+# Vite timestamp cache files
+*.timestamp-*.mjs
+
 build
 test.html
 

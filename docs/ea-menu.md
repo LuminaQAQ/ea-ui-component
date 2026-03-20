@@ -31,19 +31,6 @@ onMounted(() => {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#menu-css-part)。
@@ -167,7 +154,7 @@ onMounted(() => {
     <ea-menu-item index="0" style="margin-right: auto">
       <img
         style="width: 100px"
-        src="https://github.com/LuminaQAQ/ea-ui-component/raw/master/public/logo.png"
+        src="https://raw.githubusercontent.com/LuminaQAQ/ea-ui-component/refs/heads/master/logo.png"
         alt="EasyUI logo"
       />
     </ea-menu-item>
@@ -226,7 +213,7 @@ onMounted(() => {
   <ea-menu default-active="2" class="ea-menu-vertical-demo" style="width: 250px; min-height: 600px; border-right: 1px solid #ccc;">
     <ea-sub-menu index="1">
       <span slot="title">
-        <ea-icon icon="icon-location"></ea-icon>
+        <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
       <ea-menu-item-group title="Group One">
@@ -244,15 +231,15 @@ onMounted(() => {
       </ea-sub-menu>
     </ea-sub-menu>
     <ea-menu-item index="2">
-      <ea-icon icon="icon-th-large"></ea-icon>
+      <ea-icon name="table-cells-large"></ea-icon>
       <span>Navigator Two</span>
     </ea-menu-item>
     <ea-menu-item index="3" disabled>
-      <ea-icon icon="icon-table"></ea-icon>
+      <ea-icon name="table"></ea-icon>
       <span>Navigator Three</span>
     </ea-menu-item>
     <ea-menu-item index="4">
-      <ea-icon icon="icon-cog"></ea-icon>
+      <ea-icon name="gear"></ea-icon>
       <span>Navigator Four</span>
     </ea-menu-item>
   </ea-menu>
@@ -266,7 +253,7 @@ onMounted(() => {
   >
     <ea-sub-menu index="1">
       <span slot="title">
-        <ea-icon icon="icon-location"></ea-icon>
+        <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
       <ea-menu-item-group title="Group One">
@@ -284,15 +271,15 @@ onMounted(() => {
       </ea-sub-menu>
     </ea-sub-menu>
     <ea-menu-item index="2">
-      <ea-icon icon="icon-th-large"></ea-icon>
+      <ea-icon name="table-cells-large"></ea-icon>
       <span>Navigator Two</span>
     </ea-menu-item>
     <ea-menu-item index="3" disabled>
-      <ea-icon icon="icon-table"></ea-icon>
+      <ea-icon name="table"></ea-icon>
       <span>Navigator Three</span>
     </ea-menu-item>
     <ea-menu-item index="4">
-      <ea-icon icon="icon-cog"></ea-icon>
+      <ea-icon name="gear"></ea-icon>
       <span>Navigator Four</span>
     </ea-menu-item>
   </ea-menu>
@@ -310,7 +297,7 @@ onMounted(() => {
   >
     <ea-sub-menu index="1">
       <span slot="title">
-        <ea-icon icon="icon-location"></ea-icon>
+        <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
       <ea-menu-item-group title="Group One">
@@ -328,15 +315,15 @@ onMounted(() => {
       </ea-sub-menu>
     </ea-sub-menu>
     <ea-menu-item index="2">
-      <ea-icon icon="icon-th-large"></ea-icon>
+      <ea-icon name="table-cells-large"></ea-icon>
       <span>Navigator Two</span>
     </ea-menu-item>
     <ea-menu-item index="3" disabled>
-      <ea-icon icon="icon-table"></ea-icon>
+      <ea-icon name="table"></ea-icon>
       <span>Navigator Three</span>
     </ea-menu-item>
     <ea-menu-item index="4">
-      <ea-icon icon="icon-cog"></ea-icon>
+      <ea-icon name="gear"></ea-icon>
       <span>Navigator Four</span>
     </ea-menu-item>
   </ea-menu>
@@ -351,7 +338,7 @@ onMounted(() => {
   >
     <ea-sub-menu index="1">
       <span slot="title">
-        <ea-icon icon="icon-location"></ea-icon>
+        <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
       <ea-menu-item-group title="Group One">
@@ -369,15 +356,15 @@ onMounted(() => {
       </ea-sub-menu>
     </ea-sub-menu>
     <ea-menu-item index="2">
-      <ea-icon icon="icon-th-large"></ea-icon>
+      <ea-icon name="table-cells-large"></ea-icon>
       <span>Navigator Two</span>
     </ea-menu-item>
     <ea-menu-item index="3" disabled>
-      <ea-icon icon="icon-table"></ea-icon>
+      <ea-icon name="table"></ea-icon>
       <span>Navigator Three</span>
     </ea-menu-item>
     <ea-menu-item index="4">
-      <ea-icon icon="icon-cog"></ea-icon>
+      <ea-icon name="gear"></ea-icon>
       <span>Navigator Four</span>
     </ea-menu-item>
   </ea-menu>

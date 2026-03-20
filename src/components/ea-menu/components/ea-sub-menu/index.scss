@@ -44,9 +44,11 @@ $name: ea-sub-menu;
   cursor: pointer;
   white-space: nowrap;
 
-  transition: border-color var(--#{$name}-transition),
+  transition:
+    border-color var(--#{$name}-transition),
     background-color var(--#{$name}-transition),
-    color var(--#{$name}-transition), height var(--#{$name}-transition);
+    color var(--#{$name}-transition),
+    height var(--#{$name}-transition);
 
   @include element(arrow) {
     margin-left: 8px;
@@ -74,8 +76,10 @@ $name: ea-sub-menu;
 
     background-color: var(--ea-menu-bg-color);
 
-    transition: transform var(--#{$name}-transition),
-      height var(--#{$name}-transition), min-height var(--#{$name}-transition);
+    transition:
+      transform var(--#{$name}-transition),
+      height var(--#{$name}-transition),
+      min-height var(--#{$name}-transition);
 
     z-index: var(--#{$name}-z-index);
   }

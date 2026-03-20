@@ -68,19 +68,6 @@ ea-popover {
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
 ## 自定义样式
 
 移步到 [CSS Part](#css-part)。
@@ -535,7 +522,7 @@ const scalableExample = {
   cancelButton: document.querySelector("#scalableSection #cancel"),
 
   init() {
-    this.openButton.addEventListener("click", (e) => {
+    this.openButton.addEventListener("click", e => {
       this.referenceElement.visible = true;
     });
 

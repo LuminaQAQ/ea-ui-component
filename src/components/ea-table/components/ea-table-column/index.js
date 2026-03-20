@@ -101,10 +101,11 @@ export class EaTableColumn extends Base {
     fixed: {
       type: ["left", "right", "false"],
       default: () => {
-        return this.hasAttribute("fixed") &&
-          this.getAttribute("fixed") !== "false"
-          ? this.getAttribute("fixed") || "left"
-          : null;
+        if (!this.hasAttribute("fixed")) return null;
+        const value = this.getAttribute("fixed");
+        if (value === "false" || value === "null" || value === "")
+          return "left";
+        return value || "left";
       },
       observer: () => {
         this.#notifyParent();

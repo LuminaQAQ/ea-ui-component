@@ -80,7 +80,7 @@ export class EaTimelineItem extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        this.#dot.innerHTML = `<ea-icon class="ea-timeline-item__icon-dot" part='icon-dot' icon="${newVal}"></ea-icon>`;
+        this.#dot.innerHTML = `<ea-icon class="ea-timeline-item__icon-dot" part='icon-dot' name="${newVal}"></ea-icon>`;
       },
     },
     size: {

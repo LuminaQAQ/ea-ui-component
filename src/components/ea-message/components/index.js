@@ -1,3 +1,5 @@
+import { namespace } from "@/directives/namespace";
+import { html } from "@/directives/html";
 import Base from "@components/Base.js";
 
 import stylesheet from "./index.scss?inline";
@@ -11,6 +13,9 @@ export class EaMessageElement extends Base {
   #messageContent;
   /** @type {HTMLElement} */
   #messageCloseIcon;
+
+  /** @type {AbortController} */
+  #abortController;
   /** @type {AbortController} */
   #visibleAbortController;
 
@@ -31,34 +36,29 @@ export class EaMessageElement extends Base {
   // ------- end -------
 
   static get observedAttributes() {
-    return [
-      ...super.observedAttributes,
-      "type",
-      "visible",
-      "message",
-      "showClose",
-      "placement",
-    ];
+    return [...super.observedAttributes, "placement"];
   }
 
   state = this.properties({
     type: {
+      props: true,
       type: ["primary", "success", "warning", "info", "error"],
       default: "info",
       observer: newVal => {
         const iconTypes = {
-          success: "icon-ok-circled",
-          error: "icon-cancel-circled",
-          warning: "icon-attention-alt",
-          info: "icon-info",
-          primary: "icon-info",
+          success: "circle-check",
+          error: "circle-xmark",
+          warning: "triangle-exclamation",
+          info: "circle-info",
+          primary: "circle-info",
         };
 
-        this.#messageIcon.icon = iconTypes[newVal];
-        this.#container.className = this.updateContainerClasslist();
+        this.#messageIcon.name = iconTypes[newVal];
+        this.updateContainerClasslist();
       },
     },
     visible: {
+      props: true,
       type: Boolean,
       default: false,
       observer: async newVal => {
@@ -67,12 +67,12 @@ export class EaMessageElement extends Base {
 
         if (newVal) {
           this.#initPosition();
-          this.#container.className = this.updateContainerClasslist();
+          this.updateContainerClasslist();
           this.#dispatchBubblesEvent("show");
 
           void this.#container.offsetWidth;
 
-          this.#container.classList.add("ea-message--is-show");
+          this.#container.classList.add(this.ns.m("is-show"));
 
           this.#container.addEventListener(
             "transitionend",
@@ -84,13 +84,13 @@ export class EaMessageElement extends Base {
         } else {
           this.#handleHide();
 
-          this.#container.classList.add("ea-message--before-hide");
+          this.#container.classList.add(this.ns.m("before-hide"));
           this.#dispatchBubblesEvent("hide");
 
           this.#container.addEventListener(
             "transitionend",
             () => {
-              this.#container.className = this.updateContainerClasslist();
+              this.updateContainerClasslist();
               this.#dispatchBubblesEvent("hidden");
             },
             { once: true, signal: this.#visibleAbortController.signal }
@@ -99,6 +99,7 @@ export class EaMessageElement extends Base {
       },
     },
     message: {
+      props: true,
       type: String,
       default: "",
       observer: newVal => {
@@ -110,10 +111,20 @@ export class EaMessageElement extends Base {
       },
     },
     showClose: {
+      props: true,
       type: Boolean,
       default: false,
-      observer: () => {
-        this.#container.className = this.updateContainerClasslist();
+      observer: newVal => {
+        this.updateContainerClasslist();
+
+        this.#abortController?.abort();
+
+        if (newVal) {
+          this.#abortController = new AbortController();
+          this.#messageCloseIcon.addEventListener("click", this.#onCloseClick, {
+            signal: this.#abortController.signal,
+          });
+        }
       },
     },
     placement: {
@@ -128,7 +139,16 @@ export class EaMessageElement extends Base {
       ],
       default: "top",
       observer: () => {
-        this.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
+      },
+    },
+    icon: {
+      props: true,
+      type: String,
+      default: "",
+      observer: newVal => {
+        this.#messageIcon.name = newVal;
+        this.updateContainerClasslist();
       },
     },
   });
@@ -138,12 +158,20 @@ export class EaMessageElement extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-message", {
-      ["--visible"]: this.visible,
-      ["--" + this.type]: this.type,
-      ["--show-close"]: this.showClose,
-      ["--" + this.placement]: this.placement,
-    });
+    const className = this.computedClasslist(
+      this.ns.b(),
+      {
+        ["--" + this.type]: this.type,
+        ["--" + this.placement]: this.placement,
+        ["--visible"]: this.visible,
+        ["--show-close"]: this.showClose,
+      },
+      {}
+    );
+
+    if (this.#container) this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -155,24 +183,28 @@ export class EaMessageElement extends Base {
   }
 
   $render() {
-    this.shadowRoot.innerHTML = `
-      <div class="ea-message" part="container">
-        <ea-icon class="ea-message__icon" part="icon"></ea-icon>
-        <div class="ea-message__content" part="content-wrap"></div>
-        <ea-icon class="ea-message__icon-close" icon="icon-cancel" part="close-icon"></ea-icon>
-      </div>
-    `;
+    const ns = namespace("message");
+    this.ns = ns;
 
-    this.#container = this.shadowRoot.querySelector(".ea-message");
-    this.#messageIcon = this.shadowRoot.querySelector(".ea-message__icon");
-    this.#messageContent = this.shadowRoot.querySelector(
-      ".ea-message__content"
-    );
-    this.#messageCloseIcon = this.shadowRoot.querySelector(
-      ".ea-message__icon-close"
-    );
+    this.shadowRoot.innerHTML = html(`
+      <div class="${ns.b()}" part="container">
+        <ea-icon class="${ns.e("icon")}" part="icon"></ea-icon>
+        <div class="${ns.e("content")}" part="content-wrap"></div>
+        <ea-icon class="${ns.e("icon-close")}" name="xmark" part="close-icon"></ea-icon>
+      </div>
+    `);
+
+    this.#container = this.shadowRoot.querySelector(ns.cb());
+    this.#messageIcon = this.shadowRoot.querySelector(ns.ce("icon"));
+    this.#messageContent = this.shadowRoot.querySelector(ns.ce("content"));
+    this.#messageCloseIcon = this.shadowRoot.querySelector(ns.ce("icon-close"));
   }
 
+  /**
+   * 触发冒泡事件
+   * @param {string} customEventName - 自定义事件名称
+   * @param {string} detail - 事件详情
+   */
   #dispatchBubblesEvent = (customEventName, detail) => {
     this.emit(customEventName, {
       detail,
@@ -181,23 +213,37 @@ export class EaMessageElement extends Base {
     });
   };
 
+  /**
+   * 关闭消息（公共方法）
+   */
   close = () => {
     this.visible = false;
     this.#dispatchBubblesEvent("close");
   };
 
+  /**
+   * 关闭按钮点击事件处理
+   */
+  #onCloseClick = () => {
+    this.close();
+  };
+
+  /**
+   * 初始化消息位置
+   */
   #initPosition = () => {
     /** @type {HTMLElement[]} */
     const eaMessageList = document.querySelectorAll(
       `ea-message[placement="${this.placement}"]`
     );
+
     if (eaMessageList.length <= 1) return;
 
     const lastEl = eaMessageList[eaMessageList.length - 2];
     /** @type {string} */
     const lastPosition = lastEl.style.getPropertyValue("--ea-message-y");
 
-    const lastEaMessage = lastEl.shadowRoot.querySelector(".ea-message");
+    const lastEaMessage = lastEl.shadowRoot.querySelector(this.ns.cb());
     const lastEaMessageRect = lastEaMessage.getBoundingClientRect();
 
     this.style.setProperty(
@@ -208,6 +254,9 @@ export class EaMessageElement extends Base {
     );
   };
 
+  /**
+   * 隐藏消息
+   */
   #handleHide = () => {
     const eaMessageList = [
       ...document.querySelectorAll(`ea-message[placement="${this.placement}"]`),
@@ -216,7 +265,7 @@ export class EaMessageElement extends Base {
     const els = eaMessageList.slice(thisIndex + 1);
     const height = this.#container.getBoundingClientRect().height;
 
-    els.forEach((message, i) => {
+    els.forEach(message => {
       const posi = Number(
         message.style.getPropertyValue("--ea-message-y").replace("px", "")
       );
@@ -226,12 +275,10 @@ export class EaMessageElement extends Base {
 
   connectedCallback() {
     super.connectedCallback();
-
-    if (this.showClose)
-      this.#messageCloseIcon.addEventListener("click", this.close);
   }
 
   $beforeUnmounted() {
+    this.#abortController?.abort();
     this.#visibleAbortController?.abort();
   }
 }

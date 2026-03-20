@@ -60,14 +60,16 @@ $name: ea-color-picker-panel;
     width: var(--#{$name}-hue-slider-width);
     height: var(--#{$name}-hue-slider-height);
     border-radius: var(--#{$name}-hue-slider-border-radius);
-    background: linear-gradient(to bottom,
-        #f00 0%,
-        #ff0 17%,
-        #0f0 33%,
-        #0ff 50%,
-        #00f 67%,
-        #f0f 83%,
-        #f00 100%);
+    background: linear-gradient(
+      to bottom,
+      #f00 0%,
+      #ff0 17%,
+      #0f0 33%,
+      #0ff 50%,
+      #00f 67%,
+      #f0f 83%,
+      #f00 100%
+    );
     cursor: pointer;
 
     .#{$name}__thumb {
@@ -86,7 +88,8 @@ $name: ea-color-picker-panel;
     overflow: hidden;
     cursor: crosshair;
     background-color: var(--#{$name}-background-color);
-    background-image: linear-gradient(to top, #000, #0000),
+    background-image:
+      linear-gradient(to top, #000, #0000),
       linear-gradient(to right, #fff, #fff0);
 
     .#{$name}__cursor {
@@ -97,7 +100,6 @@ $name: ea-color-picker-panel;
       border-radius: 50%;
       box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
       transform: translate(-50%, -50%);
-
     }
   }
 
@@ -113,7 +115,11 @@ $name: ea-color-picker-panel;
       linear-gradient(45deg, transparent 75%, var(--grey-300) 75%),
       linear-gradient(-45deg, transparent 75%, var(--grey-300) 75%);
     background-size: 8px 8px;
-    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+    background-position:
+      0 0,
+      0 4px,
+      4px -4px,
+      -4px 0px;
     cursor: pointer;
     margin-bottom: var(--spacing-md);
 
@@ -146,7 +152,7 @@ $name: ea-color-picker-panel;
         border-color: var(--grey-400);
       }
 
-      &>div {
+      & > div {
         width: 100%;
         height: 100%;
         border-radius: var(--#{$name}-predefine-item-border-radius);

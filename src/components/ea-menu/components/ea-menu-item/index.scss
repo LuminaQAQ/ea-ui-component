@@ -42,7 +42,8 @@ $name: ea-menu-item;
   text-overflow: ellipsis;
   overflow: hidden;
 
-  transition: border-color var(--#{$name}-transition),
+  transition:
+    border-color var(--#{$name}-transition),
     background-color var(--#{$name}-transition),
     color var(--#{$name}-transition);
 
