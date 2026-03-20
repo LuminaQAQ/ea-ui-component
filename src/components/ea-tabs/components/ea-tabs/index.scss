@@ -128,8 +128,7 @@ $name: ea-tabs;
     }
   }
 
-  @include modifier(card) {
-  }
+  @include modifier(card) {}
 
   @include modifier(border-card) {
     border: 1px solid var(--#{$name}-border-color);
@@ -198,6 +197,7 @@ $name: ea-tabs;
   }
 
   @include state(overflow) {
+
     &.ea-tabs--bottom,
     &.ea-tabs--top {
       .ea-tabs__scroll {
