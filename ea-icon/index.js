@@ -1,71 +1,71 @@
 export class EaIcon extends HTMLElement {
-    #wrap;
+  #wrap;
 
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="${new URL('../ea-icon/index.css', import.meta.url).href}">
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
+            <link rel="stylesheet" href="${new URL("../ea-icon/index.css", import.meta.url).href}">
             <i class="ea-icon_wrap" part="container">
                 <slot></slot>
             </i>
         `;
 
-        this.#wrap = shadowRoot.querySelector('.ea-icon_wrap');
-    }
+    this.#wrap = shadowRoot.querySelector(".ea-icon_wrap");
+  }
 
-    // ------- icon 图标类名 -------
-    // #region
-    get icon() {
-        return this.getAttribute('icon') || "";
-    }
+  // ------- icon 图标类名 -------
+  // #region
+  get icon() {
+    return this.getAttribute("icon") || "";
+  }
 
-    set icon(value) {
-        this.setAttribute('icon', value);
+  set icon(value) {
+    this.setAttribute("icon", value);
 
-        this.#wrap.className = `${value}`;
-    }
-    // #endregion
-    // ------- end -------
+    this.#wrap.className = `${value}`;
+  }
+  // #endregion
+  // ------- end -------
 
-    // ------- color 颜色 -------
-    // #region
-    get color() {
-        return this.getAttribute('color') || "";
-    }
+  // ------- color 颜色 -------
+  // #region
+  get color() {
+    return this.getAttribute("color") || "";
+  }
 
-    set color(value) {
-        this.setAttribute('color', value);
+  set color(value) {
+    this.setAttribute("color", value);
 
-        this.#wrap.style.color = value;
-    }
-    // #endregion
-    // ------- end -------
+    this.#wrap.style.color = value;
+  }
+  // #endregion
+  // ------- end -------
 
-    // ------- size 大小 -------
-    // #region
-    get size() {
-        return this.getAttribute('size') || "";
-    }
+  // ------- size 大小 -------
+  // #region
+  get size() {
+    return this.getAttribute("size") || "";
+  }
 
-    set size(value) {
-        this.setAttribute('size', value);
+  set size(value) {
+    this.setAttribute("size", value);
 
-        this.#wrap.style.fontSize = `${value}px`;
-    }
-    // #endregion
-    // ------- end -------
+    this.#wrap.style.fontSize = `${value}px`;
+  }
+  // #endregion
+  // ------- end -------
 
-    connectedCallback() {
-        this.icon = this.icon;
+  connectedCallback() {
+    this.icon = this.icon;
 
-        this.color = this.color;
+    this.color = this.color;
 
-        this.size = this.size;
-    }
+    this.size = this.size;
+  }
 }
 
 if (!window.customElements.get("ea-icon")) {
-    window.customElements.define("ea-icon", EaIcon);
+  window.customElements.define("ea-icon", EaIcon);
 }
