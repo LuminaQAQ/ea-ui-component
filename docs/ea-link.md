@@ -157,16 +157,16 @@ onMounted(() => {
 带图标的文字链接可增强辨识度。
 
 <div class="row left">
-  <ea-link icon="icon-eye">查看</ea-link>
-  <ea-link>分享<ea-icon icon="icon-share"></ea-icon></ea-link>
+  <ea-link icon="eye">查看</ea-link>
+  <ea-link>分享<ea-icon name="share"></ea-icon></ea-link>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="row left">
-  <ea-link icon="icon-eye">查看</ea-link>
-  <ea-link icon="icon-share">分享</ea-link>
+  <ea-link icon="eye">查看</ea-link>
+  <ea-link icon="share">分享</ea-link>
 </div>
 ```
 

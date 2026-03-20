@@ -42,7 +42,7 @@ onMounted(() => {
 
 通过滑动来查看容器右下角的按钮。
 
-<ea-backtop><ea-icon icon="icon-angle-up"></ea-icon></ea-backtop>
+<ea-backtop><ea-icon name="angle-up"></ea-icon></ea-backtop>
 
 <div class="demo">
   <p>Scroll down to see the bottom-right button.</p> 
@@ -51,7 +51,7 @@ onMounted(() => {
 ::: details 查看代码
 
 ```html
-<ea-backtop><ea-icon icon="icon-angle-up"></ea-icon></ea-backtop>
+<ea-backtop><ea-icon name="angle-up"></ea-icon></ea-backtop>
 ```
 
 :::

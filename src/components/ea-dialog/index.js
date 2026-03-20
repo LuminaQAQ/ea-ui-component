@@ -141,8 +141,6 @@ export class EaDialog extends EaOverlay {
     },
   });
 
-  
-
   /**
    * 获取 classlist 列表
    * @return {string} 属性值
@@ -172,7 +170,7 @@ export class EaDialog extends EaOverlay {
         <header class='ea-dialog-main__header' part='header'>
           <slot name="header">
             <span class='ea-dialog-main__title' part='title'></span>
-            <ea-icon class='ea-dialog-main__close-icon' icon='icon-cancel' part='close-icon'></ea-icon>          
+            <ea-icon class='ea-dialog-main__close-icon' name='xmark' part='close-icon'></ea-icon>          
           </slot>
         </header>
         <main class='ea-dialog-main__content' part='content'>

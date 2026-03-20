@@ -14,95 +14,131 @@
 import { timeout } from "@/utils/timeout";
 
 class EaMessageInstance {
-    #includeTypes = ['dangerouslyUseHTMLString', 'message', 'placement', 'type', 'showClose', 'duration', 'offset'];
+  #includeTypes = [
+    "dangerouslyUseHTMLString",
+    "message",
+    "placement",
+    "type",
+    "showClose",
+    "duration",
+    "offset",
+    "icon",
+  ];
 
-    /**
-     * @param {EaMessageOptions} options
-     */
-    constructor(options) {
-        /** @type {EaMessageOptions} */
-        this.options = this.#includeTypes.reduce((acc, cur) => {
-            if (options[cur]) acc[cur] = options[cur];
+  /**
+   * @param {EaMessageOptions} options
+   */
+  constructor(options) {
+    /** @type {EaMessageOptions} */
+    this.options = this.#includeTypes.reduce((acc, cur) => {
+      if (options[cur]) acc[cur] = options[cur];
 
-            return acc;
-        }, {});
-        this.options.placement = this.options.placement || 'top';
+      return acc;
+    }, {});
+    this.options.placement = this.options.placement || "top";
 
-        const el = this.#renderer(this.options);
-        this.#appendToHandler(el, options.appendTo);
-        this.#durationHandler(el, options.duration);
-        this.#hideHandler(el, options.onClose);
-        el.visible = true;
+    const el = this.#renderer(this.options);
+    this.#appendToHandler(el, options.appendTo);
+    this.#durationHandler(el, options.duration);
+    this.#hideHandler(el, options.onClose);
+    el.visible = true;
+  }
+
+  /**
+   * 渲染消息实例
+   * @param {EaMessageOptions} options
+   * @return {HTMLElement}
+   */
+  #renderer = options => {
+    const el = document.createElement("ea-message");
+
+    if (options instanceof String) {
+      el.message = options;
+    } else if (options instanceof Object) {
+      for (const option in options) {
+        el[option] = options[option];
+      }
+    } else {
+      console.warn(
+        "[EaMessage] TypeError: options must be a string or an object."
+      );
     }
 
-    #renderer = (options) => {
-        const el = document.createElement('ea-message');
+    return el;
+  };
 
-        if (options instanceof String) {
-            el.message = options;
-        } else if (options instanceof Object) {
-            for (const option in options) {
-                el[option] = options[option];
-            }
-        } else {
-            console.warn('[EaMessage] TypeError: options must be a string or an object.');
-        }
+  /**
+   * 处理 duration 属性
+   */
+  #durationHandler = (el, duration = 3000) => {
+    if (duration <= 0) return;
 
-        return el;
+    timeout(() => {
+      el.visible = false;
+    }, duration);
+  };
+
+  /**
+   * 处理 appendTo 属性
+   */
+  #appendToHandler = (el, appendTo) => {
+    if (appendTo instanceof HTMLElement) {
+      appendTo.appendChild(el);
+    } else {
+      const parent = document.querySelector(appendTo);
+      parent ? parent.appendChild(el) : document.body.appendChild(el);
     }
+  };
 
-    #durationHandler = (el, duration = 3000) => {
-        if (duration <= 0) return;
-
-        timeout(() => { el.visible = false; }, duration)
-    }
-
-    #appendToHandler = (el, appendTo) => {
-        if (appendTo instanceof HTMLElement) {
-            appendTo.appendChild(el);
-        } else {
-            const parent = document.querySelector(appendTo);
-            parent ? parent.appendChild(el) : document.body.appendChild(el);
-        }
-    }
-
-    #hideHandler = (el, closeFn) => {
-        el.addEventListener('hidden', (e) => {
-            closeFn?.(e);
-            el.remove();
-        }, { once: true })
-    }
+  /**
+   * 处理 hide 属性
+   */
+  #hideHandler = (el, closeFn) => {
+    el.addEventListener(
+      "hidden",
+      e => {
+        closeFn?.(e);
+        el.remove();
+      },
+      { once: true }
+    );
+  };
 }
 
 /**
  * 创建消息实例
  * @param {EaMessageOptions} options
  */
-export const EaMessage = (options) => {
-    new EaMessageInstance(options);
-}
+export const EaMessage = options => {
+  new EaMessageInstance(options);
+};
 
-EaMessage.primary = (message) => new EaMessageInstance({
+EaMessage.primary = message =>
+  new EaMessageInstance({
     message,
-    type: 'primary'
-});
+    type: "primary",
+  });
 
-EaMessage.success = (message) => new EaMessageInstance({
+EaMessage.success = message =>
+  new EaMessageInstance({
     message,
-    type: 'success'
-});
+    type: "success",
+  });
 
-EaMessage.warning = (message) => new EaMessageInstance({
+EaMessage.warning = message =>
+  new EaMessageInstance({
     message,
-    type: 'warning'
-});
+    type: "warning",
+  });
 
-EaMessage.info = (message) => new EaMessageInstance({
+EaMessage.info = message =>
+  new EaMessageInstance({
     message,
-    type: 'info'
-});
+    type: "info",
+  });
 
-EaMessage.error = (message) => new EaMessageInstance({
+EaMessage.error = message =>
+  new EaMessageInstance({
     message,
-    type: 'error'
-});
+    type: "error",
+  });

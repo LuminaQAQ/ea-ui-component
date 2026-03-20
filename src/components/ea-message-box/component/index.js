@@ -166,13 +166,13 @@ export class EaMessageBoxElement extends EaOverlay {
       default: "",
       observer: newVal => {
         const iconType = {
-          primary: "info",
-          success: "ok-circled",
-          info: "info",
-          warning: "attention-alt",
-          error: "cancel-circled",
+          primary: "circle-info",
+          success: "circle-check",
+          info: "circle-info",
+          warning: "triangle-exclamation",
+          error: "circle-xmark",
         };
-        this.icon = `icon-${iconType[newVal]}`;
+        this.icon = iconType[newVal];
 
         this.#container.className = this.updateContainerClasslist();
       },
@@ -181,14 +181,14 @@ export class EaMessageBoxElement extends EaOverlay {
       type: String,
       default: "",
       observer: newVal => {
-        if (this.#typeIcon) this.#typeIcon.icon = newVal;
+        if (this.#typeIcon) this.#typeIcon.name = newVal;
       },
     },
     closeIcon: {
       type: String,
-      default: "icon-cancel",
+      default: "xmark",
       observer: newVal => {
-        this.#closeIcon.icon = newVal;
+        this.#closeIcon.name = newVal;
       },
     },
     showClose: {
@@ -340,7 +340,7 @@ export class EaMessageBoxElement extends EaOverlay {
             <ea-icon class="ea-message-box-main__type-icon" part="type-icon"></ea-icon>
             <span class="ea-message-box-main__title" part="title"></span>
           </div>
-          <ea-icon class="ea-message-box-main__icon-close" icon="icon-cancel" part="close-icon"></ea-icon>
+          <ea-icon class="ea-message-box-main__icon-close" name="xmark" part="close-icon"></ea-icon>
         </header>
         <main class="ea-message-box-main__content" part="content">
           <div class="ea-message-box-main__description" part="description"></div>

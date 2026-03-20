@@ -167,8 +167,7 @@ export class EaProgress extends Base {
       },
       {
         [this.type]: this.type,
-        indeterminate:
-          this.indeterminate && this.type === "line",
+        indeterminate: this.indeterminate && this.type === "line",
         "striped-flow": this["striped-flow"],
         "show-text": this["show-text"],
       }
@@ -257,16 +256,16 @@ export class EaProgress extends Base {
    */
   #updateStatusText() {
     const statusIcon = {
-      success: "icon-ok-circled",
-      warning: "icon-attention-circled",
-      exception: "icon-cancel-circled",
+      success: "circle-check",
+      warning: "triangle-exclamation",
+      exception: "circle-xmark",
     };
 
     if (
       ["success", "exception", "warning"].includes(this.status) &&
       !this["text-inside"]
     ) {
-      this.#text.innerHTML = `<ea-icon class="ea-progress__status" icon="${
+      this.#text.innerHTML = `<ea-icon class="ea-progress__status" name="${
         statusIcon[this.status]
       }" part="status-icon"></ea-icon>`;
     } else {

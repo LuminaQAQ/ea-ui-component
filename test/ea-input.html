@@ -102,7 +102,7 @@
         style="width: 240px"
         placeholder="Please input"
         clearable
-        clear-icon="icon-cancel-circled2"
+        clear-icon="circle-xmark"
       ></ea-input>
     </div>
     <hr />
@@ -134,12 +134,12 @@
           <ea-input
             class="responsive-input"
             placeholder="Pick a date"
-            prefix-icon="icon-coffee"
+            prefix-icon="mug-hot"
           ></ea-input>
           <ea-input
             class="responsive-input"
             placeholder="Type something"
-            suffix-icon="icon-coffee"
+            suffix-icon="mug-hot"
           ></ea-input>
         </div>
       </div>
@@ -147,10 +147,10 @@
         <p class="label">Using slots</p>
         <div class="input-container">
           <ea-input class="responsive-input" placeholder="Pick a date">
-            <ea-icon icon="icon-search" slot="suffix"></ea-icon>
+            <ea-icon name="magnifying-glass" slot="suffix"></ea-icon>
           </ea-input>
           <ea-input class="responsive-input" placeholder="Type something">
-            <ea-icon icon="icon-search" slot="prefix"></ea-icon>
+            <ea-icon name="magnifying-glass" slot="prefix"></ea-icon>
           </ea-input>
         </div>
       </div>
@@ -211,7 +211,7 @@
       <ea-input style="max-width: 600px" placeholder="Please input">
         <div class="prepend" slot="prepend">Http://</div>
         <div class="append" slot="append">
-          <i class="icon-search"></i>
+          <ea-icon name="magnifying-glass"></ea-icon>
         </div>
       </ea-input>
     </div>

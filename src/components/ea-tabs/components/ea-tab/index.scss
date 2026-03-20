@@ -35,6 +35,8 @@ $name: ea-tab;
 
   @include element(close-icon) {
     display: none;
+    margin-left: 4px;
+    margin-top: 4px;
   }
 
   @include modifier(card) {
@@ -42,6 +44,7 @@ $name: ea-tab;
     border-right-color: transparent;
 
     &.is-active {
+
       &.ea-tab--top,
       &.ea-tab--bottom {
         border-bottom-color: transparent;
@@ -60,6 +63,7 @@ $name: ea-tab;
     &.ea-tab--right {
       border-bottom-color: transparent;
       border-right-color: var(--ea-tabs-border-color);
+
       &.is-last {
         border-bottom-color: var(--ea-tabs-border-color);
       }

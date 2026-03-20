@@ -1,162 +1,166 @@
 <script setup>
 import { onMounted } from 'vue'
+import "../dist/components/index.js"
+import "../dist/assets/icon.css"
 
-onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+onMounted(async () => {
+  await customElements.whenDefined('ea-drawer');
+  
+      // ------- 基本用法 -------
+      // #region
+      const Drawer = {
+        drawer: document.querySelector("#drawer"),
 
-  // ------- 基本用法 -------
-  // #region
-  const Drawer = {
-    drawer: document.querySelector("#drawer"),
+        ltrBtn: document.querySelector("#openDrawerBtn--ltr"),
+        rtlBtn: document.querySelector("#openDrawerBtn--rtl"),
+        ttbBtn: document.querySelector("#openDrawerBtn--ttb"),
+        bttBtn: document.querySelector("#openDrawerBtn--btt"),
 
-    ltrBtn: document.querySelector("#openDrawerBtn--ltr"),
-    rtlBtn: document.querySelector("#openDrawerBtn--rtl"),
-    ttbBtn: document.querySelector("#openDrawerBtn--ttb"),
-    bttBtn: document.querySelector("#openDrawerBtn--btt"),
+        init() {
+          this.ltrBtn.addEventListener("click", () => {
+            this.drawer.direction = "ltr";
+            this.drawer.visible = true;
+          });
 
-    init() {
-      this.ltrBtn.addEventListener("click", () => {
-        this.drawer.direction = "ltr";
-        this.drawer.visible = true;
-      });
+          this.rtlBtn.addEventListener("click", () => {
+            this.drawer.direction = "rtl";
+            this.drawer.visible = true;
+          });
 
-      this.rtlBtn.addEventListener("click", () => {
-        this.drawer.direction = "rtl";
-        this.drawer.visible = true;
-      });
+          this.ttbBtn.addEventListener("click", () => {
+            this.drawer.direction = "ttb";
+            this.drawer.visible = true;
+          });
 
-      this.ttbBtn.addEventListener("click", () => {
-        this.drawer.direction = "ttb";
-        this.drawer.visible = true;
-      });
+          this.bttBtn.addEventListener("click", () => {
+            this.drawer.direction = "btt";
+            this.drawer.visible = true;
+          });
 
-      this.bttBtn.addEventListener("click", () => {
-        this.drawer.direction = "btt";
-        this.drawer.visible = true;
-      });
+          this.drawer.beforeClose = done => {
+            $confirm("Are you confirm to close?", "Warning", {
+              confirmButtonText: "OK",
+              cancelButtonText: "Cancel",
+              type: "warning",
+            })
+              .then(action => {
+                done();
+              })
+              .catch(action => {});
+          };
 
-      this.drawer.addEventListener("before-close", e => {
-        const { done } = e.detail;
-        $confirm("Are you confirm to chose", "Warning", {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        })
-          .then(action => {
-            done();
-          })
-          .catch(action => {});
-      });
+          this.drawer.addEventListener("close", () => {
+            console.log("close");
+          });
+        },
+      };
 
-      this.drawer.addEventListener("close", () => {
-        console.log("close");
-      });
-    },
-  };
+      Drawer.init();
+      // #endregion
+      // ------- end -------
+      
+      // ------- 不添加 Title -------
+      // #region
+      const noHeaderExample = {
+        drawer: document.querySelector("#noHeaderDrawer"),
+        openBtn: document.querySelector("#noHeaderBtn"),
 
-  Drawer.init();
-  // #endregion
-  // ------- end -------
+        init() {
+          this.openBtn.addEventListener("click", () => {
+            this.drawer.visible = true;
+          });
+        },
+      };
+      noHeaderExample.init();
+      // #endregion
+      // ------- end -------
 
-  // ------- 不添加 Title -------
-  // #region
-  const noHeaderExample = {
-    drawer: document.querySelector("#noHeaderDrawer"),
-    openBtn: document.querySelector("#noHeaderBtn"),
+      
 
-    init() {
-      this.openBtn.addEventListener("click", () => {
-        this.drawer.visible = true;
-      });
-    },
-  };
-  noHeaderExample.init();
-  // #endregion
-  // ------- end -------
+      // ------- 自定义内容 -------
+      // #region
 
-  // ------- 自定义内容 -------
-  // #region
-  const CustomDrawer = {
-    drawer: document.querySelector("#customDrawer"),
-    openBtn: document.querySelector("#openCustomDrawerBtn"),
-    cancelBtn: document.querySelector("#customCancelBtn"),
-    confirmBtn: document.querySelector("#customConfirmBtn"),
+      const CustomDrawer = {
+        drawer: document.querySelector("#customDrawer"),
+        openBtn: document.querySelector("#openCustomDrawerBtn"),
+        cancelBtn: document.querySelector("#customCancelBtn"),
+        confirmBtn: document.querySelector("#customConfirmBtn"),
 
-    init() {
-      /**
-       * @param {() => void || null} done
-       */
-      let done = null;
+        bindBeforeClose(actionType) {
+          this.drawer.beforeClose = done => {
+            const actionText = actionType === "cancel" ? "cancel" : "confirm";
+            $confirm(`Are you sure you want to ${actionText}?`, "Warning", {
+              confirmButtonText: "OK",
+              cancelButtonText: "Cancel",
+              type: "warning",
+            })
+              .then(action => {
+                done();
+              })
+              .catch(action => {});
+          };
+        },
 
-      this.openBtn.addEventListener("click", () => {
-        this.drawer.visible = true;
-      });
+        init() {
+          this.bindBeforeClose("cancel");
 
-      this.cancelBtn.addEventListener("click", () => {
-        this.drawer["before-close"] = false;
-        this.drawer.visible = false;
-      });
+          this.openBtn.addEventListener("click", () => {
+            this.drawer.visible = true;
+          });
 
-      this.confirmBtn.addEventListener("click", () => {
-        this.drawer["before-close"] = true;
+          this.cancelBtn.addEventListener("click", () => {
+            this.bindBeforeClose("cancel");
+            this.drawer.visible = false;
+          });
 
-        this.drawer.visible = false;
-      });
+          this.confirmBtn.addEventListener("click", () => {
+            this.bindBeforeClose("confirm");
+            this.drawer.visible = false;
+          });
 
-      this.drawer.addEventListener("before-close", e => {
-        done = e.detail.done;
-        $confirm("Are you confirm to chose", "Warning", {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        })
-          .then(action => {
-            done();
-          })
-          .catch(action => {});
-      });
-    },
-  };
+          this.drawer.addEventListener("closed", () => {
+            this.bindBeforeClose("cancel");
+          });
+        },
+      };
 
-  CustomDrawer.init();
-  // #endregion
-  // ------- end -------
+      CustomDrawer.init();
+      // #endregion
+      // ------- end -------
+      
+      // ------- 嵌套抽屉 -------
+      // #region
+      const nestingExample = {
+        outerBtn: document.querySelector("#outerBtn"),
+        innerBtn: document.querySelector("#innerBtn"),
+        outerDrawer: document.querySelector("#outerDrawer"),
+        innerDrawer: document.querySelector("#innerDrawer"),
 
-  // ------- 嵌套抽屉 -------
-  // #region
-  const nestingExample = {
-    outerBtn: document.querySelector("#outerBtn"),
-    innerBtn: document.querySelector("#innerBtn"),
-    outerDrawer: document.querySelector("#outerDrawer"),
-    innerDrawer: document.querySelector("#innerDrawer"),
+        init() {
+          this.outerBtn.addEventListener("click", () => {
+            this.outerDrawer.visible = true;
+          });
 
-    init() {
-      this.outerBtn.addEventListener("click", () => {
-        this.outerDrawer.visible = true;
-      });
+          this.innerBtn.addEventListener("click", () => {
+            this.innerDrawer.visible = true;
+          });
 
-      this.innerBtn.addEventListener("click", () => {
-        this.innerDrawer.visible = true;
-      });
-
-      this.innerDrawer.addEventListener("before-close", e => {
-        const { done } = e.detail;
-        $confirm("Are you confirm to chose", "Warning", {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
-        })
-          .then(action => {
-            done();
-          })
-          .catch(action => {});
-      });
-    },
-  };
-  nestingExample.init();
-  // #endregion
-  // ------- end -------
+          this.innerDrawer.beforeClose = done => {
+            $confirm("Are you confirm to close inner drawer?", "Warning", {
+              confirmButtonText: "OK",
+              cancelButtonText: "Cancel",
+              type: "warning",
+            })
+              .then(action => {
+                done();
+              })
+              .catch(action => {});
+          };
+        },
+      };
+      nestingExample.init();
+      // #endregion
+      // ------- end -------
 })
 </script>
 
@@ -175,13 +179,13 @@ onMounted(() => {
 > `css`
 
 ::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入 Font Awesome CSS 文件
 :::
 
 ```html
 <link
   rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 />
 ```
 
@@ -199,7 +203,7 @@ onMounted(() => {
   <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
   <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
-  <ea-drawer id="drawer" title="I am the title" direction="ltr" before-close>
+  <ea-drawer id="drawer" title="I am the title" direction="ltr">
     <span>Hi, there!</span>
   </ea-drawer>
 </div>
@@ -213,45 +217,23 @@ onMounted(() => {
   <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
   <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
-  <ea-drawer id="drawer" title="I am the title" direction="ltr" before-close>
+  <ea-drawer id="drawer" title="I am the title" direction="ltr">
     <span>Hi, there!</span>
   </ea-drawer>
 </div>
 ```
 
 ```js
-const Drawer = {
-  drawer: document.querySelector("#drawer"),
+const CustomDrawer = {
+  drawer: document.querySelector("#customDrawer"),
+  openBtn: document.querySelector("#openCustomDrawerBtn"),
+  cancelBtn: document.querySelector("#customCancelBtn"),
+  confirmBtn: document.querySelector("#customConfirmBtn"),
 
-  ltrBtn: document.querySelector("#openDrawerBtn--ltr"),
-  rtlBtn: document.querySelector("#openDrawerBtn--rtl"),
-  ttbBtn: document.querySelector("#openDrawerBtn--ttb"),
-  bttBtn: document.querySelector("#openDrawerBtn--btt"),
-
-  init() {
-    this.ltrBtn.addEventListener("click", () => {
-      this.drawer.direction = "ltr";
-      this.drawer.visible = true;
-    });
-
-    this.rtlBtn.addEventListener("click", () => {
-      this.drawer.direction = "rtl";
-      this.drawer.visible = true;
-    });
-
-    this.ttbBtn.addEventListener("click", () => {
-      this.drawer.direction = "ttb";
-      this.drawer.visible = true;
-    });
-
-    this.bttBtn.addEventListener("click", () => {
-      this.drawer.direction = "btt";
-      this.drawer.visible = true;
-    });
-
-    this.drawer.addEventListener("before-close", e => {
-      const { done } = e.detail;
-      $confirm("Are you confirm to chose", "Warning", {
+  bindBeforeClose(actionType) {
+    this.drawer.beforeClose = done => {
+      const actionText = actionType === "cancel" ? "cancel" : "confirm";
+      $confirm(`Are you sure you want to ${actionText}?`, "Warning", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
         type: "warning",
@@ -260,15 +242,33 @@ const Drawer = {
           done();
         })
         .catch(action => {});
+    };
+  },
+
+  init() {
+    this.bindBeforeClose("cancel");
+
+    this.openBtn.addEventListener("click", () => {
+      this.drawer.visible = true;
     });
 
-    this.drawer.addEventListener("close", () => {
-      console.log("close");
+    this.cancelBtn.addEventListener("click", () => {
+      this.bindBeforeClose("cancel");
+      this.drawer.visible = false;
+    });
+
+    this.confirmBtn.addEventListener("click", () => {
+      this.bindBeforeClose("confirm");
+      this.drawer.visible = false;
+    });
+
+    this.drawer.addEventListener("closed", () => {
+      this.bindBeforeClose("cancel");
     });
   },
 };
 
-Drawer.init();
+CustomDrawer.init();
 ```
 
 :::
@@ -296,7 +296,6 @@ Drawer.init();
 ```html
 <div class="demo">
   <ea-button type="primary" id="noHeaderBtn">open</ea-button>
-
   <ea-drawer
     id="noHeaderDrawer"
     title="I am the title"
@@ -332,17 +331,28 @@ noHeaderExample.init();
   <ea-button type="primary" id="openCustomDrawerBtn"
     >打开自定义内容的抽屉</ea-button
   >
-  <ea-drawer id="customDrawer" title="我是标题" direction="ltr" before-close>
-    <ea-descriptions direction="vertical" border>
-      <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
-      <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
-      <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
-      <ea-descriptions-item label="称号">
-        <ea-tag>宿命背反</ea-tag>
+  <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
+    <ea-descriptions title="User Info">
+      <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
+      <ea-descriptions-item label="Essence">
+        Lord of the Wild
       </ea-descriptions-item>
-      <ea-descriptions-item label="属性" span="1">
-        <ea-tag type="warning" style="margin-right: 1rem">雷电</ea-tag>
-        <ea-tag type="info">物理</ea-tag>
+      <ea-descriptions-item label="Place">
+        Lunacrest Continent
+      </ea-descriptions-item>
+      <ea-descriptions-item label="Traits">
+        <ea-tag size="small" type="warning" style="margin-right: 1rem">
+          Thunderous Veins
+        </ea-tag>
+        <ea-tag size="small" type="info">Daredevil</ea-tag>
+      </ea-descriptions-item>
+      <ea-descriptions-item label="Description">
+        She was once an elf lord, defending the border from goblin invaders. She
+        was then a goblin warrior, protecting her clan from being slaughtered by
+        elves. She has the unwavering courage to uphold justice in her heart and
+        she is prepared to betray or be betrayed for the greater good. Despite
+        her inner gentleness, Lilyiro, who has spilled so much blood on
+        battlefields, is more straightforward than men.
       </ea-descriptions-item>
     </ea-descriptions>
     <footer slot="footer" style="text-align: right">
@@ -359,21 +369,30 @@ noHeaderExample.init();
   <ea-button type="primary" id="openCustomDrawerBtn"
     >打开自定义内容的抽屉</ea-button
   >
-
-  <ea-drawer id="customDrawer" title="我是标题" direction="ltr" before-close>
-    <ea-descriptions direction="vertical" border>
-      <ea-descriptions-item label="用户名"> Lilyiro </ea-descriptions-item>
-      <ea-descriptions-item label="身高"> 165cm </ea-descriptions-item>
-      <ea-descriptions-item label="年龄"> 17岁 </ea-descriptions-item>
-      <ea-descriptions-item label="称号">
-        <ea-tag>宿命背反</ea-tag>
+  <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
+    <ea-descriptions title="User Info">
+      <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
+      <ea-descriptions-item label="Essence">
+        Lord of the Wild
       </ea-descriptions-item>
-      <ea-descriptions-item label="属性" span="1">
-        <ea-tag type="warning" style="margin-right: 1rem">雷电</ea-tag>
-        <ea-tag type="info">物理</ea-tag>
+      <ea-descriptions-item label="Place">
+        Lunacrest Continent
+      </ea-descriptions-item>
+      <ea-descriptions-item label="Traits">
+        <ea-tag size="small" type="warning" style="margin-right: 1rem">
+          Thunderous Veins
+        </ea-tag>
+        <ea-tag size="small" type="info">Daredevil</ea-tag>
+      </ea-descriptions-item>
+      <ea-descriptions-item label="Description">
+        She was once an elf lord, defending the border from goblin invaders. She
+        was then a goblin warrior, protecting her clan from being slaughtered by
+        elves. She has the unwavering courage to uphold justice in her heart and
+        she is prepared to betray or be betrayed for the greater good. Despite
+        her inner gentleness, Lilyiro, who has spilled so much blood on
+        battlefields, is more straightforward than men.
       </ea-descriptions-item>
     </ea-descriptions>
-
     <footer slot="footer" style="text-align: right">
       <ea-button id="customCancelBtn" plain>Cancel</ea-button>
       <ea-button id="customConfirmBtn" type="primary">Confirm</ea-button>
@@ -389,31 +408,10 @@ const CustomDrawer = {
   cancelBtn: document.querySelector("#customCancelBtn"),
   confirmBtn: document.querySelector("#customConfirmBtn"),
 
-  init() {
-    /**
-     * @param {() => void || null} done
-     */
-    let done = null;
-
-    this.openBtn.addEventListener("click", () => {
-      this.drawer.visible = true;
-    });
-
-    this.cancelBtn.addEventListener("click", () => {
-      this.drawer["before-close"] = false;
-      this.drawer.visible = false;
-    });
-
-    this.confirmBtn.addEventListener("click", () => {
-      this.drawer["before-close"] = true;
-
-      this.drawer.visible = false;
-    });
-
-    this.drawer.addEventListener("before-close", e => {
-      done = e.detail.done;
-
-      $confirm("Are you confirm to chose", "Warning", {
+  bindBeforeClose(actionType) {
+    this.drawer.beforeClose = done => {
+      const actionText = actionType === "cancel" ? "cancel" : "confirm";
+      $confirm(`Are you sure you want to ${actionText}?`, "Warning", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
         type: "warning",
@@ -422,6 +420,28 @@ const CustomDrawer = {
           done();
         })
         .catch(action => {});
+    };
+  },
+
+  init() {
+    this.bindBeforeClose("close");
+
+    this.openBtn.addEventListener("click", () => {
+      this.drawer.visible = true;
+    });
+
+    this.cancelBtn.addEventListener("click", () => {
+      this.bindBeforeClose("cancel");
+      this.drawer.visible = false;
+    });
+
+    this.confirmBtn.addEventListener("click", () => {
+      this.bindBeforeClose("confirm");
+      this.drawer.visible = false;
+    });
+
+    this.drawer.addEventListener("close", () => {
+      this.bindBeforeClose("close");
     });
   },
 };
@@ -446,7 +466,6 @@ CustomDrawer.init();
         id="innerDrawer"
         title="I'm inner Drawer"
         append-to-body="true"
-        before-close
       >
         <p>_(:зゝ∠)_</p>
       </ea-drawer>
@@ -466,7 +485,6 @@ CustomDrawer.init();
         id="innerDrawer"
         title="I'm inner Drawer"
         append-to-body="true"
-        before-close
       >
         <p>_(:зゝ∠)_</p>
       </ea-drawer>
@@ -491,9 +509,8 @@ const nestingExample = {
       this.innerDrawer.visible = true;
     });
 
-    this.innerDrawer.addEventListener("before-close", e => {
-      const { done } = e.detail;
-      $confirm("Are you confirm to chose", "Warning", {
+    this.innerDrawer.beforeClose = done => {
+      $confirm("Are you confirm to close inner drawer?", "Warning", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
         type: "warning",
@@ -502,7 +519,7 @@ const nestingExample = {
           done();
         })
         .catch(action => {});
-    });
+    };
   },
 };
 nestingExample.init();

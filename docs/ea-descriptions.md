@@ -536,7 +536,7 @@ onMounted(() => {
 <div class="demo">
   <ea-descriptions column="3" border>
     <span slot="title">
-      <ea-icon icon="icon-info" color="#409eff"></ea-icon>Customized style list
+      <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style list
     </span>
     <ea-button type="primary" slot="extra"> Operation </ea-button>
     <ea-descriptions-item
@@ -582,7 +582,8 @@ onMounted(() => {
 <div class="demo">
   <ea-descriptions column="3" border>
     <span slot="title">
-      <ea-icon icon="icon-info" color="#409eff"></ea-icon>Customized style list
+      <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style
+      list
     </span>
     <ea-button type="primary" slot="extra"> Operation </ea-button>
     <ea-descriptions-item

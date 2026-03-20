@@ -195,7 +195,7 @@ export class EaColorPicker extends FormAssociatedBase {
               <div class="${ns.e("inner")}" part="inner"></div>
             </div>
             <div class="${ns.e("icon-wrapper")}" part="icon-wrapper">
-              <ea-icon class="${ns.e("icon", "status")}" part="status-icon" icon="icon-cancel"></ea-icon>
+              <ea-icon class="${ns.e("icon", "status")}" part="status-icon" name="xmark"></ea-icon>
             </div>
           </div>
           <ea-color-picker-panel class="${ns.e("panel")}" part="panel">

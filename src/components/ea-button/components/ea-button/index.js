@@ -33,7 +33,7 @@ export class EaButton extends FormAssociatedBase {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist(
+    const className = this.computedClasslist(
       "ea-button",
       {
         ["--" + this.type]: this.type,
@@ -46,6 +46,10 @@ export class EaButton extends FormAssociatedBase {
       },
       { icon: this.icon?.length }
     );
+
+    this.#container.className = className;
+
+    return className;
   }
 
   /**
@@ -69,42 +73,42 @@ export class EaButton extends FormAssociatedBase {
       type: Boolean,
       default: false,
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     type: {
       type: ["normal", "primary", "success", "warning", "danger"],
       default: "normal",
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     text: {
       type: Boolean,
       default: false,
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     plain: {
       type: Boolean,
       default: false,
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     round: {
       type: Boolean,
       default: false,
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     circle: {
       type: Boolean,
       default: false,
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     link: {
@@ -113,14 +117,14 @@ export class EaButton extends FormAssociatedBase {
       observer: newVal => {
         this.$render();
         this.#container.href = this.getAttribute("href");
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     href: {
       type: String,
       default: "",
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
 
         this.#container.setAttribute("href", newVal);
       },
@@ -129,7 +133,7 @@ export class EaButton extends FormAssociatedBase {
       type: ["small", "medium", "large"],
       default: "medium",
       observer: newVal => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     loading: {
@@ -142,9 +146,10 @@ export class EaButton extends FormAssociatedBase {
         if (newVal) {
           const i = document.createElement("ea-icon");
           i.id = "ea-loading-icon";
-          i.icon = "icon-cw animate-spin";
-          i.size = this.size;
-          i.part = "loading-icon";
+          i.setAttribute("name", "spinner");
+          i.toggleAttribute("spin", true);
+          i.setAttribute("size", this.size);
+          i.setAttribute("part", "loading-icon");
 
           this.#container.insertBefore(i, this.#container.firstChild);
         } else {
@@ -155,17 +160,17 @@ export class EaButton extends FormAssociatedBase {
           }
         }
 
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     icon: {
       type: String,
       default: "",
       observer: newVal => {
-        this.#icon.setAttribute("icon", newVal);
+        this.#icon.setAttribute("name", newVal);
         this.#icon.setAttribute("size", this.size);
 
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     "button-type": {
@@ -197,7 +202,7 @@ export class EaButton extends FormAssociatedBase {
     this.#container = this.shadowRoot.querySelector(".ea-button");
     this.#icon = this.shadowRoot.querySelector(".ea-button__icon");
 
-    this.#container.className = this.updateContainerClasslist();
+    this.updateContainerClasslist();
   }
 
   /**

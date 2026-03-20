@@ -113,8 +113,8 @@ export class EaSubMenu extends Base {
       <div class='ea-sub-menu' part='container'>
         <header class='ea-sub-menu__title' part='title'>
           <slot name='title'></slot>
-          <ea-icon icon="${
-            isChild ? "icon-angle-right" : "icon-angle-down"
+          <ea-icon name="${
+            isChild ? "angle-right" : "angle-down"
           }" class='ea-sub-menu__arrow' part='arrow'></ea-icon>
         </header>
         <ul class='ea-sub-menu__content' part='content'>

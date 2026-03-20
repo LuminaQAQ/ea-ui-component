@@ -89,8 +89,7 @@ onMounted(() => {
   <p class="row left is-not-demo">
     <ea-button id="basicEl1">Upload</ea-button>
     <ea-button id="basicEl2" type="primary">Save</ea-button>
-    <ea-button id="basicEl3" icon="icon-share"></ea-button>
-  </p>
+    <ea-button id="basicEl3" icon="share-nodes"></ea-button>
 
   <ea-tour id="basicTour">
     <ea-tour-step target="#basicEl1" title="Upload File">
@@ -110,7 +109,7 @@ onMounted(() => {
   <hr />
   <ea-button id="basicEl1">Upload</ea-button>
   <ea-button id="basicEl2" type="primary">Save</ea-button>
-  <ea-button id="basicEl3" icon="icon-share"></ea-button>
+  <ea-button id="basicEl3" icon="share-nodes"></ea-button>
 
   <ea-tour id="basicTour">
     <ea-tour-step target="#basicEl1" title="Upload File">
@@ -147,7 +146,7 @@ onMounted(() => {
   <p class="row left is-not-demo">
     <ea-button id="noMaskEl1">Upload</ea-button>
     <ea-button id="noMaskEl2" type="primary">Save</ea-button>
-    <ea-button id="noMaskEl3" icon="icon-share"></ea-button>
+    <ea-button id="noMaskEl3" icon="share-nodes"></ea-button>
   </p>
 
   <ea-tour id="noMaskTour" type="primary" mask="false">
@@ -167,7 +166,7 @@ onMounted(() => {
   <hr />
   <ea-button id="noMaskEl1">Upload</ea-button>
   <ea-button id="noMaskEl2" type="primary">Save</ea-button>
-  <ea-button id="noMaskEl3" icon="icon-share"></ea-button>
+  <ea-button id="noMaskEl3" icon="share-nodes"></ea-button>
 
   <ea-tour id="noMaskTour" type="primary" mask="false">
     <ea-tour-step target="#noMaskEl1" title="Upload File">
@@ -306,15 +305,15 @@ onMounted(() => {
 
 ### Tour Attributes
 
-| 参数      | 说明                                                | 类型    | 可选值                                                                                                                                                                                                                                    | 默认值  |
-| --------- | --------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| append-to | 挂载容器选择器，支持选择器字符串                    | string  | -                                                                                                                                                                                                                                         | body    |
-| visible   | 控制引导是否显示                                    | boolean | -                                                                                                                                                                                                                                         | -       |
-| current   | 当前步骤索引                                        | number  | -                                                                                                                                                                                                                                         | 0       |
-| gap       | 遮罩与目标元素间距（像素）                          | number  | -                                                                                                                                                                                                                                         | 6       |
-| mask      | 是否显示遮罩（true 显示，false 不显示）             | boolean | -                                                                                                                                                                                                                                         | true    |
-| type      | 按钮等样式类型，会传递给子 step                     | string  | `default  \|  primary`                                                                                                                                                                                                                    | default |
-| placement | 默认步骤弹出位置（当 step 未设置 placement 时生效） | string  | <ea-tooltip><span slot="reference">enum<ea-icon icon="icon-info"></ea-icon></span>top \| top-start \| top-end \| bottom \| bottom-start \| bottom-end \| left \| left-start \| left-end \| right \| right-start \| right-end</ea-tooltip> | bottom  |
+| 参数      | 说明                                                | 类型    | 可选值                                                                                                                                                                                                                                      | 默认值  |
+| --------- | --------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| append-to | 挂载容器选择器，支持选择器字符串                    | string  | -                                                                                                                                                                                                                                           | body    |
+| visible   | 控制引导是否显示                                    | boolean | -                                                                                                                                                                                                                                           | -       |
+| current   | 当前步骤索引                                        | number  | -                                                                                                                                                                                                                                           | 0       |
+| gap       | 遮罩与目标元素间距（像素）                          | number  | -                                                                                                                                                                                                                                           | 6       |
+| mask      | 是否显示遮罩（true 显示，false 不显示）             | boolean | -                                                                                                                                                                                                                                           | true    |
+| type      | 按钮等样式类型，会传递给子 step                     | string  | `default  \|  primary`                                                                                                                                                                                                                      | default |
+| placement | 默认步骤弹出位置（当 step 未设置 placement 时生效） | string  | <ea-tooltip><span slot="reference">enum<ea-icon name="circle-info"></ea-icon></span>top \| top-start \| top-end \| bottom \| bottom-start \| bottom-end \| left \| left-start \| left-end \| right \| right-start \| right-end</ea-tooltip> | bottom  |
 
 ### Tour Slots
 
@@ -334,13 +333,13 @@ onMounted(() => {
 
 ### TourStep Attributes
 
-| 参数        | 说明                                                | 类型   | 可选值                                                                                                                                                                                                                                    | 默认值  |
-| ----------- | --------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| title       | 步骤标题                                            | string | -                                                                                                                                                                                                                                         | ""      |
-| description | 步骤描述                                            | string | -                                                                                                                                                                                                                                         | ""      |
-| target      | 目标元素选择器（缺省则居中显示）                    | string | -                                                                                                                                                                                                                                         | ""      |
-| placement   | 默认步骤弹出位置（当 step 未设置 placement 时生效） | string | <ea-tooltip><span slot="reference">enum<ea-icon icon="icon-info"></ea-icon></span>top \| top-start \| top-end \| bottom \| bottom-start \| bottom-end \| left \| left-start \| left-end \| right \| right-start \| right-end</ea-tooltip> | bottom  |
-| type        | 样式类型，会影响按钮类型                            | string | `default \| primary`                                                                                                                                                                                                                      | default |
+| 参数        | 说明                                                | 类型   | 可选值                                                                                                                                                                                                                                      | 默认值  |
+| ----------- | --------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| title       | 步骤标题                                            | string | -                                                                                                                                                                                                                                           | ""      |
+| description | 步骤描述                                            | string | -                                                                                                                                                                                                                                           | ""      |
+| target      | 目标元素选择器（缺省则居中显示）                    | string | -                                                                                                                                                                                                                                           | ""      |
+| placement   | 默认步骤弹出位置（当 step 未设置 placement 时生效） | string | <ea-tooltip><span slot="reference">enum<ea-icon name="circle-info"></ea-icon></span>top \| top-start \| top-end \| bottom \| bottom-start \| bottom-end \| left \| left-start \| left-end \| right \| right-start \| right-end</ea-tooltip> | bottom  |
+| type        | 样式类型，会影响按钮类型                            | string | `default \| primary`                                                                                                                                                                                                                        | default |
 
 ### TourStep CSS Part
 

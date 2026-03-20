@@ -44,17 +44,18 @@
 
   &.left {
     justify-content: flex-start;
-    & > *:not(ea-result) {
+
+    &>*:not(ea-result) {
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
     }
 
-    & > ea-tag {
+    &>ea-tag {
       margin-right: 1.5rem;
       margin-bottom: 0.5rem;
     }
 
-    & > ea-badge {
+    &>ea-badge {
       margin-right: 1.5rem;
     }
   }
@@ -93,15 +94,16 @@
 
   &.left {
     align-items: flex-start;
-    & > * {
+
+    &>* {
       margin-bottom: 0.5rem;
     }
 
-    & > ea-input {
+    &>ea-input {
       margin-bottom: 0.5rem;
     }
 
-    & > ea-progress {
+    &>ea-progress {
       margin-bottom: 2rem;
     }
   }
@@ -188,6 +190,11 @@
   width: 100%;
 }
 
-.vp-doc :not(pre, h1, h2, h3, h4, h5, h6) > code {
+.vp-doc :not(pre, h1, h2, h3, h4, h5, h6)>code {
   color: #484848;
+}
+
+.vp-doc th,
+.vp-doc td {
+  min-width: 120px;
 }

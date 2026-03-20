@@ -267,7 +267,7 @@ export class EaInputNumber extends FormAssociatedBase {
       <label class="ea-input-number" part="container">
         <span class="ea-input-number__form-label" part="label"></span>
         <section class="ea-input-number__region" part="region">
-          <ea-icon class="ea-input-number__operator decrease" part="decrease" icon="icon-minus"></ea-icon>
+          <ea-icon class="ea-input-number__operator decrease" part="decrease" name="minus"></ea-icon>
           <span class="ea-input-number__prefix" part="prefix">
             <slot name="prefix"></slot>
           </span>
@@ -275,7 +275,7 @@ export class EaInputNumber extends FormAssociatedBase {
           <span class="ea-input-number__suffix" part="suffix">
             <slot name="suffix"></slot>
           </span>
-          <ea-icon class="ea-input-number__operator increase" part="increase" icon="icon-plus"></ea-icon>
+          <ea-icon class="ea-input-number__operator increase" part="increase" name="plus"></ea-icon>
         </section>
       </label>
     `;

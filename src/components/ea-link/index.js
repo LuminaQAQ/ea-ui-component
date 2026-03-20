@@ -55,7 +55,7 @@ export class EaLink extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        this.#icon.setAttribute("icon", newVal);
+        this.#icon.setAttribute("name", newVal);
         this.#container.className = this.updateContainerClasslist();
       },
     },

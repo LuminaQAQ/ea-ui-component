@@ -491,7 +491,7 @@ dashboardExample.init();
     <span>Content</span>
   </ea-progress>
   <ea-progress type="circle" percentage="100" status="success">
-    <ea-button type="success" icon="icon-coffee" circle />
+    <ea-button type="success" icon="mug-hot" circle />
   </ea-progress>
   <ea-progress type="dashboard" percentage="80">
     <div class="percentage-value"><span data-percentage></span>%</div>
@@ -515,7 +515,7 @@ dashboardExample.init();
     <span>Content</span>
   </ea-progress>
   <ea-progress type="circle" percentage="100" status="success">
-    <ea-button type="success" icon="icon-coffee" circle />
+    <ea-button type="success" icon="mug-hot" circle />
   </ea-progress>
   <ea-progress type="dashboard" percentage="80">
     <div class="percentage-value"><span data-percentage></span>%</div>

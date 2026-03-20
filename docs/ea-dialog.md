@@ -373,7 +373,7 @@ basicExample.init();
   <ea-dialog id="customHeaderDialog" width="500px">
     <header class="custom-header" slot="header">
       <span>This is a custom header!</span>
-      <ea-button id="customHeaderDialogCloseIcon" type="danger" icon="icon-coffee" circle></ea-button>
+      <ea-button id="customHeaderDialogCloseIcon" type="danger" icon="xmark" circle></ea-button>
     </header>
     <span>This is a message</span>
     <footer slot="footer">
@@ -399,7 +399,7 @@ basicExample.init();
       <ea-button
         id="customHeaderDialogCloseIcon"
         type="danger"
-        icon="icon-coffee"
+        icon="xmark"
         circle
       ></ea-button>
     </header>

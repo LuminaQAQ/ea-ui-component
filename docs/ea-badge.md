@@ -181,7 +181,7 @@ ea-badge::part(custom-value) {
   <ea-badge value="99">
     <ea-button>share</ea-button>
     <div slot="content">
-      <ea-icon icon="icon-share" part="custom-icon"></ea-icon>
+      <ea-icon name="share-nodes" part="custom-icon"></ea-icon>
       <span data-value part="custom-value"></span>
     </div>
   </ea-badge>
@@ -210,10 +210,10 @@ ea-badge::part(custom-value) {
 <div class="demo row">
   <ea-badge is-dot>query</ea-badge>
   <ea-badge id="hiddenBadge" is-dot>
-    <ea-button icon="icon-share">share</ea-button>
+    <ea-button icon="share-nodes">share</ea-button>
   </ea-badge>
   <ea-badge is-dot>
-    <ea-button icon="icon-mail"></ea-button>
+    <ea-button icon="envelope"></ea-button>
   </ea-badge>
 </div>
 
@@ -223,10 +223,10 @@ ea-badge::part(custom-value) {
 <div class="demo row">
   <ea-badge is-dot>query</ea-badge>
   <ea-badge id="hiddenBadge" is-dot>
-    <ea-button icon="icon-share">share</ea-button>
+    <ea-button icon="share-nodes">share</ea-button>
   </ea-badge>
   <ea-badge is-dot>
-    <ea-button icon="icon-mail"></ea-button>
+    <ea-button icon="envelope"></ea-button>
   </ea-badge>
 </div>
 ```

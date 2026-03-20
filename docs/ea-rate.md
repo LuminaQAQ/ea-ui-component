@@ -24,7 +24,7 @@ onMounted(async () => {
 
     init() {
       this.rate.getSymbol = () =>
-        `<ea-icon icon="icon-heart" part="icon"></ea-icon>`;
+        `<ea-icon name="heart" part="icon"></ea-icon>`;
     },
   };
   customIconExample.init();
@@ -34,8 +34,9 @@ onMounted(async () => {
     color: ["red", "orange", "yellow", "green", "blue"],
 
     init() {
+      const batteryIcons = ['battery-empty', 'battery-quarter', 'battery-half', 'battery-three-quarters', 'battery-full'];
       this.rate.getSymbol = (value, isSelected) =>
-        `<ea-icon icon="icon-battery-${value}" part="icon"></ea-icon>`;
+        `<ea-icon name="${batteryIcons[value]}" part="icon"></ea-icon>`;
 
       this.rate.addEventListener("hover", e => {
         this.rate.style.setProperty(
@@ -284,8 +285,7 @@ const customIconExample = {
   rate: document.querySelector("#customIconRate"),
 
   init() {
-    this.rate.getSymbol = () =>
-      `<ea-icon icon="icon-heart" part="icon"></ea-icon>`;
+    this.rate.getSymbol = () => `<ea-icon name="heart" part="icon"></ea-icon>`;
   },
 };
 customIconExample.init();
@@ -315,8 +315,15 @@ const customIconRendererExample = {
   color: ["red", "orange", "yellow", "green", "blue"],
 
   init() {
+    const batteryIcons = [
+      "battery-empty",
+      "battery-quarter",
+      "battery-half",
+      "battery-three-quarters",
+      "battery-full",
+    ];
     this.rate.getSymbol = (value, isSelected) =>
-      `<ea-icon icon="icon-battery-${value}" part="icon"></ea-icon>`;
+      `<ea-icon name="${batteryIcons[value]}" part="icon"></ea-icon>`;
 
     this.rate.addEventListener("hover", e => {
       this.rate.style.setProperty(
@@ -334,14 +341,14 @@ customIconRendererExample.init();
 
 ## Attributes
 
-| 参数                            | 说明         | 类型     | 可选值                            | 默认值                                                     |
-| ------------------------------- | ------------ | -------- | --------------------------------- | ---------------------------------------------------------- |
-| value                           | 当前评分值   | number   | —                                 | 0                                                          |
-| max                             | 最大评分长度 | number   | —                                 | 5                                                          |
-| size                            | 组件尺寸     | string   | `"large" \| "default" \| "small"` | -                                                          |
-| readonly                        | 是否只读     | boolean  | —                                 | false                                                      |
-| disabled                        | 是否禁用     | boolean  | —                                 | false                                                      |
-| getSymbol <ea-tag>prop</ea-tag> | 自定义图标   | function | —                                 | `() => "<ea-icon icon="icon-star" part="icon"></ea-icon>"` |
+| 参数                            | 说明         | 类型     | 可选值                            | 默认值                                                |
+| ------------------------------- | ------------ | -------- | --------------------------------- | ----------------------------------------------------- |
+| value                           | 当前评分值   | number   | —                                 | 0                                                     |
+| max                             | 最大评分长度 | number   | —                                 | 5                                                     |
+| size                            | 组件尺寸     | string   | `"large" \| "default" \| "small"` | -                                                     |
+| readonly                        | 是否只读     | boolean  | —                                 | false                                                 |
+| disabled                        | 是否禁用     | boolean  | —                                 | false                                                 |
+| getSymbol <ea-tag>prop</ea-tag> | 自定义图标   | function | —                                 | `() => "<ea-icon name="star" part="icon"></ea-icon>"` |
 
 ## CSS Part
 

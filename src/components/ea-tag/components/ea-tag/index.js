@@ -130,7 +130,7 @@ export class EaTag extends Base {
     this.shadowRoot.innerHTML = `
       <div class='ea-tag' part='container'>
         <slot></slot>
-        <ea-icon class="ea-tag__close" part="close-icon" icon="icon-cancel"></ea-icon>
+        <ea-icon class="ea-tag__close" part="close-icon" name="xmark"></ea-icon>
       </div>
     `;
 

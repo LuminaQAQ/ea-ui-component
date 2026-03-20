@@ -88,7 +88,7 @@ onMounted(() => {
 
     loadingTemplate: `
       <div id="loadingInstance" class="loading-example">
-        <ea-icon icon="icon-cw"></ea-icon>
+        <ea-icon name="rotate"></ea-icon>
       </div>
     `,
 
@@ -189,7 +189,7 @@ onMounted(() => {
 
     opacity: 0.7;
 
-    ea-icon[icon="icon-cw"] {
+    ea-icon[name="rotate"] {
       animation: rotate 1s linear infinite;
     }
   }
@@ -498,7 +498,7 @@ accordionCollapseExample.init();
     <ea-collapse-item id="customTitle" name="1">
       <div class="header" slot="title">
         Consistency
-        <ea-icon icon="icon-coffee" class="header-icon"></ea-icon>
+        <ea-icon name="mug-hot" class="header-icon"></ea-icon>
       </div>
       <div>
         Consistent with real life: in line with the process and logic of real
@@ -553,7 +553,7 @@ accordionCollapseExample.init();
     <ea-collapse-item id="customTitle" name="1">
       <div class="header" slot="title">
         Consistency
-        <ea-icon icon="icon-coffee" class="header-icon"></ea-icon>
+        <ea-icon name="mug-hot" class="header-icon"></ea-icon>
       </div>
       <div>
         Consistent with real life: in line with the process and logic of real
@@ -634,7 +634,7 @@ customTitleCollapseExample.init();
         Consistent within interface: all elements should be consistent, such as:
         design style, icons and texts, position of elements, etc.
       </div>
-      <ea-icon icon="icon-coffee" slot="icon"></ea-icon>
+      <ea-icon name="mug-hot" slot="icon"></ea-icon>
     </ea-collapse-item>
     <ea-collapse-item id="customTextIconCollapseItem" title="Feedback" name="2">
       <div>
@@ -692,7 +692,7 @@ customTitleCollapseExample.init();
         Consistent within interface: all elements should be consistent, such as:
         design style, icons and texts, position of elements, etc.
       </div>
-      <ea-icon icon="icon-coffee" slot="icon"></ea-icon>
+      <ea-icon name="mug-hot" slot="icon"></ea-icon>
     </ea-collapse-item>
     <ea-collapse-item id="customTextIconCollapseItem" title="Feedback" name="2">
       <div>
@@ -1072,7 +1072,7 @@ customExpandIconPositionExample.init();
   opacity: 0.7;
 }
 
-.loading-example ea-icon[icon="icon-cw"] {
+.loading-example ea-icon[name="rotate"] {
   animation: rotate 1s linear infinite;
 }
 

@@ -169,8 +169,8 @@ export class EaOverlay extends Base {
   #dispatchBubblesEvent = (customEventName, detail) => {
     this.emit(customEventName, {
       detail,
-      // bubbles: true,
-      // composed: true,
+      bubbles: true,
+      composed: true,
     });
   };
 
@@ -195,6 +195,7 @@ export class EaOverlay extends Base {
   connectedCallback() {
     super.connectedCallback();
 
+    this.#abortController?.abort();
     this.#abortController = new AbortController();
 
     if (this["close-on-click-modal"])

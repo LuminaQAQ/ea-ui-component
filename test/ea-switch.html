@@ -97,8 +97,8 @@
           --ea-switch-inactive-bg-color: #ff4949;
         "
       >
-        <ea-icon icon="icon-cancel" slot="inactive"></ea-icon>
-        <ea-icon icon="icon-ok" slot="active"></ea-icon>
+        <ea-icon name="ban" slot="inactive"></ea-icon>
+        <ea-icon name="check" slot="active"></ea-icon>
       </ea-switch>
     </div>
 
@@ -126,16 +126,14 @@
         ></ea-switch>
       </ea-tooltip>
 
-
-      
-        <ea-switch
-          id="extSwitch"
-          slot="reference"
-          placement="top"
-          value="100"
-          active-value="hello"
-          inactive-value="world"
-        ></ea-switch>
+      <ea-switch
+        id="extSwitch"
+        slot="reference"
+        placement="top"
+        value="100"
+        active-value="hello"
+        inactive-value="world"
+      ></ea-switch>
     </div>
 
     <script type="module">

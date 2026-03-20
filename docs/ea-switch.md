@@ -204,8 +204,8 @@ onMounted(() => {
           --ea-switch-inactive-bg-color: #ff4949;
         "
   >
-    <ea-icon icon="icon-cancel" slot="inactive"></ea-icon>
-    <ea-icon icon="icon-ok" slot="active"></ea-icon>
+    <ea-icon name="ban" slot="inactive"></ea-icon>
+    <ea-icon name="check" slot="active"></ea-icon>
   </ea-switch>
 </div>
 
@@ -236,8 +236,8 @@ onMounted(() => {
           --ea-switch-inactive-bg-color: #ff4949;
         "
   >
-    <ea-icon icon="icon-cancel" slot="inactive"></ea-icon>
-    <ea-icon icon="icon-ok" slot="active"></ea-icon>
+    <ea-icon name="ban" slot="inactive"></ea-icon>
+    <ea-icon name="check" slot="active"></ea-icon>
   </ea-switch>
 </div>
 ```

@@ -193,6 +193,7 @@ $ea-progress-type: (
   @include state(show-text) {
     .ea-progress__percentage {
       display: flex;
+      flex-direction: column;
     }
   }
 

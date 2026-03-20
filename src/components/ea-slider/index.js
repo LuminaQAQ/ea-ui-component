@@ -365,6 +365,19 @@ export class EaSlider extends FormAssociatedBase {
   };
 
   /**
+   * 修复浮点数精度问题
+   * @param {number} value 原始值
+   * @returns {number} 修复精度后的值
+   */
+  #fixPrecision = value => {
+    const stepStr = this.step.toString();
+    const decimalPlaces = stepStr.includes(".")
+      ? stepStr.split(".")[1].length
+      : 0;
+    return parseFloat(value.toFixed(decimalPlaces));
+  };
+
+  /**
    * 根据鼠标位置计算滑块值
    * @param {number} position 鼠标位置
    * @returns {number} 滑块值
@@ -377,7 +390,9 @@ export class EaSlider extends FormAssociatedBase {
     const clampedPercentage = Math.max(0, Math.min(1, percentage));
     const value = this.min + clampedPercentage * (this.max - this.min);
     const steppedValue = Math.round(value / this.step) * this.step;
-    return Math.max(this.min, Math.min(this.max, steppedValue));
+    return this.#fixPrecision(
+      Math.max(this.min, Math.min(this.max, steppedValue))
+    );
   };
 
   /**

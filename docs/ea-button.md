@@ -30,21 +30,7 @@ onMounted(() => {
 ```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-button/index.js";
-  import "./node_modules/easy-component-ui/components/ea-button-group/index.js"; // 需要使用按钮组时才需引入
 </script>
-```
-
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
 ```
 
 ## 自定义样式
@@ -78,28 +64,53 @@ onMounted(() => {
       <ea-button type="danger" round>危险按钮</ea-button>
   </div>
   <div class="row">
-      <ea-button icon="icon-coffee" circle></ea-button>
-      <ea-button icon="icon-edit" type="primary" circle></ea-button>
-      <ea-button icon="icon-comment-empty" type="success" circle></ea-button>
-      <ea-button icon="icon-bell" type="warning" circle></ea-button>
-      <ea-button icon="icon-cog" type="danger" circle></ea-button>
+      <ea-button icon="coffee" circle></ea-button>
+      <ea-button icon="pen-to-square" type="primary" circle></ea-button>
+      <ea-button icon="comment" type="success" circle></ea-button>
+      <ea-button icon="bell" type="warning" circle></ea-button>
+      <ea-button icon="gear" type="danger" circle></ea-button>
   </div>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
 
-```html
-<div class="row">
-  <ea-button>默认按钮</ea-button>
-  <ea-button class="part">默认按钮</ea-button>
-  <ea-button type="primary">主要按钮</ea-button>
-  <ea-button type="success">成功按钮</ea-button>
-  <ea-button type="warning">警告按钮</ea-button>
-  <ea-button type="danger">危险按钮</ea-button>
-</div>
+::: code-group
+
+```html [默认按钮]
+<ea-button>默认按钮</ea-button>
+<ea-button type="primary">主要按钮</ea-button>
+<ea-button type="success">成功按钮</ea-button>
+<ea-button type="warning">警告按钮</ea-button>
+<ea-button type="danger">危险按钮</ea-button>
+```
+
+```html [朴素按钮]
+<ea-button plain>朴素按钮</ea-button>
+<ea-button type="primary" plain>主要按钮</ea-button>
+<ea-button type="success" plain>成功按钮</ea-button>
+<ea-button type="warning" plain>警告按钮</ea-button>
+<ea-button type="danger" plain>危险按钮</ea-button>
+```
+
+```html [圆角按钮]
+<ea-button round>圆角按钮</ea-button>
+<ea-button type="primary" round>主要按钮</ea-button>
+<ea-button type="success" round>成功按钮</ea-button>
+<ea-button type="warning" round>警告按钮</ea-button>
+<ea-button type="danger" round>危险按钮</ea-button>
+```
+
+```html [图标按钮]
+<ea-button icon="coffee" circle></ea-button>
+<ea-button icon="pen-to-square" type="primary" circle></ea-button>
+<ea-button icon="comment" type="success" circle></ea-button>
+<ea-button icon="bell" type="warning" circle></ea-button>
+<ea-button icon="gear" type="danger" circle></ea-button>
 ```
 
 :::
+
+::::
 
 ## 禁用状态
 
@@ -130,35 +141,48 @@ onMounted(() => {
       <ea-button type="danger" round disabled>危险按钮</ea-button>
   </div>
   <div class="row">
-      <ea-button icon="icon-coffee" circle disabled></ea-button>
-      <ea-button icon="icon-edit" type="primary" circle disabled></ea-button>
-      <ea-button icon="icon-comment-empty" type="success" circle disabled></ea-button>
-      <ea-button icon="icon-bell" type="warning" circle disabled></ea-button>
-      <ea-button icon="icon-cog" type="danger" circle disabled></ea-button>
+      <ea-button icon="coffee" circle disabled></ea-button>
+      <ea-button icon="pen-to-square" type="primary" circle disabled></ea-button>
+      <ea-button icon="comment" type="success" circle disabled></ea-button>
+      <ea-button icon="bell" type="warning" circle disabled></ea-button>
+      <ea-button icon="gear" type="danger" circle disabled></ea-button>
   </div>
 </div>
 
 ::: details 查看代码
 
-`html`
+::: code-group
 
-```html
-<div class="row">
-  <ea-button disabled>禁用按钮</ea-button>
-  <ea-button type="primary" disabled>主要按钮</ea-button>
-  <ea-button type="success" disabled>成功按钮</ea-button>
-  <ea-button type="warning" disabled>警告按钮</ea-button>
-  <ea-button type="danger" disabled>危险按钮</ea-button>
-</div>
+```html [默认按钮]
+<ea-button disabled>禁用按钮</ea-button>
+<ea-button type="primary" disabled>主要按钮</ea-button>
+<ea-button type="success" disabled>成功按钮</ea-button>
+<ea-button type="warning" disabled>警告按钮</ea-button>
+<ea-button type="danger" disabled>危险按钮</ea-button>
 ```
 
-`js`: 操作 `disabled` 属性
+```html [朴素按钮]
+<ea-button disabled plain>禁用按钮</ea-button>
+<ea-button type="primary" disabled plain>主要按钮</ea-button>
+<ea-button type="success" disabled plain>成功按钮</ea-button>
+<ea-button type="warning" disabled plain>警告按钮</ea-button>
+<ea-button type="danger" disabled plain>危险按钮</ea-button>
+```
 
-```js
-const btn = document.querySelector("ea-button");
-btn.addEventListener("click", function (e) {
-  btn.disabled = e.target.checked;
-});
+```html [圆角按钮]
+<ea-button id="ea-button-disabled" round disabled>圆角按钮</ea-button>
+<ea-button type="primary" round disabled>主要按钮</ea-button>
+<ea-button type="success" round disabled>成功按钮</ea-button>
+<ea-button type="warning" round disabled>警告按钮</ea-button>
+<ea-button type="danger" round disabled>危险按钮</ea-button>
+```
+
+```html [图标按钮]
+<ea-button icon="coffee" circle disabled></ea-button>
+<ea-button icon="pen-to-square" type="primary" circle disabled></ea-button>
+<ea-button icon="comment" type="success" circle disabled></ea-button>
+<ea-button icon="bell" type="warning" circle disabled></ea-button>
+<ea-button icon="gear" type="danger" circle disabled></ea-button>
 ```
 
 :::
@@ -260,96 +284,96 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
   </div>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
 
-```html
-<div class="demo">
-  <div class="row left">
-    <ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link
-      >链接按钮</ea-button
-    >
-    <ea-button
-      type="primary"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >文本按钮</ea-button
-    >
-    <ea-button
-      type="danger"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >危险按钮</ea-button
-    >
-    <ea-button
-      type="warning"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >警告按钮</ea-button
-    >
-    <ea-button
-      type="success"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >成功按钮</ea-button
-    >
-    <ea-button
-      disabled
-      id="ea-button-a"
-      type="text"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >链接按钮</ea-button
-    >
-  </div>
+::: code-group
 
-  <div class="row left">
-    <ea-button
-      disabled
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >链接按钮</ea-button
-    >
-    <ea-button
-      disabled
-      type="primary"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >文本按钮</ea-button
-    >
-    <ea-button
-      disabled
-      type="danger"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >危险按钮</ea-button
-    >
-    <ea-button
-      disabled
-      type="warning"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >警告按钮</ea-button
-    >
-    <ea-button
-      disabled
-      type="success"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >成功按钮</ea-button
-    >
-    <ea-button
-      disabled
-      id="ea-button-a"
-      type="text"
-      href="https://luminaqaq.github.io/ea-ui-component/ea-button"
-      link
-      >链接按钮</ea-button
-    >
-  </div>
-</div>
+```html [默认链接]
+<ea-button href="https://luminaqaq.github.io/ea-ui-component/ea-button" link
+  >链接按钮</ea-button
+>
+<ea-button
+  type="primary"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >文本按钮</ea-button
+>
+<ea-button
+  type="danger"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >危险按钮</ea-button
+>
+<ea-button
+  type="warning"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >警告按钮</ea-button
+>
+<ea-button
+  type="success"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >成功按钮</ea-button
+>
+<ea-button
+  disabled
+  id="ea-button-a"
+  type="text"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >链接按钮</ea-button
+>
+```
+
+```html [禁用链接]
+<ea-button
+  disabled
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >链接按钮</ea-button
+>
+<ea-button
+  disabled
+  type="primary"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >文本按钮</ea-button
+>
+<ea-button
+  disabled
+  type="danger"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >危险按钮</ea-button
+>
+<ea-button
+  disabled
+  type="warning"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >警告按钮</ea-button
+>
+<ea-button
+  disabled
+  type="success"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >成功按钮</ea-button
+>
+<ea-button
+  disabled
+  id="ea-button-a"
+  type="text"
+  href="https://luminaqaq.github.io/ea-ui-component/ea-button"
+  link
+  >链接按钮</ea-button
+>
 ```
 
 :::
+
+::::
 
 ## 文字按钮
 
@@ -363,18 +387,12 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 
 <div class="demo">
   <div class="row left">
-    <ea-button icon="icon-coffee" text>文字按钮</ea-button>
+    <ea-button icon="coffee" text>文字按钮</ea-button>
+    <ea-button icon="coffee" text disabled>文字按钮</ea-button>
     <ea-button type="primary" text>文字按钮</ea-button>
     <ea-button type="danger" text>文字按钮</ea-button>
     <ea-button type="warning" text>文字按钮</ea-button>
     <ea-button type="success" text>文字按钮</ea-button>
-  </div>
-  <div class="row left">
-    <ea-button disabled icon="icon-coffee" text>文字按钮</ea-button>
-    <ea-button disabled type="primary" text>文字按钮</ea-button>
-    <ea-button disabled type="danger" text>文字按钮</ea-button>
-    <ea-button disabled type="warning" text>文字按钮</ea-button>
-    <ea-button disabled type="success" text>文字按钮</ea-button>
   </div>
 </div>
 
@@ -383,18 +401,12 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 ```html
 <div class="demo">
   <div class="row left">
-    <ea-button icon="icon-coffee" text>文字按钮</ea-button>
+    <ea-button icon="coffee" text>文字按钮</ea-button>
+    <ea-button icon="coffee" text disabled>文字按钮</ea-button>
     <ea-button type="primary" text>文字按钮</ea-button>
     <ea-button type="danger" text>文字按钮</ea-button>
     <ea-button type="warning" text>文字按钮</ea-button>
     <ea-button type="success" text>文字按钮</ea-button>
-  </div>
-  <div class="row left">
-    <ea-button disabled icon="icon-coffee" text>文字按钮</ea-button>
-    <ea-button disabled type="primary" text>文字按钮</ea-button>
-    <ea-button disabled type="danger" text>文字按钮</ea-button>
-    <ea-button disabled type="warning" text>文字按钮</ea-button>
-    <ea-button disabled type="success" text>文字按钮</ea-button>
   </div>
 </div>
 ```
@@ -408,32 +420,26 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 通过设置 `icon` 属性为 `icon-xxx` 来改变图标，更多图标请查看 [图标文档](./ea-icon.md)。
 
 <div class="row left">
-  <ea-button type="primary" icon="icon-coffee" circle></ea-button>
-  <ea-button type="primary" icon="icon-edit" round></ea-button>
-  <ea-button type="primary" icon="icon-edit"></ea-button>
-  <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
-  <ea-button type="primary" icon="icon-trash-empty" disabled>
-    图标按钮
-  </ea-button>
-  <ea-button type="primary" disabled>
-    图标按钮 <ea-icon icon="icon-trash-empty"></ea-icon>
-  </ea-button>
+  <ea-button type="primary" icon="pen-to-square" round></ea-button>
+  <ea-button type="primary" icon="pen-to-square"></ea-button>
+  <ea-button type="primary" icon="comment">图标按钮</ea-button>
+  <ea-button type="primary" icon="trash-can" disabled>图标按钮</ea-button>
+  <ea-button type="primary" disabled
+    >图标按钮 <ea-icon name="trash-can"></ea-icon
+  ></ea-button>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="row left">
-  <ea-button type="primary" icon="icon-coffee" circle></ea-button>
-  <ea-button type="primary" icon="icon-edit" round></ea-button>
-  <ea-button type="primary" icon="icon-edit"></ea-button>
-  <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
-  <ea-button type="primary" icon="icon-trash-empty" disabled>
-    图标按钮
-  </ea-button>
-  <ea-button type="primary" disabled>
-    图标按钮 <ea-icon icon="icon-trash-empty"></ea-icon>
-  </ea-button>
+  <ea-button type="primary" icon="pen-to-square" round></ea-button>
+  <ea-button type="primary" icon="pen-to-square"></ea-button>
+  <ea-button type="primary" icon="comment">图标按钮</ea-button>
+  <ea-button type="primary" icon="trash-can" disabled>图标按钮</ea-button>
+  <ea-button type="primary" disabled
+    >图标按钮 <ea-icon name="trash-can"></ea-icon
+  ></ea-button>
 </div>
 ```
 
@@ -445,12 +451,17 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 
 <div class="row left">
   <ea-button-group>
-    <ea-button icon="icon-angle-left" type="primary">上一页</ea-button>
-    <ea-button type="primary">
-      下一页 <ea-icon icon="icon-angle-right"></ea-icon>
+    <ea-button icon="angle-left" type="success">上一页</ea-button>
+    <ea-button type="primary"
+      >下一页 <ea-icon name="angle-right"></ea-icon>
     </ea-button>
   </ea-button-group>
-  <ea-button-group>
+  <ea-button-group size="small">
+    <ea-button>后退</ea-button>
+    <ea-button>刷新</ea-button>
+    <ea-button>前进</ea-button>
+  </ea-button-group>
+  <ea-button-group type="success">
     <ea-button type="primary">后退</ea-button>
     <ea-button type="primary">刷新</ea-button>
     <ea-button type="primary">前进</ea-button>
@@ -461,13 +472,19 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 
 ```html
 <div class="row left">
+  <ea-icon name="angle-right"></ea-icon>
   <ea-button-group>
-    <ea-button icon="icon-angle-left" type="primary">上一页</ea-button>
-    <ea-button type="primary">
-      下一页 <ea-icon icon="icon-angle-right"></ea-icon>
+    <ea-button icon="angle-left" type="success">上一页</ea-button>
+    <ea-button type="primary"
+      >下一页 <ea-icon name="angle-right"></ea-icon>
     </ea-button>
   </ea-button-group>
-  <ea-button-group>
+  <ea-button-group size="small">
+    <ea-button>后退</ea-button>
+    <ea-button>刷新</ea-button>
+    <ea-button>前进</ea-button>
+  </ea-button-group>
+  <ea-button-group type="success">
     <ea-button type="primary">后退</ea-button>
     <ea-button type="primary">刷新</ea-button>
     <ea-button type="primary">前进</ea-button>
@@ -485,23 +502,23 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 
 <div class="row left">
   <ea-switch id="ea-radio-loading" value="true"></ea-switch>
-  <ea-button id="ea-button-loading" type="primary" loading>加载中按钮</ea-button>
+  <ea-button id="ea-button-loading" type="primary" icon="coffee" loading>
+    加载中按钮
+  </ea-button>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
 
-`html`
+::: code-group
 
 ```html
-<div class="row">
+<div class="row left">
   <ea-switch id="ea-radio-loading" value="true"></ea-switch>
-  <ea-button id="ea-button-loading" type="primary" loading
-    >加载中按钮</ea-button
-  >
+  <ea-button id="ea-button-loading" type="primary" icon="coffee" loading>
+    加载中按钮
+  </ea-button>
 </div>
 ```
-
-`js`: 操作 `loading` 属性。
 
 ```js
 document
@@ -514,6 +531,8 @@ document
 ```
 
 :::
+
+::::
 
 ## 不同尺寸
 
@@ -528,13 +547,9 @@ document
     <ea-button type="primary" size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button type="primary" icon="icon-coffee" size="large"
-      >大型按钮</ea-button
-    >
-    <ea-button type="primary" icon="icon-coffee">默认按钮</ea-button>
-    <ea-button type="primary" icon="icon-coffee" size="small"
-      >小型按钮</ea-button
-    >
+    <ea-button type="primary" icon="coffee" size="large">大型按钮</ea-button>
+    <ea-button type="primary" icon="coffee">默认按钮</ea-button>
+    <ea-button type="primary" icon="coffee" size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
     <ea-button type="primary" round size="large">大型按钮</ea-button>
@@ -542,19 +557,9 @@ document
     <ea-button type="primary" round size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button
-      type="primary"
-      circle
-      icon="icon-coffee"
-      size="large"
-    ></ea-button>
-    <ea-button type="primary" circle icon="icon-coffee"></ea-button>
-    <ea-button
-      type="primary"
-      circle
-      icon="icon-coffee"
-      size="small"
-    ></ea-button>
+    <ea-button type="primary" circle icon="coffee" size="large"></ea-button>
+    <ea-button type="primary" circle icon="coffee"></ea-button>
+    <ea-button type="primary" circle icon="coffee" size="small"></ea-button>
   </div>
 </div>
 
@@ -568,13 +573,9 @@ document
     <ea-button type="primary" size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button type="primary" icon="icon-coffee" size="large"
-      >大型按钮</ea-button
-    >
-    <ea-button type="primary" icon="icon-coffee">默认按钮</ea-button>
-    <ea-button type="primary" icon="icon-coffee" size="small"
-      >小型按钮</ea-button
-    >
+    <ea-button type="primary" icon="coffee" size="large">大型按钮</ea-button>
+    <ea-button type="primary" icon="coffee">默认按钮</ea-button>
+    <ea-button type="primary" icon="coffee" size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
     <ea-button type="primary" round size="large">大型按钮</ea-button>
@@ -582,19 +583,9 @@ document
     <ea-button type="primary" round size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button
-      type="primary"
-      circle
-      icon="icon-coffee"
-      size="large"
-    ></ea-button>
-    <ea-button type="primary" circle icon="icon-coffee"></ea-button>
-    <ea-button
-      type="primary"
-      circle
-      icon="icon-coffee"
-      size="small"
-    ></ea-button>
+    <ea-button type="primary" circle icon="coffee" size="large"></ea-button>
+    <ea-button type="primary" circle icon="coffee"></ea-button>
+    <ea-button type="primary" circle icon="coffee" size="small"></ea-button>
   </div>
 </div>
 ```

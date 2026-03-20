@@ -76,7 +76,7 @@ onMounted(() => {
 <!-- #region  -->
 <div class="demo">
   <ea-breadcrumb>
-    <ea-icon icon="icon-angle-right" slot="separator"></ea-icon>
+    <ea-icon name="angle-right" slot="separator"></ea-icon>
     <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
     <ea-breadcrumb-item href="javascript:;">
       <span slot="separator">→</span>
@@ -86,13 +86,13 @@ onMounted(() => {
     <ea-breadcrumb-item>promotion detail</ea-breadcrumb-item>
   </ea-breadcrumb>
 </div>
-<!-- #endregion  -->
-<!-- -------------------  -->
+<!-- #endregion -->
+<!-- ------------------- -->
 
 ```html
 <div class="demo">
   <ea-breadcrumb>
-    <ea-icon icon="icon-angle-right" slot="separator"></ea-icon>
+    <ea-icon name="angle-right" slot="separator"></ea-icon>
     <ea-breadcrumb-item href="javascript:;">homepage</ea-breadcrumb-item>
     <ea-breadcrumb-item href="javascript:;">
       <span slot="separator">→</span>

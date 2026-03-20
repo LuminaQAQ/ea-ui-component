@@ -29,14 +29,18 @@ export class EaAvatar extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        this.#container.innerHTML = `<ea-icon class="ea-avatar__icon" icon="${newVal}" part="icon-avatar"></ea-icon>`;
+        if (newVal) {
+          this.#container.innerHTML = `<ea-icon class="ea-avatar__icon" name="${newVal}" part="icon-avatar"></ea-icon>`;
+        } else {
+          this.#container.innerHTML = `<slot>${defaultAvatar}</slot>`;
+        }
       },
     },
     shape: {
       type: ["circle", "square"],
       default: "circle",
       observer: () => {
-        this.#container.className = this.updateContainerClasslist();
+        this.updateContainerClasslist();
       },
     },
     size: {
@@ -126,9 +130,13 @@ export class EaAvatar extends Base {
    * @return {string} 属性值
    */
   updateContainerClasslist() {
-    return this.computedClasslist("ea-avatar", {
+    const className = this.computedClasslist("ea-avatar", {
       ["--" + this.shape]: this.shape,
     });
+
+    this.#container.className = className;
+
+    return className;
   }
 
   constructor() {
@@ -147,12 +155,16 @@ export class EaAvatar extends Base {
     `;
 
     this.#container = this.shadowRoot.querySelector(".ea-avatar");
+
+    this.updateContainerClasslist();
   }
 
   connectedCallback() {
     super.connectedCallback();
+  }
 
-    this.#container.className = this.updateContainerClasslist();
+  $beforeUnmounted() {
+    this.#srcController?.abort();
   }
 }
 

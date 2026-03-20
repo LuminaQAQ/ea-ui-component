@@ -208,7 +208,7 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 
 ```js
 const callbackAlert = document.querySelector("#callback");
-callbackAlert.addEventListener("close", (e) => {
+callbackAlert.addEventListener("close", e => {
   alert("Hello World");
 });
 ```
@@ -228,7 +228,7 @@ callbackAlert.addEventListener("close", (e) => {
   <ea-alert title="Warning alert" type="warning" show-icon></ea-alert>
   <ea-alert title="Error alert" type="error" show-icon></ea-alert>
   <ea-alert title="Error alert with custom icon" type="error" show-icon>
-    <ea-icon slot="icon" icon="icon-bell" color="red" style=""></ea-icon>
+    <ea-icon slot="icon" name="bell" color="red" style=""></ea-icon>
   </ea-alert>
 </div>
 
@@ -242,7 +242,7 @@ callbackAlert.addEventListener("close", (e) => {
   <ea-alert title="Warning alert" type="warning" show-icon></ea-alert>
   <ea-alert title="Error alert" type="error" show-icon></ea-alert>
   <ea-alert title="Error alert with custom icon" type="error" show-icon>
-    <ea-icon slot="icon" icon="icon-bell" color="red" style=""></ea-icon>
+    <ea-icon slot="icon" name="bell" color="red" style=""></ea-icon>
   </ea-alert>
 </div>
 ```

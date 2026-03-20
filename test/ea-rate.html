@@ -149,7 +149,7 @@
 
         init() {
           this.rate.getSymbol = () =>
-            `<ea-icon icon="icon-heart" part="icon"></ea-icon>`;
+            `<ea-icon name="heart" part="icon"></ea-icon>`;
         },
       };
       customIconExample.init();
@@ -174,8 +174,15 @@
         color: ["red", "orange", "yellow", "green", "blue"],
 
         init() {
+          const batteryIcons = [
+            "battery-empty",
+            "battery-quarter",
+            "battery-half",
+            "battery-three-quarters",
+            "battery-full",
+          ];
           this.rate.getSymbol = (value, isSelected) =>
-            `<ea-icon icon="icon-battery-${value}" part="icon"></ea-icon>`;
+            `<ea-icon name="${batteryIcons[value]}" part="icon"></ea-icon>`;
 
           this.rate.addEventListener("hover", e => {
             this.rate.style.setProperty(

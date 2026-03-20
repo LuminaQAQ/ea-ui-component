@@ -24,7 +24,6 @@
 
   <body>
     <script type="module" src="/main.js"></script>
-    <ea-icon icon="coffee"></ea-icon>
     <script type="module">
       // ------- disabled按钮 -------
       // #region
@@ -112,11 +111,11 @@
       <ea-button type="danger" round>危险按钮</ea-button>
     </div>
     <div class="row">
-      <ea-button icon="icon-coffee" circle></ea-button>
-      <ea-button icon="icon-edit" type="primary" circle></ea-button>
-      <ea-button icon="icon-comment-empty" type="success" circle></ea-button>
-      <ea-button icon="icon-bell" type="warning" circle></ea-button>
-      <ea-button icon="icon-cog" type="danger" circle></ea-button>
+      <ea-button icon="coffee" circle></ea-button>
+      <ea-button icon="pen-to-square" type="primary" circle></ea-button>
+      <ea-button icon="comment" type="success" circle></ea-button>
+      <ea-button icon="bell" type="warning" circle></ea-button>
+      <ea-button icon="gear" type="danger" circle></ea-button>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -148,16 +147,16 @@
       <ea-button type="danger" round disabled>危险按钮</ea-button>
     </div>
     <div class="row">
-      <ea-button icon="icon-coffee" circle disabled></ea-button>
-      <ea-button icon="icon-edit" type="primary" circle disabled></ea-button>
+      <ea-button icon="coffee" circle disabled></ea-button>
       <ea-button
-        icon="icon-comment-empty"
-        type="success"
+        icon="pen-to-square"
+        type="primary"
         circle
         disabled
       ></ea-button>
-      <ea-button icon="icon-bell" type="warning" circle disabled></ea-button>
-      <ea-button icon="icon-cog" type="danger" circle disabled></ea-button>
+      <ea-button icon="comment" type="success" circle disabled></ea-button>
+      <ea-button icon="bell" type="warning" circle disabled></ea-button>
+      <ea-button icon="gear" type="danger" circle disabled></ea-button>
     </div>
     <hr />
     <!-- #endregion  -->
@@ -167,8 +166,8 @@
     <!-- #region  -->
     <h2>文字按钮</h2>
     <div class="row left">
-      <ea-button icon="icon-coffee" text>文字按钮</ea-button>
-      <ea-button icon="icon-coffee" text disabled>文字按钮</ea-button>
+      <ea-button icon="coffee" text>文字按钮</ea-button>
+      <ea-button icon="coffee" text disabled>文字按钮</ea-button>
       <ea-button type="primary" text>文字按钮</ea-button>
       <ea-button type="danger" text>文字按钮</ea-button>
       <ea-button type="warning" text>文字按钮</ea-button>
@@ -274,14 +273,12 @@
     <!-- #region  -->
     <h2>图标按钮</h2>
     <div class="row left">
-      <ea-button type="primary" icon="icon-edit" round></ea-button>
-      <ea-button type="primary" icon="icon-edit"></ea-button>
-      <ea-button type="primary" icon="icon-comment-empty">图标按钮</ea-button>
-      <ea-button type="primary" icon="icon-trash-empty" disabled
-        >图标按钮</ea-button
-      >
+      <ea-button type="primary" icon="pen-to-square" round></ea-button>
+      <ea-button type="primary" icon="pen-to-square"></ea-button>
+      <ea-button type="primary" icon="comment">图标按钮</ea-button>
+      <ea-button type="primary" icon="trash-can" disabled>图标按钮</ea-button>
       <ea-button type="primary" disabled
-        >图标按钮 <ea-icon icon="icon-trash-empty"></ea-icon
+        >图标按钮 <ea-icon name="trash-can"></ea-icon
       ></ea-button>
     </div>
     <hr />
@@ -292,12 +289,11 @@
     <!-- #region  -->
     <h2>按钮组</h2>
     <div class="row left">
-      <ea-icon icon="icon-angle-right"></ea-icon>
       <ea-switch id="btngroup-switch" value="true"></ea-switch>
       <ea-button-group id="btngroup" disabled>
-        <ea-button icon="icon-angle-left" type="success">上一页</ea-button>
+        <ea-button icon="angle-left" type="success">上一页</ea-button>
         <ea-button type="primary"
-          >下一页 <ea-icon icon="icon-angle-right"></ea-icon>
+          >下一页 <ea-icon name="angle-right"></ea-icon>
         </ea-button>
       </ea-button-group>
       <ea-button-group size="small">
@@ -324,7 +320,7 @@
         id="ea-button-loading"
         type="primary"
         loading="true"
-        icon="icon-coffee"
+        icon="coffee"
         >加载中按钮</ea-button
       >
     </div>
@@ -341,13 +337,9 @@
       <ea-button type="primary" size="small">小型按钮</ea-button>
     </div>
     <div class="row">
-      <ea-button type="primary" icon="icon-coffee" size="large"
-        >大型按钮</ea-button
-      >
-      <ea-button type="primary" icon="icon-coffee">默认按钮</ea-button>
-      <ea-button type="primary" icon="icon-coffee" size="small"
-        >小型按钮</ea-button
-      >
+      <ea-button type="primary" icon="coffee" size="large">大型按钮</ea-button>
+      <ea-button type="primary" icon="coffee">默认按钮</ea-button>
+      <ea-button type="primary" icon="coffee" size="small">小型按钮</ea-button>
     </div>
     <div class="row">
       <ea-button type="primary" round size="large">大型按钮</ea-button>
@@ -360,19 +352,9 @@
       <ea-button type="primary" size="small">小型按钮</ea-button>
     </div>
     <div class="row">
-      <ea-button
-        type="primary"
-        circle
-        icon="icon-coffee"
-        size="large"
-      ></ea-button>
-      <ea-button type="primary" circle icon="icon-coffee"></ea-button>
-      <ea-button
-        type="primary"
-        circle
-        icon="icon-coffee"
-        size="small"
-      ></ea-button>
+      <ea-button type="primary" circle icon="coffee" size="large"></ea-button>
+      <ea-button type="primary" circle icon="coffee"></ea-button>
+      <ea-button type="primary" circle icon="coffee" size="small"></ea-button>
     </div>
     <hr />
     <!-- #endregion  -->

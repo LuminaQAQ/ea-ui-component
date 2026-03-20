@@ -128,7 +128,7 @@ export class EaTab extends Base {
     this.shadowRoot.innerHTML = `
       <div class='ea-tab' part='container'>
         <slot></slot>
-        <ea-icon class="ea-tab__close-icon" icon="icon-cancel" part="close-icon"></ea-icon>
+        <ea-icon class="ea-tab__close-icon" name="xmark" part="close-icon"></ea-icon>
       </div>
     `;
 

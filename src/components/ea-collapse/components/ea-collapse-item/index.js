@@ -108,7 +108,7 @@ export class EaCollapseItem extends Base {
           </span>
           <span class="ea-collapse-item__indicator" part="indicator">
             <slot name="icon">
-              <ea-icon class="default-expand-icon" icon="icon-angle-down" part="icon"></ea-icon>
+              <ea-icon class="default-expand-icon" name="angle-down" part="icon"></ea-icon>
             </slot>
           </span>
         </div>

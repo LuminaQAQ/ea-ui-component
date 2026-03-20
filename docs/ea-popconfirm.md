@@ -272,7 +272,7 @@ Popconfirm 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 
     id="customizedPopconfirm"
     placement="right"
     width="220"
-    icon="icon-info"
+    icon="circle-info"
     icon-color="#626AEF"
     title="Are you sure to delete this?"
   >
@@ -294,7 +294,7 @@ Popconfirm 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 
     id="customizedPopconfirm"
     placement="right"
     width="220"
-    icon="icon-info"
+    icon="circle-info"
     icon-color="#626AEF"
     title="Are you sure to delete this?"
   >

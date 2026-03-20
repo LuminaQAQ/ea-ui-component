@@ -238,24 +238,24 @@ basicExample.init();
 
 <div class="demo">
     <ea-steps active="1">
-        <ea-step title="步骤 1" icon="icon-music"></ea-step>
-        <ea-step title="步骤 2" icon="icon-videocam"></ea-step>
-        <ea-step title="步骤 3" icon="icon-camera"></ea-step>
+        <ea-step title="步骤 1" icon="music"></ea-step>
+        <ea-step title="步骤 2" icon="video"></ea-step>
+        <ea-step title="步骤 3" icon="camera"></ea-step>
     </ea-steps>
 </div>
 
 ```html
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1">
-    <ea-step title="Step 1" icon="icon-coffee">
+    <ea-step title="Step 1" icon="mug-hot">
       <ea-icon
         slot="icon"
         class="ea-step__icon"
-        icon="icon-note-beamed"
+        name="music"
       ></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
-    <ea-step title="Step 3" icon="icon-camera"></ea-step>
+    <ea-step title="Step 2" icon="video"></ea-step>
+    <ea-step title="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -266,30 +266,30 @@ basicExample.init();
 
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1" simple align-center>
-    <ea-step title="Step 1" icon="icon-coffee">
+    <ea-step title="Step 1" icon="mug-hot">
       <ea-icon
         slot="icon"
         class="ea-step__icon"
-        icon="icon-note-beamed"
+        name="music"
       ></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
-    <ea-step title="Step 3" icon="icon-camera"></ea-step>
+    <ea-step title="Step 2" icon="video"></ea-step>
+    <ea-step title="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 
 ```html
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1" simple align-center>
-    <ea-step title="Step 1" icon="icon-coffee">
+    <ea-step title="Step 1" icon="mug-hot">
       <ea-icon
         slot="icon"
         class="ea-step__icon"
-        icon="icon-note-beamed"
+        name="music"
       ></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="icon-videocam"></ea-step>
-    <ea-step title="Step 3" icon="icon-camera"></ea-step>
+    <ea-step title="Step 2" icon="video"></ea-step>
+    <ea-step title="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 ```

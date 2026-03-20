@@ -206,7 +206,7 @@ export class EaTransfer extends FormAssociatedBase {
             size="small" 
             disabled
           >
-            <ea-icon icon="icon-angle-right"></ea-icon>
+            <ea-icon name="angle-right"></ea-icon>
             <span class="${ns.e("button-text")}"></span>
           </ea-button>
           <ea-button 
@@ -216,7 +216,7 @@ export class EaTransfer extends FormAssociatedBase {
             size="small" 
             disabled
           >
-            <ea-icon icon="icon-angle-left"></ea-icon>
+            <ea-icon name="angle-left"></ea-icon>
             <span class="${ns.e("button-text")}"></span>
           </ea-button>
         </div>

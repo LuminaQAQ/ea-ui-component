@@ -122,10 +122,10 @@ basicExample.init();
       <div class="sg-infinite-item">4</div>
       <div class="sg-infinite-item">5</div>
       <section slot="loading">
-        <ea-icon icon="icon-coffee"></ea-icon> loading...
+        <ea-icon name="mug-hot"></ea-icon> loading...
       </section>
       <section slot="noMore">
-        <ea-icon icon="icon-cancel"></ea-icon> no more
+        <ea-icon name="ban"></ea-icon> no more
       </section>
     </ea-infinite-scroll>
   </ea-scrollbar>
@@ -148,7 +148,7 @@ ea-infinite::part(wrap) {
 }
 ```
 
-```html
+````html
 <div class="demo" style="height: 150px; overflow: auto">
   <ea-scrollbar>
     <ea-infinite-scroll id="basicInfinite">
@@ -159,42 +159,22 @@ ea-infinite::part(wrap) {
       <div class="sg-infinite-item">5</div>
 
       <section slot="loading">
-        <ea-icon icon="icon-coffee"></ea-icon> loading...
+        <ea-icon name="mug-hot"></ea-icon> loading...
       </section>
-      <section slot="noMore">
-        <ea-icon icon="icon-cancel"></ea-icon> no more
-      </section>
+      <section slot="noMore"><ea-icon name="ban"></ea-icon> no more</section>
     </ea-infinite-scroll>
   </ea-scrollbar>
 </div>
-```
 
-```js
-const basicExample = {
-  el: document.querySelector("#basicInfinite"),
-  createTemplate(content) {
-    const item = document.createElement("div");
-    item.className = "sg-infinite-item";
-    item.innerHTML = content;
-
-    return item;
-  },
-
-  init() {
-    this.el.addEventListener("loadmore", async e => {
-      const { finished } = e.detail;
-      const length = this.el.querySelectorAll(".sg-infinite-item").length;
-
-      for (let i = length; i < length + 5; i++) {
-        this.el.appendChild(this.createTemplate(i + 1));
-      }
-
-      finished();
-    });
-  },
-};
+```js const basicExample = { el: document.querySelector("#basicInfinite"),
+createTemplate(content) { const item = document.createElement("div");
+item.className = "sg-infinite-item"; item.innerHTML = content; return item; },
+init() { this.el.addEventListener("loadmore", async e => { const { finished } =
+e.detail; const length = this.el.querySelectorAll(".sg-infinite-item").length;
+for (let i = length; i < length + 5; i++) {
+this.el.appendChild(this.createTemplate(i + 1)); } finished(); }); }, };
 basicExample.init();
-```
+````
 
 :::
 
@@ -211,10 +191,10 @@ basicExample.init();
       <div class="sg-infinite-item">4</div>
       <div class="sg-infinite-item">5</div>
       <section slot="loading" style="text-align: center">
-        <ea-icon icon="icon-coffee"></ea-icon> loading...
+        <ea-icon name="mug-hot"></ea-icon> loading...
       </section>
       <section slot="noMore" style="text-align: center">
-        <ea-icon icon="icon-cancel"></ea-icon> no more
+        <ea-icon name="ban"></ea-icon> no more
       </section>
     </ea-infinite-scroll>
   </ea-scrollbar>
@@ -237,7 +217,7 @@ ea-infinite::part(wrap) {
 }
 ```
 
-```html
+````html
 <div class="demo" style="height: 150px; overflow: auto">
   <ea-scrollbar>
     <ea-infinite-scroll id="statusInfinite">
@@ -247,46 +227,25 @@ ea-infinite::part(wrap) {
       <div class="sg-infinite-item">4</div>
       <div class="sg-infinite-item">5</div>
       <section slot="loading" style="text-align: center">
-        <ea-icon icon="icon-coffee"></ea-icon> loading...
+        <ea-icon name="mug-hot"></ea-icon> loading...
       </section>
       <section slot="noMore" style="text-align: center">
-        <ea-icon icon="icon-cancel"></ea-icon> no more
+        <ea-icon name="ban"></ea-icon> no more
       </section>
     </ea-infinite-scroll>
   </ea-scrollbar>
 </div>
-```
 
-```js
-const statusExample = {
-  el: document.querySelector("#statusInfinite"),
-  createTemplate(content) {
-    const item = document.createElement("div");
-    item.className = "sg-infinite-item";
-    item.innerHTML = content;
-
-    return item;
-  },
-
-  init() {
-    this.el.addEventListener("loadmore", async e => {
-      const { finished, noMore } = e.detail;
-      const length = this.el.querySelectorAll(".sg-infinite-item").length;
-
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      if (length >= 20) return noMore();
-
-      for (let i = length; i < length + 5; i++) {
-        this.el.appendChild(this.createTemplate(i + 1));
-      }
-
-      finished();
-    });
-  },
-};
-statusExample.init();
-```
+```js const statusExample = { el: document.querySelector("#statusInfinite"),
+createTemplate(content) { const item = document.createElement("div");
+item.className = "sg-infinite-item"; item.innerHTML = content; return item; },
+init() { this.el.addEventListener("loadmore", async e => { const { finished,
+noMore } = e.detail; const length =
+this.el.querySelectorAll(".sg-infinite-item").length; await new Promise(resolve
+=> setTimeout(resolve, 2000)); if (length >= 20) return noMore(); for (let i =
+length; i < length + 5; i++) { this.el.appendChild(this.createTemplate(i + 1));
+} finished(); }); }, }; statusExample.init();
+````
 
 :::
 

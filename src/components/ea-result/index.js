@@ -24,7 +24,7 @@ export class EaResult extends Base {
       type: ["primary", "success", "warning", "info", "error"],
       default: "",
       observer: newVal => {
-        this.#icon.setAttribute("icon", `icon-${typesIcon[newVal]}`);
+        this.#icon.setAttribute("name", typesIcon[newVal]);
         this.updateContainerClasslist();
       },
     },
@@ -46,8 +46,8 @@ export class EaResult extends Base {
       type: String,
       default: "",
       observer: newVal => {
-        if (newVal) this.#icon.setAttribute("icon", newVal);
-        else this.#icon.setAttribute("icon", `icon-${typesIcon[this.type]}`);
+        if (newVal) this.#icon.setAttribute("name", newVal);
+        else this.#icon.setAttribute("name", typesIcon[this.type]);
       },
     },
   });

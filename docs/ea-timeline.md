@@ -89,7 +89,7 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
       type="primary"
       size="large"
       timestamp="2024-7-1"
-      icon="icon-coffee"
+      icon="mug-hot"
     >
       Custom icon
     </ea-timeline-item>
@@ -113,7 +113,7 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
       type="primary"
       size="large"
       timestamp="2024-7-1"
-      icon="icon-coffee"
+      icon="mug-hot"
     >
       Custom icon
     </ea-timeline-item>

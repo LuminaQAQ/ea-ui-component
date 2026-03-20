@@ -134,6 +134,8 @@ export class EaPagination extends Base {
       type: Boolean,
       default: false,
       observer: () => {
+        console.log(1, this);
+
         this.updateContainerClasslist();
       },
     },
@@ -231,9 +233,9 @@ export class EaPagination extends Base {
       ["prev", "pager", "next", "jumper", "total", "sizes", "->"].includes(item)
     );
     const layoutTemplate = {
-      prev: `<ea-icon class="ea-pagination__icon prev-icon" icon='icon-angle-left' part='icon prev-icon' tabindex="0"></ea-icon>`,
+      prev: `<ea-icon class="ea-pagination__icon prev-icon" name='angle-left' part='icon prev-icon' tabindex="0"></ea-icon>`,
       pager: `<section class='ea-pagination__pager' part='pager'></section>`,
-      next: `<ea-icon class="ea-pagination__icon next-icon" icon='icon-angle-right' part='icon next-icon' tabindex="0"></ea-icon>`,
+      next: `<ea-icon class="ea-pagination__icon next-icon" name='angle-right' part='icon next-icon' tabindex="0"></ea-icon>`,
       total: `<span class='ea-pagination__total' part='total'></span>`,
       jumper: `<span class="ea-pagination__wrapper" part='jumper-wrap'>Go to <ea-input class='ea-pagination__jumper' part='jumper'></ea-input> </span>`,
       sizes: `<ea-select class='ea-pagination__sizes' part='sizes'></ea-select>`,
@@ -257,8 +259,6 @@ export class EaPagination extends Base {
     this.#jumper = this.shadowRoot.querySelector(".ea-pagination__jumper");
     this.#total = this.shadowRoot.querySelector(".ea-pagination__total");
     this.#sizes = this.shadowRoot.querySelector(".ea-pagination__sizes");
-
-    this.updateContainerClasslist();
   }
 
   /**
@@ -694,6 +694,8 @@ export class EaPagination extends Base {
     await this.#handlePaginationItemChange();
 
     this.#states.isFirstRender = false;
+
+    this.updateContainerClasslist();
   }
 
   $beforeUnmounted() {

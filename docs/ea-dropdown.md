@@ -79,7 +79,7 @@ onMounted(() => {
   <ea-dropdown>
     <span slot="reference" class="ea-dropdown-reference">
       Dropdown List
-      <ea-icon class="icon-angle-down"></ea-icon>
+      <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item>Action 1</ea-dropdown-item>
@@ -98,7 +98,7 @@ onMounted(() => {
   <ea-dropdown>
     <span slot="reference" class="ea-dropdown-reference">
       Dropdown List
-      <ea-icon class="icon-angle-down"></ea-icon>
+      <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item>Action 1</ea-dropdown-item>
@@ -372,7 +372,7 @@ onMounted(() => {
   <ea-dropdown id="commandDropdown">
     <span slot="reference" class="ea-dropdown-reference">
       Dropdown List
-      <ea-icon class="icon-angle-down"></ea-icon>
+      <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item command="a">Action 1</ea-dropdown-item>
@@ -391,7 +391,7 @@ onMounted(() => {
   <ea-dropdown id="commandDropdown">
     <span slot="reference" class="ea-dropdown-reference">
       Dropdown List
-      <ea-icon class="icon-angle-down"></ea-icon>
+      <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item command="a">Action 1</ea-dropdown-item>
@@ -428,7 +428,7 @@ commandExample.init();
   <ea-button id="methodsDropdownHideBtn">hide</ea-button>
   <ea-dropdown id="methodsDropdown">
     <span slot="reference" class="ea-dropdown-reference">
-      Dropdown List <ea-icon icon="icon-angle-down"></ea-icon>
+      Dropdown List <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item>Action 1</ea-dropdown-item>
@@ -446,7 +446,7 @@ commandExample.init();
   <ea-button id="methodsDropdownHideBtn">hide</ea-button>
   <ea-dropdown id="methodsDropdown">
     <span slot="reference" class="ea-dropdown-reference">
-      Dropdown List <ea-icon icon="icon-angle-down"></ea-icon>
+      Dropdown List <ea-icon name="angle-down"></ea-icon>
     </span>
     <ea-dropdown-menu>
       <ea-dropdown-item>Action 1</ea-dropdown-item>

@@ -196,7 +196,7 @@ export class EaTreeLabel extends Base {
 
     this.shadowRoot.innerHTML = `
       <div class='${ns.b()}' part='container'>
-        <ea-icon icon="icon-angle-right" class='${ns.e("toggle-icon")}' part='toggle'></ea-icon>
+        <ea-icon name="angle-right" class='${ns.e("toggle-icon")}' part='toggle'></ea-icon>
         <ea-checkbox class='${ns.e("checkbox")}' part='checkbox'></ea-checkbox>
         <span class='${ns.e("text")}' part='text'></span>
       </div>

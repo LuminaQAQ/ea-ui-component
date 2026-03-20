@@ -226,7 +226,7 @@ onMounted(() => {
   <ea-menu default-active="2" class="ea-menu-vertical-demo" style="width: 250px; min-height: 600px; border-right: 1px solid #ccc;">
     <ea-sub-menu index="1">
       <span slot="title">
-        <ea-icon icon="icon-location"></ea-icon>
+        <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
       <ea-menu-item-group title="Group One">
@@ -244,15 +244,15 @@ onMounted(() => {
       </ea-sub-menu>
     </ea-sub-menu>
     <ea-menu-item index="2">
-      <ea-icon icon="icon-th-large"></ea-icon>
+      <ea-icon name="table-cells-large"></ea-icon>
       <span>Navigator Two</span>
     </ea-menu-item>
     <ea-menu-item index="3" disabled>
-      <ea-icon icon="icon-table"></ea-icon>
+      <ea-icon name="table"></ea-icon>
       <span>Navigator Three</span>
     </ea-menu-item>
     <ea-menu-item index="4">
-      <ea-icon icon="icon-cog"></ea-icon>
+      <ea-icon name="gear"></ea-icon>
       <span>Navigator Four</span>
     </ea-menu-item>
   </ea-menu>
@@ -266,7 +266,7 @@ onMounted(() => {
   >
     <ea-sub-menu index="1">
       <span slot="title">
-        <ea-icon icon="icon-location"></ea-icon>
+        <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
       <ea-menu-item-group title="Group One">
@@ -284,15 +284,15 @@ onMounted(() => {
       </ea-sub-menu>
     </ea-sub-menu>
     <ea-menu-item index="2">
-      <ea-icon icon="icon-th-large"></ea-icon>
+      <ea-icon name="table-cells-large"></ea-icon>
       <span>Navigator Two</span>
     </ea-menu-item>
     <ea-menu-item index="3" disabled>
-      <ea-icon icon="icon-table"></ea-icon>
+      <ea-icon name="table"></ea-icon>
       <span>Navigator Three</span>
     </ea-menu-item>
     <ea-menu-item index="4">
-      <ea-icon icon="icon-cog"></ea-icon>
+      <ea-icon name="gear"></ea-icon>
       <span>Navigator Four</span>
     </ea-menu-item>
   </ea-menu>
@@ -310,7 +310,7 @@ onMounted(() => {
   >
     <ea-sub-menu index="1">
       <span slot="title">
-        <ea-icon icon="icon-location"></ea-icon>
+        <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
       <ea-menu-item-group title="Group One">
@@ -328,15 +328,15 @@ onMounted(() => {
       </ea-sub-menu>
     </ea-sub-menu>
     <ea-menu-item index="2">
-      <ea-icon icon="icon-th-large"></ea-icon>
+      <ea-icon name="table-cells-large"></ea-icon>
       <span>Navigator Two</span>
     </ea-menu-item>
     <ea-menu-item index="3" disabled>
-      <ea-icon icon="icon-table"></ea-icon>
+      <ea-icon name="table"></ea-icon>
       <span>Navigator Three</span>
     </ea-menu-item>
     <ea-menu-item index="4">
-      <ea-icon icon="icon-cog"></ea-icon>
+      <ea-icon name="gear"></ea-icon>
       <span>Navigator Four</span>
     </ea-menu-item>
   </ea-menu>
@@ -351,7 +351,7 @@ onMounted(() => {
   >
     <ea-sub-menu index="1">
       <span slot="title">
-        <ea-icon icon="icon-location"></ea-icon>
+        <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
       <ea-menu-item-group title="Group One">
@@ -369,15 +369,15 @@ onMounted(() => {
       </ea-sub-menu>
     </ea-sub-menu>
     <ea-menu-item index="2">
-      <ea-icon icon="icon-th-large"></ea-icon>
+      <ea-icon name="table-cells-large"></ea-icon>
       <span>Navigator Two</span>
     </ea-menu-item>
     <ea-menu-item index="3" disabled>
-      <ea-icon icon="icon-table"></ea-icon>
+      <ea-icon name="table"></ea-icon>
       <span>Navigator Three</span>
     </ea-menu-item>
     <ea-menu-item index="4">
-      <ea-icon icon="icon-cog"></ea-icon>
+      <ea-icon name="gear"></ea-icon>
       <span>Navigator Four</span>
     </ea-menu-item>
   </ea-menu>

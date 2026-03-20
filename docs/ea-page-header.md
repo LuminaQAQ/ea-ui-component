@@ -236,7 +236,7 @@ basicExample.init();
 默认图标可能无法满足您的需求，您可以通过设置`icon`属性来自定义图标，示例如下。
 
 <div class="demo">
-  <ea-page-header icon="icon-ccw">
+  <ea-page-header icon="rotate-left">
     <span class="text-large font-600 mr-3" slot="content"> Title </span>
   </ea-page-header>
   <br />
@@ -248,7 +248,7 @@ basicExample.init();
 ```html
 <div class="demo">
   <!-- 自定义图标 -->
-  <ea-page-header icon="icon-ccw">
+  <ea-page-header icon="rotate-left">
     <span class="text-large font-600 mr-3" slot="content"> Title </span>
   </ea-page-header>
   <br />

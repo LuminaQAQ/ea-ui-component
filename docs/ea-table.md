@@ -1569,7 +1569,7 @@ sortableTable.init();
 <div class="demo">
   <ea-table id="customColumnTable">
     <ea-table-column prop="date" label="Date" width="180px">
-      <ea-icon icon="icon-clock"></ea-icon>
+      <ea-icon name="clock"></ea-icon>
       <span data-scope="date"></span>
     </ea-table-column>
     <ea-table-column prop="name" label="Info" width="180px">
@@ -1601,7 +1601,7 @@ sortableTable.init();
 <div class="demo">
   <ea-table id="customColumnTable">
     <ea-table-column prop="date" label="Date" width="180px">
-      <ea-icon icon="icon-clock"></ea-icon>
+      <ea-icon name="clock"></ea-icon>
       <span data-scope="date"></span>
     </ea-table-column>
     <ea-table-column prop="name" label="Info" width="180px">
