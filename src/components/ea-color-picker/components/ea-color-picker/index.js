@@ -409,10 +409,7 @@ export class EaColorPicker extends FormAssociatedBase {
   #updateStatusIcon(colorValue = this.value) {
     if (!this.#statusIcon) return;
 
-    this.#statusIcon.setAttribute(
-      "icon",
-      colorValue ? "icon-angle-down" : "icon-cancel"
-    );
+    this.#statusIcon.setAttribute("name", colorValue ? "angle-down" : "xmark");
   }
 
   /**
