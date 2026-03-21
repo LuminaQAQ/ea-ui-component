@@ -1,5 +1,6 @@
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+coverage/
 
 # Vite timestamp cache files
 *.timestamp-*.mjs
