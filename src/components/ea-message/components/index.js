@@ -128,7 +128,6 @@ export class EaMessageElement extends Base {
       },
     },
     placement: {
-      props: true,
       type: [
         "top",
         "top-left",
