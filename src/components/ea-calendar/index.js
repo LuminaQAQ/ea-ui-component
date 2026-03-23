@@ -552,7 +552,7 @@ export class EaCalendar extends Base {
     const year = this.shadowRoot.querySelector(ns.ce("controller-year"));
     const month = this.shadowRoot.querySelector(ns.ce("controller-month"));
 
-    const date = dayjs();
+    const date = this.#states.displayDate;
     const currentYear = date.get("year");
     const currentMonth = date.get("month");
     const currentDate = date.get("date");
@@ -623,9 +623,11 @@ export class EaCalendar extends Base {
       td.classList.toggle("is-current-mon", monthType === "current");
       td.classList.toggle("is-next-mon", monthType === "next");
 
-      td.part.toggle("last-mon", monthType === "last");
-      td.part.toggle("current-mon", monthType === "current");
-      td.part.toggle("next-mon", monthType === "next");
+      if (td.part) {
+        td.part.toggle("last-mon", monthType === "last");
+        td.part.toggle("current-mon", monthType === "current");
+        td.part.toggle("next-mon", monthType === "next");
+      }
     });
 
     const currentTd = tds.some(td => td.classList.contains("is-current"));

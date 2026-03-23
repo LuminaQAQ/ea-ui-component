@@ -136,11 +136,15 @@ export default class FormAssociatedBase extends Base {
   };
 
   setValue = value => {
-    this.internals.setFormValue(value);
+    if (this.internals && typeof this.internals.setFormValue === "function") {
+      this.internals.setFormValue(value);
+    }
   };
 
   removeValue = () => {
-    this.internals.setFormValue(null);
+    if (this.internals && typeof this.internals.setFormValue === "function") {
+      this.internals.setFormValue(null);
+    }
   };
 
   /**
@@ -168,7 +172,12 @@ export default class FormAssociatedBase extends Base {
           this["validation-message"] || formControl.validationMessage
         );
 
-        this.internals.reportValidity();
+        if (
+          this.internals &&
+          typeof this.internals.reportValidity === "function"
+        ) {
+          this.internals.reportValidity();
+        }
       }
     }
   }
@@ -209,7 +218,9 @@ export default class FormAssociatedBase extends Base {
       message = this.validationTarget?.validationMessage || "";
     }
 
-    this.internals.setValidity(flags, message, this.validationTarget);
+    if (this.internals && typeof this.internals.setValidity === "function") {
+      this.internals.setValidity(flags, message, this.validationTarget);
+    }
   }
 
   /**
@@ -227,14 +238,16 @@ export default class FormAssociatedBase extends Base {
       this.validationTarget.setCustomValidity(message);
     }
 
-    if (message) {
-      this.internals.setValidity(
-        { customError: true },
-        message,
-        this.validationTarget
-      );
-    } else {
-      this.internals.setValidity({}, "", this.validationTarget);
+    if (this.internals && typeof this.internals.setValidity === "function") {
+      if (message) {
+        this.internals.setValidity(
+          { customError: true },
+          message,
+          this.validationTarget
+        );
+      } else {
+        this.internals.setValidity({}, "", this.validationTarget);
+      }
     }
   }
 
@@ -242,7 +255,9 @@ export default class FormAssociatedBase extends Base {
    * 重置自定义验证错误消息
    */
   resetCustomValidity() {
-    this.internals.setValidity({}, "", this.validationTarget);
+    if (this.internals && typeof this.internals.setValidity === "function") {
+      this.internals.setValidity({}, "", this.validationTarget);
+    }
 
     if (
       this.validationTarget &&
