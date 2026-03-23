@@ -198,18 +198,20 @@ export class EaInput extends FormAssociatedBase {
     },
     maxlength: {
       type: Number,
-      default: 0,
+      default: undefined,
       observer: async newVal => {
         await this.#renderedStates.isOriginalRenderedPromise;
-        this.#original.maxLength = newVal;
+        if (this.hasAttribute("maxlength")) this.#original.maxLength = newVal;
+        else this.#original.maxLength = undefined;
       },
     },
     minlength: {
       type: Number,
-      default: 0,
+      default: undefined,
       observer: async newVal => {
         await this.#renderedStates.isOriginalRenderedPromise;
-        this.#original.minLength = newVal;
+        if (this.hasAttribute("minlength")) this.#original.minLength = newVal;
+        else this.#original.minLength = undefined;
       },
     },
     clearable: {
