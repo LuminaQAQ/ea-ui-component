@@ -202,7 +202,6 @@ export class EaInput extends FormAssociatedBase {
       observer: async newVal => {
         await this.#renderedStates.isOriginalRenderedPromise;
         if (this.hasAttribute("maxlength")) this.#original.maxLength = newVal;
-        else this.#original.maxLength = undefined;
       },
     },
     minlength: {
@@ -211,7 +210,6 @@ export class EaInput extends FormAssociatedBase {
       observer: async newVal => {
         await this.#renderedStates.isOriginalRenderedPromise;
         if (this.hasAttribute("minlength")) this.#original.minLength = newVal;
-        else this.#original.minLength = undefined;
       },
     },
     clearable: {

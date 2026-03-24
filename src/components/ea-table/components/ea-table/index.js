@@ -434,8 +434,9 @@ export class EaTable extends Base {
 
       td.part = "tbody-td";
       td.className = "ea-table__td";
-      td.classList.toggle(`is-fixed`, column.fixed);
-      td.classList.toggle(`fixed-${column.fixed}`, column.fixed);
+      const isFixed = column.fixed && column.fixed !== "false";
+      td.classList.toggle(`is-fixed`, isFixed);
+      td.classList.toggle(`fixed-${column.fixed}`, isFixed);
       td.classList.toggle(
         `ea-table__cell--align-${column.align}`,
         column.align
