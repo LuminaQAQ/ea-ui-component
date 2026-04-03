@@ -256,6 +256,8 @@ export class EaTabs extends Base {
         tab.hasAttribute("active")
       );
 
+      if (!activeTab) return;
+
       const tabRect = activeTab.getBoundingClientRect();
 
       this.#nav.scrollTo({
