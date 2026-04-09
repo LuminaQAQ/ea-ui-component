@@ -1,5 +1,3 @@
-import { EaTag } from "@/components/ea-tag";
-
 export class EaSelectRemoveTagEvent extends Event {
   readonly detail: EaSelectRemoveTagEventDetail;
   constructor(detail: EaSelectRemoveTagEventDetail) {
@@ -9,12 +7,6 @@ export class EaSelectRemoveTagEvent extends Event {
 }
 
 interface EaSelectRemoveTagEventDetail {
-  tag: EaTag;
+  tag: HTMLElement;
   tagValue: string;
-}
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-remove-tag": EaSelectRemoveTagEvent;
-  }
 }

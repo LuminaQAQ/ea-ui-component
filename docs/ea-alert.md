@@ -2,8 +2,11 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  import("../dist/components/index.js")
-  import("../dist/assets/icon.css")
+  // import("../dist/components/index.js")
+  // import("../dist/assets/icon.css")
+
+  import("../dist/components/ea-alert2.js")
+  // import("../dist/assets/icon.css")
 
   // ------- 自定义关闭按钮 -------
   // #region

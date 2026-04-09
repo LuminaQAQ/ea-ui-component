@@ -60,7 +60,7 @@ $alert-type: (
     gap: var(--spacing-sm);
   }
 
-  @include element(title) {
+  @include element(heading) {
     display: flex;
     align-items: center;
   }

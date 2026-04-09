@@ -12,9 +12,3 @@ interface EaTreeCurrentChangeEventDetail {
   /** @description 当前选中节点实例对象 */
   node: any;
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-current-change": EaTreeCurrentChangeEvent;
-  }
-}

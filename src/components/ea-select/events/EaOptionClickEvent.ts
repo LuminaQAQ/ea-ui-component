@@ -1,5 +1,3 @@
-import { EaOption } from "../components/ea-option";
-
 export class EaOptionClickEvent extends Event {
   readonly detail: EaOptionClickEventDetail;
   constructor(detail: EaOptionClickEventDetail) {
@@ -10,5 +8,5 @@ export class EaOptionClickEvent extends Event {
 
 interface EaOptionClickEventDetail {
   value: string;
-  target: EaOption;
+  target: HTMLElement;
 }

@@ -1,4 +1,3 @@
-import './ea-alert/index.js';
 import './ea-avatar/index.js';
 import './ea-backtop/index.js';
 import './ea-badge/index.js';

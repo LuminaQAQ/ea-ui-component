@@ -12,6 +12,14 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5173,
   },
+  esbuild: {
+    target: "es2020",
+    tsconfigRaw: {
+      compilerOptions: {
+        experimentalDecorators: true,
+      },
+    },
+  },
   plugins: [
     // visualizer({
     //   open: true,
