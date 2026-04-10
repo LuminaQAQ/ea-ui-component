@@ -2,15 +2,14 @@ import { html } from "@/directives/html";
 import variable from "@/themes/variables.scss?inline";
 import "./ea-icon/index";
 import EaUtils from "@/utils/Utils";
-import { customElement } from "@/decorator/custom-element";
-import { attribute, propertyMap } from "@/decorator/attribute";
+import { CustomElement } from "@/decorator/custom-element";
+import { attribute, ElementAttributesMap } from "@/decorator/attribute";
 import {
-  EaBaseElementConstructor,
+  EaElementConstructor,
   AttributeOptions,
   ShadowRootElement,
 } from "@/types";
 import { parseAttributeValue } from "@/utils/parseAttributeValue";
-import { createGetter, createSetter } from "@/utils/propertyHelpers";
 
 /**
  * 创建属性的 getter 函数
@@ -54,7 +53,6 @@ function createSetter(
         : undefined;
 
     if (isInitialized) {
-      // 已初始化：更新 attribute 并触发 observer
       this.setAttribute(name, String(newVal));
 
       const cb = this.constructor.__observedAttributesCallback[name];
@@ -62,24 +60,16 @@ function createSetter(
         cb.call(this, convertedNewVal, convertedOldVal);
       }
     } else {
-      // 初始化阶段：只更新 attribute，不触发 observer
       this.setAttribute(name, String(newVal));
     }
   };
 }
 
-@customElement("ea-base", { autoDefine: false })
+@CustomElement("ea-base", { autoDefine: false })
 export default class Base extends HTMLElement {
-  /** @description 观察属性回调映射 */
-  static __observedAttributesCallback: EaBaseElementConstructor["__observedAttributesCallback"] =
-    {};
-  /** @description 观察属性列表 */
-  static __observedAttributes: EaBaseElementConstructor["__observedAttributes"] =
-    [];
-
   /** @description 观察属性列表 */
   static get observedAttributes() {
-    return this.__observedAttributes;
+    return ["locale"];
   }
 
   /**
@@ -94,74 +84,9 @@ export default class Base extends HTMLElement {
   })
   locale: string = "en-US";
 
-  /** 组件是否已挂载 */
-  isMounted = true;
-
-  /** 内部 props 对象 */
-  props: Record<string, any> = {
-    locale: "en-US",
-  };
-
-  private get _clsName() {
-    return this.constructor.name;
-  }
-  private _isAttrinbuePropertyInitialized = false;
-
-  /** 存储属性的默认值 */
-  private _defaultValues: Map<string, any> = new Map();
-
-  /**
-   * 收集属性的默认值（从类字段初始化）
-   * 在构造函数中调用，保存默认值后删除类字段，避免触发 setter
-   */
-  private _collectDefaultValues = async () => {
-    const propertyOptions = propertyMap.get(this._clsName);
-
-    if (propertyOptions) {
-      Object.keys(propertyOptions).forEach(name => {
-        const currentValue = (this as any)[name];
-        this._defaultValues.set(name, currentValue);
-
-        delete (this as any)[name];
-
-        (this as any)[name];
-      });
-    }
-  };
-
-  /**
-   * 定义响应式属性
-   * 在 constructor 中调用，完成属性定义
-   * 实现 attribute 和 property 的双向绑定
-   */
-  private _defineReactiveProperties = () => {
-    const propertyOptions = propertyMap.get(this._clsName);
-    if (propertyOptions) {
-      console.log(propertyOptions);
-
-      Object.keys(propertyOptions).forEach(name => {
-        const { type } = propertyOptions[name];
-        const defaultValue = this._defaultValues.get(name);
-
-        // 定义响应式属性
-        Object.defineProperty(this, name, {
-          get: createGetter(defaultValue, name, type),
-          set: createSetter(name, this._isAttrinbuePropertyInitialized, type),
-          configurable: true,
-          enumerable: true,
-        });
-      });
-    }
-  };
-
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-
-    requestAnimationFrame(() => {
-      this._collectDefaultValues();
-      this._defineReactiveProperties();
-    });
   }
 
   // ==================== 样式管理 ====================
@@ -221,7 +146,7 @@ export default class Base extends HTMLElement {
   // ==================== 生命周期回调 ====================
 
   /**
-   * 属性变化回调
+   * @abstract 属性变化回调
    * @param name 属性名
    * @param oldVal 旧值
    * @param newVal 新值
@@ -230,30 +155,7 @@ export default class Base extends HTMLElement {
     name: string,
     oldVal: string | null,
     newVal: string | null
-  ): void {
-    // 获取属性配置
-    const clsName = this.constructor.name;
-    const propertyOptions = propertyMap.get(clsName);
-    const attrOption = propertyOptions?.[name];
-
-    // 转换值类型
-    const convertedNewVal = attrOption
-      ? parseAttributeValue(newVal, attrOption.type)
-      : newVal;
-    const convertedOldVal = attrOption
-      ? parseAttributeValue(oldVal, attrOption.type)
-      : oldVal;
-
-    // 触发 observer 回调（等待初始化完成后）
-    const cb = (this.constructor as EaBaseElementConstructor)
-      .__observedAttributesCallback[name];
-    if (cb) {
-      // 使用 requestAnimationFrame 确保 DOM 已更新
-      requestAnimationFrame(() => {
-        cb.call(this, convertedNewVal, convertedOldVal);
-      });
-    }
-  }
+  ): void {}
 
   /**
    * 渲染 HTML 模板
@@ -298,9 +200,6 @@ export default class Base extends HTMLElement {
     // @ts-ignore - stylesheet 由子类提供
     this.adoptedStyle(this.stylesheet);
     this.tabIndex = this.getAttrNumber("tabindex") || 0;
-
-    // 标记属性初始化完成，后续 setter 调用将触发 observer
-    this._isAttrinbuePropertyInitialized = true;
 
     this.$render();
   }

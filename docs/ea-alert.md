@@ -5,7 +5,7 @@ onMounted(() => {
   // import("../dist/components/index.js")
   // import("../dist/assets/icon.css")
 
-  import("../dist/components/ea-alert2.js")
+  import("../dist/components/ea-alert.js")
   // import("../dist/assets/icon.css")
 
   // ------- 自定义关闭按钮 -------
@@ -105,22 +105,22 @@ Alert 组件不属于浮层元素，不会自动消失或关闭。
 Alert 组件提供 5 种类型，由 `type` 属性指定，默认值为 `info`。
 
 <div class="demo">
-  <ea-alert title="Primary alert" type="primary"></ea-alert>
-  <ea-alert title="Success alert" type="success"></ea-alert>
-  <ea-alert title="Info alert" type="info"></ea-alert>
-  <ea-alert title="Warning alert" type="warning"></ea-alert>
-  <ea-alert title="Error alert" type="error"></ea-alert>
+  <ea-alert heading="Primary alert" type="primary"></ea-alert>
+  <ea-alert heading="Success alert" type="success"></ea-alert>
+  <ea-alert heading="Info alert" type="info"></ea-alert>
+  <ea-alert heading="Warning alert" type="warning"></ea-alert>
+  <ea-alert heading="Error alert" type="error"></ea-alert>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-alert title="Primary alert" type="primary"></ea-alert>
-  <ea-alert title="Success alert" type="success"></ea-alert>
-  <ea-alert title="Info alert" type="info"></ea-alert>
-  <ea-alert title="Warning alert" type="warning"></ea-alert>
-  <ea-alert title="Error alert" type="error"></ea-alert>
+  <ea-alert heading="Primary alert" type="primary"></ea-alert>
+  <ea-alert heading="Success alert" type="success"></ea-alert>
+  <ea-alert heading="Info alert" type="info"></ea-alert>
+  <ea-alert heading="Warning alert" type="warning"></ea-alert>
+  <ea-alert heading="Error alert" type="error"></ea-alert>
 </div>
 ```
 

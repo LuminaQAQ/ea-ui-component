@@ -2,7 +2,7 @@ import Base from "@components/Base";
 
 import stylesheet from "./index.scss?inline";
 import { timeout } from "@/utils/timeout";
-import { customElement } from "@/decorator/custom-element";
+import { CustomElement } from "@/decorator/custom-element";
 import { attribute } from "@/decorator/attribute";
 
 const faIconType: Record<string, string> = {
@@ -13,7 +13,7 @@ const faIconType: Record<string, string> = {
   error: "circle-xmark",
 };
 
-@customElement("ea-alert")
+@CustomElement("ea-alert")
 export class EaAlert extends Base {
   #container!: HTMLElement;
   #alertIcon!: HTMLElement;
@@ -26,6 +26,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: String,
+    default: "",
     observer: function (this: EaAlert, newVal: string) {
       this.#alertHeading.innerHTML = newVal;
     },
@@ -34,6 +35,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: String,
+    default: "",
     observer: function (this: EaAlert, newVal: string) {
       this.#alertDescription.innerHTML = newVal ? newVal : `<slot></slot>`;
     },
@@ -42,6 +44,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: String,
+    default: "info",
     observer: function (this: EaAlert, newVal: string) {
       this.updateContainerClasslist();
 
@@ -56,6 +59,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: String,
+    default: "light",
     observer: function (this: EaAlert) {
       this.updateContainerClasslist();
     },
@@ -64,6 +68,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: String,
+    default: "",
     observer: function (this: EaAlert, newVal: string) {
       try {
         this.#alertCloseBtn.textContent = newVal;
@@ -74,6 +79,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: Boolean,
+    default: true,
     observer: function (this: EaAlert, newVal: boolean) {
       this.#abortController?.abort();
 
@@ -95,6 +101,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: Boolean,
+    default: false,
     observer: function (this: EaAlert) {
       this.#alertIcon.innerHTML = `<ea-icon class="ea-alert__icon" name="${
         faIconType[this.type]
@@ -105,6 +112,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: Boolean,
+    default: false,
     observer: function (this: EaAlert) {
       this.updateContainerClasslist();
     },
@@ -113,6 +121,7 @@ export class EaAlert extends Base {
 
   @attribute({
     type: Number,
+    default: 0,
     observer: function (this: EaAlert, newVal: number) {
       newVal = Math.abs(newVal);
       this.#container.classList.toggle("ea-alert--hide", newVal > 0);
@@ -127,11 +136,13 @@ export class EaAlert extends Base {
 
   @attribute({
     type: Number,
+    default: 300,
   })
   "hide-after": number = 300;
 
   @attribute({
     type: Number,
+    default: 0,
     observer: function (this: EaAlert, newVal: number) {
       if (newVal && this.hasAttribute("auto-close")) {
         // timeout(() => this.#closeEvent(), this["auto-close"]);
@@ -144,11 +155,6 @@ export class EaAlert extends Base {
    * 获取 classlist 列表
    */
   async updateContainerClasslist() {
-    console.log(this);
-    await new Promise(resolve => {
-      requestAnimationFrame(resolve);
-    });
-
     const className = this.computedClasslist("ea-alert", {
       ["--" + this.type]: this.type,
       ["--" + this.effect]: this.effect,

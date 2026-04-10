@@ -32,6 +32,8 @@ export interface ShadowRootElement extends HTMLElement {
 export interface AttributeOptions {
   /** @description 属性类型 - 基本数据类型 */
   type: CustomElementAttributeTypes;
+  /** @description 默认值 */
+  default?: any;
   /** @description 观察者回调 */
   observer?: ((this: any, newVal: any, oldVal: any) => void) | undefined;
 }

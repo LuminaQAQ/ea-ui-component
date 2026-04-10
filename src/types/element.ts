@@ -1,19 +1,22 @@
 /**
  * @description ea-ui 自定义元素的构造函数接口
  */
-export interface EaCustomElementConstructor extends CustomElementConstructor {
-  __observedAttributes?: string[];
-  __observedAttributesCallback?: Record<
-    string,
-    (this: HTMLElement, newVal: any, oldVal: any) => void
-  >;
-}
+// export interface EaCustomElementConstructor extends CustomElementConstructor {
+//   observedAttributes: string[];
+//   __observedAttributes?: string[];
+//   __observedAttributesCallback?: Record<
+//     string,
+//     (this: HTMLElement, newVal: any, oldVal: any) => void
+//   >;
+// }
 
 /**
  * @description ea-ui 基础组件类接口
  * 所有使用 @customElement 装饰器的组件都应该实现这个接口
  */
-export interface EaBaseElement extends HTMLElement {
+export interface EaElementConstructor extends CustomElementConstructor {
+  observedAttributes: string[];
+
   /** @abstract 组件连接时调用 */
   connectedCallback(): void;
   /** @abstract 组件断开时调用 */
@@ -41,12 +44,12 @@ export interface EaBaseElement extends HTMLElement {
  * @description ea-ui 基础组件构造函数
  * 用于类型断言和静态属性访问
  */
-export interface EaBaseElementConstructor extends EaCustomElementConstructor {
-  new (): EaBaseElement;
-  __observedAttributes: string[];
-  __observedAttributesCallback: Record<
-    string,
-    (this: HTMLElement, newVal: any, oldVal: any) => void
-  >;
-  observedAttributes: string[];
-}
+// export interface EaElementConstructor extends EaCustomElementConstructor {
+//   new (): EaElement;
+//   __observedAttributes: string[];
+//   __observedAttributesCallback: Record<
+//     string,
+//     (this: EaElement, newVal: any, oldVal: any) => void
+//   >;
+//   observedAttributes: string[];
+// }
