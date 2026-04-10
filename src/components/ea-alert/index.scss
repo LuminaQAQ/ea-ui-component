@@ -20,6 +20,7 @@ $alert-type: (
 
     --ea-alert-dark-#{$type}-bgc: var(--#{$color}-500);
   }
+
   --ea-alert-dark-color: var(--color-white);
 
   --ea-alert-cloase-icon-position-top: 12px;
@@ -110,7 +111,7 @@ $alert-type: (
     }
   }
 
-  @include modifier(center) {
+  @include state(center) {
     justify-content: center;
   }
 

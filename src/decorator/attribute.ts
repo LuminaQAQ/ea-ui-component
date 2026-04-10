@@ -1,15 +1,5 @@
-import type {
-  ShadowRootElement,
-  AttributeOptions,
-  PropertyMap,
-} from "@mytypes/index";
-
-/**
- * @description 属性配置映射表 - 用于存储类级别的属性配置
- */
-const ElementAttributesMap: PropertyMap = new Map();
-
-export { ElementAttributesMap };
+import type { AttributeOptions, EaElementConstructor } from "@/types/index";
+import { ElementAttributesMap } from "@/stores";
 
 /**
  * @description 注册属性配置到 ElementAttributesMap
@@ -52,7 +42,7 @@ function attribute(options: AttributeOptions): PropertyDecorator {
     } else {
       // 旧装饰器
       const name = context as string;
-      const target = initialValue as ShadowRootElement;
+      const target = initialValue as EaElementConstructor;
       const constructor = target.constructor;
       const clsName = constructor.name;
 

@@ -1,315 +1,271 @@
 # ea-ui-component 项目开发规范
 
-本项目是基于 Web Components 的组件库，开发时必须遵循以下规范。
+本项目是基于 Web Components 的组件库，使用 TypeScript 和装饰器模式实现，开发时必须遵循以下规范。
 
-## JavaScript 开发规范
+## 项目架构
+
+### 目录结构
+
+```
+src/
+├── components/          # 组件目录
+│   ├── ea-alert/       # 单个组件
+│   │   ├── index.ts    # 组件入口
+│   │   ├── index.scss  # 组件样式
+│   │   └── types.d.ts  # 类型声明（可选）
+├── core/               # 核心基础类
+│   ├── EaBase.ts       # 组件基类
+│   └── FormBase/       # 表单组件基类
+├── decorator/          # 装饰器
+│   ├── attribute.ts    # 属性装饰器
+│   ├── custom-element.ts # 自定义元素装饰器
+│   ├── query.ts        # DOM 查询装饰器
+│   └── listen.ts       # 事件监听装饰器
+├── utils/              # 工具函数
+│   ├── bem.ts          # BEM 类名生成
+│   ├── html.ts         # HTML 安全处理
+│   └── timeout.ts      # 定时器工具
+├── types/              # 类型定义
+└── themes/             # 主题样式
+```
+
+### 核心变更（重构后）
+
+1. **基类变更**：`Base` → `EaBase`，路径从 `@components/Base` 改为 `@core/EaBase`
+2. **BEM 工具**：`namespace()` → `createBEM()`，路径从 `@/directives/namespace` 改为 `@utils/bem`
+3. **属性定义**：`this.properties()` → `@attribute()` 装饰器
+4. **事件监听**：手动 `addEventListener` → `@listen()` 装饰器
+5. **DOM 查询**：手动 `querySelector` → `@query()` 装饰器
+6. **HTML 安全**：使用 `html()` 工具函数处理 HTML 内容
+
+## TypeScript 开发规范
 
 ### 组件结构规范
 
-所有组件必须继承 `Base` 类（表单组件继承 `FormAssociatedBase`），使用 Shadow DOM 实现样式隔离：
+所有组件必须继承 `EaBase` 类，使用装饰器模式定义：
 
-```javascript
-import { namespace } from "@/directives/namespace";
-import Base from "@components/Base.js";
+```typescript
+import EaBase, { createBEM } from "@core/EaBase";
+import { attribute } from "@decorator/attribute";
+import { CustomElement } from "@decorator/custom-element";
+import { query } from "@decorator/query";
+import { listen } from "@decorator/listen";
+import { html } from "@utils/html";
 import stylesheet from "./index.scss?inline";
 
-export class EaComponent extends Base {
-  #container;
-  #abortController = new AbortController();
+const TAG_NAME = "ea-component" as const;
+const bem = createBEM(TAG_NAME);
 
-  static get observedAttributes() {
-    return [...super.observedAttributes];
+@CustomElement(TAG_NAME, { styles: [stylesheet] })
+export class EaComponent extends EaBase {
+  // ==================== DOM 元素引用 ====================
+
+  @query(".ea-component")
+  private _container!: HTMLElement;
+
+  @query(".ea-component__input")
+  private _input!: HTMLInputElement;
+
+  // ==================== 属性定义 ====================
+
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaComponent, newVal: string) {
+      this._container.textContent = newVal;
+    },
+  })
+  label: string = "";
+
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaComponent) {
+      this.updateContainerClasslist();
+    },
+  })
+  disabled: boolean = false;
+
+  @attribute({
+    type: ["small", "medium", "large"],
+    default: "medium",
+    observer(this: EaComponent) {
+      this.updateContainerClasslist();
+    },
+  })
+  size: string = "medium";
+
+  // ==================== 方法 ====================
+
+  /**
+   * 更新容器类名
+   */
+  updateContainerClasslist(): string {
+    const className = bem({ [this.size]: true }, { disabled: this.disabled });
+    this._container.className = className;
+    return className;
   }
 
-  constructor() {
-    super();
-    this.stylesheet = stylesheet;
-    this.$render();
-  }
-
-  $render() {
-    const ns = namespace("component");
-    this.ns = ns;
-    this.shadowRoot.innerHTML = this.html(`
-      <div class='${ns.b("component")}' part='container'>
+  /**
+   * 渲染模板
+   */
+  html(): string {
+    return `
+      <div class='${bem()}' part='container'>
         <slot></slot>
       </div>
-    `);
-    this.#container = this.shadowRoot.querySelector(ns.cb("component"));
+    `;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.#abortController?.abort();
-    this.#abortController = new AbortController();
+  // ==================== 事件处理 ====================
+
+  @listen("click", ".ea-component__button")
+  private _handleClick(e: Event) {
+    if (this.disabled) return;
+    this.emit("click", { detail: { target: e.target } });
   }
 
-  $beforeUnmounted() {
-    this.#abortController?.abort();
-  }
-}
+  // ==================== 生命周期 ====================
 
-if (!customElements.get("ea-component")) {
-  customElements.define("ea-component", EaComponent);
+  $mount(): void {
+    this.updateContainerClasslist();
+  }
+
+  $beforeUnmount(): void {
+    // 清理资源
+  }
 }
 ```
 
 **核心要点：**
 
-- 继承 `Base` 类（表单组件继承 `FormAssociatedBase`）
-- 私有属性使用 `#` 前缀
-- 使用 Shadow DOM 实现样式隔离
-- 使用 `namespace()` 生成 BEM 命名空间
+- 继承 `EaBase` 类（表单组件继承 `FormBase`）
+- 使用 `@CustomElement` 装饰器注册组件
+- 使用 `@attribute` 装饰器定义属性
+- 使用 `@query` 装饰器获取 DOM 元素
+- 使用 `@listen` 装饰器绑定事件
+- 使用 `createBEM()` 生成 BEM 类名
+- 使用 `html()` 函数处理 HTML 内容（防止 XSS）
 - 样式导入使用 `?inline` 后缀
-- 文件末尾注册自定义元素
+- 私有属性使用 `_` 前缀（`#` 与装饰器不兼容）
 
-### 属性定义规范
+### 装饰器使用规范
 
-使用 `this.properties()` 定义属性，分为三类：
+#### @CustomElement
 
-1. **state**：组件内部状态属性，从 HTML 属性读取
-2. **propStates**：组件外部传入属性，从 `props` 对象读取
-3. **funcStates**：函数类型属性，保持函数原始形式
-
-```javascript
-state = this.properties({
-  disabled: {
-    type: Boolean,
-    default: false,
-    observer: newVal => {
-      this.updateContainerClasslist();
-    },
-  },
-  size: {
-    type: ["", "small", "medium", "large"],
-    default: "",
-    observer: newVal => {
-      this.updateContainerClasslist();
-    },
-  },
-});
-
-propStates = this.properties({
-  data: {
-    props: true,
-    type: Array,
-    default: [],
-    observer: newVal => {
-      this.#handleDataUpdate(newVal);
-    },
-  },
-  marks: {
-    props: true,
-    type: Object,
-    default: null,
-    observer: () => {
-      this.#renderMarks();
-    },
-  },
-});
-
-funcStates = this.properties({
-  selectable: {
-    props: true,
-    type: Function,
-    rawFunction: true,
-    default: null,
-  },
-  formatTooltip: {
-    props: true,
-    type: Function,
-    rawFunction: true,
-    default: value => value,
-    observer: () => {
-      this.#updateSlider();
-    },
-  },
-});
+```typescript
+@CustomElement("ea-component", {
+  styles: [stylesheet],      // 样式数组
+  autoDefine: true,          // 是否自动注册（默认 true）
+})
 ```
 
-**属性配置对象：**
+#### @attribute
 
-- `type`: String | Number | Boolean | Array | Function | Object | 枚举数组 | 动态类型对象
-- `default`: 静态值或函数（`rawFunction: true` 时使用 `() => value => value`）
-- `props`: 是否从 props 对象读取
-- `rawFunction`: 是否保持函数原始形式
-- `observer`: 属性变化回调函数
-
-### 函数命名规范
-
-| 函数类型 | 前缀      | 示例                                      | 说明          |
-| -------- | --------- | ----------------------------------------- | ------------- |
-| 事件函数 | `#on`     | `#onClick`, `#onScroll`                   | 处理 DOM 事件 |
-| 私有函数 | `#`       | `#handleDataUpdate`, `#handleStyleUpdate` | 组件内部使用  |
-| 暴露函数 | 无        | `setData`, `show`, `hide`                 | 对外 API      |
-| 生命周期 | `$`       | `$render`, `$beforeUnmounted`             | 生命周期钩子  |
-| 渲染函数 | `#render` | `#renderStops`, `#renderMarkLabels`       | 渲染相关      |
-
-### 生命周期管理
-
-```javascript
-connectedCallback() {
-  super.connectedCallback();
-  this.#abortController?.abort();
-  this.#abortController = new AbortController();
-  this.#bindEvents();
-}
-
-$beforeUnmounted() {
-  this.#abortController?.abort();
-  this.#resizeObserver?.unobserve();
-  this.#mutationObserver?.disconnect();
-}
-```
-
-### 多 AbortController 管理
-
-```javascript
-#AbortControllerStates = {
-  /** @type {AbortController} */
-  input: null,
-};
-
-// 在 observer 中使用
-"show-input": {
-  type: Boolean,
-  default: false,
-  observer: async newVal => {
-    if (!this.#states.isInputNumberDefined) {
-      await customElements.whenDefined("ea-input-number");
-      this.#states.isInputNumberDefined = true;
-    }
-
-    this.#AbortControllerStates.input?.abort();
-
-    if (newVal) {
-      this.#AbortControllerStates.input = new AbortController();
-      this.#input.addEventListener("ea-change", this.#onInputChange, {
-        signal: this.#AbortControllerStates.input.signal,
-      });
-    }
+```typescript
+@attribute({
+  type: String,              // String | Number | Boolean | Array | Object | 枚举数组
+  default: "default value",  // 默认值
+  observer(this, newVal) {   // 变化回调
+    this.updateUI();
   },
-}
-
-$beforeUnmounted() {
-  this.#abortController?.abort();
-  for (const key in this.#AbortControllerStates) {
-    this.#AbortControllerStates[key]?.abort();
-  }
-}
+})
+propertyName: string = "";
 ```
 
-### 事件绑定规范
+**类型说明：**
 
-使用 `AbortController` 管理事件监听器：
+- `String` - 字符串类型
+- `Number` - 数字类型
+- `Boolean` - 布尔类型（HTML 中属性存在即为 true）
+- `Array` - JSON 数组
+- `Object` - JSON 对象
+- `["a", "b", "c"]` - 枚举类型，限制可选值
 
-```javascript
-#onClick = (e) => {
-  const target = e.target.closest("ea-item");
-  if (!target || target?.hasAttribute("disabled")) return;
-  this.active = target.getAttribute("name");
-};
+#### @query
 
-#bindEvents = () => {
-  this.#abortController?.abort();
-  this.#abortController = new AbortController();
+```typescript
+@query(".ea-component__container")
+private _container!: HTMLElement;
 
-  // 组件内部事件
-  this.#rail.addEventListener("mousedown", this.#onMouseDown, {
-    signal: this.#abortController.signal,
-  });
+@query("input[type='text']")
+private _input!: HTMLInputElement;
+```
 
-  // 全局事件（用于拖拽时鼠标移出组件）
-  document.addEventListener("mousemove", this.#onMouseMove, {
-    signal: this.#abortController.signal,
-  });
-  document.addEventListener("mouseup", this.#onMouseUp, {
-    signal: this.#abortController.signal,
-  });
-};
+#### @listen
 
-connectedCallback() {
-  super.connectedCallback();
-  this.#abortController?.abort();
-  this.#abortController = new AbortController();
-
-  this.#container.addEventListener("click", this.#onClick, {
-    signal: this.#abortController.signal,
-  });
+```typescript
+// 基础用法 - 监听 shadowRoot 事件
+@listen("click")
+private _handleClick(e: Event) {
+  // 处理点击
 }
+
+// 事件委托 - 监听特定选择器
+@listen("click", ".ea-component__button")
+private _handleButtonClick(e: Event) {
+  // 处理按钮点击
+}
+
+// 自动清理 - 组件销毁时自动移除监听
 ```
 
-### 拖拽交互规范
+### BEM 类名规范
 
-```javascript
-#states = {
-  isDragging: false,
-  startX: 0,
-  startY: 0,
-};
+使用 `createBEM` 工具生成 BEM 类名：
 
-#onMouseDown = e => {
-  if (this.disabled) return;
-  e.preventDefault();
-  e.stopPropagation();
-  this.#states.isDragging = true;
-  // ...
-};
+```typescript
+const bem = createBEM("ea-component");
 
-#onMouseMove = e => {
-  if (!this.#states.isDragging || this.disabled) return;
-  e.preventDefault();
-  e.stopPropagation();
-  // ...
-};
+// 基础块
+bem(); // "ea-component"
 
-#onMouseUp = () => {
-  if (!this.#states.isDragging) return;
-  this.#states.isDragging = false;
-  // ...
-};
+// 带修饰符
+bem({ size: "large" }); // "ea-component ea-component--size-large"
+bem({ [this.type]: true }); // "ea-component ea-component--primary"
+
+// 带状态
+bem({}, { disabled: true }); // "ea-component is-disabled"
+bem({}, { active: this.active }); // "ea-component" 或 "ea-component is-active"
+
+// 组合使用
+bem(
+  { [this.type]: true, [this.size]: true },
+  { disabled: this.disabled, center: this.center }
+);
+// "ea-component ea-component--primary ea-component--large is-disabled is-center"
 ```
 
-### 子组件集成规范
+### HTML 安全处理
 
-```javascript
-// 等待子组件定义
-"show-input": {
-  type: Boolean,
-  default: false,
-  observer: async newVal => {
-    if (!this.#states.isInputNumberDefined) {
-      await customElements.whenDefined("ea-input-number");
-      this.#states.isInputNumberDefined = true;
-    }
-    // ...
+使用 `html()` 函数处理可能包含 HTML 的内容：
+
+```typescript
+import { html } from "@utils/html";
+
+@attribute({
+  type: String,
+  default: "",
+  observer(this: EaAlert, newVal: string) {
+    // 安全地插入 HTML
+    this._container.innerHTML = html(newVal);
   },
-}
-
-// 子组件事件处理
-#onInputChange = e => {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  const newValue = parseFloat(e.detail.currentValue);
-  // ...
-};
+})
+content: string = "";
 ```
 
-### 事件派发规范
+**注意：** `html()` 函数会进行 XSS 过滤，只允许安全的 HTML 标签。
 
-#### 事件命名规则
+### 事件系统
 
-- **非 "ea-" 前缀事件**：使用 `this.emit` 方法派发，如 `change`, `focus`, `blur`
-- **"ea-" 前缀事件**：创建专用事件类，使用 `dispatchEvent` 派发
+#### 派发事件
 
-#### 普通事件派发（this.emit）
-
-```javascript
-// 简单事件，无 detail
+```typescript
+// 简单事件
 this.emit("focus");
 this.emit("blur");
 
-// 带 detail 的事件
+// 带数据的事件
 this.emit("change", {
   detail: {
     value: newVal,
@@ -318,159 +274,122 @@ this.emit("change", {
 });
 ```
 
-#### "ea-" 前缀事件派发（事件类）
-
-- 注意此类事件声明是 typescript 的，同时需要在 `GlobalEventHandlersEventMap` 中声明
+#### 自定义事件类（ea- 前缀事件）
 
 ```typescript
-/**
- * 组件 Foo 事件
- * @event EaComponentFooEvent
- * @property {boolean} visible - 当前 Foo 状态
- */
-export class EaComponentFooEvent extends Event {
-  readonly detail: EaComponentFooEventDetail;
+// types.ts
+export class EaComponentChangeEvent extends Event {
+  readonly detail: { value: string; label: string };
 
-  constructor(detail: EaComponentFooEventDetail) {
-    super("ea-foo-change", {
-      bubbles: true,
-      cancelable: true,
-      composed: true,
-    });
+  constructor(detail: { value: string; label: string }) {
+    super("ea-change", { bubbles: true, cancelable: true, composed: true });
     this.detail = detail;
   }
 }
 
-interface EaComponentFooEventDetail {
-  /** @description 当前 Foo 状态 */
-  visible: boolean;
-}
-
 declare global {
   interface GlobalEventHandlersEventMap {
-    "ea-foo-change": EaComponentFooEvent;
+    "ea-change": EaComponentChangeEvent;
   }
+}
+
+// 使用
+this.dispatchEvent(new EaComponentChangeEvent({ value: "new", label: "New" }));
+```
+
+### 生命周期方法
+
+| 方法               | 说明       | 调用时机                         |
+| ------------------ | ---------- | -------------------------------- |
+| `$mount()`         | 组件挂载   | connectedCallback 后，首次渲染前 |
+| `$beforeUnmount()` | 组件销毁前 | disconnectedCallback 开始时      |
+| `$unmounted()`     | 组件销毁后 | disconnectedCallback 结束时      |
+| `$updated()`       | 属性更新   | attributeChangedCallback 后      |
+
+```typescript
+$mount(): void {
+  // 初始化操作
+  this.updateContainerClasslist();
+}
+
+$beforeUnmount(): void {
+  // 清理 AbortController、Observer 等资源
+  this._transitionAbortController?.abort();
+  this._resizeObserver?.disconnect();
 }
 ```
 
-```javascript
-// 2. 在组件中导入并使用
-import { EaComponentFooEvent } from "./events/EaComponentFooEvent";
+### AbortController 管理
 
-// 3. 派发事件
-this.dispatchEvent(new EaComponentFooEvent({ visible: true }));
-```
+对于需要手动管理的事件监听：
 
-### 公共方法规范
+```typescript
+private _transitionAbortController?: AbortController;
 
-#### 方法定义位置
+private _startTransition() {
+  // 清理之前的
+  this._transitionAbortController?.abort();
+  this._transitionAbortController = new AbortController();
 
-公共方法定义在类的主体中，生命周期方法之后：
-
-```javascript
-export class EaComponent extends Base {
-  // ... 私有方法和属性
-
-  connectedCallback() {
-    super.connectedCallback();
-    // ...
-  }
-
-  $beforeUnmounted() {
-    // ...
-  }
-
-  /**
-   * 使组件获取焦点
-   * @return {void}
-   */
-  focus = () => {
-    this.#inputElement.focus();
-  };
-
-  /**
-   * 打开下拉面板
-   * @return {void}
-   */
-  handleOpen = () => {
-    this.#openDropdown();
-  };
-
-  /**
-   * 设置数据
-   * @param {Array} data - 数据数组
-   * @return {void}
-   */
-  setData = data => {
-    this.#renderData(data);
-  };
-}
-```
-
-#### 方法命名规范
-
-- **动词开头**：`focus`, `blur`, `handleOpen`, `handleClose`
-- **驼峰命名**：`setData`, `getValue`, `updatePosition`
-- **异步方法**：可添加 `async` 前缀或返回 Promise
-
-### 样式更新规范
-
-使用 `updateContainerClasslist()` 更新类名：
-
-```javascript
-updateContainerClasslist() {
-  const className = this.computedClasslist(
-    "ea-component",
-    {
-      ["--" + this.type]: this.type,
-    },
-    {
-      disabled: this.disabled,
-      active: this.active,
-    }
-  );
-  this.#container.className = className;
-}
-```
-
-### 数据处理规范
-
-使用 `WeakMap` 管理数据与 DOM 节点的映射：
-
-```javascript
-#states = {
-  dataSource: new WeakMap(),
-  dataIndex: new WeakMap(),
-};
-
-setData = (data) => {
-  data.forEach((item, i) => {
-    const trNode = this.#createRowNode(item, i);
-    this.#states.dataSource.set(trNode, item);
-    this.#states.dataIndex.set(item, trNode);
+  this._container.addEventListener("transitionend", () => {
+    this.remove();
+  }, {
+    signal: this._transitionAbortController.signal,
+    once: true,
   });
-};
+}
+
+$beforeUnmount(): void {
+  this._transitionAbortController?.abort();
+}
 ```
 
-### 性能优化规范
+### 类型声明文件
 
-1. 使用 `AbortController` 管理事件和异步操作
-2. 使用防抖和节流优化频繁操作
-3. 使用 `DocumentFragment` 批量 DOM 操作
-4. 在 `$beforeUnmounted` 中清理所有资源
+为组件创建类型声明，支持 HTML/Vue/React：
 
-### 错误处理规范
+```typescript
+// types.d.ts
 
-```javascript
-#handleDataUpdate = async (newData) => {
-  try {
-    await this.#validateData(newData);
-    this.#renderData(newData);
-  } catch (error) {
-    console.error("Failed to update data:", error);
-    this.emit("error", { detail: { error, data: newData } });
+// HTML 全局类型
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-component": EaComponentElement;
   }
-};
+}
+
+export interface EaComponentElement extends HTMLElement {
+  label: string;
+  disabled: boolean;
+  size: "small" | "medium" | "large";
+}
+
+// Vue 类型
+declare module "vue" {
+  interface GlobalComponents {
+    "ea-component": DefineComponent<{
+      label?: string;
+      disabled?: boolean;
+      size?: "small" | "medium" | "large";
+    }>;
+  }
+}
+
+// React 类型
+declare module "react" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "ea-component": React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & {
+        label?: string;
+        disabled?: boolean;
+        size?: "small" | "medium" | "large";
+      };
+    }
+  }
+}
 ```
 
 ## CSS 开发规范
@@ -479,13 +398,10 @@ setData = (data) => {
 
 ```scss
 $name: ea-component-name;
-$ea-component-size-types: (small, default, large);
 
 :host {
   --#{$name}-height: 6px;
-  --#{$name}-height-small: 4px;
-  --#{$name}-height-large: 8px;
-  --#{$name}-rail-bg-color: var(--grey-200);
+  --#{$name}-bg-color: var(--grey-200);
   --#{$name}-transition: var(--transition-fast);
 }
 
@@ -518,15 +434,6 @@ $ea-component-size-types: (small, default, large);
       color: var(--color-white);
     }
   }
-
-  @include state(vertical) {
-    flex-direction: column;
-
-    .#{$name}__runway {
-      height: 100%;
-      width: auto;
-    }
-  }
 }
 ```
 
@@ -538,30 +445,6 @@ $ea-component-size-types: (small, default, large);
 - 使用 `@include state(state-name)` 定义状态
 - **仅在 `@include block($name)` 内部使用 elements、modifiers 和 states 的 mixin 函数**
 - **在 `@include element()`、`@include modifier()` 和 `@include state()` 内部使用完整 CSS 选择器而非 mixin**
-
-### 子组件样式覆盖
-
-使用 `::part` 选择器修改子组件样式：
-
-```scss
-@include block($name) {
-  @include element(trigger) {
-    &::part(original) {
-      display: none;
-    }
-
-    &::part(content) {
-      background-color: var(--grey-800);
-    }
-  }
-
-  @include state(show-tooltip) {
-    .#{$name}__trigger::part(original) {
-      display: block;
-    }
-  }
-}
-```
 
 ### 设计变量使用原则
 
@@ -586,13 +469,23 @@ $ea-component-size-types: (small, default, large);
    }
    ```
 
-### 注意事项
+### 子组件样式覆盖
 
-- 任何可能被用户自定义的样式属性都应提供 CSS 变量接口
-- 使用 `part` 属性暴露样式钩子，允许外部样式覆盖
-- 保持样式模块化，每个组件独立
-- 考虑颜色对比度、焦点状态等无障碍访问需求
-- 使用 `pointer-events: none` 控制元素交互行为
+使用 `::part` 选择器修改子组件样式：
+
+```scss
+@include block($name) {
+  @include element(trigger) {
+    &::part(original) {
+      display: none;
+    }
+
+    &::part(content) {
+      background-color: var(--grey-800);
+    }
+  }
+}
+```
 
 ## 文档生成规范
 
@@ -661,108 +554,44 @@ $ea-component-size-types: (small, default, large);
 
 ### [组件名] Attributes
 
-[属性表格]
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| ---- | ---- | ---- | ------ | ------ |
 
 ### [组件名] CSS Part
 
-[CSS Part 表格]
+| 名称 | 说明 |
+| ---- | ---- |
 
 ### [组件名] Slots
 
-[插槽表格]
+| 名称 | 说明 |
+| ---- | ---- |
 
 ### [组件名] Methods
 
-[方法表格]
+| 方法名 | 说明 | 参数 |
+| ------ | ---- | ---- |
 
 ### [组件名] Events
 
-[事件表格]
+| 事件名 | 说明 | 回调参数(event.detail) |
+| ------ | ---- | ---------------------- |
 
 ```
 
-### API 部分生成规则
+### API 生成规则
 
-1. **组件的 Attributes&Props** 部分，以 `.js` 文件中 `this.properties` 函数里的键名、type、default 为准
-
-2. **单组件 API 结构**：
-   - ## Attributes（如果有属性）
-   - ## CSS Part（如果有CSS Part）
-   - ## Slots（如果有插槽）
-   - ## Methods（如果有方法）
-   - ## Events（如果有事件）
-
-3. **父子组件 API 结构**：
-   - ## Parent API
-     - ### Parent Attributes
-     - ### Parent CSS Part
-     - ### Parent Slots
-     - ### Parent Methods
-     - ### Parent Events
-   - ## Child API
-     - ### Child Attributes
-     - ### Child CSS Part
-     - ### Child Slots
-     - ### Child Methods
-     - ### Child Events
-
-4. 如果某个部分不存在（如无 Methods），则不写该部分
-
-5. **Props 标记**：对于需要通过 JavaScript 设置的属性（props），在表格中标记 `<PropTag />`
-
-### 表格格式
-
-**属性表格：**
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-|------|------|------|--------|--------|
-
-**CSS Part 表格：**
-| 名称 | 说明 |
-|------|------|
-
-**Slots 表格：**
-| 名称 | 说明 |
-|------|------|
-
-**Methods 表格：**
-| 方法名 | 说明 | 参数 |
-|--------|------|------|
-
-**Event 表格：**
-| 事件名 | 说明 | 回调参数(event.detail) |
-|--------|------|------------------------|
-
-### 示例处理规则
-
-1. **示例结构**：
-   - 示例标题使用 `##` 格式
-   - 示例描述简要说明功能
-   - 示例展示使用 `<div class="demo">` 包裹
-   - 代码块使用 `::: details 查看代码` 包裹
-
-2. **布局规范**：
-   - 使用 `.slider-demo-block` 布局结构
-   - 包含 `.demonstration` 标签用于说明
-   - 参考 ea-slider.html 的示例布局
-
-3. **代码分组**：
-   - 使用 `::: code-group` 分组 HTML/CSS/JS 代码
-   - 较长示例必须折叠
-
-4. **与 HTML 文件对齐**：
-   - 示例标题与 HTML 文件中的 `h1` 标签对应
-   - 示例顺序与 `#region` 标记顺序一致
-   - 示例代码与 `#region` 内的代码一致
-
-5. **垂直模式示例**：
-   - 使用 `.vertical-demo` 类名
-   - 需要设置固定高度
+1. **Attributes** 以 `@attribute` 装饰器的定义为准
+2. **CSS Part** 以模板中 `part="xxx"` 属性为准
+3. **Slots** 以模板中 `<slot name="xxx">` 为准
+4. **Methods** 以类中公共方法为准（不含 `_` 前缀）
+5. **Events** 以 `this.emit()` 调用为准
 
 ## 通用规范
 
 ### 代码风格
 
-- 除函数的 jsdoc 注释外不添加任何注释（除非用户明确要求）
+- 不添加任何注释（除非用户明确要求）
 - 保持代码简洁、清晰
 - 遵循现有的代码风格和命名约定
 

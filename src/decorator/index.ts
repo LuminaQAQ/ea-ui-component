@@ -1,2 +1,2 @@
-export { customElement } from "./custom-element";
-export { attribute, ElementAttributesMap } from "./attribute";
+export { CustomElement } from "./custom-element";
+export { attribute } from "./attribute";

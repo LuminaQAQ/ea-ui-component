@@ -14,19 +14,6 @@ export type CustomElementAttributeTypes =
   | EnumConstructor;
 
 /**
- * @description 带 ShadowRoot 的元素接口
- */
-export interface ShadowRootElement extends HTMLElement {
-  __observedAttributes: any[];
-  __observedAttributesCallback: Record<
-    string,
-    (this: ShadowRootElement, newVal: any, oldVal: any) => void
-  >;
-  shadowRoot: ShadowRoot;
-  [key: string]: any;
-}
-
-/**
  * @description 属性装饰器选项
  */
 export interface AttributeOptions {

@@ -5,13 +5,13 @@ description: 需要为某个组件编写文档时
 
 # 组件文档生成指南
 
-根据提供的组件源代码（`.js` 文件）和示例文件（`.html` 文件）生成完整的组件文档。
+根据提供的组件源代码（`.ts` 文件）和示例文件（`.html` 文件）生成完整的组件文档。
 
 ## 文档结构要求
 
 文档应遵循以下结构：
 
-````markdown
+```markdown
 # [组件名称] [中文描述]
 
 [组件功能简介]
@@ -25,7 +25,6 @@ description: 需要为某个组件编写文档时
   import "./node_modules/easy-component-ui/components/[组件名]/index.js";
 </script>
 ```
-````
 
 > `css`
 
@@ -97,8 +96,7 @@ description: 需要为某个组件编写文档时
 ### [组件名] Events
 
 [事件表格]
-
-````
+```
 
 ## 示例处理规则
 
@@ -122,7 +120,7 @@ description: 需要为某个组件编写文档时
     <ea-component [属性]></ea-component>
   </div>
 </div>
-````
+```
 
 对应的 CSS 样式：
 
@@ -156,7 +154,7 @@ description: 需要为某个组件编写文档时
 
 使用 `::: code-group` 来分组不同语言的代码：
 
-````markdown
+```markdown
 ::: details 查看代码
 
 ::: code-group
@@ -164,7 +162,6 @@ description: 需要为某个组件编写文档时
 ```html
 <!-- HTML代码 -->
 ```
-````
 
 ```js
 // JavaScript代码
@@ -177,8 +174,7 @@ description: 需要为某个组件编写文档时
 :::
 
 :::
-
-````
+```
 
 ### 5. 示例与 HTML 文件对齐规则
 
@@ -206,7 +202,7 @@ description: 需要为某个组件编写文档时
 <hr />
 <!-- #endregion  -->
 <!-- end  -->
-````
+```
 
 ### 6. Props 标记规范
 
@@ -217,11 +213,13 @@ description: 需要为某个组件编写文档时
 | formatTooltip <PropTag /> | 自定义提示框内容格式 | Function | — | `value => value` |
 ```
 
+---
+
 ## API部分生成规则
 
 ### 1. Attributes 表格
 
-以 `.js` 文件中 `this.properties` 函数里的键名为准：
+以 `.ts` 文件中 `@attribute` 装饰器的定义为准：
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 | ---- | ---- | ---- | ------ | ------ |
@@ -231,6 +229,42 @@ description: 需要为某个组件编写文档时
 - 类型为 Boolean 且默认值为 false 的属性，可选值列写 `—`
 - 类型为枚举值的属性，可选值列写出所有可选值
 - Props 类型的属性需要标记 `<PropTag />`
+- 属性名使用 camelCase（如 `closeText` 对应 HTML 中的 `close-text`）
+
+**示例**：
+
+```typescript
+// TypeScript 源码
+@attribute({
+  type: String,
+  default: "",
+  observer(this: EaAlert, newVal: string) {
+    this._alertHeading.innerHTML = html(newVal);
+  },
+})
+heading: string = "";
+
+@attribute({
+  type: Boolean,
+  default: true,
+})
+closable: boolean = true;
+
+@attribute({
+  type: ["primary", "success", "warning", "error", "info"] as const,
+  default: "info",
+})
+type: string = "info";
+```
+
+```markdown
+<!-- 文档表格 -->
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| ---- | ---- | ---- | ------ | ------ |
+| heading | 标题 | String | — | '' |
+| closable | 是否可关闭 | Boolean | — | true |
+| type | 主题类型 | String | primary/success/warning/error/info | info |
+```
 
 ### 2. CSS Part 表格
 
@@ -239,23 +273,146 @@ description: 需要为某个组件编写文档时
 
 **说明**：
 
-- 列出所有在组件中定义的 `part` 属性
+- 列出所有在组件模板中定义的 `part` 属性
 - 说明应简洁明了，描述该 part 对应的元素
+
+**示例**：
+
+```typescript
+// TypeScript 模板
+html(): string {
+  return `
+    <div class='ea-alert' part='container'>
+      <span class="ea-alert__icon-wrap" part='icon-wrap'>
+        <slot name='icon'></slot>
+      </span>
+      <div class="ea-alert__content" part='content-wrap'>
+        ...
+      </div>
+    </div>
+  `;
+}
+```
+
+```markdown
+<!-- 文档表格 -->
+| 名称 | 说明 |
+| ---- | ---- |
+| container | 容器元素 |
+| icon-wrap | 图标包裹元素 |
+| content-wrap | 内容包裹元素 |
+```
 
 ### 3. Slots 表格
 
 | 名称 | 说明 |
 | ---- | ---- |
 
+**说明**：
+
+- 列出所有在组件模板中定义的 `<slot>` 元素
+- 默认插槽（无 name 属性）名称为 `default`
+
+**示例**：
+
+```typescript
+// TypeScript 模板
+html(): string {
+  return `
+    <div class='ea-alert'>
+      <slot name='icon'></slot>
+      <slot name='heading'></slot>
+      <slot></slot>
+    </div>
+  `;
+}
+```
+
+```markdown
+<!-- 文档表格 -->
+| 名称 | 说明 |
+| ---- | ---- |
+| default | 默认插槽，用于描述内容 |
+| icon | 自定义图标 |
+| heading | 自定义标题 |
+```
+
 ### 4. Methods 表格
 
 | 方法名 | 说明 | 参数 |
 | ------ | ---- | ---- |
 
+**说明**：
+
+- 列出类中所有公共方法（不含 `_` 前缀的方法）
+- 包括继承自 EaBase 的方法（如 `emit`）如果组件有特殊用法
+
+**示例**：
+
+```typescript
+// TypeScript 源码
+export class EaComponent extends EaBase {
+  /**
+   * 更新容器类名
+   */
+  updateContainerClasslist(): string {
+    // ...
+  }
+
+  /**
+   * 设置数据
+   * @param data - 数据数组
+   */
+  setData(data: any[]): void {
+    // ...
+  }
+
+  // 私有方法不列入文档
+  private _handleClick() {}
+}
+```
+
+```markdown
+<!-- 文档表格 -->
+| 方法名 | 说明 | 参数 |
+| ------ | ---- | ---- |
+| updateContainerClasslist | 更新容器类名 | — |
+| setData | 设置数据 | (data: Array) |
+```
+
 ### 5. Events 表格
 
 | 事件名 | 说明 | 回调参数(event.detail) |
 | ------ | ---- | ---------------------- |
+
+**说明**：
+
+- 列出所有 `this.emit()` 调用的事件
+- 列出所有自定义事件类（如 `EaComponentChangeEvent`）
+- "ea-" 前缀的事件需要详细描述 event.detail 结构
+
+**示例**：
+
+```typescript
+// TypeScript 源码
+// 普通事件
+this.emit("close", { detail: { visible: false } });
+this.emit("open");
+
+// 自定义事件类
+this.dispatchEvent(new EaAlertCloseEvent({ visible: false }));
+```
+
+```markdown
+<!-- 文档表格 -->
+| 事件名 | 说明 | 回调参数(event.detail) |
+| ------ | ---- | ---------------------- |
+| close | 关闭时触发 | `{ visible: false }` |
+| open | 显示时触发 | — |
+| ea-close | 关闭动画开始时触发（自定义事件类） | `{ visible: boolean }` |
+```
+
+---
 
 ## 特殊情况处理
 
@@ -378,45 +535,40 @@ onMounted(() => {
 
 ---
 
-## API 表格更新规范
+## 类型声明文档
 
-### Methods 表格
-
-当组件添加公共方法时，需要更新 Methods 表格：
+如果组件包含 `types.d.ts` 文件，应在文档中说明类型支持：
 
 ```markdown
-### Component Methods
+## 类型支持
 
-| 方法名      | 说明           | 参数          |
-| ----------- | -------------- | ------------- |
-| focus       | 使组件获取焦点 | —             |
-| blur        | 使组件失去焦点 | —             |
-| handleOpen  | 打开下拉面板   | —             |
-| handleClose | 关闭下拉面板   | —             |
-| setData     | 设置数据       | (data: Array) |
+### HTML
+
+组件支持 `HTMLElementTagNameMap` 扩展：
+
+```typescript
+const alert = document.createElement('ea-alert');
+alert.type = 'success'; // 类型安全
 ```
 
-### Events 表格
+### Vue
 
-当组件添加事件时，需要更新 Events 表格：
+组件支持 Vue 全局组件类型：
 
-```markdown
-### Component Events
-
-| 事件名            | 说明             | 回调参数(event.detail)         |
-| ----------------- | ---------------- | ------------------------------ |
-| change            | 值改变时触发     | `{ value, label }`             |
-| focus             | 获得焦点时触发   | —                              |
-| blur              | 失去焦点时触发   | —                              |
-| ea-visible-change | 可见性改变时触发 | `{ visible: boolean }`         |
-| ea-panel-change   | 面板改变时触发   | `{ date: Date, mode: string }` |
+```typescript
+// 在模板中使用时有类型提示
+<ea-alert :heading="'标题'" @close="handleClose" />
 ```
 
-**注意**：
+### React
 
-- "ea-" 前缀的事件需要详细描述 event.detail 结构
-- 普通事件（如 focus, blur）无 detail 时写 "—"
-- 复杂对象类型需要注明属性类型
+组件支持 JSX 类型：
+
+```typescript
+// 在 JSX 中使用时有类型检查
+<ea-alert heading="标题" type="success" />
+```
+```
 
 ---
 
@@ -429,3 +581,4 @@ onMounted(() => {
 - 确保文档结构清晰、易于阅读
 - **示例必须与 HTML 文件中的 `#region` 标记完全对齐**
 - **JavaScript 代码风格必须与 HTML 测试文件保持一致**
+- **API 表格必须从 `@attribute` 装饰器和模板中提取**

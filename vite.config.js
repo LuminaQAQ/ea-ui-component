@@ -168,6 +168,10 @@ export default defineConfig({
       "@utils": resolve(__dirname, "src/utils"),
       "@common": resolve(__dirname, "src/common"),
       "@events": resolve(__dirname, "src/events"),
+      "@core": resolve(__dirname, "src/core"),
+      "@decorator": resolve(__dirname, "src/decorator"),
+      "@types": resolve(__dirname, "src/types"),
+      "@stores": resolve(__dirname, "src/stores"),
     },
   },
 });

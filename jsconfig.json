@@ -7,7 +7,11 @@
       "@components/*": ["src/components/*"],
       "@common/*": ["src/common/*"],
       "@themes/*": ["src/themes/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@decorator/*": ["src/decorator/*"],
+      "@types/*": ["src/types/*"],
+      "@stores/*": ["src/stores/*"],
+      "@core/*": ["src/core/*"]
     }
   },
   "include": ["src"]

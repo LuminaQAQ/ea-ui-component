@@ -33,7 +33,8 @@
       "@themes/*": ["src/themes/*"],
       "@utils/*": ["src/utils/*"],
       "@decorator/*": ["src/decorator/*"],
-      "@mytypes/*": ["src/types/*"],
+      "@types/*": ["src/types/*"],
+      "@stores/*": ["src/stores/*"],
       "@core/*": ["src/core/*"]
     },
     "typeRoots": ["node_modules/@types"]

@@ -183,6 +183,34 @@ $name: ea-component-name;
 }
 ```
 
+### 与 TypeScript BEM 配合
+
+在 TypeScript 中使用 `createBEM` 生成的类名与 SCSS BEM 结构对应：
+
+```typescript
+// TypeScript
+const bem = createBEM("ea-component");
+
+bem()                          // -> .ea-component
+bem({ size: "large" })         // -> .ea-component.ea-component--size-large
+bem({}, { disabled: true })    // -> .ea-component.is-disabled
+```
+
+```scss
+// SCSS
+$name: ea-component;
+
+@include block($name) {                    // .ea-component
+  @include modifier(size-large) {          // .ea-component--size-large
+    // ...
+  }
+}
+
+@include state(disabled) {                  // .is-disabled
+  // ...
+}
+```
+
 ---
 
 ## CSS 变量规范
@@ -654,4 +682,4 @@ CSS 变量应遵循以下层级关系，避免嵌套引用：
 
 - [variables.scss](file:///e:/repo/ea-ui-component/src/themes/variables.scss) - 设计变量定义
 - [namespace.scss](file:///e:/repo/ea-ui-component/src/themes/namespace.scss) - BEM mixin 定义
-- [ea-slider/index.scss](file:///e:/repo/ea-ui-component/src/components/ea-slider/index.scss) - 完整示例
+- [ea-alert/index.scss](file:///e:/repo/ea-ui-component/src/components/ea-alert/index.scss) - 完整示例

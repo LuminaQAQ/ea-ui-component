@@ -1,4 +1,4 @@
-import type { AttributeOptions } from "@mytypes/index";
+import type { AttributeOptions } from "@/types/index";
 
 /**
  * 解析默认值
@@ -38,7 +38,7 @@ export function parseAttributeValue(
       return isNaN(num) ? parseDefaultValue(defaultVal) : num;
     }
     case Boolean: {
-      return value !== "false" && value !== "";
+      return value === "true" || value === "";
     }
     case Date: {
       const date = new Date(value);
