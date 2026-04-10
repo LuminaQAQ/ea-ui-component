@@ -143,13 +143,17 @@ export class EaAlert extends EaBase {
     default: 0,
     observer(this: EaAlert, newVal: number) {
       if (newVal && this.hasAttribute("auto-close")) {
-        console.log(this);
-
         timeout(() => this._handleClose(), newVal);
       }
     },
   })
   "auto-close": number = 0;
+
+  @attribute({
+    type: Number,
+    default: 0,
+  })
+  "hide-after": number = 0;
 
   // ==================== 方法 ====================
 
@@ -199,21 +203,29 @@ export class EaAlert extends EaBase {
   private _handleClose() {
     if (!this.closable && this["auto-close"] <= 0) return;
 
-    this._container.classList.add("ea-alert--before-close");
+    const doClose = () => {
+      this._container.classList.add("ea-alert--before-close");
 
-    this._transitionAbortController?.abort();
-    this._transitionAbortController = new AbortController();
-
-    const onTransitionEnd = () => {
-      this.emit("close", { detail: { visible: false } });
       this._transitionAbortController?.abort();
-      this.remove();
+      this._transitionAbortController = new AbortController();
+
+      const onTransitionEnd = () => {
+        this.emit("close", { detail: { visible: false } });
+        this._transitionAbortController?.abort();
+        this.remove();
+      };
+
+      this._container.addEventListener("transitionend", onTransitionEnd, {
+        signal: this._transitionAbortController.signal,
+        once: true,
+      });
     };
 
-    this._container.addEventListener("transitionend", onTransitionEnd, {
-      signal: this._transitionAbortController.signal,
-      once: true,
-    });
+    if (this["hide-after"] > 0) {
+      timeout(doClose, this["hide-after"]);
+    } else {
+      doClose();
+    }
   }
 
   // ==================== 生命周期 ====================

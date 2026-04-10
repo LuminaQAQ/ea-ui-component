@@ -66,6 +66,8 @@ ea-alert:first-child {
 
 # Alert 警告
 
+用于页面中展示重要的提示信息。
+
 ## 引入
 
 > `js`
@@ -76,9 +78,22 @@ ea-alert:first-child {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#alert-css-part)。
 
 ::: code-group
 
@@ -133,22 +148,22 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 通过设置 `effect` 属性来改变主题，默认为 `light`。
 
 <div class="demo">
-  <ea-alert title="Primary alert" type="primary" effect="dark"></ea-alert>
-  <ea-alert title="Success alert" type="success" effect="dark"></ea-alert>
-  <ea-alert title="Info alert" type="info" effect="dark"></ea-alert>
-  <ea-alert title="Warning alert" type="warning" effect="dark"></ea-alert>
-  <ea-alert title="Error alert" type="error" effect="dark"></ea-alert>
+  <ea-alert heading="Primary alert" type="primary" effect="dark"></ea-alert>
+  <ea-alert heading="Success alert" type="success" effect="dark"></ea-alert>
+  <ea-alert heading="Info alert" type="info" effect="dark"></ea-alert>
+  <ea-alert heading="Warning alert" type="warning" effect="dark"></ea-alert>
+  <ea-alert heading="Error alert" type="error" effect="dark"></ea-alert>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-alert title="Primary alert" type="primary" effect="dark"></ea-alert>
-  <ea-alert title="Success alert" type="success" effect="dark"></ea-alert>
-  <ea-alert title="Info alert" type="info" effect="dark"></ea-alert>
-  <ea-alert title="Warning alert" type="warning" effect="dark"></ea-alert>
-  <ea-alert title="Error alert" type="error" effect="dark"></ea-alert>
+  <ea-alert heading="Primary alert" type="primary" effect="dark"></ea-alert>
+  <ea-alert heading="Success alert" type="success" effect="dark"></ea-alert>
+  <ea-alert heading="Info alert" type="info" effect="dark"></ea-alert>
+  <ea-alert heading="Warning alert" type="warning" effect="dark"></ea-alert>
+  <ea-alert heading="Error alert" type="error" effect="dark"></ea-alert>
 </div>
 ```
 
@@ -158,67 +173,71 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 
 你可以自定义关闭按钮为文字或其他符号。
 
-你可以设置 Alert 组件是否为可关闭状态， 关闭按钮的内容以及关闭时的回调函数同样可以定制。 `closable` 属性决定 Alert 组件是否可关闭， 该属性接受一个 `Boolean`，默认为 `false`。 你可以设置 `close-text` 属性来代替右侧的关闭图标， 需要注意的是 `close-text` 必须是一个字符串。 当 Alert 组件被关闭时会触发 `close` 事件。
+你可以设置 Alert 组件是否为可关闭状态，关闭按钮的内容以及关闭时的回调函数同样可以定制。`closable` 属性决定 Alert 组件是否可关闭，该属性接受一个 `Boolean`，默认为 `true`。你可以设置 `close-text` 属性来代替右侧的关闭图标，需要注意的是 `close-text` 必须是一个字符串。当 Alert 组件被关闭时会触发 `close` 事件。
 
 <div class="demo">
-  <ea-alert title="Unclosable alert" type="success" closable="false"></ea-alert>
+  <ea-alert heading="Unclosable alert" type="success" closable="false"></ea-alert>
   <ea-alert
-    title="Customized close text"
+    heading="Customized close text"
     type="info"
     close-text="Gotcha"
   ></ea-alert>
   <ea-alert
     id="customizedCloseBtn"
-    title="Alert with callback"
+    heading="Alert with callback"
     type="warning"
   ></ea-alert>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
 
-`html`
+::: code-group
 
 ```html
 <div class="demo">
-  <ea-alert title="Unclosable alert" type="success" closable="false"></ea-alert>
   <ea-alert
-    title="Customized close text"
+    heading="Unclosable alert"
+    type="success"
+    closable="false"
+  ></ea-alert>
+  <ea-alert
+    heading="Customized close text"
     type="info"
     close-text="Gotcha"
   ></ea-alert>
   <ea-alert
     id="customizedCloseBtn"
-    title="Alert with callback"
+    heading="Alert with callback"
     type="warning"
   ></ea-alert>
 </div>
 ```
 
-`js`: 在该元素上添加 `close` 事件即可。
-
 ```js
-const callbackAlert = document.querySelector("#callback");
-callbackAlert.addEventListener("close", e => {
-  alert("Hello World");
+const customizedCloseBtn = document.querySelector("#customizedCloseBtn");
+customizedCloseBtn.addEventListener("close", () => {
+  console.log("close");
 });
 ```
 
 :::
 
-## 使用图标 ​
+::::
+
+## 带有 icon
 
 你可以通过为 Alert 组件添加图标来提高可读性。
 
-通过设置 `show-icon` 属性来显示 Alert 的 icon，这能更有效地向用户展示你的显示意图。 或者你可以使用 `icon` slot 自定义 `icon` 内容。
+通过设置 `show-icon` 属性来显示 Alert 的 icon，这能更有效地向用户展示你的显示意图。或者你可以使用 `icon` slot 自定义 `icon` 内容。
 
 <div class="demo">
-  <ea-alert title="Primary alert" type="primary" show-icon></ea-alert>
-  <ea-alert title="Success alert" type="success" show-icon></ea-alert>
-  <ea-alert title="Info alert" type="info" show-icon></ea-alert>
-  <ea-alert title="Warning alert" type="warning" show-icon></ea-alert>
-  <ea-alert title="Error alert" type="error" show-icon></ea-alert>
-  <ea-alert title="Error alert with custom icon" type="error" show-icon>
-    <ea-icon slot="icon" name="bell" color="red" style=""></ea-icon>
+  <ea-alert heading="Primary alert" type="primary" show-icon></ea-alert>
+  <ea-alert heading="Success alert" type="success" show-icon></ea-alert>
+  <ea-alert heading="Info alert" type="info" show-icon></ea-alert>
+  <ea-alert heading="Warning alert" type="warning" show-icon></ea-alert>
+  <ea-alert heading="Error alert" type="error" show-icon></ea-alert>
+  <ea-alert heading="Error alert with custom icon" type="error" show-icon>
+    <ea-icon slot="icon" name="bell" color="red"></ea-icon>
   </ea-alert>
 </div>
 
@@ -226,13 +245,13 @@ callbackAlert.addEventListener("close", e => {
 
 ```html
 <div class="demo">
-  <ea-alert title="Primary alert" type="primary" show-icon></ea-alert>
-  <ea-alert title="Success alert" type="success" show-icon></ea-alert>
-  <ea-alert title="Info alert" type="info" show-icon></ea-alert>
-  <ea-alert title="Warning alert" type="warning" show-icon></ea-alert>
-  <ea-alert title="Error alert" type="error" show-icon></ea-alert>
-  <ea-alert title="Error alert with custom icon" type="error" show-icon>
-    <ea-icon slot="icon" name="bell" color="red" style=""></ea-icon>
+  <ea-alert heading="Primary alert" type="primary" show-icon></ea-alert>
+  <ea-alert heading="Success alert" type="success" show-icon></ea-alert>
+  <ea-alert heading="Info alert" type="info" show-icon></ea-alert>
+  <ea-alert heading="Warning alert" type="warning" show-icon></ea-alert>
+  <ea-alert heading="Error alert" type="error" show-icon></ea-alert>
+  <ea-alert heading="Error alert with custom icon" type="error" show-icon>
+    <ea-icon slot="icon" name="bell" color="red"></ea-icon>
   </ea-alert>
 </div>
 ```
@@ -244,22 +263,22 @@ callbackAlert.addEventListener("close", e => {
 使用 `center` 属性让文字水平居中。
 
 <div class="demo">
-  <ea-alert title="Primary alert" type="primary" center show-icon></ea-alert>
-  <ea-alert title="Success alert" type="success" center show-icon></ea-alert>
-  <ea-alert title="Info alert" type="info" center show-icon></ea-alert>
-  <ea-alert title="Warning alert" type="warning" center show-icon></ea-alert>
-  <ea-alert title="Error alert" type="error" center show-icon></ea-alert>
+  <ea-alert heading="Primary alert" type="primary" center show-icon></ea-alert>
+  <ea-alert heading="Success alert" type="success" center show-icon></ea-alert>
+  <ea-alert heading="Info alert" type="info" center show-icon></ea-alert>
+  <ea-alert heading="Warning alert" type="warning" center show-icon></ea-alert>
+  <ea-alert heading="Error alert" type="error" center show-icon></ea-alert>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-alert title="Primary alert" type="primary" center show-icon></ea-alert>
-  <ea-alert title="Success alert" type="success" center show-icon></ea-alert>
-  <ea-alert title="Info alert" type="info" center show-icon></ea-alert>
-  <ea-alert title="Warning alert" type="warning" center show-icon></ea-alert>
-  <ea-alert title="Error alert" type="error" center show-icon></ea-alert>
+  <ea-alert heading="Primary alert" type="primary" center show-icon></ea-alert>
+  <ea-alert heading="Success alert" type="success" center show-icon></ea-alert>
+  <ea-alert heading="Info alert" type="info" center show-icon></ea-alert>
+  <ea-alert heading="Warning alert" type="warning" center show-icon></ea-alert>
+  <ea-alert heading="Error alert" type="error" center show-icon></ea-alert>
 </div>
 ```
 
@@ -269,44 +288,45 @@ callbackAlert.addEventListener("close", e => {
 
 为 Alert 组件添加一个更加详细的描述来使用户了解更多信息。
 
-除了必填的 `title` 属性外，你可以设置 `description` 属性来帮助你更好地介绍，我们称之为辅助性文字。 辅助性文字只能存放文本内容，当内容超出长度限制时会自动换行显示。
+除了必填的 `heading` 属性外，你可以设置 `description` 属性来帮助你更好地介绍，我们称之为辅助性文字。辅助性文字只能存放文本内容，当内容超出长度限制时会自动换行显示。
 
 <div class="demo">
   <ea-alert
     class="with-desc-and-icon"
-    title="Primary alert"
+    heading="Primary alert"
     type="primary"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
-    title="Success alert"
+    heading="Success alert"
     type="success"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
-    title="Info alert"
+    heading="Info alert"
     type="info"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
-    title="Warning alert"
+    heading="Warning alert"
     type="warning"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
-    title="Error alert"
+    heading="Error alert"
     type="error"
-    description="More text description"
     show-icon
-  ></ea-alert>
+  >
+    More text description
+  </ea-alert>
 </div>
 
 ::: code-group
@@ -321,39 +341,40 @@ callbackAlert.addEventListener("close", e => {
 <div class="demo">
   <ea-alert
     class="with-desc-and-icon"
-    title="Primary alert"
+    heading="Primary alert"
     type="primary"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
-    title="Success alert"
+    heading="Success alert"
     type="success"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
-    title="Info alert"
+    heading="Info alert"
     type="info"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
-    title="Warning alert"
+    heading="Warning alert"
     type="warning"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
-    title="Error alert"
+    heading="Error alert"
     type="error"
-    description="More text description"
     show-icon
-  ></ea-alert>
+  >
+    More text description
+  </ea-alert>
 </div>
 ```
 
@@ -361,49 +382,55 @@ callbackAlert.addEventListener("close", e => {
 
 ## 延迟属性
 
-在最后, 这是一个延迟属性的例子。
+Alert 组件支持延迟显示、延迟关闭和自动关闭功能。
+
+- `show-after`：延迟显示，单位毫秒
+- `hide-after`：延迟关闭，单位毫秒（点击关闭按钮后延迟关闭）
+- `auto-close`：自动关闭的延时，单位毫秒
 
 <div class="demo">
   <ea-alert
     id="showAfterAlert"
-    title="Primary alert that appearance after 5000 milliseconds"
+    heading="Primary alert that appearance after 5000 milliseconds"
     type="primary"
     show-after="5000"
   ></ea-alert>
   <ea-alert
     id="hideAfterAlert"
-    title="Success alert that disappear after 5000 milliseconds"
+    heading="Success alert that disappear after 5000 milliseconds"
     type="success"
     hide-after="5000"
   ></ea-alert>
   <ea-alert
     id="autoCloseAlert"
-    title="Info alert that in 5000 milliseconds to be hidden"
+    heading="Info alert that in 5000 milliseconds to be hidden"
     type="info"
     closable="false"
     auto-close="5000"
   ></ea-alert>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
+
+::: code-group
 
 ```html
 <div class="demo">
   <ea-alert
     id="showAfterAlert"
-    title="Primary alert that appearance after 5000 milliseconds"
+    heading="Primary alert that appearance after 5000 milliseconds"
     type="primary"
     show-after="5000"
   ></ea-alert>
   <ea-alert
     id="hideAfterAlert"
-    title="Success alert that disappear after 5000 milliseconds"
+    heading="Success alert that disappear after 5000 milliseconds"
     type="success"
     hide-after="5000"
   ></ea-alert>
   <ea-alert
     id="autoCloseAlert"
-    title="Info alert that in 5000 milliseconds to be hidden"
+    heading="Info alert that in 5000 milliseconds to be hidden"
     type="info"
     closable="false"
     auto-close="5000"
@@ -411,50 +438,72 @@ callbackAlert.addEventListener("close", e => {
 </div>
 ```
 
+```js
+const showAfterAlert = document.querySelector("#showAfterAlert");
+const hideAfterAlert = document.querySelector("#hideAfterAlert");
+const autoCloseAlert = document.querySelector("#autoCloseAlert");
+
+showAfterAlert.addEventListener("open", () => {
+  console.log("open");
+});
+
+hideAfterAlert.addEventListener("close", () => {
+  console.log("close");
+});
+
+autoCloseAlert.addEventListener("close", () => {
+  console.log("auto-close");
+});
+```
+
 :::
+
+::::
 
 ## Alert API
 
-| 参数        | 说明                           | 类型    | 可选值                                                                | 默认值 |
-| ----------- | ------------------------------ | ------- | --------------------------------------------------------------------- | ------ |
-| title       | Alert 标题。                   | string  | —                                                                     | —      |
-| type        | Alert 类型。                   | string  | `'primary'  \| 'success' \| 'warning' \| 'info' \| 'error' \| 'info'` | info   |
-| description | 辅助性文字介绍                 | string  | —                                                                     | —      |
-| closable    | 是否可关闭                     | boolean | —                                                                     | true   |
-| center      | 文字是否居中                   | boolean | —                                                                     | false  |
-| close-text  | 关闭按钮自定义文本             | string  | —                                                                     | —      |
-| show-icon   | 是否显示图标                   | boolean | —                                                                     | false  |
-| effect      | 选择提供的主题                 | string  | `'light' \| 'dark'`                                                   | light  |
-| show-after  | 在触发后多久显示内容，单位毫秒 | number  | —                                                                     | 0      |
-| hide-after  | 延迟关闭，单位毫秒             | number  | —                                                                     | 200    |
-| auto-close  | 是否自动关闭的延时，单位毫秒   | boolean | —                                                                     | 0      |
+### Alert Attributes
 
-## CSS Part
+| 参数        | 说明                     | 类型    | 可选值                                     | 默认值 |
+| ----------- | ------------------------ | ------- | ------------------------------------------ | ------ |
+| heading     | Alert 标题               | String  | —                                          | ''     |
+| description | 辅助性文字介绍           | String  | —                                          | ''     |
+| type        | Alert 类型               | String  | primary / success / warning / info / error | info   |
+| effect      | 选择提供的主题           | String  | light / dark                               | light  |
+| close-text  | 关闭按钮自定义文本       | String  | —                                          | ''     |
+| closable    | 是否可关闭               | Boolean | —                                          | true   |
+| show-icon   | 是否显示图标             | Boolean | —                                          | false  |
+| center      | 文字是否居中             | Boolean | —                                          | false  |
+| show-after  | 延迟显示，单位毫秒       | Number  | —                                          | 0      |
+| hide-after  | 延迟关闭，单位毫秒       | Number  | —                                          | 0      |
+| auto-close  | 自动关闭的延时，单位毫秒 | Number  | —                                          | 0      |
+
+### Alert CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称         | 说明                              |
-| ------------ | --------------------------------- |
-| container    | alert 外层容器                    |
-| icon-wrap    | alert 图标容器                    |
-| icon         | alert 图标                        |
-| content-wrap | alert 内层容器                    |
-| title        | alert 标题容器(`title`属性)       |
-| description  | alert 描述容器(`description`属性) |
-| close-btn    | alert 关闭按钮容器                |
-| close-icon   | alert 关闭图标                    |
+| 名称         | 说明               |
+| ------------ | ------------------ |
+| container    | alert 外层容器     |
+| icon-wrap    | alert 图标容器     |
+| icon         | alert 图标         |
+| content-wrap | alert 内层容器     |
+| heading      | alert 标题容器     |
+| description  | alert 描述容器     |
+| close-btn    | alert 关闭按钮容器 |
+| close-icon   | alert 关闭图标     |
 
-## Events
+### Alert Slots
 
-| 事件名称 | 说明                    | 回调参数     |
-| -------- | ----------------------- | ------------ |
-| open     | 开启 Alert 时触发的事件 | `() => void` |
-| close    | 关闭 alert 时触发       | `() => void` |
+| 名称    | 说明                                              |
+| ------- | ------------------------------------------------- |
+| default | Alert 内容描述（当不设置 description 属性时生效） |
+| heading | 标题的内容（当不设置 heading 属性时生效）         |
+| icon    | 图标内容（当设置 show-icon 时生效）               |
 
-## Slots
+### Alert Events
 
-| 名称  | 描述           |
-| ----- | -------------- |
-| -     | Alert 内容描述 |
-| title | 标题的内容     |
-| icon  | 图标内容       |
+| 事件名 | 说明                    | 回调参数             |
+| ------ | ----------------------- | -------------------- |
+| open   | 开启 Alert 时触发的事件 | `{ visible: true }`  |
+| close  | 关闭 Alert 时触发的事件 | `{ visible: false }` |
