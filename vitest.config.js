@@ -15,11 +15,31 @@ export default defineConfig({
       include: ["src/components/**/*.{js,ts}"],
       exclude: ["node_modules/", "src/**/*.test.js"],
     },
+    pool: "forks",
+    deps: {
+      optimizer: {
+        ssr: {
+          enabled: true,
+        },
+      },
+    },
+  },
+  oxc: false,
+  esbuild: {
+    target: "es2022",
+    tsconfigRaw: {
+      compilerOptions: {
+        experimentalDecorators: true,
+        useDefineForClassFields: false,
+      },
+    },
   },
   resolve: {
     alias: {
       "@": resolve(__dirname, "src/"),
       "@components": resolve(__dirname, "src/components"),
+      "@core": resolve(__dirname, "src/core"),
+      "@decorator": resolve(__dirname, "src/decorator"),
       "@themes": resolve(__dirname, "src/themes"),
       "@utils": resolve(__dirname, "src/utils"),
       "@common": resolve(__dirname, "src/common"),
@@ -29,7 +49,6 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        api: "modern-compiler",
         loadPaths: [resolve(__dirname, "src")],
         additionalData: `
           @use "themes/namespace" as *;

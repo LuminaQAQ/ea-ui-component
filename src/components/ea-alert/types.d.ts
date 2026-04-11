@@ -28,6 +28,8 @@ export interface EaAlertElement extends HTMLElement {
   center: boolean;
   /** 延迟显示时间（毫秒） */
   "show-after": number;
+  /** 延迟关闭时间（毫秒） */
+  "hide-after": number;
   /** 自动关闭时间（毫秒） */
   "auto-close": number;
 }
@@ -49,6 +51,7 @@ export interface EaAlertVueProps {
   showIcon?: boolean;
   center?: boolean;
   showAfter?: number;
+  hideAfter?: number;
   autoClose?: number;
 }
 
@@ -123,6 +126,8 @@ export interface EaAlertReactProps extends HTMLAttributes<HTMLElement> {
   center?: boolean;
   /** 延迟显示时间（毫秒） */
   showAfter?: number;
+  /** 延迟关闭时间（毫秒） */
+  hideAfter?: number;
   /** 自动关闭时间（毫秒） */
   autoClose?: number;
   /** 关闭动画开始时的回调 */

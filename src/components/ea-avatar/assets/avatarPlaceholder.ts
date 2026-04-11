@@ -1,4 +1,4 @@
-export const defaultAvatar = `
+export const defaultAvatar: string = `
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <defs>
             <clipPath id="a">
@@ -11,7 +11,7 @@ export const defaultAvatar = `
     </svg>
 `;
 
-export const errorAvatar = `
+export const errorAvatar: string = `
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path fill="#c0c4cc" d="M0 0h100v100H0z" />
         <path fill="#fff" d="M20 25h60v50H20z" />

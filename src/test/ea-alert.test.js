@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 // 导入 ea-alert 组件
-import "../components/ea-alert/index.js";
+import "../components/ea-alert/index";
 
 describe("EaAlert Component", () => {
   let container;
@@ -50,7 +50,7 @@ describe("EaAlert Component", () => {
 
       // 修改 title
       alert.setAttribute("title", "Updated Title");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(alert.title).toBe("Updated Title");
     });
@@ -81,14 +81,14 @@ describe("EaAlert Component", () => {
       container.appendChild(alert);
 
       // 等待组件初始化完成
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // 验证 type 属性的默认值为 info
       expect(alert.type).toBe("info");
 
       // 显式设置 type 属性来触发 class 更新
       alert.setAttribute("type", "info");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--info")).toBe(true);
@@ -104,7 +104,7 @@ describe("EaAlert Component", () => {
       expect(containerEl.classList.contains("ea-alert--info")).toBe(true);
 
       alert.setAttribute("type", "warning");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--warning")).toBe(true);
@@ -143,14 +143,14 @@ describe("EaAlert Component", () => {
       container.appendChild(alert);
 
       // 等待组件初始化完成
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // 验证 effect 属性的默认值为 light
       expect(alert.effect).toBe("light");
 
       // 显式设置 effect 属性来触发 class 更新
       alert.setAttribute("effect", "light");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
@@ -166,7 +166,7 @@ describe("EaAlert Component", () => {
       expect(containerEl.classList.contains("ea-alert--light")).toBe(true);
 
       alert.setAttribute("effect", "dark");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
@@ -198,13 +198,17 @@ describe("EaAlert Component", () => {
       expect(closeBtn.innerHTML).toBe("");
     });
 
-    it("应该正确显示 close-text 自定义文本", () => {
+    it("应该正确显示 close-text 自定义文本", async () => {
       const alert = document.createElement("ea-alert");
-      alert.setAttribute("title", "Custom Close Text Alert");
+      alert.setAttribute("heading", "Custom Close Text Alert");
+      alert.setAttribute("closable", true);
       alert.setAttribute("close-text", "Gotcha");
       container.appendChild(alert);
 
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+
       expect(closeBtn.textContent).toBe("Gotcha");
     });
 
@@ -220,14 +224,14 @@ describe("EaAlert Component", () => {
       closeBtn.click();
 
       // 等待 hide-after 延迟
-      await new Promise(resolve => setTimeout(resolve, 350));
+      await new Promise(resolve => setTimeout(resolve, 400));
 
       // 手动触发 transitionend 事件（因为在 jsdom 中 CSS 过渡不会实际执行）
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       // 等待事件处理
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -242,7 +246,7 @@ describe("EaAlert Component", () => {
       expect(closeBtn.innerHTML).not.toBe("");
 
       alert.setAttribute("closable", "false");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.innerHTML).toBe("");
@@ -258,7 +262,7 @@ describe("EaAlert Component", () => {
       expect(closeBtn.textContent).toBe("Initial");
 
       alert.setAttribute("close-text", "Updated");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("Updated");
@@ -334,7 +338,7 @@ describe("EaAlert Component", () => {
 
       // 启用图标
       alert.setAttribute("show-icon", "true");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       iconWrap = alert.shadowRoot.querySelector(".ea-alert__icon-wrap");
       expect(iconWrap.innerHTML).toContain("ea-icon");
@@ -354,13 +358,13 @@ describe("EaAlert Component", () => {
       // 注意：当前实现中 show-icon observer 使用的是创建时的 type 值
       // 需要重新触发 show-icon 才能更新图标
       alert.setAttribute("show-icon", "false");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       alert.setAttribute("type", "warning");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       alert.setAttribute("show-icon", "true");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       iconWrap = alert.shadowRoot.querySelector(".ea-alert__icon-wrap");
       expect(iconWrap.innerHTML).toContain("triangle-exclamation");
@@ -378,7 +382,7 @@ describe("EaAlert Component", () => {
       container.appendChild(alert);
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--center")).toBe(true);
+      expect(containerEl.classList.contains("is-center")).toBe(true);
     });
 
     it("center 属性变化时应该正确更新 class", async () => {
@@ -388,13 +392,13 @@ describe("EaAlert Component", () => {
       container.appendChild(alert);
 
       let containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--center")).toBe(false);
+      expect(containerEl.classList.contains("is-center")).toBe(false);
 
       alert.setAttribute("center", "true");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      expect(containerEl.classList.contains("ea-alert--center")).toBe(true);
+      expect(containerEl.classList.contains("is-center")).toBe(true);
     });
   });
 
@@ -441,7 +445,7 @@ describe("EaAlert Component", () => {
       expect(descriptionEl.innerHTML).toContain("Initial description");
 
       alert.setAttribute("description", "Updated description");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       descriptionEl = alert.shadowRoot.querySelector(".ea-alert__description");
       expect(descriptionEl.innerHTML).toContain("Updated description");
@@ -459,7 +463,7 @@ describe("EaAlert Component", () => {
       expect(descriptionEl.innerHTML).toContain("Has description");
 
       alert.setAttribute("description", "");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       descriptionEl = alert.shadowRoot.querySelector(".ea-alert__description");
       expect(descriptionEl.innerHTML).toContain("<slot>");
@@ -477,11 +481,12 @@ describe("EaAlert Component", () => {
       alert.setAttribute("show-after", "100");
       container.appendChild(alert);
 
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--hide")).toBe(true);
 
-      // 等待延迟时间
-      await new Promise(resolve => setTimeout(resolve, 150));
+      await new Promise(resolve => setTimeout(resolve, 200));
 
       expect(containerEl.classList.contains("ea-alert--hide")).toBe(false);
     });
@@ -495,7 +500,7 @@ describe("EaAlert Component", () => {
       const openHandler = vi.fn();
       alert.addEventListener("open", openHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 150));
 
       expect(openHandler).toHaveBeenCalled();
     });
@@ -511,14 +516,14 @@ describe("EaAlert Component", () => {
       alert.addEventListener("close", closeHandler);
 
       // 等待 auto-close 时间 + hide-after 时间
-      await new Promise(resolve => setTimeout(resolve, 450));
+      await new Promise(resolve => setTimeout(resolve, 600));
 
       // 手动触发 transitionend 事件
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       // 等待事件处理
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -535,7 +540,7 @@ describe("EaAlert Component", () => {
       // 在 hide-after 时间内，组件应该还在 DOM 中
       expect(document.contains(alert)).toBe(true);
 
-      await new Promise(resolve => setTimeout(resolve, 350));
+      await new Promise(resolve => setTimeout(resolve, 400));
 
       // 等待过渡动画完成后，组件应该被移除
       // 注意：实际测试中可能需要调整时间
@@ -551,7 +556,7 @@ describe("EaAlert Component", () => {
       const openHandler = vi.fn();
       alert.addEventListener("open", openHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 150));
+      await new Promise(resolve => setTimeout(resolve, 300));
 
       expect(openHandler).toHaveBeenCalled();
     });
@@ -704,7 +709,7 @@ describe("EaAlert Component", () => {
       const openHandler = vi.fn();
       alert.addEventListener("open", openHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 150));
 
       expect(openHandler).toHaveBeenCalled();
     });
@@ -721,14 +726,14 @@ describe("EaAlert Component", () => {
       closeBtn.click();
 
       // 等待 hide-after 延迟
-      await new Promise(resolve => setTimeout(resolve, 350));
+      await new Promise(resolve => setTimeout(resolve, 400));
 
       // 手动触发 transitionend 事件
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       // 等待事件处理
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -747,14 +752,14 @@ describe("EaAlert Component", () => {
       closeBtn.click();
 
       // 等待 hide-after 延迟
-      await new Promise(resolve => setTimeout(resolve, 350));
+      await new Promise(resolve => setTimeout(resolve, 400));
 
       // 手动触发 transitionend 事件
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       // 等待事件处理
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(eventDetail).toBeDefined();
       expect(eventDetail.visible).toBe(false);
@@ -765,22 +770,29 @@ describe("EaAlert Component", () => {
    * 生命周期测试
    */
   describe("Lifecycle", () => {
-    it("connectedCallback 应该正确设置事件监听器", () => {
+    it("connectedCallback 应该正确设置事件监听器", async () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("title", "Lifecycle Test");
       alert.setAttribute("closable", "true");
       container.appendChild(alert);
 
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // 验证关闭按钮可以点击
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn).toBeDefined();
+      expect(closeBtn).not.toBeNull();
 
       // 点击应该触发关闭流程（添加 before-close class）
       closeBtn.click();
 
-      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      // 由于 hide-after 延迟，class 不会立即添加
-      // 但事件监听器应该已设置
+      // 等待关闭动画开始
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // 验证组件开始关闭（添加了 before-close class）
+      const alertContainer = alert.shadowRoot.querySelector(".ea-alert");
+      expect(alertContainer.classList.contains("ea-alert--before-close")).toBe(
+        true
+      );
     });
 
     it("组件移除时应该清理事件监听器", async () => {
@@ -802,7 +814,7 @@ describe("EaAlert Component", () => {
    * 复杂场景测试
    */
   describe("Complex Scenarios", () => {
-    it("应该支持组合使用多个属性", () => {
+    it("应该支持组合使用多个属性", async () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("title", "Complex Alert");
       alert.setAttribute("type", "success");
@@ -813,10 +825,12 @@ describe("EaAlert Component", () => {
       alert.setAttribute("close-text", "Dismiss");
       container.appendChild(alert);
 
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--success")).toBe(true);
       expect(containerEl.classList.contains("ea-alert--dark")).toBe(true);
-      expect(containerEl.classList.contains("ea-alert--center")).toBe(true);
+      expect(containerEl.classList.contains("is-center")).toBe(true);
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("Dismiss");
@@ -837,14 +851,14 @@ describe("EaAlert Component", () => {
       alert.setAttribute("type", "warning");
 
       // 等待属性变化生效
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("ea-alert--warning")).toBe(true);
       expect(containerEl.classList.contains("ea-alert--info")).toBe(false);
     });
 
-    it("应该正确处理多个 Alert 实例", () => {
+    it("应该正确处理多个 Alert 实例", async () => {
       const alert1 = document.createElement("ea-alert");
       alert1.setAttribute("title", "Alert 1");
       alert1.setAttribute("type", "success");
@@ -855,6 +869,8 @@ describe("EaAlert Component", () => {
 
       container.appendChild(alert1);
       container.appendChild(alert2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const containerEl1 = alert1.shadowRoot.querySelector(".ea-alert");
       const containerEl2 = alert2.shadowRoot.querySelector(".ea-alert");

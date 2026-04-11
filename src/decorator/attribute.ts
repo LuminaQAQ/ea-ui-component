@@ -1,4 +1,4 @@
-import type { AttributeOptions, EaElementConstructor } from "@/types/index";
+import type { AttributeOptions } from "@/types/index";
 import { ElementAttributesMap } from "@/stores";
 
 /**
@@ -25,24 +25,41 @@ function registerPropertyMap(
  * @param options - 属性配置选项
  * @returns 装饰器函数
  */
-function attribute(options: AttributeOptions): PropertyDecorator {
-  return function (this: any, initialValue: any, context?: any) {
+function attribute(options: AttributeOptions) {
+  return function (
+    this: any,
+    initialValue: any,
+    context?: ClassFieldDecoratorContext | string | symbol
+  ) {
+    // 检测是否为新版装饰器 API
     const isNewDecoratorApi =
       context && typeof context === "object" && "addInitializer" in context;
 
     if (isNewDecoratorApi) {
-      // 新装饰器
-      const name = context.name as string;
-      const clsName: string =
-        (context as any).static?.name || this?.constructor?.name;
+      // 新版装饰器
+      const ctx = context as ClassFieldDecoratorContext;
+      const name = ctx.name as string;
+      const clsName = (ctx as any).static?.name;
 
       registerPropertyMap(clsName, name, options);
 
       return initialValue;
     } else {
-      // 旧装饰器
-      const name = context as string;
-      const target = initialValue as EaElementConstructor;
+      // 旧版装饰器 API
+      let name: string | undefined;
+      let target: any;
+
+      if (typeof context === "string" || typeof context === "symbol") {
+        name = context as string;
+        target = initialValue;
+      } else {
+        console.warn(
+          "attribute decorator: 无法识别的装饰器调用格式, context:",
+          context
+        );
+        return initialValue;
+      }
+
       const constructor = target.constructor;
       const clsName = constructor.name;
 

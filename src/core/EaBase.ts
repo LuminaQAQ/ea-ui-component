@@ -15,6 +15,10 @@ export { createBEM };
 export default class EaBase extends HTMLElement implements EaElement {
   // ==================== 属性定义 ====================
 
+  private _isRendered: Promise<void> | null = null;
+  private _isInitialized: boolean = false;
+  private _rendered!: (value: void | PromiseLike<void>) => void;
+
   /**
    * 语言设置
    * @default "en-US"
@@ -32,13 +36,27 @@ export default class EaBase extends HTMLElement implements EaElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+
+    this._isInitialized = false;
+    this._isRendered = new Promise<void>(resolve => {
+      this._rendered = resolve;
+    });
   }
 
   // ==================== 生命周期钩子 ====================
 
   connectedCallback(): void {
+    if (this._isInitialized) return;
+
     this.tabIndex = Number(this.getAttribute("tabindex")) || 0;
-    this.$mount();
+
+    requestAnimationFrame(() => {
+      this.$mount();
+      this._rendered?.();
+      this.$mounted();
+
+      this._isInitialized = true;
+    });
   }
 
   disconnectedCallback(): void {
@@ -47,13 +65,18 @@ export default class EaBase extends HTMLElement implements EaElement {
 
     this.$unmounted?.();
     this.emit("unmounted", { detail: this });
+
+    this._isInitialized = false;
+    this._isRendered = null;
   }
 
-  attributeChangedCallback(
+  async attributeChangedCallback(
     name: string,
     oldVal: string | null,
     newVal: string | null
-  ): void {
+  ): Promise<void> {
+    await this._isRendered;
+
     this.$updated({ key: name, newVal, oldVal });
   }
 
@@ -77,6 +100,11 @@ export default class EaBase extends HTMLElement implements EaElement {
    * 组件挂载时调用
    */
   $mount(): void {}
+
+  /**
+   * 组件挂载完成后调用
+   */
+  $mounted(): void {}
 
   /** 组件销毁前调用 */
   $beforeUnmount(): void {}

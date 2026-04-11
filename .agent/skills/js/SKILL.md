@@ -90,16 +90,32 @@ export class EaComponent extends EaBase {
   })
   size: "small" | "medium" | "large" = "medium";
 
+  // 带连字符的属性名示例：使用小驼峰命名，框架自动转换
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaComponent, newVal: string) {
+      this._closeBtn.textContent = newVal;
+    },
+  })
+  closeText: string = ""; // 自动映射到 HTML 属性 close-text
+
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaComponent) {
+      this._updateIconVisibility();
+    },
+  })
+  showIcon: boolean = false; // 自动映射到 HTML 属性 show-icon
+
   // ==================== 方法 ====================
 
   /**
    * 更新容器类名
    */
   updateContainerClasslist(): string {
-    const className = bem(
-      { [this.size]: true },
-      { disabled: this.disabled }
-    );
+    const className = bem({ [this.size]: true }, { disabled: this.disabled });
     this._container.className = className;
     return className;
   }
@@ -184,7 +200,29 @@ export class EaComponent extends EaBase {
 propertyName: string = "";
 ```
 
+**属性命名规则：**
+
+- **类属性使用小驼峰命名**（如 `closeText`, `showIcon`）
+- **框架自动转换为连字符命名**作为 HTML 属性（如 `close-text`, `show-icon`）
+- **无需显式声明 `name` 选项**，装饰器会自动处理命名转换
+
+```typescript
+// 正确示例：使用小驼峰命名
+@attribute({
+  type: String,
+  default: "",
+})
+closeText: string = "";  // 自动映射到 HTML 属性 close-text
+
+@attribute({
+  type: Boolean,
+  default: false,
+})
+showIcon: boolean = false;  // 自动映射到 HTML 属性 show-icon
+```
+
 **类型说明：**
+
 - `String` - 字符串类型
 - `Number` - 数字类型
 - `Boolean` - 布尔类型（HTML 中属性存在即为 true）
@@ -230,21 +268,21 @@ private _handleButtonClick(e: Event) {
 const bem = createBEM("ea-component");
 
 // 基础块
-bem()                          // "ea-component"
+bem(); // "ea-component"
 
 // 带修饰符
-bem({ size: "large" })         // "ea-component ea-component--size-large"
-bem({ [this.type]: true })     // "ea-component ea-component--primary"
+bem({ size: "large" }); // "ea-component ea-component--size-large"
+bem({ [this.type]: true }); // "ea-component ea-component--primary"
 
 // 带状态
-bem({}, { disabled: true })    // "ea-component is-disabled"
-bem({}, { active: this.active }) // "ea-component" 或 "ea-component is-active"
+bem({}, { disabled: true }); // "ea-component is-disabled"
+bem({}, { active: this.active }); // "ea-component" 或 "ea-component is-active"
 
 // 组合使用
 bem(
   { [this.type]: true, [this.size]: true },
   { disabled: this.disabled, center: this.center }
-)
+);
 // "ea-component ea-component--primary ea-component--large is-disabled is-center"
 ```
 
@@ -341,12 +379,12 @@ this.dispatchEvent(new EaComponentChangeEvent({ value: "new", label: "New" }));
 
 ### 生命周期方法
 
-| 方法 | 说明 | 调用时机 |
-|------|------|----------|
-| `$mount()` | 组件挂载 | connectedCallback 后，首次渲染前 |
-| `$beforeUnmount()` | 组件销毁前 | disconnectedCallback 开始时 |
-| `$unmounted()` | 组件销毁后 | disconnectedCallback 结束时 |
-| `$updated()` | 属性更新 | attributeChangedCallback 后 |
+| 方法               | 说明       | 调用时机                         |
+| ------------------ | ---------- | -------------------------------- |
+| `$mount()`         | 组件挂载   | connectedCallback 后，首次渲染前 |
+| `$beforeUnmount()` | 组件销毁前 | disconnectedCallback 开始时      |
+| `$unmounted()`     | 组件销毁后 | disconnectedCallback 结束时      |
+| `$updated()`       | 属性更新   | attributeChangedCallback 后      |
 
 ```typescript
 $mount(): void {
@@ -460,13 +498,13 @@ declare module "react" {
 
 ## 函数命名规范
 
-| 函数类型 | 前缀 | 示例 | 说明 |
-|----------|------|------|------|
-| 事件处理 | `_handle` | `_handleClick`, `_handleInput` | 事件回调 |
-| 私有方法 | `_` | `_updateUI`, `_renderData` | 组件内部使用 |
-| 公共方法 | 无 | `setData`, `show`, `hide` | 对外 API |
-| 生命周期 | `$` | `$mount`, `$beforeUnmount` | 生命周期钩子 |
-| 渲染相关 | `_render` | `_renderItems` | 渲染方法 |
+| 函数类型 | 前缀      | 示例                           | 说明         |
+| -------- | --------- | ------------------------------ | ------------ |
+| 事件处理 | `_handle` | `_handleClick`, `_handleInput` | 事件回调     |
+| 私有方法 | `_`       | `_updateUI`, `_renderData`     | 组件内部使用 |
+| 公共方法 | 无        | `setData`, `show`, `hide`      | 对外 API     |
+| 生命周期 | `$`       | `$mount`, `$beforeUnmount`     | 生命周期钩子 |
+| 渲染相关 | `_render` | `_renderItems`                 | 渲染方法     |
 
 ---
 
@@ -533,3 +571,238 @@ data: any[] = [];
 - [custom-element](file:///e:/repo/ea-ui-component/src/decorator/custom-element.ts) - 自定义元素装饰器
 - [query](file:///e:/repo/ea-ui-component/src/decorator/query.ts) - DOM 查询装饰器
 - [listen](file:///e:/repo/ea-ui-component/src/decorator/listen.ts) - 事件监听装饰器
+
+---
+
+## 测试开发技能
+
+### DOMPurify 属性丢失问题处理
+
+**问题场景**：
+当测试失败，且组件属性（如 `srcset`）为空或丢失时，优先考虑 DOMPurify 清洗导致的问题。
+
+**诊断步骤**：
+
+1. 检查组件是否使用 `html()` 函数处理包含该属性的 HTML 字符串
+2. 在浏览器中测试是否正常（DOMPurify 在浏览器和 JSDOM 环境行为可能不同）
+3. 确认属性值是否包含 `data:` URI（这类 URI 在 JSDOM 中可能被过滤）
+
+**解决方案**：
+使用 DOM API 替代 HTML 字符串：
+
+```typescript
+// ❌ 不推荐：HTML 字符串可能被清洗
+private _loadImage(src: string): void {
+  this._container.innerHTML = html(
+    `<img src="${src}" srcset="${this["src-set"]}" />`
+  );
+}
+
+// ✅ 推荐：使用 DOM API 设置属性
+private _renderImage(src: string): void {
+  const img = document.createElement("img");
+  img.src = src;
+  img.srcset = this["src-set"];  // 直接设置属性，绕过 DOMPurify
+  this._container.innerHTML = "";
+  this._container.appendChild(img);
+}
+```
+
+**参考案例**：
+
+- [ea-avatar/index.ts](file:///e:/repo/ea-ui-component/src/components/ea-avatar/index.ts) - 使用 DOM API 处理 srcset 属性
+
+### 测试等待函数使用
+
+**工具函数**：`src/test/utils.js`
+
+```typescript
+import { waitForRender } from "./utils.js";
+```
+
+**使用场景**：
+
+```typescript
+// 默认等待 100ms（适用于大多数组件渲染）
+await waitForRender();
+
+// 自定义等待时间
+await waitForRender(200);
+
+// 立即执行（0ms，用于微任务等待）
+await waitForRender(0);
+```
+
+**典型用例**：
+
+```typescript
+describe("Component Tests", () => {
+  it("属性变化后应该正确更新", async () => {
+    const component = document.createElement("ea-component");
+    component.setAttribute("size", "large");
+    container.appendChild(component);
+
+    // 等待组件渲染完成
+    await waitForRender();
+
+    // 验证更新后的状态
+    expect(component.size).toBe("large");
+  });
+});
+```
+
+**注意事项**：
+
+- 组件属性变化后需要等待渲染：使用 `waitForRender()`
+- 图片加载等异步操作：使用 `waitForRender(100)` 或更长
+- 微任务等待（如属性 setter 执行）：使用 `waitForRender(0)`
+
+---
+
+## 测试开发技能
+
+### 组件测试标准模式
+
+基于 `ea-avatar.test.js` 的测试逻辑，所有组件测试遵循以下模式：
+
+#### 1. 测试文件模板
+
+```javascript
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+// 导入被测试组件
+import "../components/ea-component/index";
+
+describe("EaComponent", () => {
+  let container;
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    container.remove();
+  });
+
+  describe("基本功能", () => {
+    it("应该正确渲染", () => {
+      const component = document.createElement("ea-component");
+      container.appendChild(component);
+      expect(component.shadowRoot).toBeDefined();
+    });
+  });
+});
+```
+
+#### 2. 属性测试模式
+
+**设置属性后验证（100ms 等待）**：
+
+```javascript
+it("应该正确应用属性", async () => {
+  const component = document.createElement("ea-component");
+  component.setAttribute("prop", "value");
+  container.appendChild(component);
+
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(component.prop).toBe("value");
+});
+```
+
+**属性变化验证**：
+
+```javascript
+it("属性变化时应该更新", async () => {
+  const component = document.createElement("ea-component");
+  component.setAttribute("prop", "old");
+  container.appendChild(component);
+
+  await new Promise(resolve => setTimeout(resolve, 100));
+  expect(component.prop).toBe("old");
+
+  component.setAttribute("prop", "new");
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(component.prop).toBe("new");
+});
+```
+
+#### 3. 事件测试模式
+
+```javascript
+it("应该触发事件", async () => {
+  const component = document.createElement("ea-component");
+  container.appendChild(component);
+
+  const handler = vi.fn();
+  component.addEventListener("event-name", handler);
+
+  // 触发事件的操作
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(handler).toHaveBeenCalled();
+});
+```
+
+#### 4. 复杂场景测试模式
+
+```javascript
+it("应该支持多属性组合", async () => {
+  const component = document.createElement("ea-component");
+  component.setAttribute("prop1", "value1");
+  component.setAttribute("prop2", "value2");
+  container.appendChild(component);
+
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(component.prop1).toBe("value1");
+  expect(component.prop2).toBe("value2");
+});
+```
+
+### 等待时间选择指南
+
+| 场景              | 等待时间 | 示例                                   |
+| ----------------- | -------- | -------------------------------------- |
+| 同步属性读取      | 0ms      | `expect(component.prop).toBe("value")` |
+| 组件渲染/属性更新 | 100ms    | 大多数异步渲染场景                     |
+| 图片加载          | 100ms    | 图片资源加载                           |
+| DOM 结构验证      | 无需等待 | `expect(element).toBeDefined()`        |
+
+### DOMPurify 属性丢失问题处理
+
+**问题场景**：
+当测试失败，且组件属性（如 `srcset`）为空或丢失时，优先考虑 DOMPurify 清洗导致的问题。
+
+**诊断步骤**：
+
+1. 检查组件是否使用 `html()` 函数处理包含该属性的 HTML 字符串
+2. 在浏览器中测试是否正常（DOMPurify 在浏览器和 JSDOM 环境行为可能不同）
+3. 确认属性值是否包含 `data:` URI（这类 URI 在 JSDOM 中可能被过滤）
+
+**解决方案**：
+使用 DOM API 替代 HTML 字符串：
+
+```typescript
+// ❌ 不推荐：HTML 字符串可能被清洗
+private _loadImage(src: string): void {
+  this._container.innerHTML = html(
+    `<img src="${src}" srcset="${this["src-set"]}" />`
+  );
+}
+
+// ✅ 推荐：使用 DOM API 设置属性
+private _renderImage(src: string): void {
+  const img = document.createElement("img");
+  img.src = src;
+  img.srcset = this["src-set"];  // 直接设置属性，绕过 DOMPurify
+  this._container.innerHTML = "";
+  this._container.appendChild(img);
+}
+```
+
+**参考案例**：
+
+- [ea-avatar/index.ts](file:///e:/repo/ea-ui-component/src/components/ea-avatar/index.ts) - 使用 DOM API 处理 srcset 属性

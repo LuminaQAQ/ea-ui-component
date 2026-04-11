@@ -173,6 +173,27 @@ export class EaComponent extends EaBase {
 propertyName: string = "";
 ```
 
+**属性命名规则：**
+
+- **类属性使用小驼峰命名**（如 `closeText`, `showIcon`）
+- **框架自动转换为连字符命名**作为 HTML 属性（如 `close-text`, `show-icon`）
+- **无需显式声明 `name` 选项**，装饰器会自动处理命名转换
+
+```typescript
+// 正确示例：使用小驼峰命名
+@attribute({
+  type: String,
+  default: "",
+})
+closeText: string = "";  // 自动映射到 HTML 属性 close-text
+
+@attribute({
+  type: Boolean,
+  default: false,
+})
+showIcon: boolean = false;  // 自动映射到 HTML 属性 show-icon
+```
+
 **类型说明：**
 
 - `String` - 字符串类型
@@ -577,7 +598,7 @@ $name: ea-component-name;
 | 事件名 | 说明 | 回调参数(event.detail) |
 | ------ | ---- | ---------------------- |
 
-```
+````
 
 ### API 生成规则
 
@@ -606,4 +627,171 @@ $name: ea-component-name;
 2. 使用 `SearchCodebase` 工具搜索和理解代码库
 3. 遵循项目现有的库和框架
 4. 遵循安全最佳实践，不暴露或记录密钥和机密信息
+
+## 测试规范
+
+### DOMPurify 与属性丢失问题
+
+若测试文件不通过，且可能因为渲染模板函数导致的属性丢失或者属性为空，优先考虑是否与数据清洗有关（DOMPurify）：
+
+1. **问题识别**：当组件使用 `html()` 函数处理模板字符串时，DOMPurify 可能会清洗掉某些属性（如 `srcset`）
+2. **根本原因**：DOMPurify 在 JSDOM 环境下对某些属性（如 `data:` URI 的 `srcset`）的处理比浏览器更严格
+3. **解决方案**：
+   - **优先方案**：使用 DOM API 直接创建元素并设置属性，而不是通过 HTML 字符串
+   - **示例**：
+     ```typescript
+     // 不推荐：使用 HTML 字符串（可能被清洗）
+     this._container.innerHTML = html(`<img srcset="${value}" />`);
+
+     // 推荐：使用 DOM API
+     const img = document.createElement("img");
+     img.srcset = value;
+     this._container.appendChild(img);
+     ```
+
+### 测试文件结构规范
+
+所有组件测试文件遵循统一结构：
+
+```javascript
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+// 导入被测试组件
+import "../components/ea-component/index";
+
+describe("EaComponent", () => {
+  let container;
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    container.remove();
+  });
+
+  // 按功能分组测试
+  describe("Feature Name", () => {
+    it("should do something", async () => {
+      // 测试代码
+    });
+  });
+});
+````
+
+### 组件测试模式
+
+#### 1. 基础渲染测试（同步）
+
+验证组件基本渲染和 DOM 结构：
+
+```javascript
+it("应该正确渲染组件", () => {
+  const component = document.createElement("ea-component");
+  container.appendChild(component);
+
+  expect(component).toBeDefined();
+  expect(component.shadowRoot).toBeDefined();
+});
+```
+
+#### 2. 属性测试（异步）
+
+属性设置需要等待组件渲染：
+
+```javascript
+it("应该正确应用属性", async () => {
+  const component = document.createElement("ea-component");
+  component.setAttribute("prop", "value");
+  container.appendChild(component);
+
+  // 等待组件渲染完成
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(component.prop).toBe("value");
+});
+```
+
+#### 3. 属性变化测试
+
+验证属性变化后的更新：
+
+```javascript
+it("属性变化时应该正确更新", async () => {
+  const component = document.createElement("ea-component");
+  component.setAttribute("prop", "old-value");
+  container.appendChild(component);
+
+  await new Promise(resolve => setTimeout(resolve, 100));
+  expect(component.prop).toBe("old-value");
+
+  component.setAttribute("prop", "new-value");
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(component.prop).toBe("new-value");
+});
+```
+
+#### 4. 事件测试
+
+验证事件触发：
+
+```javascript
+it("应该触发事件", async () => {
+  const component = document.createElement("ea-component");
+  container.appendChild(component);
+
+  const handler = vi.fn();
+  component.addEventListener("event-name", handler);
+
+  // 触发事件的操作
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(handler).toHaveBeenCalled();
+});
+```
+
+#### 5. 复杂场景测试
+
+验证多个属性组合使用：
+
+```javascript
+it("应该支持组合使用多个属性", async () => {
+  const component = document.createElement("ea-component");
+  component.setAttribute("prop1", "value1");
+  component.setAttribute("prop2", "value2");
+  container.appendChild(component);
+
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  expect(component.prop1).toBe("value1");
+  expect(component.prop2).toBe("value2");
+});
+```
+
+### 等待时间规范
+
+根据测试场景选择等待时间：
+
+| 场景              | 等待时间 | 说明                 |
+| ----------------- | -------- | -------------------- |
+| 同步属性读取      | 0ms      | 直接读取已设置的属性 |
+| 组件渲染/属性更新 | 100ms    | 大多数异步渲染场景   |
+| 图片加载/网络请求 | 100ms+   | 异步资源加载         |
+| DOM 结构验证      | 无需等待 | 同步验证 DOM 结构    |
+
+```javascript
+// 同步属性读取
+await new Promise(resolve => setTimeout(resolve, 0));
+
+// 组件渲染/属性更新
+await new Promise(resolve => setTimeout(resolve, 100));
+
+// 图片加载
+await new Promise(resolve => setTimeout(resolve, 100));
+```
+
+```
+
 ```

@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+﻿import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 // 导入 ea-avatar 组件
-import "../components/ea-avatar/index.js";
+import "../components/ea-avatar/index";
 
 describe("EaAvatar Component", () => {
   let container;
@@ -45,19 +45,25 @@ describe("EaAvatar Component", () => {
    * 测试 circle 和 square 两种形状
    */
   describe("Shape Attribute", () => {
-    it('应该正确应用 shape="circle" 样式', () => {
+    it('应该正确应用 shape="circle" 样式', async () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("shape", "circle");
       container.appendChild(avatar);
+
+      // 等待组件初始化完成
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--circle")).toBe(true);
     });
 
-    it('应该正确应用 shape="square" 样式', () => {
+    it('应该正确应用 shape="square" 样式', async () => {
       const avatar = document.createElement("ea-avatar");
       avatar.setAttribute("shape", "square");
       container.appendChild(avatar);
+
+      // 等待组件初始化完成
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
@@ -68,14 +74,10 @@ describe("EaAvatar Component", () => {
       container.appendChild(avatar);
 
       // 等待组件初始化完成
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // 验证 shape 属性的默认值为 circle
       expect(avatar.shape).toBe("circle");
-
-      // 显式设置 shape 属性来触发 class 更新
-      avatar.setAttribute("shape", "circle");
-      await new Promise(resolve => setTimeout(resolve, 0));
 
       const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--circle")).toBe(true);
@@ -86,11 +88,14 @@ describe("EaAvatar Component", () => {
       avatar.setAttribute("shape", "circle");
       container.appendChild(avatar);
 
+      // 等待组件初始化完成
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       let containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--circle")).toBe(true);
 
       avatar.setAttribute("shape", "square");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
@@ -197,7 +202,7 @@ describe("EaAvatar Component", () => {
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("ea-icon");
@@ -209,13 +214,13 @@ describe("EaAvatar Component", () => {
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       let avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("coffee");
 
       avatar.setAttribute("icon", "user");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("user");
@@ -226,10 +231,10 @@ describe("EaAvatar Component", () => {
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       avatar.setAttribute("icon", "");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("<slot>");
@@ -271,13 +276,18 @@ describe("EaAvatar Component", () => {
   describe("Src-set Attribute", () => {
     it("应该正确设置 src-set 属性", async () => {
       const avatar = document.createElement("ea-avatar");
-      const testSrcSet = "image-1x.jpg 1x, image-2x.jpg 2x";
-      avatar.setAttribute("src-set", testSrcSet);
+      const testSrc =
+        "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+      avatar.src = testSrc;
+      avatar.srcSet = testSrc;
       container.appendChild(avatar);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      // 等待组件渲染
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-      expect(avatar["src-set"]).toBe(testSrcSet);
+      const img = avatar.shadowRoot.querySelector(".ea-avatar__img");
+      expect(img).not.toBeNull();
+      expect(img.srcset).toBe(testSrc);
     });
   });
 
@@ -321,10 +331,12 @@ describe("EaAvatar Component", () => {
         avatar.setAttribute("fit", fit);
         container.appendChild(avatar);
 
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         expect(avatar.fit).toBe(fit);
-        expect(avatar.style.getPropertyValue("--ea-avatar-fit")).toBe(fit);
+        expect(avatar.getAttribute("style")).toContain(
+          `--ea-avatar-fit: ${fit}`
+        );
       });
     });
 
@@ -332,7 +344,7 @@ describe("EaAvatar Component", () => {
       const avatar = document.createElement("ea-avatar");
       container.appendChild(avatar);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(avatar.fit).toBe("cover");
     });
@@ -342,13 +354,15 @@ describe("EaAvatar Component", () => {
       avatar.setAttribute("fit", "fill");
       container.appendChild(avatar);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
-      expect(avatar.style.getPropertyValue("--ea-avatar-fit")).toBe("fill");
+      await new Promise(resolve => setTimeout(resolve, 100));
+      expect(avatar.getAttribute("style")).toContain("--ea-avatar-fit: fill");
 
       avatar.setAttribute("fit", "contain");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-      expect(avatar.style.getPropertyValue("--ea-avatar-fit")).toBe("contain");
+      expect(avatar.getAttribute("style")).toContain(
+        "--ea-avatar-fit: contain"
+      );
     });
   });
 
@@ -419,7 +433,7 @@ describe("EaAvatar Component", () => {
       avatar.setAttribute("icon", "coffee");
       container.appendChild(avatar);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const avatarContainer = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(avatarContainer.innerHTML).toContain("ea-icon");
@@ -479,7 +493,7 @@ describe("EaAvatar Component", () => {
       avatar.setAttribute("fit", "contain");
       container.appendChild(avatar);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const containerEl = avatar.shadowRoot.querySelector(".ea-avatar");
       expect(containerEl.classList.contains("ea-avatar--square")).toBe(true);
@@ -500,7 +514,7 @@ describe("EaAvatar Component", () => {
       container.appendChild(avatar1);
       container.appendChild(avatar2);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const containerEl1 = avatar1.shadowRoot.querySelector(".ea-avatar");
       const containerEl2 = avatar2.shadowRoot.querySelector(".ea-avatar");

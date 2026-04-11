@@ -1,6 +1,7 @@
-import parseAttributeValue from "@/utils/parseAttributeValue.js";
+import parseAttributeValue from "@/utils/parseAttributeValue";
 import { ElementAttributesMap } from "@/stores";
 import { html } from "@/utils/html";
+import { camelToKebab, kebabToCamel } from "@/utils/case-convert";
 import type {
   AttributeOptions,
   EaElement,
@@ -24,19 +25,55 @@ interface CustomElementOptions {
  */
 type CustomElementDecorator = (
   customElementConstructor: EaElementConstructor,
-  context?: DecoratorContext
+  context?: DecoratorContext | undefined
 ) => void;
 
 /**
+ * 查找属性配置，支持驼峰命名和连字符命名的自动转换
+ * @param propertyOptions 属性配置映射
+ * @param name 属性名（可能是驼峰命名或连字符命名）
+ * @returns 找到的属性配置和实际属性名
+ */
+function findPropertyOption(
+  propertyOptions: Record<string, AttributeOptions>,
+  name: string
+): { option: AttributeOptions | undefined; actualName: string } {
+  // 1. 直接匹配
+  if (propertyOptions[name]) {
+    return { option: propertyOptions[name], actualName: name };
+  }
+
+  // 2. 尝试将连字符命名转换为驼峰命名后匹配
+  const camelName = kebabToCamel(name);
+  if (propertyOptions[camelName]) {
+    return { option: propertyOptions[camelName], actualName: camelName };
+  }
+
+  // 3. 尝试将驼峰命名转换为连字符命名后匹配
+  const kebabName = camelToKebab(name);
+  if (propertyOptions[kebabName]) {
+    return { option: propertyOptions[kebabName], actualName: kebabName };
+  }
+
+  return { option: undefined, actualName: name };
+}
+
+/**
  * 创建属性的 getter 函数
+ * @param defaultValue 默认值
+ * @param name 属性名（可能是驼峰命名）
+ * @param type 属性类型
  */
 function createGetter(
   defaultValue: any,
   name: string,
   type: AttributeOptions["type"]
 ) {
+  // 将属性名转换为连字符命名（HTML 属性名）
+  const attrName = camelToKebab(name);
+
   return function (this: EaElement & HTMLElement) {
-    const attrValue = this.getAttribute(name);
+    const attrValue = this.getAttribute(attrName);
 
     if (attrValue !== null) {
       return parseAttributeValue(attrValue, type);
@@ -48,12 +85,16 @@ function createGetter(
 
 /**
  * 创建属性的 setter 函数
+ * @param name 属性名（可能是驼峰命名）
  */
 function createSetter(name: string) {
+  // 将属性名转换为连字符命名（HTML 属性名）
+  const attrName = camelToKebab(name);
+
   return function (this: EaElement & HTMLElement, newVal: any) {
     if (!(this instanceof HTMLElement)) return;
 
-    this.setAttribute(name, String(newVal));
+    this.setAttribute(attrName, String(newVal));
   };
 }
 
@@ -185,7 +226,7 @@ function CustomElement(
 
   return (
     CustomElementClass: EaElementConstructor,
-    _context?: DecoratorContext
+    _context?: DecoratorContext | undefined
   ) => {
     (CustomElementClass as any).customElementOptions = options;
 
@@ -193,8 +234,21 @@ function CustomElement(
 
     const superAttributes = CustomElementClass.observedAttributes || [];
     const attributeNames = Object.keys(propertyOptions || {});
+
+    // 为每个属性名生成连字符命名和驼峰命名两种形式
+    const allAttributeNames = attributeNames.flatMap(name => {
+      const kebabName = camelToKebab(name);
+      const camelName = kebabToCamel(name);
+      // 如果原始名已经是连字符命名，还需要添加驼峰形式
+      // 如果原始名已经是驼峰命名，还需要添加连字符形式
+      const names = [name];
+      if (kebabName !== name) names.push(kebabName);
+      if (camelName !== name && camelName !== kebabName) names.push(camelName);
+      return names;
+    });
+
     const observedAttributes = [
-      ...new Set([...superAttributes, ...attributeNames]),
+      ...new Set([...superAttributes, ...allAttributeNames]),
     ];
 
     class EaCustomElement extends CustomElementClass {
@@ -215,7 +269,7 @@ function CustomElement(
       }
 
       connectedCallback() {
-        // 挂载组件（应用样式 + 渲染模板）
+        // 应用样式 + 渲染模板
         mount(this, CustomElementClass);
 
         // 调用父类 connectedCallback
@@ -232,29 +286,28 @@ function CustomElement(
       ): Promise<void> {
         try {
           if (!propertyOptions) return;
-          if (!propertyOptions[name]) return;
 
-          await customElements.whenDefined(elementName);
-          const newValue = parseAttributeValue(
-            newVal,
-            propertyOptions[name].type
+          // 使用查找函数支持驼峰命名和连字符命名的自动转换
+          const { option, actualName } = findPropertyOption(
+            propertyOptions,
+            name
           );
-          const oldValue = parseAttributeValue(
-            oldVal,
-            propertyOptions[name].type
-          );
+          if (!option) return;
+
+          const newValue = parseAttributeValue(newVal, option.type);
+          const oldValue = parseAttributeValue(oldVal, option.type);
 
           const parent = Object.getPrototypeOf(Object.getPrototypeOf(this));
           if (parent && typeof parent.attributeChangedCallback === "function") {
             await parent.attributeChangedCallback.call(
               this,
-              name,
+              actualName,
               oldValue,
               newValue
             );
           }
 
-          propertyOptions[name].observer?.call(this, newValue, oldValue);
+          option.observer?.call(this, newValue, oldValue);
         } catch (e) {
           if (process.env.NODE_ENV === "development") {
             console.error(e, this);
