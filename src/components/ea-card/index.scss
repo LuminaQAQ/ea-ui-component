@@ -37,17 +37,17 @@
     border-top: 1px solid var(--ea-card-border-color);
   }
 
-  @include modifier(hover-shadow) {
+  @include state(hover-shadow) {
     &:hover {
       box-shadow: var(--ea-card-box-shadow);
     }
   }
 
-  @include modifier(always-shadow) {
+  @include state(always-shadow) {
     box-shadow: var(--ea-card-box-shadow);
   }
 
-  @include modifier(never-shadow) {
+  @include state(never-shadow) {
     box-shadow: none;
   }
 
