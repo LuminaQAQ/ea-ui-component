@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { waitForRender } from "./utils/waitForRender";
 
 // 导入 ea-breadcrumb 组件
 import "../components/ea-breadcrumb/index.js";
@@ -64,7 +65,7 @@ describe("EaBreadcrumb Component", () => {
       breadcrumb.setAttribute("separator", ">");
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(breadcrumb.separator).toBe(">");
     });
@@ -73,7 +74,7 @@ describe("EaBreadcrumb Component", () => {
       const breadcrumb = document.createElement("ea-breadcrumb");
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(breadcrumb.separator).toBe("/");
     });
@@ -83,11 +84,11 @@ describe("EaBreadcrumb Component", () => {
       breadcrumb.setAttribute("separator", "/");
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
       expect(breadcrumb.separator).toBe("/");
 
       breadcrumb.setAttribute("separator", ">");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(breadcrumb.separator).toBe(">");
     });
@@ -102,7 +103,7 @@ describe("EaBreadcrumb Component", () => {
       item.setAttribute("href", "https://example.com");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(item.href).toBe("https://example.com");
     });
@@ -112,7 +113,7 @@ describe("EaBreadcrumb Component", () => {
       item.setAttribute("href", "https://example.com");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const contentEl = item.shadowRoot.querySelector(
         ".ea-breadcrumb-item__content"
@@ -124,7 +125,7 @@ describe("EaBreadcrumb Component", () => {
       const item = document.createElement("ea-breadcrumb-item");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const contentEl = item.shadowRoot.querySelector(
         ".ea-breadcrumb-item__content"
@@ -137,7 +138,7 @@ describe("EaBreadcrumb Component", () => {
       item.setAttribute("href", "https://example.com");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       const contentEl = item.shadowRoot.querySelector(
         ".ea-breadcrumb-item__content"
@@ -152,11 +153,11 @@ describe("EaBreadcrumb Component", () => {
       item.setAttribute("href", "https://old.com");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
       expect(item.href).toBe("https://old.com");
 
       item.setAttribute("href", "https://new.com");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(item.href).toBe("https://new.com");
     });
@@ -266,7 +267,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(
         breadcrumb.shadowRoot.querySelector(".ea-breadcrumb")
@@ -280,7 +281,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       container.removeChild(breadcrumb);
 
@@ -302,7 +303,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
       expect(items.length).toBe(3);
@@ -320,7 +321,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(breadcrumb.separator).toBe(">");
     });
@@ -343,7 +344,7 @@ describe("EaBreadcrumb Component", () => {
       container.appendChild(breadcrumb1);
       container.appendChild(breadcrumb2);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(breadcrumb1.separator).toBe("/");
       expect(breadcrumb2.separator).toBe(">");
@@ -358,7 +359,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const separatorSlot = breadcrumb.shadowRoot.querySelector(
         'slot[name="separator"]'
@@ -377,7 +378,7 @@ describe("EaBreadcrumb Component", () => {
       `;
       container.appendChild(breadcrumb);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const items = breadcrumb.querySelectorAll("ea-breadcrumb-item");
       const separatorSlot = items[1].shadowRoot.querySelector(

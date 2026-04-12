@@ -15,7 +15,7 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-breadcrumb/index.js";
+  import "./node_modules/easy-component-ui/components/ea-breadcrumb/index.ts";
 </script>
 ```
 
