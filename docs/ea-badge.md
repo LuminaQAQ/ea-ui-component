@@ -64,16 +64,16 @@ ea-badge::part(custom-value) {
   <ea-badge value="12">
     <ea-button>comments</ea-button>
   </ea-badge>
-  <ea-badge value="3" type="primary">
+  <ea-badge value="3" variant="primary">
     <ea-button>replies</ea-button>
   </ea-badge>
-  <ea-badge value="12" type="success">
+  <ea-badge value="12" variant="success">
     <ea-button>comments</ea-button>
   </ea-badge>
-  <ea-badge value="3" type="warning">
+  <ea-badge value="3" variant="warning">
     <ea-button>replies</ea-button>
   </ea-badge>
-  <ea-badge value="3" type="info">
+  <ea-badge value="3" variant="info">
     <ea-button>comments</ea-button>
   </ea-badge>
   <ea-badge value="3" color="green">
@@ -88,16 +88,16 @@ ea-badge::part(custom-value) {
   <ea-badge value="12">
     <ea-button>comments</ea-button>
   </ea-badge>
-  <ea-badge value="3" type="primary">
+  <ea-badge value="3" variant="primary">
     <ea-button>replies</ea-button>
   </ea-badge>
-  <ea-badge value="12" type="success">
+  <ea-badge value="12" variant="success">
     <ea-button>comments</ea-button>
   </ea-badge>
-  <ea-badge value="3" type="warning">
+  <ea-badge value="3" variant="warning">
     <ea-button>replies</ea-button>
   </ea-badge>
-  <ea-badge value="3" type="info">
+  <ea-badge value="3" variant="info">
     <ea-button>comments</ea-button>
   </ea-badge>
   <ea-badge value="3" color="green">
@@ -267,7 +267,7 @@ hiddenExample.init();
 | max         | 最大值阈值，超过显示为 `{max}+`；仅当 `value` 为 Number 时生效             | Number             | —                                                 | Infinity |
 | is-dot      | 是否以小圆点形式显示徽章（不显示数字）                                     | Boolean            | —                                                 | false    |
 | data-hidden | 是否隐藏 Badge。                                                           | Boolean            | —                                                 | false    |
-| type        | badge 类型。                                                               | String             | `primary \| success \| warning \| danger \| info` | danger   |
+| variant     | badge 类型。                                                               | String             | `primary \| success \| warning \| danger \| info` | danger   |
 | show-zero   | 值为零时是否显示 Badge                                                     | Boolean            | —                                                 | true     |
 | color       | 背景色 `--ea-badge-color`                                                  | String (CSS color) | —                                                 | ""       |
 | offset-x    | 徽章在 X 轴上的偏移（像素），内部会设置 `--ea-badge-offset-x`              | Number             | —                                                 | 0        |

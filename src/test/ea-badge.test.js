@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender";
 
 // 导入 ea-badge 组件
 import "../components/ea-badge/index.js";
@@ -57,7 +58,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "12");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("12");
@@ -68,7 +69,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "new");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("new");
@@ -79,13 +80,13 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       let contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("5");
 
       badge.setAttribute("value", "10");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("10");
@@ -104,7 +105,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "200");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("99+");
@@ -116,7 +117,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "50");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("50");
@@ -127,7 +128,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "999");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("999");
@@ -135,51 +136,51 @@ describe("EaBadge Component", () => {
   });
 
   /**
-   * Type 属性测试
+   * Variant 属性测试
    * 测试徽章类型
    */
-  describe("Type Attribute", () => {
-    const types = ["primary", "success", "warning", "danger", "info"];
+  describe("Variant Attribute", () => {
+    const variants = ["primary", "success", "warning", "danger", "info"];
 
-    types.forEach(type => {
-      it(`应该正确应用 type="${type}"`, async () => {
+    variants.forEach(variant => {
+      it(`应该正确应用 variant="${variant}"`, async () => {
         const badge = document.createElement("ea-badge");
-        badge.setAttribute("type", type);
+        badge.setAttribute("variant", variant);
         badge.setAttribute("value", "5");
         container.appendChild(badge);
 
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await waitForRender();
 
         const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
-        expect(badgeContainer.classList.contains(`ea-badge--${type}`)).toBe(
+        expect(badgeContainer.classList.contains(`ea-badge--${variant}`)).toBe(
           true
         );
       });
     });
 
-    it("默认 type 应该是 danger", async () => {
+    it("默认 variant 应该是 danger", async () => {
       const badge = document.createElement("ea-badge");
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
-      expect(badge.type).toBe("danger");
+      expect(badge.variant).toBe("danger");
     });
 
-    it("type 属性变化时应该正确更新 class", async () => {
+    it("variant 属性变化时应该正确更新 class", async () => {
       const badge = document.createElement("ea-badge");
-      badge.setAttribute("type", "primary");
+      badge.setAttribute("variant", "primary");
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       let badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(true);
 
-      badge.setAttribute("type", "success");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      badge.setAttribute("variant", "success");
+      await waitForRender();
 
       badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("ea-badge--success")).toBe(true);
@@ -199,7 +200,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("is-dot", "");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       // computedClasslist 生成的是 is-dot 格式的 class
@@ -212,7 +213,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "99");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-dot")).toBe(true);
@@ -222,10 +223,10 @@ describe("EaBadge Component", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       // 未设置时返回 null，但逻辑上视为 false
-      expect(badge["is-dot"] === null || badge["is-dot"] === false).toBe(true);
+      expect(badge.isDot === null || badge.isDot === false).toBe(true);
     });
   });
 
@@ -240,7 +241,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       // computedClasslist 生成的是 is-hidden 格式的 class
@@ -251,12 +252,12 @@ describe("EaBadge Component", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       // 未设置时返回 null，但逻辑上视为 false
-      expect(
-        badge["data-hidden"] === null || badge["data-hidden"] === false
-      ).toBe(true);
+      expect(badge.dataHidden === null || badge.dataHidden === false).toBe(
+        true
+      );
     });
   });
 
@@ -273,7 +274,7 @@ describe("EaBadge Component", () => {
       // 或者测试 value 为 0 且 show-zero 未设置时的行为
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       // show-zero 默认为 true，所以 value 为 0 时应该显示
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
@@ -286,7 +287,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("show-zero", "true");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("0");
@@ -296,9 +297,9 @@ describe("EaBadge Component", () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
-      expect(badge["show-zero"]).toBe(true);
+      expect(badge.showZero).toBe(true);
     });
   });
 
@@ -313,7 +314,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(badge.color).toBe("green");
     });
@@ -323,11 +324,11 @@ describe("EaBadge Component", () => {
       badge.setAttribute("color", "red");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
       expect(badge.color).toBe("red");
 
       badge.setAttribute("color", "blue");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(badge.color).toBe("blue");
     });
@@ -342,9 +343,9 @@ describe("EaBadge Component", () => {
       badge.setAttribute("offset-x", "10");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
-      expect(badge["offset-x"]).toBe(10);
+      expect(badge.offsetX).toBe(10);
     });
 
     it("应该正确设置 offset-y 属性", async () => {
@@ -352,19 +353,19 @@ describe("EaBadge Component", () => {
       badge.setAttribute("offset-y", "5");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
-      expect(badge["offset-y"]).toBe(5);
+      expect(badge.offsetY).toBe(5);
     });
 
     it("默认 offset 应该是 0", async () => {
       const badge = document.createElement("ea-badge");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
-      expect(badge["offset-x"]).toBe(0);
-      expect(badge["offset-y"]).toBe(0);
+      expect(badge.offsetX).toBe(0);
+      expect(badge.offsetY).toBe(0);
     });
   });
 
@@ -413,7 +414,7 @@ describe("EaBadge Component", () => {
       `;
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl).toBeDefined();
@@ -429,7 +430,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "5");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("5");
@@ -445,35 +446,35 @@ describe("EaBadge Component", () => {
       // 先设置 max，再设置 value
       badge.setAttribute("max", "99");
       badge.setAttribute("value", "200");
-      badge.setAttribute("type", "primary");
+      badge.setAttribute("variant", "primary");
       // is-dot 不设置即为 false
       // show-zero 默认为 true
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       const contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
 
       expect(contentEl.textContent).toBe("99+");
       expect(badgeContainer.classList.contains("ea-badge--primary")).toBe(true);
-      expect(badge["is-dot"] === null || badge["is-dot"] === false).toBe(true);
-      expect(badge["show-zero"]).toBe(true);
+      expect(badge.isDot === null || badge.isDot === false).toBe(true);
+      expect(badge.showZero).toBe(true);
     });
 
     it("应该正确处理多个 Badge 实例", async () => {
       const badge1 = document.createElement("ea-badge");
       badge1.setAttribute("value", "5");
-      badge1.setAttribute("type", "primary");
+      badge1.setAttribute("variant", "primary");
 
       const badge2 = document.createElement("ea-badge");
       badge2.setAttribute("value", "10");
-      badge2.setAttribute("type", "success");
+      badge2.setAttribute("variant", "success");
 
       container.appendChild(badge1);
       container.appendChild(badge2);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const container1 = badge1.shadowRoot.querySelector(".ea-badge");
       const container2 = badge2.shadowRoot.querySelector(".ea-badge");
@@ -485,19 +486,19 @@ describe("EaBadge Component", () => {
     it("应该正确处理动态属性更新", async () => {
       const badge = document.createElement("ea-badge");
       badge.setAttribute("value", "5");
-      badge.setAttribute("type", "primary");
+      badge.setAttribute("variant", "primary");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       let contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       expect(contentEl.textContent).toBe("5");
 
       // 动态更新属性
       badge.setAttribute("value", "15");
-      badge.setAttribute("type", "warning");
+      badge.setAttribute("variant", "warning");
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       contentEl = badge.shadowRoot.querySelector(".ea-badge__content");
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
@@ -512,7 +513,7 @@ describe("EaBadge Component", () => {
       badge.setAttribute("value", "99");
       container.appendChild(badge);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender();
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-dot")).toBe(true);

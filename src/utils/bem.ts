@@ -7,19 +7,53 @@
  * const bem = createBEM('ea-alert');
  *
  * // 基础类名
- * bem() // 'ea-alert'
+ * bem()                          // 'ea-alert'
+ * bem.b()                        // 'ea-alert'
+ * bem.cb()                       // '.ea-alert'
  *
- * // 带修饰符 (键为修饰符名，值为 true 或字符串值)
- * bem({ primary: true, effect: 'light' }) // 'ea-alert ea-alert--primary ea-alert--effect-light'
+ * // 元素类名 (block__element)
+ * bem.e('content')               // 'ea-alert__content'
+ * bem.ce('content')              // '.ea-alert__content'
  *
- * // 带状态 (is- 前缀)
- * bem({}, { center: true }) // 'ea-alert is-center'
+ * // 修饰符类名 (block--modifier)
+ * bem({ primary: true })         // 'ea-alert ea-alert--primary'
+ * bem({ effect: 'light' })       // 'ea-alert ea-alert--effect-light'
+ * bem.m('primary', 'large')      // 'ea-alert--primary ea-alert--large'
+ * bem.cm('primary')              // '.ea-alert--primary'
  *
- * // 修饰符 + 状态
- * bem({ primary: true }, { center: true }) // 'ea-alert ea-alert--primary is-center'
+ * // 状态类名 (is-state)
+ * bem({}, { center: true })      // 'ea-alert is-center'
+ * bem.s('active', 'disabled')    // 'is-active is-disabled'
+ * bem.cs('active')               // '.is-active'
+ *
+ * // 组合使用
+ * bem({ primary: true }, { center: true })  // 'ea-alert ea-alert--primary is-center'
  */
 export function createBEM(block: string) {
-  return function bem(
+  // 生成元素类名
+  const element = (elementName: string) => `${block}__${elementName}`;
+
+  // 生成带选择器前缀的元素类名
+  const elementSelector = (elementName: string) => `.${block}__${elementName}`;
+
+  // 生成修饰符类名
+  const modifier = (...modifierNames: string[]) =>
+    modifierNames.map(name => `${block}--${name}`).join(" ");
+
+  // 生成带选择器前缀的修饰符类名
+  const modifierSelector = (...modifierNames: string[]) =>
+    modifierNames.map(name => `.${block}--${name}`).join(" ");
+
+  // 生成状态类名
+  const state = (...stateNames: string[]) =>
+    stateNames.map(name => `is-${name}`).join(" ");
+
+  // 生成带选择器前缀的状态类名
+  const stateSelector = (...stateNames: string[]) =>
+    stateNames.map(name => `.is-${name}`).join(" ");
+
+  // 主函数：生成带修饰符和状态的块类名
+  function bem(
     modifiers: Record<string, boolean | string | number> = {},
     states: Record<string, boolean | string | number> = {}
   ): string {
@@ -42,7 +76,19 @@ export function createBEM(block: string) {
     }
 
     return classes.join(" ");
-  };
+  }
+
+  // 附加方法
+  bem.b = () => block;
+  bem.cb = () => `.${block}`;
+  bem.e = element;
+  bem.ce = elementSelector;
+  bem.m = modifier;
+  bem.cm = modifierSelector;
+  bem.s = state;
+  bem.cs = stateSelector;
+
+  return bem;
 }
 
 export default createBEM;

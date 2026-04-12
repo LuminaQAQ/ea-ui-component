@@ -194,6 +194,57 @@ closeText: string = "";  // 自动映射到 HTML 属性 close-text
 showIcon: boolean = false;  // 自动映射到 HTML 属性 show-icon
 ```
 
+**组件类型属性命名：**
+
+- 用于表示组件视觉变体/类型的属性统一命名为 `variant`（而非 `type`）
+- 使用统一的常量 `VARIANT_TYPES` 定义可选值，确保全局一致
+- 统一使用 `danger` 作为错误类型（而非 `error`）
+- 可选值包括：`primary`, `success`, `warning`, `danger`, `info`
+
+```typescript
+// 正确示例：使用 variant 命名类型属性
+import {
+  VARIANT_TYPES,
+  VARIANT_DEFAULT,
+  VARIANT_ICON_MAP,
+  type VariantType,
+} from "@/constants/variant";
+
+@attribute({
+  type: Enum(VARIANT_TYPES),
+  default: VARIANT_DEFAULT,
+  observer(this: EaAlert, newVal: VariantType) {
+    this.updateContainerClasslist();
+  },
+})
+variant: VariantType = VARIANT_DEFAULT;
+```
+
+**常量定义（src/constants/variant.ts）：**
+
+```typescript
+export const VARIANT_TYPES = [
+  "primary",
+  "success",
+  "warning",
+  "danger", // 统一使用 danger 而不是 error
+  "info",
+] as const;
+
+export type VariantType = (typeof VARIANT_TYPES)[number];
+export const VARIANT_DEFAULT = "info";
+
+// 图标映射（danger 和 error 都映射到同一个图标，兼容处理）
+export const VARIANT_ICON_MAP: Record<string, string> = {
+  primary: "circle-info",
+  success: "circle-check",
+  info: "circle-info",
+  warning: "triangle-exclamation",
+  danger: "circle-xmark",
+  error: "circle-xmark", // 兼容处理
+};
+```
+
 **类型说明：**
 
 - `String` - 字符串类型
@@ -240,14 +291,24 @@ const bem = createBEM("ea-component");
 
 // 基础块
 bem(); // "ea-component"
+bem.b(); // "ea-component"
+bem.cb(); // ".ea-component"
+
+// 元素类名 (block__element)
+bem.e("content"); // "ea-component__content"
+bem.ce("content"); // ".ea-component__content"
 
 // 带修饰符
 bem({ size: "large" }); // "ea-component ea-component--size-large"
 bem({ [this.type]: true }); // "ea-component ea-component--primary"
+bem.m("primary", "large"); // "ea-component--primary ea-component--large"
+bem.cm("primary"); // ".ea-component--primary"
 
 // 带状态
 bem({}, { disabled: true }); // "ea-component is-disabled"
 bem({}, { active: this.active }); // "ea-component" 或 "ea-component is-active"
+bem.s("active", "disabled"); // "is-active is-disabled"
+bem.cs("active"); // ".is-active"
 
 // 组合使用
 bem(
@@ -255,6 +316,38 @@ bem(
   { disabled: this.disabled, center: this.center }
 );
 // "ea-component ea-component--primary ea-component--large is-disabled is-center"
+```
+
+**使用场景：**
+
+1. **模板中定义元素类名**：
+
+```typescript
+html(): string {
+  return `
+    <div class="${bem()}" part="container">
+      <sup class="${bem.e("content")}" part="content"></sup>
+      <slot></slot>
+    </div>
+  `;
+}
+```
+
+2. **updateContainerClasslist 方法**：
+
+```typescript
+updateContainerClasslist(): string {
+  const className = bem(
+    { [this.type]: true },           // 修饰符
+    { dot: this.isDot, hidden: isHidden }  // 状态
+  );
+
+  if (this._container) {
+    this._container.className = className;
+  }
+
+  return className;
+}
 ```
 
 ### HTML 安全处理
@@ -791,6 +884,29 @@ await new Promise(resolve => setTimeout(resolve, 100));
 // 图片加载
 await new Promise(resolve => setTimeout(resolve, 100));
 ```
+
+### 统一等待工具函数
+
+项目中提供了统一的等待工具函数 `waitForRender`，位于 `src/test/utils/waitForRender.js`：
+
+```javascript
+import { waitForRender } from "./utils/waitForRender";
+
+// 使用默认等待时间（100ms）
+await waitForRender();
+
+// 指定等待时间
+await waitForRender(200);
+
+// 快速等待（0ms）
+await waitForRender(0);
+```
+
+**使用规范：**
+
+- 所有测试文件中需要等待组件渲染时，统一使用 `waitForRender()` 替代 `new Promise(resolve => setTimeout(resolve, 100))`
+- 默认等待时间为 100ms，适用于大多数组件渲染场景
+- 如需特殊等待时间，可传入参数指定毫秒数
 
 ```
 

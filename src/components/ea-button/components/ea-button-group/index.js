@@ -1,4 +1,4 @@
-import Base from "@components/Base";
+import Base from "@core/EaBase";
 
 import stylesheet from "./index.scss?inline";
 

@@ -6,14 +6,13 @@ import { listen } from "@decorator/listen";
 import { timeout } from "@utils/timeout";
 import { html } from "@utils/html";
 import stylesheet from "./index.scss?inline";
-
-const faIconType: Record<string, string> = {
-  primary: "circle-info",
-  success: "circle-check",
-  info: "circle-info",
-  warning: "triangle-exclamation",
-  error: "circle-xmark",
-};
+import { Enum } from "@/utils/Enum";
+import {
+  VARIANT_TYPES,
+  VARIANT_DEFAULT,
+  VARIANT_ICON_MAP,
+  type VariantType,
+} from "@/constants/variant";
 
 const TAG_NAME = "ea-alert" as const;
 const bem = createBEM(TAG_NAME);
@@ -60,18 +59,18 @@ export class EaAlert extends EaBase {
   description: string = "";
 
   @attribute({
-    type: String,
-    default: "info",
-    observer(this: EaAlert, newVal: string) {
+    type: Enum(VARIANT_TYPES),
+    default: VARIANT_DEFAULT,
+    observer(this: EaAlert, newVal: VariantType) {
       this.updateContainerClasslist();
       if (this.showIcon) {
         this._alertIcon.innerHTML = html(
-          `<ea-icon class="ea-alert__icon" name="${faIconType[newVal]}" part="icon"></ea-icon>`
+          `<ea-icon class="ea-alert__icon" name="${VARIANT_ICON_MAP[newVal]}" part="icon"></ea-icon>`
         );
       }
     },
   })
-  type: string = "info";
+  variant: VariantType = VARIANT_DEFAULT;
 
   @attribute({
     type: String,
@@ -110,7 +109,7 @@ export class EaAlert extends EaBase {
     default: false,
     observer(this: EaAlert) {
       this._alertIcon.innerHTML = html(
-        `<ea-icon class="ea-alert__icon" name="${faIconType[this.type]}" part="icon"></ea-icon>`
+        `<ea-icon class="ea-alert__icon" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>`
       );
     },
   })
@@ -164,7 +163,7 @@ export class EaAlert extends EaBase {
    */
   updateContainerClasslist(): string {
     const className = bem(
-      { [this.type]: true, [this.effect]: true },
+      { [this.variant]: true, [this.effect]: true },
       { center: this.center }
     );
 
@@ -178,7 +177,7 @@ export class EaAlert extends EaBase {
    */
   html(): string {
     const iconContent = this.showIcon
-      ? `<ea-icon class="ea-alert__icon" name="${faIconType[this.type]}" part="icon"></ea-icon>`
+      ? `<ea-icon class="ea-alert__icon" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>`
       : "";
 
     const closeContent = this.closable

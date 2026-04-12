@@ -117,25 +117,25 @@ ea-alert:first-child {
 
 Alert 组件不属于浮层元素，不会自动消失或关闭。
 
-Alert 组件提供 5 种类型，由 `type` 属性指定，默认值为 `info`。
+Alert 组件提供 5 种类型，由 `variant` 属性指定，默认值为 `info`。
 
 <div class="demo">
-  <ea-alert heading="Primary alert" type="primary"></ea-alert>
-  <ea-alert heading="Success alert" type="success"></ea-alert>
-  <ea-alert heading="Info alert" type="info"></ea-alert>
-  <ea-alert heading="Warning alert" type="warning"></ea-alert>
-  <ea-alert heading="Error alert" type="error"></ea-alert>
+  <ea-alert heading="Primary alert" variant="primary"></ea-alert>
+  <ea-alert heading="Success alert" variant="success"></ea-alert>
+  <ea-alert heading="Info alert" variant="info"></ea-alert>
+  <ea-alert heading="Warning alert" variant="warning"></ea-alert>
+  <ea-alert heading="Error alert" variant="danger"></ea-alert>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-alert heading="Primary alert" type="primary"></ea-alert>
-  <ea-alert heading="Success alert" type="success"></ea-alert>
-  <ea-alert heading="Info alert" type="info"></ea-alert>
-  <ea-alert heading="Warning alert" type="warning"></ea-alert>
-  <ea-alert heading="Error alert" type="error"></ea-alert>
+  <ea-alert heading="Primary alert" variant="primary"></ea-alert>
+  <ea-alert heading="Success alert" variant="success"></ea-alert>
+  <ea-alert heading="Info alert" variant="info"></ea-alert>
+  <ea-alert heading="Warning alert" variant="warning"></ea-alert>
+  <ea-alert heading="Error alert" variant="danger"></ea-alert>
 </div>
 ```
 
@@ -148,22 +148,22 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 通过设置 `effect` 属性来改变主题，默认为 `light`。
 
 <div class="demo">
-  <ea-alert heading="Primary alert" type="primary" effect="dark"></ea-alert>
-  <ea-alert heading="Success alert" type="success" effect="dark"></ea-alert>
-  <ea-alert heading="Info alert" type="info" effect="dark"></ea-alert>
-  <ea-alert heading="Warning alert" type="warning" effect="dark"></ea-alert>
-  <ea-alert heading="Error alert" type="error" effect="dark"></ea-alert>
+  <ea-alert heading="Primary alert" variant="primary" effect="dark"></ea-alert>
+  <ea-alert heading="Success alert" variant="success" effect="dark"></ea-alert>
+  <ea-alert heading="Info alert" variant="info" effect="dark"></ea-alert>
+  <ea-alert heading="Warning alert" variant="warning" effect="dark"></ea-alert>
+  <ea-alert heading="Error alert" variant="danger" effect="dark"></ea-alert>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-alert heading="Primary alert" type="primary" effect="dark"></ea-alert>
-  <ea-alert heading="Success alert" type="success" effect="dark"></ea-alert>
-  <ea-alert heading="Info alert" type="info" effect="dark"></ea-alert>
-  <ea-alert heading="Warning alert" type="warning" effect="dark"></ea-alert>
-  <ea-alert heading="Error alert" type="error" effect="dark"></ea-alert>
+  <ea-alert heading="Primary alert" variant="primary" effect="dark"></ea-alert>
+  <ea-alert heading="Success alert" variant="success" effect="dark"></ea-alert>
+  <ea-alert heading="Info alert" variant="info" effect="dark"></ea-alert>
+  <ea-alert heading="Warning alert" variant="warning" effect="dark"></ea-alert>
+  <ea-alert heading="Error alert" variant="danger" effect="dark"></ea-alert>
 </div>
 ```
 
@@ -176,16 +176,16 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 你可以设置 Alert 组件是否为可关闭状态，关闭按钮的内容以及关闭时的回调函数同样可以定制。`closable` 属性决定 Alert 组件是否可关闭，该属性接受一个 `Boolean`，默认为 `true`。你可以设置 `close-text` 属性来代替右侧的关闭图标，需要注意的是 `close-text` 必须是一个字符串。当 Alert 组件被关闭时会触发 `close` 事件。
 
 <div class="demo">
-  <ea-alert heading="Unclosable alert" type="success" closable="false"></ea-alert>
+  <ea-alert heading="Unclosable alert" variant="success" closable="false"></ea-alert>
   <ea-alert
     heading="Customized close text"
-    type="info"
+    variant="info"
     close-text="Gotcha"
   ></ea-alert>
   <ea-alert
     id="customizedCloseBtn"
     heading="Alert with callback"
-    type="warning"
+    variant="warning"
   ></ea-alert>
 </div>
 
@@ -197,18 +197,18 @@ Alert 组件提供了两个不同的主题：`light` 和 `dark`。
 <div class="demo">
   <ea-alert
     heading="Unclosable alert"
-    type="success"
+    variant="success"
     closable="false"
   ></ea-alert>
   <ea-alert
     heading="Customized close text"
-    type="info"
+    variant="info"
     close-text="Gotcha"
   ></ea-alert>
   <ea-alert
     id="customizedCloseBtn"
     heading="Alert with callback"
-    type="warning"
+    variant="warning"
   ></ea-alert>
 </div>
 ```
@@ -231,12 +231,12 @@ customizedCloseBtn.addEventListener("close", () => {
 通过设置 `show-icon` 属性来显示 Alert 的 icon，这能更有效地向用户展示你的显示意图。或者你可以使用 `icon` slot 自定义 `icon` 内容。
 
 <div class="demo">
-  <ea-alert heading="Primary alert" type="primary" show-icon></ea-alert>
-  <ea-alert heading="Success alert" type="success" show-icon></ea-alert>
-  <ea-alert heading="Info alert" type="info" show-icon></ea-alert>
-  <ea-alert heading="Warning alert" type="warning" show-icon></ea-alert>
-  <ea-alert heading="Error alert" type="error" show-icon></ea-alert>
-  <ea-alert heading="Error alert with custom icon" type="error" show-icon>
+  <ea-alert heading="Primary alert" variant="primary" show-icon></ea-alert>
+  <ea-alert heading="Success alert" variant="success" show-icon></ea-alert>
+  <ea-alert heading="Info alert" variant="info" show-icon></ea-alert>
+  <ea-alert heading="Warning alert" variant="warning" show-icon></ea-alert>
+  <ea-alert heading="Error alert" variant="danger" show-icon></ea-alert>
+  <ea-alert heading="Error alert with custom icon" variant="danger" show-icon>
     <ea-icon slot="icon" name="bell" color="red"></ea-icon>
   </ea-alert>
 </div>
@@ -245,12 +245,12 @@ customizedCloseBtn.addEventListener("close", () => {
 
 ```html
 <div class="demo">
-  <ea-alert heading="Primary alert" type="primary" show-icon></ea-alert>
-  <ea-alert heading="Success alert" type="success" show-icon></ea-alert>
-  <ea-alert heading="Info alert" type="info" show-icon></ea-alert>
-  <ea-alert heading="Warning alert" type="warning" show-icon></ea-alert>
-  <ea-alert heading="Error alert" type="error" show-icon></ea-alert>
-  <ea-alert heading="Error alert with custom icon" type="error" show-icon>
+  <ea-alert heading="Primary alert" variant="primary" show-icon></ea-alert>
+  <ea-alert heading="Success alert" variant="success" show-icon></ea-alert>
+  <ea-alert heading="Info alert" variant="info" show-icon></ea-alert>
+  <ea-alert heading="Warning alert" variant="warning" show-icon></ea-alert>
+  <ea-alert heading="Error alert" variant="danger" show-icon></ea-alert>
+  <ea-alert heading="Error alert with custom icon" variant="danger" show-icon>
     <ea-icon slot="icon" name="bell" color="red"></ea-icon>
   </ea-alert>
 </div>
@@ -263,22 +263,22 @@ customizedCloseBtn.addEventListener("close", () => {
 使用 `center` 属性让文字水平居中。
 
 <div class="demo">
-  <ea-alert heading="Primary alert" type="primary" center show-icon></ea-alert>
-  <ea-alert heading="Success alert" type="success" center show-icon></ea-alert>
-  <ea-alert heading="Info alert" type="info" center show-icon></ea-alert>
-  <ea-alert heading="Warning alert" type="warning" center show-icon></ea-alert>
-  <ea-alert heading="Error alert" type="error" center show-icon></ea-alert>
+  <ea-alert heading="Primary alert" variant="primary" center show-icon></ea-alert>
+  <ea-alert heading="Success alert" variant="success" center show-icon></ea-alert>
+  <ea-alert heading="Info alert" variant="info" center show-icon></ea-alert>
+  <ea-alert heading="Warning alert" variant="warning" center show-icon></ea-alert>
+  <ea-alert heading="Error alert" variant="danger" center show-icon></ea-alert>
 </div>
 
 ::: details 查看代码
 
 ```html
 <div class="demo">
-  <ea-alert heading="Primary alert" type="primary" center show-icon></ea-alert>
-  <ea-alert heading="Success alert" type="success" center show-icon></ea-alert>
-  <ea-alert heading="Info alert" type="info" center show-icon></ea-alert>
-  <ea-alert heading="Warning alert" type="warning" center show-icon></ea-alert>
-  <ea-alert heading="Error alert" type="error" center show-icon></ea-alert>
+  <ea-alert heading="Primary alert" variant="primary" center show-icon></ea-alert>
+  <ea-alert heading="Success alert" variant="success" center show-icon></ea-alert>
+  <ea-alert heading="Info alert" variant="info" center show-icon></ea-alert>
+  <ea-alert heading="Warning alert" variant="warning" center show-icon></ea-alert>
+  <ea-alert heading="Error alert" variant="danger" center show-icon></ea-alert>
 </div>
 ```
 
@@ -294,35 +294,35 @@ customizedCloseBtn.addEventListener("close", () => {
   <ea-alert
     class="with-desc-and-icon"
     heading="Primary alert"
-    type="primary"
+    variant="primary"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
     heading="Success alert"
-    type="success"
+    variant="success"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
     heading="Info alert"
-    type="info"
+    variant="info"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
     heading="Warning alert"
-    type="warning"
+    variant="warning"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
     heading="Error alert"
-    type="error"
+    variant="danger"
     show-icon
   >
     More text description
@@ -342,35 +342,35 @@ customizedCloseBtn.addEventListener("close", () => {
   <ea-alert
     class="with-desc-and-icon"
     heading="Primary alert"
-    type="primary"
+    variant="primary"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
     heading="Success alert"
-    type="success"
+    variant="success"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
     heading="Info alert"
-    type="info"
+    variant="info"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
     heading="Warning alert"
-    type="warning"
+    variant="warning"
     description="More text description"
     show-icon
   ></ea-alert>
   <ea-alert
     class="with-desc-and-icon"
     heading="Error alert"
-    type="error"
+    variant="danger"
     show-icon
   >
     More text description
@@ -392,19 +392,19 @@ Alert 组件支持延迟显示、延迟关闭和自动关闭功能。
   <ea-alert
     id="showAfterAlert"
     heading="Primary alert that appearance after 5000 milliseconds"
-    type="primary"
+    variant="primary"
     show-after="5000"
   ></ea-alert>
   <ea-alert
     id="hideAfterAlert"
     heading="Success alert that disappear after 5000 milliseconds"
-    type="success"
+    variant="success"
     hide-after="5000"
   ></ea-alert>
   <ea-alert
     id="autoCloseAlert"
     heading="Info alert that in 5000 milliseconds to be hidden"
-    type="info"
+    variant="info"
     closable="false"
     auto-close="5000"
   ></ea-alert>
@@ -419,19 +419,19 @@ Alert 组件支持延迟显示、延迟关闭和自动关闭功能。
   <ea-alert
     id="showAfterAlert"
     heading="Primary alert that appearance after 5000 milliseconds"
-    type="primary"
+    variant="primary"
     show-after="5000"
   ></ea-alert>
   <ea-alert
     id="hideAfterAlert"
     heading="Success alert that disappear after 5000 milliseconds"
-    type="success"
+    variant="success"
     hide-after="5000"
   ></ea-alert>
   <ea-alert
     id="autoCloseAlert"
     heading="Info alert that in 5000 milliseconds to be hidden"
-    type="info"
+    variant="info"
     closable="false"
     auto-close="5000"
   ></ea-alert>
@@ -468,7 +468,7 @@ autoCloseAlert.addEventListener("close", () => {
 | ----------- | ------------------------ | ------- | ------------------------------------------ | ------ |
 | heading     | Alert 标题               | String  | —                                          | ''     |
 | description | 辅助性文字介绍           | String  | —                                          | ''     |
-| type        | Alert 类型               | String  | primary / success / warning / info / error | info   |
+| variant     | Alert 类型               | String  | primary / success / warning / info / danger | info   |
 | effect      | 选择提供的主题           | String  | light / dark                               | light  |
 | close-text  | 关闭按钮自定义文本       | String  | —                                          | ''     |
 | closable    | 是否可关闭               | Boolean | —                                          | true   |

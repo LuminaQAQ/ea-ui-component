@@ -1,4 +1,4 @@
-import Base from "@/components/Base";
+import Base from "@core/EaBase";
 
 export default class FormAssociatedBase extends Base {
   static formAssociated = true;
