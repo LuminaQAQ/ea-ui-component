@@ -1,10 +1,17 @@
 import type { EaElement } from "@/types/index";
 
+export interface ListenOptions {
+  capture?: boolean;
+  passive?: boolean;
+  once?: boolean;
+}
+
 /**
  * 自动绑定事件监听器的装饰器
  * 在 connectedCallback 时绑定，在 disconnectedCallback 时自动清理
  * @param eventName 事件名称
  * @param selector 可选的 CSS 选择器（用于事件委托）
+ * @param options 事件监听选项（capture, passive, once）
  * @returns 方法装饰器
  *
  * @example
@@ -13,9 +20,18 @@ import type { EaElement } from "@/types/index";
  *   private _handleClose(e: Event) {
  *     this.remove();
  *   }
+ *
+ *   @listen('scroll', 'window', { capture: true })
+ *   private _handleScroll(e: Event) {
+ *     // 监听 window 的滚动事件
+ *   }
  * }
  */
-export function listen(eventName: string, selector?: string) {
+export function listen(
+  eventName: string,
+  selector?: string,
+  options?: ListenOptions
+) {
   return function (
     targetOrValue: any,
     propertyKeyOrContext: string | ClassMethodDecoratorContext,
@@ -46,7 +62,7 @@ export function listen(eventName: string, selector?: string) {
           (this as any)[abortControllerKey] = controller;
 
           const handler = (e: Event) => {
-            if (selector) {
+            if (selector && selector !== "window" && selector !== "document") {
               const targetElement = e.target as Element;
               if (targetElement.closest(selector)) {
                 (this as any)[methodName].call(this, e);
@@ -56,8 +72,18 @@ export function listen(eventName: string, selector?: string) {
             }
           };
 
-          this.shadowRoot?.addEventListener(eventName, handler, {
+          let target: EventTarget;
+          if (selector === "window") {
+            target = window;
+          } else if (selector === "document") {
+            target = document;
+          } else {
+            target = this.shadowRoot!;
+          }
+
+          target.addEventListener(eventName, handler, {
             signal: controller.signal,
+            ...options,
           });
         };
 
@@ -108,7 +134,7 @@ export function listen(eventName: string, selector?: string) {
         (this as any)[abortControllerKey] = controller;
 
         const handler = (e: Event) => {
-          if (selector) {
+          if (selector && selector !== "window" && selector !== "document") {
             const targetElement = e.target as Element;
             if (targetElement.closest(selector)) {
               desc.value.call(this, e);
@@ -118,8 +144,19 @@ export function listen(eventName: string, selector?: string) {
           }
         };
 
-        this.shadowRoot?.addEventListener(eventName, handler, {
+        // 确定监听目标
+        let targetElement: EventTarget;
+        if (selector === "window") {
+          targetElement = window;
+        } else if (selector === "document") {
+          targetElement = document;
+        } else {
+          targetElement = this.shadowRoot!;
+        }
+
+        targetElement.addEventListener(eventName, handler, {
           signal: controller.signal,
+          ...options,
         });
       };
 

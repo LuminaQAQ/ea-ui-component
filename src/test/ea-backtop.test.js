@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
 // 导入 ea-backtop 组件
 import "../components/ea-backtop/index.js";
@@ -90,7 +90,7 @@ describe("EaBacktop Component", () => {
 
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(backtop["visibility-height"]).toBe(100);
+      expect(backtop.visibilityHeight).toBe(100);
     });
 
     it("默认 visibility-height 应该是 200", async () => {
@@ -99,7 +99,7 @@ describe("EaBacktop Component", () => {
 
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(backtop["visibility-height"]).toBe(200);
+      expect(backtop.visibilityHeight).toBe(200);
     });
 
     it("visibility-height 属性变化时应该正确更新", async () => {
@@ -108,12 +108,12 @@ describe("EaBacktop Component", () => {
       container.appendChild(backtop);
 
       await new Promise(resolve => setTimeout(resolve, 0));
-      expect(backtop["visibility-height"]).toBe(100);
+      expect(backtop.visibilityHeight).toBe(100);
 
       backtop.setAttribute("visibility-height", "300");
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(backtop["visibility-height"]).toBe(300);
+      expect(backtop.visibilityHeight).toBe(300);
     });
   });
 
@@ -252,7 +252,8 @@ describe("EaBacktop Component", () => {
       const backtop = document.createElement("ea-backtop");
       container.appendChild(backtop);
 
-      const containerEl = backtop.shadowRoot.querySelector('[part="container"]');
+      const containerEl =
+        backtop.shadowRoot.querySelector('[part="container"]');
       expect(containerEl).toBeDefined();
     });
   });
@@ -344,7 +345,7 @@ describe("EaBacktop Component", () => {
       await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(backtop.target).toBe("#custom-target");
-      expect(backtop["visibility-height"]).toBe(100);
+      expect(backtop.visibilityHeight).toBe(100);
       expect(backtop.right).toBe("60px");
       expect(backtop.bottom).toBe("80px");
       expect(backtop.smooth).toBe(false);
@@ -364,9 +365,9 @@ describe("EaBacktop Component", () => {
 
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(backtop1["visibility-height"]).toBe(100);
+      expect(backtop1.visibilityHeight).toBe(100);
       expect(backtop1.right).toBe("20px");
-      expect(backtop2["visibility-height"]).toBe(300);
+      expect(backtop2.visibilityHeight).toBe(300);
       expect(backtop2.right).toBe("80px");
     });
 
@@ -378,7 +379,7 @@ describe("EaBacktop Component", () => {
 
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(backtop["visibility-height"]).toBe(100);
+      expect(backtop.visibilityHeight).toBe(100);
       expect(backtop.smooth).toBe(true);
 
       // 动态更新属性
@@ -387,7 +388,7 @@ describe("EaBacktop Component", () => {
 
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(backtop["visibility-height"]).toBe(250);
+      expect(backtop.visibilityHeight).toBe(250);
       expect(backtop.smooth).toBe(false);
     });
   });
