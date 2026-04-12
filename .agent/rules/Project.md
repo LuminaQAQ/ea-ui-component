@@ -203,6 +203,7 @@ showIcon: boolean = false;  // 自动映射到 HTML 属性 show-icon
 
 ```typescript
 // 正确示例：使用 variant 命名类型属性
+import { Enum } from "@/utils/Enum";
 import {
   VARIANT_TYPES,
   VARIANT_DEFAULT,
@@ -218,6 +219,16 @@ import {
   },
 })
 variant: VariantType = VARIANT_DEFAULT;
+
+// 如果需要扩展 variant 值（如添加 "normal"）
+@attribute({
+  type: Enum([...VARIANT_TYPES, "normal"]),
+  default: "normal",
+  observer(this: EaComponent) {
+    this.updateContainerClasslist();
+  },
+})
+variant: VariantType | "normal" = "normal";
 ```
 
 **常量定义（src/constants/variant.ts）：**
@@ -252,7 +263,8 @@ export const VARIANT_ICON_MAP: Record<string, string> = {
 - `Boolean` - 布尔类型（HTML 中属性存在即为 true）
 - `Array` - JSON 数组
 - `Object` - JSON 对象
-- `["a", "b", "c"]` - 枚举类型，限制可选值
+- `Enum(["a", "b", "c"])` - 枚举类型，限制可选值（推荐从 `@/utils/Enum` 导入）
+- `Enum(VARIANT_TYPES)` - 使用统一的变体类型常量
 
 #### @query
 

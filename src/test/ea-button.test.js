@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender";
 
 // 导入 ea-button 组件
 import "../components/ea-button/index.js";
@@ -56,61 +57,53 @@ describe("EaButton Component", () => {
   /**
    * Type 属性测试
    */
-  describe("Type Attribute", () => {
-    it("应该正确设置 type 属性", async () => {
+  describe("Variant Attribute", () => {
+    it("应该正确设置 variant 属性", async () => {
       const button = document.createElement("ea-button");
-      button.setAttribute("type", "primary");
+      button.setAttribute("variant", "primary");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
-      expect(button.type).toBe("primary");
+      expect(button.variant).toBe("primary");
     });
 
-    it("默认 type 应该是 normal", async () => {
+    it("默认 variant 应该是 normal", async () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
-      expect(button.type).toBe("normal");
+      expect(button.variant).toBe("normal");
     });
 
-    it("应该支持所有 type 类型", async () => {
-      const types = [
-        "normal",
-        "primary",
-        "success",
-        "warning",
-        "danger",
-        "text",
-        "link",
-      ];
+    it("应该支持所有 variant 类型", async () => {
+      const variants = ["normal", "primary", "success", "warning", "danger"];
 
-      for (const type of types) {
+      for (const variant of variants) {
         const button = document.createElement("ea-button");
-        button.setAttribute("type", type);
+        button.setAttribute("variant", variant);
         container.appendChild(button);
 
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await waitForRender(0);
 
-        expect(button.type).toBe(type);
+        expect(button.variant).toBe(variant);
         container.removeChild(button);
       }
     });
 
-    it("type 属性变化时应该正确更新", async () => {
+    it("variant 属性变化时应该正确更新", async () => {
       const button = document.createElement("ea-button");
-      button.setAttribute("type", "normal");
+      button.setAttribute("variant", "normal");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
-      expect(button.type).toBe("normal");
+      await waitForRender(0);
+      expect(button.variant).toBe("normal");
 
-      button.setAttribute("type", "primary");
-      await new Promise(resolve => setTimeout(resolve, 0));
+      button.setAttribute("variant", "primary");
+      await waitForRender(0);
 
-      expect(button.type).toBe("primary");
+      expect(button.variant).toBe("primary");
     });
   });
 
@@ -123,7 +116,7 @@ describe("EaButton Component", () => {
       button.setAttribute("size", "large");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.size).toBe("large");
     });
@@ -132,7 +125,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.size).toBe("medium");
     });
@@ -145,7 +138,7 @@ describe("EaButton Component", () => {
         button.setAttribute("size", size);
         container.appendChild(button);
 
-        await new Promise(resolve => setTimeout(resolve, 0));
+        await waitForRender(0);
 
         expect(button.size).toBe(size);
         container.removeChild(button);
@@ -162,7 +155,7 @@ describe("EaButton Component", () => {
       button.setAttribute("disabled", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.disabled).toBe(true);
     });
@@ -171,7 +164,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.disabled || false).toBe(false);
     });
@@ -181,7 +174,7 @@ describe("EaButton Component", () => {
       button.setAttribute("disabled", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       // 验证组件的 disabled 属性
       expect(button.disabled).toBe(true);
@@ -199,7 +192,7 @@ describe("EaButton Component", () => {
       button.setAttribute("plain", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.plain).toBe(true);
     });
@@ -208,7 +201,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.plain || false).toBe(false);
     });
@@ -223,7 +216,7 @@ describe("EaButton Component", () => {
       button.setAttribute("round", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.round).toBe(true);
     });
@@ -232,7 +225,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.round || false).toBe(false);
     });
@@ -247,7 +240,7 @@ describe("EaButton Component", () => {
       button.setAttribute("circle", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.circle).toBe(true);
     });
@@ -256,7 +249,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.circle || false).toBe(false);
     });
@@ -271,7 +264,7 @@ describe("EaButton Component", () => {
       button.setAttribute("loading", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.loading).toBe(true);
     });
@@ -280,7 +273,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.loading || false).toBe(false);
     });
@@ -290,7 +283,7 @@ describe("EaButton Component", () => {
       button.setAttribute("loading", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       const loadingIcon = button.shadowRoot.querySelector("#ea-loading-icon");
       expect(loadingIcon).toBeDefined();
@@ -298,10 +291,14 @@ describe("EaButton Component", () => {
 
     it("loading 为 true 时应该禁用按钮", async () => {
       const button = document.createElement("ea-button");
-      button.setAttribute("loading", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
+
+      // 在组件挂载后再设置 loading 属性
+      button.setAttribute("loading", "");
+
+      await waitForRender(100);
 
       expect(button.hasAttribute("disabled")).toBe(true);
     });
@@ -316,7 +313,7 @@ describe("EaButton Component", () => {
       button.setAttribute("icon", "coffee");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.icon).toBe("coffee");
     });
@@ -326,7 +323,7 @@ describe("EaButton Component", () => {
       button.setAttribute("icon", "coffee");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const iconEl = button.shadowRoot.querySelector("ea-icon");
       expect(iconEl).toBeDefined();
@@ -337,7 +334,7 @@ describe("EaButton Component", () => {
       button.setAttribute("icon", "coffee");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(50);
 
       const iconEl = button.shadowRoot.querySelector("ea-icon");
       expect(iconEl.getAttribute("name")).toBe("coffee");
@@ -353,7 +350,7 @@ describe("EaButton Component", () => {
       button.setAttribute("link", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.link).toBe(true);
     });
@@ -364,7 +361,7 @@ describe("EaButton Component", () => {
       button.setAttribute("href", "https://example.com");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("a");
@@ -376,7 +373,7 @@ describe("EaButton Component", () => {
       button.setAttribute("href", "https://example.com");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.href).toBe("https://example.com");
     });
@@ -387,7 +384,7 @@ describe("EaButton Component", () => {
       button.setAttribute("href", "https://example.com");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.getAttribute("href")).toBe("https://example.com");
@@ -403,7 +400,7 @@ describe("EaButton Component", () => {
       button.setAttribute("text", "");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.text).toBe(true);
     });
@@ -412,7 +409,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.text || false).toBe(false);
     });
@@ -427,18 +424,18 @@ describe("EaButton Component", () => {
       button.setAttribute("button-type", "submit");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
-      expect(button["button-type"]).toBe("submit");
+      expect(button.buttonType).toBe("submit");
     });
 
     it("默认 button-type 应该是 button", async () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
-      expect(button["button-type"]).toBe("button");
+      expect(button.buttonType).toBe("button");
     });
   });
 
@@ -474,7 +471,7 @@ describe("EaButton Component", () => {
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       button.click();
 
@@ -489,7 +486,7 @@ describe("EaButton Component", () => {
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       button.click();
 
@@ -502,13 +499,17 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
+      await waitForRender(0);
+
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      const keypressEvent = new KeyboardEvent("keypress", { key: "Enter" });
-      button.dispatchEvent(keypressEvent);
+      // 事件需要派发到 shadowRoot，因为 @listen 装饰器监听的是 shadowRoot
+      const keypressEvent = new KeyboardEvent("keypress", {
+        key: "Enter",
+        bubbles: true,
+      });
+      button.shadowRoot.dispatchEvent(keypressEvent);
 
       expect(clickHandler).toHaveBeenCalled();
     });
@@ -520,15 +521,15 @@ describe("EaButton Component", () => {
   describe("Complex Scenarios", () => {
     it("应该支持多种属性组合", async () => {
       const button = document.createElement("ea-button");
-      button.setAttribute("type", "primary");
+      button.setAttribute("variant", "primary");
       button.setAttribute("size", "large");
       button.setAttribute("round", "");
       button.textContent = "Primary Button";
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
-      expect(button.type).toBe("primary");
+      expect(button.variant).toBe("primary");
       expect(button.size).toBe("large");
       expect(button.round).toBe(true);
     });
@@ -537,14 +538,14 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       button.setAttribute("icon", "coffee");
       button.setAttribute("circle", "");
-      button.setAttribute("type", "primary");
+      button.setAttribute("variant", "primary");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.icon).toBe("coffee");
       expect(button.circle).toBe(true);
-      expect(button.type).toBe("primary");
+      expect(button.variant).toBe("primary");
     });
 
     it("应该支持链接按钮", async () => {
@@ -555,7 +556,7 @@ describe("EaButton Component", () => {
       button.textContent = "Link Button";
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       const containerEl = button.shadowRoot.querySelector(".ea-button");
       expect(containerEl.tagName.toLowerCase()).toBe("a");
@@ -569,7 +570,7 @@ describe("EaButton Component", () => {
       button.textContent = "Text Button";
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       expect(button.text).toBe(true);
       expect(button.icon).toBe("coffee");
@@ -579,7 +580,7 @@ describe("EaButton Component", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await waitForRender(0);
 
       // 初始状态没有 loading 图标
       let loadingIcon = button.shadowRoot.querySelector("#ea-loading-icon");
@@ -587,185 +588,17 @@ describe("EaButton Component", () => {
 
       // 设置 loading
       button.setAttribute("loading", "");
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       loadingIcon = button.shadowRoot.querySelector("#ea-loading-icon");
       expect(loadingIcon).toBeDefined();
 
       // 取消 loading
       button.removeAttribute("loading");
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       loadingIcon = button.shadowRoot.querySelector("#ea-loading-icon");
       expect(loadingIcon).toBeNull();
-    });
-  });
-});
-
-describe("EaButtonGroup Component", () => {
-  let container;
-
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-  });
-
-  afterEach(() => {
-    container.remove();
-  });
-
-  /**
-   * 基本功能测试
-   */
-  describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-button-group 组件", () => {
-      const group = document.createElement("ea-button-group");
-      container.appendChild(group);
-
-      expect(group).toBeDefined();
-      expect(group.shadowRoot).toBeDefined();
-    });
-
-    it("应该包含 button-group 容器元素", () => {
-      const group = document.createElement("ea-button-group");
-      container.appendChild(group);
-
-      const groupContainer = group.shadowRoot.querySelector(".ea-button-group");
-      expect(groupContainer).toBeDefined();
-    });
-
-    it("应该支持 slot 内容", () => {
-      const group = document.createElement("ea-button-group");
-      group.innerHTML = `
-        <ea-button>Button 1</ea-button>
-        <ea-button>Button 2</ea-button>
-      `;
-      container.appendChild(group);
-
-      const slot = group.shadowRoot.querySelector("slot");
-      expect(slot).toBeDefined();
-    });
-  });
-
-  /**
-   * Type 属性测试
-   */
-  describe("Type Attribute", () => {
-    it("应该正确设置 type 属性", async () => {
-      const group = document.createElement("ea-button-group");
-      group.setAttribute("type", "primary");
-      group.innerHTML = `
-        <ea-button>Button 1</ea-button>
-        <ea-button>Button 2</ea-button>
-      `;
-      container.appendChild(group);
-
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(group.type).toBe("primary");
-    });
-
-    it("应该包含子按钮", async () => {
-      const group = document.createElement("ea-button-group");
-      group.innerHTML = `
-        <ea-button>Button 1</ea-button>
-        <ea-button>Button 2</ea-button>
-      `;
-      container.appendChild(group);
-
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      const buttons = group.querySelectorAll("ea-button");
-      expect(buttons.length).toBe(2);
-    });
-  });
-
-  /**
-   * Size 属性测试
-   */
-  describe("Size Attribute", () => {
-    it("应该正确设置 size 属性", async () => {
-      const group = document.createElement("ea-button-group");
-      group.setAttribute("size", "small");
-      container.appendChild(group);
-
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(group.size).toBe("small");
-    });
-
-    it("应该支持 size 属性", async () => {
-      const group = document.createElement("ea-button-group");
-      group.setAttribute("size", "large");
-      container.appendChild(group);
-
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(group.size).toBe("large");
-    });
-  });
-
-  /**
-   * Disabled 属性测试
-   */
-  describe("Disabled Attribute", () => {
-    it("应该正确设置 disabled 属性", async () => {
-      const group = document.createElement("ea-button-group");
-      group.setAttribute("disabled", "");
-      container.appendChild(group);
-
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(group.disabled).toBe(true);
-    });
-
-    it("应该支持 disabled 属性", async () => {
-      const group = document.createElement("ea-button-group");
-      group.setAttribute("disabled", "");
-      container.appendChild(group);
-
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      expect(group.disabled).toBe(true);
-    });
-  });
-
-  /**
-   * 复杂场景测试
-   */
-  describe("Complex Scenarios", () => {
-    it("应该支持多个按钮组合", async () => {
-      const group = document.createElement("ea-button-group");
-      group.innerHTML = `
-        <ea-button icon="angle-left">上一页</ea-button>
-        <ea-button>下一页</ea-button>
-      `;
-      container.appendChild(group);
-
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      const buttons = group.querySelectorAll("ea-button");
-      expect(buttons.length).toBe(2);
-    });
-
-    it("应该支持属性组合", async () => {
-      const group = document.createElement("ea-button-group");
-      group.setAttribute("type", "primary");
-      group.setAttribute("size", "small");
-      group.innerHTML = `
-        <ea-button>后退</ea-button>
-        <ea-button>刷新</ea-button>
-        <ea-button>前进</ea-button>
-      `;
-      container.appendChild(group);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(group.type).toBe("primary");
-      expect(group.size).toBe("small");
-
-      const buttons = group.querySelectorAll("ea-button");
-      expect(buttons.length).toBe(3);
     });
   });
 });

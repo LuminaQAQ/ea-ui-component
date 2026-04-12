@@ -205,6 +205,7 @@ propertyName: string = "";
 - **类属性使用小驼峰命名**（如 `closeText`, `showIcon`）
 - **框架自动转换为连字符命名**作为 HTML 属性（如 `close-text`, `show-icon`）
 - **无需显式声明 `name` 选项**，装饰器会自动处理命名转换
+- **组件视觉变体属性统一命名为 `variant`**（而非 `type`），并使用 `VARIANT_TYPES` 常量
 
 ```typescript
 // 正确示例：使用小驼峰命名
@@ -219,6 +220,29 @@ closeText: string = "";  // 自动映射到 HTML 属性 close-text
   default: false,
 })
 showIcon: boolean = false;  // 自动映射到 HTML 属性 show-icon
+
+// 正确示例：使用 VARIANT_TYPES 常量定义 variant 属性
+import { Enum } from "@/utils/Enum";
+import { VARIANT_TYPES, type VariantType } from "@/constants/variant";
+
+@attribute({
+  type: Enum(VARIANT_TYPES),
+  default: "info",
+  observer(this: EaComponent) {
+    this.updateContainerClasslist();
+  },
+})
+variant: VariantType = "info";
+
+// 如果需要扩展 variant 值（如添加 "normal"）
+@attribute({
+  type: Enum([...VARIANT_TYPES, "normal"]),
+  default: "normal",
+  observer(this: EaComponent) {
+    this.updateContainerClasslist();
+  },
+})
+variant: VariantType | "normal" = "normal";
 ```
 
 **类型说明：**
@@ -229,6 +253,7 @@ showIcon: boolean = false;  // 自动映射到 HTML 属性 show-icon
 - `Array` - JSON 数组
 - `Object` - JSON 对象
 - `["a", "b", "c"] as const` - 枚举类型，限制可选值
+- `VARIANT_TYPES` - 组件变体类型常量，统一从 `@/constants/variant` 导入
 
 ### @query
 

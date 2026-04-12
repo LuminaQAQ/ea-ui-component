@@ -29,7 +29,7 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-button/index.js";
+  import "./node_modules/easy-component-ui/components/ea-button/index.ts";
 </script>
 ```
 
@@ -44,31 +44,31 @@ onMounted(() => {
 <div class="demo">
   <div class="row">
       <ea-button>默认按钮</ea-button>
-      <ea-button type="primary">主要按钮</ea-button>
-      <ea-button type="success">成功按钮</ea-button>
-      <ea-button type="warning">警告按钮</ea-button>
-      <ea-button type="danger">危险按钮</ea-button>
+      <ea-button variant="primary">主要按钮</ea-button>
+      <ea-button variant="success">成功按钮</ea-button>
+      <ea-button variant="warning">警告按钮</ea-button>
+      <ea-button variant="danger">危险按钮</ea-button>
   </div>
   <div class="row">
       <ea-button plain>朴素按钮</ea-button>
-      <ea-button type="primary" plain>主要按钮</ea-button>
-      <ea-button type="success" plain>成功按钮</ea-button>
-      <ea-button type="warning" plain>警告按钮</ea-button>
-      <ea-button type="danger" plain>危险按钮</ea-button>
+      <ea-button variant="primary" plain>主要按钮</ea-button>
+      <ea-button variant="success" plain>成功按钮</ea-button>
+      <ea-button variant="warning" plain>警告按钮</ea-button>
+      <ea-button variant="danger" plain>危险按钮</ea-button>
   </div>
   <div class="row">
       <ea-button round>圆角按钮</ea-button>
-      <ea-button type="primary" round>主要按钮</ea-button>
-      <ea-button type="success" round>成功按钮</ea-button>
-      <ea-button type="warning" round>警告按钮</ea-button>
-      <ea-button type="danger" round>危险按钮</ea-button>
+      <ea-button variant="primary" round>主要按钮</ea-button>
+      <ea-button variant="success" round>成功按钮</ea-button>
+      <ea-button variant="warning" round>警告按钮</ea-button>
+      <ea-button variant="danger" round>危险按钮</ea-button>
   </div>
   <div class="row">
       <ea-button icon="coffee" circle></ea-button>
-      <ea-button icon="pen-to-square" type="primary" circle></ea-button>
-      <ea-button icon="comment" type="success" circle></ea-button>
-      <ea-button icon="bell" type="warning" circle></ea-button>
-      <ea-button icon="gear" type="danger" circle></ea-button>
+      <ea-button icon="pen-to-square" variant="primary" circle></ea-button>
+      <ea-button icon="comment" variant="success" circle></ea-button>
+      <ea-button icon="bell" variant="warning" circle></ea-button>
+      <ea-button icon="gear" variant="danger" circle></ea-button>
   </div>
 </div>
 
@@ -78,34 +78,34 @@ onMounted(() => {
 
 ```html [默认按钮]
 <ea-button>默认按钮</ea-button>
-<ea-button type="primary">主要按钮</ea-button>
-<ea-button type="success">成功按钮</ea-button>
-<ea-button type="warning">警告按钮</ea-button>
-<ea-button type="danger">危险按钮</ea-button>
+<ea-button variant="primary">主要按钮</ea-button>
+<ea-button variant="success">成功按钮</ea-button>
+<ea-button variant="warning">警告按钮</ea-button>
+<ea-button variant="danger">危险按钮</ea-button>
 ```
 
 ```html [朴素按钮]
 <ea-button plain>朴素按钮</ea-button>
-<ea-button type="primary" plain>主要按钮</ea-button>
-<ea-button type="success" plain>成功按钮</ea-button>
-<ea-button type="warning" plain>警告按钮</ea-button>
-<ea-button type="danger" plain>危险按钮</ea-button>
+<ea-button variant="primary" plain>主要按钮</ea-button>
+<ea-button variant="success" plain>成功按钮</ea-button>
+<ea-button variant="warning" plain>警告按钮</ea-button>
+<ea-button variant="danger" plain>危险按钮</ea-button>
 ```
 
 ```html [圆角按钮]
 <ea-button round>圆角按钮</ea-button>
-<ea-button type="primary" round>主要按钮</ea-button>
-<ea-button type="success" round>成功按钮</ea-button>
-<ea-button type="warning" round>警告按钮</ea-button>
-<ea-button type="danger" round>危险按钮</ea-button>
+<ea-button variant="primary" round>主要按钮</ea-button>
+<ea-button variant="success" round>成功按钮</ea-button>
+<ea-button variant="warning" round>警告按钮</ea-button>
+<ea-button variant="danger" round>危险按钮</ea-button>
 ```
 
 ```html [图标按钮]
 <ea-button icon="coffee" circle></ea-button>
-<ea-button icon="pen-to-square" type="primary" circle></ea-button>
-<ea-button icon="comment" type="success" circle></ea-button>
-<ea-button icon="bell" type="warning" circle></ea-button>
-<ea-button icon="gear" type="danger" circle></ea-button>
+<ea-button icon="pen-to-square" variant="primary" circle></ea-button>
+<ea-button icon="comment" variant="success" circle></ea-button>
+<ea-button icon="bell" variant="warning" circle></ea-button>
+<ea-button icon="gear" variant="danger" circle></ea-button>
 ```
 
 :::
@@ -121,31 +121,31 @@ onMounted(() => {
 <div class="demo">
   <div class="row">
       <ea-button disabled>禁用按钮</ea-button>
-      <ea-button type="primary" disabled>主要按钮</ea-button>
-      <ea-button type="success" disabled>成功按钮</ea-button>
-      <ea-button type="warning" disabled>警告按钮</ea-button>
-      <ea-button type="danger" disabled>危险按钮</ea-button>
+      <ea-button variant="primary" disabled>主要按钮</ea-button>
+      <ea-button variant="success" disabled>成功按钮</ea-button>
+      <ea-button variant="warning" disabled>警告按钮</ea-button>
+      <ea-button variant="danger" disabled>危险按钮</ea-button>
   </div>
   <div class="row">
       <ea-button disabled plain>禁用按钮</ea-button>
-      <ea-button type="primary" disabled plain>主要按钮</ea-button>
-      <ea-button type="success" disabled plain>成功按钮</ea-button>
-      <ea-button type="warning" disabled plain>警告按钮</ea-button>
-      <ea-button type="danger" disabled plain>危险按钮</ea-button>
+      <ea-button variant="primary" disabled plain>主要按钮</ea-button>
+      <ea-button variant="success" disabled plain>成功按钮</ea-button>
+      <ea-button variant="warning" disabled plain>警告按钮</ea-button>
+      <ea-button variant="danger" disabled plain>危险按钮</ea-button>
   </div>
   <div class="row">
       <ea-button id="ea-button-disabled" round disabled>圆角按钮</ea-button>
-      <ea-button type="primary" round disabled>主要按钮</ea-button>
-      <ea-button type="success" round disabled>成功按钮</ea-button>
-      <ea-button type="warning" round disabled>警告按钮</ea-button>
-      <ea-button type="danger" round disabled>危险按钮</ea-button>
+      <ea-button variant="primary" round disabled>主要按钮</ea-button>
+      <ea-button variant="success" round disabled>成功按钮</ea-button>
+      <ea-button variant="warning" round disabled>警告按钮</ea-button>
+      <ea-button variant="danger" round disabled>危险按钮</ea-button>
   </div>
   <div class="row">
       <ea-button icon="coffee" circle disabled></ea-button>
-      <ea-button icon="pen-to-square" type="primary" circle disabled></ea-button>
-      <ea-button icon="comment" type="success" circle disabled></ea-button>
-      <ea-button icon="bell" type="warning" circle disabled></ea-button>
-      <ea-button icon="gear" type="danger" circle disabled></ea-button>
+      <ea-button icon="pen-to-square" variant="primary" circle disabled></ea-button>
+      <ea-button icon="comment" variant="success" circle disabled></ea-button>
+      <ea-button icon="bell" variant="warning" circle disabled></ea-button>
+      <ea-button icon="gear" variant="danger" circle disabled></ea-button>
   </div>
 </div>
 
@@ -155,34 +155,34 @@ onMounted(() => {
 
 ```html [默认按钮]
 <ea-button disabled>禁用按钮</ea-button>
-<ea-button type="primary" disabled>主要按钮</ea-button>
-<ea-button type="success" disabled>成功按钮</ea-button>
-<ea-button type="warning" disabled>警告按钮</ea-button>
-<ea-button type="danger" disabled>危险按钮</ea-button>
+<ea-button variant="primary" disabled>主要按钮</ea-button>
+<ea-button variant="success" disabled>成功按钮</ea-button>
+<ea-button variant="warning" disabled>警告按钮</ea-button>
+<ea-button variant="danger" disabled>危险按钮</ea-button>
 ```
 
 ```html [朴素按钮]
 <ea-button disabled plain>禁用按钮</ea-button>
-<ea-button type="primary" disabled plain>主要按钮</ea-button>
-<ea-button type="success" disabled plain>成功按钮</ea-button>
-<ea-button type="warning" disabled plain>警告按钮</ea-button>
-<ea-button type="danger" disabled plain>危险按钮</ea-button>
+<ea-button variant="primary" disabled plain>主要按钮</ea-button>
+<ea-button variant="success" disabled plain>成功按钮</ea-button>
+<ea-button variant="warning" disabled plain>警告按钮</ea-button>
+<ea-button variant="danger" disabled plain>危险按钮</ea-button>
 ```
 
 ```html [圆角按钮]
 <ea-button id="ea-button-disabled" round disabled>圆角按钮</ea-button>
-<ea-button type="primary" round disabled>主要按钮</ea-button>
-<ea-button type="success" round disabled>成功按钮</ea-button>
-<ea-button type="warning" round disabled>警告按钮</ea-button>
-<ea-button type="danger" round disabled>危险按钮</ea-button>
+<ea-button variant="primary" round disabled>主要按钮</ea-button>
+<ea-button variant="success" round disabled>成功按钮</ea-button>
+<ea-button variant="warning" round disabled>警告按钮</ea-button>
+<ea-button variant="danger" round disabled>危险按钮</ea-button>
 ```
 
 ```html [图标按钮]
 <ea-button icon="coffee" circle disabled></ea-button>
-<ea-button icon="pen-to-square" type="primary" circle disabled></ea-button>
-<ea-button icon="comment" type="success" circle disabled></ea-button>
-<ea-button icon="bell" type="warning" circle disabled></ea-button>
-<ea-button icon="gear" type="danger" circle disabled></ea-button>
+<ea-button icon="pen-to-square" variant="primary" circle disabled></ea-button>
+<ea-button icon="comment" variant="success" circle disabled></ea-button>
+<ea-button icon="bell" variant="warning" circle disabled></ea-button>
+<ea-button icon="gear" variant="danger" circle disabled></ea-button>
 ```
 
 :::
@@ -205,25 +205,25 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
       >链接按钮</ea-button
     >
     <ea-button
-      type="primary"
+      variant="primary"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >文本按钮</ea-button
     >
     <ea-button
-      type="danger"
+      variant="danger"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >危险按钮</ea-button
     >
     <ea-button
-      type="warning"
+      variant="warning"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >警告按钮</ea-button
     >
     <ea-button
-      type="success"
+      variant="success"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >成功按钮</ea-button
@@ -247,28 +247,28 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
     >
     <ea-button
       disabled
-      type="primary"
+      variant="primary"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >文本按钮</ea-button
     >
     <ea-button
       disabled
-      type="danger"
+      variant="danger"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >危险按钮</ea-button
     >
     <ea-button
       disabled
-      type="warning"
+      variant="warning"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >警告按钮</ea-button
     >
     <ea-button
       disabled
-      type="success"
+      variant="success"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >成功按钮</ea-button
@@ -293,25 +293,25 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
   >链接按钮</ea-button
 >
 <ea-button
-  type="primary"
+  variant="primary"
   href="https://luminaqaq.github.io/ea-ui-component/ea-button"
   link
   >文本按钮</ea-button
 >
 <ea-button
-  type="danger"
+  variant="danger"
   href="https://luminaqaq.github.io/ea-ui-component/ea-button"
   link
   >危险按钮</ea-button
 >
 <ea-button
-  type="warning"
+  variant="warning"
   href="https://luminaqaq.github.io/ea-ui-component/ea-button"
   link
   >警告按钮</ea-button
 >
 <ea-button
-  type="success"
+  variant="success"
   href="https://luminaqaq.github.io/ea-ui-component/ea-button"
   link
   >成功按钮</ea-button
@@ -335,28 +335,28 @@ type="text" 已被 废弃，将于版本 3.0.0 时 移除，请考虑切换至�
 >
 <ea-button
   disabled
-  type="primary"
+  variant="primary"
   href="https://luminaqaq.github.io/ea-ui-component/ea-button"
   link
   >文本按钮</ea-button
 >
 <ea-button
   disabled
-  type="danger"
+  variant="danger"
   href="https://luminaqaq.github.io/ea-ui-component/ea-button"
   link
   >危险按钮</ea-button
 >
 <ea-button
   disabled
-  type="warning"
+  variant="warning"
   href="https://luminaqaq.github.io/ea-ui-component/ea-button"
   link
   >警告按钮</ea-button
 >
 <ea-button
   disabled
-  type="success"
+  variant="success"
   href="https://luminaqaq.github.io/ea-ui-component/ea-button"
   link
   >成功按钮</ea-button
@@ -389,10 +389,10 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
   <div class="row left">
     <ea-button icon="coffee" text>文字按钮</ea-button>
     <ea-button icon="coffee" text disabled>文字按钮</ea-button>
-    <ea-button type="primary" text>文字按钮</ea-button>
-    <ea-button type="danger" text>文字按钮</ea-button>
-    <ea-button type="warning" text>文字按钮</ea-button>
-    <ea-button type="success" text>文字按钮</ea-button>
+    <ea-button variant="primary" text>文字按钮</ea-button>
+    <ea-button variant="danger" text>文字按钮</ea-button>
+    <ea-button variant="warning" text>文字按钮</ea-button>
+    <ea-button variant="success" text>文字按钮</ea-button>
   </div>
 </div>
 
@@ -403,10 +403,10 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
   <div class="row left">
     <ea-button icon="coffee" text>文字按钮</ea-button>
     <ea-button icon="coffee" text disabled>文字按钮</ea-button>
-    <ea-button type="primary" text>文字按钮</ea-button>
-    <ea-button type="danger" text>文字按钮</ea-button>
-    <ea-button type="warning" text>文字按钮</ea-button>
-    <ea-button type="success" text>文字按钮</ea-button>
+    <ea-button variant="primary" text>文字按钮</ea-button>
+    <ea-button variant="danger" text>文字按钮</ea-button>
+    <ea-button variant="warning" text>文字按钮</ea-button>
+    <ea-button variant="success" text>文字按钮</ea-button>
   </div>
 </div>
 ```
@@ -420,11 +420,11 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 通过设置 `icon` 属性为 `icon-xxx` 来改变图标，更多图标请查看 [图标文档](./ea-icon.md)。
 
 <div class="row left">
-  <ea-button type="primary" icon="pen-to-square" round></ea-button>
-  <ea-button type="primary" icon="pen-to-square"></ea-button>
-  <ea-button type="primary" icon="comment">图标按钮</ea-button>
-  <ea-button type="primary" icon="trash-can" disabled>图标按钮</ea-button>
-  <ea-button type="primary" disabled
+  <ea-button variant="primary" icon="pen-to-square" round></ea-button>
+  <ea-button variant="primary" icon="pen-to-square"></ea-button>
+  <ea-button variant="primary" icon="comment">图标按钮</ea-button>
+  <ea-button variant="primary" icon="trash-can" disabled>图标按钮</ea-button>
+  <ea-button variant="primary" disabled
     >图标按钮 <ea-icon name="trash-can"></ea-icon
   ></ea-button>
 </div>
@@ -433,11 +433,11 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 
 ```html
 <div class="row left">
-  <ea-button type="primary" icon="pen-to-square" round></ea-button>
-  <ea-button type="primary" icon="pen-to-square"></ea-button>
-  <ea-button type="primary" icon="comment">图标按钮</ea-button>
-  <ea-button type="primary" icon="trash-can" disabled>图标按钮</ea-button>
-  <ea-button type="primary" disabled
+  <ea-button variant="primary" icon="pen-to-square" round></ea-button>
+  <ea-button variant="primary" icon="pen-to-square"></ea-button>
+  <ea-button variant="primary" icon="comment">图标按钮</ea-button>
+  <ea-button variant="primary" icon="trash-can" disabled>图标按钮</ea-button>
+  <ea-button variant="primary" disabled
     >图标按钮 <ea-icon name="trash-can"></ea-icon
   ></ea-button>
 </div>
@@ -451,8 +451,8 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 
 <div class="row left">
   <ea-button-group>
-    <ea-button icon="angle-left" type="success">上一页</ea-button>
-    <ea-button type="primary"
+    <ea-button icon="angle-left" variant="success">上一页</ea-button>
+    <ea-button variant="primary"
       >下一页 <ea-icon name="angle-right"></ea-icon>
     </ea-button>
   </ea-button-group>
@@ -461,10 +461,10 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
     <ea-button>刷新</ea-button>
     <ea-button>前进</ea-button>
   </ea-button-group>
-  <ea-button-group type="success">
-    <ea-button type="primary">后退</ea-button>
-    <ea-button type="primary">刷新</ea-button>
-    <ea-button type="primary">前进</ea-button>
+  <ea-button-group variant="success">
+    <ea-button variant="primary">后退</ea-button>
+    <ea-button variant="primary">刷新</ea-button>
+    <ea-button variant="primary">前进</ea-button>
   </ea-button-group>
 </div>
 
@@ -474,8 +474,8 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 <div class="row left">
   <ea-icon name="angle-right"></ea-icon>
   <ea-button-group>
-    <ea-button icon="angle-left" type="success">上一页</ea-button>
-    <ea-button type="primary"
+    <ea-button icon="angle-left" variant="success">上一页</ea-button>
+    <ea-button variant="primary"
       >下一页 <ea-icon name="angle-right"></ea-icon>
     </ea-button>
   </ea-button-group>
@@ -484,10 +484,10 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
     <ea-button>刷新</ea-button>
     <ea-button>前进</ea-button>
   </ea-button-group>
-  <ea-button-group type="success">
-    <ea-button type="primary">后退</ea-button>
-    <ea-button type="primary">刷新</ea-button>
-    <ea-button type="primary">前进</ea-button>
+  <ea-button-group variant="success">
+    <ea-button variant="primary">后退</ea-button>
+    <ea-button variant="primary">刷新</ea-button>
+    <ea-button variant="primary">前进</ea-button>
   </ea-button-group>
 </div>
 ```
@@ -502,7 +502,7 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 
 <div class="row left">
   <ea-switch id="ea-radio-loading" value="true"></ea-switch>
-  <ea-button id="ea-button-loading" type="primary" icon="coffee" loading>
+  <ea-button id="ea-button-loading" variant="primary" icon="coffee" loading>
     加载中按钮
   </ea-button>
 </div>
@@ -514,7 +514,7 @@ API 也已更新，由于 type 属性会同时控制按钮的样式， 因此于
 ```html
 <div class="row left">
   <ea-switch id="ea-radio-loading" value="true"></ea-switch>
-  <ea-button id="ea-button-loading" type="primary" icon="coffee" loading>
+  <ea-button id="ea-button-loading" variant="primary" icon="coffee" loading>
     加载中按钮
   </ea-button>
 </div>
@@ -542,24 +542,24 @@ document
 
 <div class="demo">
   <div class="row left">
-    <ea-button type="primary" size="large">大型按钮</ea-button>
-    <ea-button type="primary">默认按钮</ea-button>
-    <ea-button type="primary" size="small">小型按钮</ea-button>
+    <ea-button variant="primary" size="large">大型按钮</ea-button>
+    <ea-button variant="primary">默认按钮</ea-button>
+    <ea-button variant="primary" size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button type="primary" icon="coffee" size="large">大型按钮</ea-button>
-    <ea-button type="primary" icon="coffee">默认按钮</ea-button>
-    <ea-button type="primary" icon="coffee" size="small">小型按钮</ea-button>
+    <ea-button variant="primary" icon="coffee" size="large">大型按钮</ea-button>
+    <ea-button variant="primary" icon="coffee">默认按钮</ea-button>
+    <ea-button variant="primary" icon="coffee" size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button type="primary" round size="large">大型按钮</ea-button>
-    <ea-button type="primary" round>默认按钮</ea-button>
-    <ea-button type="primary" round size="small">小型按钮</ea-button>
+    <ea-button variant="primary" round size="large">大型按钮</ea-button>
+    <ea-button variant="primary" round>默认按钮</ea-button>
+    <ea-button variant="primary" round size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button type="primary" circle icon="coffee" size="large"></ea-button>
-    <ea-button type="primary" circle icon="coffee"></ea-button>
-    <ea-button type="primary" circle icon="coffee" size="small"></ea-button>
+    <ea-button variant="primary" circle icon="coffee" size="large"></ea-button>
+    <ea-button variant="primary" circle icon="coffee"></ea-button>
+    <ea-button variant="primary" circle icon="coffee" size="small"></ea-button>
   </div>
 </div>
 
@@ -568,24 +568,24 @@ document
 ```html
 <div class="demo">
   <div class="row left">
-    <ea-button type="primary" size="large">大型按钮</ea-button>
-    <ea-button type="primary">默认按钮</ea-button>
-    <ea-button type="primary" size="small">小型按钮</ea-button>
+    <ea-button variant="primary" size="large">大型按钮</ea-button>
+    <ea-button variant="primary">默认按钮</ea-button>
+    <ea-button variant="primary" size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button type="primary" icon="coffee" size="large">大型按钮</ea-button>
-    <ea-button type="primary" icon="coffee">默认按钮</ea-button>
-    <ea-button type="primary" icon="coffee" size="small">小型按钮</ea-button>
+    <ea-button variant="primary" icon="coffee" size="large">大型按钮</ea-button>
+    <ea-button variant="primary" icon="coffee">默认按钮</ea-button>
+    <ea-button variant="primary" icon="coffee" size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button type="primary" round size="large">大型按钮</ea-button>
-    <ea-button type="primary" round>默认按钮</ea-button>
-    <ea-button type="primary" round size="small">小型按钮</ea-button>
+    <ea-button variant="primary" round size="large">大型按钮</ea-button>
+    <ea-button variant="primary" round>默认按钮</ea-button>
+    <ea-button variant="primary" round size="small">小型按钮</ea-button>
   </div>
   <div class="row left">
-    <ea-button type="primary" circle icon="coffee" size="large"></ea-button>
-    <ea-button type="primary" circle icon="coffee"></ea-button>
-    <ea-button type="primary" circle icon="coffee" size="small"></ea-button>
+    <ea-button variant="primary" circle icon="coffee" size="large"></ea-button>
+    <ea-button variant="primary" circle icon="coffee"></ea-button>
+    <ea-button variant="primary" circle icon="coffee" size="small"></ea-button>
   </div>
 </div>
 ```
@@ -597,7 +597,7 @@ document
 | **参数**   | **说明** | **类型**  | **可选值**                                                          | **默认值** |
 | ---------- | -------- | --------- | ------------------------------------------------------------------- | ---------- |
 | `size`     | 按钮尺寸 | `string`  | `normal`\|`medium`\|`small`\|`mini`                                 | `"normal"` |
-| `type`     | 按钮类型 | `string`  | `normal`\|`primary`\|`success`\|`warning`\|`danger`\|`text`\|`link` | `"normal"` |
+| `variant`  | 按钮类型 | `string`  | `normal`\|`primary`\|`success`\|`warning`\|`danger`\|`text`\|`link` | `"normal"` |
 | `plain`    | 朴素效果 | `boolean` | `true`\|`false`                                                     | `false`    |
 | `disabled` | 是否禁用 | `boolean` | `true`\|`false`                                                     | `false`    |
 | `round`    | 圆角按钮 | `boolean` | `true`\|`false`                                                     | `false`    |
@@ -610,7 +610,7 @@ document
 | **参数**   | **说明** | **类型**  | **可选值**                                                          | **默认值** |
 | ---------- | -------- | --------- | ------------------------------------------------------------------- | ---------- |
 | `disabled` | 是否禁用 | `boolean` | `true`\|`false`                                                     | `false`    |
-| `type`     | 按钮类型 | `string`  | `normal`\|`primary`\|`success`\|`warning`\|`danger`\|`text`\|`link` | `"normal"` |
+| `variant`  | 按钮类型 | `string`  | `normal`\|`primary`\|`success`\|`warning`\|`danger`\|`text`\|`link` | `"normal"` |
 | `size`     | 按钮尺寸 | `string`  | `normal`\|`medium`\|`small`\|`mini`                                 | `"normal"` |
 
 ## Button CSS Part
