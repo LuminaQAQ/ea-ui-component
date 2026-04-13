@@ -14,13 +14,13 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-collapse/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
-    <script type="module" src="../src/components/ea-switch/index.js"></script>
+    <script type="module" src="../src/components/ea-collapse/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+    <!-- <script type="module" src="../src/components/ea-switch/index.js"></script>
     <script
       type="module"
       src="../src/components/ea-message-box/index.js"
-    ></script>
+    ></script> -->
     <script type="module">
       // ------- 基础用法 -------
       // #region
@@ -171,7 +171,7 @@
         </ea-button>
       </ea-button-group>
       <ea-collapse id="basicCollapse">
-        <ea-collapse-item title="Consistency" name="1">
+        <ea-collapse-item header="Consistency" name="1">
           <div>
             Consistent with real life: in line with the process and logic of
             real life, and comply with languages and habits that the users are
@@ -182,7 +182,7 @@
             as: design style, icons and texts, position of elements, etc.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Feedback" name="2">
+        <ea-collapse-item header="Feedback" name="2">
           <div>
             Operation feedback: enable the users to clearly perceive their
             operations by style updates and interactive effects;
@@ -192,7 +192,7 @@
             elements of the page.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Efficiency" name="3">
+        <ea-collapse-item header="Efficiency" name="3">
           <div>
             Simplify the process: keep operating process simple and intuitive;
           </div>
@@ -206,7 +206,7 @@
             recalling.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Controllability" name="4">
+        <ea-collapse-item header="Controllability" name="4">
           <div>
             Decision making: giving advices about operations is acceptable, but
             do not make decisions for the users;
@@ -228,7 +228,7 @@
     <h2>手风琴效果</h2>
     <div class="demo">
       <ea-collapse id="accordionCollapse" accordion>
-        <ea-collapse-item title="Consistency" name="1">
+        <ea-collapse-item header="Consistency" name="1">
           <div>
             Consistent with real life: in line with the process and logic of
             real life, and comply with languages and habits that the users are
@@ -239,7 +239,7 @@
             as: design style, icons and texts, position of elements, etc.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Feedback" name="2">
+        <ea-collapse-item header="Feedback" name="2">
           <div>
             Operation feedback: enable the users to clearly perceive their
             operations by style updates and interactive effects;
@@ -249,7 +249,7 @@
             elements of the page.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Efficiency" name="3">
+        <ea-collapse-item header="Efficiency" name="3">
           <div>
             Simplify the process: keep operating process simple and intuitive;
           </div>
@@ -263,7 +263,7 @@
             recalling.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Controllability" name="4">
+        <ea-collapse-item header="Controllability" name="4">
           <div>
             Decision making: giving advices about operations is acceptable, but
             do not make decisions for the users;
@@ -292,7 +292,7 @@
     <div class="demo">
       <ea-collapse id="customTitleCollapse" accordion>
         <ea-collapse-item id="customTitle" name="1">
-          <div class="header" slot="title">
+          <div class="header" slot="header">
             Consistency
             <ea-icon name="mug-hot" class="header-icon"></ea-icon>
           </div>
@@ -306,7 +306,7 @@
             as: design style, icons and texts, position of elements, etc.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Feedback" name="2">
+        <ea-collapse-item header="Feedback" name="2">
           <div>
             Operation feedback: enable the users to clearly perceive their
             operations by style updates and interactive effects;
@@ -316,7 +316,7 @@
             elements of the page.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Efficiency" name="3">
+        <ea-collapse-item header="Efficiency" name="3">
           <div>
             Simplify the process: keep operating process simple and intuitive;
           </div>
@@ -330,7 +330,7 @@
             recalling.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Controllability" name="4">
+        <ea-collapse-item header="Controllability" name="4">
           <div>
             Decision making: giving advices about operations is acceptable, but
             do not make decisions for the users;
@@ -380,7 +380,7 @@
       <ea-collapse id="customIconCollapse">
         <ea-collapse-item
           id="customIconCollapseItem"
-          title="Consistency"
+          header="Consistency"
           name="1"
         >
           <div>
@@ -396,7 +396,7 @@
         </ea-collapse-item>
         <ea-collapse-item
           id="customTextIconCollapseItem"
-          title="Feedback"
+          header="Feedback"
           name="2"
         >
           <div>
@@ -414,7 +414,7 @@
             active-text="Expanded"
           ></span>
         </ea-collapse-item>
-        <ea-collapse-item title="Efficiency" name="3">
+        <ea-collapse-item header="Efficiency" name="3">
           <div>
             Simplify the process: keep operating process simple and intuitive;
           </div>
@@ -428,7 +428,7 @@
             recalling.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Controllability" name="4">
+        <ea-collapse-item header="Controllability" name="4">
           <div>
             Decision making: giving advices about operations is acceptable, but
             do not make decisions for the users;
@@ -464,7 +464,7 @@
       </div>
 
       <ea-collapse id="customExpandIconPositionCollapse">
-        <ea-collapse-item title="Consistency" name="1">
+        <ea-collapse-item header="Consistency" name="1">
           <div>
             Consistent with real life: in line with the process and logic of
             real life, and comply with languages and habits that the users are
@@ -475,7 +475,7 @@
             as: design style, icons and texts, position of elements, etc.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Feedback" name="2">
+        <ea-collapse-item header="Feedback" name="2">
           <div>
             Operation feedback: enable the users to clearly perceive their
             operations by style updates and interactive effects;
@@ -485,7 +485,7 @@
             elements of the page.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Efficiency" name="3">
+        <ea-collapse-item header="Efficiency" name="3">
           <div>
             Simplify the process: keep operating process simple and intuitive;
           </div>
@@ -499,7 +499,7 @@
             recalling.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Controllability" name="4">
+        <ea-collapse-item header="Controllability" name="4">
           <div>
             Decision making: giving advices about operations is acceptable, but
             do not make decisions for the users;
@@ -568,7 +568,7 @@
       </div>
 
       <ea-collapse id="hasBeforeCollapse">
-        <ea-collapse-item title="Consistency" name="1">
+        <ea-collapse-item header="Consistency" name="1">
           <div>
             Consistent with real life: in line with the process and logic of
             real life, and comply with languages and habits that the users are
@@ -579,7 +579,7 @@
             as: design style, icons and texts, position of elements, etc.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Feedback" name="2">
+        <ea-collapse-item header="Feedback" name="2">
           <div>
             Operation feedback: enable the users to clearly perceive their
             operations by style updates and interactive effects;
@@ -589,7 +589,7 @@
             elements of the page.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Efficiency" name="3">
+        <ea-collapse-item header="Efficiency" name="3">
           <div>
             Simplify the process: keep operating process simple and intuitive;
           </div>
@@ -603,7 +603,7 @@
             recalling.
           </div>
         </ea-collapse-item>
-        <ea-collapse-item title="Controllability" name="4">
+        <ea-collapse-item header="Controllability" name="4">
           <div>
             Decision making: giving advices about operations is acceptable, but
             do not make decisions for the users;

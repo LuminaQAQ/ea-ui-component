@@ -1,9 +1,10 @@
 import parseAttributeValue from "@/utils/parseAttributeValue";
-import { ElementAttributesMap } from "@/stores";
+import { ElementAttributesMap, ElementPropertiesMap } from "@/stores";
 import { html } from "@/utils/html";
 import { camelToKebab, kebabToCamel } from "@/utils/case-convert";
 import type {
   AttributeOptions,
+  PropertyOptions,
   EaElement,
   EaElementConstructor,
 } from "@/types/index";
@@ -30,44 +31,47 @@ type CustomElementDecorator = (
 
 /**
  * 查找属性配置，支持驼峰命名和连字符命名的自动转换
- * @param propertyOptions 属性配置映射
+ * @param options 属性配置映射
  * @param name 属性名（可能是驼峰命名或连字符命名）
  * @returns 找到的属性配置和实际属性名
  */
 function findPropertyOption(
-  propertyOptions: Record<string, AttributeOptions>,
+  options: Record<string, AttributeOptions>,
   name: string
-): { option: AttributeOptions | undefined; actualName: string } {
+): {
+  option: AttributeOptions | undefined;
+  actualName: string;
+} {
   // 1. 直接匹配
-  if (propertyOptions[name]) {
-    return { option: propertyOptions[name], actualName: name };
+  if (options[name]) {
+    return { option: options[name], actualName: name };
   }
 
   // 2. 尝试将连字符命名转换为驼峰命名后匹配
   const camelName = kebabToCamel(name);
-  if (propertyOptions[camelName]) {
-    return { option: propertyOptions[camelName], actualName: camelName };
+  if (options[camelName]) {
+    return { option: options[camelName], actualName: camelName };
   }
 
   // 3. 尝试将驼峰命名转换为连字符命名后匹配
   const kebabName = camelToKebab(name);
-  if (propertyOptions[kebabName]) {
-    return { option: propertyOptions[kebabName], actualName: kebabName };
+  if (options[kebabName]) {
+    return { option: options[kebabName], actualName: kebabName };
   }
 
   return { option: undefined, actualName: name };
 }
 
 /**
- * 创建属性的 getter 函数
+ * 创建属性的 getter 函数（映射到 HTML attribute）
  * @param defaultValue 默认值
  * @param name 属性名（可能是驼峰命名）
  * @param type 属性类型
  */
-function createGetter(
+function createAttributeGetter(
   defaultValue: any,
   name: string,
-  type: AttributeOptions["type"]
+  type: AttributeOptions["type"] | PropertyOptions["type"]
 ) {
   // 将属性名转换为连字符命名（HTML 属性名）
   const attrName = camelToKebab(name);
@@ -84,10 +88,10 @@ function createGetter(
 }
 
 /**
- * 创建属性的 setter 函数
+ * 创建属性的 setter 函数（映射到 HTML attribute）
  * @param name 属性名（可能是驼峰命名）
  */
-function createSetter(name: string) {
+function createAttributeSetter(name: string) {
   // 将属性名转换为连字符命名（HTML 属性名）
   const attrName = camelToKebab(name);
 
@@ -99,16 +103,49 @@ function createSetter(name: string) {
 }
 
 /**
- * 定义响应式属性
+ * 创建属性的 getter 函数（不映射到 HTML attribute，仅作为 JS 属性）
+ * @param name 属性名
+ * @param defaultValue 默认值
+ */
+function createPropertyGetter(name: string, defaultValue: any) {
+  const privateName = `__prop_${name}`;
+  return function (this: any) {
+    return privateName in this ? this[privateName] : defaultValue;
+  };
+}
+
+/**
+ * 创建属性的 setter 函数（不映射到 HTML attribute，仅作为 JS 属性）
+ * @param name 属性名
+ * @param observer 可选的观察者回调
+ */
+function createPropertySetter(
+  name: string,
+  observer?: (newVal: any, oldVal: any) => void
+) {
+  return function (this: any, newVal: any) {
+    const privateName = `__prop_${name}`;
+    const oldVal = this[privateName];
+    this[privateName] = newVal;
+
+    // 调用观察者回调
+    if (observer) {
+      observer.call(this, newVal, oldVal);
+    }
+  };
+}
+
+/**
+ * 定义响应式属性（映射到 HTML attribute）
  * @param instance 组件实例
  * @param name 属性名
  * @param type 属性类型
  * @param defaultValue 默认值
  */
-function defineReactiveProperty(
+function defineReactiveAttribute(
   instance: any,
   name: string,
-  type: AttributeOptions["type"],
+  type: AttributeOptions["type"] | PropertyOptions["type"],
   defaultValue: any
 ): void {
   // 删除已有属性
@@ -118,8 +155,35 @@ function defineReactiveProperty(
 
   // 定义响应式属性
   Object.defineProperty(instance, name, {
-    get: createGetter(defaultValue, name, type),
-    set: createSetter(name),
+    get: createAttributeGetter(defaultValue, name, type),
+    set: createAttributeSetter(name),
+    configurable: true,
+    enumerable: true,
+  });
+}
+
+/**
+ * 定义响应式属性（不映射到 HTML attribute，仅作为 JS 属性）
+ * @param instance 组件实例
+ * @param name 属性名
+ * @param defaultValue 默认值
+ * @param observer 可选的观察者回调
+ */
+function defineReactiveProperty(
+  instance: any,
+  name: string,
+  defaultValue: any,
+  observer?: (newVal: any, oldVal: any) => void
+): void {
+  // 删除已有属性
+  if (Object.getOwnPropertyDescriptor(instance, name)) {
+    delete instance[name];
+  }
+
+  // 定义响应式属性
+  Object.defineProperty(instance, name, {
+    get: createPropertyGetter(name, defaultValue),
+    set: createPropertySetter(name, observer),
     configurable: true,
     enumerable: true,
   });
@@ -230,10 +294,13 @@ function CustomElement(
   ) => {
     (CustomElementClass as any).customElementOptions = options;
 
-    const propertyOptions = ElementAttributesMap.get(CustomElementClass.name);
+    // 获取 attribute 装饰器配置（始终映射到 HTML attribute）
+    const attributeOptions = ElementAttributesMap.get(CustomElementClass.name);
+    // 获取 property 装饰器配置（仅作为 JS 属性，不映射到 HTML attribute）
+    const propertyOptions = ElementPropertiesMap.get(CustomElementClass.name);
 
     const superAttributes = CustomElementClass.observedAttributes || [];
-    const attributeNames = Object.keys(propertyOptions || {});
+    const attributeNames = Object.keys(attributeOptions || {});
 
     // 为每个属性名生成连字符命名和驼峰命名两种形式
     const allAttributeNames = attributeNames.flatMap(name => {
@@ -259,11 +326,19 @@ function CustomElement(
       constructor() {
         super();
 
-        // 定义响应式属性
+        // 定义 attribute 装饰器的响应式属性
+        if (attributeOptions) {
+          Object.keys(attributeOptions).forEach(name => {
+            const { type, default: defaultValue } = attributeOptions[name];
+            defineReactiveAttribute(this, name, type, defaultValue);
+          });
+        }
+
+        // 定义 property 装饰器的响应式属性
         if (propertyOptions) {
           Object.keys(propertyOptions).forEach(name => {
-            const { type, default: defaultValue } = propertyOptions[name];
-            defineReactiveProperty(this, name, type, defaultValue);
+            const { default: defaultValue, observer } = propertyOptions[name];
+            defineReactiveProperty(this, name, defaultValue, observer);
           });
         }
       }
@@ -285,11 +360,11 @@ function CustomElement(
         newVal: string | null
       ): Promise<void> {
         try {
-          if (!propertyOptions) return;
+          if (!attributeOptions) return;
 
           // 使用查找函数支持驼峰命名和连字符命名的自动转换
           const { option, actualName } = findPropertyOption(
-            propertyOptions,
+            attributeOptions,
             name
           );
           if (!option) return;

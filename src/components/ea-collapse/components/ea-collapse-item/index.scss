@@ -2,11 +2,11 @@
   --ea-collapse-item-border-top: none;
   --ea-collapse-item-border: 1px solid var(--grey-200);
 
-  --ea-collapse-item-title-height: 48px;
-  --ea-collapse-item-title-font-size: var(--font-size-md);
-  --ea-collapse-item-title-color: var(--grey-900);
-  --ea-collapse-item-title-disabled-color: var(--grey-400);
-  --ea-collapse-item-title-font-weight: var(--font-weight-bold);
+  --ea-collapse-item-header-height: 48px;
+  --ea-collapse-item-header-font-size: var(--font-size-md);
+  --ea-collapse-item-header-color: var(--grey-900);
+  --ea-collapse-item-header-disabled-color: var(--grey-400);
+  --ea-collapse-item-header-font-weight: var(--font-weight-bold);
 
   --ea-collapse-item-content-height: 0;
   --ea-collapse-item-content-font-size: var(--font-size-md);
@@ -32,7 +32,7 @@
 
   margin: 0 4px;
 
-  @include element(title-wrap) {
+  @include element(header-wrap) {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -43,16 +43,16 @@
     cursor: pointer;
   }
 
-  @include element(title) {
+  @include element(header) {
     flex: 1 0 auto;
 
-    height: var(--ea-collapse-item-title-height);
-    line-height: var(--ea-collapse-item-title-height);
+    height: var(--ea-collapse-item-header-height);
+    line-height: var(--ea-collapse-item-header-height);
 
-    font-size: var(--ea-collapse-item-title-font-size);
-    font-weight: var(--ea-collapse-item-title-font-weight);
+    font-size: var(--ea-collapse-item-header-font-size);
+    font-weight: var(--ea-collapse-item-header-font-weight);
 
-    color: var(--ea-collapse-item-title-color);
+    color: var(--ea-collapse-item-header-color);
   }
 
   @include element(indicator) {
@@ -79,7 +79,7 @@
   }
 
   @include modifier(indicator-left) {
-    .ea-collapse-item__title-wrap {
+    .ea-collapse-item__header-wrap {
       flex-direction: row-reverse;
     }
 
@@ -89,9 +89,9 @@
   }
 
   @include state(disabled) {
-    .ea-collapse-item__title-wrap {
+    .ea-collapse-item__header-wrap {
       cursor: not-allowed;
-      color: var(--ea-collapse-item-title-disabled-color);
+      color: var(--ea-collapse-item-header-disabled-color);
     }
   }
 }
