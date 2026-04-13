@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { waitForRender } from "./utils/waitForRender";
 
 // 导入 ea-container 及其子组件
-import "../components/ea-container/index.js";
+import "../components/ea-container/index";
 
 describe("EaContainer Component", () => {
   let container;
@@ -23,7 +24,7 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-container")).toBeTruthy();
@@ -33,7 +34,7 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -42,7 +43,7 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-header")).toBeTruthy();
@@ -52,7 +53,7 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-aside")).toBeTruthy();
@@ -62,7 +63,7 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-main");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-main")).toBeTruthy();
@@ -72,7 +73,7 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.shadowRoot.querySelector(".ea-footer")).toBeTruthy();
@@ -87,11 +88,9 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.direction === "horizontal" || el.direction === undefined).toBe(
-        true
-      );
+      expect(el.direction).toBe("horizontal");
     });
 
     it("应该支持设置 direction 为 vertical", async () => {
@@ -99,7 +98,7 @@ describe("EaContainer Component", () => {
       el.setAttribute("direction", "vertical");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.direction).toBe("vertical");
     });
@@ -109,7 +108,7 @@ describe("EaContainer Component", () => {
       el.setAttribute("direction", "horizontal");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
     });
@@ -125,7 +124,7 @@ describe("EaContainer Component", () => {
       el.appendChild(header);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.direction).toBe("vertical");
     });
@@ -136,7 +135,7 @@ describe("EaContainer Component", () => {
       el.appendChild(footer);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.direction).toBe("vertical");
     });
@@ -149,7 +148,7 @@ describe("EaContainer Component", () => {
       el.appendChild(main);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
     });
@@ -161,7 +160,7 @@ describe("EaContainer Component", () => {
       el.appendChild(header);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       // 显式设置 direction 后，即使有 header 也不应该改变
       expect(el.getAttribute("direction")).toBe("horizontal");
@@ -176,9 +175,9 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.height === "60px" || el.height === undefined).toBe(true);
+      expect(el.height).toBe("60px");
     });
 
     it("应该支持自定义 header height", async () => {
@@ -186,9 +185,9 @@ describe("EaContainer Component", () => {
       el.setAttribute("height", "100px");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.height === "100px" || el.height === undefined).toBe(true);
+      expect(el.height).toBe("100px");
     });
 
     it("应该支持 header height 为 auto", async () => {
@@ -196,9 +195,9 @@ describe("EaContainer Component", () => {
       el.setAttribute("height", "auto");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.height === "auto" || el.height === undefined).toBe(true);
+      expect(el.height).toBe("auto");
     });
   });
 
@@ -210,9 +209,9 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-footer");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.height === "60px" || el.height === undefined).toBe(true);
+      expect(el.height).toBe("60px");
     });
 
     it("应该支持自定义 footer height", async () => {
@@ -220,9 +219,9 @@ describe("EaContainer Component", () => {
       el.setAttribute("height", "80px");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.height === "80px" || el.height === undefined).toBe(true);
+      expect(el.height).toBe("80px");
     });
   });
 
@@ -234,9 +233,9 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.width === "300px" || el.width === undefined).toBe(true);
+      expect(el.width).toBe("300px");
     });
 
     it("应该支持自定义 aside width", async () => {
@@ -244,9 +243,9 @@ describe("EaContainer Component", () => {
       el.setAttribute("width", "200px");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.width === "200px" || el.width === undefined).toBe(true);
+      expect(el.width).toBe("200px");
     });
 
     it("应该支持 aside width 为百分比", async () => {
@@ -254,9 +253,9 @@ describe("EaContainer Component", () => {
       el.setAttribute("width", "20%");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.width === "20%" || el.width === undefined).toBe(true);
+      expect(el.width).toBe("20%");
     });
   });
 
@@ -275,7 +274,7 @@ describe("EaContainer Component", () => {
       el.appendChild(main);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.direction).toBe("vertical");
       expect(el.querySelector("ea-header")).toBeTruthy();
@@ -293,7 +292,7 @@ describe("EaContainer Component", () => {
       el.appendChild(footer);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.direction).toBe("vertical");
       expect(el.querySelector("ea-header")).toBeTruthy();
@@ -311,7 +310,7 @@ describe("EaContainer Component", () => {
       el.appendChild(main);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
       expect(el.querySelector("ea-aside")).toBeTruthy();
@@ -332,7 +331,7 @@ describe("EaContainer Component", () => {
       outer.appendChild(inner);
       container.appendChild(outer);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(outer.direction).toBe("vertical");
       expect(inner.direction).toBe("horizontal");
@@ -350,7 +349,7 @@ describe("EaContainer Component", () => {
       el.appendChild(aside2);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.direction).toBe("horizontal");
       expect(el.querySelectorAll("ea-aside").length).toBe(2);
@@ -366,7 +365,7 @@ describe("EaContainer Component", () => {
       el.innerHTML = "<span>Header Content</span>";
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -377,7 +376,7 @@ describe("EaContainer Component", () => {
       el.innerHTML = "<div>Main Content</div>";
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -388,7 +387,7 @@ describe("EaContainer Component", () => {
       el.innerHTML = "<nav>Aside Content</nav>";
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -399,7 +398,7 @@ describe("EaContainer Component", () => {
       el.innerHTML = "<span>Footer Content</span>";
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = el.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -414,12 +413,10 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
-      expect(el.direction === "horizontal" || el.direction === undefined).toBe(
-        true
-      );
+      expect(el.direction).toBe("horizontal");
     });
 
     it("应该处理只有文本内容的 container", async () => {
@@ -427,7 +424,7 @@ describe("EaContainer Component", () => {
       el.textContent = "Text content";
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
     });
@@ -436,16 +433,14 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.direction === "horizontal" || el.direction === undefined).toBe(
-        true
-      );
+      expect(el.direction).toBe("horizontal");
 
       const header = document.createElement("ea-header");
       el.appendChild(header);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       // 动态添加 header 后方向应该改变
       expect(el.direction).toBe("vertical");
@@ -457,18 +452,16 @@ describe("EaContainer Component", () => {
       el.appendChild(header);
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(el.direction).toBe("vertical");
 
       header.remove();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       // 移除 header 后方向应该改变
-      expect(el.direction === "horizontal" || el.direction === "vertical").toBe(
-        true
-      );
+      expect(["horizontal", "vertical"].includes(el.direction)).toBe(true);
     });
   });
 
@@ -481,7 +474,7 @@ describe("EaContainer Component", () => {
       el.setAttribute("direction", "vertical");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.shadowRoot).toBeTruthy();
       expect(el.direction).toBe("vertical");
@@ -491,7 +484,7 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       el.remove();
 
@@ -502,15 +495,13 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-container");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.direction === "horizontal" || el.direction === undefined).toBe(
-        true
-      );
+      expect(el.direction).toBe("horizontal");
 
       el.setAttribute("direction", "vertical");
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(el.direction).toBe("vertical");
     });
@@ -519,26 +510,26 @@ describe("EaContainer Component", () => {
       const el = document.createElement("ea-header");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       el.setAttribute("height", "100px");
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.height === "100px" || el.height === undefined).toBe(true);
+      expect(el.height).toBe("100px");
     });
 
     it("aside 应该支持 width 动态更新", async () => {
       const el = document.createElement("ea-aside");
       container.appendChild(el);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       el.setAttribute("width", "250px");
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(el.width === "250px" || el.width === undefined).toBe(true);
+      expect(el.width).toBe("250px");
     });
   });
 });

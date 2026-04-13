@@ -1,5 +1,5 @@
 import "./components/ea-container/index.js";
 import "./components/ea-header/index.js";
-import "./components//ea-main/index.js";
+import "./components/ea-main/index.js";
 import "./components/ea-footer/index.js";
 import "./components/ea-aside/index.js";
