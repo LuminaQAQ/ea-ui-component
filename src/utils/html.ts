@@ -9,7 +9,6 @@ const DOMPurify = createDOMPurify(window);
  */
 export const html = (dirtyHTML: string): string => {
   return DOMPurify.sanitize(dirtyHTML, {
-    RETURN_TRUSTED_TYPE: true,
     USE_PROFILES: { html: true, svg: true, svgFilters: true },
 
     CUSTOM_ELEMENT_HANDLING: {
@@ -17,7 +16,7 @@ export const html = (dirtyHTML: string): string => {
       attributeNameCheck: /.*/,
       allowCustomizedBuiltInElements: true,
     },
-  }) as unknown as string;
+  });
 };
 
 export default html;

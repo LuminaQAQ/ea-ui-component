@@ -52,7 +52,7 @@ onMounted(() => {
 ## 基础用法
 
 <div class="demo">
-  <ea-descriptions title="User Info">
+  <ea-descriptions caption="User Info">
     <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
     <ea-descriptions-item label="Essence">
       Lord of the Wild
@@ -81,7 +81,7 @@ onMounted(() => {
 
 ```html
 <div class="demo">
-  <ea-descriptions title="User Info">
+  <ea-descriptions caption="User Info">
     <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
     <ea-descriptions-item label="Essence">
       Lord of the Wild
@@ -117,7 +117,7 @@ onMounted(() => {
     <ea-radio value="default">Default</ea-radio>
     <ea-radio value="small">Small</ea-radio>
   </ea-radio-group>
-  <ea-descriptions class="descriptions-size" title="With border" border>
+  <ea-descriptions class="descriptions-size" caption="With border" border>
     <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
     <ea-descriptions-item label="Essence">
       Lord of the Wild
@@ -141,7 +141,7 @@ onMounted(() => {
     </ea-descriptions-item>
   </ea-descriptions>
 
-  <ea-descriptions title="Without border">
+  <ea-descriptions caption="Without border">
     <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
     <ea-descriptions-item label="Essence">
       Lord of the Wild
@@ -175,7 +175,7 @@ onMounted(() => {
     <ea-radio value="default">Default</ea-radio>
     <ea-radio value="small">Small</ea-radio>
   </ea-radio-group>
-  <ea-descriptions class="descriptions-size" title="With border" border>
+  <ea-descriptions class="descriptions-size" caption="With border" border>
     <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
     <ea-descriptions-item label="Essence">
       Lord of the Wild
@@ -199,7 +199,7 @@ onMounted(() => {
     </ea-descriptions-item>
   </ea-descriptions>
 
-  <ea-descriptions title="Without border">
+  <ea-descriptions caption="Without border">
     <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
     <ea-descriptions-item label="Essence">
       Lord of the Wild
@@ -231,7 +231,7 @@ onMounted(() => {
 
 <div class="demo">
   <ea-descriptions
-    title="Vertical list with border"
+    caption="Vertical list with border"
     direction="vertical"
     border
   >
@@ -258,7 +258,7 @@ onMounted(() => {
     </ea-descriptions-item>
   </ea-descriptions>
   <ea-descriptions
-    title="Vertical list without border"
+    caption="Vertical list without border"
     direction="vertical"
     class="descriptions-size"
   >
@@ -291,7 +291,7 @@ onMounted(() => {
 ```html
 <div class="demo">
   <ea-descriptions
-    title="Vertical list with border"
+    caption="Vertical list with border"
     direction="vertical"
     border
   >
@@ -319,7 +319,7 @@ onMounted(() => {
   </ea-descriptions>
 
   <ea-descriptions
-    title="Vertical list without border"
+    caption="Vertical list without border"
     direction="vertical"
     class="descriptions-size"
   >
@@ -353,7 +353,7 @@ onMounted(() => {
 ## 单元格跨行
 
 <div class="demo">
-  <ea-descriptions title="Width horizontal list" border>
+  <ea-descriptions caption="Width horizontal list" border>
     <ea-descriptions-item
       rowspan="2"
       width="140px"
@@ -390,7 +390,7 @@ onMounted(() => {
     </ea-descriptions-item>
   </ea-descriptions>
   <ea-descriptions
-    title="Width vertical list"
+    caption="Width vertical list"
     direction="vertical"
     border
     style="margin-top: 20px"
@@ -436,7 +436,7 @@ onMounted(() => {
 
 ```html
 <div class="demo">
-  <ea-descriptions title="Width horizontal list" border>
+  <ea-descriptions caption="Width horizontal list" border>
     <ea-descriptions-item
       rowspan="2"
       width="140px"
@@ -473,7 +473,7 @@ onMounted(() => {
     </ea-descriptions-item>
   </ea-descriptions>
   <ea-descriptions
-    title="Width vertical list"
+    caption="Width vertical list"
     direction="vertical"
     border
     style="margin-top: 20px"
@@ -522,7 +522,7 @@ onMounted(() => {
 
 <div class="demo">
   <ea-descriptions column="3" border>
-    <span slot="title">
+    <span slot="header">
       <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style list
     </span>
     <ea-button type="primary" slot="extra"> Operation </ea-button>
@@ -568,7 +568,7 @@ onMounted(() => {
 ```html
 <div class="demo">
   <ea-descriptions column="3" border>
-    <span slot="title">
+    <span slot="header">
       <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style
       list
     </span>
@@ -629,7 +629,7 @@ ea-descriptions::part(my-content) {
 
 | 参数        | 说明                                                                     | 类型                          | 可选值                      | 默认值     |
 | ----------- | ------------------------------------------------------------------------ | ----------------------------- | --------------------------- | ---------- |
-| title       | 标题                                                                     | string                        | -                           | -          |
+| caption     | 标题                                                                     | string                        | -                           | -          |
 | direction   | 列表排列方向                                                             | string                        | `vertical \| horizontal`    | horizontal |
 | border      | 是否显示边框                                                             | boolean                       | -                           | false      |
 | column      | 每行预期列数（用于分配单元格 colspan/rowspan）                           | number                        | -                           | 3          |
@@ -644,7 +644,7 @@ ea-descriptions::part(my-content) {
 | ---------------- | ---------------------------------------------------------------------------------- |
 | container        | 外层表格容器，`part="container"`（对应组件根元素）                                 |
 | caption          | 标题与额外操作区容器，`part="caption"`                                             |
-| title            | 标题区域，`part="title" `                                                          |
+| header           | 标题区域，`part="header"`                                                          |
 | extra            | 右侧额外插槽区域，`part="extra" `                                                  |
 | body             | 表格 body（tbody），`part="body"`                                                  |
 | row              | 行（tr）部分，`part="row"`（在不同布局下会生成 label / content 行）                |
@@ -654,10 +654,10 @@ ea-descriptions::part(my-content) {
 
 ### Descriptions Slots
 
-| 名称  | 说明               |
-| ----- | ------------------ |
-| title | 标题插槽           |
-| extra | 右侧额外操作区插槽 |
+| 名称   | 说明               |
+| ------ | ------------------ |
+| header | 标题插槽           |
+| extra  | 右侧额外操作区插槽 |
 
 ## DescriptionsItem API
 

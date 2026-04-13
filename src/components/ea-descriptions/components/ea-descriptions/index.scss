@@ -1,4 +1,8 @@
-$ea-descriptions-size-options: (small, default, large);
+$ea-descriptions-size-options: (
+  small,
+  default,
+  large
+);
 
 :host {
   --ea-descriptions-small-spacing: 4px 8px;
@@ -106,7 +110,8 @@ $ea-descriptions-size-options: (small, default, large);
     text-align: var(--ea-descriptions-align);
   }
 
-  @include modifier(border) {
+  @include state(border) {
+
     .ea-descriptions__label,
     .ea-descriptions__content {
       padding: var(--ea-descriptions-default-spacing);
@@ -120,6 +125,7 @@ $ea-descriptions-size-options: (small, default, large);
     }
 
     .ea-descriptions__tr:not(:last-child) {
+
       .ea-descriptions__label,
       .ea-descriptions__content {
         border-bottom: none;
@@ -139,6 +145,7 @@ $ea-descriptions-size-options: (small, default, large);
       }
 
       &.ea-descriptions--border {
+
         .ea-descriptions__label,
         .ea-descriptions__content {
           padding: var(--ea-descriptions-#{$name}-spacing);

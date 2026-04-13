@@ -1,16 +1,10 @@
-import './ea-badge/index.js';
-import './ea-breadcrumb/index.js';
-import './ea-button/index.js';
 import './ea-calendar/index.js';
-import './ea-card/index.js';
 import './ea-carousel/index.js';
 import './ea-checkbox/index.js';
 import './ea-collapse/index.js';
 import './ea-color-picker/index.js';
-import './ea-container/index.js';
 import './ea-countdown/index.js';
 import './ea-date-picker/index.js';
-import './ea-descriptions/index.js';
 import './ea-dialog/index.js';
 import './ea-drawer/index.js';
 import './ea-dropdown/index.js';

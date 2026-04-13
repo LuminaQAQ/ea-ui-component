@@ -16,22 +16,22 @@
   <body>
     <script
       type="module"
-      src="../src/components/ea-descriptions/index.js"
+      src="../src/components/ea-descriptions/index.ts"
     ></script>
-    <script
+    <!-- <script
       type="module"
       src="../src/components/ea-segmented/index.js"
     ></script>
     <script type="module" src="../src/components/ea-avatar/index.js"></script>
     <script type="module" src="../src/components/ea-tag/index.js"></script>
     <script type="module" src="../src/components/ea-radio/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.js"></script> -->
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
     <div class="demo">
-      <ea-descriptions title="User Info">
+      <ea-descriptions caption="User Info">
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
         <ea-descriptions-item label="Essence">
           Lord of the Wild
@@ -68,7 +68,7 @@
         <ea-radio value="default">Default</ea-radio>
         <ea-radio value="small">Small</ea-radio>
       </ea-radio-group>
-      <ea-descriptions class="descriptions-size" title="With border" border>
+      <ea-descriptions class="descriptions-size" caption="With border" border>
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
         <ea-descriptions-item label="Essence">
           Lord of the Wild
@@ -92,7 +92,7 @@
         </ea-descriptions-item>
       </ea-descriptions>
 
-      <ea-descriptions title="Without border">
+      <ea-descriptions caption="Without border">
         <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
         <ea-descriptions-item label="Essence">
           Lord of the Wild
@@ -143,7 +143,7 @@
     <h2>垂直列表</h2>
     <div class="demo">
       <ea-descriptions
-        title="Vertical list with border"
+        caption="Vertical list with border"
         direction="vertical"
         border
       >
@@ -171,7 +171,7 @@
       </ea-descriptions>
 
       <ea-descriptions
-        title="Vertical list without border"
+        caption="Vertical list without border"
         direction="vertical"
         class="descriptions-size"
       >
@@ -208,7 +208,7 @@
     <h1>单元格跨行</h1>
 
     <div class="demo">
-      <ea-descriptions title="Width horizontal list" border>
+      <ea-descriptions caption="Width horizontal list" border>
         <ea-descriptions-item
           rowspan="2"
           width="140px"
@@ -246,7 +246,7 @@
       </ea-descriptions>
 
       <ea-descriptions
-        title="Width vertical list"
+        caption="Width vertical list"
         direction="vertical"
         border
         style="margin-top: 20px"
@@ -308,7 +308,7 @@
 
     <div class="demo">
       <ea-descriptions column="3" border>
-        <span slot="title">
+        <span slot="header">
           <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style
           list
         </span>
