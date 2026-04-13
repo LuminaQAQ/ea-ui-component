@@ -21,7 +21,7 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-text/index.js";
+  import "./node_modules/easy-component-ui/components/ea-text/index.ts";
 </script>
 ```
 

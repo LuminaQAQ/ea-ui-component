@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
+import { waitForRender } from "./utils/waitForRender.js";
+
 // 导入 ea-text 组件
-import "../components/ea-text/index.js";
+import "../components/ea-text/index.ts";
 
 describe("EaText Component", () => {
   let container;
@@ -24,7 +26,7 @@ describe("EaText Component", () => {
       text.textContent = "Hello World";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text).toBeDefined();
       expect(text.shadowRoot).toBeDefined();
@@ -35,7 +37,7 @@ describe("EaText Component", () => {
       text.textContent = "Hello World";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -45,7 +47,7 @@ describe("EaText Component", () => {
       text.textContent = "Hello World";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.textContent).toBe("Hello World");
     });
@@ -60,7 +62,7 @@ describe("EaText Component", () => {
       text.textContent = "Default";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.type).toBe("normal");
     });
@@ -71,7 +73,7 @@ describe("EaText Component", () => {
       text.textContent = "Primary";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.type).toBe("primary");
     });
@@ -82,7 +84,7 @@ describe("EaText Component", () => {
       text.textContent = "Success";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.type).toBe("success");
     });
@@ -93,7 +95,7 @@ describe("EaText Component", () => {
       text.textContent = "Info";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.type).toBe("info");
     });
@@ -104,7 +106,7 @@ describe("EaText Component", () => {
       text.textContent = "Warning";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.type).toBe("warning");
     });
@@ -115,7 +117,7 @@ describe("EaText Component", () => {
       text.textContent = "Danger";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.type).toBe("danger");
     });
@@ -130,7 +132,7 @@ describe("EaText Component", () => {
       text.textContent = "Default";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.size).toBe("medium");
     });
@@ -141,7 +143,7 @@ describe("EaText Component", () => {
       text.textContent = "Large";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.size).toBe("large");
     });
@@ -152,7 +154,7 @@ describe("EaText Component", () => {
       text.textContent = "Small";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.size).toBe("small");
     });
@@ -167,9 +169,8 @@ describe("EaText Component", () => {
       text.textContent = "Default";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // 属性可能返回 null 或 false
       const value = text.truncated;
       expect(value === false || value === null).toBe(true);
     });
@@ -180,7 +181,7 @@ describe("EaText Component", () => {
       text.textContent = "This is a very long text that should be truncated";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.truncated).toBe(true);
     });
@@ -191,7 +192,7 @@ describe("EaText Component", () => {
       text.textContent = "Test text";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.truncated).toBe(true);
     });
@@ -201,36 +202,36 @@ describe("EaText Component", () => {
    * EaText Line-clamp 属性测试
    */
   describe("EaText Line-clamp Attribute", () => {
-    it("默认 line-clamp 应该是 0", async () => {
+    it("默认 lineClamp 应该是 0", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Default";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(text["line-clamp"]).toBe(0);
+      expect(text.lineClamp).toBe(0);
     });
 
-    it("应该支持 line-clamp 属性", async () => {
+    it("应该支持 lineClamp 属性", async () => {
       const text = document.createElement("ea-text");
-      text["line-clamp"] = 2;
+      text.lineClamp = 2;
       text.textContent = "Line 1\nLine 2\nLine 3";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(text["line-clamp"]).toBe(2);
+      expect(text.lineClamp).toBe(2);
     });
 
-    it("line-clamp 大于 0 时应该设置行数限制", async () => {
+    it("lineClamp 大于 0 时应该设置行数限制", async () => {
       const text = document.createElement("ea-text");
-      text["line-clamp"] = 2;
+      text.lineClamp = 2;
       text.textContent = "Test text";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(text["line-clamp"]).toBe(2);
+      expect(text.lineClamp).toBe(2);
     });
   });
 
@@ -243,7 +244,7 @@ describe("EaText Component", () => {
       text.textContent = "Default";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("span");
     });
@@ -254,7 +255,7 @@ describe("EaText Component", () => {
       text.textContent = "Paragraph";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("p");
     });
@@ -265,7 +266,7 @@ describe("EaText Component", () => {
       text.textContent = "Bold";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("b");
     });
@@ -276,7 +277,7 @@ describe("EaText Component", () => {
       text.textContent = "Italic";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("i");
     });
@@ -287,7 +288,7 @@ describe("EaText Component", () => {
       text.textContent = "Subscript";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("sub");
     });
@@ -298,7 +299,7 @@ describe("EaText Component", () => {
       text.textContent = "Superscript";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("sup");
     });
@@ -309,7 +310,7 @@ describe("EaText Component", () => {
       text.textContent = "Inserted";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("ins");
     });
@@ -320,7 +321,7 @@ describe("EaText Component", () => {
       text.textContent = "Deleted";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("del");
     });
@@ -331,7 +332,7 @@ describe("EaText Component", () => {
       text.textContent = "Marked";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("mark");
     });
@@ -346,7 +347,7 @@ describe("EaText Component", () => {
       text.textContent = "Default";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.title).toBe("");
     });
@@ -357,7 +358,7 @@ describe("EaText Component", () => {
       text.textContent = "Text";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.title).toBe("Custom Title");
     });
@@ -372,7 +373,7 @@ describe("EaText Component", () => {
       text.textContent = "Slot Content";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = text.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -390,7 +391,7 @@ describe("EaText Component", () => {
       parent.appendChild(child);
       container.appendChild(parent);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(parent.textContent).toContain("subscript");
     });
@@ -407,7 +408,7 @@ describe("EaText Component", () => {
       text.textContent = "Primary Large";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.type).toBe("primary");
       expect(text.size).toBe("large");
@@ -420,22 +421,22 @@ describe("EaText Component", () => {
       text.textContent = "Truncated paragraph";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.truncated).toBe(true);
       expect(text.tag).toBe("p");
     });
 
-    it("应该同时支持 line-clamp 和 tag 属性", async () => {
+    it("应该同时支持 lineClamp 和 tag 属性", async () => {
       const text = document.createElement("ea-text");
-      text["line-clamp"] = 3;
+      text.lineClamp = 3;
       text.tag = "p";
       text.textContent = "Multi line text";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(text["line-clamp"]).toBe(3);
+      expect(text.lineClamp).toBe(3);
       expect(text.tag).toBe("p");
     });
   });
@@ -448,7 +449,7 @@ describe("EaText Component", () => {
       const text = document.createElement("ea-text");
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text).toBeDefined();
       expect(text.shadowRoot).toBeDefined();
@@ -459,7 +460,7 @@ describe("EaText Component", () => {
       text.textContent = "<script>alert('xss')</script>";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.textContent).toBe("<script>alert('xss')</script>");
     });
@@ -469,7 +470,7 @@ describe("EaText Component", () => {
       text.textContent = "a".repeat(1000);
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.textContent.length).toBe(1000);
     });
@@ -486,7 +487,7 @@ describe("EaText Component", () => {
       container.appendChild(text1);
       container.appendChild(text2);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text1.type).toBe("primary");
       expect(text2.type).toBe("success");
@@ -504,7 +505,7 @@ describe("EaText Component", () => {
       text.textContent = "Lifecycle Test";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.shadowRoot).toBeDefined();
       expect(text.shadowRoot.querySelector(".ea-text")).toBeTruthy();
@@ -515,7 +516,7 @@ describe("EaText Component", () => {
       text.textContent = "Remove Test";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       text.remove();
 
@@ -528,11 +529,11 @@ describe("EaText Component", () => {
       text.textContent = "Type Test";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       text.type = "danger";
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.type).toBe("danger");
     });
@@ -543,11 +544,11 @@ describe("EaText Component", () => {
       text.textContent = "Size Test";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       text.size = "large";
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.size).toBe("large");
     });
@@ -558,11 +559,11 @@ describe("EaText Component", () => {
       text.textContent = "Tag Test";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       text.tag = "p";
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.tag).toBe("p");
     });
@@ -572,27 +573,27 @@ describe("EaText Component", () => {
       text.textContent = "Truncated Test";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       text.truncated = true;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(text.truncated).toBe(true);
     });
 
-    it("动态设置 line-clamp 应该生效", async () => {
+    it("动态设置 lineClamp 应该生效", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Line Clamp Test";
       container.appendChild(text);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      text["line-clamp"] = 3;
+      text.lineClamp = 3;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(text["line-clamp"]).toBe(3);
+      expect(text.lineClamp).toBe(3);
     });
   });
 });
