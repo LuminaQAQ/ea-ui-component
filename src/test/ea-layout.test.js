@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
 // 导入 ea-layout 组件（包含 ea-row 和 ea-col）
-import "../components/ea-layout/index.js";
+import "../components/ea-layout/index.ts";
 
 describe("EaLayout Component (EaRow & EaCol)", () => {
   let container;
@@ -23,7 +24,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(row).toBeDefined();
       expect(row.shadowRoot).toBeDefined();
@@ -33,7 +34,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(row.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -43,7 +44,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.innerHTML = "<div>Row Content</div>";
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = row.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -58,7 +59,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(col).toBeDefined();
       expect(col.shadowRoot).toBeDefined();
@@ -68,7 +69,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(col.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -78,7 +79,7 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.innerHTML = "<div>Col Content</div>";
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = col.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -93,9 +94,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("gutter")).toBe(null);
+      expect(row.gutter).toBe(0);
     });
 
     it("应该支持 gutter 属性", async () => {
@@ -103,9 +104,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("gutter", "20");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("gutter")).toBe("20");
+      expect(row.gutter).toBe(20);
     });
 
     it("应该支持不同的 gutter 值", async () => {
@@ -114,7 +115,10 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       for (const gutter of gutters) {
         const row = document.createElement("ea-row");
         row.setAttribute("gutter", String(gutter));
-        expect(row.getAttribute("gutter")).toBe(String(gutter));
+        container.appendChild(row);
+        await waitForRender();
+        expect(row.gutter).toBe(gutter);
+        row.remove();
       }
     });
   });
@@ -127,9 +131,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("justify")).toBe(null);
+      expect(row.justify).toBe("start");
     });
 
     it("应该支持 justify='center'", async () => {
@@ -137,9 +141,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("justify", "center");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("justify")).toBe("center");
+      expect(row.justify).toBe("center");
     });
 
     it("应该支持 justify='end'", async () => {
@@ -147,9 +151,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("justify", "end");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("justify")).toBe("end");
+      expect(row.justify).toBe("end");
     });
 
     it("应该支持 justify='space-between'", async () => {
@@ -157,9 +161,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("justify", "space-between");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("justify")).toBe("space-between");
+      expect(row.justify).toBe("space-between");
     });
 
     it("应该支持 justify='space-around'", async () => {
@@ -167,9 +171,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("justify", "space-around");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("justify")).toBe("space-around");
+      expect(row.justify).toBe("space-around");
     });
 
     it("应该支持 justify='space-evenly'", async () => {
@@ -177,9 +181,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("justify", "space-evenly");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("justify")).toBe("space-evenly");
+      expect(row.justify).toBe("space-evenly");
     });
 
     it("应该支持不同的 justify 值", async () => {
@@ -188,7 +192,10 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       for (const justify of justifies) {
         const row = document.createElement("ea-row");
         row.setAttribute("justify", justify);
-        expect(row.getAttribute("justify")).toBe(justify);
+        container.appendChild(row);
+        await waitForRender();
+        expect(row.justify).toBe(justify);
+        row.remove();
       }
     });
   });
@@ -197,13 +204,13 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
    * EaRow Align 属性测试
    */
   describe("EaRow Align Attribute", () => {
-    it("默认 align 应该是空字符串", async () => {
+    it("默认 align 应该是 top", async () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("align")).toBe(null);
+      expect(row.align).toBe("top");
     });
 
     it("应该支持 align='top'", async () => {
@@ -211,9 +218,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("align", "top");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("align")).toBe("top");
+      expect(row.align).toBe("top");
     });
 
     it("应该支持 align='middle'", async () => {
@@ -221,9 +228,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("align", "middle");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("align")).toBe("middle");
+      expect(row.align).toBe("middle");
     });
 
     it("应该支持 align='bottom'", async () => {
@@ -231,9 +238,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("align", "bottom");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("align")).toBe("bottom");
+      expect(row.align).toBe("bottom");
     });
 
     it("应该支持不同的 align 值", async () => {
@@ -242,7 +249,10 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       for (const align of aligns) {
         const row = document.createElement("ea-row");
         row.setAttribute("align", align);
-        expect(row.getAttribute("align")).toBe(align);
+        container.appendChild(row);
+        await waitForRender();
+        expect(row.align).toBe(align);
+        row.remove();
       }
     });
   });
@@ -255,10 +265,23 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
+      expect(row.tag).toBe("div");
       const containerElement = row.shadowRoot.querySelector('[part="container"]');
       expect(containerElement.tagName.toLowerCase()).toBe("div");
+    });
+
+    it("应该支持自定义 tag", async () => {
+      const row = document.createElement("ea-row");
+      row.setAttribute("tag", "section");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      expect(row.tag).toBe("section");
+      const containerElement = row.shadowRoot.querySelector('[part="container"]');
+      expect(containerElement.tagName.toLowerCase()).toBe("section");
     });
   });
 
@@ -270,9 +293,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("span")).toBe(null);
+      expect(col.span).toBe(24);
     });
 
     it("应该支持 span 属性", async () => {
@@ -280,9 +303,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("span", "12");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("span")).toBe("12");
+      expect(col.span).toBe(12);
     });
 
     it("应该支持不同的 span 值", async () => {
@@ -291,7 +314,10 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       for (const span of spans) {
         const col = document.createElement("ea-col");
         col.setAttribute("span", String(span));
-        expect(col.getAttribute("span")).toBe(String(span));
+        container.appendChild(col);
+        await waitForRender();
+        expect(col.span).toBe(span);
+        col.remove();
       }
     });
   });
@@ -304,9 +330,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("offset")).toBe(null);
+      expect(col.offset).toBe(0);
     });
 
     it("应该支持 offset 属性", async () => {
@@ -314,9 +340,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("offset", "6");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("offset")).toBe("6");
+      expect(col.offset).toBe(6);
     });
 
     it("应该支持不同的 offset 值", async () => {
@@ -325,7 +351,10 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       for (const offset of offsets) {
         const col = document.createElement("ea-col");
         col.setAttribute("offset", String(offset));
-        expect(col.getAttribute("offset")).toBe(String(offset));
+        container.appendChild(col);
+        await waitForRender();
+        expect(col.offset).toBe(offset);
+        col.remove();
       }
     });
   });
@@ -338,9 +367,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("push")).toBe(null);
+      expect(col.push).toBe(0);
     });
 
     it("应该支持 push 属性", async () => {
@@ -348,9 +377,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("push", "4");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("push")).toBe("4");
+      expect(col.push).toBe(4);
     });
 
     it("应该支持不同的 push 值", async () => {
@@ -359,7 +388,10 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       for (const push of pushes) {
         const col = document.createElement("ea-col");
         col.setAttribute("push", String(push));
-        expect(col.getAttribute("push")).toBe(String(push));
+        container.appendChild(col);
+        await waitForRender();
+        expect(col.push).toBe(push);
+        col.remove();
       }
     });
   });
@@ -372,9 +404,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("pull")).toBe(null);
+      expect(col.pull).toBe(0);
     });
 
     it("应该支持 pull 属性", async () => {
@@ -382,9 +414,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("pull", "4");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("pull")).toBe("4");
+      expect(col.pull).toBe(4);
     });
 
     it("应该支持不同的 pull 值", async () => {
@@ -393,7 +425,10 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       for (const pull of pulls) {
         const col = document.createElement("ea-col");
         col.setAttribute("pull", String(pull));
-        expect(col.getAttribute("pull")).toBe(String(pull));
+        container.appendChild(col);
+        await waitForRender();
+        expect(col.pull).toBe(pull);
+        col.remove();
       }
     });
   });
@@ -406,10 +441,23 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const col = document.createElement("ea-col");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
+      expect(col.tag).toBe("div");
       const containerElement = col.shadowRoot.querySelector('[part="container"]');
       expect(containerElement.tagName.toLowerCase()).toBe("div");
+    });
+
+    it("应该支持自定义 tag", async () => {
+      const col = document.createElement("ea-col");
+      col.setAttribute("tag", "article");
+      container.appendChild(col);
+
+      await waitForRender();
+
+      expect(col.tag).toBe("article");
+      const containerElement = col.shadowRoot.querySelector('[part="container"]');
+      expect(containerElement.tagName.toLowerCase()).toBe("article");
     });
   });
 
@@ -425,118 +473,118 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.appendChild(col);
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(row.shadowRoot).toBeDefined();
       expect(col.shadowRoot).toBeDefined();
-      expect(col.getAttribute("span")).toBe("12");
+      expect(col.span).toBe(12);
     });
 
     it("应该支持多个 col 组合", async () => {
       const row = document.createElement("ea-row");
-      
+
       const col1 = document.createElement("ea-col");
       col1.setAttribute("span", "8");
       col1.textContent = "Col 1";
-      
+
       const col2 = document.createElement("ea-col");
       col2.setAttribute("span", "8");
       col2.textContent = "Col 2";
-      
+
       const col3 = document.createElement("ea-col");
       col3.setAttribute("span", "8");
       col3.textContent = "Col 3";
-      
+
       row.appendChild(col1);
       row.appendChild(col2);
       row.appendChild(col3);
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col1.getAttribute("span")).toBe("8");
-      expect(col2.getAttribute("span")).toBe("8");
-      expect(col3.getAttribute("span")).toBe("8");
+      expect(col1.span).toBe(8);
+      expect(col2.span).toBe(8);
+      expect(col3.span).toBe(8);
     });
 
     it("应该支持 gutter + span 组合", async () => {
       const row = document.createElement("ea-row");
       row.setAttribute("gutter", "20");
-      
+
       const col1 = document.createElement("ea-col");
       col1.setAttribute("span", "12");
-      
+
       const col2 = document.createElement("ea-col");
       col2.setAttribute("span", "12");
-      
+
       row.appendChild(col1);
       row.appendChild(col2);
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("gutter")).toBe("20");
-      expect(col1.getAttribute("span")).toBe("12");
-      expect(col2.getAttribute("span")).toBe("12");
+      expect(row.gutter).toBe(20);
+      expect(col1.span).toBe(12);
+      expect(col2.span).toBe(12);
     });
 
     it("应该支持 offset 组合", async () => {
       const row = document.createElement("ea-row");
-      
+
       const col1 = document.createElement("ea-col");
       col1.setAttribute("span", "6");
-      
+
       const col2 = document.createElement("ea-col");
       col2.setAttribute("span", "6");
       col2.setAttribute("offset", "6");
-      
+
       row.appendChild(col1);
       row.appendChild(col2);
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col1.getAttribute("span")).toBe("6");
-      expect(col2.getAttribute("span")).toBe("6");
-      expect(col2.getAttribute("offset")).toBe("6");
+      expect(col1.span).toBe(6);
+      expect(col2.span).toBe(6);
+      expect(col2.offset).toBe(6);
     });
 
     it("应该支持 push/pull 组合", async () => {
       const row = document.createElement("ea-row");
-      
+
       const col1 = document.createElement("ea-col");
       col1.setAttribute("span", "4");
       col1.setAttribute("push", "4");
-      
+
       const col2 = document.createElement("ea-col");
       col2.setAttribute("span", "4");
       col2.setAttribute("pull", "4");
-      
+
       row.appendChild(col1);
       row.appendChild(col2);
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col1.getAttribute("push")).toBe("4");
-      expect(col2.getAttribute("pull")).toBe("4");
+      expect(col1.push).toBe(4);
+      expect(col2.pull).toBe(4);
     });
 
     it("应该支持 justify + align 组合", async () => {
       const row = document.createElement("ea-row");
       row.setAttribute("justify", "center");
       row.setAttribute("align", "middle");
-      
+
       const col = document.createElement("ea-col");
       col.setAttribute("span", "12");
-      
+
       row.appendChild(col);
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("justify")).toBe("center");
-      expect(row.getAttribute("align")).toBe("middle");
+      expect(row.justify).toBe("center");
+      expect(row.align).toBe("middle");
     });
 
     it("应该支持完整的布局配置", async () => {
@@ -544,28 +592,28 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("gutter", "20");
       row.setAttribute("justify", "space-between");
       row.setAttribute("align", "top");
-      
+
       const col1 = document.createElement("ea-col");
       col1.setAttribute("span", "8");
       col1.setAttribute("offset", "4");
-      
+
       const col2 = document.createElement("ea-col");
       col2.setAttribute("span", "8");
       col2.setAttribute("push", "2");
-      
+
       row.appendChild(col1);
       row.appendChild(col2);
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(row.getAttribute("gutter")).toBe("20");
-      expect(row.getAttribute("justify")).toBe("space-between");
-      expect(row.getAttribute("align")).toBe("top");
-      expect(col1.getAttribute("span")).toBe("8");
-      expect(col1.getAttribute("offset")).toBe("4");
-      expect(col2.getAttribute("span")).toBe("8");
-      expect(col2.getAttribute("push")).toBe("2");
+      expect(row.gutter).toBe(20);
+      expect(row.justify).toBe("space-between");
+      expect(row.align).toBe("top");
+      expect(col1.span).toBe(8);
+      expect(col1.offset).toBe(4);
+      expect(col2.span).toBe(8);
+      expect(col2.push).toBe(2);
     });
   });
 
@@ -578,9 +626,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("span", "0");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("span")).toBe("0");
+      expect(col.span).toBe(0);
     });
 
     it("span 为 24 时应该正确处理", async () => {
@@ -588,16 +636,16 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("span", "24");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(col.getAttribute("span")).toBe("24");
+      expect(col.span).toBe(24);
     });
 
     it("空 row 应该正常渲染", async () => {
       const row = document.createElement("ea-row");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(row.shadowRoot).toBeDefined();
     });
@@ -606,18 +654,18 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const outerRow = document.createElement("ea-row");
       const outerCol = document.createElement("ea-col");
       outerCol.setAttribute("span", "24");
-      
+
       const innerRow = document.createElement("ea-row");
       const innerCol = document.createElement("ea-col");
       innerCol.setAttribute("span", "12");
       innerCol.textContent = "Nested";
-      
+
       innerRow.appendChild(innerCol);
       outerCol.appendChild(innerRow);
       outerRow.appendChild(outerCol);
       container.appendChild(outerRow);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(outerRow.shadowRoot).toBeDefined();
       expect(outerCol.shadowRoot).toBeDefined();
@@ -636,9 +684,11 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("justify", "center");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(row.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(row.gutter).toBe(20);
+      expect(row.justify).toBe("center");
     });
 
     it("col 组件连接后应该正确初始化", async () => {
@@ -647,9 +697,11 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       col.setAttribute("offset", "6");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(col.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(col.span).toBe(12);
+      expect(col.offset).toBe(6);
     });
 
     it("组件断开连接后应该正常移除", () => {
@@ -668,55 +720,98 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       row.setAttribute("gutter", "10");
       container.appendChild(row);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
+
+      expect(row.gutter).toBe(10);
 
       row.setAttribute("gutter", "30");
+      await waitForRender();
 
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(row.getAttribute("gutter")).toBe("30");
-    });
-
-    it("动态修改 row justify 应该生效", async () => {
-      const row = document.createElement("ea-row");
-      row.setAttribute("justify", "start");
-      container.appendChild(row);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      row.setAttribute("justify", "end");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(row.getAttribute("justify")).toBe("end");
+      expect(row.gutter).toBe(30);
     });
 
     it("动态修改 col span 应该生效", async () => {
       const col = document.createElement("ea-col");
-      col.setAttribute("span", "12");
+      col.setAttribute("span", "6");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      col.setAttribute("span", "8");
+      expect(col.span).toBe(6);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      col.setAttribute("span", "18");
+      await waitForRender();
 
-      expect(col.getAttribute("span")).toBe("8");
+      expect(col.span).toBe(18);
+    });
+  });
+
+  /**
+   * 响应式属性测试
+   */
+  describe("Responsive Attributes", () => {
+    it("row 应该响应 justify 属性变化", async () => {
+      const row = document.createElement("ea-row");
+      row.setAttribute("justify", "start");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      expect(row.justify).toBe("start");
+
+      row.setAttribute("justify", "end");
+      await waitForRender();
+
+      expect(row.justify).toBe("end");
     });
 
-    it("动态修改 col offset 应该生效", async () => {
+    it("row 应该响应 align 属性变化", async () => {
+      const row = document.createElement("ea-row");
+      row.setAttribute("align", "top");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      expect(row.align).toBe("top");
+
+      row.setAttribute("align", "bottom");
+      await waitForRender();
+
+      expect(row.align).toBe("bottom");
+    });
+
+    it("col 应该响应 offset 属性变化", async () => {
       const col = document.createElement("ea-col");
       col.setAttribute("offset", "0");
       container.appendChild(col);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      col.setAttribute("offset", "6");
+      expect(col.offset).toBe(0);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      col.setAttribute("offset", "12");
+      await waitForRender();
 
-      expect(col.getAttribute("offset")).toBe("6");
+      expect(col.offset).toBe(12);
+    });
+
+    it("col 应该响应 push/pull 属性变化", async () => {
+      const col = document.createElement("ea-col");
+      col.setAttribute("push", "0");
+      col.setAttribute("pull", "0");
+      container.appendChild(col);
+
+      await waitForRender();
+
+      expect(col.push).toBe(0);
+      expect(col.pull).toBe(0);
+
+      col.setAttribute("push", "6");
+      col.setAttribute("pull", "2");
+      await waitForRender();
+
+      expect(col.push).toBe(6);
+      expect(col.pull).toBe(2);
     });
   });
 });
