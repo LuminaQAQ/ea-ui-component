@@ -1,46 +1,79 @@
+$name: ea-link;
+
+// 链接类型颜色映射
+$link-types: (
+  normal: grey,
+  primary: blue,
+  success: green,
+  warning: yellow,
+  danger: red,
+  info: grey,
+);
+
 :host {
-  --link-cursor: var(--cursor-pointer);
-  --link-pointer-events: auto;
+  // 光标和交互
+  --#{$name}-cursor: var(--cursor-pointer);
+  --#{$name}-pointer-events: auto;
 
-  --link-normal-color: var(--color-black);
-  --link-normal-disabled-color: var(--grey-600);
-  --link-normal-hover-color: var(--grey-800);
-  --link-normal-active-color: var(--grey-900);
+  // 每种链接类型的颜色变量
+  @each $type, $color in $link-types {
+    --#{$name}-#{$type}-color: var(--#{$color}-500);
+    --#{$name}-#{$type}-disabled-color: var(--#{$color}-300);
+    --#{$name}-#{$type}-hover-color: var(--#{$color}-400);
+    --#{$name}-#{$type}-active-color: var(--#{$color}-600);
+  }
 
-  --link-primary-color: var(--blue-500);
-  --link-primary-disabled-color: var(--blue-300);
-  --link-primary-hover-color: var(--blue-400);
-  --link-primary-active-color: var(--blue-600);
+  // normal 类型使用特殊颜色
+  --#{$name}-normal-color: var(--color-black);
+  --#{$name}-normal-disabled-color: var(--grey-600);
+  --#{$name}-normal-hover-color: var(--grey-800);
+  --#{$name}-normal-active-color: var(--grey-900);
 
-  --link-info-color: var(--grey-500);
-  --link-info-disabled-color: var(--grey-300);
-  --link-info-hover-color: var(--grey-400);
-  --link-info-active-color: var(--grey-600);
-
-  --link-success-color: var(--green-500);
-  --link-success-disabled-color: var(--green-300);
-  --link-success-hover-color: var(--green-400);
-  --link-success-active-color: var(--green-600);
-
-  --link-warning-color: var(--yellow-500);
-  --link-warning-disabled-color: var(--yellow-300);
-  --link-warning-hover-color: var(--yellow-400);
-  --link-warning-active-color: var(--yellow-600);
-
-  --link-danger-color: var(--red-500);
-  --link-danger-disabled-color: var(--red-300);
-  --link-danger-hover-color: var(--red-400);
-  --link-danger-active-color: var(--red-600);
+  // 过渡动画
+  --#{$name}-transition: var(--transition-fast);
 }
 
-:host([disabled]),
-:host([disabled="true"]) {
-  --link-cursor: var(--cursor-not-allowed);
-  --link-pointer-events: none;
+// 禁用状态下的 host 样式
+:host([disabled]) {
+  --#{$name}-cursor: var(--cursor-not-allowed);
+  --#{$name}-pointer-events: none;
 }
 
-:host([underline="hover"]) {
-  @include block(ea-link) {
+// Host 基础样式
+:host {
+  display: inline-block;
+  -webkit-user-drag: auto;
+  cursor: var(--#{$name}-cursor);
+}
+
+// BEM 块定义
+@include block($name) {
+  text-decoration: none;
+  color: var(--#{$name}-normal-color);
+  transition: color var(--#{$name}-transition);
+
+  // 图标元素
+  @include element(icon) {
+    display: none;
+  }
+
+  // 每种链接类型的样式
+  @each $type, $color in $link-types {
+    @include modifier(#{$type}) {
+      color: var(--#{$name}-#{$type}-color);
+
+      &:hover {
+        color: var(--#{$name}-#{$type}-hover-color);
+      }
+
+      &:active {
+        color: var(--#{$name}-#{$type}-active-color);
+      }
+    }
+  }
+
+  // 下划线修饰符 - hover
+  @include modifier(underline-hover) {
     &:hover {
       text-decoration: underline;
 
@@ -49,60 +82,31 @@
       }
     }
   }
-}
 
-:host([underline="always"]) {
-  @include block(ea-link) {
+  // 下划线修饰符 - always
+  @include modifier(underline-always) {
     text-decoration: underline;
 
     ::slotted(*) {
       text-decoration: underline;
     }
   }
-}
 
-:host {
-  display: inline-block;
-  -webkit-user-drag: auto;
+  // 禁用状态（当父元素有 is-disabled 类时）
+  @include state(disabled) {
+    pointer-events: var(--#{$name}-pointer-events);
+    cursor: var(--#{$name}-cursor);
 
-  cursor: var(--link-cursor);
-}
-
-@mixin link-theme($theme-name) {
-  @include modifier($theme-name) {
-    color: var(--link-#{$theme-name}-color);
-
-    &:hover {
-      color: var(--link-#{$theme-name}-hover-color);
-    }
-
-    &.ea-link--disabled {
-      color: var(--link-#{$theme-name}-disabled-color);
-      cursor: var(--link-cursor);
-      pointer-events: var(--link-pointer-events);
+    @each $type, $color in $link-types {
+      &.#{$name}--#{$type} {
+        color: var(--#{$name}-#{$type}-disabled-color);
+      }
     }
   }
-}
 
-@include block(ea-link) {
-  text-decoration: none;
-  color: var(--link-normal-color);
-
-  transition: color var(--transition-fast);
-
-  @include link-theme(normal);
-  @include link-theme(primary);
-  @include link-theme(success);
-  @include link-theme(warning);
-  @include link-theme(danger);
-  @include link-theme(info);
-
-  @include element(icon) {
-    display: none;
-  }
-
+  // 图标状态（当父元素有 is-icon 类时）
   @include state(icon) {
-    .ea-link__icon {
+    .#{$name}__icon {
       display: inline-block;
     }
   }

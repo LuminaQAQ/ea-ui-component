@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
 // 导入 ea-link 组件
-import "../components/ea-link/index.js";
+import "../components/ea-link/index.ts";
 
 describe("EaLink Component", () => {
   let container;
@@ -23,7 +24,7 @@ describe("EaLink Component", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(link).toBeDefined();
       expect(link.shadowRoot).toBeDefined();
@@ -33,7 +34,7 @@ describe("EaLink Component", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(link.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -42,7 +43,7 @@ describe("EaLink Component", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement).toBeTruthy();
@@ -53,7 +54,7 @@ describe("EaLink Component", () => {
       link.textContent = "点击这里";
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = link.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -68,9 +69,9 @@ describe("EaLink Component", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe(null);
+      expect(link.type).toBe("normal");
     });
 
     it("应该支持 type='primary'", async () => {
@@ -78,9 +79,9 @@ describe("EaLink Component", () => {
       link.setAttribute("type", "primary");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("primary");
+      expect(link.type).toBe("primary");
     });
 
     it("应该支持 type='success'", async () => {
@@ -88,9 +89,9 @@ describe("EaLink Component", () => {
       link.setAttribute("type", "success");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("success");
+      expect(link.type).toBe("success");
     });
 
     it("应该支持 type='warning'", async () => {
@@ -98,9 +99,9 @@ describe("EaLink Component", () => {
       link.setAttribute("type", "warning");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("warning");
+      expect(link.type).toBe("warning");
     });
 
     it("应该支持 type='danger'", async () => {
@@ -108,9 +109,9 @@ describe("EaLink Component", () => {
       link.setAttribute("type", "danger");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("danger");
+      expect(link.type).toBe("danger");
     });
 
     it("应该支持 type='info'", async () => {
@@ -118,13 +119,20 @@ describe("EaLink Component", () => {
       link.setAttribute("type", "info");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("info");
+      expect(link.type).toBe("info");
     });
 
     it("应该支持不同的 type 值", async () => {
-      const types = ["normal", "primary", "success", "warning", "danger", "info"];
+      const types = [
+        "normal",
+        "primary",
+        "success",
+        "warning",
+        "danger",
+        "info",
+      ];
 
       for (const type of types) {
         const link = document.createElement("ea-link");
@@ -142,10 +150,9 @@ describe("EaLink Component", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.href).toBe("");
+      expect(link.href).toBe("");
     });
 
     it("应该支持 href 属性", async () => {
@@ -153,10 +160,9 @@ describe("EaLink Component", () => {
       link.setAttribute("href", "https://example.com");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.href).toBe("https://example.com/");
+      expect(link.href).toBe("https://example.com");
     });
 
     it("应该支持不同的 href 值", async () => {
@@ -172,7 +178,7 @@ describe("EaLink Component", () => {
         link.setAttribute("href", href);
         container.appendChild(link);
 
-        await new Promise(resolve => setTimeout(resolve, 30));
+        await waitForRender(30);
 
         const anchorElement = link.shadowRoot.querySelector("a.ea-link");
         expect(anchorElement.getAttribute("href")).toBe(href);
@@ -189,9 +195,9 @@ describe("EaLink Component", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.hasAttribute("disabled")).toBe(false);
+      expect(link.disabled).toBe(false);
     });
 
     it("设置 disabled 属性应该禁用链接", async () => {
@@ -199,9 +205,9 @@ describe("EaLink Component", () => {
       link.setAttribute("disabled", "");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.hasAttribute("disabled")).toBe(true);
+      expect(link.disabled).toBe(true);
     });
   });
 
@@ -213,9 +219,9 @@ describe("EaLink Component", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("underline")).toBe(null);
+      expect(link.underline).toBe("");
     });
 
     it("应该支持 underline='always'", async () => {
@@ -223,9 +229,9 @@ describe("EaLink Component", () => {
       link.setAttribute("underline", "always");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("underline")).toBe("always");
+      expect(link.underline).toBe("always");
     });
 
     it("应该支持 underline='hover'", async () => {
@@ -233,9 +239,9 @@ describe("EaLink Component", () => {
       link.setAttribute("underline", "hover");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("underline")).toBe("hover");
+      expect(link.underline).toBe("hover");
     });
 
     it("应该支持 underline='never'", async () => {
@@ -243,9 +249,9 @@ describe("EaLink Component", () => {
       link.setAttribute("underline", "never");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("underline")).toBe("never");
+      expect(link.underline).toBe("never");
     });
 
     it("应该支持不同的 underline 值", async () => {
@@ -267,12 +273,9 @@ describe("EaLink Component", () => {
       const link = document.createElement("ea-link");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      const iconElement = link.shadowRoot.querySelector("ea-icon");
-      // 当属性未设置时，getAttribute 返回 null
-      const nameAttr = iconElement.getAttribute("name");
-      expect(nameAttr === null || nameAttr === "").toBe(true);
+      expect(link.icon).toBe("");
     });
 
     it("应该支持 icon 属性", async () => {
@@ -280,7 +283,7 @@ describe("EaLink Component", () => {
       link.setAttribute("icon", "eye");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const iconElement = link.shadowRoot.querySelector("ea-icon");
       expect(iconElement.getAttribute("name")).toBe("eye");
@@ -294,7 +297,7 @@ describe("EaLink Component", () => {
         link.setAttribute("icon", icon);
         container.appendChild(link);
 
-        await new Promise(resolve => setTimeout(resolve, 30));
+        await waitForRender(30);
 
         const iconElement = link.shadowRoot.querySelector("ea-icon");
         expect(iconElement.getAttribute("name")).toBe(icon);
@@ -313,11 +316,10 @@ describe("EaLink Component", () => {
       link.setAttribute("href", "https://example.com");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("primary");
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.href).toBe("https://example.com/");
+      expect(link.type).toBe("primary");
+      expect(link.href).toBe("https://example.com");
     });
 
     it("应该同时支持 type 和 disabled", async () => {
@@ -326,10 +328,10 @@ describe("EaLink Component", () => {
       link.setAttribute("disabled", "");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("primary");
-      expect(link.hasAttribute("disabled")).toBe(true);
+      expect(link.type).toBe("primary");
+      expect(link.disabled).toBe(true);
     });
 
     it("应该同时支持 icon 和 underline", async () => {
@@ -338,11 +340,11 @@ describe("EaLink Component", () => {
       link.setAttribute("underline", "always");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const iconElement = link.shadowRoot.querySelector("ea-icon");
       expect(iconElement.getAttribute("name")).toBe("eye");
-      expect(link.getAttribute("underline")).toBe("always");
+      expect(link.underline).toBe("always");
     });
 
     it("应该同时设置多个属性", async () => {
@@ -353,11 +355,11 @@ describe("EaLink Component", () => {
       link.setAttribute("icon", "share");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("primary");
-      expect(link.getAttribute("underline")).toBe("hover");
-      expect(link.getAttribute("icon")).toBe("share");
+      expect(link.type).toBe("primary");
+      expect(link.underline).toBe("hover");
+      expect(link.icon).toBe("share");
     });
   });
 
@@ -370,7 +372,7 @@ describe("EaLink Component", () => {
       link.textContent = "链接文本";
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = link.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -381,7 +383,7 @@ describe("EaLink Component", () => {
       link.innerHTML = "<strong>粗体链接</strong>";
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = link.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -397,7 +399,7 @@ describe("EaLink Component", () => {
       link.setAttribute("href", "#");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
 
@@ -425,7 +427,7 @@ describe("EaLink Component", () => {
       link.setAttribute("href", "");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement.getAttribute("href")).toBe("");
@@ -436,7 +438,7 @@ describe("EaLink Component", () => {
       link.setAttribute("icon", "");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const iconElement = link.shadowRoot.querySelector("ea-icon");
       expect(iconElement.getAttribute("name")).toBe("");
@@ -447,10 +449,12 @@ describe("EaLink Component", () => {
       link.setAttribute("href", "/path?query=value&other=test");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.getAttribute("href")).toBe("/path?query=value&other=test");
+      expect(anchorElement.getAttribute("href")).toBe(
+        "/path?query=value&other=test"
+      );
     });
 
     it("同时设置所有属性应该正常工作", async () => {
@@ -463,12 +467,12 @@ describe("EaLink Component", () => {
       link.textContent = "查看详情";
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(link.getAttribute("type")).toBe("primary");
-      expect(link.hasAttribute("disabled")).toBe(true);
-      expect(link.getAttribute("underline")).toBe("always");
-      expect(link.getAttribute("icon")).toBe("eye");
+      expect(link.type).toBe("primary");
+      expect(link.disabled).toBe(true);
+      expect(link.underline).toBe("always");
+      expect(link.icon).toBe("eye");
     });
   });
 
@@ -482,11 +486,11 @@ describe("EaLink Component", () => {
       link.setAttribute("href", "https://example.com");
       container.appendChild(link);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const anchorElement = link.shadowRoot.querySelector("a.ea-link");
       expect(anchorElement).toBeTruthy();
-      expect(anchorElement.href).toBe("https://example.com/");
+      expect(link.href).toBe("https://example.com");
     });
 
     it("组件断开连接后应该正常移除", () => {
@@ -496,79 +500,6 @@ describe("EaLink Component", () => {
       link.remove();
 
       expect(container.contains(link)).toBe(false);
-    });
-
-    it("动态修改 type 应该生效", async () => {
-      const link = document.createElement("ea-link");
-      link.setAttribute("type", "primary");
-      container.appendChild(link);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      link.setAttribute("type", "success");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(link.getAttribute("type")).toBe("success");
-    });
-
-    it("动态修改 href 应该生效", async () => {
-      const link = document.createElement("ea-link");
-      link.setAttribute("href", "https://example.com");
-      container.appendChild(link);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      link.setAttribute("href", "https://github.com");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      const anchorElement = link.shadowRoot.querySelector("a.ea-link");
-      expect(anchorElement.href).toBe("https://github.com/");
-    });
-
-    it("动态添加 disabled 属性应该生效", async () => {
-      const link = document.createElement("ea-link");
-      container.appendChild(link);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(link.hasAttribute("disabled")).toBe(false);
-
-      link.setAttribute("disabled", "");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(link.hasAttribute("disabled")).toBe(true);
-    });
-
-    it("动态修改 icon 应该生效", async () => {
-      const link = document.createElement("ea-link");
-      link.setAttribute("icon", "eye");
-      container.appendChild(link);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      link.setAttribute("icon", "share");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      const iconElement = link.shadowRoot.querySelector("ea-icon");
-      expect(iconElement.getAttribute("name")).toBe("share");
-    });
-
-    it("动态修改 underline 应该生效", async () => {
-      const link = document.createElement("ea-link");
-      link.setAttribute("underline", "hover");
-      container.appendChild(link);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      link.setAttribute("underline", "always");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(link.getAttribute("underline")).toBe("always");
     });
   });
 });

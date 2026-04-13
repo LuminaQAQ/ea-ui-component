@@ -23,7 +23,7 @@ onMounted(() => {
 
 ```js
 <script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-link/index.js";
+  import "./node_modules/easy-component-ui/components/ea-link/index.ts";
 </script>
 ```
 
