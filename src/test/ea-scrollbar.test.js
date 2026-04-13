@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
 // Mock Element.scrollTo for JSDOM
 if (!Element.prototype.scrollTo) {
@@ -10,8 +11,16 @@ if (!Element.prototype.scrollTo) {
   };
 }
 
+// Mock requestAnimationFrame for JSDOM
+global.requestAnimationFrame = (callback) => {
+  return setTimeout(callback, 16);
+};
+global.cancelAnimationFrame = (id) => {
+  clearTimeout(id);
+};
+
 // 导入 ea-scrollbar 组件
-import "../components/ea-scrollbar/index.js";
+import "../components/ea-scrollbar/index.ts";
 
 describe("EaScrollbar Component", () => {
   let container;
@@ -38,7 +47,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(scrollbar.shadowRoot).toBeTruthy();
       expect(scrollbar.shadowRoot.querySelector(".ea-scrollbar")).toBeTruthy();
@@ -49,7 +58,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(
         scrollbar.shadowRoot.querySelector('[part="container"]')
@@ -74,7 +83,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const slot = scrollbar.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -85,7 +94,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 500px; width: 500px;">Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const horizontalTrack = scrollbar.shadowRoot.querySelector(
         ".ea-scrollbar__track-horizontal"
@@ -102,7 +111,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 500px; width: 500px;">Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const horizontalThumb = scrollbar.shadowRoot.querySelector(
         ".ea-scrollbar__thumb-horizontal"
@@ -124,11 +133,9 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
-      expect(scrollbar.native === false || scrollbar.native === null).toBe(
-        true
-      );
+      expect(scrollbar.native).toBe(false);
     });
 
     it("应该支持 native 属性设置为 true", async () => {
@@ -137,7 +144,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(scrollbar.native).toBe(true);
     });
@@ -148,7 +155,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("ea-scrollbar--native")).toBe(true);
@@ -164,11 +171,9 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
-      expect(scrollbar.noresize === false || scrollbar.noresize === null).toBe(
-        true
-      );
+      expect(scrollbar.noresize).toBe(false);
     });
 
     it("应该支持 noresize 属性设置为 true", async () => {
@@ -177,7 +182,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(scrollbar.noresize).toBe(true);
     });
@@ -188,7 +193,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("ea-scrollbar--noresize")).toBe(
@@ -206,11 +211,9 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
-      expect(scrollbar.always === false || scrollbar.always === null).toBe(
-        true
-      );
+      expect(scrollbar.always).toBe(false);
     });
 
     it("应该支持 always 属性设置为 true", async () => {
@@ -219,7 +222,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(scrollbar.always).toBe(true);
     });
@@ -230,7 +233,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("ea-scrollbar--always")).toBe(true);
@@ -248,7 +251,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const scrollHandler = vi.fn();
       scrollbar.addEventListener("scroll", scrollHandler);
@@ -257,7 +260,7 @@ describe("EaScrollbar Component", () => {
       view.scrollTop = 100;
       view.dispatchEvent(new Event("scroll"));
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       expect(scrollHandler).toHaveBeenCalled();
     });
@@ -269,10 +272,10 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       let eventDetail = null;
-      scrollbar.addEventListener("scroll", e => {
+      scrollbar.addEventListener("scroll", (e) => {
         eventDetail = e.detail;
       });
 
@@ -281,7 +284,7 @@ describe("EaScrollbar Component", () => {
       view.scrollLeft = 30;
       view.dispatchEvent(new Event("scroll"));
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       expect(eventDetail).toBeTruthy();
       expect(typeof eventDetail.scrollTop).toBe("number");
@@ -300,7 +303,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(typeof scrollbar.scrollTo).toBe("function");
     });
@@ -312,14 +315,14 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
 
       scrollbar.scrollTo({ top: 100 });
 
       // scrollTo 是异步的，等待一下
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       // 验证 scrollTo 方法被调用（实际滚动位置可能因 JSDOM 限制而不同）
       expect(view.scrollTop).toBeGreaterThanOrEqual(0);
@@ -337,7 +340,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
       const initialScrollTop = view.scrollTop;
@@ -346,7 +349,7 @@ describe("EaScrollbar Component", () => {
       const keydownEvent = new KeyboardEvent("keydown", { key: "ArrowDown" });
       scrollbar.dispatchEvent(keydownEvent);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       // 由于 JSDOM 限制，可能无法实际滚动，但事件应该被处理
       expect(view.scrollTop >= initialScrollTop).toBe(true);
@@ -359,7 +362,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
       const initialScrollLeft = view.scrollLeft;
@@ -368,7 +371,7 @@ describe("EaScrollbar Component", () => {
       const keydownEvent = new KeyboardEvent("keydown", { key: "ArrowRight" });
       scrollbar.dispatchEvent(keydownEvent);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       expect(view.scrollLeft >= initialScrollLeft).toBe(true);
     });
@@ -382,7 +385,7 @@ describe("EaScrollbar Component", () => {
       const scrollbar = document.createElement("ea-scrollbar");
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(scrollbar.shadowRoot.querySelector(".ea-scrollbar")).toBeTruthy();
     });
@@ -392,7 +395,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 50px;">Small Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(
         scrollbar.shadowRoot.querySelector(".ea-scrollbar__view")
@@ -406,7 +409,7 @@ describe("EaScrollbar Component", () => {
       `;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
       // JSDOM 中 scrollHeight 和 clientHeight 可能相等，所以只验证 view 存在
@@ -420,7 +423,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 100px;">Initial Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       // 动态添加更多内容
       const newContent = document.createElement("div");
@@ -428,7 +431,7 @@ describe("EaScrollbar Component", () => {
       newContent.textContent = "New Content";
       scrollbar.appendChild(newContent);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(scrollbar.children.length).toBe(2);
     });
@@ -443,7 +446,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div style="height: 500px;">Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       expect(scrollbar.shadowRoot).toBeTruthy();
       expect(scrollbar.isMounted).toBe(true);
@@ -454,7 +457,7 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
       scrollbar.remove();
 
@@ -466,13 +469,13 @@ describe("EaScrollbar Component", () => {
       scrollbar.innerHTML = `<div>Content</div>`;
       container.appendChild(scrollbar);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(200);
 
-      expect(scrollbar.native).toBeFalsy();
+      expect(scrollbar.native).toBe(false);
 
       scrollbar.setAttribute("native", "");
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       expect(scrollbar.native).toBe(true);
     });
