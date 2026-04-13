@@ -114,6 +114,26 @@ onMounted(() => {
 
 :::
 
+### 旋转动画
+
+<div class="demo row left">
+  <ea-icon name="spinner" spin></ea-icon>
+  <ea-icon name="circle-notch" spin></ea-icon>
+  <ea-icon name="sync" spin></ea-icon>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="demo row left">
+  <ea-icon name="spinner" spin></ea-icon>
+  <ea-icon name="circle-notch" spin></ea-icon>
+  <ea-icon name="sync" spin></ea-icon>
+</div>
+```
+
+:::
+
 ## Attributes
 
 | 属性名  | 类型          | 默认值    | 说明                                                     |
@@ -123,3 +143,4 @@ onMounted(() => {
 | variant | string        | `solid`   | 图标样式：`solid`、`regular`、`light`、`thin`、`duotone` |
 | size    | string/number | -         | 图标大小                                                 |
 | color   | string        | -         | 图标颜色                                                 |
+| spin    | boolean       | `false`   | 是否开启旋转动画                                         |
