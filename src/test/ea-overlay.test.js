@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
+import { waitForRender } from "./utils/waitForRender.js";
+
 // 导入 ea-overlay 组件
-import "../common/ea-overlay/index.js";
+import "../common/ea-overlay/index.ts";
 
 describe("EaOverlay Component", () => {
   let container;
@@ -23,7 +25,7 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(overlay.shadowRoot).toBeTruthy();
       expect(overlay.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
@@ -33,7 +35,7 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         overlay.shadowRoot.querySelector('[part="container"]')
@@ -46,7 +48,7 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         overlay.shadowRoot.querySelector(".ea-overlay__mask")
@@ -61,20 +63,20 @@ describe("EaOverlay Component", () => {
    * Status 属性测试
    */
   describe("Status Attribute", () => {
-    it("默认 status 应该是 false 或 null", async () => {
+    it("默认 status 应该是 false", async () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(overlay.status === false || overlay.status === null).toBe(true);
+      expect(overlay.status).toBe(false);
     });
 
     it("应该支持通过 show() 方法显示", async () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       overlay.show();
 
@@ -85,21 +87,21 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       overlay.show();
       expect(overlay.status).toBe(true);
 
       overlay.hide();
-      expect(overlay.status === false || overlay.status === null).toBe(true);
+      expect(overlay.status).toBe(false);
     });
 
     it("应该支持通过 status 属性控制显示", async () => {
       const overlay = document.createElement("ea-overlay");
-      overlay.setAttribute("status", "true");
+      overlay.setAttribute("status", "");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(overlay.status).toBe(true);
     });
@@ -113,7 +115,7 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(overlay.modal).toBe(true);
     });
@@ -123,7 +125,7 @@ describe("EaOverlay Component", () => {
       overlay.setAttribute("modal", "false");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(overlay.modal).toBe(false);
     });
@@ -133,24 +135,21 @@ describe("EaOverlay Component", () => {
    * Close on click modal 属性测试
    */
   describe("Close on Click Modal Attribute", () => {
-    it("默认 close-on-click-modal 应该是 false 或 null", async () => {
+    it("默认 closeOnClickModal 应该是 false", async () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(
-        overlay["close-on-click-modal"] === false ||
-          overlay["close-on-click-modal"] === null
-      ).toBe(true);
+      expect(overlay.closeOnClickModal).toBe(false);
     });
 
     it("应该支持点击遮罩层关闭", async () => {
       const overlay = document.createElement("ea-overlay");
-      overlay.setAttribute("close-on-click-modal", "true");
+      overlay.setAttribute("close-on-click-modal", "");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       overlay.show();
       expect(overlay.status).toBe(true);
@@ -159,9 +158,9 @@ describe("EaOverlay Component", () => {
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(overlay.status === false || overlay.status === null).toBe(true);
+      expect(overlay.status).toBe(false);
     });
   });
 
@@ -174,9 +173,9 @@ describe("EaOverlay Component", () => {
       overlay.setAttribute("z-index", "2000");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(overlay["z-index"]).toBe("2000");
+      expect(overlay.zIndex).toBe("2000");
     });
 
     it("应该支持 background-color 属性", async () => {
@@ -184,9 +183,9 @@ describe("EaOverlay Component", () => {
       overlay.setAttribute("background-color", "rgba(0,0,0,0.8)");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(overlay["background-color"]).toBe("rgba(0,0,0,0.8)");
+      expect(overlay.backgroundColor).toBe("rgba(0,0,0,0.8)");
     });
 
     it("应该支持 content-width 属性", async () => {
@@ -194,9 +193,9 @@ describe("EaOverlay Component", () => {
       overlay.setAttribute("content-width", "80%");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(overlay["content-width"]).toBe("80%");
+      expect(overlay.contentWidth).toBe("80%");
     });
 
     it("应该支持 content-height 属性", async () => {
@@ -204,9 +203,9 @@ describe("EaOverlay Component", () => {
       overlay.setAttribute("content-height", "60%");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(overlay["content-height"]).toBe("60%");
+      expect(overlay.contentHeight).toBe("60%");
     });
   });
 
@@ -216,10 +215,10 @@ describe("EaOverlay Component", () => {
   describe("beforeClose Property", () => {
     it("应该支持 beforeClose 回调函数", async () => {
       const overlay = document.createElement("ea-overlay");
-      overlay.setAttribute("close-on-click-modal", "true");
+      overlay.setAttribute("close-on-click-modal", "");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const beforeCloseHandler = vi.fn(done => done());
       overlay.beforeClose = beforeCloseHandler;
@@ -236,10 +235,10 @@ describe("EaOverlay Component", () => {
 
     it("beforeClose 应该可以异步执行", async () => {
       const overlay = document.createElement("ea-overlay");
-      overlay.setAttribute("close-on-click-modal", "true");
+      overlay.setAttribute("close-on-click-modal", "");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       let doneCalled = false;
       overlay.beforeClose = async done => {
@@ -253,10 +252,10 @@ describe("EaOverlay Component", () => {
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(100);
 
       expect(doneCalled).toBe(true);
-      expect(overlay.status === false || overlay.status === null).toBe(true);
+      expect(overlay.status).toBe(false);
     });
   });
 
@@ -271,7 +270,7 @@ describe("EaOverlay Component", () => {
       `;
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const slot = overlay.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
@@ -286,12 +285,14 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const openHandler = vi.fn();
       overlay.addEventListener("open", openHandler);
 
-      overlay.show();
+      overlay.status = true;
+
+      await waitForRender();
 
       expect(openHandler).toHaveBeenCalled();
     });
@@ -300,7 +301,7 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const openedHandler = vi.fn();
       overlay.addEventListener("opened", openedHandler);
@@ -309,7 +310,7 @@ describe("EaOverlay Component", () => {
 
       // 等待 requestAnimationFrame 和 transitionend
       await new Promise(resolve => requestAnimationFrame(resolve));
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 在 JSDOM 中手动触发 transitionend 事件
       const overlayContainer = overlay.shadowRoot.querySelector(".ea-overlay");
@@ -317,7 +318,7 @@ describe("EaOverlay Component", () => {
         new Event("transitionend", { bubbles: true })
       );
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(openedHandler).toHaveBeenCalled();
     });
@@ -326,14 +327,16 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      overlay.show();
+      overlay.status = true;
+      await waitForRender();
 
       const closeHandler = vi.fn();
       overlay.addEventListener("close", closeHandler);
 
-      overlay.hide();
+      overlay.status = false;
+      await waitForRender();
 
       expect(closeHandler).toHaveBeenCalled();
     });
@@ -342,14 +345,16 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      overlay.show();
+      overlay.status = true;
+      await waitForRender();
 
       const closedHandler = vi.fn();
       overlay.addEventListener("closed", closedHandler);
 
-      overlay.hide();
+      overlay.status = false;
+      await waitForRender();
 
       // 在 JSDOM 中手动触发 transitionend 事件
       const overlayContainer = overlay.shadowRoot.querySelector(".ea-overlay");
@@ -357,7 +362,7 @@ describe("EaOverlay Component", () => {
         new Event("transitionend", { bubbles: true })
       );
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(closedHandler).toHaveBeenCalled();
     });
@@ -371,7 +376,7 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(overlay.shadowRoot).toBeTruthy();
     });
@@ -380,28 +385,28 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       overlay.show();
       expect(overlay.status).toBe(true);
 
       overlay.hide();
-      expect(overlay.status === false || overlay.status === null).toBe(true);
+      expect(overlay.status).toBe(false);
 
       overlay.show();
       expect(overlay.status).toBe(true);
 
       overlay.hide();
-      expect(overlay.status === false || overlay.status === null).toBe(true);
+      expect(overlay.status).toBe(false);
     });
 
     it("应该处理点击内容区域不关闭", async () => {
       const overlay = document.createElement("ea-overlay");
-      overlay.setAttribute("close-on-click-modal", "true");
+      overlay.setAttribute("close-on-click-modal", "");
       overlay.innerHTML = `<div class="test-content">Content</div>`;
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       overlay.show();
       expect(overlay.status).toBe(true);
@@ -424,7 +429,7 @@ describe("EaOverlay Component", () => {
       overlay.setAttribute("modal", "false");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(overlay.shadowRoot).toBeTruthy();
       expect(overlay.modal).toBe(false);
@@ -434,7 +439,7 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       overlay.remove();
 
@@ -445,13 +450,13 @@ describe("EaOverlay Component", () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(overlay.modal).toBe(true);
 
       overlay.setAttribute("modal", "false");
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(overlay.modal).toBe(false);
     });
