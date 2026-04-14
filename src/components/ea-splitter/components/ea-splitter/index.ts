@@ -43,8 +43,6 @@ export class EaSplitter extends EaBase {
   @query(".ea-splitter")
   private _container!: HTMLElement;
 
-  private _resizeController?: AbortController;
-
   // ==================== 属性定义 ====================
 
   @attribute({
@@ -92,14 +90,10 @@ export class EaSplitter extends EaBase {
   /**
    * `layout="horizontal"` 时的 `resize` 事件监听
    * @param e 鼠标事件
+   * @param index bar 的索引
    */
-  private _splitterColResizeEvent = (e: MouseEvent): void => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  private _splitterColResizeEvent = (e: MouseEvent, index: number): void => {
     const controller = new AbortController();
-    const target = e.target as HTMLElement;
-    const index = Number(target.getAttribute("data-index"));
 
     const preChild = this.children[index - 1] as EaSplitterPanel;
     const nextChild = this.children[index + 1] as EaSplitterPanel;
@@ -160,14 +154,10 @@ export class EaSplitter extends EaBase {
   /**
    * `layout="vertical"` 时的 `resize` 事件监听
    * @param e 鼠标事件
+   * @param index bar 的索引
    */
-  private _splitterRowResizeEvent = (e: MouseEvent): void => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  private _splitterRowResizeEvent = (e: MouseEvent, index: number): void => {
     const controller = new AbortController();
-    const target = e.target as HTMLElement;
-    const index = Number(target.getAttribute("data-index"));
 
     const preChild = this.children[index - 1] as EaSplitterPanel;
     const nextChild = this.children[index + 1] as EaSplitterPanel;
@@ -239,43 +229,54 @@ export class EaSplitter extends EaBase {
     `;
   }
 
+  // ==================== 事件处理 ====================
+
+  /**
+   * 处理 mousedown 事件 - 统一事件委托
+   * @param e 鼠标事件
+   */
+  @listen("mousedown")
+  private _handleMouseDown(e: MouseEvent): void {
+    const target = e.target as HTMLElement;
+    const bar = target.closest("ea-splitter-bar") as HTMLElement;
+    if (!bar) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const index = Number(bar.getAttribute("data-index"));
+    if (isNaN(index)) return;
+
+    // 根据布局方向调用对应的 resize 处理函数
+    if (this.layout === "horizontal") {
+      this._splitterColResizeEvent(e, index);
+    } else {
+      this._splitterRowResizeEvent(e, index);
+    }
+  }
+
   // ==================== 生命周期 ====================
 
   $mount(): void {
-    this._resizeController = new AbortController();
-
     queueMicrotask(() => {
-      let children = [...this.children];
-      [...this.children].forEach((child, index) => {
-        if (child.tagName === "EA-SPLITTER-PANEL") {
-          (child as EaSplitterPanel).layout = this.layout;
-          child.setAttribute("data-panel-index", String(index));
+      const panels = [...this.children].filter(
+        child => child.tagName === "EA-SPLITTER-PANEL"
+      ) as EaSplitterPanel[];
 
-          if (index < children.length - 1) {
-            const splitterBar = document.createElement("ea-splitter-bar");
-            this.insertBefore(splitterBar, child.nextSibling);
-          }
-        }
-      });
+      panels.forEach((panel, index) => {
+        panel.layout = this.layout;
+        panel.setAttribute("data-panel-index", String(index));
 
-      children = [...this.children];
-      children.forEach((child, index) => {
-        if (child.tagName === "EA-SPLITTER-BAR") {
-          child.setAttribute("data-index", String(index));
-          (child as HTMLElement & { layout: string }).layout = this.layout;
-          child.addEventListener(
-            "mousedown",
-            this.layout === "horizontal"
-              ? this._splitterColResizeEvent
-              : this._splitterRowResizeEvent,
-            { signal: this._resizeController?.signal }
-          );
+        if (index < panels.length - 1) {
+          const splitterBar = document.createElement("ea-splitter-bar");
+          this.insertBefore(splitterBar, panel.nextSibling);
+
+          const barIndex = [...this.children].indexOf(splitterBar);
+          splitterBar.setAttribute("data-index", String(barIndex));
+          (splitterBar as HTMLElement & { layout: string }).layout =
+            this.layout;
         }
       });
     });
-  }
-
-  $beforeUnmount(): void {
-    this._resizeController?.abort();
   }
 }

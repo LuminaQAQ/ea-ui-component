@@ -64,7 +64,7 @@ ea-popper {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-popper/index.js";
+  import "./node_modules/easy-component-ui/components/ea-popper/index.ts";
 </script>
 ```
 

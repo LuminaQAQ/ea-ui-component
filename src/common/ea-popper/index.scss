@@ -25,10 +25,8 @@
   @include element(original) {
     --ea-popper-transform-x: 0;
     --ea-popper-transform-y: 0;
-    --ea-popper-transform: translate(
-      var(--ea-popper-transform-x),
-      var(--ea-popper-transform-y)
-    );
+    --ea-popper-transform: translate(var(--ea-popper-transform-x),
+        var(--ea-popper-transform-y));
 
     display: none;
     visibility: hidden;
@@ -62,6 +60,7 @@
   }
 
   @include modifier(top) {
+
     &,
     &-start,
     &-end {
@@ -110,6 +109,7 @@
   }
 
   @include modifier(bottom) {
+
     &,
     &-start,
     &-end {
@@ -158,6 +158,7 @@
   }
 
   @include modifier(right) {
+
     &,
     &-start,
     &-end {
@@ -210,6 +211,7 @@
   }
 
   @include modifier(left) {
+
     &,
     &-start,
     &-end {
@@ -261,26 +263,27 @@
     }
   }
 
-  @include modifier(show-arrow) {
+  @include state(show-arrow) {
     .ea-popper__original::after {
       display: block;
     }
   }
 
-  @include modifier(show) {
+  @include state(before-show) {
     .ea-popper__original {
       display: block;
     }
   }
 
-  @include modifier(is-show) {
+  @include state(show) {
     .ea-popper__original {
+      display: block;
       visibility: visible;
       filter: opacity(1);
     }
   }
 
-  @include modifier(before-hide) {
+  @include state(before-hide) {
     .ea-popper__original {
       filter: opacity(0);
     }
