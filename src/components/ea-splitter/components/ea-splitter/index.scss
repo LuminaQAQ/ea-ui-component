@@ -9,6 +9,7 @@
 }
 
 @include block(ea-splitter) {
+  position: relative;
   box-sizing: border-box;
   overflow: hidden;
 

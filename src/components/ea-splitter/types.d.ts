@@ -1,0 +1,220 @@
+// ==================== HTML 全局类型声明 ====================
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "ea-splitter": EaSplitterElement;
+    "ea-splitter-panel": EaSplitterPanelElement;
+    "ea-splitter-bar": EaSplitterBarElement;
+  }
+}
+
+/**
+ * ea-splitter 组件的 HTML 接口
+ */
+export interface EaSplitterElement extends HTMLElement {
+  /** 分隔面板的布局方向 */
+  layout: "horizontal" | "vertical";
+}
+
+/**
+ * ea-splitter-panel 组件的 HTML 接口
+ */
+export interface EaSplitterPanelElement extends HTMLElement {
+  /** 面板大小(像素或百分比) */
+  size: string;
+  /** 面板最小尺寸(像素或百分比) */
+  min: string;
+  /** 布局方向 */
+  layout: "horizontal" | "vertical";
+}
+
+/**
+ * ea-splitter-bar 组件的 HTML 接口
+ */
+export interface EaSplitterBarElement extends HTMLElement {
+  /** 布局方向 */
+  layout: "horizontal" | "vertical";
+}
+
+// ==================== Vue 类型声明 ====================
+
+import type { DefineComponent } from "vue";
+
+/**
+ * ea-splitter Vue 组件属性
+ */
+export interface EaSplitterVueProps {
+  /** 分隔面板的布局方向 */
+  layout?: "horizontal" | "vertical";
+}
+
+/**
+ * ea-splitter-panel Vue 组件属性
+ */
+export interface EaSplitterPanelVueProps {
+  /** 面板大小(像素或百分比) */
+  size?: string;
+  /** 面板最小尺寸(像素或百分比) */
+  min?: string;
+  /** 布局方向 */
+  layout?: "horizontal" | "vertical";
+}
+
+/**
+ * ea-splitter-bar Vue 组件属性
+ */
+export interface EaSplitterBarVueProps {
+  /** 布局方向 */
+  layout?: "horizontal" | "vertical";
+}
+
+/**
+ * ea-splitter Vue 组件事件
+ */
+export interface EaSplitterVueEvents {
+  /** 开始调整面板大小时触发 */
+  "panel-resize-start": (event: CustomEvent<{ size: number[] }>) => void;
+  /** 调整面板大小时触发 */
+  "panel-resize": (event: CustomEvent<{ size: number[] }>) => void;
+  /** 面板调整大小结束时触发 */
+  "panel-resize-end": (event: CustomEvent<{ size: number[] }>) => void;
+}
+
+/**
+ * ea-splitter Vue 组件插槽
+ */
+export interface EaSplitterVueSlots {
+  /** 默认插槽，用于放置 ea-splitter-panel */
+  default?: () => any;
+}
+
+/**
+ * ea-splitter-panel Vue 组件插槽
+ */
+export interface EaSplitterPanelVueSlots {
+  /** 默认插槽，用于面板内容 */
+  default?: () => any;
+}
+
+/**
+ * ea-splitter-bar Vue 组件插槽
+ */
+export interface EaSplitterBarVueSlots {
+  /** 默认插槽 */
+  default?: () => any;
+}
+
+/**
+ * ea-splitter Vue 组件类型
+ */
+export type EaSplitterVueComponent = DefineComponent<
+  EaSplitterVueProps,
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  keyof EaSplitterVueEvents,
+  {},
+  {},
+  EaSplitterVueSlots
+>;
+
+/**
+ * ea-splitter-panel Vue 组件类型
+ */
+export type EaSplitterPanelVueComponent = DefineComponent<
+  EaSplitterPanelVueProps,
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  EaSplitterPanelVueSlots
+>;
+
+/**
+ * ea-splitter-bar Vue 组件类型
+ */
+export type EaSplitterBarVueComponent = DefineComponent<
+  EaSplitterBarVueProps,
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  EaSplitterBarVueSlots
+>;
+
+declare module "vue" {
+  interface GlobalComponents {
+    "ea-splitter": EaSplitterVueComponent;
+    "ea-splitter-panel": EaSplitterPanelVueComponent;
+    "ea-splitter-bar": EaSplitterBarVueComponent;
+  }
+}
+
+// ==================== React 类型声明 ====================
+
+import type { HTMLAttributes, ReactNode } from "react";
+
+/**
+ * ea-splitter React 组件属性
+ */
+export interface EaSplitterReactProps extends HTMLAttributes<HTMLElement> {
+  /** 分隔面板的布局方向 */
+  layout?: "horizontal" | "vertical";
+  /** 开始调整面板大小时触发 */
+  onPanelResizeStart?: (event: CustomEvent<{ size: number[] }>) => void;
+  /** 调整面板大小时触发 */
+  onPanelResize?: (event: CustomEvent<{ size: number[] }>) => void;
+  /** 面板调整大小结束时触发 */
+  onPanelResizeEnd?: (event: CustomEvent<{ size: number[] }>) => void;
+  /** 子元素 */
+  children?: ReactNode;
+}
+
+/**
+ * ea-splitter-panel React 组件属性
+ */
+export interface EaSplitterPanelReactProps extends HTMLAttributes<HTMLElement> {
+  /** 面板大小(像素或百分比) */
+  size?: string;
+  /** 面板最小尺寸(像素或百分比) */
+  min?: string;
+  /** 布局方向 */
+  layout?: "horizontal" | "vertical";
+  /** 子元素 */
+  children?: ReactNode;
+}
+
+/**
+ * ea-splitter-bar React 组件属性
+ */
+export interface EaSplitterBarReactProps extends HTMLAttributes<HTMLElement> {
+  /** 布局方向 */
+  layout?: "horizontal" | "vertical";
+  /** 子元素 */
+  children?: ReactNode;
+}
+
+declare module "react" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "ea-splitter": EaSplitterReactProps;
+      "ea-splitter-panel": EaSplitterPanelReactProps;
+      "ea-splitter-bar": EaSplitterBarReactProps;
+    }
+  }
+}
+
+export {};
