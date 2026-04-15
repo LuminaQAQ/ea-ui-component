@@ -1,8 +1,8 @@
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 import stylesheet from "./index.scss?inline";
 import { EaInputNumberChangeEvent } from "./events/EaInputNumberChangeEvent";
 
-export class EaInputNumber extends FormAssociatedBase {
+export class EaInputNumber extends EaFormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLInputElement} */

@@ -1,4 +1,4 @@
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 import "@components/ea-input/index.js";
 
 import stylesheet from "./index.scss?inline";
@@ -8,7 +8,7 @@ import { EaSelectRemoveTagEvent } from "../../events/EaSelectRemoveTagEvent";
 import { EaSelectClearEvent } from "../../events/EaSelectClearEvent";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
-export class EaSelect extends FormAssociatedBase {
+export class EaSelect extends EaFormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */

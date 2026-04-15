@@ -1,4 +1,4 @@
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 import stylesheet from "./index.scss?inline";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 import "@/components/ea-tooltip";
@@ -6,7 +6,7 @@ import "@/components/ea-input-number";
 import { namespace } from "@/directives/namespace";
 import EaUtils from "@/utils/Utils";
 
-export class EaSlider extends FormAssociatedBase {
+export class EaSlider extends EaFormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */

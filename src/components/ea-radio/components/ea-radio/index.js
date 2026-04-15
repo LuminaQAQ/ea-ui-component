@@ -1,9 +1,9 @@
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 
 import stylesheet from "./index.scss?inline";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 
-export class EaRadio extends FormAssociatedBase {
+export class EaRadio extends EaFormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */

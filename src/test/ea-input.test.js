@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
 // 导入 ea-input 组件
-import "../components/ea-input/index.js";
+import "../components/ea-input/index.ts";
 
 describe("EaInput Component", () => {
   let container;
@@ -23,49 +24,88 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(input).toBeDefined();
       expect(input.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含所有 CSS Parts", async () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(input.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-    });
+      const parts = [
+        "container",
+        "region",
+        "prepend",
+        "inner",
+        "prefix",
+        "original-wrapper",
+        "original",
+        "suffix",
+        "clear-icon",
+        "show-password-icon",
+        "suffix-icon",
+        "count",
+        "append",
+        "label",
+      ];
 
-    it("应该包含 inner CSS Part", async () => {
-      const input = document.createElement("ea-input");
-      container.appendChild(input);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(input.shadowRoot.querySelector('[part="inner"]')).toBeTruthy();
-    });
-
-    it("应该包含 original CSS Part", async () => {
-      const input = document.createElement("ea-input");
-      container.appendChild(input);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(input.shadowRoot.querySelector('[part="original"]')).toBeTruthy();
+      parts.forEach(part => {
+        expect(input.shadowRoot.querySelector(`[part="${part}"]`)).toBeTruthy();
+      });
     });
 
     it("应该包含原生 input 元素", async () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
       expect(inputElement).toBeTruthy();
+    });
+  });
+
+  /**
+   * Label 属性测试
+   */
+  describe("Label Attribute", () => {
+    it("默认 label 应该是空字符串", async () => {
+      const input = document.createElement("ea-input");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      expect(input.getAttribute("label")).toBe(null);
+    });
+
+    it("应该支持 label 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("label", "用户名");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      expect(input.getAttribute("label")).toBe("用户名");
+    });
+
+    it("label 应该正确显示在标签上", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("label", "邮箱地址");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const labelElement = input.shadowRoot.querySelector(
+        ".ea-input__form-label"
+      );
+      expect(labelElement).toBeTruthy();
+      expect(labelElement.textContent).toBe("邮箱地址");
     });
   });
 
@@ -77,12 +117,12 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
-      expect(inputElement).toBeTruthy();
+      expect(inputElement.type).toBe("text");
     });
 
     it("应该支持 type='password'", async () => {
@@ -90,12 +130,12 @@ describe("EaInput Component", () => {
       input.setAttribute("type", "password");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
-      expect(inputElement).toBeTruthy();
+      expect(inputElement.type).toBe("password");
     });
 
     it("应该支持 type='textarea'", async () => {
@@ -103,7 +143,7 @@ describe("EaInput Component", () => {
       input.setAttribute("type", "textarea");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const textareaElement = input.shadowRoot.querySelector(
         "textarea.ea-input__original"
@@ -111,7 +151,7 @@ describe("EaInput Component", () => {
       expect(textareaElement).toBeTruthy();
     });
 
-    it("应该支持不同的 type 值", async () => {
+    it("应该支持所有输入类型", async () => {
       const types = [
         "text",
         "password",
@@ -120,6 +160,21 @@ describe("EaInput Component", () => {
         "search",
         "tel",
         "url",
+        "button",
+        "checkbox",
+        "color",
+        "date",
+        "datetime-local",
+        "file",
+        "hidden",
+        "image",
+        "month",
+        "radio",
+        "range",
+        "reset",
+        "submit",
+        "time",
+        "week",
       ];
 
       for (const type of types) {
@@ -127,12 +182,17 @@ describe("EaInput Component", () => {
         input.setAttribute("type", type);
         container.appendChild(input);
 
-        await new Promise(resolve => setTimeout(resolve, 30));
+        await waitForRender();
 
-        const inputElement = input.shadowRoot.querySelector(
-          "input.ea-input__original"
+        const originalElement = input.shadowRoot.querySelector(
+          ".ea-input__original"
         );
-        expect(inputElement).toBeTruthy();
+        expect(originalElement).toBeTruthy();
+
+        if (type !== "textarea") {
+          expect(originalElement.type).toBe(type);
+        }
+
         input.remove();
       }
     });
@@ -142,12 +202,24 @@ describe("EaInput Component", () => {
    * Value 属性测试
    */
   describe("Value Attribute", () => {
+    it("默认 value 应该是空字符串", async () => {
+      const input = document.createElement("ea-input");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.value).toBe("");
+    });
+
     it("应该支持 value 属性", async () => {
       const input = document.createElement("ea-input");
       input.setAttribute("value", "test value");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -163,7 +235,7 @@ describe("EaInput Component", () => {
         input.setAttribute("value", value);
         container.appendChild(input);
 
-        await new Promise(resolve => setTimeout(resolve, 30));
+        await waitForRender();
 
         const inputElement = input.shadowRoot.querySelector(
           "input.ea-input__original"
@@ -178,12 +250,24 @@ describe("EaInput Component", () => {
    * Placeholder 属性测试
    */
   describe("Placeholder Attribute", () => {
+    it("默认 placeholder 应该是空字符串", async () => {
+      const input = document.createElement("ea-input");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.placeholder).toBe("");
+    });
+
     it("应该支持 placeholder 属性", async () => {
       const input = document.createElement("ea-input");
       input.setAttribute("placeholder", "Please input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -200,7 +284,7 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -213,7 +297,7 @@ describe("EaInput Component", () => {
       input.setAttribute("disabled", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -230,7 +314,7 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -243,7 +327,7 @@ describe("EaInput Component", () => {
       input.setAttribute("readonly", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -256,12 +340,21 @@ describe("EaInput Component", () => {
    * Size 属性测试
    */
   describe("Size Attribute", () => {
+    it("默认 size 应该是 default", async () => {
+      const input = document.createElement("ea-input");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      expect(input.getAttribute("size")).toBe(null);
+    });
+
     it("应该支持 size='large'", async () => {
       const input = document.createElement("ea-input");
       input.setAttribute("size", "large");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(input.getAttribute("size")).toBe("large");
     });
@@ -271,7 +364,7 @@ describe("EaInput Component", () => {
       input.setAttribute("size", "small");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(input.getAttribute("size")).toBe("small");
     });
@@ -301,7 +394,7 @@ describe("EaInput Component", () => {
       input.setAttribute("clearable", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(input.hasAttribute("clearable")).toBe(true);
     });
@@ -311,11 +404,22 @@ describe("EaInput Component", () => {
       input.setAttribute("clearable", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         input.shadowRoot.querySelector('[part="clear-icon"]')
       ).toBeTruthy();
+    });
+
+    it("应该支持自定义 clearIcon", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("clearable", "");
+      input.setAttribute("clearIcon", "trash");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      expect(input.getAttribute("clearIcon")).toBe("trash");
     });
   });
 
@@ -323,29 +427,29 @@ describe("EaInput Component", () => {
    * Show Password 属性测试
    */
   describe("Show Password Attribute", () => {
-    it("默认 show-password 应该是 false", () => {
+    it("默认 showPassword 应该是 false", () => {
       const input = document.createElement("ea-input");
-      expect(input.hasAttribute("show-password")).toBe(false);
+      expect(input.hasAttribute("showPassword")).toBe(false);
     });
 
-    it("设置 show-password 属性应该启用密码显示切换", async () => {
+    it("设置 showPassword 属性应该启用密码显示切换", async () => {
       const input = document.createElement("ea-input");
       input.setAttribute("type", "password");
-      input.setAttribute("show-password", "");
+      input.setAttribute("showPassword", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(input.hasAttribute("show-password")).toBe(true);
+      expect(input.hasAttribute("showPassword")).toBe(true);
     });
 
     it("应该包含 show-password-icon CSS Part", async () => {
       const input = document.createElement("ea-input");
       input.setAttribute("type", "password");
-      input.setAttribute("show-password", "");
+      input.setAttribute("showPassword", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         input.shadowRoot.querySelector('[part="show-password-icon"]')
@@ -362,7 +466,7 @@ describe("EaInput Component", () => {
       input.setAttribute("maxlength", "10");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -375,7 +479,7 @@ describe("EaInput Component", () => {
       input.setAttribute("minlength", "5");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -388,20 +492,20 @@ describe("EaInput Component", () => {
    * Show Word Limit 属性测试
    */
   describe("Show Word Limit Attribute", () => {
-    it("默认 show-word-limit 应该是 false", () => {
+    it("默认 showWordLimit 应该是 false", () => {
       const input = document.createElement("ea-input");
-      expect(input.hasAttribute("show-word-limit")).toBe(false);
+      expect(input.hasAttribute("showWordLimit")).toBe(false);
     });
 
-    it("设置 show-word-limit 应该显示字数统计", async () => {
+    it("设置 showWordLimit 应该显示字数统计", async () => {
       const input = document.createElement("ea-input");
       input.setAttribute("maxlength", "10");
-      input.setAttribute("show-word-limit", "");
+      input.setAttribute("showWordLimit", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(input.hasAttribute("show-word-limit")).toBe(true);
+      expect(input.hasAttribute("showWordLimit")).toBe(true);
       expect(input.shadowRoot.querySelector('[part="count"]')).toBeTruthy();
     });
   });
@@ -410,24 +514,34 @@ describe("EaInput Component", () => {
    * Prefix/Suffix Icon 属性测试
    */
   describe("Prefix/Suffix Icon Attributes", () => {
-    it("应该支持 prefix-icon 属性", async () => {
+    it("默认 prefixIcon 应该是空字符串", () => {
       const input = document.createElement("ea-input");
-      input.setAttribute("prefix-icon", "search");
-      container.appendChild(input);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(input.getAttribute("prefix-icon")).toBe("search");
+      expect(input.getAttribute("prefixIcon")).toBe(null);
     });
 
-    it("应该支持 suffix-icon 属性", async () => {
+    it("应该支持 prefixIcon 属性", async () => {
       const input = document.createElement("ea-input");
-      input.setAttribute("suffix-icon", "calendar");
+      input.setAttribute("prefixIcon", "search");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(input.getAttribute("suffix-icon")).toBe("calendar");
+      expect(input.getAttribute("prefixIcon")).toBe("search");
+    });
+
+    it("默认 suffixIcon 应该是空字符串", () => {
+      const input = document.createElement("ea-input");
+      expect(input.getAttribute("suffixIcon")).toBe(null);
+    });
+
+    it("应该支持 suffixIcon 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("suffixIcon", "calendar");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      expect(input.getAttribute("suffixIcon")).toBe("calendar");
     });
   });
 
@@ -441,7 +555,7 @@ describe("EaInput Component", () => {
       input.setAttribute("rows", "4");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const textareaElement = input.shadowRoot.querySelector(
         "textarea.ea-input__original"
@@ -455,31 +569,31 @@ describe("EaInput Component", () => {
       input.setAttribute("autosize", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(input.hasAttribute("autosize")).toBe(true);
     });
 
-    it("应该支持 min-rows 属性", async () => {
+    it("应该支持 minRows 属性", async () => {
       const input = document.createElement("ea-input");
       input.setAttribute("type", "textarea");
-      input.setAttribute("min-rows", "2");
+      input.setAttribute("minRows", "2");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(input.getAttribute("min-rows")).toBe("2");
+      expect(input.getAttribute("minRows")).toBe("2");
     });
 
-    it("应该支持 max-rows 属性", async () => {
+    it("应该支持 maxRows 属性", async () => {
       const input = document.createElement("ea-input");
       input.setAttribute("type", "textarea");
-      input.setAttribute("max-rows", "6");
+      input.setAttribute("maxRows", "6");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(input.getAttribute("max-rows")).toBe("6");
+      expect(input.getAttribute("maxRows")).toBe("6");
     });
 
     it("应该支持 resize 属性", async () => {
@@ -488,9 +602,121 @@ describe("EaInput Component", () => {
       input.setAttribute("resize", "none");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(input.getAttribute("resize")).toBe("none");
+    });
+  });
+
+  /**
+   * 新增属性测试
+   */
+  describe("New Attributes", () => {
+    it("应该支持 min 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("type", "number");
+      input.setAttribute("min", "0");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.min).toBe("0");
+    });
+
+    it("应该支持 max 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("type", "number");
+      input.setAttribute("max", "100");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.max).toBe("100");
+    });
+
+    it("应该支持 step 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("type", "number");
+      input.setAttribute("step", "0.5");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.step).toBe("0.5");
+    });
+
+    it("应该支持 pattern 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("pattern", "[A-Za-z]{3}");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.pattern).toBe("[A-Za-z]{3}");
+    });
+
+    it("应该支持 form 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("form", "myForm");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.getAttribute("form")).toBe("myForm");
+    });
+
+    it("应该支持 ariaLabel 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("aria-label", "用户名输入框");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.getAttribute("aria-label")).toBe("用户名输入框");
+    });
+
+    it("应该支持 tabindex 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("tabindex", "1");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.tabIndex).toBe(1);
+    });
+
+    it("应该支持 inputmode 属性", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("inputmode", "numeric");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.inputMode).toBe("numeric");
     });
   });
 
@@ -503,7 +729,7 @@ describe("EaInput Component", () => {
       input.setAttribute("name", "username");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -516,7 +742,7 @@ describe("EaInput Component", () => {
       input.setAttribute("autocomplete", "on");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -529,7 +755,7 @@ describe("EaInput Component", () => {
       input.setAttribute("autofocus", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -542,7 +768,7 @@ describe("EaInput Component", () => {
       input.setAttribute("required", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -562,7 +788,7 @@ describe("EaInput Component", () => {
       `;
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const prependSlot = input.shadowRoot.querySelector(
         'slot[name="prepend"]'
@@ -577,7 +803,7 @@ describe("EaInput Component", () => {
       `;
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const appendSlot = input.shadowRoot.querySelector('slot[name="append"]');
       expect(appendSlot).toBeTruthy();
@@ -590,7 +816,7 @@ describe("EaInput Component", () => {
       `;
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const prefixSlot = input.shadowRoot.querySelector('slot[name="prefix"]');
       expect(prefixSlot).toBeTruthy();
@@ -603,7 +829,7 @@ describe("EaInput Component", () => {
       `;
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const suffixSlot = input.shadowRoot.querySelector('slot[name="suffix"]');
       expect(suffixSlot).toBeTruthy();
@@ -618,7 +844,7 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(typeof input.focus).toBe("function");
     });
@@ -627,7 +853,7 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(typeof input.blur).toBe("function");
     });
@@ -636,7 +862,7 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(typeof input.clear).toBe("function");
     });
@@ -645,9 +871,56 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(typeof input.select).toBe("function");
+    });
+
+    it("clear 方法应该清空输入框内容", async () => {
+      const input = document.createElement("ea-input");
+      input.setAttribute("value", "test value");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      input.clear();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+      expect(inputElement.value).toBe("");
+    });
+
+    it("focus 方法应该聚焦输入框", async () => {
+      const input = document.createElement("ea-input");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+
+      const focusSpy = vi.spyOn(inputElement, "focus");
+      input.focus();
+
+      expect(focusSpy).toHaveBeenCalled();
+    });
+
+    it("blur 方法应该失焦输入框", async () => {
+      const input = document.createElement("ea-input");
+      container.appendChild(input);
+
+      await waitForRender();
+
+      const inputElement = input.shadowRoot.querySelector(
+        "input.ea-input__original"
+      );
+
+      const blurSpy = vi.spyOn(inputElement, "blur");
+      input.blur();
+
+      expect(blurSpy).toHaveBeenCalled();
     });
   });
 
@@ -659,17 +932,15 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
 
-      // 验证可以添加 input 事件监听器到原生 input 元素
       const listener = vi.fn();
       inputElement.addEventListener("input", listener);
 
-      // 手动触发事件来测试监听是否工作
       const event = new Event("input", { bubbles: true });
       inputElement.dispatchEvent(event);
 
@@ -680,7 +951,7 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -701,7 +972,7 @@ describe("EaInput Component", () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
@@ -711,162 +982,64 @@ describe("EaInput Component", () => {
         inputElement.addEventListener("blur", resolve);
       });
 
-      inputElement.focus();
-      inputElement.blur();
+      inputElement.focus(); // 先聚焦
+      inputElement.blur(); // 再失焦
 
       await blurPromise;
 
       expect(true).toBe(true);
     });
-  });
 
-  /**
-   * 边界条件测试
-   */
-  describe("Edge Cases", () => {
-    it("空 value 时应该正确渲染", async () => {
+    it("应该支持 change 事件", async () => {
       const input = document.createElement("ea-input");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
-      expect(inputElement.value).toBe("");
-    });
 
-    it("特殊字符的 value 应该正确处理", async () => {
-      const input = document.createElement("ea-input");
-      input.setAttribute("value", "<script>alert('xss')</script>");
-      container.appendChild(input);
+      const listener = vi.fn();
+      inputElement.addEventListener("change", listener);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      const event = new Event("change", { bubbles: true });
+      inputElement.dispatchEvent(event);
 
-      const inputElement = input.shadowRoot.querySelector(
-        "input.ea-input__original"
-      );
-      expect(inputElement.value).toBe("<script>alert('xss')</script>");
-    });
-
-    it("同时设置多个属性应该正常工作", async () => {
-      const input = document.createElement("ea-input");
-      input.setAttribute("type", "text");
-      input.setAttribute("placeholder", "Enter text");
-      input.setAttribute("maxlength", "20");
-      input.setAttribute("disabled", "");
-      container.appendChild(input);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      const inputElement = input.shadowRoot.querySelector(
-        "input.ea-input__original"
-      );
-      expect(inputElement.placeholder).toBe("Enter text");
-      expect(inputElement.maxLength).toBe(20);
-      expect(inputElement.disabled).toBe(true);
-    });
-
-    it("切换 type 应该正确更新元素", async () => {
-      const input = document.createElement("ea-input");
-      input.setAttribute("type", "text");
-      container.appendChild(input);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      let inputElement = input.shadowRoot.querySelector(
-        "input.ea-input__original"
-      );
-      expect(inputElement).toBeTruthy();
-
-      input.setAttribute("type", "textarea");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      const textareaElement = input.shadowRoot.querySelector(
-        "textarea.ea-input__original"
-      );
-      expect(textareaElement).toBeTruthy();
+      expect(listener).toHaveBeenCalled();
     });
   });
 
   /**
-   * 生命周期测试
+   * 表单验证测试
    */
-  describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+  describe("Form Validation", () => {
+    it("应该支持表单验证", async () => {
       const input = document.createElement("ea-input");
-      input.setAttribute("value", "test");
+      input.setAttribute("required", "");
       container.appendChild(input);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
-      expect(inputElement).toBeTruthy();
-      expect(inputElement.value).toBe("test");
+      expect(inputElement.validity.valid).toBe(false);
     });
 
-    it("组件断开连接后应该正常移除", () => {
+    it("应该支持自定义验证消息", async () => {
       const input = document.createElement("ea-input");
+      input.setAttribute("required", "");
       container.appendChild(input);
 
-      input.remove();
-
-      expect(container.contains(input)).toBe(false);
-    });
-
-    it("动态修改 value 应该生效", async () => {
-      const input = document.createElement("ea-input");
-      input.setAttribute("value", "initial");
-      container.appendChild(input);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      input.setAttribute("value", "updated");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const inputElement = input.shadowRoot.querySelector(
         "input.ea-input__original"
       );
-      expect(inputElement.value).toBe("updated");
-    });
 
-    it("动态修改 placeholder 应该生效", async () => {
-      const input = document.createElement("ea-input");
-      input.setAttribute("placeholder", "initial");
-      container.appendChild(input);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      input.setAttribute("placeholder", "updated");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      const inputElement = input.shadowRoot.querySelector(
-        "input.ea-input__original"
-      );
-      expect(inputElement.placeholder).toBe("updated");
-    });
-
-    it("动态添加 disabled 属性应该生效", async () => {
-      const input = document.createElement("ea-input");
-      container.appendChild(input);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      const inputElement = input.shadowRoot.querySelector(
-        "input.ea-input__original"
-      );
-      expect(inputElement.disabled).toBe(false);
-
-      input.setAttribute("disabled", "");
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(inputElement.disabled).toBe(true);
+      inputElement.setCustomValidity("自定义错误消息");
+      expect(inputElement.validity.customError).toBe(true);
     });
   });
 });

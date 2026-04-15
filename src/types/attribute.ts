@@ -3,6 +3,14 @@
  */
 export type EnumConstructor = any[];
 
+export interface HTMLFormElementConstructor {
+  new (): HTMLFormElement;
+}
+
+export interface HTMLFormValidityConstructor {
+  new (): ValidityState;
+}
+
 /**
  * @description 自定义元素属性类型
  */
@@ -18,7 +26,10 @@ export type CustomElementAttributeTypes =
  */
 export interface AttributeOptions {
   /** @description 属性类型 - 基本数据类型 */
-  type: CustomElementAttributeTypes;
+  type:
+    | CustomElementAttributeTypes
+    | HTMLFormElementConstructor
+    | HTMLFormValidityConstructor;
   /** @description 默认值 */
   default?: any;
   /** @description 观察者回调 */

@@ -1,4 +1,4 @@
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 import { namespace } from "@/directives/namespace";
 import { i18nManager } from "@utils/I18nManager.js";
 import stylesheet from "./index.scss?inline";
@@ -10,7 +10,7 @@ import "@components/ea-button/index.js";
 import "@components/ea-icon/index.js";
 import "@components/ea-input/index.js";
 
-export class EaTransfer extends FormAssociatedBase {
+export class EaTransfer extends EaFormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */

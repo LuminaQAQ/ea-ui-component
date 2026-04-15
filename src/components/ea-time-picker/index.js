@@ -1,4 +1,4 @@
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 import stylesheet from "./index.scss?inline";
 import { namespace } from "@/directives/namespace";
 
@@ -8,7 +8,7 @@ import { timeout } from "@/utils/timeout";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 import { EaTimePickerVisibleChangeEvent } from "./events/EaTimePickerVisibleChangeEvent";
 
-export class EaTimePicker extends FormAssociatedBase {
+export class EaTimePicker extends EaFormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */

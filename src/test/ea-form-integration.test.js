@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
 // 导入所有表单相关的组件
 import "../components/ea-input/index.js";
@@ -112,7 +113,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaInput);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-input")).toBeTruthy();
       expect(eaInput.getAttribute("name")).toBe("username");
@@ -127,7 +128,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaInputNumber);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-input-number")).toBeTruthy();
       expect(eaInputNumber.getAttribute("name")).toBe("age");
@@ -141,7 +142,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaSelect);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-select")).toBeTruthy();
       expect(eaSelect.getAttribute("name")).toBe("country");
@@ -155,7 +156,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaRadioGroup);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-radio-group")).toBeTruthy();
       expect(eaRadioGroup.getAttribute("name")).toBe("gender");
@@ -169,7 +170,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaCheckboxGroup);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-checkbox-group")).toBeTruthy();
       expect(eaCheckboxGroup.getAttribute("name")).toBe("hobbies");
@@ -183,7 +184,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaSwitch);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-switch")).toBeTruthy();
       expect(eaSwitch.getAttribute("name")).toBe("notifications");
@@ -197,7 +198,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaDatePicker);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-date-picker")).toBeTruthy();
       expect(eaDatePicker.getAttribute("name")).toBe("birthdate");
@@ -211,7 +212,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaTimePicker);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-time-picker")).toBeTruthy();
       expect(eaTimePicker.getAttribute("name")).toBe("startTime");
@@ -225,7 +226,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaSlider);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-slider")).toBeTruthy();
       expect(eaSlider.getAttribute("name")).toBe("volume");
@@ -239,7 +240,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaRate);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-rate")).toBeTruthy();
       expect(eaRate.getAttribute("name")).toBe("rating");
@@ -253,7 +254,7 @@ describe("Native Form Integration", () => {
       form.appendChild(eaColorPicker);
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(form.querySelector("ea-color-picker")).toBeTruthy();
       expect(eaColorPicker.getAttribute("name")).toBe("themeColor");
@@ -348,7 +349,7 @@ describe("Native Form Integration", () => {
       // 触发 submit 事件
       form.dispatchEvent(new Event("submit", { cancelable: true }));
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       expect(submitHandler).toHaveBeenCalled();
     });
@@ -365,7 +366,7 @@ describe("Native Form Integration", () => {
 
       form.dispatchEvent(new Event("submit", { cancelable: true }));
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       expect(submitHandler).toHaveBeenCalled();
     });
@@ -389,7 +390,7 @@ describe("Native Form Integration", () => {
 
       form.dispatchEvent(new Event("submit", { cancelable: true }));
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       expect(collectedData).toEqual({ username: "testuser" });
     });
@@ -422,7 +423,7 @@ describe("Native Form Integration", () => {
 
       form.reset();
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender(50);
 
       expect(resetHandler).toHaveBeenCalled();
     });
@@ -465,7 +466,7 @@ describe("Native Form Integration", () => {
 
       container.appendChild(form);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       // 验证所有组件都在表单中
       expect(form.querySelectorAll("ea-input").length).toBe(2);

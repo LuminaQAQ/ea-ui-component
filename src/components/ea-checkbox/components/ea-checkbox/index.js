@@ -1,8 +1,8 @@
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 
 import stylesheet from "./index.scss?inline";
 
-export class EaCheckbox extends FormAssociatedBase {
+export class EaCheckbox extends EaFormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */

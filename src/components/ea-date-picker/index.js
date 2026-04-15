@@ -1,5 +1,5 @@
 import { namespace } from "@/directives/namespace";
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 import stylesheet from "./index.scss?inline";
 
 import "@/components/ea-calendar/index.js";
@@ -16,7 +16,7 @@ import { i18nManager } from "@/utils/I18nManager";
 import { EaDatePickerPanelChangeEvent } from "./events/EaDatePickerPanelChangeEvent";
 import { EaDatePickerVisibleChangeEvent } from "./events/EaDatePickerVisibleChangeEvent";
 
-export class EaDatePicker extends FormAssociatedBase {
+export class EaDatePicker extends EaFormAssociatedBase {
   /** @type {HTMLElement} */
   #container;
   /** @type {HTMLElement} */

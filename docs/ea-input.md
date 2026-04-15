@@ -10,8 +10,14 @@ onMounted(() => {
 <style lang="scss" scoped>
   .prepend,
   .append {
-    background-color: #f5f7fa;
+    box-sizing: border-box;
     padding: 0.5rem;
+    line-height: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f7fa;
   }
 </style>
 
@@ -83,14 +89,14 @@ onMounted(() => {
 
 ## 自定义清除图标
 
-你可以通过 `clear-icon` 属性自定义清除图标
+你可以通过 `clearIcon` 属性自定义清除图标
 
 <div class="demo">
   <ea-input
     style="width: 240px"
     placeholder="Please input"
     clearable
-    clear-icon="circle-xmark"
+    clearIcon="circle-xmark"
   ></ea-input>
 </div>
 
@@ -100,7 +106,7 @@ onMounted(() => {
     style="width: 240px"
     placeholder="Please input"
     clearable
-    clear-icon="circle-xmark"
+    clearIcon="circle-xmark"
   ></ea-input>
 </div>
 ```
@@ -112,7 +118,7 @@ onMounted(() => {
     style="width: 240px"
     type="password"
     placeholder="Please input password"
-    show-password
+    showPassword
   ></ea-input>
 </div>
 
@@ -122,7 +128,7 @@ onMounted(() => {
     style="width: 240px"
     type="password"
     placeholder="Please input password"
-    show-password
+    showPassword
   ></ea-input>
 </div>
 ```
@@ -138,12 +144,12 @@ onMounted(() => {
       <ea-input
         class="responsive-input"
         placeholder="Pick a date"
-        prefix-icon="mug-hot"
+        prefixIcon="mug-hot"
       ></ea-input>
       <ea-input
         class="responsive-input"
         placeholder="Type something"
-        suffix-icon="mug-hot"
+        suffixIcon="mug-hot"
       ></ea-input>
     </div>
   </div>
@@ -176,12 +182,12 @@ onMounted(() => {
       <ea-input
         class="responsive-input"
         placeholder="Pick a date"
-        prefix-icon="mug-hot"
+        prefixIcon="mug-hot"
       ></ea-input>
       <ea-input
         class="responsive-input"
         placeholder="Type something"
-        suffix-icon="mug-hot"
+        suffixIcon="mug-hot"
       ></ea-input>
     </div>
   </div>
@@ -244,8 +250,8 @@ onMounted(() => {
     type="textarea"
     placeholder="Please input"
     autosize
-    min-rows="2"
-    max-rows="4"
+    minRows="2"
+    maxRows="4"
   ></ea-input>
 </div>
 
@@ -263,8 +269,8 @@ onMounted(() => {
     type="textarea"
     placeholder="Please input"
     autosize
-    min-rows="2"
-    max-rows="4"
+    minRows="2"
+    maxRows="4"
   ></ea-input>
 </div>
 ```
@@ -307,21 +313,17 @@ onMounted(() => {
 </div>
 ```
 
-## 尺寸​
+## 字数统计
 
-使用 `size` 属性改变输入框大小。 除了默认大小外，还有另外两个选项： `large`, `small`。
+设置 `showWordLimit` 属性来显示字数统计。
 
-<div class="demo col left">
+<div class="demo">
   <ea-input
     style="width: 240px"
-    size="large"
-    placeholder="Please Input"
-  ></ea-input>
-  <ea-input style="width: 240px" placeholder="Please Input"></ea-input>
-  <ea-input
-    style="width: 240px"
-    size="small"
-    placeholder="Please Input"
+    type="textarea"
+    placeholder="Please input"
+    maxlength="100"
+    showWordLimit
   ></ea-input>
 </div>
 
@@ -329,144 +331,131 @@ onMounted(() => {
 <div class="demo">
   <ea-input
     style="width: 240px"
-    size="large"
-    placeholder="Please Input"
-  ></ea-input>
-  <ea-input style="width: 240px" placeholder="Please Input"></ea-input>
-  <ea-input
-    style="width: 240px"
-    size="small"
-    placeholder="Please Input"
+    type="textarea"
+    placeholder="Please input"
+    maxlength="100"
+    showWordLimit
   ></ea-input>
 </div>
 ```
 
-## 输入长度限制
+## 不同尺寸
 
-使用 `maxlength` 和 `minlength` 属性, 来控制输入内容的最大字数和最小字数。 `"字符数"`使用JavaScript字符串长度来衡量。 为文本或文本输入类型设置 `maxlength` 可以限制输入值的长度。 允许你通过设置 `show-word-limit` 到 `true` 来显示剩余字数。
+通过 `size` 属性指定输入框的尺寸，除了默认的大小外，还提供了 large、small 两种尺寸。
 
-<div class="col left">
+<div class="demo">
   <ea-input
     style="width: 240px"
-    maxlength="10"
-    placeholder="Please input"
-    show-word-limit
-    type="text"
-    clearable
+    size="large"
+    placeholder="Large"
   ></ea-input>
   <ea-input
-    maxlength="30"
     style="width: 240px"
-    placeholder="Please input"
-    show-word-limit
-    type="textarea"
-    clearable
+    size="default"
+    placeholder="Default"
+  ></ea-input>
+  <ea-input
+    style="width: 240px"
+    size="small"
+    placeholder="Small"
   ></ea-input>
 </div>
 
 ```html
-<div class="col left">
+<div class="demo">
+  <ea-input style="width: 240px" size="large" placeholder="Large"></ea-input>
   <ea-input
     style="width: 240px"
-    maxlength="10"
-    placeholder="Please input"
-    show-word-limit
-    type="text"
-    clearable
+    size="default"
+    placeholder="Default"
   ></ea-input>
-  <ea-input
-    maxlength="30"
-    style="width: 240px"
-    placeholder="Please input"
-    show-word-limit
-    type="textarea"
-    clearable
-  ></ea-input>
+  <ea-input style="width: 240px" size="small" placeholder="Small"></ea-input>
 </div>
 ```
 
-## Attributes
+## 属性
 
-| 参数            | 说明                                                                           | 类型    | 可选值                                                                                                                                                | 默认值                    |
-| --------------- | ------------------------------------------------------------------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| type            | 输入框类型                                                                     | String  | <ea-link type="primary" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input#Form_%3Cinput%3E_types">MDN: input</ea-link> | text                      |
-| value           | 输入框的值                                                                     | String  | -                                                                                                                                                     | -                         |
-| placeholder     | 占位符                                                                         | String  | -                                                                                                                                                     | -                         |
-| disabled        | 是否禁用                                                                       | Boolean | -                                                                                                                                                     | false                     |
-| clearable       | 是否显示一键清空图标（仅在非 textarea 时生效）                                 | Boolean | -                                                                                                                                                     | false                     |
-| clear-icon      | 自定义清除图标名称（使用图标字体时的类名）                                     | String  | -                                                                                                                                                     | circle-xmark              |
-| show-password   | 是否显示切换明文/密文图标（仅在非 textarea 且 type 为 text/password 等时生效） | Boolean | -                                                                                                                                                     | false                     |
-| prefix-icon     | 在输入框前显示的图标名称（同样可使用 `slot="prefix"` 插入自定义内容）          | String  | -                                                                                                                                                     | -                         |
-| suffix-icon     | 在输入框后显示的图标名称（同样可使用 `slot="suffix"` 插入自定义内容）          | String  | -                                                                                                                                                     | -                         |
-| rows            | textarea 行数，仅当 type 为 `textarea` 时有效                                  | Number  | -                                                                                                                                                     | 2                         |
-| autosize        | textarea 是否自适应高度                                                        | Boolean | -                                                                                                                                                     | false                     |
-| min-rows        | textarea 自适应时的最小行数（属性名为 `min-rows`）                             | Number  | -                                                                                                                                                     | 0                         |
-| max-rows        | textarea 自适应时的最大行数（属性名为 `max-rows`）                             | Number  | -                                                                                                                                                     | 0                         |
-| maxlength       | 最大输入长度（字符数）                                                         | Number  | -                                                                                                                                                     | 0                         |
-| minlength       | 最小输入长度（字符数）                                                         | Number  | -                                                                                                                                                     | 0                         |
-| show-word-limit | 是否显示字数统计（需要配合 `maxlength` 使用）                                  | Boolean | -                                                                                                                                                     | false                     |
-| autocomplete    | 原生 autocomplete 属性                                                         | String  | on, off                                                                                                                                               | off                       |
-| name            | 原生 name 属性                                                                 | String  | -                                                                                                                                                     | -                         |
-| readonly        | 原生只读属性                                                                   | Boolean | -                                                                                                                                                     | false                     |
-| max             | 原生 max（数字类型输入）                                                       | Number  | -                                                                                                                                                     | `Number.MAX_SAFE_INTEGER` |
-| min             | 原生 min（数字类型输入）                                                       | Number  | -                                                                                                                                                     | `Number.MIN_SAFE_INTEGER` |
-| step            | 原生 step                                                                      | Number  | -                                                                                                                                                     | 1                         |
-| resize          | textarea 的 resize 行为（通过 CSS 变量控制）                                   | String  | `'none' \| 'both' \| 'horizontal' \| 'vertical'`                                                                                                      | vertical                  |
-| autofocus       | 原生 autofocus                                                                 | Boolean | -                                                                                                                                                     | false                     |
-| form            | 原生 form 属性                                                                 | String  | -                                                                                                                                                     | -                         |
-| aria-label      | 原生 aria-label                                                                | String  | -                                                                                                                                                     | -                         |
-| tabindex        | 原生 tabindex                                                                  | String  | -                                                                                                                                                     | -                         |
-| validate-event  | 是否在输入时触发校验类事件（内部预留，默认开启）                               | Boolean | -                                                                                                                                                     | true                      |
-| inputmode       | 原生 inputmode                                                                 | String  | -                                                                                                                                                     | -                         |
+| 属性名        | 说明             | 类型    | 可选值                           | 默认值                  |
+| ------------- | ---------------- | ------- | -------------------------------- | ----------------------- |
+| label         | 标签文本         | string  | —                                | —                       |
+| type          | 输入框类型       | string  | text, textarea, password 等      | text                    |
+| size          | 输入框尺寸       | string  | large, default, small            | default                 |
+| value         | 输入框值         | string  | —                                | —                       |
+| placeholder   | 占位符文本       | string  | —                                | —                       |
+| maxlength     | 最大输入长度     | number  | —                                | —                       |
+| minlength     | 最小输入长度     | number  | —                                | —                       |
+| clearable     | 是否可清空       | boolean | —                                | false                   |
+| clearIcon     | 清空图标名称     | string  | —                                | xmark                   |
+| disabled      | 是否禁用         | boolean | —                                | false                   |
+| showPassword  | 是否显示密码切换 | boolean | —                                | false                   |
+| prefixIcon    | 前缀图标名称     | string  | —                                | —                       |
+| suffixIcon    | 后缀图标名称     | string  | —                                | —                       |
+| showWordLimit | 是否显示字数统计 | boolean | —                                | false                   |
+| rows          | 文本域行数       | number  | —                                | 2                       |
+| autosize      | 是否自动调整高度 | boolean | —                                | false                   |
+| minRows       | 最小行数         | number  | —                                | 0                       |
+| maxRows       | 最大行数         | number  | —                                | 0                       |
+| autocomplete  | 自动完成设置     | string  | —                                | off                     |
+| name          | 字段名称         | string  | —                                | —                       |
+| readonly      | 是否只读         | boolean | —                                | false                   |
+| max           | 最大值           | number  | —                                | Number.MAX_SAFE_INTEGER |
+| min           | 最小值           | number  | —                                | Number.MIN_SAFE_INTEGER |
+| step          | 步长             | number  | —                                | 1                       |
+| pattern       | 正则表达式模式   | string  | —                                | —                       |
+| resize        | 调整大小方式     | string  | none, both, horizontal, vertical | vertical                |
+| autofocus     | 是否自动聚焦     | boolean | —                                | false                   |
+| form          | 关联表单         | string  | —                                | —                       |
+| ariaLabel     | ARIA 标签        | string  | —                                | —                       |
+| tabindex      | Tab 索引         | string  | —                                | —                       |
+| inputmode     | 输入模式         | string  | —                                | —                       |
+| required      | 是否必填         | boolean | —                                | false                   |
+
+## 插槽
+
+| 插槽名  | 说明       |
+| ------- | ---------- |
+| default | 输入框内容 |
+| prepend | 前置内容   |
+| append  | 后置内容   |
+| prefix  | 前缀内容   |
+| suffix  | 后缀内容   |
+
+## 方法
+
+| 方法名         | 说明       |
+| -------------- | ---------- |
+| focus          | 获取焦点   |
+| blur           | 失去焦点   |
+| clear          | 清空输入框 |
+| select         | 选中文本   |
+| checkValidity  | 检查有效性 |
+| reportValidity | 报告有效性 |
+
+## 事件
+
+| 事件名 | 说明                 | 参数                                     |
+| ------ | -------------------- | ---------------------------------------- |
+| input  | 输入框值变化时触发   | value: string                            |
+| focus  | 输入框获得焦点时触发 | event: FocusEvent                        |
+| blur   | 输入框失去焦点时触发 | event: FocusEvent                        |
+| clear  | 清空按钮点击时触发   | event: CustomEvent<{ oldValue: string }> |
+| change | 输入框内容变化时触发 | value: string                            |
 
 ## CSS Part
 
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
-
-| 名称               | 说明                                                                          |
-| ------------------ | ----------------------------------------------------------------------------- |
-| container          | 组件根容器，`part="container"`                                                |
-| prepend            | 前置插槽容器，`part="prepend"`（对应 `slot="prepend"`）                       |
-| inner              | 内部输入区容器，`part="inner"`                                                |
-| prefix             | 前缀插槽容器，`part="prefix"`（对应 `slot="prefix"`）                         |
-| original-wrapper   | 原生 input/textarea 包裹容器，`part="original-wrapper"`                       |
-| original           | 原生 input 或 textarea，`part="original"`                                     |
-| suffix             | 后缀容器，`part="suffix"`                                                     |
-| clear-icon         | 清除图标，`part="clear-icon"`（仅在 `clearable` 时可见）                      |
-| show-password-icon | 切换明文/密文图标，`part="show-password-icon"`（仅在 `show-password` 时可见） |
-| suffix-icon        | 后缀图标容器，`part="suffix-icon"`（用于 `suffix` 插槽或 `suffix-icon` 属性） |
-| count              | 字数统计展示，`part="count"`（仅在 `show-word-limit` 时可见）                 |
-| append             | 后置插槽容器，`part="append"`（对应 `slot="append"`）                         |
-
-## Slots
-
-| 插槽名  | 说明                                                     |
-| ------- | -------------------------------------------------------- |
-| prepend | 前置内容插槽（例如文本或按钮），对应 `part="prepend"`    |
-| prefix  | 前缀插槽，显示在输入框内左侧，优先于 `prefix-icon` 属性  |
-| suffix  | 后缀插槽，显示在输入框内右侧，优先于 `suffix-icon` 属性  |
-| append  | 后置内容插槽（例如后缀按钮或文本），对应 `part="append"` |
-
-## Event
-
-| 事件名            | 说明                                                             | 获取值                               |
-| ----------------- | ---------------------------------------------------------------- | ------------------------------------ |
-| input             | 输入内容时触发                                                   | -                                    |
-| focus             | 原生 focus 时触发（组件聚焦）                                    | -                                    |
-| blur              | 原生 blur 时触发（组件失去焦点）                                 | -                                    |
-| keydown           | 原生 keydown 时触发                                              | -                                    |
-| mouseenter        | 原生 mouseenter 时触发，鼠标进入输入区域时触发                   | -                                    |
-| mouseleave        | 原生 mouseleave 时触发，鼠标离开输入区域时触发                   | -                                    |
-| compositionstart  | 原生 compositionstart 时触发，输入法开始输入时触发               | e.detail：`{ value: String }`        |
-| compositionupdate | 原生 compositionupdate 时触发，输入法输入过程中触发              | e.detail：`{ value: String }`        |
-| compositionend    | 原生 compositionend 时触发，输入法结束时触发                     | e.detail：`{ value: String }`        |
-| ea-clear          | 当用户通过清除图标清空输入时分发（自定义 Event: `EaClearEvent`） | event.detail：`{ oldValue: String }` |
-
-## Methods
-
-| 名称   | 说明           | 参数 |
-| ------ | -------------- | ---- |
-| focus  | 获取焦点       | -    |
-| blur   | 失去焦点       | -    |
-| select | 选中输入框内容 | -    |
-| clear  | 清空输入框内容 | -    |
+| 名称               | 说明             |
+| ------------------ | ---------------- |
+| container          | 容器元素         |
+| label              | 标签元素         |
+| region             | 区域元素         |
+| prepend            | 前置内容元素     |
+| inner              | 内部元素         |
+| prefix             | 前缀元素         |
+| original-wrapper   | 原始输入框包装器 |
+| original           | 原始输入框       |
+| suffix             | 后缀元素         |
+| clear-icon         | 清空图标         |
+| show-password-icon | 显示密码图标     |
+| suffix-icon        | 后缀图标         |
+| count              | 字数统计         |
+| append             | 后置内容元素     |

@@ -1,4 +1,4 @@
-import FormAssociatedBase from "@/core/FormBase";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 import { namespace } from "@/directives/namespace";
 import { Color } from "@/utils/Color";
 import stylesheet from "./index.scss?inline";
@@ -9,7 +9,7 @@ import "@/common/ea-popper/index";
 import "@components/ea-button/index";
 import { EaColorPickerClearEvent } from "../../events/EaColorPickerClearEvent";
 
-export class EaColorPicker extends FormAssociatedBase {
+export class EaColorPicker extends EaFormAssociatedBase {
   /** @type {HTMLDivElement} */
   #container;
   /** @type {import("@/common/ea-popper").EaPopper} */

@@ -134,7 +134,7 @@ easy-component-ui/
 │  │  ├─ea-icon.js            # 图标组件
 │  │  └─...                   # 其他组件
 │  ├─core/
-│  │  └─FormBase.js           # 表单组件基类
+│  │  └─EaFormAssociatedBase.ts  # 表单组件基类
 │  ├─css/
 │  │  └─*.style.js            # 组件样式
 │  └─utils/
