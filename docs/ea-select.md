@@ -29,8 +29,6 @@ const createOptionExample = {
 };
 createOptionExample.init();
 
-
-
 })
 </script>
 
@@ -69,23 +67,23 @@ createOptionExample.init();
 适用广泛的基础单选
 
 <div class="demo">
-  <ea-select placeholder="Select" style="width: 240px">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2">Option 2</ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select placeholder="请选择" style="width: 240px">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
 
 ```html
 <div class="demo">
-  <ea-select placeholder="Select" style="width: 240px">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2">Option 2</ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select placeholder="请选择" style="width: 240px">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
 ```
@@ -95,23 +93,23 @@ createOptionExample.init();
 在 `ea-option` 中，设定 `disabled` 值为 `true`，即可禁用该选项
 
 <div class="demo">
-  <ea-select placeholder="Select" style="width: 240px">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2" disabled> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select placeholder="请选择" style="width: 240px">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2" disabled>选项 2 (禁用)</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
 
 ```html
 <div class="demo">
-  <ea-select placeholder="Select" style="width: 240px">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2" disabled> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select placeholder="请选择" style="width: 240px">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2" disabled>选项 2 (禁用)</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
 ```
@@ -121,23 +119,23 @@ createOptionExample.init();
 为 `ea-select` 设置 `disabled` 属性，则整个选择器不可用
 
 <div class="demo">
-  <ea-select style="width: 240px" placeholder="Select" disabled>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="请选择" disabled>
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
 
 ```html
 <div class="demo">
-  <ea-select style="width: 240px" placeholder="Select" disabled>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="请选择" disabled>
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
 ```
@@ -147,23 +145,23 @@ createOptionExample.init();
 为 `ea-select` 设置 `clearable` 属性，则可将选择器清空
 
 <div class="demo">
-  <ea-select style="width: 240px" placeholder="Select" clearable>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="请选择" clearable>
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
 
 ```html
 <div class="demo">
-  <ea-select style="width: 240px" placeholder="Select" clearable>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="请选择" clearable>
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
 ```
@@ -173,164 +171,154 @@ createOptionExample.init();
 使用 `size` 属性改变选择器大小。 除了默认大小外，还有另外两个选项： `large`, `small`。
 
 <div class="demo row left">
-  <ea-select style="width: 240px" placeholder="Select" size="large">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="大尺寸" size="large">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
-  <ea-select style="width: 240px" placeholder="Select">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="默认尺寸">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
-  <ea-select style="width: 240px" placeholder="Select" size="small">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="小尺寸" size="small">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
-
-::: details 显示代码
 
 ```html
 <div class="demo">
-  <ea-select style="width: 240px" placeholder="Select" size="large">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="大尺寸" size="large">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
   </ea-select>
-  <ea-select style="width: 240px" placeholder="Select">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="默认尺寸">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
   </ea-select>
-  <ea-select style="width: 240px" placeholder="Select" size="small">
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="小尺寸" size="small">
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
   </ea-select>
 </div>
 ```
-
-:::
 
 ## 基础多选
 
-为 `ea-select` 设置 `multiple` 属性即可启用多选。
+为 `ea-select` 设置 `multiple` 属性即可启用多选模式， 默认情况下选中值会以 Tag 的形式展现
 
-<div class="demo col left"> 
-  <p>default</p>
-  <ea-select style="width: 240px" placeholder="Select" multiple>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+<div class="demo">
+  <p>默认多选</p>
+  <ea-select id="test" style="width: 240px" placeholder="请选择" multiple>
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 
-  <p>use collapse-tags</p>
-  <ea-select style="width: 240px" placeholder="Select" multiple collapse-tags>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
-  </ea-select>
-
-  <p>max-collapse-tags</p>
+  <p>标签折叠</p>
   <ea-select
     style="width: 240px"
-    placeholder="Select"
+    placeholder="请选择"
     multiple
-    collapse-tags
-    max-collapse-tags="3"
+    collapseTags
   >
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
+  </ea-select>
+
+  <p>最大折叠标签数量</p>
+  <ea-select
+    style="width: 240px"
+    placeholder="请选择"
+    multiple
+    collapseTags
+    maxCollapseTags="3"
+  >
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+    <ea-option value="option4">选项 4</ea-option>
+    <ea-option value="option5">选项 5</ea-option>
   </ea-select>
 </div>
-
-::: details 显示代码
 
 ```html
 <div class="demo">
-  <p>default</p>
-  <ea-select style="width: 240px" placeholder="Select" multiple>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <p>默认多选</p>
+  <ea-select id="test" style="width: 240px" placeholder="请选择" multiple>
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
   </ea-select>
 
-  <p>use collapse-tags</p>
-  <ea-select style="width: 240px" placeholder="Select" multiple collapse-tags>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
-  </ea-select>
-
-  <p>max-collapse-tags</p>
+  <p>标签折叠</p>
   <ea-select
     style="width: 240px"
-    placeholder="Select"
+    placeholder="请选择"
     multiple
-    collapse-tags
-    max-collapse-tags="3"
+    collapseTags
   >
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2"> Option 2 </ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
+  </ea-select>
+
+  <p>最大折叠标签数量</p>
+  <ea-select
+    style="width: 240px"
+    placeholder="请选择"
+    multiple
+    collapseTags
+    maxCollapseTags="3"
+  >
+    <ea-option value="option1">选项 1</ea-option>
+    <ea-option value="option2">选项 2</ea-option>
+    <ea-option value="option3">选项 3</ea-option>
   </ea-select>
 </div>
 ```
-
-:::
 
 ## 自定义模板
 
-可以自定义备选项。将自定义的 `HTML` 模板插入 `ea-option` 中即可。
+可以自定义备选项的模板
 
 <div class="demo">
-  <ea-select style="width: 240px" placeholder="Select" clearable>
-    <ea-option value="北京">
+  <ea-select style="width: 240px" placeholder="请选择城市" clearable>
+    <ea-option value="beijing">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">北京</div>
         <div class="ea-select_option-eng">Beijing</div>
       </div>
     </ea-option>
-    <ea-option value="上海">
+    <ea-option value="shanghai">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">上海</div>
         <div class="ea-select_option-eng">Shanghai</div>
       </div>
     </ea-option>
-    <ea-option value="广州">
+    <ea-option value="guangzhou">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">广州</div>
         <div class="ea-select_option-eng">Guangzhou</div>
       </div>
     </ea-option>
-    <ea-option value="深圳">
+    <ea-option value="shenzhen">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">深圳</div>
         <div class="ea-select_option-eng">Shenzhen</div>
@@ -339,30 +327,28 @@ createOptionExample.init();
   </ea-select>
 </div>
 
-::: code-group
-
 ```html
 <div class="demo">
-  <ea-select style="width: 240px" placeholder="Select" clearable>
-    <ea-option value="北京">
+  <ea-select style="width: 240px" placeholder="请选择城市" clearable>
+    <ea-option value="beijing">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">北京</div>
         <div class="ea-select_option-eng">Beijing</div>
       </div>
     </ea-option>
-    <ea-option value="上海">
+    <ea-option value="shanghai">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">上海</div>
         <div class="ea-select_option-eng">Shanghai</div>
       </div>
     </ea-option>
-    <ea-option value="广州">
+    <ea-option value="guangzhou">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">广州</div>
         <div class="ea-select_option-eng">Guangzhou</div>
       </div>
     </ea-option>
-    <ea-option value="深圳">
+    <ea-option value="shenzhen">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">深圳</div>
         <div class="ea-select_option-eng">Shenzhen</div>
@@ -372,269 +358,133 @@ createOptionExample.init();
 </div>
 ```
 
-```css
-.ea-select_option-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+## 将选项进行分组
 
-.ea-select_option-eng {
-  font-size: 10px;
-}
-```
-
-:::
-
-## 分组
-
-备选项进行分组展示
+使用 `ea-option-group` 对备选项进行分组
 
 <div class="demo">
-  <ea-select placeholder="Select" style="width: 240px">
-    <ea-option-group label="Group 1">
-      <ea-option value="Option 1">Option 1</ea-option>
-      <ea-option value="Option 2">Option 2</ea-option>
-      <ea-option value="Option 3">Option 3</ea-option>
+  <ea-select placeholder="请选择" style="width: 240px">
+    <ea-option-group label="分组 1">
+      <ea-option value="option1">选项 1</ea-option>
+      <ea-option value="option2">选项 2</ea-option>
+      <ea-option value="option3">选项 3</ea-option>
     </ea-option-group>
-    <ea-option-group label="Group 2">
-      <ea-option value="Option 4">Option 4</ea-option>
-      <ea-option value="Option 5">Option 5</ea-option>
+    <ea-option-group label="分组 2">
+      <ea-option value="option4">选项 4</ea-option>
+      <ea-option value="option5">选项 5</ea-option>
     </ea-option-group>
   </ea-select>
 </div>
 
 ```html
 <div class="demo">
-  <ea-select placeholder="Select" style="width: 240px">
-    <ea-option-group label="Group 1">
-      <ea-option value="Option 1">Option 1</ea-option>
-      <ea-option value="Option 2">Option 2</ea-option>
-      <ea-option value="Option 3">Option 3</ea-option>
+  <ea-select placeholder="请选择" style="width: 240px">
+    <ea-option-group label="分组 1">
+      <ea-option value="option1">选项 1</ea-option>
+      <ea-option value="option2">选项 2</ea-option>
+      <ea-option value="option3">选项 3</ea-option>
     </ea-option-group>
-    <ea-option-group label="Group 2">
-      <ea-option value="Option 4">Option 4</ea-option>
-      <ea-option value="Option 5">Option 5</ea-option>
+    <ea-option-group label="分组 2">
+      <ea-option value="option4">选项 4</ea-option>
+      <ea-option value="option5">选项 5</ea-option>
     </ea-option-group>
   </ea-select>
 </div>
 ```
 
-## 筛选选项​
+## 筛选选项
 
-可以通过 `filterable` 属性开启筛选功能。
+可以利用筛选功能快速查找选项
 
-<div class="demo row left">
-  <ea-select style="width: 240px" placeholder="Select" filterable>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2">Option 2</ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
-  </ea-select>
-
-  <ea-select style="width: 240px" placeholder="Select" multiple filterable>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2">Option 2</ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+<div class="demo">
+  <ea-select style="width: 240px" placeholder="请输入关键词搜索" filterable>
+    <ea-option value="apple">苹果</ea-option>
+    <ea-option value="banana">香蕉</ea-option>
+    <ea-option value="orange">橙子</ea-option>
+    <ea-option value="grape">葡萄</ea-option>
+    <ea-option value="watermelon">西瓜</ea-option>
   </ea-select>
 </div>
-
-::: details 显示代码
 
 ```html
 <div class="demo">
-  <ea-select style="width: 240px" placeholder="Select" filterable>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2">Option 2</ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
-  </ea-select>
-
-  <ea-select style="width: 240px" placeholder="Select" multiple filterable>
-    <ea-option value="Option 1">Option 1</ea-option>
-    <ea-option value="Option 2">Option 2</ea-option>
-    <ea-option value="Option 3">Option 3</ea-option>
-    <ea-option value="Option 4">Option 4</ea-option>
-    <ea-option value="Option 5">Option 5</ea-option>
+  <ea-select style="width: 240px" placeholder="请输入关键词搜索" filterable>
+    <ea-option value="apple">苹果</ea-option>
+    <ea-option value="banana">香蕉</ea-option>
+    <ea-option value="orange">橙子</ea-option>
+    <ea-option value="grape">葡萄</ea-option>
+    <ea-option value="watermelon">西瓜</ea-option>
   </ea-select>
 </div>
 ```
 
-:::
+## Select 属性
 
-## 创建新的选项
+| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| placeholder | 占位文本 | string | — | — |
+| disabled | 是否禁用 | boolean | — | false |
+| clearable | 是否可以清空选项 | boolean | — | false |
+| size | 输入框尺寸 | string | large / default / small | default |
+| multiple | 是否多选 | boolean | — | false |
+| collapseTags | 多选时是否将选中值按文字的形式展示 | boolean | — | false |
+| maxCollapseTags | 多选时最多显示标签数量 | number | — | 1 |
+| filterable | 是否可搜索 | boolean | — | false |
+| value / v-model | 绑定值 | string / number / boolean / array | — | — |
 
-创建并选中未包含在初始选项中的条目。
+## Select 事件
 
-<div class="demo">
-  <section class="create-example">
-    <p>Single select</p>
-    <ea-select style="width: 240px" placeholder="Select">
-      <ea-option value="Option 1">Option 1</ea-option>
-      <ea-option value="Option 2">Option 2</ea-option>
-      <ea-option value="Option 3">Option 3</ea-option>
-      <ea-option value="Option 4">Option 4</ea-option>
-      <ea-option value="Option 5">Option 5</ea-option>
-    </ea-select>
-    <br />
-    <ea-button>Add "Option 6" option</ea-button>
-  </section>
-  <section class="create-example">
-    <p>Multiple Select</p>
-    <ea-select style="width: 240px" placeholder="Select" multiple>
-      <ea-option value="Option 1">Option 1</ea-option>
-      <ea-option value="Option 2">Option 2</ea-option>
-      <ea-option value="Option 3">Option 3</ea-option>
-      <ea-option value="Option 4">Option 4</ea-option>
-      <ea-option value="Option 5">Option 5</ea-option>
-    </ea-select>
-    <br />
-    <ea-button>Add "Option 6" option</ea-button>
-  </section>
-</div>
+| 事件名 | 说明 | 参数 |
+| :--- | :--- | :--- |
+| change | 选中值发生变化时触发 | 目前的选中值 |
+| ea-visible-change | 下拉框出现/隐藏时触发 | 出现则为 true，隐藏则为 false |
+| clear | 可清空的单选模式下用户点击清空按钮时触发 | — |
+| remove-tag | 多选模式下移除tag时触发 | 移除的tag值 |
 
-::: code-group
+## Select 方法
 
-```html
-<div class="demo">
-  <section class="create-example">
-    <p>Single select</p>
-    <ea-select style="width: 240px" placeholder="Select">
-      <ea-option value="Option 1">Option 1</ea-option>
-      <ea-option value="Option 2">Option 2</ea-option>
-      <ea-option value="Option 3">Option 3</ea-option>
-      <ea-option value="Option 4">Option 4</ea-option>
-      <ea-option value="Option 5">Option 5</ea-option>
-    </ea-select>
-    <br />
-    <ea-button>Add "Option 6" option</ea-button>
-  </section>
-  <section class="create-example">
-    <p>Multiple Select</p>
-    <ea-select style="width: 240px" placeholder="Select" multiple>
-      <ea-option value="Option 1">Option 1</ea-option>
-      <ea-option value="Option 2">Option 2</ea-option>
-      <ea-option value="Option 3">Option 3</ea-option>
-      <ea-option value="Option 4">Option 4</ea-option>
-      <ea-option value="Option 5">Option 5</ea-option>
-    </ea-select>
-    <br />
-    <ea-button>Add "Option 6" option</ea-button>
-  </section>
-</div>
-```
+| 方法名 | 说明 | 参数 |
+| :--- | :--- | :--- |
+| focus | 使 input 获取焦点 | — |
+| blur | 使 input 失去焦点，并隐藏下拉框 | — |
+| show | 显示下拉框 | — |
+| hide | 隐藏下拉框 | — |
 
-```js
-const createOptionExample = {
-  examples: document.querySelectorAll(".create-example"),
+## Option 属性
 
-  init() {
-    this.examples.forEach(example => {
-      const button = example.querySelector("ea-button");
-      const select = example.querySelector("ea-select");
-      const isMultiple = select.hasAttribute("multiple");
+| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| value | 选项的值 | string / number / boolean | — | — |
+| label | 选项的标签，若不设置则默认与 `value` 相同 | string | — | — |
+| disabled | 是否禁用该选项 | boolean | — | false |
 
-      button.addEventListener("click", () => {
-        if (select.querySelector("ea-option[value='Option 6']")) return;
+## Option Group 属性
 
-        const option = document.createElement("ea-option");
-        option.value = "Option 6";
-        option.textContent = "Option 6";
-        select.appendChild(option);
+| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| label | 分组的组名 | string | — | — |
 
-        select.value = isMultiple ? ["Option 6"] : "Option 6";
-      });
-    });
-  },
-};
-createOptionExample.init();
-```
+## Select CSS Part
 
-:::
+| 名称 | 说明 |
+| :--- | :--- |
+| container | 选择器容器 |
+| input | 输入框 |
+| tag-wrap | 标签包装容器 |
+| dropdown | 下拉框 |
+| dropdown-icon | 下拉图标 |
+| clear-icon | 清除图标 |
 
-## Select API
+## Option CSS Part
 
-### Select Attributes
+| 名称 | 说明 |
+| :--- | :--- |
+| container | 选项容器 |
 
-| 参数                                       | 说明                                                                                     | 类型                              | 可选值                      | 默认值 |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------- | --------------------------------- | --------------------------- | ------ |
-| name                                       | 输入框的 `name` 属性。若与 `form` 组合使用，则 `form` 的返回值中. 该键名为该 `name` 值。 | String                            | -                           | -      |
-| value <ea-tag type="primary">prop</ea-tag> | 选中值，单选时为字符串，多选时为数组                                                     | String / Number / Boolean / Array | -                           | -      |
-| placeholder                                | 占位符                                                                                   | String                            | -                           | -      |
-| disabled                                   | 是否禁用                                                                                 | Boolean                           | -                           | false  |
-| clearable                                  | 是否可清除                                                                               | Boolean                           | -                           | false  |
-| size                                       | 尺寸                                                                                     | Enum                              | `small \| default \| large` | -      |
-| multiple                                   | 是否多选                                                                                 | Boolean                           | -                           | false  |
-| collapse-tags                              | 多选时是否折叠标签                                                                       | Boolean                           | -                           | false  |
-| max-collapse-tags                          | 多选折叠时最多显示的标签数量                                                             | Number                            | -                           | 1      |
-| filterable                                 | 是否可搜索                                                                               | Boolean                           | -                           | false  |
+## Option Group CSS Part
 
-### Select Slots
-
-| 名称 | 说明     | 子组件                                    |
-| ---- | -------- | ----------------------------------------- |
-| -    | 默认插槽 | 用于放置 `ea-option` 和 `ea-option-group` |
-
-### Select Events
-
-| 事件名            | 说明                     | 回调参数 ( `event.detail` )                       |
-| ----------------- | ------------------------ | ------------------------------------------------- |
-| change            | 选中值改变时触发         | `{ value: String \| Number \| Boolean \| Array }` |
-| ea-clear          | 清除选中值时触发         | -                                                 |
-| ea-visible-change | 下拉框显示状态改变时触发 | `{ visible: boolean }`                            |
-| ea-remove-tag     | 多选模式下移除标签时触发 | `{ tag: EaTag, tagValue: string }`                |
-
-### Select CSS Part
-
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
-
-| 名称          | 说明                                                                      |
-| ------------- | ------------------------------------------------------------------------- |
-| container     | 外层容器                                                                  |
-| input         | 输入框，该组件是对 [ea-input](./ea-input.md) 的二次封装，可以参考对应文档 |
-| tag-wrap      | 标签外层容器                                                              |
-| clear-icon    | 清除图标                                                                  |
-| dropdown-icon | 下拉图标                                                                  |
-| dropdown      | 下拉框                                                                    |
-
-## Option API
-
-### Option Attributes
-
-| 参数     | 说明     | 类型    | 可选值 | 默认值 |
-| -------- | -------- | ------- | ------ | ------ |
-| value    | 选项的值 | String  | -      | -      |
-| disabled | 是否禁用 | Boolean | -      | false  |
-
-### Option CSS Part
-
-| 名称      | 说明     |
-| --------- | -------- |
-| container | 外层容器 |
-
-## OptionGroup API
-
-## OptionGroup Attributes
-
-| 参数  | 说明       | 类型   | 可选值 | 默认值 | 必填 |
-| ----- | ---------- | ------ | ------ | ------ | ---- |
-| label | 分组的组名 | String | -      | -      | 否   |
-
-## OptionGroup Slots
-
-| 名称   | 说明     | 子组件      |
-| ------ | -------- | ----------- |
-| -      | 默认插槽 | `ea-option` |
-| header | 标题插槽 | -           |
-
-## OptionGroup CSS Part
-
-| 名称      | 说明     |
-| --------- | -------- |
-| container | 外层容器 |
-| header    | 标题容器 |
-| content   | 内容容器 |
+| 名称 | 说明 |
+| :--- | :--- |
+| container | 分组容器 |
+| header | 分组头部 |
+| content | 分组内容 |

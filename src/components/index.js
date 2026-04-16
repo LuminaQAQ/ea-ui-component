@@ -10,7 +10,6 @@ import './ea-empty/index.js';
 import './ea-image/index.js';
 import './ea-image-preview/index.js';
 import './ea-infinite-scroll/index.js';
-import './ea-input/index.js';
 import './ea-input-number/index.js';
 import './ea-menu/index.js';
 import './ea-message/index.js';

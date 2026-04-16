@@ -17,6 +17,8 @@ interface CustomElementOptions {
   autoDefine?: boolean;
   /** @description 自定义元素的样式 */
   styles?: string | string[];
+  /** @description 自定义元素的额外属性 */
+  extraAttr?: string | string[];
   /** @description 自定义元素的默认值 */
   default?: any;
 }
@@ -315,7 +317,11 @@ function CustomElement(
     });
 
     const observedAttributes = [
-      ...new Set([...superAttributes, ...allAttributeNames]),
+      ...new Set([
+        ...superAttributes,
+        ...allAttributeNames,
+        ...(options.extraAttr || []),
+      ]),
     ];
 
     class EaCustomElement extends CustomElementClass {

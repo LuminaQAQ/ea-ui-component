@@ -89,14 +89,14 @@ onMounted(() => {
 
 ## 自定义清除图标
 
-你可以通过 `clearIcon` 属性自定义清除图标
+你可以通过 `clear-icon` 属性自定义清除图标
 
 <div class="demo">
   <ea-input
     style="width: 240px"
     placeholder="Please input"
     clearable
-    clearIcon="circle-xmark"
+    clear-icon="circle-xmark"
   ></ea-input>
 </div>
 
@@ -106,7 +106,7 @@ onMounted(() => {
     style="width: 240px"
     placeholder="Please input"
     clearable
-    clearIcon="circle-xmark"
+    clear-icon="circle-xmark"
   ></ea-input>
 </div>
 ```
@@ -118,7 +118,7 @@ onMounted(() => {
     style="width: 240px"
     type="password"
     placeholder="Please input password"
-    showPassword
+    show-password
   ></ea-input>
 </div>
 
@@ -128,7 +128,7 @@ onMounted(() => {
     style="width: 240px"
     type="password"
     placeholder="Please input password"
-    showPassword
+    show-password
   ></ea-input>
 </div>
 ```
@@ -144,12 +144,12 @@ onMounted(() => {
       <ea-input
         class="responsive-input"
         placeholder="Pick a date"
-        prefixIcon="mug-hot"
+        prefix-icon="mug-hot"
       ></ea-input>
       <ea-input
         class="responsive-input"
         placeholder="Type something"
-        suffixIcon="mug-hot"
+        suffix-icon="mug-hot"
       ></ea-input>
     </div>
   </div>
@@ -182,12 +182,12 @@ onMounted(() => {
       <ea-input
         class="responsive-input"
         placeholder="Pick a date"
-        prefixIcon="mug-hot"
+        prefix-icon="mug-hot"
       ></ea-input>
       <ea-input
         class="responsive-input"
         placeholder="Type something"
-        suffixIcon="mug-hot"
+        suffix-icon="mug-hot"
       ></ea-input>
     </div>
   </div>
@@ -250,8 +250,8 @@ onMounted(() => {
     type="textarea"
     placeholder="Please input"
     autosize
-    minRows="2"
-    maxRows="4"
+    min-rows="2"
+    max-rows="4"
   ></ea-input>
 </div>
 
@@ -269,8 +269,8 @@ onMounted(() => {
     type="textarea"
     placeholder="Please input"
     autosize
-    minRows="2"
-    maxRows="4"
+    min-rows="2"
+    max-rows="4"
   ></ea-input>
 </div>
 ```
@@ -315,7 +315,7 @@ onMounted(() => {
 
 ## 字数统计
 
-设置 `showWordLimit` 属性来显示字数统计。
+设置 `show-word-limit` 属性来显示字数统计。
 
 <div class="demo">
   <ea-input
@@ -323,7 +323,7 @@ onMounted(() => {
     type="textarea"
     placeholder="Please input"
     maxlength="100"
-    showWordLimit
+    show-word-limit
   ></ea-input>
 </div>
 
@@ -334,7 +334,7 @@ onMounted(() => {
     type="textarea"
     placeholder="Please input"
     maxlength="100"
-    showWordLimit
+    show-word-limit
   ></ea-input>
 </div>
 ```
@@ -375,87 +375,84 @@ onMounted(() => {
 
 ## 属性
 
-| 属性名        | 说明             | 类型    | 可选值                           | 默认值                  |
-| ------------- | ---------------- | ------- | -------------------------------- | ----------------------- |
-| label         | 标签文本         | string  | —                                | —                       |
-| type          | 输入框类型       | string  | text, textarea, password 等      | text                    |
-| size          | 输入框尺寸       | string  | large, default, small            | default                 |
-| value         | 输入框值         | string  | —                                | —                       |
-| placeholder   | 占位符文本       | string  | —                                | —                       |
-| maxlength     | 最大输入长度     | number  | —                                | —                       |
-| minlength     | 最小输入长度     | number  | —                                | —                       |
-| clearable     | 是否可清空       | boolean | —                                | false                   |
-| clearIcon     | 清空图标名称     | string  | —                                | xmark                   |
-| disabled      | 是否禁用         | boolean | —                                | false                   |
-| showPassword  | 是否显示密码切换 | boolean | —                                | false                   |
-| prefixIcon    | 前缀图标名称     | string  | —                                | —                       |
-| suffixIcon    | 后缀图标名称     | string  | —                                | —                       |
-| showWordLimit | 是否显示字数统计 | boolean | —                                | false                   |
-| rows          | 文本域行数       | number  | —                                | 2                       |
-| autosize      | 是否自动调整高度 | boolean | —                                | false                   |
-| minRows       | 最小行数         | number  | —                                | 0                       |
-| maxRows       | 最大行数         | number  | —                                | 0                       |
-| autocomplete  | 自动完成设置     | string  | —                                | off                     |
-| name          | 字段名称         | string  | —                                | —                       |
-| readonly      | 是否只读         | boolean | —                                | false                   |
-| max           | 最大值           | number  | —                                | Number.MAX_SAFE_INTEGER |
-| min           | 最小值           | number  | —                                | Number.MIN_SAFE_INTEGER |
-| step          | 步长             | number  | —                                | 1                       |
-| pattern       | 正则表达式模式   | string  | —                                | —                       |
-| resize        | 调整大小方式     | string  | none, both, horizontal, vertical | vertical                |
-| autofocus     | 是否自动聚焦     | boolean | —                                | false                   |
-| form          | 关联表单         | string  | —                                | —                       |
-| ariaLabel     | ARIA 标签        | string  | —                                | —                       |
-| tabindex      | Tab 索引         | string  | —                                | —                       |
-| inputmode     | 输入模式         | string  | —                                | —                       |
-| required      | 是否必填         | boolean | —                                | false                   |
-
-## 插槽
-
-| 插槽名  | 说明       |
-| ------- | ---------- |
-| default | 输入框内容 |
-| prepend | 前置内容   |
-| append  | 后置内容   |
-| prefix  | 前缀内容   |
-| suffix  | 后缀内容   |
-
-## 方法
-
-| 方法名         | 说明       |
-| -------------- | ---------- |
-| focus          | 获取焦点   |
-| blur           | 失去焦点   |
-| clear          | 清空输入框 |
-| select         | 选中文本   |
-| checkValidity  | 检查有效性 |
-| reportValidity | 报告有效性 |
+| 属性名          | 说明             | 类型    | 可选值                           | 默认值                  |
+| --------------- | ---------------- | ------- | -------------------------------- | ----------------------- |
+| label           | 标签文本         | string  | —                                | —                       |
+| type            | 输入框类型       | string  | text, textarea, password 等      | text                    |
+| size            | 输入框尺寸       | string  | large, default, small            | default                 |
+| value           | 输入框值         | string  | —                                | —                       |
+| placeholder     | 占位符文本       | string  | —                                | —                       |
+| maxlength       | 最大输入长度     | number  | —                                | —                       |
+| minlength       | 最小输入长度     | number  | —                                | —                       |
+| clearable       | 是否可清空       | boolean | —                                | false                   |
+| clear-icon      | 清空图标名称     | string  | —                                | xmark                   |
+| disabled        | 是否禁用         | boolean | —                                | false                   |
+| show-password   | 是否显示密码切换 | boolean | —                                | false                   |
+| prefix-icon     | 前缀图标名称     | string  | —                                | —                       |
+| suffix-icon     | 后缀图标名称     | string  | —                                | —                       |
+| show-word-limit | 是否显示字数统计 | boolean | —                                | false                   |
+| rows            | 文本域行数       | number  | —                                | 2                       |
+| autosize        | 是否自动调整高度 | boolean | —                                | false                   |
+| min-rows        | 最小行数         | number  | —                                | 0                       |
+| max-rows        | 最大行数         | number  | —                                | 0                       |
+| autocomplete    | 自动完成设置     | string  | —                                | off                     |
+| name            | 字段名称         | string  | —                                | —                       |
+| readonly        | 是否只读         | boolean | —                                | false                   |
+| max             | 最大值           | number  | —                                | —                       |
+| min             | 最小值           | number  | —                                | —                       |
+| step            | 步长             | number  | —                                | 1                       |
+| pattern         | 正则表达式模式   | string  | —                                | —                       |
+| resize          | 调整大小方式     | string  | none, both, horizontal, vertical | vertical                |
+| autofocus       | 是否自动聚焦     | boolean | —                                | false                   |
+| form            | 关联表单         | string  | —                                | —                       |
+| aria-label      | ARIA 标签        | string  | —                                | —                       |
+| tabindex        | Tab 索引         | number  | —                                | —                       |
+| inputmode       | 输入模式         | string  | —                                | —                       |
 
 ## 事件
 
-| 事件名 | 说明                 | 参数                                     |
-| ------ | -------------------- | ---------------------------------------- |
-| input  | 输入框值变化时触发   | value: string                            |
-| focus  | 输入框获得焦点时触发 | event: FocusEvent                        |
-| blur   | 输入框失去焦点时触发 | event: FocusEvent                        |
-| clear  | 清空按钮点击时触发   | event: CustomEvent<{ oldValue: string }> |
-| change | 输入框内容变化时触发 | value: string                            |
+| 事件名 | 说明             | 回调参数                    |
+| ------ | ---------------- | --------------------------- |
+| input  | 输入值变化时触发 | (value: string)             |
+| clear  | 清空输入框时触发 | (oldValue: string)          |
+| focus  | 获取焦点时触发   | (event: FocusEvent)         |
+| blur   | 失去焦点时触发   | (event: FocusEvent)         |
 
-## CSS Part
+## 方法
 
-| 名称               | 说明             |
-| ------------------ | ---------------- |
-| container          | 容器元素         |
-| label              | 标签元素         |
-| region             | 区域元素         |
-| prepend            | 前置内容元素     |
-| inner              | 内部元素         |
-| prefix             | 前缀元素         |
-| original-wrapper   | 原始输入框包装器 |
-| original           | 原始输入框       |
-| suffix             | 后缀元素         |
-| clear-icon         | 清空图标         |
-| show-password-icon | 显示密码图标     |
-| suffix-icon        | 后缀图标         |
-| count              | 字数统计         |
-| append             | 后置内容元素     |
+| 方法名           | 说明                             | 参数 |
+| ---------------- | -------------------------------- | ---- |
+| focus            | 使 input 获取焦点                | —    |
+| blur             | 使 input 失去焦点                | —    |
+| select           | 选中 input 中的文字              | —    |
+| clear            | 清空输入框内容                   | —    |
+| checkValidity    | 检查表单字段的有效性             | —    |
+| reportValidity   | 报告表单字段的有效性（显示验证提示） | —    |
+
+## CSS Parts
+
+| 名称                | 说明             |
+| ------------------- | ---------------- |
+| container           | 容器             |
+| region              | 区域             |
+| prepend             | 前置内容         |
+| inner               | 内部容器         |
+| prefix              | 前缀             |
+| original-wrapper    | 原始输入框包装器 |
+| original            | 原始输入框       |
+| suffix              | 后缀             |
+| clear-icon          | 清除图标         |
+| show-password-icon  | 显示密码图标     |
+| suffix-icon         | 后缀图标         |
+| count               | 字数统计         |
+| append              | 后置内容         |
+| label               | 标签             |
+
+## 插槽
+
+| 插槽名  | 说明         |
+| ------- | ------------ |
+| prepend | 前置内容插槽 |
+| prefix  | 前缀图标插槽 |
+| suffix  | 后缀图标插槽 |
+| append  | 后置内容插槽 |

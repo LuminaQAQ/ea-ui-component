@@ -1,5 +1,9 @@
 $name: ea-select;
-$ea-select-size-types: (small, default, large);
+$ea-select-size-types: (
+  small,
+  default,
+  large
+);
 
 :host {
   --#{$name}-height-small: 22px;
@@ -24,8 +28,13 @@ $ea-select-size-types: (small, default, large);
 }
 
 :host([filterable][multiple]) {
-  .ea-select__input::part(prefix) {
-    width: 100%;
+
+  ea-select {
+    &.is-has-value {
+      .ea-select__input::part(prefix) {
+        width: 100%;
+      }
+    }
   }
 
   .ea-select__input::part(original) {
@@ -35,7 +44,15 @@ $ea-select-size-types: (small, default, large);
 
 :host([multiple]) {
   .ea-select__input::part(prefix) {
-    width: 100%;
+    width: 0;
+  }
+
+  .ea-select {
+    &.is-has-value {
+      .ea-select__input::part(prefix) {
+        width: 100%;
+      }
+    }
   }
 }
 
@@ -118,8 +135,9 @@ $ea-select-size-types: (small, default, large);
   }
 
   @include state(multiple) {
-    .ea-select__input::part(original) {
-      display: none;
+
+    .ea-input__prefix::part(prefix) {
+      width: 0;
     }
 
     .ea-select__tag {
@@ -128,13 +146,9 @@ $ea-select-size-types: (small, default, large);
       margin-bottom: 4px;
     }
 
-    .ea-select__input::part(original-wrapper) {
-      display: none;
-    }
-
     &.is-has-value {
       .ea-select__input::part(original-wrapper) {
-        display: block;
+        display: none;
       }
 
       .ea-select__input::part(original) {

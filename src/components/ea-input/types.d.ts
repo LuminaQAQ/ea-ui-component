@@ -32,7 +32,7 @@ export interface EaInputElement extends HTMLElement {
   clearIcon: string;
   /** 是否禁用 */
   disabled: boolean;
-  /** 是否显示密码切换按钮 */
+  /** 是否显示密码切换 */
   showPassword: boolean;
   /** 前缀图标 */
   prefixIcon: string;
@@ -45,12 +45,12 @@ export interface EaInputElement extends HTMLElement {
   /** 是否自动调整高度 */
   autosize: boolean;
   /** 最小行数 */
-  minRows: number | null;
+  minRows: number | string | null;
   /** 最大行数 */
-  maxRows: number | null;
+  maxRows: number | string | null;
   /** 自动完成设置 */
-  autocomplete: "off" | "on" | "name" | "email" | "username" | "new-password" | "current-password" | "one-time-code";
-  /** 输入框名称 */
+  autocomplete: AutoFill;
+  /** 表单字段名称 */
   name: string;
   /** 是否只读 */
   readonly: boolean;
@@ -66,7 +66,7 @@ export interface EaInputElement extends HTMLElement {
   resize: "none" | "both" | "horizontal" | "vertical";
   /** 是否自动聚焦 */
   autofocus: boolean;
-  /** 关联的表单 */
+  /** 关联表单 */
   form: HTMLFormElement | null;
   /** ARIA 标签 */
   ariaLabel: string | null;
@@ -74,7 +74,7 @@ export interface EaInputElement extends HTMLElement {
   tabindex: string | null;
   /** 输入模式 */
   inputmode: string;
-  
+
   /** 获取焦点 */
   focus(): void;
   /** 失去焦点 */
@@ -85,7 +85,7 @@ export interface EaInputElement extends HTMLElement {
   select(): void;
   /** 检查表单字段的有效性 */
   checkValidity(): boolean;
-  /** 报告表单字段的有效性 */
+  /** 报告表单字段的有效性（显示验证提示） */
   reportValidity(): boolean;
 }
 
@@ -114,9 +114,9 @@ export interface EaInputVueProps {
   showWordLimit?: boolean;
   rows?: number;
   autosize?: boolean;
-  minRows?: number | null;
-  maxRows?: number | null;
-  autocomplete?: "off" | "on" | "name" | "email" | "username" | "new-password" | "current-password" | "one-time-code";
+  minRows?: number | string | null;
+  maxRows?: number | string | null;
+  autocomplete?: AutoFill;
   name?: string;
   readonly?: boolean;
   max?: number | string | null;
@@ -135,24 +135,20 @@ export interface EaInputVueProps {
  * ea-input Vue 组件事件
  */
 export interface EaInputVueEvents {
-  /** 输入框获得焦点时触发 */
-  focus: (event: CustomEvent) => void;
-  /** 输入框失去焦点时触发 */
-  blur: (event: CustomEvent) => void;
-  /** 输入框内容改变时触发 */
+  /** 输入值变化时触发 */
   input: (event: CustomEvent<{ value: string }>) => void;
-  /** 输入框内容改变时触发 */
-  change: (event: CustomEvent<{ value: string }>) => void;
-  /** 清空按钮点击时触发 */
+  /** 清空输入框时触发 */
   clear: (event: CustomEvent<{ oldValue: string }>) => void;
+  /** 获取焦点时触发 */
+  focus: (event: FocusEvent) => void;
+  /** 失去焦点时触发 */
+  blur: (event: FocusEvent) => void;
 }
 
 /**
  * ea-input Vue 组件插槽
  */
 export interface EaInputVueSlots {
-  /** 默认插槽，用于输入框内容 */
-  default?: () => any;
   /** 前置内容插槽 */
   prepend?: () => any;
   /** 前置图标插槽 */
@@ -211,9 +207,9 @@ export interface EaInputReactProps extends HTMLAttributes<HTMLElement> {
   showWordLimit?: boolean;
   rows?: number;
   autosize?: boolean;
-  minRows?: number | null;
-  maxRows?: number | null;
-  autocomplete?: "off" | "on" | "name" | "email" | "username" | "new-password" | "current-password" | "one-time-code";
+  minRows?: number | string | null;
+  maxRows?: number | string | null;
+  autocomplete?: AutoFill;
   name?: string;
   readonly?: boolean;
   max?: number | string | null;
@@ -226,19 +222,28 @@ export interface EaInputReactProps extends HTMLAttributes<HTMLElement> {
   ariaLabel?: string | null;
   tabindex?: string | null;
   inputmode?: string;
-  /** 输入框获得焦点时的回调 */
-  onFocus?: (event: CustomEvent) => void;
-  /** 输入框失去焦点时的回调 */
-  onBlur?: (event: CustomEvent) => void;
-  /** 输入框内容改变时的回调 */
+  /** 输入值变化时的回调 */
   onInput?: (event: CustomEvent<{ value: string }>) => void;
-  /** 输入框内容改变时的回调 */
-  onChange?: (event: CustomEvent<{ value: string }>) => void;
-  /** 清空按钮点击时的回调 */
+  /** 清空输入框时的回调 */
   onClear?: (event: CustomEvent<{ oldValue: string }>) => void;
-  /** 自定义内容 */
-  children?: ReactNode;
+  /** 获取焦点时的回调 */
+  onFocus?: (event: FocusEvent) => void;
+  /** 失去焦点时的回调 */
+  onBlur?: (event: FocusEvent) => void;
+  /** 前置内容 */
+  prepend?: ReactNode;
+  /** 前置图标 */
+  prefix?: ReactNode;
+  /** 后置图标 */
+  suffix?: ReactNode;
+  /** 后置内容 */
+  append?: ReactNode;
 }
+
+/**
+ * ea-input React 组件类型
+ */
+export type EaInputReactComponent = (props: EaInputReactProps) => JSX.Element;
 
 declare module "react" {
   namespace JSX {

@@ -255,7 +255,9 @@ export class EaInput extends EaFormAssociatedBase {
     default: "",
     observer(this: EaInput, newVal: string) {
       if (newVal)
-        this._prefixSlot.innerHTML = `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" name="${newVal}"></ea-icon>`;
+        this._prefixSlot.innerHTML = html(
+          `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" name="${newVal}"></ea-icon>`
+        );
     },
   })
   prefixIcon: string = "";
@@ -265,7 +267,9 @@ export class EaInput extends EaFormAssociatedBase {
     default: "",
     observer(this: EaInput, newVal: string) {
       if (newVal)
-        this._suffixIcon.innerHTML = `<ea-icon class="ea-input__suffix-icon" part="suffix-icon" name="${newVal}"></ea-icon>`;
+        this._suffixIcon.innerHTML = html(
+          `<ea-icon class="ea-input__suffix-icon" part="suffix-icon" name="${newVal}"></ea-icon>`
+        );
     },
   })
   suffixIcon: string = "";
@@ -654,6 +658,7 @@ export class EaInput extends EaFormAssociatedBase {
   private _onInputEvent = (e: Event): void => {
     const { value } = e.target as HTMLInputElement;
     this.value = value;
+    this.dispatchEvent(new CustomEvent("input", { detail: value }));
   };
 
   /**
@@ -801,7 +806,7 @@ export class EaInput extends EaFormAssociatedBase {
    */
   checkValidity(): boolean {
     this.updateValidity();
-    return this.internals?.validity.valid ?? true;
+    return this.internals?.validity?.valid ?? true;
   }
 
   /**

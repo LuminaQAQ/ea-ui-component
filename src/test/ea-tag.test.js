@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 // 导入 ea-tag 组件及其子组件
-import "../components/ea-tag/index.js";
+import "../components/ea-tag/index";
+import { waitForRender } from "./utils/waitForRender";
 
 describe("EaTag and EaCheckTag Components", () => {
   let container;
@@ -24,7 +25,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.textContent = "Test Tag";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag).toBeDefined();
       expect(tag.shadowRoot).toBeDefined();
@@ -34,7 +35,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -43,7 +44,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
     });
@@ -53,7 +54,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.textContent = "Test Tag";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.textContent).toBe("Test Tag");
     });
@@ -67,7 +68,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.type).toBe("primary");
     });
@@ -77,7 +78,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.type = "success";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.type).toBe("success");
     });
@@ -87,7 +88,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.type = "info";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.type).toBe("info");
     });
@@ -97,7 +98,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.type = "warning";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.type).toBe("warning");
     });
@@ -107,7 +108,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.type = "danger";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.type).toBe("danger");
     });
@@ -121,7 +122,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.size).toBe("default");
     });
@@ -131,7 +132,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.size = "large";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.size).toBe("large");
     });
@@ -141,7 +142,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.size = "small";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.size).toBe("small");
     });
@@ -155,7 +156,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.effect).toBe("light");
     });
@@ -165,7 +166,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.effect = "dark";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.effect).toBe("dark");
     });
@@ -175,7 +176,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.effect = "plain";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.effect).toBe("plain");
     });
@@ -189,7 +190,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 属性可能返回 null 或 false
       const value = tag.closable;
@@ -201,7 +202,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.closable = true;
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.closable).toBe(true);
     });
@@ -209,11 +210,11 @@ describe("EaTag and EaCheckTag Components", () => {
     it("应该触发 ea-remove 事件", async () => {
       const tag = document.createElement("ea-tag");
       tag.closable = true;
-      tag["disable-transitions"] = true;
+      tag.disableTransitions = true;
       tag.textContent = "Test Tag";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       let removeDetail = null;
       tag.addEventListener("ea-remove", e => {
@@ -223,7 +224,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
       closeIcon.click();
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(removeDetail).not.toBeNull();
       expect(removeDetail.text).toBe("Test Tag");
@@ -238,7 +239,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 属性可能返回 null 或 false
       const value = tag.round;
@@ -250,7 +251,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.round = true;
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.round).toBe(true);
     });
@@ -264,7 +265,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.color).toBe("");
     });
@@ -274,7 +275,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.color = "#ff0000";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.color).toBe("#ff0000");
     });
@@ -288,21 +289,21 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 属性可能返回 null 或 false
-      const value = tag["disable-transitions"];
+      const value = tag.disableTransitions;
       expect(value === false || value === null).toBe(true);
     });
 
     it("设置 disable-transitions 应该禁用过渡动画", async () => {
       const tag = document.createElement("ea-tag");
-      tag["disable-transitions"] = true;
+      tag.disableTransitions = true;
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(tag["disable-transitions"]).toBe(true);
+      expect(tag.disableTransitions).toBe(true);
     });
   });
 
@@ -315,7 +316,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.textContent = "Check Tag";
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag).toBeDefined();
       expect(checkTag.shadowRoot).toBeDefined();
@@ -325,7 +326,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         checkTag.shadowRoot.querySelector('[part="container"]')
@@ -337,7 +338,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.textContent = "Check Tag";
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.textContent).toBe("Check Tag");
     });
@@ -351,7 +352,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 属性可能返回 null 或 false
       const value = checkTag.checked;
@@ -363,7 +364,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.checked).toBe(true);
     });
@@ -372,13 +373,13 @@ describe("EaTag and EaCheckTag Components", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.checked).toBe(true);
     });
@@ -387,7 +388,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       let changeDetail = null;
       checkTag.addEventListener("change", e => {
@@ -398,7 +399,7 @@ describe("EaTag and EaCheckTag Components", () => {
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(changeDetail).not.toBeNull();
       expect(changeDetail.checked).toBe(true);
@@ -413,7 +414,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 属性可能返回 null 或 false
       const value = checkTag.disabled;
@@ -425,7 +426,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.disabled = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.disabled).toBe(true);
     });
@@ -435,13 +436,13 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.disabled = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 检查 checked 为 falsy 值（可能是 false 或 null）
       expect(checkTag.checked === false || checkTag.checked === null).toBe(
@@ -454,7 +455,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.disabled = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       let changeFired = false;
       checkTag.addEventListener("change", () => {
@@ -465,7 +466,7 @@ describe("EaTag and EaCheckTag Components", () => {
         checkTag.shadowRoot.querySelector('[part="container"]');
       containerEl.click();
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(changeFired).toBe(false);
     });
@@ -480,7 +481,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.type).toBe("primary");
     });
@@ -491,7 +492,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.type).toBe("success");
     });
@@ -502,7 +503,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.type).toBe("info");
     });
@@ -513,7 +514,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.type).toBe("warning");
     });
@@ -524,7 +525,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.type).toBe("danger");
     });
@@ -544,7 +545,7 @@ describe("EaTag and EaCheckTag Components", () => {
         container.appendChild(tag);
       });
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const tags = container.querySelectorAll("ea-tag");
       expect(tags.length).toBe(5);
@@ -561,7 +562,7 @@ describe("EaTag and EaCheckTag Components", () => {
         container.appendChild(checkTag);
       });
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const checkTags = container.querySelectorAll("ea-check-tag");
       expect(checkTags.length).toBe(5);
@@ -576,7 +577,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -585,7 +586,7 @@ describe("EaTag and EaCheckTag Components", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         checkTag.shadowRoot.querySelector('[part="container"]')
@@ -597,7 +598,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.setAttribute("type", "invalid");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 组件保留原始属性值
       expect(tag.getAttribute("type")).toBe("invalid");
@@ -609,7 +610,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.checked = true;
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       // 组件保留原始属性值
       expect(checkTag.getAttribute("type")).toBe("invalid");
@@ -625,7 +626,7 @@ describe("EaTag and EaCheckTag Components", () => {
       tag.textContent = "Test";
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -635,7 +636,7 @@ describe("EaTag and EaCheckTag Components", () => {
       checkTag.textContent = "Test";
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         checkTag.shadowRoot.querySelector('[part="container"]')
@@ -664,11 +665,11 @@ describe("EaTag and EaCheckTag Components", () => {
       const tag = document.createElement("ea-tag");
       container.appendChild(tag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       tag.type = "success";
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tag.type).toBe("success");
     });
@@ -677,11 +678,11 @@ describe("EaTag and EaCheckTag Components", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       checkTag.checked = true;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.checked).toBe(true);
     });
@@ -690,11 +691,11 @@ describe("EaTag and EaCheckTag Components", () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       checkTag.disabled = true;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(checkTag.disabled).toBe(true);
     });

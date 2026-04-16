@@ -9,6 +9,7 @@ export type PropertyTypes =
   | ArrayConstructor
   | RegExpConstructor
   | FunctionConstructor
+  | Object
   | any[];
 
 /**

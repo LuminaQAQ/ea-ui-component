@@ -101,7 +101,7 @@ export class EaFormAssociatedBase extends EaBase {
       this.internals?.setFormValue(newVal);
     },
   })
-  value: string = "";
+  value: string | any = "";
 
   /**
    * 必填状态
@@ -236,6 +236,7 @@ export class EaFormAssociatedBase extends EaBase {
 
     if (formControl && "validity" in formControl) {
       const validity = (formControl as HTMLInputElement).validity;
+      if (!validity) return;
       if (validity.valid) {
         this.resetCustomValidity();
       } else {
