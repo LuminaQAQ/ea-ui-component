@@ -352,16 +352,18 @@ limitExample.init();
 
 ### Checkbox Attributes
 
-| 参数          | 说明               | 类型    | 可选值                      | 默认值  |
-| ------------- | ------------------ | ------- | --------------------------- | ------- |
-| label         | 通过属性设置的文本 | string  | -                           | -       |
-| value         | 绑定值             | string  | -                           | -       |
-| name          | 原生的`name`属性   | string  | -                           | -       |
-| disabled      | 是否禁用           | boolean | -                           | false   |
-| checked       | 是否选中           | boolean | -                           | false   |
-| indeterminate | 是否为半选状态     | boolean | -                           | false   |
-| size          | 组件尺寸           | string  | `large \| default \| small` | default |
-| border        | 是否带边框样式     | boolean | -                           | false   |
+| 参数           | 说明               | 类型    | 可选值                      | 默认值  |
+| -------------- | ------------------ | ------- | --------------------------- | ------- |
+| label          | 通过属性设置的文本 | string  | -                           | -       |
+| value          | 绑定值             | string  | -                           | -       |
+| name           | 原生的`name`属性   | string  | -                           | -       |
+| disabled       | 是否禁用           | boolean | -                           | false   |
+| checked        | 是否选中           | boolean | -                           | false   |
+| indeterminate   | 是否为半选状态     | boolean | -                           | false   |
+| size           | 组件尺寸           | string  | `large \| default \| small` | default |
+| border         | 是否带边框样式     | boolean | -                           | false   |
+| limit-disabled | 是否被限制禁用     | boolean | -                           | false   |
+| required       | 是否必填           | boolean | -                           | false   |
 
 ### Checkbox CSS Part
 

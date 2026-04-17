@@ -200,10 +200,20 @@ export function listen(
 
       return targetOrValue;
     } else {
-      // 旧版装饰器
+      // 旧版装饰器或兼容模式（包括 Vite/esbuild 转换后的实验性装饰器）
       const target = targetOrValue;
       const propertyKey = propertyKeyOrContext as string;
-      const desc = descriptor!;
+
+      if (!propertyKey) {
+        console.error("listen decorator: 缺少方法名", {
+          targetOrValue,
+          propertyKeyOrContext,
+          descriptor,
+          eventName,
+        });
+        return;
+      }
+
       // 使用属性名生成唯一的 key，每个装饰器调用都有自己的 key
       const abortControllerKey = createAbortControllerKey(propertyKey);
 
@@ -216,6 +226,7 @@ export function listen(
         "disconnectedCallback"
       );
 
+      // 在事件触发时从实例上动态获取方法
       target.connectedCallback = function (this: EaElement & HTMLElement) {
         originalConnected?.call(this);
         setupEventListener(
@@ -224,7 +235,16 @@ export function listen(
           eventName,
           selector,
           (e: Event) => {
-            desc.value.call(this, e);
+            // 在运行时从实例上获取方法（支持类字段和原型方法）
+            const method = (this as any)[propertyKey];
+            if (typeof method === "function") {
+              method.call(this, e);
+            } else {
+              console.error(
+                `listen decorator: 事件 "${eventName}" 触发时找不到方法 "${propertyKey}"`,
+                { instanceKeys: Object.keys(this), propertyKey }
+              );
+            }
           },
           options
         );
