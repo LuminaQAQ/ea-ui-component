@@ -65,12 +65,25 @@ onMounted(() => {
 
 ## 引入
 
-`js`
+> `js`
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-switch/index.js";
+  import "./node_modules/easy-component-ui/components/ea-switch/index.ts";
 </script>
+```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
 ```
 
 ## 自定义样式
@@ -91,6 +104,8 @@ onMounted(() => {
   ></ea-switch>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="demo">
   <ea-switch name="basic" value="true"></ea-switch>
@@ -104,6 +119,8 @@ onMounted(() => {
   ></ea-switch>
 </div>
 ```
+
+:::
 
 ## 不同尺寸
 
@@ -370,43 +387,90 @@ forbiddenExample.init();
 
 :::
 
-## Attributes
+## Switch API
+
+### Switch Attributes
 
 | 参数                                              | 说明                                                     | 类型                      | 可选值                      | 默认值  |
 | ------------------------------------------------- | -------------------------------------------------------- | ------------------------- | --------------------------- | ------- |
+| label                                             | 标签文本                                                 | string                    | -                           | ''      |
 | name                                              | 原生属性，若与 `form` 组合使用，则作为 `FormData` 的键名 | string                    | -                           | -       |
 | value                                             | 当前开关的值                                             | string / number / boolean | -                           | false   |
-| active-value                                      | 打开时的值                                               | string / number / boolean | -                           | true    |
-| inactive-value                                    | 关闭时的值                                               | string / number / boolean | -                           | false   |
+| activeValue                                       | 打开时的值                                               | string / number / boolean | -                           | true    |
+| inactiveValue                                     | 关闭时的值                                               | string / number / boolean | -                           | false   |
 | size                                              | 开关的尺寸                                               | string                    | `large \| default \| small` | default |
-| inactive-text                                     | 关闭时显示的文字                                         | string                    | -                           | -       |
-| inactive-color                                    | 关闭时的背景色                                           | string                    | -                           | -       |
-| active-text                                       | 打开时显示的文字                                         | string                    | -                           | -       |
-| active-color                                      | 打开时的背景色                                           | string                    | -                           | -       |
+| inactiveText                                      | 关闭时显示的文字                                         | string                    | -                           | -       |
+| inactiveColor                                     | 关闭时的背景色                                           | string                    | -                           | -       |
+| activeText                                        | 打开时显示的文字                                         | string                    | -                           | -       |
+| activeColor                                       | 打开时的背景色                                           | string                    | -                           | -       |
 | disabled                                          | 是否禁用                                                 | boolean                   | -                           | false   |
-| beforeChange <ea-tag type="primary">prop</ea-tag> | 切换前的回调函数，返回 Promise                           | `Function：() => Promise` |
+| required                                          | 是否必填                                                 | boolean                   | -                           | false   |
+| beforeChange <PropTag />                          | 切换前的回调函数，返回 Promise                           | Function                  | -                           | null    |
 
-## CSS Part
+### Switch CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
 | 名称        | 说明                     |
 | ----------- | ------------------------ |
+| wrapper     | 外层包裹元素             |
 | container   | 外层容器                 |
+| label       | 表单标签                 |
 | original    | 原生控件                 |
 | label-left  | 左侧文字                 |
 | switch      | 伪 `checkbox` input 控件 |
 | label-right | 右侧文字                 |
 
-## Slots
+### Switch Slots
 
 | 名称     | 说明             |
 | -------- | ---------------- |
 | active   | 打开状态时的内容 |
 | inactive | 关闭状态时的内容 |
 
-## Events
+### Switch Methods
+
+| 方法名              | 说明                       | 参数 |
+| ------------------- | -------------------------- | ---- |
+| updateContainerClasslist | 更新容器类名         | —    |
+| checkValidity       | 检查表单字段的有效性       | —    |
+| reportValidity      | 报告表单字段的有效性       | —    |
+
+### Switch Events
 
 | 事件名 | 说明               | 回调参数 ( event.detail )                |
 | ------ | ------------------ | ---------------------------------------- |
 | change | 状态发生变化时触发 | `{ value: String \| Number \| Boolean }` |
+
+## 类型支持
+
+组件提供完整的 TypeScript 类型声明文件，支持 HTML、Vue 和 React 的类型提示。
+
+### HTML
+
+组件支持 `HTMLElementTagNameMap` 扩展：
+
+```typescript
+const switchEl = document.createElement('ea-switch');
+switchEl.value = true; // 类型安全
+switchEl.activeValue = 'yes';
+switchEl.size = 'large';
+```
+
+### Vue
+
+组件支持 Vue 全局组件类型：
+
+```typescript
+// 在模板中使用时有类型提示
+<ea-switch :value="true" active-text="On" @change="handleChange" />
+```
+
+### React
+
+组件支持 JSX 类型：
+
+```typescript
+// 在 JSX 中使用时有类型检查
+<ea-switch value={true} activeText="On" onChange={handleChange} />
+```

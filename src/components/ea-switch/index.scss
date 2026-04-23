@@ -1,4 +1,8 @@
-$ea-switch-size-type: (small, default, large);
+$ea-switch-size-type: (
+  small,
+  default,
+  large
+);
 
 :host {
   --ea-switch-space: 0 var(--spacing-md);
@@ -21,9 +25,7 @@ $ea-switch-size-type: (small, default, large);
 
   --ea-switch-indicator-color: var(--color-white);
   --ea-switch-indicator-start: 2px;
-  --ea-switch-indicator-end: calc(
-    100% - var(--ea-switch-indicator-default-size) - 2px
-  );
+  --ea-switch-indicator-end: calc(100% - var(--ea-switch-indicator-default-size) - 2px);
 
   --ea-switch-inactive-bg-color: var(--grey-300);
   --ea-switch-inactive-text-color: var(--grey-900);

@@ -100,7 +100,11 @@ function createAttributeSetter(name: string) {
   return function (this: EaElement & HTMLElement, newVal: any) {
     if (!(this instanceof HTMLElement)) return;
 
-    this.setAttribute(attrName, String(newVal));
+    if (typeof newVal === "boolean") {
+      this.toggleAttribute(attrName, newVal);
+    } else {
+      this.setAttribute(attrName, String(newVal));
+    }
   };
 }
 

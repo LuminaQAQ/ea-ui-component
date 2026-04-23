@@ -14,15 +14,15 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-switch/index.js"></script>
-    <script type="module" src="../src/components/ea-tooltip/index.js"></script>
-    <script type="module" src="../src/components/ea-message/index.js"></script>
+    <script type="module" src="../src/components/ea-switch/index.ts"></script>
+    <!-- <script type="module" src="../src/components/ea-tooltip/index.js"></script>
+    <script type="module" src="../src/components/ea-message/index.js"></script> -->
 
     <!-- -------- 基本用法 --------  -->
     <!-- #region  -->
     <h2>基本用法</h2>
     <div class="demo">
-      <ea-switch name="basic" value="true"></ea-switch>
+      <ea-switch name="basic"></ea-switch>
       <ea-switch
         name="basicHasText"
         value="true"
@@ -130,7 +130,7 @@
         id="extSwitch"
         slot="reference"
         placement="top"
-        value="100"
+        value="world"
         active-value="hello"
         inactive-value="world"
       ></ea-switch>
@@ -153,7 +153,7 @@
           this.switch.addEventListener("change", e => {
             this.tooltip.setAttribute(
               "content",
-              getContentString(e.detail.value)
+              getContentString(e.target.value)
             );
           });
         },
@@ -197,12 +197,13 @@
 
         init() {
           this.switch1.beforeChange = () => {
-            this.switch1.toggleAttribute("disabled", true);
+            this.switch1.setAttribute("disabled", true);
 
             return new Promise(resolve => {
               setTimeout(() => {
-                this.switch1.toggleAttribute("disabled", false);
-                window.$message.success("Switch success");
+                this.switch1.removeAttribute("disabled", false);
+
+                // window.$message.success("Switch success");
                 return resolve(true);
               }, 1000);
             });
@@ -214,7 +215,7 @@
             return new Promise((resolve, reject) => {
               setTimeout(() => {
                 this.switch2.toggleAttribute("disabled", false);
-                window.$message.error("Switch failed");
+                // window.$message.error("Switch failed");
                 return reject(new Error("Error"));
               }, 1000);
             });

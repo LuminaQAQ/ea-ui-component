@@ -59,6 +59,10 @@ function getEventTarget(
   if (selector === "document") {
     return document;
   }
+  if ("shadowRoot" in element) {
+    const target = element.shadowRoot?.querySelector(selector as string);
+    if (target) return target;
+  }
   return element.shadowRoot!;
 }
 
