@@ -25,6 +25,7 @@
 
   @include element(content) {
     padding: var(--ea-card-padding);
+    height: 100%;
   }
 
   @include element(header) {

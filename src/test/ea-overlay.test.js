@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-overlay 组件
 import "../common/ea-overlay/index.ts";
 
 describe("EaOverlay Component", () => {
@@ -17,9 +16,6 @@ describe("EaOverlay Component", () => {
     container.remove();
   });
 
-  /**
-   * 基础功能测试
-   */
   describe("Basic Functionality", () => {
     it("应该正确渲染组件", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -59,9 +55,6 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  /**
-   * Status 属性测试
-   */
   describe("Status Attribute", () => {
     it("默认 status 应该是 false", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -107,9 +100,6 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  /**
-   * Modal 属性测试
-   */
   describe("Modal Attribute", () => {
     it("默认 modal 应该是 true", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -131,9 +121,6 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  /**
-   * Close on click modal 属性测试
-   */
   describe("Close on Click Modal Attribute", () => {
     it("默认 closeOnClickModal 应该是 false", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -154,7 +141,6 @@ describe("EaOverlay Component", () => {
       overlay.show();
       expect(overlay.status).toBe(true);
 
-      // 模拟点击遮罩层
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
 
@@ -164,9 +150,6 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  /**
-   * CSS 变量属性测试
-   */
   describe("CSS Variables Attributes", () => {
     it("应该支持 z-index 属性", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -209,9 +192,6 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  /**
-   * beforeClose 属性测试
-   */
   describe("beforeClose Property", () => {
     it("应该支持 beforeClose 回调函数", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -226,7 +206,6 @@ describe("EaOverlay Component", () => {
       overlay.show();
       expect(overlay.status).toBe(true);
 
-      // 模拟点击遮罩层
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
 
@@ -259,9 +238,6 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  /**
-   * Slot 测试
-   */
   describe("Slots", () => {
     it("应该支持默认 slot", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -277,9 +253,6 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  /**
-   * 事件测试
-   */
   describe("Events", () => {
     it("应该触发 open 事件", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -308,11 +281,9 @@ describe("EaOverlay Component", () => {
 
       overlay.show();
 
-      // 等待 requestAnimationFrame 和 transitionend
       await new Promise(resolve => requestAnimationFrame(resolve));
       await waitForRender();
 
-      // 在 JSDOM 中手动触发 transitionend 事件
       const overlayContainer = overlay.shadowRoot.querySelector(".ea-overlay");
       overlayContainer.dispatchEvent(
         new Event("transitionend", { bubbles: true })
@@ -356,7 +327,6 @@ describe("EaOverlay Component", () => {
       overlay.status = false;
       await waitForRender();
 
-      // 在 JSDOM 中手动触发 transitionend 事件
       const overlayContainer = overlay.shadowRoot.querySelector(".ea-overlay");
       overlayContainer.dispatchEvent(
         new Event("transitionend", { bubbles: true })
@@ -368,9 +338,6 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  /**
-   * 边界条件测试
-   */
   describe("Edge Cases", () => {
     it("应该处理空组件", async () => {
       const overlay = document.createElement("ea-overlay");
@@ -411,18 +378,13 @@ describe("EaOverlay Component", () => {
       overlay.show();
       expect(overlay.status).toBe(true);
 
-      // 点击内容区域
       const content = overlay.shadowRoot.querySelector(".ea-overlay__content");
       content.click();
 
-      // 状态应该保持不变
       expect(overlay.status).toBe(true);
     });
   });
 
-  /**
-   * 生命周期测试
-   */
   describe("Lifecycle", () => {
     it("组件连接后应该正确初始化", async () => {
       const overlay = document.createElement("ea-overlay");

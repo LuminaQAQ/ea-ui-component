@@ -31,32 +31,13 @@ export class EaOverlay extends EaBase {
     type: Boolean,
     default: false,
     observer(this: EaOverlay, newVal: boolean) {
+      this._transitionAbortController?.abort();
+      this._transitionAbortController = new AbortController();
+
       if (newVal) {
-        this._container.className = this.updateContainerClasslist();
-        this.emit("open");
-
-        requestAnimationFrame(() => {
-          this._container.classList.add("ea-overlay--is-show");
-          this._container.addEventListener(
-            "transitionend",
-            () => {
-              this.emit("opened");
-            },
-            { once: true }
-          );
-        });
+        this._handleOpenTransition();
       } else {
-        this._container.classList.add("ea-overlay--before-close");
-        this.emit("close");
-
-        this._container.addEventListener(
-          "transitionend",
-          () => {
-            this._container.className = this.updateContainerClasslist();
-            this.emit("closed");
-          },
-          { once: true }
-        );
+        this._handleCloseTransition();
       }
     },
   })
@@ -66,7 +47,7 @@ export class EaOverlay extends EaBase {
     type: Boolean,
     default: true,
     observer(this: EaOverlay) {
-      this._container.className = this.updateContainerClasslist();
+      this.updateContainerClasslist();
     },
   })
   modal: boolean = true;
@@ -76,6 +57,32 @@ export class EaOverlay extends EaBase {
     default: false,
   })
   closeOnClickModal: boolean = false;
+
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaOverlay, newVal: boolean) {
+      if (newVal) {
+        this.show();
+        this._handleFocus();
+      } else {
+        this.hide();
+      }
+    },
+  })
+  visible: boolean = false;
+
+  @attribute({
+    type: Boolean,
+    default: true,
+  })
+  closeOnPressEscape: boolean = true;
+
+  @attribute({
+    type: Boolean,
+    default: false,
+  })
+  appendToBody: boolean = false;
 
   // CSS 变量属性
   @attribute({
@@ -168,8 +175,6 @@ export class EaOverlay extends EaBase {
   })
   contentTransform: string = "";
 
-  // ==================== 属性（非 HTML 属性）====================
-
   @property({
     type: Function,
     default: null,
@@ -182,11 +187,60 @@ export class EaOverlay extends EaBase {
    * 更新容器类名
    */
   updateContainerClasslist(): string {
-    const className = bem(
-      { open: this.status },
-      { modal: !this.modal }
-    );
+    const className = bem({ open: this.status }, { modal: !this.modal });
+
+    if (this._container) this._container.className = className;
+
     return className;
+  }
+
+  /**
+   * 处理打开过渡
+   */
+  private _handleOpenTransition(): void {
+    this.updateContainerClasslist();
+    this.emit("open");
+    this._handleFocus();
+
+    requestAnimationFrame(() => {
+      this._container.classList.add("ea-overlay--is-show");
+
+      this._container.addEventListener(
+        "transitionend",
+        () => {
+          this.emit("opened");
+        },
+        { signal: this._transitionAbortController!.signal, once: true }
+      );
+    });
+  }
+
+  /**
+   * 处理关闭过渡
+   */
+  private _handleCloseTransition(): void {
+    this._container.classList.add("ea-overlay--before-close");
+    this.emit("close");
+
+    this._container.addEventListener(
+      "transitionend",
+      () => {
+        this.updateContainerClasslist();
+        this.emit("closed");
+      },
+      { signal: this._transitionAbortController!.signal, once: true }
+    );
+  }
+
+  /**
+   * 处理聚焦
+   */
+  private _handleFocus(): void {
+    (document.activeElement as HTMLElement)?.blur();
+
+    requestAnimationFrame(() => {
+      this.focus();
+    });
   }
 
   /**
@@ -223,10 +277,9 @@ export class EaOverlay extends EaBase {
   private _handleMaskClick(e: Event) {
     if (!this.closeOnClickModal) return;
 
-    // 检查是否点击的是遮罩层本身，而不是内容区域
     const isContent =
       [...this.children].find(
-        (child) => child === e.target || child.contains(e.target as Node)
+        child => child === e.target || child.contains(e.target as Node)
       ) ||
       this._overlayContent === e.target ||
       this._overlayContent.contains(e.target as Node);
@@ -239,15 +292,23 @@ export class EaOverlay extends EaBase {
     }
   }
 
+  @listen("keydown", "document")
+  private _handleKeyDown(e: KeyboardEvent) {
+    if (!this.status || !this.closeOnPressEscape || e.key !== "Escape") return;
+    e.stopImmediatePropagation();
+    e.preventDefault();
+
+    if (this.beforeClose) {
+      this.beforeClose(() => this.hide());
+    } else {
+      this.hide();
+    }
+  }
+
   // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();
-
-    document.activeElement?.blur();
-    timeout(() => {
-      this.focus();
-    }, 0);
   }
 
   $beforeUnmount(): void {
