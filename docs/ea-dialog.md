@@ -118,11 +118,11 @@ onMounted(() => {
 
   // ------- 可拖拽对话框 -------
   // #region
-  const draggableExample = {
-    dialog: document.querySelector("#draggableDialog"),
-    openBtn: document.querySelector("#draggableDialogOpenBtn"),
-    cancelBtn: document.querySelector("#draggableDialogCancelBtn"),
-    confirmBtn: document.querySelector("#draggableDialogConfirmBtn"),
+  const movableExample = {
+    dialog: document.querySelector("#movableDialog"),
+    openBtn: document.querySelector("#movableDialogOpenBtn"),
+    cancelBtn: document.querySelector("#movableDialogCancelBtn"),
+    confirmBtn: document.querySelector("#movableDialogConfirmBtn"),
 
     init() {
       this.openBtn.addEventListener("click", () => {
@@ -138,7 +138,7 @@ onMounted(() => {
       });
     },
   };
-  draggableExample.init();
+  movableExample.init();
   // #endregion
   // ------- end -------
 
@@ -281,7 +281,7 @@ ea-button::part(icon) {
     Click to open the Dialog
   </ea-button>
 
-  <ea-dialog id="basicDialog" title="Tips" width="500px">
+  <ea-dialog id="basicDialog" heading="Tips" width="500px">
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
@@ -302,7 +302,7 @@ ea-button::part(icon) {
     Click to open the Dialog
   </ea-button>
 
-  <ea-dialog id="basicDialog" title="Tips" width="500px">
+  <ea-dialog id="basicDialog" heading="Tips" width="500px">
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
@@ -445,12 +445,12 @@ customHeaderExample.init();
 <div class="demo">
   <ea-button id="nestingDialogOpenBtn" plain> Open the outer Dialog </ea-button>
 
-  <ea-dialog id="nestingOuterDialog" title="Outer Dialog" width="800px">
+  <ea-dialog id="nestingOuterDialog" heading="Outer Dialog" width="800px">
     <span>This is the outer Dialog</span>
     <ea-dialog
       id="nestingInnererDialog"
       width="500px"
-      title="Inner Dialog"
+      heading="Inner Dialog"
       append-to-body
     >
       <span>This is the inner Dialog</span>
@@ -470,13 +470,13 @@ customHeaderExample.init();
 <div class="demo">
   <ea-button id="nestingDialogOpenBtn" plain> Open the outer Dialog </ea-button>
 
-  <ea-dialog id="nestingOuterDialog" title="Outer Dialog" width="800px">
+  <ea-dialog id="nestingOuterDialog" heading="Outer Dialog" width="800px">
     <span>This is the outer Dialog</span>
 
     <ea-dialog
       id="nestingInnererDialog"
       width="500px"
-      title="Inner Dialog"
+      heading="Inner Dialog"
       append-to-body
     >
       <span>This is the inner Dialog</span>
@@ -528,7 +528,7 @@ nestingExample.init();
   <ea-button id="centerDialogOpenBtn" plain>
     Click to open the Dialog
   </ea-button>
-  <ea-dialog id="centerDialog" title="Tips" width="500px" center>
+  <ea-dialog id="centerDialog" heading="Tips" width="500px" center>
     <span>
       It should be noted that the content will not be aligned in center by
       default
@@ -552,7 +552,7 @@ nestingExample.init();
     Click to open the Dialog
   </ea-button>
 
-  <ea-dialog id="centerDialog" title="Tips" width="500px" center>
+  <ea-dialog id="centerDialog" heading="Tips" width="500px" center>
     <span>
       It should be noted that the content will not be aligned in center by
       default
@@ -597,19 +597,19 @@ centerExample.init();
 
 ## 可拖拽
 
-设置 `draggable` 属性使对话框可通过标题拖动。
+设置 `movable` 属性使对话框可通过标题拖动。
 
 <div class="demo">
-  <ea-button id="draggableDialogOpenBtn" plain>
+  <ea-button id="movableDialogOpenBtn" plain>
     Click to open the Dialog
   </ea-button>
 
-  <ea-dialog id="draggableDialog" title="Tips" width="500px" draggable>
+  <ea-dialog id="movableDialog" heading="Tips" width="500px" movable>
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
-        <ea-button id="draggableDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="draggableDialogConfirmBtn" type="primary">
+        <ea-button id="movableDialogCancelBtn">Cancel</ea-button>
+        <ea-button id="movableDialogConfirmBtn" type="primary">
           Confirm
         </ea-button>
       </div>
@@ -621,16 +621,16 @@ centerExample.init();
 
 ```html
 <div class="demo">
-  <ea-button id="draggableDialogOpenBtn" plain>
+  <ea-button id="movableDialogOpenBtn" plain>
     Click to open the Dialog
   </ea-button>
 
-  <ea-dialog id="draggableDialog" title="Tips" width="500px" draggable>
+  <ea-dialog id="movableDialog" heading="Tips" width="500px" movable>
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
-        <ea-button id="draggableDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="draggableDialogConfirmBtn" type="primary">
+        <ea-button id="movableDialogCancelBtn">Cancel</ea-button>
+        <ea-button id="movableDialogConfirmBtn" type="primary">
           Confirm
         </ea-button>
       </div>
@@ -640,11 +640,11 @@ centerExample.init();
 ```
 
 ```js
-const draggableExample = {
-  dialog: document.querySelector("#draggableDialog"),
-  openBtn: document.querySelector("#draggableDialogOpenBtn"),
-  cancelBtn: document.querySelector("#draggableDialogCancelBtn"),
-  confirmBtn: document.querySelector("#draggableDialogConfirmBtn"),
+const movableExample = {
+  dialog: document.querySelector("#movableDialog"),
+  openBtn: document.querySelector("#movableDialogOpenBtn"),
+  cancelBtn: document.querySelector("#movableDialogCancelBtn"),
+  confirmBtn: document.querySelector("#movableDialogConfirmBtn"),
 
   init() {
     this.openBtn.addEventListener("click", () => {
@@ -660,7 +660,7 @@ const draggableExample = {
     });
   },
 };
-draggableExample.init();
+movableExample.init();
 ```
 
 :::
@@ -674,7 +674,7 @@ draggableExample.init();
     Open the fullscreen Dialog
   </ea-button>
 
-  <ea-dialog id="fullscreenDialog" title="Tips" width="500px" fullscreen>
+  <ea-dialog id="fullscreenDialog" heading="Tips" width="500px" fullscreen>
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
@@ -695,7 +695,7 @@ draggableExample.init();
     Open the fullscreen Dialog
   </ea-button>
 
-  <ea-dialog id="fullscreenDialog" title="Tips" width="500px" fullscreen>
+  <ea-dialog id="fullscreenDialog" heading="Tips" width="500px" fullscreen>
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
@@ -742,7 +742,7 @@ fullscreenExample.init();
 <div class="demo">
   <ea-button id="modalDialogOpenBtn" plain> Open the modal Dialog </ea-button>
 
-  <ea-dialog id="modalDialog" title="Tips" width="500px" modal="false">
+  <ea-dialog id="modalDialog" heading="Tips" width="500px" modal="false">
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
@@ -761,7 +761,7 @@ fullscreenExample.init();
 <div class="demo">
   <ea-button id="modalDialogOpenBtn" plain> Open the modal Dialog </ea-button>
 
-  <ea-dialog id="modalDialog" title="Tips" width="500px" modal="false">
+  <ea-dialog id="modalDialog" heading="Tips" width="500px" modal="false">
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
@@ -814,7 +814,7 @@ modalExample.init();
 <div class="demo">
   <ea-button id="eventsDialogOpenBtn" plain> Open the events Dialog </ea-button>
 
-  <ea-dialog id="eventsDialog" title="Tips" width="500px" before-close>
+  <ea-dialog id="eventsDialog" heading="Tips" width="500px" before-close>
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
@@ -833,7 +833,7 @@ modalExample.init();
 <div class="demo">
   <ea-button id="eventsDialogOpenBtn" plain> Open the events Dialog </ea-button>
 
-  <ea-dialog id="eventsDialog" title="Tips" width="500px" before-close>
+  <ea-dialog id="eventsDialog" heading="Tips" width="500px" before-close>
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
@@ -901,11 +901,11 @@ eventsExample.init();
 
 | 参数             | 说明                       | 类型      | 可选值        | 默认值  |
 | ---------------- | -------------------------- | --------- | ------------- | ------- |
-| `title`          | 对话框标题                 | `string`  | —             | `""`    |
+| `heading`        | 对话框标题                 | `string`  | —             | `""`    |
 | `width`          | 对话框宽度（支持 css 值）  | `string`  | —             | `50%`   |
 | `visible`        | 是否可见                   | `boolean` | `true\|false` | `false` |
 | `center`         | 内容是否垂直居中           | `boolean` | `true\|false` | `false` |
-| `draggable`      | 是否可拖拽                 | `boolean` | `true\|false` | `false` |
+| `movable`        | 是否可拖拽                 | `boolean` | `true\|false` | `false` |
 | `fullscreen`     | 是否全屏显示               | `boolean` | `true\|false` | `false` |
 | `modal`          | 是否显示遮罩               | `boolean` | `true\|false` | `true`  |
 | `append-to-body` | 是否将弹窗追加到 body      | `boolean` | `true\|false` | `false` |
@@ -935,7 +935,7 @@ d.hide();
 | ------------ | --------------------------------- |
 | `container`  | 对话框根容器（`.ea-dialog-main`） |
 | `header`     | 头部（标题或自定义头部 slot）     |
-| `title`      | 标题文本                          |
+| `heading`    | 标题文本                          |
 | `close-icon` | 右上角关闭图标                    |
 | `content`    | 主体内容                          |
 | `footer`     | 底部 slot                         |

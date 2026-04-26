@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-import { waitForRender } from "./utils/waitForRender.js";
+import { waitForRender } from "./utils/waitForRender";
 
 import "../common/ea-overlay/index.ts";
 
@@ -55,14 +55,14 @@ describe("EaOverlay Component", () => {
     });
   });
 
-  describe("Status Attribute", () => {
-    it("默认 status 应该是 false", async () => {
+  describe("Visible Attribute", () => {
+    it("默认 visible 应该是 false", async () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
       await waitForRender();
 
-      expect(overlay.status).toBe(false);
+      expect(overlay.visible).toBe(false);
     });
 
     it("应该支持通过 show() 方法显示", async () => {
@@ -73,7 +73,7 @@ describe("EaOverlay Component", () => {
 
       overlay.show();
 
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
     });
 
     it("应该支持通过 hide() 方法隐藏", async () => {
@@ -83,20 +83,20 @@ describe("EaOverlay Component", () => {
       await waitForRender();
 
       overlay.show();
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
 
       overlay.hide();
-      expect(overlay.status).toBe(false);
+      expect(overlay.visible).toBe(false);
     });
 
-    it("应该支持通过 status 属性控制显示", async () => {
+    it("应该支持通过 visible 属性控制显示", async () => {
       const overlay = document.createElement("ea-overlay");
-      overlay.setAttribute("status", "");
+      overlay.setAttribute("visible", "");
       container.appendChild(overlay);
 
       await waitForRender();
 
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
     });
   });
 
@@ -139,14 +139,14 @@ describe("EaOverlay Component", () => {
       await waitForRender();
 
       overlay.show();
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
 
       await waitForRender();
 
-      expect(overlay.status).toBe(false);
+      expect(overlay.visible).toBe(false);
     });
   });
 
@@ -196,6 +196,7 @@ describe("EaOverlay Component", () => {
     it("应该支持 beforeClose 回调函数", async () => {
       const overlay = document.createElement("ea-overlay");
       overlay.setAttribute("close-on-click-modal", "");
+      overlay.setAttribute("before-close", "");
       container.appendChild(overlay);
 
       await waitForRender();
@@ -204,7 +205,7 @@ describe("EaOverlay Component", () => {
       overlay.beforeClose = beforeCloseHandler;
 
       overlay.show();
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
@@ -234,7 +235,7 @@ describe("EaOverlay Component", () => {
       await waitForRender(100);
 
       expect(doneCalled).toBe(true);
-      expect(overlay.status).toBe(false);
+      expect(overlay.visible).toBe(false);
     });
   });
 
@@ -263,7 +264,7 @@ describe("EaOverlay Component", () => {
       const openHandler = vi.fn();
       overlay.addEventListener("open", openHandler);
 
-      overlay.status = true;
+      overlay.visible = true;
 
       await waitForRender();
 
@@ -300,13 +301,13 @@ describe("EaOverlay Component", () => {
 
       await waitForRender();
 
-      overlay.status = true;
+      overlay.visible = true;
       await waitForRender();
 
       const closeHandler = vi.fn();
       overlay.addEventListener("close", closeHandler);
 
-      overlay.status = false;
+      overlay.visible = false;
       await waitForRender();
 
       expect(closeHandler).toHaveBeenCalled();
@@ -318,13 +319,13 @@ describe("EaOverlay Component", () => {
 
       await waitForRender();
 
-      overlay.status = true;
+      overlay.visible = true;
       await waitForRender();
 
       const closedHandler = vi.fn();
       overlay.addEventListener("closed", closedHandler);
 
-      overlay.status = false;
+      overlay.visible = false;
       await waitForRender();
 
       const overlayContainer = overlay.shadowRoot.querySelector(".ea-overlay");
@@ -355,16 +356,16 @@ describe("EaOverlay Component", () => {
       await waitForRender();
 
       overlay.show();
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
 
       overlay.hide();
-      expect(overlay.status).toBe(false);
+      expect(overlay.visible).toBe(false);
 
       overlay.show();
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
 
       overlay.hide();
-      expect(overlay.status).toBe(false);
+      expect(overlay.visible).toBe(false);
     });
 
     it("应该处理点击内容区域不关闭", async () => {
@@ -376,12 +377,12 @@ describe("EaOverlay Component", () => {
       await waitForRender();
 
       overlay.show();
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
 
       const content = overlay.shadowRoot.querySelector(".ea-overlay__content");
       content.click();
 
-      expect(overlay.status).toBe(true);
+      expect(overlay.visible).toBe(true);
     });
   });
 

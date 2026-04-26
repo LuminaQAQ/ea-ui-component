@@ -4,7 +4,6 @@ import { CustomElement } from "@decorator/custom-element";
 import { query } from "@decorator/query";
 import { listen } from "@decorator/listen";
 import { property } from "@decorator/property";
-import { timeout } from "@utils/timeout";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-overlay" as const;
@@ -30,18 +29,23 @@ export class EaOverlay extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaOverlay, newVal: boolean) {
+    async observer(this: EaOverlay, newVal: boolean) {
       this._transitionAbortController?.abort();
       this._transitionAbortController = new AbortController();
 
       if (newVal) {
         this._handleOpenTransition();
+        this._handleFocus();
       } else {
-        this._handleCloseTransition();
+        if (this.beforeClose && typeof this.beforeClose === "function") {
+          this.beforeClose(() => this._handleCloseTransition());
+        } else {
+          this._handleCloseTransition();
+        }
       }
     },
   })
-  status: boolean = false;
+  visible: boolean = false;
 
   @attribute({
     type: Boolean,
@@ -57,20 +61,6 @@ export class EaOverlay extends EaBase {
     default: false,
   })
   closeOnClickModal: boolean = false;
-
-  @attribute({
-    type: Boolean,
-    default: false,
-    observer(this: EaOverlay, newVal: boolean) {
-      if (newVal) {
-        this.show();
-        this._handleFocus();
-      } else {
-        this.hide();
-      }
-    },
-  })
-  visible: boolean = false;
 
   @attribute({
     type: Boolean,
@@ -187,7 +177,7 @@ export class EaOverlay extends EaBase {
    * 更新容器类名
    */
   updateContainerClasslist(): string {
-    const className = bem({ open: this.status }, { modal: !this.modal });
+    const className = bem({ open: this.visible }, { modal: this.modal });
 
     if (this._container) this._container.className = className;
 
@@ -247,14 +237,14 @@ export class EaOverlay extends EaBase {
    * 显示遮罩层
    */
   show(): void {
-    this.status = true;
+    this.visible = true;
   }
 
   /**
    * 隐藏遮罩层
    */
   hide(): void {
-    this.status = false;
+    this.visible = false;
   }
 
   /**
@@ -285,24 +275,15 @@ export class EaOverlay extends EaBase {
       this._overlayContent.contains(e.target as Node);
     if (isContent) return;
 
-    if (this.beforeClose) {
-      this.beforeClose(() => (this.status = false));
-    } else {
-      this.status = false;
-    }
+    this.visible = false;
   }
 
   @listen("keydown", "document")
   private _handleKeyDown(e: KeyboardEvent) {
-    if (!this.status || !this.closeOnPressEscape || e.key !== "Escape") return;
+    if (!this.visible || !this.closeOnPressEscape || e.key !== "Escape") return;
     e.stopImmediatePropagation();
     e.preventDefault();
-
-    if (this.beforeClose) {
-      this.beforeClose(() => this.hide());
-    } else {
-      this.hide();
-    }
+    this.visible = false;
   }
 
   // ==================== 生命周期 ====================

@@ -7,10 +7,8 @@
 
   --ea-overlay-content-translate-x: calc(0% - var(--ea-overlay-content-left));
   --ea-overlay-content-translate-y: calc(0% - var(--ea-overlay-content-top));
-  --ea-overlay-content-transform: translate(
-    var(--ea-overlay-content-translate-x),
-    var(--ea-overlay-content-translate-y)
-  );
+  --ea-overlay-content-transform: translate(var(--ea-overlay-content-translate-x),
+      var(--ea-overlay-content-translate-y));
 
   --ea-overlay-content-width: 50%;
   --ea-overlay-content-max-width: none;
@@ -45,6 +43,7 @@
   @include element(mask) {
     @include modal-mask;
 
+    display: none;
     background: var(--ea-overlay-background-color);
 
     z-index: var(--ea-overlay-z-index);
@@ -61,9 +60,9 @@
     width: var(--ea-overlay-content-width);
     height: var(--ea-overlay-content-height);
 
-    left: var(--ea-overlay-content-left);
-    top: var(--ea-overlay-content-top);
-    transform: var(--ea-overlay-content-transform);
+    // left: var(--ea-overlay-content-left);
+    // top: var(--ea-overlay-content-top);
+    // transform: var(--ea-overlay-content-transform);
 
     z-index: calc(var(--ea-overlay-z-index) + 1);
 
@@ -73,11 +72,14 @@
   }
 
   @include modifier(open) {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   @include modifier(is-show) {
     visibility: visible;
+
     .ea-overlay__content,
     .ea-overlay__mask {
       filter: opacity(1);
@@ -85,15 +87,16 @@
   }
 
   @include modifier(before-close) {
+
     .ea-overlay__content,
     .ea-overlay__mask {
       filter: opacity(0);
     }
   }
 
-  @include modifier(modal) {
+  @include state(modal) {
     .ea-overlay__mask {
-      display: none;
+      display: block;
     }
   }
 }

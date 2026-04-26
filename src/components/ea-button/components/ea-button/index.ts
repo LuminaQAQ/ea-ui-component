@@ -2,6 +2,7 @@ import EaBase, { createBEM } from "@core/EaBase";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
 import { listen } from "@decorator/listen";
+import { query } from "@decorator/query";
 import { Enum } from "@/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@/constants/variant";
 import stylesheet from "./index.scss?inline";
@@ -13,7 +14,10 @@ const bem = createBEM(TAG_NAME);
 export class EaButton extends EaBase {
   // ==================== DOM 元素引用 ====================
 
+  @query(bem.cb())
   private _container!: HTMLButtonElement | HTMLAnchorElement;
+
+  @query(bem.ce("icon"))
   private _icon!: HTMLElement;
 
   // ==================== 属性定义 ====================
@@ -76,7 +80,7 @@ export class EaButton extends EaBase {
     type: Boolean,
     default: false,
     observer(this: EaButton) {
-      this._render();
+      this._renderContainer();
       this.updateContainerClasslist();
     },
   })
@@ -186,34 +190,19 @@ export class EaButton extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
-  private _render(): void {
+  private _renderContainer(): void {
+    const container = this._container;
+    if (!container) return;
+
     const tag = this.link ? "a" : "button";
-    const hrefAttr = this.link && this.href ? `href="${this.href}"` : "";
-    const typeAttr = !this.link ? `type="${this.buttonType}"` : "";
+    if (container.tagName.toLowerCase() === tag) return;
 
-    (this.shadowRoot as ShadowRoot).innerHTML = `
-      <${tag} class="${bem()}" part="container" tabindex="-1" ${hrefAttr} ${typeAttr}>
-        <ea-icon class="${bem.e("icon")}" part="icon"></ea-icon>
-        <slot></slot>
-      </${tag}>
-    `;
+    const templateEl = document.createElement("template");
+    templateEl.innerHTML = this.html();
+    const newContainer = templateEl.content.firstElementChild as HTMLElement;
+    if (!newContainer) return;
 
-    // 重新查询 DOM 元素
-    this._container = (this.shadowRoot as ShadowRoot).querySelector(
-      bem.cb()
-    ) as HTMLButtonElement | HTMLAnchorElement;
-    this._icon = (this.shadowRoot as ShadowRoot).querySelector(
-      bem.ce("icon")
-    ) as HTMLElement;
-
-    // 初始化属性
-    if (this.icon && this._icon) {
-      this._icon.setAttribute("name", this.icon);
-      this._icon.setAttribute("size", this.size);
-    }
+    container.replaceWith(newContainer);
   }
 
   html(): string {
@@ -258,10 +247,7 @@ export class EaButton extends EaBase {
   // ==================== 生命周期 ====================
 
   $mount(): void {
-    this._render();
     this.updateContainerClasslist();
-
-    // 初始化 AbortController
     this._abortController = new AbortController();
   }
 

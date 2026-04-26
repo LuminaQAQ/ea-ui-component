@@ -220,7 +220,6 @@ function applyStyles(elementClass: any, shadowRoot: ShadowRoot | null): void {
 
   if (uniqueStyles.length === 0) return;
 
-  // 支持 adoptedStyleSheets
   if ("adoptedStyleSheets" in shadowRoot) {
     const sheets = uniqueStyles.map(css => {
       const sheet = new CSSStyleSheet();
@@ -229,11 +228,10 @@ function applyStyles(elementClass: any, shadowRoot: ShadowRoot | null): void {
     });
     shadowRoot.adoptedStyleSheets = sheets;
   } else {
-    // Fallback: 使用 style 标签
     uniqueStyles.forEach(css => {
       const styleEl = document.createElement("style");
       styleEl.textContent = css;
-      (shadowRoot as HTMLElement).appendChild(styleEl);
+      shadowRoot.appendChild(styleEl);
     });
   }
 }
@@ -252,7 +250,6 @@ function renderTemplate(
   const template = element.html?.();
   if (!template) return;
 
-  // 使用 DOMPurify 清洗 HTML，然后使用 template 元素解析
   const sanitizedTemplate = html(template);
   const templateEl = document.createElement("template");
   templateEl.innerHTML = sanitizedTemplate as string;
@@ -270,10 +267,9 @@ function mount(element: EaElement & HTMLElement, elementClass: any): void {
   const shadowRoot = element.shadowRoot;
   if (!shadowRoot) return;
 
-  // 应用样式
-  applyStyles(elementClass, shadowRoot);
+  shadowRoot.innerHTML = "";
 
-  // 渲染模板
+  applyStyles(elementClass, shadowRoot);
   renderTemplate(element, shadowRoot);
 }
 
@@ -328,6 +324,12 @@ function CustomElement(
       ]),
     ];
 
+    Object.defineProperty(CustomElementClass, "observedAttributes", {
+      get: () => observedAttributes,
+      configurable: true,
+      enumerable: true,
+    });
+
     class EaCustomElement extends CustomElementClass {
       static get observedAttributes() {
         return observedAttributes;
@@ -336,20 +338,27 @@ function CustomElement(
       constructor() {
         super();
 
-        // 定义 attribute 装饰器的响应式属性
-        if (attributeOptions) {
-          Object.keys(attributeOptions).forEach(name => {
-            const { type, default: defaultValue } = attributeOptions[name];
-            defineReactiveAttribute(this, name, type, defaultValue);
-          });
-        }
+        let current: any = CustomElementClass;
+        while (current && current !== HTMLElement) {
+          const clsName = current.name;
+          const attrs = ElementAttributesMap.get(clsName);
+          const props = ElementPropertiesMap.get(clsName);
 
-        // 定义 property 装饰器的响应式属性
-        if (propertyOptions) {
-          Object.keys(propertyOptions).forEach(name => {
-            const { default: defaultValue, observer } = propertyOptions[name];
-            defineReactiveProperty(this, name, defaultValue, observer);
-          });
+          if (attrs) {
+            Object.keys(attrs).forEach(name => {
+              const { type, default: defaultValue } = attrs[name];
+              defineReactiveAttribute(this, name, type, defaultValue);
+            });
+          }
+
+          if (props) {
+            Object.keys(props).forEach(name => {
+              const { default: defaultValue, observer } = props[name];
+              defineReactiveProperty(this, name, defaultValue, observer);
+            });
+          }
+
+          current = Object.getPrototypeOf(current);
         }
       }
 
@@ -370,29 +379,59 @@ function CustomElement(
         newVal: string | null
       ): Promise<void> {
         try {
-          if (!attributeOptions) return;
+          let currentClass: any = CustomElementClass;
+          let found = false;
 
-          // 使用查找函数支持驼峰命名和连字符命名的自动转换
-          const { option, actualName } = findPropertyOption(
-            attributeOptions,
-            name
-          );
-          if (!option) return;
+          while (currentClass && currentClass !== HTMLElement) {
+            const clsAttrs = ElementAttributesMap.get(currentClass.name);
 
-          const newValue = parseAttributeValue(newVal, option.type);
-          const oldValue = parseAttributeValue(oldVal, option.type);
+            if (clsAttrs) {
+              const { option, actualName } = findPropertyOption(clsAttrs, name);
 
-          const parent = Object.getPrototypeOf(Object.getPrototypeOf(this));
-          if (parent && typeof parent.attributeChangedCallback === "function") {
-            await parent.attributeChangedCallback.call(
-              this,
-              actualName,
-              oldValue,
-              newValue
-            );
+              if (option) {
+                const newValue = parseAttributeValue(newVal, option.type);
+                const oldValue = parseAttributeValue(oldVal, option.type);
+
+                const parentProto = Object.getPrototypeOf(
+                  Object.getPrototypeOf(this)
+                );
+                if (
+                  parentProto &&
+                  typeof parentProto.attributeChangedCallback === "function"
+                ) {
+                  await parentProto.attributeChangedCallback.call(
+                    this,
+                    actualName,
+                    oldValue,
+                    newValue
+                  );
+                }
+
+                option.observer?.call(this, newValue, oldValue);
+                found = true;
+                break;
+              }
+            }
+
+            currentClass = Object.getPrototypeOf(currentClass);
           }
 
-          option.observer?.call(this, newValue, oldValue);
+          if (!found) {
+            const parentProto = Object.getPrototypeOf(
+              Object.getPrototypeOf(this)
+            );
+            if (
+              parentProto &&
+              typeof parentProto.attributeChangedCallback === "function"
+            ) {
+              await parentProto.attributeChangedCallback.call(
+                this,
+                name,
+                oldVal,
+                newVal
+              );
+            }
+          }
         } catch (e) {
           if (process.env.NODE_ENV === "development") {
             console.error(e, this);

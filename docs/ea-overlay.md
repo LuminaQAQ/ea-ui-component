@@ -6,102 +6,101 @@ import "../dist/assets/icon.css"
 onMounted(async () => {
   await customElements.whenDefined('ea-overlay');
 
-    // ------- 基本用法 -------
-    // #region
-    const basicExample = {
-        overlay: document.querySelector('#basicOverlay'),
-        openButton: document.querySelector('#basicOverlayOpenButton'),
+  // ------- 基本用法 -------
+  // #region
+  const basicExample = {
+    overlay: document.querySelector('#basicOverlay'),
+    openButton: document.querySelector('#basicOverlayOpenButton'),
 
-        confirmButton: document.querySelector('#basicOverlayConfirmButton'),
-        cancelButton: document.querySelector('#basicOverlayCancelButton'),
+    confirmButton: document.querySelector('#basicOverlayConfirmButton'),
+    cancelButton: document.querySelector('#basicOverlayCancelButton'),
 
-        show() {
-            this.overlay.show();
-        },
+    show() {
+      this.overlay.show();
+    },
 
-        hide() {
-            this.overlay.hide();
-        },
+    hide() {
+      this.overlay.hide();
+    },
 
-        init() {
-            this.openButton.addEventListener('click', () => {
-                this.overlay.show();
-            });
+    init() {
+      this.openButton.addEventListener('click', () => {
+        this.overlay.show();
+      });
 
-            this.confirmButton.addEventListener('click', () => {
-                console.log('confirm');
-                this.overlay.hide();
-            })
+      this.confirmButton.addEventListener('click', () => {
+        console.log('confirm');
+        this.overlay.hide();
+      });
 
-            this.cancelButton.addEventListener('click', () => {
-                console.log('cancel');
-                this.overlay.hide();
-            })
-        }
+      this.cancelButton.addEventListener('click', () => {
+        console.log('cancel');
+        this.overlay.hide();
+      });
     }
-    basicExample.init();
-    // #endregion
-    // ------- end -------
+  }
+  basicExample.init();
+  // #endregion
+  // ------- end -------
 
-    // ------- 模态效果 -------
-    // #region
-    const modalExample = {
-        overlay: document.querySelector('#modalOverlay'),
-        openButton: document.querySelector('#modalOverlayOpenButton'),
+  // ------- 模态效果 -------
+  // #region
+  const modalExample = {
+    overlay: document.querySelector('#modalOverlay'),
+    openButton: document.querySelector('#modalOverlayOpenButton'),
 
-        confirmButton: document.querySelector('#modalOverlayConfirmButton'),
-        cancelButton: document.querySelector('#modalOverlayCancelButton'),
+    confirmButton: document.querySelector('#modalOverlayConfirmButton'),
+    cancelButton: document.querySelector('#modalOverlayCancelButton'),
 
-        show() {
-            this.overlay.show();
-        },
+    show() {
+      this.overlay.show();
+    },
 
-        hide() {
-            this.overlay.hide();
-        },
+    hide() {
+      this.overlay.hide();
+    },
 
-        init() {
-            this.openButton.addEventListener('click', () => {
-                this.overlay.show();
-            });
+    init() {
+      this.openButton.addEventListener('click', () => {
+        this.overlay.show();
+      });
 
-            this.confirmButton.addEventListener('click', () => {
-                console.log('confirm');
-                this.overlay.hide();
-            })
+      this.confirmButton.addEventListener('click', () => {
+        console.log('confirm');
+        this.overlay.hide();
+      });
 
-            this.cancelButton.addEventListener('click', () => {
-                console.log('cancel');
-                this.overlay.hide();
-            })
-        }
+      this.cancelButton.addEventListener('click', () => {
+        console.log('cancel');
+        this.overlay.hide();
+      });
     }
-    modalExample.init();
-    // #endregion
-    // ------- end -------
+  }
+  modalExample.init();
+  // #endregion
+  // ------- end -------
 
+  // ------- 关闭前触发 -------
+  // #region
+  const beforeCloseExample = {
+    overlay: document.querySelector("#beforeCloseOverlay"),
+    openButton: document.querySelector("#beforeCloseOverlayOpenButton"),
 
-      // ------- 关闭前触发 -------
-      // #region
-      const beforeCloseExample = {
-        overlay: document.querySelector("#beforeCloseOverlay"),
-        openButton: document.querySelector("#beforeCloseOverlayOpenButton"),
+    init() {
+      this.openButton.addEventListener("click", () => {
+        this.overlay.show();
+      });
 
-        init() {
-          this.openButton.addEventListener("click", () => {
-            this.overlay.show();
-          });
-
-          this.overlay.beforeClose = async done => {
-            console.log("before-close");
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            done();
-          };
-        },
+      this.overlay.beforeClose = async done => {
+        console.log("before-close");
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        done();
       };
-      beforeCloseExample.init();
-      // #endregion
-      // ------- end -------
+    },
+  };
+  beforeCloseExample.init();
+  // #endregion
+  // ------- end -------
 })
 </script>
 
@@ -122,7 +121,7 @@ ea-card::part(content-wrap) {
 }
 
 .ea-card-footer {
-    text-align: right;
+  text-align: right;
 }
 </style>
 
@@ -144,7 +143,7 @@ ea-card::part(content-wrap) {
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#overlay-css-part)。
 
 ::: code-group
 
@@ -181,14 +180,16 @@ ea-card::part(content-wrap) {
       <p>message</p>
       <section class="ea-card-footer" slot="footer">
         <ea-button id="basicOverlayCancelButton">Cancel</ea-button>
-        <ea-button id="basicOverlayConfirmButton" type="primary">
+        <ea-button id="basicOverlayConfirmButton" variant="primary">
           Confirm
         </ea-button>
       </section>
     </ea-card>
   </ea-overlay>
-  <ea-button id="basicOverlayOpenButton" type="primary">open</ea-button>
+  <ea-button id="basicOverlayOpenButton" variant="primary">open</ea-button>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -199,13 +200,13 @@ ea-card::part(content-wrap) {
       <p>message</p>
       <section class="ea-card-footer" slot="footer">
         <ea-button id="basicOverlayCancelButton">Cancel</ea-button>
-        <ea-button id="basicOverlayConfirmButton" type="primary">
+        <ea-button id="basicOverlayConfirmButton" variant="primary">
           Confirm
         </ea-button>
       </section>
     </ea-card>
   </ea-overlay>
-  <ea-button id="basicOverlayOpenButton" type="primary">open</ea-button>
+  <ea-button id="basicOverlayOpenButton" variant="primary">open</ea-button>
 </div>
 ```
 
@@ -246,6 +247,8 @@ basicExample.init();
 
 :::
 
+::::
+
 ## 模态效果
 
 通过设置 `modal` 控制是否启用模态效果。
@@ -256,13 +259,13 @@ basicExample.init();
       <p>message</p>
       <section class="ea-card-footer" slot="footer">
         <ea-button id="modalOverlayCancelButton">Cancel</ea-button>
-        <ea-button id="modalOverlayConfirmButton" type="primary">
+        <ea-button id="modalOverlayConfirmButton" variant="primary">
           Confirm
         </ea-button>
       </section>
     </ea-card>
   </ea-overlay>
-  <ea-button id="modalOverlayOpenButton" type="primary">open</ea-button>
+  <ea-button id="modalOverlayOpenButton" variant="primary">open</ea-button>
 </div>
 
 ::: details 查看代码
@@ -274,13 +277,13 @@ basicExample.init();
       <p>message</p>
       <section class="ea-card-footer" slot="footer">
         <ea-button id="modalOverlayCancelButton">Cancel</ea-button>
-        <ea-button id="modalOverlayConfirmButton" type="primary">
+        <ea-button id="modalOverlayConfirmButton" variant="primary">
           Confirm
         </ea-button>
       </section>
     </ea-card>
   </ea-overlay>
-  <ea-button id="modalOverlayOpenButton" type="primary">open</ea-button>
+  <ea-button id="modalOverlayOpenButton" variant="primary">open</ea-button>
 </div>
 ```
 
@@ -303,10 +306,12 @@ basicExample.init();
       </p>
     </ea-card>
   </ea-overlay>
-  <ea-button id="beforeCloseOverlayOpenButton" type="primary">open</ea-button>
+  <ea-button id="beforeCloseOverlayOpenButton" variant="primary">open</ea-button>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
+
+::: code-group
 
 ```html
 <div class="demo">
@@ -318,7 +323,7 @@ basicExample.init();
       </p>
     </ea-card>
   </ea-overlay>
-  <ea-button id="beforeCloseOverlayOpenButton" type="primary">open</ea-button>
+  <ea-button id="beforeCloseOverlayOpenButton" variant="primary">open</ea-button>
 </div>
 ```
 
@@ -334,39 +339,33 @@ overlay.beforeClose = async done => {
 
 :::
 
-## Overlay Attributes API
+::::
 
-### Main API
+## Overlay API
 
-| 参数                 | 说明                    | 类型    | 可选值 | 默认值 |
-| -------------------- | ----------------------- | ------- | ------ | ------ |
-| status               | 控制 Overlay 显隐的属性 | boolean | —      | false  |
-| modal                | 是否显示遮罩层。        | boolean | —      | true   |
-| close-on-click-modal | 点击遮罩层是否关闭。    | boolean | —      | true   |
+### Overlay Attributes
 
-### 属性（Properties）
+| 参数                  | 说明                    | 类型    | 可选值 | 默认值 |
+| --------------------- | ----------------------- | ------- | ------ | ------ |
+| visible               | 是否可见                | Boolean | —      | false  |
+| modal                 | 是否显示遮罩层          | Boolean | —      | true   |
+| close-on-click-modal  | 点击遮罩层是否关闭      | Boolean | —      | false  |
+| visible               | 是否可见                | Boolean | —      | false  |
+| close-on-press-escape | 按 ESC 键是否关闭       | Boolean | —      | true   |
+| append-to-body        | 是否追加到 body         | Boolean | —      | false  |
+| z-index               | z-index 层级            | String  | —      | ''     |
+| background-color      | 遮罩层背景色            | String  | —      | ''     |
+| content-width         | 内容宽度                | String  | —      | ''     |
+| content-max-width     | 内容最大宽度            | String  | —      | ''     |
+| content-height        | 内容高度                | String  | —      | ''     |
+| content-left          | 内容 left 定位          | String  | —      | ''     |
+| content-top           | 内容 top 定位           | String  | —      | ''     |
+| content-translate-x   | 内容 translate-x 偏移量 | String  | —      | ''     |
+| content-translate-y   | 内容 translate-y 偏移量 | String  | —      | ''     |
+| content-transform     | 内容 transform 属性     | String  | —      | ''     |
+| beforeClose <PropTag /> | 关闭前触发的回调函数，接收 `done` 回调作为参数用于完成关闭 | Function | — | null |
 
-| 参数        | 说明                                                       | 类型       | 默认值 |
-| ----------- | ---------------------------------------------------------- | ---------- | ------ |
-| beforeClose | 关闭前触发的回调函数，接收 `done` 回调作为参数用于完成关闭 | `Function` | —      |
-
-### CSS API
-
-| 参数                | 说明                                                                                                                             | 类型   | 可选值 | 默认值                                                                                                  |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------ | ------ | ------------------------------------------------------------------------------------------------------- |
-| z-index             | <ea-link type="primary" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/z-index">MDN：z-index</ea-link>                   | String | —      | 1000                                                                                                    |
-| background-color    | <ea-link type="primary" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/background-color">MDN：background-color</ea-link> | String | —      | `rgba(0, 0, 0, 0.4)`                                                                                    |
-| content-width       | 默认插槽的宽度                                                                                                                   | String | —      | `50%`                                                                                                   |
-| content-height      | 默认插槽的高度                                                                                                                   | String | —      | `50%`                                                                                                   |
-| content-left        | 默认插槽的 left 定位                                                                                                             | String | —      | `50%`                                                                                                   |
-| content-top         | 默认插槽的 top 定位                                                                                                              | String | —      | `50%`                                                                                                   |
-| content-translate-x | 默认插槽的 translate-x 偏移量                                                                                                    | String | —      | `-50%`                                                                                                  |
-| content-translate-y | 默认插槽的 translate-y 偏移量                                                                                                    | String | —      | `-50%`                                                                                                  |
-| content-transform   | 默认插槽的 transform 属性                                                                                                        | String | —      | `translate(`<br/>`var(--ea-overlay-content-translate-x),`<br/> `var(--ea-overlay-content-translate-y))` |
-
-## CSS Part
-
-### Part
+### Overlay CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -376,13 +375,11 @@ overlay.beforeClose = async done => {
 | mask      | overlay 遮罩层   |
 | content   | overlay 内容容器 |
 
-### CSS Variables
-
-等同于 CSS API
+### Overlay CSS Variables
 
 ```css
 ea-overlay {
-  --ea-overlay-z-index: 1000;
+  --ea-overlay-z-index: 3000;
   --ea-overlay-background-color: rgba(0, 0, 0, 0.4);
 
   --ea-overlay-content-left: 50%;
@@ -396,28 +393,31 @@ ea-overlay {
   );
 
   --ea-overlay-content-width: 50%;
+  --ea-overlay-content-max-width: none;
   --ea-overlay-content-height: 50%;
+
+  --ea-overlay-transition: var(--transition-normal);
 }
 ```
 
-## Events
+### Overlay Events
 
-| 事件名称 | 说明                          | 回调参数     |
-| -------- | ----------------------------- | ------------ |
-| open     | 开启 Overlay 时触发的事件     | `() => void` |
-| opened   | 开启 Overlay 的动画结束时触发 | `() => void` |
-| close    | 关闭 Overlay 时触发的事件     | `() => void` |
-| closed   | 关闭 Overlay 的动画结束时触发 | `() => void` |
+| 事件名 | 说明                          | 回调参数 |
+| ------ | ----------------------------- | -------- |
+| open   | 开启 Overlay 时触发的事件     | —        |
+| opened | 开启 Overlay 的动画结束时触发 | —        |
+| close  | 关闭 Overlay 时触发的事件     | —        |
+| closed | 关闭 Overlay 的动画结束时触发 | —        |
 
-## Methods
+### Overlay Methods
 
-| 名称 | 详情         | 类型         |
-| ---- | ------------ | ------------ |
-| show | 显示 Overlay | `() => void` |
-| hide | 隐藏 Overlay | `() => void` |
+| 方法名 | 说明         | 参数 |
+| ------ | ------------ | ---- |
+| show   | 显示 Overlay | —    |
+| hide   | 隐藏 Overlay | —    |
 
-## Slots
+### Overlay Slots
 
-| 名称 | 描述             |
-| ---- | ---------------- |
-| -    | Overlay 内容插槽 |
+| 名称    | 说明             |
+| ------- | ---------------- |
+| default | Overlay 内容插槽 |

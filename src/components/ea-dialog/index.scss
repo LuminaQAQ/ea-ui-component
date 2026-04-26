@@ -10,20 +10,21 @@
   --ea-dialog-box-shadow: var(--box-shadow-md);
   --ea-dialog-border-radius: var(--border-radius-sm);
 
-  --ea-dialog-title-font-size: var(--font-size-lg);
+  --ea-dialog-heading-font-size: var(--font-size-lg);
   --ea-dialog-close-icon-size: var(--font-size-lg);
   --ea-dialog-content-font-size: var(--font-size-md);
 
-  --ea-dialog-title-color: var(--grey-900);
+  --ea-dialog-heading-color: var(--grey-900);
   --ea-dialog-close-icon-color: var(--grey-500);
   --ea-dialog-content-color: var(--grey-700);
 }
 
-:host([draggable]) {
+:host([movable]) {
   -webkit-user-drag: none;
 }
 
 @include block(ea-overlay) {
+
   @include element(content) {
     max-width: var(--ea-overlay-content-max-width);
     height: var(--ea-overlay-content-height);
@@ -31,6 +32,8 @@
   }
 
   @include state(modal-penetrable) {
+    pointer-events: none;
+
     left: var(--ea-overlay-content-left);
     top: var(--ea-overlay-content-top);
     right: unset;
@@ -43,11 +46,23 @@
     .ea-overlay__mask {
       display: none;
     }
+
+    .ea-overlay__content {
+      pointer-events: all;
+    }
+  }
+
+  @include state(close-hidden) {
+    .ea-dialog-main__close-icon {
+      display: none;
+    }
   }
 }
 
 @include block(ea-dialog) {
+
   @include modifier(center) {
+
     .ea-dialog-main__header,
     .ea-dialog-main__footer {
       text-align: center;
@@ -79,15 +94,18 @@
 
   background-color: white;
 
+  display: flex;
+  flex-direction: column;
+
   @include element(header) {
     position: relative;
     padding-bottom: var(--ea-dialog-padding-primary);
   }
 
-  @include element(title) {
-    font-size: var(--ea-dialog-title-font-size);
-    line-height: var(--ea-dialog-title-font-size);
-    color: var(--ea-dialog-title-color);
+  @include element(heading) {
+    font-size: var(--ea-dialog-heading-font-size);
+    line-height: var(--ea-dialog-heading-font-size);
+    color: var(--ea-dialog-heading-color);
   }
 
   @include element(close-icon) {
@@ -100,6 +118,8 @@
   }
 
   @include element(content) {
+    flex: 1 0 auto;
+
     font-size: var(--ea-dialog-content-font-size);
     line-height: var(--ea-dialog-content-font-size);
     color: var(--ea-dialog-content-color);

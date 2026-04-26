@@ -2,14 +2,34 @@
 
 declare global {
   interface HTMLElementTagNameMap {
-    "ea-overlay": EaOverlayElement;
+    "ea-dialog": EaDialogElement;
   }
 }
 
 /**
- * ea-overlay 组件的 HTML 接口
+ * ea-dialog 组件的 HTML 接口
  */
-export interface EaOverlayElement extends HTMLElement {
+export interface EaDialogElement extends HTMLElement {
+  /** 标题 */
+  heading: string;
+  /** 宽度 */
+  width: string;
+  /** 顶部距离 */
+  top: string;
+  /** 内容是否居中 */
+  center: boolean;
+  /** 是否全屏 */
+  fullscreen: boolean;
+  /** 是否添加到 body */
+  appendToBody: boolean;
+  /** 添加到目标选择器 */
+  appendTo: string;
+  /** 是否显示关闭按钮 */
+  showClose: boolean;
+  /** 模态可穿透 */
+  modalPentrable: boolean;
+  /** 是否可拖拽 */
+  movable: boolean;
   /** 是否可见 */
   visible: boolean;
   /** 是否显示遮罩层 */
@@ -18,8 +38,6 @@ export interface EaOverlayElement extends HTMLElement {
   closeOnClickModal: boolean;
   /** 按 ESC 键是否关闭 */
   closeOnPressEscape: boolean;
-  /** 是否追加到 body */
-  appendToBody: boolean;
   /** z-index 层级 */
   zIndex: string;
   /** 遮罩层背景色 */
@@ -43,10 +61,12 @@ export interface EaOverlayElement extends HTMLElement {
   /** 关闭前触发的回调函数 */
   beforeClose: ((done: () => void) => void) | null;
 
-  /** 显示遮罩层 */
+  /** 显示对话框 */
   show(): void;
-  /** 隐藏遮罩层 */
+  /** 隐藏对话框 */
   hide(): void;
+  /** 重置对话框位置 */
+  resetPosition(): void;
 }
 
 // ==================== Vue 类型声明 ====================
@@ -54,14 +74,23 @@ export interface EaOverlayElement extends HTMLElement {
 import type { DefineComponent } from "vue";
 
 /**
- * ea-overlay Vue 组件属性
+ * ea-dialog Vue 组件属性
  */
-export interface EaOverlayVueProps {
+export interface EaDialogVueProps {
+  heading?: string;
+  width?: string;
+  top?: string;
+  center?: boolean;
+  fullscreen?: boolean;
+  appendToBody?: boolean;
+  appendTo?: string;
+  showClose?: boolean;
+  modalPentrable?: boolean;
+  movable?: boolean;
   visible?: boolean;
   modal?: boolean;
   closeOnClickModal?: boolean;
   closeOnPressEscape?: boolean;
-  appendToBody?: boolean;
   zIndex?: string;
   backgroundColor?: string;
   contentWidth?: string;
@@ -76,47 +105,51 @@ export interface EaOverlayVueProps {
 }
 
 /**
- * ea-overlay Vue 组件事件
+ * ea-dialog Vue 组件事件
  */
-export interface EaOverlayVueEvents {
-  /** 开启 Overlay 时触发 */
+export interface EaDialogVueEvents {
+  /** 开启 Dialog 时触发 */
   open: (event: CustomEvent) => void;
-  /** 开启 Overlay 的动画结束时触发 */
+  /** 开启 Dialog 的动画结束时触发 */
   opened: (event: CustomEvent) => void;
-  /** 关闭 Overlay 时触发 */
+  /** 关闭 Dialog 时触发 */
   close: (event: CustomEvent) => void;
-  /** 关闭 Overlay 的动画结束时触发 */
+  /** 关闭 Dialog 的动画结束时触发 */
   closed: (event: CustomEvent) => void;
 }
 
 /**
- * ea-overlay Vue 组件插槽
+ * ea-dialog Vue 组件插槽
  */
-export interface EaOverlayVueSlots {
-  /** 默认插槽，用于 Overlay 内容 */
+export interface EaDialogVueSlots {
+  /** 默认插槽，用于对话框内容 */
   default?: () => any;
+  /** 自定义头部 */
+  header?: () => any;
+  /** 自定义底部 */
+  footer?: () => any;
 }
 
 /**
- * ea-overlay Vue 组件类型
+ * ea-dialog Vue 组件类型
  */
-export type EaOverlayVueComponent = DefineComponent<
-  EaOverlayVueProps,
+export type EaDialogVueComponent = DefineComponent<
+  EaDialogVueProps,
   {},
   {},
   {},
   {},
   {},
   {},
-  keyof EaOverlayVueEvents,
+  keyof EaDialogVueEvents,
   {},
   {},
-  EaOverlayVueSlots
+  EaDialogVueSlots
 >;
 
 declare module "vue" {
   interface GlobalComponents {
-    "ea-overlay": EaOverlayVueComponent;
+    "ea-dialog": EaDialogVueComponent;
   }
 }
 
@@ -125,14 +158,23 @@ declare module "vue" {
 import type { HTMLAttributes, ReactNode } from "react";
 
 /**
- * ea-overlay React 组件属性
+ * ea-dialog React 组件属性
  */
-export interface EaOverlayReactProps extends HTMLAttributes<HTMLElement> {
+export interface EaDialogReactProps extends HTMLAttributes<HTMLElement> {
+  heading?: string;
+  width?: string;
+  top?: string;
+  center?: boolean;
+  fullscreen?: boolean;
+  appendToBody?: boolean;
+  appendTo?: string;
+  showClose?: boolean;
+  modalPentrable?: boolean;
+  movable?: boolean;
   visible?: boolean;
   modal?: boolean;
   closeOnClickModal?: boolean;
   closeOnPressEscape?: boolean;
-  appendToBody?: boolean;
   zIndex?: string;
   backgroundColor?: string;
   contentWidth?: string;
@@ -144,22 +186,22 @@ export interface EaOverlayReactProps extends HTMLAttributes<HTMLElement> {
   contentTranslateY?: string;
   contentTransform?: string;
   beforeClose?: ((done: () => void) => void) | null;
-  /** 开启 Overlay 时的回调 */
+  /** 开启 Dialog 时的回调 */
   onOpen?: (event: CustomEvent) => void;
-  /** 开启 Overlay 的动画结束时的回调 */
+  /** 开启 Dialog 的动画结束时的回调 */
   onOpened?: (event: CustomEvent) => void;
-  /** 关闭 Overlay 时的回调 */
+  /** 关闭 Dialog 时的回调 */
   onClose?: (event: CustomEvent) => void;
-  /** 关闭 Overlay 的动画结束时的回调 */
+  /** 关闭 Dialog 的动画结束时的回调 */
   onClosed?: (event: CustomEvent) => void;
-  /** Overlay 内容 */
+  /** 对话框内容 */
   children?: ReactNode;
 }
 
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
-      "ea-overlay": EaOverlayReactProps;
+      "ea-dialog": EaDialogReactProps;
     }
   }
 }

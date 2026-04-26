@@ -14,8 +14,8 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-dialog/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-dialog/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
 
     <!--  基础用法 -->
     <!-- #region -->
@@ -26,12 +26,12 @@
         Click to open the Dialog
       </ea-button>
 
-      <ea-dialog id="basicDialog" title="Tips" width="500px">
+      <ea-dialog id="basicDialog" heading="Tips" width="500px">
         <span>This is a message</span>
         <section slot="footer">
           <div class="dialog-footer">
             <ea-button id="basicDialogCancelBtn">Cancel</ea-button>
-            <ea-button id="basicDialogConfirmBtn" type="primary">
+            <ea-button id="basicDialogConfirmBtn" variant="primary">
               Confirm
             </ea-button>
           </div>
@@ -97,7 +97,7 @@
           <span>This is a custom header!</span>
           <ea-button
             id="customHeaderDialogCloseIcon"
-            type="danger"
+            variant="danger"
             icon="xmark"
             circle
           ></ea-button>
@@ -106,7 +106,7 @@
         <footer slot="footer">
           <div class="dialog-footer">
             <ea-button id="customHeaderDialogCancelBtn">Cancel</ea-button>
-            <ea-button id="customHeaderDialogConfirmBtn" type="primary">
+            <ea-button id="customHeaderDialogConfirmBtn" variant="primary">
               Confirm
             </ea-button>
           </div>
@@ -160,13 +160,13 @@
         Open the outer Dialog
       </ea-button>
 
-      <ea-dialog id="nestingOuterDialog" title="Outer Dialog" width="800px">
+      <ea-dialog id="nestingOuterDialog" heading="Outer Dialog" width="800px">
         <span>This is the outer Dialog</span>
 
         <ea-dialog
           id="nestingInnererDialog"
           width="500px"
-          title="Inner Dialog"
+          heading="Inner Dialog"
           append-to-body
         >
           <span>This is the inner Dialog</span>
@@ -174,7 +174,7 @@
 
         <section class="dialog-footer" slot="footer">
           <ea-button id="nestingDialogCancelBtn">Cancel</ea-button>
-          <ea-button id="nestingDialogInnerOpenBtn" type="primary">
+          <ea-button id="nestingDialogInnerOpenBtn" variant="primary">
             Open the inner Dialog
           </ea-button>
         </section>
@@ -224,7 +224,7 @@
         Click to open the Dialog
       </ea-button>
 
-      <ea-dialog id="centerDialog" title="Tips" width="500px" center>
+      <ea-dialog id="centerDialog" heading="Tips" width="500px" center>
         <span>
           It should be noted that the content will not be aligned in center by
           default
@@ -232,7 +232,7 @@
         <section slot="footer">
           <div class="dialog-footer">
             <ea-button id="centerDialogCancelBtn">Cancel</ea-button>
-            <ea-button id="centerDialogConfirmBtn" type="primary">
+            <ea-button id="centerDialogConfirmBtn" variant="primary">
               Confirm
             </ea-button>
           </div>
@@ -277,16 +277,16 @@
     <h1>可拖拽对话框</h1>
 
     <div class="demo">
-      <ea-button id="draggableDialogOpenBtn" plain>
+      <ea-button id="movableDialogOpenBtn" plain>
         Click to open the Dialog
       </ea-button>
 
-      <ea-dialog id="draggableDialog" title="Tips" width="500px" draggable>
+      <ea-dialog id="movableDialog" heading="Tips" width="500px" movable>
         <span>This is a message</span>
         <section slot="footer">
           <div class="dialog-footer">
-            <ea-button id="draggableDialogCancelBtn">Cancel</ea-button>
-            <ea-button id="draggableDialogConfirmBtn" type="primary">
+            <ea-button id="movableDialogCancelBtn">Cancel</ea-button>
+            <ea-button id="movableDialogConfirmBtn" variant="primary">
               Confirm
             </ea-button>
           </div>
@@ -297,11 +297,11 @@
     <script type="module">
       // ------- 可拖拽对话框 -------
       // #region
-      const draggableExample = {
-        dialog: document.querySelector("#draggableDialog"),
-        openBtn: document.querySelector("#draggableDialogOpenBtn"),
-        cancelBtn: document.querySelector("#draggableDialogCancelBtn"),
-        confirmBtn: document.querySelector("#draggableDialogConfirmBtn"),
+      const movableExample = {
+        dialog: document.querySelector("#movableDialog"),
+        openBtn: document.querySelector("#movableDialogOpenBtn"),
+        cancelBtn: document.querySelector("#movableDialogCancelBtn"),
+        confirmBtn: document.querySelector("#movableDialogConfirmBtn"),
 
         init() {
           this.openBtn.addEventListener("click", () => {
@@ -317,7 +317,7 @@
           });
         },
       };
-      draggableExample.init();
+      movableExample.init();
       // #endregion
       // ------- end -------
     </script>
@@ -335,12 +335,12 @@
         Open the fullscreen Dialog
       </ea-button>
 
-      <ea-dialog id="fullscreenDialog" title="Tips" width="500px" fullscreen>
+      <ea-dialog id="fullscreenDialog" heading="Tips" width="500px" fullscreen>
         <span>This is a message</span>
         <section slot="footer">
           <div class="dialog-footer">
             <ea-button id="fullscreenDialogCancelBtn">Cancel</ea-button>
-            <ea-button id="fullscreenDialogConfirmBtn" type="primary">
+            <ea-button id="fullscreenDialogConfirmBtn" variant="primary">
               Confirm
             </ea-button>
           </div>
@@ -389,12 +389,12 @@
         Open the modal Dialog
       </ea-button>
 
-      <ea-dialog id="modalDialog" title="Tips" width="500px" modal="false">
+      <ea-dialog id="modalDialog" heading="Tips" width="500px" modal-pentrable>
         <span>This is a message</span>
         <section slot="footer">
           <div class="dialog-footer">
             <ea-button id="modalDialogCancelBtn">Cancel</ea-button>
-            <ea-button id="modalDialogConfirmBtn" type="primary">
+            <ea-button id="modalDialogConfirmBtn" variant="primary">
               Confirm
             </ea-button>
           </div>
@@ -443,12 +443,12 @@
         Open the events Dialog
       </ea-button>
 
-      <ea-dialog id="eventsDialog" title="Tips" width="500px" before-close>
+      <ea-dialog id="eventsDialog" heading="Tips" width="500px">
         <span>This is a message</span>
         <section slot="footer">
           <div class="dialog-footer">
             <ea-button id="eventsDialogCancelBtn">Cancel</ea-button>
-            <ea-button id="eventsDialogConfirmBtn" type="primary">
+            <ea-button id="eventsDialogConfirmBtn" variant="primary">
               Confirm
             </ea-button>
           </div>
@@ -486,11 +486,14 @@
             console.log("opened");
           });
 
-          this.dialog.addEventListener("before-close", e => {
-            const { done } = e.detail;
+          this.dialog.beforeClose = async done => {
             console.log("before-close");
+            this.confirmBtn.toggleAttribute("loading", true);
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
             done();
-          });
+          };
 
           this.dialog.addEventListener("close", () => {
             console.log("close");
@@ -498,6 +501,7 @@
 
           this.dialog.addEventListener("closed", () => {
             console.log("closed");
+            this.confirmBtn.toggleAttribute("loading", false);
           });
         },
       };
