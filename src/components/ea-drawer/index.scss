@@ -1,18 +1,14 @@
 $directions: (
-  ltr: (
-    left: 0,
+  ltr: (left: 0,
     y: 0,
   ),
-  rtl: (
-    right: 0,
+  rtl: (right: 0,
     y: 0,
   ),
-  ttb: (
-    top: 0,
+  ttb: (top: 0,
     x: 0,
   ),
-  btt: (
-    bottom: 0,
+  btt: (bottom: 0,
     x: 0,
   ),
 );
@@ -86,37 +82,51 @@ $directions: (
 }
 
 @include block(ea-drawer) {
+  @include state(close-hidden) {
+    .ea-drawer-main__close-icon {
+      display: none;
+    }
+  }
+
+  @include state(header-hidden) {
+    .ea-drawer-main__header {
+      display: none;
+    }
+  }
+
   @each $direction, $options in $directions {
     @include modifier($direction) {
       .ea-overlay__content {
-        @if ($direction == ltr or $direction == rtl) {
+        @if ($direction ==ltr or $direction ==rtl) {
           --ea-overlay-content-height: 100%;
           --ea-overlay-content-width: var(--ea-drawer-size);
 
           top: var(--ea-drawer-y);
-        } @else {
+        }
+
+        @else {
           --ea-overlay-content-height: var(--ea-drawer-size);
           --ea-overlay-content-width: 100%;
 
           left: var(--ea-drawer-x);
         }
 
-        @if ($direction == ltr) {
+        @if ($direction ==ltr) {
           transform: translate(-100%, 0);
           left: var(--ea-drawer-x);
         }
 
-        @if ($direction == rtl) {
+        @if ($direction ==rtl) {
           transform: translate(100%, 0);
           right: var(--ea-drawer-x);
         }
 
-        @if ($direction == ttb) {
+        @if ($direction ==ttb) {
           transform: translate(0, -100%);
           top: var(--ea-drawer-y);
         }
 
-        @if ($direction == btt) {
+        @if ($direction ==btt) {
           transform: translate(0, 100%);
           bottom: var(--ea-drawer-y);
         }
@@ -144,23 +154,27 @@ $directions: (
     }
   }
 
+  @include modifier(open) {
+    display: block;
+  }
+
   @include modifier(before-close) {
     @each $direction, $options in $directions {
       &.ea-drawer--#{$direction} {
         .ea-overlay__content {
-          @if ($direction == ltr) {
+          @if ($direction ==ltr) {
             transform: translate(-100%, 0);
           }
 
-          @if ($direction == rtl) {
+          @if ($direction ==rtl) {
             transform: translate(100%, 0);
           }
 
-          @if ($direction == ttb) {
+          @if ($direction ==ttb) {
             transform: translate(0, -100%);
           }
 
-          @if ($direction == btt) {
+          @if ($direction ==btt) {
             transform: translate(0, 100%);
           }
         }

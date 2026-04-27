@@ -683,3 +683,44 @@ CSS 变量应遵循以下层级关系，避免嵌套引用：
 - [variables.scss](file:///e:/repo/ea-ui-component/src/themes/variables.scss) - 设计变量定义
 - [namespace.scss](file:///e:/repo/ea-ui-component/src/themes/namespace.scss) - BEM mixin 定义
 - [ea-alert/index.scss](file:///e:/repo/ea-ui-component/src/components/ea-alert/index.scss) - 完整示例
+
+---
+
+## 常见陷阱与注意事项
+
+### 1. 用 CSS 状态类替代 JS style 控制显隐
+
+**问题**：使用 JS 的 `element.style.display = "none"` 控制元素显隐会导致样式与逻辑耦合，不利于主题定制和样式覆盖。
+
+**解决方案**：使用 BEM 状态类（`is-xxx`）配合 SCSS 的 `@include state()` 控制，通过 `updateContainerClasslist()` 统一管理。
+
+```scss
+// ✅ 推荐：使用状态类控制显隐
+@include block(ea-drawer) {
+  @include state(header-hidden) {
+    .ea-drawer-main__header {
+      display: none;
+    }
+  }
+
+  @include state(close-hidden) {
+    .ea-drawer-main__close-icon {
+      display: none;
+    }
+  }
+}
+```
+
+```typescript
+// TypeScript 中通过 updateContainerClasslist 添加状态类
+updateContainerClasslist(): string {
+  const className = bem(
+    { [this.direction]: true },
+    {
+      "close-hidden": !this.showClose,
+      "header-hidden": !this.withHeader,
+    }
+  );
+  // ...
+}
+```

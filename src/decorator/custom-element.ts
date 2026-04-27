@@ -338,9 +338,15 @@ function CustomElement(
       constructor() {
         super();
 
+        const chain: any[] = [];
         let current: any = CustomElementClass;
         while (current && current !== HTMLElement) {
-          const clsName = current.name;
+          chain.unshift(current);
+          current = Object.getPrototypeOf(current);
+        }
+
+        chain.forEach(cls => {
+          const clsName = cls.name;
           const attrs = ElementAttributesMap.get(clsName);
           const props = ElementPropertiesMap.get(clsName);
 
@@ -357,9 +363,7 @@ function CustomElement(
               defineReactiveProperty(this, name, defaultValue, observer);
             });
           }
-
-          current = Object.getPrototypeOf(current);
-        }
+        });
       }
 
       connectedCallback() {

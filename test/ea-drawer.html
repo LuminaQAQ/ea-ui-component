@@ -14,15 +14,15 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-drawer/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-drawer/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
     <script
       type="module"
-      src="../src/components/ea-descriptions/index.js"
+      src="../src/components/ea-descriptions/index.ts"
     ></script>
     <script
       type="module"
-      src="../src/components/ea-message-box/index.js"
+      src="../src/components/ea-message-box/index.ts"
     ></script>
 
     <!--  基本用法 -->
@@ -35,7 +35,7 @@
       <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
       <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
-      <ea-drawer id="drawer" title="I am the title" direction="ltr">
+      <ea-drawer id="drawer" heading="I am the title" direction="ltr">
         <span>Hi, there!</span>
       </ea-drawer>
     </div>
@@ -108,7 +108,7 @@
 
       <ea-drawer
         id="noHeaderDrawer"
-        title="I am the title"
+        heading="I am the title"
         direction="ltr"
         with-header="false"
       >
@@ -146,7 +146,7 @@
       <ea-button type="primary" id="openCustomDrawerBtn">
         打开自定义内容的抽屉
       </ea-button>
-      <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
+      <ea-drawer id="customDrawer" heading="我是标题" direction="ltr">
         <ea-descriptions title="User Info">
           <ea-descriptions-item label="Username">
             Lilyiro
@@ -243,12 +243,12 @@
 
     <div class="demo">
       <ea-button type="primary" id="outerBtn">open</ea-button>
-      <ea-drawer id="outerDrawer" title="I'm outer Drawer" size="50%">
+      <ea-drawer id="outerDrawer" heading="I'm outer Drawer" size="50%">
         <div>
           <ea-button id="innerBtn">Click me!</ea-button>
           <ea-drawer
             id="innerDrawer"
-            title="I'm inner Drawer"
+            heading="I'm inner Drawer"
             append-to-body="true"
           >
             <p>_(:зゝ∠)_</p>

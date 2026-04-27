@@ -637,6 +637,92 @@ private _renderImage(src: string): void {
 
 - [ea-avatar/index.ts](file:///e:/repo/ea-ui-component/src/components/ea-avatar/index.ts) - 使用 DOM API 处理 srcset 属性
 
+---
+
+## 常见陷阱与注意事项
+
+### 1. 避免使用 HTMLElement 保留属性名
+
+**问题**：`HTMLElement` 有一些内置属性（如 `title`, `lang`, `dir`, `draggable`, `tabIndex`, `style`, `className` 等）。如果在组件中使用 `@attribute` 装饰器声明与这些保留属性同名的属性，类字段初始化器（如 `this.title = ""`）会触发 `HTMLElement.title` 的 setter，导致 jsdom 自定义元素升级失败（`NotSupportedError: Unexpected attributes`）。
+
+**解决方案**：使用不会与 `HTMLElement` 保留属性冲突的名称。例如：
+- `title` → `heading`（与 `EaDialog` 一致）
+- `type` → `variant`
+
+```typescript
+// ❌ 错误：title 是 HTMLElement 保留属性
+@attribute({ type: String, default: "" })
+title: string = "";  // this.title = "" 触发 HTMLElement.title setter
+
+// ✅ 正确：使用 heading 避免冲突
+@attribute({ type: String, default: "" })
+heading: string = "";  // 安全，不与 HTMLElement 属性冲突
+```
+
+**常见的 HTMLElement 保留属性名**：`title`, `lang`, `dir`, `draggable`, `tabIndex`, `style`, `className`, `id`, `hidden`, `accessKey`, `contentEditable`, `isContentEditable`, `offsetHeight`, `offsetWidth`, `offsetLeft`, `offsetTop` 等。
+
+### 2. 用 CSS 状态类替代 JS style 控制显隐
+
+**问题**：使用 JS 的 `element.style.display = "none"` 控制元素显隐会导致样式与逻辑耦合，不利于主题定制和样式覆盖。
+
+**解决方案**：使用 BEM 状态类（`is-xxx`）配合 SCSS 的 `@include state()` 控制，通过 `updateContainerClasslist()` 统一管理。
+
+```typescript
+// ❌ 不推荐：JS 直接控制 style
+private _updateHeaderVisibility(): void {
+  if (this._header) {
+    this._header.style.display = this.withHeader ? "" : "none";
+  }
+}
+
+// ✅ 推荐：CSS 状态类控制
+updateContainerClasslist(): string {
+  const className = bem(
+    { [this.direction]: true },
+    {
+      "close-hidden": !this.showClose,
+      "header-hidden": !this.withHeader,
+    }
+  );
+  // ...
+}
+```
+
+### 3. $mount 中不应执行 DOM 移动操作
+
+**问题**：`$mount()` 钩子在 `connectedCallback` 中触发。如果在 `$mount()` 中执行 DOM 移动操作（如 `appendChild` 将组件移到 `document.body`），会导致组件从原位置移除并重新插入 DOM，从而再次触发 `connectedCallback`，形成无限递归调用。
+
+**解决方案**：将 DOM 移动操作（如 `_handleAppendTo`）放在 `constructor` 中执行，因为 `constructor` 只在元素创建时调用一次，不会因 DOM 移动而重复触发。
+
+```typescript
+// ❌ 错误：在 $mount 中执行 DOM 移动会导致无限循环
+$mount(): void {
+  super.$mount?.();
+  this._handleAppendTo();  // appendChild 触发 connectedCallback → $mount → 无限循环
+}
+
+// ✅ 正确：在 constructor 中执行 DOM 移动
+constructor() {
+  super();
+  this._handleAppendTo();  // constructor 只执行一次，不会重复触发
+}
+
+$mount(): void {
+  super.$mount?.();
+  this.updateContainerClasslist();  // 只做样式初始化等安全操作
+}
+```
+
+**安全操作**（可在 `$mount` 中执行）：
+- `updateContainerClasslist()` - 更新 CSS 类名
+- `setAttribute()` - 设置属性
+- DOM 查询和读取
+
+**危险操作**（不可在 `$mount` 中执行）：
+- `appendChild()` / `insertBefore()` - DOM 移动
+- `remove()` / `removeChild()` - DOM 移除
+- 任何会改变组件在 DOM 树中位置的操作
+
 ### 测试等待函数使用
 
 **工具函数**：`src/test/utils.js`

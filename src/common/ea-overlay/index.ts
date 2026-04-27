@@ -58,9 +58,9 @@ export class EaOverlay extends EaBase {
 
   @attribute({
     type: Boolean,
-    default: false,
+    default: true,
   })
-  closeOnClickModal: boolean = false;
+  closeOnClickModal: boolean = true;
 
   @attribute({
     type: Boolean,
@@ -265,6 +265,7 @@ export class EaOverlay extends EaBase {
 
   @listen("click", ".ea-overlay__mask")
   private _handleMaskClick(e: Event) {
+    console.log("click", this.closeOnClickModal);
     if (!this.closeOnClickModal) return;
 
     const isContent =

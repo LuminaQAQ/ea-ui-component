@@ -59,7 +59,7 @@ onMounted(async () => {
       // #endregion
       // ------- end -------
       
-      // ------- 不添加 Title -------
+      // ------- 不添加Title -------
       // #region
       const noHeaderExample = {
         drawer: document.querySelector("#noHeaderDrawer"),
@@ -77,7 +77,7 @@ onMounted(async () => {
 
       
 
-      // ------- 自定义内容 -------
+      // ------- 自定义内�?-------
       // #region
 
       const CustomDrawer = {
@@ -179,7 +179,7 @@ onMounted(async () => {
 > `css`
 
 ::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入 Font Awesome CSS 文件
+需要注意的�? 如果需要使用到带有图标�?`属�?组件`, 需要提前使�?`link` 标签引入 Font Awesome CSS 文件
 :::
 
 ```html
@@ -189,13 +189,13 @@ onMounted(async () => {
 />
 ```
 
-## 自定义样式
+## 自定义样�?
 
-移步到 [CSS Part](#css-part)。
+移步�?[CSS Part](#css-part)�?
 
 ## 基本用法
 
-呼出一个临时的侧边栏, 可以从多个方向呼出。可以在 `ea-drawer` 标签上添加 `direction` 属性来指定呼出方向。
+呼出一个临时的侧边�? 可以从多个方向呼出。可以在 `ea-drawer` 标签上添�?`direction` 属性来指定呼出方向�?
 
 <div class="demo">
   <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
@@ -203,7 +203,7 @@ onMounted(async () => {
   <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
   <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
-  <ea-drawer id="drawer" title="I am the title" direction="ltr">
+  <ea-drawer id="drawer" heading="I am the title" direction="ltr">
     <span>Hi, there!</span>
   </ea-drawer>
 </div>
@@ -217,7 +217,7 @@ onMounted(async () => {
   <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
   <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
-  <ea-drawer id="drawer" title="I am the title" direction="ltr">
+  <ea-drawer id="drawer" heading="I am the title" direction="ltr">
     <span>Hi, there!</span>
   </ea-drawer>
 </div>
@@ -273,17 +273,16 @@ CustomDrawer.init();
 
 :::
 
-## 不添加 Title​
+## 不添�?Title�?
 
-当你不需要标题的时候，你可以将它移除。
-
-通过设置 with-header 属性为 false 来控制是否显示标题。 如果你的应用需要具备可访问性，请务必设置好 title。
+当你不需要标题的时候，你可以将它移除�?
+通过设置 with-header 属性为 false 来控制是否显示标题�?如果你的应用需要具备可访问性，请务必设置好 heading�?
 
 <div class="demo">
   <ea-button type="primary" id="noHeaderBtn">open</ea-button>
   <ea-drawer
     id="noHeaderDrawer"
-    title="I am the title"
+    heading="I am the title"
     direction="ltr"
     with-header="false"
   >
@@ -298,7 +297,7 @@ CustomDrawer.init();
   <ea-button type="primary" id="noHeaderBtn">open</ea-button>
   <ea-drawer
     id="noHeaderDrawer"
-    title="I am the title"
+    heading="I am the title"
     direction="ltr"
     with-header="false"
   >
@@ -323,15 +322,15 @@ noHeaderExample.init();
 
 :::
 
-## 自定义内容
+## 自定义内�?
 
-`Drawer` 可以在其内部嵌套各种丰富的操作
+`Drawer` 可以在其内部嵌套各种丰富的操�?
 
 <div class="demo">
   <ea-button type="primary" id="openCustomDrawerBtn"
     >打开自定义内容的抽屉</ea-button
   >
-  <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
+  <ea-drawer id="customDrawer" heading="我是标题" direction="ltr">
     <ea-descriptions title="User Info">
       <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
       <ea-descriptions-item label="Essence">
@@ -369,7 +368,7 @@ noHeaderExample.init();
   <ea-button type="primary" id="openCustomDrawerBtn"
     >打开自定义内容的抽屉</ea-button
   >
-  <ea-drawer id="customDrawer" title="我是标题" direction="ltr">
+  <ea-drawer id="customDrawer" heading="我是标题" direction="ltr">
     <ea-descriptions title="User Info">
       <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
       <ea-descriptions-item label="Essence">
@@ -451,20 +450,20 @@ CustomDrawer.init();
 
 :::
 
-## 嵌套抽屉​
+## 嵌套抽屉�?
 
 你可以像 `Dialog` 一样拥有多层嵌套的 `Drawer`
 
-如果你需要在不同图层中多个抽屉，你必须设置 `append-to-body` 属性为 `true`
+如果你需要在不同图层中多个抽屉，你必须设�?`append-to-body` 属性为 `true`
 
 <div class="demo">
   <ea-button type="primary" id="outerBtn">open</ea-button>
-  <ea-drawer id="outerDrawer" title="I'm outer Drawer" size="50%">
+  <ea-drawer id="outerDrawer" heading="I'm outer Drawer" size="50%">
     <div>
       <ea-button id="innerBtn">Click me!</ea-button>
       <ea-drawer
         id="innerDrawer"
-        title="I'm inner Drawer"
+        heading="I'm inner Drawer"
         append-to-body="true"
       >
         <p>_(:зゝ∠)_</p>
@@ -478,12 +477,12 @@ CustomDrawer.init();
 ```html
 <div class="demo">
   <ea-button type="primary" id="outerBtn">open</ea-button>
-  <ea-drawer id="outerDrawer" title="I'm outer Drawer" size="50%">
+  <ea-drawer id="outerDrawer" heading="I'm outer Drawer" size="50%">
     <div>
       <ea-button id="innerBtn">Click me!</ea-button>
       <ea-drawer
         id="innerDrawer"
-        title="I'm inner Drawer"
+        heading="I'm inner Drawer"
         append-to-body="true"
       >
         <p>_(:зゝ∠)_</p>
@@ -529,48 +528,55 @@ nestingExample.init();
 
 ## Attributes
 
-| 参数                  | 说明                                                                    | 类型    | 可选值                                                 | 默认值 |
-| :-------------------- | :---------------------------------------------------------------------- | :------ | :----------------------------------------------------- | :----- |
-| title                 | 标题文本（同步到 header 中的 title）                                    | string  | -                                                      | ""     |
-| visible               | 是否可见（受控属性，设置为 true/false）                                 | boolean | -                                                      | false  |
-| open                  | 兼容旧名，等同于 `visible`（文档中优先使用 `visible`）                  | boolean | -                                                      | false  |
-| size                  | 抽屉尺寸，支持百分比或固定宽度/高度（根据 direction 决定是宽或高）      | string  | 例如: "30%", "400px"                                   | 30%    |
-| modal                 | 是否显示遮罩层                                                          | boolean | -                                                      | true   |
-| direction             | 抽屉方向                                                                | string  | ltr（从左到右）, rtl, ttb（从上到下）, btt（从下到上） | rtl    |
-| close-on-click-modal  | 点击遮罩是否关闭（组件内部属性名）                                      | boolean | -                                                      | true   |
-| close-on-press-escape | 按下 Esc 是否关闭                                                       | boolean | -                                                      | true   |
-| before-close          | 是否启用 before-close 钩子（在关闭前触发事件，可通过 detail.done 控制） | boolean | -                                                      | false  |
-| show-close            | 是否显示右上角关闭图标（close icon）                                    | boolean | -                                                      | true   |
-| with-header           | 是否显示头部（header）                                                  | boolean | -                                                      | true   |
-| append-to-body        | 是否挂载到 body（用于嵌套抽屉确保层级正确）                             | boolean | -                                                      | false  |
-| append-to             | 指定挂载宿主元素的选择器或元素（当需要自定义挂载点时使用）              | string  | 例如: "#app" 或 "body"                                 | -      |
-| z-index               | 自定义层级                                                              | number  | -                                                      | -      |
+| 参数                  | 说明                                                             | 类型    | 可选�?                                                 | 默认�? |
+| :-------------------- | :--------------------------------------------------------------- | :------ | :----------------------------------------------------- | :----- |
+| heading               | 标题文本（同步到 header 中的 heading）                           | string  | -                                                      | ""     |
+| visible               | 是否可见（受控属性，设置�?true/false�?                           | boolean | -                                                      | false  |
+| size                  | 抽屉尺寸，支持百分比或固定宽�?高度（根�?direction 决定是宽或高�? | string  | 例如: "30%", "400px"                                   | 30%    |
+| modal                 | 是否显示遮罩�?                                                   | boolean | -                                                      | true   |
+| direction             | 抽屉方向                                                         | string  | ltr（从左到右）, rtl, ttb（从上到下）, btt（从下到上） | rtl    |
+| close-on-click-modal  | 点击遮罩是否关闭                                                 | boolean | -                                                      | true   |
+| close-on-press-escape | 按下 Esc 是否关闭                                                | boolean | -                                                      | true   |
+| show-close            | 是否显示右上角关闭图标（close icon�?                             | boolean | -                                                      | true   |
+| with-header           | 是否显示头部（header�?                                           | boolean | -                                                      | true   |
+| append-to-body        | 是否挂载�?body（用于嵌套抽屉确保层级正确）                       | boolean | -                                                      | false  |
+| append-to             | 指定挂载宿主元素的选择器（当需要自定义挂载点时使用�?             | string  | 例如: "#app" �?"body"                                  | body   |
+| z-index               | 自定义层�?                                                       | string  | -                                                      | -      |
+
+## Properties
+
+| 参数        | 说明                                    | 类型     | 默认�? |
+| :---------- | :-------------------------------------- | :------- | :----- |
+| beforeClose | 关闭前的回调函数，接�?done 函数作为参数 | Function | null   |
 
 ## CSS Part
 
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+> 用法可参�?[MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称       | 说明                                                         |
-| ---------- | ------------------------------------------------------------ |
-| container  | 外层 overlay 容器，包含遮罩与抽屉 (对应模板中 `.ea-overlay`) |
-| header     | 抽屉头部（part="header"），包含 `title` 和 `close-icon`      |
-| title      | 标题容器（part="title"），对应 slot[name="title"] 的显示位置 |
-| close-icon | 关闭图标（part="close-icon"），可以自定义样式或隐藏          |
-| content    | 主体内容区域（part="content"），对应默认 slot                |
-| footer     | 底部区域（part="footer"），对应 slot[name="footer"]          |
+| 名称       | 说明                                                           |
+| ---------- | -------------------------------------------------------------- |
+| container  | 外层 overlay 容器，包含遮罩与抽屉 (对应模板�?`.ea-overlay`)    |
+| header     | 抽屉头部（part="header"），包含 `heading` �?`close-icon`       |
+| heading    | 标题容器（part="heading"），对应 slot[name="title"] 的显示位�? |
+| close-icon | 关闭图标（part="close-icon"），可以自定义样式或隐藏            |
+| content    | 主体内容区域（part="content"），对应默认 slot                  |
+| footer     | 底部区域（part="footer"），对应 slot[name="footer"]            |
 
 ## Events
 
-> Drawer 是基于 Overlay 组件实现的，具体事件可参考 [Overlay](./ea-overlay.md#events) 组件
+> Drawer 是基�?Overlay 组件实现的，具体事件可参�?[Overlay](./ea-overlay.md#events) 组件
 
-| 事件名       | 说明                                                               | 回调参数 / detail                         |
-| :----------- | :----------------------------------------------------------------- | :---------------------------------------- |
-| before-close | 关闭前触发（当 `before-close` 属性为 true 时，会在尝试关闭时触发） | { done: Function } — 调用 done() 完成关闭 |
+| 事件�? | 说明               | 回调参数 / detail |
+| :----- | :----------------- | :---------------- |
+| open   | 打开动画开始时触发 | -                 |
+| opened | 打开动画结束时触�? | -                 |
+| close  | 关闭动画开始时触发 | -                 |
+| closed | 关闭动画结束时触�? | -                 |
 
 ## Slots
 
 | 名称   | 说明                                                    |
 | :----- | :------------------------------------------------------ |
-| (默认) | 抽屉主体内容，映射到模板中的默认 slot（part="content"） |
-| title  | 标题内容，会显示在 header 的 title 区域（part="title"） |
-| footer | 底部插槽，显示在 footer 区域（part="footer"）           |
+| (默认) | 抽屉主体内容，映射到模板中的默认 slot（part="content"�? |
+| title  | 标题内容，会显示�?header �?title 区域（part="title"�?   |
+| footer | 底部插槽，显示在 footer 区域（part="footer"�?           |
