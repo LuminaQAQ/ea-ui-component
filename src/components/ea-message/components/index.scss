@@ -1,58 +1,64 @@
-$types: (success, info, warning, error, primary);
+$name: ea-message;
+
+$types: (
+  success,
+  info,
+  warning,
+  error,
+  primary
+);
 
 :host {
-  --ea-message-z-index: 2000;
-  --ea-message-y: 0;
-  --ea-message-fade-out-y: -100%;
+  --#{$name}-z-index: 2000;
+  --#{$name}-y: 0;
+  --#{$name}-fade-out-y: -100%;
 
-  --ea-message-spacing: var(--spacing-md);
-  --ea-message-border-color: var(--grey-200);
-  --ea-message-border-radius: var(--border-radius-sm);
+  --#{$name}-spacing: var(--spacing-md);
+  --#{$name}-border-color: var(--grey-200);
+  --#{$name}-border-radius: var(--border-radius-sm);
 
-  --ea-message-min-width: 380px;
-  --ea-message-font-size: var(--font-size-md);
+  --#{$name}-min-width: 380px;
+  --#{$name}-font-size: var(--font-size-md);
 
-  --ea-message-transition: var(--transition-normal);
+  --#{$name}-transition: var(--transition-normal);
 
-  --ea-message-success-bgc: var(--green-100);
-  --ea-message-success-color: var(--green-500);
+  --#{$name}-success-bgc: var(--green-100);
+  --#{$name}-success-color: var(--green-500);
 
-  --ea-message-info-bgc: var(--grey-100);
-  --ea-message-info-color: var(--grey-500);
+  --#{$name}-info-bgc: var(--grey-100);
+  --#{$name}-info-color: var(--grey-500);
 
-  --ea-message-warning-bgc: var(--yellow-100);
-  --ea-message-warning-color: var(--yellow-500);
+  --#{$name}-warning-bgc: var(--yellow-100);
+  --#{$name}-warning-color: var(--yellow-500);
 
-  --ea-message-error-bgc: var(--red-100);
-  --ea-message-error-color: var(--red-500);
+  --#{$name}-error-bgc: var(--red-100);
+  --#{$name}-error-color: var(--red-500);
 
-  --ea-message-primary-bgc: var(--blue-100);
-  --ea-message-primary-color: var(--blue-500);
+  --#{$name}-primary-bgc: var(--blue-100);
+  --#{$name}-primary-color: var(--blue-500);
 
-  --ea-message-gap: var(--spacing-md);
+  --#{$name}-gap: var(--spacing-md);
 }
 
-@include block(ea-message) {
+@include block($name) {
   position: fixed;
   left: 50%;
-  z-index: var(--ea-message-z-index);
+  z-index: var(--#{$name}-z-index);
 
   display: none;
   visibility: hidden;
   align-items: center;
 
   box-sizing: border-box;
-  padding: var(--ea-message-spacing);
-  margin: var(--ea-message-gap) 0;
-  gap: var(--ea-message-gap);
-  border: 1px solid var(--ea-message-border-color);
-  border-radius: var(--ea-message-border-radius);
-  font-size: var(--ea-message-font-size);
+  padding: var(--#{$name}-spacing);
+  margin: var(--#{$name}-gap) 0;
+  gap: var(--#{$name}-gap);
+  border: 1px solid var(--#{$name}-border-color);
+  border-radius: var(--#{$name}-border-radius);
+  font-size: var(--#{$name}-font-size);
 
-  // top: var(--ea-message-y);
-  // left: 50%;
   transform-origin: center;
-  transform: translate(-50%, var(--ea-message-fade-out-y));
+  transform: translate(-50%, var(--#{$name}-fade-out-y));
   filter: opacity(0);
 
   width: fit-content;
@@ -60,40 +66,40 @@ $types: (success, info, warning, error, primary);
   overflow: hidden;
 
   transition:
-    filter var(--ea-message-transition),
-    transform var(--ea-message-transition),
-    top var(--ea-message-transition),
-    bottom var(--ea-message-transition);
+    filter var(--#{$name}-transition),
+    transform var(--#{$name}-transition),
+    top var(--#{$name}-transition),
+    bottom var(--#{$name}-transition);
 
   @include element(icon) {
-    font-size: var(--ea-message-font-size);
-    line-height: var(--ea-message-font-size);
+    font-size: var(--#{$name}-font-size);
+    line-height: var(--#{$name}-font-size);
   }
 
   @include element(content) {
-    line-height: var(--ea-message-font-size);
+    line-height: var(--#{$name}-font-size);
     vertical-align: middle;
   }
 
   @include element(icon-close) {
     margin-left: auto;
     display: none;
-    color: var(--ea-message-info-color);
+    color: var(--#{$name}-info-color);
   }
 
   @each $type in $types {
     @include modifier($type) {
-      background-color: var(--ea-message-#{$type}-bgc);
-      color: var(--ea-message-#{$type}-color);
+      background-color: var(--#{$name}-#{$type}-bgc);
+      color: var(--#{$name}-#{$type}-color);
 
-      .ea-message__icon {
-        color: var(--ea-message-#{$type}-color);
+      .#{$name}__icon {
+        color: var(--#{$name}-#{$type}-color);
       }
     }
   }
 
   @include modifier(show-close) {
-    .ea-message__icon-close {
+    .#{$name}__icon-close {
       display: block;
     }
   }
@@ -110,14 +116,15 @@ $types: (success, info, warning, error, primary);
 
   @include modifier(before-hide) {
     filter: opacity(0);
-    transform: translate(-50%, var(--ea-message-fade-out-y));
+    transform: translate(-50%, var(--#{$name}-fade-out-y));
   }
 
   @include modifier(top) {
+
     &,
     &-left,
     &-right {
-      top: var(--ea-message-y);
+      top: var(--#{$name}-y);
     }
 
     &-left {
@@ -134,11 +141,12 @@ $types: (success, info, warning, error, primary);
   }
 
   @include modifier(bottom) {
+
     &,
     &-left,
     &-right {
-      --ea-message-fade-out-y: 100%;
-      bottom: var(--ea-message-y);
+      --#{$name}-fade-out-y: 100%;
+      bottom: var(--#{$name}-y);
     }
 
     &-left {

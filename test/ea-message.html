@@ -14,10 +14,10 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
 
     <script type="module">
-      import { EaMessage } from "../src/components/ea-message/index.js";
+      import { EaMessage } from "../src/components/ea-message/index.ts";
 
       // ------- 基础用法 -------
       // #region
@@ -146,13 +146,13 @@
         >info</ea-button
       >
       <ea-button
-        type="primary"
+        variant="primary"
         plain
         onclick="window.$message.primary('This is a info message.')"
         >Primary</ea-button
       >
       <ea-button
-        type="success"
+        variant="success"
         plain
         onclick="
           window.$message.success('Congrats, this is a success message.')
@@ -160,13 +160,13 @@
         >Success</ea-button
       >
       <ea-button
-        type="warning"
+        variant="warning"
         plain
         onclick="window.$message.warning('Warning, this is a warning message.')"
         >Warning</ea-button
       >
       <ea-button
-        type="danger"
+        variant="danger"
         plain
         onclick="window.$message.error('Oops, this is a error message.')"
         >Error</ea-button
@@ -191,7 +191,7 @@
         >info</ea-button
       >
       <ea-button
-        type="primary"
+        variant="primary"
         plain
         onclick="
           window.$message({
@@ -203,7 +203,7 @@
         >Primary</ea-button
       >
       <ea-button
-        type="success"
+        variant="success"
         plain
         onclick="
           window.$message({
@@ -215,7 +215,7 @@
         >Success</ea-button
       >
       <ea-button
-        type="warning"
+        variant="warning"
         plain
         onclick="
           window.$message({
@@ -227,7 +227,7 @@
         >Warning</ea-button
       >
       <ea-button
-        type="danger"
+        variant="danger"
         plain
         onclick="
           window.$message({

@@ -104,7 +104,7 @@ onMounted(() => {
 
 ## 引入
 
-`js`
+> `js`
 
 ```html
 <script type="module">
@@ -114,7 +114,7 @@ onMounted(() => {
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#message-css-part)。
 
 ## 基础用法
 
@@ -194,13 +194,13 @@ basicExample.init();
     >info</ea-button
   >
   <ea-button
-    type="primary"
+    variant="primary"
     plain
     onclick="window.$message.primary('This is a info message.')"
     >Primary</ea-button
   >
   <ea-button
-    type="success"
+    variant="success"
     plain
     onclick="
           window.$message.success('Congrats, this is a success message.')
@@ -208,13 +208,13 @@ basicExample.init();
     >Success</ea-button
   >
   <ea-button
-    type="warning"
+    variant="warning"
     plain
     onclick="window.$message.warning('Warning, this is a warning message.')"
     >Warning</ea-button
   >
   <ea-button
-    type="danger"
+    variant="danger"
     plain
     onclick="window.$message.error('Oops, this is a error message.')"
     >Error</ea-button
@@ -229,13 +229,13 @@ basicExample.init();
     >info</ea-button
   >
   <ea-button
-    type="primary"
+    variant="primary"
     plain
     onclick="window.$message.primary('This is a info message.')"
     >Primary</ea-button
   >
   <ea-button
-    type="success"
+    variant="success"
     plain
     onclick="
           window.$message.success('Congrats, this is a success message.')
@@ -243,13 +243,13 @@ basicExample.init();
     >Success</ea-button
   >
   <ea-button
-    type="warning"
+    variant="warning"
     plain
     onclick="window.$message.warning('Warning, this is a warning message.')"
     >Warning</ea-button
   >
   <ea-button
-    type="danger"
+    variant="danger"
     plain
     onclick="window.$message.error('Oops, this is a error message.')"
     >Error</ea-button
@@ -275,7 +275,7 @@ basicExample.init();
     >info</ea-button
   >
   <ea-button
-    type="primary"
+    variant="primary"
     plain
     onclick="
           window.$message({
@@ -287,7 +287,7 @@ basicExample.init();
     >Primary</ea-button
   >
   <ea-button
-    type="success"
+    variant="success"
     plain
     onclick="
           window.$message({
@@ -299,7 +299,7 @@ basicExample.init();
     >Success</ea-button
   >
   <ea-button
-    type="warning"
+    variant="warning"
     plain
     onclick="
           window.$message({
@@ -311,7 +311,7 @@ basicExample.init();
     >Warning</ea-button
   >
   <ea-button
-    type="danger"
+    variant="danger"
     plain
     onclick="
           window.$message({
@@ -351,7 +351,7 @@ basicExample.init();
     >info</ea-button
   >
   <ea-button
-    type="primary"
+    variant="primary"
     plain
     onclick="
           window.$message({
@@ -363,7 +363,7 @@ basicExample.init();
     >Primary</ea-button
   >
   <ea-button
-    type="success"
+    variant="success"
     plain
     onclick="
           window.$message({
@@ -375,7 +375,7 @@ basicExample.init();
     >Success</ea-button
   >
   <ea-button
-    type="warning"
+    variant="warning"
     plain
     onclick="
           window.$message({
@@ -387,7 +387,7 @@ basicExample.init();
     >Warning</ea-button
   >
   <ea-button
-    type="danger"
+    variant="danger"
     plain
     onclick="
           window.$message({
@@ -544,7 +544,9 @@ placementExample.init();
 
 :::
 
-## Properties
+## Message API
+
+### Message Attributes
 
 | 参数                     | 说明                                                                          | 类型        | 可选值                                                                              | 默认值 |
 | ------------------------ | ----------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------- | ------ |
@@ -559,7 +561,7 @@ placementExample.init();
 | placement                | 出现位置                                                                      | enum        | `'top' \| 'top-left' \| 'top-right' \| 'bottom' \| 'bottom-left' \| 'bottom-right'` | 'top'  |
 | appendTo                 | 设置 `message` 的根元素，默认为 `document.body`                               | CSSSelector | -                                                                                   | —      |
 
-## CSS Part
+### Message CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -570,7 +572,7 @@ placementExample.init();
 | content-wrap | 内容容器（消息文本） |
 | close-icon   | 关闭按钮             |
 
-## Events
+### Message Events
 
 | 事件名称 | 说明             |
 | -------- | ---------------- |
@@ -580,7 +582,7 @@ placementExample.init();
 | hidden   | 隐藏完毕时触发。 |
 | close    | 关闭时触发。     |
 
-## Methods
+### Message Methods
 
 | 名称  | 描述               | 类型                   |
 | ----- | ------------------ | ---------------------- |

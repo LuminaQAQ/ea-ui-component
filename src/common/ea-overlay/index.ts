@@ -23,6 +23,8 @@ export class EaOverlay extends EaBase {
   private _overlayContent!: HTMLElement;
 
   private _transitionAbortController?: AbortController;
+  private _closingByBeforeClose: boolean = false;
+  private _inBeforeClose: boolean = false;
 
   // ==================== 属性定义 ====================
 
@@ -30,6 +32,8 @@ export class EaOverlay extends EaBase {
     type: Boolean,
     default: false,
     async observer(this: EaOverlay, newVal: boolean) {
+      if (this._inBeforeClose) return;
+
       this._transitionAbortController?.abort();
       this._transitionAbortController = new AbortController();
 
@@ -37,11 +41,7 @@ export class EaOverlay extends EaBase {
         this._handleOpenTransition();
         this._handleFocus();
       } else {
-        if (this.beforeClose && typeof this.beforeClose === "function") {
-          this.beforeClose(() => this._handleCloseTransition());
-        } else {
-          this._handleCloseTransition();
-        }
+        this._handleCloseRequest();
       }
     },
   })
@@ -206,6 +206,33 @@ export class EaOverlay extends EaBase {
   }
 
   /**
+   * 处理关闭请求
+   */
+  private _handleCloseRequest(): void {
+    if (this._closingByBeforeClose) {
+      this._closingByBeforeClose = false;
+      this._handleCloseTransition();
+    } else if (this.beforeClose && typeof this.beforeClose === "function") {
+      this._inBeforeClose = true;
+      let doneCalled = false;
+
+      this.beforeClose(() => {
+        doneCalled = true;
+        this._closingByBeforeClose = true;
+        this.visible = false;
+      });
+
+      if (!doneCalled) {
+        this.visible = true;
+      }
+
+      this._inBeforeClose = false;
+    } else {
+      this._handleCloseTransition();
+    }
+  }
+
+  /**
    * 处理关闭过渡
    */
   private _handleCloseTransition(): void {
@@ -265,7 +292,6 @@ export class EaOverlay extends EaBase {
 
   @listen("click", ".ea-overlay__mask")
   private _handleMaskClick(e: Event) {
-    console.log("click", this.closeOnClickModal);
     if (!this.closeOnClickModal) return;
 
     const isContent =
@@ -276,7 +302,7 @@ export class EaOverlay extends EaBase {
       this._overlayContent.contains(e.target as Node);
     if (isContent) return;
 
-    this.visible = false;
+    this.hide();
   }
 
   @listen("keydown", "document")
@@ -284,7 +310,8 @@ export class EaOverlay extends EaBase {
     if (!this.visible || !this.closeOnPressEscape || e.key !== "Escape") return;
     e.stopImmediatePropagation();
     e.preventDefault();
-    this.visible = false;
+
+    this.hide();
   }
 
   // ==================== 生命周期 ====================
