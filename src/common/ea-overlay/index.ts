@@ -25,6 +25,7 @@ export class EaOverlay extends EaBase {
   private _transitionAbortController?: AbortController;
   private _closingByBeforeClose: boolean = false;
   private _inBeforeClose: boolean = false;
+  private _appendHandled: boolean = false;
 
   // ==================== 属性定义 ====================
 
@@ -71,8 +72,22 @@ export class EaOverlay extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    observer(this: EaOverlay) {
+      this._appendHandled = false;
+      this._handleAppendTo();
+    },
   })
   appendToBody: boolean = false;
+
+  @attribute({
+    type: String,
+    default: "body",
+    observer(this: EaOverlay) {
+      this._appendHandled = false;
+      this._handleAppendTo();
+    },
+  })
+  appendTo: string = "body";
 
   // CSS 变量属性
   @attribute({
@@ -182,6 +197,23 @@ export class EaOverlay extends EaBase {
     if (this._container) this._container.className = className;
 
     return className;
+  }
+
+  private _handleAppendTo(): void {
+    if (this._appendHandled) return;
+
+    if (this.appendTo && this.appendTo !== "body") {
+      const parent = document.querySelector(this.appendTo);
+      if (parent && this.parentElement !== parent) {
+        this._appendHandled = true;
+        parent.appendChild(this);
+      }
+    } else if (this.appendToBody) {
+      if (this.parentElement !== document.body) {
+        this._appendHandled = true;
+        document.body.appendChild(this);
+      }
+    }
   }
 
   /**
@@ -319,6 +351,7 @@ export class EaOverlay extends EaBase {
   // ==================== 生命周期 ====================
 
   $mount(): void {
+    this._handleAppendTo();
     this.updateContainerClasslist();
   }
 

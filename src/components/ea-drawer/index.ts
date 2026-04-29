@@ -74,12 +74,6 @@ export class EaDrawer extends EaOverlay {
   })
   size: string = "30%";
 
-  @attribute({
-    type: String,
-    default: "body",
-  })
-  appendTo: string = "body";
-
   @property({
     type: Function,
     default: null,
@@ -132,39 +126,21 @@ export class EaDrawer extends EaOverlay {
     return fullClassName;
   }
 
-  private _handleAppendTo(): void {
-    if (this.appendTo && this.appendTo !== "body") {
-      const parent = document.querySelector(this.appendTo);
-      if (parent && this.parentElement !== parent) {
-        parent.appendChild(this);
-      }
-    } else if (this.appendToBody) {
-      if (this.parentElement !== document.body) {
-        document.body.appendChild(this);
-      }
-    }
-  }
-
   // ==================== 事件处理 ====================
 
   @listen("click", ".ea-drawer-main__close-icon")
-  private _onCloseIconClick(): void {
+  private _handleCloseIconClick(): void {
     if (!this.showClose) return;
-    this.visible = false;
+    this.hide();
   }
 
   @listen("closed")
-  private _onClosed(e: CustomEvent): void {
+  private _handleClosed(e: CustomEvent): void {
     if (e.target !== this) return;
     this.hide();
   }
 
   // ==================== 生命周期 ====================
-
-  constructor() {
-    super();
-    this._handleAppendTo();
-  }
 
   $mount(): void {
     super.$mount?.();

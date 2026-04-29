@@ -30,10 +30,18 @@
     <h1>基本用法</h1>
 
     <div class="demo">
-      <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
-      <ea-button type="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
-      <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
-      <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
+      <ea-button variant="primary" id="openDrawerBtn--ltr"
+        >从左往右开</ea-button
+      >
+      <ea-button variant="primary" id="openDrawerBtn--rtl"
+        >从右往左开</ea-button
+      >
+      <ea-button variant="primary" id="openDrawerBtn--ttb"
+        >从上往下开</ea-button
+      >
+      <ea-button variant="primary" id="openDrawerBtn--btt"
+        >从下往上开</ea-button
+      >
 
       <ea-drawer id="drawer" heading="I am the title" direction="ltr">
         <span>Hi, there!</span>
@@ -104,7 +112,7 @@
     <h1>不添加 Title</h1>
 
     <div class="demo">
-      <ea-button type="primary" id="noHeaderBtn">open</ea-button>
+      <ea-button variant="primary" id="noHeaderBtn">open</ea-button>
 
       <ea-drawer
         id="noHeaderDrawer"
@@ -143,7 +151,7 @@
     <h1>自定义内容</h1>
 
     <div class="demo">
-      <ea-button type="primary" id="openCustomDrawerBtn">
+      <ea-button variant="primary" id="openCustomDrawerBtn">
         打开自定义内容的抽屉
       </ea-button>
       <ea-drawer id="customDrawer" heading="我是标题" direction="ltr">
@@ -176,7 +184,7 @@
 
         <footer slot="footer" style="text-align: right">
           <ea-button id="customCancelBtn" plain>Cancel</ea-button>
-          <ea-button id="customConfirmBtn" type="primary">Confirm</ea-button>
+          <ea-button id="customConfirmBtn" variant="primary">Confirm</ea-button>
         </footer>
       </ea-drawer>
     </div>
@@ -242,7 +250,7 @@
     <h1>嵌套抽屉</h1>
 
     <div class="demo">
-      <ea-button type="primary" id="outerBtn">open</ea-button>
+      <ea-button variant="primary" id="outerBtn">open</ea-button>
       <ea-drawer id="outerDrawer" heading="I'm outer Drawer" size="50%">
         <div>
           <ea-button id="innerBtn">Click me!</ea-button>

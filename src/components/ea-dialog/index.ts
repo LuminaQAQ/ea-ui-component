@@ -82,12 +82,6 @@ export class EaDialog extends EaOverlay {
   appendToBody: boolean = false;
 
   @attribute({
-    type: String,
-    default: "body",
-  })
-  appendTo: string = "body";
-
-  @attribute({
     type: Boolean,
     default: true,
     observer(this: EaDialog) {
@@ -115,12 +109,6 @@ export class EaDialog extends EaOverlay {
   movable: boolean = false;
 
   // ==================== 方法 ====================
-
-  constructor() {
-    super();
-
-    this._handleAppendTo();
-  }
 
   html(): string {
     const tpl = document.createElement("template");
@@ -182,22 +170,6 @@ export class EaDialog extends EaOverlay {
     this._overlayContent.style.top = "";
     this.style.removeProperty("--ea-overlay-content-left");
     this.style.removeProperty("--ea-overlay-content-top");
-  }
-
-  /**
-   * 处理 append-to 逻辑
-   */
-  private _handleAppendTo(): void {
-    if (this.appendTo && this.appendTo !== "body") {
-      const parent = document.querySelector(this.appendTo);
-      if (parent && this.parentElement !== parent) {
-        parent.appendChild(this);
-      }
-    } else if (this.appendToBody) {
-      if (this.parentElement !== document.body) {
-        document.body.appendChild(this);
-      }
-    }
   }
 
   /**

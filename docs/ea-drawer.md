@@ -198,10 +198,10 @@ onMounted(async () => {
 呼出一个临时的侧边�? 可以从多个方向呼出。可以在 `ea-drawer` 标签上添�?`direction` 属性来指定呼出方向�?
 
 <div class="demo">
-  <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
-  <ea-button type="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
-  <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
-  <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
+  <ea-button variant="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
+  <ea-button variant="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
+  <ea-button variant="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
+  <ea-button variant="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
   <ea-drawer id="drawer" heading="I am the title" direction="ltr">
     <span>Hi, there!</span>
@@ -212,10 +212,10 @@ onMounted(async () => {
 
 ```html
 <div class="demo">
-  <ea-button type="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
-  <ea-button type="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
-  <ea-button type="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
-  <ea-button type="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
+  <ea-button variant="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
+  <ea-button variant="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
+  <ea-button variant="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
+  <ea-button variant="primary" id="openDrawerBtn--btt">从下往上开</ea-button>
 
   <ea-drawer id="drawer" heading="I am the title" direction="ltr">
     <span>Hi, there!</span>
@@ -279,7 +279,7 @@ CustomDrawer.init();
 通过设置 with-header 属性为 false 来控制是否显示标题�?如果你的应用需要具备可访问性，请务必设置好 heading�?
 
 <div class="demo">
-  <ea-button type="primary" id="noHeaderBtn">open</ea-button>
+  <ea-button variant="primary" id="noHeaderBtn">open</ea-button>
   <ea-drawer
     id="noHeaderDrawer"
     heading="I am the title"
@@ -294,7 +294,7 @@ CustomDrawer.init();
 
 ```html
 <div class="demo">
-  <ea-button type="primary" id="noHeaderBtn">open</ea-button>
+  <ea-button variant="primary" id="noHeaderBtn">open</ea-button>
   <ea-drawer
     id="noHeaderDrawer"
     heading="I am the title"
@@ -327,7 +327,7 @@ noHeaderExample.init();
 `Drawer` 可以在其内部嵌套各种丰富的操�?
 
 <div class="demo">
-  <ea-button type="primary" id="openCustomDrawerBtn"
+  <ea-button variant="primary" id="openCustomDrawerBtn"
     >打开自定义内容的抽屉</ea-button
   >
   <ea-drawer id="customDrawer" heading="我是标题" direction="ltr">
@@ -356,7 +356,7 @@ noHeaderExample.init();
     </ea-descriptions>
     <footer slot="footer" style="text-align: right">
       <ea-button id="customCancelBtn" plain>Cancel</ea-button>
-      <ea-button id="customConfirmBtn" type="primary">Confirm</ea-button>
+      <ea-button id="customConfirmBtn" variant="primary">Confirm</ea-button>
     </footer>
   </ea-drawer>
 </div>
@@ -365,7 +365,7 @@ noHeaderExample.init();
 
 ```html
 <div class="demo">
-  <ea-button type="primary" id="openCustomDrawerBtn"
+  <ea-button variant="primary" id="openCustomDrawerBtn"
     >打开自定义内容的抽屉</ea-button
   >
   <ea-drawer id="customDrawer" heading="我是标题" direction="ltr">
@@ -394,7 +394,7 @@ noHeaderExample.init();
     </ea-descriptions>
     <footer slot="footer" style="text-align: right">
       <ea-button id="customCancelBtn" plain>Cancel</ea-button>
-      <ea-button id="customConfirmBtn" type="primary">Confirm</ea-button>
+      <ea-button id="customConfirmBtn" variant="primary">Confirm</ea-button>
     </footer>
   </ea-drawer>
 </div>
@@ -457,7 +457,7 @@ CustomDrawer.init();
 如果你需要在不同图层中多个抽屉，你必须设�?`append-to-body` 属性为 `true`
 
 <div class="demo">
-  <ea-button type="primary" id="outerBtn">open</ea-button>
+  <ea-button variant="primary" id="outerBtn">open</ea-button>
   <ea-drawer id="outerDrawer" heading="I'm outer Drawer" size="50%">
     <div>
       <ea-button id="innerBtn">Click me!</ea-button>
@@ -476,7 +476,7 @@ CustomDrawer.init();
 
 ```html
 <div class="demo">
-  <ea-button type="primary" id="outerBtn">open</ea-button>
+  <ea-button variant="primary" id="outerBtn">open</ea-button>
   <ea-drawer id="outerDrawer" heading="I'm outer Drawer" size="50%">
     <div>
       <ea-button id="innerBtn">Click me!</ea-button>
@@ -530,7 +530,7 @@ nestingExample.init();
 
 | 参数                  | 说明                                                             | 类型    | 可选�?                                                 | 默认�? |
 | :-------------------- | :--------------------------------------------------------------- | :------ | :----------------------------------------------------- | :----- |
-| heading               | 标题文本（同步到 header 中的 heading）                           | string  | -                                                      | ""     |
+| heading               | 标题文本（同步到 header 中的 heading�?                           | string  | -                                                      | ""     |
 | visible               | 是否可见（受控属性，设置�?true/false�?                           | boolean | -                                                      | false  |
 | size                  | 抽屉尺寸，支持百分比或固定宽�?高度（根�?direction 决定是宽或高�? | string  | 例如: "30%", "400px"                                   | 30%    |
 | modal                 | 是否显示遮罩�?                                                   | boolean | -                                                      | true   |
