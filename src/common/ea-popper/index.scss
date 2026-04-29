@@ -1,3 +1,5 @@
+$name: ea-popper;
+
 :host {
   --ea-popper-border-color: var(--grey-300);
   --ea-popper-background-color: var(--color-white);
@@ -8,6 +10,9 @@
   --ea-popper-spacing: var(--spacing-md);
   --ea-popper-width: 150px;
 
+  --ea-popper-transform-x: 0;
+  --ea-popper-transform-y: 0;
+
   --ea-popper-transition: var(--transition-normal);
 }
 
@@ -15,7 +20,7 @@
   display: inline-block;
 }
 
-@include block(ea-popper) {
+@include block($name) {
   position: relative;
 
   @include element(reference) {
@@ -23,8 +28,6 @@
   }
 
   @include element(original) {
-    --ea-popper-transform-x: 0;
-    --ea-popper-transform-y: 0;
     --ea-popper-transform: translate(var(--ea-popper-transform-x),
         var(--ea-popper-transform-y));
 
@@ -64,7 +67,7 @@
     &,
     &-start,
     &-end {
-      .ea-popper__original {
+      .#{$name}__original {
         top: 0;
         --ea-popper-transform-y: calc(-100% - 10px);
 
@@ -79,7 +82,7 @@
     }
 
     &-start {
-      .ea-popper__original {
+      .#{$name}__original {
         left: 0;
 
         &::after {
@@ -88,7 +91,7 @@
       }
     }
 
-    .ea-popper__original {
+    .#{$name}__original {
       left: 50%;
       --ea-popper-transform-x: -50%;
 
@@ -98,7 +101,7 @@
     }
 
     &-end {
-      .ea-popper__original {
+      .#{$name}__original {
         right: 0;
 
         &::after {
@@ -113,7 +116,7 @@
     &,
     &-start,
     &-end {
-      .ea-popper__original {
+      .#{$name}__original {
         bottom: 0;
         --ea-popper-transform-y: calc(100% + 10px);
 
@@ -128,7 +131,7 @@
     }
 
     &-start {
-      .ea-popper__original {
+      .#{$name}__original {
         left: 0;
 
         &::after {
@@ -137,7 +140,7 @@
       }
     }
 
-    .ea-popper__original {
+    .#{$name}__original {
       left: 50%;
       --ea-popper-transform-x: -50%;
 
@@ -147,7 +150,7 @@
     }
 
     &-end {
-      .ea-popper__original {
+      .#{$name}__original {
         right: 0;
 
         &::after {
@@ -162,7 +165,7 @@
     &,
     &-start,
     &-end {
-      .ea-popper__original {
+      .#{$name}__original {
         right: 0;
         --ea-popper-transform-x: calc(100% + 10px);
 
@@ -177,7 +180,7 @@
     }
 
     &-start {
-      .ea-popper__original {
+      .#{$name}__original {
         --ea-popper-transform-y: 0;
         top: 0;
 
@@ -188,7 +191,7 @@
       }
     }
 
-    .ea-popper__original {
+    .#{$name}__original {
       --ea-popper-transform-y: -50%;
       top: 50%;
 
@@ -198,7 +201,7 @@
     }
 
     &-end {
-      .ea-popper__original {
+      .#{$name}__original {
         --ea-popper-transform-y: -100%;
         top: 100%;
 
@@ -215,7 +218,7 @@
     &,
     &-start,
     &-end {
-      .ea-popper__original {
+      .#{$name}__original {
         left: 0;
         --ea-popper-transform-x: calc(-100% - 10px);
 
@@ -230,7 +233,7 @@
     }
 
     &-start {
-      .ea-popper__original {
+      .#{$name}__original {
         --ea-popper-transform-y: 0;
         top: 0;
 
@@ -241,7 +244,7 @@
       }
     }
 
-    .ea-popper__original {
+    .#{$name}__original {
       --ea-popper-transform-y: -50%;
       top: 50%;
 
@@ -251,7 +254,7 @@
     }
 
     &-end {
-      .ea-popper__original {
+      .#{$name}__original {
         --ea-popper-transform-y: -100%;
         top: 100%;
 
@@ -264,19 +267,19 @@
   }
 
   @include state(show-arrow) {
-    .ea-popper__original::after {
+    .#{$name}__original::after {
       display: block;
     }
   }
 
   @include state(before-show) {
-    .ea-popper__original {
+    .#{$name}__original {
       display: block;
     }
   }
 
   @include state(show) {
-    .ea-popper__original {
+    .#{$name}__original {
       display: block;
       visibility: visible;
       filter: opacity(1);
@@ -284,7 +287,7 @@
   }
 
   @include state(before-hide) {
-    .ea-popper__original {
+    .#{$name}__original {
       filter: opacity(0);
     }
   }

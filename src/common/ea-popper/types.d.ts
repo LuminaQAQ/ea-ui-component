@@ -39,6 +39,7 @@ export interface EaPopperElement extends HTMLElement {
   offset: string;
   /** 是否在超过原 placement 视口时，进行翻转 */
   flip: boolean;
+
   /** 显示 popper */
   show(): void;
   /** 隐藏 popper */
@@ -74,13 +75,13 @@ export interface EaPopperVueProps {
  */
 export interface EaPopperVueEvents {
   /** 开启 Popper 时触发的事件 */
-  show: () => void;
+  show: (event: CustomEvent) => void;
   /** 开启 Popper 的动画结束时触发 */
-  shown: () => void;
+  shown: (event: CustomEvent) => void;
   /** 关闭 Popper 时触发的事件 */
-  hide: () => void;
+  hide: (event: CustomEvent) => void;
   /** 关闭 Popper 的动画结束时触发 */
-  hidden: () => void;
+  hidden: (event: CustomEvent) => void;
 }
 
 /**
@@ -136,14 +137,14 @@ export interface EaPopperReactProps extends HTMLAttributes<HTMLElement> {
   offset?: string;
   /** 是否在超过原 placement 视口时，进行翻转 */
   flip?: boolean;
-  /** 点击按钮时的回调 */
-  onShow?: () => void;
-  /** 开启 Popper 的动画结束时触发 */
-  onShown?: () => void;
-  /** 关闭 Popper 时触发的事件 */
-  onHide?: () => void;
-  /** 关闭 Popper 的动画结束时触发 */
-  onHidden?: () => void;
+  /** 开启 Popper 时触发的回调 */
+  onShow?: (event: CustomEvent) => void;
+  /** 开启 Popper 的动画结束时触发的回调 */
+  onShown?: (event: CustomEvent) => void;
+  /** 关闭 Popper 时触发的回调 */
+  onHide?: (event: CustomEvent) => void;
+  /** 关闭 Popper 的动画结束时触发的回调 */
+  onHidden?: (event: CustomEvent) => void;
   /** 自定义内容 */
   children?: ReactNode;
 }

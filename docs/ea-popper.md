@@ -4,44 +4,44 @@ import { onMounted } from 'vue'
 onMounted(() => {
   import("../dist/components/index.js")
   import("../dist/assets/icon.css")
-  
-        // ------- 基础用法 -------
-        // #region
-        const referenceExample = {
-            referenceElements: document.querySelectorAll('#referenceSection ea-popper'),
 
-            init() {
-                this.referenceElements.forEach(referenceElement => {
-                    referenceElement.addEventListener("click", (e) => {
-                        referenceElement.toggle();
-                    });
-                });
-            }
-        }
-        referenceExample.init();
-        // #endregion
-        // ------- end -------
+  // ------- 基础用法 -------
+  // #region
+  const referenceExample = {
+    referenceElements: document.querySelectorAll('#referenceSection ea-popper'),
 
-        // ------- 基础用法 -------
-        // #region
-        const arrowExample = {
-            referenceElements: document.querySelectorAll('#arrowSection ea-popper'),
+    init() {
+      this.referenceElements.forEach(referenceElement => {
+        referenceElement.addEventListener("click", (e) => {
+          referenceElement.toggle();
+        });
+      });
+    }
+  }
+  referenceExample.init();
+  // #endregion
+  // ------- end -------
 
-            init() {
-                this.referenceElements.forEach(referenceElement => {
-                    referenceElement.addEventListener("mouseenter", (e) => {
-                        referenceElement.show();
+  // ------- 不显示箭头 -------
+  // #region
+  const arrowExample = {
+    referenceElements: document.querySelectorAll('#arrowSection ea-popper'),
 
-                        referenceElement.addEventListener("mouseleave", () => {
-                            referenceElement.hide();
-                        }, { once: true });
-                    });
-                });
-            }
-        }
-        arrowExample.init();
-        // #endregion
-        // ------- end -------
+    init() {
+      this.referenceElements.forEach(referenceElement => {
+        referenceElement.addEventListener("mouseenter", (e) => {
+          referenceElement.show();
+
+          referenceElement.addEventListener("mouseleave", () => {
+            referenceElement.hide();
+          }, { once: true });
+        });
+      });
+    }
+  }
+  arrowExample.init();
+  // #endregion
+  // ------- end -------
 
 })
 </script>
@@ -64,13 +64,13 @@ ea-popper {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-popper/index.ts";
+  import "./node_modules/easy-component-ui/components/ea-popper/index.js";
 </script>
 ```
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#ea-popper-css-part)。
 
 ::: code-group
 
@@ -91,19 +91,19 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="top-start">
         top-start
-        <ea-button type="primary" slot="reference">top-start</ea-button>
+        <ea-button variant="primary" slot="reference">top-start</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper>
         top
-        <ea-button type="primary" slot="reference">top</ea-button>
+        <ea-button variant="primary" slot="reference">top</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="top-end">
         top-end
-        <ea-button type="primary" slot="reference">top-end</ea-button>
+        <ea-button variant="primary" slot="reference">top-end</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -111,13 +111,13 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="left-start">
         left-start
-        <ea-button type="primary" slot="reference">left-start</ea-button>
+        <ea-button variant="primary" slot="reference">left-start</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="right-start">
-        right- start
-        <ea-button type="primary" slot="reference">right-start</ea-button>
+        right-start
+        <ea-button variant="primary" slot="reference">right-start</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -125,13 +125,13 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="left">
         left
-        <ea-button type="primary" slot="reference">left</ea-button>
+        <ea-button variant="primary" slot="reference">left</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="right">
         right
-        <ea-button type="primary" slot="reference">right</ea-button>
+        <ea-button variant="primary" slot="reference">right</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -139,13 +139,13 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="left-end">
         left-end
-        <ea-button type="primary" slot="reference">left-end</ea-button>
+        <ea-button variant="primary" slot="reference">left-end</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="right-end">
         right-end
-        <ea-button type="primary" slot="reference">right-end</ea-button>
+        <ea-button variant="primary" slot="reference">right-end</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -153,19 +153,19 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="bottom-start">
         bottom-start
-        <ea-button type="primary" slot="reference">bottom-start</ea-button>
+        <ea-button variant="primary" slot="reference">bottom-start</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="bottom">
         bottom
-        <ea-button type="primary" slot="reference">bottom</ea-button>
+        <ea-button variant="primary" slot="reference">bottom</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="bottom-end">
         bottom-end
-        <ea-button type="primary" slot="reference">bottom-end</ea-button>
+        <ea-button variant="primary" slot="reference">bottom-end</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -173,7 +173,7 @@ ea-popper {
 
 ::: details 查看代码
 
-`html`
+::: code-group
 
 ```html
 <div id="referenceSection" class="demo">
@@ -181,19 +181,19 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="top-start">
         top-start
-        <ea-button type="primary" slot="reference">top-start</ea-button>
+        <ea-button variant="primary" slot="reference">top-start</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper>
         top
-        <ea-button type="primary" slot="reference">top</ea-button>
+        <ea-button variant="primary" slot="reference">top</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="top-end">
         top-end
-        <ea-button type="primary" slot="reference">top-end</ea-button>
+        <ea-button variant="primary" slot="reference">top-end</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -202,13 +202,13 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="left-start">
         left-start
-        <ea-button type="primary" slot="reference">left-start</ea-button>
+        <ea-button variant="primary" slot="reference">left-start</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="right-start">
-        right- start
-        <ea-button type="primary" slot="reference">right-start</ea-button>
+        right-start
+        <ea-button variant="primary" slot="reference">right-start</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -217,13 +217,13 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="left">
         left
-        <ea-button type="primary" slot="reference">left</ea-button>
+        <ea-button variant="primary" slot="reference">left</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="right">
         right
-        <ea-button type="primary" slot="reference">right</ea-button>
+        <ea-button variant="primary" slot="reference">right</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -232,13 +232,13 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="left-end">
         left-end
-        <ea-button type="primary" slot="reference">left-end</ea-button>
+        <ea-button variant="primary" slot="reference">left-end</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="right-end">
         right-end
-        <ea-button type="primary" slot="reference">right-end</ea-button>
+        <ea-button variant="primary" slot="reference">right-end</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
@@ -247,61 +247,41 @@ ea-popper {
     <ea-col span="6">
       <ea-popper placement="bottom-start">
         bottom-start
-        <ea-button type="primary" slot="reference">bottom-start</ea-button>
+        <ea-button variant="primary" slot="reference">bottom-start</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="bottom">
         bottom
-        <ea-button type="primary" slot="reference">bottom</ea-button>
+        <ea-button variant="primary" slot="reference">bottom</ea-button>
       </ea-popper>
     </ea-col>
     <ea-col span="6">
       <ea-popper placement="bottom-end">
         bottom-end
-        <ea-button type="primary" slot="reference">bottom-end</ea-button>
+        <ea-button variant="primary" slot="reference">bottom-end</ea-button>
       </ea-popper>
     </ea-col>
   </ea-row>
 </div>
 ```
 
-`js`
-
 ```js
-const basicExample = {
-  overlay: document.querySelector("#basicOverlay"),
-  openButton: document.querySelector("#basicOverlayOpenButton"),
-
-  confirmButton: document.querySelector("#basicOverlayConfirmButton"),
-  cancelButton: document.querySelector("#basicOverlayCancelButton"),
-
-  show() {
-    this.overlay.show();
-  },
-
-  hide() {
-    this.overlay.hide();
-  },
+const referenceExample = {
+  referenceElements: document.querySelectorAll('#referenceSection ea-popper'),
 
   init() {
-    this.openButton.addEventListener("click", () => {
-      this.overlay.show();
+    this.referenceElements.forEach(referenceElement => {
+      referenceElement.addEventListener("click", (e) => {
+        referenceElement.toggle();
+      });
     });
-
-    this.confirmButton.addEventListener("click", () => {
-      console.log("confirm");
-      this.overlay.hide();
-    });
-
-    this.cancelButton.addEventListener("click", () => {
-      console.log("cancel");
-      this.overlay.hide();
-    });
-  },
-};
-basicExample.init();
+  }
+}
+referenceExample.init();
 ```
+
+:::
 
 :::
 
@@ -312,106 +292,103 @@ basicExample.init();
 <div id="arrowSection" class="demo">
   <ea-popper placement="top-start" show-arrow="false">
     top-start
-    <ea-button type="primary" slot="reference">top-start</ea-button>
+    <ea-button variant="primary" slot="reference">top-start</ea-button>
   </ea-popper>
   <ea-popper show-arrow="false">
     top
-    <ea-button type="primary" slot="reference">top</ea-button>
+    <ea-button variant="primary" slot="reference">top</ea-button>
   </ea-popper>
   <ea-popper placement="top-end" show-arrow="false">
     top-end
-    <ea-button type="primary" slot="reference">top-end</ea-button>
+    <ea-button variant="primary" slot="reference">top-end</ea-button>
   </ea-popper>
 </div>
 
 ::: details 查看代码
 
-`html`
+::: code-group
 
 ```html
 <div id="arrowSection" class="demo">
   <ea-popper placement="top-start" show-arrow="false">
     top-start
-    <ea-button type="primary" slot="reference">top-start</ea-button>
+    <ea-button variant="primary" slot="reference">top-start</ea-button>
   </ea-popper>
   <ea-popper show-arrow="false">
     top
-    <ea-button type="primary" slot="reference">top</ea-button>
+    <ea-button variant="primary" slot="reference">top</ea-button>
   </ea-popper>
   <ea-popper placement="top-end" show-arrow="false">
     top-end
-    <ea-button type="primary" slot="reference">top-end</ea-button>
+    <ea-button variant="primary" slot="reference">top-end</ea-button>
   </ea-popper>
 </div>
 ```
 
-`js`
-
 ```js
 const arrowExample = {
-  referenceElements: document.querySelectorAll("#arrowSection ea-popper"),
+  referenceElements: document.querySelectorAll('#arrowSection ea-popper'),
 
   init() {
     this.referenceElements.forEach(referenceElement => {
-      referenceElement.addEventListener("mouseenter", e => {
+      referenceElement.addEventListener("mouseenter", (e) => {
         referenceElement.show();
 
-        referenceElement.addEventListener(
-          "mouseleave",
-          () => {
-            referenceElement.hide();
-          },
-          { once: true }
-        );
+        referenceElement.addEventListener("mouseleave", () => {
+          referenceElement.hide();
+        }, { once: true });
       });
     });
-  },
-};
+  }
+}
+arrowExample.init();
 ```
 
 :::
 
-## Popper API
+:::
 
-| 参数       | 说明                                      | 类型    | 可选值                                                                                                                                                               | 默认值                                          |
-| ---------- | ----------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| width      | 宽度，单位 px。                           | number  | —                                                                                                                                                                    | 150                                             |
-| placement  | 气泡的出现位置。                          | string  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | top                                             |
-| show-arrow | 是否显示箭头                              | boolean |                                                                                                                                                                      | false                                           |
-| status     | 控制 Popper 显隐的属性                    | boolean |                                                                                                                                                                      | false                                           |
-| offset     | 气泡出现的位置偏移量。                    | string  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
-| flip       | 是否在超过原 placement 视口时，进行翻转。 | boolean | —                                                                                                                                                                    | true                                            |
+## ea-popper API
 
-## CSS Part
+### ea-popper Attributes
 
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| ---- | ---- | ---- | ------ | ------ |
+| width | 宽度，单位 px | Number | — | 150 |
+| placement | 气泡的出现位置 | String | top / top-start / top-end / bottom / bottom-start / bottom-end / left / left-start / left-end / right / right-start / right-end | top |
+| show-arrow | 是否显示箭头 | Boolean | — | true |
+| status | 控制 Popper 显隐的属性 | Boolean | — | false |
+| offset | 气泡出现的位置偏移量 | String | — | "0 0" |
+| flip | 是否在超过原 placement 视口时，进行翻转 | Boolean | — | true |
 
-| 名称      | 说明                                  |
-| --------- | ------------------------------------- |
-| container | Popper 外层容器                       |
-| reference | 触发 Popper 显示的 HTML 元素 的父容器 |
-| original  | Popper 内容容器                       |
+### ea-popper CSS Part
 
-## Events
+| 名称 | 说明 |
+| ---- | ---- |
+| container | Popper 外层容器 |
+| reference | 触发 Popper 显示的 HTML 元素的父容器 |
+| original | Popper 内容容器 |
 
-| 事件名称 | 说明                         | 回调参数     |
-| -------- | ---------------------------- | ------------ |
-| show     | 开启 Popper 时触发的事件     | `() => void` |
-| shown    | 开启 Popper 的动画结束时触发 | `() => void` |
-| hide     | 关闭 Popper 时触发的事件     | `() => void` |
-| hidden   | 关闭 Popper 的动画结束时触发 | `() => void` |
+### ea-popper Events
 
-## Methods
+| 事件名称 | 说明 | 回调参数 |
+| -------- | ---- | -------- |
+| show | 开启 Popper 时触发的事件 | — |
+| shown | 开启 Popper 的动画结束时触发 | — |
+| hide | 关闭 Popper 时触发的事件 | — |
+| hidden | 关闭 Popper 的动画结束时触发 | — |
 
-| 名称   | 详情                 | 类型         |
-| ------ | -------------------- | ------------ |
-| show   | 显示 Popper          | `() => void` |
-| hide   | 隐藏 Popper          | `() => void` |
-| toggle | 切换 Popper 显示状态 | `() => void` |
+### ea-popper Methods
 
-## Slots
+| 方法名 | 说明 | 参数 |
+| ------ | ---- | ---- |
+| show | 显示 Popper | — |
+| hide | 隐藏 Popper | — |
+| toggle | 切换 Popper 显示状态 | — |
 
-| 名称      | 描述                             |
-| --------- | -------------------------------- |
-| -         | Popper 内容插槽                  |
+### ea-popper Slots
+
+| 名称 | 说明 |
+| ---- | ---- |
+| default | Popper 内容插槽 |
 | reference | 触发 Popper 显示的 HTML 元素插槽 |

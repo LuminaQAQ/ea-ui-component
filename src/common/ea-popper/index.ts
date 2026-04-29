@@ -1,22 +1,30 @@
 import EaBase, { createBEM } from "@core/EaBase";
 import { attribute } from "@decorator/attribute";
-import { query } from "@decorator/query";
 import { CustomElement } from "@decorator/custom-element";
-import stylesheet from "./index.scss?inline";
+import { query } from "@decorator/query";
 import { Enum } from "@/utils/Enum";
-import type { PlacementType } from "./types";
-
-export { PlacementType };
+import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-popper" as const;
 const bem = createBEM(TAG_NAME);
 
-/**
- * 检查视口可见
- * @param {HTMLElement} el
- * @param {number} scale
- * @returns {boolean}
- */
+const PLACEMENT_TYPES = [
+  "top",
+  "top-start",
+  "top-end",
+  "bottom",
+  "bottom-start",
+  "bottom-end",
+  "left",
+  "left-start",
+  "left-end",
+  "right",
+  "right-start",
+  "right-end",
+] as const;
+
+export type PlacementType = (typeof PLACEMENT_TYPES)[number];
+
 const isIntersecting = (el: HTMLElement, scale: number = 0): boolean => {
   const rect = el.getBoundingClientRect();
 
@@ -28,12 +36,6 @@ const isIntersecting = (el: HTMLElement, scale: number = 0): boolean => {
   );
 };
 
-/**
- * 根据视口情况翻转 placement
- * @param {HTMLElement} el
- * @param {string} placement
- * @returns {string}
- */
 const flipPlacement = (el: HTMLElement, placement: string): string => {
   const antiPlacement: Record<string, string> = {
     left: "right",
@@ -60,21 +62,6 @@ const flipPlacement = (el: HTMLElement, placement: string): string => {
   return placement;
 };
 
-const PLACEMENT_TYPES = [
-  "top",
-  "top-start",
-  "top-end",
-  "bottom",
-  "bottom-start",
-  "bottom-end",
-  "left",
-  "left-start",
-  "left-end",
-  "right",
-  "right-start",
-  "right-end",
-] as const;
-
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaPopper extends EaBase {
   // ==================== DOM 元素引用 ====================
@@ -97,10 +84,7 @@ export class EaPopper extends EaBase {
     type: Number,
     default: 150,
     observer(this: EaPopper, newVal: number) {
-      this._originalPopper?.style.setProperty(
-        "--ea-popper-width",
-        `${newVal}px`
-      );
+      this.style.setProperty("--ea-popper-width", `${newVal}px`);
     },
   })
   width: number = 150;
@@ -135,50 +119,9 @@ export class EaPopper extends EaBase {
       this._statusAbortController = new AbortController();
 
       if (newVal) {
-        this._container.classList.add("is-before-show");
-        this._dispatchBubblesEvent("show");
-
-        if (this.flip) {
-          const popperRect = this._originalPopper.getBoundingClientRect();
-          const isOverflow = isIntersecting(
-            this,
-            Math.max(popperRect.width, popperRect.height)
-          );
-
-          if (this._originPlacement === this.placement) {
-            this.placement = flipPlacement(
-              this._originalPopper,
-              this.placement
-            ) as PlacementType;
-          } else if (isOverflow) {
-            this.placement = this._originPlacement as PlacementType;
-          }
-        }
-
-        void this._container.offsetWidth;
-
-        this._container.classList.add("is-show");
-
-        this._container.addEventListener(
-          "transitionend",
-          () => {
-            this._dispatchBubblesEvent("shown");
-            this.updateContainerClasslist();
-          },
-          { once: true, signal: this._statusAbortController.signal }
-        );
+        this._handleShowTransition();
       } else {
-        this._container.classList.add("is-before-hide");
-        this._dispatchBubblesEvent("hide");
-
-        this._container.addEventListener(
-          "transitionend",
-          () => {
-            this.updateContainerClasslist();
-            this._dispatchBubblesEvent("hidden");
-          },
-          { once: true, signal: this._statusAbortController.signal }
-        );
+        this._handleHideTransition();
       }
     },
   })
@@ -201,14 +144,8 @@ export class EaPopper extends EaBase {
           );
         }
 
-        this._originalPopper?.style.setProperty(
-          "--ea-popper-transform-x",
-          `${x}px`
-        );
-        this._originalPopper?.style.setProperty(
-          "--ea-popper-transform-y",
-          `${y}px`
-        );
+        this.style.setProperty("--ea-popper-transform-x", `${x}px`);
+        this.style.setProperty("--ea-popper-transform-y", `${y}px`);
       } catch (error) {
         console.error(error);
       }
@@ -224,10 +161,6 @@ export class EaPopper extends EaBase {
 
   // ==================== 方法 ====================
 
-  /**
-   * 获取 classlist 列表
-   * @return {string} 属性值
-   */
   updateContainerClasslist(): string {
     const className = bem(
       {
@@ -246,9 +179,55 @@ export class EaPopper extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
+  private _handleShowTransition(): void {
+    this._container.classList.add("is-before-show");
+    this.emit("show", { bubbles: true, composed: true });
+
+    if (this.flip) {
+      const popperRect = this._originalPopper.getBoundingClientRect();
+      const isOverflow = isIntersecting(
+        this,
+        Math.max(popperRect.width, popperRect.height)
+      );
+
+      if (this._originPlacement === this.placement) {
+        this.placement = flipPlacement(
+          this._originalPopper,
+          this.placement
+        ) as PlacementType;
+      } else if (isOverflow) {
+        this.placement = this._originPlacement as PlacementType;
+      }
+    }
+
+    void this._container.offsetWidth;
+
+    this._container.classList.add("is-show");
+
+    this._container.addEventListener(
+      "transitionend",
+      () => {
+        this.emit("shown", { bubbles: true, composed: true });
+        this.updateContainerClasslist();
+      },
+      { once: true, signal: this._statusAbortController!.signal }
+    );
+  }
+
+  private _handleHideTransition(): void {
+    this._container.classList.add("is-before-hide");
+    this.emit("hide", { bubbles: true, composed: true });
+
+    this._container.addEventListener(
+      "transitionend",
+      () => {
+        this.updateContainerClasslist();
+        this.emit("hidden", { bubbles: true, composed: true });
+      },
+      { once: true, signal: this._statusAbortController!.signal }
+    );
+  }
+
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container" tabindex="-1">
@@ -262,33 +241,16 @@ export class EaPopper extends EaBase {
     `;
   }
 
-  /**
-   * 显示 popper
-   */
   show(): void {
     this.status = true;
   }
 
-  /**
-   * 隐藏 popper
-   */
   hide(): void {
     this.status = false;
   }
 
-  /**
-   * 切换 popper 显示状态
-   */
   toggle(): void {
     this.status = !this.status;
-  }
-
-  private _dispatchBubblesEvent(customEventName: string, detail?: any): void {
-    this.emit(customEventName, {
-      detail,
-      bubbles: true,
-      composed: true,
-    });
   }
 
   // ==================== 生命周期 ====================
