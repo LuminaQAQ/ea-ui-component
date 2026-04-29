@@ -1,0 +1,177 @@
+$name: ea-notification;
+
+$types: (
+  primary: blue,
+  success: green,
+  warning: yellow,
+  error: red,
+  info: grey,
+);
+
+:host {
+  --#{$name}-y: 0;
+  --#{$name}-show-x: 16px;
+  --#{$name}-fade-out-x: 100%;
+
+  --#{$name}-padding: var(--spacing-lg);
+  --#{$name}-border-color: var(--grey-200);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-box-shadow: var(--box-shadow-md);
+
+  --#{$name}-width: 300px;
+  --#{$name}-title-font-size: var(--font-size-lg);
+  --#{$name}-message-font-size: var(--font-size-md);
+  --#{$name}-title-color: var(--grey-900);
+  --#{$name}-message-color: var(--grey-700);
+  --#{$name}-icon-size: 18px;
+
+  --#{$name}-transition: var(--transition-normal);
+
+  @each $type, $color in $types {
+    --#{$name}-#{$type}-color: var(--#{$color}-500);
+  }
+
+  --#{$name}-gap: var(--spacing-md);
+
+  --#{$name}-z-index: 2000;
+}
+
+:host {
+  z-index: var(--#{$name}-z-index);
+}
+
+@include block($name) {
+  display: none;
+  visibility: hidden;
+
+  position: fixed;
+  z-index: var(--#{$name}-z-index);
+
+  box-sizing: border-box;
+  padding: var(--#{$name}-padding);
+  margin: var(--#{$name}-gap) 0;
+  gap: var(--#{$name}-gap);
+  border: 1px solid var(--#{$name}-border-color);
+  border-radius: var(--#{$name}-border-radius);
+  box-shadow: var(--#{$name}-box-shadow);
+
+  transform-origin: center;
+  transform: translate(var(--#{$name}-fade-out-x), 0);
+  filter: opacity(0);
+
+  width: var(--#{$name}-width);
+  max-width: calc(100% - 32px);
+  overflow: hidden;
+
+  transition: filter var(--#{$name}-transition),
+  transform var(--#{$name}-transition);
+
+  @include element(icon) {
+    font-size: var(--#{$name}-icon-size);
+    line-height: var(--#{$name}-icon-size);
+  }
+
+  @include element(content) {
+    flex: 1;
+    vertical-align: middle;
+  }
+
+  @include element(header) {
+    position: relative;
+  }
+
+  @include element(title) {
+    margin-top: 0;
+
+    color: var(--#{$name}-title-color);
+    font-size: var(--#{$name}-title-font-size);
+    line-height: var(--#{$name}-title-font-size);
+  }
+
+  @include element(close-icon) {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    cursor: pointer;
+    display: none;
+    color: var(--#{$name}-info-color);
+  }
+
+  @include element(main) {
+    color: var(--#{$name}-message-color);
+    line-height: 1.7;
+    font-size: var(--#{$name}-message-font-size);
+  }
+
+  @each $type, $color in $types {
+    @include modifier($type) {
+      background-color: var(--color-white);
+
+      .#{$name}__icon {
+        color: var(--#{$name}-#{$type}-color);
+      }
+    }
+  }
+
+  @include modifier(show-close) {
+    .#{$name}__close-icon {
+      display: block;
+    }
+  }
+
+  @include modifier(visible) {
+    display: flex;
+    align-items: start;
+  }
+
+  @include modifier(is-show) {
+    visibility: visible;
+    filter: opacity(1);
+    transform: translate(0, 0);
+
+    transition: filter var(--#{$name}-transition),
+    transform var(--#{$name}-transition),
+    top var(--#{$name}-transition),
+    bottom var(--#{$name}-transition);
+  }
+
+  @include modifier(before-hide) {
+    filter: opacity(0);
+    transform: translate(var(--#{$name}-fade-out-x, -50%));
+  }
+
+  @include modifier(top) {
+
+    &-left,
+    &-right {
+      top: var(--#{$name}-y);
+    }
+
+    &-left {
+      --#{$name}-fade-out-x: -100%;
+      left: var(--#{$name}-show-x);
+    }
+
+    &-right {
+      right: var(--#{$name}-show-x);
+    }
+  }
+
+  @include modifier(bottom) {
+
+    &-left,
+    &-right {
+      bottom: var(--#{$name}-y);
+    }
+
+    &-left {
+      --#{$name}-fade-out-x: -100%;
+      left: var(--#{$name}-show-x);
+    }
+
+    &-right {
+      right: var(--#{$name}-show-x);
+    }
+  }
+}

@@ -6,112 +6,48 @@ onMounted(() => {
   import("../dist/components/index.js")
   import("../dist/assets/icon.css")
 
-    // ------- 基础用法 -------
-    // #region
-    const basicExample = {
-    btn1: document.querySelector("#basicSection #basic1"),
-    btn2: document.querySelector("#basicSection #basic2"),
+  // ------- 基础用法 -------
+  // #region
+  const basicExample = {
+    moduleInstanceBtn: document.getElementById("moduleInstanceBtn"),
 
     init() {
-        this.btn1.addEventListener("click", () => {
+      this.moduleInstanceBtn.addEventListener("click", () => {
         EaNotification({
-            title: "Title",
-            message: "This is a message that automatically close",
+          heading: "Title",
+          message: "This is a message that automatically close",
         });
-        });
-
-        this.btn2.addEventListener("click", () => {
-        EaNotification({
-            title: "Prompt",
-            message: "This is a message that does not automatically close",
-            duration: 0,
-        });
-        });
+      });
     },
-    };
-    basicExample.init();
-    // #endregion
-    // ------- end -------
+  };
+  basicExample.init();
+  // #endregion
+  // ------- end -------
 
-    // ------- 不同类型的通知 -------
-    // #region
-    const typeExample = {
-    btns: document.querySelectorAll("#typeSection ea-button"),
-
-    init() {
-        this.btns.forEach(btn => {
-        btn.addEventListener("click", () => {
-            EaNotification({
-            type: btn.textContent.toLowerCase(),
-            title: btn.textContent,
-            message: "This is a message",
-            });
-        });
-        });
-    },
-    };
-    typeExample.init();
-    // #endregion
-    // ------- end -------
-
-    // ------- 自定义消息弹出的位置 -------
-    // #region
-    const placementExample = {
+  // ------- 自定义位置 -------
+  // #region
+  const placementExample = {
     btns: document.querySelectorAll("#placementSection ea-button"),
+
     init() {
-        this.btns.forEach(btn => {
+      this.btns.forEach(btn => {
         btn.addEventListener("click", () => {
-            EaNotification({
-            title: "Custom Position",
+          EaNotification({
+            heading: "Custom Position",
             message: "This is a message",
             placement: btn.textContent
-                .trim()
-                .toLowerCase()
-                .replace(" ", "-"),
-            });
+              .trim()
+              .toLowerCase()
+              .replace(" ", "-"),
+          });
         });
-        });
+      });
     },
-    };
-    placementExample.init();
-    // #endregion
-    // ------- end -------
+  };
+  placementExample.init();
+  // #endregion
+  // ------- end -------
 
-    // ------- 使用 HTML 片段作为正文内容 -------
-    // #region
-    const htmlExample = {
-    btn: document.querySelector("#useHTMLSection ea-button"),
-    init() {
-        this.btn.addEventListener("click", () => {
-        EaNotification({
-            title: "HTML String",
-            dangerouslyUseHTMLString: true,
-            message: "<strong>This is <i>HTML</i> string</strong>",
-        });
-        });
-    },
-    };
-    htmlExample.init();
-    // #endregion
-    // ------- end -------
-
-    // ------- 隐藏关闭按钮 -------
-    // #region
-    const hideCloseExample = {
-    btn: document.querySelector("#hideCloseSection ea-button"),
-    init() {
-        this.btn.addEventListener("click", async () => {
-        EaNotification.success({
-            title: "Info",
-            message: "This is a message without close button",
-            showClose: false,
-        });
-        });
-    },
-    };
-    hideCloseExample.init();
-    // #endregion
-    // ------- end -------
 })
 </script>
 
@@ -121,7 +57,7 @@ onMounted(() => {
 
 ## 引入
 
-`js`
+> `js`
 
 ```html
 <script type="module">
@@ -129,42 +65,96 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#notification-css-part)。
+
 ## 基础用法
 
 从 `placement` 指定的位置出现，默认 3 秒后自动消失。
 
-<div id="basicSection" class="demo row left">
-  <ea-button id="basic1" plain> Closes automatically </ea-button>
-  <ea-button id="basic2" plain> Won't close automatically </ea-button>
+<div class="demo row">
+  <ea-button
+    plain
+    onclick="
+          window.$notify({
+            heading: 'Title',
+            message: 'This is a message that automatically close',
+          })
+        "
+  >
+    Closes automatically
+  </ea-button>
+  <ea-button
+    plain
+    onclick="
+          window.$notify({
+            heading: 'Prompt',
+            message: 'This is a message that does not automatically close',
+            duration: 0,
+          })
+        "
+  >
+    Won't close automatically
+  </ea-button>
+  <ea-button id="moduleInstanceBtn" plain>
+    Module-Instance notify
+  </ea-button>
 </div>
 
 ::: code-group
 
 ```html
-<div id="basicSection" class="demo row left">
-  <ea-button id="basic1" plain> Closes automatically </ea-button>
-  <ea-button id="basic2" plain> Won't close automatically </ea-button>
+<div class="demo">
+  <ea-button
+    plain
+    onclick="
+          window.$notify({
+            heading: 'Title',
+            message: 'This is a message that automatically close',
+          })
+        "
+  >
+    Closes automatically
+  </ea-button>
+  <ea-button
+    plain
+    onclick="
+          window.$notify({
+            heading: 'Prompt',
+            message: 'This is a message that does not automatically close',
+            duration: 0,
+          })
+        "
+  >
+    Won't close automatically
+  </ea-button>
+  <ea-button id="moduleInstanceBtn" plain> Module-Instance notify </ea-button>
 </div>
 ```
 
 ```js
 const basicExample = {
-  btn1: document.querySelector("#basicSection #basic1"),
-  btn2: document.querySelector("#basicSection #basic2"),
+  moduleInstanceBtn: document.getElementById("moduleInstanceBtn"),
 
   init() {
-    this.btn1.addEventListener("click", () => {
+    this.moduleInstanceBtn.addEventListener("click", () => {
       EaNotification({
-        title: "Title",
+        heading: "Title",
         message: "This is a message that automatically close",
-      });
-    });
-
-    this.btn2.addEventListener("click", () => {
-      EaNotification({
-        title: "Prompt",
-        message: "This is a message that does not automatically close",
-        duration: 0,
       });
     });
   },
@@ -174,47 +164,92 @@ basicExample.init();
 
 :::
 
-## 不同类型的通知
+## 不同类型
 
 支持 success / warning / info / error / primary 类型，通过 `type` 改变样式。
 
-<div id="typeSection" class="demo row left">
-  <ea-button plain>Info</ea-button>
-  <ea-button type="primary" plain>Primary</ea-button>
-  <ea-button type="success" plain>Success</ea-button>
-  <ea-button type="warning" plain>Warning</ea-button>
-  <ea-button type="danger" plain>Error</ea-button>
+<div id="typeSection" class="demo row">
+  <ea-button plain onclick="window.$notify.info({ heading: 'Info', message: 'This is a info message.' })">Info</ea-button>
+  <ea-button
+    variant="primary"
+    plain
+    onclick="window.$notify.primary({ heading: 'Primary', message: 'This is a primary message.' })"
+    >Primary</ea-button
+  >
+  <ea-button
+    variant="success"
+    plain
+    onclick="window.$notify.success({ heading: 'Success', message: 'Congrats, this is a success message.' })"
+    >Success</ea-button
+  >
+  <ea-button
+    variant="warning"
+    plain
+    onclick="window.$notify.warning({ heading: 'Warning', message: 'Warning, this is a warning message.' })"
+    >Warning</ea-button
+  >
+  <ea-button
+    variant="danger"
+    plain
+    onclick="window.$notify.error({ heading: 'Error', message: 'Oops, this is a error message.' })"
+    >Error</ea-button
+  >
 </div>
 
 ::: code-group
 
 ```html
-<div id="typeSection" class="demo row left">
-  <ea-button plain>Info</ea-button>
-  <ea-button type="primary" plain>Primary</ea-button>
-  <ea-button type="success" plain>Success</ea-button>
-  <ea-button type="warning" plain>Warning</ea-button>
-  <ea-button type="danger" plain>Error</ea-button>
+<div id="typeSection" class="demo">
+  <ea-button
+    plain
+    onclick="window.$notify.info({ heading: 'Info', message: 'This is a info message.' })"
+    >Info</ea-button
+  >
+  <ea-button
+    variant="primary"
+    plain
+    onclick="window.$notify.primary({ heading: 'Primary', message: 'This is a primary message.' })"
+    >Primary</ea-button
+  >
+  <ea-button
+    variant="success"
+    plain
+    onclick="window.$notify.success({ heading: 'Success', message: 'Congrats, this is a success message.' })"
+    >Success</ea-button
+  >
+  <ea-button
+    variant="warning"
+    plain
+    onclick="window.$notify.warning({ heading: 'Warning', message: 'Warning, this is a warning message.' })"
+    >Warning</ea-button
+  >
+  <ea-button
+    variant="danger"
+    plain
+    onclick="window.$notify.error({ heading: 'Error', message: 'Oops, this is a error message.' })"
+    >Error</ea-button
+  >
 </div>
 ```
 
 ```js
-const typeExample = {
-  btns: document.querySelectorAll("#typeSection ea-button"),
-
-  init() {
-    this.btns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        EaNotification({
-          type: btn.textContent.toLowerCase(),
-          title: btn.textContent,
-          message: "This is a message",
-        });
-      });
-    });
-  },
-};
-typeExample.init();
+EaNotification.info({ heading: "Info", message: "This is a info message." });
+EaNotification.primary({
+  heading: "Primary",
+  message: "This is a primary message.",
+});
+EaNotification.success({
+  heading: "Success",
+  message: "Congrats, this is a success message.",
+});
+EaNotification.warning({
+  heading: "Warning",
+  message: "Warning, this is a warning message.",
+});
+EaNotification.error({
+  heading: "Error",
+  message: "Oops, this is a error message.",
+});
 ```
 
 :::
@@ -223,7 +258,7 @@ typeExample.init();
 
 支持 `top-right`、`top-left`、`bottom-right`、`bottom-left` 四个位置，通过 `placement` 配置。
 
-<div class="demo row left" id="placementSection">
+<div id="placementSection" class="demo row">
   <ea-button plain> Top Right </ea-button>
   <ea-button plain> Bottom Right </ea-button>
   <ea-button plain> Bottom Left </ea-button>
@@ -233,7 +268,7 @@ typeExample.init();
 ::: code-group
 
 ```html
-<div class="demo row left" id="placementSection">
+<div id="placementSection" class="demo">
   <ea-button plain> Top Right </ea-button>
   <ea-button plain> Bottom Right </ea-button>
   <ea-button plain> Bottom Left </ea-button>
@@ -244,11 +279,12 @@ typeExample.init();
 ```js
 const placementExample = {
   btns: document.querySelectorAll("#placementSection ea-button"),
+
   init() {
     this.btns.forEach(btn => {
       btn.addEventListener("click", () => {
         EaNotification({
-          title: "Custom Position",
+          heading: "Custom Position",
           message: "This is a message",
           placement: btn.textContent.trim().toLowerCase().replace(" ", "-"),
         });
@@ -266,31 +302,45 @@ placementExample.init();
 将 `dangerouslyUseHTMLString` 设为 `true` 可以让 `message` 被当作 HTML 片段渲染。
 
 <div class="demo" id="useHTMLSection">
-  <ea-button plain> Use HTML String </ea-button>
+  <ea-button
+    plain
+    onclick="
+          window.$notify({
+            heading: 'HTML String',
+            dangerouslyUseHTMLString: true,
+            message: '<strong>This is <i>HTML</i> string</strong>',
+          })
+        "
+  >
+    Use HTML string
+  </ea-button>
 </div>
 
 ::: code-group
 
 ```html
 <div class="demo" id="useHTMLSection">
-  <ea-button plain> Use HTML String </ea-button>
+  <ea-button
+    plain
+    onclick="
+          window.$notify({
+            heading: 'HTML String',
+            dangerouslyUseHTMLString: true,
+            message: '<strong>This is <i>HTML</i> string</strong>',
+          })
+        "
+  >
+    Use HTML string
+  </ea-button>
 </div>
 ```
 
 ```js
-const htmlExample = {
-  btn: document.querySelector("#useHTMLSection ea-button"),
-  init() {
-    this.btn.addEventListener("click", () => {
-      EaNotification({
-        title: "HTML String",
-        dangerouslyUseHTMLString: true,
-        message: "<strong>This is <i>HTML</i> string</strong>",
-      });
-    });
-  },
-};
-htmlExample.init();
+EaNotification({
+  heading: "HTML String",
+  dangerouslyUseHTMLString: true,
+  message: "<strong>This is <i>HTML</i> string</strong>",
+});
 ```
 
 :::
@@ -299,53 +349,62 @@ htmlExample.init();
 
 通过 `showClose` 控制是否显示右上角关闭按钮。
 
-<div class="demo" id="hideCloseSection">
-  <ea-button plain> Hide close button </ea-button>
+<div class="demo">
+  <ea-button
+    plain
+    onclick="
+          window.$notify({
+            heading: 'Info',
+            message: 'This is a message without close button',
+            showClose: false,
+          })
+        "
+  >
+    Hide close button
+  </ea-button>
 </div>
 
 ::: code-group
 
 ```html
-<div class="demo" id="hideCloseSection">
-  <ea-button plain> Hide close button </ea-button>
+<div class="demo">
+  <ea-button
+    plain
+    onclick="
+          window.$notify({
+            heading: 'Info',
+            message: 'This is a message without close button',
+            showClose: false,
+          })
+        "
+  >
+    Hide close button
+  </ea-button>
 </div>
-```
-
-```js
-const hideCloseExample = {
-  btn: document.querySelector("#hideCloseSection ea-button"),
-  init() {
-    this.btn.addEventListener("click", async () => {
-      EaNotification.success({
-        title: "Info",
-        message: "This is a message without close button",
-        showClose: false,
-      });
-    });
-  },
-};
-hideCloseExample.init();
 ```
 
 :::
 
-## Attributes
+## Notification API
 
-| 参数                     | 说明                                    | 类型        | 可选值                                                        | 默认值        |
-| ------------------------ | --------------------------------------- | ----------- | ------------------------------------------------------------- | ------------- |
-| title                    | 标题                                    | string      | —                                                             | ''            |
-| message                  | 正文内容                                | string      | —                                                             | ''            |
-| type                     | 通知类型                                | enum        | `'success' \| 'warning' \| 'info' \| 'error' \| 'primary'`    | 'info'        |
-| icon                     | 自定义图标 class                        | string      | —                                                             | ''            |
-| duration                 | 显示时间（毫秒）。设为 0 则不会自动关闭 | number      | —                                                             | 3000          |
-| placement                | 出现位置                                | enum        | `'top-right' \| 'top-left' \| 'bottom-right' \| 'bottom-left' | 'top-right'`  |
-| showClose                | 是否显示关闭按钮                        | boolean     | —                                                             | true          |
-| closeIcon                | 关闭按钮图标 class                      | string      | —                                                             | 'icon-cancel' |
-| zIndex                   | z-index 值                              | number      | —                                                             | 0             |
-| dangerouslyUseHTMLString | 是否把 message 当作 HTML 渲染           | boolean     | —                                                             | false         |
-| appendTo                 | 指定挂载容器，支持选择器或 HTMLElement  | CSSSelector | —                                                             | 'body'        |
+### Notification Attributes
 
-## CSS Part
+| 参数                     | 说明                                    | 类型        | 可选值                                                         | 默认值      |
+| ------------------------ | --------------------------------------- | ----------- | -------------------------------------------------------------- | ----------- |
+| heading                  | 标题                                    | string      | —                                                              | ''          |
+| message                  | 正文内容                                | string      | —                                                              | ''          |
+| type                     | 通知类型                                | enum        | `'success' \| 'warning' \| 'info' \| 'error' \| 'primary'`     | 'info'      |
+| icon                     | 自定义图标                              | string      | —                                                              | ''          |
+| duration                 | 显示时间（毫秒）。设为 0 则不会自动关闭 | number      | —                                                              | 3000        |
+| placement                | 出现位置                                | enum        | `'top-right' \| 'top-left' \| 'bottom-right' \| 'bottom-left'` | 'top-right' |
+| show-close               | 是否显示关闭按钮                        | boolean     | —                                                              | false       |
+| close-icon               | 关闭按钮图标                            | string      | —                                                              | 'xmark'     |
+| z-index                  | z-index 值                              | number      | —                                                              | 0           |
+| dangerouslyUseHTMLString | 是否把 message 当作 HTML 渲染           | boolean     | —                                                              | false       |
+| append-to                | 指定挂载容器，支持选择器或 HTMLElement  | CSSSelector | —                                                              | 'body'      |
+| onClose                  | 关闭回调函数                            | Function    | —                                                              | —           |
+
+### Notification CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -358,17 +417,17 @@ hideCloseExample.init();
 | close-icon | 关闭按钮       |
 | main       | 正文内容区域   |
 
-## Events
+### Notification Events
 
-| 事件名称 | 说明                                   |
-| -------- | -------------------------------------- |
-| show     | 显示时触发                             |
-| shown    | 显示完毕时触发                         |
-| hide     | 隐藏时触发                             |
-| hidden   | 隐藏完毕时触发                         |
-| close    | 关闭时触发（可以手动调用实例的 close） |
+| 事件名 | 说明           | 回调参数(event.detail) |
+| ------ | -------------- | ---------------------- |
+| show   | 显示时触发     | —                      |
+| shown  | 显示完毕时触发 | —                      |
+| hide   | 隐藏时触发     | —                      |
+| hidden | 隐藏完毕时触发 | —                      |
+| close  | 关闭时触发     | —                      |
 
-## Methods
+### Notification Methods
 
 | 名称  | 描述                         | 类型                   |
 | ----- | ---------------------------- | ---------------------- |

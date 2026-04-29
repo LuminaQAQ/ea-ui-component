@@ -14,29 +14,21 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+
     <script type="module">
-      import { EaNotification } from "../src/components/ea-notification/index.js";
+      import { EaNotification } from "../src/components/ea-notification/index.ts";
 
       // ------- 基础用法 -------
       // #region
       const basicExample = {
-        btn1: document.querySelector("#basicSection #basic1"),
-        btn2: document.querySelector("#basicSection #basic2"),
+        moduleInstanceBtn: document.getElementById("moduleInstanceBtn"),
 
         init() {
-          this.btn1.addEventListener("click", () => {
+          this.moduleInstanceBtn.addEventListener("click", () => {
             EaNotification({
-              title: "Title",
+              heading: "Title",
               message: "This is a message that automatically close",
-            });
-          });
-
-          this.btn2.addEventListener("click", () => {
-            EaNotification({
-              title: "Prompt",
-              message: "This is a message that does not automatically close",
-              duration: 0,
             });
           });
         },
@@ -45,36 +37,16 @@
       // #endregion
       // ------- end -------
 
-      // ------- 不同类型的通知 -------
-      // #region
-      const typeExample = {
-        btns: document.querySelectorAll("#typeSection ea-button"),
-
-        init() {
-          this.btns.forEach(btn => {
-            btn.addEventListener("click", () => {
-              EaNotification({
-                type: btn.textContent.toLowerCase(),
-                title: btn.textContent,
-                message: "This is a message",
-              });
-            });
-          });
-        },
-      };
-      typeExample.init();
-      // #endregion
-      // ------- end -------
-
-      // ------- 自定义消息弹出的位置 -------
+      // ------- 自定义位置 -------
       // #region
       const placementExample = {
         btns: document.querySelectorAll("#placementSection ea-button"),
+
         init() {
           this.btns.forEach(btn => {
             btn.addEventListener("click", () => {
               EaNotification({
-                title: "Custom Position",
+                heading: "Custom Position",
                 message: "This is a message",
                 placement: btn.textContent
                   .trim()
@@ -88,106 +60,159 @@
       placementExample.init();
       // #endregion
       // ------- end -------
-
-      // ------- 使用 HTML 片段作为正文内容 -------
-      // #region
-      const htmlExample = {
-        btn: document.querySelector("#useHTMLSection ea-button"),
-        init() {
-          this.btn.addEventListener("click", () => {
-            EaNotification({
-              title: "HTML String",
-              dangerouslyUseHTMLString: true,
-              message: "<strong>This is <i>HTML</i> string</strong>",
-            });
-          });
-        },
-      };
-      htmlExample.init();
-      // #endregion
-      // ------- end -------
-
-      // ------- 隐藏关闭按钮 -------
-      // #region
-      const hideCloseExample = {
-        btn: document.querySelector("#hideCloseSection ea-button"),
-        init() {
-          this.btn.addEventListener("click", async () => {
-            EaNotification.success({
-              title: "Info",
-              message: "This is a message without close button",
-              showClose: false,
-            });
-          });
-        },
-      };
-      hideCloseExample.init();
-      // #endregion
-      // ------- end -------
     </script>
 
     <!-- #region 基础用法 -->
     <h1>基础用法</h1>
 
-    <div id="basicSection" class="demo">
-      <ea-button id="basic1" plain> Closes automatically </ea-button>
-      <ea-button id="basic2" plain> Won't close automatically </ea-button>
+    <div class="demo">
+      <ea-button
+        plain
+        onclick="
+          window.$notify({
+            heading: 'Title',
+            message: 'This is a message that automatically close',
+          })
+        "
+      >
+        Closes automatically
+      </ea-button>
+      <ea-button
+        plain
+        onclick="
+          window.$notify({
+            heading: 'Prompt',
+            message: 'This is a message that does not automatically close',
+            duration: 0,
+          })
+        "
+      >
+        Won't close automatically
+      </ea-button>
+      <ea-button id="moduleInstanceBtn" plain>
+        Module-Instance notify
+      </ea-button>
     </div>
 
     <hr />
     <!-- #endregion  -->
 
-    <!-- #region 不同类型的通知 -->
-    <h1>不同类型的通知</h1>
-
+    <!-- -------- 不同类型 --------  -->
+    <!-- #region  -->
+    <h2>不同类型</h2>
     <div id="typeSection" class="demo">
-      <ea-button plain>Info</ea-button>
-      <ea-button type="primary" plain>Primary</ea-button>
-      <ea-button type="success" plain>Success</ea-button>
-      <ea-button type="warning" plain>Warning</ea-button>
-      <ea-button type="danger" plain>Error</ea-button>
+      <ea-button
+        plain
+        onclick="
+          window.$notify.info({
+            heading: 'Info',
+            message: 'This is a info message.',
+          })
+        "
+        >Info</ea-button
+      >
+      <ea-button
+        variant="primary"
+        plain
+        onclick="
+          window.$notify.primary({
+            heading: 'Primary',
+            message: 'This is a primary message.',
+          })
+        "
+        >Primary</ea-button
+      >
+      <ea-button
+        variant="success"
+        plain
+        onclick="
+          window.$notify.success({
+            heading: 'Success',
+            message: 'Congrats, this is a success message.',
+          })
+        "
+        >Success</ea-button
+      >
+      <ea-button
+        variant="warning"
+        plain
+        onclick="
+          window.$notify.warning({
+            heading: 'Warning',
+            message: 'Warning, this is a warning message.',
+          })
+        "
+        >Warning</ea-button
+      >
+      <ea-button
+        variant="danger"
+        plain
+        onclick="
+          window.$notify.error({
+            heading: 'Error',
+            message: 'Oops, this is a error message.',
+          })
+        "
+        >Error</ea-button
+      >
     </div>
-
     <hr />
     <!-- #endregion  -->
+    <!-- -------------------  -->
 
-    <!-- 自定义消息弹出的位置 -->
-    <!-- #region -->
-    <h1>自定义消息弹出的位置</h1>
-
-    <div class="demo" id="placementSection">
+    <!-- -------- 自定义位置 --------  -->
+    <!-- #region  -->
+    <h2>自定义位置</h2>
+    <div id="placementSection" class="demo">
       <ea-button plain> Top Right </ea-button>
       <ea-button plain> Bottom Right </ea-button>
       <ea-button plain> Bottom Left </ea-button>
       <ea-button plain> Top Left </ea-button>
     </div>
-
     <hr />
     <!-- #endregion  -->
-    <!-- end -->
+    <!-- -------------------  -->
 
-    <!--  使用 HTML 片段作为正文内容 -->
-    <!-- #region -->
-    <h1>使用 HTML 片段作为正文内容</h1>
-
+    <!-- -------- 使用 HTML 片段作为正文内容 --------  -->
+    <!-- #region  -->
+    <h2>使用 HTML 片段作为正文内容</h2>
     <div class="demo" id="useHTMLSection">
-      <ea-button plain> Use HTML String </ea-button>
+      <ea-button
+        plain
+        onclick="
+          window.$notify({
+            heading: 'HTML String',
+            dangerouslyUseHTMLString: true,
+            message: '<strong>This is <i>HTML</i> string</strong>',
+          })
+        "
+      >
+        Use HTML string
+      </ea-button>
     </div>
-
     <hr />
     <!-- #endregion  -->
-    <!-- end  -->
+    <!-- -------------------  -->
 
-    <!--  隐藏关闭按钮 -->
-    <!-- #region -->
-    <h1>隐藏关闭按钮</h1>
-
-    <div class="demo" id="hideCloseSection">
-      <ea-button plain> Hide close button </ea-button>
+    <!-- -------- 隐藏关闭按钮 --------  -->
+    <!-- #region  -->
+    <h2>隐藏关闭按钮</h2>
+    <div class="demo">
+      <ea-button
+        plain
+        onclick="
+          window.$notify({
+            heading: 'Info',
+            message: 'This is a message without close button',
+            showClose: false,
+          })
+        "
+      >
+        Hide close button
+      </ea-button>
     </div>
-
     <hr />
     <!-- #endregion  -->
-    <!-- end  -->
+    <!-- -------------------  -->
   </body>
 </html>
