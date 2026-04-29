@@ -336,7 +336,7 @@ describe("EaButton Component", () => {
 
       await waitForRender(50);
 
-      const iconEl = button.shadowRoot.querySelector("ea-icon");
+      const iconEl = button.shadowRoot.querySelector(".ea-button__icon");
       expect(iconEl.getAttribute("name")).toBe("coffee");
     });
   });

@@ -43,7 +43,7 @@ onMounted(() => {
           {
             confirmButtonText: "OK",
             cancelButtonText: "Cancel",
-            type: "warning",
+            variant: "warning",
           }
         )
           .then((action) => {
@@ -80,8 +80,6 @@ onMounted(() => {
             $message.info('Input canceled');
           });
       });
-
-      // this.btn.click();
     },
   };
   promptExample.init();
@@ -95,7 +93,7 @@ onMounted(() => {
     init() {
       this.btn.addEventListener("click", () => {
         EaMessageBox({
-          title: 'Message',
+          heading: 'Message',
           message: "This is a message",
           showCancelButton: true,
           confirmButtonText: 'OK',
@@ -116,12 +114,12 @@ onMounted(() => {
           },
         }).then((action) => {
           EaMessage({
-            type: 'info',
+            variant: 'info',
             message: `action: ${action}`,
           })
         }).catch((action) => {
           EaMessage({
-            type: 'info',
+            variant: 'info',
             message: `action: ${action}`,
           })
         })
@@ -171,13 +169,13 @@ onMounted(() => {
         )
           .then(() => {
             EaMessage({
-              type: 'info',
+              variant: 'info',
               message: 'Changes saved. Proceeding to a new route.',
             })
           })
           .catch((action) => {
             EaMessage({
-              type: 'info',
+              variant: 'info',
               message:
                 action === 'cancel'
                   ? 'Changes discarded. Proceeding to a new route.'
@@ -191,7 +189,7 @@ onMounted(() => {
   // #endregion
   // ------- end -------
 
-  // ------- 区分取消操作与关闭操作 -------
+  // ------- 内容居中 -------
   // #region
   const centerExample = {
     btn: document.querySelector('#openCenterMessageBox'),
@@ -204,19 +202,19 @@ onMounted(() => {
           {
             confirmButtonText: 'OK',
             cancelButtonText: 'Cancel',
-            type: 'warning',
+            variant: 'warning',
             center: true,
           }
         )
           .then(() => {
             EaMessage({
-              type: 'success',
+              variant: 'success',
               message: 'Delete completed',
             })
           })
           .catch(() => {
             EaMessage({
-              type: 'info',
+              variant: 'info',
               message: 'Delete canceled',
             })
           })
@@ -240,19 +238,19 @@ onMounted(() => {
           {
             confirmButtonText: 'OK',
             cancelButtonText: 'Cancel',
-            type: 'warning',
-            draggable: true,
+            variant: 'warning',
+            movable: true,
           }
         )
           .then(() => {
             EaMessage({
-              type: 'success',
+              variant: 'success',
               message: 'Delete completed',
             })
           })
           .catch(() => {
             EaMessage({
-              type: 'info',
+              variant: 'info',
               message: 'Delete canceled',
             })
           })
@@ -356,7 +354,7 @@ const confirmExample = {
       $confirm("proxy will permanently delete the file. Continue?", "Warning", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
-        type: "warning",
+        variant: "warning",
       })
         .then(action => {
           $message.info(`action: ${action}`);
@@ -411,8 +409,6 @@ const promptExample = {
           $message.info("Input canceled");
         });
     });
-
-    // this.btn.click();
   },
 };
 promptExample.init();
@@ -444,7 +440,7 @@ const personalizedExample = {
   init() {
     this.btn.addEventListener("click", () => {
       EaMessageBox({
-        title: "Message",
+        heading: "Message",
         message: "This is a message",
         showCancelButton: true,
         confirmButtonText: "OK",
@@ -466,13 +462,13 @@ const personalizedExample = {
       })
         .then(action => {
           EaMessage({
-            type: "info",
+            variant: "info",
             message: `action: ${action}`,
           });
         })
         .catch(action => {
           EaMessage({
-            type: "info",
+            variant: "info",
             message: `action: ${action}`,
           });
         });
@@ -568,13 +564,13 @@ const openDistinguishCancelAndCloseExample = {
       )
         .then(() => {
           EaMessage({
-            type: "info",
+            variant: "info",
             message: "Changes saved. Proceeding to a new route.",
           });
         })
         .catch(action => {
           EaMessage({
-            type: "info",
+            variant: "info",
             message:
               action === "cancel"
                 ? "Changes discarded. Proceeding to a new route."
@@ -619,19 +615,19 @@ const centerExample = {
         {
           confirmButtonText: "OK",
           cancelButtonText: "Cancel",
-          type: "warning",
+          variant: "warning",
           center: true,
         }
       )
         .then(() => {
           EaMessage({
-            type: "success",
+            variant: "success",
             message: "Delete completed",
           });
         })
         .catch(() => {
           EaMessage({
-            type: "info",
+            variant: "info",
             message: "Delete canceled",
           });
         });
@@ -673,19 +669,19 @@ const draggableExample = {
         {
           confirmButtonText: "OK",
           cancelButtonText: "Cancel",
-          type: "warning",
-          draggable: true,
+          variant: "warning",
+          movable: true,
         }
       )
         .then(() => {
           EaMessage({
-            type: "success",
+            variant: "success",
             message: "Delete completed",
           });
         })
         .catch(() => {
           EaMessage({
-            type: "info",
+            variant: "info",
             message: "Delete canceled",
           });
         });
@@ -701,60 +697,38 @@ draggableExample.init();
 
 | 参数                      | 说明                                                  | 类型                                                                          | 默认值        |
 | ------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------- | ------------- |
-| title                     | MessageBox 的标题                                     | String                                                                        | -             |
+| heading                   | MessageBox 的标题                                     | String                                                                        | -             |
 | message                   | MessageBox 的正文内容                                 | String                                                                        | -             |
 | dangerouslyUseHTMLString  | 是否将 message 作为 HTML 渲染                         | Boolean                                                                       | false         |
-| type                      | MessageBox 的类型                                     | String: `'primary' \| 'success' \| 'info' \| 'warning' \| 'error'`            | ''            |
-| icon                      | 自定义关闭图标组件                                    | String                                                                        | -             |
-| closeIcon                 | MessageBox 的图标                                     | String                                                                        | -             |
+| variant                   | MessageBox 的类型                                     | String: `'primary' \| 'success' \| 'info' \| 'warning' \| 'error'`            | ''            |
+| icon                      | 自定义图标组件                                        | String                                                                        | -             |
+| closeIcon                 | MessageBox 的关闭图标                                 | String                                                                        | xmark         |
 | callback                  | MessageBox 关闭的回调                                 | Function: `(action: Action) => void`                                          | -             |
 | beforeClose               | messageBox 关闭前的回调，会暂停消息弹出框的关闭过程。 | Function: `(action: Action, instance: HTMLElement, done: () => void) => void` | -             |
 | showClose                 | 是否显示关闭按钮                                      | Boolean                                                                       | true          |
 | distinguishCancelAndClose | 区分用户点击取消和关闭（X）                           | Boolean                                                                       | false         |
 | showCancelButton          | 是否显示取消按钮                                      | Boolean                                                                       | false         |
 | showConfirmButton         | 是否显示确认按钮                                      | Boolean                                                                       | true          |
-| confirmButtonText         | 确认按钮文本                                          | String                                                                        | 确认          |
-| cancelButtonText          | 取消按钮文本                                          | String                                                                        | 取消          |
+| confirmButtonText         | 确认按钮文本                                          | String                                                                        | OK            |
+| cancelButtonText          | 取消按钮文本                                          | String                                                                        | Cancel        |
 | closeOnClickModal         | 点击遮罩是否关闭                                      | Boolean                                                                       | true          |
-| closeOnPressEscape        | 是否可通过按下 ESC 键关闭 MessageBox                  | Boolean                                                                       | true          |
+| closeOnPressEscape        | 是否可通过按下 ESC 键关闭 MessageBox                  | Boolean                                                                       | false         |
 | showInput                 | 是否显示输入框                                        | Boolean                                                                       | false         |
 | inputPlaceholder          | 输入框的提示文字                                      | String                                                                        | -             |
 | inputType                 | 输入框的类型                                          | String                                                                        | text          |
 | inputValue                | 输入框的初始值                                        | String                                                                        | -             |
-| inputPattern              | 输入框的验证规则                                      | RegExp                                                                        | -             |
-| inputErrorMessage         | 输入框的校验错误提示                                  | String                                                                        | -             |
-| center                    | 是否将对话框内容垂直居中                              | Boolean                                                                       | false         |
-| draggable                 | 是否允许拖拽对话框                                    | Boolean                                                                       | false         |
-| roundButton               | 是否使用圆形按钮                                      | Boolean                                                                       | false         |
-| buttonSize                | 设置按钮尺寸                                          | String: `'small' \| 'default' \| 'large'`                                     | large         |
-| appendTo                  | 指定挂载根元素，默认为 document.body                  | CSSSelector                                                                   | document.body |
-
-## CSS Part
-
-> 用法可参考 MDN ::part() 伪类
-
-| 名称            | 说明                       |
-| --------------- | -------------------------- |
-| container       | 对话框根容器               |
-| header          | 对话框顶部容器             |
-| title-wrap      | 对话框标题容器             |
-| type-icon       | 对话框图标容器             |
-| title           | 对话框标题                 |
-| close-icon      | 对话框关闭图标             |
-| content         | 对话框内容容器             |
-| description     | 对话框描述容器             |
-| input           | 对话框的输入框             |
-| invalid-message | 对话框的输入框校验错误信息 |
-| footer          | 对话框底部容器             |
-| cancel-button   | 对话框取消按钮             |
-| confirm-button  | 对话框确认按钮             |
+| inputPattern              | 输入框的校验表达式                                    | RegExp                                                                        | -             |
+| inputErrorMessage         | 输入框校验未通过时的错误文本                          | String                                                                        | -             |
+| center                    | 是否居中内容                                          | Boolean                                                                       | false         |
+| movable                   | 是否可拖拽                                            | Boolean                                                                       | false         |
+| roundButton               | 是否使用圆角按钮                                      | Boolean                                                                       | false         |
+| buttonSize                | 按钮尺寸                                              | String: `'small' \| 'medium' \| 'large'`                                      | medium        |
+| boxType                   | 消息框类型                                            | String: `'alert' \| 'confirm' \| 'prompt' \| 'personalized'`                  | personalized  |
 
 ## Events
 
-> MessageBox 是基于 Overlay 组件实现的，具体事件可参考 [Overlay](./ea-overlay.md#events) 组件
-
-| 事件名称      | 说明                                                      |
-| ------------- | --------------------------------------------------------- |
-| confirm       | 用户点击确认按钮                                          |
-| cancel        | 用户点击取消按钮                                          |
+| 事件名        | 说明                                                   |
+| ------------- | ------------------------------------------------------ |
+| confirm       | 点击确认按钮时触发                                     |
+| cancel        | 点击取消按钮时触发                                     |
 | message-close | 当 distinguishCancelAndClose 为 true 时，用户点击关闭按钮 |

@@ -20,6 +20,9 @@ export class EaButton extends EaBase {
   @query(bem.ce("icon"))
   private _icon!: HTMLElement;
 
+  @query(bem.ce("loading-icon"))
+  private _loadingIcon!: HTMLElement;
+
   // ==================== 属性定义 ====================
 
   @attribute({
@@ -102,6 +105,9 @@ export class EaButton extends EaBase {
     type: ["small", "medium", "large"] as const,
     default: "medium",
     observer(this: EaButton) {
+      if (this._loadingIcon) {
+        this._loadingIcon.setAttribute("size", this.size);
+      }
       this.updateContainerClasslist();
     },
   })
@@ -111,23 +117,10 @@ export class EaButton extends EaBase {
     type: Boolean,
     default: false,
     observer(this: EaButton, newVal: boolean) {
-      const isLoading = newVal === true;
-      this.toggleAttribute("disabled", isLoading);
+      this.toggleAttribute("disabled", newVal === true);
 
-      if (isLoading && this._container) {
-        const i = document.createElement("ea-icon");
-        i.id = "ea-loading-icon";
-        i.setAttribute("name", "spinner");
-        i.toggleAttribute("spin", true);
-        i.setAttribute("size", this.size);
-        i.setAttribute("part", "loading-icon");
-        this._container.insertBefore(i, this._container.firstChild);
-      } else if (this._container) {
-        const loadingIcon =
-          this._container?.querySelectorAll("#ea-loading-icon");
-        if (loadingIcon?.length > 0) {
-          loadingIcon.forEach(item => item.remove());
-        }
+      if (this._loadingIcon) {
+        this._loadingIcon.setAttribute("size", this.size);
       }
 
       this.updateContainerClasslist();
@@ -180,7 +173,7 @@ export class EaButton extends EaBase {
         circle: this.circle,
         [this.size]: true,
       },
-      { icon: hasIcon }
+      { icon: hasIcon, loading: this.loading }
     );
 
     if (this._container) {
@@ -212,6 +205,7 @@ export class EaButton extends EaBase {
 
     return `
       <${tag} class="${bem()}" part="container" tabindex="-1" ${hrefAttr} ${typeAttr}>
+        <ea-icon class="${bem.e("loading-icon")}" name="spinner" spin part="loading-icon"></ea-icon>
         <ea-icon class="${bem.e("icon")}" part="icon"></ea-icon>
         <slot></slot>
       </${tag}>

@@ -220,6 +220,8 @@ export class EaOverlay extends EaBase {
         doneCalled = true;
         this._closingByBeforeClose = true;
         this.visible = false;
+
+        this._handleCloseTransition();
       });
 
       if (!doneCalled) {

@@ -28,7 +28,7 @@ $types: (
   --ea-message-invalid-message-color: var(--red-500);
 }
 
-:host([draggable]) {
+:host([movable]) {
   -webkit-user-drag: none;
 }
 
@@ -38,6 +38,7 @@ $types: (
   box-shadow: var(--ea-message-box-shadow);
 
   @include modifier(center) {
+
     .ea-message-box-main__header,
     .ea-message-box-main,
     .ea-message-box-main__footer {
@@ -58,6 +59,24 @@ $types: (
   @include modifier(draggable) {
     .ea-message-box-main__header {
       cursor: move;
+    }
+  }
+
+  @include state(close-hidden) {
+    .ea-message-box-main__icon-close {
+      display: none;
+    }
+  }
+
+  @include state(cancel-hidden) {
+    .ea-message-box-main__icon-close {
+      display: none;
+    }
+  }
+
+  @include state(confirm-hidden) {
+    .ea-message-box-main__confirm-button {
+      display: none;
     }
   }
 
@@ -105,6 +124,7 @@ $types: (
 
   @include element(input) {
     padding-top: var(--ea-message-padding-primary);
+    display: none;
   }
 
   @include element(footer) {
@@ -132,6 +152,12 @@ $types: (
 }
 
 @include block(ea-overlay) {
+  @include state(input-visible) {
+    .ea-message-box-main__input {
+      display: block;
+    }
+  }
+
   @include element(mask) {
     box-sizing: border-box;
     padding: var(--ea-message-padding);
