@@ -67,13 +67,13 @@ export class EaPopper extends EaBase {
   // ==================== DOM 元素引用 ====================
 
   @query(".ea-popper")
-  private _container!: HTMLElement;
+  protected _container!: HTMLElement;
 
   @query(".ea-popper__original")
-  private _originalPopper!: HTMLElement;
+  protected _originalPopper!: HTMLElement;
 
   @query(".ea-popper__reference")
-  private _referenceElement!: HTMLElement;
+  protected _referenceElement!: HTMLElement;
 
   private _statusAbortController?: AbortController;
   private _originPlacement!: string;

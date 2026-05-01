@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-popconfirm 组件
-import "../components/ea-popconfirm/index.js";
+import "../components/ea-popconfirm/index";
 
 describe("EaPopconfirm Component", () => {
   let container;
@@ -15,16 +15,13 @@ describe("EaPopconfirm Component", () => {
     container.remove();
   });
 
-  /**
-   * 基础功能测试
-   */
   describe("Basic Functionality", () => {
     it("应该正确渲染组件", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(popconfirm.shadowRoot).toBeTruthy();
       expect(popconfirm.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
@@ -35,7 +32,7 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         popconfirm.shadowRoot.querySelector('[part="container"]')
@@ -50,7 +47,7 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const referenceSlot = popconfirm.shadowRoot.querySelector(
         'slot[name="reference"]'
@@ -59,37 +56,31 @@ describe("EaPopconfirm Component", () => {
     });
   });
 
-  /**
-   * Title 属性测试
-   */
-  describe("Title Attribute", () => {
-    it("应该支持 title 属性", async () => {
+  describe("Heading Attribute", () => {
+    it("应该支持 heading 属性", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
-      popconfirm.setAttribute("title", "Are you sure?");
+      popconfirm.setAttribute("heading", "Are you sure?");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm.title).toBe("Are you sure?");
+      expect(popconfirm.heading).toBe("Are you sure?");
     });
 
-    it("title 应该渲染在 shadow DOM 中", async () => {
+    it("heading 应该渲染在 shadow DOM 中", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // 组件连接后再设置 title 以触发 observer
-      popconfirm.setAttribute("title", "Are you sure?");
+      popconfirm.setAttribute("heading", "Are you sure?");
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      // 检查属性值是否正确
-      expect(popconfirm.title).toBe("Are you sure?");
+      expect(popconfirm.heading).toBe("Are you sure?");
 
-      // 检查 shadow DOM 中的 title 元素（通过类名）
       const titleContainer = popconfirm.shadowRoot.querySelector(
         ".ea-popconfirm__title"
       );
@@ -97,16 +88,13 @@ describe("EaPopconfirm Component", () => {
     });
   });
 
-  /**
-   * Icon 属性测试
-   */
   describe("Icon Attribute", () => {
     it("默认 icon 应该是 circle-question", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(popconfirm.icon).toBe("circle-question");
     });
@@ -117,133 +105,116 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(popconfirm.icon).toBe("circle-info");
     });
   });
 
-  /**
-   * Icon-color 属性测试
-   */
-  describe("Icon-color Attribute", () => {
-    it("默认 icon-color 应该是 rgb(255, 153, 0)", async () => {
+  describe("IconColor Attribute", () => {
+    it("默认 iconColor 应该是 rgb(255, 153, 0)", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["icon-color"]).toBe("rgb(255, 153, 0)");
+      expect(popconfirm.iconColor).toBe("rgb(255, 153, 0)");
     });
 
-    it("应该支持自定义 icon-color", async () => {
+    it("应该支持自定义 iconColor", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.setAttribute("icon-color", "#626AEF");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["icon-color"]).toBe("#626AEF");
+      expect(popconfirm.iconColor).toBe("#626AEF");
     });
   });
 
-  /**
-   * Hide-icon 属性测试
-   */
-  describe("Hide-icon Attribute", () => {
-    it("默认 hide-icon 应该是 false", async () => {
+  describe("HideIcon Attribute", () => {
+    it("默认 hideIcon 应该是 false", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(
-        popconfirm["hide-icon"] === false || popconfirm["hide-icon"] === null
-      ).toBe(true);
+      expect(popconfirm.hideIcon).toBe(false);
     });
 
-    it("应该支持 hide-icon 属性", async () => {
+    it("应该支持 hideIcon 属性", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.setAttribute("hide-icon", "");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["hide-icon"]).toBe(true);
+      expect(popconfirm.hideIcon).toBe(true);
     });
   });
 
-  /**
-   * Confirm-button-text 属性测试
-   */
-  describe("Confirm-button-text Attribute", () => {
-    it("默认 confirm-button-text 应该是 '确定'", async () => {
+  describe("ConfirmButtonText Attribute", () => {
+    it("默认 confirmButtonText 应该是 '确定'", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["confirm-button-text"]).toBe("确定");
+      expect(popconfirm.confirmButtonText).toBe("确定");
     });
 
-    it("应该支持自定义 confirm-button-text", async () => {
+    it("应该支持自定义 confirmButtonText", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.setAttribute("confirm-button-text", "Yes");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["confirm-button-text"]).toBe("Yes");
+      expect(popconfirm.confirmButtonText).toBe("Yes");
     });
   });
 
-  /**
-   * Cancel-button-text 属性测试
-   */
-  describe("Cancel-button-text Attribute", () => {
-    it("默认 cancel-button-text 应该是 '取消'", async () => {
+  describe("CancelButtonText Attribute", () => {
+    it("默认 cancelButtonText 应该是 '取消'", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["cancel-button-text"]).toBe("取消");
+      expect(popconfirm.cancelButtonText).toBe("取消");
     });
 
-    it("应该支持自定义 cancel-button-text", async () => {
+    it("应该支持自定义 cancelButtonText", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.setAttribute("cancel-button-text", "No");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["cancel-button-text"]).toBe("No");
+      expect(popconfirm.cancelButtonText).toBe("No");
     });
   });
 
-  /**
-   * Confirm-button-type 属性测试
-   */
-  describe("Confirm-button-type Attribute", () => {
-    it("默认 confirm-button-type 应该是 primary", async () => {
+  describe("ConfirmButtonType Attribute", () => {
+    it("默认 confirmButtonType 应该是 primary", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["confirm-button-type"]).toBe("primary");
+      expect(popconfirm.confirmButtonType).toBe("primary");
     });
 
-    it("应该支持不同的 confirm-button-type", async () => {
+    it("应该支持不同的 confirmButtonType", async () => {
       const types = ["normal", "primary", "success", "warning", "danger"];
 
       for (const type of types) {
@@ -252,29 +223,26 @@ describe("EaPopconfirm Component", () => {
         popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
         container.appendChild(popconfirm);
 
-        await new Promise(resolve => setTimeout(resolve, 30));
+        await waitForRender();
 
-        expect(popconfirm["confirm-button-type"]).toBe(type);
+        expect(popconfirm.confirmButtonType).toBe(type);
         container.removeChild(popconfirm);
       }
     });
   });
 
-  /**
-   * Cancel-button-type 属性测试
-   */
-  describe("Cancel-button-type Attribute", () => {
-    it("默认 cancel-button-type 应该是 normal", async () => {
+  describe("CancelButtonType Attribute", () => {
+    it("默认 cancelButtonType 应该是 normal", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm["cancel-button-type"]).toBe("normal");
+      expect(popconfirm.cancelButtonType).toBe("normal");
     });
 
-    it("应该支持不同的 cancel-button-type", async () => {
+    it("应该支持不同的 cancelButtonType", async () => {
       const types = ["normal", "primary", "success", "warning", "danger"];
 
       for (const type of types) {
@@ -283,24 +251,21 @@ describe("EaPopconfirm Component", () => {
         popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
         container.appendChild(popconfirm);
 
-        await new Promise(resolve => setTimeout(resolve, 30));
+        await waitForRender();
 
-        expect(popconfirm["cancel-button-type"]).toBe(type);
+        expect(popconfirm.cancelButtonType).toBe(type);
         container.removeChild(popconfirm);
       }
     });
   });
 
-  /**
-   * Placement 属性测试
-   */
   describe("Placement Attribute", () => {
     it("默认 placement 应该是 top", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(popconfirm.placement).toBe("top");
     });
@@ -327,7 +292,7 @@ describe("EaPopconfirm Component", () => {
         popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
         container.appendChild(popconfirm);
 
-        await new Promise(resolve => setTimeout(resolve, 30));
+        await waitForRender();
 
         expect(popconfirm.placement).toBe(placement);
         container.removeChild(popconfirm);
@@ -335,16 +300,13 @@ describe("EaPopconfirm Component", () => {
     });
   });
 
-  /**
-   * Width 属性测试
-   */
   describe("Width Attribute", () => {
     it("默认 width 应该是 150", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(Number(popconfirm.width)).toBe(150);
     });
@@ -355,26 +317,21 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(Number(popconfirm.width)).toBe(220);
     });
   });
 
-  /**
-   * Visible 属性测试
-   */
   describe("Visible Attribute", () => {
     it("默认 visible 应该是 false", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm.visible === false || popconfirm.visible === null).toBe(
-        true
-      );
+      expect(popconfirm.visible).toBe(false);
     });
 
     it("应该支持 visible 属性设置为 true", async () => {
@@ -383,26 +340,21 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(popconfirm.visible).toBe(true);
     });
   });
 
-  /**
-   * 方法测试
-   */
   describe("Methods", () => {
     it("open() 方法应该显示 popconfirm", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm.status === false || popconfirm.status === null).toBe(
-        true
-      );
+      expect(popconfirm.status).toBe(false);
 
       popconfirm.open();
 
@@ -414,16 +366,14 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       popconfirm.open();
       expect(popconfirm.status).toBe(true);
 
       popconfirm.close();
 
-      expect(popconfirm.status === false || popconfirm.status === null).toBe(
-        true
-      );
+      expect(popconfirm.status).toBe(false);
     });
 
     it("show() 方法应该显示 popconfirm", async () => {
@@ -431,7 +381,7 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       popconfirm.show();
 
@@ -443,34 +393,28 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       popconfirm.open();
       expect(popconfirm.status).toBe(true);
 
       popconfirm.hide();
 
-      expect(popconfirm.status === false || popconfirm.status === null).toBe(
-        true
-      );
+      expect(popconfirm.status).toBe(false);
     });
   });
 
-  /**
-   * 事件测试
-   */
   describe("Events", () => {
     it("应该触发 confirm 事件", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const confirmHandler = vi.fn();
       popconfirm.addEventListener("confirm", confirmHandler);
 
-      // 触发 confirm 事件
       popconfirm.dispatchEvent(new CustomEvent("confirm"));
 
       expect(confirmHandler).toHaveBeenCalled();
@@ -481,40 +425,36 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const cancelHandler = vi.fn();
       popconfirm.addEventListener("cancel", cancelHandler);
 
-      // 触发 cancel 事件
       popconfirm.dispatchEvent(new CustomEvent("cancel"));
 
       expect(cancelHandler).toHaveBeenCalled();
     });
   });
 
-  /**
-   * 边界条件测试
-   */
   describe("Edge Cases", () => {
     it("应该处理没有 reference slot 的情况", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(popconfirm.shadowRoot).toBeTruthy();
     });
 
-    it("应该处理空 title", async () => {
+    it("应该处理空 heading", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
-      popconfirm.setAttribute("title", "");
+      popconfirm.setAttribute("heading", "");
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm.title).toBe("");
+      expect(popconfirm.heading).toBe("");
     });
 
     it("应该处理自定义 actions slot", async () => {
@@ -528,7 +468,7 @@ describe("EaPopconfirm Component", () => {
       `;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const actionsSlot = popconfirm.shadowRoot.querySelector(
         'slot[name="actions"]'
@@ -537,9 +477,6 @@ describe("EaPopconfirm Component", () => {
     });
   });
 
-  /**
-   * 生命周期测试
-   */
   describe("Lifecycle", () => {
     it("组件连接后应该正确初始化", async () => {
       const popconfirm = document.createElement("ea-popconfirm");
@@ -547,7 +484,7 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(popconfirm.shadowRoot).toBeTruthy();
       expect(popconfirm.placement).toBe("bottom");
@@ -558,7 +495,7 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       popconfirm.remove();
 
@@ -570,15 +507,15 @@ describe("EaPopconfirm Component", () => {
       popconfirm.innerHTML = `<button slot="reference">Delete</button>`;
       container.appendChild(popconfirm);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm.title).toBe("");
+      expect(popconfirm.heading).toBe("");
 
-      popconfirm.setAttribute("title", "New Title");
+      popconfirm.setAttribute("heading", "New Title");
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(popconfirm.title).toBe("New Title");
+      expect(popconfirm.heading).toBe("New Title");
     });
   });
 });

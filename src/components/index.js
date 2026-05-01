@@ -16,7 +16,7 @@ import './ea-message-box/index.js';
 import './ea-notification/index.js';
 import './ea-page-header/index.js';
 import './ea-pagination/index.js';
-import './ea-popconfirm/index.js';
+import './ea-popconfirm/index';
 import './ea-popover/index.js';
 import './ea-progress/index.js';
 import './ea-rate/index.js';

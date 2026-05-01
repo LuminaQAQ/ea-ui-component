@@ -1,41 +1,38 @@
+$name: ea-popconfirm;
+
 :host {
-  --ea-popconfirm-title-icon-color: rgb(255, 153, 0);
-  --ea-popconfirm-title-icon-display: inline-block;
+  --#{$name}-title-icon-color: rgb(255, 153, 0);
+  --#{$name}-title-color: var(--grey-900);
+  --#{$name}-title-font-size: var(--font-size-md);
 
-  --ea-popover-title-color: var(--grey-900);
-  --ea-popover-title-font-size: var(--font-size-md);
+  --#{$name}-box-shadow: var(--box-shadow-md);
+  --#{$name}-border-radius: var(--border-radius-sm);
 
-  --ea-popover-box-shadow: var(--box-shadow-md);
-  --ea-popover-border-radius: var(--border-radius-sm);
-
-  --ea-popover-z-index: 100;
+  --#{$name}-z-index: 100;
 }
 
 @include block(ea-popper) {
   @include element(original) {
-    box-shadow: var(--ea-popover-box-shadow);
-
-    border-radius: var(--ea-popover-border-radius);
-
-    z-index: var(--ea-popover-z-index);
+    box-shadow: var(--#{$name}-box-shadow);
+    border-radius: var(--#{$name}-border-radius);
+    z-index: var(--#{$name}-z-index);
   }
 }
 
-@include block(ea-popconfirm) {
+@include block($name) {
   @include element(title) {
     display: flex;
     align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
 
-    font-size: var(--ea-popover-title-font-size);
-    line-height: var(--ea-popover-title-font-size);
-    color: var(--ea-popover-title-color);
+    font-size: var(--#{$name}-title-font-size);
+    line-height: var(--#{$name}-title-font-size);
+    color: var(--#{$name}-title-color);
     margin-bottom: 12px;
 
     ea-icon {
-      display: var(--ea-popconfirm-title-icon-display);
-      color: var(--ea-popconfirm-title-icon-color);
+      color: var(--#{$name}-title-icon-color);
     }
   }
 
@@ -45,6 +42,12 @@
     ea-button:first-child {
       box-sizing: border-box;
       margin-right: 0.5rem;
+    }
+  }
+
+  @include state(icon-hidden) {
+    .#{$name}__title ea-icon {
+      display: none;
     }
   }
 }
