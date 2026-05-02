@@ -1,9 +1,13 @@
+$name: ea-dropdown;
+
 :host {
   --ea-popper-width: 100px;
 
-  --ea-drowdown-z-index: 2000;
+  --#{$name}-z-index: 2000;
 }
 
-.ea-popper__original {
-  z-index: var(--ea-drowdown-z-index);
+@include block(ea-popper) {
+  @include element(original) {
+    z-index: var(--#{$name}-z-index);
+  }
 }

@@ -1,0 +1,9 @@
+$name: ea-dropdown-menu;
+
+:host {
+  display: block;
+}
+
+@include block($name) {
+  display: block;
+}
