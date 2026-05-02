@@ -54,15 +54,6 @@ export class EaPopconfirm extends EaPopper {
   heading: string = "";
 
   @attribute({
-    type: Boolean,
-    default: false,
-    observer(this: EaPopconfirm, newVal: boolean) {
-      this.status = newVal;
-    },
-  })
-  visible: boolean = false;
-
-  @attribute({
     type: String,
     default: "circle-question",
     observer(this: EaPopconfirm, newVal: string) {

@@ -450,7 +450,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await waitForRender();
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
     });
 
     it("默认 offset 应该是 '0 0'", async () => {
@@ -502,12 +502,12 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await waitForRender();
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
 
       dropdown.show();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
     });
 
     it("调用 hide 方法应该设置 status 为 false", async () => {
@@ -521,7 +521,7 @@ describe("EaDropdown Component", () => {
       dropdown.hide();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
     });
 
     it("调用 toggle 方法应该切换 status", async () => {
@@ -529,17 +529,17 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await waitForRender();
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
 
       dropdown.toggle();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
 
       dropdown.toggle();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
     });
   });
 
@@ -670,7 +670,7 @@ describe("EaDropdown Component", () => {
 
       dropdown.show();
       await waitForRender(0);
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
 
       const item = dropdown.querySelector("ea-dropdown-item");
       const content = item.shadowRoot.querySelector(
@@ -679,7 +679,7 @@ describe("EaDropdown Component", () => {
       content.click();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
     });
 
     it("hideOnClick 为 false 时，点击菜单项不应该隐藏下拉菜单", async () => {
@@ -695,7 +695,7 @@ describe("EaDropdown Component", () => {
 
       dropdown.show();
       await waitForRender(0);
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
 
       const item = dropdown.querySelector("ea-dropdown-item");
       const content = item.shadowRoot.querySelector(
@@ -704,7 +704,7 @@ describe("EaDropdown Component", () => {
       content.click();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
     });
   });
 
@@ -716,12 +716,12 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await waitForRender();
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
 
       dropdown.dispatchEvent(new MouseEvent("mouseenter"));
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
     });
 
     it("hover 触发时，mouseleave 应该延迟隐藏下拉菜单", async () => {
@@ -731,15 +731,15 @@ describe("EaDropdown Component", () => {
 
       dropdown.dispatchEvent(new MouseEvent("mouseenter"));
       await waitForRender(0);
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
 
       dropdown.dispatchEvent(new MouseEvent("mouseleave"));
 
       await waitForRender(50);
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
 
       await waitForRender(200);
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
     });
 
     it("mouseleave 延迟期间重新 mouseenter 应该取消隐藏", async () => {
@@ -749,7 +749,7 @@ describe("EaDropdown Component", () => {
 
       dropdown.dispatchEvent(new MouseEvent("mouseenter"));
       await waitForRender(0);
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
 
       dropdown.dispatchEvent(new MouseEvent("mouseleave"));
       await waitForRender(80);
@@ -758,7 +758,7 @@ describe("EaDropdown Component", () => {
       await waitForRender(0);
 
       await waitForRender(200);
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
     });
   });
 
@@ -776,7 +776,7 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await waitForRender();
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
 
       const referenceSlot = dropdown.shadowRoot.querySelector(
         'slot[name="reference"]'
@@ -784,12 +784,12 @@ describe("EaDropdown Component", () => {
       referenceSlot.dispatchEvent(new Event("click", { bubbles: true }));
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
 
       referenceSlot.dispatchEvent(new Event("click", { bubbles: true }));
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
     });
   });
 
@@ -804,14 +804,14 @@ describe("EaDropdown Component", () => {
       container.appendChild(dropdown);
       await waitForRender();
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
 
       dropdown.dispatchEvent(
         new MouseEvent("contextmenu", { cancelable: true })
       );
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
     });
 
     it("contextmenu 触发时，右键事件应该被 preventDefault", async () => {
@@ -949,7 +949,7 @@ describe("EaDropdown Component", () => {
       dropdown.show();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(true);
+      expect(dropdown.visible).toBe(true);
     });
 
     it("连续调用 hide 不应该出错", async () => {
@@ -962,7 +962,7 @@ describe("EaDropdown Component", () => {
       dropdown.hide();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
     });
 
     it("未 show 时调用 hide 不应该出错", async () => {
@@ -973,7 +973,7 @@ describe("EaDropdown Component", () => {
       dropdown.hide();
       await waitForRender(0);
 
-      expect(dropdown.status).toBe(false);
+      expect(dropdown.visible).toBe(false);
     });
   });
 
@@ -1579,14 +1579,14 @@ describe("Integration Tests", () => {
 
     dropdown.show();
     await waitForRender(0);
-    expect(dropdown.status).toBe(true);
+    expect(dropdown.visible).toBe(true);
 
     const item = dropdown.querySelector("ea-dropdown-item");
     const content = item.shadowRoot.querySelector(".ea-dropdown-item__content");
     content.click();
     await waitForRender(0);
 
-    expect(dropdown.status).toBe(false);
+    expect(dropdown.visible).toBe(false);
   });
 
   it("多个 dropdown-item 应该各自独立触发 command 事件", async () => {
@@ -1666,7 +1666,7 @@ describe("Integration Tests", () => {
 
     dropdown.show();
     await waitForRender(0);
-    expect(dropdown.status).toBe(true);
+    expect(dropdown.visible).toBe(true);
 
     const items = dropdown.querySelectorAll("ea-dropdown-item");
     const content1 = items[0].shadowRoot.querySelector(
@@ -1675,7 +1675,7 @@ describe("Integration Tests", () => {
     content1.click();
     await waitForRender(0);
 
-    expect(dropdown.status).toBe(true);
+    expect(dropdown.visible).toBe(true);
 
     const content2 = items[1].shadowRoot.querySelector(
       ".ea-dropdown-item__content"
@@ -1683,6 +1683,6 @@ describe("Integration Tests", () => {
     content2.click();
     await waitForRender(0);
 
-    expect(dropdown.status).toBe(true);
+    expect(dropdown.visible).toBe(true);
   });
 });

@@ -17,13 +17,7 @@ export class EaTooltip extends EaPopper {
   #isMounted;
 
   static get observedAttributes() {
-    return [
-      ...super.observedAttributes,
-      "trigger",
-      "content",
-      "visible",
-      "effect",
-    ];
+    return [...super.observedAttributes, "trigger", "content", "effect"];
   }
 
   state = this.properties({
@@ -31,13 +25,6 @@ export class EaTooltip extends EaPopper {
       type: ["click", "focus", "hover", "contextmenu", "customized"],
       default: "hover",
       observer: newVal => {},
-    },
-    visible: {
-      type: Boolean,
-      default: false,
-      observer: newVal => {
-        this.status = newVal;
-      },
     },
     effect: {
       type: ["dark", "light", "customized"],

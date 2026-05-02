@@ -75,7 +75,7 @@ export class EaPopper extends EaBase {
   @query(".ea-popper__reference")
   protected _referenceElement!: HTMLElement;
 
-  private _statusAbortController?: AbortController;
+  private _visibleAbortController?: AbortController;
   private _originPlacement!: string;
 
   // ==================== 属性定义 ====================
@@ -115,8 +115,8 @@ export class EaPopper extends EaBase {
     type: Boolean,
     default: false,
     observer(this: EaPopper, newVal: boolean) {
-      this._statusAbortController?.abort();
-      this._statusAbortController = new AbortController();
+      this._visibleAbortController?.abort();
+      this._visibleAbortController = new AbortController();
 
       if (newVal) {
         this._handleShowTransition();
@@ -125,7 +125,7 @@ export class EaPopper extends EaBase {
       }
     },
   })
-  status: boolean = false;
+  visible: boolean = false;
 
   @attribute({
     type: String,
@@ -167,7 +167,7 @@ export class EaPopper extends EaBase {
         [this.placement]: true,
       },
       {
-        show: this.status,
+        show: this.visible,
         "show-arrow": this.showArrow,
       }
     );
@@ -210,7 +210,7 @@ export class EaPopper extends EaBase {
         this.emit("shown", { bubbles: true, composed: true });
         this.updateContainerClasslist();
       },
-      { once: true, signal: this._statusAbortController!.signal }
+      { once: true, signal: this._visibleAbortController!.signal }
     );
   }
 
@@ -224,7 +224,7 @@ export class EaPopper extends EaBase {
         this.updateContainerClasslist();
         this.emit("hidden", { bubbles: true, composed: true });
       },
-      { once: true, signal: this._statusAbortController!.signal }
+      { once: true, signal: this._visibleAbortController!.signal }
     );
   }
 
@@ -242,15 +242,15 @@ export class EaPopper extends EaBase {
   }
 
   show(): void {
-    this.status = true;
+    this.visible = true;
   }
 
   hide(): void {
-    this.status = false;
+    this.visible = false;
   }
 
   toggle(): void {
-    this.status = !this.status;
+    this.visible = !this.visible;
   }
 
   // ==================== 生命周期 ====================
@@ -261,6 +261,6 @@ export class EaPopper extends EaBase {
   }
 
   $beforeUnmount(): void {
-    this._statusAbortController?.abort();
+    this._visibleAbortController?.abort();
   }
 }

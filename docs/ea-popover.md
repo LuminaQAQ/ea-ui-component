@@ -4,7 +4,7 @@ import { onMounted } from 'vue'
 onMounted(async () => {
   await import("../dist/components/index.js")
   await import("../dist/assets/icon.css")
-  
+
         // ------- 基础用法 -------
         // #region
         const triggerExample = {
@@ -92,7 +92,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="center">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Top Left prompts info"
         placement="top-start"
       >
@@ -101,7 +101,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Top Center prompts info"
         placement="top"
       >
@@ -111,7 +111,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Top Right prompts info"
         placement="top-end"
       >
@@ -122,7 +122,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Left Top prompts info"
         placement="left-start"
       >
@@ -131,7 +131,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Right Top prompts info"
         placement="right-start"
       >
@@ -142,7 +142,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Left Center prompts info"
         placement="left"
       >
@@ -151,7 +151,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Right Center prompts info"
         placement="right"
       >
@@ -162,7 +162,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Left Bottom prompts info"
         placement="left-end"
       >
@@ -171,7 +171,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Right Bottom prompts info"
         placement="right-end"
       >
@@ -182,7 +182,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="center">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Bottom Left prompts info"
         placement="bottom-start"
       >
@@ -191,7 +191,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Bottom Center prompts info"
         placement="bottom"
       >
@@ -200,7 +200,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Bottom Right prompts info"
         placement="bottom-end"
       >
@@ -217,7 +217,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="center">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Top Left prompts info"
         placement="top-start"
       >
@@ -226,7 +226,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Top Center prompts info"
         placement="top"
       >
@@ -236,7 +236,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Top Right prompts info"
         placement="top-end"
       >
@@ -248,7 +248,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Left Top prompts info"
         placement="left-start"
       >
@@ -257,7 +257,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Right Top prompts info"
         placement="right-start"
       >
@@ -269,7 +269,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Left Center prompts info"
         placement="left"
       >
@@ -278,7 +278,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Right Center prompts info"
         placement="right"
       >
@@ -290,7 +290,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="space-between">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Left Bottom prompts info"
         placement="left-end"
       >
@@ -299,7 +299,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Right Bottom prompts info"
         placement="right-end"
       >
@@ -311,7 +311,7 @@ Popover 弹出框提供 9 种展示位置。
   <ea-row justify="center">
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Bottom Left prompts info"
         placement="bottom-start"
       >
@@ -320,7 +320,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Bottom Center prompts info"
         placement="bottom"
       >
@@ -329,7 +329,7 @@ Popover 弹出框提供 9 种展示位置。
     </ea-col>
     <ea-col span="6">
       <ea-popover
-        title="Title"
+        heading="Title"
         content="Bottom Right prompts info"
         placement="bottom-end"
       >
@@ -351,7 +351,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
 <div id="triggerSection" class="demo">
   <ea-popover
     placement="top-start"
-    title="Title"
+    heading="Title"
     content="this is content, this is content, this is content"
   >
     <ea-button type="primary" slot="reference">Hover to activate</ea-button>
@@ -359,7 +359,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   <ea-popover
     placement="top-start"
     trigger="click"
-    title="Title"
+    heading="Title"
     content="this is content, this is content, this is content"
   >
     <ea-button type="primary" slot="reference">Click to activate</ea-button>
@@ -367,7 +367,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   <ea-popover
     placement="top-start"
     trigger="focus"
-    title="Title"
+    heading="Title"
     content="this is content, this is content, this is content"
   >
     <ea-button type="primary" slot="reference">Focus to activate</ea-button>
@@ -375,7 +375,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   <ea-popover
     placement="top-start"
     trigger="contextmenu"
-    title="Title"
+    heading="Title"
     content="this is content, this is content, this is content"
   >
     <ea-button type="primary" slot="reference"
@@ -386,7 +386,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
     id="customedTrigger"
     placement="top-start"
     trigger="customized"
-    title="Title"
+    heading="Title"
     width="200"
     content="this is content, this is content, this is content"
   >
@@ -402,7 +402,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
 <div id="triggerSection" class="demo">
   <ea-popover
     placement="top-start"
-    title="Title"
+    heading="Title"
     content="this is content, this is content, this is content"
   >
     <ea-button type="primary" slot="reference">Hover to activate</ea-button>
@@ -410,7 +410,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   <ea-popover
     placement="top-start"
     trigger="click"
-    title="Title"
+    heading="Title"
     content="this is content, this is content, this is content"
   >
     <ea-button type="primary" slot="reference">Click to activate</ea-button>
@@ -418,7 +418,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   <ea-popover
     placement="top-start"
     trigger="focus"
-    title="Title"
+    heading="Title"
     content="this is content, this is content, this is content"
   >
     <ea-button type="primary" slot="reference">Focus to activate</ea-button>
@@ -426,7 +426,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   <ea-popover
     placement="top-start"
     trigger="contextmenu"
-    title="Title"
+    heading="Title"
     content="this is content, this is content, this is content"
   >
     <ea-button type="primary" slot="reference"
@@ -436,7 +436,7 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopover</ea-link> 基
   <ea-popover
     placement="top-start"
     trigger="customized"
-    title="Title"
+    heading="Title"
     width="200"
     content="this is content, this is content, this is content"
   >
@@ -547,11 +547,11 @@ scalableExample.init();
 | 参数       | 说明                                             | 类型    | 可选值                                                                                                                                                               | 默认值                                          |
 | ---------- | ------------------------------------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | trigger    | 触发方式。                                       | string  | `'click' \| 'focus' \| 'hover' \| 'contextmenu' \| 'customized'`                                                                                                     | hover                                           |
-| title      | 标题                                             | string  | —                                                                                                                                                                    | —                                               |
+| heading    | 标题                                             | string  | —                                                                                                                                                                    | —                                               |
 | content    | 显示的内容，也可以通过写入默认 slot 修改显示内容 | string  | —                                                                                                                                                                    | —                                               |
 | width      | 宽度，单位 px。                                  | number  | —                                                                                                                                                                    | 150                                             |
 | placement  | 气泡的出现位置。                                 | string  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | top                                             |
-| show-arrow | 是否显示箭头                                     | boolean |                                                                                                                                                                      | false                                           |
+| show-arrow | 是否显示箭头                                     | boolean |                                                                                                                                                                      | true                                            |
 | visible    | 控制 Popover 显隐的属性                          | boolean |                                                                                                                                                                      | false                                           |
 | offset     | 气泡出现的位置偏移量。                           | string  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
 | flip       | 是否在超过原 placement 视口时，进行翻转。        | boolean | —                                                                                                                                                                    | true                                            |

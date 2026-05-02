@@ -364,29 +364,29 @@ describe("EaPopper Component", () => {
     });
   });
 
-  describe("Status Attribute", () => {
-    it("默认 status 应该是 false", async () => {
+  describe("Visible Attribute", () => {
+    it("默认 visible 应该是 false", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
       await waitForRender();
 
-      expect(popper.status).toBe(false);
+      expect(popper.visible).toBe(false);
     });
 
-    it("应该支持通过 HTML 属性设置 status 为 true", async () => {
+    it("应该支持通过 HTML 属性设置 visible 为 true", async () => {
       const popper = document.createElement("ea-popper");
-      popper.setAttribute("status", "");
+      popper.setAttribute("visible", "");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
       await waitForRender();
 
-      expect(popper.status).toBe(true);
+      expect(popper.visible).toBe(true);
     });
 
-    it("status 为 true 时应该添加 is-show 类", async () => {
+    it("visible 为 true 时应该添加 is-show 类", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
@@ -400,7 +400,7 @@ describe("EaPopper Component", () => {
       expect(containerEl.classList.contains("is-show")).toBe(true);
     });
 
-    it("status 为 false 时不应有 is-show 类", async () => {
+    it("visible 为 false 时不应有 is-show 类", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
@@ -428,7 +428,7 @@ describe("EaPopper Component", () => {
       expect(containerEl.classList.contains("is-before-hide")).toBe(true);
     });
 
-    it("status 变化时应该创建新的 AbortController", async () => {
+    it("visible 变化时应该创建新的 AbortController", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
@@ -444,7 +444,7 @@ describe("EaPopper Component", () => {
       popper.show();
       await waitForRender();
 
-      expect(popper.status).toBe(true);
+      expect(popper.visible).toBe(true);
     });
   });
 
@@ -601,21 +601,21 @@ describe("EaPopper Component", () => {
   });
 
   describe("Methods", () => {
-    it("show() 方法应该设置 status 为 true", async () => {
+    it("show() 方法应该设置 visible 为 true", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
       await waitForRender();
 
-      expect(popper.status).toBe(false);
+      expect(popper.visible).toBe(false);
 
       popper.show();
 
-      expect(popper.status).toBe(true);
+      expect(popper.visible).toBe(true);
     });
 
-    it("hide() 方法应该设置 status 为 false", async () => {
+    it("hide() 方法应该设置 visible 为 false", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
@@ -623,27 +623,27 @@ describe("EaPopper Component", () => {
       await waitForRender();
 
       popper.show();
-      expect(popper.status).toBe(true);
+      expect(popper.visible).toBe(true);
 
       popper.hide();
 
-      expect(popper.status).toBe(false);
+      expect(popper.visible).toBe(false);
     });
 
-    it("toggle() 方法应该切换 status", async () => {
+    it("toggle() 方法应该切换 visible", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
 
       await waitForRender();
 
-      expect(popper.status).toBe(false);
+      expect(popper.visible).toBe(false);
 
       popper.toggle();
-      expect(popper.status).toBe(true);
+      expect(popper.visible).toBe(true);
 
       popper.toggle();
-      expect(popper.status).toBe(false);
+      expect(popper.visible).toBe(false);
     });
 
     it("连续调用 show() 不应该导致错误", async () => {
@@ -656,7 +656,7 @@ describe("EaPopper Component", () => {
       popper.show();
       popper.show();
 
-      expect(popper.status).toBe(true);
+      expect(popper.visible).toBe(true);
     });
 
     it("连续调用 hide() 不应该导致错误", async () => {
@@ -669,7 +669,7 @@ describe("EaPopper Component", () => {
       popper.hide();
       popper.hide();
 
-      expect(popper.status).toBe(false);
+      expect(popper.visible).toBe(false);
     });
   });
 
@@ -704,7 +704,7 @@ describe("EaPopper Component", () => {
       expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
     });
 
-    it("status 为 true 时 className 应包含 is-show 状态", async () => {
+    it("visible 为 true 时 className 应包含 is-show 状态", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
@@ -718,7 +718,7 @@ describe("EaPopper Component", () => {
       expect(className).toContain("is-show");
     });
 
-    it("status 为 false 时 className 不应包含 is-show 状态", async () => {
+    it("visible 为 false 时 className 不应包含 is-show 状态", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
@@ -972,7 +972,7 @@ describe("EaPopper Component", () => {
       expect(containerEl.classList.contains("is-before-hide")).toBe(true);
     });
 
-    it("快速切换 status 不应该导致错误", async () => {
+    it("快速切换 visible 不应该导致错误", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
@@ -986,7 +986,7 @@ describe("EaPopper Component", () => {
 
       await waitForRender();
 
-      expect(popper.status).toBe(false);
+      expect(popper.visible).toBe(false);
     });
 
     it("快速 show/hide 后再 show 应该正常工作", async () => {
@@ -1002,7 +1002,7 @@ describe("EaPopper Component", () => {
 
       await waitForRender();
 
-      expect(popper.status).toBe(true);
+      expect(popper.visible).toBe(true);
 
       const containerEl = popper.shadowRoot.querySelector(".ea-popper");
       expect(containerEl.classList.contains("is-show")).toBe(true);
@@ -1301,7 +1301,7 @@ describe("EaPopper Component", () => {
       expect(className).toBe("ea-popper ea-popper--bottom");
     });
 
-    it("placement=left-start, showArrow=true, status=true 应该包含所有状态", async () => {
+    it("placement=left-start, showArrow=true, visible=true 应该包含所有状态", async () => {
       const popper = document.createElement("ea-popper");
       popper.setAttribute("placement", "left-start");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;

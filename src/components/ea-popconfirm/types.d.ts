@@ -46,8 +46,6 @@ export interface EaPopconfirmElement extends HTMLElement {
     | "right-end";
   /** 是否显示箭头 */
   showArrow: boolean;
-  /** 控制 Popconfirm 显隐的属性 */
-  status: boolean;
   /** 偏移量 */
   offset: string;
   /** 是否翻转 */
@@ -97,7 +95,6 @@ export interface EaPopconfirmVueProps {
     | "right-start"
     | "right-end";
   showArrow?: boolean;
-  status?: boolean;
   offset?: string;
   flip?: boolean;
 }
@@ -185,7 +182,6 @@ export interface EaPopconfirmReactProps extends HTMLAttributes<HTMLElement> {
     | "right-start"
     | "right-end";
   showArrow?: boolean;
-  status?: boolean;
   offset?: string;
   flip?: boolean;
   /** 点击确认按钮时的回调 */

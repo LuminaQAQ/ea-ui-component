@@ -753,34 +753,34 @@ describe("EaPopconfirm Component", () => {
       expect(popconfirm.visible).toBe(true);
     });
 
-    it("visible 为 true 时应该同步设置 status 为 true", async () => {
+    it("visible 为 true 时应该同步设置 visible 为 true", async () => {
       const popconfirm = createPopconfirm({ visible: "" }, withReference());
       container.appendChild(popconfirm);
       await waitForRender();
 
-      expect(popconfirm.status).toBe(true);
+      expect(popconfirm.visible).toBe(true);
     });
 
-    it("visible 为 false 时 status 应该为 false", async () => {
+    it("visible 为 false 时 visible 应该为 false", async () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
       await waitForRender();
 
-      expect(popconfirm.status).toBe(false);
+      expect(popconfirm.visible).toBe(false);
     });
 
-    it("动态修改 visible 应该同步 status", async () => {
+    it("动态修改 visible 应该同步 visible", async () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
       await waitForRender();
 
       popconfirm.setAttribute("visible", "");
       await waitForRender();
-      expect(popconfirm.status).toBe(true);
+      expect(popconfirm.visible).toBe(true);
 
       popconfirm.removeAttribute("visible");
       await waitForRender();
-      expect(popconfirm.status).toBe(false);
+      expect(popconfirm.visible).toBe(false);
     });
   });
 
@@ -896,16 +896,16 @@ describe("EaPopconfirm Component", () => {
       });
     });
 
-    describe("Status", () => {
-      it("默认 status 应该是 false", async () => {
+    describe("Visible", () => {
+      it("默认 visible 应该是 false", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
 
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
       });
 
-      it("status 为 true 时应该添加 is-show 类", async () => {
+      it("visible 为 true 时应该添加 is-show 类", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
@@ -978,43 +978,43 @@ describe("EaPopconfirm Component", () => {
 
   describe("Methods", () => {
     describe("show()", () => {
-      it("show() 应该设置 status 为 true", async () => {
+      it("show() 应该设置 visible 为 true", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
 
         popconfirm.show();
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
       });
     });
 
     describe("hide()", () => {
-      it("hide() 应该设置 status 为 false", async () => {
+      it("hide() 应该设置 visible 为 false", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
 
         popconfirm.show();
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
 
         popconfirm.hide();
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
       });
     });
 
     describe("toggle()", () => {
-      it("toggle() 应该切换 status", async () => {
+      it("toggle() 应该切换 visible", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
 
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
 
         popconfirm.toggle();
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
 
         popconfirm.toggle();
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
       });
     });
 
@@ -1024,10 +1024,10 @@ describe("EaPopconfirm Component", () => {
         container.appendChild(popconfirm);
         await waitForRender();
 
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
 
         popconfirm.open();
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
       });
 
       it("open() 应该注册 window click 监听来关闭", async () => {
@@ -1036,12 +1036,12 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         popconfirm.open();
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
 
         document.body.click();
         await waitForRender();
 
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
       });
 
       it("点击 popconfirm 内部不应该关闭", async () => {
@@ -1050,7 +1050,7 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         popconfirm.open();
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
 
         const innerEl = popconfirm.shadowRoot.querySelector(
           ".ea-popper__original"
@@ -1058,7 +1058,7 @@ describe("EaPopconfirm Component", () => {
         innerEl.click();
         await waitForRender();
 
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
       });
 
       it("连续调用 open() 不应该出错", async () => {
@@ -1070,7 +1070,7 @@ describe("EaPopconfirm Component", () => {
         popconfirm.open();
         popconfirm.open();
 
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
       });
     });
 
@@ -1081,10 +1081,10 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         popconfirm.open();
-        expect(popconfirm.status).toBe(true);
+        expect(popconfirm.visible).toBe(true);
 
         popconfirm.close();
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
       });
 
       it("close() 应该清理 window click 监听", async () => {
@@ -1098,7 +1098,7 @@ describe("EaPopconfirm Component", () => {
         document.body.click();
         await waitForRender();
 
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
       });
 
       it("在未打开状态下调用 close() 不应该出错", async () => {
@@ -1145,7 +1145,7 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         expect(handler).toHaveBeenCalledTimes(1);
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
       });
     });
 
@@ -1180,7 +1180,7 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         expect(handler).toHaveBeenCalledTimes(1);
-        expect(popconfirm.status).toBe(false);
+        expect(popconfirm.visible).toBe(false);
       });
     });
 
@@ -1259,7 +1259,7 @@ describe("EaPopconfirm Component", () => {
       container.appendChild(popconfirm);
       await waitForRender();
 
-      expect(popconfirm.status).toBe(false);
+      expect(popconfirm.visible).toBe(false);
 
       const referenceSlot = popconfirm.shadowRoot.querySelector(
         'slot[name="reference"]'
@@ -1267,7 +1267,7 @@ describe("EaPopconfirm Component", () => {
       referenceSlot.click();
       await waitForRender();
 
-      expect(popconfirm.status).toBe(true);
+      expect(popconfirm.visible).toBe(true);
     });
 
     it("点击取消按钮应该触发 cancel 并关闭", async () => {
@@ -1288,7 +1288,7 @@ describe("EaPopconfirm Component", () => {
       await waitForRender();
 
       expect(cancelHandler).toHaveBeenCalledTimes(1);
-      expect(popconfirm.status).toBe(false);
+      expect(popconfirm.visible).toBe(false);
     });
 
     it("点击确认按钮应该触发 confirm 并关闭", async () => {
@@ -1309,7 +1309,7 @@ describe("EaPopconfirm Component", () => {
       await waitForRender();
 
       expect(confirmHandler).toHaveBeenCalledTimes(1);
-      expect(popconfirm.status).toBe(false);
+      expect(popconfirm.visible).toBe(false);
     });
   });
 
@@ -1344,7 +1344,7 @@ describe("EaPopconfirm Component", () => {
       await waitForRender();
 
       popconfirm.open();
-      expect(popconfirm.status).toBe(true);
+      expect(popconfirm.visible).toBe(true);
 
       popconfirm.remove();
 
@@ -1428,7 +1428,7 @@ describe("EaPopconfirm Component", () => {
         popconfirm.close();
       }
 
-      expect(popconfirm.status).toBe(false);
+      expect(popconfirm.visible).toBe(false);
     });
 
     it("width 设置为 0 应该正常工作", async () => {
@@ -1533,7 +1533,7 @@ describe("EaPopconfirm Component", () => {
       );
     });
 
-    it("status 变化时应该触发对应的过渡类名", async () => {
+    it("visible 变化时应该触发对应的过渡类名", async () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
       await waitForRender();
@@ -1555,13 +1555,13 @@ describe("EaPopconfirm Component", () => {
       await waitForRender();
 
       popconfirm.toggle();
-      expect(popconfirm.status).toBe(true);
+      expect(popconfirm.visible).toBe(true);
 
       popconfirm.toggle();
-      expect(popconfirm.status).toBe(false);
+      expect(popconfirm.visible).toBe(false);
 
       popconfirm.toggle();
-      expect(popconfirm.status).toBe(true);
+      expect(popconfirm.visible).toBe(true);
     });
   });
 });

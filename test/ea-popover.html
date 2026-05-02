@@ -1,211 +1,292 @@
-<!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../dist/assets/icon.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
 
-        .demo {
-            box-sizing: border-box;
-            padding: 3rem;
-        }
+      .demo {
+        box-sizing: border-box;
+        padding: 3rem;
+      }
 
-        ea-popover {
-            margin: 1rem;
-        }
+      ea-popover {
+        margin: 1rem;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
-    <script src="../src/components/ea-button/index.js" type='module'></script>
-    <script src="../src/components/ea-card/index.js" type='module'></script>
-    <script src="../src/components/ea-layout/index.js" type='module'></script>
-    <script src="../src/components/ea-popover/index.js" type='module'></script>
+  <body>
+    <script src="../src/components/ea-button/index.ts" type="module"></script>
+    <script src="../src/components/ea-card/index.ts" type="module"></script>
+    <script src="../src/components/ea-layout/index.ts" type="module"></script>
+    <script src="../src/components/ea-popover/index.ts" type="module"></script>
 
     <!-- #region 展示位置 -->
     <h1>展示位置</h1>
 
     <div id="referenceSection" class="demo">
-        <ea-row justify="center">
-            <ea-col span="6">
-                <ea-popover title="Title" content="Top Left prompts info" placement="top-start">
-                    <ea-button type="primary" slot="reference">top-start</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover title="Title" content="Top Center prompts info" placement="top">
-                    top
-                    <ea-button type="primary" slot="reference">top</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover title="Title" content="Top Right prompts info" placement="top-end">
-                    <ea-button type="primary" slot="reference">top-end</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="center">
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Top Left prompts info"
+            placement="top-start"
+          >
+            <ea-button type="primary" slot="reference">top-start</ea-button>
+          </ea-popover>
+        </ea-col>
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Top Center prompts info"
+            placement="top"
+          >
+            top
+            <ea-button type="primary" slot="reference">top</ea-button>
+          </ea-popover>
+        </ea-col>
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Top Right prompts info"
+            placement="top-end"
+          >
+            <ea-button type="primary" slot="reference">top-end</ea-button>
+          </ea-popover>
+        </ea-col>
+      </ea-row>
 
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-popover title="Title" content="Left Top prompts info" placement="left-start">
-                    <ea-button type="primary" slot="reference">left-start</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover title="Title" content="Right Top prompts info" placement="right-start">
-                    <ea-button type="primary" slot="reference">right-start</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="space-between">
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Left Top prompts info"
+            placement="left-start"
+          >
+            <ea-button type="primary" slot="reference">left-start</ea-button>
+          </ea-popover>
+        </ea-col>
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Right Top prompts info"
+            placement="right-start"
+          >
+            <ea-button type="primary" slot="reference">right-start</ea-button>
+          </ea-popover>
+        </ea-col>
+      </ea-row>
 
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-popover title="Title" content="Left Center prompts info" placement="left">
-                    <ea-button type="primary" slot="reference">left</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover title="Title" content="Right Center prompts info" placement="right">
-                    <ea-button type="primary" slot="reference">right</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="space-between">
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Left Center prompts info"
+            placement="left"
+          >
+            <ea-button type="primary" slot="reference">left</ea-button>
+          </ea-popover>
+        </ea-col>
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Right Center prompts info"
+            placement="right"
+          >
+            <ea-button type="primary" slot="reference">right</ea-button>
+          </ea-popover>
+        </ea-col>
+      </ea-row>
 
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-popover title="Title" content="Left Bottom prompts info" placement="left-end">
-                    <ea-button type="primary" slot="reference">left-end</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover title="Title" content="Right Bottom prompts info" placement="right-end">
-                    <ea-button type="primary" slot="reference">right-end</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="space-between">
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Left Bottom prompts info"
+            placement="left-end"
+          >
+            <ea-button type="primary" slot="reference">left-end</ea-button>
+          </ea-popover>
+        </ea-col>
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Right Bottom prompts info"
+            placement="right-end"
+          >
+            <ea-button type="primary" slot="reference">right-end</ea-button>
+          </ea-popover>
+        </ea-col>
+      </ea-row>
 
-        <ea-row justify="center">
-            <ea-col span="6">
-                <ea-popover title="Title" content="Bottom Left prompts info" placement="bottom-start">
-                    <ea-button type="primary" slot="reference">bottom-start</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover title="Title" content="Bottom Center prompts info" placement="bottom">
-                    <ea-button type="primary" slot="reference">bottom</ea-button>
-                </ea-popover>
-            </ea-col>
-            <ea-col span="6">
-                <ea-popover title="Title" content="Bottom Right prompts info" placement="bottom-end">
-                    <ea-button type="primary" slot="reference">bottom-end</ea-button>
-                </ea-popover>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="center">
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Bottom Left prompts info"
+            placement="bottom-start"
+          >
+            <ea-button type="primary" slot="reference">bottom-start</ea-button>
+          </ea-popover>
+        </ea-col>
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Bottom Center prompts info"
+            placement="bottom"
+          >
+            <ea-button type="primary" slot="reference">bottom</ea-button>
+          </ea-popover>
+        </ea-col>
+        <ea-col span="6">
+          <ea-popover
+            heading="Title"
+            content="Bottom Right prompts info"
+            placement="bottom-end"
+          >
+            <ea-button type="primary" slot="reference">bottom-end</ea-button>
+          </ea-popover>
+        </ea-col>
+      </ea-row>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
     <!-- #region 基础用法 -->
     <h1>基础用法</h1>
 
-    <div id="triggerSection" class=‘demo’>
-        <ea-popover placement="top-start" title="Title" content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">Hover to activate</ea-button>
-        </ea-popover>
-        <ea-popover placement="top-start" trigger="click" title="Title"
-            content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">Click to activate</ea-button>
-        </ea-popover>
-        <ea-popover placement="top-start" trigger="focus" title="Title"
-            content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">Focus to activate</ea-button>
-        </ea-popover>
-        <ea-popover placement="top-start" trigger="contextmenu" title="Title"
-            content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">contextmenu to activate</ea-button>
-        </ea-popover>
-        <ea-popover placement="top-start" trigger="customized" title="Title" width="200"
-            content="this is content, this is content, this is content">
-            <ea-button type="primary" slot="reference">Manual to activate</ea-button>
-        </ea-popover>
+    <div id="triggerSection" class="demo">
+      <ea-popover
+        placement="top-start"
+        heading="Title"
+        content="this is content, this is content, this is content"
+      >
+        <ea-button type="primary" slot="reference">Hover to activate</ea-button>
+      </ea-popover>
+      <ea-popover
+        placement="top-start"
+        trigger="click"
+        heading="Title"
+        content="this is content, this is content, this is content"
+      >
+        <ea-button type="primary" slot="reference">Click to activate</ea-button>
+      </ea-popover>
+      <ea-popover
+        placement="top-start"
+        trigger="focus"
+        heading="Title"
+        content="this is content, this is content, this is content"
+      >
+        <ea-button type="primary" slot="reference">Focus to activate</ea-button>
+      </ea-popover>
+      <ea-popover
+        placement="top-start"
+        trigger="contextmenu"
+        heading="Title"
+        content="this is content, this is content, this is content"
+      >
+        <ea-button type="primary" slot="reference"
+          >contextmenu to activate</ea-button
+        >
+      </ea-popover>
+      <ea-popover
+        placement="top-start"
+        trigger="customized"
+        heading="Title"
+        width="200"
+        content="this is content, this is content, this is content"
+      >
+        <ea-button type="primary" slot="reference"
+          >Manual to activate</ea-button
+        >
+      </ea-popover>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
     <!-- #region 内容可扩展 -->
     <h1>内容可扩展</h1>
 
     <div id="scalableSection" class="demo">
-        <ea-popover trigger="customized" placement="right" show-arrow="false" width="200">
-            <ea-button id="popoverBtn" type="primary" slot="reference">Click to activate</ea-button>
+      <ea-popover
+        trigger="customized"
+        placement="right"
+        show-arrow="false"
+        width="200"
+      >
+        <ea-button id="popoverBtn" type="primary" slot="reference"
+          >Click to activate</ea-button
+        >
 
-            <ea-card shadow="never" header="Header">
-                Are you sure?
-                <section slot="footer" style="text-align: right;">
-                    <ea-button id="confirm" type="primary" size="small">Confirm</ea-button>
-                    <ea-button id="cancel" size="small">Cancel</ea-button>
-                </section>
-            </ea-card>
-        </ea-popover>
+        <ea-card shadow="never" header="Header">
+          Are you sure?
+          <section slot="footer" style="text-align: right">
+            <ea-button id="confirm" type="primary" size="small"
+              >Confirm</ea-button
+            >
+            <ea-button id="cancel" size="small">Cancel</ea-button>
+          </section>
+        </ea-card>
+      </ea-popover>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
     <script>
-        // ------- 基础用法 -------
-        // #region
-        const triggerExample = {
-            referenceElement: document.querySelector('#triggerSection ea-popover[trigger="customized"]'),
+      // ------- 基础用法 -------
+      // #region
+      const triggerExample = {
+        referenceElement: document.querySelector(
+          '#triggerSection ea-popover[trigger="customized"]'
+        ),
 
-            init() {
-                this.referenceElement.addEventListener('click', () => {
-                    this.referenceElement.visible = !this.referenceElement.visible;
-                });
-            }
-        }
-        triggerExample.init();
-        // #endregion
-        // ------- end -------
+        init() {
+          this.referenceElement.addEventListener("click", () => {
+            this.referenceElement.visible = !this.referenceElement.visible;
+          });
+        },
+      };
+      triggerExample.init();
+      // #endregion
+      // ------- end -------
 
-        // ------- 基础用法 -------
-        // #region
-        const scalableExample = {
-            referenceElement: document.querySelector('#scalableSection ea-popover'),
-            openButton: document.querySelector('#scalableSection #popoverBtn'),
-            confirmButton: document.querySelector('#scalableSection #confirm'),
-            cancelButton: document.querySelector('#scalableSection #cancel'),
+      // ------- 基础用法 -------
+      // #region
+      const scalableExample = {
+        referenceElement: document.querySelector("#scalableSection ea-popover"),
+        openButton: document.querySelector("#scalableSection #popoverBtn"),
+        confirmButton: document.querySelector("#scalableSection #confirm"),
+        cancelButton: document.querySelector("#scalableSection #cancel"),
 
-            init() {
-                this.openButton.addEventListener('click', e => {
-                    this.referenceElement.visible = true;
-                });
+        init() {
+          this.openButton.addEventListener("click", e => {
+            this.referenceElement.visible = true;
+          });
 
-                this.confirmButton.addEventListener('click', () => {
-                    this.referenceElement.visible = false;
-                    console.log('confirm');
-                });
+          this.confirmButton.addEventListener("click", () => {
+            this.referenceElement.visible = false;
+            console.log("confirm");
+          });
 
-                this.cancelButton.addEventListener('click', () => {
-                    this.referenceElement.visible = false;
-                    console.log('cancel');
-                });
-            }
-        }
-        scalableExample.init();
-        // #endregion
-        // ------- end -------
+          this.cancelButton.addEventListener("click", () => {
+            this.referenceElement.visible = false;
+            console.log("cancel");
+          });
+        },
+      };
+      scalableExample.init();
+      // #endregion
+      // ------- end -------
     </script>
-</body>
-
+  </body>
 </html>

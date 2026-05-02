@@ -1,36 +1,38 @@
+$name: ea-popover;
+
 :host {
-  --ea-popover-title-color: var(--grey-900);
-  --ea-popover-title-font-size: var(--font-size-lg);
-  --ea-popover-content-color: var(--grey-700);
-  --ea-popover-content-font-size: var(--font-size-md);
+  --#{$name}-title-color: var(--grey-900);
+  --#{$name}-title-font-size: var(--font-size-lg);
+  --#{$name}-content-color: var(--grey-700);
+  --#{$name}-content-font-size: var(--font-size-md);
 
-  --ea-popover-box-shadow: var(--box-shadow-md);
-  --ea-popover-border-radius: var(--border-radius-sm);
+  --#{$name}-box-shadow: var(--box-shadow-md);
+  --#{$name}-border-radius: var(--border-radius-sm);
 
-  --ea-popover-z-index: 100;
+  --#{$name}-z-index: 100;
 }
 
 @include block(ea-popper) {
   @include element(original) {
-    box-shadow: var(--ea-popover-box-shadow);
+    box-shadow: var(--#{$name}-box-shadow);
 
-    border-radius: var(--ea-popover-border-radius);
+    border-radius: var(--#{$name}-border-radius);
 
-    z-index: var(--ea-popover-z-index);
+    z-index: var(--#{$name}-z-index);
   }
 }
 
-@include block(ea-popover) {
+@include block($name) {
   @include element(title) {
-    font-size: var(--ea-popover-title-font-size);
-    line-height: var(--ea-popover-title-font-size);
-    color: var(--ea-popover-title-color);
+    font-size: var(--#{$name}-title-font-size);
+    line-height: var(--#{$name}-title-font-size);
+    color: var(--#{$name}-title-color);
     margin-bottom: 12px;
   }
 
   @include element(content) {
-    font-size: var(--ea-popover-content-font-size);
-    line-height: var(--ea-popover-content-font-size);
-    color: var(--ea-popover-content-color);
+    font-size: var(--#{$name}-content-font-size);
+    line-height: var(--#{$name}-content-font-size);
+    color: var(--#{$name}-content-color);
   }
 }

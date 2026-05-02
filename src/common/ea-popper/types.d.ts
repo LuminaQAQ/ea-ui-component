@@ -34,7 +34,7 @@ export interface EaPopperElement extends HTMLElement {
   /** 是否显示箭头 */
   showArrow: boolean;
   /** 控制 Popper 显隐的属性 */
-  status: boolean;
+  visible: boolean;
   /** 气泡出现的位置偏移量 */
   offset: string;
   /** 是否在超过原 placement 视口时，进行翻转 */
@@ -63,7 +63,7 @@ export interface EaPopperVueProps {
   /** 是否显示箭头 */
   showArrow?: boolean;
   /** 控制 Popper 显隐的属性 */
-  status?: boolean;
+  visible?: boolean;
   /** 气泡出现的位置偏移量 */
   offset?: string;
   /** 是否在超过原 placement 视口时，进行翻转 */
@@ -132,7 +132,7 @@ export interface EaPopperReactProps extends HTMLAttributes<HTMLElement> {
   /** 是否显示箭头 */
   showArrow?: boolean;
   /** 控制 Popper 显隐的属性 */
-  status?: boolean;
+  visible?: boolean;
   /** 气泡出现的位置偏移量 */
   offset?: string;
   /** 是否在超过原 placement 视口时，进行翻转 */

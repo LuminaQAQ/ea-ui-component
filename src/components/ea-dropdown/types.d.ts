@@ -34,8 +34,8 @@ export interface EaDropdownElement extends HTMLElement {
     | "right-end";
   /** 是否显示箭头 */
   showArrow: boolean;
-  /** 控制显隐的状态 */
-  status: boolean;
+  /** 控制显隐的属性 */
+  visible: boolean;
   /** 宽度 */
   width: number;
   /** 偏移量 */
@@ -93,7 +93,7 @@ export interface EaDropdownVueProps {
     | "right-start"
     | "right-end";
   showArrow?: boolean;
-  status?: boolean;
+  visible?: boolean;
   width?: number;
   offset?: string;
   flip?: boolean;
@@ -249,7 +249,7 @@ export interface EaDropdownReactProps extends HTMLAttributes<HTMLElement> {
     | "right-start"
     | "right-end";
   showArrow?: boolean;
-  status?: boolean;
+  visible?: boolean;
   width?: number;
   offset?: string;
   flip?: boolean;

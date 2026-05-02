@@ -103,7 +103,7 @@ export class EaDropdown extends EaPopper {
 
           this.toggle();
 
-          if (this.status) {
+          if (this.visible) {
             window.addEventListener(
               "click",
               (e: MouseEvent) => {
