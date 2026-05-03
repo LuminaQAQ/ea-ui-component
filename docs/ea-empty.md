@@ -101,7 +101,7 @@ onMounted(() => {
 | ----------- | -------- | ------ | ------ | ------ |
 | description | 描述     | string | -      | -      |
 | image       | 图片     | string | -      | -      |
-| image-size  | 图片大小 | number | -      | 80     |
+| image-size  | 图片大小 | string | -      | -      |
 
 ## CSS Part
 
