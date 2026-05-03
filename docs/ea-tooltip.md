@@ -288,21 +288,21 @@ ea-tooltip[effect="customized"]::part(original)::after {
 
 ## Tooltip API
 
+### Tooltip Attributes
+
 | 参数       | 说明                                             | 类型    | 可选值                                                                                                                                                               | 默认值                                          |
 | ---------- | ------------------------------------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| effect     | 显示效果。                                       | string  | `'dark' \| 'light' \| 'customized'`                                                                                                                                  | dark                                            |
-| trigger    | 触发方式。                                       | string  | `'click' \| 'focus' \| 'hover' \| 'contextmenu' \| 'customized'`                                                                                                     | hover                                           |
-| content    | 显示的内容，也可以通过写入默认 slot 修改显示内容 | string  | —                                                                                                                                                                    | —                                               |
-| width      | 宽度，单位 px。                                  | number  | —                                                                                                                                                                    | 150                                             |
-| placement  | 气泡的出现位置。                                 | string  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | top                                             |
-| show-arrow | 是否显示箭头                                     | boolean |                                                                                                                                                                      | false                                           |
-| visible    | 控制 Tooltip 显隐的属性                          | boolean |                                                                                                                                                                      | false                                           |
-| offset     | 气泡出现的位置偏移量。                           | string  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
-| flip       | 是否在超过原 placement 视口时，进行翻转。        | boolean | —                                                                                                                                                                    | true                                            |
+| effect     | 显示效果。                                       | String  | `dark` / `light` / `customized`                                                                                                                                      | dark                                            |
+| trigger    | 触发方式。                                       | String  | `click` / `focus` / `hover` / `contextmenu` / `customized`                                                                                                           | hover                                           |
+| content    | 显示的内容，也可以通过写入默认 slot 修改显示内容 | String  | —                                                                                                                                                                    | —                                               |
+| width      | 宽度，单位 px。                                  | Number  | —                                                                                                                                                                    | 150                                             |
+| placement  | 气泡的出现位置。                                 | String  | `top` / `top-start` / `top-end` / `bottom` / `bottom-start` / `bottom-end` / `left` / `left-start` / `left-end` / `right` / `right-start` / `right-end`              | top                                             |
+| show-arrow | 是否显示箭头                                     | Boolean | —                                                                                                                                                                    | true                                            |
+| visible    | 控制 Tooltip 显隐的属性                          | Boolean | —                                                                                                                                                                    | false                                           |
+| offset     | 气泡出现的位置偏移量。                           | String  | —                                                                                                                                                                    | <span style="white-space: nowrap;">"0 0"</span> |
+| flip       | 是否在超过原 placement 视口时，进行翻转。        | Boolean | —                                                                                                                                                                    | true                                            |
 
-## CSS Part
-
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+### Tooltip CSS Part
 
 | 名称      | 说明                                   |
 | --------- | -------------------------------------- |
@@ -311,7 +311,7 @@ ea-tooltip[effect="customized"]::part(original)::after {
 | original  | Tooltip 内容容器                       |
 | content   | Tooltip 内容容器                       |
 
-## Events
+### Tooltip Events
 
 | 事件名称 | 说明                          | 回调参数     |
 | -------- | ----------------------------- | ------------ |
@@ -320,7 +320,7 @@ ea-tooltip[effect="customized"]::part(original)::after {
 | hide     | 关闭 Tooltip 时触发的事件     | `() => void` |
 | hidden   | 关闭 Tooltip 的动画结束时触发 | `() => void` |
 
-## Methods
+### Tooltip Methods
 
 | 名称   | 详情                  | 类型         |
 | ------ | --------------------- | ------------ |
@@ -328,9 +328,9 @@ ea-tooltip[effect="customized"]::part(original)::after {
 | hide   | 隐藏 Tooltip          | `() => void` |
 | toggle | 切换 Tooltip 显示状态 | `() => void` |
 
-## Slots
+### Tooltip Slots
 
 | 名称      | 描述                              |
 | --------- | --------------------------------- |
-| -         | Tooltip 内容插槽                  |
+| default   | Tooltip 内容插槽                  |
 | reference | 触发 Tooltip 显示的 HTML 元素插槽 |

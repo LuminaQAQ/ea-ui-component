@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-tooltip 组件
-import "../components/ea-tooltip/index.js";
+import "../components/ea-tooltip/index.ts";
 
 describe("EaTooltip Component", () => {
   let container;
@@ -15,21 +15,16 @@ describe("EaTooltip Component", () => {
     container.remove();
   });
 
-  /**
-   * 基本功能测试
-   */
   describe("Basic Functionality", () => {
     it("应该正确渲染 ea-tooltip 组件", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.innerHTML = `
-        <span slot="reference">Hover me</span>
-      `;
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(tooltip).toBeDefined();
-      expect(tooltip.shadowRoot).toBeDefined();
+      expect(tooltip.shadowRoot).toBeTruthy();
+      expect(tooltip.shadowRoot.querySelector(".ea-popper")).toBeTruthy();
     });
 
     it("应该包含 container CSS Part", async () => {
@@ -37,7 +32,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         tooltip.shadowRoot.querySelector('[part="container"]')
@@ -49,7 +44,7 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         tooltip.shadowRoot.querySelector('[part="reference"]')
@@ -61,523 +56,967 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(
         tooltip.shadowRoot.querySelector('[part="original"]')
       ).toBeTruthy();
     });
 
-    it("应该包含 content 元素", async () => {
+    it("设置 content 属性后应包含 content CSS Part", async () => {
       const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
       tooltip.content = "Test content";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      await waitForRender();
+
+      const contentEl = tooltip.shadowRoot.querySelector(
+        ".ea-tooltip__content"
+      );
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.part).toBe("content");
+      expect(contentEl.classList.contains("ea-tooltip__content")).toBe(true);
+    });
+
+    it("应该渲染 reference slot", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // content part 在设置 content 后才会创建
-      expect(
-        tooltip.shadowRoot.querySelector('[part="content"]') ||
-          tooltip.shadowRoot.querySelector(".ea-tooltip__content")
-      ).toBeTruthy();
+      const referenceSlot = tooltip.shadowRoot.querySelector(
+        'slot[name="reference"]'
+      );
+      expect(referenceSlot).toBeTruthy();
     });
-  });
 
-  /**
-   * Content 属性测试
-   */
-  describe("Content Attribute", () => {
-    it("默认 content 应该是空字符串", async () => {
+    it("应该渲染默认 slot", async () => {
       const tooltip = document.createElement("ea-tooltip");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(tooltip.content).toBe("");
-    });
-
-    it("应该支持 content 属性", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.content = "Tooltip content";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.content).toBe("Tooltip content");
+      const defaultSlot = tooltip.shadowRoot.querySelector("slot:not([name])");
+      expect(defaultSlot).toBeTruthy();
     });
   });
 
-  /**
-   * Effect 属性测试
-   */
   describe("Effect Attribute", () => {
-    it("默认 effect 应该是 'dark'", async () => {
+    it("默认 effect 应该是 dark", async () => {
       const tooltip = document.createElement("ea-tooltip");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.effect).toBe("dark");
     });
 
     it("应该支持 effect='dark'", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.effect = "dark";
+      tooltip.setAttribute("effect", "dark");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.effect).toBe("dark");
     });
 
     it("应该支持 effect='light'", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.effect = "light";
+      tooltip.setAttribute("effect", "light");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.effect).toBe("light");
     });
 
     it("应该支持 effect='customized'", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.effect = "customized";
+      tooltip.setAttribute("effect", "customized");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.effect).toBe("customized");
     });
-  });
 
-  /**
-   * Trigger 属性测试
-   */
-  describe("Trigger Attribute", () => {
-    it("默认 trigger 应该是 'hover'", async () => {
+    it("effect='dark' 时容器应包含 ea-tooltip--dark 修饰符类", async () => {
       const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("effect", "dark");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(tooltip.trigger).toBe("hover");
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(true);
     });
 
-    it("应该支持 trigger='hover'", async () => {
+    it("effect='light' 时容器应包含 ea-tooltip--light 修饰符类", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.trigger = "hover";
+      tooltip.setAttribute("effect", "light");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
+    });
+
+    it("effect='customized' 时容器不应包含 dark 或 light 修饰符类", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("effect", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(false);
+      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(false);
+    });
+
+    it("动态切换 effect 应更新容器修饰符类", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+
+      tooltip.setAttribute("effect", "light");
+      await waitForRender();
+      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
+      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(false);
+
+      tooltip.setAttribute("effect", "dark");
+      await waitForRender();
+      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(true);
+      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(false);
+    });
+
+    it("从 dark 切换到 customized 应移除 dark 修饰符类", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("effect", "dark");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(true);
+
+      tooltip.setAttribute("effect", "customized");
+      await waitForRender();
+
+      expect(containerEl.classList.contains("ea-tooltip--dark")).toBe(false);
+    });
+  });
+
+  describe("Trigger Attribute", () => {
+    it("默认 trigger 应该是 hover", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
 
       expect(tooltip.trigger).toBe("hover");
     });
 
     it("应该支持 trigger='click'", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.trigger = "click";
+      tooltip.setAttribute("trigger", "click");
       tooltip.innerHTML = `<span slot="reference">Click me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.trigger).toBe("click");
     });
 
     it("应该支持 trigger='focus'", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.trigger = "focus";
+      tooltip.setAttribute("trigger", "focus");
       tooltip.innerHTML = `<span slot="reference">Focus me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.trigger).toBe("focus");
     });
 
     it("应该支持 trigger='contextmenu'", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.trigger = "contextmenu";
+      tooltip.setAttribute("trigger", "contextmenu");
       tooltip.innerHTML = `<span slot="reference">Right click me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.trigger).toBe("contextmenu");
     });
 
     it("应该支持 trigger='customized'", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.trigger = "customized";
+      tooltip.setAttribute("trigger", "customized");
       tooltip.innerHTML = `<span slot="reference">Custom trigger</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.trigger).toBe("customized");
     });
+
+    it("trigger='customized' 时不应自动绑定任何触发事件", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Custom trigger</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.dispatchEvent(new Event("mouseover"));
+      expect(tooltip.visible === false || tooltip.visible === null).toBe(true);
+    });
+
+    it("trigger='hover' 时 mouseover 应触发 show", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "hover");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      await waitForRender();
+
+      expect(tooltip.visible).toBe(true);
+    });
+
+    it("trigger='click' 时 click 应切换 visible", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "click");
+      tooltip.innerHTML = `<span slot="reference">Click me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await waitForRender();
+
+      expect(tooltip.visible).toBe(true);
+
+      tooltip.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await waitForRender();
+
+      expect(tooltip.visible).toBe(false);
+    });
+
+    it("trigger='focus' 时 focus 应触发 show", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "focus");
+      tooltip.innerHTML = `<span slot="reference">Focus me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.dispatchEvent(new FocusEvent("focus", { bubbles: true }));
+      await waitForRender();
+
+      expect(tooltip.visible).toBe(true);
+    });
+
+    it("trigger='contextmenu' 时应阻止默认右键菜单并显示 tooltip", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "contextmenu");
+      tooltip.innerHTML = `<span slot="reference">Right click</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const contextmenuEvent = new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+      });
+      tooltip.dispatchEvent(contextmenuEvent);
+      await waitForRender();
+
+      expect(contextmenuEvent.defaultPrevented).toBe(true);
+      expect(tooltip.visible).toBe(true);
+    });
   });
 
-  /**
-   * Placement 属性测试
-   */
+  describe("Content Attribute", () => {
+    it("默认 content 应该是空字符串", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      expect(tooltip.content).toBe("");
+    });
+
+    it("应该支持 content 属性", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("content", "Tooltip content");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      expect(tooltip.content).toBe("Tooltip content");
+    });
+
+    it("设置 content 后应创建 ea-tooltip__content 元素", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.content = "Hello tooltip";
+      await waitForRender();
+
+      const contentEl = tooltip.shadowRoot.querySelector(
+        ".ea-tooltip__content"
+      );
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.innerText).toBe("Hello tooltip");
+    });
+
+    it("设置 content 后应移除默认 slot", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.content = "Hello tooltip";
+      await waitForRender();
+
+      const defaultSlot = tooltip.shadowRoot.querySelector(
+        ".ea-popper__original slot:not([name])"
+      );
+      expect(defaultSlot).toBeFalsy();
+    });
+
+    it("content 元素应被添加到 _originalPopper 中", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.content = "Hello tooltip";
+      await waitForRender();
+
+      const originalEl = tooltip.shadowRoot.querySelector(
+        ".ea-popper__original"
+      );
+      const contentEl = originalEl.querySelector(".ea-tooltip__content");
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.innerText).toBe("Hello tooltip");
+    });
+
+    it("动态更新 content 应更新已有 content 元素的文本", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.content = "First content";
+      await waitForRender();
+
+      const contentEl = tooltip.shadowRoot.querySelector(
+        ".ea-tooltip__content"
+      );
+      expect(contentEl.innerText).toBe("First content");
+
+      tooltip.content = "Updated content";
+      await waitForRender();
+
+      expect(contentEl.innerText).toBe("Updated content");
+    });
+
+    it("content 元素应有 part='content'", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.content = "Test";
+      await waitForRender();
+
+      const contentEl = tooltip.shadowRoot.querySelector(
+        ".ea-tooltip__content"
+      );
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.part).toBe("content");
+      expect(contentEl.classList.contains("ea-tooltip__content")).toBe(true);
+    });
+
+    it("通过 attribute 设置 content 也应创建 content 元素", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("content", "Attr content");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const contentEl = tooltip.shadowRoot.querySelector(
+        ".ea-tooltip__content"
+      );
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.innerText).toBe("Attr content");
+    });
+  });
+
   describe("Placement Attribute", () => {
-    it("默认 placement 应该是 'top'", async () => {
+    it("默认 placement 应该是 top", async () => {
       const tooltip = document.createElement("ea-tooltip");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.placement).toBe("top");
     });
 
-    it("应该支持 placement='top'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "top";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
+    it("应该支持所有 placement 值", async () => {
+      const placements = [
+        "top",
+        "top-start",
+        "top-end",
+        "bottom",
+        "bottom-start",
+        "bottom-end",
+        "left",
+        "left-start",
+        "left-end",
+        "right",
+        "right-start",
+        "right-end",
+      ];
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      for (const placement of placements) {
+        const tooltip = document.createElement("ea-tooltip");
+        tooltip.setAttribute("placement", placement);
+        tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+        container.appendChild(tooltip);
 
-      expect(tooltip.placement).toBe("top");
+        await waitForRender();
+
+        expect(tooltip.placement).toBe(placement);
+        container.removeChild(tooltip);
+      }
     });
 
-    it("应该支持 placement='top-start'", async () => {
+    it("placement 应反映在容器类名中", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "top-start";
+      tooltip.setAttribute("placement", "bottom");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(tooltip.placement).toBe("top-start");
-    });
-
-    it("应该支持 placement='top-end'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "top-end";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("top-end");
-    });
-
-    it("应该支持 placement='bottom'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "bottom";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("bottom");
-    });
-
-    it("应该支持 placement='bottom-start'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "bottom-start";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("bottom-start");
-    });
-
-    it("应该支持 placement='bottom-end'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "bottom-end";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("bottom-end");
-    });
-
-    it("应该支持 placement='left'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "left";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("left");
-    });
-
-    it("应该支持 placement='left-start'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "left-start";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("left-start");
-    });
-
-    it("应该支持 placement='left-end'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "left-end";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("left-end");
-    });
-
-    it("应该支持 placement='right'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "right";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("right");
-    });
-
-    it("应该支持 placement='right-start'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "right-start";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("right-start");
-    });
-
-    it("应该支持 placement='right-end'", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "right-end";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.placement).toBe("right-end");
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
     });
   });
 
-  /**
-   * Visible 属性测试
-   */
   describe("Visible Attribute", () => {
     it("默认 visible 应该是 false", async () => {
       const tooltip = document.createElement("ea-tooltip");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      const value = tooltip.visible;
-      expect(value === false || value === null).toBe(true);
+      expect(tooltip.visible === false || tooltip.visible === null).toBe(true);
     });
 
-    it("设置 visible 应该控制显示状态", async () => {
+    it("设置 visible 为 true 应显示 tooltip", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.visible = true;
+      tooltip.setAttribute("visible", "");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.visible).toBe(true);
     });
+
+    it("visible 为 true 时容器应包含 is-show 状态类", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.show();
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-show")).toBe(true);
+    });
+
+    it("visible 为 false 时容器不应包含 is-show 状态类", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-show")).toBe(false);
+    });
   });
 
-  /**
-   * Width 属性测试
-   */
   describe("Width Attribute", () => {
     it("默认 width 应该是 150", async () => {
       const tooltip = document.createElement("ea-tooltip");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // width 可能是字符串 "150" 或数字 150
-      expect(tooltip.width == 150).toBe(true);
+      expect(Number(tooltip.width)).toBe(150);
     });
 
     it("应该支持自定义 width", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.width = 200;
+      tooltip.setAttribute("width", "200");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.width).toBe(200);
     });
+
+    it("设置 width 应更新 CSS 变量 --ea-popper-width", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("width", "300");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      expect(tooltip.style.getPropertyValue("--ea-popper-width")).toBe("300px");
+    });
   });
 
-  /**
-   * Show-arrow 属性测试
-   */
-  describe("Show-arrow Attribute", () => {
-    it("默认 show-arrow 应该是 true", async () => {
+  describe("ShowArrow Attribute", () => {
+    it("默认 showArrow 应该是 true", async () => {
       const tooltip = document.createElement("ea-tooltip");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // show-arrow 默认是 true
-      const value = tooltip["show-arrow"];
-      expect(value === true || value === "true").toBe(true);
+      expect(tooltip.showArrow === true || tooltip.showArrow === null).toBe(
+        true
+      );
     });
 
-    it("设置 show-arrow 应该显示箭头", async () => {
+    it("应该支持 showArrow 设置为 false", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip["show-arrow"] = true;
+      tooltip.setAttribute("show-arrow", "false");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(tooltip["show-arrow"]).toBe(true);
+      expect(tooltip.showArrow).toBe(false);
+    });
+
+    it("showArrow 为 false 时容器不应包含 is-show-arrow 状态类", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("show-arrow", "false");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+    });
+
+    it("showArrow 为 true 时容器应包含 is-show-arrow 状态类", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("show-arrow", "true");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
     });
   });
 
-  /**
-   * Slots 测试
-   */
-  describe("Slots", () => {
-    it("应该正确渲染 reference 插槽", async () => {
+  describe("Offset Attribute", () => {
+    it("默认 offset 应该是 '0 0'", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.innerHTML = `
-        <button slot="reference">Reference Button</button>
-      `;
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      const slot = tooltip.shadowRoot.querySelector('slot[name="reference"]');
-      expect(slot).toBeTruthy();
+      expect(tooltip.offset).toBe("0 0");
     });
 
-    it("应该正确渲染默认内容插槽", async () => {
+    it("应该支持自定义 offset", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.innerHTML = `
-        <span slot="reference">Hover me</span>
-        <div>Custom content</div>
-      `;
+      tooltip.setAttribute("offset", "10 20");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      const slots = tooltip.shadowRoot.querySelectorAll("slot");
-      expect(slots.length).toBeGreaterThan(0);
+      expect(tooltip.offset).toBe("10 20");
+    });
+
+    it("设置 offset 应更新 CSS 变量 --ea-popper-transform-x 和 --ea-popper-transform-y", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("offset", "10 20");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      expect(tooltip.style.getPropertyValue("--ea-popper-transform-x")).toBe(
+        "10px"
+      );
+      expect(tooltip.style.getPropertyValue("--ea-popper-transform-y")).toBe(
+        "20px"
+      );
     });
   });
 
-  /**
-   * Methods 测试
-   */
+  describe("Flip Attribute", () => {
+    it("默认 flip 应该是 true", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      expect(tooltip.flip === true || tooltip.flip === null).toBe(true);
+    });
+
+    it("应该支持 flip 设置为 false", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("flip", "false");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      expect(tooltip.flip).toBe(false);
+    });
+  });
+
   describe("Methods", () => {
-    it("应该支持 show 方法", async () => {
+    it("show() 方法应该显示 tooltip", async () => {
       const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(typeof tooltip.show).toBe("function");
+      expect(tooltip.visible === false || tooltip.visible === null).toBe(true);
+
+      tooltip.show();
+
+      expect(tooltip.visible).toBe(true);
     });
 
-    it("应该支持 hide 方法", async () => {
+    it("hide() 方法应该隐藏 tooltip", async () => {
       const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(typeof tooltip.hide).toBe("function");
+      tooltip.show();
+      expect(tooltip.visible).toBe(true);
+
+      tooltip.hide();
+
+      expect(tooltip.visible === false || tooltip.visible === null).toBe(true);
     });
 
-    it("应该支持 toggle 方法", async () => {
+    it("toggle() 方法应该切换 tooltip 显示状态", async () => {
       const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(typeof tooltip.toggle).toBe("function");
+      expect(tooltip.visible === false || tooltip.visible === null).toBe(true);
+
+      tooltip.toggle();
+      expect(tooltip.visible).toBe(true);
+
+      tooltip.toggle();
+      expect(tooltip.visible === false || tooltip.visible === null).toBe(true);
     });
   });
 
-  /**
-   * Events 测试
-   */
   describe("Events", () => {
     it("应该触发 show 事件", async () => {
       const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const showHandler = vi.fn();
       tooltip.addEventListener("show", showHandler);
 
       tooltip.show();
-
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(showHandler).toHaveBeenCalled();
     });
 
     it("应该触发 hide 事件", async () => {
       const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
+
+      tooltip.show();
+      await waitForRender();
 
       const hideHandler = vi.fn();
       tooltip.addEventListener("hide", hideHandler);
 
-      tooltip.show();
-      await new Promise(resolve => setTimeout(resolve, 50));
       tooltip.hide();
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(hideHandler).toHaveBeenCalled();
     });
+
+    it("show 事件应冒泡且可组合", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const showHandler = vi.fn();
+      tooltip.addEventListener("show", showHandler);
+
+      tooltip.show();
+      await waitForRender();
+
+      const event = showHandler.mock.calls[0][0];
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("hide 事件应冒泡且可组合", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.show();
+      await waitForRender();
+
+      const hideHandler = vi.fn();
+      tooltip.addEventListener("hide", hideHandler);
+
+      tooltip.hide();
+      await waitForRender();
+
+      const event = hideHandler.mock.calls[0][0];
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("应该触发 shown 事件（过渡动画结束后）", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const shownHandler = vi.fn();
+      tooltip.addEventListener("shown", shownHandler);
+
+      tooltip.show();
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      await waitForRender();
+
+      expect(shownHandler).toHaveBeenCalled();
+    });
+
+    it("应该触发 hidden 事件（过渡动画结束后）", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.show();
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      await waitForRender();
+
+      const hiddenHandler = vi.fn();
+      tooltip.addEventListener("hidden", hiddenHandler);
+
+      tooltip.hide();
+      await waitForRender();
+
+      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      await waitForRender();
+
+      expect(hiddenHandler).toHaveBeenCalled();
+    });
   });
 
-  /**
-   * 组合测试
-   */
+  describe("updateContainerClasslist", () => {
+    it("容器类名应同时包含 ea-popper 和 ea-tooltip 的类", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-popper")).toBe(true);
+      expect(containerEl.classList.contains("ea-tooltip")).toBe(true);
+    });
+
+    it("容器类名应包含 placement 修饰符", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("placement", "bottom");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
+    });
+
+    it("容器类名应包含 effect 修饰符", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("effect", "light");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
+    });
+
+    it("容器类名应包含 showArrow 状态", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+    });
+
+    it("visible 为 true 时 className 应包含 is-show 状态", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.show();
+      await waitForRender();
+
+      const className = tooltip.updateContainerClasslist();
+      expect(className).toContain("is-show");
+    });
+
+    it("visible 为 false 时 className 不应包含 is-show 状态", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const className = tooltip.updateContainerClasslist();
+      const classList = className.split(" ");
+      expect(classList).not.toContain("is-show");
+    });
+  });
+
   describe("Combined Tests", () => {
     it("应该支持多种属性组合", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.content = "Test content";
-      tooltip.placement = "bottom";
-      tooltip.effect = "light";
-      tooltip.trigger = "click";
+      tooltip.setAttribute("content", "Test content");
+      tooltip.setAttribute("placement", "bottom");
+      tooltip.setAttribute("effect", "light");
+      tooltip.setAttribute("trigger", "click");
       tooltip.innerHTML = `<span slot="reference">Click me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.content).toBe("Test content");
       expect(tooltip.placement).toBe("bottom");
@@ -587,75 +1026,146 @@ describe("EaTooltip Component", () => {
 
     it("应该支持不同 effect 和 trigger 组合", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.effect = "light";
-      tooltip.trigger = "focus";
+      tooltip.setAttribute("effect", "light");
+      tooltip.setAttribute("trigger", "focus");
       tooltip.innerHTML = `<input slot="reference" type="text" />`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.effect).toBe("light");
       expect(tooltip.trigger).toBe("focus");
     });
+
+    it("容器类名应同时反映 placement、effect 和 showArrow", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("placement", "right");
+      tooltip.setAttribute("effect", "light");
+      tooltip.setAttribute("show-arrow", "true");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-popper--right")).toBe(true);
+      expect(containerEl.classList.contains("ea-tooltip--light")).toBe(true);
+      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+    });
+
+    it("设置 content 后再设置其他属性应保持 content 元素", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.content = "Hello";
+      await waitForRender();
+
+      tooltip.setAttribute("placement", "bottom");
+      tooltip.setAttribute("effect", "light");
+      await waitForRender();
+
+      const contentEl = tooltip.shadowRoot.querySelector(
+        ".ea-tooltip__content"
+      );
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.innerText).toBe("Hello");
+    });
   });
 
-  /**
-   * 边界条件测试
-   */
   describe("Edge Cases", () => {
-    it("没有 reference 插槽应该正常渲染", async () => {
+    it("没有 reference slot 应该正常渲染", async () => {
       const tooltip = document.createElement("ea-tooltip");
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(tooltip).toBeDefined();
-      expect(tooltip.shadowRoot).toBeDefined();
+      expect(tooltip.shadowRoot).toBeTruthy();
     });
 
     it("空 content 应该正常渲染", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.content = "";
+      tooltip.setAttribute("content", "");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip.content).toBe("");
     });
 
     it("多个 tooltip 应该独立工作", async () => {
       const tooltip1 = document.createElement("ea-tooltip");
-      tooltip1.content = "Tooltip 1";
+      tooltip1.setAttribute("content", "Tooltip 1");
       tooltip1.innerHTML = `<span slot="reference">Hover 1</span>`;
 
       const tooltip2 = document.createElement("ea-tooltip");
-      tooltip2.content = "Tooltip 2";
+      tooltip2.setAttribute("content", "Tooltip 2");
       tooltip2.innerHTML = `<span slot="reference">Hover 2</span>`;
 
       container.appendChild(tooltip1);
       container.appendChild(tooltip2);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(tooltip1.content).toBe("Tooltip 1");
       expect(tooltip2.content).toBe("Tooltip 2");
     });
-  });
 
-  /**
-   * 生命周期测试
-   */
-  describe("Lifecycle", () => {
-    it("组件连接后应该正确初始化", async () => {
+    it("content 设置为空字符串后应创建 content 元素但文本为空", async () => {
       const tooltip = document.createElement("ea-tooltip");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(tooltip.shadowRoot).toBeDefined();
-      expect(tooltip.trigger).toBe("hover");
+      tooltip.content = "";
+      await waitForRender();
+
+      const contentEl = tooltip.shadowRoot.querySelector(
+        ".ea-tooltip__content"
+      );
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.innerText).toBe("");
+    });
+
+    it("先设置 content 再清空应保留 content 元素但文本为空", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      tooltip.content = "Hello";
+      await waitForRender();
+
+      let contentEl = tooltip.shadowRoot.querySelector(".ea-tooltip__content");
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.innerText).toBe("Hello");
+
+      tooltip.content = "";
+      await waitForRender();
+
+      contentEl = tooltip.shadowRoot.querySelector(".ea-tooltip__content");
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.innerText).toBe("");
+    });
+  });
+
+  describe("Lifecycle", () => {
+    it("组件连接后应该正确初始化", async () => {
+      const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("placement", "bottom");
+      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(tooltip);
+
+      await waitForRender();
+
+      expect(tooltip.shadowRoot).toBeTruthy();
+      expect(tooltip.placement).toBe("bottom");
     });
 
     it("组件断开连接后应该正常移除", async () => {
@@ -663,93 +1173,84 @@ describe("EaTooltip Component", () => {
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       tooltip.remove();
 
-      expect(container.contains(tooltip)).toBe(false);
+      expect(tooltip.isConnected).toBe(false);
     });
 
-    it("动态修改 content 应该生效", async () => {
+    it("应该支持属性动态更新", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.content = "Initial content";
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      tooltip.content = "Updated content";
+      expect(tooltip.effect).toBe("dark");
 
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(tooltip.content).toBe("Updated content");
-    });
-
-    it("动态修改 effect 应该生效", async () => {
-      const tooltip = document.createElement("ea-tooltip");
-      tooltip.effect = "dark";
-      tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
-      container.appendChild(tooltip);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      tooltip.effect = "light";
-
-      await new Promise(resolve => setTimeout(resolve, 50));
+      tooltip.setAttribute("effect", "light");
+      await waitForRender();
 
       expect(tooltip.effect).toBe("light");
     });
 
-    it("动态修改 placement 应该生效", async () => {
+    it("动态更新 placement 应更新容器类名", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.placement = "top";
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      tooltip.placement = "bottom";
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      tooltip.setAttribute("placement", "bottom");
+      await waitForRender();
 
-      expect(tooltip.placement).toBe("bottom");
+      expect(containerEl.classList.contains("ea-popper--bottom")).toBe(true);
+      expect(containerEl.classList.contains("ea-popper--top")).toBe(false);
     });
 
-    it("动态修改 trigger 应该生效", async () => {
+    it("动态更新 showArrow 应更新容器类名", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.trigger = "hover";
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      tooltip.trigger = "click";
+      const containerEl =
+        tooltip.shadowRoot.querySelector('[part="container"]');
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      tooltip.setAttribute("show-arrow", "false");
+      await waitForRender();
 
-      expect(tooltip.trigger).toBe("click");
+      expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
+
+      tooltip.setAttribute("show-arrow", "true");
+      await waitForRender();
+
+      expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
     });
 
-    it("动态修改 visible 应该控制显示", async () => {
+    it("动态更新 trigger 不会自动重新绑定事件（无 observer）", async () => {
       const tooltip = document.createElement("ea-tooltip");
+      tooltip.setAttribute("trigger", "customized");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      tooltip.visible = true;
+      tooltip.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await waitForRender();
+      expect(tooltip.visible).toBe(false);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      tooltip.setAttribute("trigger", "click");
+      await waitForRender();
 
-      expect(tooltip.visible).toBe(true);
-
-      tooltip.visible = false;
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      // visible 可能返回 false 或 null
-      const value = tooltip.visible;
-      expect(value === false || value === null).toBe(true);
+      tooltip.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await waitForRender();
+      expect(tooltip.visible).toBe(false);
     });
   });
 });

@@ -1,164 +1,172 @@
-<!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='../dist/assets/icon.css'>
+    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
 
-        .demo {
-            box-sizing: border-box;
-            padding: 3rem;
-        }
+      .demo {
+        box-sizing: border-box;
+        padding: 3rem;
+      }
 
-        ea-tooltip {
-            margin: 1rem;
-        }
+      ea-tooltip {
+        margin: 1rem;
+      }
 
-        ea-card::part(container) {
-            border: none;
-        }
+      ea-card::part(container) {
+        border: none;
+      }
 
-        ea-tooltip[effect="customized"]::part(original) {
-            background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
-        }
+      ea-tooltip[effect="customized"]::part(original) {
+        background: linear-gradient(
+          90deg,
+          rgb(159, 229, 151),
+          rgb(204, 229, 129)
+        );
+      }
 
-        ea-tooltip[effect="customized"]::part(original)::after {
-            background: linear-gradient(45deg, #b2e68d, #bce689);
-        }
+      ea-tooltip[effect="customized"]::part(original)::after {
+        background: linear-gradient(45deg, #b2e68d, #bce689);
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
-    <script src="../src/components/ea-button/index.js" type='module'></script>
-    <script src="../src/components/ea-card/index.js" type='module'></script>
-    <script src="../src/components/ea-layout/index.js" type='module'></script>
-    <script src="../src/components/ea-tooltip/index.js" type='module'></script>
+  <body>
+    <script src="../src/components/ea-button/index.ts" type="module"></script>
+    <script src="../src/components/ea-card/index.ts" type="module"></script>
+    <script src="../src/components/ea-layout/index.ts" type="module"></script>
+    <script src="../src/components/ea-tooltip/index.ts" type="module"></script>
 
     <!-- #region 基础用法 -->
     <h1>基础用法</h1>
 
     <div class="demo">
-        <ea-row justify="center">
-            <ea-col span="6">
-                <ea-tooltip content="Top Left prompts info" placement="top-start">
-                    <ea-button type="primary" slot="reference">top-start</ea-button>
-                </ea-tooltip>
-            </ea-col>
-            <ea-col span="6">
-                <ea-tooltip content="Top Center prompts info" placement="top">
-                    top
-                    <ea-button type="primary" slot="reference">top</ea-button>
-                </ea-tooltip>
-            </ea-col>
-            <ea-col span="6">
-                <ea-tooltip content="Top Right prompts info" placement="top-end">
-                    <ea-button type="primary" slot="reference">top-end</ea-button>
-                </ea-tooltip>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="center">
+        <ea-col span="6">
+          <ea-tooltip content="Top Left prompts info" placement="top-start">
+            <ea-button type="primary" slot="reference">top-start</ea-button>
+          </ea-tooltip>
+        </ea-col>
+        <ea-col span="6">
+          <ea-tooltip content="Top Center prompts info" placement="top">
+            top
+            <ea-button type="primary" slot="reference">top</ea-button>
+          </ea-tooltip>
+        </ea-col>
+        <ea-col span="6">
+          <ea-tooltip content="Top Right prompts info" placement="top-end">
+            <ea-button type="primary" slot="reference">top-end</ea-button>
+          </ea-tooltip>
+        </ea-col>
+      </ea-row>
 
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-tooltip content="Left Top prompts info" placement="left-start">
-                    <ea-button type="primary" slot="reference">left-start</ea-button>
-                </ea-tooltip>
-            </ea-col>
-            <ea-col span="6">
-                <ea-tooltip content="Right Top prompts info" placement="right-start">
-                    <ea-button type="primary" slot="reference">right-start</ea-button>
-                </ea-tooltip>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="space-between">
+        <ea-col span="6">
+          <ea-tooltip content="Left Top prompts info" placement="left-start">
+            <ea-button type="primary" slot="reference">left-start</ea-button>
+          </ea-tooltip>
+        </ea-col>
+        <ea-col span="6">
+          <ea-tooltip content="Right Top prompts info" placement="right-start">
+            <ea-button type="primary" slot="reference">right-start</ea-button>
+          </ea-tooltip>
+        </ea-col>
+      </ea-row>
 
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-tooltip content="Left Center prompts info" placement="left">
-                    <ea-button type="primary" slot="reference">left</ea-button>
-                </ea-tooltip>
-            </ea-col>
-            <ea-col span="6">
-                <ea-tooltip content="Right Center prompts info" placement="right">
-                    <ea-button type="primary" slot="reference">right</ea-button>
-                </ea-tooltip>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="space-between">
+        <ea-col span="6">
+          <ea-tooltip content="Left Center prompts info" placement="left">
+            <ea-button type="primary" slot="reference">left</ea-button>
+          </ea-tooltip>
+        </ea-col>
+        <ea-col span="6">
+          <ea-tooltip content="Right Center prompts info" placement="right">
+            <ea-button type="primary" slot="reference">right</ea-button>
+          </ea-tooltip>
+        </ea-col>
+      </ea-row>
 
-        <ea-row justify="space-between">
-            <ea-col span="6">
-                <ea-tooltip content="Left Bottom prompts info" placement="left-end">
-                    <ea-button type="primary" slot="reference">left-end</ea-button>
-                </ea-tooltip>
-            </ea-col>
-            <ea-col span="6">
-                <ea-tooltip content="Right Bottom prompts info" placement="right-end">
-                    <ea-button type="primary" slot="reference">right-end</ea-button>
-                </ea-tooltip>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="space-between">
+        <ea-col span="6">
+          <ea-tooltip content="Left Bottom prompts info" placement="left-end">
+            <ea-button type="primary" slot="reference">left-end</ea-button>
+          </ea-tooltip>
+        </ea-col>
+        <ea-col span="6">
+          <ea-tooltip content="Right Bottom prompts info" placement="right-end">
+            <ea-button type="primary" slot="reference">right-end</ea-button>
+          </ea-tooltip>
+        </ea-col>
+      </ea-row>
 
-        <ea-row justify="center">
-            <ea-col span="6">
-                <ea-tooltip content="Bottom Left prompts info" placement="bottom-start">
-                    <ea-button type="primary" slot="reference">bottom-start</ea-button>
-                </ea-tooltip>
-            </ea-col>
-            <ea-col span="6">
-                <ea-tooltip content="Bottom Center prompts info" placement="bottom">
-                    <ea-button type="primary" slot="reference">bottom</ea-button>
-                </ea-tooltip>
-            </ea-col>
-            <ea-col span="6">
-                <ea-tooltip content="Bottom Right prompts info" placement="bottom-end">
-                    <ea-button type="primary" slot="reference">bottom-end</ea-button>
-                </ea-tooltip>
-            </ea-col>
-        </ea-row>
+      <ea-row justify="center">
+        <ea-col span="6">
+          <ea-tooltip
+            content="Bottom Left prompts info"
+            placement="bottom-start"
+          >
+            <ea-button type="primary" slot="reference">bottom-start</ea-button>
+          </ea-tooltip>
+        </ea-col>
+        <ea-col span="6">
+          <ea-tooltip content="Bottom Center prompts info" placement="bottom">
+            <ea-button type="primary" slot="reference">bottom</ea-button>
+          </ea-tooltip>
+        </ea-col>
+        <ea-col span="6">
+          <ea-tooltip
+            content="Bottom Right prompts info"
+            placement="bottom-end"
+          >
+            <ea-button type="primary" slot="reference">bottom-end</ea-button>
+          </ea-tooltip>
+        </ea-col>
+      </ea-row>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
     <!-- #region 主题 -->
     <h1>主题</h1>
 
-    <div class=‘demo’>
-        <ea-tooltip content="Top center" placement="top">
-            <ea-button slot="reference">Dark</ea-button>
-        </ea-tooltip>
-        <ea-tooltip content="Bottom center" placement="bottom" effect="light">
-            <ea-button slot="reference">Light</ea-button>
-        </ea-tooltip>
-        <ea-tooltip content="Bottom center" effect="customized">
-            <ea-button slot="reference">Customized theme</ea-button>
-        </ea-tooltip>
+    <div class="demo">
+      <ea-tooltip content="Top center" placement="top">
+        <ea-button slot="reference">Dark</ea-button>
+      </ea-tooltip>
+      <ea-tooltip content="Bottom center" placement="bottom" effect="light">
+        <ea-button slot="reference">Light</ea-button>
+      </ea-tooltip>
+      <ea-tooltip content="Bottom center" effect="customized">
+        <ea-button slot="reference">Customized theme</ea-button>
+      </ea-tooltip>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
     <!-- #region 更多内容的文字提示 -->
     <h1>更多内容的文字提示</h1>
 
     <div id="scalableSection" class="demo">
-        <ea-tooltip placement="top">
-            multiple lines<br />second line
-            <ea-button id="popoverBtn" type="primary" slot="reference">Top center</ea-button>
-        </ea-tooltip>
+      <ea-tooltip placement="top">
+        multiple lines<br />second line
+        <ea-button id="popoverBtn" type="primary" slot="reference"
+          >Top center</ea-button
+        >
+      </ea-tooltip>
     </div>
 
-    <hr>
+    <hr />
     <!-- #endregion  -->
 
-    <script>
-    </script>
-</body>
-
+    <script></script>
+  </body>
 </html>

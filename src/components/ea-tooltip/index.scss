@@ -1,54 +1,56 @@
+$name: ea-tooltip;
+
 :host {
-  --ea-tooltip-spacing: 5px 11px;
+  --#{$name}-spacing: 5px 11px;
 
-  --ea-tooltip-background-color-dark: var(--grey-900);
-  --ea-tooltip-color-dark: var(--white);
-  --ea-tooltip-background-color-light: var(--white);
-  --ea-tooltip-color-light: var(--grey-900);
+  --#{$name}-bg-color-dark: var(--grey-900);
+  --#{$name}-color-dark: var(--white);
+  --#{$name}-bg-color-light: var(--white);
+  --#{$name}-color-light: var(--grey-900);
 
-  --ea-tooltip-background-color: none;
-  --ea-tooltip-color: none;
+  --#{$name}-background-color: none;
+  --#{$name}-color: none;
 
-  --ea-tooltip-font-size: var(--font-size-sm);
+  --#{$name}-font-size: var(--font-size-sm);
 
-  --ea-tooltip-box-shadow: var(--box-shadow-md);
-  --ea-tooltip-border-radius: var(--border-radius-sm);
+  --#{$name}-box-shadow: var(--box-shadow-md);
+  --#{$name}-border-radius: var(--border-radius-sm);
 
-  --ea-tooltip-z-index: 100;
+  --#{$name}-z-index: 100;
 }
 
 @include block(ea-popper) {
   @include element(original) {
-    padding: var(--ea-tooltip-spacing);
-    border-radius: var(--ea-tooltip-border-radius);
-    background-color: var(--ea-tooltip-background-color);
+    padding: var(--#{$name}-spacing);
+    border-radius: var(--#{$name}-border-radius);
+    background-color: var(--#{$name}-background-color);
 
-    color: var(--ea-tooltip-color);
-    font-size: var(--ea-tooltip-font-size);
+    color: var(--#{$name}-color);
+    font-size: var(--#{$name}-font-size);
 
-    z-index: var(--ea-tooltip-z-index);
-  }
-
-  @include element(content) {
-    line-height: var(--ea-tooltip-content-font-size);
+    z-index: var(--#{$name}-z-index);
   }
 }
 
-@include block(ea-tooltip) {
+@include block($name) {
   --ea-popper-arrow-size: 6px;
 
   @include modifier(dark) {
     --ea-popper-border-color: transparent;
-    --ea-tooltip-color: var(--ea-tooltip-color-dark);
-    --ea-tooltip-background-color: var(--ea-tooltip-background-color-dark);
+    --#{$name}-color: var(--#{$name}-color-dark);
+    --#{$name}-background-color: var(--#{$name}-bg-color-dark);
 
     .ea-popper__original {
-      --ea-popper-background-color: var(--ea-tooltip-background-color);
+      --ea-popper-background-color: var(--#{$name}-background-color);
     }
   }
 
   @include modifier(light) {
-    --ea-tooltip-color: var(--ea-tooltip-color-light);
-    --ea-tooltip-background-color: var(--ea-tooltip-background-color-light);
+    --#{$name}-color: var(--#{$name}-color-light);
+    --#{$name}-background-color: var(--#{$name}-bg-color-light);
+  }
+
+  @include element(content) {
+    line-height: var(--#{$name}-font-size);
   }
 }
