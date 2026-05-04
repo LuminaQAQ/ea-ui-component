@@ -32,8 +32,6 @@ export class EaScrollbar extends EaBase {
 
   // ==================== 私有状态 ====================
 
-  private _eventController?: AbortController;
-  private _isMounted: boolean = false;
   private _dragState?: {
     isHorizontal: boolean;
     startClientX: number;
@@ -60,10 +58,8 @@ export class EaScrollbar extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaScrollbar, newVal: boolean) {
-      if (this._container) {
-        this._container.classList.toggle("ea-scrollbar--native", newVal);
-      }
+    observer(this: EaScrollbar) {
+      this.updateContainerClasslist();
     },
   })
   native: boolean = false;
@@ -71,10 +67,8 @@ export class EaScrollbar extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaScrollbar, newVal: boolean) {
-      if (this._container) {
-        this._container.classList.toggle("ea-scrollbar--noresize", newVal);
-      }
+    observer(this: EaScrollbar) {
+      this.updateContainerClasslist();
     },
   })
   noresize: boolean = false;
@@ -82,25 +76,28 @@ export class EaScrollbar extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaScrollbar, newVal: boolean) {
-      if (this._container) {
-        this._container.classList.toggle("ea-scrollbar--always", newVal);
-      }
+    observer(this: EaScrollbar) {
+      this.updateContainerClasslist();
     },
   })
   always: boolean = false;
 
-  // ==================== Getter ====================
-
-  get isMounted(): boolean {
-    return this._isMounted;
-  }
-
   // ==================== 方法 ====================
 
-  /**
-   * 滚动事件处理
-   */
+  updateContainerClasslist(): string {
+    const className = bem({
+      native: this.native,
+      noresize: this.noresize,
+      always: this.always,
+    });
+
+    if (this._container) {
+      this._container.className = className;
+    }
+
+    return className;
+  }
+
   private _handleScroll(): void {
     if (!this._view || !this._verticalThumb || !this._horizontalThumb) return;
 
@@ -140,9 +137,6 @@ export class EaScrollbar extends EaBase {
     });
   }
 
-  /**
-   * 页面尺寸改变后，调整滚动条样式
-   */
   private _handleResize(): void {
     queueMicrotask(() => {
       if (!this._view || !this._verticalThumb || !this._horizontalThumb) return;
@@ -171,9 +165,6 @@ export class EaScrollbar extends EaBase {
     });
   }
 
-  /**
-   * 处理滚动条拖动
-   */
   private _handleThumbDrag = (e: MouseEvent): void => {
     if (!this._dragState || !this._view) return;
 
@@ -222,9 +213,6 @@ export class EaScrollbar extends EaBase {
     }
   };
 
-  /**
-   * 鼠标按下事件
-   */
   @listen("mousedown", ".ea-scrollbar__thumb-horizontal")
   @listen("mousedown", ".ea-scrollbar__thumb-vertical")
   private _handleMouseDown(e: MouseEvent): void {
@@ -235,7 +223,6 @@ export class EaScrollbar extends EaBase {
 
     const isHorizontal = (e.target as HTMLElement) === this._horizontalThumb;
 
-    // 记录拖动初始状态
     this._dragState = {
       isHorizontal,
       startClientX: e.clientX,
@@ -246,7 +233,6 @@ export class EaScrollbar extends EaBase {
       thumbHeight: this._verticalThumb?.getBoundingClientRect().height || 0,
     };
 
-    // 添加拖动状态类，防止滚动条消失
     this._container?.classList.add("is-dragging");
     if (isHorizontal) {
       this._horizontalThumb?.classList.add("is-active");
@@ -273,9 +259,6 @@ export class EaScrollbar extends EaBase {
     );
   }
 
-  /**
-   * 键盘事件
-   */
   @listen("keydown")
   private _handleKeyDown(e: KeyboardEvent): void {
     if (!this._view) return;
@@ -297,19 +280,40 @@ export class EaScrollbar extends EaBase {
     }
   }
 
-  /**
-   * 滚动到指定位置
-   */
-  scrollTo(options: ScrollToOptions): void {
-    this._view?.scrollTo(options);
+  @listen("scroll", ".ea-scrollbar__view")
+  private _handleViewScroll(): void {
+    this._handleScroll();
   }
 
-  /**
-   * 渲染模板
-   */
+  @listen("slotchange", bem.ce("view"))
+  private _handleSlotChange(): void {
+    this._handleResize();
+  }
+
+  @listen("resize", "window")
+  private _handleWindowResize(): void {
+    if (this.noresize) return;
+    this._handleResize();
+  }
+
+  @listen("load", "window")
+  private _handleWindowLoad(): void {
+    this._handleResize();
+  }
+
+  scrollTo(options?: ScrollToOptions): void;
+  scrollTo(x: number, y: number): void;
+  scrollTo(optionsOrX?: ScrollToOptions | number, y?: number): void {
+    if (typeof optionsOrX === "number") {
+      this._view?.scrollTo(optionsOrX, y ?? 0);
+    } else {
+      this._view?.scrollTo(optionsOrX);
+    }
+  }
+
   html(): string {
     return `
-      <div class="${bem.b()}" part="container">
+      <div class="${bem()}" part="container">
         <div class="${bem.e("track-horizontal")}" part="track-horizontal">
           <div class="${bem.e("thumb-horizontal")}" part="thumb"></div>
         </div>
@@ -326,49 +330,7 @@ export class EaScrollbar extends EaBase {
   // ==================== 生命周期 ====================
 
   $mount(): void {
-    this._isMounted = true;
-
-    // 初始化属性
-    this.native = this.native;
-    this.noresize = this.noresize;
-    this.always = this.always;
-
-    // 初始化事件控制器
-    this._eventController = new AbortController();
-    const controller = this._eventController;
-
-    // 初始化滚动条尺寸
+    this.updateContainerClasslist();
     this._handleResize();
-
-    // 绑定滚动事件
-    this._view?.addEventListener("scroll", () => this._handleScroll(), {
-      signal: controller.signal,
-    });
-
-    // 绑定 slotchange 事件
-    this.shadowRoot?.addEventListener(
-      "slotchange",
-      () => this._handleResize(),
-      {
-        signal: controller.signal,
-      }
-    );
-
-    // 绑定 resize 事件（如果 noresize 为 false）
-    if (!this.noresize) {
-      window.addEventListener("resize", () => this._handleResize(), {
-        signal: controller.signal,
-      });
-    }
-
-    // 绑定 load 事件
-    window.addEventListener("load", () => this._handleResize(), {
-      signal: controller.signal,
-    });
-  }
-
-  $beforeUnmount(): void {
-    this._eventController?.abort();
-    this._isMounted = false;
   }
 }

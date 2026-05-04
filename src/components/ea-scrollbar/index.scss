@@ -48,7 +48,7 @@
 
     transition: opacity var(--transition-normal);
 
-    &.is-show {
+    @include state(show) {
       display: none;
     }
   }
@@ -79,7 +79,10 @@
 
     z-index: 1;
 
-    &.is-active,
+    @include state(active) {
+      background-color: var(--ea-scrollbar-thumb-hover-color);
+    }
+
     &:hover {
       background-color: var(--ea-scrollbar-thumb-hover-color);
     }
@@ -116,7 +119,7 @@
     }
   }
 
-  &.is-dragging {
+  @include state(dragging) {
 
     .ea-scrollbar__track-vertical,
     .ea-scrollbar__track-horizontal {

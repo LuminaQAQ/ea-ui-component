@@ -165,9 +165,9 @@ basicExample.init();
 
 :::
 
-## 禁用加载
+## 加载状态
 
-通过设置 `disabled` 属性，可以禁用无限加载功能。若同时使用了插槽名为 `noMore` 的插槽，则会显示 `noMore` 插槽的内容。
+通过设置 `status` 属性，可以控制组件的加载状态。当 `status` 为 `noMore` 时，若同时使用了插槽名为 `noMore` 的插槽，则会显示 `noMore` 插槽的内容。
 
 <div class="demo" style="height: 150px; overflow: auto">
   <ea-scrollbar>
