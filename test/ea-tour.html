@@ -14,22 +14,22 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
-    <script type="module" src="../src/components/ea-tour/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+    <script type="module" src="../src/components/ea-tour/index.ts"></script>
 
     <!--  基本用法 -->
     <!-- #region -->
     <h1>基本用法</h1>
 
     <div class="demo">
-      <ea-button id="basicTourBtn" type="primary">Begin Tour</ea-button>
+      <ea-button id="basicTourBtn" variant="primary">Begin Tour</ea-button>
       <hr />
       <ea-button id="basicEl1">Upload</ea-button>
-      <ea-button id="basicEl2" type="primary">Save</ea-button>
+      <ea-button id="basicEl2" variant="primary">Save</ea-button>
       <ea-button id="basicEl3" icon="share-nodes"></ea-button>
 
       <ea-tour id="basicTour">
-        <ea-tour-step target="#basicEl1" title="Upload File">
+        <ea-tour-step target="#basicEl1" heading="Upload File">
           <img
             style="width: 80px"
             src="https://raw.githubusercontent.com/LuminaQAQ/ea-ui-component/refs/heads/dev_3.0/docs/favicon.ico"
@@ -39,12 +39,12 @@
         </ea-tour-step>
         <ea-tour-step
           target="#basicEl2"
-          title="Save"
+          heading="Save"
           description="Save your changes"
         ></ea-tour-step>
         <ea-tour-step
           target="#basicEl3"
-          title="Other Actions"
+          heading="Other Actions"
           description="Click to see other"
         ></ea-tour-step>
       </ea-tour>
@@ -73,24 +73,24 @@
     <h1>非模态</h1>
 
     <div class="demo">
-      <ea-button id="noMaskTourBtn" type="primary">Begin Tour</ea-button>
+      <ea-button id="noMaskTourBtn" variant="primary">Begin Tour</ea-button>
       <hr />
       <ea-button id="noMaskEl1">Upload</ea-button>
-      <ea-button id="noMaskEl2" type="primary">Save</ea-button>
+      <ea-button id="noMaskEl2" variant="primary">Save</ea-button>
       <ea-button id="noMaskEl3" icon="share-nodes"></ea-button>
 
-      <ea-tour id="noMaskTour" type="primary" mask="false">
-        <ea-tour-step target="#noMaskEl1" title="Upload File">
+      <ea-tour id="noMaskTour" variant="primary" mask="false">
+        <ea-tour-step target="#noMaskEl1" heading="Upload File">
           <div>Put you files here.</div>
         </ea-tour-step>
         <ea-tour-step
           target="#noMaskEl2"
-          title="Save"
+          heading="Save"
           description="Save your changes"
         ></ea-tour-step>
         <ea-tour-step
           target="#noMaskEl3"
-          title="Other Actions"
+          heading="Other Actions"
           description="Click to see other"
         ></ea-tour-step>
       </ea-tour>
@@ -119,83 +119,83 @@
     <h1>位置</h1>
 
     <div class="demo" style="text-align: center">
-      <ea-button id="placementTourBtn" type="primary">Begin Tour</ea-button>
+      <ea-button id="placementTourBtn" variant="primary">Begin Tour</ea-button>
 
       <ea-tour id="placementTour">
         <ea-tour-step
-          title="Center"
+          heading="Center"
           description="Displayed in the center of screen."
         >
         </ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Top"
+          heading="Top"
           description="On the top of target."
           placement="top"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Top-Start"
+          heading="Top-Start"
           description="On the top-start of target."
           placement="top-start"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Top-End"
+          heading="Top-End"
           description="On the top-end of target."
           placement="top-end"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Right"
+          heading="Right"
           description="On the right of target."
           placement="right"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Right-Start"
+          heading="Right-Start"
           description="On the right-start of target."
           placement="right-start"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Right-End"
+          heading="Right-End"
           description="On the right-end of target."
           placement="right-end"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Bottom"
+          heading="Bottom"
           description="On the bottom of target."
           placement="bottom"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Bottom-Start"
+          heading="Bottom-Start"
           description="On the bottom-start of target."
           placement="bottom-start"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Bottom-End"
+          heading="Bottom-End"
           description="On the bottom-end of target."
           placement="bottom-end"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Left"
+          heading="Left"
           description="On the Left of target."
           placement="left"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Left-Start"
+          heading="Left-Start"
           description="On the left-start of target."
           placement="left-start"
         ></ea-tour-step>
         <ea-tour-step
           target="#placementTourBtn"
-          title="Left-End"
+          heading="Left-End"
           description="On the left-end of target."
           placement="left-end"
         ></ea-tour-step>

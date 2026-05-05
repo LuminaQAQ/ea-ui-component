@@ -63,7 +63,7 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-tour/index.js";
+  import "./node_modules/easy-component-ui/components/ea-tour/index.ts";
 </script>
 ```
 
@@ -72,20 +72,20 @@ onMounted(() => {
 简单示例：点击按钮开启引导。
 
 <div class="demo">
-  <ea-button id="basicTourBtn" type="primary">Begin Tour</ea-button>
+  <ea-button id="basicTourBtn" variant="primary">Begin Tour</ea-button>
   <p class="row left is-not-demo">
     <ea-button id="basicEl1">Upload</ea-button>
-    <ea-button id="basicEl2" type="primary">Save</ea-button>
+    <ea-button id="basicEl2" variant="primary">Save</ea-button>
     <ea-button id="basicEl3" icon="share-nodes"></ea-button>
   </p>
 
   <ea-tour id="basicTour">
-    <ea-tour-step target="#basicEl1" title="Upload File">
+    <ea-tour-step target="#basicEl1" heading="Upload File">
       <img style="width: 240px" src="https://raw.githubusercontent.com/LuminaQAQ/ea-ui-component/refs/heads/dev_3.0/docs/favicon.ico" alt="tour.png" />
       <div>Put you files here.</div>
     </ea-tour-step>
-    <ea-tour-step target="#basicEl2" title="Save" description="Save your changes"></ea-tour-step>
-    <ea-tour-step target="#basicEl3" title="Other Actions" description="Click to see other"></ea-tour-step>
+    <ea-tour-step target="#basicEl2" heading="Save" description="Save your changes"></ea-tour-step>
+    <ea-tour-step target="#basicEl3" heading="Other Actions" description="Click to see other"></ea-tour-step>
   </ea-tour>
 </div>
 
@@ -93,14 +93,14 @@ onMounted(() => {
 
 ```html
 <div class="demo">
-  <ea-button id="basicTourBtn" type="primary">Begin Tour</ea-button>
+  <ea-button id="basicTourBtn" variant="primary">Begin Tour</ea-button>
   <hr />
   <ea-button id="basicEl1">Upload</ea-button>
-  <ea-button id="basicEl2" type="primary">Save</ea-button>
+  <ea-button id="basicEl2" variant="primary">Save</ea-button>
   <ea-button id="basicEl3" icon="share-nodes"></ea-button>
 
   <ea-tour id="basicTour">
-    <ea-tour-step target="#basicEl1" title="Upload File">
+    <ea-tour-step target="#basicEl1" heading="Upload File">
       <img
         style="width: 240px"
         src="https://raw.githubusercontent.com/LuminaQAQ/ea-ui-component/refs/heads/dev_3.0/docs/favicon.ico"
@@ -110,12 +110,12 @@ onMounted(() => {
     </ea-tour-step>
     <ea-tour-step
       target="#basicEl2"
-      title="Save"
+      heading="Save"
       description="Save your changes"
     ></ea-tour-step>
     <ea-tour-step
       target="#basicEl3"
-      title="Other Actions"
+      heading="Other Actions"
       description="Click to see other"
     ></ea-tour-step>
   </ea-tour>
@@ -129,20 +129,20 @@ onMounted(() => {
 设置 `mask="false"` 可让引导非模态显示（不遮罩页面）。
 
 <div class="demo">
-  <ea-button id="noMaskTourBtn" type="primary">Begin Tour</ea-button>
+  <ea-button id="noMaskTourBtn" variant="primary">Begin Tour</ea-button>
   <hr />
   <p class="row left is-not-demo">
     <ea-button id="noMaskEl1">Upload</ea-button>
-    <ea-button id="noMaskEl2" type="primary">Save</ea-button>
+    <ea-button id="noMaskEl2" variant="primary">Save</ea-button>
     <ea-button id="noMaskEl3" icon="share-nodes"></ea-button>
   </p>
 
-  <ea-tour id="noMaskTour" type="primary" mask="false">
-    <ea-tour-step target="#noMaskEl1" title="Upload File">
+  <ea-tour id="noMaskTour" variant="primary" mask="false">
+    <ea-tour-step target="#noMaskEl1" heading="Upload File">
       <div>Put you files here.</div>
     </ea-tour-step>
-    <ea-tour-step target="#noMaskEl2" title="Save" description="Save your changes"></ea-tour-step>
-    <ea-tour-step target="#noMaskEl3" title="Other Actions" description="Click to see other"></ea-tour-step>
+    <ea-tour-step target="#noMaskEl2" heading="Save" description="Save your changes"></ea-tour-step>
+    <ea-tour-step target="#noMaskEl3" heading="Other Actions" description="Click to see other"></ea-tour-step>
   </ea-tour>
 </div>
 
@@ -150,24 +150,24 @@ onMounted(() => {
 
 ```html
 <div class="demo">
-  <ea-button id="noMaskTourBtn" type="primary">Begin Tour</ea-button>
+  <ea-button id="noMaskTourBtn" variant="primary">Begin Tour</ea-button>
   <hr />
   <ea-button id="noMaskEl1">Upload</ea-button>
-  <ea-button id="noMaskEl2" type="primary">Save</ea-button>
+  <ea-button id="noMaskEl2" variant="primary">Save</ea-button>
   <ea-button id="noMaskEl3" icon="share-nodes"></ea-button>
 
-  <ea-tour id="noMaskTour" type="primary" mask="false">
-    <ea-tour-step target="#noMaskEl1" title="Upload File">
+  <ea-tour id="noMaskTour" variant="primary" mask="false">
+    <ea-tour-step target="#noMaskEl1" heading="Upload File">
       <div>Put you files here.</div>
     </ea-tour-step>
     <ea-tour-step
       target="#noMaskEl2"
-      title="Save"
+      heading="Save"
       description="Save your changes"
     ></ea-tour-step>
     <ea-tour-step
       target="#noMaskEl3"
-      title="Other Actions"
+      heading="Other Actions"
       description="Click to see other"
     ></ea-tour-step>
   </ea-tour>
@@ -181,22 +181,22 @@ onMounted(() => {
 通过 `placement` 属性可设置 `ea-tour-step` 的出现位置；若不设置 `target`，可在屏幕中心显示。
 
 <div class="demo" style="text-align: center">
-  <ea-button id="placementTourBtn" type="primary">Begin Tour</ea-button>
+  <ea-button id="placementTourBtn" variant="primary">Begin Tour</ea-button>
 
   <ea-tour id="placementTour">
-    <ea-tour-step title="Center" description="Displayed in the center of screen."></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Top" description="On the top of target." placement="top"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Top-Start" description="On the top-start of target." placement="top-start"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Top-End" description="On the top-end of target." placement="top-end"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Right" description="On the right of target." placement="right"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Right-Start" description="On the right-start of target." placement="right-start"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Right-End" description="On the right-end of target." placement="right-end"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Bottom" description="On the bottom of target." placement="bottom"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Bottom-Start" description="On the bottom-start of target." placement="bottom-start"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Bottom-End" description="On the bottom-end of target." placement="bottom-end"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Left" description="On the Left of target." placement="left"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Left-Start" description="On the left-start of target." placement="left-start"></ea-tour-step>
-    <ea-tour-step target="#placementTourBtn" title="Left-End" description="On the left-end of target." placement="left-end"></ea-tour-step>
+    <ea-tour-step heading="Center" description="Displayed in the center of screen."></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Top" description="On the top of target." placement="top"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Top-Start" description="On the top-start of target." placement="top-start"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Top-End" description="On the top-end of target." placement="top-end"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Right" description="On the right of target." placement="right"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Right-Start" description="On the right-start of target." placement="right-start"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Right-End" description="On the right-end of target." placement="right-end"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Bottom" description="On the bottom of target." placement="bottom"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Bottom-Start" description="On the bottom-start of target." placement="bottom-start"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Bottom-End" description="On the bottom-end of target." placement="bottom-end"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Left" description="On the Left of target." placement="left"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Left-Start" description="On the left-start of target." placement="left-start"></ea-tour-step>
+    <ea-tour-step target="#placementTourBtn" heading="Left-End" description="On the left-end of target." placement="left-end"></ea-tour-step>
   </ea-tour>
 </div>
 
@@ -204,82 +204,82 @@ onMounted(() => {
 
 ```html
 <div class="demo" style="text-align: center">
-  <ea-button id="placementTourBtn" type="primary">Begin Tour</ea-button>
+  <ea-button id="placementTourBtn" variant="primary">Begin Tour</ea-button>
 
   <ea-tour id="placementTour">
     <ea-tour-step
-      title="Center"
+      heading="Center"
       description="Displayed in the center of screen."
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Top"
+      heading="Top"
       description="On the top of target."
       placement="top"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Top-Start"
+      heading="Top-Start"
       description="On the top-start of target."
       placement="top-start"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Top-End"
+      heading="Top-End"
       description="On the top-end of target."
       placement="top-end"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Right"
+      heading="Right"
       description="On the right of target."
       placement="right"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Right-Start"
+      heading="Right-Start"
       description="On the right-start of target."
       placement="right-start"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Right-End"
+      heading="Right-End"
       description="On the right-end of target."
       placement="right-end"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Bottom"
+      heading="Bottom"
       description="On the bottom of target."
       placement="bottom"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Bottom-Start"
+      heading="Bottom-Start"
       description="On the bottom-start of target."
       placement="bottom-start"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Bottom-End"
+      heading="Bottom-End"
       description="On the bottom-end of target."
       placement="bottom-end"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Left"
+      heading="Left"
       description="On the Left of target."
       placement="left"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Left-Start"
+      heading="Left-Start"
       description="On the left-start of target."
       placement="left-start"
     ></ea-tour-step>
     <ea-tour-step
       target="#placementTourBtn"
-      title="Left-End"
+      heading="Left-End"
       description="On the left-end of target."
       placement="left-end"
     ></ea-tour-step>
@@ -300,7 +300,7 @@ onMounted(() => {
 | current   | 当前步骤索引                                        | number  | -                                                                                                                                                                                                                                           | 0       |
 | gap       | 遮罩与目标元素间距（像素）                          | number  | -                                                                                                                                                                                                                                           | 6       |
 | mask      | 是否显示遮罩（true 显示，false 不显示）             | boolean | -                                                                                                                                                                                                                                           | true    |
-| type      | 按钮等样式类型，会传递给子 step                     | string  | `default  \|  primary`                                                                                                                                                                                                                      | default |
+| variant   | 按钮等样式类型，会传递给子 step                     | string  | `default  \|  primary`                                                                                                                                                                                                                      | default |
 | placement | 默认步骤弹出位置（当 step 未设置 placement 时生效） | string  | <ea-tooltip><span slot="reference">enum<ea-icon name="circle-info"></ea-icon></span>top \| top-start \| top-end \| bottom \| bottom-start \| bottom-end \| left \| left-start \| left-end \| right \| right-start \| right-end</ea-tooltip> | bottom  |
 
 ### Tour Slots
@@ -323,18 +323,18 @@ onMounted(() => {
 
 | 参数        | 说明                                                | 类型   | 可选值                                                                                                                                                                                                                                      | 默认值  |
 | ----------- | --------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| title       | 步骤标题                                            | string | -                                                                                                                                                                                                                                           | ""      |
+| heading     | 步骤标题                                            | string | -                                                                                                                                                                                                                                           | ""      |
 | description | 步骤描述                                            | string | -                                                                                                                                                                                                                                           | ""      |
 | target      | 目标元素选择器（缺省则居中显示）                    | string | -                                                                                                                                                                                                                                           | ""      |
 | placement   | 默认步骤弹出位置（当 step 未设置 placement 时生效） | string | <ea-tooltip><span slot="reference">enum<ea-icon name="circle-info"></ea-icon></span>top \| top-start \| top-end \| bottom \| bottom-start \| bottom-end \| left \| left-start \| left-end \| right \| right-start \| right-end</ea-tooltip> | bottom  |
-| type        | 样式类型，会影响按钮类型                            | string | `default \| primary`                                                                                                                                                                                                                        | default |
+| variant     | 样式类型，会影响按钮类型                            | string | `default \| primary`                                                                                                                                                                                                                        | default |
 
 ### TourStep CSS Part
 
 | 名称            | 说明                  |
 | --------------- | --------------------- |
 | container       | step 根元素           |
-| header          | 头部（title / close） |
+| header          | 头部（heading / close） |
 | close-icon      | 关闭图标              |
 | content         | 内容区域              |
 | footer          | 底部区域              |

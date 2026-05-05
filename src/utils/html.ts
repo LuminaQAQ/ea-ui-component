@@ -9,7 +9,7 @@ const DOMPurify = createDOMPurify(window);
  */
 export const html = (dirtyHTML: string): string => {
   const slotPlaceholders: string[] = [];
-  const protectedHTML = dirtyHTML.replace(/<slot\b[^>]*\/?>/g, match => {
+  const protectedHTML = dirtyHTML.replace(/<\/?slot\b[^>]*>/g, match => {
     const placeholder = `___SLOT_${slotPlaceholders.length}___`;
     slotPlaceholders.push(match);
     return placeholder;
