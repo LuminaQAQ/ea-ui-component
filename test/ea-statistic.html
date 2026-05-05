@@ -16,14 +16,14 @@
   <body>
     <script
       type="module"
-      src="../src/components/ea-statistic/index.js"
+      src="../src/components/ea-statistic/index.ts"
     ></script>
     <script
       type="module"
-      src="../src/components/ea-countdown/index.js"
+      src="../src/components/ea-countdown/index.ts"
     ></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
-    <script type="module" src="../src/components/ea-tooltip/index.js"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+    <script type="module" src="../src/components/ea-tooltip/index.ts"></script>
     <script type="module" src="../node_modules/dayjs/dayjs.min.js"></script>
 
     <!--  基础用法 -->
@@ -31,7 +31,7 @@
     <h1>基础用法</h1>
 
     <div class="demo">
-      <ea-statistic title="Daily active users" value="268500"></ea-statistic>
+      <ea-statistic heading="Daily active users" value="268500"></ea-statistic>
       <ea-statistic value="138">
         <div slot="title" style="display: inline-flex; align-items: center">
           Ratio of men to women
@@ -39,8 +39,8 @@
         </div>
         <div slot="suffix">/100</div>
       </ea-statistic>
-      <ea-statistic title="Total Transactions" value="172000"></ea-statistic>
-      <ea-statistic title="Feedback number" value="562">
+      <ea-statistic heading="Total Transactions" value="172000"></ea-statistic>
+      <ea-statistic heading="Feedback number" value="562">
         <div slot="suffix">
           <ea-icon style="vertical-align: middle" name="comment"> </ea-icon>
         </div>
@@ -56,7 +56,7 @@
     <h1>倒计时</h1>
 
     <div class="demo">
-      <ea-countdown id="countdown1" title="Start to grab"></ea-countdown>
+      <ea-countdown id="countdown1" heading="Start to grab"></ea-countdown>
       <div
         style="
           display: flex;
@@ -67,7 +67,7 @@
       >
         <ea-countdown
           id="countdown2"
-          title="Remaining VIP time"
+          heading="Remaining VIP time"
           format="HH:mm:ss"
         >
         </ea-countdown>
@@ -93,7 +93,7 @@
       >
         <ea-countdown
           id="countdown3"
-          title="Countdown"
+          heading="Countdown"
           format="DD [days] HH:mm:ss"
         >
           <div style="display: inline-flex; align-items: center" slot="title">
@@ -246,7 +246,7 @@
         </div>
       </div>
       <div class="statistic-card">
-        <ea-statistic value="72000" title="New transactions today">
+        <ea-statistic value="72000" heading="New transactions today">
           <div style="display: inline-flex; align-items: center" slot="title">
             New transactions today
           </div>
