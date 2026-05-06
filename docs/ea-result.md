@@ -29,39 +29,39 @@ onMounted(() => {
 
 <div class="row space-between">
   <ea-result
-    type="primary"
-    title="Primary Tip"
+    variant="primary"
+    heading="Primary Tip"
     sub-title="Please follow the instructions"
   >
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
   <ea-result
-    type="success"
-    title="Success Tip"
+    variant="success"
+    heading="Success Tip"
     sub-title="Please follow the instructions"
   >
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
   <ea-result
-    type="warning"
-    title="Warning Tip"
+    variant="warning"
+    heading="Warning Tip"
     sub-title="Please follow the instructions"
   >
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
   <ea-result
-    type="error"
-    title="Error Tip"
+    variant="error"
+    heading="Error Tip"
     sub-title="Please follow the instructions"
   >
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
 </div>
@@ -71,39 +71,39 @@ onMounted(() => {
 ```html
 <div class="row space-between">
   <ea-result
-    type="primary"
-    title="Primary Tip"
+    variant="primary"
+    heading="Primary Tip"
     sub-title="Please follow the instructions"
   >
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
   <ea-result
-    type="success"
-    title="Success Tip"
+    variant="success"
+    heading="Success Tip"
     sub-title="Please follow the instructions"
   >
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
   <ea-result
-    type="warning"
-    title="Warning Tip"
+    variant="warning"
+    heading="Warning Tip"
     sub-title="Please follow the instructions"
   >
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
   <ea-result
-    type="error"
-    title="Error Tip"
+    variant="error"
+    heading="Error Tip"
     sub-title="Please follow the instructions"
   >
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
 </div>
@@ -114,28 +114,28 @@ onMounted(() => {
 ## 自定义内容
 
 <div class="demo">
-  <ea-result title="404" sub-title="Sorry, request error">
+  <ea-result heading="404" sub-title="Sorry, request error">
     <div slot="icon">
       <ea-image
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       ></ea-image>
     </div>
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
 </div>
 
 ```html
 <div class="demo">
-  <ea-result title="404" sub-title="Sorry, request error">
+  <ea-result heading="404" sub-title="Sorry, request error">
     <div slot="icon">
       <ea-image
         src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
       ></ea-image>
     </div>
     <div slot="extra">
-      <ea-button type="primary">Back</ea-button>
+      <ea-button variant="primary">Back</ea-button>
     </div>
   </ea-result>
 </div>
@@ -143,12 +143,12 @@ onMounted(() => {
 
 ## Attributes
 
-| 参数      | 说明                  | 类型   | 可选值                                                     | 默认值 |
-| --------- | --------------------- | ------ | ---------------------------------------------------------- | ------ |
-| title     | result 组件的标题     | string | -                                                          | -      |
-| sub-title | result 组件的副标题   | string | -                                                          | -      |
-| type      | 类型                  | string | `"primary" \| "success" \| "warning" \| "info" \| "error"` | ""     |
-| icon      | result 组件的图标类型 | string | -                                                          | -      |
+| 参数      | 说明                  | 类型   | 可选值                                                              | 默认值 |
+| --------- | --------------------- | ------ | ------------------------------------------------------------------- | ------ |
+| heading   | result 组件的标题     | string | -                                                                   | -      |
+| sub-title | result 组件的副标题   | string | -                                                                   | -      |
+| variant   | 类型                  | string | `"primary" \| "success" \| "warning" \| "danger" \| "info" \| "error"` | ""     |
+| icon      | result 组件的图标类型 | string | -                                                                   | -      |
 
 ## CSS Part
 

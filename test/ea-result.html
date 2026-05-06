@@ -14,48 +14,48 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-result/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
-    <script type="module" src="../src/components/ea-image/index.js"></script>
+    <script type="module" src="../src/components/ea-result/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+    <script type="module" src="../src/components/ea-image/index.ts"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
     <div class="row space-between">
       <ea-result
-        type="primary"
-        title="Primary Tip"
+        variant="primary"
+        heading="Primary Tip"
         sub-title="Please follow the instructions"
       >
         <div slot="extra">
-          <ea-button type="primary">Back</ea-button>
+          <ea-button variant="primary">Back</ea-button>
         </div>
       </ea-result>
       <ea-result
-        type="success"
-        title="Success Tip"
+        variant="success"
+        heading="Success Tip"
         sub-title="Please follow the instructions"
       >
         <div slot="extra">
-          <ea-button type="primary">Back</ea-button>
+          <ea-button variant="primary">Back</ea-button>
         </div>
       </ea-result>
       <ea-result
-        type="warning"
-        title="Warning Tip"
+        variant="warning"
+        heading="Warning Tip"
         sub-title="Please follow the instructions"
       >
         <div slot="extra">
-          <ea-button type="primary">Back</ea-button>
+          <ea-button variant="primary">Back</ea-button>
         </div>
       </ea-result>
       <ea-result
-        type="error"
-        title="Error Tip"
+        variant="error"
+        heading="Error Tip"
         sub-title="Please follow the instructions"
       >
         <div slot="extra">
-          <ea-button type="primary">Back</ea-button>
+          <ea-button variant="primary">Back</ea-button>
         </div>
       </ea-result>
     </div>
@@ -68,14 +68,14 @@
     <h1>自定义内容</h1>
 
     <div class="demo">
-      <ea-result title="404" sub-title="Sorry, request error">
+      <ea-result heading="404" sub-title="Sorry, request error">
         <div slot="icon">
           <ea-image
             src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
           ></ea-image>
         </div>
         <div slot="extra">
-          <ea-button type="primary">Back</ea-button>
+          <ea-button variant="primary">Back</ea-button>
         </div>
       </ea-result>
     </div>
