@@ -14,10 +14,10 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-timeline/index.js"></script>
-    <script type="module" src="../src/components/ea-card/index.js"></script>
-    <script type="module" src="../src/components/ea-radio/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-timeline/index.ts"></script>
+    <script type="module" src="../src/components/ea-card/index.ts"></script>
+    <script type="module" src="../src/components/ea-radio/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
@@ -45,18 +45,18 @@
     <div class="demo">
       <ea-timeline>
         <ea-timeline-item
-          type="primary"
+          variant="primary"
           size="large"
           timestamp="2024-7-1"
           icon="mug-hot"
         >
           Custom icon
         </ea-timeline-item>
-        <ea-timeline-item type="primary" color="#0bbd87" timestamp="2024-7-2">
+        <ea-timeline-item variant="primary" color="#0bbd87" timestamp="2024-7-2">
           Custom color
         </ea-timeline-item>
         <ea-timeline-item timestamp="2024-7-3"> Custom size </ea-timeline-item>
-        <ea-timeline-item type="primary" timestamp="2024-7-4" hollow>
+        <ea-timeline-item variant="primary" timestamp="2024-7-4" hollow>
           Custom hollow
         </ea-timeline-item>
         <ea-timeline-item timestamp="2024-7-5"> Default node </ea-timeline-item>
@@ -77,28 +77,28 @@
     </style>
     <div class="demo">
       <ea-timeline>
-        <ea-timeline-item type="success" placement="top">
+        <ea-timeline-item variant="success" placement="top">
           <ea-card>
             <header class="header">打开冰箱</header>
             <p>Open the refrigerator</p>
           </ea-card>
           <div slot="timestamp">2025-10-21</div>
         </ea-timeline-item>
-        <ea-timeline-item type="primary" placement="top">
+        <ea-timeline-item variant="primary" placement="top">
           <ea-card>
             <header class="header">把大象放进去</header>
             <p>Put the elephant inside</p>
           </ea-card>
           <div slot="timestamp">2025-10-22</div>
         </ea-timeline-item>
-        <ea-timeline-item type="warning" placement="top">
+        <ea-timeline-item variant="warning" placement="top">
           <ea-card>
             <header class="header">关上冰箱</header>
             <p>Close the refrigerator</p>
           </ea-card>
           <div slot="timestamp">2025-10-23</div>
         </ea-timeline-item>
-        <ea-timeline-item type="danger" placement="top">
+        <ea-timeline-item variant="danger" placement="top">
           <ea-card>
             <header class="header">
               由于违反动物保护法，该组件库将被无限期停更

@@ -22,7 +22,7 @@ $name: ea-timeline-item;
   @include component-types-defination(ea-timeline-item, 5);
 }
 
-@include block(ea-timeline-item) {
+@include block($name) {
   position: relative;
   box-sizing: border-box;
 
@@ -88,7 +88,7 @@ $name: ea-timeline-item;
   }
 
   @include modifier(large) {
-    .ea-timeline-item__dot {
+    .#{$name}__dot {
       width: var(--ea-timeline-item-dot-size-large);
       height: var(--ea-timeline-item-dot-size-large);
     }
@@ -97,32 +97,32 @@ $name: ea-timeline-item;
   @include modifier(center) {
     overflow: hidden;
 
-    .ea-timeline-item__dot {
+    .#{$name}__dot {
       top: calc(50% - var(--#{$name}-bottom-spacing));
     }
 
-    .ea-timeline-item__tail {
+    .#{$name}__tail {
       top: var(--is-last-child-top);
     }
 
-    .ea-timeline-item__dot {
+    .#{$name}__dot {
       transform: translateY(-50%);
     }
   }
 
-  @each $placment in $ea-timeline-item-placement {
-    @include modifier($placment) {
-      .right-wrapper {
+  @each $placement in $ea-timeline-item-placement {
+    @include modifier($placement) {
+      .#{$name}__right-wrapper {
         display: flex;
 
-        @if $placment == top {
+        @if $placement == top {
           flex-direction: column-reverse;
         } @else {
           flex-direction: column;
         }
       }
 
-      .ea-timeline-item__timestamp {
+      .#{$name}__timestamp {
         margin-top: 0;
         margin-bottom: var(--#{$name}-timestamp-spacing);
       }
@@ -130,7 +130,7 @@ $name: ea-timeline-item;
   }
 
   @include state(hollow-dot) {
-    .ea-timeline-item__dot {
+    .#{$name}__dot {
       background-color: var(--white);
       border-width: 2px;
       border-style: solid;
@@ -139,12 +139,12 @@ $name: ea-timeline-item;
 
   @each $type, $color in $component-types {
     @include modifier($type) {
-      .ea-timeline-item__dot {
+      .#{$name}__dot {
         background-color: var(--ea-timeline-item-#{$type}-color);
         border-color: var(--ea-timeline-item-#{$type}-color);
       }
 
-      .ea-timeline-item__dot[part*="icon-dot"] {
+      .#{$name}__dot[part*="icon-dot"] {
         color: var(--color-white);
       }
     }

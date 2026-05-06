@@ -24,7 +24,7 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-timeline/index.js";
+  import "./node_modules/easy-component-ui/components/ea-timeline/index.ts";
 </script>
 ```
 
@@ -73,18 +73,18 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
 <div class="demo">
   <ea-timeline>
     <ea-timeline-item
-      type="primary"
+      variant="primary"
       size="large"
       timestamp="2024-7-1"
       icon="mug-hot"
     >
       Custom icon
     </ea-timeline-item>
-    <ea-timeline-item type="primary" color="#0bbd87" timestamp="2024-7-2">
+    <ea-timeline-item variant="primary" color="#0bbd87" timestamp="2024-7-2">
       Custom color
     </ea-timeline-item>
     <ea-timeline-item timestamp="2024-7-3"> Custom size </ea-timeline-item>
-    <ea-timeline-item type="primary" timestamp="2024-7-4" hollow>
+    <ea-timeline-item variant="primary" timestamp="2024-7-4" hollow>
       Custom hollow
     </ea-timeline-item>
     <ea-timeline-item timestamp="2024-7-5"> Default node </ea-timeline-item>
@@ -97,18 +97,18 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
 <div class="demo">
   <ea-timeline>
     <ea-timeline-item
-      type="primary"
+      variant="primary"
       size="large"
       timestamp="2024-7-1"
       icon="mug-hot"
     >
       Custom icon
     </ea-timeline-item>
-    <ea-timeline-item type="primary" color="#0bbd87" timestamp="2024-7-2">
+    <ea-timeline-item variant="primary" color="#0bbd87" timestamp="2024-7-2">
       Custom color
     </ea-timeline-item>
     <ea-timeline-item timestamp="2024-7-3"> Custom size </ea-timeline-item>
-    <ea-timeline-item type="primary" timestamp="2024-7-4" hollow>
+    <ea-timeline-item variant="primary" timestamp="2024-7-4" hollow>
       Custom hollow
     </ea-timeline-item>
     <ea-timeline-item timestamp="2024-7-5"> Default node </ea-timeline-item>
@@ -124,28 +124,28 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
 
 <div class="demo">
   <ea-timeline>
-    <ea-timeline-item type="success" placement="top">
+    <ea-timeline-item variant="success" placement="top">
       <ea-card>
         <header class="header">打开冰箱</header>
         <p>Open the refrigerator</p>
       </ea-card>
       <div slot="timestamp">2025-10-21</div>
     </ea-timeline-item>
-    <ea-timeline-item type="primary" placement="top">
+    <ea-timeline-item variant="primary" placement="top">
       <ea-card>
         <header class="header">把大象放进去</header>
         <p>Put the elephant inside</p>
       </ea-card>
       <div slot="timestamp">2025-10-22</div>
     </ea-timeline-item>
-    <ea-timeline-item type="warning" placement="top">
+    <ea-timeline-item variant="warning" placement="top">
       <ea-card>
         <header class="header">关上冰箱</header>
         <p>Close the refrigerator</p>
       </ea-card>
       <div slot="timestamp">2025-10-23</div>
     </ea-timeline-item>
-    <ea-timeline-item type="danger" placement="top">
+    <ea-timeline-item variant="danger" placement="top">
       <ea-card>
         <header class="header">
           由于违反动物保护法，该组件库将被无限期停更
@@ -174,28 +174,28 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
 ```html
 <div class="demo">
   <ea-timeline>
-    <ea-timeline-item type="success" placement="top">
+    <ea-timeline-item variant="success" placement="top">
       <ea-card>
         <header class="header">打开冰箱</header>
         <p>Open the refrigerator</p>
       </ea-card>
       <div slot="timestamp">2025-10-21</div>
     </ea-timeline-item>
-    <ea-timeline-item type="primary" placement="top">
+    <ea-timeline-item variant="primary" placement="top">
       <ea-card>
         <header class="header">把大象放进去</header>
         <p>Put the elephant inside</p>
       </ea-card>
       <div slot="timestamp">2025-10-22</div>
     </ea-timeline-item>
-    <ea-timeline-item type="warning" placement="top">
+    <ea-timeline-item variant="warning" placement="top">
       <ea-card>
         <header class="header">关上冰箱</header>
         <p>Close the refrigerator</p>
       </ea-card>
       <div slot="timestamp">2025-10-23</div>
     </ea-timeline-item>
-    <ea-timeline-item type="danger" placement="top">
+    <ea-timeline-item variant="danger" placement="top">
       <ea-card>
         <header class="header">
           由于违反动物保护法，该组件库将被无限期停更
@@ -307,10 +307,10 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
 
 | 参数           | 说明                                 | 类型    | 可选值                                            | 默认值 |
 | -------------- | ------------------------------------ | ------- | ------------------------------------------------- | ------ |
-| type           | 节点类型，用于控制颜色或样式         | string  | `primary \| success \| warning \| danger \| info` | info   |
+| variant        | 节点类型，用于控制颜色或样式         | string  | `primary \| success \| warning \| danger \| info` | -      |
 | timestamp      | 时间戳，可作为 slot 覆盖             | string  | -                                                 | -      |
 | hide-timestamp | 是否隐藏时间戳                       | boolean | -                                                 | false  |
-| placement      | 时间戳位置，可选将时间放置到内容上方 | string  | top                                               | bottom |
+| placement      | 时间戳位置，可选将时间放置到内容上方 | string  | top \| bottom                                     | bottom |
 | size           | 节点大小                             | string  | `large \| normal`                                 | normal |
 | color          | 自定义颜色（支持任意 CSS 颜色值）    | string  | -                                                 | -      |
 | hollow         | 是否为空心节点（只显示描边）         | boolean | -                                                 | false  |
