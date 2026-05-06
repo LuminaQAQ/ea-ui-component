@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,25 +10,19 @@
   <body>
     <script
       type="module"
-      src="../src/components/ea-page-header/index.js"
+      src="../src/components/ea-page-header/index.ts"
     ></script>
     <script
       type="module"
-      src="../src/components/ea-breadcrumb/index.js"
+      src="../src/components/ea-breadcrumb/index.ts"
     ></script>
     <script
       type="module"
-      src="../src/components/ea-descriptions/index.js"
+      src="../src/components/ea-descriptions/index.ts"
     ></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
-    <script type="module" src="../src/components/ea-tag/index.js"></script>
-    <script type="module" src="../src/components/ea-avatar/index.js"></script>
-    <script type="module">
-      //   const pageHeader = document.querySelector("#pageHeader");
-      //   pageHeader.addEventListener("back", () => {
-      //     console.log("go back");
-      //   });
-    </script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+    <script type="module" src="../src/components/ea-tag/index.ts"></script>
+    <script type="module" src="../src/components/ea-avatar/index.ts"></script>
 
     <style>
       .flex {
@@ -83,7 +77,7 @@
         </div>
         <div class="flex items-center" slot="extra">
           <ea-button>Print</ea-button>
-          <ea-button type="primary" class="ml-2">Edit</ea-button>
+          <ea-button variant="primary" class="ml-2">Edit</ea-button>
         </div>
         <ea-descriptions>
           <ea-descriptions-item label="Username">
@@ -115,7 +109,7 @@
     </div>
 
     <script type="module">
-      import { EaNotification } from "../src/components/ea-notification/index.js";
+      import { EaNotification } from "../src/components/ea-notification/index.ts";
 
       const completeExample = {
         pageHeader: document.querySelector("#completePageHeader"),
@@ -124,7 +118,7 @@
           this.pageHeader.addEventListener("back", () => {
             EaNotification({
               type: "info",
-              title: "Back",
+              heading: "Back",
               message: "Go back clicked!",
             });
           });
@@ -148,7 +142,7 @@
     </div>
 
     <script type="module">
-      import { EaNotification } from "../src/components/ea-notification/index.js";
+      import { EaNotification } from "../src/components/ea-notification/index.ts";
 
       const basicExample = {
         pageHeader: document.querySelector("#basicPageHeader"),
@@ -157,7 +151,7 @@
           this.pageHeader.addEventListener("back", () => {
             EaNotification({
               type: "info",
-              title: "Back",
+              heading: "Back",
               message: "Go back clicked!",
             });
           });
@@ -165,6 +159,18 @@
       };
       basicExample.init();
     </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  使用 heading 和 content 属性 -->
+    <!-- #region -->
+    <h1>使用 heading 和 content 属性</h1>
+
+    <div class="demo">
+      <ea-page-header heading="返回" content="页面标题"></ea-page-header>
+    </div>
 
     <hr />
     <!-- #endregion  -->
@@ -235,7 +241,7 @@
         </div>
         <div class="flex items-center" slot="extra">
           <ea-button>Print</ea-button>
-          <ea-button type="primary" class="ml-2">Edit</ea-button>
+          <ea-button variant="primary" class="ml-2">Edit</ea-button>
         </div>
       </ea-page-header>
     </div>

@@ -13,7 +13,7 @@ onMounted(() => {
       this.pageHeader.addEventListener("back", () => {
         EaNotification({
           type: "info",
-          title: "Back",
+          heading: "Back",
           message: "Go back clicked!",
         });
       });
@@ -28,7 +28,7 @@ onMounted(() => {
       this.pageHeader.addEventListener("back", () => {
         EaNotification({
           type: "info",
-          title: "Back",
+          heading: "Back",
           message: "Go back clicked!",
         });
       });
@@ -48,7 +48,7 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-page-header/index.js";
+  import "./node_modules/easy-component-ui/components/ea-page-header/index.ts";
 </script>
 ```
 
@@ -77,7 +77,7 @@ onMounted(() => {
     </div>
     <div class="flex items-center" slot="extra">
       <ea-button>Print</ea-button>
-      <ea-button type="primary" class="ml-2">Edit</ea-button>
+      <ea-button variant="primary" class="ml-2">Edit</ea-button>
     </div>
     <ea-descriptions>
       <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
@@ -127,7 +127,7 @@ onMounted(() => {
     </div>
     <div class="flex items-center" slot="extra">
       <ea-button>Print</ea-button>
-      <ea-button type="primary" class="ml-2">Edit</ea-button>
+      <ea-button variant="primary" class="ml-2">Edit</ea-button>
     </div>
     <ea-descriptions>
       <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
@@ -166,7 +166,7 @@ const completeExample = {
     this.pageHeader.addEventListener("back", () => {
       EaNotification({
         type: "info",
-        title: "Back",
+        heading: "Back",
         message: "Go back clicked!",
       });
     });
@@ -207,7 +207,7 @@ const basicExample = {
     this.pageHeader.addEventListener("back", () => {
       EaNotification({
         type: "info",
-        title: "Back",
+        heading: "Back",
         message: "Go back clicked!",
       });
     });
@@ -217,6 +217,20 @@ basicExample.init();
 ```
 
 :::
+
+## 使用 heading 和 content 属性
+
+通过 `heading` 属性设置返回按钮文字，通过 `content` 属性设置页头右侧主要内容的文本。
+
+<div class="demo">
+  <ea-page-header heading="返回" content="页面标题"></ea-page-header>
+</div>
+
+```html
+<div class="demo">
+  <ea-page-header heading="返回" content="页面标题"></ea-page-header>
+</div>
+```
 
 ## 自定义图标
 
@@ -292,7 +306,7 @@ basicExample.init();
     </div>
     <div class="flex items-center" slot="extra">
       <ea-button>Print</ea-button>
-      <ea-button type="primary" class="ml-2">Edit</ea-button>
+      <ea-button variant="primary" class="ml-2">Edit</ea-button>
     </div>
   </ea-page-header>
 </div>
@@ -312,7 +326,7 @@ basicExample.init();
     </div>
     <div class="flex items-center" slot="extra">
       <ea-button>Print</ea-button>
-      <ea-button type="primary" class="ml-2">Edit</ea-button>
+      <ea-button variant="primary" class="ml-2">Edit</ea-button>
     </div>
   </ea-page-header>
 </div>
@@ -348,11 +362,13 @@ basicExample.init();
 
 ### Attributes
 
-| 参数    | 说明                                         | 类型   | 可选值 | 默认值            |
-| ------- | -------------------------------------------- | ------ | ------ | ----------------- |
-| icon    | 返回按钮使用的图标名称                       | String | -      | "icon-angle-left" |
-| title   | 返回按钮文字（具名 slot "title" 的默认内容） | String | -      | "Back"            |
-| content | 页头右侧主要内容的文本（也可通过 slot 填充） | String | -      | ""                |
+| 参数    | 说明                                         | 类型   | 可选值 | 默认值 |
+| ------- | -------------------------------------------- | ------ | ------ | ------ |
+| icon    | 返回按钮使用的图标名称                       | String | -      | ""     |
+| heading | 返回按钮文字（具名 slot "title" 的默认内容） | String | -      | ""     |
+| content | 页头右侧主要内容的文本（也可通过 slot 填充） | String | -      | ""     |
+
+> **注意**：`icon` 属性默认为空字符串，模板中默认渲染 `angle-left` 图标；`heading` 属性默认为空字符串，slot "title" 的默认文本为 "Back"。
 
 ## CSS Part
 
@@ -382,7 +398,7 @@ basicExample.init();
 | ---------- | -------------------------------------------------------------------- |
 | breadcrumb | 面包屑插槽，可放置 `ea-breadcrumb` 组件（slot="breadcrumb"）         |
 | icon       | 自定义返回图标（具名 slot="icon"），如果不提供会显示默认的 `ea-icon` |
-| title      | 返回按钮文字（具名 slot="title"，默认文本由 `title` 属性提供）       |
+| title      | 返回按钮文字（具名 slot="title"，默认文本由 `heading` 属性提供）     |
 | content    | 页头的主要内容区（具名 slot="content"）                              |
 | extra      | 额外操作区（具名 slot="extra"）                                      |
 | -          | 默认插槽，可用于放置额外内容                                         |

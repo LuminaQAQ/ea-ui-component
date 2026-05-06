@@ -19,7 +19,7 @@ $name: ea-page-header;
     // margin-left: 0.25rem;
   }
 
-  @include element(title) {
+  @include element(heading) {
     margin-left: 0.5rem;
   }
 
