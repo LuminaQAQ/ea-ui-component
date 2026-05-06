@@ -1,4 +1,4 @@
-export const dashboardItem = `
+export const dashboardItem: string = `
 <svg viewBox="0 0 100 100">
     <mask id="myMask">
         <rect class="mask" width="100%" height="20%" fill="white" />

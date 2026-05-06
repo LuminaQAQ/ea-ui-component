@@ -82,7 +82,7 @@ function createAttributeGetter(
     const attrValue = this.getAttribute(attrName);
 
     if (attrValue !== null) {
-      return parseAttributeValue(attrValue, type);
+      return parseAttributeValue(attrValue, type, defaultValue);
     }
 
     return defaultValue;

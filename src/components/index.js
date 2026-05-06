@@ -10,7 +10,7 @@ import './ea-input-number/index.js';
 import './ea-menu/index.js';
 import './ea-page-header/index.js';
 import './ea-pagination/index.js';
-import './ea-progress/index.js';
+import './ea-progress/index.ts';
 import './ea-rate/index.js';
 import './ea-result/index.js';
 import './ea-segmented/index.js';

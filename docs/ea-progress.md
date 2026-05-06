@@ -150,7 +150,7 @@ ea-progress {
 
 ```js
 <script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-progress/index.js";
+  import "./node_modules/easy-component-ui/components/ea-progress/index.ts";
 </script>
 ```
 
@@ -678,19 +678,19 @@ stripedExample.init();
 
 ## Attributes
 
-| 参数          | 说明                                                       | 类型                          | 可选值                                            | 默认值 |
-| ------------- | ---------------------------------------------------------- | ----------------------------- | ------------------------------------------------- | ------ |
-| percentage    | 进度百分比（0-100）                                        | number                        | 0-100                                             | 0      |
-| type          | 进度条类型                                                 | string                        | `line \| circle \| dashboard`                     | `line` |
-| stroke-width  | 进度条的宽度                                               | string                        | 任意合法 CSS 长度                                 | `8px`  |
-| text-inside   | 进度条显示文字内置在进度条内（仅 `type` 为 'line' 时可用） | boolean                       | true / false                                      | false  |
-| status        | 进度条当前状态                                             | string                        | `success` / `warning` / `exception`               | —      |
-| indeterminate | 是否为动画进度条                                           | boolean                       | true / false                                      | false  |
-| duration      | 动画持续时间（秒），控制动画进度条速度和条纹进度条流动速度 | number                        | 正数（秒）                                        | 3      |
-| color         | 进度条背景色 （会覆盖 status 状态颜色）                    | `string \| Array \| Function` | 例如 `"#409eff"`、[{color, percentage}]、(p)=>... | —      |
-| striped       | 是否为条纹样式                                             | boolean                       | true / false                                      | false  |
-| striped-flow  | 条纹是否流动（仅当 `striped` 为 true 时生效）              | boolean                       | true / false                                      | false  |
-| show-text     | 是否显示进度条文字内容                                     | boolean                       | `true \| false`                                   | true   |
+| 参数              | 说明                                                       | 类型                          | 可选值                                            | 默认值 |
+| ----------------- | ---------------------------------------------------------- | ----------------------------- | ------------------------------------------------- | ------ |
+| percentage        | 进度百分比（0-100）                                        | number                        | 0-100                                             | 0      |
+| type              | 进度条类型                                                 | string                        | `line \| circle \| dashboard`                     | `line` |
+| strokeWidth       | 进度条的宽度                                               | string                        | 任意合法 CSS 长度                                 | `8px`  |
+| textInside        | 进度条显示文字内置在进度条内（仅 `type` 为 'line' 时可用） | boolean                       | —                                                 | false  |
+| status            | 进度条当前状态                                             | string                        | `success` / `warning` / `exception`               | —      |
+| indeterminate     | 是否为动画进度条                                           | boolean                       | —                                                 | false  |
+| duration          | 动画持续时间（秒），控制动画进度条速度和条纹进度条流动速度 | number                        | 正数（秒）                                        | 3      |
+| color <PropTag /> | 进度条背景色 （会覆盖 status 状态颜色）                    | `string \| Array \| Function` | 例如 `"#409eff"`、[{color, percentage}]、(p)=>... | —      |
+| striped           | 是否为条纹样式                                             | boolean                       | —                                                 | false  |
+| stripedFlow       | 条纹是否流动（仅当 `striped` 为 true 时生效）              | boolean                       | —                                                 | false  |
+| showText          | 是否显示进度条文字内容                                     | boolean                       | —                                                 | true   |
 
 ## CSS Part
 
@@ -706,9 +706,9 @@ stripedExample.init();
 
 ## Slots
 
-| 名称 | 说明                                                                                                                                                  |
-| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| -    | 默认插槽。用于在进度条中插入自定义内容（例如圆环中间的文案或按钮）。当 `text-inside` 为 true 或 `type` 为 `circle`/`dashboard` 时常用于显示中心内容。 |
+| 名称    | 说明                                                                                                                                                 |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| default | 默认插槽。用于在进度条中插入自定义内容（例如圆环中间的文案或按钮）。当 `textInside` 为 true 或 `type` 为 `circle`/`dashboard` 时常用于显示中心内容。 |
 
 ## Events
 
