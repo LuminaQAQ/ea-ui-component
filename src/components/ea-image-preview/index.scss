@@ -1,4 +1,8 @@
-$ea-image-status: (loading, error, success);
+$ea-image-status: (
+  loading,
+  error,
+  success
+);
 
 :host {
   --ea-overlay-content-width: 100%;
@@ -38,23 +42,12 @@ $ea-image-status: (loading, error, success);
   @include element(img) {
     --ea-image-background: transparent;
 
-    position: fixed;
-
-    left: 50%;
-    top: 50%;
-    transform-origin: center center;
-    transform: translate(-50%, -50%) scale(var(--ea-image-preview-scale))
-      rotate(var(--ea-image-preview-rotate));
-
-    width: 100%;
-    height: 100%;
     max-width: 100%;
     max-height: 100%;
 
-    margin-left: var(--ea-image-preview-img-move-x);
-    margin-top: var(--ea-image-preview-img-move-y);
-
-    transition: transform 0.3s ease-in-out;
+    &::part(preview) {
+      display: none;
+    }
   }
 
   .ea-image-preview__header,
@@ -73,11 +66,12 @@ $ea-image-status: (loading, error, success);
   }
 
   @include element(main) {
-    position: relative;
-
-    top: 50%;
+    position: fixed;
+    top: 0;
     left: 0;
-    transform: translateY(-50%);
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
   }
 
   @include element(footer) {
@@ -129,25 +123,30 @@ $ea-image-status: (loading, error, success);
     }
   }
 
-  .next-icon,
-  .prev-icon {
+  @include element(prev-icon) {
     position: fixed;
-  }
-
-  .prev-icon {
+    top: 50%;
     left: var(--ea-image-preview-tool-offset-x);
+    transform: translateY(-50%);
+    pointer-events: auto;
   }
 
-  .next-icon {
+  @include element(next-icon) {
+    position: fixed;
+    top: 50%;
     right: var(--ea-image-preview-tool-offset-x);
+    transform: translateY(-50%);
+    pointer-events: auto;
   }
 
   @each $status in $ea-image-status {
-    @if ($status == loading) {
+    @if ($status ==loading) {
       @include modifier(loading) {
         --ea-overlay-content-height: 50%;
       }
-    } @else if ($status == error) {
+    }
+
+    @else if ($status ==error) {
       @include modifier(error) {
         --ea-overlay-content-height: 50%;
       }
@@ -156,6 +155,7 @@ $ea-image-status: (loading, error, success);
 }
 
 .ea-overlay--is-show {
+
   .ea-image-preview__header,
   .ea-image-preview__main,
   .ea-image-preview__footer {
@@ -164,9 +164,22 @@ $ea-image-status: (loading, error, success);
 }
 
 .ea-overlay--before-close {
+
   .ea-image-preview__header,
   .ea-image-preview__main,
   .ea-image-preview__footer {
     filter: opacity(0);
   }
+}
+
+.ea-overlay__content {
+  width: auto;
+  height: auto;
+
+  margin-left: var(--ea-image-preview-img-move-x);
+  margin-top: var(--ea-image-preview-img-move-y);
+
+  transform: scale(var(--ea-image-preview-scale)) rotate(var(--ea-image-preview-rotate));
+
+  transition: transform 0.3s ease-in-out;
 }
