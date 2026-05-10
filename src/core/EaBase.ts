@@ -67,7 +67,6 @@ export default class EaBase extends HTMLElement implements EaElement {
     this.emit("unmounted", { detail: this });
 
     this._isInitialized = false;
-    this._isMounted = false;
     this._isRendered = null;
   }
 

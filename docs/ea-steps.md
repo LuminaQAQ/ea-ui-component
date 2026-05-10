@@ -73,10 +73,10 @@ onMounted(() => {
     <ea-button id="basicStepsNextBtn">下一步</ea-button>
   </p>
   <ea-steps id="basicSteps" active="0" finish-status="success">
-    <ea-step title="Step 1"></ea-step>
-    <ea-step title="Step 2"></ea-step>
-    <ea-step title="Step 3"></ea-step>
-    <ea-step title="Step 4"></ea-step>
+    <ea-step heading="Step 1"></ea-step>
+    <ea-step heading="Step 2"></ea-step>
+    <ea-step heading="Step 3"></ea-step>
+    <ea-step heading="Step 4"></ea-step>
   </ea-steps>
 </div>
 
@@ -89,10 +89,10 @@ onMounted(() => {
     <ea-button id="basicStepsNextBtn">下一步</ea-button>
   </p>
   <ea-steps id="basicSteps" active="0" finish-status="success">
-    <ea-step title="Step 1"></ea-step>
-    <ea-step title="Step 2"></ea-step>
-    <ea-step title="Step 3"></ea-step>
-    <ea-step title="Step 4"></ea-step>
+    <ea-step heading="Step 1"></ea-step>
+    <ea-step heading="Step 2"></ea-step>
+    <ea-step heading="Step 3"></ea-step>
+    <ea-step heading="Step 4"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -143,7 +143,7 @@ basicExample.init();
 
 每一步骤显示出该步骤的状态。
 
-> 也可以使用 `title` 具名分发，可以用 `slot` 的方式来取代属性的设置，在本文档最后的列表中有所有的 `slot name` 可供参考。
+> 也可以使用 `heading` 具名分发，可以用 `slot` 的方式来取代属性的设置，在本文档最后的列表中有所有的 `slot name` 可供参考。
 
 <!-- -------- 2. 含状态步骤条 --------  -->
 <!-- #region  -->
@@ -154,9 +154,9 @@ basicExample.init();
     finish-status="success"
     space="200px"
   >
-    <ea-step title="Done"></ea-step>
-    <ea-step title="Processing"></ea-step>
-    <ea-step title="Step 3"></ea-step>
+    <ea-step heading="Done"></ea-step>
+    <ea-step heading="Processing"></ea-step>
+    <ea-step heading="Step 3"></ea-step>
   </ea-steps>
 </div>
 <!-- #endregion  -->
@@ -170,9 +170,9 @@ basicExample.init();
     finish-status="success"
     space="200px"
   >
-    <ea-step title="Done"></ea-step>
-    <ea-step title="Processing"></ea-step>
-    <ea-step title="Step 3"></ea-step>
+    <ea-step heading="Done"></ea-step>
+    <ea-step heading="Processing"></ea-step>
+    <ea-step heading="Step 3"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -181,18 +181,18 @@ basicExample.init();
 
 <div class="demo">
   <ea-steps style="max-width: 600px" active="2" align-center>
-    <ea-step title="Step 1" description="Some description"></ea-step>
-    <ea-step title="Step 2" description="Some description"></ea-step>
-    <ea-step title="Step 3" description="Some description"></ea-step>
+    <ea-step heading="Step 1" description="Some description"></ea-step>
+    <ea-step heading="Step 2" description="Some description"></ea-step>
+    <ea-step heading="Step 3" description="Some description"></ea-step>
   </ea-steps>
 </div>
 
 ```html
 <div class="demo">
   <ea-steps style="max-width: 600px" active="2" align-center>
-    <ea-step title="Step 1" description="Some description"></ea-step>
-    <ea-step title="Step 2" description="Some description"></ea-step>
-    <ea-step title="Step 3" description="Some description"></ea-step>
+    <ea-step heading="Step 1" description="Some description"></ea-step>
+    <ea-step heading="Step 2" description="Some description"></ea-step>
+    <ea-step heading="Step 3" description="Some description"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -203,18 +203,18 @@ basicExample.init();
 
 <div class="demo">
   <ea-steps style="max-width: 600px" active="2">
-    <ea-step title="Step 1" description="Some description"></ea-step>
-    <ea-step title="Step 2" description="Some description"></ea-step>
-    <ea-step title="Step 3" description="Some description"></ea-step>
+    <ea-step heading="Step 1" description="Some description"></ea-step>
+    <ea-step heading="Step 2" description="Some description"></ea-step>
+    <ea-step heading="Step 3" description="Some description"></ea-step>
   </ea-steps>
 </div>
 
 ```html
 <div class="demo">
   <ea-steps style="max-width: 600px" active="2">
-    <ea-step title="Step 1" description="Some description"></ea-step>
-    <ea-step title="Step 2" description="Some description"></ea-step>
-    <ea-step title="Step 3" description="Some description"></ea-step>
+    <ea-step heading="Step 1" description="Some description"></ea-step>
+    <ea-step heading="Step 2" description="Some description"></ea-step>
+    <ea-step heading="Step 3" description="Some description"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -225,20 +225,20 @@ basicExample.init();
 
 <div class="demo">
     <ea-steps active="1">
-        <ea-step title="步骤 1" icon="music"></ea-step>
-        <ea-step title="步骤 2" icon="video"></ea-step>
-        <ea-step title="步骤 3" icon="camera"></ea-step>
+        <ea-step heading="步骤 1" icon="music"></ea-step>
+        <ea-step heading="步骤 2" icon="video"></ea-step>
+        <ea-step heading="步骤 3" icon="camera"></ea-step>
     </ea-steps>
 </div>
 
 ```html
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1">
-    <ea-step title="Step 1" icon="mug-hot">
+    <ea-step heading="Step 1" icon="mug-hot">
       <ea-icon slot="icon" class="ea-step__icon" name="music"></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="video"></ea-step>
-    <ea-step title="Step 3" icon="camera"></ea-step>
+    <ea-step heading="Step 2" icon="video"></ea-step>
+    <ea-step heading="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -249,26 +249,26 @@ basicExample.init();
 
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1" simple align-center>
-    <ea-step title="Step 1" icon="mug-hot">
+    <ea-step heading="Step 1" icon="mug-hot">
       <ea-icon
         slot="icon"
         class="ea-step__icon"
         name="music"
       ></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="video"></ea-step>
-    <ea-step title="Step 3" icon="camera"></ea-step>
+    <ea-step heading="Step 2" icon="video"></ea-step>
+    <ea-step heading="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 
 ```html
 <div class="demo">
   <ea-steps style="max-width: 600px" active="1" simple align-center>
-    <ea-step title="Step 1" icon="mug-hot">
+    <ea-step heading="Step 1" icon="mug-hot">
       <ea-icon slot="icon" class="ea-step__icon" name="music"></ea-icon>
     </ea-step>
-    <ea-step title="Step 2" icon="video"></ea-step>
-    <ea-step title="Step 3" icon="camera"></ea-step>
+    <ea-step heading="Step 2" icon="video"></ea-step>
+    <ea-step heading="Step 3" icon="camera"></ea-step>
   </ea-steps>
 </div>
 ```
@@ -306,11 +306,11 @@ basicExample.init();
 
 | 参数         | 说明                                           | 类型    | 可选值                                          | 默认值                         |
 | ------------ | ---------------------------------------------- | ------- | ----------------------------------------------- | ------------------------------ |
-| title        | 标题                                           | string  | —                                               | ""                             |
+| heading      | 标题                                           | string  | —                                               | ""                             |
 | description  | 步骤的详细描述                                 | string  | —                                               | ""                             |
 | icon         | 图标（会传给内部的 `ea-icon`）                 | string  | —                                               | ""                             |
 | status       | 步骤的状态（可由父组件根据 active 自动设置）   | string  | `wait \| process \| finish \| error \| success` | ""                             |
-| index        | 当前步骤的索引（只读，组件内部计算）           | number  | —                                               | 自动计算                       |
+| index        | 当前步骤的索引（只读，组件内部计算）           | number  | —                               | 自动计算                       |
 | simple       | 是否为简洁模式（继承自父级 `ea-steps` 的属性） | boolean | —                                               | 与父组件同步                   |
 | align-center | 是否居中（继承自父级 `ea-steps` 的属性）       | boolean | —                                               | 与父组件同步                   |
 | direction    | 步骤方向（继承自父级 `ea-steps`）              | string  | `vertical \| horizontal`                        | horizontal（来自父组件或默认） |
@@ -327,7 +327,7 @@ basicExample.init();
 | icon         | 图标（内部 ea-icon）         |
 | tail         | 步骤之间的连接线             |
 | main         | 主体容器                     |
-| title        | 标题容器                     |
+| heading      | 标题容器                     |
 | description  | 描述容器                     |
 | simple-arrow | 简洁模式下的箭头 slot 的容器 |
 
@@ -336,7 +336,7 @@ basicExample.init();
 | 名称         | 说明                                                         |
 | ------------ | ------------------------------------------------------------ |
 | —            | 步骤内容（默认插槽，通常为空）                               |
-| title        | 步骤标题（具名插槽，优先于 `title` 属性）                    |
+| heading      | 步骤标题（具名插槽，优先于 `heading` 属性）                  |
 | description  | 步骤描述（具名插槽，优先于 `description` 属性）              |
 | icon         | 步骤图标（具名插槽，优先于 `icon` 属性，内部为 `<ea-icon>`） |
 | simple-arrow | 简洁模式下的箭头插槽（由父组件在 `simple` 模式下自动注入）   |

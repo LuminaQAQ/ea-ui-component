@@ -13,9 +13,9 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-icon/index.js"></script>
-    <script type="module" src="../src/components/ea-steps/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-icon/index.ts"></script>
+    <script type="module" src="../src/components/ea-steps/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
 
     <!--  基础用法 -->
     <!-- #region -->
@@ -27,10 +27,10 @@
         <ea-button id="basicStepsNextBtn">下一步</ea-button>
       </p>
       <ea-steps id="basicSteps" active="0" finish-status="success">
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-        <ea-step title="Step 3"></ea-step>
-        <ea-step title="Step 4"></ea-step>
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
+        <ea-step heading="Step 4"></ea-step>
       </ea-steps>
     </div>
 
@@ -89,9 +89,9 @@
         finish-status="success"
         space="200px"
       >
-        <ea-step title="Done"></ea-step>
-        <ea-step title="Processing"></ea-step>
-        <ea-step title="Step 3"></ea-step>
+        <ea-step heading="Done"></ea-step>
+        <ea-step heading="Processing"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
       </ea-steps>
     </div>
 
@@ -105,9 +105,9 @@
 
     <div class="demo">
       <ea-steps style="max-width: 600px" active="2" align-center>
-        <ea-step title="Step 1" description="Some description"></ea-step>
-        <ea-step title="Step 2" description="Some description"></ea-step>
-        <ea-step title="Step 3" description="Some description"></ea-step>
+        <ea-step heading="Step 1" description="Some description"></ea-step>
+        <ea-step heading="Step 2" description="Some description"></ea-step>
+        <ea-step heading="Step 3" description="Some description"></ea-step>
       </ea-steps>
     </div>
 
@@ -121,9 +121,9 @@
 
     <div class="demo">
       <ea-steps style="max-width: 600px" active="2">
-        <ea-step title="Step 1" description="Some description"></ea-step>
-        <ea-step title="Step 2" description="Some description"></ea-step>
-        <ea-step title="Step 3" description="Some description"></ea-step>
+        <ea-step heading="Step 1" description="Some description"></ea-step>
+        <ea-step heading="Step 2" description="Some description"></ea-step>
+        <ea-step heading="Step 3" description="Some description"></ea-step>
       </ea-steps>
     </div>
 
@@ -137,11 +137,11 @@
 
     <div class="demo">
       <ea-steps style="max-width: 600px" active="1">
-        <ea-step title="Step 1" icon="mug-hot">
+        <ea-step heading="Step 1" icon="mug-hot">
           <ea-icon slot="icon" class="ea-step__icon" name="music"></ea-icon>
         </ea-step>
-        <ea-step title="Step 2" icon="video"></ea-step>
-        <ea-step title="Step 3" icon="camera"></ea-step>
+        <ea-step heading="Step 2" icon="video"></ea-step>
+        <ea-step heading="Step 3" icon="camera"></ea-step>
       </ea-steps>
     </div>
 
@@ -159,9 +159,9 @@
         active="1"
         direction="vertical"
       >
-        <ea-step title="Step 1" description="Some description"></ea-step>
-        <ea-step title="Step 2" description="Some description"></ea-step>
-        <ea-step title="Step 3" description="Some description"></ea-step>
+        <ea-step heading="Step 1" description="Some description"></ea-step>
+        <ea-step heading="Step 2" description="Some description"></ea-step>
+        <ea-step heading="Step 3" description="Some description"></ea-step>
       </ea-steps>
     </div>
 
@@ -175,11 +175,11 @@
 
     <div class="demo">
       <ea-steps style="max-width: 600px" active="1" simple align-center>
-        <ea-step title="Step 1" icon="mug-hot">
+        <ea-step heading="Step 1" icon="mug-hot">
           <ea-icon slot="icon" class="ea-step__icon" name="music"></ea-icon>
         </ea-step>
-        <ea-step title="Step 2" icon="video"></ea-step>
-        <ea-step title="Step 3" icon="camera"></ea-step>
+        <ea-step heading="Step 2" icon="video"></ea-step>
+        <ea-step heading="Step 3" icon="camera"></ea-step>
       </ea-steps>
     </div>
 

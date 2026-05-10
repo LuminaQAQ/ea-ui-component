@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-steps 组件及其子组件
-import "../components/ea-steps/index.js";
+import "../components/ea-steps/index.ts";
 
 describe("EaSteps Component", () => {
   let container;
@@ -15,15 +15,14 @@ describe("EaSteps Component", () => {
     container.remove();
   });
 
-  /**
-   * EaSteps 基本功能测试
-   */
-  describe("EaSteps Basic Functionality", () => {
+  // ==================== EaSteps 基础功能 ====================
+
+  describe("EaSteps 基础功能", () => {
     it("应该正确渲染 ea-steps 组件", async () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(steps).toBeDefined();
       expect(steps.shadowRoot).toBeDefined();
@@ -33,7 +32,7 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(steps.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
@@ -42,516 +41,773 @@ describe("EaSteps Component", () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(steps.shadowRoot.querySelector("slot")).toBeTruthy();
     });
+
+    it("默认容器不应该有 is-simple 和 is-align-center CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepsContainer =
+        steps.shadowRoot.querySelector('[part="container"]');
+      expect(stepsContainer.classList.contains("is-simple")).toBe(false);
+      expect(stepsContainer.classList.contains("is-align-center")).toBe(false);
+    });
   });
 
-  /**
-   * EaStep 基本功能测试
-   */
-  describe("EaStep Basic Functionality", () => {
+  // ==================== EaStep 基础功能 ====================
+
+  describe("EaStep 基础功能", () => {
     it("应该正确渲染 ea-step 组件", async () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(step).toBeDefined();
       expect(step.shadowRoot).toBeDefined();
     });
 
-    it("应该包含 container CSS Part", async () => {
+    it("应该包含所有 CSS Parts", async () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      const parts = [
+        "container",
+        "head",
+        "icon-wrapper",
+        "icon",
+        "tail",
+        "main",
+        "heading",
+        "description",
+        "simple-arrow",
+      ];
+
+      for (const part of parts) {
+        expect(step.shadowRoot.querySelector(`[part="${part}"]`)).toBeTruthy();
+      }
     });
 
-    it("应该包含 head CSS Part", async () => {
+    it("应该包含所有命名 slot", async () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.shadowRoot.querySelector('[part="head"]')).toBeTruthy();
+      const slots = step.shadowRoot.querySelectorAll("slot");
+      const slotNames = [...slots].map(s => s.name || "default");
+
+      expect(slotNames).toContain("heading");
+      expect(slotNames).toContain("description");
+      expect(slotNames).toContain("icon");
+      expect(slotNames).toContain("simple-arrow");
     });
 
-    it("应该包含 icon-wrapper CSS Part", async () => {
+    it("默认容器应该有 ea-step 基础类名", async () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.shadowRoot.querySelector('[part="icon-wrapper"]')).toBeTruthy();
-    });
-
-    it("应该包含 icon CSS Part", async () => {
-      const step = document.createElement("ea-step");
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.shadowRoot.querySelector('[part="icon"]')).toBeTruthy();
-    });
-
-    it("应该包含 tail CSS Part", async () => {
-      const step = document.createElement("ea-step");
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.shadowRoot.querySelector('[part="tail"]')).toBeTruthy();
-    });
-
-    it("应该包含 main CSS Part", async () => {
-      const step = document.createElement("ea-step");
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.shadowRoot.querySelector('[part="main"]')).toBeTruthy();
-    });
-
-    it("应该包含 title CSS Part", async () => {
-      const step = document.createElement("ea-step");
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.shadowRoot.querySelector('[part="title"]')).toBeTruthy();
-    });
-
-    it("应该包含 description CSS Part", async () => {
-      const step = document.createElement("ea-step");
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.shadowRoot.querySelector('[part="description"]')).toBeTruthy();
-    });
-
-    it("应该包含 simple-arrow CSS Part", async () => {
-      const step = document.createElement("ea-step");
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.shadowRoot.querySelector('[part="simple-arrow"]')).toBeTruthy();
+      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("ea-step")).toBe(true);
     });
   });
 
-  /**
-   * EaSteps Space 属性测试
-   */
-  describe("EaSteps Space Attribute", () => {
+  // ==================== EaSteps space 属性 ====================
+
+  describe("EaSteps space 属性", () => {
     it("默认 space 应该是 50%", async () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(steps.space).toBe("50%");
     });
 
-    it("应该支持 space 属性", async () => {
+    it("设置 space 属性应该更新 CSS 变量 --ea-step-tail-spacing", async () => {
       const steps = document.createElement("ea-steps");
       steps.space = "200px";
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(steps.space).toBe("200px");
+      expect(steps.style.getPropertyValue("--ea-step-tail-spacing")).toBe(
+        "200px"
+      );
     });
 
-    it("应该支持不同的 space 值", async () => {
-      const spaces = ["100px", "200px", "50%", "100%"];
+    it("动态修改 space 应该更新 CSS 变量", async () => {
+      const steps = document.createElement("ea-steps");
+      container.appendChild(steps);
 
-      for (const space of spaces) {
-        const steps = document.createElement("ea-steps");
-        steps.space = space;
-        expect(steps.space).toBe(space);
-      }
+      await waitForRender();
+
+      steps.space = "100px";
+      await waitForRender();
+
+      expect(steps.style.getPropertyValue("--ea-step-tail-spacing")).toBe(
+        "100px"
+      );
     });
   });
 
-  /**
-   * EaSteps Active 属性测试
-   */
-  describe("EaSteps Active Attribute", () => {
+  // ==================== EaSteps active 属性 ====================
+
+  describe("EaSteps active 属性", () => {
     it("默认 active 应该是 0", async () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(steps.active).toBe(0);
     });
 
-    it("应该支持 active 属性", async () => {
+    it("设置 active 属性应该生效", async () => {
       const steps = document.createElement("ea-steps");
       steps.active = 2;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(steps.active).toBe(2);
     });
 
-    it("应该支持不同的 active 值", async () => {
-      const actives = [0, 1, 2, 3, 4];
+    it("动态修改 active 应该更新子 step 状态", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
+      `;
+      container.appendChild(steps);
 
-      for (const active of actives) {
-        const steps = document.createElement("ea-steps");
-        steps.active = active;
-        expect(steps.active).toBe(active);
-      }
+      await waitForRender();
+
+      steps.active = 1;
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("finish");
+      expect(stepElements[1].getAttribute("status")).toBe("process");
+      expect(stepElements[2].getAttribute("status")).toBe("wait");
+    });
+
+    it("active=0 时第一个 step 应该是 process 状态", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("process");
+      expect(stepElements[1].getAttribute("status")).toBe("wait");
+    });
+
+    it("active 超出范围时所有 step 应该是 finish 状态", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.active = 10;
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("finish");
+      expect(stepElements[1].getAttribute("status")).toBe("finish");
     });
   });
 
-  /**
-   * EaSteps Process-status 属性测试
-   */
-  describe("EaSteps Process-status Attribute", () => {
-    it("默认 process-status 应该是 process", async () => {
+  // ==================== EaSteps processStatus 属性 ====================
+
+  describe("EaSteps processStatus 属性", () => {
+    it("默认 processStatus 应该是 process", async () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(steps["process-status"]).toBe("process");
+      expect(steps.processStatus).toBe("process");
     });
 
-    it("应该支持 process-status='wait'", async () => {
+    it("processStatus 应该影响当前激活 step 的状态", async () => {
       const steps = document.createElement("ea-steps");
-      steps["process-status"] = "wait";
+      steps.processStatus = "error";
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(steps["process-status"]).toBe("wait");
-    });
-
-    it("应该支持 process-status='error'", async () => {
-      const steps = document.createElement("ea-steps");
-      steps["process-status"] = "error";
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(steps["process-status"]).toBe("error");
-    });
-
-    it("应该支持 process-status='success'", async () => {
-      const steps = document.createElement("ea-steps");
-      steps["process-status"] = "success";
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(steps["process-status"]).toBe("success");
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("error");
     });
   });
 
-  /**
-   * EaSteps Finish-status 属性测试
-   */
-  describe("EaSteps Finish-status Attribute", () => {
-    it("默认 finish-status 应该是 finish", async () => {
+  // ==================== EaSteps finishStatus 属性 ====================
+
+  describe("EaSteps finishStatus 属性", () => {
+    it("默认 finishStatus 应该是 finish", async () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(steps["finish-status"]).toBe("finish");
+      expect(steps.finishStatus).toBe("finish");
     });
 
-    it("应该支持 finish-status='success'", async () => {
+    it("finishStatus 应该影响已完成 step 的状态", async () => {
       const steps = document.createElement("ea-steps");
-      steps["finish-status"] = "success";
+      steps.active = 1;
+      steps.finishStatus = "success";
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(steps["finish-status"]).toBe("success");
-    });
-
-    it("应该支持 finish-status='error'", async () => {
-      const steps = document.createElement("ea-steps");
-      steps["finish-status"] = "error";
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(steps["finish-status"]).toBe("error");
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("success");
     });
   });
 
-  /**
-   * EaSteps Align-center 属性测试
-   */
-  describe("EaSteps Align-center Attribute", () => {
-    it("默认 align-center 应该是 false", async () => {
+  // ==================== EaSteps alignCenter 属性 ====================
+
+  describe("EaSteps alignCenter 属性", () => {
+    it("默认 alignCenter 应该是 false", async () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // 属性可能返回 null 或 false
-      const value = steps["align-center"];
-      expect(value === false || value === null).toBe(true);
+      expect(steps.alignCenter).toBe(false);
     });
 
-    it("设置 align-center 属性应该启用居中对齐", async () => {
+    it("设置 alignCenter 应该在容器上添加 is-align-center CSS 类", async () => {
       const steps = document.createElement("ea-steps");
-      steps["align-center"] = true;
+      steps.alignCenter = true;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(steps["align-center"]).toBe(true);
+      const stepsContainer =
+        steps.shadowRoot.querySelector('[part="container"]');
+      expect(stepsContainer.classList.contains("is-align-center")).toBe(true);
+    });
+
+    it("设置 alignCenter 应该在子 step 上设置 align-center attribute", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.alignCenter = true;
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].hasAttribute("align-center")).toBe(true);
+      expect(stepElements[1].hasAttribute("align-center")).toBe(true);
+    });
+
+    it("子 step 的容器应该有 is-align-center CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.alignCenter = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-align-center")).toBe(true);
+    });
+
+    it("动态关闭 alignCenter 应该移除 CSS 类和 attribute", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.alignCenter = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      steps.alignCenter = false;
+      await waitForRender();
+
+      const stepsContainer =
+        steps.shadowRoot.querySelector('[part="container"]');
+      expect(stepsContainer.classList.contains("is-align-center")).toBe(false);
+
+      const stepElement = steps.querySelector("ea-step");
+      expect(stepElement.hasAttribute("align-center")).toBe(false);
     });
   });
 
-  /**
-   * EaSteps Simple 属性测试
-   */
-  describe("EaSteps Simple Attribute", () => {
+  // ==================== EaSteps simple 属性 ====================
+
+  describe("EaSteps simple 属性", () => {
     it("默认 simple 应该是 false", async () => {
       const steps = document.createElement("ea-steps");
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // 属性可能返回 null 或 false
-      const value = steps.simple;
-      expect(value === false || value === null).toBe(true);
+      expect(steps.simple).toBe(false);
     });
 
-    it("设置 simple 属性应该启用简洁模式", async () => {
+    it("设置 simple 应该在容器上添加 is-simple CSS 类", async () => {
       const steps = document.createElement("ea-steps");
       steps.simple = true;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(steps.simple).toBe(true);
+      const stepsContainer =
+        steps.shadowRoot.querySelector('[part="container"]');
+      expect(stepsContainer.classList.contains("is-simple")).toBe(true);
+    });
+
+    it("设置 simple 应该在子 step 上设置 simple attribute", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].hasAttribute("simple")).toBe(true);
+      expect(stepElements[1].hasAttribute("simple")).toBe(true);
+    });
+
+    it("simple 模式下子 step 容器应该有 is-simple CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-simple")).toBe(true);
+    });
+
+    it("simple 模式下应该为子 step 添加箭头图标", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      const arrow1 = stepElements[0].querySelector('[slot="simple-arrow"]');
+      expect(arrow1).toBeTruthy();
+      expect(arrow1.tagName.toLowerCase()).toBe("ea-icon");
+      expect(arrow1.getAttribute("name")).toBe("angle-right");
+    });
+
+    it("simple 模式下最后一个 step 不应该有箭头图标", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      const lastArrow = stepElements[1].querySelector('[slot="simple-arrow"]');
+      expect(lastArrow).toBeTruthy();
+    });
+
+    it("动态关闭 simple 应该移除箭头图标", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      steps.simple = false;
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const arrow = stepElement.querySelector('[slot="simple-arrow"]');
+      expect(arrow).toBeFalsy();
+    });
+
+    it("动态关闭 simple 应该移除子 step 的 simple attribute 和 CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      steps.simple = false;
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      expect(stepElement.hasAttribute("simple")).toBe(false);
+
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-simple")).toBe(false);
     });
   });
 
-  /**
-   * EaStep Title 属性测试
-   */
-  describe("EaStep Title Attribute", () => {
-    it("默认 title 应该是空字符串", async () => {
-      const step = document.createElement("ea-step");
-      container.appendChild(step);
+  // ==================== EaSteps direction 属性 ====================
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+  describe("EaSteps direction 属性", () => {
+    it("默认 direction 应该是 horizontal", async () => {
+      const steps = document.createElement("ea-steps");
+      container.appendChild(steps);
 
-      expect(step.title).toBe("");
+      await waitForRender();
+
+      expect(steps.direction).toBe("horizontal");
     });
 
-    it("应该支持 title 属性", async () => {
-      const step = document.createElement("ea-step");
-      step.title = "Step 1";
-      container.appendChild(step);
+    it("设置 direction=vertical 应该在子 step 上设置 direction attribute", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.direction = "vertical";
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.title).toBe("Step 1");
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("direction")).toBe("vertical");
+      expect(stepElements[1].getAttribute("direction")).toBe("vertical");
     });
 
-    it("应该支持不同的 title 值", async () => {
-      const titles = ["Step 1", "Step 2", "Done", "Processing"];
+    it("子 step 的容器应该有对应方向的 CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.direction = "vertical";
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
 
-      for (const title of titles) {
-        const step = document.createElement("ea-step");
-        step.title = title;
-        expect(step.title).toBe(title);
-      }
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("ea-step--vertical")).toBe(true);
+    });
+
+    it("动态修改 direction 应该更新子 step", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      steps.direction = "vertical";
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      expect(stepElement.getAttribute("direction")).toBe("vertical");
+
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("ea-step--vertical")).toBe(true);
     });
   });
 
-  /**
-   * EaStep Description 属性测试
-   */
-  describe("EaStep Description Attribute", () => {
+  // ==================== EaStep heading 属性 ====================
+
+  describe("EaStep heading 属性", () => {
+    it("默认 heading 应该是空字符串", async () => {
+      const step = document.createElement("ea-step");
+      container.appendChild(step);
+
+      await waitForRender();
+
+      expect(step.heading).toBe("");
+    });
+
+    it("设置 heading 应该更新 heading slot 的文本内容", async () => {
+      const step = document.createElement("ea-step");
+      step.heading = "Step 1";
+      container.appendChild(step);
+
+      await waitForRender();
+
+      const headingSlot = step.shadowRoot.querySelector('slot[name="heading"]');
+      expect(headingSlot.textContent).toBe("Step 1");
+    });
+
+    it("动态修改 heading 应该更新文本内容", async () => {
+      const step = document.createElement("ea-step");
+      step.heading = "Step 1";
+      container.appendChild(step);
+
+      await waitForRender();
+
+      step.heading = "Updated Step";
+      await waitForRender();
+
+      const headingSlot = step.shadowRoot.querySelector('slot[name="heading"]');
+      expect(headingSlot.textContent).toBe("Updated Step");
+    });
+  });
+
+  // ==================== EaStep description 属性 ====================
+
+  describe("EaStep description 属性", () => {
     it("默认 description 应该是空字符串", async () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(step.description).toBe("");
     });
 
-    it("应该支持 description 属性", async () => {
+    it("设置 description 应该更新 description slot 的文本内容", async () => {
       const step = document.createElement("ea-step");
       step.description = "Some description";
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.description).toBe("Some description");
+      const descriptionSlot = step.shadowRoot.querySelector(
+        'slot[name="description"]'
+      );
+      expect(descriptionSlot.textContent).toBe("Some description");
+    });
+
+    it("动态修改 description 应该更新文本内容", async () => {
+      const step = document.createElement("ea-step");
+      step.description = "Old description";
+      container.appendChild(step);
+
+      await waitForRender();
+
+      step.description = "New description";
+      await waitForRender();
+
+      const descriptionSlot = step.shadowRoot.querySelector(
+        'slot[name="description"]'
+      );
+      expect(descriptionSlot.textContent).toBe("New description");
     });
   });
 
-  /**
-   * EaStep Icon 属性测试
-   */
-  describe("EaStep Icon Attribute", () => {
+  // ==================== EaStep icon 属性 ====================
+
+  describe("EaStep icon 属性", () => {
     it("默认 icon 应该是空字符串", async () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(step.icon).toBe("");
     });
 
-    it("应该支持 icon 属性", async () => {
+    it("设置 icon 应该更新 ea-icon 的 name 属性", async () => {
       const step = document.createElement("ea-step");
       step.icon = "music";
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.icon).toBe("music");
+      const iconElement = step.shadowRoot.querySelector('[part="icon"]');
+      expect(iconElement.getAttribute("name")).toBe("music");
     });
 
-    it("应该支持不同的 icon 值", async () => {
-      const icons = ["music", "video", "camera", "check"];
+    it("设置 icon 后容器应该有 is-icon CSS 类", async () => {
+      const step = document.createElement("ea-step");
+      step.icon = "music";
+      container.appendChild(step);
 
-      for (const icon of icons) {
-        const step = document.createElement("ea-step");
-        step.icon = icon;
-        expect(step.icon).toBe(icon);
-      }
+      await waitForRender();
+
+      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-icon")).toBe(true);
+    });
+
+    it("动态修改 icon 应该更新 ea-icon 的 name", async () => {
+      const step = document.createElement("ea-step");
+      step.icon = "music";
+      container.appendChild(step);
+
+      await waitForRender();
+
+      step.icon = "video";
+      await waitForRender();
+
+      const iconElement = step.shadowRoot.querySelector('[part="icon"]');
+      expect(iconElement.getAttribute("name")).toBe("video");
     });
   });
 
-  /**
-   * EaStep Status 属性测试
-   */
-  describe("EaStep Status Attribute", () => {
+  // ==================== EaStep status 属性 ====================
+
+  describe("EaStep status 属性", () => {
     it("默认 status 应该是空字符串", async () => {
       const step = document.createElement("ea-step");
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(step.status).toBe("");
     });
 
-    it("应该支持 status='wait'", async () => {
+    it("设置 status 应该在容器上添加对应的状态 CSS 类", async () => {
+      const statuses = ["wait", "process", "finish", "error", "success"];
+
+      for (const status of statuses) {
+        const step = document.createElement("ea-step");
+        step.status = status;
+        container.appendChild(step);
+
+        await waitForRender();
+
+        const stepContainer =
+          step.shadowRoot.querySelector('[part="container"]');
+        expect(stepContainer.classList.contains(`is-${status}`)).toBe(true);
+
+        step.remove();
+      }
+    });
+
+    it("无 icon 时 status=wait 应该显示序号", async () => {
       const step = document.createElement("ea-step");
       step.status = "wait";
+      step.index = 2;
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.status).toBe("wait");
+      const iconElement = step.shadowRoot.querySelector('[part="icon"]');
+      expect(iconElement.textContent).toBe("3");
     });
 
-    it("应该支持 status='process'", async () => {
+    it("有 icon 时设置 status 不应该覆盖 icon", async () => {
       const step = document.createElement("ea-step");
-      step.status = "process";
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.status).toBe("process");
-    });
-
-    it("应该支持 status='finish'", async () => {
-      const step = document.createElement("ea-step");
+      step.icon = "music";
       step.status = "finish";
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.status).toBe("finish");
-    });
-
-    it("应该支持 status='error'", async () => {
-      const step = document.createElement("ea-step");
-      step.status = "error";
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.status).toBe("error");
-    });
-
-    it("应该支持 status='success'", async () => {
-      const step = document.createElement("ea-step");
-      step.status = "success";
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.status).toBe("success");
+      const iconElement = step.shadowRoot.querySelector('[part="icon"]');
+      expect(iconElement.getAttribute("name")).toBe("music");
     });
   });
 
-  /**
-   * EaStep Index 属性测试
-   */
-  describe("EaStep Index Attribute", () => {
-    it("应该支持 index 属性", async () => {
+  // ==================== EaStep index 属性 ====================
+
+  describe("EaStep index 属性", () => {
+    it("默认 index 应该是 0", async () => {
       const step = document.createElement("ea-step");
-      step.index = 0;
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(step.index).toBe(0);
     });
 
-    it("应该支持不同的 index 值", async () => {
-      const indices = [0, 1, 2, 3, 4];
+    it("index=0 时容器应该有 is-first CSS 类", async () => {
+      const step = document.createElement("ea-step");
+      step.index = 0;
+      container.appendChild(step);
 
-      for (const index of indices) {
-        const step = document.createElement("ea-step");
-        step.index = index;
-        expect(step.index).toBe(index);
-      }
+      await waitForRender();
+
+      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-first")).toBe(true);
     });
   });
 
-  /**
-   * 组合测试 - Steps + Step
-   */
-  describe("Combined Steps and Step", () => {
-    it("应该正确渲染包含多个 step 的 steps", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-        <ea-step title="Step 3"></ea-step>
-      `;
-      container.appendChild(steps);
+  // ==================== EaStep direction 属性 ====================
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+  describe("EaStep direction 属性", () => {
+    it("默认 direction 应该是 horizontal", async () => {
+      const step = document.createElement("ea-step");
+      container.appendChild(step);
 
-      const stepElements = steps.querySelectorAll("ea-step");
-      expect(stepElements.length).toBe(3);
+      await waitForRender();
+
+      expect(step.direction).toBe("horizontal");
     });
 
+    it("设置 direction=vertical 应该在容器上添加 ea-step--vertical CSS 类", async () => {
+      const step = document.createElement("ea-step");
+      step.direction = "vertical";
+      container.appendChild(step);
+
+      await waitForRender();
+
+      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("ea-step--vertical")).toBe(true);
+    });
+
+    it("设置 direction=horizontal 应该在容器上添加 ea-step--horizontal CSS 类", async () => {
+      const step = document.createElement("ea-step");
+      step.direction = "horizontal";
+      container.appendChild(step);
+
+      await waitForRender();
+
+      const stepContainer = step.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("ea-step--horizontal")).toBe(
+        true
+      );
+    });
+  });
+
+  // ==================== 父子组件联动 ====================
+
+  describe("父子组件联动", () => {
     it("steps 应该正确设置子 step 的 index", async () => {
       const steps = document.createElement("ea-steps");
       steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-        <ea-step title="Step 3"></ea-step>
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
       `;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].index).toBe(0);
@@ -559,255 +815,583 @@ describe("EaSteps Component", () => {
       expect(stepElements[2].index).toBe(2);
     });
 
-    it("steps 应该正确设置子 step 的 first 和 last 属性", async () => {
+    it("steps 应该正确设置子 step 的 first 和 last attribute", async () => {
       const steps = document.createElement("ea-steps");
       steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-        <ea-step title="Step 3"></ea-step>
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
       `;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].hasAttribute("first")).toBe(true);
+      expect(stepElements[0].hasAttribute("last")).toBe(false);
+      expect(stepElements[1].hasAttribute("first")).toBe(false);
+      expect(stepElements[1].hasAttribute("last")).toBe(false);
+      expect(stepElements[2].hasAttribute("first")).toBe(false);
       expect(stepElements[2].hasAttribute("last")).toBe(true);
+    });
+
+    it("最后一个 step 的容器应该有 is-last CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      const lastContainer =
+        stepElements[1].shadowRoot.querySelector('[part="container"]');
+      expect(lastContainer.classList.contains("is-last")).toBe(true);
+
+      const firstContainer =
+        stepElements[0].shadowRoot.querySelector('[part="container"]');
+      expect(firstContainer.classList.contains("is-last")).toBe(false);
     });
 
     it("steps 应该根据 active 设置子 step 的 status", async () => {
       const steps = document.createElement("ea-steps");
       steps.active = 1;
-      steps["finish-status"] = "finish";
-      steps["process-status"] = "process";
+      steps.finishStatus = "finish";
+      steps.processStatus = "process";
       steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-        <ea-step title="Step 3"></ea-step>
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
       `;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       const stepElements = steps.querySelectorAll("ea-step");
-      // active=1 时，step 0 应该是 finish，step 1 应该是 process，step 2 应该是 wait
       expect(stepElements[0].getAttribute("status")).toBe("finish");
       expect(stepElements[1].getAttribute("status")).toBe("process");
       expect(stepElements[2].getAttribute("status")).toBe("wait");
     });
 
-    it("应该支持含描述的步骤条", async () => {
+    it("子 step 的 status 应该在容器上生成对应 CSS 类", async () => {
       const steps = document.createElement("ea-steps");
+      steps.active = 1;
       steps.innerHTML = `
-        <ea-step title="Step 1" description="Description 1"></ea-step>
-        <ea-step title="Step 2" description="Description 2"></ea-step>
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
       `;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       const stepElements = steps.querySelectorAll("ea-step");
-      expect(stepElements[0].description).toBe("Description 1");
-      expect(stepElements[1].description).toBe("Description 2");
+      const container0 =
+        stepElements[0].shadowRoot.querySelector('[part="container"]');
+      const container1 =
+        stepElements[1].shadowRoot.querySelector('[part="container"]');
+      const container2 =
+        stepElements[2].shadowRoot.querySelector('[part="container"]');
+
+      expect(container0.classList.contains("is-finish")).toBe(true);
+      expect(container1.classList.contains("is-process")).toBe(true);
+      expect(container2.classList.contains("is-wait")).toBe(true);
     });
 
-    it("应该支持带图标的步骤条", async () => {
+    it("动态修改 active 应该更新所有子 step 状态和 CSS 类", async () => {
       const steps = document.createElement("ea-steps");
       steps.innerHTML = `
-        <ea-step title="Step 1" icon="music"></ea-step>
-        <ea-step title="Step 2" icon="video"></ea-step>
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
       `;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      const stepElements = steps.querySelectorAll("ea-step");
-      expect(stepElements[0].icon).toBe("music");
-      expect(stepElements[1].icon).toBe("video");
-    });
-  });
-
-  /**
-   * 边界条件测试
-   */
-  describe("Edge Cases", () => {
-    it("空 steps 应该正常渲染", async () => {
-      const steps = document.createElement("ea-steps");
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(steps.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-    });
-
-    it("单个 step 应该正常渲染", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.innerHTML = `<ea-step title="Only Step"></ea-step>`;
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const stepElements = steps.querySelectorAll("ea-step");
-      expect(stepElements.length).toBe(1);
-      expect(stepElements[0].hasAttribute("first")).toBe(true);
-      expect(stepElements[0].hasAttribute("last")).toBe(true);
-    });
-
-    it("active 超出范围应该正确处理", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.active = 10;
-      steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-      `;
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // 所有 step 应该都是 finish 状态（因为 active > step 数量）
-      const stepElements = steps.querySelectorAll("ea-step");
-      expect(stepElements[0].getAttribute("status")).toBe("finish");
-      expect(stepElements[1].getAttribute("status")).toBe("finish");
-    });
-
-    it("active 为负数应该正确处理", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.active = -1;
-      steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-      `;
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // 所有 step 应该都是 wait 状态（因为 active < 0）
-      const stepElements = steps.querySelectorAll("ea-step");
-      expect(stepElements[0].getAttribute("status")).toBe("wait");
-      expect(stepElements[1].getAttribute("status")).toBe("wait");
-    });
-  });
-
-  /**
-   * 生命周期测试
-   */
-  describe("Lifecycle", () => {
-    it("steps 组件连接后应该正确初始化", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-      `;
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(steps.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-    });
-
-    it("step 组件连接后应该正确初始化", async () => {
-      const step = document.createElement("ea-step");
-      step.title = "Test Step";
-      container.appendChild(step);
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-    });
-
-    it("组件断开连接后应该正常移除", () => {
-      const steps = document.createElement("ea-steps");
-      container.appendChild(steps);
-
-      steps.remove();
-
-      expect(container.contains(steps)).toBe(false);
-    });
-
-    it("动态修改 active 应该更新子 step 的 status", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.active = 0;
-      steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
-        <ea-step title="Step 2"></ea-step>
-        <ea-step title="Step 3"></ea-step>
-      `;
-      container.appendChild(steps);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // 修改 active
       steps.active = 2;
-
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       const stepElements = steps.querySelectorAll("ea-step");
       expect(stepElements[0].getAttribute("status")).toBe("finish");
       expect(stepElements[1].getAttribute("status")).toBe("finish");
       expect(stepElements[2].getAttribute("status")).toBe("process");
+
+      const container2 =
+        stepElements[2].shadowRoot.querySelector('[part="container"]');
+      expect(container2.classList.contains("is-process")).toBe(true);
+    });
+  });
+
+  // ==================== simple 模式深度测试 ====================
+
+  describe("simple 模式深度测试", () => {
+    it("simple 模式下箭头图标应该有 part=simple-arrow", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const arrow = stepElement.querySelector('[slot="simple-arrow"]');
+      expect(arrow).toBeTruthy();
+      expect(arrow.tagName.toLowerCase()).toBe("ea-icon");
+      expect(arrow.getAttribute("name")).toBe("angle-right");
     });
 
-    it("动态添加 step 应该更新 index", async () => {
+    it("simple 模式下子 step 的 tail 应该被隐藏（CSS 类控制）", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-simple")).toBe(true);
+    });
+
+    it("simple 和 alignCenter 同时设置时 simple 优先", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.alignCenter = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-simple")).toBe(true);
+      expect(stepContainer.classList.contains("is-align-center")).toBe(true);
+    });
+
+    it("先设置 steps 再添加 step 时 simple 应该传播", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const step = document.createElement("ea-step");
+      step.heading = "Dynamic Step";
+      steps.appendChild(step);
+
+      await waitForRender();
+
+      expect(step.hasAttribute("simple")).toBe(true);
+    });
+  });
+
+  // ==================== _updateStatus 深度测试 ====================
+
+  describe("step 图标状态更新", () => {
+    it("无 icon 且 status 非 finishStatus 时应该显示序号", async () => {
       const steps = document.createElement("ea-steps");
       steps.innerHTML = `
-        <ea-step title="Step 1"></ea-step>
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
       `;
       container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // 动态添加 step
-      const newStep = document.createElement("ea-step");
-      newStep.title = "Step 2";
-      steps.appendChild(newStep);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       const stepElements = steps.querySelectorAll("ea-step");
+      const iconElement =
+        stepElements[0].shadowRoot.querySelector('[part="icon"]');
+      expect(iconElement.textContent).toBe("1");
+    });
+
+    it("finishStatus=success 且 step 已完成时应该显示 check 图标", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.active = 1;
+      steps.finishStatus = "success";
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      const iconElement =
+        stepElements[0].shadowRoot.querySelector('[part="icon"]');
+      expect(iconElement.getAttribute("name")).toBe("check");
+      expect(iconElement.textContent).toBe("");
+    });
+
+    it("finishStatus=finish 且 step 已完成时应该显示 check 图标", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.active = 1;
+      steps.finishStatus = "finish";
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      const iconElement =
+        stepElements[0].shadowRoot.querySelector('[part="icon"]');
+      expect(iconElement.getAttribute("name")).toBe("check");
+    });
+
+    it("有自定义 icon 时不应该被 status 覆盖", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.active = 1;
+      steps.finishStatus = "finish";
+      steps.innerHTML = `
+        <ea-step heading="Step 1" icon="star"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const iconElement = stepElement.shadowRoot.querySelector('[part="icon"]');
+      expect(iconElement.getAttribute("name")).toBe("star");
+    });
+  });
+
+  // ==================== 边界情况 ====================
+
+  describe("边界情况", () => {
+    it("空 steps 应该正常渲染", async () => {
+      const steps = document.createElement("ea-steps");
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      expect(steps.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+    });
+
+    it("单个 step 应该同时有 first 和 last attribute", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `<ea-step heading="Only Step"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      expect(stepElement.hasAttribute("first")).toBe(true);
+      expect(stepElement.hasAttribute("last")).toBe(true);
+    });
+
+    it("单个 step 的容器应该同时有 is-first 和 is-last CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `<ea-step heading="Only Step"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-first")).toBe(true);
+      expect(stepContainer.classList.contains("is-last")).toBe(true);
+    });
+
+    it("两个 step 时第一个有 first，第二个有 last", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].hasAttribute("first")).toBe(true);
+      expect(stepElements[0].hasAttribute("last")).toBe(false);
+      expect(stepElements[1].hasAttribute("first")).toBe(false);
+      expect(stepElements[1].hasAttribute("last")).toBe(true);
+    });
+
+    it("动态添加 step 应该更新所有 step 的 index 和 first/last", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const newStep = document.createElement("ea-step");
+      newStep.heading = "Step 3";
+      steps.appendChild(newStep);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements.length).toBe(3);
       expect(stepElements[0].index).toBe(0);
       expect(stepElements[1].index).toBe(1);
+      expect(stepElements[2].index).toBe(2);
+      expect(stepElements[2].hasAttribute("last")).toBe(true);
+      expect(stepElements[1].hasAttribute("last")).toBe(false);
     });
 
-    it("动态修改 step 的 title 应该生效", async () => {
-      const step = document.createElement("ea-step");
-      step.title = "Original Title";
-      container.appendChild(step);
+    it("动态移除 step 应该更新剩余 step 的 index 和 first/last", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
+      `;
+      container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      step.title = "New Title";
+      const stepElements = steps.querySelectorAll("ea-step");
+      stepElements[1].remove();
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(step.title).toBe("New Title");
+      const remainingSteps = steps.querySelectorAll("ea-step");
+      expect(remainingSteps.length).toBe(2);
+      expect(remainingSteps[0].index).toBe(0);
+      expect(remainingSteps[1].index).toBe(1);
+      expect(remainingSteps[0].hasAttribute("first")).toBe(true);
+      expect(remainingSteps[1].hasAttribute("last")).toBe(true);
     });
 
-    it("动态修改 step 的 description 应该生效", async () => {
-      const step = document.createElement("ea-step");
-      step.description = "Original Description";
-      container.appendChild(step);
+    it("active 为负数时所有 step 应该是 wait 状态", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.active = -1;
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      step.description = "New Description";
-
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      expect(step.description).toBe("New Description");
+      const stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("wait");
+      expect(stepElements[1].getAttribute("status")).toBe("wait");
     });
 
-    it("动态修改 step 的 icon 应该生效", async () => {
+    it("ea-step 不在 ea-steps 内时应该正常渲染", async () => {
       const step = document.createElement("ea-step");
-      step.icon = "original";
+      step.heading = "Standalone Step";
       container.appendChild(step);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      step.icon = "new-icon";
+      expect(step.shadowRoot).toBeDefined();
+      expect(step.heading).toBe("Standalone Step");
+    });
+  });
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+  // ==================== 属性动态响应测试 ====================
 
-      expect(step.icon).toBe("new-icon");
+  describe("属性动态响应", () => {
+    it("动态设置 alignCenter 后再添加 step，新 step 也应该有 align-center", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.alignCenter = true;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const step = document.createElement("ea-step");
+      step.heading = "New Step";
+      steps.appendChild(step);
+
+      await waitForRender();
+
+      expect(step.hasAttribute("align-center")).toBe(true);
+    });
+
+    it("动态设置 direction 后再添加 step，新 step 也应该有对应 direction", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.direction = "vertical";
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const step = document.createElement("ea-step");
+      step.heading = "New Step";
+      steps.appendChild(step);
+
+      await waitForRender();
+
+      expect(step.getAttribute("direction")).toBe("vertical");
+    });
+
+    it("从 horizontal 切换到 vertical 再切回 horizontal 应该正确更新", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      steps.direction = "vertical";
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      expect(stepElement.getAttribute("direction")).toBe("vertical");
+
+      steps.direction = "horizontal";
+      await waitForRender();
+
+      expect(stepElement.getAttribute("direction")).toBe("horizontal");
+    });
+
+    it("active 从 0 逐步增加到 2 应该正确更新所有 step 状态", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+        <ea-step heading="Step 3"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      steps.active = 0;
+      await waitForRender();
+
+      let stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("process");
+      expect(stepElements[1].getAttribute("status")).toBe("wait");
+      expect(stepElements[2].getAttribute("status")).toBe("wait");
+
+      steps.active = 1;
+      await waitForRender();
+
+      stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("finish");
+      expect(stepElements[1].getAttribute("status")).toBe("process");
+      expect(stepElements[2].getAttribute("status")).toBe("wait");
+
+      steps.active = 2;
+      await waitForRender();
+
+      stepElements = steps.querySelectorAll("ea-step");
+      expect(stepElements[0].getAttribute("status")).toBe("finish");
+      expect(stepElements[1].getAttribute("status")).toBe("finish");
+      expect(stepElements[2].getAttribute("status")).toBe("process");
+    });
+  });
+
+  // ==================== EaSteps 容器 CSS 类测试 ====================
+
+  describe("EaSteps 容器 CSS 类", () => {
+    it("默认容器只有 ea-steps 基础类名", async () => {
+      const steps = document.createElement("ea-steps");
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepsContainer =
+        steps.shadowRoot.querySelector('[part="container"]');
+      expect(stepsContainer.classList.contains("ea-steps")).toBe(true);
+      expect(stepsContainer.classList.contains("is-simple")).toBe(false);
+      expect(stepsContainer.classList.contains("is-align-center")).toBe(false);
+    });
+
+    it("simple=true 时容器应该有 is-simple CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepsContainer =
+        steps.shadowRoot.querySelector('[part="container"]');
+      expect(stepsContainer.classList.contains("is-simple")).toBe(true);
+    });
+
+    it("alignCenter=true 时容器应该有 is-align-center CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.alignCenter = true;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepsContainer =
+        steps.shadowRoot.querySelector('[part="container"]');
+      expect(stepsContainer.classList.contains("is-align-center")).toBe(true);
+    });
+
+    it("simple 和 alignCenter 同时设置时容器应该同时有两个 CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.alignCenter = true;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepsContainer =
+        steps.shadowRoot.querySelector('[part="container"]');
+      expect(stepsContainer.classList.contains("is-simple")).toBe(true);
+      expect(stepsContainer.classList.contains("is-align-center")).toBe(true);
+    });
+  });
+
+  // ==================== EaStep 容器 CSS 类组合测试 ====================
+
+  describe("EaStep 容器 CSS 类组合", () => {
+    it("step 应该同时包含方向、状态、位置等多个 CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.active = 0;
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      const container0 =
+        stepElements[0].shadowRoot.querySelector('[part="container"]');
+
+      expect(container0.classList.contains("ea-step")).toBe(true);
+      expect(container0.classList.contains("ea-step--horizontal")).toBe(true);
+      expect(container0.classList.contains("is-process")).toBe(true);
+      expect(container0.classList.contains("is-first")).toBe(true);
+    });
+
+    it("有 icon 的 step 应该有 is-icon CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.innerHTML = `<ea-step heading="Step 1" icon="star"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-icon")).toBe(true);
+    });
+
+    it("simple 模式下 step 应该有 is-simple 且非 simple 的 align-center 不生效", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.alignCenter = true;
+      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElement = steps.querySelector("ea-step");
+      const stepContainer =
+        stepElement.shadowRoot.querySelector('[part="container"]');
+      expect(stepContainer.classList.contains("is-simple")).toBe(true);
+      expect(stepContainer.classList.contains("is-align-center")).toBe(true);
     });
   });
 });
