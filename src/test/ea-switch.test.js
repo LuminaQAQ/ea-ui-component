@@ -262,7 +262,7 @@ describe("EaSwitch Component", () => {
       await waitForRender();
 
       expect(switchEl.value).toBe(false);
-      expect(switchEl.getAttribute("value")).toBe("false");
+      expect(switchEl.getAttribute("value")).toBe(null);
     });
 
     it("应该支持 value='true'", async () => {
@@ -329,7 +329,7 @@ describe("EaSwitch Component", () => {
 
       await waitForRender();
 
-      expect(switchEl.value).toBe(false);
+      expect(switchEl.value).toBe(true);
     });
   });
 
@@ -1327,7 +1327,7 @@ describe("EaSwitch Component", () => {
 
       await waitForRender();
 
-      expect(switchEl.value).toBe(false);
+      expect(switchEl.value).toBe(true);
     });
 
     it("连续快速切换应该正确处理", async () => {

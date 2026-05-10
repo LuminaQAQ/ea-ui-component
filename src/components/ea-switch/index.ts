@@ -62,11 +62,10 @@ export class EaSwitch extends EaFormAssociatedBase {
   name: string = "";
 
   @attribute({
-    // type: String,
     type: {
       Number: (value: string | number) => {
         const parsedValue = Number(value);
-        return !isNaN(parsedValue);
+        return !isNaN(parsedValue) && value !== "";
       },
       Boolean: (value: string | boolean) => {
         return (
