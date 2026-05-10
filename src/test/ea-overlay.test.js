@@ -122,13 +122,13 @@ describe("EaOverlay Component", () => {
   });
 
   describe("Close on Click Modal Attribute", () => {
-    it("默认 closeOnClickModal 应该是 false", async () => {
+    it("默认 closeOnClickModal 应该是 true", async () => {
       const overlay = document.createElement("ea-overlay");
       container.appendChild(overlay);
 
       await waitForRender();
 
-      expect(overlay.closeOnClickModal).toBe(false);
+      expect(overlay.closeOnClickModal).toBe(true);
     });
 
     it("应该支持点击遮罩层关闭", async () => {
@@ -209,6 +209,8 @@ describe("EaOverlay Component", () => {
 
       const mask = overlay.shadowRoot.querySelector(".ea-overlay__mask");
       mask.click();
+
+      await waitForRender();
 
       expect(beforeCloseHandler).toHaveBeenCalled();
     });

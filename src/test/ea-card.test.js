@@ -124,8 +124,8 @@ describe("EaCard Component", () => {
       container.appendChild(card);
       await waitForRender();
 
-      const headerEl = card.shadowRoot.querySelector(".ea-card__header");
-      expect(headerEl.classList.contains("header-empty")).toBe(true);
+      const containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-header-empty")).toBe(true);
     });
 
     it("通过 slot='header' 传入内容应该显示 header", async () => {
@@ -137,8 +137,8 @@ describe("EaCard Component", () => {
       container.appendChild(card);
       await waitForRender();
 
-      const headerEl = card.shadowRoot.querySelector(".ea-card__header");
-      expect(headerEl.classList.contains("header-empty")).toBe(false);
+      const containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
     });
 
     it("header 插槽应该正确渲染传入的 DOM 内容", async () => {
@@ -170,8 +170,8 @@ describe("EaCard Component", () => {
       container.appendChild(card);
       await waitForRender();
 
-      const footerEl = card.shadowRoot.querySelector(".ea-card__footer");
-      expect(footerEl.classList.contains("footer-empty")).toBe(true);
+      const containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
     });
 
     it("通过 slot='footer' 传入内容应该显示 footer", async () => {
@@ -183,8 +183,8 @@ describe("EaCard Component", () => {
       container.appendChild(card);
       await waitForRender();
 
-      const footerEl = card.shadowRoot.querySelector(".ea-card__footer");
-      expect(footerEl.classList.contains("footer-empty")).toBe(false);
+      const containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
     });
 
     it("footer 插槽应该正确渲染传入的 DOM 内容", async () => {
@@ -270,8 +270,8 @@ describe("EaCard Component", () => {
       expect(contentEl).toBeTruthy();
       expect(footerEl).toBeTruthy();
 
-      expect(headerEl.classList.contains("header-empty")).toBe(false);
-      expect(footerEl.classList.contains("footer-empty")).toBe(false);
+      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
     });
 
     it("简单卡片（只有内容区域）应该正确渲染", async () => {
@@ -285,12 +285,13 @@ describe("EaCard Component", () => {
       container.appendChild(card);
       await waitForRender();
 
+      const containerEl = card.shadowRoot.querySelector(".ea-card");
       const headerEl = card.shadowRoot.querySelector(".ea-card__header");
       const footerEl = card.shadowRoot.querySelector(".ea-card__footer");
       const contentSlot = card.shadowRoot.querySelector("slot:not([name])");
 
-      expect(headerEl.classList.contains("header-empty")).toBe(true);
-      expect(footerEl.classList.contains("footer-empty")).toBe(true);
+      expect(containerEl.classList.contains("is-header-empty")).toBe(true);
+      expect(containerEl.classList.contains("is-footer-empty")).toBe(true);
       expect(contentSlot.assignedElements().length).toBe(4);
     });
   });
@@ -317,8 +318,8 @@ describe("EaCard Component", () => {
       container.appendChild(card);
       await waitForRender();
 
-      let headerEl = card.shadowRoot.querySelector(".ea-card__header");
-      expect(headerEl.classList.contains("header-empty")).toBe(true);
+      let containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-header-empty")).toBe(true);
 
       // 动态添加 header
       const headerDiv = document.createElement("div");
@@ -327,8 +328,8 @@ describe("EaCard Component", () => {
       card.appendChild(headerDiv);
       await waitForRender();
 
-      headerEl = card.shadowRoot.querySelector(".ea-card__header");
-      expect(headerEl.classList.contains("header-empty")).toBe(false);
+      containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
     });
 
     it("动态移除 header 内容后应该隐藏 header", async () => {
@@ -340,8 +341,8 @@ describe("EaCard Component", () => {
       container.appendChild(card);
       await waitForRender();
 
-      let headerEl = card.shadowRoot.querySelector(".ea-card__header");
-      expect(headerEl.classList.contains("header-empty")).toBe(false);
+      let containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
 
       // 移除 header
       const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
@@ -355,8 +356,8 @@ describe("EaCard Component", () => {
       headerSlot.dispatchEvent(new Event("slotchange"));
       await waitForRender();
 
-      headerEl = card.shadowRoot.querySelector(".ea-card__header");
-      expect(headerEl.classList.contains("header-empty")).toBe(true);
+      containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-header-empty")).toBe(true);
     });
   });
 

@@ -24,6 +24,7 @@
 
   <body>
     <script type="module" src="../src/components/ea-button/index.ts"></script>
+    <script type="module" src="../src/components/ea-switch/index.ts"></script>
     <script type="module">
       // ------- disabled按钮 -------
       // #region
@@ -33,7 +34,7 @@
           const btn = document.querySelector("#ea-button-disabled");
 
           // btn.disabled = e.detail.checked;
-          btn.setAttribute("disabled", e.detail.value);
+          btn.toggleAttribute("disabled", e.detail.value);
         });
       // setTimeout(() => {
       //     document.querySelector("#ea-button-a").remove();
@@ -49,7 +50,7 @@
           const btn = document.querySelector("#ea-button-a");
 
           // btn.disabled = e.detail.checked;
-          btn.setAttribute("disabled", e.detail.checked);
+          btn.toggleAttribute("disabled", e.detail.value);
         });
       // setTimeout(() => {
       //     document.querySelector("#ea-button-a").remove();
@@ -65,7 +66,7 @@
           const btn = document.querySelector("#btngroup");
 
           // btn.disabled = e.detail.checked;
-          btn.setAttribute("disabled", e.detail.value);
+          btn.toggleAttribute("disabled", e.detail.value);
         });
       // #endregion
       // ------- end -------
@@ -276,7 +277,9 @@
       <ea-button variant="primary" icon="pen-to-square" round></ea-button>
       <ea-button variant="primary" icon="pen-to-square"></ea-button>
       <ea-button variant="primary" icon="comment">图标按钮</ea-button>
-      <ea-button variant="primary" icon="trash-can" disabled>图标按钮</ea-button>
+      <ea-button variant="primary" icon="trash-can" disabled
+        >图标按钮</ea-button
+      >
       <ea-button variant="primary" disabled
         >图标按钮 <ea-icon name="trash-can"></ea-icon
       ></ea-button>
@@ -337,9 +340,13 @@
       <ea-button variant="primary" size="small">小型按钮</ea-button>
     </div>
     <div class="row">
-      <ea-button variant="primary" icon="coffee" size="large">大型按钮</ea-button>
+      <ea-button variant="primary" icon="coffee" size="large"
+        >大型按钮</ea-button
+      >
       <ea-button variant="primary" icon="coffee">默认按钮</ea-button>
-      <ea-button variant="primary" icon="coffee" size="small">小型按钮</ea-button>
+      <ea-button variant="primary" icon="coffee" size="small"
+        >小型按钮</ea-button
+      >
     </div>
     <div class="row">
       <ea-button variant="primary" round size="large">大型按钮</ea-button>
@@ -352,9 +359,19 @@
       <ea-button variant="primary" size="small">小型按钮</ea-button>
     </div>
     <div class="row">
-      <ea-button variant="primary" circle icon="coffee" size="large"></ea-button>
+      <ea-button
+        variant="primary"
+        circle
+        icon="coffee"
+        size="large"
+      ></ea-button>
       <ea-button variant="primary" circle icon="coffee"></ea-button>
-      <ea-button variant="primary" circle icon="coffee" size="small"></ea-button>
+      <ea-button
+        variant="primary"
+        circle
+        icon="coffee"
+        size="small"
+      ></ea-button>
     </div>
     <hr />
     <!-- #endregion  -->

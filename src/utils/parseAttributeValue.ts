@@ -13,6 +13,25 @@ function parseDefaultValue(defaultVal: any): any {
       : null;
 }
 
+function parseStringType(
+  type: string
+): AttributeOptions["type"] | PropertyOptions["type"] {
+  switch (type) {
+    case "String": {
+      return String;
+    }
+    case "Number": {
+      return Number;
+    }
+    case "Boolean": {
+      return Boolean;
+    }
+    default: {
+      return type;
+    }
+  }
+}
+
 /**
  * 解析属性值为指定类型
  * @param value 属性值
@@ -28,6 +47,21 @@ export function parseAttributeValue(
   if (value === null) {
     return parseDefaultValue(defaultVal);
   }
+
+  if (Array.isArray(type)) {
+    return type.includes(value) ? value : parseDefaultValue(defaultVal);
+  }
+
+  if (typeof type === "object" && type !== null) {
+    const realType = Object.entries(type).filter(_ =>
+      typeof _[1] === "function" ? _[1](value) : false
+    );
+    return realType && realType?.length
+      ? parseAttributeValue(value, realType[0][0] as any, defaultVal)
+      : parseDefaultValue(defaultVal);
+  }
+
+  type = parseStringType(type);
 
   switch (type) {
     case String: {
@@ -68,7 +102,7 @@ export function parseAttributeValue(
       }
       if (typeof type === "object" && type !== null) {
         const realType = Object.entries(type).filter(_ =>
-          typeof _[1] === "function" ? _[1]() : false
+          typeof _[1] === "function" ? _[1](value) : false
         );
         return realType && realType?.length
           ? parseAttributeValue(value, realType[0][0] as any, defaultVal)

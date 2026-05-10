@@ -14,11 +14,11 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-skeleton/index.js"></script>
-    <script type="module" src="../src/components/ea-card/index.js"></script>
-    <script type="module" src="../src/components/ea-image/index.js"></script>
-    <script type="module" src="../src/components/ea-switch/index.js"></script>
-    <script type="module" src="../src/components/ea-button/index.js"></script>
+    <script type="module" src="../src/components/ea-skeleton/index.ts"></script>
+    <script type="module" src="../src/components/ea-card/index.ts"></script>
+    <script type="module" src="../src/components/ea-image/index.ts"></script>
+    <script type="module" src="../src/components/ea-switch/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
 
     <!-- -------- 骨架屏 --------  -->
     <!-- #region  -->
@@ -152,7 +152,7 @@
 
         init() {
           this.switch.addEventListener("change", e => {
-            const { value } = e.target;
+            const { value } = e.detail;
 
             this.el.loading = value;
           });
@@ -306,7 +306,7 @@
 
         init() {
           this.switch.addEventListener("change", e => {
-            const { value } = e.target;
+            const { value } = e.detail;
 
             this.el.loading = value;
           });

@@ -18,11 +18,9 @@ export type PropertyTypes =
  */
 export interface PropertyOptions {
   /** @description 属性类型 - 支持基本类型、Array、RegExp、Function 等 */
-  type: PropertyTypes;
+  type?: PropertyTypes;
   /** @description 默认值 */
   default?: any;
-  /** @description 是否映射到 HTML attribute（默认为 false，即 props 模式） */
-  attr?: boolean;
   /** @description 观察者回调 - 当属性值变化时触发 */
   observer?: ((this: any, newVal: any, oldVal: any) => void) | undefined;
   /** @description 是否保留函数原始值（不执行函数） */

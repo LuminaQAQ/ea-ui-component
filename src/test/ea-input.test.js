@@ -967,7 +967,7 @@ describe("EaInput Component", () => {
       await waitForRender();
 
       const handler = vi.fn();
-      input.addEventListener("clear", handler);
+      input.addEventListener("ea-clear", handler);
 
       const clearIcon = input.shadowRoot.querySelector(".ea-input__clear-icon");
       clearIcon.click();

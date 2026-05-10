@@ -29,7 +29,8 @@ export interface AttributeOptions {
   type:
     | CustomElementAttributeTypes
     | HTMLFormElementConstructor
-    | HTMLFormValidityConstructor;
+    | HTMLFormValidityConstructor
+    | object;
   /** @description 默认值 */
   default?: any;
   /** @description 观察者回调 */

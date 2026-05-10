@@ -255,14 +255,14 @@ describe("EaSwitch Component", () => {
   });
 
   describe("Value Attribute", () => {
-    it("默认 value 应该是空字符串", async () => {
+    it("默认 value 应该是 false", async () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
       await waitForRender();
 
-      expect(switchEl.value).toBe("");
-      expect(switchEl.getAttribute("value")).toBe(null);
+      expect(switchEl.value).toBe(false);
+      expect(switchEl.getAttribute("value")).toBe("false");
     });
 
     it("应该支持 value='true'", async () => {
@@ -329,7 +329,7 @@ describe("EaSwitch Component", () => {
 
       await waitForRender();
 
-      expect(switchEl.getAttribute("value")).toBe("");
+      expect(switchEl.value).toBe(false);
     });
   });
 
@@ -1327,7 +1327,7 @@ describe("EaSwitch Component", () => {
 
       await waitForRender();
 
-      expect(switchEl.getAttribute("value")).toBe("");
+      expect(switchEl.value).toBe(false);
     });
 
     it("连续快速切换应该正确处理", async () => {

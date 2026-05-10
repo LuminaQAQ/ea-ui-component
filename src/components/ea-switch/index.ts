@@ -62,9 +62,27 @@ export class EaSwitch extends EaFormAssociatedBase {
   name: string = "";
 
   @attribute({
-    type: String,
-    default: "",
-    observer(this: EaSwitch, newVal: string) {
+    // type: String,
+    type: {
+      Number: (value: string | number) => {
+        const parsedValue = Number(value);
+        return !isNaN(parsedValue);
+      },
+      Boolean: (value: string | boolean) => {
+        return (
+          value === "true" ||
+          value === true ||
+          value === "false" ||
+          value === false ||
+          value === ""
+        );
+      },
+      String: (value: string) => {
+        return typeof value === "string";
+      },
+    },
+    default: false,
+    observer(this: EaSwitch, newVal: number | boolean | string) {
       this._handleValueChange(newVal);
     },
   })
@@ -207,7 +225,7 @@ export class EaSwitch extends EaFormAssociatedBase {
         [this.size]: true,
       },
       {
-        checked: this.value === this.activeValue,
+        checked: this._parseValue(this.value) === this._parsedActiveValue,
         disabled: this.disabled,
       }
     );
@@ -250,7 +268,9 @@ export class EaSwitch extends EaFormAssociatedBase {
   @listen("change", ".ea-switch__original")
   private _onChangeEvent(e: Event): void {
     const isChecked = (e.target as HTMLInputElement).checked;
-    const value = isChecked ? this.activeValue : this.inactiveValue;
+    const value = isChecked
+      ? this._parsedActiveValue
+      : this._parsedInactiveValue;
 
     this.setAttribute("value", value);
   }
@@ -261,6 +281,12 @@ export class EaSwitch extends EaFormAssociatedBase {
    */
   @listen("click", ".ea-switch__original")
   private _onClickEvent(e: Event): void {
+    const parser = () => {
+      return this._originalInput.checked
+        ? this._parsedActiveValue
+        : this._parsedInactiveValue;
+    };
+
     if (this.beforeChange && typeof this.beforeChange === "function") {
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -268,11 +294,11 @@ export class EaSwitch extends EaFormAssociatedBase {
       this.beforeChange()
         .then(() => {
           this._originalInput.checked = !this._originalInput.checked;
-          this._originalInput.dispatchEvent(new EaSwitchChangeEvent());
+          this._originalInput.dispatchEvent(new EaSwitchChangeEvent(parser()));
         })
         .catch(() => {});
     } else {
-      this._originalInput.dispatchEvent(new EaSwitchChangeEvent());
+      this._originalInput.dispatchEvent(new EaSwitchChangeEvent(parser()));
     }
   }
 
@@ -283,7 +309,9 @@ export class EaSwitch extends EaFormAssociatedBase {
       this.setAttribute("name", Math.random().toString(36).substring(2, 15));
 
     this.setValue(
-      this._originalInput.checked ? this.activeValue : this.inactiveValue
+      this._originalInput.checked
+        ? this._parsedActiveValue
+        : this._parsedInactiveValue
     );
 
     this.updateContainerClasslist();
@@ -300,7 +328,7 @@ export class EaSwitch extends EaFormAssociatedBase {
    * switch 的验证逻辑：当 required 为 true 时，必须处于选中状态（value 等于 active-value）
    */
   updateValidity() {
-    const isChecked = this.value === this.activeValue;
+    const isChecked = this.value === this._parsedActiveValue;
 
     if (this.required && !isChecked) {
       this.internals.setValidity(

@@ -81,7 +81,9 @@ function createAttributeGetter(
   return function (this: EaElement & HTMLElement) {
     const attrValue = this.getAttribute(attrName);
 
-    if (attrValue !== null) {
+    if (type === Boolean) {
+      return this.hasAttribute(attrName);
+    } else if (attrValue !== null) {
       return parseAttributeValue(attrValue, type, defaultValue);
     }
 
@@ -393,8 +395,16 @@ function CustomElement(
               const { option, actualName } = findPropertyOption(clsAttrs, name);
 
               if (option) {
-                const newValue = parseAttributeValue(newVal, option.type);
-                const oldValue = parseAttributeValue(oldVal, option.type);
+                const newValue = parseAttributeValue(
+                  newVal,
+                  option.type,
+                  option.default
+                );
+                const oldValue = parseAttributeValue(
+                  oldVal,
+                  option.type,
+                  option.default
+                );
 
                 const parentProto = Object.getPrototypeOf(
                   Object.getPrototypeOf(this)

@@ -1,5 +1,8 @@
 export class EaSwitchChangeEvent extends Event {
-  constructor() {
+  detail: { value: any };
+
+  constructor(value: any) {
     super("change", { bubbles: true, composed: true });
+    this.detail = { value };
   }
 }

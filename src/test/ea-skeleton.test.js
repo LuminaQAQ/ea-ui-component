@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-skeleton 组件及其子组件
-import "../components/ea-skeleton/index.js";
+import "../components/ea-skeleton/index";
 
 describe("EaSkeleton Component", () => {
   let container;
@@ -15,15 +15,12 @@ describe("EaSkeleton Component", () => {
     container.remove();
   });
 
-  /**
-   * EaSkeleton 基本功能测试
-   */
   describe("EaSkeleton Basic Functionality", () => {
     it("应该正确渲染 ea-skeleton 组件", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton).toBeDefined();
       expect(skeleton.shadowRoot).toBeDefined();
@@ -33,43 +30,44 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        skeleton.shadowRoot.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("应该包含 default-slot CSS Part", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton.shadowRoot.querySelector('[part="default-slot"]')).toBeTruthy();
+      expect(
+        skeleton.shadowRoot.querySelector('[part="default-slot"]')
+      ).toBeTruthy();
     });
 
     it("应该包含 template-slot CSS Part", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton.shadowRoot.querySelector('[part="template-slot"]')).toBeTruthy();
+      expect(
+        skeleton.shadowRoot.querySelector('[part="template-slot"]')
+      ).toBeTruthy();
     });
   });
 
-  /**
-   * Loading 属性测试
-   */
   describe("Loading Attribute", () => {
     it("默认 loading 应该是 true", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // 默认 loading 为 true，但可能返回 null 或 true
-      const value = skeleton.loading;
-      expect(value === true || value === null).toBe(true);
+      expect(skeleton.loading).toBe(true);
     });
 
     it("设置 loading 为 false 应该显示真实内容", async () => {
@@ -77,7 +75,7 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = false;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.loading).toBe(false);
     });
@@ -87,29 +85,24 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = true;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       skeleton.loading = false;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.loading).toBe(false);
     });
   });
 
-  /**
-   * Animated 属性测试
-   */
   describe("Animated Attribute", () => {
     it("默认 animated 应该是 false", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // 属性可能返回 null 或 false
-      const value = skeleton.animated;
-      expect(value === false || value === null).toBe(true);
+      expect(skeleton.animated).toBe(false);
     });
 
     it("设置 animated 属性应该启用动画", async () => {
@@ -117,21 +110,18 @@ describe("EaSkeleton Component", () => {
       skeleton.animated = true;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.animated).toBe(true);
     });
   });
 
-  /**
-   * Rows 属性测试
-   */
   describe("Rows Attribute", () => {
     it("默认 rows 应该是 4", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.rows).toBe(4);
     });
@@ -141,7 +131,7 @@ describe("EaSkeleton Component", () => {
       skeleton.rows = 6;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.rows).toBe(6);
     });
@@ -157,15 +147,12 @@ describe("EaSkeleton Component", () => {
     });
   });
 
-  /**
-   * Count 属性测试
-   */
   describe("Count Attribute", () => {
     it("默认 count 应该是 1", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.count).toBe(1);
     });
@@ -175,7 +162,7 @@ describe("EaSkeleton Component", () => {
       skeleton.count = 3;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.count).toBe(3);
     });
@@ -191,58 +178,52 @@ describe("EaSkeleton Component", () => {
     });
   });
 
-  /**
-   * Throttle 属性测试
-   */
   describe("Throttle Attributes", () => {
-    it("默认 throttle-leading 应该是 0", async () => {
+    it("默认 throttleLeading 应该是 0", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton["throttle-leading"]).toBe(0);
+      expect(skeleton.throttleLeading).toBe(0);
     });
 
-    it("默认 throttle-trailing 应该是 0", async () => {
+    it("默认 throttleTrailing 应该是 0", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton["throttle-trailing"]).toBe(0);
+      expect(skeleton.throttleTrailing).toBe(0);
     });
 
-    it("应该支持 throttle-leading 属性", async () => {
+    it("应该支持 throttleLeading 属性", async () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("throttle-leading", "500");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton["throttle-leading"]).toBe(500);
+      expect(skeleton.throttleLeading).toBe(500);
     });
 
-    it("应该支持 throttle-trailing 属性", async () => {
+    it("应该支持 throttleTrailing 属性", async () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.setAttribute("throttle-trailing", "500");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton["throttle-trailing"]).toBe(500);
+      expect(skeleton.throttleTrailing).toBe(500);
     });
   });
 
-  /**
-   * EaSkeletonItem 基本功能测试
-   */
   describe("EaSkeletonItem Basic Functionality", () => {
     it("应该正确渲染 ea-skeleton-item 组件", async () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item).toBeDefined();
       expect(item.shadowRoot).toBeDefined();
@@ -252,21 +233,18 @@ describe("EaSkeleton Component", () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
   });
 
-  /**
-   * EaSkeletonItem Variant 属性测试
-   */
   describe("EaSkeletonItem Variant Attribute", () => {
     it("默认 variant 应该是 p", async () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("p");
     });
@@ -276,7 +254,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "text";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("text");
     });
@@ -286,7 +264,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "h1";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("h1");
     });
@@ -296,7 +274,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "h3";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("h3");
     });
@@ -306,7 +284,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "caption";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("caption");
     });
@@ -316,7 +294,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "button";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("button");
     });
@@ -326,7 +304,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "image";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("image");
     });
@@ -336,7 +314,7 @@ describe("EaSkeleton Component", () => {
       item.variant = "circle";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("circle");
     });
@@ -346,13 +324,23 @@ describe("EaSkeleton Component", () => {
       item.variant = "rect";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("rect");
     });
 
     it("应该支持不同的 variant 值", async () => {
-      const variants = ["p", "text", "h1", "h3", "caption", "button", "image", "circle", "rect"];
+      const variants = [
+        "p",
+        "text",
+        "h1",
+        "h3",
+        "caption",
+        "button",
+        "image",
+        "circle",
+        "rect",
+      ];
 
       for (const variant of variants) {
         const item = document.createElement("ea-skeleton-item");
@@ -362,19 +350,14 @@ describe("EaSkeleton Component", () => {
     });
   });
 
-  /**
-   * EaSkeletonItem Animated 属性测试
-   */
   describe("EaSkeletonItem Animated Attribute", () => {
     it("默认 animated 应该是 false", async () => {
       const item = document.createElement("ea-skeleton-item");
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      // 属性可能返回 null 或 false
-      const value = item.animated;
-      expect(value === false || value === null).toBe(true);
+      expect(item.animated).toBe(false);
     });
 
     it("设置 animated 属性应该启用动画", async () => {
@@ -382,15 +365,12 @@ describe("EaSkeleton Component", () => {
       item.animated = true;
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.animated).toBe(true);
     });
   });
 
-  /**
-   * 组合布局测试
-   */
   describe("Combined Layout", () => {
     it("应该支持基本的 skeleton + skeleton-item 布局", async () => {
       const skeleton = document.createElement("ea-skeleton");
@@ -399,7 +379,7 @@ describe("EaSkeleton Component", () => {
       skeleton.appendChild(item);
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.querySelector("ea-skeleton-item")).toBeTruthy();
     });
@@ -415,7 +395,7 @@ describe("EaSkeleton Component", () => {
 
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.querySelectorAll("ea-skeleton-item").length).toBe(3);
     });
@@ -430,7 +410,7 @@ describe("EaSkeleton Component", () => {
       `;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.querySelectorAll("ea-skeleton-item").length).toBe(2);
     });
@@ -446,23 +426,22 @@ describe("EaSkeleton Component", () => {
       `;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.textContent).toContain("Real Content");
     });
   });
 
-  /**
-   * 边界条件测试
-   */
   describe("Edge Cases", () => {
     it("空 skeleton 应该正常渲染", async () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        skeleton.shadowRoot.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("rows=0 应该正确处理", async () => {
@@ -470,7 +449,7 @@ describe("EaSkeleton Component", () => {
       skeleton.rows = 0;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.rows).toBe(0);
     });
@@ -480,7 +459,7 @@ describe("EaSkeleton Component", () => {
       skeleton.count = 0;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.count).toBe(0);
     });
@@ -490,24 +469,23 @@ describe("EaSkeleton Component", () => {
       item.variant = "image";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("image");
     });
   });
 
-  /**
-   * 生命周期测试
-   */
   describe("Lifecycle", () => {
     it("skeleton 组件连接后应该正确初始化", async () => {
       const skeleton = document.createElement("ea-skeleton");
       skeleton.rows = 3;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
-      expect(skeleton.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(
+        skeleton.shadowRoot.querySelector('[part="container"]')
+      ).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", () => {
@@ -524,11 +502,11 @@ describe("EaSkeleton Component", () => {
       skeleton.loading = true;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       skeleton.loading = false;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.loading).toBe(false);
     });
@@ -537,11 +515,11 @@ describe("EaSkeleton Component", () => {
       const skeleton = document.createElement("ea-skeleton");
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       skeleton.animated = true;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.animated).toBe(true);
     });
@@ -551,11 +529,11 @@ describe("EaSkeleton Component", () => {
       skeleton.rows = 2;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       skeleton.rows = 6;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.rows).toBe(6);
     });
@@ -565,11 +543,11 @@ describe("EaSkeleton Component", () => {
       skeleton.count = 1;
       container.appendChild(skeleton);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       skeleton.count = 5;
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(skeleton.count).toBe(5);
     });
@@ -579,11 +557,11 @@ describe("EaSkeleton Component", () => {
       item.variant = "p";
       container.appendChild(item);
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       item.variant = "h1";
 
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await waitForRender();
 
       expect(item.variant).toBe("h1");
     });
