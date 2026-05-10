@@ -1,5 +1,9 @@
 import parseAttributeValue from "@/utils/parseAttributeValue";
-import { ElementAttributesMap, ElementPropertiesMap } from "@/stores";
+import {
+  ElementAttributesMap,
+  ElementPropertiesMap,
+  StylesheetCache,
+} from "@/stores";
 import { html } from "@/utils/html";
 import { camelToKebab, kebabToCamel } from "@/utils/case-convert";
 import type {
@@ -240,11 +244,7 @@ function applyStyles(elementClass: any, shadowRoot: ShadowRoot | null): void {
   if (uniqueStyles.length === 0) return;
 
   if ("adoptedStyleSheets" in shadowRoot) {
-    const sheets = uniqueStyles.map(css => {
-      const sheet = new CSSStyleSheet();
-      sheet.replaceSync(css);
-      return sheet;
-    });
+    const sheets = uniqueStyles.map(css => StylesheetCache.getOrCreate(css));
     shadowRoot.adoptedStyleSheets = sheets;
   } else {
     uniqueStyles.forEach(css => {
