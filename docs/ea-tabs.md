@@ -515,12 +515,12 @@ editableExample.init();
 
 ### Tabs Attributes
 
-| 参数         | 说明                                                       | 类型    | 可选值                      | 默认值 |
-| ------------ | ---------------------------------------------------------- | ------- | --------------------------- | ------ |
-| active       | 当前激活的标签页（panel 名称或索引），可用于设置默认激活项 | String  | -                           | -      |
-| type         | 标签页风格                                                 | String  | `‘’ \| card \| border-card` | ''     |
-| editable     | 是否启用可编辑（增删）模式                                 | Boolean | -                           | false  |
-| tab-position | 标签栏的位置（水平或垂直）                                 | String  | top / right / bottom / left | top    |
+| 参数        | 说明                                                       | 类型    | 可选值                      | 默认值 |
+| ----------- | ---------------------------------------------------------- | ------- | --------------------------- | ------ |
+| active      | 当前激活的标签页（panel 名称或索引），可用于设置默认激活项 | String  | -                           | -      |
+| type        | 标签页风格                                                 | String  | `‘’ \| card \| border-card` | ''     |
+| editable    | 是否启用可编辑（增删）模式                                 | Boolean | -                           | false  |
+| tabPosition | 标签栏的位置（水平或垂直）                                 | String  | top / right / bottom / left | top    |
 
 ### Tabs CSS Part
 
@@ -538,11 +538,11 @@ editableExample.init();
 
 ### Tabs Events
 
-| 事件名      | 说明               | 回调参数                            |
-| ----------- | ------------------ | ----------------------------------- |
-| tab-click   | 点击切换标签时触发 | event.detail (目标 panel 名称/索引) |
-| tabs-change | 标签页切换时触发   | event.detail (目标 panel 索引)      |
-| tab-remove  | 点击删除标签时触发 | event.detail (目标 panel 索引)      |
+| 事件名         | 说明               | 回调参数                            |
+| -------------- | ------------------ | ----------------------------------- |
+| ea-tab-click   | 点击切换标签时触发 | event.detail (目标 panel 名称/索引) |
+| ea-tabs-change | 标签页切换时触发   | event.detail (目标 panel 索引)      |
+| ea-tab-remove  | 点击删除标签时触发 | event.detail (目标 panel 索引)      |
 
 ### Tabs Slot
 
