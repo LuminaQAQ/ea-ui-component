@@ -2,7 +2,7 @@ import EaBase, { createBEM } from "@core/EaBase";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
 import { query } from "@decorator/query";
-import { property } from "@decorator/property";
+import { listen } from "@decorator/listen";
 import { html } from "@/utils/html";
 import { timeout } from "@/utils/timeout";
 import stylesheet from "./index.scss?inline";
@@ -10,7 +10,7 @@ import stylesheet from "./index.scss?inline";
 const TAG_NAME = "ea-skeleton" as const;
 const bem = createBEM(TAG_NAME);
 
-@CustomElement(TAG_NAME, { styles: [stylesheet], extraAttr: ["loading"] })
+@CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSkeleton extends EaBase {
   // ==================== DOM 元素引用 ====================
 
@@ -80,7 +80,7 @@ export class EaSkeleton extends EaBase {
   })
   throttleTrailing: number = 0;
 
-  @property({
+  @attribute({
     type: Boolean,
     default: true,
     observer(this: EaSkeleton, newVal: boolean) {
@@ -105,7 +105,6 @@ export class EaSkeleton extends EaBase {
 
   // ==================== 私有属性 ====================
 
-  private _abortController?: AbortController;
   private _loadingThrottle: number | null = null;
   private _templateNode: DocumentFragment | null = null;
 
@@ -162,10 +161,14 @@ export class EaSkeleton extends EaBase {
   }
 
   private _updateAnimatedStatus(isAnimated: boolean): void {
-    const children: HTMLElement[] = this._templateSlot
-      .assignedElements()
+    const assigned = this._templateSlot.assignedElements();
+    const children: HTMLElement[] = assigned
       .filter(el => el.tagName.toLocaleLowerCase() === "ea-skeleton-item")
+      .concat(
+        ...assigned.map(el => [...el.querySelectorAll("ea-skeleton-item")])
+      )
       .concat([...this._templateSlot.querySelectorAll("ea-skeleton-item")]);
+
     children.forEach(child => child.toggleAttribute("animated", isAnimated));
   }
 
@@ -178,39 +181,30 @@ export class EaSkeleton extends EaBase {
     `;
   }
 
-  // ==================== 生命周期 ====================
+  // ==================== 事件处理 ====================
 
-  async attributeChangedCallback(
-    name: string,
-    oldVal: string | null,
-    newVal: string | null
-  ): Promise<void> {
-    await super.attributeChangedCallback(name, oldVal, newVal);
-
-    if (name === "loading" && newVal !== oldVal) {
-      this.loading = newVal !== "false" && newVal !== null;
-    }
+  @listen("slotchange", "#template")
+  private _handleTemplateSlotChange(): void {
+    this._updateAnimatedStatus(this.animated);
   }
+
+  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();
+  }
 
-    this._abortController?.abort();
-    this._abortController = new AbortController();
-
-    const onTemplateSlotChange = () => {
-      this._updateAnimatedStatus(this.animated);
-    };
-
+  $mounted(): void {
     this._initDefaultSkeleton();
-
-    this._templateSlot.addEventListener("slotchange", onTemplateSlotChange, {
-      signal: this._abortController.signal,
-    });
   }
 
   $beforeUnmount(): void {
-    this._abortController?.abort();
+    try {
+      clearTimeout(this._loadingThrottle);
+      this._loadingThrottle = null;
+    } catch {
+      /* empty */
+    }
   }
 }
 

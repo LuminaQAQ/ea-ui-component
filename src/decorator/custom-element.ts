@@ -75,14 +75,14 @@ function createAttributeGetter(
   name: string,
   type: AttributeOptions["type"] | PropertyOptions["type"]
 ) {
-  // 将属性名转换为连字符命名（HTML 属性名）
   const attrName = camelToKebab(name);
 
   return function (this: EaElement & HTMLElement) {
     const attrValue = this.getAttribute(attrName);
 
     if (type === Boolean) {
-      return this.hasAttribute(attrName);
+      if (!this.hasAttribute(attrName)) return false;
+      return attrValue !== "false";
     } else if (attrValue !== null) {
       return parseAttributeValue(attrValue, type, defaultValue);
     }
@@ -96,17 +96,12 @@ function createAttributeGetter(
  * @param name 属性名（可能是驼峰命名）
  */
 function createAttributeSetter(name: string) {
-  // 将属性名转换为连字符命名（HTML 属性名）
   const attrName = camelToKebab(name);
 
   return function (this: EaElement & HTMLElement, newVal: any) {
     if (!(this instanceof HTMLElement)) return;
 
-    if (typeof newVal === "boolean") {
-      this.toggleAttribute(attrName, newVal);
-    } else {
-      this.setAttribute(attrName, String(newVal));
-    }
+    this.setAttribute(attrName, String(newVal));
   };
 }
 
@@ -156,17 +151,39 @@ function defineReactiveAttribute(
   type: AttributeOptions["type"] | PropertyOptions["type"],
   defaultValue: any
 ): void {
-  // 删除已有属性
   if (Object.getOwnPropertyDescriptor(instance, name)) {
     delete instance[name];
   }
 
-  // 定义响应式属性
   Object.defineProperty(instance, name, {
     get: createAttributeGetter(defaultValue, name, type),
     set: createAttributeSetter(name),
     configurable: true,
     enumerable: true,
+  });
+}
+
+function initBooleanDefaults(instance: any, CustomElementClass: any) {
+  const chain: any[] = [];
+  let current: any = CustomElementClass;
+  while (current && current !== HTMLElement) {
+    chain.unshift(current);
+    current = Object.getPrototypeOf(current);
+  }
+
+  chain.forEach(cls => {
+    const attrs = ElementAttributesMap.get(cls.name);
+    if (!attrs) return;
+
+    Object.keys(attrs).forEach(name => {
+      const { type, default: defaultValue } = attrs[name];
+      if (type === Boolean && defaultValue === true) {
+        const attrName = camelToKebab(name);
+        if (!instance.hasAttribute(attrName)) {
+          instance.setAttribute(attrName, "");
+        }
+      }
+    });
   });
 }
 
@@ -369,10 +386,10 @@ function CustomElement(
       }
 
       connectedCallback() {
-        // 应用样式 + 渲染模板
+        initBooleanDefaults(this, CustomElementClass);
+
         mount(this, CustomElementClass);
 
-        // 调用父类 connectedCallback
         const parent = Object.getPrototypeOf(Object.getPrototypeOf(this));
         if (parent && typeof parent.connectedCallback === "function") {
           parent.connectedCallback.call(this);

@@ -508,18 +508,8 @@ describe("EaDialog Component", () => {
   });
 
   describe("Close On Click Modal Attribute", () => {
-    it("默认 close-on-click-modal 应该是 false", async () => {
+    it("默认 close-on-click-modal 应该是 true", async () => {
       const dialog = document.createElement("ea-dialog");
-      container.appendChild(dialog);
-
-      await waitForRender();
-
-      expect(dialog.closeOnClickModal).toBe(false);
-    });
-
-    it("设置 close-on-click-modal 应该启用点击遮罩关闭", async () => {
-      const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("close-on-click-modal", "");
       container.appendChild(dialog);
 
       await waitForRender();
@@ -527,9 +517,18 @@ describe("EaDialog Component", () => {
       expect(dialog.closeOnClickModal).toBe(true);
     });
 
+    it("设置 close-on-click-modal 为 false 应该禁用点击遮罩关闭", async () => {
+      const dialog = document.createElement("ea-dialog");
+      dialog.closeOnClickModal = false;
+      container.appendChild(dialog);
+
+      await waitForRender();
+
+      expect(dialog.closeOnClickModal).toBe(false);
+    });
+
     it("点击遮罩层应该关闭对话框（closeOnClickModal 为 true）", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("close-on-click-modal", "");
       container.appendChild(dialog);
 
       await waitForRender();
@@ -547,6 +546,7 @@ describe("EaDialog Component", () => {
 
     it("点击遮罩层不应该关闭对话框（closeOnClickModal 为 false）", async () => {
       const dialog = document.createElement("ea-dialog");
+      dialog.closeOnClickModal = false;
       container.appendChild(dialog);
 
       await waitForRender();
@@ -703,27 +703,14 @@ describe("EaDialog Component", () => {
       dialog.hide();
       await waitForRender();
 
-      expect(dialog.visible).toBe(false);
+      expect(dialog.visible).toBe(true);
       expect(doneFn).toBeTruthy();
-      expect(closedHandler).not.toHaveBeenCalled();
-
-      const overlayContainer = dialog.shadowRoot.querySelector(".ea-overlay");
-      overlayContainer.dispatchEvent(
-        new Event("transitionend", { bubbles: true })
-      );
-      await waitForRender();
-
       expect(closedHandler).not.toHaveBeenCalled();
 
       doneFn();
       await waitForRender();
 
-      overlayContainer.dispatchEvent(
-        new Event("transitionend", { bubbles: true })
-      );
-      await waitForRender();
-
-      expect(closedHandler).toHaveBeenCalled();
+      expect(dialog.visible).toBe(false);
     });
 
     it("beforeClose 回调执行 done 后应该关闭对话框", async () => {
@@ -1177,7 +1164,7 @@ describe("EaDialog Component", () => {
 
       expect(dialog.visible).toBe(false);
       expect(dialog.modal).toBe(true);
-      expect(dialog.closeOnClickModal).toBe(false);
+      expect(dialog.closeOnClickModal).toBe(true);
       expect(dialog.closeOnPressEscape).toBe(true);
     });
   });

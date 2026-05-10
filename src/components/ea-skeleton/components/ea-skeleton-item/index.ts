@@ -39,6 +39,8 @@ export class EaSkeletonItem extends EaBase {
     observer(this: EaSkeletonItem, newVal: SkeletonItemVariant) {
       if (newVal === "image") {
         this._container.innerHTML = html(skeletonImageSVG);
+      } else {
+        this._container.innerHTML = "";
       }
       this.updateContainerClasslist();
     },
@@ -68,9 +70,15 @@ export class EaSkeletonItem extends EaBase {
   }
 
   html(): string {
+    const imageVariant = this.variant === "image" ? skeletonImageSVG : "";
+
     return `
-      <div class="${bem()}" part="container"></div>
+      <div class="${bem()}" part="container">${imageVariant}</div>
     `;
+  }
+
+  $mount(): void {
+    this.updateContainerClasslist();
   }
 }
 
