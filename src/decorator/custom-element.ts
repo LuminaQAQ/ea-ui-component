@@ -1,4 +1,6 @@
-import parseAttributeValue from "@/utils/parseAttributeValue";
+import parseAttributeValue, {
+  parseDefaultValue,
+} from "@/utils/parseAttributeValue";
 import {
   ElementAttributesMap,
   ElementPropertiesMap,
@@ -88,10 +90,10 @@ function createAttributeGetter(
       if (!this.hasAttribute(attrName)) return false;
       return attrValue !== "false";
     } else if (attrValue !== null) {
-      return parseAttributeValue(attrValue, type, defaultValue);
+      return parseAttributeValue(this, attrValue, type, defaultValue);
     }
 
-    return defaultValue;
+    return parseDefaultValue(this, defaultValue);
   };
 }
 
@@ -413,11 +415,13 @@ function CustomElement(
 
               if (option) {
                 const newValue = parseAttributeValue(
+                  this,
                   newVal,
                   option.type,
                   option.default
                 );
                 const oldValue = parseAttributeValue(
+                  this,
                   oldVal,
                   option.type,
                   option.default
