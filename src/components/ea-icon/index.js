@@ -2,6 +2,7 @@ import stylesheet from "./index.css?inline";
 import faStylesheet from "@fortawesome/fontawesome-free/css/all.min.css?inline";
 import variable from "../../themes/variables.scss?inline";
 import host from "./host.scss?inline";
+import { StylesheetCache } from "@/stores/stylesheet-cache.js";
 
 // 动态注入 Font Awesome 到 document head（只执行一次）
 const injectFontAwesome = () => {
@@ -161,15 +162,10 @@ export class EaIcon extends HTMLElement {
   }
 
   connectedCallback() {
-    const sheet = new CSSStyleSheet();
-    const variableSheet = new CSSStyleSheet();
-    const hostSheet = new CSSStyleSheet();
-    const faStylesSheet = new CSSStyleSheet();
-
-    sheet.replaceSync(stylesheet);
-    variableSheet.replaceSync(variable);
-    hostSheet.replaceSync(host);
-    faStylesSheet.replaceSync(faStylesheet);
+    const sheet = StylesheetCache.getOrCreate(stylesheet);
+    const variableSheet = StylesheetCache.getOrCreate(variable);
+    const hostSheet = StylesheetCache.getOrCreate(host);
+    const faStylesSheet = StylesheetCache.getOrCreate(faStylesheet);
 
     this.shadowRoot.adoptedStyleSheets = [
       sheet,
@@ -178,7 +174,6 @@ export class EaIcon extends HTMLElement {
       hostSheet,
     ];
 
-    // 初始化图标类名
     this.#updateIconClass();
   }
 

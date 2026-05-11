@@ -2,6 +2,7 @@ import { html } from "@/directives/html";
 import variable from "../themes/variables.scss?inline";
 import "./ea-icon/index.js";
 import EaUtils from "@/utils/Utils";
+import { StylesheetCache } from "@/stores/stylesheet-cache.js";
 
 export default class Base extends HTMLElement {
   #stateConfigs = {};
@@ -40,22 +41,62 @@ export default class Base extends HTMLElement {
    * @param {string} stylesheet 静态样式（vite:`xxx.css?inline`）
    */
   adoptedStyle(stylesheet) {
-    const sheet = new CSSStyleSheet();
-    const variableSheet = new CSSStyleSheet();
-    sheet.replaceSync(stylesheet);
-    variableSheet.replaceSync(variable);
+    const allStyles = [];
 
-    this.shadowRoot.adoptedStyleSheets = [sheet, variableSheet];
+    let currentClass = this.constructor;
+    while (currentClass && currentClass !== HTMLElement) {
+      const classOptions = currentClass.customElementOptions;
+      if (classOptions?.styles) {
+        const classStyles = Array.isArray(classOptions.styles)
+          ? classOptions.styles
+          : [classOptions.styles];
+        allStyles.unshift(...classStyles);
+      }
+      currentClass = Object.getPrototypeOf(currentClass);
+    }
+
+    if (stylesheet) {
+      allStyles.push(stylesheet);
+    }
+
+    const uniqueStyles = [...new Set(allStyles)];
+
+    if (uniqueStyles.length === 0) return;
+
+    if ("adoptedStyleSheets" in this.shadowRoot) {
+      const sheets = uniqueStyles.map(css => StylesheetCache.getOrCreate(css));
+      const variableSheet = StylesheetCache.getOrCreate(variable);
+      this.shadowRoot.adoptedStyleSheets = [variableSheet, ...sheets];
+    } else {
+      uniqueStyles.forEach(css => {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = css;
+        this.shadowRoot.appendChild(styleEl);
+      });
+      const variableStyleEl = document.createElement("style");
+      variableStyleEl.textContent = variable;
+      this.shadowRoot.appendChild(variableStyleEl);
+    }
   }
 
+  /**
+   * 动态添加额外样式
+   * @param {string} stylesheet 静态样式（vite:`xxx.css?inline`）
+   */
   assignedStyle(stylesheet) {
-    const sheet = new CSSStyleSheet();
-    sheet.replaceSync(stylesheet);
+    if (!stylesheet) return;
 
-    this.shadowRoot.adoptedStyleSheets = [
-      ...this.shadowRoot.adoptedStyleSheets,
-      sheet,
-    ];
+    if ("adoptedStyleSheets" in this.shadowRoot) {
+      const sheet = StylesheetCache.getOrCreate(stylesheet);
+      this.shadowRoot.adoptedStyleSheets = [
+        ...this.shadowRoot.adoptedStyleSheets,
+        sheet,
+      ];
+    } else {
+      const styleEl = document.createElement("style");
+      styleEl.textContent = stylesheet;
+      this.shadowRoot.appendChild(styleEl);
+    }
   }
 
   /**
