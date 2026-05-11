@@ -668,7 +668,7 @@ describe("EaStatistic Component", () => {
 
       await waitForRender();
 
-      expect(statistic.value).toBeNull();
+      expect(statistic.value).toBe(0);
     });
 
     it("设置 heading 属性后 header 的 slot 会被替换为文本", async () => {

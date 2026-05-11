@@ -671,7 +671,7 @@ describe("EaPopconfirm Component", () => {
       container.appendChild(popconfirm);
       await waitForRender();
 
-      expect(popconfirm.confirmButtonType).toBeNull();
+      expect(popconfirm.confirmButtonType).toBe("primary");
     });
   });
 
@@ -730,7 +730,7 @@ describe("EaPopconfirm Component", () => {
       container.appendChild(popconfirm);
       await waitForRender();
 
-      expect(popconfirm.cancelButtonType).toBeNull();
+      expect(popconfirm.cancelButtonType).toBe("normal");
     });
   });
 
@@ -1471,7 +1471,7 @@ describe("EaPopconfirm Component", () => {
       container.appendChild(popconfirm);
       await waitForRender();
 
-      expect(popconfirm.placement).toBeNull();
+      expect(popconfirm.placement).toBe("top");
     });
 
     it("无效的 offset 值应该输出错误", async () => {

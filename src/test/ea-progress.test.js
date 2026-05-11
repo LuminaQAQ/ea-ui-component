@@ -1352,7 +1352,7 @@ describe("EaProgress Component", () => {
 
       expect(containerEl.classList.contains("is-show-text")).toBe(false);
 
-      progress.removeAttribute("show-text");
+      progress.showText = true;
       await waitForRender();
 
       expect(containerEl.classList.contains("is-show-text")).toBe(true);

@@ -1088,10 +1088,10 @@ describe("EaMessageBox Component", () => {
   });
 
   describe("CloseOnPressEscape Attribute", () => {
-    it("default closeOnPressEscape should be false", async () => {
+    it("default closeOnPressEscape should be true", async () => {
       const messageBox = createMessageBox();
       await waitForRender();
-      expect(messageBox.closeOnPressEscape).toBe(false);
+      expect(messageBox.closeOnPressEscape).toBe(true);
     });
 
     it("should support setting closeOnPressEscape to true", async () => {
@@ -1494,7 +1494,10 @@ describe("EaMessageBox Component", () => {
     });
 
     it("closeOnPressEscape=false and pressing ESC should not trigger event", async () => {
-      const messageBox = createMessageBox({ visible: true });
+      const messageBox = document.createElement("ea-message-box");
+      messageBox.setAttribute("visible", "");
+      messageBox.closeOnPressEscape = false;
+      container.appendChild(messageBox);
       await waitForRender();
       const handler = vi.fn();
       messageBox.addEventListener("cancel", handler);

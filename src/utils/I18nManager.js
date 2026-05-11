@@ -148,6 +148,8 @@ class I18nManager {
    * @param {string} locale
    */
   #sanitizeLocale = locale => {
+    if (!locale) return "en-US";
+
     const ary = locale.split("-") || [];
 
     return ary.length > 1 ? ary[0] + "-" + ary[1].toUpperCase() : ary[0];

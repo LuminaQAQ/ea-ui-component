@@ -70,8 +70,6 @@ export class EaMessageBoxElement extends EaOverlay {
   @query(".ea-message-box-main__confirm-button")
   private _confirmButton!: HTMLElement;
 
-  private _transitionAbortController?: AbortController;
-
   // ==================== 属性定义 ====================
 
   @attribute({
@@ -179,12 +177,6 @@ export class EaMessageBoxElement extends EaOverlay {
     },
   })
   cancelButtonText: string = "Cancel";
-
-  @attribute({
-    type: Boolean,
-    default: false,
-  })
-  closeOnPressEscape: boolean = false;
 
   @attribute({
     type: Boolean,
@@ -406,7 +398,6 @@ export class EaMessageBoxElement extends EaOverlay {
   private _handleConfirmClick(): void {
     this._handleInputPattern()
       .then(() => {
-        this._transitionAbortController?.abort();
         this._dispatchBubblesEvent("confirm");
       })
       .catch(() => {});
@@ -414,7 +405,6 @@ export class EaMessageBoxElement extends EaOverlay {
 
   @listen("click", ".ea-message-box-main__cancel-button")
   private _handleCancelClick(): void {
-    this._transitionAbortController?.abort();
     this._dispatchBubblesEvent("cancel");
   }
 
@@ -497,14 +487,10 @@ export class EaMessageBoxElement extends EaOverlay {
     this.style.setProperty("--ea-overlay-content-max-width", "420px");
     this.style.setProperty("--ea-overlay-content-height", "auto");
 
-    this._transitionAbortController?.abort();
-    this._transitionAbortController = new AbortController();
-
     this.updateContainerClasslist();
   }
 
   $beforeUnmount(): void {
     super.$beforeUnmount?.();
-    this._transitionAbortController?.abort();
   }
 }

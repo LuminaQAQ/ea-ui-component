@@ -25,6 +25,7 @@ export default class EaBase extends HTMLElement implements EaElement {
    */
   @attribute({
     type: String,
+    default: "en-US",
     observer(this: EaBase, locale: string) {
       this.$updateLocalization(locale);
     },

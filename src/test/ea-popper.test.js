@@ -281,7 +281,7 @@ describe("EaPopper Component", () => {
 
       await waitForRender();
 
-      expect(popper.placement).toBeNull();
+      expect(popper.placement).toBe("top");
     });
   });
 

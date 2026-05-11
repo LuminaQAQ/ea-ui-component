@@ -40,6 +40,7 @@ interface MessageBoxOptions {
 }
 
 const EXCLUDED_KEYS = [
+  "appendTo",
   "inputPattern",
   "inputValidator",
   "beforeClose",
@@ -65,7 +66,7 @@ class EaMessageBoxInstance {
     cancelButtonText: "Cancel",
     confirmButtonText: "OK",
     closeOnClickModal: true,
-    closeOnPressEscape: false,
+    closeOnPressEscape: true,
     showInput: false,
     inputPlaceholder: "",
     inputType: "text",
@@ -110,6 +111,9 @@ class EaMessageBoxInstance {
     const messageBox = document.createElement("ea-message-box");
 
     for (const k in options) {
+      if (k === "appendTo") {
+        continue;
+      }
       if (EXCLUDED_KEYS.includes(k)) {
         (messageBox as any)[k] = (options as any)[k];
       } else {
@@ -208,6 +212,7 @@ EaMessageBox.alert = (message = "", title = "", options = {}) =>
     message,
     heading: title,
     closeOnClickModal: false,
+    closeOnPressEscape: false,
     showConfirmButton: true,
     boxType: "alert",
     ...options,

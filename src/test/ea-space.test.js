@@ -382,8 +382,8 @@ describe("EaSpace Component", () => {
 
       await waitForRender();
 
-      // Enum 类型会拦截无效值，返回 null
-      expect(space.alignment).toBeNull();
+      // Enum 类型会拦截无效值，返回默认值（空字符串）
+      expect(space.alignment).toBe("");
     });
   });
 

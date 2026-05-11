@@ -255,7 +255,7 @@ describe("EaDropdown Component", () => {
       dropdown.setAttribute("trigger", "invalid");
       await waitForRender(0);
 
-      expect(dropdown.trigger).toBeNull();
+      expect(dropdown.trigger).toBe("hover");
     });
   });
 

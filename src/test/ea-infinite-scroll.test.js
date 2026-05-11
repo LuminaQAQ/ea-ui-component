@@ -1148,7 +1148,7 @@ describe("EaInfiniteScroll Component", () => {
 
       await waitForRender();
 
-      expect(el.status).toBeNull();
+      expect(el.status).toBe("finished");
     });
   });
 

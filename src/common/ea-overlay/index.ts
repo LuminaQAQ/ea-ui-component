@@ -202,11 +202,18 @@ export class EaOverlay extends EaBase {
   private _handleAppendTo(): void {
     if (this._appendHandled) return;
 
-    if (this.appendTo && this.appendTo !== "body") {
-      const parent = document.querySelector(this.appendTo);
-      if (parent && this.parentElement !== parent) {
-        this._appendHandled = true;
-        parent.appendChild(this);
+    if (typeof this.appendTo === "string" && this.appendTo && this.appendTo !== "body") {
+      try {
+        const parent = document.querySelector(this.appendTo);
+        if (parent && this.parentElement !== parent) {
+          this._appendHandled = true;
+          parent.appendChild(this);
+        }
+      } catch {
+        if (this.parentElement !== document.body) {
+          this._appendHandled = true;
+          document.body.appendChild(this);
+        }
       }
     } else if (this.appendToBody) {
       if (this.parentElement !== document.body) {
