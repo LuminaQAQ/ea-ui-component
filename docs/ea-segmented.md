@@ -181,7 +181,7 @@
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-segmented/index.js";
+  import "./node_modules/easy-component-ui/components/ea-segmented/index.ts";
 </script>
 ```
 

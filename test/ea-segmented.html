@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -16,9 +16,9 @@
   <body>
     <script
       type="module"
-      src="../src/components/ea-segmented/index.js"
+      src="../src/components/ea-segmented/index.ts"
     ></script>
-    <script type="module" src="../src/components/ea-icon/index.js"></script>
+    <script type="module" src="../src/components/ea-icon/index.ts"></script>
 
     <!--  基础用法 -->
     <!-- #region -->
@@ -55,11 +55,11 @@
         options: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
 
         init() {
-          this.els.forEach((el) => {
+          this.els.forEach(el => {
             el.options = this.options;
 
-            el.addEventListener("change", (e) => {
-              this.els.forEach((el) => {
+            el.addEventListener("change", e => {
+              this.els.forEach(el => {
                 el.value = e.detail.value;
               });
             });
@@ -141,11 +141,11 @@
           this.directionSegmented.options = this.directionOptions;
           this.directionSegmentedOptions.options = this.options;
 
-          this.sizeSegmented.addEventListener("change", (e) => {
+          this.sizeSegmented.addEventListener("change", e => {
             this.directionSegmentedOptions.size = e.detail.value;
           });
 
-          this.directionSegmented.addEventListener("change", (e) => {
+          this.directionSegmented.addEventListener("change", e => {
             console.log(e.detail.value);
 
             this.directionSegmentedOptions.direction = e.detail.value;
@@ -221,11 +221,11 @@
           this.disabledSegmented1.options = this.options;
           this.disabledSegmented2.options = this.options;
 
-          this.disabledSegmented1.addEventListener("change", (e) => {
+          this.disabledSegmented1.addEventListener("change", e => {
             this.disabledSegmented2.value = e.detail.value;
           });
 
-          this.disabledSegmented2.addEventListener("change", (e) => {
+          this.disabledSegmented2.addEventListener("change", e => {
             this.disabledSegmented1.value = e.detail.value;
           });
         },
