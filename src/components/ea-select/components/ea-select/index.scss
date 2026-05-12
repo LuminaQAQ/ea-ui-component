@@ -159,15 +159,30 @@ $ea-select-size-types: (
 
   @include state(filterable) {
     &.is-has-value {
+
       .ea-select__input::part(original)::placeholder {
         color: var(--#{$name}-color);
       }
+
 
       &.is-focus {
         .ea-select__input::part(original)::placeholder {
           color: var(--#{$name}-placeholder-color);
         }
       }
+    }
+  }
+
+  &.is-multiple.is-filterable.is-has-value {
+    .ea-select__input::part(original-wrapper) {
+      display: block;
+    }
+
+    .ea-select__input::part(inner) {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template: "a a"
+        "b  c";
     }
   }
 }

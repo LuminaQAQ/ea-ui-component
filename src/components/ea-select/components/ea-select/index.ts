@@ -43,9 +43,6 @@ export class EaSelect extends EaFormAssociatedBase {
   @query(".ea-select__clear-icon")
   private _clearIcon!: HTMLElement;
 
-  /** @type {AbortController} */
-  private _abortController?: AbortController | null;
-
   private _abortControllerStates = {
     closeAbortController: null as AbortController | null,
     tagRemoveAbortController: null as AbortController | null,
@@ -214,7 +211,7 @@ export class EaSelect extends EaFormAssociatedBase {
 
     const className = bem(
       {
-        [`--${this.size}`]: this.size !== "default",
+        [this.size]: this.size !== "default",
       },
       {
         focus: this._states.isFocus,
@@ -392,11 +389,14 @@ export class EaSelect extends EaFormAssociatedBase {
    * 查找显示值
    */
   private _findDisplayValue(value: string | number | boolean): string {
+    const valueStr = String(value);
     const option = [...this.querySelectorAll("ea-option")].find(
-      item => (item as any).value === value
+      item => String((item as any).value) === valueStr
     );
 
-    return option ? option.textContent?.trim() || "" : (value ?? "").toString();
+    return option
+      ? ((option as any).label || option.textContent)?.trim() || ""
+      : (value ?? "").toString();
   }
 
   /**
@@ -412,17 +412,19 @@ export class EaSelect extends EaFormAssociatedBase {
       typeof selectedValue === "number" ||
       typeof selectedValue === "boolean"
     ) {
+      const selectedStr = String(selectedValue);
       options.forEach(option => {
         option.toggleAttribute(
           "selected",
-          (option as any).value === selectedValue
+          String((option as any).value) === selectedStr
         );
       });
     } else if (Array.isArray(selectedValue)) {
+      const selectedStrs = selectedValue.map(v => String(v));
       options.forEach(option => {
         option.toggleAttribute(
           "selected",
-          selectedValue.includes((option as any).value)
+          selectedStrs.includes(String((option as any).value))
         );
       });
     }
@@ -447,7 +449,7 @@ export class EaSelect extends EaFormAssociatedBase {
       label: string,
       value?: string | number | boolean
     ) => {
-      return `<ea-tag class="ea-select__tag" closable disable-transitions type="info" size="${this.size}" ${
+      return `<ea-tag class="ea-select__tag" ${isClosable ? "closable" : ""} disable-transitions type="info" size="${this.size}" ${
         isClosable && value !== undefined ? `data-value="${value}"` : ""
       }>${label}</ea-tag>`;
     };
@@ -465,7 +467,11 @@ export class EaSelect extends EaFormAssociatedBase {
 
         option.setAttribute("selected", "");
 
-        tmpl += tagRenderer(true, option.textContent || "", v);
+        tmpl += tagRenderer(
+          true,
+          (option as any).label || option.textContent || "",
+          v
+        );
       });
 
       return tmpl;
@@ -509,8 +515,11 @@ export class EaSelect extends EaFormAssociatedBase {
    * 过滤选项
    */
   private _filterMethod(option: Element, query: string): void {
+    const label = (option as any).label || "";
     const textContent = option.textContent || "";
-    (option as HTMLElement).style.display = textContent.includes(query)
+    const searchText = `${label} ${textContent}`;
+
+    (option as HTMLElement).style.display = searchText.includes(query)
       ? "block"
       : "none";
   }
@@ -520,6 +529,8 @@ export class EaSelect extends EaFormAssociatedBase {
    */
   @listen("click", ".ea-select__input")
   private async _onDropdownVisibleChangeEvent(): Promise<void> {
+    if (this.disabled) return;
+
     this._abortControllerStates.closeAbortController?.abort();
 
     this._states.isFocus = true;
@@ -538,7 +549,7 @@ export class EaSelect extends EaFormAssociatedBase {
       signal: this._abortControllerStates.closeAbortController.signal,
     });
 
-    this.addEventListener("keydown", this._onKeydown, {
+    this.addEventListener("keydown", this._onDropdownKeydown, {
       signal: this._abortControllerStates.closeAbortController.signal,
     });
   }
@@ -584,7 +595,7 @@ export class EaSelect extends EaFormAssociatedBase {
    * 下拉框关闭事件
    */
   private _onSelectClose = (e: Event): void => {
-    if (this.contains(e.target as Node)) return;
+    if (e.composedPath().includes(this)) return;
     this.hide();
     this._abortControllerStates.closeAbortController?.abort();
   };
@@ -592,7 +603,7 @@ export class EaSelect extends EaFormAssociatedBase {
   /**
    * 键盘事件
    */
-  private _onKeydown = (e: KeyboardEvent): void => {
+  private _onDropdownKeydown = (e: KeyboardEvent): void => {
     const arrows = new Set(["Escape", "ArrowUp", "ArrowDown"]);
     if (!arrows.has(e.key)) return;
 
@@ -635,7 +646,8 @@ export class EaSelect extends EaFormAssociatedBase {
    * 过滤事件
    */
   private _onFilterEvent = (e: Event): void => {
-    const { value } = (e as CustomEvent).detail;
+    const value =
+      (e as CustomEvent).detail?.value ?? (e.target as HTMLInputElement).value;
     if (typeof value === "string") {
       this.filterMethod(value);
       this._handleFilteredOptionStyle(value);
@@ -658,49 +670,26 @@ export class EaSelect extends EaFormAssociatedBase {
     this.dispatchEvent(new EaSelectVisibleChangeEvent({ visible: false }));
   }
 
-  async connectedCallback() {
-    super.connectedCallback();
+  async $mount() {
+    this.updateContainerClasslist();
 
     await customElements.whenDefined("ea-input");
     await customElements.whenDefined("ea-option");
 
-    this._abortController?.abort();
-    this._abortController = new AbortController();
-
     if (!this.name) this.name = Math.random().toString(36).substring(2, 15);
+  }
 
-    this.addEventListener(
-      "keydown",
-      (e: KeyboardEvent) => {
-        if (e.key === "Enter") {
-          this._input.dispatchEvent(new CustomEvent("click"));
-        }
-      },
-      {
-        signal: this._abortController.signal,
-      }
-    );
-
-    // 添加 input 事件监听（用于 filterable 模式）
-    this._input.addEventListener(
-      "input",
-      (e: Event) => {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        const target = e.target as HTMLInputElement;
-        if (typeof target.value === "string") {
-          this.filterMethod(target.value);
-          this._handleFilteredOptionStyle(target.value);
-        }
-      },
-      { signal: this._abortController.signal }
-    );
+  /**
+   * 键盘事件 - Enter 键打开下拉框
+   */
+  @listen("keydown")
+  private _onKeydown(e: KeyboardEvent): void {
+    if (e.key === "Enter") {
+      this._input.dispatchEvent(new CustomEvent("click"));
+    }
   }
 
   $beforeUnmount() {
-    this._abortController?.abort();
-
     Object.values(this._abortControllerStates).forEach(controller => {
       controller?.abort();
     });

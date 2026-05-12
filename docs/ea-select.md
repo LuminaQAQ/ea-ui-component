@@ -268,12 +268,7 @@ createOptionExample.init();
   </ea-select>
 
   <p>标签折叠</p>
-  <ea-select
-    style="width: 240px"
-    placeholder="请选择"
-    multiple
-    collapseTags
-  >
+  <ea-select style="width: 240px" placeholder="请选择" multiple collapseTags>
     <ea-option value="option1">选项 1</ea-option>
     <ea-option value="option2">选项 2</ea-option>
     <ea-option value="option3">选项 3</ea-option>
@@ -296,29 +291,29 @@ createOptionExample.init();
 
 ## 自定义模板
 
-可以自定义备选项的模板
+可以自定义备选项的模板，使用 `label` 属性指定选中后显示的文本
 
 <div class="demo">
   <ea-select style="width: 240px" placeholder="请选择城市" clearable>
-    <ea-option value="beijing">
+    <ea-option value="beijing" label="北京">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">北京</div>
         <div class="ea-select_option-eng">Beijing</div>
       </div>
     </ea-option>
-    <ea-option value="shanghai">
+    <ea-option value="shanghai" label="上海">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">上海</div>
         <div class="ea-select_option-eng">Shanghai</div>
       </div>
     </ea-option>
-    <ea-option value="guangzhou">
+    <ea-option value="guangzhou" label="广州">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">广州</div>
         <div class="ea-select_option-eng">Guangzhou</div>
       </div>
     </ea-option>
-    <ea-option value="shenzhen">
+    <ea-option value="shenzhen" label="深圳">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">深圳</div>
         <div class="ea-select_option-eng">Shenzhen</div>
@@ -330,25 +325,25 @@ createOptionExample.init();
 ```html
 <div class="demo">
   <ea-select style="width: 240px" placeholder="请选择城市" clearable>
-    <ea-option value="beijing">
+    <ea-option value="beijing" label="北京">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">北京</div>
         <div class="ea-select_option-eng">Beijing</div>
       </div>
     </ea-option>
-    <ea-option value="shanghai">
+    <ea-option value="shanghai" label="上海">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">上海</div>
         <div class="ea-select_option-eng">Shanghai</div>
       </div>
     </ea-option>
-    <ea-option value="guangzhou">
+    <ea-option value="guangzhou" label="广州">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">广州</div>
         <div class="ea-select_option-eng">Guangzhou</div>
       </div>
     </ea-option>
-    <ea-option value="shenzhen">
+    <ea-option value="shenzhen" label="深圳">
       <div class="ea-select_option-wrap">
         <div class="ea-select_option-text">深圳</div>
         <div class="ea-select_option-eng">Shenzhen</div>
@@ -420,71 +415,71 @@ createOptionExample.init();
 
 ## Select 属性
 
-| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
-| :--- | :--- | :--- | :--- | :--- |
-| placeholder | 占位文本 | string | — | — |
-| disabled | 是否禁用 | boolean | — | false |
-| clearable | 是否可以清空选项 | boolean | — | false |
-| size | 输入框尺寸 | string | large / default / small | default |
-| multiple | 是否多选 | boolean | — | false |
-| collapseTags | 多选时是否将选中值按文字的形式展示 | boolean | — | false |
-| maxCollapseTags | 多选时最多显示标签数量 | number | — | 1 |
-| filterable | 是否可搜索 | boolean | — | false |
-| value / v-model | 绑定值 | string / number / boolean / array | — | — |
+| 属性名          | 说明                               | 类型                              | 可选值                  | 默认值  |
+| :-------------- | :--------------------------------- | :-------------------------------- | :---------------------- | :------ |
+| placeholder     | 占位文本                           | string                            | —                       | —       |
+| disabled        | 是否禁用                           | boolean                           | —                       | false   |
+| clearable       | 是否可以清空选项                   | boolean                           | —                       | false   |
+| size            | 输入框尺寸                         | string                            | large / default / small | default |
+| multiple        | 是否多选                           | boolean                           | —                       | false   |
+| collapseTags    | 多选时是否将选中值按文字的形式展示 | boolean                           | —                       | false   |
+| maxCollapseTags | 多选时最多显示标签数量             | number                            | —                       | 1       |
+| filterable      | 是否可搜索                         | boolean                           | —                       | false   |
+| value / v-model | 绑定值                             | string / number / boolean / array | —                       | —       |
 
 ## Select 事件
 
-| 事件名 | 说明 | 参数 |
-| :--- | :--- | :--- |
-| change | 选中值发生变化时触发 | 目前的选中值 |
-| ea-visible-change | 下拉框出现/隐藏时触发 | 出现则为 true，隐藏则为 false |
-| clear | 可清空的单选模式下用户点击清空按钮时触发 | — |
-| remove-tag | 多选模式下移除tag时触发 | 移除的tag值 |
+| 事件名            | 说明                                     | 参数                          |
+| :---------------- | :--------------------------------------- | :---------------------------- |
+| change            | 选中值发生变化时触发                     | 目前的选中值                  |
+| ea-visible-change | 下拉框出现/隐藏时触发                    | 出现则为 true，隐藏则为 false |
+| clear             | 可清空的单选模式下用户点击清空按钮时触发 | —                             |
+| remove-tag        | 多选模式下移除tag时触发                  | 移除的tag值                   |
 
 ## Select 方法
 
-| 方法名 | 说明 | 参数 |
-| :--- | :--- | :--- |
-| focus | 使 input 获取焦点 | — |
-| blur | 使 input 失去焦点，并隐藏下拉框 | — |
-| show | 显示下拉框 | — |
-| hide | 隐藏下拉框 | — |
+| 方法名 | 说明                            | 参数 |
+| :----- | :------------------------------ | :--- |
+| focus  | 使 input 获取焦点               | —    |
+| blur   | 使 input 失去焦点，并隐藏下拉框 | —    |
+| show   | 显示下拉框                      | —    |
+| hide   | 隐藏下拉框                      | —    |
 
 ## Option 属性
 
-| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
-| :--- | :--- | :--- | :--- | :--- |
-| value | 选项的值 | string / number / boolean | — | — |
-| label | 选项的标签，若不设置则默认与 `value` 相同 | string | — | — |
-| disabled | 是否禁用该选项 | boolean | — | false |
+| 属性名   | 说明                                                                                                                       | 类型                      | 可选值 | 默认值 |
+| :------- | :------------------------------------------------------------------------------------------------------------------------- | :------------------------ | :----- | :----- |
+| value    | 选项的值                                                                                                                   | string / number / boolean | —      | —      |
+| label    | 选项的显示文本，若不设置则默认使用 `textContent`。当选项内容较复杂时（如包含多个元素），建议使用此属性指定选中后显示的文本 | string                    | —      | null   |
+| disabled | 是否禁用该选项                                                                                                             | boolean                   | —      | false  |
 
 ## Option Group 属性
 
-| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
-| :--- | :--- | :--- | :--- | :--- |
-| label | 分组的组名 | string | — | — |
+| 属性名 | 说明       | 类型   | 可选值 | 默认值 |
+| :----- | :--------- | :----- | :----- | :----- |
+| label  | 分组的组名 | string | —      | —      |
 
 ## Select CSS Part
 
-| 名称 | 说明 |
-| :--- | :--- |
-| container | 选择器容器 |
-| input | 输入框 |
-| tag-wrap | 标签包装容器 |
-| dropdown | 下拉框 |
-| dropdown-icon | 下拉图标 |
-| clear-icon | 清除图标 |
+| 名称          | 说明         |
+| :------------ | :----------- |
+| container     | 选择器容器   |
+| input         | 输入框       |
+| tag-wrap      | 标签包装容器 |
+| dropdown      | 下拉框       |
+| dropdown-icon | 下拉图标     |
+| clear-icon    | 清除图标     |
 
 ## Option CSS Part
 
-| 名称 | 说明 |
-| :--- | :--- |
+| 名称      | 说明     |
+| :-------- | :------- |
 | container | 选项容器 |
 
 ## Option Group CSS Part
 
-| 名称 | 说明 |
-| :--- | :--- |
+| 名称      | 说明     |
+| :-------- | :------- |
 | container | 分组容器 |
-| header | 分组头部 |
-| content | 分组内容 |
+| header    | 分组头部 |
+| content   | 分组内容 |

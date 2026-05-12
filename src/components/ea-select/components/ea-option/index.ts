@@ -19,9 +19,6 @@ export class EaOption extends EaBase {
   @query(".ea-option")
   private _container!: HTMLElement;
 
-  /** @type {AbortController} */
-  private _abortController?: AbortController | null;
-
   // ==================== 属性定义 ====================
 
   @attribute({
@@ -30,6 +27,13 @@ export class EaOption extends EaBase {
     observer(this: EaOption) {},
   })
   value: string | null = null;
+
+  @attribute({
+    type: String,
+    default: null,
+    observer(this: EaOption) {},
+  })
+  label: string | null = null;
 
   @attribute({
     type: Boolean,
@@ -43,8 +47,7 @@ export class EaOption extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaOption, newVal: boolean) {
-      this.setAttribute("tabindex", newVal ? "-1" : "0");
+    observer(this: EaOption) {
       this.updateContainerClasslist();
     },
   })
@@ -66,7 +69,10 @@ export class EaOption extends EaBase {
       }
     );
 
-    if (this._container) this._container.className = className;
+    if (this._container) {
+      this._container.className = className;
+      this._container.setAttribute("tabindex", this.disabled ? "-1" : "0");
+    }
 
     return className;
   }
@@ -109,16 +115,7 @@ export class EaOption extends EaBase {
     }
   }
 
-  async connectedCallback() {
-    super.connectedCallback();
-
-    this.removeAttribute("tabindex");
-
-    this._abortController?.abort();
-    this._abortController = new AbortController();
-  }
-
-  $beforeUnmount() {
-    this._abortController?.abort();
+  $mounted() {
+    this.updateContainerClasslist();
   }
 }

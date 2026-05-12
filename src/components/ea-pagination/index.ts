@@ -1,8 +1,10 @@
 import EaBase, { createBEM } from "@core/EaBase";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
+import { query } from "@decorator/query";
 import { property } from "@decorator/property";
 import { Enum } from "@/utils/Enum";
+import { html } from "@/utils/html";
 import { getPageItem } from "./components/pageItem.js";
 import { getMoreItem } from "./components/moreItem.js";
 import { EaPaginationCurrentChangeEvent } from "./events/EaPaginationCurrentChangeEvent";
@@ -36,12 +38,27 @@ const LAYOUT_TEMPLATE: Record<string, string> = {
 
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaPagination extends EaBase {
+  // ==================== DOM 元素引用 ====================
+
+  @query(".ea-pagination")
   private _container!: HTMLElement;
+
+  @query(".ea-pagination__pager")
   private _pagination!: HTMLElement;
+
+  @query(".ea-pagination__icon.prev-icon")
   private _prevIcon!: HTMLElement;
+
+  @query(".ea-pagination__icon.next-icon")
   private _nextIcon!: HTMLElement;
+
+  @query(".ea-pagination__jumper")
   private _jumper!: any;
+
+  @query(".ea-pagination__total")
   private _total!: HTMLElement;
+
+  @query(".ea-pagination__sizes")
   private _sizes!: any;
 
   private _states = {
@@ -74,7 +91,7 @@ export class EaPagination extends EaBase {
     },
     observer(this: EaPagination, newVal: number) {
       if (!this._states.isFirstRender) {
-        this._handlePaginationItemChange();
+        this._handlePaginationItemChange(true);
 
         this.dispatchEvent(
           new EaPaginationSizeChangeEvent({
@@ -229,6 +246,10 @@ export class EaPagination extends EaBase {
     super();
   }
 
+  /**
+   * 生成分页布局 HTML
+   * @returns 布局 HTML 字符串
+   */
   private _getLayoutHTML(): string {
     const validLayout = this.layout.filter(item =>
       ["prev", "pager", "next", "jumper", "total", "sizes", "->"].includes(
@@ -248,25 +269,14 @@ export class EaPagination extends EaBase {
 		`;
   }
 
-  private _queryElements(): void {
-    const shadowRoot = this.shadowRoot!;
-    this._container = shadowRoot.querySelector(".ea-pagination")!;
-    this._pagination = shadowRoot.querySelector(".ea-pagination__pager")!;
-    this._prevIcon = shadowRoot.querySelector(
-      ".ea-pagination__icon.prev-icon"
-    )!;
-    this._nextIcon = shadowRoot.querySelector(
-      ".ea-pagination__icon.next-icon"
-    )!;
-    this._jumper = shadowRoot.querySelector(".ea-pagination__jumper");
-    this._total = shadowRoot.querySelector(".ea-pagination__total")!;
-    this._sizes = shadowRoot.querySelector(".ea-pagination__sizes");
-  }
-
+  /**
+   * 更新分页器样式和激活状态
+   * @param currentPage 当前页码
+   */
   private _updatePaginationStyle(currentPage: number = this.currentPage): void {
     if (!this._pagination || !this.layout?.includes("pager")) return;
 
-    this._pagination.innerHTML = this._getPagerTemplate(currentPage);
+    this._pagination.innerHTML = html(this._getPagerTemplate(currentPage));
 
     const els = this._pagination.querySelectorAll(".ea-pagination__page");
     const target = this._pagination.querySelector(
@@ -279,6 +289,11 @@ export class EaPagination extends EaBase {
     });
   }
 
+  /**
+   * 计算分页器显示的页码范围
+   * @param currentPage 当前页码
+   * @returns 包含数字和省略号的页码数组
+   */
   private _getPagerRange(newVal: number): (number | string)[] {
     const totalCount = Math.ceil(this.total / this.pageSize);
     const step = Math.floor(this.pagerCount / 2);
@@ -328,6 +343,11 @@ export class EaPagination extends EaBase {
     return range;
   }
 
+  /**
+   * 生成分页器 HTML 模板
+   * @param currentPage 当前页码
+   * @returns 分页器 HTML 字符串
+   */
   private _getPagerTemplate(currentPage: number = 1): string {
     let template = "";
 
@@ -374,13 +394,16 @@ export class EaPagination extends EaBase {
       }
     };
 
-    this._pagination.innerHTML = this._getPagerTemplate(1);
+    this._pagination.innerHTML = html(this._getPagerTemplate(1));
 
     this._pagination.addEventListener("click", onPagerClickEvent, {
       signal: this._abortControllerStates.paginationAbortController!.signal,
     });
   }
 
+  /**
+   * 渲染上一页按钮并绑定事件
+   */
   private _handlePrevRender(): void {
     if (!this._prevIcon || !this.layout.includes("prev")) return;
 
@@ -467,6 +490,9 @@ export class EaPagination extends EaBase {
     this._total.textContent = `Total ${this.total}`;
   }
 
+  /**
+   * 渲染跳转输入框并绑定事件
+   */
   private async _handleJumperRender(): Promise<void> {
     if (!this.layout.includes("jumper") || !this._jumper) return;
 
@@ -504,6 +530,9 @@ export class EaPagination extends EaBase {
     });
   }
 
+  /**
+   * 渲染每页条数选择器并绑定事件
+   */
   private async _handleSizesRender(): Promise<void> {
     if (!this.layout.includes("sizes") || !this._sizes) return;
 
@@ -526,7 +555,7 @@ export class EaPagination extends EaBase {
       this.pageSize = this.pageSizes[0];
     }
 
-    this._sizes.innerHTML = this.pageSizes.map(renderCallback).join("");
+    this._sizes.innerHTML = html(this.pageSizes.map(renderCallback).join(""));
     this._sizes.value = this.pageSize;
 
     this._sizes.addEventListener("change", onSizesChangeEvent, {
@@ -534,7 +563,9 @@ export class EaPagination extends EaBase {
     });
   }
 
-  private async _handlePaginationItemChange(): Promise<void> {
+  private async _handlePaginationItemChange(
+    skipInnerHTML = false
+  ): Promise<void> {
     for (const key in this._abortControllerStates) {
       this._abortControllerStates[
         key as keyof typeof this._abortControllerStates
@@ -558,11 +589,9 @@ export class EaPagination extends EaBase {
       (this._abortControllerStates as any)[key] = new AbortController();
     }
 
-    if (this._container) {
-      this._container.innerHTML = this._getLayoutHTML();
+    if (this._container && !skipInnerHTML) {
+      this._container.innerHTML = html(this._getLayoutHTML());
     }
-
-    this._queryElements();
 
     this._handleSizesRender();
     this._handlePagerRender();
@@ -573,8 +602,6 @@ export class EaPagination extends EaBase {
   }
 
   async $mount(): Promise<void> {
-    this._queryElements();
-
     await this._handlePaginationItemChange();
 
     this._states.isFirstRender = false;

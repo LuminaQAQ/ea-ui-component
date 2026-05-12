@@ -8,20 +8,21 @@ import stylesheet from "./index.scss?inline";
 const TAG_NAME = "ea-option-group" as const;
 const bem = createBEM(TAG_NAME);
 
-// ==================== 组件类 ====================
-
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaOptionGroup extends EaBase {
   // ==================== DOM 元素引用 ====================
 
-  @query(".ea-option-group")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query("slot[name='header']")
+  @query(bem.ce("header"))
+  private _header!: HTMLElement;
+
+  @query('slot[name="header"]')
   private _headerSlot!: HTMLSlotElement;
 
-  /** @type {AbortController} */
-  private _abortController?: AbortController | null;
+  @query(bem.ce("content"))
+  private _content!: HTMLElement;
 
   // ==================== 属性定义 ====================
 
@@ -36,32 +37,19 @@ export class EaOptionGroup extends EaBase {
   })
   label: string = "";
 
-  constructor() {
-    super();
-  }
-
   /**
    * 渲染模板
    */
   html(): string {
     return `
       <div class='${bem()}' part='container'>
-        <header class='${bem("header")}' part='header'>
+        <header class='${bem.e("header")}' part='header'>
           <slot name='header'></slot>
         </header>
-        <section class='${bem("content")}' part='content'>
+        <section class='${bem.e("content")}' part='content'>
           <slot></slot>
         </section>
       </div>
     `;
-  }
-
-  $mount(): void {
-    this._abortController?.abort();
-    this._abortController = new AbortController();
-  }
-
-  $beforeUnmount(): void {
-    this._abortController?.abort();
   }
 }
