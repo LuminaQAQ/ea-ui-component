@@ -44,11 +44,10 @@ $name: ea-sub-menu;
   cursor: pointer;
   white-space: nowrap;
 
-  transition:
-    border-color var(--#{$name}-transition),
-    background-color var(--#{$name}-transition),
-    color var(--#{$name}-transition),
-    height var(--#{$name}-transition);
+  transition: border-color var(--#{$name}-transition),
+  background-color var(--#{$name}-transition),
+  color var(--#{$name}-transition),
+  height var(--#{$name}-transition);
 
   @include element(arrow) {
     margin-left: 8px;
@@ -56,6 +55,10 @@ $name: ea-sub-menu;
   }
 
   @include element(title) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     color: var(--ea-menu-text-color);
     height: var(--#{$name}-height);
     line-height: var(--#{$name}-height);
@@ -76,16 +79,21 @@ $name: ea-sub-menu;
 
     background-color: var(--ea-menu-bg-color);
 
-    transition:
-      transform var(--#{$name}-transition),
-      height var(--#{$name}-transition),
-      min-height var(--#{$name}-transition);
+    transition: transform var(--#{$name}-transition),
+    height var(--#{$name}-transition),
+    min-height var(--#{$name}-transition);
 
     z-index: var(--#{$name}-z-index);
   }
 
   @include state(active) {
     color: var(--#{$name}-active-text-color);
+  }
+
+  @include state(disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   @include state(open) {

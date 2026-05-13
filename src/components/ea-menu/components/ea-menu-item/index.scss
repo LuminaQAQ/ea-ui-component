@@ -21,6 +21,10 @@ $name: ea-menu-item;
   transition: height var(--#{$name}-transition);
 }
 
+:host([disabled]) {
+  cursor: not-allowed;
+}
+
 @include block($name) {
   position: relative;
 
@@ -42,10 +46,9 @@ $name: ea-menu-item;
   text-overflow: ellipsis;
   overflow: hidden;
 
-  transition:
-    border-color var(--#{$name}-transition),
-    background-color var(--#{$name}-transition),
-    color var(--#{$name}-transition);
+  transition: border-color var(--#{$name}-transition),
+  background-color var(--#{$name}-transition),
+  color var(--#{$name}-transition);
 
   &:hover {
     color: var(--ea-menu-active-text-color);
@@ -56,5 +59,10 @@ $name: ea-menu-item;
     color: var(--ea-menu-active-text-color);
 
     border-bottom-color: var(--ea-menu-active-text-color);
+  }
+
+  @include state(disabled) {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }

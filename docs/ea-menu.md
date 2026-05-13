@@ -25,9 +25,9 @@ onMounted(() => {
 
 > `js`
 
-```js
-<script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-menu/index.js";
+```html
+<script type="module">
+  import "./node_modules/easy-component-ui/components/ea-menu/index.ts";
 </script>
 ```
 
@@ -210,17 +210,17 @@ onMounted(() => {
 垂直菜单，可内嵌子菜单。通过使用 `ea-menu-item-group` 组件可以实现菜单进行分组。
 
 <div class="demo row left">
-  <ea-menu default-active="2" class="ea-menu-vertical-demo" style="width: 250px; min-height: 600px; border-right: 1px solid #ccc;">
+  <ea-menu default-active="2" class="ea-menu-vertical-demo" mode="vertical" style="width: 250px; min-height: 600px; border-right: 1px solid #ccc;">
     <ea-sub-menu index="1">
       <span slot="title">
         <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
-      <ea-menu-item-group title="Group One">
+      <ea-menu-item-group group-title="Group One">
         <ea-menu-item index="1-1">item one</ea-menu-item>
         <ea-menu-item index="1-2">item two</ea-menu-item>
       </ea-menu-item-group>
-      <ea-menu-item-group title="Group Two">
+      <ea-menu-item-group group-title="Group Two">
         <ea-menu-item index="1-3">item three</ea-menu-item>
       </ea-menu-item-group>
       <ea-sub-menu index="1-4">
@@ -248,6 +248,7 @@ onMounted(() => {
     background-color="#545c64"
     class="ea-menu-vertical-demo"
     default-active="2"
+    mode="vertical"
     text-color="#fff"
     style="--ea-menu-hover-bg-color: rgb(67, 74, 80); width: 250px; min-height: 600px;"
   >
@@ -256,11 +257,11 @@ onMounted(() => {
         <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
-      <ea-menu-item-group title="Group One">
+      <ea-menu-item-group group-title="Group One">
         <ea-menu-item index="1-1">item one</ea-menu-item>
         <ea-menu-item index="1-2">item two</ea-menu-item>
       </ea-menu-item-group>
-      <ea-menu-item-group title="Group Two">
+      <ea-menu-item-group group-title="Group Two">
         <ea-menu-item index="1-3">item three</ea-menu-item>
       </ea-menu-item-group>
       <ea-sub-menu index="1-4">
@@ -293,6 +294,7 @@ onMounted(() => {
   <ea-menu
     default-active="2"
     class="ea-menu-vertical-demo"
+    mode="vertical"
     style="width: 250px; min-height: 600px; border-right: 1px solid #ccc;"
   >
     <ea-sub-menu index="1">
@@ -300,11 +302,11 @@ onMounted(() => {
         <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
-      <ea-menu-item-group title="Group One">
+      <ea-menu-item-group group-title="Group One">
         <ea-menu-item index="1-1">item one</ea-menu-item>
         <ea-menu-item index="1-2">item two</ea-menu-item>
       </ea-menu-item-group>
-      <ea-menu-item-group title="Group Two">
+      <ea-menu-item-group group-title="Group Two">
         <ea-menu-item index="1-3">item three</ea-menu-item>
       </ea-menu-item-group>
       <ea-sub-menu index="1-4">
@@ -333,6 +335,7 @@ onMounted(() => {
     background-color="#545c64"
     class="ea-menu-vertical-demo"
     default-active="2"
+    mode="vertical"
     text-color="#fff"
     style="--ea-menu-hover-bg-color: rgb(67, 74, 80); width: 250px;  min-height: 600px;"
   >
@@ -341,11 +344,11 @@ onMounted(() => {
         <ea-icon name="location-dot"></ea-icon>
         <span>Navigator One</span>
       </span>
-      <ea-menu-item-group title="Group One">
+      <ea-menu-item-group group-title="Group One">
         <ea-menu-item index="1-1">item one</ea-menu-item>
         <ea-menu-item index="1-2">item two</ea-menu-item>
       </ea-menu-item-group>
-      <ea-menu-item-group title="Group Two">
+      <ea-menu-item-group group-title="Group Two">
         <ea-menu-item index="1-3">item three</ea-menu-item>
       </ea-menu-item-group>
       <ea-sub-menu index="1-4">
@@ -373,17 +376,226 @@ onMounted(() => {
 
 :::
 
+## 实例
+
+结合 `ea-container` 实现侧栏 + 顶栏的完整布局。
+
+<div class="demo">
+  <style>
+    .ea-container {
+      display: block;
+      height: 100vh;
+    }
+
+    .ea-aside {
+      flex: 1 0 0;
+      min-width: 0;
+    }
+
+    .ea-container-left {
+      --ea-container-direction: column;
+      flex: 1 0 0;
+      width: 100%;
+      overflow: auto;
+    }
+
+  </style>
+  <ea-container class="ea-container" direction="horizontal">
+    <ea-aside width="300px">
+      <ea-menu default-active="2" class="ea-menu-vertical-demo" mode="vertical">
+        <ea-sub-menu index="1">
+          <span slot="title">
+            <ea-icon name="location-dot"></ea-icon>
+            <span>Navigator One</span>
+          </span>
+          <ea-menu-item-group group-title="Group One">
+            <ea-menu-item index="1-1">item one</ea-menu-item>
+            <ea-menu-item index="1-2">item two</ea-menu-item>
+          </ea-menu-item-group>
+          <ea-menu-item-group group-title="Group Two">
+            <ea-menu-item index="1-3">item three</ea-menu-item>
+          </ea-menu-item-group>
+          <ea-sub-menu index="1-4">
+            <span slot="title">
+              <span>item four</span>
+            </span>
+            <ea-menu-item index="1-4-1">item one</ea-menu-item>
+          </ea-sub-menu>
+        </ea-sub-menu>
+        <ea-menu-item index="2">
+          <ea-icon name="table-cells-large"></ea-icon>
+          <span>Navigator Two</span>
+        </ea-menu-item>
+        <ea-menu-item index="3" disabled>
+          <ea-icon name="table"></ea-icon>
+          <span>Navigator Three</span>
+        </ea-menu-item>
+        <ea-menu-item index="4">
+          <ea-icon name="gear"></ea-icon>
+          <span>Navigator Four</span>
+        </ea-menu-item>
+      </ea-menu>
+    </ea-aside>
+    <ea-container class="ea-container-left" direction="vertical">
+      <ea-header>
+        <ea-menu default-active="2" mode="horizontal" class="ea-menu-demo">
+          <ea-sub-menu index="1">
+            <span slot="title">
+              <ea-icon name="location-dot"></ea-icon>
+              <span>Navigator One</span>
+            </span>
+            <ea-menu-item-group group-title="Group One">
+              <ea-menu-item index="1-1">item one</ea-menu-item>
+              <ea-menu-item index="1-2">item two</ea-menu-item>
+            </ea-menu-item-group>
+            <ea-menu-item-group group-title="Group Two">
+              <ea-menu-item index="1-3">item three</ea-menu-item>
+            </ea-menu-item-group>
+            <ea-sub-menu index="1-4">
+              <span slot="title">
+                <span>item four</span>
+              </span>
+              <ea-menu-item index="1-4-1">item one</ea-menu-item>
+            </ea-sub-menu>
+          </ea-sub-menu>
+          <ea-menu-item index="2">
+            <ea-icon name="table-cells-large"></ea-icon>
+            <span>Navigator Two</span>
+          </ea-menu-item>
+          <ea-menu-item index="3" disabled>
+            <ea-icon name="table"></ea-icon>
+            <span>Navigator Three</span>
+          </ea-menu-item>
+          <ea-menu-item index="4">
+            <ea-icon name="gear"></ea-icon>
+            <span>Navigator Four</span>
+          </ea-menu-item>
+        </ea-menu>
+      </ea-header>
+      <ea-main>
+        这个示例在 Header 下方嵌套了一个包含 Aside 和 Main 的 ea-container。
+      </ea-main>
+    </ea-container>
+  </ea-container>
+</div>
+
+::: details 查看代码
+
+```html
+<div class="demo">
+  <style>
+    .ea-container {
+      display: block;
+      height: 100vh;
+    }
+
+    .ea-aside {
+      flex: 1 0 0;
+      min-width: 0;
+    }
+
+    .ea-container-left {
+      --ea-container-direction: column;
+      flex: 1 0 0;
+      width: 100%;
+      overflow: auto;
+    }
+  </style>
+  <ea-container class="ea-container" direction="horizontal">
+    <ea-aside width="300px">
+      <ea-menu default-active="2" class="ea-menu-vertical-demo" mode="vertical">
+        <ea-sub-menu index="1">
+          <span slot="title">
+            <ea-icon name="location-dot"></ea-icon>
+            <span>Navigator One</span>
+          </span>
+          <ea-menu-item-group group-title="Group One">
+            <ea-menu-item index="1-1">item one</ea-menu-item>
+            <ea-menu-item index="1-2">item two</ea-menu-item>
+          </ea-menu-item-group>
+          <ea-menu-item-group group-title="Group Two">
+            <ea-menu-item index="1-3">item three</ea-menu-item>
+          </ea-menu-item-group>
+          <ea-sub-menu index="1-4">
+            <span slot="title">
+              <span>item four</span>
+            </span>
+            <ea-menu-item index="1-4-1">item one</ea-menu-item>
+          </ea-sub-menu>
+        </ea-sub-menu>
+        <ea-menu-item index="2">
+          <ea-icon name="table-cells-large"></ea-icon>
+          <span>Navigator Two</span>
+        </ea-menu-item>
+        <ea-menu-item index="3" disabled>
+          <ea-icon name="table"></ea-icon>
+          <span>Navigator Three</span>
+        </ea-menu-item>
+        <ea-menu-item index="4">
+          <ea-icon name="gear"></ea-icon>
+          <span>Navigator Four</span>
+        </ea-menu-item>
+      </ea-menu>
+    </ea-aside>
+    <ea-container class="ea-container-left" direction="vertical">
+      <ea-header>
+        <ea-menu default-active="2" mode="horizontal" class="ea-menu-demo">
+          <ea-sub-menu index="1">
+            <span slot="title">
+              <ea-icon name="location-dot"></ea-icon>
+              <span>Navigator One</span>
+            </span>
+            <ea-menu-item-group group-title="Group One">
+              <ea-menu-item index="1-1">item one</ea-menu-item>
+              <ea-menu-item index="1-2">item two</ea-menu-item>
+            </ea-menu-item-group>
+            <ea-menu-item-group group-title="Group Two">
+              <ea-menu-item index="1-3">item three</ea-menu-item>
+            </ea-menu-item-group>
+            <ea-sub-menu index="1-4">
+              <span slot="title">
+                <span>item four</span>
+              </span>
+              <ea-menu-item index="1-4-1">item one</ea-menu-item>
+            </ea-sub-menu>
+          </ea-sub-menu>
+          <ea-menu-item index="2">
+            <ea-icon name="table-cells-large"></ea-icon>
+            <span>Navigator Two</span>
+          </ea-menu-item>
+          <ea-menu-item index="3" disabled>
+            <ea-icon name="table"></ea-icon>
+            <span>Navigator Three</span>
+          </ea-menu-item>
+          <ea-menu-item index="4">
+            <ea-icon name="gear"></ea-icon>
+            <span>Navigator Four</span>
+          </ea-menu-item>
+        </ea-menu>
+      </ea-header>
+      <ea-main>
+        这个示例在 Header 下方嵌套了一个包含 Aside 和 Main 的 ea-container。
+      </ea-main>
+    </ea-container>
+  </ea-container>
+</div>
+```
+
+:::
+
 ## Menu API
 
 ### Menu Attributes
 
-| 参数              | 说明                             | 类型   | 可选值                       | 默认值     |
-| ----------------- | -------------------------------- | ------ | ---------------------------- | ---------- |
-| mode              | 菜单模式，决定是水平还是垂直显示 | string | `"horizontal" \| "vertical"` | "vertical" |
-| background-color  | 菜单背景色                       | string | -                            | "#ffffff"  |
-| text-color        | 菜单文字颜色                     | string | -                            | "#303133"  |
-| active-text-color | 当前激活菜单的文字颜色           | string | -                            | "#409eff"  |
-| default-active    | 初始激活的菜单项 index 值        | string | -                            | ""         |
+| 参数              | 说明                              | 类型    | 可选值                       | 默认值     |
+| ----------------- | --------------------------------- | ------- | ---------------------------- | ---------- |
+| mode              | 菜单模式，决定是水平还是垂直显示  | string  | `"horizontal" \| "vertical"` | "vertical" |
+| background-color  | 菜单背景色                        | string  | -                            | "#ffffff"  |
+| text-color        | 菜单文字颜色                      | string  | -                            | "#303133"  |
+| active-text-color | 当前激活菜单的文字颜色            | string  | -                            | "#409eff"  |
+| default-active    | 初始激活的菜单项 index 值         | string  | -                            | ""         |
+| active            | 动态控制当前激活的菜单项 index 值 | string  | -                            | ""         |
+| collapse          | 是否折叠菜单                      | boolean | -                            | false      |
 
 ### Menu CSS Part
 
@@ -406,6 +618,17 @@ onMounted(() => {
 | -    | 菜单内容的默认插槽。 | SubMenu / Menu-Item / Menu-Item-Group |
 
 ## SubMenu API
+
+### SubMenu Attributes
+
+| 参数     | 说明             | 类型    | 可选值                       | 默认值     |
+| -------- | ---------------- | ------- | ---------------------------- | ---------- |
+| index    | 子菜单的唯一标识 | string  | -                            | ""         |
+| mode     | 菜单模式         | string  | `"horizontal" \| "vertical"` | "vertical" |
+| disabled | 是否禁用         | boolean | -                            | false      |
+| active   | 是否激活         | boolean | -                            | false      |
+| open     | 是否展开         | boolean | -                            | false      |
+| label    | 子菜单标题文本   | string  | -                            | ""         |
 
 ### SubMenu CSS Part
 
@@ -433,6 +656,12 @@ onMounted(() => {
 | active   | 菜单项是否激活（属性） | boolean | -      | false  |
 | disabled | 菜单项是否禁用         | boolean | -      | false  |
 
+### Menu-Item CSS Part
+
+| 名称      | 说明                                |
+| --------- | ----------------------------------- |
+| container | 菜单项外层容器 (`part="container"`) |
+
 ### Menu-Item Slots
 
 | 名称 | 说明                 |
@@ -443,9 +672,9 @@ onMounted(() => {
 
 ### Menu-Item-Group Attributes
 
-| 参数  | 说明       | 类型   | 可选值 | 默认值 |
-| ----- | ---------- | ------ | ------ | ------ |
-| title | 菜单组标题 | string | -      | ""     |
+| 参数        | 说明       | 类型   | 可选值 | 默认值 |
+| ----------- | ---------- | ------ | ------ | ------ |
+| group-title | 菜单组标题 | string | -      | ""     |
 
 ### Menu-Item-Group CSS Part
 
@@ -457,7 +686,7 @@ onMounted(() => {
 
 ### Menu-Item-Group Slots
 
-| 名称  | 说明                                        |
-| ----- | ------------------------------------------- |
-| -     | 菜单项内容（默认插槽）                      |
-| title | 菜单组标题（具名插槽，或使用 `title` 属性） |
+| 名称  | 说明                                              |
+| ----- | ------------------------------------------------- |
+| -     | 菜单项内容（默认插槽）                            |
+| title | 菜单组标题（具名插槽，或使用 `group-title` 属性） |
