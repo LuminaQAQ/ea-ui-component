@@ -87,8 +87,9 @@ function createAttributeGetter(
     const attrValue = this.getAttribute(attrName);
 
     if (type === Boolean) {
-      if (!this.hasAttribute(attrName)) return false;
-      return attrValue !== "false";
+      // if (!this.hasAttribute(attrName)) return false;
+      // return attrValue !== "false";
+      return this.hasAttribute(attrName);
     } else if (attrValue !== null) {
       return parseAttributeValue(this, attrValue, type, defaultValue);
     }
@@ -107,7 +108,12 @@ function createAttributeSetter(name: string) {
   return function (this: EaElement & HTMLElement, newVal: any) {
     if (!(this instanceof HTMLElement)) return;
 
-    this.setAttribute(attrName, String(newVal));
+    if (typeof newVal === "boolean") {
+      this.toggleAttribute(attrName, newVal);
+    } else {
+      this.setAttribute(attrName, String(newVal));
+    }
+    // this.setAttribute(attrName, String(newVal));
   };
 }
 
@@ -186,7 +192,8 @@ function initBooleanDefaults(instance: any, CustomElementClass: any) {
       if (type === Boolean && defaultValue === true) {
         const attrName = camelToKebab(name);
         if (!instance.hasAttribute(attrName)) {
-          instance.setAttribute(attrName, "");
+          // instance.setAttribute(attrName, "");
+          instance.toggleAttribute(attrName, true);
         }
       }
     });

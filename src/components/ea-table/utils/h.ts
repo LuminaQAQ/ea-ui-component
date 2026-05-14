@@ -1,4 +1,4 @@
-const handleProps = (key, value) => {
+const handleProps = (key: string, value: unknown): string => {
   if (
     key &&
     (typeof value === "string" ||
@@ -10,7 +10,7 @@ const handleProps = (key, value) => {
     return `${key}="${value.join(" ")}"`;
   } else if (typeof value === "object" && value) {
     return Object.entries(value)
-      .map(([key, value]) => handleProps(key, value))
+      .map(([k, v]) => handleProps(k, v))
       .join(" ");
   } else if (typeof value === "function") {
     return `${key}="${value()}"`;
@@ -19,13 +19,13 @@ const handleProps = (key, value) => {
   return "";
 };
 
-const handleChildren = children => {
+const handleChildren = (children: unknown): string => {
   if (
     typeof children === "string" ||
     typeof children === "number" ||
     typeof children === "boolean"
   ) {
-    return children;
+    return String(children);
   } else if (Array.isArray(children)) {
     return children.join("");
   }
@@ -33,14 +33,12 @@ const handleChildren = children => {
   return "";
 };
 
-/**
- * @param { String } tagName
- * @param { string | string[]} className
- * @param { import("../components/ea-table").CulumnOption } props
- * @param { String | Object } children
- * @returns
- */
-export const h = (tagName, className, props, children) => {
+export const h = (
+  tagName: string,
+  className: string | string[] | null,
+  props: Record<string, unknown> | null,
+  children: string | unknown[] | null
+): string => {
   const notEndTag = ["input"];
 
   return `<${tagName} ${handleProps("class", className)} ${

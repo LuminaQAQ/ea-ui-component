@@ -6,7 +6,6 @@ import { listen } from "@decorator/listen";
 import { Enum } from "@/utils/Enum";
 import { html } from "@/utils/html";
 import stylesheet from "./index.scss?inline";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import { i18nManager } from "@/utils/I18nManager";
 import dayjs, { type Dayjs } from "dayjs";
 import "dayjs/locale/zh-cn";
@@ -192,13 +191,14 @@ export class EaCalendar extends EaBase {
     // 动态导入依赖组件
     if (controllerType === "select") {
       await importSelectComponent();
-      await importButtonComponent(); // select 模式也需要 today 按钮
+      await importButtonComponent();
     } else {
       await importButtonComponent();
     }
 
-    this._controllerWrapper.innerHTML =
-      controllerTypeStrategies[controllerType]();
+    this._controllerWrapper.innerHTML = html(
+      controllerTypeStrategies[controllerType]()
+    );
 
     if (controllerType === "select") {
       await this._initSelectControllerEvent();
@@ -330,7 +330,6 @@ export class EaCalendar extends EaBase {
    * 处理tbody点击事件
    */
   @listen("click", ".ea-calendar__tbody")
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private _handleDayCellClick(e: MouseEvent): void {
     const target = (e.target as HTMLElement).closest(bem.ce("day"));
 
@@ -530,91 +529,28 @@ export class EaCalendar extends EaBase {
     i18nManager.locale = locale;
     dayjs.locale(this.locale.toLowerCase());
 
+    this._displayDate = this._displayDate.locale(this.locale.toLowerCase());
+
     const prev = this.shadowRoot?.querySelector(bem.ce("controller-prev"));
     const today = this.shadowRoot?.querySelector(bem.ce("controller-today"));
     const next = this.shadowRoot?.querySelector(bem.ce("controller-next"));
     const year = this.shadowRoot?.querySelector(bem.ce("controller-year"));
     const month = this.shadowRoot?.querySelector(bem.ce("controller-month"));
 
-    const date = this._displayDate;
-    const currentYear = date.get("year");
-    const currentMonth = date.get("month");
-    const currentDate = date.get("date");
-
-    const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
-      this._getDayOption(date);
-    const days = lastMonRemainingDays
-      .concat(currentMonDays)
-      .concat(nextMonRemainingDays);
-
-    const week = i18nManager.t("calendar.weekDays");
-    const ths = this._thead.querySelectorAll(".ea-calendar__th");
-    const tds = [...this._tbody.querySelectorAll(".ea-calendar__day")];
-
     if (prev) prev.textContent = i18nManager.t("calendar.prevMonth");
     if (today) today.textContent = i18nManager.t("calendar.today");
     if (next) next.textContent = i18nManager.t("calendar.nextMonth");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (year) (year as any).placeholder = i18nManager.t("calendar.selectYear");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (month)
       (month as any).placeholder = i18nManager.t("calendar.selectMonth");
 
-    this._title.textContent = `${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}`;
-
+    const week = i18nManager.t("calendar.weekDays");
+    const ths = this._thead.querySelectorAll(`.${bem.e("th")}`);
     ths.forEach((th, index) => {
       th.textContent = week[index];
     });
 
-    tds.forEach((tdElement, index) => {
-      const newDate = days[index];
-      const isToday = this._isToday(currentYear, currentMonth, newDate);
-
-      let yearValue: number;
-      let monthValue: number;
-      let monthType: "last" | "current" | "next";
-
-      if (index < lastMonRemainingDays.length) {
-        const tempMonth = date.subtract(1, "month");
-        yearValue = tempMonth.get("year");
-        monthValue = tempMonth.get("month") + 1;
-        monthType = "last";
-      } else if (index < lastMonRemainingDays.length + currentMonDays.length) {
-        yearValue = currentYear;
-        monthValue = currentMonth + 1;
-        monthType = "current";
-      } else {
-        const tempMonth = date.add(1, "month");
-        yearValue = tempMonth.get("year");
-        monthValue = tempMonth.get("month") + 1;
-        monthType = "next";
-      }
-
-      const td = tdElement as HTMLElement;
-      td.dataset.year = String(yearValue);
-      td.dataset.month = String(monthValue);
-      td.dataset.date = String(newDate);
-      td.textContent = String(newDate);
-
-      td.classList.toggle("is-today", isToday);
-      td.classList.toggle("is-current", isToday);
-
-      td.classList.toggle("is-last-mon", monthType === "last");
-      td.classList.toggle("is-current-mon", monthType === "current");
-      td.classList.toggle("is-next-mon", monthType === "next");
-
-      if ((td as HTMLElement).part) {
-        (td as HTMLElement).part.toggle("last-mon", monthType === "last");
-        (td as HTMLElement).part.toggle("current-mon", monthType === "current");
-        (td as HTMLElement).part.toggle("next-mon", monthType === "next");
-      }
-    });
-
-    const currentTd = tds.some(td => td.classList.contains("is-current"));
-    if (!currentTd) {
-      const td = this._findDateCell(currentYear, currentMonth + 1, currentDate);
-      if (td) td.classList.add("is-current");
-    }
+    this._updateCalendarDays(this._displayDate);
   }
 
   // ==================== 生命周期 ====================

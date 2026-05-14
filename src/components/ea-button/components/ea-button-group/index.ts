@@ -21,7 +21,6 @@ export class EaButtonGroup extends EaBase {
       this._defaultSlot?.assignedElements().forEach(button => {
         if (button.tagName === "EA-BUTTON") {
           button.toggleAttribute("disabled", newVal);
-          console.log(button, newVal);
         }
       });
     },

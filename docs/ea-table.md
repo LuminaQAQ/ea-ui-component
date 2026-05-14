@@ -491,7 +491,7 @@ onMounted(async () => {
 
 ```js
 <script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-table/index.js";
+  import "./node_modules/easy-component-ui/components/ea-table/index.ts";
 </script>
 ```
 

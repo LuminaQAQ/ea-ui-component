@@ -6,6 +6,7 @@ import { listen } from "@decorator/listen";
 import { createBEM } from "@utils/bem";
 import { Enum } from "@/utils/Enum";
 import stylesheet from "./index.scss?inline";
+import { EaCheckboxChangeEvent } from "../../events/EaCheckboxChangeEvent";
 
 const TAG_NAME = "ea-checkbox" as const;
 const bem = createBEM(TAG_NAME);
@@ -181,13 +182,12 @@ export class EaCheckbox extends EaFormAssociatedBase {
    * 派发 change 事件
    */
   private _dispatchChangeEvent = () => {
-    this.emit("change", {
-      detail: {
+    this.dispatchEvent(
+      new EaCheckboxChangeEvent({
         value: this.value,
         checked: Boolean(this.checked),
-      },
-      bubbles: true,
-    });
+      })
+    );
   };
 
   // ==================== 事件处理 ====================
@@ -195,7 +195,7 @@ export class EaCheckbox extends EaFormAssociatedBase {
   /**
    * change 事件处理
    */
-  @listen("change")
+  @listen("change", ".ea-checkbox__orignal")
   private _onChangeEvent = (): void => {
     this.checked = this._original.checked;
     this._dispatchChangeEvent();
