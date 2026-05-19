@@ -81,7 +81,7 @@ onMounted(async () => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-slider/index.js";
+  import "./node_modules/easy-component-ui/components/ea-slider/index.ts";
 </script>
 ```
 

@@ -197,9 +197,18 @@ $ea-slider-size-types: (small, default, large);
     }
   }
 
+  @include element(tooltip) {
+    display: none;
+  }
+
   @include state(show-tooltip) {
+    .ea-slider__tooltip {
+      display: block;
+    }
+
     .ea-slider__trigger::part(original) {
       display: block;
+      pointer-events: none;
     }
   }
 
