@@ -718,6 +718,7 @@ $name: ea-component-name;
 ### 代码风格
 
 - 不添加任何注释（除非用户明确要求）
+- **例外：每个私有方法必须添加简单的 JSDoc 注释**，说明其用途，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数，有返回值时必须用 `@returns` 说明返回值
 - 保持代码简洁、清晰
 - 遵循现有的代码风格和命名约定
 
@@ -920,7 +921,7 @@ await waitForRender(0);
 - 默认等待时间为 100ms，适用于大多数组件渲染场景
 - 如需特殊等待时间，可传入参数指定毫秒数
 
-```
+````
 
 ## 常见陷阱与注意事项
 
@@ -940,7 +941,7 @@ title: string = "";  // this.title = "" 触发 HTMLElement.title setter
 // ✅ 正确：使用 heading 避免冲突
 @attribute({ type: String, default: "" })
 heading: string = "";  // 安全，不与 HTMLElement 属性冲突
-```
+````
 
 **常见的 HTMLElement 保留属性名**：`title`, `lang`, `dir`, `draggable`, `tabIndex`, `style`, `className`, `id`, `hidden`, `accessKey`, `contentEditable`, `isContentEditable`, `offsetHeight`, `offsetWidth`, `offsetLeft`, `offsetTop` 等。
 
@@ -1008,13 +1009,17 @@ $mount(): void {
 ```
 
 **安全操作**（可在 `$mount` 中执行）：
+
 - `updateContainerClasslist()` - 更新 CSS 类名
 - `setAttribute()` - 设置属性
 - DOM 查询和读取
 
 **危险操作**（不可在 `$mount` 中执行）：
+
 - `appendChild()` / `insertBefore()` - DOM 移动
 - `remove()` / `removeChild()` - DOM 移除
 - 任何会改变组件在 DOM 树中位置的操作
+
+```
 
 ```

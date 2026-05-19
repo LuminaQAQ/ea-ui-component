@@ -399,3 +399,5 @@ export class EaFormAssociatedBase extends EaBase {
     this.setValidity({});
   }
 }
+
+export default EaFormAssociatedBase;

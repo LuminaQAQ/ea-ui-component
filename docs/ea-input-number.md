@@ -121,10 +121,12 @@ onMounted(() => {
 
 | 参数           | 说明                           | 类型    | 可选值                      | 默认值                  |
 | -------------- | ------------------------------ | ------- | --------------------------- | ----------------------- |
+| label          | 输入框标签文本                 | string  | —                           | (空)                    |
 | value          | 当前值（字符串形式以保留精度） | number  | —                           | 0                       |
 | value-on-clear | 清空时使用的值                 | number  | —                           | -                       |
 | min            | 设置允许的最小值               | number  | —                           | Number.MIN_SAFE_INTEGER |
 | max            | 设置允许的最大值               | number  | —                           | Number.MAX_SAFE_INTEGER |
+| required       | 是否必填                       | boolean | —                           | false                   |
 | step           | 计数器步长                     | number  | —                           | 1                       |
 | step-strictly  | 是否严格按 step 的倍数校验值   | boolean | —                           | false                   |
 | precision      | 值的小数精度（非负整数）       | number  | —                           | -                       |
@@ -144,6 +146,8 @@ onMounted(() => {
 | 名称      | 说明                                      |
 | --------- | ----------------------------------------- |
 | container | 组件根容器，对应元素的 `part="container"` |
+| label     | 标签文本，对应 `part="label"`             |
+| region    | 输入区域容器，对应 `part="region"`        |
 | decrease  | 减号按钮，对应 `part="decrease"`          |
 | prefix    | 前缀插槽容器，对应 `part="prefix"`        |
 | input     | 输入框，对应 `part="input"`               |
