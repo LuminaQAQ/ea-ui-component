@@ -352,4 +352,4 @@ customIconRendererExample.init();
 | 事件名 | 说明                 | 回调参数 ( event.detail )                |
 | ------ | -------------------- | ---------------------------------------- |
 | change | 评分值变化时触发     | `{ value: number }`                      |
-| hover  | 鼠标移动到某项时触发 | `{ value: number, target: HTMLElement }` |
+| hover  | 鼠标移动到某项时触发 | `{ value: number \| null, target: HTMLElement \| null }` |

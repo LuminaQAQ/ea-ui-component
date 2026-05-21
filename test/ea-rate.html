@@ -14,7 +14,7 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-rate/index.js"></script>
+    <script type="module" src="../src/components/ea-rate/index.ts"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
@@ -119,6 +119,8 @@
 
         init() {
           this.rate.addEventListener("hover", e => {
+            console.log(e.detail);
+
             this.content.textContent = this.text[e.detail.value];
           });
         },
