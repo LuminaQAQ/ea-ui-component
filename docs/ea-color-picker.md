@@ -55,7 +55,7 @@ onMounted(async () => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-color-picker/index.js";
+  import "./node_modules/easy-component-ui/components/ea-color-picker/index.ts";
 </script>
 ```
 
@@ -228,8 +228,10 @@ predefineExample.init();
 
 | 参数                  | 说明           | 类型    | 可选值                                                                                                                                                               | 默认值   |
 | --------------------- | -------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| label                 | 标签文本       | String  | —                                                                                                                                                                    | ""       |
 | value                 | 绑定值         | String  | —                                                                                                                                                                    | ""       |
 | disabled              | 是否禁用       | Boolean | —                                                                                                                                                                    | false    |
+| required              | 是否必填       | Boolean | —                                                                                                                                                                    | false    |
 | clearable             | 是否可清空     | Boolean | —                                                                                                                                                                    | false    |
 | size                  | 尺寸           | String  | `'small' \| 'medium' \| 'large'`                                                                                                                                     | ""       |
 | color-format          | 颜色格式       | String  | `'hsl' \| 'hsv' \| hex \| 'rgb'`                                                                                                                                     | "hex"    |
@@ -242,6 +244,7 @@ predefineExample.init();
 
 | 名称                              | 说明             |
 | --------------------------------- | ---------------- |
+| form-label                        | 表单标签         |
 | container                         | 根容器           |
 | [popper](./ea-popper.md#css-part) | 弹出层           |
 | trigger                           | 触发器           |
@@ -268,6 +271,7 @@ predefineExample.init();
 | 事件名           | 说明                 | 回调参数(event.detail) |
 | ---------------- | -------------------- | ---------------------- |
 | change           | 颜色值改变时触发     | `{ value: string }`    |
+| ea-clear         | 清空颜色值时触发     | —                      |
 | ea-active-change | 颜色激活值改变时触发 | `{ value: string }`    |
 | ea-invalid-color | 无效颜色值改变时触发 | `{ value: string }`    |
 

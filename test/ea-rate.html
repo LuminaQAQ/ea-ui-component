@@ -119,8 +119,6 @@
 
         init() {
           this.rate.addEventListener("hover", e => {
-            console.log(e.detail);
-
             this.content.textContent = this.text[e.detail.value];
           });
         },

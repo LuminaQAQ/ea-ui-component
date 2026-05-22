@@ -1,24 +1,36 @@
-/**
- * 颜色处理工具类
- * 支持多种颜色格式转换和操作
- */
-export class Color {
-  #value;
+type ColorFormat = "hex" | "hexa" | "rgb" | "rgba" | "hsl" | "hsla" | "hsv";
 
-  /**
-   * 构造函数
-   * @param {string|Object} color - 颜色值，支持 hex、rgb、hsl、hsv 格式
-   */
-  constructor(color) {
+interface ColorValue {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
+interface HslValue {
+  h: number;
+  s: number;
+  l: number;
+  a: number;
+}
+
+interface HsvValue {
+  h: number;
+  s: number;
+  v: number;
+  a: number;
+}
+
+type ColorInput = string | Partial<ColorValue & HslValue & HsvValue>;
+
+export class Color {
+  #value: ColorValue;
+
+  constructor(color?: ColorInput) {
     this.#value = this.parse(color);
   }
 
-  /**
-   * 解析颜色值
-   * @param {string|Object} color - 颜色值
-   * @returns {Object} 颜色对象
-   */
-  parse(color) {
+  parse(color?: ColorInput): ColorValue {
     if (!color) {
       return this.#getDefaultColor();
     }
@@ -35,12 +47,7 @@ export class Color {
     return this.#getDefaultColor();
   }
 
-  /**
-   * 解析字符串颜色值（严格模式，返回null表示非法）
-   * @param {string} colorStr - 颜色字符串
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  #parseStringStrict(colorStr) {
+  #parseStringStrict(colorStr: string): ColorValue | null {
     colorStr = colorStr.trim().toLowerCase();
 
     if (colorStr.startsWith("#")) {
@@ -62,12 +69,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 静态方法：严格解析字符串颜色值
-   * @param {string} colorStr - 颜色字符串
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  static parseStringStrict(colorStr) {
+  static parseStringStrict(colorStr: string): ColorValue | null {
     if (!colorStr || typeof colorStr !== "string") {
       return null;
     }
@@ -93,12 +95,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 静态方法：解析 HEX 颜色
-   * @param {string} hex - HEX 颜色值
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  static #parseHexStatic(hex) {
+  static #parseHexStatic(hex: string): ColorValue | null {
     hex = hex.replace("#", "");
 
     const validLengths = [3, 6, 8];
@@ -133,12 +130,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 静态方法：解析 RGB 颜色
-   * @param {string} rgbStr - RGB 颜色字符串
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  static #parseRgbStatic(rgbStr) {
+  static #parseRgbStatic(rgbStr: string): ColorValue | null {
     const match = rgbStr.match(
       /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
     );
@@ -166,12 +158,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 静态方法：解析 HSL 颜色
-   * @param {string} hslStr - HSL 颜色字符串
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  static #parseHslStatic(hslStr) {
+  static #parseHslStatic(hslStr: string): ColorValue | null {
     const match = hslStr.match(
       /hsla?\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
     );
@@ -199,12 +186,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 静态方法：解析 HSV 颜色
-   * @param {string} hsvStr - HSV 颜色字符串
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  static #parseHsvStatic(hsvStr) {
+  static #parseHsvStatic(hsvStr: string): ColorValue | null {
     const match = hsvStr.match(
       /hsv\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
     );
@@ -234,12 +216,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 静态方法：HSL 转 RGB
-   * @param {Object} hsl - HSL 颜色对象
-   * @returns {Object} RGB 颜色对象
-   */
-  static #hslToRgbStatic(hsl) {
+  static #hslToRgbStatic(hsl: HslValue): ColorValue {
     const { h, s, l, a = 1 } = hsl;
 
     if (s === 0) {
@@ -247,7 +224,7 @@ export class Color {
       return { r: gray, g: gray, b: gray, a };
     }
 
-    const hueToRgb = (p, q, t) => {
+    const hueToRgb = (p: number, q: number, t: number): number => {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -267,12 +244,7 @@ export class Color {
     return { r, g, b, a };
   }
 
-  /**
-   * 静态方法：HSV 转 RGB
-   * @param {Object} hsv - HSV 颜色对象
-   * @returns {Object} RGB 颜色对象
-   */
-  static #hsvToRgbStatic(hsv) {
+  static #hsvToRgbStatic(hsv: HsvValue): ColorValue {
     const { h, s, v, a = 1 } = hsv;
 
     const hi = Math.floor(h / 60) % 6;
@@ -281,7 +253,7 @@ export class Color {
     const q = v * (1 - f * s);
     const t = v * (1 - (1 - f) * s);
 
-    let r, g, b;
+    let r: number, g: number, b: number;
 
     switch (hi) {
       case 0:
@@ -305,28 +277,18 @@ export class Color {
     }
 
     return {
-      r: Math.round(r * 255),
-      g: Math.round(g * 255),
-      b: Math.round(b * 255),
+      r: Math.round(r! * 255),
+      g: Math.round(g! * 255),
+      b: Math.round(b! * 255),
       a,
     };
   }
 
-  /**
-   * 解析字符串颜色值
-   * @param {string} colorStr - 颜色字符串
-   * @returns {Object} 颜色对象
-   */
-  #parseString(colorStr) {
+  #parseString(colorStr: string): ColorValue | null {
     return this.#parseStringStrict(colorStr);
   }
 
-  /**
-   * 解析 HEX 颜色
-   * @param {string} hex - HEX 颜色值
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  #parseHex(hex) {
+  #parseHex(hex: string): ColorValue | null {
     hex = hex.replace("#", "");
 
     const validLengths = [3, 6, 8];
@@ -361,12 +323,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 解析 RGB 颜色
-   * @param {string} rgbStr - RGB 颜色字符串
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  #parseRgb(rgbStr) {
+  #parseRgb(rgbStr: string): ColorValue | null {
     const match = rgbStr.match(
       /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
     );
@@ -394,12 +351,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 解析 HSL 颜色
-   * @param {string} hslStr - HSL 颜色字符串
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  #parseHsl(hslStr) {
+  #parseHsl(hslStr: string): ColorValue | null {
     const match = hslStr.match(
       /hsla?\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
     );
@@ -427,7 +379,7 @@ export class Color {
     return null;
   }
 
-  hsvStrToHsvObject(hsvStr) {
+  hsvStrToHsvObject(hsvStr: string): HsvValue | null {
     const match = hsvStr.match(
       /hsv\(\s*(\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*(?:,\s*(\d*\.?\d+)\s*)?\)/
     );
@@ -444,18 +396,13 @@ export class Color {
     return null;
   }
 
-  /**
-   * 解析 HSV 颜色
-   * @param {string} hsvStr - HSV 颜色字符串
-   * @returns {Object|null} 颜色对象，非法时返回null
-   */
-  #parseHsv(hsvStr) {
+  #parseHsv(hsvStr: string): ColorValue | null {
     const match = this.hsvStrToHsvObject(hsvStr);
     if (match) {
-      const h = parseInt(match.h);
-      const s = parseInt(match.s);
-      const v = parseInt(match.v);
-      const a = match.a ? parseFloat(match.a) : 1;
+      const h = match.h;
+      const s = match.s;
+      const v = match.v;
+      const a = match.a;
 
       if (
         h < 0 ||
@@ -475,12 +422,7 @@ export class Color {
     return null;
   }
 
-  /**
-   * 验证颜色对象
-   * @param {Object} colorObj - 颜色对象
-   * @returns {Object} 验证后的颜色对象
-   */
-  #validateColorObject(colorObj) {
+  #validateColorObject(colorObj: Partial<ColorValue & HslValue & HsvValue>): ColorValue {
     const { r, g, b, a = 1, h, s, l, v } = colorObj;
 
     if (r !== undefined && g !== undefined && b !== undefined) {
@@ -513,20 +455,11 @@ export class Color {
     return this.#getDefaultColor();
   }
 
-  /**
-   * 获取默认颜色
-   * @returns {Object} 默认颜色对象
-   */
-  #getDefaultColor() {
+  #getDefaultColor(): ColorValue {
     return { r: 0, g: 0, b: 0, a: 1 };
   }
 
-  /**
-   * HSL 转 RGB
-   * @param {Object} hsl - HSL 颜色对象
-   * @returns {Object} RGB 颜色对象
-   */
-  #hslToRgb(hsl) {
+  #hslToRgb(hsl: HslValue): ColorValue {
     const { h, s, l, a = 1 } = hsl;
 
     if (s === 0) {
@@ -534,7 +467,7 @@ export class Color {
       return { r: gray, g: gray, b: gray, a };
     }
 
-    const hueToRgb = (p, q, t) => {
+    const hueToRgb = (p: number, q: number, t: number): number => {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -554,12 +487,7 @@ export class Color {
     return { r, g, b, a };
   }
 
-  /**
-   * HSV 转 RGB
-   * @param {Object} hsv - HSV 颜色对象
-   * @returns {Object} RGB 颜色对象
-   */
-  #hsvToRgb(hsv) {
+  #hsvToRgb(hsv: HsvValue): ColorValue {
     const { h, s, v, a = 1 } = hsv;
 
     const hi = Math.floor(h / 60) % 6;
@@ -568,7 +496,7 @@ export class Color {
     const q = v * (1 - f * s);
     const t = v * (1 - (1 - f) * s);
 
-    let r, g, b;
+    let r: number, g: number, b: number;
 
     switch (hi) {
       case 0:
@@ -592,18 +520,14 @@ export class Color {
     }
 
     return {
-      r: Math.round(r * 255),
-      g: Math.round(g * 255),
-      b: Math.round(b * 255),
+      r: Math.round(r! * 255),
+      g: Math.round(g! * 255),
+      b: Math.round(b! * 255),
       a,
     };
   }
 
-  /**
-   * RGB 转 HSL
-   * @returns {Object} HSL 颜色对象
-   */
-  #rgbToHsl() {
+  #rgbToHsl(): HslValue {
     const { r, g, b, a } = this.#value;
 
     const red = r / 255;
@@ -644,11 +568,7 @@ export class Color {
     };
   }
 
-  /**
-   * RGB 转 HSV
-   * @returns {Object} HSV 颜色对象
-   */
-  #rgbToHsv() {
+  #rgbToHsv(): HsvValue {
     const { r, g, b, a } = this.#value;
 
     const red = r / 255;
@@ -686,15 +606,10 @@ export class Color {
     };
   }
 
-  /**
-   * 获取 HEX 格式颜色
-   * @param {boolean} withAlpha - 是否包含透明度
-   * @returns {string} HEX 颜色值
-   */
-  toHex(withAlpha = false) {
+  toHex(withAlpha = false): string {
     const { r, g, b, a } = this.#value;
 
-    const toHex = num => {
+    const toHex = (num: number): string => {
       const hex = Math.round(num).toString(16);
       return hex.length === 1 ? "0" + hex : hex;
     };
@@ -708,12 +623,7 @@ export class Color {
     return hex;
   }
 
-  /**
-   * 获取 RGB 格式颜色
-   * @param {boolean} withAlpha - 是否包含透明度
-   * @returns {string} RGB 颜色值
-   */
-  toRgb(withAlpha = false) {
+  toRgb(withAlpha = false): string {
     const { r, g, b, a } = this.#value;
 
     if (withAlpha && a < 1) {
@@ -723,12 +633,7 @@ export class Color {
     return `rgb(${r}, ${g}, ${b})`;
   }
 
-  /**
-   * 获取 HSL 格式颜色
-   * @param {boolean} withAlpha - 是否包含透明度
-   * @returns {string} HSL 颜色值
-   */
-  toHsl(withAlpha = false) {
+  toHsl(withAlpha = false): string {
     const hsl = this.#rgbToHsl();
 
     if (withAlpha && hsl.a < 1) {
@@ -738,12 +643,7 @@ export class Color {
     return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
   }
 
-  /**
-   * 获取 HSV 格式颜色
-   * @param {boolean} withAlpha - 是否包含透明度
-   * @returns {string} HSV 颜色值
-   */
-  toHsv(withAlpha = false) {
+  toHsv(withAlpha = false): string {
     const hsv = this.#rgbToHsv();
 
     if (withAlpha && hsv.a < 1) {
@@ -753,12 +653,7 @@ export class Color {
     return `hsv(${hsv.h}, ${hsv.s}%, ${hsv.v}%)`;
   }
 
-  /**
-   * 获取指定格式的颜色值
-   * @param {"hex"|"hexa"|"rgb"|"rgba"|"hsl"|"hsla"|"hsv"} format - 颜色格式
-   * @returns {string} 颜色值
-   */
-  toString(format = "hex") {
+  toString(format: ColorFormat = "hex"): string {
     switch (format.toLowerCase()) {
       case "hex":
         return this.toHex();
@@ -779,53 +674,28 @@ export class Color {
     }
   }
 
-  /**
-   * 获取颜色对象
-   * @returns {Object} 颜色对象
-   */
-  getValue() {
+  getValue(): ColorValue {
     return { ...this.#value };
   }
 
-  /**
-   * 设置颜色值
-   * @param {string|Object} color - 颜色值
-   */
-  setValue(color) {
+  setValue(color: ColorInput): void {
     this.#value = this.parse(color);
   }
 
-  /**
-   * 获取亮度值
-   * @returns {number} 亮度值 (0-1)
-   */
-  getBrightness() {
+  getBrightness(): number {
     const { r, g, b } = this.#value;
     return (r * 0.299 + g * 0.587 + b * 0.114) / 255;
   }
 
-  /**
-   * 判断颜色是否为亮色
-   * @returns {boolean} 是否为亮色
-   */
-  isLight() {
+  isLight(): boolean {
     return this.getBrightness() > 0.5;
   }
 
-  /**
-   * 判断颜色是否为暗色
-   * @returns {boolean} 是否为暗色
-   */
-  isDark() {
+  isDark(): boolean {
     return this.getBrightness() <= 0.5;
   }
 
-  /**
-   * 静态方法：验证颜色字符串是否合法
-   * @param {string} colorValue - 颜色值
-   * @returns {boolean} 是否合法
-   */
-  static isValidColor(colorValue) {
+  static isValidColor(colorValue: string): boolean {
     if (!colorValue || typeof colorValue !== "string") {
       return false;
     }
@@ -834,3 +704,5 @@ export class Color {
     return result !== null;
   }
 }
+
+export type { ColorFormat, ColorValue, HslValue, HsvValue, ColorInput };
