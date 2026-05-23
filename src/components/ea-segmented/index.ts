@@ -216,7 +216,7 @@ export class EaSegmented extends EaBase {
     this._updateIndicatorPosition(this.value);
   }
 
-  @listen("change")
+  @listen("change", ".ea-segmented")
   private _handleChange(e: Event) {
     const value = (e.target as HTMLInputElement).value;
     this.value = value;
