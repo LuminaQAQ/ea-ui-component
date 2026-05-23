@@ -84,7 +84,7 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-time-picker/index.js";
+  import "./node_modules/easy-component-ui/components/ea-time-picker/index.ts";
 </script>
 ```
 
