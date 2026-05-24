@@ -21,7 +21,7 @@ $name: ea-transfer;
 }
 
 :host(:invalid) {
-  .#{$name}__target-panel {
+  .#{$name}__panel--target {
     border-color: var(--red-500);
   }
 }

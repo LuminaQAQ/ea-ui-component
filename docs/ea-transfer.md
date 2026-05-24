@@ -145,7 +145,7 @@ Transfer 是一个用于在两个列表之间移动数据的穿梭框组件，�
 
 ```js
 <script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-transfer/index.js";
+  import "./node_modules/easy-component-ui/components/ea-transfer/index";
 </script>
 ```
 

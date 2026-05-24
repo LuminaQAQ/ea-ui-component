@@ -245,14 +245,16 @@ export class EaCheckbox extends EaFormAssociatedBase {
    * checkbox 的验证逻辑：当 required 为 true 时，必须处于选中状态
    */
   updateValidity() {
+    const anchor = this._container ?? undefined;
+
     if (this.required && !this.checked) {
       this.internals?.setValidity(
         { valueMissing: true },
         "请勾选此项",
-        this._container
+        anchor
       );
     } else {
-      this.internals?.setValidity({}, "", this._container);
+      this.internals?.setValidity({}, "", anchor);
     }
   }
 

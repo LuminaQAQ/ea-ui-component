@@ -276,15 +276,16 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
    */
   updateValidity() {
     const hasValue = Array.isArray(this.value) && this.value.length > 0;
+    const anchor = this.validationTarget ?? undefined;
 
     if (this.required && !hasValue) {
       this.internals?.setValidity(
         { valueMissing: true },
         "请至少选择一个选项",
-        this
+        anchor
       );
     } else {
-      this.internals?.setValidity({}, "", this);
+      this.internals?.setValidity({}, "", anchor);
     }
   }
 
