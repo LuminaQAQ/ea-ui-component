@@ -145,6 +145,11 @@ export class EaRadio extends EaFormAssociatedBase {
 
   // ==================== 生命周期 ====================
 
+  formResetCallback(): void {
+    this.checked = false;
+    this.setValidity({});
+  }
+
   $mount(): void {
     if (!this.name)
       this.setAttribute("name", Math.random().toString(36).substring(2, 15));

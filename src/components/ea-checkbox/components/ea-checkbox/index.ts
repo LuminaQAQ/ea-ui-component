@@ -214,6 +214,11 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   // ==================== 生命周期 ====================
 
+  formResetCallback(): void {
+    this.checked = false;
+    this.setValidity({});
+  }
+
   $mount(): void {
     // if (this._original) {
     //   this._original.addEventListener("change", this._onChangeEvent);

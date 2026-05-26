@@ -10,9 +10,6 @@ import { CustomElement } from "@decorator/custom-element";
 export class EaFormAssociatedBase extends EaBase {
   static formAssociated = true;
 
-  /** 内部 AbortController 用于管理事件监听 */
-  private _formAbortController?: AbortController | null;
-
   /** ElementInternals 实例，用于表单关联 */
   declare internals: ElementInternals;
 
@@ -256,13 +253,6 @@ export class EaFormAssociatedBase extends EaBase {
           this.validationMessage ||
             (formControl as HTMLInputElement).validationMessage
         );
-
-        if (
-          this.internals &&
-          typeof this.internals.reportValidity === "function"
-        ) {
-          this.internals.reportValidity();
-        }
       }
     }
   }
@@ -275,8 +265,10 @@ export class EaFormAssociatedBase extends EaBase {
     if (this.tagName === "EA-BUTTON") return true;
 
     this.updateValidity();
-    const target = this.validationTarget as HTMLInputElement | undefined;
-    return target?.checkValidity() ?? true;
+    if (this.internals && typeof this.internals.checkValidity === "function") {
+      return this.internals.checkValidity();
+    }
+    return true;
   }
 
   /**
@@ -287,8 +279,10 @@ export class EaFormAssociatedBase extends EaBase {
     if (this.tagName === "EA-BUTTON") return true;
 
     this.updateValidity();
-    const target = this.validationTarget as HTMLInputElement | undefined;
-    return target?.reportValidity() ?? true;
+    if (this.internals && typeof this.internals.reportValidity === "function") {
+      return this.internals.reportValidity();
+    }
+    return true;
   }
 
   /**
@@ -322,13 +316,13 @@ export class EaFormAssociatedBase extends EaBase {
   setCustomValidity(message: string): void {
     if (this.tagName === "EA-BUTTON") return;
 
-    const target = this.validationTarget as HTMLInputElement | undefined;
+    const target = this.validationTarget as HTMLElement | undefined;
     if (
       target &&
       target !== this &&
-      typeof target.setCustomValidity === "function"
+      typeof (target as HTMLInputElement).setCustomValidity === "function"
     ) {
-      target.setCustomValidity(message);
+      (target as HTMLInputElement).setCustomValidity(message);
     }
 
     if (this.internals && typeof this.internals.setValidity === "function") {
@@ -352,44 +346,67 @@ export class EaFormAssociatedBase extends EaBase {
       this.internals.setValidity({}, "", this.validationTarget ?? undefined);
     }
 
-    const target = this.validationTarget as HTMLInputElement | undefined;
+    const target = this.validationTarget as HTMLElement | undefined;
     if (
       target &&
       target !== this &&
-      typeof target.setCustomValidity === "function"
+      typeof (target as HTMLInputElement).setCustomValidity === "function"
     ) {
-      target.setCustomValidity("");
+      (target as HTMLInputElement).setCustomValidity("");
     }
   }
 
   // ==================== 生命周期 ====================
 
-  $beforeUnmount(): void {
-    this._formAbortController?.abort();
-  }
+  private static _formSubmitControllers: WeakMap<
+    HTMLFormElement,
+    { controller: AbortController; registered: boolean }
+  > = new WeakMap();
 
   /**
    * 表单关联回调，处理表单提交事件
    * @param form - 关联的表单元素
    */
   formAssociatedCallback(form: HTMLFormElement | null): void {
-    if (form) {
-      this._formAbortController?.abort();
-      this._formAbortController = new AbortController();
+    if (!form) return;
 
+    form.noValidate = true;
+
+    let entry = EaFormAssociatedBase._formSubmitControllers.get(form);
+    if (!entry) {
+      entry = { controller: new AbortController(), registered: false };
+      EaFormAssociatedBase._formSubmitControllers.set(form, entry);
+    }
+
+    if (!entry.registered) {
+      entry.registered = true;
       form.addEventListener(
         "submit",
         (e: Event) => {
-          this.setCustomValidity("");
-          this.updateValidity();
+          const allElements = Array.from(
+            form.querySelectorAll("*")
+          ) as EaFormAssociatedBase[];
+          const sorted = allElements.filter(
+            el =>
+              el instanceof EaFormAssociatedBase && el.tagName !== "EA-BUTTON"
+          );
 
-          if (!this.checkValidity() && this.tagName !== "EA-BUTTON") {
+          let firstInvalid: EaFormAssociatedBase | null = null;
+          for (const el of sorted) {
+            el.setCustomValidity("");
+            el.updateValidity();
+            if (!el.checkValidity() && !firstInvalid) {
+              firstInvalid = el;
+            }
+          }
+
+          if (firstInvalid) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            this.reportValidity();
+            firstInvalid.reportValidity();
           }
         },
-        { signal: this._formAbortController.signal }
+        { signal: entry.controller.signal }
       );
     }
   }

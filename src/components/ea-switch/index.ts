@@ -303,6 +303,11 @@ export class EaSwitch extends EaFormAssociatedBase {
 
   // ==================== 生命周期 ====================
 
+  formResetCallback(): void {
+    this.value = false;
+    this.setValidity({});
+  }
+
   $mount() {
     if (!this.name)
       this.setAttribute("name", Math.random().toString(36).substring(2, 15));
