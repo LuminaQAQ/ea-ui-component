@@ -1,4 +1,4 @@
-import "@/components/ea-input-number/index.ts";
+import "@/components/ea-input-number/index";
 import "@/components/ea-tooltip";
 import { Enum } from "@/utils/Enum";
 import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";

@@ -2,9 +2,9 @@ import {
   handleImportModules,
   handlePackageExport,
   handleImportChildPages,
-} from "./pack.js";
+} from "./pack";
 
-const main = async () => {
+const main = async (): Promise<void> => {
   await handleImportModules();
   await handlePackageExport();
   await handleImportChildPages();

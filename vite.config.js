@@ -1,6 +1,6 @@
 import { defineConfig, normalizePath } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
-import entryConfigs from "./configs/entryConfig.js";
+import entryConfigs from "./configs/entryConfig.ts";
 import path, { resolve } from "node:path";
 import dtsPlugin from "vite-plugin-dts";
 import { fileURLToPath } from "url";
@@ -161,6 +161,7 @@ export default defineConfig({
     },
   },
   resolve: {
+    extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
     alias: {
       "@": resolve(__dirname, "src/"),
       "@components": resolve(__dirname, "src/components"),

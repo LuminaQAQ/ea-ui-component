@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "dev:doc": "vitepress dev docs --host 0.0.0.0",
-    "build": "node tools/index.js && vite build && powershell -Command \"New-Item -ItemType Directory -Force -Path .\\docs\\.vitepress\\public\\dist\\assets | Out-Null; Copy-Item .\\dist\\assets\\icon.css .\\docs\\.vitepress\\public\\dist\\assets\\icon.css -Force | Out-Null\"",
+    "build": "tsx scripts/index.ts && vite build && powershell -Command \"New-Item -ItemType Directory -Force -Path .\\docs\\.vitepress\\public\\dist\\assets | Out-Null; Copy-Item .\\dist\\assets\\icon.css .\\docs\\.vitepress\\public\\dist\\assets\\icon.css -Force | Out-Null\"",
     "build:doc": "xcopy .\\docs\\index.css .\\docs\\.vitepress\\public\\index.css /y >nul && vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e /y >nul",
     "preview:doc": "set VITEPRESS_BASE=___EMPTY___&& xcopy .\\docs\\index.css .\\docs\\.vitepress\\public\\index.css /y >nul && vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e /y >nul && vitepress preview docs",
     "preview": "vite preview",
@@ -100,6 +100,7 @@
     "sass-embedded": "^1.93.2",
     "scss": "^0.2.4",
     "scss-loader": "^0.0.1",
+    "tsx": "^4.22.3",
     "vite": "^5.4.1",
     "vitepress": "^1.2.0",
     "vitest": "^4.1.0"
@@ -119,191 +120,191 @@
     }
   },
   "exports": {
-    ".": "./dist/components/index.js",
+    ".": "./dist/components/index.ts",
     "./icon-assets": {
       "import": "./dist/assets/icon.css",
       "require": "./dist/assets/icon.css",
       "default": "./dist/assets/icon.css"
     },
     "./ea-alert": {
-      "import": "./dist/components/ea-alert.js"
+      "import": "./dist/components/ea-alert.ts"
     },
     "./ea-avatar": {
-      "import": "./dist/components/ea-avatar.js"
+      "import": "./dist/components/ea-avatar.ts"
     },
     "./ea-backtop": {
-      "import": "./dist/components/ea-backtop.js"
+      "import": "./dist/components/ea-backtop.ts"
     },
     "./ea-badge": {
-      "import": "./dist/components/ea-badge.js"
+      "import": "./dist/components/ea-badge.ts"
     },
     "./ea-breadcrumb": {
-      "import": "./dist/components/ea-breadcrumb.js"
+      "import": "./dist/components/ea-breadcrumb.ts"
     },
     "./ea-button": {
-      "import": "./dist/components/ea-button.js"
+      "import": "./dist/components/ea-button.ts"
     },
     "./ea-calendar": {
-      "import": "./dist/components/ea-calendar.js"
+      "import": "./dist/components/ea-calendar.ts"
     },
     "./ea-card": {
-      "import": "./dist/components/ea-card.js"
+      "import": "./dist/components/ea-card.ts"
     },
     "./ea-carousel": {
-      "import": "./dist/components/ea-carousel.js"
+      "import": "./dist/components/ea-carousel.ts"
     },
     "./ea-checkbox": {
-      "import": "./dist/components/ea-checkbox.js"
+      "import": "./dist/components/ea-checkbox.ts"
     },
     "./ea-collapse": {
-      "import": "./dist/components/ea-collapse.js"
+      "import": "./dist/components/ea-collapse.ts"
     },
     "./ea-color-picker": {
-      "import": "./dist/components/ea-color-picker.js"
+      "import": "./dist/components/ea-color-picker.ts"
     },
     "./ea-container": {
-      "import": "./dist/components/ea-container.js"
+      "import": "./dist/components/ea-container.ts"
     },
     "./ea-countdown": {
-      "import": "./dist/components/ea-countdown.js"
+      "import": "./dist/components/ea-countdown.ts"
     },
     "./ea-date-picker": {
-      "import": "./dist/components/ea-date-picker.js"
+      "import": "./dist/components/ea-date-picker.ts"
     },
     "./ea-descriptions": {
-      "import": "./dist/components/ea-descriptions.js"
+      "import": "./dist/components/ea-descriptions.ts"
     },
     "./ea-dialog": {
-      "import": "./dist/components/ea-dialog.js"
+      "import": "./dist/components/ea-dialog.ts"
     },
     "./ea-drawer": {
-      "import": "./dist/components/ea-drawer.js"
+      "import": "./dist/components/ea-drawer.ts"
     },
     "./ea-dropdown": {
-      "import": "./dist/components/ea-dropdown.js"
+      "import": "./dist/components/ea-dropdown.ts"
     },
     "./ea-empty": {
-      "import": "./dist/components/ea-empty.js"
+      "import": "./dist/components/ea-empty.ts"
     },
     "./ea-icon": {
-      "import": "./dist/components/ea-icon.js"
+      "import": "./dist/components/ea-icon.ts"
     },
     "./ea-image": {
-      "import": "./dist/components/ea-image.js"
+      "import": "./dist/components/ea-image.ts"
     },
     "./ea-image-preview": {
-      "import": "./dist/components/ea-image-preview.js"
+      "import": "./dist/components/ea-image-preview.ts"
     },
     "./ea-infinite-scroll": {
-      "import": "./dist/components/ea-infinite-scroll.js"
+      "import": "./dist/components/ea-infinite-scroll.ts"
     },
     "./ea-input": {
-      "import": "./dist/components/ea-input.js"
+      "import": "./dist/components/ea-input.ts"
     },
     "./ea-input-number": {
-      "import": "./dist/components/ea-input-number.js"
+      "import": "./dist/components/ea-input-number.ts"
     },
     "./ea-layout": {
-      "import": "./dist/components/ea-layout.js"
+      "import": "./dist/components/ea-layout.ts"
     },
     "./ea-link": {
-      "import": "./dist/components/ea-link.js"
+      "import": "./dist/components/ea-link.ts"
     },
     "./ea-menu": {
-      "import": "./dist/components/ea-menu.js"
+      "import": "./dist/components/ea-menu.ts"
     },
     "./ea-message": {
-      "import": "./dist/components/ea-message.js"
+      "import": "./dist/components/ea-message.ts"
     },
     "./ea-message-box": {
-      "import": "./dist/components/ea-message-box.js"
+      "import": "./dist/components/ea-message-box.ts"
     },
     "./ea-notification": {
-      "import": "./dist/components/ea-notification.js"
+      "import": "./dist/components/ea-notification.ts"
     },
     "./ea-page-header": {
-      "import": "./dist/components/ea-page-header.js"
+      "import": "./dist/components/ea-page-header.ts"
     },
     "./ea-pagination": {
-      "import": "./dist/components/ea-pagination.js"
+      "import": "./dist/components/ea-pagination.ts"
     },
     "./ea-popconfirm": {
-      "import": "./dist/components/ea-popconfirm.js"
+      "import": "./dist/components/ea-popconfirm.ts"
     },
     "./ea-popover": {
-      "import": "./dist/components/ea-popover.js"
+      "import": "./dist/components/ea-popover.ts"
     },
     "./ea-progress": {
-      "import": "./dist/components/ea-progress.js"
+      "import": "./dist/components/ea-progress.ts"
     },
     "./ea-radio": {
-      "import": "./dist/components/ea-radio.js"
+      "import": "./dist/components/ea-radio.ts"
     },
     "./ea-rate": {
-      "import": "./dist/components/ea-rate.js"
+      "import": "./dist/components/ea-rate.ts"
     },
     "./ea-result": {
-      "import": "./dist/components/ea-result.js"
+      "import": "./dist/components/ea-result.ts"
     },
     "./ea-scrollbar": {
-      "import": "./dist/components/ea-scrollbar.js"
+      "import": "./dist/components/ea-scrollbar.ts"
     },
     "./ea-segmented": {
-      "import": "./dist/components/ea-segmented.js"
+      "import": "./dist/components/ea-segmented.ts"
     },
     "./ea-select": {
-      "import": "./dist/components/ea-select.js"
+      "import": "./dist/components/ea-select.ts"
     },
     "./ea-skeleton": {
-      "import": "./dist/components/ea-skeleton.js"
+      "import": "./dist/components/ea-skeleton.ts"
     },
     "./ea-slider": {
-      "import": "./dist/components/ea-slider.js"
+      "import": "./dist/components/ea-slider.ts"
     },
     "./ea-space": {
-      "import": "./dist/components/ea-space.js"
+      "import": "./dist/components/ea-space.ts"
     },
     "./ea-splitter": {
-      "import": "./dist/components/ea-splitter.js"
+      "import": "./dist/components/ea-splitter.ts"
     },
     "./ea-statistic": {
-      "import": "./dist/components/ea-statistic.js"
+      "import": "./dist/components/ea-statistic.ts"
     },
     "./ea-steps": {
-      "import": "./dist/components/ea-steps.js"
+      "import": "./dist/components/ea-steps.ts"
     },
     "./ea-switch": {
-      "import": "./dist/components/ea-switch.js"
+      "import": "./dist/components/ea-switch.ts"
     },
     "./ea-table": {
-      "import": "./dist/components/ea-table.js"
+      "import": "./dist/components/ea-table.ts"
     },
     "./ea-tabs": {
-      "import": "./dist/components/ea-tabs.js"
+      "import": "./dist/components/ea-tabs.ts"
     },
     "./ea-tag": {
-      "import": "./dist/components/ea-tag.js"
+      "import": "./dist/components/ea-tag.ts"
     },
     "./ea-text": {
-      "import": "./dist/components/ea-text.js"
+      "import": "./dist/components/ea-text.ts"
     },
     "./ea-time-picker": {
-      "import": "./dist/components/ea-time-picker.js"
+      "import": "./dist/components/ea-time-picker.ts"
     },
     "./ea-timeline": {
-      "import": "./dist/components/ea-timeline.js"
+      "import": "./dist/components/ea-timeline.ts"
     },
     "./ea-tooltip": {
-      "import": "./dist/components/ea-tooltip.js"
+      "import": "./dist/components/ea-tooltip.ts"
     },
     "./ea-tour": {
-      "import": "./dist/components/ea-tour.js"
+      "import": "./dist/components/ea-tour.ts"
     },
     "./ea-transfer": {
-      "import": "./dist/components/ea-transfer.js"
+      "import": "./dist/components/ea-transfer.ts"
     },
     "./ea-tree": {
-      "import": "./dist/components/ea-tree.js"
+      "import": "./dist/components/ea-tree.ts"
     }
   }
 }

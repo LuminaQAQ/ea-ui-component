@@ -5,19 +5,29 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const handleImportModules = () => {
+interface EntryConfigs {
+  [key: string]: string;
+}
+
+interface ExportsConfig {
+  [key: string]:
+    | string
+    | { import?: string; require?: string; default?: string };
+}
+
+export const handleImportModules = (): void => {
   const dir = path.join(process.cwd(), "src/components");
-  const entryPath = path.join(process.cwd(), "src/components/index.js");
+  const entryPath = path.join(process.cwd(), "src/components/index.ts");
   fs.writeFileSync(entryPath, "");
 
-  fs.readdirSync(dir).forEach(file => {
+  fs.readdirSync(dir).forEach((file: string) => {
     const filePath = path.join(dir, file);
     const isDir = fs.statSync(filePath).isDirectory();
 
     if (isDir) {
-      const indexPath = path.join(filePath, "index.js");
+      const indexPath = path.join(filePath, "index.ts");
       if (fs.existsSync(indexPath)) {
-        fs.appendFileSync(entryPath, `import './${file}/index.js';\n`);
+        fs.appendFileSync(entryPath, `import './${file}/index';\n`);
       }
     }
   });
@@ -25,14 +35,14 @@ export const handleImportModules = () => {
   fs.appendFileSync(entryPath, `import './ea-icon/index.css';\n`);
 };
 
-export const handlePackageExport = () => {
+export const handlePackageExport = (): void => {
   const dir = path.resolve(process.cwd(), "src/components");
-  const entryConfigs = {
-    index: path.resolve(process.cwd(), "src/components/index.js"),
+  const entryConfigs: EntryConfigs = {
+    index: path.resolve(process.cwd(), "src/components/index.ts"),
   };
 
-  const exportsConfig = {
-    ".": "./dist/components/index.js",
+  const exportsConfig: ExportsConfig = {
+    ".": "./dist/components/index.ts",
     "./icon-assets": {
       import: "./dist/assets/icon.css",
       require: "./dist/assets/icon.css",
@@ -40,16 +50,16 @@ export const handlePackageExport = () => {
     },
   };
 
-  fs.readdirSync(dir).forEach(file => {
+  fs.readdirSync(dir).forEach((file: string) => {
     const subPath = path.resolve(dir, file);
     const isDirectory = fs.statSync(subPath).isDirectory();
 
     if (isDirectory) {
-      const entryPath = path.resolve(subPath, "index.js");
+      const entryPath = path.resolve(subPath, "index.ts");
       entryConfigs[file] = entryPath;
 
       exportsConfig[`./${file}`] = {
-        import: `./dist/components/${file}.js`,
+        import: `./dist/components/${file}.ts`,
       };
     }
   });
@@ -60,12 +70,12 @@ export const handlePackageExport = () => {
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 };
 
-export const handleImportChildPages = () => {
+export const handleImportChildPages = (): void => {
   const dir = path.join(process.cwd(), "test");
   const entryPath = path.join(process.cwd(), "index.html");
-  const files = [];
+  const files: string[] = [];
 
-  fs.readdirSync(dir).forEach(file => {
+  fs.readdirSync(dir).forEach((file: string) => {
     files.push(`./test/${file}`);
   });
 
@@ -82,7 +92,7 @@ export const handleImportChildPages = () => {
         </head>
 
         <body>
-            <script type="module" src="main.js"></script>
+            <script type="module" src="main.ts"></script>
             ${files.map(file => `<p><ea-button type="primary" href="${file}" link size="large"> ${file.slice(7, files.length)}</ea-button></p>`).join("\n")}
         </body>
 
