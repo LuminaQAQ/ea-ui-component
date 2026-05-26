@@ -155,6 +155,9 @@ onMounted(async () => {
 ```js
 <script type='module'>
   import "./node_modules/easy-component-ui/components/ea-tree/index.js";
+
+// 或者使用 ES Module
+import "./node_modules/easy-component-ui/dist/components/index.js";
 </script>
 ```
 
@@ -520,9 +523,8 @@ defaultExpandedTree.data = idData;
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称             | 说明       |
-| ---------------- | ---------- |
-| container        | 树容器     |
-| children-wrapper | 子节点容器 |
-| children         | 子节点     |
-| label            | 节点标签   |
+| 名称      | 说明                           |
+| --------- | ------------------------------ |
+| container | 树容器                         |
+| label     | 节点标签（div.ea-tree__label） |
+| children  | 子节点容器（div.ea-tree__children） |

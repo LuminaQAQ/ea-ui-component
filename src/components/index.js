@@ -15,5 +15,5 @@ import "./ea-table/index.js";
 import "./ea-tabs/index.js";
 import "./ea-time-picker/index.js";
 import "./ea-transfer/index.js";
-import "./ea-tree/index.js";
+import "./ea-tree/index";
 import "./ea-icon/index.css";

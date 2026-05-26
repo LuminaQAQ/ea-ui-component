@@ -1,17 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { waitForRender } from "./utils/waitForRender";
+import "../components/ea-tree/index";
 
-// 尝试加载组件，处理组件尚未重构为 TypeScript 的情况
-let componentReady = false;
-try {
-  await import("../components/ea-tree/index.js");
-  componentReady = true;
-} catch (e) {
-  console.warn(`[ea-tree] 组件尚未重构为 TypeScript (或存在依赖缺失)，跳过测试`);
-}
-
-const suite = componentReady ? describe : describe.skip;
-
-suite("EaTree Component", () => {
+describe("EaTree", () => {
   let container;
 
   beforeEach(() => {
@@ -23,7 +14,6 @@ suite("EaTree Component", () => {
     container.remove();
   });
 
-  // 生成测试数据
   const generateTestData = () => [
     {
       label: "Level one 1",
@@ -53,7 +43,6 @@ suite("EaTree Component", () => {
     },
   ];
 
-  // 生成带 ID 的测试数据
   const generateIdTestData = () => [
     {
       id: 1,
@@ -73,15 +62,62 @@ suite("EaTree Component", () => {
     },
   ];
 
-  /**
-   * 基本功能测试
-   */
-  describe("Basic Functionality", () => {
+  const generateDisabledTestData = () => [
+    {
+      id: 1,
+      label: "Level one 1",
+      children: [
+        {
+          id: 2,
+          label: "Level two 1-1",
+          disabled: true,
+          children: [
+            { id: 3, label: "Level three 1-1-1" },
+            { id: 4, label: "Level three 1-1-2", disabled: true },
+          ],
+        },
+        {
+          id: 5,
+          label: "Level two 1-2",
+          children: [{ id: 6, label: "Level three 1-2-1" }],
+        },
+      ],
+    },
+  ];
+
+  const findNodeByPath = (tree, path) =>
+    tree.shadowRoot.querySelector(`.ea-tree__node[data-path="${path}"]`);
+
+  const findLabelByPath = (tree, path) =>
+    tree.shadowRoot.querySelector(`.ea-tree__label[data-path="${path}"]`);
+
+  const findCheckboxByPath = (tree, path) => {
+    const label = findLabelByPath(tree, path);
+    return label ? label.querySelector(".ea-tree__checkbox") : null;
+  };
+
+  const findChildrenByPath = (tree, path) => {
+    const node = findNodeByPath(tree, path);
+    if (!node) return null;
+    for (const child of node.children) {
+      if (child.classList && child.classList.contains("ea-tree__children")) {
+        return child;
+      }
+    }
+    return null;
+  };
+
+  const findToggleIconByPath = (tree, path) => {
+    const label = findLabelByPath(tree, path);
+    return label ? label.querySelector(".ea-tree__toggle-icon") : null;
+  };
+
+  describe("基础渲染", () => {
     it("应该正确渲染 ea-tree 组件", async () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(tree).toBeDefined();
       expect(tree.shadowRoot).toBeDefined();
@@ -91,148 +127,210 @@ suite("EaTree Component", () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(tree.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
-  });
 
-  /**
-   * Data 属性测试
-   */
-  describe("Data Attribute", () => {
-    it("默认 data 应该可以访问", async () => {
+    it("空数据时应该正常渲染", async () => {
       const tree = document.createElement("ea-tree");
+      tree.data = [];
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      // data 属性可能返回空字符串、null 或 undefined
-      const value = tree.data;
-      expect(value === "" || value === null || value === undefined).toBe(true);
+      expect(tree.shadowRoot).toBeDefined();
+      expect(tree.data).toEqual([]);
     });
+  });
 
-    it("应该支持设置 data 属性", async () => {
+  describe("DOM 结构", () => {
+    it("应该正确渲染节点并设置 data-path 属性", async () => {
       const tree = document.createElement("ea-tree");
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(tree.data.length).toBe(2);
-      expect(tree.data[0].label).toBe("Level one 1");
+      const rootNode1 = findNodeByPath(tree, "1$");
+      const rootNode2 = findNodeByPath(tree, "2$");
+
+      expect(rootNode1).toBeTruthy();
+      expect(rootNode2).toBeTruthy();
+      expect(rootNode1.dataset.path).toBe("1$");
+      expect(rootNode2.dataset.path).toBe("2$");
+    });
+
+    it("应该正确渲染子节点的 data-path", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(findNodeByPath(tree, "1$-1")).toBeTruthy();
+      expect(findNodeByPath(tree, "1$-1-1")).toBeTruthy();
+      expect(findNodeByPath(tree, "2$-1")).toBeTruthy();
+      expect(findNodeByPath(tree, "2$-1-1")).toBeTruthy();
+    });
+
+    it("应该正确显示节点文本", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const text1 = tree.shadowRoot.querySelector(".ea-tree__text");
+      expect(text1).toBeTruthy();
+      expect(text1.textContent).toBe("Level one 1");
+    });
+
+    it("有子节点的节点应该包含 toggle icon", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const toggleIcon = findToggleIconByPath(tree, "1$");
+      expect(toggleIcon).toBeTruthy();
+    });
+
+    it("叶子节点不应该包含 toggle icon", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const toggleIcon = findToggleIconByPath(tree, "1$-1-1");
+      expect(toggleIcon).toBeFalsy();
+    });
+
+    it("有子节点的节点应该包含 children 容器", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const childrenEl = findChildrenByPath(tree, "1$");
+      expect(childrenEl).toBeTruthy();
+      expect(childrenEl.classList.contains("ea-tree__children")).toBe(true);
+    });
+
+    it("叶子节点不应该包含 children 容器", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const childrenEl = findChildrenByPath(tree, "1$-1-1");
+      expect(childrenEl).toBeFalsy();
+    });
+
+    it("showCheckbox 时应该渲染 checkbox 元素", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const checkbox = findCheckboxByPath(tree, "1$");
+      expect(checkbox).toBeTruthy();
+    });
+
+    it("默认不显示 checkbox", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const node = findNodeByPath(tree, "1$");
+      expect(node.classList.contains("is-show-checkbox")).toBe(false);
+    });
+
+    it("showCheckbox 时节点应该有 is-show-checkbox 状态类", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const node = findNodeByPath(tree, "1$");
+      expect(node.classList.contains("is-show-checkbox")).toBe(true);
+    });
+
+    it("label 元素应该有正确的 data-path", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const label = findLabelByPath(tree, "1$");
+      expect(label).toBeTruthy();
+      expect(label.dataset.path).toBe("1$");
     });
   });
 
-  /**
-   * Show-checkbox 属性测试
-   */
-  describe("Show-checkbox Attribute", () => {
-    it("默认 show-checkbox 应该是 false", async () => {
+  describe("属性默认值", () => {
+    it("showCheckbox 默认为 false", async () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      const value = tree["show-checkbox"];
-      expect(value === false || value === null).toBe(true);
+      expect(tree.showCheckbox).toBe(false);
     });
 
-    it("应该支持 show-checkbox 属性", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["show-checkbox"] = true;
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree["show-checkbox"]).toBe(true);
-    });
-  });
-
-  /**
-   * Check-strictly 属性测试
-   */
-  describe("Check-strictly Attribute", () => {
-    it("默认 check-strictly 应该是 false", async () => {
+    it("checkStrictly 默认为 false", async () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      const value = tree["check-strictly"];
-      expect(value === false || value === null).toBe(true);
+      expect(tree.checkStrictly).toBe(false);
     });
 
-    it("应该支持 check-strictly 属性", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["check-strictly"] = true;
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree["check-strictly"]).toBe(true);
-    });
-  });
-
-  /**
-   * Node-key 属性测试
-   */
-  describe("Node-key Attribute", () => {
-    it("默认 node-key 应该是 null", async () => {
+    it("nodeKey 默认为空字符串", async () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      const value = tree["node-key"];
-      expect(value === null || value === undefined || value === "").toBe(true);
+      expect(tree.nodeKey).toBe("");
     });
 
-    it("应该支持 node-key 属性", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree["node-key"]).toBe("id");
-    });
-  });
-
-  /**
-   * Expand-on-icon-click 属性测试
-   */
-  describe("Expand-on-icon-click Attribute", () => {
-    it("默认 expand-on-icon-click 应该是 false", async () => {
+    it("expandOnIconClick 默认为 false", async () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      const value = tree["expand-on-icon-click"];
-      expect(value === false || value === null).toBe(true);
+      expect(tree.expandOnIconClick).toBe(false);
     });
 
-    it("应该支持 expand-on-icon-click 属性", async () => {
+    it("data 默认为空数组", async () => {
       const tree = document.createElement("ea-tree");
-      tree["expand-on-icon-click"] = true;
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(tree["expand-on-icon-click"]).toBe(true);
+      expect(Array.isArray(tree.data)).toBe(true);
+      expect(tree.data.length).toBe(0);
     });
-  });
 
-  /**
-   * DataProps 属性测试
-   */
-  describe("DataProps Attribute", () => {
-    it("默认 dataProps 应该有正确的默认值", async () => {
+    it("dataProps 默认值正确", async () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(tree.dataProps).toEqual({
         children: "children",
@@ -241,6 +339,73 @@ suite("EaTree Component", () => {
       });
     });
 
+    it("defaultExpandedKeys 默认为空数组", async () => {
+      const tree = document.createElement("ea-tree");
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(Array.isArray(tree.defaultExpandedKeys)).toBe(true);
+    });
+
+    it("defaultCheckedKeys 默认为空数组", async () => {
+      const tree = document.createElement("ea-tree");
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(Array.isArray(tree.defaultCheckedKeys)).toBe(true);
+    });
+  });
+
+  describe("data 属性", () => {
+    it("应该支持设置 data 属性", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.data.length).toBe(2);
+      expect(tree.data[0].label).toBe("Level one 1");
+      expect(tree.data[1].label).toBe("Level one 2");
+    });
+
+    it("动态修改 data 应该重新渲染", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.data.length).toBe(2);
+
+      tree.data = [{ label: "New Item" }];
+
+      await waitForRender();
+
+      expect(tree.data.length).toBe(1);
+      expect(tree.data[0].label).toBe("New Item");
+    });
+
+    it("设置空数组应该清空树", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(findNodeByPath(tree, "1$")).toBeTruthy();
+
+      tree.data = [];
+
+      await waitForRender();
+
+      expect(findNodeByPath(tree, "1$")).toBeFalsy();
+    });
+  });
+
+  describe("dataProps 属性", () => {
     it("应该支持自定义 dataProps", async () => {
       const tree = document.createElement("ea-tree");
       tree.dataProps = {
@@ -248,383 +413,1615 @@ suite("EaTree Component", () => {
         label: "name",
         disabled: "isDisabled",
       };
+      tree.data = [
+        {
+          name: "Custom Node",
+          childNodes: [{ name: "Custom Child" }],
+        },
+      ];
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(tree.dataProps).toEqual({
         children: "childNodes",
         label: "name",
         disabled: "isDisabled",
       });
+
+      const text = tree.shadowRoot.querySelector(".ea-tree__text");
+      expect(text.textContent).toBe("Custom Node");
+    });
+
+    it("自定义 dataProps 的子节点应该正确渲染", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.dataProps = {
+        children: "items",
+        label: "title",
+        disabled: "isDisabled",
+      };
+      tree.data = [
+        {
+          title: "Parent",
+          items: [{ title: "Child 1" }, { title: "Child 2" }],
+        },
+      ];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const toggleIcon = findToggleIconByPath(tree, "1$");
+      expect(toggleIcon).toBeTruthy();
+
+      const childrenEl = findChildrenByPath(tree, "1$");
+      expect(childrenEl).toBeTruthy();
     });
   });
 
-  /**
-   * DefaultExpandedKeys 属性测试
-   */
-  describe("DefaultExpandedKeys Attribute", () => {
-    it("默认 defaultExpandedKeys 应该是空数组", async () => {
+  describe("展开/折叠行为", () => {
+    it("展开节点应该添加 is-expanded 状态类", async () => {
       const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(Array.isArray(tree.defaultExpandedKeys)).toBe(true);
+      tree._expandPath("1$");
+
+      const node = findNodeByPath(tree, "1$");
+      expect(node.classList.contains("is-expanded")).toBe(true);
     });
 
-    it("应该支持 defaultExpandedKeys 属性", async () => {
+    it("折叠节点应该移除 is-expanded 状态类", async () => {
       const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._expandPath("1$");
+      expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
+        true
+      );
+
+      tree._collapsePath("1$");
+      expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
+        false
+      );
+    });
+
+    it("切换展开/折叠应该正确工作", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._toggleExpand("1$");
+      expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
+        true
+      );
+
+      tree._toggleExpand("1$");
+      expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
+        false
+      );
+    });
+
+    it("展开节点应该触发 ea-node-expand 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-expand", handler);
+
+      tree._expandPath("1$");
+
+      expect(handler).toHaveBeenCalledOnce();
+      expect(handler.mock.calls[0][0].detail.data.label).toBe("Level one 1");
+      expect(handler.mock.calls[0][0].detail.expanded).toBe(true);
+    });
+
+    it("折叠节点应该触发 ea-node-collapse 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._expandPath("1$");
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-collapse", handler);
+
+      tree._collapsePath("1$");
+
+      expect(handler).toHaveBeenCalledOnce();
+      expect(handler.mock.calls[0][0].detail.data.label).toBe("Level one 1");
+      expect(handler.mock.calls[0][0].detail.expanded).toBe(false);
+    });
+
+    it("叶子节点不应该展开/折叠", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-expand", handler);
+
+      tree._expandPath("1$-1-1");
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it("defaultExpandedKeys 应该自动展开指定节点", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.nodeKey = "id";
+      tree.data = generateIdTestData();
       tree.defaultExpandedKeys = [1, 2];
-      tree.data = generateIdTestData();
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender(50);
 
-      expect(tree.defaultExpandedKeys).toEqual([1, 2]);
+      const rootNode = findNodeByPath(tree, "1$");
+      const childNode = findNodeByPath(tree, "1$-1");
+
+      expect(rootNode.classList.contains("is-expanded")).toBe(true);
+      expect(childNode.classList.contains("is-expanded")).toBe(true);
+    });
+
+    it("defaultExpandedKeys 不设置 nodeKey 时不生效", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateIdTestData();
+      tree.defaultExpandedKeys = [1];
+      container.appendChild(tree);
+
+      await waitForRender(50);
+
+      const rootNode = findNodeByPath(tree, "1$");
+      expect(rootNode.classList.contains("is-expanded")).toBe(false);
+    });
+
+    it("展开祖先节点应该正确工作", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._expandAncestorPaths("1$-1-1");
+
+      expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
+        true
+      );
+      expect(
+        findNodeByPath(tree, "1$-1").classList.contains("is-expanded")
+      ).toBe(true);
     });
   });
 
-  /**
-   * DefaultCheckedKeys 属性测试
-   */
-  describe("DefaultCheckedKeys Attribute", () => {
-    it("默认 defaultCheckedKeys 应该是空数组", async () => {
+  describe("选中行为", () => {
+    it("选中节点应该添加 is-selected 状态类", async () => {
       const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(Array.isArray(tree.defaultCheckedKeys)).toBe(true);
+      tree._selectPath("1$");
+
+      const node = findNodeByPath(tree, "1$");
+      expect(node.classList.contains("is-selected")).toBe(true);
     });
 
-    it("应该支持 defaultCheckedKeys 属性", async () => {
+    it("选中另一个节点时前一个应该取消选中", async () => {
       const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
-      tree["show-checkbox"] = true;
-      tree.defaultCheckedKeys = [1, 2];
-      tree.data = generateIdTestData();
+      tree.data = generateTestData();
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(tree.defaultCheckedKeys).toEqual([1, 2]);
+      tree._selectPath("1$");
+      expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
+        true
+      );
+
+      tree._selectPath("2$");
+      expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
+        false
+      );
+      expect(findNodeByPath(tree, "2$").classList.contains("is-selected")).toBe(
+        true
+      );
+    });
+
+    it("选中节点应该触发 ea-node-select 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-select", handler);
+
+      tree._selectPath("1$");
+
+      expect(handler).toHaveBeenCalledOnce();
+      expect(handler.mock.calls[0][0].detail.node.label).toBe("Level one 1");
+      expect(handler.mock.calls[0][0].detail.selected).toBe(true);
+    });
+
+    it("选中节点应该触发 ea-current-change 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-current-change", handler);
+
+      tree._selectPath("1$");
+
+      expect(handler).toHaveBeenCalledOnce();
+      expect(handler.mock.calls[0][0].detail.data.label).toBe("Level one 1");
+    });
+
+    it("点击节点应该触发 ea-node-click 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-click", handler);
+
+      const labelEl = findLabelByPath(tree, "1$");
+      labelEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(handler).toHaveBeenCalledOnce();
+      expect(handler.mock.calls[0][0].detail.data.label).toBe("Level one 1");
+    });
+
+    it("点击节点应该同时选中该节点", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const labelEl = findLabelByPath(tree, "1$");
+      labelEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
+        true
+      );
+    });
+
+    it("点击有子节点的节点应该同时展开", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const labelEl = findLabelByPath(tree, "1$");
+      labelEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
+        true
+      );
     });
   });
 
-  /**
-   * Events 测试
-   */
-  describe("Events", () => {
-    it("应该触发 ea-node-click 事件", async () => {
+  describe("Checkbox 行为", () => {
+    it("showCheckbox 控制 checkbox 可见性", async () => {
       const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      const clickHandler = vi.fn();
-      tree.addEventListener("ea-node-click", clickHandler);
+      const node = findNodeByPath(tree, "1$");
+      expect(node.classList.contains("is-show-checkbox")).toBe(true);
 
-      // 模拟触发事件
-      tree.dispatchEvent(
-        new CustomEvent("ea-node-click", {
-          detail: { data: tree.data[0] },
-        })
-      );
+      tree.showCheckbox = false;
 
-      expect(clickHandler).toHaveBeenCalled();
+      await waitForRender();
+
+      expect(
+        findNodeByPath(tree, "1$").classList.contains("is-show-checkbox")
+      ).toBe(false);
     });
 
-    it("应该触发 ea-node-select 事件", async () => {
+    it("勾选叶子节点应该更新父节点为 indeterminate", async () => {
       const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const selectHandler = vi.fn();
-      tree.addEventListener("ea-node-select", selectHandler);
-
-      // 模拟触发事件
-      tree.dispatchEvent(
-        new CustomEvent("ea-node-select", {
-          detail: { node: tree.data[0], selected: true },
-        })
-      );
-
-      expect(selectHandler).toHaveBeenCalled();
-    });
-
-    it("应该触发 ea-check-change 事件", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["show-checkbox"] = true;
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const checkHandler = vi.fn();
-      tree.addEventListener("ea-check-change", checkHandler);
-
-      // 模拟触发事件
-      tree.dispatchEvent(
-        new CustomEvent("ea-check-change", {
-          detail: {
-            data: tree.data[0],
-            checked: true,
-            hasCheckedChildren: false,
-          },
-        })
-      );
-
-      expect(checkHandler).toHaveBeenCalled();
-    });
-
-    it("应该触发 ea-node-expand 事件", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const expandHandler = vi.fn();
-      tree.addEventListener("ea-node-expand", expandHandler);
-
-      // 模拟触发事件
-      tree.dispatchEvent(
-        new CustomEvent("ea-node-expand", {
-          detail: { data: tree.data[0], node: null, expanded: true },
-        })
-      );
-
-      expect(expandHandler).toHaveBeenCalled();
-    });
-
-    it("应该触发 ea-node-collapse 事件", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const collapseHandler = vi.fn();
-      tree.addEventListener("ea-node-collapse", collapseHandler);
-
-      // 模拟触发事件
-      tree.dispatchEvent(
-        new CustomEvent("ea-node-collapse", {
-          detail: { data: tree.data[0], node: null, expanded: false },
-        })
-      );
-
-      expect(collapseHandler).toHaveBeenCalled();
-    });
-
-    it("应该触发 ea-current-change 事件", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const changeHandler = vi.fn();
-      tree.addEventListener("ea-current-change", changeHandler);
-
-      // 模拟触发事件
-      tree.dispatchEvent(
-        new CustomEvent("ea-current-change", {
-          detail: { data: tree.data[0], node: null },
-        })
-      );
-
-      expect(changeHandler).toHaveBeenCalled();
-    });
-  });
-
-  /**
-   * Methods 测试
-   */
-  describe("Methods", () => {
-    it("应该支持 getCheckedNodes 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["show-checkbox"] = true;
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.getCheckedNodes).toBe("function");
-    });
-
-    it("应该支持 getCheckedKeys 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
-      tree["show-checkbox"] = true;
-      tree.data = generateIdTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.getCheckedKeys).toBe("function");
-    });
-
-    it("应该支持 setCheckedKeys 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
-      tree["show-checkbox"] = true;
-      tree.data = generateIdTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.setCheckedKeys).toBe("function");
-    });
-
-    it("应该支持 setChecked 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["show-checkbox"] = true;
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.setChecked).toBe("function");
-    });
-
-    it("应该支持 getCurrentKey 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
-      tree.data = generateIdTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.getCurrentKey).toBe("function");
-    });
-
-    it("应该支持 getCurrentNode 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.getCurrentNode).toBe("function");
-    });
-
-    it("应该支持 setCurrentKey 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
-      tree.data = generateIdTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.setCurrentKey).toBe("function");
-    });
-
-    it("应该支持 getNode 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
-      tree.data = generateIdTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.getNode).toBe("function");
-    });
-
-    it("应该支持 getHalfCheckedNodes 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["show-checkbox"] = true;
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.getHalfCheckedNodes).toBe("function");
-    });
-
-    it("应该支持 getHalfCheckedKeys 方法", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["node-key"] = "id";
-      tree["show-checkbox"] = true;
-      tree.data = generateIdTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(typeof tree.getHalfCheckedKeys).toBe("function");
-    });
-  });
-
-  /**
-   * 组合测试
-   */
-  describe("Combined Tests", () => {
-    it("应该支持多种属性组合", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["show-checkbox"] = true;
-      tree["check-strictly"] = true;
-      tree["node-key"] = "id";
-      tree["expand-on-icon-click"] = true;
-      tree.data = generateIdTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree["show-checkbox"]).toBe(true);
-      expect(tree["check-strictly"]).toBe(true);
-      expect(tree["node-key"]).toBe("id");
-      expect(tree["expand-on-icon-click"]).toBe(true);
-    });
-
-    it("应该支持带禁用项的数据", async () => {
-      const tree = document.createElement("ea-tree");
-      tree["show-checkbox"] = true;
+      tree.showCheckbox = true;
       tree.data = [
         {
           id: 1,
           label: "Parent",
           children: [
-            { id: 2, label: "Child 1", disabled: true },
+            {
+              id: 2,
+              label: "Child",
+              children: [
+                { id: 3, label: "Grandchild 1" },
+                { id: 4, label: "Grandchild 2" },
+              ],
+            },
+          ],
+        },
+      ];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      const leafNode = findNodeByPath(tree, "1$-1-1");
+      const parentNode = findNodeByPath(tree, "1$-1");
+      const rootNode = findNodeByPath(tree, "1$");
+
+      expect(leafNode.classList.contains("is-checked")).toBe(true);
+      expect(parentNode.classList.contains("is-indeterminate")).toBe(true);
+      expect(parentNode.classList.contains("is-checked")).toBe(false);
+      expect(rootNode.classList.contains("is-indeterminate")).toBe(true);
+      expect(rootNode.classList.contains("is-checked")).toBe(false);
+    });
+
+    it("勾选所有子节点应该更新父节点为 checked", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = [
+        {
+          id: 1,
+          label: "Parent",
+          children: [
+            { id: 2, label: "Child 1" },
             { id: 3, label: "Child 2" },
           ],
         },
       ];
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(tree.data[0].children[0].disabled).toBe(true);
+      tree._handleCheckboxToggle("1$-1");
+      tree._handleCheckboxToggle("1$-2");
+
+      const parentNode = findNodeByPath(tree, "1$");
+      expect(parentNode.classList.contains("is-checked")).toBe(true);
+      expect(parentNode.classList.contains("is-indeterminate")).toBe(false);
+    });
+
+    it("取消勾选一个子节点应该将父节点从 checked 变为 indeterminate", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = [
+        {
+          id: 1,
+          label: "Parent",
+          children: [
+            { id: 2, label: "Child 1" },
+            { id: 3, label: "Child 2" },
+          ],
+        },
+      ];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$-1");
+      tree._handleCheckboxToggle("1$-2");
+
+      expect(findNodeByPath(tree, "1$").classList.contains("is-checked")).toBe(
+        true
+      );
+
+      tree._handleCheckboxToggle("1$-1");
+
+      const parentNode = findNodeByPath(tree, "1$");
+      expect(parentNode.classList.contains("is-checked")).toBe(false);
+      expect(parentNode.classList.contains("is-indeterminate")).toBe(true);
+    });
+
+    it("勾选父节点应该自动勾选所有子节点", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$");
+
+      const rootNode = findNodeByPath(tree, "1$");
+      const childNode = findNodeByPath(tree, "1$-1");
+      const grandchildNode = findNodeByPath(tree, "1$-1-1");
+
+      expect(rootNode.classList.contains("is-checked")).toBe(true);
+      expect(childNode.classList.contains("is-checked")).toBe(true);
+      expect(grandchildNode.classList.contains("is-checked")).toBe(true);
+    });
+
+    it("取消勾选父节点应该自动取消所有子节点", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$");
+      expect(
+        findNodeByPath(tree, "1$-1").classList.contains("is-checked")
+      ).toBe(true);
+
+      tree._handleCheckboxToggle("1$");
+
+      expect(findNodeByPath(tree, "1$").classList.contains("is-checked")).toBe(
+        false
+      );
+      expect(
+        findNodeByPath(tree, "1$-1").classList.contains("is-checked")
+      ).toBe(false);
+      expect(
+        findNodeByPath(tree, "1$-1-1").classList.contains("is-checked")
+      ).toBe(false);
+    });
+
+    it("checkStrictly 模式下父子不联动", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.checkStrictly = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$");
+
+      const rootNode = findNodeByPath(tree, "1$");
+      const childNode = findNodeByPath(tree, "1$-1");
+      const grandchildNode = findNodeByPath(tree, "1$-1-1");
+
+      expect(rootNode.classList.contains("is-checked")).toBe(true);
+      expect(childNode.classList.contains("is-checked")).toBe(false);
+      expect(grandchildNode.classList.contains("is-checked")).toBe(false);
+    });
+
+    it("checkStrictly 模式下勾选子节点不影响父节点", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.checkStrictly = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      const rootNode = findNodeByPath(tree, "1$");
+      const childNode = findNodeByPath(tree, "1$-1");
+      const grandchildNode = findNodeByPath(tree, "1$-1-1");
+
+      expect(grandchildNode.classList.contains("is-checked")).toBe(true);
+      expect(childNode.classList.contains("is-checked")).toBe(false);
+      expect(childNode.classList.contains("is-indeterminate")).toBe(false);
+      expect(rootNode.classList.contains("is-checked")).toBe(false);
+      expect(rootNode.classList.contains("is-indeterminate")).toBe(false);
+    });
+
+    it("禁用节点不可勾选", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = [
+        {
+          id: 1,
+          label: "Parent",
+          children: [
+            { id: 2, label: "Disabled Child", disabled: true },
+            { id: 3, label: "Normal Child" },
+          ],
+        },
+      ];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$-1");
+
+      const disabledNode = findNodeByPath(tree, "1$-1");
+      expect(disabledNode.classList.contains("is-checked")).toBe(false);
+    });
+
+    it("勾选父节点时禁用子节点不被勾选", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = [
+        {
+          id: 1,
+          label: "Parent",
+          children: [
+            { id: 2, label: "Disabled Child", disabled: true },
+            { id: 3, label: "Normal Child" },
+          ],
+        },
+      ];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$");
+
+      const disabledNode = findNodeByPath(tree, "1$-1");
+      const normalNode = findNodeByPath(tree, "1$-2");
+
+      expect(disabledNode.classList.contains("is-checked")).toBe(false);
+      expect(normalNode.classList.contains("is-checked")).toBe(true);
+    });
+
+    it("defaultCheckedKeys 应该自动勾选指定节点", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.nodeKey = "id";
+      tree.defaultCheckedKeys = [3];
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender(50);
+
+      const grandchildNode = findNodeByPath(tree, "1$-1-1");
+      expect(grandchildNode.classList.contains("is-checked")).toBe(true);
+    });
+
+    it("defaultCheckedKeys 不设置 nodeKey 时不生效", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.defaultCheckedKeys = [3];
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender(50);
+
+      const grandchildNode = findNodeByPath(tree, "1$-1-1");
+      expect(grandchildNode.classList.contains("is-checked")).toBe(false);
+    });
+
+    it("勾选应该触发 ea-check-change 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-check-change", handler);
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      expect(handler).toHaveBeenCalled();
+      const event = handler.mock.calls[0][0];
+      expect(event.detail.checked).toBe(true);
+      expect(event.detail.data.label).toBe("Level three 1-1-1");
+    });
+
+    it("勾选应该触发 ea-check 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.nodeKey = "id";
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-check", handler);
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      expect(handler).toHaveBeenCalled();
+      const event = handler.mock.calls[0][0];
+      expect(event.detail.data).toBeDefined();
+      expect(event.detail.checkedState).toBeDefined();
+      expect(event.detail.checkedState.checkedNodes).toBeDefined();
+      expect(event.detail.checkedState.checkedKeys).toBeDefined();
+      expect(event.detail.checkedState.halfCheckedNodes).toBeDefined();
+      expect(event.detail.checkedState.halfCheckedKeys).toBeDefined();
+    });
+
+    it("disabled 子树中多节点选中时父树状态应正确更新", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = [
+        {
+          id: 1,
+          label: "Level one 1",
+          children: [
+            {
+              id: 3,
+              label: "Level two 2-1",
+              children: [
+                { id: 4, label: "Level three 3-1-1" },
+                { id: 5, label: "Level three 3-1-2", disabled: true },
+              ],
+            },
+            {
+              id: 2,
+              label: "Level two 2-2",
+              disabled: true,
+              children: [
+                { id: 6, label: "Level three 3-2-1" },
+                { id: 7, label: "Level three 3-2-2", disabled: true },
+              ],
+            },
+          ],
+        },
+      ];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const grandchildA1 = findNodeByPath(tree, "1$-1-1");
+      expect(grandchildA1).toBeTruthy();
+      tree._handleCheckboxToggle("1$-1-1");
+
+      await waitForRender();
+
+      const rootNode = findNodeByPath(tree, "1$");
+      const childA = findNodeByPath(tree, "1$-1");
+
+      expect(grandchildA1.classList.contains("is-checked")).toBe(true);
+      expect(childA.classList.contains("is-indeterminate")).toBe(true);
+      expect(childA.classList.contains("is-checked")).toBe(false);
+      expect(rootNode.classList.contains("is-indeterminate")).toBe(true);
+      expect(rootNode.classList.contains("is-checked")).toBe(false);
+
+      const grandchildB1 = findNodeByPath(tree, "1$-2-1");
+      expect(grandchildB1).toBeTruthy();
+      tree._handleCheckboxToggle("1$-2-1");
+
+      await waitForRender();
+
+      expect(grandchildB1.classList.contains("is-checked")).toBe(true);
+      expect(rootNode.classList.contains("is-indeterminate")).toBe(true);
+      expect(rootNode.classList.contains("is-checked")).toBe(false);
+    });
+
+    it("checkbox DOM 元素的 checked 状态应该同步更新", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      const checkbox = findCheckboxByPath(tree, "1$-1-1");
+      expect(checkbox.checked).toBe(true);
+    });
+
+    it("checkbox DOM 元素的 indeterminate 状态应该同步更新", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = [
+        {
+          id: 1,
+          label: "Parent",
+          children: [
+            { id: 2, label: "Child 1" },
+            { id: 3, label: "Child 2" },
+          ],
+        },
+      ];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$-1");
+
+      const parentCheckbox = findCheckboxByPath(tree, "1$");
+      expect(parentCheckbox.indeterminate).toBe(true);
     });
   });
 
-  /**
-   * 边界条件测试
-   */
-  describe("Edge Cases", () => {
-    it("空数据应该正常渲染", async () => {
+  describe("expandOnIconClick 行为", () => {
+    it("expandOnIconClick 为 false 时点击节点同时展开和选中", async () => {
       const tree = document.createElement("ea-tree");
-      tree.data = [];
+      tree.data = generateTestData();
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(tree.data).toEqual([]);
-      expect(tree.shadowRoot).toBeDefined();
+      const labelEl = findLabelByPath(tree, "1$");
+      labelEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
+        true
+      );
+      expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
+        true
+      );
     });
 
-    it("没有 children 的叶子节点应该正常渲染", async () => {
+    it("expandOnIconClick 为 true 时点击 toggle icon 只展开不选中", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.expandOnIconClick = true;
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const toggleIcon = findToggleIconByPath(tree, "1$");
+      toggleIcon.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(findNodeByPath(tree, "1$").classList.contains("is-expanded")).toBe(
+        true
+      );
+      expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
+        false
+      );
+    });
+
+    it("expandOnIconClick 为 true 时点击非 icon 区域只选中不展开", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.expandOnIconClick = true;
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const textEl = tree.shadowRoot.querySelector(".ea-tree__text");
+      textEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(
+        true
+      );
+    });
+  });
+
+  describe("右键菜单", () => {
+    it("右键点击节点应该触发 ea-node-contextmenu 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-contextmenu", handler);
+
+      const labelEl = findLabelByPath(tree, "1$");
+      const event = new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+      });
+      labelEl.dispatchEvent(event);
+
+      expect(handler).toHaveBeenCalledOnce();
+      expect(handler.mock.calls[0][0].detail.data.label).toBe("Level one 1");
+      expect(handler.mock.calls[0][0].detail.node).toBeDefined();
+    });
+  });
+
+  describe("公共方法", () => {
+    describe("getCheckedNodes", () => {
+      it("showCheckbox 为 false 时返回空数组", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.getCheckedNodes()).toEqual([]);
+      });
+
+      it("应该返回所有选中的节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$-1-1");
+
+        const nodes = tree.getCheckedNodes();
+        expect(nodes.length).toBeGreaterThan(0);
+        expect(nodes.some(n => n.label === "Level three 1-1-1")).toBe(true);
+      });
+
+      it("leafOnly 为 true 时只返回叶子节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$");
+
+        const allNodes = tree.getCheckedNodes();
+        const leafNodes = tree.getCheckedNodes(true);
+
+        expect(leafNodes.length).toBeLessThanOrEqual(allNodes.length);
+        leafNodes.forEach(node => {
+          expect(node.children).toBeFalsy();
+        });
+      });
+
+      it("includeHalfChecked 为 true 时包含半选节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$-1-1");
+
+        const nodesWithoutHalf = tree.getCheckedNodes(false, false);
+        const nodesWithHalf = tree.getCheckedNodes(false, true);
+
+        expect(nodesWithHalf.length).toBeGreaterThanOrEqual(
+          nodesWithoutHalf.length
+        );
+      });
+    });
+
+    describe("getCheckedKeys", () => {
+      it("showCheckbox 为 false 时返回空数组", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.getCheckedKeys()).toEqual([]);
+      });
+
+      it("nodeKey 为空时返回空数组", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$-1-1");
+
+        expect(tree.getCheckedKeys()).toEqual([]);
+      });
+
+      it("应该返回所有选中节点的 key", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$-1-1");
+
+        const keys = tree.getCheckedKeys();
+        expect(keys).toContain(3);
+      });
+
+      it("leafOnly 为 true 时只返回叶子节点的 key", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$");
+
+        const allKeys = tree.getCheckedKeys();
+        const leafKeys = tree.getCheckedKeys(true);
+
+        expect(leafKeys.length).toBeLessThanOrEqual(allKeys.length);
+        expect(leafKeys).toContain(3);
+      });
+    });
+
+    describe("setCheckedKeys", () => {
+      it("showCheckbox 为 false 时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCheckedKeys([3])).toBe(false);
+      });
+
+      it("nodeKey 为空时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCheckedKeys([3])).toBe(false);
+      });
+
+      it("应该勾选指定 key 的节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCheckedKeys([3]);
+
+        const node = findNodeByPath(tree, "1$-1-1");
+        expect(node.classList.contains("is-checked")).toBe(true);
+      });
+
+      it("leafOnly 为 true 时跳过非叶子节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCheckedKeys([1], true);
+
+        const rootNode = findNodeByPath(tree, "1$");
+        expect(rootNode.classList.contains("is-checked")).toBe(false);
+      });
+    });
+
+    describe("setChecked", () => {
+      it("showCheckbox 为 false 时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setChecked(3, true)).toBe(false);
+      });
+
+      it("nodeKey 为空时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setChecked(3, true)).toBe(false);
+      });
+
+      it("应该设置指定节点的勾选状态", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setChecked(3, true);
+
+        expect(
+          findNodeByPath(tree, "1$-1-1").classList.contains("is-checked")
+        ).toBe(true);
+
+        tree.setChecked(3, false);
+
+        expect(
+          findNodeByPath(tree, "1$-1-1").classList.contains("is-checked")
+        ).toBe(false);
+      });
+
+      it("禁用节点返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = [
+          {
+            id: 1,
+            label: "Disabled",
+            disabled: true,
+          },
+        ];
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setChecked(1, true)).toBe(false);
+      });
+
+      it("不存在的节点返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setChecked(999, true)).toBe(false);
+      });
+
+      it("应该支持通过数据对象设置勾选状态", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        const result = tree.setChecked(tree.data[0], true);
+        expect(result).toBe(true);
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-checked")
+        ).toBe(true);
+      });
+    });
+
+    describe("setCheckedNodes", () => {
+      it("showCheckbox 为 false 时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCheckedNodes([])).toBe(false);
+      });
+
+      it("nodeKey 为空时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCheckedNodes([])).toBe(false);
+      });
+
+      it("应该勾选指定节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCheckedNodes([tree.data[0]]);
+
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-checked")
+        ).toBe(true);
+      });
+    });
+
+    describe("getCurrentKey", () => {
+      it("nodeKey 为空时返回 null", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._selectPath("1$");
+
+        expect(tree.getCurrentKey()).toBe(null);
+      });
+
+      it("没有选中节点时返回 null", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.getCurrentKey()).toBe(null);
+      });
+
+      it("应该返回当前选中节点的 key", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._selectPath("1$");
+
+        expect(tree.getCurrentKey()).toBe(1);
+      });
+    });
+
+    describe("getCurrentNode", () => {
+      it("没有选中节点时返回 null", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.getCurrentNode()).toBe(null);
+      });
+
+      it("应该返回当前选中节点的数据", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._selectPath("1$");
+
+        const node = tree.getCurrentNode();
+        expect(node).toBeDefined();
+        expect(node.label).toBe("Level one 1");
+      });
+    });
+
+    describe("setCurrentKey", () => {
+      it("nodeKey 为空时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCurrentKey(1)).toBe(false);
+      });
+
+      it("不存在的 key 返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCurrentKey(999)).toBe(false);
+      });
+
+      it("禁用节点返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = [{ id: 1, label: "Disabled", disabled: true }];
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCurrentKey(1)).toBe(false);
+      });
+
+      it("应该选中指定 key 的节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCurrentKey(1);
+
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-selected")
+        ).toBe(true);
+        expect(tree.getCurrentKey()).toBe(1);
+      });
+
+      it("传入 null 应该取消选中", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCurrentKey(1);
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-selected")
+        ).toBe(true);
+
+        tree.setCurrentKey(null);
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-selected")
+        ).toBe(false);
+        expect(tree.getCurrentKey()).toBe(null);
+      });
+
+      it("shouldAutoExpandParent 为 true 时应该展开祖先节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCurrentKey(3, true);
+
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-expanded")
+        ).toBe(true);
+        expect(
+          findNodeByPath(tree, "1$-1").classList.contains("is-expanded")
+        ).toBe(true);
+      });
+
+      it("shouldAutoExpandParent 为 false 时不展开祖先节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCurrentKey(3, false);
+
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-expanded")
+        ).toBe(false);
+      });
+    });
+
+    describe("setCurrentNode", () => {
+      it("nodeKey 为空时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCurrentNode(tree.data[0])).toBe(false);
+      });
+
+      it("不存在的节点返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.setCurrentNode({ id: 999, label: "Not exist" })).toBe(
+          false
+        );
+      });
+
+      it("应该选中指定节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCurrentNode(tree.data[0]);
+
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-selected")
+        ).toBe(true);
+      });
+
+      it("传入 null 应该取消选中", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCurrentNode(tree.data[0]);
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-selected")
+        ).toBe(true);
+
+        tree.setCurrentNode(null);
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-selected")
+        ).toBe(false);
+      });
+
+      it("shouldAutoExpandParent 为 true 时应该展开祖先节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree.setCurrentNode(tree.data[0].children[0], true);
+
+        expect(
+          findNodeByPath(tree, "1$").classList.contains("is-expanded")
+        ).toBe(true);
+      });
+    });
+
+    describe("getNode", () => {
+      it("nodeKey 为空时返回 null", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.getNode(1)).toBe(null);
+      });
+
+      it("不存在的节点返回 null", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.getNode(999)).toBe(null);
+      });
+
+      it("应该通过 key 返回节点信息", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        const nodeInfo = tree.getNode(1);
+        expect(nodeInfo).toBeDefined();
+        expect(nodeInfo.data).toBeDefined();
+        expect(nodeInfo.data.id).toBe(1);
+        expect(nodeInfo.data.label).toBe("Level one 1");
+        expect(nodeInfo.label).toBeDefined();
+      });
+
+      it("应该通过数据对象返回节点信息", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        const nodeInfo = tree.getNode(tree.data[0]);
+        expect(nodeInfo).toBeDefined();
+        expect(nodeInfo.data.id).toBe(1);
+      });
+
+      it("有子节点的节点应该返回 child 元素", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        const nodeInfo = tree.getNode(1);
+        expect(nodeInfo.child).toBeDefined();
+      });
+
+      it("叶子节点返回的 child 应该为 null", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        const nodeInfo = tree.getNode(3);
+        expect(nodeInfo.child).toBeNull();
+      });
+    });
+
+    describe("getHalfCheckedNodes", () => {
+      it("showCheckbox 为 false 时返回空数组", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.getHalfCheckedNodes()).toEqual([]);
+      });
+
+      it("应该返回所有半选节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = [
+          {
+            id: 1,
+            label: "Parent",
+            children: [
+              { id: 2, label: "Child 1" },
+              { id: 3, label: "Child 2" },
+            ],
+          },
+        ];
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$-1");
+
+        const halfNodes = tree.getHalfCheckedNodes();
+        expect(halfNodes.length).toBeGreaterThan(0);
+      });
+    });
+
+    describe("getHalfCheckedKeys", () => {
+      it("showCheckbox 为 false 时返回空数组", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.getHalfCheckedKeys()).toEqual([]);
+      });
+
+      it("nodeKey 为空时返回空数组", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$-1-1");
+
+        expect(tree.getHalfCheckedKeys()).toEqual([]);
+      });
+
+      it("应该返回所有半选节点的 key", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.nodeKey = "id";
+        tree.data = [
+          {
+            id: 1,
+            label: "Parent",
+            children: [
+              { id: 2, label: "Child 1" },
+              { id: 3, label: "Child 2" },
+            ],
+          },
+        ];
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        tree._handleCheckboxToggle("1$-1");
+
+        const halfKeys = tree.getHalfCheckedKeys();
+        expect(halfKeys.length).toBeGreaterThan(0);
+        expect(halfKeys).toContain(1);
+      });
+    });
+
+    describe("updateKeyChildren", () => {
+      it("nodeKey 为空时返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.updateKeyChildren(1, [])).toBe(false);
+      });
+
+      it("不存在的 key 返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.updateKeyChildren(999, [])).toBe(false);
+      });
+
+      it("叶子节点返回 false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(tree.updateKeyChildren(3, [])).toBe(false);
+      });
+
+      it("应该更新指定节点的子节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        const newChildren = [
+          { id: 10, label: "New Child 1" },
+          { id: 11, label: "New Child 2" },
+        ];
+
+        const result = tree.updateKeyChildren(1, newChildren);
+        expect(result).toBe(true);
+
+        await waitForRender(50);
+
+        const nodeInfo = tree.getNode(10);
+        expect(nodeInfo).toBeDefined();
+        expect(nodeInfo.data.label).toBe("New Child 1");
+      });
+
+      it("更新子节点后旧子节点应该被移除", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.nodeKey = "id";
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+
+        await waitForRender();
+
+        expect(findNodeByPath(tree, "1$-1")).toBeTruthy();
+
+        tree.updateKeyChildren(1, [{ id: 10, label: "New Child" }]);
+
+        await waitForRender();
+
+        expect(findNodeByPath(tree, "1$-1")).toBeTruthy();
+      });
+    });
+  });
+
+  describe("边界情况", () => {
+    it("叶子节点应该正常渲染", async () => {
       const tree = document.createElement("ea-tree");
       tree.data = [{ label: "Leaf 1" }, { label: "Leaf 2" }];
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(tree.data.length).toBe(2);
+      expect(findNodeByPath(tree, "1$")).toBeTruthy();
+      expect(findNodeByPath(tree, "2$")).toBeTruthy();
+      expect(findToggleIconByPath(tree, "1$")).toBeFalsy();
     });
 
     it("深层嵌套数据应该正常渲染", async () => {
@@ -647,11 +2044,12 @@ suite("EaTree Component", () => {
       ];
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
-      expect(tree.data[0].children[0].children[0].children[0].label).toBe(
-        "Level 4"
-      );
+      expect(findNodeByPath(tree, "1$")).toBeTruthy();
+      expect(findNodeByPath(tree, "1$-1")).toBeTruthy();
+      expect(findNodeByPath(tree, "1$-1-1")).toBeTruthy();
+      expect(findNodeByPath(tree, "1$-1-1-1")).toBeTruthy();
     });
 
     it("多个 tree 应该独立工作", async () => {
@@ -664,23 +2062,140 @@ suite("EaTree Component", () => {
       container.appendChild(tree1);
       container.appendChild(tree2);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(tree1.data.length).toBe(2);
       expect(tree2.data.length).toBe(1);
+
+      tree1._selectPath("1$");
+      expect(tree1.getCurrentNode()).toBeDefined();
+      expect(tree2.getCurrentNode()).toBe(null);
+    });
+
+    it("动态修改 showCheckbox 应该更新 checkbox 可见性", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(
+        findNodeByPath(tree, "1$").classList.contains("is-show-checkbox")
+      ).toBe(false);
+
+      tree.showCheckbox = true;
+
+      await waitForRender();
+
+      expect(
+        findNodeByPath(tree, "1$").classList.contains("is-show-checkbox")
+      ).toBe(true);
+    });
+
+    it("动态修改 checkStrictly 应该生效", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.checkStrictly).toBe(false);
+
+      tree.checkStrictly = true;
+
+      await waitForRender();
+
+      expect(tree.checkStrictly).toBe(true);
+    });
+
+    it("动态修改 nodeKey 应该生效", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.nodeKey).toBe("");
+
+      tree.nodeKey = "id";
+
+      await waitForRender();
+
+      expect(tree.nodeKey).toBe("id");
+    });
+
+    it("动态修改 expandOnIconClick 应该生效", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.expandOnIconClick).toBe(false);
+
+      tree.expandOnIconClick = true;
+
+      await waitForRender();
+
+      expect(tree.expandOnIconClick).toBe(true);
+    });
+
+    it("带禁用项的数据应该正常渲染", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateDisabledTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.data[0].children[0].disabled).toBe(true);
+    });
+
+    it("重复勾选同一节点为相同状态不应触发多余事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$-1-1", true);
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-check-change", handler);
+
+      tree._handleCheckboxToggle("1$-1-1", true);
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it("多种属性组合应该正常工作", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.checkStrictly = true;
+      tree.nodeKey = "id";
+      tree.expandOnIconClick = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.showCheckbox).toBe(true);
+      expect(tree.checkStrictly).toBe(true);
+      expect(tree.nodeKey).toBe("id");
+      expect(tree.expandOnIconClick).toBe(true);
+      expect(tree.data.length).toBe(1);
     });
   });
 
-  /**
-   * 生命周期测试
-   */
-  describe("Lifecycle", () => {
+  describe("生命周期", () => {
     it("组件连接后应该正确初始化", async () => {
       const tree = document.createElement("ea-tree");
       tree.data = generateTestData();
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       expect(tree.shadowRoot).toBeDefined();
       expect(tree.data.length).toBe(2);
@@ -690,83 +2205,11 @@ suite("EaTree Component", () => {
       const tree = document.createElement("ea-tree");
       container.appendChild(tree);
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await waitForRender();
 
       tree.remove();
 
       expect(container.contains(tree)).toBe(false);
-    });
-
-    it("动态修改 data 应该生效", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const newData = [{ label: "New Item" }];
-      tree.data = newData;
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree.data.length).toBe(1);
-      expect(tree.data[0].label).toBe("New Item");
-    });
-
-    it("动态修改 show-checkbox 应该生效", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      tree["show-checkbox"] = true;
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree["show-checkbox"]).toBe(true);
-    });
-
-    it("动态修改 check-strictly 应该生效", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      tree["check-strictly"] = true;
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree["check-strictly"]).toBe(true);
-    });
-
-    it("动态修改 node-key 应该生效", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      tree["node-key"] = "id";
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree["node-key"]).toBe("id");
-    });
-
-    it("动态修改 expand-on-icon-click 应该生效", async () => {
-      const tree = document.createElement("ea-tree");
-      tree.data = generateTestData();
-      container.appendChild(tree);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      tree["expand-on-icon-click"] = true;
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(tree["expand-on-icon-click"]).toBe(true);
     });
   });
 });

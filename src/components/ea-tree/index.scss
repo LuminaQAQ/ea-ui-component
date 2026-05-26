@@ -1,51 +1,96 @@
 $name: ea-tree;
-$child-name: ea-tree-child;
 
 :host {
   --#{$name}-font-size: var(--font-size-md);
   --#{$name}-text-color: var(--grey-700);
-}
-
-:host {
-  --#{$child-name}-indent-size: 16px;
-  --#{$child-name}-padding-vertical: var(--spacing-sm);
-  --#{$child-name}-padding-horizontal: var(--spacing-md);
-  --#{$child-name}-border-radius: var(--border-radius-sm);
-  --#{$child-name}-transition: var(--transition-normal);
-  --#{$child-name}-item-hover-bg: var(--grey-100);
-  --#{$child-name}-item-height: 36px;
-  --#{$child-name}-icon-size: 16px;
-  --#{$child-name}-icon-color: var(--grey-500);
-  --#{$child-name}-icon-hover-color: var(--blue-500);
+  --#{$name}-toggle-size: 16px;
+  --#{$name}-cursor: pointer;
+  --#{$name}-padding-vertical: var(--spacing-sm);
+  --#{$name}-padding-horizontal: var(--spacing-md);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-transition: var(--transition-normal);
+  --#{$name}-hover-bg: var(--grey-100);
+  --#{$name}-selected-bg: var(--blue-100);
+  --#{$name}-selected-text-color: var(--blue-600);
+  --#{$name}-icon-color: var(--grey-500);
+  --#{$name}-icon-hover-color: var(--blue-500);
+  --#{$name}-indent-size: 16px;
 }
 
 @include block($name) {
   font-size: var(--#{$name}-font-size);
   line-height: var(--#{$name}-font-size);
   color: var(--#{$name}-text-color);
-}
 
-@include block($child-name) {
-  @include element(item) {
-    display: flex;
-    align-items: center;
-    min-height: var(--#{$child-name}-item-height);
-    padding: var(--#{$child-name}-padding-vertical)
-      var(--#{$child-name}-padding-horizontal);
-    margin: 2px 0;
-    border-radius: var(--#{$child-name}-border-radius);
-    cursor: pointer;
-    transition: all var(--#{$child-name}-transition);
-    position: relative;
+  @include element(node) {
+    @include state(selected) {
+      > .ea-tree__label {
+        background-color: var(--#{$name}-selected-bg);
+        color: var(--#{$name}-selected-text-color);
+      }
+    }
 
-    &:hover {
-      background-color: var(--#{$child-name}-item-hover-bg);
-      transform: translateX(2px);
+    @include state(show-checkbox) {
+      .ea-tree__checkbox {
+        display: flex;
+      }
+    }
+
+    @include state(expanded) {
+      > .ea-tree__children {
+        display: block;
+      }
+
+      > .ea-tree__label .ea-tree__toggle-icon {
+        transform: rotate(90deg);
+        color: var(--#{$name}-icon-hover-color);
+      }
     }
   }
 
+  @include element(label) {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--#{$name}-padding-vertical) var(--#{$name}-padding-horizontal);
+    cursor: var(--#{$name}-cursor);
+    border-radius: var(--#{$name}-border-radius);
+    transition: all var(--#{$name}-transition);
+    color: var(--#{$name}-text-color);
+    min-height: 36px;
+    position: relative;
+
+    &:hover {
+      background-color: var(--#{$name}-hover-bg);
+    }
+  }
+
+  @include element(toggle-icon) {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: var(--#{$name}-toggle-size);
+    height: var(--#{$name}-toggle-size);
+    color: var(--#{$name}-icon-color);
+    transition: transform var(--#{$name}-transition), color var(--#{$name}-transition);
+  }
+
+  @include element(checkbox) {
+    display: none;
+    flex-shrink: 0;
+  }
+
+  @include element(text) {
+    flex: 1;
+    min-width: 0;
+    font-weight: inherit;
+    transition: color var(--#{$name}-transition);
+  }
+
   @include element(children) {
-    margin-left: var(--#{$child-name}-indent-size);
+    display: none;
+    margin-left: var(--#{$name}-indent-size);
     padding-left: 0;
     list-style: none;
     position: relative;

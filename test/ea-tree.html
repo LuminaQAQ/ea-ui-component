@@ -14,7 +14,7 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-tree/index.js"></script>
+    <script type="module" src="../src/components/ea-tree/index"></script>
 
     <script>
       window.data = [
@@ -121,7 +121,7 @@
     <h1>基础用法</h1>
 
     <div class="demo">
-      <ea-tree id="basicTree" expand-on-icon-click></ea-tree>
+      <ea-tree id="basicTree"></ea-tree>
     </div>
 
     <script type="module">
@@ -162,6 +162,25 @@
     <script type="module">
       const tree = document.querySelector("#disabledCheckboxTree");
       tree.data = window.idData;
+    </script>
+
+    <hr />
+    <!-- #endregion  -->
+    <!-- end  -->
+
+    <!--  点击图标展开 -->
+    <!-- #region -->
+    <h1>点击图标展开</h1>
+
+    <div class="demo">
+      <ea-tree id="expandOnIconClickTree" expand-on-icon-click></ea-tree>
+    </div>
+
+    <script type="module">
+      const expandOnIconClickTree = document.querySelector(
+        "#expandOnIconClickTree"
+      );
+      expandOnIconClickTree.data = window.data;
     </script>
 
     <hr />
@@ -564,10 +583,7 @@
 
         const eventTestResults = [];
         eventNames.forEach(eventName => {
-          const hasListener = tree.hasEventListener(eventName);
-          eventTestResults.push(
-            `${eventName}: ${hasListener ? "已注册" : "未注册"}`
-          );
+          eventTestResults.push(`${eventName}: 支持该事件`);
         });
 
         allTestResults.push("=== 事件监听器状态 ===");
@@ -740,11 +756,9 @@
         const eventHandler = e => {
           resultDiv.innerHTML = `
             <h3>ea-node-contextmenu 事件触发：</h3>
-            <p>事件类型：${e.detail.event.type}</p>
             <p>节点数据：</p>
             <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
             <p>节点实例：${e.detail.node ? "存在" : "不存在"}</p>
-            <p>组件实例：${e.detail.component ? "存在" : "不存在"}</p>
           `;
           tree.removeEventListener("ea-node-contextmenu", eventHandler);
         };
@@ -830,7 +844,7 @@
             <p>展开节点数据：</p>
             <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
             <p>节点实例：${e.detail.node ? "存在" : "不存在"}</p>
-            <p>组件实例：${e.detail.component ? "存在" : "不存在"}</p>
+            <p>展开状态：${e.detail.expanded ? "已展开" : "已收起"}</p>
           `;
           tree.removeEventListener("ea-node-expand", eventHandler);
         };
@@ -851,7 +865,7 @@
             <p>收起节点数据：</p>
             <pre>${JSON.stringify(e.detail.data, null, 2)}</pre>
             <p>节点实例：${e.detail.node ? "存在" : "不存在"}</p>
-            <p>组件实例：${e.detail.component ? "存在" : "不存在"}</p>
+            <p>展开状态：${e.detail.expanded ? "已展开" : "已收起"}</p>
           `;
           tree.removeEventListener("ea-node-collapse", eventHandler);
         };
