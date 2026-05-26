@@ -169,8 +169,7 @@ export class EaSelect extends EaFormAssociatedBase {
     observer(
       newVal: string | number | boolean | (string | number | boolean)[]
     ) {
-      // 将值转换为字符串形式传递给表单关联
-      this.setValue(newVal?.toString() || "");
+      this.setValue(newVal ? newVal.toString() : null);
       this._handleValueChange(newVal);
     },
   })

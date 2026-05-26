@@ -89,6 +89,7 @@ export class EaColorPicker extends EaFormAssociatedBase {
     type: String,
     default: "",
     observer(this: EaColorPicker) {
+      this.setValue(this.value || null);
       this._updateTriggerColor();
       this._updateStatusIcon();
       if (this._panel) this._panel.setAttribute("value", this.value);

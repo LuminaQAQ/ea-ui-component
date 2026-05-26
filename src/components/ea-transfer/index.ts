@@ -464,13 +464,21 @@ export class EaTransfer extends EaFormAssociatedBase {
   }
 
   private _updateButtonStates(): void {
+    const { disabled } = this.dataProps;
+
     if (this._moveToRightBtn) {
-      (this._moveToRightBtn as any).disabled =
-        this._states.sourceSelectedKeys.size === 0;
+      const movableSourceKeys = this._getMovableKeys(
+        [...this._states.sourceSelectedKeys],
+        disabled
+      );
+      (this._moveToRightBtn as any).disabled = movableSourceKeys.length === 0;
     }
     if (this._moveToLeftBtn) {
-      (this._moveToLeftBtn as any).disabled =
-        this._states.targetSelectedKeys.size === 0;
+      const movableTargetKeys = this._getMovableKeys(
+        [...this._states.targetSelectedKeys],
+        disabled
+      );
+      (this._moveToLeftBtn as any).disabled = movableTargetKeys.length === 0;
     }
   }
 
@@ -592,7 +600,13 @@ export class EaTransfer extends EaFormAssociatedBase {
     });
   }
 
-  private _handleMovableKeys(movableKeys: any[]): void {
+  private _handleMovableKeys(
+    movableKeys: any[],
+    type: "source" | "target"
+  ): void {
+    const selectedKeysKey = `${type}SelectedKeys` as keyof typeof this._states;
+    const selectedKeysSet = this._states[selectedKeysKey] as Set<any>;
+
     movableKeys.forEach((li: any) => {
       const checkbox = li.querySelector(".ea-transfer-panel__item-checkbox");
       if (checkbox) {
@@ -609,7 +623,7 @@ export class EaTransfer extends EaFormAssociatedBase {
         );
       }
 
-      this._states.sourceSelectedKeys.delete(li);
+      selectedKeysSet.delete(li);
     });
   }
 
@@ -632,7 +646,9 @@ export class EaTransfer extends EaFormAssociatedBase {
     const selectedKeys = [...this._states.sourceSelectedKeys];
     const movableKeys = this._getMovableKeys(selectedKeys, disabled);
 
-    this._handleMovableKeys(movableKeys);
+    if (movableKeys.length === 0) return;
+
+    this._handleMovableKeys(movableKeys, "source");
 
     if (this._targetPanel) {
       this._targetPanel.data = [
@@ -669,7 +685,9 @@ export class EaTransfer extends EaFormAssociatedBase {
     const selectedKeys = [...this._states.targetSelectedKeys];
     const movableKeys = this._getMovableKeys(selectedKeys, disabled);
 
-    this._handleMovableKeys(movableKeys);
+    if (movableKeys.length === 0) return;
+
+    this._handleMovableKeys(movableKeys, "target");
 
     if (this._sourcePanel) {
       this._sourcePanel.data = [
@@ -730,7 +748,11 @@ export class EaTransfer extends EaFormAssociatedBase {
   // ==================== 表单验证 ====================
 
   get validationTarget(): HTMLElement | null {
-    return this._targetPanel?.shadowRoot?.querySelector('.ea-transfer-panel__list') || null;
+    return (
+      this._targetPanel?.shadowRoot?.querySelector(
+        ".ea-transfer-panel__list"
+      ) || null
+    );
   }
 
   updateValidity(): void {
@@ -738,10 +760,7 @@ export class EaTransfer extends EaFormAssociatedBase {
     const isEmpty = !val || (Array.isArray(val) && val.length === 0);
 
     if (this.required && isEmpty) {
-      this.internals.setValidity(
-        { valueMissing: true },
-        "请至少选择一项"
-      );
+      this.internals.setValidity({ valueMissing: true }, "请至少选择一项");
     } else {
       this.internals.setValidity({}, "");
     }

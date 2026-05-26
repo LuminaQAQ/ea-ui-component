@@ -38,7 +38,7 @@ export class EaRate extends EaFormAssociatedBase {
     type: Number,
     default: 0,
     observer(this: EaRate, newVal: number) {
-      this.setValue(newVal);
+      this.setValue(newVal ? newVal.toString() : null);
       this._setRateStatus(newVal - 1);
     },
   })

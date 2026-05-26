@@ -329,6 +329,13 @@ export class EaTransferPanel extends EaBase {
   private _handleDataUpdate(newData: HTMLElement[]): void {
     this.clearList();
 
+    const newDataSet = new Set(newData);
+    for (const key of this._states.selectedKeys) {
+      if (!newDataSet.has(key)) {
+        this._states.selectedKeys.delete(key);
+      }
+    }
+
     newData.forEach(item => {
       this._list.appendChild(item);
     });
@@ -342,6 +349,9 @@ export class EaTransferPanel extends EaBase {
     } else {
       this._checkbox.disabled = false;
     }
+
+    this._updateCount();
+    this._updateSelectAllState();
   }
 
   private _handleFilterableUpdateInternal(filterable: boolean): void {
@@ -411,13 +421,14 @@ export class EaTransferPanel extends EaBase {
       const visibleSelectedItems = [...this._states.selectedKeys].filter(
         li => !li.classList.contains("is-filtered-out")
       ).length;
-      isAllChecked = visibleSelectedItems >= visibleItems;
+      isAllChecked = visibleItems > 0 && visibleSelectedItems >= visibleItems;
       isSomeChecked = visibleSelectedItems > 0;
     } else {
       const totalItems = this._list.querySelectorAll(
         `.${bem.e("item")}:not(.is-disabled)`
       ).length;
-      isAllChecked = this._states.selectedKeys.size >= totalItems;
+      isAllChecked =
+        totalItems > 0 && this._states.selectedKeys.size >= totalItems;
       isSomeChecked = this._states.selectedKeys.size > 0;
     }
 

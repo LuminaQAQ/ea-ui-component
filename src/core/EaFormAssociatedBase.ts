@@ -170,7 +170,11 @@ export class EaFormAssociatedBase extends EaBase {
     type: String,
     default: "",
     observer(this: EaFormAssociatedBase, newVal: string) {
-      this.validationTarget?.setAttribute("pattern", newVal);
+      if (newVal) {
+        this.validationTarget?.setAttribute("pattern", newVal);
+      } else {
+        this.validationTarget?.removeAttribute("pattern");
+      }
     },
   })
   pattern: string | null = null;
@@ -319,7 +323,11 @@ export class EaFormAssociatedBase extends EaBase {
     if (this.tagName === "EA-BUTTON") return;
 
     const target = this.validationTarget as HTMLInputElement | undefined;
-    if (target && typeof target.setCustomValidity === "function") {
+    if (
+      target &&
+      target !== this &&
+      typeof target.setCustomValidity === "function"
+    ) {
       target.setCustomValidity(message);
     }
 
@@ -345,7 +353,11 @@ export class EaFormAssociatedBase extends EaBase {
     }
 
     const target = this.validationTarget as HTMLInputElement | undefined;
-    if (target && typeof target.setCustomValidity === "function") {
+    if (
+      target &&
+      target !== this &&
+      typeof target.setCustomValidity === "function"
+    ) {
       target.setCustomValidity("");
     }
   }

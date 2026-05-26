@@ -394,7 +394,11 @@ export class EaInput extends EaFormAssociatedBase {
     default: "",
     observer(this: EaInput, newVal: string) {
       if (this._original instanceof HTMLInputElement) {
-        this._original.pattern = newVal;
+        if (newVal) {
+          this._original.pattern = newVal;
+        } else {
+          this._original.removeAttribute("pattern");
+        }
       }
     },
   })
@@ -540,7 +544,9 @@ export class EaInput extends EaFormAssociatedBase {
       inputElement.max = this.max as string;
       inputElement.min = this.min as string;
       inputElement.step = this.step as string;
-      inputElement.pattern = this.pattern as string;
+      if (this.pattern) {
+        inputElement.pattern = this.pattern as string;
+      }
     }
 
     if (this.form) {
