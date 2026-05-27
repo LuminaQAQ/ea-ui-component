@@ -13,6 +13,7 @@ describe("EaAlert", () => {
 
   afterEach(() => {
     container.remove();
+    vi.useRealTimers();
   });
 
   describe("Basic Rendering", () => {
@@ -72,6 +73,40 @@ describe("EaAlert", () => {
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn).not.toBeNull();
+    });
+
+    it("close-btn 应该是 button 元素", () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.tagName).toBe("BUTTON");
+    });
+
+    it("close-btn 应该有 type=button 属性", () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.getAttribute("type")).toBe("button");
+    });
+
+    it("close-btn 应该是容器的直接子元素", () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.parentElement).toBe(containerEl);
+    });
+
+    it("close-btn 不应该在 content 元素内", () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      const content = alert.shadowRoot.querySelector(".ea-alert__content");
+      const closeBtn = content.querySelector(".ea-alert__close-btn");
+      expect(closeBtn).toBeNull();
     });
   });
 
@@ -196,13 +231,30 @@ describe("EaAlert", () => {
       expect(headingEl.textContent).toContain("New Heading");
     });
 
-    it("heading 为空时 heading 元素应该只包含 slot", async () => {
+    it("heading 为空时 heading 元素应该包含 slot", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
       await waitForRender();
 
       const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
+      const slot = headingEl.querySelector('slot[name="heading"]');
+      expect(slot).not.toBeNull();
+    });
+
+    it("heading 从有值变为空时应该恢复 slot", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("heading", "Has Value");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
+      expect(headingEl.textContent).toContain("Has Value");
+
+      alert.setAttribute("heading", "");
+      await waitForRender();
+
       const slot = headingEl.querySelector('slot[name="heading"]');
       expect(slot).not.toBeNull();
     });
@@ -284,6 +336,58 @@ describe("EaAlert", () => {
 
       const slot = descriptionEl.querySelector("slot");
       expect(slot).not.toBeNull();
+    });
+
+    it("description 为空时不应有 is-has-description 状态 class", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-has-description")).toBe(false);
+    });
+
+    it("description 有值时应该添加 is-has-description 状态 class", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("description", "Some description");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-has-description")).toBe(true);
+    });
+
+    it("description 从有值变为空时应该移除 is-has-description 状态 class", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("description", "Has description");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-has-description")).toBe(true);
+
+      alert.setAttribute("description", "");
+      await waitForRender();
+
+      expect(containerEl.classList.contains("is-has-description")).toBe(false);
+    });
+
+    it("description 从空变为有值时应该添加 is-has-description 状态 class", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-has-description")).toBe(false);
+
+      alert.setAttribute("description", "Now has description");
+      await waitForRender();
+
+      expect(containerEl.classList.contains("is-has-description")).toBe(true);
     });
   });
 
@@ -458,7 +562,7 @@ describe("EaAlert", () => {
 
       await waitForRender();
 
-      alert.setAttribute("closable", "false");
+      alert.closable = false;
       await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
@@ -471,13 +575,13 @@ describe("EaAlert", () => {
 
       await waitForRender();
 
-      alert.setAttribute("closable", "false");
+      alert.closable = false;
       await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
 
-      alert.setAttribute("closable", "");
+      alert.closable = true;
       await waitForRender();
 
       expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
@@ -492,6 +596,41 @@ describe("EaAlert", () => {
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("关闭");
+    });
+
+    it("closable 从 true 变为 false 时应该清空 closeText 内容", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("close-text", "关闭");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.textContent).toBe("关闭");
+
+      alert.closable = false;
+      await waitForRender();
+
+      expect(closeBtn.innerHTML).toBe("");
+    });
+
+    it("closable 从 false 变为 true 且 closeText 有值时应该显示 closeText", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("close-text", "知道了");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.closable = false;
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.innerHTML).toBe("");
+
+      alert.closable = true;
+      await waitForRender();
+
+      expect(closeBtn.textContent).toBe("知道了");
     });
   });
 
@@ -541,6 +680,42 @@ describe("EaAlert", () => {
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       expect(closeBtn.textContent).toBe("知道了");
+      expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
+    });
+
+    it("closeText 清空后应该恢复关闭图标", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("close-text", "关闭");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.textContent).toBe("关闭");
+      expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
+
+      alert.setAttribute("close-text", "");
+      await waitForRender();
+
+      expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
+    });
+
+    it("closeText 清空后 closable 为 false 时不应恢复图标", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("close-text", "关闭");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.closable = false;
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.innerHTML).toBe("");
+
+      alert.setAttribute("close-text", "");
+      await waitForRender();
+
       expect(closeBtn.querySelector(".ea-alert__close-icon")).toBeNull();
     });
   });
@@ -603,7 +778,7 @@ describe("EaAlert", () => {
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
 
-      alert.setAttribute("show-icon", "false");
+      alert.showIcon = false;
       await waitForRender();
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
@@ -784,6 +959,27 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("ea-alert--primary")).toBe(false);
       expect(containerEl.classList.contains("ea-alert--light")).toBe(false);
     });
+
+    it("description 有值时应该添加 is-has-description 状态 class", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("description", "Description text");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-has-description")).toBe(true);
+    });
+
+    it("description 为空时不应有 is-has-description 状态 class", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-has-description")).toBe(false);
+    });
   });
 
   describe("CSS Parts", () => {
@@ -876,7 +1072,18 @@ describe("EaAlert", () => {
 
       await waitForRender();
 
-      alert.setAttribute("closable", "false");
+      alert.closable = false;
+      await waitForRender();
+
+      const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
+      expect(closeIcon).toBeNull();
+    });
+
+    it("closeText 有值时不应有 close-icon part", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("close-text", "关闭");
+      container.appendChild(alert);
+
       await waitForRender();
 
       const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
@@ -884,7 +1091,7 @@ describe("EaAlert", () => {
     });
   });
 
-  describe("Close Event", () => {
+  describe("Close Event (ea-close)", () => {
     it("点击关闭按钮应该添加 is-before-close 状态 class", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
@@ -898,34 +1105,39 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-before-close")).toBe(true);
     });
 
-    it("点击关闭按钮后 transitionend 应该触发 close 事件", async () => {
+    it("点击关闭按钮后 transitionend 应该触发 ea-close 事件", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
       await waitForRender();
 
       const closeHandler = vi.fn();
-      alert.addEventListener("close", closeHandler);
+      alert.addEventListener("ea-close", closeHandler);
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
       closeBtn.click();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      containerEl.dispatchEvent(
+        new TransitionEvent("transitionend", {
+          bubbles: true,
+          propertyName: "filter",
+        })
+      );
 
       await waitForRender();
 
       expect(closeHandler).toHaveBeenCalled();
     });
 
-    it("close 事件应该包含 detail: { visible: false }", async () => {
+    it("ea-close 事件应该包含 detail: { visible: false }", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
       await waitForRender();
 
       let eventDetail = null;
-      alert.addEventListener("close", e => {
+      alert.addEventListener("ea-close", e => {
         eventDetail = e.detail;
       });
 
@@ -933,7 +1145,12 @@ describe("EaAlert", () => {
       closeBtn.click();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      containerEl.dispatchEvent(
+        new TransitionEvent("transitionend", {
+          bubbles: true,
+          propertyName: "filter",
+        })
+      );
 
       await waitForRender();
 
@@ -950,7 +1167,12 @@ describe("EaAlert", () => {
       closeBtn.click();
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      containerEl.dispatchEvent(
+        new TransitionEvent("transitionend", {
+          bubbles: true,
+          propertyName: "filter",
+        })
+      );
 
       await waitForRender();
 
@@ -970,9 +1192,14 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-before-close")).toBe(true);
 
       const closeHandler = vi.fn();
-      alert.addEventListener("close", closeHandler);
+      alert.addEventListener("ea-close", closeHandler);
 
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      containerEl.dispatchEvent(
+        new TransitionEvent("transitionend", {
+          bubbles: true,
+          propertyName: "filter",
+        })
+      );
 
       await waitForRender();
 
@@ -993,6 +1220,89 @@ describe("EaAlert", () => {
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-before-close")).toBe(false);
+    });
+
+    it("closable 为 false 且 autoClose 为 0 时不应触发关闭", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.closable = false;
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeHandler = vi.fn();
+      alert.addEventListener("ea-close", closeHandler);
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      closeBtn.click();
+
+      expect(closeHandler).not.toHaveBeenCalled();
+    });
+
+    it("ea-close 事件应该 bubbles 且 composed", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      let caughtEvent = null;
+      alert.addEventListener("ea-close", e => {
+        caughtEvent = e;
+      });
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      closeBtn.click();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      containerEl.dispatchEvent(
+        new TransitionEvent("transitionend", {
+          bubbles: true,
+          propertyName: "filter",
+        })
+      );
+
+      await waitForRender();
+
+      expect(caughtEvent).not.toBeNull();
+      expect(caughtEvent.bubbles).toBe(true);
+      expect(caughtEvent.composed).toBe(true);
+    });
+  });
+
+  describe("Open Event (ea-open)", () => {
+    it("showAfter 到期后应该触发 ea-open 事件", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("show-after", "100");
+
+      const openHandler = vi.fn();
+      alert.addEventListener("ea-open", openHandler);
+
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      expect(openHandler).not.toHaveBeenCalled();
+
+      await waitForRender(200);
+
+      expect(openHandler).toHaveBeenCalled();
+    });
+
+    it("ea-open 事件应该 bubbles 且 composed", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("show-after", "100");
+
+      let caughtEvent = null;
+      alert.addEventListener("ea-open", e => {
+        caughtEvent = e;
+      });
+
+      container.appendChild(alert);
+
+      await waitForRender(250);
+
+      expect(caughtEvent).not.toBeNull();
+      expect(caughtEvent.bubbles).toBe(true);
+      expect(caughtEvent.composed).toBe(true);
     });
   });
 
@@ -1042,12 +1352,12 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-hide")).toBe(false);
     });
 
-    it("showAfter 大于 0 时应该延迟触发 open 事件", async () => {
+    it("showAfter 大于 0 时应该延迟触发 ea-open 事件", async () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("show-after", "100");
 
       const openHandler = vi.fn();
-      alert.addEventListener("open", openHandler);
+      alert.addEventListener("ea-open", openHandler);
 
       container.appendChild(alert);
 
@@ -1075,18 +1385,76 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-hide")).toBe(false);
     });
 
-    it("设置 show-after=0 时应该立即触发 open 事件", async () => {
+    it("设置 show-after=0 时应该立即触发 ea-open 事件", async () => {
       const alert = document.createElement("ea-alert");
       container.appendChild(alert);
 
       await waitForRender();
 
       const openHandler = vi.fn();
-      alert.addEventListener("open", openHandler);
+      alert.addEventListener("ea-open", openHandler);
 
       alert.setAttribute("show-after", "0");
       await waitForRender();
 
+      expect(openHandler).toHaveBeenCalled();
+    });
+
+    it("showAfter 隐藏期间变更其他属性不应丢失 is-hide 状态", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("show-after", "500");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-hide")).toBe(true);
+
+      alert.setAttribute("variant", "success");
+      await waitForRender();
+
+      expect(containerEl.classList.contains("is-hide")).toBe(true);
+      expect(containerEl.classList.contains("ea-alert--success")).toBe(true);
+    });
+
+    it("重新设置 showAfter 应该清除之前的定时器", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("show-after", "200");
+
+      const openHandler = vi.fn();
+      alert.addEventListener("ea-open", openHandler);
+
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.setAttribute("show-after", "300");
+      await waitForRender();
+
+      await waitForRender(150);
+      expect(openHandler).not.toHaveBeenCalled();
+
+      await waitForRender(200);
+      expect(openHandler).toHaveBeenCalled();
+    });
+
+    it("showAfter 到期后应该移除 is-hide 并触发 ea-open 事件", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("show-after", "100");
+
+      const openHandler = vi.fn();
+      alert.addEventListener("ea-open", openHandler);
+
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-hide")).toBe(true);
+
+      await waitForRender(200);
+
+      expect(containerEl.classList.contains("is-hide")).toBe(false);
       expect(openHandler).toHaveBeenCalled();
     });
   });
@@ -1101,7 +1469,7 @@ describe("EaAlert", () => {
       expect(alert.autoClose).toBe(0);
     });
 
-    it("autoClose 大于 0 且有 auto-close 属性时应该自动关闭", async () => {
+    it("autoClose 大于 0 时应该自动关闭", async () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("auto-close", "100");
       container.appendChild(alert);
@@ -1114,20 +1482,25 @@ describe("EaAlert", () => {
       expect(containerEl.classList.contains("is-before-close")).toBe(true);
     });
 
-    it("autoClose 大于 0 时应该触发 close 事件", async () => {
+    it("autoClose 大于 0 时应该触发 ea-close 事件", async () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("auto-close", "100");
       container.appendChild(alert);
 
       const closeHandler = vi.fn();
-      alert.addEventListener("close", closeHandler);
+      alert.addEventListener("ea-close", closeHandler);
 
       await waitForRender();
 
       await waitForRender(200);
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
-      containerEl.dispatchEvent(new Event("transitionend", { bubbles: true }));
+      containerEl.dispatchEvent(
+        new TransitionEvent("transitionend", {
+          bubbles: true,
+          propertyName: "filter",
+        })
+      );
 
       await waitForRender();
 
@@ -1149,6 +1522,55 @@ describe("EaAlert", () => {
 
       const containerEl = alert.shadowRoot.querySelector(".ea-alert");
       expect(containerEl.classList.contains("is-before-close")).toBe(true);
+    });
+
+    it("autoClose 为 0 时不应自动关闭", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("auto-close", "0");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      await waitForRender(200);
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+    });
+
+    it("重新设置 autoClose 应该清除之前的定时器", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("auto-close", "200");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.setAttribute("auto-close", "300");
+      await waitForRender();
+
+      await waitForRender(150);
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+
+      await waitForRender(200);
+
+      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+    });
+
+    it("设置 autoClose 为 0 应该取消自动关闭定时器", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("auto-close", "100");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.setAttribute("auto-close", "0");
+      await waitForRender();
+
+      await waitForRender(200);
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-before-close")).toBe(false);
     });
   });
 
@@ -1190,6 +1612,121 @@ describe("EaAlert", () => {
       await waitForRender(200);
 
       expect(containerEl.classList.contains("is-before-close")).toBe(true);
+    });
+
+    it("hideAfter 为 0 时应该立即开始关闭动画", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      closeBtn.click();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+    });
+
+    it("组件断开连接时应该清理 hideAfter 定时器", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("hide-after", "500");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      closeBtn.click();
+
+      alert.remove();
+
+      const closeHandler = vi.fn();
+      alert.addEventListener("ea-close", closeHandler);
+
+      await waitForRender(600);
+
+      expect(closeHandler).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("updateContainerClasslist Method", () => {
+    it("应该返回正确的 BEM 类名字符串", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("variant", "primary");
+      alert.setAttribute("effect", "dark");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const className = alert.updateContainerClasslist();
+      expect(className).toContain("ea-alert");
+      expect(className).toContain("ea-alert--primary");
+      expect(className).toContain("ea-alert--dark");
+    });
+
+    it("center 为 true 时返回的类名应包含 is-center", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("center", "");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const className = alert.updateContainerClasslist();
+      expect(className).toContain("is-center");
+    });
+
+    it("center 为 false 时返回的类名不应包含 is-center", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const className = alert.updateContainerClasslist();
+      expect(className).not.toContain("is-center");
+    });
+
+    it("is-hide 状态应该反映在返回的类名中", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("show-after", "500");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const className = alert.updateContainerClasslist();
+      expect(className).toContain("is-hide");
+    });
+
+    it("应该同时包含 variant 和 effect 修饰符", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("variant", "warning");
+      alert.setAttribute("effect", "dark");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const className = alert.updateContainerClasslist();
+      expect(className).toContain("ea-alert--warning");
+      expect(className).toContain("ea-alert--dark");
+    });
+
+    it("description 有值时返回的类名应包含 is-has-description", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("description", "Description text");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const className = alert.updateContainerClasslist();
+      expect(className).toContain("is-has-description");
+    });
+
+    it("description 为空时返回的类名不应包含 is-has-description", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const className = alert.updateContainerClasslist();
+      expect(className).not.toContain("is-has-description");
     });
   });
 
@@ -1365,6 +1902,55 @@ describe("EaAlert", () => {
     });
   });
 
+  describe("Accessibility", () => {
+    it("关闭按钮应该是 button 元素", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.tagName).toBe("BUTTON");
+    });
+
+    it("关闭按钮应该有 type=button 属性", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.getAttribute("type")).toBe("button");
+    });
+
+    it("关闭按钮应该可以通过键盘聚焦", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      closeBtn.focus();
+      expect(closeBtn).toBe(alert.shadowRoot.activeElement);
+    });
+
+    it("关闭按钮应该可以通过 Enter 键触发关闭", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
+      closeBtn.dispatchEvent(enterEvent);
+
+      closeBtn.click();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+    });
+  });
+
   describe("Lifecycle", () => {
     it("组件连接时应该正确初始化", async () => {
       const alert = document.createElement("ea-alert");
@@ -1405,6 +1991,42 @@ describe("EaAlert", () => {
       await waitForRender();
 
       expect(alert.shadowRoot).toBeDefined();
+    });
+
+    it("组件断开连接时应该清理 showAfter 定时器", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("show-after", "500");
+
+      const openHandler = vi.fn();
+      alert.addEventListener("ea-open", openHandler);
+
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.remove();
+
+      await waitForRender(600);
+
+      expect(openHandler).not.toHaveBeenCalled();
+    });
+
+    it("组件断开连接时应该清理 autoClose 定时器", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("auto-close", "200");
+
+      const closeHandler = vi.fn();
+      alert.addEventListener("ea-close", closeHandler);
+
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.remove();
+
+      await waitForRender(300);
+
+      expect(closeHandler).not.toHaveBeenCalled();
     });
   });
 
@@ -1460,22 +2082,6 @@ describe("EaAlert", () => {
       expect(closeBtn.querySelector(".ea-alert__close-icon")).not.toBeNull();
     });
 
-    it("设置 closeText 后再清空应该清空关闭按钮文本", async () => {
-      const alert = document.createElement("ea-alert");
-      alert.setAttribute("close-text", "关闭");
-      container.appendChild(alert);
-
-      await waitForRender();
-
-      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
-      expect(closeBtn.textContent).toBe("关闭");
-
-      alert.setAttribute("close-text", "");
-      await waitForRender();
-
-      expect(closeBtn.textContent).toBe("");
-    });
-
     it("showIcon 从 false 变为 true 时应该根据当前 variant 显示正确图标", async () => {
       const alert = document.createElement("ea-alert");
       alert.setAttribute("variant", "danger");
@@ -1504,7 +2110,7 @@ describe("EaAlert", () => {
       let iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
       expect(iconEl).not.toBeNull();
 
-      alert.setAttribute("show-icon", "false");
+      alert.showIcon = false;
       await waitForRender();
 
       iconEl = alert.shadowRoot.querySelector(".ea-alert__icon");
@@ -1517,7 +2123,7 @@ describe("EaAlert", () => {
 
       await waitForRender();
 
-      alert.setAttribute("closable", "false");
+      alert.closable = false;
       await waitForRender();
 
       const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
@@ -1530,11 +2136,229 @@ describe("EaAlert", () => {
 
       await waitForRender();
 
-      alert.setAttribute("closable", "false");
+      alert.closable = false;
       await waitForRender();
 
       const closeIcon = alert.shadowRoot.querySelector('[part="close-icon"]');
       expect(closeIcon).toBeNull();
+    });
+
+    it("closeText 设置为 HTML 字符串时应该被安全处理", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("close-text", "<script>alert('xss')</script>");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      expect(closeBtn.querySelector("script")).toBeNull();
+    });
+
+    it("heading 设置为安全 HTML 标签时应该保留", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("heading", "<b>Bold Heading</b>");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
+      expect(headingEl.querySelector("b")).not.toBeNull();
+      expect(headingEl.textContent).toContain("Bold Heading");
+    });
+
+    it("description 设置为安全 HTML 标签时应该保留", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("description", "<em>Italic Description</em>");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const descriptionEl = alert.shadowRoot.querySelector(
+        ".ea-alert__description"
+      );
+      expect(descriptionEl.querySelector("em")).not.toBeNull();
+      expect(descriptionEl.textContent).toContain("Italic Description");
+    });
+
+    it("关闭过程中 AbortController 应该正确管理 transitionend 监听", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      closeBtn.click();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+
+      alert.remove();
+
+      expect(container.contains(alert)).toBe(false);
+    });
+
+    it("重复点击关闭按钮不应产生多个 transitionend 监听", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const closeHandler = vi.fn();
+      alert.addEventListener("ea-close", closeHandler);
+
+      const closeBtn = alert.shadowRoot.querySelector(".ea-alert__close-btn");
+      closeBtn.click();
+      closeBtn.click();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      containerEl.dispatchEvent(
+        new TransitionEvent("transitionend", {
+          bubbles: true,
+          propertyName: "filter",
+        })
+      );
+
+      await waitForRender();
+
+      expect(closeHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("showAfter=0 设置后不应该添加 is-hide class", async () => {
+      const alert = document.createElement("ea-alert");
+      alert.setAttribute("show-after", "0");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-hide")).toBe(false);
+    });
+
+    it("快速连续修改 showAfter 应该只使用最后一个定时器", async () => {
+      const alert = document.createElement("ea-alert");
+
+      const openHandler = vi.fn();
+      alert.addEventListener("ea-open", openHandler);
+
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.setAttribute("show-after", "500");
+      alert.setAttribute("show-after", "200");
+      alert.setAttribute("show-after", "100");
+
+      await waitForRender(50);
+      expect(openHandler).not.toHaveBeenCalled();
+
+      await waitForRender(100);
+      expect(openHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("快速连续修改 autoClose 应该只使用最后一个定时器", async () => {
+      const alert = document.createElement("ea-alert");
+
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      alert.setAttribute("auto-close", "500");
+      alert.setAttribute("auto-close", "200");
+      alert.setAttribute("auto-close", "100");
+
+      await waitForRender(50);
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      expect(containerEl.classList.contains("is-before-close")).toBe(false);
+
+      await waitForRender(100);
+
+      expect(containerEl.classList.contains("is-before-close")).toBe(true);
+    });
+  });
+
+  describe("DOM Structure", () => {
+    it("容器应该包含 icon-wrap、content、close-btn 三个直接子元素", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const containerEl = alert.shadowRoot.querySelector(".ea-alert");
+      const directChildren = Array.from(containerEl.children);
+
+      const hasIconWrap = directChildren.some(el =>
+        el.classList.contains("ea-alert__icon-wrap")
+      );
+      const hasContent = directChildren.some(el =>
+        el.classList.contains("ea-alert__content")
+      );
+      const hasCloseBtn = directChildren.some(el =>
+        el.classList.contains("ea-alert__close-btn")
+      );
+
+      expect(hasIconWrap).toBe(true);
+      expect(hasContent).toBe(true);
+      expect(hasCloseBtn).toBe(true);
+    });
+
+    it("content 元素应该包含 heading 和 description", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const content = alert.shadowRoot.querySelector(".ea-alert__content");
+      const heading = content.querySelector(".ea-alert__heading");
+      const description = content.querySelector(".ea-alert__description");
+
+      expect(heading).not.toBeNull();
+      expect(description).not.toBeNull();
+    });
+
+    it("content 元素应该有 flex: 1 样式", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const content = alert.shadowRoot.querySelector(".ea-alert__content");
+      expect(content).not.toBeNull();
+    });
+
+    it("icon-wrap 元素应该包含对应 slot", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const iconWrap = alert.shadowRoot.querySelector(".ea-alert__icon-wrap");
+      const slot = iconWrap.querySelector('slot[name="icon"]');
+      expect(slot).not.toBeNull();
+    });
+
+    it("heading 元素应该包含对应 slot", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const headingEl = alert.shadowRoot.querySelector(".ea-alert__heading");
+      const slot = headingEl.querySelector('slot[name="heading"]');
+      expect(slot).not.toBeNull();
+    });
+
+    it("description 元素应该包含对应 slot", async () => {
+      const alert = document.createElement("ea-alert");
+      container.appendChild(alert);
+
+      await waitForRender();
+
+      const descriptionEl = alert.shadowRoot.querySelector(
+        ".ea-alert__description"
+      );
+      const slot = descriptionEl.querySelector("slot:not([name])");
+      expect(slot).not.toBeNull();
     });
   });
 });

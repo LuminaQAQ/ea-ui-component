@@ -13,11 +13,12 @@ $alert-type: (
   --#{$name}-border-radius: var(--border-radius-sm);
   --#{$name}-transition: var(--transition-normal);
 
+  --#{$name}-icon-size: var(--font-size-lg);
   --#{$name}-icon-margin-right: var(--spacing-md);
   --#{$name}-content-gap: var(--spacing-sm);
 
-  --#{$name}-close-position-top: var(--spacing-lg);
-  --#{$name}-close-position-right: 16px;
+  --#{$name}-close-position-top: var(--spacing-md);
+  --#{$name}-close-position-right: var(--spacing-lg);
 
   --#{$name}-close-icon-size: var(--font-size-lg);
   --#{$name}-close-icon-color: var(--grey-400);
@@ -28,23 +29,21 @@ $alert-type: (
     --#{$name}-dark-#{$type}-bgc: var(--#{$color}-500);
     --#{$name}-dark-#{$type}-color: var(--color-white);
   }
-}
 
-:host {
   display: block;
 }
 
 @include block($name) {
-  position: relative;
-  box-sizing: border-box;
-  overflow: hidden;
-
   display: flex;
   align-items: center;
+  position: relative;
+
   width: 100%;
+  box-sizing: border-box;
+  padding: var(--#{$name}-padding);
+  overflow: hidden;
 
   border-radius: var(--#{$name}-border-radius);
-  padding: var(--#{$name}-padding);
 
   filter: opacity(1);
 
@@ -55,12 +54,15 @@ $alert-type: (
     margin-right: var(--#{$name}-icon-margin-right);
   }
 
+  @include element(icon) {
+    --ea-icon-size: var(--#{$name}-icon-size);
+  }
+
   @include element(content) {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
-    gap: var(--#{$name}-content-gap);
+    flex: 1;
   }
 
   @include element(heading) {
@@ -74,12 +76,26 @@ $alert-type: (
 
   @include element(close-btn) {
     cursor: pointer;
-
     display: block;
-
     position: absolute;
     top: var(--#{$name}-close-position-top);
     right: var(--#{$name}-close-position-right);
+    padding: 0;
+    border: none;
+    background: none;
+    outline: none;
+    font: inherit;
+    color: inherit;
+    transition: opacity var(--#{$name}-transition);
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--blue-500);
+      outline-offset: 2px;
+    }
   }
 
   @include element(close-icon) {
@@ -91,30 +107,41 @@ $alert-type: (
 
   @each $type, $color in $alert-type {
     @include modifier(#{$type}) {
-      background-color: var(--#{$name}-light-#{$type}-bgc);
-      color: var(--#{$name}-light-#{$type}-color);
+      --#{$name}-current-bgc: var(--#{$name}-light-#{$type}-bgc);
+      --#{$name}-current-color: var(--#{$name}-light-#{$type}-color);
+      --#{$name}-dark-bgc: var(--#{$name}-dark-#{$type}-bgc);
+      --#{$name}-dark-color: var(--#{$name}-dark-#{$type}-color);
 
-      &.#{$name}--dark {
-        background-color: var(--#{$name}-dark-#{$type}-bgc);
-        color: var(--#{$name}-dark-#{$type}-color);
-
-        .#{$name}__icon {
-          color: var(--#{$name}-dark-#{$type}-color);
-        }
-
-        .#{$name}__close-icon {
-          color: var(--#{$name}-dark-#{$type}-color);
-        }
-      }
+      background-color: var(--#{$name}-current-bgc);
+      color: var(--#{$name}-current-color);
 
       .#{$name}__icon {
-        color: var(--#{$name}-light-#{$type}-color);
+        color: var(--#{$name}-current-color);
       }
+    }
+  }
+
+  @include modifier(dark) {
+    background-color: var(--#{$name}-dark-bgc);
+    color: var(--#{$name}-dark-color);
+
+    .#{$name}__icon {
+      color: var(--#{$name}-dark-color);
+    }
+
+    .#{$name}__close-icon {
+      color: var(--#{$name}-dark-color);
     }
   }
 
   @include state(center) {
     justify-content: center;
+  }
+
+  @include state(has-description) {
+    .#{$name}__content {
+      gap: var(--#{$name}-content-gap);
+    }
   }
 
   @include state(before-close) {
@@ -126,10 +153,8 @@ $alert-type: (
     height: 0;
     padding: 0;
     margin: 0;
-
     overflow: hidden;
     visibility: hidden;
-
     filter: opacity(0);
   }
 }

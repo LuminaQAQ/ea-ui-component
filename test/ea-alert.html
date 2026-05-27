@@ -229,7 +229,7 @@
         container: document.querySelector("#customizedCloseBtn"),
 
         init() {
-          this.container.addEventListener("close", () => {
+          this.container.addEventListener("ea-close", () => {
             console.log("close");
           });
         },
@@ -246,17 +246,17 @@
         autoCloseAlert: document.querySelector("#autoCloseAlert"),
 
         init() {
-          this.showAfterAlert.addEventListener("open", () => {
+          this.showAfterAlert.addEventListener("ea-open", () => {
             console.log("open");
-          });
+        });
 
-          this.hideAfterAlert.addEventListener("close", () => {
+        this.hideAfterAlert.addEventListener("ea-close", () => {
             console.log("close");
-          });
+        });
 
-          this.autoCloseAlert.addEventListener("close", () => {
+        this.autoCloseAlert.addEventListener("ea-close", () => {
             console.log("auto-close");
-          });
+        });
         },
       };
       delayAttrExample.init();
