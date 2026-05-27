@@ -48,6 +48,19 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 自定义样式
 
 移步到 [CSS Part](#button-css-part)。
@@ -281,7 +294,6 @@ document
     <ea-button
       disabled
       id="ea-button-a"
-      type="text"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >链接按钮</ea-button
@@ -326,7 +338,6 @@ document
     <ea-button
       disabled
       id="ea-button-a"
-      type="text"
       href="https://luminaqaq.github.io/ea-ui-component/ea-button"
       link
       >链接按钮</ea-button
@@ -371,7 +382,6 @@ document
   <ea-button
     disabled
     id="ea-button-a"
-    type="text"
     href="https://luminaqaq.github.io/ea-ui-component/ea-button"
     link
     >链接按钮</ea-button
@@ -416,7 +426,6 @@ document
   <ea-button
     disabled
     id="ea-button-a"
-    type="text"
     href="https://luminaqaq.github.io/ea-ui-component/ea-button"
     link
     >链接按钮</ea-button
@@ -629,57 +638,62 @@ document
 
 :::
 
-## Button Attributes
+## Button API
 
-| 参数       | 说明     | 类型     | 可选值                                             | 默认值     |
-| ---------- | -------- | -------- | -------------------------------------------------- | ---------- |
-| variant    | 按钮类型 | String   | normal/primary/success/warning/danger              | `"normal"` |
-| size       | 按钮尺寸 | String   | small/medium/large                                 | `"medium"` |
-| plain      | 朴素效果 | Boolean  | —                                                  | false      |
-| disabled   | 是否禁用 | Boolean  | —                                                  | false      |
-| round      | 圆角按钮 | Boolean  | —                                                  | false      |
-| circle     | 圆形按钮 | Boolean  | —                                                  | false      |
-| text       | 文字按钮 | Boolean  | —                                                  | false      |
-| link       | 链接按钮 | Boolean  | —                                                  | false      |
-| href       | 链接地址 | String   | —                                                  | —          |
-| loading    | 加载状态 | Boolean  | —                                                  | false      |
-| icon       | 图标类名 | String   | —                                                  | —          |
-| buttonType | 原生类型 | String   | button/submit/reset                                | `"button"` |
+### Button Attributes
 
-## ButtonGroup Attributes
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| ---- | ---- | ---- | ------ | ------ |
+| variant | 按钮类型 | String | normal / primary / success / warning / danger / info | `"normal"` |
+| size | 按钮尺寸 | String | small / medium / large | `"medium"` |
+| plain | 朴素效果 | Boolean | — | false |
+| disabled | 是否禁用 | Boolean | — | false |
+| round | 圆角按钮 | Boolean | — | false |
+| circle | 圆形按钮 | Boolean | — | false |
+| text | 文字按钮 | Boolean | — | false |
+| link | 链接按钮 | Boolean | — | false |
+| href | 链接地址 | String | — | — |
+| target | 链接打开方式 | String | — | — |
+| rel | 链接关系 | String | — | — |
+| download | 下载文件名 | String | — | — |
+| loading | 加载状态 | Boolean | — | false |
+| icon | 图标类名 | String | — | — |
+| type | 原生按钮类型 | String | button / submit / reset | `"button"` |
 
-| 参数     | 说明     | 类型    | 可选值                                | 默认值     |
-| -------- | -------- | ------- | ------------------------------------- | ---------- |
-| disabled | 是否禁用 | Boolean | —                                     | false      |
-| size     | 按钮尺寸 | String  | small/medium/large                    | `"medium"` |
-| type     | 按钮类型 | String  | normal/primary/success/warning/danger | `"normal"` |
+### ButtonGroup Attributes
 
-## Button CSS Part
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| ---- | ---- | ---- | ------ | ------ |
+| disabled | 是否禁用 | Boolean | — | false |
+| size | 按钮尺寸 | String | small / medium / large | `"medium"` |
+| variant | 按钮类型 | String | normal / primary / success / warning / danger / info | `"normal"` |
+
+### Button CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称        | 说明         |
-| ----------- | ------------ |
-| container   | 按钮容器     |
-| icon        | 图标元素     |
+| 名称 | 说明 |
+| ---- | ---- |
+| container | 按钮容器 |
+| icon | 图标元素 |
 | loading-icon | 加载图标元素 |
 
-## ButtonGroup CSS Part
+### ButtonGroup CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明         |
-| --------- | ------------ |
-| container | 按钮组容器   |
+| 名称 | 说明 |
+| ---- | ---- |
+| container | 按钮组容器 |
 
-## Button Slots
+### Button Slots
 
-| 名称    | 说明           |
-| ------- | -------------- |
-| default | 按钮内容插槽   |
+| 名称 | 说明 |
+| ---- | ---- |
+| default | 按钮内容插槽 |
 
-## ButtonGroup Slots
+### ButtonGroup Slots
 
-| 名称    | 说明               |
-| ------- | ------------------ |
-| default | 按钮组内容插槽     |
+| 名称 | 说明 |
+| ---- | ---- |
+| default | 按钮组内容插槽 |

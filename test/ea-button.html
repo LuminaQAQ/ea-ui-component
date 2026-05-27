@@ -12,10 +12,6 @@
         color: white;
       }
 
-      /* ea-button::part(icon) {
-            color: black;
-        } */
-
       .row {
         margin: 1rem 0;
       }
@@ -32,13 +28,8 @@
         .querySelector("#ea-switch-disabled")
         .addEventListener("change", function (e) {
           const btn = document.querySelector("#ea-button-disabled");
-
-          // btn.disabled = e.detail.checked;
           btn.toggleAttribute("disabled", e.detail.value);
         });
-      // setTimeout(() => {
-      //     document.querySelector("#ea-button-a").remove();
-      // }, 3000);
       // #endregion
       // ------- end -------
 
@@ -48,13 +39,8 @@
         .querySelector("#ea-radio-href")
         .addEventListener("change", function (e) {
           const btn = document.querySelector("#ea-button-a");
-
-          // btn.disabled = e.detail.checked;
           btn.toggleAttribute("disabled", e.detail.value);
         });
-      // setTimeout(() => {
-      //     document.querySelector("#ea-button-a").remove();
-      // }, 3000);
       // #endregion
       // ------- end -------
 
@@ -64,8 +50,6 @@
         .querySelector("#btngroup-switch")
         .addEventListener("change", function (e) {
           const btn = document.querySelector("#btngroup");
-
-          // btn.disabled = e.detail.checked;
           btn.toggleAttribute("disabled", e.detail.value);
         });
       // #endregion
@@ -77,17 +61,13 @@
         .querySelector("#ea-radio-loading")
         .addEventListener("change", function (e) {
           const btn = document.querySelector("#ea-button-loading");
-
-          // console.log(e.detail.checked);
-
           btn.loading = e.target.value;
-          // btn.setAttribute("loading", e.detail.checked);
         });
       // #endregion
       // ------- end -------
     </script>
 
-    <!-- -------- 基础用法 --------  -->
+    <!-- -------- 基础用法 -------- -->
     <!-- #region  -->
     <h2>基础用法</h2>
     <div class="row">
@@ -122,7 +102,7 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 禁用按钮 --------  -->
+    <!-- -------- 禁用按钮 -------- -->
     <!-- #region  -->
     <h2>禁用按钮</h2>
     <ea-switch id="ea-switch-disabled" value="true"></ea-switch>
@@ -163,7 +143,7 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 文字按钮 --------  -->
+    <!-- -------- 文字按钮 -------- -->
     <!-- #region  -->
     <h2>文字按钮</h2>
     <div class="row left">
@@ -178,7 +158,7 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 链接按钮 --------  -->
+    <!-- -------- 链接按钮 -------- -->
     <!-- #region  -->
     <h2>链接按钮</h2>
     <div class="row left">
@@ -215,7 +195,6 @@
       <ea-button
         disabled
         id="ea-button-a"
-        type="text"
         href="https://luminaqaq.github.io/ea-ui-component/ea-button"
         link
         >链接按钮</ea-button
@@ -258,9 +237,7 @@
       >
       <ea-button
         disabled
-        disabled
         id="ea-button-a"
-        type="text"
         href="https://luminaqaq.github.io/ea-ui-component/ea-button"
         link
         >链接按钮</ea-button
@@ -270,7 +247,7 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 图标按钮 --------  -->
+    <!-- -------- 图标按钮 -------- -->
     <!-- #region  -->
     <h2>图标按钮</h2>
     <div class="row left">
@@ -288,7 +265,7 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 按钮组 --------  -->
+    <!-- -------- 按钮组 -------- -->
     <!-- #region  -->
     <h2>按钮组</h2>
     <div class="row left">
@@ -314,9 +291,9 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 加载中 --------  -->
+    <!-- -------- 加载中 -------- -->
     <!-- #region  -->
-    <h2>按钮组</h2>
+    <h2>加载中</h2>
     <div class="row">
       <ea-switch id="ea-radio-loading" value="true"></ea-switch>
       <ea-button
@@ -331,7 +308,7 @@
     <!-- #endregion  -->
     <!-- -------------------  -->
 
-    <!-- -------- 不同尺寸 --------  -->
+    <!-- -------- 不同尺寸 -------- -->
     <!-- #region  -->
     <h2>不同尺寸</h2>
     <div class="row">

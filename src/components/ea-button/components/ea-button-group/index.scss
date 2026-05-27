@@ -1,4 +1,6 @@
-.ea-button-group {
+$name: ea-button-group;
+
+@include block($name) {
   display: flex;
   align-items: center;
 
@@ -6,15 +8,15 @@
     --ea-button-border-radius: 0;
   }
 
-  ::slotted(ea-button:not([type="normal"])) {
+  ::slotted(ea-button:not([variant="normal"])) {
     border-right: 1px solid rgba(255, 255, 255, 0.3);
   }
 
   ::slotted(ea-button:first-of-type) {
-    --ea-button-border-radius: 4px 0 0 4px;
+    --ea-button-border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
   }
 
   ::slotted(ea-button:last-of-type) {
-    --ea-button-border-radius: 0 4px 4px 0;
+    --ea-button-border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
   }
 }

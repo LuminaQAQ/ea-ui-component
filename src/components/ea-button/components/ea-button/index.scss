@@ -1,331 +1,242 @@
+$name: ea-button;
+
+$button-type: (
+  primary: blue,
+  success: green,
+  warning: yellow,
+  danger: red,
+  info: grey,
+);
+
 :host {
-  --cursor-type: pointer;
-  --font-size: var(--font-size-md);
-  --ea-button-border-radius: var(--border-radius-sm);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-transition: var(--transition-fast);
 
-  /* === 公共变量 === */
-  --ea-button-text: var(--ea-button-normal-text);
-  --ea-button-bg: var(--ea-button-normal-background);
-  --ea-button-border-color: var(--ea-button-normal-border);
-  --ea-button-text-hover: var(--ea-button-primary-600);
-  --ea-button-bg-hover: var(--ea-button-primary-100);
-  --ea-button-border-color-hover: var(--ea-button-primary-100);
-  --ea-button-text-active: var(--ea-button-primary-700);
-  --ea-button-border-color-active: var(--ea-button-primary-700);
-  --ea-button-text-disabled: var(--ea-button-normal-text-disabled);
-  --ea-button-bg-disabled: var(--ea-button-normal-background-disabled);
-  --ea-button-border-color-disabled: var(--ea-button-normal-border);
+  --#{$name}-padding-sm: var(--spacing-sm) var(--spacing-md);
+  --#{$name}-padding-md: var(--spacing-md) var(--spacing-lg);
+  --#{$name}-padding-lg: var(--spacing-md) var(--spacing-lg);
 
-  /* === Normal === */
-  --ea-button-normal-text: var(--grey-900);
-  --ea-button-normal-background: var(--color-white);
-  --ea-button-normal-border: var(--grey-300);
-  --ea-button-normal-text-disabled: var(--grey-400);
-  --ea-button-normal-background-disabled: var(--grey-100);
+  --#{$name}-text: var(--grey-900);
+  --#{$name}-bg: var(--color-white);
+  --#{$name}-border-color: var(--grey-300);
 
-  /* === Primary（Blue）=== */
-  --ea-button-primary-100: #d9ecff;
-  --ea-button-primary-300: var(--blue-300);
-  --ea-button-primary-500: var(--color-blue);
-  --ea-button-primary-600: var(--blue-400);
-  --ea-button-primary-700: var(--blue-600);
-  --ea-button-primary-text: var(--color-white);
-  --ea-button-primary-disabled: var(--ea-button-primary-300);
-  --ea-button-primary-text-disabled: var(--color-white);
+  --#{$name}-text-hover: var(--blue-600);
+  --#{$name}-bg-hover: var(--blue-100);
+  --#{$name}-border-color-hover: var(--blue-300);
 
-  /* === Success（Green）=== */
-  --ea-button-success-100: #e1f3d8;
-  --ea-button-success-300: var(--green-300);
-  --ea-button-success-500: var(--color-green);
-  --ea-button-success-600: var(--green-400);
-  --ea-button-success-700: var(--green-600);
-  --ea-button-success-text: var(--color-white);
-  --ea-button-success-disabled: var(--ea-button-success-300);
-  --ea-button-success-text-disabled: var(--color-white);
+  --#{$name}-text-active: var(--blue-700);
+  --#{$name}-bg-active: var(--blue-100);
+  --#{$name}-border-color-active: var(--blue-700);
 
-  /* === Info（Muted）=== */
-  --ea-button-info-100: #e9e9eb;
-  --ea-button-info-300: #d3d4d6;
-  --ea-button-info-500: var(--color-info);
-  --ea-button-info-600: #a6a9b3;
-  --ea-button-info-700: var(--grey-600);
-  --ea-button-info-text: var(--color-white);
+  --#{$name}-text-disabled: var(--grey-400);
+  --#{$name}-bg-disabled: var(--grey-100);
+  --#{$name}-border-color-disabled: var(--grey-300);
 
-  /* === Warning（Yellow）=== */
-  --ea-button-warning-100: var(--yellow-100);
-  --ea-button-warning-300: var(--yellow-300);
-  --ea-button-warning-500: var(--color-yellow);
-  --ea-button-warning-600: var(--yellow-400);
-  --ea-button-warning-700: var(--yellow-600);
-  --ea-button-warning-text: var(--color-white);
-  --ea-button-warning-disabled: var(--ea-button-warning-300);
-  --ea-button-warning-text-disabled: var(--color-white);
+  @each $type, $color in $button-type {
+    --#{$name}-#{$type}-text: var(--color-white);
+    --#{$name}-#{$type}-bg: var(--#{$color}-500);
+    --#{$name}-#{$type}-border-color: var(--#{$color}-500);
+    --#{$name}-#{$type}-text-hover: var(--color-white);
+    --#{$name}-#{$type}-bg-hover: var(--#{$color}-400);
+    --#{$name}-#{$type}-border-color-hover: var(--#{$color}-400);
+    --#{$name}-#{$type}-text-active: var(--color-white);
+    --#{$name}-#{$type}-bg-active: var(--#{$color}-600);
+    --#{$name}-#{$type}-border-color-active: var(--#{$color}-600);
+    --#{$name}-#{$type}-text-disabled: var(--color-white);
+    --#{$name}-#{$type}-bg-disabled: var(--#{$color}-300);
+    --#{$name}-#{$type}-border-color-disabled: var(--#{$color}-300);
+  }
 
-  /* === Danger（Red）=== */
-  --ea-button-danger-100: var(--red-100);
-  --ea-button-danger-300: var(--red-300);
-  --ea-button-danger-500: var(--color-red);
-  --ea-button-danger-600: var(--red-400);
-  --ea-button-danger-700: var(--red-600);
-  --ea-button-danger-text: var(--color-white);
-  --ea-button-danger-disabled: var(--ea-button-danger-300);
-  --ea-button-danger-text-disabled: var(--color-white);
+  display: inline-block;
+  cursor: var(--cursor-pointer);
 }
 
 :host([disabled]),
-:host([loading="true"]) {
-  --cursor-type: not-allowed;
-
-  .ea-button {
-    pointer-events: none;
-  }
+:host([loading]) {
+  cursor: var(--cursor-not-allowed);
 }
 
-:host {
-  cursor: var(--cursor-type);
-  display: inline-block;
-}
-
-@mixin button-disabled-type($type) {
-  &.ea-button--disabled {
-    --cursor-type: not-allowed;
-    --ea-button-text: var(--ea-button-text-disabled);
-    --ea-button-bg: var(--ea-button-bg-disabled);
-    --ea-button-border-color: var(--ea-button-border-color-disabled);
-
-    pointer-events: none;
-  }
-}
-
-@mixin button-hover-type($type) {
-  &:hover {
-    --ea-button-text: var(--ea-button-text-hover);
-    --ea-button-bg: var(--ea-button-bg-hover);
-    --ea-button-border-color: var(--ea-button-border-color-hover);
-  }
-}
-
-@mixin button-active-type($type) {
-  &:active {
-    --ea-button-text: var(--ea-button-text-active);
-    --ea-button-border-color: var(--ea-button-border-color-active);
-  }
-}
-
-@mixin button-text-type($type) {
-  &.ea-button--text {
-    --ea-button-bg: none;
-    --ea-button-border-color: transparent;
-
-    @if ($type =="normal") {
-      --ea-button-text: var(--ea-button-normal-text);
-      --ea-button-text-hover: var(--ea-button-primary-600);
-      --ea-button-text-active: var(--ea-button-primary-700);
-      --ea-button-text-disabled: var(--ea-button-info-300);
-    }
-
-    @else {
-      --ea-button-text: var(--ea-button-#{$type}-500);
-      --ea-button-text-hover: var(--ea-button-#{$type}-600);
-      --ea-button-text-active: var(--ea-button-#{$type}-700);
-      --ea-button-text-disabled: var(--ea-button-#{$type}-300);
-    }
-
-    &:hover {
-      --ea-button-bg: none;
-      --ea-button-border-color: transparent;
-    }
-
-    &.ea-button--disabled {
-      --ea-button-bg: none;
-      --ea-button-border-color: transparent;
-    }
-  }
-}
-
-@mixin button-plain-type($type) {
-  &.ea-button--plain {
-    --ea-button-bg: var(--ea-button-#{$type}-100);
-
-    @if ($type =="normal") {
-      --ea-button-text: var(--ea-button-normal-text);
-      --ea-button-text-hover: var(--ea-button-primary-500);
-      --ea-button-text-active: var(--ea-button-primary-700);
-      --ea-button-text-disabled: var(--ea-button-info-300);
-    }
-
-    @else {
-      --ea-button-text: var(--ea-button-#{$type}-500);
-      --ea-button-border-color: var(--ea-button-#{$type}-300);
-      --ea-button-text-hover: var(--color-white);
-      --ea-button-bg-hover: var(--ea-button-#{$type}-600);
-      --ea-button-bg-active: var(--ea-button-#{$type}-700);
-      --ea-button-text-disabled: var(--ea-button-#{$type}-300);
-    }
-
-    &:hover {
-      @if ($type =="normal") {
-        --ea-button-text: var(--ea-button-primary-500);
-      }
-
-      @else {
-        --ea-button-text: var(--color-white);
-      }
-
-      --ea-button-bg: var(--ea-button-bg-hover);
-    }
-
-    &:active {
-      @if ($type =="normal") {
-        --ea-button-text: var(--ea-button-primary-700);
-      }
-
-      @else {
-        --ea-button-bg: var(--ea-button-bg-active);
-      }
-    }
-
-    &.ea-button--disabled {
-      --ea-button-text: var(--ea-button-text-disabled);
-    }
-  }
-}
-
-@mixin button-round-type($type) {
-  &.ea-button--round {
-    border-radius: var(--border-radius-round);
-    padding: var(--spacing-md) var(--spacing-lg);
-  }
-}
-
-@mixin button-circle-type($type) {
-  &.ea-button--circle {
-    border-radius: var(--border-radius-circle);
-    padding: var(--spacing-md);
-  }
-}
-
-@mixin button-link-type($type) {
-  &.ea-button--link {
-    --ea-button-bg: unset;
-    --ea-button-border-color: unset;
-    padding: 0;
-  }
-}
-
-@mixin button-size-type() {
-  &.ea-button--small {
-    --font-size: var(--font-size-sm);
-    padding: var(--spacing-sm);
-  }
-
-  &.ea-button--large {
-    --font-size: var(--font-size-lg);
-    padding: var(--spacing-lg);
-  }
-}
-
-@mixin button-type($type) {
-  --ea-button-text: var(--ea-button-#{$type}-text);
-  --ea-button-bg: var(--ea-button-#{$type}-500);
-
-  @if ($type =="normal") {
-    --ea-button-border-color: var(--ea-button-normal-border);
-    --ea-button-text-hover: var(--ea-button-primary-600);
-    --ea-button-bg-hover: var(--ea-button-primary-100);
-    --ea-button-border-color-hover: var(--ea-button-primary-100);
-    --ea-button-text-active: var(--ea-button-primary-700);
-    --ea-button-border-color-active: var(--ea-button-primary-700);
-    --ea-button-text-disabled: var(--ea-button-normal-text-disabled);
-    --ea-button-bg-disabled: var(--ea-button-normal-background-disabled);
-    --ea-button-border-color-disabled: var(--ea-button-normal-border);
-  }
-
-  @else {
-    --ea-button-border-color: var(--ea-button-#{$type}-500);
-    --ea-button-text-hover: var(--color-white);
-    --ea-button-bg-hover: var(--ea-button-#{$type}-600);
-    --ea-button-border-color-hover: var(--ea-button-#{$type}-600);
-    --ea-button-bg-active: var(--ea-button-#{$type}-700);
-    --ea-button-text-disabled: var(--ea-button-#{$type}-text-disabled);
-    --ea-button-bg-disabled: var(--ea-button-#{$type}-disabled);
-    --ea-button-border-color-disabled: var(--ea-button-#{$type}-disabled);
-  }
-
-  @include button-text-type($type);
-  @include button-disabled-type($type);
-  @include button-plain-type($type);
-  @include button-round-type($type);
-  @include button-circle-type($type);
-  @include button-link-type($type);
-  @include button-size-type;
-
-  @include button-hover-type($type);
-  @include button-active-type($type);
-}
-
-@include block(ea-button) {
+@include block($name) {
   box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 100%;
+  padding: var(--#{$name}-padding-md);
 
-  padding: var(--spacing-md);
-  border: 1px solid;
-  border-color: var(--ea-button-border-color);
-  background-color: var(--ea-button-bg);
-  border-radius: var(--ea-button-border-radius);
-
+  border: var(--border-width) solid var(--#{$name}-border-color);
+  border-radius: var(--#{$name}-border-radius);
+  background-color: var(--#{$name}-bg);
+  color: var(--#{$name}-text);
+  font-size: var(--#{$name}-font-size);
+  line-height: 1;
   white-space: nowrap;
-
-  cursor: var(--cursor-type);
-
-  color: var(--ea-button-text);
-  font-size: var(--font-size);
-  line-height: var(--font-size);
   text-decoration: none;
 
-  transition:
-    background-color var(--transition-fast),
-    color var(--transition-fast);
+  cursor: inherit;
 
-  will-change: width;
+  transition: background-color var(--#{$name}-transition),
+  border-color var(--#{$name}-transition),
+  color var(--#{$name}-transition);
+
+  &:hover {
+    color: var(--#{$name}-text-hover);
+    background-color: var(--#{$name}-bg-hover);
+    border-color: var(--#{$name}-border-color-hover);
+  }
+
+  &:active {
+    color: var(--#{$name}-text-active);
+    background-color: var(--#{$name}-bg-active);
+    border-color: var(--#{$name}-border-color-active);
+  }
 
   @include element(loading-icon) {
     display: none;
-  }
-
-  @include state(loading) {
-    .ea-button__loading-icon {
-      display: inline-block;
-      margin-right: var(--spacing-md);
-    }
-  }
-
-  @include button-type(normal);
-
-  @include modifier(primary) {
-    @include button-type(primary);
-  }
-
-  @include modifier(success) {
-    @include button-type(success);
-  }
-
-  @include modifier(danger) {
-    @include button-type(danger);
-  }
-
-  @include modifier(warning) {
-    @include button-type(warning);
   }
 
   @include element(icon) {
     display: none;
   }
 
+  @include state(loading) {
+    .#{$name}__loading-icon {
+      display: inline-block;
+      margin-right: var(--spacing-md);
+    }
+  }
+
   @include state(icon) {
-    .ea-button__icon {
+    .#{$name}__icon {
       display: inline-block;
     }
+  }
+
+  @include state(disabled) {
+    pointer-events: none;
+
+    color: var(--#{$name}-text-disabled);
+    background-color: var(--#{$name}-bg-disabled);
+    border-color: var(--#{$name}-border-color-disabled);
+
+    cursor: var(--cursor-not-allowed);
+  }
+
+  @include modifier(small) {
+    --#{$name}-font-size: var(--font-size-sm);
+    padding: var(--#{$name}-padding-sm);
+  }
+
+  @include modifier(large) {
+    --#{$name}-font-size: var(--font-size-lg);
+    padding: var(--#{$name}-padding-lg);
+  }
+
+  @include modifier(round) {
+    border-radius: var(--border-radius-round);
+  }
+
+  @include modifier(circle) {
+    border-radius: var(--border-radius-circle);
+    padding: var(--spacing-md);
+  }
+
+  @include modifier(text) {
+    background-color: transparent;
+    border-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    &:active {
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    &.is-disabled {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  @include modifier(plain) {
+    &:hover {
+      color: var(--#{$name}-text-hover);
+    }
+
+    &:active {
+      color: var(--#{$name}-text-active);
+    }
+  }
+
+  @include modifier(link) {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0;
+  }
+
+  @each $type, $color in $button-type {
+    @include modifier(#{$type}) {
+      --#{$name}-text: var(--#{$name}-#{$type}-text);
+      --#{$name}-bg: var(--#{$name}-#{$type}-bg);
+      --#{$name}-border-color: var(--#{$name}-#{$type}-border-color);
+      --#{$name}-text-hover: var(--#{$name}-#{$type}-text-hover);
+      --#{$name}-bg-hover: var(--#{$name}-#{$type}-bg-hover);
+      --#{$name}-border-color-hover: var(--#{$name}-#{$type}-border-color-hover);
+      --#{$name}-text-active: var(--#{$name}-#{$type}-text-active);
+      --#{$name}-bg-active: var(--#{$name}-#{$type}-bg-active);
+      --#{$name}-border-color-active: var(--#{$name}-#{$type}-border-color-active);
+      --#{$name}-text-disabled: var(--#{$name}-#{$type}-text-disabled);
+      --#{$name}-bg-disabled: var(--#{$name}-#{$type}-bg-disabled);
+      --#{$name}-border-color-disabled: var(--#{$name}-#{$type}-border-color-disabled);
+
+      &.#{$name}--text {
+        --#{$name}-text: var(--#{$color}-500);
+        --#{$name}-text-hover: var(--#{$color}-400);
+        --#{$name}-text-active: var(--#{$color}-600);
+        --#{$name}-text-disabled: var(--#{$color}-300);
+      }
+
+      &.#{$name}--plain {
+        --#{$name}-bg: var(--#{$color}-100);
+        --#{$name}-border-color: var(--#{$color}-300);
+        --#{$name}-text: var(--#{$color}-500);
+        --#{$name}-text-hover: var(--color-white);
+        --#{$name}-bg-hover: var(--#{$color}-400);
+        --#{$name}-border-color-hover: var(--#{$color}-400);
+        --#{$name}-text-active: var(--color-white);
+        --#{$name}-bg-active: var(--#{$color}-600);
+        --#{$name}-border-color-active: var(--#{$color}-600);
+        --#{$name}-text-disabled: var(--#{$color}-300);
+        --#{$name}-bg-disabled: var(--#{$color}-100);
+        --#{$name}-border-color-disabled: var(--#{$color}-300);
+      }
+    }
+  }
+
+  &.#{$name}--normal.#{$name}--text {
+    --#{$name}-text: var(--grey-900);
+    --#{$name}-text-hover: var(--blue-600);
+    --#{$name}-text-active: var(--blue-700);
+    --#{$name}-text-disabled: var(--grey-400);
+  }
+
+  &.#{$name}--normal.#{$name}--plain {
+    --#{$name}-bg: var(--color-white);
+    --#{$name}-text: var(--grey-900);
+    --#{$name}-text-hover: var(--blue-500);
+    --#{$name}-bg-hover: var(--blue-100);
+    --#{$name}-border-color-hover: var(--blue-300);
+    --#{$name}-text-active: var(--blue-700);
+    --#{$name}-bg-active: var(--blue-100);
+    --#{$name}-border-color-active: var(--blue-700);
+    --#{$name}-text-disabled: var(--grey-400);
+    --#{$name}-bg-disabled: var(--grey-100);
+    --#{$name}-border-color-disabled: var(--grey-300);
   }
 }

@@ -1,20 +1,32 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
-import { VARIANT_TYPES, type VariantType } from "@/constants/variant";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
+import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-button" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 按钮组件，用于触发操作，支持多种变体、尺寸和状态。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot default - 默认插槽，用于按钮内容。
+ *
+ * @csspart container - 按钮容器元素。
+ * @csspart icon - 图标元素。
+ * @csspart loading-icon - 加载图标元素。
+ *
+ * @cssproperty --ea-button-border-radius - 按钮圆角。
+ * @cssproperty --ea-button-font-size - 按钮字体大小。
+ * @cssproperty --ea-button-transition - 过渡动画时长。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaButton extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLButtonElement | HTMLAnchorElement;
 
@@ -23,8 +35,6 @@ export class EaButton extends EaBase {
 
   @query(bem.ce("loading-icon"))
   private _loadingIcon!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Boolean,
@@ -151,30 +161,56 @@ export class EaButton extends EaBase {
       }
     },
   })
-  buttonType: "button" | "submit" | "reset" = "button";
+  type: "button" | "submit" | "reset" = "button";
 
-  // ==================== 私有属性 ====================
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaButton, newVal: string) {
+      if (this._container && this.link) {
+        (this._container as HTMLAnchorElement).target = newVal;
+      }
+    },
+  })
+  target: string = "";
 
-  private _abortController?: AbortController;
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaButton, newVal: string) {
+      if (this._container && this.link) {
+        (this._container as HTMLAnchorElement).rel = newVal;
+      }
+    },
+  })
+  rel: string = "";
 
-  // ==================== 方法 ====================
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaButton, newVal: string) {
+      if (this._container && this.link) {
+        (this._container as HTMLAnchorElement).download = newVal;
+      }
+    },
+  })
+  download: string = "";
 
-  /**
-   * 更新容器类名
-   */
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const hasIcon = !!this.icon;
+    const isDisabled = this.disabled || this.loading;
     const className = bem(
       {
         [this.variant]: true,
-        disabled: this.disabled || this.loading,
         text: this.text || this.link,
         plain: this.plain,
         round: this.round,
         circle: this.circle,
+        link: this.link,
         [this.size]: true,
       },
-      { icon: hasIcon, loading: this.loading }
+      { icon: hasIcon, loading: this.loading, disabled: isDisabled }
     );
 
     if (this._container) {
@@ -184,6 +220,7 @@ export class EaButton extends EaBase {
     return className;
   }
 
+  /** 重新渲染容器（link 切换时替换 button/a 标签） */
   private _renderContainer(): void {
     const container = this._container;
     if (!container) return;
@@ -199,21 +236,25 @@ export class EaButton extends EaBase {
     container.replaceWith(newContainer);
   }
 
+  /** 渲染模板 */
   html(): string {
     const tag = this.link ? "a" : "button";
     const hrefAttr = this.link && this.href ? `href="${this.href}"` : "";
-    const typeAttr = !this.link ? `type="${this.buttonType}"` : "";
+    const targetAttr =
+      this.link && this.target ? `target="${this.target}"` : "";
+    const relAttr = this.link && this.rel ? `rel="${this.rel}"` : "";
+    const downloadAttr =
+      this.link && this.download ? `download="${this.download}"` : "";
+    const typeAttr = !this.link ? `type="${this.type}"` : "";
 
     return `
-      <${tag} class="${bem()}" part="container" tabindex="-1" ${hrefAttr} ${typeAttr}>
+      <${tag} class="${bem()}" part="container" tabindex="-1" ${hrefAttr} ${targetAttr} ${relAttr} ${downloadAttr} ${typeAttr}>
         <ea-icon class="${bem.e("loading-icon")}" name="spinner" spin part="loading-icon"></ea-icon>
         <ea-icon class="${bem.e("icon")}" part="icon"></ea-icon>
         <slot></slot>
       </${tag}>
     `;
   }
-
-  // ==================== 事件处理 ====================
 
   @listen("keypress")
   private _handleKeyPress(e: KeyboardEvent) {
@@ -224,13 +265,13 @@ export class EaButton extends EaBase {
 
   @listen("click")
   private _handleClick(e: Event) {
-    if (this.buttonType === "submit") {
+    if (this.type === "submit") {
       const form = this.closest("form");
       if (form) {
         e.preventDefault();
         form.dispatchEvent(new Event("submit"));
       }
-    } else if (this.buttonType === "reset") {
+    } else if (this.type === "reset") {
       const form = this.closest("form");
       if (form) {
         e.preventDefault();
@@ -239,15 +280,8 @@ export class EaButton extends EaBase {
     }
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
     this.updateContainerClasslist();
-    this._abortController = new AbortController();
-  }
-
-  $beforeUnmount(): void {
-    this._abortController?.abort();
   }
 }
 
