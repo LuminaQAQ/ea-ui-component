@@ -51,21 +51,9 @@ description: "Component documentation generation. Invoke when writing or updatin
 
 ::: details 查看代码
 
-::: code-group
-
 \```html
 [HTML代码]
 \```
-
-\```js
-[JavaScript代码];
-\```
-
-\```css
-[CSS代码]
-\```
-
-:::
 
 :::
 
@@ -91,6 +79,57 @@ description: "Component documentation generation. Invoke when writing or updatin
 
 [事件表格]
 ```
+
+## 代码展示规范
+
+### VitePress 容器语法使用规则
+
+**`::: code-group` 仅在存在多种语言代码块时使用**（如同时有 HTML + CSS + JS）。当只有单一 HTML 代码块时，**禁止使用** `::: code-group`，否则会导致 `:::` 在页面中显示为明文。
+
+#### 单一代码块（仅 HTML）
+
+当示例只有 HTML 代码时，使用 `::: details` 直接包裹代码块：
+
+```markdown
+::: details 查看代码
+
+\```html
+<ea-button>点击</ea-button>
+\```
+
+:::
+```
+
+#### 多种代码块（HTML + CSS + JS）
+
+当示例同时包含 HTML、CSS、JavaScript 等多种代码时，使用 `::: details` + `::: code-group` 嵌套：
+
+```markdown
+::: details 查看代码
+
+::: code-group
+
+\```html
+[HTML代码]
+\```
+
+\```js
+[JavaScript代码]
+\```
+
+\```css
+[CSS代码]
+\```
+
+:::
+
+:::
+```
+
+**关键规则：**
+- `::: code-group` 内必须包含 **两个及以上** 不同语言的代码块
+- 嵌套时，`::: code-group` 的 `:::` 闭合符在前，`::: details` 的 `:::` 闭合符在后
+- 单一 HTML 代码块直接放在 `::: details` 内，不嵌套 `::: code-group`
 
 ## 示例处理规则
 
@@ -173,11 +212,18 @@ onMounted(() => {
 | 事件名 | 说明 | 回调参数(event.detail) |
 | ------ | ---- | ---------------------- |
 
+### CSS 自定义属性表格
+
+以 `:host` 中 `--#{$name}-` 前缀的 CSS 变量为准：
+
+| 属性名 | 说明 | 默认值 |
+| ------ | ---- | ------ |
+
 ## 特殊情况
 
 ### 无某个 API 部分
 
-如果组件没有 Methods 或 Slots，则不写该部分。
+如果组件没有 Methods、Events 或 Slots，则不写该部分。
 
 ### 父子组件结构
 

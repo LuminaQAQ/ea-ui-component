@@ -187,6 +187,7 @@ export default defineConfig({
       "@decorator": resolve(__dirname, "src/decorator"),
       "@types": resolve(__dirname, "src/types"),
       "@stores": resolve(__dirname, "src/stores"),
+      "@constants": resolve(__dirname, "src/constants"),
     },
   },
 });

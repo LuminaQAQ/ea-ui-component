@@ -36,7 +36,8 @@
       "@decorator/*": ["src/decorator/*"],
       "@types/*": ["src/types/*"],
       "@stores/*": ["src/stores/*"],
-      "@core/*": ["src/core/*"]
+      "@core/*": ["src/core/*"],
+      "@constants/*": ["src/constants/*"]
     },
     "typeRoots": ["node_modules/@types"]
   },

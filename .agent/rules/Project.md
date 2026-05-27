@@ -413,6 +413,13 @@ $name: ea-component-name;
 3. **Slots** 以模板中 `<slot name="xxx">` 为准
 4. **Methods** 以类中公共方法为准（不含 `_` 前缀）
 5. **Events** 以 `this.emit()` 调用和自定义事件类为准
+6. **CSS 自定义属性** 以 `:host` 中 `--#{$name}-` 前缀的 CSS 变量为准
+
+### VitePress 容器语法规则
+
+- **`::: code-group` 仅在存在多种语言代码块时使用**（如 HTML + CSS + JS），单一 HTML 代码块禁止使用 `::: code-group`
+- 单一代码块：`::: details` 直接包裹代码块
+- 多种代码块：`::: details` + `::: code-group` 嵌套，闭合符先内后外
 
 ## 通用规范
 

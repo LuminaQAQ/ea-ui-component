@@ -44,6 +44,7 @@ export default defineConfig({
       "@utils": resolve(__dirname, "src/utils"),
       "@common": resolve(__dirname, "src/common"),
       "@events": resolve(__dirname, "src/events"),
+      "@constants": resolve(__dirname, "src/constants"),
     },
   },
   css: {
