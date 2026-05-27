@@ -1,23 +1,37 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-breadcrumb-item" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 面包屑项组件，用于面包屑导航中的每一级路径项。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，用于放置面包屑项的内容。
+ * @slot separator - 自定义分隔符内容。
+ *
+ * @csspart container - 项容器元素。
+ * @csspart content - 内容元素。
+ * @csspart separator - 分隔符元素。
+ *
+ * @cssproperty --ea-breadcrumb-item-separator-color - 分隔符颜色。
+ * @cssproperty --ea-breadcrumb-item-separator-size - 分隔符字体大小。
+ * @cssproperty --ea-breadcrumb-item-separator-spacing - 分隔符间距。
+ * @cssproperty --ea-breadcrumb-item-link-color - 链接颜色。
+ * @cssproperty --ea-breadcrumb-item-link-hover-color - 链接悬停颜色。
+ * @cssproperty --ea-breadcrumb-item-link-font-weight - 链接字体粗细。
+ * @cssproperty --ea-breadcrumb-item-transition - 过渡动画时长。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaBreadcrumbItem extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-breadcrumb-item")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-breadcrumb-item__content")
+  @query(bem.ce("content"))
   private _content!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -31,11 +45,6 @@ export class EaBreadcrumbItem extends EaBase {
   })
   href: string = "";
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const className = bem();
 
@@ -47,7 +56,7 @@ export class EaBreadcrumbItem extends EaBase {
   }
 
   /**
-   * 渲染内容元素
+   * 根据 href 属性重新渲染内容元素，切换 a/span 标签
    */
   private _renderContent(): void {
     if (!this._container) return;
@@ -56,7 +65,6 @@ export class EaBreadcrumbItem extends EaBase {
     const tag = isLink ? "a" : "span";
     const linkClass = isLink ? bem.s("link") : "";
 
-    // 重新渲染内容区域
     const contentEl = this._container.querySelector(bem.ce("content"));
     if (contentEl) {
       const newContent = document.createElement(tag);
@@ -73,9 +81,6 @@ export class EaBreadcrumbItem extends EaBase {
     }
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     const isLink = !!this.href;
     const tag = isLink ? "a" : "span";
@@ -92,8 +97,6 @@ export class EaBreadcrumbItem extends EaBase {
       </div>
     `;
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

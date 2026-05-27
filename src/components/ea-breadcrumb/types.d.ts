@@ -11,7 +11,7 @@ declare global {
  * ea-breadcrumb 组件的 HTML 接口
  */
 export interface EaBreadcrumbElement extends HTMLElement {
-  /** 分隔符字符串 */
+  /** 分隔符字符串，默认为 "/" */
   separator: string;
 }
 
@@ -47,7 +47,7 @@ export interface EaBreadcrumbItemVueProps {
 export interface EaBreadcrumbVueSlots {
   /** 默认插槽，用于放置 ea-breadcrumb-item */
   default?: () => any;
-  /** 分隔符插槽 */
+  /** 自定义分隔符内容 */
   separator?: () => any;
 }
 
@@ -55,9 +55,9 @@ export interface EaBreadcrumbVueSlots {
  * ea-breadcrumb-item Vue 组件插槽
  */
 export interface EaBreadcrumbItemVueSlots {
-  /** 默认插槽，用于内容 */
+  /** 默认插槽，用于面包屑项内容 */
   default?: () => any;
-  /** 分隔符插槽 */
+  /** 自定义分隔符内容 */
   separator?: () => any;
 }
 

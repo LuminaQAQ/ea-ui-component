@@ -1,23 +1,29 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-breadcrumb" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 面包屑导航组件，显示当前页面的路径，快速返回之前的任意页面。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot default - 默认插槽，用于放置 ea-breadcrumb-item 子组件。
+ * @slot separator - 自定义分隔符内容。
+ *
+ * @csspart container - 导航容器元素。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaBreadcrumb extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-breadcrumb")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
   @query("#defaultSlot")
   private _defaultSlot!: HTMLSlotElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -28,15 +34,6 @@ export class EaBreadcrumb extends EaBase {
   })
   separator: string = "/";
 
-  // ==================== 私有属性 ====================
-
-  private _abortController?: AbortController;
-
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const className = bem();
 
@@ -48,7 +45,9 @@ export class EaBreadcrumb extends EaBase {
   }
 
   /**
-   * 获取分隔符元素
+   * 获取分隔符元素，优先使用 separator slot 中的自定义内容
+   * @param defaultSeparator - 默认分隔符文本
+   * @returns 分隔符 DOM 元素
    */
   private _getSeparatorItem(defaultSeparator: string = this.separator): HTMLElement {
     const separatorSlot = this.shadowRoot!.querySelector("#separatorSlot") as HTMLSlotElement;
@@ -64,7 +63,7 @@ export class EaBreadcrumb extends EaBase {
   }
 
   /**
-   * 渲染分隔符
+   * 渲染分隔符到非末尾的面包屑项中
    */
   private _renderSeparator(): void {
     const defaultSlot = this.shadowRoot!.querySelector("#defaultSlot") as HTMLSlotElement;
@@ -86,9 +85,6 @@ export class EaBreadcrumb extends EaBase {
     });
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <nav class="${bem()}" part="container">
@@ -98,31 +94,17 @@ export class EaBreadcrumb extends EaBase {
     `;
   }
 
-  // ==================== 事件处理 ====================
-
-  private _handleSlotChange = (): void => {
-    this._renderSeparator();
-  };
-
-  // ==================== 生命周期 ====================
-
-  $mount(): void {
-    this.updateContainerClasslist();
-
-    // 初始化 AbortController
-    this._abortController = new AbortController();
-
-    // 监听 slot 变化
-    this._defaultSlot.addEventListener("slotchange", this._handleSlotChange, {
-      signal: this._abortController.signal,
-    });
-
-    // 初始渲染分隔符
+  /**
+   * 处理默认 slot 内容变化，重新渲染分隔符
+   */
+  @listen("slotchange", "#defaultSlot")
+  private _handleSlotChange(): void {
     this._renderSeparator();
   }
 
-  $beforeUnmount(): void {
-    this._abortController?.abort();
+  $mount(): void {
+    this.updateContainerClasslist();
+    this._renderSeparator();
   }
 }
 

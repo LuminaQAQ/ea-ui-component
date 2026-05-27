@@ -17,15 +17,12 @@ $name: ea-breadcrumb-item;
 }
 
 ::slotted(ea-icon) {
-  margin: 0 -8px;
+  margin: 0 calc(var(--spacing-md) * -1);
 }
 
 @include block($name) {
-  box-sizing: border-box;
-
   display: flex;
   align-items: center;
-
   font-size: var(--#{$name}-separator-size);
   color: var(--#{$name}-separator-color);
 
@@ -37,11 +34,10 @@ $name: ea-breadcrumb-item;
   @include element(content) {
     color: var(--#{$name}-separator-color);
 
-    &.is-link {
+    @include state(link) {
       text-decoration: none;
       color: var(--#{$name}-link-color);
       font-weight: var(--#{$name}-link-font-weight);
-
       transition: color var(--#{$name}-transition);
 
       &:hover {

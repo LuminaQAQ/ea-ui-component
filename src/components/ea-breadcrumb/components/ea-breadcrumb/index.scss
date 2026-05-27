@@ -1,6 +1,7 @@
 $name: ea-breadcrumb;
 
 :host {
+  display: block;
 }
 
 #separatorSlot {
@@ -10,4 +11,6 @@ $name: ea-breadcrumb;
 @include block($name) {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
+  font-size: var(--font-size-md);
 }
