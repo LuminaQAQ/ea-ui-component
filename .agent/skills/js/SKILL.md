@@ -41,10 +41,7 @@ ea-component/
 
 ```typescript
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import { html } from "@utils/html";
 import stylesheet from "./index.scss?inline";
 
@@ -222,8 +219,8 @@ closeText: string = "";  // 自动映射到 HTML 属性 close-text
 showIcon: boolean = false;  // 自动映射到 HTML 属性 show-icon
 
 // 正确示例：使用 VARIANT_TYPES 常量定义 variant 属性
-import { Enum } from "@/utils/Enum";
-import { VARIANT_TYPES, type VariantType } from "@/constants/variant";
+import { Enum } from "@utils/Enum";
+import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 
 @attribute({
   type: Enum(VARIANT_TYPES),
@@ -253,7 +250,7 @@ variant: VariantType | "normal" = "normal";
 - `Array` - JSON 数组
 - `Object` - JSON 对象
 - `["a", "b", "c"] as const` - 枚举类型，限制可选值
-- `VARIANT_TYPES` - 组件变体类型常量，统一从 `@/constants/variant` 导入
+- `VARIANT_TYPES` - 组件变体类型常量，统一从 `@constants/variant` 导入
 
 ### @query
 

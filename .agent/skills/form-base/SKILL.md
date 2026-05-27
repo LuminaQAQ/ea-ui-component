@@ -35,9 +35,7 @@ HTMLElement
 
 ```typescript
 import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-input" as const;

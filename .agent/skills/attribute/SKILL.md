@@ -10,7 +10,7 @@ description: "@attribute decorator for defining HTML attribute-mapped properties
 ## 导入
 
 ```typescript
-import { attribute } from "@decorator/attribute";
+import { CustomElement, attribute } from "@decorator";
 ```
 
 ## API
@@ -71,7 +71,7 @@ content: string = "";
 ### 枚举属性
 
 ```typescript
-import { Enum } from "@/utils/Enum";
+import { Enum } from "@utils/Enum";
 
 @attribute({
   type: Enum(["small", "medium", "large"]),
@@ -86,8 +86,8 @@ size: string = "medium";
 ### Variant 属性
 
 ```typescript
-import { Enum } from "@/utils/Enum";
-import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@/constants/variant";
+import { Enum } from "@utils/Enum";
+import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
 
 @attribute({
   type: Enum(VARIANT_TYPES),

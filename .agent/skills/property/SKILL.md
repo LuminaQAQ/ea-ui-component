@@ -10,7 +10,7 @@ description: "@property decorator for defining pure JavaScript properties that d
 ## 导入
 
 ```typescript
-import { property } from "@decorator/property";
+import { CustomElement, property } from "@decorator";
 ```
 
 ## 与 @attribute 的区别

@@ -35,10 +35,10 @@ export const VARIANT_ICON_MAP: Record<string, string> = {
 
 ## Enum 工具
 
-导入路径：`@/utils/Enum` 或 `@utils/Enum`
+导入路径：`@utils/Enum`
 
 ```typescript
-import { Enum } from "@/utils/Enum";
+import { Enum } from "@utils/Enum";
 
 // 传入数组
 Enum(VARIANT_TYPES)  // 返回数组本身
@@ -54,8 +54,8 @@ Enum("a", "b", "c")  // 返回 ["a", "b", "c"]
 ### 基础用法
 
 ```typescript
-import { Enum } from "@/utils/Enum";
-import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@/constants/variant";
+import { Enum } from "@utils/Enum";
+import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
 
 @attribute({
   type: Enum(VARIANT_TYPES),
@@ -130,7 +130,7 @@ updateContainerClasslist(): string {
 使用 `VARIANT_ICON_MAP` 获取 variant 对应的图标名：
 
 ```typescript
-import { VARIANT_ICON_MAP } from "@/constants/variant";
+import { VARIANT_ICON_MAP } from "@constants/variant";
 
 const iconName = VARIANT_ICON_MAP[this.variant]; // 如 "circle-check"
 ```

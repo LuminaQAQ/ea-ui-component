@@ -10,7 +10,7 @@ description: "@query and @queryAll decorators for DOM element queries in Shadow 
 ## 导入
 
 ```typescript
-import { query, queryAll } from "@decorator/query";
+import { CustomElement, query, queryAll } from "@decorator";
 ```
 
 ## @query(selector)

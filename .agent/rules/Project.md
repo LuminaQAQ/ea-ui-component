@@ -1,6 +1,6 @@
 # ea-ui-component 项目开发规范
 
-> **版本**: 3.1.0  
+> **版本**: 3.4.0  
 > **最后更新**: 2026-05-27  
 > **更新日志**: 见文末
 
@@ -16,7 +16,8 @@ src/
 │   ├── ea-alert/       # 单个组件
 │   │   ├── index.ts    # 组件入口
 │   │   ├── index.scss  # 组件样式
-│   │   └── types.d.ts  # 类型声明（可选）
+│   │   ├── types.d.ts  # 类型声明（可选）
+│   │   └── events/     # 自定义事件类（可选）
 ├── common/             # 公共子组件
 │   ├── ea-overlay/     # 遮罩层
 │   └── ea-popper/      # 弹出定位
@@ -70,16 +71,38 @@ src/
 
 ```typescript
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
+import { CustomElement, attribute, property, query, queryAll, listen } from "@decorator";
 import { html } from "@utils/html";
+import { Enum } from "@utils/Enum";
+import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-component" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 警告提示组件，用于展示重要的提示信息，支持多种类型和可关闭功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot icon - 自定义图标内容。
+ * @slot heading - 自定义标题内容。
+ * @slot default - 默认插槽，用于描述内容。
+ *
+ * @event close - 关闭时触发，detail: `{ visible: false }`。
+ *
+ * @csspart container - 容器元素。
+ * @csspart icon-wrap - 图标包裹元素。
+ * @csspart content-wrap - 内容包裹元素。
+ * @csspart heading - 标题元素。
+ * @csspart description - 描述元素。
+ * @csspart close-btn - 关闭按钮元素。
+ *
+ * @cssproperty --ea-alert-height - 组件高度。
+ * @cssproperty --ea-alert-bg-color - 组件背景颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaComponent extends EaBase {
   @query(".ea-component")
@@ -136,6 +159,7 @@ export class EaComponent extends EaBase {
 **核心要点：**
 
 - 继承 `EaBase` 类（表单组件继承 `EaFormAssociatedBase`）
+- **装饰器统一从 `@decorator` 导入**，不使用零散路径（如 `@decorator/attribute`）
 - 使用 `@CustomElement` 装饰器注册组件
 - 使用 `@attribute` 装饰器定义 HTML attribute 映射属性
 - 使用 `@property` 装饰器定义纯 JS 属性（不映射 HTML attribute）
@@ -159,6 +183,75 @@ export class EaComponent extends EaBase {
 | `@queryAll` | 查询多个 DOM 元素 | `query` |
 | `@listen` | 绑定事件监听 | `listen` |
 
+### 导入顺序规范
+
+组件文件的导入必须按以下顺序排列，每组之间空一行：
+
+```typescript
+// 1. 核心基类
+import EaBase, { createBEM } from "@core/EaBase";
+
+// 2. 装饰器（统一从 @decorator 导入）
+import { CustomElement, attribute, property, query, queryAll, listen } from "@decorator";
+
+// 3. 工具函数
+import { html } from "@utils/html";
+import { Enum } from "@utils/Enum";
+import { timeout } from "@utils/timeout";
+
+// 4. 常量
+import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
+
+// 5. 子组件/资源
+import stylesheet from "./index.scss?inline";
+```
+
+**关键规则：**
+- **装饰器统一从 `@decorator` 导入**，禁止使用零散路径（如 `@decorator/attribute`）
+- 仅导入当前组件实际使用的装饰器
+- 装饰器按 `CustomElement → attribute → property → query → queryAll → listen` 顺序排列
+
+### 组件类 JSDoc 注释规范
+
+每个组件类必须添加 JSDoc 注释，描述组件的元信息、插槽、事件、CSS Part 和 CSS 自定义属性：
+
+```typescript
+/**
+ * @summary 警告提示组件，用于展示重要的提示信息，支持多种类型和可关闭功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot icon - 自定义图标内容。
+ * @slot heading - 自定义标题内容。
+ * @slot default - 默认插槽，用于描述内容。
+ *
+ * @event close - 关闭时触发，detail: `{ visible: false }`。
+ *
+ * @csspart container - 容器元素。
+ * @csspart icon-wrap - 图标包裹元素。
+ *
+ * @cssproperty --ea-alert-height - 组件高度。
+ * @cssproperty --ea-alert-bg-color - 组件背景颜色。
+ */
+@CustomElement(TAG_NAME, { styles: [stylesheet] })
+export class EaAlert extends EaBase {
+```
+
+**JSDoc 标签说明：**
+
+| 标签 | 必填 | 说明 |
+|------|------|------|
+| `@summary` | ✅ | 组件的中文简要描述，说明用途和核心功能 |
+| `@status` | ✅ | 组件稳定状态：`stable`（稳定）/ `experimental`（实验性）/ `deprecated`（已弃用） |
+| `@since` | ✅ | 组件首次引入的版本号 |
+| `@dependency` | 条件必填 | 依赖的子组件标签名（无依赖则省略） |
+| `@slot` | 条件必填 | 插槽描述，格式：`@slot name - 描述`，默认插槽用 `default` |
+| `@event` | 条件必填 | 事件描述，格式：`@event name - 描述，detail: { ... }` |
+| `@csspart` | 条件必填 | CSS Part 描述，格式：`@csspart name - 描述` |
+| `@cssproperty` | 条件必填 | CSS 自定义属性描述，格式：`@cssproperty --name - 描述` |
+
 ### 属性命名规则
 
 - **类属性使用小驼峰命名**（如 `closeText`, `showIcon`）
@@ -180,16 +273,35 @@ export class EaComponent extends EaBase {
 
 ### 事件系统
 
+组件支持两种事件模式，详见 `event` 技能模块：
+
 ```typescript
-// 简单事件
-this.emit("focus");
-
-// 带数据的事件
-this.emit("change", { detail: { value: newVal } });
-
-// 自定义事件类（ea- 前缀）
+// 自定义事件类（对外公开事件）
 this.dispatchEvent(new EaComponentChangeEvent({ value: "new" }));
+
+// emit（父子组件内部通信）
+this.emit("ea-tab-close-icon-click", { detail: { name: this.name } });
 ```
+
+**事件模式选择规则：**
+
+| 场景 | 模式 | 理由 |
+|------|------|------|
+| 对外公开事件（用户监听的） | 自定义事件类 | 控制台显示类名（如 `EaCheckboxChangeEvent`），类型安全 |
+| 父子组件内部通信 | `this.emit()` | 轻量级，无需定义事件类 |
+
+**事件命名规则：**
+
+| 模式 | 事件名规则 | 示例 |
+|------|-----------|------|
+| 自定义事件类 | 统一 `ea-` 前缀 | `ea-change`, `ea-sort-change` |
+| `this.emit()` | 统一 `ea-` 前缀 | `ea-tab-close-icon-click`, `ea-sub-menu-click` |
+
+**自定义事件类规范：**
+- 文件组织：组件目录下 `events/Ea{Component}{Action}Event.ts`
+- Detail 接口：独立 `export interface`，命名 `Ea{Component}{Action}EventDetail`
+- 全局类型注册：统一注册到 `GlobalEventHandlersEventMap`
+- 构造选项：默认 `{ bubbles: true, composed: true }`
 
 ### BEM 类名规范
 
@@ -300,14 +412,15 @@ $name: ea-component-name;
 2. **CSS Part** 以模板中 `part="xxx"` 属性为准
 3. **Slots** 以模板中 `<slot name="xxx">` 为准
 4. **Methods** 以类中公共方法为准（不含 `_` 前缀）
-5. **Events** 以 `this.emit()` 调用为准
+5. **Events** 以 `this.emit()` 调用和自定义事件类为准
 
 ## 通用规范
 
 ### 代码风格
 
 - 不添加任何注释（除非用户明确要求）
-- **例外：每个私有方法必须添加简单的 JSDoc 注释**，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数，有返回值时必须用 `@returns` 说明返回值
+- **例外 1：每个组件类必须添加 JSDoc 注释**，包含 `@summary`、`@status`、`@since` 等元信息标签（参见「组件类 JSDoc 注释规范」）
+- **例外 2：每个私有方法必须添加简单的 JSDoc 注释**，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数，有返回值时必须用 `@returns` 说明返回值
 - 保持代码简洁、清晰
 - 遵循现有的代码风格和命名约定
 
@@ -371,16 +484,57 @@ this._container.appendChild(img);
 
 使用 BEM 状态类（`is-xxx`）配合 SCSS 的 `@include state()` 控制，通过 `updateContainerClasslist()` 统一管理，而非 `element.style.display = "none"`。
 
-### 3. $mount 中不应执行 DOM 移动操作
+### 3. $mount 中的 DOM 移动操作
 
-`$mount()` 在 `connectedCallback` 中触发，执行 DOM 移动操作（如 `appendChild`）会导致无限递归。DOM 移动操作应放在 `constructor` 中。
+`$mount()` 在 `connectedCallback` 中触发，DOM 移动操作（如 `appendChild(this)`）会导致 `disconnectedCallback` + `connectedCallback` 重新触发。需区分场景处理：
 
-**安全操作**：`updateContainerClasslist()`、`setAttribute()`、DOM 查询和读取  
-**危险操作**：`appendChild()`、`insertBefore()`、`remove()`、`removeChild()`
+**自身移动**（`parent.appendChild(this)`）：允许在 `$mount()` 中执行，但**必须**有防重入保护：
+
+```typescript
+private _appendHandled: boolean = false;
+
+private _handleAppendTo(): void {
+  if (this._appendHandled) return;
+  if (this.parentElement !== target) {
+    this._appendHandled = true;
+    target.appendChild(this);
+  }
+}
+
+$mount(): void {
+  this._handleAppendTo();
+}
+```
+
+**子元素操作**（`this.appendChild(child)`、`this.insertBefore(child)`）：在 `$mount()` 中一般安全，推荐用 `queueMicrotask` 延迟执行。
+
+**`appendToBody` / `appendTo` 模式**：弹出层类组件（overlay、dialog、drawer）的标准模式，通过 `@attribute` 定义属性，在 observer 和 `$mount()` 中调用 `_handleAppendTo()`，使用 `_appendHandled` 标志位防重入。
 
 ---
 
 ## 更新日志
+
+### v3.4.0 (2026-05-27)
+
+- **事件策略优化**：自定义事件类用于对外公开事件（控制台显示类名），`this.emit()` 仅用于父子组件内部通信
+- **事件命名统一 `ea-` 前缀**：`this.emit()` 的事件名也统一使用 `ea-` 前缀，标识内部通信性质
+- **$mount DOM 移动规则重写**：不再一刀切禁止，区分自身移动（需防重入保护）和子元素操作（一般安全），新增 `appendToBody`/`appendTo` 标准模式
+
+### v3.3.0 (2026-05-27)
+
+- **事件系统规范化**：定义双轨命名策略（emit 模式 vs 自定义事件类）
+- **自定义事件类统一 `ea-` 前缀**：所有 Event 子类的事件名统一使用 `ea-` 前缀
+- **自定义事件类规范**：Detail 接口独立导出、全局类型注册统一到 `GlobalEventHandlersEventMap`
+- **目录结构更新**：组件目录新增 `events/` 子目录说明
+- **文档生成规则更新**：Events 以 `this.emit()` 调用和自定义事件类为准
+- 事件技能模块大幅扩充
+
+### v3.2.0 (2026-05-27)
+
+- **装饰器统一导入**：从 `@decorator` 统一导入，禁止零散路径
+- **导入顺序规范**：定义标准导入顺序（基类 → 装饰器 → 工具 → 常量 → 资源）
+- **组件类 JSDoc 注释规范**：新增 `@summary`、`@status`、`@since`、`@dependency`、`@slot`、`@event`、`@csspart`、`@cssproperty` 标签
+- 代码风格更新：组件类 JSDoc 注释为必填项
 
 ### v3.1.0 (2026-05-27)
 

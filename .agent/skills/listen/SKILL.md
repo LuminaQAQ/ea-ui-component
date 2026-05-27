@@ -10,7 +10,7 @@ description: "@listen decorator for event binding with automatic cleanup. Invoke
 ## 导入
 
 ```typescript
-import { listen } from "@decorator/listen";
+import { CustomElement, listen } from "@decorator";
 ```
 
 ## API
