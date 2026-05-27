@@ -3,17 +3,17 @@ import { ElementPropertiesMap } from "@/stores";
 
 /**
  * @description 注册属性配置到 ElementPropertiesMap
- * @param clsName 组件类名
+ * @param cls 类构造函数
  * @param name 属性名
  * @param options 属性配置选项
  */
 function registerPropertyMap(
-  clsName: string,
+  cls: Function,
   name: string,
   options: PropertyOptions
 ) {
-  const existingOptions = ElementPropertiesMap.get(clsName) || {};
-  ElementPropertiesMap.set(clsName, {
+  const existingOptions = ElementPropertiesMap.get(cls) || {};
+  ElementPropertiesMap.set(cls, {
     ...existingOptions,
     [name]: options,
   });
@@ -61,9 +61,10 @@ function property(options: PropertyOptions) {
       // 新版装饰器
       const ctx = context as ClassFieldDecoratorContext;
       const name = ctx.name as string;
-      const clsName = (ctx as any).static?.name;
 
-      registerPropertyMap(clsName, name, options);
+      ctx.addInitializer(function (this: any) {
+        registerPropertyMap(this, name, options);
+      });
 
       return initialValue;
     } else {
@@ -83,9 +84,7 @@ function property(options: PropertyOptions) {
       }
 
       const constructor = target.constructor;
-      const clsName = constructor.name;
-
-      registerPropertyMap(clsName, name, options);
+      registerPropertyMap(constructor, name, options);
     }
   };
 }

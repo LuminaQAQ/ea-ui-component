@@ -87,8 +87,6 @@ function createAttributeGetter(
     const attrValue = this.getAttribute(attrName);
 
     if (type === Boolean) {
-      // if (!this.hasAttribute(attrName)) return false;
-      // return attrValue !== "false";
       return this.hasAttribute(attrName);
     } else if (attrValue !== null) {
       return parseAttributeValue(this, attrValue, type, defaultValue);
@@ -113,7 +111,6 @@ function createAttributeSetter(name: string) {
     } else {
       this.setAttribute(attrName, String(newVal));
     }
-    // this.setAttribute(attrName, String(newVal));
   };
 }
 
@@ -184,7 +181,7 @@ function initBooleanDefaults(instance: any, CustomElementClass: any) {
   }
 
   chain.forEach(cls => {
-    const attrs = ElementAttributesMap.get(cls.name);
+    const attrs = ElementAttributesMap.get(cls);
     if (!attrs) return;
 
     Object.keys(attrs).forEach(name => {
@@ -192,7 +189,6 @@ function initBooleanDefaults(instance: any, CustomElementClass: any) {
       if (type === Boolean && defaultValue === true) {
         const attrName = camelToKebab(name);
         if (!instance.hasAttribute(attrName)) {
-          // instance.setAttribute(attrName, "");
           instance.toggleAttribute(attrName, true);
         }
       }
@@ -325,9 +321,9 @@ function CustomElement(
     (CustomElementClass as any).customElementOptions = options;
 
     // 获取 attribute 装饰器配置（始终映射到 HTML attribute）
-    const attributeOptions = ElementAttributesMap.get(CustomElementClass.name);
+    const attributeOptions = ElementAttributesMap.get(CustomElementClass);
     // 获取 property 装饰器配置（仅作为 JS 属性，不映射到 HTML attribute）
-    const propertyOptions = ElementPropertiesMap.get(CustomElementClass.name);
+    const propertyOptions = ElementPropertiesMap.get(CustomElementClass);
 
     const superAttributes = CustomElementClass.observedAttributes || [];
     const attributeNames = Object.keys(attributeOptions || {});
@@ -374,9 +370,8 @@ function CustomElement(
         }
 
         chain.forEach(cls => {
-          const clsName = cls.name;
-          const attrs = ElementAttributesMap.get(clsName);
-          const props = ElementPropertiesMap.get(clsName);
+          const attrs = ElementAttributesMap.get(cls);
+          const props = ElementPropertiesMap.get(cls);
 
           if (attrs) {
             Object.keys(attrs).forEach(name => {
@@ -415,7 +410,7 @@ function CustomElement(
           let found = false;
 
           while (currentClass && currentClass !== HTMLElement) {
-            const clsAttrs = ElementAttributesMap.get(currentClass.name);
+            const clsAttrs = ElementAttributesMap.get(currentClass);
 
             if (clsAttrs) {
               const { option, actualName } = findPropertyOption(clsAttrs, name);

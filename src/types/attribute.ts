@@ -39,7 +39,7 @@ export interface AttributeOptions {
 
 /**
  * @description 属性映射表
- * 键：类名
+ * 键：类构造函数
  * 值：属性名到选项的映射
  */
-export type PropertyMap = Map<string, Record<string, AttributeOptions>>;
+export type PropertyMap = WeakMap<Function, Record<string, AttributeOptions>>;

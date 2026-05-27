@@ -31,7 +31,10 @@ export interface PropertyOptions {
 
 /**
  * @description Property 属性映射表
- * 键：类名
+ * 键：类构造函数
  * 值：属性名到 PropertyOptions 的映射
  */
-export type ElementPropertyMap = Map<string, Record<string, PropertyOptions>>;
+export type ElementPropertyMap = WeakMap<
+  Function,
+  Record<string, PropertyOptions>
+>;
