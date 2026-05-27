@@ -1,11 +1,11 @@
 ---
 name: "bem"
-description: "BEM class name generation and usage guidelines for ea-ui-component. Invoke when creating or updating component CSS class names."
+description: "BEM class name generation using createBEM() in TypeScript. Invoke when creating or updating component CSS class names in TS code."
 ---
 
-# BEM 类名生成规范
+# BEM 类名生成（TypeScript 侧）
 
-本项目使用 `createBEM` 工具函数生成 BEM 规范的 CSS 类名。
+使用 `createBEM` 工具函数在 TypeScript 中生成 BEM 规范的 CSS 类名。
 
 ## 导入方式
 
@@ -16,24 +16,34 @@ const TAG_NAME = "ea-component" as const;
 const bem = createBEM(TAG_NAME);
 ```
 
-## API 使用方法
+## API 参考
 
-### 1. 基础块类名
-
-```typescript
-bem()                    // 'ea-component'
-bem.b()                  // 'ea-component'
-bem.cb()                 // '.ea-component'
-```
-
-### 2. 元素类名 (block__element)
+### 主函数调用
 
 ```typescript
-bem.e('content')         // 'ea-component__content'
-bem.ce('content')        // '.ea-component__content'
+bem(modifiers?, states?): string
 ```
 
-**使用场景：模板中定义元素类名**
+- `modifiers`：对象形式，键为修饰符名，值为 `true`（生成 `block--key`）、字符串/数字（生成 `block--key-value`）、`false/undefined/null`（忽略）
+- `states`：对象形式，键为状态名，值为 `true` 或空字符串时生成 `is-key`，其他值忽略
+- 始终包含基础块类名
+
+### 挂载方法
+
+| 方法 | 返回值 | 说明 |
+|------|--------|------|
+| `bem.b()` | `"ea-component"` | 块类名 |
+| `bem.cb()` | `".ea-component"` | 块类名选择器 |
+| `bem.e(name)` | `"ea-component__content"` | 元素类名 |
+| `bem.ce(name)` | `".ea-component__content"` | 元素类名选择器 |
+| `bem.m(...names)` | `"ea-component--primary ea-component--large"` | 修饰符类名 |
+| `bem.cm(...names)` | `".ea-component--primary"` | 修饰符类名选择器 |
+| `bem.s(...names)` | `"is-active is-disabled"` | 状态类名 |
+| `bem.cs(...names)` | `".is-active"` | 状态类名选择器 |
+
+## 使用示例
+
+### 模板中定义元素类名
 
 ```typescript
 html(): string {
@@ -46,117 +56,49 @@ html(): string {
 }
 ```
 
-### 3. 修饰符类名 (block--modifier)
-
-```typescript
-// 对象形式（推荐，用于条件判断）
-bem({ primary: true })              // 'ea-component ea-component--primary'
-bem({ size: 'large' })              // 'ea-component ea-component--size-large'
-bem({ primary: true, large: true }) // 'ea-component ea-component--primary ea-component--large'
-
-// 字符串形式
-bem.m('primary', 'large')           // 'ea-component--primary ea-component--large'
-bem.cm('primary')                   // '.ea-component--primary'
-```
-
-**使用场景：updateContainerClasslist 方法**
+### updateContainerClasslist 方法
 
 ```typescript
 updateContainerClasslist(): string {
   const className = bem(
-    { [this.type]: true },           // 修饰符
-    { dot: this.isDot, hidden: isHidden }  // 状态
+    { [this.variant]: true },
+    { disabled: this.disabled, hidden: isHidden }
   );
-  
+
   if (this._container) {
     this._container.className = className;
   }
-  
+
   return className;
 }
 ```
 
-### 4. 状态类名 (is-state)
+### 修饰符类名
 
 ```typescript
-// 对象形式（推荐，用于条件判断）
+bem({ primary: true })              // 'ea-component ea-component--primary'
+bem({ size: 'large' })              // 'ea-component ea-component--size-large'
+bem.m('primary', 'large')           // 'ea-component--primary ea-component--large'
+bem.cm('primary')                   // '.ea-component--primary'
+```
+
+### 状态类名
+
+```typescript
 bem({}, { center: true })           // 'ea-component is-center'
 bem({}, { active: this.isActive })  // 'ea-component' 或 'ea-component is-active'
-
-// 字符串形式
 bem.s('active', 'disabled')         // 'is-active is-disabled'
 bem.cs('active')                    // '.is-active'
 ```
 
-### 5. 组合使用
+### 组合使用
 
 ```typescript
-// 修饰符 + 状态
 bem(
-  { [this.type]: true, [this.size]: true },  // 修饰符
-  { disabled: this.disabled, center: this.center }  // 状态
+  { [this.variant]: true, [this.size]: true },
+  { disabled: this.disabled, center: this.center }
 );
-// 结果: 'ea-component ea-component--primary ea-component--large is-disabled is-center'
-```
-
-## 完整示例
-
-```typescript
-import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import stylesheet from "./index.scss?inline";
-
-const TAG_NAME = "ea-badge" as const;
-const bem = createBEM(TAG_NAME);
-
-@CustomElement(TAG_NAME, { styles: [stylesheet] })
-export class EaBadge extends EaBase {
-  @query(".ea-badge")
-  private _container!: HTMLElement;
-
-  @attribute({
-    type: ["primary", "success", "warning", "danger", "info"] as const,
-    default: "danger",
-    observer(this: EaBadge) {
-      this.updateContainerClasslist();
-    },
-  })
-  type: "primary" | "success" | "warning" | "danger" | "info" = "danger";
-
-  @attribute({ type: Boolean, default: false })
-  isDot: boolean = false;
-
-  updateContainerClasslist(): string {
-    const isHidden = this.dataHidden || (!this.showZero && Number(this.value) === 0);
-    
-    // 生成类名：块 + 修饰符 + 状态
-    const className = bem(
-      { [this.type]: true },           // 修饰符: ea-badge--primary
-      { dot: this.isDot, hidden: isHidden }  // 状态: is-dot, is-hidden
-    );
-
-    if (this._container) {
-      this._container.className = className;
-    }
-
-    return className;
-  }
-
-  html(): string {
-    return `
-      <div class="${bem()}" part="container">
-        <sup class="${bem.e("content")}" part="content"></sup>
-        <slot></slot>
-      </div>
-    `;
-  }
-
-  $mount(): void {
-    this.updateContainerClasslist();
-  }
-}
+// 'ea-component ea-component--primary ea-component--large is-disabled is-center'
 ```
 
 ## 命名规范
@@ -168,29 +110,4 @@ export class EaBadge extends EaBase {
 
 ## 与 SCSS 配合
 
-```scss
-$name: ea-badge;
-
-@include block($name) {
-  // 基础样式
-  position: relative;
-  display: inline-block;
-
-  @include element(content) {
-    // .ea-badge__content
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-
-  @include modifier(primary) {
-    // .ea-badge--primary
-    background-color: var(--primary-color);
-  }
-
-  @include state(hidden) {
-    // .is-hidden
-    display: none;
-  }
-}
-```
+TypeScript 中 `createBEM` 生成的类名与 SCSS 中 `@include block/element/modifier/state` 的结构一一对应，参见 `bem-mixin` 技能。

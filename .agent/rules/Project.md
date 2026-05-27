@@ -1,5 +1,9 @@
 # ea-ui-component 项目开发规范
 
+> **版本**: 3.1.0  
+> **最后更新**: 2026-05-27  
+> **更新日志**: 见文末
+
 本项目是基于 Web Components 的组件库，使用 TypeScript 和装饰器模式实现，开发时必须遵循以下规范。
 
 ## 项目架构
@@ -13,36 +17,56 @@ src/
 │   │   ├── index.ts    # 组件入口
 │   │   ├── index.scss  # 组件样式
 │   │   └── types.d.ts  # 类型声明（可选）
+├── common/             # 公共子组件
+│   ├── ea-overlay/     # 遮罩层
+│   └── ea-popper/      # 弹出定位
 ├── core/               # 核心基础类
 │   ├── EaBase.ts       # 组件基类
-│   └── FormBase/       # 表单组件基类
+│   └── EaFormAssociatedBase.ts  # 表单关联基类
 ├── decorator/          # 装饰器
-│   ├── attribute.ts    # 属性装饰器
+│   ├── attribute.ts    # 属性装饰器（映射 HTML attribute）
+│   ├── property.ts     # 属性装饰器（纯 JS 属性，不映射 HTML attribute）
 │   ├── custom-element.ts # 自定义元素装饰器
-│   ├── query.ts        # DOM 查询装饰器
+│   ├── query.ts        # DOM 查询装饰器（@query / @queryAll）
 │   └── listen.ts       # 事件监听装饰器
 ├── utils/              # 工具函数
-│   ├── bem.ts          # BEM 类名生成
-│   ├── html.ts         # HTML 安全处理
+│   ├── bem.ts          # BEM 类名生成（createBEM）
+│   ├── html.ts         # HTML 安全处理（DOMPurify 封装）
+│   ├── Enum.ts         # 枚举类型工具
+│   ├── case-convert.ts # 大小写转换
+│   ├── h.ts            # 元素创建辅助
+│   ├── parseAttributeValue.ts # 属性值解析
 │   └── timeout.ts      # 定时器工具
-├── types/              # 类型定义
-└── themes/             # 主题样式
+├── constants/          # 常量定义
+│   └── variant.ts      # 统一变体类型（VARIANT_TYPES 等）
+├── types/              # 全局类型定义
+├── stores/             # 状态存储（属性/样式缓存）
+├── themes/             # 主题样式
+│   ├── variables.scss  # CSS 变量定义
+│   ├── mixins.scss     # SCSS mixin
+│   ├── namespace.scss  # BEM mixin 定义
+│   ├── light.scss      # 浅色主题
+│   └── dark.scss       # 深色主题
+└── test/               # 测试文件
+    └── utils/          # 测试工具
+        └── waitForRender.js
 ```
 
 ### 核心变更（重构后）
 
 1. **基类变更**：`Base` → `EaBase`，路径从 `@components/Base` 改为 `@core/EaBase`
-2. **BEM 工具**：`namespace()` → `createBEM()`，路径从 `@/directives/namespace` 改为 `@utils/bem`
-3. **属性定义**：`this.properties()` → `@attribute()` 装饰器
-4. **事件监听**：手动 `addEventListener` → `@listen()` 装饰器
-5. **DOM 查询**：手动 `querySelector` → `@query()` 装饰器
-6. **HTML 安全**：使用 `html()` 工具函数处理 HTML 内容
+2. **表单基类**：`FormBase` → `EaFormAssociatedBase`，路径 `@core/EaFormAssociatedBase`
+3. **BEM 工具**：`namespace()` → `createBEM()`，路径从 `@/directives/namespace` 改为 `@utils/bem`
+4. **属性定义**：`this.properties()` → `@attribute()` 装饰器（映射 HTML attribute）/ `@property()` 装饰器（纯 JS 属性）
+5. **事件监听**：手动 `addEventListener` → `@listen()` 装饰器
+6. **DOM 查询**：手动 `querySelector` → `@query()` / `@queryAll()` 装饰器
+7. **HTML 安全**：使用 `html()` 工具函数处理 HTML 内容
 
 ## TypeScript 开发规范
 
 ### 组件结构规范
 
-所有组件必须继承 `EaBase` 类，使用装饰器模式定义：
+所有组件必须继承 `EaBase` 类（表单组件继承 `EaFormAssociatedBase`），使用装饰器模式定义：
 
 ```typescript
 import EaBase, { createBEM } from "@core/EaBase";
@@ -58,15 +82,8 @@ const bem = createBEM(TAG_NAME);
 
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaComponent extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(".ea-component")
   private _container!: HTMLElement;
-
-  @query(".ea-component__input")
-  private _input!: HTMLInputElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -86,29 +103,12 @@ export class EaComponent extends EaBase {
   })
   disabled: boolean = false;
 
-  @attribute({
-    type: ["small", "medium", "large"],
-    default: "medium",
-    observer(this: EaComponent) {
-      this.updateContainerClasslist();
-    },
-  })
-  size: string = "medium";
-
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const className = bem({ [this.size]: true }, { disabled: this.disabled });
     this._container.className = className;
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class='${bem()}' part='container'>
@@ -117,15 +117,11 @@ export class EaComponent extends EaBase {
     `;
   }
 
-  // ==================== 事件处理 ====================
-
   @listen("click", ".ea-component__button")
   private _handleClick(e: Event) {
     if (this.disabled) return;
     this.emit("click", { detail: { target: e.target } });
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();
@@ -139,384 +135,87 @@ export class EaComponent extends EaBase {
 
 **核心要点：**
 
-- 继承 `EaBase` 类（表单组件继承 `FormBase`）
+- 继承 `EaBase` 类（表单组件继承 `EaFormAssociatedBase`）
 - 使用 `@CustomElement` 装饰器注册组件
-- 使用 `@attribute` 装饰器定义属性
-- 使用 `@query` 装饰器获取 DOM 元素
+- 使用 `@attribute` 装饰器定义 HTML attribute 映射属性
+- 使用 `@property` 装饰器定义纯 JS 属性（不映射 HTML attribute）
+- 使用 `@query` / `@queryAll` 装饰器获取 DOM 元素
 - 使用 `@listen` 装饰器绑定事件
 - 使用 `createBEM()` 生成 BEM 类名
 - 使用 `html()` 函数处理 HTML 内容（防止 XSS）
 - 样式导入使用 `?inline` 后缀
 - 私有属性使用 `_` 前缀（`#` 与装饰器不兼容）
 
-### 装饰器使用规范
+### 装饰器速查
 
-#### @CustomElement
+> 详细用法参见对应技能模块
 
-```typescript
-@CustomElement("ea-component", {
-  styles: [stylesheet],      // 样式数组
-  autoDefine: true,          // 是否自动注册（默认 true）
-})
-```
+| 装饰器 | 用途 | 技能 |
+|--------|------|------|
+| `@CustomElement` | 注册自定义元素 | `custom-element` |
+| `@attribute` | 定义 HTML attribute 映射属性 | `attribute` |
+| `@property` | 定义纯 JS 属性 | `property` |
+| `@query` | 查询单个 DOM 元素 | `query` |
+| `@queryAll` | 查询多个 DOM 元素 | `query` |
+| `@listen` | 绑定事件监听 | `listen` |
 
-#### @attribute
-
-```typescript
-@attribute({
-  type: String,              // String | Number | Boolean | Array | Object | 枚举数组
-  default: "default value",  // 默认值
-  observer(this, newVal) {   // 变化回调
-    this.updateUI();
-  },
-})
-propertyName: string = "";
-```
-
-**属性命名规则：**
+### 属性命名规则
 
 - **类属性使用小驼峰命名**（如 `closeText`, `showIcon`）
 - **框架自动转换为连字符命名**作为 HTML 属性（如 `close-text`, `show-icon`）
 - **无需显式声明 `name` 选项**，装饰器会自动处理命名转换
+- **组件视觉变体属性统一命名为 `variant`**（而非 `type`），使用 `VARIANT_TYPES` 常量（参见 `variant` 技能）
 
-```typescript
-// 正确示例：使用小驼峰命名
-@attribute({
-  type: String,
-  default: "",
-})
-closeText: string = "";  // 自动映射到 HTML 属性 close-text
+### 生命周期方法
 
-@attribute({
-  type: Boolean,
-  default: false,
-})
-showIcon: boolean = false;  // 自动映射到 HTML 属性 show-icon
-```
-
-**组件类型属性命名：**
-
-- 用于表示组件视觉变体/类型的属性统一命名为 `variant`（而非 `type`）
-- 使用统一的常量 `VARIANT_TYPES` 定义可选值，确保全局一致
-- 统一使用 `danger` 作为错误类型（而非 `error`）
-- 可选值包括：`primary`, `success`, `warning`, `danger`, `info`
-
-```typescript
-// 正确示例：使用 variant 命名类型属性
-import { Enum } from "@/utils/Enum";
-import {
-  VARIANT_TYPES,
-  VARIANT_DEFAULT,
-  VARIANT_ICON_MAP,
-  type VariantType,
-} from "@/constants/variant";
-
-@attribute({
-  type: Enum(VARIANT_TYPES),
-  default: VARIANT_DEFAULT,
-  observer(this: EaAlert, newVal: VariantType) {
-    this.updateContainerClasslist();
-  },
-})
-variant: VariantType = VARIANT_DEFAULT;
-
-// 如果需要扩展 variant 值（如添加 "normal"）
-@attribute({
-  type: Enum([...VARIANT_TYPES, "normal"]),
-  default: "normal",
-  observer(this: EaComponent) {
-    this.updateContainerClasslist();
-  },
-})
-variant: VariantType | "normal" = "normal";
-```
-
-**常量定义（src/constants/variant.ts）：**
-
-```typescript
-export const VARIANT_TYPES = [
-  "primary",
-  "success",
-  "warning",
-  "danger", // 统一使用 danger 而不是 error
-  "info",
-] as const;
-
-export type VariantType = (typeof VARIANT_TYPES)[number];
-export const VARIANT_DEFAULT = "info";
-
-// 图标映射（danger 和 error 都映射到同一个图标，兼容处理）
-export const VARIANT_ICON_MAP: Record<string, string> = {
-  primary: "circle-info",
-  success: "circle-check",
-  info: "circle-info",
-  warning: "triangle-exclamation",
-  danger: "circle-xmark",
-  error: "circle-xmark", // 兼容处理
-};
-```
-
-**类型说明：**
-
-- `String` - 字符串类型
-- `Number` - 数字类型
-- `Boolean` - 布尔类型（HTML 中属性存在即为 true）
-- `Array` - JSON 数组
-- `Object` - JSON 对象
-- `Enum(["a", "b", "c"])` - 枚举类型，限制可选值（推荐从 `@/utils/Enum` 导入）
-- `Enum(VARIANT_TYPES)` - 使用统一的变体类型常量
-
-#### @query
-
-```typescript
-@query(".ea-component__container")
-private _container!: HTMLElement;
-
-@query("input[type='text']")
-private _input!: HTMLInputElement;
-```
-
-#### @listen
-
-```typescript
-// 基础用法 - 监听 shadowRoot 事件
-@listen("click")
-private _handleClick(e: Event) {
-  // 处理点击
-}
-
-// 事件委托 - 监听特定选择器
-@listen("click", ".ea-component__button")
-private _handleButtonClick(e: Event) {
-  // 处理按钮点击
-}
-
-// 自动清理 - 组件销毁时自动移除监听
-```
-
-### BEM 类名规范
-
-使用 `createBEM` 工具生成 BEM 类名：
-
-```typescript
-const bem = createBEM("ea-component");
-
-// 基础块
-bem(); // "ea-component"
-bem.b(); // "ea-component"
-bem.cb(); // ".ea-component"
-
-// 元素类名 (block__element)
-bem.e("content"); // "ea-component__content"
-bem.ce("content"); // ".ea-component__content"
-
-// 带修饰符
-bem({ size: "large" }); // "ea-component ea-component--size-large"
-bem({ [this.type]: true }); // "ea-component ea-component--primary"
-bem.m("primary", "large"); // "ea-component--primary ea-component--large"
-bem.cm("primary"); // ".ea-component--primary"
-
-// 带状态
-bem({}, { disabled: true }); // "ea-component is-disabled"
-bem({}, { active: this.active }); // "ea-component" 或 "ea-component is-active"
-bem.s("active", "disabled"); // "is-active is-disabled"
-bem.cs("active"); // ".is-active"
-
-// 组合使用
-bem(
-  { [this.type]: true, [this.size]: true },
-  { disabled: this.disabled, center: this.center }
-);
-// "ea-component ea-component--primary ea-component--large is-disabled is-center"
-```
-
-**使用场景：**
-
-1. **模板中定义元素类名**：
-
-```typescript
-html(): string {
-  return `
-    <div class="${bem()}" part="container">
-      <sup class="${bem.e("content")}" part="content"></sup>
-      <slot></slot>
-    </div>
-  `;
-}
-```
-
-2. **updateContainerClasslist 方法**：
-
-```typescript
-updateContainerClasslist(): string {
-  const className = bem(
-    { [this.type]: true },           // 修饰符
-    { dot: this.isDot, hidden: isHidden }  // 状态
-  );
-
-  if (this._container) {
-    this._container.className = className;
-  }
-
-  return className;
-}
-```
-
-### HTML 安全处理
-
-使用 `html()` 函数处理可能包含 HTML 的内容：
-
-```typescript
-import { html } from "@utils/html";
-
-@attribute({
-  type: String,
-  default: "",
-  observer(this: EaAlert, newVal: string) {
-    // 安全地插入 HTML
-    this._container.innerHTML = html(newVal);
-  },
-})
-content: string = "";
-```
-
-**注意：** `html()` 函数会进行 XSS 过滤，只允许安全的 HTML 标签。
+| 方法 | 说明 | 调用时机 |
+|------|------|---------|
+| `html()` | 渲染模板 | `connectedCallback` 中调用，返回 HTML 字符串 |
+| `$mount()` | 组件挂载 | `connectedCallback` 后，`requestAnimationFrame` 中 |
+| `$mounted()` | 挂载完成 | `$mount()` 之后调用 |
+| `$beforeUnmount()` | 组件销毁前 | `disconnectedCallback` 开始时 |
+| `$unmounted()` | 组件销毁后 | `disconnectedCallback` 结束时 |
+| `$updated(data)` | 属性更新 | `attributeChangedCallback` 后，参数 `{ key, newVal, oldVal }` |
+| `$updateLocalization(locale)` | 语言更新 | `locale` 属性变化时 |
 
 ### 事件系统
-
-#### 派发事件
 
 ```typescript
 // 简单事件
 this.emit("focus");
-this.emit("blur");
 
 // 带数据的事件
-this.emit("change", {
-  detail: {
-    value: newVal,
-    label: item.label,
-  },
-});
+this.emit("change", { detail: { value: newVal } });
+
+// 自定义事件类（ea- 前缀）
+this.dispatchEvent(new EaComponentChangeEvent({ value: "new" }));
 ```
 
-#### 自定义事件类（ea- 前缀事件）
+### BEM 类名规范
+
+使用 `createBEM` 工具生成 BEM 类名（详见 `bem` 技能）：
 
 ```typescript
-// types.ts
-export class EaComponentChangeEvent extends Event {
-  readonly detail: { value: string; label: string };
+const bem = createBEM("ea-component");
 
-  constructor(detail: { value: string; label: string }) {
-    super("ea-change", { bubbles: true, cancelable: true, composed: true });
-    this.detail = detail;
-  }
-}
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-change": EaComponentChangeEvent;
-  }
-}
-
-// 使用
-this.dispatchEvent(new EaComponentChangeEvent({ value: "new", label: "New" }));
+bem();                              // "ea-component"
+bem.e("content");                   // "ea-component__content"
+bem({ size: "large" });             // "ea-component ea-component--size-large"
+bem({}, { disabled: true });        // "ea-component is-disabled"
+bem({ primary: true }, { active: this.active });  // 组合
 ```
 
-### 生命周期方法
+### HTML 安全处理
 
-| 方法               | 说明       | 调用时机                         |
-| ------------------ | ---------- | -------------------------------- |
-| `$mount()`         | 组件挂载   | connectedCallback 后，首次渲染前 |
-| `$beforeUnmount()` | 组件销毁前 | disconnectedCallback 开始时      |
-| `$unmounted()`     | 组件销毁后 | disconnectedCallback 结束时      |
-| `$updated()`       | 属性更新   | attributeChangedCallback 后      |
+使用 `html()` 函数处理可能包含 HTML 的内容（详见 `html-safe` 技能）：
 
 ```typescript
-$mount(): void {
-  // 初始化操作
-  this.updateContainerClasslist();
-}
+import { html } from "@utils/html";
 
-$beforeUnmount(): void {
-  // 清理 AbortController、Observer 等资源
-  this._transitionAbortController?.abort();
-  this._resizeObserver?.disconnect();
-}
+this._container.innerHTML = html(newVal);
 ```
 
-### AbortController 管理
-
-对于需要手动管理的事件监听：
-
-```typescript
-private _transitionAbortController?: AbortController;
-
-private _startTransition() {
-  // 清理之前的
-  this._transitionAbortController?.abort();
-  this._transitionAbortController = new AbortController();
-
-  this._container.addEventListener("transitionend", () => {
-    this.remove();
-  }, {
-    signal: this._transitionAbortController.signal,
-    once: true,
-  });
-}
-
-$beforeUnmount(): void {
-  this._transitionAbortController?.abort();
-}
-```
-
-### 类型声明文件
-
-为组件创建类型声明，支持 HTML/Vue/React：
-
-```typescript
-// types.d.ts
-
-// HTML 全局类型
-declare global {
-  interface HTMLElementTagNameMap {
-    "ea-component": EaComponentElement;
-  }
-}
-
-export interface EaComponentElement extends HTMLElement {
-  label: string;
-  disabled: boolean;
-  size: "small" | "medium" | "large";
-}
-
-// Vue 类型
-declare module "vue" {
-  interface GlobalComponents {
-    "ea-component": DefineComponent<{
-      label?: string;
-      disabled?: boolean;
-      size?: "small" | "medium" | "large";
-    }>;
-  }
-}
-
-// React 类型
-declare module "react" {
-  namespace JSX {
-    interface IntrinsicElements {
-      "ea-component": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        label?: string;
-        disabled?: boolean;
-        size?: "small" | "medium" | "large";
-      };
-    }
-  }
-}
-```
+**注意：** `html()` 函数会自动保护 `<slot>` 标签不被 DOMPurify 清洗，并允许 `ea-` 前缀的自定义元素标签和属性。
 
 ## CSS 开发规范
 
@@ -555,7 +254,6 @@ $name: ea-component-name;
   @include state(active) {
     background-color: var(--primary-color);
 
-    // 在 state 内部使用完整选择器
     .#{$name}__content {
       color: var(--color-white);
     }
@@ -563,7 +261,7 @@ $name: ea-component-name;
 }
 ```
 
-### BEM 命名规范
+### BEM SCSS 命名规范
 
 - 使用 `@include block($name)` 定义组件块
 - 使用 `@include element(element-name)` 定义元素
@@ -575,25 +273,8 @@ $name: ea-component-name;
 ### 设计变量使用原则
 
 1. **优先使用变量**：若在 `src/themes/variables.scss` 中存在的颜色、尺寸、间距等值，必须使用其对应的 CSS 变量
-   - 使用 `var(--blue-500)` 而不是硬编码 `#409eff`
-   - 使用 `var(--spacing-md)` 而不是硬编码 `8px`
-   - 使用 `var(--font-size-lg)` 而不是硬编码 `16px`
-
 2. **变量命名规范**：自定义变量必须以 `--#{$name}-` 开头，后跟有意义的描述性名称
-
-3. **尺寸变体变量**：
-
-   ```scss
-   :host {
-     --#{$name}-height: 6px;
-     --#{$name}-height-small: 4px;
-     --#{$name}-height-large: 8px;
-   }
-
-   @include modifier(small) {
-     --#{$name}-height: var(--#{$name}-height-small);
-   }
-   ```
+3. **避免嵌套变量**：不要创建引用其他组件变量的嵌套变量
 
 ### 子组件样式覆盖
 
@@ -605,105 +286,13 @@ $name: ea-component-name;
     &::part(original) {
       display: none;
     }
-
-    &::part(content) {
-      background-color: var(--grey-800);
-    }
   }
 }
 ```
 
 ## 文档生成规范
 
-### 文档结构
-
-````markdown
-# [组件名称] [中文描述]
-
-## 引入
-
-> `js`
-
-```html
-<script type="module">
-  import "./node_modules/easy-component-ui/components/[组件名]/index.js";
-</script>
-```
-````
-
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
-```
-
-## 自定义样式
-
-移步到 [CSS Part](#[组件名小写]-css-part)。
-
-## [示例标题 1]
-
-[示例描述]
-
-<div class="demo">
-  [示例HTML代码]
-</div>
-
-::: details 查看代码
-
-::: code-group
-
-```html
-[HTML代码]
-```
-
-```js
-[JavaScript代码];
-```
-
-```css
-[CSS代码]
-```
-
-:::
-
-:::
-
-## [组件名] API
-
-### [组件名] Attributes
-
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| ---- | ---- | ---- | ------ | ------ |
-
-### [组件名] CSS Part
-
-| 名称 | 说明 |
-| ---- | ---- |
-
-### [组件名] Slots
-
-| 名称 | 说明 |
-| ---- | ---- |
-
-### [组件名] Methods
-
-| 方法名 | 说明 | 参数 |
-| ------ | ---- | ---- |
-
-### [组件名] Events
-
-| 事件名 | 说明 | 回调参数(event.detail) |
-| ------ | ---- | ---------------------- |
-
-````
+> 详见 `doc` 技能模块
 
 ### API 生成规则
 
@@ -718,14 +307,24 @@ $name: ea-component-name;
 ### 代码风格
 
 - 不添加任何注释（除非用户明确要求）
-- **例外：每个私有方法必须添加简单的 JSDoc 注释**，说明其用途，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数，有返回值时必须用 `@returns` 说明返回值
+- **例外：每个私有方法必须添加简单的 JSDoc 注释**，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数，有返回值时必须用 `@returns` 说明返回值
 - 保持代码简洁、清晰
 - 遵循现有的代码风格和命名约定
+
+### 函数命名规范
+
+| 函数类型 | 前缀 | 示例 | 说明 |
+|----------|------|------|------|
+| 事件处理 | `_handle` | `_handleClick`, `_handleInput` | 事件回调 |
+| 私有方法 | `_` | `_updateUI`, `_renderData` | 组件内部使用 |
+| 公共方法 | 无 | `setData`, `show`, `hide` | 对外 API |
+| 生命周期 | `$` | `$mount`, `$beforeUnmount` | 生命周期钩子 |
+| 渲染相关 | `_render` | `_renderItems` | 渲染方法 |
 
 ### 文件操作
 
 - 优先编辑现有文件，而不是创建新文件
-- 不要主动创建文档文件（\*.md）或 README 文件，除非用户明确要求
+- 不要主动创建文档文件（*.md）或 README 文件，除非用户明确要求
 
 ### 开发流程
 
@@ -736,290 +335,66 @@ $name: ea-component-name;
 
 ## 测试规范
 
-### DOMPurify 与属性丢失问题
-
-若测试文件不通过，且可能因为渲染模板函数导致的属性丢失或者属性为空，优先考虑是否与数据清洗有关（DOMPurify）：
-
-1. **问题识别**：当组件使用 `html()` 函数处理模板字符串时，DOMPurify 可能会清洗掉某些属性（如 `srcset`）
-2. **根本原因**：DOMPurify 在 JSDOM 环境下对某些属性（如 `data:` URI 的 `srcset`）的处理比浏览器更严格
-3. **解决方案**：
-   - **优先方案**：使用 DOM API 直接创建元素并设置属性，而不是通过 HTML 字符串
-   - **示例**：
-     ```typescript
-     // 不推荐：使用 HTML 字符串（可能被清洗）
-     this._container.innerHTML = html(`<img srcset="${value}" />`);
-
-     // 推荐：使用 DOM API
-     const img = document.createElement("img");
-     img.srcset = value;
-     this._container.appendChild(img);
-     ```
-
-### 测试文件结构规范
-
-所有组件测试文件遵循统一结构：
-
-```javascript
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-
-// 导入被测试组件
-import "../components/ea-component/index";
-
-describe("EaComponent", () => {
-  let container;
-
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-  });
-
-  afterEach(() => {
-    container.remove();
-  });
-
-  // 按功能分组测试
-  describe("Feature Name", () => {
-    it("should do something", async () => {
-      // 测试代码
-    });
-  });
-});
-````
-
-### 组件测试模式
-
-#### 1. 基础渲染测试（同步）
-
-验证组件基本渲染和 DOM 结构：
-
-```javascript
-it("应该正确渲染组件", () => {
-  const component = document.createElement("ea-component");
-  container.appendChild(component);
-
-  expect(component).toBeDefined();
-  expect(component.shadowRoot).toBeDefined();
-});
-```
-
-#### 2. 属性测试（异步）
-
-属性设置需要等待组件渲染：
-
-```javascript
-it("应该正确应用属性", async () => {
-  const component = document.createElement("ea-component");
-  component.setAttribute("prop", "value");
-  container.appendChild(component);
-
-  // 等待组件渲染完成
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  expect(component.prop).toBe("value");
-});
-```
-
-#### 3. 属性变化测试
-
-验证属性变化后的更新：
-
-```javascript
-it("属性变化时应该正确更新", async () => {
-  const component = document.createElement("ea-component");
-  component.setAttribute("prop", "old-value");
-  container.appendChild(component);
-
-  await new Promise(resolve => setTimeout(resolve, 100));
-  expect(component.prop).toBe("old-value");
-
-  component.setAttribute("prop", "new-value");
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  expect(component.prop).toBe("new-value");
-});
-```
-
-#### 4. 事件测试
-
-验证事件触发：
-
-```javascript
-it("应该触发事件", async () => {
-  const component = document.createElement("ea-component");
-  container.appendChild(component);
-
-  const handler = vi.fn();
-  component.addEventListener("event-name", handler);
-
-  // 触发事件的操作
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  expect(handler).toHaveBeenCalled();
-});
-```
-
-#### 5. 复杂场景测试
-
-验证多个属性组合使用：
-
-```javascript
-it("应该支持组合使用多个属性", async () => {
-  const component = document.createElement("ea-component");
-  component.setAttribute("prop1", "value1");
-  component.setAttribute("prop2", "value2");
-  container.appendChild(component);
-
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  expect(component.prop1).toBe("value1");
-  expect(component.prop2).toBe("value2");
-});
-```
-
-### 等待时间规范
-
-根据测试场景选择等待时间：
-
-| 场景              | 等待时间 | 说明                 |
-| ----------------- | -------- | -------------------- |
-| 同步属性读取      | 0ms      | 直接读取已设置的属性 |
-| 组件渲染/属性更新 | 100ms    | 大多数异步渲染场景   |
-| 图片加载/网络请求 | 100ms+   | 异步资源加载         |
-| DOM 结构验证      | 无需等待 | 同步验证 DOM 结构    |
-
-```javascript
-// 同步属性读取
-await new Promise(resolve => setTimeout(resolve, 0));
-
-// 组件渲染/属性更新
-await new Promise(resolve => setTimeout(resolve, 100));
-
-// 图片加载
-await new Promise(resolve => setTimeout(resolve, 100));
-```
+> 详见 `test` 技能模块
 
 ### 统一等待工具函数
-
-项目中提供了统一的等待工具函数 `waitForRender`，位于 `src/test/utils/waitForRender.js`：
 
 ```javascript
 import { waitForRender } from "./utils/waitForRender";
 
-// 使用默认等待时间（100ms）
-await waitForRender();
-
-// 指定等待时间
-await waitForRender(200);
-
-// 快速等待（0ms）
-await waitForRender(0);
+await waitForRender();    // 默认 100ms
+await waitForRender(200); // 自定义
+await waitForRender(0);   // 微任务等待
 ```
 
-**使用规范：**
+### DOMPurify 属性丢失问题
 
-- 所有测试文件中需要等待组件渲染时，统一使用 `waitForRender()` 替代 `new Promise(resolve => setTimeout(resolve, 100))`
-- 默认等待时间为 100ms，适用于大多数组件渲染场景
-- 如需特殊等待时间，可传入参数指定毫秒数
+若测试中属性丢失或为空，优先考虑 DOMPurify 清洗问题，使用 DOM API 替代 HTML 字符串：
 
-````
+```typescript
+// 推荐：使用 DOM API
+const img = document.createElement("img");
+img.srcset = value;
+this._container.appendChild(img);
+```
 
 ## 常见陷阱与注意事项
 
 ### 1. 避免使用 HTMLElement 保留属性名
 
-**问题**：`HTMLElement` 有一些内置属性（如 `title`, `lang`, `dir`, `draggable`, `tabIndex`, `style`, `className` 等）。如果在组件中使用 `@attribute` 装饰器声明与这些保留属性同名的属性，类字段初始化器（如 `this.title = ""`）会触发 `HTMLElement.title` 的 setter，导致 jsdom 自定义元素升级失败（`NotSupportedError: Unexpected attributes`）。
+`HTMLElement` 有内置属性（如 `title`, `lang`, `dir`, `draggable`, `tabIndex`, `style`, `className`, `id`, `hidden` 等）。使用 `@attribute` 声明与保留属性同名的属性会导致 jsdom 自定义元素升级失败。
 
-**解决方案**：使用不会与 `HTMLElement` 保留属性冲突的名称。例如：
-- `title` → `heading`（与 `EaDialog` 一致）
+- `title` → `heading`
 - `type` → `variant`
-
-```typescript
-// ❌ 错误：title 是 HTMLElement 保留属性
-@attribute({ type: String, default: "" })
-title: string = "";  // this.title = "" 触发 HTMLElement.title setter
-
-// ✅ 正确：使用 heading 避免冲突
-@attribute({ type: String, default: "" })
-heading: string = "";  // 安全，不与 HTMLElement 属性冲突
-````
-
-**常见的 HTMLElement 保留属性名**：`title`, `lang`, `dir`, `draggable`, `tabIndex`, `style`, `className`, `id`, `hidden`, `accessKey`, `contentEditable`, `isContentEditable`, `offsetHeight`, `offsetWidth`, `offsetLeft`, `offsetTop` 等。
 
 ### 2. 用 CSS 状态类替代 JS style 控制显隐
 
-**问题**：使用 JS 的 `element.style.display = "none"` 控制元素显隐会导致样式与逻辑耦合，不利于主题定制和样式覆盖。
-
-**解决方案**：使用 BEM 状态类（`is-xxx`）配合 SCSS 的 `@include state()` 控制，通过 `updateContainerClasslist()` 统一管理。
-
-```typescript
-// ❌ 不推荐：JS 直接控制 style
-private _updateHeaderVisibility(): void {
-  if (this._header) {
-    this._header.style.display = this.withHeader ? "" : "none";
-  }
-}
-
-// ✅ 推荐：CSS 状态类控制
-updateContainerClasslist(): string {
-  const className = bem(
-    { [this.direction]: true },
-    {
-      "close-hidden": !this.showClose,
-      "header-hidden": !this.withHeader,  // 通过状态类控制
-    }
-  );
-  // ...
-}
-```
-
-```scss
-// SCSS 中定义状态样式
-@include block(ea-drawer) {
-  @include state(header-hidden) {
-    .ea-drawer-main__header {
-      display: none;
-    }
-  }
-}
-```
+使用 BEM 状态类（`is-xxx`）配合 SCSS 的 `@include state()` 控制，通过 `updateContainerClasslist()` 统一管理，而非 `element.style.display = "none"`。
 
 ### 3. $mount 中不应执行 DOM 移动操作
 
-**问题**：`$mount()` 钩子在 `connectedCallback` 中触发。如果在 `$mount()` 中执行 DOM 移动操作（如 `appendChild` 将组件移到 `document.body`），会导致组件从原位置移除并重新插入 DOM，从而再次触发 `connectedCallback`，形成无限递归调用。
+`$mount()` 在 `connectedCallback` 中触发，执行 DOM 移动操作（如 `appendChild`）会导致无限递归。DOM 移动操作应放在 `constructor` 中。
 
-**解决方案**：将 DOM 移动操作（如 `_handleAppendTo`）放在 `constructor` 中执行，因为 `constructor` 只在元素创建时调用一次，不会因 DOM 移动而重复触发。
+**安全操作**：`updateContainerClasslist()`、`setAttribute()`、DOM 查询和读取  
+**危险操作**：`appendChild()`、`insertBefore()`、`remove()`、`removeChild()`
 
-```typescript
-// ❌ 错误：在 $mount 中执行 DOM 移动会导致无限循环
-$mount(): void {
-  super.$mount?.();
-  this._handleAppendTo();  // appendChild 触发 connectedCallback → $mount → 无限循环
-}
+---
 
-// ✅ 正确：在 constructor 中执行 DOM 移动
-constructor() {
-  super();
-  this._handleAppendTo();  // constructor 只执行一次，不会重复触发
-}
+## 更新日志
 
-$mount(): void {
-  super.$mount?.();
-  this.updateContainerClasslist();  // 只做样式初始化等安全操作
-}
-```
+### v3.1.0 (2026-05-27)
 
-**安全操作**（可在 `$mount` 中执行）：
-
-- `updateContainerClasslist()` - 更新 CSS 类名
-- `setAttribute()` - 设置属性
-- DOM 查询和读取
-
-**危险操作**（不可在 `$mount` 中执行）：
-
-- `appendChild()` / `insertBefore()` - DOM 移动
-- `remove()` / `removeChild()` - DOM 移除
-- 任何会改变组件在 DOM 树中位置的操作
-
-```
-
-```
+- 新增 `@property` 装饰器文档
+- 新增 `@queryAll` 装饰器文档
+- 新增 `@listen` 装饰器完整选项（capture/passive/once, 特殊 selector 值）
+- 新增 `@CustomElement` 的 `extraAttr` 选项
+- 修正基类名称：`FormBase` → `EaFormAssociatedBase`
+- 修正生命周期方法签名：`$updated(data: { key, newVal, oldVal })`
+- 新增 `$mounted()` 生命周期方法
+- 新增 `$updateLocalization()` 生命周期方法
+- 新增 `html()` 函数的 slot 保护机制和 DOMPurify 配置说明
+- 补全目录结构：`common/`、`stores/`、`constants/`
+- 统一测试工具路径：`src/test/utils/waitForRender.js`
+- 添加版本追踪和更新日志
+- 技能模块原子化拆分（16 个独立技能）
+- 规则精简为高层规范 + 技能索引
