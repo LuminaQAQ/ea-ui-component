@@ -1,3 +1,5 @@
+$name: ea-alert;
+
 $alert-type: (
   primary: blue,
   warning: yellow,
@@ -7,31 +9,32 @@ $alert-type: (
 );
 
 :host {
-  --ea-alert-effect: light;
+  --#{$name}-padding: var(--spacing-md) var(--spacing-lg);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-transition: var(--transition-normal);
 
-  --ea-alert-space: var(--spacing-md) var(--spacing-lg);
-  --ea-alert-border-radius: var(--border-radius-sm);
+  --#{$name}-icon-margin-right: var(--spacing-md);
+  --#{$name}-content-gap: var(--spacing-sm);
 
-  --ea-alert-transition: var(--transition-normal);
+  --#{$name}-close-position-top: var(--spacing-lg);
+  --#{$name}-close-position-right: 16px;
+
+  --#{$name}-close-icon-size: var(--font-size-lg);
+  --#{$name}-close-icon-color: var(--grey-400);
 
   @each $type, $color in $alert-type {
-    --ea-alert-light-#{$type}-bgc: var(--#{$color}-100);
-    --ea-alert-light-#{$type}-color: var(--#{$color}-500);
-
-    --ea-alert-dark-#{$type}-bgc: var(--#{$color}-500);
+    --#{$name}-light-#{$type}-bgc: var(--#{$color}-100);
+    --#{$name}-light-#{$type}-color: var(--#{$color}-500);
+    --#{$name}-dark-#{$type}-bgc: var(--#{$color}-500);
+    --#{$name}-dark-#{$type}-color: var(--color-white);
   }
-
-  --ea-alert-dark-color: var(--color-white);
-
-  --ea-alert-cloase-icon-position-top: 12px;
-  --ea-alert-cloase-icon-position-right: 16px;
 }
 
 :host {
   display: block;
 }
 
-@include block(ea-alert) {
+@include block($name) {
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
@@ -40,25 +43,24 @@ $alert-type: (
   align-items: center;
   width: 100%;
 
-  border-radius: var(--ea-alert-border-radius);
-  padding: var(--ea-alert-space);
+  border-radius: var(--#{$name}-border-radius);
+  padding: var(--#{$name}-padding);
 
   filter: opacity(1);
 
-  transition: filter var(--ea-alert-transition);
+  transition: filter var(--#{$name}-transition);
 
   @include element(icon-wrap) {
     display: block;
-    margin-right: 8px;
+    margin-right: var(--#{$name}-icon-margin-right);
   }
 
   @include element(content) {
     display: flex;
-    align-items: center;
     flex-direction: column;
     align-items: flex-start;
 
-    gap: var(--spacing-sm);
+    gap: var(--#{$name}-content-gap);
   }
 
   @include element(heading) {
@@ -76,37 +78,37 @@ $alert-type: (
     display: block;
 
     position: absolute;
-    top: var(--ea-alert-cloase-icon-position-top);
-    right: var(--ea-alert-cloase-icon-position-right);
+    top: var(--#{$name}-close-position-top);
+    right: var(--#{$name}-close-position-right);
   }
 
   @include element(close-icon) {
     display: block;
-    width: 1rem;
-    height: 1rem;
-    color: var(--grey-400);
+    width: var(--#{$name}-close-icon-size);
+    height: var(--#{$name}-close-icon-size);
+    color: var(--#{$name}-close-icon-color);
   }
 
   @each $type, $color in $alert-type {
     @include modifier(#{$type}) {
-      background-color: var(--ea-alert-light-#{$type}-bgc);
-      color: var(--ea-alert-light-#{$type}-color);
+      background-color: var(--#{$name}-light-#{$type}-bgc);
+      color: var(--#{$name}-light-#{$type}-color);
 
-      &.ea-alert--dark {
-        background-color: var(--ea-alert-dark-#{$type}-bgc);
-        color: var(--ea-alert-dark-color);
+      &.#{$name}--dark {
+        background-color: var(--#{$name}-dark-#{$type}-bgc);
+        color: var(--#{$name}-dark-#{$type}-color);
 
-        .ea-alert__icon {
-          color: var(--ea-alert-dark-#{$type}-color);
+        .#{$name}__icon {
+          color: var(--#{$name}-dark-#{$type}-color);
         }
 
-        .ea-alert__close-icon {
-          color: var(--ea-alert-dark-#{$type}-color);
+        .#{$name}__close-icon {
+          color: var(--#{$name}-dark-#{$type}-color);
         }
       }
 
-      .ea-alert__icon {
-        color: var(--ea-alert-light-#{$type}-color);
+      .#{$name}__icon {
+        color: var(--#{$name}-light-#{$type}-color);
       }
     }
   }
@@ -115,11 +117,11 @@ $alert-type: (
     justify-content: center;
   }
 
-  @include modifier(before-close) {
+  @include state(before-close) {
     filter: opacity(0);
   }
 
-  @include modifier(hide) {
+  @include state(hide) {
     width: 0;
     height: 0;
     padding: 0;

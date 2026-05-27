@@ -17,6 +17,9 @@ import {
 const TAG_NAME = "ea-alert" as const;
 const bem = createBEM(TAG_NAME);
 
+const EFFECT_TYPES = ["light", "dark"] as const;
+type EffectType = (typeof EFFECT_TYPES)[number];
+
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaAlert extends EaBase {
   // ==================== DOM 元素引用 ====================
@@ -65,7 +68,7 @@ export class EaAlert extends EaBase {
       this.updateContainerClasslist();
       if (this.showIcon) {
         this._alertIcon.innerHTML = html(
-          `<ea-icon class="ea-alert__icon" name="${VARIANT_ICON_MAP[newVal]}" part="icon"></ea-icon>`
+          `<ea-icon class="${bem.e("icon")}" name="${VARIANT_ICON_MAP[newVal]}" part="icon"></ea-icon>`
         );
       }
     },
@@ -73,13 +76,13 @@ export class EaAlert extends EaBase {
   variant: VariantType = VARIANT_DEFAULT;
 
   @attribute({
-    type: String,
+    type: Enum(EFFECT_TYPES),
     default: "light",
     observer(this: EaAlert) {
       this.updateContainerClasslist();
     },
   })
-  effect: string = "light";
+  effect: EffectType = "light";
 
   @attribute({
     type: String,
@@ -97,7 +100,7 @@ export class EaAlert extends EaBase {
       this._alertCloseBtn.innerHTML = newVal
         ? html(
             this.closeText ||
-              `<ea-icon class="ea-alert__close-icon" name="xmark" part="close-icon"></ea-icon>`
+              `<ea-icon class="${bem.e("close-icon")}" name="xmark" part="close-icon"></ea-icon>`
           )
         : "";
     },
@@ -107,10 +110,12 @@ export class EaAlert extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaAlert) {
-      this._alertIcon.innerHTML = html(
-        `<ea-icon class="ea-alert__icon" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>`
-      );
+    observer(this: EaAlert, newVal: boolean) {
+      this._alertIcon.innerHTML = newVal
+        ? html(
+            `<ea-icon class="${bem.e("icon")}" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>`
+          )
+        : "";
     },
   })
   showIcon: boolean = false;
@@ -129,11 +134,11 @@ export class EaAlert extends EaBase {
     default: 0,
     observer(this: EaAlert, newVal: number) {
       newVal = Math.abs(newVal);
-      this._container.classList.toggle("ea-alert--hide", newVal > 0);
+      this._container.classList.toggle(bem.s("hide"), newVal > 0);
 
       timeout(() => {
         this.emit("open");
-        this._container.classList.remove("ea-alert--hide");
+        this._container.classList.remove(bem.s("hide"));
       }, newVal);
     },
   })
@@ -177,27 +182,27 @@ export class EaAlert extends EaBase {
    */
   html(): string {
     const iconContent = this.showIcon
-      ? `<ea-icon class="ea-alert__icon" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>`
+      ? `<ea-icon class="${bem.e("icon")}" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>`
       : "";
 
     const closeContent = this.closable
       ? this.closeText ||
-        `<ea-icon class="ea-alert__close-icon" name="xmark" part="close-icon"></ea-icon>`
+        `<ea-icon class="${bem.e("close-icon")}" name="xmark" part="close-icon"></ea-icon>`
       : "";
 
     return `
       <div class="${this.updateContainerClasslist()}" part='container'>
-        <span class="ea-alert__icon-wrap" part='icon-wrap'>
+        <span class="${bem.e("icon-wrap")}" part='icon-wrap'>
           <slot name='icon'>${iconContent}</slot>
         </span>
-        <div class="ea-alert__content" part='content-wrap'>
-          <span class="ea-alert__heading" part='heading'>
+        <div class="${bem.e("content")}" part='content-wrap'>
+          <span class="${bem.e("heading")}" part='heading'>
             <slot name="heading">${this.heading}</slot>
           </span>
-          <p class="ea-alert__description" part='description'>
+          <p class="${bem.e("description")}" part='description'>
             <slot>${this.description}</slot>
           </p>
-          <span class="ea-alert__close-btn" part="close-btn">${closeContent}</span>
+          <span class="${bem.e("close-btn")}" part="close-btn">${closeContent}</span>
         </div>
       </div>
     `;
@@ -206,12 +211,12 @@ export class EaAlert extends EaBase {
   /**
    * 关闭事件处理
    */
-  @listen("click", ".ea-alert__close-btn")
+  @listen("click", bem.ce("close-btn"))
   private _handleClose() {
     if (!this.closable && this.autoClose <= 0) return;
 
     const doClose = () => {
-      this._container.classList.add("ea-alert--before-close");
+      this._container.classList.add(bem.s("before-close"));
 
       this._transitionAbortController?.abort();
       this._transitionAbortController = new AbortController();
