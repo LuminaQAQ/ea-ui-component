@@ -1,25 +1,41 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import stylesheet from "./index.scss?inline";
+import { CustomElement, attribute, query } from "@decorator";
 import { Enum } from "@/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@/constants/variant";
+import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-badge" as const;
 const bem = createBEM(TAG_NAME);
+const BADGE_VARIANT_DEFAULT = "danger";
 
+/**
+ * @summary 徽标组件，出现在按钮、图标旁的数字或状态标记，支持多种类型、最大值和小圆点模式。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，徽标定位的参考元素（如按钮、图标等）。
+ * @slot content - 自定义徽标内容，内部使用 `data-value` 标记值显示位置。
+ *
+ * @csspart container - 外层容器元素。
+ * @csspart content - 徽标显示值的容器元素。
+ *
+ * @cssproperty --ea-badge-color - 徽标背景颜色。
+ * @cssproperty --ea-badge-text-color - 徽标文字颜色。
+ * @cssproperty --ea-badge-font-size - 徽标文字大小。
+ * @cssproperty --ea-badge-size - 徽标高度。
+ * @cssproperty --ea-badge-dot-size - 小圆点尺寸。
+ * @cssproperty --ea-badge-spacing - 徽标内边距。
+ * @cssproperty --ea-badge-border-radius - 徽标圆角。
+ * @cssproperty --ea-badge-offset-x - X 轴偏移量。
+ * @cssproperty --ea-badge-offset-y - Y 轴偏移量。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaBadge extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-badge")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-badge__content")
+  @query(bem.ce("content"))
   private _content!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -34,18 +50,17 @@ export class EaBadge extends EaBase {
   @attribute({
     type: Number,
     default: Infinity,
-    observer() {},
   })
   max: number = Infinity;
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: "danger",
+    default: BADGE_VARIANT_DEFAULT,
     observer(this: EaBadge) {
       this.updateContainerClasslist();
     },
   })
-  variant: VariantType = "danger";
+  variant: VariantType = BADGE_VARIANT_DEFAULT;
 
   @attribute({
     type: String,
@@ -103,52 +118,29 @@ export class EaBadge extends EaBase {
   })
   showZero: boolean = true;
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const isHidden =
       this.dataHidden || (!this.showZero && Number(this.value) === 0);
 
     const className = bem(
-      {
-        [this.variant]: true,
-      },
-      {
-        dot: this.isDot,
-        hidden: isHidden,
-      }
+      { [this.variant]: this.variant !== BADGE_VARIANT_DEFAULT },
+      { dot: this.isDot, hidden: isHidden }
     );
 
-    const container = this.shadowRoot?.querySelector(bem.cb()) as HTMLElement;
-    if (container) {
-      container.className = className;
-    }
+    if (this._container) this._container.className = className;
 
     return className;
   }
 
-  /**
-   * 计算显示值
-   */
   private _computedValue(value: string): string {
-    if (!this.showZero && Number(value) === 0) {
-      return "";
-    }
+    if (!this.showZero && Number(value) === 0) return "";
 
     const numValue = Number(value);
-    if (!isNaN(numValue) && numValue > this.max) {
-      return `${this.max}+`;
-    }
+    if (!isNaN(numValue) && numValue > this.max) return `${this.max}+`;
 
     return value;
   }
 
-  /**
-   * 更新内容显示
-   */
   private _updateContent(value: string): void {
     const computedValue = this._computedValue(value);
 
@@ -173,9 +165,6 @@ export class EaBadge extends EaBase {
     this._content.innerHTML = cloned.innerHTML;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class="${bem()}" part="container">
@@ -184,8 +173,6 @@ export class EaBadge extends EaBase {
       </div>
     `;
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

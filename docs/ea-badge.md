@@ -10,7 +10,7 @@ onMounted(() => {
 
     init() {
       this.badge.addEventListener("mouseover", () => {
-        this.badge.setAttribute("data-hidden", true);
+        this.badge.setAttribute("data-hidden", "");
 
         this.badge.addEventListener(
           "mouseout",
@@ -32,7 +32,6 @@ ea-badge::part(custom-icon) {
   font-size: 12px;
   margin-right: 2px;
 }
-
 ea-badge::part(custom-value) {
   font-size: 14px;
 }
@@ -52,9 +51,22 @@ ea-badge::part(custom-value) {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#badge-css-part)。
 
 ## 基础用法
 
@@ -127,6 +139,8 @@ ea-badge::part(custom-value) {
   </ea-badge>
 </div>
 
+::: details 查看代码
+
 ```html
 <div class="demo row">
   <ea-badge value="200" max="99">
@@ -138,11 +152,13 @@ ea-badge::part(custom-value) {
 </div>
 ```
 
-## 自定义显示内容​
+:::
 
-你也可以展示除数字以外你想要展示的任何值。 或者您可以使用 content 栏位自定义内容。
+## 自定义显示内容
 
-当 `value` 是 `String` 时，可以显示自定义文字。 或者使用 `content` 插槽。
+你也可以展示除数字以外你想要展示的任何值。或者可以使用 `content` 插槽自定义内容。
+
+当 `value` 是 `String` 时，可以显示自定义文字。或者使用 `content` 插槽。
 
 <div class="row left">
   <ea-badge value="new">
@@ -152,6 +168,8 @@ ea-badge::part(custom-value) {
     <ea-button size="small">回复</ea-button>
   </ea-badge>
 </div>
+
+::: details 查看代码
 
 ::: code-group
 
@@ -188,11 +206,11 @@ ea-badge::part(custom-value) {
 
 :::
 
-## 小红点​
+## 小红点
 
 通过一个小红点标记来告知用户有新内容。
 
-使用 `is-dot` 属性。 是个布尔值。
+使用 `is-dot` 属性。是个布尔值。
 
 <div class="demo row">
   <ea-badge is-dot>query</ea-badge>
@@ -203,6 +221,8 @@ ea-badge::part(custom-value) {
     <ea-button icon="envelope"></ea-button>
   </ea-badge>
 </div>
+
+::: details 查看代码
 
 ::: code-group
 
@@ -224,7 +244,7 @@ const hiddenExample = {
 
   init() {
     this.badge.addEventListener("mouseover", () => {
-      this.badge.setAttribute("data-hidden", true);
+      this.badge.setAttribute("data-hidden", "");
 
       this.badge.addEventListener(
         "mouseout",
@@ -243,13 +263,15 @@ hiddenExample.init();
 
 ## 偏移量
 
-设置徽章点的偏移，格式是 `[左，顶部]`， 代表状态点从左侧和默认位置顶部的偏移。
+设置徽章点的偏移，格式是 `[左，顶部]`，代表状态点从左侧和默认位置顶部的偏移。
 
 <div class="demo">
   <ea-badge class="item" value="0" offset-x="10" offset-y="5">
     <ea-button>offset</ea-button>
   </ea-badge>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -259,37 +281,50 @@ hiddenExample.init();
 </div>
 ```
 
-## Attributes
+:::
+
+## Badge API
+
+### Badge Attributes
 
 | 参数        | 说明                                                                       | 类型               | 可选值                                            | 默认值   |
 | ----------- | -------------------------------------------------------------------------- | ------------------ | ------------------------------------------------- | -------- |
-| value       | 徽章显示的值；可以是数字或字符串；当为数字且超过 `max` 时会显示为 `{max}+` | String / Number    | —                                                 | ""       |
+| value       | 徽章显示的值；可以是数字或字符串；当为数字且超过 `max` 时会显示为 `{max}+` | String             | —                                                 | ""       |
 | max         | 最大值阈值，超过显示为 `{max}+`；仅当 `value` 为 Number 时生效             | Number             | —                                                 | Infinity |
+| variant     | 徽标类型                                                                   | String             | `primary \| success \| warning \| danger \| info` | danger   |
+| color       | 自定义背景色，设置后覆盖 `variant` 的背景色                                | String (CSS color) | —                                                 | ""       |
 | is-dot      | 是否以小圆点形式显示徽章（不显示数字）                                     | Boolean            | —                                                 | false    |
-| data-hidden | 是否隐藏 Badge。                                                           | Boolean            | —                                                 | false    |
-| variant     | badge 类型。                                                               | String             | `primary \| success \| warning \| danger \| info` | danger   |
+| data-hidden | 是否隐藏徽章                                                               | Boolean            | —                                                 | false    |
 | show-zero   | 值为零时是否显示 Badge                                                     | Boolean            | —                                                 | true     |
-| color       | 背景色 `--ea-badge-color`                                                  | String (CSS color) | —                                                 | ""       |
-| offset-x    | 徽章在 X 轴上的偏移（像素），内部会设置 `--ea-badge-offset-x`              | Number             | —                                                 | 0        |
-| offset-y    | 徽章在 Y 轴上的偏移（像素），内部会设置 `--ea-badge-offset-y`              | Number             | —                                                 | 0        |
+| offset-x    | 徽章在 X 轴上的偏移（像素）                                                | Number             | —                                                 | 0        |
+| offset-y    | 徽章在 Y 轴上的偏移（像素）                                                | Number             | —                                                 | 0        |
 
-## Scopes
-
-| 名称       | 说明         |
-| ---------- | ------------ |
-| data-value | 徽章显示的值 |
-
-## CSS Part
+### Badge CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明                                                    |
-| --------- | ------------------------------------------------------- |
-| container | `ea-badge` 外层容器（包含徽章与插槽内容）               |
-| content   | 徽章显示值的容器（内部为 `<sup>` 元素，part="content"） |
+| 名称      | 说明                                      |
+| --------- | ----------------------------------------- |
+| container | `ea-badge` 外层容器（包含徽章与插槽内容） |
+| content   | 徽章显示值的容器（内部为 `<sup>` 元素）   |
 
-## Slots
+### Badge Slots
 
-| 名称 | 说明                                                                         |
-| ---- | ---------------------------------------------------------------------------- |
-| —    | 默认插槽：组件的子节点通常为触发目标（如按钮、图标等），徽章会定位在该元素上 |
+| 名称    | 说明                                                                         |
+| ------- | ---------------------------------------------------------------------------- |
+| default | 默认插槽，组件的子节点通常为触发目标（如按钮、图标等），徽章会定位在该元素上 |
+| content | 自定义徽标内容，内部使用 `data-value` 标记值显示位置                         |
+
+### Badge CSS Properties
+
+| 名称                     | 说明         |
+| ------------------------ | ------------ |
+| --ea-badge-color         | 徽标背景颜色 |
+| --ea-badge-text-color    | 徽标文字颜色 |
+| --ea-badge-font-size     | 徽标文字大小 |
+| --ea-badge-size          | 徽标高度     |
+| --ea-badge-dot-size      | 小圆点尺寸   |
+| --ea-badge-spacing       | 徽标内边距   |
+| --ea-badge-border-radius | 徽标圆角     |
+| --ea-badge-offset-x      | X 轴偏移量   |
+| --ea-badge-offset-y      | Y 轴偏移量   |

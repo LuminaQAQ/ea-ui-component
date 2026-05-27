@@ -82,15 +82,13 @@
         font-size: 14px;
       }
     </style>
-    <div class="demo">
-      <div class="row">
-        <ea-badge value="new">
-          <ea-button>comments</ea-button>
-        </ea-badge>
-        <ea-badge value="hot">
-          <ea-button>replies</ea-button>
-        </ea-badge>
-      </div>
+    <div class="demo row">
+      <ea-badge value="new">
+        <ea-button>comments</ea-button>
+      </ea-badge>
+      <ea-badge value="hot">
+        <ea-button>replies</ea-button>
+      </ea-badge>
       <ea-badge value="99">
         <ea-button>share</ea-button>
         <div slot="content">
@@ -123,7 +121,7 @@
 
         init() {
           this.badge.addEventListener("mouseover", () => {
-            this.badge.setAttribute("data-hidden", true);
+            this.badge.setAttribute("data-hidden", "");
 
             this.badge.addEventListener(
               "mouseout",
