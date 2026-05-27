@@ -27,6 +27,23 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+如果需要使用带有图标的属性，需要提前引入图标样式文件。
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#avatar-css-part) 和 [CSS 自定义属性](#avatar-css-自定义属性)。
+
 ## 基本用法
 
 使用 `shape`（`circle` | `square`）和 `size` 控制头像的形状与大小。`size` 支持预设字符串或像素值。
@@ -68,7 +85,7 @@ onMounted(() => {
 
 ## 展示类型
 
-支持三种展示类型：图标（`icon`）、图片（`src`）和字符（slot）。
+支持三种展示类型：图标（`icon`）、图片（`src`）和字符（slot）。当 `src` 和 `icon` 同时设置时，`src` 优先。
 
 <div class="demo">
   <div class="row">
@@ -92,9 +109,9 @@ onMounted(() => {
 
 ## 图片加载失败的回退（fallback）
 
-当 `src` 指定的图片加载失败时，组件会触发 `error` 事件。你可以监听该事件来替换图片、显示文本或其它占位内容。
+当 `src` 指定的图片加载失败时，组件会触发 `error` 事件并显示错误占位图。你可以监听该事件来替换图片、显示文本或其它占位内容。
 
-示例（HTML + JS）：
+清空 `src` 属性时，组件会自动回退到 `icon`（如果已设置）或默认 slot 内容。
 
 <div class="demo">
   <div class="row">
@@ -199,34 +216,48 @@ avatar.addEventListener("error", e => {
 
 :::
 
-## Attributes
+## Avatar API
 
-| **参数** | **说明**     | **类型**                                                   | **可选值**                            | **默认值** |
-| -------- | ------------ | ---------------------------------------------------------- | ------------------------------------- | ---------- |
-| icon     | 图标类名     | `string`                                                   | —                                     | —          |
-| size     | 尺寸         | `string`                                                   | `large \| default \| small \| 像素值` | `default`  |
-| shape    | 形状         | `string`                                                   | `circle \| square`                    | `circle`   |
-| src      | 图片地址     | `string`                                                   | —                                     | —          |
-| src-set  | 图片地址集   | `string`                                                   | —                                     | —          |
-| alt      | 替代文本     | `string`                                                   | —                                     | —          |
-| fit      | 图片适应方式 | `string \| fill \| contain \| cover \| none \| scale-down` | `cover`                               |
+### Avatar Attributes
 
-## Events
+| 参数    | 说明         | 类型   | 可选值                                                   | 默认值  |
+| ------- | ------------ | ------ | -------------------------------------------------------- | ------- |
+| icon    | 图标类名     | string | —                                                        | —       |
+| size    | 尺寸         | string | `large` \| `default` \| `small` \| 像素值                | default |
+| shape   | 形状         | string | `circle` \| `square`                                     | circle  |
+| src     | 图片地址     | string | —                                                        | —       |
+| src-set | 图片地址集   | string | —                                                        | —       |
+| alt     | 替代文本     | string | —                                                        | —       |
+| fit     | 图片适应方式 | string | `fill` \| `contain` \| `cover` \| `none` \| `scale-down` | cover   |
 
-| 事件名 | 说明               |
-| ------ | ------------------ |
-| error  | 图片加载失败时触发 |
+### Avatar Events
 
-## CSS Part
+| 事件名 | 说明               | 回调参数(event.detail) |
+| ------ | ------------------ | ---------------------- |
+| error  | 图片加载失败时触发 | —                      |
 
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+### Avatar CSS Part
 
-| 名称      | 说明            |
-| --------- | --------------- |
-| container | avatar 外层容器 |
+| 名称        | 说明     |
+| ----------- | -------- |
+| container   | 容器元素 |
+| img-avatar  | 图片元素 |
+| icon-avatar | 图标元素 |
 
-## Slots
+### Avatar Slots
 
-| 名称 | 说明     |
-| ---- | -------- |
-| —    | 默认插槽 |
+| 名称    | 说明     |
+| ------- | -------- |
+| default | 默认插槽 |
+
+### Avatar CSS 自定义属性
+
+| 属性名                           | 说明         |
+| -------------------------------- | ------------ |
+| --ea-avatar-size                 | 头像尺寸     |
+| --ea-avatar-square-border-radius | 方形圆角     |
+| --ea-avatar-circle-border-radius | 圆形圆角     |
+| --ea-avatar-fit                  | 图片适应方式 |
+| --ea-avatar-color                | 文字颜色     |
+| --ea-avatar-font-size            | 字体大小     |
+| --ea-avatar-background-color     | 背景颜色     |

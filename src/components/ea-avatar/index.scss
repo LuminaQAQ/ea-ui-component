@@ -1,3 +1,5 @@
+$name: ea-avatar;
+
 $size-type: (
   small: 24px,
   default: 40px,
@@ -6,58 +8,56 @@ $size-type: (
 
 :host {
   @each $size-name, $size in $size-type {
-    --ea-avatar-size-#{$size-name}: #{$size};
+    --#{$name}-size-#{$size-name}: #{$size};
   }
-  --ea-avatar-size: var(--ea-avatar-size-default);
-  --ea-avatar-square-border-radius: 4px;
-  --ea-avatar-circle-border-radius: 50%;
 
-  --ea-avatar-fit: cover;
+  --#{$name}-size: var(--#{$name}-size-default);
+  --#{$name}-square-border-radius: var(--border-radius-sm);
+  --#{$name}-circle-border-radius: var(--border-radius-circle);
+  --#{$name}-fit: cover;
 
-  --ea-avatar-color: var(--color-white);
-  --ea-avatar-font-size: var(--font-size-md);
-  --ea-avatar-background-color: var(--grey-400);
+  --#{$name}-color: var(--color-white);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-background-color: var(--grey-400);
 }
 
 :host {
   display: inline-block;
 }
 
-@include block(ea-avatar) {
+@include block($name) {
   display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
 
-  width: var(--ea-avatar-size);
-  height: var(--ea-avatar-size);
-  line-height: var(--ea-avatar-size);
+  width: var(--#{$name}-size);
+  height: var(--#{$name}-size);
+  line-height: var(--#{$name}-size);
 
   white-space: nowrap;
 
-  background-color: var(--ea-avatar-background-color);
-  color: var(--ea-avatar-color);
-  font-size: var(--ea-avatar-font-size);
+  background-color: var(--#{$name}-background-color);
+  color: var(--#{$name}-color);
+  font-size: var(--#{$name}-font-size);
 
   @include element(img) {
     width: 100%;
     height: 100%;
 
-    object-fit: var(--ea-avatar-fit);
+    object-fit: var(--#{$name}-fit);
   }
 
   @include element(icon) {
-    color: var(--ea-avatar-color);
+    color: var(--#{$name}-color);
   }
 
   @include modifier(circle) {
-    border-radius: 50%;
+    border-radius: var(--#{$name}-circle-border-radius);
 
     overflow: hidden;
   }
 
   @include modifier(square) {
-    border-radius: var(--ea-avatar-square-border-radius);
+    border-radius: var(--#{$name}-square-border-radius);
   }
 }

@@ -1,7 +1,5 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query } from "@decorator";
 import { html } from "@utils/html";
 import { defaultAvatar, errorAvatar } from "./assets/avatarPlaceholder";
 import stylesheet from "./index.scss?inline";
@@ -10,11 +8,34 @@ import "@/components/ea-icon/index";
 const TAG_NAME = "ea-avatar" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 头像组件，以图标、图片或字符的形式展示用户或实体的标识信息。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot default - 默认插槽，用于自定义内容。
+ *
+ * @event error - 图片加载失败时触发。
+ *
+ * @csspart container - 容器元素。
+ * @csspart img-avatar - 图片元素。
+ * @csspart icon-avatar - 图标元素。
+ *
+ * @cssproperty --ea-avatar-size - 头像尺寸。
+ * @cssproperty --ea-avatar-square-border-radius - 方形圆角。
+ * @cssproperty --ea-avatar-circle-border-radius - 圆形圆角。
+ * @cssproperty --ea-avatar-fit - 图片适应方式。
+ * @cssproperty --ea-avatar-color - 文字颜色。
+ * @cssproperty --ea-avatar-font-size - 字体大小。
+ * @cssproperty --ea-avatar-background-color - 背景颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaAvatar extends EaBase {
   // ==================== DOM 元素引用 ====================
 
-  @query(".ea-avatar")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
   private _srcController?: AbortController;
@@ -28,7 +49,7 @@ export class EaAvatar extends EaBase {
       if (this.src) return;
       if (newVal) {
         this._container.innerHTML = html(
-          `<ea-icon class="ea-avatar__icon" name="${newVal}" part="icon-avatar"></ea-icon>`
+          `<ea-icon class="${bem.e("icon")}" name="${newVal}" part="icon-avatar"></ea-icon>`
         );
       } else {
         this._container.innerHTML = html(`<slot>${defaultAvatar}</slot>`);
@@ -81,6 +102,9 @@ export class EaAvatar extends EaBase {
     observer(this: EaAvatar, newVal: string) {
       if (newVal) {
         this._loadImage(newVal);
+      } else {
+        this._srcController?.abort();
+        this._renderFallback();
       }
     },
   })
@@ -91,7 +115,7 @@ export class EaAvatar extends EaBase {
     default: "",
     observer(this: EaAvatar, newVal: string) {
       const img = this._container?.querySelector(
-        ".ea-avatar__img"
+        bem.ce("img")
       ) as HTMLImageElement | null;
       if (img) {
         img.srcset = newVal;
@@ -105,7 +129,7 @@ export class EaAvatar extends EaBase {
     default: "",
     observer(this: EaAvatar, newVal: string) {
       const img = this._container?.querySelector(
-        ".ea-avatar__img"
+        bem.ce("img")
       ) as HTMLImageElement | null;
       if (img) {
         img.alt = newVal;
@@ -137,16 +161,31 @@ export class EaAvatar extends EaBase {
   }
 
   /**
-   * 加载图片
+   * 渲染回退内容（icon 或默认 slot）
+   */
+  private _renderFallback(): void {
+    if (this.icon) {
+      this._container.innerHTML = html(
+        `<ea-icon class="${bem.e("icon")}" name="${this.icon}" part="icon-avatar"></ea-icon>`
+      );
+    } else {
+      this._container.innerHTML = html(`<slot>${defaultAvatar}</slot>`);
+    }
+  }
+
+  /**
+   * 加载并渲染图片
+   * 先通过隐藏 Image 预加载，成功后再插入 DOM，避免破图闪烁
+   * @param src 图片源地址
    */
   private _loadImage(src: string): void {
     this._srcController?.abort();
     this._srcController = new AbortController();
 
-    const image = new Image();
-    image.src = src;
+    const preloader = new Image();
+    preloader.src = src;
 
-    image.addEventListener(
+    preloader.addEventListener(
       "load",
       () => {
         this._renderImage(src);
@@ -155,7 +194,7 @@ export class EaAvatar extends EaBase {
       { signal: this._srcController.signal }
     );
 
-    image.addEventListener(
+    preloader.addEventListener(
       "error",
       () => {
         this._container.innerHTML = html(`<slot>${errorAvatar}</slot>`);
@@ -167,11 +206,12 @@ export class EaAvatar extends EaBase {
   }
 
   /**
-   * 渲染图片元素
+   * 渲染图片元素到 DOM
+   * @param src 图片源地址
    */
   private _renderImage(src: string): void {
     const img = document.createElement("img");
-    img.className = "ea-avatar__img";
+    img.className = bem.e("img");
     img.src = src;
     img.alt = this.alt;
     img.srcset = this.srcSet;
@@ -184,9 +224,6 @@ export class EaAvatar extends EaBase {
 
   /**
    * 获取内容 HTML
-   * 图片模式返回空串，是由于 DOMPurify 的清洗
-   * srcset 属性作为不安全的属性，因此会被清洗
-   * 所以最后选择通过 DOM API 创建 img 元素，而不是直接设置属性值
    */
   private _getContentHtml(): string {
     if (this.src) {
@@ -194,7 +231,7 @@ export class EaAvatar extends EaBase {
     }
 
     if (this.icon) {
-      return `<ea-icon class="ea-avatar__icon" name="${this.icon}" part="icon-avatar"></ea-icon>`;
+      return `<ea-icon class="${bem.e("icon")}" name="${this.icon}" part="icon-avatar"></ea-icon>`;
     }
 
     return `<slot>${defaultAvatar}</slot>`;
@@ -217,8 +254,10 @@ export class EaAvatar extends EaBase {
   // ==================== 生命周期 ====================
 
   $mount(): void {
+    this.updateContainerClasslist();
+
     if (this.src) {
-      this._renderImage(this.src);
+      this._loadImage(this.src);
     }
   }
 
