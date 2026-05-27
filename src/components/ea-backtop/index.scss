@@ -18,6 +18,10 @@ $name: ea-backtop;
   --#{$name}-z-index: 1000;
 }
 
+:host {
+  display: block;
+}
+
 @include block($name) {
   position: fixed;
 
@@ -42,7 +46,7 @@ $name: ea-backtop;
   z-index: var(--#{$name}-z-index);
   transition: opacity var(--#{$name}-transition);
 
-  &.before-enter {
+  @include state(before-enter) {
     display: flex;
   }
 
@@ -51,7 +55,7 @@ $name: ea-backtop;
     opacity: 1;
   }
 
-  &.before-leave {
+  @include state(before-leave) {
     opacity: 0;
   }
 }

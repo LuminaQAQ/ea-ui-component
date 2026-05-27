@@ -1,35 +1,48 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-backtop" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 回到顶部组件，用于快速返回页面顶部的操作按钮，支持自定义滚动目标、显示阈值和平滑滚动。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，用于自定义按钮内容。
+ *
+ * @csspart container - 容器元素。
+ *
+ * @cssproperty --ea-backtop-right - 距右侧距离。
+ * @cssproperty --ea-backtop-bottom - 距底部距离。
+ * @cssproperty --ea-backtop-size - 按钮尺寸。
+ * @cssproperty --ea-backtop-border-radius - 按钮圆角。
+ * @cssproperty --ea-backtop-font-size - 图标字体大小。
+ * @cssproperty --ea-backtop-color - 图标颜色。
+ * @cssproperty --ea-backtop-background-color - 背景颜色。
+ * @cssproperty --ea-backtop-box-shadow - 阴影。
+ * @cssproperty --ea-backtop-transition - 过渡动画时长。
+ * @cssproperty --ea-backtop-z-index - 层级。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaBacktop extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-backtop")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
   private _beforeLeaveAbortController?: AbortController;
 
-  // ==================== 属性定义 ====================
+  private _targetScrollAbortController?: AbortController;
 
   @attribute({
     type: String,
     default: "window",
-    observer() {},
   })
   target: string = "window";
 
   @attribute({
     type: Number,
     default: 200,
-    observer() {},
   })
   visibilityHeight: number = 200;
 
@@ -54,11 +67,8 @@ export class EaBacktop extends EaBase {
   @attribute({
     type: Boolean,
     default: true,
-    observer() {},
   })
   smooth: boolean = true;
-
-  // ==================== 方法 ====================
 
   /**
    * 更新容器类名
@@ -76,6 +86,7 @@ export class EaBacktop extends EaBase {
 
   /**
    * 获取当前滚动位置
+   * @returns 当前滚动高度
    */
   private _getCurrentScrollTop(): number {
     const el = document.querySelector(this.target);
@@ -89,14 +100,14 @@ export class EaBacktop extends EaBase {
     const scrollTop = this._getCurrentScrollTop();
 
     if (scrollTop > this.visibilityHeight) {
-      this._container.classList.add("before-enter");
+      this._container.classList.add(bem.s("before-enter"));
       void this._container.offsetWidth;
       this.updateContainerClasslist();
     } else {
       this._beforeLeaveAbortController?.abort();
       this._beforeLeaveAbortController = new AbortController();
 
-      this._container.classList.add("before-leave");
+      this._container.classList.add(bem.s("before-leave"));
       this._container.addEventListener(
         "transitionend",
         () => {
@@ -104,6 +115,23 @@ export class EaBacktop extends EaBase {
         },
         { once: true, signal: this._beforeLeaveAbortController.signal }
       );
+    }
+  }
+
+  /**
+   * 绑定自定义目标的滚动监听
+   */
+  private _bindTargetScroll(): void {
+    this._targetScrollAbortController?.abort();
+    this._targetScrollAbortController = new AbortController();
+
+    if (this.target !== "window") {
+      const el = document.querySelector(this.target);
+      if (el) {
+        el.addEventListener("scroll", () => this._handleScroll(), {
+          signal: this._targetScrollAbortController.signal,
+        });
+      }
     }
   }
 
@@ -117,8 +145,6 @@ export class EaBacktop extends EaBase {
       </div>
     `;
   }
-
-  // ==================== 事件处理 ====================
 
   @listen("click")
   private _handleClick(): void {
@@ -137,22 +163,14 @@ export class EaBacktop extends EaBase {
     }
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
     this.updateContainerClasslist();
-
-    if (this.target !== "window") {
-      const el = document.querySelector(this.target);
-      if (el) {
-        el.addEventListener("scroll", () => this._handleScroll());
-      }
-    }
-
+    this._bindTargetScroll();
     this._handleScroll();
   }
 
   $beforeUnmount(): void {
     this._beforeLeaveAbortController?.abort();
+    this._targetScrollAbortController?.abort();
   }
 }
