@@ -13,6 +13,7 @@ import "../ea-color-picker-panel/index";
 import "@/common/ea-popper/index";
 import "@components/ea-button/index";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-color-picker" as const;
 const bem = createBEM(TAG_NAME);

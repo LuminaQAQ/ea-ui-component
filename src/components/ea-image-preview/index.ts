@@ -8,6 +8,7 @@ import { createBEM } from "@utils/bem";
 import { html } from "@utils/html";
 import "../ea-image/components/ea-image/index";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-image-preview" as const;
 const bem = createBEM(TAG_NAME);

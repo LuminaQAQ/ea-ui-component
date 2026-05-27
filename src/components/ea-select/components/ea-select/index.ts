@@ -11,6 +11,7 @@ import { EaSelectClearEvent } from "../../events/EaSelectClearEvent";
 import { EaSelectRemoveTagEvent } from "../../events/EaSelectRemoveTagEvent";
 import { EaSelectVisibleChangeEvent } from "../../events/EaSelectVisibleChangeEvent";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-select" as const;
 const bem = createBEM(TAG_NAME);

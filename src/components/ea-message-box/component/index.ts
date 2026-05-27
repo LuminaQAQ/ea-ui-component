@@ -9,6 +9,7 @@ import { createBEM } from "@utils/bem";
 import { Enum } from "@/utils/Enum";
 import { VARIANT_ICON_MAP } from "@/constants/variant";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-message-box" as const;
 const bem = createBEM(TAG_NAME);

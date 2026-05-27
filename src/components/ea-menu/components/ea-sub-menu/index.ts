@@ -6,6 +6,7 @@ import { property } from "@decorator/property";
 import { query } from "@decorator/query";
 import { Enum } from "@/utils/Enum";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-sub-menu" as const;
 const bem = createBEM(TAG_NAME);

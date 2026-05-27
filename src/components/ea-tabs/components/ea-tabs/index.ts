@@ -9,6 +9,7 @@ import { EaTabRemoveEvent } from "./events/EaTabRemoveEvent";
 import { EaTabsChangeEvent } from "./events/EaTabsChangeEvent";
 
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-tabs" as const;
 const bem = createBEM(TAG_NAME);

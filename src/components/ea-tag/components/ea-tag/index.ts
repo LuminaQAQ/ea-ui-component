@@ -9,6 +9,7 @@ import { componentSizes } from "@/utils/Variables";
 import EaUtils from "@/utils/Utils";
 import { EaTagRemoveEvent } from "../../events/EaTagRemoveEvent";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-tag" as const;
 const bem = createBEM(TAG_NAME);

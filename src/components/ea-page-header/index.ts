@@ -4,6 +4,7 @@ import { CustomElement } from "@decorator/custom-element";
 import { listen } from "@decorator/listen";
 import { query } from "@decorator/query";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-page-header" as const;
 const bem = createBEM(TAG_NAME);

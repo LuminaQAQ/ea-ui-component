@@ -6,6 +6,7 @@ import { listen } from "@decorator/listen";
 import { Enum } from "@/utils/Enum";
 
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-tab" as const;
 const bem = createBEM(TAG_NAME);

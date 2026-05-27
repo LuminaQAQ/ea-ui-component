@@ -4,6 +4,7 @@ import { CustomElement } from "@decorator/custom-element";
 import { query } from "@decorator/query";
 import { Enum } from "@/utils/Enum";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-step" as const;
 const bem = createBEM(TAG_NAME);

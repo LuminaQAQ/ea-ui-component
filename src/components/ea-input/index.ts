@@ -8,6 +8,7 @@ import { html } from "@utils/html";
 import { Enum } from "@/utils/Enum";
 import { EaClearEvent } from "./events/EaClearEvent";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-input" as const;
 const bem = createBEM(TAG_NAME);

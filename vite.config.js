@@ -65,6 +65,12 @@ export default defineConfig({
           const componentsPath = normalizePath(
             path.resolve(__dirname, "src/components")
           );
+          const decoratorPath = normalizePath(
+            path.resolve(__dirname, "src/decorator")
+          );
+          const constantsPath = normalizePath(
+            path.resolve(__dirname, "src/constants")
+          );
           const normalizedId = normalizePath(id);
           /**
            * @param {Array<string>} pathChunks
@@ -86,6 +92,14 @@ export default defineConfig({
               ? chunk
               : findCoreComponentName(pathChunks);
           };
+
+          if (normalizedId.startsWith(decoratorPath)) {
+            return "core/decorator";
+          }
+
+          if (normalizedId.startsWith(constantsPath)) {
+            return "core/constants";
+          }
 
           if (normalizedId.includes(".scss?inline")) {
             const fullPathChunk = normalizedId.split("/");

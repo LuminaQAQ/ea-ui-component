@@ -9,6 +9,7 @@ import { html } from "@utils/html";
 import { Enum } from "@/utils/Enum";
 import { EA_COMPONENT_SIZES } from "@/utils/Variables";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-rate" as const;
 const bem = createBEM(TAG_NAME);

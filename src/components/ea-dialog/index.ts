@@ -5,6 +5,7 @@ import { query } from "@decorator/query";
 import { listen } from "@decorator/listen";
 import { createBEM } from "@utils/bem";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-dialog" as const;
 const bem = createBEM(TAG_NAME);

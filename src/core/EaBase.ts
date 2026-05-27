@@ -3,7 +3,6 @@ import type { EaElement } from "@/types/index";
 import { createBEM } from "@utils/bem";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
-import "@/components/ea-icon/index";
 
 export { createBEM };
 

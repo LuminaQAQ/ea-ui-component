@@ -5,6 +5,7 @@ import { query } from "@decorator/query";
 import { html } from "@utils/html";
 import { defaultAvatar, errorAvatar } from "./assets/avatarPlaceholder";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-avatar" as const;
 const bem = createBEM(TAG_NAME);

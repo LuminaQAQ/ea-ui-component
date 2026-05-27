@@ -6,6 +6,7 @@ import { listen } from "@decorator/listen";
 import { Enum } from "@/utils/Enum";
 import stylesheet from "./index.scss?inline";
 import { timeout } from "@/utils/timeout";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-carousel" as const;
 const bem = createBEM(TAG_NAME);

@@ -5,6 +5,7 @@ import { query } from "@decorator/query";
 import { Enum } from "@/utils/Enum";
 import { VARIANT_TYPES, type VariantType } from "@/constants/variant";
 import stylesheet from "./index.scss?inline";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-timeline-item" as const;
 const bem = createBEM(TAG_NAME);

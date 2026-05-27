@@ -7,6 +7,7 @@ import { property } from "@decorator/property";
 import { html } from "@utils/html";
 import stylesheet from "./index.scss?inline";
 import { Enum } from "@/utils/Enum";
+import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-notification" as const;
 const bem = createBEM(TAG_NAME);

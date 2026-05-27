@@ -32,6 +32,7 @@
       "@common/*": ["src/common/*"],
       "@themes/*": ["src/themes/*"],
       "@utils/*": ["src/utils/*"],
+      "@decorator": ["src/decorator"],
       "@decorator/*": ["src/decorator/*"],
       "@types/*": ["src/types/*"],
       "@stores/*": ["src/stores/*"],
