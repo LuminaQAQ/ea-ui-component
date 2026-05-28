@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
 
-// 导入真实组件
 import "../components/ea-collapse/index";
 
 describe("EaCollapse Component", () => {
@@ -16,9 +15,6 @@ describe("EaCollapse Component", () => {
     container.remove();
   });
 
-  /**
-   * 基本渲染测试
-   */
   describe("Basic Rendering", () => {
     it("应该正确渲染 ea-collapse 组件", async () => {
       const collapse = document.createElement("ea-collapse");
@@ -50,11 +46,18 @@ describe("EaCollapse Component", () => {
         collapse.shadowRoot.querySelector('[part="container"]')
       ).toBeTruthy();
     });
+
+    it("应该包含默认插槽", async () => {
+      const collapse = document.createElement("ea-collapse");
+      container.appendChild(collapse);
+
+      await waitForRender();
+
+      const slot = collapse.shadowRoot.querySelector("slot");
+      expect(slot).toBeTruthy();
+    });
   });
 
-  /**
-   * Accordion 属性测试
-   */
   describe("Accordion Property", () => {
     it("默认情况下 accordion 应该为 false", async () => {
       const collapse = document.createElement("ea-collapse");
@@ -76,9 +79,6 @@ describe("EaCollapse Component", () => {
     });
   });
 
-  /**
-   * Active 属性测试
-   */
   describe("Active Property", () => {
     it("默认情况下 active 应该为空数组", async () => {
       const collapse = document.createElement("ea-collapse");
@@ -118,9 +118,6 @@ describe("EaCollapse Component", () => {
     });
   });
 
-  /**
-   * Expand Icon Position 属性测试
-   */
   describe("Expand Icon Position Property", () => {
     it("默认情况下 expandIconPosition 应该为 right", async () => {
       const collapse = document.createElement("ea-collapse");
@@ -163,7 +160,6 @@ describe("EaCollapse Component", () => {
 
       await waitForRender();
 
-      // 先添加到 DOM，再设置 expand-icon-position 属性，触发 attributeChangedCallback
       collapse.setAttribute("expand-icon-position", "left");
 
       await waitForRender();
@@ -173,11 +169,8 @@ describe("EaCollapse Component", () => {
     });
   });
 
-  /**
-   * Change 事件测试
-   */
   describe("Change Event", () => {
-    it("展开/收起应该触发 change 事件", async () => {
+    it("展开/收起应该触发 ea-change 事件", async () => {
       const collapse = document.createElement("ea-collapse");
       collapse.innerHTML = `
         <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
@@ -187,7 +180,7 @@ describe("EaCollapse Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      collapse.addEventListener("change", changeHandler);
+      collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
       const headerWrap = item.shadowRoot.querySelector(
@@ -200,7 +193,7 @@ describe("EaCollapse Component", () => {
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    it("change 事件应该包含 name、target 和 active", async () => {
+    it("ea-change 事件应该包含 name、target 和 active", async () => {
       const collapse = document.createElement("ea-collapse");
       collapse.innerHTML = `
         <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
@@ -210,7 +203,7 @@ describe("EaCollapse Component", () => {
       await waitForRender();
 
       let eventDetail = null;
-      collapse.addEventListener("change", e => {
+      collapse.addEventListener("ea-change", e => {
         eventDetail = e.detail;
       });
 
@@ -226,14 +219,40 @@ describe("EaCollapse Component", () => {
         name: "1",
         target: item,
       });
+      expect(Array.isArray(eventDetail.active)).toBe(true);
+    });
+
+    it("ea-change 事件应该使用 EaCollapseChangeEvent 类", async () => {
+      const collapse = document.createElement("ea-collapse");
+      collapse.innerHTML = `
+        <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
+      `;
+      container.appendChild(collapse);
+
+      await waitForRender();
+
+      let receivedEvent = null;
+      collapse.addEventListener("ea-change", e => {
+        receivedEvent = e;
+      });
+
+      const item = collapse.querySelector("ea-collapse-item");
+      const headerWrap = item.shadowRoot.querySelector(
+        ".ea-collapse-item__header-wrap"
+      );
+      headerWrap.click();
+
+      await waitForRender();
+
+      expect(receivedEvent).toBeDefined();
+      expect(receivedEvent.type).toBe("ea-change");
+      expect(receivedEvent.bubbles).toBe(true);
+      expect(receivedEvent.composed).toBe(true);
     });
   });
 
-  /**
-   * beforeCollapse 钩子测试
-   */
   describe("beforeCollapse Hook", () => {
-    it("beforeCollapse 应该阻止展开", async () => {
+    it("beforeCollapse 返回 false 应该阻止展开", async () => {
       const collapse = document.createElement("ea-collapse");
       collapse.innerHTML = `
         <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
@@ -245,7 +264,7 @@ describe("EaCollapse Component", () => {
       collapse.beforeCollapse = () => false;
 
       const changeHandler = vi.fn();
-      collapse.addEventListener("change", changeHandler);
+      collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
       const headerWrap = item.shadowRoot.querySelector(
@@ -270,7 +289,7 @@ describe("EaCollapse Component", () => {
       collapse.beforeCollapse = () => true;
 
       const changeHandler = vi.fn();
-      collapse.addEventListener("change", changeHandler);
+      collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
       const headerWrap = item.shadowRoot.querySelector(
@@ -283,7 +302,7 @@ describe("EaCollapse Component", () => {
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    it("beforeCollapse 支持异步函数", async () => {
+    it("beforeCollapse 支持异步函数返回 true", async () => {
       const collapse = document.createElement("ea-collapse");
       collapse.innerHTML = `
         <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
@@ -298,7 +317,7 @@ describe("EaCollapse Component", () => {
       };
 
       const changeHandler = vi.fn();
-      collapse.addEventListener("change", changeHandler);
+      collapse.addEventListener("ea-change", changeHandler);
 
       const item = collapse.querySelector("ea-collapse-item");
       const headerWrap = item.shadowRoot.querySelector(
@@ -310,11 +329,60 @@ describe("EaCollapse Component", () => {
 
       expect(changeHandler).toHaveBeenCalled();
     });
+
+    it("beforeCollapse 异步函数抛出异常应该阻止展开", async () => {
+      const collapse = document.createElement("ea-collapse");
+      collapse.innerHTML = `
+        <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
+      `;
+      container.appendChild(collapse);
+
+      await waitForRender();
+
+      collapse.beforeCollapse = async () => {
+        throw new Error("rejected");
+      };
+
+      const changeHandler = vi.fn();
+      collapse.addEventListener("ea-change", changeHandler);
+
+      const item = collapse.querySelector("ea-collapse-item");
+      const headerWrap = item.shadowRoot.querySelector(
+        ".ea-collapse-item__header-wrap"
+      );
+      headerWrap.click();
+
+      await waitForRender(200);
+
+      expect(changeHandler).not.toHaveBeenCalled();
+    });
+
+    it("beforeCollapse 为 null 时应该正常展开", async () => {
+      const collapse = document.createElement("ea-collapse");
+      collapse.innerHTML = `
+        <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
+      `;
+      container.appendChild(collapse);
+
+      await waitForRender();
+
+      collapse.beforeCollapse = null;
+
+      const changeHandler = vi.fn();
+      collapse.addEventListener("ea-change", changeHandler);
+
+      const item = collapse.querySelector("ea-collapse-item");
+      const headerWrap = item.shadowRoot.querySelector(
+        ".ea-collapse-item__header-wrap"
+      );
+      headerWrap.click();
+
+      await waitForRender();
+
+      expect(changeHandler).toHaveBeenCalled();
+    });
   });
 
-  /**
-   * 手风琴模式测试
-   */
   describe("Accordion Mode", () => {
     it("手风琴模式下只能展开一个面板", async () => {
       const collapse = document.createElement("ea-collapse");
@@ -329,10 +397,9 @@ describe("EaCollapse Component", () => {
 
       const items = collapse.querySelectorAll("ea-collapse-item");
 
-      // 展开第一个
       items[0].dispatchEvent(
-        new CustomEvent("collapse-item-click", {
-          detail: { name: "1", el: items[0] },
+        new CustomEvent("ea-collapse-item-click", {
+          detail: { name: "1", target: items[0] },
           bubbles: true,
           cancelable: true,
         })
@@ -343,10 +410,9 @@ describe("EaCollapse Component", () => {
       expect(items[0].hasAttribute("active")).toBe(true);
       expect(items[1].hasAttribute("active")).toBe(false);
 
-      // 展开第二个
       items[1].dispatchEvent(
-        new CustomEvent("collapse-item-click", {
-          detail: { name: "2", el: items[1] },
+        new CustomEvent("ea-collapse-item-click", {
+          detail: { name: "2", target: items[1] },
           bubbles: true,
           cancelable: true,
         })
@@ -357,11 +423,45 @@ describe("EaCollapse Component", () => {
       expect(items[0].hasAttribute("active")).toBe(false);
       expect(items[1].hasAttribute("active")).toBe(true);
     });
+
+    it("手风琴模式下点击同一面板应该收起", async () => {
+      const collapse = document.createElement("ea-collapse");
+      collapse.setAttribute("accordion", "");
+      collapse.innerHTML = `
+        <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
+      `;
+      container.appendChild(collapse);
+
+      await waitForRender();
+
+      const item = collapse.querySelector("ea-collapse-item");
+
+      item.dispatchEvent(
+        new CustomEvent("ea-collapse-item-click", {
+          detail: { name: "1", target: item },
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+
+      await waitForRender();
+
+      expect(item.hasAttribute("active")).toBe(true);
+
+      item.dispatchEvent(
+        new CustomEvent("ea-collapse-item-click", {
+          detail: { name: "1", target: item },
+          bubbles: true,
+          cancelable: true,
+        })
+      );
+
+      await waitForRender();
+
+      expect(item.hasAttribute("active")).toBe(false);
+    });
   });
 
-  /**
-   * 普通模式测试
-   */
   describe("Normal Mode", () => {
     it("普通模式下可以展开多个面板", async () => {
       const collapse = document.createElement("ea-collapse");
@@ -375,10 +475,9 @@ describe("EaCollapse Component", () => {
 
       const items = collapse.querySelectorAll("ea-collapse-item");
 
-      // 展开第一个
       items[0].dispatchEvent(
-        new CustomEvent("collapse-item-click", {
-          detail: { name: "1", el: items[0] },
+        new CustomEvent("ea-collapse-item-click", {
+          detail: { name: "1", target: items[0] },
           bubbles: true,
           cancelable: true,
         })
@@ -388,10 +487,9 @@ describe("EaCollapse Component", () => {
 
       expect(items[0].hasAttribute("active")).toBe(true);
 
-      // 展开第二个
       items[1].dispatchEvent(
-        new CustomEvent("collapse-item-click", {
-          detail: { name: "2", el: items[1] },
+        new CustomEvent("ea-collapse-item-click", {
+          detail: { name: "2", target: items[1] },
           bubbles: true,
           cancelable: true,
         })
@@ -414,10 +512,9 @@ describe("EaCollapse Component", () => {
 
       const item = collapse.querySelector("ea-collapse-item");
 
-      // 展开
       item.dispatchEvent(
-        new CustomEvent("collapse-item-click", {
-          detail: { name: "1", el: item },
+        new CustomEvent("ea-collapse-item-click", {
+          detail: { name: "1", target: item },
           bubbles: true,
           cancelable: true,
         })
@@ -427,10 +524,9 @@ describe("EaCollapse Component", () => {
 
       expect(item.hasAttribute("active")).toBe(true);
 
-      // 收起
       item.dispatchEvent(
-        new CustomEvent("collapse-item-click", {
-          detail: { name: "1", el: item },
+        new CustomEvent("ea-collapse-item-click", {
+          detail: { name: "1", target: item },
           bubbles: true,
           cancelable: true,
         })
@@ -442,9 +538,6 @@ describe("EaCollapse Component", () => {
     });
   });
 
-  /**
-   * setActiveNames 方法测试
-   */
   describe("setActiveNames Method", () => {
     it("应该能通过 setActiveNames 设置激活的面板", async () => {
       const collapse = document.createElement("ea-collapse");
@@ -480,11 +573,25 @@ describe("EaCollapse Component", () => {
       expect(items[0].hasAttribute("active")).toBe(false);
       expect(items[1].hasAttribute("active")).toBe(true);
     });
+
+    it("setActiveNames 传入空数组应该收起所有面板", async () => {
+      const collapse = document.createElement("ea-collapse");
+      collapse.innerHTML = `
+        <ea-collapse-item header="Item 1" name="1" active>Content 1</ea-collapse-item>
+        <ea-collapse-item header="Item 2" name="2">Content 2</ea-collapse-item>
+      `;
+      container.appendChild(collapse);
+
+      await waitForRender();
+
+      collapse.setActiveNames([]);
+
+      const items = collapse.querySelectorAll("ea-collapse-item");
+      expect(items[0].hasAttribute("active")).toBe(false);
+      expect(items[1].hasAttribute("active")).toBe(false);
+    });
   });
 
-  /**
-   * 初始化测试
-   */
   describe("Initialization", () => {
     it("应该自动为没有 name 的项分配索引", async () => {
       const collapse = document.createElement("ea-collapse");
@@ -515,9 +622,6 @@ describe("EaCollapseItem Component", () => {
     container.remove();
   });
 
-  /**
-   * 基本渲染测试
-   */
   describe("Basic Rendering", () => {
     it("应该正确渲染 ea-collapse-item 组件", async () => {
       const item = document.createElement("ea-collapse-item");
@@ -553,15 +657,13 @@ describe("EaCollapseItem Component", () => {
       ).toBeTruthy();
       expect(item.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
       expect(item.shadowRoot.querySelector('[part="indicator"]')).toBeTruthy();
+      expect(item.shadowRoot.querySelector('[part="icon"]')).toBeTruthy();
       expect(
         item.shadowRoot.querySelector('[part="content-wrap"]')
       ).toBeTruthy();
     });
   });
 
-  /**
-   * 插槽测试
-   */
   describe("Slots", () => {
     it("应该支持默认插槽", async () => {
       const item = document.createElement("ea-collapse-item");
@@ -600,9 +702,6 @@ describe("EaCollapseItem Component", () => {
     });
   });
 
-  /**
-   * Header 属性测试
-   */
   describe("Header Attribute", () => {
     it("应该通过 header 属性设置标题", async () => {
       const item = document.createElement("ea-collapse-item");
@@ -629,9 +728,6 @@ describe("EaCollapseItem Component", () => {
     });
   });
 
-  /**
-   * Name 属性测试
-   */
   describe("Name Attribute", () => {
     it("应该设置 name 属性", async () => {
       const item = document.createElement("ea-collapse-item");
@@ -644,9 +740,6 @@ describe("EaCollapseItem Component", () => {
     });
   });
 
-  /**
-   * Expand Icon Position 属性测试
-   */
   describe("Expand Icon Position Property", () => {
     it("默认情况下 expandIconPosition 应该为 right", async () => {
       const item = document.createElement("ea-collapse-item");
@@ -666,11 +759,19 @@ describe("EaCollapseItem Component", () => {
 
       expect(item.expandIconPosition).toBe("left");
     });
+
+    it("设置 expand-icon-position 为 left 应该添加 indicator-left 修饰符类", async () => {
+      const item = document.createElement("ea-collapse-item");
+      item.setAttribute("expand-icon-position", "left");
+      container.appendChild(item);
+
+      await waitForRender();
+
+      const containerEl = item.shadowRoot.querySelector(".ea-collapse-item");
+      expect(containerEl.classList.contains("ea-collapse-item--indicator-left")).toBe(true);
+    });
   });
 
-  /**
-   * Disabled 属性测试
-   */
   describe("Disabled Property", () => {
     it("默认情况下 disabled 应该为 false", async () => {
       const item = document.createElement("ea-collapse-item");
@@ -691,7 +792,7 @@ describe("EaCollapseItem Component", () => {
       expect(item.disabled).toBe(true);
 
       const clickHandler = vi.fn();
-      item.addEventListener("collapse-item-click", clickHandler);
+      item.addEventListener("ea-collapse-item-click", clickHandler);
 
       const headerWrap = item.shadowRoot.querySelector(
         ".ea-collapse-item__header-wrap"
@@ -700,11 +801,19 @@ describe("EaCollapseItem Component", () => {
 
       expect(clickHandler).not.toHaveBeenCalled();
     });
+
+    it("设置 disabled 属性应该添加 is-disabled 状态类", async () => {
+      const item = document.createElement("ea-collapse-item");
+      item.setAttribute("disabled", "");
+      container.appendChild(item);
+
+      await waitForRender();
+
+      const containerEl = item.shadowRoot.querySelector(".ea-collapse-item");
+      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+    });
   });
 
-  /**
-   * Active 属性测试
-   */
   describe("Active Property", () => {
     it("默认情况下 active 应该为 false", async () => {
       const item = document.createElement("ea-collapse-item");
@@ -727,11 +836,8 @@ describe("EaCollapseItem Component", () => {
     });
   });
 
-  /**
-   * 点击事件测试
-   */
   describe("Click Event", () => {
-    it("点击 header 应该触发 collapse-item-click 事件", async () => {
+    it("点击 header 应该触发 ea-collapse-item-click 事件", async () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("name", "1");
       container.appendChild(item);
@@ -739,7 +845,7 @@ describe("EaCollapseItem Component", () => {
       await waitForRender();
 
       const clickHandler = vi.fn();
-      item.addEventListener("collapse-item-click", clickHandler);
+      item.addEventListener("ea-collapse-item-click", clickHandler);
 
       const headerWrap = item.shadowRoot.querySelector(
         ".ea-collapse-item__header-wrap"
@@ -749,7 +855,7 @@ describe("EaCollapseItem Component", () => {
       expect(clickHandler).toHaveBeenCalled();
     });
 
-    it("collapse-item-click 事件应该包含 name 和 el", async () => {
+    it("ea-collapse-item-click 事件应该包含 name 和 target", async () => {
       const item = document.createElement("ea-collapse-item");
       item.setAttribute("name", "test-name");
       container.appendChild(item);
@@ -757,7 +863,7 @@ describe("EaCollapseItem Component", () => {
       await waitForRender();
 
       let eventDetail = null;
-      item.addEventListener("collapse-item-click", e => {
+      item.addEventListener("ea-collapse-item-click", e => {
         eventDetail = e.detail;
       });
 
@@ -770,6 +876,28 @@ describe("EaCollapseItem Component", () => {
         name: "test-name",
         target: item,
       });
+    });
+  });
+
+  describe("Default Expand Icon", () => {
+    it("应该包含默认展开图标", async () => {
+      const item = document.createElement("ea-collapse-item");
+      container.appendChild(item);
+
+      await waitForRender();
+
+      const icon = item.shadowRoot.querySelector("ea-icon[name='angle-down']");
+      expect(icon).toBeTruthy();
+    });
+
+    it("默认展开图标应该具有 expand-icon 类名", async () => {
+      const item = document.createElement("ea-collapse-item");
+      container.appendChild(item);
+
+      await waitForRender();
+
+      const icon = item.shadowRoot.querySelector(".ea-collapse-item__expand-icon");
+      expect(icon).toBeTruthy();
     });
   });
 });

@@ -72,7 +72,7 @@ onMounted(() => {
 
       this.btn.addEventListener("change", ({ detail }) => {
         const { value } = detail;
-        this.el["expand-icon-position"] = value;
+        this.el.expandIconPosition = value;
       });
     },
   };
@@ -127,7 +127,7 @@ onMounted(() => {
 
       this.btn.addEventListener("change", ({ detail }) => {
         const { value } = detail;
-        if (value === "true") {
+        if (value) {
           this.el.beforeCollapse = beforeCollapse;
         } else {
           this.el.beforeCollapse = null;
@@ -215,9 +215,22 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#collapse-css-part)。
 
 ## 基础用法
 
@@ -233,7 +246,7 @@ onMounted(() => {
     </ea-button>
   </ea-button-group>
   <ea-collapse id="basicCollapse">
-    <ea-collapse-item title="Consistency" name="1">
+    <ea-collapse-item header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -243,7 +256,7 @@ onMounted(() => {
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -253,7 +266,7 @@ onMounted(() => {
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -266,7 +279,7 @@ onMounted(() => {
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -278,6 +291,8 @@ onMounted(() => {
     </ea-collapse-item>
   </ea-collapse>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -292,7 +307,7 @@ onMounted(() => {
     </ea-button>
   </ea-button-group>
   <ea-collapse id="basicCollapse">
-    <ea-collapse-item title="Consistency" name="1">
+    <ea-collapse-item header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -302,7 +317,7 @@ onMounted(() => {
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -312,7 +327,7 @@ onMounted(() => {
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -325,7 +340,7 @@ onMounted(() => {
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -360,13 +375,15 @@ basicExample.init();
 
 :::
 
+::::
+
 ## 手风琴效果
 
-每次只能展开一个面板。通过设置 `accordion` 属性为 `true` 来开启手风琴模式。可以在元素上添加 `change` 事件来监听面板的展开和收起。
+每次只能展开一个面板。通过设置 `accordion` 属性为 `true` 来开启手风琴模式。可以在元素上添加 `ea-change` 事件来监听面板的展开和收起。
 
 <div class="demo">
   <ea-collapse id="accordionCollapse" accordion>
-    <ea-collapse-item title="Consistency" name="1">
+    <ea-collapse-item header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -376,7 +393,7 @@ basicExample.init();
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -386,7 +403,7 @@ basicExample.init();
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -399,7 +416,7 @@ basicExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -412,12 +429,14 @@ basicExample.init();
   </ea-collapse>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html
 <div class="demo">
   <ea-collapse id="accordionCollapse" accordion>
-    <ea-collapse-item title="Consistency" name="1">
+    <ea-collapse-item header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -427,7 +446,7 @@ basicExample.init();
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -437,7 +456,7 @@ basicExample.init();
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -450,7 +469,7 @@ basicExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -476,14 +495,16 @@ accordionCollapseExample.init();
 
 :::
 
+::::
+
 ## 自定义面板标题
 
-除了可以通过 `title` 属性以外，还可以通过具名 `slot` 来实现自定义面板的标题内容，以实现增加图标等效果。
+除了可以通过 `header` 属性以外，还可以通过具名 `slot` 来实现自定义面板的标题内容，以实现增加图标等效果。
 
 <div class="demo">
   <ea-collapse id="customTitleCollapse" accordion>
     <ea-collapse-item id="customTitle" name="1">
-      <div class="header" slot="title">
+      <div class="header" slot="header">
         Consistency
         <ea-icon name="mug-hot" class="header-icon"></ea-icon>
       </div>
@@ -496,7 +517,7 @@ accordionCollapseExample.init();
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -506,7 +527,7 @@ accordionCollapseExample.init();
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -519,7 +540,7 @@ accordionCollapseExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -532,13 +553,15 @@ accordionCollapseExample.init();
   </ea-collapse>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html
 <div class="demo">
   <ea-collapse id="customTitleCollapse" accordion>
     <ea-collapse-item id="customTitle" name="1">
-      <div class="header" slot="title">
+      <div class="header" slot="header">
         Consistency
         <ea-icon name="mug-hot" class="header-icon"></ea-icon>
       </div>
@@ -551,7 +574,7 @@ accordionCollapseExample.init();
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -561,7 +584,7 @@ accordionCollapseExample.init();
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -574,7 +597,7 @@ accordionCollapseExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -606,13 +629,15 @@ customTitleCollapseExample.init();
 
 :::
 
+::::
+
 ## 自定义图标
 
-除了使用 `icon` 属性外，您还可以自定义面板项目图标，从而添加自定义内容。
+除了使用默认图标外，您还可以自定义面板项目图标，从而添加自定义内容。
 
 <div class="demo">
   <ea-collapse id="customIconCollapse">
-    <ea-collapse-item id="customIconCollapseItem" title="Consistency" name="1">
+    <ea-collapse-item id="customIconCollapseItem" header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -623,7 +648,7 @@ customTitleCollapseExample.init();
       </div>
       <ea-icon name="mug-hot" slot="icon"></ea-icon>
     </ea-collapse-item>
-    <ea-collapse-item id="customTextIconCollapseItem" title="Feedback" name="2">
+    <ea-collapse-item id="customTextIconCollapseItem" header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -639,7 +664,7 @@ customTitleCollapseExample.init();
         active-text="Expanded"
       ></span>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -652,7 +677,7 @@ customTitleCollapseExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -665,12 +690,14 @@ customTitleCollapseExample.init();
   </ea-collapse>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html
 <div class="demo">
   <ea-collapse id="customIconCollapse">
-    <ea-collapse-item id="customIconCollapseItem" title="Consistency" name="1">
+    <ea-collapse-item id="customIconCollapseItem" header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -681,7 +708,11 @@ customTitleCollapseExample.init();
       </div>
       <ea-icon name="mug-hot" slot="icon"></ea-icon>
     </ea-collapse-item>
-    <ea-collapse-item id="customTextIconCollapseItem" title="Feedback" name="2">
+    <ea-collapse-item
+      id="customTextIconCollapseItem"
+      header="Feedback"
+      name="2"
+    >
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -697,7 +728,7 @@ customTitleCollapseExample.init();
         active-text="Expanded"
       ></span>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -710,7 +741,7 @@ customTitleCollapseExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -762,9 +793,11 @@ customIconCollapseExample.init();
 
 :::
 
+::::
+
 ## 自定义图标位置
 
-使用 `expand-icon-position `属性，您可以自定义图标位置。
+使用 `expand-icon-position` 属性，您可以自定义图标位置。
 
 <div class="demo">
   <div style="margin-bottom: 1rem">
@@ -781,7 +814,7 @@ customIconCollapseExample.init();
   </div>
 
   <ea-collapse id="customExpandIconPositionCollapse">
-    <ea-collapse-item title="Consistency" name="1">
+    <ea-collapse-item header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -791,7 +824,7 @@ customIconCollapseExample.init();
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -801,7 +834,7 @@ customIconCollapseExample.init();
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -814,7 +847,7 @@ customIconCollapseExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -826,6 +859,8 @@ customIconCollapseExample.init();
     </ea-collapse-item>
   </ea-collapse>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -845,7 +880,7 @@ customIconCollapseExample.init();
   </div>
 
   <ea-collapse id="customExpandIconPositionCollapse">
-    <ea-collapse-item title="Consistency" name="1">
+    <ea-collapse-item header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -855,7 +890,7 @@ customIconCollapseExample.init();
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -865,7 +900,7 @@ customIconCollapseExample.init();
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -878,7 +913,7 @@ customIconCollapseExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -901,7 +936,7 @@ const customExpandIconPositionExample = {
 
     this.btn.addEventListener("change", ({ detail }) => {
       const { value } = detail;
-      this.el["expand-icon-position"] = value;
+      this.el.expandIconPosition = value;
     });
   },
 };
@@ -910,9 +945,11 @@ customExpandIconPositionExample.init();
 
 :::
 
+::::
+
 ## 阻止折叠
 
-设置 `beforeChange` 属性，若返回 `false` 或者返回 `Promise` 且被 `reject` ，则停止切换。
+设置 `beforeCollapse` 属性，若返回 `false` 或者返回 `Promise` 且被 `reject` ，则停止切换。
 
 <div class="demo loading-collapse-example">
   <div style="margin-bottom: 1rem">
@@ -927,7 +964,7 @@ customExpandIconPositionExample.init();
     ></ea-switch>
   </div>
   <ea-collapse id="hasBeforeCollapse">
-    <ea-collapse-item title="Consistency" name="1">
+    <ea-collapse-item header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -937,7 +974,7 @@ customExpandIconPositionExample.init();
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -947,7 +984,7 @@ customExpandIconPositionExample.init();
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -960,7 +997,7 @@ customExpandIconPositionExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -972,6 +1009,8 @@ customExpandIconPositionExample.init();
     </ea-collapse-item>
   </ea-collapse>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -990,7 +1029,7 @@ customExpandIconPositionExample.init();
   </div>
 
   <ea-collapse id="hasBeforeCollapse">
-    <ea-collapse-item title="Consistency" name="1">
+    <ea-collapse-item header="Consistency" name="1">
       <div>
         Consistent with real life: in line with the process and logic of real
         life, and comply with languages and habits that the users are used to;
@@ -1000,7 +1039,7 @@ customExpandIconPositionExample.init();
         design style, icons and texts, position of elements, etc.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Feedback" name="2">
+    <ea-collapse-item header="Feedback" name="2">
       <div>
         Operation feedback: enable the users to clearly perceive their
         operations by style updates and interactive effects;
@@ -1010,7 +1049,7 @@ customExpandIconPositionExample.init();
         elements of the page.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Efficiency" name="3">
+    <ea-collapse-item header="Efficiency" name="3">
       <div>
         Simplify the process: keep operating process simple and intuitive;
       </div>
@@ -1023,7 +1062,7 @@ customExpandIconPositionExample.init();
         the users to identify and frees them from memorizing and recalling.
       </div>
     </ea-collapse-item>
-    <ea-collapse-item title="Controllability" name="4">
+    <ea-collapse-item header="Controllability" name="4">
       <div>
         Decision making: giving advices about operations is acceptable, but do
         not make decisions for the users;
@@ -1075,12 +1114,13 @@ const hasBeforeCollapseExample = {
   el: document.querySelector("#hasBeforeCollapse"),
   btn: document.querySelector("#hasBeforeCollapseSwitch"),
 
-  loadingTemplate: document.querySelector("#loadingTemplate").content,
+  loadingTemplate: `
+    <div id="loadingInstance" class="loading-example">
+      <ea-icon name="rotate"></ea-icon>
+    </div>
+  `,
 
   init() {
-    this.el.active = ["1"];
-
-    let loadingTarget = null;
     const loading = new Proxy(
       { value: false },
       {
@@ -1089,13 +1129,11 @@ const hasBeforeCollapseExample = {
         },
         set: (target, key, value) => {
           if (value) {
-            this.el.appendChild(this.loadingTemplate.cloneNode(true));
-            loadingTarget = document.querySelector("#loadingInstance");
+            const tpl = document.createElement("template");
+            tpl.innerHTML = this.loadingTemplate.trim();
+            this.el.appendChild(tpl.content.cloneNode(true));
           } else {
-            if (loadingTarget && typeof loadingTarget.remove === "function") {
-              loadingTarget.remove();
-            }
-            loadingTarget = null;
+            document.querySelector("#loadingInstance").remove();
           }
           target[key] = value;
           return true;
@@ -1113,7 +1151,16 @@ const hasBeforeCollapseExample = {
       });
     };
 
-    this.el.beforeCollapse = beforeCollapse;
+    this.el.active = ["1"];
+
+    this.btn.addEventListener("change", ({ detail }) => {
+      const { value } = detail;
+      if (value) {
+        this.el.beforeCollapse = beforeCollapse;
+      } else {
+        this.el.beforeCollapse = null;
+      }
+    });
   },
 };
 hasBeforeCollapseExample.init();
@@ -1121,16 +1168,18 @@ hasBeforeCollapseExample.init();
 
 :::
 
+::::
+
 ## Collapse API
 
 ### Collapse Attributes
 
-| 参数                                 | 说明                                                   | 类型     | 可选值          | 默认值 |
-| ------------------------------------ | ------------------------------------------------------ | -------- | --------------- | ------ |
-| active                               | 当前激活面板的 name. 当展开元素为多项时, 需用逗号分隔. | string   | —               | —      |
-| accordion                            | 是否开启手风琴模式                                     | boolean  | —               | false  |
-| expand-icon-position                 | 设置图标位置                                           | string   | `left \| right` | left   |
-| beforeCollapse <ea-tag>Prop</ea-tag> | 展开前的回调，返回 false 则取消展开                    | function | —               | —      |
+| 参数                       | 说明                                                              | 类型               | 可选值          | 默认值 |
+| -------------------------- | ----------------------------------------------------------------- | ------------------ | --------------- | ------ |
+| accordion                  | 是否开启手风琴模式                                                | boolean            | —               | false  |
+| expand-icon-position       | 设置图标位置                                                      | string             | `left \| right` | right  |
+| active <PropTag />         | 当前激活面板的 name。手风琴模式下为 string，普通模式下为 string[] | string \| string[] | —               | []     |
+| beforeCollapse <PropTag /> | 展开前的回调，返回 false 则取消展开                               | function           | —               | null   |
 
 ### Collapse CSS Part
 
@@ -1142,49 +1191,68 @@ hasBeforeCollapseExample.init();
 
 ### Collapse Slots
 
-| 名称 | 说明     |
-| ---- | -------- |
-| -    | 默认插槽 |
+| 名称    | 说明                                       |
+| ------- | ------------------------------------------ |
+| default | 默认插槽，用于放置 ea-collapse-item 子组件 |
 
 ### Collapse Events
 
-| 事件名称 | 说明                                       | 回调参数                                                                       |
-| -------- | ------------------------------------------ | ------------------------------------------------------------------------------ |
-| change   | 手动展开面板变化时触发（对应 active 属性） | e.detail: `{ name: string, active: string[] \| string, target: HTMLElement  }` |
+| 事件名称  | 说明           | 回调参数                                                                         |
+| --------- | -------------- | -------------------------------------------------------------------------------- |
+| ea-change | 面板切换时触发 | e.detail: `{ name: string, target: EaCollapseItem, active: string[] \| string }` |
 
 ### Collapse Methods
 
-| 方法名                                      | 说明                                                                           |
-| ------------------------------------------- | ------------------------------------------------------------------------------ |
-| setActiveNames(`names: string[] \| string`) | 设置组件的 active 值。传入数组可同时展开多项；传入字符串仅在手风琴模式下生效。 |
+| 方法名         | 说明             | 参数                                                                                 |
+| -------------- | ---------------- | ------------------------------------------------------------------------------------ |
+| setActiveNames | 设置当前激活面板 | `names: string[] \| string` — 传入数组可同时展开多项；传入字符串仅在手风琴模式下生效 |
 
 ## CollapseItem API
 
 ### CollapseItem Attributes
 
-| 参数     | 说明                                                                                        |
-| -------- | ------------------------------------------------------------------------------------------- |
-| title    | 面板标题（可选）。当使用具名 slot `title` 时可省略。                                        |
-| name     | 面板的唯一标识，collapse 通过此字段进行开/关控制。若不提供，组件会以子项顺序生成默认 name。 |
-| disabled | 若为 true，则该面板无法被切换。                                                             |
+| 参数                 | 说明                                                                                      | 类型    | 可选值          | 默认值 |
+| -------------------- | ----------------------------------------------------------------------------------------- | ------- | --------------- | ------ |
+| header               | 面板标题。当使用具名 slot `header` 时可省略                                               | string  | —               | ""     |
+| name                 | 面板的唯一标识，collapse 通过此字段进行开/关控制。若不提供，组件会以子项顺序生成默认 name | string  | —               | ""     |
+| expand-icon-position | 设置图标位置                                                                              | string  | `left \| right` | right  |
+| disabled             | 若为 true，则该面板无法被切换                                                             | boolean | —               | false  |
+| active               | 是否展开                                                                                  | boolean | —               | false  |
 
 ### CollapseItem CSS Part
 
-| 名称          | 说明                                               |
-| ------------- | -------------------------------------------------- |
-| container     | 外层容器, 包含标题`title-wrap`和内容`content-wrap` |
-| title-wrap    | 标题容器                                           |
-| title-content | 标题内容                                           |
-| indicator     | 标题图标容器                                       |
-| icon          | 标题图标                                           |
-| content-wrap  | 内容容器                                           |
+> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-                                                                  |
+| 名称         | 说明                                               |
+| ------------ | -------------------------------------------------- |
+| container    | 外层容器，包含标题 header-wrap 和内容 content-wrap |
+| header-wrap  | 标题容器                                           |
+| header       | 标题内容                                           |
+| indicator    | 展开图标容器                                       |
+| icon         | 默认展开图标                                       |
+| content-wrap | 内容容器                                           |
 
 ### CollapseItem Slots
 
-| 名称  | 说明         |
-| ----- | ------------ |
-| -     | 默认插槽     |
-| title | 标题插槽     |
-| icon  | 标题图标插槽 |
+| 名称    | 说明                   |
+| ------- | ---------------------- |
+| default | 默认插槽，用于面板内容 |
+| header  | 标题插槽               |
+| icon    | 展开图标插槽           |
+
+### CollapseItem CSS 自定义属性
+
+| 属性名                                    | 说明             | 默认值                                                  |
+| ----------------------------------------- | ---------------- | ------------------------------------------------------- |
+| --ea-collapse-item-border-top             | 顶部边框         | none                                                    |
+| --ea-collapse-item-border                 | 底部边框         | var(--border-width) var(--border-style) var(--grey-200) |
+| --ea-collapse-item-header-height          | 标题高度         | 48px                                                    |
+| --ea-collapse-item-header-font-size       | 标题字体大小     | var(--font-size-md)                                     |
+| --ea-collapse-item-header-color           | 标题颜色         | var(--grey-900)                                         |
+| --ea-collapse-item-header-disabled-color  | 禁用状态标题颜色 | var(--grey-400)                                         |
+| --ea-collapse-item-header-font-weight     | 标题字重         | var(--font-weight-bold)                                 |
+| --ea-collapse-item-content-height         | 内容高度         | 0                                                       |
+| --ea-collapse-item-content-font-size      | 内容字体大小     | var(--font-size-md)                                     |
+| --ea-collapse-item-content-color          | 内容颜色         | var(--grey-900)                                         |
+| --ea-collapse-item-content-padding-bottom | 内容底部内边距   | var(--spacing-lg)                                       |
+| --ea-collapse-item-transition             | 过渡动画时长     | var(--transition-normal)                                |

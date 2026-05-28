@@ -16,11 +16,11 @@
   <body>
     <script type="module" src="../src/components/ea-collapse/index.ts"></script>
     <script type="module" src="../src/components/ea-button/index.ts"></script>
-    <!-- <script type="module" src="../src/components/ea-switch/index.ts"></script>
+    <script type="module" src="../src/components/ea-switch/index.ts"></script>
     <script
       type="module"
       src="../src/components/ea-message-box/index.ts"
-    ></script> -->
+    ></script>
     <script type="module">
       // ------- 基础用法 -------
       // #region
@@ -89,7 +89,7 @@
 
           this.btn.addEventListener("change", ({ detail }) => {
             const { value } = detail;
-            this.el["expand-icon-position"] = value;
+            this.el.expandIconPosition = value;
           });
         },
       };
@@ -145,7 +145,7 @@
 
           this.btn.addEventListener("change", ({ detail }) => {
             const { value } = detail;
-            if (value === "true") {
+            if (value) {
               this.el.beforeCollapse = beforeCollapse;
             } else {
               this.el.beforeCollapse = null;
@@ -348,7 +348,7 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!--  自定义图标位置 -->
+    <!--  自定义图标 -->
     <!-- #region -->
     <h1>自定义图标</h1>
     <style>

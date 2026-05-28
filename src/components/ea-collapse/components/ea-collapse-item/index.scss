@@ -1,36 +1,38 @@
+$name: ea-collapse-item;
+
 :host {
-  --ea-collapse-item-border-top: none;
-  --ea-collapse-item-border: 1px solid var(--grey-200);
+  --#{$name}-border-top: none;
+  --#{$name}-border: var(--border-width) var(--border-style) var(--grey-200);
 
-  --ea-collapse-item-header-height: 48px;
-  --ea-collapse-item-header-font-size: var(--font-size-md);
-  --ea-collapse-item-header-color: var(--grey-900);
-  --ea-collapse-item-header-disabled-color: var(--grey-400);
-  --ea-collapse-item-header-font-weight: var(--font-weight-bold);
+  --#{$name}-header-height: 48px;
+  --#{$name}-header-font-size: var(--font-size-md);
+  --#{$name}-header-color: var(--grey-900);
+  --#{$name}-header-disabled-color: var(--grey-400);
+  --#{$name}-header-font-weight: var(--font-weight-bold);
 
-  --ea-collapse-item-content-height: 0;
-  --ea-collapse-item-content-font-size: var(--font-size-md);
-  --ea-collapse-item-content-color: var(--grey-900);
-  --ea-collapse-item-content-padding-bottom: 12px;
+  --#{$name}-content-height: 0;
+  --#{$name}-content-font-size: var(--font-size-md);
+  --#{$name}-content-color: var(--grey-900);
+  --#{$name}-content-padding-bottom: var(--spacing-lg);
 
-  --ea-collapse-item-transition: var(--transition-normal);
+  --#{$name}-transition: var(--transition-normal);
 }
 
 :host([active]) {
-  .default-expand-icon {
+  .#{$name}__expand-icon {
     transform: rotate(0);
   }
 
-  .ea-collapse-item__content {
-    padding-bottom: var(--ea-collapse-item-content-padding-bottom);
+  .#{$name}__content {
+    padding-bottom: var(--#{$name}-content-padding-bottom);
   }
 }
 
-@include block(ea-collapse-item) {
-  border-top: var(--ea-collapse-item-border-top);
-  border-bottom: var(--ea-collapse-item-border);
+@include block($name) {
+  border-top: var(--#{$name}-border-top);
+  border-bottom: var(--#{$name}-border);
 
-  margin: 0 4px;
+  margin: 0 var(--spacing-sm);
 
   @include element(header-wrap) {
     position: relative;
@@ -40,26 +42,26 @@
 
     width: calc(100% - 2px);
 
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
   }
 
   @include element(header) {
     flex: 1 0 auto;
 
-    height: var(--ea-collapse-item-header-height);
-    line-height: var(--ea-collapse-item-header-height);
+    height: var(--#{$name}-header-height);
+    line-height: var(--#{$name}-header-height);
 
-    font-size: var(--ea-collapse-item-header-font-size);
-    font-weight: var(--ea-collapse-item-header-font-weight);
+    font-size: var(--#{$name}-header-font-size);
+    font-weight: var(--#{$name}-header-font-weight);
 
-    color: var(--ea-collapse-item-header-color);
+    color: var(--#{$name}-header-color);
   }
 
   @include element(indicator) {
-    .default-expand-icon {
+    .#{$name}__expand-icon {
       transform: rotate(-90deg);
 
-      transition: transform var(--ea-collapse-item-transition);
+      transition: transform var(--#{$name}-transition);
     }
   }
 
@@ -67,31 +69,31 @@
     will-change: height;
     overflow: hidden;
 
-    height: var(--ea-collapse-item-content-height);
+    height: var(--#{$name}-content-height);
     padding-bottom: 0;
 
-    color: var(--ea-collapse-item-content-color);
-    font-size: var(--ea-collapse-item-content-font-size);
+    color: var(--#{$name}-content-color);
+    font-size: var(--#{$name}-content-font-size);
 
     transition:
-      height var(--ea-collapse-item-transition),
-      padding-bottom var(--ea-collapse-item-transition);
+      height var(--#{$name}-transition),
+      padding-bottom var(--#{$name}-transition);
   }
 
   @include modifier(indicator-left) {
-    .ea-collapse-item__header-wrap {
+    .#{$name}__header-wrap {
       flex-direction: row-reverse;
     }
 
-    .ea-collapse-item__indicator {
-      margin-right: 12px;
+    .#{$name}__indicator {
+      margin-right: var(--spacing-lg);
     }
   }
 
   @include state(disabled) {
-    .ea-collapse-item__header-wrap {
-      cursor: not-allowed;
-      color: var(--ea-collapse-item-header-disabled-color);
+    .#{$name}__header-wrap {
+      cursor: var(--cursor-not-allowed);
+      color: var(--#{$name}-header-disabled-color);
     }
   }
 }

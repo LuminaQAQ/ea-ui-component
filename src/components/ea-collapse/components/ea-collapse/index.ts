@@ -1,17 +1,12 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
 import type { EaCollapseItem } from "../ea-collapse-item/index";
+import { EaCollapseChangeEvent } from "./events/EaCollapseChangeEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-collapse" as const;
 const bem = createBEM(TAG_NAME);
-
-// ==================== 类型定义 ====================
 
 export type ActiveValue = string | string[];
 
@@ -26,16 +21,23 @@ export type BeforeCollapseCallback = (params: {
   target: EaCollapseItem;
 }) => boolean | Promise<boolean>;
 
-// ==================== 组件类 ====================
-
+/**
+ * @summary 折叠面板组件，通过折叠面板收纳内容区域，支持手风琴模式和普通模式。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-collapse-item
+ *
+ * @slot default - 默认插槽，用于放置 ea-collapse-item 子组件。
+ *
+ * @event ea-change - 面板切换时触发，detail: `{ name: string, target: EaCollapseItem, active: string | string[] }`。
+ *
+ * @csspart container - 外层容器。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaCollapse extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-collapse")
+  @query(bem.cb())
   private _container!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Boolean,
@@ -47,8 +49,9 @@ export class EaCollapse extends EaBase {
     type: Array,
     default: [],
     observer(this: EaCollapse, newVal: ActiveValue) {
-
-      this.setActiveNames(newVal);
+      if (!this._isSettingActiveNames) {
+        this.setActiveNames(newVal);
+      }
     },
   })
   active: ActiveValue = [];
@@ -70,11 +73,9 @@ export class EaCollapse extends EaBase {
   })
   beforeCollapse: BeforeCollapseCallback | null = null;
 
-  // ==================== 方法 ====================
+  private _isSettingActiveNames: boolean = false;
 
-  /**
-   * 更新手风琴模式下的折叠状态
-   */
+  /** 更新手风琴模式下的折叠状态 */
   private _updateAccordionCollapse(
     activeName: string = this.active as string
   ): void {
@@ -87,9 +88,7 @@ export class EaCollapse extends EaBase {
     );
   }
 
-  /**
-   * 更新普通模式下的折叠状态
-   */
+  /** 更新普通模式下的折叠状态 */
   private _updateNormalCollapse(
     activeNames: string[] = this.active as string[]
   ): void {
@@ -105,10 +104,12 @@ export class EaCollapse extends EaBase {
     );
   }
 
-  /**
-   * 设置折叠项的展开状态
-   */
+  /** 设置折叠项的展开状态 */
   setActiveNames(newVal: ActiveValue): void {
+    this._isSettingActiveNames = true;
+    this.active = newVal;
+    this._isSettingActiveNames = false;
+
     if (this.accordion) {
       this._updateAccordionCollapse(newVal as string);
     } else {
@@ -116,9 +117,7 @@ export class EaCollapse extends EaBase {
     }
   }
 
-  /**
-   * 初始化折叠项的唯一标识及折叠状态
-   */
+  /** 初始化折叠项的唯一标识及折叠状态 */
   private _initCollapseStatus(): void {
     const els = [
       ...this.querySelectorAll("ea-collapse-item"),
@@ -131,9 +130,6 @@ export class EaCollapse extends EaBase {
     });
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class="${bem()}" part="container">
@@ -142,9 +138,7 @@ export class EaCollapse extends EaBase {
     `;
   }
 
-  // ==================== 事件处理 ====================
-
-  @listen("collapse-item-click")
+  @listen("ea-collapse-item-click")
   private async _handleCollapseItemClick(
     e: CustomEvent<{ name: string; target: EaCollapseItem }>
   ) {
@@ -154,7 +148,6 @@ export class EaCollapse extends EaBase {
 
     const { name, target } = e.detail;
 
-    // 执行 beforeCollapse 钩子
     if (typeof this.beforeCollapse === "function") {
       try {
         const isContinue = await this.beforeCollapse({ name, target });
@@ -165,17 +158,18 @@ export class EaCollapse extends EaBase {
     }
 
     if (this.accordion) {
-      this._updateAccordionCollapse(name);
-      this.active = name;
+      if (this.active === name) {
+        this.setActiveNames("");
+      } else {
+        this.setActiveNames(name);
+      }
     } else {
       try {
         const currentActive = this.active as string[];
         if (currentActive.includes(name)) {
-          this.active = currentActive.filter(item => item !== name);
-          target.toggleAttribute("active", false);
+          this.setActiveNames(currentActive.filter(item => item !== name));
         } else {
-          this.active = [...currentActive, name];
-          target.toggleAttribute("active", true);
+          this.setActiveNames([...currentActive, name]);
         }
       } catch {
         console.error(
@@ -185,17 +179,14 @@ export class EaCollapse extends EaBase {
       }
     }
 
-    this.emit("change", {
-      detail: {
+    this.dispatchEvent(
+      new EaCollapseChangeEvent({
         name,
         target,
         active: this.active,
-      },
-      bubbles: true,
-    });
+      })
+    );
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this._initCollapseStatus();
