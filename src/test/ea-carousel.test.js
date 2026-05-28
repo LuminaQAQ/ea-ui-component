@@ -11,7 +11,13 @@ function createCarousel(itemCount = 3, attrs = {}) {
     carousel.appendChild(item);
   }
   Object.entries(attrs).forEach(([key, value]) => {
-    carousel.setAttribute(key, String(value));
+    if (value === false) {
+      carousel.removeAttribute(key);
+    } else if (typeof value === "boolean") {
+      carousel.toggleAttribute(key, value);
+    } else {
+      carousel.setAttribute(key, String(value));
+    }
   });
   return carousel;
 }
@@ -34,7 +40,7 @@ async function simulateTransitionEnd(carousel) {
   await waitForRender();
 }
 
-describe("EaCarousel Component", () => {
+describe("EaCarousel", () => {
   let container;
 
   beforeEach(() => {
@@ -279,13 +285,13 @@ describe("EaCarousel Component", () => {
       expect(transform).not.toBe("translateX(0px)");
     });
 
-    it("should emit 'change' event when index changes", async () => {
+    it("should emit 'ea-change' event when index changes", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       await waitForRender();
 
       const changeHandler = vi.fn();
-      carousel.addEventListener("change", changeHandler);
+      carousel.addEventListener("ea-change", changeHandler);
 
       carousel.setAttribute("index", "1");
       await waitForRender();
@@ -297,13 +303,13 @@ describe("EaCarousel Component", () => {
       });
     });
 
-    it("should emit 'change' event with correct prev and current", async () => {
+    it("should emit 'ea-change' event with correct prev and current", async () => {
       const carousel = createCarousel(3, { index: "1" });
       container.appendChild(carousel);
       await waitForRender();
 
       const changeHandler = vi.fn();
-      carousel.addEventListener("change", changeHandler);
+      carousel.addEventListener("ea-change", changeHandler);
 
       carousel.setAttribute("index", "2");
       await waitForRender();
@@ -315,13 +321,13 @@ describe("EaCarousel Component", () => {
       });
     });
 
-    it("should emit 'change' event when looping forward", async () => {
+    it("should emit 'ea-change' event when looping forward", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
       await waitForRender();
 
       const changeHandler = vi.fn();
-      carousel.addEventListener("change", changeHandler);
+      carousel.addEventListener("ea-change", changeHandler);
 
       carousel.next();
       await waitForRender();
@@ -333,13 +339,13 @@ describe("EaCarousel Component", () => {
       });
     });
 
-    it("should emit 'change' event when looping backward", async () => {
+    it("should emit 'ea-change' event when looping backward", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
       await waitForRender();
 
       const changeHandler = vi.fn();
-      carousel.addEventListener("change", changeHandler);
+      carousel.addEventListener("ea-change", changeHandler);
 
       carousel.prev();
       await waitForRender();
@@ -496,8 +502,11 @@ describe("EaCarousel Component", () => {
     });
 
     it("should accept false value", async () => {
-      const carousel = createCarousel(3, { autoplay: "false" });
+      const carousel = createCarousel(3);
       container.appendChild(carousel);
+      await waitForRender();
+
+      carousel.autoplay = false;
       await waitForRender();
 
       expect(carousel.autoplay).toBe(false);
@@ -508,7 +517,7 @@ describe("EaCarousel Component", () => {
       container.appendChild(carousel);
       await waitForRender();
 
-      carousel.setAttribute("autoplay", "false");
+      carousel.autoplay = false;
       await waitForRender();
 
       expect(carousel.autoplay).toBe(false);
@@ -525,8 +534,11 @@ describe("EaCarousel Component", () => {
     });
 
     it("should accept false value", async () => {
-      const carousel = createCarousel(3, { loop: "false" });
+      const carousel = createCarousel(3);
       container.appendChild(carousel);
+      await waitForRender();
+
+      carousel.loop = false;
       await waitForRender();
 
       expect(carousel.loop).toBe(false);
@@ -537,7 +549,7 @@ describe("EaCarousel Component", () => {
       container.appendChild(carousel);
       await waitForRender();
 
-      carousel.setAttribute("loop", "false");
+      carousel.loop = false;
       await waitForRender();
 
       expect(carousel.loop).toBe(false);
@@ -554,8 +566,11 @@ describe("EaCarousel Component", () => {
     });
 
     it("should accept false value", async () => {
-      const carousel = createCarousel(3, { "pause-on-hover": "false" });
+      const carousel = createCarousel(3);
       container.appendChild(carousel);
+      await waitForRender();
+
+      carousel.pauseOnHover = false;
       await waitForRender();
 
       expect(carousel.pauseOnHover).toBe(false);
@@ -1024,12 +1039,15 @@ describe("EaCarousel Component", () => {
       expect(carousel.getAttribute("index")).toBe("1");
     });
 
-    it("should not autoplay when autoplay='false'", async () => {
-      const carousel = createCarousel(3, { autoplay: "false", interval: "50" });
+    it("should not autoplay when autoplay is false", async () => {
+      const carousel = createCarousel(3, { interval: "500" });
       container.appendChild(carousel);
+      await waitForRender(0);
+
+      carousel.autoplay = false;
       await waitForRender();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 600));
       expect(carousel.getAttribute("index") || "0").toBe("0");
     });
 
@@ -1081,11 +1099,11 @@ describe("EaCarousel Component", () => {
     });
 
     it("should not pause on hover when pauseOnHover is false", async () => {
-      const carousel = createCarousel(3, {
-        "pause-on-hover": "false",
-        interval: "50",
-      });
+      const carousel = createCarousel(3, { interval: "50" });
       container.appendChild(carousel);
+      await waitForRender();
+
+      carousel.pauseOnHover = false;
       await waitForRender();
 
       const containerEl = getContainer(carousel);
@@ -1112,13 +1130,13 @@ describe("EaCarousel Component", () => {
   });
 
   describe("Events", () => {
-    it("should emit 'change' event with bubbles and composed", async () => {
+    it("should emit 'ea-change' event with bubbles and composed", async () => {
       const carousel = createCarousel(3);
       container.appendChild(carousel);
       await waitForRender();
 
       const changeHandler = vi.fn();
-      container.addEventListener("change", changeHandler);
+      container.addEventListener("ea-change", changeHandler);
 
       carousel.setAttribute("index", "1");
       await waitForRender();
@@ -1126,13 +1144,13 @@ describe("EaCarousel Component", () => {
       expect(changeHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("should emit 'change' event with correct detail on loop forward", async () => {
+    it("should emit 'ea-change' event with correct detail on loop forward", async () => {
       const carousel = createCarousel(3, { index: "2" });
       container.appendChild(carousel);
       await waitForRender();
 
       const changeHandler = vi.fn();
-      carousel.addEventListener("change", changeHandler);
+      carousel.addEventListener("ea-change", changeHandler);
 
       carousel.next();
       await waitForRender();
@@ -1142,13 +1160,13 @@ describe("EaCarousel Component", () => {
       expect(changeHandler.mock.calls[0][0].detail.prev).toBe(2);
     });
 
-    it("should emit 'change' event with correct detail on loop backward", async () => {
+    it("should emit 'ea-change' event with correct detail on loop backward", async () => {
       const carousel = createCarousel(3, { index: "0" });
       container.appendChild(carousel);
       await waitForRender();
 
       const changeHandler = vi.fn();
-      carousel.addEventListener("change", changeHandler);
+      carousel.addEventListener("ea-change", changeHandler);
 
       carousel.prev();
       await waitForRender();
@@ -1158,10 +1176,10 @@ describe("EaCarousel Component", () => {
       expect(changeHandler.mock.calls[0][0].detail.prev).toBe(0);
     });
 
-    it("should emit 'change' event when index attribute is set", async () => {
+    it("should emit 'ea-change' event when index attribute is set", async () => {
       const changeHandler = vi.fn();
       const carousel = createCarousel(3);
-      carousel.addEventListener("change", changeHandler);
+      carousel.addEventListener("ea-change", changeHandler);
       container.appendChild(carousel);
       await waitForRender();
 
