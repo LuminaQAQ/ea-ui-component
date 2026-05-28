@@ -16,9 +16,3 @@ export class EaCheckboxChangeEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    change: EaCheckboxChangeEvent;
-  }
-}

@@ -23,6 +23,27 @@ export interface EaCheckboxElement extends HTMLElement {
   focus(): void;
   blur(): void;
   toggle(): void;
+
+  addEventListener(
+    type: "change",
+    listener: (event: EaCheckboxChangeEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: "focus",
+    listener: (event: EaCheckboxFocusEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: "blur",
+    listener: (event: EaCheckboxBlurEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ): void;
 }
 
 export interface EaCheckboxGroupElement extends HTMLElement {
@@ -34,6 +55,17 @@ export interface EaCheckboxGroupElement extends HTMLElement {
   min: number;
   max: number;
   required: boolean;
+
+  addEventListener(
+    type: "change",
+    listener: (event: EaCheckboxChangeEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ): void;
 }
 
 import type { DefineComponent } from "vue";

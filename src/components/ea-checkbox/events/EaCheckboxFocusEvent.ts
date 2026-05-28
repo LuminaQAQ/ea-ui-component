@@ -15,9 +15,3 @@ export class EaCheckboxFocusEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    focus: EaCheckboxFocusEvent;
-  }
-}

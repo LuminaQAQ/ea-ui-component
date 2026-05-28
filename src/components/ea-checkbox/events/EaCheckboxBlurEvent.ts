@@ -15,9 +15,3 @@ export class EaCheckboxBlurEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    blur: EaCheckboxBlurEvent;
-  }
-}
