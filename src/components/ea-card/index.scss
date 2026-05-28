@@ -1,51 +1,50 @@
+$name: ea-card;
+
 :host {
-  --ea-card-border-color: var(--color-border, #ebeef5);
-  --ea-card-transition: var(--transition-normal);
-  --ea-card-border-radius: var(--border-radius-sm);
-  --ea-card-box-shadow: var(--box-shadow-md);
-  --ea-card-background-color: var(--color-white);
-  --ea-card-padding: 20px;
+  --#{$name}-border-color: var(--grey-200);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-box-shadow: var(--box-shadow-md);
+  --#{$name}-background-color: var(--white);
+  --#{$name}-padding: var(--spacing-lg);
+  --#{$name}-transition: var(--transition-normal);
 }
 
 :host {
   display: block;
 }
 
-@include block(ea-card) {
+@include block($name) {
   width: 100%;
   height: 100%;
-
   box-sizing: border-box;
-  border-radius: var(--ea-card-border-radius);
-  border: 1px solid var(--ea-card-border-color);
-
-  background-color: var(--ea-card-background-color);
-
-  transition: box-shadow var(--ea-card-transition);
+  border-radius: var(--#{$name}-border-radius);
+  border: var(--border-width) solid var(--#{$name}-border-color);
+  background-color: var(--#{$name}-background-color);
+  transition: box-shadow var(--#{$name}-transition);
 
   @include element(content) {
-    padding: var(--ea-card-padding);
+    padding: var(--#{$name}-padding);
     height: 100%;
   }
 
   @include element(header) {
-    padding: var(--ea-card-padding);
-    border-bottom: 1px solid var(--ea-card-border-color);
+    padding: var(--#{$name}-padding);
+    border-bottom: var(--border-width) solid var(--#{$name}-border-color);
   }
 
   @include element(footer) {
-    padding: var(--ea-card-padding);
-    border-top: 1px solid var(--ea-card-border-color);
+    padding: var(--#{$name}-padding);
+    border-top: var(--border-width) solid var(--#{$name}-border-color);
   }
 
   @include state(hover-shadow) {
     &:hover {
-      box-shadow: var(--ea-card-box-shadow);
+      box-shadow: var(--#{$name}-box-shadow);
     }
   }
 
   @include state(always-shadow) {
-    box-shadow: var(--ea-card-box-shadow);
+    box-shadow: var(--#{$name}-box-shadow);
   }
 
   @include state(never-shadow) {
@@ -53,14 +52,14 @@
   }
 
   @include state(header-empty) {
-    .ea-card__header {
+    .#{$name}__header {
       display: none;
       padding: 0;
     }
   }
 
   @include state(footer-empty) {
-    .ea-card__footer {
+    .#{$name}__footer {
       display: none;
       padding: 0;
     }

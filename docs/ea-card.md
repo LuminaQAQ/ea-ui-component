@@ -42,7 +42,7 @@ onMounted(() => {
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#ea-card-css-part)。
 
 ::: tip
 示例中使用的样式
@@ -73,7 +73,7 @@ onMounted(() => {
 
 卡片包含标题，内容以及操作区域。
 
-Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是可选的，其内容取决于一个具名的 slot。
+Card 组件由 `header` `content` 和 `footer` 组成。 `header` 和 `footer` 是可选的，其内容取决于一个具名的 slot。
 
 <div class="demo">
   <ea-card class="ea-card-demo">
@@ -93,22 +93,20 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-card class="ea-card-demo">
-    <div slot="header" class="header">
-      <span>Card name</span>
-    </div>
+<ea-card class="ea-card-demo">
+  <div slot="header" class="header">
+    <span>Card name</span>
+  </div>
 
-    <p class="ea-card-content">content1</p>
-    <p class="ea-card-content">content2</p>
-    <p class="ea-card-content">content3</p>
-    <p class="ea-card-content">content4</p>
+  <p class="ea-card-content">content1</p>
+  <p class="ea-card-content">content2</p>
+  <p class="ea-card-content">content3</p>
+  <p class="ea-card-content">content4</p>
 
-    <div slot="footer" class="footer">
-      <span>Footer content</span>
-    </div>
-  </ea-card>
-</div>
+  <div slot="footer" class="footer">
+    <span>Footer content</span>
+  </div>
+</ea-card>
 ```
 
 :::
@@ -126,18 +124,20 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
   </ea-card>
 </div>
 
+::: details 查看代码
+
 ```html
-<div class="demo">
-  <ea-card class="ea-card-demo">
-    <p class="ea-card-content">content1</p>
-    <p class="ea-card-content">content2</p>
-    <p class="ea-card-content">content3</p>
-    <p class="ea-card-content">content4</p>
-  </ea-card>
-</div>
+<ea-card class="ea-card-demo">
+  <p class="ea-card-content">content1</p>
+  <p class="ea-card-content">content2</p>
+  <p class="ea-card-content">content3</p>
+  <p class="ea-card-content">content4</p>
+</ea-card>
 ```
 
-## 有图片内容的卡片​
+:::
+
+## 有图片内容的卡片
 
 可配置定义更丰富的内容展示。
 
@@ -153,19 +153,21 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
   </ea-card>
 </div>
 
+::: details 查看代码
+
 ```html
-<div class="demo">
-  <ea-card class="ea-card-demo">
-    <div class="header" slot="header">
-      <span>view</span>
-    </div>
-    <img
-      class="img"
-      src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-    />
-  </ea-card>
-</div>
+<ea-card class="ea-card-demo">
+  <div class="header" slot="header">
+    <span>view</span>
+  </div>
+  <img
+    class="img"
+    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  />
+</ea-card>
 ```
+
+:::
 
 ## 卡片阴影
 
@@ -181,27 +183,27 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
   <ea-card shadow="never">从不显示</ea-card>
 </div>
 
+::: details 查看代码
+
 ```html
-<div class="demo">
-  <ea-card shadow="always">总是显示</ea-card>
-  <p></p>
-  <ea-card shadow="hover">鼠标移入显示</ea-card>
-  <p></p>
-  <ea-card shadow="never">从不显示</ea-card>
-</div>
+<ea-card shadow="always">总是显示</ea-card>
+<ea-card shadow="hover">鼠标移入显示</ea-card>
+<ea-card shadow="never">从不显示</ea-card>
 ```
 
-## Attributes
+:::
+
+## ea-card API
+
+### ea-card Attributes
 
 | 参数   | 说明                                                                                            | 类型   | 可选值                     | 默认值 |
 | ------ | ----------------------------------------------------------------------------------------------- | ------ | -------------------------- | ------ |
-| header | 卡片的标题 你既可以通过设置 header 来修改标题，也可以通过 `slot="header"` 传入 DOM 节点         | string | —                          | —      |
-| footer | 卡片页脚。 你既可以通过设置 footer 来修改卡片底部内容，也可以通过 `slot="footer"` 传入 DOM 节点 | string | —                          | —      |
-| shadow | 卡片阴影                                                                                        | string | `always \| hover \| never` | always |
+| header | 卡片的标题。你既可以通过设置 header 来修改标题，也可以通过 `slot="header"` 传入 DOM 节点         | string | —                          | —      |
+| footer | 卡片页脚。你既可以通过设置 footer 来修改卡片底部内容，也可以通过 `slot="footer"` 传入 DOM 节点 | string | —                          | —      |
+| shadow | 卡片阴影显示时机                                                                                | string | `always \| hover \| never` | always |
 
-## CSS Part
-
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+### ea-card CSS Part
 
 | 名称      | 说明      |
 | --------- | --------- |
@@ -210,10 +212,21 @@ Card 组件由 `header` `body` 和 `footer` 组成。 `header` 和 `footer` 是�
 | content   | 内容容器  |
 | footer    | 页脚容器  |
 
-## Slot
+### ea-card Slots
 
-| name   | 说明     |
-| ------ | -------- |
-| —      | 卡片内容 |
-| header | 卡片标题 |
-| footer | 卡片页脚 |
+| 名称    | 说明     |
+| ------- | -------- |
+| default | 卡片内容 |
+| header  | 卡片标题 |
+| footer  | 卡片页脚 |
+
+### ea-card CSS 自定义属性
+
+| 属性名                         | 说明         | 默认值                    |
+| ------------------------------ | ------------ | ------------------------- |
+| --ea-card-border-color         | 边框颜色     | var(--grey-200)           |
+| --ea-card-border-radius        | 圆角大小     | var(--border-radius-sm)   |
+| --ea-card-box-shadow           | 阴影效果     | var(--box-shadow-md)      |
+| --ea-card-background-color     | 背景颜色     | var(--white)              |
+| --ea-card-padding              | 内边距       | var(--spacing-lg)         |
+| --ea-card-transition           | 过渡动画时长 | var(--transition-normal)  |
