@@ -11,9 +11,3 @@ export class EaCountdownChangeEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-change": EaCountdownChangeEvent;
-  }
-}

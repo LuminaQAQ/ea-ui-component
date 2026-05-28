@@ -9,8 +9,3 @@ export class EaColorPickerClearEvent extends Event {
   }
 }
 
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-clear": EaColorPickerClearEvent;
-  }
-}

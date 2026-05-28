@@ -13,8 +13,3 @@ export class EaCollapseChangeEvent extends Event {
   }
 }
 
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-change": EaCollapseChangeEvent;
-  }
-}

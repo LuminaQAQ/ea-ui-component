@@ -12,8 +12,3 @@ interface EaInputNumberChangeEventDetail {
   oldValue: number;
 }
 
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-change": EaInputNumberChangeEvent;
-  }
-}

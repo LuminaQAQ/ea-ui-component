@@ -14,8 +14,3 @@ interface EaTourCloseEventDetail {
   current: number;
 }
 
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-close": EaTourCloseEvent;
-  }
-}

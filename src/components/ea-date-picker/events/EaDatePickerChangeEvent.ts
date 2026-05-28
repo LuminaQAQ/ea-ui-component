@@ -19,8 +19,3 @@ export class EaDatePickerChangeEvent extends Event {
   }
 }
 
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-change": EaDatePickerChangeEvent;
-  }
-}

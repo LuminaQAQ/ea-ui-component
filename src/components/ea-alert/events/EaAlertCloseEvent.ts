@@ -11,8 +11,3 @@ export class EaAlertCloseEvent extends Event {
   }
 }
 
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-close": EaAlertCloseEvent;
-  }
-}
