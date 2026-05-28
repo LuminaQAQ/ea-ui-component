@@ -19,7 +19,7 @@ function createEventHandler(
   element: EaElement & HTMLElement
 ): (e: Event) => void {
   // 没有 selector 或监听 window/document 时，直接调用回调
-  if (!selector || selector === "window" || selector === "document") {
+  if (!selector || selector === "window" || selector === "document" || selector === "shadowRoot") {
     return (e: Event) => callback.call(element, e);
   }
 

@@ -60,7 +60,7 @@ src/
 3. **BEM 工具**：`namespace()` → `createBEM()`，路径从 `@/directives/namespace` 改为 `@utils/bem`
 4. **属性定义**：`this.properties()` → `@attribute()` 装饰器（映射 HTML attribute）/ `@property()` 装饰器（纯 JS 属性）
 5. **事件监听**：手动 `addEventListener` → `@listen()` 装饰器
-6. **DOM 查询**：手动 `querySelector` → `@query()` / `@queryAll()` 装饰器
+6. **DOM 查询**：手动 `querySelector` → `@query()` / `@queryAll()` 装饰器（Shadow DOM）/ `@children()` 装饰器（Light DOM）
 7. **HTML 安全**：使用 `html()` 工具函数处理 HTML 内容
 
 ## TypeScript 开发规范
@@ -71,7 +71,7 @@ src/
 
 ```typescript
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, property, query, queryAll, listen } from "@decorator";
+import { CustomElement, attribute, property, query, queryAll, children, listen } from "@decorator";
 import { html } from "@utils/html";
 import { Enum } from "@utils/Enum";
 import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
@@ -181,6 +181,7 @@ export class EaComponent extends EaBase {
 | `@property` | 定义纯 JS 属性 | `property` |
 | `@query` | 查询单个 DOM 元素 | `query` |
 | `@queryAll` | 查询多个 DOM 元素 | `query` |
+| `@children` | 查询 Light DOM 子元素 | `children` |
 | `@listen` | 绑定事件监听 | `listen` |
 
 ### 导入顺序规范
@@ -192,7 +193,7 @@ export class EaComponent extends EaBase {
 import EaBase, { createBEM } from "@core/EaBase";
 
 // 2. 装饰器（统一从 @decorator 导入）
-import { CustomElement, attribute, property, query, queryAll, listen } from "@decorator";
+import { CustomElement, attribute, property, query, queryAll, children, listen } from "@decorator";
 
 // 3. 工具函数
 import { html } from "@utils/html";
@@ -209,7 +210,7 @@ import stylesheet from "./index.scss?inline";
 **关键规则：**
 - **装饰器统一从 `@decorator` 导入**，禁止使用零散路径（如 `@decorator/attribute`）
 - 仅导入当前组件实际使用的装饰器
-- 装饰器按 `CustomElement → attribute → property → query → queryAll → listen` 顺序排列
+- 装饰器按 `CustomElement → attribute → property → query → queryAll → children → listen` 顺序排列
 
 ### 组件类 JSDoc 注释规范
 
