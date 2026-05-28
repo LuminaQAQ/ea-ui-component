@@ -437,10 +437,10 @@ ea-statistic {
 
 ### Countdown Events
 
-| 事件名    | 说明             | 触发时机                 | 事件 detail                               |
-| --------- | ---------------- | ------------------------ | ----------------------------------------- |
-| change    | 倒计时变化时触发 | 倒计时变化时             | `{ value: Number, displayValue: String }` |
-| ea-finish | 倒计时结束时触发 | 倒计时归零或达到目标时间 | `{ value: Number, displayValue: String }` |
+| 事件名    | 说明                       | 回调参数(event.detail)                        |
+| --------- | -------------------------- | --------------------------------------------- |
+| ea-change | 倒计时每次刷新时触发       | `{ value: number, displayValue: string }`     |
+| ea-finish | 倒计时结束（归零）时触发   | `{ value: number, displayValue: string }`     |
 
 ### Countdown CSS Part
 
@@ -455,9 +455,18 @@ ea-statistic {
 
 ### Countdown Slots
 
-| 名称   | 说明           |
-| ------ | -------------- |
-| -      | 默认内容插槽   |
-| title  | 自定义标题插槽 |
-| prefix | 自定义前缀插槽 |
-| suffix | 自定义后缀插槽 |
+| 名称    | 说明                     |
+| ------- | ------------------------ |
+| default | 默认插槽，自定义倒计时内容 |
+| title   | 自定义标题插槽           |
+| prefix  | 自定义前缀插槽           |
+| suffix  | 自定义后缀插槽           |
+
+### Countdown CSS 自定义属性
+
+| 属性名                        | 说明     | 默认值              |
+| ----------------------------- | -------- | ------------------- |
+| --ea-countdown-title-size     | 标题字号 | var(--font-size-md) |
+| --ea-countdown-title-color    | 标题颜色 | var(--grey-700)     |
+| --ea-countdown-number-size    | 数值字号 | 22px                |
+| --ea-countdown-number-color   | 数值颜色 | var(--grey-900)     |

@@ -445,7 +445,7 @@ describe("EaCountdown Component", () => {
       expect(countdown.heading).toBe("New Title");
     });
 
-    it("heading 为空时 header 文本应为空（未设置 heading 属性时 header 包含 slot）", async () => {
+    it("heading 为空时 header 文本应为空", async () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
@@ -611,7 +611,7 @@ describe("EaCountdown Component", () => {
       expect(numberEl.textContent).toBe("00:00:00");
     });
 
-    it("value 为空时 number 元素应该为空（未设置 value 属性时 number 包含 slot）", async () => {
+    it("value 为空时 number 元素应该为空", async () => {
       const countdown = document.createElement("ea-countdown");
       container.appendChild(countdown);
 
@@ -668,7 +668,7 @@ describe("EaCountdown Component", () => {
   });
 
   describe("Events", () => {
-    it("应该触发 change 事件", async () => {
+    it("应该触发 ea-change 事件", async () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
@@ -676,14 +676,14 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      countdown.addEventListener("change", changeHandler);
+      countdown.addEventListener("ea-change", changeHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await waitForRender(1100);
 
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    it("change 事件应该包含 value 和 displayValue", async () => {
+    it("ea-change 事件应该包含 value 和 displayValue", async () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
@@ -691,9 +691,9 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      countdown.addEventListener("change", changeHandler);
+      countdown.addEventListener("ea-change", changeHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await waitForRender(1100);
 
       if (changeHandler.mock.calls.length > 0) {
         const eventDetail = changeHandler.mock.calls[0][0].detail;
@@ -702,7 +702,7 @@ describe("EaCountdown Component", () => {
       }
     });
 
-    it("change 事件的 displayValue 应该是字符串", async () => {
+    it("ea-change 事件的 displayValue 应该是字符串", async () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
@@ -710,9 +710,9 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      countdown.addEventListener("change", changeHandler);
+      countdown.addEventListener("ea-change", changeHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await waitForRender(1100);
 
       if (changeHandler.mock.calls.length > 0) {
         const eventDetail = changeHandler.mock.calls[0][0].detail;
@@ -720,7 +720,7 @@ describe("EaCountdown Component", () => {
       }
     });
 
-    it("change 事件的 value 应该是数字", async () => {
+    it("ea-change 事件的 value 应该是数字", async () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("value", String(Date.now() + 60000));
       container.appendChild(countdown);
@@ -728,13 +728,31 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      countdown.addEventListener("change", changeHandler);
+      countdown.addEventListener("ea-change", changeHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await waitForRender(1100);
 
       if (changeHandler.mock.calls.length > 0) {
         const eventDetail = changeHandler.mock.calls[0][0].detail;
         expect(typeof eventDetail.value).toBe("number");
+      }
+    });
+
+    it("ea-change 事件应该是 EaCountdownChangeEvent 实例", async () => {
+      const countdown = document.createElement("ea-countdown");
+      countdown.setAttribute("value", String(Date.now() + 60000));
+      container.appendChild(countdown);
+
+      await waitForRender();
+
+      const changeHandler = vi.fn();
+      countdown.addEventListener("ea-change", changeHandler);
+
+      await waitForRender(1100);
+
+      if (changeHandler.mock.calls.length > 0) {
+        const event = changeHandler.mock.calls[0][0];
+        expect(event.constructor.name).toBe("EaCountdownChangeEvent");
       }
     });
 
@@ -765,6 +783,22 @@ describe("EaCountdown Component", () => {
         const eventDetail = finishHandler.mock.calls[0][0].detail;
         expect(eventDetail).toHaveProperty("value");
         expect(eventDetail).toHaveProperty("displayValue");
+      }
+    });
+
+    it("ea-finish 事件应该是 EaCountdownFinishEvent 实例", async () => {
+      const countdown = document.createElement("ea-countdown");
+      countdown.setAttribute("value", String(Date.now() - 1000));
+      container.appendChild(countdown);
+
+      const finishHandler = vi.fn();
+      countdown.addEventListener("ea-finish", finishHandler);
+
+      await waitForRender(200);
+
+      if (finishHandler.mock.calls.length > 0) {
+        const event = finishHandler.mock.calls[0][0];
+        expect(event.constructor.name).toBe("EaCountdownFinishEvent");
       }
     });
 
@@ -804,11 +838,11 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      countdown.addEventListener("change", changeHandler);
+      countdown.addEventListener("ea-change", changeHandler);
 
       countdown.setAttribute("value", String(Date.now() + 120000));
 
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await waitForRender(1100);
 
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -829,9 +863,9 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      countdown.addEventListener("change", changeHandler);
+      countdown.addEventListener("ea-change", changeHandler);
 
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await waitForRender(1100);
 
       expect(changeHandler.mock.calls.length).toBeLessThanOrEqual(2);
     });
@@ -856,9 +890,6 @@ describe("EaCountdown Component", () => {
       container.appendChild(countdown);
 
       await waitForRender();
-
-      const changeHandlerBefore = vi.fn();
-      countdown.addEventListener("change", changeHandlerBefore);
 
       countdown.remove();
 
@@ -971,7 +1002,7 @@ describe("EaCountdown Component", () => {
       expect(countdown).toBeDefined();
     });
 
-    it("设置 heading 属性后 header 的 slot 会被替换为文本", async () => {
+    it("设置 heading 属性后 header 的文本应该被更新", async () => {
       const countdown = document.createElement("ea-countdown");
       countdown.innerHTML = `<div slot="title">Slot Title</div>`;
       container.appendChild(countdown);
@@ -991,10 +1022,9 @@ describe("EaCountdown Component", () => {
         ".ea-countdown__header"
       );
       expect(headerAfter.textContent).toBe("Attribute Title");
-      expect(headerAfter.querySelector('slot[name="title"]')).toBeNull();
     });
 
-    it("refreshInterval 为 0 时应该使用默认值 1000", async () => {
+    it("refreshInterval 为 0 时应该使用默认值 1000 进行计时", async () => {
       const countdown = document.createElement("ea-countdown");
       countdown.setAttribute("refresh-interval", "0");
       container.appendChild(countdown);

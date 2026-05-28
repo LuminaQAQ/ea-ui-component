@@ -1,21 +1,42 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, property, query } from "@decorator";
 import dayjs from "dayjs";
-import { timeout } from "@/utils/timeout";
-import { parseToDate } from "@/utils/parseTime";
+import { timeout } from "@utils/timeout";
+import { parseToDate } from "@utils/parseTime";
+import { EaCountdownChangeEvent } from "./events/EaCountdownChangeEvent";
 import { EaCountdownFinishEvent } from "./events/EaCountdownFinishEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-countdown" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 倒计时组件，用于显示剩余时间，支持多种时间格式和自定义刷新间隔。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot title - 自定义标题内容。
+ * @slot prefix - 自定义前缀内容。
+ * @slot default - 默认插槽，用于自定义倒计时显示内容。
+ * @slot suffix - 自定义后缀内容。
+ *
+ * @event ea-change - 倒计时每次刷新时触发，detail: `{ value: number, displayValue: string }`。
+ * @event ea-finish - 倒计时结束时触发，detail: `{ value: number, displayValue: string }`。
+ *
+ * @csspart container - 容器元素。
+ * @csspart title - 标题元素。
+ * @csspart content - 内容区域元素。
+ * @csspart prefix - 前缀元素。
+ * @csspart number - 倒计时数值元素。
+ * @csspart suffix - 后缀元素。
+ *
+ * @cssproperty --ea-countdown-title-size - 标题字号。
+ * @cssproperty --ea-countdown-title-color - 标题颜色。
+ * @cssproperty --ea-countdown-number-size - 数值字号。
+ * @cssproperty --ea-countdown-number-color - 数值颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaCountdown extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -25,7 +46,9 @@ export class EaCountdown extends EaBase {
   @query(bem.ce("number"))
   private _number!: HTMLElement;
 
-  // ==================== 属性定义 ====================
+  private _timer: ReturnType<typeof setInterval> | null = null;
+
+  private _alignTimeout: number | null = null;
 
   @attribute({
     type: String,
@@ -57,45 +80,10 @@ export class EaCountdown extends EaBase {
   })
   heading: string = "";
 
-  // ==================== JS 属性（不映射到 HTML attribute） ====================
-
   @property({ type: String, default: "" })
   displayValue: string = "";
 
-  // ==================== 私有属性 ====================
-
-  private _timer: ReturnType<typeof setInterval> | null = null;
-  private _alignTimeout: number | null = null;
-
-  // ==================== 方法 ====================
-
-  updateContainerClasslist(): string {
-    const className = bem();
-    this._container.className = className;
-    return className;
-  }
-
-  html(): string {
-    return `
-      <div class='${bem()}' part='container'>
-        <header class='${bem.e("header")}' part='title'>
-          <slot name='title'></slot>
-        </header>
-        <main class='${bem.e("content")}' part='content'>
-          <span class='${bem.e("prefix")}' part='prefix'>
-            <slot name='prefix'></slot>
-          </span>
-          <span class='${bem.e("number")}' part='number'>
-            <slot></slot>
-          </span>
-          <span class='${bem.e("suffix")}' part='suffix'>
-            <slot name='suffix'></slot>
-          </span>
-        </main>
-      </div>
-    `;
-  }
-
+  /** 处理 value 属性变化，清理旧定时器并启动新倒计时 */
   private _handleValueChange(newVal: string): void {
     if (this._timer) {
       clearInterval(this._timer);
@@ -118,9 +106,9 @@ export class EaCountdown extends EaBase {
       this._number.textContent = displayValue;
       this.displayValue = displayValue;
 
-      this.emit("change", {
-        detail: { value: currentTime, displayValue },
-      });
+      this.dispatchEvent(
+        new EaCountdownChangeEvent({ value: currentTime, displayValue })
+      );
 
       if (diff <= 0 || !diff) {
         if (this._alignTimeout) {
@@ -153,6 +141,7 @@ export class EaCountdown extends EaBase {
     }, delay);
   }
 
+  /** 计算目标时间与当前时间的差值，并格式化显示 */
   private _getDiffTime = (
     date: string | Date,
     format: string
@@ -233,7 +222,32 @@ export class EaCountdown extends EaBase {
     };
   };
 
-  // ==================== 生命周期 ====================
+  updateContainerClasslist(): string {
+    const className = bem();
+    this._container.className = className;
+    return className;
+  }
+
+  html(): string {
+    return `
+      <div class='${bem()}' part='container'>
+        <header class='${bem.e("header")}' part='title'>
+          <slot name='title'></slot>
+        </header>
+        <main class='${bem.e("content")}' part='content'>
+          <span class='${bem.e("prefix")}' part='prefix'>
+            <slot name='prefix'></slot>
+          </span>
+          <span class='${bem.e("number")}' part='number'>
+            <slot></slot>
+          </span>
+          <span class='${bem.e("suffix")}' part='suffix'>
+            <slot name='suffix'></slot>
+          </span>
+        </main>
+      </div>
+    `;
+  }
 
   $mount(): void {
     this.updateContainerClasslist();
