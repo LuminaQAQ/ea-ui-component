@@ -1,10 +1,10 @@
 $name: ea-calendar;
 
 :host {
+  --#{$name}-bg-color: var(--white);
   --#{$name}-border-color: var(--grey-200);
   --#{$name}-border-radius: var(--border-radius);
   --#{$name}-shadow: var(--box-shadow-sm);
-  --#{$name}-background-color: var(--white);
 
   --#{$name}-header-padding: var(--spacing-md);
   --#{$name}-header-title-font-size: var(--font-size-lg);
@@ -13,7 +13,7 @@ $name: ea-calendar;
 
   --#{$name}-body-padding: var(--spacing-md);
 
-  --#{$name}-thead-background-color: var(--grey-100);
+  --#{$name}-thead-bg-color: var(--grey-100);
   --#{$name}-th-color: var(--grey-700);
   --#{$name}-th-font-weight: var(--font-weight-md);
   --#{$name}-th-padding: var(--spacing-md) 0;
@@ -21,13 +21,12 @@ $name: ea-calendar;
 
   --#{$name}-day-height: 40px;
   --#{$name}-day-hover-bg-color: var(--grey-100);
-  --#{$name}-day-selected-bg-color: var(--blue-100);
-  --#{$name}-day-selected-color: var(--blue-500);
-  --#{$name}-day-selected-font-weight: var(--font-weight-bold);
+  --#{$name}-day-active-bg-color: var(--blue-500);
+  --#{$name}-day-active-color: var(--white);
+  --#{$name}-day-active-border-color: var(--blue-500);
+  --#{$name}-day-active-hover-bg-color: var(--blue-400);
   --#{$name}-day-today-color: var(--blue-500);
-  --#{$name}-day-current-bg-color: var(--blue-500);
-  --#{$name}-day-current-color: var(--white);
-  --#{$name}-day-current-border-color: var(--blue-500);
+  --#{$name}-day-today-font-weight: var(--font-weight-bold);
   --#{$name}-day-out-of-range-color: var(--grey-400);
   --#{$name}-day-out-of-range-hover-color: var(--grey-500);
   --#{$name}-day-out-of-range-hover-bg-color: var(--grey-100);
@@ -63,6 +62,8 @@ $name: ea-calendar;
   }
 
   @include element(controller-wrapper) {
+    display: flex;
+    align-items: center;
   }
 
   @include element(controller-group) {
@@ -82,7 +83,6 @@ $name: ea-calendar;
   @include element(body) {
     box-sizing: border-box;
     padding: var(--#{$name}-body-padding);
-
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
@@ -123,42 +123,34 @@ $name: ea-calendar;
       background-color: var(--#{$name}-day-hover-bg-color);
     }
 
-    &.is-selected {
-      background-color: var(--#{$name}-day-selected-bg-color);
-      color: var(--#{$name}-day-selected-color);
-      font-weight: var(--#{$name}-day-selected-font-weight);
+    &:empty {
+      display: none;
     }
 
-    &.is-today {
-      color: var(--#{$name}-day-today-color);
-      font-weight: var(--font-weight-bold);
-    }
-
-    &.is-current {
-      background-color: var(--#{$name}-day-current-bg-color);
-      color: var(--#{$name}-day-current-color);
-      border: 1px solid var(--#{$name}-day-current-border-color);
-
-      &:not(.is-selected):hover {
-        background-color: var(--blue-400);
-      }
-    }
-
-    &.is-last-mon,
-    &.is-next-mon {
+    &.is-prev-month,
+    &.is-next-month {
       color: var(--#{$name}-day-out-of-range-color);
-    }
 
-    &[part~="last-mon"]:not(.is-selected):not(.is-current),
-    &[part~="next-mon"]:not(.is-selected):not(.is-current) {
-      &:hover {
+      &:not(.is-active):hover {
         background-color: var(--#{$name}-day-out-of-range-hover-bg-color);
         color: var(--#{$name}-day-out-of-range-hover-color);
       }
     }
 
-    &:empty {
-      display: none;
+    &.is-today {
+      color: var(--#{$name}-day-today-color);
+      font-weight: var(--#{$name}-day-today-font-weight);
+    }
+
+    &.is-active {
+      background-color: var(--#{$name}-day-active-bg-color);
+      color: var(--#{$name}-day-active-color);
+      border: 1px solid var(--#{$name}-day-active-border-color);
+      font-weight: var(--font-weight-bold);
+
+      &:hover {
+        background-color: var(--#{$name}-day-active-hover-bg-color);
+      }
     }
   }
 }

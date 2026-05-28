@@ -1,37 +1,30 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { Enum } from "@/utils/Enum";
-import { html } from "@/utils/html";
-import stylesheet from "./index.scss?inline";
-import { i18nManager } from "@/utils/I18nManager";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { html } from "@utils/html";
+import { Enum } from "@utils/Enum";
+import { i18nManager } from "@utils/I18nManager";
 import dayjs, { type Dayjs } from "dayjs";
 import "dayjs/locale/zh-cn";
+import { EaCalendarSelectEvent } from "./events/EaCalendarSelectEvent";
+import stylesheet from "./index.scss?inline";
 
-// 动态导入依赖组件，避免循环依赖和架构冲突
 async function importButtonComponent() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await import("@/components/ea-button/index" as any);
+  await import("@/components/ea-button/index");
 }
 
 async function importSelectComponent() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await import("@/components/ea-select/index" as any);
+  await import("@/components/ea-select/index");
 }
 
 const TAG_NAME = "ea-calendar" as const;
 const bem = createBEM(TAG_NAME);
 
-// ==================== 类型定义 ====================
-
 export type ControllerType = "button" | "select";
 
 export interface DayOption {
-  lastMonRemainingDays: number[];
-  currentMonDays: number[];
-  nextMonRemainingDays: number[];
+  prevMonthRemainingDays: number[];
+  currentMonthDays: number[];
+  nextMonthRemainingDays: number[];
 }
 
 export interface CalendarSelectDetail {
@@ -42,36 +35,92 @@ export interface CalendarSelectDetail {
   fullDate: string;
 }
 
-// ==================== 组件类 ====================
+type DayType = "prev-month" | "current-month" | "next-month";
 
+/**
+ * @summary 日历组件，用于显示和选择日期，支持按钮/下拉控制器和国际化。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-button
+ * @dependency ea-select
+ *
+ * @slot header - 自定义头部内容。
+ *
+ * @event ea-select - 选择日期时触发，detail: `{ year, month, date, day, fullDate }`。
+ *
+ * @csspart container - 外层容器。
+ * @csspart header - 头部容器。
+ * @csspart title - 标题部分。
+ * @csspart controller-wrapper - 控制器包装器。
+ * @csspart controller-group - 控制器组。
+ * @csspart controller - 控制器通用部分。
+ * @csspart prev - 上一月控制器。
+ * @csspart next - 下一月控制器。
+ * @csspart current - 当前/今天控制器。
+ * @csspart year - 年份选择器。
+ * @csspart month - 月份选择器。
+ * @csspart body - 主体表格。
+ * @csspart thead - 表头。
+ * @csspart thead-tr - 表头行。
+ * @csspart th - 表头单元格。
+ * @csspart tbody - 表体。
+ * @csspart row - 日期行。
+ * @csspart day - 日期单元格。
+ * @csspart prev-month - 上月日期单元格。
+ * @csspart current-month - 当月日期单元格。
+ * @csspart next-month - 下月日期单元格。
+ *
+ * @cssproperty --ea-calendar-bg-color - 组件背景颜色。
+ * @cssproperty --ea-calendar-border-color - 组件边框颜色。
+ * @cssproperty --ea-calendar-border-radius - 组件圆角。
+ * @cssproperty --ea-calendar-shadow - 组件阴影。
+ * @cssproperty --ea-calendar-header-padding - 头部内边距。
+ * @cssproperty --ea-calendar-header-title-font-size - 标题字体大小。
+ * @cssproperty --ea-calendar-header-title-font-weight - 标题字体粗细。
+ * @cssproperty --ea-calendar-header-title-color - 标题颜色。
+ * @cssproperty --ea-calendar-body-padding - 主体内边距。
+ * @cssproperty --ea-calendar-thead-bg-color - 表头背景颜色。
+ * @cssproperty --ea-calendar-th-color - 表头单元格颜色。
+ * @cssproperty --ea-calendar-th-font-weight - 表头单元格字体粗细。
+ * @cssproperty --ea-calendar-th-padding - 表头单元格内边距。
+ * @cssproperty --ea-calendar-th-border-color - 表头单元格边框颜色。
+ * @cssproperty --ea-calendar-day-height - 日期单元格高度。
+ * @cssproperty --ea-calendar-day-hover-bg-color - 日期单元格悬停背景颜色。
+ * @cssproperty --ea-calendar-day-active-bg-color - 选中日期背景颜色。
+ * @cssproperty --ea-calendar-day-active-color - 选中日期文字颜色。
+ * @cssproperty --ea-calendar-day-active-border-color - 选中日期边框颜色。
+ * @cssproperty --ea-calendar-day-active-hover-bg-color - 选中日期悬停背景颜色。
+ * @cssproperty --ea-calendar-day-today-color - 今日日期文字颜色。
+ * @cssproperty --ea-calendar-day-today-font-weight - 今日日期字体粗细。
+ * @cssproperty --ea-calendar-day-out-of-range-color - 非当月日期文字颜色。
+ * @cssproperty --ea-calendar-day-out-of-range-hover-color - 非当月日期悬停文字颜色。
+ * @cssproperty --ea-calendar-day-out-of-range-hover-bg-color - 非当月日期悬停背景颜色。
+ * @cssproperty --ea-calendar-controller-year-width - 年份选择器宽度。
+ * @cssproperty --ea-calendar-controller-month-width - 月份选择器宽度。
+ * @cssproperty --ea-calendar-controller-group-gap - 控制器组间距。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaCalendar extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-calendar")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-calendar__title")
+  @query(bem.ce("title"))
   private _title!: HTMLElement;
 
-  @query(".ea-calendar__controller-wrapper")
+  @query(bem.ce("controller-wrapper"))
   private _controllerWrapper!: HTMLElement;
 
-  @query(".ea-calendar__thead")
+  @query(bem.ce("thead"))
   private _thead!: HTMLTableSectionElement;
 
-  @query(".ea-calendar__tbody")
+  @query(bem.ce("tbody"))
   private _tbody!: HTMLTableSectionElement;
 
-  // ==================== 私有属性 ====================
-
-  private _abortController?: AbortController;
   private _dateChangeAbortController?: AbortController;
   private _isEaSelectImported: boolean = false;
   private _isEaButtonImported: boolean = false;
   private _displayDate: Dayjs = dayjs();
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -94,8 +143,6 @@ export class EaCalendar extends EaBase {
   })
   controllerType: ControllerType = "button";
 
-  // ==================== Getter / Setter ====================
-
   get displayDate(): Dayjs {
     return this._displayDate;
   }
@@ -106,11 +153,6 @@ export class EaCalendar extends EaBase {
     this.value = newDate.format("YYYY-MM-DD");
   }
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const className = bem();
     if (this._container) {
@@ -119,10 +161,7 @@ export class EaCalendar extends EaBase {
     return className;
   }
 
-  /**
-   * 今天按钮点击时的事件
-   */
-  private _onTodayBtnClickEvent = (): void => {
+  private _handleTodayClick = (): void => {
     i18nManager.locale = this.locale;
     dayjs.locale(this.locale.toLowerCase());
 
@@ -132,9 +171,6 @@ export class EaCalendar extends EaBase {
     this.value = today.format("YYYY-MM-DD");
   };
 
-  /**
-   * controller-type 的渲染器
-   */
   private _handleControllerRender = async (
     controllerType: ControllerType = this.controllerType
   ): Promise<void> => {
@@ -188,7 +224,6 @@ export class EaCalendar extends EaBase {
     this._dateChangeAbortController?.abort();
     this._dateChangeAbortController = new AbortController();
 
-    // 动态导入依赖组件
     if (controllerType === "select") {
       await importSelectComponent();
       await importButtonComponent();
@@ -208,15 +243,12 @@ export class EaCalendar extends EaBase {
 
     const todayBtn = this.shadowRoot?.querySelector(bem.ce("controller-today"));
     if (todayBtn) {
-      todayBtn.addEventListener("click", this._onTodayBtnClickEvent, {
+      todayBtn.addEventListener("click", this._handleTodayClick, {
         signal: this._dateChangeAbortController.signal,
       });
     }
   };
 
-  /**
-   * 初始化控制器为 button 的事件
-   */
   private _initButtonControllerEvent = async (): Promise<void> => {
     if (!this._isEaButtonImported) {
       await customElements.whenDefined("ea-button");
@@ -226,32 +258,27 @@ export class EaCalendar extends EaBase {
     const prevBtn = this.shadowRoot?.querySelector(bem.ce("controller-prev"));
     const nextBtn = this.shadowRoot?.querySelector(bem.ce("controller-next"));
 
-    /** 上个月 */
-    const onPrevMonthBtnClickEvent = (): void => {
+    const onPrevMonthClick = (): void => {
       this.displayDate = this._displayDate.subtract(1, "month").set("date", 1);
     };
 
-    /** 下个月 */
-    const onNextMonthBtnClickEvent = (): void => {
+    const onNextMonthClick = (): void => {
       this.displayDate = this._displayDate.add(1, "month").set("date", 1);
     };
 
     if (prevBtn) {
-      prevBtn.addEventListener("click", onPrevMonthBtnClickEvent, {
+      prevBtn.addEventListener("click", onPrevMonthClick, {
         signal: this._dateChangeAbortController?.signal,
       });
     }
 
     if (nextBtn) {
-      nextBtn.addEventListener("click", onNextMonthBtnClickEvent, {
+      nextBtn.addEventListener("click", onNextMonthClick, {
         signal: this._dateChangeAbortController?.signal,
       });
     }
   };
 
-  /**
-   * 初始化控制器为 select 的事件
-   */
   private _initSelectControllerEvent = async (): Promise<void> => {
     if (!this._isEaSelectImported) {
       await customElements.whenDefined("ea-select");
@@ -268,20 +295,16 @@ export class EaCalendar extends EaBase {
       bem.ce("controller-month")
     ) as HTMLSelectElement | null;
 
-    /**
-     * 年份改变事件
-     */
-    const onYearChangeEvent = (e: Event): void => {
+    /** @param e - 年份改变事件 */
+    const onYearChange = (e: Event): void => {
       e.stopImmediatePropagation();
       const newYear = parseInt((e.target as HTMLSelectElement).value);
       const currentMonthValue = this._displayDate.get("month") + 1;
       this.displayDate = dayjs(`${newYear}-${currentMonthValue}-01`);
     };
 
-    /**
-     * 月份改变事件
-     */
-    const onMonthChangeEvent = (e: Event): void => {
+    /** @param e - 月份改变事件 */
+    const onMonthChange = (e: Event): void => {
       e.stopImmediatePropagation();
       const currentYearValue = this._displayDate.get("year");
       const newMonth = (e.target as HTMLSelectElement).value.padStart(2, "0");
@@ -293,27 +316,23 @@ export class EaCalendar extends EaBase {
 
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    yearEl?.addEventListener("change", onYearChangeEvent, {
+    yearEl?.addEventListener("change", onYearChange, {
       signal: this._dateChangeAbortController?.signal,
     });
 
-    monthEl?.addEventListener("change", onMonthChangeEvent, {
+    monthEl?.addEventListener("change", onMonthChange, {
       signal: this._dateChangeAbortController?.signal,
     });
   };
 
-  /**
-   * 处理周渲染
-   */
-  private _getWeekHTMLString = (weekList: string[]): string => {
+  /** @param weekList - 星期名称列表 @returns 星期行 HTML 字符串 */
+  private _renderWeekHeader(weekList: string[]): string {
     return weekList
       .map(day => `<th class='${bem.e("th")}' part='th'>${day}</th>`)
       .join("");
-  };
+  }
 
-  /**
-   * 渲染日历天数
-   */
+  /** @param date - 要渲染的日期 */
   private _updateCalendarDays(date: Dayjs): void {
     i18nManager.locale = this.locale;
     dayjs.locale(this.locale.toLowerCase());
@@ -322,14 +341,10 @@ export class EaCalendar extends EaBase {
     const currentMonth = date.get("month");
 
     this._title.textContent = `${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}`;
-
-    this._tbody.innerHTML = this._getDayHTMLString();
+    this._tbody.innerHTML = this._renderDayCells();
   }
 
-  /**
-   * 处理tbody点击事件
-   */
-  @listen("click", ".ea-calendar__tbody")
+  @listen("click", bem.ce("tbody"))
   private _handleDayCellClick(e: MouseEvent): void {
     const target = (e.target as HTMLElement).closest(bem.ce("day"));
 
@@ -343,106 +358,80 @@ export class EaCalendar extends EaBase {
 
     this.displayDate = selectedDate;
 
-    this.emit("select", {
-      detail: {
+    this.dispatchEvent(
+      new EaCalendarSelectEvent({
         year: yearData,
         month: monthData,
         date: dateData,
         day: selectedDate.day(),
         fullDate: `${yearData}-${monthData}-${dateData}`,
-      } as CalendarSelectDetail,
-      bubbles: true,
-      composed: true,
-    });
+      })
+    );
   }
 
-  /**
-   * 获取日期数组
-   */
-  private _getDayOption = (refDate: Dayjs = dayjs()): DayOption => {
-    const currentDate = refDate;
+  /** @param refDate - 参考日期 @returns 日期数组选项 */
+  private _getDayOption(refDate: Dayjs = dayjs()): DayOption {
+    const prevMonthDate = refDate.subtract(1, "month");
+    const prevMonthTotalDays = prevMonthDate.daysInMonth();
 
-    const lastMonDate = currentDate.subtract(1, "month");
-    const lastMonTotalDays = lastMonDate.daysInMonth();
+    const currentMonthFirstDay = refDate.startOf("month").day();
+    const currentMonthLastDay = refDate.endOf("month").day();
+    const currentMonthTotalDays = refDate.daysInMonth();
 
-    const currentMonFirstDay = currentDate.startOf("month").day();
-    const currentMonLastDay = currentDate.endOf("month").day();
-    const currentMonTotalDays = currentDate.daysInMonth();
+    const weekStart = refDate.startOf("week").get("day");
 
-    const weekStart = currentDate.startOf("week").get("day");
-
-    const lastMonRemainingDays = Array.from(
-      { length: currentMonFirstDay - weekStart },
-      (_, i) => lastMonTotalDays - i
+    const prevMonthRemainingDays = Array.from(
+      { length: currentMonthFirstDay - weekStart },
+      (_, i) => prevMonthTotalDays - i
     ).reverse();
-    const currentMonDays = Array.from(
-      { length: currentMonTotalDays },
+    const currentMonthDays = Array.from(
+      { length: currentMonthTotalDays },
       (_, i) => i + 1
     );
-    const nextMonRemainingDays = Array.from(
-      { length: 6 - currentMonLastDay + weekStart },
+    const nextMonthRemainingDays = Array.from(
+      { length: 6 - currentMonthLastDay + weekStart },
       (_, i) => i + 1
     );
 
-    return { lastMonRemainingDays, currentMonDays, nextMonRemainingDays };
-  };
+    return { prevMonthRemainingDays, currentMonthDays, nextMonthRemainingDays };
+  }
 
-  /**
-   * 查找指定日期的单元格
-   */
-  private _findDateCell = (
-    year: number,
-    month: number,
-    date: number
-  ): HTMLElement | null => {
-    return this._tbody.querySelector(
-      `td[data-year="${year}"][data-month="${month}"][data-date="${date}"]`
-    );
-  };
-
-  /**
-   * 判断是否是今天
-   */
+  /** @param year - 年份 @param month - 月份 @param date - 日期 @returns 是否是今天 */
   private _isToday(year: number, month: number, date: number): boolean {
     const now = dayjs();
     return (
       year === now.get("year") &&
-      month === now.get("month") &&
+      month === now.get("month") + 1 &&
       date === now.get("date")
     );
   }
 
-  /**
-   * 处理天渲染
-   */
-  private _getDayHTMLString = (): string => {
+  /** @returns 日历天数的 HTML 字符串 */
+  private _renderDayCells(): string {
     const date = this._displayDate;
     const currentYear = date.get("year");
     const currentMonth = date.get("month") + 1;
+    const currentDate = date.get("date");
 
-    const { lastMonRemainingDays, currentMonDays, nextMonRemainingDays } =
+    const { prevMonthRemainingDays, currentMonthDays, nextMonthRemainingDays } =
       this._getDayOption(date);
 
-    /**
-     * 渲染日历项
-     */
     const cellRenderer = (
-      dayType: "last-mon" | "current-mon" | "next-mon",
+      dayType: DayType,
       content: number,
       option: {
-        isSelected?: boolean;
         isToday?: boolean;
-        isCurrent?: boolean;
+        isActive?: boolean;
       } = {}
     ): string => {
       let year: number;
       let month: number;
 
-      if (dayType === "last-mon") {
+      if (dayType === "prev-month") {
         const m = date.subtract(1, "month");
         year = m.get("year");
         month = m.get("month") + 1;
-      } else if (dayType === "current-mon") {
+      } else if (dayType === "current-month") {
         year = currentYear;
         month = currentMonth;
       } else {
@@ -452,31 +441,42 @@ export class EaCalendar extends EaBase {
       }
 
       const classes: string[] = [bem.e("day"), bem.s(dayType)];
-      if (option.isSelected) classes.push(bem.s("selected"));
       if (option.isToday) classes.push(bem.s("today"));
-      if (option.isCurrent) classes.push(bem.s("current"));
+      if (option.isActive) classes.push(bem.s("active"));
 
       const parts: string[] = ["day", dayType];
 
       return `<td class="${classes.join(" ")}" part="${parts.join(" ")}" data-year="${year}" data-month="${month}" data-date="${content}">${content}</td>`;
     };
 
-    const lastMon = lastMonRemainingDays.map(content =>
-      cellRenderer("last-mon", content)
-    );
-    const currentMon = currentMonDays.map(content =>
-      cellRenderer("current-mon", content, {
-        isToday: content === date.get("date"),
-        isCurrent: content === date.get("date"),
+    const prevMonth = prevMonthRemainingDays.map(content =>
+      cellRenderer("prev-month", content, {
+        isActive: this._isActiveDate(
+          date.subtract(1, "month").get("year"),
+          date.subtract(1, "month").get("month") + 1,
+          content
+        ),
       })
     );
-    const nextMon = nextMonRemainingDays.map(content =>
-      cellRenderer("next-mon", content)
+    const currentMonthCells = currentMonthDays.map(content =>
+      cellRenderer("current-month", content, {
+        isToday: this._isToday(currentYear, currentMonth, content),
+        isActive: content === currentDate,
+      })
+    );
+    const nextMonthCells = nextMonthRemainingDays.map(content =>
+      cellRenderer("next-month", content, {
+        isActive: this._isActiveDate(
+          date.add(1, "month").get("year"),
+          date.add(1, "month").get("month") + 1,
+          content
+        ),
+      })
     );
 
-    const calendarDays = lastMon
-      .concat(currentMon)
-      .concat(nextMon)
+    return prevMonth
+      .concat(currentMonthCells)
+      .concat(nextMonthCells)
       .reduce<string[][]>((acc, day, i) => {
         if (i % 7 === 0) acc.push([]);
         acc[acc.length - 1].push(day);
@@ -484,13 +484,17 @@ export class EaCalendar extends EaBase {
       }, [])
       .map(row => `<tr class="${bem.e("row")}">${row.join("")}</tr>`)
       .join("");
+  }
 
-    return calendarDays;
-  };
+  /** @param year - 年份 @param month - 月份 @param date - 日期 @returns 是否是选中日期 */
+  private _isActiveDate(year: number, month: number, date: number): boolean {
+    return (
+      year === this._displayDate.get("year") &&
+      month === this._displayDate.get("month") + 1 &&
+      date === this._displayDate.get("date")
+    );
+  }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -513,18 +517,15 @@ export class EaCalendar extends EaBase {
         <table class="${bem.e("body")}" part="body">
           <thead class="${bem.e("thead")}" part="thead">
             <tr class="${bem.e("week")}" part="thead-tr tr">
-              ${this._getWeekHTMLString(i18nManager.t("calendar.weekDays"))}
+              ${this._renderWeekHeader(i18nManager.t("calendar.weekDays"))}
             </tr>
           </thead>
-          <tbody class="${bem.e("tbody")}" part="tbody">${this._getDayHTMLString()}</tbody>
+          <tbody class="${bem.e("tbody")}" part="tbody">${this._renderDayCells()}</tbody>
         </table>
       </div>
     `;
   }
 
-  /**
-   * 更新组件语言
-   */
   $updateLocalization(locale: string): void {
     i18nManager.locale = locale;
     dayjs.locale(this.locale.toLowerCase());
@@ -553,14 +554,9 @@ export class EaCalendar extends EaBase {
     this._updateCalendarDays(this._displayDate);
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
-    this._abortController = new AbortController();
-
     this._handleControllerRender();
 
-    // 初始化显示日期
     if (this.value) {
       this._displayDate = dayjs(this.value);
       this._updateCalendarDays(this._displayDate);
@@ -568,7 +564,6 @@ export class EaCalendar extends EaBase {
   }
 
   $beforeUnmount(): void {
-    this._abortController?.abort();
     this._dateChangeAbortController?.abort();
   }
 }
