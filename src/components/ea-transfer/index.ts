@@ -5,7 +5,7 @@ import { CustomElement } from "@decorator/custom-element";
 import { query } from "@decorator/query";
 import { listen } from "@decorator/listen";
 import { createBEM } from "@utils/bem";
-import { i18nManager } from "@utils/I18nManager.js";
+import { i18nManager } from "@utils/I18nManager";
 import { EaTransferLeftCheckChangeEvent } from "./events/EaTransferLeftCheckChangeEvent";
 import { EaTransferRightCheckChangeEvent } from "./events/EaTransferRightCheckChangeEvent";
 import "./components/panel/index";

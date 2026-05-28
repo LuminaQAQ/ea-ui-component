@@ -1,5 +1,80 @@
+type Locale = "zh-CN" | "en-US" | string;
+
+interface CalendarMessages {
+  selectYear: string;
+  selectMonth: string;
+  prevMonth: string;
+  currentMonth: string;
+  nextMonth: string;
+  today: string;
+  weekDays: string[];
+  months: string[];
+  monthsShort?: string[];
+}
+
+interface ButtonMessages {
+  ok: string;
+  cancel: string;
+  confirm: string;
+}
+
+interface PaginationMessages {
+  total: string;
+  itemsPerPage: string;
+  goto: string;
+  page: string;
+}
+
+interface InputNumberMessages {
+  increase: string;
+  decrease: string;
+}
+
+interface SelectMessages {
+  placeholder: string;
+  noData: string;
+  noMatch: string;
+}
+
+interface DialogMessages {
+  confirmButtonText: string;
+  cancelButtonText: string;
+}
+
+interface DrawerMessages {
+  close: string;
+}
+
+interface EmptyMessages {
+  description: string;
+}
+
+interface TransferMessages {
+  list1: string;
+  list2: string;
+  filterPlaceholder: string;
+}
+
+interface LocaleMessages {
+  calendar: CalendarMessages;
+  button: ButtonMessages;
+  pagination: PaginationMessages;
+  inputNumber: InputNumberMessages;
+  select: SelectMessages;
+  dialog: DialogMessages;
+  drawer: DrawerMessages;
+  empty: EmptyMessages;
+  transfer: TransferMessages;
+  [key: string]: any;
+}
+
+interface I18nConfigs {
+  locale: Locale;
+  messages: Record<string, LocaleMessages>;
+}
+
 class I18nManager {
-  configs = {
+  configs: I18nConfigs = {
     locale: "en-US",
 
     messages: {
@@ -141,13 +216,12 @@ class I18nManager {
     },
   };
 
-  constructor() {}
-
   /**
    * 格式化成规范的 locale
-   * @param {string} locale
+   * @param locale
+   * @returns 规范化后的 locale 字符串
    */
-  #sanitizeLocale = locale => {
+  #sanitizeLocale = (locale: string): string => {
     if (!locale) return "en-US";
 
     const ary = locale.split("-") || [];
@@ -155,37 +229,26 @@ class I18nManager {
     return ary.length > 1 ? ary[0] + "-" + ary[1].toUpperCase() : ary[0];
   };
 
-  /**
-   * 获取当前语言
-   * @returns {string} 当前语言标识符
-   */
-  get locale() {
+  get locale(): string {
     return this.configs.locale;
   }
 
-  /**
-   * 设置当前语言
-   * @param {'zh-CN' | 'en-US'} locale - 语言标识符，如 'zh-CN', 'en-US'
-   */
-  set locale(locale) {
+  set locale(locale: string) {
     this.configs.locale = this.#sanitizeLocale(locale);
   }
 
-  /**
-   * 获取当前语言的所有消息
-   */
-  get messages() {
-    return this.configs.messages[this.locale] || {};
+  get messages(): LocaleMessages {
+    return this.configs.messages[this.locale] || ({} as LocaleMessages);
   }
 
   /**
    * 添加或更新语言包
-   * @param {string} locale - 语言标识符
-   * @param {object} messages - 语言消息对象
+   * @param locale - 语言标识符
+   * @param messages - 语言消息对象
    */
-  setMessages(locale, messages) {
+  setMessages(locale: string, messages: Partial<LocaleMessages>): void {
     if (!this.configs.messages[locale]) {
-      this.configs.messages[locale] = {};
+      this.configs.messages[locale] = {} as LocaleMessages;
     }
 
     this.configs.messages[locale] = {
@@ -196,13 +259,13 @@ class I18nManager {
 
   /**
    * 获取翻译文本
-   * @param {string} key - 翻译键路径，例如 'calendar.prevMonth'
-   * @param {object} params - 参数对象，用于替换模板字符串中的变量
-   * @returns {string} 翻译后的文本
+   * @param key - 翻译键路径，例如 'calendar.prevMonth'
+   * @param params - 参数对象，用于替换模板字符串中的变量
+   * @returns 翻译后的文本
    */
-  t(key, params) {
+  t(key: string, params?: Record<string, string | number>): any {
     const keys = key.split(".");
-    let result = this.configs.messages[this.locale];
+    let result: any = this.configs.messages[this.locale];
 
     for (const k of keys) {
       if (result && typeof result === "object") {
@@ -217,7 +280,7 @@ class I18nManager {
       Object.keys(params).forEach(paramKey => {
         result = result.replace(
           new RegExp(`\\{${paramKey}\\}`, "g"),
-          params[paramKey]
+          String(params[paramKey])
         );
       });
     }
@@ -229,3 +292,4 @@ class I18nManager {
 const i18nManager = new I18nManager();
 
 export { i18nManager, I18nManager };
+export type { Locale, LocaleMessages, CalendarMessages, ButtonMessages, PaginationMessages, InputNumberMessages, SelectMessages, DialogMessages, DrawerMessages, EmptyMessages, TransferMessages };

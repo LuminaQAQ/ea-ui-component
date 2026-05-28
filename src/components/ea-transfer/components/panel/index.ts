@@ -4,7 +4,7 @@ import { property } from "@decorator/property";
 import { CustomElement } from "@decorator/custom-element";
 import { query } from "@decorator/query";
 import { Enum } from "@/utils/Enum";
-import { i18nManager } from "@/utils/I18nManager.js";
+import { i18nManager } from "@utils/I18nManager";
 import "@components/ea-checkbox/index.js";
 import "@components/ea-input/index.js";
 import stylesheet from "./index.scss?inline";

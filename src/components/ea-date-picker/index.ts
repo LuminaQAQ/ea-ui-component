@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 dayjs.extend(advancedFormat);
 import "dayjs/locale/zh-cn";
-import { i18nManager } from "@/utils/I18nManager";
+import { i18nManager } from "@utils/I18nManager";
 import { EaDatePickerPanelChangeEvent } from "./events/EaDatePickerPanelChangeEvent";
 import { EaDatePickerVisibleChangeEvent } from "./events/EaDatePickerVisibleChangeEvent";
 
