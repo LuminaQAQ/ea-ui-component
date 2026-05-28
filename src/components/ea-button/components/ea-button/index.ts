@@ -244,7 +244,9 @@ export class EaButton extends EaBase {
       this.link && this.target ? `target="${this.target}"` : "";
     const relAttr = this.link && this.rel ? `rel="${this.rel}"` : "";
     const downloadAttr =
-      this.link && this.download ? `download="${this.download}"` : "";
+      this.link && this.hasAttribute("download")
+        ? `download="${this.download}"`
+        : "";
     const typeAttr = !this.link ? `type="${this.type}"` : "";
 
     return `
@@ -280,8 +282,19 @@ export class EaButton extends EaBase {
     }
   }
 
+  /** 同步链接属性到容器（处理 observer 在 _container 不存在时遗漏的情况） */
+  private _syncLinkAttributes(): void {
+    if (!this._container || !this.link) return;
+    const a = this._container as HTMLAnchorElement;
+    if (this.href) a.href = this.href;
+    if (this.target) a.target = this.target;
+    if (this.rel) a.rel = this.rel;
+    if (this.hasAttribute("download")) a.download = this.download;
+  }
+
   $mount(): void {
     this.updateContainerClasslist();
+    this._syncLinkAttributes();
   }
 }
 

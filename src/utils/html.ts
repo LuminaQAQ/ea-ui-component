@@ -17,6 +17,7 @@ export const html = (dirtyHTML: string): string => {
 
   let clean = DOMPurify.sanitize(protectedHTML, {
     USE_PROFILES: { html: true, svg: true, svgFilters: true },
+    ADD_ATTR: ["target", "rel", "download"],
     CUSTOM_ELEMENT_HANDLING: {
       tagNameCheck: /^ea-/,
       attributeNameCheck: /.*/,
