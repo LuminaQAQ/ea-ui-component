@@ -1,43 +1,52 @@
 import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
 import { createBEM } from "@utils/bem";
-import { Enum } from "@/utils/Enum";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  children,
+  listen,
+} from "@decorator";
+import { Enum } from "@utils/Enum";
+import { EaCheckboxChangeEvent } from "../../events/EaCheckboxChangeEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-checkbox-group" as const;
 const bem = createBEM(TAG_NAME);
 
-export type CheckboxGroupSize = "small" | "default" | "large";
+export type CheckboxGroupSize = "" | "small" | "default" | "large";
 
+/**
+ * @summary 多选框组组件，用于将多个多选框绑定到同一个数组，支持 min/max 限制和禁用。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-checkbox
+ *
+ * @slot default - 默认插槽，用于放置 ea-checkbox 子组件。
+ *
+ * @csspart container - 外层容器。
+ * @csspart form-label - 表单标签元素。
+ *
+ * @cssproperty --ea-checkbox-group-gap - 子组件间距。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaCheckboxGroup extends EaFormAssociatedBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-checkbox-group")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query("slot")
-  private _defaultSlot!: HTMLSlotElement;
-
-  @query(".ea-checkbox-group__form-label")
+  @query(bem.ce("form-label"))
   private _label!: HTMLElement;
 
-  /** @type {AbortController} */
-  private _abortController?: AbortController;
-
-  // ==================== 属性定义 ====================
+  @children("ea-checkbox")
+  private _checkboxItems!: NodeListOf<HTMLElement>;
 
   @attribute({
     type: String,
     default: "",
     observer(this: EaCheckboxGroup, newVal: string) {
-      if (this._label) {
-        this._label.textContent = newVal;
-      }
+      if (this._label) this._label.textContent = newVal;
     },
   })
   label: string = "";
@@ -65,7 +74,7 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
     type: Boolean,
     default: false,
     observer(this: EaCheckboxGroup, newVal: boolean) {
-      this.querySelectorAll("ea-checkbox").forEach(checkbox => {
+      this._checkboxItems?.forEach(checkbox => {
         checkbox.toggleAttribute("disabled", newVal);
       });
     },
@@ -91,7 +100,7 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
   max: number = Infinity;
 
   @attribute({
-    type: Enum(["small", "default", "large"]),
+    type: Enum(["", "small", "default", "large"]),
     default: "",
     observer(this: EaCheckboxGroup) {
       this._updateChildrenSize();
@@ -105,11 +114,6 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
   })
   required: boolean = false;
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const className = bem();
 
@@ -118,124 +122,99 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
-      <label class='ea-checkbox-group__form-label' part='form-label'></label>
-      <div class='${this.updateContainerClasslist()}' part='container'>
+      <label class="${bem.e("form-label")}" part="form-label"></label>
+      <div class="${this.updateContainerClasslist()}" part="container">
         <slot></slot>
       </div>
     `;
   }
 
-  /**
-   * 更新子组件的 name 属性
-   */
+  /** 更新子组件的 name 属性 */
   private _updateCheckboxChildrenName = () => {
-    this.querySelectorAll("ea-checkbox").forEach(checkbox => {
+    this._checkboxItems?.forEach(checkbox => {
       checkbox.setAttribute("name", this.name);
     });
   };
 
-  /**
-   * 更新子组件的初始勾选状态
-   */
+  /** 更新子组件的初始勾选状态 */
   private _updateCheckboxChildrenValue = () => {
-    this.querySelectorAll("ea-checkbox").forEach(checkbox => {
+    this._checkboxItems?.forEach(checkbox => {
       const isChecked = this.value.includes(checkbox.getAttribute("value"));
       checkbox.toggleAttribute("checked", isChecked);
     });
   };
 
-  /**
-   * 更新子组件值
-   * @param {Boolean} isChecked
-   * @param {any} updateValue
-   */
+  /** 更新子组件值 */
   private _updateGroupValue = (isChecked: boolean, updateValue: any) => {
     if (isChecked) {
       const hasValue = this.value.some((item: any) => item === updateValue);
-
       if (!hasValue) this.value.push(updateValue);
     } else {
       this.value = this.value.filter((item: any) => item !== updateValue);
     }
   };
 
-  /**
-   * 更新子组件在带有 Min 下的禁用状态
-   */
+  /** 更新子组件在 min 限制下的禁用状态 */
   private _updateMinValueStatus = () => {
-    this.querySelectorAll("ea-checkbox").forEach(item => {
+    this._checkboxItems?.forEach(item => {
       const isChecked = item.hasAttribute("checked");
       item.toggleAttribute("limit-disabled", isChecked);
     });
   };
 
-  /**
-   * 更新子组件在带有 Max 下的禁用状态
-   */
+  /** 更新子组件在 max 限制下的禁用状态 */
   private _updateMaxValueStatus = () => {
-    this.querySelectorAll("ea-checkbox").forEach(item => {
+    this._checkboxItems?.forEach(item => {
       const isChecked = item.hasAttribute("checked");
       item.toggleAttribute("limit-disabled", !isChecked);
     });
   };
 
-  /**
-   * 还原子组件的禁用状态
-   */
+  /** 还原子组件的禁用状态 */
   private _restoreLimitValueStatus = () => {
-    this.querySelectorAll("ea-checkbox").forEach(item => {
+    this._checkboxItems?.forEach(item => {
       item.toggleAttribute("limit-disabled", false);
     });
   };
 
-  /**
-   * 更新子组件的禁用状态
-   */
+  /** 更新子组件的禁用状态 */
   private _updateLimitStatus = () => {
     if (this.value.length <= this.min) {
       this._updateMinValueStatus();
     } else if (this.value.length >= this.max) {
       this._updateMaxValueStatus();
-    } else if (this.max < Infinity && this.min === 0) {
-      this._restoreLimitValueStatus();
     } else {
       this._restoreLimitValueStatus();
     }
   };
 
-  /**
-   * 更新子组件的尺寸
-   */
+  /** 更新子组件的尺寸 */
   private _updateChildrenSize = () => {
-    this.querySelectorAll("ea-checkbox").forEach(checkbox => {
+    this._checkboxItems?.forEach(checkbox => {
       checkbox.setAttribute("size", this.size);
     });
   };
 
-  // ==================== 事件处理 ====================
-
-  private _onSlotChange = (): void => {
+  @listen("slotchange", "shadowRoot")
+  private _handleSlotChange = (): void => {
     this._updateCheckboxChildrenName();
     this._updateCheckboxChildrenValue();
     this._updateLimitStatus();
   };
 
-  private _onChange = (e: CustomEvent): void => {
+  @listen("change", undefined, { capture: true })
+  private _handleChange = (e: Event): void => {
+    if (!(e instanceof EaCheckboxChangeEvent)) return;
     const { checked, value } = e.detail;
     this._updateGroupValue(checked, value);
     this._updateLimitStatus();
   };
 
-  // ==================== 生命周期 ====================
-
   formResetCallback(): void {
     this.value = [];
-    this.querySelectorAll("ea-checkbox").forEach(checkbox => {
+    this._checkboxItems?.forEach(checkbox => {
       checkbox.toggleAttribute("checked", false);
     });
     this.setValidity({});
@@ -246,17 +225,9 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
 
     this.updateContainerClasslist();
 
-    // 初始化 label
     if (this._label && this.label) {
       this._label.textContent = this.label;
     }
-
-    // 手动绑定事件
-    if (this._defaultSlot) {
-      this._defaultSlot.addEventListener("slotchange", this._onSlotChange);
-    }
-
-    this.addEventListener("change", this._onChange);
 
     queueMicrotask(() => {
       this._updateCheckboxChildrenName();
@@ -265,23 +236,12 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
     });
   }
 
-  $beforeUnmount(): void {
-    this._abortController?.abort();
-  }
-
-  /**
-   * 获取验证目标元素
-   * 返回第一个 ea-checkbox
-   * @returns {HTMLElement}
-   */
   get validationTarget() {
-    const firstCheckbox = this.querySelector("ea-checkbox");
+    const firstCheckbox = this._checkboxItems?.[0];
     return firstCheckbox || this._container;
   }
 
-  /**
-   * 更新表单验证状态
-   */
+  /** 更新表单验证状态 */
   updateValidity() {
     const hasValue = Array.isArray(this.value) && this.value.length > 0;
     const anchor = this.validationTarget ?? undefined;
@@ -297,19 +257,11 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
     }
   }
 
-  /**
-   * 检查表单字段的有效性
-   * @returns {boolean}
-   */
   checkValidity(): boolean {
     this.updateValidity();
     return this.internals?.validity?.valid ?? true;
   }
 
-  /**
-   * 报告表单字段的有效性（显示验证提示）
-   * @returns {boolean}
-   */
   reportValidity(): boolean {
     this.updateValidity();
     return this.internals?.reportValidity() ?? true;

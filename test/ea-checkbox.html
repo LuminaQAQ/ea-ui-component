@@ -78,10 +78,10 @@
 
     <script type="module">
       const multipleGroupExample = {
-        gruop: document.querySelector("#mulipleGroup"),
+        group: document.querySelector("#mulipleGroup"),
 
         init() {
-          this.gruop.value = ["Value selected and disabled", "Value A"];
+          this.group.value = ["Value selected and disabled", "Value A"];
         },
       };
 
@@ -125,7 +125,7 @@
           };
 
           this.indeterminateCheckbox.addEventListener("change", e => {
-            const { checked } = e.target;
+            const { checked } = e.detail;
 
             if (checked) this.group.value = this.cities;
             else this.group.value = [];

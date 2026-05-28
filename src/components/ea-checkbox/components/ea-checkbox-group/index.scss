@@ -1,17 +1,21 @@
+$name: ea-checkbox-group;
+
 :host {
+  --#{$name}-gap: var(--spacing-md);
+
   display: block;
 }
 
 :host(:invalid) {
-  .ea-checkbox-group__form-label {
+  .#{$name}__form-label {
     color: var(--red-500);
   }
 }
 
-@include block(ea-checkbox-group) {
+@include block($name) {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: var(--#{$name}-gap);
 
   @include element(form-label) {
     display: block;
