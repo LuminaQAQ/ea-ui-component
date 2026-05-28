@@ -1,13 +1,19 @@
+$name: ea-main;
+
 :host {
-  --ea-main-padding: 0 20px;
+  --#{$name}-padding: 0 20px;
 }
 
-@include block(ea-main) {
+:host {
+  display: block;
+}
+
+@include block($name) {
   width: 100%;
   height: 100%;
 
   box-sizing: border-box;
-  padding: var(--ea-main-padding);
+  padding: var(--#{$name}-padding);
 
   overflow: auto;
 }

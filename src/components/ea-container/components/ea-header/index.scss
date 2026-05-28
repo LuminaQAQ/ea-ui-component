@@ -1,15 +1,18 @@
+$name: ea-header;
+
 :host {
-  --ea-header-height: 60px;
-  --ea-header-padding: 0 20px;
+  --#{$name}-height: 60px;
+  --#{$name}-padding: 0 20px;
 }
 
 :host {
+  display: block;
 }
 
-@include block(ea-header) {
+@include block($name) {
   box-sizing: border-box;
-  padding: var(--ea-header-padding);
+  padding: var(--#{$name}-padding);
 
-  height: var(--ea-header-height);
-  line-height: var(--ea-header-height);
+  height: var(--#{$name}-height);
+  line-height: var(--#{$name}-height);
 }

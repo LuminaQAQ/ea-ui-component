@@ -62,6 +62,8 @@ hr {
 
 ## 示例样式
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html [示例样式]
@@ -83,14 +85,18 @@ hr {
 
   ea-aside::part(container) {
     background-color: #d3dce6;
+    text-align: center;
   }
 </style>
 ```
 
 ```html [页面样式]
 <style>
-  body,
-  html {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+
     height: 100%;
     width: 100%;
   }
@@ -98,6 +104,8 @@ hr {
 ```
 
 :::
+
+::::
 
 ## 自定义样式
 
@@ -115,12 +123,10 @@ hr {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-container style="height: 500px">
-    <ea-header>Header</ea-header>
-    <ea-main>Main</ea-main>
-  </ea-container>
-</div>
+<ea-container style="height: 500px">
+  <ea-header>Header</ea-header>
+  <ea-main>Main</ea-main>
+</ea-container>
 ```
 
 :::
@@ -138,13 +144,11 @@ hr {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-container style="height: 500px">
-    <ea-header>Header</ea-header>
-    <ea-main>Main</ea-main>
-    <ea-footer>Footer</ea-footer>
-  </ea-container>
-</div>
+<ea-container style="height: 500px">
+  <ea-header>Header</ea-header>
+  <ea-main>Main</ea-main>
+  <ea-footer>Footer</ea-footer>
+</ea-container>
 ```
 
 :::
@@ -162,13 +166,11 @@ hr {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-container style="height: 500px" direction="horizontal">
-    <ea-aside width="150px">Aside</ea-aside>
-    <ea-main>Main</ea-main>
-    <ea-aside width="150px">Aside</ea-aside>
-  </ea-container>
-</div>
+<ea-container style="height: 500px" direction="horizontal">
+  <ea-aside width="150px">Aside</ea-aside>
+  <ea-main>Main</ea-main>
+  <ea-aside width="150px">Aside</ea-aside>
+</ea-container>
 ```
 
 :::
@@ -188,15 +190,13 @@ hr {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-container style="height: 500px">
-    <ea-header>Header</ea-header>
-    <ea-container direction="horizontal">
-      <ea-aside width="200px">Aside</ea-aside>
-      <ea-main>Main</ea-main>
-    </ea-container>
+<ea-container style="height: 500px">
+  <ea-header>Header</ea-header>
+  <ea-container direction="horizontal">
+    <ea-aside width="200px">Aside</ea-aside>
+    <ea-main>Main</ea-main>
   </ea-container>
-</div>
+</ea-container>
 ```
 
 :::
@@ -219,46 +219,42 @@ hr {
 ::: details 查看代码
 
 ```html
+<ea-container style="height: 500px">
+  <ea-header>Header</ea-header>
+  <ea-container direction="horizontal">
+    <ea-aside width="200px">Aside</ea-aside>
+    <ea-container>
+      <ea-main>Main</ea-main>
+      <ea-footer>Footer</ea-footer>
+    </ea-container>
+  </ea-container>
+</ea-container>
+```
+
+:::
+
+---
+
 <div class="demo">
-  <ea-container style="height: 500px">
+  <ea-container style="height: 500px" direction="horizontal">
+    <ea-aside width="200px">Aside</ea-aside>
+    <ea-container>
+      <ea-header>Header</ea-header>
+      <ea-main>Main</ea-main>
+    </ea-container>
+  </ea-container>
+</div>
+
+::: details 查看代码
+
+```html
+<ea-container style="height: 500px" direction="horizontal">
+  <ea-aside width="200px">Aside</ea-aside>
+  <ea-container>
     <ea-header>Header</ea-header>
-    <ea-container direction="horizontal">
-      <ea-aside width="200px">Aside</ea-aside>
-      <ea-container>
-        <ea-main>Main</ea-main>
-        <ea-footer>Footer</ea-footer>
-      </ea-container>
-    </ea-container>
+    <ea-main>Main</ea-main>
   </ea-container>
-</div>
-```
-
-:::
-
----
-
-<div class="demo">
-  <ea-container style="height: 500px" direction="horizontal">
-    <ea-aside width="200px">Aside</ea-aside>
-    <ea-container>
-      <ea-header>Header</ea-header>
-      <ea-main>Main</ea-main>
-    </ea-container>
-  </ea-container>
-</div>
-
-::: details 查看代码
-
-```html
-<div class="demo">
-  <ea-container style="height: 500px" direction="horizontal">
-    <ea-aside width="200px">Aside</ea-aside>
-    <ea-container>
-      <ea-header>Header</ea-header>
-      <ea-main>Main</ea-main>
-    </ea-container>
-  </ea-container>
-</div>
+</ea-container>
 ```
 
 :::
@@ -279,525 +275,146 @@ hr {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-container style="height: 500px" direction="horizontal">
-    <ea-aside width="200px">Aside</ea-aside>
-    <ea-container>
-      <ea-header>Header</ea-header>
-      <ea-main>Main</ea-main>
-      <ea-footer>Footer</ea-footer>
-    </ea-container>
+<ea-container style="height: 500px" direction="horizontal">
+  <ea-aside width="200px">Aside</ea-aside>
+  <ea-container>
+    <ea-header>Header</ea-header>
+    <ea-main>Main</ea-main>
+    <ea-footer>Footer</ea-footer>
   </ea-container>
-</div>
+</ea-container>
 ```
 
 :::
 
-## 例子
+## Container API
 
-<div class="demo">
-  <ea-container class="example" direction="horizontal" style="height: 500px;">
-    <ea-aside width="200px">
-      <ea-header>header</ea-header>
-      <ea-main>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-      </ea-main>
-      <ea-footer>footer</ea-footer>
-    </ea-aside>
-    <ea-container>
-      <ea-header>header</ea-header>
-      <ea-main>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-      </ea-main>
-      <ea-footer>footer</ea-footer>
-    </ea-container>
-  </ea-container>
-</div>
+### Container Attributes
 
-::: details 查看代码
+| 参数      | 说明                                                                                          | 类型   | 可选值                   | 默认值     |
+| --------- | --------------------------------------------------------------------------------------------- | ------ | ------------------------ | ---------- |
+| direction | 布局方向。当子元素中包含 `ea-header` 或 `ea-footer` 时，会自动设置为 `vertical`，无需手动指定 | string | `horizontal`、`vertical` | horizontal |
 
-```html
-<div class="demo">
-  <ea-container class="example" direction="vertical" style="height: 500px;">
-    <ea-aside width="200px">
-      <ea-header>
-        <p>header</p>
-      </ea-header>
-      <ea-main>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-        <div>aside</div>
-      </ea-main>
-      <ea-footer>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-      </ea-footer>
-    </ea-aside>
-    <ea-container>
-      <ea-header>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-        <p>header</p>
-      </ea-header>
-      <ea-main>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-        <p>main</p>
-      </ea-main>
-      <ea-footer>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-        <p>footer</p>
-      </ea-footer>
-    </ea-container>
-  </ea-container>
-</div>
-```
+### Container Slots
 
-:::
+| 名称    | 说明                                                              |
+| ------- | ----------------------------------------------------------------- |
+| default | 默认插槽，用于放置 ea-header、ea-main、ea-footer、ea-aside 子组件 |
 
-## Container Attributes
+### Container CSS Part
 
-| 参数      | 说明     | 类型   | 可选值                   | 默认值     |
-| --------- | -------- | ------ | ------------------------ | ---------- |
-| direction | 布局模式 | string | `horizontal`、`vertical` | horizontal |
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 容器元素 |
 
-## Header Attributes
+### Container CSS 自定义属性
 
-| 参数   | 说明                   | 类型     | 可选值 | 默认值 |
-| ------ | ---------------------- | -------- | ------ | ------ |
-| height | Header 的高度，单位 px | `String` | -      | `60px` |
+| 属性名                   | 说明     | 默认值 |
+| ------------------------ | -------- | ------ |
+| --ea-container-direction | 布局方向 | —      |
 
-## Aside Attributes
+### Container Methods
 
-| 参数  | 说明                  | 类型     | 可选值 | 默认值  |
-| ----- | --------------------- | -------- | ------ | ------- |
-| width | Aside 的宽度，单位 px | `String` | -      | `300px` |
+| 方法名                   | 说明              | 参数 |
+| ------------------------ | ----------------- | ---- |
+| updateContainerClasslist | 更新容器 BEM 类名 | —    |
 
-## Footer Attributes
+## Header API
 
-| 参数   | 说明                   | 类型     | 可选值 | 默认值 |
-| ------ | ---------------------- | -------- | ------ | ------ |
-| height | Footer 的高度，单位 px | `String` | -      | `60px` |
+### Header Attributes
 
-## Container CSS Part
+| 参数   | 说明                                   | 类型     | 可选值 | 默认值 |
+| ------ | -------------------------------------- | -------- | ------ | ------ |
+| height | Header 的高度，支持任何 CSS 合法高度值 | `String` | —      | `60px` |
 
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+### Header Slots
 
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+| 名称    | 说明                       |
+| ------- | -------------------------- |
+| default | 默认插槽，用于放置顶栏内容 |
 
-## Header CSS Part
+### Header CSS Part
 
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 容器元素 |
 
-## Aside CSS Part
+### Header CSS 自定义属性
 
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+| 属性名              | 说明       | 默认值   |
+| ------------------- | ---------- | -------- |
+| --ea-header-height  | 顶栏高度   | `60px`   |
+| --ea-header-padding | 顶栏内边距 | `0 20px` |
 
-## Main CSS Part
+## Main API
 
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+### Main Slots
 
-## Footer CSS Part
+| 名称    | 说明                       |
+| ------- | -------------------------- |
+| default | 默认插槽，用于放置主要内容 |
 
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+### Main CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 容器元素 |
+
+### Main CSS 自定义属性
+
+| 属性名            | 说明         | 默认值   |
+| ----------------- | ------------ | -------- |
+| --ea-main-padding | 主区域内边距 | `0 20px` |
+
+## Aside API
+
+### Aside Attributes
+
+| 参数  | 说明                                  | 类型     | 可选值 | 默认值  |
+| ----- | ------------------------------------- | -------- | ------ | ------- |
+| width | Aside 的宽度，支持任何 CSS 合法宽度值 | `String` | —      | `300px` |
+
+### Aside Slots
+
+| 名称    | 说明                         |
+| ------- | ---------------------------- |
+| default | 默认插槽，用于放置侧边栏内容 |
+
+### Aside CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 容器元素 |
+
+### Aside CSS 自定义属性
+
+| 属性名           | 说明       | 默认值  |
+| ---------------- | ---------- | ------- |
+| --ea-aside-width | 侧边栏宽度 | `300px` |
+
+## Footer API
+
+### Footer Attributes
+
+| 参数   | 说明                                   | 类型     | 可选值 | 默认值 |
+| ------ | -------------------------------------- | -------- | ------ | ------ |
+| height | Footer 的高度，支持任何 CSS 合法高度值 | `String` | —      | `60px` |
+
+### Footer Slots
+
+| 名称    | 说明                       |
+| ------- | -------------------------- |
+| default | 默认插槽，用于放置底栏内容 |
+
+### Footer CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 容器元素 |
+
+### Footer CSS 自定义属性
+
+| 属性名              | 说明       | 默认值   |
+| ------------------- | ---------- | -------- |
+| --ea-footer-height  | 底栏高度   | `60px`   |
+| --ea-footer-padding | 底栏内边距 | `0 20px` |

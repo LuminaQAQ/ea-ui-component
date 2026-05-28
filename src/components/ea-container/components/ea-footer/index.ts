@@ -1,11 +1,22 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
+import { CustomElement, attribute } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-footer" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 底栏容器组件，用于布局的底部区域。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，用于放置底栏内容。
+ *
+ * @csspart container - 容器元素。
+ *
+ * @cssproperty --ea-footer-height - 底栏高度。
+ * @cssproperty --ea-footer-padding - 底栏内边距。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaFooter extends EaBase {
   @attribute({

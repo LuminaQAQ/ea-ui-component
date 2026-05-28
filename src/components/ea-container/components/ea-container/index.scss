@@ -1,3 +1,5 @@
+$name: ea-container;
+
 :host {
   display: block;
 }
@@ -18,7 +20,7 @@
   width: 100%;
 }
 
-@include block(ea-container) {
+@include block($name) {
   box-sizing: border-box;
 
   display: flex;

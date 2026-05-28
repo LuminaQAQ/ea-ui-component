@@ -1,14 +1,20 @@
+$name: ea-footer;
+
 :host {
-  --ea-footer-padding: 0 20px;
-  --ea-footer-height: 60px;
+  --#{$name}-padding: 0 20px;
+  --#{$name}-height: 60px;
 }
 
-@include block(ea-footer) {
-  box-sizing: border-box;
-  padding: var(--ea-footer-padding);
+:host {
+  display: block;
+}
 
-  height: var(--ea-footer-height);
-  line-height: var(--ea-footer-height);
+@include block($name) {
+  box-sizing: border-box;
+  padding: var(--#{$name}-padding);
+
+  height: var(--#{$name}-height);
+  line-height: var(--#{$name}-height);
 
   overflow: hidden;
 }
