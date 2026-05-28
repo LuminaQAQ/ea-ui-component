@@ -102,10 +102,10 @@ description: "Component documentation generation. Invoke when writing or updatin
 
 #### 多种代码块（HTML + CSS + JS）
 
-当示例同时包含 HTML、CSS、JavaScript 等多种代码时，使用 `::: details` + `::: code-group` 嵌套：
+当示例同时包含 HTML、CSS、JavaScript 等多种代码时，使用 `:::: details` + `::: code-group` 嵌套。**外层 `details` 必须使用 `::::`（4 个冒号）**，以区分内层 `::: code-group` 的 `:::`（3 个冒号）：
 
 ```markdown
-::: details 查看代码
+:::: details 查看代码
 
 ::: code-group
 
@@ -123,12 +123,13 @@ description: "Component documentation generation. Invoke when writing or updatin
 
 :::
 
-:::
+::::
 ```
 
 **关键规则：**
 - `::: code-group` 内必须包含 **两个及以上** 不同语言的代码块
-- 嵌套时，`::: code-group` 的 `:::` 闭合符在前，`::: details` 的 `:::` 闭合符在后
+- 嵌套时，外层 `:::: details` 使用 4 个冒号，内层 `::: code-group` 使用 3 个冒号
+- 关闭顺序：先 `:::` 关闭内层 `code-group`，再 `::::` 关闭外层 `details`
 - 单一 HTML 代码块直接放在 `::: details` 内，不嵌套 `::: code-group`
 
 ## 示例处理规则

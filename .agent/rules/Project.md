@@ -420,7 +420,7 @@ $name: ea-component-name;
 
 - **`::: code-group` 仅在存在多种语言代码块时使用**（如 HTML + CSS + JS），单一 HTML 代码块禁止使用 `::: code-group`
 - 单一代码块：`::: details` 直接包裹代码块
-- 多种代码块：`::: details` + `::: code-group` 嵌套，闭合符先内后外
+- 多种代码块：`:::: details`（4 个冒号）+ `::: code-group`（3 个冒号）嵌套，闭合符先内 `:::` 后外 `::::`
 
 ## 通用规范
 
