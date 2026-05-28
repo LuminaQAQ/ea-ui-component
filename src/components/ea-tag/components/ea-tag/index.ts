@@ -6,7 +6,7 @@ import { listen } from "@decorator/listen";
 import { html } from "@utils/html";
 import { Enum } from "@/utils/Enum";
 import { componentSizes } from "@/utils/Variables";
-import EaUtils from "@/utils/Utils";
+import { addAsyncEventListener } from "@/utils/Utils";
 import { EaTagRemoveEvent } from "../../events/EaTagRemoveEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -157,7 +157,7 @@ export class EaTag extends EaBase {
   private _onTagRemoveEvent = async () => {
     if (!this.disableTransitions) {
       this._container.classList.add("before-close");
-      await EaUtils.EaElement.addAsyncEventListener(
+      await addAsyncEventListener(
         this._container,
         "transitionend"
       );
