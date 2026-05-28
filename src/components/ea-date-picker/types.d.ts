@@ -13,7 +13,7 @@ export interface EaDatePickerElement extends HTMLElement {
   align: "left" | "center" | "right";
   displayFormat: string;
   valueFormat: string;
-  type: "date" | "month" | "year";
+  variant: "date" | "month" | "year";
   size: "large" | "default" | "small";
   required: boolean;
 
@@ -37,13 +37,13 @@ export interface EaDatePickerVueProps {
   align?: "left" | "center" | "right";
   displayFormat?: string;
   valueFormat?: string;
-  type?: "date" | "month" | "year";
+  variant?: "date" | "month" | "year";
   size?: "large" | "default" | "small";
   required?: boolean;
 }
 
 export interface EaDatePickerVueEvents {
-  change: (event: CustomEvent<{ fullDate: string; year: number | null; month: number | null; date: number | null; week: number | null }>) => void;
+  "ea-change": (event: CustomEvent<{ fullDate: string; year: number | null; month: number | null; date: number | null; week: number | null }>) => void;
   focus: (event: FocusEvent) => void;
   blur: (event: FocusEvent) => void;
   "ea-panel-change": (event: CustomEvent<{ date: Date; mode: "month" | "year"; view?: string }>) => void;
@@ -83,10 +83,10 @@ export interface EaDatePickerReactProps extends HTMLAttributes<HTMLElement> {
   align?: "left" | "center" | "right";
   displayFormat?: string;
   valueFormat?: string;
-  type?: "date" | "month" | "year";
+  variant?: "date" | "month" | "year";
   size?: "large" | "default" | "small";
   required?: boolean;
-  onChange?: (event: CustomEvent<{ fullDate: string; year: number | null; month: number | null; date: number | null; week: number | null }>) => void;
+  onEaChange?: (event: CustomEvent<{ fullDate: string; year: number | null; month: number | null; date: number | null; week: number | null }>) => void;
   onFocus?: (event: FocusEvent) => void;
   onBlur?: (event: FocusEvent) => void;
   onEaPanelChange?: (event: CustomEvent<{ date: Date; mode: "month" | "year"; view?: string }>) => void;

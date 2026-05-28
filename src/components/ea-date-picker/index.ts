@@ -1,12 +1,11 @@
 import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
 import { createBEM } from "@utils/bem";
+
+import { CustomElement, attribute, query, listen } from "@decorator";
+
 import { html } from "@utils/html";
-import { Enum } from "@/utils/Enum";
+import { Enum } from "@utils/Enum";
+
 import stylesheet from "./index.scss?inline";
 
 import "@/components/ea-calendar/index.js";
@@ -20,15 +19,64 @@ import "dayjs/locale/zh-cn";
 import { i18nManager } from "@utils/I18nManager";
 import { EaDatePickerPanelChangeEvent } from "./events/EaDatePickerPanelChangeEvent";
 import { EaDatePickerVisibleChangeEvent } from "./events/EaDatePickerVisibleChangeEvent";
+import { EaDatePickerChangeEvent } from "./events/EaDatePickerChangeEvent";
 
 const TAG_NAME = "ea-date-picker" as const;
 const bem = createBEM(TAG_NAME);
 
-export type DatePickerType = "date" | "month" | "year";
+export type DatePickerVariant = "date" | "month" | "year";
 export type DatePickerSize = "large" | "default" | "small";
 export type DatePickerAlign = "left" | "center" | "right";
 export type DatePickerViewMode = "day" | "month" | "year";
 
+/**
+ * @summary 日期选择器组件，用于选择或输入日期，支持日期、月份、年份三种模式。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-calendar
+ * @dependency ea-input
+ * @dependency ea-button
+ *
+ * @event ea-change - 日期选择确认时触发，detail: `{ fullDate, year, month, date, week }`。
+ * @event ea-panel-change - 面板切换时触发，detail: `{ date, mode, view }`。
+ * @event ea-visible-change - 下拉面板显隐变化时触发，detail: `{ visible }`。
+ * @event focus - 输入框获得焦点时触发。
+ * @event blur - 输入框失去焦点时触发。
+ *
+ * @csspart container - 组件根容器。
+ * @csspart input-wrap - 输入框包装器。
+ * @csspart input - 输入框元素。
+ * @csspart dropdown-wrap - 下拉面板包装器。
+ * @csspart calendar-header - 日历头部。
+ * @csspart header-left - 头部左侧。
+ * @csspart header-center - 头部中心。
+ * @csspart header-right - 头部右侧。
+ * @csspart header-btn - 头部按钮。
+ * @csspart header-year - 年份按钮。
+ * @csspart header-month - 月份按钮。
+ * @csspart calendar-body - 日历主体。
+ * @csspart calendar - 日历组件。
+ * @csspart year-panel - 年份选择面板。
+ * @csspart year-item - 年份项。
+ * @csspart month-panel - 月份选择面板。
+ * @csspart month-item - 月份项。
+ *
+ * @cssproperty --ea-date-picker-width - 组件宽度。
+ * @cssproperty --ea-date-picker-bg-color - 下拉面板背景颜色。
+ * @cssproperty --ea-date-picker-shadow - 下拉面板阴影。
+ * @cssproperty --ea-date-picker-header-height - 头部高度。
+ * @cssproperty --ea-date-picker-header-text-color - 头部文字颜色。
+ * @cssproperty --ea-date-picker-header-text-hover - 头部文字悬停颜色。
+ * @cssproperty --ea-date-picker-panel-item-size - 面板项尺寸。
+ * @cssproperty --ea-date-picker-panel-item-bg-color - 面板项背景颜色。
+ * @cssproperty --ea-date-picker-panel-item-text-color - 面板项文字颜色。
+ * @cssproperty --ea-date-picker-panel-item-hover - 面板项悬停背景颜色。
+ * @cssproperty --ea-date-picker-panel-item-selected - 面板项选中文字颜色。
+ * @cssproperty --ea-date-picker-panel-item-selected-bg - 面板项选中背景颜色。
+ * @cssproperty --ea-date-picker-font-size - 字体大小。
+ * @cssproperty --ea-date-picker-transition - 过渡动画。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaDatePicker extends EaFormAssociatedBase {
   @query(".ea-date-picker")
@@ -167,7 +215,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
   @attribute({
     type: Enum(["date", "month", "year"]),
     default: "date",
-    observer(this: EaDatePicker, newVal: DatePickerType) {
+    observer(this: EaDatePicker, newVal: DatePickerVariant) {
       if (newVal === "year") {
         this._switchToYearMode();
       } else if (newVal === "month") {
@@ -177,7 +225,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
       }
     },
   })
-  type: DatePickerType = "date";
+  variant: DatePickerVariant = "date";
 
   @attribute({
     type: Enum(["large", "default", "small"]),
@@ -224,12 +272,13 @@ export class EaDatePicker extends EaFormAssociatedBase {
     return className;
   }
 
+  /** @returns 根据当前 variant 返回显示格式 */
   private _getDisplayFormat(): string {
     if (this.hasAttribute("display-format") && this.displayFormat !== "") {
       return this.displayFormat;
     }
 
-    switch (this.type) {
+    switch (this.variant) {
       case "year":
         return "YYYY";
       case "month":
@@ -282,6 +331,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     `;
   }
 
+  /** 更新头部年月显示 */
   private _updateHeaderDisplay = (): void => {
     const year = this._states.currentDate.year();
     const month = this._states.currentDate.month() + 1;
@@ -300,6 +350,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     }
   };
 
+  /** 切换到年份视图模式 */
   private _switchToYearMode = (): void => {
     this._states.viewMode = "year";
     this._updateHeaderDisplay();
@@ -316,6 +367,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     );
   };
 
+  /** 切换到月份视图模式 */
   private _switchToMonthMode = (): void => {
     this._states.viewMode = "month";
     this._updateHeaderDisplay();
@@ -332,6 +384,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     );
   };
 
+  /** 切换到日期视图模式 */
   private _switchToDayMode = (): void => {
     this._states.viewMode = "day";
     this._updateHeaderDisplay();
@@ -351,6 +404,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     );
   };
 
+  /** @param mode - 视图模式，更新导航按钮的 aria-label */
   private _updateHeaderButtons = (mode: DatePickerViewMode): void => {
     if (mode === "year") {
       this._prevYearBtn.ariaLabel = "Previous decade";
@@ -366,6 +420,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     }
   };
 
+  /** 渲染年份面板 */
   private _renderYearPanel = (): void => {
     const year = this._states.currentDate.year();
     const decadeStart = Math.floor(year / 10) * 10;
@@ -380,6 +435,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     yearPanel.innerHTML = html(yearHtml);
   };
 
+  /** 渲染月份面板选中状态 */
   private _renderMonthPanel = (): void => {
     const monthItems = this._monthPanel.querySelectorAll(
       `.${bem.e("month-item")}`
@@ -411,6 +467,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     });
   }
 
+  /** 点击上一年/上一组按钮 */
   private _onPrevYearClick = (): void => {
     if (this._states.viewMode === "year") {
       this._states.currentDate = this._states.currentDate.subtract(10, "year");
@@ -420,6 +477,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._updateView();
   };
 
+  /** 点击下一年/下一组按钮 */
   private _onNextYearClick = (): void => {
     if (this._states.viewMode === "year") {
       this._states.currentDate = this._states.currentDate.add(10, "year");
@@ -429,16 +487,19 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._updateView();
   };
 
+  /** 点击上一月按钮 */
   private _onPrevMonthClick = (): void => {
     this._states.currentDate = this._states.currentDate.subtract(1, "month");
     this._updateView();
   };
 
+  /** 点击下一月按钮 */
   private _onNextMonthClick = (): void => {
     this._states.currentDate = this._states.currentDate.add(1, "month");
     this._updateView();
   };
 
+  /** @param e - 点击事件，从 data-year 属性获取年份 */
   private _onYearClick = (e: Event): void => {
     const target = e.target as HTMLElement;
     const yearItem = target.closest("[data-year]");
@@ -448,13 +509,14 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._states.selectedYear = year;
     this._states.currentDate = this._states.currentDate.year(year);
 
-    if (this.type === "year") {
+    if (this.variant === "year") {
       this._handleYearSelect(year);
     } else {
       this._switchToMonthMode();
     }
   };
 
+  /** @param year - 选中的年份 */
   private _handleYearSelect = (year: number): void => {
     const selectedDate = this._states.currentDate;
     const displayValue = selectedDate.format(this._getDisplayFormat());
@@ -463,19 +525,20 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._inputElement.value = displayValue;
     this.setAttribute("value", valueStr);
 
-    this.emit("change", {
-      detail: {
+    this.dispatchEvent(
+      new EaDatePickerChangeEvent({
         fullDate: valueStr,
         year,
         month: null,
         date: null,
         week: null,
-      },
-    });
+      })
+    );
 
     this._closeDropdown();
   };
 
+  /** @param e - 点击事件，从 data-month 属性获取月份 */
   private _onMonthClick = (e: Event): void => {
     const target = e.target as HTMLElement;
     const monthItem = target.closest("[data-month]");
@@ -485,13 +548,14 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._states.selectedMonth = month;
     this._states.currentDate = this._states.currentDate.month(month - 1);
 
-    if (this.type === "month") {
+    if (this.variant === "month") {
       this._handleMonthSelect(month);
     } else {
       this._switchToDayMode();
     }
   };
 
+  /** @param month - 选中的月份 */
   private _handleMonthSelect = (month: number): void => {
     const selectedDate = this._states.currentDate;
     const displayValue = selectedDate.format(this._getDisplayFormat());
@@ -500,19 +564,20 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._inputElement.value = displayValue;
     this.setAttribute("value", valueStr);
 
-    this.emit("change", {
-      detail: {
+    this.dispatchEvent(
+      new EaDatePickerChangeEvent({
         fullDate: valueStr,
         year: this._states.selectedYear,
         month,
         date: null,
         week: null,
-      },
-    });
+      })
+    );
 
     this._closeDropdown();
   };
 
+  /** 更新当前视图 */
   private _updateView = (): void => {
     this._updateHeaderDisplay();
 
@@ -526,7 +591,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._calendarElement.setAttribute("value", dateStr);
   };
 
-  @listen("select", ".ea-date-picker__calendar")
+  @listen("ea-select", ".ea-date-picker__calendar")
   private _onCalendarSelect(e: Event): void {
     const detail = (e as CustomEvent).detail;
     const { year, month, date, day } = detail;
@@ -542,15 +607,15 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._inputElement.value = displayValue;
     this.setAttribute("value", valueStr);
 
-    this.emit("change", {
-      detail: {
+    this.dispatchEvent(
+      new EaDatePickerChangeEvent({
         fullDate: valueStr,
         year,
         month,
         date,
         week: day,
-      },
-    });
+      })
+    );
 
     this._closeDropdown();
   }
@@ -620,6 +685,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this._onMonthClick(e);
   }
 
+  /** 打开下拉面板 */
   private _openDropdown = (): void => {
     if (this.disabled) return;
     const wasOpen = this._container.classList.contains("is-open");
@@ -629,15 +695,16 @@ export class EaDatePicker extends EaFormAssociatedBase {
       this.dispatchEvent(new EaDatePickerVisibleChangeEvent({ visible: true }));
     }
 
-    if (this.type === "year") {
+    if (this.variant === "year") {
       this._switchToYearMode();
-    } else if (this.type === "month") {
+    } else if (this.variant === "month") {
       this._switchToMonthMode();
     } else {
       this._switchToDayMode();
     }
   };
 
+  /** 关闭下拉面板 */
   private _closeDropdown = (): void => {
     const wasOpen = this._container.classList.contains("is-open");
     this._container.classList.remove("is-open");
@@ -649,6 +716,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     }
   };
 
+  /** 切换下拉面板显隐 */
   private _toggleDropdown = (): void => {
     if (this.disabled) return;
     if (this._container.classList.contains("is-open")) {

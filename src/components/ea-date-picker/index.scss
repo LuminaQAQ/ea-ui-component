@@ -4,8 +4,8 @@ $ea-date-picker-align-types: left, center, right;
 $ea-date-picker-sizes: small, large;
 
 :host {
-  --#{$name}-bg-color: var(--white);
-  --#{$name}-shadow: var(--shadow-sm);
+  --#{$name}-bg-color: var(--color-white);
+  --#{$name}-shadow: var(--box-shadow-sm);
   --#{$name}-z-index: 2;
   --#{$name}-transition: var(--transition-fast);
 
@@ -15,7 +15,7 @@ $ea-date-picker-sizes: small, large;
   --#{$name}-header-text-hover: var(--blue-500);
 
   --#{$name}-panel-item-size: 60px;
-  --#{$name}-panel-item-bg-color: transparent;
+  --#{$name}-panel-item-bg-color: var(--color-transparent);
   --#{$name}-panel-item-text-color: var(--grey-700);
   --#{$name}-panel-item-hover: var(--grey-100);
   --#{$name}-panel-item-selected: var(--blue-500);
@@ -36,13 +36,13 @@ $ea-date-picker-sizes: small, large;
 }
 
 :host(:invalid) {
-  .ea-date-picker__input::part(inner) {
+  .#{$name}__input::part(inner) {
     border-color: var(--red-500);
   }
 }
 
 :host(:invalid:focus-within) {
-  .ea-date-picker__input::part(inner) {
+  .#{$name}__input::part(inner) {
     border-color: var(--red-500);
     box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
   }
@@ -55,7 +55,7 @@ $ea-date-picker-sizes: small, large;
   @include element(input-wrap) {
     position: relative;
 
-    .ea-date-picker__input {
+    .#{$name}__input {
       width: 100%;
     }
   }
@@ -65,10 +65,10 @@ $ea-date-picker-sizes: small, large;
     width: 100%;
     top: 100%;
     left: 0;
-    margin-top: var(--spacing-xs);
+    margin-top: var(--spacing-md);
     background-color: var(--#{$name}-bg-color);
     box-shadow: var(--#{$name}-shadow);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius);
     z-index: var(--#{$name}-z-index);
     transform-origin: top center;
     transform: scaleY(0);
@@ -79,6 +79,7 @@ $ea-date-picker-sizes: small, large;
   @include element(calendar-wrapper) {
     display: flex;
     flex-direction: column;
+    box-shadow: var(--box-shadow-md);
   }
 
   @include element(calendar-header) {
@@ -86,20 +87,20 @@ $ea-date-picker-sizes: small, large;
     align-items: center;
     justify-content: space-between;
     height: var(--#{$name}-header-height);
-    padding: 0 var(--spacing-xs);
-    margin-bottom: var(--spacing-xs);
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-md);
   }
 
   @include element(header-left) {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-md);
   }
 
   @include element(header-right) {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-md);
   }
 
   @include element(header-btn) {
@@ -111,9 +112,9 @@ $ea-date-picker-sizes: small, large;
   @include element(header-center) {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-md);
     font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-md);
     color: var(--#{$name}-header-text-color);
   }
 
@@ -134,7 +135,7 @@ $ea-date-picker-sizes: small, large;
     color: var(--#{$name}-panel-item-text-color);
     font-size: var(--font-size-sm);
     cursor: pointer;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius);
     transition: all var(--#{$name}-transition);
 
     &:hover {
@@ -144,7 +145,7 @@ $ea-date-picker-sizes: small, large;
     &.is-selected {
       color: var(--#{$name}-panel-item-selected);
       background-color: var(--#{$name}-panel-item-selected-bg);
-      font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-md);
 
       &:hover {
         background-color: var(--#{$name}-panel-item-selected-bg);
@@ -167,10 +168,6 @@ $ea-date-picker-sizes: small, large;
     height: calc(var(--#{$name}-panel-item-size) * 0.8);
   }
 
-  @include element(calendar-wrapper) {
-    box-shadow: var(--box-shadow-md);
-  }
-
   @include element(calendar) {
     width: 100%;
 
@@ -185,53 +182,53 @@ $ea-date-picker-sizes: small, large;
 
   &.is-view-year,
   &.is-view-month {
-    .ea-date-picker__calendar-body,
-    .ea-date-picker__month-panel,
-    .ea-date-picker__header-month,
-    .ea-date-picker__btn-prev-month,
-    .ea-date-picker__btn-next-month {
+    .#{$name}__calendar-body,
+    .#{$name}__month-panel,
+    .#{$name}__header-month,
+    .#{$name}__btn-prev-month,
+    .#{$name}__btn-next-month {
       display: none;
     }
   }
 
   @include state(view-year) {
-    .ea-date-picker__month-panel {
+    .#{$name}__month-panel {
       display: none;
     }
 
-    .ea-date-picker__year-panel {
+    .#{$name}__year-panel {
       display: grid;
     }
   }
 
   @include state(view-month) {
-    .ea-date-picker__year-panel {
+    .#{$name}__year-panel {
       display: none;
     }
 
-    .ea-date-picker__month-panel {
+    .#{$name}__month-panel {
       display: grid;
     }
   }
 
   @include state(view-day) {
-    .ea-date-picker__calendar-body {
+    .#{$name}__calendar-body {
       display: block;
     }
 
-    .ea-date-picker__year-panel,
-    .ea-date-picker__month-panel {
+    .#{$name}__year-panel,
+    .#{$name}__month-panel {
       display: none;
     }
 
-    .ea-date-picker__btn-prev-month,
-    .ea-date-picker__btn-next-month {
+    .#{$name}__btn-prev-month,
+    .#{$name}__btn-next-month {
       display: inline-flex;
     }
   }
 
   @include state(open) {
-    .ea-date-picker__dropdown-wrap {
+    .#{$name}__dropdown-wrap {
       transform: scaleY(1);
       opacity: 1;
       pointer-events: auto;
@@ -241,14 +238,14 @@ $ea-date-picker-sizes: small, large;
   @include state(disabled) {
     cursor: not-allowed;
 
-    .ea-date-picker__input-wrap {
+    .#{$name}__input-wrap {
       pointer-events: none;
     }
   }
 
   @each $type in $ea-date-picker-align-types {
     @include state(align-#{$type}) {
-      .ea-date-picker__input::part(original) {
+      .#{$name}__input::part(original) {
         text-align: #{$type};
       }
     }
@@ -256,17 +253,16 @@ $ea-date-picker-sizes: small, large;
 
   @each $size in $ea-date-picker-sizes {
     @include modifier(#{$size}) {
-      --#{$name}-input-height: var(--#{$name}-input-height-#{$size});
       --#{$name}-font-size: var(--#{$name}-font-size-#{$size});
       --#{$name}-header-height: var(--#{$name}-header-height-#{$size});
       --#{$name}-panel-item-size: var(--#{$name}-panel-item-size-#{$size});
 
-      .ea-date-picker__input {
-        --input-height: var(--#{$name}-input-height-#{$size});
+      .#{$name}__input {
+        --input-height: var(--#{$name}-header-height-#{$size});
         --input-font-size: var(--#{$name}-font-size-#{$size});
       }
 
-      .ea-date-picker__header-btn {
+      .#{$name}__header-btn {
         --button-font-size: var(--#{$name}-font-size-#{$size});
       }
     }

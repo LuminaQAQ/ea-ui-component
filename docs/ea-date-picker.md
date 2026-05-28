@@ -8,7 +8,6 @@ const fn = (e) => {
 }
 
 onMounted(() => {
-  // 选择某一天示例
   const basicExample = {
     sizeSegmented: document.getElementById("sizeSegmented"),
     defaultDatePicker: document.getElementById("defaultDatePicker"),
@@ -27,7 +26,6 @@ onMounted(() => {
   }
   basicExample.init()
 
-  // 日期格式示例
   const formatExample = {
     formatPicker1: document.getElementById("formatPicker1"),
     formatPicker2: document.getElementById("formatPicker2"),
@@ -40,9 +38,9 @@ onMounted(() => {
     },
 
     init() {
-      this.formatPicker1.addEventListener("change", this.onChange)
-      this.formatPicker2.addEventListener("change", this.onChange)
-      this.formatPicker3.addEventListener("change", this.onChange)
+      this.formatPicker1.addEventListener("ea-change", this.onChange)
+      this.formatPicker2.addEventListener("ea-change", this.onChange)
+      this.formatPicker3.addEventListener("ea-change", this.onChange)
     },
   }
   formatExample.init()
@@ -113,7 +111,7 @@ onMounted(() => {
       <span class="demonstration">Default</span>
       <ea-date-picker
         id="defaultDatePicker"
-        type="date"
+        variant="date"
         placeholder="Pick a Date"
       ></ea-date-picker>
     </div>
@@ -121,7 +119,7 @@ onMounted(() => {
       <span class="demonstration">Disabled</span>
       <ea-date-picker
         id="disabledDatePicker"
-        type="date"
+        variant="date"
         placeholder="Pick a Date"
         value="2026-01-01"
         disabled
@@ -151,7 +149,7 @@ onMounted(() => {
     <span class="demonstration">Default</span>
     <ea-date-picker
       id="defaultDatePicker"
-      type="date"
+      variant="date"
       placeholder="Pick a Date"
     ></ea-date-picker>
   </div>
@@ -159,7 +157,7 @@ onMounted(() => {
     <span class="demonstration">Disabled</span>
     <ea-date-picker
       id="disabledDatePicker"
-      type="date"
+      variant="date"
       placeholder="Pick a Date"
       value="2026-01-01"
       disabled
@@ -235,20 +233,20 @@ basicExample.init();
 
 ## 其他日期单位
 
-通过设置 `type` 属性，可以实现年份、月份的选择。
+通过设置 `variant` 属性，可以实现年份、月份的选择。
 
 <div class="demo demo-date-picker">
   <div class="block">
     <span class="demonstration">Year</span>
-    <ea-date-picker placeholder="Pick a Year" type="year"></ea-date-picker>
+    <ea-date-picker placeholder="Pick a Year" variant="year"></ea-date-picker>
   </div>
   <div class="block">
     <span class="demonstration">Month</span>
-    <ea-date-picker placeholder="Pick a Month" type="month"></ea-date-picker>
+    <ea-date-picker placeholder="Pick a Month" variant="month"></ea-date-picker>
   </div>
   <div class="block">
     <span class="demonstration">Date</span>
-    <ea-date-picker placeholder="Pick a Date" type="date"></ea-date-picker>
+    <ea-date-picker placeholder="Pick a Date" variant="date"></ea-date-picker>
   </div>
 </div>
 
@@ -260,15 +258,15 @@ basicExample.init();
 <div class="demo demo-date-picker">
   <div class="block">
     <span class="demonstration">Year</span>
-    <ea-date-picker placeholder="Pick a Year" type="year"></ea-date-picker>
+    <ea-date-picker placeholder="Pick a Year" variant="year"></ea-date-picker>
   </div>
   <div class="block">
     <span class="demonstration">Month</span>
-    <ea-date-picker placeholder="Pick a Month" type="month"></ea-date-picker>
+    <ea-date-picker placeholder="Pick a Month" variant="month"></ea-date-picker>
   </div>
   <div class="block">
     <span class="demonstration">Date</span>
-    <ea-date-picker placeholder="Pick a Date" type="date"></ea-date-picker>
+    <ea-date-picker placeholder="Pick a Date" variant="date"></ea-date-picker>
   </div>
 </div>
 ```
@@ -322,7 +320,7 @@ basicExample.init();
     <div class="demonstration" id="value1">Value:</div>
     <ea-date-picker
       id="formatPicker1"
-      type="date"
+      variant="date"
       placeholder="Pick a Date"
       display-format="YYYY/MM/DD"
     ></ea-date-picker>
@@ -332,7 +330,7 @@ basicExample.init();
     <div class="demonstration" id="value2">Value:</div>
     <ea-date-picker
       id="formatPicker2"
-      type="date"
+      variant="date"
       placeholder="Pick a Date"
       display-format="YYYY/MM/DD"
       value-format="YYYY-MM-DD"
@@ -343,7 +341,7 @@ basicExample.init();
     <div class="demonstration" id="value3">Value:</div>
     <ea-date-picker
       id="formatPicker3"
-      type="date"
+      variant="date"
       placeholder="Pick a Date"
       display-format="YYYY/MM/DD"
       value-format="x"
@@ -362,7 +360,7 @@ basicExample.init();
     <div class="demonstration" id="value1">Value:</div>
     <ea-date-picker
       id="formatPicker1"
-      type="date"
+      variant="date"
       placeholder="Pick a Date"
       display-format="YYYY/MM/DD"
     ></ea-date-picker>
@@ -372,7 +370,7 @@ basicExample.init();
     <div class="demonstration" id="value2">Value:</div>
     <ea-date-picker
       id="formatPicker2"
-      type="date"
+      variant="date"
       placeholder="Pick a Date"
       display-format="YYYY/MM/DD"
       value-format="YYYY-MM-DD"
@@ -383,7 +381,7 @@ basicExample.init();
     <div class="demonstration" id="value3">Value:</div>
     <ea-date-picker
       id="formatPicker3"
-      type="date"
+      variant="date"
       placeholder="Pick a Date"
       display-format="YYYY/MM/DD"
       value-format="x"
@@ -405,9 +403,9 @@ const formatExample = {
   },
 
   init() {
-    this.formatPicker1.addEventListener("change", this.onChange);
-    this.formatPicker2.addEventListener("change", this.onChange);
-    this.formatPicker3.addEventListener("change", this.onChange);
+    this.formatPicker1.addEventListener("ea-change", this.onChange);
+    this.formatPicker2.addEventListener("ea-change", this.onChange);
+    this.formatPicker3.addEventListener("ea-change", this.onChange);
   },
 };
 formatExample.init();
@@ -457,14 +455,16 @@ formatExample.init();
 | 参数           | 说明                 | 类型    | 可选值                      | 默认值     |
 | -------------- | -------------------- | ------- | --------------------------- | ---------- |
 | value          | 日期值               | string  | —                           | —          |
-| type           | 显示类型             | string  | `date \| month \| year`     | date       |
+| variant        | 显示类型             | string  | `date \| month \| year`     | date       |
 | placeholder    | 输入框占位文本       | string  | —                           | —          |
 | disabled       | 是否禁用             | boolean | —                           | false      |
 | size           | 输入框尺寸           | string  | `large \| default \| small` | default    |
 | align          | 对齐方式             | string  | `left \| center \| right`   | left       |
 | display-format | 显示在输入框中的格式 | string  | 见[日期格式](#日期格式)     | YYYY-MM-DD |
 | value-format   | 绑定值的格式         | string  | 见[日期格式](#日期格式)     | YYYY-MM-DD |
-| width          | 输入框宽度           | string  | —                           | -          |
+| label          | 输入框标签文本       | string  | —                           | ""         |
+| required       | 是否必填             | boolean | —                           | false      |
+| width          | 组件宽度             | string  | —                           | auto       |
 | locale         | 国际化语言           | string  | -                           | en-US      |
 
 ### DatePicker CSS Part
@@ -507,10 +507,29 @@ formatExample.init();
 
 ### DatePicker Events
 
-| 事件名            | 说明                         | 回调参数(event.detail)                                                          |
-| ----------------- | ---------------------------- | ------------------------------------------------------------------------------- |
-| change            | 用户确认选定的值时触发       | `{ fullDate: string, year: number, month: number, date: number, week: number }` |
-| focus             | 当 Input 组件获得焦点时触发  | —                                                                               |
-| blur              | 当 Input 组件失去焦点时触发  | —                                                                               |
-| ea-panel-change   | 当日期选择面板发生改变时触发 | `{ date: Date, mode: 'month' \| 'year', view?: string }`                        |
-| ea-visible-change | 当下拉列表显示状态改变时触发 | `{ visible: boolean }`                                                          |
+| 事件名            | 说明                         | 回调参数(event.detail)                                                                    |
+| ----------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
+| ea-change         | 用户确认选定的值时触发       | `{ fullDate: string, year: number \| null, month: number \| null, date: number \| null, week: number \| null }` |
+| focus             | 当 Input 组件获得焦点时触发  | —                                                                                         |
+| blur              | 当 Input 组件失去焦点时触发  | —                                                                                         |
+| ea-panel-change   | 当日期选择面板发生改变时触发 | `{ date: Date, mode: 'month' \| 'year', view?: string }`                                  |
+| ea-visible-change | 当下拉列表显示状态改变时触发 | `{ visible: boolean }`                                                                    |
+
+### DatePicker CSS 自定义属性
+
+| 属性名                                       | 说明                 | 默认值                 |
+| -------------------------------------------- | -------------------- | ---------------------- |
+| --ea-date-picker-width                       | 组件宽度             | auto                   |
+| --ea-date-picker-bg-color                    | 下拉面板背景颜色     | var(--color-white)     |
+| --ea-date-picker-shadow                      | 下拉面板阴影         | var(--box-shadow-sm)   |
+| --ea-date-picker-header-height               | 头部高度             | 40px                   |
+| --ea-date-picker-header-text-color           | 头部文字颜色         | var(--grey-900)        |
+| --ea-date-picker-header-text-hover           | 头部文字悬停颜色     | var(--blue-500)        |
+| --ea-date-picker-panel-item-size             | 面板项尺寸           | 60px                   |
+| --ea-date-picker-panel-item-bg-color         | 面板项背景颜色       | transparent            |
+| --ea-date-picker-panel-item-text-color       | 面板项文字颜色       | var(--grey-700)        |
+| --ea-date-picker-panel-item-hover            | 面板项悬停背景颜色   | var(--grey-100)        |
+| --ea-date-picker-panel-item-selected         | 面板项选中文字颜色   | var(--blue-500)        |
+| --ea-date-picker-panel-item-selected-bg      | 面板项选中背景颜色   | var(--blue-100)        |
+| --ea-date-picker-font-size                   | 字体大小             | var(--font-size-sm)    |
+| --ea-date-picker-transition                  | 过渡动画             | var(--transition-fast) |

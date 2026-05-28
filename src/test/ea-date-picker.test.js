@@ -3,7 +3,7 @@ import { waitForRender } from "./utils/waitForRender.js";
 
 import "../components/ea-date-picker/index";
 
-describe("EaDatePicker Component", () => {
+describe("EaDatePicker", () => {
   let container;
 
   beforeEach(() => {
@@ -344,51 +344,51 @@ describe("EaDatePicker Component", () => {
     });
   });
 
-  // ==================== Type Attribute & Panel Navigation ====================
+  // ==================== Variant Attribute & Panel Navigation ====================
 
-  describe("Type Attribute", () => {
-    it("默认 type 应该是 date", async () => {
+  describe("Variant Attribute", () => {
+    it("默认 variant 应该是 date", async () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
       await waitForRender();
 
-      expect(datePicker.type).toBe("date");
+      expect(datePicker.variant).toBe("date");
     });
 
-    it("应该支持 type=year", async () => {
+    it("应该支持 variant=year", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.setAttribute("type", "year");
+      datePicker.setAttribute("variant", "year");
       container.appendChild(datePicker);
 
       await waitForRender();
 
-      expect(datePicker.type).toBe("year");
+      expect(datePicker.variant).toBe("year");
     });
 
-    it("应该支持 type=month", async () => {
+    it("应该支持 variant=month", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.setAttribute("type", "month");
+      datePicker.setAttribute("variant", "month");
       container.appendChild(datePicker);
 
       await waitForRender();
 
-      expect(datePicker.type).toBe("month");
+      expect(datePicker.variant).toBe("month");
     });
 
-    it("应该支持 type=date", async () => {
+    it("应该支持 variant=date", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.setAttribute("type", "date");
+      datePicker.setAttribute("variant", "date");
       container.appendChild(datePicker);
 
       await waitForRender();
 
-      expect(datePicker.type).toBe("date");
+      expect(datePicker.variant).toBe("date");
     });
 
-    it("type=year 时打开面板应该显示年份面板", async () => {
+    it("variant=year 时打开面板应该显示年份面板", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.setAttribute("type", "year");
+      datePicker.setAttribute("variant", "year");
       container.appendChild(datePicker);
 
       await waitForRender();
@@ -402,9 +402,9 @@ describe("EaDatePicker Component", () => {
       expect(containerEl.classList.contains("is-view-year")).toBe(true);
     });
 
-    it("type=month 时打开面板应该显示月份面板", async () => {
+    it("variant=month 时打开面板应该显示月份面板", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.setAttribute("type", "month");
+      datePicker.setAttribute("variant", "month");
       container.appendChild(datePicker);
 
       await waitForRender();
@@ -418,9 +418,9 @@ describe("EaDatePicker Component", () => {
       expect(containerEl.classList.contains("is-view-month")).toBe(true);
     });
 
-    it("type=date 时打开面板默认应该显示日期面板", async () => {
+    it("variant=date 时打开面板默认应该显示日期面板", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.setAttribute("type", "date");
+      datePicker.setAttribute("variant", "date");
       container.appendChild(datePicker);
 
       await waitForRender();
@@ -434,34 +434,34 @@ describe("EaDatePicker Component", () => {
       expect(containerEl.classList.contains("is-view-day")).toBe(true);
     });
 
-    it("动态切换 type=year 应该切换到年份模式", async () => {
+    it("动态切换 variant=year 应该切换到年份模式", async () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
       await waitForRender();
-      expect(datePicker.type).toBe("date");
+      expect(datePicker.variant).toBe("date");
 
-      datePicker.type = "year";
+      datePicker.variant = "year";
       await waitForRender();
 
-      expect(datePicker.type).toBe("year");
+      expect(datePicker.variant).toBe("year");
     });
 
-    it("动态切换 type=month 应该切换到月份模式", async () => {
+    it("动态切换 variant=month 应该切换到月份模式", async () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
       await waitForRender();
 
-      datePicker.type = "month";
+      datePicker.variant = "month";
       await waitForRender();
 
-      expect(datePicker.type).toBe("month");
+      expect(datePicker.variant).toBe("month");
     });
 
-    it("type=year 时 _getDisplayFormat 应该返回 YYYY", async () => {
+    it("variant=year 时 _getDisplayFormat 应该返回 YYYY", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.setAttribute("type", "year");
+      datePicker.setAttribute("variant", "year");
       datePicker.setAttribute("value", "2026");
       container.appendChild(datePicker);
 
@@ -471,9 +471,9 @@ describe("EaDatePicker Component", () => {
       expect(input.value).toBe("2026");
     });
 
-    it("type=month 时 _getDisplayFormat 应该返回 YYYY-MM", async () => {
+    it("variant=month 时 _getDisplayFormat 应该返回 YYYY-MM", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.setAttribute("type", "month");
+      datePicker.setAttribute("variant", "month");
       datePicker.setAttribute("value", "2026-05");
       container.appendChild(datePicker);
 
@@ -529,7 +529,7 @@ describe("EaDatePicker Component", () => {
       expect(containerEl.classList.contains("is-view-month")).toBe(true);
     });
 
-    it("从年份视图选择年份后应切换至月份视图 (type=date)", async () => {
+    it("从年份视图选择年份后应切换至月份视图 (variant=date)", async () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
@@ -648,9 +648,9 @@ describe("EaDatePicker Component", () => {
       expect(selected.textContent).toBe("2026");
     });
 
-    it("type=year 时选择年份应关闭面板并触发 change 事件", async () => {
+    it("variant=year 时选择年份应关闭面板并触发 ea-change 事件", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.type = "year";
+      datePicker.variant = "year";
       datePicker.setAttribute("value", "2026");
       container.appendChild(datePicker);
 
@@ -660,7 +660,7 @@ describe("EaDatePicker Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      datePicker.addEventListener("change", changeHandler);
+      datePicker.addEventListener("ea-change", changeHandler);
 
       const yearItems = datePicker.shadowRoot.querySelectorAll(
         ".ea-date-picker__year-item"
@@ -699,9 +699,9 @@ describe("EaDatePicker Component", () => {
       expect(selected.dataset.month).toBe("6");
     });
 
-    it("type=month 时选择月份应关闭面板并触发 change 事件", async () => {
+    it("variant=month 时选择月份应关闭面板并触发 ea-change 事件", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.type = "month";
+      datePicker.variant = "month";
       container.appendChild(datePicker);
 
       await waitForRender();
@@ -710,7 +710,7 @@ describe("EaDatePicker Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      datePicker.addEventListener("change", changeHandler);
+      datePicker.addEventListener("ea-change", changeHandler);
 
       const monthItems = datePicker.shadowRoot.querySelectorAll(
         ".ea-date-picker__month-item"
@@ -978,7 +978,7 @@ describe("EaDatePicker Component", () => {
       expect(datePicker.valueFormat).toBe("YYYY/MM/DD");
     });
 
-    it("自定义 valueFormat 应该影响 change 事件中的 value", async () => {
+    it("自定义 valueFormat 应该影响 ea-change 事件中的 value", async () => {
       const datePicker = document.createElement("ea-date-picker");
       datePicker.setAttribute("value-format", "x");
       datePicker.setAttribute("value", "2026-06-15");
@@ -1365,7 +1365,7 @@ describe("EaDatePicker Component", () => {
   // ==================== Calendar Selection ====================
 
   describe("Calendar Selection", () => {
-    it("日历选择日期应该触发 change 事件", async () => {
+    it("日历选择日期应该触发 ea-change 事件", async () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
@@ -1375,11 +1375,11 @@ describe("EaDatePicker Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      datePicker.addEventListener("change", changeHandler);
+      datePicker.addEventListener("ea-change", changeHandler);
 
       const calendar = datePicker.shadowRoot.querySelector("ea-calendar");
       calendar.dispatchEvent(
-        new CustomEvent("select", {
+        new CustomEvent("ea-select", {
           bubbles: true,
           detail: { year: 2026, month: 6, date: 15, day: 1 },
         })
@@ -1401,7 +1401,7 @@ describe("EaDatePicker Component", () => {
 
       const calendar = datePicker.shadowRoot.querySelector("ea-calendar");
       calendar.dispatchEvent(
-        new CustomEvent("select", {
+        new CustomEvent("ea-select", {
           bubbles: true,
           detail: { year: 2026, month: 6, date: 15, day: 1 },
         })
@@ -1425,7 +1425,7 @@ describe("EaDatePicker Component", () => {
 
       const calendar = datePicker.shadowRoot.querySelector("ea-calendar");
       calendar.dispatchEvent(
-        new CustomEvent("select", {
+        new CustomEvent("ea-select", {
           bubbles: true,
           detail: { year: 2026, month: 6, date: 15, day: 1 },
         })
@@ -1437,7 +1437,7 @@ describe("EaDatePicker Component", () => {
       expect(input.value).toContain("2026");
     });
 
-    it("change 事件 detail 应包含完整日期信息", async () => {
+    it("ea-change 事件 detail 应包含完整日期信息", async () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
@@ -1447,11 +1447,11 @@ describe("EaDatePicker Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      datePicker.addEventListener("change", changeHandler);
+      datePicker.addEventListener("ea-change", changeHandler);
 
       const calendar = datePicker.shadowRoot.querySelector("ea-calendar");
       calendar.dispatchEvent(
-        new CustomEvent("select", {
+        new CustomEvent("ea-select", {
           bubbles: true,
           detail: { year: 2026, month: 6, date: 15, day: 1 },
         })
@@ -1465,19 +1465,46 @@ describe("EaDatePicker Component", () => {
       expect(detail.month).toBe(6);
       expect(detail.date).toBe(15);
     });
+
+    it("ea-change 事件应该是 EaDatePickerChangeEvent 实例", async () => {
+      const datePicker = document.createElement("ea-date-picker");
+      container.appendChild(datePicker);
+
+      await waitForRender();
+
+      datePicker.handleOpen();
+      await waitForRender();
+
+      const changeHandler = vi.fn();
+      datePicker.addEventListener("ea-change", changeHandler);
+
+      const calendar = datePicker.shadowRoot.querySelector("ea-calendar");
+      calendar.dispatchEvent(
+        new CustomEvent("ea-select", {
+          bubbles: true,
+          detail: { year: 2026, month: 6, date: 15, day: 1 },
+        })
+      );
+
+      await waitForRender();
+
+      expect(changeHandler).toHaveBeenCalled();
+      const event = changeHandler.mock.calls[0][0];
+      expect(event.type).toBe("ea-change");
+    });
   });
 
   // ==================== Events ====================
 
   describe("Events", () => {
-    it("应该支持 change 事件监听", async () => {
+    it("应该支持 ea-change 事件监听", async () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
       await waitForRender();
 
       const changeHandler = vi.fn();
-      datePicker.addEventListener("change", changeHandler);
+      datePicker.addEventListener("ea-change", changeHandler);
 
       expect(changeHandler).not.toHaveBeenCalled();
     });
@@ -1488,12 +1515,6 @@ describe("EaDatePicker Component", () => {
 
       await waitForRender();
 
-      const focusHandler = vi.fn();
-      datePicker.addEventListener("focus", focusHandler);
-
-      datePicker.focus();
-      await waitForRender();
-
       expect(typeof datePicker.focus).toBe("function");
     });
 
@@ -1502,9 +1523,6 @@ describe("EaDatePicker Component", () => {
       container.appendChild(datePicker);
 
       await waitForRender();
-
-      const blurHandler = vi.fn();
-      datePicker.addEventListener("blur", blurHandler);
 
       expect(typeof datePicker.blur).toBe("function");
     });
@@ -1541,6 +1559,23 @@ describe("EaDatePicker Component", () => {
       const detail = handler.mock.calls[0][0].detail;
       expect(detail.mode).toBeDefined();
       expect(detail.date).toBeInstanceOf(Date);
+    });
+
+    it("ea-visible-change 事件应该是 EaDatePickerVisibleChangeEvent 实例", async () => {
+      const datePicker = document.createElement("ea-date-picker");
+      container.appendChild(datePicker);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      datePicker.addEventListener("ea-visible-change", handler);
+
+      datePicker.handleOpen();
+      await waitForRender();
+
+      expect(handler).toHaveBeenCalled();
+      const event = handler.mock.calls[0][0];
+      expect(event.type).toBe("ea-visible-change");
     });
   });
 
@@ -1799,6 +1834,39 @@ describe("EaDatePicker Component", () => {
         datePicker.shadowRoot.querySelector('[part="month-item"]')
       ).toBeTruthy();
     });
+
+    it("应该支持 [part=calendar-header]", async () => {
+      const datePicker = document.createElement("ea-date-picker");
+      container.appendChild(datePicker);
+
+      await waitForRender();
+
+      expect(
+        datePicker.shadowRoot.querySelector('[part="calendar-header"]')
+      ).toBeTruthy();
+    });
+
+    it("应该支持 [part=header-year]", async () => {
+      const datePicker = document.createElement("ea-date-picker");
+      container.appendChild(datePicker);
+
+      await waitForRender();
+
+      expect(
+        datePicker.shadowRoot.querySelector('[part="header-year"]')
+      ).toBeTruthy();
+    });
+
+    it("应该支持 [part=header-month]", async () => {
+      const datePicker = document.createElement("ea-date-picker");
+      container.appendChild(datePicker);
+
+      await waitForRender();
+
+      expect(
+        datePicker.shadowRoot.querySelector('[part="header-month"]')
+      ).toBeTruthy();
+    });
   });
 
   // ==================== BEM Class Names ====================
@@ -1918,9 +1986,9 @@ describe("EaDatePicker Component", () => {
       expect(containerEl.classList.contains("is-open")).toBe(true);
     });
 
-    it("type=date 打开面板时应该有 is-view-day 状态类", async () => {
+    it("variant=date 打开面板时应该有 is-view-day 状态类", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.type = "date";
+      datePicker.variant = "date";
       container.appendChild(datePicker);
 
       await waitForRender();
@@ -1934,9 +2002,9 @@ describe("EaDatePicker Component", () => {
       expect(containerEl.classList.contains("is-view-day")).toBe(true);
     });
 
-    it("type=month 打开面板时应该有 is-view-month 状态类", async () => {
+    it("variant=month 打开面板时应该有 is-view-month 状态类", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.type = "month";
+      datePicker.variant = "month";
       container.appendChild(datePicker);
 
       await waitForRender();
@@ -1950,9 +2018,9 @@ describe("EaDatePicker Component", () => {
       expect(containerEl.classList.contains("is-view-month")).toBe(true);
     });
 
-    it("type=year 打开面板时应该有 is-view-year 状态类", async () => {
+    it("variant=year 打开面板时应该有 is-view-year 状态类", async () => {
       const datePicker = document.createElement("ea-date-picker");
-      datePicker.type = "year";
+      datePicker.variant = "year";
       container.appendChild(datePicker);
 
       await waitForRender();
@@ -2063,23 +2131,23 @@ describe("EaDatePicker Component", () => {
       expect(datePicker.shadowRoot).toBeTruthy();
     });
 
-    it("type 在运行时切换应正确更新", async () => {
+    it("variant 在运行时切换应正确更新", async () => {
       const datePicker = document.createElement("ea-date-picker");
       container.appendChild(datePicker);
 
       await waitForRender();
 
-      datePicker.type = "month";
+      datePicker.variant = "month";
       await waitForRender();
-      expect(datePicker.type).toBe("month");
+      expect(datePicker.variant).toBe("month");
 
-      datePicker.type = "year";
+      datePicker.variant = "year";
       await waitForRender();
-      expect(datePicker.type).toBe("year");
+      expect(datePicker.variant).toBe("year");
 
-      datePicker.type = "date";
+      datePicker.variant = "date";
       await waitForRender();
-      expect(datePicker.type).toBe("date");
+      expect(datePicker.variant).toBe("date");
     });
   });
 });

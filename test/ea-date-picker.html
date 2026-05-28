@@ -67,7 +67,7 @@
           <span class="demonstration">Default</span>
           <ea-date-picker
             id="defaultDatePicker"
-            type="date"
+            variant="date"
             placeholder="Pick a Date"
           ></ea-date-picker>
         </div>
@@ -75,7 +75,7 @@
           <span class="demonstration">Disabled</span>
           <ea-date-picker
             id="disabledDatePicker"
-            type="date"
+            variant="date"
             placeholder="Pick a Date"
             value="2026-01-01"
             disabled
@@ -124,18 +124,18 @@
     <div class="demo demo-date-picker">
       <div class="block">
         <span class="demonstration">Year</span>
-        <ea-date-picker placeholder="Pick a Year" type="year"></ea-date-picker>
+        <ea-date-picker placeholder="Pick a Year" variant="year"></ea-date-picker>
       </div>
       <div class="block">
         <span class="demonstration">Month</span>
         <ea-date-picker
           placeholder="Pick a Month"
-          type="month"
+          variant="month"
         ></ea-date-picker>
       </div>
       <div class="block">
         <span class="demonstration">Date</span>
-        <ea-date-picker placeholder="Pick a Date" type="date"></ea-date-picker>
+        <ea-date-picker placeholder="Pick a Date" variant="date"></ea-date-picker>
       </div>
     </div>
 
@@ -153,7 +153,7 @@
         <div class="demonstration" id="value1">Value:</div>
         <ea-date-picker
           id="formatPicker1"
-          type="date"
+          variant="date"
           placeholder="Pick a Date"
           display-format="YYYY/MM/DD"
         ></ea-date-picker>
@@ -163,7 +163,7 @@
         <div class="demonstration" id="value2">Value:</div>
         <ea-date-picker
           id="formatPicker2"
-          type="date"
+          variant="date"
           placeholder="Pick a Date"
           display-format="YYYY/MM/DD"
           value-format="YYYY-MM-DD"
@@ -174,7 +174,7 @@
         <div class="demonstration" id="value3">Value:</div>
         <ea-date-picker
           id="formatPicker3"
-          type="date"
+          variant="date"
           placeholder="Pick a Date"
           display-format="YYYY/MM/DD"
           value-format="x"
@@ -196,9 +196,9 @@
         },
 
         init() {
-          this.formatPicker1.addEventListener("change", this.onChange);
-          this.formatPicker2.addEventListener("change", this.onChange);
-          this.formatPicker3.addEventListener("change", this.onChange);
+          this.formatPicker1.addEventListener("ea-change", this.onChange);
+          this.formatPicker2.addEventListener("ea-change", this.onChange);
+          this.formatPicker3.addEventListener("ea-change", this.onChange);
         },
       };
       formatExample.init();
@@ -216,7 +216,7 @@
       <p>
         <ea-date-picker
           id="methodTestPicker"
-          type="date"
+          variant="date"
           placeholder="Pick a Date"
         ></ea-date-picker>
       </p>
