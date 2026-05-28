@@ -1,5 +1,3 @@
-// ==================== HTML 全局类型声明 ====================
-
 declare global {
   interface HTMLElementTagNameMap {
     "ea-color-picker": EaColorPickerElement;
@@ -7,15 +5,12 @@ declare global {
   }
 }
 
-/**
- * ea-color-picker 组件的 HTML 接口
- */
 export interface EaColorPickerElement extends HTMLElement {
   label: string;
   value: string;
   disabled: boolean;
   clearable: boolean;
-  size: string;
+  size: "small" | "medium" | "large" | "";
   colorFormat: "hsl" | "hsv" | "hex" | "rgb" | "rgba";
   showAlpha: boolean;
   tabindex: number;
@@ -38,11 +33,10 @@ export interface EaColorPickerElement extends HTMLElement {
   hide(): void;
   focus(): void;
   blur(): void;
+  checkValidity(): boolean;
+  reportValidity(): boolean;
 }
 
-/**
- * ea-color-picker-panel 组件的 HTML 接口
- */
 export interface EaColorPickerPanelElement extends HTMLElement {
   value: string;
   colorFormat: "hsl" | "hsv" | "hex" | "rgb" | "rgba";
@@ -54,8 +48,6 @@ export interface EaColorPickerPanelElement extends HTMLElement {
   resetCursorPosition(): void;
 }
 
-// ==================== Vue 类型声明 ====================
-
 import type { DefineComponent } from "vue";
 
 export interface EaColorPickerVueProps {
@@ -63,7 +55,7 @@ export interface EaColorPickerVueProps {
   value?: string;
   disabled?: boolean;
   clearable?: boolean;
-  size?: string;
+  size?: "small" | "medium" | "large" | "";
   colorFormat?: "hsl" | "hsv" | "hex" | "rgb" | "rgba";
   showAlpha?: boolean;
   tabindex?: number;
@@ -96,6 +88,8 @@ export interface EaColorPickerPanelVueProps {
 
 export interface EaColorPickerVueEvents {
   change: (event: CustomEvent) => void;
+  "ea-clear": (event: CustomEvent) => void;
+  "ea-active-change": (event: CustomEvent) => void;
 }
 
 export interface EaColorPickerVueSlots {
@@ -141,8 +135,6 @@ declare module "vue" {
   }
 }
 
-// ==================== React 类型声明 ====================
-
 import type { HTMLAttributes, ReactNode } from "react";
 
 export interface EaColorPickerReactProps extends HTMLAttributes<HTMLElement> {
@@ -150,7 +142,7 @@ export interface EaColorPickerReactProps extends HTMLAttributes<HTMLElement> {
   value?: string;
   disabled?: boolean;
   clearable?: boolean;
-  size?: string;
+  size?: "small" | "medium" | "large" | "";
   colorFormat?: "hsl" | "hsv" | "hex" | "rgb" | "rgba";
   showAlpha?: boolean;
   tabindex?: number;
@@ -170,6 +162,8 @@ export interface EaColorPickerReactProps extends HTMLAttributes<HTMLElement> {
     | "right-end";
   predefine?: string[];
   onChange?: (event: CustomEvent) => void;
+  onEaClear?: (event: CustomEvent) => void;
+  onEaActiveChange?: (event: CustomEvent) => void;
   children?: ReactNode;
 }
 

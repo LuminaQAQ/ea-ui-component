@@ -1,13 +1,9 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { html } from "@utils/html";
-import { Enum } from "@/utils/Enum";
+import { Enum } from "@utils/Enum";
 import { Color, type ColorFormat as ColorUtilFormat } from "../../utils/Color";
-import EaUtils from "@/utils/Utils";
+import { px2num } from "@/utils/Utils";
 import { EaColorPickerActiveChangeEvent } from "../../events/EaColorPickerActiveChangeEvent";
 import { EaColorPickerPanelInvalidColorEvent } from "../../events/EaColorPickerPanelInvalidColorEvent";
 import "@components/ea-input/index";
@@ -19,10 +15,42 @@ const bem = createBEM(TAG_NAME);
 const COLOR_FORMATS = ["hsl", "hsv", "hex", "rgb", "rgba"] as const;
 type ColorFormat = (typeof COLOR_FORMATS)[number];
 
+/**
+ * @summary 颜色选择器面板组件，提供饱和度/亮度选择、色调滑块、透明度滑块和颜色输入。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-input
+ *
+ * @slot footer - 底部操作区域插槽。
+ *
+ * @event change - 颜色值改变时触发，detail: `{ value: string, color: Color }`。
+ * @event ea-active-change - 颜色激活值改变时触发，detail: `{ value: string }`。
+ * @event ea-invalid-color - 输入的颜色格式不合法时触发，detail: `{ value: string }`。
+ *
+ * @csspart container - 容器元素。
+ * @csspart wrapper - 包裹层元素。
+ * @csspart svpanel - 饱和度/亮度面板元素。
+ * @csspart svpanel-cursor - 饱和度/亮度光标元素。
+ * @csspart hue-slider - 色调滑块元素。
+ * @csspart hue-slider-thumb - 色调滑块按钮元素。
+ * @csspart alpha-slider - 透明度滑块元素。
+ * @csspart alpha-slider-thumb - 透明度滑块按钮元素。
+ * @csspart predefine - 预定义颜色区域元素。
+ * @csspart predefine-colors - 预定义颜色列表元素。
+ * @csspart footer - 底部区域元素。
+ * @csspart text-display - 文本显示区域元素。
+ * @csspart color-input - 颜色输入框元素。
+ * @csspart append - 插槽区域元素。
+ *
+ * @cssproperty --ea-color-picker-panel-border-radius - 面板圆角。
+ * @cssproperty --ea-color-picker-panel-box-shadow - 面板阴影。
+ * @cssproperty --ea-color-picker-panel-background-color - 饱和度面板背景颜色。
+ * @cssproperty --ea-color-picker-panel-border-color - 边框颜色。
+ * @cssproperty --ea-color-picker-panel-padding - 面板内边距。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaColorPickerPanel extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLDivElement;
 
@@ -52,8 +80,6 @@ export class EaColorPickerPanel extends EaBase {
 
   @query(bem.ce("text-display"))
   private _textDisplay!: HTMLDivElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -130,8 +156,6 @@ export class EaColorPickerPanel extends EaBase {
   })
   predefine: string[] = [];
 
-  // ==================== 私有状态 ====================
-
   private _abortControllerStates = {
     saturationMove: null as AbortController | null,
     hueMove: null as AbortController | null,
@@ -147,8 +171,6 @@ export class EaColorPickerPanel extends EaBase {
     color: new Color(),
     lastValidValue: "",
   };
-
-  // ==================== 方法 ====================
 
   updateContainerClasslist(): string {
     const className = bem(
@@ -196,10 +218,8 @@ export class EaColorPickerPanel extends EaBase {
     `);
   }
 
-  // ==================== 事件处理 ====================
-
   @listen("mousedown", bem.ce("svpanel"))
-  private _onSaturationMouseDown(e: MouseEvent) {
+  private _handleSaturationMouseDown(e: MouseEvent) {
     this._abortControllerStates.saturationMove?.abort();
     this._abortControllerStates.hueMove?.abort();
     if (this.disabled) return;
@@ -250,7 +270,7 @@ export class EaColorPickerPanel extends EaBase {
   }
 
   @listen("mousedown", bem.ce("hue-slider"))
-  private _onHueMouseDown(e: MouseEvent) {
+  private _handleHueMouseDown(e: MouseEvent) {
     this._abortControllerStates.hueMove?.abort();
     this._abortControllerStates.saturationMove?.abort();
     if (this.disabled) return;
@@ -299,7 +319,7 @@ export class EaColorPickerPanel extends EaBase {
   }
 
   @listen("mousedown", bem.ce("alpha-slider"))
-  private _onAlphaMouseDown(e: MouseEvent) {
+  private _handleAlphaMouseDown(e: MouseEvent) {
     this._abortControllerStates.alphaMove?.abort();
     this._abortControllerStates.saturationMove?.abort();
     this._abortControllerStates.hueMove?.abort();
@@ -349,7 +369,7 @@ export class EaColorPickerPanel extends EaBase {
   }
 
   @listen("change", bem.ce("color-input"))
-  private _onColorInputChange(e: Event) {
+  private _handleColorInputChange(e: Event) {
     const target = e.target as HTMLInputElement;
     const value = target.value;
     try {
@@ -362,7 +382,7 @@ export class EaColorPickerPanel extends EaBase {
   }
 
   @listen("blur", bem.ce("color-input"))
-  private _onColorInputBlur() {
+  private _handleColorInputBlur() {
     if (!this._colorInput) return;
 
     const inputValue = this._colorInput.getAttribute("value") || "";
@@ -388,7 +408,7 @@ export class EaColorPickerPanel extends EaBase {
   }
 
   @listen("click", bem.ce("predefine"))
-  private _onPredefineListClick(e: MouseEvent) {
+  private _handlePredefineListClick(e: MouseEvent) {
     if (this.disabled) return;
 
     const colorElement = (e.target as HTMLElement).closest(
@@ -402,8 +422,7 @@ export class EaColorPickerPanel extends EaBase {
     }
   }
 
-  // ==================== 私有方法 ====================
-
+  /** 获取有效的颜色格式，考虑透明度 */
   private _getEffectiveFormat(): ColorUtilFormat {
     const format = this.colorFormat;
     if (!this.showAlpha) return format;
@@ -417,6 +436,7 @@ export class EaColorPickerPanel extends EaBase {
     return alphaMap[format] || format;
   }
 
+  /** 从当前颜色对象解析 HSV 值 */
   private _parseHsvFromColor() {
     const match = (this._states.color as any).hsvStrToHsvObject(
       (this._states.color as any).toHsv(true)
@@ -430,6 +450,7 @@ export class EaColorPickerPanel extends EaBase {
     }
   }
 
+  /** 获取滑块尺寸 */
   private _getSliderSize(
     element: HTMLElement,
     cssVar: string,
@@ -437,11 +458,11 @@ export class EaColorPickerPanel extends EaBase {
     dimension: "width" | "height"
   ): number {
     const rect = element.getBoundingClientRect();
-    const cssSize =
-      EaUtils.CSS.px2num(this.style.getPropertyValue(cssVar)) || fallback;
+    const cssSize = px2num(this.style.getPropertyValue(cssVar)) || fallback;
     return Math.max(0, Math.min(rect[dimension], cssSize), cssSize);
   }
 
+  /** 更新所有滑块光标位置 */
   private _updateCursorPosition() {
     if (!this._states.isFirstValueUpdate && this.value) {
       this._states.color.setValue(this.value);
@@ -501,6 +522,7 @@ export class EaColorPickerPanel extends EaBase {
     }
   }
 
+  /** 更新饱和度面板背景颜色 */
   private _updateSvpanelStatus = () => {
     const color = new Color({
       h: this._states.hue,
@@ -515,6 +537,7 @@ export class EaColorPickerPanel extends EaBase {
     );
   };
 
+  /** 触发颜色变化事件 */
   private _emitChangeEvent() {
     this.dispatchEvent(
       new CustomEvent("change", {
@@ -532,6 +555,7 @@ export class EaColorPickerPanel extends EaBase {
     );
   }
 
+  /** 渲染预定义颜色列表 */
   private _renderPredefineColors(list: string[]) {
     if (!this._predefineList) return;
 
@@ -555,6 +579,7 @@ export class EaColorPickerPanel extends EaBase {
     );
   }
 
+  /** 从颜色值更新所有状态 */
   private _updateColorFromValue(colorValue: string) {
     this._updateColorInputValue();
 
@@ -569,6 +594,7 @@ export class EaColorPickerPanel extends EaBase {
     this._emitChangeEvent();
   }
 
+  /** 更新文本显示模式 */
   private _updateTextDisplayMode() {
     if (!this._colorInput || !this._textDisplay) return;
 
@@ -577,6 +603,7 @@ export class EaColorPickerPanel extends EaBase {
     this.updateContainerClasslist();
   }
 
+  /** 更新颜色输入框的值 */
   private _updateColorInputValue() {
     if (this.clearable && this._colorInput) {
       this._colorInput.setAttribute("value", this.value);
@@ -585,11 +612,10 @@ export class EaColorPickerPanel extends EaBase {
     }
   }
 
+  /** 验证颜色值是否合法 */
   private _validateColor(colorValue: string): boolean {
     return Color.isValidColor(colorValue);
   }
-
-  // ==================== 公共方法 ====================
 
   resetCursorPosition() {
     this._states.hue = 0;
@@ -613,8 +639,6 @@ export class EaColorPickerPanel extends EaBase {
 
     this._updateSvpanelStatus();
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

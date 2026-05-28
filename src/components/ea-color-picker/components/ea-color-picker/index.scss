@@ -7,24 +7,17 @@ $name: ea-color-picker;
   --#{$name}-border-color-focus: var(--primary-color);
   --#{$name}-background-color: var(--white);
   --#{$name}-background-color-disabled: var(--grey-100);
-  --#{$name}-text-color: var(--grey-700);
-  --#{$name}-text-color-disabled: var(--grey-400);
-  --#{$name}-placeholder-color: var(--grey-400);
-  --#{$name}-padding: 0;
-  --#{$name}-font-size: var(--font-size-md);
-
   --#{$name}-outer-size: 100%;
   --#{$name}-outer-border-radius: var(--border-radius-sm);
   --#{$name}-outer-border: 1px solid var(--grey-200);
   --#{$name}-outer-padding: 2px;
-
   --#{$name}-inner-size: calc(100% - 4px);
   --#{$name}-inner-border-radius: var(--border-radius-sm);
   --#{$name}-inner-border: 1px solid var(--grey-300);
   --#{$name}-inner-background-color: transparent;
-
+  --#{$name}-icon-color-empty: var(--grey-400);
+  --#{$name}-icon-size: 10px;
   --#{$name}-panel-z-index: 1000;
-  --#{$name}-panel-margin-top: var(--spacing-xs);
 }
 
 :host {
@@ -72,10 +65,9 @@ $name: ea-color-picker;
     height: var(--#{$name}-size);
     background-color: var(--#{$name}-background-color);
     border-radius: var(--#{$name}-border-radius);
-    padding: var(--#{$name}-padding);
     box-sizing: border-box;
     cursor: pointer;
-    transition: border-color 0.2s ease;
+    transition: border-color var(--transition-fast) ease;
   }
 
   @include element(outer) {
@@ -101,7 +93,7 @@ $name: ea-color-picker;
   }
 
   @include element(icon) {
-    --ea-icon-size: 10px;
+    --ea-icon-size: var(--#{$name}-icon-size);
 
     position: absolute;
     top: 50%;
@@ -111,7 +103,7 @@ $name: ea-color-picker;
     color: var(--#{$name}-icon-color-empty);
     width: var(--#{$name}-icon-size);
     height: var(--#{$name}-icon-size);
-    transition: color 0.2s ease;
+    transition: color var(--transition-fast) ease;
   }
 
   @include element(popper) {
@@ -141,12 +133,12 @@ $name: ea-color-picker;
     border-color: var(--grey-300);
     cursor: not-allowed;
 
-    .ea-color-picker__trigger {
+    .#{$name}__trigger {
       opacity: 0.6;
       cursor: not-allowed;
     }
 
-    .ea-color-picker__icon-wrapper {
+    .#{$name}__icon-wrapper {
       opacity: 0.6;
     }
   }

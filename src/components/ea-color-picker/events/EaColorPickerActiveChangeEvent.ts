@@ -1,8 +1,7 @@
-/**
- * 颜色选择器活动颜色变化事件
- * @event EaColorPickerActiveChangeEvent
- * @property {string} value - 当前活动颜色值
- */
+export interface EaColorPickerActiveChangeEventDetail {
+  value: string;
+}
+
 export class EaColorPickerActiveChangeEvent extends Event {
   readonly detail: EaColorPickerActiveChangeEventDetail;
 
@@ -15,11 +14,6 @@ export class EaColorPickerActiveChangeEvent extends Event {
 
     this.detail = detail;
   }
-}
-
-interface EaColorPickerActiveChangeEventDetail {
-  /** @description 当前活动颜色值 */
-  value: string;
 }
 
 declare global {

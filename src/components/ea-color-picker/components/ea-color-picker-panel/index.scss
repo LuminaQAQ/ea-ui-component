@@ -6,7 +6,6 @@ $name: ea-color-picker-panel;
   --#{$name}-background-color: #ff0000;
   --#{$name}-border-color: var(--grey-200);
   --#{$name}-padding: var(--spacing-md);
-
   --#{$name}-hue-slider-width: 12px;
   --#{$name}-hue-slider-height: 180px;
   --#{$name}-hue-slider-border-radius: var(--border-radius-sm);
@@ -18,12 +17,6 @@ $name: ea-color-picker-panel;
   --#{$name}-predefine-gap: var(--spacing-xs);
   --#{$name}-predefine-item-size: 20px;
   --#{$name}-predefine-item-border-radius: var(--border-radius-sm);
-
-  --#{$name}-input-height: 28px;
-  --#{$name}-input-border-radius: var(--border-radius-sm);
-  --#{$name}-input-border-color: var(--grey-300);
-  --#{$name}-input-focus-border-color: var(--primary-color);
-
   --#{$name}-text-display-font-size: var(--font-size-sm);
   --#{$name}-text-display-color: var(--grey-700);
   --#{$name}-text-display-padding: 0 8px;
@@ -146,7 +139,7 @@ $name: ea-color-picker-panel;
       border: 2px solid transparent;
       background: transparent;
       padding: 0;
-      transition: border-color 0.2s ease;
+      transition: border-color var(--transition-fast) ease;
 
       &:hover {
         border-color: var(--grey-400);

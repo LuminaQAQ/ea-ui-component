@@ -1,19 +1,15 @@
 import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { query } from "@decorator/query";
 import { createBEM } from "@utils/bem";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { html } from "@utils/html";
-import { Enum } from "@/utils/Enum";
+import { Enum } from "@utils/Enum";
 import { Color } from "../../utils/Color";
 import { EaColorPickerClearEvent } from "../../events/EaColorPickerClearEvent";
 import "../ea-color-picker-panel/index";
 import "@/common/ea-popper/index";
 import "@components/ea-button/index";
+import "@components/ea-icon/index";
 import stylesheet from "./index.scss?inline";
-import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-color-picker" as const;
 const bem = createBEM(TAG_NAME);
@@ -37,10 +33,44 @@ const PLACEMENTS = [
 ] as const;
 type Placement = (typeof PLACEMENTS)[number];
 
+/**
+ * @summary 颜色选择器组件，支持多种颜色格式、透明度选择和预定义颜色。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ * @dependency ea-button
+ * @dependency ea-popper
+ * @dependency ea-color-picker-panel
+ *
+ * @slot default - 默认插槽（未使用）。
+ *
+ * @event change - 颜色值改变时触发，detail: `{ value: string }`。
+ * @event ea-clear - 清空颜色值时触发。
+ * @event ea-active-change - 颜色激活值改变时触发，detail: `{ value: string }`。
+ *
+ * @csspart form-label - 表单标签元素。
+ * @csspart container - 根容器元素。
+ * @csspart popper - 弹出层元素。
+ * @csspart trigger - 触发器元素。
+ * @csspart outer - 外层容器元素。
+ * @csspart inner - 内层容器元素。
+ * @csspart icon-wrapper - 图标包裹层元素。
+ * @csspart status-icon - 状态图标元素。
+ * @csspart panel - 颜色选择器面板元素。
+ * @csspart footer-actions - 底部操作按钮区域元素。
+ * @csspart clear-btn - 清除按钮元素。
+ * @csspart confirm-btn - 确认按钮元素。
+ *
+ * @cssproperty --ea-color-picker-size - 触发器尺寸。
+ * @cssproperty --ea-color-picker-border-radius - 触发器圆角。
+ * @cssproperty --ea-color-picker-border-color - 触发器边框颜色。
+ * @cssproperty --ea-color-picker-border-color-focus - 聚焦时边框颜色。
+ * @cssproperty --ea-color-picker-background-color - 触发器背景颜色。
+ * @cssproperty --ea-color-picker-background-color-disabled - 禁用时背景颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaColorPicker extends EaFormAssociatedBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.ce("form-label"))
   private _label!: HTMLLabelElement;
 
@@ -74,8 +104,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   @query(bem.ce("confirm-btn"))
   private _confirmBtn!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -182,8 +210,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
   })
   predefine: string[] = [];
 
-  // ==================== 私有状态 ====================
-
   private _abortControllerStates = {
     close: null as AbortController | null,
   };
@@ -193,8 +219,6 @@ export class EaColorPicker extends EaFormAssociatedBase {
     isPanelDefined: false,
     previousValue: "",
   };
-
-  // ==================== 方法 ====================
 
   updateContainerClasslist(): string {
     const className = bem(
@@ -242,10 +266,8 @@ export class EaColorPicker extends EaFormAssociatedBase {
     `);
   }
 
-  // ==================== 事件处理 ====================
-
   @listen("click", bem.ce("trigger"))
-  private _onTriggerClick(e: MouseEvent) {
+  private _handleTriggerClick(e: MouseEvent) {
     if (this.disabled) return;
 
     this._abortControllerStates.close?.abort();
@@ -255,19 +277,19 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
     this._showPopper();
 
-    document.addEventListener("click", this._onDocumentClick.bind(this), {
+    document.addEventListener("click", this._handleDocumentClick.bind(this), {
       signal: this._abortControllerStates.close.signal,
     });
   }
 
   @listen("show", bem.ce("popper"))
-  private _onPopperShow() {
+  private _handlePopperShow() {
     this._states.isOpen = true;
     this.updateContainerClasslist();
   }
 
   @listen("hide", bem.ce("popper"))
-  private _onPopperHide() {
+  private _handlePopperHide() {
     this._states.isOpen = false;
     this.updateContainerClasslist();
 
@@ -282,7 +304,7 @@ export class EaColorPicker extends EaFormAssociatedBase {
   }
 
   @listen("change", bem.ce("panel"))
-  private _onPanelChange(e: CustomEvent) {
+  private _handlePanelChange(e: CustomEvent) {
     const { value } = e.detail;
     this.value = value;
     this._updateTriggerColor();
@@ -290,7 +312,7 @@ export class EaColorPicker extends EaFormAssociatedBase {
   }
 
   @listen("click", bem.ce("clear-btn"))
-  private _onClearClick() {
+  private _handleClearClick() {
     this.value = "";
 
     this._panel.style.setProperty(
@@ -310,32 +332,34 @@ export class EaColorPicker extends EaFormAssociatedBase {
   }
 
   @listen("click", bem.ce("confirm-btn"))
-  private _onConfirmClick() {
+  private _handleConfirmClick() {
     this._states.previousValue = this.value;
     this._hidePopper();
   }
 
-  private _onDocumentClick(e: MouseEvent) {
+  /** 处理文档点击事件，点击外部时关闭弹出层 */
+  private _handleDocumentClick(e: MouseEvent) {
     if (!this._states.isOpen) return;
     if (!this.contains(e.target as Node) || e.target !== this) {
       this._hidePopper();
     }
   }
 
-  // ==================== 私有方法 ====================
-
+  /** 显示弹出层 */
   private _showPopper() {
     if (this._popper) {
       this._popper.show();
     }
   }
 
+  /** 隐藏弹出层 */
   private _hidePopper() {
     if (this._popper) {
       this._popper.hide();
     }
   }
 
+  /** 更新触发器内层背景颜色 */
   private _updateTriggerColor() {
     if (!this._inner) return;
 
@@ -361,13 +385,12 @@ export class EaColorPicker extends EaFormAssociatedBase {
     }
   }
 
+  /** 更新状态图标 */
   private _updateStatusIcon(colorValue = this.value) {
     if (!this._statusIcon) return;
 
     this._statusIcon.setAttribute("name", colorValue ? "angle-down" : "xmark");
   }
-
-  // ==================== 公共方法 ====================
 
   show() {
     this._showPopper();
@@ -395,27 +418,27 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   updateValidity() {
     if (this.required && !this.value) {
-      this.internals.setValidity(
-        { valueMissing: true },
-        "请选择一个颜色",
-        this
-      );
+      this.setValidity({ valueMissing: true }, "请选择一个颜色");
     } else {
-      this.internals.setValidity({}, "", this);
+      this.setValidity({});
     }
   }
 
   checkValidity(): boolean {
     this.updateValidity();
-    return this.internals.checkValidity();
+    if (this.internals && typeof this.internals.checkValidity === "function") {
+      return this.internals.checkValidity();
+    }
+    return !this.required || !!this.value;
   }
 
   reportValidity(): boolean {
     this.updateValidity();
-    return this.internals.reportValidity();
+    if (this.internals && typeof this.internals.reportValidity === "function") {
+      return this.internals.reportValidity();
+    }
+    return !this.required || !!this.value;
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

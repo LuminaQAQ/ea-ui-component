@@ -547,6 +547,27 @@ describe("EaColorPicker Component", () => {
 
       expect(typeof picker.reportValidity).toBe("function");
     });
+
+    it("required 且无 value 时 checkValidity 应该返回 false", async () => {
+      const picker = document.createElement("ea-color-picker");
+      picker.setAttribute("required", "");
+      container.appendChild(picker);
+
+      await waitForRender();
+
+      expect(picker.checkValidity()).toBe(false);
+    });
+
+    it("required 且有 value 时 checkValidity 应该返回 true", async () => {
+      const picker = document.createElement("ea-color-picker");
+      picker.setAttribute("required", "");
+      picker.setAttribute("value", "#409eff");
+      container.appendChild(picker);
+
+      await waitForRender();
+
+      expect(picker.checkValidity()).toBe(true);
+    });
   });
 
   describe("Predefine Property", () => {
@@ -644,6 +665,25 @@ describe("EaColorPicker Component", () => {
       await waitForRender();
 
       expect(picker.value).toBe("");
+    });
+
+    it("点击 clear 按钮应该触发 change 事件且 value 为空", async () => {
+      const picker = document.createElement("ea-color-picker");
+      picker.setAttribute("value", "#409eff");
+      picker.setAttribute("clearable", "");
+      container.appendChild(picker);
+
+      await waitForRender();
+
+      const changeHandler = vi.fn();
+      picker.addEventListener("change", changeHandler);
+
+      const clearBtn = picker.shadowRoot.querySelector('[part="clear-btn"]');
+      clearBtn.click();
+
+      await waitForRender();
+
+      expect(changeHandler).toHaveBeenCalled();
     });
   });
 
@@ -987,7 +1027,7 @@ describe("EaColorPickerPanel Component", () => {
       expect(panel.showAlpha).toBe(true);
     });
 
-    it("showAlpha=true 且 colorFormat=hex 时 value 应该输出 rgb 格式（alpha=1 时省略 alpha 通道）", async () => {
+    it("showAlpha=true 且 colorFormat=hex 时 value 应该输出 rgb 格式", async () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("show-alpha", "");
       panel.setAttribute("value", "#409eff");
@@ -998,7 +1038,7 @@ describe("EaColorPickerPanel Component", () => {
       expect(panel.value).toMatch(/^rgb/);
     });
 
-    it("showAlpha=true 且 colorFormat=rgb 时 value 应该输出 rgb 格式（alpha=1 时省略 alpha 通道）", async () => {
+    it("showAlpha=true 且 colorFormat=rgb 时 value 应该输出 rgb 格式", async () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("show-alpha", "");
       panel.setAttribute("color-format", "rgb");
@@ -1010,7 +1050,7 @@ describe("EaColorPickerPanel Component", () => {
       expect(panel.value).toMatch(/^rgb/);
     });
 
-    it("showAlpha=true 且 colorFormat=hsl 时 value 应该输出 hsl 格式（alpha=1 时省略 alpha 通道）", async () => {
+    it("showAlpha=true 且 colorFormat=hsl 时 value 应该输出 hsl 格式", async () => {
       const panel = document.createElement("ea-color-picker-panel");
       panel.setAttribute("show-alpha", "");
       panel.setAttribute("color-format", "hsl");

@@ -1,8 +1,7 @@
-/**
- * 颜色选择器面板非法颜色事件
- * @event EaColorPickerPanelInvalidColorEvent
- * @property {string} value - 非法的颜色值
- */
+export interface EaColorPickerPanelInvalidColorEventDetail {
+  value: string;
+}
+
 export class EaColorPickerPanelInvalidColorEvent extends Event {
   readonly detail: EaColorPickerPanelInvalidColorEventDetail;
 
@@ -14,11 +13,6 @@ export class EaColorPickerPanelInvalidColorEvent extends Event {
 
     this.detail = detail;
   }
-}
-
-interface EaColorPickerPanelInvalidColorEventDetail {
-  /** @description 非法的颜色值 */
-  value: string;
 }
 
 declare global {
