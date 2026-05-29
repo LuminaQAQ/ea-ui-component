@@ -1,29 +1,32 @@
+$name: ea-empty;
+
 :host {
-  --ea-empty-size: 120px;
+  --#{$name}-size: 120px;
+  --#{$name}-image-color: var(--grey-400);
+  --#{$name}-color: var(--grey-500);
+  --#{$name}-description-font-size: var(--font-size-lg);
+  --#{$name}-spacing: var(--spacing-lg);
 
-  --ea-empty-image-color: var(--grey-400);
-  --ea-empty-color: var(--grey-500);
-  --ea-empty-description-font-size: var(--font-size-lg);
-
-  --ea-empty-spacing: var(--spacing-lg);
+  display: flex;
 }
 
-@include block(ea-empty) {
+@include block($name) {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 100%;
 
   @include element(default) {
     width: 100%;
     height: 100%;
 
     .border {
-      stroke: var(--ea-empty-image-color);
+      stroke: var(--#{$name}-image-color);
     }
 
     .front {
-      fill: var(--ea-empty-image-color);
+      fill: var(--#{$name}-image-color);
     }
   }
 
@@ -32,8 +35,8 @@
     align-items: center;
     justify-content: center;
 
-    width: var(--ea-empty-size);
-    height: var(--ea-empty-size);
+    width: var(--#{$name}-size);
+    height: var(--#{$name}-size);
   }
 
   @include element(image) {
@@ -44,13 +47,13 @@
   }
 
   @include element(description) {
-    font-size: var(--ea-empty-description-font-size);
-    color: var(--ea-empty-color);
+    font-size: var(--#{$name}-description-font-size);
+    color: var(--#{$name}-color);
 
-    margin-top: var(--ea-empty-spacing);
+    margin-top: var(--#{$name}-spacing);
   }
 
   @include element(bottom) {
-    margin-top: var(--ea-empty-spacing);
+    margin-top: var(--#{$name}-spacing);
   }
 }

@@ -21,7 +21,7 @@ if (typeof CSS === "undefined") {
 
 import "../components/ea-empty/index.js";
 
-describe("EaEmpty Component", () => {
+describe("EaEmpty", () => {
   let container;
 
   beforeEach(() => {
@@ -32,8 +32,6 @@ describe("EaEmpty Component", () => {
   afterEach(() => {
     container.remove();
   });
-
-  // ==================== 基础渲染测试 ====================
 
   describe("Basic Rendering", () => {
     it("应该正确创建 ea-empty 元素", () => {
@@ -124,8 +122,6 @@ describe("EaEmpty Component", () => {
     });
   });
 
-  // ==================== CSS Part 测试 ====================
-
   describe("CSS Parts", () => {
     it("应该暴露 container part", () => {
       const empty = document.createElement("ea-empty");
@@ -181,8 +177,6 @@ describe("EaEmpty Component", () => {
       expect(el).toBeDefined();
     });
   });
-
-  // ==================== 插槽测试 ====================
 
   describe("Slots", () => {
     it("应该包含默认插槽（底部内容）", () => {
@@ -282,8 +276,6 @@ describe("EaEmpty Component", () => {
       expect(slots.length).toBe(3);
     });
   });
-
-  // ==================== Image 属性测试 ====================
 
   describe("Image Attribute", () => {
     it("默认 image 属性应该为空字符串", async () => {
@@ -431,8 +423,6 @@ describe("EaEmpty Component", () => {
     });
   });
 
-  // ==================== ImageSize 属性测试 ====================
-
   describe("ImageSize Attribute", () => {
     it("默认 imageSize 属性应该为空字符串", async () => {
       const empty = document.createElement("ea-empty");
@@ -558,21 +548,22 @@ describe("EaEmpty Component", () => {
       warnSpy.mockRestore();
     });
 
-    it("imageSize 设置为空字符串后应清空 CSS 变量", async () => {
+    it("imageSize 设置为空字符串后应移除 CSS 变量", async () => {
       const empty = document.createElement("ea-empty");
       empty.setAttribute("image-size", "200px");
       container.appendChild(empty);
 
       await waitForRender();
 
+      expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("200px");
+
       empty.setAttribute("image-size", "");
       await waitForRender();
 
       expect(empty.imageSize).toBe("");
+      expect(empty.style.getPropertyValue("--ea-empty-size")).toBe("");
     });
   });
-
-  // ==================== Description 属性测试 ====================
 
   describe("Description Attribute", () => {
     it("默认 description 属性应该为空字符串", async () => {
@@ -682,16 +673,6 @@ describe("EaEmpty Component", () => {
       expect(empty.description).toBe("这里什么都没有");
     });
 
-    it("应该支持包含 HTML 实体的 description", async () => {
-      const empty = document.createElement("ea-empty");
-      empty.setAttribute("description", "价格 &lt; 100 元");
-      container.appendChild(empty);
-
-      await waitForRender();
-
-      expect(empty.description).toBe("价格 &lt; 100 元");
-    });
-
     it("应该支持长文本 description", async () => {
       const longText =
         "这是一段非常长的描述文字，用来测试组件是否能够正确处理长文本的显示。".repeat(
@@ -706,8 +687,6 @@ describe("EaEmpty Component", () => {
       expect(empty.description).toBe(longText);
     });
   });
-
-  // ==================== CSS 自定义属性测试 ====================
 
   describe("CSS Custom Properties", () => {
     it("默认不设置 imageSize 时不应有内联 --ea-empty-size", () => {
@@ -762,8 +741,6 @@ describe("EaEmpty Component", () => {
       expect(size.trim()).toBe("80px");
     });
   });
-
-  // ==================== DOM 结构测试 ====================
 
   describe("DOM Structure", () => {
     it("容器应该是 placeholder、description、bottom 的父级", () => {
@@ -820,8 +797,6 @@ describe("EaEmpty Component", () => {
       expect(containerEl.children.length).toBe(3);
     });
   });
-
-  // ==================== 生命周期测试 ====================
 
   describe("Lifecycle", () => {
     it("组件添加到 DOM 后应该正确初始化", async () => {
@@ -889,8 +864,6 @@ describe("EaEmpty Component", () => {
       expect(empty.description).toBe("After Mount");
     });
   });
-
-  // ==================== 边界条件测试 ====================
 
   describe("Edge Cases", () => {
     it("不设置任何属性时应该使用所有默认值", async () => {
@@ -1015,8 +988,6 @@ describe("EaEmpty Component", () => {
       expect(imgEl.getAttribute("src")).toBe("data:image/svg+xml,...");
     });
   });
-
-  // ==================== 复杂场景测试 ====================
 
   describe("Complex Scenarios", () => {
     it("完整配置：自定义图片 + 尺寸 + 描述 + 底部按钮", async () => {

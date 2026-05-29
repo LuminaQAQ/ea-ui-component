@@ -15,15 +15,28 @@ onMounted(() => {
 
 > `js`
 
-```js
-<script type='module'>
+```html
+<script type="module">
   import "./node_modules/easy-component-ui/components/ea-empty/index.js";
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#empty-css-part)。
 
 ## 基础用法
 
@@ -33,11 +46,13 @@ onMounted(() => {
   <ea-empty description="description"></ea-empty>
 </div>
 
+::: details 查看代码
+
 ```html
-<div class="demo">
-  <ea-empty description="description"></ea-empty>
-</div>
+<ea-empty description="description"></ea-empty>
 ```
+
+:::
 
 ## 自定义图片
 
@@ -49,13 +64,15 @@ onMounted(() => {
   ></ea-empty>
 </div>
 
+::: details 查看代码
+
 ```html
-<div class="demo">
-  <ea-empty
-    image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-empty>
-</div>
+<ea-empty
+  image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+></ea-empty>
 ```
+
+:::
 
 ## 图片尺寸
 
@@ -68,14 +85,16 @@ onMounted(() => {
   ></ea-empty>
 </div>
 
+::: details 查看代码
+
 ```html
-<div class="row">
-  <ea-empty
-    image-size="200px"
-    image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-  ></ea-empty>
-</div>
+<ea-empty
+  image-size="200px"
+  image="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+></ea-empty>
 ```
+
+:::
 
 ## 底部内容
 
@@ -87,37 +106,54 @@ onMounted(() => {
   </ea-empty>
 </div>
 
+::: details 查看代码
+
 ```html
-<div class="demo">
-  <ea-empty>
-    <ea-button type="primary">Button</ea-button>
-  </ea-empty>
-</div>
+<ea-empty>
+  <ea-button type="primary">Button</ea-button>
+</ea-empty>
 ```
 
-## Attributes
+:::
 
-| 参数        | 说明     | 类型   | 可选值 | 默认值 |
-| ----------- | -------- | ------ | ------ | ------ |
-| description | 描述     | string | -      | -      |
-| image       | 图片     | string | -      | -      |
-| image-size  | 图片大小 | string | -      | -      |
+## Empty API
 
-## CSS Part
+### Empty Attributes
+
+| 参数        | 说明                                       | 类型   | 可选值 | 默认值 |
+| ----------- | ------------------------------------------ | ------ | ------ | ------ |
+| image       | 图片 URL，为空时显示默认 SVG               | string | —      | —      |
+| image-size  | 图片尺寸，支持 CSS 合法尺寸值（如 200px）  | string | —      | —      |
+| description | 描述文字，为空时显示 "No Data"             | string | —      | —      |
+
+### Empty CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称        | 说明                                                                                   |
-| ----------- | -------------------------------------------------------------------------------------- |
-| container   | 外层容器, 包含 图片容器`image-wrap`、描述容器`description-wrap`和底部容器`bottom-wrap` |
-| placeholder | 图片容器                                                                               |
-| description | 描述容器                                                                               |
-| bottom      | 底部容器                                                                               |
+| 名称                 | 说明                   |
+| -------------------- | ---------------------- |
+| container            | 外层容器               |
+| placeholder          | 图片占位容器           |
+| image                | 自定义图片元素         |
+| default-image-front  | 默认 SVG 前景路径元素  |
+| default-image-border | 默认 SVG 边框路径元素  |
+| description          | 描述文字容器           |
+| bottom               | 底部容器               |
 
-## Slots
+### Empty Slots
 
-| 名称        | 说明     |
-| ----------- | -------- |
-| -           | 默认插槽 |
-| image       | 图片插槽 |
-| description | 描述插槽 |
+| 名称        | 说明                     |
+| ----------- | ------------------------ |
+| default     | 默认插槽，底部操作内容   |
+| image       | 自定义图片内容           |
+| description | 自定义描述内容           |
+
+### Empty CSS 自定义属性
+
+| 属性名                            | 说明           | 默认值              |
+| --------------------------------- | -------------- | ------------------- |
+| --ea-empty-size                   | 图片区域尺寸   | 120px               |
+| --ea-empty-image-color            | 默认图片颜色   | var(--grey-400)     |
+| --ea-empty-color                  | 描述文字颜色   | var(--grey-500)     |
+| --ea-empty-description-font-size  | 描述文字字号   | var(--font-size-lg) |
+| --ea-empty-spacing                | 元素间距       | var(--spacing-lg)   |
