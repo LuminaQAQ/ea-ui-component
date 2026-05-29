@@ -87,7 +87,10 @@ function createAttributeGetter(
     const attrValue = this.getAttribute(attrName);
 
     if (type === Boolean) {
-      return this.hasAttribute(attrName);
+      if (attrValue === null) {
+        return parseDefaultValue(this, defaultValue);
+      }
+      return attrValue === "true" || attrValue === "";
     } else if (attrValue !== null) {
       return parseAttributeValue(this, attrValue, type, defaultValue);
     }
@@ -107,7 +110,11 @@ function createAttributeSetter(name: string) {
     if (!(this instanceof HTMLElement)) return;
 
     if (typeof newVal === "boolean") {
-      this.toggleAttribute(attrName, newVal);
+      if (newVal) {
+        this.setAttribute(attrName, "");
+      } else {
+        this.removeAttribute(attrName);
+      }
     } else {
       this.setAttribute(attrName, String(newVal));
     }

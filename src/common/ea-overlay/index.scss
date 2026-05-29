@@ -1,74 +1,64 @@
+$name: ea-overlay;
+
 :host {
-  --ea-overlay-z-index: 3000;
-  --ea-overlay-background-color: rgba(0, 0, 0, 0.4);
-
-  --ea-overlay-content-left: 50%;
-  --ea-overlay-content-top: 50%;
-
-  --ea-overlay-content-translate-x: calc(0% - var(--ea-overlay-content-left));
-  --ea-overlay-content-translate-y: calc(0% - var(--ea-overlay-content-top));
-  --ea-overlay-content-transform: translate(var(--ea-overlay-content-translate-x),
-      var(--ea-overlay-content-translate-y));
-
-  --ea-overlay-content-width: 50%;
-  --ea-overlay-content-max-width: none;
-  --ea-overlay-content-height: 50%;
-
-  --ea-overlay-transition: var(--transition-normal);
+  --#{$name}-z-index: 3000;
+  --#{$name}-background-color: rgba(0, 0, 0, 0.4);
+  --#{$name}-content-width: 50%;
+  --#{$name}-content-max-width: none;
+  --#{$name}-content-height: 50%;
+  --#{$name}-transition: var(--transition-normal);
 }
 
 :host {
   position: fixed;
-  z-index: var(--ea-overlay-z-index);
+  z-index: var(--#{$name}-z-index);
 }
 
-@mixin modal-mask {
+@include block($name) {
   position: fixed;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-
   width: 100%;
   height: 100%;
-}
 
-@include block(ea-overlay) {
-  @include modal-mask;
   display: none;
   visibility: hidden;
 
-  z-index: var(--ea-overlay-z-index);
+  z-index: var(--#{$name}-z-index);
 
   @include element(mask) {
-    @include modal-mask;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
 
     display: none;
-    background: var(--ea-overlay-background-color);
+    background: var(--#{$name}-background-color);
 
-    z-index: var(--ea-overlay-z-index);
+    z-index: var(--#{$name}-z-index);
 
     filter: opacity(0);
 
-    transition: filter var(--ea-overlay-transition);
+    transition: filter var(--#{$name}-transition);
   }
 
   @include element(content) {
     position: absolute;
 
-    max-width: var(--ea-overlay-content-max-width);
-    width: var(--ea-overlay-content-width);
-    height: var(--ea-overlay-content-height);
+    max-width: var(--#{$name}-content-max-width);
+    width: var(--#{$name}-content-width);
+    height: var(--#{$name}-content-height);
 
-    // left: var(--ea-overlay-content-left);
-    // top: var(--ea-overlay-content-top);
-    // transform: var(--ea-overlay-content-transform);
-
-    z-index: calc(var(--ea-overlay-z-index) + 1);
+    z-index: calc(var(--#{$name}-z-index) + 1);
 
     filter: opacity(0);
 
-    transition: filter var(--ea-overlay-transition);
+    transition: filter var(--#{$name}-transition);
   }
 
   @include modifier(open) {
@@ -77,25 +67,26 @@
     justify-content: center;
   }
 
-  @include modifier(is-show) {
+  @include state(show) {
     visibility: visible;
 
-    .ea-overlay__content,
-    .ea-overlay__mask {
+    .#{$name}__content,
+    .#{$name}__mask {
       filter: opacity(1);
     }
   }
 
-  @include modifier(before-close) {
+  @include state(before-close) {
+    visibility: visible;
 
-    .ea-overlay__content,
-    .ea-overlay__mask {
+    .#{$name}__content,
+    .#{$name}__mask {
       filter: opacity(0);
     }
   }
 
   @include state(modal) {
-    .ea-overlay__mask {
+    .#{$name}__mask {
       display: block;
     }
   }

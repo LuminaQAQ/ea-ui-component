@@ -49,6 +49,14 @@ const EXCLUDED_KEYS = [
   "distinguishCancelAndClose",
 ];
 
+const DEFERRED_BOOLEAN_KEYS = [
+  "closeOnClickModal",
+  "closeOnPressEscape",
+  "showCancelButton",
+  "showClose",
+  "showConfirmButton",
+];
+
 class EaMessageBoxInstance {
   private _defaultOptions: MessageBoxOptions = {
     boxType: "personalized",
@@ -93,6 +101,7 @@ class EaMessageBoxInstance {
     const messageBox = this._renderer(mergedOptions);
     this.instance = messageBox;
     this._appendToHandler(messageBox, mergedOptions.appendTo);
+    this._applyDeferredBooleanProps(messageBox, mergedOptions);
   }
 
   private _appendToHandler(
@@ -111,7 +120,7 @@ class EaMessageBoxInstance {
     const messageBox = document.createElement("ea-message-box");
 
     for (const k in options) {
-      if (k === "appendTo") {
+      if (k === "appendTo" || DEFERRED_BOOLEAN_KEYS.includes(k)) {
         continue;
       }
       if (EXCLUDED_KEYS.includes(k)) {
@@ -123,6 +132,17 @@ class EaMessageBoxInstance {
     }
 
     return messageBox;
+  }
+
+  private _applyDeferredBooleanProps(
+    messageBox: HTMLElement,
+    options: MessageBoxOptions
+  ): void {
+    for (const k of DEFERRED_BOOLEAN_KEYS) {
+      if (k in options) {
+        (messageBox as any)[k] = (options as any)[k];
+      }
+    }
   }
 }
 
@@ -162,7 +182,7 @@ const EaMessageBox: EaMessageBoxFn = (options: MessageBoxOptions) => {
 
   return new Promise((resolve, reject) => {
     messageBox.addEventListener(
-      "closed",
+      "ea-closed",
       () => {
         messageBox.remove();
         controller.abort();

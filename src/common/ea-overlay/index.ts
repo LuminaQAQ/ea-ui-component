@@ -1,25 +1,46 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { property } from "@decorator/property";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
+import { EaOverlayOpenEvent } from "./events/EaOverlayOpenEvent";
+import { EaOverlayOpenedEvent } from "./events/EaOverlayOpenedEvent";
+import { EaOverlayCloseEvent } from "./events/EaOverlayCloseEvent";
+import { EaOverlayClosedEvent } from "./events/EaOverlayClosedEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-overlay" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 遮罩层组件，用于弹窗场景的背景遮罩，支持模态/非模态模式、过渡动画和关闭拦截。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 遮罩层内容区域。
+ *
+ * @event ea-open - 遮罩层打开时触发。
+ * @event ea-opened - 遮罩层打开动画结束时触发。
+ * @event ea-close - 遮罩层关闭时触发。
+ * @event ea-closed - 遮罩层关闭动画结束时触发。
+ *
+ * @csspart container - 容器元素。
+ * @csspart mask - 遮罩层元素。
+ * @csspart content - 内容容器元素。
+ *
+ * @cssproperty --ea-overlay-z-index - 层级。
+ * @cssproperty --ea-overlay-background-color - 遮罩层背景颜色。
+ * @cssproperty --ea-overlay-content-width - 内容宽度。
+ * @cssproperty --ea-overlay-content-max-width - 内容最大宽度。
+ * @cssproperty --ea-overlay-content-height - 内容高度。
+ * @cssproperty --ea-overlay-transition - 过渡动画时长。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaOverlay extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-overlay")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-overlay__mask")
+  @query(bem.ce("mask"))
   private _overlayMask!: HTMLElement;
 
-  @query(".ea-overlay__content")
+  @query(bem.ce("content"))
   private _overlayContent!: HTMLElement;
 
   private _transitionAbortController?: AbortController;
@@ -27,12 +48,10 @@ export class EaOverlay extends EaBase {
   private _inBeforeClose: boolean = false;
   private _appendHandled: boolean = false;
 
-  // ==================== 属性定义 ====================
-
   @attribute({
     type: Boolean,
     default: false,
-    async observer(this: EaOverlay, newVal: boolean) {
+    observer(this: EaOverlay, newVal: boolean) {
       if (this._inBeforeClose) return;
 
       this._transitionAbortController?.abort();
@@ -89,7 +108,6 @@ export class EaOverlay extends EaBase {
   })
   appendTo: string = "body";
 
-  // CSS 变量属性
   @attribute({
     type: String,
     default: "",
@@ -135,62 +153,12 @@ export class EaOverlay extends EaBase {
   })
   contentHeight: string = "";
 
-  @attribute({
-    type: String,
-    default: "",
-    observer(this: EaOverlay, newVal: string) {
-      this.style.setProperty("--ea-overlay-content-left", newVal);
-    },
-  })
-  contentLeft: string = "";
-
-  @attribute({
-    type: String,
-    default: "",
-    observer(this: EaOverlay, newVal: string) {
-      this.style.setProperty("--ea-overlay-content-top", newVal);
-    },
-  })
-  contentTop: string = "";
-
-  @attribute({
-    type: String,
-    default: "",
-    observer(this: EaOverlay, newVal: string) {
-      this.style.setProperty("--ea-overlay-content-translate-x", newVal);
-    },
-  })
-  contentTranslateX: string = "";
-
-  @attribute({
-    type: String,
-    default: "",
-    observer(this: EaOverlay, newVal: string) {
-      this.style.setProperty("--ea-overlay-content-translate-y", newVal);
-    },
-  })
-  contentTranslateY: string = "";
-
-  @attribute({
-    type: String,
-    default: "",
-    observer(this: EaOverlay, newVal: string) {
-      this.style.setProperty("--ea-overlay-content-transform", newVal);
-    },
-  })
-  contentTransform: string = "";
-
   @property({
     type: Function,
     default: null,
   })
   beforeClose: ((done: () => void) => void) | null = null;
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const className = bem({ open: this.visible }, { modal: this.modal });
 
@@ -199,6 +167,7 @@ export class EaOverlay extends EaBase {
     return className;
   }
 
+  /** 处理组件追加到指定容器 */
   private _handleAppendTo(): void {
     if (this._appendHandled) return;
 
@@ -223,30 +192,26 @@ export class EaOverlay extends EaBase {
     }
   }
 
-  /**
-   * 处理打开过渡
-   */
+  /** 处理打开过渡动画 */
   private _handleOpenTransition(): void {
     this.updateContainerClasslist();
-    this.emit("open");
+    this.dispatchEvent(new EaOverlayOpenEvent());
     this._handleFocus();
 
     requestAnimationFrame(() => {
-      this._container.classList.add("ea-overlay--is-show");
+      this._container.classList.add(bem.s("show"));
 
       this._container.addEventListener(
         "transitionend",
         () => {
-          this.emit("opened");
+          this.dispatchEvent(new EaOverlayOpenedEvent());
         },
         { signal: this._transitionAbortController!.signal, once: true }
       );
     });
   }
 
-  /**
-   * 处理关闭请求
-   */
+  /** 处理关闭请求，支持 beforeClose 拦截 */
   private _handleCloseRequest(): void {
     if (this._closingByBeforeClose) {
       this._closingByBeforeClose = false;
@@ -273,26 +238,23 @@ export class EaOverlay extends EaBase {
     }
   }
 
-  /**
-   * 处理关闭过渡
-   */
+  /** 处理关闭过渡动画 */
   private _handleCloseTransition(): void {
-    this._container.classList.add("ea-overlay--before-close");
-    this.emit("close");
+    this._container.classList.remove(bem.s("show"));
+    this._container.classList.add(bem.s("before-close"));
+    this.dispatchEvent(new EaOverlayCloseEvent());
 
     this._container.addEventListener(
       "transitionend",
       () => {
         this.updateContainerClasslist();
-        this.emit("closed");
+        this.dispatchEvent(new EaOverlayClosedEvent());
       },
       { signal: this._transitionAbortController!.signal, once: true }
     );
   }
 
-  /**
-   * 处理聚焦
-   */
+  /** 处理焦点管理 */
   private _handleFocus(): void {
     (document.activeElement as HTMLElement)?.blur();
 
@@ -301,47 +263,30 @@ export class EaOverlay extends EaBase {
     });
   }
 
-  /**
-   * 显示遮罩层
-   */
+  /** 显示遮罩层 */
   show(): void {
     this.visible = true;
   }
 
-  /**
-   * 隐藏遮罩层
-   */
+  /** 隐藏遮罩层 */
   hide(): void {
     this.visible = false;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container">
-        <div class="ea-overlay__mask" part="mask"></div>
-        <div class="ea-overlay__content" part="content">
+        <div class="${bem.e("mask")}" part="mask"></div>
+        <div class="${bem.e("content")}" part="content">
           <slot></slot>
         </div>
       </div>
     `;
   }
 
-  // ==================== 事件处理 ====================
-
-  @listen("click", ".ea-overlay__mask")
-  private _handleMaskClick(e: Event) {
+  @listen("click", bem.ce("mask"))
+  private _handleMaskClick() {
     if (!this.closeOnClickModal) return;
-
-    const isContent =
-      [...this.children].find(
-        child => child === e.target || child.contains(e.target as Node)
-      ) ||
-      this._overlayContent === e.target ||
-      this._overlayContent.contains(e.target as Node);
-    if (isContent) return;
 
     this.hide();
   }
@@ -354,8 +299,6 @@ export class EaOverlay extends EaBase {
 
     this.hide();
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this._handleAppendTo();

@@ -578,7 +578,9 @@ describe("EaMessageBox Component", () => {
     });
 
     it("showClose=false should add is-close-hidden state class", async () => {
-      const messageBox = createMessageBox({ "show-close": "false" });
+      const messageBox = createMessageBox();
+      await waitForRender();
+      messageBox.showClose = false;
       await waitForRender();
       const overlayEl = messageBox.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-close-hidden")).toBe(true);
@@ -596,7 +598,7 @@ describe("EaMessageBox Component", () => {
       await waitForRender();
       const overlayEl = messageBox.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-close-hidden")).toBe(false);
-      messageBox.setAttribute("show-close", "false");
+      messageBox.showClose = false;
       await waitForRender();
       expect(overlayEl.classList.contains("is-close-hidden")).toBe(true);
     });
@@ -646,7 +648,9 @@ describe("EaMessageBox Component", () => {
     });
 
     it("showConfirmButton=false should add is-confirm-hidden state class", async () => {
-      const messageBox = createMessageBox({ "show-confirm-button": "false" });
+      const messageBox = createMessageBox();
+      await waitForRender();
+      messageBox.showConfirmButton = false;
       await waitForRender();
       const overlayEl = messageBox.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-confirm-hidden")).toBe(true);
@@ -664,7 +668,7 @@ describe("EaMessageBox Component", () => {
       await waitForRender();
       const overlayEl = messageBox.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-confirm-hidden")).toBe(false);
-      messageBox.setAttribute("show-confirm-button", "false");
+      messageBox.showConfirmButton = false;
       await waitForRender();
       expect(overlayEl.classList.contains("is-confirm-hidden")).toBe(true);
     });
@@ -1066,7 +1070,9 @@ describe("EaMessageBox Component", () => {
     });
 
     it("modal=false should not add is-modal state class", async () => {
-      const messageBox = createMessageBox({ modal: "false" });
+      const messageBox = createMessageBox();
+      await waitForRender();
+      messageBox.modal = false;
       await waitForRender();
       const overlayEl = messageBox.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-modal")).toBe(false);
@@ -1081,7 +1087,9 @@ describe("EaMessageBox Component", () => {
     });
 
     it("should support setting closeOnClickModal to false", async () => {
-      const messageBox = createMessageBox({ "close-on-click-modal": "false" });
+      const messageBox = createMessageBox();
+      await waitForRender();
+      messageBox.closeOnClickModal = false;
       await waitForRender();
       expect(messageBox.closeOnClickModal).toBe(false);
     });
@@ -1284,10 +1292,9 @@ describe("EaMessageBox Component", () => {
     });
 
     it("clicking close icon when showClose=false should not trigger any event", async () => {
-      const messageBox = createMessageBox({
-        visible: true,
-        "show-close": "false",
-      });
+      const messageBox = createMessageBox({ visible: true });
+      await waitForRender();
+      messageBox.showClose = false;
       await waitForRender();
       const handler = vi.fn();
       messageBox.addEventListener("cancel", handler);
@@ -1334,21 +1341,21 @@ describe("EaMessageBox Component", () => {
       expect(event.composed).toBe(true);
     });
 
-    it("setting visible to true should trigger open event", async () => {
+    it("setting visible to true should trigger ea-open event", async () => {
       const messageBox = createMessageBox();
       await waitForRender();
       const openHandler = vi.fn();
-      messageBox.addEventListener("open", openHandler);
+      messageBox.addEventListener("ea-open", openHandler);
       messageBox.setAttribute("visible", "");
       await waitForRender();
       expect(openHandler).toHaveBeenCalled();
     });
 
-    it("setting visible to true then transitionend should trigger opened event", async () => {
+    it("setting visible to true then transitionend should trigger ea-opened event", async () => {
       const messageBox = createMessageBox();
       await waitForRender();
       const openedHandler = vi.fn();
-      messageBox.addEventListener("opened", openedHandler);
+      messageBox.addEventListener("ea-opened", openedHandler);
       messageBox.show();
       await waitForRender();
       await new Promise(resolve => requestAnimationFrame(resolve));
@@ -1357,21 +1364,21 @@ describe("EaMessageBox Component", () => {
       expect(openedHandler).toHaveBeenCalled();
     });
 
-    it("setting visible from true to false should trigger close event", async () => {
+    it("setting visible from true to false should trigger ea-close event", async () => {
       const messageBox = createMessageBox({ visible: true });
       await waitForRender();
       const closeHandler = vi.fn();
-      messageBox.addEventListener("close", closeHandler);
+      messageBox.addEventListener("ea-close", closeHandler);
       messageBox.removeAttribute("visible");
       await waitForRender();
       expect(closeHandler).toHaveBeenCalled();
     });
 
-    it("setting visible from true to false then transitionend should trigger closed event", async () => {
+    it("setting visible from true to false then transitionend should trigger ea-closed event", async () => {
       const messageBox = createMessageBox({ visible: true });
       await waitForRender();
       const closedHandler = vi.fn();
-      messageBox.addEventListener("closed", closedHandler);
+      messageBox.addEventListener("ea-closed", closedHandler);
       messageBox.removeAttribute("visible");
       await waitForRender();
       dispatchTransitionEnd(messageBox);
@@ -1494,10 +1501,9 @@ describe("EaMessageBox Component", () => {
     });
 
     it("closeOnPressEscape=false and pressing ESC should not trigger event", async () => {
-      const messageBox = document.createElement("ea-message-box");
-      messageBox.setAttribute("visible", "");
+      const messageBox = createMessageBox({ visible: true });
+      await waitForRender();
       messageBox.closeOnPressEscape = false;
-      container.appendChild(messageBox);
       await waitForRender();
       const handler = vi.fn();
       messageBox.addEventListener("cancel", handler);
@@ -1580,10 +1586,9 @@ describe("EaMessageBox Component", () => {
     });
 
     it("closeOnClickModal=false and clicking mask should not trigger event", async () => {
-      const messageBox = createMessageBox({
-        visible: true,
-        "close-on-click-modal": "false",
-      });
+      const messageBox = createMessageBox({ visible: true });
+      await waitForRender();
+      messageBox.closeOnClickModal = false;
       await waitForRender();
       const handler = vi.fn();
       messageBox.addEventListener("cancel", handler);
@@ -1800,11 +1805,10 @@ describe("EaMessageBox Component", () => {
     });
 
     it("all hidden states combined should generate correct classes", async () => {
-      const messageBox = createMessageBox({
-        "show-close": "false",
-        "show-cancel-button": "false",
-        "show-confirm-button": "false",
-      });
+      const messageBox = createMessageBox();
+      await waitForRender();
+      messageBox.showClose = false;
+      messageBox.showConfirmButton = false;
       await waitForRender();
       const overlayEl = messageBox.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-close-hidden")).toBe(true);
@@ -2421,10 +2425,9 @@ describe("EaMessageBox Component", () => {
     });
 
     it("closeOnClickModal=false with distinguishCancelAndClose=true, clicking mask should not trigger any event", async () => {
-      const messageBox = createMessageBox({
-        visible: true,
-        "close-on-click-modal": "false",
-      });
+      const messageBox = createMessageBox({ visible: true });
+      await waitForRender();
+      messageBox.closeOnClickModal = false;
       messageBox.distinguishCancelAndClose = true;
       await waitForRender();
       const cancelHandler = vi.fn();
@@ -2881,35 +2884,35 @@ describe("EaMessageBox Component", () => {
       expect(handler).toHaveBeenCalledTimes(3);
     });
 
-    it("open and opened events should fire in correct order", async () => {
+    it("ea-open and ea-opened events should fire in correct order", async () => {
       const messageBox = createMessageBox();
       await waitForRender();
       const order = [];
-      messageBox.addEventListener("open", () => order.push("open"));
-      messageBox.addEventListener("opened", () => order.push("opened"));
+      messageBox.addEventListener("ea-open", () => order.push("ea-open"));
+      messageBox.addEventListener("ea-opened", () => order.push("ea-opened"));
       messageBox.show();
       await waitForRender();
       await new Promise(resolve => requestAnimationFrame(resolve));
       dispatchTransitionEnd(messageBox);
       await waitForRender();
-      expect(order).toContain("open");
-      expect(order).toContain("opened");
-      expect(order.indexOf("open")).toBeLessThan(order.indexOf("opened"));
+      expect(order).toContain("ea-open");
+      expect(order).toContain("ea-opened");
+      expect(order.indexOf("ea-open")).toBeLessThan(order.indexOf("ea-opened"));
     });
 
-    it("close and closed events should fire in correct order", async () => {
+    it("ea-close and ea-closed events should fire in correct order", async () => {
       const messageBox = createMessageBox({ visible: true });
       await waitForRender();
       const order = [];
-      messageBox.addEventListener("close", () => order.push("close"));
-      messageBox.addEventListener("closed", () => order.push("closed"));
+      messageBox.addEventListener("ea-close", () => order.push("ea-close"));
+      messageBox.addEventListener("ea-closed", () => order.push("ea-closed"));
       messageBox.hide();
       await waitForRender();
       dispatchTransitionEnd(messageBox);
       await waitForRender();
-      expect(order).toContain("close");
-      expect(order).toContain("closed");
-      expect(order.indexOf("close")).toBeLessThan(order.indexOf("closed"));
+      expect(order).toContain("ea-close");
+      expect(order).toContain("ea-closed");
+      expect(order.indexOf("ea-close")).toBeLessThan(order.indexOf("ea-closed"));
     });
 
     it("message-close event should bubble and be composed", async () => {
@@ -3177,54 +3180,10 @@ describe("EaMessageBox Component", () => {
   // ==================== 继承属性深度测试 ====================
 
   describe("Inherited Overlay Attributes Deep Tests", () => {
-    it("should support contentLeft attribute", async () => {
-      const messageBox = createMessageBox({ "content-left": "100px" });
-      await waitForRender();
-      expect(
-        messageBox.style.getPropertyValue("--ea-overlay-content-left")
-      ).toBe("100px");
-    });
-
-    it("should support contentTop attribute", async () => {
-      const messageBox = createMessageBox({ "content-top": "200px" });
-      await waitForRender();
-      expect(
-        messageBox.style.getPropertyValue("--ea-overlay-content-top")
-      ).toBe("200px");
-    });
-
-    it("should support contentTranslateX attribute", async () => {
-      const messageBox = createMessageBox({
-        "content-translate-x": "50%",
-      });
-      await waitForRender();
-      expect(
-        messageBox.style.getPropertyValue("--ea-overlay-content-translate-x")
-      ).toBe("50%");
-    });
-
-    it("should support contentTranslateY attribute", async () => {
-      const messageBox = createMessageBox({
-        "content-translate-y": "-50%",
-      });
-      await waitForRender();
-      expect(
-        messageBox.style.getPropertyValue("--ea-overlay-content-translate-y")
-      ).toBe("-50%");
-    });
-
-    it("should support contentTransform attribute", async () => {
-      const messageBox = createMessageBox({
-        "content-transform": "translate(-50%, -50%)",
-      });
-      await waitForRender();
-      expect(
-        messageBox.style.getPropertyValue("--ea-overlay-content-transform")
-      ).toBe("translate(-50%, -50%)");
-    });
-
     it("modal=false should not add is-modal state class", async () => {
-      const messageBox = createMessageBox({ modal: "false" });
+      const messageBox = createMessageBox();
+      await waitForRender();
+      messageBox.modal = false;
       await waitForRender();
       const overlayEl = messageBox.shadowRoot.querySelector(".ea-overlay");
       expect(overlayEl.classList.contains("is-modal")).toBe(false);

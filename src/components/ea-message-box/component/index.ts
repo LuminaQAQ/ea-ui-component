@@ -467,12 +467,6 @@ export class EaMessageBoxElement extends EaOverlay {
     this._initDistinguishCancelAndCloseEvent();
   }
 
-  @listen("close")
-  private _handleCloseEvent(e: CustomEvent): void {
-    if (e.target !== this) return;
-    this._initDistinguishCancelAndCloseEvent();
-  }
-
   // ==================== 生命周期 ====================
 
   $mount(): void {

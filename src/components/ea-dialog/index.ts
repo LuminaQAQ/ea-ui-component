@@ -1,4 +1,5 @@
 import { EaOverlay } from "@/common/ea-overlay";
+import { EaOverlayClosedEvent } from "@/common/ea-overlay/events/EaOverlayClosedEvent";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
 import { query } from "@decorator/query";
@@ -219,8 +220,8 @@ export class EaDialog extends EaOverlay {
   /**
    * 处理关闭事件
    */
-  @listen("closed")
-  private _handleClosed(e: CustomEvent): void {
+  @listen("ea-closed")
+  private _handleClosed(e: EaOverlayClosedEvent): void {
     if (e.target !== this) return;
     this.hide();
   }

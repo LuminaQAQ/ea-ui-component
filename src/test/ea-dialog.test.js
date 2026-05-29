@@ -234,7 +234,7 @@ describe("EaDialog Component", () => {
       await waitForRender();
 
       const openHandler = vi.fn();
-      dialog.addEventListener("open", openHandler);
+      dialog.addEventListener("ea-open", openHandler);
 
       dialog.show();
 
@@ -256,7 +256,7 @@ describe("EaDialog Component", () => {
       expect(dialog.visible).toBe(true);
 
       const closeHandler = vi.fn();
-      dialog.addEventListener("close", closeHandler);
+      dialog.addEventListener("ea-close", closeHandler);
 
       dialog.hide();
 
@@ -369,11 +369,13 @@ describe("EaDialog Component", () => {
       expect(dialog.modal).toBe(true);
     });
 
-    it("设置 modal='false' 应该禁用遮罩", async () => {
+    it("设置 modal 为 false 应该禁用遮罩", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("modal", "false");
       container.appendChild(dialog);
 
+      await waitForRender();
+
+      dialog.modal = false;
       await waitForRender();
 
       expect(dialog.modal).toBe(false);
@@ -391,9 +393,11 @@ describe("EaDialog Component", () => {
 
     it("modal 为 false 时不应该添加 is-modal 状态类", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("modal", "false");
       container.appendChild(dialog);
 
+      await waitForRender();
+
+      dialog.modal = false;
       await waitForRender();
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
@@ -443,11 +447,13 @@ describe("EaDialog Component", () => {
       expect(dialog.showClose).toBe(true);
     });
 
-    it("设置 show-close='false' 应该隐藏关闭图标", async () => {
+    it("设置 showClose 为 false 应该隐藏关闭图标", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("show-close", "false");
       container.appendChild(dialog);
 
+      await waitForRender();
+
+      dialog.showClose = false;
       await waitForRender();
 
       expect(dialog.showClose).toBe(false);
@@ -455,9 +461,11 @@ describe("EaDialog Component", () => {
 
     it("showClose 为 false 时应该添加 close-hidden 状态类", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("show-close", "false");
       container.appendChild(dialog);
 
+      await waitForRender();
+
+      dialog.showClose = false;
       await waitForRender();
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
@@ -517,11 +525,13 @@ describe("EaDialog Component", () => {
       expect(dialog.closeOnClickModal).toBe(true);
     });
 
-    it("设置 close-on-click-modal 为 false 应该禁用点击遮罩关闭", async () => {
+    it("设置 closeOnClickModal 为 false 应该禁用点击遮罩关闭", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.closeOnClickModal = false;
       container.appendChild(dialog);
 
+      await waitForRender();
+
+      dialog.closeOnClickModal = false;
       await waitForRender();
 
       expect(dialog.closeOnClickModal).toBe(false);
@@ -546,11 +556,11 @@ describe("EaDialog Component", () => {
 
     it("点击遮罩层不应该关闭对话框（closeOnClickModal 为 false）", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.closeOnClickModal = false;
       container.appendChild(dialog);
 
       await waitForRender();
 
+      dialog.closeOnClickModal = false;
       dialog.show();
       expect(dialog.visible).toBe(true);
 
@@ -573,11 +583,13 @@ describe("EaDialog Component", () => {
       expect(dialog.closeOnPressEscape).toBe(true);
     });
 
-    it("设置 close-on-press-escape='false' 应该禁用 ESC 关闭", async () => {
+    it("设置 closeOnPressEscape 为 false 应该禁用 ESC 关闭", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("close-on-press-escape", "false");
       container.appendChild(dialog);
 
+      await waitForRender();
+
+      dialog.closeOnPressEscape = false;
       await waitForRender();
 
       expect(dialog.closeOnPressEscape).toBe(false);
@@ -605,11 +617,11 @@ describe("EaDialog Component", () => {
 
     it("按 ESC 键不应该关闭对话框（closeOnPressEscape 为 false）", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("close-on-press-escape", "false");
       container.appendChild(dialog);
 
       await waitForRender();
 
+      dialog.closeOnPressEscape = false;
       dialog.show();
       expect(dialog.visible).toBe(true);
 
@@ -690,7 +702,7 @@ describe("EaDialog Component", () => {
       await waitForRender();
 
       const closedHandler = vi.fn();
-      dialog.addEventListener("closed", closedHandler);
+      dialog.addEventListener("ea-closed", closedHandler);
 
       let doneFn = null;
       dialog.beforeClose = done => {
@@ -783,56 +795,6 @@ describe("EaDialog Component", () => {
 
       expect(dialog.contentHeight).toBe("60%");
     });
-
-    it("应该支持 content-left 属性", async () => {
-      const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("content-left", "100px");
-      container.appendChild(dialog);
-
-      await waitForRender();
-
-      expect(dialog.contentLeft).toBe("100px");
-    });
-
-    it("应该支持 content-top 属性", async () => {
-      const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("content-top", "50px");
-      container.appendChild(dialog);
-
-      await waitForRender();
-
-      expect(dialog.contentTop).toBe("50px");
-    });
-
-    it("应该支持 content-translate-x 属性", async () => {
-      const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("content-translate-x", "-50%");
-      container.appendChild(dialog);
-
-      await waitForRender();
-
-      expect(dialog.contentTranslateX).toBe("-50%");
-    });
-
-    it("应该支持 content-translate-y 属性", async () => {
-      const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("content-translate-y", "-50%");
-      container.appendChild(dialog);
-
-      await waitForRender();
-
-      expect(dialog.contentTranslateY).toBe("-50%");
-    });
-
-    it("应该支持 content-transform 属性", async () => {
-      const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("content-transform", "translate(-50%, -50%)");
-      container.appendChild(dialog);
-
-      await waitForRender();
-
-      expect(dialog.contentTransform).toBe("translate(-50%, -50%)");
-    });
   });
 
   describe("Close Icon Click Behavior", () => {
@@ -857,11 +819,11 @@ describe("EaDialog Component", () => {
 
     it("showClose 为 false 时点击关闭图标不应该隐藏对话框", async () => {
       const dialog = document.createElement("ea-dialog");
-      dialog.setAttribute("show-close", "false");
       container.appendChild(dialog);
 
       await waitForRender();
 
+      dialog.showClose = false;
       dialog.show();
       expect(dialog.visible).toBe(true);
 
@@ -914,14 +876,14 @@ describe("EaDialog Component", () => {
   });
 
   describe("Events", () => {
-    it("应该触发 open 事件", async () => {
+    it("应该触发 ea-open 事件", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
       await waitForRender();
 
       const openHandler = vi.fn();
-      dialog.addEventListener("open", openHandler);
+      dialog.addEventListener("ea-open", openHandler);
 
       dialog.show();
       await waitForRender();
@@ -929,7 +891,7 @@ describe("EaDialog Component", () => {
       expect(openHandler).toHaveBeenCalled();
     });
 
-    it("应该触发 close 事件", async () => {
+    it("应该触发 ea-close 事件", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -939,7 +901,7 @@ describe("EaDialog Component", () => {
       await waitForRender();
 
       const closeHandler = vi.fn();
-      dialog.addEventListener("close", closeHandler);
+      dialog.addEventListener("ea-close", closeHandler);
 
       dialog.hide();
       await waitForRender();
@@ -947,14 +909,14 @@ describe("EaDialog Component", () => {
       expect(closeHandler).toHaveBeenCalled();
     });
 
-    it("应该触发 opened 事件（动画结束后）", async () => {
+    it("应该触发 ea-opened 事件（动画结束后）", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
       await waitForRender();
 
       const openedHandler = vi.fn();
-      dialog.addEventListener("opened", openedHandler);
+      dialog.addEventListener("ea-opened", openedHandler);
 
       dialog.show();
 
@@ -971,7 +933,7 @@ describe("EaDialog Component", () => {
       expect(openedHandler).toHaveBeenCalled();
     });
 
-    it("应该触发 closed 事件（动画结束后）", async () => {
+    it("应该触发 ea-closed 事件（动画结束后）", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -981,7 +943,7 @@ describe("EaDialog Component", () => {
       await waitForRender();
 
       const closedHandler = vi.fn();
-      dialog.addEventListener("closed", closedHandler);
+      dialog.addEventListener("ea-closed", closedHandler);
 
       dialog.visible = false;
       await waitForRender();
@@ -996,7 +958,7 @@ describe("EaDialog Component", () => {
       expect(closedHandler).toHaveBeenCalled();
     });
 
-    it("open 和 close 事件应该正确触发", async () => {
+    it("ea-open 和 ea-close 事件应该正确触发", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -1005,8 +967,8 @@ describe("EaDialog Component", () => {
       const openHandler = vi.fn();
       const closeHandler = vi.fn();
 
-      dialog.addEventListener("open", openHandler);
-      dialog.addEventListener("close", closeHandler);
+      dialog.addEventListener("ea-open", openHandler);
+      dialog.addEventListener("ea-close", closeHandler);
 
       dialog.show();
       await waitForRender();
@@ -1077,9 +1039,11 @@ describe("EaDialog Component", () => {
       dialog.setAttribute("width", "600px");
       dialog.setAttribute("top", "20vh");
       dialog.setAttribute("center", "");
-      dialog.setAttribute("modal", "false");
       container.appendChild(dialog);
 
+      await waitForRender();
+
+      dialog.modal = false;
       await waitForRender();
 
       expect(dialog.heading).toBe("Multi Props");

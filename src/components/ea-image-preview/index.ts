@@ -1,4 +1,5 @@
 import { EaOverlay } from "@/common/ea-overlay";
+import { EaOverlayClosedEvent } from "@/common/ea-overlay/events/EaOverlayClosedEvent";
 import { attribute } from "@decorator/attribute";
 import { CustomElement } from "@decorator/custom-element";
 import { query } from "@decorator/query";
@@ -492,8 +493,8 @@ export class EaImagePreview extends EaOverlay {
     this._onImgMoveEvent(e);
   }
 
-  @listen("closed")
-  private _handleClosed(e: CustomEvent): void {
+  @listen("ea-closed")
+  private _handleClosed(e: EaOverlayClosedEvent): void {
     if (e.target !== this) return;
     this.reset();
   }

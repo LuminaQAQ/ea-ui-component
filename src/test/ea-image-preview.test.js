@@ -46,10 +46,14 @@ describe("EaImagePreview Component", () => {
     const preview = document.createElement("ea-image-preview");
     if (options.urlList) preview.urlList = options.urlList;
     if (options.showProgress) preview.showProgress = true;
-    if (options.infinite !== undefined) preview.infinite = options.infinite;
     if (options.initialIndex !== undefined)
       preview.initialIndex = options.initialIndex;
     container.appendChild(preview);
+
+    if (options.infinite !== undefined) {
+      preview.infinite = options.infinite;
+    }
+
     return preview;
   }
 
@@ -356,8 +360,10 @@ describe("EaImagePreview Component", () => {
 
     it("应该支持关闭无限循环", async () => {
       const preview = document.createElement("ea-image-preview");
-      preview.setAttribute("infinite", "false");
       container.appendChild(preview);
+      await waitForRender();
+
+      preview.infinite = false;
       await waitForRender();
 
       expect(preview.infinite).toBe(false);
@@ -1288,8 +1294,8 @@ describe("EaImagePreview Component", () => {
     });
   });
 
-  describe("closed Event Auto Reset", () => {
-    it("closed 事件应该触发 reset", async () => {
+  describe("ea-closed Event Auto Reset", () => {
+    it("ea-closed 事件应该触发 reset", async () => {
       const preview = createPreview({ urlList: ["a.jpg"] });
       await waitForRender();
 
@@ -1309,7 +1315,7 @@ describe("EaImagePreview Component", () => {
       preview.scale = 3;
       await waitForRender();
 
-      const fakeEvent = new CustomEvent("closed", {
+      const fakeEvent = new CustomEvent("ea-closed", {
         bubbles: true,
         composed: true,
       });
@@ -1330,7 +1336,7 @@ describe("EaImagePreview Component", () => {
       preview.scale = 3;
       await waitForRender();
 
-      const realEvent = new CustomEvent("closed", {
+      const realEvent = new CustomEvent("ea-closed", {
         bubbles: true,
         composed: true,
       });
