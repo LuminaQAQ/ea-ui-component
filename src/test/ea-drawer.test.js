@@ -36,14 +36,10 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await waitForRender();
 
-      expect(
-        drawer.shadowRoot.querySelector('[part="container"]')
-      ).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(drawer.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
       expect(drawer.shadowRoot.querySelector('[part="heading"]')).toBeTruthy();
-      expect(
-        drawer.shadowRoot.querySelector('[part="close-icon"]')
-      ).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
       expect(drawer.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
       expect(drawer.shadowRoot.querySelector('[part="footer"]')).toBeTruthy();
     });
@@ -55,9 +51,7 @@ describe("EaDrawer Component", () => {
 
       expect(drawer.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
       expect(drawer.shadowRoot.querySelector(".ea-overlay__mask")).toBeTruthy();
-      expect(
-        drawer.shadowRoot.querySelector(".ea-overlay__content")
-      ).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector(".ea-overlay__content")).toBeTruthy();
     });
 
     it("应该包含抽屉主体结构", async () => {
@@ -66,21 +60,11 @@ describe("EaDrawer Component", () => {
       await waitForRender();
 
       expect(drawer.shadowRoot.querySelector(".ea-drawer-main")).toBeTruthy();
-      expect(
-        drawer.shadowRoot.querySelector(".ea-drawer-main__header")
-      ).toBeTruthy();
-      expect(
-        drawer.shadowRoot.querySelector(".ea-drawer-main__heading")
-      ).toBeTruthy();
-      expect(
-        drawer.shadowRoot.querySelector(".ea-drawer-main__close-icon")
-      ).toBeTruthy();
-      expect(
-        drawer.shadowRoot.querySelector(".ea-drawer-main__content")
-      ).toBeTruthy();
-      expect(
-        drawer.shadowRoot.querySelector(".ea-drawer-main__footer")
-      ).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__header")).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__heading")).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__close-icon")).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__content")).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector(".ea-drawer-main__footer")).toBeTruthy();
     });
 
     it("应该包含 header、footer 和默认插槽", async () => {
@@ -481,9 +465,7 @@ describe("EaDrawer Component", () => {
 
       expect(drawer.visible).toBe(true);
 
-      const closeIcon = drawer.shadowRoot.querySelector(
-        ".ea-drawer-main__close-icon"
-      );
+      const closeIcon = drawer.shadowRoot.querySelector(".ea-drawer-main__close-icon");
       closeIcon.click();
 
       await waitForRender();
@@ -503,9 +485,7 @@ describe("EaDrawer Component", () => {
 
       expect(drawer.visible).toBe(true);
 
-      const closeIcon = drawer.shadowRoot.querySelector(
-        ".ea-drawer-main__close-icon"
-      );
+      const closeIcon = drawer.shadowRoot.querySelector(".ea-drawer-main__close-icon");
       closeIcon.click();
 
       await waitForRender();
@@ -1054,9 +1034,7 @@ describe("EaDrawer Component", () => {
       container.appendChild(drawer);
       await waitForRender();
 
-      expect(
-        drawer.shadowRoot.querySelector('[part="container"]')
-      ).toBeTruthy();
+      expect(drawer.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(drawer.getAttribute("role")).toBe("dialog");
     });
 

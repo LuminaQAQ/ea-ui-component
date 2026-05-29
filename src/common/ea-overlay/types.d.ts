@@ -16,7 +16,7 @@ export interface EaOverlayElement extends HTMLElement {
   contentWidth: string;
   contentMaxWidth: string;
   contentHeight: string;
-  beforeClose: ((done: () => void) => void) | null;
+  beforeClose: ((done: (cancel?: boolean) => void) => void) | null;
 
   show(): void;
   hide(): void;
@@ -43,7 +43,7 @@ declare module "vue" {
       contentWidth?: string;
       contentMaxWidth?: string;
       contentHeight?: string;
-      beforeClose?: ((done: () => void) => void) | null;
+      beforeClose?: ((done: (cancel?: boolean) => void) => void) | null;
     }>;
   }
 }
@@ -65,7 +65,7 @@ declare module "react" {
         contentWidth?: string;
         contentMaxWidth?: string;
         contentHeight?: string;
-        beforeClose?: ((done: () => void) => void) | null;
+        beforeClose?: ((done: (cancel?: boolean) => void) => void) | null;
         onEaOpen?: (event: EaOverlayOpenEvent) => void;
         onEaOpened?: (event: EaOverlayOpenedEvent) => void;
         onEaClose?: (event: EaOverlayCloseEvent) => void;

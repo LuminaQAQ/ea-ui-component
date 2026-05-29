@@ -355,7 +355,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("modal", "false");
+      dialog.removeAttribute("modal");
       await waitForRender();
 
       expect(dialog.modal).toBe(false);
@@ -377,7 +377,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("modal", "false");
+      dialog.removeAttribute("modal");
       await waitForRender();
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
@@ -433,7 +433,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("show-close", "false");
+      dialog.removeAttribute("show-close");
       await waitForRender();
 
       expect(dialog.showClose).toBe(false);
@@ -445,7 +445,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("show-close", "false");
+      dialog.removeAttribute("show-close");
       await waitForRender();
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
@@ -511,7 +511,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("close-on-click-modal", "false");
+      dialog.removeAttribute("close-on-click-modal");
       await waitForRender();
 
       expect(dialog.closeOnClickModal).toBe(false);
@@ -540,7 +540,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("close-on-click-modal", "false");
+      dialog.removeAttribute("close-on-click-modal");
       dialog.show();
       expect(dialog.visible).toBe(true);
 
@@ -569,7 +569,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("close-on-press-escape", "false");
+      dialog.removeAttribute("close-on-press-escape");
       await waitForRender();
 
       expect(dialog.closeOnPressEscape).toBe(false);
@@ -601,7 +601,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("close-on-press-escape", "false");
+      dialog.removeAttribute("close-on-press-escape");
       dialog.show();
       expect(dialog.visible).toBe(true);
 
@@ -801,7 +801,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("show-close", "false");
+      dialog.removeAttribute("show-close");
       dialog.show();
       expect(dialog.visible).toBe(true);
 
@@ -1009,7 +1009,7 @@ describe("EaDialog", () => {
 
       await waitForRender();
 
-      dialog.setAttribute("modal", "false");
+      dialog.removeAttribute("modal");
       await waitForRender();
 
       expect(dialog.heading).toBe("Multi Props");

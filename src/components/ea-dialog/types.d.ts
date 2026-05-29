@@ -24,7 +24,7 @@ export interface EaDialogElement extends HTMLElement {
   contentWidth: string;
   contentMaxWidth: string;
   contentHeight: string;
-  beforeClose: ((done: () => void) => void) | null;
+  beforeClose: ((done: (cancel?: boolean) => void) => void) | null;
 
   show(): void;
   hide(): void;
@@ -53,7 +53,7 @@ export interface EaDialogVueProps {
   contentWidth?: string;
   contentMaxWidth?: string;
   contentHeight?: string;
-  beforeClose?: ((done: () => void) => void) | null;
+  beforeClose?: ((done: (cancel?: boolean) => void) => void) | null;
 }
 
 export interface EaDialogVueEvents {
@@ -111,7 +111,7 @@ export interface EaDialogReactProps extends HTMLAttributes<HTMLElement> {
   contentWidth?: string;
   contentMaxWidth?: string;
   contentHeight?: string;
-  beforeClose?: ((done: () => void) => void) | null;
+  beforeClose?: ((done: (cancel?: boolean) => void) => void) | null;
   onEaOpen?: (event: CustomEvent) => void;
   onEaOpened?: (event: CustomEvent) => void;
   onEaClose?: (event: CustomEvent) => void;

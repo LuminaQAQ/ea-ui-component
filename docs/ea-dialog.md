@@ -901,7 +901,7 @@ eventsExample.init();
 | `content-width` | 内容宽度 | `string` | — | `""` |
 | `content-max-width` | 内容最大宽度 | `string` | — | `""` |
 | `content-height` | 内容高度 | `string` | — | `""` |
-| `beforeClose` | 关闭前回调函数，调用 done() 后关闭 | `Function` | — | `null` |
+| `beforeClose` | 关闭前回调函数，`done()` 确认关闭，`done(true)` 取消关闭 | `Function` | — | `null` |
 
 ### ea-dialog CSS Part
 

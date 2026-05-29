@@ -291,7 +291,7 @@ basicExample.init();
 
 ## 关闭前触发
 
-关闭前触发，可以拦截关闭，需调用 `done()` 回调函数才能完成关闭。通过设置 `beforeClose` 属性为一个函数来实现。
+关闭前触发，可以拦截关闭，需调用 `done()` 回调函数才能完成关闭。调用 `done(true)` 可以取消关闭。通过设置 `beforeClose` 属性为一个函数来实现。
 
 ::: tip
 \< 手动调用 `overlay.hide()` \> + \< 设置 `close-on-click-modal="false"` \>可达到同样的效果。
@@ -358,7 +358,7 @@ overlay.beforeClose = async done => {
 | content-width | 内容宽度 | String | — | '' |
 | content-max-width | 内容最大宽度 | String | — | '' |
 | content-height | 内容高度 | String | — | '' |
-| beforeClose <PropTag /> | 关闭前触发的回调函数，接收 `done` 回调作为参数用于完成关闭 | Function | — | null |
+| beforeClose <PropTag /> | 关闭前触发的回调函数，接收 `done` 回调作为参数。`done()` 确认关闭，`done(true)` 取消关闭 | Function | — | null |
 
 ### Overlay CSS Part
 

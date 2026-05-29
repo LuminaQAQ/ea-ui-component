@@ -1,42 +1,25 @@
-$directions: (
-  ltr: (left: 0,
-    y: 0,
-  ),
-  rtl: (right: 0,
-    y: 0,
-  ),
-  ttb: (top: 0,
-    x: 0,
-  ),
-  btt: (bottom: 0,
-    x: 0,
-  ),
-);
+$name: ea-drawer-main;
+$css-prefix: ea-drawer;
 
 :host {
+  --#{$css-prefix}-size: 30%;
+  --#{$css-prefix}-padding: var(--spacing-lg);
+
+  --#{$css-prefix}-heading-color: var(--grey-900);
+  --#{$css-prefix}-close-icon-color: var(--grey-500);
+  --#{$css-prefix}-content-color: var(--grey-700);
+  --#{$css-prefix}-bg-color: var(--white);
+
+  --#{$css-prefix}-heading-font-size: var(--font-size-lg);
+  --#{$css-prefix}-close-icon-size: var(--font-size-lg);
+
   --ea-overlay-content-left: unset;
   --ea-overlay-content-top: unset;
-
   --ea-overlay-content-height: auto;
   --ea-overlay-content-width: auto;
 }
 
-:host {
-  --ea-drawer-x: 0;
-  --ea-drawer-y: 0;
-
-  --ea-drawer-size: 30%;
-  --ea-drawer-padding-primary: 20px;
-
-  --ea-drawer-color-text: var(--grey-900);
-  --ea-drawer-color-text-secondary: var(--grey-500);
-
-  --ea-drawer-header-font-size: var(--font-size-lg);
-  --ea-drawer-close-icon-size: 18px;
-}
-
-@include block(ea-drawer-main) {
-  background-color: white;
+@include block($name) {
   width: 100%;
   height: 100%;
 
@@ -51,134 +34,127 @@ $directions: (
     justify-content: space-between;
 
     box-sizing: border-box;
-    padding: var(--ea-drawer-padding-primary);
+    padding: var(--#{$css-prefix}-padding);
     padding-bottom: 0;
-    margin-bottom: 32px;
+    margin-bottom: var(--spacing-lg);
 
-    font-size: var(--ea-drawer-header-font-size);
-    color: var(--ea-drawer-color-text);
+    color: var(--#{$css-prefix}-heading-color);
+    font-size: var(--#{$css-prefix}-heading-font-size);
   }
 
   @include element(close-icon) {
     cursor: pointer;
 
-    font-size: var(--ea-drawer-close-icon-size);
-    color: var(--ea-drawer-color-text-secondary);
+    color: var(--#{$css-prefix}-close-icon-color);
+    font-size: var(--#{$css-prefix}-close-icon-size);
   }
 
   @include element(content) {
     flex: 1 0 auto;
 
     box-sizing: border-box;
-    padding: var(--ea-drawer-padding-primary);
+    padding: var(--#{$css-prefix}-padding);
 
-    color: var(--ea-drawer-color-text);
+    color: var(--#{$css-prefix}-content-color);
   }
 
   @include element(footer) {
     box-sizing: border-box;
-    padding: var(--ea-drawer-padding-primary);
+    padding: var(--#{$css-prefix}-padding);
   }
 }
 
 @include block(ea-drawer) {
   @include state(close-hidden) {
-    .ea-drawer-main__close-icon {
+    .#{$name}__close-icon {
       display: none;
     }
   }
 
   @include state(header-hidden) {
-    .ea-drawer-main__header {
+    .#{$name}__header {
       display: none;
-    }
-  }
-
-  @each $direction, $options in $directions {
-    @include modifier($direction) {
-      .ea-overlay__content {
-        @if ($direction ==ltr or $direction ==rtl) {
-          --ea-overlay-content-height: 100%;
-          --ea-overlay-content-width: var(--ea-drawer-size);
-
-          top: var(--ea-drawer-y);
-        }
-
-        @else {
-          --ea-overlay-content-height: var(--ea-drawer-size);
-          --ea-overlay-content-width: 100%;
-
-          left: var(--ea-drawer-x);
-        }
-
-        @if ($direction ==ltr) {
-          transform: translate(-100%, 0);
-          left: var(--ea-drawer-x);
-        }
-
-        @if ($direction ==rtl) {
-          transform: translate(100%, 0);
-          right: var(--ea-drawer-x);
-        }
-
-        @if ($direction ==ttb) {
-          transform: translate(0, -100%);
-          top: var(--ea-drawer-y);
-        }
-
-        @if ($direction ==btt) {
-          transform: translate(0, 100%);
-          bottom: var(--ea-drawer-y);
-        }
-      }
     }
   }
 }
 
 @include block(ea-overlay) {
-  @include element(mask) {
-    box-sizing: border-box;
-    padding: var(--ea-message-padding);
-  }
-
   @include element(content) {
-    width: var(--ea-overlay-content-width);
-    height: var(--ea-overlay-content-height);
-
-    transition: all 0.3s;
+    background-color: var(--#{$css-prefix}-bg-color);
+    filter: opacity(1);
+    transition: transform var(--ea-overlay-transition);
   }
 
-  @include modifier(is-show) {
+  &.ea-drawer--rtl {
+    justify-content: flex-end;
+    align-items: stretch;
+
     .ea-overlay__content {
+      height: 100%;
+      width: var(--#{$css-prefix}-size);
+      transform: translate(100%, 0);
+    }
+  }
+
+  &.ea-drawer--ltr {
+    justify-content: flex-start;
+    align-items: stretch;
+
+    .ea-overlay__content {
+      height: 100%;
+      width: var(--#{$css-prefix}-size);
+      transform: translate(-100%, 0);
+    }
+  }
+
+  &.ea-drawer--ttb {
+    justify-content: center;
+    align-items: flex-start;
+
+    .ea-overlay__content {
+      height: var(--#{$css-prefix}-size);
+      width: 100%;
+      transform: translate(0, -100%);
+    }
+  }
+
+  &.ea-drawer--btt {
+    justify-content: center;
+    align-items: flex-end;
+
+    .ea-overlay__content {
+      height: var(--#{$css-prefix}-size);
+      width: 100%;
+      transform: translate(0, 100%);
+    }
+  }
+
+  @include state(show) {
+    .ea-overlay__content {
+      filter: opacity(1);
       transform: translate(0, 0);
     }
   }
 
-  @include modifier(open) {
-    display: block;
-  }
+  @include state(before-close) {
+    .ea-overlay__content {
+      filter: opacity(1);
+    }
 
-  @include modifier(before-close) {
-    @each $direction, $options in $directions {
-      &.ea-drawer--#{$direction} {
-        .ea-overlay__content {
-          @if ($direction ==ltr) {
-            transform: translate(-100%, 0);
-          }
+    &.ea-drawer--rtl .ea-overlay__content {
+      transform: translate(100%, 0);
+    }
 
-          @if ($direction ==rtl) {
-            transform: translate(100%, 0);
-          }
+    &.ea-drawer--ltr .ea-overlay__content {
+      transform: translate(-100%, 0);
+    }
 
-          @if ($direction ==ttb) {
-            transform: translate(0, -100%);
-          }
+    &.ea-drawer--ttb .ea-overlay__content {
+      transform: translate(0, -100%);
+    }
 
-          @if ($direction ==btt) {
-            transform: translate(0, 100%);
-          }
-        }
-      }
+    &.ea-drawer--btt .ea-overlay__content {
+      transform: translate(0, 100%);
     }
   }
 }
