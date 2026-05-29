@@ -883,7 +883,7 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       const rotateSpy = vi.fn();
-      preview.addEventListener("rotate", rotateSpy);
+      preview.addEventListener("ea-rotate", rotateSpy);
 
       preview.shadowRoot
         .querySelector(".ea-image-preview__rotate-right-icon")
@@ -898,7 +898,7 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       let capturedEvent = null;
-      preview.addEventListener("rotate", e => {
+      preview.addEventListener("ea-rotate", e => {
         capturedEvent = e;
       });
 
@@ -1122,7 +1122,7 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       const switchSpy = vi.fn();
-      preview.addEventListener("switch", switchSpy);
+      preview.addEventListener("ea-switch", switchSpy);
 
       preview.index = 1;
       await waitForRender();
@@ -1138,7 +1138,7 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       let capturedEvent = null;
-      preview.addEventListener("switch", e => {
+      preview.addEventListener("ea-switch", e => {
         capturedEvent = e;
       });
 
@@ -1287,10 +1287,10 @@ describe("EaImagePreview Component", () => {
       const content = preview.shadowRoot.querySelector(".ea-overlay__content");
       expect(
         content.style.getPropertyValue("--ea-image-preview-img-move-x")
-      ).toBe("0");
+      ).toBe("0px");
       expect(
         content.style.getPropertyValue("--ea-image-preview-img-move-y")
-      ).toBe("0");
+      ).toBe("0px");
     });
   });
 

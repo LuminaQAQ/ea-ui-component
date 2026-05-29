@@ -1,10 +1,8 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { property } from "@decorator/property";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
+import { EaImageLoadEvent } from "./events/EaImageLoadEvent";
+import { EaImageErrorEvent } from "./events/EaImageErrorEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-image" as const;
@@ -20,6 +18,32 @@ export type ImageFit =
 export type ImageLoading = "lazy" | "eager";
 export type ImageStatus = "loading" | "error" | "success";
 
+/**
+ * @summary 图片组件，在保留原生 img 特性下，支持懒加载、自定义占位、加载失败和图片预览功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-image-preview
+ *
+ * @slot error - 图片加载失败时显示的内容。
+ * @slot placeholder - 图片未加载时的占位内容。
+ * @slot progress - 图片预览时的进度显示（需启用 preview）。
+ * @slot toolbar - 图片预览工具栏（需启用 preview）。
+ *
+ * @event load - 图片加载成功时触发。
+ * @event error - 图片加载失败时触发。
+ *
+ * @csspart container - 外层容器。
+ * @csspart image - 图片元素。
+ * @csspart error - 加载失败区域。
+ * @csspart placeholder - 占位内容区域。
+ * @csspart preview - 预览容器。
+ *
+ * @cssproperty --ea-image-width - 图片宽度。
+ * @cssproperty --ea-image-height - 图片高度。
+ * @cssproperty --ea-image-fit - 图片填充模式。
+ * @cssproperty --ea-image-background - 图片背景颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaImage extends EaBase {
   // ==================== DOM 元素引用 ====================
@@ -167,7 +191,7 @@ export class EaImage extends EaBase {
     type: Boolean,
     default: false,
     async observer(this: EaImage, newVal: boolean) {
-      await this._updatePreviewProperty("hideOnClickModal", newVal);
+      await this._updatePreviewProperty("closeOnClickModal", !newVal);
     },
   })
   hideOnClickModal: boolean = false;
@@ -176,7 +200,7 @@ export class EaImage extends EaBase {
     type: Number,
     default: 2000,
     async observer(this: EaImage, newVal: number) {
-      await this._updatePreviewProperty("zIndex", newVal);
+      await this._updatePreviewProperty("zIndex", String(newVal));
     },
   })
   zIndex: number = 2000;
@@ -283,6 +307,11 @@ export class EaImage extends EaBase {
     return className;
   }
 
+  /**
+   * 处理插槽内容变化，有内容时添加 slot 属性以转发到 preview
+   * @param slotElement - 插槽元素
+   * @param slotName - 插槽名称
+   */
   private _handleSlotChange(
     slotElement: HTMLSlotElement,
     slotName: string
@@ -301,6 +330,11 @@ export class EaImage extends EaBase {
     }
   }
 
+  /**
+   * 更新 preview 子组件的属性
+   * @param prop - 属性名
+   * @param value - 属性值
+   */
   private async _updatePreviewProperty(
     prop: string,
     value: any
@@ -312,6 +346,10 @@ export class EaImage extends EaBase {
     this._imagePreview[prop] = value;
   }
 
+  /**
+   * 加载图片
+   * @param src - 图片地址
+   */
   private _loadImage(src: string): void {
     this.updateContainerClasslist();
 
@@ -330,17 +368,21 @@ export class EaImage extends EaBase {
       this._states.imageStatus = "success";
       this.updateContainerClasslist();
 
-      this.emit("load");
+      this.dispatchEvent(new EaImageLoadEvent());
     };
 
     img.onerror = () => {
       this._states.imageStatus = "error";
       this.updateContainerClasslist();
 
-      this.emit("error");
+      this.dispatchEvent(new EaImageErrorEvent());
     };
   }
 
+  /**
+   * 设置懒加载观察器
+   * @param img - 图片元素
+   */
   private _setupLazyLoad(img: HTMLImageElement): void {
     this._lazyObserver?.disconnect();
 
@@ -355,18 +397,21 @@ export class EaImage extends EaBase {
     this._lazyObserver.observe(this);
   }
 
+  /** 切换预览图片到指定索引 */
   setActiveItem(index: number): void {
     if (!this.preview) return;
 
     this._imagePreview.setActiveItem(index);
   }
 
+  /** 重置图片预览状态 */
   reset(): void {
     if (!this.preview) return;
 
     this._imagePreview.reset();
   }
 
+  /** 显示图片预览 */
   showPreview(): void {
     this._imagePreview.visible = true;
   }
@@ -413,6 +458,22 @@ export class EaImage extends EaBase {
   $mount(): void {
     this._abortController?.abort();
     this._abortController = new AbortController();
+
+    this._image.addEventListener(
+      "load",
+      (e: Event) => {
+        e.stopPropagation();
+      },
+      { signal: this._abortController.signal }
+    );
+
+    this._image.addEventListener(
+      "error",
+      (e: Event) => {
+        e.stopPropagation();
+      },
+      { signal: this._abortController.signal }
+    );
 
     this.updateContainerClasslist();
   }

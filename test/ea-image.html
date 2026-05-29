@@ -81,17 +81,41 @@
 
     <div class="demo">
       <ea-image
+        id="placeholderImage"
         class="image"
         width="200px"
         height="150px"
         fit="cover"
-        src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+        src=""
       >
         <div class="image-slot" slot="placeholder">
           Loading<span class="dot">...</span>
         </div>
       </ea-image>
+      <ea-button id="reloadButton">Reload</ea-button>
     </div>
+
+    <script type="module">
+      const placeholderExample = {
+        image: document.querySelector("#placeholderImage"),
+        button: document.querySelector("#reloadButton"),
+
+        async init() {
+          await customElements.whenDefined("ea-image");
+
+          this.button.addEventListener("click", () => {
+            this.image.setAttribute("src", "");
+            setTimeout(() => {
+              this.image.setAttribute(
+                "src",
+                "https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+              );
+            }, 500);
+          });
+        },
+      };
+      placeholderExample.init();
+    </script>
 
     <hr />
     <!-- #endregion  -->

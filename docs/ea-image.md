@@ -5,6 +5,26 @@ onMounted(() => {
   import('../dist/components/index.js')
   import('../dist/assets/icon.css')
 
+  const placeholderExample = {
+    image: document.querySelector("#placeholderImage"),
+    button: document.querySelector("#reloadButton"),
+
+    async init() {
+      await customElements.whenDefined("ea-image");
+
+      this.button.addEventListener("click", () => {
+        this.image.setAttribute("src", "");
+        setTimeout(() => {
+          this.image.setAttribute(
+            "src",
+            "https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+          );
+        }, 500);
+      });
+    },
+  };
+  placeholderExample.init();
+
   const previewExample = {
     image: document.querySelector("#previewImage"),
     list: [
@@ -115,6 +135,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+  .image-slot {
+    margin: auto;
+  }
+
   .viewer-error {
     width: 100%;
     height: 100%;
@@ -250,37 +274,43 @@ await customElements.whenDefined("ea-image-preview");
 
 ## 占位内容
 
-在 `slot="placeholder"` 插槽中自定义占位内容。
+在 `slot="placeholder"` 插槽中自定义占位内容。点击 Reload 按钮可重新加载图片，观察占位内容到加载完成的过渡效果。
 
 <div class="demo">
   <ea-image
+    id="placeholderImage"
     class="image"
     width="200px"
     height="150px"
     fit="cover"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+    src=""
   >
     <div class="image-slot" slot="placeholder">
       Loading<span class="dot">...</span>
     </div>
   </ea-image>
+  <ea-button id="reloadButton">Reload</ea-button>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
 ```html
 <div class="demo">
   <ea-image
+    id="placeholderImage"
     class="image"
     width="200px"
     height="150px"
     fit="cover"
-    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+    src=""
   >
     <div class="image-slot" slot="placeholder">
       Loading<span class="dot">...</span>
     </div>
   </ea-image>
+  <ea-button id="reloadButton">Reload</ea-button>
 </div>
 ```
 
@@ -290,7 +320,31 @@ await customElements.whenDefined("ea-image-preview");
 }
 ```
 
+```js
+const placeholderExample = {
+  image: document.querySelector("#placeholderImage"),
+  button: document.querySelector("#reloadButton"),
+
+  async init() {
+    await customElements.whenDefined("ea-image");
+
+    this.button.addEventListener("click", () => {
+      this.image.setAttribute("src", "");
+      setTimeout(() => {
+        this.image.setAttribute(
+          "src",
+          "https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+        );
+      }, 500);
+    });
+  },
+};
+placeholderExample.init();
+```
+
 :::
+
+::::
 
 ## 加载失败
 
@@ -341,7 +395,7 @@ await customElements.whenDefined("ea-image-preview");
   ></ea-image>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -850,8 +904,8 @@ customProgressExample.init();
 
 | 事件名称 | 说明               | 回调参数   |
 | -------- | ------------------ | ---------- |
-| load     | 图片加载成功时触发 | (e: Event) |
-| error    | 图片加载失败时触发 | (e: Event) |
+| load  | 图片加载成功时触发 | (e: Event) |
+| error | 图片加载失败时触发 | (e: Event) |
 
 ### Image Slots
 
@@ -866,24 +920,25 @@ customProgressExample.init();
 
 ### ImagePreview Attributes
 
-| 参数                              | 说明                                                | 类型     | 可选值 | 默认值        |
-| --------------------------------- | --------------------------------------------------- | -------- | ------ | ------------- |
-| visible                           | 是否可见（控制遮罩显示/隐藏）                       | Boolean  | —      | false         |
-| modal                             | 是否显示遮罩层（继承自 ea-overlay）                 | Boolean  | —      | true          |
-| urlList <ea-tag>Prop</ea-tag>     | 图片地址列表                                        | Array    | —      | []            |
-| initial-index                     | 初始索引，用于初始化 index                          | Number   | —      | 0             |
-| index                             | 当前预览的图片索引（可读写，会触发切换逻辑）        | Number   | —      | initial-index |
-| infinite                          | 是否在首尾继续循环                                  | Boolean  | —      | true          |
-| zoom-rate                         | 缩放步长（每次缩放的倍率因子）                      | Number   | —      | 1.2           |
-| zoom                              | 缩放倍数                                            | Number   | —      | 1             |
-| scale                             | 当前缩放比例（可读写，受 min-scale/max-scale 限制） | Number   | —      | 1             |
-| min-scale                         | 最小缩放比例                                        | Number   | —      | 0.2           |
-| max-scale                         | 最大缩放比例                                        | Number   | —      | 7             |
-| close-on-press-escape             | 是否支持按 Escape 关闭                              | Boolean  | —      | true          |
-| close-on-click-modal              | 点击遮罩是否关闭（继承自 ea-overlay）               | Boolean  | —      | true          |
-| show-progress                     | 是否显示进度（progress 区域会渲染 slot 或文本）     | Boolean  | —      | false         |
-| append-to-body                    | 是否插入到 body                                     | Boolean  | —      | false         |
-| z-index                           | 遮罩层的 z-index（继承自 ea-overlay）               | String   | —      | —             |
+| 参数                              | 说明                                                                            | 类型     | 可选值 | 默认值        |
+| --------------------------------- | ------------------------------------------------------------------------------- | -------- | ------ | ------------- |
+| visible                           | 是否可见（控制遮罩显示/隐藏）                                                   | Boolean  | —      | false         |
+| modal                             | 是否显示遮罩层（继承自 ea-overlay）                                             | Boolean  | —      | true          |
+| urlList <ea-tag>Prop</ea-tag>     | 图片地址列表                                                                    | Array    | —      | []            |
+| initial-index                     | 初始索引，用于初始化 index                                                      | Number   | —      | 0             |
+| index                             | 当前预览的图片索引（可读写，会触发切换逻辑）                                    | Number   | —      | initial-index |
+| infinite                          | 是否在首尾继续循环                                                              | Boolean  | —      | true          |
+| zoom-rate                         | 缩放步长（每次缩放的倍率因子）                                                  | Number   | —      | 1.2           |
+| zoom                              | 缩放倍数                                                                        | Number   | —      | 1             |
+| scale                             | 当前缩放比例（可读写，受 min-scale/max-scale 限制）                             | Number   | —      | 1             |
+| min-scale                         | 最小缩放比例                                                                    | Number   | —      | 0.2           |
+| max-scale                         | 最大缩放比例                                                                    | Number   | —      | 7             |
+| close-on-press-escape             | 是否支持按 Escape 关闭                                                          | Boolean  | —      | true          |
+| close-on-click-modal              | 点击遮罩是否关闭（继承自 ea-overlay）                                           | Boolean  | —      | true          |
+| show-progress                     | 是否显示进度（progress 区域会渲染 slot 或文本）                                 | Boolean  | —      | false         |
+| append-to-body                    | 是否插入到 body（继承自 ea-overlay）                                            | Boolean  | —      | false         |
+| append-to                         | 组件追加的目标容器选择器（继承自 ea-overlay）                                   | String   | —      | body          |
+| z-index                           | 遮罩层的 z-index（继承自 ea-overlay）                                           | String   | —      | —             |
 | beforeClose <ea-tag>Prop</ea-tag> | 关闭前的回调函数（继承自 ea-overlay），`done()` 确认关闭，`done(true)` 取消关闭 | Function | —      | null          |
 
 ### ImagePreview Scopes
@@ -907,6 +962,7 @@ customProgressExample.init();
 | footer                   | 底部区域（包含工具栏与进度）        |
 | toolbar                  | 自定义工具栏 slot                   |
 | progress                 | 进度显示区域                        |
+| icon                     | 图标元素（所有图标共有的 part）     |
 | icon & close-icon        | 关闭按钮                            |
 | icon & prev-icon         | 左切换按钮                          |
 | icon & next-icon         | 右切换按钮                          |
@@ -924,15 +980,15 @@ customProgressExample.init();
 
 ### ImagePreview Events
 
-| 事件名称 | 说明                                        | 回调参数                    |
-| -------- | ------------------------------------------- | --------------------------- |
-| switch   | 切换图片时触发                              | `{ index, url, imgTarget }` |
-| error    | 图片加载失败时触发                          | —                           |
-| rotate   | 旋转图片时触发                              | `{ oldVal, rotate }`        |
-| open     | 遮罩打开时触发（继承自 ea-overlay）         | —                           |
-| opened   | 遮罩打开动画结束后触发（继承自 ea-overlay） | —                           |
-| close    | 遮罩关闭时触发（继承自 ea-overlay）         | —                           |
-| closed   | 遮罩关闭动画结束后触发（继承自 ea-overlay） | —                           |
+| 事件名称         | 说明                                        | 回调参数                    |
+| ---------------- | ------------------------------------------- | --------------------------- |
+| ea-switch        | 切换图片时触发                              | `{ index, url, imgTarget }` |
+| ea-preview-error | 图片加载失败时触发                          | —                           |
+| ea-rotate        | 旋转图片时触发                              | `{ oldVal, rotate }`        |
+| ea-open          | 遮罩打开时触发（继承自 ea-overlay）         | —                           |
+| ea-opened        | 遮罩打开动画结束后触发（继承自 ea-overlay） | —                           |
+| ea-close         | 遮罩关闭时触发（继承自 ea-overlay）         | —                           |
+| ea-closed        | 遮罩关闭动画结束后触发（继承自 ea-overlay） | —                           |
 
 ### ImagePreview Slots
 

@@ -884,7 +884,7 @@ describe("EaImage Component", () => {
       expect(listener).toHaveBeenCalled();
     });
 
-    it("emit 方法应该触发 CustomEvent 且 bubbles 和 composed", async () => {
+    it("dispatchEvent 应该触发 Event 且 bubbles 和 composed", async () => {
       const image = document.createElement("ea-image");
       container.appendChild(image);
       await waitForRender();
@@ -894,10 +894,9 @@ describe("EaImage Component", () => {
         capturedEvent = e;
       });
 
-      image.emit("load");
+      image.dispatchEvent(new Event("load", { bubbles: true, composed: true }));
 
       expect(capturedEvent).toBeTruthy();
-      expect(capturedEvent instanceof CustomEvent).toBe(true);
       expect(capturedEvent.bubbles).toBe(true);
       expect(capturedEvent.composed).toBe(true);
     });
@@ -944,7 +943,7 @@ describe("EaImage Component", () => {
       expect(preview.zoomRate).toBe(1.5);
     });
 
-    it("hideOnClickModal 应该同步到 preview 子组件", async () => {
+    it("hideOnClickModal=true 时 preview 的 closeOnClickModal 应该为 false", async () => {
       const image = document.createElement("ea-image");
       image.setAttribute("preview", "");
       image.setAttribute("hide-on-click-modal", "");
@@ -952,7 +951,17 @@ describe("EaImage Component", () => {
       await waitForRender();
 
       const preview = image.shadowRoot.querySelector("ea-image-preview");
-      expect(preview.hideOnClickModal).toBe(true);
+      expect(preview.closeOnClickModal).toBe(false);
+    });
+
+    it("hideOnClickModal=false（默认）时 preview 的 closeOnClickModal 应该为 true", async () => {
+      const image = document.createElement("ea-image");
+      image.setAttribute("preview", "");
+      container.appendChild(image);
+      await waitForRender();
+
+      const preview = image.shadowRoot.querySelector("ea-image-preview");
+      expect(preview.closeOnClickModal).toBe(true);
     });
 
     it("zIndex 应该同步到 preview 子组件", async () => {

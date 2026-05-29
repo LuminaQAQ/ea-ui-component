@@ -1,36 +1,32 @@
-$ea-image-status: (loading, error, success);
+$name: ea-image;
 
 :host {
-  --ea-image-width: 100%;
-  --ea-image-height: 100%;
-
-  --ea-image-fit: inherit;
-
-  --ea-image-background: var(--grey-100);
+  --#{$name}-width: 100%;
+  --#{$name}-height: 100%;
+  --#{$name}-fit: inherit;
+  --#{$name}-background: var(--grey-100);
 }
 
 :host {
   display: block;
 }
 
-@include block(ea-image) {
-  width: var(--ea-image-width);
-  height: var(--ea-image-height);
-
-  background: var(--ea-image-background);
+@include block($name) {
+  width: var(--#{$name}-width);
+  height: var(--#{$name}-height);
+  overflow: hidden;
+  background: var(--#{$name}-background);
 
   @include element(image) {
     width: 100%;
     height: 100%;
-
-    object-fit: var(--ea-image-fit);
+    object-fit: var(--#{$name}-fit);
   }
 
   @include element(error) {
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 100%;
     height: 100%;
   }
@@ -40,30 +36,26 @@ $ea-image-status: (loading, error, success);
     height: 100%;
   }
 
-  @each $status in $ea-image-status {
-    @if ($status == loading) {
-      @include modifier($status) {
-        .ea-image__image,
-        .ea-image__error {
-          display: none;
-        }
-      }
-    } @else if ($status == error) {
-      @include modifier($status) {
-        .ea-image__image,
-        .ea-image__placeholder {
-          display: none;
-        }
-      }
-    } @else if($status == success) {
-      @include modifier($status) {
-        --ea-image-background: transparent;
+  @include modifier(loading) {
+    .#{$name}__image,
+    .#{$name}__error {
+      display: none;
+    }
+  }
 
-        .ea-image__placeholder,
-        .ea-image__error {
-          display: none;
-        }
-      }
+  @include modifier(error) {
+    .#{$name}__image,
+    .#{$name}__placeholder {
+      display: none;
+    }
+  }
+
+  @include modifier(success) {
+    --#{$name}-background: transparent;
+
+    .#{$name}__placeholder,
+    .#{$name}__error {
+      display: none;
     }
   }
 }

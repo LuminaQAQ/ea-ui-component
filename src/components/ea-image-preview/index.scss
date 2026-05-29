@@ -1,42 +1,38 @@
-$ea-image-status: (
-  loading,
-  error,
-  success
-);
+$name: ea-image-preview;
 
 :host {
   --ea-overlay-content-width: 100%;
   --ea-overlay-content-max-width: 100%;
   --ea-overlay-content-height: 100%;
 
-  --ea-image-preview-img-move-x: 0;
-  --ea-image-preview-img-move-y: 0;
+  --#{$name}-img-move-x: 0px;
+  --#{$name}-img-move-y: 0px;
 
-  --ea-image-preview-tool-size: 20px;
-  --ea-image-preview-tool-color: #fff;
+  --#{$name}-tool-size: 20px;
+  --#{$name}-tool-color: var(--color-white);
 
-  --ea-image-preview-tool-offset-x: 1.5rem;
-  --ea-image-preview-tool-offset-y: 1.5rem;
+  --#{$name}-tool-offset-x: 1.5rem;
+  --#{$name}-tool-offset-y: 1.5rem;
 
-  --ea-image-preview-scale: 1;
-  --ea-image-preview-rotate: 0;
+  --#{$name}-scale: 1;
+  --#{$name}-rotate: 0;
 }
 
-@include block(ea-image-preview) {
+@include block($name) {
   @include element(icon) {
-    --ea-icon-size: var(--ea-image-preview-tool-size);
+    --ea-icon-size: var(--#{$name}-tool-size);
 
     padding: 0.65rem;
-    border-radius: 999px;
+    border-radius: var(--border-radius-round);
     cursor: pointer;
 
-    width: var(--ea-image-preview-tool-size);
-    height: var(--ea-image-preview-tool-size);
+    width: var(--#{$name}-tool-size);
+    height: var(--#{$name}-tool-size);
 
-    font-size: var(--ea-image-preview-tool-size);
-    color: var(--ea-image-preview-tool-color);
+    font-size: var(--#{$name}-tool-size);
+    color: var(--#{$name}-tool-color);
 
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--ea-overlay-background-color);
   }
 
   @include element(img) {
@@ -48,21 +44,25 @@ $ea-image-status: (
     &::part(preview) {
       display: none;
     }
+
+    &::part(error) {
+      color: var(--color-white);
+    }
   }
 
-  .ea-image-preview__header,
-  .ea-image-preview__main,
-  .ea-image-preview__footer {
+  .#{$name}__header,
+  .#{$name}__main,
+  .#{$name}__footer {
     filter: opacity(0);
     z-index: calc(var(--ea-overlay-z-index) + 2);
-    transition: filter 0.3s ease-in-out;
+    transition: filter var(--transition-normal);
   }
 
   @include element(header) {
     position: fixed;
 
-    top: var(--ea-image-preview-tool-offset-y);
-    right: var(--ea-image-preview-tool-offset-x);
+    top: var(--#{$name}-tool-offset-y);
+    right: var(--#{$name}-tool-offset-x);
   }
 
   @include element(main) {
@@ -77,7 +77,7 @@ $ea-image-status: (
   @include element(footer) {
     position: fixed;
 
-    bottom: var(--ea-image-preview-tool-offset-y);
+    bottom: var(--#{$name}-tool-offset-y);
     left: 50%;
     transform: translateX(-50%);
   }
@@ -90,8 +90,8 @@ $ea-image-status: (
     align-items: center;
     justify-content: center;
 
-    font-size: 18px;
-    color: white;
+    font-size: var(--font-size-lg);
+    color: var(--color-white);
 
     cursor: default;
     user-select: none;
@@ -104,21 +104,21 @@ $ea-image-status: (
 
     box-sizing: border-box;
     padding: 0.25rem 1.25rem;
-    border-radius: 999px;
+    border-radius: var(--border-radius-round);
 
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--ea-overlay-background-color);
 
-    font-size: var(--ea-image-preview-tool-size);
-    color: var(--ea-image-preview-tool-color);
+    font-size: var(--#{$name}-tool-size);
+    color: var(--#{$name}-tool-color);
 
-    .ea-image-preview__icon {
+    .#{$name}__icon {
       background: none;
       margin: 0 0.25rem;
     }
   }
 
   @include state(show-progress) {
-    .ea-image-preview__progress {
+    .#{$name}__progress {
       display: flex;
     }
   }
@@ -126,7 +126,7 @@ $ea-image-status: (
   @include element(prev-icon) {
     position: fixed;
     top: 50%;
-    left: var(--ea-image-preview-tool-offset-x);
+    left: var(--#{$name}-tool-offset-x);
     transform: translateY(-50%);
     pointer-events: auto;
   }
@@ -134,40 +134,34 @@ $ea-image-status: (
   @include element(next-icon) {
     position: fixed;
     top: 50%;
-    right: var(--ea-image-preview-tool-offset-x);
+    right: var(--#{$name}-tool-offset-x);
     transform: translateY(-50%);
     pointer-events: auto;
   }
 
-  @each $status in $ea-image-status {
-    @if ($status ==loading) {
-      @include modifier(loading) {
-        --ea-overlay-content-height: 50%;
-      }
-    }
+  @include modifier(loading) {
+    --ea-overlay-content-height: 50%;
+  }
 
-    @else if ($status ==error) {
-      @include modifier(error) {
-        --ea-overlay-content-height: 50%;
-      }
-    }
+  @include modifier(error) {
+    --ea-overlay-content-height: 50%;
   }
 }
 
-.ea-overlay--is-show {
+.ea-overlay.is-show {
 
-  .ea-image-preview__header,
-  .ea-image-preview__main,
-  .ea-image-preview__footer {
+  .#{$name}__header,
+  .#{$name}__main,
+  .#{$name}__footer {
     filter: opacity(1);
   }
 }
 
-.ea-overlay--before-close {
+.ea-overlay.is-before-close {
 
-  .ea-image-preview__header,
-  .ea-image-preview__main,
-  .ea-image-preview__footer {
+  .#{$name}__header,
+  .#{$name}__main,
+  .#{$name}__footer {
     filter: opacity(0);
   }
 }
@@ -176,10 +170,11 @@ $ea-image-status: (
   width: auto;
   height: auto;
 
-  margin-left: var(--ea-image-preview-img-move-x);
-  margin-top: var(--ea-image-preview-img-move-y);
+  translate: var(--#{$name}-img-move-x) var(--#{$name}-img-move-y);
+  transform: scale(var(--#{$name}-scale)) rotate(var(--#{$name}-rotate));
 
-  transform: scale(var(--ea-image-preview-scale)) rotate(var(--ea-image-preview-rotate));
+  cursor: grab;
+  user-select: none;
 
-  transition: transform 0.3s ease-in-out;
+  transition: transform var(--transition-normal);
 }

@@ -30,25 +30,33 @@ export interface EaImageElement extends HTMLElement {
   showPreview(): void;
   setActiveItem(index: number): void;
   reset(): void;
+  updateContainerClasslist(): string;
 }
 
 export interface EaImagePreviewElement extends HTMLElement {
   visible: boolean;
+  modal: boolean;
+  closeOnClickModal: boolean;
+  closeOnPressEscape: boolean;
+  appendToBody: boolean;
+  appendTo: string;
+  zIndex: string;
   initialIndex: number;
   index: number;
   infinite: boolean;
-  appendToBody: boolean;
   zoom: number;
   zoomRate: number;
   scale: number;
   minScale: number;
   maxScale: number;
-  closeOnPressEscape: boolean;
   showProgress: boolean;
-  hideOnClickModal: boolean;
   urlList: string[];
+  status: "loading" | "error" | "success";
   setActiveItem(index: number): void;
   reset(): void;
+  show(): void;
+  hide(): void;
+  updateContainerClasslist(): string;
 }
 
 import type { DefineComponent } from "vue";
@@ -79,24 +87,37 @@ export interface EaImageVueProps {
 
 export interface EaImagePreviewVueProps {
   visible?: boolean;
+  modal?: boolean;
+  closeOnClickModal?: boolean;
+  closeOnPressEscape?: boolean;
+  appendToBody?: boolean;
+  appendTo?: string;
+  zIndex?: string;
   initialIndex?: number;
   index?: number;
   infinite?: boolean;
-  appendToBody?: boolean;
   zoom?: number;
   zoomRate?: number;
   scale?: number;
   minScale?: number;
   maxScale?: number;
-  closeOnPressEscape?: boolean;
   showProgress?: boolean;
-  hideOnClickModal?: boolean;
   urlList?: string[];
 }
 
 export interface EaImageVueEvents {
   load: (event: CustomEvent) => void;
   error: (event: CustomEvent) => void;
+}
+
+export interface EaImagePreviewVueEvents {
+  "ea-preview-error": (event: CustomEvent) => void;
+  "ea-switch": (event: CustomEvent) => void;
+  "ea-rotate": (event: CustomEvent) => void;
+  "ea-open": (event: CustomEvent) => void;
+  "ea-opened": (event: CustomEvent) => void;
+  "ea-close": (event: CustomEvent) => void;
+  "ea-closed": (event: CustomEvent) => void;
 }
 
 export interface EaImageVueSlots {
@@ -136,7 +157,7 @@ export type EaImagePreviewVueComponent = DefineComponent<
   {},
   {},
   {},
-  {},
+  keyof EaImagePreviewVueEvents,
   {},
   {},
   EaImagePreviewVueSlots
@@ -180,19 +201,29 @@ export interface EaImageReactProps extends HTMLAttributes<HTMLElement> {
 
 export interface EaImagePreviewReactProps extends HTMLAttributes<HTMLElement> {
   visible?: boolean;
+  modal?: boolean;
+  closeOnClickModal?: boolean;
+  closeOnPressEscape?: boolean;
+  appendToBody?: boolean;
+  appendTo?: string;
+  zIndex?: string;
   initialIndex?: number;
   index?: number;
   infinite?: boolean;
-  appendToBody?: boolean;
   zoom?: number;
   zoomRate?: number;
   scale?: number;
   minScale?: number;
   maxScale?: number;
-  closeOnPressEscape?: boolean;
   showProgress?: boolean;
-  hideOnClickModal?: boolean;
   urlList?: string[];
+  onEaPreviewError?: (event: CustomEvent) => void;
+  onEaSwitch?: (event: CustomEvent) => void;
+  onEaRotate?: (event: CustomEvent) => void;
+  onEaOpen?: (event: CustomEvent) => void;
+  onEaOpened?: (event: CustomEvent) => void;
+  onEaClose?: (event: CustomEvent) => void;
+  onEaClosed?: (event: CustomEvent) => void;
   children?: ReactNode;
 }
 
