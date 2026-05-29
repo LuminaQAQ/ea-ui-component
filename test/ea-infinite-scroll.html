@@ -19,11 +19,6 @@
         background-color: aquamarine;
         margin-bottom: 10px;
       }
-
-      ea-infinite::part(wrap) {
-        display: flex;
-        flex-direction: column;
-      }
     </style>
   </head>
 
@@ -72,7 +67,7 @@
         },
 
         init() {
-          this.el.addEventListener("loadmore", async e => {
+          this.el.addEventListener("ea-loadmore", async e => {
             const { finished } = e.detail;
             const length = this.el.querySelectorAll(".sg-infinite-item").length;
 
@@ -123,7 +118,7 @@
         },
 
         init() {
-          this.el.addEventListener("loadmore", async e => {
+          this.el.addEventListener("ea-loadmore", async e => {
             const { finished, noMore } = e.detail;
             const length = this.el.querySelectorAll(".sg-infinite-item").length;
 

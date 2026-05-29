@@ -1,9 +1,7 @@
-import { listen } from "@/decorator";
-import { Enum } from "@/utils/Enum";
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
+import { EaInfiniteScrollLoadmoreEvent } from "./events/EaInfiniteScrollLoadmoreEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-infinite-scroll" as const;
@@ -11,6 +9,25 @@ const bem = createBEM(TAG_NAME);
 
 export type InfiniteScrollStatus = "finished" | "loading" | "noMore";
 
+/**
+ * @summary 无限滚动组件，滚动至底部时自动加载更多数据，支持加载状态和无更多数据状态。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，滚动列表的内容。
+ * @slot loading - 加载中显示内容。
+ * @slot noMore - 无更多数据时显示内容。
+ *
+ * @event ea-loadmore - 占位元素进入可视区且 status 为 finished 时触发，detail: `{ finished: () => void, noMore: () => void }`。
+ *
+ * @csspart container - 根容器元素。
+ * @csspart content - 内容包裹元素。
+ * @csspart placeholder - 占位哨兵元素。
+ * @csspart loading - 加载状态容器元素。
+ * @csspart noMore - 无更多数据容器元素。
+ *
+ * @cssproperty --ea-infinite-scroll-placeholder-height - 占位哨兵元素高度。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaInfiniteScroll extends EaBase {
   @query(bem.cb())
@@ -19,11 +36,7 @@ export class EaInfiniteScroll extends EaBase {
   @query(bem.ce("placeholder"))
   private _placeholder!: HTMLElement;
 
-  private _abortController?: AbortController;
-
-  private _states = {
-    observer: null as IntersectionObserver | null,
-  };
+  private _observer: IntersectionObserver | null = null;
 
   @attribute({
     type: Enum(["finished", "loading", "noMore"]),
@@ -37,7 +50,9 @@ export class EaInfiniteScroll extends EaBase {
   @attribute({
     type: Number,
     default: 0,
-    observer() {},
+    observer(this: EaInfiniteScroll) {
+      this._recreateObserver();
+    },
   })
   distance: number = 0;
 
@@ -74,45 +89,42 @@ export class EaInfiniteScroll extends EaBase {
   }
 
   @listen("slotchange", bem.ce("content"))
-  private _onSlotchange() {
+  private _handleSlotchange() {
+    this.emit("ea-infinite-scroll-slotchange", {
+      bubbles: true,
+      composed: true,
+    });
     this.emit("slotchange", { bubbles: true, composed: true });
   }
 
-  protected _onLoadmore() {
-    this.status = "loading";
-    this.updateContainerClasslist();
-  }
+  /** 重新创建 IntersectionObserver */
+  private _recreateObserver(): void {
+    if (!this._placeholder) return;
 
-  $mount(): void {
-    this.updateContainerClasslist();
-
-    this._abortController?.abort();
-    this._abortController = new AbortController();
-
-    this._states.observer = new IntersectionObserver(
+    this._observer?.disconnect();
+    this._observer = new IntersectionObserver(
       entries => {
         if (this.status !== "finished") return;
 
-        entries.forEach(async entry => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
-            this._states.observer!.unobserve(entry.target);
+            this._observer!.unobserve(entry.target);
             this.status = "loading";
             this.updateContainerClasslist();
-            this.emit("loadmore", {
-              detail: {
+            this.dispatchEvent(
+              new EaInfiniteScrollLoadmoreEvent({
                 finished: () => {
                   this.status = "finished";
                   this.updateContainerClasslist();
-                  this._states.observer!.observe(entry.target);
+                  this._observer!.observe(entry.target);
                 },
                 noMore: () => {
                   this.status = "noMore";
                   this.updateContainerClasslist();
-                  this._states.observer!.observe(entry.target);
+                  this._observer!.observe(entry.target);
                 },
-              },
-              bubbles: true,
-            });
+              })
+            );
           }
         });
       },
@@ -121,12 +133,17 @@ export class EaInfiniteScroll extends EaBase {
       }
     );
 
-    this._states.observer.observe(this._placeholder);
+    this._observer.observe(this._placeholder);
+  }
+
+  $mount(): void {
+    this.updateContainerClasslist();
+    this._recreateObserver();
   }
 
   $beforeUnmount(): void {
-    this._abortController?.abort();
-    this._states.observer?.disconnect();
+    this._observer?.disconnect();
+    this._observer = null;
   }
 }
 

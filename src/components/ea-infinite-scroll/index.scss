@@ -1,8 +1,14 @@
+$name: ea-infinite-scroll;
+
+:host {
+  --#{$name}-placeholder-height: 1px;
+}
+
 :host {
   display: block;
 }
 
-@include block(ea-infinite-scroll) {
+@include block($name) {
   @include element(loading) {
     display: none;
   }
@@ -12,17 +18,17 @@
   }
 
   @include element(placeholder) {
-    height: 1px;
+    height: var(--#{$name}-placeholder-height);
   }
 
   @include state(loading) {
-    .ea-infinite-scroll__loading {
+    .#{$name}__loading {
       display: block;
     }
   }
 
   @include state(noMore) {
-    .ea-infinite-scroll__noMore {
+    .#{$name}__noMore {
       display: block;
     }
   }
