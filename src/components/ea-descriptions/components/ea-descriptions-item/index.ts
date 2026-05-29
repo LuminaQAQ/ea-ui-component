@@ -1,25 +1,36 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-descriptions-item" as const;
 const bem = createBEM(TAG_NAME);
 
+const ALIGN_TYPES = ["left", "center", "right"] as const;
+type AlignType = (typeof ALIGN_TYPES)[number];
+
+/**
+ * @summary 描述列表项组件，用于定义描述列表中的单个字段项，支持跨行跨列和自定义对齐。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，用于描述项内容。
+ *
+ * @event ea-descriptions-item-change - 属性变化时触发，通知父组件重新渲染。
+ *
+ * @csspart container - item 外层容器。
+ * @csspart label - 标签元素。
+ * @csspart content - 内容元素。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaDescriptionsItem extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-descriptions-item")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-descriptions-item__label")
+  @query(bem.ce("label"))
   private _label!: HTMLSpanElement;
 
   private _contentObserver: MutationObserver | null = null;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -50,22 +61,22 @@ export class EaDescriptionsItem extends EaBase {
   rowspan: number = 1;
 
   @attribute({
-    type: ["left", "center", "right"] as const,
+    type: Enum(ALIGN_TYPES),
     default: "",
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
   })
-  align: "left" | "center" | "right" | "" = "";
+  align: AlignType | "" = "";
 
   @attribute({
-    type: ["left", "center", "right"] as const,
+    type: Enum(ALIGN_TYPES),
     default: "",
     observer(this: EaDescriptionsItem) {
       this._notifyParent();
     },
   })
-  labelAlign: "left" | "center" | "right" | "" = "";
+  labelAlign: AlignType | "" = "";
 
   @attribute({
     type: String,
@@ -103,11 +114,7 @@ export class EaDescriptionsItem extends EaBase {
   })
   contentPart: string = "";
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const className = bem();
     if (this._container) {
@@ -116,9 +123,6 @@ export class EaDescriptionsItem extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class='${bem()}' part='container'>
@@ -130,9 +134,7 @@ export class EaDescriptionsItem extends EaBase {
     `;
   }
 
-  /**
-   * 通知父组件更新
-   */
+  /** 通知父组件更新 */
   private _notifyParent(): void {
     this.emit("ea-descriptions-item-change", {
       bubbles: true,
@@ -140,9 +142,7 @@ export class EaDescriptionsItem extends EaBase {
     });
   }
 
-  /**
-   * 设置内容观察器
-   */
+  /** 设置内容观察器 */
   private _setupContentObserver(): void {
     this._contentObserver = new MutationObserver(() => {
       this._notifyParent();
@@ -154,8 +154,6 @@ export class EaDescriptionsItem extends EaBase {
       characterData: true,
     });
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this._setupContentObserver();

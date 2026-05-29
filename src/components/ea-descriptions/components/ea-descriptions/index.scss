@@ -1,42 +1,49 @@
-$ea-descriptions-size-options: (
+$name: ea-descriptions;
+
+$size-options: (
   small,
   default,
   large
 );
 
 :host {
-  --ea-descriptions-small-spacing: 4px 8px;
-  --ea-descriptions-default-spacing: 8px 12px;
-  --ea-descriptions-large-spacing: 12px 16px;
-  --ea-descriptions-border: 1px solid var(--grey-200);
-  --ea-descriptions-border-cell-color: var(--grey-100);
+  --#{$name}-small-spacing: 4px 8px;
+  --#{$name}-default-spacing: 8px 12px;
+  --#{$name}-large-spacing: 12px 16px;
+  --#{$name}-border: 1px solid var(--grey-200);
+  --#{$name}-border-cell-color: var(--grey-100);
 
-  --ea-descriptions-item-width: auto;
-  --ea-descriptions-label-width: auto;
+  --#{$name}-item-width: auto;
+  --#{$name}-label-width: auto;
 
-  --ea-descriptions-cell-default-font-size: var(--font-size-md);
+  --#{$name}-cell-default-font-size: var(--font-size-md);
 
-  --ea-descriptions-label-small-font-size: var(--font-size-sm);
-  --ea-descriptions-label-default-font-size: var(--font-size-md);
-  --ea-descriptions-label-large-font-size: var(--font-size-lg);
-  --ea-descriptions-label-font-weight: var(--font-weight-bold);
-  --ea-descriptions-label-color: var(--grey-900);
+  --#{$name}-label-small-font-size: var(--font-size-sm);
+  --#{$name}-label-default-font-size: var(--font-size-md);
+  --#{$name}-label-large-font-size: var(--font-size-lg);
+  --#{$name}-label-font-weight: var(--font-weight-bold);
+  --#{$name}-label-color: var(--grey-900);
 
-  --ea-descriptions-content-small-font-size: var(--font-size-sm);
-  --ea-descriptions-content-default-font-size: var(--font-size-md);
-  --ea-descriptions-content-large-font-size: var(--font-size-lg);
-  --ea-descriptions-content-font-weight: var(--font-weight-md);
-  --ea-descriptions-content-color: var(--grey-700);
+  --#{$name}-content-small-font-size: var(--font-size-sm);
+  --#{$name}-content-default-font-size: var(--font-size-md);
+  --#{$name}-content-large-font-size: var(--font-size-lg);
+  --#{$name}-content-font-weight: var(--font-weight-md);
+  --#{$name}-content-color: var(--grey-700);
 
-  --ea-descriptions-align: left;
-  --ea-descriptions-label-align: left;
+  --#{$name}-align: left;
+  --#{$name}-label-align: left;
+}
+
+:host {
+  display: block;
+  width: 100%;
 }
 
 #defaultSlot {
   display: none;
 }
 
-@include block(ea-descriptions) {
+@include block($name) {
   width: 100%;
   border-spacing: 0;
   border-collapse: collapse;
@@ -49,10 +56,14 @@ $ea-descriptions-size-options: (
 
   @include element(title) {
     text-align: left;
-    font-size: 20px;
-    font-weight: 700;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    margin: var(--spacing-lg) 0;
+  }
 
-    margin: 16px 0;
+  @include element(extra) {
+    display: flex;
+    align-items: center;
   }
 
   @include element(body) {
@@ -60,95 +71,85 @@ $ea-descriptions-size-options: (
     min-width: 100%;
   }
 
-  @include element(th) {
-    text-align: left;
+  @include element(row) {
     min-width: 100%;
   }
 
-  @include element(td) {
+  @include element(cell) {
     box-sizing: border-box;
-    padding-bottom: 12px;
-
-    width: var(--ea-descriptions-item-width);
+    padding-bottom: var(--spacing-lg);
+    width: var(--#{$name}-item-width);
     min-width: 100%;
-
-    font-size: var(--ea-descriptions-cell-default-font-size);
-    line-height: calc(var(--ea-descriptions-cell-default-font-size) * 2);
+    font-size: var(--#{$name}-cell-default-font-size);
+    line-height: calc(var(--#{$name}-cell-default-font-size) * 2);
     text-align: left;
   }
 
-  @include element(tr) {
+  @include element(header) {
+    text-align: left;
     min-width: 100%;
   }
 
   @include element(label) {
-    margin-right: 16px;
-
-    width: var(--ea-descriptions-label-width);
-
-    font-size: var(--ea-descriptions-label-default-font-size);
-    line-height: calc(var(--ea-descriptions-label-default-font-size) * 2);
-    font-weight: var(--ea-descriptions-label-font-weight);
-    color: var(--ea-descriptions-label-color);
-
-    text-align: var(--ea-descriptions-label-align);
+    margin-right: var(--spacing-lg);
+    width: var(--#{$name}-label-width);
+    font-size: var(--#{$name}-label-default-font-size);
+    line-height: calc(var(--#{$name}-label-default-font-size) * 2);
+    font-weight: var(--#{$name}-label-font-weight);
+    color: var(--#{$name}-label-color);
+    text-align: var(--#{$name}-label-align);
   }
 
-  span.ea-descriptions__label,
-  span.ea-descriptions__content {
+  span.#{$name}__label,
+  span.#{$name}__content {
     display: inline-block;
   }
 
   @include element(content) {
-    width: var(--ea-descriptions-item-width);
-
-    font-size: var(--ea-descriptions-content-default-font-size);
-    line-height: calc(var(--ea-descriptions-content-default-font-size) * 2);
-    font-weight: var(--ea-descriptions-content-font-weight);
-    color: var(--ea-descriptions-content-color);
-
-    text-align: var(--ea-descriptions-align);
+    width: var(--#{$name}-item-width);
+    font-size: var(--#{$name}-content-default-font-size);
+    line-height: calc(var(--#{$name}-content-default-font-size) * 2);
+    font-weight: var(--#{$name}-content-font-weight);
+    color: var(--#{$name}-content-color);
+    text-align: var(--#{$name}-align);
   }
 
   @include state(border) {
-
-    .ea-descriptions__label,
-    .ea-descriptions__content {
-      padding: var(--ea-descriptions-default-spacing);
-      border: var(--ea-descriptions-border);
+    .#{$name}__label,
+    .#{$name}__content {
+      padding: var(--#{$name}-default-spacing);
+      border: var(--#{$name}-border);
     }
 
-    .ea-descriptions__label {
+    .#{$name}__label {
       margin: 0;
-      background-color: var(--ea-descriptions-border-cell-color);
+      background-color: var(--#{$name}-border-cell-color);
       border-right: none;
     }
 
-    .ea-descriptions__tr:not(:last-child) {
-
-      .ea-descriptions__label,
-      .ea-descriptions__content {
+    .#{$name}__row:not(:last-child) {
+      .#{$name}__label,
+      .#{$name}__content {
         border-bottom: none;
       }
     }
 
-    .ea-descriptions__content:not(:last-child) {
+    .#{$name}__content:not(:last-child) {
       border-right: none;
     }
   }
 
-  @each $name in $ea-descriptions-size-options {
-    @include modifier($name) {
-      .ea-descriptions__label {
-        font-size: var(--ea-descriptions-label-#{$name}-font-size);
-        line-height: calc(var(--ea-descriptions-label-#{$name}-font-size) * 2);
+  @each $size in $size-options {
+    @include modifier($size) {
+      .#{$name}__label {
+        font-size: var(--#{$name}-label-#{$size}-font-size);
+        line-height: calc(var(--#{$name}-label-#{$size}-font-size) * 2);
       }
 
-      &.ea-descriptions--border {
-
-        .ea-descriptions__label,
-        .ea-descriptions__content {
-          padding: var(--ea-descriptions-#{$name}-spacing);
+      &.is-border {
+        .#{$name}__label,
+        .#{$name}__content {
+          padding: var(--#{$name}-#{$size}-spacing);
         }
       }
     }

@@ -1,16 +1,18 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import { html } from "@utils/html";
 import { h } from "@utils/h";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
-import { listen } from "@/decorator";
 
 const TAG_NAME = "ea-descriptions" as const;
 const bem = createBEM(TAG_NAME);
 
-// ==================== 类型定义 ====================
+const DIRECTION_TYPES = ["horizontal", "vertical"] as const;
+type DirectionType = (typeof DIRECTION_TYPES)[number];
+
+const SIZE_TYPES = ["large", "default", "small"] as const;
+type SizeType = (typeof SIZE_TYPES)[number];
 
 interface DescriptionsItemOption {
   label: string;
@@ -28,27 +30,42 @@ interface DescriptionsItemOption {
 
 type VariantType = "normal" | "border" | "vertical";
 
-// ==================== 组件类 ====================
-
+/**
+ * @summary 描述列表组件，以表格形式展示多个字段信息，支持边框、垂直布局和多种尺寸。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-descriptions-item
+ *
+ * @slot header - 标题插槽。
+ * @slot extra - 右侧额外操作区插槽。
+ * @slot default - 默认插槽，用于放置 ea-descriptions-item。
+ *
+ * @csspart container - 外层表格容器。
+ * @csspart caption - 标题与额外操作区容器。
+ * @csspart title - 标题区域。
+ * @csspart extra - 右侧额外插槽区域。
+ * @csspart body - 表格 body（tbody）。
+ * @csspart row - 行（tr）。
+ * @csspart col-cell - 单元格（td）。
+ * @csspart label - 标签单元格。
+ * @csspart content - 内容单元格。
+ *
+ * @cssproperty --ea-descriptions-label-width - 标签宽度。
+ * @cssproperty --ea-descriptions-item-width - 单元格宽度。
+ * @cssproperty --ea-descriptions-align - 内容对齐方式。
+ * @cssproperty --ea-descriptions-label-align - 标签对齐方式。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaDescriptions extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-descriptions")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-descriptions__title slot[name='header']")
+  @query(`${bem.ce("title")} slot[name='header']`)
   private _captionSlot!: HTMLElement;
 
-  @query(".ea-descriptions__body")
+  @query(bem.ce("body"))
   private _tbody!: HTMLElement;
-
-  @query("#defaultSlot")
-  private _defaultSlot!: HTMLSlotElement;
-
-  private _abortController?: AbortController;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Number,
@@ -73,27 +90,29 @@ export class EaDescriptions extends EaBase {
     default: false,
     observer(this: EaDescriptions) {
       this.updateContainerClasslist();
+      this._render();
     },
   })
   border: boolean = false;
 
   @attribute({
-    type: ["horizontal", "vertical"] as const,
+    type: Enum(DIRECTION_TYPES),
     default: "horizontal",
     observer(this: EaDescriptions) {
+      this.updateContainerClasslist();
       this._render();
     },
   })
-  direction: "horizontal" | "vertical" = "horizontal";
+  direction: DirectionType = "horizontal";
 
   @attribute({
-    type: ["large", "default", "small"] as const,
+    type: Enum(SIZE_TYPES),
     default: "default",
     observer(this: EaDescriptions) {
       this.updateContainerClasslist();
     },
   })
-  size: "large" | "default" | "small" = "default";
+  size: SizeType = "default";
 
   @attribute({
     type: String,
@@ -104,19 +123,11 @@ export class EaDescriptions extends EaBase {
   })
   labelWidth: string = "";
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const className = bem(
-      {
-        [this.size]: true,
-      },
-      {
-        border: this.border,
-      }
+      { [this.size]: true },
+      { border: this.border, vertical: this.direction === "vertical" }
     );
 
     if (this._container) this._container.className = className;
@@ -124,9 +135,6 @@ export class EaDescriptions extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <slot id='defaultSlot' part='default-slot'></slot>
@@ -147,16 +155,17 @@ export class EaDescriptions extends EaBase {
 
   /**
    * 处理子元素分割，将 HTML 描述转换为行列描述
+   * @param children - 子元素列表
+   * @param column - 每行列数
+   * @returns 行列描述二维数组
    */
   private _handleChildrenDivide(
     children: EaDescriptionsItemElement[],
     column: number
   ): DescriptionsItemOption[][] {
-    const ary: DescriptionsItemOption[][] = [];
+    const rows: DescriptionsItemOption[][] = [];
 
     children.forEach(item => {
-      const currentRow = ary.length;
-      const currentCol = column % (ary[currentRow]?.length || 0) || 0;
       const option: DescriptionsItemOption = {
         label: item.label,
         content: item.innerHTML,
@@ -170,65 +179,51 @@ export class EaDescriptions extends EaBase {
         "content-part": item.contentPart,
       };
 
-      for (let i = currentRow; i < currentRow + option.rowspan; i++) {
-        if (!ary[i]) ary[i] = [];
+      let targetRow = rows.findIndex(r => {
+        const used = r.reduce((acc, cur) => acc + (cur?.colspan || 0), 0);
+        return used + option.colspan <= column;
+      });
 
-        if (option.rowspan > 1 && i !== currentRow) {
-          ary[i][currentCol] = {
+      if (targetRow === -1) {
+        rows.push([]);
+        targetRow = rows.length - 1;
+      }
+
+      rows[targetRow].push(option);
+
+      for (let i = 1; i < option.rowspan; i++) {
+        const ri = targetRow + i;
+        if (!rows[ri]) rows[ri] = [];
+        for (let j = 0; j < option.colspan; j++) {
+          rows[ri].splice(rows[targetRow].indexOf(option) + j, 0, {
             colspan: 1,
             rowspan: 1,
             placeholder: true,
-          } as DescriptionsItemOption;
+          } as DescriptionsItemOption);
         }
-
-        for (let j = currentCol; j < currentCol + option.colspan; j++) {
-          if (option.colspan > 1 && j !== currentCol) {
-            ary[i][j] = {
-              colspan: 1,
-              rowspan: 1,
-              placeholder: true,
-            } as DescriptionsItemOption;
-          }
-        }
-      }
-
-      let row = ary.findIndex(item => item.length < column);
-      row = row === -1 ? currentRow : row;
-
-      if (!ary[row]) ary[row] = [];
-      const col = ary[row].reduce((acc, cur) => {
-        return acc + (cur?.colspan || 0);
-      }, 0);
-
-      if (col + option.colspan <= column) {
-        ary[row].push(option);
-      } else {
-        ary[row][currentCol] = option;
       }
     });
 
-    return ary
+    return rows
       .map(row => row.filter(col => !col.placeholder))
       .filter(row => row.length > 0);
   }
 
   /**
    * 获取 Descriptions 组件的样式类型
+   * @returns 样式类型
    */
   private _getVariant(): VariantType {
-    if (this.direction === "vertical") {
-      return "vertical";
-    } else if (this.border) {
-      return "border";
-    } else {
-      return "normal";
-    }
+    if (this.direction === "vertical") return "vertical";
+    if (this.border) return "border";
+    return "normal";
   }
-
-  // ==================== 渲染方法 ====================
 
   /**
    * 计算单元格样式
+   * @param item - 描述项配置
+   * @param isLabel - 是否为标签单元格
+   * @returns CSS 样式字符串
    */
   private _getCellStyle(
     item: DescriptionsItemOption,
@@ -259,6 +254,10 @@ export class EaDescriptions extends EaBase {
 
   /**
    * 计算普通模式的 colspan
+   * @param item - 描述项配置
+   * @param index - 当前项在行中的索引
+   * @param row - 当前行
+   * @returns colspan 值或 undefined
    */
   private _getNormalColspan(
     item: DescriptionsItemOption,
@@ -280,6 +279,10 @@ export class EaDescriptions extends EaBase {
 
   /**
    * 渲染标签元素
+   * @param item - 描述项配置
+   * @param tag - HTML 标签名
+   * @param extraClass - 额外类名
+   * @returns HTML 字符串
    */
   private _renderLabelElement(
     item: DescriptionsItemOption,
@@ -304,6 +307,10 @@ export class EaDescriptions extends EaBase {
 
   /**
    * 渲染内容元素
+   * @param item - 描述项配置
+   * @param tag - HTML 标签名
+   * @param extraClass - 额外类名
+   * @returns HTML 字符串
    */
   private _renderContentElement(
     item: DescriptionsItemOption,
@@ -328,21 +335,20 @@ export class EaDescriptions extends EaBase {
 
   /**
    * 渲染表格行
+   * @param cells - 单元格 HTML 数组
+   * @param extraPart - 额外 part 名称
+   * @returns HTML 字符串
    */
   private _renderTableRow(cells: string[], extraPart?: string): string {
     return h(
       "tr",
-      bem.e("tr"),
+      bem.e("row"),
       { part: extraPart ? `row ${extraPart}` : "row" },
       cells
     );
   }
 
-  // ==================== 渲染器 ====================
-
-  /**
-   * 普通模式渲染器
-   */
+  /** 普通模式渲染器 */
   private _renderNormalRow(row: DescriptionsItemOption[]): string {
     const cells = row.map((item, index) => {
       const colspan = this._getNormalColspan(item, index, row);
@@ -355,7 +361,7 @@ export class EaDescriptions extends EaBase {
       if (item.rowspan > 1) props.rowspan = item.rowspan;
       if (colspan) props.colspan = colspan;
 
-      return h("td", bem.e("td"), props, [
+      return h("td", bem.e("cell"), props, [
         this._renderLabelElement(item),
         this._renderContentElement(item),
       ]);
@@ -364,9 +370,7 @@ export class EaDescriptions extends EaBase {
     return this._renderTableRow(cells);
   }
 
-  /**
-   * 边框模式渲染器
-   */
+  /** 边框模式渲染器 */
   private _renderBorderRow(row: DescriptionsItemOption[]): string {
     const cells = row.flatMap((item, index) => {
       const isLastItem = index === row.length - 1;
@@ -404,19 +408,15 @@ export class EaDescriptions extends EaBase {
     return this._renderTableRow(cells);
   }
 
-  /**
-   * 垂直模式渲染器
-   */
+  /** 垂直模式渲染器 */
   private _renderVerticalRow(row: DescriptionsItemOption[]): string {
-    const isLastItem = (index: number) => index === row.length - 1;
     const needsExtraColspan = (index: number) =>
-      row.length < 3 && isLastItem(index);
+      row.length < 3 && index === row.length - 1;
 
-    // 渲染标签行
     const labelCells = row.map((item, index) =>
       h(
         "th",
-        `${bem.e("label")} ${bem.e("th")}`,
+        `${bem.e("label")} ${bem.e("header")}`,
         {
           part: `label cell ${item["label-part"] || ""}`,
           tabindex: 1,
@@ -430,11 +430,10 @@ export class EaDescriptions extends EaBase {
       )
     );
 
-    // 渲染内容行
     const contentCells = row.map((item, index) =>
       h(
         "td",
-        `${bem.e("content")} ${bem.e("td")}`,
+        `${bem.e("content")} ${bem.e("cell")}`,
         {
           part: `content cell ${item["content-part"] || ""}`,
           tabindex: 1,
@@ -454,9 +453,6 @@ export class EaDescriptions extends EaBase {
     );
   }
 
-  /**
-   * Descriptions 组件的样式类型渲染器
-   */
   private _variantRenderer: Record<
     VariantType,
     (row: DescriptionsItemOption[]) => string
@@ -466,9 +462,7 @@ export class EaDescriptions extends EaBase {
     vertical: row => this._renderVerticalRow(row),
   };
 
-  /**
-   * 渲染默认插槽内容
-   */
+  /** 渲染默认插槽内容 */
   private _render(): void {
     const children = [
       ...this.querySelectorAll<EaDescriptionsItemElement>(
@@ -481,27 +475,22 @@ export class EaDescriptions extends EaBase {
       .join("");
   }
 
-  // ==================== 事件处理 ====================
-
   @listen("slotchange", "#defaultSlot")
-  _handleSlotChange(): void {
+  private _handleSlotChange(): void {
     this._render();
   }
 
   @listen("ea-descriptions-item-change")
-  _handleChildChange(e: Event): void {
+  private _handleChildChange(e: Event): void {
     e.stopImmediatePropagation();
     this._render();
   }
 
-  // ==================== 生命周期 ====================
-
-  $beforeUnmount(): void {
-    this._abortController?.abort();
+  $mount(): void {
+    this.updateContainerClasslist();
+    this._render();
   }
 }
-
-// ==================== 类型声明 ====================
 
 export interface EaDescriptionsItemElement extends HTMLElement {
   label: string;
