@@ -35,10 +35,36 @@
 
   <body>
     <script type="module" src="../src/components/ea-icon/index.ts"></script>
+
+    <!-- #region 基础用法 -->
     <ea-icon name="user"></ea-icon>
     <ea-icon name="coffee" family="classic" variant="solid"></ea-icon>
     <ea-icon name="github" family="brands"></ea-icon>
-    <ea-icon name="star" color="#ffa502" size="24"></ea-icon>
+    <!-- #endregion 基础用法 -->
+
+    <!-- #region 不同样式 -->
+    <ea-icon name="heart" variant="solid" color="#ff4757"></ea-icon>
+    <ea-icon name="heart" variant="regular" color="#ff4757"></ea-icon>
+    <ea-icon name="star" variant="solid" color="#ffa502"></ea-icon>
+    <ea-icon name="star" variant="regular" color="#ffa502"></ea-icon>
+    <!-- #endregion 不同样式 -->
+
+    <!-- #region 设置大小 -->
+    <ea-icon name="coffee" size="16"></ea-icon>
+    <ea-icon name="coffee" size="24"></ea-icon>
+    <ea-icon name="coffee" size="32"></ea-icon>
+    <ea-icon name="coffee" size="48"></ea-icon>
+    <!-- #endregion 设置大小 -->
+
+    <!-- #region 旋转动画 -->
     <ea-icon name="spinner" spin></ea-icon>
+    <ea-icon name="circle-notch" spin></ea-icon>
+    <ea-icon name="sync" spin></ea-icon>
+    <!-- #endregion 旋转动画 -->
+
+    <!-- #region 图标家族 -->
+    <ea-icon name="coffee" family="classic"></ea-icon>
+    <ea-icon name="github" family="brands"></ea-icon>
+    <!-- #endregion 图标家族 -->
   </body>
 </html>

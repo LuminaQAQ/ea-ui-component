@@ -1,15 +1,12 @@
-import { CustomElement } from "@decorator/custom-element";
-import { attribute } from "@decorator/attribute";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
-import stylesheet from "./index.css?inline";
+import EaBase, { createBEM } from "@core/EaBase";
+import { CustomElement, attribute, query } from "@decorator";
+import { Enum } from "@utils/Enum";
+import stylesheet from "./index.scss?inline";
 import faStylesheet from "@fortawesome/fontawesome-free/css/all.min.css?inline";
-import variable from "@/themes/variables.scss?inline";
-import host from "./host.scss?inline";
 
 const TAG_NAME = "ea-icon" as const;
+const bem = createBEM(TAG_NAME);
 
-// 动态注入 Font Awesome 到 document head（只执行一次）
 const injectFontAwesome = () => {
   if (document.querySelector("style[data-ea-icon-fontawesome]")) return;
 
@@ -19,14 +16,12 @@ const injectFontAwesome = () => {
   document.head.appendChild(style);
 };
 
-// family 映射
 const FAMILY_MAP = {
   classic: "fa-classic",
   sharp: "fa-sharp",
   brands: "fa-brands",
 } as const;
 
-// variant 映射
 const VARIANT_MAP = {
   solid: "fa-solid",
   regular: "fa-regular",
@@ -38,19 +33,22 @@ const VARIANT_MAP = {
 export type IconFamily = keyof typeof FAMILY_MAP;
 export type IconVariant = keyof typeof VARIANT_MAP;
 
-@CustomElement(TAG_NAME, { styles: [stylesheet, variable, faStylesheet, host] })
-export class EaIcon extends HTMLElement {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-icon")
+/**
+ * @summary 图标组件，基于 Font Awesome 提供常用图标集合，支持多种家族、样式、颜色和大小配置。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，用于自定义内容。
+ *
+ * @csspart container - 图标容器元素。
+ *
+ * @cssproperty --ea-icon-size - 图标大小。
+ * @cssproperty --ea-icon-color - 图标颜色。
+ */
+@CustomElement(TAG_NAME, { styles: [stylesheet, faStylesheet] })
+export class EaIcon extends EaBase {
+  @query(bem.cb())
   private _container!: HTMLElement;
-
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-  }
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -106,16 +104,19 @@ export class EaIcon extends HTMLElement {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaIcon, newVal: boolean) {
-      this._container?.classList.toggle("fa-spin", newVal);
+    observer(this: EaIcon) {
+      this._updateIconClass();
     },
   })
   spin: boolean = false;
 
-  // ==================== 方法 ====================
-
   /**
    * 获取 Font Awesome 类名
+   * @param name 图标名称
+   * @param family 图标家族
+   * @param variant 图标样式
+   * @param spin 是否旋转
+   * @returns 类名字符串
    */
   private _getFontAwesomeClass(
     name: string,
@@ -123,22 +124,21 @@ export class EaIcon extends HTMLElement {
     variant: IconVariant,
     spin: boolean
   ): string {
-    if (!name) return "ea-icon";
+    if (!name) return bem();
 
-    // 如果用户已经提供了完整的 Font Awesome 类名，直接使用
+    const spinClass = spin ? " fa-spin" : "";
+
     if (name.startsWith("fa-")) {
-      return `ea-icon ${name}${spin ? " fa-spin" : ""}`;
+      return `${bem()} ${name}${spinClass}`;
     }
 
     const faFamily = FAMILY_MAP[family];
     const faVariant = VARIANT_MAP[variant] || "fa-solid";
-    const spinClass = spin ? " fa-spin" : "";
 
-    // 使用对象映射替代条件判断
     const classMap: Record<string, string> = {
-      brands: `ea-icon fa-brands fa-${name}${spinClass}`,
-      classic: `ea-icon ${faVariant} fa-${name}${spinClass}`,
-      sharp: `ea-icon ${faFamily} ${faVariant} fa-${name}${spinClass}`,
+      brands: `${bem()} fa-brands fa-${name}${spinClass}`,
+      classic: `${bem()} ${faVariant} fa-${name}${spinClass}`,
+      sharp: `${bem()} ${faFamily} ${faVariant} fa-${name}${spinClass}`,
     };
 
     return classMap[family] || classMap.classic;
@@ -176,13 +176,9 @@ export class EaIcon extends HTMLElement {
     `;
   }
 
-  // ==================== 生命周期 ====================
-
-  connectedCallback(): void {
-    // 注入 Font Awesome 样式
+  $mount(): void {
     injectFontAwesome();
 
-    // 初始化样式
     if (this.color) {
       this.style.setProperty("--ea-icon-color", this.color);
     }

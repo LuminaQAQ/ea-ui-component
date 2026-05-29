@@ -32,7 +32,7 @@ export const handleImportModules = (): void => {
     }
   });
 
-  fs.appendFileSync(entryPath, `import './ea-icon/index.css';\n`);
+  fs.appendFileSync(entryPath, `import './ea-icon/index.scss';\n`);
 };
 
 export const handlePackageExport = (): void => {
