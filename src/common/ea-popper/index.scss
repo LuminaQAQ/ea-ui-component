@@ -1,19 +1,19 @@
 $name: ea-popper;
 
 :host {
-  --ea-popper-border-color: var(--grey-300);
-  --ea-popper-background-color: var(--color-white);
-  --ea-popper-box-shadow: var(--box-shadow-md);
+  --#{$name}-border-color: var(--grey-300);
+  --#{$name}-background-color: var(--color-white);
+  --#{$name}-box-shadow: var(--box-shadow-md);
 
-  --ea-popper-arrow-size: 10px;
+  --#{$name}-arrow-size: 10px;
 
-  --ea-popper-spacing: var(--spacing-md);
-  --ea-popper-width: 150px;
+  --#{$name}-spacing: var(--spacing-md);
+  --#{$name}-width: 150px;
 
-  --ea-popper-transform-x: 0;
-  --ea-popper-transform-y: 0;
+  --#{$name}-transform-x: 0;
+  --#{$name}-transform-y: 0;
 
-  --ea-popper-transition: var(--transition-normal);
+  --#{$name}-transition: var(--transition-normal);
 }
 
 :host {
@@ -28,37 +28,37 @@ $name: ea-popper;
   }
 
   @include element(original) {
-    --ea-popper-transform: translate(var(--ea-popper-transform-x),
-        var(--ea-popper-transform-y));
+    --#{$name}-transform: translate(var(--#{$name}-transform-x),
+        var(--#{$name}-transform-y));
 
     display: none;
     visibility: hidden;
 
     position: absolute;
-    transform: var(--ea-popper-transform);
+    transform: var(--#{$name}-transform);
 
     box-sizing: border-box;
-    padding: var(--ea-popper-spacing);
-    border: 1px solid var(--ea-popper-border-color);
+    padding: var(--#{$name}-spacing);
+    border: var(--border-width) solid var(--#{$name}-border-color);
 
-    min-width: var(--ea-popper-width);
+    min-width: var(--#{$name}-width);
 
-    background-color: var(--ea-popper-background-color);
+    background-color: var(--#{$name}-background-color);
 
     filter: opacity(0);
-    transition: filter var(--ea-popper-transition);
+    transition: filter var(--#{$name}-transition);
 
     &::after {
       display: none;
       content: "";
       position: absolute;
 
-      width: var(--ea-popper-arrow-size);
-      height: var(--ea-popper-arrow-size);
+      width: var(--#{$name}-arrow-size);
+      height: var(--#{$name}-arrow-size);
 
-      background-color: var(--ea-popper-background-color);
+      background-color: var(--#{$name}-background-color);
 
-      border: 1px solid transparent;
+      border: var(--border-width) solid transparent;
     }
   }
 
@@ -69,14 +69,14 @@ $name: ea-popper;
     &-end {
       .#{$name}__original {
         top: 0;
-        --ea-popper-transform-y: calc(-100% - 10px);
+        --#{$name}-transform-y: calc(-100% - var(--#{$name}-arrow-size));
 
         &::after {
-          top: calc(100% - var(--ea-popper-arrow-size) * 0.707 + 0.5px);
+          top: calc(100% - var(--#{$name}-arrow-size) * 0.707 + 0.5px);
           transform: translateX(-50%) rotate(45deg);
 
-          border-bottom-color: var(--ea-popper-border-color);
-          border-right-color: var(--ea-popper-border-color);
+          border-bottom-color: var(--#{$name}-border-color);
+          border-right-color: var(--#{$name}-border-color);
         }
       }
     }
@@ -93,7 +93,7 @@ $name: ea-popper;
 
     .#{$name}__original {
       left: 50%;
-      --ea-popper-transform-x: -50%;
+      --#{$name}-transform-x: -50%;
 
       &::after {
         left: 50%;
@@ -118,14 +118,14 @@ $name: ea-popper;
     &-end {
       .#{$name}__original {
         bottom: 0;
-        --ea-popper-transform-y: calc(100% + 10px);
+        --#{$name}-transform-y: calc(100% + var(--#{$name}-arrow-size));
 
         &::after {
-          bottom: calc(100% - var(--ea-popper-arrow-size) * 0.707 + 0.5px);
+          bottom: calc(100% - var(--#{$name}-arrow-size) * 0.707 + 0.5px);
           transform: translateX(-50%) rotate(45deg);
 
-          border-top-color: var(--ea-popper-border-color);
-          border-left-color: var(--ea-popper-border-color);
+          border-top-color: var(--#{$name}-border-color);
+          border-left-color: var(--#{$name}-border-color);
         }
       }
     }
@@ -142,7 +142,7 @@ $name: ea-popper;
 
     .#{$name}__original {
       left: 50%;
-      --ea-popper-transform-x: -50%;
+      --#{$name}-transform-x: -50%;
 
       &::after {
         left: 50%;
@@ -167,21 +167,21 @@ $name: ea-popper;
     &-end {
       .#{$name}__original {
         right: 0;
-        --ea-popper-transform-x: calc(100% + 10px);
+        --#{$name}-transform-x: calc(100% + var(--#{$name}-arrow-size));
 
         &::after {
-          right: calc(100% - var(--ea-popper-arrow-size) * 0.707 + 0.5px);
+          right: calc(100% - var(--#{$name}-arrow-size) * 0.707 + 0.5px);
           transform: translateY(-50%) rotate(45deg);
 
-          border-bottom-color: var(--ea-popper-border-color);
-          border-left-color: var(--ea-popper-border-color);
+          border-bottom-color: var(--#{$name}-border-color);
+          border-left-color: var(--#{$name}-border-color);
         }
       }
     }
 
     &-start {
       .#{$name}__original {
-        --ea-popper-transform-y: 0;
+        --#{$name}-transform-y: 0;
         top: 0;
 
         &::after {
@@ -192,7 +192,7 @@ $name: ea-popper;
     }
 
     .#{$name}__original {
-      --ea-popper-transform-y: -50%;
+      --#{$name}-transform-y: -50%;
       top: 50%;
 
       &::after {
@@ -202,7 +202,7 @@ $name: ea-popper;
 
     &-end {
       .#{$name}__original {
-        --ea-popper-transform-y: -100%;
+        --#{$name}-transform-y: -100%;
         top: 100%;
 
         &::after {
@@ -220,21 +220,21 @@ $name: ea-popper;
     &-end {
       .#{$name}__original {
         left: 0;
-        --ea-popper-transform-x: calc(-100% - 10px);
+        --#{$name}-transform-x: calc(-100% - var(--#{$name}-arrow-size));
 
         &::after {
           left: 100%;
           transform: translate(-50%, -50%) rotate(45deg);
 
-          border-top-color: var(--ea-popper-border-color);
-          border-right-color: var(--ea-popper-border-color);
+          border-top-color: var(--#{$name}-border-color);
+          border-right-color: var(--#{$name}-border-color);
         }
       }
     }
 
     &-start {
       .#{$name}__original {
-        --ea-popper-transform-y: 0;
+        --#{$name}-transform-y: 0;
         top: 0;
 
         &::after {
@@ -245,7 +245,7 @@ $name: ea-popper;
     }
 
     .#{$name}__original {
-      --ea-popper-transform-y: -50%;
+      --#{$name}-transform-y: -50%;
       top: 50%;
 
       &::after {
@@ -255,7 +255,7 @@ $name: ea-popper;
 
     &-end {
       .#{$name}__original {
-        --ea-popper-transform-y: -100%;
+        --#{$name}-transform-y: -100%;
         top: 100%;
 
         &::after {

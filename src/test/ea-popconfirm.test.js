@@ -884,11 +884,10 @@ describe("EaPopconfirm Component", () => {
       });
 
       it("showArrow 为 false 时不应该有 is-show-arrow 类", async () => {
-        const popconfirm = createPopconfirm(
-          { "show-arrow": "false" },
-          withReference()
-        );
+        const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
+        await waitForRender();
+        popconfirm.showArrow = false;
         await waitForRender();
 
         const containerEl = popconfirm.shadowRoot.querySelector(".ea-popper");
@@ -965,8 +964,10 @@ describe("EaPopconfirm Component", () => {
       });
 
       it("应该支持 flip 设置为 false", async () => {
-        const popconfirm = createPopconfirm({ flip: "false" }, withReference());
+        const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
+        await waitForRender();
+        popconfirm.flip = false;
         await waitForRender();
 
         expect(popconfirm.flip).toBe(false);
@@ -1191,7 +1192,7 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         const handler = vi.fn();
-        popconfirm.addEventListener("show", handler);
+        popconfirm.addEventListener("ea-show", handler);
 
         popconfirm.show();
         await waitForRender();
@@ -1205,7 +1206,7 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         const handler = vi.fn();
-        popconfirm.addEventListener("show", handler);
+        popconfirm.addEventListener("ea-show", handler);
 
         popconfirm.open();
         await waitForRender();
@@ -1224,7 +1225,7 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         const handler = vi.fn();
-        popconfirm.addEventListener("hide", handler);
+        popconfirm.addEventListener("ea-hide", handler);
 
         popconfirm.hide();
         await waitForRender();
@@ -1241,7 +1242,7 @@ describe("EaPopconfirm Component", () => {
         await waitForRender();
 
         const handler = vi.fn();
-        popconfirm.addEventListener("hide", handler);
+        popconfirm.addEventListener("ea-hide", handler);
 
         popconfirm.close();
         await waitForRender();
@@ -1496,11 +1497,11 @@ describe("EaPopconfirm Component", () => {
 
       const containerEl = popconfirm.shadowRoot.querySelector(".ea-popper");
 
-      popconfirm.setAttribute("show-arrow", "false");
+      popconfirm.showArrow = false;
       await waitForRender();
       expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
 
-      popconfirm.setAttribute("show-arrow", "true");
+      popconfirm.showArrow = true;
       await waitForRender();
       expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
     });

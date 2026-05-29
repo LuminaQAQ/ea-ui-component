@@ -647,10 +647,9 @@ describe("EaTooltip Component", () => {
 
     it("应该支持 showArrow 设置为 false", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.setAttribute("show-arrow", "false");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
-
+      tooltip.showArrow = false;
       await waitForRender();
 
       expect(tooltip.showArrow).toBe(false);
@@ -658,10 +657,9 @@ describe("EaTooltip Component", () => {
 
     it("showArrow 为 false 时容器不应包含 is-show-arrow 状态类", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.setAttribute("show-arrow", "false");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
-
+      tooltip.showArrow = false;
       await waitForRender();
 
       const containerEl =
@@ -671,10 +669,9 @@ describe("EaTooltip Component", () => {
 
     it("showArrow 为 true 时容器应包含 is-show-arrow 状态类", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.setAttribute("show-arrow", "true");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
-
+      tooltip.showArrow = true;
       await waitForRender();
 
       const containerEl =
@@ -735,10 +732,9 @@ describe("EaTooltip Component", () => {
 
     it("应该支持 flip 设置为 false", async () => {
       const tooltip = document.createElement("ea-tooltip");
-      tooltip.setAttribute("flip", "false");
       tooltip.innerHTML = `<span slot="reference">Hover me</span>`;
       container.appendChild(tooltip);
-
+      tooltip.flip = false;
       await waitForRender();
 
       expect(tooltip.flip).toBe(false);
@@ -805,7 +801,7 @@ describe("EaTooltip Component", () => {
       await waitForRender();
 
       const showHandler = vi.fn();
-      tooltip.addEventListener("show", showHandler);
+      tooltip.addEventListener("ea-show", showHandler);
 
       tooltip.show();
       await waitForRender();
@@ -825,7 +821,7 @@ describe("EaTooltip Component", () => {
       await waitForRender();
 
       const hideHandler = vi.fn();
-      tooltip.addEventListener("hide", hideHandler);
+      tooltip.addEventListener("ea-hide", hideHandler);
 
       tooltip.hide();
       await waitForRender();
@@ -842,7 +838,7 @@ describe("EaTooltip Component", () => {
       await waitForRender();
 
       const showHandler = vi.fn();
-      tooltip.addEventListener("show", showHandler);
+      tooltip.addEventListener("ea-show", showHandler);
 
       tooltip.show();
       await waitForRender();
@@ -864,7 +860,7 @@ describe("EaTooltip Component", () => {
       await waitForRender();
 
       const hideHandler = vi.fn();
-      tooltip.addEventListener("hide", hideHandler);
+      tooltip.addEventListener("ea-hide", hideHandler);
 
       tooltip.hide();
       await waitForRender();
@@ -883,7 +879,7 @@ describe("EaTooltip Component", () => {
       await waitForRender();
 
       const shownHandler = vi.fn();
-      tooltip.addEventListener("shown", shownHandler);
+      tooltip.addEventListener("ea-shown", shownHandler);
 
       tooltip.show();
       await waitForRender();
@@ -913,7 +909,7 @@ describe("EaTooltip Component", () => {
       await waitForRender();
 
       const hiddenHandler = vi.fn();
-      tooltip.addEventListener("hidden", hiddenHandler);
+      tooltip.addEventListener("ea-hidden", hiddenHandler);
 
       tooltip.hide();
       await waitForRender();
@@ -1222,12 +1218,12 @@ describe("EaTooltip Component", () => {
       const containerEl =
         tooltip.shadowRoot.querySelector('[part="container"]');
 
-      tooltip.setAttribute("show-arrow", "false");
+      tooltip.showArrow = false;
       await waitForRender();
 
       expect(containerEl.classList.contains("is-show-arrow")).toBe(false);
 
-      tooltip.setAttribute("show-arrow", "true");
+      tooltip.showArrow = true;
       await waitForRender();
 
       expect(containerEl.classList.contains("is-show-arrow")).toBe(true);

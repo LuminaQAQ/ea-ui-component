@@ -283,9 +283,9 @@ describe("EaPopover Component", () => {
 
     it("应该支持 showArrow 设置为 false", async () => {
       const popover = document.createElement("ea-popover");
-      popover.setAttribute("show-arrow", "false");
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
+      popover.showArrow = false;
 
       await waitForRender();
 
@@ -329,9 +329,9 @@ describe("EaPopover Component", () => {
 
     it("应该支持 flip 设置为 false", async () => {
       const popover = document.createElement("ea-popover");
-      popover.setAttribute("flip", "false");
       popover.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popover);
+      popover.flip = false;
 
       await waitForRender();
 
@@ -400,7 +400,7 @@ describe("EaPopover Component", () => {
       await waitForRender();
 
       const showHandler = vi.fn();
-      popover.addEventListener("show", showHandler);
+      popover.addEventListener("ea-show", showHandler);
 
       popover.show();
       await waitForRender();
@@ -418,7 +418,7 @@ describe("EaPopover Component", () => {
       await waitForRender();
 
       const hideHandler = vi.fn();
-      popover.addEventListener("hide", hideHandler);
+      popover.addEventListener("ea-hide", hideHandler);
 
       popover.hide();
       await waitForRender();

@@ -347,11 +347,10 @@ describe("EaDropdown Component", () => {
     });
 
     it("设置 hide-on-click='false' 应该禁用点击隐藏", async () => {
-      const dropdown = createDropdown(
-        { "hide-on-click": "false" },
-        withReference()
-      );
+      const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
+      await waitForRender();
+      dropdown.hideOnClick = false;
       await waitForRender();
 
       expect(dropdown.hideOnClick).toBe(false);
@@ -364,7 +363,7 @@ describe("EaDropdown Component", () => {
 
       expect(dropdown.hideOnClick).toBe(true);
 
-      dropdown.setAttribute("hide-on-click", "false");
+      dropdown.hideOnClick = false;
       await waitForRender(0);
 
       expect(dropdown.hideOnClick).toBe(false);
@@ -435,11 +434,10 @@ describe("EaDropdown Component", () => {
     });
 
     it("设置 show-arrow='false' 应该隐藏箭头", async () => {
-      const dropdown = createDropdown(
-        { "show-arrow": "false" },
-        withReference()
-      );
+      const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
+      await waitForRender();
+      dropdown.showArrow = false;
       await waitForRender();
 
       expect(dropdown.showArrow).toBe(false);
@@ -552,7 +550,7 @@ describe("EaDropdown Component", () => {
       await waitForRender();
 
       const showHandler = vi.fn();
-      dropdown.addEventListener("show", showHandler);
+      dropdown.addEventListener("ea-show", showHandler);
 
       dropdown.show();
       await waitForRender(0);
@@ -569,7 +567,7 @@ describe("EaDropdown Component", () => {
       await waitForRender(0);
 
       const hideHandler = vi.fn();
-      dropdown.addEventListener("hide", hideHandler);
+      dropdown.addEventListener("ea-hide", hideHandler);
 
       dropdown.hide();
       await waitForRender(0);
@@ -583,7 +581,7 @@ describe("EaDropdown Component", () => {
       await waitForRender();
 
       const showHandler = vi.fn();
-      container.addEventListener("show", showHandler);
+      container.addEventListener("ea-show", showHandler);
 
       dropdown.show();
       await waitForRender(0);
@@ -600,7 +598,7 @@ describe("EaDropdown Component", () => {
       await waitForRender(0);
 
       const hideHandler = vi.fn();
-      container.addEventListener("hide", hideHandler);
+      container.addEventListener("ea-hide", hideHandler);
 
       dropdown.hide();
       await waitForRender(0);
@@ -684,13 +682,15 @@ describe("EaDropdown Component", () => {
 
     it("hideOnClick 为 false 时，点击菜单项不应该隐藏下拉菜单", async () => {
       const dropdown = createDropdown(
-        { "hide-on-click": "false" },
+        {},
         `<span slot="reference">Trigger</span>
          <ea-dropdown-menu>
            <ea-dropdown-item>Item 1</ea-dropdown-item>
          </ea-dropdown-menu>`
       );
       container.appendChild(dropdown);
+      await waitForRender();
+      dropdown.hideOnClick = false;
       await waitForRender();
 
       dropdown.show();
@@ -863,11 +863,10 @@ describe("EaDropdown Component", () => {
     });
 
     it("showArrow 为 false 时不应该包含 show-arrow 状态类", async () => {
-      const dropdown = createDropdown(
-        { "show-arrow": "false" },
-        withReference()
-      );
+      const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
+      await waitForRender();
+      dropdown.showArrow = false;
       await waitForRender();
 
       const containerEl = dropdown.shadowRoot.querySelector(".ea-popper");
@@ -1654,7 +1653,7 @@ describe("Integration Tests", () => {
 
   it("hideOnClick=false 时连续点击多个 item 不应该隐藏 dropdown", async () => {
     const dropdown = createDropdown(
-      { "hide-on-click": "false" },
+      {},
       `<span slot="reference">Trigger</span>
        <ea-dropdown-menu>
          <ea-dropdown-item command="cmd1">Item 1</ea-dropdown-item>
@@ -1662,6 +1661,8 @@ describe("Integration Tests", () => {
        </ea-dropdown-menu>`
     );
     container.appendChild(dropdown);
+    await waitForRender();
+    dropdown.hideOnClick = false;
     await waitForRender();
 
     dropdown.show();

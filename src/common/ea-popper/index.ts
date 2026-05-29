@@ -1,8 +1,10 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query } from "@decorator";
+import { Enum } from "@utils/Enum";
+import { EaPopperShowEvent } from "./events/EaPopperShowEvent";
+import { EaPopperShownEvent } from "./events/EaPopperShownEvent";
+import { EaPopperHideEvent } from "./events/EaPopperHideEvent";
+import { EaPopperHiddenEvent } from "./events/EaPopperHiddenEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-popper" as const;
@@ -25,6 +27,7 @@ const PLACEMENT_TYPES = [
 
 export type PlacementType = (typeof PLACEMENT_TYPES)[number];
 
+/** 检测元素是否在视口内 */
 const isIntersecting = (el: HTMLElement, scale: number = 0): boolean => {
   const rect = el.getBoundingClientRect();
 
@@ -36,6 +39,7 @@ const isIntersecting = (el: HTMLElement, scale: number = 0): boolean => {
   );
 };
 
+/** 根据 overflow 翻转 placement */
 const flipPlacement = (el: HTMLElement, placement: string): string => {
   const antiPlacement: Record<string, string> = {
     left: "right",
@@ -62,23 +66,46 @@ const flipPlacement = (el: HTMLElement, placement: string): string => {
   return placement;
 };
 
+/**
+ * @summary 气泡定位组件，提供相对某个元素进行智能定位的浮层能力，支持多种方向、箭头、偏移和翻转。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - Popper 内容插槽。
+ * @slot reference - 触发 Popper 显示的 HTML 元素插槽。
+ *
+ * @event ea-show - 开启 Popper 时触发。
+ * @event ea-shown - 开启 Popper 的动画结束时触发。
+ * @event ea-hide - 关闭 Popper 时触发。
+ * @event ea-hidden - 关闭 Popper 的动画结束时触发。
+ *
+ * @csspart container - Popper 外层容器。
+ * @csspart reference - 触发 Popper 显示的 HTML 元素的父容器。
+ * @csspart original - Popper 内容容器。
+ *
+ * @cssproperty --ea-popper-width - Popper 宽度。
+ * @cssproperty --ea-popper-border-color - Popper 边框颜色。
+ * @cssproperty --ea-popper-background-color - Popper 背景颜色。
+ * @cssproperty --ea-popper-box-shadow - Popper 阴影。
+ * @cssproperty --ea-popper-arrow-size - 箭头大小。
+ * @cssproperty --ea-popper-spacing - Popper 内边距。
+ * @cssproperty --ea-popper-transform-x - X 轴偏移量。
+ * @cssproperty --ea-popper-transform-y - Y 轴偏移量。
+ * @cssproperty --ea-popper-transition - 过渡动画时长。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaPopper extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-popper")
+  @query(bem.cb())
   protected _container!: HTMLElement;
 
-  @query(".ea-popper__original")
+  @query(bem.ce("original"))
   protected _originalPopper!: HTMLElement;
 
-  @query(".ea-popper__reference")
+  @query(bem.ce("reference"))
   protected _referenceElement!: HTMLElement;
 
   private _visibleAbortController?: AbortController;
   private _originPlacement!: string;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Number,
@@ -159,8 +186,6 @@ export class EaPopper extends EaBase {
   })
   flip: boolean = true;
 
-  // ==================== 方法 ====================
-
   updateContainerClasslist(): string {
     const className = bem(
       {
@@ -179,9 +204,10 @@ export class EaPopper extends EaBase {
     return className;
   }
 
+  /** 处理显示过渡动画 */
   private _handleShowTransition(): void {
     this._container.classList.add("is-before-show");
-    this.emit("show", { bubbles: true, composed: true });
+    this.dispatchEvent(new EaPopperShowEvent());
 
     if (this.flip) {
       const popperRect = this._originalPopper.getBoundingClientRect();
@@ -207,22 +233,23 @@ export class EaPopper extends EaBase {
     this._container.addEventListener(
       "transitionend",
       () => {
-        this.emit("shown", { bubbles: true, composed: true });
+        this.dispatchEvent(new EaPopperShownEvent());
         this.updateContainerClasslist();
       },
       { once: true, signal: this._visibleAbortController!.signal }
     );
   }
 
+  /** 处理隐藏过渡动画 */
   private _handleHideTransition(): void {
     this._container.classList.add("is-before-hide");
-    this.emit("hide", { bubbles: true, composed: true });
+    this.dispatchEvent(new EaPopperHideEvent());
 
     this._container.addEventListener(
       "transitionend",
       () => {
         this.updateContainerClasslist();
-        this.emit("hidden", { bubbles: true, composed: true });
+        this.dispatchEvent(new EaPopperHiddenEvent());
       },
       { once: true, signal: this._visibleAbortController!.signal }
     );
@@ -231,8 +258,8 @@ export class EaPopper extends EaBase {
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container" tabindex="-1">
-        <div class="ea-popper__reference" part="reference" tabindex="-1">
-          <div class="ea-popper__original" part="original" tabindex="0">
+        <div class="${bem.e("reference")}" part="reference" tabindex="-1">
+          <div class="${bem.e("original")}" part="original" tabindex="0">
             <slot></slot>
           </div>
           <slot name="reference"></slot>
@@ -252,8 +279,6 @@ export class EaPopper extends EaBase {
   toggle(): void {
     this.visible = !this.visible;
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();
