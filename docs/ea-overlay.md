@@ -116,7 +116,7 @@ ea-card::part(container) {
   height: 100%;
 }
 
-ea-card::part(content-wrap) {
+ea-card::part(content) {
   flex: 1;
 }
 
@@ -159,7 +159,7 @@ ea-card::part(container) {
   height: 100%;
 }
 
-ea-card::part(content-wrap) {
+ea-card::part(content) {
   flex: 1;
 }
 

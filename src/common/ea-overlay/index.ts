@@ -46,6 +46,7 @@ export class EaOverlay extends EaBase {
   private _transitionAbortController?: AbortController;
   private _closingByBeforeClose: boolean = false;
   private _inBeforeClose: boolean = false;
+  private _waitingBeforeClose: boolean = false;
   private _appendHandled: boolean = false;
 
   @attribute({
@@ -53,9 +54,16 @@ export class EaOverlay extends EaBase {
     default: false,
     observer(this: EaOverlay, newVal: boolean) {
       if (this._inBeforeClose) return;
+      if (this._waitingBeforeClose) return;
 
       this._transitionAbortController?.abort();
       this._transitionAbortController = new AbortController();
+
+      if (this._closingByBeforeClose) {
+        this._closingByBeforeClose = false;
+        this._handleCloseTransition();
+        return;
+      }
 
       if (newVal) {
         this._handleOpenTransition();
@@ -171,7 +179,11 @@ export class EaOverlay extends EaBase {
   private _handleAppendTo(): void {
     if (this._appendHandled) return;
 
-    if (typeof this.appendTo === "string" && this.appendTo && this.appendTo !== "body") {
+    if (
+      typeof this.appendTo === "string" &&
+      this.appendTo &&
+      this.appendTo !== "body"
+    ) {
       try {
         const parent = document.querySelector(this.appendTo);
         if (parent && this.parentElement !== parent) {
@@ -213,19 +225,26 @@ export class EaOverlay extends EaBase {
 
   /** 处理关闭请求，支持 beforeClose 拦截 */
   private _handleCloseRequest(): void {
-    if (this._closingByBeforeClose) {
-      this._closingByBeforeClose = false;
-      this._handleCloseTransition();
-    } else if (this.beforeClose && typeof this.beforeClose === "function") {
+    if (this.beforeClose && typeof this.beforeClose === "function") {
       this._inBeforeClose = true;
+      this._waitingBeforeClose = true;
       let doneCalled = false;
 
       this.beforeClose(() => {
+        if (doneCalled) return;
         doneCalled = true;
-        this._closingByBeforeClose = true;
+        this._waitingBeforeClose = false;
+
+        const wasVisible = this.visible;
         this.visible = false;
 
-        this._handleCloseTransition();
+        if (wasVisible) {
+          this._closingByBeforeClose = true;
+        } else {
+          this._transitionAbortController?.abort();
+          this._transitionAbortController = new AbortController();
+          this._handleCloseTransition();
+        }
       });
 
       if (!doneCalled) {

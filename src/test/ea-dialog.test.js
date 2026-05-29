@@ -5,7 +5,7 @@ import { waitForRender } from "./utils/waitForRender";
 import "../components/ea-icon/index.ts";
 import "../components/ea-dialog/index.ts";
 
-describe("EaDialog Component", () => {
+describe("EaDialog", () => {
   let container;
 
   beforeEach(() => {
@@ -22,8 +22,8 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Basic Functionality", () => {
-    it("应该正确渲染 ea-dialog 组件", async () => {
+  describe("基本功能", () => {
+    it("应该正确渲染组件", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -39,14 +39,10 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      expect(
-        dialog.shadowRoot.querySelector('[part="container"]')
-      ).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(dialog.shadowRoot.querySelector('[part="header"]')).toBeTruthy();
       expect(dialog.shadowRoot.querySelector('[part="heading"]')).toBeTruthy();
-      expect(
-        dialog.shadowRoot.querySelector('[part="close-icon"]')
-      ).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector('[part="close-icon"]')).toBeTruthy();
       expect(dialog.shadowRoot.querySelector('[part="content"]')).toBeTruthy();
       expect(dialog.shadowRoot.querySelector('[part="footer"]')).toBeTruthy();
     });
@@ -59,9 +55,7 @@ describe("EaDialog Component", () => {
 
       expect(dialog.shadowRoot.querySelector(".ea-overlay")).toBeTruthy();
       expect(dialog.shadowRoot.querySelector(".ea-overlay__mask")).toBeTruthy();
-      expect(
-        dialog.shadowRoot.querySelector(".ea-overlay__content")
-      ).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector(".ea-overlay__content")).toBeTruthy();
     });
 
     it("应该包含对话框主体结构", async () => {
@@ -70,22 +64,12 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      expect(dialog.shadowRoot.querySelector(".ea-dialog-main")).toBeTruthy();
-      expect(
-        dialog.shadowRoot.querySelector(".ea-dialog-main__header")
-      ).toBeTruthy();
-      expect(
-        dialog.shadowRoot.querySelector(".ea-dialog-main__heading")
-      ).toBeTruthy();
-      expect(
-        dialog.shadowRoot.querySelector(".ea-dialog-main__close-icon")
-      ).toBeTruthy();
-      expect(
-        dialog.shadowRoot.querySelector(".ea-dialog-main__content")
-      ).toBeTruthy();
-      expect(
-        dialog.shadowRoot.querySelector(".ea-dialog-main__footer")
-      ).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector(".ea-dialog")).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector(".ea-dialog__header")).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector(".ea-dialog__heading")).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector(".ea-dialog__close-icon")).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector(".ea-dialog__content")).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector(".ea-dialog__footer")).toBeTruthy();
     });
 
     it("应该包含 header、footer 和默认插槽", async () => {
@@ -104,7 +88,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Heading Attribute", () => {
+  describe("heading 属性", () => {
     it("应该通过 heading 属性设置标题", async () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("heading", "Test Title");
@@ -146,7 +130,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Width Attribute", () => {
+  describe("width 属性", () => {
     it("应该通过 width 属性设置宽度", async () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("width", "500px");
@@ -176,13 +160,11 @@ describe("EaDialog Component", () => {
       await waitForRender();
 
       expect(dialog.width).toBe("800px");
-      expect(dialog.style.getPropertyValue("--ea-overlay-content-width")).toBe(
-        "800px"
-      );
+      expect(dialog.style.getPropertyValue("--ea-overlay-content-width")).toBe("800px");
     });
   });
 
-  describe("Top Attribute", () => {
+  describe("top 属性", () => {
     it("默认 top 应该是 50%", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -211,13 +193,11 @@ describe("EaDialog Component", () => {
       dialog.setAttribute("top", "10vh");
       await waitForRender();
 
-      expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe(
-        "10vh"
-      );
+      expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe("10vh");
     });
   });
 
-  describe("Visible Attribute", () => {
+  describe("visible 属性", () => {
     it("默认对话框应该是隐藏的", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -295,7 +275,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Center Attribute", () => {
+  describe("center 属性", () => {
     it("默认 center 应该是 false", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -327,7 +307,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Fullscreen Attribute", () => {
+  describe("fullscreen 属性", () => {
     it("默认 fullscreen 应该是 false", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -359,7 +339,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Modal Attribute", () => {
+  describe("modal 属性", () => {
     it("默认 modal 应该是 true", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -375,7 +355,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.modal = false;
+      dialog.setAttribute("modal", "false");
       await waitForRender();
 
       expect(dialog.modal).toBe(false);
@@ -397,7 +377,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.modal = false;
+      dialog.setAttribute("modal", "false");
       await waitForRender();
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
@@ -405,7 +385,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Movable Attribute", () => {
+  describe("movable 属性", () => {
     it("默认 movable 应该是 false", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -437,8 +417,8 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Show Close Attribute", () => {
-    it("默认 show-close 应该是 true", async () => {
+  describe("showClose 属性", () => {
+    it("默认 showClose 应该是 true", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -453,7 +433,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.showClose = false;
+      dialog.setAttribute("show-close", "false");
       await waitForRender();
 
       expect(dialog.showClose).toBe(false);
@@ -465,7 +445,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.showClose = false;
+      dialog.setAttribute("show-close", "false");
       await waitForRender();
 
       const overlayEl = dialog.shadowRoot.querySelector(".ea-overlay");
@@ -483,8 +463,8 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Modal Pentrable Attribute", () => {
-    it("默认 modal-pentrable 应该是 false", async () => {
+  describe("modalPentrable 属性", () => {
+    it("默认 modalPentrable 应该是 false", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -515,8 +495,8 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Close On Click Modal Attribute", () => {
-    it("默认 close-on-click-modal 应该是 true", async () => {
+  describe("closeOnClickModal 属性", () => {
+    it("默认 closeOnClickModal 应该是 true", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -531,7 +511,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.closeOnClickModal = false;
+      dialog.setAttribute("close-on-click-modal", "false");
       await waitForRender();
 
       expect(dialog.closeOnClickModal).toBe(false);
@@ -560,7 +540,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.closeOnClickModal = false;
+      dialog.setAttribute("close-on-click-modal", "false");
       dialog.show();
       expect(dialog.visible).toBe(true);
 
@@ -573,8 +553,8 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Close On Press Escape Attribute", () => {
-    it("默认 close-on-press-escape 应该是 true", async () => {
+  describe("closeOnPressEscape 属性", () => {
+    it("默认 closeOnPressEscape 应该是 true", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -589,7 +569,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.closeOnPressEscape = false;
+      dialog.setAttribute("close-on-press-escape", "false");
       await waitForRender();
 
       expect(dialog.closeOnPressEscape).toBe(false);
@@ -621,7 +601,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.closeOnPressEscape = false;
+      dialog.setAttribute("close-on-press-escape", "false");
       dialog.show();
       expect(dialog.visible).toBe(true);
 
@@ -637,8 +617,8 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Append To Body Attribute", () => {
-    it("默认 append-to-body 应该是 false", async () => {
+  describe("appendToBody 属性", () => {
+    it("默认 appendToBody 应该是 false", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -658,8 +638,8 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Append To Attribute", () => {
-    it("默认 append-to 应该是 body", async () => {
+  describe("appendTo 属性", () => {
+    it("默认 appendTo 应该是 body", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
 
@@ -668,7 +648,7 @@ describe("EaDialog Component", () => {
       expect(dialog.appendTo).toBe("body");
     });
 
-    it("应该支持自定义 append-to 选择器", async () => {
+    it("应该支持自定义 appendTo 选择器", async () => {
       const customContainer = document.createElement("div");
       customContainer.id = "custom-dialog-container";
       document.body.appendChild(customContainer);
@@ -685,7 +665,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Before Close Property", () => {
+  describe("beforeClose 属性", () => {
     it("默认 beforeClose 应该是 null", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -745,7 +725,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("CSS Variables Attributes (from EaOverlay)", () => {
+  describe("EaOverlay 继承属性", () => {
     it("应该支持 z-index 属性", async () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("z-index", "5000");
@@ -797,7 +777,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Close Icon Click Behavior", () => {
+  describe("关闭图标点击行为", () => {
     it("点击关闭图标应该隐藏对话框", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -807,9 +787,7 @@ describe("EaDialog Component", () => {
       dialog.show();
       expect(dialog.visible).toBe(true);
 
-      const closeIcon = dialog.shadowRoot.querySelector(
-        ".ea-dialog-main__close-icon"
-      );
+      const closeIcon = dialog.shadowRoot.querySelector(".ea-dialog__close-icon");
       closeIcon.click();
 
       await waitForRender();
@@ -823,13 +801,11 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.showClose = false;
+      dialog.setAttribute("show-close", "false");
       dialog.show();
       expect(dialog.visible).toBe(true);
 
-      const closeIcon = dialog.shadowRoot.querySelector(
-        ".ea-dialog-main__close-icon"
-      );
+      const closeIcon = dialog.shadowRoot.querySelector(".ea-dialog__close-icon");
       closeIcon.click();
 
       await waitForRender();
@@ -838,7 +814,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Reset Position Method", () => {
+  describe("resetPosition 方法", () => {
     it("应该提供 resetPosition 方法", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -854,9 +830,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      const overlayContent = dialog.shadowRoot.querySelector(
-        ".ea-overlay__content"
-      );
+      const overlayContent = dialog.shadowRoot.querySelector(".ea-overlay__content");
       overlayContent.style.left = "100px";
       overlayContent.style.top = "200px";
       dialog.style.setProperty("--ea-overlay-content-left", "100px");
@@ -866,16 +840,12 @@ describe("EaDialog Component", () => {
 
       expect(overlayContent.style.left).toBe("");
       expect(overlayContent.style.top).toBe("");
-      expect(dialog.style.getPropertyValue("--ea-overlay-content-left")).toBe(
-        ""
-      );
-      expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe(
-        ""
-      );
+      expect(dialog.style.getPropertyValue("--ea-overlay-content-left")).toBe("");
+      expect(dialog.style.getPropertyValue("--ea-overlay-content-top")).toBe("");
     });
   });
 
-  describe("Events", () => {
+  describe("事件", () => {
     it("应该触发 ea-open 事件", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -924,9 +894,7 @@ describe("EaDialog Component", () => {
       await waitForRender();
 
       const overlayContainer = dialog.shadowRoot.querySelector(".ea-overlay");
-      overlayContainer.dispatchEvent(
-        new Event("transitionend", { bubbles: true })
-      );
+      overlayContainer.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       await waitForRender();
 
@@ -949,9 +917,7 @@ describe("EaDialog Component", () => {
       await waitForRender();
 
       const overlayContainer = dialog.shadowRoot.querySelector(".ea-overlay");
-      overlayContainer.dispatchEvent(
-        new Event("transitionend", { bubbles: true })
-      );
+      overlayContainer.dispatchEvent(new Event("transitionend", { bubbles: true }));
 
       await waitForRender();
 
@@ -982,7 +948,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Edge Cases", () => {
+  describe("边界场景", () => {
     it("空内容时应该正确处理", async () => {
       const dialog = document.createElement("ea-dialog");
       container.appendChild(dialog);
@@ -1043,7 +1009,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      dialog.modal = false;
+      dialog.setAttribute("modal", "false");
       await waitForRender();
 
       expect(dialog.heading).toBe("Multi Props");
@@ -1075,7 +1041,7 @@ describe("EaDialog Component", () => {
       dialog.show();
       expect(dialog.visible).toBe(true);
 
-      const dialogContent = dialog.shadowRoot.querySelector(".ea-dialog-main");
+      const dialogContent = dialog.shadowRoot.querySelector(".ea-dialog");
       dialogContent.click();
 
       await waitForRender();
@@ -1084,7 +1050,7 @@ describe("EaDialog Component", () => {
     });
   });
 
-  describe("Lifecycle", () => {
+  describe("生命周期", () => {
     it("组件连接后应该正确初始化", async () => {
       const dialog = document.createElement("ea-dialog");
       dialog.setAttribute("heading", "Test");
@@ -1092,9 +1058,7 @@ describe("EaDialog Component", () => {
 
       await waitForRender();
 
-      expect(
-        dialog.shadowRoot.querySelector('[part="container"]')
-      ).toBeTruthy();
+      expect(dialog.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(dialog.getAttribute("role")).toBe("dialog");
     });
 

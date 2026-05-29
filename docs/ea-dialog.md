@@ -168,7 +168,7 @@ onMounted(() => {
   // #endregion
   // ------- end -------
 
-  // ------- 模态框 -------
+  // ------- 模态穿透 -------
   // #region
   const modalExample = {
     dialog: document.querySelector("#modalDialog"),
@@ -215,33 +215,36 @@ onMounted(() => {
         this.dialog.hide();
       });
 
-      this.dialog.addEventListener("open", () => {
-        console.log("open");
+      this.dialog.addEventListener("ea-open", () => {
+        console.log("ea-open");
       });
 
-      this.dialog.addEventListener("opened", () => {
-        console.log("opened");
+      this.dialog.addEventListener("ea-opened", () => {
+        console.log("ea-opened");
       });
 
-      this.dialog.addEventListener("before-close", (e) => {
-        const { done } = e.detail;
+      this.dialog.beforeClose = async done => {
         console.log("before-close");
+        this.confirmBtn.toggleAttribute("loading", true);
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
         done();
+      };
+
+      this.dialog.addEventListener("ea-close", () => {
+        console.log("ea-close");
       });
 
-      this.dialog.addEventListener("close", () => {
-        console.log("close");
-      });
-
-      this.dialog.addEventListener("closed", () => {
-        console.log("closed");
+      this.dialog.addEventListener("ea-closed", () => {
+        console.log("ea-closed");
+        this.confirmBtn.toggleAttribute("loading", false);
       });
     },
   };
   eventsExample.init();
   // #endregion
   // ------- end -------
-
 })
 </script>
 
@@ -268,35 +271,31 @@ ea-button::part(icon) {
 ```html
 <script type="module">
   import "./node_modules/easy-component-ui/components/ea-dialog/index.js";
-  import "./node_modules/easy-component-ui/components/ea-button/index.js"; // 示例中使用到按钮
+  import "./node_modules/easy-component-ui/components/ea-button/index.js";
 </script>
 ```
 
-## 基础用法
+> `css`
 
-使用 `ea-dialog` 包裹对话框内容，通过 `show()` / `hide()` 或 `visible` / `visible = true/false` 控制显示。
-
-<div class="demo">
-  <ea-button id="basicDialogOpenBtn" plain>
-    Click to open the Dialog
-  </ea-button>
-
-  <ea-dialog id="basicDialog" heading="Tips" width="500px">
-    <span>This is a message</span>
-    <section slot="footer">
-      <div class="dialog-footer">
-        <ea-button id="basicDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="basicDialogConfirmBtn" type="primary">
-          Confirm
-        </ea-button>
-      </div>
-    </section>
-  </ea-dialog>
-</div>
-
-::: code-group
+::: tip
+需要注意的是，如果需要使用到带有图标的属性/组件，需要提前使用 `link` 标签引入图标文件
+:::
 
 ```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
+## 自定义样式
+
+移步到 [CSS Part](#ea-dialog-css-part)。
+
+## 基础用法
+
+使用 `ea-dialog` 包裹对话框内容，通过 `show()` / `hide()` 或设置 `visible` 属性控制显示。
+
 <div class="demo">
   <ea-button id="basicDialogOpenBtn" plain>
     Click to open the Dialog
@@ -307,25 +306,32 @@ ea-button::part(icon) {
     <section slot="footer">
       <div class="dialog-footer">
         <ea-button id="basicDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="basicDialogConfirmBtn" type="primary">
+        <ea-button id="basicDialogConfirmBtn" variant="primary">
           Confirm
         </ea-button>
       </div>
     </section>
   </ea-dialog>
 </div>
-```
 
-```css
-.custom-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+::: details 查看代码
 
-ea-button::part(icon) {
-  color: white;
-}
+```html
+<ea-button id="basicDialogOpenBtn" plain>
+  Click to open the Dialog
+</ea-button>
+
+<ea-dialog id="basicDialog" heading="Tips" width="500px">
+  <span>This is a message</span>
+  <section slot="footer">
+    <div class="dialog-footer">
+      <ea-button id="basicDialogCancelBtn">Cancel</ea-button>
+      <ea-button id="basicDialogConfirmBtn" variant="primary">
+        Confirm
+      </ea-button>
+    </div>
+  </section>
+</ea-dialog>
 ```
 
 ```js
@@ -364,47 +370,45 @@ basicExample.init();
   <ea-dialog id="customHeaderDialog" width="500px">
     <header class="custom-header" slot="header">
       <span>This is a custom header!</span>
-      <ea-button id="customHeaderDialogCloseIcon" type="danger" icon="xmark" circle></ea-button>
+      <ea-button id="customHeaderDialogCloseIcon" variant="danger" icon="xmark" circle></ea-button>
     </header>
     <span>This is a message</span>
     <footer slot="footer">
       <div class="dialog-footer">
         <ea-button id="customHeaderDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="customHeaderDialogConfirmBtn" type="primary">Confirm</ea-button>
+        <ea-button id="customHeaderDialogConfirmBtn" variant="primary">Confirm</ea-button>
       </div>
     </footer>
   </ea-dialog>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-button id="customHeaderDialogOpenBtn" plain
-    >Click to open the Dialog</ea-button
-  >
+<ea-button id="customHeaderDialogOpenBtn" plain
+  >Click to open the Dialog</ea-button
+>
 
-  <ea-dialog id="customHeaderDialog" width="500px">
-    <header class="custom-header" slot="header">
-      <span>This is a custom header!</span>
-      <ea-button
-        id="customHeaderDialogCloseIcon"
-        type="danger"
-        icon="xmark"
-        circle
-      ></ea-button>
-    </header>
-    <span>This is a message</span>
-    <footer slot="footer">
-      <div class="dialog-footer">
-        <ea-button id="customHeaderDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="customHeaderDialogConfirmBtn" type="primary"
-          >Confirm</ea-button
-        >
-      </div>
-    </footer>
-  </ea-dialog>
-</div>
+<ea-dialog id="customHeaderDialog" width="500px">
+  <header class="custom-header" slot="header">
+    <span>This is a custom header!</span>
+    <ea-button
+      id="customHeaderDialogCloseIcon"
+      variant="danger"
+      icon="xmark"
+      circle
+    ></ea-button>
+  </header>
+  <span>This is a message</span>
+  <footer slot="footer">
+    <div class="dialog-footer">
+      <ea-button id="customHeaderDialogCancelBtn">Cancel</ea-button>
+      <ea-button id="customHeaderDialogConfirmBtn" variant="primary"
+        >Confirm</ea-button
+      >
+    </div>
+  </footer>
+</ea-dialog>
 ```
 
 ```js
@@ -457,39 +461,37 @@ customHeaderExample.init();
     </ea-dialog>
     <section class="dialog-footer" slot="footer">
       <ea-button id="nestingDialogCancelBtn">Cancel</ea-button>
-      <ea-button id="nestingDialogInnerOpenBtn" type="primary">
+      <ea-button id="nestingDialogInnerOpenBtn" variant="primary">
         Open the inner Dialog
       </ea-button>
     </section>
   </ea-dialog>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-button id="nestingDialogOpenBtn" plain> Open the outer Dialog </ea-button>
+<ea-button id="nestingDialogOpenBtn" plain> Open the outer Dialog </ea-button>
 
-  <ea-dialog id="nestingOuterDialog" heading="Outer Dialog" width="800px">
-    <span>This is the outer Dialog</span>
+<ea-dialog id="nestingOuterDialog" heading="Outer Dialog" width="800px">
+  <span>This is the outer Dialog</span>
 
-    <ea-dialog
-      id="nestingInnererDialog"
-      width="500px"
-      heading="Inner Dialog"
-      append-to-body
-    >
-      <span>This is the inner Dialog</span>
-    </ea-dialog>
-
-    <section class="dialog-footer" slot="footer">
-      <ea-button id="nestingDialogCancelBtn">Cancel</ea-button>
-      <ea-button id="nestingDialogInnerOpenBtn" type="primary">
-        Open the inner Dialog
-      </ea-button>
-    </section>
+  <ea-dialog
+    id="nestingInnererDialog"
+    width="500px"
+    heading="Inner Dialog"
+    append-to-body
+  >
+    <span>This is the inner Dialog</span>
   </ea-dialog>
-</div>
+
+  <section class="dialog-footer" slot="footer">
+    <ea-button id="nestingDialogCancelBtn">Cancel</ea-button>
+    <ea-button id="nestingDialogInnerOpenBtn" variant="primary">
+      Open the inner Dialog
+    </ea-button>
+  </section>
+</ea-dialog>
 ```
 
 ```js
@@ -522,7 +524,7 @@ nestingExample.init();
 
 ## 内容居中
 
-设置 `center` 属性可以使内容在对话框中垂直居中显示。
+设置 `center` 属性可以使对话框头部和底部内容水平居中。
 
 <div class="demo">
   <ea-button id="centerDialogOpenBtn" plain>
@@ -536,7 +538,7 @@ nestingExample.init();
     <section slot="footer">
       <div class="dialog-footer">
         <ea-button id="centerDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="centerDialogConfirmBtn" type="primary">
+        <ea-button id="centerDialogConfirmBtn" variant="primary">
           Confirm
         </ea-button>
       </div>
@@ -544,29 +546,23 @@ nestingExample.init();
   </ea-dialog>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-button id="centerDialogOpenBtn" plain>
-    Click to open the Dialog
-  </ea-button>
-
-  <ea-dialog id="centerDialog" heading="Tips" width="500px" center>
-    <span>
-      It should be noted that the content will not be aligned in center by
-      default
-    </span>
-    <section slot="footer">
-      <div class="dialog-footer">
-        <ea-button id="centerDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="centerDialogConfirmBtn" type="primary">
-          Confirm
-        </ea-button>
-      </div>
-    </section>
-  </ea-dialog>
-</div>
+<ea-dialog id="centerDialog" heading="Tips" width="500px" center>
+  <span>
+    It should be noted that the content will not be aligned in center by
+    default
+  </span>
+  <section slot="footer">
+    <div class="dialog-footer">
+      <ea-button id="centerDialogCancelBtn">Cancel</ea-button>
+      <ea-button id="centerDialogConfirmBtn" variant="primary">
+        Confirm
+      </ea-button>
+    </div>
+  </section>
+</ea-dialog>
 ```
 
 ```js
@@ -597,7 +593,7 @@ centerExample.init();
 
 ## 可拖拽
 
-设置 `movable` 属性使对话框可通过标题拖动。
+设置 `movable` 属性使对话框可通过标题栏拖动。
 
 <div class="demo">
   <ea-button id="movableDialogOpenBtn" plain>
@@ -609,7 +605,7 @@ centerExample.init();
     <section slot="footer">
       <div class="dialog-footer">
         <ea-button id="movableDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="movableDialogConfirmBtn" type="primary">
+        <ea-button id="movableDialogConfirmBtn" variant="primary">
           Confirm
         </ea-button>
       </div>
@@ -617,26 +613,20 @@ centerExample.init();
   </ea-dialog>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-button id="movableDialogOpenBtn" plain>
-    Click to open the Dialog
-  </ea-button>
-
-  <ea-dialog id="movableDialog" heading="Tips" width="500px" movable>
-    <span>This is a message</span>
-    <section slot="footer">
-      <div class="dialog-footer">
-        <ea-button id="movableDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="movableDialogConfirmBtn" type="primary">
-          Confirm
-        </ea-button>
-      </div>
-    </section>
-  </ea-dialog>
-</div>
+<ea-dialog id="movableDialog" heading="Tips" width="500px" movable>
+  <span>This is a message</span>
+  <section slot="footer">
+    <div class="dialog-footer">
+      <ea-button id="movableDialogCancelBtn">Cancel</ea-button>
+      <ea-button id="movableDialogConfirmBtn" variant="primary">
+        Confirm
+      </ea-button>
+    </div>
+  </section>
+</ea-dialog>
 ```
 
 ```js
@@ -679,7 +669,7 @@ movableExample.init();
     <section slot="footer">
       <div class="dialog-footer">
         <ea-button id="fullscreenDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="fullscreenDialogConfirmBtn" type="primary">
+        <ea-button id="fullscreenDialogConfirmBtn" variant="primary">
           Confirm
         </ea-button>
       </div>
@@ -687,26 +677,20 @@ movableExample.init();
   </ea-dialog>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-button id="fullscreenDialogOpenBtn" plain>
-    Open the fullscreen Dialog
-  </ea-button>
-
-  <ea-dialog id="fullscreenDialog" heading="Tips" width="500px" fullscreen>
-    <span>This is a message</span>
-    <section slot="footer">
-      <div class="dialog-footer">
-        <ea-button id="fullscreenDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="fullscreenDialogConfirmBtn" type="primary">
-          Confirm
-        </ea-button>
-      </div>
-    </section>
-  </ea-dialog>
-</div>
+<ea-dialog id="fullscreenDialog" heading="Tips" width="500px" fullscreen>
+  <span>This is a message</span>
+  <section slot="footer">
+    <div class="dialog-footer">
+      <ea-button id="fullscreenDialogCancelBtn">Cancel</ea-button>
+      <ea-button id="fullscreenDialogConfirmBtn" variant="primary">
+        Confirm
+      </ea-button>
+    </div>
+  </section>
+</ea-dialog>
 ```
 
 ```js
@@ -735,19 +719,19 @@ fullscreenExample.init();
 
 :::
 
-## 模态/非模态
+## 模态穿透
 
-通过 `modal` 属性控制遮罩行为，`modal="false"` 可关闭遮罩（非模态）。
+设置 `modal-pentrable` 属性使遮罩层可穿透，允许点击遮罩层下方的元素。
 
 <div class="demo">
   <ea-button id="modalDialogOpenBtn" plain> Open the modal Dialog </ea-button>
 
-  <ea-dialog id="modalDialog" heading="Tips" width="500px" modal="false">
+  <ea-dialog id="modalDialog" heading="Tips" width="500px" modal-pentrable>
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
         <ea-button id="modalDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="modalDialogConfirmBtn" type="primary">
+        <ea-button id="modalDialogConfirmBtn" variant="primary">
           Confirm
         </ea-button>
       </div>
@@ -755,24 +739,20 @@ fullscreenExample.init();
   </ea-dialog>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-button id="modalDialogOpenBtn" plain> Open the modal Dialog </ea-button>
-
-  <ea-dialog id="modalDialog" heading="Tips" width="500px" modal="false">
-    <span>This is a message</span>
-    <section slot="footer">
-      <div class="dialog-footer">
-        <ea-button id="modalDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="modalDialogConfirmBtn" type="primary">
-          Confirm
-        </ea-button>
-      </div>
-    </section>
-  </ea-dialog>
-</div>
+<ea-dialog id="modalDialog" heading="Tips" width="500px" modal-pentrable>
+  <span>This is a message</span>
+  <section slot="footer">
+    <div class="dialog-footer">
+      <ea-button id="modalDialogCancelBtn">Cancel</ea-button>
+      <ea-button id="modalDialogConfirmBtn" variant="primary">
+        Confirm
+      </ea-button>
+    </div>
+  </section>
+</ea-dialog>
 ```
 
 ```js
@@ -805,21 +785,22 @@ modalExample.init();
 
 组件会触发以下事件：
 
-- `open`：打开开始
-- `opened`：打开完成
-- `before-close`：关闭前（可通过事件 detail 提供的 done() 异步控制关闭）
-- `close`：开始关闭
-- `closed`：关闭完成
+- `ea-open`：打开开始
+- `ea-opened`：打开动画完成
+- `ea-close`：开始关闭
+- `ea-closed`：关闭动画完成
+
+通过 `beforeClose` 属性可以拦截关闭操作，实现异步关闭。
 
 <div class="demo">
   <ea-button id="eventsDialogOpenBtn" plain> Open the events Dialog </ea-button>
 
-  <ea-dialog id="eventsDialog" heading="Tips" width="500px" before-close>
+  <ea-dialog id="eventsDialog" heading="Tips" width="500px">
     <span>This is a message</span>
     <section slot="footer">
       <div class="dialog-footer">
         <ea-button id="eventsDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="eventsDialogConfirmBtn" type="primary">
+        <ea-button id="eventsDialogConfirmBtn" variant="primary">
           Confirm
         </ea-button>
       </div>
@@ -827,24 +808,20 @@ modalExample.init();
   </ea-dialog>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-button id="eventsDialogOpenBtn" plain> Open the events Dialog </ea-button>
-
-  <ea-dialog id="eventsDialog" heading="Tips" width="500px" before-close>
-    <span>This is a message</span>
-    <section slot="footer">
-      <div class="dialog-footer">
-        <ea-button id="eventsDialogCancelBtn">Cancel</ea-button>
-        <ea-button id="eventsDialogConfirmBtn" type="primary">
-          Confirm
-        </ea-button>
-      </div>
-    </section>
-  </ea-dialog>
-</div>
+<ea-dialog id="eventsDialog" heading="Tips" width="500px">
+  <span>This is a message</span>
+  <section slot="footer">
+    <div class="dialog-footer">
+      <ea-button id="eventsDialogCancelBtn">Cancel</ea-button>
+      <ea-button id="eventsDialogConfirmBtn" variant="primary">
+        Confirm
+      </ea-button>
+    </div>
+  </section>
+</ea-dialog>
 ```
 
 ```js
@@ -867,26 +844,30 @@ const eventsExample = {
       this.dialog.hide();
     });
 
-    this.dialog.addEventListener("open", () => {
-      console.log("open");
+    this.dialog.addEventListener("ea-open", () => {
+      console.log("ea-open");
     });
 
-    this.dialog.addEventListener("opened", () => {
-      console.log("opened");
+    this.dialog.addEventListener("ea-opened", () => {
+      console.log("ea-opened");
     });
 
-    this.dialog.addEventListener("before-close", e => {
-      const { done } = e.detail;
+    this.dialog.beforeClose = async done => {
       console.log("before-close");
+      this.confirmBtn.toggleAttribute("loading", true);
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
       done();
+    };
+
+    this.dialog.addEventListener("ea-close", () => {
+      console.log("ea-close");
     });
 
-    this.dialog.addEventListener("close", () => {
-      console.log("close");
-    });
-
-    this.dialog.addEventListener("closed", () => {
-      console.log("closed");
+    this.dialog.addEventListener("ea-closed", () => {
+      console.log("ea-closed");
+      this.confirmBtn.toggleAttribute("loading", false);
     });
   },
 };
@@ -895,55 +876,81 @@ eventsExample.init();
 
 :::
 
-## Attributes（属性）
+## ea-dialog API
 
-下面列出 `ea-dialog` 常用属性、类型、说明与默认值，便于查阅。
+### ea-dialog Attributes
 
-| 参数             | 说明                       | 类型      | 可选值        | 默认值  |
-| ---------------- | -------------------------- | --------- | ------------- | ------- |
-| `heading`        | 对话框标题                 | `string`  | —             | `""`    |
-| `width`          | 对话框宽度（支持 css 值）  | `string`  | —             | `50%`   |
-| `visible`        | 是否可见                   | `boolean` | `true\|false` | `false` |
-| `center`         | 内容是否垂直居中           | `boolean` | `true\|false` | `false` |
-| `movable`        | 是否可拖拽                 | `boolean` | `true\|false` | `false` |
-| `fullscreen`     | 是否全屏显示               | `boolean` | `true\|false` | `false` |
-| `modal`          | 是否显示遮罩               | `boolean` | `true\|false` | `true`  |
-| `append-to-body` | 是否将弹窗追加到 body      | `boolean` | `true\|false` | `false` |
-| `append-to`      | 指定追加到的选择器         | `string`  | —             | `body`  |
-| `show-close`     | 是否显示右上角关闭图标     | `boolean` | `true\|false` | `true`  |
-| `before-close`   | 是否启用 before-close 拦截 | `boolean` | `true\|false` | `false` |
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| ---- | ---- | ---- | ------ | ------ |
+| `heading` | 对话框标题 | `string` | — | `""` |
+| `width` | 对话框宽度（支持 CSS 值） | `string` | — | `"50%"` |
+| `top` | 对话框顶部距离（支持 CSS 值） | `string` | — | `"50%"` |
+| `visible` | 是否可见 | `boolean` | — | `false` |
+| `center` | 头部和底部内容是否水平居中 | `boolean` | — | `false` |
+| `fullscreen` | 是否全屏显示 | `boolean` | — | `false` |
+| `movable` | 是否可拖拽 | `boolean` | — | `false` |
+| `modal` | 是否显示遮罩层 | `boolean` | — | `true` |
+| `modal-pentrable` | 遮罩层是否可穿透 | `boolean` | — | `false` |
+| `show-close` | 是否显示右上角关闭图标 | `boolean` | — | `true` |
+| `close-on-click-modal` | 点击遮罩层是否关闭 | `boolean` | — | `true` |
+| `close-on-press-escape` | 按 ESC 键是否关闭 | `boolean` | — | `true` |
+| `append-to-body` | 是否将弹窗追加到 body | `boolean` | — | `false` |
+| `append-to` | 指定追加到的选择器 | `string` | — | `"body"` |
+| `z-index` | 层级 | `string` | — | `""` |
+| `background-color` | 遮罩层背景色 | `string` | — | `""` |
+| `content-width` | 内容宽度 | `string` | — | `""` |
+| `content-max-width` | 内容最大宽度 | `string` | — | `""` |
+| `content-height` | 内容高度 | `string` | — | `""` |
+| `beforeClose` | 关闭前回调函数，调用 done() 后关闭 | `Function` | — | `null` |
 
-## Methods（方法）
+### ea-dialog CSS Part
 
-- `show()`：显示对话框。
-- `hide()`：隐藏对话框。
-- `resetPosition()`：重置对话框位置（用于可拖拽场景）。
+| 名称 | 说明 |
+| ---- | ---- |
+| `container` | 对话框容器元素 |
+| `header` | 头部元素 |
+| `heading` | 标题文本元素 |
+| `close-icon` | 关闭图标元素 |
+| `content` | 主体内容元素 |
+| `footer` | 底部元素 |
 
-示例：
+### ea-dialog Slots
 
-```js
-const d = document.querySelector("#basicDialog");
-d.show();
-d.hide();
-```
+| 名称 | 说明 |
+| ---- | ---- |
+| `default` | 对话框主体内容 |
+| `header` | 自定义头部内容 |
+| `footer` | 自定义底部内容 |
 
-## CSS Part / 自定义样式
+### ea-dialog Methods
 
-组件在 shadow DOM 中使用下列 part/class，可以通过 `::part()` 或全局样式覆盖（对非 shadow 部分）。
+| 方法名 | 说明 | 参数 |
+| ------ | ---- | ---- |
+| `show()` | 显示对话框 | — |
+| `hide()` | 隐藏对话框 | — |
+| `resetPosition()` | 重置对话框位置（用于可拖拽场景） | — |
 
-| 名称         | 说明                              |
-| ------------ | --------------------------------- |
-| `container`  | 对话框根容器（`.ea-dialog-main`） |
-| `header`     | 头部（标题或自定义头部 slot）     |
-| `heading`    | 标题文本                          |
-| `close-icon` | 右上角关闭图标                    |
-| `content`    | 主体内容                          |
-| `footer`     | 底部 slot                         |
+### ea-dialog Events
 
-示例：改变按钮 icon 颜色
+| 事件名 | 说明 | 回调参数 |
+| ------ | ---- | -------- |
+| `ea-open` | 对话框打开时触发 | — |
+| `ea-opened` | 对话框打开动画结束时触发 | — |
+| `ea-close` | 对话框关闭时触发 | — |
+| `ea-closed` | 对话框关闭动画结束时触发 | — |
 
-```css
-ea-dialog::part(icon) {
-  color: white;
-}
-```
+### ea-dialog CSS 自定义属性
+
+| 属性名 | 说明 | 默认值 |
+| ------ | ---- | ------ |
+| `--ea-dialog-padding` | 对话框内边距 | `var(--spacing-lg)` |
+| `--ea-dialog-padding-primary` | 对话框次级内边距 | `var(--spacing-md)` |
+| `--ea-dialog-box-shadow` | 对话框阴影 | `var(--box-shadow-md)` |
+| `--ea-dialog-border-radius` | 对话框圆角 | `var(--border-radius-sm)` |
+| `--ea-dialog-heading-font-size` | 标题字号 | `var(--font-size-lg)` |
+| `--ea-dialog-close-icon-size` | 关闭图标尺寸 | `var(--font-size-lg)` |
+| `--ea-dialog-content-font-size` | 内容字号 | `var(--font-size-md)` |
+| `--ea-dialog-heading-color` | 标题颜色 | `var(--grey-900)` |
+| `--ea-dialog-close-icon-color` | 关闭图标颜色 | `var(--grey-500)` |
+| `--ea-dialog-content-color` | 内容颜色 | `var(--grey-700)` |
+| `--ea-dialog-bg-color` | 对话框背景色 | `var(--white)` |

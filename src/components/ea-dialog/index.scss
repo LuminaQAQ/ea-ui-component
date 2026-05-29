@@ -1,22 +1,23 @@
+$name: ea-dialog;
+
 :host {
+  --#{$name}-padding: var(--spacing-lg);
+  --#{$name}-padding-primary: var(--spacing-md);
+  --#{$name}-box-shadow: var(--box-shadow-md);
+  --#{$name}-border-radius: var(--border-radius-sm);
+
+  --#{$name}-heading-font-size: var(--font-size-lg);
+  --#{$name}-close-icon-size: var(--font-size-lg);
+  --#{$name}-content-font-size: var(--font-size-md);
+
+  --#{$name}-heading-color: var(--grey-900);
+  --#{$name}-close-icon-color: var(--grey-500);
+  --#{$name}-content-color: var(--grey-700);
+  --#{$name}-bg-color: var(--white);
+
   --ea-overlay-content-max-width: unset;
   --ea-overlay-content-height: auto;
   --ea-overlay-content-width: 50%;
-}
-
-:host {
-  --ea-dialog-padding: 14px;
-  --ea-dialog-padding-primary: 12px;
-  --ea-dialog-box-shadow: var(--box-shadow-md);
-  --ea-dialog-border-radius: var(--border-radius-sm);
-
-  --ea-dialog-heading-font-size: var(--font-size-lg);
-  --ea-dialog-close-icon-size: var(--font-size-lg);
-  --ea-dialog-content-font-size: var(--font-size-md);
-
-  --ea-dialog-heading-color: var(--grey-900);
-  --ea-dialog-close-icon-color: var(--grey-500);
-  --ea-dialog-content-color: var(--grey-700);
 }
 
 :host([movable]) {
@@ -24,24 +25,20 @@
 }
 
 @include block(ea-overlay) {
-
   @include element(content) {
     max-width: var(--ea-overlay-content-max-width);
     height: var(--ea-overlay-content-height);
     width: var(--ea-overlay-content-width);
+
+    box-sizing: border-box;
+    padding: var(--#{$name}-padding);
+    border-radius: var(--#{$name}-border-radius);
+    box-shadow: var(--#{$name}-box-shadow);
+    background-color: var(--#{$name}-bg-color);
   }
 
   @include state(modal-penetrable) {
     pointer-events: none;
-
-    left: var(--ea-overlay-content-left);
-    top: var(--ea-overlay-content-top);
-    right: unset;
-    bottom: unset;
-    transform: var(--ea-overlay-content-transform);
-
-    width: auto;
-    height: auto;
 
     .ea-overlay__mask {
       display: none;
@@ -53,24 +50,23 @@
   }
 
   @include state(close-hidden) {
-    .ea-dialog-main__close-icon {
+    .ea-dialog__close-icon {
       display: none;
     }
   }
 }
 
-@include block(ea-dialog) {
-
+@include block($name) {
   @include modifier(center) {
 
-    .ea-dialog-main__header,
-    .ea-dialog-main__footer {
+    .ea-dialog__header,
+    .ea-dialog__footer {
       text-align: center;
     }
   }
 
   @include modifier(draggable) {
-    .ea-dialog-main__header {
+    .ea-dialog__header {
       cursor: move;
     }
   }
@@ -79,33 +75,26 @@
     --ea-overlay-content-width: 100%;
     --ea-overlay-content-height: 100%;
 
-    .ea-dialog-main {
+    .ea-dialog {
       width: 100%;
       height: 100%;
     }
   }
 }
 
-@include block(ea-dialog-main) {
-  box-sizing: border-box;
-  padding: var(--ea-dialog-padding);
-  border-radius: var(--ea-dialog-border-radius);
-  box-shadow: var(--ea-dialog-box-shadow);
-
-  background-color: white;
-
+@include block($name) {
   display: flex;
   flex-direction: column;
 
   @include element(header) {
     position: relative;
-    padding-bottom: var(--ea-dialog-padding-primary);
+    padding-bottom: var(--#{$name}-padding-primary);
   }
 
   @include element(heading) {
-    font-size: var(--ea-dialog-heading-font-size);
-    line-height: var(--ea-dialog-heading-font-size);
-    color: var(--ea-dialog-heading-color);
+    font-size: var(--#{$name}-heading-font-size);
+    line-height: var(--#{$name}-heading-font-size);
+    color: var(--#{$name}-heading-color);
   }
 
   @include element(close-icon) {
@@ -114,23 +103,19 @@
     top: 0;
 
     cursor: pointer;
-    color: var(--ea-dialog-close-icon-color);
+    color: var(--#{$name}-close-icon-color);
   }
 
   @include element(content) {
     flex: 1 0 auto;
 
-    font-size: var(--ea-dialog-content-font-size);
-    line-height: var(--ea-dialog-content-font-size);
-    color: var(--ea-dialog-content-color);
-  }
-
-  @include element(input) {
-    padding-top: var(--ea-dialog-padding-primary);
+    font-size: var(--#{$name}-content-font-size);
+    line-height: var(--#{$name}-content-font-size);
+    color: var(--#{$name}-content-color);
   }
 
   @include element(footer) {
-    padding-top: var(--ea-dialog-padding-primary);
+    padding-top: var(--#{$name}-padding-primary);
     text-align: right;
 
     ea-button {

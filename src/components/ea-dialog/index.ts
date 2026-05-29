@@ -1,9 +1,6 @@
 import { EaOverlay } from "@/common/ea-overlay";
 import { EaOverlayClosedEvent } from "@/common/ea-overlay/events/EaOverlayClosedEvent";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import { createBEM } from "@utils/bem";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -11,6 +8,41 @@ import "@/components/ea-icon/index";
 const TAG_NAME = "ea-dialog" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 对话框组件，用于弹出交互层，显示重要信息或要求用户确认/输入，支持拖拽、全屏、居中等模式。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot default - 对话框主体内容。
+ * @slot header - 自定义头部内容。
+ * @slot footer - 自定义底部内容。
+ *
+ * @event ea-open - 对话框打开时触发。
+ * @event ea-opened - 对话框打开动画结束时触发。
+ * @event ea-close - 对话框关闭时触发。
+ * @event ea-closed - 对话框关闭动画结束时触发。
+ *
+ * @csspart container - 对话框容器元素。
+ * @csspart header - 头部元素。
+ * @csspart heading - 标题文本元素。
+ * @csspart close-icon - 关闭图标元素。
+ * @csspart content - 主体内容元素。
+ * @csspart footer - 底部元素。
+ *
+ * @cssproperty --ea-dialog-padding - 对话框内边距。
+ * @cssproperty --ea-dialog-padding-primary - 对话框次级内边距。
+ * @cssproperty --ea-dialog-box-shadow - 对话框阴影。
+ * @cssproperty --ea-dialog-border-radius - 对话框圆角。
+ * @cssproperty --ea-dialog-heading-font-size - 标题字号。
+ * @cssproperty --ea-dialog-close-icon-size - 关闭图标尺寸。
+ * @cssproperty --ea-dialog-content-font-size - 内容字号。
+ * @cssproperty --ea-dialog-heading-color - 标题颜色。
+ * @cssproperty --ea-dialog-close-icon-color - 关闭图标颜色。
+ * @cssproperty --ea-dialog-content-color - 内容颜色。
+ * @cssproperty --ea-dialog-bg-color - 对话框背景色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaDialog extends EaOverlay {
   // ==================== DOM 元素引用 ====================
@@ -21,13 +53,13 @@ export class EaDialog extends EaOverlay {
   @query(".ea-overlay__content")
   private _overlayContent!: HTMLElement;
 
-  @query(".ea-dialog-main__header")
+  @query(bem.ce("header"))
   private _header!: HTMLElement;
 
-  @query(".ea-dialog-main__heading")
+  @query(bem.ce("heading"))
   private _heading!: HTMLElement;
 
-  @query(".ea-dialog-main__close-icon")
+  @query(bem.ce("close-icon"))
   private _closeIcon!: HTMLElement;
 
   // ==================== 属性定义 ====================
@@ -119,18 +151,18 @@ export class EaDialog extends EaOverlay {
     const contentContainer = tpl.content.querySelector(".ea-overlay__content")!;
 
     contentContainer.innerHTML = `
-      <div class='ea-dialog-main' part='container'>
-        <header class='ea-dialog-main__header' part='header'>
+      <div class='${bem()}' part='container'>
+        <header class='${bem.e("header")}' part='header'>
           <slot name="header">
-            <span class='ea-dialog-main__heading' part='heading'></span>
-            <ea-icon class='ea-dialog-main__close-icon' name='xmark' part='close-icon'></ea-icon>          
+            <span class='${bem.e("heading")}' part='heading'></span>
+            <ea-icon class='${bem.e("close-icon")}' name='xmark' part='close-icon'></ea-icon>
           </slot>
         </header>
-        <main class='ea-dialog-main__content' part='content'>
-            <slot></slot>
+        <main class='${bem.e("content")}' part='content'>
+          <slot></slot>
         </main>
-        <footer class='ea-dialog-main__footer' part='footer'>
-            <slot name='footer'></slot>
+        <footer class='${bem.e("footer")}' part='footer'>
+          <slot name='footer'></slot>
         </footer>
       </div>
     `;
@@ -149,7 +181,6 @@ export class EaDialog extends EaOverlay {
         fullscreen: this.fullscreen,
       },
       {
-        modal: this.modalPentrable,
         "modal-penetrable": this.modalPentrable,
         "close-hidden": !this.showClose,
       }
@@ -174,10 +205,12 @@ export class EaDialog extends EaOverlay {
     this.style.removeProperty("--ea-overlay-content-top");
   }
 
+  // ==================== 事件处理 ====================
+
   /**
-   * 初始化拖拽事件
+   * 处理拖拽开始
    */
-  @listen("mousedown", ".ea-dialog-main__header")
+  @listen("mousedown", bem.ce("header"))
   private _handleDragStart(mousedownEvent: MouseEvent): void {
     if (!this.movable || this.fullscreen) return;
     if (!this._header.contains(mousedownEvent.target as Node)) return;
@@ -206,19 +239,17 @@ export class EaDialog extends EaOverlay {
     });
   }
 
-  // ==================== 事件处理 ====================
-
   /**
    * 处理关闭图标点击事件
    */
-  @listen("click", ".ea-dialog-main__close-icon")
+  @listen("click", bem.ce("close-icon"))
   private _handleCloseIconClick(): void {
     if (!this.showClose) return;
     this.visible = false;
   }
 
   /**
-   * 处理关闭事件
+   * 处理关闭动画结束事件
    */
   @listen("ea-closed")
   private _handleClosed(e: EaOverlayClosedEvent): void {

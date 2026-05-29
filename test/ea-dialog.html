@@ -380,9 +380,9 @@
     <!-- #endregion  -->
     <!-- end  -->
 
-    <!--  模态框 -->
+    <!--  模态穿透 -->
     <!-- #region -->
-    <h1>模态框</h1>
+    <h1>模态穿透</h1>
 
     <div class="demo">
       <ea-button id="modalDialogOpenBtn" plain>
@@ -403,7 +403,7 @@
     </div>
 
     <script type="module">
-      // ------- 模态框 -------
+      // ------- 模态穿透 -------
       // #region
       const modalExample = {
         dialog: document.querySelector("#modalDialog"),
@@ -478,12 +478,12 @@
             this.dialog.hide();
           });
 
-          this.dialog.addEventListener("open", () => {
-            console.log("open");
+          this.dialog.addEventListener("ea-open", () => {
+            console.log("ea-open");
           });
 
-          this.dialog.addEventListener("opened", () => {
-            console.log("opened");
+          this.dialog.addEventListener("ea-opened", () => {
+            console.log("ea-opened");
           });
 
           this.dialog.beforeClose = async done => {
@@ -495,12 +495,12 @@
             done();
           };
 
-          this.dialog.addEventListener("close", () => {
-            console.log("close");
+          this.dialog.addEventListener("ea-close", () => {
+            console.log("ea-close");
           });
 
-          this.dialog.addEventListener("closed", () => {
-            console.log("closed");
+          this.dialog.addEventListener("ea-closed", () => {
+            console.log("ea-closed");
             this.confirmBtn.toggleAttribute("loading", false);
           });
         },
