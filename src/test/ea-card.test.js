@@ -552,5 +552,40 @@ describe("EaCard", () => {
       const headerSlot = card.shadowRoot.querySelector('slot[name="header"]');
       expect(headerSlot.innerText).toBe("Attr Header");
     });
+
+    it("设置 header 属性但没有 slot 内容时不应显示 is-header-empty", async () => {
+      const card = document.createElement("ea-card");
+      card.setAttribute("header", "Card Title");
+      card.innerHTML = `<p>Content only</p>`;
+      container.appendChild(card);
+      await waitForRender();
+
+      const containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+    });
+
+    it("设置 footer 属性但没有 slot 内容时不应显示 is-footer-empty", async () => {
+      const card = document.createElement("ea-card");
+      card.setAttribute("footer", "Card Footer");
+      card.innerHTML = `<p>Content only</p>`;
+      container.appendChild(card);
+      await waitForRender();
+
+      const containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+    });
+
+    it("同时设置 header 和 footer 属性且有其他 slot 内容时状态正确", async () => {
+      const card = document.createElement("ea-card");
+      card.setAttribute("header", "Title");
+      card.setAttribute("footer", "Footer");
+      card.innerHTML = `<section slot="footer">Slot Footer</section><p>Content</p>`;
+      container.appendChild(card);
+      await waitForRender();
+
+      const containerEl = card.shadowRoot.querySelector(".ea-card");
+      expect(containerEl.classList.contains("is-header-empty")).toBe(false);
+      expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+    });
   });
 });

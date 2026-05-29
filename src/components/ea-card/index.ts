@@ -116,7 +116,7 @@ export class EaCard extends EaBase {
   @listen("slotchange", `${bem.ce("header")} slot[name="header"]`)
   private _handleHeaderSlotChange(e: Event) {
     const target = e.target as HTMLSlotElement;
-    const isEmpty = target.assignedElements().length === 0;
+    const isEmpty = target.assignedElements().length === 0 && !this.header;
     this._states.isHeaderEmpty = isEmpty;
     this.updateContainerClasslist();
   }
@@ -125,7 +125,7 @@ export class EaCard extends EaBase {
   @listen("slotchange", `${bem.ce("footer")} slot[name="footer"]`)
   private _handleFooterSlotChange(e: Event) {
     const target = e.target as HTMLSlotElement;
-    const isEmpty = target.assignedElements().length === 0;
+    const isEmpty = target.assignedElements().length === 0 && !this.footer;
     this._states.isFooterEmpty = isEmpty;
     this.updateContainerClasslist();
   }
