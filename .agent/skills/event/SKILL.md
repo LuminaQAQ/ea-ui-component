@@ -67,12 +67,41 @@ this.emit("click", { detail: { index, item } });
 
 ### 事件命名规则
 
-自定义事件类的事件名**统一使用 `ea-` 前缀**：
+自定义事件类的事件名应**优先使用原生事件名**，仅在没有原生对应事件时使用 `ea-` 前缀：
 
-| 事件类别 | 前缀 | 示例 |
-|---------|------|------|
-| 标准语义事件（change, close, open 等） | `ea-` | `ea-change`, `ea-close`, `ea-open` |
-| 组件特有事件 | `ea-` | `ea-sort-change`, `ea-visible-change`, `ea-check` |
+| 事件类别 | 命名策略 | 示例 |
+|---------|---------|------|
+| 原生 DOM 事件（focus, blur, change, input 等） | **使用原生事件名** | `focus`, `blur`, `change`, `input` |
+| 组件特有事件（无原生对应） | **使用 `ea-` 前缀** | `ea-clear`, `ea-sort-change`, `ea-visible-change` |
+
+**为什么原生事件名优先？**
+
+1. **直觉性**：用户使用表单组件时，天然期望监听 `focus`、`blur`、`change`、`input` 等原生事件名
+2. **一致性**：与原生 HTML 元素行为一致，降低学习成本
+3. **互操作性**：与框架和工具的事件系统兼容
+
+**原生事件名使用注意事项：**
+
+1. **阻止原生事件泄漏**：在 Shadow DOM 内部监听原生事件后，必须调用 `e.stopPropagation()` 阻止原生事件穿透 Shadow DOM，然后从宿主元素派发自定义事件，防止用户收到两次同名事件
+2. **不注册到 GlobalEventHandlersEventMap**：原生事件名（如 `"focus"`、`"change"`）已在内置类型中定义，重复注册会导致类型冲突。仅 `ea-` 前缀的事件名注册到 `GlobalEventHandlersEventMap`
+
+```typescript
+// ✅ 正确：原生事件名 + stopPropagation
+this._originalWrapper.addEventListener("input", (e: Event) => {
+  e.stopPropagation(); // 阻止原生事件穿透 Shadow DOM
+  this._handleInput(e);
+}, { signal });
+
+// 从宿主元素派发自定义事件
+this.dispatchEvent(new EaInputInputEvent({ value }));
+
+// ✅ 正确：组件特有事件使用 ea- 前缀
+this.dispatchEvent(new EaInputClearEvent({ oldValue }));
+
+// ❌ 错误：原生事件使用 ea- 前缀
+this.dispatchEvent(new EaInputFocusEvent()); // super("ea-focus", ...) ❌
+// 应改为 super("focus", ...)
+```
 
 ### 文件组织
 
@@ -88,72 +117,116 @@ ea-component/
 
 ### 定义事件类
 
+#### 原生事件名的事件类
+
 ```typescript
-// events/EaComponentChangeEvent.ts
-export interface EaComponentChangeEventDetail {
+// events/EaInputChangeEvent.ts
+export interface EaInputChangeEventDetail {
   value: string;
-  checked: boolean;
 }
 
-export class EaComponentChangeEvent extends Event {
-  readonly detail: EaComponentChangeEventDetail;
+export class EaInputChangeEvent extends Event {
+  readonly detail: EaInputChangeEventDetail;
 
-  constructor(detail: EaComponentChangeEventDetail) {
-    super("ea-change", { bubbles: true, composed: true });
+  constructor(detail: EaInputChangeEventDetail) {
+    super("change", { bubbles: true, composed: true });
+    this.detail = detail;
+  }
+}
+
+// 注意：原生事件名不注册到 GlobalEventHandlersEventMap（会与内置类型冲突）
+```
+
+#### 组件特有事件的事件类
+
+```typescript
+// events/EaInputClearEvent.ts
+export interface EaInputClearEventDetail {
+  oldValue: string;
+}
+
+export class EaInputClearEvent extends Event {
+  readonly detail: EaInputClearEventDetail;
+
+  constructor(detail: EaInputClearEventDetail) {
+    super("ea-clear", { bubbles: true, composed: true });
     this.detail = detail;
   }
 }
 
 declare global {
   interface GlobalEventHandlersEventMap {
-    "ea-change": EaComponentChangeEvent;
+    "ea-clear": EaInputClearEvent;
   }
 }
 ```
 
 ### 关键规范
 
-1. **事件名**：`super()` 中的事件名统一使用 `ea-` 前缀
+1. **事件名**：优先使用原生事件名，仅组件特有事件使用 `ea-` 前缀
 2. **Detail 接口**：必须定义独立的 `export interface`，命名为 `Ea{Component}{Action}EventDetail`
 3. **Detail 属性**：使用 `readonly` 修饰符，确保不可变
 4. **构造选项**：默认 `{ bubbles: true, composed: true }`；需要阻止默认行为时添加 `cancelable: true`
-5. **全局类型注册**：统一注册到 `GlobalEventHandlersEventMap`，禁止使用 `HTMLElementEventMap`
+5. **全局类型注册**：仅 `ea-` 前缀的事件名注册到 `GlobalEventHandlersEventMap`，原生事件名不注册（避免与内置类型冲突）
 6. **类命名**：`Ea{Component}{Action}Event`（如 `EaTableSortChangeEvent`、`EaTreeCheckEvent`）
+7. **阻止原生事件泄漏**：当事件名与原生事件同名时，必须在 Shadow DOM 内部 `stopPropagation()` 阻止原生事件穿透
 
 ### 使用自定义事件
 
 ```typescript
-import { EaComponentChangeEvent } from "./events/EaComponentChangeEvent";
+import { EaInputChangeEvent } from "./events/EaInputChangeEvent";
+import { EaInputClearEvent } from "./events/EaInputClearEvent";
 
-this.dispatchEvent(new EaComponentChangeEvent({ value: "new", checked: true }));
+// 原生事件名
+this.dispatchEvent(new EaInputChangeEvent({ value: "new" }));
+
+// 组件特有事件
+this.dispatchEvent(new EaInputClearEvent({ oldValue: "" }));
 ```
 
 ### 在外部监听
 
 ```typescript
-import { EaComponentChangeEvent } from "@components/ea-component/events/EaComponentChangeEvent";
+import { EaInputChangeEvent } from "@components/ea-input/events/EaInputChangeEvent";
+import { EaInputClearEvent } from "@components/ea-input/events/EaInputClearEvent";
 
-component.addEventListener("ea-change", (e: EaComponentChangeEvent) => {
+// 原生事件名 - 直接使用字符串
+component.addEventListener("change", (e: EaInputChangeEvent) => {
   console.log(e.detail.value);
-  console.log(e.detail.checked);
+});
+
+// 组件特有事件 - 使用 ea- 前缀
+component.addEventListener("ea-clear", (e: EaInputClearEvent) => {
+  console.log(e.detail.oldValue);
 });
 ```
 
 ## 事件名速查
 
-### 对外公开事件（自定义事件类，ea- 前缀）
+### 对外公开事件（自定义事件类）
+
+#### 原生事件名
 
 | 事件名 | 用途 | 典型组件 |
 |--------|------|---------|
-| `ea-change` | 值变化 | checkbox、switch、slider、input-number |
+| `focus` | 获得焦点 | input、textarea、select |
+| `blur` | 失去焦点 | input、textarea、select |
+| `change` | 值提交变化 | input、select、checkbox、switch |
+| `input` | 实时输入 | input、textarea |
+
+#### 组件特有事件（`ea-` 前缀）
+
+| 事件名 | 用途 | 典型组件 |
+|--------|------|---------|
+| `ea-clear` | 清除操作 | input、select、color-picker |
 | `ea-sort-change` | 排序变化 | table |
 | `ea-current-change` | 当前项变化 | table、tree、pagination |
 | `ea-check` / `ea-check-change` | 勾选变化 | tree |
-| `ea-clear` | 清除操作 | input、select、color-picker |
 | `ea-remove-tag` | 移除标签 | select、tag |
 | `ea-visible-change` | 下拉框显隐变化 | select、picker |
 | `ea-select` / `ea-select-all` | 选中变化 | table |
 | `ea-row-click` / `ea-cell-click` | 行/单元格点击 | table |
+| `ea-close` | 关闭 | alert、tour |
 
 ### 内部通信事件（emit 模式，ea- 前缀）
 
@@ -177,7 +250,7 @@ export class EaSliderChangeEvent extends Event {
   readonly detail: EaSliderChangeEventDetail;
 
   constructor(detail: EaSliderChangeEventDetail) {
-    super("ea-change", { bubbles: true, cancelable: true, composed: true });
+    super("change", { bubbles: true, cancelable: true, composed: true });
     this.detail = detail;
   }
 }
@@ -186,6 +259,43 @@ export class EaSliderChangeEvent extends Event {
 const event = new EaSliderChangeEvent({ value: 50 });
 if (!this.dispatchEvent(event)) {
   return;
+}
+```
+
+### Shadow DOM 内事件代理模式
+
+当组件封装了原生表单元素（如 input、textarea）时，需要阻止原生事件穿透 Shadow DOM，然后从宿主元素重新派发自定义事件：
+
+```typescript
+private _bindOriginalEvents(): void {
+  const { signal } = this._originalAbortController;
+
+  // 阻止原生 input 事件穿透，派发自定义事件
+  this._originalWrapper.addEventListener("input", (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (!target.classList.contains(bem.e("original"))) return;
+    e.stopPropagation(); // 关键：阻止原生事件穿透 Shadow DOM
+    this._handleInput(e);
+  }, { signal });
+
+  this._originalWrapper.addEventListener("focusin", (e: FocusEvent) => {
+    const target = e.target as HTMLElement;
+    if (!target.classList.contains(bem.e("original"))) return;
+    e.stopPropagation();
+    this._handleFocus();
+  }, { signal });
+}
+
+private _handleInput(e: Event): void {
+  const { value } = e.target as HTMLInputElement;
+  this.value = value;
+  this.dispatchEvent(new EaInputInputEvent({ value }));
+}
+
+private _handleFocus(): void {
+  this._isFocus = true;
+  this.updateContainerClasslist();
+  this.dispatchEvent(new EaInputFocusEvent());
 }
 ```
 

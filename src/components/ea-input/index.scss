@@ -1,33 +1,34 @@
+$name: ea-input;
+
 :host {
-  --ea-input-border-radius: var(--border-radius-sm);
-  --ea-input-border-color: var(--color-border);
-  --ea-input-border-focus-color: var(--blue-400);
-  --ea-input-border-invalid-color: var(--red-500);
-  --ea-input-padding: 0 var(--spacing-md);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-border-color: var(--color-border);
+  --#{$name}-border-focus-color: var(--blue-400);
+  --#{$name}-border-invalid-color: var(--red-500);
+  --#{$name}-padding: 0 var(--spacing-md);
 
-  --ea-input-disabled-background-color: var(--grey-100);
-  --ea-input-disabled-color: var(--grey-300);
+  --#{$name}-disabled-bg-color: var(--grey-100);
+  --#{$name}-disabled-color: var(--grey-300);
 
-  --ea-input-height-sm: 22px;
-  --ea-input-height-md: 30px;
-  --ea-input-height-lg: 38px;
-  --ea-input-height: var(--ea-input-height-md);
+  --#{$name}-height-sm: 22px;
+  --#{$name}-height-md: 30px;
+  --#{$name}-height-lg: 38px;
+  --#{$name}-height: var(--#{$name}-height-md);
 
-  --ea-input-font-size-sm: var(--font-size-sm);
-  --ea-input-font-size-md: var(--font-size-md);
-  --ea-input-font-size-lg: var(--font-size-lg);
-  --ea-input-font-size: var(--ea-input-font-size-md);
+  --#{$name}-font-size-sm: var(--font-size-sm);
+  --#{$name}-font-size-md: var(--font-size-md);
+  --#{$name}-font-size-lg: var(--font-size-lg);
+  --#{$name}-font-size: var(--#{$name}-font-size-md);
 
-  --ea-input-text-color: var(--grey-700);
-  --ea-input-box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+  --#{$name}-text-color: var(--grey-700);
 
-  --ea-input-transition: var(--transition-fast);
+  --#{$name}-transition: var(--transition-fast);
 
-  --ea-input-icon-color: var(--grey-500);
+  --#{$name}-icon-color: var(--grey-500);
 
-  --ea-input-outside-fill-color: var(--grey-100);
+  --#{$name}-outside-fill-color: var(--grey-100);
 
-  --ea-input-resize: vertical;
+  --#{$name}-resize: vertical;
 }
 
 :host {
@@ -40,35 +41,35 @@
 }
 
 :host(:invalid) {
-  .ea-input__inner {
-    --ea-input-border-color: var(--ea-input-border-invalid-color);
+  .#{$name}__inner {
+    --#{$name}-border-color: var(--#{$name}-border-invalid-color);
   }
 }
 
 :host(:invalid:focus) {
-  .ea-input__inner {
-    --ea-input-border-color: var(--ea-input-border-invalid-color);
+  .#{$name}__inner {
+    --#{$name}-border-color: var(--#{$name}-border-invalid-color);
     box-shadow: 0 0 0 2px rgba(245, 108, 108, 0.2);
   }
 }
 
 ::slotted([slot="prefix"]),
 ::slotted([slot="suffix"]) {
-  color: var(--ea-input-icon-color);
+  color: var(--#{$name}-icon-color);
 }
 
 ::slotted([slot="prefix"]) {
-  margin-right: 8px;
+  margin-right: var(--spacing-md);
 }
 
 ::slotted([slot="suffix"]) {
-  margin-left: 4px;
+  margin-left: var(--spacing-sm);
 }
 
 @mixin outside-slot-style {
   box-sizing: border-box;
-  padding: var(--ea-input-padding);
-  border: 1px solid var(--ea-input-border-color);
+  padding: var(--#{$name}-padding);
+  border: 1px solid var(--#{$name}-border-color);
 
   display: flex;
   align-items: center;
@@ -76,12 +77,12 @@
 
   min-height: 100%;
 
-  color: var(--ea-input-text-color);
+  color: var(--#{$name}-text-color);
 
-  background-color: var(--ea-input-outside-fill-color);
+  background-color: var(--#{$name}-outside-fill-color);
 }
 
-@include block(ea-input) {
+@include block($name) {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -94,8 +95,8 @@
   @include element(form-label) {
     padding-bottom: var(--spacing-md);
 
-    font-size: var(--ea-input-font-size);
-    color: var(--ea-input-text-color);
+    font-size: var(--#{$name}-font-size);
+    color: var(--#{$name}-text-color);
 
     &:empty {
       display: none;
@@ -108,25 +109,24 @@
     display: flex;
     align-items: center;
 
-    // box-sizing: border-box;
     box-shadow: none;
 
-    padding: var(--ea-input-padding);
+    padding: var(--#{$name}-padding);
 
-    border: 1px solid var(--ea-input-border-color);
-    border-radius: var(--ea-input-border-radius);
+    border: 1px solid var(--#{$name}-border-color);
+    border-radius: var(--#{$name}-border-radius);
 
     width: 100%;
-    min-height: var(--ea-input-height);
+    min-height: var(--#{$name}-height);
     overflow: hidden;
 
-    transition: border var(--ea-input-transition);
+    transition: border var(--#{$name}-transition);
   }
 
   @include element(original-wrapper) {
     width: 100%;
 
-    line-height: var(--ea-input-height);
+    line-height: var(--#{$name}-height);
   }
 
   @include element(original) {
@@ -139,16 +139,17 @@
     width: 100%;
     height: 100%;
 
-    font-size: var(--ea-input-font-size);
-    color: var(--ea-input-text-color);
+    font-size: var(--#{$name}-font-size);
+    color: var(--#{$name}-text-color);
 
     &::placeholder {
-      color: var(--ea-input-icon-color);
+      color: var(--#{$name}-icon-color);
     }
   }
 
   @include element(prefix-icon) {
-    margin-right: 8px;
+    margin-right: var(--spacing-md);
+    color: var(--#{$name}-icon-color);
   }
 
   @include element(suffix) {
@@ -158,96 +159,99 @@
     align-items: center;
   }
 
+  @include element(suffix-icon-item) {
+    color: var(--#{$name}-icon-color);
+  }
+
   @include element(suffix-icon) {
-    margin-left: 4px;
+    margin-left: var(--spacing-sm);
   }
 
   @include element(word-count) {
     display: none;
 
-    font-size: var(--ea-input-font-size);
-    color: var(--ea-input-icon-color);
+    font-size: var(--#{$name}-font-size);
+    color: var(--#{$name}-icon-color);
 
     white-space: nowrap;
   }
 
-  .ea-input__clear-icon,
-  .ea-input__show-password-icon {
+  @include element(clear-icon) {
     display: none;
     cursor: pointer;
-
-    color: var(--ea-input-icon-color);
+    color: var(--#{$name}-icon-color);
   }
 
-  .ea-input__prefix-icon,
-  .ea-input__suffix-icon {
-    color: var(--ea-input-icon-color);
+  @include element(show-password-icon) {
+    display: none;
+    cursor: pointer;
+    color: var(--#{$name}-icon-color);
   }
 
   @include modifier(textarea) {
-    --ea-input-padding: var(--spacing-md);
+    --#{$name}-padding: var(--spacing-md);
 
-    .ea-input__inner {
+    .#{$name}__inner {
       padding: 0;
     }
 
-    .ea-input__prefix {
+    .#{$name}__prefix {
       padding-right: 0;
     }
 
-    .ea-input__original {
-      min-height: calc(var(--ea-input-height) + 8px);
+    .#{$name}__original {
+      min-height: calc(var(--#{$name}-height) + 8px);
       line-height: normal;
 
-      resize: var(--ea-input-resize);
+      resize: var(--#{$name}-resize);
       scrollbar-width: thin;
 
-      padding: 8px;
+      padding: var(--spacing-sm);
     }
 
-    .ea-input__word-count {
+    .#{$name}__word-count {
       position: absolute;
-      bottom: 4px;
-      right: 16px;
+      bottom: var(--spacing-sm);
+      right: var(--spacing-lg);
     }
   }
 
   @include state(focus) {
-    .ea-input__inner {
-      --ea-input-border-color: var(--ea-input-border-focus-color);
+    .#{$name}__inner {
+      --#{$name}-border-color: var(--#{$name}-border-focus-color);
     }
   }
 
   @include state(disabled) {
-    background-color: var(--ea-input-disabled-background-color);
+    background-color: var(--#{$name}-disabled-bg-color);
     cursor: not-allowed;
     pointer-events: none;
 
-    .ea-input__original {
+    .#{$name}__original {
       &:disabled {
-        background-color: var(--ea-input-disabled-background-color);
-        color: var(--ea-input-disabled-color);
+        background-color: var(--#{$name}-disabled-bg-color);
+        color: var(--#{$name}-disabled-color);
       }
     }
   }
 
   @include state(clearable) {
-    .ea-input__clear-icon {
+    .#{$name}__clear-icon {
       display: block;
     }
   }
 
   @include modifier(show-password) {
-    .ea-input__show-password-icon {
+    .#{$name}__show-password-icon {
       display: block;
     }
   }
 
   @include modifier(has-prepend) {
-    --ea-input-border-radius: 0 var(--border-radius-sm) var(--border-radius-sm)
+    --#{$name}-border-radius: 0 var(--border-radius-sm) var(--border-radius-sm)
       0;
 
-    .ea-input__prepend {
+    .#{$name}__prepend {
       @include outside-slot-style;
 
       border-right: none;
@@ -258,10 +262,10 @@
   }
 
   @include modifier(has-append) {
-    --ea-input-border-radius: var(--border-radius-sm) 0 0
+    --#{$name}-border-radius: var(--border-radius-sm) 0 0
       var(--border-radius-sm);
 
-    .ea-input__append {
+    .#{$name}__append {
       @include outside-slot-style;
 
       border-left: none;
@@ -272,22 +276,22 @@
   }
 
   @include modifier(size-small) {
-    --ea-input-height: var(--ea-input-height-sm);
-    --ea-input-font-size: var(--font-size-sm);
+    --#{$name}-height: var(--#{$name}-height-sm);
+    --#{$name}-font-size: var(--font-size-sm);
   }
 
   @include modifier(size-large) {
-    --ea-input-height: var(--ea-input-height-lg);
-    --ea-input-font-size: var(--font-size-lg);
+    --#{$name}-height: var(--#{$name}-height-lg);
+    --#{$name}-font-size: var(--font-size-lg);
   }
 
   @include modifier(show-word-limit) {
-    .ea-input__word-count {
+    .#{$name}__word-count {
       display: block;
     }
   }
 
-  &.ea-input--has-prepend.ea-input--has-append {
-    --ea-input-border-radius: 0;
+  &.#{$name}--has-prepend.#{$name}--has-append {
+    --#{$name}-border-radius: 0;
   }
 }

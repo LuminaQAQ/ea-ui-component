@@ -1,104 +1,144 @@
-import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
+import EaFormAssociatedBase from "@core/EaFormAssociatedBase";
 import { createBEM } from "@utils/bem";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { html } from "@utils/html";
-import { Enum } from "@/utils/Enum";
-import { EaClearEvent } from "./events/EaClearEvent";
+import { Enum } from "@utils/Enum";
+import { EaInputClearEvent } from "./events/EaClearEvent";
+import { EaInputInputEvent } from "./events/EaInputInputEvent";
+import { EaInputFocusEvent } from "./events/EaInputFocusEvent";
+import { EaInputBlurEvent } from "./events/EaInputBlurEvent";
+import { EaInputChangeEvent } from "./events/EaInputChangeEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-input" as const;
 const bem = createBEM(TAG_NAME);
 
-// ==================== 类型定义 ====================
+const INPUT_TYPES = [
+  "textarea",
+  "text",
+  "button",
+  "checkbox",
+  "color",
+  "date",
+  "datetime-local",
+  "email",
+  "file",
+  "hidden",
+  "image",
+  "month",
+  "number",
+  "password",
+  "radio",
+  "range",
+  "reset",
+  "search",
+  "submit",
+  "tel",
+  "time",
+  "url",
+  "week",
+] as const;
 
-export type InputType =
-  | "textarea"
-  | "text"
-  | "button"
-  | "checkbox"
-  | "color"
-  | "date"
-  | "datetime-local"
-  | "email"
-  | "file"
-  | "hidden"
-  | "image"
-  | "month"
-  | "number"
-  | "password"
-  | "radio"
-  | "range"
-  | "reset"
-  | "search"
-  | "submit"
-  | "tel"
-  | "time"
-  | "url"
-  | "week";
+export type InputType = (typeof INPUT_TYPES)[number];
 
 export type InputSize = "large" | "default" | "small";
 
 export type ResizeType = "none" | "both" | "horizontal" | "vertical";
 
-// ==================== 组件类 ====================
-
+/**
+ * @summary 输入框组件，支持多种输入类型、可清空、密码显示切换、字数统计等功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot prepend - 前置内容插槽。
+ * @slot prefix - 前缀图标插槽。
+ * @slot suffix - 后缀图标插槽。
+ * @slot append - 后置内容插槽。
+ *
+ * @event input - 输入值变化时触发，detail: `{ value: string }`。
+ * @event change - 值提交变化时触发，detail: `{ value: string }`。
+ * @event ea-clear - 清空输入框时触发，detail: `{ oldValue: string }`。
+ * @event focus - 获得焦点时触发。
+ * @event blur - 失去焦点时触发。
+ *
+ * @csspart container - 容器元素。
+ * @csspart label - 标签元素。
+ * @csspart region - 区域元素。
+ * @csspart prepend - 前置内容元素。
+ * @csspart inner - 内部容器元素。
+ * @csspart prefix - 前缀元素。
+ * @csspart original-wrapper - 原始输入框包装器元素。
+ * @csspart original - 原始输入框元素。
+ * @csspart suffix - 后缀元素。
+ * @csspart clear-icon - 清除图标元素。
+ * @csspart show-password-icon - 显示密码图标元素。
+ * @csspart suffix-icon - 后缀图标元素。
+ * @csspart count - 字数统计元素。
+ * @csspart append - 后置内容元素。
+ *
+ * @cssproperty --ea-input-height - 输入框高度。
+ * @cssproperty --ea-input-font-size - 输入框字体大小。
+ * @cssproperty --ea-input-border-color - 输入框边框颜色。
+ * @cssproperty --ea-input-border-focus-color - 输入框聚焦边框颜色。
+ * @cssproperty --ea-input-border-invalid-color - 输入框无效边框颜色。
+ * @cssproperty --ea-input-border-radius - 输入框圆角。
+ * @cssproperty --ea-input-padding - 输入框内边距。
+ * @cssproperty --ea-input-text-color - 输入框文字颜色。
+ * @cssproperty --ea-input-transition - 过渡动画时长。
+ * @cssproperty --ea-input-icon-color - 图标颜色。
+ * @cssproperty --ea-input-resize - 文本域调整大小方式。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaInput extends EaFormAssociatedBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-input")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-input__prepend")
+  @query(bem.ce("prepend"))
   private _prepend!: HTMLElement;
 
-  @query(".ea-input__inner")
+  @query(bem.ce("inner"))
   private _inner!: HTMLElement;
 
   @query('slot[name="prefix"]')
   private _prefixSlot!: HTMLElement;
 
-  @query(".ea-input__original-wrapper")
+  @query(bem.ce("original-wrapper"))
   private _originalWrapper!: HTMLElement;
 
-  @query(".ea-input__original")
+  @query(bem.ce("original"))
   private _original!: HTMLInputElement | HTMLTextAreaElement;
 
-  @query(".ea-input__suffix")
+  @query(bem.ce("suffix"))
   private _suffix!: HTMLElement;
 
-  @query(".ea-input__suffix-icon")
+  @query(bem.ce("suffix-icon"))
   private _suffixIcon!: HTMLElement;
 
-  @query(".ea-input__clear-icon")
+  @query(bem.ce("clear-icon"))
   private _clearIcon!: HTMLElement;
 
-  @query(".ea-input__show-password-icon")
+  @query(bem.ce("show-password-icon"))
   private _showPasswordIcon!: HTMLElement;
 
-  @query(".ea-input__word-count")
+  @query(bem.ce("word-count"))
   private _wordCount!: HTMLElement;
 
-  @query(".ea-input__append")
+  @query(bem.ce("append"))
   private _append!: HTMLElement;
 
-  @query(".ea-input__form-label")
+  @query(bem.ce("form-label"))
   private _label!: HTMLElement;
 
-  /** @type {AbortController} */
-  private _abortController?: AbortController | null;
+  @property({ type: Boolean, default: false })
+  _isFocus: boolean = false;
 
-  private _states = {
-    isFocus: false,
-    isMouseenter: false,
-    originTextareaHeight: 0,
-  };
+  @property({ type: Number, default: 0 })
+  _originTextareaHeight: number = 0;
 
-  // ==================== 属性定义 ====================
+  private _originalAbortController: AbortController | null = null;
 
   @attribute({
     type: String,
@@ -110,34 +150,26 @@ export class EaInput extends EaFormAssociatedBase {
   label: string = "";
 
   @attribute({
-    type: Enum([
-      "textarea",
-      "text",
-      "button",
-      "checkbox",
-      "color",
-      "date",
-      "datetime-local",
-      "email",
-      "file",
-      "hidden",
-      "image",
-      "month",
-      "number",
-      "password",
-      "radio",
-      "range",
-      "reset",
-      "search",
-      "submit",
-      "tel",
-      "time",
-      "url",
-      "week",
-    ]),
+    type: Enum(INPUT_TYPES),
     default: "text",
-    observer(this: EaInput, newVal: InputType) {
-      this._renderOriginal(newVal);
+    observer(this: EaInput, newVal: InputType, oldVal: InputType) {
+      const oldIsTextarea = oldVal === "textarea";
+      const newIsTextarea = newVal === "textarea";
+
+      if (oldIsTextarea !== newIsTextarea) {
+        this._renderOriginal(newVal);
+      } else if (!newIsTextarea && this._original instanceof HTMLInputElement) {
+        this._original.type = newVal;
+      }
+
+      if (this.showPassword && !newIsTextarea) {
+        if (newVal === "text") {
+          this._showPasswordIcon.setAttribute("name", "eye");
+        } else if (newVal === "password") {
+          this._showPasswordIcon.setAttribute("name", "eye-slash");
+        }
+      }
+
       this.updateContainerClasslist();
     },
   })
@@ -165,6 +197,10 @@ export class EaInput extends EaFormAssociatedBase {
 
       if (this.clearable || this.showPassword) {
         this.updateContainerClasslist();
+      }
+
+      if (this.showWordLimit && this.maxlength) {
+        this._updateWordCount();
       }
     },
   })
@@ -240,10 +276,12 @@ export class EaInput extends EaFormAssociatedBase {
     observer(this: EaInput, newVal: boolean) {
       if (this.type === "textarea") return;
 
-      if (this.type === "text") {
-        this._showPasswordIcon.setAttribute("name", "eye");
-      } else if (this.type === "password") {
-        this._showPasswordIcon.setAttribute("name", "eye-slash");
+      if (newVal) {
+        if (this.type === "text") {
+          this._showPasswordIcon.setAttribute("name", "eye");
+        } else if (this.type === "password") {
+          this._showPasswordIcon.setAttribute("name", "eye-slash");
+        }
       }
 
       this.updateContainerClasslist();
@@ -257,7 +295,7 @@ export class EaInput extends EaFormAssociatedBase {
     observer(this: EaInput, newVal: string) {
       if (newVal)
         this._prefixSlot.innerHTML = html(
-          `<ea-icon class="ea-input__prefix-icon" part="prefix-icon" name="${newVal}"></ea-icon>`
+          `<ea-icon class="${bem.e("prefix-icon")}" part="prefix-icon" name="${newVal}"></ea-icon>`
         );
     },
   })
@@ -269,7 +307,7 @@ export class EaInput extends EaFormAssociatedBase {
     observer(this: EaInput, newVal: string) {
       if (newVal)
         this._suffixIcon.innerHTML = html(
-          `<ea-icon class="ea-input__suffix-icon" part="suffix-icon" name="${newVal}"></ea-icon>`
+          `<ea-icon class="${bem.e("suffix-icon-item")}" part="suffix-icon" name="${newVal}"></ea-icon>`
         );
     },
   })
@@ -282,7 +320,7 @@ export class EaInput extends EaFormAssociatedBase {
       if (this.type !== "textarea" && this.type !== "text") return;
 
       if (newVal && this.hasAttribute("maxlength")) {
-        this._onWordLimitTextShouldUpdate();
+        this._updateWordCount();
       }
 
       this.updateContainerClasslist();
@@ -306,12 +344,12 @@ export class EaInput extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaInput, newVal: boolean) {
+    observer(this: EaInput, _newVal: boolean) {
       if (this.type !== "textarea") return;
 
       void this._original.clientHeight;
 
-      this._states.originTextareaHeight = this._original.scrollHeight;
+      this._originTextareaHeight = this._original.scrollHeight;
     },
   })
   autosize: boolean = false;
@@ -319,14 +357,12 @@ export class EaInput extends EaFormAssociatedBase {
   @attribute({
     type: Number,
     default: 0,
-    observer(this: EaInput, newVal: number) {},
   })
   minRows: number | string | null = null;
 
   @attribute({
     type: Number,
     default: 0,
-    observer(this: EaInput, newVal: number) {},
   })
   maxRows: number | string | null = null;
 
@@ -408,7 +444,6 @@ export class EaInput extends EaFormAssociatedBase {
   @attribute({
     type: Enum(["none", "both", "horizontal", "vertical"]),
     default: "vertical",
-    observer(this: EaInput, newVal: ResizeType) {},
   })
   resize: ResizeType = "vertical";
 
@@ -425,19 +460,10 @@ export class EaInput extends EaFormAssociatedBase {
     type: String,
     default: "",
     observer(this: EaInput, newVal: string) {
-      this._original.setAttribute("form", newVal);
-    },
-  })
-  form: HTMLFormElement | null = null;
-
-  @attribute({
-    type: String,
-    default: "",
-    observer(this: EaInput, newVal: string) {
       this._original.setAttribute("aria-label", newVal);
     },
   })
-  ariaLabel: string | null = null;
+  ariaLabel!: string;
 
   @attribute({
     type: String,
@@ -446,7 +472,7 @@ export class EaInput extends EaFormAssociatedBase {
       this._original.tabIndex = newVal ? parseInt(newVal) : 0;
     },
   })
-  tabindex: string | null = null;
+  tabindex: string = "";
 
   @attribute({
     type: String,
@@ -457,17 +483,10 @@ export class EaInput extends EaFormAssociatedBase {
   })
   inputmode: string = "";
 
-  /**
-   * 获取验证目标元素
-   * @returns {HTMLElement}
-   */
   get validationTarget() {
     return this._original;
   }
 
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const isTextarea = this.type === "textarea";
     const isText = this.type === "text";
@@ -494,7 +513,7 @@ export class EaInput extends EaFormAssociatedBase {
         ["size-" + this.size]: hasSize,
       },
       {
-        focus: this._states.isFocus,
+        focus: this._isFocus,
         disabled: this.disabled,
         clearable: clearable,
       }
@@ -505,25 +524,16 @@ export class EaInput extends EaFormAssociatedBase {
     return className;
   }
 
-  constructor() {
-    super();
-  }
-
-  /**
-   * 渲染原始输入元素
-   * @param type 输入类型
-   */
   private _renderOriginal(type: InputType): void {
     const id =
       this.getAttribute("id") || Math.random().toString(36).substring(2, 7);
     const tpl =
       type === "textarea"
-        ? `<textarea id="${id}" class="ea-input__original" part="original"></textarea>`
-        : `<input id="${id}" class="ea-input__original" type="${type}" part="original" />`;
+        ? `<textarea id="${id}" class="${bem.e("original")}" part="original"></textarea>`
+        : `<input id="${id}" class="${bem.e("original")}" type="${type}" part="original" />`;
 
     this._originalWrapper.innerHTML = html(tpl);
 
-    // 初始化原始输入元素的属性
     this._original.value = this.value;
     this._original.disabled = this.disabled;
     this._original.readOnly = this.readonly;
@@ -550,55 +560,47 @@ export class EaInput extends EaFormAssociatedBase {
       }
     }
 
-    if (this.form) {
-      this._original.setAttribute("form", this.form?.id || "");
-    }
     if (this.ariaLabel) {
-      this._original.setAttribute("aria-label", this.ariaLabel || "");
+      this._original.setAttribute("aria-label", this.ariaLabel);
     }
     if (this.tabindex) {
       this._original.tabIndex = this.tabindex ? parseInt(this.tabindex) : 0;
     }
-
-    this._initBasicEvent();
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     const id =
       (this as any).getAttribute("id") ||
       Math.random().toString(36).substring(2, 7);
     const tpl =
       this.type === "textarea"
-        ? `<textarea id="${id}" class="ea-input__original" part="original"></textarea>`
-        : `<input id="${id}" class="ea-input__original" type="${this.type || "text"}" part="original" />`;
+        ? `<textarea id="${id}" class="${bem.e("original")}" part="original"></textarea>`
+        : `<input id="${id}" class="${bem.e("original")}" type="${this.type || "text"}" part="original" />`;
 
     return `
-      <label class="ea-input" part="container">
-        <span class="ea-input__form-label" part="label"></span>
-        <section class="ea-input__region" part="region">
-          <div class="ea-input__prepend" part="prepend">
+      <label class="${bem()}" part="container">
+        <span class="${bem.e("form-label")}" part="label"></span>
+        <section class="${bem.e("region")}" part="region">
+          <div class="${bem.e("prepend")}" part="prepend">
             <slot name="prepend"></slot>
           </div>
-          <div class="ea-input__inner" part="inner">
-            <span class="ea-input__prefix" part="prefix">
+          <div class="${bem.e("inner")}" part="inner">
+            <span class="${bem.e("prefix")}" part="prefix">
               <slot name="prefix"></slot>
             </span>
-            <span class="ea-input__original-wrapper" part="original-wrapper">
+            <span class="${bem.e("original-wrapper")}" part="original-wrapper">
               ${tpl}
             </span>
-            <span class="ea-input__suffix" part="suffix">
-              <ea-icon class="ea-input__clear-icon" name="xmark" part="clear-icon"></ea-icon>
-              <ea-icon class="ea-input__show-password-icon" name="eye-slash" part="show-password-icon"></ea-icon>
-              <span class="ea-input__suffix-icon" part="suffix-icon">
+            <span class="${bem.e("suffix")}" part="suffix">
+              <ea-icon class="${bem.e("clear-icon")}" name="xmark" part="clear-icon"></ea-icon>
+              <ea-icon class="${bem.e("show-password-icon")}" name="eye-slash" part="show-password-icon"></ea-icon>
+              <span class="${bem.e("suffix-icon")}" part="suffix-icon">
                 <slot name="suffix"></slot>
               </span>
-              <span class="ea-input__word-count" part="count"></span>
+              <span class="${bem.e("word-count")}" part="count"></span>
             </span>
           </div>
-          <div class="ea-input__append" part="append">
+          <div class="${bem.e("append")}" part="append">
             <slot name="append"></slot>
           </div>
         </section>
@@ -606,91 +608,83 @@ export class EaInput extends EaFormAssociatedBase {
     `;
   }
 
-  /**
-   * 获取焦点
-   */
-  focus() {
-    this._states.isFocus = true;
-    this._original.focus();
+  focus(options?: FocusOptions) {
+    this._isFocus = true;
+    this._original.focus(options);
   }
 
-  /**
-   * 失去焦点
-   */
   blur() {
-    this._states.isFocus = false;
+    this._isFocus = false;
     this._original.blur();
   }
 
-  /**
-   * 清空输入框内容
-   */
   clear() {
     this.value = "";
     this._original.value = "";
     if (this.showWordLimit && this.maxlength) {
-      this._onWordLimitTextShouldUpdate();
+      this._updateWordCount();
     }
   }
 
-  /**
-   * 选中输入框内容
-   */
   select() {
     this._original.select();
   }
 
-  /**
-   * 输入框内容发生改变时触发
-   * @param {FocusEvent} e 事件对象
-   */
-  private _onFocusEvent = (e: Event): void => {
-    this._states.isFocus = true;
-    this.updateContainerClasslist();
-  };
+  setRangeText(
+    replacement: string,
+    start: number,
+    end: number,
+    selectMode: "select" | "start" | "end" | "preserve" = "preserve"
+  ): void {
+    if (this._original instanceof HTMLInputElement) {
+      this._original.setRangeText(replacement, start, end, selectMode);
+    } else if (this._original instanceof HTMLTextAreaElement) {
+      this._original.setRangeText(replacement, start, end, selectMode);
+    }
+    this.value = this._original.value;
+  }
 
-  /**
-   * 输入框失去焦点时触发
-   * @param {FocusEvent} e 事件对象
-   */
-  private _onBlurEvent = (e: Event): void => {
-    this._states.isFocus = false;
-    this.updateContainerClasslist();
-  };
+  setSelectionRange(
+    selectionStart: number,
+    selectionEnd: number,
+    selectionDirection?: "forward" | "backward" | "none"
+  ): void {
+    this._original.setSelectionRange(
+      selectionStart,
+      selectionEnd,
+      selectionDirection
+    );
+  }
 
-  /**
-   * 输入框内容发生改变时触发
-   * @param {InputEvent} e 事件对象
-   */
-  private _onInputEvent = (e: Event): void => {
-    const { value } = e.target as HTMLInputElement;
-    this.value = value;
-    this.dispatchEvent(new CustomEvent("input", { detail: value }));
-  };
+  showPicker(): void {
+    if (
+      this._original instanceof HTMLInputElement &&
+      "showPicker" in this._original
+    ) {
+      (this._original as any).showPicker();
+    }
+  }
 
-  /**
-   * 初始化基本事件
-   */
-  private _initBasicEvent = (): void => {
-    this._abortController?.abort();
-    this._abortController = new AbortController();
+  stepDown(n?: number): void {
+    if (this._original instanceof HTMLInputElement) {
+      try {
+        this._original.stepDown(n);
+        this.value = this._original.value;
+      } catch {}
+    }
+  }
 
-    this._original.addEventListener("focus", this._onFocusEvent, {
-      signal: this._abortController.signal,
-    });
-    this._original.addEventListener("blur", this._onBlurEvent, {
-      signal: this._abortController.signal,
-    });
-    this._original.addEventListener("input", this._onInputEvent, {
-      signal: this._abortController.signal,
-    });
-  };
+  stepUp(n?: number): void {
+    if (this._original instanceof HTMLInputElement) {
+      try {
+        this._original.stepUp(n);
+        this.value = this._original.value;
+      } catch {}
+    }
+  }
 
-  /**
-   * 清空按钮点击时触发
-   */
-  @listen("click", ".ea-input__clear-icon")
-  private _onClearIconClickEvent(): void {
+  @listen("click", bem.ce("clear-icon"))
+  private _handleClearIconClick(): void {
     if (!this.clearable) return;
 
     const oldValue = this.value;
@@ -701,40 +695,49 @@ export class EaInput extends EaFormAssociatedBase {
       this.showWordLimit &&
       (this.type === "textarea" || this.type === "text")
     ) {
-      this._onWordLimitTextShouldUpdate();
+      this._updateWordCount();
     }
 
     this.focus();
 
-    this.dispatchEvent(new EaClearEvent({ oldValue }));
+    this.dispatchEvent(new EaInputClearEvent({ oldValue }));
   }
 
-  /**
-   * 显示密码按钮点击时触发
-   */
-  @listen("click", ".ea-input__show-password-icon")
-  private _onShowPasswordIconClickEvent(): void {
+  @listen("click", bem.ce("show-password-icon"))
+  private _handleShowPasswordIconClick(): void {
     if (!this.showPassword) return;
 
     if (this.type === "password") {
       this.type = "text";
-      this._showPasswordIcon.setAttribute("name", "eye");
     } else if (this.type === "text") {
       this.type = "password";
-      this._showPasswordIcon.setAttribute("name", "eye-slash");
     }
 
     this.focus();
   }
 
-  /**
-   * 自动调整高度
-   */
-  @listen("input", ".ea-input__original")
-  private _onAutosizeEvent(e: Event): void {
+  private _handleInput(e: Event): void {
+    const { value } = e.target as HTMLInputElement;
+    this.value = value;
+    this.dispatchEvent(new EaInputInputEvent({ value }));
+  }
+
+  private _handleFocus(): void {
+    this._isFocus = true;
+    this.updateContainerClasslist();
+    this.dispatchEvent(new EaInputFocusEvent());
+  }
+
+  private _handleBlur(): void {
+    this._isFocus = false;
+    this.updateContainerClasslist();
+    this.dispatchEvent(new EaInputBlurEvent());
+  }
+
+  private _handleAutosize(e: Event): void {
     if (!this.autosize || this.type !== "textarea") return;
 
-    const lineHeight = this._states.originTextareaHeight / this.rows;
+    const lineHeight = this._originTextareaHeight / this.rows;
 
     if (
       (this.minRows as number) > 0 &&
@@ -748,34 +751,89 @@ export class EaInput extends EaFormAssociatedBase {
     )
       return;
 
-    this._original.style.height = `${this._states.originTextareaHeight}px`;
+    this._original.style.height = `${this._originTextareaHeight}px`;
     void this._original.scrollHeight;
     this._original.style.height = `${(e.target as HTMLElement).scrollHeight + 2}px`;
   }
 
-  /**
-   * 当包含 show-word-limit 属性时，更新字数统计
-   */
-  @listen("input", ".ea-input__original")
-  private _onWordLimitTextShouldUpdate(): void {
+  private _handleChange(e: Event): void {
+    const { value } = e.target as HTMLInputElement;
+    this.value = value;
+    this.dispatchEvent(new EaInputChangeEvent({ value }));
+  }
+
+  /** 更新字数统计 */
+  private _updateWordCount(): void {
     if (!this.showWordLimit || !this.maxlength) return;
 
     this._wordCount.textContent = `${this._original.value.length} / ${this.maxlength}`;
   }
 
-  $mount() {
+  $mount(): void {
     this.updateContainerClasslist();
-    this._initBasicEvent();
+    this._bindOriginalEvents();
   }
 
-  $beforeUnmount() {
-    this._abortController?.abort();
-    this._abortController = null;
+  private _bindOriginalEvents(): void {
+    if (this._originalAbortController) {
+      this._originalAbortController.abort();
+    }
+    this._originalAbortController = new AbortController();
+    const { signal } = this._originalAbortController;
+
+    this._originalWrapper.addEventListener(
+      "input",
+      (e: Event) => {
+        const target = e.target as HTMLElement;
+        if (!target.classList.contains(bem.e("original"))) return;
+        e.stopPropagation();
+        this._handleInput(e);
+        this._handleAutosize(e);
+      },
+      { signal }
+    );
+
+    this._originalWrapper.addEventListener(
+      "focusin",
+      (e: FocusEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target.classList.contains(bem.e("original"))) return;
+        e.stopPropagation();
+        this._handleFocus();
+      },
+      { signal }
+    );
+
+    this._originalWrapper.addEventListener(
+      "focusout",
+      (e: FocusEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target.classList.contains(bem.e("original"))) return;
+        e.stopPropagation();
+        this._handleBlur();
+      },
+      { signal }
+    );
+
+    this._originalWrapper.addEventListener(
+      "change",
+      (e: Event) => {
+        const target = e.target as HTMLElement;
+        if (!target.classList.contains(bem.e("original"))) return;
+        e.stopPropagation();
+        this._handleChange(e);
+      },
+      { signal }
+    );
   }
 
-  /**
-   * 更新表单验证状态
-   */
+  $beforeUnmount(): void {
+    if (this._originalAbortController) {
+      this._originalAbortController.abort();
+      this._originalAbortController = null;
+    }
+  }
+
   updateValidity() {
     super.updateValidity();
 
@@ -808,17 +866,11 @@ export class EaInput extends EaFormAssociatedBase {
     }
   }
 
-  /**
-   * 检查表单字段的有效性
-   */
   checkValidity(): boolean {
     this.updateValidity();
     return this.internals?.validity?.valid ?? true;
   }
 
-  /**
-   * 报告表单字段的有效性（显示验证提示）
-   */
   reportValidity(): boolean {
     this.updateValidity();
     return this.internals?.reportValidity() ?? true;

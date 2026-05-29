@@ -1,13 +1,18 @@
-export class EaClearEvent extends Event {
-  readonly detail: EaClearEventDetail;
+export interface EaInputClearEventDetail {
+  oldValue: string;
+}
 
-  constructor(detail: EaClearEventDetail) {
+export class EaInputClearEvent extends Event {
+  readonly detail: EaInputClearEventDetail;
+
+  constructor(detail: EaInputClearEventDetail) {
     super("ea-clear", { bubbles: true, cancelable: true, composed: true });
-
     this.detail = detail;
   }
 }
 
-interface EaClearEventDetail {
-  oldValue: string;
+declare global {
+  interface GlobalEventHandlersEventMap {
+    "ea-clear": EaInputClearEvent;
+  }
 }

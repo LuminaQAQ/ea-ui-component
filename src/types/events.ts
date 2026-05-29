@@ -2,7 +2,7 @@
  * 全局事件类型声明
  */
 
-import { EaClearEvent } from "../components/ea-input/events/EaClearEvent";
+import { EaInputClearEvent } from "../components/ea-input/events/EaClearEvent";
 import { EaColorPickerClearEvent } from "../components/ea-color-picker/events/EaColorPickerClearEvent";
 import { EaSelectClearEvent } from "../components/ea-select/events/EaSelectClearEvent";
 import { EaPaginationCurrentChangeEvent } from "../components/ea-pagination/events/EaPaginationCurrentChangeEvent";
@@ -17,7 +17,7 @@ import { EaTourCloseEvent } from "../components/ea-tour/events/EaTourCloseEvent"
 
 declare global {
   interface GlobalEventHandlersEventMap {
-    "ea-clear": EaClearEvent | EaColorPickerClearEvent | EaSelectClearEvent;
+    "ea-clear": EaInputClearEvent | EaColorPickerClearEvent | EaSelectClearEvent;
 
     "ea-current-change":
       | EaPaginationCurrentChangeEvent

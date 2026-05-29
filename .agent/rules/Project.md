@@ -278,7 +278,8 @@ export class EaAlert extends EaBase {
 
 ```typescript
 // 自定义事件类（对外公开事件）
-this.dispatchEvent(new EaComponentChangeEvent({ value: "new" }));
+this.dispatchEvent(new EaInputChangeEvent({ value: "new" }));
+this.dispatchEvent(new EaInputClearEvent({ oldValue: "" }));
 
 // emit（父子组件内部通信）
 this.emit("ea-tab-close-icon-click", { detail: { name: this.name } });
@@ -295,14 +296,16 @@ this.emit("ea-tab-close-icon-click", { detail: { name: this.name } });
 
 | 模式 | 事件名规则 | 示例 |
 |------|-----------|------|
-| 自定义事件类 | 统一 `ea-` 前缀 | `ea-change`, `ea-sort-change` |
+| 自定义事件类（原生对应事件） | **使用原生事件名** | `focus`, `blur`, `change`, `input` |
+| 自定义事件类（组件特有事件） | **使用 `ea-` 前缀** | `ea-clear`, `ea-sort-change` |
 | `this.emit()` | 统一 `ea-` 前缀 | `ea-tab-close-icon-click`, `ea-sub-menu-click` |
 
 **自定义事件类规范：**
 - 文件组织：组件目录下 `events/Ea{Component}{Action}Event.ts`
 - Detail 接口：独立 `export interface`，命名 `Ea{Component}{Action}EventDetail`
-- 全局类型注册：统一注册到 `GlobalEventHandlersEventMap`
+- 全局类型注册：仅 `ea-` 前缀的事件名注册到 `GlobalEventHandlersEventMap`，原生事件名不注册（避免与内置类型冲突）
 - 构造选项：默认 `{ bubbles: true, composed: true }`
+- 阻止原生事件泄漏：当事件名与原生事件同名时，必须在 Shadow DOM 内部 `stopPropagation()` 阻止原生事件穿透
 
 ### BEM 类名规范
 
