@@ -130,31 +130,66 @@
     <!-- #region -->
     <h1>触发方式</h1>
 
-    <div class="demo">
-      <ea-dropdown trigger="hover">
-        <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
-        <ea-dropdown-menu>
-          <ea-dropdown-item>Action 1</ea-dropdown-item>
-          <ea-dropdown-item divided>Action 2</ea-dropdown-item>
-          <ea-dropdown-item>Action 3</ea-dropdown-item>
-        </ea-dropdown-menu>
-      </ea-dropdown>
-      <ea-dropdown trigger="click">
-        <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
-        <ea-dropdown-menu>
-          <ea-dropdown-item>Action 1</ea-dropdown-item>
-          <ea-dropdown-item divided>Action 2</ea-dropdown-item>
-          <ea-dropdown-item>Action 3</ea-dropdown-item>
-        </ea-dropdown-menu>
-      </ea-dropdown>
-      <ea-dropdown trigger="contextmenu">
-        <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
-        <ea-dropdown-menu>
-          <ea-dropdown-item>Action 1</ea-dropdown-item>
-          <ea-dropdown-item divided>Action 2</ea-dropdown-item>
-          <ea-dropdown-item>Action 3</ea-dropdown-item>
-        </ea-dropdown-menu>
-      </ea-dropdown>
+    <style>
+      .demo-trigger {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 1rem 0;
+        align-items: center;
+      }
+
+      .demo-trigger .block {
+        flex: 1;
+        min-width: 200px;
+        max-width: 320px;
+        padding: 1.5rem;
+        text-align: center;
+      }
+
+      .demo-trigger .demonstration {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-size: 14px;
+        text-align: center;
+        color: #606266;
+      }
+    </style>
+
+    <div class="demo demo-trigger">
+      <div class="block">
+        <span class="demonstration">Hover</span>
+        <ea-dropdown trigger="hover">
+          <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
+          <ea-dropdown-menu>
+            <ea-dropdown-item>Action 1</ea-dropdown-item>
+            <ea-dropdown-item divided>Action 2</ea-dropdown-item>
+            <ea-dropdown-item>Action 3</ea-dropdown-item>
+          </ea-dropdown-menu>
+        </ea-dropdown>
+      </div>
+      <div class="block">
+        <span class="demonstration">Click</span>
+        <ea-dropdown trigger="click">
+          <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
+          <ea-dropdown-menu>
+            <ea-dropdown-item>Action 1</ea-dropdown-item>
+            <ea-dropdown-item divided>Action 2</ea-dropdown-item>
+            <ea-dropdown-item>Action 3</ea-dropdown-item>
+          </ea-dropdown-menu>
+        </ea-dropdown>
+      </div>
+      <div class="block">
+        <span class="demonstration">Contextmenu</span>
+        <ea-dropdown trigger="contextmenu">
+          <ea-button type="primary" slot="reference"> Dropdown List</ea-button>
+          <ea-dropdown-menu>
+            <ea-dropdown-item>Action 1</ea-dropdown-item>
+            <ea-dropdown-item divided>Action 2</ea-dropdown-item>
+            <ea-dropdown-item>Action 3</ea-dropdown-item>
+          </ea-dropdown-menu>
+        </ea-dropdown>
+      </div>
     </div>
 
     <hr />

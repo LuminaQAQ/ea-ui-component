@@ -151,8 +151,8 @@ export class EaDropdown extends EaPopper {
   }
 
   $mount(): void {
-    super.$mount();
     if (!this.getAttribute("placement")) this.placement = "bottom";
+    super.$mount();
     this._setupTrigger();
   }
 
