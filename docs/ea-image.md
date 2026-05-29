@@ -884,7 +884,7 @@ customProgressExample.init();
 | show-progress                     | 是否显示进度（progress 区域会渲染 slot 或文本）     | Boolean  | —      | false         |
 | append-to-body                    | 是否插入到 body                                     | Boolean  | —      | false         |
 | z-index                           | 遮罩层的 z-index（继承自 ea-overlay）               | String   | —      | —             |
-| beforeClose <ea-tag>Prop</ea-tag> | 关闭前的回调函数（继承自 ea-overlay）               | Function | —      | null          |
+| beforeClose <ea-tag>Prop</ea-tag> | 关闭前的回调函数（继承自 ea-overlay），`done()` 确认关闭，`done(true)` 取消关闭 | Function | —      | null          |
 
 ### ImagePreview Scopes
 

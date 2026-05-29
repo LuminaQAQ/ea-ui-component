@@ -1,177 +1,155 @@
 <script setup>
 import { onMounted } from 'vue'
-import "../dist/components/index.js"
-import "../dist/assets/icon.css"
 
-onMounted(async () => {
-  await customElements.whenDefined('ea-drawer');
-  
-      // ------- 基本用法 -------
-      // #region
-      const Drawer = {
-        drawer: document.querySelector("#drawer"),
+onMounted(() => {
+  import("../dist/components/index.js")
+  import("../dist/components/ea-message-box.js")
+  import("../dist/assets/icon.css")
 
-        ltrBtn: document.querySelector("#openDrawerBtn--ltr"),
-        rtlBtn: document.querySelector("#openDrawerBtn--rtl"),
-        ttbBtn: document.querySelector("#openDrawerBtn--ttb"),
-        bttBtn: document.querySelector("#openDrawerBtn--btt"),
+  const Drawer = {
+    drawer: document.querySelector("#drawer"),
+    ltrBtn: document.querySelector("#openDrawerBtn--ltr"),
+    rtlBtn: document.querySelector("#openDrawerBtn--rtl"),
+    ttbBtn: document.querySelector("#openDrawerBtn--ttb"),
+    bttBtn: document.querySelector("#openDrawerBtn--btt"),
 
-        init() {
-          this.ltrBtn.addEventListener("click", () => {
-            this.drawer.direction = "ltr";
-            this.drawer.visible = true;
+    init() {
+      this.ltrBtn.addEventListener("click", () => {
+        this.drawer.direction = "ltr";
+        this.drawer.visible = true;
+      });
+
+      this.rtlBtn.addEventListener("click", () => {
+        this.drawer.direction = "rtl";
+        this.drawer.visible = true;
+      });
+
+      this.ttbBtn.addEventListener("click", () => {
+        this.drawer.direction = "ttb";
+        this.drawer.visible = true;
+      });
+
+      this.bttBtn.addEventListener("click", () => {
+        this.drawer.direction = "btt";
+        this.drawer.visible = true;
+      });
+
+      this.drawer.beforeClose = done => {
+        $confirm("Are you confirm to close?", "Warning", {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        })
+          .then(action => {
+            done();
+          })
+          .catch(action => {
+            done(true);
           });
-
-          this.rtlBtn.addEventListener("click", () => {
-            this.drawer.direction = "rtl";
-            this.drawer.visible = true;
-          });
-
-          this.ttbBtn.addEventListener("click", () => {
-            this.drawer.direction = "ttb";
-            this.drawer.visible = true;
-          });
-
-          this.bttBtn.addEventListener("click", () => {
-            this.drawer.direction = "btt";
-            this.drawer.visible = true;
-          });
-
-          this.drawer.beforeClose = done => {
-            $confirm("Are you confirm to close?", "Warning", {
-              confirmButtonText: "OK",
-              cancelButtonText: "Cancel",
-              type: "warning",
-            })
-              .then(action => {
-                done();
-              })
-              .catch(action => {});
-          };
-
-          this.drawer.addEventListener("close", () => {
-            console.log("close");
-          });
-        },
       };
 
-      Drawer.init();
-      // #endregion
-      // ------- end -------
-      
-      // ------- 不添加Title -------
-      // #region
-      const noHeaderExample = {
-        drawer: document.querySelector("#noHeaderDrawer"),
-        openBtn: document.querySelector("#noHeaderBtn"),
+      this.drawer.addEventListener("ea-close", () => {
+        console.log("close");
+      });
+    },
+  };
 
-        init() {
-          this.openBtn.addEventListener("click", () => {
-            this.drawer.visible = true;
+  Drawer.init();
+
+  const noHeaderExample = {
+    drawer: document.querySelector("#noHeaderDrawer"),
+    openBtn: document.querySelector("#noHeaderBtn"),
+
+    init() {
+      this.openBtn.addEventListener("click", () => {
+        this.drawer.visible = true;
+      });
+    },
+  };
+  noHeaderExample.init();
+
+  const CustomDrawer = {
+    drawer: document.querySelector("#customDrawer"),
+    openBtn: document.querySelector("#openCustomDrawerBtn"),
+    cancelBtn: document.querySelector("#customCancelBtn"),
+    confirmBtn: document.querySelector("#customConfirmBtn"),
+
+    bindBeforeClose(actionType) {
+      this.drawer.beforeClose = done => {
+        const actionText = actionType === "cancel" ? "cancel" : "confirm";
+        $confirm(`Are you sure you want to ${actionText}?`, "Warning", {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        })
+          .then(action => {
+            done();
+          })
+          .catch(action => {
+            done(true);
           });
-        },
       };
-      noHeaderExample.init();
-      // #endregion
-      // ------- end -------
+    },
 
-      
+    init() {
+      this.bindBeforeClose("cancel");
 
-      // ------- 自定义内�?-------
-      // #region
+      this.openBtn.addEventListener("click", () => {
+        this.drawer.visible = true;
+      });
 
-      const CustomDrawer = {
-        drawer: document.querySelector("#customDrawer"),
-        openBtn: document.querySelector("#openCustomDrawerBtn"),
-        cancelBtn: document.querySelector("#customCancelBtn"),
-        confirmBtn: document.querySelector("#customConfirmBtn"),
-
-        bindBeforeClose(actionType) {
-          this.drawer.beforeClose = done => {
-            const actionText = actionType === "cancel" ? "cancel" : "confirm";
-            $confirm(`Are you sure you want to ${actionText}?`, "Warning", {
-              confirmButtonText: "OK",
-              cancelButtonText: "Cancel",
-              type: "warning",
-            })
-              .then(action => {
-                done();
-              })
-              .catch(action => {});
-          };
-        },
-
-        init() {
+      if (this.cancelBtn) {
+        this.cancelBtn.addEventListener("click", () => {
           this.bindBeforeClose("cancel");
+          this.drawer.visible = false;
+        });
+      }
 
-          this.openBtn.addEventListener("click", () => {
-            this.drawer.visible = true;
-          });
+      if (this.confirmBtn) {
+        this.confirmBtn.addEventListener("click", () => {
+          this.bindBeforeClose("confirm");
+          this.drawer.visible = false;
+        });
+      }
 
-          this.cancelBtn.addEventListener("click", () => {
-            this.bindBeforeClose("cancel");
-            this.drawer.visible = false;
-          });
+      this.drawer.addEventListener("ea-closed", () => {
+        this.bindBeforeClose("cancel");
+      });
+    },
+  };
 
-          this.confirmBtn.addEventListener("click", () => {
-            this.bindBeforeClose("confirm");
-            this.drawer.visible = false;
-          });
+  CustomDrawer.init();
 
-          this.drawer.addEventListener("closed", () => {
-            this.bindBeforeClose("cancel");
-          });
-        },
-      };
+  const nestingExample = {
+    outerBtn: document.querySelector("#outerBtn"),
+    innerBtn: document.querySelector("#innerBtn"),
+    outerDrawer: document.querySelector("#outerDrawer"),
+    innerDrawer: document.querySelector("#innerDrawer"),
 
-      CustomDrawer.init();
-      // #endregion
-      // ------- end -------
-      
-      // ------- 嵌套抽屉 -------
-      // #region
-      const nestingExample = {
-        outerBtn: document.querySelector("#outerBtn"),
-        innerBtn: document.querySelector("#innerBtn"),
-        outerDrawer: document.querySelector("#outerDrawer"),
-        innerDrawer: document.querySelector("#innerDrawer"),
+    init() {
+      this.outerBtn.addEventListener("click", () => {
+        this.outerDrawer.visible = true;
+      });
 
-        init() {
-          this.outerBtn.addEventListener("click", () => {
-            this.outerDrawer.visible = true;
-          });
-
-          this.innerBtn.addEventListener("click", () => {
-            this.innerDrawer.visible = true;
-          });
-
-          this.innerDrawer.beforeClose = done => {
-            $confirm("Are you confirm to close inner drawer?", "Warning", {
-              confirmButtonText: "OK",
-              cancelButtonText: "Cancel",
-              type: "warning",
-            })
-              .then(action => {
-                done();
-              })
-              .catch(action => {});
-          };
-        },
-      };
-      nestingExample.init();
-      // #endregion
-      // ------- end -------
+      this.innerBtn.addEventListener("click", () => {
+        this.innerDrawer.visible = true;
+      });
+    },
+  };
+  nestingExample.init();
 })
 </script>
 
 # Drawer 抽屉
 
+呼出一个临时的侧边面板，可以从多个方向呼出。
+
 ## 引入
 
 > `js`
 
-```js
-<script type='module'>
+```html
+<script type="module">
   import "./node_modules/easy-component-ui/components/ea-drawer/index.js";
 </script>
 ```
@@ -179,23 +157,23 @@ onMounted(async () => {
 > `css`
 
 ::: tip
-需要注意的�? 如果需要使用到带有图标�?`属�?组件`, 需要提前使�?`link` 标签引入 Font Awesome CSS 文件
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
 :::
 
 ```html
 <link
   rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
 />
 ```
 
-## 自定义样�?
+## 自定义样式
 
-移步�?[CSS Part](#css-part)�?
+移步到 [CSS Part](#ea-drawer-css-part) 和 [CSS 自定义属性](#ea-drawer-css-自定义属性)。
 
 ## 基本用法
 
-呼出一个临时的侧边�? 可以从多个方向呼出。可以在 `ea-drawer` 标签上添�?`direction` 属性来指定呼出方向�?
+可以在 `ea-drawer` 标签上添加 `direction` 属性来指定呼出方向。
 
 <div class="demo">
   <ea-button variant="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
@@ -207,6 +185,8 @@ onMounted(async () => {
     <span>Hi, there!</span>
   </ea-drawer>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -224,16 +204,36 @@ onMounted(async () => {
 ```
 
 ```js
-const CustomDrawer = {
-  drawer: document.querySelector("#customDrawer"),
-  openBtn: document.querySelector("#openCustomDrawerBtn"),
-  cancelBtn: document.querySelector("#customCancelBtn"),
-  confirmBtn: document.querySelector("#customConfirmBtn"),
+const Drawer = {
+  drawer: document.querySelector("#drawer"),
+  ltrBtn: document.querySelector("#openDrawerBtn--ltr"),
+  rtlBtn: document.querySelector("#openDrawerBtn--rtl"),
+  ttbBtn: document.querySelector("#openDrawerBtn--ttb"),
+  bttBtn: document.querySelector("#openDrawerBtn--btt"),
 
-  bindBeforeClose(actionType) {
+  init() {
+    this.ltrBtn.addEventListener("click", () => {
+      this.drawer.direction = "ltr";
+      this.drawer.visible = true;
+    });
+
+    this.rtlBtn.addEventListener("click", () => {
+      this.drawer.direction = "rtl";
+      this.drawer.visible = true;
+    });
+
+    this.ttbBtn.addEventListener("click", () => {
+      this.drawer.direction = "ttb";
+      this.drawer.visible = true;
+    });
+
+    this.bttBtn.addEventListener("click", () => {
+      this.drawer.direction = "btt";
+      this.drawer.visible = true;
+    });
+
     this.drawer.beforeClose = done => {
-      const actionText = actionType === "cancel" ? "cancel" : "confirm";
-      $confirm(`Are you sure you want to ${actionText}?`, "Warning", {
+      $confirm("Are you confirm to close?", "Warning", {
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
         type: "warning",
@@ -241,42 +241,27 @@ const CustomDrawer = {
         .then(action => {
           done();
         })
-        .catch(action => {});
+        .catch(action => {
+          done(true);
+        });
     };
-  },
 
-  init() {
-    this.bindBeforeClose("cancel");
-
-    this.openBtn.addEventListener("click", () => {
-      this.drawer.visible = true;
-    });
-
-    this.cancelBtn.addEventListener("click", () => {
-      this.bindBeforeClose("cancel");
-      this.drawer.visible = false;
-    });
-
-    this.confirmBtn.addEventListener("click", () => {
-      this.bindBeforeClose("confirm");
-      this.drawer.visible = false;
-    });
-
-    this.drawer.addEventListener("closed", () => {
-      this.bindBeforeClose("cancel");
+    this.drawer.addEventListener("ea-close", () => {
+      console.log("close");
     });
   },
 };
 
-CustomDrawer.init();
+Drawer.init();
 ```
 
 :::
 
-## 不添�?Title�?
+::::
 
-当你不需要标题的时候，你可以将它移除�?
-通过设置 with-header 属性为 false 来控制是否显示标题�?如果你的应用需要具备可访问性，请务必设置好 heading�?
+## 不添加 Title
+
+当你不需要标题的时候，你可以将它移除。通过设置 `with-header` 属性为 `false` 来控制是否显示标题。如果你的应用需要具备可访问性，请务必设置好 `heading`。
 
 <div class="demo">
   <ea-button variant="primary" id="noHeaderBtn">open</ea-button>
@@ -289,6 +274,8 @@ CustomDrawer.init();
     <span>Hi, there!</span>
   </ea-drawer>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -322,17 +309,19 @@ noHeaderExample.init();
 
 :::
 
-## 自定义内�?
+::::
 
-`Drawer` 可以在其内部嵌套各种丰富的操�?
+## 自定义内容
+
+`Drawer` 可以在其内部嵌套各种丰富的操作。
 
 <div class="demo">
-  <ea-button variant="primary" id="openCustomDrawerBtn"
-    >打开自定义内容的抽屉</ea-button
-  >
+  <ea-button variant="primary" id="openCustomDrawerBtn">打开自定义内容的抽屉</ea-button>
   <ea-drawer id="customDrawer" heading="我是标题" direction="ltr">
     <ea-descriptions title="User Info">
-      <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
+      <ea-descriptions-item label="Username">
+        Lilyiro
+      </ea-descriptions-item>
       <ea-descriptions-item label="Essence">
         Lord of the Wild
       </ea-descriptions-item>
@@ -346,12 +335,13 @@ noHeaderExample.init();
         <ea-tag size="small" type="info">Daredevil</ea-tag>
       </ea-descriptions-item>
       <ea-descriptions-item label="Description">
-        She was once an elf lord, defending the border from goblin invaders. She
-        was then a goblin warrior, protecting her clan from being slaughtered by
-        elves. She has the unwavering courage to uphold justice in her heart and
-        she is prepared to betray or be betrayed for the greater good. Despite
-        her inner gentleness, Lilyiro, who has spilled so much blood on
-        battlefields, is more straightforward than men.
+        She was once an elf lord, defending the border from goblin invaders.
+        She was then a goblin warrior, protecting her clan from being
+        slaughtered by elves. She has the unwavering courage to uphold
+        justice in her heart and she is prepared to betray or be betrayed
+        for the greater good. Despite her inner gentleness, Lilyiro, who has
+        spilled so much blood on battlefields, is more straightforward than
+        men.
       </ea-descriptions-item>
     </ea-descriptions>
     <footer slot="footer" style="text-align: right">
@@ -360,6 +350,8 @@ noHeaderExample.init();
     </footer>
   </ea-drawer>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -418,12 +410,14 @@ const CustomDrawer = {
         .then(action => {
           done();
         })
-        .catch(action => {});
+        .catch(action => {
+          done(true);
+        });
     };
   },
 
   init() {
-    this.bindBeforeClose("close");
+    this.bindBeforeClose("cancel");
 
     this.openBtn.addEventListener("click", () => {
       this.drawer.visible = true;
@@ -439,8 +433,8 @@ const CustomDrawer = {
       this.drawer.visible = false;
     });
 
-    this.drawer.addEventListener("close", () => {
-      this.bindBeforeClose("close");
+    this.drawer.addEventListener("ea-closed", () => {
+      this.bindBeforeClose("cancel");
     });
   },
 };
@@ -450,11 +444,11 @@ CustomDrawer.init();
 
 :::
 
-## 嵌套抽屉�?
+::::
 
-你可以像 `Dialog` 一样拥有多层嵌套的 `Drawer`
+## 嵌套抽屉
 
-如果你需要在不同图层中多个抽屉，你必须设�?`append-to-body` 属性为 `true`
+你可以像 `Dialog` 一样拥有多层嵌套的 `Drawer`。如果你需要在不同图层中多个抽屉，你必须设置 `append-to-body` 属性为 `true`。
 
 <div class="demo">
   <ea-button variant="primary" id="outerBtn">open</ea-button>
@@ -464,13 +458,15 @@ CustomDrawer.init();
       <ea-drawer
         id="innerDrawer"
         heading="I'm inner Drawer"
-        append-to-body="true"
+        append-to-body
       >
         <p>_(:зゝ∠)_</p>
       </ea-drawer>
     </div>
   </ea-drawer>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -480,11 +476,7 @@ CustomDrawer.init();
   <ea-drawer id="outerDrawer" heading="I'm outer Drawer" size="50%">
     <div>
       <ea-button id="innerBtn">Click me!</ea-button>
-      <ea-drawer
-        id="innerDrawer"
-        heading="I'm inner Drawer"
-        append-to-body="true"
-      >
+      <ea-drawer id="innerDrawer" heading="I'm inner Drawer" append-to-body>
         <p>_(:зゝ∠)_</p>
       </ea-drawer>
     </div>
@@ -507,18 +499,6 @@ const nestingExample = {
     this.innerBtn.addEventListener("click", () => {
       this.innerDrawer.visible = true;
     });
-
-    this.innerDrawer.beforeClose = done => {
-      $confirm("Are you confirm to close inner drawer?", "Warning", {
-        confirmButtonText: "OK",
-        cancelButtonText: "Cancel",
-        type: "warning",
-      })
-        .then(action => {
-          done();
-        })
-        .catch(action => {});
-    };
   },
 };
 nestingExample.init();
@@ -526,57 +506,81 @@ nestingExample.init();
 
 :::
 
-## Attributes
+::::
 
-| 参数                  | 说明                                                             | 类型    | 可选�?                                                 | 默认�? |
-| :-------------------- | :--------------------------------------------------------------- | :------ | :----------------------------------------------------- | :----- |
-| heading               | 标题文本（同步到 header 中的 heading�?                           | string  | -                                                      | ""     |
-| visible               | 是否可见（受控属性，设置�?true/false�?                           | boolean | -                                                      | false  |
-| size                  | 抽屉尺寸，支持百分比或固定宽�?高度（根�?direction 决定是宽或高�? | string  | 例如: "30%", "400px"                                   | 30%    |
-| modal                 | 是否显示遮罩�?                                                   | boolean | -                                                      | true   |
-| direction             | 抽屉方向                                                         | string  | ltr（从左到右）, rtl, ttb（从上到下）, btt（从下到上） | rtl    |
-| close-on-click-modal  | 点击遮罩是否关闭                                                 | boolean | -                                                      | true   |
-| close-on-press-escape | 按下 Esc 是否关闭                                                | boolean | -                                                      | true   |
-| show-close            | 是否显示右上角关闭图标（close icon�?                             | boolean | -                                                      | true   |
-| with-header           | 是否显示头部（header�?                                           | boolean | -                                                      | true   |
-| append-to-body        | 是否挂载�?body（用于嵌套抽屉确保层级正确）                       | boolean | -                                                      | false  |
-| append-to             | 指定挂载宿主元素的选择器（当需要自定义挂载点时使用�?             | string  | 例如: "#app" �?"body"                                  | body   |
-| z-index               | 自定义层�?                                                       | string  | -                                                      | -      |
+## ea-drawer API
 
-## Properties
+### ea-drawer Attributes
 
-| 参数        | 说明                                    | 类型     | 默认�? |
-| :---------- | :-------------------------------------- | :------- | :----- |
-| beforeClose | 关闭前的回调函数，接�?done 函数作为参数 | Function | null   |
+| 参数                  | 说明                                                               | 类型    | 可选值                 | 默认值 |
+| :-------------------- | :----------------------------------------------------------------- | :------ | :--------------------- | :----- |
+| heading               | 标题文本                                                           | string  | —                      | ""     |
+| visible               | 是否可见（受控属性）                                               | boolean | —                      | false  |
+| size                  | 抽屉尺寸，支持百分比或固定宽度/高度（根据 direction 决定是宽或高） | string  | 例如: "30%", "400px"   | 30%    |
+| modal                 | 是否显示遮罩层                                                     | boolean | —                      | true   |
+| direction             | 抽屉方向                                                           | string  | ltr / rtl / ttb / btt  | rtl    |
+| close-on-click-modal  | 点击遮罩是否关闭                                                   | boolean | —                      | true   |
+| close-on-press-escape | 按下 Esc 是否关闭                                                  | boolean | —                      | true   |
+| show-close            | 是否显示右上角关闭图标                                             | boolean | —                      | true   |
+| with-header           | 是否显示头部                                                       | boolean | —                      | true   |
+| append-to-body        | 是否挂载到 body（用于嵌套抽屉确保层级正确）                        | boolean | —                      | false  |
+| append-to             | 指定挂载宿主元素的选择器                                           | string  | 例如: "#app" 或 "body" | body   |
+| z-index               | 自定义层级                                                         | string  | —                      | —      |
+| background-color      | 遮罩层背景色                                                       | string  | —                      | —      |
+| content-width         | 内容宽度                                                           | string  | —                      | —      |
+| content-max-width     | 内容最大宽度                                                       | string  | —                      | —      |
+| content-height        | 内容高度                                                           | string  | —                      | —      |
 
-## CSS Part
+### ea-drawer Properties
 
-> 用法可参�?[MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
+| 参数        | 说明                                                                               | 类型     | 默认值 |
+| :---------- | :--------------------------------------------------------------------------------- | :------- | :----- |
+| beforeClose | 关闭前的回调函数，接收 done 函数作为参数。`done()` 确认关闭，`done(true)` 取消关闭 | Function | null   |
 
-| 名称       | 说明                                                           |
-| ---------- | -------------------------------------------------------------- |
-| container  | 外层 overlay 容器，包含遮罩与抽屉 (对应模板�?`.ea-overlay`)    |
-| header     | 抽屉头部（part="header"），包含 `heading` �?`close-icon`       |
-| heading    | 标题容器（part="heading"），对应 slot[name="title"] 的显示位�? |
-| close-icon | 关闭图标（part="close-icon"），可以自定义样式或隐藏            |
-| content    | 主体内容区域（part="content"），对应默认 slot                  |
-| footer     | 底部区域（part="footer"），对应 slot[name="footer"]            |
+### ea-drawer CSS Part
 
-## Events
+| 名称       | 说明                                             |
+| :--------- | :----------------------------------------------- |
+| container  | 抽屉容器元素（对应模板中 `.ea-drawer`）          |
+| header     | 头部元素，包含 heading 和 close-icon             |
+| heading    | 标题文本元素，对应 slot[name="title"] 的显示位置 |
+| close-icon | 关闭图标元素                                     |
+| content    | 主体内容元素，对应默认 slot                      |
+| footer     | 底部元素，对应 slot[name="footer"]               |
 
-> Drawer 是基�?Overlay 组件实现的，具体事件可参�?[Overlay](./ea-overlay.md#events) 组件
+### ea-drawer Slots
 
-| 事件�? | 说明               | 回调参数 / detail |
-| :----- | :----------------- | :---------------- |
-| open   | 打开动画开始时触发 | -                 |
-| opened | 打开动画结束时触�? | -                 |
-| close  | 关闭动画开始时触发 | -                 |
-| closed | 关闭动画结束时触�? | -                 |
+| 名称    | 说明           |
+| :------ | :------------- |
+| default | 抽屉主体内容   |
+| title   | 自定义标题内容 |
+| footer  | 自定义底部内容 |
 
-## Slots
+### ea-drawer Methods
 
-| 名称   | 说明                                                    |
-| :----- | :------------------------------------------------------ |
-| (默认) | 抽屉主体内容，映射到模板中的默认 slot（part="content"�? |
-| title  | 标题内容，会显示�?header �?title 区域（part="title"�?   |
-| footer | 底部插槽，显示在 footer 区域（part="footer"�?           |
+| 方法名 | 说明     | 参数 |
+| :----- | :------- | :--- |
+| show   | 显示抽屉 | —    |
+| hide   | 隐藏抽屉 | —    |
+
+### ea-drawer Events
+
+| 事件名    | 说明                   | 回调参数(event.detail) |
+| :-------- | :--------------------- | :--------------------- |
+| ea-open   | 抽屉打开时触发         | —                      |
+| ea-opened | 抽屉打开动画结束时触发 | —                      |
+| ea-close  | 抽屉关闭时触发         | —                      |
+| ea-closed | 抽屉关闭动画结束时触发 | —                      |
+
+### ea-drawer CSS 自定义属性
+
+| 属性名                        | 说明                               | 默认值              |
+| :---------------------------- | :--------------------------------- | :------------------ |
+| --ea-drawer-size              | 抽屉尺寸（宽度或高度，取决于方向） | 30%                 |
+| --ea-drawer-padding           | 抽屉内边距                         | var(--spacing-lg)   |
+| --ea-drawer-heading-color     | 标题颜色                           | var(--grey-900)     |
+| --ea-drawer-close-icon-color  | 关闭图标颜色                       | var(--grey-500)     |
+| --ea-drawer-content-color     | 内容颜色                           | var(--grey-700)     |
+| --ea-drawer-bg-color          | 抽屉背景色                         | var(--white)        |
+| --ea-drawer-heading-font-size | 标题字号                           | var(--font-size-lg) |
+| --ea-drawer-close-icon-size   | 关闭图标尺寸                       | var(--font-size-lg) |

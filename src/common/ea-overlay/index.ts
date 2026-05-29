@@ -165,7 +165,7 @@ export class EaOverlay extends EaBase {
     type: Function,
     default: null,
   })
-  beforeClose: ((done: () => void) => void) | null = null;
+  beforeClose: ((done: (cancel?: boolean) => void) => void) | null = null;
 
   updateContainerClasslist(): string {
     const className = bem({ open: this.visible }, { modal: this.modal });
@@ -230,10 +230,17 @@ export class EaOverlay extends EaBase {
       this._waitingBeforeClose = true;
       let doneCalled = false;
 
-      this.beforeClose(() => {
+      this.beforeClose((cancel?: boolean) => {
         if (doneCalled) return;
         doneCalled = true;
         this._waitingBeforeClose = false;
+
+        if (cancel) {
+          if (!this.visible) {
+            this.visible = true;
+          }
+          return;
+        }
 
         const wasVisible = this.visible;
         this.visible = false;

@@ -89,10 +89,12 @@
               .then(action => {
                 done();
               })
-              .catch(action => {});
+              .catch(action => {
+                done(true);
+              });
           };
 
-          this.drawer.addEventListener("close", () => {
+          this.drawer.addEventListener("ea-close", () => {
             console.log("close");
           });
         },
@@ -209,7 +211,9 @@
               .then(action => {
                 done();
               })
-              .catch(action => {});
+              .catch(action => {
+                done(true);
+              });
           };
         },
 
@@ -230,7 +234,7 @@
             this.drawer.visible = false;
           });
 
-          this.drawer.addEventListener("closed", () => {
+          this.drawer.addEventListener("ea-closed", () => {
             this.bindBeforeClose("cancel");
           });
         },
@@ -254,11 +258,7 @@
       <ea-drawer id="outerDrawer" heading="I'm outer Drawer" size="50%">
         <div>
           <ea-button id="innerBtn">Click me!</ea-button>
-          <ea-drawer
-            id="innerDrawer"
-            heading="I'm inner Drawer"
-            append-to-body="true"
-          >
+          <ea-drawer id="innerDrawer" heading="I'm inner Drawer" append-to-body>
             <p>_(:зゝ∠)_</p>
           </ea-drawer>
         </div>
@@ -282,18 +282,6 @@
           this.innerBtn.addEventListener("click", () => {
             this.innerDrawer.visible = true;
           });
-
-          this.innerDrawer.beforeClose = done => {
-            $confirm("Are you confirm to close inner drawer?", "Warning", {
-              confirmButtonText: "OK",
-              cancelButtonText: "Cancel",
-              type: "warning",
-            })
-              .then(action => {
-                done();
-              })
-              .catch(action => {});
-          };
         },
       };
       nestingExample.init();
