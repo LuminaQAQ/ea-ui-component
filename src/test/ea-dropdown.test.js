@@ -247,7 +247,7 @@ describe("EaDropdown Component", () => {
       expect(dropdown.trigger).toBe("click");
     });
 
-    it("无效的 trigger 值时 getter 应该返回 null", async () => {
+    it("无效的 trigger 值时 getter 应该返回默认值", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -256,6 +256,22 @@ describe("EaDropdown Component", () => {
       await waitForRender(0);
 
       expect(dropdown.trigger).toBe("hover");
+    });
+
+    it("动态修改 trigger 应该重新绑定事件监听器", async () => {
+      const dropdown = createDropdown({ trigger: "click" }, withReference());
+      container.appendChild(dropdown);
+      await waitForRender();
+
+      dropdown.trigger = "hover";
+      await waitForRender(0);
+
+      expect(dropdown.visible).toBe(false);
+
+      dropdown.dispatchEvent(new MouseEvent("mouseenter"));
+      await waitForRender(0);
+
+      expect(dropdown.visible).toBe(true);
     });
   });
 
@@ -443,7 +459,7 @@ describe("EaDropdown Component", () => {
       expect(dropdown.showArrow).toBe(false);
     });
 
-    it("默认 status 应该是 false", async () => {
+    it("默认 visible 应该是 false", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -495,7 +511,7 @@ describe("EaDropdown Component", () => {
       expect(typeof dropdown.toggle).toBe("function");
     });
 
-    it("调用 show 方法应该设置 status 为 true", async () => {
+    it("调用 show 方法应该设置 visible 为 true", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -508,7 +524,7 @@ describe("EaDropdown Component", () => {
       expect(dropdown.visible).toBe(true);
     });
 
-    it("调用 hide 方法应该设置 status 为 false", async () => {
+    it("调用 hide 方法应该设置 visible 为 false", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -522,7 +538,7 @@ describe("EaDropdown Component", () => {
       expect(dropdown.visible).toBe(false);
     });
 
-    it("调用 toggle 方法应该切换 status", async () => {
+    it("调用 toggle 方法应该切换 visible", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -544,7 +560,7 @@ describe("EaDropdown Component", () => {
   // ==================== 事件 ====================
 
   describe("Events", () => {
-    it("调用 show 应该触发 show 事件", async () => {
+    it("调用 show 应该触发 ea-show 事件", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -558,7 +574,7 @@ describe("EaDropdown Component", () => {
       expect(showHandler).toHaveBeenCalled();
     });
 
-    it("调用 hide 应该触发 hide 事件", async () => {
+    it("调用 hide 应该触发 ea-hide 事件", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -575,7 +591,7 @@ describe("EaDropdown Component", () => {
       expect(hideHandler).toHaveBeenCalled();
     });
 
-    it("show 事件应该冒泡", async () => {
+    it("ea-show 事件应该冒泡", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -589,7 +605,7 @@ describe("EaDropdown Component", () => {
       expect(showHandler).toHaveBeenCalled();
     });
 
-    it("hide 事件应该冒泡", async () => {
+    it("ea-hide 事件应该冒泡", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -606,7 +622,7 @@ describe("EaDropdown Component", () => {
       expect(hideHandler).toHaveBeenCalled();
     });
 
-    it("点击菜单项应该触发 command 事件", async () => {
+    it("点击菜单项应该触发 ea-command 事件", async () => {
       const dropdown = createDropdown(
         { trigger: "click" },
         `<span slot="reference">Trigger</span>
@@ -618,7 +634,7 @@ describe("EaDropdown Component", () => {
       await waitForRender();
 
       const commandHandler = vi.fn();
-      dropdown.addEventListener("command", commandHandler);
+      dropdown.addEventListener("ea-command", commandHandler);
 
       const item = dropdown.querySelector("ea-dropdown-item");
       const content = item.shadowRoot.querySelector(
@@ -630,6 +646,32 @@ describe("EaDropdown Component", () => {
       expect(commandHandler.mock.calls[0][0].detail.command).toBe(
         "test-command"
       );
+    });
+
+    it("ea-command 事件应该是 EaDropdownCommandEvent 实例", async () => {
+      const dropdown = createDropdown(
+        { trigger: "click" },
+        `<span slot="reference">Trigger</span>
+         <ea-dropdown-menu>
+           <ea-dropdown-item command="test">Item 1</ea-dropdown-item>
+         </ea-dropdown-menu>`
+      );
+      container.appendChild(dropdown);
+      await waitForRender();
+
+      const commandHandler = vi.fn();
+      dropdown.addEventListener("ea-command", commandHandler);
+
+      const item = dropdown.querySelector("ea-dropdown-item");
+      const content = item.shadowRoot.querySelector(
+        ".ea-dropdown-item__content"
+      );
+      content.click();
+
+      const event = commandHandler.mock.calls[0][0];
+      expect(event.type).toBe("ea-command");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
     });
 
     it("点击菜单项应该触发 ea-dropdown-item-click 事件", async () => {
@@ -1288,13 +1330,13 @@ describe("EaDropdownItem Component", () => {
       expect(clickHandler).toHaveBeenCalled();
     });
 
-    it("点击设置了 command 的项应该触发 command 事件", async () => {
+    it("点击设置了 command 的项应该触发 ea-command 事件", async () => {
       const item = createDropdownItem({ command: "my-command" });
       container.appendChild(item);
       await waitForRender();
 
       const commandHandler = vi.fn();
-      item.addEventListener("command", commandHandler);
+      item.addEventListener("ea-command", commandHandler);
 
       const content = item.shadowRoot.querySelector(
         ".ea-dropdown-item__content"
@@ -1305,13 +1347,32 @@ describe("EaDropdownItem Component", () => {
       expect(commandHandler.mock.calls[0][0].detail.command).toBe("my-command");
     });
 
-    it("没有 command 的项点击不应该触发 command 事件", async () => {
+    it("ea-command 事件应该是 EaDropdownCommandEvent 实例", async () => {
+      const item = createDropdownItem({ command: "test" });
+      container.appendChild(item);
+      await waitForRender();
+
+      const commandHandler = vi.fn();
+      item.addEventListener("ea-command", commandHandler);
+
+      const content = item.shadowRoot.querySelector(
+        ".ea-dropdown-item__content"
+      );
+      content.click();
+
+      const event = commandHandler.mock.calls[0][0];
+      expect(event.type).toBe("ea-command");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("没有 command 的项点击不应该触发 ea-command 事件", async () => {
       const item = createDropdownItem();
       container.appendChild(item);
       await waitForRender();
 
       const commandHandler = vi.fn();
-      item.addEventListener("command", commandHandler);
+      item.addEventListener("ea-command", commandHandler);
 
       const content = item.shadowRoot.querySelector(
         ".ea-dropdown-item__content"
@@ -1337,13 +1398,13 @@ describe("EaDropdownItem Component", () => {
       expect(clickHandler).not.toHaveBeenCalled();
     });
 
-    it("禁用时点击不应该触发 command 事件", async () => {
+    it("禁用时点击不应该触发 ea-command 事件", async () => {
       const item = createDropdownItem({ disabled: "", command: "test" });
       container.appendChild(item);
       await waitForRender();
 
       const commandHandler = vi.fn();
-      item.addEventListener("command", commandHandler);
+      item.addEventListener("ea-command", commandHandler);
 
       const content = item.shadowRoot.querySelector(
         ".ea-dropdown-item__content"
@@ -1369,13 +1430,13 @@ describe("EaDropdownItem Component", () => {
       expect(bubbleHandler).toHaveBeenCalled();
     });
 
-    it("command 事件应该冒泡", async () => {
+    it("ea-command 事件应该冒泡", async () => {
       const item = createDropdownItem({ command: "test" });
       container.appendChild(item);
       await waitForRender();
 
       const bubbleHandler = vi.fn();
-      container.addEventListener("command", bubbleHandler);
+      container.addEventListener("ea-command", bubbleHandler);
 
       const content = item.shadowRoot.querySelector(
         ".ea-dropdown-item__content"
@@ -1543,7 +1604,7 @@ describe("Integration Tests", () => {
     expect(dropdown.querySelector("ea-dropdown-menu")).toBeTruthy();
   });
 
-  it("点击 dropdown-item 的 command 事件应该冒泡到 dropdown", async () => {
+  it("点击 dropdown-item 的 ea-command 事件应该冒泡到 dropdown", async () => {
     const dropdown = createDropdown(
       {},
       `<span slot="reference">Trigger</span>
@@ -1555,7 +1616,7 @@ describe("Integration Tests", () => {
     await waitForRender();
 
     const commandHandler = vi.fn();
-    dropdown.addEventListener("command", commandHandler);
+    dropdown.addEventListener("ea-command", commandHandler);
 
     const item = dropdown.querySelector("ea-dropdown-item");
     const content = item.shadowRoot.querySelector(".ea-dropdown-item__content");
@@ -1588,7 +1649,7 @@ describe("Integration Tests", () => {
     expect(dropdown.visible).toBe(false);
   });
 
-  it("多个 dropdown-item 应该各自独立触发 command 事件", async () => {
+  it("多个 dropdown-item 应该各自独立触发 ea-command 事件", async () => {
     const dropdown = createDropdown(
       {},
       `<span slot="reference">Trigger</span>
@@ -1601,7 +1662,7 @@ describe("Integration Tests", () => {
     await waitForRender();
 
     const commandHandler = vi.fn();
-    dropdown.addEventListener("command", commandHandler);
+    dropdown.addEventListener("ea-command", commandHandler);
 
     const items = dropdown.querySelectorAll("ea-dropdown-item");
 
@@ -1633,7 +1694,7 @@ describe("Integration Tests", () => {
     await waitForRender();
 
     const commandHandler = vi.fn();
-    dropdown.addEventListener("command", commandHandler);
+    dropdown.addEventListener("ea-command", commandHandler);
 
     const items = dropdown.querySelectorAll("ea-dropdown-item");
 

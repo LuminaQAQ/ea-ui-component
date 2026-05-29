@@ -87,10 +87,13 @@ function createAttributeGetter(
     const attrValue = this.getAttribute(attrName);
 
     if (type === Boolean) {
-      if (attrValue === null) {
-        return parseDefaultValue(this, defaultValue);
+      if (attrValue !== null) {
+        return attrValue === "true" || attrValue === "";
       }
-      return attrValue === "true" || attrValue === "";
+      if (this.isConnected) {
+        return false;
+      }
+      return parseDefaultValue(this, defaultValue);
     } else if (attrValue !== null) {
       return parseAttributeValue(this, attrValue, type, defaultValue);
     }
@@ -98,6 +101,8 @@ function createAttributeGetter(
     return parseDefaultValue(this, defaultValue);
   };
 }
+
+const BOOLEAN_FALSE_ATTRS = Symbol("booleanFalseAttrs");
 
 /**
  * 创建属性的 setter 函数（映射到 HTML attribute）
@@ -112,8 +117,12 @@ function createAttributeSetter(name: string) {
     if (typeof newVal === "boolean") {
       if (newVal) {
         this.setAttribute(attrName, "");
+        const marked = this[BOOLEAN_FALSE_ATTRS];
+        if (marked) marked.delete(attrName);
       } else {
         this.removeAttribute(attrName);
+        if (!this[BOOLEAN_FALSE_ATTRS]) this[BOOLEAN_FALSE_ATTRS] = new Set();
+        this[BOOLEAN_FALSE_ATTRS].add(attrName);
       }
     } else {
       this.setAttribute(attrName, String(newVal));
@@ -195,6 +204,8 @@ function initBooleanDefaults(instance: any, CustomElementClass: any) {
       const { type, default: defaultValue } = attrs[name];
       if (type === Boolean && defaultValue === true) {
         const attrName = camelToKebab(name);
+        const marked = instance[BOOLEAN_FALSE_ATTRS];
+        if (marked && marked.has(attrName)) return;
         if (!instance.hasAttribute(attrName)) {
           instance.toggleAttribute(attrName, true);
         }
@@ -423,18 +434,26 @@ function CustomElement(
               const { option, actualName } = findPropertyOption(clsAttrs, name);
 
               if (option) {
-                const newValue = parseAttributeValue(
-                  this,
-                  newVal,
-                  option.type,
-                  option.default
-                );
-                const oldValue = parseAttributeValue(
-                  this,
-                  oldVal,
-                  option.type,
-                  option.default
-                );
+                let newValue: any;
+                let oldValue: any;
+
+                if (option.type === Boolean) {
+                  newValue = newVal !== null;
+                  oldValue = oldVal !== null;
+                } else {
+                  newValue = parseAttributeValue(
+                    this,
+                    newVal,
+                    option.type,
+                    option.default
+                  );
+                  oldValue = parseAttributeValue(
+                    this,
+                    oldVal,
+                    option.type,
+                    option.default
+                  );
+                }
 
                 const parentProto = Object.getPrototypeOf(
                   Object.getPrototypeOf(this)

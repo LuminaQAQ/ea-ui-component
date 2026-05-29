@@ -1,8 +1,6 @@
 $name: ea-dropdown;
 
 :host {
-  --ea-popper-width: 100px;
-
   --#{$name}-z-index: 2000;
 }
 

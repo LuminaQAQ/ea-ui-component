@@ -1,9 +1,6 @@
-import { EaPopper } from "@/common/ea-popper";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { EaPopper } from "@common/ea-popper";
+import { CustomElement, attribute, listen, query } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-dropdown" as const;
@@ -14,6 +11,28 @@ type TriggerType = (typeof TRIGGER_TYPES)[number];
 const SIZE_TYPES = ["small", "default", "large"] as const;
 type SizeType = (typeof SIZE_TYPES)[number];
 
+/**
+ * @summary 下拉菜单组件，将动作或菜单折叠到下拉菜单中，支持多种触发方式和位置。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-popper
+ *
+ * @slot default - 下拉菜单内容插槽。
+ * @slot reference - 触发下拉菜单的元素插槽。
+ *
+ * @event ea-command - 点击菜单项时触发，detail: `{ command: string }`。
+ * @event ea-show - 开启下拉菜单时触发。
+ * @event ea-shown - 开启下拉菜单的动画结束时触发。
+ * @event ea-hide - 关闭下拉菜单时触发。
+ * @event ea-hidden - 关闭下拉菜单的动画结束时触发。
+ *
+ * @csspart container - 外层容器。
+ * @csspart reference - 触发元素的父容器。
+ * @csspart original - 下拉菜单内容容器。
+ *
+ * @cssproperty --ea-dropdown-z-index - 下拉菜单层级。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaDropdown extends EaPopper {
   @query('slot[name="reference"]')
@@ -26,28 +45,25 @@ export class EaDropdown extends EaPopper {
   @attribute({
     type: Enum(TRIGGER_TYPES),
     default: "hover",
-    observer() {},
+    observer(this: EaDropdown) {
+      this._setupTrigger();
+    },
   })
   trigger: TriggerType = "hover";
 
   @attribute({
     type: Boolean,
     default: true,
-    observer() {},
   })
   hideOnClick: boolean = true;
 
   @attribute({
     type: Enum(SIZE_TYPES),
     default: "",
-    observer() {},
   })
   size: SizeType | "" = "";
 
-  constructor() {
-    super();
-  }
-
+  /** 清除 hover 隐藏定时器 */
   private _clearHoverHideTimer(): void {
     if (this._hoverHideTimer !== null) {
       clearTimeout(this._hoverHideTimer);
@@ -55,11 +71,19 @@ export class EaDropdown extends EaPopper {
     }
   }
 
+  /** 延迟隐藏下拉菜单 */
   private _scheduleHoverHide(): void {
     this._hoverHideTimer = setTimeout(() => {
       this.hide();
       this._hoverHideTimer = null;
     }, 150);
+  }
+
+  /** 设置触发事件监听器 */
+  private _setupTrigger(): void {
+    this._triggerAbortController?.abort();
+    this._triggerAbortController = new AbortController();
+    this._triggerEventStrategies[this.trigger]();
   }
 
   private _triggerEventStrategies: Record<TriggerType, () => void> = {
@@ -129,10 +153,7 @@ export class EaDropdown extends EaPopper {
   $mount(): void {
     super.$mount();
     if (!this.getAttribute("placement")) this.placement = "bottom";
-
-    this._triggerAbortController?.abort();
-    this._triggerAbortController = new AbortController();
-    this._triggerEventStrategies[this.trigger]();
+    this._setupTrigger();
   }
 
   $beforeUnmount(): void {
