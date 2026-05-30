@@ -1,6 +1,6 @@
 $name: ea-notification;
 
-$types: (
+$notification-type: (
   primary: blue,
   success: green,
   warning: yellow,
@@ -10,7 +10,7 @@ $types: (
 
 :host {
   --#{$name}-y: 0;
-  --#{$name}-show-x: 16px;
+  --#{$name}-show-x: var(--spacing-lg);
   --#{$name}-fade-out-x: 100%;
 
   --#{$name}-padding: var(--spacing-lg);
@@ -23,16 +23,17 @@ $types: (
   --#{$name}-message-font-size: var(--font-size-md);
   --#{$name}-title-color: var(--grey-900);
   --#{$name}-message-color: var(--grey-700);
-  --#{$name}-icon-size: 18px;
+  --#{$name}-icon-size: var(--font-size-lg);
 
   --#{$name}-transition: var(--transition-normal);
 
-  @each $type, $color in $types {
+  @each $type, $color in $notification-type {
     --#{$name}-#{$type}-color: var(--#{$color}-500);
   }
 
   --#{$name}-gap: var(--spacing-md);
-
+  --#{$name}-offset: var(--spacing-md);
+  --#{$name}-close-icon-color: var(--grey-500);
   --#{$name}-z-index: 2000;
 }
 
@@ -64,7 +65,7 @@ $types: (
   overflow: hidden;
 
   transition: filter var(--#{$name}-transition),
-  transform var(--#{$name}-transition);
+    transform var(--#{$name}-transition);
 
   @include element(icon) {
     font-size: var(--#{$name}-icon-size);
@@ -95,7 +96,7 @@ $types: (
 
     cursor: pointer;
     display: none;
-    color: var(--#{$name}-info-color);
+    color: var(--#{$name}-close-icon-color);
   }
 
   @include element(main) {
@@ -104,8 +105,8 @@ $types: (
     font-size: var(--#{$name}-message-font-size);
   }
 
-  @each $type, $color in $types {
-    @include modifier($type) {
+  @each $type, $color in $notification-type {
+    @include modifier(#{$type}) {
       background-color: var(--color-white);
 
       .#{$name}__icon {
@@ -114,64 +115,52 @@ $types: (
     }
   }
 
-  @include modifier(show-close) {
+  @include state(show-close) {
     .#{$name}__close-icon {
       display: block;
     }
   }
 
-  @include modifier(visible) {
+  @include state(visible) {
     display: flex;
     align-items: start;
   }
 
-  @include modifier(is-show) {
+  @include state(is-show) {
     visibility: visible;
     filter: opacity(1);
     transform: translate(0, 0);
 
     transition: filter var(--#{$name}-transition),
-    transform var(--#{$name}-transition),
-    top var(--#{$name}-transition),
-    bottom var(--#{$name}-transition);
+      transform var(--#{$name}-transition),
+      top var(--#{$name}-transition),
+      bottom var(--#{$name}-transition);
   }
 
-  @include modifier(before-hide) {
+  @include state(before-hide) {
     filter: opacity(0);
     transform: translate(var(--#{$name}-fade-out-x, -50%));
   }
 
-  @include modifier(top) {
-
-    &-left,
-    &-right {
-      top: var(--#{$name}-y);
-    }
-
-    &-left {
-      --#{$name}-fade-out-x: -100%;
-      left: var(--#{$name}-show-x);
-    }
-
-    &-right {
-      right: var(--#{$name}-show-x);
-    }
+  @include modifier(top-right) {
+    top: var(--#{$name}-y);
+    right: var(--#{$name}-show-x);
   }
 
-  @include modifier(bottom) {
+  @include modifier(top-left) {
+    top: var(--#{$name}-y);
+    --#{$name}-fade-out-x: -100%;
+    left: var(--#{$name}-show-x);
+  }
 
-    &-left,
-    &-right {
-      bottom: var(--#{$name}-y);
-    }
+  @include modifier(bottom-right) {
+    bottom: var(--#{$name}-y);
+    right: var(--#{$name}-show-x);
+  }
 
-    &-left {
-      --#{$name}-fade-out-x: -100%;
-      left: var(--#{$name}-show-x);
-    }
-
-    &-right {
-      right: var(--#{$name}-show-x);
-    }
+  @include modifier(bottom-left) {
+    bottom: var(--#{$name}-y);
+    --#{$name}-fade-out-x: -100%;
+    left: var(--#{$name}-show-x);
   }
 }

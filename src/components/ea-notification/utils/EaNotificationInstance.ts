@@ -1,10 +1,10 @@
 import { timeout } from "@utils/timeout";
-import type { EaNotificationElement } from "../components/index";
+import type { EaNotificationElement, NotificationVariantType } from "../components/index";
 
 export interface EaNotificationOptions {
   heading?: string;
   message?: string;
-  type?: "primary" | "success" | "warning" | "info" | "error";
+  variant?: NotificationVariantType;
   icon?: string;
   duration?: number;
   placement?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
@@ -21,7 +21,7 @@ class EaNotificationInstance {
     "heading",
     "message",
     "placement",
-    "type",
+    "variant",
     "showClose",
     "duration",
     "closeIcon",
@@ -30,14 +30,12 @@ class EaNotificationInstance {
     "dangerouslyUseHTMLString",
   ];
 
-  private _privateTypes = ["appendTo", "onClose", "duration"];
-
   private _defaultOptions: EaNotificationOptions = {
     heading: "",
     dangerouslyUseHTMLString: false,
     message: "",
     icon: "",
-    type: "info",
+    variant: "info",
     duration: 3000,
     placement: "top-right",
     zIndex: 0,
@@ -117,7 +115,7 @@ class EaNotificationInstance {
     closeFn?: (e: Event) => void
   ): void {
     el.addEventListener(
-      "hidden",
+      "ea-hidden",
       (e: Event) => {
         closeFn?.(e);
         el.remove();
@@ -137,29 +135,29 @@ export const EaNotification = (options: EaNotificationOptions) =>
 EaNotification.primary = (options: EaNotificationOptions) =>
   EaNotification({
     ...options,
-    type: "primary",
+    variant: "primary",
   });
 
 EaNotification.success = (options: EaNotificationOptions) =>
   EaNotification({
     ...options,
-    type: "success",
+    variant: "success",
   });
 
 EaNotification.warning = (options: EaNotificationOptions) =>
   EaNotification({
     ...options,
-    type: "warning",
+    variant: "warning",
   });
 
 EaNotification.info = (options: EaNotificationOptions) =>
   EaNotification({
     ...options,
-    type: "info",
+    variant: "info",
   });
 
 EaNotification.error = (options: EaNotificationOptions) =>
   EaNotification({
     ...options,
-    type: "error",
+    variant: "error",
   });

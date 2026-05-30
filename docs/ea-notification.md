@@ -47,7 +47,6 @@ onMounted(() => {
   placementExample.init();
   // #endregion
   // ------- end -------
-
 })
 </script>
 
@@ -115,6 +114,8 @@ onMounted(() => {
   </ea-button>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html
@@ -164,9 +165,11 @@ basicExample.init();
 
 :::
 
+::::
+
 ## 不同类型
 
-支持 success / warning / info / error / primary 类型，通过 `type` 改变样式。
+支持 success / warning / info / error / primary 类型，通过 `variant` 改变样式。
 
 <div id="typeSection" class="demo row">
   <ea-button plain onclick="window.$notify.info({ heading: 'Info', message: 'This is a info message.' })">Info</ea-button>
@@ -195,6 +198,8 @@ basicExample.init();
     >Error</ea-button
   >
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -254,6 +259,8 @@ EaNotification.error({
 
 :::
 
+::::
+
 ## 自定义位置
 
 支持 `top-right`、`top-left`、`bottom-right`、`bottom-left` 四个位置，通过 `placement` 配置。
@@ -264,6 +271,8 @@ EaNotification.error({
   <ea-button plain> Bottom Left </ea-button>
   <ea-button plain> Top Left </ea-button>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -297,6 +306,8 @@ placementExample.init();
 
 :::
 
+::::
+
 ## 使用 HTML 片段作为正文内容
 
 将 `dangerouslyUseHTMLString` 设为 `true` 可以让 `message` 被当作 HTML 片段渲染。
@@ -315,6 +326,8 @@ placementExample.init();
     Use HTML string
   </ea-button>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -345,6 +358,8 @@ EaNotification({
 
 :::
 
+::::
+
 ## 隐藏关闭按钮
 
 通过 `showClose` 控制是否显示右上角关闭按钮。
@@ -364,7 +379,7 @@ EaNotification({
   </ea-button>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -389,46 +404,75 @@ EaNotification({
 
 ### Notification Attributes
 
-| 参数                     | 说明                                    | 类型        | 可选值                                                         | 默认值      |
-| ------------------------ | --------------------------------------- | ----------- | -------------------------------------------------------------- | ----------- |
-| heading                  | 标题                                    | string      | —                                                              | ''          |
-| message                  | 正文内容                                | string      | —                                                              | ''          |
-| type                     | 通知类型                                | enum        | `'success' \| 'warning' \| 'info' \| 'error' \| 'primary'`     | 'info'      |
-| icon                     | 自定义图标                              | string      | —                                                              | ''          |
-| duration                 | 显示时间（毫秒）。设为 0 则不会自动关闭 | number      | —                                                              | 3000        |
-| placement                | 出现位置                                | enum        | `'top-right' \| 'top-left' \| 'bottom-right' \| 'bottom-left'` | 'top-right' |
-| show-close               | 是否显示关闭按钮                        | boolean     | —                                                              | false       |
-| close-icon               | 关闭按钮图标                            | string      | —                                                              | 'xmark'     |
-| z-index                  | z-index 值                              | number      | —                                                              | 0           |
-| dangerouslyUseHTMLString | 是否把 message 当作 HTML 渲染           | boolean     | —                                                              | false       |
-| append-to                | 指定挂载容器，支持选择器或 HTMLElement  | CSSSelector | —                                                              | 'body'      |
-| onClose                  | 关闭回调函数                            | Function    | —                                                              | —           |
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| ---- | ---- | ---- | ------ | ------ |
+| heading | 标题 | string | — | '' |
+| message | 正文内容 | string | — | '' |
+| variant | 通知类型 | enum | `'success' \| 'warning' \| 'info' \| 'error' \| 'primary'` | 'info' |
+| icon | 自定义图标 | string | — | '' |
+| duration | 显示时间（毫秒）。设为 0 则不会自动关闭 | number | — | 3000 |
+| placement | 出现位置 | enum | `'top-right' \| 'top-left' \| 'bottom-right' \| 'bottom-left'` | 'top-right' |
+| show-close | 是否显示关闭按钮 | boolean | — | false |
+| close-icon | 关闭按钮图标 | string | — | 'xmark' |
+| z-index | z-index 值 | number | — | 0 |
+| dangerouslyUseHTMLString | 是否把 message 当作 HTML 渲染 | boolean | — | false |
+| append-to | 指定挂载容器，支持选择器或 HTMLElement | CSSSelector | — | 'body' |
+| onClose | 关闭回调函数 | Function | — | — |
 
 ### Notification CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称       | 说明           |
-| ---------- | -------------- |
-| container  | 通知整体根元素 |
-| icon       | 类型图标       |
-| header     | 标题区域       |
-| title      | 标题文本       |
-| close-icon | 关闭按钮       |
-| main       | 正文内容区域   |
+| 名称 | 说明 |
+| ---- | ---- |
+| container | 通知整体根元素 |
+| icon | 类型图标 |
+| content | 内容区域 |
+| header | 标题区域 |
+| title | 标题文本 |
+| close-icon | 关闭按钮 |
+| main | 正文内容区域 |
+
+### Notification Slots
+
+| 名称 | 说明 |
+| ---- | ---- |
+| default | 默认插槽，用于自定义正文内容 |
 
 ### Notification Events
 
-| 事件名 | 说明           | 回调参数(event.detail) |
-| ------ | -------------- | ---------------------- |
-| show   | 显示时触发     | —                      |
-| shown  | 显示完毕时触发 | —                      |
-| hide   | 隐藏时触发     | —                      |
-| hidden | 隐藏完毕时触发 | —                      |
-| close  | 关闭时触发     | —                      |
+| 事件名 | 说明 | 回调参数(event.detail) |
+| ---- | ---- | ---- |
+| ea-show | 显示时触发 | — |
+| ea-shown | 显示完毕时触发 | — |
+| ea-hide | 隐藏时触发 | — |
+| ea-hidden | 隐藏完毕时触发 | — |
+| ea-close | 关闭时触发 | — |
 
 ### Notification Methods
 
-| 名称  | 描述                         | 类型                   |
-| ----- | ---------------------------- | ---------------------- |
+| 名称 | 描述 | 类型 |
+| ---- | ---- | ---- |
 | close | 关闭当前的 Notification 实例 | `Function: () => void` |
+
+### Notification CSS 自定义属性
+
+| 属性名 | 说明 | 默认值 |
+| ---- | ---- | ---- |
+| --ea-notification-y | 垂直偏移量 | 0 |
+| --ea-notification-show-x | 水平显示偏移量 | var(--spacing-lg) |
+| --ea-notification-fade-out-x | 水平隐藏偏移量 | 100% |
+| --ea-notification-padding | 内边距 | var(--spacing-lg) |
+| --ea-notification-border-color | 边框颜色 | var(--grey-200) |
+| --ea-notification-border-radius | 圆角 | var(--border-radius-sm) |
+| --ea-notification-box-shadow | 阴影 | var(--box-shadow-md) |
+| --ea-notification-width | 宽度 | 300px |
+| --ea-notification-title-font-size | 标题字号 | var(--font-size-lg) |
+| --ea-notification-message-font-size | 正文字号 | var(--font-size-md) |
+| --ea-notification-title-color | 标题颜色 | var(--grey-900) |
+| --ea-notification-message-color | 正文颜色 | var(--grey-700) |
+| --ea-notification-icon-size | 图标尺寸 | var(--font-size-lg) |
+| --ea-notification-transition | 过渡动画时长 | var(--transition-normal) |
+| --ea-notification-gap | 间距 | var(--spacing-md) |
+| --ea-notification-close-icon-color | 关闭图标颜色 | var(--grey-500) |
+| --ea-notification-z-index | 层级 | 2000 |

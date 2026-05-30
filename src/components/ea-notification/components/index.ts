@@ -1,33 +1,22 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { property } from "@decorator/property";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { html } from "@utils/html";
+import { Enum } from "@utils/Enum";
+import { VARIANT_ICON_MAP } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
-import { Enum } from "@/utils/Enum";
 import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-notification" as const;
 const bem = createBEM(TAG_NAME);
 
-const NOTIFICATION_TYPES = [
+const NOTIFICATION_VARIANT_TYPES = [
   "primary",
   "success",
   "warning",
   "info",
   "error",
 ] as const;
-type NotificationType = (typeof NOTIFICATION_TYPES)[number];
-
-const ICON_TYPES: Record<NotificationType, string> = {
-  success: "circle-check",
-  error: "circle-xmark",
-  warning: "triangle-exclamation",
-  info: "circle-info",
-  primary: "circle-info",
-};
+export type NotificationVariantType = (typeof NOTIFICATION_VARIANT_TYPES)[number];
 
 const PLACEMENT_TYPES = [
   "top-right",
@@ -37,41 +26,79 @@ const PLACEMENT_TYPES = [
 ] as const;
 type PlacementType = (typeof PLACEMENT_TYPES)[number];
 
+/**
+ * @summary 通知组件，用于系统级通知或轻量级提醒，支持多种类型、自定义位置和自动关闭。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot default - 默认插槽，用于自定义正文内容。
+ *
+ * @event ea-show - 通知显示时触发。
+ * @event ea-shown - 通知显示完毕时触发。
+ * @event ea-hide - 通知隐藏时触发。
+ * @event ea-hidden - 通知隐藏完毕时触发。
+ * @event ea-close - 通知关闭时触发。
+ *
+ * @csspart container - 通知整体根元素。
+ * @csspart icon - 类型图标。
+ * @csspart content - 内容区域。
+ * @csspart header - 标题区域。
+ * @csspart title - 标题文本。
+ * @csspart close-icon - 关闭按钮。
+ * @csspart main - 正文内容区域。
+ *
+ * @cssproperty --ea-notification-y - 垂直偏移量。
+ * @cssproperty --ea-notification-show-x - 水平显示偏移量。
+ * @cssproperty --ea-notification-fade-out-x - 水平隐藏偏移量。
+ * @cssproperty --ea-notification-padding - 内边距。
+ * @cssproperty --ea-notification-border-color - 边框颜色。
+ * @cssproperty --ea-notification-border-radius - 圆角。
+ * @cssproperty --ea-notification-box-shadow - 阴影。
+ * @cssproperty --ea-notification-width - 宽度。
+ * @cssproperty --ea-notification-title-font-size - 标题字号。
+ * @cssproperty --ea-notification-message-font-size - 正文字号。
+ * @cssproperty --ea-notification-title-color - 标题颜色。
+ * @cssproperty --ea-notification-message-color - 正文颜色。
+ * @cssproperty --ea-notification-icon-size - 图标尺寸。
+ * @cssproperty --ea-notification-transition - 过渡动画时长。
+ * @cssproperty --ea-notification-gap - 间距。
+ * @cssproperty --ea-notification-offset - 通知间距偏移量。
+ * @cssproperty --ea-notification-close-icon-color - 关闭图标颜色。
+ * @cssproperty --ea-notification-z-index - 层级。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaNotificationElement extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-notification")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-notification__icon")
+  @query(bem.ce("icon"))
   private _notificationIcon!: HTMLElement;
 
-  @query(".ea-notification__title")
+  @query(bem.ce("title"))
   private _title!: HTMLElement;
 
-  @query(".ea-notification__close-icon")
+  @query(bem.ce("close-icon"))
   private _closeIcon!: HTMLElement;
 
-  @query(".ea-notification__main")
+  @query(bem.ce("main"))
   private _main!: HTMLElement;
 
   private _transitionAbortController?: AbortController;
 
-  // ==================== 属性定义 ====================
-
   @attribute({
-    type: Enum(NOTIFICATION_TYPES),
+    type: Enum(NOTIFICATION_VARIANT_TYPES),
     default: "info",
-    observer(this: EaNotificationElement, newVal: NotificationType) {
+    observer(this: EaNotificationElement, newVal: NotificationVariantType) {
       this._notificationIcon.setAttribute(
         "name",
-        this.icon || ICON_TYPES[newVal]
+        this.icon || VARIANT_ICON_MAP[newVal]
       );
       this.updateContainerClasslist();
     },
   })
-  type: NotificationType = "info";
+  variant: NotificationVariantType = "info";
 
   @attribute({
     type: String,
@@ -92,30 +119,30 @@ export class EaNotificationElement extends EaBase {
       if (newVal) {
         this._initPosition();
         this.updateContainerClasslist();
-        this.emit("show");
+        this.emit("ea-show");
 
         void this._container.offsetWidth;
 
-        this._container.classList.add("ea-notification--is-show");
+        this._container.classList.add(bem.s("is-show"));
 
         this._container.addEventListener(
           "transitionend",
           () => {
-            this.emit("shown");
+            this.emit("ea-shown");
           },
           { once: true, signal: this._transitionAbortController.signal }
         );
       } else {
         this._handleHide();
 
-        this._container.classList.add("ea-notification--before-hide");
-        this.emit("hide");
+        this._container.classList.add(bem.s("before-hide"));
+        this.emit("ea-hide");
 
         this._container.addEventListener(
           "transitionend",
           () => {
             this.updateContainerClasslist();
-            this.emit("hidden");
+            this.emit("ea-hidden");
           },
           { once: true, signal: this._transitionAbortController.signal }
         );
@@ -185,7 +212,7 @@ export class EaNotificationElement extends EaBase {
     observer(this: EaNotificationElement, newVal: string) {
       this._notificationIcon.setAttribute(
         "name",
-        newVal || ICON_TYPES[this.type]
+        newVal || VARIANT_ICON_MAP[this.variant]
       );
       this.updateContainerClasslist();
     },
@@ -198,17 +225,16 @@ export class EaNotificationElement extends EaBase {
   })
   dangerouslyUseHTMLString: boolean = false;
 
-  // ==================== 方法 ====================
-
   updateContainerClasslist(): string {
     const className = bem(
       {
-        [this.type]: true,
+        [this.variant]: true,
         [this.placement]: true,
+      },
+      {
         visible: this.visible,
         "show-close": this.showClose,
-      },
-      {}
+      }
     );
 
     if (this._container) this._container.className = className;
@@ -219,13 +245,13 @@ export class EaNotificationElement extends EaBase {
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container">
-        <ea-icon class="${bem.e("icon")}" name="${ICON_TYPES[this.type]}" part="icon"></ea-icon>
-        <div class="${bem.e("content")}">
+        <ea-icon class="${bem.e("icon")}" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>
+        <div class="${bem.e("content")}" part="content">
           <header class="${bem.e("header")}" part="header">
             <h2 class="${bem.e("title")}" part="title"> </h2>
             <ea-icon class="${bem.e("close-icon")}" name="xmark" part="close-icon"></ea-icon>
           </header>
-          <main class="${bem.e("main")}" part="main"> </main>
+          <main class="${bem.e("main")}" part="main"><slot></slot> </main>
         </div>
       </div>
     `;
@@ -233,9 +259,10 @@ export class EaNotificationElement extends EaBase {
 
   close(): void {
     this.visible = false;
-    this.emit("close");
+    this.emit("ea-close");
   }
 
+  /** 初始化通知位置，计算堆叠偏移 */
   private _initPosition(): void {
     const eaNotificationList = document.querySelectorAll<HTMLElement>(
       `ea-notification[placement="${this.placement}"]`
@@ -247,7 +274,7 @@ export class EaNotificationElement extends EaBase {
     const lastPosition = lastEl.style.getPropertyValue("--ea-notification-y");
 
     const lastEaNotification = lastEl.shadowRoot?.querySelector(
-      ".ea-notification"
+      `.${bem.b()}`
     ) as HTMLElement;
     if (!lastEaNotification) return;
 
@@ -259,6 +286,7 @@ export class EaNotificationElement extends EaBase {
     );
   }
 
+  /** 隐藏时调整后续通知位置 */
   private _handleHide(): void {
     const eaNotificationList = [
       ...document.querySelectorAll<HTMLElement>(
@@ -282,15 +310,11 @@ export class EaNotificationElement extends EaBase {
     });
   }
 
-  // ==================== 事件处理 ====================
-
-  @listen("click", ".ea-notification__close-icon")
+  @listen("click", bem.ce("close-icon"))
   private _handleCloseIconClick(): void {
     if (!this.showClose) return;
     this.close();
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

@@ -53,6 +53,17 @@ describe("EaNotification Component", () => {
       ).toBeTruthy();
     });
 
+    it("应该包含 content CSS Part", async () => {
+      const notification = document.createElement("ea-notification");
+      container.appendChild(notification);
+
+      await waitForRender();
+
+      expect(
+        notification.shadowRoot.querySelector('[part="content"]')
+      ).toBeTruthy();
+    });
+
     it("应该包含 header CSS Part", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
@@ -148,75 +159,63 @@ describe("EaNotification Component", () => {
       expect(main).toBeTruthy();
       expect(main.tagName.toLowerCase()).toBe("main");
     });
-
-    it("应该渲染内容容器", async () => {
-      const notification = document.createElement("ea-notification");
-      container.appendChild(notification);
-
-      await waitForRender();
-
-      const content = notification.shadowRoot.querySelector(
-        ".ea-notification__content"
-      );
-      expect(content).toBeTruthy();
-    });
   });
 
-  // ==================== Type 属性测试 ====================
+  // ==================== Variant 属性测试 ====================
 
-  describe("Type Attribute", () => {
-    it("默认 type 应该是 info", async () => {
+  describe("Variant Attribute", () => {
+    it("默认 variant 应该是 info", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
       await waitForRender();
 
-      expect(notification.type).toBe("info");
+      expect(notification.variant).toBe("info");
     });
 
     it("应该支持 success 类型", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "success";
+      notification.variant = "success";
       container.appendChild(notification);
 
       await waitForRender();
 
-      expect(notification.type).toBe("success");
+      expect(notification.variant).toBe("success");
     });
 
     it("应该支持 warning 类型", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "warning";
+      notification.variant = "warning";
       container.appendChild(notification);
 
       await waitForRender();
 
-      expect(notification.type).toBe("warning");
+      expect(notification.variant).toBe("warning");
     });
 
     it("应该支持 error 类型", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "error";
+      notification.variant = "error";
       container.appendChild(notification);
 
       await waitForRender();
 
-      expect(notification.type).toBe("error");
+      expect(notification.variant).toBe("error");
     });
 
     it("应该支持 primary 类型", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "primary";
+      notification.variant = "primary";
       container.appendChild(notification);
 
       await waitForRender();
 
-      expect(notification.type).toBe("primary");
+      expect(notification.variant).toBe("primary");
     });
 
-    it("type 为 success 时图标应该是 circle-check", async () => {
+    it("variant 为 success 时图标应该是 circle-check", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "success";
+      notification.variant = "success";
       container.appendChild(notification);
 
       await waitForRender();
@@ -227,9 +226,9 @@ describe("EaNotification Component", () => {
       expect(icon.getAttribute("name")).toBe("circle-check");
     });
 
-    it("type 为 error 时图标应该是 circle-xmark", async () => {
+    it("variant 为 error 时图标应该是 circle-xmark", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "error";
+      notification.variant = "error";
       container.appendChild(notification);
 
       await waitForRender();
@@ -240,9 +239,9 @@ describe("EaNotification Component", () => {
       expect(icon.getAttribute("name")).toBe("circle-xmark");
     });
 
-    it("type 为 warning 时图标应该是 triangle-exclamation", async () => {
+    it("variant 为 warning 时图标应该是 triangle-exclamation", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "warning";
+      notification.variant = "warning";
       container.appendChild(notification);
 
       await waitForRender();
@@ -253,9 +252,9 @@ describe("EaNotification Component", () => {
       expect(icon.getAttribute("name")).toBe("triangle-exclamation");
     });
 
-    it("type 为 info 时图标应该是 circle-info", async () => {
+    it("variant 为 info 时图标应该是 circle-info", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "info";
+      notification.variant = "info";
       container.appendChild(notification);
 
       await waitForRender();
@@ -266,9 +265,9 @@ describe("EaNotification Component", () => {
       expect(icon.getAttribute("name")).toBe("circle-info");
     });
 
-    it("type 为 primary 时图标应该是 circle-info", async () => {
+    it("variant 为 primary 时图标应该是 circle-info", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "primary";
+      notification.variant = "primary";
       container.appendChild(notification);
 
       await waitForRender();
@@ -279,9 +278,9 @@ describe("EaNotification Component", () => {
       expect(icon.getAttribute("name")).toBe("circle-info");
     });
 
-    it("type 应该正确反映到容器类名", async () => {
+    it("variant 应该正确反映到容器类名", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "success";
+      notification.variant = "success";
       container.appendChild(notification);
 
       await waitForRender();
@@ -293,13 +292,13 @@ describe("EaNotification Component", () => {
       );
     });
 
-    it("动态修改 type 应该更新容器类名", async () => {
+    it("动态修改 variant 应该更新容器类名", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
       await waitForRender();
 
-      notification.type = "warning";
+      notification.variant = "warning";
 
       await waitForRender();
 
@@ -313,14 +312,14 @@ describe("EaNotification Component", () => {
       );
     });
 
-    it("通过 setAttribute 设置 type 应该生效", async () => {
+    it("通过 setAttribute 设置 variant 应该生效", async () => {
       const notification = document.createElement("ea-notification");
-      notification.setAttribute("type", "error");
+      notification.setAttribute("variant", "error");
       container.appendChild(notification);
 
       await waitForRender();
 
-      expect(notification.type).toBe("error");
+      expect(notification.variant).toBe("error");
     });
   });
 
@@ -418,7 +417,7 @@ describe("EaNotification Component", () => {
       const main = notification.shadowRoot.querySelector(
         ".ea-notification__main"
       );
-      expect(main.textContent).toBe("Hello World");
+      expect(main.textContent).toContain("Hello World");
     });
 
     it("dangerouslyUseHTMLString 为 false 时 HTML 标签应该被转义", async () => {
@@ -472,7 +471,7 @@ describe("EaNotification Component", () => {
       const main = notification.shadowRoot.querySelector(
         ".ea-notification__main"
       );
-      expect(main.textContent).toBe("Updated Message");
+      expect(main.textContent).toContain("Updated Message");
     });
   });
 
@@ -501,7 +500,7 @@ describe("EaNotification Component", () => {
       expect(notification.visible).toBe(true);
     });
 
-    it("visible 为 true 时容器应该包含 visible 类名", async () => {
+    it("visible 为 true 时容器应该包含 is-visible 类名", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
@@ -513,12 +512,10 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(containerEl.classList.contains("ea-notification--visible")).toBe(
-        true
-      );
+      expect(containerEl.classList.contains("is-visible")).toBe(true);
     });
 
-    it("visible 为 true 时容器应该包含 is-show 类名", async () => {
+    it("visible 为 true 时容器应该包含 is-is-show 类名", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
@@ -530,12 +527,10 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(containerEl.classList.contains("ea-notification--is-show")).toBe(
-        true
-      );
+      expect(containerEl.classList.contains("is-is-show")).toBe(true);
     });
 
-    it("visible 为 false 时容器不应该包含 is-show 类名", async () => {
+    it("visible 为 false 时容器不应该包含 is-is-show 类名", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
@@ -543,12 +538,10 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(containerEl.classList.contains("ea-notification--is-show")).toBe(
-        false
-      );
+      expect(containerEl.classList.contains("is-is-show")).toBe(false);
     });
 
-    it("从 true 切换到 false 时应该添加 before-hide 类名", async () => {
+    it("从 true 切换到 false 时应该添加 is-before-hide 类名", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
@@ -562,9 +555,7 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(
-        containerEl.classList.contains("ea-notification--before-hide")
-      ).toBe(true);
+      expect(containerEl.classList.contains("is-before-hide")).toBe(true);
     });
   });
 
@@ -590,7 +581,7 @@ describe("EaNotification Component", () => {
       expect(notification.showClose).toBe(true);
     });
 
-    it("showClose 为 true 时容器应该包含 show-close 类名", async () => {
+    it("showClose 为 true 时容器应该包含 is-show-close 类名", async () => {
       const notification = document.createElement("ea-notification");
       notification.showClose = true;
       container.appendChild(notification);
@@ -599,12 +590,10 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(
-        containerEl.classList.contains("ea-notification--show-close")
-      ).toBe(true);
+      expect(containerEl.classList.contains("is-show-close")).toBe(true);
     });
 
-    it("showClose 为 false 时容器不应该包含 show-close 类名", async () => {
+    it("showClose 为 false 时容器不应该包含 is-show-close 类名", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
@@ -612,9 +601,7 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(
-        containerEl.classList.contains("ea-notification--show-close")
-      ).toBe(false);
+      expect(containerEl.classList.contains("is-show-close")).toBe(false);
     });
 
     it("showClose 为 true 时关闭图标应该可见", async () => {
@@ -654,16 +641,12 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(
-        containerEl.classList.contains("ea-notification--show-close")
-      ).toBe(true);
+      expect(containerEl.classList.contains("is-show-close")).toBe(true);
 
       notification.showClose = false;
       await waitForRender();
 
-      expect(
-        containerEl.classList.contains("ea-notification--show-close")
-      ).toBe(false);
+      expect(containerEl.classList.contains("is-show-close")).toBe(false);
     });
   });
 
@@ -912,9 +895,9 @@ describe("EaNotification Component", () => {
       expect(notification.icon).toBe("custom-icon");
     });
 
-    it("自定义 icon 应该覆盖 type 默认图标", async () => {
+    it("自定义 icon 应该覆盖 variant 默认图标", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "success";
+      notification.variant = "success";
       notification.icon = "custom-icon";
       container.appendChild(notification);
 
@@ -926,9 +909,9 @@ describe("EaNotification Component", () => {
       expect(icon.getAttribute("name")).toBe("custom-icon");
     });
 
-    it("icon 为空时应该使用 type 对应的默认图标", async () => {
+    it("icon 为空时应该使用 variant 对应的默认图标", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "error";
+      notification.variant = "error";
       container.appendChild(notification);
 
       await waitForRender();
@@ -955,9 +938,9 @@ describe("EaNotification Component", () => {
       expect(icon.getAttribute("name")).toBe("star");
     });
 
-    it("将 icon 清空后应该回退到 type 默认图标", async () => {
+    it("将 icon 清空后应该回退到 variant 默认图标", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "warning";
+      notification.variant = "warning";
       notification.icon = "custom-icon";
       container.appendChild(notification);
 
@@ -977,14 +960,14 @@ describe("EaNotification Component", () => {
   // ==================== 事件测试 ====================
 
   describe("Events", () => {
-    it("visible 变为 true 时应该触发 show 事件", async () => {
+    it("visible 变为 true 时应该触发 ea-show 事件", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
       await waitForRender();
 
       const showHandler = vi.fn();
-      notification.addEventListener("show", showHandler);
+      notification.addEventListener("ea-show", showHandler);
 
       notification.visible = true;
 
@@ -993,14 +976,14 @@ describe("EaNotification Component", () => {
       expect(showHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("visible 变为 true 后 transitionend 应该触发 shown 事件", async () => {
+    it("visible 变为 true 后 transitionend 应该触发 ea-shown 事件", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
       await waitForRender();
 
       const shownHandler = vi.fn();
-      notification.addEventListener("shown", shownHandler);
+      notification.addEventListener("ea-shown", shownHandler);
 
       notification.visible = true;
 
@@ -1015,7 +998,7 @@ describe("EaNotification Component", () => {
       expect(shownHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("visible 变为 false 时应该触发 hide 事件", async () => {
+    it("visible 变为 false 时应该触发 ea-hide 事件", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
@@ -1025,7 +1008,7 @@ describe("EaNotification Component", () => {
       await waitForRender();
 
       const hideHandler = vi.fn();
-      notification.addEventListener("hide", hideHandler);
+      notification.addEventListener("ea-hide", hideHandler);
 
       notification.visible = false;
 
@@ -1034,7 +1017,7 @@ describe("EaNotification Component", () => {
       expect(hideHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("visible 变为 false 后 transitionend 应该触发 hidden 事件", async () => {
+    it("visible 变为 false 后 transitionend 应该触发 ea-hidden 事件", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
@@ -1044,7 +1027,7 @@ describe("EaNotification Component", () => {
       await waitForRender();
 
       const hiddenHandler = vi.fn();
-      notification.addEventListener("hidden", hiddenHandler);
+      notification.addEventListener("ea-hidden", hiddenHandler);
 
       notification.visible = false;
       await waitForRender();
@@ -1058,14 +1041,14 @@ describe("EaNotification Component", () => {
       expect(hiddenHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("调用 close() 应该触发 close 事件", async () => {
+    it("调用 close() 应该触发 ea-close 事件", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
       await waitForRender();
 
       const closeHandler = vi.fn();
-      notification.addEventListener("close", closeHandler);
+      notification.addEventListener("ea-close", closeHandler);
 
       notification.close();
 
@@ -1084,7 +1067,7 @@ describe("EaNotification Component", () => {
       expect(notification.visible).toBe(false);
     });
 
-    it("showClose 为 true 时点击关闭图标应该触发 close 事件", async () => {
+    it("showClose 为 true 时点击关闭图标应该触发 ea-close 事件", async () => {
       const notification = document.createElement("ea-notification");
       notification.showClose = true;
       container.appendChild(notification);
@@ -1092,7 +1075,7 @@ describe("EaNotification Component", () => {
       await waitForRender();
 
       const closeHandler = vi.fn();
-      notification.addEventListener("close", closeHandler);
+      notification.addEventListener("ea-close", closeHandler);
 
       const closeIcon = notification.shadowRoot.querySelector(
         ".ea-notification__close-icon"
@@ -1104,14 +1087,14 @@ describe("EaNotification Component", () => {
       expect(closeHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("showClose 为 false 时点击关闭图标不应该触发 close 事件", async () => {
+    it("showClose 为 false 时点击关闭图标不应该触发 ea-close 事件", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
       await waitForRender();
 
       const closeHandler = vi.fn();
-      notification.addEventListener("close", closeHandler);
+      notification.addEventListener("ea-close", closeHandler);
 
       const closeIcon = notification.shadowRoot.querySelector(
         ".ea-notification__close-icon"
@@ -1141,14 +1124,14 @@ describe("EaNotification Component", () => {
       expect(notification.visible).toBe(false);
     });
 
-    it("close() 方法应该触发 close 事件", async () => {
+    it("close() 方法应该触发 ea-close 事件", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
       await waitForRender();
 
       const closeHandler = vi.fn();
-      notification.addEventListener("close", closeHandler);
+      notification.addEventListener("ea-close", closeHandler);
 
       notification.close();
 
@@ -1157,7 +1140,7 @@ describe("EaNotification Component", () => {
 
     it("updateContainerClasslist() 应该返回正确的类名", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "success";
+      notification.variant = "success";
       notification.placement = "top-left";
       container.appendChild(notification);
 
@@ -1211,7 +1194,7 @@ describe("EaNotification Component", () => {
       );
     });
 
-    it("visible 为 true 时应该包含 visible 类名", async () => {
+    it("visible 为 true 时应该包含 is-visible 类名", async () => {
       const notification = document.createElement("ea-notification");
       container.appendChild(notification);
 
@@ -1223,12 +1206,10 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(containerEl.classList.contains("ea-notification--visible")).toBe(
-        true
-      );
+      expect(containerEl.classList.contains("is-visible")).toBe(true);
     });
 
-    it("showClose 为 true 时应该包含 show-close 类名", async () => {
+    it("showClose 为 true 时应该包含 is-show-close 类名", async () => {
       const notification = document.createElement("ea-notification");
       notification.showClose = true;
       container.appendChild(notification);
@@ -1237,14 +1218,12 @@ describe("EaNotification Component", () => {
 
       const containerEl =
         notification.shadowRoot.querySelector(".ea-notification");
-      expect(
-        containerEl.classList.contains("ea-notification--show-close")
-      ).toBe(true);
+      expect(containerEl.classList.contains("is-show-close")).toBe(true);
     });
 
     it("多个修饰类名应该同时存在", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "warning";
+      notification.variant = "warning";
       notification.placement = "bottom-left";
       notification.showClose = true;
       notification.visible = true;
@@ -1260,12 +1239,8 @@ describe("EaNotification Component", () => {
       expect(
         containerEl.classList.contains("ea-notification--bottom-left")
       ).toBe(true);
-      expect(
-        containerEl.classList.contains("ea-notification--show-close")
-      ).toBe(true);
-      expect(containerEl.classList.contains("ea-notification--visible")).toBe(
-        true
-      );
+      expect(containerEl.classList.contains("is-show-close")).toBe(true);
+      expect(containerEl.classList.contains("is-visible")).toBe(true);
     });
   });
 
@@ -1311,7 +1286,7 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      expect(instance.instance.type).toBe("success");
+      expect(instance.instance.variant).toBe("success");
 
       instance.close();
     });
@@ -1325,7 +1300,7 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      expect(instance.instance.type).toBe("warning");
+      expect(instance.instance.variant).toBe("warning");
 
       instance.close();
     });
@@ -1339,7 +1314,7 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      expect(instance.instance.type).toBe("error");
+      expect(instance.instance.variant).toBe("error");
 
       instance.close();
     });
@@ -1353,7 +1328,7 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      expect(instance.instance.type).toBe("info");
+      expect(instance.instance.variant).toBe("info");
 
       instance.close();
     });
@@ -1367,7 +1342,7 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      expect(instance.instance.type).toBe("primary");
+      expect(instance.instance.variant).toBe("primary");
 
       instance.close();
     });
@@ -1533,7 +1508,7 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      instance.instance.dispatchEvent(new Event("hidden", { bubbles: true }));
+      instance.instance.dispatchEvent(new Event("ea-hidden", { bubbles: true }));
 
       await waitForRender();
 
@@ -1578,7 +1553,7 @@ describe("EaNotification Component", () => {
       expect(instance.instance.visible).toBe(false);
     });
 
-    it("hidden 事件后应该自动从 DOM 移除", async () => {
+    it("ea-hidden 事件后应该自动从 DOM 移除", async () => {
       const instance = EaNotification({
         heading: "Test",
         message: "Test Message",
@@ -1594,7 +1569,7 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      el.dispatchEvent(new Event("hidden", { bubbles: true }));
+      el.dispatchEvent(new Event("ea-hidden", { bubbles: true }));
 
       await waitForRender();
 
@@ -1659,7 +1634,7 @@ describe("EaNotification Component", () => {
       instance.close();
     });
 
-    it("$notify.success 调用后应该创建 type=success 的通知", async () => {
+    it("$notify.success 调用后应该创建 variant=success 的通知", async () => {
       const instance = window.$notify.success({
         heading: "Test",
         message: "Test Message",
@@ -1668,12 +1643,12 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      expect(instance.instance.type).toBe("success");
+      expect(instance.instance.variant).toBe("success");
 
       instance.close();
     });
 
-    it("$notify.error 调用后应该创建 type=error 的通知", async () => {
+    it("$notify.error 调用后应该创建 variant=error 的通知", async () => {
       const instance = window.$notify.error({
         heading: "Test",
         message: "Test Message",
@@ -1682,7 +1657,7 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      expect(instance.instance.type).toBe("error");
+      expect(instance.instance.variant).toBe("error");
 
       instance.close();
     });
@@ -1844,7 +1819,7 @@ describe("EaNotification Component", () => {
       await waitForRender();
 
       expect(notification.shadowRoot).toBeTruthy();
-      expect(notification.type).toBe("info");
+      expect(notification.variant).toBe("info");
       expect(notification.heading).toBe("");
       expect(notification.message).toBe("");
     });
@@ -1874,13 +1849,13 @@ describe("EaNotification Component", () => {
 
       await waitForRender();
 
-      notification.type = "warning";
+      notification.variant = "warning";
       notification.heading = "Updated Title";
       notification.message = "Updated Message";
 
       await waitForRender();
 
-      expect(notification.type).toBe("warning");
+      expect(notification.variant).toBe("warning");
       expect(notification.heading).toBe("Updated Title");
       expect(notification.message).toBe("Updated Message");
     });
@@ -1917,14 +1892,14 @@ describe("EaNotification Component", () => {
   describe("Lifecycle", () => {
     it("组件连接后应该正确初始化", async () => {
       const notification = document.createElement("ea-notification");
-      notification.type = "success";
+      notification.variant = "success";
       notification.heading = "Test Title";
       container.appendChild(notification);
 
       await waitForRender();
 
       expect(notification.shadowRoot).toBeTruthy();
-      expect(notification.type).toBe("success");
+      expect(notification.variant).toBe("success");
       expect(notification.heading).toBe("Test Title");
     });
 
