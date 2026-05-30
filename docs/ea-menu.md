@@ -15,6 +15,23 @@ onMounted(() => {
   .vertical::part(wrap) {
     height: 100%;
   }
+
+  .ea-menu-demo .ea-container {
+    display: block;
+    height: 100vh;
+  }
+
+  .ea-menu-demo .ea-aside {
+    flex: 1 0 0;
+    min-width: 0;
+  }
+
+  .ea-menu-demo .ea-container-left {
+    --ea-container-direction: column;
+    flex: 1 0 0;
+    width: 100%;
+    overflow: auto;
+  }
 </style>
 
 # Menu 导航菜单
@@ -393,26 +410,7 @@ onMounted(() => {
 
 结合 `ea-container` 实现侧栏 + 顶栏的完整布局。
 
-<div class="demo">
-  <style>
-    .ea-container {
-      display: block;
-      height: 100vh;
-    }
-
-    .ea-aside {
-      flex: 1 0 0;
-      min-width: 0;
-    }
-
-    .ea-container-left {
-      --ea-container-direction: column;
-      flex: 1 0 0;
-      width: 100%;
-      overflow: auto;
-    }
-
-  </style>
+<div class="demo ea-menu-demo">
   <ea-container class="ea-container" direction="horizontal">
     <ea-aside width="300px">
       <ea-menu default-active="2" class="ea-menu-vertical-demo" mode="vertical">
@@ -495,25 +493,7 @@ onMounted(() => {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <style>
-    .ea-container {
-      display: block;
-      height: 100vh;
-    }
-
-    .ea-aside {
-      flex: 1 0 0;
-      min-width: 0;
-    }
-
-    .ea-container-left {
-      --ea-container-direction: column;
-      flex: 1 0 0;
-      width: 100%;
-      overflow: auto;
-    }
-  </style>
+<div class="demo ea-menu-demo">
   <ea-container class="ea-container" direction="horizontal">
     <ea-aside width="300px">
       <ea-menu default-active="2" class="ea-menu-vertical-demo" mode="vertical">
