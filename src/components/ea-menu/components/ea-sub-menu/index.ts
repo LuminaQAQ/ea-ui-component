@@ -1,16 +1,41 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { property } from "@decorator/property";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-sub-menu" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 子菜单组件，支持展开/收起和嵌套，用于构建多级导航菜单。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot title - 子菜单标题内容。
+ * @slot default - 子菜单项内容，放置 ea-menu-item / ea-menu-item-group 等。
+ *
+ * @event ea-sub-menu-click - 子菜单内菜单项点击时触发，detail: `{ index: string, itemIndex: string, target: HTMLElement }`。
+ *
+ * @csspart container - 外层容器元素。
+ * @csspart title - 标题容器元素。
+ * @csspart arrow - 展开/收起箭头图标元素。
+ * @csspart content - 子菜单列表容器元素。
+ *
+ * @cssproperty --ea-sub-menu-spacing - 子菜单水平内边距。
+ * @cssproperty --ea-sub-menu-height - 子菜单标题高度。
+ * @cssproperty --ea-sub-menu-font-size - 子菜单字体大小。
+ * @cssproperty --ea-sub-menu-bg-color - 子菜单背景颜色。
+ * @cssproperty --ea-sub-menu-text-color - 子菜单文字颜色。
+ * @cssproperty --ea-sub-menu-border-color - 子菜单激活边框颜色。
+ * @cssproperty --ea-sub-menu-active-text-color - 子菜单激活文字颜色。
+ * @cssproperty --ea-sub-menu-active-bg-color - 子菜单激活背景颜色。
+ * @cssproperty --ea-sub-menu-dropdown-box-shadow - 下拉菜单阴影。
+ * @cssproperty --ea-sub-menu-transition - 子菜单过渡动画时长。
+ * @cssproperty --ea-sub-menu-z-index - 子菜单层级。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSubMenu extends EaBase {
   @query(bem.cb())
@@ -28,7 +53,6 @@ export class EaSubMenu extends EaBase {
   @query(bem.ce("arrow"))
   private _arrowEl!: HTMLElement;
 
-  private _abortController?: AbortController;
   private _dropdownAbortController?: AbortController;
   private _modeAbortController?: AbortController;
 
@@ -120,7 +144,7 @@ export class EaSubMenu extends EaBase {
   }
 
   @listen("click")
-  private _onMenuItemClick(e: MouseEvent) {
+  private _handleMenuItemClick(e: MouseEvent) {
     e.stopImmediatePropagation();
     e.preventDefault();
 
@@ -150,6 +174,9 @@ export class EaSubMenu extends EaBase {
     target.setAttribute("active", "true");
   }
 
+  /**
+   * 水平模式下的鼠标悬停展开处理
+   */
   private _onHoverEvent = () => {
     this._dropdownAbortController?.abort();
     this._dropdownAbortController = new AbortController();
@@ -166,6 +193,9 @@ export class EaSubMenu extends EaBase {
     });
   };
 
+  /**
+   * 垂直模式下的点击折叠/展开处理
+   */
   private _onVerticalCollapseEvent = () => {
     if (this.disabled) return;
 
@@ -192,6 +222,10 @@ export class EaSubMenu extends EaBase {
     );
   };
 
+  /**
+   * 根据 mode 切换交互方式
+   * @param mode - 菜单模式
+   */
   private _handleModeChange = (mode: string = this.mode) => {
     this._modeAbortController?.abort();
     this._modeAbortController = new AbortController();
@@ -208,15 +242,11 @@ export class EaSubMenu extends EaBase {
   };
 
   $mount(): void {
-    this._abortController?.abort();
-    this._abortController = new AbortController();
-
     this._handleModeChange();
     this.updateContainerClasslist();
   }
 
   $beforeUnmount(): void {
-    this._abortController?.abort();
     this._dropdownAbortController?.abort();
     this._modeAbortController?.abort();
   }

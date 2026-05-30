@@ -47,8 +47,8 @@ $name: ea-menu-item;
   overflow: hidden;
 
   transition: border-color var(--#{$name}-transition),
-  background-color var(--#{$name}-transition),
-  color var(--#{$name}-transition);
+    background-color var(--#{$name}-transition),
+    color var(--#{$name}-transition);
 
   &:hover {
     color: var(--ea-menu-active-text-color);

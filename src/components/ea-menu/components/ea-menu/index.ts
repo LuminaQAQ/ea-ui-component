@@ -1,14 +1,33 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-menu" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 导航菜单组件，为网站提供导航功能，支持水平和垂直两种模式。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-sub-menu
+ * @dependency ea-menu-item
+ * @dependency ea-menu-item-group
+ *
+ * @slot default - 菜单内容的默认插槽，放置 ea-menu-item / ea-sub-menu / ea-menu-item-group。
+ *
+ * @event select - 菜单项被选中时触发，detail: `{ index: string, target: HTMLElement }`。
+ *
+ * @csspart container - 外层容器元素。
+ *
+ * @cssproperty --ea-menu-bg-color - 菜单背景颜色。
+ * @cssproperty --ea-menu-hover-bg-color - 菜单项悬停背景颜色。
+ * @cssproperty --ea-menu-active-bg-color - 菜单项激活背景颜色。
+ * @cssproperty --ea-menu-border-color - 菜单边框颜色。
+ * @cssproperty --ea-menu-text-color - 菜单文字颜色。
+ * @cssproperty --ea-menu-active-text-color - 菜单项激活文字颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaMenu extends EaBase {
   @query(bem.cb())
@@ -103,6 +122,10 @@ export class EaMenu extends EaBase {
     `;
   }
 
+  /**
+   * 同步 mode 到所有 ea-sub-menu 子组件
+   * @param mode - 菜单模式
+   */
   private _updateChildrenMode = (mode: string) => {
     this.querySelectorAll("ea-sub-menu").forEach(subMenu => {
       subMenu.setAttribute("mode", mode);
@@ -110,7 +133,7 @@ export class EaMenu extends EaBase {
   };
 
   @listen("click")
-  private _onMenuItemClick(e: MouseEvent) {
+  private _handleMenuItemClick(e: MouseEvent) {
     const target = (e.target as HTMLElement).closest(
       "ea-menu-item"
     ) as HTMLElement | null;
@@ -138,7 +161,10 @@ export class EaMenu extends EaBase {
     }
   }
 
-  private _onSubMenuClick = (e: Event) => {
+  /**
+   * 处理子菜单内菜单项点击事件
+   */
+  private _handleSubMenuClick = (e: Event) => {
     const customEvent = e as CustomEvent;
     const detail = customEvent.detail || {};
 
@@ -156,6 +182,10 @@ export class EaMenu extends EaBase {
     }
   };
 
+  /**
+   * 根据 index 激活对应菜单项及其祖先子菜单
+   * @param index - 菜单项索引
+   */
   private _activateItem = (index: string) => {
     if (!index) return;
 
@@ -182,6 +212,9 @@ export class EaMenu extends EaBase {
     }
   };
 
+  /**
+   * 初始化默认激活项
+   */
   private _initDefaultActiveItem = () => {
     const defaultActiveItem = this.querySelector(
       `ea-menu-item[index="${this.defaultActive}"]`
@@ -196,7 +229,7 @@ export class EaMenu extends EaBase {
     this._abortController?.abort();
     this._abortController = new AbortController();
 
-    this.addEventListener("ea-sub-menu-click", this._onSubMenuClick, {
+    this.addEventListener("ea-sub-menu-click", this._handleSubMenuClick, {
       signal: this._abortController.signal,
     });
 
