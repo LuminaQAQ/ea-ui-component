@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-layout 组件（包含 ea-row 和 ea-col）
 import "../components/ea-layout/index.ts";
 
 describe("EaLayout Component (EaRow & EaCol)", () => {
@@ -16,9 +15,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     container.remove();
   });
 
-  /**
-   * EaRow 基本功能测试
-   */
   describe("EaRow Basic Functionality", () => {
     it("应该正确渲染 ea-row 组件", async () => {
       const row = document.createElement("ea-row");
@@ -49,11 +45,18 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const slot = row.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
+
+    it("容器应该包含 BEM 类名 ea-row", async () => {
+      const row = document.createElement("ea-row");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      const containerEl = row.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-row")).toBe(true);
+    });
   });
 
-  /**
-   * EaCol 基本功能测试
-   */
   describe("EaCol Basic Functionality", () => {
     it("应该正确渲染 ea-col 组件", async () => {
       const col = document.createElement("ea-col");
@@ -84,11 +87,18 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       const slot = col.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
+
+    it("容器应该包含 BEM 类名 ea-col", async () => {
+      const col = document.createElement("ea-col");
+      container.appendChild(col);
+
+      await waitForRender();
+
+      const containerEl = col.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-col")).toBe(true);
+    });
   });
 
-  /**
-   * EaRow Gutter 属性测试
-   */
   describe("EaRow Gutter Attribute", () => {
     it("默认 gutter 应该是 0", async () => {
       const row = document.createElement("ea-row");
@@ -109,6 +119,16 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(row.gutter).toBe(20);
     });
 
+    it("gutter 变化时应该更新 CSS 变量 --ea-row-gutter", async () => {
+      const row = document.createElement("ea-row");
+      row.setAttribute("gutter", "20");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("10px");
+    });
+
     it("应该支持不同的 gutter 值", async () => {
       const gutters = [0, 10, 20, 30, 40];
 
@@ -123,9 +143,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * EaRow Justify 属性测试
-   */
   describe("EaRow Justify Attribute", () => {
     it("默认 justify 应该是 start", async () => {
       const row = document.createElement("ea-row");
@@ -186,6 +203,16 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(row.justify).toBe("space-evenly");
     });
 
+    it("justify 变化时应该更新 CSS 变量 --ea-row-justify", async () => {
+      const row = document.createElement("ea-row");
+      row.setAttribute("justify", "center");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      expect(row.style.getPropertyValue("--ea-row-justify")).toBe("center");
+    });
+
     it("应该支持不同的 justify 值", async () => {
       const justifies = ["start", "end", "center", "space-around", "space-between", "space-evenly"];
 
@@ -200,22 +227,9 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * EaRow Align 属性测试
-   */
   describe("EaRow Align Attribute", () => {
     it("默认 align 应该是 top", async () => {
       const row = document.createElement("ea-row");
-      container.appendChild(row);
-
-      await waitForRender();
-
-      expect(row.align).toBe("top");
-    });
-
-    it("应该支持 align='top'", async () => {
-      const row = document.createElement("ea-row");
-      row.setAttribute("align", "top");
       container.appendChild(row);
 
       await waitForRender();
@@ -243,6 +257,16 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(row.align).toBe("bottom");
     });
 
+    it("align 变化时应该更新 CSS 变量 --ea-row-align", async () => {
+      const row = document.createElement("ea-row");
+      row.setAttribute("align", "middle");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      expect(row.style.getPropertyValue("--ea-row-align")).toBe("middle");
+    });
+
     it("应该支持不同的 align 值", async () => {
       const aligns = ["top", "middle", "bottom"];
 
@@ -257,9 +281,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * EaRow Tag 属性测试
-   */
   describe("EaRow Tag Attribute", () => {
     it("默认 tag 应该是 div", async () => {
       const row = document.createElement("ea-row");
@@ -285,9 +306,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * EaCol Span 属性测试
-   */
   describe("EaCol Span Attribute", () => {
     it("默认 span 应该是 24", async () => {
       const col = document.createElement("ea-col");
@@ -308,6 +326,16 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(col.span).toBe(12);
     });
 
+    it("span 变化时应该更新 CSS 变量 --ea-col-span", async () => {
+      const col = document.createElement("ea-col");
+      col.setAttribute("span", "8");
+      container.appendChild(col);
+
+      await waitForRender();
+
+      expect(col.style.getPropertyValue("--ea-col-span")).toBe("8");
+    });
+
     it("应该支持不同的 span 值", async () => {
       const spans = [0, 6, 8, 12, 16, 24];
 
@@ -322,9 +350,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * EaCol Offset 属性测试
-   */
   describe("EaCol Offset Attribute", () => {
     it("默认 offset 应该是 0", async () => {
       const col = document.createElement("ea-col");
@@ -345,6 +370,16 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(col.offset).toBe(6);
     });
 
+    it("offset 变化时应该更新 CSS 变量 --ea-col-offset", async () => {
+      const col = document.createElement("ea-col");
+      col.setAttribute("offset", "6");
+      container.appendChild(col);
+
+      await waitForRender();
+
+      expect(col.style.getPropertyValue("--ea-col-offset")).toBe("6");
+    });
+
     it("应该支持不同的 offset 值", async () => {
       const offsets = [0, 4, 6, 8, 12];
 
@@ -359,9 +394,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * EaCol Push 属性测试
-   */
   describe("EaCol Push Attribute", () => {
     it("默认 push 应该是 0", async () => {
       const col = document.createElement("ea-col");
@@ -382,6 +414,16 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(col.push).toBe(4);
     });
 
+    it("push 变化时应该更新 CSS 变量 --ea-col-push", async () => {
+      const col = document.createElement("ea-col");
+      col.setAttribute("push", "4");
+      container.appendChild(col);
+
+      await waitForRender();
+
+      expect(col.style.getPropertyValue("--ea-col-push")).toBe("4");
+    });
+
     it("应该支持不同的 push 值", async () => {
       const pushes = [0, 2, 4, 6, 8];
 
@@ -396,9 +438,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * EaCol Pull 属性测试
-   */
   describe("EaCol Pull Attribute", () => {
     it("默认 pull 应该是 0", async () => {
       const col = document.createElement("ea-col");
@@ -419,6 +458,16 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(col.pull).toBe(4);
     });
 
+    it("pull 变化时应该更新 CSS 变量 --ea-col-pull", async () => {
+      const col = document.createElement("ea-col");
+      col.setAttribute("pull", "4");
+      container.appendChild(col);
+
+      await waitForRender();
+
+      expect(col.style.getPropertyValue("--ea-col-pull")).toBe("4");
+    });
+
     it("应该支持不同的 pull 值", async () => {
       const pulls = [0, 2, 4, 6, 8];
 
@@ -433,9 +482,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * EaCol Tag 属性测试
-   */
   describe("EaCol Tag Attribute", () => {
     it("默认 tag 应该是 div", async () => {
       const col = document.createElement("ea-col");
@@ -461,9 +507,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * 组合布局测试
-   */
   describe("Combined Layout", () => {
     it("应该支持基本的 row + col 布局", async () => {
       const row = document.createElement("ea-row");
@@ -617,9 +660,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * 边界条件测试
-   */
   describe("Edge Cases", () => {
     it("span 为 0 时应该正确处理", async () => {
       const col = document.createElement("ea-col");
@@ -674,14 +714,12 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * 生命周期测试
-   */
   describe("Lifecycle", () => {
-    it("row 组件连接后应该正确初始化", async () => {
+    it("row 组件连接后应该正确初始化 CSS 变量", async () => {
       const row = document.createElement("ea-row");
       row.setAttribute("gutter", "20");
       row.setAttribute("justify", "center");
+      row.setAttribute("align", "middle");
       container.appendChild(row);
 
       await waitForRender();
@@ -689,9 +727,13 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(row.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(row.gutter).toBe(20);
       expect(row.justify).toBe("center");
+      expect(row.align).toBe("middle");
+      expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("10px");
+      expect(row.style.getPropertyValue("--ea-row-justify")).toBe("center");
+      expect(row.style.getPropertyValue("--ea-row-align")).toBe("middle");
     });
 
-    it("col 组件连接后应该正确初始化", async () => {
+    it("col 组件连接后应该正确初始化 CSS 变量", async () => {
       const col = document.createElement("ea-col");
       col.setAttribute("span", "12");
       col.setAttribute("offset", "6");
@@ -702,6 +744,8 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(col.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
       expect(col.span).toBe(12);
       expect(col.offset).toBe(6);
+      expect(col.style.getPropertyValue("--ea-col-span")).toBe("12");
+      expect(col.style.getPropertyValue("--ea-col-offset")).toBe("6");
     });
 
     it("组件断开连接后应该正常移除", () => {
@@ -746,9 +790,6 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
     });
   });
 
-  /**
-   * 响应式属性测试
-   */
   describe("Responsive Attributes", () => {
     it("row 应该响应 justify 属性变化", async () => {
       const row = document.createElement("ea-row");
@@ -812,6 +853,47 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
 
       expect(col.push).toBe(6);
       expect(col.pull).toBe(2);
+    });
+  });
+
+  describe("CSS Variables", () => {
+    it("row 默认 CSS 变量应该正确设置", async () => {
+      const row = document.createElement("ea-row");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("0px");
+      expect(row.style.getPropertyValue("--ea-row-justify")).toBe("start");
+      expect(row.style.getPropertyValue("--ea-row-align")).toBe("top");
+    });
+
+    it("col 默认 CSS 变量应该正确设置", async () => {
+      const col = document.createElement("ea-col");
+      container.appendChild(col);
+
+      await waitForRender();
+
+      expect(col.style.getPropertyValue("--ea-col-span")).toBe("24");
+      expect(col.style.getPropertyValue("--ea-col-offset")).toBe("0");
+      expect(col.style.getPropertyValue("--ea-col-push")).toBe("0");
+      expect(col.style.getPropertyValue("--ea-col-pull")).toBe("0");
+    });
+
+    it("动态修改属性后 CSS 变量应该同步更新", async () => {
+      const row = document.createElement("ea-row");
+      container.appendChild(row);
+
+      await waitForRender();
+
+      row.setAttribute("gutter", "40");
+      row.setAttribute("justify", "space-between");
+      row.setAttribute("align", "bottom");
+      await waitForRender();
+
+      expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("20px");
+      expect(row.style.getPropertyValue("--ea-row-justify")).toBe("space-between");
+      expect(row.style.getPropertyValue("--ea-row-align")).toBe("bottom");
     });
   });
 });

@@ -1,7 +1,6 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-row" as const;
@@ -15,15 +14,28 @@ const JUSTIFY_TYPES = [
   "space-between",
   "space-evenly",
 ] as const;
-type JustifyType = (typeof JUSTIFY_TYPES)[number];
+export type JustifyType = (typeof JUSTIFY_TYPES)[number];
 
 const ALIGN_TYPES = ["top", "middle", "bottom"] as const;
-type AlignType = (typeof ALIGN_TYPES)[number];
+export type AlignType = (typeof ALIGN_TYPES)[number];
 
+/**
+ * @summary 栅格行组件，基于 24 分栏的 Flex 布局容器，支持列间距、对齐方式和自定义标签。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-col
+ *
+ * @slot default - 默认插槽，用于放置 ea-col 列组件。
+ *
+ * @csspart container - 容器元素。
+ *
+ * @cssproperty --ea-row-gutter - 列间距（半值），默认 0px。
+ * @cssproperty --ea-row-justify - 水平排列方式，默认 start。
+ * @cssproperty --ea-row-align - 垂直对齐方式，默认 top。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaRow extends EaBase {
-  // ==================== 属性定义 ====================
-
   @attribute({
     type: Number,
     default: 0,
@@ -57,11 +69,6 @@ export class EaRow extends EaBase {
   })
   tag: string = "div";
 
-  // ==================== 方法 ====================
-
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <${this.tag} class="${bem()}" part="container">
@@ -70,10 +77,7 @@ export class EaRow extends EaBase {
     `;
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
-    // 初始化 CSS 变量
     this.style.setProperty("--ea-row-gutter", this.gutter / 2 + "px");
     this.style.setProperty("--ea-row-justify", this.justify);
     this.style.setProperty("--ea-row-align", this.align);

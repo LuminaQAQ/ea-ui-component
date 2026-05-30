@@ -1,15 +1,28 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
+import { CustomElement, attribute } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-col" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 栅格列组件，基于 24 分栏的 Flex 子项，支持列宽、偏移、推拉和自定义标签。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-row
+ *
+ * @slot default - 默认插槽，用于列内容。
+ *
+ * @csspart container - 容器元素。
+ *
+ * @cssproperty --ea-col-span - 栅格占据的列数，默认 24。
+ * @cssproperty --ea-col-offset - 栅格左侧的间隔格数，默认 0。
+ * @cssproperty --ea-col-push - 栅格向右移动格数，默认 0。
+ * @cssproperty --ea-col-pull - 栅格向左移动格数，默认 0。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaCol extends EaBase {
-  // ==================== 属性定义 ====================
-
   @attribute({
     type: Number,
     default: 24,
@@ -52,11 +65,6 @@ export class EaCol extends EaBase {
   })
   tag: string = "div";
 
-  // ==================== 方法 ====================
-
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <${this.tag} class="${bem()}" part="container">
@@ -65,10 +73,7 @@ export class EaCol extends EaBase {
     `;
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
-    // 初始化 CSS 变量
     this.style.setProperty("--ea-col-span", String(this.span));
     this.style.setProperty("--ea-col-offset", String(this.offset));
     this.style.setProperty("--ea-col-push", String(this.push));

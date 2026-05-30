@@ -39,16 +39,28 @@ ea-button::part(container) {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-button/index.js";
-  import "./node_modules/easy-component-ui/components/ea-button-group/index.js"; // 需要使用按钮组时才需引入
+  import "./node_modules/easy-component-ui/components/ea-layout/index.js";
 </script>
+```
+
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
 ```
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#row-css-part)。
 
-## 基础布局 ​
+## 基础布局
 
 使用列创建基础网格布局。
 
@@ -57,60 +69,60 @@ ea-button::part(container) {
 <div class="demo">
   <ea-row class="row-container">
     <ea-col span="24">
-      <ea-button type="primary">col-24</ea-button>
+      <ea-button variant="primary">col-24</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container">
     <ea-col span="12">
-      <ea-button type="primary">col-12</ea-button>
+      <ea-button variant="primary">col-12</ea-button>
     </ea-col>
     <ea-col span="12">
-      <ea-button type="primary">col-12</ea-button>
+      <ea-button variant="primary">col-12</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container">
     <ea-col span="8">
-      <ea-button type="primary">col-8</ea-button>
+      <ea-button variant="primary">col-8</ea-button>
     </ea-col>
     <ea-col span="8">
-      <ea-button type="primary">col-8</ea-button>
+      <ea-button variant="primary">col-8</ea-button>
     </ea-col>
     <ea-col span="8">
-      <ea-button type="primary">col-8</ea-button>
+      <ea-button variant="primary">col-8</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container">
     <ea-col span="6">
-      <ea-button type="primary">col-6</ea-button>
+      <ea-button variant="primary">col-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">col-6</ea-button>
+      <ea-button variant="primary">col-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">col-6</ea-button>
+      <ea-button variant="primary">col-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">col-6</ea-button>
+      <ea-button variant="primary">col-6</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container">
     <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
+      <ea-button variant="primary">col-4</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
+      <ea-button variant="primary">col-4</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
+      <ea-button variant="primary">col-4</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
+      <ea-button variant="primary">col-4</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
+      <ea-button variant="primary">col-4</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
+      <ea-button variant="primary">col-4</ea-button>
     </ea-col>
   </ea-row>
 </div>
@@ -118,71 +130,69 @@ ea-button::part(container) {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-row class="row-container">
-    <ea-col span="24">
-      <ea-button type="primary">col-24</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container">
-    <ea-col span="12">
-      <ea-button type="primary">col-12</ea-button>
-    </ea-col>
-    <ea-col span="12">
-      <ea-button type="primary">col-12</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container">
-    <ea-col span="8">
-      <ea-button type="primary">col-8</ea-button>
-    </ea-col>
-    <ea-col span="8">
-      <ea-button type="primary">col-8</ea-button>
-    </ea-col>
-    <ea-col span="8">
-      <ea-button type="primary">col-8</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container">
-    <ea-col span="6">
-      <ea-button type="primary">col-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">col-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">col-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">col-6</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container">
-    <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">col-4</ea-button>
-    </ea-col>
-  </ea-row>
-</div>
+<ea-row class="row-container">
+  <ea-col span="24">
+    <ea-button variant="primary">col-24</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container">
+  <ea-col span="12">
+    <ea-button variant="primary">col-12</ea-button>
+  </ea-col>
+  <ea-col span="12">
+    <ea-button variant="primary">col-12</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container">
+  <ea-col span="8">
+    <ea-button variant="primary">col-8</ea-button>
+  </ea-col>
+  <ea-col span="8">
+    <ea-button variant="primary">col-8</ea-button>
+  </ea-col>
+  <ea-col span="8">
+    <ea-button variant="primary">col-8</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container">
+  <ea-col span="6">
+    <ea-button variant="primary">col-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">col-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">col-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">col-6</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container">
+  <ea-col span="4">
+    <ea-button variant="primary">col-4</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">col-4</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">col-4</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">col-4</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">col-4</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">col-4</ea-button>
+  </ea-col>
+</ea-row>
 ```
 
 :::
 
-## 分栏间隔 ​
+## 分栏间隔
 
 支持列间距。
 
@@ -191,16 +201,16 @@ ea-button::part(container) {
 <div class="demo">
   <ea-row class="row-container" gutter="20">
     <ea-col span="6">
-      <ea-button type="primary">col-gutter-20</ea-button>
+      <ea-button variant="primary">col-gutter-20</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">col-gutter-20</ea-button>
+      <ea-button variant="primary">col-gutter-20</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">col-gutter-20</ea-button>
+      <ea-button variant="primary">col-gutter-20</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">col-gutter-20</ea-button>
+      <ea-button variant="primary">col-gutter-20</ea-button>
     </ea-col>
   </ea-row>
 </div>
@@ -208,62 +218,60 @@ ea-button::part(container) {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="6">
-      <ea-button type="primary">col-gutter-20</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">col-gutter-20</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">col-gutter-20</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">col-gutter-20</ea-button>
-    </ea-col>
-  </ea-row>
-</div>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="6">
+    <ea-button variant="primary">col-gutter-20</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">col-gutter-20</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">col-gutter-20</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">col-gutter-20</ea-button>
+  </ea-col>
+</ea-row>
 ```
 
 :::
 
-## 混合布局 ​
+## 混合布局
 
 通过基础的 `1/24` 分栏任意扩展组合形成较为复杂的混合布局。
 
 <div class="demo">
   <ea-row class="row-container" gutter="20">
     <ea-col span="16">
-      <ea-button type="primary">span-16</ea-button>
+      <ea-button variant="primary">span-16</ea-button>
     </ea-col>
     <ea-col span="8">
-      <ea-button type="primary">span-8</ea-button>
+      <ea-button variant="primary">span-8</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" gutter="20">
     <ea-col span="8">
-      <ea-button type="primary">span-8</ea-button>
+      <ea-button variant="primary">span-8</ea-button>
     </ea-col>
     <ea-col span="8">
-      <ea-button type="primary">span-8</ea-button>
+      <ea-button variant="primary">span-8</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
+      <ea-button variant="primary">span-4</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
+      <ea-button variant="primary">span-4</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" gutter="20">
     <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
+      <ea-button variant="primary">span-4</ea-button>
     </ea-col>
     <ea-col span="16">
-      <ea-button type="primary">span-16</ea-button>
+      <ea-button variant="primary">span-16</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
+      <ea-button variant="primary">span-4</ea-button>
     </ea-col>
   </ea-row>
 </div>
@@ -271,46 +279,44 @@ ea-button::part(container) {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="16">
-      <ea-button type="primary">span-16</ea-button>
-    </ea-col>
-    <ea-col span="8">
-      <ea-button type="primary">span-8</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="8">
-      <ea-button type="primary">span-8</ea-button>
-    </ea-col>
-    <ea-col span="8">
-      <ea-button type="primary">span-8</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
-    </ea-col>
-    <ea-col span="16">
-      <ea-button type="primary">span-16</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
-    </ea-col>
-  </ea-row>
-</div>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="16">
+    <ea-button variant="primary">span-16</ea-button>
+  </ea-col>
+  <ea-col span="8">
+    <ea-button variant="primary">span-8</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="8">
+    <ea-button variant="primary">span-8</ea-button>
+  </ea-col>
+  <ea-col span="8">
+    <ea-button variant="primary">span-8</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">span-4</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">span-4</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="4">
+    <ea-button variant="primary">span-4</ea-button>
+  </ea-col>
+  <ea-col span="16">
+    <ea-button variant="primary">span-16</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">span-4</ea-button>
+  </ea-col>
+</ea-row>
 ```
 
 :::
 
-## 列偏移 ​
+## 列偏移
 
 您可以指定列偏移量。
 
@@ -319,23 +325,23 @@ ea-button::part(container) {
 <div class="demo">
   <ea-row class="row-container" gutter="20">
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6" offset="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" gutter="20">
     <ea-col span="6" offset="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6" offset="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" gutter="20">
     <ea-col span="12" offset="6">
-      <ea-button type="primary">span-12</ea-button>
+      <ea-button variant="primary">span-12</ea-button>
     </ea-col>
   </ea-row>
 </div>
@@ -343,29 +349,27 @@ ea-button::part(container) {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6" offset="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="6" offset="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6" offset="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="12" offset="6">
-      <ea-button type="primary">span-12</ea-button>
-    </ea-col>
-  </ea-row>
-</div>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6" offset="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="6" offset="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6" offset="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="12" offset="6">
+    <ea-button variant="primary">span-12</ea-button>
+  </ea-col>
+</ea-row>
 ```
 
 :::
@@ -378,35 +382,35 @@ ea-button::part(container) {
   <p>栅格向右偏移</p>
   <ea-row class="row-container" gutter="20">
     <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
+      <ea-button variant="primary">span-4</ea-button>
     </ea-col>
     <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
+      <ea-button variant="primary">span-4</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" gutter="20">
     <ea-col span="4" push="4">
-      <ea-button type="primary">span-4 push-4</ea-button>
+      <ea-button variant="primary">span-4 push-4</ea-button>
     </ea-col>
     <ea-col span="4" push="4">
-      <ea-button type="primary">span-4 push-4</ea-button>
+      <ea-button variant="primary">span-4 push-4</ea-button>
     </ea-col>
   </ea-row>
   <p>栅格向左偏移</p>
   <ea-row class="row-container" gutter="20">
     <ea-col span="4" offset="4">
-      <ea-button type="primary">span-4 offset-4</ea-button>
+      <ea-button variant="primary">span-4 offset-4</ea-button>
     </ea-col>
     <ea-col span="4" offset="4">
-      <ea-button type="primary">span-4 offset-4</ea-button>
+      <ea-button variant="primary">span-4 offset-4</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" gutter="20">
     <ea-col span="4" pull="4" offset="4">
-      <ea-button type="primary">span-4 pull-4 offset-4</ea-button>
+      <ea-button variant="primary">span-4 pull-4 offset-4</ea-button>
     </ea-col>
     <ea-col span="4" pull="4" offset="4">
-      <ea-button type="primary">span-4 pull-4 offset-4</ea-button>
+      <ea-button variant="primary">span-4 pull-4 offset-4</ea-button>
     </ea-col>
   </ea-row>
 </div>
@@ -414,117 +418,117 @@ ea-button::part(container) {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <p>栅格向右移动</p>
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
-    </ea-col>
-    <ea-col span="4">
-      <ea-button type="primary">span-4</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="4" push="4">
-      <ea-button type="primary">span-4 push-4</ea-button>
-    </ea-col>
-    <ea-col span="4" push="4">
-      <ea-button type="primary">span-4 push-4</ea-button>
-    </ea-col>
-  </ea-row>
-  <p>栅格向左移动</p>
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="4" offset="4">
-      <ea-button type="primary">span-4 offset-4</ea-button>
-    </ea-col>
-    <ea-col span="4" offset="4">
-      <ea-button type="primary">span-4 offset-4</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" gutter="20">
-    <ea-col span="4" pull="4" offset="4">
-      <ea-button type="primary">span-4 pull-4 offset-4</ea-button>
-    </ea-col>
-    <ea-col span="4" pull="4" offset="4">
-      <ea-button type="primary">span-4 pull-4 offset-4</ea-button>
-    </ea-col>
-  </ea-row>
-</div>
+<p>栅格向右偏移</p>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="4">
+    <ea-button variant="primary">span-4</ea-button>
+  </ea-col>
+  <ea-col span="4">
+    <ea-button variant="primary">span-4</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="4" push="4">
+    <ea-button variant="primary">span-4 push-4</ea-button>
+  </ea-col>
+  <ea-col span="4" push="4">
+    <ea-button variant="primary">span-4 push-4</ea-button>
+  </ea-col>
+</ea-row>
+<p>栅格向左偏移</p>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="4" offset="4">
+    <ea-button variant="primary">span-4 offset-4</ea-button>
+  </ea-col>
+  <ea-col span="4" offset="4">
+    <ea-button variant="primary">span-4 offset-4</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" gutter="20">
+  <ea-col span="4" pull="4" offset="4">
+    <ea-button variant="primary">span-4 pull-4 offset-4</ea-button>
+  </ea-col>
+  <ea-col span="4" pull="4" offset="4">
+    <ea-button variant="primary">span-4 pull-4 offset-4</ea-button>
+  </ea-col>
+</ea-row>
 ```
 
 :::
 
-## 对齐方式 ​
+## 对齐方式
 
 默认使用 `flex` 布局来对分栏进行灵活的对齐。
 
 您可以通过 `justify` 属性来定义子元素的排版方式，其取值为`start | center | end | space-between | space-around | space-evenly`。
 
+通过 `align` 属性来定义子元素的垂直对齐方式，其取值为`top | middle | bottom`。
+
 <div class="demo">
   <ea-row class="row-container">
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" justify="center">
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" justify="end">
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" justify="space-between">
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" justify="space-around">
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
   </ea-row>
   <ea-row class="row-container" justify="space-evenly">
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
     <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
+      <ea-button variant="primary">span-6</ea-button>
     </ea-col>
   </ea-row>
 </div>
@@ -532,74 +536,72 @@ ea-button::part(container) {
 ::: details 查看代码
 
 ```html
-<div class="demo">
-  <ea-row class="row-container">
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" justify="center">
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" justify="end">
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" justify="space-between">
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" justify="space-around">
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-  </ea-row>
-  <ea-row class="row-container" justify="space-evenly">
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-    <ea-col span="6">
-      <ea-button type="primary">span-6</ea-button>
-    </ea-col>
-  </ea-row>
-</div>
+<ea-row class="row-container">
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" justify="center">
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" justify="end">
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" justify="space-between">
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" justify="space-around">
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+</ea-row>
+<ea-row class="row-container" justify="space-evenly">
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+  <ea-col span="6">
+    <ea-button variant="primary">span-6</ea-button>
+  </ea-col>
+</ea-row>
 ```
 
 :::
@@ -608,49 +610,62 @@ ea-button::part(container) {
 
 ### Row Attributes
 
-| **属性名** | **说明**             | **类型** | **可选值**                                                                            | **默认值** |
-| ---------- | -------------------- | -------- | ------------------------------------------------------------------------------------- | ---------- |
-| gutter     | 设置列之间的间距     | Number   | -                                                                                     | `0`        |
-| justify    | 定义子元素的排版方式 | String   | `'start' \| 'end' \| 'center' \| 'space-around' \| 'space-between' \| 'space-evenly'` | `start`    |
-| align      | 定义子元素的对齐方式 | String   | `'top' \| 'middle' \| 'bottom'`                                                       | `top`      |
-| tag        | 设置布局的标签       | String   | -                                                                                     | `div`      |
+| 属性名  | 说明                 | 类型   | 可选值                                                                       | 默认值  |
+| ------- | -------------------- | ------ | ---------------------------------------------------------------------------- | ------- |
+| gutter  | 设置列之间的间距     | Number | —                                                                            | `0`     |
+| justify | 定义子元素的排版方式 | String | `'start' \| 'end' \| 'center' \| 'space-around' \| 'space-between' \| 'space-evenly'` | `start` |
+| align   | 定义子元素的对齐方式 | String | `'top' \| 'middle' \| 'bottom'`                                              | `top`   |
+| tag     | 设置布局的标签       | String | —                                                                            | `div`   |
+
+### Row CSS Part
+
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 容器元素 |
 
 ### Row Slots
 
-| **插槽名** | **说明** |
-| ---------- | -------- |
-| -          | 默认内容 |
+| 名称    | 说明                    |
+| ------- | ----------------------- |
+| default | 默认插槽，用于放置 ea-col |
+
+### Row CSS 自定义属性
+
+| 属性名             | 说明                   | 默认值  |
+| ------------------ | ---------------------- | ------- |
+| --ea-row-gutter    | 列间距（半值）         | `0px`   |
+| --ea-row-justify   | 水平排列方式           | `start` |
+| --ea-row-align     | 垂直对齐方式           | `top`   |
 
 ## Col API
 
 ### Col Attributes
 
-| **属性名** | **说明**               | **类型** | **可选值** | **默认值** |
-| ---------- | ---------------------- | -------- | ---------- | ---------- |
-| span       | 定义列所占的宽度比例   | Number   | 0-24       | `24`       |
-| offset     | 定义列左侧的偏移量     | Number   | 0-24       | `0`        |
-| push       | 将列向右移动指定的列数 | Number   | 0-24       | `0`        |
-| pull       | 将列向左移动指定的列数 | Number   | 0-24       | `0`        |
-| tag        | 设置布局的标签         | String   | -          | `div`      |
-
-### Col Slots
-
-| **插槽名** | **说明** |
-| ---------- | -------- |
-| -          | 默认内容 |
-
-## CSS Part
-
-> 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
-
-### Row CSS Part
-
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+| 属性名 | 说明                   | 类型   | 可选值 | 默认值 |
+| ------ | ---------------------- | ------ | ------ | ------ |
+| span   | 定义列所占的宽度比例   | Number | 0-24   | `24`   |
+| offset | 定义列左侧的偏移量     | Number | 0-24   | `0`    |
+| push   | 将列向右移动指定的列数 | Number | 0-24   | `0`    |
+| pull   | 将列向左移动指定的列数 | Number | 0-24   | `0`    |
+| tag    | 设置布局的标签         | String | —      | `div`  |
 
 ### Col CSS Part
 
-| 名称      | 说明 |
-| --------- | ---- |
-| container | 容器 |
+| 名称      | 说明     |
+| --------- | -------- |
+| container | 容器元素 |
+
+### Col Slots
+
+| 名称    | 说明               |
+| ------- | ------------------ |
+| default | 默认插槽，用于列内容 |
+
+### Col CSS 自定义属性
+
+| 属性名           | 说明               | 默认值 |
+| ---------------- | ------------------ | ------ |
+| --ea-col-span    | 栅格占据的列数     | `24`   |
+| --ea-col-offset  | 栅格左侧的间隔格数 | `0`    |
+| --ea-col-push    | 栅格向右移动格数   | `0`    |
+| --ea-col-pull    | 栅格向左移动格数   | `0`    |
