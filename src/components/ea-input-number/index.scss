@@ -1,17 +1,7 @@
 $name: ea-input-number;
-$ea-input-number-align-type: (
-  left,
-  center,
-  right
-);
-$ea-input-number-size-type: (
-  large,
-  default,
-  small
-);
 
 @mixin operator-disabled-style {
-  cursor: not-allowed;
+  cursor: var(--cursor-not-allowed);
   color: var(--#{$name}-operator-disabled-color);
 
   &:hover {
@@ -20,17 +10,17 @@ $ea-input-number-size-type: (
 }
 
 :host {
-  --#{$name}-large-width: 180px;
-  --#{$name}-default-width: 150px;
-  --#{$name}-small-width: 120px;
+  --#{$name}-width: 150px;
+  --#{$name}-width-large: 180px;
+  --#{$name}-width-small: 120px;
 
-  --#{$name}-large-height: 40px;
-  --#{$name}-default-height: 32px;
-  --#{$name}-small-height: 24px;
+  --#{$name}-height: 32px;
+  --#{$name}-height-large: 40px;
+  --#{$name}-height-small: 24px;
 
-  --#{$name}-large-font-size: var(--font-size-lg);
-  --#{$name}-default-font-size: var(--font-size-md);
-  --#{$name}-small-font-size: var(--font-size-sm);
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-font-size-large: var(--font-size-lg);
+  --#{$name}-font-size-small: var(--font-size-sm);
 
   --#{$name}-border-color: var(--grey-300);
   --#{$name}-text-color: var(--grey-700);
@@ -52,7 +42,7 @@ $ea-input-number-size-type: (
 }
 
 :host([disabled]) {
-  cursor: not-allowed;
+  cursor: var(--cursor-not-allowed);
 }
 
 @include block($name) {
@@ -67,10 +57,10 @@ $ea-input-number-size-type: (
     box-sizing: border-box;
     user-select: none;
 
-    width: calc(var(--#{$name}-default-width) - 2px);
+    width: calc(var(--#{$name}-width) - 2px);
 
-    border: 1px solid var(--#{$name}-border-color);
-    border-radius: 4px;
+    border: var(--border-width) solid var(--#{$name}-border-color);
+    border-radius: var(--border-radius-sm);
 
     overflow: hidden;
 
@@ -80,7 +70,7 @@ $ea-input-number-size-type: (
   @include element(form-label) {
     padding-bottom: var(--spacing-md);
 
-    font-size: var(--#{$name}-default-font-size);
+    font-size: var(--#{$name}-font-size);
     color: var(--#{$name}-text-color);
 
     &:empty {
@@ -88,7 +78,7 @@ $ea-input-number-size-type: (
     }
   }
 
-  @include element(operator) {
+  @include element(decrease) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -96,29 +86,54 @@ $ea-input-number-size-type: (
     box-sizing: border-box;
     padding: 0.5rem;
 
-    height: calc(var(--#{$name}-default-height) - 2px);
-    line-height: calc(var(--#{$name}-default-height) - 2px);
+    height: calc(var(--#{$name}-height) - 2px);
+    line-height: calc(var(--#{$name}-height) - 2px);
 
     color: var(--#{$name}-operator-color);
 
     background-color: var(--#{$name}-operator-bg-color);
 
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
 
-    &.decrease,
-    &.increase {
-      &:hover {
-        color: var(--#{$name}-active-color);
-      }
-    }
+    border-right: var(--border-width) solid var(--#{$name}-border-color);
 
-    &.decrease {
-      border-right: 1px solid var(--#{$name}-border-color);
+    &:hover {
+      color: var(--#{$name}-active-color);
     }
+  }
 
-    &.increase {
-      border-left: 1px solid var(--#{$name}-border-color);
+  @include element(increase) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+    padding: 0.5rem;
+
+    height: calc(var(--#{$name}-height) - 2px);
+    line-height: calc(var(--#{$name}-height) - 2px);
+
+    color: var(--#{$name}-operator-color);
+
+    background-color: var(--#{$name}-operator-bg-color);
+
+    cursor: var(--cursor-pointer);
+
+    border-left: var(--border-width) solid var(--#{$name}-border-color);
+
+    &:hover {
+      color: var(--#{$name}-active-color);
     }
+  }
+
+  @include element(prefix) {
+    display: flex;
+    align-items: center;
+  }
+
+  @include element(suffix) {
+    display: flex;
+    align-items: center;
   }
 
   @include element(inner) {
@@ -143,53 +158,76 @@ $ea-input-number-size-type: (
     border: 0;
 
     width: 100%;
-    height: calc(var(--#{$name}-default-height) - 2px);
-    line-height: calc(var(--#{$name}-default-height) - 2px);
+    height: calc(var(--#{$name}-height) - 2px);
+    line-height: calc(var(--#{$name}-height) - 2px);
     padding: 0 var(--spacing-sm);
 
     text-align: center;
 
     color: var(--#{$name}-text-color);
+    font-size: var(--#{$name}-font-size);
   }
 
-  @each $align in $ea-input-number-align-type {
-    @include modifier($align) {
-      .ea-input-number__inner {
-        text-align: #{$align};
-      }
+  @include modifier(size-large) {
+    .#{$name}__region {
+      width: calc(var(--#{$name}-width-large) - 2px);
+    }
+
+    .#{$name}__decrease,
+    .#{$name}__increase,
+    .#{$name}__inner {
+      height: calc(var(--#{$name}-height-large) - 2px);
+      line-height: calc(var(--#{$name}-height-large) - 2px);
+      font-size: var(--#{$name}-font-size-large);
     }
   }
 
-  @each $size in $ea-input-number-size-type {
-    @include modifier($size) {
-      .ea-input-number__region {
-        width: calc(var(--#{$name}-#{$size}-width) - 2px);
-      }
+  @include modifier(size-small) {
+    .#{$name}__region {
+      width: calc(var(--#{$name}-width-small) - 2px);
+    }
 
-      .ea-input-number__operator,
-      .ea-input-number__inner {
-        height: calc(var(--#{$name}-#{$size}-height) - 2px);
-        line-height: calc(var(--#{$name}-#{$size}-height) - 2px);
+    .#{$name}__decrease,
+    .#{$name}__increase,
+    .#{$name}__inner {
+      height: calc(var(--#{$name}-height-small) - 2px);
+      line-height: calc(var(--#{$name}-height-small) - 2px);
+      font-size: var(--#{$name}-font-size-small);
+    }
+  }
 
-        font-size: var(--#{$name}-#{$size}-font-size);
-      }
+  @include modifier(left) {
+    .#{$name}__inner {
+      text-align: left;
+    }
+  }
+
+  @include modifier(center) {
+    .#{$name}__inner {
+      text-align: center;
+    }
+  }
+
+  @include modifier(right) {
+    .#{$name}__inner {
+      text-align: right;
     }
   }
 
   @include state(focus) {
-    .ea-input-number__region {
+    .#{$name}__region {
       border-color: var(--#{$name}-active-color);
     }
   }
 
   @include state(min) {
-    .ea-input-number__operator.decrease {
+    .#{$name}__decrease {
       @include operator-disabled-style;
     }
   }
 
   @include state(max) {
-    .ea-input-number__operator.increase {
+    .#{$name}__increase {
       @include operator-disabled-style;
     }
   }
@@ -197,26 +235,28 @@ $ea-input-number-size-type: (
   @include state(disabled) {
     pointer-events: none;
 
-    .ea-input-number__region {
+    .#{$name}__region {
       border-color: var(--#{$name}-border-color);
     }
 
-    .ea-input-number__operator {
+    .#{$name}__decrease,
+    .#{$name}__increase {
       @include operator-disabled-style;
     }
 
-    .ea-input-number__inner {
+    .#{$name}__inner {
       color: var(--#{$name}-input-disabled-color);
       background-color: var(--#{$name}-input-disabled-bg-color);
     }
   }
 
   @include state(no-controls) {
-    .ea-input-number__region {
-      display: inline-block;
+    .#{$name}__region {
+      display: inline-flex;
     }
 
-    .ea-input-number__operator {
+    .#{$name}__decrease,
+    .#{$name}__increase {
       display: none;
     }
   }

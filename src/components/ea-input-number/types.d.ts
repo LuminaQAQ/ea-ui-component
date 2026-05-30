@@ -15,18 +15,19 @@ export interface EaInputNumberElement extends HTMLElement {
   step: number;
   stepStrictly: boolean;
   precision: number;
-  size: "large" | "default" | "small" | "";
+  size: "large" | "default" | "small";
   readonly: boolean;
   disabled: boolean;
   controls: boolean;
-  valueOnClear: number | string;
+  valueOnClear: number | null;
   align: "left" | "center" | "right";
   name: string;
   placeholder: string;
   inputmode: string;
 
-  focus(): void;
+  focus(options?: FocusOptions): void;
   blur(): void;
+  updateContainerClasslist(): string;
 }
 
 // ==================== Vue 类型声明 ====================
@@ -42,11 +43,11 @@ export interface EaInputNumberVueProps {
   step?: number;
   stepStrictly?: boolean;
   precision?: number;
-  size?: "large" | "default" | "small" | "";
+  size?: "large" | "default" | "small";
   readonly?: boolean;
   disabled?: boolean;
   controls?: boolean;
-  valueOnClear?: number | string;
+  valueOnClear?: number | null;
   align?: "left" | "center" | "right";
   name?: string;
   placeholder?: string;
@@ -97,11 +98,11 @@ export interface EaInputNumberReactProps extends HTMLAttributes<HTMLElement> {
   step?: number;
   stepStrictly?: boolean;
   precision?: number;
-  size?: "large" | "default" | "small" | "";
+  size?: "large" | "default" | "small";
   readonly?: boolean;
   disabled?: boolean;
   controls?: boolean;
-  valueOnClear?: number | string;
+  valueOnClear?: number | null;
   align?: "left" | "center" | "right";
   name?: string;
   placeholder?: string;
