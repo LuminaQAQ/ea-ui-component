@@ -1,8 +1,6 @@
 $name: ea-link;
 
-// 链接类型颜色映射
-$link-types: (
-  normal: grey,
+$link-variant: (
   primary: blue,
   success: green,
   warning: yellow,
@@ -11,68 +9,61 @@ $link-types: (
 );
 
 :host {
-  // 光标和交互
+  --#{$name}-font-size: var(--font-size-md);
+  --#{$name}-transition: var(--transition-fast);
+  --#{$name}-icon-margin-right: var(--spacing-sm);
+
   --#{$name}-cursor: var(--cursor-pointer);
   --#{$name}-pointer-events: auto;
 
-  // 每种链接类型的颜色变量
-  @each $type, $color in $link-types {
-    --#{$name}-#{$type}-color: var(--#{$color}-500);
-    --#{$name}-#{$type}-disabled-color: var(--#{$color}-300);
-    --#{$name}-#{$type}-hover-color: var(--#{$color}-400);
-    --#{$name}-#{$type}-active-color: var(--#{$color}-600);
+  @each $variant, $color in $link-variant {
+    --#{$name}-#{$variant}-color: var(--#{$color}-500);
+    --#{$name}-#{$variant}-disabled-color: var(--#{$color}-300);
+    --#{$name}-#{$variant}-hover-color: var(--#{$color}-400);
+    --#{$name}-#{$variant}-active-color: var(--#{$color}-600);
   }
 
-  // normal 类型使用特殊颜色
   --#{$name}-normal-color: var(--color-black);
   --#{$name}-normal-disabled-color: var(--grey-600);
   --#{$name}-normal-hover-color: var(--grey-800);
   --#{$name}-normal-active-color: var(--grey-900);
-
-  // 过渡动画
-  --#{$name}-transition: var(--transition-fast);
 }
 
-// 禁用状态下的 host 样式
 :host([disabled]) {
   --#{$name}-cursor: var(--cursor-not-allowed);
   --#{$name}-pointer-events: none;
 }
 
-// Host 基础样式
 :host {
   display: inline-block;
   -webkit-user-drag: auto;
   cursor: var(--#{$name}-cursor);
 }
 
-// BEM 块定义
 @include block($name) {
   text-decoration: none;
   color: var(--#{$name}-normal-color);
+  font-size: var(--#{$name}-font-size);
   transition: color var(--#{$name}-transition);
 
-  // 图标元素
   @include element(icon) {
     display: none;
   }
 
-  // 每种链接类型的样式
-  @each $type, $color in $link-types {
-    @include modifier(#{$type}) {
-      color: var(--#{$name}-#{$type}-color);
+  @each $variant, $color in $link-variant {
+    @include modifier(#{$variant}) {
+      color: var(--#{$name}-#{$variant}-color);
 
       &:hover {
-        color: var(--#{$name}-#{$type}-hover-color);
+        color: var(--#{$name}-#{$variant}-hover-color);
       }
 
       &:active {
-        color: var(--#{$name}-#{$type}-active-color);
+        color: var(--#{$name}-#{$variant}-active-color);
       }
     }
   }
 
-  // 下划线修饰符 - hover
   @include modifier(underline-hover) {
     &:hover {
       text-decoration: underline;
@@ -83,7 +74,6 @@ $link-types: (
     }
   }
 
-  // 下划线修饰符 - always
   @include modifier(underline-always) {
     text-decoration: underline;
 
@@ -92,22 +82,22 @@ $link-types: (
     }
   }
 
-  // 禁用状态（当父元素有 is-disabled 类时）
   @include state(disabled) {
     pointer-events: var(--#{$name}-pointer-events);
     cursor: var(--#{$name}-cursor);
+    color: var(--#{$name}-normal-disabled-color);
 
-    @each $type, $color in $link-types {
-      &.#{$name}--#{$type} {
-        color: var(--#{$name}-#{$type}-disabled-color);
+    @each $variant, $color in $link-variant {
+      &.#{$name}--#{$variant} {
+        color: var(--#{$name}-#{$variant}-disabled-color);
       }
     }
   }
 
-  // 图标状态（当父元素有 is-icon 类时）
   @include state(icon) {
     .#{$name}__icon {
       display: inline-block;
+      margin-right: var(--#{$name}-icon-margin-right);
     }
   }
 }

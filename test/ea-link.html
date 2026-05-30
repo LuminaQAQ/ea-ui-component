@@ -1,34 +1,43 @@
-<!DOCTYPE html>
-<html lang='en'>
-
-<head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel='stylesheet' href='/dist/assets/icon.css'>
+    <link rel="stylesheet" href="/dist/assets/icon.css" />
 
     <style>
-        hr {
-            margin: 3rem 0;
-        }
+      hr {
+        margin: 3rem 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <script type="module" src="/src/components/ea-link/index.ts"></script>
 
     <!-- -------- 基础用法 --------  -->
     <!-- #region  -->
     <h2>基础用法</h2>
     <div class="row left">
-        <ea-link href="https://github.com/LuminaQAQ">默认链接</ea-link>
-        <ea-link href="https://github.com/LuminaQAQ" type="primary">主要链接</ea-link>
-        <ea-link href="https://github.com/LuminaQAQ" type="success">成功链接</ea-link>
-        <ea-link href="https://github.com/LuminaQAQ" type="warning">警告链接</ea-link>
-        <ea-link href="https://github.com/LuminaQAQ" type="danger">危险链接</ea-link>
-        <ea-link href="https://github.com/LuminaQAQ" type="info">信息链接</ea-link>
+      <ea-link href="https://github.com/LuminaQAQ">默认链接</ea-link>
+      <ea-link href="https://github.com/LuminaQAQ" variant="primary"
+        >主要链接</ea-link
+      >
+      <ea-link href="https://github.com/LuminaQAQ" variant="success"
+        >成功链接</ea-link
+      >
+      <ea-link href="https://github.com/LuminaQAQ" variant="warning"
+        >警告链接</ea-link
+      >
+      <ea-link href="https://github.com/LuminaQAQ" variant="danger"
+        >危险链接</ea-link
+      >
+      <ea-link href="https://github.com/LuminaQAQ" variant="info"
+        >信息链接</ea-link
+      >
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -36,10 +45,24 @@
     <!-- #region  -->
     <h2>禁用状态</h2>
     <div class="row left">
-        <ea-link type="primary" href="https://github.com/LuminaQAQ">未禁用状态</ea-link>
-        <ea-link disabled>禁用状态</ea-link>
+      <ea-link href="https://github.com/LuminaQAQ" disabled>默认链接</ea-link>
+      <ea-link variant="primary" href="https://github.com/LuminaQAQ" disabled
+        >主要链接</ea-link
+      >
+      <ea-link variant="success" href="https://github.com/LuminaQAQ" disabled
+        >成功链接</ea-link
+      >
+      <ea-link variant="warning" href="https://github.com/LuminaQAQ" disabled
+        >警告链接</ea-link
+      >
+      <ea-link variant="danger" href="https://github.com/LuminaQAQ" disabled
+        >危险链接</ea-link
+      >
+      <ea-link variant="info" href="https://github.com/LuminaQAQ" disabled
+        >信息链接</ea-link
+      >
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -47,12 +70,12 @@
     <!-- #region  -->
     <h2>下划线</h2>
     <div class="row left">
-        <ea-link>无下划线</ea-link>
-        <ea-link underline="never">无下划线</ea-link>
-        <ea-link type="primary" underline="hover">hover下划线</ea-link>
-        <ea-link type="primary" underline="always">always下划线</ea-link>
+      <ea-link>无下划线</ea-link>
+      <ea-link underline="never">无下划线</ea-link>
+      <ea-link variant="primary" underline="hover">hover下划线</ea-link>
+      <ea-link variant="primary" underline="always">always下划线</ea-link>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
 
@@ -60,12 +83,29 @@
     <!-- #region  -->
     <h2>图标</h2>
     <div class="row left">
-        <ea-link icon="eye">查看</ea-link>
-        <ea-link icon="share">分享</ea-link>
+      <ea-link icon="eye">查看</ea-link>
+      <ea-link icon="share">分享</ea-link>
     </div>
-    <hr>
+    <hr />
     <!-- #endregion  -->
     <!-- -------------------  -->
-</body>
 
+    <!-- -------- 原生链接属性 --------  -->
+    <!-- #region  -->
+    <h2>原生链接属性</h2>
+    <div class="row left">
+      <ea-link
+        href="https://github.com/LuminaQAQ"
+        target="_blank"
+        rel="noopener noreferrer"
+        >新窗口打开</ea-link
+      >
+      <ea-link href="/files/document.pdf" download="document.pdf"
+        >下载文件</ea-link
+      >
+    </div>
+    <hr />
+    <!-- #endregion  -->
+    <!-- -------------------  -->
+  </body>
 </html>
