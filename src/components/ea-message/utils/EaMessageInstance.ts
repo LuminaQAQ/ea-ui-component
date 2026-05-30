@@ -11,7 +11,7 @@ export interface EaMessageOptions {
     | "bottom-left"
     | "bottom-right"
     | "middle";
-  type?: "primary" | "success" | "warning" | "info" | "error";
+  variant?: "primary" | "success" | "warning" | "danger" | "info";
   dangerouslyUseHTMLString?: boolean;
   showClose?: boolean;
   duration?: number;
@@ -26,7 +26,7 @@ class EaMessageInstance {
     "dangerouslyUseHTMLString",
     "message",
     "placement",
-    "type",
+    "variant",
     "showClose",
     "duration",
     "offset",
@@ -92,7 +92,7 @@ class EaMessageInstance {
     closeFn?: (e: Event) => void
   ): void {
     el.addEventListener(
-      "hidden",
+      "ea-hidden",
       (e: Event) => {
         closeFn?.(e);
         el.remove();
@@ -109,29 +109,35 @@ export const EaMessage = (options: EaMessageOptions | string) => {
 EaMessage.primary = (message: string) =>
   new EaMessageInstance({
     message,
-    type: "primary",
+    variant: "primary",
   });
 
 EaMessage.success = (message: string) =>
   new EaMessageInstance({
     message,
-    type: "success",
+    variant: "success",
   });
 
 EaMessage.warning = (message: string) =>
   new EaMessageInstance({
     message,
-    type: "warning",
+    variant: "warning",
   });
 
 EaMessage.info = (message: string) =>
   new EaMessageInstance({
     message,
-    type: "info",
+    variant: "info",
+  });
+
+EaMessage.danger = (message: string) =>
+  new EaMessageInstance({
+    message,
+    variant: "danger",
   });
 
 EaMessage.error = (message: string) =>
   new EaMessageInstance({
     message,
-    type: "error",
+    variant: "danger",
   });

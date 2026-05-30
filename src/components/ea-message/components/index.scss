@@ -1,17 +1,19 @@
 $name: ea-message;
 
-$types: (
-  success,
-  info,
-  warning,
-  error,
-  primary
+$message-variant: (
+  primary: blue,
+  success: green,
+  warning: yellow,
+  danger: red,
+  info: grey,
 );
 
 :host {
   --#{$name}-z-index: 2000;
   --#{$name}-y: 0;
   --#{$name}-fade-out-y: -100%;
+
+  --#{$name}-offset: 0;
 
   --#{$name}-spacing: var(--spacing-md);
   --#{$name}-border-color: var(--grey-200);
@@ -22,22 +24,17 @@ $types: (
 
   --#{$name}-transition: var(--transition-normal);
 
-  --#{$name}-success-bgc: var(--green-100);
-  --#{$name}-success-color: var(--green-500);
-
-  --#{$name}-info-bgc: var(--grey-100);
-  --#{$name}-info-color: var(--grey-500);
-
-  --#{$name}-warning-bgc: var(--yellow-100);
-  --#{$name}-warning-color: var(--yellow-500);
-
-  --#{$name}-error-bgc: var(--red-100);
-  --#{$name}-error-color: var(--red-500);
-
-  --#{$name}-primary-bgc: var(--blue-100);
-  --#{$name}-primary-color: var(--blue-500);
+  @each $type, $color in $message-variant {
+    --#{$name}-#{$type}-bgc: var(--#{$color}-100);
+    --#{$name}-#{$type}-color: var(--#{$color}-500);
+  }
 
   --#{$name}-gap: var(--spacing-md);
+  --#{$name}-close-icon-color: var(--grey-500);
+}
+
+:host {
+  display: block;
 }
 
 @include block($name) {
@@ -50,6 +47,7 @@ $types: (
   align-items: center;
 
   box-sizing: border-box;
+  min-width: var(--#{$name}-min-width);
   padding: var(--#{$name}-spacing);
   margin: var(--#{$name}-gap) 0;
   gap: var(--#{$name}-gap);
@@ -65,11 +63,10 @@ $types: (
   max-width: calc(100% - 32px);
   overflow: hidden;
 
-  transition:
-    filter var(--#{$name}-transition),
-    transform var(--#{$name}-transition),
-    top var(--#{$name}-transition),
-    bottom var(--#{$name}-transition);
+  transition: filter var(--#{$name}-transition),
+  transform var(--#{$name}-transition),
+  top var(--#{$name}-transition),
+  bottom var(--#{$name}-transition);
 
   @include element(icon) {
     font-size: var(--#{$name}-font-size);
@@ -81,14 +78,15 @@ $types: (
     vertical-align: middle;
   }
 
-  @include element(icon-close) {
+  @include element(close-icon) {
     margin-left: auto;
     display: none;
-    color: var(--#{$name}-info-color);
+    color: var(--#{$name}-close-icon-color);
+    cursor: pointer;
   }
 
-  @each $type in $types {
-    @include modifier($type) {
+  @each $type, $color in $message-variant {
+    @include modifier(#{$type}) {
       background-color: var(--#{$name}-#{$type}-bgc);
       color: var(--#{$name}-#{$type}-color);
 
@@ -98,23 +96,23 @@ $types: (
     }
   }
 
-  @include modifier(show-close) {
-    .#{$name}__icon-close {
+  @include state(show-close) {
+    .#{$name}__close-icon {
       display: block;
     }
   }
 
-  @include modifier(visible) {
+  @include state(visible) {
     display: flex;
   }
 
-  @include modifier(is-show) {
+  @include state(show) {
     visibility: visible;
     filter: opacity(1);
     transform: translate(-50%, 0);
   }
 
-  @include modifier(before-hide) {
+  @include state(before-hide) {
     filter: opacity(0);
     transform: translate(-50%, var(--#{$name}-fade-out-y));
   }
@@ -159,6 +157,22 @@ $types: (
 
     &-right {
       left: 75%;
+    }
+  }
+
+  @include modifier(middle) {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    filter: opacity(0);
+
+    &.is-show {
+      transform: translate(-50%, -50%);
+      filter: opacity(1);
+    }
+
+    &.is-before-hide {
+      transform: translate(-50%, -50%);
+      filter: opacity(0);
     }
   }
 }

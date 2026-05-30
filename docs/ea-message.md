@@ -6,8 +6,6 @@ onMounted(() => {
   import("../dist/components/index.js")
   import("../dist/assets/icon.css")
 
-  // ------- 基础用法 -------
-  // #region
   const basicExample = {
     moduleInstanceBtn: document.getElementById("moduleInstanceBtn"),
     chainInstanceBtn: document.getElementById("chainInstanceBtn"),
@@ -16,7 +14,7 @@ onMounted(() => {
       this.moduleInstanceBtn.addEventListener("click", () => {
         EaMessage({
           message: "This is a message.",
-          type: "info",
+          variant: "info",
           showClose: false,
           duration: 3000,
         });
@@ -28,11 +26,7 @@ onMounted(() => {
     },
   };
   basicExample.init();
-  // #endregion
-  // ------- end -------
 
-  // ------- Placement -------
-  // #region
   let topCount = 0;
   let bottomCount = 0;
   let topLeftCount = 0;
@@ -41,38 +35,38 @@ onMounted(() => {
   let bottomRightCount = 0;
   const openMsg = (placement = "top") => {
     let count = 0;
-    let type = "success";
+    let variant = "success";
 
     switch (placement) {
       case "top":
         count = ++topCount;
-        type = "success";
+        variant = "success";
         break;
       case "bottom":
         count = ++bottomCount;
-        type = "warning";
+        variant = "warning";
         break;
       case "top-left":
         count = ++topLeftCount;
-        type = "info";
+        variant = "info";
         break;
       case "top-right":
         count = ++topRightCount;
-        type = "primary";
+        variant = "primary";
         break;
       case "bottom-left":
         count = ++bottomLeftCount;
-        type = "warning";
+        variant = "warning";
         break;
       case "bottom-right":
         count = ++bottomRightCount;
-        type = "error";
+        variant = "danger";
         break;
     }
 
     EaMessage({
       message: `This is a message from the ${placement} ${count}`,
-      type,
+      variant,
       placement,
     });
   };
@@ -93,8 +87,6 @@ onMounted(() => {
     },
   };
   placementExample.init();
-  // #endregion
-  // ------- end -------
 })
 </script>
 
@@ -112,6 +104,19 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 自定义样式
 
 移步到 [CSS Part](#message-css-part)。
@@ -126,7 +131,7 @@ onMounted(() => {
     onclick="
           window.$message({
             message: 'This is a message.',
-            type: 'info',
+            variant: 'info',
             showClose: false,
             duration: 3000,
           })
@@ -134,9 +139,15 @@ onMounted(() => {
   >
     Show message
   </ea-button>
-  <ea-button id="moduleInstanceBtn" plain> Module-Instance message </ea-button>
-  <ea-button id="chainInstanceBtn" plain> Chain-Instance message </ea-button>
+  <ea-button id="moduleInstanceBtn" plain>
+    Module-Instance message
+  </ea-button>
+  <ea-button id="chainInstanceBtn" plain>
+    Chain-Instance message
+  </ea-button>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -147,7 +158,7 @@ onMounted(() => {
     onclick="
           window.$message({
             message: 'This is a message.',
-            type: 'info',
+            variant: 'info',
             showClose: false,
             duration: 3000,
           })
@@ -155,8 +166,12 @@ onMounted(() => {
   >
     Show message
   </ea-button>
-  <ea-button id="moduleInstanceBtn" plain> Module-Instance message </ea-button>
-  <ea-button id="chainInstanceBtn" plain> Chain-Instance message </ea-button>
+  <ea-button id="moduleInstanceBtn" plain>
+    Module-Instance message
+  </ea-button>
+  <ea-button id="chainInstanceBtn" plain>
+    Chain-Instance message
+  </ea-button>
 </div>
 ```
 
@@ -169,7 +184,7 @@ const basicExample = {
     this.moduleInstanceBtn.addEventListener("click", () => {
       EaMessage({
         message: "This is a message.",
-        type: "info",
+        variant: "info",
         showClose: false,
         duration: 3000,
       });
@@ -185,9 +200,11 @@ basicExample.init();
 
 :::
 
+::::
+
 ## 不同状态
 
-用来显示「成功、警告、消息、错误」类的操作反馈。通过设置 `option` 中的 `type` 属性来改变主题。
+用来显示「成功、警告、消息、错误」类的操作反馈。通过设置 `option` 中的 `variant` 属性来改变主题。
 
 <div class="demo row">
   <ea-button plain onclick="window.$message.info('This is a info message.')"
@@ -196,7 +213,7 @@ basicExample.init();
   <ea-button
     variant="primary"
     plain
-    onclick="window.$message.primary('This is a info message.')"
+    onclick="window.$message.primary('This is a primary message.')"
     >Primary</ea-button
   >
   <ea-button
@@ -216,12 +233,12 @@ basicExample.init();
   <ea-button
     variant="danger"
     plain
-    onclick="window.$message.error('Oops, this is a error message.')"
-    >Error</ea-button
+    onclick="window.$message.danger('Oops, this is a danger message.')"
+    >Danger</ea-button
   >
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -231,7 +248,7 @@ basicExample.init();
   <ea-button
     variant="primary"
     plain
-    onclick="window.$message.primary('This is a info message.')"
+    onclick="window.$message.primary('This is a primary message.')"
     >Primary</ea-button
   >
   <ea-button
@@ -251,8 +268,8 @@ basicExample.init();
   <ea-button
     variant="danger"
     plain
-    onclick="window.$message.error('Oops, this is a error message.')"
-    >Error</ea-button
+    onclick="window.$message.danger('Oops, this is a danger message.')"
+    >Danger</ea-button
   >
 </div>
 ```
@@ -279,8 +296,8 @@ basicExample.init();
     plain
     onclick="
           window.$message({
-            type: 'primary',
-            message: 'This is a info message.',
+            variant: 'primary',
+            message: 'This is a primary message.',
             showClose: true,
           })
         "
@@ -291,7 +308,7 @@ basicExample.init();
     plain
     onclick="
           window.$message({
-            type: 'success',
+            variant: 'success',
             message: 'Congrats, this is a success message.',
             showClose: true,
           })
@@ -303,7 +320,7 @@ basicExample.init();
     plain
     onclick="
           window.$message({
-            type: 'warning',
+            variant: 'warning',
             message: 'Warning, this is a warning message.',
             showClose: true,
           })
@@ -315,12 +332,12 @@ basicExample.init();
     plain
     onclick="
           window.$message({
-            type: 'error',
-            message: 'Oops, this is a error message.',
+            variant: 'danger',
+            message: 'Oops, this is a danger message.',
             showClose: true,
           })
         "
-    >Error</ea-button
+    >Danger</ea-button
   >
   <ea-button
     plain
@@ -355,8 +372,8 @@ basicExample.init();
     plain
     onclick="
           window.$message({
-            type: 'primary',
-            message: 'This is a info message.',
+            variant: 'primary',
+            message: 'This is a primary message.',
             showClose: true,
           })
         "
@@ -367,7 +384,7 @@ basicExample.init();
     plain
     onclick="
           window.$message({
-            type: 'success',
+            variant: 'success',
             message: 'Congrats, this is a success message.',
             showClose: true,
           })
@@ -379,7 +396,7 @@ basicExample.init();
     plain
     onclick="
           window.$message({
-            type: 'warning',
+            variant: 'warning',
             message: 'Warning, this is a warning message.',
             showClose: true,
           })
@@ -391,12 +408,12 @@ basicExample.init();
     plain
     onclick="
           window.$message({
-            type: 'error',
-            message: 'Oops, this is a error message.',
+            variant: 'danger',
+            message: 'Oops, this is a danger message.',
             showClose: true,
           })
         "
-    >Error</ea-button
+    >Danger</ea-button
   >
   <ea-button
     plain
@@ -435,7 +452,7 @@ basicExample.init();
   </ea-button>
 </div>
 
-::: code-group
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -466,6 +483,8 @@ basicExample.init();
   <ea-button plain> Bottom Right </ea-button>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html
@@ -488,38 +507,38 @@ let bottomLeftCount = 0;
 let bottomRightCount = 0;
 const openMsg = (placement = "top") => {
   let count = 0;
-  let type = "success";
+  let variant = "success";
 
   switch (placement) {
     case "top":
       count = ++topCount;
-      type = "success";
+      variant = "success";
       break;
     case "bottom":
       count = ++bottomCount;
-      type = "warning";
+      variant = "warning";
       break;
     case "top-left":
       count = ++topLeftCount;
-      type = "info";
+      variant = "info";
       break;
     case "top-right":
       count = ++topRightCount;
-      type = "primary";
+      variant = "primary";
       break;
     case "bottom-left":
       count = ++bottomLeftCount;
-      type = "warning";
+      variant = "warning";
       break;
     case "bottom-right":
       count = ++bottomRightCount;
-      type = "error";
+      variant = "danger";
       break;
   }
 
   EaMessage({
     message: `This is a message from the ${placement} ${count}`,
-    type,
+    variant,
     placement,
   });
 };
@@ -544,6 +563,8 @@ placementExample.init();
 
 :::
 
+::::
+
 ## Message API
 
 ### Message Attributes
@@ -551,14 +572,14 @@ placementExample.init();
 | 参数                     | 说明                                                                          | 类型        | 可选值                                                                              | 默认值 |
 | ------------------------ | ----------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------- | ------ |
 | message                  | 消息文字                                                                      | string      | —                                                                                   | ''     |
-| type                     | 消息类型                                                                      | enum        | `'success' \| 'warning' \| 'info' \| 'error' \| 'primary'`                          | 'info' |
+| variant                  | 消息类型                                                                      | enum        | `'primary' \| 'success' \| 'warning' \| 'danger' \| 'info'`                        | 'info' |
 | icon                     | 自定义图标                                                                    | string      | —                                                                                   | ''     |
 | dangerouslyUseHTMLString | 是否将 `message` 作为 HTML 片段渲染                                           | boolean     | —                                                                                   | false  |
 | duration                 | 显示时间（毫秒）。设为 0 则不会自动关闭                                       | number      | —                                                                                   | 3000   |
 | onClose                  | 关闭回调函数（消息关闭或被手动关闭时调用），回调接收事件对象                  | Function    | —                                                                                   | —      |
 | showClose                | 是否显示关闭按钮                                                              | boolean     | —                                                                                   | false  |
-| offset                   | 设置到视口边缘的距离（当位置为`'top'`时为顶部，当位置为`'bottom'`时为底部）） | number      | —                                                                                   | 16     |
-| placement                | 出现位置                                                                      | enum        | `'top' \| 'top-left' \| 'top-right' \| 'bottom' \| 'bottom-left' \| 'bottom-right'` | 'top'  |
+| offset                   | 设置到视口边缘的距离（当位置为`'top'`时为顶部，当位置为`'bottom'`时为底部）   | number      | —                                                                                   | 0      |
+| placement                | 出现位置                                                                      | enum        | `'top' \| 'top-left' \| 'top-right' \| 'bottom' \| 'bottom-left' \| 'bottom-right' \| 'middle'` | 'top'  |
 | appendTo                 | 设置 `message` 的根元素，默认为 `document.body`                               | CSSSelector | -                                                                                   | —      |
 
 ### Message CSS Part
@@ -574,16 +595,33 @@ placementExample.init();
 
 ### Message Events
 
-| 事件名称 | 说明             |
-| -------- | ---------------- |
-| show     | 显示时触发。     |
-| shown    | 显示完毕时触发。 |
-| hide     | 隐藏时触发。     |
-| hidden   | 隐藏完毕时触发。 |
-| close    | 关闭时触发。     |
+| 事件名称 | 说明             | 回调参数(event.detail)       |
+| -------- | ---------------- | ---------------------------- |
+| ea-close | 关闭时触发       | `{ visible: false }`         |
+| ea-show  | 显示时触发       | —                            |
+| ea-shown | 显示完毕时触发   | —                            |
+| ea-hide  | 隐藏时触发       | —                            |
+| ea-hidden | 隐藏完毕时触发  | —                            |
 
 ### Message Methods
 
 | 名称  | 描述               | 类型                   |
 | ----- | ------------------ | ---------------------- |
 | close | 关闭当前的 Message | `Function: () => void` |
+
+### Message CSS 自定义属性
+
+| 属性名 | 说明 | 默认值 |
+| ------ | ---- | ------ |
+| --ea-message-z-index | 组件层级 | 2000 |
+| --ea-message-y | 垂直偏移量 | 0 |
+| --ea-message-fade-out-y | 消失方向偏移 | -100% |
+| --ea-message-offset | 初始偏移距离 | 0 |
+| --ea-message-spacing | 内边距 | var(--spacing-md) |
+| --ea-message-border-color | 边框颜色 | var(--grey-200) |
+| --ea-message-border-radius | 圆角大小 | var(--border-radius-sm) |
+| --ea-message-min-width | 最小宽度 | 380px |
+| --ea-message-font-size | 字体大小 | var(--font-size-md) |
+| --ea-message-transition | 过渡动画时长 | var(--transition-normal) |
+| --ea-message-gap | 元素间距 | var(--spacing-md) |
+| --ea-message-close-icon-color | 关闭图标颜色 | var(--grey-500) |
