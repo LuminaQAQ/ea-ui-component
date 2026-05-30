@@ -29,7 +29,7 @@ $name: ea-popconfirm;
     font-size: var(--#{$name}-title-font-size);
     line-height: var(--#{$name}-title-font-size);
     color: var(--#{$name}-title-color);
-    margin-bottom: 12px;
+    margin-bottom: var(--spacing-lg);
 
     ea-icon {
       color: var(--#{$name}-title-icon-color);
@@ -41,7 +41,7 @@ $name: ea-popconfirm;
 
     ea-button:first-child {
       box-sizing: border-box;
-      margin-right: 0.5rem;
+      margin-right: var(--spacing-md);
     }
   }
 

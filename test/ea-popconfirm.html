@@ -43,7 +43,6 @@
         </ea-col>
         <ea-col span="6">
           <ea-popconfirm heading="Top Center prompts info" placement="top">
-            top
             <ea-button variant="primary" slot="reference">top</ea-button>
           </ea-popconfirm>
         </ea-col>
@@ -192,19 +191,17 @@
         init() {
           this.cancelBtn.addEventListener("click", () => {
             this.el.close();
-            this.el.dispatchEvent(new CustomEvent("cancel"));
           });
 
           this.confirmBtn.addEventListener("click", () => {
             this.el.close();
-            this.el.dispatchEvent(new CustomEvent("confirm"));
           });
 
-          this.el.addEventListener("confirm", e => {
+          this.el.addEventListener("ea-confirm", (e) => {
             console.log("confirm");
           });
 
-          this.el.addEventListener("cancel", e => {
+          this.el.addEventListener("ea-cancel", (e) => {
             console.log("cancel");
           });
         },

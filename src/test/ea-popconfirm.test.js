@@ -3,7 +3,7 @@ import { waitForRender } from "./utils/waitForRender.js";
 
 import "../components/ea-popconfirm/index";
 
-describe("EaPopconfirm Component", () => {
+describe("EaPopconfirm", () => {
   let container;
 
   beforeEach(() => {
@@ -663,7 +663,7 @@ describe("EaPopconfirm Component", () => {
       expect(confirmBtn.getAttribute("variant")).toBe("danger");
     });
 
-    it("无效的 confirmButtonType 值应该回退到 null", async () => {
+    it("无效的 confirmButtonType 值应该回退到默认值", async () => {
       const popconfirm = createPopconfirm(
         { "confirm-button-type": "invalid" },
         withReference()
@@ -722,7 +722,7 @@ describe("EaPopconfirm Component", () => {
       expect(cancelBtn.getAttribute("variant")).toBe("warning");
     });
 
-    it("无效的 cancelButtonType 值应该回退到 null", async () => {
+    it("无效的 cancelButtonType 值应该回退到默认值", async () => {
       const popconfirm = createPopconfirm(
         { "cancel-button-type": "invalid" },
         withReference()
@@ -1115,26 +1115,26 @@ describe("EaPopconfirm Component", () => {
   // ==================== 事件 ====================
 
   describe("Events", () => {
-    describe("confirm 事件", () => {
-      it("应该能监听 confirm 事件", async () => {
+    describe("ea-confirm 事件", () => {
+      it("应该能监听 ea-confirm 事件", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
 
         const handler = vi.fn();
-        popconfirm.addEventListener("confirm", handler);
+        popconfirm.addEventListener("ea-confirm", handler);
 
-        popconfirm.dispatchEvent(new CustomEvent("confirm"));
+        popconfirm.dispatchEvent(new CustomEvent("ea-confirm"));
         expect(handler).toHaveBeenCalledTimes(1);
       });
 
-      it("点击确认按钮应该触发 confirm 事件并关闭", async () => {
+      it("点击确认按钮应该触发 ea-confirm 事件并关闭", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
 
         const handler = vi.fn();
-        popconfirm.addEventListener("confirm", handler);
+        popconfirm.addEventListener("ea-confirm", handler);
 
         popconfirm.open();
         await waitForRender();
@@ -1150,26 +1150,26 @@ describe("EaPopconfirm Component", () => {
       });
     });
 
-    describe("cancel 事件", () => {
-      it("应该能监听 cancel 事件", async () => {
+    describe("ea-cancel 事件", () => {
+      it("应该能监听 ea-cancel 事件", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
 
         const handler = vi.fn();
-        popconfirm.addEventListener("cancel", handler);
+        popconfirm.addEventListener("ea-cancel", handler);
 
-        popconfirm.dispatchEvent(new CustomEvent("cancel"));
+        popconfirm.dispatchEvent(new CustomEvent("ea-cancel"));
         expect(handler).toHaveBeenCalledTimes(1);
       });
 
-      it("点击取消按钮应该触发 cancel 事件并关闭", async () => {
+      it("点击取消按钮应该触发 ea-cancel 事件并关闭", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
 
         const handler = vi.fn();
-        popconfirm.addEventListener("cancel", handler);
+        popconfirm.addEventListener("ea-cancel", handler);
 
         popconfirm.open();
         await waitForRender();
@@ -1185,8 +1185,8 @@ describe("EaPopconfirm Component", () => {
       });
     });
 
-    describe("show / shown 事件", () => {
-      it("show() 应该触发 show 事件", async () => {
+    describe("ea-show / ea-shown 事件", () => {
+      it("show() 应该触发 ea-show 事件", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
@@ -1200,7 +1200,7 @@ describe("EaPopconfirm Component", () => {
         expect(handler).toHaveBeenCalled();
       });
 
-      it("open() 应该触发 show 事件", async () => {
+      it("open() 应该触发 ea-show 事件", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
@@ -1215,8 +1215,8 @@ describe("EaPopconfirm Component", () => {
       });
     });
 
-    describe("hide / hidden 事件", () => {
-      it("hide() 应该触发 hide 事件", async () => {
+    describe("ea-hide / ea-hidden 事件", () => {
+      it("hide() 应该触发 ea-hide 事件", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
@@ -1233,7 +1233,7 @@ describe("EaPopconfirm Component", () => {
         expect(handler).toHaveBeenCalled();
       });
 
-      it("close() 应该触发 hide 事件", async () => {
+      it("close() 应该触发 ea-hide 事件", async () => {
         const popconfirm = createPopconfirm({}, withReference());
         container.appendChild(popconfirm);
         await waitForRender();
@@ -1271,13 +1271,13 @@ describe("EaPopconfirm Component", () => {
       expect(popconfirm.visible).toBe(true);
     });
 
-    it("点击取消按钮应该触发 cancel 并关闭", async () => {
+    it("点击取消按钮应该触发 ea-cancel 并关闭", async () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
       await waitForRender();
 
       const cancelHandler = vi.fn();
-      popconfirm.addEventListener("cancel", cancelHandler);
+      popconfirm.addEventListener("ea-cancel", cancelHandler);
 
       popconfirm.open();
       await waitForRender();
@@ -1292,13 +1292,13 @@ describe("EaPopconfirm Component", () => {
       expect(popconfirm.visible).toBe(false);
     });
 
-    it("点击确认按钮应该触发 confirm 并关闭", async () => {
+    it("点击确认按钮应该触发 ea-confirm 并关闭", async () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
       await waitForRender();
 
       const confirmHandler = vi.fn();
-      popconfirm.addEventListener("confirm", confirmHandler);
+      popconfirm.addEventListener("ea-confirm", confirmHandler);
 
       popconfirm.open();
       await waitForRender();
@@ -1464,7 +1464,7 @@ describe("EaPopconfirm Component", () => {
       expect(popconfirm.offset).toBe("15");
     });
 
-    it("无效的 placement 值应该回退到 null", async () => {
+    it("无效的 placement 值应该回退到默认值", async () => {
       const popconfirm = createPopconfirm(
         { placement: "invalid" },
         withReference()
