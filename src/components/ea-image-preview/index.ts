@@ -63,27 +63,10 @@ export class EaImagePreview extends EaOverlay {
   @query(".ea-overlay__content")
   private _overlayContent!: HTMLElement;
 
-  @query(".ea-overlay__mask")
-  private _overlayMask!: HTMLElement;
-
-  @query(".ea-image-preview__header")
-  private _header!: HTMLElement;
-
-  @query(".ea-image-preview__main")
-  private _main!: HTMLElement;
-
-  @query(".ea-image-preview__footer")
-  private _footer!: HTMLElement;
-
-  @query(".ea-image-preview__close-icon")
-  private _closeIcon!: HTMLElement;
-
   @query(".ea-image-preview__progress")
   private _progress!: HTMLElement;
 
-  private _mainAbortController?: AbortController;
   private _imgAbortController?: AbortController;
-  private _clickModalAbortController?: AbortController;
   private _imgMoveAbortController?: AbortController;
 
   private _states = {
@@ -545,18 +528,13 @@ export class EaImagePreview extends EaOverlay {
   $mount(): void {
     super.$mount?.();
 
-    this._mainAbortController?.abort();
-    this._mainAbortController = new AbortController();
-
     this.updateContainerClasslist();
   }
 
   $beforeUnmount(): void {
     super.$beforeUnmount?.();
 
-    this._mainAbortController?.abort();
     this._imgAbortController?.abort();
-    this._clickModalAbortController?.abort();
     this._imgMoveAbortController?.abort();
   }
 }
