@@ -165,16 +165,16 @@
     <h1>环形进度条</h1>
 
     <div class="demo row">
-      <ea-progress type="circle" percentage="0"></ea-progress>
-      <ea-progress type="circle" percentage="25"></ea-progress>
+      <ea-progress variant="circle" percentage="0"></ea-progress>
+      <ea-progress variant="circle" percentage="25"></ea-progress>
       <ea-progress
-        type="circle"
+        variant="circle"
         percentage="100"
         status="success"
       ></ea-progress>
-      <ea-progress type="circle" percentage="70" status="warning"></ea-progress>
+      <ea-progress variant="circle" percentage="70" status="warning"></ea-progress>
       <ea-progress
-        type="circle"
+        variant="circle"
         percentage="50"
         status="exception"
       ></ea-progress>
@@ -191,7 +191,7 @@
     <div class="demo">
       <ea-progress
         id="dashboardProgress1"
-        type="dashboard"
+        variant="dashboard"
         percentage="10"
         stroke-width="4px"
       ></ea-progress>
@@ -201,7 +201,7 @@
       </ea-button-group>
       <ea-progress
         id="dashboardProgress2"
-        type="dashboard"
+        variant="dashboard"
         percentage="0"
         stroke-width="10px"
       ></ea-progress>
@@ -260,13 +260,6 @@
         display: block;
         font-size: 12px;
       }
-      .demo-progress .el-progress--line {
-        margin-bottom: 15px;
-        max-width: 600px;
-      }
-      .demo-progress .el-progress--circle {
-        margin-right: 15px;
-      }
     </style>
 
     <div class="demo">
@@ -274,17 +267,17 @@
         <ea-button text>Content</ea-button>
       </ea-progress>
       <ea-progress
-        text-inside="true"
+        text-inside
         stroke-width="20px"
         percentage="50"
         status="exception"
       >
         <span>Content</span>
       </ea-progress>
-      <ea-progress type="circle" percentage="100" status="success">
-        <ea-button type="success" icon="mug-hot" circle />
+      <ea-progress variant="circle" percentage="100" status="success">
+        <ea-button variant="success" icon="mug-hot" circle />
       </ea-progress>
-      <ea-progress type="dashboard" percentage="80">
+      <ea-progress variant="dashboard" percentage="80">
         <div class="percentage-value"><span data-percentage></span>%</div>
         <span class="percentage-label">Progressing</span>
       </ea-progress>

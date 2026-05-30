@@ -101,17 +101,17 @@ describe("EaProgress Component", () => {
     });
   });
 
-  describe("Type Attribute", () => {
-    it("默认 type 应该是 line", async () => {
+  describe("Variant Attribute", () => {
+    it("默认 variant 应该是 line", async () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
       await waitForRender();
 
-      expect(progress.type).toBe("line");
+      expect(progress.variant).toBe("line");
     });
 
-    it("line 类型应该渲染 section 结构的 track 和 path", async () => {
+    it("line 变体应该渲染 section 结构的 track 和 path", async () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
@@ -127,7 +127,7 @@ describe("EaProgress Component", () => {
       expect(path).toBeTruthy();
     });
 
-    it("line 类型应该包含 percentage-wrapper 和 slot", async () => {
+    it("line 变体应该包含 percentage-wrapper 和 slot", async () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
@@ -143,19 +143,19 @@ describe("EaProgress Component", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("应该支持 circle 类型", async () => {
+    it("应该支持 circle 变体", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
 
-      expect(progress.type).toBe("circle");
+      expect(progress.variant).toBe("circle");
     });
 
-    it("circle 类型应该渲染 SVG 元素", async () => {
+    it("circle 变体应该渲染 SVG 元素", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
@@ -165,9 +165,9 @@ describe("EaProgress Component", () => {
       expect(svg.getAttribute("viewBox")).toBe("0 0 100 100");
     });
 
-    it("circle 类型应该包含 track 和 path circle 元素", async () => {
+    it("circle 变体应该包含 track 和 path circle 元素", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
@@ -182,9 +182,9 @@ describe("EaProgress Component", () => {
       expect(pathCircle).toBeTruthy();
     });
 
-    it("circle 类型的 circle 元素应该有正确的属性", async () => {
+    it("circle 变体的 circle 元素应该有正确的属性", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
@@ -197,9 +197,9 @@ describe("EaProgress Component", () => {
       });
     });
 
-    it("circle 类型的 circle 元素应该有 part 属性", async () => {
+    it("circle 变体的 circle 元素应该有 part 属性", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
@@ -214,9 +214,9 @@ describe("EaProgress Component", () => {
       expect(pathCircle.getAttribute("part")).toBe("path");
     });
 
-    it("circle 类型应该包含 percentage-wrapper 和 slot", async () => {
+    it("circle 变体应该包含 percentage-wrapper 和 slot", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
@@ -231,19 +231,19 @@ describe("EaProgress Component", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("应该支持 dashboard 类型", async () => {
+    it("应该支持 dashboard 变体", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
       await waitForRender();
 
-      expect(progress.type).toBe("dashboard");
+      expect(progress.variant).toBe("dashboard");
     });
 
-    it("dashboard 类型应该渲染 SVG 元素", async () => {
+    it("dashboard 变体应该渲染 SVG 元素", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
       await waitForRender();
@@ -252,9 +252,9 @@ describe("EaProgress Component", () => {
       expect(svg).toBeTruthy();
     });
 
-    it("dashboard 类型应该包含 mask 和 clipPath 元素", async () => {
+    it("dashboard 变体应该包含 mask 和 clipPath 元素", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
       await waitForRender();
@@ -265,9 +265,9 @@ describe("EaProgress Component", () => {
       expect(clipPath).toBeTruthy();
     });
 
-    it("dashboard 类型的 circle 元素应该有 clip-path 属性", async () => {
+    it("dashboard 变体的 circle 元素应该有 clip-path 属性", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
       await waitForRender();
@@ -282,9 +282,9 @@ describe("EaProgress Component", () => {
       expect(pathCircle.getAttribute("clip-path")).toBe("url(#myClip)");
     });
 
-    it("dashboard 类型应该包含 percentage-wrapper 和 slot", async () => {
+    it("dashboard 变体应该包含 percentage-wrapper 和 slot", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
       await waitForRender();
@@ -299,49 +299,49 @@ describe("EaProgress Component", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("动态切换 type 应该重新渲染", async () => {
+    it("动态切换 variant 应该重新渲染", async () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
       await waitForRender();
 
-      expect(progress.type).toBe("line");
+      expect(progress.variant).toBe("line");
       expect(
         progress.shadowRoot.querySelector("section.ea-progress__track")
       ).toBeTruthy();
 
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       await waitForRender();
 
-      expect(progress.type).toBe("circle");
+      expect(progress.variant).toBe("circle");
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
     });
 
     it("从 circle 切换到 dashboard 应该重新渲染", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
 
-      expect(progress.type).toBe("circle");
+      expect(progress.variant).toBe("circle");
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeFalsy();
 
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       await waitForRender();
 
-      expect(progress.type).toBe("dashboard");
+      expect(progress.variant).toBe("dashboard");
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
     });
 
-    it("无效的 type 值应该使用默认值 line", async () => {
+    it("无效的 variant 值应该使用默认值 line", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "invalid");
+      progress.setAttribute("variant", "invalid");
       container.appendChild(progress);
 
       await waitForRender();
 
-      expect(progress.type).toBe("line");
+      expect(progress.variant).toBe("line");
     });
 
     it("从 line 切换到 circle 后 line 的 DOM 应该被替换", async () => {
@@ -354,7 +354,7 @@ describe("EaProgress Component", () => {
         progress.shadowRoot.querySelector("section.ea-progress__track")
       ).toBeTruthy();
 
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       await waitForRender();
 
       expect(
@@ -434,7 +434,7 @@ describe("EaProgress Component", () => {
       expect(progress.percentage).toBe(0);
     });
 
-    it("line 类型应该设置 --ea-progress-percentage CSS 变量", async () => {
+    it("line 变体应该设置 --ea-progress-percentage CSS 变量", async () => {
       const progress = document.createElement("ea-progress");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
@@ -462,9 +462,9 @@ describe("EaProgress Component", () => {
       ).toBe("75%");
     });
 
-    it("circle 类型应该设置 stroke-dashoffset 格式的 CSS 变量", async () => {
+    it("circle 变体应该设置 stroke-dashoffset 格式的 CSS 变量", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
@@ -478,9 +478,9 @@ describe("EaProgress Component", () => {
       expect(cssVar.endsWith("px")).toBe(true);
     });
 
-    it("circle 类型 percentage 为 0 时 stroke-dashoffset 应该为 302px", async () => {
+    it("circle 变体 percentage 为 0 时 stroke-dashoffset 应该为 302px", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("percentage", "0");
       container.appendChild(progress);
 
@@ -492,9 +492,9 @@ describe("EaProgress Component", () => {
       ).toBe("302px");
     });
 
-    it("circle 类型 percentage 为 100 时 stroke-dashoffset 应该为 0px", async () => {
+    it("circle 变体 percentage 为 100 时 stroke-dashoffset 应该为 0px", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("percentage", "100");
       container.appendChild(progress);
 
@@ -506,9 +506,9 @@ describe("EaProgress Component", () => {
       ).toBe("0px");
     });
 
-    it("circle 类型 percentage 为 50 时 stroke-dashoffset 应该为 151px", async () => {
+    it("circle 变体 percentage 为 50 时 stroke-dashoffset 应该为 151px", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
@@ -520,9 +520,9 @@ describe("EaProgress Component", () => {
       ).toBe("151px");
     });
 
-    it("dashboard 类型应该设置 stroke-dasharray 和 stroke-dashoffset", async () => {
+    it("dashboard 变体应该设置 stroke-dasharray 和 stroke-dashoffset", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
@@ -540,9 +540,9 @@ describe("EaProgress Component", () => {
       expect(trackCircle.style.strokeDasharray).toBeTruthy();
     });
 
-    it("dashboard 类型 percentage 为 0 时 CSS 变量应该有值", async () => {
+    it("dashboard 变体 percentage 为 0 时 CSS 变量应该有值", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("percentage", "0");
       container.appendChild(progress);
 
@@ -859,9 +859,9 @@ describe("EaProgress Component", () => {
       warnSpy.mockRestore();
     });
 
-    it("dashboard 类型应该使用 strokeWidth 计算 stroke-dasharray", async () => {
+    it("dashboard 变体应该使用 strokeWidth 计算 stroke-dasharray", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("stroke-width", "6px");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
@@ -997,7 +997,7 @@ describe("EaProgress Component", () => {
       expect(progress.indeterminate).toBe(true);
     });
 
-    it("line 类型 indeterminate 为 true 时应该添加 is-indeterminate 状态类", async () => {
+    it("line 变体 indeterminate 为 true 时应该添加 is-indeterminate 状态类", async () => {
       const progress = document.createElement("ea-progress");
       progress.setAttribute("indeterminate", "");
       container.appendChild(progress);
@@ -1008,9 +1008,9 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("is-indeterminate")).toBe(true);
     });
 
-    it("circle 类型 indeterminate 不应该添加 is-indeterminate 状态类", async () => {
+    it("circle 变体 indeterminate 不应该添加 is-indeterminate 状态类", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("indeterminate", "");
       container.appendChild(progress);
 
@@ -1020,9 +1020,9 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("is-indeterminate")).toBe(false);
     });
 
-    it("dashboard 类型 indeterminate 不应该添加 is-indeterminate 状态类", async () => {
+    it("dashboard 变体 indeterminate 不应该添加 is-indeterminate 状态类", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("indeterminate", "");
       container.appendChild(progress);
 
@@ -1241,9 +1241,9 @@ describe("EaProgress Component", () => {
       expect(progress.size).toBe("200px");
     });
 
-    it("circle 类型应该设置 --ea-progress-size CSS 变量", async () => {
+    it("circle 变体应该设置 --ea-progress-size CSS 变量", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("size", "200px");
       container.appendChild(progress);
 
@@ -1255,9 +1255,9 @@ describe("EaProgress Component", () => {
       );
     });
 
-    it("dashboard 类型应该设置 --ea-progress-size CSS 变量", async () => {
+    it("dashboard 变体应该设置 --ea-progress-size CSS 变量", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("size", "180px");
       container.appendChild(progress);
 
@@ -1269,7 +1269,7 @@ describe("EaProgress Component", () => {
       );
     });
 
-    it("line 类型不应该设置 --ea-progress-size CSS 变量", async () => {
+    it("line 变体不应该设置 --ea-progress-size CSS 变量", async () => {
       const progress = document.createElement("ea-progress");
       progress.setAttribute("size", "200px");
       container.appendChild(progress);
@@ -1282,7 +1282,7 @@ describe("EaProgress Component", () => {
 
     it("动态更新 size 应该更新 CSS 变量", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
@@ -1582,9 +1582,9 @@ describe("EaProgress Component", () => {
       );
     });
 
-    it("circle 类型应该支持字符串 color", async () => {
+    it("circle 变体应该支持字符串 color", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
@@ -1599,9 +1599,9 @@ describe("EaProgress Component", () => {
       );
     });
 
-    it("dashboard 类型应该支持字符串 color", async () => {
+    it("dashboard 变体应该支持字符串 color", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
@@ -1732,7 +1732,7 @@ describe("EaProgress Component", () => {
       expect(className).toContain("ea-progress");
     });
 
-    it("line 类型应该包含 is-line 状态类", async () => {
+    it("line 变体应该包含 is-line 状态类", async () => {
       const progress = document.createElement("ea-progress");
       container.appendChild(progress);
 
@@ -1742,9 +1742,9 @@ describe("EaProgress Component", () => {
       expect(className).toContain("is-line");
     });
 
-    it("circle 类型应该包含 is-circle 状态类", async () => {
+    it("circle 变体应该包含 is-circle 状态类", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
@@ -1753,9 +1753,9 @@ describe("EaProgress Component", () => {
       expect(className).toContain("is-circle");
     });
 
-    it("dashboard 类型应该包含 is-dashboard 状态类", async () => {
+    it("dashboard 变体应该包含 is-dashboard 状态类", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
       await waitForRender();
@@ -1798,7 +1798,7 @@ describe("EaProgress Component", () => {
 
     it("indeterminate + circle 不应该包含 is-indeterminate 状态类", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("indeterminate", "");
       container.appendChild(progress);
 
@@ -1874,14 +1874,14 @@ describe("EaProgress Component", () => {
     it("组件连接后应该正确初始化", async () => {
       const progress = document.createElement("ea-progress");
       progress.setAttribute("percentage", "50");
-      progress.setAttribute("type", "line");
+      progress.setAttribute("variant", "line");
       container.appendChild(progress);
 
       await waitForRender();
 
       expect(progress.shadowRoot).toBeTruthy();
       expect(progress.percentage).toBe(50);
-      expect(progress.type).toBe("line");
+      expect(progress.variant).toBe("line");
     });
 
     it("组件断开连接后应该正常移除", async () => {
@@ -1909,19 +1909,19 @@ describe("EaProgress Component", () => {
       expect(progress.percentage).toBe(60);
     });
 
-    it("动态更新 type 应该重新渲染", async () => {
+    it("动态更新 variant 应该重新渲染", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "line");
+      progress.setAttribute("variant", "line");
       container.appendChild(progress);
 
       await waitForRender();
 
-      expect(progress.type).toBe("line");
+      expect(progress.variant).toBe("line");
 
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       await waitForRender();
 
-      expect(progress.type).toBe("circle");
+      expect(progress.variant).toBe("circle");
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
     });
 
@@ -2003,9 +2003,9 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("is-striped-flow")).toBe(true);
     });
 
-    it("应该支持 circle 类型 + status 组合", async () => {
+    it("应该支持 circle 变体 + status 组合", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("status", "success");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
@@ -2017,9 +2017,9 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("is-circle")).toBe(true);
     });
 
-    it("应该支持 dashboard 类型 + status 组合", async () => {
+    it("应该支持 dashboard 变体 + status 组合", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("status", "exception");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
@@ -2075,26 +2075,26 @@ describe("EaProgress Component", () => {
 
       expect(progress.percentage).toBe(60);
 
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       await waitForRender();
 
-      expect(progress.type).toBe("circle");
+      expect(progress.variant).toBe("circle");
       expect(progress.percentage).toBe(60);
     });
 
     it("应该支持从 circle 切换回 line", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       container.appendChild(progress);
 
       await waitForRender();
 
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
 
-      progress.setAttribute("type", "line");
+      progress.setAttribute("variant", "line");
       await waitForRender();
 
-      expect(progress.type).toBe("line");
+      expect(progress.variant).toBe("line");
       expect(
         progress.shadowRoot.querySelector("section.ea-progress__track")
       ).toBeTruthy();
@@ -2167,9 +2167,9 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("is-striped-flow")).toBe(true);
     });
 
-    it("应该支持 circle 类型 + status + color 组合", async () => {
+    it("应该支持 circle 变体 + status + color 组合", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("status", "success");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
@@ -2189,9 +2189,9 @@ describe("EaProgress Component", () => {
       );
     });
 
-    it("应该支持 dashboard 类型 + strokeWidth + percentage 组合", async () => {
+    it("应该支持 dashboard 变体 + strokeWidth + percentage 组合", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("stroke-width", "6px");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
@@ -2210,7 +2210,7 @@ describe("EaProgress Component", () => {
 
     it("从 dashboard 切换到 line 后 SVG 应该被替换为 section 结构", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       container.appendChild(progress);
 
       await waitForRender();
@@ -2218,7 +2218,7 @@ describe("EaProgress Component", () => {
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
 
-      progress.setAttribute("type", "line");
+      progress.setAttribute("variant", "line");
       await waitForRender();
 
       expect(progress.shadowRoot.querySelector("svg")).toBeFalsy();
@@ -2228,31 +2228,31 @@ describe("EaProgress Component", () => {
       ).toBeTruthy();
     });
 
-    it("应该支持所有三种类型的完整循环切换", async () => {
+    it("应该支持所有三种变体的完整循环切换", async () => {
       const progress = document.createElement("ea-progress");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
 
       await waitForRender();
 
-      expect(progress.type).toBe("line");
+      expect(progress.variant).toBe("line");
       expect(
         progress.shadowRoot.querySelector("section.ea-progress__track")
       ).toBeTruthy();
 
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       await waitForRender();
-      expect(progress.type).toBe("circle");
+      expect(progress.variant).toBe("circle");
       expect(progress.shadowRoot.querySelector("svg")).toBeTruthy();
 
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       await waitForRender();
-      expect(progress.type).toBe("dashboard");
+      expect(progress.variant).toBe("dashboard");
       expect(progress.shadowRoot.querySelector("mask#myMask")).toBeTruthy();
 
-      progress.setAttribute("type", "line");
+      progress.setAttribute("variant", "line");
       await waitForRender();
-      expect(progress.type).toBe("line");
+      expect(progress.variant).toBe("line");
       expect(
         progress.shadowRoot.querySelector("section.ea-progress__track")
       ).toBeTruthy();
@@ -2303,9 +2303,9 @@ describe("EaProgress Component", () => {
       expect(containerEl.classList.contains("is-show-text")).toBe(false);
     });
 
-    it("应该支持 circle 类型 + size + strokeWidth 组合", async () => {
+    it("应该支持 circle 变体 + size + strokeWidth 组合", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("size", "200px");
       progress.setAttribute("stroke-width", "8px");
       progress.setAttribute("percentage", "50");
@@ -2322,9 +2322,9 @@ describe("EaProgress Component", () => {
       ).toBe("8px");
     });
 
-    it("应该支持 warning 状态在 circle 类型中显示图标", async () => {
+    it("应该支持 warning 状态在 circle 变体中显示图标", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "circle");
+      progress.setAttribute("variant", "circle");
       progress.setAttribute("status", "warning");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
@@ -2338,9 +2338,9 @@ describe("EaProgress Component", () => {
       expect(icon.getAttribute("name")).toBe("triangle-exclamation");
     });
 
-    it("应该支持 exception 状态在 dashboard 类型中显示图标", async () => {
+    it("应该支持 exception 状态在 dashboard 变体中显示图标", async () => {
       const progress = document.createElement("ea-progress");
-      progress.setAttribute("type", "dashboard");
+      progress.setAttribute("variant", "dashboard");
       progress.setAttribute("status", "exception");
       progress.setAttribute("percentage", "50");
       container.appendChild(progress);
