@@ -1,51 +1,76 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { html } from "@utils/html";
+import { EaPageHeaderBackEvent } from "./events/EaPageHeaderBackEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-page-header" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 页头组件，用于页面的路径导航，支持返回按钮、面包屑、标题内容和额外操作区。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot breadcrumb - 面包屑插槽，可放置 ea-breadcrumb 组件。
+ * @slot icon - 自定义返回图标，默认显示 angle-left 图标。
+ * @slot title - 返回按钮文字，默认显示 "Back"。
+ * @slot content - 页头主要内容区。
+ * @slot extra - 额外操作区。
+ * @slot default - 默认插槽，用于放置额外内容。
+ *
+ * @event ea-back - 点击返回按钮时触发。
+ *
+ * @csspart container - 外层容器。
+ * @csspart breadcrumb - 面包屑插槽容器。
+ * @csspart header-wrapper - 标题与操作区的包装容器。
+ * @csspart back - 返回按钮容器。
+ * @csspart icon - 返回图标容器。
+ * @csspart back-icon - 默认返回图标元素。
+ * @csspart title - 返回按钮文字容器。
+ * @csspart divider - 分隔符。
+ * @csspart content - 主要内容容器。
+ * @csspart extra - 额外操作区容器。
+ *
+ * @cssproperty --ea-page-header-gap - 包装容器内间距。
+ * @cssproperty --ea-page-header-back-gap - 返回按钮内间距。
+ * @cssproperty --ea-page-header-divider-margin - 分隔符外边距。
+ * @cssproperty --ea-page-header-divider-color - 分隔符颜色。
+ * @cssproperty --ea-page-header-heading-font-size - 返回文字字号。
+ * @cssproperty --ea-page-header-heading-font-weight - 返回文字字重。
+ * @cssproperty --ea-page-header-heading-color - 返回文字颜色。
+ * @cssproperty --ea-page-header-content-font-size - 内容字号。
+ * @cssproperty --ea-page-header-content-font-weight - 内容字重。
+ * @cssproperty --ea-page-header-content-color - 内容颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaPageHeader extends EaBase {
-  // ==================== DOM 元素引用 ====================
+  @query(bem.ce("icon"))
+  private _iconContainer!: HTMLElement;
 
-  @query(bem.ce("back"))
-  private _backEl!: HTMLElement;
+  @query(bem.ce("heading"))
+  private _headingContainer!: HTMLElement;
 
-  @query(`${bem.ce("icon")} slot[name="icon"]`)
-  private _backIconSlot!: HTMLSlotElement;
-
-  @query(`${bem.ce("heading")} slot[name="title"]`)
-  private _titleSlot!: HTMLSlotElement;
-
-  @query(`${bem.ce("content")} slot[name="content"]`)
-  private _contentSlot!: HTMLSlotElement;
-
-  // ==================== 属性定义 ====================
+  @query(bem.ce("content"))
+  private _contentContainer!: HTMLElement;
 
   @attribute({
     type: String,
-    default: "",
-    observer(this: EaPageHeader, newVal: string) {
-      const iconEl = this._backIconSlot?.querySelector("ea-icon");
-      if (iconEl) {
-        iconEl.setAttribute("name", newVal);
-      }
+    default: "angle-left",
+    observer(this: EaPageHeader) {
+      this._updateIcon();
     },
   })
-  icon: string = "";
+  icon: string = "angle-left";
 
   @attribute({
     type: String,
     default: "",
-    observer(this: EaPageHeader, newVal: string) {
-      if (this._titleSlot) {
-        this._titleSlot.textContent = newVal;
-      }
+    observer(this: EaPageHeader) {
+      this._updateHeading();
     },
   })
   heading: string = "";
@@ -53,16 +78,36 @@ export class EaPageHeader extends EaBase {
   @attribute({
     type: String,
     default: "",
-    observer(this: EaPageHeader, newVal: string) {
-      if (this._contentSlot) {
-        this._contentSlot.textContent = newVal;
-      }
+    observer(this: EaPageHeader) {
+      this._updateContent();
     },
   })
   content: string = "";
 
-  // ==================== 方法 ====================
+  /** 更新图标内容，icon 为空字符串时隐藏图标 */
+  private _updateIcon(): void {
+    if (this.icon) {
+      this._iconContainer.classList.remove(bem.s("hidden"));
+      this._iconContainer.innerHTML = `<slot name="icon"><ea-icon name="${this.icon}" part="back-icon"></ea-icon></slot>`;
+    } else {
+      this._iconContainer.classList.add(bem.s("hidden"));
+      this._iconContainer.innerHTML = `<slot name="icon"></slot>`;
+    }
+  }
 
+  /** 更新标题内容，为空时恢复 slot */
+  private _updateHeading(): void {
+    this._headingContainer.innerHTML =
+      html(this.heading) || '<slot name="title">Back</slot>';
+  }
+
+  /** 更新内容区域，为空时恢复 slot */
+  private _updateContent(): void {
+    this._contentContainer.innerHTML =
+      html(this.content) || '<slot name="content"></slot>';
+  }
+
+  /** 渲染模板 */
   html(): string {
     return `
       <div class='${bem()}' part='container'>
@@ -77,10 +122,10 @@ export class EaPageHeader extends EaBase {
               </slot>
             </span>
             <span class="${bem.e("heading")}" part="title">
-                <slot name="title">Back</slot>
+              <slot name="title">Back</slot>
             </span>
           </div>
-          <ea-icon class="${bem.e("divider")}" part="divider">|</ea-icon>
+          <span class="${bem.e("divider")}" part="divider">|</span>
           <div class="${bem.e("content")}" part="content">
             <slot name="content"></slot>
           </div>
@@ -93,10 +138,13 @@ export class EaPageHeader extends EaBase {
     `;
   }
 
-  // ==================== 事件处理 ====================
-
+  /** 点击返回按钮事件处理 */
   @listen("click", bem.ce("back"))
   private _handleBackClick(_e: Event) {
-    this.emit("back");
+    this.dispatchEvent(new EaPageHeaderBackEvent());
+  }
+
+  $mount(): void {
+    this._updateIcon();
   }
 }

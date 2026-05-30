@@ -1,31 +1,66 @@
 $name: ea-page-header;
 
+:host {
+  --#{$name}-gap: var(--spacing-md);
+  --#{$name}-back-gap: var(--spacing-sm);
+  --#{$name}-divider-margin: 0 var(--spacing-md);
+  --#{$name}-divider-color: var(--grey-400);
+  --#{$name}-heading-font-size: var(--font-size-md);
+  --#{$name}-heading-font-weight: var(--font-weight-md);
+  --#{$name}-heading-color: var(--grey-700);
+  --#{$name}-content-font-size: var(--font-size-lg);
+  --#{$name}-content-font-weight: var(--font-weight-bold);
+  --#{$name}-content-color: var(--grey-900);
+
+  display: block;
+}
+
 @include block($name) {
+  @include element(breadcrumb) {
+    margin-bottom: var(--#{$name}-gap);
+  }
+
   @include element(wrapper) {
     display: flex;
     align-items: center;
-
-    margin: 0.5rem 0;
+    gap: var(--#{$name}-gap);
   }
 
   @include element(back) {
     display: flex;
     align-items: center;
+    gap: var(--#{$name}-back-gap);
+    cursor: var(--cursor-pointer);
 
-    cursor: pointer;
+    &:hover {
+      color: var(--blue-500);
+    }
   }
 
   @include element(icon) {
-    // margin-left: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+
+    &.is-hidden {
+      display: none;
+    }
   }
 
   @include element(heading) {
-    margin-left: 0.5rem;
+    font-size: var(--#{$name}-heading-font-size);
+    font-weight: var(--#{$name}-heading-font-weight);
+    color: var(--#{$name}-heading-color);
   }
 
   @include element(divider) {
-    margin: 0 0.75rem;
-    color: var(--grey-400);
+    margin: var(--#{$name}-divider-margin);
+    color: var(--#{$name}-divider-color);
+  }
+
+  @include element(content) {
+    font-size: var(--#{$name}-content-font-size);
+    font-weight: var(--#{$name}-content-font-weight);
+    color: var(--#{$name}-content-color);
   }
 
   @include element(extra) {

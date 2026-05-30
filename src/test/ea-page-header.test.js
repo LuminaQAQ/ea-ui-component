@@ -102,7 +102,7 @@ describe("EaPageHeader Component", () => {
       expect(heading).toBeDefined();
     });
 
-    it("应该渲染 divider 图标", async () => {
+    it("应该渲染 divider", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
@@ -299,6 +299,16 @@ describe("EaPageHeader Component", () => {
       const el = pageHeader.shadowRoot.querySelector('[part="icon"]');
       expect(el).toBeDefined();
       expect(el.classList.contains("ea-page-header__icon")).toBe(true);
+    });
+
+    it("应该暴露 back-icon part", async () => {
+      const pageHeader = document.createElement("ea-page-header");
+      container.appendChild(pageHeader);
+
+      await waitForRender();
+
+      const el = pageHeader.shadowRoot.querySelector('[part="back-icon"]');
+      expect(el).toBeDefined();
     });
 
     it("应该暴露 title part（heading 元素）", async () => {
@@ -541,13 +551,13 @@ describe("EaPageHeader Component", () => {
   // ==================== Icon 属性测试 ====================
 
   describe("Icon Attribute", () => {
-    it("默认 icon 应该是空字符串", async () => {
+    it("默认 icon 应该是 angle-left", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
-      expect(pageHeader.icon).toBe("");
+      expect(pageHeader.icon).toBe("angle-left");
     });
 
     it("默认应该渲染 angle-left 图标", async () => {
@@ -609,7 +619,7 @@ describe("EaPageHeader Component", () => {
       expect(pageHeader.icon).toBe("rotate-left");
     });
 
-    it("icon 设置为空字符串后应恢复默认", async () => {
+    it("icon 设置为空字符串后应隐藏图标", async () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("icon", "arrow-left");
       container.appendChild(pageHeader);
@@ -620,6 +630,37 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.icon).toBe("");
+      const iconEl = pageHeader.shadowRoot.querySelector(".ea-page-header__icon");
+      expect(iconEl.classList.contains("is-hidden")).toBe(true);
+    });
+
+    it("icon 为空字符串时不应渲染 ea-icon", async () => {
+      const pageHeader = document.createElement("ea-page-header");
+      pageHeader.setAttribute("icon", "");
+      container.appendChild(pageHeader);
+
+      await waitForRender();
+
+      const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
+      expect(iconEl).toBeNull();
+    });
+
+    it("icon 从空字符串恢复为非空时应移除 is-hidden 类", async () => {
+      const pageHeader = document.createElement("ea-page-header");
+      pageHeader.setAttribute("icon", "");
+      container.appendChild(pageHeader);
+
+      await waitForRender();
+
+      const iconContainer = pageHeader.shadowRoot.querySelector(".ea-page-header__icon");
+      expect(iconContainer.classList.contains("is-hidden")).toBe(true);
+
+      pageHeader.setAttribute("icon", "arrow-left");
+      await waitForRender();
+
+      expect(iconContainer.classList.contains("is-hidden")).toBe(false);
+      const iconEl = pageHeader.shadowRoot.querySelector("ea-icon");
+      expect(iconEl.getAttribute("name")).toBe("arrow-left");
     });
   });
 
@@ -656,16 +697,17 @@ describe("EaPageHeader Component", () => {
       expect(pageHeader.heading).toBe("返回");
     });
 
-    it("heading 应该更新 title slot 的 textContent", async () => {
+    it("heading 应该更新 heading 容器的 textContent", async () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "Go Back");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
-      const titleSlot =
-        pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("Go Back");
+      const headingEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__heading"
+      );
+      expect(headingEl.textContent).toBe("Go Back");
     });
 
     it("应该支持通过 JS property 设置 heading", async () => {
@@ -678,9 +720,10 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.heading).toBe("JS Property Heading");
-      const titleSlot =
-        pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("JS Property Heading");
+      const headingEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__heading"
+      );
+      expect(headingEl.textContent).toBe("JS Property Heading");
     });
 
     it("应该支持动态修改 heading", async () => {
@@ -690,17 +733,21 @@ describe("EaPageHeader Component", () => {
 
       await waitForRender();
 
-      let titleSlot = pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("初始标题");
+      const headingEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__heading"
+      );
+      expect(headingEl.textContent).toBe("初始标题");
 
       pageHeader.setAttribute("heading", "更新后的标题");
       await waitForRender();
 
-      titleSlot = pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("更新后的标题");
+      const updatedHeadingEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__heading"
+      );
+      expect(updatedHeadingEl.textContent).toBe("更新后的标题");
     });
 
-    it("heading 设置为空字符串后应清空 title slot 内容", async () => {
+    it("heading 设置为空字符串后应恢复 title slot 默认 Back", async () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "临时标题");
       container.appendChild(pageHeader);
@@ -711,6 +758,10 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.heading).toBe("");
+      const titleSlot =
+        pageHeader.shadowRoot.querySelector('slot[name="title"]');
+      expect(titleSlot).toBeDefined();
+      expect(titleSlot.textContent.trim()).toBe("Back");
     });
 
     it("heading 属性应映射到 HTML attribute heading（非 title）", async () => {
@@ -759,17 +810,17 @@ describe("EaPageHeader Component", () => {
       expect(pageHeader.content).toBe("Page Title");
     });
 
-    it("content 应该更新 content slot 的 textContent", async () => {
+    it("content 应该更新 content 容器的 textContent", async () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("content", "Page Title");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
-      const contentSlot = pageHeader.shadowRoot.querySelector(
-        'slot[name="content"]'
+      const contentEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__content"
       );
-      expect(contentSlot.textContent).toBe("Page Title");
+      expect(contentEl.textContent).toBe("Page Title");
     });
 
     it("应该支持通过 JS property 设置 content", async () => {
@@ -782,10 +833,10 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.content).toBe("JS Property Content");
-      const contentSlot = pageHeader.shadowRoot.querySelector(
-        'slot[name="content"]'
+      const contentEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__content"
       );
-      expect(contentSlot.textContent).toBe("JS Property Content");
+      expect(contentEl.textContent).toBe("JS Property Content");
     });
 
     it("应该支持动态修改 content", async () => {
@@ -795,19 +846,21 @@ describe("EaPageHeader Component", () => {
 
       await waitForRender();
 
-      let contentSlot = pageHeader.shadowRoot.querySelector(
-        'slot[name="content"]'
+      const contentEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__content"
       );
-      expect(contentSlot.textContent).toBe("初始内容");
+      expect(contentEl.textContent).toBe("初始内容");
 
       pageHeader.setAttribute("content", "更新后的内容");
       await waitForRender();
 
-      contentSlot = pageHeader.shadowRoot.querySelector('slot[name="content"]');
-      expect(contentSlot.textContent).toBe("更新后的内容");
+      const updatedContentEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__content"
+      );
+      expect(updatedContentEl.textContent).toBe("更新后的内容");
     });
 
-    it("content 设置为空字符串后应清空 content slot 内容", async () => {
+    it("content 设置为空字符串后应恢复 content slot", async () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("content", "临时内容");
       container.appendChild(pageHeader);
@@ -818,20 +871,24 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.content).toBe("");
+      const contentSlot = pageHeader.shadowRoot.querySelector(
+        'slot[name="content"]'
+      );
+      expect(contentSlot).toBeDefined();
     });
   });
 
   // ==================== 事件测试 ====================
 
   describe("Events", () => {
-    it("点击 back 区域应该触发 back 事件", async () => {
+    it("点击 back 区域应该触发 ea-back 事件", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       const backHandler = vi.fn();
-      pageHeader.addEventListener("back", backHandler);
+      pageHeader.addEventListener("ea-back", backHandler);
 
       const backEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__back"
@@ -841,14 +898,14 @@ describe("EaPageHeader Component", () => {
       expect(backHandler).toHaveBeenCalled();
     });
 
-    it("back 事件应该可以多次触发", async () => {
+    it("ea-back 事件应该可以多次触发", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       const backHandler = vi.fn();
-      pageHeader.addEventListener("back", backHandler);
+      pageHeader.addEventListener("ea-back", backHandler);
 
       const backEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__back"
@@ -860,14 +917,14 @@ describe("EaPageHeader Component", () => {
       expect(backHandler).toHaveBeenCalledTimes(3);
     });
 
-    it("back 事件应该是 CustomEvent", async () => {
+    it("ea-back 事件应该是 EaPageHeaderBackEvent", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       let receivedEvent;
-      pageHeader.addEventListener("back", e => {
+      pageHeader.addEventListener("ea-back", e => {
         receivedEvent = e;
       });
 
@@ -877,17 +934,19 @@ describe("EaPageHeader Component", () => {
       backEl.click();
 
       expect(receivedEvent).toBeDefined();
-      expect(receivedEvent instanceof CustomEvent).toBe(true);
+      expect(receivedEvent.type).toBe("ea-back");
+      expect(receivedEvent.bubbles).toBe(true);
+      expect(receivedEvent.composed).toBe(true);
     });
 
-    it("点击 icon 区域（back 的子元素）也应该触发 back 事件", async () => {
+    it("点击 icon 区域（back 的子元素）也应该触发 ea-back 事件", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       const backHandler = vi.fn();
-      pageHeader.addEventListener("back", backHandler);
+      pageHeader.addEventListener("ea-back", backHandler);
 
       const iconEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__icon"
@@ -897,14 +956,14 @@ describe("EaPageHeader Component", () => {
       expect(backHandler).toHaveBeenCalled();
     });
 
-    it("点击 heading 区域（back 的子元素）也应该触发 back 事件", async () => {
+    it("点击 heading 区域（back 的子元素）也应该触发 ea-back 事件", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       const backHandler = vi.fn();
-      pageHeader.addEventListener("back", backHandler);
+      pageHeader.addEventListener("ea-back", backHandler);
 
       const headingEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__heading"
@@ -914,14 +973,14 @@ describe("EaPageHeader Component", () => {
       expect(backHandler).toHaveBeenCalled();
     });
 
-    it("点击 content 区域不应该触发 back 事件", async () => {
+    it("点击 content 区域不应该触发 ea-back 事件", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       const backHandler = vi.fn();
-      pageHeader.addEventListener("back", backHandler);
+      pageHeader.addEventListener("ea-back", backHandler);
 
       const contentEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__content"
@@ -931,14 +990,14 @@ describe("EaPageHeader Component", () => {
       expect(backHandler).not.toHaveBeenCalled();
     });
 
-    it("点击 extra 区域不应该触发 back 事件", async () => {
+    it("点击 extra 区域不应该触发 ea-back 事件", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       const backHandler = vi.fn();
-      pageHeader.addEventListener("back", backHandler);
+      pageHeader.addEventListener("ea-back", backHandler);
 
       const extraEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__extra"
@@ -948,14 +1007,14 @@ describe("EaPageHeader Component", () => {
       expect(backHandler).not.toHaveBeenCalled();
     });
 
-    it("移除 back 事件监听后不应再触发", async () => {
+    it("移除 ea-back 事件监听后不应再触发", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       const backHandler = vi.fn();
-      pageHeader.addEventListener("back", backHandler);
+      pageHeader.addEventListener("ea-back", backHandler);
 
       const backEl = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__back"
@@ -964,7 +1023,7 @@ describe("EaPageHeader Component", () => {
 
       expect(backHandler).toHaveBeenCalledTimes(1);
 
-      pageHeader.removeEventListener("back", backHandler);
+      pageHeader.removeEventListener("ea-back", backHandler);
       backEl.click();
 
       expect(backHandler).toHaveBeenCalledTimes(1);
@@ -988,30 +1047,31 @@ describe("EaPageHeader Component", () => {
       expect(pageHeader.content).toBe("页面标题");
     });
 
-    it("设置 heading 后 title slot 内容应为 heading 值而非默认 Back", async () => {
+    it("设置 heading 后 heading 容器内容应为 heading 值而非默认 Back", async () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "自定义返回");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
-      const titleSlot =
-        pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("自定义返回");
-      expect(titleSlot.textContent.trim()).not.toBe("Back");
+      const headingEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__heading"
+      );
+      expect(headingEl.textContent).toBe("自定义返回");
+      expect(headingEl.textContent.trim()).not.toBe("Back");
     });
 
-    it("设置 content 后 content slot 内容应为 content 值", async () => {
+    it("设置 content 后 content 容器内容应为 content 值", async () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("content", "详情页面");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
-      const contentSlot = pageHeader.shadowRoot.querySelector(
-        'slot[name="content"]'
+      const contentEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__content"
       );
-      expect(contentSlot.textContent).toBe("详情页面");
+      expect(contentEl.textContent).toBe("详情页面");
     });
 
     it("设置 icon 后默认 ea-icon 的 name 应被更新", async () => {
@@ -1150,9 +1210,10 @@ describe("EaPageHeader Component", () => {
 
       await waitForRender();
 
-      const titleSlot =
-        pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe("Updated Title");
+      const headingEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__heading"
+      );
+      expect(headingEl.textContent).toBe("Updated Title");
     });
 
     it("动态更新 content 应该反映在 UI 上", async () => {
@@ -1165,10 +1226,10 @@ describe("EaPageHeader Component", () => {
 
       await waitForRender();
 
-      const contentSlot = pageHeader.shadowRoot.querySelector(
-        'slot[name="content"]'
+      const contentEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__content"
       );
-      expect(contentSlot.textContent).toBe("Updated Content");
+      expect(contentEl.textContent).toBe("Updated Content");
     });
 
     it("动态更新 icon 应该反映在 UI 上", async () => {
@@ -1196,7 +1257,7 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.shadowRoot).toBeDefined();
-      expect(pageHeader.icon).toBe("");
+      expect(pageHeader.icon).toBe("angle-left");
       expect(pageHeader.heading).toBe("");
       expect(pageHeader.content).toBe("");
     });
@@ -1211,9 +1272,10 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.heading).toBe(longText);
-      const titleSlot =
-        pageHeader.shadowRoot.querySelector('slot[name="title"]');
-      expect(titleSlot.textContent).toBe(longText);
+      const headingEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__heading"
+      );
+      expect(headingEl.textContent).toBe(longText);
     });
 
     it("应该处理长文本 content", async () => {
@@ -1226,22 +1288,24 @@ describe("EaPageHeader Component", () => {
       await waitForRender();
 
       expect(pageHeader.content).toBe(longText);
-      const contentSlot = pageHeader.shadowRoot.querySelector(
-        'slot[name="content"]'
+      const contentEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__content"
       );
-      expect(contentSlot.textContent).toBe(longText);
+      expect(contentEl.textContent).toBe(longText);
     });
 
-    it("应该处理特殊字符", async () => {
+    it("应该通过 html() 安全处理 XSS 内容", async () => {
       const pageHeader = document.createElement("ea-page-header");
       pageHeader.setAttribute("heading", "<script>alert('xss')</script>");
-      pageHeader.setAttribute("content", "&nbsp;特殊&nbsp;字符&nbsp;");
       container.appendChild(pageHeader);
 
       await waitForRender();
 
       expect(pageHeader.heading).toBe("<script>alert('xss')</script>");
-      expect(pageHeader.content).toBe("&nbsp;特殊&nbsp;字符&nbsp;");
+      const headingEl = pageHeader.shadowRoot.querySelector(
+        ".ea-page-header__heading"
+      );
+      expect(headingEl.querySelector("script")).toBeNull();
     });
 
     it("应该处理 Unicode 字符", async () => {
@@ -1412,7 +1476,7 @@ describe("EaPageHeader Component", () => {
   // ==================== 分隔符测试 ====================
 
   describe("Divider", () => {
-    it("divider 应该是 ea-icon 元素", async () => {
+    it("divider 应该是 span 元素", async () => {
       const pageHeader = document.createElement("ea-page-header");
       container.appendChild(pageHeader);
 
@@ -1421,7 +1485,7 @@ describe("EaPageHeader Component", () => {
       const divider = pageHeader.shadowRoot.querySelector(
         ".ea-page-header__divider"
       );
-      expect(divider.tagName.toLowerCase()).toBe("ea-icon");
+      expect(divider.tagName.toLowerCase()).toBe("span");
     });
 
     it("divider 内容应该是 |", async () => {
