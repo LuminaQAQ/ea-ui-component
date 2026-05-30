@@ -25,6 +25,7 @@ $name: ea-popper;
 
   @include element(reference) {
     position: relative;
+    width: fit-content;
   }
 
   @include element(original) {

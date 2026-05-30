@@ -1,9 +1,7 @@
 import { EaPopper } from "@common/ea-popper/index";
-import { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { createBEM } from "@utils/bem";
+import { CustomElement, attribute, query } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-popover" as const;
@@ -19,28 +17,50 @@ const TRIGGER_TYPES = [
 
 type TriggerType = (typeof TRIGGER_TYPES)[number];
 
+/**
+ * @summary 弹出框组件，基于 EaPopper 扩展，支持标题、内容和多种触发方式。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - Popover 内容插槽。
+ * @slot reference - 触发 Popover 显示的 HTML 元素插槽。
+ *
+ * @event ea-show - 开启 Popover 时触发。
+ * @event ea-shown - 开启 Popover 的动画结束时触发。
+ * @event ea-hide - 关闭 Popover 时触发。
+ * @event ea-hidden - 关闭 Popover 的动画结束时触发。
+ *
+ * @csspart container - Popover 外层容器。
+ * @csspart reference - 触发 Popover 显示的 HTML 元素的父容器。
+ * @csspart original - Popover 内容容器。
+ * @csspart title - Popover 标题容器。
+ * @csspart content - Popover 内容容器。
+ *
+ * @cssproperty --ea-popover-title-color - 标题颜色。
+ * @cssproperty --ea-popover-title-font-size - 标题字体大小。
+ * @cssproperty --ea-popover-content-color - 内容颜色。
+ * @cssproperty --ea-popover-content-font-size - 内容字体大小。
+ * @cssproperty --ea-popover-box-shadow - 阴影。
+ * @cssproperty --ea-popover-border-radius - 圆角。
+ * @cssproperty --ea-popover-z-index - 层级。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaPopover extends EaPopper {
-  // ==================== DOM 元素引用 ====================
-
-  @query(`.${bem.e("title")}`)
+  @query(bem.ce("title"))
   private _titleElement!: HTMLElement;
 
-  @query(`.${bem.e("content")}`)
+  @query(bem.ce("content"))
   private _contentElement!: HTMLElement;
-
-  @query("slot:not([name])")
-  private _defaultSlot!: HTMLSlotElement;
 
   private _triggerAbortController?: AbortController;
   private _contextmenuAbortController?: AbortController;
 
-  // ==================== 属性定义 ====================
-
   @attribute({
     type: Enum(TRIGGER_TYPES),
     default: "hover",
-    observer() {},
+    observer(this: EaPopover) {
+      this._initTriggerEvent();
+    },
   })
   trigger: TriggerType = "hover";
 
@@ -49,9 +69,9 @@ export class EaPopover extends EaPopper {
     default: "",
     observer(this: EaPopover, newVal: string) {
       if (this._titleElement) {
-        this._titleElement.innerText = newVal;
-        this._titleElement.style.display = newVal ? "" : "none";
+        this._titleElement.textContent = newVal;
       }
+      this.updateContainerClasslist();
     },
   })
   heading: string = "";
@@ -61,18 +81,31 @@ export class EaPopover extends EaPopper {
     default: "",
     observer(this: EaPopover, newVal: string) {
       if (this._contentElement) {
-        this._contentElement.innerText = newVal;
-        this._contentElement.style.display = newVal ? "" : "none";
+        this._contentElement.textContent = newVal;
       }
-      if (this._defaultSlot) {
-        (this._defaultSlot as HTMLElement).style.display = newVal ? "none" : "";
-      }
+      this.updateContainerClasslist();
     },
   })
   content: string = "";
 
-  // ==================== 方法 ====================
+  updateContainerClasslist(): string {
+    const originClasslist = super.updateContainerClasslist();
+    const className = `${originClasslist} ${bem(
+      {},
+      {
+        "has-heading": !!this.heading,
+        "has-content": !!this.content,
+      }
+    )}`;
 
+    if (this._container) {
+      this._container.className = className;
+    }
+
+    return className;
+  }
+
+  /** 初始化触发事件监听 */
   private _initTriggerEvent(): void {
     this._triggerAbortController?.abort();
     this._triggerAbortController = new AbortController();
@@ -88,6 +121,7 @@ export class EaPopover extends EaPopper {
     }
   }
 
+  /** 触发事件策略映射 */
   private _triggerEventStrategies: Record<TriggerType, () => void> = {
     hover: () => {
       this.addEventListener(
@@ -166,9 +200,9 @@ export class EaPopover extends EaPopper {
       <div class="${this.updateContainerClasslist()}" part="container" tabindex="-1">
         <div class="ea-popper__reference" part="reference" tabindex="-1">
           <div class="ea-popper__original" part="original" tabindex="0">
-            <div class="${bem.e("title")}" part="title" style="display: ${this.heading ? "" : "none"}">${this.heading}</div>
+            <div class="${bem.e("title")}" part="title"></div>
             <slot></slot>
-            <div class="${bem.e("content")}" part="content" style="display: ${this.content ? "" : "none"}">${this.content}</div>
+            <div class="${bem.e("content")}" part="content"></div>
           </div>
           <slot name="reference"></slot>
         </div>
@@ -176,11 +210,16 @@ export class EaPopover extends EaPopper {
     `;
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
     super.$mount();
     this._initTriggerEvent();
+
+    if (this.heading && this._titleElement) {
+      this._titleElement.textContent = this.heading;
+    }
+    if (this.content && this._contentElement) {
+      this._contentElement.textContent = this.content;
+    }
   }
 
   $beforeUnmount(): void {

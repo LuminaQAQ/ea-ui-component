@@ -24,15 +24,35 @@ $name: ea-popover;
 
 @include block($name) {
   @include element(title) {
+    display: none;
+
     font-size: var(--#{$name}-title-font-size);
     line-height: var(--#{$name}-title-font-size);
     color: var(--#{$name}-title-color);
-    margin-bottom: 12px;
+    margin-bottom: var(--spacing-lg);
   }
 
   @include element(content) {
+    display: none;
+
     font-size: var(--#{$name}-content-font-size);
     line-height: var(--#{$name}-content-font-size);
     color: var(--#{$name}-content-color);
+  }
+
+  @include state(has-heading) {
+    .#{$name}__title {
+      display: block;
+    }
+  }
+
+  @include state(has-content) {
+    .#{$name}__content {
+      display: block;
+    }
+
+    .ea-popper__original slot:not([name]) {
+      display: none;
+    }
   }
 }
