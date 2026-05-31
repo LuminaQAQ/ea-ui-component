@@ -6,10 +6,10 @@ $name: ea-transfer-panel;
   --#{$name}-border-color: var(--grey-300);
   --#{$name}-background-color: var(--white);
   --#{$name}-header-height: 40px;
-  --#{$name}-header-background: var(--grey-50);
+  --#{$name}-header-background: var(--grey-100);
   --#{$name}-item-height: 32px;
   --#{$name}-item-hover-background: var(--grey-100);
-  --#{$name}-item-selected-background: var(--blue-50);
+  --#{$name}-item-selected-background: var(--blue-100);
   --#{$name}-item-selected-color: var(--blue-600);
   --#{$name}-item-disabled-color: var(--grey-400);
   --#{$name}-filter-height: 40px;
@@ -22,7 +22,7 @@ $name: ea-transfer-panel;
   width: var(--#{$name}-width);
   height: var(--#{$name}-height);
   border: 1px solid var(--#{$name}-border-color);
-  border-radius: var(--border-radius-base);
+  border-radius: var(--border-radius);
   background-color: var(--#{$name}-background-color);
   display: flex;
   flex-direction: column;
@@ -49,7 +49,7 @@ $name: ea-transfer-panel;
 
   @include element(title) {
     flex: 1;
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-bold);
     color: var(--grey-900);
     font-size: var(--font-size-lg);
   }
@@ -79,10 +79,6 @@ $name: ea-transfer-panel;
     flex-shrink: 0;
   }
 
-  @include element(filter-input) {
-    width: 100%;
-  }
-
   @include element(list) {
     flex: 1;
     overflow-y: auto;
@@ -102,7 +98,6 @@ $name: ea-transfer-panel;
     flex-shrink: 0;
     display: none;
     align-items: center;
-
     height: var(--#{$name}-footer-height);
     background: var(--#{$name}-footer-background);
     margin: 0;
@@ -119,7 +114,7 @@ $name: ea-transfer-panel;
     align-items: center;
     gap: var(--spacing-sm);
     cursor: pointer;
-    transition: background-color var(--transition-duration-fast);
+    transition: background-color var(--transition-fast);
 
     &:hover {
       background-color: var(--#{$name}-item-hover-background);
@@ -159,7 +154,29 @@ $name: ea-transfer-panel;
     }
   }
 
-  &:not(:has(.ea-transfer-panel__item:not(.is-filtered-out))) {
+  @include state(disabled) {
+    .#{$name}__item {
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
+    .#{$name}__item-checkbox {
+      pointer-events: none;
+    }
+
+    .#{$name}__checkbox {
+      pointer-events: none;
+    }
+
+    .#{$name}__filter {
+      pointer-events: none;
+    }
+  }
+
+  &:not(:has(.#{$name}__item:not(.is-filtered-out))) {
     .#{$name}__empty {
       display: flex;
     }

@@ -27,7 +27,7 @@ ElementInternals.prototype.checkValidity =
 ElementInternals.prototype.setFormValue =
   ElementInternals.prototype.setFormValue || function () {};
 
-describe("EaTransfer Component", () => {
+describe("EaTransfer", () => {
   let container;
 
   beforeEach(() => {
@@ -110,11 +110,8 @@ describe("EaTransfer Component", () => {
     await waitForRender();
   };
 
-  /**
-   * 基本结构测试
-   */
   describe("Basic Structure", () => {
-    it("应该正确渲染 ea-transfer 组件", async () => {
+    it("should render ea-transfer component", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -123,7 +120,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.shadowRoot).toBeDefined();
     });
 
-    it("应该包含所有 CSS Parts", async () => {
+    it("should contain all CSS Parts", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -163,7 +160,7 @@ describe("EaTransfer Component", () => {
       expect(leftBtn).toBeTruthy();
     });
 
-    it("应该正确创建两个面板 (source / target)", async () => {
+    it("should create two panels (source / target)", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -179,55 +176,62 @@ describe("EaTransfer Component", () => {
       expect(targetPanel).toBeTruthy();
     });
 
-    it("初始状态下移动按钮应该禁用", async () => {
+    it("move buttons should be disabled initially", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      expect(transfer._moveToRightBtn.disabled).toBe(true);
-      expect(transfer._moveToLeftBtn.disabled).toBe(true);
+      const rightBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-right-btn"]'
+      );
+      const leftBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-left-btn"]'
+      );
+      expect(rightBtn.hasAttribute("disabled")).toBe(true);
+      expect(leftBtn.hasAttribute("disabled")).toBe(true);
     });
 
-    it("应该包含左右两个 ea-transfer-panel 元素", async () => {
+    it("should contain left and right ea-transfer-panel elements", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
-      const targetPanel = transfer._targetPanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
       expect(sourcePanel).toBeTruthy();
       expect(targetPanel).toBeTruthy();
     });
   });
 
-  /**
-   * HTML Attributes / Properties 默认值测试
-   */
   describe("Default Values", () => {
-    it("disabled 默认值应为 false", async () => {
+    it("disabled default should be false", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
       expect(transfer.disabled).toBe(false);
     });
 
-    it("filterable 默认值应为 false", async () => {
+    it("filterable default should be false", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
       expect(transfer.filterable).toBe(false);
     });
 
-    it("filterPlaceholder 默认值应为 '请输入搜索内容'", async () => {
+    it("filterPlaceholder default should be '请输入搜索内容'", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
       expect(transfer.filterPlaceholder).toBe("请输入搜索内容");
     });
 
-    it("data 默认值应为空数组", async () => {
+    it("data default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -235,7 +239,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.data.length).toBe(0);
     });
 
-    it("value 默认值应为空数组", async () => {
+    it("value default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -243,7 +247,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.value.length).toBe(0);
     });
 
-    it("dataProps 应有正确的默认映射 {key, label, disabled}", async () => {
+    it("dataProps should have correct default mapping", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -254,7 +258,7 @@ describe("EaTransfer Component", () => {
       });
     });
 
-    it("titles 默认值应为空数组", async () => {
+    it("titles default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -262,7 +266,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.titles.length).toBe(0);
     });
 
-    it("buttonTexts 默认值应为空数组", async () => {
+    it("buttonTexts default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -270,14 +274,14 @@ describe("EaTransfer Component", () => {
       expect(transfer.buttonTexts.length).toBe(0);
     });
 
-    it("filterMethod 默认值应为 null", async () => {
+    it("filterMethod default should be null", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
       expect(transfer.filterMethod).toBeNull();
     });
 
-    it("leftDefaultChecked 默认值应为空数组", async () => {
+    it("leftDefaultChecked default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -285,7 +289,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.leftDefaultChecked.length).toBe(0);
     });
 
-    it("rightDefaultChecked 默认值应为空数组", async () => {
+    it("rightDefaultChecked default should be empty array", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -294,11 +298,8 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 属性设置测试
-   */
   describe("Attribute/Property Setting", () => {
-    it("设置 disabled=true 应添加 is-disabled 样式类", async () => {
+    it("setting disabled=true should add is-disabled state class", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.disabled = true;
       container.appendChild(transfer);
@@ -309,7 +310,7 @@ describe("EaTransfer Component", () => {
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
     });
 
-    it("设置 filterable=true 应影响两个面板", async () => {
+    it("setting filterable=true should affect both panels", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.filterable = true;
@@ -317,11 +318,17 @@ describe("EaTransfer Component", () => {
       await waitForRender();
 
       expect(transfer.filterable).toBe(true);
-      expect(transfer._sourcePanel.filterable).toBe(true);
-      expect(transfer._targetPanel.filterable).toBe(true);
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      expect(sourcePanel.filterable).toBe(true);
+      expect(targetPanel.filterable).toBe(true);
     });
 
-    it("应支持设置自定义 filterPlaceholder", async () => {
+    it("should support custom filterPlaceholder", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       transfer.filterPlaceholder = "Search items...";
@@ -331,7 +338,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.filterPlaceholder).toBe("Search items...");
     });
 
-    it("设置 data 应渲染到 source panel 中", async () => {
+    it("setting data should render to source panel", async () => {
       const transfer = document.createElement("ea-transfer");
       const data = generateTestData();
       transfer.data = data;
@@ -339,10 +346,13 @@ describe("EaTransfer Component", () => {
       await waitForRender();
 
       expect(transfer.data.length).toBe(10);
-      expect(transfer._sourcePanel.data.length).toBe(10);
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(sourcePanel.data.length).toBe(10);
     });
 
-    it("设置 value 应将相应数据渲染到 target panel 中", async () => {
+    it("setting value should render corresponding data to target panel", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.value = [1, 2, 3];
@@ -350,11 +360,17 @@ describe("EaTransfer Component", () => {
       await waitForRender();
 
       expect(transfer.value).toEqual([1, 2, 3]);
-      expect(transfer._targetPanel.data.length).toBe(3);
-      expect(transfer._sourcePanel.data.length).toBe(7);
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(targetPanel.data.length).toBe(3);
+      expect(sourcePanel.data.length).toBe(7);
     });
 
-    it("应支持自定义 dataProps 字段映射", async () => {
+    it("should support custom dataProps field mapping", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.dataProps = {
         key: "id",
@@ -371,7 +387,7 @@ describe("EaTransfer Component", () => {
       });
     });
 
-    it("设置 titles 应更新面板标题", async () => {
+    it("setting titles should update panel titles", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -380,15 +396,17 @@ describe("EaTransfer Component", () => {
       await waitForRender();
 
       expect(transfer.titles).toEqual(["Source List", "Target List"]);
-      expect(transfer._sourcePanel.getAttribute("data-title")).toBe(
-        "Source List"
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
       );
-      expect(transfer._targetPanel.getAttribute("data-title")).toBe(
-        "Target List"
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
       );
+      expect(sourcePanel.getAttribute("data-title")).toBe("Source List");
+      expect(targetPanel.getAttribute("data-title")).toBe("Target List");
     });
 
-    it("设置 buttonTexts 应更新按钮文本", async () => {
+    it("setting buttonTexts should update button text", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.buttonTexts = ["To right", "To left"];
       container.appendChild(transfer);
@@ -397,7 +415,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.buttonTexts).toEqual(["To right", "To left"]);
     });
 
-    it("应支持设置 leftDefaultChecked 和 rightDefaultChecked", async () => {
+    it("should support setting leftDefaultChecked and rightDefaultChecked", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.leftDefaultChecked = [1, 2];
       transfer.rightDefaultChecked = [3, 4];
@@ -408,7 +426,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.rightDefaultChecked).toEqual([3, 4]);
     });
 
-    it("应支持设置自定义 filterMethod", async () => {
+    it("should support setting custom filterMethod", async () => {
       const transfer = document.createElement("ea-transfer");
       const customFilter = (query, item) =>
         item.label.toLowerCase().includes(query.toLowerCase());
@@ -420,11 +438,8 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * Slots 插槽测试
-   */
   describe("Slots", () => {
-    it("应支持 left-empty 插槽", async () => {
+    it("should support left-empty slot", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.innerHTML = '<div slot="left-empty">No data</div>';
       container.appendChild(transfer);
@@ -434,7 +449,7 @@ describe("EaTransfer Component", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("应支持 right-empty 插槽", async () => {
+    it("should support right-empty slot", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.innerHTML = '<div slot="right-empty">No data</div>';
       container.appendChild(transfer);
@@ -446,7 +461,7 @@ describe("EaTransfer Component", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("应支持 left-footer 插槽", async () => {
+    it("should support left-footer slot", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.innerHTML = '<div slot="left-footer">Footer</div>';
       container.appendChild(transfer);
@@ -458,7 +473,7 @@ describe("EaTransfer Component", () => {
       expect(slot).toBeTruthy();
     });
 
-    it("应支持 right-footer 插槽", async () => {
+    it("should support right-footer slot", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.innerHTML = '<div slot="right-footer">Footer</div>';
       container.appendChild(transfer);
@@ -471,11 +486,8 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 事件测试
-   */
   describe("Events", () => {
-    it("设置 value 属性应触发 change 事件", async () => {
+    it("setting value property should trigger change event", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
@@ -490,7 +502,7 @@ describe("EaTransfer Component", () => {
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    it("change 事件的 detail 应包含新 value", async () => {
+    it("change event detail should contain new value", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
@@ -506,7 +518,7 @@ describe("EaTransfer Component", () => {
       expect(event.detail.value).toEqual([1, 2]);
     });
 
-    it("应支持触发 ea-left-check-change 事件监听", async () => {
+    it("should support ea-left-check-change event", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
@@ -526,7 +538,7 @@ describe("EaTransfer Component", () => {
       expect(handler).toHaveBeenCalled();
     });
 
-    it("应支持触发 ea-right-check-change 事件监听", async () => {
+    it("should support ea-right-check-change event", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
@@ -547,11 +559,8 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 数据分离 & 移动功能测试
-   */
   describe("Data Separation & Movement", () => {
-    it("根据 value 正确分离 source 和 target 面板数据", async () => {
+    it("should correctly separate source and target panel data based on value", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.value = [1, 2, 3];
@@ -559,49 +568,68 @@ describe("EaTransfer Component", () => {
       await waitForRender();
 
       expect(transfer.value).toEqual([1, 2, 3]);
-      expect(transfer._targetPanel.data.length).toBe(3);
-      expect(transfer._sourcePanel.data.length).toBe(7);
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(targetPanel.data.length).toBe(3);
+      expect(sourcePanel.data.length).toBe(7);
     });
 
-    it("选中源面板项并点击右移按钮应移动到 target", async () => {
+    it("selecting source item and clicking move-right should move to target", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       const initialSourceCount = sourcePanel.data.length;
 
       await selectPanelItem(sourcePanel, 0);
 
-      transfer._moveToRightBtn.click();
+      const rightBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-right-btn"]'
+      );
+      rightBtn.click();
       await waitForRender();
 
       expect(transfer.value.length).toBe(1);
       expect(sourcePanel.data.length).toBe(initialSourceCount - 1);
-      expect(transfer._targetPanel.data.length).toBe(1);
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      expect(targetPanel.data.length).toBe(1);
     });
 
-    it("选中目标面板项并点击左移按钮应移回 source", async () => {
+    it("selecting target item and clicking move-left should move back to source", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.value = [1, 2, 3];
       container.appendChild(transfer);
       await waitForRender();
 
-      const targetPanel = transfer._targetPanel;
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
       const initialTargetCount = targetPanel.data.length;
 
       await selectPanelItem(targetPanel, 0);
 
-      transfer._moveToLeftBtn.click();
+      const leftBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-left-btn"]'
+      );
+      leftBtn.click();
       await waitForRender();
 
       expect(transfer.value.length).toBe(2);
       expect(targetPanel.data.length).toBe(initialTargetCount - 1);
     });
 
-    it("移动操作应触发 change 事件", async () => {
+    it("move operation should trigger change event", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
@@ -610,65 +638,86 @@ describe("EaTransfer Component", () => {
       const changeHandler = vi.fn();
       transfer.addEventListener("change", changeHandler);
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       await selectPanelItem(sourcePanel, 0);
 
-      transfer._moveToRightBtn.click();
+      const rightBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-right-btn"]'
+      );
+      rightBtn.click();
       await waitForRender();
 
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    it("value 为空数组时所有数据应在 source 面板", async () => {
+    it("empty value should put all data in source panel", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.value = [];
       container.appendChild(transfer);
       await waitForRender();
 
-      expect(transfer._sourcePanel.data.length).toBe(10);
-      expect(transfer._targetPanel.data.length).toBe(0);
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      expect(sourcePanel.data.length).toBe(10);
+      expect(targetPanel.data.length).toBe(0);
     });
   });
 
-  /**
-   * 选中项交互测试
-   */
   describe("Item Selection", () => {
-    it("选中项后移动按钮应启用", async () => {
+    it("move button should be enabled after selecting item", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       await selectPanelItem(sourcePanel, 0);
 
-      expect(transfer._moveToRightBtn.disabled).toBe(false);
+      const rightBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-right-btn"]'
+      );
+      expect(rightBtn.hasAttribute("disabled")).toBe(false);
     });
 
-    it("清空选中后移动按钮应禁用", async () => {
+    it("move button should be disabled after clearing selection", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       await selectPanelItem(sourcePanel, 0);
-      expect(transfer._moveToRightBtn.disabled).toBe(false);
+
+      const rightBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-right-btn"]'
+      );
+      expect(rightBtn.hasAttribute("disabled")).toBe(false);
 
       await deselectPanelItem(sourcePanel, 0);
 
-      expect(transfer._moveToRightBtn.disabled).toBe(true);
+      expect(rightBtn.hasAttribute("disabled")).toBe(true);
     });
 
-    it("面板应该显示正确的选中计数 (selected/total)", async () => {
+    it("panel should display correct selection count (selected/total)", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       const countEl = sourcePanel.shadowRoot.querySelector(
         ".ea-transfer-panel__count"
       );
@@ -676,13 +725,15 @@ describe("EaTransfer Component", () => {
       expect(countEl.textContent).toMatch(/^\d+\/\d+$/);
     });
 
-    it("选中项应更新计数", async () => {
+    it("selecting item should update count", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = [{ key: 1, label: "Option 1", disabled: false }];
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       await selectPanelItem(sourcePanel, 0);
 
       const countEl = sourcePanel.shadowRoot.querySelector(
@@ -692,45 +743,48 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 全选功能测试
-   */
   describe("Select All", () => {
-    it("点击全选应选中所有未禁用项", async () => {
+    it("clicking select all should select all non-disabled items", async () => {
       const transfer = document.createElement("ea-transfer");
       const data = generateTestData().filter(item => !item.disabled);
       transfer.data = data;
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       await selectAllPanelItems(sourcePanel, true);
 
       expect(sourcePanel._states.selectedKeys.size).toBe(data.length);
     });
 
-    it("取消全选应取消所有选中", async () => {
+    it("deselecting all should clear all selections", async () => {
       const transfer = document.createElement("ea-transfer");
       const data = generateTestData().filter(item => !item.disabled);
       transfer.data = data;
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       await selectAllPanelItems(sourcePanel, true);
       await selectAllPanelItems(sourcePanel, false);
 
       expect(sourcePanel._states.selectedKeys.size).toBe(0);
     });
 
-    it("部分选定时全选 checkbox 应显示 indeterminate 状态", async () => {
+    it("partial selection should show indeterminate state on select-all checkbox", async () => {
       const transfer = document.createElement("ea-transfer");
       const data = generateTestData().filter(item => !item.disabled);
       transfer.data = data;
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       await selectPanelItem(sourcePanel, 0);
 
       expect(sourcePanel._checkbox.indeterminate).toBe(true);
@@ -738,18 +792,17 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 搜索过滤功能测试
-   */
   describe("Search Filtering", () => {
-    it("filterable=true 时面板应显示搜索框", async () => {
+    it("filterable=true should show search input in panels", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       expect(sourcePanel.filterable).toBe(true);
 
       const filterWrapper = sourcePanel.shadowRoot.querySelector(
@@ -758,14 +811,16 @@ describe("EaTransfer Component", () => {
       expect(filterWrapper).toBeTruthy();
     });
 
-    it("输入搜索关键词应过滤不匹配的项", async () => {
+    it("entering search keyword should filter non-matching items", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       const filterInput = sourcePanel._filterInput;
 
       filterInput.value = "Option 1";
@@ -779,14 +834,16 @@ describe("EaTransfer Component", () => {
       expect(visibleItems.length).toBeLessThan(10);
     });
 
-    it("清空搜索关键词应显示全部项", async () => {
+    it("clearing search keyword should show all items", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       const filterInput = sourcePanel._filterInput;
 
       filterInput.value = "Option";
@@ -802,14 +859,16 @@ describe("EaTransfer Component", () => {
       expect(filteredOut.length).toBe(0);
     });
 
-    it("clearQuery('left') 应清空左侧搜索并重置过滤", async () => {
+    it("clearQuery('left') should clear left panel search and reset filter", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       const filterInput = sourcePanel._filterInput;
 
       filterInput.value = "xyz";
@@ -822,7 +881,7 @@ describe("EaTransfer Component", () => {
       expect(sourcePanel._filterInput.value).toBe("");
     });
 
-    it("搜索过滤时全选应仅影响可见项", async () => {
+    it("select all during search should only affect visible items", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       const data = [
@@ -833,7 +892,9 @@ describe("EaTransfer Component", () => {
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       const filterInput = sourcePanel._filterInput;
 
       filterInput.value = "Apple";
@@ -846,11 +907,8 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 公共方法测试
-   */
   describe("Public Methods", () => {
-    it("checkValidity 方法应存在并可调用", async () => {
+    it("checkValidity method should exist and be callable", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -858,7 +916,7 @@ describe("EaTransfer Component", () => {
       expect(typeof transfer.checkValidity).toBe("function");
     });
 
-    it("reportValidity 方法应存在并可调用", async () => {
+    it("reportValidity method should exist and be callable", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -866,7 +924,7 @@ describe("EaTransfer Component", () => {
       expect(typeof transfer.reportValidity).toBe("function");
     });
 
-    it("clearQuery 方法应存在", async () => {
+    it("clearQuery method should exist", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       transfer.data = generateTestData();
@@ -876,15 +934,19 @@ describe("EaTransfer Component", () => {
       expect(typeof transfer.clearQuery).toBe("function");
     });
 
-    it("clearQuery('left') 和 clearQuery('right') 应分别清空对应面板", async () => {
+    it("clearQuery('left') and clearQuery('right') should clear respective panels", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.filterable = true;
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
-      const targetPanel = transfer._targetPanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
 
       sourcePanel._filterInput.value = "test1";
       targetPanel._filterInput.value = "test2";
@@ -899,11 +961,8 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 表单验证测试
-   */
   describe("Form Validation", () => {
-    it("required=true 且 value 为空时应返回 invalid", async () => {
+    it("required=true with empty value should return invalid", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.required = true;
       transfer.data = generateTestData();
@@ -914,7 +973,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.checkValidity()).toBe(false);
     });
 
-    it("required=true 且 value 有值时应返回 valid", async () => {
+    it("required=true with value should return valid", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.required = true;
       transfer.data = generateTestData();
@@ -925,7 +984,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.checkValidity()).toBe(true);
     });
 
-    it("required=false 时空值也应 valid", async () => {
+    it("required=false with empty value should be valid", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.value = [];
@@ -936,11 +995,8 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 动态修改测试
-   */
   describe("Dynamic Modification", () => {
-    it("动态修改 data 应更新 source 面板", async () => {
+    it("dynamically modifying data should update source panel", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
@@ -952,26 +1008,32 @@ describe("EaTransfer Component", () => {
 
       expect(transfer.data.length).toBe(1);
       expect(transfer.data[0].key).toBe(100);
-      expect(transfer._sourcePanel.data.length).toBe(1);
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(sourcePanel.data.length).toBe(1);
     });
 
-    it("动态修改 value 应移动数据到 target 面板", async () => {
+    it("dynamically modifying value should move data to target panel", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.value = [1];
       container.appendChild(transfer);
       await waitForRender();
 
-      expect(transfer._targetPanel.data.length).toBe(1);
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      expect(targetPanel.data.length).toBe(1);
 
       transfer.value = [2, 3];
       await waitForRender();
 
       expect(transfer.value).toEqual([2, 3]);
-      expect(transfer._targetPanel.data.length).toBe(2);
+      expect(targetPanel.data.length).toBe(2);
     });
 
-    it("动态修改 titles 应更新面板标题", async () => {
+    it("dynamically modifying titles should update panel titles", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -979,18 +1041,24 @@ describe("EaTransfer Component", () => {
       transfer.titles = ["Old Src", "Old Tgt"];
       await waitForRender();
 
-      expect(transfer._sourcePanel.getAttribute("data-title")).toBe("Old Src");
-      expect(transfer._targetPanel.getAttribute("data-title")).toBe("Old Tgt");
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      expect(sourcePanel.getAttribute("data-title")).toBe("Old Src");
+      expect(targetPanel.getAttribute("data-title")).toBe("Old Tgt");
 
       transfer.titles = ["New Src", "New Tgt"];
       await waitForRender();
 
       expect(transfer.titles).toEqual(["New Src", "New Tgt"]);
-      expect(transfer._sourcePanel.getAttribute("data-title")).toBe("New Src");
-      expect(transfer._targetPanel.getAttribute("data-title")).toBe("New Tgt");
+      expect(sourcePanel.getAttribute("data-title")).toBe("New Src");
+      expect(targetPanel.getAttribute("data-title")).toBe("New Tgt");
     });
 
-    it("动态修改 disabled 应更新样式类", async () => {
+    it("dynamically modifying disabled should update state class", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -1011,7 +1079,7 @@ describe("EaTransfer Component", () => {
       expect(containerEl.classList.contains("is-disabled")).toBe(false);
     });
 
-    it("动态切换 filterable 应添加/移除搜索框", async () => {
+    it("dynamically toggling filterable should add/remove search input", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
@@ -1022,10 +1090,13 @@ describe("EaTransfer Component", () => {
       await waitForRender();
 
       expect(transfer.filterable).toBe(true);
-      expect(transfer._sourcePanel.filterable).toBe(true);
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(sourcePanel.filterable).toBe(true);
     });
 
-    it("动态修改 buttonTexts 应更新按钮文本", async () => {
+    it("dynamically modifying buttonTexts should update button text", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();
@@ -1037,11 +1108,8 @@ describe("EaTransfer Component", () => {
     });
   });
 
-  /**
-   * 边界条件测试
-   */
   describe("Edge Cases", () => {
-    it("空 data 应正常渲染", async () => {
+    it("empty data should render normally", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = [];
       container.appendChild(transfer);
@@ -1051,7 +1119,7 @@ describe("EaTransfer Component", () => {
       expect(transfer.shadowRoot).toBeDefined();
     });
 
-    it("空 value 应正常渲染", async () => {
+    it("empty value should render normally", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.value = [];
@@ -1059,10 +1127,13 @@ describe("EaTransfer Component", () => {
       await waitForRender();
 
       expect(transfer.value).toEqual([]);
-      expect(transfer._sourcePanel.data.length).toBe(10);
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(sourcePanel.data.length).toBe(10);
     });
 
-    it("多个 transfer 实例应独立工作", async () => {
+    it("multiple transfer instances should work independently", async () => {
       const t1 = document.createElement("ea-transfer");
       t1.data = generateTestData();
       t1.value = [1, 2];
@@ -1079,7 +1150,7 @@ describe("EaTransfer Component", () => {
       expect(t2.value).toEqual([3, 4]);
     });
 
-    it("包含禁用项的数据应正常渲染", async () => {
+    it("data with disabled items should render normally", async () => {
       const transfer = document.createElement("ea-transfer");
       const data = [
         { key: 1, label: "A", disabled: false },
@@ -1090,13 +1161,15 @@ describe("EaTransfer Component", () => {
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
       const disabledItems =
         sourcePanel.shadowRoot.querySelectorAll(".is-disabled");
       expect(disabledItems.length).toBe(1);
     });
 
-    it("全部数据禁用时全选 checkbox 应保持可用", async () => {
+    it("all disabled data should keep select-all checkbox enabled", async () => {
       const transfer = document.createElement("ea-transfer");
       const data = [
         { key: 1, label: "X", disabled: true },
@@ -1106,11 +1179,14 @@ describe("EaTransfer Component", () => {
       container.appendChild(transfer);
       await waitForRender();
 
-      expect(transfer._sourcePanel._checkbox.disabled).toBe(false);
-      expect(transfer._sourcePanel.data.length).toBe(2);
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(sourcePanel._checkbox.disabled).toBe(false);
+      expect(sourcePanel.data.length).toBe(2);
     });
 
-    it("自定义 dataProps 可与自定义 data 配合使用", async () => {
+    it("custom dataProps should work with custom data", async () => {
       const transfer = document.createElement("ea-transfer");
       const customData = [
         { id: "a", name: "Alpha", blocked: false },
@@ -1123,21 +1199,23 @@ describe("EaTransfer Component", () => {
       await waitForRender();
 
       expect(transfer.value).toEqual(["a"]);
-      expect(transfer._targetPanel.data.length).toBe(1);
-      expect(transfer._sourcePanel.data.length).toBe(1);
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(targetPanel.data.length).toBe(1);
+      expect(sourcePanel.data.length).toBe(1);
 
-      const sourcePanel = transfer._sourcePanel;
       const disabledItems =
         sourcePanel.shadowRoot.querySelectorAll(".is-disabled");
       expect(disabledItems.length).toBe(1);
     });
   });
 
-  /**
-   * 组合属性测试
-   */
   describe("Combined Tests", () => {
-    it("应支持同时设置多个属性", async () => {
+    it("should support setting multiple properties simultaneously", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       transfer.value = [1, 2];
@@ -1158,50 +1236,197 @@ describe("EaTransfer Component", () => {
       expect(transfer.rightDefaultChecked).toEqual([2]);
     });
 
-    it("完整的穿梭流程：选中 → 右移 → 左移", async () => {
+    it("full transfer flow: select → move right → move left", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
-      const sourcePanel = transfer._sourcePanel;
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
 
       await selectPanelItem(sourcePanel, 0);
       await selectPanelItem(sourcePanel, 1);
 
-      transfer._moveToRightBtn.click();
+      const rightBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-right-btn"]'
+      );
+      rightBtn.click();
       await waitForRender();
 
       expect(transfer.value.length).toBe(2);
 
-      const targetPanel = transfer._targetPanel;
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
 
       await selectPanelItem(targetPanel, 1);
 
-      transfer._moveToLeftBtn.click();
+      const leftBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-left-btn"]'
+      );
+      leftBtn.click();
       await waitForRender();
 
       expect(transfer.value.length).toBe(1);
     });
   });
 
-  /**
-   * 生命周期测试
-   */
+  describe("Disabled State", () => {
+    it("should propagate disabled to both panels", async () => {
+      const transfer = document.createElement("ea-transfer");
+      transfer.data = generateTestData();
+      transfer.disabled = true;
+      container.appendChild(transfer);
+      await waitForRender();
+
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      expect(sourcePanel.disabled).toBe(true);
+      expect(targetPanel.disabled).toBe(true);
+    });
+
+    it("should disable panel checkbox when disabled", async () => {
+      const transfer = document.createElement("ea-transfer");
+      transfer.data = generateTestData();
+      transfer.disabled = true;
+      container.appendChild(transfer);
+      await waitForRender();
+
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(sourcePanel._checkbox.disabled).toBe(true);
+    });
+
+    it("should not move items when disabled", async () => {
+      const transfer = document.createElement("ea-transfer");
+      transfer.data = generateTestData();
+      transfer.disabled = true;
+      container.appendChild(transfer);
+      await waitForRender();
+
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      const initialSourceCount = sourcePanel.data.length;
+
+      await selectPanelItem(sourcePanel, 0);
+
+      const rightBtn = transfer.shadowRoot.querySelector(
+        '[part~="move-to-right-btn"]'
+      );
+      rightBtn.click();
+      await waitForRender();
+
+      expect(transfer.value.length).toBe(0);
+      expect(sourcePanel.data.length).toBe(initialSourceCount);
+    });
+
+    it("should not handle item selection when disabled", async () => {
+      const transfer = document.createElement("ea-transfer");
+      transfer.data = generateTestData();
+      transfer.disabled = true;
+      container.appendChild(transfer);
+      await waitForRender();
+
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+
+      const items = sourcePanel.shadowRoot.querySelectorAll(
+        ".ea-transfer-panel__item:not(.is-disabled)"
+      );
+      const item = items[0];
+      if (!item) return;
+
+      const checkbox = getPanelCheckbox(item);
+      if (checkbox) {
+        setCheckboxChecked(checkbox, true);
+        checkbox.dispatchEvent(
+          new Event("change", { bubbles: true, composed: true })
+        );
+      }
+      await waitForRender();
+
+      expect(sourcePanel._states.selectedKeys.size).toBe(0);
+    });
+
+    it("should not handle select-all when disabled", async () => {
+      const transfer = document.createElement("ea-transfer");
+      const data = generateTestData().filter(item => !item.disabled);
+      transfer.data = data;
+      transfer.disabled = true;
+      container.appendChild(transfer);
+      await waitForRender();
+
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+
+      const selectAllCheckbox = sourcePanel.shadowRoot.querySelector(
+        ".ea-transfer-panel__checkbox"
+      );
+      if (selectAllCheckbox) {
+        setCheckboxChecked(selectAllCheckbox, true);
+        selectAllCheckbox.dispatchEvent(
+          new Event("change", { bubbles: true, composed: true })
+        );
+      }
+      await waitForRender();
+
+      expect(sourcePanel._states.selectedKeys.size).toBe(0);
+    });
+
+    it("should dynamically propagate disabled when toggled", async () => {
+      const transfer = document.createElement("ea-transfer");
+      transfer.data = generateTestData();
+      container.appendChild(transfer);
+      await waitForRender();
+
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      expect(sourcePanel.disabled).toBe(false);
+
+      transfer.disabled = true;
+      await waitForRender();
+
+      expect(sourcePanel.disabled).toBe(true);
+      expect(sourcePanel._checkbox.disabled).toBe(true);
+
+      transfer.disabled = false;
+      await waitForRender();
+
+      expect(sourcePanel.disabled).toBe(false);
+    });
+  });
+
   describe("Lifecycle", () => {
-    it("connectedCallback 后应正确初始化", async () => {
+    it("connectedCallback should initialize correctly", async () => {
       const transfer = document.createElement("ea-transfer");
       transfer.data = generateTestData();
       container.appendChild(transfer);
       await waitForRender();
 
       expect(transfer.shadowRoot).toBeDefined();
-      expect(transfer._sourcePanel).toBeTruthy();
-      expect(transfer._targetPanel).toBeTruthy();
+      const sourcePanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="source"]'
+      );
+      const targetPanel = transfer.shadowRoot.querySelector(
+        'ea-transfer-panel[type="target"]'
+      );
+      expect(sourcePanel).toBeTruthy();
+      expect(targetPanel).toBeTruthy();
       expect(transfer.data.length).toBe(10);
     });
 
-    it("remove() 后应正常从 DOM 移除", async () => {
+    it("remove() should remove from DOM normally", async () => {
       const transfer = document.createElement("ea-transfer");
       container.appendChild(transfer);
       await waitForRender();

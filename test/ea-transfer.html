@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>transfer</title>
+    <title>ea-transfer</title>
     <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
@@ -14,11 +14,12 @@
   </head>
 
   <body>
-    <script type="module" src="../src/components/ea-transfer/index"></script>
+    <script type="module" src="../src/components/ea-transfer/index.ts"></script>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
 
     <!--  基础用法 -->
     <!-- #region -->
-    <h1>基础用法</h1>
+    <h2>基础用法</h2>
 
     <div class="demo">
       <ea-transfer id="basicTransfer"></ea-transfer>
@@ -27,9 +28,8 @@
     <script type="module">
       const basicExample = {
         transfer: document.querySelector("#basicTransfer"),
-        setDataBtn: document.querySelector("#setDataBtn"),
 
-        generateData: () => {
+        generateData() {
           const data = [];
           for (let i = 1; i <= 15; i++) {
             data.push({
@@ -42,19 +42,18 @@
         },
 
         init() {
-          const data = this.generateData();
-          this.transfer.data = data;
+          this.transfer.data = this.generateData();
         },
       };
       basicExample.init();
     </script>
 
     <hr />
-    <!-- #endregion  -->
+    <!-- #endregion -->
 
     <!--  可搜索过滤 -->
     <!-- #region -->
-    <h1>可搜索过滤</h1>
+    <h2>可搜索过滤</h2>
 
     <div class="demo">
       <ea-transfer id="filterableTransfer" filterable></ea-transfer>
@@ -64,7 +63,7 @@
       const filterableExample = {
         transfer: document.querySelector("#filterableTransfer"),
 
-        generateData: () => {
+        generateData() {
           const data = [];
           for (let i = 1; i <= 15; i++) {
             data.push({
@@ -77,27 +76,63 @@
         },
 
         init() {
-          const data = this.generateData();
-          this.transfer.data = data;
+          this.transfer.data = this.generateData();
         },
       };
       filterableExample.init();
     </script>
 
     <hr />
-    <!-- #endregion  -->
+    <!-- #endregion -->
 
-    <!--  自定义用法 -->
+    <!--  自定义标题和按钮文本 -->
     <!-- #region -->
-    <h1>自定义用法</h1>
+    <h2>自定义标题和按钮文本</h2>
+
+    <div class="demo">
+      <ea-transfer id="customTextTransfer" filterable></ea-transfer>
+    </div>
+
+    <script type="module">
+      const customTextExample = {
+        transfer: document.querySelector("#customTextTransfer"),
+
+        generateData() {
+          const data = [];
+          for (let i = 1; i <= 15; i++) {
+            data.push({
+              key: i,
+              label: `Option ${i}`,
+              disabled: i % 4 === 0,
+            });
+          }
+          return data;
+        },
+
+        init() {
+          this.transfer.data = this.generateData();
+          this.transfer.titles = ["Source", "Target"];
+          this.transfer.buttonTexts = ["To right", "To left"];
+          this.transfer.value = [1, 2, 3];
+        },
+      };
+      customTextExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion -->
+
+    <!--  自定义底部插槽 -->
+    <!-- #region -->
+    <h2>自定义底部插槽</h2>
 
     <div class="demo">
       <p style="text-align: center; margin: 0 0 20px">
-        Customize data items using render-content
+        Customize footer content using slots
       </p>
       <div style="text-align: center">
         <ea-transfer
-          id="customTransfer"
+          id="footerTransfer"
           style="text-align: left; display: inline-block"
           filterable
         >
@@ -116,10 +151,10 @@
     </div>
 
     <script type="module">
-      const customExample = {
-        transfer: document.querySelector("#customTransfer"),
+      const footerExample = {
+        transfer: document.querySelector("#footerTransfer"),
 
-        generateData: () => {
+        generateData() {
           const data = [];
           for (let i = 1; i <= 15; i++) {
             data.push({
@@ -132,37 +167,21 @@
         },
 
         init() {
-          const data = this.generateData();
-
+          this.transfer.data = this.generateData();
           this.transfer.titles = ["Source", "Target"];
           this.transfer.buttonTexts = ["To right", "To left"];
-
-          this.transfer.data = data;
-
           this.transfer.value = [1, 2, 3];
-
-          this.transfer.addEventListener("change", event => {
-            console.log("Selection changed:", event.detail.value);
-          });
-
-          this.transfer.addEventListener("ea-left-check-change", event => {
-            console.log("Left check changed:", event.detail);
-          });
-
-          this.transfer.addEventListener("ea-right-check-change", event => {
-            console.log("Right check changed:", event.detail);
-          });
         },
       };
-      customExample.init();
+      footerExample.init();
     </script>
 
     <hr />
-    <!-- #endregion  -->
+    <!-- #endregion -->
 
     <!--  自定义空内容 -->
     <!-- #region -->
-    <h1>自定义空内容</h1>
+    <h2>自定义空内容</h2>
 
     <div class="demo">
       <p style="text-align: center; margin: 0 0 20px">
@@ -190,7 +209,200 @@
       const emptyExample = {
         transfer: document.querySelector("#emptyTransfer"),
 
-        generateData: () => {
+        generateData() {
+          const data = [];
+          for (let i = 1; i <= 15; i++) {
+            data.push({
+              key: i,
+              label: `Option ${i}`,
+              disabled: i % 4 === 0,
+            });
+          }
+          return data;
+        },
+
+        init() {
+          this.transfer.data = this.generateData();
+        },
+      };
+      emptyExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion -->
+
+    <!--  禁用状态 -->
+    <!-- #region -->
+    <h2>禁用状态</h2>
+
+    <div class="demo">
+      <ea-transfer id="disabledTransfer" disabled></ea-transfer>
+    </div>
+
+    <script type="module">
+      const disabledExample = {
+        transfer: document.querySelector("#disabledTransfer"),
+
+        generateData() {
+          const data = [];
+          for (let i = 1; i <= 15; i++) {
+            data.push({
+              key: i,
+              label: `Option ${i}`,
+              disabled: i % 4 === 0,
+            });
+          }
+          return data;
+        },
+
+        init() {
+          this.transfer.data = this.generateData();
+          this.transfer.value = [1, 2, 3];
+        },
+      };
+      disabledExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion -->
+
+    <!--  自定义数据字段映射 -->
+    <!-- #region -->
+    <h2>自定义数据字段映射</h2>
+
+    <div class="demo">
+      <ea-transfer id="dataPropsTransfer"></ea-transfer>
+    </div>
+
+    <script type="module">
+      const dataPropsExample = {
+        transfer: document.querySelector("#dataPropsTransfer"),
+
+        generateData() {
+          const data = [];
+          for (let i = 1; i <= 10; i++) {
+            data.push({
+              id: i,
+              name: `Item ${i}`,
+              isBlocked: i % 3 === 0,
+            });
+          }
+          return data;
+        },
+
+        init() {
+          this.transfer.data = this.generateData();
+          this.transfer.dataProps = {
+            key: "id",
+            label: "name",
+            disabled: "isBlocked",
+          };
+          this.transfer.value = [1, 2];
+        },
+      };
+      dataPropsExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion -->
+
+    <!--  事件监听 -->
+    <!-- #region -->
+    <h2>事件监听</h2>
+
+    <div class="demo">
+      <ea-transfer id="eventTransfer" filterable></ea-transfer>
+      <div
+        id="eventLog"
+        style="
+          margin-top: 16px;
+          padding: 12px;
+          background: #f5f5f5;
+          border-radius: 4px;
+          max-height: 200px;
+          overflow-y: auto;
+          font-family: monospace;
+          font-size: 12px;
+        "
+      ></div>
+    </div>
+
+    <script type="module">
+      const eventExample = {
+        transfer: document.querySelector("#eventTransfer"),
+        logEl: document.querySelector("#eventLog"),
+
+        generateData() {
+          const data = [];
+          for (let i = 1; i <= 15; i++) {
+            data.push({
+              key: i,
+              label: `Option ${i}`,
+              disabled: i % 4 === 0,
+            });
+          }
+          return data;
+        },
+
+        log(msg) {
+          const line = document.createElement("div");
+          line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+          this.logEl.prepend(line);
+        },
+
+        init() {
+          this.transfer.data = this.generateData();
+          this.transfer.titles = ["Source", "Target"];
+          this.transfer.buttonTexts = ["To right", "To left"];
+
+          this.transfer.addEventListener("change", e => {
+            this.log(`change: value = ${JSON.stringify(e.detail.value)}`);
+          });
+
+          this.transfer.addEventListener("ea-left-check-change", e => {
+            this.log(
+              `ea-left-check-change: value = ${JSON.stringify(e.detail.value)}, movedKeys = ${JSON.stringify(e.detail.movedKeys)}`
+            );
+          });
+
+          this.transfer.addEventListener("ea-right-check-change", e => {
+            this.log(
+              `ea-right-check-change: value = ${JSON.stringify(e.detail.value)}, movedKeys = ${JSON.stringify(e.detail.movedKeys)}`
+            );
+          });
+        },
+      };
+      eventExample.init();
+    </script>
+
+    <hr />
+    <!-- #endregion -->
+
+    <!--  表单验证 -->
+    <!-- #region -->
+    <h2>表单验证</h2>
+
+    <div class="demo">
+      <form id="transferForm" onsubmit="return false">
+        <ea-transfer id="formTransfer" required></ea-transfer>
+        <div style="margin-top: 12px">
+          <ea-button id="validateBtn" variant="primary" size="small">
+            Validate
+          </ea-button>
+          <ea-button id="resetBtn" size="small" style="margin-left: 8px">
+            Reset
+          </ea-button>
+        </div>
+      </form>
+    </div>
+
+    <script type="module">
+      const formExample = {
+        transfer: document.querySelector("#formTransfer"),
+        validateBtn: document.querySelector("#validateBtn"),
+        resetBtn: document.querySelector("#resetBtn"),
+
+        generateData() {
           const data = [];
           for (let i = 1; i <= 15; i++) {
             data.push({
@@ -205,16 +417,20 @@
         init() {
           this.transfer.data = this.generateData();
 
-          this.transfer.addEventListener("change", event => {
-            console.log("Selection changed:", event.detail.value);
+          this.validateBtn.addEventListener("click", () => {
+            const isValid = this.transfer.checkValidity();
+            alert(isValid ? "Validation passed!" : "Validation failed!");
+          });
+
+          this.resetBtn.addEventListener("click", () => {
+            this.transfer.value = [];
           });
         },
       };
-      emptyExample.init();
+      formExample.init();
     </script>
 
     <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
+    <!-- #endregion -->
   </body>
 </html>

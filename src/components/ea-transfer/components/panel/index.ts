@@ -1,9 +1,6 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, property, query } from "@decorator";
+import { Enum } from "@utils/Enum";
 import { i18nManager } from "@utils/I18nManager";
 import "@components/ea-checkbox/index.js";
 import "@components/ea-input/index.js";
@@ -14,15 +11,51 @@ const bem = createBEM(TAG_NAME);
 
 export type PanelType = "source" | "target";
 
+/**
+ * @summary 穿梭框面板子组件，用于展示单侧数据列表，支持全选、搜索过滤和自定义空状态。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-checkbox
+ * @dependency ea-input
+ *
+ * @slot empty - 空状态内容。
+ * @slot footer - 面板底部内容。
+ *
+ * @csspart container - 面板容器。
+ * @csspart header - 面板头部。
+ * @csspart checkbox - 全选复选框。
+ * @csspart title - 标题。
+ * @csspart count - 计数显示。
+ * @csspart body - 面板主体。
+ * @csspart filter-wrapper - 搜索框容器。
+ * @csspart filter - 搜索框。
+ * @csspart empty - 空状态区域。
+ * @csspart list - 列表容器。
+ * @csspart footer - 面板底部。
+ * @csspart item-checkbox - 列表项复选框。
+ * @csspart item-label - 列表项标签。
+ *
+ * @cssproperty --ea-transfer-panel-width - 面板宽度。
+ * @cssproperty --ea-transfer-panel-height - 面板高度。
+ * @cssproperty --ea-transfer-panel-border-color - 边框颜色。
+ * @cssproperty --ea-transfer-panel-background-color - 背景颜色。
+ * @cssproperty --ea-transfer-panel-header-height - 头部高度。
+ * @cssproperty --ea-transfer-panel-header-background - 头部背景颜色。
+ * @cssproperty --ea-transfer-panel-item-height - 列表项高度。
+ * @cssproperty --ea-transfer-panel-item-hover-background - 列表项悬停背景颜色。
+ * @cssproperty --ea-transfer-panel-item-selected-background - 列表项选中背景颜色。
+ * @cssproperty --ea-transfer-panel-item-selected-color - 列表项选中文字颜色。
+ * @cssproperty --ea-transfer-panel-item-disabled-color - 列表项禁用文字颜色。
+ * @cssproperty --ea-transfer-panel-filter-height - 搜索框高度。
+ * @cssproperty --ea-transfer-panel-footer-height - 底部高度。
+ * @cssproperty --ea-transfer-panel-footer-background - 底部背景颜色。
+ * @cssproperty --ea-transfer-panel-footer-border-color - 底部边框颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTransferPanel extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
-
-  @query(bem.ce("header"))
-  private _header!: HTMLElement;
 
   @query(bem.ce("checkbox"))
   private _checkbox!: any;
@@ -55,7 +88,15 @@ export class EaTransferPanel extends EaBase {
     filterText: "",
   };
 
-  // ==================== 属性定义 ====================
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaTransferPanel) {
+      this.updateContainerClasslist();
+      this._handleDisabledUpdate();
+    },
+  })
+  disabled: boolean = false;
 
   @attribute({
     type: String,
@@ -132,8 +173,6 @@ export class EaTransferPanel extends EaBase {
   })
   dataMap: Map<any, any> = new Map();
 
-  // ==================== 方法 ====================
-
   updateContainerClasslist(): string {
     const slot = this._footerSlot?.assignedElements?.()?.[0] as any;
     const hasFooter = slot?.assignedElements?.()?.length > 0;
@@ -143,6 +182,7 @@ export class EaTransferPanel extends EaBase {
       {
         filterable: this.filterable,
         "has-footer": hasFooter,
+        disabled: this.disabled,
       }
     );
 
@@ -166,7 +206,7 @@ export class EaTransferPanel extends EaBase {
         </div>
         <div class='${bem.e("body")}' part='body'>
           <div class='${bem.e("filter-wrapper")}' part='filter-wrapper'>
-            <ea-input 
+            <ea-input
               class='${bem.e("filter")}'
               placeholder="${i18nManager.t("transfer.filterPlaceholder")}"
               part='filter'
@@ -202,12 +242,14 @@ export class EaTransferPanel extends EaBase {
     this._filterAbortController?.abort();
   }
 
+  /** 清空列表项 */
   clearList(): void {
     if (this._list) {
       this._list.innerHTML = "";
     }
   }
 
+  /** 清空搜索关键词并重置过滤 */
   clearQuery(): void {
     if (this._filterInput) {
       this._filterInput.value = "";
@@ -215,8 +257,11 @@ export class EaTransferPanel extends EaBase {
     }
   }
 
+  /** 处理列表项选中变化 */
   private _handleItemChange(e: Event): void {
     e.stopImmediatePropagation();
+
+    if (this.disabled) return;
 
     const li = (e.target as HTMLElement).closest(
       `.${bem.e("item")}`
@@ -246,12 +291,15 @@ export class EaTransferPanel extends EaBase {
     this._updateCount();
   }
 
+  /** 处理全选复选框变化 */
   private _handleSelectAllChange(e: Event): void {
     e.stopImmediatePropagation();
 
+    if (this.disabled) return;
+
     const isChecked = Boolean((e.target as any).checked);
     const isFiltering =
-      this._states.filterText && this._states.filterText.trim() !== "";
+      !!(this._states.filterText && this._states.filterText.trim() !== "");
 
     const listItems = this._getSelectableItems(isFiltering);
 
@@ -286,6 +334,7 @@ export class EaTransferPanel extends EaBase {
     this._updateCount();
   }
 
+  /** 获取当前可选择的列表项 */
   private _getSelectableItems(isFiltering: boolean): HTMLElement[] {
     if (isFiltering) {
       return [
@@ -300,6 +349,7 @@ export class EaTransferPanel extends EaBase {
     }
   }
 
+  /** 绑定列表和全选复选框事件 */
   private _bindEvents(): void {
     this._abortController?.abort();
     this._abortController = new AbortController();
@@ -310,13 +360,14 @@ export class EaTransferPanel extends EaBase {
 
     this._checkbox.addEventListener(
       "change",
-      e => this._handleSelectAllChange(e),
+      (e: Event) => this._handleSelectAllChange(e),
       {
         signal: this._abortController.signal,
       }
     );
   }
 
+  /** 更新选中计数显示 */
   private _updateCount(): void {
     if (!this._count) return;
 
@@ -326,6 +377,7 @@ export class EaTransferPanel extends EaBase {
     this._count.textContent = `${checkedItems}/${totalItems}`;
   }
 
+  /** 处理数据更新，重新渲染列表 */
   private _handleDataUpdate(newData: HTMLElement[]): void {
     this.clearList();
 
@@ -354,6 +406,7 @@ export class EaTransferPanel extends EaBase {
     this._updateSelectAllState();
   }
 
+  /** 处理 filterable 属性内部更新 */
   private _handleFilterableUpdateInternal(filterable: boolean): void {
     if (this._filterWrapper) {
       if (filterable) {
@@ -368,6 +421,18 @@ export class EaTransferPanel extends EaBase {
     }
   }
 
+  /** 处理 disabled 属性更新 */
+  private _handleDisabledUpdate(): void {
+    if (this._checkbox) {
+      this._checkbox.disabled = this.disabled;
+    }
+
+    if (this._filterInput) {
+      this._filterInput.disabled = this.disabled;
+    }
+  }
+
+  /** 绑定搜索框输入和清除事件 */
   private _bindFilterEvents(): void {
     this._filterAbortController?.abort();
     this._filterAbortController = new AbortController();
@@ -398,12 +463,14 @@ export class EaTransferPanel extends EaBase {
     );
   }
 
+  /** 处理搜索关键词变化 */
   private _handleFilterChange(filterText: string): void {
     this._states.filterText = filterText;
     this._filterData();
     this._updateSelectAllState();
   }
 
+  /** 计算全选复选框状态 */
   private _calculateSelectAllState(): {
     isAllChecked: boolean;
     isSomeChecked: boolean;
@@ -435,6 +502,7 @@ export class EaTransferPanel extends EaBase {
     return { isAllChecked, isSomeChecked };
   }
 
+  /** 更新全选复选框的选中/半选状态 */
   private _updateSelectAllState(): void {
     if (!this._checkbox) return;
 
@@ -452,6 +520,7 @@ export class EaTransferPanel extends EaBase {
     }
   }
 
+  /** 根据搜索关键词过滤列表项 */
   private _filterData(): void {
     const { label } = this.dataProps;
     const filterText = this._states.filterText || "";
@@ -472,7 +541,7 @@ export class EaTransferPanel extends EaBase {
     if (this.filterMethod && typeof this.filterMethod === "function") {
       allItems.forEach(item => {
         const data = this.dataMap?.get(item) || {};
-        const shouldShow = this.filterMethod(filterText, data);
+        const shouldShow = this.filterMethod!(filterText, data);
         item.classList.toggle("is-filtered-out", !shouldShow);
       });
     } else {
@@ -487,6 +556,7 @@ export class EaTransferPanel extends EaBase {
     this._updateCount();
   }
 
+  /** 更新搜索框占位符文本 */
   private _updateFilterPlaceholder(newPlaceholder?: string): void {
     if (this._filterInput) {
       if (!this.hasAttribute("filter-placeholder")) {

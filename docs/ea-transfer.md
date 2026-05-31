@@ -11,7 +11,6 @@ onMounted(async () => {
   // #region
   const basicExample = {
     transfer: document.querySelector("#basicTransfer"),
-    setDataBtn: document.querySelector("#setDataBtn"),
 
     generateData: () => {
       const data = [];
@@ -149,6 +148,19 @@ Transfer 是一个用于在两个列表之间移动数据的穿梭框组件，�
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 自定义样式
 
 移步到 [CSS Part](#transfer-css-part)。
@@ -160,6 +172,8 @@ Transfer 是一个用于在两个列表之间移动数据的穿梭框组件，�
 <div class="demo">
   <ea-transfer id="basicTransfer"></ea-transfer>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -195,6 +209,8 @@ basicExample.init();
 
 :::
 
+::::
+
 ## 可搜索过滤
 
 通过设置 `filterable` 属性启用搜索功能，可以快速筛选数据。
@@ -202,6 +218,8 @@ basicExample.init();
 <div class="demo">
   <ea-transfer id="filterableTransfer" filterable></ea-transfer>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -237,6 +255,8 @@ filterableExample.init();
 
 :::
 
+::::
+
 ## 自定义用法
 
 支持自定义面板标题、按钮文本、空状态内容等。
@@ -260,6 +280,8 @@ filterableExample.init();
     </ea-transfer>
   </div>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -333,6 +355,8 @@ customExample.init();
 
 :::
 
+::::
+
 ## 自定义空内容
 
 可以为左右面板分别自定义空状态显示内容。
@@ -358,6 +382,8 @@ customExample.init();
     </ea-transfer>
   </div>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -414,23 +440,25 @@ emptyExample.init();
 
 :::
 
+::::
+
 ## Transfer API
 
 ### Transfer Attributes
 
 | 参数                           | 说明             | 类型          | 可选值 | 默认值                                                 |
 | ------------------------------ | ---------------- | ------------- | ------ | ------------------------------------------------------ |
-| data <PropTag/>                | 数据源           | `dataProps[]` | -      | []                                                     |
-| value <PropTag/>               | 已选中的数据项   | Array         | -      | []                                                     |
-| disabled                       | 是否禁用         | Boolean       | -      | false                                                  |
-| filterable                     | 是否可搜索       | Boolean       | -      | false                                                  |
-| filter-placeholder             | 搜索框占位符     | String        | -      | "请输入搜索内容"                                       |
-| dataProps <PropTag/>           | 数据字段映射配置 | Object        | -      | `{ key: "key", label: "label", disabled: "disabled" }` |
-| titles                         | 面板标题         | Array         | -      | []                                                     |
-| buttonTexts <PropTag/>         | 按钮文本         | Array         | -      | []                                                     |
-| filterMethod <PropTag/>        | 自定义筛选方法   | Function      | -      | null                                                   |
-| leftDefaultChecked <PropTag/>  | 左侧默认选中项   | Array         | -      | []                                                     |
-| rightDefaultChecked <PropTag/> | 右侧默认选中项   | Array         | -      | []                                                     |
+| disabled                       | 是否禁用         | Boolean       | —      | false                                                  |
+| filterable                     | 是否可搜索       | Boolean       | —      | false                                                  |
+| filter-placeholder             | 搜索框占位符     | String        | —      | "请输入搜索内容"                                       |
+| data <PropTag/>                | 数据源           | dataProps[]   | —      | []                                                     |
+| value <PropTag/>               | 已选中的数据项   | Array         | —      | []                                                     |
+| dataProps <PropTag/>           | 数据字段映射配置 | Object        | —      | `{ key: "key", label: "label", disabled: "disabled" }` |
+| titles <PropTag/>              | 面板标题         | Array         | —      | []                                                     |
+| buttonTexts <PropTag/>         | 按钮文本         | Array         | —      | []                                                     |
+| filterMethod <PropTag/>        | 自定义筛选方法   | Function      | —      | null                                                   |
+| leftDefaultChecked <PropTag/>  | 左侧默认选中项   | Array         | —      | []                                                     |
+| rightDefaultChecked <PropTag/> | 右侧默认选中项   | Array         | —      | []                                                     |
 
 ### Transfer Methods
 
@@ -454,14 +482,14 @@ emptyExample.init();
 | -------------------------- | ------------ |
 | container                  | 组件容器     |
 | panel                      | 面板容器     |
-| panel & source-panel       | 左侧面板     |
-| panel & target-panel       | 右侧面板     |
+| source-panel               | 左侧面板     |
+| target-panel               | 右侧面板     |
 | buttons                    | 按钮区域     |
-| button                     | 按钮         |
-| button & move-to-right-btn | 向右移动按钮 |
-| button & move-to-left-btn  | 向左移动按钮 |
+| button                     | 移动按钮     |
+| move-to-right-btn          | 向右移动按钮 |
+| move-to-left-btn           | 向左移动按钮 |
 
-### Transfer Slot
+### Transfer Slots
 
 | 名称         | 说明               |
 | ------------ | ------------------ |
@@ -469,6 +497,21 @@ emptyExample.init();
 | right-empty  | 右侧面板空状态内容 |
 | left-footer  | 左侧面板底部内容   |
 | right-footer | 右侧面板底部内容   |
+
+### Transfer CSS 自定义属性
+
+| 属性名                           | 说明         | 默认值                |
+| -------------------------------- | ------------ | --------------------- |
+| --ea-transfer-width              | 面板宽度     | 200px                 |
+| --ea-transfer-height             | 面板高度     | 300px                 |
+| --ea-transfer-border-color       | 边框颜色     | var(--grey-200)       |
+| --ea-transfer-border-radius      | 边框圆角     | var(--border-radius-sm) |
+| --ea-transfer-bg-color           | 背景颜色     | var(--color-white)    |
+| --ea-transfer-button-bg-color    | 按钮背景颜色 | var(--blue-500)       |
+| --ea-transfer-button-disabled-bg-color | 按钮禁用背景颜色 | var(--grey-200) |
+| --ea-transfer-button-hover-bg-color | 按钮悬停背景颜色 | var(--blue-400)   |
+| --ea-transfer-transition        | 过渡动画时长 | var(--transition-fast) |
+| --ea-transfer-font-size          | 字体大小     | var(--font-size-md)   |
 
 ## TransferPanel API
 
@@ -488,9 +531,31 @@ emptyExample.init();
 | list                                                | 列表容器     |
 | [item-checkbox](./ea-checkbox.md#checkbox-css-part) | 列表项复选框 |
 | item-label                                          | 列表项标签   |
+| footer                                              | 面板底部     |
 
-### TransferPanel Slot
+### TransferPanel Slots
 
 | 名称  | 说明       |
 | ----- | ---------- |
 | empty | 空状态内容 |
+| footer | 面板底部内容 |
+
+### TransferPanel CSS 自定义属性
+
+| 属性名                                            | 说明               | 默认值              |
+| ------------------------------------------------- | ------------------ | ------------------- |
+| --ea-transfer-panel-width                         | 面板宽度           | 200px               |
+| --ea-transfer-panel-height                        | 面板高度           | 300px               |
+| --ea-transfer-panel-border-color                  | 边框颜色           | var(--grey-300)     |
+| --ea-transfer-panel-background-color              | 背景颜色           | var(--white)        |
+| --ea-transfer-panel-header-height                 | 头部高度           | 40px                |
+| --ea-transfer-panel-header-background             | 头部背景颜色       | var(--grey-100)     |
+| --ea-transfer-panel-item-height                   | 列表项高度         | 32px                |
+| --ea-transfer-panel-item-hover-background         | 列表项悬停背景颜色 | var(--grey-100)     |
+| --ea-transfer-panel-item-selected-background      | 列表项选中背景颜色 | var(--blue-100)     |
+| --ea-transfer-panel-item-selected-color           | 列表项选中文字颜色 | var(--blue-600)     |
+| --ea-transfer-panel-item-disabled-color           | 列表项禁用文字颜色 | var(--grey-400)     |
+| --ea-transfer-panel-filter-height                 | 搜索框高度         | 40px                |
+| --ea-transfer-panel-footer-height                 | 底部高度           | 40px                |
+| --ea-transfer-panel-footer-background             | 底部背景颜色       | var(--white)        |
+| --ea-transfer-panel-footer-border-color           | 底部边框颜色       | var(--grey-300)     |
