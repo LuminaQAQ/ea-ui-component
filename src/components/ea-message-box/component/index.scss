@@ -1,3 +1,6 @@
+$name: ea-message-box;
+$main: ea-message-box-main;
+
 $types: (
   primary: blue,
   success: green,
@@ -7,104 +10,97 @@ $types: (
 );
 
 :host {
-  --ea-message-padding: 14px;
-  --ea-message-border-radius: var(--border-radius-sm);
-  --ea-message-box-shadow: var(--box-shadow-md);
+  --#{$name}-padding: var(--spacing-lg);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-box-shadow: var(--box-shadow-md);
 
-  --ea-message-title-font-size: var(--font-size-lg);
-  --ea-message-close-icon-size: var(--font-size-lg);
-  --ea-message-content-font-size: var(--font-size-md);
+  --#{$name}-title-font-size: var(--font-size-lg);
+  --#{$name}-close-icon-size: var(--font-size-lg);
+  --#{$name}-content-font-size: var(--font-size-md);
 
-  --ea-message-title-color: var(--grey-900);
-  --ea-message-close-icon-color: var(--grey-500);
-  --ea-message-content-color: var(--grey-700);
+  --#{$name}-title-color: var(--grey-900);
+  --#{$name}-close-icon-color: var(--grey-500);
+  --#{$name}-content-color: var(--grey-700);
 
-  --ea-message-padding-primary: 12px;
+  --#{$name}-section-gap: var(--spacing-lg);
 
   @each $type, $color in $types {
-    --ea-message-#{$type}-icon-color: var(--#{$color}-500);
+    --#{$name}-#{$type}-icon-color: var(--#{$color}-500);
   }
-
-  --ea-message-invalid-message-color: var(--red-500);
 }
 
 :host([movable]) {
   -webkit-user-drag: none;
 }
 
-@include block(ea-message-box) {
+@include block($name) {
   box-sizing: border-box;
-  padding: var(--ea-message-padding);
-  box-shadow: var(--ea-message-box-shadow);
+  padding: var(--#{$name}-padding);
+  box-shadow: var(--#{$name}-box-shadow);
 
   @include modifier(center) {
-
-    .ea-message-box-main__header,
-    .ea-message-box-main,
-    .ea-message-box-main__footer {
+    .#{$main}__header,
+    .#{$main},
+    .#{$main}__footer {
       text-align: center;
     }
   }
 
-  @include state(invalid) {
-    .ea-message-box-main__invalid-message {
-      display: block;
-    }
-
-    .ea-message-box-main__input {
-      --ea-input-border-color: var(--red-500);
-    }
-  }
-
   @include modifier(draggable) {
-    .ea-message-box-main__header {
+    .#{$main}__header {
       cursor: move;
     }
   }
 
   @include state(close-hidden) {
-    .ea-message-box-main__icon-close {
+    .#{$main}__icon-close {
       display: none;
     }
   }
 
   @include state(cancel-hidden) {
-    .ea-message-box-main__icon-close {
+    .#{$main}__icon-close {
       display: none;
     }
   }
 
   @include state(confirm-hidden) {
-    .ea-message-box-main__confirm-button {
+    .#{$main}__confirm-button {
       display: none;
+    }
+  }
+
+  @include state(input-visible) {
+    .#{$main}__input {
+      display: block;
     }
   }
 
   @each $type, $color in $types {
     @include modifier($type) {
-      .ea-message-box-main {
-        @include element(type-icon) {
-          color: var(--ea-message-#{$type}-icon-color);
+      .#{$main} {
+        .#{$main}__type-icon {
+          color: var(--#{$name}-#{$type}-icon-color);
         }
       }
     }
   }
 }
 
-@include block(ea-message-box-main) {
-  background-color: white;
-  padding: var(--ea-message-padding);
-  border-radius: var(--ea-message-border-radius);
+@include block($main) {
+  background-color: var(--white);
+  padding: var(--#{$name}-padding);
+  border-radius: var(--#{$name}-border-radius);
 
   @include element(header) {
     position: relative;
-    padding-bottom: var(--ea-message-padding-primary);
+    padding-bottom: var(--#{$name}-section-gap);
   }
 
   @include element(title) {
-    font-size: var(--ea-message-title-font-size);
-    line-height: var(--ea-message-title-font-size);
-    color: var(--ea-message-title-color);
+    font-size: var(--#{$name}-title-font-size);
+    line-height: var(--#{$name}-title-font-size);
+    color: var(--#{$name}-title-color);
   }
 
   @include element(icon-close) {
@@ -113,22 +109,28 @@ $types: (
     top: 0;
 
     cursor: pointer;
-    color: var(--ea-message-close-icon-color);
+    color: var(--#{$name}-close-icon-color);
   }
 
-  @include element(content) {
-    font-size: var(--ea-message-content-font-size);
-    line-height: var(--ea-message-content-font-size);
-    color: var(--ea-message-content-color);
+  @include element(form) {
+    font-size: var(--#{$name}-content-font-size);
+    line-height: var(--#{$name}-content-font-size);
+    color: var(--#{$name}-content-color);
+  }
+
+  @include element(description) {
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
   }
 
   @include element(input) {
-    padding-top: var(--ea-message-padding-primary);
+    padding-top: var(--#{$name}-section-gap);
     display: none;
   }
 
   @include element(footer) {
-    padding-top: var(--ea-message-padding-primary);
+    padding-top: var(--#{$name}-section-gap);
     text-align: right;
 
     ea-button {
@@ -139,27 +141,11 @@ $types: (
       margin: 0;
     }
   }
-
-  @include element(invalid-message) {
-    display: none;
-
-    color: var(--ea-message-invalid-message-color);
-    font-size: var(--ea-message-content-font-size);
-    line-height: var(--ea-message-content-font-size);
-    text-align: left;
-    margin-top: 0.5rem;
-  }
 }
 
 @include block(ea-overlay) {
-  @include state(input-visible) {
-    .ea-message-box-main__input {
-      display: block;
-    }
-  }
-
   @include element(mask) {
     box-sizing: border-box;
-    padding: var(--ea-message-padding);
+    padding: var(--#{$name}-padding);
   }
 }

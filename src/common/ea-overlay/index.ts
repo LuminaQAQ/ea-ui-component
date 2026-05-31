@@ -164,6 +164,11 @@ export class EaOverlay extends EaBase {
   @property({
     type: Function,
     default: null,
+    observer(this: EaOverlay, newVal: ((done: (cancel?: boolean) => void) => void) | null) {
+      if (newVal === null) {
+        this._waitingBeforeClose = false;
+      }
+    },
   })
   beforeClose: ((done: (cancel?: boolean) => void) => void) | null = null;
 
@@ -311,7 +316,7 @@ export class EaOverlay extends EaBase {
   }
 
   @listen("click", bem.ce("mask"))
-  private _handleMaskClick() {
+  private _handleMaskClick(_e: Event) {
     if (!this.closeOnClickModal) return;
 
     this.hide();

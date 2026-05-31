@@ -1,4 +1,4 @@
-import { camelToKebab } from "@/utils/case-convert";
+import { camelToKebab } from "@utils/case-convert";
 
 type Action = "cancel" | "close" | "confirm";
 
@@ -10,7 +10,6 @@ interface MessageBoxOptions {
   dangerouslyUseHTMLString?: boolean;
   message?: string;
   icon?: string;
-  type?: string;
   variant?: string;
   closeIcon?: string;
   showClose?: boolean;
@@ -25,10 +24,10 @@ interface MessageBoxOptions {
   inputPlaceholder?: string;
   inputType?: string;
   inputValue?: string;
-  inputPattern?: RegExp | null;
+  inputPattern?: string | RegExp | null;
   inputErrorMessage?: string;
+  inputValidator?: ((value: string) => boolean | string | Promise<boolean | string>) | null;
   center?: boolean;
-  draggable?: boolean;
   movable?: boolean;
   roundButton?: boolean;
   buttonSize?: "small" | "medium" | "large";
@@ -81,6 +80,7 @@ class EaMessageBoxInstance {
     inputValue: "",
     inputPattern: null,
     inputErrorMessage: "",
+    inputValidator: null,
     center: false,
     movable: false,
     roundButton: false,
@@ -102,6 +102,7 @@ class EaMessageBoxInstance {
     this.instance = messageBox;
     this._appendToHandler(messageBox, mergedOptions.appendTo);
     this._applyDeferredBooleanProps(messageBox, mergedOptions);
+    this._applyExcludedProps(messageBox, mergedOptions);
   }
 
   private _appendToHandler(
@@ -120,15 +121,11 @@ class EaMessageBoxInstance {
     const messageBox = document.createElement("ea-message-box");
 
     for (const k in options) {
-      if (k === "appendTo" || DEFERRED_BOOLEAN_KEYS.includes(k)) {
+      if (k === "appendTo" || DEFERRED_BOOLEAN_KEYS.includes(k) || EXCLUDED_KEYS.includes(k)) {
         continue;
       }
-      if (EXCLUDED_KEYS.includes(k)) {
-        (messageBox as any)[k] = (options as any)[k];
-      } else {
-        const key = camelToKebab(k);
-        messageBox.setAttribute(key, String((options as any)[k]));
-      }
+      const key = camelToKebab(k);
+      messageBox.setAttribute(key, String((options as any)[k]));
     }
 
     return messageBox;
@@ -142,6 +139,37 @@ class EaMessageBoxInstance {
       if (k in options) {
         (messageBox as any)[k] = (options as any)[k];
       }
+    }
+  }
+
+  private _applyExcludedProps(
+    messageBox: HTMLElement,
+    options: MessageBoxOptions
+  ): void {
+    if (options.inputPattern instanceof RegExp) {
+      (messageBox as any).inputPattern = options.inputPattern.source;
+    } else if (typeof options.inputPattern === "string") {
+      (messageBox as any).inputPattern = options.inputPattern;
+    }
+
+    if (options.inputValidator) {
+      (messageBox as any).inputValidator = options.inputValidator;
+    }
+
+    if (options.beforeClose) {
+      (messageBox as any).beforeClose = options.beforeClose;
+    }
+
+    if (options.dangerouslyUseHTMLString) {
+      (messageBox as any).dangerouslyUseHTMLString = true;
+    }
+
+    if (options.distinguishCancelAndClose) {
+      (messageBox as any).distinguishCancelAndClose = true;
+    }
+
+    if (options.confirmButtonLoading) {
+      (messageBox as any).confirmButtonLoading = true;
     }
   }
 }
@@ -170,6 +198,7 @@ const EaMessageBox: EaMessageBoxFn = (options: MessageBoxOptions) => {
   const messageBox = new EaMessageBoxInstance(options).instance;
 
   let currentAction: Action = "confirm";
+  let inputValue: string | undefined;
 
   if (options.beforeClose) {
     const userBeforeClose = options.beforeClose;
@@ -188,7 +217,7 @@ const EaMessageBox: EaMessageBoxFn = (options: MessageBoxOptions) => {
         controller.abort();
 
         if (currentAction === "confirm") {
-          resolve("confirm");
+          resolve(inputValue ?? "confirm");
         } else if (currentAction === "cancel") {
           reject("cancel");
         } else {
@@ -199,16 +228,20 @@ const EaMessageBox: EaMessageBoxFn = (options: MessageBoxOptions) => {
     );
 
     messageBox.addEventListener(
-      "confirm",
-      () => {
+      "ea-confirm",
+      (e: Event) => {
         currentAction = "confirm";
+        const detail = (e as CustomEvent).detail;
+        if (detail && "value" in detail) {
+          inputValue = detail.value;
+        }
         messageBox.removeAttribute("visible");
       },
       { signal: controller.signal }
     );
 
     messageBox.addEventListener(
-      "cancel",
+      "ea-cancel",
       () => {
         currentAction = "cancel";
         messageBox.removeAttribute("visible");
@@ -217,7 +250,7 @@ const EaMessageBox: EaMessageBoxFn = (options: MessageBoxOptions) => {
     );
 
     messageBox.addEventListener(
-      "message-close",
+      "ea-message-close",
       () => {
         currentAction = "close";
         messageBox.removeAttribute("visible");
