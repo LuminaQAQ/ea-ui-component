@@ -1,3 +1,7 @@
+import type { EaSplitterPanelResizeStartEvent } from "./components/ea-splitter/events/EaSplitterPanelResizeStartEvent";
+import type { EaSplitterPanelResizeEvent } from "./components/ea-splitter/events/EaSplitterPanelResizeEvent";
+import type { EaSplitterPanelResizeEndEvent } from "./components/ea-splitter/events/EaSplitterPanelResizeEndEvent";
+
 // ==================== HTML 全局类型声明 ====================
 
 declare global {
@@ -14,6 +18,27 @@ declare global {
 export interface EaSplitterElement extends HTMLElement {
   /** 分隔面板的布局方向 */
   layout: "horizontal" | "vertical";
+
+  addEventListener(
+    type: "ea-panel-resize-start",
+    listener: (event: EaSplitterPanelResizeStartEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: "ea-panel-resize",
+    listener: (event: EaSplitterPanelResizeEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: "ea-panel-resize-end",
+    listener: (event: EaSplitterPanelResizeEndEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ): void;
 }
 
 /**
@@ -73,11 +98,11 @@ export interface EaSplitterBarVueProps {
  */
 export interface EaSplitterVueEvents {
   /** 开始调整面板大小时触发 */
-  "panel-resize-start": (event: CustomEvent<{ size: number[] }>) => void;
+  "ea-panel-resize-start": (event: EaSplitterPanelResizeStartEvent) => void;
   /** 调整面板大小时触发 */
-  "panel-resize": (event: CustomEvent<{ size: number[] }>) => void;
+  "ea-panel-resize": (event: EaSplitterPanelResizeEvent) => void;
   /** 面板调整大小结束时触发 */
-  "panel-resize-end": (event: CustomEvent<{ size: number[] }>) => void;
+  "ea-panel-resize-end": (event: EaSplitterPanelResizeEndEvent) => void;
 }
 
 /**
@@ -174,11 +199,11 @@ export interface EaSplitterReactProps extends HTMLAttributes<HTMLElement> {
   /** 分隔面板的布局方向 */
   layout?: "horizontal" | "vertical";
   /** 开始调整面板大小时触发 */
-  onPanelResizeStart?: (event: CustomEvent<{ size: number[] }>) => void;
+  onEaPanelResizeStart?: (event: EaSplitterPanelResizeStartEvent) => void;
   /** 调整面板大小时触发 */
-  onPanelResize?: (event: CustomEvent<{ size: number[] }>) => void;
+  onEaPanelResize?: (event: EaSplitterPanelResizeEvent) => void;
   /** 面板调整大小结束时触发 */
-  onPanelResizeEnd?: (event: CustomEvent<{ size: number[] }>) => void;
+  onEaPanelResizeEnd?: (event: EaSplitterPanelResizeEndEvent) => void;
   /** 子元素 */
   children?: ReactNode;
 }

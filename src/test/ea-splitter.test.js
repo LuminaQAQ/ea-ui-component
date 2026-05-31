@@ -1,10 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-splitter 组件
 import "../components/ea-splitter/index";
 
-describe("EaSplitter Component", () => {
+describe("EaSplitter", () => {
   let container;
 
   beforeEach(() => {
@@ -18,10 +17,7 @@ describe("EaSplitter Component", () => {
     container.remove();
   });
 
-  /**
-   * 基础功能测试
-   */
-  describe("Basic Functionality", () => {
+  describe("基础功能", () => {
     it("应该正确渲染组件", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
@@ -56,16 +52,41 @@ describe("EaSplitter Component", () => {
 
       await waitForRender();
 
-      // 3 个 panel 应该有 2 个 bar
       const bars = splitter.querySelectorAll("ea-splitter-bar");
       expect(bars.length).toBe(2);
     });
+
+    it("单个面板不应创建 splitter-bar", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const bars = splitter.querySelectorAll("ea-splitter-bar");
+      expect(bars.length).toBe(0);
+    });
+
+    it("四个面板应创建三个 splitter-bar", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+        <ea-splitter-panel>Panel 2</ea-splitter-panel>
+        <ea-splitter-panel>Panel 3</ea-splitter-panel>
+        <ea-splitter-panel>Panel 4</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const bars = splitter.querySelectorAll("ea-splitter-bar");
+      expect(bars.length).toBe(3);
+    });
   });
 
-  /**
-   * Layout 属性测试
-   */
-  describe("Layout Attribute", () => {
+  describe("Layout 属性", () => {
     it("默认 layout 应该是 horizontal", async () => {
       const splitter = document.createElement("ea-splitter");
       container.appendChild(splitter);
@@ -94,13 +115,41 @@ describe("EaSplitter Component", () => {
 
       expect(splitter.layout).toBe("horizontal");
     });
+
+    it("layout 变化时应该更新容器类名", async () => {
+      const splitter = document.createElement("ea-splitter");
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const containerEl = splitter.shadowRoot.querySelector(".ea-splitter");
+      expect(containerEl.classList.contains("ea-splitter--horizontal")).toBe(true);
+
+      splitter.setAttribute("layout", "vertical");
+      await waitForRender();
+
+      expect(containerEl.classList.contains("ea-splitter--vertical")).toBe(true);
+    });
+
+    it("layout 变化时应该同步子面板的 layout", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+        <ea-splitter-panel>Panel 2</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const panels = splitter.querySelectorAll("ea-splitter-panel");
+      panels.forEach(panel => {
+        expect(panel.layout).toBe("horizontal");
+      });
+    });
   });
 
-  /**
-   * 事件测试
-   */
-  describe("Events", () => {
-    it("应该触发 panel-resize-start 事件", async () => {
+  describe("事件", () => {
+    it("应该触发 ea-panel-resize-start 事件", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
         <ea-splitter-panel>Panel 1</ea-splitter-panel>
@@ -111,9 +160,8 @@ describe("EaSplitter Component", () => {
       await waitForRender();
 
       const resizeStartHandler = vi.fn();
-      splitter.addEventListener("panel-resize-start", resizeStartHandler);
+      splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
 
-      // 模拟 mousedown 事件
       const bar = splitter.querySelector("ea-splitter-bar");
       bar.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
@@ -122,7 +170,7 @@ describe("EaSplitter Component", () => {
       expect(resizeStartHandler).toHaveBeenCalled();
     });
 
-    it("panel-resize-start 事件应该包含 size 数组", async () => {
+    it("ea-panel-resize-start 事件应该包含 size 数组", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
         <ea-splitter-panel>Panel 1</ea-splitter-panel>
@@ -133,7 +181,7 @@ describe("EaSplitter Component", () => {
       await waitForRender();
 
       const resizeStartHandler = vi.fn();
-      splitter.addEventListener("panel-resize-start", resizeStartHandler);
+      splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
 
       const bar = splitter.querySelector("ea-splitter-bar");
       bar.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
@@ -147,7 +195,7 @@ describe("EaSplitter Component", () => {
       }
     });
 
-    it("应该触发 panel-resize-end 事件", async () => {
+    it("应该触发 ea-panel-resize-end 事件", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
         <ea-splitter-panel>Panel 1</ea-splitter-panel>
@@ -158,24 +206,41 @@ describe("EaSplitter Component", () => {
       await waitForRender();
 
       const resizeEndHandler = vi.fn();
-      splitter.addEventListener("panel-resize-end", resizeEndHandler);
+      splitter.addEventListener("ea-panel-resize-end", resizeEndHandler);
 
       const bar = splitter.querySelector("ea-splitter-bar");
       bar.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
-      // 触发 mouseup
       window.dispatchEvent(new MouseEvent("mouseup"));
 
       await waitForRender(50);
 
       expect(resizeEndHandler).toHaveBeenCalled();
     });
+
+    it("点击非 bar 区域不应触发 resize 事件", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+        <ea-splitter-panel>Panel 2</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const resizeStartHandler = vi.fn();
+      splitter.addEventListener("ea-panel-resize-start", resizeStartHandler);
+
+      const panel = splitter.querySelector("ea-splitter-panel");
+      panel.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+
+      await waitForRender(50);
+
+      expect(resizeStartHandler).not.toHaveBeenCalled();
+    });
   });
 
-  /**
-   * 生命周期测试
-   */
-  describe("Lifecycle", () => {
+  describe("生命周期", () => {
     it("组件连接后应该正确初始化", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
@@ -209,7 +274,7 @@ describe("EaSplitter Component", () => {
   });
 });
 
-describe("EaSplitterPanel Component", () => {
+describe("EaSplitterPanel", () => {
   let container;
 
   beforeEach(() => {
@@ -223,10 +288,7 @@ describe("EaSplitterPanel Component", () => {
     container.remove();
   });
 
-  /**
-   * 基础功能测试
-   */
-  describe("Basic Functionality", () => {
+  describe("基础功能", () => {
     it("应该正确渲染组件", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
@@ -255,10 +317,7 @@ describe("EaSplitterPanel Component", () => {
     });
   });
 
-  /**
-   * Size 属性测试
-   */
-  describe("Size Attribute", () => {
+  describe("Size 属性", () => {
     it("默认 size 应该是空字符串", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
@@ -297,12 +356,26 @@ describe("EaSplitterPanel Component", () => {
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.size).toBe("30%");
     });
+
+    it("size 属性变化时应该正确更新", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const panel = splitter.querySelector("ea-splitter-panel");
+      panel.setAttribute("size", "50%");
+
+      await waitForRender();
+
+      expect(panel.size).toBe("50%");
+    });
   });
 
-  /**
-   * Min 属性测试
-   */
-  describe("Min Attribute", () => {
+  describe("Min 属性", () => {
     it("默认 min 应该是空字符串", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
@@ -341,12 +414,26 @@ describe("EaSplitterPanel Component", () => {
       const panel = splitter.querySelector("ea-splitter-panel");
       expect(panel.min).toBe("20%");
     });
+
+    it("min 属性变化时应该正确更新", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const panel = splitter.querySelector("ea-splitter-panel");
+      panel.setAttribute("min", "30%");
+
+      await waitForRender();
+
+      expect(panel.min).toBe("30%");
+    });
   });
 
-  /**
-   * Layout 属性测试
-   */
-  describe("Layout Attribute", () => {
+  describe("Layout 属性", () => {
     it("默认 layout 应该是 horizontal", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
@@ -375,10 +462,7 @@ describe("EaSplitterPanel Component", () => {
     });
   });
 
-  /**
-   * 插槽测试
-   */
-  describe("Slots", () => {
+  describe("插槽", () => {
     it("应该支持默认插槽", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
@@ -391,15 +475,12 @@ describe("EaSplitterPanel Component", () => {
       await waitForRender();
 
       const panel = splitter.querySelector("ea-splitter-panel");
-      const slot = panel.shadowRoot.querySelector('slot');
+      const slot = panel.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
   });
 
-  /**
-   * 生命周期测试
-   */
-  describe("Lifecycle", () => {
+  describe("生命周期", () => {
     it("组件连接后应该正确初始化", async () => {
       const splitter = document.createElement("ea-splitter");
       splitter.innerHTML = `
@@ -413,6 +494,101 @@ describe("EaSplitterPanel Component", () => {
       expect(panel.shadowRoot).toBeTruthy();
       expect(panel.size).toBe("200px");
       expect(panel.min).toBe("100px");
+    });
+  });
+});
+
+describe("EaSplitterBar", () => {
+  let container;
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    container.style.width = "600px";
+    container.style.height = "300px";
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    container.remove();
+  });
+
+  describe("基础功能", () => {
+    it("应该正确渲染组件", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+        <ea-splitter-panel>Panel 2</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const bar = splitter.querySelector("ea-splitter-bar");
+      expect(bar.shadowRoot).toBeTruthy();
+      expect(bar.shadowRoot.querySelector(".ea-splitter-bar")).toBeTruthy();
+    });
+
+    it("应该支持 CSS Parts", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+        <ea-splitter-panel>Panel 2</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const bar = splitter.querySelector("ea-splitter-bar");
+      expect(bar.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+    });
+  });
+
+  describe("Layout 属性", () => {
+    it("默认 layout 应该是 horizontal", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+        <ea-splitter-panel>Panel 2</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const bar = splitter.querySelector("ea-splitter-bar");
+      expect(bar.layout).toBe("horizontal");
+    });
+
+    it("vertical 布局时 bar 的 layout 应为 vertical", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.setAttribute("layout", "vertical");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+        <ea-splitter-panel>Panel 2</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const bar = splitter.querySelector("ea-splitter-bar");
+      expect(bar.layout).toBe("vertical");
+    });
+  });
+
+  describe("data-index 属性", () => {
+    it("bar 应该设置正确的 data-index", async () => {
+      const splitter = document.createElement("ea-splitter");
+      splitter.innerHTML = `
+        <ea-splitter-panel>Panel 1</ea-splitter-panel>
+        <ea-splitter-panel>Panel 2</ea-splitter-panel>
+        <ea-splitter-panel>Panel 3</ea-splitter-panel>
+      `;
+      container.appendChild(splitter);
+
+      await waitForRender();
+
+      const bars = splitter.querySelectorAll("ea-splitter-bar");
+      expect(bars[0].getAttribute("data-index")).toBeTruthy();
+      expect(bars[1].getAttribute("data-index")).toBeTruthy();
     });
   });
 });

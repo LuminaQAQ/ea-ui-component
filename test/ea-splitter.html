@@ -42,7 +42,7 @@
 <body>
     <script type="module" src="/src/components/ea-splitter/index.ts"></script>
 
-    <!-- #region 垂直布局 -->
+    <!-- #region 基础用法 -->
     <h1>基础用法</h1>
     <div class="demo">
         <div class="section">
@@ -84,15 +84,16 @@
 
     <script>
         const eaSplitter = document.querySelector('ea-splitter');
-        eaSplitter.addEventListener('panel-resize-start', (e) => {
-            console.log('panel-resize-start', e.detail.size);
+        eaSplitter.addEventListener('ea-panel-resize-start', (e) => {
+            console.log('ea-panel-resize-start', e.detail.size);
         });
-        eaSplitter.addEventListener('panel-resize', (e) => {
-            console.log('panel-resize', e.detail.size);
+        eaSplitter.addEventListener('ea-panel-resize', (e) => {
+            console.log('ea-panel-resize', e.detail.size);
         });
-        eaSplitter.addEventListener('panel-resize-end', (e) => {
-            console.log('panel-resize-end', e.detail.size);
+        eaSplitter.addEventListener('ea-panel-resize-end', (e) => {
+            console.log('ea-panel-resize-end', e.detail.size);
         });
     </script>
 
+</html>
 </html>
