@@ -1,22 +1,53 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { html } from "@utils/html";
+import { Enum } from "@utils/Enum";
 import "@/components/ea-icon/index";
 import "@/components/ea-button/index";
 import { EaTourCloseEvent } from "../../events/EaTourCloseEvent";
 import stylesheet from "./index.scss?inline";
-import html from "@/utils/html";
 
 const TAG_NAME = "ea-tour-step" as const;
 const bem = createBEM(TAG_NAME);
 
+const PLACEMENT_TYPES = [
+  "top", "top-start", "top-end",
+  "bottom", "bottom-start", "bottom-end",
+  "left", "left-start", "left-end",
+  "right", "right-start", "right-end",
+] as const;
+
+type PlacementType = (typeof PLACEMENT_TYPES)[number];
+
+/**
+ * @summary 引导步骤组件，用于定义引导的每个步骤内容、标题和位置，支持自定义插槽。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ * @dependency ea-button
+ *
+ * @slot default - 步骤描述内容。
+ * @slot header - 自定义头部内容。
+ * @slot indicator - 自定义指示器内容。
+ * @slot footer - 自定义底部按钮区域。
+ *
+ * @event ea-close - 关闭当前步骤时触发，detail: `{ current: number }`。
+ *
+ * @csspart container - 步骤根容器元素。
+ * @csspart header - 头部区域元素。
+ * @csspart close-icon - 关闭图标元素。
+ * @csspart content - 内容区域元素。
+ * @csspart footer - 底部区域元素。
+ * @csspart indicator-group - 指示器容器元素。
+ * @csspart indicator - 单个指示器元素。
+ * @csspart switch-group - 按钮容器元素。
+ * @csspart previous - 上一步按钮元素。
+ * @csspart next - 下一步按钮元素。
+ * @csspart finish - 完成按钮元素。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTourStep extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -38,8 +69,6 @@ export class EaTourStep extends EaBase {
   @query(".ea-tour-step__close-icon")
   private _closeIcon!: HTMLElement;
 
-  // ==================== 私有属性 ====================
-
   private _abortController?: AbortController;
 
   private get _hostContentTour(): HTMLElement | null {
@@ -49,8 +78,6 @@ export class EaTourStep extends EaBase {
       return null;
     }
   }
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -89,26 +116,12 @@ export class EaTourStep extends EaBase {
   variant: "default" | "primary" = "default";
 
   @attribute({
-    type: Enum([
-      "top",
-      "top-start",
-      "top-end",
-      "bottom",
-      "bottom-start",
-      "bottom-end",
-      "left",
-      "left-start",
-      "left-end",
-      "right",
-      "right-start",
-      "right-end",
-    ]),
+    type: Enum(PLACEMENT_TYPES),
     default: "bottom",
   })
-  placement: string = "bottom";
+  placement: PlacementType = "bottom";
 
-  // ==================== 方法 ====================
-
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const className = bem({
       primary: this.variant === "primary",
@@ -119,6 +132,11 @@ export class EaTourStep extends EaBase {
     return className;
   }
 
+  /**
+   * 渲染指示器 HTML
+   * @param tourItems - 所有步骤元素数组
+   * @returns 指示器 HTML 字符串
+   */
   private _renderIndicators(tourItems: HTMLElement[]): string {
     return html(
       Array.from(tourItems, item => {
@@ -128,7 +146,11 @@ export class EaTourStep extends EaBase {
     );
   }
 
-  private _handleBtnTypeChange = (type: "default" | "primary") => {
+  /**
+   * 更新按钮类型
+   * @param type - 按钮样式类型
+   */
+  private _handleBtnTypeChange(type: "default" | "primary"): void {
     const btns = [this._previousBtn, this._nextBtn, this._finishBtn];
 
     btns.forEach(btn => {
@@ -138,8 +160,9 @@ export class EaTourStep extends EaBase {
         btn.removeAttribute("variant");
       }
     });
-  };
+  }
 
+  /** 渲染模板 */
   html(): string {
     return `
       <div class='${bem()}' part='container'>
@@ -166,8 +189,7 @@ export class EaTourStep extends EaBase {
     `;
   }
 
-  // ==================== 事件处理 ====================
-
+  /** 处理关闭图标点击事件 */
   @listen("click", ".ea-tour-step__close-icon")
   private _handleCloseIconClick() {
     const index = [...(this._hostContentTour?.children || [])].findIndex(
@@ -180,23 +202,28 @@ export class EaTourStep extends EaBase {
     );
   }
 
+  /** 处理下一步按钮点击事件 */
   @listen("click", ".ea-tour-step__next")
   private _handleNextClick() {
-    this.emit("next", { bubbles: true });
+    this.emit("ea-tour-step-next", { bubbles: true });
   }
 
+  /** 处理上一步按钮点击事件 */
   @listen("click", ".ea-tour-step__previous")
   private _handlePreviousClick() {
-    this.emit("previous", { bubbles: true });
+    this.emit("ea-tour-step-previous", { bubbles: true });
   }
 
+  /** 处理完成按钮点击事件 */
   @listen("click", ".ea-tour-step__finish")
   private _handleFinishClick() {
-    this.emit("finish", { bubbles: true });
+    this.emit("ea-tour-step-finish", { bubbles: true });
   }
 
-  // ==================== 生命周期 ====================
-
+  /**
+   * 更新步骤指示器
+   * @param allSteps - 所有步骤元素数组
+   */
   updateIndicators(allSteps: HTMLElement[]): void {
     if (this._indicatorSlot) {
       this._indicatorSlot.innerHTML = this._renderIndicators(allSteps);

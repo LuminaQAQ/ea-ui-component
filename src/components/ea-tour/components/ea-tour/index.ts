@@ -1,13 +1,19 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-tour" as const;
 const bem = createBEM(TAG_NAME);
+
+const PLACEMENT_TYPES = [
+  "top", "top-start", "top-end",
+  "bottom", "bottom-start", "bottom-end",
+  "left", "left-start", "left-end",
+  "right", "right-start", "right-end",
+] as const;
+
+type PlacementType = (typeof PLACEMENT_TYPES)[number];
 
 const isIntersecting = (el: HTMLElement, scale = 0) => {
   const rect = el.getBoundingClientRect();
@@ -20,10 +26,24 @@ const isIntersecting = (el: HTMLElement, scale = 0) => {
   );
 };
 
+/**
+ * @summary 引导组件，用于分步骤引导用户了解界面功能，支持遮罩、自定义位置和多种弹出方向。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ * @dependency ea-button
+ *
+ * @slot default - 引导步骤子元素（ea-tour-step）。
+ *
+ * @event ea-close - 关闭引导时触发，detail: `{ current: number }`。
+ * @event ea-tour-change - 步骤切换时触发，detail: `{ current: number }`。
+ * @event ea-tour-finish - 完成所有引导步骤时触发。
+ *
+ * @csspart hollow - 镂空区域元素。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTour extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -42,22 +62,23 @@ export class EaTour extends EaBase {
   @query(".ea-tour__divider.left-mask")
   private _leftMask!: SVGRectElement;
 
-  // ==================== 私有属性 ====================
-
   private _abortController?: AbortController;
 
   private _currentChangeAbortController: AbortController | null = null;
+
+  private _appendHandled: boolean = false;
 
   private _states = {
     isChildrenLoaded: false,
     isCenter: false,
   };
 
-  // ==================== 属性定义 ====================
-
   @attribute({
     type: String,
     default: "body",
+    observer(this: EaTour, newVal: string) {
+      this._handleAppendTo(newVal);
+    },
   })
   appendTo: string = "body";
 
@@ -163,20 +184,7 @@ export class EaTour extends EaBase {
   variant: "default" | "primary" = "default";
 
   @attribute({
-    type: Enum([
-      "top",
-      "top-start",
-      "top-end",
-      "bottom",
-      "bottom-start",
-      "bottom-end",
-      "left",
-      "left-start",
-      "left-end",
-      "right",
-      "right-start",
-      "right-end",
-    ]),
+    type: Enum(PLACEMENT_TYPES),
     default: "bottom",
     observer(this: EaTour, newVal: string) {
       this.querySelectorAll("ea-tour-step").forEach(item => {
@@ -186,10 +194,9 @@ export class EaTour extends EaBase {
       });
     },
   })
-  placement: string = "bottom";
+  placement: PlacementType = "bottom";
 
-  // ==================== 方法 ====================
-
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const className = bem(
       {},
@@ -205,6 +212,7 @@ export class EaTour extends EaBase {
     return className;
   }
 
+  /** 渲染模板 */
   html(): string {
     return `
       <div class='${bem()}'>
@@ -228,21 +236,25 @@ export class EaTour extends EaBase {
     `;
   }
 
-  private _handleAppendTo = async (selector: string) => {
-    await customElements.whenDefined("ea-tour");
+  /** 将组件挂载到指定容器 */
+  private _handleAppendTo(selector: string): void {
+    if (this._appendHandled) return;
 
     const target = document.querySelector(selector);
     if (!target)
       console.warn(`[EaTour] append-to ${selector} not found.`, this);
 
-    if (target) {
+    if (target && target !== this.parentElement) {
+      this._appendHandled = true;
       target.appendChild(this);
-    } else {
+    } else if (!target) {
+      this._appendHandled = true;
       document.body.appendChild(this);
     }
-  };
+  }
 
-  private _handleCenterPosition = () => {
+  /** 处理居中显示模式 */
+  private _handleCenterPosition(): void {
     const children = [
       ...this.querySelectorAll("ea-tour-step"),
     ] as HTMLElement[];
@@ -261,9 +273,14 @@ export class EaTour extends EaBase {
     this._leftMask.setAttribute("width", "100%");
 
     this.updateContainerClasslist();
-  };
+  }
 
-  private _updateStepPosition = (target: HTMLElement, step: HTMLElement) => {
+  /**
+   * 更新步骤弹出位置
+   * @param target - 目标元素
+   * @param step - 步骤元素
+   */
+  private _updateStepPosition(target: HTMLElement, step: HTMLElement): void {
     const { width, height, x, y, top, bottom, left } =
       target.getBoundingClientRect();
 
@@ -354,9 +371,13 @@ export class EaTour extends EaBase {
 
     step.style.left = `${realLeft}px`;
     step.style.top = `${realTop}px`;
-  };
+  }
 
-  private _updateHollowPosition = (current: number = this.current) => {
+  /**
+   * 更新镂空区域位置
+   * @param current - 当前步骤索引
+   */
+  private _updateHollowPosition(current: number = this.current): void {
     const children = [
       ...this.querySelectorAll("ea-tour-step"),
     ] as HTMLElement[];
@@ -399,17 +420,10 @@ export class EaTour extends EaBase {
     this._leftMask.setAttribute("width", `${x - halfGap}px`);
 
     this._updateStepPosition(target, children[current]);
-  };
-
-  // ==================== 事件处理 ====================
-
-  @listen("slotchange", ".ea-tour__content slot")
-  private async _handleSlotChange() {
-    await customElements.whenDefined("ea-tour-step");
-    this._updateStepIndicators();
   }
 
-  private _updateStepIndicators() {
+  /** 更新所有步骤的指示器 */
+  private _updateStepIndicators(): void {
     const steps = [...this.querySelectorAll("ea-tour-step")] as any[];
     steps.forEach(step => {
       if (typeof step.updateIndicators === "function") {
@@ -418,21 +432,20 @@ export class EaTour extends EaBase {
     });
   }
 
-  // ==================== 生命周期 ====================
-
-  constructor() {
-    super();
-    this._handleAppendTo(this.appendTo);
+  /** 处理插槽变化，更新步骤指示器 */
+  @listen("slotchange", ".ea-tour__content slot")
+  private async _handleSlotChange() {
+    await customElements.whenDefined("ea-tour-step");
+    this._updateStepIndicators();
   }
 
   $mount(): void {
+    this._handleAppendTo(this.appendTo);
     this.updateContainerClasslist();
 
     const dispatchChangeEvent = () => {
-      this.emit("change", {
+      this.emit("ea-tour-change", {
         detail: { current: this.current },
-        bubbles: true,
-        composed: true,
       });
     };
 
@@ -448,7 +461,7 @@ export class EaTour extends EaBase {
     );
 
     this.addEventListener(
-      "next",
+      "ea-tour-step-next",
       e => {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -460,8 +473,9 @@ export class EaTour extends EaBase {
       },
       { signal: this._abortController.signal }
     );
+
     this.addEventListener(
-      "previous",
+      "ea-tour-step-previous",
       e => {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -473,10 +487,12 @@ export class EaTour extends EaBase {
       },
       { signal: this._abortController.signal }
     );
+
     this.addEventListener(
-      "finish",
+      "ea-tour-step-finish",
       () => {
         this.visible = false;
+        this.emit("ea-tour-finish");
       },
       { signal: this._abortController.signal }
     );

@@ -2,6 +2,7 @@ $name: ea-tour;
 
 :host {
   --#{$name}-transition: var(--transition-normal);
+  --#{$name}-mask-color: rgba(0, 0, 0, 0.5);
 }
 
 :host {
@@ -40,7 +41,7 @@ $name: ea-tour;
     width: 100%;
     height: 100%;
 
-    fill: rgba(0, 0, 0, 0.5);
+    fill: var(--#{$name}-mask-color);
     pointer-events: none;
   }
 
@@ -81,8 +82,5 @@ $name: ea-tour;
     .ea-tour__mask {
       display: block;
     }
-  }
-
-  @include modifier(primary) {
   }
 }

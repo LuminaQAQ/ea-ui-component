@@ -10,12 +10,18 @@ $name: ea-tour-step;
   --#{$name}-visible: none;
   --#{$name}-width: 400px;
   --#{$name}-indicator-size: 6px;
-
   --#{$name}-indicator-color: var(--grey-200);
   --#{$name}-indicator-active-color: var(--blue-500);
   --#{$name}-close-color: var(--grey-500);
-
   --#{$name}-primary-color: var(--blue-500);
+  --#{$name}-bg-color: var(--white);
+  --#{$name}-padding: var(--spacing-lg);
+  --#{$name}-header-padding-bottom: var(--spacing-lg);
+  --#{$name}-header-padding-right: var(--spacing-lg);
+  --#{$name}-footer-padding-top: var(--spacing-lg);
+  --#{$name}-switch-margin-top: var(--spacing-md);
+  --#{$name}-indicator-margin: var(--spacing-sm);
+  --#{$name}-btn-margin: var(--spacing-sm);
 }
 
 :host {
@@ -38,20 +44,20 @@ $name: ea-tour-step;
 
 @include block($name) {
   box-sizing: border-box;
-  padding: 12px;
+  padding: var(--#{$name}-padding);
 
-  background-color: white;
+  background-color: var(--#{$name}-bg-color);
 
   @include element(btn) {
-    margin: 0 6px;
+    margin: 0 var(--#{$name}-btn-margin);
   }
 
   @include element(header) {
     position: relative;
     box-sizing: border-box;
 
-    padding-bottom: 12px;
-    padding-right: 12px;
+    padding-bottom: var(--#{$name}-header-padding-bottom);
+    padding-right: var(--#{$name}-header-padding-right);
   }
 
   @include element(close-icon) {
@@ -70,7 +76,7 @@ $name: ea-tour-step;
     align-items: center;
     justify-content: space-around;
 
-    padding-top: 12px;
+    padding-top: var(--#{$name}-footer-padding-top);
   }
 
   @include element(indicator-group) {
@@ -82,13 +88,12 @@ $name: ea-tour-step;
 
   @include element(indicator) {
     box-sizing: border-box;
-    margin: 0 4px;
-    border-radius: 50%;
+    margin: 0 var(--#{$name}-indicator-margin);
+    border-radius: var(--border-radius-circle);
 
     width: var(--#{$name}-indicator-size);
     height: var(--#{$name}-indicator-size);
 
-    // border: 1px solid var(--#{$name}-indicator-color);
     background-color: var(--#{$name}-indicator-color);
 
     &.is-active {
@@ -102,32 +107,30 @@ $name: ea-tour-step;
     display: flex;
     justify-content: flex-end;
 
-    margin-top: 6px;
+    margin-top: var(--#{$name}-switch-margin-top);
   }
 
   @include element(next) {
     display: var(--next-button-visible);
   }
+
   @include element(previous) {
     display: var(--previous-button-visible);
   }
+
   @include element(finish) {
     display: var(--finish-button-visible);
   }
 
   @include modifier(primary) {
     --#{$name}-indicator-color: rgba(255, 255, 255, 0.3);
-    --#{$name}-indicator-active-color: white;
-    --#{$name}-close-color: white;
+    --#{$name}-indicator-active-color: var(--white);
+    --#{$name}-close-color: var(--white);
     background-color: var(--#{$name}-primary-color);
-    color: white;
-
-    // .ea-tour-step__close-icon {
-    //   color: white;
-    // }
+    color: var(--white);
 
     .ea-tour-step__previous {
-      border: 1px solid white;
+      border: var(--border-width) solid var(--white);
     }
   }
 }

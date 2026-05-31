@@ -532,7 +532,7 @@ describe("EaTour Component", () => {
   // ==================== 事件 ====================
 
   describe("Events", () => {
-    it("next 事件应该触发 change 事件", async () => {
+    it("ea-tour-step-next 事件应该触发 ea-tour-change 事件", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content 1</div></ea-tour-step>
         <ea-tour-step heading="Step 2"><div>Content 2</div></ea-tour-step>
@@ -543,15 +543,15 @@ describe("EaTour Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      tour.addEventListener("change", changeHandler);
+      tour.addEventListener("ea-tour-change", changeHandler);
 
-      tour.dispatchEvent(new CustomEvent("next", { bubbles: true }));
+      tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
       await waitForRender();
 
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    it("previous 事件应该触发 change 事件", async () => {
+    it("ea-tour-step-previous 事件应该触发 ea-tour-change 事件", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content 1</div></ea-tour-step>
         <ea-tour-step heading="Step 2"><div>Content 2</div></ea-tour-step>
@@ -565,9 +565,9 @@ describe("EaTour Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      tour.addEventListener("change", changeHandler);
+      tour.addEventListener("ea-tour-change", changeHandler);
 
-      tour.dispatchEvent(new CustomEvent("previous", { bubbles: true }));
+      tour.dispatchEvent(new CustomEvent("ea-tour-step-previous", { bubbles: true }));
       await waitForRender();
 
       expect(changeHandler).toHaveBeenCalled();
@@ -588,7 +588,7 @@ describe("EaTour Component", () => {
       expect(tour.visible).toBe(false);
     });
 
-    it("finish 事件应该隐藏 tour", async () => {
+    it("ea-tour-step-finish 事件应该隐藏 tour 并触发 ea-tour-finish 事件", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
@@ -597,17 +597,21 @@ describe("EaTour Component", () => {
 
       await waitForRender();
 
-      tour.dispatchEvent(new CustomEvent("finish", { bubbles: true }));
+      const finishHandler = vi.fn();
+      tour.addEventListener("ea-tour-finish", finishHandler);
+
+      tour.dispatchEvent(new CustomEvent("ea-tour-step-finish", { bubbles: true }));
       await waitForRender();
 
       expect(tour.visible).toBe(false);
+      expect(finishHandler).toHaveBeenCalled();
     });
   });
 
   // ==================== 步骤导航 ====================
 
   describe("Step Navigation", () => {
-    it("next 事件应该增加 current", async () => {
+    it("ea-tour-step-next 事件应该增加 current", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content 1</div></ea-tour-step>
         <ea-tour-step heading="Step 2"><div>Content 2</div></ea-tour-step>
@@ -619,13 +623,13 @@ describe("EaTour Component", () => {
 
       expect(tour.current).toBe(0);
 
-      tour.dispatchEvent(new CustomEvent("next", { bubbles: true }));
+      tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
       await waitForRender();
 
       expect(tour.current).toBe(1);
     });
 
-    it("previous 事件应该减少 current", async () => {
+    it("ea-tour-step-previous 事件应该减少 current", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content 1</div></ea-tour-step>
         <ea-tour-step heading="Step 2"><div>Content 2</div></ea-tour-step>
@@ -635,11 +639,11 @@ describe("EaTour Component", () => {
 
       await waitForRender();
 
-      tour.dispatchEvent(new CustomEvent("next", { bubbles: true }));
+      tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
       await waitForRender();
       expect(tour.current).toBe(1);
 
-      tour.dispatchEvent(new CustomEvent("previous", { bubbles: true }));
+      tour.dispatchEvent(new CustomEvent("ea-tour-step-previous", { bubbles: true }));
       await waitForRender();
       expect(tour.current).toBe(0);
     });
@@ -653,7 +657,7 @@ describe("EaTour Component", () => {
 
       await waitForRender();
 
-      tour.dispatchEvent(new CustomEvent("finish", { bubbles: true }));
+      tour.dispatchEvent(new CustomEvent("ea-tour-step-finish", { bubbles: true }));
       await waitForRender();
 
       expect(tour.visible).toBe(false);
@@ -717,9 +721,9 @@ describe("EaTour Component", () => {
       await waitForRender();
 
       const changeHandler = vi.fn();
-      tour.addEventListener("change", changeHandler);
+      tour.addEventListener("ea-tour-change", changeHandler);
 
-      tour.dispatchEvent(new CustomEvent("next", { bubbles: true }));
+      tour.dispatchEvent(new CustomEvent("ea-tour-step-next", { bubbles: true }));
       await waitForRender();
 
       expect(changeHandler).not.toHaveBeenCalled();
@@ -1512,7 +1516,7 @@ describe("EaTourStep Component", () => {
   // ==================== 事件 ====================
 
   describe("Events", () => {
-    it("点击 Next 按钮应该触发 next 事件", async () => {
+    it("点击 Next 按钮应该触发 ea-tour-step-next 事件", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
@@ -1522,7 +1526,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       const nextHandler = vi.fn();
-      step.addEventListener("next", nextHandler);
+      step.addEventListener("ea-tour-step-next", nextHandler);
 
       const nextBtn = step.shadowRoot.querySelector('[part="next"]');
       nextBtn.click();
@@ -1531,7 +1535,7 @@ describe("EaTourStep Component", () => {
       expect(nextHandler).toHaveBeenCalled();
     });
 
-    it("点击 Previous 按钮应该触发 previous 事件", async () => {
+    it("点击 Previous 按钮应该触发 ea-tour-step-previous 事件", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
@@ -1541,7 +1545,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       const previousHandler = vi.fn();
-      step.addEventListener("previous", previousHandler);
+      step.addEventListener("ea-tour-step-previous", previousHandler);
 
       const previousBtn = step.shadowRoot.querySelector('[part="previous"]');
       previousBtn.click();
@@ -1550,7 +1554,7 @@ describe("EaTourStep Component", () => {
       expect(previousHandler).toHaveBeenCalled();
     });
 
-    it("点击 Finish 按钮应该触发 finish 事件", async () => {
+    it("点击 Finish 按钮应该触发 ea-tour-step-finish 事件", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content</div></ea-tour-step>
       `);
@@ -1560,7 +1564,7 @@ describe("EaTourStep Component", () => {
 
       const step = tour.querySelector("ea-tour-step");
       const finishHandler = vi.fn();
-      step.addEventListener("finish", finishHandler);
+      step.addEventListener("ea-tour-step-finish", finishHandler);
 
       const finishBtn = step.shadowRoot.querySelector('[part="finish"]');
       finishBtn.click();
@@ -1636,7 +1640,7 @@ describe("EaTourStep Component", () => {
       expect(closeHandler).toHaveBeenCalled();
     });
 
-    it("next 事件会被 EaTour 拦截并处理", async () => {
+    it("ea-tour-step-next 事件会被 EaTour 拦截并处理", async () => {
       const tour = createTour(`
         <ea-tour-step heading="Step 1"><div>Content 1</div></ea-tour-step>
         <ea-tour-step heading="Step 2"><div>Content 2</div></ea-tour-step>
