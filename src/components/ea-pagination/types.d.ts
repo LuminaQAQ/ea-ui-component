@@ -33,7 +33,6 @@ export interface EaPaginationVueProps {
 }
 
 export interface EaPaginationVueEvents {
-  "change": (event: CustomEvent<{ currentPage: number; pageSize: number }>) => void;
   "ea-current-change": (event: CustomEvent<{ value: number }>) => void;
   "ea-prev-click": (event: CustomEvent<{ value: number }>) => void;
   "ea-next-click": (event: CustomEvent<{ value: number }>) => void;
@@ -52,7 +51,7 @@ export type EaPaginationVueComponent = DefineComponent<
   {},
   {},
   {},
-  "change" | "ea-current-change" | "ea-prev-click" | "ea-next-click" | "ea-size-change",
+  "ea-current-change" | "ea-prev-click" | "ea-next-click" | "ea-size-change",
   {},
   {},
   EaPaginationVueSlots
@@ -78,7 +77,6 @@ export interface EaPaginationReactProps extends HTMLAttributes<HTMLElement> {
   disabled?: boolean;
   pageSizes?: number[];
   layout?: Array<"prev" | "pager" | "next" | "jumper" | "total" | "sizes" | "->">;
-  onChange?: (event: CustomEvent<{ currentPage: number; pageSize: number }>) => void;
   onEaCurrentChange?: (event: CustomEvent<{ value: number }>) => void;
   onEaPrevClick?: (event: CustomEvent<{ value: number }>) => void;
   onEaNextClick?: (event: CustomEvent<{ value: number }>) => void;

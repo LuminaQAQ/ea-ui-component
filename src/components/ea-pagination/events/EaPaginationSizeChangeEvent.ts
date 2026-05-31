@@ -1,3 +1,7 @@
+export interface EaPaginationSizeChangeEventDetail {
+  pageSize: number;
+}
+
 export class EaPaginationSizeChangeEvent extends Event {
   readonly detail: EaPaginationSizeChangeEventDetail;
 
@@ -10,13 +14,6 @@ export class EaPaginationSizeChangeEvent extends Event {
 
     this.detail = detail;
   }
-}
-
-interface EaPaginationSizeChangeEventDetail {
-  /**
-   * @description size 的值
-   */
-  pageSize: number;
 }
 
 declare global {

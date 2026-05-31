@@ -160,7 +160,7 @@
           this.el.layout = ["prev", "pager", "next"];
 
           this.btn.addEventListener("change", e => {
-            this.el["hide-on-single-page"] = e.detail.value;
+            this.el.hideOnSinglePage = e.detail.value;
           });
         },
       };

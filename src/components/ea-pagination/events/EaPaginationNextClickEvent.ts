@@ -1,3 +1,7 @@
+export interface EaPaginationNextClickEventDetail {
+  value: number;
+}
+
 export class EaPaginationNextClickEvent extends Event {
   readonly detail: EaPaginationNextClickEventDetail;
 
@@ -10,10 +14,6 @@ export class EaPaginationNextClickEvent extends Event {
 
     this.detail = detail;
   }
-}
-
-interface EaPaginationNextClickEventDetail {
-  value: number;
 }
 
 declare global {

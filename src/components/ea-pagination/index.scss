@@ -1,59 +1,66 @@
-$ea-pagination-size-options: ("large", "default", "small");
+$name: ea-pagination;
+$ea-pagination-size-options: (
+  "large",
+  "default",
+  "small"
+);
 
 :host {
-  --ea-pagination-color: var(--grey-900);
-  --ea-pagination-active-color: var(--blue-500);
-  --ea-pagination-disabled-active-color: var(--blue-300);
-  --ea-pagination-disabled-color: var(--grey-300);
-  --ea-pagination-background: #f0f2f5;
+  --#{$name}-color: var(--grey-900);
+  --#{$name}-active-color: var(--blue-500);
+  --#{$name}-disabled-active-color: var(--blue-300);
+  --#{$name}-disabled-color: var(--grey-300);
+  --#{$name}-background: var(--grey-200);
 
-  --ea-pagination-large-size: 18px;
-  --ea-pagination-default-size: 16px;
-  --ea-pagination-small-size: 14px;
+  --#{$name}-font-size: var(--font-size-lg);
+  --#{$name}-font-size-default: var(--font-size-lg);
+  --#{$name}-font-size-small: var(--font-size-md);
+  --#{$name}-font-size-large: 18px;
 
-  --ea-pagination-jumper-large-size: 30px;
-  --ea-pagination-jumper-default-size: 28px;
-  --ea-pagination-jumper-small-size: 22px;
+  --#{$name}-spacing: var(--spacing-sm) var(--spacing-lg);
+  --#{$name}-spacing-default: var(--spacing-sm) var(--spacing-lg);
+  --#{$name}-spacing-small: var(--spacing-xs) var(--spacing-md);
+  --#{$name}-spacing-large: var(--spacing-sm) 12px;
 
-  --ea-pagination-large-spacing: 6px 12px;
-  --ea-pagination-default-spacing: 4px 10px;
-  --ea-pagination-small-spacing: 2px 8px;
-
-  --ea-pagination-large-control-spacing: 6px;
-  --ea-pagination-default-control-spacing: 4px;
-  --ea-pagination-small-control-spacing: 2px;
+  --#{$name}-jumper-height: 28px;
+  --#{$name}-jumper-height-default: 28px;
+  --#{$name}-jumper-height-small: 22px;
+  --#{$name}-jumper-height-large: 30px;
 }
 
-@include block(ea-pagination) {
+:host {
+  display: block;
+}
+
+:host([disabled]) {
+  cursor: var(--cursor-not-allowed);
+}
+
+@include block($name) {
   display: flex;
   align-items: center;
 
-  .prev-icon,
-  .next-icon {
+  @include element(icon) {
     display: inline-block;
 
     box-sizing: border-box;
-    padding: var(--ea-pagination-default-spacing);
-    border-radius: 2px;
+    padding: var(--#{$name}-spacing);
+    border-radius: var(--border-radius-sm);
 
-    font-size: var(--ea-pagination-default-size);
-    line-height: var(--ea-pagination-default-size);
+    font-size: var(--#{$name}-font-size);
+    line-height: var(--#{$name}-font-size);
 
-    color: var(--ea-pagination-color);
-    cursor: pointer;
+    color: var(--#{$name}-color);
+    cursor: var(--cursor-pointer);
     text-align: center;
 
     &.is-disabled {
-      cursor: not-allowed;
-      color: var(--ea-pagination-disabled-color);
+      cursor: var(--cursor-not-allowed);
+      color: var(--#{$name}-disabled-color);
     }
 
     &:not(.is-disabled):hover {
-      color: var(--ea-pagination-active-color);
-    }
-
-    &.is-hidden {
-      display: none;
+      color: var(--#{$name}-active-color);
     }
   }
 
@@ -69,29 +76,44 @@ $ea-pagination-size-options: ("large", "default", "small");
     display: inline-block;
 
     box-sizing: border-box;
-    padding: var(--ea-pagination-default-spacing);
-    border-radius: 2px;
+    padding: var(--#{$name}-spacing);
+    border-radius: var(--border-radius-sm);
 
-    font-size: var(--ea-pagination-default-size);
-    line-height: var(--ea-pagination-default-size);
+    font-size: var(--#{$name}-font-size);
+    line-height: var(--#{$name}-font-size);
 
-    color: var(--ea-pagination-color);
-    cursor: pointer;
+    color: var(--#{$name}-color);
+    cursor: var(--cursor-pointer);
     text-align: center;
 
     &:hover {
-      color: var(--ea-pagination-active-color);
+      color: var(--#{$name}-active-color);
     }
 
     &.is-active {
-      font-weight: 500;
-      color: var(--ea-pagination-active-color);
+      font-weight: var(--font-weight-bold);
+      color: var(--#{$name}-active-color);
     }
   }
 
+  @include element(more) {
+    display: inline-block;
+
+    box-sizing: border-box;
+    padding: var(--#{$name}-spacing);
+    border-radius: var(--border-radius-sm);
+
+    font-size: var(--#{$name}-font-size);
+    line-height: var(--#{$name}-font-size);
+
+    color: var(--#{$name}-color);
+    cursor: var(--cursor-pointer);
+    text-align: center;
+  }
+
   @include element(total) {
-    color: var(--ea-pagination-color);
-    font-size: var(--ea-pagination-default-size);
+    color: var(--#{$name}-color);
+    font-size: var(--#{$name}-font-size);
 
     margin: 0 0.5rem;
 
@@ -104,8 +126,8 @@ $ea-pagination-size-options: ("large", "default", "small");
 
     margin: 0 0.5rem;
 
-    color: var(--ea-pagination-color);
-    font-size: var(--ea-pagination-default-size);
+    color: var(--#{$name}-color);
+    font-size: var(--#{$name}-font-size);
 
     white-space: nowrap;
   }
@@ -113,16 +135,18 @@ $ea-pagination-size-options: ("large", "default", "small");
   @include element(jumper) {
     margin-left: 0.5rem;
 
-    height: var(--ea-pagination-jumper-default-size);
-    width: 56px;
+    --ea-input-number-width: 56px;
+    --ea-input-number-height: var(--#{$name}-jumper-height);
 
-    color: var(--ea-pagination-color);
-    font-size: var(--ea-pagination-default-size);
+    color: var(--#{$name}-color);
+    font-size: var(--#{$name}-font-size);
 
-    &::part(original),
-    &::part(inner) {
+    &::part(region) {
+      height: var(--#{$name}-jumper-height);
+    }
+
+    &::part(input) {
       text-align: center;
-      height: var(--ea-pagination-jumper-default-size);
     }
   }
 
@@ -132,18 +156,23 @@ $ea-pagination-size-options: ("large", "default", "small");
     width: 128px;
   }
 
+  @include element(separator) {
+    flex: 1;
+  }
+
   @include modifier(background) {
-    .ea-pagination__icon,
-    .ea-pagination__page {
-      background: var(--ea-pagination-background);
+
+    .#{$name}__icon,
+    .#{$name}__page {
+      background: var(--#{$name}-background);
     }
 
-    .ea-pagination__page {
-      margin: 0 4px;
+    .#{$name}__page {
+      margin: 0 var(--spacing-xs);
 
       &.is-active {
-        color: white;
-        background: var(--ea-pagination-active-color);
+        color: var(--white);
+        background: var(--#{$name}-active-color);
       }
     }
   }
@@ -153,29 +182,29 @@ $ea-pagination-size-options: ("large", "default", "small");
   }
 
   @include state(disabled) {
-    cursor: not-allowed;
+    cursor: var(--cursor-not-allowed);
 
-    .ea-pagination__icon,
-    .ea-pagination__page,
-    .ea-pagination__total,
-    .ea-pagination__wrapper {
-      color: var(--ea-pagination-disabled-color);
+    .#{$name}__icon,
+    .#{$name}__page,
+    .#{$name}__total,
+    .#{$name}__wrapper {
+      color: var(--#{$name}-disabled-color);
       pointer-events: none;
     }
 
-    .ea-pagination__page {
+    .#{$name}__page {
       &.is-active {
-        cursor: not-allowed;
-        color: var(--ea-pagination-disabled-active-color);
+        cursor: var(--cursor-not-allowed);
+        color: var(--#{$name}-disabled-active-color);
       }
     }
 
-    &.ea-pagination--background {
-      .ea-pagination__page {
+    &.#{$name}--background {
+      .#{$name}__page {
         &.is-active {
-          cursor: not-allowed;
-          color: white;
-          background-color: var(--ea-pagination-disabled-active-color);
+          cursor: var(--cursor-not-allowed);
+          color: var(--white);
+          background-color: var(--#{$name}-disabled-active-color);
         }
       }
     }
@@ -183,25 +212,26 @@ $ea-pagination-size-options: ("large", "default", "small");
 
   @each $size in $ea-pagination-size-options {
     @include modifier(size-#{$size}) {
-      .prev-icon,
-      .ea-pagination__page,
-      .next-icon {
-        font-size: var(--ea-pagination-#{$size}-size);
-        line-height: var(--ea-pagination-#{$size}-size);
-        padding: var(--ea-pagination-#{$size}-spacing);
+
+      .#{$name}__icon,
+      .#{$name}__page,
+      .#{$name}__more {
+        font-size: var(--#{$name}-font-size-#{$size});
+        line-height: var(--#{$name}-font-size-#{$size});
+        padding: var(--#{$name}-spacing-#{$size});
       }
 
-      .ea-pagination__total {
-        font-size: var(--ea-pagination-#{$size}-size);
-        line-height: var(--ea-pagination-#{$size}-size);
+      .#{$name}__total,
+      .#{$name}__wrapper {
+        font-size: var(--#{$name}-font-size-#{$size});
+        line-height: var(--#{$name}-font-size-#{$size});
       }
 
-      .ea-pagination__jumper {
-        height: var(--ea-pagination-jumper-#{$size}-size);
+      .#{$name}__jumper {
+        --ea-input-number-height: var(--#{$name}-jumper-height-#{$size});
 
-        &::part(original),
-        &::part(inner) {
-          height: var(--ea-pagination-jumper-#{$size}-size);
+        &::part(region) {
+          height: var(--#{$name}-jumper-height-#{$size});
         }
       }
     }

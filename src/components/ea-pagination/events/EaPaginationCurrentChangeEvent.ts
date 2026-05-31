@@ -1,3 +1,7 @@
+export interface EaPaginationCurrentChangeEventDetail {
+  value: number;
+}
+
 export class EaPaginationCurrentChangeEvent extends Event {
   readonly detail: EaPaginationCurrentChangeEventDetail;
 
@@ -12,6 +16,8 @@ export class EaPaginationCurrentChangeEvent extends Event {
   }
 }
 
-interface EaPaginationCurrentChangeEventDetail {
-  value: number;
+declare global {
+  interface GlobalEventHandlersEventMap {
+    "ea-current-change": EaPaginationCurrentChangeEvent;
+  }
 }

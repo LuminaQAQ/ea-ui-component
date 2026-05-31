@@ -3,7 +3,7 @@ import { waitForRender } from "./utils/waitForRender.js";
 
 import "../components/ea-pagination/index.ts";
 
-describe("EaPagination Component", () => {
+describe("EaPagination", () => {
   let container;
 
   beforeEach(() => {
@@ -15,10 +15,8 @@ describe("EaPagination Component", () => {
     container.remove();
   });
 
-  // ==================== 基本渲染 ====================
-
-  describe("Basic Rendering", () => {
-    it("应该正确渲染 ea-pagination 组件", async () => {
+  describe("基本渲染", () => {
+    it("应该正确渲染组件", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -28,7 +26,7 @@ describe("EaPagination Component", () => {
       expect(pagination.shadowRoot).toBeTruthy();
     });
 
-    it("应该包含 .ea-pagination 容器元素", async () => {
+    it("应该包含容器元素", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -49,7 +47,7 @@ describe("EaPagination Component", () => {
       ).toBeTruthy();
     });
 
-    it("默认 layout 应该包含 prev, pager, next, jumper, ->, total", async () => {
+    it("默认 layout 应包含 prev, pager, next, jumper, ->, total", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -65,29 +63,29 @@ describe("EaPagination Component", () => {
       ]);
     });
 
-    it("默认 layout 应该渲染 prev icon", async () => {
+    it("默认 layout 应渲染上一页图标", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       await waitForRender();
 
       expect(
-        pagination.shadowRoot.querySelector(".ea-pagination__icon.prev-icon")
+        pagination.shadowRoot.querySelector(".ea-pagination__icon--prev")
       ).toBeTruthy();
     });
 
-    it("默认 layout 应该渲染 next icon", async () => {
+    it("默认 layout 应渲染下一页图标", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       await waitForRender();
 
       expect(
-        pagination.shadowRoot.querySelector(".ea-pagination__icon.next-icon")
+        pagination.shadowRoot.querySelector(".ea-pagination__icon--next")
       ).toBeTruthy();
     });
 
-    it("默认 layout 应该渲染 pager 区域", async () => {
+    it("默认 layout 应渲染分页器区域", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -98,7 +96,7 @@ describe("EaPagination Component", () => {
       ).toBeTruthy();
     });
 
-    it("默认 layout 应该渲染 total 区域", async () => {
+    it("默认 layout 应渲染总数区域", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -109,7 +107,7 @@ describe("EaPagination Component", () => {
       ).toBeTruthy();
     });
 
-    it("默认 layout 应该渲染 jumper 区域", async () => {
+    it("默认 layout 应渲染跳转区域", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -120,8 +118,6 @@ describe("EaPagination Component", () => {
       ).toBeTruthy();
     });
   });
-
-  // ==================== CSS Parts ====================
 
   describe("CSS Parts", () => {
     it("应该支持 container part", async () => {
@@ -222,10 +218,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== Total 属性 ====================
-
-  describe("Total Attribute", () => {
-    it("默认 total 应该是 0", async () => {
+  describe("total 属性", () => {
+    it("默认 total 应为 0", async () => {
       const pagination = document.createElement("ea-pagination");
       container.appendChild(pagination);
       await waitForRender();
@@ -242,7 +236,7 @@ describe("EaPagination Component", () => {
       expect(pagination.total).toBe(1000);
     });
 
-    it("total 变化时应该更新 total 文本", async () => {
+    it("total 变化应更新总数文本", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -260,7 +254,7 @@ describe("EaPagination Component", () => {
       expect(totalEl.textContent).toBe("Total 200");
     });
 
-    it("total 为 0 时应该正常渲染", async () => {
+    it("total 为 0 应正常渲染", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "0");
       container.appendChild(pagination);
@@ -274,10 +268,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== DefaultPageSize 属性 ====================
-
-  describe("DefaultPageSize Attribute", () => {
-    it("默认 defaultPageSize 应该是 10", async () => {
+  describe("defaultPageSize 属性", () => {
+    it("默认 defaultPageSize 应为 10", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -296,7 +288,7 @@ describe("EaPagination Component", () => {
       expect(pagination.defaultPageSize).toBe(20);
     });
 
-    it("defaultPageSize 变化时应该影响 pageSize 默认值", async () => {
+    it("defaultPageSize 应影响 pageSize 默认值", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("default-page-size", "25");
@@ -306,7 +298,7 @@ describe("EaPagination Component", () => {
       expect(pagination.pageSize).toBe(25);
     });
 
-    it("defaultPageSize 动态变化时应该触发重新渲染", async () => {
+    it("defaultPageSize 动态变化应触发重新渲染", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -321,10 +313,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== PageSize 属性 ====================
-
-  describe("PageSize Attribute", () => {
-    it("默认 pageSize 应该使用 defaultPageSize", async () => {
+  describe("pageSize 属性", () => {
+    it("默认 pageSize 应使用 defaultPageSize", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -343,7 +333,7 @@ describe("EaPagination Component", () => {
       expect(pagination.pageSize).toBe(50);
     });
 
-    it("pageSize 变化时应该触发 ea-size-change 事件", async () => {
+    it("pageSize 变化应触发 ea-size-change 事件", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -359,7 +349,7 @@ describe("EaPagination Component", () => {
       expect(sizeChangeHandler.mock.calls[0][0].detail.pageSize).toBe(20);
     });
 
-    it("pageSize 变化时应该触发重新渲染分页", async () => {
+    it("pageSize 变化应触发分页器重新渲染", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -380,10 +370,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== PagerCount 属性 ====================
-
-  describe("PagerCount Attribute", () => {
-    it("默认 pagerCount 应该是 7", async () => {
+  describe("pagerCount 属性", () => {
+    it("默认 pagerCount 应为 7", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -402,7 +390,7 @@ describe("EaPagination Component", () => {
       expect(pagination.pagerCount).toBe(11);
     });
 
-    it("pagerCount 较小时应该显示省略号", async () => {
+    it("较小的 pagerCount 应显示省略号", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "1000");
       pagination.setAttribute("pager-count", "5");
@@ -416,10 +404,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== CurrentPage 属性 ====================
-
-  describe("CurrentPage Attribute", () => {
-    it("默认 currentPage 应该是 1", async () => {
+  describe("currentPage 属性", () => {
+    it("默认 currentPage 应为 1", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -438,24 +424,7 @@ describe("EaPagination Component", () => {
       expect(pagination.currentPage).toBe(5);
     });
 
-    it("currentPage 变化时应该触发 change 事件", async () => {
-      const pagination = document.createElement("ea-pagination");
-      pagination.setAttribute("total", "100");
-      container.appendChild(pagination);
-      await waitForRender();
-
-      const changeHandler = vi.fn();
-      pagination.addEventListener("change", changeHandler);
-
-      pagination.currentPage = 2;
-      await waitForRender();
-
-      expect(changeHandler).toHaveBeenCalled();
-      expect(changeHandler.mock.calls[0][0].detail.currentPage).toBe(2);
-      expect(changeHandler.mock.calls[0][0].detail.pageSize).toBe(10);
-    });
-
-    it("currentPage 变化时应该触发 ea-current-change 事件", async () => {
+    it("currentPage 变化应触发 ea-current-change 事件", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -464,14 +433,14 @@ describe("EaPagination Component", () => {
       const handler = vi.fn();
       pagination.addEventListener("ea-current-change", handler);
 
-      pagination.currentPage = 3;
+      pagination.currentPage = 2;
       await waitForRender();
 
       expect(handler).toHaveBeenCalled();
-      expect(handler.mock.calls[0][0].detail.value).toBe(3);
+      expect(handler.mock.calls[0][0].detail.value).toBe(2);
     });
 
-    it("currentPage 变化时应该更新活跃页码样式", async () => {
+    it("currentPage 变化应更新激活页码样式", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -486,7 +455,7 @@ describe("EaPagination Component", () => {
       expect(activePage).toBeTruthy();
     });
 
-    it("currentPage 动态更新应该正确反映", async () => {
+    it("currentPage 动态更新应正确反映", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -501,10 +470,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== Background 属性 ====================
-
-  describe("Background Attribute", () => {
-    it("默认 background 应该是 false", async () => {
+  describe("background 属性", () => {
+    it("默认 background 应为 false", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -523,7 +490,7 @@ describe("EaPagination Component", () => {
       expect(pagination.background).toBe(true);
     });
 
-    it("background 为 true 时应该添加 background 修饰符 class", async () => {
+    it("background 为 true 应添加 background 修饰符类", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("background", "");
@@ -536,7 +503,7 @@ describe("EaPagination Component", () => {
       );
     });
 
-    it("background 为 false 时不应有 background 修饰符 class", async () => {
+    it("background 为 false 不应有 background 修饰符类", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -548,7 +515,7 @@ describe("EaPagination Component", () => {
       );
     });
 
-    it("background 动态切换应该正确更新 class", async () => {
+    it("background 动态切换应正确更新类名", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -575,10 +542,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== Size 属性 ====================
-
-  describe("Size Attribute", () => {
-    it("默认 size 应该是空字符串", async () => {
+  describe("size 属性", () => {
+    it("默认 size 应为空字符串", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -617,7 +582,7 @@ describe("EaPagination Component", () => {
       expect(pagination.size).toBe("large");
     });
 
-    it("size 变化时应该添加对应修饰符 class", async () => {
+    it("size 变化应添加对应修饰符类", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("size", "small");
@@ -630,7 +595,7 @@ describe("EaPagination Component", () => {
       );
     });
 
-    it("size 为空时不应有 size 修饰符 class", async () => {
+    it("空 size 不应有 size 修饰符类", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -645,7 +610,7 @@ describe("EaPagination Component", () => {
       );
     });
 
-    it("size 动态切换应该正确更新 class", async () => {
+    it("size 动态切换应正确更新类名", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("size", "small");
@@ -669,10 +634,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== HideOnSinglePage 属性 ====================
-
-  describe("HideOnSinglePage Attribute", () => {
-    it("默认 hideOnSinglePage 应该是 false", async () => {
+  describe("hideOnSinglePage 属性", () => {
+    it("默认 hideOnSinglePage 应为 false", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -691,7 +654,7 @@ describe("EaPagination Component", () => {
       expect(pagination.hideOnSinglePage).toBe(true);
     });
 
-    it("hideOnSinglePage 为 true 且只有一页时应该隐藏分页", async () => {
+    it("hideOnSinglePage 为 true 且只有一页时应隐藏分页", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "5");
       pagination.setAttribute("hide-on-single-page", "");
@@ -702,7 +665,7 @@ describe("EaPagination Component", () => {
       expect(containerEl.classList.contains("is-hide")).toBe(true);
     });
 
-    it("hideOnSinglePage 为 true 但多页时不应隐藏", async () => {
+    it("hideOnSinglePage 为 true 且有多页时不应隐藏", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("hide-on-single-page", "");
@@ -712,12 +675,22 @@ describe("EaPagination Component", () => {
       const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
       expect(containerEl.classList.contains("is-hide")).toBe(false);
     });
+
+    it("hideOnSinglePage 在不含 pager 的 layout 中也应生效", async () => {
+      const pagination = document.createElement("ea-pagination");
+      pagination.setAttribute("total", "5");
+      pagination.setAttribute("hide-on-single-page", "");
+      pagination.layout = ["prev", "next", "total"];
+      container.appendChild(pagination);
+      await waitForRender();
+
+      const containerEl = pagination.shadowRoot.querySelector(".ea-pagination");
+      expect(containerEl.classList.contains("is-hide")).toBe(true);
+    });
   });
 
-  // ==================== Disabled 属性 ====================
-
-  describe("Disabled Attribute", () => {
-    it("默认 disabled 应该是 false", async () => {
+  describe("disabled 属性", () => {
+    it("默认 disabled 应为 false", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -736,7 +709,7 @@ describe("EaPagination Component", () => {
       expect(pagination.disabled).toBe(true);
     });
 
-    it("disabled 时容器应有 is-disabled 样式类", async () => {
+    it("disabled 应添加 is-disabled 类到容器", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("disabled", "");
@@ -747,7 +720,7 @@ describe("EaPagination Component", () => {
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
     });
 
-    it("disabled 时 jumper 输入框应该被禁用（需在挂载后设置）", async () => {
+    it("disabled 应禁用跳转输入框", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -760,12 +733,24 @@ describe("EaPagination Component", () => {
         pagination.shadowRoot.querySelector('[part="jumper"]');
       expect(jumperInput.disabled).toBe(true);
     });
+
+    it("disabled 应禁用 sizes 下拉框", async () => {
+      const pagination = document.createElement("ea-pagination");
+      pagination.setAttribute("total", "100");
+      pagination.layout = ["sizes", "prev", "pager", "next"];
+      container.appendChild(pagination);
+      await waitForRender(300);
+
+      pagination.setAttribute("disabled", "");
+      await waitForRender(300);
+
+      const sizes = pagination.shadowRoot.querySelector('[part="sizes"]');
+      expect(sizes.disabled).toBe(true);
+    });
   });
 
-  // ==================== PageSizes 属性 ====================
-
-  describe("PageSizes Property", () => {
-    it("默认 pageSizes 应该是 [10, 20, 30, 40, 50, 100]", async () => {
+  describe("pageSizes 属性", () => {
+    it("默认 pageSizes 应为 [10, 20, 30, 40, 50, 100]", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -784,7 +769,7 @@ describe("EaPagination Component", () => {
       expect(pagination.pageSizes).toEqual([5, 15, 25]);
     });
 
-    it("pageSizes 变化时应该更新 sizes 下拉框", async () => {
+    it("pageSizes 变化应更新 sizes 下拉框", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.layout = ["sizes", "prev", "pager", "next"];
@@ -799,9 +784,7 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== Layout 属性 ====================
-
-  describe("Layout Property", () => {
+  describe("layout 属性", () => {
     it("应该支持自定义 layout", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
@@ -812,7 +795,7 @@ describe("EaPagination Component", () => {
       expect(pagination.layout).toEqual(["prev", "pager", "next"]);
     });
 
-    it("layout 包含 sizes 时应该渲染 sizes 下拉框", async () => {
+    it("layout 包含 sizes 应渲染 sizes 下拉框", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.layout = ["sizes", "prev", "pager", "next"];
@@ -823,7 +806,7 @@ describe("EaPagination Component", () => {
       expect(sizes).toBeTruthy();
     });
 
-    it("layout 不包含 sizes 时不应渲染 sizes 下拉框", async () => {
+    it("layout 不包含 sizes 不应渲染 sizes 下拉框", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.layout = ["prev", "pager", "next"];
@@ -834,7 +817,7 @@ describe("EaPagination Component", () => {
       expect(sizes).toBeFalsy();
     });
 
-    it("layout 不包含 total 时不应渲染 total 区域", async () => {
+    it("layout 不包含 total 不应渲染总数区域", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.layout = ["prev", "pager", "next"];
@@ -845,7 +828,7 @@ describe("EaPagination Component", () => {
       expect(total).toBeFalsy();
     });
 
-    it("layout 不包含 jumper 时不应渲染 jumper 区域", async () => {
+    it("layout 不包含 jumper 不应渲染跳转区域", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.layout = ["prev", "pager", "next"];
@@ -858,7 +841,7 @@ describe("EaPagination Component", () => {
       expect(jumperWrap).toBeFalsy();
     });
 
-    it("layout 包含 -> 时应该渲染 separator", async () => {
+    it("layout 包含 -> 应渲染分隔符", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.layout = ["prev", "pager", "next", "->", "total"];
@@ -871,10 +854,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== 交互测试 ====================
-
-  describe("Prev/Next Click Interaction", () => {
-    it("点击 prev 按钮应该切换到上一页", async () => {
+  describe("上一页/下一页点击交互", () => {
+    it("点击上一页应切换到前一页", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
@@ -882,7 +863,7 @@ describe("EaPagination Component", () => {
       await waitForRender();
 
       const prevIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.prev-icon"
+        ".ea-pagination__icon--prev"
       );
       prevIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await waitForRender();
@@ -890,14 +871,14 @@ describe("EaPagination Component", () => {
       expect(pagination.currentPage).toBe(2);
     });
 
-    it("点击 next 按钮应该切换到下一页", async () => {
+    it("点击下一页应切换到后一页", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       await waitForRender();
 
       const nextIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.next-icon"
+        ".ea-pagination__icon--next"
       );
       nextIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await waitForRender();
@@ -905,7 +886,7 @@ describe("EaPagination Component", () => {
       expect(pagination.currentPage).toBe(2);
     });
 
-    it("点击 prev 按钮应该触发 ea-prev-click 事件", async () => {
+    it("点击上一页应触发 ea-prev-click 事件", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
@@ -916,7 +897,7 @@ describe("EaPagination Component", () => {
       pagination.addEventListener("ea-prev-click", handler);
 
       const prevIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.prev-icon"
+        ".ea-pagination__icon--prev"
       );
       prevIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await waitForRender();
@@ -924,7 +905,7 @@ describe("EaPagination Component", () => {
       expect(handler).toHaveBeenCalled();
     });
 
-    it("点击 next 按钮应该触发 ea-next-click 事件", async () => {
+    it("点击下一页应触发 ea-next-click 事件", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -934,7 +915,7 @@ describe("EaPagination Component", () => {
       pagination.addEventListener("ea-next-click", handler);
 
       const nextIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.next-icon"
+        ".ea-pagination__icon--next"
       );
       nextIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await waitForRender();
@@ -942,19 +923,19 @@ describe("EaPagination Component", () => {
       expect(handler).toHaveBeenCalled();
     });
 
-    it("第一页时 prev 按钮应该被禁用", async () => {
+    it("第一页时上一页按钮应为禁用状态", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       await waitForRender();
 
       const prevIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.prev-icon"
+        ".ea-pagination__icon--prev"
       );
       expect(prevIcon.classList.contains("is-disabled")).toBe(true);
     });
 
-    it("最后一页时 next 按钮应该被禁用", async () => {
+    it("最后一页时下一页按钮应为禁用状态", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "10");
@@ -962,12 +943,12 @@ describe("EaPagination Component", () => {
       await waitForRender();
 
       const nextIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.next-icon"
+        ".ea-pagination__icon--next"
       );
       expect(nextIcon.classList.contains("is-disabled")).toBe(true);
     });
 
-    it("disabled 时点击 prev 仍会切换页面（disabled 不阻止点击）", async () => {
+    it("disabled 状态下点击上一页不应切换页码", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
@@ -976,16 +957,15 @@ describe("EaPagination Component", () => {
       await waitForRender();
 
       const prevIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.prev-icon"
+        ".ea-pagination__icon--prev"
       );
-
       prevIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await waitForRender();
 
-      expect(pagination.currentPage).toBe(2);
+      expect(pagination.currentPage).toBe(3);
     });
 
-    it("disabled 时点击 next 仍会切换页面（disabled 不阻止点击）", async () => {
+    it("disabled 状态下点击下一页不应切换页码", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("disabled", "");
@@ -993,18 +973,17 @@ describe("EaPagination Component", () => {
       await waitForRender();
 
       const nextIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.next-icon"
+        ".ea-pagination__icon--next"
       );
-
       nextIcon.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       await waitForRender();
 
-      expect(pagination.currentPage).toBe(2);
+      expect(pagination.currentPage).toBe(1);
     });
   });
 
-  describe("Pager Click Interaction", () => {
-    it("点击页码应该切换到对应页", async () => {
+  describe("页码点击交互", () => {
+    it("点击页码应切换到对应页", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -1019,14 +998,14 @@ describe("EaPagination Component", () => {
       expect(pagination.currentPage).toBe(5);
     });
 
-    it("点击页码应该触发 change 事件", async () => {
+    it("点击页码应触发 ea-current-change 事件", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       await waitForRender();
 
       const handler = vi.fn();
-      pagination.addEventListener("change", handler);
+      pagination.addEventListener("ea-current-change", handler);
 
       const page3 = pagination.shadowRoot.querySelector(
         '.ea-pagination__page[data-page="3"]'
@@ -1035,10 +1014,10 @@ describe("EaPagination Component", () => {
       await waitForRender();
 
       expect(handler).toHaveBeenCalled();
-      expect(handler.mock.calls[0][0].detail.currentPage).toBe(3);
+      expect(handler.mock.calls[0][0].detail.value).toBe(3);
     });
 
-    it("点击省略号应该展开更多页码", async () => {
+    it("点击省略号应展开更多页码", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "1000");
       pagination.setAttribute("pager-count", "5");
@@ -1054,7 +1033,7 @@ describe("EaPagination Component", () => {
       expect(pagination.currentPage).toBeGreaterThan(1);
     });
 
-    it("活跃页码应该有 is-active 类", async () => {
+    it("激活页码应有 is-active 类", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
@@ -1067,7 +1046,7 @@ describe("EaPagination Component", () => {
       expect(activePage).toBeTruthy();
     });
 
-    it("非活跃页码不应有 is-active 类", async () => {
+    it("非激活页码不应有 is-active 类", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "3");
@@ -1081,8 +1060,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  describe("Jumper Interaction", () => {
-    it("jumper 输入框应该显示当前页码", async () => {
+  describe("跳转输入框交互", () => {
+    it("跳转输入框应显示当前页码", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "5");
@@ -1091,10 +1070,10 @@ describe("EaPagination Component", () => {
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
-      expect(jumperInput.value).toBe("5");
+      expect(jumperInput.value).toBe(5);
     });
 
-    it("jumper 输入有效页码后按 Enter 应该跳转", async () => {
+    it("ea-change 事件应更新当前页码", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -1102,33 +1081,33 @@ describe("EaPagination Component", () => {
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
-      jumperInput.value = "8";
       jumperInput.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
+        new CustomEvent("ea-change", {
+          detail: { currentValue: 8, oldValue: 1 },
+          bubbles: true,
+          composed: true,
+        })
       );
       await waitForRender();
 
       expect(pagination.currentPage).toBe(8);
     });
 
-    it("jumper 输入超出范围的页码应该重置输入框", async () => {
+    it("currentPage 变化应同步更新跳转输入框的值", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
       await waitForRender();
 
-      const jumperInput =
-        pagination.shadowRoot.querySelector('[part="jumper"]');
-      jumperInput.value = "999";
-      jumperInput.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
-      );
+      pagination.currentPage = 5;
       await waitForRender();
 
-      expect(pagination.currentPage).toBe(1);
+      const jumperInput =
+        pagination.shadowRoot.querySelector('[part="jumper"]');
+      expect(jumperInput.value).toBe(5);
     });
 
-    it("jumper 输入 0 会设置为当前页 0（无下限校验）", async () => {
+    it("跳转输入框的 max 应与总页数一致", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -1136,34 +1115,10 @@ describe("EaPagination Component", () => {
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
-      jumperInput.value = "0";
-      jumperInput.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
-      );
-      await waitForRender();
-
-      expect(pagination.currentPage).toBe(0);
+      expect(jumperInput.max).toBe(10);
     });
 
-    it("jumper 输入非数字应该忽略", async () => {
-      const pagination = document.createElement("ea-pagination");
-      pagination.setAttribute("total", "100");
-      pagination.setAttribute("current-page", "3");
-      container.appendChild(pagination);
-      await waitForRender();
-
-      const jumperInput =
-        pagination.shadowRoot.querySelector('[part="jumper"]');
-      jumperInput.value = "abc";
-      jumperInput.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
-      );
-      await waitForRender();
-
-      expect(pagination.currentPage).toBe(3);
-    });
-
-    it("jumper blur 时应该跳转到输入页码", async () => {
+    it("跳转输入框的 min 应为 1", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -1171,16 +1126,12 @@ describe("EaPagination Component", () => {
 
       const jumperInput =
         pagination.shadowRoot.querySelector('[part="jumper"]');
-      jumperInput.value = "6";
-      jumperInput.dispatchEvent(new FocusEvent("blur", { bubbles: true }));
-      await waitForRender();
-
-      expect(pagination.currentPage).toBe(6);
+      expect(jumperInput.min).toBe(1);
     });
   });
 
-  describe("Sizes Interaction", () => {
-    it("sizes 下拉框应该包含 pageSizes 选项", async () => {
+  describe("每页条数选择器交互", () => {
+    it("sizes 下拉框应包含 pageSizes 选项", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.layout = ["sizes", "prev", "pager", "next"];
@@ -1192,7 +1143,7 @@ describe("EaPagination Component", () => {
       expect(options.length).toBe(6);
     });
 
-    it("sizes 下拉框当前值应该匹配 pageSize", async () => {
+    it("sizes 下拉框当前值应与 pageSize 匹配", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("page-size", "20");
@@ -1204,7 +1155,7 @@ describe("EaPagination Component", () => {
       expect(sizes.value).toBe(20);
     });
 
-    it("sizes 变化时应该触发 ea-size-change 事件", async () => {
+    it("sizes 变化应触发 ea-size-change 事件", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.layout = ["sizes", "prev", "pager", "next"];
@@ -1223,7 +1174,7 @@ describe("EaPagination Component", () => {
       expect(handler.mock.calls[0][0].detail.pageSize).toBe(50);
     });
 
-    it("sizes 变化时应该重置 currentPage 到合法范围", async () => {
+    it("sizes 变化应将 currentPage 重置到有效范围", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "10");
@@ -1240,10 +1191,8 @@ describe("EaPagination Component", () => {
     });
   });
 
-  // ==================== 边界情况 ====================
-
-  describe("Edge Cases", () => {
-    it("total 为 0 时应该正常渲染", async () => {
+  describe("边界情况", () => {
+    it("total 为 0 应正常渲染", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "0");
       container.appendChild(pagination);
@@ -1252,23 +1201,23 @@ describe("EaPagination Component", () => {
       expect(pagination.shadowRoot).toBeDefined();
     });
 
-    it("total 为 0 时 prev 和 next 应该被禁用", async () => {
+    it("total 为 0 时上一页和下一页应为禁用状态", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "0");
       container.appendChild(pagination);
       await waitForRender();
 
       const prevIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.prev-icon"
+        ".ea-pagination__icon--prev"
       );
       const nextIcon = pagination.shadowRoot.querySelector(
-        ".ea-pagination__icon.next-icon"
+        ".ea-pagination__icon--next"
       );
       expect(prevIcon.classList.contains("is-disabled")).toBe(true);
       expect(nextIcon.classList.contains("is-disabled")).toBe(true);
     });
 
-    it("pageSize 大于 total 时应该只有一页", async () => {
+    it("pageSize 大于 total 应只有一页", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "5");
       pagination.setAttribute("page-size", "100");
@@ -1281,7 +1230,7 @@ describe("EaPagination Component", () => {
       expect(pages.length).toBe(1);
     });
 
-    it("currentPage 超出范围时不会被自动修正", async () => {
+    it("currentPage 超出范围不会被自动修正", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("current-page", "999");
@@ -1291,17 +1240,7 @@ describe("EaPagination Component", () => {
       expect(pagination.currentPage).toBe(999);
     });
 
-    it("currentPage 为 0 时不会被自动修正", async () => {
-      const pagination = document.createElement("ea-pagination");
-      pagination.setAttribute("total", "100");
-      pagination.setAttribute("current-page", "0");
-      container.appendChild(pagination);
-      await waitForRender();
-
-      expect(pagination.currentPage).toBe(0);
-    });
-
-    it("pageSize 不在 pageSizes 中时应该使用 pageSizes 第一项", async () => {
+    it("pageSize 不在 pageSizes 中应使用 pageSizes 第一项", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       pagination.setAttribute("page-size", "7");
@@ -1312,7 +1251,7 @@ describe("EaPagination Component", () => {
       expect(pagination.pageSize).toBe(10);
     });
 
-    it("动态修改 total 应该更新分页", async () => {
+    it("动态修改 total 应更新分页器", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -1332,7 +1271,7 @@ describe("EaPagination Component", () => {
       expect(newPages).toBeGreaterThanOrEqual(initialPages);
     });
 
-    it("动态修改 layout 应该更新渲染", async () => {
+    it("动态修改 layout 应更新渲染", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100");
       container.appendChild(pagination);
@@ -1348,7 +1287,7 @@ describe("EaPagination Component", () => {
       expect(pagination.shadowRoot.querySelector('[part="total"]')).toBeFalsy();
     });
 
-    it("大 total 值应该正常渲染", async () => {
+    it("较大的 total 值应正常渲染", async () => {
       const pagination = document.createElement("ea-pagination");
       pagination.setAttribute("total", "100000");
       container.appendChild(pagination);

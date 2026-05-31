@@ -1,4 +1,11 @@
+import { createBEM } from "@core/EaBase";
+
+const bem = createBEM("ea-pagination");
+
 export const getPageItem = (page: number, currentPage: number, content?: number | string): string => {
-	const isActive = page === currentPage ? " is-active" : "";
-	return `<span class="ea-pagination__page${isActive}" part="page" tabindex="0" data-page="${page}" aria-label="page ${page}" aria-current="${page === currentPage}">${content || page}</span>`;
+	const isActive = page === currentPage;
+	const className = isActive
+		? `${bem.e("page")} ${bem.s("active")}`
+		: bem.e("page");
+	return `<span class="${className}" part="page" tabindex="0" data-page="${page}" aria-label="page ${page}" aria-current="${isActive}">${content || page}</span>`;
 };
