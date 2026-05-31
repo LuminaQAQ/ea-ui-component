@@ -1,8 +1,6 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
@@ -18,10 +16,45 @@ export type StepStatus =
   | "success";
 export type StepDirection = "vertical" | "horizontal";
 
+/**
+ * @summary 步骤条子组件，表示单个步骤，支持状态、图标、描述等功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot icon - 自定义图标内容。
+ * @slot heading - 自定义标题内容。
+ * @slot description - 自定义描述内容。
+ * @slot simple-arrow - 简洁模式下的箭头内容。
+ * @slot default - 默认插槽。
+ *
+ * @csspart container - 外层容器。
+ * @csspart head - 头部容器（包含图标与连接线）。
+ * @csspart icon-wrapper - 图标包裹容器。
+ * @csspart icon - 图标元素。
+ * @csspart tail - 步骤之间的连接线。
+ * @csspart main - 主体容器。
+ * @csspart heading - 标题容器。
+ * @csspart description - 描述容器。
+ * @csspart simple-arrow - 简洁模式下的箭头容器。
+ *
+ * @cssproperty --ea-step-icon-border-radius - 图标圆角。
+ * @cssproperty --ea-step-icon-wrapper-size - 图标容器尺寸。
+ * @cssproperty --ea-step-icon-size - 图标字体大小。
+ * @cssproperty --ea-step-arrow-icon-size - 箭头图标大小。
+ * @cssproperty --ea-step-tail-size - 连接线粗细。
+ * @cssproperty --ea-step-process-color - 进行中状态颜色。
+ * @cssproperty --ea-step-wait-color - 等待状态颜色。
+ * @cssproperty --ea-step-finish-color - 已完成状态颜色。
+ * @cssproperty --ea-step-success-color - 成功状态颜色。
+ * @cssproperty --ea-step-error-color - 错误状态颜色。
+ * @cssproperty --ea-step-tail-color - 连接线颜色。
+ * @cssproperty --ea-step-icon-bg-color - 图标背景颜色。
+ * @cssproperty --ea-step-icon-font-weight - 图标字体粗细。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaStep extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -34,10 +67,6 @@ export class EaStep extends EaBase {
   @query('slot[name="description"]')
   private _descriptionSlot!: HTMLElement;
 
-  // ==================== 私有属性 ====================
-
-  private _abortController?: AbortController;
-
   private get _hostContextSteps(): HTMLElement | null {
     try {
       return this.closest("ea-steps");
@@ -45,8 +74,6 @@ export class EaStep extends EaBase {
       return null;
     }
   }
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -119,8 +146,7 @@ export class EaStep extends EaBase {
   })
   direction: StepDirection = "horizontal";
 
-  // ==================== 方法 ====================
-
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const stepList = this._hostContextSteps?.querySelectorAll("ea-step");
     const isLast = stepList ? stepList.length - 1 === this.index : false;
@@ -144,6 +170,7 @@ export class EaStep extends EaBase {
     return className;
   }
 
+  /** 根据 status 更新图标显示 */
   private _updateStatus(status: StepStatus = this.status): void {
     if (status === this._hostContextSteps?.getAttribute("finish-status")) {
       this._stepIcon.setAttribute("name", "check");
@@ -180,14 +207,8 @@ export class EaStep extends EaBase {
     `;
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
     this.updateContainerClasslist();
-  }
-
-  $beforeUnmount(): void {
-    this._abortController?.abort();
   }
 }
 

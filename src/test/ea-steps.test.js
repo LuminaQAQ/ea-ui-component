@@ -437,7 +437,7 @@ describe("EaSteps Component", () => {
       expect(arrow1.getAttribute("name")).toBe("angle-right");
     });
 
-    it("simple 模式下最后一个 step 不应该有箭头图标", async () => {
+    it("simple 模式下最后一个 step 仍有箭头元素（CSS 控制显隐）", async () => {
       const steps = document.createElement("ea-steps");
       steps.simple = true;
       steps.innerHTML = `
@@ -451,6 +451,23 @@ describe("EaSteps Component", () => {
       const stepElements = steps.querySelectorAll("ea-step");
       const lastArrow = stepElements[1].querySelector('[slot="simple-arrow"]');
       expect(lastArrow).toBeTruthy();
+    });
+
+    it("simple 模式下最后一个 step 的容器应该有 is-last CSS 类", async () => {
+      const steps = document.createElement("ea-steps");
+      steps.simple = true;
+      steps.innerHTML = `
+        <ea-step heading="Step 1"></ea-step>
+        <ea-step heading="Step 2"></ea-step>
+      `;
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const stepElements = steps.querySelectorAll("ea-step");
+      const lastContainer =
+        stepElements[1].shadowRoot.querySelector('[part="container"]');
+      expect(lastContainer.classList.contains("is-last")).toBe(true);
     });
 
     it("动态关闭 simple 应该移除箭头图标", async () => {
@@ -925,72 +942,7 @@ describe("EaSteps Component", () => {
     });
   });
 
-  // ==================== simple 模式深度测试 ====================
-
-  describe("simple 模式深度测试", () => {
-    it("simple 模式下箭头图标应该有 part=simple-arrow", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.simple = true;
-      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
-      container.appendChild(steps);
-
-      await waitForRender();
-
-      const stepElement = steps.querySelector("ea-step");
-      const arrow = stepElement.querySelector('[slot="simple-arrow"]');
-      expect(arrow).toBeTruthy();
-      expect(arrow.tagName.toLowerCase()).toBe("ea-icon");
-      expect(arrow.getAttribute("name")).toBe("angle-right");
-    });
-
-    it("simple 模式下子 step 的 tail 应该被隐藏（CSS 类控制）", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.simple = true;
-      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
-      container.appendChild(steps);
-
-      await waitForRender();
-
-      const stepElement = steps.querySelector("ea-step");
-      const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-simple")).toBe(true);
-    });
-
-    it("simple 和 alignCenter 同时设置时 simple 优先", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.simple = true;
-      steps.alignCenter = true;
-      steps.innerHTML = `<ea-step heading="Step 1"></ea-step>`;
-      container.appendChild(steps);
-
-      await waitForRender();
-
-      const stepElement = steps.querySelector("ea-step");
-      const stepContainer =
-        stepElement.shadowRoot.querySelector('[part="container"]');
-      expect(stepContainer.classList.contains("is-simple")).toBe(true);
-      expect(stepContainer.classList.contains("is-align-center")).toBe(true);
-    });
-
-    it("先设置 steps 再添加 step 时 simple 应该传播", async () => {
-      const steps = document.createElement("ea-steps");
-      steps.simple = true;
-      container.appendChild(steps);
-
-      await waitForRender();
-
-      const step = document.createElement("ea-step");
-      step.heading = "Dynamic Step";
-      steps.appendChild(step);
-
-      await waitForRender();
-
-      expect(step.hasAttribute("simple")).toBe(true);
-    });
-  });
-
-  // ==================== _updateStatus 深度测试 ====================
+  // ==================== step 图标状态更新 ====================
 
   describe("step 图标状态更新", () => {
     it("无 icon 且 status 非 finishStatus 时应该显示序号", async () => {
@@ -1378,7 +1330,7 @@ describe("EaSteps Component", () => {
       expect(stepContainer.classList.contains("is-icon")).toBe(true);
     });
 
-    it("simple 模式下 step 应该有 is-simple 且非 simple 的 align-center 不生效", async () => {
+    it("simple 和 alignCenter 同时设置时 step 应该同时有两个 CSS 类", async () => {
       const steps = document.createElement("ea-steps");
       steps.simple = true;
       steps.alignCenter = true;
@@ -1392,6 +1344,31 @@ describe("EaSteps Component", () => {
         stepElement.shadowRoot.querySelector('[part="container"]');
       expect(stepContainer.classList.contains("is-simple")).toBe(true);
       expect(stepContainer.classList.contains("is-align-center")).toBe(true);
+    });
+  });
+
+  // ==================== updateContainerClasslist 方法测试 ====================
+
+  describe("updateContainerClasslist 方法", () => {
+    it("EaSteps 的 updateContainerClasslist 应该返回正确的类名字符串", async () => {
+      const steps = document.createElement("ea-steps");
+      container.appendChild(steps);
+
+      await waitForRender();
+
+      const result = steps.updateContainerClasslist();
+      expect(result).toContain("ea-steps");
+    });
+
+    it("EaStep 的 updateContainerClasslist 应该返回正确的类名字符串", async () => {
+      const step = document.createElement("ea-step");
+      container.appendChild(step);
+
+      await waitForRender();
+
+      const result = step.updateContainerClasslist();
+      expect(result).toContain("ea-step");
+      expect(result).toContain("ea-step--horizontal");
     });
   });
 });

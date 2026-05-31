@@ -1,9 +1,6 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
 import type { EaStep } from "../ea-step";
 import stylesheet from "./index.scss?inline";
 
@@ -24,21 +21,25 @@ export type StepsFinishStatus =
   | "success";
 export type StepsDirection = "vertical" | "horizontal";
 
+/**
+ * @summary 步骤条组件，引导用户按照流程完成任务的分步导航条。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-step
+ *
+ * @slot default - 默认插槽，用于放置 ea-step 子组件。
+ *
+ * @csspart container - 外层容器。
+ *
+ * @cssproperty --ea-step-tail-spacing - 每个 step 的间距。
+ * @cssproperty --ea-steps-simple-padding - 简洁模式内边距。
+ * @cssproperty --ea-steps-simple-bg-color - 简洁模式背景颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSteps extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
-
-  @query("slot")
-  private _defaultSlot!: HTMLSlotElement;
-
-  // ==================== 私有属性 ====================
-
-  private _abortController?: AbortController;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -110,8 +111,7 @@ export class EaSteps extends EaBase {
   })
   direction: StepsDirection = "horizontal";
 
-  // ==================== 方法 ====================
-
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const className = bem(
       {},
@@ -126,6 +126,7 @@ export class EaSteps extends EaBase {
     return className;
   }
 
+  /** 根据 active 更新子 step 的 status */
   private _updateStepStatus(active: number = this.active): void {
     const stepItems = [...this.querySelectorAll("ea-step")] as EaStep[];
 
@@ -140,6 +141,7 @@ export class EaSteps extends EaBase {
     });
   }
 
+  /** 更新简洁模式下的箭头图标 */
   private _updateSimpleStatus(isSimple: boolean = this.simple): void {
     const steps = [...this.querySelectorAll("ea-step")] as EaStep[];
 
@@ -172,6 +174,7 @@ export class EaSteps extends EaBase {
     }
   }
 
+  /** 处理 slot 变化，同步子 step 状态 */
   private _handleSlotChange = (): void => {
     const steps = [...this.querySelectorAll("ea-step")] as EaStep[];
 
@@ -197,21 +200,13 @@ export class EaSteps extends EaBase {
     `;
   }
 
-  // ==================== 事件处理 ====================
-
   @listen("slotchange", "slot")
   private _onSlotChange(): void {
     this._handleSlotChange();
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
     this.updateContainerClasslist();
-  }
-
-  $beforeUnmount(): void {
-    this._abortController?.abort();
   }
 }
 

@@ -28,6 +28,10 @@ $status-theme: (
   --#{$name}-icon-font-weight: var(--font-weight-bold);
 }
 
+:host {
+  display: block;
+}
+
 @include block($name) {
   @include element(head) {
     position: relative;
@@ -83,15 +87,15 @@ $status-theme: (
     @include state($status) {
       color: $color;
 
-      .ea-step__icon,
-      .ea-step__tail {
+      .#{$name}__icon,
+      .#{$name}__tail {
         border-color: $color;
       }
     }
   }
 
   @include state(icon) {
-    .ea-step__icon {
+    .#{$name}__icon {
       border-color: transparent;
     }
   }
@@ -100,18 +104,18 @@ $status-theme: (
     @include state(align-center) {
       text-align: center;
 
-      .ea-step__tail {
+      .#{$name}__tail {
         flex: 1 0 100%;
         margin-left: calc(0px - var(--#{$name}-icon-wrapper-size));
       }
 
-      .ea-step__icon-wrapper {
+      .#{$name}__icon-wrapper {
         left: 50%;
         transform: translateX(-50%);
       }
 
       &.is-first {
-        .ea-step__icon-wrapper {
+        .#{$name}__icon-wrapper {
           flex: 1 0 calc(50% + var(--#{$name}-icon-wrapper-size) / 2);
 
           position: relative;
@@ -120,17 +124,17 @@ $status-theme: (
           transform: unset;
         }
 
-        .ea-step__tail {
+        .#{$name}__tail {
           flex: 1 0 50%;
         }
       }
 
       &.is-last {
-        .ea-step__head {
+        .#{$name}__head {
           flex-direction: row-reverse;
         }
 
-        .ea-step__icon-wrapper {
+        .#{$name}__icon-wrapper {
           flex: 1 0 calc(50% + var(--#{$name}-icon-size) / 2);
 
           position: relative;
@@ -139,7 +143,7 @@ $status-theme: (
           transform: unset;
         }
 
-        .ea-step__tail {
+        .#{$name}__tail {
           flex: 1 0 50%;
 
           display: inline-block;
@@ -153,20 +157,20 @@ $status-theme: (
     align-items: center;
     justify-content: center;
 
-    .ea-step__tail {
+    .#{$name}__tail {
       display: none;
     }
 
-    .ea-step__icon-wrapper {
+    .#{$name}__icon-wrapper {
       background-color: transparent;
     }
 
-    .ea-step__icon {
+    .#{$name}__icon {
       border-color: transparent;
       background-color: transparent;
     }
 
-    .ea-step__simple-arrow {
+    .#{$name}__simple-arrow {
       display: inline-block;
 
       flex: 1 0 auto;
@@ -180,8 +184,8 @@ $status-theme: (
   }
 
   @include state(last) {
-    .ea-step__tail,
-    .ea-step__simple-arrow {
+    .#{$name}__tail,
+    .#{$name}__simple-arrow {
       display: none;
     }
   }

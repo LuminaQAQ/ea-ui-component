@@ -3,8 +3,12 @@ $name: ea-steps;
 :host {
   --ea-step-tail-spacing: 50%;
 
-  --ea-steps-simple-padding: 13px 8%;
-  --ea-steps-simple-bg-color: var(--grey-100);
+  --#{$name}-simple-padding: 13px 8%;
+  --#{$name}-simple-bg-color: var(--grey-100);
+}
+
+:host {
+  display: block;
 }
 
 ::slotted(ea-step) {
@@ -21,10 +25,6 @@ $name: ea-steps;
   }
 }
 
-:host {
-  display: block;
-}
-
 @include block($name) {
   display: flex;
   align-items: center;
@@ -35,8 +35,8 @@ $name: ea-steps;
   box-sizing: border-box;
 
   @include state(simple) {
-    padding: var(--ea-steps-simple-padding);
-    background-color: var(--ea-steps-simple-bg-color);
+    padding: var(--#{$name}-simple-padding);
+    background-color: var(--#{$name}-simple-bg-color);
   }
 
   @include state(align-center) {
