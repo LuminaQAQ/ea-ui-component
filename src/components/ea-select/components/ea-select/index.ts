@@ -182,9 +182,6 @@ export class EaSelect extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaSelect) {
-      this.updateValidity();
-    },
   })
   required: boolean = false;
 
@@ -330,7 +327,9 @@ export class EaSelect extends EaFormAssociatedBase {
 
   private _handleCollapseTagsChange(): void {
     if (this.multiple && Array.isArray(this.value)) {
-      this._handleSelectValuesRender(this.value as (string | number | boolean)[]);
+      this._handleSelectValuesRender(
+        this.value as (string | number | boolean)[]
+      );
     }
   }
 
@@ -630,20 +629,21 @@ export class EaSelect extends EaFormAssociatedBase {
   }
 
   updateValidity() {
-    super.updateValidity();
+    if (!this.internals || typeof this.internals.setValidity !== "function")
+      return;
 
     const hasValue = this.multiple
       ? Array.isArray(this.value) && this.value.length > 0
       : this.value !== "" && this.value != null;
 
     if (this.required && !hasValue) {
-      this.internals?.setValidity(
+      this.internals.setValidity(
         { valueMissing: true },
         "请选择一个选项",
         this
       );
     } else {
-      this.internals?.setValidity({}, "", this);
+      this.internals.setValidity({}, "", this);
     }
   }
 

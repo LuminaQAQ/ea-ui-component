@@ -266,8 +266,8 @@ onMounted(() => {
         </ea-select>
       </div>
       <div class="demo-button-group">
-        <ea-button type="primary" button-type="submit">提交</ea-button>
-        <ea-button button-type="reset">重置</ea-button>
+        <ea-button variant="primary" type="submit">提交</ea-button>
+        <ea-button type="reset">重置</ea-button>
       </div>
     </form>
     <div class="demo-output" id="basicFormOutput"></div>
@@ -318,8 +318,8 @@ onMounted(() => {
       </ea-select>
     </div>
     <div class="demo-button-group">
-      <ea-button type="primary" button-type="submit">提交</ea-button>
-      <ea-button button-type="reset">重置</ea-button>
+      <ea-button variant="primary" type="submit">提交</ea-button>
+      <ea-button type="reset">重置</ea-button>
     </div>
   </form>
   <div class="demo-output" id="basicFormOutput"></div>
@@ -555,8 +555,8 @@ basicForm.init();
         ></ea-transfer>
       </div>
       <div class="demo-button-group">
-        <ea-button type="primary" button-type="submit">提交</ea-button>
-        <ea-button button-type="reset">重置</ea-button>
+        <ea-button variant="primary" type="submit">提交</ea-button>
+        <ea-button type="reset">重置</ea-button>
       </div>
     </form>
     <div class="demo-output" id="complexOutput"></div>
@@ -696,8 +696,8 @@ basicForm.init();
     </div>
 
     <div class="demo-button-group">
-      <ea-button type="primary" button-type="submit">提交</ea-button>
-      <ea-button button-type="reset">重置</ea-button>
+      <ea-button variant="primary" type="submit">提交</ea-button>
+      <ea-button type="reset">重置</ea-button>
     </div>
   </form>
   <div class="demo-output" id="complexOutput"></div>
@@ -849,7 +849,7 @@ complexTransfer.data = [
         style="width: 100%"
       ></ea-input>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -876,9 +876,7 @@ complexTransfer.data = [
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -912,7 +910,7 @@ inputForm.addEventListener("submit", e => {
         style="width: 100%"
       ></ea-input-number>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -939,9 +937,7 @@ inputForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -977,7 +973,7 @@ inputNumberForm.addEventListener("submit", e => {
         <ea-option value="guangzhou">广州</ea-option>
       </ea-select>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1006,9 +1002,7 @@ inputNumberForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1040,7 +1034,7 @@ selectForm.addEventListener("submit", e => {
         style="width: 100%"
       ></ea-date-picker>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1058,7 +1052,7 @@ selectForm.addEventListener("submit", e => {
         style="width: 100%"
       ></ea-time-picker>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1083,9 +1077,7 @@ selectForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1104,9 +1096,7 @@ selectForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1141,7 +1131,7 @@ timePickerForm.addEventListener("submit", e => {
         <ea-radio value="female" label="女"></ea-radio>
       </ea-radio-group>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1157,7 +1147,7 @@ timePickerForm.addEventListener("submit", e => {
         <ea-checkbox value="music" label="音乐"></ea-checkbox>
       </ea-checkbox-group>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1179,9 +1169,7 @@ timePickerForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1198,9 +1186,7 @@ timePickerForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1232,7 +1218,7 @@ checkboxForm.addEventListener("submit", e => {
     <form id="rateForm">
       <ea-rate name="score" label="评分" required value="0"></ea-rate>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1251,9 +1237,7 @@ checkboxForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1279,7 +1263,7 @@ rateForm.addEventListener("submit", e => {
     <form id="switchForm">
       <ea-switch name="agreement" label="同意协议" required></ea-switch>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1298,9 +1282,7 @@ rateForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1332,7 +1314,7 @@ switchForm.addEventListener("submit", e => {
         style="width: 100%"
       ></ea-color-picker>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1357,9 +1339,7 @@ switchForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1394,7 +1374,7 @@ colorPickerForm.addEventListener("submit", e => {
         style="width: 100%"
       ></ea-slider>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1422,9 +1402,7 @@ colorPickerForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1455,7 +1433,7 @@ sliderForm.addEventListener("submit", e => {
         style="width: 100%"
       ></ea-transfer>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1479,9 +1457,7 @@ sliderForm.addEventListener("submit", e => {
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1519,7 +1495,7 @@ transferValidate.data = [
         我已阅读并同意《用户协议》和《隐私政策》
       </ea-checkbox>
       <div class="demo-button-group" style="margin-top: 1rem; padding-top: 0; border: none;">
-        <ea-button type="primary" button-type="submit" size="small">提交</ea-button>
+        <ea-button variant="primary" type="submit" size="small">提交</ea-button>
       </div>
     </form>
   </div>
@@ -1540,9 +1516,7 @@ transferValidate.data = [
       class="demo-button-group"
       style="margin-top: 1rem; padding-top: 0; border: none;"
     >
-      <ea-button type="primary" button-type="submit" size="small"
-        >提交</ea-button
-      >
+      <ea-button variant="primary" type="submit" size="small">提交</ea-button>
     </div>
   </form>
 </div>
@@ -1560,32 +1534,49 @@ singleCheckboxForm.addEventListener("submit", e => {
 
 ::::
 
-## 通用表单属性
+## Form API
 
-以下属性适用于所有表单组件：
+所有表单组件均继承自 `EaFormAssociatedBase`，通过 `ElementInternals` API 实现与原生 `<form>` 的集成。
 
-| 参数     | 说明       | 类型    | 可选值 | 默认值 |
-| -------- | ---------- | ------- | ------ | ------ |
-| name     | 表单字段名 | string  | —      | —      |
-| label    | 标签文本   | string  | —      | —      |
-| required | 是否必填   | boolean | —      | false  |
-| disabled | 是否禁用   | boolean | —      | false  |
+### Form Attributes
 
-## 输入类组件验证属性
+以下属性适用于所有继承 `EaFormAssociatedBase` 的表单组件：
 
-| 参数      | 说明         | 类型   | 可选值                           | 默认值 |
-| --------- | ------------ | ------ | -------------------------------- | ------ |
-| minlength | 最小长度     | number | —                                | —      |
-| maxlength | 最大长度     | number | —                                | —      |
-| min       | 最小值       | number | —                                | —      |
-| max       | 最大值       | number | —                                | —      |
-| type      | 输入类型     | string | text / email / password / number | text   |
-| pattern   | 正则匹配模式 | string | —                                | —      |
+| 属性名            | 说明                     | 类型            | 可选值 | 默认值     |
+| ----------------- | ------------------------ | --------------- | ------ | ---------- |
+| name              | 表单字段名               | string          | —      | —          |
+| value             | 字段值                   | string          | —      | —          |
+| label             | 标签文本                 | string          | —      | —          |
+| required          | 是否必填                 | boolean         | —      | false      |
+| disabled          | 是否禁用                 | boolean         | —      | false      |
+| form              | 关联的 form 元素（只读） | HTMLFormElement | —      | —          |
+| type              | 字段类型（只读）         | string          | —      | 组件标签名 |
+| validity          | 验证状态（只读）         | ValidityState   | —      | —          |
+| validationMessage | 验证消息（只读）         | string          | —      | —          |
+| willValidate      | 是否参与验证（只读）     | boolean         | —      | false      |
 
-## 表单组件方法
+### Validation Attributes
 
-| 方法名            | 说明                   | 返回值  |
-| ----------------- | ---------------------- | ------- |
-| checkValidity     | 检查表单字段的有效性   | boolean |
-| reportValidity    | 报告验证结果并显示提示 | boolean |
-| setCustomValidity | 设置自定义验证消息     | —       |
+以下验证属性适用于输入类表单组件（如 `ea-input`、`ea-input-number`）：
+
+| 属性名    | 说明         | 类型   | 可选值 | 默认值 |
+| --------- | ------------ | ------ | ------ | ------ |
+| minlength | 最小长度     | number | —      | —      |
+| maxlength | 最大长度     | number | —      | —      |
+| min       | 最小值       | number | —      | —      |
+| max       | 最大值       | number | —      | —      |
+| pattern   | 正则匹配模式 | string | —      | —      |
+
+### Form Methods
+
+| 方法名              | 说明                                 | 参数                                   |
+| ------------------- | ------------------------------------ | -------------------------------------- |
+| checkValidity       | 检查表单字段的有效性，返回 boolean   | —                                      |
+| reportValidity      | 报告验证结果并显示提示，返回 boolean | —                                      |
+| setCustomValidity   | 设置自定义验证消息                   | message: string                        |
+| setValidity         | 设置验证状态                         | flags: object, message: string         |
+| resetCustomValidity | 重置自定义验证消息                   | —                                      |
+| updateValidity      | 同步内部验证目标元素的验证状态       | —                                      |
+| getForm             | 获取关联的 form 元素                 | —                                      |
+| setValue            | 设置表单值（通过 ElementInternals）  | value: string / File / FormData / null |
+| removeValue         | 移除表单值（通过 ElementInternals）  | —                                      |

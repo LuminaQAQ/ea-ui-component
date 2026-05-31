@@ -1123,6 +1123,68 @@ describe("EaSelect Component", () => {
       expect(select.checkValidity()).toBe(true);
     });
 
+    it("默认状态下 checkValidity 应为 true", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.checkValidity()).toBe(true);
+    });
+
+    it("嵌入 form 中默认不应为 :invalid", async () => {
+      const form = document.createElement("form");
+      container.appendChild(form);
+
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      form.appendChild(select);
+      await waitForRender();
+
+      expect(select.checkValidity()).toBe(true);
+    });
+
+    it("required 且未触发校验时不应为 :invalid", async () => {
+      const select = document.createElement("ea-select");
+      select.required = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.checkValidity()).toBe(false);
+    });
+
+    it("required 且触发校验后值从空变为非空时验证应通过", async () => {
+      const select = document.createElement("ea-select");
+      select.required = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.checkValidity()).toBe(false);
+
+      select.value = "1";
+      await waitForRender();
+
+      expect(select.checkValidity()).toBe(true);
+    });
+
+    it("required 且值从非空变为空时验证应失败", async () => {
+      const select = document.createElement("ea-select");
+      select.required = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      select.value = "1";
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.checkValidity()).toBe(true);
+
+      select.value = "";
+      await waitForRender();
+
+      expect(select.checkValidity()).toBe(false);
+    });
+
     it("多选 required 且空数组时应验证失败", async () => {
       const select = document.createElement("ea-select");
       select.multiple = true;

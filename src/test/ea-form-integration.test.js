@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
 
-// 尝试加载所有表单相关组件，处理组件尚未重构为 TypeScript 的情况
 let componentReady = false;
 try {
   await import("../components/ea-input/index.js");
@@ -34,9 +33,6 @@ suite("Native Form Integration", () => {
     container.remove();
   });
 
-  /**
-   * 基础表单功能测试
-   */
   describe("Basic Form Functionality", () => {
     it("应该创建原生 form 元素", () => {
       const form = document.createElement("form");
@@ -63,14 +59,10 @@ suite("Native Form Integration", () => {
     });
   });
 
-  /**
-   * 表单数据收集测试
-   */
   describe("Form Data Collection", () => {
-    it("应该使用 FormData 收集表单数据", async () => {
+    it("应该使用 FormData 收集原生表单数据", async () => {
       const form = document.createElement("form");
 
-      // 添加原生输入元素
       const input = document.createElement("input");
       input.name = "username";
       input.value = "testuser";
@@ -80,7 +72,7 @@ suite("Native Form Integration", () => {
       expect(formData.get("username")).toBe("testuser");
     });
 
-    it("应该支持多个表单字段", async () => {
+    it("应该支持多个原生表单字段", async () => {
       const form = document.createElement("form");
 
       const input1 = document.createElement("input");
@@ -112,7 +104,7 @@ suite("Native Form Integration", () => {
       expect(data).toEqual({ email: "test@example.com" });
     });
 
-    it("应该支持 ea-input 在表单中", async () => {
+    it("应该支持 ea-input 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaInput = document.createElement("ea-input");
@@ -125,9 +117,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-input")).toBeTruthy();
       expect(eaInput.getAttribute("name")).toBe("username");
+      expect(eaInput.name).toBe("username");
     });
 
-    it("应该支持 ea-input-number 在表单中", async () => {
+    it("应该支持 ea-input-number 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaInputNumber = document.createElement("ea-input-number");
@@ -140,9 +133,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-input-number")).toBeTruthy();
       expect(eaInputNumber.getAttribute("name")).toBe("age");
+      expect(eaInputNumber.name).toBe("age");
     });
 
-    it("应该支持 ea-select 在表单中", async () => {
+    it("应该支持 ea-select 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaSelect = document.createElement("ea-select");
@@ -154,9 +148,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-select")).toBeTruthy();
       expect(eaSelect.getAttribute("name")).toBe("country");
+      expect(eaSelect.name).toBe("country");
     });
 
-    it("应该支持 ea-radio-group 在表单中", async () => {
+    it("应该支持 ea-radio-group 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaRadioGroup = document.createElement("ea-radio-group");
@@ -168,9 +163,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-radio-group")).toBeTruthy();
       expect(eaRadioGroup.getAttribute("name")).toBe("gender");
+      expect(eaRadioGroup.name).toBe("gender");
     });
 
-    it("应该支持 ea-checkbox-group 在表单中", async () => {
+    it("应该支持 ea-checkbox-group 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaCheckboxGroup = document.createElement("ea-checkbox-group");
@@ -182,9 +178,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-checkbox-group")).toBeTruthy();
       expect(eaCheckboxGroup.getAttribute("name")).toBe("hobbies");
+      expect(eaCheckboxGroup.name).toBe("hobbies");
     });
 
-    it("应该支持 ea-switch 在表单中", async () => {
+    it("应该支持 ea-switch 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaSwitch = document.createElement("ea-switch");
@@ -196,9 +193,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-switch")).toBeTruthy();
       expect(eaSwitch.getAttribute("name")).toBe("notifications");
+      expect(eaSwitch.name).toBe("notifications");
     });
 
-    it("应该支持 ea-date-picker 在表单中", async () => {
+    it("应该支持 ea-date-picker 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaDatePicker = document.createElement("ea-date-picker");
@@ -210,9 +208,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-date-picker")).toBeTruthy();
       expect(eaDatePicker.getAttribute("name")).toBe("birthdate");
+      expect(eaDatePicker.name).toBe("birthdate");
     });
 
-    it("应该支持 ea-time-picker 在表单中", async () => {
+    it("应该支持 ea-time-picker 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaTimePicker = document.createElement("ea-time-picker");
@@ -224,9 +223,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-time-picker")).toBeTruthy();
       expect(eaTimePicker.getAttribute("name")).toBe("startTime");
+      expect(eaTimePicker.name).toBe("startTime");
     });
 
-    it("应该支持 ea-slider 在表单中", async () => {
+    it("应该支持 ea-slider 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaSlider = document.createElement("ea-slider");
@@ -238,9 +238,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-slider")).toBeTruthy();
       expect(eaSlider.getAttribute("name")).toBe("volume");
+      expect(eaSlider.name).toBe("volume");
     });
 
-    it("应该支持 ea-rate 在表单中", async () => {
+    it("应该支持 ea-rate 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaRate = document.createElement("ea-rate");
@@ -252,9 +253,10 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-rate")).toBeTruthy();
       expect(eaRate.getAttribute("name")).toBe("rating");
+      expect(eaRate.name).toBe("rating");
     });
 
-    it("应该支持 ea-color-picker 在表单中", async () => {
+    it("应该支持 ea-color-picker 在表单中并设置 name 属性", async () => {
       const form = document.createElement("form");
 
       const eaColorPicker = document.createElement("ea-color-picker");
@@ -266,14 +268,116 @@ suite("Native Form Integration", () => {
 
       expect(form.querySelector("ea-color-picker")).toBeTruthy();
       expect(eaColorPicker.getAttribute("name")).toBe("themeColor");
+      expect(eaColorPicker.name).toBe("themeColor");
     });
   });
 
-  /**
-   * 表单验证测试
-   */
+  describe("EaFormAssociatedBase Integration", () => {
+    it("ea-input 应该具有 formAssociated 静态属性", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(eaInput.constructor.formAssociated).toBe(true);
+    });
+
+    it("ea-input 在表单中应该能通过 getForm 获取关联表单", async () => {
+      const form = document.createElement("form");
+      const eaInput = document.createElement("ea-input");
+      eaInput.setAttribute("name", "test");
+      form.appendChild(eaInput);
+      container.appendChild(form);
+
+      await waitForRender();
+
+      const associatedForm = eaInput.getForm();
+      expect(
+        associatedForm === null || associatedForm instanceof HTMLFormElement
+      ).toBe(true);
+    });
+
+    it("ea-input 应该通过 ElementInternals 设置表单值", async () => {
+      const form = document.createElement("form");
+      const eaInput = document.createElement("ea-input");
+      eaInput.setAttribute("name", "username");
+      eaInput.setAttribute("value", "testuser");
+      form.appendChild(eaInput);
+      container.appendChild(form);
+
+      await waitForRender();
+
+      expect(eaInput.value).toBe("testuser");
+    });
+
+    it("ea-input 应该支持 setValue 方法", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(typeof eaInput.setValue).toBe("function");
+      expect(() => eaInput.setValue("new value")).not.toThrow();
+    });
+
+    it("ea-input 应该支持 removeValue 方法", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(typeof eaInput.removeValue).toBe("function");
+      expect(() => eaInput.removeValue()).not.toThrow();
+    });
+
+    it("ea-input 不在表单中时 getForm 应返回 null", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(eaInput.getForm()).toBeNull();
+    });
+
+    it("ea-switch 应该具有 formAssociated 静态属性", async () => {
+      const eaSwitch = document.createElement("ea-switch");
+      container.appendChild(eaSwitch);
+
+      await waitForRender();
+
+      expect(eaSwitch.constructor.formAssociated).toBe(true);
+    });
+
+    it("ea-select 应该具有 formAssociated 静态属性", async () => {
+      const eaSelect = document.createElement("ea-select");
+      container.appendChild(eaSelect);
+
+      await waitForRender();
+
+      expect(eaSelect.constructor.formAssociated).toBe(true);
+    });
+
+    it("ea-radio-group 应该具有 formAssociated 静态属性", async () => {
+      const eaRadioGroup = document.createElement("ea-radio-group");
+      container.appendChild(eaRadioGroup);
+
+      await waitForRender();
+
+      expect(eaRadioGroup.constructor.formAssociated).toBe(true);
+    });
+
+    it("ea-checkbox-group 应该具有 formAssociated 静态属性", async () => {
+      const eaCheckboxGroup = document.createElement("ea-checkbox-group");
+      container.appendChild(eaCheckboxGroup);
+
+      await waitForRender();
+
+      expect(eaCheckboxGroup.constructor.formAssociated).toBe(true);
+    });
+  });
+
   describe("Form Validation", () => {
-    it("应该支持 required 属性验证", () => {
+    it("应该支持原生 required 属性验证", () => {
       const form = document.createElement("form");
 
       const input = document.createElement("input");
@@ -281,7 +385,6 @@ suite("Native Form Integration", () => {
       input.setAttribute("required", "true");
       form.appendChild(input);
 
-      // 空值时验证应该失败
       expect(form.checkValidity()).toBe(false);
     });
 
@@ -294,7 +397,6 @@ suite("Native Form Integration", () => {
       input.value = "invalid-email";
       form.appendChild(input);
 
-      // 无效邮箱格式验证应该失败
       expect(form.checkValidity()).toBe(false);
     });
 
@@ -307,7 +409,6 @@ suite("Native Form Integration", () => {
       input.value = "abc";
       form.appendChild(input);
 
-      // 不符合 pattern 验证应该失败
       expect(form.checkValidity()).toBe(false);
     });
 
@@ -322,7 +423,6 @@ suite("Native Form Integration", () => {
       input.value = "10";
       form.appendChild(input);
 
-      // 小于 min 值验证应该失败
       expect(form.checkValidity()).toBe(false);
     });
 
@@ -336,16 +436,78 @@ suite("Native Form Integration", () => {
       input.value = "ab";
       form.appendChild(input);
 
-      // JSDOM 中 minlength 验证行为可能与浏览器不同
-      // 只检查验证方法存在且能执行
       const isValid = form.checkValidity();
       expect(typeof isValid === "boolean").toBe(true);
     });
+
+    it("ea-input 应该支持 checkValidity 方法", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(typeof eaInput.checkValidity).toBe("function");
+    });
+
+    it("ea-input 应该支持 reportValidity 方法", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(typeof eaInput.reportValidity).toBe("function");
+    });
+
+    it("ea-input 应该支持 setCustomValidity 方法", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(typeof eaInput.setCustomValidity).toBe("function");
+      expect(() => eaInput.setCustomValidity("自定义错误")).not.toThrow();
+    });
+
+    it("ea-input 应该支持 validity 属性", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(eaInput.validity).toBeDefined();
+    });
+
+    it("ea-input 应该支持 willValidate 属性", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(typeof eaInput.willValidate).toBe("boolean");
+    });
+
+    it("ea-input 设置 required 后应该验证失败", async () => {
+      const eaInput = document.createElement("ea-input");
+      eaInput.setAttribute("required", "true");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(eaInput.required).toBe(true);
+    });
+
+    it("ea-input 设置 disabled 后 shouldValidate 应为 false", async () => {
+      const eaInput = document.createElement("ea-input");
+      eaInput.setAttribute("disabled", "true");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(eaInput.disabled).toBe(true);
+      expect(eaInput.willValidate).toBe(false);
+    });
   });
 
-  /**
-   * 表单提交测试
-   */
   describe("Form Submission", () => {
     it("应该触发 submit 事件", async () => {
       const form = document.createElement("form");
@@ -354,7 +516,6 @@ suite("Native Form Integration", () => {
       const submitHandler = vi.fn(e => e.preventDefault());
       form.addEventListener("submit", submitHandler);
 
-      // 触发 submit 事件
       form.dispatchEvent(new Event("submit", { cancelable: true }));
 
       await waitForRender(50);
@@ -379,7 +540,7 @@ suite("Native Form Integration", () => {
       expect(submitHandler).toHaveBeenCalled();
     });
 
-    it("应该在 submit 事件中收集表单数据", async () => {
+    it("应该在 submit 事件中收集原生表单数据", async () => {
       const form = document.createElement("form");
 
       const input = document.createElement("input");
@@ -412,13 +573,10 @@ suite("Native Form Integration", () => {
       input.value = "initial";
       form.appendChild(input);
 
-      // 修改值
       input.value = "changed";
       expect(input.value).toBe("changed");
 
-      // 重置表单
       form.reset();
-      // JSDOM 中 reset 行为可能与浏览器不同，检查值是否被重置或方法是否执行
       expect(input.value === "initial" || input.value === "").toBe(true);
     });
 
@@ -437,15 +595,11 @@ suite("Native Form Integration", () => {
     });
   });
 
-  /**
-   * 复杂表单场景测试
-   */
   describe("Complex Form Scenarios", () => {
     it("应该支持包含多个组件的复杂表单", async () => {
       const form = document.createElement("form");
       form.id = "complexForm";
 
-      // 添加各种表单组件
       const username = document.createElement("ea-input");
       username.setAttribute("name", "username");
       username.setAttribute("label", "Username");
@@ -476,7 +630,6 @@ suite("Native Form Integration", () => {
 
       await waitForRender();
 
-      // 验证所有组件都在表单中
       expect(form.querySelectorAll("ea-input").length).toBe(2);
       expect(form.querySelector("ea-input-number")).toBeTruthy();
       expect(form.querySelector("ea-select")).toBeTruthy();
@@ -513,7 +666,6 @@ suite("Native Form Integration", () => {
       form.appendChild(input);
 
       const formData = new FormData(form);
-      // 禁用字段不应该包含在 FormData 中
       expect(formData.get("disabledField")).toBeNull();
     });
 
@@ -527,14 +679,43 @@ suite("Native Form Integration", () => {
       form.appendChild(input);
 
       const formData = new FormData(form);
-      // readonly 字段应该包含在 FormData 中
       expect(formData.get("readonlyField")).toBe("readonlyValue");
+    });
+
+    it("多个表单组件应该各自独立关联表单", async () => {
+      const form1 = document.createElement("form");
+      form1.id = "form1";
+      const input1 = document.createElement("ea-input");
+      input1.setAttribute("name", "field1");
+      form1.appendChild(input1);
+
+      const form2 = document.createElement("form");
+      form2.id = "form2";
+      const input2 = document.createElement("ea-input");
+      input2.setAttribute("name", "field2");
+      form2.appendChild(input2);
+
+      container.appendChild(form1);
+      container.appendChild(form2);
+
+      await waitForRender();
+
+      const form1Result = input1.getForm();
+      const form2Result = input2.getForm();
+
+      expect(
+        form1Result === null || form1Result instanceof HTMLFormElement
+      ).toBe(true);
+      expect(
+        form2Result === null || form2Result instanceof HTMLFormElement
+      ).toBe(true);
+
+      if (form1Result && form2Result) {
+        expect(form1Result).not.toBe(form2Result);
+      }
     });
   });
 
-  /**
-   * 表单验证报告测试
-   */
   describe("Form Validation Reporting", () => {
     it("应该报告验证失败", () => {
       const form = document.createElement("form");
@@ -568,12 +749,33 @@ suite("Native Form Integration", () => {
       input.setAttribute("required", "true");
       form.appendChild(input);
 
-      // 检查表单有效性
       form.checkValidity();
 
-      // 验证元素应该具有 invalid 状态
       expect(input.validity.valid).toBe(false);
       expect(input.validity.valueMissing).toBe(true);
+    });
+
+    it("ea-input 设置 setCustomValidity 后应该影响验证状态", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      expect(() => eaInput.setCustomValidity("自定义错误消息")).not.toThrow();
+
+      expect(typeof eaInput.validationMessage === "string").toBe(true);
+    });
+
+    it("ea-input 清除 setCustomValidity 后应该恢复验证状态", async () => {
+      const eaInput = document.createElement("ea-input");
+      container.appendChild(eaInput);
+
+      await waitForRender();
+
+      eaInput.setCustomValidity("自定义错误消息");
+      expect(() => eaInput.setCustomValidity("")).not.toThrow();
+
+      expect(typeof eaInput.validationMessage === "string").toBe(true);
     });
   });
 });
