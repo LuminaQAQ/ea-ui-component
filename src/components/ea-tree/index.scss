@@ -4,7 +4,7 @@ $name: ea-tree;
   --#{$name}-font-size: var(--font-size-md);
   --#{$name}-text-color: var(--grey-700);
   --#{$name}-toggle-size: 16px;
-  --#{$name}-cursor: pointer;
+  --#{$name}-cursor: var(--cursor-pointer);
   --#{$name}-padding-vertical: var(--spacing-sm);
   --#{$name}-padding-horizontal: var(--spacing-md);
   --#{$name}-border-radius: var(--border-radius-sm);
@@ -24,24 +24,24 @@ $name: ea-tree;
 
   @include element(node) {
     @include state(selected) {
-      > .ea-tree__label {
+      > .#{$name}__label {
         background-color: var(--#{$name}-selected-bg);
         color: var(--#{$name}-selected-text-color);
       }
     }
 
     @include state(show-checkbox) {
-      .ea-tree__checkbox {
+      .#{$name}__checkbox {
         display: flex;
       }
     }
 
     @include state(expanded) {
-      > .ea-tree__children {
+      > .#{$name}__children {
         display: block;
       }
 
-      > .ea-tree__label .ea-tree__toggle-icon {
+      > .#{$name}__label .#{$name}__toggle-icon {
         transform: rotate(90deg);
         color: var(--#{$name}-icon-hover-color);
       }
@@ -91,8 +91,6 @@ $name: ea-tree;
   @include element(children) {
     display: none;
     margin-left: var(--#{$name}-indent-size);
-    padding-left: 0;
-    list-style: none;
     position: relative;
 
     &::before {

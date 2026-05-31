@@ -1,6 +1,14 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
 import "../components/ea-tree/index";
+import { EaTreeCheckChangeEvent } from "../components/ea-tree/events/EaTreeCheckChangeEvent";
+import { EaTreeCheckEvent } from "../components/ea-tree/events/EaTreeCheckEvent";
+import { EaTreeCurrentChangeEvent } from "../components/ea-tree/events/EaTreeCurrentChangeEvent";
+import { EaTreeNodeClickEvent } from "../components/ea-tree/events/EaTreeNodeClickEvent";
+import { EaTreeNodeCollapseEvent } from "../components/ea-tree/events/EaTreeNodeCollapseEvent";
+import { EaTreeNodeContextmenuEvent } from "../components/ea-tree/events/EaTreeNodeContextmenuEvent";
+import { EaTreeNodeExpandEvent } from "../components/ea-tree/events/EaTreeNodeExpandEvent";
+import { EaTreeNodeSelectEvent } from "../components/ea-tree/events/EaTreeNodeSelectEvent";
 
 describe("EaTree", () => {
   let container;
@@ -2210,6 +2218,549 @@ describe("EaTree", () => {
       tree.remove();
 
       expect(container.contains(tree)).toBe(false);
+    });
+  });
+
+  describe("自定义事件类", () => {
+    it("ea-node-expand 应该是 EaTreeNodeExpandEvent 实例", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-expand", handler);
+
+      tree._expandPath("1$");
+
+      expect(handler).toHaveBeenCalledOnce();
+      const event = handler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaTreeNodeExpandEvent);
+      expect(event.type).toBe("ea-node-expand");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("ea-node-collapse 应该是 EaTreeNodeCollapseEvent 实例", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._expandPath("1$");
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-collapse", handler);
+
+      tree._collapsePath("1$");
+
+      expect(handler).toHaveBeenCalledOnce();
+      const event = handler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaTreeNodeCollapseEvent);
+      expect(event.type).toBe("ea-node-collapse");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("ea-node-select 应该是 EaTreeNodeSelectEvent 实例", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-select", handler);
+
+      tree._selectPath("1$");
+
+      expect(handler).toHaveBeenCalledOnce();
+      const event = handler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaTreeNodeSelectEvent);
+      expect(event.type).toBe("ea-node-select");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("ea-node-click 应该是 EaTreeNodeClickEvent 实例", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-click", handler);
+
+      const labelEl = findLabelByPath(tree, "1$");
+      labelEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(handler).toHaveBeenCalledOnce();
+      const event = handler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaTreeNodeClickEvent);
+      expect(event.type).toBe("ea-node-click");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("ea-check-change 应该是 EaTreeCheckChangeEvent 实例", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-check-change", handler);
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      expect(handler).toHaveBeenCalled();
+      const event = handler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaTreeCheckChangeEvent);
+      expect(event.type).toBe("ea-check-change");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("ea-check 应该是 EaTreeCheckEvent 实例", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.nodeKey = "id";
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-check", handler);
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      expect(handler).toHaveBeenCalled();
+      const event = handler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaTreeCheckEvent);
+      expect(event.type).toBe("ea-check");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("ea-current-change 应该是 EaTreeCurrentChangeEvent 实例", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-current-change", handler);
+
+      tree._selectPath("1$");
+
+      expect(handler).toHaveBeenCalledOnce();
+      const event = handler.mock.calls[0][0];
+      expect(event).toBeInstanceOf(EaTreeCurrentChangeEvent);
+      expect(event.type).toBe("ea-current-change");
+      expect(event.bubbles).toBe(true);
+      expect(event.composed).toBe(true);
+    });
+
+    it("ea-node-contextmenu 应该是 EaTreeNodeContextmenuEvent 实例", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-contextmenu", handler);
+
+      const labelEl = findLabelByPath(tree, "1$");
+      const event = new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+      });
+      labelEl.dispatchEvent(event);
+
+      expect(handler).toHaveBeenCalledOnce();
+      const firedEvent = handler.mock.calls[0][0];
+      expect(firedEvent).toBeInstanceOf(EaTreeNodeContextmenuEvent);
+      expect(firedEvent.type).toBe("ea-node-contextmenu");
+      expect(firedEvent.bubbles).toBe(true);
+      expect(firedEvent.composed).toBe(true);
+    });
+  });
+
+  describe("事件 detail 完整性", () => {
+    it("ea-node-expand detail 应包含 node 属性", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-expand", handler);
+
+      tree._expandPath("1$");
+
+      const event = handler.mock.calls[0][0];
+      expect(event.detail.node).toBeDefined();
+      expect(event.detail.node.path).toBe("1$");
+      expect(event.detail.node.expanded).toBe(true);
+      expect(event.detail.node.hasChildren).toBe(true);
+    });
+
+    it("ea-node-collapse detail 应包含 node 属性", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._expandPath("1$");
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-collapse", handler);
+
+      tree._collapsePath("1$");
+
+      const event = handler.mock.calls[0][0];
+      expect(event.detail.node).toBeDefined();
+      expect(event.detail.node.path).toBe("1$");
+      expect(event.detail.node.expanded).toBe(false);
+    });
+
+    it("ea-check-change detail 应包含 hasCheckedChildren 属性", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-check-change", handler);
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      const event = handler.mock.calls[0][0];
+      expect(event.detail.hasCheckedChildren).toBeDefined();
+      expect(typeof event.detail.hasCheckedChildren).toBe("boolean");
+    });
+
+    it("ea-current-change detail 应包含 node 属性", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-current-change", handler);
+
+      tree._selectPath("1$");
+
+      const event = handler.mock.calls[0][0];
+      expect(event.detail.node).toBeDefined();
+      expect(event.detail.node.path).toBe("1$");
+      expect(event.detail.node.selected).toBe(true);
+    });
+
+    it("ea-node-click detail 应包含 data 属性", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-click", handler);
+
+      const labelEl = findLabelByPath(tree, "1$");
+      labelEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      const event = handler.mock.calls[0][0];
+      expect(event.detail.data).toBeDefined();
+      expect(event.detail.data.label).toBe("Level one 1");
+    });
+
+    it("ea-check detail.checkedState 应包含完整结构", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.nodeKey = "id";
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-check", handler);
+
+      tree._handleCheckboxToggle("1$-1-1");
+
+      const event = handler.mock.calls[0][0];
+      expect(event.detail.checkedState).toBeDefined();
+      expect(Array.isArray(event.detail.checkedState.checkedNodes)).toBe(true);
+      expect(Array.isArray(event.detail.checkedState.checkedKeys)).toBe(true);
+      expect(
+        Array.isArray(event.detail.checkedState.halfCheckedNodes)
+      ).toBe(true);
+      expect(Array.isArray(event.detail.checkedState.halfCheckedKeys)).toBe(
+        true
+      );
+    });
+  });
+
+  describe("禁用节点行为", () => {
+    it("点击禁用节点应该触发 ea-node-click 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateDisabledTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-node-click", handler);
+
+      const labelEl = findLabelByPath(tree, "1$-1");
+      labelEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(handler).toHaveBeenCalledOnce();
+    });
+
+    it("点击禁用节点应该选中该节点", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = generateDisabledTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const labelEl = findLabelByPath(tree, "1$-1");
+      labelEl.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, composed: true })
+      );
+
+      expect(
+        findNodeByPath(tree, "1$-1").classList.contains("is-selected")
+      ).toBe(true);
+    });
+
+    it("禁用节点不可通过 checkbox 点击切换勾选", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateDisabledTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$-1");
+
+      const disabledNode = findNodeByPath(tree, "1$-1");
+      expect(disabledNode.classList.contains("is-checked")).toBe(false);
+    });
+
+    it("禁用节点的 checkbox DOM 应有 disabled 属性", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateDisabledTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const checkbox = findCheckboxByPath(tree, "1$-1");
+      expect(checkbox).toBeTruthy();
+      expect(checkbox.disabled).toBe(true);
+    });
+  });
+
+  describe("Checkbox DOM 交互", () => {
+    it("checkbox change 事件应该触发勾选切换", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const checkbox = findCheckboxByPath(tree, "1$-1-1");
+      checkbox.dispatchEvent(
+        new CustomEvent("change", {
+          detail: { checked: true },
+          bubbles: true,
+          composed: true,
+        })
+      );
+
+      await waitForRender();
+
+      const node = findNodeByPath(tree, "1$-1-1");
+      expect(node.classList.contains("is-checked")).toBe(true);
+    });
+
+    it("checkbox change 事件应该触发 ea-check-change 事件", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const handler = vi.fn();
+      tree.addEventListener("ea-check-change", handler);
+
+      const checkbox = findCheckboxByPath(tree, "1$-1-1");
+      checkbox.dispatchEvent(
+        new CustomEvent("change", {
+          detail: { checked: true },
+          bubbles: true,
+          composed: true,
+        })
+      );
+
+      expect(handler).toHaveBeenCalled();
+    });
+
+    it("禁用节点 checkbox change 事件不应触发勾选", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.data = generateDisabledTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const checkbox = findCheckboxByPath(tree, "1$-1");
+      checkbox.dispatchEvent(
+        new CustomEvent("change", {
+          detail: { checked: true },
+          bubbles: true,
+          composed: true,
+        })
+      );
+
+      const node = findNodeByPath(tree, "1$-1");
+      expect(node.classList.contains("is-checked")).toBe(false);
+    });
+  });
+
+  describe("数据边界条件", () => {
+    it("空 children 数组应该渲染为叶子节点", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = [{ label: "Empty Children", children: [] }];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const toggleIcon = findToggleIconByPath(tree, "1$");
+      expect(toggleIcon).toBeFalsy();
+
+      const childrenEl = findChildrenByPath(tree, "1$");
+      expect(childrenEl).toBeFalsy();
+    });
+
+    it("仅有 label 属性的节点应该正常渲染", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = [{ label: "Simple" }];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const text = tree.shadowRoot.querySelector(".ea-tree__text");
+      expect(text).toBeTruthy();
+      expect(text.textContent).toBe("Simple");
+    });
+
+    it("data 为 null 时应该正常渲染", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = null;
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.shadowRoot).toBeDefined();
+    });
+
+    it("data 为 undefined 时应该正常渲染", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = undefined;
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      expect(tree.shadowRoot).toBeDefined();
+    });
+
+    it("节点 label 为空字符串时应该正常渲染", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.data = [{ label: "" }];
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const text = tree.shadowRoot.querySelector(".ea-tree__text");
+      expect(text).toBeTruthy();
+      expect(text.textContent).toBe("");
+    });
+
+    it("updateKeyChildren 更新子节点后应该更新节点状态", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.nodeKey = "id";
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      const newChildren = [
+        { id: 10, label: "New Child 1" },
+        { id: 11, label: "New Child 2" },
+      ];
+
+      tree.updateKeyChildren(1, newChildren);
+
+      await waitForRender(50);
+
+      const nodeInfo = tree.getNode(10);
+      expect(nodeInfo).toBeDefined();
+      expect(nodeInfo.data.label).toBe("New Child 1");
+
+      const oldNodeInfo = tree.getNode(2);
+      expect(oldNodeInfo).toBeNull();
+    });
+
+    it("updateKeyChildren 更新子节点后 checkbox 状态应该正确传播", async () => {
+      const tree = document.createElement("ea-tree");
+      tree.showCheckbox = true;
+      tree.nodeKey = "id";
+      tree.data = generateIdTestData();
+      container.appendChild(tree);
+
+      await waitForRender();
+
+      tree._handleCheckboxToggle("1$");
+      expect(findNodeByPath(tree, "1$").classList.contains("is-checked")).toBe(
+        true
+      );
+
+      const newChildren = [
+        { id: 10, label: "New Child 1" },
+        { id: 11, label: "New Child 2" },
+      ];
+
+      tree.updateKeyChildren(1, newChildren);
+
+      await waitForRender(50);
+
+      const rootNode = findNodeByPath(tree, "1$");
+      expect(rootNode.classList.contains("is-checked")).toBe(true);
     });
   });
 });

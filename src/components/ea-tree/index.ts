@@ -1,12 +1,8 @@
-import { timeout } from "@/utils/timeout";
+import EaBase, { createBEM } from "@core/EaBase";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
+import { timeout } from "@utils/timeout";
 import "@components/ea-checkbox";
 import "@components/ea-icon";
-import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { property } from "@decorator/property";
-import { query } from "@decorator/query";
 import { EaTreeCheckChangeEvent } from "./events/EaTreeCheckChangeEvent";
 import { EaTreeCheckEvent } from "./events/EaTreeCheckEvent";
 import { EaTreeCurrentChangeEvent } from "./events/EaTreeCurrentChangeEvent";
@@ -33,22 +29,52 @@ interface TreeNodeState {
   selected: boolean;
 }
 
+/**
+ * @summary 树形控件，用于展示层次结构数据，支持展开折叠、复选框选择、右键菜单等功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-checkbox
+ * @dependency ea-icon
+ *
+ * @slot default - 默认插槽。
+ *
+ * @event ea-node-click - 节点点击时触发，detail: `{ data: any }`。
+ * @event ea-node-contextmenu - 节点右键点击时触发，detail: `{ data: any, node: TreeNodeState }`。
+ * @event ea-node-select - 节点选中时触发，detail: `{ node: any, selected: boolean }`。
+ * @event ea-check-change - 复选框状态变化时触发，detail: `{ data: any, checked: boolean, hasCheckedChildren: boolean }`。
+ * @event ea-check - 复选框选中时触发，detail: `{ data: any, checkedState: { checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys } }`。
+ * @event ea-current-change - 当前选中节点变化时触发，detail: `{ data: any, node: TreeNodeState }`。
+ * @event ea-node-expand - 节点展开时触发，detail: `{ data: any, node: TreeNodeState, expanded: true }`。
+ * @event ea-node-collapse - 节点折叠时触发，detail: `{ data: any, node: TreeNodeState, expanded: false }`。
+ *
+ * @csspart container - 树容器元素。
+ *
+ * @cssproperty --ea-tree-font-size - 字体大小。
+ * @cssproperty --ea-tree-text-color - 文本颜色。
+ * @cssproperty --ea-tree-toggle-size - 展开图标尺寸。
+ * @cssproperty --ea-tree-cursor - 光标样式。
+ * @cssproperty --ea-tree-padding-vertical - 垂直内边距。
+ * @cssproperty --ea-tree-padding-horizontal - 水平内边距。
+ * @cssproperty --ea-tree-border-radius - 圆角大小。
+ * @cssproperty --ea-tree-transition - 过渡动画时长。
+ * @cssproperty --ea-tree-hover-bg - 悬停背景色。
+ * @cssproperty --ea-tree-selected-bg - 选中背景色。
+ * @cssproperty --ea-tree-selected-text-color - 选中文本色。
+ * @cssproperty --ea-tree-icon-color - 图标颜色。
+ * @cssproperty --ea-tree-icon-hover-color - 图标悬停颜色。
+ * @cssproperty --ea-tree-indent-size - 缩进大小。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTree extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
-
-  // ==================== 私有属性 ====================
 
   private _nodeStates = new Map<string, TreeNodeState>();
 
   private _treeState = {
     selectedPath: null as string | null,
   };
-
-  // ==================== 属性定义 (HTML attribute) ====================
 
   @attribute({
     type: Boolean,
@@ -76,8 +102,6 @@ export class EaTree extends EaBase {
     default: false,
   })
   expandOnIconClick: boolean = false;
-
-  // ==================== 属性定义 (JS property) ====================
 
   @property({
     type: Array,
@@ -109,8 +133,6 @@ export class EaTree extends EaBase {
     default: [],
   })
   defaultCheckedKeys: any[] = [];
-
-  // ==================== Private Methods ====================
 
   /** 处理数据变化，重新构建节点状态和渲染树 */
   private async _handleDataChange(newVal: any[]) {
@@ -204,10 +226,10 @@ export class EaTree extends EaBase {
   <div class="${bem.e("label")}" data-path="${path}">
     ${toggleIconHTML}
     <ea-checkbox class="${bem.e("checkbox")}"${
-      state.checked ? " checked" : ""
-    }${state.indeterminate ? " indeterminate" : ""}${
-      isDisabled ? " disabled" : ""
-    }></ea-checkbox>
+          state.checked ? " checked" : ""
+        }${state.indeterminate ? " indeterminate" : ""}${
+          isDisabled ? " disabled" : ""
+        }></ea-checkbox>
     <span class="${bem.e("text")}">${text}</span>
   </div>
   ${childrenHTML}
@@ -590,8 +612,7 @@ export class EaTree extends EaBase {
     });
   }
 
-  // ==================== 事件处理 ====================
-
+  /** 处理节点点击事件 */
   @listen("click", bem.ce("node"))
   private _handleClick(e: Event): void {
     const composedPath = e.composedPath();
@@ -625,6 +646,7 @@ export class EaTree extends EaBase {
     this._selectPath(path);
   }
 
+  /** 处理 checkbox 变更事件 */
   @listen("change", bem.ce("checkbox"))
   private _handleCheckboxChange(e: Event): void {
     e.stopPropagation();
@@ -647,6 +669,7 @@ export class EaTree extends EaBase {
     this._handleCheckboxToggle(path, newChecked);
   }
 
+  /** 处理节点右键菜单事件 */
   @listen("contextmenu", bem.ce("node"))
   private _handleContextmenu(e: Event): void {
     e.preventDefault();
@@ -668,8 +691,6 @@ export class EaTree extends EaBase {
     );
   }
 
-  // ==================== html 模板 ====================
-
   html(): string {
     return `
       <div class="${bem()}" part="container"></div>
@@ -677,14 +698,11 @@ export class EaTree extends EaBase {
     `;
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
     this.updateContainerClasslist();
   }
 
-  // ==================== 公共方法 ====================
-
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const className = bem({}, {});
 
@@ -695,6 +713,7 @@ export class EaTree extends EaBase {
     return className;
   }
 
+  /** 获取半选中节点数据数组 */
   getHalfCheckedNodes(): any[] {
     if (!this.showCheckbox) return [];
 
@@ -707,6 +726,7 @@ export class EaTree extends EaBase {
     return result;
   }
 
+  /** 获取半选中节点键值数组 */
   getHalfCheckedKeys(): any[] {
     if (!this.showCheckbox || !this.nodeKey) return [];
 
@@ -720,6 +740,7 @@ export class EaTree extends EaBase {
     return result;
   }
 
+  /** 获取当前选中节点的键值 */
   getCurrentKey(): any {
     if (!this.nodeKey || !this._treeState.selectedPath) return null;
 
@@ -729,6 +750,7 @@ export class EaTree extends EaBase {
     return state.raw[this.nodeKey] || null;
   }
 
+  /** 获取当前选中节点的数据 */
   getCurrentNode(): any {
     if (!this._treeState.selectedPath) return null;
 
@@ -736,6 +758,12 @@ export class EaTree extends EaBase {
     return state ? state.raw : null;
   }
 
+  /**
+   * 更新指定节点的子节点数据
+   * @param key - 节点键值
+   * @param data - 新的子节点数据数组
+   * @returns 是否更新成功
+   */
   updateKeyChildren(key: any, data: any[]): boolean {
     if (!this.nodeKey) {
       console.warn("updateKeyChildren requires node-key to be set");
@@ -779,6 +807,12 @@ export class EaTree extends EaBase {
     return true;
   }
 
+  /**
+   * 获取选中节点数据数组
+   * @param leafOnly - 是否仅返回叶子节点
+   * @param includeHalfChecked - 是否包含半选节点
+   * @returns 选中节点数据数组
+   */
   getCheckedNodes(
     leafOnly: boolean = false,
     includeHalfChecked: boolean = false
@@ -795,6 +829,11 @@ export class EaTree extends EaBase {
     return result;
   }
 
+  /**
+   * 通过节点数据设置选中状态
+   * @param nodes - 要选中的节点数据数组
+   * @returns 是否设置成功
+   */
   setCheckedNodes(nodes: any[]): boolean {
     if (!this.showCheckbox || !this.nodeKey) {
       console.warn(
@@ -815,6 +854,11 @@ export class EaTree extends EaBase {
     return true;
   }
 
+  /**
+   * 获取选中节点键值数组
+   * @param leafOnly - 是否仅返回叶子节点
+   * @returns 选中节点键值数组
+   */
   getCheckedKeys(leafOnly: boolean = false): any[] {
     if (!this.showCheckbox || !this.nodeKey) return [];
 
@@ -829,6 +873,12 @@ export class EaTree extends EaBase {
     return result;
   }
 
+  /**
+   * 通过键值设置选中状态
+   * @param keys - 要选中的节点键值数组
+   * @param leafOnly - 是否仅选中叶子节点
+   * @returns 是否设置成功
+   */
   setCheckedKeys(keys: any[], leafOnly: boolean = false): boolean {
     if (!this.showCheckbox || !this.nodeKey) {
       console.warn(
@@ -850,6 +900,12 @@ export class EaTree extends EaBase {
     return true;
   }
 
+  /**
+   * 设置指定节点的选中状态
+   * @param keyOrData - 节点键值或数据对象
+   * @param checked - 是否选中
+   * @returns 是否设置成功
+   */
   setChecked(keyOrData: any, checked: boolean): boolean {
     if (!this.showCheckbox || !this.nodeKey) {
       console.warn("setChecked requires show-checkbox and node-key to be set");
@@ -872,6 +928,12 @@ export class EaTree extends EaBase {
     return true;
   }
 
+  /**
+   * 设置当前选中节点的键值
+   * @param key - 节点键值，传 null 取消选中
+   * @param shouldAutoExpandParent - 是否自动展开父节点
+   * @returns 是否设置成功
+   */
   setCurrentKey(key: any, shouldAutoExpandParent: boolean = true): boolean {
     if (!this.nodeKey) {
       console.warn("setCurrentKey requires node-key to be set");
@@ -911,6 +973,12 @@ export class EaTree extends EaBase {
     return true;
   }
 
+  /**
+   * 设置当前选中节点
+   * @param node - 节点数据对象，传 null 取消选中
+   * @param shouldAutoExpandParent - 是否自动展开父节点
+   * @returns 是否设置成功
+   */
   setCurrentNode(node: any, shouldAutoExpandParent: boolean = true): boolean {
     if (!this.nodeKey) {
       console.warn("setCurrentNode requires node-key to be set");
@@ -950,6 +1018,11 @@ export class EaTree extends EaBase {
     return true;
   }
 
+  /**
+   * 获取节点信息
+   * @param data - 节点键值或数据对象
+   * @returns 节点信息对象，包含 label（节点状态）、child（子节点容器）、data（原始数据）
+   */
   getNode(data: any): any {
     if (!this.nodeKey) {
       console.warn("getNode requires node-key to be set");
