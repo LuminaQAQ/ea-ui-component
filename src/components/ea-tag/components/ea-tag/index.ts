@@ -1,12 +1,12 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { html } from "@utils/html";
-import { Enum } from "@/utils/Enum";
-import { componentSizes } from "@/utils/Variables";
-import { addAsyncEventListener } from "@/utils/Utils";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { timeout } from "@utils/timeout";
+import { Enum } from "@utils/Enum";
+import {
+  VARIANT_TYPES,
+  VARIANT_DEFAULT,
+  type VariantType,
+} from "@/constants/variant";
 import { EaTagRemoveEvent } from "../../events/EaTagRemoveEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -14,53 +14,52 @@ import "@/components/ea-icon/index";
 const TAG_NAME = "ea-tag" as const;
 const bem = createBEM(TAG_NAME);
 
-// ==================== 类型定义 ====================
+const TAG_SIZES = ["large", "default", "small"] as const;
+type TagSize = (typeof TAG_SIZES)[number];
 
-export type TagType = "primary" | "info" | "success" | "warning" | "danger";
+const TAG_EFFECTS = ["dark", "light", "plain"] as const;
+type TagEffect = (typeof TAG_EFFECTS)[number];
 
-export type TagSize = "large" | "default" | "small";
-
-export type TagEffect = "dark" | "light" | "plain";
-
-// ==================== 组件类 ====================
-
+/**
+ * @summary 标签组件，用于标记和选择，支持多种类型、尺寸、主题效果和可关闭功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot default - 默认插槽，用于放置标签文本或自定义内容。
+ *
+ * @event ea-remove - 标签被移除后触发，detail: `{ text: string | null }`。
+ *
+ * @csspart container - 容器元素。
+ * @csspart close-icon - 关闭图标元素。
+ *
+ * @cssproperty --ea-tag-border-radius - 组件圆角。
+ * @cssproperty --ea-tag-font-size - 组件字体大小。
+ * @cssproperty --ea-tag-transition - 过渡动画时长。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTag extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-tag")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-tag__close")
-  private _closeIcon!: HTMLElement;
+  private _transitionAbortController?: AbortController;
 
-  /** @type {AbortController} */
-  private _closableAbortController?: AbortController;
-
-  // ==================== 属性定义 ====================
+  private _closeFallbackTimer?: number;
 
   @attribute({
-    type: Enum(["primary", "info", "success", "warning", "danger"]),
-    default: "primary",
+    type: Enum(VARIANT_TYPES),
+    default: VARIANT_DEFAULT,
     observer(this: EaTag) {
       this.updateContainerClasslist();
     },
   })
-  type: TagType = "primary";
+  variant: VariantType = VARIANT_DEFAULT;
 
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaTag, newVal: boolean) {
-      this._closableAbortController?.abort();
-
-      if (newVal) {
-        this._closableAbortController = new AbortController();
-        this._closeIcon.addEventListener("click", this._onTagRemoveEvent, {
-          signal: this._closableAbortController.signal,
-        });
-      }
-
+    observer(this: EaTag) {
       this.updateContainerClasslist();
     },
   })
@@ -69,7 +68,6 @@ export class EaTag extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaTag) {},
   })
   disableTransitions: boolean = false;
 
@@ -77,20 +75,13 @@ export class EaTag extends EaBase {
     type: String,
     default: "",
     observer(this: EaTag, newVal: string) {
-      if (newVal && CSS.supports("background", newVal))
-        this._container.style.background = newVal;
-      else this._container.style.background = "";
-
-      if (!CSS.supports("background", newVal))
-        return console.warn(
-          `[EaTag] The color value ${newVal} is not supported.`
-        );
+      this._updateCustomColor(newVal);
     },
   })
   color: string = "";
 
   @attribute({
-    type: Enum(componentSizes),
+    type: Enum(TAG_SIZES),
     default: "default",
     observer(this: EaTag) {
       this.updateContainerClasslist();
@@ -99,7 +90,7 @@ export class EaTag extends EaBase {
   size: TagSize = "default";
 
   @attribute({
-    type: Enum(["dark", "light", "plain"]),
+    type: Enum(TAG_EFFECTS),
     default: "light",
     observer(this: EaTag) {
       this.updateContainerClasslist();
@@ -116,15 +107,32 @@ export class EaTag extends EaBase {
   })
   round: boolean = false;
 
-  // ==================== 方法 ====================
+  /** 更新自定义颜色 */
+  private _updateCustomColor(color: string): void {
+    if (!this._container) return;
 
-  /**
-   * 更新容器类名
-   */
+    if (!color) {
+      this._container.style.removeProperty("--ea-tag-custom-color");
+      return;
+    }
+
+    try {
+      if (CSS.supports("background", color)) {
+        this._container.style.setProperty("--ea-tag-custom-color", color);
+      } else {
+        this._container.style.removeProperty("--ea-tag-custom-color");
+        console.warn(`[EaTag] The color value ${color} is not supported.`);
+      }
+    } catch {
+      this._container.style.setProperty("--ea-tag-custom-color", color);
+    }
+  }
+
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const className = bem(
       {
-        [this.type]: true,
+        [this.variant]: true,
         [`${this.size}-size`]: true,
         [this.effect]: true,
       },
@@ -139,42 +147,62 @@ export class EaTag extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
+  /** 渲染模板 */
   html(): string {
     return `
       <div class='${this.updateContainerClasslist()}' part='container'>
-        <span><slot></slot></span>
-        <ea-icon class="ea-tag__close" part="close-icon" name="xmark"></ea-icon>
+        <span class="${bem.e("content")}"><slot></slot></span>
+        <ea-icon class="${bem.e("close")}" part="close-icon" name="xmark"></ea-icon>
       </div>
     `;
   }
 
-  /**
-   * 标签移除事件
-   */
-  private _onTagRemoveEvent = async () => {
+  /** 关闭图标点击处理 */
+  @listen("click", bem.ce("close"))
+  private _handleCloseClick(): void {
     if (!this.disableTransitions) {
-      this._container.classList.add("before-close");
-      await addAsyncEventListener(
-        this._container,
-        "transitionend"
+      this._container.classList.add(bem.s("before-close"));
+
+      this._transitionAbortController?.abort();
+      this._transitionAbortController = new AbortController();
+
+      const transitionDuration =
+        parseFloat(getComputedStyle(this._container).transitionDuration) || 0.3;
+
+      const doRemove = () => {
+        clearTimeout(this._closeFallbackTimer);
+        this._transitionAbortController?.abort();
+        this.dispatchEvent(new EaTagRemoveEvent({ text: this.textContent }));
+        this.remove();
+      };
+
+      this._container.addEventListener(
+        "transitionend",
+        (e: TransitionEvent) => {
+          if (e.target !== this._container || e.propertyName !== "filter")
+            return;
+          doRemove();
+        },
+        { signal: this._transitionAbortController.signal }
       );
+
+      this._closeFallbackTimer = timeout(
+        doRemove,
+        (transitionDuration + 0.1) * 1000
+      );
+    } else {
+      this.dispatchEvent(new EaTagRemoveEvent({ text: this.textContent }));
+      this.remove();
     }
-
-    this.dispatchEvent(new EaTagRemoveEvent({ text: this.textContent }));
-
-    this.remove();
-  };
-
-  // ==================== 生命周期 ====================
+  }
 
   $mount(): void {
     this.updateContainerClasslist();
+    if (this.color) this._updateCustomColor(this.color);
   }
 
   $beforeUnmount(): void {
-    this._closableAbortController?.abort();
+    this._transitionAbortController?.abort();
+    clearTimeout(this._closeFallbackTimer);
   }
 }

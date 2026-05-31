@@ -1,101 +1,104 @@
-$ea-tag-types: (
+$name: ea-tag;
+
+$tag-variant: (
   "primary": blue,
-  "info": grey,
   "success": green,
-  "warning": "yellow",
-  "danger": "red",
+  "warning": yellow,
+  "danger": red,
+  "info": grey,
 );
 
-$ea-tag-sizes: ("large", "default", "small");
+$tag-sizes: ("large", "default", "small");
 
-$ea-tag-effect: ("plain", "dark", "light");
+$tag-effects: ("light", "dark", "plain");
 
 :host {
-  --ea-tag-spacing-small: 0 6px;
-  --ea-tag-spacing-default: 2px 8px;
-  --ea-tag-spacing-large: 4px 12px;
-  --ea-tag-border-radius: var(--border-radius-sm);
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-font-size: var(--font-size-sm);
+  --#{$name}-transition: var(--transition-normal);
 
-  @each $type, $color in $ea-tag-types {
-    @each $effect in $ea-tag-effect {
+  --#{$name}-spacing-small: 0 6px;
+  --#{$name}-spacing-default: 2px 8px;
+  --#{$name}-spacing-large: 4px 12px;
+
+  @each $variant, $color in $tag-variant {
+    @each $effect in $tag-effects {
       @if ($effect == "light") {
-        --ea-tag-#{$type}-#{$effect}-theme-color: var(--#{$color}-100);
-        --ea-tag-#{$type}-#{$effect}-text-color: var(--#{$color}-500);
+        --#{$name}-#{$variant}-#{$effect}-bg-color: var(--#{$color}-100);
+        --#{$name}-#{$variant}-#{$effect}-text-color: var(--#{$color}-500);
       } @else {
-        --ea-tag-#{$type}-#{$effect}-theme-color: var(--#{$color}-500);
+        --#{$name}-#{$variant}-#{$effect}-bg-color: var(--#{$color}-500);
       }
     }
   }
 
-  --ea-tag-font-size: var(--font-size-sm);
-
-  --ea-tag-transition: var(--transition-normal);
-}
-
-:host {
   display: inline-block;
 }
 
-@include block(ea-tag) {
+@include block($name) {
   box-sizing: border-box;
-  border-radius: var(--ea-tag-border-radius);
+  border-radius: var(--#{$name}-border-radius);
   border: 1px solid transparent;
 
-  font-size: var(--ea-tag-font-size);
+  font-size: var(--#{$name}-font-size);
+
+  filter: opacity(1);
+  transition: filter var(--#{$name}-transition);
+
+  @include element(content) {
+    display: inline;
+  }
 
   @include element(close) {
     display: none;
   }
 
-  @include state(closable) {
-    display: flex;
-    align-items: center;
-
-    .ea-tag__close {
-      display: inline-block;
-
-      margin-left: var(--spacing-sm);
-      margin-top: var(--spacing-sm);
-
-      cursor: pointer;
-      font-size: var(--ea-tag-font-size);
-    }
-  }
-
-  @include state(round) {
-    border-radius: 999px;
-  }
-
-  &.before-close {
-    filter: opacity(0);
-
-    transition: filter var(--ea-tag-transition);
-  }
-
-  @each $size in $ea-tag-sizes {
+  @each $size in $tag-sizes {
     @include modifier(#{$size}-size) {
-      padding: var(--ea-tag-spacing-#{$size});
+      padding: var(--#{$name}-spacing-#{$size});
     }
   }
 
-  @each $type, $color in $ea-tag-types {
-    @include modifier($type) {
-      color: var(--ea-tag-#{$type}-light-text-color);
-      background-color: var(--ea-tag-#{$type}-light-theme-color);
-      border-color: var(--ea-tag-#{$type}-light-theme-color);
+  @each $variant, $color in $tag-variant {
+    @include modifier($variant) {
+      color: var(--#{$name}-#{$variant}-light-text-color);
+      background-color: var(--#{$name}-#{$variant}-light-bg-color);
+      border-color: var(--#{$name}-#{$variant}-light-bg-color);
 
-      @each $effect in $ea-tag-effect {
-        &.ea-tag--#{$effect} {
+      @each $effect in $tag-effects {
+        &.#{$name}--#{$effect} {
           @if ($effect == "dark") {
-            color: var(--white);
-            background-color: var(--ea-tag-#{$type}-#{$effect}-theme-color);
+            color: var(--color-white);
+            background-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
+            border-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
           } @else if($effect == "plain") {
             background-color: var(--color-transparent);
-            color: var(--ea-tag-#{$type}-#{$effect}-theme-color);
-            border-color: var(--ea-tag-#{$type}-#{$effect}-theme-color);
+            color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
+            border-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
           }
         }
       }
     }
+  }
+
+  @include state(closable) {
+    display: inline-flex;
+    align-items: center;
+
+    .#{$name}__close {
+      display: inline-block;
+      margin-left: var(--spacing-sm);
+      margin-top: var(--spacing-sm);
+      cursor: pointer;
+      font-size: var(--#{$name}-font-size);
+    }
+  }
+
+  @include state(round) {
+    border-radius: var(--border-radius-round);
+  }
+
+  @include state(before-close) {
+    filter: opacity(0);
   }
 }

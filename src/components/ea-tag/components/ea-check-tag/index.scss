@@ -1,30 +1,29 @@
-$ea-check-tag-types: (
+$name: ea-check-tag;
+
+$check-tag-variant: (
   "primary": blue,
-  "info": grey,
   "success": green,
-  "warning": "yellow",
-  "danger": "red",
+  "warning": yellow,
+  "danger": red,
+  "info": grey,
 );
 
 :host {
-  --ea-check-tag-spacing: 4px 12px;
-  --ea-check-tag-border-radius: var(--border-radius-sm);
+  --#{$name}-spacing: 4px 12px;
+  --#{$name}-border-radius: var(--border-radius-sm);
+  --#{$name}-font-size: var(--font-size-lg);
+  --#{$name}-transition: var(--transition-normal);
 
-  @each $type, $color in $ea-check-tag-types {
-    --ea-check-tag-#{$type}-theme-color: var(--#{$color}-100);
-    --ea-check-tag-#{$type}-text-color: var(--#{$color}-500);
-    --ea-check-tag-#{$type}-hover-theme-color: var(--#{$color}-200);
-    --ea-check-tag-#{$type}-disable-theme-color: var(--#{$color}-200);
+  @each $variant, $color in $check-tag-variant {
+    --#{$name}-#{$variant}-bg-color: var(--#{$color}-100);
+    --#{$name}-#{$variant}-text-color: var(--#{$color}-500);
+    --#{$name}-#{$variant}-hover-bg-color: var(--#{$color}-200);
+    --#{$name}-#{$variant}-disabled-bg-color: var(--#{$color}-200);
   }
-  --ea-check-tag-disable-text-color: var(--grey-400);
-  --ea-check-tag-info-checked-theme-color: var(--grey-200);
 
-  --ea-check-tag-font-size: var(--font-size-lg);
+  --#{$name}-disabled-text-color: var(--grey-400);
+  --#{$name}-info-checked-bg-color: var(--grey-200);
 
-  --ea-check-tag-transition: var(--transition-normal);
-}
-
-:host {
   display: inline-block;
 }
 
@@ -32,51 +31,53 @@ $ea-check-tag-types: (
   cursor: not-allowed;
 }
 
-@include block(ea-check-tag) {
+@include block($name) {
   box-sizing: border-box;
-  padding: var(--ea-check-tag-spacing);
-  border-radius: var(--ea-check-tag-border-radius);
+  padding: var(--#{$name}-spacing);
+  border-radius: var(--#{$name}-border-radius);
 
-  background-color: var(--ea-check-tag-info-theme-color);
-  color: var(--ea-check-tag-info-text-color);
+  background-color: var(--#{$name}-info-bg-color);
+  color: var(--#{$name}-info-text-color);
   cursor: pointer;
 
   font-weight: 600;
-  font-size: var(--ea-check-tag-font-size);
+  font-size: var(--#{$name}-font-size);
 
-  transition: background-color var(--ea-check-tag-transition);
+  transition: background-color var(--#{$name}-transition);
 
   &:hover {
-    background-color: var(--ea-check-tag-info-hover-theme-color);
+    background-color: var(--#{$name}-info-hover-bg-color);
   }
 
   @include state(disabled) {
     pointer-events: none;
-    color: var(--ea-check-tag-disable-text-color);
-    background-color: var(--ea-check-tag-info-theme-color);
+    color: var(--#{$name}-disabled-text-color);
+    background-color: var(--#{$name}-info-bg-color);
 
     &:hover {
-      background-color: var(--ea-check-tag-info-theme-color);
+      background-color: var(--#{$name}-info-bg-color);
     }
   }
 
-  @each $type, $color in $ea-check-tag-types {
-    @include modifier($type) {
-      color: var(--ea-check-tag-#{$type}-text-color);
-      @if ($type == "info") {
-        background-color: var(--ea-check-tag-info-checked-theme-color);
+  @each $variant, $color in $check-tag-variant {
+    @include modifier($variant) {
+      color: var(--#{$name}-#{$variant}-text-color);
+
+      @if ($variant == "info") {
+        background-color: var(--#{$name}-info-checked-bg-color);
       } @else {
-        background-color: var(--ea-check-tag-#{$type}-theme-color);
+        background-color: var(--#{$name}-#{$variant}-bg-color);
       }
-      border-color: var(--ea-check-tag-#{$type}-theme-color);
+
+      border-color: var(--#{$name}-#{$variant}-bg-color);
 
       &:hover {
-        background-color: var(--ea-check-tag-#{$type}-hover-theme-color);
+        background-color: var(--#{$name}-#{$variant}-hover-bg-color);
       }
 
       &.is-disabled {
-        @if ($type != "info") {
-          background-color: var(--ea-check-tag-#{$type}-disable-theme-color);
+        @if ($variant != "info") {
+          background-color: var(--#{$name}-#{$variant}-disabled-bg-color);
         }
       }
     }

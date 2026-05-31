@@ -1,3 +1,7 @@
+export interface EaTagRemoveEventDetail {
+  text: string | null;
+}
+
 export class EaTagRemoveEvent extends Event {
   readonly detail: EaTagRemoveEventDetail;
 
@@ -11,12 +15,8 @@ export class EaTagRemoveEvent extends Event {
   }
 }
 
-interface EaTagRemoveEventDetail {
-  text: string;
-}
-
 declare global {
-  interface HTMLElementEventMap {
+  interface GlobalEventHandlersEventMap {
     "ea-remove": EaTagRemoveEvent;
   }
 }

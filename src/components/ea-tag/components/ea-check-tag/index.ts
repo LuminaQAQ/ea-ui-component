@@ -1,28 +1,32 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
+import {
+  VARIANT_TYPES,
+  VARIANT_DEFAULT,
+  type VariantType,
+} from "@/constants/variant";
+import { EaCheckTagChangeEvent } from "../../events/EaCheckTagChangeEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-check-tag" as const;
 const bem = createBEM(TAG_NAME);
 
-// ==================== 类型定义 ====================
-
-export type CheckTagType = "primary" | "info" | "success" | "warning" | "danger";
-
-// ==================== 组件类 ====================
-
+/**
+ * @summary 可选中标签组件，用于类似复选框的标签选择场景，支持选中状态切换和多种类型。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，用于放置标签文本或自定义内容。
+ *
+ * @event change - 选中状态改变时触发，detail: `{ checked: boolean }`。
+ *
+ * @csspart container - 容器元素。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaCheckTag extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-check-tag")
+  @query(bem.cb())
   private _container!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Boolean,
@@ -43,23 +47,19 @@ export class EaCheckTag extends EaBase {
   disabled: boolean = false;
 
   @attribute({
-    type: Enum(["primary", "info", "success", "warning", "danger"]),
-    default: "primary",
+    type: Enum(VARIANT_TYPES),
+    default: VARIANT_DEFAULT,
     observer(this: EaCheckTag) {
       this.updateContainerClasslist();
     },
   })
-  type: CheckTagType = "primary";
+  variant: VariantType = VARIANT_DEFAULT;
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
+  /** 更新容器类名 */
   updateContainerClasslist(): string {
     const className = bem(
       {
-        [this.type]: this.type && this.checked,
+        [this.variant]: this.variant && this.checked,
       },
       {
         disabled: this.disabled,
@@ -71,9 +71,7 @@ export class EaCheckTag extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
+  /** 渲染模板 */
   html(): string {
     return `
       <div class='${this.updateContainerClasslist()}' part='container'>
@@ -82,18 +80,14 @@ export class EaCheckTag extends EaBase {
     `;
   }
 
-  /**
-   * 点击切换选中状态
-   */
-  @listen("click", ".ea-check-tag")
-  private _onCheckChangeEvent(): void {
+  /** 点击切换选中状态 */
+  @listen("click", bem.cb())
+  private _handleClick(): void {
     if (this.disabled) return;
 
     this.checked = !this.checked;
-    this.emit("change", { detail: { checked: this.checked } });
+    this.dispatchEvent(new EaCheckTagChangeEvent({ checked: this.checked }));
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();
