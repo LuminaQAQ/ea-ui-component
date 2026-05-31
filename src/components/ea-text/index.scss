@@ -1,62 +1,56 @@
-:host {
-  --ea-text-normal-color: var(--grey-900);
-  --ea-text-primary-color: var(--blue-500);
-  --ea-text-success-color: var(--green-500);
-  --ea-text-info-color: var(--grey-500);
-  --ea-text-warning-color: var(--yellow-500);
-  --ea-text-danger-color: var(--red-500);
+$name: ea-text;
 
-  --ea-text-large-size: var(--font-size-lg);
-  --ea-text-medium-size: var(--font-size-md);
-  --ea-text-small-size: var(--font-size-sm);
+$text-variant-colors: (
+  primary: blue-500,
+  success: green-500,
+  info: grey-500,
+  warning: yellow-500,
+  danger: red-500,
+);
 
-  --ea-text-h1-size: 2rem;
-  --ea-text-h2-size: 1.5rem;
-  --ea-text-h3-size: 1.25rem;
-  --ea-text-h4-size: 1rem;
-  --ea-text-h5-size: 0.875rem;
-  --ea-text-h6-size: 0.75rem;
-
-  --ea-text-line-clamp: 0;
-}
+$text-size-fonts: (
+  small: font-size-sm,
+  medium: font-size-md,
+  large: font-size-lg,
+);
 
 :host {
+  --#{$name}-line-clamp: 0;
+
+  @each $variant, $color in $text-variant-colors {
+    --#{$name}-#{$variant}-color: var(--#{$color});
+  }
+
+  @each $size, $font in $text-size-fonts {
+    --#{$name}-#{$size}-font-size: var(--#{$font});
+  }
+
   display: inline-block;
   max-width: 100%;
   overflow-wrap: break-word;
 }
 
-@mixin ea-text-type-theme($theme-name) {
-  @include modifier($theme-name) {
-    color: var(--ea-text-#{$theme-name}-color);
-  }
-}
+@include block($name) {
+  font-size: var(--#{$name}-medium-font-size);
+  line-height: var(--#{$name}-medium-font-size);
 
-@mixin ea-text-size-theme($theme-name) {
-  @include modifier($theme-name) {
-    font-size: var(--ea-text-#{$theme-name}-size);
-    line-height: var(--ea-text-#{$theme-name}-size);
-
-    ::slotted(*) {
-      font-size: var(--ea-text-#{$theme-name}-size);
-      line-height: var(--ea-text-#{$theme-name}-size);
+  @each $variant, $color in $text-variant-colors {
+    @include modifier(#{$variant}) {
+      color: var(--#{$name}-#{$variant}-color);
     }
   }
-}
 
-@include block(ea-text) {
-  font-size: var(--ea-text-medium-size);
-  line-height: var(--ea-text-medium-size);
+  @each $size, $font in $text-size-fonts {
+    @include modifier(#{$size}) {
+      font-size: var(--#{$name}-#{$size}-font-size);
+      line-height: var(--#{$name}-#{$size}-font-size);
 
-  @include ea-text-type-theme(noraml);
-  @include ea-text-type-theme(primary);
-  @include ea-text-type-theme(success);
-  @include ea-text-type-theme(warning);
-  @include ea-text-type-theme(danger);
-  @include ea-text-type-theme(info);
-
-  @include ea-text-size-theme(small);
-  @include ea-text-size-theme(large);
+      ::slotted(*) {
+        font-size: var(--#{$name}-#{$size}-font-size);
+        line-height: var(--#{$name}-#{$size}-font-size);
+      }
+    }
+  }
 
   @include modifier(truncated) {
     white-space: nowrap;
@@ -67,17 +61,7 @@
   @include modifier(line-clamp) {
     display: -webkit-inline-box;
     -webkit-box-orient: vertical;
-    line-clamp: var(--ea-text-line-clamp);
-    -webkit-line-clamp: var(--ea-text-line-clamp);
+    -webkit-line-clamp: var(--#{$name}-line-clamp);
     overflow: hidden;
-  }
-}
-
-:host {
-  @for $i from 1 through 6 {
-    h#{$i} {
-      font-size: var(--ea-text-h#{$i}-size);
-      line-height: var(--ea-text-h#{$i}-size);
-    }
   }
 }

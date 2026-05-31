@@ -2,10 +2,9 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-text 组件
 import "../components/ea-text/index.ts";
 
-describe("EaText Component", () => {
+describe("EaText", () => {
   let container;
 
   beforeEach(() => {
@@ -17,11 +16,8 @@ describe("EaText Component", () => {
     container.remove();
   });
 
-  /**
-   * EaText 基本功能测试
-   */
-  describe("EaText Basic Functionality", () => {
-    it("应该正确渲染 ea-text 组件", async () => {
+  describe("基本功能", () => {
+    it("应该正确渲染组件", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Hello World";
       container.appendChild(text);
@@ -42,91 +38,126 @@ describe("EaText Component", () => {
       expect(text.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
     });
 
-    it("应该正确显示文本内容", async () => {
+    it("应该包含默认插槽", async () => {
       const text = document.createElement("ea-text");
-      text.textContent = "Hello World";
+      text.textContent = "Slot Content";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.textContent).toBe("Hello World");
+      const slot = text.shadowRoot.querySelector("slot");
+      expect(slot).toBeTruthy();
+    });
+
+    it("默认标签应为 span", async () => {
+      const text = document.createElement("ea-text");
+      text.textContent = "Default Tag";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.tagName.toLowerCase()).toBe("span");
     });
   });
 
-  /**
-   * EaText Type 属性测试
-   */
-  describe("EaText Type Attribute", () => {
-    it("默认 type 应该是 normal", async () => {
+  describe("Variant 属性", () => {
+    it("默认 variant 应该是 normal", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Default";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.type).toBe("normal");
+      expect(text.variant).toBe("normal");
     });
 
-    it("应该支持 type='primary'", async () => {
+    it("应该支持 variant='primary'", async () => {
       const text = document.createElement("ea-text");
-      text.type = "primary";
+      text.setAttribute("variant", "primary");
       text.textContent = "Primary";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.type).toBe("primary");
+      expect(text.variant).toBe("primary");
     });
 
-    it("应该支持 type='success'", async () => {
+    it("应该支持 variant='success'", async () => {
       const text = document.createElement("ea-text");
-      text.type = "success";
+      text.setAttribute("variant", "success");
       text.textContent = "Success";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.type).toBe("success");
+      expect(text.variant).toBe("success");
     });
 
-    it("应该支持 type='info'", async () => {
+    it("应该支持 variant='info'", async () => {
       const text = document.createElement("ea-text");
-      text.type = "info";
+      text.setAttribute("variant", "info");
       text.textContent = "Info";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.type).toBe("info");
+      expect(text.variant).toBe("info");
     });
 
-    it("应该支持 type='warning'", async () => {
+    it("应该支持 variant='warning'", async () => {
       const text = document.createElement("ea-text");
-      text.type = "warning";
+      text.setAttribute("variant", "warning");
       text.textContent = "Warning";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.type).toBe("warning");
+      expect(text.variant).toBe("warning");
     });
 
-    it("应该支持 type='danger'", async () => {
+    it("应该支持 variant='danger'", async () => {
       const text = document.createElement("ea-text");
-      text.type = "danger";
+      text.setAttribute("variant", "danger");
       text.textContent = "Danger";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.type).toBe("danger");
+      expect(text.variant).toBe("danger");
+    });
+
+    it("variant 变化时应该更新 CSS 类名", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("variant", "primary");
+      text.textContent = "Primary";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--primary")).toBe(true);
+    });
+
+    it("动态修改 variant 应该生效", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("variant", "normal");
+      text.textContent = "Variant Test";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      text.setAttribute("variant", "danger");
+      await waitForRender();
+
+      expect(text.variant).toBe("danger");
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--danger")).toBe(true);
+      expect(containerEl.classList.contains("ea-text--normal")).toBe(false);
     });
   });
 
-  /**
-   * EaText Size 属性测试
-   */
-  describe("EaText Size Attribute", () => {
+  describe("Size 属性", () => {
     it("默认 size 应该是 medium", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Default";
@@ -139,7 +170,7 @@ describe("EaText Component", () => {
 
     it("应该支持 size='large'", async () => {
       const text = document.createElement("ea-text");
-      text.size = "large";
+      text.setAttribute("size", "large");
       text.textContent = "Large";
       container.appendChild(text);
 
@@ -150,7 +181,7 @@ describe("EaText Component", () => {
 
     it("应该支持 size='small'", async () => {
       const text = document.createElement("ea-text");
-      text.size = "small";
+      text.setAttribute("size", "small");
       text.textContent = "Small";
       container.appendChild(text);
 
@@ -158,12 +189,38 @@ describe("EaText Component", () => {
 
       expect(text.size).toBe("small");
     });
+
+    it("size 变化时应该更新 CSS 类名", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("size", "large");
+      text.textContent = "Large";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--large")).toBe(true);
+    });
+
+    it("动态修改 size 应该生效", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("size", "medium");
+      text.textContent = "Size Test";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      text.setAttribute("size", "large");
+      await waitForRender();
+
+      expect(text.size).toBe("large");
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--large")).toBe(true);
+      expect(containerEl.classList.contains("ea-text--medium")).toBe(false);
+    });
   });
 
-  /**
-   * EaText Truncated 属性测试
-   */
-  describe("EaText Truncated Attribute", () => {
+  describe("Truncated 属性", () => {
     it("默认 truncated 应该是 false", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Default";
@@ -171,37 +228,73 @@ describe("EaText Component", () => {
 
       await waitForRender();
 
-      const value = text.truncated;
-      expect(value === false || value === null).toBe(true);
+      expect(text.truncated).toBe(false);
     });
 
-    it("设置 truncated 应该启用文本截断", async () => {
+    it("设置 truncated 应该添加截断修饰符类", async () => {
       const text = document.createElement("ea-text");
-      text.truncated = true;
+      text.setAttribute("truncated", "");
       text.textContent = "This is a very long text that should be truncated";
       container.appendChild(text);
 
       await waitForRender();
 
       expect(text.truncated).toBe(true);
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--truncated")).toBe(true);
     });
 
-    it("truncated 为 true 时应该启用截断", async () => {
+    it("truncated 为 false 时不应有截断修饰符类", async () => {
       const text = document.createElement("ea-text");
-      text.truncated = true;
       text.textContent = "Test text";
       container.appendChild(text);
 
       await waitForRender();
 
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--truncated")).toBe(false);
+    });
+
+    it("动态设置 truncated 应该生效", async () => {
+      const text = document.createElement("ea-text");
+      text.textContent = "Truncated Test";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      text.setAttribute("truncated", "");
+      await waitForRender();
+
       expect(text.truncated).toBe(true);
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--truncated")).toBe(true);
+    });
+
+    it("truncated 启用时应自动设置容器 title", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("truncated", "");
+      text.textContent = "Long text content";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.title).toBe("Long text content");
+    });
+
+    it("truncated 未启用时不应自动设置容器 title", async () => {
+      const text = document.createElement("ea-text");
+      text.textContent = "Normal text";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.title).toBe("");
     });
   });
 
-  /**
-   * EaText Line-clamp 属性测试
-   */
-  describe("EaText Line-clamp Attribute", () => {
+  describe("Line-clamp 属性", () => {
     it("默认 lineClamp 应该是 0", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Default";
@@ -214,8 +307,8 @@ describe("EaText Component", () => {
 
     it("应该支持 lineClamp 属性", async () => {
       const text = document.createElement("ea-text");
-      text.lineClamp = 2;
-      text.textContent = "Line 1\nLine 2\nLine 3";
+      text.setAttribute("line-clamp", "2");
+      text.textContent = "Line 1 Line 2 Line 3";
       container.appendChild(text);
 
       await waitForRender();
@@ -223,22 +316,69 @@ describe("EaText Component", () => {
       expect(text.lineClamp).toBe(2);
     });
 
-    it("lineClamp 大于 0 时应该设置行数限制", async () => {
+    it("lineClamp 大于 0 时应该添加 line-clamp 修饰符类", async () => {
       const text = document.createElement("ea-text");
-      text.lineClamp = 2;
+      text.setAttribute("line-clamp", "2");
       text.textContent = "Test text";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.lineClamp).toBe(2);
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--line-clamp")).toBe(true);
+    });
+
+    it("lineClamp 为 0 时不应有 line-clamp 修饰符类", async () => {
+      const text = document.createElement("ea-text");
+      text.textContent = "Test text";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--line-clamp")).toBe(false);
+    });
+
+    it("lineClamp 大于 0 时应该设置 CSS 自定义属性", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("line-clamp", "3");
+      text.textContent = "Test text";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      expect(text.style.getPropertyValue("--ea-text-line-clamp")).toBe("3");
+    });
+
+    it("lineClamp 启用时应自动设置容器 title", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("line-clamp", "2");
+      text.textContent = "Multi line text";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.title).toBe("Multi line text");
+    });
+
+    it("动态设置 lineClamp 应该生效", async () => {
+      const text = document.createElement("ea-text");
+      text.textContent = "Line Clamp Test";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      text.setAttribute("line-clamp", "3");
+      await waitForRender();
+
+      expect(text.lineClamp).toBe(3);
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--line-clamp")).toBe(true);
     });
   });
 
-  /**
-   * EaText Tag 属性测试
-   */
-  describe("EaText Tag Attribute", () => {
+  describe("Tag 属性", () => {
     it("默认 tag 应该是 span", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Default";
@@ -251,29 +391,33 @@ describe("EaText Component", () => {
 
     it("应该支持 tag='p'", async () => {
       const text = document.createElement("ea-text");
-      text.tag = "p";
+      text.setAttribute("tag", "p");
       text.textContent = "Paragraph";
       container.appendChild(text);
 
       await waitForRender();
 
       expect(text.tag).toBe("p");
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.tagName.toLowerCase()).toBe("p");
     });
 
     it("应该支持 tag='b'", async () => {
       const text = document.createElement("ea-text");
-      text.tag = "b";
+      text.setAttribute("tag", "b");
       text.textContent = "Bold";
       container.appendChild(text);
 
       await waitForRender();
 
       expect(text.tag).toBe("b");
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.tagName.toLowerCase()).toBe("b");
     });
 
     it("应该支持 tag='i'", async () => {
       const text = document.createElement("ea-text");
-      text.tag = "i";
+      text.setAttribute("tag", "i");
       text.textContent = "Italic";
       container.appendChild(text);
 
@@ -284,7 +428,7 @@ describe("EaText Component", () => {
 
     it("应该支持 tag='sub'", async () => {
       const text = document.createElement("ea-text");
-      text.tag = "sub";
+      text.setAttribute("tag", "sub");
       text.textContent = "Subscript";
       container.appendChild(text);
 
@@ -295,7 +439,7 @@ describe("EaText Component", () => {
 
     it("应该支持 tag='sup'", async () => {
       const text = document.createElement("ea-text");
-      text.tag = "sup";
+      text.setAttribute("tag", "sup");
       text.textContent = "Superscript";
       container.appendChild(text);
 
@@ -306,7 +450,7 @@ describe("EaText Component", () => {
 
     it("应该支持 tag='ins'", async () => {
       const text = document.createElement("ea-text");
-      text.tag = "ins";
+      text.setAttribute("tag", "ins");
       text.textContent = "Inserted";
       container.appendChild(text);
 
@@ -317,7 +461,7 @@ describe("EaText Component", () => {
 
     it("应该支持 tag='del'", async () => {
       const text = document.createElement("ea-text");
-      text.tag = "del";
+      text.setAttribute("tag", "del");
       text.textContent = "Deleted";
       container.appendChild(text);
 
@@ -328,7 +472,7 @@ describe("EaText Component", () => {
 
     it("应该支持 tag='mark'", async () => {
       const text = document.createElement("ea-text");
-      text.tag = "mark";
+      text.setAttribute("tag", "mark");
       text.textContent = "Marked";
       container.appendChild(text);
 
@@ -336,56 +480,94 @@ describe("EaText Component", () => {
 
       expect(text.tag).toBe("mark");
     });
-  });
 
-  /**
-   * EaText Title 属性测试
-   */
-  describe("EaText Title Attribute", () => {
-    it("默认 title 应该是空字符串", async () => {
+    it("动态修改 tag 应该重新渲染", async () => {
       const text = document.createElement("ea-text");
-      text.textContent = "Default";
+      text.textContent = "Tag Test";
       container.appendChild(text);
 
       await waitForRender();
 
-      expect(text.title).toBe("");
-    });
-
-    it("应该支持 title 属性", async () => {
-      const text = document.createElement("ea-text");
-      text.title = "Custom Title";
-      text.textContent = "Text";
-      container.appendChild(text);
-
+      text.setAttribute("tag", "p");
       await waitForRender();
 
-      expect(text.title).toBe("Custom Title");
+      expect(text.tag).toBe("p");
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.tagName.toLowerCase()).toBe("p");
     });
   });
 
-  /**
-   * EaText Slots 测试
-   */
-  describe("EaText Slots", () => {
-    it("应该正确渲染默认插槽内容", async () => {
+  describe("组合测试", () => {
+    it("应该同时支持 variant 和 size 属性", async () => {
       const text = document.createElement("ea-text");
-      text.textContent = "Slot Content";
+      text.setAttribute("variant", "primary");
+      text.setAttribute("size", "large");
+      text.textContent = "Primary Large";
       container.appendChild(text);
 
       await waitForRender();
 
-      const slot = text.shadowRoot.querySelector("slot");
-      expect(slot).toBeTruthy();
+      expect(text.variant).toBe("primary");
+      expect(text.size).toBe("large");
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--primary")).toBe(true);
+      expect(containerEl.classList.contains("ea-text--large")).toBe(true);
     });
 
+    it("应该同时支持 truncated 和 tag 属性", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("truncated", "");
+      text.setAttribute("tag", "p");
+      text.textContent = "Truncated paragraph";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      expect(text.truncated).toBe(true);
+      expect(text.tag).toBe("p");
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--truncated")).toBe(true);
+      expect(containerEl.tagName.toLowerCase()).toBe("p");
+    });
+
+    it("应该同时支持 lineClamp 和 tag 属性", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("line-clamp", "3");
+      text.setAttribute("tag", "p");
+      text.textContent = "Multi line text";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      expect(text.lineClamp).toBe(3);
+      expect(text.tag).toBe("p");
+    });
+
+    it("应该同时支持 variant、size、truncated 属性", async () => {
+      const text = document.createElement("ea-text");
+      text.setAttribute("variant", "danger");
+      text.setAttribute("size", "small");
+      text.setAttribute("truncated", "");
+      text.textContent = "Combined";
+      container.appendChild(text);
+
+      await waitForRender();
+
+      const containerEl = text.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("ea-text--danger")).toBe(true);
+      expect(containerEl.classList.contains("ea-text--small")).toBe(true);
+      expect(containerEl.classList.contains("ea-text--truncated")).toBe(true);
+    });
+  });
+
+  describe("嵌套组件", () => {
     it("应该支持嵌套 ea-text 组件", async () => {
       const parent = document.createElement("ea-text");
       parent.textContent = "This is ";
 
       const child = document.createElement("ea-text");
-      child.tag = "sub";
-      child.size = "small";
+      child.setAttribute("tag", "sub");
+      child.setAttribute("size", "small");
       child.textContent = "subscript";
 
       parent.appendChild(child);
@@ -397,54 +579,7 @@ describe("EaText Component", () => {
     });
   });
 
-  /**
-   * EaText 组合测试
-   */
-  describe("EaText Combined Tests", () => {
-    it("应该同时支持 type 和 size 属性", async () => {
-      const text = document.createElement("ea-text");
-      text.type = "primary";
-      text.size = "large";
-      text.textContent = "Primary Large";
-      container.appendChild(text);
-
-      await waitForRender();
-
-      expect(text.type).toBe("primary");
-      expect(text.size).toBe("large");
-    });
-
-    it("应该同时支持 truncated 和 tag 属性", async () => {
-      const text = document.createElement("ea-text");
-      text.truncated = true;
-      text.tag = "p";
-      text.textContent = "Truncated paragraph";
-      container.appendChild(text);
-
-      await waitForRender();
-
-      expect(text.truncated).toBe(true);
-      expect(text.tag).toBe("p");
-    });
-
-    it("应该同时支持 lineClamp 和 tag 属性", async () => {
-      const text = document.createElement("ea-text");
-      text.lineClamp = 3;
-      text.tag = "p";
-      text.textContent = "Multi line text";
-      container.appendChild(text);
-
-      await waitForRender();
-
-      expect(text.lineClamp).toBe(3);
-      expect(text.tag).toBe("p");
-    });
-  });
-
-  /**
-   * EaText 边界条件测试
-   */
-  describe("EaText Edge Cases", () => {
+  describe("边界条件", () => {
     it("空文本应该正常渲染", async () => {
       const text = document.createElement("ea-text");
       container.appendChild(text);
@@ -477,11 +612,11 @@ describe("EaText Component", () => {
 
     it("多个 ea-text 应该独立工作", async () => {
       const text1 = document.createElement("ea-text");
-      text1.type = "primary";
+      text1.setAttribute("variant", "primary");
       text1.textContent = "Text 1";
 
       const text2 = document.createElement("ea-text");
-      text2.type = "success";
+      text2.setAttribute("variant", "success");
       text2.textContent = "Text 2";
 
       container.appendChild(text1);
@@ -489,17 +624,14 @@ describe("EaText Component", () => {
 
       await waitForRender();
 
-      expect(text1.type).toBe("primary");
-      expect(text2.type).toBe("success");
+      expect(text1.variant).toBe("primary");
+      expect(text2.variant).toBe("success");
       expect(text1.textContent).toBe("Text 1");
       expect(text2.textContent).toBe("Text 2");
     });
   });
 
-  /**
-   * EaText 生命周期测试
-   */
-  describe("EaText Lifecycle", () => {
+  describe("生命周期", () => {
     it("组件连接后应该正确初始化", async () => {
       const text = document.createElement("ea-text");
       text.textContent = "Lifecycle Test";
@@ -521,79 +653,6 @@ describe("EaText Component", () => {
       text.remove();
 
       expect(container.contains(text)).toBe(false);
-    });
-
-    it("动态修改 type 应该生效", async () => {
-      const text = document.createElement("ea-text");
-      text.type = "normal";
-      text.textContent = "Type Test";
-      container.appendChild(text);
-
-      await waitForRender();
-
-      text.type = "danger";
-
-      await waitForRender();
-
-      expect(text.type).toBe("danger");
-    });
-
-    it("动态修改 size 应该生效", async () => {
-      const text = document.createElement("ea-text");
-      text.size = "medium";
-      text.textContent = "Size Test";
-      container.appendChild(text);
-
-      await waitForRender();
-
-      text.size = "large";
-
-      await waitForRender();
-
-      expect(text.size).toBe("large");
-    });
-
-    it("动态修改 tag 应该重新渲染", async () => {
-      const text = document.createElement("ea-text");
-      text.tag = "span";
-      text.textContent = "Tag Test";
-      container.appendChild(text);
-
-      await waitForRender();
-
-      text.tag = "p";
-
-      await waitForRender();
-
-      expect(text.tag).toBe("p");
-    });
-
-    it("动态设置 truncated 应该生效", async () => {
-      const text = document.createElement("ea-text");
-      text.textContent = "Truncated Test";
-      container.appendChild(text);
-
-      await waitForRender();
-
-      text.truncated = true;
-
-      await waitForRender();
-
-      expect(text.truncated).toBe(true);
-    });
-
-    it("动态设置 lineClamp 应该生效", async () => {
-      const text = document.createElement("ea-text");
-      text.textContent = "Line Clamp Test";
-      container.appendChild(text);
-
-      await waitForRender();
-
-      text.lineClamp = 3;
-
-      await waitForRender();
-
-      expect(text.lineClamp).toBe(3);
     });
   });
 });
