@@ -14,7 +14,6 @@ ea-tooltip {
 ea-tooltip[effect="customized"]::part(original) {
   background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
 }
-
 ea-tooltip[effect="customized"]::part(original)::after {
   background: linear-gradient(45deg, #b2e68d, #bce689);
 }
@@ -36,11 +35,11 @@ ea-tooltip[effect="customized"]::part(original)::after {
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#tooltip-css-part) 和 [CSS 自定义属性](#tooltip-css-自定义属性)。
 
-::: code-group
+::: details 查看代码
 
-```css [该用例使用到的样式]
+```css
 ea-tooltip {
   margin: 1rem;
 }
@@ -224,9 +223,9 @@ Tooltip 组件内置了两个主题：`dark` 和 `light`。
   </ea-tooltip>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
 
-`css`
+::: code-group
 
 ```css
 ea-tooltip[effect="customized"]::part(original) {
@@ -237,8 +236,6 @@ ea-tooltip[effect="customized"]::part(original)::after {
   background: linear-gradient(45deg, #b2e68d, #bce689);
 }
 ```
-
-`html`
 
 ```html
 <div class="demo">
@@ -256,11 +253,13 @@ ea-tooltip[effect="customized"]::part(original)::after {
 
 :::
 
+::::
+
 ## 更多内容的文字提示 ​
 
 展示多行文本或者是设置文本内容的格式
 
-用具名 slot `content`，替代 `tooltip` 中的 `content` 属性。
+用默认 slot 替代 `content` 属性，支持 HTML 格式内容。
 
 <div id="scalableSection" class="demo">
   <ea-tooltip placement="top">
@@ -307,26 +306,26 @@ ea-tooltip[effect="customized"]::part(original)::after {
 | 名称      | 说明                                   |
 | --------- | -------------------------------------- |
 | container | Tooltip 外层容器                       |
-| reference | 触发 Tooltip 显示的 HTML 元素 的父容器 |
-| original  | Tooltip 内容容器                       |
-| content   | Tooltip 内容容器                       |
+| reference | 触发 Tooltip 显示的 HTML 元素的父容器 |
+| original  | Tooltip 弹出内容容器                   |
+| content   | Tooltip 文本内容容器                   |
 
 ### Tooltip Events
 
-| 事件名称 | 说明                          | 回调参数     |
-| -------- | ----------------------------- | ------------ |
-| show     | 开启 Tooltip 时触发的事件     | `() => void` |
-| shown    | 开启 Tooltip 的动画结束时触发 | `() => void` |
-| hide     | 关闭 Tooltip 时触发的事件     | `() => void` |
-| hidden   | 关闭 Tooltip 的动画结束时触发 | `() => void` |
+| 事件名   | 说明                          | 回调参数(event.detail) |
+| -------- | ----------------------------- | ---------------------- |
+| ea-show  | 开启 Tooltip 时触发的事件     | —                      |
+| ea-shown | 开启 Tooltip 的动画结束时触发 | —                      |
+| ea-hide  | 关闭 Tooltip 时触发的事件     | —                      |
+| ea-hidden| 关闭 Tooltip 的动画结束时触发 | —                      |
 
 ### Tooltip Methods
 
-| 名称   | 详情                  | 类型         |
-| ------ | --------------------- | ------------ |
-| show   | 显示 Tooltip          | `() => void` |
-| hide   | 隐藏 Tooltip          | `() => void` |
-| toggle | 切换 Tooltip 显示状态 | `() => void` |
+| 方法名 | 说明                  | 参数 |
+| ------ | --------------------- | ---- |
+| show   | 显示 Tooltip          | —    |
+| hide   | 隐藏 Tooltip          | —    |
+| toggle | 切换 Tooltip 显示状态 | —    |
 
 ### Tooltip Slots
 
@@ -334,3 +333,16 @@ ea-tooltip[effect="customized"]::part(original)::after {
 | --------- | --------------------------------- |
 | default   | Tooltip 内容插槽                  |
 | reference | 触发 Tooltip 显示的 HTML 元素插槽 |
+
+### Tooltip CSS 自定义属性
+
+| 属性名                       | 说明             | 默认值              |
+| ---------------------------- | ---------------- | ------------------- |
+| --ea-tooltip-spacing         | 内边距           | 5px 11px            |
+| --ea-tooltip-bg-color-dark   | 暗色主题背景颜色 | var(--grey-900)     |
+| --ea-tooltip-color-dark      | 暗色主题文字颜色 | var(--color-white)  |
+| --ea-tooltip-bg-color-light  | 亮色主题背景颜色 | var(--color-white)  |
+| --ea-tooltip-color-light     | 亮色主题文字颜色 | var(--grey-900)     |
+| --ea-tooltip-font-size       | 字体大小         | var(--font-size-sm) |
+| --ea-tooltip-border-radius   | 圆角             | var(--border-radius-sm) |
+| --ea-tooltip-z-index         | 层级             | 100                 |

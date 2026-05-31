@@ -4,16 +4,11 @@ $name: ea-tooltip;
   --#{$name}-spacing: 5px 11px;
 
   --#{$name}-bg-color-dark: var(--grey-900);
-  --#{$name}-color-dark: var(--white);
-  --#{$name}-bg-color-light: var(--white);
+  --#{$name}-color-dark: var(--color-white);
+  --#{$name}-bg-color-light: var(--color-white);
   --#{$name}-color-light: var(--grey-900);
 
-  --#{$name}-background-color: none;
-  --#{$name}-color: none;
-
   --#{$name}-font-size: var(--font-size-sm);
-
-  --#{$name}-box-shadow: var(--box-shadow-md);
   --#{$name}-border-radius: var(--border-radius-sm);
 
   --#{$name}-z-index: 100;
@@ -23,11 +18,7 @@ $name: ea-tooltip;
   @include element(original) {
     padding: var(--#{$name}-spacing);
     border-radius: var(--#{$name}-border-radius);
-    background-color: var(--#{$name}-background-color);
-
-    color: var(--#{$name}-color);
     font-size: var(--#{$name}-font-size);
-
     z-index: var(--#{$name}-z-index);
   }
 }
@@ -37,20 +28,33 @@ $name: ea-tooltip;
 
   @include modifier(dark) {
     --ea-popper-border-color: transparent;
-    --#{$name}-color: var(--#{$name}-color-dark);
-    --#{$name}-background-color: var(--#{$name}-bg-color-dark);
+    --ea-popper-background-color: var(--#{$name}-bg-color-dark);
 
     .ea-popper__original {
-      --ea-popper-background-color: var(--#{$name}-background-color);
+      color: var(--#{$name}-color-dark);
     }
   }
 
   @include modifier(light) {
-    --#{$name}-color: var(--#{$name}-color-light);
-    --#{$name}-background-color: var(--#{$name}-bg-color-light);
+    --ea-popper-background-color: var(--#{$name}-bg-color-light);
+
+    .ea-popper__original {
+      color: var(--#{$name}-color-light);
+    }
   }
 
   @include element(content) {
+    display: none;
     line-height: var(--#{$name}-font-size);
+  }
+
+  @include state(has-content) {
+    .#{$name}__content {
+      display: block;
+    }
+
+    .ea-popper__original slot:not([name]) {
+      display: none;
+    }
   }
 }
