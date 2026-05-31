@@ -1,17 +1,24 @@
-import EaBase from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { createBEM } from "@utils/bem";
+import EaBase, { createBEM } from "@core/EaBase";
+import { CustomElement, attribute, query } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-option-group" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 选项分组组件，用于将下拉选择器的选项进行分组展示。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot header - 自定义分组头部内容。
+ * @slot default - 默认插槽，用于放置 ea-option。
+ *
+ * @csspart container - 分组容器。
+ * @csspart header - 分组头部。
+ * @csspart content - 分组内容。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaOptionGroup extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -24,8 +31,6 @@ export class EaOptionGroup extends EaBase {
   @query(bem.ce("content"))
   private _content!: HTMLElement;
 
-  // ==================== 属性定义 ====================
-
   @attribute({
     type: String,
     default: "",
@@ -37,9 +42,6 @@ export class EaOptionGroup extends EaBase {
   })
   label: string = "";
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class='${bem()}' part='container'>

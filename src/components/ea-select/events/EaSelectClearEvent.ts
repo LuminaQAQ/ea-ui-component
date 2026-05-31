@@ -1,5 +1,10 @@
+export interface EaSelectClearEventDetail {}
+
 export class EaSelectClearEvent extends Event {
-  constructor() {
+  readonly detail: EaSelectClearEventDetail;
+
+  constructor(detail: EaSelectClearEventDetail = {}) {
     super("ea-clear", { bubbles: true, composed: true });
+    this.detail = detail;
   }
 }

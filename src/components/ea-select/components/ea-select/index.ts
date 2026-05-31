@@ -1,47 +1,71 @@
 import "@/components/ea-input";
-import { Enum } from "@/utils/Enum";
+import "@/components/ea-icon/index";
 import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { property } from "@decorator/property";
-import { query } from "@decorator/query";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
 import { createBEM } from "@utils/bem";
+import { EaSelectChangeEvent } from "../../events/EaSelectChangeEvent";
 import { EaSelectClearEvent } from "../../events/EaSelectClearEvent";
 import { EaSelectRemoveTagEvent } from "../../events/EaSelectRemoveTagEvent";
 import { EaSelectVisibleChangeEvent } from "../../events/EaSelectVisibleChangeEvent";
 import stylesheet from "./index.scss?inline";
-import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-select" as const;
 const bem = createBEM(TAG_NAME);
 
-// ==================== 类型定义 ====================
-
 export type SelectSize = "large" | "default" | "small";
 
-// ==================== 组件类 ====================
-
+/**
+ * @summary 下拉选择器组件，支持单选、多选、可搜索、可清空、分组选项等功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-input
+ * @dependency ea-icon
+ * @dependency ea-tag
+ *
+ * @slot default - 默认插槽，用于放置 ea-option 或 ea-option-group。
+ *
+ * @event change - 选中值发生变化时触发，detail: `{ value }`。
+ * @event ea-visible-change - 下拉框出现/隐藏时触发，detail: `{ visible }`。
+ * @event ea-clear - 可清空模式下用户点击清空按钮时触发。
+ * @event ea-remove-tag - 多选模式下移除标签时触发，detail: `{ tag, tagValue }`。
+ *
+ * @csspart container - 选择器容器。
+ * @csspart input - 输入框。
+ * @csspart tag-wrap - 标签包装容器。
+ * @csspart dropdown - 下拉框。
+ * @csspart dropdown-icon - 下拉图标。
+ * @csspart clear-icon - 清除图标。
+ *
+ * @cssproperty --ea-select-height-small - 小尺寸高度。
+ * @cssproperty --ea-select-height-default - 默认尺寸高度。
+ * @cssproperty --ea-select-height-large - 大尺寸高度。
+ * @cssproperty --ea-select-dropdown-bg-color - 下拉框背景颜色。
+ * @cssproperty --ea-select-color - 文本颜色。
+ * @cssproperty --ea-select-placeholder-color - 占位符颜色。
+ * @cssproperty --ea-select-transition - 过渡时长。
+ * @cssproperty --ea-select-border-color - 边框颜色。
+ * @cssproperty --ea-select-border-invalid-color - 无效状态边框颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSelect extends EaFormAssociatedBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-select")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-select__input")
+  @query(bem.ce("input"))
   private _input!: HTMLElement;
 
-  @query(".ea-select__tag-wrap")
+  @query(bem.ce("tag-wrap"))
   private _tagWrap!: HTMLElement;
 
-  @query(".ea-select__dropdown")
+  @query(bem.ce("dropdown"))
   private _dropdown!: HTMLElement;
 
-  @query(".ea-select__dropdown-icon")
+  @query(bem.ce("dropdown-icon"))
   private _dropdownIcon!: HTMLElement;
 
-  @query(".ea-select__clear-icon")
+  @query(bem.ce("clear-icon"))
   private _clearIcon!: HTMLElement;
 
   private _abortControllerStates = {
@@ -55,8 +79,6 @@ export class EaSelect extends EaFormAssociatedBase {
     isFocus: false,
     isTagImport: false,
   };
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -133,7 +155,7 @@ export class EaSelect extends EaFormAssociatedBase {
     type: Boolean,
     default: false,
     observer(this: EaSelect) {
-      // 处理标签折叠逻辑
+      this._handleCollapseTagsChange();
     },
   })
   collapseTags: boolean = false;
@@ -142,7 +164,7 @@ export class EaSelect extends EaFormAssociatedBase {
     type: Number,
     default: 1,
     observer(this: EaSelect) {
-      // 处理最大折叠标签数量
+      this._handleCollapseTagsChange();
     },
   })
   maxCollapseTags: number = 1;
@@ -157,17 +179,27 @@ export class EaSelect extends EaFormAssociatedBase {
   })
   filterable: boolean = false;
 
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaSelect) {
+      this.updateValidity();
+    },
+  })
+  required: boolean = false;
+
   @property({
     type: Function,
-    default: (query: string) => {},
+    default: (_query: string) => {},
     observer(this: EaSelect) {},
   })
-  filterMethod: (query: string) => void = (query: string) => {};
+  filterMethod: (query: string) => void = (_query: string) => {};
 
   @property({
     type: Object,
     default: "",
     observer(
+      this: EaSelect,
       newVal: string | number | boolean | (string | number | boolean)[]
     ) {
       this.setValue(newVal ? newVal.toString() : null);
@@ -176,10 +208,6 @@ export class EaSelect extends EaFormAssociatedBase {
   })
   value: string | number | boolean | (string | number | boolean)[] = "";
 
-  /**
-   * 获取验证目标元素
-   * @returns {HTMLElement}
-   */
   get validationTarget() {
     return this._input;
   }
@@ -187,7 +215,6 @@ export class EaSelect extends EaFormAssociatedBase {
   constructor() {
     super();
 
-    // 确保 _abortControllerStates 在构造函数中初始化
     this._abortControllerStates = {
       closeAbortController: null,
       tagRemoveAbortController: null,
@@ -201,9 +228,6 @@ export class EaSelect extends EaFormAssociatedBase {
     };
   }
 
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const hasValue = this.multiple
       ? Array.isArray(this.value) && this.value.length > 0
@@ -228,30 +252,26 @@ export class EaSelect extends EaFormAssociatedBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
-      <div class='ea-select' part='container' tabindex='-1'>
-        <ea-input class="ea-select__input" part="input" readonly>
-          <section slot="prefix" class="ea-select__tag-wrap" part="tag-wrap"></section>
-          <ea-icon slot="suffix" class="ea-select__clear-icon" part="clear-icon" name='xmark'></ea-icon>
-          <ea-icon slot="suffix" class="ea-select__dropdown-icon" part="dropdown-icon" name='angle-down'></ea-icon>
+      <div class='${bem()}' part='container' tabindex='-1'>
+        <ea-input class="${bem.e("input")}" part="input" readonly>
+          <section slot="prefix" class="${bem.e("tag-wrap")}" part="tag-wrap"></section>
+          <ea-icon slot="suffix" class="${bem.e("clear-icon")}" part="clear-icon" name='xmark'></ea-icon>
+          <ea-icon slot="suffix" class="${bem.e("dropdown-icon")}" part="dropdown-icon" name='angle-down'></ea-icon>
         </ea-input>
-        <section class="ea-select__dropdown" part="dropdown">
+        <section class="${bem.e("dropdown")}" part="dropdown">
           <slot></slot>
         </section>
       </div>
     `;
   }
 
-  /**
-   * 更新输入框属性
-   */
   private _updateInputAttribute(attr: string, value: any): void {
     if (this._input) {
-      if (value !== undefined && value !== null) {
+      if (typeof value === "boolean") {
+        this._input.toggleAttribute(attr, value);
+      } else if (value !== undefined && value !== null) {
         if (attr === "value") {
           (this._input as any).value = value.toString();
         } else {
@@ -267,9 +287,6 @@ export class EaSelect extends EaFormAssociatedBase {
     }
   }
 
-  /**
-   * 处理多选模式变化
-   */
   private async _handleMultipleModeChange(isMultiple: boolean): Promise<void> {
     this._abortControllerStates.tagRemoveAbortController?.abort();
 
@@ -295,9 +312,6 @@ export class EaSelect extends EaFormAssociatedBase {
     this.updateContainerClasslist();
   }
 
-  /**
-   * 处理可筛选变化
-   */
   private async _handleFilterableChange(isFilterable: boolean): Promise<void> {
     this._abortControllerStates.inputFilterAbortController?.abort();
 
@@ -314,9 +328,12 @@ export class EaSelect extends EaFormAssociatedBase {
     this.updateContainerClasslist();
   }
 
-  /**
-   * 处理值变化
-   */
+  private _handleCollapseTagsChange(): void {
+    if (this.multiple && Array.isArray(this.value)) {
+      this._handleSelectValuesRender(this.value as (string | number | boolean)[]);
+    }
+  }
+
   private _handleValueChange(
     newVal: string | number | boolean | (string | number | boolean)[]
   ): void {
@@ -330,9 +347,6 @@ export class EaSelect extends EaFormAssociatedBase {
     this.updateContainerClasslist();
   }
 
-  /**
-   * 处理多选值变化
-   */
   private _handleMultipleValueChange(
     values: (string | number | boolean)[]
   ): void {
@@ -345,9 +359,6 @@ export class EaSelect extends EaFormAssociatedBase {
     this._handleSelectValuesRender(values || []);
   }
 
-  /**
-   * 处理单选值变化
-   */
   private _handleSingleValueChange(value: string | number | boolean): void {
     if (this.filterable) {
       this._updateInputAttribute("value", "");
@@ -361,22 +372,12 @@ export class EaSelect extends EaFormAssociatedBase {
     }
   }
 
-  /**
-   * 初始化清除事件
-   */
   private _initClearEvent(): void {
     const onClearEvent = () => {
       const newVal = this.multiple ? [] : "";
       this.value = newVal;
 
-      this.dispatchEvent(
-        new CustomEvent("change", {
-          detail: { value: newVal },
-          bubbles: true,
-          composed: true,
-        })
-      );
-
+      this.dispatchEvent(new EaSelectChangeEvent({ value: newVal }));
       this.dispatchEvent(new EaSelectClearEvent());
     };
 
@@ -385,9 +386,6 @@ export class EaSelect extends EaFormAssociatedBase {
     });
   }
 
-  /**
-   * 查找显示值
-   */
   private _findDisplayValue(value: string | number | boolean): string {
     const valueStr = String(value);
     const option = [...this.querySelectorAll("ea-option")].find(
@@ -399,9 +397,6 @@ export class EaSelect extends EaFormAssociatedBase {
       : (value ?? "").toString();
   }
 
-  /**
-   * 设置已选项样式
-   */
   private _handleSelectedValueStyle(
     selectedValue: string | number | boolean | (string | number | boolean)[]
   ): void {
@@ -430,34 +425,21 @@ export class EaSelect extends EaFormAssociatedBase {
     }
   }
 
-  /**
-   * 渲染已选项
-   */
   private _handleSelectValuesRender(
     selectValue: (string | number | boolean)[]
   ): void {
     let template = "";
 
-    /**
-     * 渲染 tag 标签
-     * @param isClosable 是否可关闭
-     * @param label 显示文本
-     * @param value 值（用于 data-value）
-     */
     const tagRenderer = (
       isClosable: boolean,
       label: string,
       value?: string | number | boolean
     ) => {
-      return `<ea-tag class="ea-select__tag" ${isClosable ? "closable" : ""} disable-transitions type="info" size="${this.size}" ${
+      return `<ea-tag class="${bem.e("tag")}" ${isClosable ? "closable" : ""} disable-transitions type="info" size="${this.size}" ${
         isClosable && value !== undefined ? `data-value="${value}"` : ""
       }>${label}</ea-tag>`;
     };
 
-    /**
-     * 渲染所有 tag 的模板
-     * @param values 要渲染的值数组
-     */
     const templateRenderer = (values: (string | number | boolean)[]) => {
       let tmpl = "";
 
@@ -477,12 +459,10 @@ export class EaSelect extends EaFormAssociatedBase {
       return tmpl;
     };
 
-    // 重置所有选项的选中状态
     this.querySelectorAll("ea-option").forEach(option => {
       option.removeAttribute("selected");
     });
 
-    // 清空标签容器
     this._tagWrap.innerHTML = "";
 
     if (this.collapseTags && Array.isArray(selectValue)) {
@@ -502,18 +482,12 @@ export class EaSelect extends EaFormAssociatedBase {
     this._tagWrap.innerHTML = template;
   }
 
-  /**
-   * 处理过滤选项样式
-   */
   private _handleFilteredOptionStyle(filterValue: string): void {
     this.querySelectorAll("ea-option").forEach(option => {
       this._filterMethod(option, filterValue);
     });
   }
 
-  /**
-   * 过滤选项
-   */
   private _filterMethod(option: Element, query: string): void {
     const label = (option as any).label || "";
     const textContent = option.textContent || "";
@@ -524,10 +498,7 @@ export class EaSelect extends EaFormAssociatedBase {
       : "none";
   }
 
-  /**
-   * 下拉框折叠事件
-   */
-  @listen("click", ".ea-select__input")
+  @listen("click", bem.ce("input"))
   private async _onDropdownVisibleChangeEvent(): Promise<void> {
     if (this.disabled) return;
 
@@ -554,9 +525,6 @@ export class EaSelect extends EaFormAssociatedBase {
     });
   }
 
-  /**
-   * 选项点击事件
-   */
   private _onOptionClick = (e: Event): void => {
     e.stopImmediatePropagation();
 
@@ -582,27 +550,15 @@ export class EaSelect extends EaFormAssociatedBase {
       this.value = newVal;
     }
 
-    this.dispatchEvent(
-      new CustomEvent("change", {
-        detail: { value: newVal },
-        bubbles: true,
-        composed: true,
-      })
-    );
+    this.dispatchEvent(new EaSelectChangeEvent({ value: newVal }));
   };
 
-  /**
-   * 下拉框关闭事件
-   */
   private _onSelectClose = (e: Event): void => {
     if (e.composedPath().includes(this)) return;
     this.hide();
     this._abortControllerStates.closeAbortController?.abort();
   };
 
-  /**
-   * 键盘事件
-   */
   private _onDropdownKeydown = (e: KeyboardEvent): void => {
     const arrows = new Set(["Escape", "ArrowUp", "ArrowDown"]);
     if (!arrows.has(e.key)) return;
@@ -615,9 +571,6 @@ export class EaSelect extends EaFormAssociatedBase {
     }
   };
 
-  /**
-   * 移除选中标签事件
-   */
   private _onMultipleTagRemoveEvent = (e: Event): void => {
     const target = e.target as HTMLElement;
     const value = target.getAttribute("data-value");
@@ -629,22 +582,12 @@ export class EaSelect extends EaFormAssociatedBase {
     );
     this.value = newVal;
 
-    this.dispatchEvent(
-      new CustomEvent("change", {
-        detail: { value: newVal },
-        bubbles: true,
-        composed: true,
-      })
-    );
-
+    this.dispatchEvent(new EaSelectChangeEvent({ value: newVal }));
     this.dispatchEvent(
       new EaSelectRemoveTagEvent({ tag: target, tagValue: value })
     );
   };
 
-  /**
-   * 过滤事件
-   */
   private _onFilterEvent = (e: Event): void => {
     const value =
       (e as CustomEvent).detail?.value ?? (e.target as HTMLInputElement).value;
@@ -654,16 +597,10 @@ export class EaSelect extends EaFormAssociatedBase {
     }
   };
 
-  /**
-   * 显示下拉框
-   */
   show(): void {
     this._input.dispatchEvent(new CustomEvent("click"));
   }
 
-  /**
-   * 隐藏下拉框
-   */
   hide(): void {
     this._states.isFocus = false;
     this.updateContainerClasslist();
@@ -679,9 +616,6 @@ export class EaSelect extends EaFormAssociatedBase {
     if (!this.name) this.name = Math.random().toString(36).substring(2, 15);
   }
 
-  /**
-   * 键盘事件 - Enter 键打开下拉框
-   */
   @listen("keydown")
   private _onKeydown(e: KeyboardEvent): void {
     if (e.key === "Enter") {
@@ -695,9 +629,6 @@ export class EaSelect extends EaFormAssociatedBase {
     });
   }
 
-  /**
-   * 更新表单验证状态
-   */
   updateValidity() {
     super.updateValidity();
 
@@ -716,17 +647,11 @@ export class EaSelect extends EaFormAssociatedBase {
     }
   }
 
-  /**
-   * 检查表单字段的有效性
-   */
   checkValidity(): boolean {
     this.updateValidity();
     return this.internals?.validity?.valid ?? true;
   }
 
-  /**
-   * 报告表单字段的有效性（显示验证提示）
-   */
   reportValidity(): boolean {
     this.updateValidity();
     return this.internals?.reportValidity() ?? true;
