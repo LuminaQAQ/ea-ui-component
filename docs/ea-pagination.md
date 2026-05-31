@@ -413,7 +413,7 @@ singlePageExample.init();
 <div class="demo col left">
   <ea-radio-group id="additionalFunctionsSize" name="size" value="default">
     <ea-radio value="large">large</ea-radio>
-    <ea-radio value="default" checked>default</ea-radio>
+    <ea-radio value="default">default</ea-radio>
     <ea-radio value="small">small</ea-radio>
   </ea-radio-group>
   <div>
@@ -457,7 +457,7 @@ singlePageExample.init();
 <div class="demo">
   <ea-radio-group id="additionalFunctionsSize" name="size" value="default">
     <ea-radio value="large">large</ea-radio>
-    <ea-radio value="default" checked>default</ea-radio>
+    <ea-radio value="default">default</ea-radio>
     <ea-radio value="small">small</ea-radio>
   </ea-radio-group>
   <div>
