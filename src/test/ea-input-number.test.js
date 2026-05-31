@@ -94,7 +94,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement).toBeTruthy();
       expect(inputElement.type).toBe("number");
     });
@@ -104,8 +106,12 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const decrease = el.shadowRoot.querySelector(".ea-input-number__decrease");
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
+      const decrease = el.shadowRoot.querySelector(
+        ".ea-input-number__decrease"
+      );
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
       expect(decrease).toBeTruthy();
       expect(increase).toBeTruthy();
     });
@@ -149,7 +155,9 @@ describe("EaInputNumber", () => {
       await waitForRender();
 
       expect(el.value).toBe(10);
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(Number(inputElement.value)).toBe(10);
     });
 
@@ -161,7 +169,9 @@ describe("EaInputNumber", () => {
       el.value = 42;
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.value).toBe("42");
     });
 
@@ -279,7 +289,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const labelEl = el.shadowRoot.querySelector(".ea-input-number__form-label");
+      const labelEl = el.shadowRoot.querySelector(
+        ".ea-input-number__form-label"
+      );
       expect(labelEl.textContent).toBe("数量");
     });
 
@@ -291,7 +303,9 @@ describe("EaInputNumber", () => {
       el.label = "新标签";
       await waitForRender();
 
-      const labelEl = el.shadowRoot.querySelector(".ea-input-number__form-label");
+      const labelEl = el.shadowRoot.querySelector(
+        ".ea-input-number__form-label"
+      );
       expect(labelEl.textContent).toBe("新标签");
     });
   });
@@ -319,7 +333,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.min).toBe("0");
     });
 
@@ -329,7 +345,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.max).toBe("100");
     });
 
@@ -340,7 +358,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.min).toBe("10");
       expect(inputElement.max).toBe("200");
     });
@@ -353,7 +373,9 @@ describe("EaInputNumber", () => {
       el.min = 5;
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.min).toBe("5");
     });
 
@@ -365,7 +387,9 @@ describe("EaInputNumber", () => {
       el.max = 50;
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.max).toBe("50");
     });
 
@@ -413,8 +437,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(5);
@@ -427,8 +456,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const decrease = el.shadowRoot.querySelector(".ea-input-number__decrease");
-      decrease.click();
+      const decrease = el.shadowRoot.querySelector(
+        ".ea-input-number__decrease"
+      );
+      decrease.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      decrease.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(5);
@@ -488,7 +522,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.value).toBe("1.00");
     });
 
@@ -499,7 +535,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.value).toBe("0.5");
     });
 
@@ -510,7 +548,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.value).toBe("1.500");
     });
   });
@@ -560,7 +600,9 @@ describe("EaInputNumber", () => {
       await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-input-number");
-      expect(containerEl.classList.contains("ea-input-number--size-large")).toBe(true);
+      expect(
+        containerEl.classList.contains("ea-input-number--size-large")
+      ).toBe(true);
     });
 
     it("size=small 时容器应该包含 ea-input-number--size-small class", async () => {
@@ -572,7 +614,9 @@ describe("EaInputNumber", () => {
       await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-input-number");
-      expect(containerEl.classList.contains("ea-input-number--size-small")).toBe(true);
+      expect(
+        containerEl.classList.contains("ea-input-number--size-small")
+      ).toBe(true);
     });
 
     it("size=default 时容器不应该包含 size 修饰符 class", async () => {
@@ -581,8 +625,12 @@ describe("EaInputNumber", () => {
       await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-input-number");
-      expect(containerEl.classList.contains("ea-input-number--size-large")).toBe(false);
-      expect(containerEl.classList.contains("ea-input-number--size-small")).toBe(false);
+      expect(
+        containerEl.classList.contains("ea-input-number--size-large")
+      ).toBe(false);
+      expect(
+        containerEl.classList.contains("ea-input-number--size-small")
+      ).toBe(false);
     });
   });
 
@@ -621,8 +669,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(5);
@@ -635,8 +688,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const decrease = el.shadowRoot.querySelector(".ea-input-number__decrease");
-      decrease.click();
+      const decrease = el.shadowRoot.querySelector(
+        ".ea-input-number__decrease"
+      );
+      decrease.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      decrease.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(5);
@@ -666,7 +724,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.readOnly).toBe(false);
     });
 
@@ -676,7 +736,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.readOnly).toBe(true);
     });
 
@@ -688,7 +750,9 @@ describe("EaInputNumber", () => {
       el.readonly = true;
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.readOnly).toBe(true);
 
       el.readonly = false;
@@ -728,8 +792,13 @@ describe("EaInputNumber", () => {
       el.controls = false;
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(5);
@@ -744,8 +813,13 @@ describe("EaInputNumber", () => {
       el.controls = false;
       await waitForRender();
 
-      const decrease = el.shadowRoot.querySelector(".ea-input-number__decrease");
-      decrease.click();
+      const decrease = el.shadowRoot.querySelector(
+        ".ea-input-number__decrease"
+      );
+      decrease.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      decrease.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(5);
@@ -805,7 +879,9 @@ describe("EaInputNumber", () => {
       await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-input-number");
-      expect(containerEl.classList.contains("ea-input-number--left")).toBe(true);
+      expect(containerEl.classList.contains("ea-input-number--left")).toBe(
+        true
+      );
     });
   });
 
@@ -824,7 +900,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.placeholder).toBe("Enter number");
     });
 
@@ -836,7 +914,9 @@ describe("EaInputNumber", () => {
       el.placeholder = "新提示";
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.placeholder).toBe("新提示");
     });
   });
@@ -848,7 +928,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.name).toBe("quantity");
       expect(inputElement.id).toBe("quantity");
     });
@@ -861,7 +943,9 @@ describe("EaInputNumber", () => {
       el.name = "newName";
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.name).toBe("newName");
       expect(inputElement.id).toBe("newName");
     });
@@ -882,7 +966,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.required).toBe(true);
     });
 
@@ -894,7 +980,9 @@ describe("EaInputNumber", () => {
       el.required = true;
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.required).toBe(true);
 
       el.required = false;
@@ -938,7 +1026,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.getAttribute("inputmode")).toBe("numeric");
     });
 
@@ -950,7 +1040,9 @@ describe("EaInputNumber", () => {
       el.inputmode = "decimal";
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.getAttribute("inputmode")).toBe("decimal");
     });
   });
@@ -992,7 +1084,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.dispatchEvent(new Event("focus"));
       await waitForRender();
 
@@ -1021,7 +1115,9 @@ describe("EaInputNumber", () => {
       await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-input-number");
-      expect(containerEl.classList.contains("ea-input-number--left")).toBe(true);
+      expect(containerEl.classList.contains("ea-input-number--left")).toBe(
+        true
+      );
     });
 
     it("size 修饰符应该正确反映在容器 class 中", async () => {
@@ -1033,7 +1129,9 @@ describe("EaInputNumber", () => {
       await waitForRender();
 
       const containerEl = el.shadowRoot.querySelector(".ea-input-number");
-      expect(containerEl.classList.contains("ea-input-number--size-small")).toBe(true);
+      expect(
+        containerEl.classList.contains("ea-input-number--size-small")
+      ).toBe(true);
     });
 
     it("updateContainerClasslist 应该返回正确的 class 字符串", async () => {
@@ -1061,8 +1159,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(1);
@@ -1074,8 +1177,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const decrease = el.shadowRoot.querySelector(".ea-input-number__decrease");
-      decrease.click();
+      const decrease = el.shadowRoot.querySelector(
+        ".ea-input-number__decrease"
+      );
+      decrease.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      decrease.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(4);
@@ -1087,12 +1195,23 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
-      increase.click();
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
-      increase.click();
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(3);
@@ -1104,10 +1223,18 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const decrease = el.shadowRoot.querySelector(".ea-input-number__decrease");
-      decrease.click();
+      const decrease = el.shadowRoot.querySelector(
+        ".ea-input-number__decrease"
+      );
+      decrease.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      decrease.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
-      decrease.click();
+      decrease.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      decrease.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(3);
@@ -1120,8 +1247,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(10);
@@ -1134,8 +1266,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const decrease = el.shadowRoot.querySelector(".ea-input-number__decrease");
-      decrease.click();
+      const decrease = el.shadowRoot.querySelector(
+        ".ea-input-number__decrease"
+      );
+      decrease.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      decrease.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(0);
@@ -1149,8 +1286,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(0.1);
@@ -1166,7 +1308,9 @@ describe("EaInputNumber", () => {
       const focusSpy = vi.fn();
       el.addEventListener("focus", focusSpy);
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.dispatchEvent(new Event("focus"));
       await waitForRender();
 
@@ -1181,7 +1325,9 @@ describe("EaInputNumber", () => {
       const blurSpy = vi.fn();
       el.addEventListener("blur", blurSpy);
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.dispatchEvent(new Event("blur", { bubbles: true }));
       await waitForRender();
 
@@ -1281,8 +1427,13 @@ describe("EaInputNumber", () => {
       const changeSpy = vi.fn();
       el.addEventListener("ea-change", changeSpy);
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(changeSpy).toHaveBeenCalledTimes(1);
@@ -1341,7 +1492,9 @@ describe("EaInputNumber", () => {
       el.value = 150;
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.value = "150";
       inputElement.dispatchEvent(new Event("blur", { bubbles: true }));
       await waitForRender();
@@ -1356,7 +1509,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.value = "5";
       inputElement.dispatchEvent(new Event("blur", { bubbles: true }));
       await waitForRender();
@@ -1370,7 +1525,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.value = "";
       inputElement.dispatchEvent(new Event("blur", { bubbles: true }));
       await waitForRender();
@@ -1385,7 +1542,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.value).toBe("5");
     });
 
@@ -1396,7 +1555,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.value = "50";
       inputElement.dispatchEvent(new Event("blur", { bubbles: true }));
       await waitForRender();
@@ -1423,8 +1584,13 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.click();
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
+      increase.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
       await waitForRender();
 
       expect(el.value).toBe(0.1);
@@ -1595,7 +1761,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.value = "";
       inputElement.dispatchEvent(new Event("input", { bubbles: true }));
       await waitForRender();
@@ -1610,7 +1778,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       inputElement.value = "-5";
       inputElement.dispatchEvent(new Event("blur", { bubbles: true }));
       await waitForRender();
@@ -1637,7 +1807,9 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const inputElement = el.shadowRoot.querySelector("input.ea-input-number__inner");
+      const inputElement = el.shadowRoot.querySelector(
+        "input.ea-input-number__inner"
+      );
       expect(inputElement.value).toBe("-42");
     });
   });
@@ -1651,8 +1823,12 @@ describe("EaInputNumber", () => {
 
       vi.useFakeTimers();
 
-      const decrease = el.shadowRoot.querySelector(".ea-input-number__decrease");
-      decrease.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+      const decrease = el.shadowRoot.querySelector(
+        ".ea-input-number__decrease"
+      );
+      decrease.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
 
       expect(el.value).toBe(9);
 
@@ -1679,8 +1855,12 @@ describe("EaInputNumber", () => {
 
       vi.useFakeTimers();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
 
       expect(el.value).toBe(1);
 
@@ -1707,12 +1887,18 @@ describe("EaInputNumber", () => {
 
       vi.useFakeTimers();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
 
       vi.advanceTimersByTime(500);
 
-      increase.dispatchEvent(new PointerEvent("pointerleave", { bubbles: true }));
+      increase.dispatchEvent(
+        new PointerEvent("pointerleave", { bubbles: true })
+      );
 
       const valueAfterLeave = el.value;
 
@@ -1730,8 +1916,12 @@ describe("EaInputNumber", () => {
       container.appendChild(el);
       await waitForRender();
 
-      const increase = el.shadowRoot.querySelector(".ea-input-number__increase");
-      increase.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+      const increase = el.shadowRoot.querySelector(
+        ".ea-input-number__increase"
+      );
+      increase.dispatchEvent(
+        new PointerEvent("pointerdown", { bubbles: true })
+      );
 
       expect(el.value).toBe(5);
     });

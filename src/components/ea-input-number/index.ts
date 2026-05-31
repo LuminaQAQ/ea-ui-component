@@ -3,6 +3,8 @@ import { createBEM } from "@utils/bem";
 import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { Enum } from "@utils/Enum";
 import { EaInputNumberChangeEvent } from "./events/EaInputNumberChangeEvent";
+import { EaInputNumberFocusEvent } from "./events/EaInputNumberFocusEvent";
+import { EaInputNumberBlurEvent } from "./events/EaInputNumberBlurEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
@@ -257,6 +259,10 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   // ==================== 方法 ====================
 
+  /**
+   * 更新容器 CSS 类名
+   * @returns 生成的类名字符串
+   */
   updateContainerClasslist(): string {
     const hasSize = this.size !== "default";
 
@@ -298,10 +304,15 @@ export class EaInputNumber extends EaFormAssociatedBase {
     `;
   }
 
+  /**
+   * 聚焦输入框
+   * @param options - 焦点选项
+   */
   focus(options?: FocusOptions) {
     this._inputEl?.focus(options);
   }
 
+  /** 失焦输入框 */
   blur() {
     this._inputEl?.blur();
   }
@@ -403,16 +414,10 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   // ==================== 事件处理 ====================
 
-  @listen("click", bem.ce("decrease"))
-  private _handleDecreaseClick() {
-    this._decrease();
-  }
-
-  @listen("click", bem.ce("increase"))
-  private _handleIncreaseClick() {
-    this._increase();
-  }
-
+  /**
+   * 处理减号按钮按下事件，启动长按重复
+   * @param e - 指针事件对象
+   */
   @listen("pointerdown", bem.ce("decrease"))
   private _handleDecreasePointerDown(e: PointerEvent) {
     if (this.disabled || !this.controls) return;
@@ -421,6 +426,10 @@ export class EaInputNumber extends EaFormAssociatedBase {
     this._startRepeat(() => this._decrease());
   }
 
+  /**
+   * 处理加号按钮按下事件，启动长按重复
+   * @param e - 指针事件对象
+   */
   @listen("pointerdown", bem.ce("increase"))
   private _handleIncreasePointerDown(e: PointerEvent) {
     if (this.disabled || !this.controls) return;
@@ -429,6 +438,7 @@ export class EaInputNumber extends EaFormAssociatedBase {
     this._startRepeat(() => this._increase());
   }
 
+  /** 处理指针抬起和离开事件，停止长按重复 */
   @listen("pointerup", bem.ce("decrease"))
   @listen("pointerup", bem.ce("increase"))
   @listen("pointerleave", bem.ce("decrease"))
@@ -458,13 +468,22 @@ export class EaInputNumber extends EaFormAssociatedBase {
     }
   }
 
+  /**
+   * 处理输入框获得焦点事件，阻止原生 focus 冒泡并派发自定义事件
+   * @param e - focus 事件对象
+   */
   @listen("focus", bem.ce("inner"))
-  private _handleInputFocus() {
+  private _handleInputFocus(e: Event) {
+    e.stopPropagation();
     this._isFocus = true;
     this.updateContainerClasslist();
-    this.emit("focus");
+    this.dispatchEvent(new EaInputNumberFocusEvent());
   }
 
+  /**
+   * 处理键盘按下事件，限制只能输入数字相关字符
+   * @param e - 键盘事件对象
+   */
   @listen("keydown", bem.ce("inner"))
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -495,6 +514,10 @@ export class EaInputNumber extends EaFormAssociatedBase {
     e.preventDefault();
   }
 
+  /**
+   * 处理输入事件，允许中间输入状态（如负号、小数点）通过
+   * @param e - 输入事件对象
+   */
   @listen("input", bem.ce("inner"))
   private _handleInput(e: Event) {
     const inputEl = e.target as HTMLInputElement;
@@ -510,10 +533,15 @@ export class EaInputNumber extends EaFormAssociatedBase {
     }
   }
 
+  /**
+   * 处理输入框失焦事件，阻止原生 blur 冒泡并派发自定义事件
+   * @param e - blur 事件对象
+   */
   @listen("blur", bem.ce("inner"))
   private _handleInputBlur(e: Event) {
     this._ensureInputValueIsCorrect(e);
-    this.emit("blur");
+    e.stopPropagation();
+    this.dispatchEvent(new EaInputNumberBlurEvent());
   }
 
   // ==================== 生命周期 ====================
