@@ -35,36 +35,35 @@ $name: ea-tab;
 
   @include element(close-icon) {
     display: none;
-    margin-left: 4px;
-    margin-top: 4px;
+    margin-left: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
   }
 
   @include modifier(card) {
     border-color: var(--ea-tabs-border-color);
     border-right-color: transparent;
 
-    &.is-active {
-
-      &.ea-tab--top,
-      &.ea-tab--bottom {
+    @include state(active) {
+      &.#{$name}--top,
+      &.#{$name}--bottom {
         border-bottom-color: transparent;
       }
 
-      &.ea-tab--left {
+      &.#{$name}--left {
         border-right-color: transparent;
       }
 
-      &.ea-tab--right {
+      &.#{$name}--right {
         border-left-color: transparent;
       }
     }
 
-    &.ea-tab--left,
-    &.ea-tab--right {
+    &.#{$name}--left,
+    &.#{$name}--right {
       border-bottom-color: transparent;
       border-right-color: var(--ea-tabs-border-color);
 
-      &.is-last {
+      @include state(last) {
         border-bottom-color: var(--ea-tabs-border-color);
       }
     }
@@ -76,49 +75,49 @@ $name: ea-tab;
       color var(--ea-tabs-transition),
       border-color var(--ea-tabs-transition);
 
-    &.ea-tab--top,
-    &.ea-tab--bottom {
+    &.#{$name}--top,
+    &.#{$name}--bottom {
       border-bottom-color: var(--ea-tabs-border-color);
     }
 
-    &.ea-tab--left {
+    &.#{$name}--left {
       border-right-color: var(--ea-tabs-border-color);
     }
 
-    &.ea-tab--right {
+    &.#{$name}--right {
       border-left-color: var(--ea-tabs-border-color);
     }
 
-    &.is-active {
+    @include state(active) {
       background-color: var(--#{$name}-border-card-bg-color);
 
       border: 1px solid transparent;
 
-      &.ea-tab--top,
-      &.ea-tab--bottom {
+      &.#{$name}--top,
+      &.#{$name}--bottom {
         border-left-color: var(--ea-tabs-border-color);
         border-right-color: var(--ea-tabs-border-color);
 
-        &.is-first {
+        @include state(first) {
           border-left-color: transparent;
         }
       }
 
-      &.ea-tab--left,
-      &.ea-tab--right {
+      &.#{$name}--left,
+      &.#{$name}--right {
         border-top-color: var(--ea-tabs-border-color);
         border-bottom-color: var(--ea-tabs-border-color);
 
-        &.is-first {
+        @include state(first) {
           border-top-color: transparent;
         }
       }
 
-      &.ea-tab--left {
+      &.#{$name}--left {
         border-right-color: transparent;
       }
 
-      &.ea-tab--right {
+      &.#{$name}--right {
         border-left-color: transparent;
       }
     }
@@ -134,13 +133,13 @@ $name: ea-tab;
   }
 
   @include state(last) {
-    &.ea-tab--card:not(.ea-tab--left) {
+    &.#{$name}--card:not(.#{$name}--left) {
       border-right-color: var(--ea-tabs-border-color);
     }
   }
 
   @include state(closable) {
-    .ea-tab__close-icon {
+    .#{$name}__close-icon {
       display: block;
     }
   }

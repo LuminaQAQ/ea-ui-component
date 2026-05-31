@@ -1,17 +1,23 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query } from "@decorator";
+import { Enum } from "@utils/Enum";
 
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-tab-panel" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 标签面板组件，用于在 ea-tabs 中定义单个面板内容区域。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，用于面板的实际内容。
+ *
+ * @csspart container - 面板内容的外层容器。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTabPanel extends EaBase {
-  /** @returns {HTMLElement | null} */
   get _hostTabsContext(): HTMLElement | null {
     try {
       return this.closest("ea-tabs");
@@ -20,12 +26,8 @@ export class EaTabPanel extends EaBase {
     }
   }
 
-  // ==================== DOM 元素引用 ====================
-
   @query(".ea-tab-panel")
   private _container!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -42,11 +44,6 @@ export class EaTabPanel extends EaBase {
   })
   type: "" | "card" | "border-card" = "";
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const className = bem({ [this.type]: !!this.type });
 
@@ -57,9 +54,6 @@ export class EaTabPanel extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class='${bem()}' part='container'>
@@ -67,8 +61,6 @@ export class EaTabPanel extends EaBase {
       </div>
     `;
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

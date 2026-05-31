@@ -1,3 +1,8 @@
+export interface EaTabClickEventDetail {
+  name: string;
+  panel: HTMLElement | null;
+}
+
 export class EaTabClickEvent extends Event {
   readonly detail: EaTabClickEventDetail;
 
@@ -11,13 +16,8 @@ export class EaTabClickEvent extends Event {
   }
 }
 
-interface EaTabClickEventDetail {
-  name: string;
-  panel: HTMLElement | null;
-}
-
 declare global {
-  interface HTMLElementEventMap {
+  interface GlobalEventHandlersEventMap {
     "ea-tab-click": EaTabClickEvent;
   }
 }

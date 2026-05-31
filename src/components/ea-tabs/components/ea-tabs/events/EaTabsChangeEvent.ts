@@ -1,3 +1,7 @@
+export interface EaTabsChangeEventDetail {
+  name: string;
+}
+
 export class EaTabsChangeEvent extends Event {
   readonly detail: EaTabsChangeEventDetail;
 
@@ -11,12 +15,8 @@ export class EaTabsChangeEvent extends Event {
   }
 }
 
-interface EaTabsChangeEventDetail {
-  name: string;
-}
-
 declare global {
-  interface HTMLElementEventMap {
+  interface GlobalEventHandlersEventMap {
     "ea-tabs-change": EaTabsChangeEvent;
   }
 }

@@ -1,3 +1,7 @@
+export interface EaTabRemoveEventDetail {
+  name: string;
+}
+
 export class EaTabRemoveEvent extends Event {
   readonly detail: EaTabRemoveEventDetail;
 
@@ -11,12 +15,8 @@ export class EaTabRemoveEvent extends Event {
   }
 }
 
-interface EaTabRemoveEventDetail {
-  name: string;
-}
-
 declare global {
-  interface HTMLElementEventMap {
+  interface GlobalEventHandlersEventMap {
     "ea-tab-remove": EaTabRemoveEvent;
   }
 }

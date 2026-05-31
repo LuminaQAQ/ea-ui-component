@@ -1,11 +1,10 @@
 $name: ea-tabs;
 
 :host {
-  --#{$name}-tab-spacing: 20px;
+  --#{$name}-tab-spacing: var(--spacing-lg);
   --#{$name}-border-color: var(--grey-300);
 
   --#{$name}-nav-height: 40px;
-  --#{$name}-width: 40px;
 
   --#{$name}-border-card-bg-color: var(--grey-100);
 
@@ -71,7 +70,7 @@ $name: ea-tabs;
     height: 2px;
     width: 100%;
 
-    background-color: var(--grey-300);
+    background-color: var(--#{$name}-border-color);
   }
 
   @include element(indicator) {
@@ -95,13 +94,12 @@ $name: ea-tabs;
     width: 100%;
   }
 
-  &.ea-tabs--card,
-  &.ea-tabs--border-card {
-    .ea-tabs__line {
+  @include modifier(card) {
+    .#{$name}__line {
       display: none;
     }
 
-    .ea-tabs__nav::after {
+    .#{$name}__nav::after {
       content: "";
       position: relative;
 
@@ -113,74 +111,104 @@ $name: ea-tabs;
       background-color: var(--#{$name}-border-color);
     }
 
-    &.ea-tabs--right,
-    &.ea-tabs--left {
-      .ea-tabs__nav::after {
+    &.#{$name}--right,
+    &.#{$name}--left {
+      .#{$name}__nav::after {
         width: 1px;
         height: 100%;
       }
     }
 
-    &.ea-tabs--left {
-      .ea-tabs__nav::after {
+    &.#{$name}--left {
+      .#{$name}__nav::after {
         margin-left: auto;
       }
     }
   }
 
-  @include modifier(card) {}
-
   @include modifier(border-card) {
     border: 1px solid var(--#{$name}-border-color);
 
-    .ea-tabs__nav {
+    .#{$name}__line {
+      display: none;
+    }
+
+    .#{$name}__nav {
       background-color: var(--#{$name}-border-card-bg-color);
     }
-  }
 
-  &.ea-tabs--bottom,
-  &.ea-tabs--top {
-    .ea-tabs__indicator {
-      transform: translateX(var(--#{$name}-indicator-x));
+    .#{$name}__nav::after {
+      content: "";
+      position: relative;
+
+      margin-top: auto;
+
+      width: 100%;
+      height: 1px;
+
+      background-color: var(--#{$name}-border-color);
+    }
+
+    &.#{$name}--right,
+    &.#{$name}--left {
+      .#{$name}__nav::after {
+        width: 1px;
+        height: 100%;
+      }
+    }
+
+    &.#{$name}--left {
+      .#{$name}__nav::after {
+        margin-left: auto;
+      }
     }
   }
 
   @include modifier(top) {
     flex-direction: column;
+
+    .#{$name}__indicator {
+      transform: translateX(var(--#{$name}-indicator-x));
+    }
   }
 
   @include modifier(bottom) {
     flex-direction: column-reverse;
 
-    .ea-tabs__content {
+    .#{$name}__indicator {
+      transform: translateX(var(--#{$name}-indicator-x));
+    }
+
+    .#{$name}__content {
       order: 3;
     }
 
-    .ea-tabs__nav {
+    .#{$name}__nav {
       order: 2;
     }
 
-    .ea-tabs__line {
+    .#{$name}__line {
       order: 1;
     }
   }
 
-  &.ea-tabs--right,
-  &.ea-tabs--left {
+  @include modifier(left) {
+    flex-direction: row;
+
     align-items: stretch;
 
-    .ea-tabs__nav {
+    .#{$name}__nav {
       flex-direction: column;
       align-items: stretch;
       height: auto;
     }
 
-    .ea-tabs__line {
+    .#{$name}__line {
       height: auto;
       width: 2px;
     }
 
-    .ea-tabs__indicator {
+    .#{$name}__indicator {
       height: var(--#{$name}-indicator-size);
       width: 2px;
 
@@ -190,17 +218,32 @@ $name: ea-tabs;
 
   @include modifier(right) {
     flex-direction: row-reverse;
-  }
 
-  @include modifier(left) {
-    flex-direction: row;
+    align-items: stretch;
+
+    .#{$name}__nav {
+      flex-direction: column;
+      align-items: stretch;
+      height: auto;
+    }
+
+    .#{$name}__line {
+      height: auto;
+      width: 2px;
+    }
+
+    .#{$name}__indicator {
+      height: var(--#{$name}-indicator-size);
+      width: 2px;
+
+      transform: translateY(var(--#{$name}-indicator-x));
+    }
   }
 
   @include state(overflow) {
-
-    &.ea-tabs--bottom,
-    &.ea-tabs--top {
-      .ea-tabs__scroll {
+    &.#{$name}--bottom,
+    &.#{$name}--top {
+      .#{$name}__scroll {
         display: flex;
         align-items: center;
         flex-direction: row;

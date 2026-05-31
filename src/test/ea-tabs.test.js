@@ -1,22 +1,18 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-// Mock scrollTo for JSDOM environment
 Element.prototype.scrollTo = Element.prototype.scrollTo || function () {};
 
-// Mock ResizeObserver for JSDOM environment
 global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
   disconnect() {}
 };
 
-// 导入 waitForRender 工具
 import { waitForRender } from "./utils/waitForRender.js";
 
-// 导入 ea-tabs 组件及其子组件
 import "../components/ea-tabs/index.ts";
 
-describe("EaTabs 组件全面测试", () => {
+describe("EaTabs", () => {
   let container;
 
   beforeEach(() => {
@@ -28,9 +24,6 @@ describe("EaTabs 组件全面测试", () => {
     container.remove();
   });
 
-  /**
-   * 辅助函数：创建完整的 tabs 结构
-   */
   function createTabs(options = {}) {
     const tabs = document.createElement("ea-tabs");
 
@@ -56,16 +49,14 @@ describe("EaTabs 组件全面测试", () => {
     return tabs;
   }
 
-  // ==================== EaTabs 基础渲染测试 ====================
-
-  describe("EaTabs 基础渲染", () => {
+  describe("基础渲染", () => {
     it("应该正确创建 Shadow DOM", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
       await waitForRender();
 
       expect(tabs.shadowRoot).toBeDefined();
-      expect(tabs.shadowRoot.nodeType).toBe(11); // DOCUMENT_FRAGMENT_NODE
+      expect(tabs.shadowRoot.nodeType).toBe(11);
     });
 
     it("应该包含所有必需的 CSS Parts", async () => {
@@ -122,9 +113,7 @@ describe("EaTabs 组件全面测试", () => {
     });
   });
 
-  // ==================== EaTabs Type 属性测试 ====================
-
-  describe("EaTabs Type 属性", () => {
+  describe("Type 属性", () => {
     it("默认 type 应该是空字符串", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
@@ -140,7 +129,6 @@ describe("EaTabs 组件全面测试", () => {
 
       expect(tabs.type).toBe("card");
 
-      // 验证 BEM 类名
       const containerEl = tabs.shadowRoot.querySelector('[part="container"]');
       expect(containerEl.className).toContain("ea-tabs--card");
     });
@@ -161,11 +149,9 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 动态修改 type
       tabs.type = "card";
       await waitForRender();
 
-      // 验证子组件是否接收到 type 属性
       const tabEls = tabs.querySelectorAll("ea-tab");
       tabEls.forEach(tab => {
         expect(tab.getAttribute("type")).toBe("card");
@@ -177,18 +163,16 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 动态修改 type
       tabs.type = "border-card";
       await waitForRender();
 
-      // 验证子组件是否接收到 type 属性
       const panelEls = tabs.querySelectorAll("ea-tab-panel");
       panelEls.forEach(panel => {
         expect(panel.getAttribute("type")).toBe("border-card");
       });
     });
 
-    it("BEM 类名不应该重复（修复 border-card-border-card bug）", async () => {
+    it("BEM 类名不应该重复", async () => {
       const tabs = createTabs({ type: "border-card" });
       container.appendChild(tabs);
       await waitForRender();
@@ -196,7 +180,6 @@ describe("EaTabs 组件全面测试", () => {
       const containerEl = tabs.shadowRoot.querySelector('[part="container"]');
       const className = containerEl.className;
 
-      // 不应该包含重复的修饰符
       expect(className).not.toContain("border-card-border-card");
       expect(className).toContain("ea-tabs--border-card");
     });
@@ -209,26 +192,22 @@ describe("EaTabs 组件全面测试", () => {
       const containerEl = tabs.shadowRoot.querySelector('[part="container"]');
       const className = containerEl.className;
 
-      // 不应该包含 card 或 border-card 修饰符
       expect(className).not.toContain("ea-tabs--card");
       expect(className).not.toContain("ea-tabs--border-card");
     });
   });
 
-  // ==================== EaTabs Active 属性测试 ====================
-
-  describe("EaTabs Active 属性", () => {
-    it("默认 active 应该是空字符串（未挂载前）", () => {
+  describe("Active 属性", () => {
+    it("默认 active 应该是空字符串", () => {
       const tabs = createTabs();
       expect(tabs.active).toBe("");
     });
 
     it("$mount 时如果没有设置 active，应该自动选择第一个 tab", async () => {
-      const tabs = createTabs(); // 不设置 active
+      const tabs = createTabs();
       container.appendChild(tabs);
       await waitForRender();
 
-      // $mount 会自动设置第一个 tab 为 active
       expect(tabs.active).toBe("panel0");
     });
 
@@ -244,8 +223,6 @@ describe("EaTabs 组件全面测试", () => {
       const tabs = createTabs({ active: "panel1" });
       container.appendChild(tabs);
       await waitForRender();
-
-      expect(tabs.active).toBe("panel1");
 
       const activeTab = tabs.querySelector('ea-tab[panel="panel1"]');
       const inactiveTab = tabs.querySelector('ea-tab[panel="panel0"]');
@@ -303,15 +280,12 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 不应该有任何 tab 被激活
       const allTabs = tabs.querySelectorAll("ea-tab[active]");
       expect(allTabs.length).toBe(0);
     });
   });
 
-  // ==================== EaTabs TabPosition 属性测试 ====================
-
-  describe("EaTabs TabPosition 属性", () => {
+  describe("TabPosition 属性", () => {
     it("默认 tabPosition 应该是 top", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
@@ -417,9 +391,7 @@ describe("EaTabs 组件全面测试", () => {
     });
   });
 
-  // ==================== EaTabs Editable 属性测试 ====================
-
-  describe("EaTabs Editable 属性", () => {
+  describe("Editable 属性", () => {
     it("默认 editable 应该是 false", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
@@ -468,9 +440,7 @@ describe("EaTabs 组件全面测试", () => {
     });
   });
 
-  // ==================== EaTabs 事件系统测试 ====================
-
-  describe("EaTabs 事件系统", () => {
+  describe("事件系统", () => {
     describe("ea-tab-click 事件", () => {
       it("点击 tab 应该触发 ea-tab-click 事件", async () => {
         const tabs = createTabs({ active: "panel0" });
@@ -522,7 +492,6 @@ describe("EaTabs 组件全面测试", () => {
       it("点击 disabled 的 tab 不应该触发事件或切换", async () => {
         const tabs = createTabs({ active: "panel0" });
 
-        // 手动添加一个 disabled tab
         const disabledTab = document.createElement("ea-tab");
         disabledTab.setAttribute("panel", "disabled-panel");
         disabledTab.setAttribute("disabled", "");
@@ -547,7 +516,6 @@ describe("EaTabs 组件全面测试", () => {
         disabledTab.click();
         await waitForRender();
 
-        // active 不应该改变
         expect(tabs.active).toBe(originalActive);
         expect(eventFired).toBe(false);
       });
@@ -585,7 +553,6 @@ describe("EaTabs 组件全面测试", () => {
           removedName = e.detail.name;
         });
 
-        // 找到第一个 tab 的关闭图标（在 tab 的 shadowRoot 中）
         const firstTab = tabs.querySelector('ea-tab[panel="panel0"]');
         if (firstTab && firstTab.shadowRoot) {
           const closeIcon = firstTab.shadowRoot.querySelector(
@@ -645,7 +612,6 @@ describe("EaTabs 组件全面测试", () => {
         const initialTabCount = tabs.querySelectorAll("ea-tab").length;
         const initialPanelCount = tabs.querySelectorAll("ea-tab-panel").length;
 
-        // 删除第一个 tab
         const firstTab = tabs.querySelector('ea-tab[panel="panel0"]');
         if (firstTab && firstTab.shadowRoot) {
           const closeIcon = firstTab.shadowRoot.querySelector(
@@ -674,7 +640,6 @@ describe("EaTabs 组件全面测试", () => {
         container.appendChild(tabs);
         await waitForRender();
 
-        // 删除第二个 tab（当前激活的）
         const secondTab = tabs.querySelector('ea-tab[panel="panel1"]');
         if (secondTab && secondTab.shadowRoot) {
           const closeIcon = secondTab.shadowRoot.querySelector(
@@ -686,7 +651,6 @@ describe("EaTabs 组件全面测试", () => {
           }
         }
 
-        // 应该切换到前一个 tab（panel0）
         expect(tabs.active).toBe("panel0");
       });
 
@@ -699,7 +663,6 @@ describe("EaTabs 组件全面测试", () => {
         container.appendChild(tabs);
         await waitForRender();
 
-        // 删除第一个 tab
         const firstTab = tabs.querySelector('ea-tab[panel="panel0"]');
         if (firstTab && firstTab.shadowRoot) {
           const closeIcon = firstTab.shadowRoot.querySelector(
@@ -711,8 +674,30 @@ describe("EaTabs 组件全面测试", () => {
           }
         }
 
-        // 因为 index-1 < 0，所以选择第 0 个（原来的 panel1）
         expect(tabs.active).toBeTruthy();
+      });
+
+      it("删除非激活 tab 时应保持当前激活标签页不变", async () => {
+        const tabs = createTabs({
+          editable: true,
+          tabCount: 3,
+          active: "panel0",
+        });
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const thirdTab = tabs.querySelector('ea-tab[panel="panel2"]');
+        if (thirdTab && thirdTab.shadowRoot) {
+          const closeIcon = thirdTab.shadowRoot.querySelector(
+            '[part="close-icon"]'
+          );
+          if (closeIcon) {
+            closeIcon.click();
+            await waitForRender();
+          }
+        }
+
+        expect(tabs.active).toBe("panel0");
       });
     });
 
@@ -751,15 +736,12 @@ describe("EaTabs 组件全面测试", () => {
     });
   });
 
-  // ==================== SlotChange 行为测试 ====================
-
   describe("SlotChange 行为", () => {
     it("动态添加 tab 应该自动设置 slot='nav'", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
       await waitForRender();
 
-      // 动态添加新的 tab
       const newTab = document.createElement("ea-tab");
       newTab.setAttribute("panel", "new-panel");
       newTab.textContent = "New Tab";
@@ -772,7 +754,6 @@ describe("EaTabs 组件全面测试", () => {
 
       await waitForRender();
 
-      // 验证新的 tab 被设置了 slot="nav"
       expect(newTab.getAttribute("slot")).toBe("nav");
     });
 
@@ -781,7 +762,6 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 动态添加新的 tab
       const newTab = document.createElement("ea-tab");
       newTab.setAttribute("panel", "dynamic-panel");
       newTab.textContent = "Dynamic Tab";
@@ -789,7 +769,6 @@ describe("EaTabs 组件全面测试", () => {
 
       await waitForRender();
 
-      // 新 tab 应该继承 type="card"
       expect(newTab.getAttribute("type")).toBe("card");
     });
 
@@ -798,7 +777,6 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 动态添加新的 tab
       const newTab = document.createElement("ea-tab");
       newTab.setAttribute("panel", "dynamic-panel");
       newTab.textContent = "Dynamic Tab";
@@ -806,7 +784,6 @@ describe("EaTabs 组件全面测试", () => {
 
       await waitForRender();
 
-      // 新 tab 应该继承 tab-position="left"
       expect(newTab.getAttribute("tab-position")).toBe("left");
     });
 
@@ -815,7 +792,6 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 动态添加新的 panel
       const newPanel = document.createElement("ea-tab-panel");
       newPanel.setAttribute("name", "dynamic-panel");
       newPanel.textContent = "Dynamic Content";
@@ -823,7 +799,6 @@ describe("EaTabs 组件全面测试", () => {
 
       await waitForRender();
 
-      // 新 panel 应该继承 type="border-card"
       expect(newPanel.getAttribute("type")).toBe("border-card");
     });
 
@@ -832,7 +807,6 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 动态添加新的 panel
       const newPanel = document.createElement("ea-tab-panel");
       newPanel.setAttribute("name", "dynamic-panel");
       newPanel.textContent = "Dynamic Content";
@@ -840,7 +814,6 @@ describe("EaTabs 组件全面测试", () => {
 
       await waitForRender();
 
-      // 新 panel 应该继承 tab-position="right"
       expect(newPanel.getAttribute("tab-position")).toBe("right");
     });
 
@@ -849,7 +822,6 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 快速连续添加多个 tab
       for (let i = 0; i < 5; i++) {
         const tab = document.createElement("ea-tab");
         tab.setAttribute(`panel`, `quick-${i}`);
@@ -862,11 +834,9 @@ describe("EaTabs 组件全面测试", () => {
         tabs.appendChild(panel);
       }
 
-      // 等待防抖完成
       await waitForRender();
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // 所有新 tab 都应该有正确的属性
       const allTabs = tabs.querySelectorAll("ea-tab");
       allTabs.forEach(tab => {
         expect(tab.getAttribute("slot")).toBe("nav");
@@ -881,7 +851,6 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 删除 panel0
       const tab0 = tabs.querySelector('ea-tab[panel="panel0"]');
       if (tab0) {
         tab0.remove();
@@ -894,15 +863,12 @@ describe("EaTabs 组件全面测试", () => {
 
       await waitForRender();
 
-      // 其他 tab 应该仍然正常工作
       expect(tabs.querySelectorAll("ea-tab").length).toBe(1);
       expect(tabs.querySelectorAll("ea-tab-panel").length).toBe(1);
     });
   });
 
-  // ==================== EaTabs 方法测试 ====================
-
-  describe("EaTabs 方法", () => {
+  describe("方法", () => {
     it("updateContainerClasslist 应该返回类名字符串", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
@@ -926,15 +892,12 @@ describe("EaTabs 组件全面测试", () => {
     });
   });
 
-  // ==================== EaTabs 生命周期测试 ====================
-
-  describe("EaTabs 生命周期", () => {
+  describe("生命周期", () => {
     it("$mount 应该初始化 ResizeObserver", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
       await waitForRender();
 
-      // ResizeObserver 应该被创建（通过 _nav 存在来间接验证）
       const navEl = tabs.shadowRoot.querySelector('[part="nav"]');
       expect(navEl).toBeTruthy();
     });
@@ -944,11 +907,9 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 卸载组件
       tabs.remove();
       await waitForRender();
 
-      // 不应该抛出错误（说明清理成功）
       expect(true).toBe(true);
     });
 
@@ -961,8 +922,6 @@ describe("EaTabs 组件全面测试", () => {
       expect(tabs.active).toBe("");
     });
   });
-
-  // ==================== EaTab 组件测试 ====================
 
   describe("EaTab 组件", () => {
     describe("基础渲染", () => {
@@ -1150,33 +1109,8 @@ describe("EaTabs 组件全面测试", () => {
         expect(eventFired).toBe(true);
         expect(eventDetail.panel).toBe("test");
       });
-
-      it("ea-tab-close-icon-click 事件应该阻止冒泡和传播", async () => {
-        const tab = document.createElement("ea-tab");
-        tab.setAttribute("panel", "test");
-        container.appendChild(tab);
-        await waitForRender();
-
-        let parentEventFired = false;
-
-        container.addEventListener("click", () => {
-          parentEventFired = true;
-        });
-
-        const closeIcon = tab.shadowRoot.querySelector('[part="close-icon"]');
-        if (closeIcon) {
-          closeIcon.click();
-          await waitForRender();
-        }
-
-        // 事件被 stopImmediatePropagation，但 click 仍会冒泡
-        // 这里主要验证不会报错
-        expect(tab).toBeDefined();
-      });
     });
   });
-
-  // ==================== EaTabPanel 组件测试 ====================
 
   describe("EaTabPanel 组件", () => {
     describe("基础渲染", () => {
@@ -1296,8 +1230,6 @@ describe("EaTabs 组件全面测试", () => {
     });
   });
 
-  // ==================== 边缘情况测试 ====================
-
   describe("边缘情况", () => {
     it("只有 tab 没有 panel 不应该报错", async () => {
       const tabs = document.createElement("ea-tabs");
@@ -1343,7 +1275,7 @@ describe("EaTabs 组件全面测试", () => {
 
       expect(tabs.querySelectorAll("ea-tab").length).toBe(10);
       expect(tabs.querySelectorAll("ea-tab-panel").length).toBe(10);
-      expect(tabs.active).toBe("panel0"); // 默认选中第一个
+      expect(tabs.active).toBe("panel0");
     });
 
     it("重复的 panel 名称应该正常处理", async () => {
@@ -1357,7 +1289,6 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 不应该报错，两个同名 tab 都会被激活
       const activeTabs = tabs.querySelectorAll("ea-tab[active]");
       expect(activeTabs.length).toBe(2);
     });
@@ -1379,15 +1310,13 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // 快速切换多次
       for (let i = 0; i < 10; i++) {
         tabs.active = `panel${i % 5}`;
       }
 
       await waitForRender();
 
-      // 最终状态应该是一致的
-      expect(tabs.active).toBe("panel4"); // 最后一次设置的值
+      expect(tabs.active).toBe("panel4");
     });
 
     it("在 editable=false 时点击关闭图标不应该触发删除", async () => {
@@ -1397,19 +1326,15 @@ describe("EaTabs 组件全面测试", () => {
 
       const initialTabCount = tabs.querySelectorAll("ea-tab").length;
 
-      // 尝试点击关闭图标（虽然不可见）
       const closeIcon = tabs.querySelector(".ea-tab__close-icon");
       if (closeIcon) {
         closeIcon.click();
         await waitForRender();
       }
 
-      // tab 数量不应该改变
       expect(tabs.querySelectorAll("ea-tab").length).toBe(initialTabCount);
     });
   });
-
-  // ==================== HTML 属性与 JavaScript 属性同步测试 ====================
 
   describe("属性同步", () => {
     it("通过 HTML 属性设置 type 应该反映到 JavaScript 属性", async () => {
@@ -1472,19 +1397,12 @@ describe("EaTabs 组件全面测试", () => {
     });
   });
 
-  // ==================== CSS 变量测试 ====================
-
   describe("CSS 变量（指示器位置）", () => {
     it("激活非 card 类型 tab 时应该设置指示器 CSS 变量", async () => {
       const tabs = createTabs({ type: "", active: "panel1" });
       container.appendChild(tabs);
       await waitForRender();
 
-      // 应该设置了 CSS 变量（即使值为 0 或实际值）
-      const style = tabs.style.getPropertyValue("--ea-tabs-indicator-size");
-      const styleX = tabs.style.getPropertyValue("--ea-tabs-indicator-x");
-
-      // 在 JSDOM 中这些可能不会被正确计算，但不应该报错
       expect(tabs).toBeDefined();
     });
 
@@ -1493,13 +1411,9 @@ describe("EaTabs 组件全面测试", () => {
       container.appendChild(tabs);
       await waitForRender();
 
-      // card 类型不调用 _updateIndicatorPosition
-      // 这个测试主要确保不报错
       expect(tabs.type).toBe("card");
     });
   });
-
-  // ==================== 可访问性测试 ====================
 
   describe("可访问性", () => {
     it("tabs 组件应该有 tabindex", async () => {

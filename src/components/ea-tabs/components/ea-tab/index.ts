@@ -1,9 +1,6 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
 
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -11,9 +8,22 @@ import "@/components/ea-icon/index";
 const TAG_NAME = "ea-tab" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 标签项组件，用于在 ea-tabs 中定义单个标签，支持禁用、可关闭等状态。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot default - 默认插槽，用于标签文本内容。
+ *
+ * @event ea-tab-close-icon-click - 点击关闭图标时触发，detail: `{ panel }`。
+ *
+ * @csspart container - 单个标签项的外层容器。
+ * @csspart close-icon - 关闭图标元素。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTab extends EaBase {
-  /** @returns {HTMLElement | null} */
   get _hostTabsContext(): HTMLElement | null {
     try {
       return this.closest("ea-tabs");
@@ -22,15 +32,8 @@ export class EaTab extends EaBase {
     }
   }
 
-  // ==================== DOM 元素引用 ====================
-
   @query(".ea-tab")
   private _container!: HTMLElement;
-
-  @query(".ea-tab__close-icon")
-  private _closeIcon!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -92,14 +95,10 @@ export class EaTab extends EaBase {
   })
   closable: boolean = false;
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
-    let tabEls = this._hostTabsContext?.querySelectorAll("ea-tab");
-    tabEls = tabEls?.length > 0 ? [...tabEls] : ([] as Element[]);
+    const tabEls = this._hostTabsContext
+      ? [...this._hostTabsContext.querySelectorAll("ea-tab")]
+      : [];
 
     const className = bem(
       {
@@ -123,9 +122,6 @@ export class EaTab extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class='${bem()}' part='container'>
@@ -135,13 +131,8 @@ export class EaTab extends EaBase {
     `;
   }
 
-  // ==================== 事件处理 ====================
-
-  /**
-   * 关闭图标点击事件
-   */
   @listen("click", ".ea-tab__close-icon")
-  private _onCloseIconClick(e: Event): void {
+  private _handleCloseIconClick(e: Event): void {
     e.preventDefault();
     (e as MouseEvent).stopImmediatePropagation();
 
@@ -152,8 +143,6 @@ export class EaTab extends EaBase {
       bubbles: true,
     });
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

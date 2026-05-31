@@ -1,12 +1,10 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
 import { EaTabClickEvent } from "./events/EaTabClickEvent";
 import { EaTabRemoveEvent } from "./events/EaTabRemoveEvent";
 import { EaTabsChangeEvent } from "./events/EaTabsChangeEvent";
+import type { EaTabElement } from "../../types";
 
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -14,17 +12,43 @@ import "@/components/ea-icon/index";
 const TAG_NAME = "ea-tabs" as const;
 const bem = createBEM(TAG_NAME);
 
-// ==================== 类型定义 ====================
-
 export type TabsType = "" | "card" | "border-card";
 export type TabPosition = "top" | "bottom" | "left" | "right";
 
-// ==================== 组件类 ====================
-
+/**
+ * @summary 标签页组件，用于分隔内容上有关联但属于不同类别的数据集合。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot nav - 放置标签项的容器（无须手动设置，ea-tab 会自动分配）。
+ * @slot default - 默认插槽，用于放置 ea-tab-panel 面板子元素。
+ *
+ * @event ea-tab-click - 点击标签时触发，detail: `{ name, panel }`。
+ * @event ea-tabs-change - 标签页切换时触发，detail: `{ name }`。
+ * @event ea-tab-remove - 点击删除标签时触发，detail: `{ name }`。
+ *
+ * @csspart container - 外层容器。
+ * @csspart nav - 标签栏容器。
+ * @csspart prev - 上一个标签滚动按钮。
+ * @csspart next - 下一个标签滚动按钮。
+ * @csspart line - 标签栏下方的连接线。
+ * @csspart indicator - 标签栏下方的指示器。
+ * @csspart content - 标签栏下方的面板内容区域。
+ *
+ * @cssproperty --ea-tabs-tab-spacing - 标签项间距。
+ * @cssproperty --ea-tabs-border-color - 边框颜色。
+ * @cssproperty --ea-tabs-nav-height - 导航栏高度。
+ * @cssproperty --ea-tabs-border-card-bg-color - 边框卡片背景颜色。
+ * @cssproperty --ea-tabs-content-spacing - 内容区域内边距。
+ * @cssproperty --ea-tabs-indicator-color - 指示器颜色。
+ * @cssproperty --ea-tabs-indicator-size - 指示器尺寸。
+ * @cssproperty --ea-tabs-indicator-x - 指示器偏移量。
+ * @cssproperty --ea-tabs-transition - 过渡动画时长。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTabs extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(".ea-tabs")
   private _container!: HTMLElement;
 
@@ -37,31 +61,12 @@ export class EaTabs extends EaBase {
   @query(".ea-tabs__nav")
   private _nav!: HTMLElement;
 
-  @query('slot[name="nav"]')
-  private _navSlot!: HTMLSlotElement;
-
   @query(".ea-tabs__line")
   private _line!: HTMLElement;
 
-  @query(".ea-tabs__indicator")
-  private _indicator!: HTMLElement;
-
-  @query(".ea-tabs__content")
-  private _content!: HTMLElement;
-
-  @query(".ea-tabs__content > slot")
-  private _defaultSlot!: HTMLSlotElement;
-
-  /** @type {ResizeObserver} */
   private _resizeObserver?: ResizeObserver;
-
-  /** @type {number} */
   private _slotChangeTimer?: number;
-
-  /** @type {number} */
   private _resizeTimer?: number;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Enum(["", "card", "border-card"]),
@@ -69,7 +74,6 @@ export class EaTabs extends EaBase {
     observer(this: EaTabs) {
       this.updateContainerClasslist();
 
-      // 设置所有子组件的 type 属性
       this.querySelectorAll("ea-tab").forEach(tab => {
         tab.setAttribute("type", this.type);
       });
@@ -101,7 +105,6 @@ export class EaTabs extends EaBase {
       this._updateTabNavigationPosition(newVal);
       this._updateTabsActive(this.active);
 
-      // 设置所有子组件的 tab-position 属性
       this.querySelectorAll("ea-tab").forEach(tab => {
         tab.setAttribute("tab-position", newVal);
       });
@@ -122,11 +125,6 @@ export class EaTabs extends EaBase {
   })
   editable: boolean = false;
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     if (!this._nav || !this._container) return "";
 
@@ -146,6 +144,9 @@ export class EaTabs extends EaBase {
 
   /**
    * 更新指示器位置
+   * @param tabEl - 目标标签元素
+   * @param lineEl - 指示线元素
+   * @param position - 标签位置方向
    */
   private _updateIndicatorPosition = (
     tabEl: HTMLElement,
@@ -170,6 +171,7 @@ export class EaTabs extends EaBase {
 
   /**
    * 更新导航滚动位置
+   * @param tabEl - 目标标签元素
    */
   private _updateNavPosition = (tabEl: HTMLElement): void => {
     if (!this._nav) return;
@@ -218,11 +220,10 @@ export class EaTabs extends EaBase {
 
   /**
    * 更新 tab 激活状态
+   * @param activeName - 激活的标签面板标识
    */
   private _updateTabsActive = (activeName: string = this.active): void => {
-    /** @type {HTMLElement[]} */
     const panelEls = [...this.querySelectorAll("ea-tab-panel")];
-    /** @type {HTMLElement[]} */
     const tabEls = [...this.querySelectorAll("ea-tab")];
 
     tabEls.forEach(tab => {
@@ -246,6 +247,7 @@ export class EaTabs extends EaBase {
 
   /**
    * 更新 tab 是否为可编辑状态
+   * @param isEditable - 是否可编辑
    */
   private _updateTabEditable = (isEditable: boolean = this.editable): void => {
     this.querySelectorAll("ea-tab").forEach(tab => {
@@ -255,6 +257,7 @@ export class EaTabs extends EaBase {
 
   /**
    * 更新标签导航按钮图标方向
+   * @param tabPosition - 标签位置方向
    */
   private _updateTabNavigationPosition = (
     tabPosition: TabPosition = this.tabPosition
@@ -270,9 +273,6 @@ export class EaTabs extends EaBase {
     }
   };
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class='${bem()}' part='container'>
@@ -291,11 +291,6 @@ export class EaTabs extends EaBase {
     `;
   }
 
-  // ==================== 事件处理 ====================
-
-  /**
-   * 当 slot 内容变化时触发
-   */
   @listen("slotchange", 'slot[name="nav"]')
   @listen("slotchange", ".ea-tabs__content > slot")
   private _onSlotChange(): void {
@@ -313,12 +308,10 @@ export class EaTabs extends EaBase {
   }
 
   /**
-   * 实际处理 slot 变化的逻辑
+   * 处理 slot 变化逻辑
    */
   private _handleSlotChange(): void {
-    /** @type {HTMLElement[]} */
     const tabEls = [...this.querySelectorAll("ea-tab")];
-    /** @type {HTMLElement[]} */
     const panelEls = [...this.querySelectorAll("ea-tab-panel")];
 
     tabEls.forEach(tab => {
@@ -338,16 +331,13 @@ export class EaTabs extends EaBase {
     this.updateContainerClasslist();
   }
 
-  /**
-   * 标签点击事件
-   */
   @listen("click", ".ea-tabs__nav")
-  private _onTabClick(e: Event): void {
+  private _handleTabClick(e: Event): void {
     const target = (e.target as HTMLElement).closest("ea-tab");
     if (!target || target?.hasAttribute("disabled")) return;
 
-    const panelName = target.getAttribute("panel");
-    this.active = panelName || "";
+    const panelName = target.getAttribute("panel") || "";
+    this.active = panelName;
 
     this.dispatchEvent(
       new EaTabClickEvent({
@@ -357,11 +347,8 @@ export class EaTabs extends EaBase {
     );
   }
 
-  /**
-   * 上一个按钮点击事件
-   */
   @listen("click", ".ea-tabs__prev")
-  private _onPrev(): void {
+  private _handlePrev(): void {
     this._nav.scrollTo({
       left: this._nav.scrollLeft - this._nav.offsetWidth,
       top: this._nav.scrollTop - this._nav.offsetHeight,
@@ -369,11 +356,8 @@ export class EaTabs extends EaBase {
     });
   }
 
-  /**
-   * 下一个按钮点击事件
-   */
   @listen("click", ".ea-tabs__next")
-  private _onNext(): void {
+  private _handleNext(): void {
     this._nav.scrollTo({
       left: this._nav.scrollLeft + this._nav.offsetWidth,
       top: this._nav.scrollTop + this._nav.offsetHeight,
@@ -381,11 +365,8 @@ export class EaTabs extends EaBase {
     });
   }
 
-  /**
-   * 删除标签事件
-   */
   @listen("ea-tab-close-icon-click")
-  private _onTabRemove(e: Event): void {
+  private _handleTabRemove(e: Event): void {
     e.preventDefault();
     (e as Event).stopImmediatePropagation();
 
@@ -394,26 +375,28 @@ export class EaTabs extends EaBase {
 
     const tabEls = [...this.querySelectorAll("ea-tab")];
     const tab = customEvent.target as HTMLElement;
-    const index = tabEls.indexOf(tab);
+    const index = tabEls.indexOf(tab as EaTabElement);
     const panel = this.querySelector(
       `ea-tab-panel[name="${panelId}"]`
     ) as HTMLElement;
-    const tabName = [...this.querySelectorAll("ea-tab")][
-      index - 1 < 0 ? 0 : index - 1
-    ].getAttribute("panel");
 
-    this.setAttribute("active", tabName || "");
+    const isRemovingActive = panelId === this.active;
 
     panel.remove();
     tab.remove();
 
-    this.dispatchEvent(new EaTabRemoveEvent({ name: tabName }));
+    if (isRemovingActive) {
+      const remaining = [...this.querySelectorAll("ea-tab")];
+      const fallback = remaining[index - 1] || remaining[0];
+      const tabName = fallback?.getAttribute("panel") || "";
+      this.setAttribute("active", tabName);
+      this.dispatchEvent(new EaTabRemoveEvent({ name: tabName }));
+    } else {
+      this.dispatchEvent(new EaTabRemoveEvent({ name: this.active }));
+    }
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
-    // 动态设置默认激活的 tab
     if (!this.active) {
       const activeAttr = this.getAttribute("active");
       if (activeAttr) {
@@ -454,7 +437,7 @@ export class EaTabs extends EaBase {
       this._resizeTimer = undefined;
     }
 
-    this._resizeObserver?.unobserve();
+    this._resizeObserver?.disconnect();
     this._resizeObserver = undefined;
   }
 }
