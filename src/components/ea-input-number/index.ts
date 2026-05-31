@@ -469,13 +469,17 @@ export class EaInputNumber extends EaFormAssociatedBase {
   private _handleKeyDown(e: KeyboardEvent) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
 
+    if (e.key === "Enter") {
+      this._ensureInputValueIsCorrect(e);
+      return;
+    }
+
     if (
       [
         "Backspace",
         "Delete",
         "Tab",
         "Escape",
-        "Enter",
         "ArrowLeft",
         "ArrowRight",
         "ArrowUp",
