@@ -35,8 +35,6 @@ describe("EaSegmented Component", () => {
     return el;
   }
 
-  // ==================== 基础渲染 ====================
-
   describe("基础渲染", () => {
     it("应该正确创建 Shadow DOM", async () => {
       const segmented = createSegmented({ name: "test" }, ["Mon", "Tue"]);
@@ -96,8 +94,6 @@ describe("EaSegmented Component", () => {
       expect(items.length).toBe(0);
     });
   });
-
-  // ==================== Options 属性 ====================
 
   describe("Options 属性", () => {
     it("应该支持字符串数组选项", async () => {
@@ -333,8 +329,6 @@ describe("EaSegmented Component", () => {
     });
   });
 
-  // ==================== Value 属性 ====================
-
   describe("Value 属性", () => {
     it("默认 value 应该是空字符串", async () => {
       const segmented = createSegmented({ name: "week" }, [
@@ -460,8 +454,6 @@ describe("EaSegmented Component", () => {
     });
   });
 
-  // ==================== Size 属性 ====================
-
   describe("Size 属性", () => {
     it("默认 size 应该是空字符串", async () => {
       const segmented = createSegmented({ name: "week" }, [
@@ -527,8 +519,6 @@ describe("EaSegmented Component", () => {
     });
   });
 
-  // ==================== Direction 属性 ====================
-
   describe("Direction 属性", () => {
     it("默认 direction 应该是空字符串", async () => {
       const segmented = createSegmented({ name: "week" }, [
@@ -577,8 +567,6 @@ describe("EaSegmented Component", () => {
       expect(containerEl.classList.contains("is-horizontal")).toBe(false);
     });
   });
-
-  // ==================== Disabled 属性 ====================
 
   describe("Disabled 属性", () => {
     it("默认 disabled 应该是 false", async () => {
@@ -656,7 +644,7 @@ describe("EaSegmented Component", () => {
       });
     });
 
-    it("disabled 动态变化时不应该在容器上添加 is-disabled 类", async () => {
+    it("disabled 不应该在容器上添加 is-disabled 类", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
       await waitForRender();
@@ -719,8 +707,6 @@ describe("EaSegmented Component", () => {
     });
   });
 
-  // ==================== Block 属性 ====================
-
   describe("Block 属性", () => {
     it("默认 block 应该是 false", async () => {
       const segmented = createSegmented({ name: "week" }, [
@@ -777,8 +763,6 @@ describe("EaSegmented Component", () => {
     });
   });
 
-  // ==================== Name 属性 ====================
-
   describe("Name 属性", () => {
     it("默认 name 应该是空字符串", async () => {
       const segmented = document.createElement("ea-segmented");
@@ -809,8 +793,6 @@ describe("EaSegmented Component", () => {
       });
     });
   });
-
-  // ==================== PropsConfiguration 属性 ====================
 
   describe("PropsConfiguration 属性", () => {
     it("默认 propsConfiguration 应该包含 label, value, disabled", async () => {
@@ -888,8 +870,6 @@ describe("EaSegmented Component", () => {
       expect(items[1].classList.contains("is-checked")).toBe(true);
     });
   });
-
-  // ==================== BEM 类名 ====================
 
   describe("BEM 类名", () => {
     it("容器应该有 ea-segmented 基础类名", async () => {
@@ -1023,8 +1003,6 @@ describe("EaSegmented Component", () => {
     });
   });
 
-  // ==================== 事件 ====================
-
   describe("事件", () => {
     it("应该触发 change 事件当选项改变时", async () => {
       const segmented = createSegmented({ name: "week" }, [
@@ -1102,9 +1080,52 @@ describe("EaSegmented Component", () => {
       expect(items[0].classList.contains("is-checked")).toBe(false);
       expect(items[2].classList.contains("is-checked")).toBe(true);
     });
-  });
 
-  // ==================== 指示器位置 ====================
+    it("change 事件应该是 EaSegmentedChangeEvent 实例", async () => {
+      const segmented = createSegmented({ name: "week" }, [
+        "Mon",
+        "Tue",
+        "Wed",
+      ]);
+      container.appendChild(segmented);
+      await waitForRender();
+
+      let receivedEvent = null;
+      segmented.addEventListener("change", e => {
+        receivedEvent = e;
+      });
+
+      const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
+      input.click();
+      await waitForRender();
+
+      expect(receivedEvent).toBeTruthy();
+      expect(receivedEvent.type).toBe("change");
+      expect(receivedEvent.bubbles).toBe(true);
+      expect(receivedEvent.composed).toBe(true);
+    });
+
+    it("原生 change 事件不应泄漏到组件外部", async () => {
+      const segmented = createSegmented({ name: "week" }, [
+        "Mon",
+        "Tue",
+        "Wed",
+      ]);
+      container.appendChild(segmented);
+      await waitForRender();
+
+      const nativeChangeHandler = vi.fn();
+      segmented.addEventListener("change", (e) => {
+        if (!e.detail) nativeChangeHandler();
+      });
+
+      const input = segmented.shadowRoot.querySelector('input[value="Tue"]');
+      input.click();
+      await waitForRender();
+
+      expect(nativeChangeHandler).not.toHaveBeenCalled();
+    });
+  });
 
   describe("指示器位置", () => {
     it("选中选项时应该设置 CSS 自定义属性", async () => {
@@ -1166,8 +1187,6 @@ describe("EaSegmented Component", () => {
       expect(width).toBe("");
     });
   });
-
-  // ==================== 生命周期 ====================
 
   describe("生命周期", () => {
     it("组件连接后应该正确初始化", async () => {
@@ -1239,8 +1258,6 @@ describe("EaSegmented Component", () => {
     });
   });
 
-  // ==================== 属性组合 ====================
-
   describe("属性组合", () => {
     it("size + direction 应该同时生效", async () => {
       const segmented = createSegmented(
@@ -1302,8 +1319,6 @@ describe("EaSegmented Component", () => {
       expect(items[0].classList.contains("is-disabled")).toBe(true);
     });
   });
-
-  // ==================== 自定义元素注册 ====================
 
   describe("自定义元素注册", () => {
     it("应该注册为 ea-segmented 自定义元素", () => {

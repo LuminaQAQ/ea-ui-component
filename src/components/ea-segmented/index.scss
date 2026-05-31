@@ -16,11 +16,11 @@ $size-type: (small, large);
   --#{$name}-item-default-height: 32px;
   --#{$name}-item-large-height: 40px;
 
-  --#{$name}-bgc: var(--grey-100);
-  --#{$name}-hover-bgc: var(--grey-200);
-  --#{$name}-checked-bgc: var(--blue-600);
+  --#{$name}-bg-color: var(--grey-100);
+  --#{$name}-hover-bg-color: var(--grey-200);
 
   --#{$name}-item-disabled-color: var(--grey-400);
+  --#{$name}-item-disabled-bg-color: transparent;
 
   --#{$name}-indicator-color: var(--blue-500);
   --#{$name}-item-checked-color: var(--color-white);
@@ -40,14 +40,10 @@ $size-type: (small, large);
 
   position: relative;
   display: inline-flex;
-  background-color: var(--#{$name}-bgc);
+  background-color: var(--#{$name}-bg-color);
   min-height: var(--#{$name}-item-default-height);
 
   overflow: hidden;
-
-  #defaultSlot {
-    display: none;
-  }
 
   @include element(item) {
     box-sizing: border-box;
@@ -67,7 +63,7 @@ $size-type: (small, large);
     transition: color var(--#{$name}-transition);
 
     &:hover {
-      background-color: var(--#{$name}-hover-bgc);
+      background-color: var(--#{$name}-hover-bg-color);
     }
 
     &.is-checked {
@@ -81,9 +77,10 @@ $size-type: (small, large);
     &.is-disabled {
       cursor: not-allowed;
       color: var(--#{$name}-item-disabled-color);
-      background-color: var(--#{$name}-item-disabled-bgc);
+      background-color: var(--#{$name}-item-disabled-bg-color);
+
       &:hover {
-        background-color: var(--#{$name}-item-disabled-bgc);
+        background-color: var(--#{$name}-item-disabled-bg-color);
       }
     }
   }
@@ -119,7 +116,7 @@ $size-type: (small, large);
     @include modifier($type) {
       min-height: var(--#{$name}-item-#{$type}-height);
 
-      .ea-segmented__item {
+      .#{$name}__item {
         padding: var(--#{$name}-item-#{$type}-spacing);
         font-size: var(--#{$name}-item-#{$type}-size);
       }
@@ -130,13 +127,13 @@ $size-type: (small, large);
     flex-direction: column;
     min-height: auto;
 
-    .ea-segmented__item {
+    .#{$name}__item {
       min-height: var(--#{$name}-item-default-height);
     }
 
     @each $type in $size-type {
-      &.ea-segmented--#{$type} {
-        .ea-segmented__item {
+      &.#{$name}--#{$type} {
+        .#{$name}__item {
           min-height: var(--#{$name}-item-#{$type}-height);
         }
       }
@@ -146,7 +143,7 @@ $size-type: (small, large);
   @include state(block) {
     width: 100%;
 
-    .ea-segmented__item {
+    .#{$name}__item {
       min-width: 0;
       flex: 1 1 0;
     }

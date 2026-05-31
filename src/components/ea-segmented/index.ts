@@ -1,12 +1,9 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { h } from "@utils/h";
 import { html } from "@utils/html";
-import { Enum } from "@/utils/Enum";
+import { Enum } from "@utils/Enum";
+import { EaSegmentedChangeEvent } from "./events/EaSegmentedChangeEvent";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-segmented" as const;
@@ -29,20 +26,35 @@ export type PropsConfiguration = {
   disabled: string;
 };
 
+/**
+ * @summary 分段选择器组件，用于在一组互斥的选项中进行选择，支持多种尺寸、方向和自定义字段映射。
+ * @status stable
+ * @since 3.0
+ *
+ * @csspart container - 组件根容器元素。
+ * @csspart item - 每个选项的容器元素。
+ * @csspart label - 选项标签元素。
+ * @csspart input - 原生 radio input 元素。
+ * @csspart indicator - 当前选中指示器元素。
+ *
+ * @event change - 选项改变时触发，detail: `{ value: string }`。
+ *
+ * @cssproperty --ea-segmented-border-radius - 组件圆角半径。
+ * @cssproperty --ea-segmented-bg-color - 组件背景颜色。
+ * @cssproperty --ea-segmented-hover-bg-color - 选项悬停背景颜色。
+ * @cssproperty --ea-segmented-indicator-color - 选中指示器颜色。
+ * @cssproperty --ea-segmented-item-checked-color - 选中项文字颜色。
+ * @cssproperty --ea-segmented-item-disabled-color - 禁用项文字颜色。
+ * @cssproperty --ea-segmented-item-disabled-bg-color - 禁用项背景颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSegmented extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(".ea-segmented")
   private _container!: HTMLElement;
-
-  // ==================== 私有属性 ====================
 
   private _resizeObserver?: ResizeObserver;
 
   private _resizeTimer?: number;
-
-  // ==================== @property 属性（JS-only，不映射到 HTML attribute） ====================
 
   @property({
     type: Array,
@@ -70,8 +82,6 @@ export class EaSegmented extends EaBase {
     value: "value",
     disabled: "disabled",
   };
-
-  // ==================== @attribute 属性（映射到 HTML attribute） ====================
 
   @attribute({
     type: String,
@@ -126,8 +136,6 @@ export class EaSegmented extends EaBase {
   })
   name: string = "";
 
-  // ==================== 方法 ====================
-
   updateContainerClasslist(): string {
     const className = bem(
       { [this.size]: !!this.size },
@@ -145,6 +153,7 @@ export class EaSegmented extends EaBase {
     `;
   }
 
+  /** 渲染选项列表 */
   private _renderOptions(options: SegmentedOption[]): void {
     if (!this._container) return;
 
@@ -216,13 +225,20 @@ export class EaSegmented extends EaBase {
     this._updateIndicatorPosition(this.value);
   }
 
+  /** 处理选项变更事件 */
   @listen("change", ".ea-segmented")
   private _handleChange(e: Event) {
+    e.stopPropagation();
+
     const value = (e.target as HTMLInputElement).value;
     this.value = value;
-    this.emit("change", { detail: { value } });
+    this.dispatchEvent(new EaSegmentedChangeEvent({ value }));
   }
 
+  /**
+   * 更新选中指示器位置
+   * @param value 当前选中值
+   */
   private _updateIndicatorPosition(value: string = this.value): void {
     if (!this._container) return;
 
@@ -268,8 +284,6 @@ export class EaSegmented extends EaBase {
       }
     });
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

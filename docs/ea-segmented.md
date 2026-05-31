@@ -163,12 +163,6 @@
     display: flex;
     flex-direction: column;
   }
-
-  #customStyleSegmented {
-    --ea-segmented-item-checked-color: black;
-    --ea-segmented-indicator-color: #ffd100;
-    --ea-segmented-border-radius: 16px;
-  }
 </style>
 
 # Segmented 分段选择器
@@ -181,13 +175,13 @@
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-segmented/index.ts";
+  import "./node_modules/easy-component-ui/components/ea-segmented/index.js";
 </script>
 ```
 
 ## 自定义样式
 
-移步到 [CSS Part](#segmented-css-part)。
+移步到 [CSS Part](#segmented-css-part) 和 [CSS 自定义属性](#segmented-css-自定义属性)。
 
 ## 基础用法
 
@@ -546,16 +540,17 @@ customStyleExample.init();
 | value                          | 当前选中值                           | string  | —                           | ""                                                         |
 | options <PropTag />            | 选项列表（可为字符串数组或对象数组） | array   | —                           | []                                                         |
 | propsConfiguration <PropTag /> | 自定义选项字段映射                   | object  | —                           | `{ label: 'label', value: 'value', disabled: 'disabled' }` |
-| size                           | 组件尺寸                             | string  | `large \| default \| small` | default                                                    |
-| direction                      | 排列方向                             | string  | `horizontal \| vertical`    | horizontal                                                 |
+| size                           | 组件尺寸                             | string  | `large \| default \| small` | ""                                                         |
+| direction                      | 排列方向                             | string  | `horizontal \| vertical`    | ""                                                         |
 | block                          | 是否在父容器内占满宽度（块级）       | boolean | —                           | false                                                      |
 | disabled                       | 是否禁用整个组件                     | boolean | —                           | false                                                      |
+| name                           | 表单字段名称                         | string  | —                           | ""                                                         |
 
 ### Segmented CSS Part
 
 | 名称      | 说明           |
 | --------- | -------------- |
-| container | 组件根元素     |
+| container | 组件根容器元素 |
 | item      | 每个选项的容器 |
 | label     | 选项标签       |
 | input     | 原生 input     |
@@ -565,4 +560,16 @@ customStyleExample.init();
 
 | 事件名 | 说明           | 回调参数(event.detail) |
 | ------ | -------------- | ---------------------- |
-| change | 选项改变时触发 | `{ value: string } `   |
+| change | 选项改变时触发 | `{ value: string }`    |
+
+### Segmented CSS 自定义属性
+
+| 属性名                                  | 说明             | 默认值            |
+| --------------------------------------- | ---------------- | ----------------- |
+| --ea-segmented-border-radius            | 组件圆角半径     | 2px               |
+| --ea-segmented-bg-color                 | 组件背景颜色     | var(--grey-100)   |
+| --ea-segmented-hover-bg-color           | 选项悬停背景颜色 | var(--grey-200)   |
+| --ea-segmented-indicator-color          | 选中指示器颜色   | var(--blue-500)   |
+| --ea-segmented-item-checked-color       | 选中项文字颜色   | var(--color-white) |
+| --ea-segmented-item-disabled-color      | 禁用项文字颜色   | var(--grey-400)   |
+| --ea-segmented-item-disabled-bg-color   | 禁用项背景颜色   | transparent       |
