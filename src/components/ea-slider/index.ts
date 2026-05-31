@@ -1,13 +1,9 @@
 import "@/components/ea-input-number/index";
 import "@/components/ea-tooltip";
-import { Enum } from "@/utils/Enum";
+import { createBEM } from "@core/EaBase";
 import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { listen } from "@decorator/listen";
-import { property } from "@decorator/property";
-import { query } from "@decorator/query";
-import { createBEM } from "@utils/bem";
+import { CustomElement, attribute, listen, property, query } from "@decorator";
+import { Enum } from "@utils/Enum";
 import { html } from "@utils/html";
 import { EaSliderChangeEvent } from "./events/EaSliderChangeEvent";
 import { EaSliderInputEvent } from "./events/EaSliderInputEvent";
@@ -32,10 +28,48 @@ export type SliderPlacement =
   | "right-start"
   | "right-end";
 
+/**
+ * @summary 滑块组件，通过拖动滑块在固定区间内进行选择，支持离散值、标记点和输入框。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-tooltip
+ * @dependency ea-input-number
+ *
+ * @slot default - 默认插槽（暂未使用）。
+ *
+ * @event change - 值改变时触发（拖拽结束），detail: `{ value: number }`。
+ * @event input - 拖动时触发，detail: `{ value: number }`。
+ *
+ * @csspart form-label - 标签元素。
+ * @csspart container - 根容器。
+ * @csspart runway - 轨道容器。
+ * @csspart rail - 轨道背景。
+ * @csspart bar - 已填充轨道。
+ * @csspart stop - 步长节点。
+ * @csspart mark-stop - 标记点节点。
+ * @csspart trigger - 触发器容器（ea-tooltip）。
+ * @csspart thumb - 滑块按钮。
+ * @csspart tooltip - 提示框内容。
+ * @csspart marks - 标记容器。
+ * @csspart mark - 标记项。
+ * @csspart mark-label - 标记标签。
+ * @csspart input - 输入框（ea-input-number）。
+ *
+ * @cssproperty --ea-slider-height - 轨道高度。
+ * @cssproperty --ea-slider-height-small - 小尺寸轨道高度。
+ * @cssproperty --ea-slider-height-large - 大尺寸轨道高度。
+ * @cssproperty --ea-slider-thumb-size - 滑块按钮尺寸。
+ * @cssproperty --ea-slider-thumb-size-small - 小尺寸滑块按钮尺寸。
+ * @cssproperty --ea-slider-thumb-size-large - 大尺寸滑块按钮尺寸。
+ * @cssproperty --ea-slider-rail-bg-color - 轨道背景颜色。
+ * @cssproperty --ea-slider-bar-bg-color - 已填充轨道颜色。
+ * @cssproperty --ea-slider-thumb-bg-color - 滑块按钮背景颜色。
+ * @cssproperty --ea-slider-thumb-border-color - 滑块按钮边框颜色。
+ * @cssproperty --ea-slider-transition - 过渡动画时长。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSlider extends EaFormAssociatedBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.ce("form-label"))
   private _label!: HTMLElement;
 
@@ -44,6 +78,9 @@ export class EaSlider extends EaFormAssociatedBase {
 
   @query(bem.ce("rail"))
   private _rail!: HTMLElement;
+
+  @query(bem.ce("bar"))
+  private _bar!: HTMLElement;
 
   @query(bem.ce("trigger"))
   private _trigger!: HTMLElement;
@@ -60,7 +97,6 @@ export class EaSlider extends EaFormAssociatedBase {
   @query(bem.ce("input"))
   private _input!: HTMLElement;
 
-  // ==================== 私有属性 ====================
   private _inputAbortController?: AbortController | null;
 
   private _states = {
@@ -69,8 +105,6 @@ export class EaSlider extends EaFormAssociatedBase {
     startY: 0,
     isInputNumberDefined: false,
   };
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -86,7 +120,7 @@ export class EaSlider extends EaFormAssociatedBase {
     default: 0,
     observer(this: EaSlider, newVal: number) {
       const clampedValue = Math.max(this.min, Math.min(this.max, newVal));
-      this.setValue(clampedValue);
+      this.setValue(String(clampedValue));
       this._updateSlider();
     },
   })
@@ -204,8 +238,6 @@ export class EaSlider extends EaFormAssociatedBase {
   })
   required: boolean = false;
 
-  // ==================== Property 属性====================
-
   @property({
     type: Object,
     default: null,
@@ -224,8 +256,6 @@ export class EaSlider extends EaFormAssociatedBase {
     },
   })
   formatTooltip: (value: number) => number | string = (value: number) => value;
-
-  // ==================== 方法 ====================
 
   updateContainerClasslist(): string {
     const className = bem(
@@ -246,16 +276,13 @@ export class EaSlider extends EaFormAssociatedBase {
     return className;
   }
 
-  constructor() {
-    super();
-  }
-
   html(): string {
     return `
       <label class='${bem.e("form-label")}' part='form-label'></label>
       <div class='${bem()}' part='container'>
         <div class='${bem.e("runway")}' part='runway'>
           <div class='${bem.e("rail")}' part='rail'></div>
+          <div class='${bem.e("bar")}' part='bar'></div>
           <ea-tooltip class='${bem.e("trigger")}' part='trigger' flip="false" trigger="customized" placement="${this.placement}">
             <div class='${bem.e("thumb")}' part='thumb' slot="reference"></div>
             <div class='${bem.e("tooltip")}' part='tooltip'></div>
@@ -267,9 +294,7 @@ export class EaSlider extends EaFormAssociatedBase {
     `;
   }
 
-  /**
-   * 渲染 stops 和 mark-stop 节点到 rail 中
-   */
+  /** 渲染 stops 和 mark-stop 节点到 rail 中 */
   private _renderStops(): void {
     if (!this._rail) return;
 
@@ -329,9 +354,7 @@ export class EaSlider extends EaFormAssociatedBase {
     this._rail.innerHTML = html(stopElements.join(""));
   }
 
-  /**
-   * 渲染 mark 标签到 marks 容器中
-   */
+  /** 渲染 mark 标签到 marks 容器中 */
   private _renderMarkLabels(): void {
     if (!this._marks) return;
 
@@ -360,9 +383,7 @@ export class EaSlider extends EaFormAssociatedBase {
     this._marks.innerHTML = html(marksHtml);
   }
 
-  /**
-   * 统一渲染 stops 和 marks
-   */
+  /** 统一渲染 stops 和 marks */
   private _renderMarks(): void {
     this._renderStops();
     this._renderMarkLabels();
@@ -399,9 +420,7 @@ export class EaSlider extends EaFormAssociatedBase {
     );
   }
 
-  /**
-   * 更新滑块位置、tooltip 内容、输入框值及容器类名
-   */
+  /** 更新滑块位置、bar 宽度、tooltip 内容、输入框值及容器类名 */
   private _updateSlider(): void {
     if (!this._trigger) return;
 
@@ -411,9 +430,13 @@ export class EaSlider extends EaFormAssociatedBase {
     if (this.vertical) {
       this._trigger.style.top = `${percentage}%`;
       this._trigger.style.left = "50%";
+      this._bar.style.width = "";
+      this._bar.style.height = `${percentage}%`;
     } else {
       this._trigger.style.left = `${percentage}%`;
       this._trigger.style.top = "50%";
+      this._bar.style.width = `${percentage}%`;
+      this._bar.style.height = "";
     }
 
     this._tooltip.textContent = String(this.formatTooltip(value));
@@ -449,8 +472,6 @@ export class EaSlider extends EaFormAssociatedBase {
       });
     }
   }
-
-  // ==================== 事件处理 ====================
 
   /**
    * 在轨道上按下鼠标，开始拖拽并跳转到点击位置
@@ -521,9 +542,7 @@ export class EaSlider extends EaFormAssociatedBase {
     this.dispatchEvent(new EaSliderInputEvent({ value: this.value }));
   }
 
-  /**
-   * 文档级鼠标松开，结束拖拽
-   */
+  /** 文档级鼠标松开，结束拖拽 */
   @listen("mouseup", "document")
   private _onMouseUp(): void {
     if (!this._states.isDragging) return;
@@ -533,18 +552,14 @@ export class EaSlider extends EaFormAssociatedBase {
     this.dispatchEvent(new EaSliderChangeEvent({ value: this.value }));
   }
 
-  /**
-   * 鼠标进入滑块，显示 tooltip
-   */
+  /** 鼠标进入滑块，显示 tooltip */
   @listen("mouseenter", bem.ce("thumb"))
   private _onThumbMouseEnter(): void {
     if (this.disabled) return;
     this._trigger.toggleAttribute("visible", true);
   }
 
-  /**
-   * 鼠标离开滑块，隐藏 tooltip
-   */
+  /** 鼠标离开滑块，隐藏 tooltip */
   @listen("mouseleave", bem.ce("thumb"))
   private _onThumbMouseLeave(): void {
     if (this.disabled || this._states.isDragging) return;
@@ -565,8 +580,6 @@ export class EaSlider extends EaFormAssociatedBase {
     this.value = clampedValue;
     this.dispatchEvent(new EaSliderChangeEvent({ value: this.value }));
   };
-
-  // ==================== 表单验证 ====================
 
   get validationTarget() {
     return this._input;
@@ -591,8 +604,6 @@ export class EaSlider extends EaFormAssociatedBase {
     this.updateValidity();
     return this.internals.reportValidity();
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this._updateSlider();

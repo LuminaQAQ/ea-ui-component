@@ -1,5 +1,4 @@
 $name: ea-slider;
-$ea-slider-size-types: (small, default, large);
 
 :host {
   --#{$name}-height: 6px;
@@ -11,6 +10,7 @@ $ea-slider-size-types: (small, default, large);
   --#{$name}-thumb-size-large: 20px;
 
   --#{$name}-rail-bg-color: var(--grey-200);
+  --#{$name}-bar-bg-color: var(--blue-500);
   --#{$name}-thumb-bg-color: var(--color-white);
   --#{$name}-thumb-border-color: var(--blue-300);
 
@@ -24,7 +24,7 @@ $ea-slider-size-types: (small, default, large);
 
 :host(:invalid) {
   .#{$name}__form-label {
-    color: var(--danger-color);
+    color: var(--red-500);
   }
 
   .#{$name}__thumb {
@@ -64,12 +64,24 @@ $ea-slider-size-types: (small, default, large);
     height: var(--#{$name}-height);
     background-color: var(--#{$name}-rail-bg-color);
     border-radius: var(--border-radius-round);
+    cursor: pointer;
+  }
+
+  @include element(bar) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: var(--#{$name}-height);
+    background-color: var(--#{$name}-bar-bg-color);
+    border-radius: var(--border-radius-round);
+    pointer-events: none;
   }
 
   @include element(stop) {
     display: none;
 
     position: absolute;
+    z-index: 1;
     transform: translateX(-50%);
 
     width: var(--#{$name}-height);
@@ -140,24 +152,33 @@ $ea-slider-size-types: (small, default, large);
     display: none;
   }
 
+  @include element(tooltip) {
+    display: none;
+  }
+
   @include state(vertical) {
     flex-direction: column;
     height: 100%;
     width: auto;
 
-    .ea-slider__runway {
+    .#{$name}__runway {
       height: 100%;
       width: auto;
 
       display: flex;
     }
 
-    .ea-slider__rail {
+    .#{$name}__rail {
       width: var(--#{$name}-height);
       height: 100%;
     }
 
-    .ea-slider__trigger {
+    .#{$name}__bar {
+      width: var(--#{$name}-height);
+      height: auto;
+    }
+
+    .#{$name}__trigger {
       top: 0;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -167,7 +188,7 @@ $ea-slider-size-types: (small, default, large);
       transform: translateY(-50%);
     }
 
-    .ea-slider__marks {
+    .#{$name}__marks {
       top: 0;
       left: 50%;
       width: auto;
@@ -175,7 +196,7 @@ $ea-slider-size-types: (small, default, large);
       transform: translateX(-50%);
     }
 
-    .ea-slider__mark {
+    .#{$name}__mark {
       top: auto;
       left: 50%;
       transform: translateY(-50%);
@@ -184,7 +205,7 @@ $ea-slider-size-types: (small, default, large);
       margin-left: calc(var(--#{$name}-thumb-size) / 2);
     }
 
-    .ea-slider__mark-label {
+    .#{$name}__mark-label {
       margin-top: 0;
       margin-left: var(--spacing-xs);
       text-align: left;
@@ -192,28 +213,24 @@ $ea-slider-size-types: (small, default, large);
   }
 
   @include state(show-stops) {
-    .ea-slider__stop {
+    .#{$name}__stop {
       display: block;
     }
-  }
-
-  @include element(tooltip) {
-    display: none;
   }
 
   @include state(show-tooltip) {
-    .ea-slider__tooltip {
+    .#{$name}__tooltip {
       display: block;
     }
 
-    .ea-slider__trigger::part(original) {
+    .#{$name}__trigger::part(original) {
       display: block;
       pointer-events: none;
     }
   }
 
   @include state(show-input) {
-    .ea-slider__input {
+    .#{$name}__input {
       display: inline-block;
       left: auto;
       right: calc(100% + var(--spacing-sm));
@@ -221,11 +238,16 @@ $ea-slider-size-types: (small, default, large);
   }
 
   @include state(disabled) {
-    .ea-slider__rail {
+    .#{$name}__rail {
       background-color: var(--grey-100);
+      cursor: not-allowed;
     }
 
-    .ea-slider__thumb {
+    .#{$name}__bar {
+      background-color: var(--grey-300);
+    }
+
+    .#{$name}__thumb {
       cursor: not-allowed;
       border-color: var(--grey-300);
     }

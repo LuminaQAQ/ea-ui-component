@@ -51,6 +51,14 @@ describe("EaSlider Component", () => {
       expect(slider.shadowRoot.querySelector('[part="rail"]')).toBeTruthy();
     });
 
+    it("应该包含 bar CSS Part", async () => {
+      const slider = document.createElement("ea-slider");
+      container.appendChild(slider);
+      await waitForRender();
+
+      expect(slider.shadowRoot.querySelector('[part="bar"]')).toBeTruthy();
+    });
+
     it("应该包含 trigger CSS Part（ea-tooltip 元素）", async () => {
       const slider = document.createElement("ea-slider");
       container.appendChild(slider);
@@ -206,6 +214,21 @@ describe("EaSlider Component", () => {
       expect(trigger.style.left).toBe("50%");
     });
 
+    it("value 变化时应该更新 bar 宽度", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.value = 0;
+      container.appendChild(slider);
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("0%");
+
+      slider.value = 50;
+      await waitForRender();
+
+      expect(bar.style.width).toBe("50%");
+    });
+
     it("value 超过 max 时仍可设置（observer 内部 clamp 用于表单提交）", async () => {
       const slider = document.createElement("ea-slider");
       slider.min = 0;
@@ -353,6 +376,23 @@ describe("EaSlider Component", () => {
       expect(trigger.style.left).toBe("25%");
     });
 
+    it("min/max 变化时应该更新 bar 宽度", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.min = 0;
+      slider.max = 100;
+      slider.value = 50;
+      container.appendChild(slider);
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("50%");
+
+      slider.max = 200;
+      await waitForRender();
+
+      expect(bar.style.width).toBe("25%");
+    });
+
     it("应该支持负数 min", async () => {
       const slider = document.createElement("ea-slider");
       slider.min = -100;
@@ -377,7 +417,7 @@ describe("EaSlider Component", () => {
       expect(trigger.style.left).toBe("50%");
     });
 
-    it("min 等于 max 时应该正常处理（位置为 NaN%）", async () => {
+    it("min 等于 max 时应该正常处理", async () => {
       const slider = document.createElement("ea-slider");
       slider.min = 50;
       slider.max = 50;
@@ -565,6 +605,28 @@ describe("EaSlider Component", () => {
       expect(trigger.style.left).toBe("50%");
     });
 
+    it("vertical 模式下 bar 应该使用 height 定位", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.vertical = true;
+      slider.value = 50;
+      container.appendChild(slider);
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.height).toBe("50%");
+    });
+
+    it("vertical 模式下 bar 不应该设置 width", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.vertical = true;
+      slider.value = 50;
+      container.appendChild(slider);
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("");
+    });
+
     it("vertical 模式下 value=0 时 trigger top 应该是 0%", async () => {
       const slider = document.createElement("ea-slider");
       slider.vertical = true;
@@ -600,6 +662,21 @@ describe("EaSlider Component", () => {
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
       expect(trigger.style.top).toBe("50%");
+    });
+
+    it("从 vertical 切换回 horizontal 时 bar 应该恢复 width 定位", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.vertical = true;
+      slider.value = 50;
+      container.appendChild(slider);
+      await waitForRender();
+
+      slider.vertical = false;
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("50%");
+      expect(bar.style.height).toBe("");
     });
   });
 
@@ -1550,6 +1627,36 @@ describe("EaSlider Component", () => {
       expect(trigger.style.left).toBe("100%");
     });
 
+    it("value=0 时 bar 宽度应该是 0%", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.value = 0;
+      container.appendChild(slider);
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("0%");
+    });
+
+    it("value=50 时 bar 宽度应该是 50%", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.value = 50;
+      container.appendChild(slider);
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("50%");
+    });
+
+    it("value=100 时 bar 宽度应该是 100%", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.value = 100;
+      container.appendChild(slider);
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("100%");
+    });
+
     it("自定义 min/max 时位置应该正确计算", async () => {
       const slider = document.createElement("ea-slider");
       slider.min = 0;
@@ -1560,6 +1667,18 @@ describe("EaSlider Component", () => {
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("50%");
+    });
+
+    it("自定义 min/max 时 bar 宽度应该正确计算", async () => {
+      const slider = document.createElement("ea-slider");
+      slider.min = 0;
+      slider.max = 200;
+      slider.value = 100;
+      container.appendChild(slider);
+      await waitForRender();
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("50%");
     });
 
     it("vertical 模式下应该使用 top 定位", async () => {
@@ -2202,6 +2321,7 @@ describe("EaSlider Component", () => {
       ).toBeTruthy();
       expect(slider.shadowRoot.querySelector('[part="rail"]')).toBeTruthy();
       expect(slider.shadowRoot.querySelector('[part="thumb"]')).toBeTruthy();
+      expect(slider.shadowRoot.querySelector('[part="bar"]')).toBeTruthy();
     });
 
     it("组件断开连接后应该正常移除", () => {
@@ -2234,6 +2354,9 @@ describe("EaSlider Component", () => {
 
       const trigger = slider.shadowRoot.querySelector('[part="trigger"]');
       expect(trigger.style.left).toBe("75%");
+
+      const bar = slider.shadowRoot.querySelector('[part="bar"]');
+      expect(bar.style.width).toBe("75%");
     });
   });
 });

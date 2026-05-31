@@ -1,3 +1,7 @@
+export interface EaSliderChangeEventDetail {
+  value: number;
+}
+
 export class EaSliderChangeEvent extends Event {
   readonly detail: EaSliderChangeEventDetail;
 
@@ -5,15 +9,5 @@ export class EaSliderChangeEvent extends Event {
     super("change", { bubbles: true, cancelable: true, composed: true });
 
     this.detail = detail;
-  }
-}
-
-interface EaSliderChangeEventDetail {
-  value: number;
-}
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    change: EaSliderChangeEvent;
   }
 }

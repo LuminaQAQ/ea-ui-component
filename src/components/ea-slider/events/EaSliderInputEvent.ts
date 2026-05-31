@@ -1,3 +1,7 @@
+export interface EaSliderInputEventDetail {
+  value: number;
+}
+
 export class EaSliderInputEvent extends Event {
   readonly detail: EaSliderInputEventDetail;
 
@@ -5,15 +9,5 @@ export class EaSliderInputEvent extends Event {
     super("input", { bubbles: true, cancelable: true, composed: true });
 
     this.detail = detail;
-  }
-}
-
-interface EaSliderInputEventDetail {
-  value: number;
-}
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    input: EaSliderInputEvent;
   }
 }
