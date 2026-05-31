@@ -1,8 +1,7 @@
-/**
- * 时间选择器可见性改变事件
- * @event EaTimePickerVisibleChangeEvent
- * @property {boolean} visible - 下拉列表当前可见状态
- */
+export interface EaTimePickerVisibleChangeEventDetail {
+  visible: boolean;
+}
+
 export class EaTimePickerVisibleChangeEvent extends Event {
   readonly detail: EaTimePickerVisibleChangeEventDetail;
 
@@ -15,11 +14,6 @@ export class EaTimePickerVisibleChangeEvent extends Event {
 
     this.detail = detail;
   }
-}
-
-interface EaTimePickerVisibleChangeEventDetail {
-  /** @description 下拉列表当前可见状态 */
-  visible: boolean;
 }
 
 declare global {

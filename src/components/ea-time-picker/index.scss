@@ -162,11 +162,6 @@ $ea-time-picker-align-types: left, center, right;
       --#{$name}-dropdown-max-height: var(
         --#{$name}-dropdown-max-height-#{$size}
       );
-
-      .#{$name}__input {
-        --input-height: var(--input-height-#{$size});
-        --input-font-size: var(--input-font-size-#{$size});
-      }
     }
   }
 

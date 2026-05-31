@@ -4,7 +4,7 @@ import "../dist/components/index.js"
 import "../dist/assets/icon.css"
 
 onMounted(() => {
-  
+
       const basicExample = {
         sizeSegmented: document.getElementById("sizeSegmented"),
         defaultTimePicker: document.getElementById("defaultTimePicker"),
@@ -76,7 +76,7 @@ onMounted(() => {
 
 # TimePicker 时间选择器
 
-用于选择或输入时间
+用于选择或输入时间。
 
 ## 引入
 
@@ -84,17 +84,17 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-time-picker/index.ts";
+  import "./node_modules/easy-component-ui/components/ea-time-picker/index.js";
 </script>
 ```
 
 ## 自定义样式
 
-移步到 [CSS Part](#time-picker-css-part)。
+移步到 [CSS Part](#timepicker-css-part)。
 
 ## 任意时间点
 
-可以选择任意时间
+可以选择任意时间。
 
 <div class="demo">
   <p>
@@ -242,7 +242,7 @@ basicExample.init();
 
 ## 限制时间选择范围
 
-可以限制时间选择的范围
+可以限制时间选择的范围，超出范围的时间项将被禁用。
 
 <div class="demo demo-time-picker">
   <div class="block">
@@ -318,7 +318,7 @@ basicExample.init();
 
 ## 事件监听
 
-监听时间选择器的事件
+监听时间选择器的事件。
 
 <div class="demo demo-time-picker">
   <div class="block">
@@ -388,32 +388,41 @@ eventExample.init();
 
 ::::
 
-## Time Picker API
+## TimePicker API
 
-### Time Picker Attributes
+### TimePicker Attributes
 
-| 参数              | 说明             | 类型    | 可选值                | 默认值   |
-| ----------------- | ---------------- | ------- | --------------------- | -------- |
-| value             | 绑定值           | String  | —                     | —        |
-| width             | 输入框宽度       | String  | —                     | —        |
-| disabled          | 是否禁用         | Boolean | —                     | false    |
-| align             | 对齐方式         | String  | left / center / right | left     |
-| placeholder       | 占位符           | String  | —                     | —        |
-| limit-range-start | 限制范围开始时间 | String  | —                     | 00:00:00 |
-| limit-range-end   | 限制范围结束时间 | String  | —                     | 23:59:59 |
+| 参数              | 说明             | 类型    | 可选值                      | 默认值       |
+| ----------------- | ---------------- | ------- | --------------------------- | ------------ |
+| value             | 绑定值           | string  | —                           | ""           |
+| width             | 组件宽度         | string  | —                           | ""           |
+| disabled          | 是否禁用         | boolean | —                           | false        |
+| align             | 对齐方式         | string  | `left \| center \| right`   | left         |
+| placeholder       | 占位符           | string  | —                           | Select time  |
+| size              | 输入框尺寸       | string  | `large \| default \| small` | default      |
+| label             | 输入框标签文本   | string  | —                           | ""           |
+| required          | 是否必填         | boolean | —                           | false        |
+| limit-range-start | 限制范围开始时间 | string  | —                           | 00:00:00     |
+| limit-range-end   | 限制范围结束时间 | string  | —                           | 23:59:59     |
 
-### Time Picker CSS Part
+### TimePicker CSS Part
 
 | 名称                | 说明             |
 | ------------------- | ---------------- |
-| container           | 组件容器         |
+| container           | 组件根容器       |
 | input               | 输入框元素       |
 | dropdown            | 下拉面板         |
 | dropdown-inner-wrap | 下拉面板内部容器 |
 | dropdown-time       | 时间列表         |
 | dropdown-item       | 时间项           |
 
-### Time Picker Methods
+### TimePicker Slots
+
+| 名称 | 说明 |
+| ---- | ---- |
+| —    | —    |
+
+### TimePicker Methods
 
 | 方法名      | 说明           | 参数 |
 | ----------- | -------------- | ---- |
@@ -422,11 +431,29 @@ eventExample.init();
 | handleOpen  | 打开下拉面板   | —    |
 | handleClose | 关闭下拉面板   | —    |
 
-### Time Picker Events
+### TimePicker Events
 
-| 事件名            | 说明                     | 回调参数(event.detail) |
-| ----------------- | ------------------------ | ---------------------- |
-| change            | 值改变时触发             | `{ value: string }`    |
-| focus             | 获得焦点时触发           | —                      |
-| blur              | 失去焦点时触发           | —                      |
-| ea-visible-change | 下拉面板可见性改变时触发 | `{ visible: boolean }` |
+| 事件名            | 说明                       | 回调参数(event.detail) |
+| ----------------- | -------------------------- | ---------------------- |
+| change            | 值改变时触发               | `{ value: string }`    |
+| focus             | 输入框获得焦点时触发       | —                      |
+| blur              | 输入框失去焦点时触发       | —                      |
+| ea-visible-change | 下拉面板显隐变化时触发     | `{ visible: boolean }` |
+
+### TimePicker CSS 自定义属性
+
+| 属性名                                       | 说明             | 默认值                   |
+| -------------------------------------------- | ---------------- | ------------------------ |
+| --ea-time-picker-width                       | 组件宽度         | auto                     |
+| --ea-time-picker-dropdown-bg-color           | 下拉面板背景颜色 | var(--color-white)       |
+| --ea-time-picker-dropdown-shadow             | 下拉面板阴影     | var(--box-shadow-lg)     |
+| --ea-time-picker-dropdown-border-color       | 下拉面板边框颜色 | var(--grey-200)          |
+| --ea-time-picker-item-height                 | 时间项高度       | 32px                     |
+| --ea-time-picker-item-font-size              | 时间项字体大小   | var(--font-size-sm)      |
+| --ea-time-picker-item-color                  | 时间项文字颜色   | var(--grey-700)          |
+| --ea-time-picker-item-active-color           | 选中项文字颜色   | var(--blue-500)          |
+| --ea-time-picker-item-disabled-color         | 禁用项文字颜色   | var(--grey-400)          |
+| --ea-time-picker-item-hover-bg-color         | 悬停项背景颜色   | var(--grey-100)          |
+| --ea-time-picker-transition                  | 过渡动画         | var(--transition-normal) |
+| --ea-time-picker-dropdown-max-height         | 下拉面板最大高度 | 190px                    |
+| --ea-time-picker-dropdown-padding            | 下拉面板内边距   | var(--spacing-lg)        |

@@ -41,8 +41,8 @@ export interface EaTimePickerVueProps {
 
 export interface EaTimePickerVueEvents {
   change: (event: CustomEvent<{ value: string }>) => void;
-  focus: (event: FocusEvent) => void;
-  blur: (event: FocusEvent) => void;
+  focus: (event: Event) => void;
+  blur: (event: Event) => void;
   "ea-visible-change": (event: CustomEvent<{ visible: boolean }>) => void;
 }
 
@@ -82,8 +82,8 @@ export interface EaTimePickerReactProps extends HTMLAttributes<HTMLElement> {
   limitRangeEnd?: string;
   required?: boolean;
   onChange?: (event: CustomEvent<{ value: string }>) => void;
-  onFocus?: (event: FocusEvent) => void;
-  onBlur?: (event: FocusEvent) => void;
+  onFocus?: (event: Event) => void;
+  onBlur?: (event: Event) => void;
   onEaVisibleChange?: (event: CustomEvent<{ visible: boolean }>) => void;
   children?: ReactNode;
 }

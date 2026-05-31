@@ -1,15 +1,16 @@
 import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
 import { createBEM } from "@utils/bem";
-import { Enum } from "@/utils/Enum";
-import { timeout } from "@/utils/timeout";
+
+import { CustomElement, attribute, query, listen } from "@decorator";
+
+import { Enum } from "@utils/Enum";
+import { timeout } from "@utils/timeout";
+
 import { EaTimePickerVisibleChangeEvent } from "./events/EaTimePickerVisibleChangeEvent";
 import { EaTimePickerChangeEvent } from "./events/EaTimePickerChangeEvent";
 import { EaTimePickerFocusEvent } from "./events/EaTimePickerFocusEvent";
 import { EaTimePickerBlurEvent } from "./events/EaTimePickerBlurEvent";
+
 import stylesheet from "./index.scss?inline";
 
 import "@/components/ea-icon/index.js";
@@ -21,21 +22,55 @@ const bem = createBEM(TAG_NAME);
 export type TimePickerSize = "large" | "default" | "small";
 export type TimePickerAlign = "left" | "center" | "right";
 
+/**
+ * @summary 时间选择器组件，用于选择或输入时间，支持限制时间范围和多种对齐方式。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ * @dependency ea-input
+ *
+ * @event change - 值改变时触发，detail: `{ value }`。
+ * @event focus - 输入框获得焦点时触发。
+ * @event blur - 输入框失去焦点时触发。
+ * @event ea-visible-change - 下拉面板显隐变化时触发，detail: `{ visible }`。
+ *
+ * @csspart container - 组件根容器。
+ * @csspart input - 输入框元素。
+ * @csspart dropdown - 下拉面板。
+ * @csspart dropdown-inner-wrap - 下拉面板内部容器。
+ * @csspart dropdown-time - 时间列表。
+ * @csspart dropdown-item - 时间项。
+ *
+ * @cssproperty --ea-time-picker-width - 组件宽度。
+ * @cssproperty --ea-time-picker-dropdown-bg-color - 下拉面板背景颜色。
+ * @cssproperty --ea-time-picker-dropdown-shadow - 下拉面板阴影。
+ * @cssproperty --ea-time-picker-dropdown-border-color - 下拉面板边框颜色。
+ * @cssproperty --ea-time-picker-item-height - 时间项高度。
+ * @cssproperty --ea-time-picker-item-font-size - 时间项字体大小。
+ * @cssproperty --ea-time-picker-item-color - 时间项文字颜色。
+ * @cssproperty --ea-time-picker-item-active-color - 选中项文字颜色。
+ * @cssproperty --ea-time-picker-item-disabled-color - 禁用项文字颜色。
+ * @cssproperty --ea-time-picker-item-hover-bg-color - 悬停项背景颜色。
+ * @cssproperty --ea-time-picker-transition - 过渡动画。
+ * @cssproperty --ea-time-picker-dropdown-max-height - 下拉面板最大高度。
+ * @cssproperty --ea-time-picker-dropdown-padding - 下拉面板内边距。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTimePicker extends EaFormAssociatedBase {
-  @query(".ea-time-picker")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-time-picker__input")
+  @query(bem.ce("input"))
   private _input!: HTMLElement;
 
-  @query(`.${bem.e("dropdown-inner")}--hour`)
+  @query(`${bem.ce("dropdown-inner")}--hour`)
   private _hourWrap!: HTMLElement;
 
-  @query(`.${bem.e("dropdown-inner")}--minute`)
+  @query(`${bem.ce("dropdown-inner")}--minute`)
   private _minuteWrap!: HTMLElement;
 
-  @query(`.${bem.e("dropdown-inner")}--second`)
+  @query(`${bem.ce("dropdown-inner")}--second`)
   private _secondWrap!: HTMLElement;
 
   private _states = {
@@ -52,7 +87,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     default: "",
     observer(this: EaTimePicker, newVal: string) {
       if (this._input) {
-        this._input.label = newVal;
+        (this._input as any).label = newVal;
       }
     },
   })
@@ -63,7 +98,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     default: "Select time",
     observer(this: EaTimePicker, newVal: string) {
       if (this._input) {
-        this._input.placeholder = newVal;
+        (this._input as any).placeholder = newVal;
       }
     },
   })
@@ -201,6 +236,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     `;
   }
 
+  /** @param end - 结束值（包含） @returns 时间项 HTML 字符串 */
   private _generateTimeItems = (start: number, end: number): string => {
     const items: string[] = [];
 
@@ -214,6 +250,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     return items.join("");
   };
 
+  /** @param value - 时间字符串，格式 HH:mm:ss */
   private _parseValue = (value: string): void => {
     const [hour = 0, minute = 0, second = 0] = value.split(":").map(Number);
     this._states.hour = hour;
@@ -221,26 +258,34 @@ export class EaTimePicker extends EaFormAssociatedBase {
     this._states.second = second;
   };
 
+  /** @returns 格式化的时间值字符串 HH:mm:ss */
   private get _timeValue(): string {
     return `${this._formatNumber(this._states.hour)}:${this._formatNumber(this._states.minute)}:${this._formatNumber(this._states.second)}`;
   }
 
+  /** @param num - 待格式化的数字 @returns 两位数字符串 */
   private _formatNumber = (num: number): string => {
     return num < 10 ? `0${num}` : String(num);
   };
 
+  /** 同步内部 ea-input 的显示值 */
   private _updateInputValue = (): void => {
     if (this._input) {
-      this._input.value = this._timeValue;
+      (this._input as any).value = this._timeValue;
     }
   };
 
+  /** 更新所有时间列表的选中状态 */
   private _updateSelectionState = (): void => {
     this._updateWrapSelection(this._hourWrap, this._states.hour);
     this._updateWrapSelection(this._minuteWrap, this._states.minute);
     this._updateWrapSelection(this._secondWrap, this._states.second);
   };
 
+  /**
+   * @param wrap - 时间列表容器
+   * @param value - 当前选中值
+   */
   private _updateWrapSelection = (wrap: HTMLElement, value: number): void => {
     if (!wrap) return;
     const items = wrap.querySelectorAll("li");
@@ -250,6 +295,11 @@ export class EaTimePicker extends EaFormAssociatedBase {
     });
   };
 
+  /**
+   * @param wrap - 时间列表容器
+   * @param targetValue - 目标值
+   * @returns 最接近的可用值，无可用项时返回 null
+   */
   private _getClosestAvailableValue = (
     wrap: HTMLElement,
     targetValue: number
@@ -273,6 +323,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     return closestValue;
   };
 
+  /** @returns 是否设置了时间范围限制 */
   private _hasLimitedRange = (): boolean => {
     return (
       this.hasAttribute("limit-range-start") ||
@@ -280,6 +331,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     );
   };
 
+  /** 根据 limitRangeStart 和 limitRangeEnd 禁用超出范围的时间项 */
   private _applyLimitRange = (): void => {
     const [startHour = 0, startMinute = 0, startSecond = 0] =
       this.limitRangeStart.split(":").map(Number);
@@ -292,6 +344,11 @@ export class EaTimePicker extends EaFormAssociatedBase {
     this._applyRangeToWrap(this._secondWrap, startSecond, endSecond);
   };
 
+  /**
+   * @param wrap - 时间列表容器
+   * @param start - 起始值（包含）
+   * @param end - 结束值（包含）
+   */
   private _applyRangeToWrap = (
     wrap: HTMLElement,
     start: number,
@@ -306,6 +363,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     });
   };
 
+  /** 打开下拉面板 */
   private _openDropdown = (): void => {
     if (this.disabled) return;
     const wasOpen = this._container.classList.contains("is-open");
@@ -363,6 +421,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     }
   };
 
+  /** 关闭下拉面板 */
   private _closeDropdown = (): void => {
     const wasOpen = this._container.classList.contains("is-open");
     this._container.classList.remove("is-open");
@@ -375,6 +434,11 @@ export class EaTimePicker extends EaFormAssociatedBase {
     }
   };
 
+  /**
+   * @param wrap - 时间列表容器
+   * @param value - 滚动目标值
+   * @param smooth - 是否使用平滑滚动
+   */
   private _scrollToValue = (
     wrap: HTMLElement,
     value: number,
@@ -391,6 +455,10 @@ export class EaTimePicker extends EaFormAssociatedBase {
     }
   };
 
+  /**
+   * @param wrap - 时间列表容器
+   * @param type - 时间类型（hour/minute/second）
+   */
   private _handleScrollStop = (wrap: HTMLElement, type: string): void => {
     if (this._states.scrollTimeout) {
       clearTimeout(this._states.scrollTimeout);
@@ -446,6 +514,11 @@ export class EaTimePicker extends EaFormAssociatedBase {
     }, 150);
   };
 
+  /**
+   * @param e - 点击事件
+   * @param type - 时间类型（hour/minute/second）
+   * @param wrap - 时间列表容器
+   */
   private _handleItemClick = (
     e: Event,
     type: string,
@@ -471,6 +544,10 @@ export class EaTimePicker extends EaFormAssociatedBase {
     }, 1000);
   };
 
+  /**
+   * @param type - 时间类型（hour/minute/second）
+   * @param value - 新的时间值
+   */
   private _setTimeValue = (type: string, value: number): void => {
     switch (type) {
       case "hour":
@@ -492,26 +569,26 @@ export class EaTimePicker extends EaFormAssociatedBase {
     this.dispatchEvent(new EaTimePickerChangeEvent({ value: newValue }));
   };
 
-  // ==================== 事件处理 ====================
-
-  @listen("click", ".ea-time-picker__input")
-  private _onInputClick(): void {
+  @listen("click", bem.ce("input"))
+  private _handleInputClick(): void {
     this._openDropdown();
   }
 
-  @listen("focus", ".ea-time-picker__input")
-  private _onInputFocus(): void {
+  @listen("focus", bem.ce("input"))
+  private _handleInputFocus(e: Event): void {
+    e.stopPropagation();
     this.dispatchEvent(new EaTimePickerFocusEvent());
     this._openDropdown();
   }
 
-  @listen("blur", ".ea-time-picker__input")
-  private _onInputBlur(): void {
+  @listen("blur", bem.ce("input"))
+  private _handleInputBlur(e: Event): void {
+    e.stopPropagation();
     this.dispatchEvent(new EaTimePickerBlurEvent());
   }
 
   @listen("click", "window")
-  private _onWindowClick(e: MouseEvent): void {
+  private _handleWindowClick(e: MouseEvent): void {
     const path = e.composedPath();
     const isInsideTimePicker =
       path.includes(this) || path.includes(this.shadowRoot!);
@@ -520,44 +597,42 @@ export class EaTimePicker extends EaFormAssociatedBase {
     }
   }
 
-  @listen("click", `.${bem.e("dropdown-inner")}--hour`)
-  private _onHourClick(e: Event): void {
+  @listen("click", `${bem.ce("dropdown-inner")}--hour`)
+  private _handleHourClick(e: Event): void {
     this._handleItemClick(e, "hour", this._hourWrap);
   }
 
-  @listen("click", `.${bem.e("dropdown-inner")}--minute`)
-  private _onMinuteClick(e: Event): void {
+  @listen("click", `${bem.ce("dropdown-inner")}--minute`)
+  private _handleMinuteClick(e: Event): void {
     this._handleItemClick(e, "minute", this._minuteWrap);
   }
 
-  @listen("click", `.${bem.e("dropdown-inner")}--second`)
-  private _onSecondClick(e: Event): void {
+  @listen("click", `${bem.ce("dropdown-inner")}--second`)
+  private _handleSecondClick(e: Event): void {
     this._handleItemClick(e, "second", this._secondWrap);
   }
 
-  @listen("scroll", `.${bem.e("dropdown-inner")}--hour`)
-  private _onHourScroll(): void {
+  @listen("scroll", `${bem.ce("dropdown-inner")}--hour`)
+  private _handleHourScroll(): void {
     this._handleScrollStop(this._hourWrap, "hour");
   }
 
-  @listen("scroll", `.${bem.e("dropdown-inner")}--minute`)
-  private _onMinuteScroll(): void {
+  @listen("scroll", `${bem.ce("dropdown-inner")}--minute`)
+  private _handleMinuteScroll(): void {
     this._handleScrollStop(this._minuteWrap, "minute");
   }
 
-  @listen("scroll", `.${bem.e("dropdown-inner")}--second`)
-  private _onSecondScroll(): void {
+  @listen("scroll", `${bem.ce("dropdown-inner")}--second`)
+  private _handleSecondScroll(): void {
     this._handleScrollStop(this._secondWrap, "second");
   }
 
-  // ==================== 公共方法 ====================
-
   focus = (): void => {
-    this._input.focus();
+    (this._input as any).focus();
   };
 
   blur = (): void => {
-    this._input.blur();
+    (this._input as any).blur();
   };
 
   handleOpen = (): void => {
@@ -591,8 +666,6 @@ export class EaTimePicker extends EaFormAssociatedBase {
     this.updateValidity();
     return this.internals.reportValidity();
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();
