@@ -18,7 +18,7 @@ $ea-table-align-types: (left, center, right);
 
   --ea-table-bg-color: var(--color-white);
   --ea-table-stripe-bg-color: #fafafa;
-  --ea-table-hover-bg-color: #f5f7fa;
+  --ea-table-hover-bg-color: var(--grey-100);
   --ea-table-selected-bg-color: var(--blue-100);
   --ea-table-border-color: var(--grey-200);
 
@@ -68,26 +68,18 @@ $ea-table-align-types: (left, center, right);
   .ea-table__th,
   .ea-table__td {
     box-sizing: border-box;
-    padding: 8px;
+    padding: var(--ea-table-cell-spacing);
+    min-width: var(--ea-table-cell-width);
     border-bottom: 1px solid var(--ea-table-border-color);
+    background-color: var(--ea-table-bg-color);
+    transition:
+      background-color var(--ea-table-transition),
+      box-shadow var(--ea-table-transition);
   }
 
   .ea-table__tbody,
   .ea-table__thead {
     white-space: nowrap;
-  }
-
-  .ea-table__th,
-  .ea-table__td {
-    padding: var(--ea-table-cell-spacing);
-
-    min-width: var(--ea-table-cell-width);
-
-    background-color: var(--ea-table-bg-color);
-
-    transition:
-      background-color var(--ea-table-transition),
-      box-shadow var(--ea-table-transition);
   }
 
   .ea-table__th:not(.is-width) {
@@ -123,7 +115,7 @@ $ea-table-align-types: (left, center, right);
           align-items: center;
           justify-content: center;
 
-          margin-left: 0.5rem;
+          margin-left: var(--spacing-md);
         }
       }
     }

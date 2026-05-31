@@ -305,7 +305,7 @@ onMounted(async () => {
         init() {
           this.table.setData(data);
 
-          this.table.addEventListener("current-change", e => {
+          this.table.addEventListener("ea-current-change", e => {
             console.log(e.detail.row);
           });
 
@@ -386,7 +386,7 @@ onMounted(async () => {
         init() {
           this.table.setData(data);
 
-          this.table.addEventListener("sort-change", e => {
+          this.table.addEventListener("ea-sort-change", e => {
             console.log(e.detail);
           });
         },
@@ -491,13 +491,13 @@ onMounted(async () => {
 
 ```js
 <script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-table/index.ts";
+  import "ea-ui-component/components/ea-table/index.ts";
 </script>
 ```
 
 ## 自定义样式
 
-移步到 [CSS Part](#table-css-part)。
+移步到 [CSS Part](#table-css-part) 和 [CSS Custom Properties](#table-css-custom-properties)。
 
 ## 基础表格
 
@@ -910,59 +910,72 @@ fixedHeaderExample.init();
 ```
 
 ```js
-const moreData = [
+const detailsData = [
   {
     date: "2016-05-03",
     name: "Tom",
+    state: "California",
+    city: "Los Angeles",
     address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
   },
   {
     date: "2016-05-02",
     name: "Tom",
+    state: "California",
+    city: "Los Angeles",
     address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
   },
   {
     date: "2016-05-04",
     name: "Tom",
+    state: "California",
+    city: "Los Angeles",
     address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
   },
   {
     date: "2016-05-01",
     name: "Tom",
+    state: "California",
+    city: "Los Angeles",
     address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
   },
   {
     date: "2016-05-08",
     name: "Tom",
+    state: "California",
+    city: "Los Angeles",
     address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
   },
   {
     date: "2016-05-06",
     name: "Tom",
+    state: "California",
+    city: "Los Angeles",
     address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
   },
   {
     date: "2016-05-07",
     name: "Tom",
+    state: "California",
+    city: "Los Angeles",
     address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
   },
 ];
 
-window.handleSearch = keywords => {
-  const res = searchData.filter(item => {
-    return item.name.toLowerCase().includes(keywords.toLowerCase());
-  });
-
-  customHeaderTableExample.table.setData(res);
-};
-
-const fixedHeaderExample = {
-  table: document.querySelector("#fixedHeaderTable"),
+const fixedColumnExample = {
+  table: document.querySelector("#fixedColumnTable"),
   init() {
-    this.table.setData(moreData);
+    this.table.setData(detailsData);
   },
 };
-fixedHeaderExample.init();
+fixedColumnExample.init();
 ```
 
 :::
@@ -1275,7 +1288,7 @@ const radioTable = {
   init() {
     this.table.setData(data);
 
-    this.table.addEventListener("current-change", e => {
+    this.table.addEventListener("ea-current-change", e => {
       console.log(e.detail.row);
     });
 
@@ -1539,7 +1552,7 @@ const sortableTable = {
   init() {
     this.table.setData(data);
 
-    this.table.addEventListener("sort-change", e => {
+    this.table.addEventListener("ea-sort-change", e => {
       console.log(e.detail);
     });
   },
@@ -1672,11 +1685,9 @@ const customColumnExample = {
   init() {
     this.table.setData(detailsData);
 
-    // 监听模板单元格点击事件
     this.table.addEventListener("ea-template-cell-click", e => {
       const { target, rowData, rowIndex, originalEvent } = e.detail;
 
-      // 根据点击的元素执行不同的操作
       const action = target.getAttribute("data-action");
       if (action === "detail") {
         console.log("查看详情:", rowData);
@@ -1781,24 +1792,33 @@ const searchData = [
   },
 ];
 
+window.handleSearch = keywords => {
+  const res = searchData.filter(item => {
+    return item.name.toLowerCase().includes(keywords.toLowerCase());
+  });
+
+  customHeaderTableExample.table.setData(res);
+};
+
 window.getRowData = table => {
   /** @type {{target: HTMLTableRowElement, value: any}} */
   const res = table.getCurrentRow();
   console.log(res.value);
 };
 
-const customColumnExample = {
-  table: document.querySelector("#customColumnTable"),
+const customHeaderTableExample = {
+  table: document.querySelector("#customHeaderTable"),
+
   init() {
-    this.table.setData(detailsData);
+    this.table.setData(searchData);
   },
 };
-customColumnExample.init();
+customHeaderTableExample.init();
 ```
 
 :::
 
-## 表尾合计行​
+## 表尾合计行
 
 若表格展示的是各类数字，可以在表尾显示各列的合计。
 
@@ -1928,97 +1948,129 @@ summaryExample.init();
 
 ### Table Attributes
 
-| 参数                  | 说明                                          | 类型    | 可选值 | 默认值 |
-| --------------------- | --------------------------------------------- | ------- | ------ | ------ |
-| data                  | 表格数据 ( 等同于 [setData](#table-methods) ) | Array   | -      | []     |
-| stripe                | 是否显示斑马纹                                | Boolean | -      | false  |
-| border                | 是否显示边框                                  | Boolean | -      | false  |
-| height                | 表格高度                                      | String  | -      | -      |
-| max-height            | 表格最大高度                                  | String  | -      | -      |
-| highlight-current-row | 是否高亮当前行                                | Boolean | -      | false  |
-| show-summary          | 是否显示合计行                                | Boolean | -      | false  |
+| Name | Description | Type | Options | Default |
+| ---- | ----------- | ---- | ------- | ------- |
+| stripe | 是否为斑马纹表格 | Boolean | - | false |
+| border | 是否为带边框表格 | Boolean | - | false |
+| height | 表格高度 | String | - | "" |
+| max-height | 表格最大高度 | String | - | "" |
+| highlight-current-row | 是否高亮当前行 | Boolean | - | false |
+| show-summary | 是否显示合计行 | Boolean | - | false |
+
+### Table Properties
+
+> Properties 为纯 JavaScript 属性，不映射到 HTML attribute，需通过 JS 访问。
+
+| Name | Description | Type | Default |
+| ---- | ----------- | ---- | ------- |
+| data | 表格数据（等同于 [setData](#table-methods)） | Array | [] |
+| selectable | 行是否可选的判断函数，返回 `true` 表示可选 | Function \| null | null |
+| indexMethod | 自定义索引方法，参数为当前索引，返回显示值 | Function \| null | null |
+| summaryMethod | 自定义合计方法，参数为 `{ columns, data }`，返回合计值数组 | Function \| null | null |
 
 ### Table Methods
 
-| 方法名             | 说明             | 参数                                                                 |
-| ------------------ | ---------------- | -------------------------------------------------------------------- |
-| setData            | 设置表格数据     | `(dataSource: any[]) => void`                                        |
-| sort               | 对指定列进行排序 | `(prop: string, order?: 'asc' \| 'desc') => void`                    |
-| setRowStylePart    | 设置行样式       | `(handler: Function \| string) => void`                              |
-| getCurrentRow      | 获取当前行数据   | `() => any`                                                          |
-| setCurrentRow      | 设置当前行数据   | `(row: any) => void`                                                 |
-| toggleRowSelection | 切换行选中状态   | `(row: any, selected?: boolean, ignoreSelectable?: boolean) => void` |
-| clearSelection     | 清空选择         | `() => void`                                                         |
+| Name | Description | Parameters |
+| ---- | ----------- | ---------- |
+| setData | 设置表格数据 | `(dataSource: any[]) => Promise<void>` |
+| sort | 对指定列进行排序 | `(prop: string, order?: 'asc' \| 'desc') => void` |
+| setRowStylePart | 设置行样式 part | `(handler: Function \| string) => void` |
+| getCurrentRow | 获取当前行数据 | `() => { target: HTMLTableRowElement \| null, value: any }` |
+| setCurrentRow | 设置当前行数据 | `(row?: any) => void` |
+| toggleRowSelection | 切换行选中状态 | `(row: any, selected?: boolean, ignoreSelectable?: boolean) => void` |
+| clearSelection | 清空选择 | `() => void` |
 
 ### Table Events
 
-| 事件名                 | 说明                       | 参数                                                                                               |
-| ---------------------- | -------------------------- | -------------------------------------------------------------------------------------------------- |
-| ea-select              | 选择某一行时触发           | event.detail: `{ selection: any[], row: any }`                                                     |
-| ea-select-all          | 全选时触发                 | event.detail: `{ selection: any[] }`                                                               |
-| ea-selection-change    | 多选发生变化时触发         | event.detail: `{ newSelection: any[] }`                                                            |
-| ea-cell-mouse-enter    | 单元格鼠标进入时触发       | event.detail: `{ row: any, column: string, cell: HTMLTableCellElement }`                           |
-| ea-cell-mouse-leave    | 单元格鼠标离开时触发       | event.detail: `{ row: any, column: string, cell: HTMLTableCellElement }`                           |
-| ea-cell-click          | 点击单元格时触发           | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`                           |
-| ea-template-cell-click | 点击自定义模板单元格时触发 | event.detail: `{ target: HTMLElement, rowData: any, rowIndex: number, originalEvent: MouseEvent }` |
-| ea-cell-dblclick       | 双击单元格时触发           | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`                           |
-| ea-cell-contextmenu    | 右键点击单元格时触发       | event.detail: `{ cell: HTMLTableCellElement, column: string, row: any }`                           |
-| ea-row-click           | 点击行时触发               | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }`                          |
-| ea-row-dblclick        | 双击行时触发               | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }`                          |
-| ea-row-contextmenu     | 右键点击行时触发           | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }`                          |
-| ea-header-click        | 点击表头时触发             | event.detail: `{ cell: HTMLTableCellElement, column: string }`                                     |
-| ea-header-contextmenu  | 右键点击表头时触发         | event.detail: `{ cell: HTMLTableCellElement, column: string }`                                     |
-| ea-sort-change         | 排序变化时触发             | event.detail: `{ prop: string, order: 'ascend' \| 'descend' }`                                     |
-| ea-current-change      | 当前行变化时触发           | event.detail: `{ target: HTMLTableRowElement, column: string, row: any }`                          |
-| ea-table-data-rendered | 表格在数据渲染完成后触发   | -                                                                                                  |
+| Name | Description | Detail |
+| ---- | ----------- | ------ |
+| ea-row-click | 行点击时触发 | `{ target, column, row }` |
+| ea-row-dblclick | 行双击时触发 | `{ target, column, row }` |
+| ea-row-contextmenu | 行右键点击时触发 | `{ target, column, row }` |
+| ea-cell-click | 单元格点击时触发 | `{ cell, column, row }` |
+| ea-cell-dblclick | 单元格双击时触发 | `{ cell, column, row }` |
+| ea-cell-contextmenu | 单元格右键点击时触发 | `{ cell, column, row }` |
+| ea-cell-mouse-enter | 单元格鼠标移入时触发 | `{ cell, column, row }` |
+| ea-cell-mouse-leave | 单元格鼠标移出时触发 | `{ cell, column, row }` |
+| ea-header-click | 表头单元格点击时触发 | `{ cell, column }` |
+| ea-header-contextmenu | 表头单元格右键点击时触发 | `{ cell, column }` |
+| ea-sort-change | 排序变化时触发 | `{ prop, order }` |
+| ea-current-change | 当前行变化时触发 | `{ target, column, row }` |
+| ea-selection-change | 选中项变化时触发 | `{ newSelection }` |
+| ea-select | 单行选中时触发 | `{ selection, row }` |
+| ea-select-all | 全选时触发 | `{ selection }` |
+| ea-template-cell-click | 模板单元格点击时触发 | `{ target, rowData, rowIndex, originalEvent }` |
+| ea-table-data-rendered | 数据渲染完成时触发 | - |
 
 ### Table CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明                                                         |
-| --------- | ------------------------------------------------------------ |
-| container | 外层容器，即整个表格容器                                     |
-| colgroup  | 表格列（colgroup）部分                                       |
-| col       | 表格列（col）部分                                            |
-| thead     | 表格头部（thead）部分                                        |
-| thead-tr  | 表格头部行（tr）部分                                         |
-| thead-th  | 表格头部列（th）部分                                         |
-| checkbox  | 表格复选框（checkbox）`当存在 type="selection" 的列时有效`   |
-| asc-icon  | 表格排序图标（asc-icon）`当存在 sortable="true" 的列时有效`  |
-| desc-icon | 表格排序图标（desc-icon）`当存在 sortable="true" 的列时有效` |
-| tbody     | 表格主体（tbody）部分                                        |
-| tbody-tr  | 表格行（tr）部分                                             |
-| tbody-td  | 表格单元格（td）部分                                         |
-| tfoot     | 表格尾部（tfoot）部分                                        |
-| tfoot-tr  | 表格行（tr）部分                                             |
-| tfoot-td  | 表格单元格（td）部分                                         |
+| Name | Description |
+| ---- | ----------- |
+| container | 表格容器 |
+| colgroup | 列分组 |
+| thead | 表头 |
+| tbody | 表体 |
+| tfoot | 表尾 |
+| default-slot | 默认插槽 |
+| thead-th | 表头单元格 |
+| thead-tr | 表头行 |
+| tfoot-tr | 表尾行 |
+| tfoot-td | 表尾单元格 |
+| tbody-tr | 表体行 |
+| tbody-td | 表体单元格 |
 
-### Table Slot
+### Table CSS Custom Properties
 
-| 名称   | 说明                                     |
-| ------ | ---------------------------------------- |
-| -      | 表格列定义插槽，仅支持 `ea-table-column` |
-| header | 表格外头部插槽                           |
-| empty  | 表格无数据时显示插槽                     |
+| Name | Description | Default |
+| ---- | ----------- | ------- |
+| --ea-table-cell-spacing | 单元格内边距 | var(--spacing-md) |
+| --ea-table-cell-width | 单元格最小宽度 | 100% |
+| --ea-table-height | 表格高度 | auto |
+| --ea-table-max-height | 表格最大高度 | unset |
+| --ea-table-sort-indicator-color | 排序指示器颜色 | var(--grey-500) |
+| --ea-table-sort-indicator-active-color | 排序指示器激活颜色 | var(--blue-500) |
+| --ea-table-sort-icon-size | 排序图标大小 | 14px |
+| --ea-table-header-color | 表头文字颜色 | var(--grey-700) |
+| --ea-table-header-font-size | 表头字体大小 | var(--font-size-lg) |
+| --ea-table-body-color | 表体文字颜色 | var(--grey-900) |
+| --ea-table-body-font-size | 表体字体大小 | var(--font-size-md) |
+| --ea-table-bg-color | 表格背景颜色 | var(--color-white) |
+| --ea-table-stripe-bg-color | 斑马纹背景颜色 | #fafafa |
+| --ea-table-hover-bg-color | 悬停背景颜色 | var(--grey-100) |
+| --ea-table-selected-bg-color | 选中行背景颜色 | var(--blue-100) |
+| --ea-table-border-color | 边框颜色 | var(--grey-200) |
+| --ea-table-fixed-x | 固定列偏移量 | 0 |
+| --ea-table-fixed-left-cell-box-shadow | 左固定列阴影 | 0px 10px 10px 0 rgba(0,0,0,0.12) |
+| --ea-table-fixed-right-cell-box-shadow | 右固定列阴影 | 0px 10px 10px 0 rgba(0,0,0,0.12) |
+| --ea-table-transition | 过渡动画 | var(--transition-fast) |
+
+### Table Slots
+
+| Name | Description |
+| ---- | ----------- |
+| default | 表格列定义插槽，仅支持 `ea-table-column` |
+| empty | 表格无数据时显示插槽 |
 
 ## TableColumn API
 
 ### TableColumn Attributes
 
-| 参数     | 说明                 | 类型    | 可选值                    | 默认值 |
-| -------- | -------------------- | ------- | ------------------------- | ------ |
-| label    | 表头标题             | String  | -                         | -      |
-| prop     | 表头对应的数据的键值 | String  | -                         | -      |
-| type     | 列类型               | String  | `selection \| index`      | -      |
-| align    | 对齐方式             | String  | `left \| center \| right` | left   |
-| width    | 列宽                 | String  | -                         | -      |
-| sortable | 是否可排序           | Boolean | -                         | false  |
-| fixed    | 是否固定列           | String  | `left \| right`           | -      |
+| Name | Description | Type | Options | Default |
+| ---- | ----------- | ---- | ------- | ------- |
+| type | 列类型 | String | `selection \| index` | "" |
+| align | 对齐方式 | String | `left \| center \| right` | left |
+| label | 表头标题 | String | - | "" |
+| prop | 数据字段名 | String | - | "" |
+| colspan | 列跨度 | Number | - | undefined |
+| width | 列宽 | String | - | "" |
+| sortable | 是否可排序 | Boolean | - | false |
+| fixed | 固定列 | String | `left \| right` | false |
 
-### TableColumn Slot
+### TableColumn Slots
 
-| 名称   | 说明                         |
-| ------ | ---------------------------- |
-| -      | 默认插槽，用于自定义列内容   |
-| header | 表头插槽，用于自定义表头内容 |
+| Name | Description |
+| ---- | ----------- |
+| default | 自定义列内容模板 |
+| header | 自定义表头内容 |

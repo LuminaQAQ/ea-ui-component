@@ -1,10 +1,7 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
-import sanitizeHtml from "@utils/html";
+import { CustomElement, attribute, property, query } from "@decorator";
+import { Enum } from "@utils/Enum";
+import { html } from "@utils/html";
 import type { ColumnOption } from "../../types";
 import stylesheet from "./index.scss?inline";
 
@@ -30,14 +27,25 @@ export interface TableColumnCtx extends Omit<
   template: TableColumnCtx[] | HTMLTemplateElement | null;
 }
 
+/**
+ * @summary 表格列组件，用于定义表格的列配置，支持多级表头、排序和固定列。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot header - 自定义表头内容。
+ * @slot default - 默认插槽，用于列内容模板。
+ *
+ * @csspart container - 容器元素。
+ * @csspart label - 标签元素。
+ * @csspart content - 内容包裹元素。
+ * @csspart default-slot - 默认插槽元素。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTableColumn extends EaBase {
   @query(bem.ce("label"))
   private _label!: HTMLElement;
 
   private _contentObserver: MutationObserver | null = null;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Enum(["selection", "index"]),
@@ -125,8 +133,6 @@ export class EaTableColumn extends EaBase {
   })
   option: Record<string, unknown> = {};
 
-  // ==================== 计算属性 ====================
-
   get getColumnTree(): TableColumnCtx {
     const table = this.closest("ea-table");
     const columns = [
@@ -151,7 +157,7 @@ export class EaTableColumn extends EaBase {
 
       if (assignedNodes) {
         const tpl = document.createElement("template");
-        tpl.innerHTML = sanitizeHtml(assignedNodes);
+        tpl.innerHTML = html(assignedNodes);
         template = tpl;
       } else {
         template = null;
@@ -190,8 +196,6 @@ export class EaTableColumn extends EaBase {
     };
   }
 
-  // ==================== 模板 ====================
-
   html(): string {
     return `
       <div class='ea-table-column' part='container'>
@@ -204,8 +208,7 @@ export class EaTableColumn extends EaBase {
     `;
   }
 
-  // ==================== 私有方法 ====================
-
+  /** 获取元素相对于根节点的深度 */
   private _getThisDepth(el: EaTableColumn, root: HTMLElement | null): number {
     let depth = 0;
     let current: HTMLElement | null = el;
@@ -218,6 +221,7 @@ export class EaTableColumn extends EaBase {
     return depth;
   }
 
+  /** 获取表格列的最大深度 */
   private _getMaxDepth(root: HTMLElement | null): number {
     let depth = 0;
 
@@ -231,6 +235,7 @@ export class EaTableColumn extends EaBase {
     return depth;
   }
 
+  /** 通知父组件列配置变更 */
   private _notifyParent(): void {
     this.emit("ea-table-column-change", {
       bubbles: true,
@@ -238,6 +243,7 @@ export class EaTableColumn extends EaBase {
     });
   }
 
+  /** 设置内容变更观察器 */
   private _setupContentObserver(): void {
     this._contentObserver = new MutationObserver(() => {
       this._notifyParent();
@@ -249,8 +255,6 @@ export class EaTableColumn extends EaBase {
       characterData: true,
     });
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.shadowRoot!.innerHTML = this.html();

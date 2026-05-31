@@ -1,10 +1,14 @@
-import "@components/ea-empty/index";
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { property } from "@decorator/property";
-import { query } from "@decorator/query";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  listen,
+  children,
+} from "@decorator";
 import { html } from "@utils/html";
+import "@components/ea-empty/index";
 import { EaTableCellClickEvent } from "../../events/EaTableCellClickEvent";
 import { EaTableCellContextmenuEvent } from "../../events/EaTableCellContextmenuEvent";
 import { EaTableCellDBLClickEvent } from "../../events/EaTableCellDBLClickEvent";
@@ -31,10 +35,72 @@ import stylesheet from "./index.scss?inline";
 const TAG_NAME = "ea-table" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 表格组件，用于展示结构化数据，支持排序、选择、固定列、斑马纹、合计行等功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-empty
+ * @dependency ea-checkbox
+ *
+ * @slot default - 表格列定义插槽，用于放置 ea-table-column 子组件。
+ * @slot empty - 无数据时的空状态内容。
+ *
+ * @event ea-row-click - 行点击时触发，detail: `{ target, column, row }`。
+ * @event ea-row-dblclick - 行双击时触发，detail: `{ target, column, row }`。
+ * @event ea-row-contextmenu - 行右键点击时触发，detail: `{ target, column, row }`。
+ * @event ea-cell-click - 单元格点击时触发，detail: `{ cell, column, row }`。
+ * @event ea-cell-dblclick - 单元格双击时触发，detail: `{ cell, column, row }`。
+ * @event ea-cell-contextmenu - 单元格右键点击时触发，detail: `{ cell, column, row }`。
+ * @event ea-cell-mouse-enter - 单元格鼠标移入时触发，detail: `{ cell, column, row }`。
+ * @event ea-cell-mouse-leave - 单元格鼠标移出时触发，detail: `{ cell, column, row }`。
+ * @event ea-header-click - 表头单元格点击时触发，detail: `{ cell, column }`。
+ * @event ea-header-contextmenu - 表头单元格右键点击时触发，detail: `{ cell, column }`。
+ * @event ea-sort-change - 排序变化时触发，detail: `{ prop, order }`。
+ * @event ea-current-change - 当前行变化时触发，detail: `{ target, column, row }`。
+ * @event ea-selection-change - 选中项变化时触发，detail: `{ newSelection }`。
+ * @event ea-select - 单行选中时触发，detail: `{ selection, row }`。
+ * @event ea-select-all - 全选时触发，detail: `{ selection }`。
+ * @event ea-template-cell-click - 模板单元格点击时触发，detail: `{ target, rowData, rowIndex, originalEvent }`。
+ * @event ea-table-data-rendered - 数据渲染完成时触发（内部通信）。
+ * @event ea-table-column-change - 列配置变化时触发（内部通信）。
+ *
+ * @csspart container - 表格容器元素。
+ * @csspart colgroup - 列分组元素。
+ * @csspart thead - 表头元素。
+ * @csspart tbody - 表体元素。
+ * @csspart tfoot - 表尾元素。
+ * @csspart default-slot - 默认插槽元素。
+ * @csspart thead-th - 表头单元格元素。
+ * @csspart thead-tr - 表头行元素。
+ * @csspart tfoot-tr - 表尾行元素。
+ * @csspart tfoot-td - 表尾单元格元素。
+ * @csspart tbody-tr - 表体行元素。
+ * @csspart tbody-td - 表体单元格元素。
+ *
+ * @cssproperty --ea-table-cell-spacing - 单元格内边距。
+ * @cssproperty --ea-table-cell-width - 单元格最小宽度。
+ * @cssproperty --ea-table-height - 表格高度。
+ * @cssproperty --ea-table-max-height - 表格最大高度。
+ * @cssproperty --ea-table-sort-indicator-color - 排序指示器颜色。
+ * @cssproperty --ea-table-sort-indicator-active-color - 排序指示器激活颜色。
+ * @cssproperty --ea-table-sort-icon-size - 排序图标大小。
+ * @cssproperty --ea-table-header-color - 表头文字颜色。
+ * @cssproperty --ea-table-header-font-size - 表头字体大小。
+ * @cssproperty --ea-table-body-color - 表体文字颜色。
+ * @cssproperty --ea-table-body-font-size - 表体字体大小。
+ * @cssproperty --ea-table-bg-color - 表格背景颜色。
+ * @cssproperty --ea-table-stripe-bg-color - 斑马纹背景颜色。
+ * @cssproperty --ea-table-hover-bg-color - 悬停背景颜色。
+ * @cssproperty --ea-table-selected-bg-color - 选中行背景颜色。
+ * @cssproperty --ea-table-border-color - 边框颜色。
+ * @cssproperty --ea-table-fixed-x - 固定列偏移量。
+ * @cssproperty --ea-table-fixed-left-cell-box-shadow - 左侧固定列阴影。
+ * @cssproperty --ea-table-fixed-right-cell-box-shadow - 右侧固定列阴影。
+ * @cssproperty --ea-table-transition - 过渡动画时长。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTable extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -47,13 +113,14 @@ export class EaTable extends EaBase {
   @query(bem.ce("tfoot"))
   private _tfoot!: HTMLElement;
 
-  @query("#defaultSlot")
-  private _defaultSlot!: HTMLSlotElement;
-
   @query(bem.ce("empty"))
   private _emptySlot!: HTMLElement;
 
-  // ==================== 属性定义 ====================
+  @query(bem.ce("colgroup"))
+  private _colgroup!: HTMLElement;
+
+  @children("ea-table-column")
+  private _columnNodes!: NodeListOf<HTMLElement>;
 
   @attribute({
     type: Boolean,
@@ -138,21 +205,12 @@ export class EaTable extends EaBase {
       }) => (string | number)[])
     | null = null;
 
-  // ==================== 私有属性 ====================
+  private _selectAbortController: AbortController | null = null;
 
-  private _abortController = new AbortController();
-
-  private _AbortControllerStates: Record<string, AbortController | null> = {
-    selectionChangeAbortController: null,
-    selectAbortController: null,
-  };
-
-  private _sortAbortController: AbortController | null = null;
-
-  private _defaultSummaryMethod = (param: {
+  private _defaultSummaryMethod(param: {
     columns: ColumnOption[];
     data: unknown[];
-  }): (string | number)[] => {
+  }): (string | number)[] {
     const { columns, data } = param;
     const sums: (string | number)[] = [];
 
@@ -180,7 +238,7 @@ export class EaTable extends EaBase {
     });
 
     return sums;
-  };
+  }
 
   private _mountResolve!: () => void;
   private _mountPromise = new Promise<void>(resolve => {
@@ -209,8 +267,6 @@ export class EaTable extends EaBase {
       | null,
   };
 
-  // ==================== 模板 ====================
-
   html(): string {
     return `
       <slot id='defaultSlot' part='default-slot'></slot>
@@ -223,8 +279,6 @@ export class EaTable extends EaBase {
       <slot class="ea-table__empty" name="empty">No Data</slot>
     `;
   }
-
-  // ==================== 方法 ====================
 
   updateContainerClasslist(): string {
     const className = bem(
@@ -246,10 +300,9 @@ export class EaTable extends EaBase {
     return className;
   }
 
-  private _handleTableStructRender = (): void => {
-    const columns: ColumnOption[] = [
-      ...this.querySelectorAll("ea-table-column"),
-    ].map(
+  /** 渲染表格结构（colgroup、thead、tfoot） */
+  private _handleTableStructRender(): void {
+    const columns: ColumnOption[] = [...this._columnNodes!].map(
       column =>
         (column as unknown as EaTableColumn)
           .getColumnTree as unknown as ColumnOption
@@ -261,111 +314,24 @@ export class EaTable extends EaBase {
     const thead = theadRenderer(columns);
     const tfoot = tfootRenderer(columns);
 
-    const colgroupEl = this.shadowRoot!.querySelector(bem.ce("colgroup"));
-    const theadEl = this.shadowRoot!.querySelector(bem.ce("thead"));
-    const tfootEl = this.shadowRoot!.querySelector(bem.ce("tfoot"));
-
-    if (colgroupEl) colgroupEl.innerHTML = colgroup;
-    if (theadEl) theadEl.innerHTML = thead;
-    if (tfootEl) tfootEl.innerHTML = tfoot;
-  };
-
-  private _handleSortableColumnsInit = (): void => {
-    const sortableEls = [
-      ...this._container.querySelectorAll(".ea-table__th.is-sortable"),
-    ] as HTMLElement[];
-
-    if (!sortableEls.length) return;
-
-    this._sortAbortController?.abort();
-    this._sortAbortController = new AbortController();
-
-    const onSortItemClickEvent = (e: Event) => {
-      const mouseEvent = e as MouseEvent;
-      const sortableEl = (mouseEvent.target as HTMLElement).closest(
-        ".is-sortable"
-      ) as HTMLElement;
-      if (!sortableEl) return;
-
-      const { prop, order } = sortableEl.dataset;
-      if (!prop) return;
-
-      const newOrder = order === "asc" ? "desc" : "asc";
-      const orderEls: Record<string, Element | null> = {
-        asc: sortableEl.querySelector('[part="asc-icon"]'),
-        desc: sortableEl.querySelector('[part="desc-icon"]'),
-      };
-
-      sortableEl.setAttribute("data-order", newOrder);
-
-      sortableEl.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
-        icon.classList.toggle("is-active", orderEls[newOrder] === icon);
-      });
-
-      this.sort(prop, newOrder as "asc" | "desc");
-    };
-
-    this._thead.addEventListener("click", onSortItemClickEvent, {
-      signal: this._sortAbortController!.signal,
-    });
-  };
+    this._colgroup.innerHTML = colgroup;
+    this._thead.innerHTML = thead;
+    this._tfoot.innerHTML = tfoot;
+  }
 
   $mount(): void {
-    this.shadowRoot!.innerHTML = this.html();
     this._mountResolve();
   }
 
   async $mounted(): Promise<void> {
     await customElements.whenDefined("ea-table-column");
-
-    this._abortController?.abort();
-    this._abortController = new AbortController();
-
     this._handleTableStructRender();
-    this._handleSortableColumnsInit();
-
-    this.addEventListener(
-      "ea-table-column-change",
-      this._childChangeHandler as EventListener,
-      {
-        signal: this._abortController.signal,
-      }
-    );
-
-    this._container.addEventListener("mousedown", this._onClickEvent, {
-      signal: this._abortController.signal,
-    });
-    this._container.addEventListener("dblclick", this._onDBLClickEvent, {
-      signal: this._abortController.signal,
-    });
-    this._container.addEventListener("contextmenu", this._onContextmenuEvent, {
-      signal: this._abortController.signal,
-    });
-    this._thead.addEventListener("click", this._onHeaderClickEvent, {
-      signal: this._abortController.signal,
-    });
-    this._thead.addEventListener(
-      "contextmenu",
-      this._onHeaderContextmenuEvent,
-      {
-        signal: this._abortController.signal,
-      }
-    );
-    this._container.addEventListener("scroll", this._onScrollEvent, {
-      signal: this._abortController.signal,
-    });
-    this._container.addEventListener("mouseover", this._onCellMouseEnterEvent, {
-      signal: this._abortController.signal,
-    });
-    this._container.addEventListener("mouseout", this._onCellMouseLeaveEvent, {
-      signal: this._abortController.signal,
-    });
-
-    this._defaultSlot.addEventListener("slotchange", this._slotChangeHandler, {
-      signal: this._abortController.signal,
-    });
   }
 
+  /**
+   * 设置表格数据并渲染行
+   * @param dataSource - 数据源数组
+   */
   setData = async (dataSource: unknown[]): Promise<void> => {
     if (this._isSettingData) return;
     this._isSettingData = true;
@@ -376,7 +342,6 @@ export class EaTable extends EaBase {
 
     if (this._states.columns.length === 0) {
       this._handleTableStructRender();
-      this._handleSortableColumnsInit();
     }
 
     (this as Record<string, unknown>)["__prop_data"] = dataSource;
@@ -388,7 +353,6 @@ export class EaTable extends EaBase {
     const columns = this._states.columns.filter(
       item => !item.template || item.template instanceof HTMLTemplateElement
     );
-    const hasSelectionColumn = columns.some(item => item.type === "selection");
 
     const typeTemplate: Record<string, () => string> = {
       selection: () =>
@@ -399,10 +363,8 @@ export class EaTable extends EaBase {
         html(`<span class="ea-table__index" data-type="index"></span>`),
     };
 
-    for (const key in this._AbortControllerStates) {
-      this._AbortControllerStates[key]?.abort();
-      this._AbortControllerStates[key] = new AbortController();
-    }
+    this._selectAbortController?.abort();
+    this._selectAbortController = new AbortController();
 
     this._states.isDataRendered = false;
     this._tbody.innerHTML = "";
@@ -510,14 +472,8 @@ export class EaTable extends EaBase {
 
     this._tbody.appendChild(bodyTemplate);
 
-    if (hasSelectionColumn) {
-      this._container.addEventListener("change", this._onSelectionChangeEvent, {
-        signal: this._abortController.signal,
-      });
-    }
-
     this._handleFixedColumn();
-    this._onScrollEvent();
+    this._handleScroll();
 
     this.updateContainerClasslist();
 
@@ -527,6 +483,11 @@ export class EaTable extends EaBase {
     this._isSettingData = false;
   };
 
+  /**
+   * 对表格数据进行排序
+   * @param prop - 排序列的属性名
+   * @param order - 排序方向
+   */
   sort = (prop: string, order: "asc" | "desc" = "asc"): void => {
     const tbody = this._tbody;
     const template = document.createDocumentFragment();
@@ -556,7 +517,8 @@ export class EaTable extends EaBase {
     );
   };
 
-  private _applyRowStylePart = (): void => {
+  /** 为行元素添加自定义样式 part */
+  private _applyRowStylePart(): void {
     const handler = this._states.rowStyleHandler;
     if (!handler || !this._tbody) return;
 
@@ -580,8 +542,12 @@ export class EaTable extends EaBase {
         tr.part?.add(handler);
       });
     }
-  };
+  }
 
+  /**
+   * 设置行样式 part 处理器
+   * @param handler - 样式处理器，支持函数或字符串
+   */
   setRowStylePart = (
     handler: ((param: { row: unknown; rowIndex: number }) => string) | string
   ): void => {
@@ -620,6 +586,12 @@ export class EaTable extends EaBase {
     }
   }
 
+  /**
+   * 切换行选中状态
+   * @param row - 行数据对象
+   * @param selected - 是否选中，不传则切换
+   * @param ignoreSelectable - 是否忽略可选性检查
+   */
   toggleRowSelection = (
     row: unknown,
     selected?: boolean,
@@ -644,9 +616,10 @@ export class EaTable extends EaBase {
     }
 
     this._handleSelectionUpdate();
-    this._dispatchSlectionChangeEvent();
+    this._dispatchSelectionChangeEvent();
   };
 
+  /** 清空所有行的选中状态 */
   clearSelection = (): void => {
     const selectionCheckboxEls = [
       ...this._container.querySelectorAll(`ea-checkbox[data-type="selection"]`),
@@ -657,12 +630,11 @@ export class EaTable extends EaBase {
       el.removeAttribute("indeterminate");
     });
 
-    this._dispatchSlectionChangeEvent();
+    this._dispatchSelectionChangeEvent();
   };
 
-  // ==================== 私有方法 ====================
-
-  private _getCurrentSelectionRows = (): unknown[] => {
+  /** 获取当前所有选中行的数据 */
+  private _getCurrentSelectionRows(): unknown[] {
     return [
       ...this._tbody.querySelectorAll(
         `ea-checkbox[data-type="selection"][checked]`
@@ -672,9 +644,10 @@ export class EaTable extends EaBase {
         el.closest(`.ea-table__tr[part="tbody-tr"]`) as HTMLElement
       )
     );
-  };
+  }
 
-  private _handleSelectionUpdate = (): void => {
+  /** 更新表头全选复选框的状态（选中、半选、未选） */
+  private _handleSelectionUpdate(): void {
     const theadCheckboxEl = this._thead.querySelector(
       `ea-checkbox[data-type="selection"]`
     ) as HTMLElement;
@@ -701,9 +674,10 @@ export class EaTable extends EaBase {
       theadCheckboxEl.removeAttribute("checked");
       theadCheckboxEl.removeAttribute("indeterminate");
     }
-  };
+  }
 
-  private _handleFixedColumn = (): void => {
+  /** 处理固定列的样式计算和偏移量设置 */
+  private _handleFixedColumn(): void {
     const fixedItems = [
       ...this._container.querySelectorAll(".is-fixed"),
     ] as HTMLElement[];
@@ -764,27 +738,37 @@ export class EaTable extends EaBase {
 
     handleColumnStyles(leftFixedColumnGroup);
     handleColumnStyles(rightFixedColumnGroup);
-  };
+  }
 
-  private _setHighlightCurrentRowStyle = (
+  /**
+   * 设置高亮当前行样式
+   * @param currentRow - 当前行元素
+   * @param oldRow - 之前高亮的行元素
+   */
+  private _setHighlightCurrentRowStyle(
     currentRow: HTMLTableRowElement,
     oldRow: HTMLTableRowElement | null = this._states.currentRow.target
-  ): void => {
+  ): void {
     if (!this.highlightCurrentRow) return;
 
     oldRow?.classList?.remove("is-current");
     currentRow?.classList?.add("is-current");
-  };
+  }
 
-  private _unsetHighlightCurrentRowStyle = (
+  /**
+   * 移除高亮当前行样式
+   * @param currentRow - 需要移除高亮的行元素
+   */
+  private _unsetHighlightCurrentRowStyle(
     currentRow: HTMLTableRowElement | null
-  ): void => {
+  ): void {
     if (!this.highlightCurrentRow || !currentRow) return;
 
     currentRow?.classList?.remove("is-current");
-  };
+  }
 
-  private _dispatchSlectionChangeEvent = (): void => {
+  /** 派发选中项变化事件 */
+  private _dispatchSelectionChangeEvent(): void {
     const newSelection = this._getCurrentSelectionRows();
 
     this.dispatchEvent(
@@ -792,21 +776,21 @@ export class EaTable extends EaBase {
         newSelection,
       })
     );
-  };
+  }
 
-  // ==================== 事件处理 ====================
-
-  private _onClickEvent = (e: MouseEvent): void => {
+  /** 处理表格点击事件，触发行点击和单元格点击 */
+  @listen("mousedown", ".ea-table")
+  private _handleRowMouseDown(e: MouseEvent): void {
     const tr = (e.target as HTMLElement).closest(
       "tr[part='tbody-tr']"
     ) as HTMLTableRowElement;
 
-    this._AbortControllerStates.selectAbortController?.abort();
+    this._selectAbortController?.abort();
 
     if (!tr) return;
 
     const onControllerShouldAbortEvent = (): void => {
-      this._AbortControllerStates.selectAbortController?.abort();
+      this._selectAbortController?.abort();
     };
 
     const onMouseUpEvent = (e: Event): void => {
@@ -872,19 +856,25 @@ export class EaTable extends EaBase {
       }
     };
 
-    this._AbortControllerStates.selectAbortController = new AbortController();
+    this._selectAbortController = new AbortController();
 
     this.addEventListener("mouseout", onControllerShouldAbortEvent, {
       once: true,
-      signal: this._AbortControllerStates.selectAbortController.signal,
+      signal: this._selectAbortController.signal,
     });
     this._container.addEventListener("mouseup", onMouseUpEvent, {
       once: true,
-      signal: this._AbortControllerStates.selectAbortController.signal,
+      signal: this._selectAbortController.signal,
     });
-  };
+  }
 
-  private _onMouseEvent = (
+  /**
+   * 从鼠标事件中提取行、单元格、数据和列键信息
+   * @param e - 鼠标事件
+   * @param part - 表格区域类型
+   * @returns 包含 cell、row、data、columnKey 的对象
+   */
+  private _getMouseEventData(
     e: MouseEvent,
     part: "body" | "head"
   ): {
@@ -892,7 +882,7 @@ export class EaTable extends EaBase {
     row: HTMLTableRowElement | null;
     data: unknown;
     columnKey: string | null;
-  } => {
+  } {
     const tr = (e.target as HTMLElement).closest(
       `tr[part='t${part}-tr']`
     ) as HTMLTableRowElement;
@@ -913,10 +903,12 @@ export class EaTable extends EaBase {
       data: value,
       columnKey,
     };
-  };
+  }
 
-  private _onDBLClickEvent = (e: MouseEvent): void => {
-    const { row, cell, data, columnKey } = this._onMouseEvent(e, "body");
+  /** 处理表格双击事件，触发行和单元格双击 */
+  @listen("dblclick", ".ea-table")
+  private _handleRowDblClick(e: MouseEvent): void {
+    const { row, cell, data, columnKey } = this._getMouseEventData(e, "body");
 
     if (!row) return;
 
@@ -935,10 +927,12 @@ export class EaTable extends EaBase {
         row: data,
       })
     );
-  };
+  }
 
-  private _onContextmenuEvent = (e: MouseEvent): void => {
-    const { row, cell, data, columnKey } = this._onMouseEvent(e, "body");
+  /** 处理表格右键点击事件，触发行和单元格右键菜单 */
+  @listen("contextmenu", ".ea-table")
+  private _handleRowContextmenu(e: MouseEvent): void {
+    const { row, cell, data, columnKey } = this._getMouseEventData(e, "body");
 
     if (!row) return;
 
@@ -957,9 +951,11 @@ export class EaTable extends EaBase {
         row: data,
       })
     );
-  };
+  }
 
-  private _onScrollEvent = (): void => {
+  /** 处理表格滚动事件，更新固定列的视觉状态 */
+  @listen("scroll", ".ea-table")
+  private _handleScroll(): void {
     const fixedItems = [
       ...this._container.querySelectorAll(".is-fixed"),
     ] as HTMLElement[];
@@ -988,10 +984,12 @@ export class EaTable extends EaBase {
         );
       });
     }
-  };
+  }
 
-  private _onCellMouseEnterEvent = (e: MouseEvent): void => {
-    const { row, cell, data, columnKey } = this._onMouseEvent(e, "body");
+  /** 处理单元格鼠标移入事件 */
+  @listen("mouseover", ".ea-table")
+  private _handleCellMouseEnter(e: MouseEvent): void {
+    const { row, cell, data, columnKey } = this._getMouseEventData(e, "body");
 
     if (!row) return;
 
@@ -1002,10 +1000,12 @@ export class EaTable extends EaBase {
         cell: cell!,
       })
     );
-  };
+  }
 
-  private _onCellMouseLeaveEvent = (e: MouseEvent): void => {
-    const { row, cell, data, columnKey } = this._onMouseEvent(e, "body");
+  /** 处理单元格鼠标移出事件 */
+  @listen("mouseout", ".ea-table")
+  private _handleCellMouseLeave(e: MouseEvent): void {
+    const { row, cell, data, columnKey } = this._getMouseEventData(e, "body");
 
     if (!row) return;
 
@@ -1016,11 +1016,31 @@ export class EaTable extends EaBase {
         cell: cell!,
       })
     );
-  };
+  }
 
-  private _onHeaderClickEvent = (e: MouseEvent): void => {
-    const { cell, columnKey } = this._onMouseEvent(e, "head");
+  /** 处理表头点击事件 */
+  @listen("click", ".ea-table__thead")
+  private _handleHeaderClick(e: MouseEvent): void {
+    const sortableEl = (e.target as HTMLElement).closest(
+      ".is-sortable"
+    ) as HTMLElement;
+    if (sortableEl) {
+      const { prop, order } = sortableEl.dataset;
+      if (prop) {
+        const newOrder = order === "asc" ? "desc" : "asc";
+        const orderEls: Record<string, Element | null> = {
+          asc: sortableEl.querySelector('[part="asc-icon"]'),
+          desc: sortableEl.querySelector('[part="desc-icon"]'),
+        };
+        sortableEl.setAttribute("data-order", newOrder);
+        sortableEl.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
+          icon.classList.toggle("is-active", orderEls[newOrder] === icon);
+        });
+        this.sort(prop, newOrder as "asc" | "desc");
+      }
+    }
 
+    const { cell, columnKey } = this._getMouseEventData(e, "head");
     if (!cell) return;
 
     this.dispatchEvent(
@@ -1029,10 +1049,12 @@ export class EaTable extends EaBase {
         cell,
       })
     );
-  };
+  }
 
-  private _onHeaderContextmenuEvent = (e: MouseEvent): void => {
-    const { cell, columnKey } = this._onMouseEvent(e, "head");
+  /** 处理表头右键点击事件 */
+  @listen("contextmenu", ".ea-table__thead")
+  private _handleHeaderContextmenu(e: MouseEvent): void {
+    const { cell, columnKey } = this._getMouseEventData(e, "head");
 
     if (!cell) return;
 
@@ -1042,27 +1064,33 @@ export class EaTable extends EaBase {
         cell,
       })
     );
-  };
+  }
 
-  private _slotChangeHandler = (): void => {
+  /** 处理默认插槽变化，重新渲染表格结构 */
+  @listen("slotchange", "#defaultSlot")
+  private _handleSlotChange(): void {
     this._handleTableStructRender();
-    this._handleSortableColumnsInit();
     if (this._states.originData.length > 0) {
       this.setData(this._states.originData);
     }
-  };
+  }
 
-  private _childChangeHandler = (e: Event): void => {
+  /**
+   * 处理子组件列配置变化事件
+   * @param e - 列变化事件
+   */
+  @listen("ea-table-column-change")
+  private _handleColumnChange(e: Event): void {
     e.stopImmediatePropagation();
-
     this._handleTableStructRender();
-    this._handleSortableColumnsInit();
     if (this._states.originData.length > 0) {
       this.setData(this._states.originData);
     }
-  };
+  }
 
-  private _onSelectionChangeEvent = (e: Event): void => {
+  /** 处理选择复选框的 change 事件，更新全选/半选状态并派发事件 */
+  @listen("change", ".ea-table")
+  private _handleSelectionChange(e: Event): void {
     const target = e.target as HTMLElement;
     if (target.getAttribute("data-type") !== "selection") return;
 
@@ -1102,16 +1130,10 @@ export class EaTable extends EaBase {
       );
     }
 
-    this._dispatchSlectionChangeEvent();
-  };
+    this._dispatchSelectionChangeEvent();
+  }
 
   $beforeUnmount(): void {
-    this._abortController?.abort();
-    this._sortAbortController?.abort();
-
-    for (const key in this._AbortControllerStates) {
-      this._AbortControllerStates[key]?.abort();
-      this._AbortControllerStates[key] = null;
-    }
+    this._selectAbortController?.abort();
   }
 }
