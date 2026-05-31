@@ -65,7 +65,7 @@ describe("EaSkeleton Component", () => {
 
       await waitForRender();
 
-      const slot = skeleton.shadowRoot.querySelector("#default");
+      const slot = skeleton.shadowRoot.querySelector(".ea-skeleton__default");
       expect(slot).toBeTruthy();
       expect(slot.tagName.toLowerCase()).toBe("slot");
     });
@@ -76,7 +76,7 @@ describe("EaSkeleton Component", () => {
 
       await waitForRender();
 
-      const slot = skeleton.shadowRoot.querySelector("#template");
+      const slot = skeleton.shadowRoot.querySelector(".ea-skeleton__template");
       expect(slot).toBeTruthy();
       expect(slot.tagName.toLowerCase()).toBe("slot");
       expect(slot.getAttribute("name")).toBe("template");

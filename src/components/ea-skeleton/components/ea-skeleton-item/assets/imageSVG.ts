@@ -1,5 +1,5 @@
 export const skeletonImageSVG = `
-    <svg id="skeletonImagePlaceholder" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" part="image-svg">
+    <svg class="ea-skeleton-item__image-placeholder" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" part="image-svg">
         <path fill="#c0c4cc" d="M0 0h100v100H0z" />
         <path fill="#fff" d="M15 20h70v60H15z" />
         <circle r="8" cx="32" cy="35" fill="#c0c4cc" />

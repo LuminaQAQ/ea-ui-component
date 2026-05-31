@@ -61,7 +61,7 @@ onMounted(() => {
 
 ## 自定义样式
 
-移步到 [CSS Part](#skeleton-css-part)。
+移步到 [CSS Part](#skeleton-css-part) 和 [CSS 自定义属性](#skeleton-item-css-自定义属性)。
 
 ## 基础用法
 
@@ -79,6 +79,8 @@ onMounted(() => {
   </ea-skeleton>
 </div>
 
+::: details 查看代码
+
 ```html
 <ea-skeleton></ea-skeleton>
 <br />
@@ -91,6 +93,8 @@ onMounted(() => {
 </ea-skeleton>
 ```
 
+:::
+
 ## 更多参数
 
 可以配置骨架屏段落数量，以便更接近真实渲染效果。显示的数量会比传入的数量多 1，首行会被渲染一个长度 `33%` 的段首。
@@ -99,9 +103,13 @@ onMounted(() => {
   <ea-skeleton rows="6"></ea-skeleton>
 </div>
 
+::: details 查看代码
+
 ```html
 <ea-skeleton rows="6"></ea-skeleton>
 ```
+
+:::
 
 ## 动画效果
 
@@ -111,11 +119,15 @@ onMounted(() => {
   <ea-skeleton rows="6" animated></ea-skeleton>
 </div>
 
+::: details 查看代码
+
 ```html
 <ea-skeleton rows="6" animated></ea-skeleton>
 ```
 
-## 自定义样式
+:::
+
+## 自定义模板
 
 默认提供的排版模式有时候并不满足要求，当您想要用自己定义的模板时，可以通过一个具名 `slot="template"` 来自己设定模板。
 
@@ -414,7 +426,10 @@ multipleDataExample.init();
 
 ## 防止渲染抖动
 
-有的时候，API 的请求回来的特别快，往往骨架占位刚刚被渲染，真实的数据就已经回来了，用户的界面会突然一闪， 此时为了避免这种情况，就需要通过 `throttle` 属性来避免这个问题。
+有的时候，API 的请求回来的特别快，往往骨架占位刚刚被渲染，真实的数据就已经回来了，用户的界面会突然一闪， 此时为了避免这种情况，就需要通过 `throttle-leading` 和 `throttle-trailing` 属性来避免这个问题。
+
+- `throttle-leading`：当 `loading` 由 true → false 时的延迟（ms），防止加载完成后的闪烁
+- `throttle-trailing`：当 `loading` 由 false → true 时的延迟（ms），防止重新加载时的闪烁
 
 <div class="demo">
   <p>切换状态: <ea-switch id="throttleSwitch" value="true"></ea-switch></p>
@@ -562,8 +577,8 @@ throttleExample.init();
 | count               | 渲染的骨架屏条目数量（注意性能）                                      | Number  | —      | 1      |
 | loading <PropTag /> | 是否显示骨架屏（true 显示骨架，false 显示默认插槽中的真实内容）       | Boolean | —      | true   |
 | rows                | 段落占位图行数，用于生成默认模板的段落数                              | Number  | —      | 4      |
-| throttle-leading    | 当 `loading` 由 true -> false 时的延迟（ms），用于防抖/节流以防止闪烁 | Number  | —      | 0      |
-| throttle-trailing   | 当 `loading` 由 false -> true 时的延迟（ms），用于防抖/节流以防止闪烁 | Number  | —      | 0      |
+| throttle-leading    | 当 `loading` 由 true → false 时的延迟（ms），用于防抖/节流以防止闪烁 | Number  | —      | 0      |
+| throttle-trailing   | 当 `loading` 由 false → true 时的延迟（ms），用于防抖/节流以防止闪烁 | Number  | —      | 0      |
 
 ### Skeleton CSS Part
 
@@ -582,6 +597,18 @@ throttleExample.init();
 | default  | 骨架屏内容, 非具名插槽 |
 | template | 骨架屏模板             |
 
+### Skeleton Methods
+
+| 方法名                  | 说明             | 参数 |
+| ----------------------- | ---------------- | ---- |
+| updateContainerClasslist | 更新容器类名并返回 | —    |
+
+### Skeleton CSS 自定义属性
+
+| 属性名                    | 说明             | 默认值                    |
+| ------------------------- | ---------------- | ------------------------- |
+| --ea-skeleton-transition  | 过渡动画时长     | var(--transition-fast)    |
+
 ## Skeleton Item API
 
 ### Skeleton Item Attributes
@@ -595,6 +622,30 @@ throttleExample.init();
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明     |
-| --------- | -------- |
-| container | 外层容器 |
+| 名称      | 说明                         |
+| --------- | ---------------------------- |
+| container | 外层容器                     |
+| image-svg | 图片占位 SVG 元素（仅 image 变体） |
+
+### SkeletonItem Slots
+
+| 名称    | 说明         |
+| ------- | ------------ |
+| default | 默认插槽     |
+
+### SkeletonItem Methods
+
+| 方法名                  | 说明             | 参数 |
+| ----------------------- | ---------------- | ---- |
+| updateContainerClasslist | 更新容器类名并返回 | —    |
+
+### SkeletonItem CSS 自定义属性
+
+| 属性名                                    | 说明               | 默认值                |
+| ----------------------------------------- | ------------------ | --------------------- |
+| --ea-skeleton-item-color                  | 占位图背景颜色     | var(--grey-100)       |
+| --ea-skeleton-item-border-radius          | 占位图圆角         | var(--border-radius-sm) |
+| --ea-skeleton-item-image-color            | 图片占位图颜色     | var(--grey-300)       |
+| --ea-skeleton-item-circle-size            | 圆形变体尺寸       | auto                  |
+| --ea-skeleton-item-animation-color-from   | 动画渐变起始颜色   | var(--grey-100)       |
+| --ea-skeleton-item-animation-color-to     | 动画渐变中间颜色   | var(--grey-200)       |

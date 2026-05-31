@@ -1,11 +1,18 @@
+$name: ea-skeleton;
+
+:host {
+  --#{$name}-transition: var(--transition-fast);
+}
+
 :host {
   display: block;
-  position: relative;
   width: 100%;
 }
 
-@include block(ea-skeleton) {
-  #template {
+@include block($name) {
+  @include element(template) {
+    display: none;
+
     ea-skeleton-item[variant="p"]:first-child {
       width: 33%;
       display: block;
@@ -18,16 +25,12 @@
     }
   }
 
-  #template {
-    display: none;
-  }
-
   @include state(loading) {
-    #template {
+    .#{$name}__template {
       display: block;
     }
 
-    #default {
+    .#{$name}__default {
       display: none;
     }
   }
