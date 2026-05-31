@@ -18,8 +18,7 @@
     <script type="module" src="../src/components/ea-button/index.ts"></script>
     <script type="module" src="../src/components/ea-image/index.ts"></script>
 
-    <!-- -------- 基础用法 --------  -->
-    <!-- #region  -->
+    <!-- #region 基础用法 -->
     <h2>基础用法</h2>
     <div class="row space-between">
       <ea-result
@@ -50,8 +49,8 @@
         </div>
       </ea-result>
       <ea-result
-        variant="error"
-        heading="Error Tip"
+        variant="danger"
+        heading="Danger Tip"
         sub-title="Please follow the instructions"
       >
         <div slot="extra">
@@ -60,13 +59,10 @@
       </ea-result>
     </div>
     <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
+    <!-- #endregion -->
 
-    <!--  自定义内容  -->
-    <!-- #region -->
-    <h1>自定义内容</h1>
-
+    <!-- #region 自定义内容 -->
+    <h2>自定义内容</h2>
     <div class="demo">
       <ea-result heading="404" sub-title="Sorry, request error">
         <div slot="icon">
@@ -79,9 +75,28 @@
         </div>
       </ea-result>
     </div>
-
     <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
+    <!-- #endregion -->
+
+    <!-- #region 自定义图标 -->
+    <h2>自定义图标</h2>
+    <div class="row space-between">
+      <ea-result
+        variant="success"
+        heading="Success"
+        sub-title="Operation completed"
+        icon="star"
+      >
+      </ea-result>
+      <ea-result
+        variant="danger"
+        heading="Error"
+        sub-title="Something went wrong"
+        icon="bug"
+      >
+      </ea-result>
+    </div>
+    <hr />
+    <!-- #endregion -->
   </body>
 </html>

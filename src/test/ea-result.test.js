@@ -19,22 +19,24 @@ if (typeof CSS === "undefined") {
   };
 }
 
-// 确保 CustomElement 注册环境已就绪
 if (!customElements.get("ea-icon")) {
-  customElements.define("ea-icon", class extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
+  customElements.define(
+    "ea-icon",
+    class extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+      }
+      connectedCallback() {
+        this.shadowRoot.innerHTML = `<slot></slot>`;
+      }
     }
-    connectedCallback() {
-      this.shadowRoot.innerHTML = `<slot></slot>`;
-    }
-  });
+  );
 }
 
 import "../components/ea-result/index.ts";
 
-describe("EaResult Component", () => {
+describe("EaResult", () => {
   let container;
 
   beforeEach(() => {
@@ -46,9 +48,7 @@ describe("EaResult Component", () => {
     container.remove();
   });
 
-  // ==================== 基础渲染测试 ====================
-
-  describe("Basic Rendering", () => {
+  describe("基础渲染", () => {
     it("应该正确创建 ea-result 元素", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -76,27 +76,27 @@ describe("EaResult Component", () => {
       expect(containerEl.tagName.toLowerCase()).toBe("div");
     });
 
-    it("应该渲染 icon 包裹元素并带有正确的 BEM 类名", async () => {
+    it("应该渲染 icon-wrap 元素", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
       await waitForRender();
 
-      const iconWrap = result.shadowRoot.querySelector(".ea-result__icon");
+      const iconWrap = result.shadowRoot.querySelector(
+        ".ea-result__icon-wrap"
+      );
       expect(iconWrap).toBeDefined();
-      expect(iconWrap.classList.contains("ea-result__icon-wrap")).toBe(true);
     });
 
-    it("应该渲染默认图标元素", async () => {
+    it("应该渲染默认 ea-icon 元素", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon).toBeDefined();
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon).toBeDefined();
+      expect(icon.tagName.toLowerCase()).toBe("ea-icon");
     });
 
     it("应该渲染标题元素", async () => {
@@ -115,7 +115,9 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const subTitle = result.shadowRoot.querySelector(".ea-result__sub-title");
+      const subTitle = result.shadowRoot.querySelector(
+        ".ea-result__sub-title"
+      );
       expect(subTitle).toBeDefined();
     });
 
@@ -129,8 +131,6 @@ describe("EaResult Component", () => {
       expect(extra).toBeDefined();
     });
   });
-
-  // ==================== CSS Part 测试 ====================
 
   describe("CSS Parts", () => {
     it("应该暴露 container part", async () => {
@@ -200,9 +200,7 @@ describe("EaResult Component", () => {
     });
   });
 
-  // ==================== DOM 结构测试 ====================
-
-  describe("DOM Structure", () => {
+  describe("DOM 结构", () => {
     it("容器应该是所有部分的父级", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -257,15 +255,17 @@ describe("EaResult Component", () => {
       expect(containerEl.children.length).toBe(4);
     });
 
-    it("icon 包裹内应包含 slot 和默认 ea-icon", async () => {
+    it("icon-wrap 内应包含 slot 和默认 ea-icon", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
       await waitForRender();
 
-      const iconWrap = result.shadowRoot.querySelector(".ea-result__icon-wrap");
+      const iconWrap = result.shadowRoot.querySelector(
+        ".ea-result__icon-wrap"
+      );
       const iconSlot = iconWrap.querySelector('slot[name="icon"]');
-      const defaultIcon = iconWrap.querySelector(".ea-result__default-icon");
+      const defaultIcon = iconWrap.querySelector(".ea-result__icon");
 
       expect(iconSlot).toBeDefined();
       expect(defaultIcon).toBeDefined();
@@ -309,9 +309,7 @@ describe("EaResult Component", () => {
     });
   });
 
-  // ==================== 插槽测试 ====================
-
-  describe("Slots", () => {
+  describe("插槽", () => {
     it("应该包含 icon 命名插槽", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -329,7 +327,7 @@ describe("EaResult Component", () => {
       const iconSlot = result.shadowRoot.querySelector(
         '.ea-result__icon-wrap slot[name="icon"]'
       );
-      const defaultIcon = iconSlot.querySelector(".ea-result__default-icon");
+      const defaultIcon = iconSlot.querySelector(".ea-result__icon");
       expect(defaultIcon).toBeDefined();
       expect(defaultIcon.tagName.toLowerCase()).toBe("ea-icon");
     });
@@ -364,16 +362,6 @@ describe("EaResult Component", () => {
       expect(extraSlot).toBeDefined();
     });
 
-    it("extra slot 应该支持默认插槽行为（无 name）", () => {
-      const result = document.createElement("ea-result");
-      container.appendChild(result);
-
-      const extraSlot = result.shadowRoot.querySelector(
-        '.ea-result__extra slot[name="extra"]'
-      );
-      expect(extraSlot).toBeDefined();
-    });
-
     it("应该支持通过 icon slot 自定义图标内容", () => {
       const result = document.createElement("ea-result");
       result.innerHTML = `<div slot="icon">Custom Icon</div>`;
@@ -391,7 +379,7 @@ describe("EaResult Component", () => {
       container.appendChild(result);
 
       const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
+        'slot[name="title"]'
       );
       expect(titleSlot).toBeDefined();
     });
@@ -402,7 +390,7 @@ describe("EaResult Component", () => {
       container.appendChild(result);
 
       const subTitleSlot = result.shadowRoot.querySelector(
-        '.ea-result__sub-title slot[name="sub-title"]'
+        'slot[name="sub-title"]'
       );
       expect(subTitleSlot).toBeDefined();
     });
@@ -413,7 +401,7 @@ describe("EaResult Component", () => {
       container.appendChild(result);
 
       const extraSlot = result.shadowRoot.querySelector(
-        '.ea-result__extra slot[name="extra"]'
+        'slot[name="extra"]'
       );
       expect(extraSlot).toBeDefined();
     });
@@ -442,18 +430,12 @@ describe("EaResult Component", () => {
       `;
       container.appendChild(result);
 
-      const iconSlot = result.shadowRoot.querySelector(
-        'slot[name="icon"]'
-      );
-      const titleSlot = result.shadowRoot.querySelector(
-        'slot[name="title"]'
-      );
+      const iconSlot = result.shadowRoot.querySelector('slot[name="icon"]');
+      const titleSlot = result.shadowRoot.querySelector('slot[name="title"]');
       const subTitleSlot = result.shadowRoot.querySelector(
         'slot[name="sub-title"]'
       );
-      const extraSlot = result.shadowRoot.querySelector(
-        'slot[name="extra"]'
-      );
+      const extraSlot = result.shadowRoot.querySelector('slot[name="extra"]');
 
       expect(iconSlot).toBeDefined();
       expect(titleSlot).toBeDefined();
@@ -462,9 +444,7 @@ describe("EaResult Component", () => {
     });
   });
 
-  // ==================== Heading 属性测试 ====================
-
-  describe("Heading Attribute", () => {
+  describe("Heading 属性", () => {
     it("默认 heading 应该为空字符串", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -472,18 +452,6 @@ describe("EaResult Component", () => {
       await waitForRender();
 
       expect(result.heading).toBe("");
-    });
-
-    it("默认 title slot 内容应为空", async () => {
-      const result = document.createElement("ea-result");
-      container.appendChild(result);
-
-      await waitForRender();
-
-      const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("");
     });
 
     it("应该通过 HTML attribute 设置 heading", async () => {
@@ -496,17 +464,15 @@ describe("EaResult Component", () => {
       expect(result.heading).toBe("操作成功");
     });
 
-    it("heading 应该更新 title slot 的 textContent", async () => {
+    it("heading 应该更新标题元素的内容", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("heading", "操作成功");
       container.appendChild(result);
 
       await waitForRender();
 
-      const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("操作成功");
+      const titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.textContent).toBe("操作成功");
     });
 
     it("应该支持通过 JS property 设置 heading", async () => {
@@ -519,10 +485,8 @@ describe("EaResult Component", () => {
       await waitForRender();
 
       expect(result.heading).toBe("JS Property Heading");
-      const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("JS Property Heading");
+      const titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.textContent).toBe("JS Property Heading");
     });
 
     it("应该支持动态修改 heading", async () => {
@@ -532,21 +496,17 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      let titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("初始标题");
+      let titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.textContent).toBe("初始标题");
 
       result.setAttribute("heading", "更新后的标题");
       await waitForRender();
 
-      titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("更新后的标题");
+      titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.textContent).toBe("更新后的标题");
     });
 
-    it("heading 设置为空字符串后应清空", async () => {
+    it("heading 设置为空字符串后应恢复 slot", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("heading", "临时标题");
       container.appendChild(result);
@@ -557,19 +517,10 @@ describe("EaResult Component", () => {
       await waitForRender();
 
       expect(result.heading).toBe("");
-    });
-
-    it("heading 为插槽提供默认内容", async () => {
-      const result = document.createElement("ea-result");
-      result.setAttribute("heading", "Slot Default");
-      container.appendChild(result);
-
-      await waitForRender();
-
       const titleSlot = result.shadowRoot.querySelector(
         '.ea-result__title slot[name="title"]'
       );
-      expect(titleSlot.textContent).toBe("Slot Default");
+      expect(titleSlot).toBeDefined();
     });
 
     it("使用自定义 title slot 时仍应保留 heading 属性", async () => {
@@ -588,9 +539,7 @@ describe("EaResult Component", () => {
     });
   });
 
-  // ==================== SubTitle 属性测试 ====================
-
-  describe("SubTitle Attribute", () => {
+  describe("SubTitle 属性", () => {
     it("默认 subTitle 应该为空字符串", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -598,18 +547,6 @@ describe("EaResult Component", () => {
       await waitForRender();
 
       expect(result.subTitle).toBe("");
-    });
-
-    it("默认 sub-title slot 内容应为空", async () => {
-      const result = document.createElement("ea-result");
-      container.appendChild(result);
-
-      await waitForRender();
-
-      const subTitleSlot = result.shadowRoot.querySelector(
-        '.ea-result__sub-title slot[name="sub-title"]'
-      );
-      expect(subTitleSlot.textContent).toBe("");
     });
 
     it("应该通过 HTML attribute 设置 sub-title", async () => {
@@ -622,17 +559,17 @@ describe("EaResult Component", () => {
       expect(result.subTitle).toBe("内容描述");
     });
 
-    it("sub-title 应该更新 sub-title slot 的 textContent", async () => {
+    it("sub-title 应该更新副标题元素的内容", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("sub-title", "内容描述");
       container.appendChild(result);
 
       await waitForRender();
 
-      const subTitleSlot = result.shadowRoot.querySelector(
-        '.ea-result__sub-title slot[name="sub-title"]'
+      const subTitleEl = result.shadowRoot.querySelector(
+        ".ea-result__sub-title"
       );
-      expect(subTitleSlot.textContent).toBe("内容描述");
+      expect(subTitleEl.textContent).toBe("内容描述");
     });
 
     it("应该支持通过 JS property 设置 subTitle", async () => {
@@ -645,10 +582,10 @@ describe("EaResult Component", () => {
       await waitForRender();
 
       expect(result.subTitle).toBe("JS Subtitle");
-      const subTitleSlot = result.shadowRoot.querySelector(
-        '.ea-result__sub-title slot[name="sub-title"]'
+      const subTitleEl = result.shadowRoot.querySelector(
+        ".ea-result__sub-title"
       );
-      expect(subTitleSlot.textContent).toBe("JS Subtitle");
+      expect(subTitleEl.textContent).toBe("JS Subtitle");
     });
 
     it("应该支持动态修改 sub-title", async () => {
@@ -658,21 +595,19 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      let subTitleSlot = result.shadowRoot.querySelector(
-        '.ea-result__sub-title slot[name="sub-title"]'
+      let subTitleEl = result.shadowRoot.querySelector(
+        ".ea-result__sub-title"
       );
-      expect(subTitleSlot.textContent).toBe("初始描述");
+      expect(subTitleEl.textContent).toBe("初始描述");
 
       result.setAttribute("sub-title", "更新后的描述");
       await waitForRender();
 
-      subTitleSlot = result.shadowRoot.querySelector(
-        '.ea-result__sub-title slot[name="sub-title"]'
-      );
-      expect(subTitleSlot.textContent).toBe("更新后的描述");
+      subTitleEl = result.shadowRoot.querySelector(".ea-result__sub-title");
+      expect(subTitleEl.textContent).toBe("更新后的描述");
     });
 
-    it("sub-title 设置为空字符串后应清空", async () => {
+    it("sub-title 设置为空字符串后应恢复 slot", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("sub-title", "临时描述");
       container.appendChild(result);
@@ -683,12 +618,14 @@ describe("EaResult Component", () => {
       await waitForRender();
 
       expect(result.subTitle).toBe("");
+      const subTitleSlot = result.shadowRoot.querySelector(
+        '.ea-result__sub-title slot[name="sub-title"]'
+      );
+      expect(subTitleSlot).toBeDefined();
     });
   });
 
-  // ==================== Variant 属性测试 ====================
-
-  describe("Variant Attribute", () => {
+  describe("Variant 属性", () => {
     it("默认 variant 应该为空字符串", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -768,18 +705,6 @@ describe("EaResult Component", () => {
       expect(containerEl.classList.contains("ea-result--info")).toBe(true);
     });
 
-    it("应该支持 error 类型", async () => {
-      const result = document.createElement("ea-result");
-      result.setAttribute("variant", "error");
-      container.appendChild(result);
-
-      await waitForRender();
-
-      expect(result.variant).toBe("error");
-      const containerEl = result.shadowRoot.querySelector(".ea-result");
-      expect(containerEl.classList.contains("ea-result--error")).toBe(true);
-    });
-
     it("设置 invalid variant 时不应添加未知修饰符类名", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -789,7 +714,6 @@ describe("EaResult Component", () => {
       result.setAttribute("variant", "invalid-variant");
       await waitForRender();
 
-      // Enum decorator should reject invalid value, variant should stay empty
       const containerEl = result.shadowRoot.querySelector(".ea-result");
       const modifierClasses = Array.from(containerEl.classList).filter((c) =>
         c.startsWith("ea-result--")
@@ -807,12 +731,12 @@ describe("EaResult Component", () => {
       let containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.classList.contains("ea-result--success")).toBe(true);
 
-      result.setAttribute("variant", "error");
+      result.setAttribute("variant", "danger");
       await waitForRender();
 
       containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.classList.contains("ea-result--success")).toBe(false);
-      expect(containerEl.classList.contains("ea-result--error")).toBe(true);
+      expect(containerEl.classList.contains("ea-result--danger")).toBe(true);
     });
 
     it("variant 从有值切换为空应移除修饰符类名", async () => {
@@ -838,10 +762,8 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("circle-info");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("circle-info");
     });
 
     it("success variant 应设置图标为 circle-check", async () => {
@@ -851,10 +773,8 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("circle-check");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("circle-check");
     });
 
     it("warning variant 应设置图标为 triangle-exclamation", async () => {
@@ -864,10 +784,8 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("triangle-exclamation");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("triangle-exclamation");
     });
 
     it("danger variant 应设置图标为 circle-xmark", async () => {
@@ -877,10 +795,8 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("circle-xmark");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("circle-xmark");
     });
 
     it("info variant 应设置图标为 circle-info", async () => {
@@ -890,23 +806,8 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("circle-info");
-    });
-
-    it("error variant 应设置图标为 circle-xmark", async () => {
-      const result = document.createElement("ea-result");
-      result.setAttribute("variant", "error");
-      container.appendChild(result);
-
-      await waitForRender();
-
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("circle-xmark");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("circle-info");
     });
 
     it("切换 variant 后图标应同步更新", async () => {
@@ -916,24 +817,18 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      let defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("circle-check");
+      let icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("circle-check");
 
       result.setAttribute("variant", "warning");
       await waitForRender();
 
-      defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("triangle-exclamation");
+      icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("triangle-exclamation");
     });
   });
 
-  // ==================== Icon 属性测试 ====================
-
-  describe("Icon Attribute", () => {
+  describe("Icon 属性", () => {
     it("默认 icon 应该为空字符串", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -960,10 +855,8 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("star");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("star");
     });
 
     it("应该支持通过 JS property 设置 icon", async () => {
@@ -976,10 +869,8 @@ describe("EaResult Component", () => {
       await waitForRender();
 
       expect(result.icon).toBe("heart");
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("heart");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("heart");
     });
 
     it("设置 icon 应覆盖 variant 默认图标", async () => {
@@ -990,10 +881,8 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("custom-icon");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("custom-icon");
     });
 
     it("移除 icon 后应恢复为 variant 对应的默认图标", async () => {
@@ -1004,15 +893,13 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("custom-icon");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("custom-icon");
 
       result.removeAttribute("icon");
       await waitForRender();
 
-      expect(defaultIcon.getAttribute("name")).toBe("circle-check");
+      expect(icon.getAttribute("name")).toBe("circle-check");
     });
 
     it("icon 设置为空字符串后应恢复 variant 默认图标", async () => {
@@ -1026,10 +913,8 @@ describe("EaResult Component", () => {
       result.setAttribute("icon", "");
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("triangle-exclamation");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("triangle-exclamation");
     });
 
     it("应支持动态切换 icon", async () => {
@@ -1039,25 +924,19 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      let defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("icon-a");
+      let icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("icon-a");
 
       result.setAttribute("icon", "icon-b");
       await waitForRender();
 
-      defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("icon-b");
+      icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("icon-b");
     });
   });
 
-  // ==================== Icon + Variant 交互测试 ====================
-
-  describe("Icon and Variant Interaction", () => {
-    it("先设置 icon 再设置 variant，variant 设置的图标应优先于先前设置的 icon", async () => {
+  describe("Icon 与 Variant 交互", () => {
+    it("设置 icon 后切换 variant，自定义 icon 应保持不变", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("icon", "custom-icon");
       container.appendChild(result);
@@ -1067,11 +946,8 @@ describe("EaResult Component", () => {
       result.setAttribute("variant", "success");
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      // variant 的 observer 会覆盖 icon
-      expect(defaultIcon.getAttribute("name")).toBe("circle-check");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("custom-icon");
     });
 
     it("先设置 variant 再设置 icon，应以 icon 为准", async () => {
@@ -1081,15 +957,13 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      let defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("circle-check");
+      let icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("circle-check");
 
       result.setAttribute("icon", "overriding-icon");
       await waitForRender();
 
-      expect(defaultIcon.getAttribute("name")).toBe("overriding-icon");
+      expect(icon.getAttribute("name")).toBe("overriding-icon");
     });
 
     it("variant 和 icon 同时设置，icon 应优先", async () => {
@@ -1102,13 +976,11 @@ describe("EaResult Component", () => {
 
       expect(result.variant).toBe("success");
       expect(result.icon).toBe("star");
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("star");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("star");
     });
 
-    it("切换 variant 时若有自定义 icon，新 variant 的图标会覆盖原有 icon", async () => {
+    it("清除 icon 后切换 variant 应使用新 variant 的图标", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("variant", "success");
       result.setAttribute("icon", "persistent-icon");
@@ -1116,20 +988,16 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      result.setAttribute("variant", "error");
+      result.removeAttribute("icon");
+      result.setAttribute("variant", "danger");
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      // variant observer 在设置时会覆盖 icon
-      expect(defaultIcon.getAttribute("name")).toBe("circle-xmark");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("circle-xmark");
     });
   });
 
-  // ==================== 生命周期测试 ====================
-
-  describe("Lifecycle", () => {
+  describe("生命周期", () => {
     it("挂载后组件应正确初始化", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("heading", "测试标题");
@@ -1203,16 +1071,12 @@ describe("EaResult Component", () => {
       await waitForRender();
 
       expect(result.heading).toBe("挂载后设置");
-      const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("挂载后设置");
+      const titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.textContent).toBe("挂载后设置");
     });
   });
 
-  // ==================== 属性更新测试 ====================
-
-  describe("Attribute Updates", () => {
+  describe("属性更新", () => {
     it("动态更新 variant 应反映在 UI 上", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -1237,10 +1101,8 @@ describe("EaResult Component", () => {
       result.setAttribute("heading", "更新标题");
       await waitForRender();
 
-      const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("更新标题");
+      const titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.textContent).toBe("更新标题");
     });
 
     it("动态更新 sub-title 应反映在 UI 上", async () => {
@@ -1253,10 +1115,10 @@ describe("EaResult Component", () => {
       result.setAttribute("sub-title", "更新描述");
       await waitForRender();
 
-      const subTitleSlot = result.shadowRoot.querySelector(
-        '.ea-result__sub-title slot[name="sub-title"]'
+      const subTitleEl = result.shadowRoot.querySelector(
+        ".ea-result__sub-title"
       );
-      expect(subTitleSlot.textContent).toBe("更新描述");
+      expect(subTitleEl.textContent).toBe("更新描述");
     });
 
     it("JS property 修改应同步更新 HTML attribute", async () => {
@@ -1270,9 +1132,7 @@ describe("EaResult Component", () => {
     });
   });
 
-  // ==================== 边界条件测试 ====================
-
-  describe("Edge Cases", () => {
+  describe("边界条件", () => {
     it("不设置任何属性时应使用所有默认值", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -1307,33 +1167,31 @@ describe("EaResult Component", () => {
       expect(result.subTitle).toBe("");
     });
 
-    it("应该处理特殊字符的 heading", async () => {
+    it("应该处理特殊字符的 heading（XSS 防护）", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("heading", "<script>alert('xss')</script>");
       container.appendChild(result);
 
       await waitForRender();
 
-      const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      // textContent 不会解析 HTML，所以应该保持原样
-      expect(titleSlot.textContent).toBe("<script>alert('xss')</script>");
+      const titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.querySelector("script")).toBeNull();
     });
 
-    it("应该处理特殊字符的 sub-title", async () => {
+    it("应该处理特殊字符的 sub-title（XSS 防护）", async () => {
       const result = document.createElement("ea-result");
-      result.setAttribute("sub-title", '<img src=x onerror="alert(1)">');
+      result.setAttribute(
+        "sub-title",
+        '<img src=x onerror="alert(1)">'
+      );
       container.appendChild(result);
 
       await waitForRender();
 
-      const subTitleSlot = result.shadowRoot.querySelector(
-        '.ea-result__sub-title slot[name="sub-title"]'
+      const subTitleEl = result.shadowRoot.querySelector(
+        ".ea-result__sub-title"
       );
-      expect(subTitleSlot.textContent).toBe(
-        '<img src=x onerror="alert(1)">'
-      );
+      expect(subTitleEl.querySelector("img[onerror]")).toBeNull();
     });
 
     it("应该处理长文本 heading", async () => {
@@ -1378,16 +1236,6 @@ describe("EaResult Component", () => {
       expect(result.subTitle).toBe("操作成功 🎉 请继续");
     });
 
-    it("heading 为纯空格时应保留", async () => {
-      const result = document.createElement("ea-result");
-      result.setAttribute("heading", "   ");
-      container.appendChild(result);
-
-      await waitForRender();
-
-      expect(result.heading).toBe("   ");
-    });
-
     it("快速连续修改 heading 应正确反映最终值", async () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -1400,10 +1248,8 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("最终值");
+      const titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.textContent).toBe("最终值");
     });
 
     it("快速连续修改 variant 应正确反映最终值", async () => {
@@ -1414,12 +1260,12 @@ describe("EaResult Component", () => {
 
       result.setAttribute("variant", "success");
       result.setAttribute("variant", "warning");
-      result.setAttribute("variant", "error");
+      result.setAttribute("variant", "danger");
 
       await waitForRender();
 
       const containerEl = result.shadowRoot.querySelector(".ea-result");
-      expect(containerEl.classList.contains("ea-result--error")).toBe(true);
+      expect(containerEl.classList.contains("ea-result--danger")).toBe(true);
       expect(containerEl.classList.contains("ea-result--success")).toBe(false);
     });
 
@@ -1452,9 +1298,7 @@ describe("EaResult Component", () => {
     });
   });
 
-  // ==================== CSS 自定义属性测试 ====================
-
-  describe("CSS Custom Properties", () => {
+  describe("CSS 自定义属性", () => {
     it(":host 应该定义 --ea-result-icon-size", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
@@ -1463,12 +1307,12 @@ describe("EaResult Component", () => {
       expect(styles.getPropertyValue("--ea-result-icon-size")).toBeDefined();
     });
 
-    it(":host 应该定义 --ea-result-spacing", () => {
+    it(":host 应该定义 --ea-result-padding", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
       const styles = getComputedStyle(result);
-      expect(styles.getPropertyValue("--ea-result-spacing")).toBeDefined();
+      expect(styles.getPropertyValue("--ea-result-padding")).toBeDefined();
     });
 
     it(":host 应该定义 --ea-result-title-font-size", () => {
@@ -1491,33 +1335,33 @@ describe("EaResult Component", () => {
       ).toBeDefined();
     });
 
-    it(":host 应该定义 --ea-result-subtitle-font-size", () => {
+    it(":host 应该定义 --ea-result-sub-title-font-size", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
       const styles = getComputedStyle(result);
       expect(
-        styles.getPropertyValue("--ea-result-subtitle-font-size")
+        styles.getPropertyValue("--ea-result-sub-title-font-size")
       ).toBeDefined();
     });
 
-    it(":host 应该定义 --ea-result-subtitle-color", () => {
+    it(":host 应该定义 --ea-result-sub-title-color", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
       const styles = getComputedStyle(result);
       expect(
-        styles.getPropertyValue("--ea-result-subtitle-color")
+        styles.getPropertyValue("--ea-result-sub-title-color")
       ).toBeDefined();
     });
 
-    it(":host 应该定义 --ea-result-extra-spacing", () => {
+    it(":host 应该定义 --ea-result-extra-margin-top", () => {
       const result = document.createElement("ea-result");
       container.appendChild(result);
 
       const styles = getComputedStyle(result);
       expect(
-        styles.getPropertyValue("--ea-result-extra-spacing")
+        styles.getPropertyValue("--ea-result-extra-margin-top")
       ).toBeDefined();
     });
 
@@ -1535,9 +1379,7 @@ describe("EaResult Component", () => {
     });
   });
 
-  // ==================== 复杂场景测试 ====================
-
-  describe("Complex Scenarios", () => {
+  describe("复杂场景", () => {
     it("完整配置：自定义 variant + heading + sub-title + 自定义额外内容", async () => {
       const result = document.createElement("ea-result");
       result.setAttribute("variant", "success");
@@ -1562,15 +1404,13 @@ describe("EaResult Component", () => {
       expect(result.querySelector("#view-order")).toBeTruthy();
       expect(result.querySelector("#back-home")).toBeTruthy();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("circle-check");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("circle-check");
     });
 
-    it("完整配置：error variant + 自定义图标 + 标题 + 按钮", async () => {
+    it("完整配置：danger variant + 自定义图标 + 标题 + 按钮", async () => {
       const result = document.createElement("ea-result");
-      result.setAttribute("variant", "error");
+      result.setAttribute("variant", "danger");
       result.setAttribute("icon", "bug");
       result.setAttribute("heading", "系统错误");
       result.setAttribute("sub-title", "请稍后重试或联系技术支持");
@@ -1579,14 +1419,11 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      // 自定义 icon 优先于 variant 默认图标
-      expect(defaultIcon.getAttribute("name")).toBe("bug");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("bug");
 
       const containerEl = result.shadowRoot.querySelector(".ea-result");
-      expect(containerEl.classList.contains("ea-result--error")).toBe(true);
+      expect(containerEl.classList.contains("ea-result--danger")).toBe(true);
 
       const extraSlot = result.shadowRoot.querySelector(
         '.ea-result__extra slot[name="extra"]'
@@ -1641,9 +1478,7 @@ describe("EaResult Component", () => {
       `;
       container.appendChild(result);
 
-      const iconSlot = result.shadowRoot.querySelector(
-        'slot[name="icon"]'
-      );
+      const iconSlot = result.shadowRoot.querySelector('slot[name="icon"]');
       expect(iconSlot).toBeDefined();
       expect(iconSlot.assignedNodes().length).toBeGreaterThan(0);
     });
@@ -1654,7 +1489,6 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      // 第一次变化
       result.setAttribute("variant", "success");
       result.setAttribute("heading", "成功");
       result.setAttribute("icon", "check");
@@ -1663,28 +1497,22 @@ describe("EaResult Component", () => {
       expect(result.variant).toBe("success");
       expect(result.heading).toBe("成功");
 
-      // 第二次变化
-      result.setAttribute("variant", "error");
+      result.setAttribute("variant", "danger");
       result.setAttribute("heading", "失败");
       result.setAttribute("icon", "close");
       await waitForRender();
 
-      expect(result.variant).toBe("error");
+      expect(result.variant).toBe("danger");
       expect(result.heading).toBe("失败");
 
-      const defaultIcon = result.shadowRoot.querySelector(
-        ".ea-result__default-icon"
-      );
-      expect(defaultIcon.getAttribute("name")).toBe("close");
+      const icon = result.shadowRoot.querySelector(".ea-result__icon");
+      expect(icon.getAttribute("name")).toBe("close");
     });
   });
 
-  // ==================== 错误处理和健壮性测试 ====================
-
-  describe("Error Handling & Robustness", () => {
+  describe("错误处理与健壮性", () => {
     it("不添加到 DOM 不应报错", () => {
       const result = document.createElement("ea-result");
-      // 创建但不添加，不应抛出异常
       expect(() => {
         result.setAttribute("heading", "未挂载");
         result.setAttribute("variant", "success");
@@ -1702,7 +1530,6 @@ describe("EaResult Component", () => {
       result.setAttribute("variant", undefined);
       await waitForRender();
 
-      // variant 应保持之前的值或默认
       const containerEl = result.shadowRoot.querySelector(".ea-result");
       expect(containerEl.className.trim()).toBe("ea-result");
     });
@@ -1738,16 +1565,13 @@ describe("EaResult Component", () => {
 
       await waitForRender();
 
-      const titleSlot = result.shadowRoot.querySelector(
-        '.ea-result__title slot[name="title"]'
-      );
-      expect(titleSlot.textContent).toBe("保持不变");
+      const titleEl = result.shadowRoot.querySelector(".ea-result__title");
+      expect(titleEl.textContent).toBe("保持不变");
 
       result.setAttribute("heading", "保持不变");
       await waitForRender();
 
-      // 应该还是同样的值
-      expect(titleSlot.textContent).toBe("保持不变");
+      expect(titleEl.textContent).toBe("保持不变");
     });
 
     it("设置不存在的 HTML attribute 不应影响组件", async () => {

@@ -1,28 +1,29 @@
-$ea-types-colors: (
+$name: ea-result;
+
+$result-variant-colors: (
   info: var(--grey-500),
   primary: var(--blue-500),
   success: var(--green-500),
   warning: var(--yellow-500),
   danger: var(--red-500),
-  error: var(--red-500),
 );
 
 :host {
-  --ea-result-icon-size: 64px;
-  --ea-result-spacing: 40px 30px;
+  --#{$name}-icon-size: 64px;
+  --#{$name}-padding: 40px 30px;
 
-  --ea-result-title-spacing: 20px;
-  --ea-result-title-font-size: 20px;
-  --ea-result-title-color: var(--grey-900);
+  --#{$name}-title-margin-top: 20px;
+  --#{$name}-title-font-size: 20px;
+  --#{$name}-title-color: var(--grey-900);
 
-  --ea-result-subtitle-spacing: 10px;
-  --ea-result-subtitle-font-size: 14px;
-  --ea-result-subtitle-color: var(--grey-700);
+  --#{$name}-sub-title-margin-top: 10px;
+  --#{$name}-sub-title-font-size: var(--font-size-md);
+  --#{$name}-sub-title-color: var(--grey-700);
 
-  --ea-result-extra-spacing: 30px;
+  --#{$name}-extra-margin-top: 30px;
 
-  @each $type, $color in $ea-types-colors {
-    --ea-result-#{$type}-color: #{$color};
+  @each $type, $color in $result-variant-colors {
+    --#{$name}-#{$type}-color: #{$color};
   }
 }
 
@@ -30,42 +31,45 @@ $ea-types-colors: (
   display: block;
 }
 
-@include block(ea-result) {
+@include block($name) {
   box-sizing: border-box;
-  padding: var(--ea-result-spacing);
+  padding: var(--#{$name}-padding);
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
+  @include element(icon-wrap) {
+    --ea-icon-size: var(--#{$name}-icon-size);
+  }
+
   @include element(icon) {
-    --ea-icon-size: var(--ea-result-icon-size);
-    font-size: var(--ea-result-icon-size);
+    font-size: var(--#{$name}-icon-size);
   }
 
   @include element(title) {
-    margin-top: var(--ea-result-title-spacing);
+    margin-top: var(--#{$name}-title-margin-top);
 
-    color: var(--ea-result-title-color);
-    font-size: var(--ea-result-title-font-size);
+    color: var(--#{$name}-title-color);
+    font-size: var(--#{$name}-title-font-size);
   }
 
   @include element(sub-title) {
-    margin-top: var(--ea-result-subtitle-spacing);
+    margin-top: var(--#{$name}-sub-title-margin-top);
 
-    color: var(--ea-result-subtitle-color);
-    font-size: var(--ea-result-subtitle-font-size);
+    color: var(--#{$name}-sub-title-color);
+    font-size: var(--#{$name}-sub-title-font-size);
   }
 
   @include element(extra) {
-    margin-top: var(--ea-result-extra-spacing);
+    margin-top: var(--#{$name}-extra-margin-top);
   }
 
-  @each $type, $color in $ea-types-colors {
+  @each $type, $color in $result-variant-colors {
     @include modifier($type) {
-      .ea-result__icon {
-        color: var(--ea-result-#{$type}-color);
+      .#{$name}__icon {
+        color: var(--#{$name}-#{$type}-color);
       }
     }
   }
