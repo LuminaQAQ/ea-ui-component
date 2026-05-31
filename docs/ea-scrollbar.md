@@ -47,7 +47,7 @@ ea-aside::part(container) {
 
 # Scrollbar 滚动条
 
-用于替换浏览器原生滚动条。
+用于替换浏览器原生滚动条，支持自定义滚动条样式。
 
 ## 引入
 
@@ -55,7 +55,7 @@ ea-aside::part(container) {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-scrollbar/index.ts";
+  import "./node_modules/easy-component-ui/components/ea-scrollbar/index.js";
 </script>
 ```
 
@@ -75,9 +75,6 @@ ea-aside::part(container) {
       </ea-header>
       <ea-main>
         <ea-scrollbar>
-          <div>aside</div>
-          <div>aside</div>
-          <div>aside</div>
           <div>aside</div>
           <div>aside</div>
           <div>aside</div>
@@ -209,11 +206,6 @@ ea-aside::part(container) {
           <p>main</p>
           <p>main</p>
           <p>main</p>
-          <p>main</p>
-          <p>main</p>
-          <p>main</p>
-          <p>main</p>
-          <p>main</p>
         </ea-scrollbar>
       </ea-main>
       <ea-footer>
@@ -223,7 +215,7 @@ ea-aside::part(container) {
   </ea-container>
 </div>
 
-:::details 查看代码
+::: details 查看代码
 
 ```html
 <ea-scrollbar>
@@ -259,7 +251,7 @@ ea-aside::part(container) {
 ::: details 查看代码
 
 ```html
-<div class="demo" style="height: 200px;">
+<div style="height: 200px;">
   <ea-scrollbar>
     <div class="horizontal-section">
       <div class="scrollbar-item">horizontal</div>
@@ -341,7 +333,44 @@ ea-aside::part(container) {
 
 :::
 
-## Scrollbar Attributes
+## 指定高度
+
+使用 height 属性设置滚动条高度。
+
+<div class="demo">
+  <ea-scrollbar height="300px">
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+    <p>height scrollbar content</p>
+  </ea-scrollbar>
+</div>
+
+::: details 查看代码
+
+```html
+<ea-scrollbar height="300px">
+  <p>height scrollbar content</p>
+  <!-- ... -->
+</ea-scrollbar>
+```
+
+:::
+
+## Scrollbar API
+
+### Scrollbar Attributes
 
 | **参数**    | **说明**                         | **类型**  | **可选值** | **默认值** |
 | ----------- | -------------------------------- | --------- | ---------- | ---------- |
@@ -350,20 +379,7 @@ ea-aside::part(container) {
 | `noresize`  | 是否禁用滚动条的自动调整大小功能 | `boolean` | —          | `false`    |
 | `always`    | 是否始终显示滚动条               | `boolean` | —          | `false`    |
 
-## Scrollbar Events
-
-| **事件名**    | **说明**               | **回调参数**                                                                                                               |
-| ------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `scroll`      | 滚动时触发             | `({ scrollLeft: number, scrollTop: number }) => void`                                                                      |
-| `end-reached` | 触发滚动结束时触发     | `(direction: 'top' \| 'bottom' \| 'left' \| 'right'`, `scrollLeft: number,` `scrollTop: number ) => void`                  |
-
-## Scrollbar Methods
-
-| **方法名** | **说明**             | **参数**                           |
-| ---------- | -------------------- | ---------------------------------- |
-| `scrollTo` | 滚动到指定位置       | `ScrollToOptions`                  |
-
-## Scrollbar CSS Part
+### Scrollbar CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -372,5 +388,43 @@ ea-aside::part(container) {
 | container         | 滚动条容器   |
 | track-horizontal  | 水平滚动轨道 |
 | track-vertical    | 垂直滚动轨道 |
-| thumb             | 滚动滑块     |
-| view-container    | 视图容器     |
+| thumb-horizontal  | 水平滚动滑块 |
+| thumb-vertical    | 垂直滚动滑块 |
+| view              | 视图容器     |
+
+### Scrollbar Slots
+
+| 名称    | 说明     |
+| ------- | -------- |
+| default | 滚动内容 |
+
+### Scrollbar Methods
+
+| **方法名** | **说明**       | **参数**          |
+| ---------- | -------------- | ----------------- |
+| `scrollTo` | 滚动到指定位置 | `ScrollToOptions` |
+
+### Scrollbar Events
+
+| **事件名**       | **说明**               | **回调参数(event.detail)**                                                                                                  |
+| ---------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `ea-scroll`      | 滚动时触发             | `{ scrollTop: number, scrollLeft: number }`                                                                                 |
+| `ea-end-reached` | 滚动到边界时触发       | `{ direction: 'top' \| 'bottom' \| 'left' \| 'right', scrollTop: number, scrollLeft: number }`                              |
+
+### Scrollbar CSS 自定义属性
+
+| 属性名                                       | 说明             | 默认值                  |
+| -------------------------------------------- | ---------------- | ----------------------- |
+| `--ea-scrollbar-top`                         | 垂直滑块偏移位置 | `0`                     |
+| `--ea-scrollbar-left`                        | 水平滑块偏移位置 | `0`                     |
+| `--ea-scrollbar-track-color`                 | 轨道背景颜色     | `var(--color-transparent)` |
+| `--ea-scrollbar-thumb-color`                 | 滑块背景颜色     | `var(--grey-300)`       |
+| `--ea-scrollbar-thumb-hover-color`           | 滑块悬停背景颜色 | `var(--grey-400)`       |
+| `--ea-scrollbar-track-vertical-height`       | 垂直轨道高度     | `100%`                  |
+| `--ea-scrollbar-track-vertical-width`        | 垂直轨道宽度     | `10px`                  |
+| `--ea-scrollbar-thumb-vertical-height`       | 垂直滑块高度     | `0`                     |
+| `--ea-scrollbar-thumb-vertical-width`        | 垂直滑块宽度     | `100%`                  |
+| `--ea-scrollbar-track-horizontal-height`     | 水平轨道高度     | `10px`                  |
+| `--ea-scrollbar-track-horizontal-width`      | 水平轨道宽度     | `100%`                  |
+| `--ea-scrollbar-thumb-horizontal-height`     | 水平滑块高度     | `100%`                  |
+| `--ea-scrollbar-thumb-horizontal-width`      | 水平滑块宽度     | `0`                     |

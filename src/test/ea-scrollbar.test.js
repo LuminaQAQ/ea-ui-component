@@ -63,9 +63,14 @@ describe("EaScrollbar Component", () => {
       expect(
         scrollbar.shadowRoot.querySelector('[part="track-vertical"]')
       ).toBeTruthy();
-      expect(scrollbar.shadowRoot.querySelector('[part="thumb"]')).toBeTruthy();
       expect(
-        scrollbar.shadowRoot.querySelector('[part="view-container"]')
+        scrollbar.shadowRoot.querySelector('[part="thumb-horizontal"]')
+      ).toBeTruthy();
+      expect(
+        scrollbar.shadowRoot.querySelector('[part="thumb-vertical"]')
+      ).toBeTruthy();
+      expect(
+        scrollbar.shadowRoot.querySelector('[part="view"]')
       ).toBeTruthy();
     });
 
@@ -115,6 +120,52 @@ describe("EaScrollbar Component", () => {
       );
       expect(horizontalThumb).toBeTruthy();
       expect(verticalThumb).toBeTruthy();
+    });
+  });
+
+  describe("Height Attribute", () => {
+    it("默认 height 应该是空字符串", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.innerHTML = `<div>Content</div>`;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      expect(scrollbar.height).toBe("");
+    });
+
+    it("应该支持 height 属性设置", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.setAttribute("height", "300px");
+      scrollbar.innerHTML = `<div>Content</div>`;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      expect(scrollbar.height).toBe("300px");
+    });
+
+    it("height 属性应该设置容器高度", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.setAttribute("height", "200px");
+      scrollbar.innerHTML = `<div>Content</div>`;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
+      expect(containerEl.style.height).toBe("200px");
+    });
+
+    it("height 为空时容器高度应为 100%", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.innerHTML = `<div>Content</div>`;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
+      expect(containerEl.style.height).toBe("100%");
     });
   });
 
@@ -226,7 +277,7 @@ describe("EaScrollbar Component", () => {
   });
 
   describe("Scroll Events", () => {
-    it("应该触发 scroll 事件", async () => {
+    it("应该触发 ea-scroll 事件", async () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `
         <div style="height: 500px;">Content</div>
@@ -236,7 +287,7 @@ describe("EaScrollbar Component", () => {
       await waitForRender();
 
       const scrollHandler = vi.fn();
-      scrollbar.addEventListener("scroll", scrollHandler);
+      scrollbar.addEventListener("ea-scroll", scrollHandler);
 
       const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
       view.scrollTop = 100;
@@ -247,7 +298,7 @@ describe("EaScrollbar Component", () => {
       expect(scrollHandler).toHaveBeenCalled();
     });
 
-    it("scroll 事件应该包含 scrollTop 和 scrollLeft", async () => {
+    it("ea-scroll 事件应该包含 scrollTop 和 scrollLeft", async () => {
       const scrollbar = document.createElement("ea-scrollbar");
       scrollbar.innerHTML = `
         <div style="height: 500px; width: 500px;">Content</div>
@@ -257,7 +308,7 @@ describe("EaScrollbar Component", () => {
       await waitForRender();
 
       let eventDetail = null;
-      scrollbar.addEventListener("scroll", (e) => {
+      scrollbar.addEventListener("ea-scroll", (e) => {
         eventDetail = e.detail;
       });
 
@@ -271,6 +322,63 @@ describe("EaScrollbar Component", () => {
       expect(eventDetail).toBeTruthy();
       expect(typeof eventDetail.scrollTop).toBe("number");
       expect(typeof eventDetail.scrollLeft).toBe("number");
+    });
+
+    it("应该触发 ea-end-reached 事件（滚动到顶部边界）", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.innerHTML = `
+        <div style="height: 500px;">Content</div>
+      `;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
+
+      Object.defineProperty(view, "scrollTop", { value: 0, configurable: true });
+      Object.defineProperty(view, "scrollHeight", { value: 500, configurable: true });
+      Object.defineProperty(view, "scrollLeft", { value: 0, configurable: true });
+      Object.defineProperty(view, "scrollWidth", { value: 400, configurable: true });
+
+      const endReachedHandler = vi.fn();
+      scrollbar.addEventListener("ea-end-reached", endReachedHandler);
+
+      view.dispatchEvent(new Event("scroll"));
+
+      await waitForRender();
+
+      expect(endReachedHandler).toHaveBeenCalled();
+    });
+
+    it("ea-end-reached 事件应该包含 direction 信息", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.innerHTML = `
+        <div style="height: 500px;">Content</div>
+      `;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
+
+      Object.defineProperty(view, "scrollTop", { value: 0, configurable: true });
+      Object.defineProperty(view, "scrollHeight", { value: 500, configurable: true });
+      Object.defineProperty(view, "scrollLeft", { value: 0, configurable: true });
+      Object.defineProperty(view, "scrollWidth", { value: 400, configurable: true });
+
+      let eventDetail = null;
+      scrollbar.addEventListener("ea-end-reached", (e) => {
+        eventDetail = e.detail;
+      });
+
+      view.dispatchEvent(new Event("scroll"));
+
+      await waitForRender();
+
+      expect(eventDetail).toBeTruthy();
+      expect(["top", "bottom", "left", "right"]).toContain(
+        eventDetail.direction
+      );
     });
   });
 
@@ -303,6 +411,83 @@ describe("EaScrollbar Component", () => {
       await waitForRender();
 
       expect(view.scrollTop).toBeGreaterThanOrEqual(0);
+    });
+
+    it("scrollTo 应该支持 x, y 参数形式", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.innerHTML = `
+        <div style="height: 500px; width: 500px;">Content</div>
+      `;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      expect(() => scrollbar.scrollTo(0, 100)).not.toThrow();
+    });
+  });
+
+  describe("Thumb Drag", () => {
+    it("鼠标按下滑块应该添加 is-dragging 状态", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.innerHTML = `<div style="height: 500px;">Content</div>`;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      const verticalThumb = scrollbar.shadowRoot.querySelector(
+        ".ea-scrollbar__thumb-vertical"
+      );
+
+      const mousedownEvent = new MouseEvent("mousedown", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 0,
+        clientY: 0,
+      });
+      verticalThumb.dispatchEvent(mousedownEvent);
+
+      await waitForRender();
+
+      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
+      expect(containerEl.classList.contains("is-dragging")).toBe(true);
+
+      const mouseupEvent = new MouseEvent("mouseup", { bubbles: true });
+      window.dispatchEvent(mouseupEvent);
+
+      await waitForRender();
+
+      expect(containerEl.classList.contains("is-dragging")).toBe(false);
+    });
+
+    it("鼠标按下垂直滑块应该添加 is-active 状态", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.innerHTML = `<div style="height: 500px;">Content</div>`;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      const verticalThumb = scrollbar.shadowRoot.querySelector(
+        ".ea-scrollbar__thumb-vertical"
+      );
+
+      const mousedownEvent = new MouseEvent("mousedown", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 0,
+        clientY: 0,
+      });
+      verticalThumb.dispatchEvent(mousedownEvent);
+
+      await waitForRender();
+
+      expect(verticalThumb.classList.contains("is-active")).toBe(true);
+
+      const mouseupEvent = new MouseEvent("mouseup", { bubbles: true });
+      window.dispatchEvent(mouseupEvent);
+
+      await waitForRender();
+
+      expect(verticalThumb.classList.contains("is-active")).toBe(false);
     });
   });
 
@@ -345,6 +530,34 @@ describe("EaScrollbar Component", () => {
       await waitForRender();
 
       expect(view.scrollLeft >= initialScrollLeft).toBe(true);
+    });
+  });
+
+  describe("Track Visibility", () => {
+    it("内容不溢出时轨道应该添加 is-hidden 类", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.innerHTML = `<div style="height: 50px;">Small Content</div>`;
+      container.appendChild(scrollbar);
+
+      await waitForRender(200);
+
+      const view = scrollbar.shadowRoot.querySelector(".ea-scrollbar__view");
+      const verticalTrack = scrollbar.shadowRoot.querySelector(
+        ".ea-scrollbar__track-vertical"
+      );
+
+      Object.defineProperty(view, "getBoundingClientRect", {
+        value: () => ({ height: 300, width: 400 }),
+        configurable: true,
+      });
+      Object.defineProperty(view, "scrollHeight", { value: 300, configurable: true });
+      Object.defineProperty(view, "scrollWidth", { value: 400, configurable: true });
+
+      window.dispatchEvent(new Event("resize"));
+
+      await waitForRender(200);
+
+      expect(verticalTrack.classList.contains("is-hidden")).toBe(true);
     });
   });
 
@@ -439,6 +652,20 @@ describe("EaScrollbar Component", () => {
       await waitForRender();
 
       expect(scrollbar.native).toBe(true);
+    });
+
+    it("应该支持多个属性同时设置", async () => {
+      const scrollbar = document.createElement("ea-scrollbar");
+      scrollbar.setAttribute("native", "");
+      scrollbar.setAttribute("always", "");
+      scrollbar.innerHTML = `<div>Content</div>`;
+      container.appendChild(scrollbar);
+
+      await waitForRender();
+
+      const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
+      expect(containerEl.classList.contains("ea-scrollbar--native")).toBe(true);
+      expect(containerEl.classList.contains("ea-scrollbar--always")).toBe(true);
     });
   });
 });

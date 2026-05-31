@@ -1,46 +1,49 @@
+$name: ea-scrollbar;
+
 :host {
-  --ea-scrollbar-top: 0;
-  --ea-scrollbar-left: 0;
+  --#{$name}-top: 0;
+  --#{$name}-left: 0;
 
-  --ea-scrollbar-track-color: transparent;
-  --ea-scrollbar-thumb-color: var(--grey-300);
-  --ea-scrollbar-thumb-hover-color: var(--grey-400);
+  --#{$name}-track-color: var(--color-transparent);
+  --#{$name}-thumb-color: var(--grey-300);
+  --#{$name}-thumb-hover-color: var(--grey-400);
 
-  --ea-scrollbar-track-vertical-height: 100%;
-  --ea-scrollbar-thumb-vertical-height: 0;
+  --#{$name}-track-vertical-height: 100%;
+  --#{$name}-track-vertical-width: 10px;
+  --#{$name}-thumb-vertical-height: 0;
+  --#{$name}-thumb-vertical-width: 100%;
 
-  --ea-scrollbar-track-vertical-width: 10px;
-  --ea-scrollbar-thumb-vertical-width: 100%;
-
-  --ea-scrollbar-track-horizontal-height: 10px;
-  --ea-scrollbar-thumb-horizontal-height: 100%;
-
-  --ea-scrollbar-track-horizontal-width: 0;
-  --ea-scrollbar-thumb-horizontal-width: 100%;
+  --#{$name}-track-horizontal-height: 10px;
+  --#{$name}-track-horizontal-width: 100%;
+  --#{$name}-thumb-horizontal-height: 100%;
+  --#{$name}-thumb-horizontal-width: 0;
 
   overflow: hidden;
 }
 
 :host(:focus) {
-
-  .ea-scrollbar__track-vertical,
-  .ea-scrollbar__track-horizontal {
+  .#{$name}__track-vertical,
+  .#{$name}__track-horizontal {
     opacity: 1;
   }
 }
 
-@include block(ea-scrollbar) {
+@include block($name) {
   position: relative;
   height: 100%;
   overflow: hidden;
   scroll-behavior: smooth;
   scrollbar-width: none;
 
-  .ea-scrollbar__track-vertical,
-  .ea-scrollbar__track-horizontal {
+  @include element(track-vertical) {
     position: absolute;
+    right: 0;
+    top: 0;
 
-    background-color: var(--ea-scrollbar-track-color);
+    height: var(--#{$name}-track-vertical-height);
+    width: var(--#{$name}-track-vertical-width);
+
+    background-color: var(--#{$name}-track-color);
 
     opacity: 0;
 
@@ -48,60 +51,76 @@
 
     transition: opacity var(--transition-normal);
 
-    @include state(show) {
+    &.is-hidden {
       display: none;
     }
   }
 
-  @include element(track-vertical) {
-    right: 0;
-    top: 0;
-
-    height: var(--ea-scrollbar-track-vertical-height);
-    width: var(--ea-scrollbar-track-vertical-width);
-  }
-
   @include element(track-horizontal) {
+    position: absolute;
     left: 0;
     bottom: 0;
 
-    height: 8px;
-    width: var(--ea-scrollbar-track-vertical-height);
+    height: var(--#{$name}-track-horizontal-height);
+    width: var(--#{$name}-track-horizontal-width);
+
+    background-color: var(--#{$name}-track-color);
+
+    opacity: 0;
+
+    z-index: 0;
+
+    transition: opacity var(--transition-normal);
+
+    &.is-hidden {
+      display: none;
+    }
   }
 
-  .ea-scrollbar__thumb-horizontal,
-  .ea-scrollbar__thumb-vertical {
+  @include element(thumb-vertical) {
     position: absolute;
+    right: 0;
+    top: var(--#{$name}-top);
 
-    border-radius: 999px;
+    width: var(--#{$name}-thumb-vertical-width);
+    height: var(--#{$name}-thumb-vertical-height);
 
-    background-color: var(--ea-scrollbar-thumb-color);
+    border-radius: var(--border-radius-round);
+
+    background-color: var(--#{$name}-thumb-color);
 
     z-index: 1;
 
-    @include state(active) {
-      background-color: var(--ea-scrollbar-thumb-hover-color);
+    &.is-active {
+      background-color: var(--#{$name}-thumb-hover-color);
     }
 
     &:hover {
-      background-color: var(--ea-scrollbar-thumb-hover-color);
+      background-color: var(--#{$name}-thumb-hover-color);
     }
   }
 
   @include element(thumb-horizontal) {
-    left: var(--ea-scrollbar-left);
+    position: absolute;
+    left: var(--#{$name}-left);
     bottom: 0;
 
-    width: var(--ea-scrollbar-thumb-horizontal-width);
-    height: var(--ea-scrollbar-thumb-horizontal-height);
-  }
+    width: var(--#{$name}-thumb-horizontal-width);
+    height: var(--#{$name}-thumb-horizontal-height);
 
-  @include element(thumb-vertical) {
-    right: 0;
-    top: var(--ea-scrollbar-top);
+    border-radius: var(--border-radius-round);
 
-    width: var(--ea-scrollbar-thumb-vertical-width);
-    height: var(--ea-scrollbar-thumb-vertical-height);
+    background-color: var(--#{$name}-thumb-color);
+
+    z-index: 1;
+
+    &.is-active {
+      background-color: var(--#{$name}-thumb-hover-color);
+    }
+
+    &:hover {
+      background-color: var(--#{$name}-thumb-hover-color);
+    }
   }
 
   @include element(view) {
@@ -112,37 +131,33 @@
   }
 
   &:hover {
-
-    .ea-scrollbar__track-vertical,
-    .ea-scrollbar__track-horizontal {
+    .#{$name}__track-vertical,
+    .#{$name}__track-horizontal {
       opacity: 1;
     }
   }
 
   @include state(dragging) {
-
-    .ea-scrollbar__track-vertical,
-    .ea-scrollbar__track-horizontal {
+    .#{$name}__track-vertical,
+    .#{$name}__track-horizontal {
       opacity: 1;
     }
   }
 
   @include modifier(native) {
-
-    .ea-scrollbar__track-vertical,
-    .ea-scrollbar__track-horizontal {
+    .#{$name}__track-vertical,
+    .#{$name}__track-horizontal {
       display: none;
     }
 
-    .ea-scrollbar__view {
+    .#{$name}__view {
       scrollbar-width: auto;
     }
   }
 
   @include modifier(always) {
-
-    .ea-scrollbar__track-vertical,
-    .ea-scrollbar__track-horizontal {
+    .#{$name}__track-vertical,
+    .#{$name}__track-horizontal {
       opacity: 1;
     }
   }

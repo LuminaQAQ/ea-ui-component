@@ -1,36 +1,60 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-scrollbar" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 滚动条组件，用于替换浏览器原生滚动条，支持自定义滚动条样式。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，滚动内容。
+ *
+ * @event ea-scroll - 滚动时触发，detail: `{ scrollTop: number, scrollLeft: number }`。
+ * @event ea-end-reached - 滚动到边界时触发，detail: `{ direction: 'top' | 'bottom' | 'left' | 'right', scrollTop: number, scrollLeft: number }`。
+ *
+ * @csspart container - 滚动条容器。
+ * @csspart track-horizontal - 水平滚动轨道。
+ * @csspart track-vertical - 垂直滚动轨道。
+ * @csspart thumb-horizontal - 水平滚动滑块。
+ * @csspart thumb-vertical - 垂直滚动滑块。
+ * @csspart view - 视图容器。
+ *
+ * @cssproperty --ea-scrollbar-top - 垂直滑块偏移位置。
+ * @cssproperty --ea-scrollbar-left - 水平滑块偏移位置。
+ * @cssproperty --ea-scrollbar-track-color - 轨道背景颜色。
+ * @cssproperty --ea-scrollbar-thumb-color - 滑块背景颜色。
+ * @cssproperty --ea-scrollbar-thumb-hover-color - 滑块悬停背景颜色。
+ * @cssproperty --ea-scrollbar-track-vertical-height - 垂直轨道高度。
+ * @cssproperty --ea-scrollbar-track-vertical-width - 垂直轨道宽度。
+ * @cssproperty --ea-scrollbar-thumb-vertical-height - 垂直滑块高度。
+ * @cssproperty --ea-scrollbar-thumb-vertical-width - 垂直滑块宽度。
+ * @cssproperty --ea-scrollbar-track-horizontal-height - 水平轨道高度。
+ * @cssproperty --ea-scrollbar-track-horizontal-width - 水平轨道宽度。
+ * @cssproperty --ea-scrollbar-thumb-horizontal-height - 水平滑块高度。
+ * @cssproperty --ea-scrollbar-thumb-horizontal-width - 水平滑块宽度。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaScrollbar extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-scrollbar")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-scrollbar__track-horizontal")
+  @query(bem.ce("track-horizontal"))
   private _horizontalTrack!: HTMLElement;
 
-  @query(".ea-scrollbar__track-vertical")
+  @query(bem.ce("track-vertical"))
   private _verticalTrack!: HTMLElement;
 
-  @query(".ea-scrollbar__thumb-horizontal")
+  @query(bem.ce("thumb-horizontal"))
   private _horizontalThumb!: HTMLElement;
 
-  @query(".ea-scrollbar__thumb-vertical")
+  @query(bem.ce("thumb-vertical"))
   private _verticalThumb!: HTMLElement;
 
-  @query(".ea-scrollbar__view")
+  @query(bem.ce("view"))
   private _view!: HTMLElement;
-
-  // ==================== 私有状态 ====================
 
   private _dragState?: {
     isHorizontal: boolean;
@@ -41,8 +65,6 @@ export class EaScrollbar extends EaBase {
     thumbWidth: number;
     thumbHeight: number;
   };
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: String,
@@ -82,14 +104,11 @@ export class EaScrollbar extends EaBase {
   })
   always: boolean = false;
 
-  // ==================== 方法 ====================
-
   updateContainerClasslist(): string {
-    const className = bem({
-      native: this.native,
-      noresize: this.noresize,
-      always: this.always,
-    });
+    const className = bem(
+      { native: this.native, noresize: this.noresize, always: this.always },
+      {}
+    );
 
     if (this._container) {
       this._container.className = className;
@@ -98,6 +117,7 @@ export class EaScrollbar extends EaBase {
     return className;
   }
 
+  /** 处理滚动事件，更新滑块位置并派发滚动事件 */
   private _handleScroll(): void {
     if (!this._view || !this._verticalThumb || !this._horizontalThumb) return;
 
@@ -110,7 +130,7 @@ export class EaScrollbar extends EaBase {
       `${(this._view.scrollLeft / this._view.scrollWidth) * 100}%`
     );
 
-    this.emit("scroll", {
+    this.emit("ea-scroll", {
       detail: {
         scrollTop: this._view.scrollTop,
         scrollLeft: this._view.scrollLeft,
@@ -126,7 +146,7 @@ export class EaScrollbar extends EaBase {
 
     Object.keys(directions).forEach(direction => {
       if (directions[direction as keyof typeof directions]) {
-        this.emit("end-reached", {
+        this.emit("ea-end-reached", {
           detail: {
             direction,
             scrollTop: this._view.scrollTop,
@@ -137,6 +157,7 @@ export class EaScrollbar extends EaBase {
     });
   }
 
+  /** 处理尺寸变化，更新滑块大小和轨道可见性 */
   private _handleResize(): void {
     queueMicrotask(() => {
       if (!this._view || !this._verticalThumb || !this._horizontalThumb) return;
@@ -155,16 +176,17 @@ export class EaScrollbar extends EaBase {
       );
 
       this._verticalTrack?.classList.toggle(
-        "is-show",
+        "is-hidden",
         verticalThumbHeight >= 0.999
       );
       this._horizontalTrack?.classList.toggle(
-        "is-show",
+        "is-hidden",
         horizontalThumbWidth >= 0.999
       );
     });
   }
 
+  /** 处理滑块拖拽移动 */
   private _handleThumbDrag = (e: MouseEvent): void => {
     if (!this._dragState || !this._view) return;
 
@@ -213,8 +235,9 @@ export class EaScrollbar extends EaBase {
     }
   };
 
-  @listen("mousedown", ".ea-scrollbar__thumb-horizontal")
-  @listen("mousedown", ".ea-scrollbar__thumb-vertical")
+  /** 处理滑块鼠标按下事件，启动拖拽 */
+  @listen("mousedown", bem.ce("thumb-horizontal"))
+  @listen("mousedown", bem.ce("thumb-vertical"))
   private _handleMouseDown(e: MouseEvent): void {
     e.preventDefault();
     e.stopPropagation();
@@ -259,6 +282,7 @@ export class EaScrollbar extends EaBase {
     );
   }
 
+  /** 处理键盘事件，支持方向键滚动 */
   @listen("keydown")
   private _handleKeyDown(e: KeyboardEvent): void {
     if (!this._view) return;
@@ -280,22 +304,26 @@ export class EaScrollbar extends EaBase {
     }
   }
 
-  @listen("scroll", ".ea-scrollbar__view")
+  /** 处理视图滚动事件 */
+  @listen("scroll", bem.ce("view"))
   private _handleViewScroll(): void {
     this._handleScroll();
   }
 
+  /** 处理插槽内容变化，重新计算滑块尺寸 */
   @listen("slotchange", bem.ce("view"))
   private _handleSlotChange(): void {
     this._handleResize();
   }
 
+  /** 处理窗口尺寸变化 */
   @listen("resize", "window")
   private _handleWindowResize(): void {
     if (this.noresize) return;
     this._handleResize();
   }
 
+  /** 处理窗口加载完成 */
   @listen("load", "window")
   private _handleWindowLoad(): void {
     this._handleResize();
@@ -315,22 +343,23 @@ export class EaScrollbar extends EaBase {
     return `
       <div class="${bem()}" part="container">
         <div class="${bem.e("track-horizontal")}" part="track-horizontal">
-          <div class="${bem.e("thumb-horizontal")}" part="thumb"></div>
+          <div class="${bem.e("thumb-horizontal")}" part="thumb-horizontal"></div>
         </div>
         <div class="${bem.e("track-vertical")}" part="track-vertical">
-          <div class="${bem.e("thumb-vertical")}" part="thumb"></div>
+          <div class="${bem.e("thumb-vertical")}" part="thumb-vertical"></div>
         </div>
-        <div class="${bem.e("view")}" part="view-container">
+        <div class="${bem.e("view")}" part="view">
           <slot></slot>
         </div>
       </div>
     `;
   }
 
-  // ==================== 生命周期 ====================
-
   $mount(): void {
     this.updateContainerClasslist();
     this._handleResize();
+    if (this._container) {
+      this._container.style.height = this.height || "100%";
+    }
   }
 }

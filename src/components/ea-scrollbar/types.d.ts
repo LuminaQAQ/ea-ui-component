@@ -10,7 +10,7 @@ export interface EaScrollbarElement extends HTMLElement {
   noresize: boolean;
   always: boolean;
   scrollTo(options: ScrollToOptions): void;
-  updateContainerClasslist(): string;
+  scrollTo(x: number, y: number): void;
 }
 
 import type { DefineComponent } from "vue";
@@ -23,8 +23,8 @@ export interface EaScrollbarVueProps {
 }
 
 export interface EaScrollbarVueEvents {
-  scroll: (event: CustomEvent<{ scrollTop: number; scrollLeft: number }>) => void;
-  "end-reached": (event: CustomEvent<{ direction: string; scrollTop: number; scrollLeft: number }>) => void;
+  "ea-scroll": (event: CustomEvent<{ scrollTop: number; scrollLeft: number }>) => void;
+  "ea-end-reached": (event: CustomEvent<{ direction: "top" | "bottom" | "left" | "right"; scrollTop: number; scrollLeft: number }>) => void;
 }
 
 export interface EaScrollbarVueSlots {
@@ -58,8 +58,8 @@ export interface EaScrollbarReactProps extends HTMLAttributes<HTMLElement> {
   native?: boolean;
   noresize?: boolean;
   always?: boolean;
-  onScroll?: (event: CustomEvent<{ scrollTop: number; scrollLeft: number }>) => void;
-  onEndReached?: (event: CustomEvent<{ direction: string; scrollTop: number; scrollLeft: number }>) => void;
+  onEaScroll?: (event: CustomEvent<{ scrollTop: number; scrollLeft: number }>) => void;
+  onEaEndReached?: (event: CustomEvent<{ direction: "top" | "bottom" | "left" | "right"; scrollTop: number; scrollLeft: number }>) => void;
   children?: ReactNode;
 }
 
