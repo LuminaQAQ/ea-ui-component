@@ -1,19 +1,43 @@
 import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
 import { createBEM } from "@utils/bem";
+
+import { CustomElement, attribute, property, query, listen } from "@decorator";
+
 import { html } from "@utils/html";
-import { Enum } from "@/utils/Enum";
-import { EA_COMPONENT_SIZES } from "@/utils/Variables";
+import { Enum } from "@utils/Enum";
+
+import { EaRateChangeEvent } from "./events/EaRateChangeEvent";
+import { EaRateHoverEvent } from "./events/EaRateHoverEvent";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-rate" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 评分组件，支持自定义图标、悬停提示和可配置最大值。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @event change - 评分值变化时触发，detail: `{ value: number }`。
+ * @event ea-hover - 鼠标移动到某项时触发，detail: `{ value: number | null, target: HTMLElement | null }`。
+ *
+ * @csspart container - 评分项容器元素。
+ * @csspart label - 辅助文字元素。
+ * @csspart symbol-wrap - 单个评分项的包裹元素。
+ * @csspart icon - 每个图标的内部元素。
+ *
+ * @cssproperty --ea-rate-spacing - 评分项间距。
+ * @cssproperty --ea-rate-large-size - 大号尺寸。
+ * @cssproperty --ea-rate-default-size - 默认尺寸。
+ * @cssproperty --ea-rate-small-size - 小号尺寸。
+ * @cssproperty --ea-rate-active-color - 选中状态颜色。
+ * @cssproperty --ea-rate-inactive-color - 未选中状态颜色。
+ * @cssproperty --ea-rate-disabled-active-color - 禁用态选中颜色。
+ * @cssproperty --ea-rate-disabled-inactive-color - 禁用态未选中颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaRate extends EaFormAssociatedBase {
   @query(".ea-rate")
@@ -56,7 +80,7 @@ export class EaRate extends EaFormAssociatedBase {
   max: number = 5;
 
   @attribute({
-    type: Enum(EA_COMPONENT_SIZES),
+    type: Enum(["large", "default", "small"]),
     default: "",
     observer(this: EaRate) {
       this.updateContainerClasslist();
@@ -81,9 +105,9 @@ export class EaRate extends EaFormAssociatedBase {
 
   @property({
     type: Function,
-    default: (value?: number, isSelected?: number) =>
+    default: (_value?: number, _isSelected?: number) =>
       `<ea-icon name="star" part="icon"></ea-icon>`,
-    observer(this: EaRate, cb: Function) {
+    observer(this: EaRate, cb: (value: number, isSelected: number) => string) {
       if (!cb || typeof cb !== "function") return;
       this._renderRateEl(cb, this.value);
       this._setRateStatus(this.value - 1);
@@ -114,6 +138,7 @@ export class EaRate extends EaFormAssociatedBase {
     `;
   }
 
+  /** @param renderer - 图标渲染函数 @param activeValue - 当前选中值 @param length - 评分项数量 */
   private _renderRateEl(
     renderer: (value: number, isSelected: number) => string,
     activeValue: number = this.value,
@@ -133,6 +158,7 @@ export class EaRate extends EaFormAssociatedBase {
     this._container.innerHTML = tpl;
   }
 
+  /** @param index - 选中截止下标（0-based） */
   private _setRateStatus(index: number = this.value - 1): void {
     if (!this._container) return;
 
@@ -143,6 +169,7 @@ export class EaRate extends EaFormAssociatedBase {
     });
   }
 
+  /** @returns 恢复为 value 对应的选中状态 */
   private _unsetRateStatus(): void {
     if (!this._container) return;
 
@@ -153,20 +180,16 @@ export class EaRate extends EaFormAssociatedBase {
     });
   }
 
+  /** @param value - 悬停项下标或 null @param target - 悬停目标元素或 null */
   private _emitHoverEvent(
     value: number | null,
     target: HTMLElement | null = null
   ): void {
-    this.emit("hover", {
-      detail: {
-        value,
-        target,
-      },
-    });
+    this.dispatchEvent(new EaRateHoverEvent({ value, target }));
   }
 
   @listen("mouseover", ".ea-rate")
-  private _onMouseover(): void {
+  private _handleMouseover = (): void => {
     if (this.readonly || this.disabled) return;
 
     this._hoverAbortController?.abort();
@@ -210,7 +233,7 @@ export class EaRate extends EaFormAssociatedBase {
   }
 
   @listen("click", ".ea-rate__symbol")
-  private _onClick(e: Event): void {
+  private _handleClick = (e: Event): void => {
     if (this.readonly || this.disabled) return;
 
     const target = (e.target as HTMLElement).closest(
@@ -228,7 +251,7 @@ export class EaRate extends EaFormAssociatedBase {
       this.value = displayValue;
     }
 
-    this.emit("change", { detail: { value: displayValue } });
+    this.dispatchEvent(new EaRateChangeEvent({ value: displayValue }));
   }
 
   get validationTarget(): HTMLElement {

@@ -24,7 +24,28 @@ export interface EaRateElement extends HTMLElement {
   disabled: boolean;
   /** 自定义图标渲染函数 */
   getSymbol: (value?: number, isSelected?: number) => string;
+
+  addEventListener(
+    type: "change",
+    listener: (event: EaRateChangeEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: "ea-hover",
+    listener: (event: EaRateHoverEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ): void;
 }
+
+// ==================== 事件类型导出 ====================
+
+export { EaRateChangeEvent } from "./events/EaRateChangeEvent";
+export { EaRateHoverEvent } from "./events/EaRateHoverEvent";
 
 // ==================== Vue 类型声明 ====================
 
@@ -55,11 +76,9 @@ export interface EaRateVueProps {
  */
 export interface EaRateVueEvents {
   /** 评分值变化时触发 */
-  change: (event: CustomEvent<{ value: number }>) => void;
+  change: (event: EaRateChangeEvent) => void;
   /** 鼠标移动到某项时触发 */
-  hover: (
-    event: CustomEvent<{ value: number | null; target: HTMLElement | null }>
-  ) => void;
+  "ea-hover": (event: EaRateHoverEvent) => void;
 }
 
 /**
@@ -116,11 +135,9 @@ export interface EaRateReactProps extends HTMLAttributes<HTMLElement> {
   /** 自定义图标渲染函数 */
   getSymbol?: (value?: number, isSelected?: number) => string;
   /** 评分值变化时的回调 */
-  onChange?: (event: CustomEvent<{ value: number }>) => void;
+  onChange?: (event: EaRateChangeEvent) => void;
   /** 鼠标移动到某项时的回调 */
-  onHover?: (
-    event: CustomEvent<{ value: number | null; target: HTMLElement | null }>
-  ) => void;
+  onEaHover?: (event: EaRateHoverEvent) => void;
   /** 自定义内容 */
   children?: ReactNode;
 }

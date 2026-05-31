@@ -819,15 +819,15 @@ describe("EaRate", () => {
       expect(changeHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("change 事件 detail 应该包含正确的 value", async () => {
+    it("change 事件应该是 EaRateChangeEvent 实例", async () => {
       const rate = createRate();
       container.appendChild(rate);
 
       await waitForRender();
 
-      let eventDetail = null;
+      let caughtEvent = null;
       rate.addEventListener("change", e => {
-        eventDetail = e.detail;
+        caughtEvent = e;
       });
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
@@ -835,8 +835,10 @@ describe("EaRate", () => {
 
       await waitForRender();
 
-      expect(eventDetail).toBeTruthy();
-      expect(eventDetail.value).toBe(3);
+      expect(caughtEvent).toBeTruthy();
+      expect(caughtEvent.type).toBe("change");
+      expect(caughtEvent.detail).toBeTruthy();
+      expect(caughtEvent.detail.value).toBe(3);
     });
 
     it("取消选中时 change 事件 value 应为点击的评分显示值", async () => {
@@ -894,17 +896,17 @@ describe("EaRate", () => {
     });
   });
 
-  // ==================== hover 事件 ====================
+  // ==================== ea-hover 事件 ====================
 
-  describe("Hover Event", () => {
-    it("鼠标移入评分项应该触发 hover 事件", async () => {
+  describe("EaHover Event", () => {
+    it("鼠标移入评分项应该触发 ea-hover 事件", async () => {
       const rate = createRate();
       container.appendChild(rate);
 
       await waitForRender();
 
       const hoverHandler = vi.fn();
-      rate.addEventListener("hover", hoverHandler);
+      rate.addEventListener("ea-hover", hoverHandler);
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -917,15 +919,15 @@ describe("EaRate", () => {
       expect(hoverHandler).toHaveBeenCalled();
     });
 
-    it("hover 事件 detail 应该包含 value 和 target", async () => {
+    it("ea-hover 事件应该是 EaRateHoverEvent 实例", async () => {
       const rate = createRate();
       container.appendChild(rate);
 
       await waitForRender();
 
-      let eventDetail = null;
-      rate.addEventListener("hover", e => {
-        eventDetail = e.detail;
+      let caughtEvent = null;
+      rate.addEventListener("ea-hover", e => {
+        caughtEvent = e;
       });
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
@@ -936,19 +938,21 @@ describe("EaRate", () => {
 
       await waitForRender();
 
-      expect(eventDetail).toBeTruthy();
-      expect(eventDetail.value).toBe(2);
-      expect(eventDetail.target).toBeTruthy();
+      expect(caughtEvent).toBeTruthy();
+      expect(caughtEvent.type).toBe("ea-hover");
+      expect(caughtEvent.detail).toBeTruthy();
+      expect(caughtEvent.detail.value).toBe(2);
+      expect(caughtEvent.detail.target).toBeTruthy();
     });
 
-    it("hover 事件的 value 应该是 0-based 下标", async () => {
+    it("ea-hover 事件的 value 应该是 0-based 下标", async () => {
       const rate = createRate();
       container.appendChild(rate);
 
       await waitForRender();
 
       let eventDetail = null;
-      rate.addEventListener("hover", e => {
+      rate.addEventListener("ea-hover", e => {
         eventDetail = e.detail;
       });
 
@@ -963,14 +967,14 @@ describe("EaRate", () => {
       expect(eventDetail.value).toBe(0);
     });
 
-    it("同一评分项上重复 mousemove 不应该重复触发 hover", async () => {
+    it("同一评分项上重复 mousemove 不应该重复触发 ea-hover", async () => {
       const rate = createRate();
       container.appendChild(rate);
 
       await waitForRender();
 
       const hoverHandler = vi.fn();
-      rate.addEventListener("hover", hoverHandler);
+      rate.addEventListener("ea-hover", hoverHandler);
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -985,14 +989,14 @@ describe("EaRate", () => {
       expect(hoverHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("mouseout 且 value 有值时 hover 事件 value 应为恢复后的选中下标", async () => {
+    it("mouseout 且 value 有值时 ea-hover 事件 value 应为恢复后的选中下标", async () => {
       const rate = createRate({ value: 2 });
       container.appendChild(rate);
 
       await waitForRender();
 
       let eventDetail = null;
-      rate.addEventListener("hover", e => {
+      rate.addEventListener("ea-hover", e => {
         eventDetail = e.detail;
       });
 
@@ -1012,14 +1016,14 @@ describe("EaRate", () => {
       expect(eventDetail.target).toBeTruthy();
     });
 
-    it("mouseout 且 value=0 时 hover 事件 value 应为 null", async () => {
+    it("mouseout 且 value=0 时 ea-hover 事件 value 应为 null", async () => {
       const rate = createRate();
       container.appendChild(rate);
 
       await waitForRender();
 
       let eventDetail = null;
-      rate.addEventListener("hover", e => {
+      rate.addEventListener("ea-hover", e => {
         eventDetail = e.detail;
       });
 
@@ -1039,14 +1043,14 @@ describe("EaRate", () => {
       expect(eventDetail.target).toBe(null);
     });
 
-    it("readonly 时不应该触发 hover 事件", async () => {
+    it("readonly 时不应该触发 ea-hover 事件", async () => {
       const rate = createRate({ readonly: true });
       container.appendChild(rate);
 
       await waitForRender();
 
       const hoverHandler = vi.fn();
-      rate.addEventListener("hover", hoverHandler);
+      rate.addEventListener("ea-hover", hoverHandler);
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -1059,14 +1063,14 @@ describe("EaRate", () => {
       expect(hoverHandler).not.toHaveBeenCalled();
     });
 
-    it("disabled 时不应该触发 hover 事件", async () => {
+    it("disabled 时不应该触发 ea-hover 事件", async () => {
       const rate = createRate({ disabled: true });
       container.appendChild(rate);
 
       await waitForRender();
 
       const hoverHandler = vi.fn();
-      rate.addEventListener("hover", hoverHandler);
+      rate.addEventListener("ea-hover", hoverHandler);
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       containerEl.dispatchEvent(new Event("mouseover", { bubbles: true }));
@@ -1079,14 +1083,14 @@ describe("EaRate", () => {
       expect(hoverHandler).not.toHaveBeenCalled();
     });
 
-    it("hover 后续 mouseout 后重新 mouseover 应可再次触发 hover", async () => {
+    it("hover 后续 mouseout 后重新 mouseover 应可再次触发 ea-hover", async () => {
       const rate = createRate();
       container.appendChild(rate);
 
       await waitForRender();
 
       const hoverHandler = vi.fn();
-      rate.addEventListener("hover", hoverHandler);
+      rate.addEventListener("ea-hover", hoverHandler);
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
@@ -1204,7 +1208,7 @@ describe("EaRate", () => {
       rate.remove();
 
       const hoverHandler = vi.fn();
-      rate.addEventListener("hover", hoverHandler);
+      rate.addEventListener("ea-hover", hoverHandler);
 
       const symbols = rate.shadowRoot.querySelectorAll(".ea-rate__symbol");
       symbols[2].dispatchEvent(new Event("mousemove", { bubbles: true }));

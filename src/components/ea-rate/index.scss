@@ -1,5 +1,4 @@
 $name: ea-rate;
-$ea-rate-size-type: (small, default, large);
 
 :host {
   --#{$name}-spacing: 2px;
@@ -77,9 +76,9 @@ $ea-rate-size-type: (small, default, large);
       transform var(--transition-normal);
   }
 
-  @each $size in $ea-rate-size-type {
+  @each $size in (small, default, large) {
     @include modifier($size) {
-      .ea-rate__symbol {
+      .#{$name}__symbol {
         width: var(--#{$name}-#{$size}-size);
         height: var(--#{$name}-#{$size}-size);
         line-height: var(--#{$name}-#{$size}-size);
@@ -94,7 +93,7 @@ $ea-rate-size-type: (small, default, large);
   }
 
   @include state(disabled) {
-    .ea-rate__symbol {
+    .#{$name}__symbol {
       color: var(--#{$name}-disabled-inactive-color);
 
       &.is-selected {
