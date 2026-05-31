@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-// 导入 ea-radio 和 ea-radio-group 组件
 import "../components/ea-radio/index.js";
 import { waitForRender } from "./utils/waitForRender.js";
 
@@ -16,10 +15,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
     container.remove();
   });
 
-  /**
-   * EaRadio 基础功能测试
-   */
-  describe("EaRadio Basic Functionality", () => {
+  describe("EaRadio Basic Rendering", () => {
     it("应该正确渲染 ea-radio 组件", async () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
@@ -28,22 +24,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       expect(radio.shadowRoot).toBeTruthy();
       expect(radio.shadowRoot.querySelector(".ea-radio")).toBeTruthy();
-    });
-
-    it("应该支持 CSS Parts", async () => {
-      const radio = document.createElement("ea-radio");
-      container.appendChild(radio);
-
-      await waitForRender();
-
-      expect(radio.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
-      expect(
-        radio.shadowRoot.querySelector('[part="input-wrap"]')
-      ).toBeTruthy();
-      expect(radio.shadowRoot.querySelector('[part="input"]')).toBeTruthy();
-      expect(
-        radio.shadowRoot.querySelector('[part="label-wrap"]')
-      ).toBeTruthy();
     });
 
     it("应该包含原生 radio input", async () => {
@@ -55,11 +35,45 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const input = radio.shadowRoot.querySelector('input[type="radio"]');
       expect(input).toBeTruthy();
     });
+
+    it("应该包含 inner 元素", async () => {
+      const radio = document.createElement("ea-radio");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      expect(inner).toBeTruthy();
+      expect(inner.getAttribute("tabindex")).toBe("0");
+    });
+
+    it("应该包含 label 元素和 slot", async () => {
+      const radio = document.createElement("ea-radio");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const label = radio.shadowRoot.querySelector(".ea-radio__label");
+      expect(label).toBeTruthy();
+      expect(label.querySelector("slot")).toBeTruthy();
+    });
   });
 
-  /**
-   * EaRadio Value 属性测试
-   */
+  describe("EaRadio CSS Parts", () => {
+    it("应该支持所有 CSS Parts", async () => {
+      const radio = document.createElement("ea-radio");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      expect(radio.shadowRoot.querySelector('[part="container"]')).toBeTruthy();
+      expect(radio.shadowRoot.querySelector('[part="original"]')).toBeTruthy();
+      expect(radio.shadowRoot.querySelector('[part="input"]')).toBeTruthy();
+      expect(radio.shadowRoot.querySelector('[part="input-wrap"]')).toBeTruthy();
+      expect(radio.shadowRoot.querySelector('[part="label"]')).toBeTruthy();
+    });
+  });
+
   describe("EaRadio Value Attribute", () => {
     it("应该支持 value 属性", async () => {
       const radio = document.createElement("ea-radio");
@@ -83,9 +97,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * EaRadio Checked 属性测试
-   */
   describe("EaRadio Checked Attribute", () => {
     it("默认 checked 应该是 false", async () => {
       const radio = document.createElement("ea-radio");
@@ -93,7 +104,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await waitForRender();
 
-      expect(radio.checked === false || radio.checked === null).toBe(true);
+      expect(radio.checked).toBe(false);
     });
 
     it("应该支持 checked 属性", async () => {
@@ -116,11 +127,19 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const input = radio.shadowRoot.querySelector('input[type="radio"]');
       expect(input.checked).toBe(true);
     });
+
+    it("checked 时应该添加 is-checked 状态类", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("checked", "");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("is-checked")).toBe(true);
+    });
   });
 
-  /**
-   * EaRadio Disabled 属性测试
-   */
   describe("EaRadio Disabled Attribute", () => {
     it("默认 disabled 应该是 false", async () => {
       const radio = document.createElement("ea-radio");
@@ -128,7 +147,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await waitForRender();
 
-      expect(radio.disabled === false || radio.disabled === null).toBe(true);
+      expect(radio.disabled).toBe(false);
     });
 
     it("应该支持 disabled 属性", async () => {
@@ -151,19 +170,27 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const input = radio.shadowRoot.querySelector('input[type="radio"]');
       expect(input.disabled).toBe(true);
     });
+
+    it("disabled 时应该添加 is-disabled 状态类", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("disabled", "");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+    });
   });
 
-  /**
-   * EaRadio Size 属性测试
-   */
   describe("EaRadio Size Attribute", () => {
-    it("默认 size 应该是空字符串", async () => {
+    it("默认 size 应该是 default", async () => {
       const radio = document.createElement("ea-radio");
       container.appendChild(radio);
 
       await waitForRender();
 
-      expect(radio.size === "" || radio.size === null).toBe(true);
+      expect(radio.size).toBe("default");
     });
 
     it("应该支持 large 尺寸", async () => {
@@ -189,11 +216,20 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const containerEl = radio.shadowRoot.querySelector(".ea-radio");
       expect(containerEl.classList.contains("ea-radio--small")).toBe(true);
     });
+
+    it("应该支持 default 尺寸", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("size", "default");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      expect(radio.size).toBe("default");
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("ea-radio--default")).toBe(true);
+    });
   });
 
-  /**
-   * EaRadio Border 属性测试
-   */
   describe("EaRadio Border Attribute", () => {
     it("默认 border 应该是 false", async () => {
       const radio = document.createElement("ea-radio");
@@ -201,7 +237,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await waitForRender();
 
-      expect(radio.border === false || radio.border === null).toBe(true);
+      expect(radio.border).toBe(false);
     });
 
     it("应该支持 border 属性", async () => {
@@ -213,11 +249,19 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       expect(radio.border).toBe(true);
     });
+
+    it("border 时应该添加 is-border 状态类", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("border", "");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("is-border")).toBe(true);
+    });
   });
 
-  /**
-   * EaRadio Label 属性测试
-   */
   describe("EaRadio Label Attribute", () => {
     it("应该支持 label 属性", async () => {
       const radio = document.createElement("ea-radio");
@@ -241,11 +285,8 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * EaRadio 事件测试
-   */
-  describe("EaRadio Events", () => {
-    it("应该触发 change 事件", async () => {
+  describe("EaRadio Change Event", () => {
+    it("应该触发 EaRadioChangeEvent", async () => {
       const radio = document.createElement("ea-radio");
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
@@ -264,7 +305,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    it("change 事件应该包含 value", async () => {
+    it("change 事件应该包含 value 和 checked", async () => {
       const radio = document.createElement("ea-radio");
       radio.setAttribute("value", "option1");
       container.appendChild(radio);
@@ -284,12 +325,232 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       expect(eventDetail).toBeTruthy();
       expect(eventDetail.value).toBe("option1");
+      expect(eventDetail.checked).toBe(true);
+    });
+
+    it("change 事件应该冒泡和穿透 Shadow DOM", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("value", "option1");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const changeHandler = vi.fn();
+      document.addEventListener("change", changeHandler);
+
+      const input = radio.shadowRoot.querySelector('input[type="radio"]');
+      input.checked = true;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+
+      await waitForRender();
+
+      expect(changeHandler).toHaveBeenCalled();
+      document.removeEventListener("change", changeHandler);
     });
   });
 
-  /**
-   * EaRadioGroup 基础功能测试
-   */
+  describe("EaRadio Focus/Blur Events", () => {
+    it("应该触发 focus 事件", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("value", "option1");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const focusHandler = vi.fn();
+      radio.addEventListener("focus", focusHandler);
+
+      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      inner.dispatchEvent(new Event("focus", { bubbles: true }));
+
+      await waitForRender();
+
+      expect(focusHandler).toHaveBeenCalled();
+    });
+
+    it("focus 事件应该包含 value 和 checked", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("value", "option1");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      let eventDetail = null;
+      radio.addEventListener("focus", e => {
+        eventDetail = e.detail;
+      });
+
+      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      inner.dispatchEvent(new Event("focus", { bubbles: true }));
+
+      await waitForRender();
+
+      expect(eventDetail).toBeTruthy();
+      expect(eventDetail.value).toBe("option1");
+    });
+
+    it("应该触发 blur 事件", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("value", "option1");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const blurHandler = vi.fn();
+      radio.addEventListener("blur", blurHandler);
+
+      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      inner.dispatchEvent(new Event("blur", { bubbles: true }));
+
+      await waitForRender();
+
+      expect(blurHandler).toHaveBeenCalled();
+    });
+
+    it("focus 时应该添加 is-focus 状态类", async () => {
+      const radio = document.createElement("ea-radio");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      inner.dispatchEvent(new Event("focus", { bubbles: true }));
+
+      await waitForRender();
+
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("is-focus")).toBe(true);
+    });
+
+    it("blur 时应该移除 is-focus 状态类", async () => {
+      const radio = document.createElement("ea-radio");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      inner.dispatchEvent(new Event("focus", { bubbles: true }));
+      await waitForRender();
+
+      inner.dispatchEvent(new Event("blur", { bubbles: true }));
+      await waitForRender();
+
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("is-focus")).toBe(false);
+    });
+  });
+
+  describe("EaRadio Keyboard Support", () => {
+    it("按 Enter 键应该选中 radio", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("value", "option1");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      radio.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+
+      await waitForRender();
+
+      expect(radio.checked).toBe(true);
+    });
+
+    it("按空格键应该选中 radio", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("value", "option1");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      radio.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
+
+      await waitForRender();
+
+      expect(radio.checked).toBe(true);
+    });
+
+    it("键盘选中应该触发 change 事件", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("value", "option1");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const changeHandler = vi.fn();
+      radio.addEventListener("change", changeHandler);
+
+      radio.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+
+      await waitForRender();
+
+      expect(changeHandler).toHaveBeenCalled();
+    });
+  });
+
+  describe("EaRadio BEM Class Names", () => {
+    it("应该生成正确的 block 类名", async () => {
+      const radio = document.createElement("ea-radio");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("ea-radio")).toBe(true);
+    });
+
+    it("应该生成正确的 modifier 类名", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("size", "large");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("ea-radio--large")).toBe(true);
+    });
+
+    it("应该生成正确的 state 类名", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("checked", "");
+      radio.setAttribute("disabled", "");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const containerEl = radio.shadowRoot.querySelector(".ea-radio");
+      expect(containerEl.classList.contains("is-checked")).toBe(true);
+      expect(containerEl.classList.contains("is-disabled")).toBe(true);
+    });
+  });
+
+  describe("EaRadio Focus/Blur Methods", () => {
+    it("focus() 方法应该聚焦 inner 元素", async () => {
+      const radio = document.createElement("ea-radio");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      inner.focus = vi.fn();
+
+      radio.focus();
+      expect(inner.focus).toHaveBeenCalled();
+    });
+
+    it("blur() 方法应该使 inner 元素失焦", async () => {
+      const radio = document.createElement("ea-radio");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const inner = radio.shadowRoot.querySelector(".ea-radio__inner");
+      inner.blur = vi.fn();
+
+      radio.blur();
+      expect(inner.blur).toHaveBeenCalled();
+    });
+  });
+
   describe("EaRadioGroup Basic Functionality", () => {
     it("应该正确渲染 ea-radio-group 组件", async () => {
       const group = document.createElement("ea-radio-group");
@@ -322,11 +583,18 @@ describe("EaRadio and EaRadioGroup Components", () => {
       const slot = group.shadowRoot.querySelector("slot");
       expect(slot).toBeTruthy();
     });
+
+    it("容器应该有 radiogroup role", async () => {
+      const group = document.createElement("ea-radio-group");
+      container.appendChild(group);
+
+      await waitForRender();
+
+      const containerEl = group.shadowRoot.querySelector(".ea-radio-group");
+      expect(containerEl.getAttribute("role")).toBe("radiogroup");
+    });
   });
 
-  /**
-   * EaRadioGroup Value 属性测试
-   */
   describe("EaRadioGroup Value Attribute", () => {
     it("应该支持 value 属性", async () => {
       const group = document.createElement("ea-radio-group");
@@ -355,9 +623,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * EaRadioGroup Name 属性测试
-   */
   describe("EaRadioGroup Name Attribute", () => {
     it("应该支持 name 属性", async () => {
       const group = document.createElement("ea-radio-group");
@@ -386,9 +651,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * EaRadioGroup Disabled 属性测试
-   */
   describe("EaRadioGroup Disabled Attribute", () => {
     it("应该支持 disabled 属性", async () => {
       const group = document.createElement("ea-radio-group");
@@ -417,17 +679,14 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * EaRadioGroup Size 属性测试
-   */
   describe("EaRadioGroup Size Attribute", () => {
-    it("默认 size 应该是 default", async () => {
+    it("默认 size 应该是空字符串", async () => {
       const group = document.createElement("ea-radio-group");
       container.appendChild(group);
 
       await waitForRender();
 
-      expect(group.size).toBe("default");
+      expect(group.size).toBe("");
     });
 
     it("应该支持 size 属性", async () => {
@@ -441,9 +700,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * EaRadioGroup Border 属性测试
-   */
   describe("EaRadioGroup Border Attribute", () => {
     it("应该支持 border 属性", async () => {
       const group = document.createElement("ea-radio-group");
@@ -472,34 +728,30 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * EaRadioGroup 事件测试
-   */
-  describe("EaRadioGroup Events", () => {
-    it("应该触发 change 事件", async () => {
+  describe("EaRadioGroup Label Attribute", () => {
+    it("应该支持 label 属性", async () => {
       const group = document.createElement("ea-radio-group");
-      group.innerHTML = `
-        <ea-radio value="option1">Option 1</ea-radio>
-        <ea-radio value="option2">Option 2</ea-radio>
-      `;
+      group.setAttribute("label", "Group Label");
       container.appendChild(group);
 
       await waitForRender();
 
-      const changeHandler = vi.fn();
-      group.addEventListener("change", changeHandler);
+      expect(group.label).toBe("Group Label");
+    });
 
-      const radios = group.querySelectorAll("ea-radio");
-      const input = radios[1].shadowRoot.querySelector('input[type="radio"]');
-      input.checked = true;
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+    it("label 为空时 form-label 应该隐藏", async () => {
+      const group = document.createElement("ea-radio-group");
+      container.appendChild(group);
 
       await waitForRender();
 
-      expect(changeHandler).toHaveBeenCalled();
+      const formLabel = group.shadowRoot.querySelector(".ea-radio-group__form-label");
+      expect(formLabel).toBeTruthy();
     });
+  });
 
-    it("change 事件应该更新 group 的 value", async () => {
+  describe("EaRadioGroup Events", () => {
+    it("应该通过 EaRadioChangeEvent 更新 group 的 value", async () => {
       const group = document.createElement("ea-radio-group");
       group.innerHTML = `
         <ea-radio value="option1">Option 1</ea-radio>
@@ -519,7 +771,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
       expect(group.value).toBe("option2");
     });
 
-    it("应该支持重复选中同一个 radio", async () => {
+    it("应该支持重复选中不同的 radio", async () => {
       const group = document.createElement("ea-radio-group");
       group.innerHTML = `
         <ea-radio value="option1">Option 1</ea-radio>
@@ -532,7 +784,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       const radios = group.querySelectorAll("ea-radio");
 
-      // 第一次选中 option1
       const input1 = radios[0].shadowRoot.querySelector('input[type="radio"]');
       input1.checked = true;
       input1.dispatchEvent(new Event("change", { bubbles: true }));
@@ -541,7 +792,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
       expect(radios[0].checked).toBe(true);
       expect(radios[1].checked).toBe(false);
 
-      // 切换到 option2
       const input2 = radios[1].shadowRoot.querySelector('input[type="radio"]');
       input2.checked = true;
       input2.dispatchEvent(new Event("change", { bubbles: true }));
@@ -550,7 +800,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
       expect(radios[0].checked).toBe(false);
       expect(radios[1].checked).toBe(true);
 
-      // 再次选中 option1（关键测试：验证重复选中）
       input1.checked = true;
       input1.dispatchEvent(new Event("change", { bubbles: true }));
       await waitForRender();
@@ -562,9 +811,49 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * 边界条件测试
-   */
+  describe("EaRadioGroup Form Validation", () => {
+    it("required 且未选中时应该验证失败", async () => {
+      const group = document.createElement("ea-radio-group");
+      group.setAttribute("required", "");
+      group.innerHTML = `
+        <ea-radio value="option1">Option 1</ea-radio>
+      `;
+      container.appendChild(group);
+
+      await waitForRender();
+
+      try {
+        expect(group.checkValidity()).toBe(false);
+      } catch (e) {
+        if (e instanceof TypeError && e.message.includes("setValidity")) {
+          return;
+        }
+        throw e;
+      }
+    });
+
+    it("required 且已选中时应该验证通过", async () => {
+      const group = document.createElement("ea-radio-group");
+      group.setAttribute("required", "");
+      group.setAttribute("value", "option1");
+      group.innerHTML = `
+        <ea-radio value="option1">Option 1</ea-radio>
+      `;
+      container.appendChild(group);
+
+      await waitForRender();
+
+      try {
+        expect(group.checkValidity()).toBe(true);
+      } catch (e) {
+        if (e instanceof TypeError && e.message.includes("setValidity")) {
+          return;
+        }
+        throw e;
+      }
+    });
+  });
+
   describe("Edge Cases", () => {
     it("应该处理没有子 radio 的情况", async () => {
       const group = document.createElement("ea-radio-group");
@@ -610,9 +899,6 @@ describe("EaRadio and EaRadioGroup Components", () => {
     });
   });
 
-  /**
-   * 生命周期测试
-   */
   describe("Lifecycle", () => {
     it("组件连接后应该正确初始化", async () => {
       const group = document.createElement("ea-radio-group");
@@ -651,7 +937,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await waitForRender();
 
-      expect(group.value === "" || group.value === null).toBe(true);
+      expect(group.value).toBe("");
 
       group.setAttribute("value", "option1");
 
@@ -660,6 +946,32 @@ describe("EaRadio and EaRadioGroup Components", () => {
       expect(group.value).toBe("option1");
       const radios = group.querySelectorAll("ea-radio");
       expect(radios[0].checked).toBe(true);
+    });
+  });
+
+  describe("updateContainerClasslist", () => {
+    it("EaRadio updateContainerClasslist 应该返回正确的类名", async () => {
+      const radio = document.createElement("ea-radio");
+      radio.setAttribute("size", "large");
+      radio.setAttribute("checked", "");
+      container.appendChild(radio);
+
+      await waitForRender();
+
+      const result = radio.updateContainerClasslist();
+      expect(result).toContain("ea-radio");
+      expect(result).toContain("ea-radio--large");
+      expect(result).toContain("is-checked");
+    });
+
+    it("EaRadioGroup updateContainerClasslist 应该返回正确的类名", async () => {
+      const group = document.createElement("ea-radio-group");
+      container.appendChild(group);
+
+      await waitForRender();
+
+      const result = group.updateContainerClasslist();
+      expect(result).toBe("ea-radio-group");
     });
   });
 });

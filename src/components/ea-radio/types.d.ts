@@ -1,4 +1,19 @@
-// ==================== HTML 全局类型声明 ====================
+import type { EaRadioBlurEvent } from "./events/EaRadioBlurEvent";
+import type { EaRadioChangeEvent } from "./events/EaRadioChangeEvent";
+import type { EaRadioFocusEvent } from "./events/EaRadioFocusEvent";
+
+export {
+  EaRadioBlurEvent,
+  type EaRadioBlurEventDetail,
+} from "./events/EaRadioBlurEvent";
+export {
+  EaRadioChangeEvent,
+  type EaRadioChangeEventDetail,
+} from "./events/EaRadioChangeEvent";
+export {
+  EaRadioFocusEvent,
+  type EaRadioFocusEventDetail,
+} from "./events/EaRadioFocusEvent";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -7,53 +22,62 @@ declare global {
   }
 }
 
-/**
- * ea-radio 组件的 HTML 接口
- */
 export interface EaRadioElement extends HTMLElement {
-  /** 绑定的组名（提交或选择时的分组依据） */
   name: string;
-  /** 选项的值 */
   value: string;
-  /** 是否禁用 */
   disabled: boolean;
-  /** 是否选中 */
   checked: boolean;
-  /** 选项的显示文本 */
   label: string;
-  /** 是否显示边框样式 */
   border: boolean;
-  /** 组件尺寸 */
-  size: "" | "large" | "default" | "small";
+  size: "small" | "default" | "large";
+  focus(): void;
+  blur(): void;
+
+  addEventListener(
+    type: "change",
+    listener: (event: EaRadioChangeEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: "focus",
+    listener: (event: EaRadioFocusEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: "blur",
+    listener: (event: EaRadioBlurEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ): void;
 }
 
-/**
- * ea-radio-group 组件的 HTML 接口
- */
 export interface EaRadioGroupElement extends HTMLElement {
-  /** 组名（表单提交时使用） */
-  name: string;
-  /** 当前选中值 */
-  value: string;
-  /** 是否整体禁用 */
-  disabled: boolean;
-  /** 组件尺寸 */
-  size: "large" | "default" | "small";
-  /** 是否显示边框样式 */
-  border: boolean;
-  /** 是否必填 */
-  required: boolean;
-  /** 表单标签文本 */
   label: string;
-}
+  name: string;
+  value: string;
+  size: "" | "small" | "default" | "large";
+  disabled: boolean;
+  border: boolean;
+  required: boolean;
 
-// ==================== Vue 类型声明 ====================
+  addEventListener(
+    type: "change",
+    listener: (event: EaRadioChangeEvent) => void,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+}
 
 import type { DefineComponent } from "vue";
 
-/**
- * ea-radio Vue 组件属性
- */
 export interface EaRadioVueProps {
   name?: string;
   value?: string;
@@ -61,57 +85,37 @@ export interface EaRadioVueProps {
   checked?: boolean;
   label?: string;
   border?: boolean;
-  size?: "" | "large" | "default" | "small";
+  size?: "small" | "default" | "large";
 }
 
-/**
- * ea-radio-group Vue 组件属性
- */
 export interface EaRadioGroupVueProps {
+  label?: string;
   name?: string;
   value?: string;
+  size?: "" | "small" | "default" | "large";
   disabled?: boolean;
-  size?: "large" | "default" | "small";
   border?: boolean;
   required?: boolean;
-  label?: string;
 }
 
-/**
- * ea-radio Vue 组件事件
- */
 export interface EaRadioVueEvents {
-  /** 选中值变化时触发 */
-  change: (event: CustomEvent) => void;
+  onChange?: (event: EaRadioChangeEvent) => void;
+  onFocus?: (event: EaRadioFocusEvent) => void;
+  onBlur?: (event: EaRadioBlurEvent) => void;
 }
 
-/**
- * ea-radio-group Vue 组件事件
- */
 export interface EaRadioGroupVueEvents {
-  /** 组内选中值变化时触发 */
-  change: (event: CustomEvent) => void;
+  onChange?: (event: EaRadioChangeEvent) => void;
 }
 
-/**
- * ea-radio Vue 组件插槽
- */
 export interface EaRadioVueSlots {
-  /** 默认插槽，用于选项内容（label） */
   default?: () => any;
 }
 
-/**
- * ea-radio-group Vue 组件插槽
- */
 export interface EaRadioGroupVueSlots {
-  /** 默认插槽，用于放置 ea-radio 子节点 */
   default?: () => any;
 }
 
-/**
- * ea-radio Vue 组件类型
- */
 export type EaRadioVueComponent = DefineComponent<
   EaRadioVueProps,
   {},
@@ -126,9 +130,6 @@ export type EaRadioVueComponent = DefineComponent<
   EaRadioVueSlots
 >;
 
-/**
- * ea-radio-group Vue 组件类型
- */
 export type EaRadioGroupVueComponent = DefineComponent<
   EaRadioGroupVueProps,
   {},
@@ -150,13 +151,8 @@ declare module "vue" {
   }
 }
 
-// ==================== React 类型声明 ====================
-
 import type { HTMLAttributes, ReactNode } from "react";
 
-/**
- * ea-radio React 组件属性
- */
 export interface EaRadioReactProps extends HTMLAttributes<HTMLElement> {
   name?: string;
   value?: string;
@@ -164,27 +160,21 @@ export interface EaRadioReactProps extends HTMLAttributes<HTMLElement> {
   checked?: boolean;
   label?: string;
   border?: boolean;
-  size?: "" | "large" | "default" | "small";
-  /** 选中值变化时的回调 */
-  onChange?: (event: CustomEvent) => void;
-  /** 选项内容 */
+  size?: "small" | "default" | "large";
+  onChange?: (event: EaRadioChangeEvent) => void;
+  onFocus?: (event: EaRadioFocusEvent) => void;
+  onBlur?: (event: EaRadioBlurEvent) => void;
   children?: ReactNode;
 }
 
-/**
- * ea-radio-group React 组件属性
- */
 export interface EaRadioGroupReactProps extends HTMLAttributes<HTMLElement> {
+  label?: string;
   name?: string;
   value?: string;
+  size?: "" | "small" | "default" | "large";
   disabled?: boolean;
-  size?: "large" | "default" | "small";
   border?: boolean;
   required?: boolean;
-  label?: string;
-  /** 组内选中值变化时的回调 */
-  onChange?: (event: CustomEvent) => void;
-  /** 子节点 */
   children?: ReactNode;
 }
 

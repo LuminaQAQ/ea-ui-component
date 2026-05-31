@@ -1,41 +1,57 @@
-$ea-radio-size-type: ("large", "default", "small");
+$name: ea-radio;
+$ea-radio-size-type: (
+  large,
+  default,
+  small
+);
 
 :host {
-  --ea-radio-input-size-large: var(--font-size-lg);
-  --ea-radio-input-size-default: var(--font-size-md);
-  --ea-radio-input-size-small: var(--font-size-sm);
+  --#{$name}-input-size-large: var(--font-size-lg);
+  --#{$name}-input-size-default: var(--font-size-md);
+  --#{$name}-input-size-small: var(--font-size-sm);
 
-  --ea-radio-inner-size-large: 7px;
-  --ea-radio-inner-size-default: 5px;
-  --ea-radio-inner-size-small: 4px;
+  --#{$name}-inner-size-large: 7px;
+  --#{$name}-inner-size-default: 5px;
+  --#{$name}-inner-size-small: 4px;
 
-  --ea-radio-space: var(--spacing-md);
+  --#{$name}-space: var(--spacing-md);
 
-  --ea-radio-border: var(--ea-border);
-  --ea-radio-border-radius: var(--border-radius);
-  --ea-radio-border-hover: var(--blue-400);
+  --#{$name}-border: var(--ea-border);
+  --#{$name}-border-radius: var(--border-radius);
+  --#{$name}-border-hover: var(--blue-400);
 
-  --ea-radio-inner-background: var(--color-white);
+  --#{$name}-inner-background: var(--color-white);
 
-  --ea-radio-disabled-color: var(--grey-300);
+  --#{$name}-disabled-color: var(--grey-300);
 }
 
 :host([disabled]) {
   cursor: not-allowed;
 }
 
-@include block(ea-radio) {
+:host(:invalid) {
+  .#{$name}__inner {
+    border-color: var(--red-500);
+    box-shadow: 0 0 0 2px var(--red-200);
+  }
+
+  .#{$name}__label {
+    color: var(--red-500);
+  }
+}
+
+@include block($name) {
   display: inline-flex;
   align-items: center;
 
   cursor: pointer;
 
-  margin-right: var(--ea-radio-space);
+  margin-right: var(--#{$name}-space);
 
   @include element(input) {
-    width: var(--ea-radio-input-size-default);
-    height: var(--ea-radio-input-size-default);
-    line-height: var(--ea-radio-input-size-default);
+    width: var(--#{$name}-input-size-default);
+    height: var(--#{$name}-input-size-default);
+    line-height: var(--#{$name}-input-size-default);
   }
 
   @include element(original) {
@@ -48,11 +64,11 @@ $ea-radio-size-type: ("large", "default", "small");
 
     width: 100%;
     height: 100%;
-    line-height: var(--ea-radio-input-size-default);
+    line-height: var(--#{$name}-input-size-default);
 
     box-sizing: border-box;
     border-radius: 50%;
-    border: var(--ea-radio-border);
+    border: var(--#{$name}-border);
 
     &::before {
       position: absolute;
@@ -62,91 +78,103 @@ $ea-radio-size-type: ("large", "default", "small");
 
       content: "";
 
-      width: var(--ea-radio-inner-size-default);
-      height: var(--ea-radio-inner-size-default);
+      width: var(--#{$name}-inner-size-default);
+      height: var(--#{$name}-inner-size-default);
 
       border-radius: 50%;
-      background-color: var(--ea-radio-inner-background);
+      background-color: var(--#{$name}-inner-background);
 
       box-sizing: border-box;
       transition: transform var(--transition-fast);
     }
 
     &:hover {
-      border-color: var(--ea-radio-border-hover);
+      border-color: var(--#{$name}-border-hover);
+    }
+
+    &:focus-visible {
+      border-color: var(--#{$name}-border-hover);
+      box-shadow: 0 0 0 2px var(--blue-200);
     }
   }
 
   @include element(label) {
-    padding-left: var(--ea-radio-space);
+    padding-left: var(--#{$name}-space);
 
     color: var(--color-black);
-    font-size: var(--ea-radio-input-size-default);
-    line-height: var(--ea-radio-input-size-default);
+    font-size: var(--#{$name}-input-size-default);
+    line-height: var(--#{$name}-input-size-default);
   }
 
   @each $size in $ea-radio-size-type {
     @include modifier($size) {
-      .ea-radio__input {
-        width: var(--ea-radio-input-size-#{$size});
-        height: var(--ea-radio-input-size-#{$size});
-        line-height: var(--ea-radio-input-size-#{$size});
+      .#{$name}__input {
+        width: var(--#{$name}-input-size-#{$size});
+        height: var(--#{$name}-input-size-#{$size});
+        line-height: var(--#{$name}-input-size-#{$size});
       }
 
-      .ea-radio__label {
-        font-size: var(--ea-radio-input-size-#{$size});
+      .#{$name}__label {
+        font-size: var(--#{$name}-input-size-#{$size});
       }
 
-      .ea-radio__inner {
+      .#{$name}__inner {
         &::before {
-          width: var(--ea-radio-inner-size-#{$size});
-          height: var(--ea-radio-inner-size-#{$size});
+          width: var(--#{$name}-inner-size-#{$size});
+          height: var(--#{$name}-inner-size-#{$size});
         }
       }
     }
   }
 
   @include state(border) {
-    border: var(--ea-radio-border);
-    padding: var(--ea-radio-space);
-    border-radius: var(--ea-radio-border-radius);
+    border: var(--#{$name}-border);
+    padding: var(--#{$name}-space);
+    border-radius: var(--#{$name}-border-radius);
 
     transition: border var(--transition-fast);
   }
 
   @include state(checked) {
-    .ea-radio__inner {
-      border-color: var(--ea-radio-border-hover);
-      background-color: var(--ea-radio-border-hover);
+    .#{$name}__inner {
+      border-color: var(--#{$name}-border-hover);
+      background-color: var(--#{$name}-border-hover);
 
       &::before {
         transform: translate(-50%, -50%) scale(1);
       }
     }
 
-    .ea-radio__label {
-      color: var(--ea-radio-border-hover);
+    .#{$name}__label {
+      color: var(--#{$name}-border-hover);
     }
 
     &:not(.is-disabled).is-border {
-      border-color: var(--ea-radio-border-hover);
+      border-color: var(--#{$name}-border-hover);
+    }
+  }
+
+  @include state(focus) {
+    .#{$name}__inner {
+      border-color: var(--#{$name}-border-hover);
+      box-shadow: 0 0 0 2px var(--blue-200);
     }
   }
 
   @include state(disabled) {
     pointer-events: none;
 
-    .ea-radio__inner {
-      border-color: var(--ea-radio-disabled-color);
+    .#{$name}__inner {
+      border-color: var(--#{$name}-disabled-color);
     }
 
-    .ea-radio__label {
-      color: var(--ea-radio-disabled-color);
+    .#{$name}__label {
+      color: var(--#{$name}-disabled-color);
     }
 
     &.is-checked {
-      .ea-radio__inner {
-        background-color: var(--ea-radio-disabled-color);
+      .#{$name}__inner {
+        background-color: var(--#{$name}-disabled-color);
       }
     }
   }

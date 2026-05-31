@@ -1,21 +1,21 @@
+$name: ea-radio-group;
+
 :host {
+  --#{$name}-gap: var(--spacing-md);
+
   display: block;
 }
 
-::slotted(ea-radio) {
-  margin-right: 4px;
-}
-
 :host(:invalid) {
-  .ea-radio-group__form-label {
+  .#{$name}__form-label {
     color: var(--red-500);
   }
 }
 
-@include block(ea-radio-group) {
+@include block($name) {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: var(--#{$name}-gap);
 
   @include element(form-label) {
     display: block;
