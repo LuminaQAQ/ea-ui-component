@@ -29,7 +29,7 @@ onMounted(() => {
 
         init() {
             this.fillSwitch.addEventListener('change', (e) => {
-                this.fillContainer.setAttribute('fill', e.detail.value);
+                this.fillContainer.fill = e.detail.value;
             });
 
             this.fillRadioGroup.addEventListener('change', (e) => {
@@ -37,7 +37,7 @@ onMounted(() => {
             });
 
             this.fillRatioSwitch.addEventListener('change', (e) => {
-                this.fillRatioContainer.setAttribute('fill', e.detail.value);
+                this.fillRatioContainer.fill = e.detail.value;
             });
         }
     };
@@ -69,9 +69,22 @@ onMounted(() => {
 </script>
 ```
 
+> `css`
+
+::: tip
+需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
+:::
+
+```html
+<link
+  rel="stylesheet"
+  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
+/>
+```
+
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#ea-space-css-part)。
 
 ## 基础用法 ​
 
@@ -133,7 +146,7 @@ onMounted(() => {
 
 ## 垂直布局 ​
 
-使用 `direction` 来控制布局的方式, 背后实际上是利用了 `flex-direction` 来控制.
+使用 `direction` 来控制布局的方式，背后实际上是利用了 `flex-direction` 来控制。
 
 我们也提供垂直布局方式。
 
@@ -184,14 +197,14 @@ onMounted(() => {
 
 通过调整 `size` 的值来控制间距的大小
 
-使用内置的 `small`、`default`、`large` 来设置间距大小，分别对应 `8px`、`12px` 和 `16px` 的间距。 默认的间距大小为 `small`，也就是 `8px`。
+使用内置的 `small`、`default`、`large` 来设置间距大小，分别对应 `8px`、`12px` 和 `16px` 的间距。默认的间距大小为 `default`，也就是 `12px`。
 
 您也可以通过自定义的 `size` 来控制大小。
 
 <div class="demo">
-  <ea-space direction="vertical" alignment="start" size="30px">
-    <ea-radio-group id="controllableRadioGroup" name="salary">
-      <ea-radio value="large" checked>Large</ea-radio>
+  <ea-space direction="vertical" alignment="flex-start" size="30px">
+    <ea-radio-group id="controllableRadioGroup" name="salary" value="large">
+      <ea-radio value="large">Large</ea-radio>
       <ea-radio value="default">Default</ea-radio>
       <ea-radio value="small">Small</ea-radio>
     </ea-radio-group>
@@ -209,13 +222,15 @@ onMounted(() => {
   </ea-space>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html
 <div class="demo">
-  <ea-space direction="vertical" alignment="start" size="30px">
-    <ea-radio-group id="controllableRadioGroup" name="salary">
-      <ea-radio value="large" checked>Large</ea-radio>
+  <ea-space direction="vertical" alignment="flex-start" size="30px">
+    <ea-radio-group id="controllableRadioGroup" name="salary" value="large">
+      <ea-radio value="large">Large</ea-radio>
       <ea-radio value="default">Default</ea-radio>
       <ea-radio value="small">Small</ea-radio>
     </ea-radio-group>
@@ -268,6 +283,8 @@ controllableExample.init();
 
 :::
 
+::::
+
 ## 自动换行 ​
 
 在 **水平 (horizontal)** 模式下，通过使用 `wrap`（布尔类型）来控制自动换行行为。
@@ -306,7 +323,7 @@ controllableExample.init();
 
 有时候，仅仅在行间加空白并不能满足我们的日常需求，此时分隔符 (spacer) 就可以发挥非常好的作用了。
 
-利用 `wrap` 属性控制换行
+利用 `spacer` 属性设置分隔符
 
 <div class="demo">
   <ea-space size="10px" spacer="|">
@@ -400,7 +417,7 @@ controllableExample.init();
 
 <div class="demo">
   <div style="margin-bottom: 15px">
-    fill: <ea-switch id="fillSwitch"></ea-switch>
+    fill: <ea-switch id="fillSwitch" value="true"></ea-switch>
   </div>
   <ea-space id="fillSpace" wrap>
     <ea-card style="width: 250px;">
@@ -474,7 +491,7 @@ controllableExample.init();
 
 :::
 
-也可以使用 `fillRatio` 参数，自定义填充的比例， 默认值为 `100`，代表基于父容器宽度的 `100%` 进行填充
+也可以使用 `fillRatio` 参数，自定义填充的比例，默认值为 `100`，代表基于父容器宽度的 `100%` 进行填充
 
 需要注意的是，水平布局和垂直布局的表现形式稍有不同，具体的效果可以查看下面的例子
 
@@ -483,8 +500,8 @@ controllableExample.init();
 <div class="demo">
   <div style="margin-bottom: 15px">
     direction:
-    <ea-radio-group id="fillRadioGroup" name="direction">
-      <ea-radio value="horizontal" checked>horizontal</ea-radio>
+    <ea-radio-group id="fillRadioGroup" name="direction" value="horizontal">
+      <ea-radio value="horizontal">horizontal</ea-radio>
       <ea-radio value="vertical">vertical</ea-radio>
     </ea-radio-group>
   </div>
@@ -522,14 +539,16 @@ controllableExample.init();
   </ea-space>
 </div>
 
-::: details 查看代码
+:::: details 查看代码
+
+::: code-group
 
 ```html
 <div class="demo">
   <div style="margin-bottom: 15px">
     direction:
-    <ea-radio-group id="fillRadioGroup" name="direction">
-      <ea-radio value="horizontal" checked>horizontal</ea-radio>
+    <ea-radio-group id="fillRadioGroup" name="direction" value="horizontal">
+      <ea-radio value="horizontal">horizontal</ea-radio>
       <ea-radio value="vertical">vertical</ea-radio>
     </ea-radio-group>
   </div>
@@ -568,11 +587,7 @@ controllableExample.init();
 </div>
 ```
 
-:::
-
-::: code-group
-
-```js [填充容器示例]
+```js
 const fillExample = {
   fillSwitch: document.querySelector("#fillSwitch"),
   fillContainer: document.querySelector("#fillSpace"),
@@ -583,7 +598,7 @@ const fillExample = {
 
   init() {
     this.fillSwitch.addEventListener("change", e => {
-      this.fillContainer.setAttribute("fill", e.detail.value);
+      this.fillContainer.fill = e.detail.value;
     });
 
     this.fillRadioGroup.addEventListener("change", e => {
@@ -591,7 +606,7 @@ const fillExample = {
     });
 
     this.fillRatioSwitch.addEventListener("change", e => {
-      this.fillRatioContainer.setAttribute("fill", e.detail.value);
+      this.fillRatioContainer.fill = e.detail.value;
     });
   },
 };
@@ -600,27 +615,23 @@ fillExample.init();
 
 :::
 
+::::
+
 ## API
 
-### Attributes
+### ea-space Attributes
 
-| **属性名** | **说明**             | **类型**        | **可选值**                                                                                                                 | **默认值** |
-| ---------- | -------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| alignment  | 对齐的方式           | enum            | 详见 <ea-link type="primary" href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-items">MDN align-items</ea-link> | center     |
-| direction  | 排列的方向           | string          | `'vertical' \| 'horizontal'`                                                                                               | horizontal |
-| spacer     | 间隔                 | string / number | -                                                                                                                          | -          |
-| size       | 间隔大小             | string          | `'default' \| 'small' \| 'large'` / `string(eg: 32px)`                                                                     | default    |
-| wrap       | 设置是否自动折行     | boolean         | -                                                                                                                          | false      |
-| fill       | 子元素是否填充父容器 | boolean         | -                                                                                                                          | false      |
-| fill-ratio | 填充父容器的比例     | number          | `0-100`                                                                                                                    | 100        |
+| 属性名     | 说明                 | 类型    | 可选值                                                                              | 默认值     |
+| ---------- | -------------------- | ------- | ----------------------------------------------------------------------------------- | ---------- |
+| alignment  | 对齐的方式           | enum    | `""` \| `"center"` \| `"flex-start"` \| `"flex-end"` \| `"baseline"` \| `"stretch"` | ""         |
+| direction  | 排列的方向           | enum    | `"horizontal"` \| `"vertical"`                                                      | horizontal |
+| spacer     | 间隔分隔符           | string  | —                                                                                   | ""         |
+| size       | 间隔大小             | string  | `"default"` \| `"small"` \| `"large"` / 自定义值（如 `30px`）                       | default    |
+| wrap       | 设置是否自动折行     | boolean | —                                                                                   | false      |
+| fill       | 子元素是否填充父容器 | boolean | —                                                                                   | false      |
+| fill-ratio | 填充父容器的比例     | number  | `0-100`                                                                             | 100        |
 
-### Slots
-
-| **插槽名** | **说明** |
-| ---------- | -------- |
-| -          | 默认内容 |
-
-## CSS Part
+### ea-space CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -628,3 +639,20 @@ fillExample.init();
 | --------- | ---------- |
 | container | 容器       |
 | spacer    | 分隔符样式 |
+
+### ea-space Slots
+
+| 名称    | 说明                     |
+| ------- | ------------------------ |
+| default | 默认插槽，放置子元素内容 |
+
+### ea-space CSS 自定义属性
+
+| 属性名                 | 说明     | 默认值                      |
+| ---------------------- | -------- | --------------------------- |
+| --ea-space-gap         | 间距大小 | var(--ea-space-gap-default) |
+| --ea-space-gap-small   | 小号间距 | var(--spacing-md)           |
+| --ea-space-gap-default | 默认间距 | var(--spacing-lg)           |
+| --ea-space-gap-large   | 大号间距 | 1rem                        |
+| --ea-space-alignment   | 对齐方式 | center                      |
+| --ea-space-fill-ratio  | 填充比例 | 100%                        |

@@ -118,9 +118,9 @@
     <h1>控制间距的大小</h1>
 
     <div>
-        <ea-space direction="vertical" alignment="start" size="30px">
-            <ea-radio-group id="controllableRadioGroup" name="salary">
-                <ea-radio value="large" checked>Large</ea-radio>
+        <ea-space direction="vertical" alignment="flex-start" size="30px">
+            <ea-radio-group id="controllableRadioGroup" name="salary" value="large">
+                <ea-radio value="large">Large</ea-radio>
                 <ea-radio value="default">Default</ea-radio>
                 <ea-radio value="small">Small</ea-radio>
             </ea-radio-group>
@@ -284,13 +284,13 @@
     <div class="demo">
         <div style="margin-bottom: 15px">
             direction:
-            <ea-radio-group id="fillRadioGroup" name="direction">
-                <ea-radio value="horizontal" checked>horizontal</ea-radio>
+            <ea-radio-group id="fillRadioGroup" name="direction" value="horizontal">
+                <ea-radio value="horizontal">horizontal</ea-radio>
                 <ea-radio value="vertical">vertical</ea-radio>
             </ea-radio-group>
         </div>
         <div style="margin-bottom: 15px">
-            fill(ratio): <ea-switch id="fillRatioSwitch"></ea-switch>
+            fill(ratio): <ea-switch id="fillRatioSwitch" value="true"></ea-switch>
         </div>
         <ea-space id="fillRatioSpace" fill-ratio="49" wrap>
             <ea-card style="width: 250px;">
@@ -362,7 +362,7 @@
 
             init() {
                 this.fillSwitch.addEventListener('change', (e) => {
-                    this.fillContainer.setAttribute('fill', e.detail.value);
+                    this.fillContainer.fill = e.detail.value;
                 });
 
                 this.fillRadioGroup.addEventListener('change', (e) => {
@@ -370,7 +370,7 @@
                 });
 
                 this.fillRatioSwitch.addEventListener('change', (e) => {
-                    this.fillRatioContainer.setAttribute('fill', e.detail.checked);
+                    this.fillRatioContainer.fill = e.detail.value;
                 });
             }
         };

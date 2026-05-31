@@ -1,22 +1,17 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, query } from "@decorator";
+import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-space" as const;
 const bem = createBEM(TAG_NAME);
 
-// 方向类型
 const DIRECTION_TYPES = ["horizontal", "vertical"] as const;
 type DirectionType = (typeof DIRECTION_TYPES)[number];
 
-// 尺寸类型
 const SIZE_TYPES = ["small", "default", "large"] as const;
 type SizeType = (typeof SIZE_TYPES)[number];
 
-// 对齐类型
 const ALIGNMENT_TYPES = [
   "",
   "center",
@@ -27,20 +22,33 @@ const ALIGNMENT_TYPES = [
 ] as const;
 type AlignmentType = (typeof ALIGNMENT_TYPES)[number];
 
+/**
+ * @summary 间距组件，用于在子元素之间提供统一的间距，支持方向、对齐、换行和填充等布局功能。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot default - 默认插槽，用于放置需要间距的子元素。
+ *
+ * @csspart container - 容器元素。
+ * @csspart spacer - 分隔符元素。
+ *
+ * @cssproperty --ea-space-gap - 间距大小。
+ * @cssproperty --ea-space-gap-small - 小号间距。
+ * @cssproperty --ea-space-gap-default - 默认间距。
+ * @cssproperty --ea-space-gap-large - 大号间距。
+ * @cssproperty --ea-space-alignment - 对齐方式。
+ * @cssproperty --ea-space-fill-ratio - 填充比例。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSpace extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-space")
+  @query(bem.cb())
   private _container!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaSpace, newVal: boolean) {
-      this.style.setProperty("--ea-space-wrap", newVal ? "wrap" : "nowrap");
+    observer(this: EaSpace) {
+      this.updateContainerClasslist();
     },
   })
   wrap: boolean = false;
@@ -50,7 +58,7 @@ export class EaSpace extends EaBase {
     default: "",
     observer(this: EaSpace, newVal: AlignmentType) {
       if (newVal && !CSS.supports("align-items", newVal)) {
-        console.warn(`[ea-space] Invalid alignment value ${newVal}`);
+        console.warn(`[ea-space] Invalid alignment value: ${newVal}`);
         return;
       }
       this.style.setProperty("--ea-space-alignment", newVal || "center");
@@ -88,7 +96,6 @@ export class EaSpace extends EaBase {
     type: String,
     default: "",
     observer(this: EaSpace, newVal: string) {
-      // 移除现有的分隔符
       const existingSpacers = this.querySelectorAll('[part="spacer"]');
       existingSpacers.forEach(spacer => spacer.remove());
 
@@ -99,7 +106,7 @@ export class EaSpace extends EaBase {
         if (i < children.length - 1) {
           const spacer = document.createElement("span");
           spacer.innerText = newVal;
-          spacer.part = "spacer";
+          spacer.setAttribute("part", "spacer");
           this.insertBefore(spacer, child.nextSibling);
         }
       });
@@ -121,18 +128,13 @@ export class EaSpace extends EaBase {
     default: 100,
     observer(this: EaSpace, newVal: number) {
       if (!Number.isNaN(Number(newVal))) {
-        this.toggleAttribute("fill", true);
+        this.fill = true;
       }
       this.style.setProperty("--ea-space-fill-ratio", `${newVal}%`);
     },
   })
   fillRatio: number = 100;
 
-  // ==================== 方法 ====================
-
-  /**
-   * 更新容器类名
-   */
   updateContainerClasslist(): string {
     const isPresetSize = SIZE_TYPES.includes(this.size as SizeType);
     const className = bem(
@@ -151,9 +153,6 @@ export class EaSpace extends EaBase {
     return className;
   }
 
-  /**
-   * 渲染模板
-   */
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container">
@@ -161,8 +160,6 @@ export class EaSpace extends EaBase {
       </div>
     `;
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

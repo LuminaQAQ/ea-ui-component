@@ -1,15 +1,17 @@
+$name: ea-space;
+
 :host {
-  --ea-space-direction: row;
-  --ea-space-alignment: center;
-  --ea-space-wrap: nowrap;
+  --#{$name}-direction: row;
+  --#{$name}-alignment: center;
+  --#{$name}-wrap: nowrap;
 
-  --ea-space-gap-small: 0.5rem;
-  --ea-space-gap-default: 0.75rem;
-  --ea-space-gap-large: 1rem;
+  --#{$name}-gap-small: var(--spacing-md);
+  --#{$name}-gap-default: var(--spacing-lg);
+  --#{$name}-gap-large: 1rem;
 
-  --ea-space-gap: var(--ea-space-gap-default);
+  --#{$name}-gap: var(--#{$name}-gap-default);
 
-  --ea-space-fill-ratio: 100%;
+  --#{$name}-fill-ratio: 100%;
 }
 
 :host {
@@ -17,42 +19,37 @@
   width: 100%;
 }
 
-::slotted(*) {
-  box-sizing: border-box;
-}
-
-@include block(ea-space) {
+@include block($name) {
   display: flex;
-  align-items: var(--ea-space-alignment);
-  flex-direction: var(--ea-space-direction);
-  gap: var(--ea-space-gap);
+  align-items: var(--#{$name}-alignment);
+  flex-direction: var(--#{$name}-direction);
+  flex-wrap: var(--#{$name}-wrap);
+  gap: var(--#{$name}-gap);
 
-  flex-wrap: var(--ea-space-wrap);
-
-  @include modifier(horizontal) {
-    --ea-space-direction: row;
+  ::slotted(*) {
+    box-sizing: border-box;
   }
 
   @include modifier(vertical) {
-    --ea-space-direction: column;
-  }
-
-  @include modifier(wrap) {
-    --ea-space-wrap: wrap;
+    --#{$name}-direction: column;
   }
 
   @include modifier(small) {
-    --ea-space-gap: var(--ea-space-gap-small);
+    --#{$name}-gap: var(--#{$name}-gap-small);
   }
 
   @include modifier(large) {
-    --ea-space-gap: var(--ea-space-gap-large);
+    --#{$name}-gap: var(--#{$name}-gap-large);
   }
 
   @include modifier(fill) {
     ::slotted(*) {
-      flex-grow: var(--ea-space-fill-ratio);
-      min-width: var(--ea-space-fill-ratio);
+      flex-grow: var(--#{$name}-fill-ratio);
+      min-width: var(--#{$name}-fill-ratio);
     }
+  }
+
+  @include state(wrap) {
+    --#{$name}-wrap: wrap;
   }
 }
