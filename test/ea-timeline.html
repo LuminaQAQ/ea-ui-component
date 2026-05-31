@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>EaTimeline Demo</title>
     <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
@@ -16,11 +16,8 @@
   <body>
     <script type="module" src="../src/components/ea-timeline/index.ts"></script>
     <script type="module" src="../src/components/ea-card/index.ts"></script>
-    <script type="module" src="../src/components/ea-radio/index.ts"></script>
-    <script type="module" src="../src/components/ea-button/index.ts"></script>
 
-    <!-- -------- 基础用法 --------  -->
-    <!-- #region  -->
+    <!-- -------- 基础用法 -------- -->
     <h2>基础用法</h2>
     <div class="demo">
       <ea-timeline>
@@ -36,11 +33,8 @@
       </ea-timeline>
     </div>
     <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
 
-    <!-- -------- 定义节点样式 --------  -->
-    <!-- #region  -->
+    <!-- -------- 定义节点样式 -------- -->
     <h2>定义节点样式</h2>
     <div class="demo">
       <ea-timeline>
@@ -63,11 +57,8 @@
       </ea-timeline>
     </div>
     <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
 
-    <!-- -------- ⾃定义时间戳 --------  -->
-    <!-- #region  -->
+    <!-- -------- ⾃定义时间戳 -------- -->
     <h2>⾃定义时间戳</h2>
     <style>
       .header {
@@ -120,13 +111,9 @@
       </ea-timeline>
     </div>
     <hr />
-    <!-- #endregion  -->
-    <!-- -------------------  -->
 
-    <!--  垂直居中 -->
-    <!-- #region -->
-    <h1>垂直居中</h1>
-
+    <!-- -------- 垂直居中 -------- -->
+    <h2>垂直居中</h2>
     <div class="demo">
       <ea-timeline style="max-width: 600px">
         <ea-timeline-item center timestamp="2024/6/1" placement="top">
@@ -149,9 +136,45 @@
         </ea-timeline-item>
       </ea-timeline>
     </div>
-
     <hr />
-    <!-- #endregion  -->
-    <!-- end  -->
+
+    <!-- -------- 隐藏时间戳 -------- -->
+    <h2>隐藏时间戳</h2>
+    <div class="demo">
+      <ea-timeline>
+        <ea-timeline-item variant="primary" timestamp="2024-7-1" hide-timestamp>
+          隐藏时间戳
+        </ea-timeline-item>
+        <ea-timeline-item variant="success" timestamp="2024-7-2">
+          显示时间戳
+        </ea-timeline-item>
+        <ea-timeline-item variant="warning" timestamp="2024-7-3" hide-timestamp>
+          隐藏时间戳
+        </ea-timeline-item>
+      </ea-timeline>
+    </div>
+    <hr />
+
+    <!-- -------- 节点变体 -------- -->
+    <h2>节点变体</h2>
+    <div class="demo">
+      <ea-timeline>
+        <ea-timeline-item variant="primary" timestamp="2024-7-1">
+          Primary
+        </ea-timeline-item>
+        <ea-timeline-item variant="success" timestamp="2024-7-2">
+          Success
+        </ea-timeline-item>
+        <ea-timeline-item variant="warning" timestamp="2024-7-3">
+          Warning
+        </ea-timeline-item>
+        <ea-timeline-item variant="danger" timestamp="2024-7-4">
+          Danger
+        </ea-timeline-item>
+        <ea-timeline-item variant="info" timestamp="2024-7-5">
+          Info
+        </ea-timeline-item>
+      </ea-timeline>
+    </div>
   </body>
 </html>

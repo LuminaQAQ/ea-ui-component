@@ -635,26 +635,22 @@ describe("EaTimelineItem", () => {
       expect(item.hideTimestamp).toBe(false);
     });
 
-    it("设置 hideTimestamp 为 true 应该隐藏时间戳", async () => {
+    it("设置 hideTimestamp 为 true 应该添加 is-hide-timestamp 状态类名", async () => {
       const item = document.createElement("ea-timeline-item");
       item.hideTimestamp = true;
       container.appendChild(item);
       await waitForRender();
-      const timestampSlot = item.shadowRoot.querySelector(
-        'slot[name="timestamp"]'
-      );
-      expect(timestampSlot.style.display).toBe("none");
+      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
     });
 
-    it("hideTimestamp 为 false 时时间戳不应隐藏", async () => {
+    it("hideTimestamp 为 false 时不应添加 hide-timestamp 状态类名", async () => {
       const item = document.createElement("ea-timeline-item");
       item.hideTimestamp = false;
       container.appendChild(item);
       await waitForRender();
-      const timestampSlot = item.shadowRoot.querySelector(
-        'slot[name="timestamp"]'
-      );
-      expect(timestampSlot.style.display).not.toBe("none");
+      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
     });
 
     it("hideTimestamp 应该通过 setAttribute 设置", async () => {
@@ -665,35 +661,31 @@ describe("EaTimelineItem", () => {
       expect(item.hideTimestamp).toBe(true);
     });
 
-    it("hideTimestamp 从 true 变为 false 应该显示时间戳", async () => {
+    it("hideTimestamp 从 true 变为 false 应该移除 is-hide-timestamp 状态类名", async () => {
       const item = document.createElement("ea-timeline-item");
       item.hideTimestamp = true;
       container.appendChild(item);
       await waitForRender();
 
-      const timestampSlot = item.shadowRoot.querySelector(
-        'slot[name="timestamp"]'
-      );
-      expect(timestampSlot.style.display).toBe("none");
+      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
 
       item.hideTimestamp = false;
       await waitForRender();
-      expect(timestampSlot.style.display).toBe("block");
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
     });
 
-    it("hideTimestamp 从 false 变为 true 应该隐藏时间戳", async () => {
+    it("hideTimestamp 从 false 变为 true 应该添加 is-hide-timestamp 状态类名", async () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       await waitForRender();
 
-      const timestampSlot = item.shadowRoot.querySelector(
-        'slot[name="timestamp"]'
-      );
-      expect(timestampSlot.style.display).not.toBe("none");
+      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
 
       item.hideTimestamp = true;
       await waitForRender();
-      expect(timestampSlot.style.display).toBe("none");
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
     });
   });
 
@@ -748,7 +740,7 @@ describe("EaTimelineItem", () => {
       expect(dot.style.borderColor).not.toBe(initialBorderColor);
     });
 
-    it("color 设置为空字符串时不应设置 borderColor", async () => {
+    it("color 设置为空字符串时应该清除 borderColor 和 CSS 变量", async () => {
       const item = document.createElement("ea-timeline-item");
       item.color = "#0bbd87";
       container.appendChild(item);
@@ -760,6 +752,9 @@ describe("EaTimelineItem", () => {
       item.color = "";
       await waitForRender();
       expect(dot.style.borderColor).toBeFalsy();
+      expect(
+        item.style.getPropertyValue("--ea-timeline-item-dot-color")
+      ).toBeFalsy();
     });
   });
 
@@ -875,7 +870,7 @@ describe("EaTimelineItem", () => {
       expect(iconEl.getAttribute("name")).toBe("star");
     });
 
-    it("icon 设置为空字符串后 ea-icon 的 name 应该为空", async () => {
+    it("icon 设置为空字符串后应该移除 ea-icon", async () => {
       const item = document.createElement("ea-timeline-item");
       item.icon = "mug-hot";
       container.appendChild(item);
@@ -886,9 +881,7 @@ describe("EaTimelineItem", () => {
 
       item.icon = "";
       await waitForRender();
-      const iconEl = dotEl.querySelector("ea-icon");
-      expect(iconEl).toBeTruthy();
-      expect(iconEl.getAttribute("name")).toBe("");
+      expect(dotEl.querySelector("ea-icon")).toBeFalsy();
     });
 
     it("设置 icon 后 ea-icon 应该有 icon-dot CSS Part", async () => {
@@ -1251,6 +1244,7 @@ describe("EaTimelineItem", () => {
       item.placement = "top";
       item.center = true;
       item.hollow = true;
+      item.hideTimestamp = true;
       container.appendChild(item);
       await waitForRender();
 
@@ -1269,6 +1263,7 @@ describe("EaTimelineItem", () => {
         true
       );
       expect(containerEl.classList.contains("is-hollow-dot")).toBe(true);
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
     });
   });
 
@@ -1305,19 +1300,17 @@ describe("EaTimelineItem", () => {
       expect(timestampSlot.textContent).toBe("2024-7-1");
     });
 
-    it("hideTimestamp observer 应该在属性变化时更新 display 样式", async () => {
+    it("hideTimestamp observer 应该在属性变化时更新状态类名", async () => {
       const item = document.createElement("ea-timeline-item");
       container.appendChild(item);
       await waitForRender();
 
-      const timestampSlot = item.shadowRoot.querySelector(
-        'slot[name="timestamp"]'
-      );
-      expect(timestampSlot.style.display).not.toBe("none");
+      const containerEl = item.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
 
       item.hideTimestamp = true;
       await waitForRender();
-      expect(timestampSlot.style.display).toBe("none");
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
     });
 
     it("color observer 应该在属性变化时更新 dot 的 borderColor", async () => {
@@ -1592,16 +1585,17 @@ describe("EaTimelineItem", () => {
       container.appendChild(item);
       await waitForRender();
 
+      const containerEl = item.shadowRoot.querySelector('[part="container"]');
       const timestampSlot = item.shadowRoot.querySelector(
         'slot[name="timestamp"]'
       );
       expect(timestampSlot.textContent).toBe("2024-7-1");
-      expect(timestampSlot.style.display).toBe("none");
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(true);
 
       item.hideTimestamp = false;
       await waitForRender();
       expect(timestampSlot.textContent).toBe("2024-7-1");
-      expect(timestampSlot.style.display).toBe("block");
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
     });
 
     it("完整属性组合应该全部生效", async () => {
@@ -1647,10 +1641,10 @@ describe("EaTimelineItem", () => {
       expect(containerEl.classList.contains("ea-timeline-item--center")).toBe(
         true
       );
+      expect(containerEl.classList.contains("is-hide-timestamp")).toBe(false);
       expect(dot.style.borderColor).toBeTruthy();
       expect(dot.querySelector("ea-icon")).toBeTruthy();
       expect(timestampSlot.textContent).toBe("2024-7-1");
-      expect(timestampSlot.style.display).not.toBe("none");
     });
   });
 

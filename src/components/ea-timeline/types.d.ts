@@ -22,17 +22,17 @@ export interface EaTimelineItemElement extends HTMLElement {
   timestamp: string;
   /** 是否隐藏时间戳 */
   hideTimestamp: boolean;
-  /** 自定义颜色 */
+  /** 自定义颜色（支持任意 CSS 颜色值） */
   color: string;
   /** 是否为空心节点 */
   hollow: boolean;
-  /** 节点图标类名 */
+  /** 节点图标名称 */
   icon: string;
   /** 节点大小 */
   size: "normal" | "large" | "";
   /** 时间戳位置 */
   placement: "top" | "bottom" | "";
-  /** 是否垂直居中 */
+  /** 是否垂直居中对齐 */
   center: boolean;
 }
 
@@ -49,14 +49,23 @@ export interface EaTimelineVueProps {}
  * ea-timeline-item Vue 组件属性
  */
 export interface EaTimelineItemVueProps {
+  /** 节点类型 */
   variant?: "primary" | "success" | "warning" | "danger" | "info" | "";
+  /** 时间戳 */
   timestamp?: string;
+  /** 是否隐藏时间戳 */
   hideTimestamp?: boolean;
+  /** 自定义颜色（支持任意 CSS 颜色值） */
   color?: string;
+  /** 是否为空心节点 */
   hollow?: boolean;
+  /** 节点图标名称 */
   icon?: string;
+  /** 节点大小 */
   size?: "normal" | "large" | "";
+  /** 时间戳位置 */
   placement?: "top" | "bottom" | "";
+  /** 是否垂直居中对齐 */
   center?: boolean;
 }
 
@@ -74,9 +83,9 @@ export interface EaTimelineVueSlots {
 export interface EaTimelineItemVueSlots {
   /** 默认插槽，放置时间线项的主内容 */
   default?: () => any;
-  /** 自定义节点内容 */
+  /** 自定义节点内容（覆盖 icon 属性） */
   dot?: () => any;
-  /** 自定义时间戳内容 */
+  /** 自定义时间戳内容（覆盖 timestamp 属性） */
   timestamp?: () => any;
 }
 
@@ -137,14 +146,23 @@ export interface EaTimelineReactProps extends HTMLAttributes<HTMLElement> {
  * ea-timeline-item React 组件属性
  */
 export interface EaTimelineItemReactProps extends HTMLAttributes<HTMLElement> {
+  /** 节点类型 */
   variant?: "primary" | "success" | "warning" | "danger" | "info" | "";
+  /** 时间戳 */
   timestamp?: string;
+  /** 是否隐藏时间戳 */
   hideTimestamp?: boolean;
+  /** 自定义颜色（支持任意 CSS 颜色值） */
   color?: string;
+  /** 是否为空心节点 */
   hollow?: boolean;
+  /** 节点图标名称 */
   icon?: string;
+  /** 节点大小 */
   size?: "normal" | "large" | "";
+  /** 时间戳位置 */
   placement?: "top" | "bottom" | "";
+  /** 是否垂直居中对齐 */
   center?: boolean;
   /** 子内容 */
   children?: ReactNode;

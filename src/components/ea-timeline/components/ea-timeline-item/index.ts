@@ -1,32 +1,49 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { attribute } from "@decorator/attribute";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { Enum } from "@/utils/Enum";
-import { VARIANT_TYPES, type VariantType } from "@/constants/variant";
+import { CustomElement, attribute, query } from "@decorator";
+import { html } from "@utils/html";
+import { Enum } from "@utils/Enum";
+import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
 const TAG_NAME = "ea-timeline-item" as const;
 const bem = createBEM(TAG_NAME);
 
+/**
+ * @summary 时间线项组件，用于展示单个时间线节点，支持自定义样式、图标和颜色。
+ * @status stable
+ * @since 3.0
+ *
+ * @dependency ea-icon
+ *
+ * @slot default - 默认插槽，放置时间线项的主内容。
+ * @slot dot - 自定义节点内容（覆盖 icon 属性）。
+ * @slot timestamp - 自定义时间戳内容（覆盖 timestamp 属性）。
+ *
+ * @csspart container - 外层容器。
+ * @csspart left-wrapper - 左侧容器。
+ * @csspart dot - 默认的节点容器。
+ * @csspart icon-dot - 节点图标。
+ * @csspart tail - 时间线线条。
+ * @csspart right-wrapper - 右侧容器。
+ * @csspart content - 单个时间线的内容。
+ * @csspart timestamp - 时间戳。
+ *
+ * @cssproperty --ea-timeline-item-dot-color - 节点颜色。
+ * @cssproperty --ea-timeline-item-tail-color - 时间线线条颜色。
+ * @cssproperty --ea-timeline-item-content-color - 内容颜色。
+ * @cssproperty --ea-timeline-item-timestamp-color - 时间戳颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTimelineItem extends EaBase {
-  // ==================== DOM 元素引用 ====================
-
   @query(bem.cb())
   private _container!: HTMLElement;
 
   @query(bem.ce("dot"))
   private _dot!: HTMLElement;
 
-  @query(bem.ce("tail"))
-  private _tail!: HTMLElement;
-
   @query('slot[name="timestamp"]')
   private _timestampSlot!: HTMLElement;
-
-  // ==================== 属性定义 ====================
 
   @attribute({
     type: Enum(VARIANT_TYPES),
@@ -49,8 +66,8 @@ export class EaTimelineItem extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaTimelineItem, newVal: boolean) {
-      this._timestampSlot.style.display = newVal ? "none" : "block";
+    observer(this: EaTimelineItem) {
+      this.updateContainerClasslist();
     },
   })
   hideTimestamp: boolean = false;
@@ -59,6 +76,11 @@ export class EaTimelineItem extends EaBase {
     type: String,
     default: "",
     observer(this: EaTimelineItem, newVal: string) {
+      if (!newVal) {
+        this.style.removeProperty("--ea-timeline-item-dot-color");
+        if (this._dot) this._dot.style.borderColor = "";
+        return;
+      }
       if (!CSS.supports("color", newVal))
         return console.warn(
           `[EaTimelineItem] The color value ${newVal} is not supported.`
@@ -84,7 +106,13 @@ export class EaTimelineItem extends EaBase {
     type: String,
     default: "",
     observer(this: EaTimelineItem, newVal: string) {
-      this._dot.innerHTML = `<ea-icon class="${bem.e("icon-dot")}" part='icon-dot' name="${newVal}"></ea-icon>`;
+      if (newVal) {
+        this._dot.innerHTML = html(
+          `<ea-icon class="${bem.e("icon-dot")}" part="icon-dot" name="${newVal}"></ea-icon>`
+        );
+      } else {
+        this._dot.innerHTML = "";
+      }
     },
   })
   icon: string = "";
@@ -116,8 +144,7 @@ export class EaTimelineItem extends EaBase {
   })
   center: boolean = false;
 
-  // ==================== 方法 ====================
-
+  /** 更新容器类名列表 */
   updateContainerClasslist(): string {
     const className = bem(
       {
@@ -128,6 +155,7 @@ export class EaTimelineItem extends EaBase {
       },
       {
         "hollow-dot": this.hollow,
+        "hide-timestamp": this.hideTimestamp,
       }
     );
 
@@ -158,8 +186,6 @@ export class EaTimelineItem extends EaBase {
       </div>
     `;
   }
-
-  // ==================== 生命周期 ====================
 
   $mount(): void {
     this.updateContainerClasslist();

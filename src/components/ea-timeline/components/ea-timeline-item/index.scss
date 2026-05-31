@@ -1,16 +1,15 @@
-$ea-timeline-item-placement: (top, bottom);
 $name: ea-timeline-item;
 
 :host {
-  --is-last-child-display: block;
-  --is-last-child-top: 0;
+  --#{$name}-last-child-tail-display: block;
+  --#{$name}-last-child-tail-top: 0;
 
   --#{$name}-bottom-spacing: 20px;
   --#{$name}-spacing: 0 0 20px 28px;
   --#{$name}-timestamp-spacing: 8px;
 
-  --ea-timeline-item-dot-size-normal: 12px;
-  --ea-timeline-item-dot-size-large: 14px;
+  --#{$name}-dot-size-normal: 12px;
+  --#{$name}-dot-size-large: 14px;
 
   --#{$name}-dot-color: var(--grey-300);
   --#{$name}-tail-color: var(--grey-300);
@@ -19,7 +18,7 @@ $name: ea-timeline-item;
 
   --#{$name}-font-size: var(--font-size-md);
 
-  @include component-types-defination(ea-timeline-item, 5);
+  @include component-types-defination($name, 5);
 }
 
 @include block($name) {
@@ -39,10 +38,10 @@ $name: ea-timeline-item;
 
     border: 2px solid transparent;
 
-    width: var(--ea-timeline-item-dot-size-normal);
-    height: var(--ea-timeline-item-dot-size-normal);
-    font-size: var(--ea-timeline-item-dot-size-normal);
-    line-height: var(--ea-timeline-item-dot-size-normal);
+    width: var(--#{$name}-dot-size-normal);
+    height: var(--#{$name}-dot-size-normal);
+    font-size: var(--#{$name}-dot-size-normal);
+    line-height: var(--#{$name}-dot-size-normal);
 
     border-radius: 50%;
     background-color: var(--#{$name}-dot-color);
@@ -50,15 +49,15 @@ $name: ea-timeline-item;
   }
 
   @include element(icon-dot) {
-    font-size: calc(var(--ea-timeline-item-dot-size-normal) - 4px);
-    color: white;
+    --ea-icon-size: calc(var(--#{$name}-dot-size-normal) - 4px);
+    color: var(--color-white);
   }
 
   @include element(tail) {
-    display: var(--is-last-child-display);
+    display: var(--#{$name}-last-child-tail-display);
 
     position: absolute;
-    left: calc(var(--ea-timeline-item-dot-size-normal) / 2 + 2px);
+    left: calc(var(--#{$name}-dot-size-normal) / 2 + 2px);
     transform: translate(-50%, 0);
 
     width: 2px;
@@ -89,8 +88,8 @@ $name: ea-timeline-item;
 
   @include modifier(large) {
     .#{$name}__dot {
-      width: var(--ea-timeline-item-dot-size-large);
-      height: var(--ea-timeline-item-dot-size-large);
+      width: var(--#{$name}-dot-size-large);
+      height: var(--#{$name}-dot-size-large);
     }
   }
 
@@ -102,7 +101,7 @@ $name: ea-timeline-item;
     }
 
     .#{$name}__tail {
-      top: var(--is-last-child-top);
+      top: var(--#{$name}-last-child-tail-top);
     }
 
     .#{$name}__dot {
@@ -110,14 +109,16 @@ $name: ea-timeline-item;
     }
   }
 
-  @each $placement in $ea-timeline-item-placement {
+  @each $placement in (top, bottom) {
     @include modifier($placement) {
       .#{$name}__right-wrapper {
         display: flex;
 
-        @if $placement == top {
+        @if $placement ==top {
           flex-direction: column-reverse;
-        } @else {
+        }
+
+        @else {
           flex-direction: column;
         }
       }
@@ -131,17 +132,23 @@ $name: ea-timeline-item;
 
   @include state(hollow-dot) {
     .#{$name}__dot {
-      background-color: var(--white);
+      background-color: var(--color-white);
       border-width: 2px;
       border-style: solid;
+    }
+  }
+
+  @include state(hide-timestamp) {
+    .#{$name}__timestamp {
+      display: none;
     }
   }
 
   @each $type, $color in $component-types {
     @include modifier($type) {
       .#{$name}__dot {
-        background-color: var(--ea-timeline-item-#{$type}-color);
-        border-color: var(--ea-timeline-item-#{$type}-color);
+        background-color: var(--#{$name}-#{$type}-color);
+        border-color: var(--#{$name}-#{$type}-color);
       }
 
       .#{$name}__dot[part*="icon-dot"] {

@@ -1,12 +1,14 @@
+$item-name: ea-timeline-item;
+
 ::slotted(ea-timeline-item:last-child) {
-  --is-last-child-display: none;
+  --#{$item-name}-last-child-tail-display: none;
 }
 
 ::slotted(ea-timeline-item:first-child) {
-  --is-last-child-top: calc(50% - 20px);
+  --#{$item-name}-last-child-tail-top: calc(50% - 20px);
 }
 
 ::slotted(ea-timeline-item:last-child[center]) {
-  --is-last-child-display: block;
-  --is-last-child-top: calc(-50% - 20px);
+  --#{$item-name}-last-child-tail-display: block;
+  --#{$item-name}-last-child-tail-top: calc(-50% - 20px);
 }
