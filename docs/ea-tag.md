@@ -325,7 +325,7 @@ Tag 可以像按钮组件一样变为完全圆形。
 | -------- | ------------------ | ------- | ------------------------------------------------- | ------ |
 | checked  | 是否选中状态       | boolean | —                                                 | false  |
 | disabled | 是否禁用交互       | boolean | —                                                 | false  |
-| variant  | 选中状态的主题样式 | string  | `primary \| success \| info \| warning \| danger` | info   |
+| variant  | 选中状态的主题样式 | string  | `primary \| success \| info \| warning \| danger` | primary |
 
 ### CheckTag CSS Part
 

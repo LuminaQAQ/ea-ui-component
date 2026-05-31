@@ -8,9 +8,17 @@ $tag-variant: (
   "info": grey,
 );
 
-$tag-sizes: ("large", "default", "small");
+$tag-sizes: (
+  "large",
+  "default",
+  "small"
+);
 
-$tag-effects: ("light", "dark", "plain");
+$tag-effects: (
+  "light",
+  "dark",
+  "plain"
+);
 
 :host {
   --#{$name}-border-radius: var(--border-radius-sm);
@@ -23,10 +31,12 @@ $tag-effects: ("light", "dark", "plain");
 
   @each $variant, $color in $tag-variant {
     @each $effect in $tag-effects {
-      @if ($effect == "light") {
+      @if ($effect =="light") {
         --#{$name}-#{$variant}-#{$effect}-bg-color: var(--#{$color}-100);
         --#{$name}-#{$variant}-#{$effect}-text-color: var(--#{$color}-500);
-      } @else {
+      }
+
+      @else {
         --#{$name}-#{$variant}-#{$effect}-bg-color: var(--#{$color}-500);
       }
     }
@@ -51,6 +61,8 @@ $tag-effects: ("light", "dark", "plain");
 
   @include element(close) {
     display: none;
+    --ea-icon-size: var(--#{$name}-font-size);
+    cursor: pointer;
   }
 
   @each $size in $tag-sizes {
@@ -67,11 +79,13 @@ $tag-effects: ("light", "dark", "plain");
 
       @each $effect in $tag-effects {
         &.#{$name}--#{$effect} {
-          @if ($effect == "dark") {
+          @if ($effect =="dark") {
             color: var(--color-white);
             background-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
             border-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
-          } @else if($effect == "plain") {
+          }
+
+          @else if($effect =="plain") {
             background-color: var(--color-transparent);
             color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
             border-color: var(--#{$name}-#{$variant}-#{$effect}-bg-color);
@@ -84,13 +98,10 @@ $tag-effects: ("light", "dark", "plain");
   @include state(closable) {
     display: inline-flex;
     align-items: center;
+    gap: var(--spacing-xs);
 
     .#{$name}__close {
-      display: inline-block;
-      margin-left: var(--spacing-sm);
-      margin-top: var(--spacing-sm);
-      cursor: pointer;
-      font-size: var(--#{$name}-font-size);
+      display: inline-flex;
     }
   }
 

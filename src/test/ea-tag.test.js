@@ -631,13 +631,13 @@ describe("EaCheckTag", () => {
   });
 
   describe("Variant Attribute", () => {
-    it("默认 variant 应该是 info", async () => {
+    it("默认 variant 应该是 primary", async () => {
       const checkTag = document.createElement("ea-check-tag");
       container.appendChild(checkTag);
 
       await waitForRender();
 
-      expect(checkTag.variant).toBe("info");
+      expect(checkTag.variant).toBe("primary");
     });
 
     it("应该支持 variant='primary'", async () => {
@@ -694,7 +694,9 @@ describe("EaCheckTag", () => {
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-check-tag--success")).toBe(true);
+      expect(containerEl.classList.contains("ea-check-tag--success")).toBe(
+        true
+      );
     });
 
     it("checked 为 false 时不应该添加 variant 修饰符类", async () => {
@@ -706,7 +708,9 @@ describe("EaCheckTag", () => {
 
       const containerEl =
         checkTag.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.classList.contains("ea-check-tag--success")).toBe(false);
+      expect(containerEl.classList.contains("ea-check-tag--success")).toBe(
+        false
+      );
     });
   });
 

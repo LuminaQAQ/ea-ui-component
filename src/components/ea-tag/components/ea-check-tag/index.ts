@@ -1,11 +1,7 @@
 import EaBase, { createBEM } from "@core/EaBase";
 import { CustomElement, attribute, query, listen } from "@decorator";
 import { Enum } from "@utils/Enum";
-import {
-  VARIANT_TYPES,
-  VARIANT_DEFAULT,
-  type VariantType,
-} from "@/constants/variant";
+import { VARIANT_TYPES, type VariantType } from "@/constants/variant";
 import { EaCheckTagChangeEvent } from "../../events/EaCheckTagChangeEvent";
 import stylesheet from "./index.scss?inline";
 
@@ -48,12 +44,12 @@ export class EaCheckTag extends EaBase {
 
   @attribute({
     type: Enum(VARIANT_TYPES),
-    default: VARIANT_DEFAULT,
+    default: "primary",
     observer(this: EaCheckTag) {
       this.updateContainerClasslist();
     },
   })
-  variant: VariantType = VARIANT_DEFAULT;
+  variant: VariantType = "primary";
 
   /** 更新容器类名 */
   updateContainerClasslist(): string {
