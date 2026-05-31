@@ -24,7 +24,9 @@ description: "Event system for Web Components including emit() and custom event 
 
 ## emit() 模式
 
-`this.emit()` 仅用于父子组件内部通信，事件名统一使用 `ea-` 前缀标识其内部性质。
+`this.emit()` 仅用于父子组件内部通信，事件名统一使用 `ea-{component}-{event}` 格式标识其内部性质。
+
+**说明**：此类事件主要服务于组件内部逻辑，即便用户监听也不会获得实质性业务价值。
 
 ### 内部通信事件
 
@@ -49,12 +51,15 @@ emit(eventName: string, options?: CustomEventInit): boolean
 
 ### 命名规则
 
-`this.emit()` 的事件名统一使用 `ea-` 前缀，格式为 `ea-{component}-{action}`：
+`this.emit()` 的事件名统一使用 `ea-` 前缀，格式为 `ea-{component}-{event}`：
 
 ```typescript
-// ✅ 正确：ea- 前缀标识内部通信
+// ✅ 正确：ea-{component}-{event} 格式标识内部通信
 this.emit("ea-tab-close-icon-click", { detail: { name } });
 this.emit("ea-sub-menu-click", { detail: { index, item } });
+
+// ❌ 错误：无组件名前缀，不够明确
+this.emit("ea-close-icon-click", { detail: { name } });
 
 // ❌ 错误：无前缀，外部用户可能误监听
 this.emit("close-icon-click", { detail: { name } });
@@ -318,9 +323,9 @@ private _handleTabClose(e: CustomEvent) {
 
 ```typescript
 // EaMessageInstance.ts
-el.emit("show");
-el.emit("shown");
-el.emit("hide");
-el.emit("hidden");
-el.emit("close");
+el.emit("ea-message-show");
+el.emit("ea-message-shown");
+el.emit("ea-message-hide");
+el.emit("ea-message-hidden");
+el.emit("ea-message-close");
 ```

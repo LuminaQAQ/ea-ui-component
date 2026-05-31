@@ -1,7 +1,7 @@
 # ea-ui-component 项目开发规范
 
-> **版本**: 3.4.0  
-> **最后更新**: 2026-05-27  
+> **版本**: 3.5.0  
+> **最后更新**: 2026-05-30  
 > **更新日志**: 见文末
 
 本项目是基于 Web Components 的组件库，使用 TypeScript 和装饰器模式实现，开发时必须遵循以下规范。
@@ -71,10 +71,22 @@ src/
 
 ```typescript
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, property, query, queryAll, children, listen } from "@decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  queryAll,
+  children,
+  listen,
+} from "@decorator";
 import { html } from "@utils/html";
 import { Enum } from "@utils/Enum";
-import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
+import {
+  VARIANT_TYPES,
+  VARIANT_DEFAULT,
+  type VariantType,
+} from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-component" as const;
@@ -174,15 +186,15 @@ export class EaComponent extends EaBase {
 
 > 详细用法参见对应技能模块
 
-| 装饰器 | 用途 | 技能 |
-|--------|------|------|
-| `@CustomElement` | 注册自定义元素 | `custom-element` |
-| `@attribute` | 定义 HTML attribute 映射属性 | `attribute` |
-| `@property` | 定义纯 JS 属性 | `property` |
-| `@query` | 查询单个 DOM 元素 | `query` |
-| `@queryAll` | 查询多个 DOM 元素 | `query` |
-| `@children` | 查询 Light DOM 子元素 | `children` |
-| `@listen` | 绑定事件监听 | `listen` |
+| 装饰器           | 用途                         | 技能             |
+| ---------------- | ---------------------------- | ---------------- |
+| `@CustomElement` | 注册自定义元素               | `custom-element` |
+| `@attribute`     | 定义 HTML attribute 映射属性 | `attribute`      |
+| `@property`      | 定义纯 JS 属性               | `property`       |
+| `@query`         | 查询单个 DOM 元素            | `query`          |
+| `@queryAll`      | 查询多个 DOM 元素            | `query`          |
+| `@children`      | 查询 Light DOM 子元素        | `children`       |
+| `@listen`        | 绑定事件监听                 | `listen`         |
 
 ### 导入顺序规范
 
@@ -193,7 +205,15 @@ export class EaComponent extends EaBase {
 import EaBase, { createBEM } from "@core/EaBase";
 
 // 2. 装饰器（统一从 @decorator 导入）
-import { CustomElement, attribute, property, query, queryAll, children, listen } from "@decorator";
+import {
+  CustomElement,
+  attribute,
+  property,
+  query,
+  queryAll,
+  children,
+  listen,
+} from "@decorator";
 
 // 3. 工具函数
 import { html } from "@utils/html";
@@ -201,13 +221,18 @@ import { Enum } from "@utils/Enum";
 import { timeout } from "@utils/timeout";
 
 // 4. 常量
-import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/variant";
+import {
+  VARIANT_TYPES,
+  VARIANT_DEFAULT,
+  type VariantType,
+} from "@constants/variant";
 
 // 5. 子组件/资源
 import stylesheet from "./index.scss?inline";
 ```
 
 **关键规则：**
+
 - **装饰器统一从 `@decorator` 导入**，禁止使用零散路径（如 `@decorator/attribute`）
 - 仅导入当前组件实际使用的装饰器
 - 装饰器按 `CustomElement → attribute → property → query → queryAll → children → listen` 顺序排列
@@ -242,16 +267,16 @@ export class EaAlert extends EaBase {
 
 **JSDoc 标签说明：**
 
-| 标签 | 必填 | 说明 |
-|------|------|------|
-| `@summary` | ✅ | 组件的中文简要描述，说明用途和核心功能 |
-| `@status` | ✅ | 组件稳定状态：`stable`（稳定）/ `experimental`（实验性）/ `deprecated`（已弃用） |
-| `@since` | ✅ | 组件首次引入的版本号 |
-| `@dependency` | 条件必填 | 依赖的子组件标签名（无依赖则省略） |
-| `@slot` | 条件必填 | 插槽描述，格式：`@slot name - 描述`，默认插槽用 `default` |
-| `@event` | 条件必填 | 事件描述，格式：`@event name - 描述，detail: { ... }` |
-| `@csspart` | 条件必填 | CSS Part 描述，格式：`@csspart name - 描述` |
-| `@cssproperty` | 条件必填 | CSS 自定义属性描述，格式：`@cssproperty --name - 描述` |
+| 标签           | 必填     | 说明                                                                             |
+| -------------- | -------- | -------------------------------------------------------------------------------- |
+| `@summary`     | ✅       | 组件的中文简要描述，说明用途和核心功能                                           |
+| `@status`      | ✅       | 组件稳定状态：`stable`（稳定）/ `experimental`（实验性）/ `deprecated`（已弃用） |
+| `@since`       | ✅       | 组件首次引入的版本号                                                             |
+| `@dependency`  | 条件必填 | 依赖的子组件标签名（无依赖则省略）                                               |
+| `@slot`        | 条件必填 | 插槽描述，格式：`@slot name - 描述`，默认插槽用 `default`                        |
+| `@event`       | 条件必填 | 事件描述，格式：`@event name - 描述，detail: { ... }`                            |
+| `@csspart`     | 条件必填 | CSS Part 描述，格式：`@csspart name - 描述`                                      |
+| `@cssproperty` | 条件必填 | CSS 自定义属性描述，格式：`@cssproperty --name - 描述`                           |
 
 ### 属性命名规则
 
@@ -262,15 +287,15 @@ export class EaAlert extends EaBase {
 
 ### 生命周期方法
 
-| 方法 | 说明 | 调用时机 |
-|------|------|---------|
-| `html()` | 渲染模板 | `connectedCallback` 中调用，返回 HTML 字符串 |
-| `$mount()` | 组件挂载 | `connectedCallback` 后，`requestAnimationFrame` 中 |
-| `$mounted()` | 挂载完成 | `$mount()` 之后调用 |
-| `$beforeUnmount()` | 组件销毁前 | `disconnectedCallback` 开始时 |
-| `$unmounted()` | 组件销毁后 | `disconnectedCallback` 结束时 |
-| `$updated(data)` | 属性更新 | `attributeChangedCallback` 后，参数 `{ key, newVal, oldVal }` |
-| `$updateLocalization(locale)` | 语言更新 | `locale` 属性变化时 |
+| 方法                          | 说明       | 调用时机                                                      |
+| ----------------------------- | ---------- | ------------------------------------------------------------- |
+| `html()`                      | 渲染模板   | `connectedCallback` 中调用，返回 HTML 字符串                  |
+| `$mount()`                    | 组件挂载   | `connectedCallback` 后，`requestAnimationFrame` 中            |
+| `$mounted()`                  | 挂载完成   | `$mount()` 之后调用                                           |
+| `$beforeUnmount()`            | 组件销毁前 | `disconnectedCallback` 开始时                                 |
+| `$unmounted()`                | 组件销毁后 | `disconnectedCallback` 结束时                                 |
+| `$updated(data)`              | 属性更新   | `attributeChangedCallback` 后，参数 `{ key, newVal, oldVal }` |
+| `$updateLocalization(locale)` | 语言更新   | `locale` 属性变化时                                           |
 
 ### 事件系统
 
@@ -287,25 +312,26 @@ this.emit("ea-tab-close-icon-click", { detail: { name: this.name } });
 
 **事件模式选择规则：**
 
-| 场景 | 模式 | 理由 |
-|------|------|------|
-| 对外公开事件（用户监听的） | 自定义事件类 | 控制台显示类名（如 `EaCheckboxChangeEvent`），类型安全 |
-| 父子组件内部通信 | `this.emit()` | 轻量级，无需定义事件类 |
+| 场景                       | 模式          | 理由                                                   |
+| -------------------------- | ------------- | ------------------------------------------------------ |
+| 对外公开事件（用户监听的） | 自定义事件类  | 控制台显示类名（如 `EaCheckboxChangeEvent`），类型安全 |
+| 父子组件内部通信           | `this.emit()` | 轻量级，无需定义事件类                                 |
 
 **事件命名规则：**
 
-| 模式 | 事件名规则 | 示例 |
-|------|-----------|------|
-| 自定义事件类（原生对应事件） | **使用原生事件名** | `focus`, `blur`, `change`, `input` |
-| 自定义事件类（组件特有事件） | **使用 `ea-` 前缀** | `ea-clear`, `ea-sort-change` |
-| `this.emit()` | 统一 `ea-` 前缀 | `ea-tab-close-icon-click`, `ea-sub-menu-click` |
+| 模式                         | 事件名规则                        | 示例                                           |
+| ---------------------------- | --------------------------------- | ---------------------------------------------- |
+| 自定义事件类（原生对应事件） | **使用原生事件名**                | `focus`, `blur`, `change`, `input`             |
+| 自定义事件类（组件特有事件） | **使用 `ea-` 前缀**               | `ea-clear`, `ea-sort-change`                   |
+| `this.emit()`                | **`ea-{component}-{event}` 格式** | `ea-tab-close-icon-click`, `ea-sub-menu-click` |
 
 **自定义事件类规范：**
+
 - 文件组织：组件目录下 `events/Ea{Component}{Action}Event.ts`
 - Detail 接口：独立 `export interface`，命名 `Ea{Component}{Action}EventDetail`
 - 全局类型注册：仅 `ea-` 前缀的事件名注册到 `GlobalEventHandlersEventMap`，原生事件名不注册（避免与内置类型冲突）
 - 构造选项：默认 `{ bubbles: true, composed: true }`
-- 阻止原生事件泄漏：当事件名与原生事件同名时，必须在 Shadow DOM 内部 `stopPropagation()` 阻止原生事件穿透
+- 阻止原生事件泄漏：当事件名与原生事件同名时，必须在 Shadow DOM 内部 `stopPropagation()` 阻止原生事件穿透，然后从宿主元素派发自定义事件
 
 ### BEM 类名规范
 
@@ -314,11 +340,11 @@ this.emit("ea-tab-close-icon-click", { detail: { name: this.name } });
 ```typescript
 const bem = createBEM("ea-component");
 
-bem();                              // "ea-component"
-bem.e("content");                   // "ea-component__content"
-bem({ size: "large" });             // "ea-component ea-component--size-large"
-bem({}, { disabled: true });        // "ea-component is-disabled"
-bem({ primary: true }, { active: this.active });  // 组合
+bem(); // "ea-component"
+bem.e("content"); // "ea-component__content"
+bem({ size: "large" }); // "ea-component ea-component--size-large"
+bem({}, { disabled: true }); // "ea-component is-disabled"
+bem({ primary: true }, { active: this.active }); // 组合
 ```
 
 ### HTML 安全处理
@@ -431,24 +457,25 @@ $name: ea-component-name;
 
 - 不添加任何注释（除非用户明确要求）
 - **例外 1：每个组件类必须添加 JSDoc 注释**，包含 `@summary`、`@status`、`@since` 等元信息标签（参见「组件类 JSDoc 注释规范」）
-- **例外 2：每个私有方法必须添加简单的 JSDoc 注释**，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数，有返回值时必须用 `@returns` 说明返回值
+- **例外 2：每个私有方法必须添加简单的 JSDoc 注释**，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数，有返回值时必须用 `@returns` 说明返回值。**包括 `@listen` 事件处理方法**（如 `_handleClick`、`_handleInput`）
+- **例外 3：每个公共方法必须添加 JSDoc 注释**，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数，有返回值时必须用 `@returns` 说明返回值
 - 保持代码简洁、清晰
 - 遵循现有的代码风格和命名约定
 
 ### 函数命名规范
 
-| 函数类型 | 前缀 | 示例 | 说明 |
-|----------|------|------|------|
-| 事件处理 | `_handle` | `_handleClick`, `_handleInput` | 事件回调 |
-| 私有方法 | `_` | `_updateUI`, `_renderData` | 组件内部使用 |
-| 公共方法 | 无 | `setData`, `show`, `hide` | 对外 API |
-| 生命周期 | `$` | `$mount`, `$beforeUnmount` | 生命周期钩子 |
-| 渲染相关 | `_render` | `_renderItems` | 渲染方法 |
+| 函数类型 | 前缀      | 示例                           | 说明         |
+| -------- | --------- | ------------------------------ | ------------ |
+| 事件处理 | `_handle` | `_handleClick`, `_handleInput` | 事件回调     |
+| 私有方法 | `_`       | `_updateUI`, `_renderData`     | 组件内部使用 |
+| 公共方法 | 无        | `setData`, `show`, `hide`      | 对外 API     |
+| 生命周期 | `$`       | `$mount`, `$beforeUnmount`     | 生命周期钩子 |
+| 渲染相关 | `_render` | `_renderItems`                 | 渲染方法     |
 
 ### 文件操作
 
 - 优先编辑现有文件，而不是创建新文件
-- 不要主动创建文档文件（*.md）或 README 文件，除非用户明确要求
+- 不要主动创建文档文件（\*.md）或 README 文件，除非用户明确要求
 
 ### 开发流程
 
@@ -466,9 +493,9 @@ $name: ea-component-name;
 ```javascript
 import { waitForRender } from "./utils/waitForRender";
 
-await waitForRender();    // 默认 100ms
+await waitForRender(); // 默认 100ms
 await waitForRender(200); // 自定义
-await waitForRender(0);   // 微任务等待
+await waitForRender(0); // 微任务等待
 ```
 
 ### DOMPurify 属性丢失问题
@@ -524,6 +551,12 @@ $mount(): void {
 ---
 
 ## 更新日志
+
+### v3.5.0 (2026-05-30)
+
+- **JSDoc 注释规范补充**：明确私有方法注释包括 `@listen` 事件处理方法，新增公共方法 JSDoc 注释为必填项（例外 3）
+- **emit() 事件命名规范强化**：`this.emit()` 事件名格式从 `ea-{event}` 细化为 `ea-{component}-{event}`，明确此类事件服务于组件内部逻辑
+- **自定义事件类规范强化**：原生事件名适配原则（封装原生元素时使用原生事件名而非 `ea-` 前缀），派发前必须 `stopPropagation()` 阻止原生事件穿透
 
 ### v3.4.0 (2026-05-27)
 

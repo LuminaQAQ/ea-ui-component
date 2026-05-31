@@ -129,3 +129,24 @@ private _handleInput(e: Event) { }
 @listen("change", ".ea-select")
 private _handleChange(e: Event) { }
 ```
+
+## JSDoc 注释规范
+
+每个 `@listen` 事件处理方法必须添加 JSDoc 注释，格式为 `/** 描述 */`；有参数时必须用 `@param` 说明参数：
+
+```typescript
+/** 处理按钮点击事件 */
+@listen("click", ".ea-component__button")
+private _handleButtonClick(e: Event) { }
+
+/**
+ * 处理输入事件，校验输入值
+ * @param e - 输入事件对象
+ */
+@listen("input", ".ea-component__input")
+private _handleInput(e: Event) { }
+
+/** 处理指针抬起事件，停止长按重复 */
+@listen("pointerup", ".ea-component__button")
+private _handlePointerUp() { }
+```

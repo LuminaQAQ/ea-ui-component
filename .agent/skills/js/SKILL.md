@@ -130,10 +130,11 @@ export class EaComponent extends EaBase {
 
   // ==================== 事件处理 ====================
 
+  /** 处理按钮点击事件 */
   @listen("click", ".ea-component__button")
   private _handleClick(e: Event) {
     if (this.disabled) return;
-    this.emit("click", { detail: { target: e.target } });
+    this.emit("ea-component-click", { detail: { target: e.target } });
   }
 
   // ==================== 生命周期 ====================
@@ -359,18 +360,19 @@ content: string = "";
 ### 派发事件
 
 ```typescript
-// 简单事件
-this.emit("focus");
-this.emit("blur");
+// 内部通信事件（ea-{component}-{event} 格式）
+this.emit("ea-input-number-focus");
+this.emit("ea-input-number-blur");
 
-// 带数据的事件
-this.emit("change", {
+// 带数据的内部通信事件
+this.emit("ea-tab-close-icon-click", {
   detail: {
-    value: newVal,
-    label: item.label,
+    name: this.name,
   },
 });
 ```
+
+**注意**：`this.emit()` 仅用于父子组件内部通信，事件名必须使用 `ea-{component}-{event}` 格式。对外公开事件应使用自定义事件类（参见 event 技能）。
 
 ### 自定义事件类（ea- 前缀事件）
 
@@ -643,6 +645,7 @@ private _renderImage(src: string): void {
 **问题**：`HTMLElement` 有一些内置属性（如 `title`, `lang`, `dir`, `draggable`, `tabIndex`, `style`, `className` 等）。如果在组件中使用 `@attribute` 装饰器声明与这些保留属性同名的属性，类字段初始化器（如 `this.title = ""`）会触发 `HTMLElement.title` 的 setter，导致 jsdom 自定义元素升级失败（`NotSupportedError: Unexpected attributes`）。
 
 **解决方案**：使用不会与 `HTMLElement` 保留属性冲突的名称。例如：
+
 - `title` → `heading`（与 `EaDialog` 一致）
 - `type` → `variant`
 
@@ -711,11 +714,13 @@ $mount(): void {
 ```
 
 **安全操作**（可在 `$mount` 中执行）：
+
 - `updateContainerClasslist()` - 更新 CSS 类名
 - `setAttribute()` - 设置属性
 - DOM 查询和读取
 
 **危险操作**（不可在 `$mount` 中执行）：
+
 - `appendChild()` / `insertBefore()` - DOM 移动
 - `remove()` / `removeChild()` - DOM 移除
 - 任何会改变组件在 DOM 树中位置的操作
