@@ -69,7 +69,7 @@ onMounted(() => {
 
 ```html
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-switch/index.ts";
+  import "./node_modules/easy-component-ui/components/ea-switch/index.js";
 </script>
 ```
 
@@ -88,7 +88,7 @@ onMounted(() => {
 
 ## 自定义样式
 
-移步到 [CSS Part](#css-part)。
+移步到 [CSS Part](#switch-css-part) 和 [CSS 自定义属性](#switch-css-自定义属性)。
 
 ## 基础用法
 
@@ -123,6 +123,8 @@ onMounted(() => {
 :::
 
 ## 不同尺寸
+
+提供 `large`、`default`、`small` 三种尺寸，通过 `size` 属性设置。
 
 <div class="demo col left">
   <ea-switch
@@ -182,7 +184,7 @@ onMounted(() => {
 
 ## 文字描述
 
-使用 `active-text` 属性与 `inactive-text` 属性来设置开关的文字描述。
+使用 `active-text` 属性与 `inactive-text` 属性来设置开关的文字描述，也可通过 `active` 和 `inactive` 插槽自定义内容。
 
 <div class="demo col left">
   <ea-switch
@@ -250,7 +252,7 @@ onMounted(() => {
 
 ## 扩展的 value 类型
 
-你可以设置 `active-value` 和 `inactive-value` 属性， 它们接受 `Boolean`、`String` 或 `Number` 类型的值。
+你可以设置 `active-value` 和 `inactive-value` 属性，它们接受 `Boolean`、`String` 或 `Number` 类型的值。
 
 <div class="demo">
   <ea-tooltip id="extTooltip" content="1111" placement="top-start">
@@ -267,6 +269,8 @@ onMounted(() => {
     ></ea-switch>
   </ea-tooltip>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -309,9 +313,11 @@ extExample.init();
 
 :::
 
+::::
+
 ## 禁用状态
 
-设置 `disabled` 属性，接受一个 `Boolean` ，设置 `true` 即可禁用。
+设置 `disabled` 属性即可禁用开关。
 
 <div class="row left">
   <ea-switch disabled></ea-switch>
@@ -322,6 +328,8 @@ extExample.init();
     disabled
   ></ea-switch>
 </div>
+
+::: details 查看代码
 
 ```html
 <div class="demo">
@@ -335,12 +343,18 @@ extExample.init();
 </div>
 ```
 
+:::
+
 ## 阻止切换
+
+设置 `beforeChange` 属性，在切换前进行拦截。返回 `Promise.resolve()` 允许切换，返回 `Promise.reject()` 阻止切换。
 
 <div class="demo">
   <ea-switch id="forbiddenSwitch1"></ea-switch>
   <ea-switch id="forbiddenSwitch2"></ea-switch>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -387,25 +401,27 @@ forbiddenExample.init();
 
 :::
 
+::::
+
 ## Switch API
 
 ### Switch Attributes
 
-| 参数                                              | 说明                                                     | 类型                      | 可选值                      | 默认值  |
-| ------------------------------------------------- | -------------------------------------------------------- | ------------------------- | --------------------------- | ------- |
-| label                                             | 标签文本                                                 | string                    | -                           | ''      |
-| name                                              | 原生属性，若与 `form` 组合使用，则作为 `FormData` 的键名 | string                    | -                           | -       |
-| value                                             | 当前开关的值                                             | string / number / boolean | -                           | false   |
-| activeValue                                       | 打开时的值                                               | string / number / boolean | -                           | true    |
-| inactiveValue                                     | 关闭时的值                                               | string / number / boolean | -                           | false   |
-| size                                              | 开关的尺寸                                               | string                    | `large \| default \| small` | default |
-| inactiveText                                      | 关闭时显示的文字                                         | string                    | -                           | -       |
-| inactiveColor                                     | 关闭时的背景色                                           | string                    | -                           | -       |
-| activeText                                        | 打开时显示的文字                                         | string                    | -                           | -       |
-| activeColor                                       | 打开时的背景色                                           | string                    | -                           | -       |
-| disabled                                          | 是否禁用                                                 | boolean                   | -                           | false   |
-| required                                          | 是否必填                                                 | boolean                   | -                           | false   |
-| beforeChange <PropTag />                          | 切换前的回调函数，返回 Promise                           | Function                  | -                           | null    |
+| 参数                     | 说明                                                     | 类型                      | 可选值                      | 默认值  |
+| ------------------------ | -------------------------------------------------------- | ------------------------- | --------------------------- | ------- |
+| label                    | 标签文本                                                 | string                    | —                           | ''      |
+| name                     | 原生属性，若与 `form` 组合使用，则作为 `FormData` 的键名 | string                    | —                           | ''      |
+| value                    | 当前开关的值                                             | string / number / boolean | —                           | false   |
+| activeValue              | 打开时的值                                               | string / number / boolean | —                           | true    |
+| inactiveValue            | 关闭时的值                                               | string / number / boolean | —                           | false   |
+| size                     | 开关的尺寸                                               | string                    | `large \| default \| small` | default |
+| inactiveText             | 关闭时显示的文字                                         | string                    | —                           | ''      |
+| inactiveColor            | 关闭时的背景色                                           | string                    | —                           | ''      |
+| activeText               | 打开时显示的文字                                         | string                    | —                           | ''      |
+| activeColor              | 打开时的背景色                                           | string                    | —                           | ''      |
+| disabled                 | 是否禁用                                                 | boolean                   | —                           | false   |
+| required                 | 是否必填                                                 | boolean                   | —                           | false   |
+| beforeChange <PropTag /> | 切换前的回调函数，返回 Promise                           | Function                  | —                           | null    |
 
 ### Switch CSS Part
 
@@ -413,13 +429,14 @@ forbiddenExample.init();
 
 | 名称        | 说明                     |
 | ----------- | ------------------------ |
-| wrapper     | 外层包裹元素             |
-| container   | 外层容器                 |
+| wrapper     | 外层 label 容器          |
 | label       | 表单标签                 |
-| original    | 原生控件                 |
-| label-left  | 左侧文字                 |
-| switch      | 伪 `checkbox` input 控件 |
-| label-right | 右侧文字                 |
+| form-label  | 表单标签（与 label 相同）|
+| container   | 开关内容容器             |
+| original    | 原生 checkbox 控件       |
+| label-left  | 左侧文字（关闭状态）     |
+| switch      | 伪开关控件               |
+| label-right | 右侧文字（打开状态）     |
 
 ### Switch Slots
 
@@ -430,17 +447,30 @@ forbiddenExample.init();
 
 ### Switch Methods
 
-| 方法名              | 说明                       | 参数 |
-| ------------------- | -------------------------- | ---- |
+| 方法名                   | 说明                 | 参数 |
+| ------------------------ | -------------------- | ---- |
 | updateContainerClasslist | 更新容器类名         | —    |
-| checkValidity       | 检查表单字段的有效性       | —    |
-| reportValidity      | 报告表单字段的有效性       | —    |
+| checkValidity            | 检查表单字段的有效性 | —    |
+| reportValidity           | 报告表单字段的有效性 | —    |
 
 ### Switch Events
 
 | 事件名 | 说明               | 回调参数 ( event.detail )                |
 | ------ | ------------------ | ---------------------------------------- |
 | change | 状态发生变化时触发 | `{ value: String \| Number \| Boolean }` |
+
+### Switch CSS 自定义属性
+
+| 属性名                                   | 说明                   | 默认值              |
+| ---------------------------------------- | ---------------------- | ------------------- |
+| --ea-switch-active-bg-color              | 打开时的背景色         | var(--blue-500)     |
+| --ea-switch-inactive-bg-color            | 关闭时的背景色         | var(--grey-300)     |
+| --ea-switch-active-text-color            | 打开时的文字颜色       | var(--blue-500)     |
+| --ea-switch-inactive-text-color          | 关闭时的文字颜色       | var(--grey-900)     |
+| --ea-switch-disabled-bg-color            | 禁用时的背景色         | var(--grey-200)     |
+| --ea-switch-disabled-text-color          | 禁用时的文字颜色       | var(--grey-300)     |
+| --ea-switch-disabled-checked-bg-color    | 禁用且选中时的背景色   | var(--blue-300)     |
+| --ea-switch-disabled-checked-text-color  | 禁用且选中时的文字颜色 | var(--blue-300)     |
 
 ## 类型支持
 

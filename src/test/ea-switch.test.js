@@ -88,20 +88,20 @@ describe("EaSwitch Component", () => {
 
       await waitForRender();
 
-      const wrapper = switchEl.shadowRoot.querySelector(".ea-switch-wrapper");
+      const wrapper = switchEl.shadowRoot.querySelector("label.ea-switch");
       expect(wrapper).toBeTruthy();
       expect(wrapper.tagName).toBe("LABEL");
     });
 
-    it("应该包含 container section 元素", async () => {
+    it("应该包含 content span 元素", async () => {
       const switchEl = document.createElement("ea-switch");
       container.appendChild(switchEl);
 
       await waitForRender();
 
-      const containerEl = switchEl.shadowRoot.querySelector(".ea-switch");
-      expect(containerEl).toBeTruthy();
-      expect(containerEl.tagName).toBe("SECTION");
+      const contentEl = switchEl.shadowRoot.querySelector(".ea-switch__content");
+      expect(contentEl).toBeTruthy();
+      expect(contentEl.tagName).toBe("SPAN");
     });
 
     it("应该包含 inner span 元素", async () => {
@@ -1376,6 +1376,311 @@ describe("EaSwitch Component", () => {
       await waitForRender();
 
       expect(switchEl.disabled).toBe(false);
+    });
+  });
+
+  describe("EaSwitchChangeEvent", () => {
+    it("change 事件应该包含正确的 detail", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("value", "false");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      let eventDetail = null;
+      switchEl.addEventListener("change", (e) => {
+        eventDetail = e.detail;
+      });
+
+      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
+      input.checked = true;
+      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+
+      await waitForRender();
+
+      expect(eventDetail).toBeTruthy();
+      expect(eventDetail.value).toBe(true);
+    });
+
+    it("change 事件应该冒泡且可取消", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("value", "false");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      let capturedEvent = null;
+      switchEl.addEventListener("change", (e) => {
+        capturedEvent = e;
+      });
+
+      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
+      input.checked = true;
+      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+
+      await waitForRender();
+
+      expect(capturedEvent).toBeTruthy();
+      expect(capturedEvent.bubbles).toBe(true);
+      expect(capturedEvent.cancelable).toBe(true);
+      expect(capturedEvent.composed).toBe(true);
+    });
+
+    it("取消选中时 change 事件 detail 应该包含 inactiveValue", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("active-value", "on");
+      switchEl.setAttribute("inactive-value", "off");
+      switchEl.setAttribute("value", "on");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      let eventDetail = null;
+      switchEl.addEventListener("change", (e) => {
+        eventDetail = e.detail;
+      });
+
+      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
+      input.checked = false;
+      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+
+      await waitForRender();
+
+      expect(eventDetail).toBeTruthy();
+      expect(eventDetail.value).toBe("off");
+    });
+
+    it("原生 change 事件应该被阻止传播", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("value", "false");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      let nativeChangeCaptured = false;
+      switchEl.shadowRoot.addEventListener("change", (e) => {
+        if (e.target === switchEl.shadowRoot.querySelector(".ea-switch__original")) {
+          nativeChangeCaptured = true;
+        }
+      });
+
+      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
+      input.checked = true;
+      input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
+
+      await waitForRender();
+
+      expect(nativeChangeCaptured).toBe(false);
+    });
+  });
+
+  describe("Text Content Updates", () => {
+    it("设置 inactiveText 后应该更新 label-left 文本内容", async () => {
+      const switchEl = document.createElement("ea-switch");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      switchEl.setAttribute("inactive-text", "Close");
+      await waitForRender();
+
+      const labelLeft = switchEl.shadowRoot.querySelector(".ea-switch__label-left");
+      expect(labelLeft.textContent).toBe("Close");
+    });
+
+    it("设置 activeText 后应该更新 label-right 文本内容", async () => {
+      const switchEl = document.createElement("ea-switch");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      switchEl.setAttribute("active-text", "Open");
+      await waitForRender();
+
+      const labelRight = switchEl.shadowRoot.querySelector(".ea-switch__label-right");
+      expect(labelRight.textContent).toBe("Open");
+    });
+
+    it("动态修改 inactiveText 应该更新 label-left 文本内容", async () => {
+      const switchEl = document.createElement("ea-switch");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      switchEl.setAttribute("inactive-text", "Old");
+      await waitForRender();
+
+      switchEl.setAttribute("inactive-text", "New");
+      await waitForRender();
+
+      const labelLeft = switchEl.shadowRoot.querySelector(".ea-switch__label-left");
+      expect(labelLeft.textContent).toBe("New");
+    });
+
+    it("动态修改 activeText 应该更新 label-right 文本内容", async () => {
+      const switchEl = document.createElement("ea-switch");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      switchEl.setAttribute("active-text", "Old");
+      await waitForRender();
+
+      switchEl.setAttribute("active-text", "New");
+      await waitForRender();
+
+      const labelRight = switchEl.shadowRoot.querySelector(".ea-switch__label-right");
+      expect(labelRight.textContent).toBe("New");
+    });
+  });
+
+  describe("updateContainerClasslist", () => {
+    it("应该返回包含 block 和 modifier 的类名字符串", async () => {
+      const switchEl = document.createElement("ea-switch");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const className = switchEl.updateContainerClasslist();
+      expect(className).toContain("ea-switch");
+      expect(className).toContain("ea-switch--default");
+    });
+
+    it("checked 状态应该包含 is-checked 类", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("value", "true");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const className = switchEl.updateContainerClasslist();
+      expect(className).toContain("is-checked");
+    });
+
+    it("disabled 状态应该包含 is-disabled 类", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("disabled", "");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const className = switchEl.updateContainerClasslist();
+      expect(className).toContain("is-disabled");
+    });
+
+    it("size 应该反映在返回的类名中", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("size", "large");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const className = switchEl.updateContainerClasslist();
+      expect(className).toContain("ea-switch--large");
+    });
+
+    it("应该同步更新容器的 className", async () => {
+      const switchEl = document.createElement("ea-switch");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const wrapperEl = switchEl.shadowRoot.querySelector("label.ea-switch");
+      const className = switchEl.updateContainerClasslist();
+      expect(wrapperEl.className).toBe(className);
+    });
+  });
+
+  describe("formResetCallback", () => {
+    it("应该重置 value 为 false", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("value", "true");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      switchEl.formResetCallback();
+      await waitForRender();
+
+      expect(switchEl.value).toBe(false);
+    });
+
+    it("重置后 checked class 应该被移除", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("value", "true");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      switchEl.formResetCallback();
+      await waitForRender();
+
+      const wrapperEl = switchEl.shadowRoot.querySelector("label.ea-switch");
+      expect(wrapperEl.classList.contains("is-checked")).toBe(false);
+    });
+
+    it("重置后原生 input 应该未选中", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("value", "true");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      switchEl.formResetCallback();
+      await waitForRender();
+
+      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
+      expect(input.checked).toBe(false);
+    });
+  });
+
+  describe("DOM Structure", () => {
+    it("label 元素应该有 for 属性指向 input", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("name", "test-name");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const wrapper = switchEl.shadowRoot.querySelector("label.ea-switch");
+      const input = switchEl.shadowRoot.querySelector(".ea-switch__original");
+      expect(wrapper.getAttribute("for")).toBe("test-name");
+      expect(input.getAttribute("id")).toBe("test-name");
+    });
+
+    it("form-label 为空时应该存在但无内容", async () => {
+      const switchEl = document.createElement("ea-switch");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const formLabel = switchEl.shadowRoot.querySelector(".ea-switch__form-label");
+      expect(formLabel).toBeTruthy();
+      expect(formLabel.textContent).toBe("");
+    });
+
+    it("设置 label 后 form-label 应该显示文本", async () => {
+      const switchEl = document.createElement("ea-switch");
+      switchEl.setAttribute("label", "Test Label");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const formLabel = switchEl.shadowRoot.querySelector(".ea-switch__form-label");
+      expect(formLabel.textContent).toBe("Test Label");
+    });
+
+    it("content 元素应该包含 original、label-left、inner、label-right", async () => {
+      const switchEl = document.createElement("ea-switch");
+      container.appendChild(switchEl);
+
+      await waitForRender();
+
+      const content = switchEl.shadowRoot.querySelector(".ea-switch__content");
+      expect(content.querySelector(".ea-switch__original")).toBeTruthy();
+      expect(content.querySelector(".ea-switch__label-left")).toBeTruthy();
+      expect(content.querySelector(".ea-switch__inner")).toBeTruthy();
+      expect(content.querySelector(".ea-switch__label-right")).toBeTruthy();
     });
   });
 });

@@ -153,7 +153,7 @@
           this.switch.addEventListener("change", e => {
             this.tooltip.setAttribute(
               "content",
-              getContentString(e.target.value)
+              getContentString(e.detail.value)
             );
           });
         },

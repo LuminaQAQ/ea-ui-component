@@ -1,85 +1,38 @@
-$ea-switch-size-type: (
-  small,
-  default,
-  large
-);
+$name: ea-switch;
+$ea-switch-size-type: (large, default, small);
 
 :host {
-  --ea-switch-space: 0 var(--spacing-md);
+  --#{$name}-large-width: 50px;
+  --#{$name}-default-width: 40px;
+  --#{$name}-small-width: 30px;
 
-  --ea-switch-large-width: 50px;
-  --ea-switch-default-width: 40px;
-  --ea-switch-small-width: 30px;
+  --#{$name}-large-height: 24px;
+  --#{$name}-default-height: 20px;
+  --#{$name}-small-height: 16px;
 
-  --ea-switch-large-height: 24px;
-  --ea-switch-default-height: 20px;
-  --ea-switch-small-height: 16px;
+  --#{$name}-indicator-large-size: 20px;
+  --#{$name}-indicator-default-size: 16px;
+  --#{$name}-indicator-small-size: 12px;
 
-  --ea-switch-indicator-large-size: 20px;
-  --ea-switch-indicator-default-size: 16px;
-  --ea-switch-indicator-small-size: 12px;
+  --#{$name}-large-font-size: 18px;
+  --#{$name}-default-font-size: var(--font-size-lg);
+  --#{$name}-small-font-size: var(--font-size-md);
 
-  --ea-switch-large-font-size: 18px;
-  --ea-switch-default-font-size: 16px;
-  --ea-switch-small-font-size: 14px;
+  --#{$name}-indicator-color: var(--color-white);
+  --#{$name}-indicator-start: 2px;
 
-  --ea-switch-indicator-color: var(--color-white);
-  --ea-switch-indicator-start: 2px;
-  --ea-switch-indicator-end: calc(100% - var(--ea-switch-indicator-default-size) - 2px);
+  --#{$name}-inactive-bg-color: var(--grey-300);
+  --#{$name}-inactive-text-color: var(--grey-900);
+  --#{$name}-active-bg-color: var(--blue-500);
+  --#{$name}-active-text-color: var(--blue-500);
 
-  --ea-switch-inactive-bg-color: var(--grey-300);
-  --ea-switch-inactive-text-color: var(--grey-900);
-  --ea-switch-active-bg-color: var(--blue-500);
-  --ea-switch-active-text-color: var(--blue-500);
+  --#{$name}-disabled-text-color: var(--grey-300);
+  --#{$name}-disabled-bg-color: var(--grey-200);
+  --#{$name}-disabled-checked-bg-color: var(--blue-300);
+  --#{$name}-disabled-checked-text-color: var(--blue-300);
 
-  --ea-switch-disabled-text-color: var(--grey-300);
-  --ea-switch-disabled-bg-color: var(--grey-200);
-  --ea-switch-disabled-checked-bg-color: var(--blue-300);
-  --ea-switch-disabled-checked-text-color: var(--blue-300);
-
-  --ea-switch-border-radius: var(--border-radius-round);
-}
-
-:host(:invalid) {
-  .ea-switch__form-label {
-    color: var(--red-500);
-  }
-
-  .ea-switch__inner {
-    box-shadow: 0 0 0 2px var(--red-500);
-  }
-}
-
-:host([inactive-text]) {
-  @include block(ea-switch) {
-    @include element(label) {
-      color: var(--ea-switch-active-text-color);
-
-      &.label-right {
-        color: var(--ea-switch-inactive-text-color);
-      }
-    }
-
-    @include state(checked) {
-      .label-left {
-        color: var(--ea-switch-inactive-text-color);
-      }
-
-      .label-right {
-        color: var(--ea-switch-active-text-color);
-      }
-    }
-
-    @include state(disabled) {
-      .label-left {
-        color: var(--ea-switch-disabled-checked-text-color);
-      }
-
-      .label-right {
-        color: var(--ea-switch-disabled-text-color);
-      }
-    }
-  }
+  --#{$name}-border-radius: var(--border-radius-round);
+  --#{$name}-space: 0 var(--spacing-md);
 }
 
 :host([disabled]) {
@@ -90,24 +43,25 @@ $ea-switch-size-type: (
   display: inline-block;
 }
 
-@include block(ea-switch-wrapper) {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: nowrap;
-  flex-direction: column;
+:host(:invalid) {
+  .#{$name}__form-label {
+    color: var(--red-500);
+  }
+
+  .#{$name}__inner {
+    box-shadow: 0 0 0 2px var(--red-500);
+  }
 }
 
-@include block(ea-switch) {
-  display: flex;
-  align-items: center;
+@include block($name) {
+  display: inline-flex;
+  align-items: flex-start;
+  flex-direction: column;
   cursor: pointer;
-
-  color: var(--ea-switch-inactive-text-color);
 
   @include element(form-label) {
     display: block;
     padding-bottom: var(--spacing-md);
-
     font-size: var(--font-size-md);
     color: var(--grey-700);
 
@@ -116,114 +70,121 @@ $ea-switch-size-type: (
     }
   }
 
+  @include element(content) {
+    display: flex;
+    align-items: center;
+    color: var(--#{$name}-inactive-text-color);
+  }
+
   @include element(original) {
     display: none;
   }
 
+  @include element(label-left) {
+    color: var(--#{$name}-active-text-color);
+    transition: color var(--transition-normal);
+  }
+
   @include element(inner) {
     position: relative;
-
-    margin: var(--ea-switch-space);
-    height: var(--ea-switch-default-height);
-    line-height: var(--ea-switch-default-height);
-
-    background-color: var(--ea-switch-inactive-bg-color);
-    border-radius: var(--ea-switch-border-radius);
-
+    margin: var(--#{$name}-space);
+    height: var(--#{$name}-default-height);
+    line-height: var(--#{$name}-default-height);
+    background-color: var(--#{$name}-inactive-bg-color);
+    border-radius: var(--#{$name}-border-radius);
     transition: background-color var(--transition-normal);
 
     &::after {
       content: "";
       display: block;
-
       position: absolute;
-      left: var(--ea-switch-indicator-start);
+      left: var(--#{$name}-indicator-start);
       top: 50%;
       transform-origin: center center;
       transform: translate(0, -50%);
-
-      width: var(--ea-switch-indicator-default-size);
-      height: var(--ea-switch-indicator-default-size);
-
+      width: var(--#{$name}-indicator-default-size);
+      height: var(--#{$name}-indicator-default-size);
       border-radius: var(--border-radius-circle);
-      background-color: var(--ea-switch-indicator-color);
-
+      background-color: var(--#{$name}-indicator-color);
       z-index: 1;
-
       transition:
         left var(--transition-normal),
         transform var(--transition-normal);
     }
   }
 
-  @include element(label) {
-    &.label-left {
-      color: var(--ea-switch-active-text-color);
-    }
-
+  @include element(label-right) {
+    color: var(--#{$name}-inactive-text-color);
     transition: color var(--transition-normal);
   }
 
   @each $size in $ea-switch-size-type {
     @include modifier($size) {
-      font-size: var(--ea-switch-#{$size}-font-size);
+      .#{$name}__content {
+        font-size: var(--#{$name}-#{$size}-font-size);
+      }
 
-      .ea-switch__inner {
-        flex: 1 0 var(--ea-switch-#{$size}-width);
-        width: var(--ea-switch-#{$size}-width);
-        height: var(--ea-switch-#{$size}-height);
-
-        min-width: calc(var(--ea-switch-#{$size}-width));
+      .#{$name}__inner {
+        flex: 1 0 var(--#{$name}-#{$size}-width);
+        width: var(--#{$name}-#{$size}-width);
+        height: var(--#{$name}-#{$size}-height);
+        min-width: var(--#{$name}-#{$size}-width);
 
         &::after {
-          width: var(--ea-switch-indicator-#{$size}-size);
-          height: var(--ea-switch-indicator-#{$size}-size);
+          width: var(--#{$name}-indicator-#{$size}-size);
+          height: var(--#{$name}-indicator-#{$size}-size);
         }
       }
 
       &.is-checked {
-        .ea-switch__inner::after {
-          color: var(--ea-switch-active-bg-color);
-          left: calc(100% - var(--ea-switch-indicator-#{$size}-size) - 2px);
+        .#{$name}__inner::after {
+          left: calc(100% - var(--#{$name}-indicator-#{$size}-size) - 2px);
         }
       }
     }
   }
 
   @include state(checked) {
-    .ea-switch__inner {
-      background-color: var(--ea-switch-active-bg-color);
+    .#{$name}__inner {
+      background-color: var(--#{$name}-active-bg-color);
     }
 
-    .label-right {
-      color: var(--ea-switch-active-text-color);
+    .#{$name}__label-left {
+      color: var(--#{$name}-inactive-text-color);
     }
 
-    .label-left {
-      color: var(--ea-switch-inactive-text-color);
+    .#{$name}__label-right {
+      color: var(--#{$name}-active-text-color);
     }
   }
 
   @include state(disabled) {
     pointer-events: none;
+    color: var(--#{$name}-disabled-text-color);
 
-    color: var(--ea-switch-disabled-text-color);
+    .#{$name}__inner {
+      background-color: var(--#{$name}-disabled-bg-color);
+    }
 
-    .ea-switch__inner {
-      background-color: var(--ea-switch-disabled-bg-color);
+    .#{$name}__label-left {
+      color: var(--#{$name}-disabled-text-color);
+    }
+
+    .#{$name}__label-right {
+      color: var(--#{$name}-disabled-text-color);
     }
 
     &.is-checked {
-      .ea-switch__inner {
-        background-color: var(--ea-switch-disabled-checked-bg-color);
+      .#{$name}__inner {
+        background-color: var(--#{$name}-disabled-checked-bg-color);
       }
 
-      .label-left {
-        color: var(--ea-switch-disabled-text-color);
+      .#{$name}__label-left {
+        color: var(--#{$name}-disabled-text-color);
       }
 
-      .label-right {
-        color: var(--ea-switch-disabled-checked-text-color);
+      .#{$name}__label-right {
+        color: var(--#{$name}-disabled-checked-text-color);
       }
     }
   }

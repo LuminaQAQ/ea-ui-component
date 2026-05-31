@@ -1,51 +1,68 @@
 import { EaFormAssociatedBase } from "@core/EaFormAssociatedBase";
-import { attribute } from "@decorator/attribute";
-import { property } from "@decorator/property";
-import { CustomElement } from "@decorator/custom-element";
-import { query } from "@decorator/query";
-import { listen } from "@decorator/listen";
 import { createBEM } from "@utils/bem";
-import { Enum } from "@/utils/Enum";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
+import { Enum } from "@utils/Enum";
+import { EaSwitchChangeEvent } from "./events/EaSwitchChangeEvent";
 import stylesheet from "./index.scss?inline";
-import { EaSwitchChangeEvent } from "./events/EaChangeEvent";
 
 const TAG_NAME = "ea-switch" as const;
 const bem = createBEM(TAG_NAME);
 
 export type SwitchSize = "large" | "default" | "small";
 
+/**
+ * @summary 开关组件，表示两种相互对立的状态间的切换，多用于触发开/关，支持自定义值、尺寸和禁用状态。
+ * @status stable
+ * @since 3.0
+ *
+ * @slot active - 打开状态时的内容。
+ * @slot inactive - 关闭状态时的内容。
+ *
+ * @event change - 状态发生变化时触发，detail: `{ value: unknown }`。
+ *
+ * @csspart wrapper - 外层 label 容器。
+ * @csspart label - 表单标签。
+ * @csspart form-label - 表单标签（与 label 相同）。
+ * @csspart container - 开关内容容器。
+ * @csspart original - 原生 checkbox 控件。
+ * @csspart label-left - 左侧文字（关闭状态）。
+ * @csspart switch - 伪开关控件。
+ * @csspart label-right - 右侧文字（打开状态）。
+ *
+ * @cssproperty --ea-switch-active-bg-color - 打开时的背景色。
+ * @cssproperty --ea-switch-inactive-bg-color - 关闭时的背景色。
+ * @cssproperty --ea-switch-active-text-color - 打开时的文字颜色。
+ * @cssproperty --ea-switch-inactive-text-color - 关闭时的文字颜色。
+ * @cssproperty --ea-switch-disabled-bg-color - 禁用时的背景色。
+ * @cssproperty --ea-switch-disabled-text-color - 禁用时的文字颜色。
+ * @cssproperty --ea-switch-disabled-checked-bg-color - 禁用且选中时的背景色。
+ * @cssproperty --ea-switch-disabled-checked-text-color - 禁用且选中时的文字颜色。
+ */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSwitch extends EaFormAssociatedBase {
-  // ==================== DOM 元素引用 ====================
-
-  @query(".ea-switch")
+  @query(bem.cb())
   private _container!: HTMLElement;
 
-  @query(".ea-switch__original")
+  @query(bem.ce("original"))
   private _originalInput!: HTMLInputElement;
 
-  @query(".ea-switch__inner")
-  private _innerInput!: HTMLElement;
-
-  @query(".ea-switch__label.label-left slot[name='inactive']")
+  @query(bem.ce("label-left"))
   private _labelLeftSlot!: HTMLElement;
 
-  @query(".ea-switch__label.label-right slot[name='active']")
+  @query(bem.ce("label-right"))
   private _labelRightSlot!: HTMLElement;
 
-  @query(".ea-switch__form-label")
+  @query(bem.ce("form-label"))
   private _label!: HTMLElement;
 
-  private _parsedActiveValue: any = true;
-  private _parsedInactiveValue: any = false;
-
-  // ==================== 属性定义 ====================
+  private _parsedActiveValue: unknown = true;
+  private _parsedInactiveValue: unknown = false;
 
   @attribute({
     type: String,
     default: "",
     observer(this: EaSwitch, newVal: string) {
-      this._label.textContent = newVal;
+      if (this._label) this._label.textContent = newVal;
     },
   })
   label: string = "";
@@ -54,9 +71,11 @@ export class EaSwitch extends EaFormAssociatedBase {
     type: String,
     default: "",
     observer(this: EaSwitch, newVal: string) {
-      this._container.setAttribute("for", newVal);
-      this._originalInput.setAttribute("name", newVal);
-      this._originalInput.setAttribute("id", newVal);
+      if (this._container) this._container.setAttribute("for", newVal);
+      if (this._originalInput) {
+        this._originalInput.setAttribute("name", newVal);
+        this._originalInput.setAttribute("id", newVal);
+      }
     },
   })
   name: string = "";
@@ -120,7 +139,7 @@ export class EaSwitch extends EaFormAssociatedBase {
     type: String,
     default: "",
     observer(this: EaSwitch, newVal: string) {
-      this._labelLeftSlot.innerText = newVal;
+      if (this._labelLeftSlot) this._labelLeftSlot.textContent = newVal;
     },
   })
   inactiveText: string = "";
@@ -138,7 +157,7 @@ export class EaSwitch extends EaFormAssociatedBase {
     type: String,
     default: "",
     observer(this: EaSwitch, newVal: string) {
-      this._labelRightSlot.innerText = newVal;
+      if (this._labelRightSlot) this._labelRightSlot.textContent = newVal;
     },
   })
   activeText: string = "";
@@ -156,7 +175,7 @@ export class EaSwitch extends EaFormAssociatedBase {
     type: Boolean,
     default: false,
     observer(this: EaSwitch, newVal: boolean) {
-      this._originalInput.toggleAttribute("disabled", newVal);
+      if (this._originalInput) this._originalInput.toggleAttribute("disabled", newVal);
       this.updateContainerClasslist();
     },
   })
@@ -166,7 +185,7 @@ export class EaSwitch extends EaFormAssociatedBase {
     type: Boolean,
     default: false,
     observer(this: EaSwitch, newVal: boolean) {
-      this._originalInput.toggleAttribute("required", newVal);
+      if (this._originalInput) this._originalInput.toggleAttribute("required", newVal);
     },
   })
   required: boolean = false;
@@ -177,52 +196,36 @@ export class EaSwitch extends EaFormAssociatedBase {
   })
   beforeChange: (() => Promise<boolean>) | null = null;
 
-  // ==================== 方法 ====================
-
-  private _parseValue(value: string | null | boolean | undefined): any {
-    if (value === "true" || value === true) {
-      return true;
-    } else if (value === "false" || value === false || value === "") {
-      return false;
-    } else if (
-      value !== null &&
-      value !== "" &&
-      value !== undefined &&
-      !isNaN(Number(value))
-    ) {
-      return Number(value);
-    } else if (typeof value === "string") {
-      return value;
-    }
-
-    return value === null;
+  /** 解析属性值为实际类型 */
+  private _parseValue(value: unknown): unknown {
+    if (value === "true" || value === true) return true;
+    if (value === "false" || value === false) return false;
+    if (typeof value === "number") return value;
+    if (typeof value === "string" && value !== "" && !isNaN(Number(value))) return Number(value);
+    if (typeof value === "string") return value;
+    return false;
   }
 
-  private _handleValueChange(value: any): void {
+  /** 处理 value 属性变化，同步原生 input 状态和表单值 */
+  private _handleValueChange(value: unknown): void {
     const parsedValue = this._parseValue(value);
-
     const realValue =
       parsedValue == this._parsedActiveValue
         ? this._parsedActiveValue
         : this._parsedInactiveValue;
 
-    this._originalInput.value = realValue;
-    this._originalInput.checked = realValue === this._parsedActiveValue;
+    if (this._originalInput) {
+      this._originalInput.value = String(realValue);
+      this._originalInput.checked = realValue === this._parsedActiveValue;
+    }
 
-    this.setValue(realValue);
-
+    this.setValue(String(realValue));
     this.updateContainerClasslist();
   }
 
-  /**
-   * 获取 classlist 列表
-   * @return {string} 属性值
-   */
   updateContainerClasslist(): string {
     const className = bem(
-      {
-        [this.size]: true,
-      },
+      { [this.size]: true },
       {
         checked: this._parseValue(this.value) === this._parsedActiveValue,
         disabled: this.disabled,
@@ -234,131 +237,102 @@ export class EaSwitch extends EaFormAssociatedBase {
     return className;
   }
 
-  constructor() {
-    super();
-  }
-
-  /**
-   * 渲染模板
-   */
   html(): string {
+    const id = this.getAttribute("name") || Math.random().toString(36).substring(2, 15);
+    const isChecked = this._parseValue(this.value) === this._parsedActiveValue;
+
     return `
-      <label class="ea-switch-wrapper" part="wrapper">
-        <span class="ea-switch__form-label" part="label form-label"></span>
-        <section class="ea-switch" part="container">
-          <input class="ea-switch__original" type="checkbox" part="original" />
-          <span class="ea-switch__label label-left" part="label-left">
+      <label class="${this.updateContainerClasslist()}" part="wrapper" for="${id}">
+        <span class="${bem.e("form-label")}" part="label form-label">${this.label}</span>
+        <span class="${bem.e("content")}" part="container">
+          <input id="${id}" type="checkbox" class="${bem.e("original")}" part="original"
+            name="${id}"
+            ${isChecked ? "checked" : ""}
+            ${this.disabled ? "disabled" : ""}
+            ${this.required ? "required" : ""} />
+          <span class="${bem.e("label-left")}" part="label-left">
             <slot name="inactive"></slot>
           </span>
-          <span class="ea-switch__inner" part="switch"></span>
-          <span class="ea-switch__label label-right" part="label-right">
+          <span class="${bem.e("inner")}" part="switch"></span>
+          <span class="${bem.e("label-right")}" part="label-right">
             <slot name="active"></slot>
           </span>
-        </section>
+        </span>
       </label>
     `;
   }
-  // ==================== 事件处理 ====================
 
-  /**
-   * 改变事件 - 更新值并派发事件
-   * @param {Event} e
-   */
-  @listen("change", ".ea-switch__original")
-  private _onChangeEvent(e: Event): void {
+  /** 处理原生 input 的 change 事件 */
+  @listen("change", bem.ce("original"))
+  private _handleChangeEvent(e: Event): void {
+    e.stopPropagation();
+
     const isChecked = (e.target as HTMLInputElement).checked;
-    const value = isChecked
-      ? this._parsedActiveValue
-      : this._parsedInactiveValue;
+    const value = isChecked ? this._parsedActiveValue : this._parsedInactiveValue;
 
-    this.setAttribute("value", value);
+    this.value = String(value);
+    this.dispatchEvent(new EaSwitchChangeEvent({ value }));
   }
 
-  /**
-   * 点击事件 - 触发 beforeChange 回调函数
-   * @param {Event} e
-   */
-  @listen("click", ".ea-switch__original")
-  private _onClickEvent(e: Event): void {
-    const parser = () => {
-      return this._originalInput.checked
-        ? this._parsedActiveValue
-        : this._parsedInactiveValue;
-    };
+  /** 处理点击事件，支持 beforeChange 拦截 */
+  @listen("click", bem.ce("original"))
+  private _handleClickEvent(e: Event): void {
+    if (!this.beforeChange || typeof this.beforeChange !== "function") return;
 
-    if (this.beforeChange && typeof this.beforeChange === "function") {
-      e.preventDefault();
-      e.stopImmediatePropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
-      this.beforeChange()
-        .then(() => {
-          this._originalInput.checked = !this._originalInput.checked;
-          this._originalInput.dispatchEvent(new EaSwitchChangeEvent(parser()));
-        })
-        .catch(() => {});
-    } else {
-      this._originalInput.dispatchEvent(new EaSwitchChangeEvent(parser()));
-    }
+    this.beforeChange()
+      .then(() => {
+        this._originalInput.checked = !this._originalInput.checked;
+        const isChecked = this._originalInput.checked;
+        const value = isChecked ? this._parsedActiveValue : this._parsedInactiveValue;
+        this.value = String(value);
+        this.dispatchEvent(new EaSwitchChangeEvent({ value }));
+      })
+      .catch(() => {});
   }
-
-  // ==================== 生命周期 ====================
 
   formResetCallback(): void {
     this.value = false;
     this.setValidity({});
   }
 
-  $mount() {
-    if (!this.name)
+  $mount(): void {
+    if (!this.name) {
       this.setAttribute("name", Math.random().toString(36).substring(2, 15));
+    }
 
-    this.setValue(
-      this._originalInput.checked
-        ? this._parsedActiveValue
-        : this._parsedInactiveValue
-    );
-
-    this.updateContainerClasslist();
+    this._handleValueChange(this.value);
   }
 
-  // ==================== 表单验证 ====================
+  $updated(): void {
+    this.updateContainerClasslist();
+  }
 
   get validationTarget() {
     return this._container;
   }
 
-  /**
-   * 更新表单验证状态
-   * switch 的验证逻辑：当 required 为 true 时，必须处于选中状态（value 等于 active-value）
-   */
+  /** 更新表单验证状态，required 时必须选中 */
   updateValidity() {
-    const isChecked = this.value === this._parsedActiveValue;
+    const anchor = this._container ?? undefined;
+    const isChecked = this._parseValue(this.value) === this._parsedActiveValue;
 
     if (this.required && !isChecked) {
-      this.internals.setValidity(
-        { valueMissing: true },
-        "请开启此选项",
-        this._container
-      );
+      this.internals?.setValidity({ valueMissing: true }, "请开启此选项", anchor);
     } else {
-      this.internals.setValidity({}, "", this._container);
+      this.internals?.setValidity({}, "", anchor);
     }
   }
 
-  /**
-   * 检查表单字段的有效性
-   * @returns {boolean}
-   */
   checkValidity(): boolean {
     this.updateValidity();
-    return this.internals.validity.valid;
+    return this.internals?.validity?.valid ?? true;
   }
 
-  /**
-   * 报告表单字段的有效性（显示验证提示）
-   * @returns {boolean}
-   */
   reportValidity(): boolean {
-    return this.internals.reportValidity();
+    this.updateValidity();
+    return this.internals?.reportValidity() ?? true;
   }
 }
