@@ -17,13 +17,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-text/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-text.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-text";
+```
+
+:::
 
 ## 自定义样式
 
@@ -163,9 +169,9 @@ onMounted(() => {
 
 :::
 
-## ea-text API
+## EaText API
 
-### ea-text Attributes
+### EaText Attributes
 
 | 属性名 | 说明 | 类型 | 可选值 | 默认值 |
 | --- | --- | --- | --- | --- |
@@ -175,19 +181,19 @@ onMounted(() => {
 | line-clamp | 截断的行数 | number | — | 0 |
 | tag | 文本标签 | string | span / p / b / i / sub / sup / ins / del / mark | span |
 
-### ea-text Slots
+### EaText Slots
 
 | 插槽名 | 说明 |
 | --- | --- |
 | default | 默认内容 |
 
-### ea-text CSS Part
+### EaText CSS Part
 
 | 名称 | 说明 |
 | --- | --- |
 | container | 容器 |
 
-### ea-text CSS 自定义属性
+### EaText CSS Custom Properties
 
 | 属性名 | 说明 | 默认值 |
 | --- | --- | --- |

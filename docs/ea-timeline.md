@@ -20,30 +20,23 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-timeline/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-timeline.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-timeline";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#timelineitem-css-part) 和 [CSS 自定义属性](#timelineitem-css-自定义属性)。
+移步到 [CSS Part](#timelineitem-css-part) 和 [CSS Custom Properties](#timelineitem-css-自定义属性)。
 
 ## 基础用法
 
@@ -209,9 +202,7 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
   </ea-timeline-item>
   <ea-timeline-item variant="danger" placement="top">
     <ea-card>
-      <header class="header">
-        由于违反动物保护法，该组件库将被无限期停更
-      </header>
+      <header class="header">由于违反动物保护法，该组件库将被无限期停更</header>
       <p>
         Due to violation of the Animal Protection Law, this component library
         will be suspended indefinitely
@@ -390,8 +381,8 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
 
 ### Timeline Slots
 
-| 名称    | 说明                                      |
-| ------- | ----------------------------------------- |
+| 名称    | 说明                                     |
+| ------- | ---------------------------------------- |
 | default | 默认插槽，放置 `ea-timeline-item` 子节点 |
 
 ## TimelineItem API
@@ -425,14 +416,14 @@ Timeline 可拆分成多个按照时间戳正序或倒序排列的 `activity`，
 | content       | 单个时间线的内容 |
 | timestamp     | 时间戳           |
 
-### TimelineItem CSS 自定义属性
+### TimelineItem CSS Custom Properties
 
-| 属性名                            | 说明         | 默认值              |
-| --------------------------------- | ------------ | ------------------- |
-| --ea-timeline-item-dot-color      | 节点颜色     | var(--grey-300)     |
-| --ea-timeline-item-tail-color     | 时间线线条颜色 | var(--grey-300)     |
-| --ea-timeline-item-content-color  | 内容颜色     | var(--grey-900)     |
-| --ea-timeline-item-timestamp-color | 时间戳颜色 | var(--grey-500)     |
+| 属性名                             | 说明           | 默认值          |
+| ---------------------------------- | -------------- | --------------- |
+| --ea-timeline-item-dot-color       | 节点颜色       | var(--grey-300) |
+| --ea-timeline-item-tail-color      | 时间线线条颜色 | var(--grey-300) |
+| --ea-timeline-item-content-color   | 内容颜色       | var(--grey-900) |
+| --ea-timeline-item-timestamp-color | 时间戳颜色     | var(--grey-500) |
 
 ### TimelineItem Slots
 

@@ -78,30 +78,23 @@ onMounted(async () => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-rate/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-rate.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-rate";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#ea-rate-css-part) 与 [CSS 自定义属性](#ea-rate-css-自定义属性)。
+移步到 [CSS Part](#ea-rate-css-part) 与 [CSS Custom Properties](#ea-rate-css-自定义属性)。
 
 ## 基础用法
 
@@ -371,47 +364,47 @@ customIconRendererExample.init();
 
 ::::
 
-## ea-rate API
+## EaRate API
 
-### ea-rate Attributes
+### EaRate Attributes
 
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
-| value | 当前评分值 | number | — | 0 |
-| max | 最大评分长度 | number | — | 5 |
-| size | 组件尺寸 | string | `"large" \| "default" \| "small"` | — |
-| label | 辅助文字 | string | — | — |
-| readonly | 是否只读 | boolean | — | false |
-| disabled | 是否禁用 | boolean | — | false |
-| getSymbol <ea-tag>prop</ea-tag> | 自定义图标渲染函数 | function | — | `() => '<ea-icon name="star" part="icon"></ea-icon>'` |
+| 参数                            | 说明               | 类型     | 可选值                            | 默认值                                                |
+| ------------------------------- | ------------------ | -------- | --------------------------------- | ----------------------------------------------------- |
+| value                           | 当前评分值         | number   | —                                 | 0                                                     |
+| max                             | 最大评分长度       | number   | —                                 | 5                                                     |
+| size                            | 组件尺寸           | string   | `"large" \| "default" \| "small"` | —                                                     |
+| label                           | 辅助文字           | string   | —                                 | —                                                     |
+| readonly                        | 是否只读           | boolean  | —                                 | false                                                 |
+| disabled                        | 是否禁用           | boolean  | —                                 | false                                                 |
+| getSymbol <ea-tag>prop</ea-tag> | 自定义图标渲染函数 | function | —                                 | `() => '<ea-icon name="star" part="icon"></ea-icon>'` |
 
-### ea-rate CSS Part
+### EaRate CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称 | 说明 |
-| --- | --- |
-| container | 评分项容器元素 |
-| label | 辅助文字元素 |
-| symbol-wrap | 单个评分项的包裹元素 |
-| icon | 每个图标的内部元素（`getSymbol` 返回的图标可带 `part="icon"`） |
+| 名称        | 说明                                                           |
+| ----------- | -------------------------------------------------------------- |
+| container   | 评分项容器元素                                                 |
+| label       | 辅助文字元素                                                   |
+| symbol-wrap | 单个评分项的包裹元素                                           |
+| icon        | 每个图标的内部元素（`getSymbol` 返回的图标可带 `part="icon"`） |
 
-### ea-rate Events
+### EaRate Events
 
-| 事件名 | 说明 | 回调参数 ( event.detail ) |
-| --- | --- | --- |
-| change | 评分值变化时触发 | `{ value: number }` |
+| 事件名   | 说明                 | 回调参数 ( event.detail )                                |
+| -------- | -------------------- | -------------------------------------------------------- |
+| change   | 评分值变化时触发     | `{ value: number }`                                      |
 | ea-hover | 鼠标移动到某项时触发 | `{ value: number \| null, target: HTMLElement \| null }` |
 
-### ea-rate CSS 自定义属性
+### EaRate CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| --- | --- | --- |
-| --ea-rate-spacing | 评分项间距 | 2px |
-| --ea-rate-large-size | 大号尺寸 | 20px |
-| --ea-rate-default-size | 默认尺寸 | 16px |
-| --ea-rate-small-size | 小号尺寸 | 12px |
-| --ea-rate-active-color | 选中状态颜色 | var(--yellow-500) |
-| --ea-rate-inactive-color | 未选中状态颜色 | var(--grey-400) |
-| --ea-rate-disabled-active-color | 禁用态选中颜色 | var(--yellow-300) |
-| --ea-rate-disabled-inactive-color | 禁用态未选中颜色 | var(--grey-200) |
+| 属性名                            | 说明             | 默认值            |
+| --------------------------------- | ---------------- | ----------------- |
+| --ea-rate-spacing                 | 评分项间距       | 2px               |
+| --ea-rate-large-size              | 大号尺寸         | 20px              |
+| --ea-rate-default-size            | 默认尺寸         | 16px              |
+| --ea-rate-small-size              | 小号尺寸         | 12px              |
+| --ea-rate-active-color            | 选中状态颜色     | var(--yellow-500) |
+| --ea-rate-inactive-color          | 未选中状态颜色   | var(--grey-400)   |
+| --ea-rate-disabled-active-color   | 禁用态选中颜色   | var(--yellow-300) |
+| --ea-rate-disabled-inactive-color | 禁用态未选中颜色 | var(--grey-200)   |

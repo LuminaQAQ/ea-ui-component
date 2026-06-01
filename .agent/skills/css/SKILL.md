@@ -12,7 +12,7 @@ description: "Component CSS styling standards including variables, host styles, 
 ```scss
 $name: ea-component-name;
 
-// 1. CSS 自定义属性
+// 1. CSS Custom Properties
 :host {
   --#{$name}-height: 6px;
   --#{$name}-bg-color: var(--grey-200);
@@ -100,6 +100,7 @@ $name: ea-component-name;
    - `var(--font-size-lg)` 而非 `16px`
 
 2. **避免嵌套变量**：不要创建引用其他组件变量的嵌套变量
+
    ```scss
    // 正确
    --#{$name}-bg-color: var(--grey-100);

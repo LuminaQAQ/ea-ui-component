@@ -266,27 +266,19 @@ ea-button::part(icon) {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-dialog/index.js";
-  import "./node_modules/easy-component-ui/components/ea-button/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-dialog.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是，如果需要使用到带有图标的属性/组件，需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-dialog";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -876,9 +868,9 @@ eventsExample.init();
 
 :::
 
-## ea-dialog API
+## EaDialog API
 
-### ea-dialog Attributes
+### EaDialog Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 | ---- | ---- | ---- | ------ | ------ |
@@ -903,7 +895,7 @@ eventsExample.init();
 | `content-height` | 内容高度 | `string` | — | `""` |
 | `beforeClose` | 关闭前回调函数，`done()` 确认关闭，`done(true)` 取消关闭 | `Function` | — | `null` |
 
-### ea-dialog CSS Part
+### EaDialog CSS Part
 
 | 名称 | 说明 |
 | ---- | ---- |
@@ -914,7 +906,7 @@ eventsExample.init();
 | `content` | 主体内容元素 |
 | `footer` | 底部元素 |
 
-### ea-dialog Slots
+### EaDialog Slots
 
 | 名称 | 说明 |
 | ---- | ---- |
@@ -922,7 +914,7 @@ eventsExample.init();
 | `header` | 自定义头部内容 |
 | `footer` | 自定义底部内容 |
 
-### ea-dialog Methods
+### EaDialog Methods
 
 | 方法名 | 说明 | 参数 |
 | ------ | ---- | ---- |
@@ -930,7 +922,7 @@ eventsExample.init();
 | `hide()` | 隐藏对话框 | — |
 | `resetPosition()` | 重置对话框位置（用于可拖拽场景） | — |
 
-### ea-dialog Events
+### EaDialog Events
 
 | 事件名 | 说明 | 回调参数 |
 | ------ | ---- | -------- |
@@ -939,7 +931,7 @@ eventsExample.init();
 | `ea-close` | 对话框关闭时触发 | — |
 | `ea-closed` | 对话框关闭动画结束时触发 | — |
 
-### ea-dialog CSS 自定义属性
+### EaDialog CSS Custom Properties
 
 | 属性名 | 说明 | 默认值 |
 | ------ | ---- | ------ |

@@ -51,13 +51,19 @@ ea-aside::part(container) {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-scrollbar/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-scrollbar.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-scrollbar";
+```
+
+:::
 
 ## 自定义样式
 
@@ -372,25 +378,25 @@ ea-aside::part(container) {
 
 ### Scrollbar Attributes
 
-| **参数**    | **说明**                         | **类型**  | **可选值** | **默认值** |
-| ----------- | -------------------------------- | --------- | ---------- | ---------- |
-| `height`    | 滚动条高度                       | `string`  | —          | `""`       |
-| `native`    | 是否使用浏览器原生滚动条样式     | `boolean` | —          | `false`    |
-| `noresize`  | 是否禁用滚动条的自动调整大小功能 | `boolean` | —          | `false`    |
-| `always`    | 是否始终显示滚动条               | `boolean` | —          | `false`    |
+| **参数**   | **说明**                         | **类型**  | **可选值** | **默认值** |
+| ---------- | -------------------------------- | --------- | ---------- | ---------- |
+| `height`   | 滚动条高度                       | `string`  | —          | `""`       |
+| `native`   | 是否使用浏览器原生滚动条样式     | `boolean` | —          | `false`    |
+| `noresize` | 是否禁用滚动条的自动调整大小功能 | `boolean` | —          | `false`    |
+| `always`   | 是否始终显示滚动条               | `boolean` | —          | `false`    |
 
 ### Scrollbar CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称              | 说明         |
-| ----------------- | ------------ |
-| container         | 滚动条容器   |
-| track-horizontal  | 水平滚动轨道 |
-| track-vertical    | 垂直滚动轨道 |
-| thumb-horizontal  | 水平滚动滑块 |
-| thumb-vertical    | 垂直滚动滑块 |
-| view              | 视图容器     |
+| 名称             | 说明         |
+| ---------------- | ------------ |
+| container        | 滚动条容器   |
+| track-horizontal | 水平滚动轨道 |
+| track-vertical   | 垂直滚动轨道 |
+| thumb-horizontal | 水平滚动滑块 |
+| thumb-vertical   | 垂直滚动滑块 |
+| view             | 视图容器     |
 
 ### Scrollbar Slots
 
@@ -406,25 +412,25 @@ ea-aside::part(container) {
 
 ### Scrollbar Events
 
-| **事件名**       | **说明**               | **回调参数(event.detail)**                                                                                                  |
-| ---------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `ea-scroll`      | 滚动时触发             | `{ scrollTop: number, scrollLeft: number }`                                                                                 |
-| `ea-end-reached` | 滚动到边界时触发       | `{ direction: 'top' \| 'bottom' \| 'left' \| 'right', scrollTop: number, scrollLeft: number }`                              |
+| **事件名**       | **说明**         | **回调参数(event.detail)**                                                                     |
+| ---------------- | ---------------- | ---------------------------------------------------------------------------------------------- |
+| `ea-scroll`      | 滚动时触发       | `{ scrollTop: number, scrollLeft: number }`                                                    |
+| `ea-end-reached` | 滚动到边界时触发 | `{ direction: 'top' \| 'bottom' \| 'left' \| 'right', scrollTop: number, scrollLeft: number }` |
 
-### Scrollbar CSS 自定义属性
+### Scrollbar CSS Custom Properties
 
-| 属性名                                       | 说明             | 默认值                  |
-| -------------------------------------------- | ---------------- | ----------------------- |
-| `--ea-scrollbar-top`                         | 垂直滑块偏移位置 | `0`                     |
-| `--ea-scrollbar-left`                        | 水平滑块偏移位置 | `0`                     |
-| `--ea-scrollbar-track-color`                 | 轨道背景颜色     | `var(--color-transparent)` |
-| `--ea-scrollbar-thumb-color`                 | 滑块背景颜色     | `var(--grey-300)`       |
-| `--ea-scrollbar-thumb-hover-color`           | 滑块悬停背景颜色 | `var(--grey-400)`       |
-| `--ea-scrollbar-track-vertical-height`       | 垂直轨道高度     | `100%`                  |
-| `--ea-scrollbar-track-vertical-width`        | 垂直轨道宽度     | `10px`                  |
-| `--ea-scrollbar-thumb-vertical-height`       | 垂直滑块高度     | `0`                     |
-| `--ea-scrollbar-thumb-vertical-width`        | 垂直滑块宽度     | `100%`                  |
-| `--ea-scrollbar-track-horizontal-height`     | 水平轨道高度     | `10px`                  |
-| `--ea-scrollbar-track-horizontal-width`      | 水平轨道宽度     | `100%`                  |
-| `--ea-scrollbar-thumb-horizontal-height`     | 水平滑块高度     | `100%`                  |
-| `--ea-scrollbar-thumb-horizontal-width`      | 水平滑块宽度     | `0`                     |
+| 属性名                                   | 说明             | 默认值                     |
+| ---------------------------------------- | ---------------- | -------------------------- |
+| `--ea-scrollbar-top`                     | 垂直滑块偏移位置 | `0`                        |
+| `--ea-scrollbar-left`                    | 水平滑块偏移位置 | `0`                        |
+| `--ea-scrollbar-track-color`             | 轨道背景颜色     | `var(--color-transparent)` |
+| `--ea-scrollbar-thumb-color`             | 滑块背景颜色     | `var(--grey-300)`          |
+| `--ea-scrollbar-thumb-hover-color`       | 滑块悬停背景颜色 | `var(--grey-400)`          |
+| `--ea-scrollbar-track-vertical-height`   | 垂直轨道高度     | `100%`                     |
+| `--ea-scrollbar-track-vertical-width`    | 垂直轨道宽度     | `10px`                     |
+| `--ea-scrollbar-thumb-vertical-height`   | 垂直滑块高度     | `0`                        |
+| `--ea-scrollbar-thumb-vertical-width`    | 垂直滑块宽度     | `100%`                     |
+| `--ea-scrollbar-track-horizontal-height` | 水平轨道高度     | `10px`                     |
+| `--ea-scrollbar-track-horizontal-width`  | 水平轨道宽度     | `100%`                     |
+| `--ea-scrollbar-thumb-horizontal-height` | 水平滑块高度     | `100%`                     |
+| `--ea-scrollbar-thumb-horizontal-width`  | 水平滑块宽度     | `0`                        |

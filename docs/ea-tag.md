@@ -13,26 +13,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```js
-<script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-tag/index.js";
+```html [原生引入]
+<script type="module">
+  import "./node_modules/easy-component-ui/dist/components/ea-tag.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-tag";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -280,15 +273,15 @@ Tag 可以像按钮组件一样变为完全圆形。
 
 ### Tag Attributes
 
-| 参数                | 说明                                         | 类型    | 可选值                                                       | 默认值  |
-| ------------------- | -------------------------------------------- | ------- | ------------------------------------------------------------ | ------- |
-| variant             | 主题类型，用于选择预设样式                   | string  | `primary \| success \| info \| warning \| danger`            | info    |
-| size                | 组件尺寸，影响内边距与字体大小               | string  | `large \| default \| small`                                  | default |
-| effect              | 主题效果，控制背景与边框样式                 | string  | `dark \| light \| plain`                                     | light   |
-| closable            | 是否显示关闭图标，支持用户移除标签           | boolean | —                                                            | false   |
-| color               | 自定义背景色                                 | string  | CSS color value                                              | —       |
-| round               | 是否为圆角/圆形样式                          | boolean | —                                                            | false   |
-| disable-transitions | 是否禁用移除时的动画过渡                     | boolean | —                                                            | false   |
+| 参数                | 说明                               | 类型    | 可选值                                            | 默认值  |
+| ------------------- | ---------------------------------- | ------- | ------------------------------------------------- | ------- |
+| variant             | 主题类型，用于选择预设样式         | string  | `primary \| success \| info \| warning \| danger` | info    |
+| size                | 组件尺寸，影响内边距与字体大小     | string  | `large \| default \| small`                       | default |
+| effect              | 主题效果，控制背景与边框样式       | string  | `dark \| light \| plain`                          | light   |
+| closable            | 是否显示关闭图标，支持用户移除标签 | boolean | —                                                 | false   |
+| color               | 自定义背景色                       | string  | CSS color value                                   | —       |
+| round               | 是否为圆角/圆形样式                | boolean | —                                                 | false   |
+| disable-transitions | 是否禁用移除时的动画过渡           | boolean | —                                                 | false   |
 
 ### Tag CSS Part
 
@@ -305,33 +298,33 @@ Tag 可以像按钮组件一样变为完全圆形。
 
 ### Tag Events
 
-| 事件名称  | 说明             | 回调参数                                |
-| --------- | ---------------- | --------------------------------------- |
+| 事件名称  | 说明             | 回调参数                   |
+| --------- | ---------------- | -------------------------- |
 | ea-remove | 标签被移除后触发 | `{ text: string \| null }` |
 
-### Tag CSS 自定义属性
+### Tag CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| ------ | ---- | ------ |
-| --ea-tag-border-radius | 组件圆角 | var(--border-radius-sm) |
-| --ea-tag-font-size | 组件字体大小 | var(--font-size-sm) |
-| --ea-tag-transition | 过渡动画时长 | var(--transition-normal) |
+| 属性名                 | 说明         | 默认值                   |
+| ---------------------- | ------------ | ------------------------ |
+| --ea-tag-border-radius | 组件圆角     | var(--border-radius-sm)  |
+| --ea-tag-font-size     | 组件字体大小 | var(--font-size-sm)      |
+| --ea-tag-transition    | 过渡动画时长 | var(--transition-normal) |
 
 ## CheckTag API
 
 ### CheckTag Attributes
 
-| 参数     | 说明               | 类型    | 可选值                                            | 默认值 |
-| -------- | ------------------ | ------- | ------------------------------------------------- | ------ |
-| checked  | 是否选中状态       | boolean | —                                                 | false  |
-| disabled | 是否禁用交互       | boolean | —                                                 | false  |
+| 参数     | 说明               | 类型    | 可选值                                            | 默认值  |
+| -------- | ------------------ | ------- | ------------------------------------------------- | ------- |
+| checked  | 是否选中状态       | boolean | —                                                 | false   |
+| disabled | 是否禁用交互       | boolean | —                                                 | false   |
 | variant  | 选中状态的主题样式 | string  | `primary \| success \| info \| warning \| danger` | primary |
 
 ### CheckTag CSS Part
 
-| 名称      | 说明         |
-| --------- | ------------ |
-| container | 标签根容器   |
+| 名称      | 说明       |
+| --------- | ---------- |
+| container | 标签根容器 |
 
 ### CheckTag Slots
 
@@ -341,6 +334,6 @@ Tag 可以像按钮组件一样变为完全圆形。
 
 ### CheckTag Events
 
-| 事件名称 | 说明               | 回调参数                          |
-| -------- | ------------------ | --------------------------------- |
+| 事件名称 | 说明               | 回调参数               |
+| -------- | ------------------ | ---------------------- |
 | change   | 选中状态改变时触发 | `{ checked: boolean }` |

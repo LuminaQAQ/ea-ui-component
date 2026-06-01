@@ -13,26 +13,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```js
-<script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-input-number/index.js";
+```html [原生引入]
+<script type="module">
+  import "./node_modules/easy-component-ui/dist/components/ea-input-number.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-input-number";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -180,9 +173,9 @@ onMounted(() => {
 
 :::
 
-## ea-input-number API
+## EaInputNumber API
 
-### ea-input-number Attributes
+### EaInputNumber Attributes
 
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 | ---- | ---- | ---- | ------ | ------ |
@@ -204,7 +197,7 @@ onMounted(() => {
 | placeholder | 输入框占位文本 | string | — | (空) |
 | inputmode | 原生 input 的 inputmode 属性 | string | — | (空) |
 
-### ea-input-number CSS Part
+### EaInputNumber CSS Part
 
 | 名称 | 说明 |
 | ---- | ---- |
@@ -217,14 +210,14 @@ onMounted(() => {
 | suffix | 后缀插槽容器 |
 | increase | 加号按钮 |
 
-### ea-input-number Slots
+### EaInputNumber Slots
 
 | 名称 | 说明 |
 | ---- | ---- |
 | prefix | 输入框前置插槽，用于放置图标或文本 |
 | suffix | 输入框后置插槽，用于放置单位或图标 |
 
-### ea-input-number Methods
+### EaInputNumber Methods
 
 | 方法名 | 说明 | 参数 |
 | ------ | ---- | ---- |
@@ -232,7 +225,7 @@ onMounted(() => {
 | blur | 失焦输入框 | - |
 | updateContainerClasslist | 更新容器 class | - |
 
-### ea-input-number Events
+### EaInputNumber Events
 
 | 事件名称 | 说明 | 回调参数(event.detail) |
 | -------- | ---- | ---------------------- |
@@ -240,7 +233,7 @@ onMounted(() => {
 | focus | 输入框获得焦点时触发 | - |
 | blur | 输入框失去焦点时触发 | - |
 
-### ea-input-number CSS 自定义属性
+### EaInputNumber CSS Custom Properties
 
 | 属性名 | 说明 | 默认值 |
 | ------ | ---- | ------ |

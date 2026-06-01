@@ -61,26 +61,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-space/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-space.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-space";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -619,7 +612,7 @@ fillExample.init();
 
 ## API
 
-### ea-space Attributes
+### EaSpace Attributes
 
 | 属性名     | 说明                 | 类型    | 可选值                                                                              | 默认值     |
 | ---------- | -------------------- | ------- | ----------------------------------------------------------------------------------- | ---------- |
@@ -631,7 +624,7 @@ fillExample.init();
 | fill       | 子元素是否填充父容器 | boolean | —                                                                                   | false      |
 | fill-ratio | 填充父容器的比例     | number  | `0-100`                                                                             | 100        |
 
-### ea-space CSS Part
+### EaSpace CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -640,13 +633,13 @@ fillExample.init();
 | container | 容器       |
 | spacer    | 分隔符样式 |
 
-### ea-space Slots
+### EaSpace Slots
 
 | 名称    | 说明                     |
 | ------- | ------------------------ |
 | default | 默认插槽，放置子元素内容 |
 
-### ea-space CSS 自定义属性
+### EaSpace CSS Custom Properties
 
 | 属性名                 | 说明     | 默认值                      |
 | ---------------------- | -------- | --------------------------- |

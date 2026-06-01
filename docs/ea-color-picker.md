@@ -51,30 +51,23 @@ onMounted(async () => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-color-picker/index.ts";
+  import "./node_modules/easy-component-ui/dist/components/ea-color-picker.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-color-picker";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#color-picker-css-part) 和 [CSS 自定义属性](#color-picker-css-自定义属性)。
+移步到 [CSS Part](#color-picker-css-part) 和 [CSS Custom Properties](#color-picker-css-自定义属性)。
 
 ## 基础用法
 
@@ -251,7 +244,7 @@ predefineExample.init();
 | required              | 是否必填       | Boolean | —                                                                                                                                                                    | false    |
 | clearable             | 是否可清空     | Boolean | —                                                                                                                                                                    | false    |
 | size                  | 尺寸           | String  | `'small' \| 'medium' \| 'large'`                                                                                                                                     | ""       |
-| color-format          | 颜色格式       | String  | `'hsl' \| 'hsv' \| 'hex' \| 'rgb' \| 'rgba'`                                                                                                                        | "hex"    |
+| color-format          | 颜色格式       | String  | `'hsl' \| 'hsv' \| 'hex' \| 'rgb' \| 'rgba'`                                                                                                                         | "hex"    |
 | show-alpha            | 是否支持透明度 | Boolean | —                                                                                                                                                                    | false    |
 | tabindex              | Tab 键遍历顺序 | Number  | —                                                                                                                                                                    | 0        |
 | placement             | 弹出位置       | String  | `'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | "bottom" |
@@ -274,16 +267,16 @@ predefineExample.init();
 | clear-btn                         | 清除按钮         |
 | confirm-btn                       | 确认按钮         |
 
-### ColorPicker CSS 自定义属性
+### ColorPicker CSS Custom Properties
 
-| 属性名                                | 说明             | 默认值                   |
-| ------------------------------------- | ---------------- | ------------------------ |
-| --ea-color-picker-size                | 触发器尺寸       | 32px                     |
-| --ea-color-picker-border-radius       | 触发器圆角       | var(--border-radius-sm)  |
-| --ea-color-picker-border-color        | 触发器边框颜色   | var(--grey-200)          |
-| --ea-color-picker-border-color-focus  | 聚焦时边框颜色   | var(--primary-color)     |
-| --ea-color-picker-background-color    | 触发器背景颜色   | var(--white)             |
-| --ea-color-picker-background-color-disabled | 禁用时背景颜色 | var(--grey-100)          |
+| 属性名                                      | 说明           | 默认值                  |
+| ------------------------------------------- | -------------- | ----------------------- |
+| --ea-color-picker-size                      | 触发器尺寸     | 32px                    |
+| --ea-color-picker-border-radius             | 触发器圆角     | var(--border-radius-sm) |
+| --ea-color-picker-border-color              | 触发器边框颜色 | var(--grey-200)         |
+| --ea-color-picker-border-color-focus        | 聚焦时边框颜色 | var(--primary-color)    |
+| --ea-color-picker-background-color          | 触发器背景颜色 | var(--white)            |
+| --ea-color-picker-background-color-disabled | 禁用时背景颜色 | var(--grey-100)         |
 
 ### ColorPicker Methods
 
@@ -308,15 +301,15 @@ predefineExample.init();
 
 ### ColorPickerPanel Attributes
 
-| 参数                  | 说明                                               | 类型    | 可选值                                    | 默认值                                                                |
-| --------------------- | -------------------------------------------------- | ------- | ----------------------------------------- | --------------------------------------------------------------------- |
-| value                 | 绑定值                                             | String  | —                                         | ""                                                                    |
+| 参数                  | 说明                                               | 类型    | 可选值                                       | 默认值                                                                |
+| --------------------- | -------------------------------------------------- | ------- | -------------------------------------------- | --------------------------------------------------------------------- |
+| value                 | 绑定值                                             | String  | —                                            | ""                                                                    |
 | color-format          | 颜色格式                                           | String  | `'hsl' \| 'hsv' \| 'hex' \| 'rgb' \| 'rgba'` | `'hex' (when show-alpha is false) \| 'rgb' (when show-alpha is true)` |
-| show-alpha            | 是否支持透明度                                     | Boolean | —                                         | false                                                                 |
-| disabled              | 是否禁用                                           | Boolean | —                                         | false                                                                 |
-| border                | 是否显示边框                                       | Boolean | —                                         | false                                                                 |
-| clearable             | 是否可编辑，开启后显示输入框允许用户直接输入颜色值 | Boolean | —                                         | true                                                                  |
-| predefine <PropTag /> | 预定义颜色                                         | Array   | —                                         | []                                                                    |
+| show-alpha            | 是否支持透明度                                     | Boolean | —                                            | false                                                                 |
+| disabled              | 是否禁用                                           | Boolean | —                                            | false                                                                 |
+| border                | 是否显示边框                                       | Boolean | —                                            | false                                                                 |
+| clearable             | 是否可编辑，开启后显示输入框允许用户直接输入颜色值 | Boolean | —                                            | true                                                                  |
+| predefine <PropTag /> | 预定义颜色                                         | Array   | —                                            | []                                                                    |
 
 ### ColorPickerPanel CSS Part
 
@@ -338,33 +331,33 @@ predefineExample.init();
 | color-input        | 颜色输入框（仅在clearable模式显示）     |
 | append             | 插槽区域                                |
 
-### ColorPickerPanel CSS 自定义属性
+### ColorPickerPanel CSS Custom Properties
 
-| 属性名                                          | 说明               | 默认值                  |
-| ----------------------------------------------- | ------------------ | ----------------------- |
-| --ea-color-picker-panel-border-radius           | 面板圆角           | var(--border-radius-md) |
-| --ea-color-picker-panel-box-shadow              | 面板阴影           | var(--shadow-lg)        |
-| --ea-color-picker-panel-background-color        | 饱和度面板背景颜色 | #ff0000                 |
-| --ea-color-picker-panel-border-color            | 边框颜色           | var(--grey-200)         |
-| --ea-color-picker-panel-padding                 | 面板内边距         | var(--spacing-md)       |
-| --ea-color-picker-panel-svpanel-width           | 饱和度面板宽度     | 280px                   |
-| --ea-color-picker-panel-svpanel-height          | 饱和度面板高度     | 180px                   |
-| --ea-color-picker-panel-hue-slider-width        | 色调滑块宽度       | 12px                    |
-| --ea-color-picker-panel-hue-slider-height       | 色调滑块高度       | 180px                   |
-| --ea-color-picker-panel-alpha-slider-width      | 透明度滑块宽度     | 280px                   |
-| --ea-color-picker-panel-alpha-slider-height     | 透明度滑块高度     | 12px                    |
-| --ea-color-picker-panel-predefine-item-size     | 预定义颜色项尺寸   | 20px                    |
+| 属性名                                      | 说明               | 默认值                  |
+| ------------------------------------------- | ------------------ | ----------------------- |
+| --ea-color-picker-panel-border-radius       | 面板圆角           | var(--border-radius-md) |
+| --ea-color-picker-panel-box-shadow          | 面板阴影           | var(--shadow-lg)        |
+| --ea-color-picker-panel-background-color    | 饱和度面板背景颜色 | #ff0000                 |
+| --ea-color-picker-panel-border-color        | 边框颜色           | var(--grey-200)         |
+| --ea-color-picker-panel-padding             | 面板内边距         | var(--spacing-md)       |
+| --ea-color-picker-panel-svpanel-width       | 饱和度面板宽度     | 280px                   |
+| --ea-color-picker-panel-svpanel-height      | 饱和度面板高度     | 180px                   |
+| --ea-color-picker-panel-hue-slider-width    | 色调滑块宽度       | 12px                    |
+| --ea-color-picker-panel-hue-slider-height   | 色调滑块高度       | 180px                   |
+| --ea-color-picker-panel-alpha-slider-width  | 透明度滑块宽度     | 280px                   |
+| --ea-color-picker-panel-alpha-slider-height | 透明度滑块高度     | 12px                    |
+| --ea-color-picker-panel-predefine-item-size | 预定义颜色项尺寸   | 20px                    |
 
 ### ColorPickerPanel Events
 
-| 事件名           | 说明                       | 回调参数(event.detail)          |
-| ---------------- | -------------------------- | ------------------------------- |
+| 事件名           | 说明                       | 回调参数(event.detail)            |
+| ---------------- | -------------------------- | --------------------------------- |
 | change           | 颜色值改变时触发           | `{ value: string, color: Color }` |
-| ea-active-change | 颜色激活值改变时触发       | `{ value: string }`             |
-| ea-invalid-color | 输入的颜色格式不合法时触发 | `{ value: string }`             |
+| ea-active-change | 颜色激活值改变时触发       | `{ value: string }`               |
+| ea-invalid-color | 输入的颜色格式不合法时触发 | `{ value: string }`               |
 
 ### ColorPickerPanel Methods
 
-| 方法名             | 说明                 | 参数 |
-| ------------------ | -------------------- | ---- |
+| 方法名              | 说明                 | 参数 |
+| ------------------- | -------------------- | ---- |
 | resetCursorPosition | 重置所有滑块光标位置 | —    |

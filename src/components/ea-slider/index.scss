@@ -56,7 +56,7 @@ $name: ea-slider;
     flex: 1;
     height: 100%;
 
-    margin: 0 calc(var(--spacing-md) + var(--#{$name}-thumb-size));
+    margin-right: calc(var(--spacing-md) + var(--#{$name}-thumb-size));
   }
 
   @include element(rail) {

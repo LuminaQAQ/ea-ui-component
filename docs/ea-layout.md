@@ -35,26 +35,19 @@ ea-button::part(container) {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-layout/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-layout.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-layout";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -610,12 +603,12 @@ ea-button::part(container) {
 
 ### Row Attributes
 
-| 属性名  | 说明                 | 类型   | 可选值                                                                       | 默认值  |
-| ------- | -------------------- | ------ | ---------------------------------------------------------------------------- | ------- |
-| gutter  | 设置列之间的间距     | Number | —                                                                            | `0`     |
+| 属性名  | 说明                 | 类型   | 可选值                                                                                | 默认值  |
+| ------- | -------------------- | ------ | ------------------------------------------------------------------------------------- | ------- |
+| gutter  | 设置列之间的间距     | Number | —                                                                                     | `0`     |
 | justify | 定义子元素的排版方式 | String | `'start' \| 'end' \| 'center' \| 'space-around' \| 'space-between' \| 'space-evenly'` | `start` |
-| align   | 定义子元素的对齐方式 | String | `'top' \| 'middle' \| 'bottom'`                                              | `top`   |
-| tag     | 设置布局的标签       | String | —                                                                            | `div`   |
+| align   | 定义子元素的对齐方式 | String | `'top' \| 'middle' \| 'bottom'`                                                       | `top`   |
+| tag     | 设置布局的标签       | String | —                                                                                     | `div`   |
 
 ### Row CSS Part
 
@@ -625,17 +618,17 @@ ea-button::part(container) {
 
 ### Row Slots
 
-| 名称    | 说明                    |
-| ------- | ----------------------- |
+| 名称    | 说明                      |
+| ------- | ------------------------- |
 | default | 默认插槽，用于放置 ea-col |
 
-### Row CSS 自定义属性
+### Row CSS Custom Properties
 
-| 属性名             | 说明                   | 默认值  |
-| ------------------ | ---------------------- | ------- |
-| --ea-row-gutter    | 列间距（半值）         | `0px`   |
-| --ea-row-justify   | 水平排列方式           | `start` |
-| --ea-row-align     | 垂直对齐方式           | `top`   |
+| 属性名           | 说明           | 默认值  |
+| ---------------- | -------------- | ------- |
+| --ea-row-gutter  | 列间距（半值） | `0px`   |
+| --ea-row-justify | 水平排列方式   | `start` |
+| --ea-row-align   | 垂直对齐方式   | `top`   |
 
 ## Col API
 
@@ -657,15 +650,15 @@ ea-button::part(container) {
 
 ### Col Slots
 
-| 名称    | 说明               |
-| ------- | ------------------ |
+| 名称    | 说明                 |
+| ------- | -------------------- |
 | default | 默认插槽，用于列内容 |
 
-### Col CSS 自定义属性
+### Col CSS Custom Properties
 
-| 属性名           | 说明               | 默认值 |
-| ---------------- | ------------------ | ------ |
-| --ea-col-span    | 栅格占据的列数     | `24`   |
-| --ea-col-offset  | 栅格左侧的间隔格数 | `0`    |
-| --ea-col-push    | 栅格向右移动格数   | `0`    |
-| --ea-col-pull    | 栅格向左移动格数   | `0`    |
+| 属性名          | 说明               | 默认值 |
+| --------------- | ------------------ | ------ |
+| --ea-col-span   | 栅格占据的列数     | `24`   |
+| --ea-col-offset | 栅格左侧的间隔格数 | `0`    |
+| --ea-col-push   | 栅格向右移动格数   | `0`    |
+| --ea-col-pull   | 栅格向左移动格数   | `0`    |

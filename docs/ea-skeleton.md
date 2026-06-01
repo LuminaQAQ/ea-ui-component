@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import "../dist/components/index.js"
 import "../dist/assets/icon.css"
+import PropTag from './components/PropTag.vue'
 
 onMounted(() => {
   const loadingExample = {
@@ -51,17 +52,23 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-skeleton/index.ts";
+  import "./node_modules/easy-component-ui/dist/components/ea-skeleton.js";
 </script>
 ```
 
+```js [Vite]
+import "easy-component-ui/ea-skeleton";
+```
+
+:::
+
 ## 自定义样式
 
-移步到 [CSS Part](#skeleton-css-part) 和 [CSS 自定义属性](#skeleton-item-css-自定义属性)。
+移步到 [CSS Part](#skeleton-css-part) 和 [CSS Custom Properties](#skeleton-item-css-自定义属性)。
 
 ## 基础用法
 
@@ -571,12 +578,12 @@ throttleExample.init();
 
 ### Skeleton Attributes
 
-| 参数                | 说明                                                                  | 类型    | 可选值 | 默认值 |
-| ------------------- | --------------------------------------------------------------------- | ------- | ------ | ------ |
-| animated            | 是否开启动画                                                          | Boolean | —      | false  |
-| count               | 渲染的骨架屏条目数量（注意性能）                                      | Number  | —      | 1      |
-| loading <PropTag /> | 是否显示骨架屏（true 显示骨架，false 显示默认插槽中的真实内容）       | Boolean | —      | true   |
-| rows                | 段落占位图行数，用于生成默认模板的段落数                              | Number  | —      | 4      |
+| 参数                | 说明                                                                 | 类型    | 可选值 | 默认值 |
+| ------------------- | -------------------------------------------------------------------- | ------- | ------ | ------ |
+| animated            | 是否开启动画                                                         | Boolean | —      | false  |
+| count               | 渲染的骨架屏条目数量（注意性能）                                     | Number  | —      | 1      |
+| loading <PropTag /> | 是否显示骨架屏（true 显示骨架，false 显示默认插槽中的真实内容）      | Boolean | —      | true   |
+| rows                | 段落占位图行数，用于生成默认模板的段落数                             | Number  | —      | 4      |
 | throttle-leading    | 当 `loading` 由 true → false 时的延迟（ms），用于防抖/节流以防止闪烁 | Number  | —      | 0      |
 | throttle-trailing   | 当 `loading` 由 false → true 时的延迟（ms），用于防抖/节流以防止闪烁 | Number  | —      | 0      |
 
@@ -599,15 +606,15 @@ throttleExample.init();
 
 ### Skeleton Methods
 
-| 方法名                  | 说明             | 参数 |
-| ----------------------- | ---------------- | ---- |
+| 方法名                   | 说明               | 参数 |
+| ------------------------ | ------------------ | ---- |
 | updateContainerClasslist | 更新容器类名并返回 | —    |
 
-### Skeleton CSS 自定义属性
+### Skeleton CSS Custom Properties
 
-| 属性名                    | 说明             | 默认值                    |
-| ------------------------- | ---------------- | ------------------------- |
-| --ea-skeleton-transition  | 过渡动画时长     | var(--transition-fast)    |
+| 属性名                   | 说明         | 默认值                 |
+| ------------------------ | ------------ | ---------------------- |
+| --ea-skeleton-transition | 过渡动画时长 | var(--transition-fast) |
 
 ## Skeleton Item API
 
@@ -622,30 +629,30 @@ throttleExample.init();
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明                         |
-| --------- | ---------------------------- |
-| container | 外层容器                     |
+| 名称      | 说明                               |
+| --------- | ---------------------------------- |
+| container | 外层容器                           |
 | image-svg | 图片占位 SVG 元素（仅 image 变体） |
 
 ### SkeletonItem Slots
 
-| 名称    | 说明         |
-| ------- | ------------ |
-| default | 默认插槽     |
+| 名称    | 说明     |
+| ------- | -------- |
+| default | 默认插槽 |
 
 ### SkeletonItem Methods
 
-| 方法名                  | 说明             | 参数 |
-| ----------------------- | ---------------- | ---- |
+| 方法名                   | 说明               | 参数 |
+| ------------------------ | ------------------ | ---- |
 | updateContainerClasslist | 更新容器类名并返回 | —    |
 
-### SkeletonItem CSS 自定义属性
+### SkeletonItem CSS Custom Properties
 
-| 属性名                                    | 说明               | 默认值                |
-| ----------------------------------------- | ------------------ | --------------------- |
-| --ea-skeleton-item-color                  | 占位图背景颜色     | var(--grey-100)       |
-| --ea-skeleton-item-border-radius          | 占位图圆角         | var(--border-radius-sm) |
-| --ea-skeleton-item-image-color            | 图片占位图颜色     | var(--grey-300)       |
-| --ea-skeleton-item-circle-size            | 圆形变体尺寸       | auto                  |
-| --ea-skeleton-item-animation-color-from   | 动画渐变起始颜色   | var(--grey-100)       |
-| --ea-skeleton-item-animation-color-to     | 动画渐变中间颜色   | var(--grey-200)       |
+| 属性名                                  | 说明             | 默认值                  |
+| --------------------------------------- | ---------------- | ----------------------- |
+| --ea-skeleton-item-color                | 占位图背景颜色   | var(--grey-100)         |
+| --ea-skeleton-item-border-radius        | 占位图圆角       | var(--border-radius-sm) |
+| --ea-skeleton-item-image-color          | 图片占位图颜色   | var(--grey-300)         |
+| --ea-skeleton-item-circle-size          | 圆形变体尺寸     | auto                    |
+| --ea-skeleton-item-animation-color-from | 动画渐变起始颜色 | var(--grey-100)         |
+| --ea-skeleton-item-animation-color-to   | 动画渐变中间颜色 | var(--grey-200)         |

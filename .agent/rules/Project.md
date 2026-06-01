@@ -1,7 +1,7 @@
 # ea-ui-component 项目开发规范
 
-> **版本**: 3.5.0  
-> **最后更新**: 2026-05-30  
+> **版本**: 3.6.0  
+> **最后更新**: 2026-06-02  
 > **更新日志**: 见文末
 
 本项目是基于 Web Components 的组件库，使用 TypeScript 和装饰器模式实现，开发时必须遵循以下规范。
@@ -239,7 +239,7 @@ import stylesheet from "./index.scss?inline";
 
 ### 组件类 JSDoc 注释规范
 
-每个组件类必须添加 JSDoc 注释，描述组件的元信息、插槽、事件、CSS Part 和 CSS 自定义属性：
+每个组件类必须添加 JSDoc 注释，描述组件的元信息、插槽、事件、CSS Part 和 CSS Custom Properties：
 
 ```typescript
 /**
@@ -276,7 +276,7 @@ export class EaAlert extends EaBase {
 | `@slot`        | 条件必填 | 插槽描述，格式：`@slot name - 描述`，默认插槽用 `default`                        |
 | `@event`       | 条件必填 | 事件描述，格式：`@event name - 描述，detail: { ... }`                            |
 | `@csspart`     | 条件必填 | CSS Part 描述，格式：`@csspart name - 描述`                                      |
-| `@cssproperty` | 条件必填 | CSS 自定义属性描述，格式：`@cssproperty --name - 描述`                           |
+| `@cssproperty` | 条件必填 | CSS Custom Properties描述，格式：`@cssproperty --name - 描述`                    |
 
 ### 属性命名规则
 
@@ -438,18 +438,38 @@ $name: ea-component-name;
 
 ### API 生成规则
 
-1. **Attributes** 以 `@attribute` 装饰器的定义为准
-2. **CSS Part** 以模板中 `part="xxx"` 属性为准
-3. **Slots** 以模板中 `<slot name="xxx">` 为准
-4. **Methods** 以类中公共方法为准（不含 `_` 前缀）
-5. **Events** 以 `this.emit()` 调用和自定义事件类为准
-6. **CSS 自定义属性** 以 `:host` 中 `--#{$name}-` 前缀的 CSS 变量为准
+1. **Attributes** 以 `@attribute` 装饰器的定义为准（映射 HTML attribute）
+2. **Properties** 以 `@property` 装饰器的定义为准（纯 JS 属性，不映射 HTML attribute），仅当组件存在非内部 `@property` 声明时添加此部分，并附注"Properties 为纯 JavaScript 属性，不映射到 HTML attribute，需通过 JS 访问。"
+3. **CSS Part** 以模板中 `part="xxx"` 属性为准，表格前添加 MDN `::part()` 引用
+4. **Slots** 以模板中 `<slot name="xxx">` 为准
+5. **Methods** 以类中公共方法为准（不含 `_` 前缀）
+6. **Events** 以 `this.emit()` 调用和自定义事件类为准
+7. **CSS Custom Properties** 以 `:host` 中 `--#{$name}-` 前缀的 CSS 变量为准，支持表格和 CSS 代码块两种展示方式
+
+### API 标题命名规范
+
+API 部分的标题使用 **PascalCase 组件名**，不使用 `ea-` 前缀的 kebab-case 格式：
+
+- `## Drawer API`、`### Drawer Attributes` ✅
+- `## ea-drawer API`、`### ea-drawer Attributes` ❌
+
+### CSS Custom Properties 标题规范
+
+- 使用英文标题：`### Drawer CSS Custom Properties`
+- 禁止使用中文标题：`### Drawer CSS 自定义属性` ❌
 
 ### VitePress 容器语法规则
 
 - **`::: code-group` 仅在存在多种语言代码块时使用**（如 HTML + CSS + JS），单一 HTML 代码块禁止使用 `::: code-group`
 - 单一代码块：`::: details` 直接包裹代码块
 - 多种代码块：`:::: details`（4 个冒号）+ `::: code-group`（3 个冒号）嵌套，闭合符先内 `:::` 后外 `::::`
+
+### `<script setup>` 规范
+
+- 文档中必须包含 `<script setup>` 块，用于导入组件库和编写示例交互逻辑
+- 使用 `<PropTag />` 标记 `@property` 属性时，**必须**导入 `import PropTag from './components/PropTag.vue'`
+- `onMounted` 中 `document.querySelector` 获取的 DOM 元素**必须**进行 null 检查，避免 `TypeError: Cannot read properties of null`
+- 非 `ea-` 前缀的 Vue 组件标签必须在 `<script setup>` 中导入，否则会触发 Vue 警告
 
 ## 通用规范
 
@@ -551,6 +571,16 @@ $mount(): void {
 ---
 
 ## 更新日志
+
+### v3.6.0 (2026-06-02)
+
+- **文档生成规范大幅扩充**：新增 `<script setup>` 规范（组件库导入、PropTag 导入、DOM null 检查）
+- **API 标题命名规范**：明确 PascalCase 格式，禁止 kebab-case
+- **CSS Custom Properties 规范**：英文标题、支持表格和 CSS 代码块两种展示方式
+- **CSS Part 规范**：表格前添加 MDN `::part()` 引用
+- **PropTag 导入要求**：使用 `<PropTag />` 时必须导入 `import PropTag from './components/PropTag.vue'`
+- **DOM null 检查要求**：`onMounted` 中 `querySelector` 结果必须进行 null 检查
+- **VitePress 自定义元素注意事项**：非 `ea-` 前缀的 Vue 组件标签必须导入
 
 ### v3.5.0 (2026-05-30)
 

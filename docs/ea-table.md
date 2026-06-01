@@ -487,13 +487,19 @@ onMounted(async () => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```js
-<script type='module'>
-  import "ea-ui-component/components/ea-table/index.ts";
+```html [原生引入]
+<script type="module">
+  import "./node_modules/easy-component-ui/dist/components/ea-table.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-table";
+```
+
+:::
 
 ## 自定义样式
 
@@ -521,6 +527,8 @@ await customElements.whenDefined("ea-table");
     <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -564,6 +572,8 @@ basicTable.setData(data);
 
 :::
 
+::::
+
 ## 带斑马纹表格
 
 使用带斑马纹的表格，可以更容易区分出不同行的数据。
@@ -575,6 +585,8 @@ basicTable.setData(data);
     <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -618,6 +630,8 @@ stripeTable.setData(data);
 
 :::
 
+::::
+
 ## 带边框表格
 
 <div class="demo">
@@ -627,6 +641,8 @@ stripeTable.setData(data);
     <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -670,6 +686,8 @@ borderTable.setData(data);
 
 :::
 
+::::
+
 ## 带状态表格
 
 <div class="demo">
@@ -679,6 +697,8 @@ borderTable.setData(data);
     <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -749,6 +769,8 @@ statusTable.setRowStylePart(
 
 :::
 
+::::
+
 ## 固定表头
 
 纵向内容过多时，可选择固定表头。
@@ -760,6 +782,8 @@ statusTable.setRowStylePart(
     <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -823,6 +847,8 @@ fixedHeaderExample.init();
 
 :::
 
+::::
+
 ## 固定列
 
 横向内容过多时，可选择固定列。
@@ -865,6 +891,8 @@ fixedHeaderExample.init();
     </ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -980,6 +1008,8 @@ fixedColumnExample.init();
 
 :::
 
+::::
+
 ## 固定列和表头
 
 当您有大量数据块放入表中，您可以同时固定表头和列。
@@ -1005,6 +1035,8 @@ fixedColumnExample.init();
     <ea-table-column prop="zip" label="Zip"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1101,6 +1133,8 @@ fixedColumnAndHeaderExample.init();
 
 :::
 
+::::
+
 ## 多级表头
 
 数据结构比较复杂的时候，可使用多级表头来展现数据的层次关系。
@@ -1129,6 +1163,8 @@ fixedColumnAndHeaderExample.init();
     </ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1223,6 +1259,8 @@ groupingHeadTable.setData(detailsData);
 
 :::
 
+::::
+
 ## 单选
 
 选择单行数据时使用色块表示。
@@ -1238,6 +1276,8 @@ groupingHeadTable.setData(detailsData);
     <ea-button id="radioTableClearBtn">Clear selection</ea-button>
   </div>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1306,6 +1346,8 @@ radioTable.init();
 
 :::
 
+::::
+
 ## 多选
 
 选择多行数据时使用 Checkbox。
@@ -1327,6 +1369,8 @@ radioTable.init();
     <ea-button id="selectionTableClearSelection"> Clear selection </ea-button>
   </div>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1416,6 +1460,8 @@ selectionTable.init();
 
 :::
 
+::::
+
 ## 自定义索引
 
 自定义 `type=index` 列的行号。
@@ -1428,6 +1474,8 @@ selectionTable.init();
     <ea-table-column prop="address" label="Address"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1484,6 +1532,8 @@ increaseliyTable.init();
 
 :::
 
+::::
+
 ## 排序
 
 对表格进行排序，可快速查找或对比数据。
@@ -1500,6 +1550,8 @@ increaseliyTable.init();
     <ea-table-column label="Address" prop="address"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1562,6 +1614,8 @@ sortableTable.init();
 
 :::
 
+::::
+
 ## 自定义列模板
 
 自定义某列的显示内容，可组合其他组件使用。通过设置 `data-scope="dataKey"` 来指定数据源字段。
@@ -1594,6 +1648,8 @@ sortableTable.init();
     </ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1704,6 +1760,8 @@ customColumnExample.init();
 通过 `ea-template-cell-click` 事件，可以方便地处理自定义模板中元素的点击事件，无需为每个元素单独绑定点击事件。
 :::
 
+::::
+
 ## 自定义表头
 
 表头支持自定义。
@@ -1735,6 +1793,8 @@ customColumnExample.init();
     </ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1818,6 +1878,8 @@ customHeaderTableExample.init();
 
 :::
 
+::::
+
 ## 表尾合计行
 
 若表格展示的是各类数字，可以在表尾显示各列的合计。
@@ -1839,6 +1901,8 @@ customHeaderTableExample.init();
     <ea-table-column label="Amount 3" prop="amount3"></ea-table-column>
   </ea-table>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -1943,6 +2007,8 @@ summaryExample.init();
 ```
 
 :::
+
+::::
 
 ## Table API
 

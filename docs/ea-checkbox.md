@@ -65,13 +65,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-checkbox/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-checkbox.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-checkbox";
+```
+
+:::
 
 ## 自定义样式
 
@@ -322,7 +328,7 @@ limitExample.init();
 
 支持 `border` 属性展现带边框的样式。
 
-<div class="demo">
+<div class="col left">
   <div>
     <ea-checkbox label="Option 1" size="large" border checked></ea-checkbox>
     <ea-checkbox label="Option 2" size="large" border></ea-checkbox>
@@ -422,7 +428,7 @@ limitExample.init();
 | ------- | ---------------------------- |
 | default | 默认插槽，用于多选框标签内容 |
 
-### Checkbox CSS 自定义属性
+### Checkbox CSS Custom Properties
 
 | 属性名                                  | 说明             | 默认值                |
 | --------------------------------------- | ---------------- | --------------------- |
@@ -470,7 +476,7 @@ limitExample.init();
 | ------- | ------------------------------ |
 | default | 默认插槽，用于放置 ea-checkbox |
 
-### CheckboxGroup CSS 自定义属性
+### CheckboxGroup CSS Custom Properties
 
 | 属性名                  | 说明       | 默认值              |
 | ----------------------- | ---------- | ------------------- |

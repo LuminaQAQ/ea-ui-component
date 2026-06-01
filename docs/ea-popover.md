@@ -54,17 +54,23 @@ ea-popover {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-popover/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-popover.js";
 </script>
 ```
 
+```js [Vite]
+import "easy-component-ui/ea-popover";
+```
+
+:::
+
 ## 自定义样式
 
-移步到 [CSS Part](#popover-css-part) 和 [CSS 自定义属性](#popover-css-自定义属性)。
+移步到 [CSS Part](#popover-css-part) 和 [CSS Custom Properties](#popover-css-自定义属性)。
 
 ## 展示位置
 
@@ -430,10 +436,10 @@ Popover 是在 <ea-link type="primary" href="/ea-popper">EaPopper</ea-link> 基�
 
 ```js
 const triggerExample = {
-  referenceElement: document.querySelector('#customedTrigger'),
+  referenceElement: document.querySelector("#customedTrigger"),
 
   init() {
-    this.referenceElement.addEventListener('click', () => {
+    this.referenceElement.addEventListener("click", () => {
       this.referenceElement.visible = !this.referenceElement.visible;
     });
   },
@@ -541,13 +547,13 @@ scalableExample.init();
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明                                   |
-| --------- | -------------------------------------- |
-| container | Popover 外层容器                       |
+| 名称      | 说明                                  |
+| --------- | ------------------------------------- |
+| container | Popover 外层容器                      |
 | reference | 触发 Popover 显示的 HTML 元素的父容器 |
-| original  | Popover 内容容器                       |
-| title     | Popover 标题容器                       |
-| content   | Popover 内容容器                       |
+| original  | Popover 内容容器                      |
+| title     | Popover 标题容器                      |
+| content   | Popover 内容容器                      |
 
 ### Popover Slots
 
@@ -566,21 +572,21 @@ scalableExample.init();
 
 ### Popover Events
 
-| 事件名   | 说明                          | 回调参数(event.detail) |
-| -------- | ----------------------------- | ---------------------- |
-| ea-show  | 开启 Popover 时触发           | —                      |
-| ea-shown | 开启 Popover 的动画结束时触发 | —                      |
-| ea-hide  | 关闭 Popover 时触发           | —                      |
-| ea-hidden| 关闭 Popover 的动画结束时触发 | —                      |
+| 事件名    | 说明                          | 回调参数(event.detail) |
+| --------- | ----------------------------- | ---------------------- |
+| ea-show   | 开启 Popover 时触发           | —                      |
+| ea-shown  | 开启 Popover 的动画结束时触发 | —                      |
+| ea-hide   | 关闭 Popover 时触发           | —                      |
+| ea-hidden | 关闭 Popover 的动画结束时触发 | —                      |
 
-### Popover CSS 自定义属性
+### Popover CSS Custom Properties
 
-| 属性名                          | 说明         | 默认值                 |
-| ------------------------------- | ------------ | ---------------------- |
-| --ea-popover-title-color        | 标题颜色     | var(--grey-900)        |
-| --ea-popover-title-font-size    | 标题字体大小 | var(--font-size-lg)    |
-| --ea-popover-content-color      | 内容颜色     | var(--grey-700)        |
-| --ea-popover-content-font-size  | 内容字体大小 | var(--font-size-md)    |
-| --ea-popover-box-shadow         | 阴影         | var(--box-shadow-md)   |
-| --ea-popover-border-radius      | 圆角         | var(--border-radius-sm)|
-| --ea-popover-z-index            | 层级         | 100                    |
+| 属性名                         | 说明         | 默认值                  |
+| ------------------------------ | ------------ | ----------------------- |
+| --ea-popover-title-color       | 标题颜色     | var(--grey-900)         |
+| --ea-popover-title-font-size   | 标题字体大小 | var(--font-size-lg)     |
+| --ea-popover-content-color     | 内容颜色     | var(--grey-700)         |
+| --ea-popover-content-font-size | 内容字体大小 | var(--font-size-md)     |
+| --ea-popover-box-shadow        | 阴影         | var(--box-shadow-md)    |
+| --ea-popover-border-radius     | 圆角         | var(--border-radius-sm) |
+| --ea-popover-z-index           | 层级         | 100                     |

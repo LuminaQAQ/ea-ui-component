@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="../dist/assets/icon.css" />
-
+    
     <style>
       hr {
-        margin: 3rem 0;
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid var(--grey-200, #e4e7ed);
       }
 
       .override-variable {
@@ -69,7 +70,7 @@
     <!-- -------------------  -->
 
     <!-- #region 模态效果 -->
-    <h1>模态效果</h1>
+    <h2>模态效果</h2>
 
     <div class="demo">
       <ea-overlay id="modalOverlay" modal="false">
@@ -90,7 +91,7 @@
     <!-- #endregion  -->
 
     <!-- #region 关闭前触发 -->
-    <h1>关闭前触发</h1>
+    <h2>关闭前触发</h2>
 
     <div class="demo">
       <ea-overlay id="beforeCloseOverlay" close-on-click-modal>

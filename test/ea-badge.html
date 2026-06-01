@@ -4,17 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="../dist/assets/icon.css" />
 
     <style>
-      hr {
-        margin: 3rem 0;
-      }
-
       .row {
+        margin: 1rem 0;
         display: flex;
+        align-items: center;
         flex-wrap: wrap;
-        justify-content: space-around;
+        gap: 0.5rem;
+      }
+      hr {
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid var(--grey-200, #e4e7ed);
       }
     </style>
   </head>
@@ -27,7 +29,7 @@
     <!-- #region -->
     <h1>基础用法</h1>
 
-    <div class="demo row">
+    <div class="row">
       <ea-badge value="12">
         <ea-button>comments</ea-button>
       </ea-badge>
@@ -103,7 +105,7 @@
 
     <!--  小红点 -->
     <!-- #region -->
-    <h1>小红点</h1>
+    <h2>小红点</h2>
 
     <div class="demo row">
       <ea-badge is-dot>query</ea-badge>
@@ -142,7 +144,7 @@
 
     <!--  偏移量 -->
     <!-- #region -->
-    <h1>偏移量</h1>
+    <h2>偏移量</h2>
 
     <div class="demo">
       <ea-badge class="item" value="0" offset-x="10" offset-y="5">

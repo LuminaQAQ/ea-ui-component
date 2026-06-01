@@ -32,13 +32,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-card/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-card.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-card";
+```
+
+:::
 
 ## 自定义样式
 
@@ -193,9 +199,9 @@ Card 组件由 `header` `content` 和 `footer` 组成。 `header` 和 `footer` �
 
 :::
 
-## ea-card API
+## EaCard API
 
-### ea-card Attributes
+### EaCard Attributes
 
 | 参数   | 说明                                                                                            | 类型   | 可选值                     | 默认值 |
 | ------ | ----------------------------------------------------------------------------------------------- | ------ | -------------------------- | ------ |
@@ -203,7 +209,7 @@ Card 组件由 `header` `content` 和 `footer` 组成。 `header` 和 `footer` �
 | footer | 卡片页脚。你既可以通过设置 footer 来修改卡片底部内容，也可以通过 `slot="footer"` 传入 DOM 节点 | string | —                          | —      |
 | shadow | 卡片阴影显示时机                                                                                | string | `always \| hover \| never` | always |
 
-### ea-card CSS Part
+### EaCard CSS Part
 
 | 名称      | 说明      |
 | --------- | --------- |
@@ -212,7 +218,7 @@ Card 组件由 `header` `content` 和 `footer` 组成。 `header` 和 `footer` �
 | content   | 内容容器  |
 | footer    | 页脚容器  |
 
-### ea-card Slots
+### EaCard Slots
 
 | 名称    | 说明     |
 | ------- | -------- |
@@ -220,7 +226,7 @@ Card 组件由 `header` `content` 和 `footer` 组成。 `header` 和 `footer` �
 | header  | 卡片标题 |
 | footer  | 卡片页脚 |
 
-### ea-card CSS 自定义属性
+### EaCard CSS Custom Properties
 
 | 属性名                         | 说明         | 默认值                    |
 | ------------------------------ | ------------ | ------------------------- |

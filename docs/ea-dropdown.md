@@ -74,15 +74,23 @@ onMounted(() => {
 
 ## 引入
 
-```html
+::: code-group
+
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-dropdown/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-dropdown.js";
 </script>
 ```
 
+```js [Vite]
+import "easy-component-ui/ea-dropdown";
+```
+
+:::
+
 ## 自定义样式
 
-移步到 [CSS Part](#dropdown-css-part) 和 [CSS 自定义属性](#dropdown-css-自定义属性)。
+移步到 [CSS Part](#dropdown-css-part) 和 [CSS Custom Properties](#dropdown-css-自定义属性)。
 
 ## 基本用法
 
@@ -605,7 +613,7 @@ methodsExample.init();
 | hide   | 隐藏下拉菜单         | —    |
 | toggle | 切换下拉菜单显示状态 | —    |
 
-### Dropdown CSS 自定义属性
+### Dropdown CSS Custom Properties
 
 | 属性名                       | 说明         | 默认值 |
 | ---------------------------- | ------------ | ------ |
@@ -650,7 +658,7 @@ methodsExample.init();
 | ---------- | ----------------------------------------- | ---------------------- |
 | ea-command | 点击菜单项时触发（当设置了 command 属性） | `{ command: string }`  |
 
-### DropdownItem CSS 自定义属性
+### DropdownItem CSS Custom Properties
 
 | 属性名                                    | 说明             | 默认值              |
 | ----------------------------------------- | ---------------- | ------------------- |

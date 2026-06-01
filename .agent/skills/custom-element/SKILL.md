@@ -21,11 +21,11 @@ import { CustomElement } from "@decorator";
 
 ### CustomElementOptions
 
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `autoDefine` | `boolean` | `true` | 是否自动调用 `customElements.define()` 注册 |
-| `styles` | `string \| string[]` | — | 组件的 CSS 样式字符串（通常通过 `?inline` 导入 SCSS） |
-| `extraAttr` | `string \| string[]` | — | 额外需要监听的 HTML attribute 名称 |
+| 属性         | 类型                 | 默认值 | 说明                                                  |
+| ------------ | -------------------- | ------ | ----------------------------------------------------- |
+| `autoDefine` | `boolean`            | `true` | 是否自动调用 `customElements.define()` 注册           |
+| `styles`     | `string \| string[]` | —      | 组件的 CSS 样式字符串（通常通过 `?inline` 导入 SCSS） |
+| `extraAttr`  | `string \| string[]` | —      | 额外需要监听的 HTML attribute 名称                    |
 
 ## 使用示例
 
@@ -121,16 +121,16 @@ export class EaAlert extends EaBase {
 
 ### JSDoc 标签说明
 
-| 标签 | 必填 | 说明 |
-|------|------|------|
-| `@summary` | ✅ | 组件的中文简要描述，说明用途和核心功能 |
-| `@status` | ✅ | 组件稳定状态：`stable` / `experimental` / `deprecated` |
-| `@since` | ✅ | 组件首次引入的版本号 |
-| `@dependency` | 条件必填 | 依赖的子组件标签名（无依赖则省略） |
-| `@slot` | 条件必填 | 插槽描述，格式：`@slot name - 描述`，默认插槽用 `default` |
-| `@event` | 条件必填 | 事件描述，格式：`@event name - 描述，detail: { ... }` |
-| `@csspart` | 条件必填 | CSS Part 描述，格式：`@csspart name - 描述` |
-| `@cssproperty` | 条件必填 | CSS 自定义属性描述，格式：`@cssproperty --name - 描述` |
+| 标签           | 必填     | 说明                                                          |
+| -------------- | -------- | ------------------------------------------------------------- |
+| `@summary`     | ✅       | 组件的中文简要描述，说明用途和核心功能                        |
+| `@status`      | ✅       | 组件稳定状态：`stable` / `experimental` / `deprecated`        |
+| `@since`       | ✅       | 组件首次引入的版本号                                          |
+| `@dependency`  | 条件必填 | 依赖的子组件标签名（无依赖则省略）                            |
+| `@slot`        | 条件必填 | 插槽描述，格式：`@slot name - 描述`，默认插槽用 `default`     |
+| `@event`       | 条件必填 | 事件描述，格式：`@event name - 描述，detail: { ... }`         |
+| `@csspart`     | 条件必填 | CSS Part 描述，格式：`@csspart name - 描述`                   |
+| `@cssproperty` | 条件必填 | CSS Custom Properties描述，格式：`@cssproperty --name - 描述` |
 
 ### JSDoc 标签顺序
 

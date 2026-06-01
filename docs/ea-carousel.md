@@ -19,26 +19,19 @@ ea-carousel-item {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-carousel/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-carousel.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-carousel";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -224,13 +217,15 @@ ea-carousel-item {
 
 通过设置 `direction` 属性可以设置轮播图的方向。可选值为 `horizontal`（水平）和 `vertical`（垂直）。
 
-<ea-carousel direction="vertical" height="150px">
+<div class="demo">
+  <ea-carousel direction="vertical" height="150px">
   <ea-carousel-item> 1 </ea-carousel-item>
   <ea-carousel-item> 2 </ea-carousel-item>
   <ea-carousel-item> 3 </ea-carousel-item>
   <ea-carousel-item> 4 </ea-carousel-item>
   <ea-carousel-item> 5 </ea-carousel-item>
-</ea-carousel>
+  </ea-carousel>
+</div>
 
 ::: details 查看代码
 
@@ -278,11 +273,11 @@ ea-carousel-item {
 
 ### Carousel Slots
 
-| 名称         | 说明                                  |
-| ------------ | ------------------------------------- |
-| default      | 默认插槽，放置 ea-carousel-item 子组件 |
-| clone-first  | 首项克隆插槽（内部使用）              |
-| clone-last   | 末项克隆插槽（内部使用）              |
+| 名称        | 说明                                   |
+| ----------- | -------------------------------------- |
+| default     | 默认插槽，放置 ea-carousel-item 子组件 |
+| clone-first | 首项克隆插槽（内部使用）               |
+| clone-last  | 末项克隆插槽（内部使用）               |
 
 ### Carousel Methods
 
@@ -297,7 +292,7 @@ ea-carousel-item {
 | --------- | ------------------------------------ | ----------------------------------- |
 | ea-change | 当前索引变化时触发（变更为有效索引） | `{ current: number, prev: number }` |
 
-### Carousel CSS 自定义属性
+### Carousel CSS Custom Properties
 
 | 属性名                                | 说明             | 默认值                      |
 | ------------------------------------- | ---------------- | --------------------------- |
@@ -322,8 +317,8 @@ ea-carousel-item {
 
 ### CarouselItem Slots
 
-| 名称    | 说明               |
-| ------- | ------------------ |
+| 名称    | 说明           |
+| ------- | -------------- |
 | default | 轮播项内容插槽 |
 
 ### CarouselItem CSS Part

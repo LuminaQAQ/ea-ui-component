@@ -86,13 +86,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-date-picker/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-date-picker.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-date-picker";
+```
+
+:::
 
 ## 自定义样式
 
@@ -507,29 +513,29 @@ formatExample.init();
 
 ### DatePicker Events
 
-| 事件名            | 说明                         | 回调参数(event.detail)                                                                    |
-| ----------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
+| 事件名            | 说明                         | 回调参数(event.detail)                                                                                          |
+| ----------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | ea-change         | 用户确认选定的值时触发       | `{ fullDate: string, year: number \| null, month: number \| null, date: number \| null, week: number \| null }` |
-| focus             | 当 Input 组件获得焦点时触发  | —                                                                                         |
-| blur              | 当 Input 组件失去焦点时触发  | —                                                                                         |
-| ea-panel-change   | 当日期选择面板发生改变时触发 | `{ date: Date, mode: 'month' \| 'year', view?: string }`                                  |
-| ea-visible-change | 当下拉列表显示状态改变时触发 | `{ visible: boolean }`                                                                    |
+| focus             | 当 Input 组件获得焦点时触发  | —                                                                                                               |
+| blur              | 当 Input 组件失去焦点时触发  | —                                                                                                               |
+| ea-panel-change   | 当日期选择面板发生改变时触发 | `{ date: Date, mode: 'month' \| 'year', view?: string }`                                                        |
+| ea-visible-change | 当下拉列表显示状态改变时触发 | `{ visible: boolean }`                                                                                          |
 
-### DatePicker CSS 自定义属性
+### DatePicker CSS Custom Properties
 
-| 属性名                                       | 说明                 | 默认值                 |
-| -------------------------------------------- | -------------------- | ---------------------- |
-| --ea-date-picker-width                       | 组件宽度             | auto                   |
-| --ea-date-picker-bg-color                    | 下拉面板背景颜色     | var(--color-white)     |
-| --ea-date-picker-shadow                      | 下拉面板阴影         | var(--box-shadow-sm)   |
-| --ea-date-picker-header-height               | 头部高度             | 40px                   |
-| --ea-date-picker-header-text-color           | 头部文字颜色         | var(--grey-900)        |
-| --ea-date-picker-header-text-hover           | 头部文字悬停颜色     | var(--blue-500)        |
-| --ea-date-picker-panel-item-size             | 面板项尺寸           | 60px                   |
-| --ea-date-picker-panel-item-bg-color         | 面板项背景颜色       | transparent            |
-| --ea-date-picker-panel-item-text-color       | 面板项文字颜色       | var(--grey-700)        |
-| --ea-date-picker-panel-item-hover            | 面板项悬停背景颜色   | var(--grey-100)        |
-| --ea-date-picker-panel-item-selected         | 面板项选中文字颜色   | var(--blue-500)        |
-| --ea-date-picker-panel-item-selected-bg      | 面板项选中背景颜色   | var(--blue-100)        |
-| --ea-date-picker-font-size                   | 字体大小             | var(--font-size-sm)    |
-| --ea-date-picker-transition                  | 过渡动画             | var(--transition-fast) |
+| 属性名                                  | 说明               | 默认值                 |
+| --------------------------------------- | ------------------ | ---------------------- |
+| --ea-date-picker-width                  | 组件宽度           | auto                   |
+| --ea-date-picker-bg-color               | 下拉面板背景颜色   | var(--color-white)     |
+| --ea-date-picker-shadow                 | 下拉面板阴影       | var(--box-shadow-sm)   |
+| --ea-date-picker-header-height          | 头部高度           | 40px                   |
+| --ea-date-picker-header-text-color      | 头部文字颜色       | var(--grey-900)        |
+| --ea-date-picker-header-text-hover      | 头部文字悬停颜色   | var(--blue-500)        |
+| --ea-date-picker-panel-item-size        | 面板项尺寸         | 60px                   |
+| --ea-date-picker-panel-item-bg-color    | 面板项背景颜色     | transparent            |
+| --ea-date-picker-panel-item-text-color  | 面板项文字颜色     | var(--grey-700)        |
+| --ea-date-picker-panel-item-hover       | 面板项悬停背景颜色 | var(--grey-100)        |
+| --ea-date-picker-panel-item-selected    | 面板项选中文字颜色 | var(--blue-500)        |
+| --ea-date-picker-panel-item-selected-bg | 面板项选中背景颜色 | var(--blue-100)        |
+| --ea-date-picker-font-size              | 字体大小           | var(--font-size-sm)    |
+| --ea-date-picker-transition             | 过渡动画           | var(--transition-fast) |

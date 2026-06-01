@@ -24,6 +24,8 @@ $badge-type: (
 
   --#{$name}-offset-x: 0;
   --#{$name}-offset-y: 0;
+
+  display: contents;
 }
 
 @include block($name) {
@@ -42,6 +44,7 @@ $badge-type: (
     right: 0;
     top: 0;
     margin-right: var(--#{$name}-offset-x);
+    z-index: 1;
 
     transform: translate(calc(100% - var(--#{$name}-size) / 2), -50%);
 

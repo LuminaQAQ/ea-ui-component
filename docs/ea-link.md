@@ -19,26 +19,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```js
-<script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-link/index.js";
+```html [原生引入]
+<script type="module">
+  import "./node_modules/easy-component-ui/dist/components/ea-link.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-link";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -215,7 +208,7 @@ ea-link 支持原生 `<a>` 标签的 `target`、`rel`、`download` 属性，提�
 | ------- | ---------------------- |
 | default | 默认插槽，链接文本内容 |
 
-### Link CSS 自定义属性
+### Link CSS Custom Properties
 
 | 属性名                      | 说明         | 默认值                 |
 | --------------------------- | ------------ | ---------------------- |

@@ -40,34 +40,27 @@ onMounted(() => {
 
 # PageHeader 页头
 
-如果页面的路径比较简单，推荐使用页头组件而非面包屑组件。页头组件支持返回按钮、面包屑导航、标题内容、额外操作区等功能，并提供丰富的插槽和 CSS 自定义属性用于定制化。
+如果页面的路径比较简单，推荐使用页头组件而非面包屑组件。页头组件支持返回按钮、面包屑导航、标题内容、额外操作区等功能，并提供丰富的插槽和 CSS Custom Properties用于定制化。
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-page-header/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-page-header.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-page-header";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#pageheader-css-part) 和 [CSS 自定义属性](#pageheader-css-自定义属性)。
+移步到 [CSS Part](#pageheader-css-part) 和 [CSS Custom Properties](#pageheader-css-自定义属性)。
 
 ## 完整示例
 
@@ -457,7 +450,7 @@ basicExample.init();
 | ------- | ------------------ | ---------------------- |
 | ea-back | 点击返回按钮时触发 | —                      |
 
-### PageHeader CSS 自定义属性
+### PageHeader CSS Custom Properties
 
 | 属性名                               | 说明           | 默认值                  |
 | ------------------------------------ | -------------- | ----------------------- |

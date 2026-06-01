@@ -201,26 +201,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-input/index.js";
-  import "./node_modules/easy-component-ui/components/ea-input-number/index.js";
-  import "./node_modules/easy-component-ui/components/ea-select/index.js";
-  import "./node_modules/easy-component-ui/components/ea-date-picker/index.js";
-  import "./node_modules/easy-component-ui/components/ea-time-picker/index.js";
-  import "./node_modules/easy-component-ui/components/ea-radio/index.js";
-  import "./node_modules/easy-component-ui/components/ea-checkbox/index.js";
-  import "./node_modules/easy-component-ui/components/ea-switch/index.js";
-  import "./node_modules/easy-component-ui/components/ea-textarea/index.js";
-  import "./node_modules/easy-component-ui/components/ea-button/index.js";
-  import "./node_modules/easy-component-ui/components/ea-rate/index.js";
-  import "./node_modules/easy-component-ui/components/ea-color-picker/index.js";
-  import "./node_modules/easy-component-ui/components/ea-slider/index.js";
-  import "./node_modules/easy-component-ui/components/ea-transfer/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-form.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-form";
+```
+
+:::
 
 ## 基础表单
 
@@ -442,7 +435,7 @@ basicForm.init();
 
 涵盖所有表单组件的综合示例，展示表单验证和数据收集功能。
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="demo-card">
     <form id="complexForm" class="demo-form">
       <div class="demo-section-title">基本信息</div>
@@ -835,7 +828,7 @@ complexTransfer.data = [
 
 ### 输入框验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>输入框验证</h4>
     <form id="inputForm">
@@ -896,7 +889,7 @@ inputForm.addEventListener("submit", e => {
 
 ### 数字输入验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>数字输入验证</h4>
     <form id="inputNumberForm">
@@ -957,7 +950,7 @@ inputNumberForm.addEventListener("submit", e => {
 
 ### 选择器验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>选择器验证</h4>
     <form id="selectForm">
@@ -1022,7 +1015,7 @@ selectForm.addEventListener("submit", e => {
 
 ### 日期/时间选择器验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>日期选择验证</h4>
     <form id="datePickerForm">
@@ -1040,7 +1033,7 @@ selectForm.addEventListener("submit", e => {
   </div>
 </div>
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>时间选择验证</h4>
     <form id="timePickerForm">
@@ -1122,7 +1115,7 @@ timePickerForm.addEventListener("submit", e => {
 
 ### 单选/复选验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>单选组验证</h4>
     <form id="radioForm">
@@ -1137,7 +1130,7 @@ timePickerForm.addEventListener("submit", e => {
   </div>
 </div>
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>复选组验证</h4>
     <form id="checkboxForm">
@@ -1212,7 +1205,7 @@ checkboxForm.addEventListener("submit", e => {
 
 ### 评分组件验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>评分验证</h4>
     <form id="rateForm">
@@ -1257,7 +1250,7 @@ rateForm.addEventListener("submit", e => {
 
 ### 开关组件验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>开关验证</h4>
     <form id="switchForm">
@@ -1302,7 +1295,7 @@ switchForm.addEventListener("submit", e => {
 
 ### 颜色选择器验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>颜色选择验证</h4>
     <form id="colorPickerForm">
@@ -1359,7 +1352,7 @@ colorPickerForm.addEventListener("submit", e => {
 
 ### 滑块组件验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card">
     <h4>滑块验证</h4>
     <form id="sliderForm">
@@ -1422,7 +1415,7 @@ sliderForm.addEventListener("submit", e => {
 
 ### 穿梭框验证
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card" style="max-width: 100%;">
     <h4>穿梭框验证</h4>
     <form id="transferForm">
@@ -1487,7 +1480,7 @@ transferValidate.data = [
 
 ### 同意协议场景（单选复选框）
 
-<div class="demo">
+<div class="row is-not-demo">
   <div class="component-card" style="max-width: 100%;">
     <h4>单选复选框（同意协议场景）</h4>
     <form id="singleCheckboxForm">

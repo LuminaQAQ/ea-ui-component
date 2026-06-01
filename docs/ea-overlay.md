@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import "../dist/components/index.js"
 import "../dist/assets/icon.css"
+import PropTag from './components/PropTag.vue'
 
 onMounted(async () => {
   await customElements.whenDefined('ea-overlay');
@@ -133,21 +134,28 @@ ea-card::part(content) {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-overlay/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-overlay.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-overlay";
+```
+
+:::
 
 ## 自定义样式
 
 移步到 [CSS Part](#overlay-css-part)。
 
-::: code-group
+::: details 查看代码
 
-```css [该用例使用到的样式]
+
+```css
 ea-card {
   height: 100%;
 }
@@ -167,6 +175,7 @@ ea-card::part(content) {
   text-align: right;
 }
 ```
+
 
 :::
 

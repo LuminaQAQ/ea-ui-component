@@ -13,17 +13,23 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-breadcrumb/index.ts";
+  import "./node_modules/easy-component-ui/dist/components/ea-breadcrumb.js";
 </script>
 ```
 
+```js [Vite]
+import "easy-component-ui/ea-breadcrumb";
+```
+
+:::
+
 ## 自定义样式
 
-移步到 [CSS Part](#breadcrumb-css-part) 和 [CSS 自定义属性](#breadcrumbitem-css-自定义属性)。
+移步到 [CSS Part](#breadcrumb-css-part) 和 [CSS Custom Properties](#breadcrumbitem-css-自定义属性)。
 
 ## 基础用法
 
@@ -145,7 +151,7 @@ onMounted(() => {
 | content   | 内容元素 |
 | separator | 分隔符   |
 
-### BreadcrumbItem CSS 自定义属性
+### BreadcrumbItem CSS Custom Properties
 
 | 属性名                                 | 说明           | 默认值                   |
 | -------------------------------------- | -------------- | ------------------------ |

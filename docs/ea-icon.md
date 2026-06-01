@@ -12,26 +12,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-icon/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-icon.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-icon";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -185,9 +178,9 @@ onMounted(() => {
 
 :::
 
-## ea-icon API
+## EaIcon API
 
-### ea-icon Attributes
+### EaIcon Attributes
 
 | 属性名  | 类型    | 可选值                                           | 默认值    | 说明                                                     |
 | ------- | ------- | ------------------------------------------------ | --------- | -------------------------------------------------------- |
@@ -198,19 +191,19 @@ onMounted(() => {
 | color   | string  | —                                                | `""`      | 图标颜色，支持任意 CSS 颜色值                             |
 | spin    | boolean | —                                                | `false`   | 是否开启旋转动画                                         |
 
-### ea-icon CSS Part
+### EaIcon CSS Part
 
 | 名称      | 说明         |
 | --------- | ------------ |
 | container | 图标容器元素 |
 
-### ea-icon Slots
+### EaIcon Slots
 
 | 名称    | 说明               |
 | ------- | ------------------ |
 | default | 默认插槽，自定义内容 |
 
-### ea-icon CSS 自定义属性
+### EaIcon CSS Custom Properties
 
 | 属性名            | 说明     | 默认值                |
 | ----------------- | -------- | --------------------- |

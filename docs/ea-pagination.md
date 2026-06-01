@@ -153,30 +153,23 @@ await customElements.whenDefined("ea-pagination");
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-pagination/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-pagination.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-如果需要使用到带有图标的 `属性/组件`，需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-pagination";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#pagination-css-part) 或 [CSS 自定义属性](#pagination-css-自定义属性)。
+移步到 [CSS Part](#pagination-css-part) 或 [CSS Custom Properties](#pagination-css-自定义属性)。
 
 ## 基础用法
 
@@ -644,7 +637,7 @@ eventExample.init();
 | ea-next-click     | 点击下一页按钮时触发 | `{ value: number }`     |
 | ea-size-change    | 每页条数变化时触发   | `{ pageSize: number }`  |
 
-### Pagination CSS 自定义属性
+### Pagination CSS Custom Properties
 
 | 属性名                                | 说明               | 默认值                              |
 | ------------------------------------- | ------------------ | ----------------------------------- |

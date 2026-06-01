@@ -69,14 +69,19 @@ ea-statistic {
 
 ## 引入
 
-`js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-statistic/index.ts";
-  import "./node_modules/easy-component-ui/components/ea-countdown/index.ts";
+  import "./node_modules/easy-component-ui/dist/components/ea-statistic.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-statistic";
+```
+
+:::
 
 ## 基础用法
 
@@ -437,10 +442,10 @@ ea-statistic {
 
 ### Countdown Events
 
-| 事件名    | 说明                       | 回调参数(event.detail)                        |
-| --------- | -------------------------- | --------------------------------------------- |
-| ea-change | 倒计时每次刷新时触发       | `{ value: number, displayValue: string }`     |
-| ea-finish | 倒计时结束（归零）时触发   | `{ value: number, displayValue: string }`     |
+| 事件名    | 说明                     | 回调参数(event.detail)                    |
+| --------- | ------------------------ | ----------------------------------------- |
+| ea-change | 倒计时每次刷新时触发     | `{ value: number, displayValue: string }` |
+| ea-finish | 倒计时结束（归零）时触发 | `{ value: number, displayValue: string }` |
 
 ### Countdown CSS Part
 
@@ -455,18 +460,18 @@ ea-statistic {
 
 ### Countdown Slots
 
-| 名称    | 说明                     |
-| ------- | ------------------------ |
+| 名称    | 说明                       |
+| ------- | -------------------------- |
 | default | 默认插槽，自定义倒计时内容 |
-| title   | 自定义标题插槽           |
-| prefix  | 自定义前缀插槽           |
-| suffix  | 自定义后缀插槽           |
+| title   | 自定义标题插槽             |
+| prefix  | 自定义前缀插槽             |
+| suffix  | 自定义后缀插槽             |
 
-### Countdown CSS 自定义属性
+### Countdown CSS Custom Properties
 
-| 属性名                        | 说明     | 默认值              |
-| ----------------------------- | -------- | ------------------- |
-| --ea-countdown-title-size     | 标题字号 | var(--font-size-md) |
-| --ea-countdown-title-color    | 标题颜色 | var(--grey-700)     |
-| --ea-countdown-number-size    | 数值字号 | 22px                |
-| --ea-countdown-number-color   | 数值颜色 | var(--grey-900)     |
+| 属性名                      | 说明     | 默认值              |
+| --------------------------- | -------- | ------------------- |
+| --ea-countdown-title-size   | 标题字号 | var(--font-size-md) |
+| --ea-countdown-title-color  | 标题颜色 | var(--grey-700)     |
+| --ea-countdown-number-size  | 数值字号 | 22px                |
+| --ea-countdown-number-color | 数值颜色 | var(--grey-900)     |

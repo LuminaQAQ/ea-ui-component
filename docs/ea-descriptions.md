@@ -37,17 +37,23 @@ onMounted(() => {
 
 ## 引入
 
-`js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-descriptions/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-descriptions.js";
 </script>
 ```
 
+```js [Vite]
+import "easy-component-ui/ea-descriptions";
+```
+
+:::
+
 ## 自定义样式
 
-移步到 [CSS Part](#descriptions-css-part) 和 [CSS 自定义属性](#descriptions-css-自定义属性)。
+移步到 [CSS Part](#descriptions-css-part) 和 [CSS Custom Properties](#descriptions-css-自定义属性)。
 
 ## 基础用法
 
@@ -61,10 +67,10 @@ onMounted(() => {
       Lunacrest Continent
     </ea-descriptions-item>
     <ea-descriptions-item label="Traits">
-      <ea-tag size="small" type="warning" style="margin-right: 1rem">
+      <ea-tag size="small" variant="warning" style="margin-right: 1rem">
         Thunderous Veins
       </ea-tag>
-      <ea-tag size="small" type="info">Daredevil</ea-tag>
+      <ea-tag size="small" variant="info">Daredevil</ea-tag>
     </ea-descriptions-item>
     <ea-descriptions-item label="Description">
       She was once an elf lord, defending the border from goblin invaders.
@@ -89,18 +95,18 @@ onMounted(() => {
     Lunacrest Continent
   </ea-descriptions-item>
   <ea-descriptions-item label="Traits">
-    <ea-tag size="small" type="warning" style="margin-right: 1rem">
+    <ea-tag size="small" variant="warning" style="margin-right: 1rem">
       Thunderous Veins
     </ea-tag>
-    <ea-tag size="small" type="info">Daredevil</ea-tag>
+    <ea-tag size="small" variant="info">Daredevil</ea-tag>
   </ea-descriptions-item>
   <ea-descriptions-item label="Description">
-    She was once an elf lord, defending the border from goblin invaders.
-    She was then a goblin warrior, protecting her clan from being
-    slaughtered by elves. She has the unwavering courage to uphold justice
-    in her heart and she is prepared to betray or be betrayed for the
-    greater good. Despite her inner gentleness, Lilyiro, who has spilled
-    so much blood on battlefields, is more straightforward than men.
+    She was once an elf lord, defending the border from goblin invaders. She was
+    then a goblin warrior, protecting her clan from being slaughtered by elves.
+    She has the unwavering courage to uphold justice in her heart and she is
+    prepared to betray or be betrayed for the greater good. Despite her inner
+    gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+    straightforward than men.
   </ea-descriptions-item>
 </ea-descriptions>
 ```
@@ -124,10 +130,10 @@ onMounted(() => {
       Lunacrest Continent
     </ea-descriptions-item>
     <ea-descriptions-item label="Traits">
-      <ea-tag size="small" type="warning" style="margin-right: 1rem">
+      <ea-tag size="small" variant="warning" style="margin-right: 1rem">
         Thunderous Veins
       </ea-tag>
-      <ea-tag size="small" type="info">Daredevil</ea-tag>
+      <ea-tag size="small" variant="info">Daredevil</ea-tag>
     </ea-descriptions-item>
     <ea-descriptions-item label="Description">
       She was once an elf lord, defending the border from goblin invaders.
@@ -148,10 +154,10 @@ onMounted(() => {
       Lunacrest Continent
     </ea-descriptions-item>
     <ea-descriptions-item label="Traits">
-      <ea-tag size="small" type="warning" style="margin-right: 1rem">
+      <ea-tag size="small" variant="warning" style="margin-right: 1rem">
         Thunderous Veins
       </ea-tag>
-      <ea-tag size="small" type="info">Daredevil</ea-tag>
+      <ea-tag size="small" variant="info">Daredevil</ea-tag>
     </ea-descriptions-item>
     <ea-descriptions-item label="Description">
       She was once an elf lord, defending the border from goblin invaders.
@@ -181,18 +187,18 @@ onMounted(() => {
     Lunacrest Continent
   </ea-descriptions-item>
   <ea-descriptions-item label="Traits">
-    <ea-tag size="small" type="warning" style="margin-right: 1rem">
+    <ea-tag size="small" variant="warning" style="margin-right: 1rem">
       Thunderous Veins
     </ea-tag>
-    <ea-tag size="small" type="info">Daredevil</ea-tag>
+    <ea-tag size="small" variant="info">Daredevil</ea-tag>
   </ea-descriptions-item>
   <ea-descriptions-item label="Description">
-    She was once an elf lord, defending the border from goblin invaders.
-    She was then a goblin warrior, protecting her clan from being
-    slaughtered by elves. She has the unwavering courage to uphold justice
-    in her heart and she is prepared to betray or be betrayed for the
-    greater good. Despite her inner gentleness, Lilyiro, who has spilled
-    so much blood on battlefields, is more straightforward than men.
+    She was once an elf lord, defending the border from goblin invaders. She was
+    then a goblin warrior, protecting her clan from being slaughtered by elves.
+    She has the unwavering courage to uphold justice in her heart and she is
+    prepared to betray or be betrayed for the greater good. Despite her inner
+    gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+    straightforward than men.
   </ea-descriptions-item>
 </ea-descriptions>
 
@@ -205,18 +211,18 @@ onMounted(() => {
     Lunacrest Continent
   </ea-descriptions-item>
   <ea-descriptions-item label="Traits">
-    <ea-tag size="small" type="warning" style="margin-right: 1rem">
+    <ea-tag size="small" variant="warning" style="margin-right: 1rem">
       Thunderous Veins
     </ea-tag>
-    <ea-tag size="small" type="info">Daredevil</ea-tag>
+    <ea-tag size="small" variant="info">Daredevil</ea-tag>
   </ea-descriptions-item>
   <ea-descriptions-item label="Description">
-    She was once an elf lord, defending the border from goblin invaders.
-    She was then a goblin warrior, protecting her clan from being
-    slaughtered by elves. She has the unwavering courage to uphold justice
-    in her heart and she is prepared to betray or be betrayed for the
-    greater good. Despite her inner gentleness, Lilyiro, who has spilled
-    so much blood on battlefields, is more straightforward than men.
+    She was once an elf lord, defending the border from goblin invaders. She was
+    then a goblin warrior, protecting her clan from being slaughtered by elves.
+    She has the unwavering courage to uphold justice in her heart and she is
+    prepared to betray or be betrayed for the greater good. Despite her inner
+    gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+    straightforward than men.
   </ea-descriptions-item>
 </ea-descriptions>
 ```
@@ -239,10 +245,10 @@ onMounted(() => {
       Lunacrest Continent
     </ea-descriptions-item>
     <ea-descriptions-item label="Traits">
-      <ea-tag size="small" type="warning" style="margin-right: 1rem">
+      <ea-tag size="small" variant="warning" style="margin-right: 1rem">
         Thunderous Veins
       </ea-tag>
-      <ea-tag size="small" type="info">Daredevil</ea-tag>
+      <ea-tag size="small" variant="info">Daredevil</ea-tag>
     </ea-descriptions-item>
     <ea-descriptions-item label="Description">
       She was once an elf lord, defending the border from goblin invaders.
@@ -265,10 +271,10 @@ onMounted(() => {
       Lunacrest Continent
     </ea-descriptions-item>
     <ea-descriptions-item label="Traits">
-      <ea-tag size="small" type="warning" style="margin-right: 1rem">
+      <ea-tag size="small" variant="warning" style="margin-right: 1rem">
         Thunderous Veins
       </ea-tag>
-      <ea-tag size="small" type="info">Daredevil</ea-tag>
+      <ea-tag size="small" variant="info">Daredevil</ea-tag>
     </ea-descriptions-item>
     <ea-descriptions-item label="Description">
       She was once an elf lord, defending the border from goblin invaders.
@@ -297,25 +303,22 @@ onMounted(() => {
     Lunacrest Continent
   </ea-descriptions-item>
   <ea-descriptions-item label="Traits">
-    <ea-tag size="small" type="warning" style="margin-right: 1rem">
+    <ea-tag size="small" variant="warning" style="margin-right: 1rem">
       Thunderous Veins
     </ea-tag>
-    <ea-tag size="small" type="info">Daredevil</ea-tag>
+    <ea-tag size="small" variant="info">Daredevil</ea-tag>
   </ea-descriptions-item>
   <ea-descriptions-item label="Description">
-    She was once an elf lord, defending the border from goblin invaders.
-    She was then a goblin warrior, protecting her clan from being
-    slaughtered by elves. She has the unwavering courage to uphold justice
-    in her heart and she is prepared to betray or be betrayed for the
-    greater good. Despite her inner gentleness, Lilyiro, who has spilled
-    so much blood on battlefields, is more straightforward than men.
+    She was once an elf lord, defending the border from goblin invaders. She was
+    then a goblin warrior, protecting her clan from being slaughtered by elves.
+    She has the unwavering courage to uphold justice in her heart and she is
+    prepared to betray or be betrayed for the greater good. Despite her inner
+    gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+    straightforward than men.
   </ea-descriptions-item>
 </ea-descriptions>
 
-<ea-descriptions
-  caption="Vertical list without border"
-  direction="vertical"
->
+<ea-descriptions caption="Vertical list without border" direction="vertical">
   <ea-descriptions-item label="Username"> Lilyiro </ea-descriptions-item>
   <ea-descriptions-item label="Essence">
     Lord of the Wild
@@ -324,18 +327,18 @@ onMounted(() => {
     Lunacrest Continent
   </ea-descriptions-item>
   <ea-descriptions-item label="Traits">
-    <ea-tag size="small" type="warning" style="margin-right: 1rem">
-      Thunderous Veins
-    </ea-tag>
-    <ea-tag size="small" type="info">Daredevil</ea-tag>
+    <ea-tag size="small" type="warning" style="margin-right: 1rem"
+      >Thunderous Veins</ea-tag
+    >
+    <ea-tag size="small" variant="info">Daredevil</ea-tag>
   </ea-descriptions-item>
   <ea-descriptions-item label="Description">
-    She was once an elf lord, defending the border from goblin invaders.
-    She was then a goblin warrior, protecting her clan from being
-    slaughtered by elves. She has the unwavering courage to uphold justice
-    in her heart and she is prepared to betray or be betrayed for the
-    greater good. Despite her inner gentleness, Lilyiro, who has spilled
-    so much blood on battlefields, is more straightforward than men.
+    She was once an elf lord, defending the border from goblin invaders. She was
+    then a goblin warrior, protecting her clan from being slaughtered by elves.
+    She has the unwavering courage to uphold justice in her heart and she is
+    prepared to betray or be betrayed for the greater good. Despite her inner
+    gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+    straightforward than men.
   </ea-descriptions-item>
 </ea-descriptions>
 ```
@@ -370,10 +373,9 @@ onMounted(() => {
       <ea-tag size="small" type="warning" style="margin-right: 1rem">
         Thunderous Veins
       </ea-tag>
-      <ea-tag size="small" type="info">Daredevil</ea-tag>
+      <ea-tag size="small" variant="info">Daredevil</ea-tag>
     </ea-descriptions-item>
     <ea-descriptions-item label="Description">
-      She was once an elf lord, defending the border from goblin invaders.
       She was then a goblin warrior, protecting her clan from being
       slaughtered by elves. She has the unwavering courage to uphold justice
       in her heart and she is prepared to betray or be betrayed for the
@@ -414,12 +416,12 @@ onMounted(() => {
       <ea-tag size="small" type="info">Daredevil</ea-tag>
     </ea-descriptions-item>
     <ea-descriptions-item label="Description">
-      She was once an elf lord, defending the border from goblin invaders.
-      She was then a goblin warrior, protecting her clan from being
-      slaughtered by elves. She has the unwavering courage to uphold justice
-      in her heart and she is prepared to betray or be betrayed for the
-      greater good. Despite her inner gentleness, Lilyiro, who has spilled
-      so much blood on battlefields, is more straightforward than men.
+      She was once an elf lord, defending the border from goblin invaders. She was
+      then a goblin warrior, protecting her clan from being slaughtered by elves.
+      She has the unwavering courage to uphold justice in her heart and she is
+      prepared to betray or be betrayed for the greater good. Despite her inner
+      gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+      straightforward than men.
     </ea-descriptions-item>
   </ea-descriptions>
 </div>
@@ -428,12 +430,7 @@ onMounted(() => {
 
 ```html
 <ea-descriptions caption="Width horizontal list" border>
-  <ea-descriptions-item
-    rowspan="2"
-    width="140px"
-    label="Photo"
-    align="center"
-  >
+  <ea-descriptions-item rowspan="2" width="140px" label="Photo" align="center">
     <ea-avatar
       style="width: 100px; height: 100px"
       size="100%"
@@ -455,12 +452,12 @@ onMounted(() => {
     <ea-tag size="small" type="info">Daredevil</ea-tag>
   </ea-descriptions-item>
   <ea-descriptions-item label="Description">
-    She was once an elf lord, defending the border from goblin invaders.
-    She was then a goblin warrior, protecting her clan from being
-    slaughtered by elves. She has the unwavering courage to uphold justice
-    in her heart and she is prepared to betray or be betrayed for the
-    greater good. Despite her inner gentleness, Lilyiro, who has spilled
-    so much blood on battlefields, is more straightforward than men.
+    She was once an elf lord, defending the border from goblin invaders. She was
+    then a goblin warrior, protecting her clan from being slaughtered by elves.
+    She has the unwavering courage to uphold justice in her heart and she is
+    prepared to betray or be betrayed for the greater good. Despite her inner
+    gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+    straightforward than men.
   </ea-descriptions-item>
 </ea-descriptions>
 <ea-descriptions
@@ -469,12 +466,7 @@ onMounted(() => {
   border
   style="margin-top: 20px"
 >
-  <ea-descriptions-item
-    rowspan="2"
-    width="140px"
-    label="Photo"
-    align="center"
-  >
+  <ea-descriptions-item rowspan="2" width="140px" label="Photo" align="center">
     <ea-avatar
       style="width: 100px; height: 100px"
       size="100%"
@@ -496,12 +488,12 @@ onMounted(() => {
     <ea-tag size="small" type="info">Daredevil</ea-tag>
   </ea-descriptions-item>
   <ea-descriptions-item label="Description">
-    She was once an elf lord, defending the border from goblin invaders.
-    She was then a goblin warrior, protecting her clan from being
-    slaughtered by elves. She has the unwavering courage to uphold justice
-    in her heart and she is prepared to betray or be betrayed for the
-    greater good. Despite her inner gentleness, Lilyiro, who has spilled
-    so much blood on battlefields, is more straightforward than men.
+    She was once an elf lord, defending the border from goblin invaders. She was
+    then a goblin warrior, protecting her clan from being slaughtered by elves.
+    She has the unwavering courage to uphold justice in her heart and she is
+    prepared to betray or be betrayed for the greater good. Despite her inner
+    gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+    straightforward than men.
   </ea-descriptions-item>
 </ea-descriptions>
 ```
@@ -560,8 +552,7 @@ onMounted(() => {
 ```html
 <ea-descriptions column="3" border>
   <span slot="header">
-    <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style
-    list
+    <ea-icon name="circle-info" color="#409eff"></ea-icon>Customized style list
   </span>
   <ea-button type="primary" slot="extra"> Operation </ea-button>
   <ea-descriptions-item
@@ -586,17 +577,13 @@ onMounted(() => {
     </ea-tag>
     <ea-tag size="small" type="info">Daredevil</ea-tag>
   </ea-descriptions-item>
-  <ea-descriptions-item
-    label="Description"
-    label-align="right"
-    align="center"
-  >
-    She was once an elf lord, defending the border from goblin invaders.
-    She was then a goblin warrior, protecting her clan from being
-    slaughtered by elves. She has the unwavering courage to uphold justice
-    in her heart and she is prepared to betray or be betrayed for the
-    greater good. Despite her inner gentleness, Lilyiro, who has spilled
-    so much blood on battlefields, is more straightforward than men.
+  <ea-descriptions-item label="Description" label-align="right" align="center">
+    She was once an elf lord, defending the border from goblin invaders. She was
+    then a goblin warrior, protecting her clan from being slaughtered by elves.
+    She has the unwavering courage to uphold justice in her heart and she is
+    prepared to betray or be betrayed for the greater good. Despite her inner
+    gentleness, Lilyiro, who has spilled so much blood on battlefields, is more
+    straightforward than men.
   </ea-descriptions-item>
 </ea-descriptions>
 ```
@@ -632,34 +619,34 @@ ea-descriptions::part(my-content) {
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称     | 说明                                                               |
-| -------- | ------------------------------------------------------------------ |
-| container | 外层表格容器                                                       |
-| caption  | 标题与额外操作区容器                                               |
-| title    | 标题区域                                                           |
-| extra    | 右侧额外插槽区域                                                   |
-| body     | 表格 body（tbody）                                                 |
-| row      | 行（tr），在不同布局下会生成 label / content 行                    |
-| col-cell | 单元格（td）                                                       |
-| label    | 标签单元格的 part（渲染为 th/td 时携带 label 标识）                |
-| content  | 内容单元格的 part（渲染为 td 时携带 content 标识）                 |
+| 名称      | 说明                                                |
+| --------- | --------------------------------------------------- |
+| container | 外层表格容器                                        |
+| caption   | 标题与额外操作区容器                                |
+| title     | 标题区域                                            |
+| extra     | 右侧额外插槽区域                                    |
+| body      | 表格 body（tbody）                                  |
+| row       | 行（tr），在不同布局下会生成 label / content 行     |
+| col-cell  | 单元格（td）                                        |
+| label     | 标签单元格的 part（渲染为 th/td 时携带 label 标识） |
+| content   | 内容单元格的 part（渲染为 td 时携带 content 标识）  |
 
 ### Descriptions Slots
 
-| 名称    | 说明               |
-| ------- | ------------------ |
-| header  | 标题插槽           |
-| extra   | 右侧额外操作区插槽 |
+| 名称    | 说明                                    |
+| ------- | --------------------------------------- |
+| header  | 标题插槽                                |
+| extra   | 右侧额外操作区插槽                      |
 | default | 默认插槽，用于放置 ea-descriptions-item |
 
-### Descriptions CSS 自定义属性
+### Descriptions CSS Custom Properties
 
-| 属性名                              | 说明         | 默认值                     |
-| ------------------------------------ | ------------ | -------------------------- |
-| --ea-descriptions-label-width        | 标签宽度     | auto                       |
-| --ea-descriptions-item-width         | 单元格宽度   | auto                       |
-| --ea-descriptions-align              | 内容对齐方式 | left                       |
-| --ea-descriptions-label-align        | 标签对齐方式 | left                       |
+| 属性名                        | 说明         | 默认值 |
+| ----------------------------- | ------------ | ------ |
+| --ea-descriptions-label-width | 标签宽度     | auto   |
+| --ea-descriptions-item-width  | 单元格宽度   | auto   |
+| --ea-descriptions-align       | 内容对齐方式 | left   |
+| --ea-descriptions-label-align | 标签对齐方式 | left   |
 
 ## DescriptionsItem API
 
@@ -681,11 +668,11 @@ ea-descriptions::part(my-content) {
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称      | 说明                              |
-| --------- | --------------------------------- |
-| container | item 外层容器                     |
-| label     | 标签元素                          |
-| content   | 内容元素                          |
+| 名称      | 说明          |
+| --------- | ------------- |
+| container | item 外层容器 |
+| label     | 标签元素      |
+| content   | 内容元素      |
 
 ### DescriptionsItem Slots
 
@@ -695,6 +682,6 @@ ea-descriptions::part(my-content) {
 
 ### DescriptionsItem Events
 
-| 事件名                          | 说明                       | 回调参数 |
-| ------------------------------- | -------------------------- | -------- |
-| ea-descriptions-item-change     | 属性变化时触发，通知父组件重新渲染 | —        |
+| 事件名                      | 说明                               | 回调参数 |
+| --------------------------- | ---------------------------------- | -------- |
+| ea-descriptions-item-change | 属性变化时触发，通知父组件重新渲染 | —        |

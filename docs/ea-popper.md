@@ -59,17 +59,23 @@ ea-popper {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-popper/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-popper.js";
 </script>
 ```
 
+```js [Vite]
+import "easy-component-ui/ea-popper";
+```
+
+:::
+
 ## 自定义样式
 
-移步到 [CSS Part](#ea-popper-css-part) 或 [CSS 自定义属性](#ea-popper-css-自定义属性)。
+移步到 [CSS Part](#ea-popper-css-part) 或 [CSS Custom Properties](#ea-popper-css-自定义属性)。
 
 ## 基本用法
 
@@ -257,16 +263,16 @@ ea-popper {
 
 ```js
 const referenceExample = {
-  referenceElements: document.querySelectorAll('#referenceSection ea-popper'),
+  referenceElements: document.querySelectorAll("#referenceSection ea-popper"),
 
   init() {
     this.referenceElements.forEach(referenceElement => {
-      referenceElement.addEventListener("click", (e) => {
+      referenceElement.addEventListener("click", e => {
         referenceElement.toggle();
       });
     });
-  }
-}
+  },
+};
 referenceExample.init();
 ```
 
@@ -316,20 +322,24 @@ referenceExample.init();
 
 ```js
 const arrowExample = {
-  referenceElements: document.querySelectorAll('#arrowSection ea-popper'),
+  referenceElements: document.querySelectorAll("#arrowSection ea-popper"),
 
   init() {
     this.referenceElements.forEach(referenceElement => {
-      referenceElement.addEventListener("mouseenter", (e) => {
+      referenceElement.addEventListener("mouseenter", e => {
         referenceElement.show();
 
-        referenceElement.addEventListener("mouseleave", () => {
-          referenceElement.hide();
-        }, { once: true });
+        referenceElement.addEventListener(
+          "mouseleave",
+          () => {
+            referenceElement.hide();
+          },
+          { once: true }
+        );
       });
     });
-  }
-}
+  },
+};
 arrowExample.init();
 ```
 
@@ -337,61 +347,61 @@ arrowExample.init();
 
 ::::
 
-## ea-popper API
+## EaPopper API
 
-### ea-popper Attributes
+### EaPopper Attributes
 
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| ---- | ---- | ---- | ------ | ------ |
-| width | 宽度，单位 px | Number | — | 150 |
-| placement | 气泡的出现位置 | String | top / top-start / top-end / bottom / bottom-start / bottom-end / left / left-start / left-end / right / right-start / right-end | top |
-| showArrow | 是否显示箭头 | Boolean | — | true |
-| visible | 控制 Popper 显隐的属性 | Boolean | — | false |
-| offset | 气泡出现的位置偏移量 | String | — | "0 0" |
-| flip | 是否在超过原 placement 视口时，进行翻转 | Boolean | — | true |
+| 参数      | 说明                                    | 类型    | 可选值                                                                                                                          | 默认值 |
+| --------- | --------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| width     | 宽度，单位 px                           | Number  | —                                                                                                                               | 150    |
+| placement | 气泡的出现位置                          | String  | top / top-start / top-end / bottom / bottom-start / bottom-end / left / left-start / left-end / right / right-start / right-end | top    |
+| showArrow | 是否显示箭头                            | Boolean | —                                                                                                                               | true   |
+| visible   | 控制 Popper 显隐的属性                  | Boolean | —                                                                                                                               | false  |
+| offset    | 气泡出现的位置偏移量                    | String  | —                                                                                                                               | "0 0"  |
+| flip      | 是否在超过原 placement 视口时，进行翻转 | Boolean | —                                                                                                                               | true   |
 
-### ea-popper CSS Part
+### EaPopper CSS Part
 
-| 名称 | 说明 |
-| ---- | ---- |
-| container | Popper 外层容器 |
+| 名称      | 说明                                 |
+| --------- | ------------------------------------ |
+| container | Popper 外层容器                      |
 | reference | 触发 Popper 显示的 HTML 元素的父容器 |
-| original | Popper 内容容器 |
+| original  | Popper 内容容器                      |
 
-### ea-popper Events
+### EaPopper Events
 
-| 事件名 | 说明 | 回调参数 |
-| ------ | ---- | -------- |
-| ea-show | 开启 Popper 时触发 | — |
-| ea-shown | 开启 Popper 的动画结束时触发 | — |
-| ea-hide | 关闭 Popper 时触发 | — |
-| ea-hidden | 关闭 Popper 的动画结束时触发 | — |
+| 事件名    | 说明                         | 回调参数 |
+| --------- | ---------------------------- | -------- |
+| ea-show   | 开启 Popper 时触发           | —        |
+| ea-shown  | 开启 Popper 的动画结束时触发 | —        |
+| ea-hide   | 关闭 Popper 时触发           | —        |
+| ea-hidden | 关闭 Popper 的动画结束时触发 | —        |
 
-### ea-popper Methods
+### EaPopper Methods
 
-| 方法名 | 说明 | 参数 |
-| ------ | ---- | ---- |
-| show | 显示 Popper | — |
-| hide | 隐藏 Popper | — |
-| toggle | 切换 Popper 显示状态 | — |
+| 方法名 | 说明                 | 参数 |
+| ------ | -------------------- | ---- |
+| show   | 显示 Popper          | —    |
+| hide   | 隐藏 Popper          | —    |
+| toggle | 切换 Popper 显示状态 | —    |
 
-### ea-popper Slots
+### EaPopper Slots
 
-| 名称 | 说明 |
-| ---- | ---- |
-| default | Popper 内容插槽 |
+| 名称      | 说明                             |
+| --------- | -------------------------------- |
+| default   | Popper 内容插槽                  |
 | reference | 触发 Popper 显示的 HTML 元素插槽 |
 
-### ea-popper CSS 自定义属性
+### EaPopper CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| ------ | ---- | ------ |
-| --ea-popper-width | Popper 宽度 | 150px |
-| --ea-popper-border-color | Popper 边框颜色 | var(--grey-300) |
-| --ea-popper-background-color | Popper 背景颜色 | var(--color-white) |
-| --ea-popper-box-shadow | Popper 阴影 | var(--box-shadow-md) |
-| --ea-popper-arrow-size | 箭头大小 | 10px |
-| --ea-popper-spacing | Popper 内边距 | var(--spacing-md) |
-| --ea-popper-transform-x | X 轴偏移量 | 0 |
-| --ea-popper-transform-y | Y 轴偏移量 | 0 |
-| --ea-popper-transition | 过渡动画时长 | var(--transition-normal) |
+| 属性名                       | 说明            | 默认值                   |
+| ---------------------------- | --------------- | ------------------------ |
+| --ea-popper-width            | Popper 宽度     | 150px                    |
+| --ea-popper-border-color     | Popper 边框颜色 | var(--grey-300)          |
+| --ea-popper-background-color | Popper 背景颜色 | var(--color-white)       |
+| --ea-popper-box-shadow       | Popper 阴影     | var(--box-shadow-md)     |
+| --ea-popper-arrow-size       | 箭头大小        | 10px                     |
+| --ea-popper-spacing          | Popper 内边距   | var(--spacing-md)        |
+| --ea-popper-transform-x      | X 轴偏移量      | 0                        |
+| --ea-popper-transform-y      | Y 轴偏移量      | 0                        |
+| --ea-popper-transition       | 过渡动画时长    | var(--transition-normal) |

@@ -54,11 +54,19 @@ hr {
 
 ## 引入
 
-```html
+::: code-group
+
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-container/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-container.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-container";
+```
+
+:::
 
 ## 示例样式
 
@@ -307,7 +315,7 @@ hr {
 | --------- | -------- |
 | container | 容器元素 |
 
-### Container CSS 自定义属性
+### Container CSS Custom Properties
 
 | 属性名                   | 说明     | 默认值 |
 | ------------------------ | -------- | ------ |
@@ -339,7 +347,7 @@ hr {
 | --------- | -------- |
 | container | 容器元素 |
 
-### Header CSS 自定义属性
+### Header CSS Custom Properties
 
 | 属性名              | 说明       | 默认值   |
 | ------------------- | ---------- | -------- |
@@ -360,7 +368,7 @@ hr {
 | --------- | -------- |
 | container | 容器元素 |
 
-### Main CSS 自定义属性
+### Main CSS Custom Properties
 
 | 属性名            | 说明         | 默认值   |
 | ----------------- | ------------ | -------- |
@@ -386,7 +394,7 @@ hr {
 | --------- | -------- |
 | container | 容器元素 |
 
-### Aside CSS 自定义属性
+### Aside CSS Custom Properties
 
 | 属性名           | 说明       | 默认值  |
 | ---------------- | ---------- | ------- |
@@ -412,7 +420,7 @@ hr {
 | --------- | -------- |
 | container | 容器元素 |
 
-### Footer CSS 自定义属性
+### Footer CSS Custom Properties
 
 | 属性名              | 说明       | 默认值   |
 | ------------------- | ---------- | -------- |

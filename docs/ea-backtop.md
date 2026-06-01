@@ -13,26 +13,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-backtop/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-backtop.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-backtop";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -142,9 +135,9 @@ onMounted(() => {
 
 :::
 
-## ea-backtop API
+## EaBacktop API
 
-### ea-backtop Attributes
+### EaBacktop Attributes
 
 | 参数              | 说明                             | 类型    | 可选值 | 默认值   |
 | ----------------- | -------------------------------- | ------- | ------ | -------- |
@@ -154,7 +147,7 @@ onMounted(() => {
 | bottom            | 控制其显示位置，距离页面底部距离 | String  | —      | `40px`   |
 | smooth            | 滚动动画是否平滑                 | Boolean | —      | true     |
 
-### ea-backtop CSS Part
+### EaBacktop CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
@@ -162,7 +155,7 @@ onMounted(() => {
 | --------- | ---------------- |
 | container | backtop 外层容器 |
 
-### ea-backtop Slots
+### EaBacktop Slots
 
 | 名称    | 说明                     |
 | ------- | ------------------------ |

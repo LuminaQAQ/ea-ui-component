@@ -96,26 +96,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-message/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-message.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-message";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -166,12 +159,8 @@ onMounted(() => {
   >
     Show message
   </ea-button>
-  <ea-button id="moduleInstanceBtn" plain>
-    Module-Instance message
-  </ea-button>
-  <ea-button id="chainInstanceBtn" plain>
-    Chain-Instance message
-  </ea-button>
+  <ea-button id="moduleInstanceBtn" plain> Module-Instance message </ea-button>
+  <ea-button id="chainInstanceBtn" plain> Chain-Instance message </ea-button>
 </div>
 ```
 
@@ -569,18 +558,18 @@ placementExample.init();
 
 ### Message Attributes
 
-| 参数                     | 说明                                                                          | 类型        | 可选值                                                                              | 默认值 |
-| ------------------------ | ----------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------- | ------ |
-| message                  | 消息文字                                                                      | string      | —                                                                                   | ''     |
-| variant                  | 消息类型                                                                      | enum        | `'primary' \| 'success' \| 'warning' \| 'danger' \| 'info'`                        | 'info' |
-| icon                     | 自定义图标                                                                    | string      | —                                                                                   | ''     |
-| dangerouslyUseHTMLString | 是否将 `message` 作为 HTML 片段渲染                                           | boolean     | —                                                                                   | false  |
-| duration                 | 显示时间（毫秒）。设为 0 则不会自动关闭                                       | number      | —                                                                                   | 3000   |
-| onClose                  | 关闭回调函数（消息关闭或被手动关闭时调用），回调接收事件对象                  | Function    | —                                                                                   | —      |
-| showClose                | 是否显示关闭按钮                                                              | boolean     | —                                                                                   | false  |
-| offset                   | 设置到视口边缘的距离（当位置为`'top'`时为顶部，当位置为`'bottom'`时为底部）   | number      | —                                                                                   | 0      |
-| placement                | 出现位置                                                                      | enum        | `'top' \| 'top-left' \| 'top-right' \| 'bottom' \| 'bottom-left' \| 'bottom-right' \| 'middle'` | 'top'  |
-| appendTo                 | 设置 `message` 的根元素，默认为 `document.body`                               | CSSSelector | -                                                                                   | —      |
+| 参数                     | 说明                                                                        | 类型        | 可选值                                                                                          | 默认值 |
+| ------------------------ | --------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------- | ------ |
+| message                  | 消息文字                                                                    | string      | —                                                                                               | ''     |
+| variant                  | 消息类型                                                                    | enum        | `'primary' \| 'success' \| 'warning' \| 'danger' \| 'info'`                                     | 'info' |
+| icon                     | 自定义图标                                                                  | string      | —                                                                                               | ''     |
+| dangerouslyUseHTMLString | 是否将 `message` 作为 HTML 片段渲染                                         | boolean     | —                                                                                               | false  |
+| duration                 | 显示时间（毫秒）。设为 0 则不会自动关闭                                     | number      | —                                                                                               | 3000   |
+| onClose                  | 关闭回调函数（消息关闭或被手动关闭时调用），回调接收事件对象                | Function    | —                                                                                               | —      |
+| showClose                | 是否显示关闭按钮                                                            | boolean     | —                                                                                               | false  |
+| offset                   | 设置到视口边缘的距离（当位置为`'top'`时为顶部，当位置为`'bottom'`时为底部） | number      | —                                                                                               | 0      |
+| placement                | 出现位置                                                                    | enum        | `'top' \| 'top-left' \| 'top-right' \| 'bottom' \| 'bottom-left' \| 'bottom-right' \| 'middle'` | 'top'  |
+| appendTo                 | 设置 `message` 的根元素，默认为 `document.body`                             | CSSSelector | -                                                                                               | —      |
 
 ### Message CSS Part
 
@@ -595,13 +584,13 @@ placementExample.init();
 
 ### Message Events
 
-| 事件名称 | 说明             | 回调参数(event.detail)       |
-| -------- | ---------------- | ---------------------------- |
-| ea-close | 关闭时触发       | `{ visible: false }`         |
-| ea-show  | 显示时触发       | —                            |
-| ea-shown | 显示完毕时触发   | —                            |
-| ea-hide  | 隐藏时触发       | —                            |
-| ea-hidden | 隐藏完毕时触发  | —                            |
+| 事件名称  | 说明           | 回调参数(event.detail) |
+| --------- | -------------- | ---------------------- |
+| ea-close  | 关闭时触发     | `{ visible: false }`   |
+| ea-show   | 显示时触发     | —                      |
+| ea-shown  | 显示完毕时触发 | —                      |
+| ea-hide   | 隐藏时触发     | —                      |
+| ea-hidden | 隐藏完毕时触发 | —                      |
 
 ### Message Methods
 
@@ -609,19 +598,19 @@ placementExample.init();
 | ----- | ------------------ | ---------------------- |
 | close | 关闭当前的 Message | `Function: () => void` |
 
-### Message CSS 自定义属性
+### Message CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| ------ | ---- | ------ |
-| --ea-message-z-index | 组件层级 | 2000 |
-| --ea-message-y | 垂直偏移量 | 0 |
-| --ea-message-fade-out-y | 消失方向偏移 | -100% |
-| --ea-message-offset | 初始偏移距离 | 0 |
-| --ea-message-spacing | 内边距 | var(--spacing-md) |
-| --ea-message-border-color | 边框颜色 | var(--grey-200) |
-| --ea-message-border-radius | 圆角大小 | var(--border-radius-sm) |
-| --ea-message-min-width | 最小宽度 | 380px |
-| --ea-message-font-size | 字体大小 | var(--font-size-md) |
-| --ea-message-transition | 过渡动画时长 | var(--transition-normal) |
-| --ea-message-gap | 元素间距 | var(--spacing-md) |
-| --ea-message-close-icon-color | 关闭图标颜色 | var(--grey-500) |
+| 属性名                        | 说明         | 默认值                   |
+| ----------------------------- | ------------ | ------------------------ |
+| --ea-message-z-index          | 组件层级     | 2000                     |
+| --ea-message-y                | 垂直偏移量   | 0                        |
+| --ea-message-fade-out-y       | 消失方向偏移 | -100%                    |
+| --ea-message-offset           | 初始偏移距离 | 0                        |
+| --ea-message-spacing          | 内边距       | var(--spacing-md)        |
+| --ea-message-border-color     | 边框颜色     | var(--grey-200)          |
+| --ea-message-border-radius    | 圆角大小     | var(--border-radius-sm)  |
+| --ea-message-min-width        | 最小宽度     | 380px                    |
+| --ea-message-font-size        | 字体大小     | var(--font-size-md)      |
+| --ea-message-transition       | 过渡动画时长 | var(--transition-normal) |
+| --ea-message-gap              | 元素间距     | var(--spacing-md)        |
+| --ea-message-close-icon-color | 关闭图标颜色 | var(--grey-500)          |

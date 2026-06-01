@@ -79,26 +79,19 @@ basicExample.init();
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-infinite-scroll/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-infinite-scroll.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-infinite-scroll";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -143,9 +136,7 @@ basicExample.init();
       <section slot="loading">
         <ea-icon name="mug-hot"></ea-icon> loading...
       </section>
-      <section slot="noMore">
-        <ea-icon name="ban"></ea-icon> no more
-      </section>
+      <section slot="noMore"><ea-icon name="ban"></ea-icon> no more</section>
     </ea-infinite-scroll>
   </ea-scrollbar>
 </div>
@@ -279,37 +270,37 @@ statusExample.init();
 
 ### InfiniteScroll Attributes
 
-| 参数     | 说明                                                           | 类型   | 可选值                        | 默认值     |
-| -------- | -------------------------------------------------------------- | ------ | ----------------------------- | ---------- |
-| status   | 当前加载状态，控制显示的状态区域                               | String | `finished` `loading` `noMore` | `finished` |
+| 参数     | 说明                                                             | 类型   | 可选值                        | 默认值     |
+| -------- | ---------------------------------------------------------------- | ------ | ----------------------------- | ---------- |
+| status   | 当前加载状态，控制显示的状态区域                                 | String | `finished` `loading` `noMore` | `finished` |
 | distance | 占位元素与视口交叉的 rootMargin 偏移量（像素），用于提前触发加载 | Number | —                             | `0`        |
 
 ### InfiniteScroll CSS Part
 
-| 名称        | 说明                                        |
-| ----------- | ------------------------------------------- |
-| container   | 根容器元素                                  |
-| content     | 内容包裹元素                                |
+| 名称        | 说明                                           |
+| ----------- | ---------------------------------------------- |
+| container   | 根容器元素                                     |
+| content     | 内容包裹元素                                   |
 | placeholder | 占位哨兵元素（用于 IntersectionObserver 观察） |
-| loading     | 加载状态容器元素                            |
-| noMore      | 无更多数据容器元素                          |
+| loading     | 加载状态容器元素                               |
+| noMore      | 无更多数据容器元素                             |
 
 ### InfiniteScroll Slots
 
-| 名称    | 说明                           |
-| ------- | ------------------------------ |
-| default | 默认插槽，滚动列表的内容       |
-| loading | 加载中显示内容                 |
-| noMore  | 无更多数据时显示内容           |
+| 名称    | 说明                     |
+| ------- | ------------------------ |
+| default | 默认插槽，滚动列表的内容 |
+| loading | 加载中显示内容           |
+| noMore  | 无更多数据时显示内容     |
 
 ### InfiniteScroll Events
 
-| 事件名       | 说明                                                                        | 回调参数(event.detail)                                                                 |
-| ------------ | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| ea-loadmore  | 占位元素进入可视区且 status 为 `finished` 时触发                            | `{ finished: () => void, noMore: () => void }`，调用 `finished()` 恢复可加载，调用 `noMore()` 标记无更多数据 |
+| 事件名      | 说明                                             | 回调参数(event.detail)                                                                                       |
+| ----------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| ea-loadmore | 占位元素进入可视区且 status 为 `finished` 时触发 | `{ finished: () => void, noMore: () => void }`，调用 `finished()` 恢复可加载，调用 `noMore()` 标记无更多数据 |
 
-### InfiniteScroll CSS 自定义属性
+### InfiniteScroll CSS Custom Properties
 
-| 属性名                                   | 说明             | 默认值 |
-| ---------------------------------------- | ---------------- | ------ |
-| --ea-infinite-scroll-placeholder-height  | 占位哨兵元素高度 | `1px`  |
+| 属性名                                  | 说明             | 默认值 |
+| --------------------------------------- | ---------------- | ------ |
+| --ea-infinite-scroll-placeholder-height | 占位哨兵元素高度 | `1px`  |

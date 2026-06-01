@@ -19,43 +19,36 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-avatar/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-avatar.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-如果需要使用带有图标的属性，需要提前引入图标样式文件。
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-avatar";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#avatar-css-part) 和 [CSS 自定义属性](#avatar-css-自定义属性)。
+移步到 [CSS Part](#avatar-css-part) 和 [CSS Custom Properties](#avatar-css-自定义属性)。
 
 ## 基本用法
 
 使用 `shape`（`circle` | `square`）和 `size` 控制头像的形状与大小。`size` 支持预设字符串或像素值。
 
 <div class="demo">
-  <div class="row">
+  <div class="row is-not-demo">
     <ea-avatar size="50px"></ea-avatar>
     <ea-avatar size="large"></ea-avatar>
     <ea-avatar size="default"></ea-avatar>
     <ea-avatar size="small"></ea-avatar>
   </div>
-  <div class="row">
+  <div class="row is-not-demo">
     <ea-avatar shape="square" size="50px"></ea-avatar>
     <ea-avatar shape="square" size="large"></ea-avatar>
     <ea-avatar shape="square" size="default"></ea-avatar>
@@ -87,18 +80,16 @@ onMounted(() => {
 
 支持三种展示类型：图标（`icon`）、图片（`src`）和字符（slot）。当 `src` 和 `icon` 同时设置时，`src` 优先。
 
-<div class="demo">
-  <div class="row">
-    <ea-avatar icon="coffee"></ea-avatar>
-    <ea-avatar
-      src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
-    ></ea-avatar>
-    <ea-avatar>user</ea-avatar>
-  </div>
+<div class="row">
+  <ea-avatar icon="coffee"></ea-avatar>
+  <ea-avatar
+    src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
+  ></ea-avatar>
+  <ea-avatar>user</ea-avatar>
 </div>
 
 ```html
-<div class="row">
+<div class="demo">
   <ea-avatar icon="coffee"></ea-avatar>
   <ea-avatar
     src="https://tse2-mm.cn.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQAAAA?rs=1&pid=ImgDetMain"
@@ -113,17 +104,19 @@ onMounted(() => {
 
 清空 `src` 属性时，组件会自动回退到 `icon`（如果已设置）或默认 slot 内容。
 
-<div class="demo">
-  <div class="row">
-    <ea-avatar id="error" size="60px" src="https://empty"></ea-avatar>
-    <ea-avatar id="error-with-text" size="60px" src="https://empty">error text</ea-avatar>
-  </div>
+<div class="row">
+  <ea-avatar id="error" size="60px" src="https://empty"></ea-avatar>
+  <ea-avatar id="error-with-text" size="60px" src="https://empty"
+    >error text</ea-avatar
+  >
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
 ```html
-<div class="row">
+<div class="demo">
   <ea-avatar id="error" size="60px" src="https://empty"></ea-avatar>
   <ea-avatar id="error-with-text" size="60px" src="https://empty"
     >error text</ea-avatar
@@ -139,6 +132,8 @@ avatar.addEventListener("error", e => {
 ```
 
 :::
+
+::::
 
 ## 适应容器
 
@@ -250,7 +245,7 @@ avatar.addEventListener("error", e => {
 | ------- | -------- |
 | default | 默认插槽 |
 
-### Avatar CSS 自定义属性
+### Avatar CSS Custom Properties
 
 | 属性名                           | 说明         |
 | -------------------------------- | ------------ |

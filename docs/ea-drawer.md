@@ -146,36 +146,29 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-drawer/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-drawer.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-drawer";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#ea-drawer-css-part) 和 [CSS 自定义属性](#ea-drawer-css-自定义属性)。
+移步到 [CSS Part](#ea-drawer-css-part) 和 [CSS Custom Properties](#ea-drawer-css-自定义属性)。
 
 ## 基本用法
 
 可以在 `ea-drawer` 标签上添加 `direction` 属性来指定呼出方向。
 
-<div class="demo">
+<div class="row left">
   <ea-button variant="primary" id="openDrawerBtn--ltr">从左往右开</ea-button>
   <ea-button variant="primary" id="openDrawerBtn--rtl">从右往左开</ea-button>
   <ea-button variant="primary" id="openDrawerBtn--ttb">从上往下开</ea-button>
@@ -508,9 +501,9 @@ nestingExample.init();
 
 ::::
 
-## ea-drawer API
+## EaDrawer API
 
-### ea-drawer Attributes
+### EaDrawer Attributes
 
 | 参数                  | 说明                                                               | 类型    | 可选值                 | 默认值 |
 | :-------------------- | :----------------------------------------------------------------- | :------ | :--------------------- | :----- |
@@ -531,13 +524,13 @@ nestingExample.init();
 | content-max-width     | 内容最大宽度                                                       | string  | —                      | —      |
 | content-height        | 内容高度                                                           | string  | —                      | —      |
 
-### ea-drawer Properties
+### EaDrawer Properties
 
 | 参数        | 说明                                                                               | 类型     | 默认值 |
 | :---------- | :--------------------------------------------------------------------------------- | :------- | :----- |
 | beforeClose | 关闭前的回调函数，接收 done 函数作为参数。`done()` 确认关闭，`done(true)` 取消关闭 | Function | null   |
 
-### ea-drawer CSS Part
+### EaDrawer CSS Part
 
 | 名称       | 说明                                             |
 | :--------- | :----------------------------------------------- |
@@ -548,7 +541,7 @@ nestingExample.init();
 | content    | 主体内容元素，对应默认 slot                      |
 | footer     | 底部元素，对应 slot[name="footer"]               |
 
-### ea-drawer Slots
+### EaDrawer Slots
 
 | 名称    | 说明           |
 | :------ | :------------- |
@@ -556,14 +549,14 @@ nestingExample.init();
 | title   | 自定义标题内容 |
 | footer  | 自定义底部内容 |
 
-### ea-drawer Methods
+### EaDrawer Methods
 
 | 方法名 | 说明     | 参数 |
 | :----- | :------- | :--- |
 | show   | 显示抽屉 | —    |
 | hide   | 隐藏抽屉 | —    |
 
-### ea-drawer Events
+### EaDrawer Events
 
 | 事件名    | 说明                   | 回调参数(event.detail) |
 | :-------- | :--------------------- | :--------------------- |
@@ -572,7 +565,7 @@ nestingExample.init();
 | ea-close  | 抽屉关闭时触发         | —                      |
 | ea-closed | 抽屉关闭动画结束时触发 | —                      |
 
-### ea-drawer CSS 自定义属性
+### EaDrawer CSS Custom Properties
 
 | 属性名                        | 说明                               | 默认值              |
 | :---------------------------- | :--------------------------------- | :------------------ |

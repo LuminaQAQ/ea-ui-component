@@ -51,30 +51,23 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-steps/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-steps.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-如果需要使用带有图标的属性，需要提前引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-steps";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#steps-css-part) 和 [CSS 自定义属性](#steps-css-自定义属性)。
+移步到 [CSS Part](#steps-css-part) 和 [CSS Custom Properties](#steps-css-自定义属性)。
 
 ## 基础用法
 
@@ -290,15 +283,15 @@ basicExample.init();
 
 ### Steps Attributes
 
-| 参数           | 说明                                             | 类型    | 可选值                                          | 默认值  |
-| -------------- | ------------------------------------------------ | ------- | ----------------------------------------------- | ------- |
-| space          | 每个 step 的间距（影响连接线长度），支持 CSS 值  | string  | —                                               | 50%     |
-| active         | 当前激活步骤的 index，从 0 开始记数              | number  | —                                               | 0       |
-| process-status | 正在进行中的步骤状态展示                         | string  | `wait \| process \| finish \| error \| success` | process |
-| finish-status  | 已完成步骤的状态展示                             | string  | `wait \| process \| finish \| error \| success` | finish  |
-| align-center   | 是否居中对齐步骤内容                             | boolean | —                                               | false   |
-| simple         | 简洁模式（启用后会为每个 step 注入简洁箭头 slot）| boolean | —                                               | false   |
-| direction      | 步骤方向                                         | string  | `vertical \| horizontal`                        | horizontal |
+| 参数           | 说明                                              | 类型    | 可选值                                          | 默认值     |
+| -------------- | ------------------------------------------------- | ------- | ----------------------------------------------- | ---------- |
+| space          | 每个 step 的间距（影响连接线长度），支持 CSS 值   | string  | —                                               | 50%        |
+| active         | 当前激活步骤的 index，从 0 开始记数               | number  | —                                               | 0          |
+| process-status | 正在进行中的步骤状态展示                          | string  | `wait \| process \| finish \| error \| success` | process    |
+| finish-status  | 已完成步骤的状态展示                              | string  | `wait \| process \| finish \| error \| success` | finish     |
+| align-center   | 是否居中对齐步骤内容                              | boolean | —                                               | false      |
+| simple         | 简洁模式（启用后会为每个 step 注入简洁箭头 slot） | boolean | —                                               | false      |
+| direction      | 步骤方向                                          | string  | `vertical \| horizontal`                        | horizontal |
 
 ### Steps CSS Part
 
@@ -310,17 +303,17 @@ basicExample.init();
 
 ### Steps Slots
 
-| 名称    | 说明                  | 子元素    |
-| ------- | --------------------- | --------- |
+| 名称    | 说明                   | 子元素    |
+| ------- | ---------------------- | --------- |
 | default | 默认插槽，放置 ea-step | `ea-step` |
 
-### Steps CSS 自定义属性
+### Steps CSS Custom Properties
 
-| 属性名                     | 说明               | 默认值       |
-| -------------------------- | ------------------ | ------------ |
-| --ea-step-tail-spacing    | 每个 step 的间距   | 50%          |
-| --ea-steps-simple-padding  | 简洁模式内边距     | 13px 8%      |
-| --ea-steps-simple-bg-color | 简洁模式背景颜色   | var(--grey-100) |
+| 属性名                     | 说明             | 默认值          |
+| -------------------------- | ---------------- | --------------- |
+| --ea-step-tail-spacing     | 每个 step 的间距 | 50%             |
+| --ea-steps-simple-padding  | 简洁模式内边距   | 13px 8%         |
+| --ea-steps-simple-bg-color | 简洁模式背景颜色 | var(--grey-100) |
 
 ## Step API
 
@@ -363,20 +356,20 @@ basicExample.init();
 | icon         | 步骤图标（具名插槽，优先于 `icon` 属性，内部为 `<ea-icon>`） |
 | simple-arrow | 简洁模式下的箭头插槽（由父组件在 `simple` 模式下自动注入）   |
 
-### Step CSS 自定义属性
+### Step CSS Custom Properties
 
-| 属性名                       | 说明           | 默认值               |
-| ---------------------------- | -------------- | -------------------- |
+| 属性名                       | 说明           | 默认值                      |
+| ---------------------------- | -------------- | --------------------------- |
 | --ea-step-icon-border-radius | 图标圆角       | var(--border-radius-circle) |
-| --ea-step-icon-wrapper-size  | 图标容器尺寸   | 24px                 |
-| --ea-step-icon-size          | 图标字体大小   | var(--font-size-md)  |
-| --ea-step-arrow-icon-size    | 箭头图标大小   | 24px                 |
-| --ea-step-tail-size          | 连接线粗细     | 2px                  |
-| --ea-step-process-color      | 进行中状态颜色 | var(--grey-900)      |
-| --ea-step-wait-color         | 等待状态颜色   | var(--grey-500)      |
-| --ea-step-finish-color       | 已完成状态颜色 | var(--blue-500)      |
-| --ea-step-success-color      | 成功状态颜色   | var(--green-500)     |
-| --ea-step-error-color        | 错误状态颜色   | var(--red-500)       |
-| --ea-step-tail-color         | 连接线颜色     | var(--grey-500)      |
-| --ea-step-icon-bg-color      | 图标背景颜色   | var(--color-white)   |
-| --ea-step-icon-font-weight   | 图标字体粗细   | var(--font-weight-bold) |
+| --ea-step-icon-wrapper-size  | 图标容器尺寸   | 24px                        |
+| --ea-step-icon-size          | 图标字体大小   | var(--font-size-md)         |
+| --ea-step-arrow-icon-size    | 箭头图标大小   | 24px                        |
+| --ea-step-tail-size          | 连接线粗细     | 2px                         |
+| --ea-step-process-color      | 进行中状态颜色 | var(--grey-900)             |
+| --ea-step-wait-color         | 等待状态颜色   | var(--grey-500)             |
+| --ea-step-finish-color       | 已完成状态颜色 | var(--blue-500)             |
+| --ea-step-success-color      | 成功状态颜色   | var(--green-500)            |
+| --ea-step-error-color        | 错误状态颜色   | var(--red-500)              |
+| --ea-step-tail-color         | 连接线颜色     | var(--grey-500)             |
+| --ea-step-icon-bg-color      | 图标背景颜色   | var(--color-white)          |
+| --ea-step-icon-font-weight   | 图标字体粗细   | var(--font-weight-bold)     |

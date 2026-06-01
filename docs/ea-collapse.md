@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
+import PropTag from './components/PropTag.vue'
 
 onMounted(() => {
   import('../dist/components/index.js')
@@ -207,26 +208,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-collapse/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-collapse.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-collapse";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -1240,7 +1234,7 @@ hasBeforeCollapseExample.init();
 | header  | 标题插槽               |
 | icon    | 展开图标插槽           |
 
-### CollapseItem CSS 自定义属性
+### CollapseItem CSS Custom Properties
 
 | 属性名                                    | 说明             | 默认值                                                  |
 | ----------------------------------------- | ---------------- | ------------------------------------------------------- |

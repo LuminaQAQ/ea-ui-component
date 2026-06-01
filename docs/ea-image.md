@@ -182,15 +182,19 @@ await customElements.whenDefined("ea-image-preview");
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-image/index.js";
-  // 如需单独使用 ea-image-preview, 可单独引入该组件
-  import "./node_modules/easy-component-ui/components/ea-image-preview/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-image.js";
 </script>
 ```
+
+```js [Vite]
+import "easy-component-ui/ea-image";
+```
+
+:::
 
 ## 自定义样式
 
@@ -355,6 +359,8 @@ placeholderExample.init();
   </ea-image>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html
@@ -374,6 +380,8 @@ placeholderExample.init();
 ```
 
 :::
+
+::::
 
 ## 懒加载
 
@@ -441,6 +449,8 @@ placeholderExample.init();
   ></ea-image>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```html
@@ -491,6 +501,8 @@ placeholderExample.init();
 
 :::
 
+::::
+
 ## 图片预览
 
 可通过 `previewSrcList` 开启预览大图的功能。 你可以通过 `initial-index` 初始化第一张预览图片的位置。 默认初始位置为 0。
@@ -511,6 +523,8 @@ placeholderExample.init();
   >
   </ea-image>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -556,6 +570,8 @@ previewExample.init();
 
 :::
 
+::::
+
 ## 手动打开预览
 
 <div class="demo">
@@ -592,6 +608,8 @@ previewExample.init();
     </ea-image-preview>
   </section>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -669,6 +687,8 @@ imageHandlerExample.init();
 
 :::
 
+::::
+
 ## 自定义工具栏
 
 可通过 `toolbar` 插槽自定义工具栏内容。工具栏中的元素支持 `data-action` 事件委托，可用的 action 值包括：`switch-prev`、`switch-next`、`zoom-in`、`zoom-out`、`rotate-anticlockwise`、`rotate-clockwise`。对于自定义操作（如跳转到首张/末张、重置），可通过组件的 `setActiveItem` 和 `reset` 方法实现。
@@ -703,6 +723,8 @@ imageHandlerExample.init();
     </section>
   </ea-image>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -777,6 +799,8 @@ customToolbarImage.init();
 
 :::
 
+::::
+
 ## 自定义进度条
 
 可通过 `show-progress` 控制是否在预览图片时显示进度条。 进度条会在使用 `progress` 插槽时显示。
@@ -801,6 +825,8 @@ customToolbarImage.init();
     </section>
   </ea-image>
 </div>
+
+:::: details 查看代码
 
 ::: code-group
 
@@ -851,6 +877,8 @@ customProgressExample.init();
 ```
 
 :::
+
+::::
 
 ## Image API
 

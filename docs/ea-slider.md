@@ -75,30 +75,23 @@ onMounted(async () => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-slider/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-slider.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-slider";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#slider-css-part) 或 [CSS 自定义属性](#slider-css-自定义属性)。
+移步到 [CSS Part](#slider-css-part) 或 [CSS Custom Properties](#slider-css-自定义属性)。
 
 ## 基础用法
 
@@ -512,20 +505,20 @@ marksSlider.marks = {
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称       | 说明             |
-| ---------- | ---------------- |
-| form-label | 标签元素         |
-| container  | 根容器           |
-| runway     | 轨道容器         |
-| rail       | 轨道背景         |
-| bar        | 已填充轨道       |
-| stop       | 步长节点         |
-| mark-stop  | 标记点节点       |
-| trigger    | 触发器容器       |
-| thumb      | 滑块按钮         |
-| tooltip    | 提示框内容       |
-| marks      | 标记容器         |
-| input      | 输入框           |
+| 名称       | 说明       |
+| ---------- | ---------- |
+| form-label | 标签元素   |
+| container  | 根容器     |
+| runway     | 轨道容器   |
+| rail       | 轨道背景   |
+| bar        | 已填充轨道 |
+| stop       | 步长节点   |
+| mark-stop  | 标记点节点 |
+| trigger    | 触发器容器 |
+| thumb      | 滑块按钮   |
+| tooltip    | 提示框内容 |
+| marks      | 标记容器   |
+| input      | 输入框     |
 
 ### Slider Methods
 
@@ -537,23 +530,23 @@ marksSlider.marks = {
 
 ### Slider Events
 
-| 事件名 | 说明                           | 回调参数(event.detail) |
-| ------ | ------------------------------ | ---------------------- |
-| change | 值改变时触发（拖拽结束）       | `{ value: number }`    |
-| input  | 拖动时触发                     | `{ value: number }`    |
+| 事件名 | 说明                     | 回调参数(event.detail) |
+| ------ | ------------------------ | ---------------------- |
+| change | 值改变时触发（拖拽结束） | `{ value: number }`    |
+| input  | 拖动时触发               | `{ value: number }`    |
 
-### Slider CSS 自定义属性
+### Slider CSS Custom Properties
 
-| 属性名                            | 说明             | 默认值                |
-| --------------------------------- | ---------------- | --------------------- |
-| --ea-slider-height                | 轨道高度         | 6px                   |
-| --ea-slider-height-small          | 小尺寸轨道高度   | 4px                   |
-| --ea-slider-height-large          | 大尺寸轨道高度   | 8px                   |
-| --ea-slider-thumb-size            | 滑块按钮尺寸     | 16px                  |
-| --ea-slider-thumb-size-small      | 小尺寸滑块按钮   | 12px                  |
-| --ea-slider-thumb-size-large      | 大尺寸滑块按钮   | 20px                  |
-| --ea-slider-rail-bg-color         | 轨道背景颜色     | var(--grey-200)       |
-| --ea-slider-bar-bg-color          | 已填充轨道颜色   | var(--blue-500)       |
-| --ea-slider-thumb-bg-color        | 滑块按钮背景颜色 | var(--color-white)    |
-| --ea-slider-thumb-border-color    | 滑块按钮边框颜色 | var(--blue-300)       |
-| --ea-slider-transition            | 过渡动画时长     | var(--transition-fast)|
+| 属性名                         | 说明             | 默认值                 |
+| ------------------------------ | ---------------- | ---------------------- |
+| --ea-slider-height             | 轨道高度         | 6px                    |
+| --ea-slider-height-small       | 小尺寸轨道高度   | 4px                    |
+| --ea-slider-height-large       | 大尺寸轨道高度   | 8px                    |
+| --ea-slider-thumb-size         | 滑块按钮尺寸     | 16px                   |
+| --ea-slider-thumb-size-small   | 小尺寸滑块按钮   | 12px                   |
+| --ea-slider-thumb-size-large   | 大尺寸滑块按钮   | 20px                   |
+| --ea-slider-rail-bg-color      | 轨道背景颜色     | var(--grey-200)        |
+| --ea-slider-bar-bg-color       | 已填充轨道颜色   | var(--blue-500)        |
+| --ea-slider-thumb-bg-color     | 滑块按钮背景颜色 | var(--color-white)     |
+| --ea-slider-thumb-border-color | 滑块按钮边框颜色 | var(--blue-300)        |
+| --ea-slider-transition         | 过渡动画时长     | var(--transition-fast) |

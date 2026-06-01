@@ -4,20 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ea-dropdown</title>
-    <link rel="stylesheet" href="../dist/assets/icon.css" />
+    
 
     <style>
-      hr {
-        margin: 3rem 0;
-      }
-    </style>
-  </head>
+      .row { margin: 1rem 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+      hr { margin: 2rem 0; border: none; border-top: 1px solid var(--grey-200, #e4e7ed); }
 
-  <body>
-    <script type="module" src="../src/components/ea-dropdown/index.ts"></script>
-    <script type="module" src="../src/components/ea-button/index.ts"></script>
-
-    <style>
       .ea-dropdown-reference {
         cursor: pointer;
         color: #409eff;
@@ -26,7 +18,7 @@
 
     <!--  基础用法 -->
     <!-- #region -->
-    <h1>基础用法</h1>
+    <h2>基础用法</h2>
 
     <div class="demo">
       <ea-dropdown>
@@ -50,7 +42,7 @@
 
     <!--  位置 -->
     <!-- #region -->
-    <h1>位置</h1>
+    <h2>位置</h2>
 
     <div class="demo">
       <ea-dropdown placement="top-start">
@@ -109,7 +101,7 @@
 
     <!--  分割线 -->
     <!-- #region -->
-    <h1>分割线</h1>
+    <h2>分割线</h2>
 
     <div class="demo">
       <ea-dropdown>
@@ -198,7 +190,7 @@
 
     <!--  菜单隐藏方式 -->
     <!-- #region -->
-    <h1>菜单隐藏方式</h1>
+    <h2>菜单隐藏方式</h2>
 
     <div class="demo">
       <ea-dropdown hide-on-click="false">
@@ -257,7 +249,7 @@
 
     <!--  下拉方法 -->
     <!-- #region -->
-    <h1>下拉方法</h1>
+    <h2>下拉方法</h2>
 
     <div class="demo">
       <ea-button id="methodsDropdownShowBtn">show</ea-button>

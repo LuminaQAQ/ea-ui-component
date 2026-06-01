@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rea="stylesheet" href="/dist/assets/icon.css" />
-
+    
     <style>
       hr {
-        margin: 3rem 0;
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid var(--grey-200, #e4e7ed);
       }
 
       ea-button::part(container) {
@@ -29,7 +30,7 @@
     <script type="module" src="/src/components/ea-text/index.ts"></script>
 
     <!-- #region 基础用法  -->
-    <h1>基础用法</h1>
+    <h2>基础用法</h2>
 
     <div>
       <ea-text>Default</ea-text>
@@ -45,7 +46,7 @@
 
     <!-- #region 尺寸 -->
     <div>
-      <h1>尺寸</h1>
+      <h2>尺寸</h2>
 
       <ea-text size="large">Large</ea-text>
       <ea-text size="large"> <ea-text size="large">Large</ea-text></ea-text>
@@ -58,7 +59,7 @@
 
     <!-- #region 省略 -->
     <div>
-      <h1>省略</h1>
+      <h2>省略</h2>
 
       <div>
         <ea-text tag="p" truncated style="width: 100px">
@@ -79,7 +80,7 @@
     <!-- #endregion  -->
 
     <!-- #region 覆盖 -->
-    <h1>覆盖</h1>
+    <h2>覆盖</h2>
 
     <div style="display: flex; flex-direction: column">
       <ea-text>span</ea-text>

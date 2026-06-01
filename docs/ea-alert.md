@@ -70,34 +70,27 @@ ea-alert:first-child {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-alert/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-alert.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-alert";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#alert-css-part) 或 [CSS 自定义属性](#alert-css-自定义属性)。
+移步到 [CSS Part](#alert-css-part) 或 [CSS Custom Properties](#alert-css-自定义属性)。
 
-::: code-group
+::: details 查看代码
 
-```css [所有示例通用的 style]
+```css
 ea-alert {
   margin: 20px 0 0;
 }
@@ -348,6 +341,8 @@ customizedCloseBtn.addEventListener("ea-close", () => {
   </ea-alert>
 </div>
 
+:::: details 查看代码
+
 ::: code-group
 
 ```css [图标样式]
@@ -398,6 +393,8 @@ customizedCloseBtn.addEventListener("ea-close", () => {
 ```
 
 :::
+
+::::
 
 ## 延迟属性
 
@@ -533,7 +530,7 @@ autoCloseAlert.addEventListener("ea-close", () => {
 | ea-open  | 开启 Alert 时触发的事件 | `{}`                    |
 | ea-close | 关闭 Alert 时触发的事件 | `{ visible: false }`    |
 
-### Alert CSS 自定义属性
+### Alert CSS Custom Properties
 
 | 属性名                          | 说明             | 默认值                              |
 | ------------------------------- | ---------------- | ----------------------------------- |

@@ -4,20 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Button 按钮</title>
-    <link rel="stylesheet" href="/dist/assets/icon.css" />
-
+    
     <style>
+      .row { margin: 1rem 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+      hr { margin: 2rem 0; border: none; border-top: 1px solid var(--grey-200, #e4e7ed); }
+
       .part::part(container) {
         background: aquamarine;
         color: white;
-      }
-
-      .row {
-        margin: 1rem 0;
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.5rem;
       }
 
       .custom-btn::part(container) {

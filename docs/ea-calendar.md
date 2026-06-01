@@ -42,30 +42,23 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-calendar/index";
+  import "./node_modules/easy-component-ui/dist/components/ea-calendar.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-calendar";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#ea-calendar-css-part) 和 [CSS 自定义属性](#ea-calendar-css-自定义属性)。
+移步到 [CSS Part](#ea-calendar-css-part) 和 [CSS Custom Properties](#ea-calendar-css-自定义属性)。
 
 ## 基础用法
 
@@ -195,9 +188,9 @@ localeExample.init();
 
 ::::
 
-## ea-calendar API
+## EaCalendar API
 
-### ea-calendar Attributes
+### EaCalendar Attributes
 
 | 参数            | 说明       | 类型   | 可选值             | 默认值 |
 | --------------- | ---------- | ------ | ------------------ | ------ |
@@ -205,7 +198,7 @@ localeExample.init();
 | controller-type | 控制器类型 | String | `button \| select` | button |
 | locale          | 语言设置   | String | `en-US \| zh-CN`   | en-US  |
 
-### ea-calendar CSS Part
+### EaCalendar CSS Part
 
 | 名称               | 说明            |
 | ------------------ | --------------- |
@@ -231,19 +224,19 @@ localeExample.init();
 | current-month      | 当月日期单元格  |
 | next-month         | 下月日期单元格  |
 
-### ea-calendar Slots
+### EaCalendar Slots
 
 | 名称   | 说明                         |
 | ------ | ---------------------------- |
 | header | 头部插槽，用于自定义头部内容 |
 
-### ea-calendar Events
+### EaCalendar Events
 
 | 事件名称  | 说明           | 回调参数                               |
 | --------- | -------------- | -------------------------------------- |
 | ea-select | 选择日期时触发 | `{ year, month, date, day, fullDate }` |
 
-### ea-calendar CSS 自定义属性
+### EaCalendar CSS Custom Properties
 
 | 属性名                                        | 说明                   | 默认值                  |
 | --------------------------------------------- | ---------------------- | ----------------------- |

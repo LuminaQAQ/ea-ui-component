@@ -40,30 +40,23 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-menu/index.ts";
+  import "./node_modules/easy-component-ui/dist/components/ea-menu.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-menu";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#menu-css-part) 和 [CSS 自定义属性](#menu-css-自定义属性)。
+移步到 [CSS Part](#menu-css-part) 和 [CSS Custom Properties](#menu-css-自定义属性)。
 
 ## 顶栏
 
@@ -598,21 +591,21 @@ onMounted(() => {
 | --------- | ----------------------------------------- |
 | container | 外层容器 (菜单根节点，`part="container"`) |
 
-### Menu CSS 自定义属性
+### Menu CSS Custom Properties
 
-| 属性名                       | 说明             | 默认值              |
-| ---------------------------- | ---------------- | ------------------- |
-| --ea-menu-bg-color           | 菜单背景颜色     | var(--color-white)  |
-| --ea-menu-hover-bg-color     | 菜单项悬停背景颜色 | var(--blue-100)   |
-| --ea-menu-active-bg-color    | 菜单项激活背景颜色 | var(--blue-100)   |
-| --ea-menu-border-color       | 菜单边框颜色     | var(--grey-100)     |
-| --ea-menu-text-color         | 菜单文字颜色     | var(--grey-900)     |
-| --ea-menu-active-text-color  | 菜单项激活文字颜色 | var(--blue-500)   |
+| 属性名                      | 说明               | 默认值             |
+| --------------------------- | ------------------ | ------------------ |
+| --ea-menu-bg-color          | 菜单背景颜色       | var(--color-white) |
+| --ea-menu-hover-bg-color    | 菜单项悬停背景颜色 | var(--blue-100)    |
+| --ea-menu-active-bg-color   | 菜单项激活背景颜色 | var(--blue-100)    |
+| --ea-menu-border-color      | 菜单边框颜色       | var(--grey-100)    |
+| --ea-menu-text-color        | 菜单文字颜色       | var(--grey-900)    |
+| --ea-menu-active-text-color | 菜单项激活文字颜色 | var(--blue-500)    |
 
 ### Menu Events
 
-| 事件名 | 说明         | 回调参数(event.detail)                            |
-| ------ | ------------ | ------------------------------------------------- |
+| 事件名 | 说明         | 回调参数(event.detail)                   |
+| ------ | ------------ | ---------------------------------------- |
 | select | 菜单激活回调 | `{ index: string, target: HTMLElement }` |
 
 ### Menu Slots
@@ -643,18 +636,18 @@ onMounted(() => {
 | arrow     | 展示为下拉或右箭头的图标 (`part="arrow"`)              |
 | content   | 子菜单列表容器，默认插槽所在处 (`part="content"`)      |
 
-### SubMenu CSS 自定义属性
+### SubMenu CSS Custom Properties
 
-| 属性名                              | 说明             | 默认值                |
-| ----------------------------------- | ---------------- | --------------------- |
-| --ea-sub-menu-spacing               | 子菜单水平内边距 | 20px                  |
-| --ea-sub-menu-height                | 子菜单标题高度   | 56px                  |
-| --ea-sub-menu-font-size             | 子菜单字体大小   | var(--font-size-md)   |
-| --ea-sub-menu-border-color          | 子菜单激活边框颜色 | var(--blue-500)     |
-| --ea-sub-menu-active-text-color     | 子菜单激活文字颜色 | var(--blue-500)     |
-| --ea-sub-menu-dropdown-box-shadow   | 下拉菜单阴影     | var(--box-shadow-md)  |
-| --ea-sub-menu-transition            | 子菜单过渡动画时长 | var(--transition-normal) |
-| --ea-sub-menu-z-index               | 子菜单层级       | 100                   |
+| 属性名                            | 说明               | 默认值                   |
+| --------------------------------- | ------------------ | ------------------------ |
+| --ea-sub-menu-spacing             | 子菜单水平内边距   | 20px                     |
+| --ea-sub-menu-height              | 子菜单标题高度     | 56px                     |
+| --ea-sub-menu-font-size           | 子菜单字体大小     | var(--font-size-md)      |
+| --ea-sub-menu-border-color        | 子菜单激活边框颜色 | var(--blue-500)          |
+| --ea-sub-menu-active-text-color   | 子菜单激活文字颜色 | var(--blue-500)          |
+| --ea-sub-menu-dropdown-box-shadow | 下拉菜单阴影       | var(--box-shadow-md)     |
+| --ea-sub-menu-transition          | 子菜单过渡动画时长 | var(--transition-normal) |
+| --ea-sub-menu-z-index             | 子菜单层级         | 100                      |
 
 ### SubMenu Slots
 
@@ -679,18 +672,18 @@ onMounted(() => {
 | --------- | ----------------------------------- |
 | container | 菜单项外层容器 (`part="container"`) |
 
-### Menu-Item CSS 自定义属性
+### Menu-Item CSS Custom Properties
 
-| 属性名                            | 说明             | 默认值                  |
-| --------------------------------- | ---------------- | ----------------------- |
-| --ea-menu-item-spacing            | 菜单项水平内边距 | 20px                    |
-| --ea-menu-item-height             | 菜单项高度       | 56px                    |
-| --ea-menu-item-font-size          | 菜单项字体大小   | var(--font-size-md)     |
-| --ea-menu-item-bg-color           | 菜单项背景颜色   | var(--color-white)      |
-| --ea-menu-item-border-color       | 菜单项激活边框颜色 | var(--blue-500)       |
-| --ea-menu-item-active-text-color  | 菜单项激活文字颜色 | var(--blue-500)       |
-| --ea-menu-item-active-bg-color    | 菜单项激活背景颜色 | var(--blue-100)       |
-| --ea-menu-item-transition         | 菜单项过渡动画时长 | var(--transition-normal) |
+| 属性名                           | 说明               | 默认值                   |
+| -------------------------------- | ------------------ | ------------------------ |
+| --ea-menu-item-spacing           | 菜单项水平内边距   | 20px                     |
+| --ea-menu-item-height            | 菜单项高度         | 56px                     |
+| --ea-menu-item-font-size         | 菜单项字体大小     | var(--font-size-md)      |
+| --ea-menu-item-bg-color          | 菜单项背景颜色     | var(--color-white)       |
+| --ea-menu-item-border-color      | 菜单项激活边框颜色 | var(--blue-500)          |
+| --ea-menu-item-active-text-color | 菜单项激活文字颜色 | var(--blue-500)          |
+| --ea-menu-item-active-bg-color   | 菜单项激活背景颜色 | var(--blue-100)          |
+| --ea-menu-item-transition        | 菜单项过渡动画时长 | var(--transition-normal) |
 
 ### Menu-Item Slots
 
@@ -708,20 +701,20 @@ onMounted(() => {
 
 ### Menu-Item-Group CSS Part
 
-| 名称      | 说明                                    |
-| --------- | --------------------------------------- |
-| container | 菜单项外层容器 (`part="container"`)     |
-| title     | 菜单项标题容器 (`part="title"`)         |
-| content   | 菜单项内容容器 (`part="content"`)       |
+| 名称      | 说明                                |
+| --------- | ----------------------------------- |
+| container | 菜单项外层容器 (`part="container"`) |
+| title     | 菜单项标题容器 (`part="title"`)     |
+| content   | 菜单项内容容器 (`part="content"`)   |
 
-### Menu-Item-Group CSS 自定义属性
+### Menu-Item-Group CSS Custom Properties
 
-| 属性名                              | 说明             | 默认值                |
-| ----------------------------------- | ---------------- | --------------------- |
-| --ea-menu-item-group-spacing        | 分组水平内边距   | 20px                  |
-| --ea-menu-item-group-height         | 分组标题高度     | 36px                  |
-| --ea-menu-item-group-font-size      | 分组标题字体大小 | var(--font-size-md)   |
-| --ea-menu-item-group-text-color     | 分组标题文字颜色 | var(--grey-500)       |
+| 属性名                          | 说明             | 默认值              |
+| ------------------------------- | ---------------- | ------------------- |
+| --ea-menu-item-group-spacing    | 分组水平内边距   | 20px                |
+| --ea-menu-item-group-height     | 分组标题高度     | 36px                |
+| --ea-menu-item-group-font-size  | 分组标题字体大小 | var(--font-size-md) |
+| --ea-menu-item-group-text-color | 分组标题文字颜色 | var(--grey-500)     |
 
 ### Menu-Item-Group Slots
 

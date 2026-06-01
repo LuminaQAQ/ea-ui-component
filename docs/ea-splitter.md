@@ -146,83 +146,83 @@ eaSplitter.addEventListener("ea-panel-resize-end", e => {
 
 ### Splitter Attributes
 
-| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
+| 属性名   | 说明               | 类型   | 可选值                       | 默认值     |
+| -------- | ------------------ | ------ | ---------------------------- | ---------- |
 | `layout` | 分隔面板的布局方向 | `enum` | `'horizontal' \| 'vertical'` | horizontal |
 
 ### Splitter Events
 
-| 事件名 | 说明 | 回调参数(event.detail) |
-| --- | --- | --- |
-| `ea-panel-resize-start` | 开始调整面板大小时触发 | `{ size: number[] }` |
-| `ea-panel-resize` | 调整面板大小时触发 | `{ size: number[] }` |
-| `ea-panel-resize-end` | 面板调整大小结束时触发 | `{ size: number[] }` |
+| 事件名                  | 说明                   | 回调参数(event.detail) |
+| ----------------------- | ---------------------- | ---------------------- |
+| `ea-panel-resize-start` | 开始调整面板大小时触发 | `{ size: number[] }`   |
+| `ea-panel-resize`       | 调整面板大小时触发     | `{ size: number[] }`   |
+| `ea-panel-resize-end`   | 面板调整大小结束时触发 | `{ size: number[] }`   |
 
 ### Splitter Slots
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称    | 说明                                 |
+| ------- | ------------------------------------ |
 | default | 默认插槽，用于放置 ea-splitter-panel |
 
 ### Splitter CSS Part
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称      | 说明     |
+| --------- | -------- |
 | container | 容器元素 |
 
-### Splitter CSS 自定义属性
+### Splitter CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| --- | --- | --- |
-| `--ea-splitter-direction` | flex 布局方向 | row |
+| 属性名                    | 说明          | 默认值 |
+| ------------------------- | ------------- | ------ |
+| `--ea-splitter-direction` | flex 布局方向 | row    |
 
 ## SplitterPanel API
 
 ### SplitterPanel Attributes
 
-| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
-| `size` | 面板大小(像素或百分比) | `string` | — | — |
-| `min` | 面板最小尺寸(像素或百分比) | `string` | — | — |
-| `layout` | 布局方向 | `enum` | `'horizontal' \| 'vertical'` | horizontal |
+| 属性名   | 说明                       | 类型     | 可选值                       | 默认值     |
+| -------- | -------------------------- | -------- | ---------------------------- | ---------- |
+| `size`   | 面板大小(像素或百分比)     | `string` | —                            | —          |
+| `min`    | 面板最小尺寸(像素或百分比) | `string` | —                            | —          |
+| `layout` | 布局方向                   | `enum`   | `'horizontal' \| 'vertical'` | horizontal |
 
 ### SplitterPanel Slots
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称    | 说明                   |
+| ------- | ---------------------- |
 | default | 默认插槽，用于面板内容 |
 
 ### SplitterPanel CSS Part
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称      | 说明     |
+| --------- | -------- |
 | container | 容器元素 |
 
-### SplitterPanel CSS 自定义属性
+### SplitterPanel CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| --- | --- | --- |
-| `--ea-splitter-panel-size` | 面板大小 | 100% |
-| `--ea-splitter-panel-min-size` | 面板最小尺寸 | 0 |
+| 属性名                         | 说明         | 默认值 |
+| ------------------------------ | ------------ | ------ |
+| `--ea-splitter-panel-size`     | 面板大小     | 100%   |
+| `--ea-splitter-panel-min-size` | 面板最小尺寸 | 0      |
 
 ## SplitterBar API
 
 ### SplitterBar Attributes
 
-| 属性名 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
+| 属性名   | 说明     | 类型   | 可选值                       | 默认值     |
+| -------- | -------- | ------ | ---------------------------- | ---------- |
 | `layout` | 布局方向 | `enum` | `'horizontal' \| 'vertical'` | horizontal |
 
 ### SplitterBar CSS Part
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称      | 说明     |
+| --------- | -------- |
 | container | 容器元素 |
 
-### SplitterBar CSS 自定义属性
+### SplitterBar CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| --- | --- | --- |
-| `--ea-splitter-bar-size` | 分隔条尺寸（水平模式为宽度，垂直模式为高度） | 1rem |
-| `--ea-splitter-bar-color` | 分隔条默认颜色 | var(--color-border) |
-| `--ea-splitter-bar-hover-color` | 分隔条悬停颜色 | var(--color-blue) |
+| 属性名                          | 说明                                         | 默认值              |
+| ------------------------------- | -------------------------------------------- | ------------------- |
+| `--ea-splitter-bar-size`        | 分隔条尺寸（水平模式为宽度，垂直模式为高度） | 1rem                |
+| `--ea-splitter-bar-color`       | 分隔条默认颜色                               | var(--color-border) |
+| `--ea-splitter-bar-hover-color` | 分隔条悬停颜色                               | var(--color-blue)   |

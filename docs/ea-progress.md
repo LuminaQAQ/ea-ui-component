@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import "../dist/components/index.js"
 import "../dist/assets/icon.css"
+import PropTag from './components/PropTag.vue'
 
 onMounted(async () => {
   await customElements.whenDefined("ea-progress")
@@ -145,17 +146,23 @@ ea-progress {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```js
-<script type='module'>
-  import "./node_modules/easy-component-ui/components/ea-progress/index.ts";
+```html [原生引入]
+<script type="module">
+  import "./node_modules/easy-component-ui/dist/components/ea-progress.js";
 </script>
 ```
 
+```js [Vite]
+import "easy-component-ui/ea-progress";
+```
+
+:::
+
 ## 自定义样式
 
-移步到 [CSS Part](#css-part) 和 [CSS 自定义属性](#css-自定义属性)。
+移步到 [CSS Part](#css-part) 和 [CSS Custom Properties](#css-自定义属性)。
 
 ::: tip
 示例中使用的样式
@@ -499,12 +506,7 @@ dashboardExample.init();
 <ea-progress percentage="50">
   <ea-button text>Content</ea-button>
 </ea-progress>
-<ea-progress
-  text-inside
-  stroke-width="20px"
-  percentage="50"
-  status="exception"
->
+<ea-progress text-inside stroke-width="20px" percentage="50" status="exception">
   <span>Content</span>
 </ea-progress>
 <ea-progress variant="circle" percentage="100" status="success">
@@ -684,57 +686,57 @@ stripedExample.init();
 
 ### Progress Attributes
 
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
-| percentage | 进度百分比（0-100） | number | 0-100 | 0 |
-| variant | 进度条形态 | string | `line \| circle \| dashboard` | `line` |
-| stroke-width | 进度条的宽度 | string | 任意合法 CSS 长度 | `8px` |
-| text-inside | 进度条显示文字内置在进度条内（仅 `variant` 为 `line` 时可用） | boolean | — | false |
-| status | 进度条当前状态 | string | `success` / `warning` / `exception` | — |
-| indeterminate | 是否为动画进度条 | boolean | — | false |
-| duration | 动画持续时间（秒），控制动画进度条速度和条纹进度条流动速度 | number | 正数（秒） | 3 |
-| color <PropTag /> | 进度条背景色（会覆盖 status 状态颜色） | `string \| Array \| Function` | 例如 `"#409eff"`、`[{color, percentage}]`、`(p)=>...` | — |
-| striped | 是否为条纹样式 | boolean | — | false |
-| striped-flow | 条纹是否流动（仅当 `striped` 为 true 时生效） | boolean | — | false |
-| size | 环形/仪表盘进度条的尺寸（仅 `variant` 为 `circle`/`dashboard` 时生效） | string | 任意合法 CSS 长度 | `126px` |
-| show-text | 是否显示进度条文字内容 | boolean | — | true |
+| 参数              | 说明                                                                   | 类型                          | 可选值                                                | 默认值  |
+| ----------------- | ---------------------------------------------------------------------- | ----------------------------- | ----------------------------------------------------- | ------- |
+| percentage        | 进度百分比（0-100）                                                    | number                        | 0-100                                                 | 0       |
+| variant           | 进度条形态                                                             | string                        | `line \| circle \| dashboard`                         | `line`  |
+| stroke-width      | 进度条的宽度                                                           | string                        | 任意合法 CSS 长度                                     | `8px`   |
+| text-inside       | 进度条显示文字内置在进度条内（仅 `variant` 为 `line` 时可用）          | boolean                       | —                                                     | false   |
+| status            | 进度条当前状态                                                         | string                        | `success` / `warning` / `exception`                   | —       |
+| indeterminate     | 是否为动画进度条                                                       | boolean                       | —                                                     | false   |
+| duration          | 动画持续时间（秒），控制动画进度条速度和条纹进度条流动速度             | number                        | 正数（秒）                                            | 3       |
+| color <PropTag /> | 进度条背景色（会覆盖 status 状态颜色）                                 | `string \| Array \| Function` | 例如 `"#409eff"`、`[{color, percentage}]`、`(p)=>...` | —       |
+| striped           | 是否为条纹样式                                                         | boolean                       | —                                                     | false   |
+| striped-flow      | 条纹是否流动（仅当 `striped` 为 true 时生效）                          | boolean                       | —                                                     | false   |
+| size              | 环形/仪表盘进度条的尺寸（仅 `variant` 为 `circle`/`dashboard` 时生效） | string                        | 任意合法 CSS 长度                                     | `126px` |
+| show-text         | 是否显示进度条文字内容                                                 | boolean                       | —                                                     | true    |
 
 ### Progress CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称 | 说明 |
-| --- | --- |
-| container | 组件根容器元素 |
-| track | 轨道元素（线性进度条的外层轨道 / 环形和仪表盘的 SVG circle） |
-| path | 进度路径元素（表示已完成部分） |
-| percentage | 百分比文本容器 |
-| status-icon | 状态图标元素（当 `status` 为 success/warning/exception 时） |
+| 名称        | 说明                                                         |
+| ----------- | ------------------------------------------------------------ |
+| container   | 组件根容器元素                                               |
+| track       | 轨道元素（线性进度条的外层轨道 / 环形和仪表盘的 SVG circle） |
+| path        | 进度路径元素（表示已完成部分）                               |
+| percentage  | 百分比文本容器                                               |
+| status-icon | 状态图标元素（当 `status` 为 success/warning/exception 时）  |
 
 ### Progress Slots
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称    | 说明                                                                                                                                                     |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | default | 默认插槽。用于在进度条中插入自定义内容（例如圆环中间的文案或按钮）。当 `text-inside` 为 true 或 `variant` 为 `circle`/`dashboard` 时常用于显示中心内容。 |
 
 ### Progress Events
 
-| 事件名 | 说明 | 回调参数 (event.detail) |
-| --- | --- | --- |
+| 事件名 | 说明                 | 回调参数 (event.detail)  |
+| ------ | -------------------- | ------------------------ |
 | change | 进度百分比变化时触发 | `{ percentage: number }` |
 
-### Progress CSS 自定义属性
+### Progress CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| --- | --- | --- |
-| --ea-progress-percentage | 进度百分比值 | 0 |
-| --ea-progress-stroke-width | 进度条宽度 | 8px |
-| --ea-progress-default-color | 默认颜色 | var(--blue-500) |
-| --ea-progress-success-color | 成功状态颜色 | var(--green-500) |
-| --ea-progress-exception-color | 异常状态颜色 | var(--red-500) |
-| --ea-progress-warning-color | 警告状态颜色 | var(--yellow-500) |
-| --ea-progress-percentage-color | 百分比文字颜色 | var(--grey-900) |
-| --ea-progress-track-color | 轨道颜色 | var(--grey-200) |
-| --ea-progress-path-color | 进度路径颜色 | var(--ea-progress-default-color) |
-| --ea-progress-size | 环形/仪表盘尺寸 | 126px |
-| --ea-progress-animation-duration | 动画持续时间 | 3s |
+| 属性名                           | 说明            | 默认值                           |
+| -------------------------------- | --------------- | -------------------------------- |
+| --ea-progress-percentage         | 进度百分比值    | 0                                |
+| --ea-progress-stroke-width       | 进度条宽度      | 8px                              |
+| --ea-progress-default-color      | 默认颜色        | var(--blue-500)                  |
+| --ea-progress-success-color      | 成功状态颜色    | var(--green-500)                 |
+| --ea-progress-exception-color    | 异常状态颜色    | var(--red-500)                   |
+| --ea-progress-warning-color      | 警告状态颜色    | var(--yellow-500)                |
+| --ea-progress-percentage-color   | 百分比文字颜色  | var(--grey-900)                  |
+| --ea-progress-track-color        | 轨道颜色        | var(--grey-200)                  |
+| --ea-progress-path-color         | 进度路径颜色    | var(--ea-progress-default-color) |
+| --ea-progress-size               | 环形/仪表盘尺寸 | 126px                            |
+| --ea-progress-animation-duration | 动画持续时间    | 3s                               |

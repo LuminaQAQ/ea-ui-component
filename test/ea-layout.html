@@ -4,12 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rea="stylesheet" href="/dist/assets/icon.css" />
+    
 
     <style>
-      hr {
-        margin: 3rem 0;
-      }
+      .row { margin: 1rem 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+      hr { margin: 2rem 0; border: none; border-top: 1px solid var(--grey-200, #e4e7ed); }
 
       ea-button::part(container) {
         width: 100%;
@@ -95,7 +94,7 @@
 
     <!-- #region 分栏间隔 -->
     <div>
-      <h1>分栏间隔</h1>
+      <h2>分栏间隔</h2>
 
       <ea-row class="row-container" gutter="20">
         <ea-col span="6">
@@ -159,7 +158,7 @@
     <!-- #endregion  -->
 
     <!-- #region 列偏移 -->
-    <h1>列偏移</h1>
+    <h2>列偏移</h2>
 
     <ea-row class="row-container" gutter="20">
       <ea-col span="6">
@@ -187,7 +186,7 @@
     <!-- #endregion  -->
 
     <!-- #region 列栅格偏移 -->
-    <h1>列栅格偏移</h1>
+    <h2>列栅格偏移</h2>
 
     <p>栅格向右移动</p>
     <ea-row class="row-container" gutter="20">
@@ -232,7 +231,7 @@
     <!-- #endregion  -->
 
     <!-- #region 对齐方式 -->
-    <h1>对齐方式</h1>
+    <h2>对齐方式</h2>
 
     <ea-row class="row-container">
       <ea-col span="6">

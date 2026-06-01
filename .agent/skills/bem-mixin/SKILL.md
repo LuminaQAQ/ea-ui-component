@@ -109,7 +109,7 @@ $name: ea-component;
 ```scss
 $name: ea-component-name;
 
-// 1. CSS 自定义属性
+// 1. CSS Custom Properties
 :host {
   --#{$name}-size: var(--spacing-md);
   --#{$name}-bg-color: var(--grey-100);
@@ -175,8 +175,8 @@ $name: ea-component-name;
 ```typescript
 // TypeScript
 const bem = createBEM("ea-component");
-bem({ size: "large" });       // -> .ea-component.ea-component--size-large
-bem({}, { disabled: true });  // -> .ea-component.is-disabled
+bem({ size: "large" }); // -> .ea-component.ea-component--size-large
+bem({}, { disabled: true }); // -> .ea-component.is-disabled
 ```
 
 ```scss
@@ -184,12 +184,14 @@ bem({}, { disabled: true });  // -> .ea-component.is-disabled
 $name: ea-component;
 
 @include block($name) {
-  @include modifier(size-large) {  // .ea-component--size-large
+  @include modifier(size-large) {
+    // .ea-component--size-large
     // ...
   }
 }
 
-@include state(disabled) {          // .is-disabled
+@include state(disabled) {
+  // .is-disabled
   // ...
 }
 ```

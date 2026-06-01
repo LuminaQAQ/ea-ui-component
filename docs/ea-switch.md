@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import "../dist/components/index.js"
 import "../dist/assets/icon.css"
+import PropTag from './components/PropTag.vue'
 
 onMounted(() => {
 
@@ -65,30 +66,23 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-switch/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-switch.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-switch";
 ```
+
+:::
 
 ## 自定义样式
 
-移步到 [CSS Part](#switch-css-part) 和 [CSS 自定义属性](#switch-css-自定义属性)。
+移步到 [CSS Part](#switch-css-part) 和 [CSS Custom Properties](#switch-css-自定义属性)。
 
 ## 基础用法
 
@@ -427,16 +421,16 @@ forbiddenExample.init();
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称        | 说明                     |
-| ----------- | ------------------------ |
-| wrapper     | 外层 label 容器          |
-| label       | 表单标签                 |
-| form-label  | 表单标签（与 label 相同）|
-| container   | 开关内容容器             |
-| original    | 原生 checkbox 控件       |
-| label-left  | 左侧文字（关闭状态）     |
-| switch      | 伪开关控件               |
-| label-right | 右侧文字（打开状态）     |
+| 名称        | 说明                      |
+| ----------- | ------------------------- |
+| wrapper     | 外层 label 容器           |
+| label       | 表单标签                  |
+| form-label  | 表单标签（与 label 相同） |
+| container   | 开关内容容器              |
+| original    | 原生 checkbox 控件        |
+| label-left  | 左侧文字（关闭状态）      |
+| switch      | 伪开关控件                |
+| label-right | 右侧文字（打开状态）      |
 
 ### Switch Slots
 
@@ -459,18 +453,18 @@ forbiddenExample.init();
 | ------ | ------------------ | ---------------------------------------- |
 | change | 状态发生变化时触发 | `{ value: String \| Number \| Boolean }` |
 
-### Switch CSS 自定义属性
+### Switch CSS Custom Properties
 
-| 属性名                                   | 说明                   | 默认值              |
-| ---------------------------------------- | ---------------------- | ------------------- |
-| --ea-switch-active-bg-color              | 打开时的背景色         | var(--blue-500)     |
-| --ea-switch-inactive-bg-color            | 关闭时的背景色         | var(--grey-300)     |
-| --ea-switch-active-text-color            | 打开时的文字颜色       | var(--blue-500)     |
-| --ea-switch-inactive-text-color          | 关闭时的文字颜色       | var(--grey-900)     |
-| --ea-switch-disabled-bg-color            | 禁用时的背景色         | var(--grey-200)     |
-| --ea-switch-disabled-text-color          | 禁用时的文字颜色       | var(--grey-300)     |
-| --ea-switch-disabled-checked-bg-color    | 禁用且选中时的背景色   | var(--blue-300)     |
-| --ea-switch-disabled-checked-text-color  | 禁用且选中时的文字颜色 | var(--blue-300)     |
+| 属性名                                  | 说明                   | 默认值          |
+| --------------------------------------- | ---------------------- | --------------- |
+| --ea-switch-active-bg-color             | 打开时的背景色         | var(--blue-500) |
+| --ea-switch-inactive-bg-color           | 关闭时的背景色         | var(--grey-300) |
+| --ea-switch-active-text-color           | 打开时的文字颜色       | var(--blue-500) |
+| --ea-switch-inactive-text-color         | 关闭时的文字颜色       | var(--grey-900) |
+| --ea-switch-disabled-bg-color           | 禁用时的背景色         | var(--grey-200) |
+| --ea-switch-disabled-text-color         | 禁用时的文字颜色       | var(--grey-300) |
+| --ea-switch-disabled-checked-bg-color   | 禁用且选中时的背景色   | var(--blue-300) |
+| --ea-switch-disabled-checked-text-color | 禁用且选中时的文字颜色 | var(--blue-300) |
 
 ## 类型支持
 
@@ -481,10 +475,10 @@ forbiddenExample.init();
 组件支持 `HTMLElementTagNameMap` 扩展：
 
 ```typescript
-const switchEl = document.createElement('ea-switch');
+const switchEl = document.createElement("ea-switch");
 switchEl.value = true; // 类型安全
-switchEl.activeValue = 'yes';
-switchEl.size = 'large';
+switchEl.activeValue = "yes";
+switchEl.size = "large";
 ```
 
 ### Vue

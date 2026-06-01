@@ -44,26 +44,19 @@ ea-popconfirm {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-popconfirm/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-popconfirm.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是，如果需要使用到带有图标的 `属性/组件`，需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-popconfirm";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -326,11 +319,11 @@ const customizedPopconfirmExample = {
       this.el.close();
     });
 
-    this.el.addEventListener("ea-confirm", (e) => {
+    this.el.addEventListener("ea-confirm", e => {
       console.log("confirm");
     });
 
-    this.el.addEventListener("ea-cancel", (e) => {
+    this.el.addEventListener("ea-cancel", e => {
       console.log("cancel");
     });
   },
@@ -346,74 +339,74 @@ customizedPopconfirmExample.init();
 
 ### Popconfirm Attributes
 
-| 参数 | 说明 | 类型 | 可选值 | 默认值 |
-| --- | --- | --- | --- | --- |
-| heading | 标题 | string | — | — |
-| confirmButtonText | 确认按钮文字 | string | — | 确定 |
-| cancelButtonText | 取消按钮文字 | string | — | 取消 |
-| confirmButtonType | 确认按钮类型 | string | `normal` \| `primary` \| `success` \| `warning` \| `danger` | primary |
-| cancelButtonType | 取消按钮类型 | string | `normal` \| `primary` \| `success` \| `warning` \| `danger` | normal |
-| icon | 自定义图标 | string | — | circle-question |
-| iconColor | 确认框图标的颜色 | string | — | `rgb(255, 153, 0)` |
-| hideIcon | 是否隐藏图标 | boolean | — | false |
-| width | 宽度，单位 px | number | — | 150 |
-| placement | 气泡的出现位置 | string | `top` \| `top-start` \| `top-end` \| `bottom` \| `bottom-start` \| `bottom-end` \| `left` \| `left-start` \| `left-end` \| `right` \| `right-start` \| `right-end` | top |
-| showArrow | 是否显示箭头 | boolean | — | true |
-| visible | 控制 Popconfirm 显隐 | boolean | — | false |
-| offset | 气泡出现的位置偏移量 | string | — | "0 0" |
-| flip | 是否在超过原 placement 视口时进行翻转 | boolean | — | true |
+| 参数              | 说明                                  | 类型    | 可选值                                                                                                                                                             | 默认值             |
+| ----------------- | ------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| heading           | 标题                                  | string  | —                                                                                                                                                                  | —                  |
+| confirmButtonText | 确认按钮文字                          | string  | —                                                                                                                                                                  | 确定               |
+| cancelButtonText  | 取消按钮文字                          | string  | —                                                                                                                                                                  | 取消               |
+| confirmButtonType | 确认按钮类型                          | string  | `normal` \| `primary` \| `success` \| `warning` \| `danger`                                                                                                        | primary            |
+| cancelButtonType  | 取消按钮类型                          | string  | `normal` \| `primary` \| `success` \| `warning` \| `danger`                                                                                                        | normal             |
+| icon              | 自定义图标                            | string  | —                                                                                                                                                                  | circle-question    |
+| iconColor         | 确认框图标的颜色                      | string  | —                                                                                                                                                                  | `rgb(255, 153, 0)` |
+| hideIcon          | 是否隐藏图标                          | boolean | —                                                                                                                                                                  | false              |
+| width             | 宽度，单位 px                         | number  | —                                                                                                                                                                  | 150                |
+| placement         | 气泡的出现位置                        | string  | `top` \| `top-start` \| `top-end` \| `bottom` \| `bottom-start` \| `bottom-end` \| `left` \| `left-start` \| `left-end` \| `right` \| `right-start` \| `right-end` | top                |
+| showArrow         | 是否显示箭头                          | boolean | —                                                                                                                                                                  | true               |
+| visible           | 控制 Popconfirm 显隐                  | boolean | —                                                                                                                                                                  | false              |
+| offset            | 气泡出现的位置偏移量                  | string  | —                                                                                                                                                                  | "0 0"              |
+| flip              | 是否在超过原 placement 视口时进行翻转 | boolean | —                                                                                                                                                                  | true               |
 
 ### Popconfirm CSS Part
 
 > 用法可参考 [MDN ::part()伪类](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::part)
 
-| 名称 | 说明 |
-| --- | --- |
-| container | Popconfirm 外层容器 |
-| reference | 触发 Popconfirm 显示的 HTML 元素的父容器 |
-| original | Popconfirm 弹出内容容器 |
-| title | Popconfirm 标题容器 |
-| icon | Popconfirm 的图标 |
-| title-content | Popconfirm 内容容器 |
-| footer | Popconfirm 底部容器 |
-| cancel-button | Popconfirm 取消按钮 |
-| confirm-button | Popconfirm 确认按钮 |
+| 名称           | 说明                                     |
+| -------------- | ---------------------------------------- |
+| container      | Popconfirm 外层容器                      |
+| reference      | 触发 Popconfirm 显示的 HTML 元素的父容器 |
+| original       | Popconfirm 弹出内容容器                  |
+| title          | Popconfirm 标题容器                      |
+| icon           | Popconfirm 的图标                        |
+| title-content  | Popconfirm 内容容器                      |
+| footer         | Popconfirm 底部容器                      |
+| cancel-button  | Popconfirm 取消按钮                      |
+| confirm-button | Popconfirm 确认按钮                      |
 
-### Popconfirm CSS 自定义属性
+### Popconfirm CSS Custom Properties
 
-| 属性名 | 说明 | 默认值 |
-| --- | --- | --- |
-| --ea-popconfirm-title-icon-color | 标题图标颜色 | rgb(255, 153, 0) |
-| --ea-popconfirm-title-color | 标题文字颜色 | var(--grey-900) |
-| --ea-popconfirm-title-font-size | 标题文字大小 | var(--font-size-md) |
-| --ea-popconfirm-box-shadow | 容器阴影 | var(--box-shadow-md) |
-| --ea-popconfirm-border-radius | 容器圆角 | var(--border-radius-sm) |
-| --ea-popconfirm-z-index | 容器层级 | 100 |
+| 属性名                           | 说明         | 默认值                  |
+| -------------------------------- | ------------ | ----------------------- |
+| --ea-popconfirm-title-icon-color | 标题图标颜色 | rgb(255, 153, 0)        |
+| --ea-popconfirm-title-color      | 标题文字颜色 | var(--grey-900)         |
+| --ea-popconfirm-title-font-size  | 标题文字大小 | var(--font-size-md)     |
+| --ea-popconfirm-box-shadow       | 容器阴影     | var(--box-shadow-md)    |
+| --ea-popconfirm-border-radius    | 容器圆角     | var(--border-radius-sm) |
+| --ea-popconfirm-z-index          | 容器层级     | 100                     |
 
 ### Popconfirm Events
 
-| 事件名 | 说明 | 回调参数 |
-| --- | --- | --- |
-| ea-confirm | 点击确认按钮时触发 | — |
-| ea-cancel | 点击取消按钮时触发 | — |
-| ea-show | 开启 Popper 时触发 | — |
-| ea-shown | 开启 Popper 的动画结束时触发 | — |
-| ea-hide | 关闭 Popper 时触发 | — |
-| ea-hidden | 关闭 Popper 的动画结束时触发 | — |
+| 事件名     | 说明                         | 回调参数 |
+| ---------- | ---------------------------- | -------- |
+| ea-confirm | 点击确认按钮时触发           | —        |
+| ea-cancel  | 点击取消按钮时触发           | —        |
+| ea-show    | 开启 Popper 时触发           | —        |
+| ea-shown   | 开启 Popper 的动画结束时触发 | —        |
+| ea-hide    | 关闭 Popper 时触发           | —        |
+| ea-hidden  | 关闭 Popper 的动画结束时触发 | —        |
 
 ### Popconfirm Methods
 
-| 方法名 | 说明 | 参数 |
-| --- | --- | --- |
-| open | 显示 Popconfirm | — |
-| close | 隐藏 Popconfirm | — |
-| show | 显示 Popper | — |
-| hide | 隐藏 Popper | — |
-| toggle | 切换 Popper 显示状态 | — |
+| 方法名 | 说明                 | 参数 |
+| ------ | -------------------- | ---- |
+| open   | 显示 Popconfirm      | —    |
+| close  | 隐藏 Popconfirm      | —    |
+| show   | 显示 Popper          | —    |
+| hide   | 隐藏 Popper          | —    |
+| toggle | 切换 Popper 显示状态 | —    |
 
 ### Popconfirm Slots
 
-| 名称 | 说明 |
-| --- | --- |
+| 名称      | 说明                                 |
+| --------- | ------------------------------------ |
 | reference | 触发 Popconfirm 显示的 HTML 元素插槽 |
-| actions | 页脚内容插槽 |
+| actions   | 页脚内容插槽                         |

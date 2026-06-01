@@ -13,26 +13,19 @@ onMounted(() => {
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-result/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-result.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是, 如果需要使用到带有图标的 `属性/组件`, 需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-result";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -202,9 +195,9 @@ onMounted(() => {
 
 :::
 
-## ea-result API
+## EaResult API
 
-### ea-result Attributes
+### EaResult Attributes
 
 | 参数      | 说明                   | 类型   | 可选值                                             | 默认值 |
 | --------- | ---------------------- | ------ | -------------------------------------------------- | ------ |
@@ -213,7 +206,7 @@ onMounted(() => {
 | sub-title | 副标题                 | string | —                                                  | ""     |
 | icon      | 自定义图标，优先于 variant 默认图标 | string | — | ""     |
 
-### ea-result CSS Part
+### EaResult CSS Part
 
 | 名称      | 说明         |
 | --------- | ------------ |
@@ -224,7 +217,7 @@ onMounted(() => {
 | sub-title | 副标题元素   |
 | extra     | 额外内容元素 |
 
-### ea-result Slots
+### EaResult Slots
 
 | 名称      | 说明         |
 | --------- | ------------ |
@@ -233,7 +226,7 @@ onMounted(() => {
 | sub-title | 自定义副标题 |
 | extra     | 额外内容区域 |
 
-### ea-result CSS 自定义属性
+### EaResult CSS Custom Properties
 
 | 属性名                              | 说明           | 默认值             |
 | ----------------------------------- | -------------- | ------------------ |

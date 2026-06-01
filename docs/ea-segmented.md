@@ -1,5 +1,6 @@
 <script setup>
   import { onMounted } from "vue";
+  import PropTag from './components/PropTag.vue'
   import "../dist/components/index.js";
   import "../dist/assets/icon.css";
 
@@ -171,17 +172,23 @@
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-segmented/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-segmented.js";
 </script>
 ```
 
+```js [Vite]
+import "easy-component-ui/ea-segmented";
+```
+
+:::
+
 ## 自定义样式
 
-移步到 [CSS Part](#segmented-css-part) 和 [CSS 自定义属性](#segmented-css-自定义属性)。
+移步到 [CSS Part](#segmented-css-part) 和 [CSS Custom Properties](#segmented-css-自定义属性)。
 
 ## 基础用法
 
@@ -562,14 +569,14 @@ customStyleExample.init();
 | ------ | -------------- | ---------------------- |
 | change | 选项改变时触发 | `{ value: string }`    |
 
-### Segmented CSS 自定义属性
+### Segmented CSS Custom Properties
 
-| 属性名                                  | 说明             | 默认值            |
-| --------------------------------------- | ---------------- | ----------------- |
-| --ea-segmented-border-radius            | 组件圆角半径     | 2px               |
-| --ea-segmented-bg-color                 | 组件背景颜色     | var(--grey-100)   |
-| --ea-segmented-hover-bg-color           | 选项悬停背景颜色 | var(--grey-200)   |
-| --ea-segmented-indicator-color          | 选中指示器颜色   | var(--blue-500)   |
-| --ea-segmented-item-checked-color       | 选中项文字颜色   | var(--color-white) |
-| --ea-segmented-item-disabled-color      | 禁用项文字颜色   | var(--grey-400)   |
-| --ea-segmented-item-disabled-bg-color   | 禁用项背景颜色   | transparent       |
+| 属性名                                | 说明             | 默认值             |
+| ------------------------------------- | ---------------- | ------------------ |
+| --ea-segmented-border-radius          | 组件圆角半径     | 2px                |
+| --ea-segmented-bg-color               | 组件背景颜色     | var(--grey-100)    |
+| --ea-segmented-hover-bg-color         | 选项悬停背景颜色 | var(--grey-200)    |
+| --ea-segmented-indicator-color        | 选中指示器颜色   | var(--blue-500)    |
+| --ea-segmented-item-checked-color     | 选中项文字颜色   | var(--color-white) |
+| --ea-segmented-item-disabled-color    | 禁用项文字颜色   | var(--grey-400)    |
+| --ea-segmented-item-disabled-bg-color | 禁用项背景颜色   | transparent        |

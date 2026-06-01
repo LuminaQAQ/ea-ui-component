@@ -93,26 +93,19 @@
 
 ## 引入
 
-> `js`
+::: code-group
 
-```html
+```html [原生引入]
 <script type="module">
-  import "./node_modules/easy-component-ui/components/ea-tabs/index.js";
+  import "./node_modules/easy-component-ui/dist/components/ea-tabs.js";
 </script>
 ```
 
-> `css`
-
-::: tip
-需要注意的是，如果需要使用到带有图标的属性/组件，需要提前使用 `link` 标签引入图标文件
-:::
-
-```html
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/components/ea-icon/index.css"
-/>
+```js [Vite]
+import "easy-component-ui/ea-tabs";
 ```
+
+:::
 
 ## 自定义样式
 
@@ -500,11 +493,11 @@ editableExample.init();
 
 ### Tabs Events
 
-| 事件名         | 说明             | 回调参数(event.detail)                  |
-| -------------- | ---------------- | --------------------------------------- |
-| ea-tab-click   | 点击标签时触发   | `{ name: string, panel: HTMLElement }` |
-| ea-tabs-change | 标签页切换时触发 | `{ name: string }`                      |
-| ea-tab-remove  | 点击删除标签时触发 | `{ name: string }`                    |
+| 事件名         | 说明               | 回调参数(event.detail)                 |
+| -------------- | ------------------ | -------------------------------------- |
+| ea-tab-click   | 点击标签时触发     | `{ name: string, panel: HTMLElement }` |
+| ea-tabs-change | 标签页切换时触发   | `{ name: string }`                     |
+| ea-tab-remove  | 点击删除标签时触发 | `{ name: string }`                     |
 
 ### Tabs Slots
 
@@ -513,7 +506,7 @@ editableExample.init();
 | nav  | 放置标签项的容器（无须手动设置）             | `ea-tab`       |
 | —    | 默认插槽，用于放置面板子元素（无须手动设置） | `ea-tab-panel` |
 
-### Tabs CSS 自定义属性
+### Tabs CSS Custom Properties
 
 | 属性名                         | 说明             | 默认值                   |
 | ------------------------------ | ---------------- | ------------------------ |
@@ -552,12 +545,12 @@ editableExample.init();
 | ----------------------- | ------------------ | ---------------------- |
 | ea-tab-close-icon-click | 点击关闭图标时触发 | `{ panel: string }`    |
 
-### Tab CSS 自定义属性
+### Tab CSS Custom Properties
 
-| 属性名                        | 说明             | 默认值          |
-| ----------------------------- | ---------------- | --------------- |
-| --ea-tab-active-color         | 激活状态颜色     | var(--blue-500) |
-| --ea-tab-disabled-color       | 禁用状态颜色     | var(--grey-400) |
+| 属性名                        | 说明             | 默认值             |
+| ----------------------------- | ---------------- | ------------------ |
+| --ea-tab-active-color         | 激活状态颜色     | var(--blue-500)    |
+| --ea-tab-disabled-color       | 禁用状态颜色     | var(--grey-400)    |
 | --ea-tab-border-card-bg-color | 边框卡片背景颜色 | var(--color-white) |
 
 ## TabPanel API

@@ -4,7 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="../dist/assets/icon.css" />
+
+    <style>
+      hr {
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid var(--grey-200, #e4e7ed);
+      }
+
+      .row {
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+    </style>
   </head>
 
   <body>
@@ -56,7 +71,7 @@
 
     <!--  完整示例 -->
     <!-- #region -->
-    <h1>完整示例</h1>
+    <h2>完整示例</h2>
 
     <div aria-label="A complete example of page header" class="demo">
       <ea-page-header id="completePageHeader">
@@ -90,10 +105,10 @@
             Lunacrest Continent
           </ea-descriptions-item>
           <ea-descriptions-item label="Traits">
-            <ea-tag size="small" type="warning" style="margin-right: 1rem">
+            <ea-tag size="small" variant="warning" style="margin-right: 1rem">
               Thunderous Veins
             </ea-tag>
-            <ea-tag size="small" type="info">Daredevil</ea-tag>
+            <ea-tag size="small" variant="info">Daredevil</ea-tag>
           </ea-descriptions-item>
           <ea-descriptions-item label="Description">
             She was once an elf lord, defending the border from goblin invaders.
@@ -133,7 +148,7 @@
 
     <!--  基础用法 -->
     <!-- #region -->
-    <h1>基础用法</h1>
+    <h2>基础用法</h2>
 
     <div class="demo">
       <ea-page-header id="basicPageHeader">
@@ -166,7 +181,7 @@
 
     <!--  使用 heading 和 content 属性 -->
     <!-- #region -->
-    <h1>使用 heading 和 content 属性</h1>
+    <h2>使用 heading 和 content 属性</h2>
 
     <div class="demo">
       <ea-page-header heading="返回" content="页面标题"></ea-page-header>
@@ -178,7 +193,7 @@
 
     <!--  自定义图标 -->
     <!-- #region -->
-    <h1>自定义图标</h1>
+    <h2>自定义图标</h2>
 
     <div class="demo">
       <ea-page-header icon="rotate-left">
@@ -192,7 +207,7 @@
 
     <!--  无图标 -->
     <!-- #region -->
-    <h1>无图标</h1>
+    <h2>无图标</h2>
 
     <div class="demo">
       <ea-page-header icon="">
@@ -206,7 +221,7 @@
 
     <!--  面包屑导航 -->
     <!-- #region -->
-    <h1>面包屑导航</h1>
+    <h2>面包屑导航</h2>
 
     <div class="demo">
       <ea-page-header>
@@ -225,7 +240,7 @@
 
     <!--  额外操作部分 -->
     <!-- #region -->
-    <h1>额外操作部分</h1>
+    <h2>额外操作部分</h2>
 
     <div class="demo">
       <ea-page-header>
@@ -252,7 +267,7 @@
 
     <!--  主要内容 -->
     <!-- #region -->
-    <h1>主要内容</h1>
+    <h2>主要内容</h2>
 
     <div class="demo">
       <ea-page-header>
