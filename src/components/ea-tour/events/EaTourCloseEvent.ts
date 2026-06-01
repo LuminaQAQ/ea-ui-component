@@ -10,9 +10,3 @@ export class EaTourCloseEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-close": EaTourCloseEvent;
-  }
-}

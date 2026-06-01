@@ -35,13 +35,13 @@ const bem = createBEM(TAG_NAME);
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaOverlay extends EaBase {
   @query(bem.cb())
-  private _container!: HTMLElement;
+  protected _container!: HTMLElement;
 
   @query(bem.ce("mask"))
-  private _overlayMask!: HTMLElement;
+  protected _overlayMask!: HTMLElement;
 
   @query(bem.ce("content"))
-  private _overlayContent!: HTMLElement;
+  protected _overlayContent!: HTMLElement;
 
   private _transitionAbortController?: AbortController;
   private _closingByBeforeClose: boolean = false;
@@ -316,14 +316,14 @@ export class EaOverlay extends EaBase {
   }
 
   @listen("click", bem.ce("mask"))
-  private _handleMaskClick(_e: Event) {
+  protected _handleMaskClick(_e: Event) {
     if (!this.closeOnClickModal) return;
 
     this.hide();
   }
 
   @listen("keydown", "document")
-  private _handleKeyDown(e: KeyboardEvent) {
+  protected _handleKeyDown(e: KeyboardEvent) {
     if (!this.visible || !this.closeOnPressEscape || e.key !== "Escape") return;
     e.stopImmediatePropagation();
     e.preventDefault();

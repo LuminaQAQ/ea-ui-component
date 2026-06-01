@@ -1,9 +1,8 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query, listen } from "@decorator";
+import { CustomElement, attribute, query } from "@decorator";
 import { Enum } from "@utils/Enum";
 import {
   VARIANT_TYPES,
-  VARIANT_DEFAULT,
   type VariantType,
 } from "@constants/variant";
 import stylesheet from "./index.scss?inline";

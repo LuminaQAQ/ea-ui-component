@@ -117,12 +117,12 @@ function createAttributeSetter(name: string) {
     if (typeof newVal === "boolean") {
       if (newVal) {
         this.setAttribute(attrName, "");
-        const marked = this[BOOLEAN_FALSE_ATTRS];
+        const marked = (this as any)[BOOLEAN_FALSE_ATTRS];
         if (marked) marked.delete(attrName);
       } else {
         this.removeAttribute(attrName);
-        if (!this[BOOLEAN_FALSE_ATTRS]) this[BOOLEAN_FALSE_ATTRS] = new Set();
-        this[BOOLEAN_FALSE_ATTRS].add(attrName);
+        if (!(this as any)[BOOLEAN_FALSE_ATTRS]) (this as any)[BOOLEAN_FALSE_ATTRS] = new Set();
+        (this as any)[BOOLEAN_FALSE_ATTRS].add(attrName);
       }
     } else {
       this.setAttribute(attrName, String(newVal));
@@ -266,7 +266,7 @@ function applyStyles(elementClass: any, shadowRoot: ShadowRoot | null): void {
 
   if (uniqueStyles.length === 0) return;
 
-  if ("adoptedStyleSheets" in shadowRoot) {
+  if ("adoptedStyleSheets" in ShadowRoot.prototype && shadowRoot.adoptedStyleSheets !== undefined) {
     const sheets = uniqueStyles.map(css => StylesheetCache.getOrCreate(css));
     shadowRoot.adoptedStyleSheets = sheets;
   } else {
@@ -340,8 +340,6 @@ function CustomElement(
 
     // 获取 attribute 装饰器配置（始终映射到 HTML attribute）
     const attributeOptions = ElementAttributesMap.get(CustomElementClass);
-    // 获取 property 装饰器配置（仅作为 JS 属性，不映射到 HTML attribute）
-    const propertyOptions = ElementPropertiesMap.get(CustomElementClass);
 
     const superAttributes = CustomElementClass.observedAttributes || [];
     const attributeNames = Object.keys(attributeOptions || {});

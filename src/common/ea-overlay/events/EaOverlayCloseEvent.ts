@@ -3,9 +3,3 @@ export class EaOverlayCloseEvent extends Event {
     super("ea-close", { bubbles: true, composed: true });
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-close": EaOverlayCloseEvent;
-  }
-}

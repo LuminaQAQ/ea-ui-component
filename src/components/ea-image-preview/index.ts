@@ -57,12 +57,6 @@ export type ImagePreviewStatus = "loading" | "success" | "error";
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaImagePreview extends EaOverlay {
-  @query(".ea-overlay")
-  private _container!: HTMLElement;
-
-  @query(".ea-overlay__content")
-  private _overlayContent!: HTMLElement;
-
   @query(".ea-image-preview__progress")
   private _progress!: HTMLElement;
 

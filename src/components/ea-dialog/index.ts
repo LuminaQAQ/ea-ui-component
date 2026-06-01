@@ -47,12 +47,6 @@ const bem = createBEM(TAG_NAME);
 export class EaDialog extends EaOverlay {
   // ==================== DOM 元素引用 ====================
 
-  @query(".ea-overlay")
-  private _container!: HTMLElement;
-
-  @query(".ea-overlay__content")
-  private _overlayContent!: HTMLElement;
-
   @query(bem.ce("header"))
   private _header!: HTMLElement;
 

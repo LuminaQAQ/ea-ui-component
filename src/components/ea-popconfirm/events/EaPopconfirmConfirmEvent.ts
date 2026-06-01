@@ -8,9 +8,3 @@ export class EaPopconfirmConfirmEvent extends Event {
     this.detail = detail ?? {};
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-confirm": EaPopconfirmConfirmEvent;
-  }
-}

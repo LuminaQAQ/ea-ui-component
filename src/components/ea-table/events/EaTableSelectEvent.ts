@@ -12,9 +12,3 @@ interface EaTableSelectEventDetail {
   /** @description 当前选中的行数据 */
   row: any;
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-select": EaTableSelectEvent;
-  }
-}

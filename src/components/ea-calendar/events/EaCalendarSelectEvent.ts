@@ -14,9 +14,3 @@ export class EaCalendarSelectEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-select": EaCalendarSelectEvent;
-  }
-}

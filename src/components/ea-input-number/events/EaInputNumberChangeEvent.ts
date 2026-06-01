@@ -11,9 +11,3 @@ export class EaInputNumberChangeEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-change": EaInputNumberChangeEvent;
-  }
-}

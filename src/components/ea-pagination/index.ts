@@ -321,7 +321,7 @@ export class EaPagination extends EaBase {
       return ary;
     };
 
-    const range = getRange(
+    const range: (number | string)[] = getRange(
       Math.max(
         2,
         newVal + step > totalCount
@@ -336,7 +336,7 @@ export class EaPagination extends EaBase {
       )
     );
 
-    if (range[0] > 2 || step === 0) {
+    if ((range[0] as number) > 2 || step === 0) {
       range.unshift(1, "...");
     } else {
       range.unshift(1);
@@ -347,7 +347,7 @@ export class EaPagination extends EaBase {
     }
 
     if (
-      range[range.length - 1] < totalCount - 1 ||
+      (range[range.length - 1] as number) < totalCount - 1 ||
       (step === 0 && newVal === totalCount - 1)
     ) {
       range.push("...", totalCount);

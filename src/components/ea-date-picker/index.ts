@@ -83,7 +83,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
   private _container!: HTMLElement;
 
   @query(".ea-date-picker__input")
-  private _inputElement!: HTMLElement;
+  private _inputElement!: any;
 
   @query(".ea-date-picker__dropdown-wrap")
   private _dropdownWrap!: HTMLElement;
@@ -321,7 +321,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
             <div class='${bem.e("year-panel")}' part='year-panel'></div>
             <div class='${bem.e("month-panel")}' part='month-panel'>${monthsShort
               .map(
-                (month, i) =>
+                (month: string, i: number) =>
                   `<button class='${bem.e("month-item")}' part='month-item' data-month='${i + 1}'>${month}</button>`
               )
               .join("")}</div>

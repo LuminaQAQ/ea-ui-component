@@ -15,9 +15,3 @@ export class EaPaginationCurrentChangeEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-current-change": EaPaginationCurrentChangeEvent;
-  }
-}

@@ -47,9 +47,6 @@ type DirectionType = (typeof DIRECTION_TYPES)[number];
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaDrawer extends EaOverlay {
-  @query(".ea-overlay")
-  private _container!: HTMLElement;
-
   @query(bemMain.ce("header"))
   private _header!: HTMLElement;
 

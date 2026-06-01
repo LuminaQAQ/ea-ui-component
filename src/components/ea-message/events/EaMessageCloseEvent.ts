@@ -10,9 +10,3 @@ export class EaMessageCloseEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-close": EaMessageCloseEvent;
-  }
-}

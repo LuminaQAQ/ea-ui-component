@@ -15,7 +15,7 @@ function parseDefaultValue(thisArg: any, defaultVal: any): any {
 }
 
 function parseStringType(
-  type: string
+  type: AttributeOptions["type"] | PropertyOptions["type"]
 ): AttributeOptions["type"] | PropertyOptions["type"] {
   switch (type) {
     case "String": {

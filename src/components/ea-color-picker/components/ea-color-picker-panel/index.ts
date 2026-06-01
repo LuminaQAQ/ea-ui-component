@@ -99,7 +99,7 @@ export class EaColorPickerPanel extends EaBase {
   @attribute({
     type: Enum(COLOR_FORMATS),
     default: "hex",
-    observer(this: EaColorPickerPanel, newVal: string) {
+    observer(this: EaColorPickerPanel, _newVal: string) {
       if (this.value) {
         this.value = this._states.color.toString(this._getEffectiveFormat());
       }

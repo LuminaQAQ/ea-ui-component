@@ -1,6 +1,5 @@
 import EaBase, { createBEM } from "@core/EaBase";
 import { CustomElement, attribute, listen, query } from "@decorator";
-import { Enum } from "@utils/Enum";
 import { EaDropdownCommandEvent } from "../../events/EaDropdownCommandEvent";
 import stylesheet from "./index.scss?inline";
 

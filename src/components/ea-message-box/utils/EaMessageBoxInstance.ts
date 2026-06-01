@@ -217,7 +217,7 @@ const EaMessageBox: EaMessageBoxFn = (options: MessageBoxOptions) => {
         controller.abort();
 
         if (currentAction === "confirm") {
-          resolve(inputValue ?? "confirm");
+          resolve((inputValue ?? "confirm") as Action);
         } else if (currentAction === "cancel") {
           reject("cancel");
         } else {

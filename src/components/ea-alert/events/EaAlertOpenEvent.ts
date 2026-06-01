@@ -8,9 +8,3 @@ export class EaAlertOpenEvent extends Event {
     this.detail = detail ?? {};
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-open": EaAlertOpenEvent;
-  }
-}

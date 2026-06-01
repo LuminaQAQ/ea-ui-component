@@ -267,7 +267,7 @@ export class EaColorPicker extends EaFormAssociatedBase {
   }
 
   @listen("click", bem.ce("trigger"))
-  private _handleTriggerClick(e: MouseEvent) {
+  private _handleTriggerClick(_e: MouseEvent) {
     if (this.disabled) return;
 
     this._abortControllerStates.close?.abort();

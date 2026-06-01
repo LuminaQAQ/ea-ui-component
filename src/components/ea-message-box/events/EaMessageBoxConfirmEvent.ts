@@ -10,9 +10,3 @@ export class EaMessageBoxConfirmEvent extends Event {
     this.detail = detail ?? {};
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-confirm": EaMessageBoxConfirmEvent;
-  }
-}

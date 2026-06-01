@@ -70,12 +70,6 @@ type ButtonSize = (typeof BUTTON_SIZES)[number];
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaMessageBoxElement extends EaOverlay {
-  @query(".ea-overlay")
-  private _container!: HTMLElement;
-
-  @query(".ea-overlay__content")
-  private _overlayContent!: HTMLElement;
-
   @query(bemMain.ce("header"))
   private _header!: HTMLElement;
 
@@ -518,7 +512,7 @@ export class EaMessageBoxElement extends EaOverlay {
   }
 
   @listen("keydown", "document")
-  private _handleKeyDown(e: KeyboardEvent): void {
+  protected _handleKeyDown(e: KeyboardEvent): void {
     if (!this.visible || !this.closeOnPressEscape || e.key !== "Escape") return;
     e.stopImmediatePropagation();
     e.preventDefault();
@@ -526,7 +520,7 @@ export class EaMessageBoxElement extends EaOverlay {
   }
 
   @listen("click", ".ea-overlay__mask")
-  private _handleMaskClick(e: Event): void {
+  protected _handleMaskClick(e: Event): void {
     if (!this.closeOnClickModal && e.target !== this._overlayContent) return;
 
     const isContent =

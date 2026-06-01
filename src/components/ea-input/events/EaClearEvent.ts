@@ -10,9 +10,3 @@ export class EaInputClearEvent extends Event {
     this.detail = detail;
   }
 }
-
-declare global {
-  interface GlobalEventHandlersEventMap {
-    "ea-clear": EaInputClearEvent;
-  }
-}
