@@ -3,6 +3,7 @@ import { resolve } from "path";
 
 const dir = resolve(process.cwd(), "src/components");
 const commonDir = resolve(process.cwd(), "src/common");
+const themesDir = resolve(process.cwd(), "src/themes");
 
 function getEntryFile(directory: string, component: string): string {
   const tsPath = resolve(directory, component, "index.ts");
@@ -31,5 +32,10 @@ readdirSync(commonDir).forEach((file: string) => {
     entryConfigs[file] = getEntryFile(commonDir, file);
   }
 });
+
+entryConfigs["themes/source"] = resolve(themesDir, "source.entry.ts");
+entryConfigs["themes/light"] = resolve(themesDir, "light.entry.ts");
+entryConfigs["themes/dark"] = resolve(themesDir, "dark.entry.ts");
+entryConfigs["theme"] = resolve(themesDir, "controller.ts");
 
 export default entryConfigs;

@@ -36,7 +36,15 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        entryFileNames: "components/[name].js",
+        entryFileNames: chunkInfo => {
+          if (chunkInfo.name.startsWith("themes/")) {
+            return `${chunkInfo.name}.js`;
+          }
+          if (chunkInfo.name === "theme") {
+            return `themes/controller.js`;
+          }
+          return "components/[name].js";
+        },
         chunkFileNames: chunkInfo => {
           if (chunkInfo.name.startsWith("css/")) {
             return `${chunkInfo.name}.style.js`;
@@ -70,6 +78,9 @@ export default defineConfig({
           );
           const constantsPath = normalizePath(
             path.resolve(__dirname, "src/constants")
+          );
+          const themesPath = normalizePath(
+            path.resolve(__dirname, "src/themes")
           );
           const normalizedId = normalizePath(id);
           /**
@@ -138,6 +149,22 @@ export default defineConfig({
               .pop()
               ?.replace(".scss?inline", "");
             return `themes/${name}`;
+          }
+
+          if (
+            normalizedId.startsWith(themesPath + "/") &&
+            normalizedId.includes(".scss") &&
+            !normalizedId.includes("?inline")
+          ) {
+            const name = normalizedId.split("/").pop()?.replace(".scss", "");
+            return `themes/${name}`;
+          }
+
+          if (
+            normalizedId.startsWith(themesPath + "/") &&
+            normalizedId.includes("controller")
+          ) {
+            return "themes/controller";
           }
 
           if (normalizedId.startsWith(utilsPath)) {

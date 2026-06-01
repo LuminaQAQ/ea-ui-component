@@ -8,3 +8,12 @@ export { attribute, CustomElement, listen, query } from "@decorator/index";
 export { html } from "@utils/html";
 export { createBEM as createBem } from "@utils/bem";
 export { timeout } from "@utils/timeout";
+
+// ==================== 主题控制器 ====================
+export {
+  initTheme,
+  setTheme,
+  getCurrentTheme,
+  toggleTheme,
+} from "@themes/controller";
+export type { ThemeMode, ThemeValue } from "@themes/controller";

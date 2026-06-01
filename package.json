@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "dev:doc": "vitepress dev docs --host 0.0.0.0",
-    "build": "tsx scripts/index.ts && vite build && powershell -Command \"New-Item -ItemType Directory -Force -Path .\\docs\\.vitepress\\public\\dist\\assets | Out-Null; Copy-Item .\\dist\\assets\\icon.css .\\docs\\.vitepress\\public\\dist\\assets\\icon.css -Force | Out-Null\"",
+    "build": "tsx scripts/index.ts && vite build && powershell -Command \"New-Item -ItemType Directory -Force -Path .\\docs\\.vitepress\\public\\dist\\assets | Out-Null; New-Item -ItemType Directory -Force -Path .\\docs\\.vitepress\\public\\dist\\themes | Out-Null; Copy-Item .\\dist\\assets\\icon.css .\\docs\\.vitepress\\public\\dist\\assets\\icon.css -Force | Out-Null; Copy-Item .\\dist\\themes\\* .\\docs\\.vitepress\\public\\dist\\themes\\ -Force | Out-Null\"",
     "build:doc": "xcopy .\\docs\\index.css .\\docs\\.vitepress\\public\\index.css /y >nul && vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e /y >nul",
     "preview:doc": "set VITEPRESS_BASE=___EMPTY___&& xcopy .\\docs\\index.css .\\docs\\.vitepress\\public\\index.css /y >nul && vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e /y >nul && vitepress preview docs",
     "preview": "vite preview",
@@ -125,6 +125,18 @@
       "import": "./dist/assets/icon.css",
       "require": "./dist/assets/icon.css",
       "default": "./dist/assets/icon.css"
+    },
+    "./themes/source": {
+      "import": "./dist/themes/source.js"
+    },
+    "./themes/light": {
+      "import": "./dist/themes/light.js"
+    },
+    "./themes/dark": {
+      "import": "./dist/themes/dark.js"
+    },
+    "./theme": {
+      "import": "./dist/themes/controller.js"
     },
     "./ea-alert": {
       "import": "./dist/components/ea-alert.ts"
@@ -290,6 +302,9 @@
     },
     "./ea-text": {
       "import": "./dist/components/ea-text.ts"
+    },
+    "./ea-theme-toggle": {
+      "import": "./dist/components/ea-theme-toggle.ts"
     },
     "./ea-time-picker": {
       "import": "./dist/components/ea-time-picker.ts"

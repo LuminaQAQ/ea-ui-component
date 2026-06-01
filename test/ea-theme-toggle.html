@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ThemeToggle 主题切换</title>
+    <script>
+      (function () {
+        var s = localStorage.getItem("ea-theme");
+        var d = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (s === "dark" || (s !== "light" && d)) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+
+    <style>
+      hr {
+        margin: 2rem 0;
+        border: none;
+        border-top: 1px solid var(--grey-200, #e4e7ed);
+      }
+    </style>
+  </head>
+
+  <body>
+    <script
+      type="module"
+      src="../src/components/ea-theme-toggle/index.ts"
+    ></script>
+
+    <!-- -------- 基本用法 -------- -->
+    <!-- #region -->
+    <h2>基本用法</h2>
+    <div class="demo">
+      <ea-theme-toggle id="basicToggle"></ea-theme-toggle>
+      <span>当前主题：<strong id="basicStatus">auto</strong></span>
+    </div>
+
+    <script type="module">
+      document.addEventListener("ea-theme-change", e => {
+        const status = document.querySelector("#basicStatus");
+        if (status) status.textContent = e.detail.mode;
+      });
+    </script>
+    <hr />
+    <!-- #endregion -->
+    <!-- ------------------- -->
+
+    <!-- -------- 指定初始模式 -------- -->
+    <!-- #region -->
+    <h2>指定初始模式</h2>
+    <div class="demo">
+      <ea-theme-toggle mode="light"></ea-theme-toggle>
+      <ea-theme-toggle mode="dark"></ea-theme-toggle>
+      <ea-theme-toggle mode="auto"></ea-theme-toggle>
+    </div>
+    <hr />
+    <!-- #endregion -->
+    <!-- ------------------- -->
+
+    <!-- -------- 自定义颜色 -------- -->
+    <!-- #region -->
+    <h2>自定义颜色</h2>
+    <div class="demo">
+      <ea-theme-toggle
+        style="
+          --ea-theme-toggle-active-color: #8b5cf6;
+          --ea-theme-toggle-inactive-color: #fbbf24;
+        "
+      ></ea-theme-toggle>
+    </div>
+    <hr />
+    <!-- #endregion -->
+    <!-- ------------------- -->
+
+    <!-- -------- 多实例同步 -------- -->
+    <!-- #region -->
+    <h2>多实例同步</h2>
+    <div class="demo">
+      <ea-theme-toggle></ea-theme-toggle>
+      <ea-theme-toggle></ea-theme-toggle>
+      <ea-theme-toggle></ea-theme-toggle>
+    </div>
+    <hr />
+    <!-- #endregion -->
+    <!-- ------------------- -->
+  </body>
+</html>

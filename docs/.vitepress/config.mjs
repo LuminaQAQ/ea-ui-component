@@ -17,13 +17,27 @@ export default defineConfig({
       },
     ],
     ["link", { rel: "shortcut icon", href: `/ea-ui-component/favicon.ico` }],
+    [
+      "script",
+      {
+        src: `/ea-ui-component/dist/themes/source.js`,
+        type: "module",
+      },
+    ],
+    [
+      "script",
+      {
+        src: `/ea-ui-component/dist/themes/dark.js`,
+        type: "module",
+      },
+    ],
   ],
 
   cleanUrls: true,
   lastUpdated: true,
   // mpa: true,
 
-  appearance: false,
+  appearance: true,
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -56,6 +70,7 @@ export default defineConfig({
           { text: "Layout 布局", link: "/ea-layout" },
           { text: "Link 链接", link: "/ea-link" },
           { text: "Text 文本", link: "/ea-text" },
+          { text: "Theme Toggle 主题切换", link: "/ea-theme-toggle" },
           { text: "Scrollbar 滚动条", link: "/ea-scrollbar" },
           { text: "Space 间距", link: "/ea-space" },
           { text: "Splitter 分隔面板", link: "/ea-splitter" },

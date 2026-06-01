@@ -17,7 +17,7 @@ $ea-table-align-types: (left, center, right);
   --ea-table-body-font-size: var(--font-size-md);
 
   --ea-table-bg-color: var(--color-white);
-  --ea-table-stripe-bg-color: #fafafa;
+  --ea-table-stripe-bg-color: var(--grey-100);
   --ea-table-hover-bg-color: var(--grey-100);
   --ea-table-selected-bg-color: var(--blue-100);
   --ea-table-border-color: var(--grey-200);

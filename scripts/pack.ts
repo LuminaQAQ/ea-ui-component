@@ -33,10 +33,16 @@ export const handleImportModules = (): void => {
   });
 
   fs.appendFileSync(entryPath, `import './ea-icon/index.scss';\n`);
+  fs.appendFileSync(
+    entryPath,
+    `import { initTheme } from "@themes/controller";\n`
+  );
+  fs.appendFileSync(entryPath, `initTheme();\n`);
 };
 
 export const handlePackageExport = (): void => {
   const dir = path.resolve(process.cwd(), "src/components");
+  const themesDir = path.resolve(process.cwd(), "src/themes");
   const entryConfigs: EntryConfigs = {
     index: path.resolve(process.cwd(), "src/components/index.ts"),
   };
@@ -47,6 +53,18 @@ export const handlePackageExport = (): void => {
       import: "./dist/assets/icon.css",
       require: "./dist/assets/icon.css",
       default: "./dist/assets/icon.css",
+    },
+    "./themes/source": {
+      import: "./dist/themes/source.js",
+    },
+    "./themes/light": {
+      import: "./dist/themes/light.js",
+    },
+    "./themes/dark": {
+      import: "./dist/themes/dark.js",
+    },
+    "./theme": {
+      import: "./dist/themes/controller.js",
     },
   };
 
@@ -63,6 +81,11 @@ export const handlePackageExport = (): void => {
       };
     }
   });
+
+  entryConfigs["themes/source"] = path.resolve(themesDir, "source.entry.ts");
+  entryConfigs["themes/light"] = path.resolve(themesDir, "light.entry.ts");
+  entryConfigs["themes/dark"] = path.resolve(themesDir, "dark.entry.ts");
+  entryConfigs["theme"] = path.resolve(themesDir, "controller.ts");
 
   const pkgPath = path.resolve(process.cwd(), "package.json");
   const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
@@ -89,6 +112,15 @@ export const handleImportChildPages = (): void => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
+            <script>
+                (function() {
+                    var s = localStorage.getItem('ea-theme');
+                    var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (s === 'dark' || (s !== 'light' && d)) {
+                        document.documentElement.classList.add('dark');
+                    }
+                })();
+            </script>
         </head>
 
         <body>

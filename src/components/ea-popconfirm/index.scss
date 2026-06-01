@@ -1,7 +1,7 @@
 $name: ea-popconfirm;
 
 :host {
-  --#{$name}-title-icon-color: rgb(255, 153, 0);
+  --#{$name}-title-icon-color: var(--yellow-500);
   --#{$name}-title-color: var(--grey-900);
   --#{$name}-title-font-size: var(--font-size-md);
 

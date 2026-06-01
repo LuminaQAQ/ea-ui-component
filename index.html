@@ -6,6 +6,15 @@
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Document</title>
+            <script>
+                (function() {
+                    var s = localStorage.getItem('ea-theme');
+                    var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (s === 'dark' || (s !== 'light' && d)) {
+                        document.documentElement.classList.add('dark');
+                    }
+                })();
+            </script>
         </head>
 
         <body>
@@ -66,6 +75,7 @@
 <p><ea-button type="primary" href="./test/ea-tabs.html" link size="large"> ea-tabs.html</ea-button></p>
 <p><ea-button type="primary" href="./test/ea-tag.html" link size="large"> ea-tag.html</ea-button></p>
 <p><ea-button type="primary" href="./test/ea-text.html" link size="large"> ea-text.html</ea-button></p>
+<p><ea-button type="primary" href="./test/ea-theme-toggle.html" link size="large"> ea-theme-toggle.html</ea-button></p>
 <p><ea-button type="primary" href="./test/ea-time-picker.html" link size="large"> ea-time-picker.html</ea-button></p>
 <p><ea-button type="primary" href="./test/ea-timeline.html" link size="large"> ea-timeline.html</ea-button></p>
 <p><ea-button type="primary" href="./test/ea-tooltip.html" link size="large"> ea-tooltip.html</ea-button></p>
