@@ -26,6 +26,7 @@ import './ea-input/index';
 import './ea-input-number/index';
 import './ea-layout/index';
 import './ea-link/index';
+import './ea-loading/index';
 import './ea-menu/index';
 import './ea-message/index';
 import './ea-message-box/index';

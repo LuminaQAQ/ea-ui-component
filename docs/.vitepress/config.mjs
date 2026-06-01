@@ -135,6 +135,7 @@ export default defineConfig({
           { text: "Alert 提示", link: "/ea-alert" },
           { text: "Dialog 对话框", link: "/ea-dialog" },
           { text: "Drawer 抽屉", link: "/ea-drawer" },
+          { text: "Loading 加载", link: "/ea-loading" },
           { text: "Message 消息提示", link: "/ea-message" },
           { text: "Message Box 消息弹出框", link: "/ea-message-box" },
           { text: "Notification 通知", link: "/ea-notification" },

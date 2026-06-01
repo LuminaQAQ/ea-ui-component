@@ -1,0 +1,74 @@
+$name: ea-loading;
+
+:host {
+  --#{$name}-spinner-size: 2rem;
+  --#{$name}-spinner-color: var(--blue-500);
+  --#{$name}-background: hsla(0, 0%, 100%, 0.9);
+  --#{$name}-text-color: var(--blue-500);
+  --#{$name}-text-font-size: var(--font-size-md);
+  --#{$name}-text-margin-top: var(--spacing-sm);
+  --#{$name}-z-index: 3000;
+  --#{$name}-transition: var(--transition-fast);
+}
+
+:host {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+@include block($name) {
+  width: 100%;
+
+  @include element(mask) {
+    position: absolute;
+    inset: 0;
+
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--#{$name}-background);
+    z-index: 1;
+
+    transition: background-color var(--#{$name}-transition);
+  }
+
+  @include element(spinner) {
+    --ea-icon-size: var(--#{$name}-spinner-size);
+    --ea-icon-color: var(--#{$name}-spinner-color);
+  }
+
+  @include element(text) {
+    display: none;
+    margin-top: var(--#{$name}-text-margin-top);
+
+    font-size: var(--#{$name}-text-font-size);
+    color: var(--#{$name}-text-color);
+  }
+
+  @include element(content) {
+    position: relative;
+    width: 100%;
+  }
+
+  @include modifier(fullscreen) {
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    z-index: var(--#{$name}-z-index);
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+  }
+
+  @include state(loading) {
+    .#{$name}__mask {
+      display: flex;
+    }
+  }
+}

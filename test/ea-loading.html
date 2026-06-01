@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      .row { margin: 1rem 0; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+      hr { margin: 2rem 0; border: none; border-top: 1px solid var(--grey-200, #e4e7ed); }
+      .loading-container { position: relative; width: 100%; border: 1px solid var(--grey-200, #e4e7ed); border-radius: 4px; padding: 1rem; box-sizing: border-box; }
+    </style>
+  </head>
+
+  <body>
+    <script type="module" src="../src/components/ea-button/index.ts"></script>
+    <script type="module" src="../src/components/ea-descriptions/index.ts"></script>
+    <script type="module" src="../src/components/ea-descriptions-item/index.ts"></script>
+    <script type="module" src="../src/components/ea-tag/index.ts"></script>
+
+    <script type="module">
+      import "../src/components/ea-loading/index.ts";
+
+      // ------- 区域加载 -------
+      // #region
+      const loadingToggle = document.getElementById("loadingToggle");
+      const loadingTarget = document.getElementById("loadingTarget");
+      if (loadingToggle && loadingTarget) {
+        loadingToggle.addEventListener("click", () => {
+          loadingTarget.loading = !loadingTarget.loading;
+        });
+      }
+      // #endregion
+      // ------- end -------
+
+      // ------- 自定义加载图标 -------
+      // #region
+      const spinnerToggle = document.getElementById("spinnerToggle");
+      const spinnerTarget = document.getElementById("spinnerTarget");
+      if (spinnerToggle && spinnerTarget) {
+        spinnerToggle.addEventListener("click", () => {
+          spinnerTarget.loading = !spinnerTarget.loading;
+        });
+      }
+      // #endregion
+      // ------- end -------
+
+      // ------- 加载文本 -------
+      // #region
+      const textToggle = document.getElementById("textToggle");
+      const textTarget = document.getElementById("textTarget");
+      if (textToggle && textTarget) {
+        textToggle.addEventListener("click", () => {
+          textTarget.loading = !textTarget.loading;
+        });
+      }
+      // #endregion
+      // ------- end -------
+
+      // ------- 自定义背景色 -------
+      // #region
+      const bgToggle = document.getElementById("bgToggle");
+      const bgTarget = document.getElementById("bgTarget");
+      if (bgToggle && bgTarget) {
+        bgToggle.addEventListener("click", () => {
+          bgTarget.loading = !bgTarget.loading;
+        });
+      }
+      // #endregion
+      // ------- end -------
+
+      // ------- 自定义图标插槽 -------
+      // #region
+      const slotToggle = document.getElementById("slotToggle");
+      const slotTarget = document.getElementById("slotTarget");
+      if (slotToggle && slotTarget) {
+        slotToggle.addEventListener("click", () => {
+          slotTarget.loading = !slotTarget.loading;
+        });
+      }
+      // #endregion
+      // ------- end -------
+    </script>
+
+    <!-- #region 区域加载 -->
+    <h2>区域加载</h2>
+    <div class="demo">
+      <ea-button id="loadingToggle" plain>切换加载状态</ea-button>
+    </div>
+    <ea-loading id="loadingTarget" class="loading-container" loading>
+      <ea-descriptions caption="User Info">
+        <ea-descriptions-item label="Username">Lilyiro</ea-descriptions-item>
+        <ea-descriptions-item label="Essence">Lord of the Wild</ea-descriptions-item>
+        <ea-descriptions-item label="Place">Lunacrest Continent</ea-descriptions-item>
+        <ea-descriptions-item label="Traits">
+          <ea-tag size="small" variant="warning" style="margin-right: 1rem">Thunderous Veins</ea-tag>
+          <ea-tag size="small" variant="info">Daredevil</ea-tag>
+        </ea-descriptions-item>
+        <ea-descriptions-item label="Description">
+          She was once an elf lord, defending the border from goblin invaders. She was then a goblin warrior, protecting her clan from being slaughtered by elves.
+        </ea-descriptions-item>
+      </ea-descriptions>
+    </ea-loading>
+    <hr />
+    <!-- #endregion -->
+
+    <!-- #region 自定义加载图标 -->
+    <h2>自定义加载图标</h2>
+    <div class="demo">
+      <ea-button id="spinnerToggle" plain>切换加载状态</ea-button>
+    </div>
+    <ea-loading id="spinnerTarget" class="loading-container" loading spinner="circle-notch" spinner-size="32">
+      <ea-descriptions caption="User Info">
+        <ea-descriptions-item label="Username">Lilyiro</ea-descriptions-item>
+        <ea-descriptions-item label="Essence">Lord of the Wild</ea-descriptions-item>
+        <ea-descriptions-item label="Place">Lunacrest Continent</ea-descriptions-item>
+        <ea-descriptions-item label="Traits">
+          <ea-tag size="small" variant="warning" style="margin-right: 1rem">Thunderous Veins</ea-tag>
+          <ea-tag size="small" variant="info">Daredevil</ea-tag>
+        </ea-descriptions-item>
+        <ea-descriptions-item label="Description">
+          She was once an elf lord, defending the border from goblin invaders. She was then a goblin warrior, protecting her clan from being slaughtered by elves.
+        </ea-descriptions-item>
+      </ea-descriptions>
+    </ea-loading>
+    <hr />
+    <!-- #endregion -->
+
+    <!-- #region 加载文本 -->
+    <h2>加载文本</h2>
+    <div class="demo">
+      <ea-button id="textToggle" plain>切换加载状态</ea-button>
+    </div>
+    <ea-loading id="textTarget" class="loading-container" loading text="正在加载中...">
+      <ea-descriptions caption="User Info">
+        <ea-descriptions-item label="Username">Lilyiro</ea-descriptions-item>
+        <ea-descriptions-item label="Essence">Lord of the Wild</ea-descriptions-item>
+        <ea-descriptions-item label="Place">Lunacrest Continent</ea-descriptions-item>
+        <ea-descriptions-item label="Traits">
+          <ea-tag size="small" variant="warning" style="margin-right: 1rem">Thunderous Veins</ea-tag>
+          <ea-tag size="small" variant="info">Daredevil</ea-tag>
+        </ea-descriptions-item>
+        <ea-descriptions-item label="Description">
+          She was once an elf lord, defending the border from goblin invaders. She was then a goblin warrior, protecting her clan from being slaughtered by elves.
+        </ea-descriptions-item>
+      </ea-descriptions>
+    </ea-loading>
+    <hr />
+    <!-- #endregion -->
+
+    <!-- #region 自定义背景色 -->
+    <h2>自定义背景色</h2>
+    <div class="demo">
+      <ea-button id="bgToggle" plain>切换加载状态</ea-button>
+    </div>
+    <ea-loading id="bgTarget" class="loading-container" loading background="hsla(220, 4%, 58%, 0.3)">
+      <ea-descriptions caption="User Info">
+        <ea-descriptions-item label="Username">Lilyiro</ea-descriptions-item>
+        <ea-descriptions-item label="Essence">Lord of the Wild</ea-descriptions-item>
+        <ea-descriptions-item label="Place">Lunacrest Continent</ea-descriptions-item>
+        <ea-descriptions-item label="Traits">
+          <ea-tag size="small" variant="warning" style="margin-right: 1rem">Thunderous Veins</ea-tag>
+          <ea-tag size="small" variant="info">Daredevil</ea-tag>
+        </ea-descriptions-item>
+        <ea-descriptions-item label="Description">
+          She was once an elf lord, defending the border from goblin invaders. She was then a goblin warrior, protecting her clan from being slaughtered by elves.
+        </ea-descriptions-item>
+      </ea-descriptions>
+    </ea-loading>
+    <hr />
+    <!-- #endregion -->
+
+    <!-- #region 全屏加载 -->
+    <h2>全屏加载</h2>
+    <div class="demo">
+      <ea-button
+        plain
+        onclick="
+          const loading = window.$loading({});
+          setTimeout(() => loading.close(), 2000);
+        "
+      >
+        显示全屏加载（2秒后关闭）
+      </ea-button>
+    </div>
+    <hr />
+    <!-- #endregion -->
+
+    <!-- #region 锁定滚动 -->
+    <h2>锁定滚动</h2>
+    <div class="demo">
+      <ea-button
+        plain
+        onclick="
+          const loading = window.$loading({ lock: true });
+          setTimeout(() => loading.close(), 2000);
+        "
+      >
+        显示锁定加载（2秒后关闭）
+      </ea-button>
+    </div>
+    <hr />
+    <!-- #endregion -->
+
+    <!-- #region 服务 -->
+    <h2>服务</h2>
+    <div class="demo">
+      <ea-button
+        plain
+        onclick="
+          const loading = window.$loading({ lock: true, text: 'Loading', spinner: 'circle-notch', background: 'rgba(0, 0, 0, 0.7)' });
+          setTimeout(() => loading.close(), 2000);
+        "
+      >
+        显示自定义加载（2秒后关闭）
+      </ea-button>
+    </div>
+    <hr />
+    <!-- #endregion -->
+
+    <!-- #region 自定义图标插槽 -->
+    <h2>自定义图标插槽</h2>
+    <div class="demo">
+      <ea-button id="slotToggle" plain>切换加载状态</ea-button>
+    </div>
+    <ea-loading id="slotTarget" class="loading-container" loading>
+      <div slot="spinner" style="font-size: 24px; color: #409eff;">⏳</div>
+      <ea-descriptions caption="User Info">
+        <ea-descriptions-item label="Username">Lilyiro</ea-descriptions-item>
+        <ea-descriptions-item label="Essence">Lord of the Wild</ea-descriptions-item>
+        <ea-descriptions-item label="Place">Lunacrest Continent</ea-descriptions-item>
+        <ea-descriptions-item label="Traits">
+          <ea-tag size="small" variant="warning" style="margin-right: 1rem">Thunderous Veins</ea-tag>
+          <ea-tag size="small" variant="info">Daredevil</ea-tag>
+        </ea-descriptions-item>
+        <ea-descriptions-item label="Description">
+          She was once an elf lord, defending the border from goblin invaders. She was then a goblin warrior, protecting her clan from being slaughtered by elves.
+        </ea-descriptions-item>
+      </ea-descriptions>
+    </ea-loading>
+    <hr />
+    <!-- #endregion -->
+  </body>
+</html>
