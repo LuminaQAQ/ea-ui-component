@@ -1,3 +1,8 @@
+---
+title: 使用 - Easy UI
+description: 快速上手 Easy UI 组件库，了解如何在 HTML、Vue、React 等项目中引入和使用组件。
+---
+
 # 使用
 
 ## 快速开始

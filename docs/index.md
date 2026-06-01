@@ -1,6 +1,8 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
+
+title: Easy UI - 基于 WebComponent 的 UI 组件库
+description: Easy UI 是一个轻量、易用、跨框架的现代化 Web Components 组件库，原生支持 Vue、React、Angular 等主流前端框架，提供 50+ 高质量组件。
 
 hero:
   name: "Easy UI"

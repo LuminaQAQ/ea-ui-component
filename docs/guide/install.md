@@ -1,5 +1,7 @@
 ---
 outline: deep
+title: 安装 - Easy UI
+description: 了解如何通过 npm 或 CDN 安装 Easy UI 组件库，快速集成到您的项目中。
 ---
 
 # 安装

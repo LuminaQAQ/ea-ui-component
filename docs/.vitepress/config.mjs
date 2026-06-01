@@ -2,42 +2,96 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 
+const SITE_URL = "https://luminaqaq.github.io";
+const SITE_BASE = "/ea-ui-component/";
+const SITE_FULL_URL = `${SITE_URL}${SITE_BASE}`;
+
 export default defineConfig({
-  base: "/ea-ui-component/",
+  base: SITE_BASE,
   title: "Easy UI",
   description: "基于 WebComponent 的 UI 组件库",
 
+  sitemap: {
+    hostname: SITE_FULL_URL,
+    lastmodDateOnly: true,
+  },
+
   head: [
-    ["link", { rel: "stylesheet", href: `/ea-ui-component/index.css` }],
+    ["link", { rel: "stylesheet", href: `${SITE_BASE}index.css` }],
     [
       "link",
       {
         rel: "stylesheet",
-        href: `/ea-ui-component/dist/assets/icon.css`,
+        href: `${SITE_BASE}dist/assets/icon.css`,
       },
     ],
-    ["link", { rel: "shortcut icon", href: `/ea-ui-component/favicon.ico` }],
+    ["link", { rel: "shortcut icon", href: `${SITE_BASE}favicon.ico` }],
     [
       "script",
       {
-        src: `/ea-ui-component/dist/themes/source.js`,
+        src: `${SITE_BASE}dist/themes/source.js`,
         type: "module",
       },
     ],
     [
       "script",
       {
-        src: `/ea-ui-component/dist/themes/dark.js`,
+        src: `${SITE_BASE}dist/themes/dark.js`,
         type: "module",
       },
     ],
+    [
+      "meta",
+      {
+        name: "keywords",
+        content:
+          "Easy UI,Web Components,UI组件库,跨框架,Shadow DOM,Custom Elements,Vue,React,Angular,前端组件",
+      },
+    ],
+    ["meta", { property: "og:type", content: "website" }],
+    ["meta", { property: "og:site_name", content: "Easy UI" }],
+    ["meta", { property: "og:locale", content: "zh-CN" }],
+    ["meta", { property: "og:image", content: `${SITE_FULL_URL}logo.png` }],
+    ["meta", { property: "og:url", content: SITE_FULL_URL }],
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+    ["meta", { name: "twitter:image", content: `${SITE_FULL_URL}logo.png` }],
   ],
 
   cleanUrls: true,
   lastUpdated: true,
-  // mpa: true,
 
   appearance: true,
+
+  transformHead(context) {
+    const page = context.page;
+    const title = context.title;
+    const description = context.description || "基于 WebComponent 的 UI 组件库";
+    const pageUrl = `${SITE_FULL_URL}${page.replace(/\.md$/, "").replace(/\/index$/, "")}`;
+
+    /** @type {import('vitepress').HeadConfig[]} */
+    const head = [
+      ["link", { rel: "canonical", href: pageUrl }],
+      [
+        "meta",
+        {
+          property: "og:title",
+          content: title ? `${title} | Easy UI` : "Easy UI",
+        },
+      ],
+      ["meta", { property: "og:description", content: description }],
+      ["meta", { property: "og:url", content: pageUrl }],
+      [
+        "meta",
+        {
+          name: "twitter:title",
+          content: title ? `${title} | Easy UI` : "Easy UI",
+        },
+      ],
+      ["meta", { name: "twitter:description", content: description }],
+    ];
+
+    return head;
+  },
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
