@@ -227,7 +227,7 @@ describe("EaBreadcrumb Component", () => {
       expect(contentEl.tagName.toLowerCase()).toBe("a");
 
       item.removeAttribute("href");
-      await waitForRender(0);
+      await waitForRender();
 
       contentEl = item.shadowRoot.querySelector(".ea-breadcrumb-item__content");
       expect(contentEl.tagName.toLowerCase()).toBe("span");

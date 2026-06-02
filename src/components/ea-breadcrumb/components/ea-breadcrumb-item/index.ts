@@ -36,11 +36,8 @@ export class EaBreadcrumbItem extends EaBase {
   @attribute({
     type: String,
     default: "",
-    observer(this: EaBreadcrumbItem, newVal: string) {
+    observer(this: EaBreadcrumbItem) {
       this._renderContent();
-      if (this._content && newVal) {
-        (this._content as HTMLAnchorElement).href = newVal;
-      }
     },
   })
   href: string = "";
