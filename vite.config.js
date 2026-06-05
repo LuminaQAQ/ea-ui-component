@@ -21,14 +21,15 @@ export default defineConfig({
     },
   },
   plugins: [
-    // visualizer({
-    //   open: true,
-    //   gzipSize: true,
-    //   brotliSize: true,
-    //   filename: "dist/stats.html",
-    // }),
+    process.env.REPORT &&
+      visualizer({
+        open: true,
+        gzipSize: true,
+        brotliSize: true,
+        filename: "dist/stats.html",
+      }),
     dtsPlugin({ outDir: "dist/types" }),
-  ],
+  ].filter(Boolean),
   build: {
     lib: {
       entry: entryConfigs,

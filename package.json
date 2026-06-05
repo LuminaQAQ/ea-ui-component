@@ -13,18 +13,18 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "dev:doc": "vitepress dev docs --host 0.0.0.0",
-    "build": "tsx scripts/index.ts && vite build && powershell -Command \"New-Item -ItemType Directory -Force -Path .\\docs\\.vitepress\\public\\dist\\assets | Out-Null; New-Item -ItemType Directory -Force -Path .\\docs\\.vitepress\\public\\dist\\themes | Out-Null; Copy-Item .\\dist\\assets\\icon.css .\\docs\\.vitepress\\public\\dist\\assets\\icon.css -Force | Out-Null; Copy-Item .\\dist\\themes\\* .\\docs\\.vitepress\\public\\dist\\themes\\ -Force | Out-Null\"",
-    "build:doc": "xcopy .\\docs\\index.css .\\docs\\.vitepress\\public\\index.css /y >nul && vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e /y >nul",
-    "preview:doc": "set VITEPRESS_BASE=___EMPTY___&& xcopy .\\docs\\index.css .\\docs\\.vitepress\\public\\index.css /y >nul && vitepress build docs && xcopy .\\docs\\.vitepress\\public .\\docs\\.vitepress\\dist /s /e /y >nul && vitepress preview docs",
+    "build": "tsx scripts/index.ts && vite build && tsx scripts/copy-assets.ts",
+    "build:doc": "tsx scripts/copy-doc-assets.ts --index-css && vitepress build docs && tsx scripts/copy-doc-assets.ts",
+    "preview:doc": "cross-env VITEPRESS_BASE=___EMPTY___ && tsx scripts/copy-doc-assets.ts --index-css && vitepress build docs && tsx scripts/copy-doc-assets.ts && vitepress preview docs",
     "preview": "vite preview",
     "deploy": "gh-pages -d docs/.vitepress/dist",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint . --ext .js",
-    "lint:fix": "eslint . --ext .js --fix",
+    "lint": "eslint . --ext .js,.mjs,.cjs,.ts",
+    "lint:fix": "eslint . --ext .js,.mjs,.cjs,.ts --fix",
     "format": "prettier --write \"**/*.{js,json,scss,css,md}\"",
-    "prepare": "husky install",
+    "prepare": "husky",
     "commit": "git add . && git-cz",
     "patch": "npm version patch && git push --follow-tags",
     "minor": "npm version minor && git push --follow-tags",
@@ -82,7 +82,10 @@
     "@types/node": "^24.0.14",
     "@vitest/coverage-v8": "^4.1.0",
     "axe-core": "^4.12.0",
+    "@typescript-eslint/eslint-plugin": "^8.33.0",
+    "@typescript-eslint/parser": "^8.33.0",
     "commitizen": "^4.3.1",
+    "cross-env": "^10.1.0",
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.28.0",
     "eslint": "^9.39.2",
@@ -94,11 +97,11 @@
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "jsdom": "^29.0.1",
+    "lint-staged": "^16.1.2",
     "nanoid": "^5.0.7",
     "prettier": "^3.7.4",
     "rollup-plugin-visualizer": "^6.0.3",
     "sass": "^1.77.2",
-    "sass-loader": "^16.0.5",
     "tsx": "^4.22.3",
     "vite": "^5.4.1",
     "vite-plugin-dts": "^4.5.4",
@@ -114,6 +117,17 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs}": [
+      "eslint --fix"
+    ],
+    "*.ts": [
+      "eslint --fix"
+    ],
+    "*.{json,scss,css,md}": [
+      "prettier --write"
+    ]
   },
   "exports": {
     ".": {
