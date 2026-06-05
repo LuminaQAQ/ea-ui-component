@@ -73,6 +73,9 @@ export class EaTimePicker extends EaFormAssociatedBase {
   @query(`${bem.ce("dropdown-inner")}--second`)
   private _secondWrap!: HTMLElement;
 
+  private static _instanceCount: number = 0;
+  private readonly _uniqueId: number = EaTimePicker._instanceCount++;
+
   private _states = {
     hour: 0,
     minute: 0,
@@ -132,10 +135,18 @@ export class EaTimePicker extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaTimePicker, newVal: boolean) {
       if (this._input) {
         this._input.toggleAttribute("disabled", newVal);
       }
+      if (newVal) {
+        this._closeDropdown();
+      }
+      this._updateDropdownInert();
       this.updateContainerClasslist();
     },
   })
@@ -243,7 +254,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     for (let i = start; i <= end; i++) {
       const formattedValue = this._formatNumber(i);
       items.push(
-        `<li class="${bem.e("dropdown-item")}" data-value="${i}" part="dropdown-item">${formattedValue}</li>`
+        `<li class="${bem.e("dropdown-item")}" data-value="${i}" part="dropdown-item" role="option" tabindex="-1" aria-selected="false">${formattedValue}</li>`
       );
     }
 
@@ -275,6 +286,39 @@ export class EaTimePicker extends EaFormAssociatedBase {
     }
   };
 
+  /** 设置 ARIA 属性，遵循 W3C combobox 模式 */
+  private _setupAria = (): void => {
+    this._input.setAttribute("role", "combobox");
+    this._input.setAttribute("aria-expanded", "false");
+    this._input.setAttribute("aria-haspopup", "listbox");
+
+    const dropdown = this._container.querySelector(
+      `.${bem.e("dropdown")}`
+    ) as HTMLElement | null;
+    if (dropdown) {
+      const listboxId = `ea-time-picker-${this._uniqueId}-listbox`;
+      dropdown.id = listboxId;
+      dropdown.setAttribute("role", "listbox");
+      this._input.setAttribute("aria-controls", listboxId);
+    }
+  };
+
+  /** 更新 aria-expanded 属性 */
+  private _updateAriaExpanded = (): void => {
+    const isOpen = this._container.classList.contains("is-open");
+    this._input.setAttribute("aria-expanded", String(isOpen));
+  };
+
+  /** 根据 disabled 状态设置下拉框的 inert 属性 */
+  private _updateDropdownInert = (): void => {
+    const dropdown = this._container.querySelector(
+      `.${bem.e("dropdown")}`
+    ) as HTMLElement | null;
+    if (dropdown) {
+      dropdown.inert = this.disabled;
+    }
+  };
+
   /** 更新所有时间列表的选中状态 */
   private _updateSelectionState = (): void => {
     this._updateWrapSelection(this._hourWrap, this._states.hour);
@@ -291,7 +335,9 @@ export class EaTimePicker extends EaFormAssociatedBase {
     const items = wrap.querySelectorAll("li");
     items.forEach(item => {
       const itemValue = parseInt((item as HTMLElement).dataset.value!, 10);
-      item.classList.toggle("is-active", itemValue === value);
+      const isActive = itemValue === value;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-selected", String(isActive));
     });
   };
 
@@ -369,6 +415,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     const wasOpen = this._container.classList.contains("is-open");
     this._container.classList.add("is-open");
     this.updateContainerClasslist();
+    this._updateAriaExpanded();
 
     if (!wasOpen) {
       this.dispatchEvent(new EaTimePickerVisibleChangeEvent({ visible: true }));
@@ -426,6 +473,7 @@ export class EaTimePicker extends EaFormAssociatedBase {
     const wasOpen = this._container.classList.contains("is-open");
     this._container.classList.remove("is-open");
     this.updateContainerClasslist();
+    this._updateAriaExpanded();
 
     if (wasOpen) {
       this.dispatchEvent(
@@ -587,6 +635,23 @@ export class EaTimePicker extends EaFormAssociatedBase {
     this.dispatchEvent(new EaTimePickerBlurEvent());
   }
 
+  @listen("focusout")
+  private _handleFocusOut(): void {
+    requestAnimationFrame(() => {
+      if (!this.contains(document.activeElement)) {
+        this._closeDropdown();
+      }
+    });
+  }
+
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent): void {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      this._closeDropdown();
+    }
+  }
+
   @listen("click", "window")
   private _handleWindowClick(e: MouseEvent): void {
     const path = e.composedPath();
@@ -670,6 +735,8 @@ export class EaTimePicker extends EaFormAssociatedBase {
   $mount(): void {
     this.updateContainerClasslist();
     this._applyLimitRange();
+    this._setupAria();
+    this._updateDropdownInert();
 
     if (this.hasAttribute("value")) {
       this._parseValue(this.value);

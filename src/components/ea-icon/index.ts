@@ -169,8 +169,10 @@ export class EaIcon extends EaBase {
       this.spin
     );
 
+    const isDecorative = !this.getAttribute("aria-label");
+
     return `
-      <i class="${iconClass}" part="container">
+      <i class="${iconClass}" part="container" aria-hidden="${isDecorative}">
         <slot></slot>
       </i>
     `;

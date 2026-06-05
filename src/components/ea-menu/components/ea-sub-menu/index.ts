@@ -38,6 +38,10 @@ const bem = createBEM(TAG_NAME);
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSubMenu extends EaBase {
+  private static _instanceCount: number = 0;
+
+  private readonly _uniqueId: number = EaSubMenu._instanceCount++;
+
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -55,12 +59,18 @@ export class EaSubMenu extends EaBase {
 
   private _dropdownAbortController?: AbortController;
   private _modeAbortController?: AbortController;
+  private _focusoutRafId: number | null = null;
 
   @property({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-expanded",
+      target: bem.ce("title"),
+    },
     observer(this: EaSubMenu) {
       this.updateContainerClasslist();
+      this._updateContentInert();
     },
   })
   open: boolean = false;
@@ -74,6 +84,10 @@ export class EaSubMenu extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaSubMenu) {
       this.updateContainerClasslist();
     },
@@ -132,15 +146,210 @@ export class EaSubMenu extends EaBase {
   html(): string {
     return `
       <div class="${bem()}" part="container">
-        <header class="${bem.e("title")}" part="title">
+        <header class="${bem.e("title")}" part="title" tabindex="-1" role="menuitem">
           <slot name="title"></slot>
           <ea-icon name="angle-down" class="${bem.e("arrow")}" part="arrow"></ea-icon>
         </header>
-        <ul class="${bem.e("content")}" part="content">
+        <ul class="${bem.e("content")}" part="content" role="menu">
           <slot></slot>
         </ul>
       </div>
     `;
+  }
+
+  /** 处理标题元素的键盘事件 */
+  @listen("keydown", bem.ce("title"))
+  private _handleTitleKeydown(e: KeyboardEvent) {
+    if (this.disabled) return;
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!this.open) {
+        this.open = true;
+        if (this.mode === "vertical") {
+          this._animateContentOpen();
+        }
+      } else {
+        this.open = false;
+      }
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!this.open) {
+        this.open = true;
+        if (this.mode === "vertical") {
+          this._animateContentOpen();
+        }
+      }
+      this._focusFirstItem();
+      return;
+    }
+
+    if (e.key === "ArrowRight" && this.mode === "horizontal") {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!this.open) {
+        this.open = true;
+      }
+      this._focusFirstItem();
+      return;
+    }
+
+    if (e.key === "Escape" && this.open) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.open = false;
+      return;
+    }
+  }
+
+  /** 垂直模式展开内容区域的高度动画 */
+  private _animateContentOpen(): void {
+    if (this.mode !== "vertical" || !this._contentEl) return;
+
+    this._contentEl.style.height = `${this._contentEl.scrollHeight}px`;
+    this._contentEl.addEventListener(
+      "transitionend",
+      () => {
+        this._contentEl.style.height = "100%";
+      },
+      { once: true }
+    );
+  }
+
+  /**
+   * 处理子菜单内菜单项的键盘事件
+   * 监听在宿主元素上，因为 slotted 元素的事件通过 Light DOM 冒泡
+   */
+  @listen("keydown")
+  private _handleContentKeydown(e: KeyboardEvent) {
+    const target = e.target as HTMLElement;
+    const menuItem = target.closest?.("ea-menu-item") as HTMLElement | null;
+    if (!menuItem) return;
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+      this.open = false;
+      this._titleEl.focus();
+      return;
+    }
+
+    if (e.key === "ArrowLeft" && this.mode === "vertical" && this.open) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.open = false;
+      this._titleEl.focus();
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      e.stopPropagation();
+      this._focusPrevItem(menuItem);
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      e.stopPropagation();
+      this._focusNextItem(menuItem);
+      return;
+    }
+
+    if (e.key === "ArrowLeft" && this.mode === "horizontal") {
+      e.preventDefault();
+      e.stopPropagation();
+      this._focusPrevItem(menuItem);
+      return;
+    }
+
+    if (e.key === "ArrowRight" && this.mode === "horizontal") {
+      e.preventDefault();
+      e.stopPropagation();
+      this._focusNextItem(menuItem);
+      return;
+    }
+
+    if (e.key === "Home") {
+      e.preventDefault();
+      e.stopPropagation();
+      const items = this._getSubMenuItems();
+      if (items.length > 0) items[0].focus();
+      return;
+    }
+
+    if (e.key === "End") {
+      e.preventDefault();
+      e.stopPropagation();
+      const items = this._getSubMenuItems();
+      if (items.length > 0) items[items.length - 1].focus();
+      return;
+    }
+  }
+
+  /** 聚焦子菜单中的第一个菜单项 */
+  private _focusFirstItem(): void {
+    const items = this._getSubMenuItems();
+    if (items.length === 0) return;
+    queueMicrotask(() => items[0].focus());
+  }
+
+  /** 聚焦子菜单中的下一个菜单项 */
+  private _focusNextItem(currentItem: HTMLElement): void {
+    const items = this._getSubMenuItems();
+    if (items.length === 0) return;
+
+    const currentIndex = items.indexOf(currentItem);
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < items.length) items[nextIndex].focus();
+  }
+
+  /** 聚焦子菜单中的上一个菜单项 */
+  private _focusPrevItem(currentItem: HTMLElement): void {
+    const items = this._getSubMenuItems();
+    if (items.length === 0) return;
+
+    const currentIndex = items.indexOf(currentItem);
+    if (currentIndex > 0) {
+      items[currentIndex - 1].focus();
+    } else {
+      this._titleEl.focus();
+    }
+  }
+
+  /** 获取子菜单内所有菜单项 */
+  private _getSubMenuItems(): HTMLElement[] {
+    return [...this.querySelectorAll("ea-menu-item:not([disabled])")] as HTMLElement[];
+  }
+
+  /** 焦点离开子菜单时自动关闭 */
+  @listen("focusout")
+  private _handleFocusout() {
+    if (!this.open) return;
+    this._focusoutRafId = requestAnimationFrame(() => {
+      this._focusoutRafId = null;
+      if (!this.open) return;
+      const activeEl = document.activeElement;
+      if (activeEl && (this === activeEl || this.contains(activeEl))) return;
+      this.open = false;
+    });
+  }
+
+  /** 焦点进入子菜单时取消待执行的关闭检查，并将焦点委托到 title 元素 */
+  @listen("focusin")
+  private _handleFocusin(e: FocusEvent) {
+    if (this._focusoutRafId !== null) {
+      cancelAnimationFrame(this._focusoutRafId);
+      this._focusoutRafId = null;
+    }
+    if (e.target === this && this._titleEl) {
+      this._titleEl.focus();
+    }
   }
 
   @listen("click")
@@ -172,6 +381,27 @@ export class EaSubMenu extends EaBase {
     if (isChild) isChild.setAttribute("active", "true");
 
     target.setAttribute("active", "true");
+  }
+
+  /** 设置折叠内容的 inert 状态：折叠时阻止焦点进入 */
+  private _updateContentInert(): void {
+    if (!this._contentEl) return;
+    if (this.open) {
+      this._contentEl.removeAttribute("inert");
+    } else {
+      this._contentEl.setAttribute("inert", "");
+    }
+  }
+
+  /** 设置 ARIA 关联属性 */
+  private _setupAria(): void {
+    const id = `ea-sub-menu-${this._uniqueId}`;
+    this._titleEl.setAttribute("id", `${id}-title`);
+    this._titleEl.setAttribute("aria-controls", `${id}-content`);
+    this._titleEl.setAttribute("aria-haspopup", "menu");
+    this._titleEl.setAttribute("aria-expanded", String(this.open));
+    this._contentEl.setAttribute("id", `${id}-content`);
+    this._contentEl.setAttribute("aria-labelledby", `${id}-title`);
   }
 
   /**
@@ -242,8 +472,11 @@ export class EaSubMenu extends EaBase {
   };
 
   $mount(): void {
+    this.tabIndex = 0;
     this._handleModeChange();
     this.updateContainerClasslist();
+    this._updateContentInert();
+    this._setupAria();
   }
 
   $beforeUnmount(): void {

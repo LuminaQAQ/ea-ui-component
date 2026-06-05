@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 global.ResizeObserver = class ResizeObserver {
   observe() {}
@@ -316,7 +317,7 @@ describe("EaSegmented Component", () => {
       expect(items.length).toBe(2);
     });
 
-    it("label 元素应该有 aria-label 属性", async () => {
+    it("label 元素应该显示选项文本", async () => {
       const segmented = createSegmented({ name: "week" }, ["Mon", "Tue"]);
       container.appendChild(segmented);
       await waitForRender();
@@ -324,8 +325,8 @@ describe("EaSegmented Component", () => {
       const labels = segmented.shadowRoot.querySelectorAll(
         ".ea-segmented__label"
       );
-      expect(labels[0].getAttribute("aria-label")).toBe("Mon");
-      expect(labels[1].getAttribute("aria-label")).toBe("Tue");
+      expect(labels[0].textContent).toBe("Mon");
+      expect(labels[1].textContent).toBe("Tue");
     });
   });
 
@@ -1328,6 +1329,122 @@ describe("EaSegmented Component", () => {
     it("创建的元素应该是 EaCustomElement 的子类实例", () => {
       const segmented = document.createElement("ea-segmented");
       expect(segmented.constructor.name).toBe("EaCustomElement");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-segmented");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("宿主元素应该有 role='radiogroup'", async () => {
+        const el = createSegmented({ name: "week" }, ["Mon", "Tue"]);
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("radiogroup");
+      });
+
+      it("选项应该有 role='radio'", async () => {
+        const el = createSegmented({ name: "week" }, ["Mon", "Tue"]);
+        container.appendChild(el);
+        await waitForRender();
+        const items = el.shadowRoot.querySelectorAll(".ea-segmented__item");
+        items.forEach(item => {
+          expect(item.getAttribute("role")).toBe("radio");
+        });
+      });
+
+      it("选中的选项应该有 aria-checked='true'", async () => {
+        const el = createSegmented({ name: "week", value: "Mon" }, [
+          "Mon",
+          "Tue",
+        ]);
+        container.appendChild(el);
+        await waitForRender();
+        const items = el.shadowRoot.querySelectorAll(".ea-segmented__item");
+        expect(items[0].getAttribute("aria-checked")).toBe("true");
+        expect(items[1].getAttribute("aria-checked")).toBe("false");
+      });
+
+      it("disabled 时宿主元素应该有 aria-disabled='true'", async () => {
+        const el = createSegmented({ name: "week", disabled: true }, [
+          "Mon",
+          "Tue",
+        ]);
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("未 disabled 时宿主元素应该有 aria-disabled='false'", async () => {
+        const el = createSegmented({ name: "week" }, ["Mon", "Tue"]);
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("按下 ArrowRight 应该切换到下一个选项", async () => {
+        const el = createSegmented({ name: "week", value: "Mon" }, [
+          "Mon",
+          "Tue",
+          "Wed",
+        ]);
+        container.appendChild(el);
+        await waitForRender();
+        el.focus();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+        await waitForRender();
+        expect(el.value).toBe("Tue");
+      });
+
+      it("按下 ArrowLeft 应该切换到上一个选项", async () => {
+        const el = createSegmented({ name: "week", value: "Tue" }, [
+          "Mon",
+          "Tue",
+          "Wed",
+        ]);
+        container.appendChild(el);
+        await waitForRender();
+        el.focus();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
+        await waitForRender();
+        expect(el.value).toBe("Mon");
+      });
+
+      it("在最后一个选项按下 ArrowRight 应该循环到第一个选项", async () => {
+        const el = createSegmented({ name: "week", value: "Wed" }, [
+          "Mon",
+          "Tue",
+          "Wed",
+        ]);
+        container.appendChild(el);
+        await waitForRender();
+        el.focus();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+        await waitForRender();
+        expect(el.value).toBe("Mon");
+      });
+
+      it("在第一个选项按下 ArrowLeft 应该循环到最后一个选项", async () => {
+        const el = createSegmented({ name: "week", value: "Mon" }, [
+          "Mon",
+          "Tue",
+          "Wed",
+        ]);
+        container.appendChild(el);
+        await waitForRender();
+        el.focus();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
+        await waitForRender();
+        expect(el.value).toBe("Wed");
+      });
     });
   });
 });

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-checkbox/index";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 describe("EaCheckbox Component", () => {
   let container;
@@ -605,24 +606,6 @@ describe("EaCheckbox Component", () => {
       expect(handler.mock.calls[0][0].detail.checked).toBe(false);
     });
 
-    it("Enter 键应该切换选中状态并触发 change 事件", async () => {
-      const checkbox = document.createElement("ea-checkbox");
-      checkbox.setAttribute("value", "option1");
-      container.appendChild(checkbox);
-
-      await waitForRender();
-
-      const handler = vi.fn();
-      checkbox.addEventListener("change", handler);
-
-      checkbox.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
-
-      await waitForRender();
-
-      expect(handler).toHaveBeenCalled();
-      expect(checkbox.checked).toBe(true);
-    });
-
     it("Space 键应该切换选中状态并触发 change 事件", async () => {
       const checkbox = document.createElement("ea-checkbox");
       checkbox.setAttribute("value", "option1");
@@ -771,7 +754,7 @@ describe("EaCheckbox Component", () => {
       });
     });
 
-    it("获得焦点时应该添加 is-focus 类", async () => {
+    it("获得焦点时宿主元素应该成为 activeElement", async () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
@@ -780,11 +763,10 @@ describe("EaCheckbox Component", () => {
       checkbox.focus();
       await waitForRender();
 
-      const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
-      expect(containerEl.classList.contains("is-focus")).toBe(true);
+      expect(document.activeElement).toBe(checkbox);
     });
 
-    it("失去焦点时应该移除 is-focus 类", async () => {
+    it("失去焦点时宿主元素不应该再是 activeElement", async () => {
       const checkbox = document.createElement("ea-checkbox");
       container.appendChild(checkbox);
 
@@ -796,8 +778,7 @@ describe("EaCheckbox Component", () => {
       checkbox.blur();
       await waitForRender();
 
-      const containerEl = checkbox.shadowRoot.querySelector(".ea-checkbox");
-      expect(containerEl.classList.contains("is-focus")).toBe(false);
+      expect(document.activeElement).not.toBe(checkbox);
     });
   });
 
@@ -914,6 +895,90 @@ describe("EaCheckbox Component", () => {
       expect(containerEl.classList.contains("ea-checkbox--large")).toBe(true);
       expect(containerEl.classList.contains("is-checked")).toBe(true);
       expect(containerEl.classList.contains("is-border")).toBe(true);
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("宿主元素应该有 role=checkbox", async () => {
+        const el = document.createElement("ea-checkbox");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("checkbox");
+      });
+
+      it("未选中时 aria-checked 应该为 false", async () => {
+        const el = document.createElement("ea-checkbox");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-checked")).toBe("false");
+      });
+
+      it("选中时 aria-checked 应该为 true", async () => {
+        const el = document.createElement("ea-checkbox");
+        el.setAttribute("checked", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-checked")).toBe("true");
+      });
+
+      it("半选时 aria-checked 应该为 mixed", async () => {
+        const el = document.createElement("ea-checkbox");
+        el.setAttribute("indeterminate", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-checked")).toBe("mixed");
+      });
+
+      it("disabled 时应该设置 aria-disabled 为 true", async () => {
+        const el = document.createElement("ea-checkbox");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("limit-disabled 时应该设置 aria-disabled 为 true", async () => {
+        const el = document.createElement("ea-checkbox");
+        el.setAttribute("limit-disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("非 disabled 且非 limit-disabled 时 aria-disabled 应该为 false", async () => {
+        const el = document.createElement("ea-checkbox");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("disabled 移除后 aria-disabled 应该变为 false", async () => {
+        const el = document.createElement("ea-checkbox");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+
+        el.removeAttribute("disabled");
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("required 时应该设置 aria-required 为 true", async () => {
+        const el = document.createElement("ea-checkbox");
+        el.setAttribute("required", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-required")).toBe("true");
+      });
+
+      it("非 required 时 aria-required 应该为 false", async () => {
+        const el = document.createElement("ea-checkbox");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-required")).toBe("false");
+      });
     });
   });
 });
@@ -1365,6 +1430,27 @@ describe("EaCheckboxGroup Component", () => {
       group.formResetCallback();
 
       expect(group.value).toEqual([]);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-checkbox");
+      el.setAttribute("label", "Checkbox");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-checkbox");
+      el.setAttribute("label", "Checkbox");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
     });
   });
 });

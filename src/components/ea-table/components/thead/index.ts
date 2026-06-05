@@ -2,12 +2,12 @@ import { h } from "../../utils/h";
 import type { ColumnOption } from "../../types";
 
 const sortIconRenderer = (text: string): string => {
-  return h("span", "ea-table__sort-wrapper", {}, [
+  return h("button", "ea-table__sort-wrapper", { type: "button" }, [
     h("span", null, {}, text),
     h(
       "span",
       "ea-table__sort",
-      {},
+      { "aria-hidden": "true" },
       [
         h("ea-icon", "ea-table__sort-icon", {
           part: "asc-icon",
@@ -79,12 +79,15 @@ const renderThCell = (col: ColumnOption): string => {
     }${col.sortable ? " is-sortable" : ""}${col.width ? " is-width" : ""}`.trim(),
     {
       part: "thead-th",
+      scope: "col",
       colspan: col.colspan,
       rowspan: col.rowspan,
       style: [col.width ? `--ea-table-cell-width: ${col.width}` : ""],
       "data-scope": col.prop || "",
       "data-prop": col.prop || "",
       "data-order": "asc",
+      "aria-sort": col.sortable ? "none" : undefined,
+      "aria-label": col.type === "selection" ? "Select all" : col.type === "index" ? "Index" : undefined,
     },
     content
   );

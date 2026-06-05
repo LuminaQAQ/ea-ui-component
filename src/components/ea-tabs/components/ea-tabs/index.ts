@@ -1,6 +1,7 @@
 import EaBase, { createBEM } from "@core/EaBase";
 import { CustomElement, attribute, query, listen } from "@decorator";
 import { Enum } from "@utils/Enum";
+import { RovingTabindex } from "@utils/roving-tabindex";
 import { EaTabClickEvent } from "./events/EaTabClickEvent";
 import { EaTabRemoveEvent } from "./events/EaTabRemoveEvent";
 import { EaTabsChangeEvent } from "./events/EaTabsChangeEvent";
@@ -67,6 +68,7 @@ export class EaTabs extends EaBase {
   private _resizeObserver?: ResizeObserver;
   private _slotChangeTimer?: number;
   private _resizeTimer?: number;
+  private _rovingTabindex?: RovingTabindex;
 
   @attribute({
     type: Enum(["", "card", "border-card"]),
@@ -90,6 +92,7 @@ export class EaTabs extends EaBase {
     default: "",
     observer(this: EaTabs, newVal: string) {
       this._updateTabsActive(newVal);
+      this._syncRovingTabindex(newVal);
 
       this.dispatchEvent(new EaTabsChangeEvent({ name: newVal }));
     },
@@ -104,6 +107,7 @@ export class EaTabs extends EaBase {
 
       this._updateTabNavigationPosition(newVal);
       this._updateTabsActive(this.active);
+      this._updateAriaOrientation(newVal);
 
       this.querySelectorAll("ea-tab").forEach(tab => {
         tab.setAttribute("tab-position", newVal);
@@ -284,9 +288,9 @@ export class EaTabs extends EaBase {
         <div class="${bem.e("line")}" part="line" tabindex="-1">
             <span class="${bem.e("indicator")}" part="indicator"></span>
         </div>
-        <main class='${bem.e("content")}' part='content'>
+        <div class='${bem.e("content")}' part='content'>
           <slot></slot>
-        </main>
+        </div>
       </div>
     `;
   }
@@ -397,6 +401,9 @@ export class EaTabs extends EaBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "tablist");
+    this._updateAriaOrientation();
+
     if (!this.active) {
       const activeAttr = this.getAttribute("active");
       if (activeAttr) {
@@ -424,6 +431,50 @@ export class EaTabs extends EaBase {
       });
       this._resizeObserver.observe(this._nav);
     }
+
+    this._initRovingTabindex();
+  }
+
+  /** 根据 tabPosition 更新 aria-orientation 属性 */
+  private _updateAriaOrientation(position: TabPosition = this.tabPosition): void {
+    const isVertical = position === "left" || position === "right";
+    this.setAttribute("aria-orientation", isVertical ? "vertical" : "horizontal");
+  }
+
+  /** 初始化键盘导航 */
+  private _initRovingTabindex(): void {
+    const isVertical =
+      this.tabPosition === "left" || this.tabPosition === "right";
+    const tabEls = [...this.querySelectorAll("ea-tab")] as HTMLElement[];
+
+    this._rovingTabindex = new RovingTabindex({
+      orientation: isVertical ? "vertical" : "horizontal",
+      loop: true,
+      onActivate: index => {
+        const tab = tabEls[index];
+        if (tab && !tab.hasAttribute("disabled")) {
+          const panelName = tab.getAttribute("panel") || "";
+          this.active = panelName;
+        }
+      },
+    });
+    this._rovingTabindex.setItems(tabEls);
+    this._syncRovingTabindex(this.active);
+  }
+
+  /** 同步 RovingTabindex 的当前索引与 active 属性 */
+  private _syncRovingTabindex(activeName: string): void {
+    if (!this._rovingTabindex || !activeName) return;
+    const tabEls = [...this.querySelectorAll("ea-tab")] as HTMLElement[];
+    const activeIndex = tabEls.findIndex(tab => tab.getAttribute("panel") === activeName);
+    if (activeIndex >= 0) {
+      this._rovingTabindex.setCurrentIndex(activeIndex);
+    }
+  }
+
+  @listen("keydown", ".ea-tabs__nav")
+  private _handleNavKeydown(e: KeyboardEvent): void {
+    this._rovingTabindex?.handleKeydown(e);
   }
 
   $beforeUnmount(): void {
@@ -439,5 +490,8 @@ export class EaTabs extends EaBase {
 
     this._resizeObserver?.disconnect();
     this._resizeObserver = undefined;
+
+    this._rovingTabindex?.destroy();
+    this._rovingTabindex = undefined;
   }
 }

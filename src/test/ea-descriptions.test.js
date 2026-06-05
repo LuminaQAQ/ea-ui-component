@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-descriptions/index.ts";
 
@@ -757,6 +758,40 @@ describe("EaDescriptionsItem", () => {
       await waitForRender();
 
       expect(item.isConnected).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-descriptions-item");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("table 应该有 aria-labelledby 属性", async () => {
+        const el = document.createElement("ea-descriptions");
+        el.setAttribute("caption", "User Info");
+        el.innerHTML = `<ea-descriptions-item label="Name">John</ea-descriptions-item>`;
+        container.appendChild(el);
+        await waitForRender();
+        const table = el.shadowRoot.querySelector("table");
+        expect(table.getAttribute("aria-labelledby")).toBeTruthy();
+      });
+
+      it("label 元素应该有 role='rowheader'", async () => {
+        const el = document.createElement("ea-descriptions");
+        el.innerHTML = `<ea-descriptions-item label="Name">John</ea-descriptions-item>`;
+        container.appendChild(el);
+        await waitForRender();
+        const labels = el.shadowRoot.querySelectorAll(".ea-descriptions__label");
+        expect(labels.length).toBeGreaterThan(0);
+        labels.forEach(label => {
+          expect(label.getAttribute("role")).toBe("rowheader");
+        });
+      });
     });
   });
 });

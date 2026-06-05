@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-message/index";
 
@@ -1431,6 +1432,39 @@ describe("EaMessage Component", () => {
       expect(lastMessage.visible).toBe(true);
 
       messages.forEach(el => el.remove());
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-message");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("宿主元素应该有 role='alert'", async () => {
+        const el = document.createElement("ea-message");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("alert");
+      });
+
+      it("宿主元素应该有 aria-live='assertive'", async () => {
+        const el = document.createElement("ea-message");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-live")).toBe("assertive");
+      });
+
+      it("宿主元素应该有 aria-atomic='true'", async () => {
+        const el = document.createElement("ea-message");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-atomic")).toBe("true");
+      });
     });
   });
 });

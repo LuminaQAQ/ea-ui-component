@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-statistic/index.ts";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaStatistic Component", () => {
   let container;
@@ -692,6 +693,54 @@ describe("EaStatistic Component", () => {
       );
       expect(headerAfter.textContent).toBe("Attribute Title");
       expect(headerAfter.querySelector('slot[name="title"]')).toBeNull();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-statistic");
+      el.setAttribute("value", "100");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("number 元素应该有 aria-live='polite'", async () => {
+        const statistic = document.createElement("ea-statistic");
+        container.appendChild(statistic);
+
+        await waitForRender();
+
+        const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
+        expect(numberEl.getAttribute("aria-live")).toBe("polite");
+      });
+
+      it("设置 value 后 number 元素仍然有 aria-live='polite'", async () => {
+        const statistic = document.createElement("ea-statistic");
+        statistic.setAttribute("value", "1000");
+        container.appendChild(statistic);
+
+        await waitForRender();
+
+        const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
+        expect(numberEl.getAttribute("aria-live")).toBe("polite");
+      });
+
+      it("动态修改 value 后 number 元素仍然有 aria-live='polite'", async () => {
+        const statistic = document.createElement("ea-statistic");
+        statistic.setAttribute("value", "100");
+        container.appendChild(statistic);
+
+        await waitForRender();
+
+        statistic.setAttribute("value", "2000");
+        await waitForRender();
+
+        const numberEl = statistic.shadowRoot.querySelector(".ea-statistic__number");
+        expect(numberEl.getAttribute("aria-live")).toBe("polite");
+      });
     });
   });
 });

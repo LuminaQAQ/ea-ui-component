@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-alert/index";
 
@@ -2359,6 +2360,16 @@ describe("EaAlert", () => {
       );
       const slot = descriptionEl.querySelector("slot:not([name])");
       expect(slot).not.toBeNull();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-alert");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

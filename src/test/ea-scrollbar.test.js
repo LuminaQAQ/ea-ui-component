@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 if (!Element.prototype.scrollTo) {
   Element.prototype.scrollTo = function (options) {
@@ -666,6 +667,16 @@ describe("EaScrollbar Component", () => {
       const containerEl = scrollbar.shadowRoot.querySelector(".ea-scrollbar");
       expect(containerEl.classList.contains("ea-scrollbar--native")).toBe(true);
       expect(containerEl.classList.contains("ea-scrollbar--always")).toBe(true);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-scrollbar");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

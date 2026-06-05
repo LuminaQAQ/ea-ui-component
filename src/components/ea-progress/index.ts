@@ -82,6 +82,7 @@ export class EaProgress extends EaBase {
       this._render();
       this.updateContainerClasslist();
       this._updatePercentage();
+      this.setAttribute("role", this.variant === "dashboard" ? "meter" : "progressbar");
     },
   })
   variant: ProgressVariant = "line";
@@ -89,6 +90,7 @@ export class EaProgress extends EaBase {
   @attribute({
     type: Number,
     default: 0,
+    a11y: { ariaAttr: "aria-valuenow" },
     observer(this: EaProgress, newVal: number) {
       this._updatePercentage(newVal);
     },
@@ -359,6 +361,10 @@ export class EaProgress extends EaBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", this.variant === "dashboard" ? "meter" : "progressbar");
+    this.setAttribute("aria-valuemin", "0");
+    this.setAttribute("aria-valuemax", "100");
+
     const colorAttr = this.getAttribute("color");
     if (colorAttr && !this.color) {
       this.color = colorAttr;

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../common/ea-popper/index.ts";
 
@@ -117,7 +118,7 @@ describe("EaPopper Component", () => {
       expect(containerEl.getAttribute("tabindex")).toBe("-1");
     });
 
-    it("original 应该有 tabindex=0", async () => {
+    it("original 应该有 tabindex=-1", async () => {
       const popper = document.createElement("ea-popper");
       popper.innerHTML = `<button slot="reference">Trigger</button>`;
       container.appendChild(popper);
@@ -127,7 +128,7 @@ describe("EaPopper Component", () => {
       const originalEl = popper.shadowRoot.querySelector(
         ".ea-popper__original"
       );
-      expect(originalEl.getAttribute("tabindex")).toBe("0");
+      expect(originalEl.getAttribute("tabindex")).toBe("-1");
     });
 
     it("reference 应该有 tabindex=-1", async () => {
@@ -1372,6 +1373,86 @@ describe("EaPopper Component", () => {
       expect(className).toContain("ea-popper--left-start");
       expect(className).toContain("is-show-arrow");
       expect(className).toContain("is-show");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-popper");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("弹出内容应该有 id 属性", async () => {
+        const popper = document.createElement("ea-popper");
+        container.appendChild(popper);
+        await waitForRender();
+        const original = popper.shadowRoot.querySelector(
+          ".ea-popper__original"
+        );
+        expect(original.hasAttribute("id")).toBe(true);
+      });
+
+      it("触发器应该有 aria-controls 指向弹出内容", async () => {
+        const popper = document.createElement("ea-popper");
+        container.appendChild(popper);
+        await waitForRender();
+        const original = popper.shadowRoot.querySelector(
+          ".ea-popper__original"
+        );
+        const referenceSlot = popper.shadowRoot.querySelector(
+          'slot[name="reference"]'
+        );
+        const trigger = referenceSlot.assignedElements()[0];
+        if (trigger) {
+          expect(trigger.getAttribute("aria-controls")).toBe(
+            original.id
+          );
+        }
+      });
+
+      it("触发器应该有 aria-expanded 属性", async () => {
+        const popper = document.createElement("ea-popper");
+        container.appendChild(popper);
+        await waitForRender();
+        const referenceSlot = popper.shadowRoot.querySelector(
+          'slot[name="reference"]'
+        );
+        const trigger = referenceSlot.assignedElements()[0];
+        if (trigger) {
+          expect(trigger.hasAttribute("aria-expanded")).toBe(true);
+        }
+      });
+
+      it("关闭时触发器 aria-expanded 应该为 false", async () => {
+        const popper = document.createElement("ea-popper");
+        container.appendChild(popper);
+        await waitForRender();
+        const referenceSlot = popper.shadowRoot.querySelector(
+          'slot[name="reference"]'
+        );
+        const trigger = referenceSlot.assignedElements()[0];
+        if (trigger) {
+          expect(trigger.getAttribute("aria-expanded")).toBe("false");
+        }
+      });
+
+      it("打开时触发器 aria-expanded 应该为 true", async () => {
+        const popper = document.createElement("ea-popper");
+        popper.setAttribute("visible", "");
+        container.appendChild(popper);
+        await waitForRender();
+        const referenceSlot = popper.shadowRoot.querySelector(
+          'slot[name="reference"]'
+        );
+        const trigger = referenceSlot.assignedElements()[0];
+        if (trigger) {
+          expect(trigger.getAttribute("aria-expanded")).toBe("true");
+        }
+      });
     });
   });
 });

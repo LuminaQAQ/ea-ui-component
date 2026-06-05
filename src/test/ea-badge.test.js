@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-badge/index";
 
@@ -586,6 +587,53 @@ describe("EaBadge", () => {
 
       const badgeContainer = badge.shadowRoot.querySelector(".ea-badge");
       expect(badgeContainer.classList.contains("is-hidden")).toBe(true);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-badge");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("sup 元素应该有 aria-hidden='true'", async () => {
+        const badge = document.createElement("ea-badge");
+        badge.setAttribute("value", "5");
+        container.appendChild(badge);
+
+        await waitForRender();
+
+        const supEl = badge.shadowRoot.querySelector("sup");
+        expect(supEl).toBeTruthy();
+        expect(supEl.getAttribute("aria-hidden")).toBe("true");
+      });
+
+      it("is-dot 模式下 sup 元素仍然有 aria-hidden='true'", async () => {
+        const badge = document.createElement("ea-badge");
+        badge.setAttribute("is-dot", "");
+        container.appendChild(badge);
+
+        await waitForRender();
+
+        const supEl = badge.shadowRoot.querySelector("sup");
+        expect(supEl.getAttribute("aria-hidden")).toBe("true");
+      });
+
+      it("data-hidden 时 sup 元素仍然有 aria-hidden='true'", async () => {
+        const badge = document.createElement("ea-badge");
+        badge.setAttribute("data-hidden", "");
+        badge.setAttribute("value", "5");
+        container.appendChild(badge);
+
+        await waitForRender();
+
+        const supEl = badge.shadowRoot.querySelector("sup");
+        expect(supEl.getAttribute("aria-hidden")).toBe("true");
+      });
     });
   });
 });

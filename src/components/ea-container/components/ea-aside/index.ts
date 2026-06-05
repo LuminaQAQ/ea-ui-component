@@ -20,6 +20,17 @@ const bem = createBEM(TAG_NAME);
 export class EaAside extends EaBase {
   @attribute({
     type: String,
+    default: "",
+    a11y: {
+      ariaAttr: "aria-label",
+      target: ".ea-aside",
+      map: v => v || null,
+    },
+  })
+  label: string = "";
+
+  @attribute({
+    type: String,
     default: "300px",
     observer(this: EaAside, newVal: string) {
       this.style.setProperty("--ea-aside-width", newVal);

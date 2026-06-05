@@ -123,9 +123,11 @@ export class EaCheckboxGroup extends EaFormAssociatedBase {
   }
 
   html(): string {
+    const labelId = `${TAG_NAME}-label-${Math.random().toString(36).substring(2, 15)}`;
+
     return `
-      <label class="${bem.e("form-label")}" part="form-label"></label>
-      <div class="${this.updateContainerClasslist()}" part="container">
+      <label id="${labelId}" class="${bem.e("form-label")}" part="form-label"></label>
+      <div class="${this.updateContainerClasslist()}" part="container" role="group" aria-labelledby="${labelId}">
         <slot></slot>
       </div>
     `;

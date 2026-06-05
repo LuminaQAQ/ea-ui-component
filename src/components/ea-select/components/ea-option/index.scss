@@ -8,6 +8,7 @@ $name: ea-option;
   --#{$name}-selected-color: var(--blue-500);
   --#{$name}-hover-color: var(--grey-900);
   --#{$name}-hover-bg-color: var(--blue-100);
+  --#{$name}-active-bg-color: var(--blue-100);
 
   --#{$name}-font-size: var(--font-size-md);
 }
@@ -40,5 +41,9 @@ $name: ea-option;
 
   @include state(selected) {
     color: var(--#{$name}-selected-color);
+  }
+
+  @include state(active) {
+    background-color: var(--#{$name}-active-bg-color);
   }
 }

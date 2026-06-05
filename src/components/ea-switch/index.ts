@@ -174,8 +174,10 @@ export class EaSwitch extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaSwitch, newVal: boolean) {
-      if (this._originalInput) this._originalInput.toggleAttribute("disabled", newVal);
+      if (this._originalInput)
+        this._originalInput.toggleAttribute("disabled", newVal);
       this.updateContainerClasslist();
     },
   })
@@ -185,7 +187,8 @@ export class EaSwitch extends EaFormAssociatedBase {
     type: Boolean,
     default: false,
     observer(this: EaSwitch, newVal: boolean) {
-      if (this._originalInput) this._originalInput.toggleAttribute("required", newVal);
+      if (this._originalInput)
+        this._originalInput.toggleAttribute("required", newVal);
     },
   })
   required: boolean = false;
@@ -201,7 +204,8 @@ export class EaSwitch extends EaFormAssociatedBase {
     if (value === "true" || value === true) return true;
     if (value === "false" || value === false) return false;
     if (typeof value === "number") return value;
-    if (typeof value === "string" && value !== "" && !isNaN(Number(value))) return Number(value);
+    if (typeof value === "string" && value !== "" && !isNaN(Number(value)))
+      return Number(value);
     if (typeof value === "string") return value;
     return false;
   }
@@ -221,6 +225,7 @@ export class EaSwitch extends EaFormAssociatedBase {
 
     this.setValue(String(realValue));
     this.updateContainerClasslist();
+    this._syncAriaChecked();
   }
 
   updateContainerClasslist(): string {
@@ -238,7 +243,8 @@ export class EaSwitch extends EaFormAssociatedBase {
   }
 
   html(): string {
-    const id = this.getAttribute("name") || Math.random().toString(36).substring(2, 15);
+    const id =
+      this.getAttribute("name") || Math.random().toString(36).substring(2, 15);
     const isChecked = this._parseValue(this.value) === this._parsedActiveValue;
 
     return `
@@ -250,11 +256,11 @@ export class EaSwitch extends EaFormAssociatedBase {
             ${isChecked ? "checked" : ""}
             ${this.disabled ? "disabled" : ""}
             ${this.required ? "required" : ""} />
-          <span class="${bem.e("label-left")}" part="label-left">
+          <span class="${bem.e("label-left")}" part="label-left" aria-hidden="true">
             <slot name="inactive"></slot>
           </span>
           <span class="${bem.e("inner")}" part="switch"></span>
-          <span class="${bem.e("label-right")}" part="label-right">
+          <span class="${bem.e("label-right")}" part="label-right" aria-hidden="true">
             <slot name="active"></slot>
           </span>
         </span>
@@ -268,7 +274,9 @@ export class EaSwitch extends EaFormAssociatedBase {
     e.stopPropagation();
 
     const isChecked = (e.target as HTMLInputElement).checked;
-    const value = isChecked ? this._parsedActiveValue : this._parsedInactiveValue;
+    const value = isChecked
+      ? this._parsedActiveValue
+      : this._parsedInactiveValue;
 
     this.value = String(value);
     this.dispatchEvent(new EaSwitchChangeEvent({ value }));
@@ -286,11 +294,36 @@ export class EaSwitch extends EaFormAssociatedBase {
       .then(() => {
         this._originalInput.checked = !this._originalInput.checked;
         const isChecked = this._originalInput.checked;
-        const value = isChecked ? this._parsedActiveValue : this._parsedInactiveValue;
+        const value = isChecked
+          ? this._parsedActiveValue
+          : this._parsedInactiveValue;
         this.value = String(value);
         this.dispatchEvent(new EaSwitchChangeEvent({ value }));
       })
       .catch(() => {});
+  }
+
+  /** 处理键盘交互，Space/Enter 切换开关状态 */
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent): void {
+    if (this.disabled) return;
+    if (e.key !== " " && e.key !== "Enter") return;
+
+    e.preventDefault();
+    const isChecked = this._parseValue(this.value) === this._parsedActiveValue;
+    const newValue = isChecked ? this._parsedInactiveValue : this._parsedActiveValue;
+
+    if (this.beforeChange && typeof this.beforeChange === "function") {
+      this.beforeChange()
+        .then(() => {
+          this.value = String(newValue);
+          this.dispatchEvent(new EaSwitchChangeEvent({ value: newValue }));
+        })
+        .catch(() => {});
+    } else {
+      this.value = String(newValue);
+      this.dispatchEvent(new EaSwitchChangeEvent({ value: newValue }));
+    }
   }
 
   formResetCallback(): void {
@@ -299,11 +332,21 @@ export class EaSwitch extends EaFormAssociatedBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "switch");
+    this.tabIndex = 0;
+
     if (!this.name) {
       this.setAttribute("name", Math.random().toString(36).substring(2, 15));
     }
 
     this._handleValueChange(this.value);
+    this._syncAriaChecked();
+  }
+
+  /** 同步 aria-checked 状态 */
+  private _syncAriaChecked(): void {
+    const isChecked = this._parseValue(this.value) === this._parsedActiveValue;
+    this.setAttribute("aria-checked", String(isChecked));
   }
 
   $updated(): void {
@@ -320,7 +363,11 @@ export class EaSwitch extends EaFormAssociatedBase {
     const isChecked = this._parseValue(this.value) === this._parsedActiveValue;
 
     if (this.required && !isChecked) {
-      this.internals?.setValidity({ valueMissing: true }, "请开启此选项", anchor);
+      this.internals?.setValidity(
+        { valueMissing: true },
+        "请开启此选项",
+        anchor
+      );
     } else {
       this.internals?.setValidity({}, "", anchor);
     }

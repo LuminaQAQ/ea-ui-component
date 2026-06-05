@@ -49,6 +49,11 @@ export class EaLoading extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-loading__content",
+      map: v => (v ? "" : null),
+    },
     observer(this: EaLoading) {
       this.updateContainerClasslist();
       this._handleLock();
@@ -178,7 +183,10 @@ export class EaLoading extends EaBase {
     }
 
     if (this.spinnerSize > 0) {
-      this.style.setProperty("--ea-loading-spinner-size", `${this.spinnerSize}px`);
+      this.style.setProperty(
+        "--ea-loading-spinner-size",
+        `${this.spinnerSize}px`
+      );
     }
   }
 

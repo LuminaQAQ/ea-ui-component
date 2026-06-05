@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-slider/index.ts";
 
@@ -2357,6 +2358,204 @@ describe("EaSlider Component", () => {
 
       const bar = slider.shadowRoot.querySelector('[part="bar"]');
       expect(bar.style.width).toBe("75%");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-slider");
+      el.setAttribute("label", "Slider");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-slider");
+      el.setAttribute("label", "Slider");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("宿主元素应该有 role=slider", async () => {
+        const el = document.createElement("ea-slider");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("slider");
+      });
+
+      it("宿主元素应该有 aria-valuenow 等于当前 value", async () => {
+        const el = document.createElement("ea-slider");
+        el.value = 50;
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuenow")).toBe("50");
+      });
+
+      it("宿主元素应该有 aria-valuemin 等于 min", async () => {
+        const el = document.createElement("ea-slider");
+        el.min = 10;
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuemin")).toBe("10");
+      });
+
+      it("宿主元素应该有 aria-valuemax 等于 max", async () => {
+        const el = document.createElement("ea-slider");
+        el.max = 200;
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuemax")).toBe("200");
+      });
+
+      it("disabled 时宿主元素应该有 aria-disabled=true", async () => {
+        const el = document.createElement("ea-slider");
+        el.disabled = true;
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("非 disabled 时宿主元素 aria-disabled 应该为 false", async () => {
+        const el = document.createElement("ea-slider");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("vertical 时宿主元素应该有 aria-orientation=vertical", async () => {
+        const el = document.createElement("ea-slider");
+        el.vertical = true;
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-orientation")).toBe("vertical");
+      });
+
+      it("非 vertical 时宿主元素不应该有 aria-orientation", async () => {
+        const el = document.createElement("ea-slider");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-orientation")).toBeNull();
+      });
+
+      it("设置 label 时宿主元素应该有 aria-label", async () => {
+        const el = document.createElement("ea-slider");
+        el.label = "Volume";
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-label")).toBe("Volume");
+      });
+
+      it("value 变化时 aria-valuenow 应该同步更新", async () => {
+        const el = document.createElement("ea-slider");
+        container.appendChild(el);
+        await waitForRender();
+        el.value = 75;
+        await waitForRender();
+        expect(el.getAttribute("aria-valuenow")).toBe("75");
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("ArrowRight 应该增加 value", async () => {
+        const el = document.createElement("ea-slider");
+        el.value = 50;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+        await waitForRender();
+        expect(el.value).toBe(51);
+      });
+
+      it("ArrowLeft 应该减少 value", async () => {
+        const el = document.createElement("ea-slider");
+        el.value = 50;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
+        await waitForRender();
+        expect(el.value).toBe(49);
+      });
+
+      it("ArrowUp 应该增加 value", async () => {
+        const el = document.createElement("ea-slider");
+        el.value = 50;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp" }));
+        await waitForRender();
+        expect(el.value).toBe(51);
+      });
+
+      it("ArrowDown 应该减少 value", async () => {
+        const el = document.createElement("ea-slider");
+        el.value = 50;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+        await waitForRender();
+        expect(el.value).toBe(49);
+      });
+
+      it("Home 应该设置 value 为 min", async () => {
+        const el = document.createElement("ea-slider");
+        el.min = 10;
+        el.value = 50;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Home" }));
+        await waitForRender();
+        expect(el.value).toBe(10);
+      });
+
+      it("End 应该设置 value 为 max", async () => {
+        const el = document.createElement("ea-slider");
+        el.max = 200;
+        el.value = 50;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "End" }));
+        await waitForRender();
+        expect(el.value).toBe(200);
+      });
+
+      it("disabled 时键盘操作不应该改变 value", async () => {
+        const el = document.createElement("ea-slider");
+        el.value = 50;
+        el.disabled = true;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+        await waitForRender();
+        expect(el.value).toBe(50);
+      });
+
+      it("ArrowRight 不应该超过 max", async () => {
+        const el = document.createElement("ea-slider");
+        el.value = 100;
+        el.max = 100;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+        await waitForRender();
+        expect(el.value).toBe(100);
+      });
+
+      it("ArrowLeft 不应该低于 min", async () => {
+        const el = document.createElement("ea-slider");
+        el.value = 0;
+        el.min = 0;
+        container.appendChild(el);
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
+        await waitForRender();
+        expect(el.value).toBe(0);
+      });
     });
   });
 });

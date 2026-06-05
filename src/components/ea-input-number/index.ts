@@ -75,6 +75,8 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
   private _repeatInterval: number = 100;
 
+  private _inputId: string = `ea-input-number-input-${Math.random().toString(36).slice(2, 9)}`;
+
   // ==================== @property 属性 ====================
 
   @property({ type: Number, default: 0 })
@@ -96,6 +98,9 @@ export class EaInputNumber extends EaFormAssociatedBase {
     default: "",
     observer(this: EaInputNumber, newVal: string) {
       this._label.textContent = newVal;
+      if (this._inputEl) {
+        this._inputEl.setAttribute("aria-label", newVal || "数值输入");
+      }
     },
   })
   label: string = "";
@@ -103,6 +108,10 @@ export class EaInputNumber extends EaFormAssociatedBase {
   @attribute({
     type: Number,
     default: 0,
+    a11y: {
+      ariaAttr: "aria-valuenow",
+      target: bem.ce("inner"),
+    },
     observer(this: EaInputNumber, newVal: number, oldVal: number) {
       const fixedNewVal = Number(newVal).toFixed(this.precision);
       const fixedOldVal = Number(oldVal).toFixed(this.precision);
@@ -112,6 +121,8 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
       this._isMax = Number(fixedNewVal) >= this.max;
       this._isMin = Number(fixedNewVal) <= this.min;
+
+      this._updateButtonDisabledState();
 
       this.dispatchEvent(
         new EaInputNumberChangeEvent({
@@ -128,8 +139,13 @@ export class EaInputNumber extends EaFormAssociatedBase {
   @attribute({
     type: Number,
     default: Number.MIN_SAFE_INTEGER,
+    a11y: {
+      ariaAttr: "aria-valuemin",
+      target: bem.ce("inner"),
+    },
     observer(this: EaInputNumber, newVal: number) {
       if (this._inputEl) this._inputEl.min = String(newVal);
+      this._updateButtonDisabledState();
     },
   })
   min: number = Number.MIN_SAFE_INTEGER;
@@ -137,8 +153,13 @@ export class EaInputNumber extends EaFormAssociatedBase {
   @attribute({
     type: Number,
     default: Number.MAX_SAFE_INTEGER,
+    a11y: {
+      ariaAttr: "aria-valuemax",
+      target: bem.ce("inner"),
+    },
     observer(this: EaInputNumber, newVal: number) {
       if (this._inputEl) this._inputEl.max = String(newVal);
+      this._updateButtonDisabledState();
     },
   })
   max: number = Number.MAX_SAFE_INTEGER;
@@ -191,8 +212,13 @@ export class EaInputNumber extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaInputNumber) {
       this.updateContainerClasslist();
+      this._updateButtonDisabledState();
     },
   })
   disabled: boolean = false;
@@ -200,6 +226,11 @@ export class EaInputNumber extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: true,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-input-number__decrease, .ea-input-number__increase",
+      map: v => (v ? null : ""),
+    },
     observer(this: EaInputNumber) {
       this.updateContainerClasslist();
     },
@@ -225,10 +256,7 @@ export class EaInputNumber extends EaFormAssociatedBase {
     type: String,
     default: "",
     observer(this: EaInputNumber, newVal: string) {
-      if (this._inputEl) {
-        this._inputEl.setAttribute("name", newVal);
-        this._inputEl.setAttribute("id", newVal);
-      }
+      if (this._inputEl) this._inputEl.setAttribute("name", newVal);
     },
   })
   name: string = "";
@@ -285,20 +313,36 @@ export class EaInputNumber extends EaFormAssociatedBase {
     return className;
   }
 
+  /** 更新增减按钮的禁用状态和 ARIA 属性 */
+  private _updateButtonDisabledState(): void {
+    if (!this._decreaseBtn || !this._increaseBtn) return;
+
+    const isDecreaseDisabled = this._isMin || this.disabled;
+    const isIncreaseDisabled = this._isMax || this.disabled;
+
+    this._decreaseBtn.setAttribute("aria-disabled", String(isDecreaseDisabled));
+    this._decreaseBtn.setAttribute("title", "减少数值");
+    this._decreaseBtn.setAttribute("aria-controls", this._inputId);
+
+    this._increaseBtn.setAttribute("aria-disabled", String(isIncreaseDisabled));
+    this._increaseBtn.setAttribute("title", "增加数值");
+    this._increaseBtn.setAttribute("aria-controls", this._inputId);
+  }
+
   html(): string {
     return `
       <label class='${bem()}' part='container'>
         <span class='${bem.e("form-label")}' part='label'></span>
         <section class='${bem.e("region")}' part='region'>
-          <ea-icon class='${bem.e("decrease")}' part='decrease' name='minus'></ea-icon>
+          <ea-icon class='${bem.e("decrease")}' part='decrease' name='minus' tabindex='-1' aria-hidden='true'></ea-icon>
           <span class='${bem.e("prefix")}' part='prefix'>
             <slot name="prefix"></slot>
           </span>
-          <input class='${bem.e("inner")}' part='input' type='number' />
+          <input class='${bem.e("inner")}' part='input' type='text' role='spinbutton' />
           <span class='${bem.e("suffix")}' part='suffix'>
             <slot name="suffix"></slot>
           </span>
-          <ea-icon class='${bem.e("increase")}' part='increase' name='plus'></ea-icon>
+          <ea-icon class='${bem.e("increase")}' part='increase' name='plus' tabindex='-1' aria-hidden='true'></ea-icon>
         </section>
       </label>
     `;
@@ -382,15 +426,12 @@ export class EaInputNumber extends EaFormAssociatedBase {
    */
   private _ensureInputValueIsCorrect(e: Event): void {
     const inputEl = e.target as HTMLInputElement;
-    let correctValue = this._sanitizeNumber(
-      Number(inputEl.value),
-      {
-        precision: this.precision,
-        min: this.min,
-        max: this.max,
-        defaultValue: this.defaultValue,
-      }
-    );
+    let correctValue = this._sanitizeNumber(Number(inputEl.value), {
+      precision: this.precision,
+      min: this.min,
+      max: this.max,
+      defaultValue: this.defaultValue,
+    });
 
     if (this.stepStrictly && Number(correctValue) % this.step !== 0) {
       correctValue = this._sanitizeNumber(
@@ -406,9 +447,9 @@ export class EaInputNumber extends EaFormAssociatedBase {
 
     this.value = Number(correctValue);
 
-    if (correctValue !== inputEl.value)
-      inputEl.value = correctValue;
+    if (correctValue !== inputEl.value) inputEl.value = correctValue;
 
+    this._inputEl.removeAttribute("aria-invalid");
     this._isFocus = false;
   }
 
@@ -481,7 +522,7 @@ export class EaInputNumber extends EaFormAssociatedBase {
   }
 
   /**
-   * 处理键盘按下事件，限制只能输入数字相关字符
+   * 处理键盘按下事件，实现 spinbutton 键盘交互
    * @param e - 键盘事件对象
    */
   @listen("keydown", bem.ce("inner"))
@@ -493,43 +534,86 @@ export class EaInputNumber extends EaFormAssociatedBase {
       return;
     }
 
-    if (
-      [
-        "Backspace",
-        "Delete",
-        "Tab",
-        "Escape",
-        "ArrowLeft",
-        "ArrowRight",
-        "ArrowUp",
-        "ArrowDown",
-        "Home",
-        "End",
-      ].includes(e.key)
-    )
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const current = Number(this._inputEl.value) || this.value;
+      this.value = Number(
+        this._sanitizeNumber(current + this.step, {
+          precision: this.precision,
+          min: this.min,
+          max: this.max,
+          defaultValue: this.defaultValue,
+        })
+      );
       return;
+    }
 
-    if (/^[\d.\-eE]$/.test(e.key)) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const current = Number(this._inputEl.value) || this.value;
+      this.value = Number(
+        this._sanitizeNumber(current - this.step, {
+          precision: this.precision,
+          min: this.min,
+          max: this.max,
+          defaultValue: this.defaultValue,
+        })
+      );
+      return;
+    }
 
-    e.preventDefault();
+    if (e.key === "Home") {
+      e.preventDefault();
+      this.value = this.min;
+      return;
+    }
+
+    if (e.key === "End") {
+      e.preventDefault();
+      this.value = this.max;
+      return;
+    }
   }
 
   /**
-   * 处理输入事件，允许中间输入状态（如负号、小数点）通过
+   * 处理输入事件，过滤非法字符并更新 aria-invalid 状态
    * @param e - 输入事件对象
    */
   @listen("input", bem.ce("inner"))
   private _handleInput(e: Event) {
     const inputEl = e.target as HTMLInputElement;
     const rawValue = inputEl.value;
+    const cursorPos = inputEl.selectionStart ?? rawValue.length;
 
-    if (rawValue === "" || rawValue === "-" || rawValue === "." || /^-?\d*\.?\d*e?E?$/.test(rawValue)) return;
+    const filtered = rawValue.replace(/[^\d.\-eE]/g, "");
 
-    if (inputEl.validity.badInput) {
-      const fixedValue = Number(this.value).toFixed(this.precision);
-      requestAnimationFrame(() => {
-        inputEl.value = fixedValue;
-      });
+    if (filtered !== rawValue) {
+      if (filtered === "") {
+        inputEl.value = Number(this.value).toFixed(this.precision);
+        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+      } else {
+        inputEl.value = filtered;
+        const newCursorPos = Math.min(cursorPos - 1, filtered.length);
+        inputEl.setSelectionRange(newCursorPos, newCursorPos);
+      }
+    }
+
+    const current = inputEl.value;
+    if (
+      current === "" ||
+      current === "-" ||
+      current === "." ||
+      /^-?\d*\.?\d*e?E?$/.test(current)
+    ) {
+      this._inputEl.removeAttribute("aria-invalid");
+      return;
+    }
+
+    const numValue = Number(current);
+    if (!isNaN(numValue) && (numValue < this.min || numValue > this.max)) {
+      this._inputEl.setAttribute("aria-invalid", "true");
+    } else {
+      this._inputEl.removeAttribute("aria-invalid");
     }
   }
 
@@ -552,10 +636,14 @@ export class EaInputNumber extends EaFormAssociatedBase {
   }
 
   $mount(): void {
+    this._inputEl.id = this._inputId;
+    this._inputEl.setAttribute("aria-label", this.label || "数值输入");
+
     const initValue = this.hasAttribute("value") ? this.value : 0;
     this.value = Number(Number(initValue).toFixed(this.precision));
 
     this.updateContainerClasslist();
+    this._updateButtonDisabledState();
   }
 
   $beforeUnmount(): void {

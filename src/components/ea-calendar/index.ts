@@ -325,10 +325,16 @@ export class EaCalendar extends EaBase {
     });
   };
 
-  /** @param weekList - 星期名称列表 @returns 星期行 HTML 字符串 */
-  private _renderWeekHeader(weekList: string[]): string {
+  /** @param weekList - 星期名称列表 @param weekFullList - 完整星期名称列表 @returns 星期行 HTML 字符串 */
+  private _renderWeekHeader(
+    weekList: string[],
+    weekFullList: string[]
+  ): string {
     return weekList
-      .map(day => `<th class='${bem.e("th")}' part='th'>${day}</th>`)
+      .map(
+        (day, i) =>
+          `<th class='${bem.e("th")}' part='th' scope='col' role='columnheader' aria-colindex='${i + 1}' abbr='${weekFullList[i] || day}'>${day}</th>`
+      )
       .join("");
   }
 
@@ -340,8 +346,25 @@ export class EaCalendar extends EaBase {
     const currentYear = date.get("year");
     const currentMonth = date.get("month");
 
+    const hadFocusInGrid = !!this.shadowRoot?.activeElement?.closest(
+      bem.ce("tbody")
+    );
+
     this._title.textContent = `${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}`;
     this._tbody.innerHTML = this._renderDayCells();
+
+    const tableEl = this._container.querySelector("table");
+    if (tableEl) {
+      const totalRows = 1 + this._tbody.querySelectorAll("tr").length;
+      tableEl.setAttribute("aria-rowcount", String(totalRows));
+    }
+
+    if (hadFocusInGrid) {
+      const activeCell = this._tbody.querySelector(
+        "td[role='gridcell'][tabindex='0']"
+      ) as HTMLTableCellElement | null;
+      activeCell?.focus();
+    }
   }
 
   @listen("click", bem.ce("tbody"))
@@ -358,6 +381,18 @@ export class EaCalendar extends EaBase {
 
     this.displayDate = selectedDate;
 
+    const td = (target as HTMLElement).closest(
+      "td[role='gridcell']"
+    ) as HTMLTableCellElement | null;
+    if (td) {
+      const prevFocus = this._tbody.querySelector(
+        "td[role='gridcell'][tabindex='0']"
+      );
+      if (prevFocus && prevFocus !== td)
+        prevFocus.setAttribute("tabindex", "-1");
+      td.setAttribute("tabindex", "0");
+    }
+
     this.dispatchEvent(
       new EaCalendarSelectEvent({
         year: yearData,
@@ -367,6 +402,69 @@ export class EaCalendar extends EaBase {
         fullDate: `${yearData}-${monthData}-${dateData}`,
       })
     );
+  }
+
+  /** 处理日历网格键盘导航 */
+  @listen("keydown", bem.ce("tbody"))
+  private _handleGridKeydown(e: KeyboardEvent): void {
+    const cell = (e.target as HTMLElement).closest("td[role='gridcell']");
+    if (!cell) return;
+
+    const allCells = [
+      ...this._tbody.querySelectorAll("td[role='gridcell']"),
+    ] as HTMLTableCellElement[];
+    const currentIndex = allCells.indexOf(cell as HTMLTableCellElement);
+    if (currentIndex === -1) return;
+
+    const cols = 7;
+    const rows = Math.ceil(allCells.length / cols);
+    const currentRow = Math.floor(currentIndex / cols);
+    const currentCol = currentIndex % cols;
+
+    let targetIndex = -1;
+
+    switch (e.key) {
+      case "ArrowRight":
+        if (currentCol < cols - 1) targetIndex = currentIndex + 1;
+        break;
+      case "ArrowLeft":
+        if (currentCol > 0) targetIndex = currentIndex - 1;
+        break;
+      case "ArrowDown":
+        if (currentRow < rows - 1) targetIndex = currentIndex + cols;
+        break;
+      case "ArrowUp":
+        if (currentRow > 0) targetIndex = currentIndex - cols;
+        break;
+      case "Home":
+        targetIndex = currentRow * cols;
+        break;
+      case "End":
+        targetIndex = currentRow * cols + cols - 1;
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        (cell as HTMLElement).click();
+        return;
+      default:
+        return;
+    }
+
+    if (targetIndex >= 0 && targetIndex < allCells.length) {
+      e.preventDefault();
+      this._moveFocus(allCells[currentIndex], allCells[targetIndex]);
+    }
+  }
+
+  /** @param fromCell - 当前聚焦单元格 @param toCell - 目标聚焦单元格 */
+  private _moveFocus(
+    fromCell: HTMLTableCellElement,
+    toCell: HTMLTableCellElement
+  ): void {
+    fromCell.setAttribute("tabindex", "-1");
+    toCell.setAttribute("tabindex", "0");
+    toCell.focus();
   }
 
   /** @param refDate - 参考日期 @returns 日期数组选项 */
@@ -446,7 +544,17 @@ export class EaCalendar extends EaBase {
 
       const parts: string[] = ["day", dayType];
 
-      return `<td class="${classes.join(" ")}" part="${parts.join(" ")}" data-year="${year}" data-month="${month}" data-date="${content}">${content}</td>`;
+      const ariaAttrs: string = [
+        `role="gridcell"`,
+        option.isActive ? `aria-selected="true"` : "",
+        option.isToday ? `aria-current="date"` : "",
+        dayType !== "current-month" ? `aria-disabled="true"` : "",
+        `tabindex="${option.isActive ? 0 : -1}"`,
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      return `<td class="${classes.join(" ")}" part="${parts.join(" ")}" data-year="${year}" data-month="${month}" data-date="${content}" ${ariaAttrs}>${content}</td>`;
     };
 
     const prevMonth = prevMonthRemainingDays.map(content =>
@@ -482,7 +590,15 @@ export class EaCalendar extends EaBase {
         acc[acc.length - 1].push(day);
         return acc;
       }, [])
-      .map(row => `<tr class="${bem.e("row")}">${row.join("")}</tr>`)
+      .map((row, i) => {
+        const cells = row.map((cell, colIdx) =>
+          cell.replace(
+            'role="gridcell"',
+            `role="gridcell" aria-colindex="${colIdx + 1}"`
+          )
+        );
+        return `<tr class="${bem.e("row")}" role="row" aria-rowindex="${i + 2}">${cells.join("")}</tr>`;
+      })
       .join("");
   }
 
@@ -503,21 +619,23 @@ export class EaCalendar extends EaBase {
     i18nManager.locale = this.locale;
     dayjs.locale(this.locale);
 
+    const titleId = `${TAG_NAME}-title`;
+
     return `
       <div class="${bem.b()}" part="container">
         <header class="${bem.e("header")}" part="header">
           <slot name="header">
-            <span class="${bem.e("title")}" part="title">
+            <span class="${bem.e("title")}" part="title" id="${titleId}">
               ${currentYear} ${i18nManager.t("calendar.months")[currentMonth]}
             </span>
             <section class="${bem.e("controller-wrapper")}" part="controller-wrapper">
             </section>
           </slot>
         </header>
-        <table class="${bem.e("body")}" part="body">
+        <table class="${bem.e("body")}" part="body" role="grid" aria-labelledby="${titleId}" aria-colcount="7">
           <thead class="${bem.e("thead")}" part="thead">
-            <tr class="${bem.e("week")}" part="thead-tr tr">
-              ${this._renderWeekHeader(i18nManager.t("calendar.weekDays"))}
+            <tr class="${bem.e("week")}" part="thead-tr tr" role="row" aria-rowindex="1">
+              ${this._renderWeekHeader(i18nManager.t("calendar.weekDays"), i18nManager.t("calendar.weekDaysFull") || i18nManager.t("calendar.weekDays"))}
             </tr>
           </thead>
           <tbody class="${bem.e("tbody")}" part="tbody">${this._renderDayCells()}</tbody>

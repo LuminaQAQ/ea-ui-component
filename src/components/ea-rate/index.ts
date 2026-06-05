@@ -5,6 +5,7 @@ import { CustomElement, attribute, property, query, listen } from "@decorator";
 
 import { html } from "@utils/html";
 import { Enum } from "@utils/Enum";
+import { i18nManager } from "@utils/I18nManager";
 
 import { EaRateChangeEvent } from "./events/EaRateChangeEvent";
 import { EaRateHoverEvent } from "./events/EaRateHoverEvent";
@@ -53,6 +54,10 @@ export class EaRate extends EaFormAssociatedBase {
   @attribute({
     type: String,
     default: "",
+    a11y: {
+      ariaAttr: "aria-label",
+      map: v => v || null,
+    },
     observer(this: EaRate, newVal: string) {
       if (this._label) this._label.textContent = newVal;
     },
@@ -68,6 +73,12 @@ export class EaRate extends EaFormAssociatedBase {
     },
   })
   value: number = 0;
+
+  @attribute({
+    type: Number,
+    default: 0,
+  })
+  min: number = 0;
 
   @attribute({
     type: Number,
@@ -91,12 +102,17 @@ export class EaRate extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-readonly" },
   })
   readonly: boolean = false;
 
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaRate) {
       this.updateContainerClasslist();
     },
@@ -134,7 +150,7 @@ export class EaRate extends EaFormAssociatedBase {
   html(): string {
     return `
       <label class="${bem.e("label")}" part="label"></label>
-      <div class="${bem()}" part="container"></div>
+      <div class="${bem()}" part="container" role="presentation"></div>
     `;
   }
 
@@ -146,26 +162,43 @@ export class EaRate extends EaFormAssociatedBase {
   ): void {
     if (!renderer || !this._container) return;
 
-    const tpl = Array.from({ length })
-      .map(
-        (_, index) => `
-          <span class="${bem.e("symbol")}" part="symbol-wrap">
-            ${html(renderer(index, activeValue))}
-          </span>`
-      )
-      .join("");
+    this._container.innerHTML = "";
 
-    this._container.innerHTML = tpl;
+    i18nManager.locale = this.locale;
+
+    for (let index = 0; index < length; index++) {
+      const starValue = index + 1;
+      const isChecked = starValue === activeValue;
+
+      const span = document.createElement("span");
+      span.className = bem.e("symbol");
+      span.setAttribute("part", "symbol-wrap");
+      span.setAttribute("role", "radio");
+      span.setAttribute("aria-checked", String(isChecked));
+      span.setAttribute(
+        "aria-label",
+        i18nManager.t("rate.star", { n: starValue })
+      );
+      span.tabIndex = isChecked ? 0 : -1;
+
+      span.innerHTML = html(renderer(index, activeValue));
+
+      this._container.appendChild(span);
+    }
   }
 
   /** @param index - 选中截止下标（0-based） */
   private _setRateStatus(index: number = this.value - 1): void {
     if (!this._container) return;
 
-    const children = [...this._container.children];
+    const children = [...this._container.children] as HTMLElement[];
 
     children.forEach((el, i) => {
-      el.classList.toggle("is-selected", i <= index);
+      const isSelected = i <= index;
+      const isChecked = i === index;
+      el.classList.toggle("is-selected", isSelected);
+      el.setAttribute("aria-checked", String(isChecked));
+      el.tabIndex = isChecked || (index < 0 && i === 0) ? 0 : -1;
     });
   }
 
@@ -173,7 +206,7 @@ export class EaRate extends EaFormAssociatedBase {
   private _unsetRateStatus(): void {
     if (!this._container) return;
 
-    const children = [...this._container.children];
+    const children = [...this._container.children] as HTMLElement[];
 
     children.forEach((el, i) => {
       el.classList.toggle("is-selected", i <= this.value - 1);
@@ -230,7 +263,7 @@ export class EaRate extends EaFormAssociatedBase {
     this._container.addEventListener("mouseout", onMouseout, {
       signal: this._hoverAbortController.signal,
     });
-  }
+  };
 
   @listen("click", ".ea-rate__symbol")
   private _handleClick = (e: Event): void => {
@@ -252,7 +285,48 @@ export class EaRate extends EaFormAssociatedBase {
     }
 
     this.dispatchEvent(new EaRateChangeEvent({ value: displayValue }));
-  }
+  };
+
+  /** 处理键盘导航（roving tabindex） */
+  @listen("keydown", ".ea-rate__symbol")
+  private _handleKeydown = (e: KeyboardEvent): void => {
+    if (this.readonly || this.disabled) return;
+
+    const target = e.target as HTMLElement;
+    const children = [...this._container.children] as HTMLElement[];
+    const currentIndex = children.indexOf(target);
+
+    let newIndex = currentIndex;
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault();
+        newIndex = currentIndex < children.length - 1 ? currentIndex + 1 : 0;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault();
+        newIndex = currentIndex > 0 ? currentIndex - 1 : children.length - 1;
+        break;
+      case " ":
+        e.preventDefault();
+        const displayValue = currentIndex + 1;
+        if (this.value !== displayValue) {
+          this.value = displayValue;
+          this.dispatchEvent(new EaRateChangeEvent({ value: displayValue }));
+        }
+        return;
+      default:
+        return;
+    }
+
+    if (newIndex !== currentIndex) {
+      this.value = newIndex + 1;
+      children[newIndex].focus();
+      this.dispatchEvent(new EaRateChangeEvent({ value: newIndex + 1 }));
+    }
+  };
 
   get validationTarget(): HTMLElement {
     return this;
@@ -281,8 +355,15 @@ export class EaRate extends EaFormAssociatedBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "radiogroup");
     this._renderRateEl(this.getSymbol, this.value);
     this.updateContainerClasslist();
+    this._setRateStatus(this.value - 1);
+  }
+
+  $updateLocalization(locale: string): void {
+    i18nManager.locale = locale;
+    this._renderRateEl(this.getSymbol, this.value);
     this._setRateStatus(this.value - 1);
   }
 

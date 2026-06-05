@@ -1,5 +1,9 @@
 $name: ea-table;
-$ea-table-align-types: (left, center, right);
+$ea-table-align-types: (
+  left,
+  center,
+  right
+);
 
 :host {
   --ea-table-cell-spacing: var(--spacing-md);
@@ -107,7 +111,26 @@ $ea-table-align-types: (left, center, right);
       .ea-table__sort-wrapper {
         display: flex;
         align-items: center;
+        width: 100%;
+        padding: 0;
+        border: none;
+        background: none;
+        font: inherit;
+        color: inherit;
         cursor: pointer;
+        text-align: inherit;
+
+        &:focus,
+        &:hover {
+          outline: none;
+          text-underline-offset: 2px;
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--primary-color, var(--blue-500));
+          outline-offset: -2px;
+          border-radius: 2px;
+        }
 
         .ea-table__sort {
           display: flex;
@@ -208,6 +231,7 @@ $ea-table-align-types: (left, center, right);
 
     .ea-table__tbody {
       .ea-table__tr:last-child {
+
         .ea-table__th,
         .ea-table__td {
           border-bottom-width: 0;

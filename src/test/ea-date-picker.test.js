@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-date-picker/index";
 
@@ -2148,6 +2149,263 @@ describe("EaDatePicker", () => {
       datePicker.variant = "date";
       await waitForRender();
       expect(datePicker.variant).toBe("date");
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("Keyboard Interaction", () => {
+      it("ArrowDown 应该打开日期面板", async () => {
+        const el = document.createElement("ea-date-picker");
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+        await waitForRender();
+      });
+
+      it("Escape 应该关闭日期面板", async () => {
+        const el = document.createElement("ea-date-picker");
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        el.handleOpen();
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+        await waitForRender();
+        expect(el._container.classList.contains("is-open")).toBe(false);
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-date-picker");
+      el.setAttribute("label", "Date");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("输入框应该有 role=combobox", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const input = datePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("role")).toBe("combobox");
+      });
+
+      it("输入框应该有 aria-haspopup=dialog", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const input = datePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("aria-haspopup")).toBe("dialog");
+      });
+
+      it("输入框应该有 aria-autocomplete=none", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const input = datePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("aria-autocomplete")).toBe("none");
+      });
+
+      it("输入框应该有 aria-controls 指向 dialog", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const input = datePicker.shadowRoot.querySelector("ea-input");
+        const dropdownWrap = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__dropdown-wrap"
+        );
+        expect(input.getAttribute("aria-controls")).toBe(dropdownWrap.id);
+      });
+
+      it("关闭时输入框 aria-expanded 应该为 false", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const input = datePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("aria-expanded")).toBe("false");
+      });
+
+      it("打开时输入框 aria-expanded 应该为 true", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        datePicker.handleOpen();
+        await waitForRender();
+        const input = datePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("aria-expanded")).toBe("true");
+      });
+
+      it("下拉面板应该有 role=dialog", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const dropdownWrap = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__dropdown-wrap"
+        );
+        expect(dropdownWrap.getAttribute("role")).toBe("dialog");
+      });
+
+      it("下拉面板应该有 aria-modal=true", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const dropdownWrap = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__dropdown-wrap"
+        );
+        expect(dropdownWrap.getAttribute("aria-modal")).toBe("true");
+      });
+
+      it("下拉面板应该有 aria-labelledby 指向头部标签", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const dropdownWrap = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__dropdown-wrap"
+        );
+        const headerCenter = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__header-center"
+        );
+        expect(dropdownWrap.getAttribute("aria-labelledby")).toBe(
+          headerCenter.id
+        );
+      });
+
+      it("宿主元素 disabled 时应该有 aria-disabled=true", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        datePicker.disabled = true;
+        container.appendChild(datePicker);
+        await waitForRender();
+        expect(datePicker.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("宿主元素非 disabled 时 aria-disabled 应该为 false", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        expect(datePicker.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("年份面板应该有 role=listbox", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const yearPanel = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__year-panel"
+        );
+        expect(yearPanel.getAttribute("role")).toBe("listbox");
+      });
+
+      it("年份面板应该有 aria-label", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const yearPanel = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__year-panel"
+        );
+        expect(yearPanel.getAttribute("aria-label")).toBe("Select year");
+      });
+
+      it("年份项应该有 role=option 和 aria-selected", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        datePicker.setAttribute("value", "2026-06-15");
+        container.appendChild(datePicker);
+        await waitForRender();
+        datePicker.handleOpen();
+        await waitForRender();
+        const yearBtn = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__header-year"
+        );
+        yearBtn.click();
+        await waitForRender();
+        const yearItems = datePicker.shadowRoot.querySelectorAll(
+          ".ea-date-picker__year-item"
+        );
+        expect(yearItems.length).toBeGreaterThan(0);
+        yearItems.forEach(item => {
+          expect(item.getAttribute("role")).toBe("option");
+          expect(item.hasAttribute("aria-selected")).toBe(true);
+        });
+      });
+
+      it("月份面板应该有 role=listbox", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const monthPanel = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__month-panel"
+        );
+        expect(monthPanel.getAttribute("role")).toBe("listbox");
+      });
+
+      it("月份面板应该有 aria-label", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const monthPanel = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__month-panel"
+        );
+        expect(monthPanel.getAttribute("aria-label")).toBe("Select month");
+      });
+
+      it("月份项应该有 role=option 和 aria-selected", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const monthItems = datePicker.shadowRoot.querySelectorAll(
+          ".ea-date-picker__month-item"
+        );
+        expect(monthItems.length).toBe(12);
+        monthItems.forEach(item => {
+          expect(item.getAttribute("role")).toBe("option");
+          expect(item.hasAttribute("aria-selected")).toBe(true);
+        });
+      });
+
+      it("头部中心应该有 aria-live=polite", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const headerCenter = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__header-center"
+        );
+        expect(headerCenter.getAttribute("aria-live")).toBe("polite");
+      });
+
+      it("头部中心应该有 aria-atomic=true", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const headerCenter = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__header-center"
+        );
+        expect(headerCenter.getAttribute("aria-atomic")).toBe("true");
+      });
+
+      it("导航按钮应该有 aria-label", async () => {
+        const datePicker = document.createElement("ea-date-picker");
+        container.appendChild(datePicker);
+        await waitForRender();
+        const prevYearBtn = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__btn-prev-year"
+        );
+        const nextYearBtn = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__btn-next-year"
+        );
+        const prevMonthBtn = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__btn-prev-month"
+        );
+        const nextMonthBtn = datePicker.shadowRoot.querySelector(
+          ".ea-date-picker__btn-next-month"
+        );
+        expect(prevYearBtn.hasAttribute("aria-label")).toBe(true);
+        expect(nextYearBtn.hasAttribute("aria-label")).toBe(true);
+        expect(prevMonthBtn.hasAttribute("aria-label")).toBe(true);
+        expect(nextMonthBtn.hasAttribute("aria-label")).toBe(true);
+      });
     });
   });
 });

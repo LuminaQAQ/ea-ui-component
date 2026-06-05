@@ -1,5 +1,5 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query } from "@decorator";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-menu-item" as const;
@@ -37,7 +37,12 @@ export class EaMenuItem extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaMenuItem) {
+      this.tabIndex = this.disabled ? -1 : 0;
       this.updateContainerClasslist();
     },
   })
@@ -70,14 +75,26 @@ export class EaMenuItem extends EaBase {
 
   html(): string {
     return `
-      <li class="${bem()}" role="menuitem" part="container">
+      <li class="${bem()}" part="container">
         <slot></slot>
       </li>
     `;
   }
 
   $mount(): void {
+    this.tabIndex = this.disabled ? -1 : 0;
+    this.setAttribute("role", "menuitem");
     this.updateContainerClasslist();
+  }
+
+  /** 处理键盘事件，Enter/Space 激活菜单项 */
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent) {
+    if (this.disabled) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      this.click();
+    }
   }
 }
 

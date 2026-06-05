@@ -10,6 +10,7 @@ if (typeof CSS === "undefined") {
 
 import "../components/ea-timeline/index.js";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaTimeline", () => {
   let container;
@@ -1769,6 +1770,38 @@ describe("EaTimelineItem", () => {
       expect(timeline.querySelectorAll("ea-timeline-item").length).toBe(2);
       expect(newItem.variant).toBe("primary");
       expect(newItem.timestamp).toBe("2024-7-1");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const timeline = document.createElement("ea-timeline");
+      const el = document.createElement("ea-timeline-item");
+      timeline.appendChild(el);
+      container.appendChild(timeline);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("ea-timeline 容器应该有 role='list'", async () => {
+        const timeline = document.createElement("ea-timeline");
+        container.appendChild(timeline);
+        await waitForRender();
+        const containerEl = timeline.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("list");
+      });
+
+      it("ea-timeline-item 容器应该有 role='listitem'", async () => {
+        const timeline = document.createElement("ea-timeline");
+        const item = document.createElement("ea-timeline-item");
+        timeline.appendChild(item);
+        container.appendChild(timeline);
+        await waitForRender();
+        const containerEl = item.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("listitem");
+      });
     });
   });
 });

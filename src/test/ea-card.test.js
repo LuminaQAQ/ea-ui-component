@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-card/index";
 
@@ -586,6 +587,25 @@ describe("EaCard", () => {
       const containerEl = card.shadowRoot.querySelector(".ea-card");
       expect(containerEl.classList.contains("is-header-empty")).toBe(false);
       expect(containerEl.classList.contains("is-footer-empty")).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("作为展示组件不需要特定 ARIA 属性", async () => {
+        const el = document.createElement("ea-card");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBeNull();
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-card");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

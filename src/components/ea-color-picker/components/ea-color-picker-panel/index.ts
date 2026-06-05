@@ -194,14 +194,14 @@ export class EaColorPickerPanel extends EaBase {
     return html(`
       <div class="${bem.b()}" part="container">
         <div class="${bem.e("wrapper")}" part="wrapper">
-          <div class="${bem.e("svpanel")}" part="svpanel">
+          <div class="${bem.e("svpanel")}" part="svpanel" role="slider" aria-label="Saturation and brightness" aria-valuemin="0" aria-valuemax="100">
             <div class="${bem.e("cursor")} ${bem.e("svpanel-cursor")}" part="svpanel-cursor"></div>
           </div>
-          <div class="${bem.e("hue-slider")} ${bem.m("vertical")}" part="hue-slider">
+          <div class="${bem.e("hue-slider")} ${bem.m("vertical")}" part="hue-slider" role="slider" aria-label="Hue" aria-valuemin="0" aria-valuemax="360" aria-orientation="vertical">
             <div class="${bem.e("thumb")} ${bem.e("hue-slider-thumb")}" part="hue-slider-thumb"></div>
           </div>
         </div>
-        <div class="${bem.e("alpha-slider")}" part="alpha-slider">
+        <div class="${bem.e("alpha-slider")}" part="alpha-slider" role="slider" aria-label="Opacity" aria-valuemin="0" aria-valuemax="100">
           <div class="${bem.e("thumb")} ${bem.e("alpha-slider-thumb")}" part="alpha-slider-thumb"></div>
         </div>
         <div class="${bem.e("predefine")}" part="predefine">
@@ -520,6 +520,8 @@ export class EaColorPickerPanel extends EaBase {
 
       this._alphaThumb.style.left = x + "px";
     }
+
+    this._updateSliderAriaValues();
   }
 
   /** 更新饱和度面板背景颜色 */
@@ -536,6 +538,22 @@ export class EaColorPickerPanel extends EaBase {
       color.toString(this._getEffectiveFormat())
     );
   };
+
+  /** 更新所有滑块的 aria-valuenow 属性 */
+  private _updateSliderAriaValues(): void {
+    if (this._saturation) {
+      const brightness = Math.round(this._states.value * 100);
+      this._saturation.setAttribute("aria-valuenow", String(brightness));
+    }
+
+    if (this._hue) {
+      this._hue.setAttribute("aria-valuenow", String(Math.round(this._states.hue)));
+    }
+
+    if (this._alpha) {
+      this._alpha.setAttribute("aria-valuenow", String(Math.round(this._states.alpha * 100)));
+    }
+  }
 
   /** 触发颜色变化事件 */
   private _emitChangeEvent() {

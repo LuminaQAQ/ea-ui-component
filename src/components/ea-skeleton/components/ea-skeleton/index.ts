@@ -172,7 +172,7 @@ export class EaSkeleton extends EaBase {
   /** 渲染模板 */
   html(): string {
     return `
-      <div class="${bem()}" part="container">
+      <div class="${bem()}" part="container" aria-hidden="true" aria-busy="${this.loading}">
         <slot class="${bem.e("default")}" part="default-slot"></slot>
         <slot class="${bem.e("template")}" name="template" part="template-slot"></slot>
       </div>

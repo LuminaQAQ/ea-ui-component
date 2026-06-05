@@ -9,6 +9,7 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-tabs/index.ts";
 
@@ -1416,12 +1417,12 @@ describe("EaTabs", () => {
   });
 
   describe("可访问性", () => {
-    it("tabs 组件应该有 tabindex", async () => {
+    it("tabs 组件作为容器不需要 tabindex", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
       await waitForRender();
 
-      expect(tabs.getAttribute("tabindex")).toBe("0");
+      expect(tabs.getAttribute("tabindex")).toBeNull();
     });
 
     it("每个 tab 应该有 tabindex", async () => {
@@ -1431,18 +1432,23 @@ describe("EaTabs", () => {
 
       const tabEls = tabs.querySelectorAll("ea-tab");
       tabEls.forEach(tab => {
-        expect(tab.getAttribute("tabindex")).toBe("0");
+        expect(tab.hasAttribute("tabindex")).toBe(true);
       });
+
+      const activeTabs = [...tabEls].filter(tab => tab.hasAttribute("active"));
+      if (activeTabs.length > 0) {
+        expect(activeTabs[0].getAttribute("tabindex")).toBe("0");
+      }
     });
 
-    it("每个 tab-panel 应该有 tabindex", async () => {
+    it("每个 tab-panel 不需要 tabindex", async () => {
       const tabs = createTabs();
       container.appendChild(tabs);
       await waitForRender();
 
       const panelEls = tabs.querySelectorAll("ea-tab-panel");
       panelEls.forEach(panel => {
-        expect(panel.getAttribute("tabindex")).toBe("0");
+        expect(panel.getAttribute("tabindex")).toBeNull();
       });
     });
 
@@ -1453,6 +1459,147 @@ describe("EaTabs", () => {
 
       const lineEl = tabs.shadowRoot.querySelector('[part="line"]');
       expect(lineEl.getAttribute("tabindex")).toBe("-1");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-tabs");
+      const tab = document.createElement("ea-tab-pane");
+      tab.setAttribute("label", "Tab 1");
+      tab.textContent = "Content 1";
+      el.appendChild(tab);
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "aria-required-children": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("ea-tabs 宿主元素应该有 role=tablist", async () => {
+        const tabs = createTabs();
+        container.appendChild(tabs);
+        await waitForRender();
+
+        expect(tabs.getAttribute("role")).toBe("tablist");
+      });
+
+      it("ea-tabs 应该有 aria-orientation 属性", async () => {
+        const tabs = createTabs();
+        container.appendChild(tabs);
+        await waitForRender();
+
+        expect(tabs.getAttribute("aria-orientation")).toBe("horizontal");
+      });
+
+      it("垂直方向时 aria-orientation 应为 vertical", async () => {
+        const tabs = createTabs({ tabPosition: "left" });
+        container.appendChild(tabs);
+        await waitForRender();
+
+        expect(tabs.getAttribute("aria-orientation")).toBe("vertical");
+      });
+
+      it("ea-tab 内部容器应该有 role=tab", async () => {
+        const tabs = createTabs();
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const tabEl = tabs.querySelector("ea-tab");
+        const containerEl = tabEl.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("tab");
+      });
+
+      it("激活的 ea-tab 应该有 aria-selected=true", async () => {
+        const tabs = createTabs({ active: "panel0" });
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const activeTab = tabs.querySelector('ea-tab[panel="panel0"]');
+        const containerEl = activeTab.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-selected")).toBe("true");
+      });
+
+      it("未激活的 ea-tab 应该有 aria-selected=false", async () => {
+        const tabs = createTabs({ active: "panel0" });
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const inactiveTab = tabs.querySelector('ea-tab[panel="panel1"]');
+        const containerEl = inactiveTab.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-selected")).toBe("false");
+      });
+
+      it("ea-tab 应该有 aria-controls 指向对应 panel", async () => {
+        const tabs = createTabs();
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const tabEl = tabs.querySelector('ea-tab[panel="panel0"]');
+        const containerEl = tabEl.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-controls")).toBe("ea-tab-panel-panel0");
+      });
+
+      it("ea-tab-panel 内部容器应该有 role=tabpanel", async () => {
+        const tabs = createTabs();
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const panelEl = tabs.querySelector('ea-tab-panel[name="panel0"]');
+        const containerEl = panelEl.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("tabpanel");
+      });
+
+      it("ea-tab-panel 应该有 aria-labelledby 指向对应 tab", async () => {
+        const tabs = createTabs();
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const panelEl = tabs.querySelector('ea-tab-panel[name="panel0"]');
+        const containerEl = panelEl.shadowRoot.querySelector('[part="container"]');
+        const labelledby = containerEl.getAttribute("aria-labelledby");
+        expect(labelledby).toBeTruthy();
+        expect(labelledby).toContain("ea-tab-");
+      });
+
+      it("disabled 的 ea-tab 应该有 aria-disabled=true", async () => {
+        const tab = document.createElement("ea-tab");
+        tab.setAttribute("panel", "test");
+        tab.disabled = true;
+        container.appendChild(tab);
+        await waitForRender();
+
+        expect(tab.getAttribute("aria-disabled")).toBe("true");
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("ArrowRight 应该将焦点移到下一个 tab", async () => {
+        const tabs = createTabs({ active: "panel0" });
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const firstTab = tabs.querySelector('ea-tab[panel="panel0"]');
+        const navEl = tabs.shadowRoot.querySelector('[part="nav"]');
+        navEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        await waitForRender();
+
+        const secondTab = tabs.querySelector('ea-tab[panel="panel1"]');
+        expect(secondTab.getAttribute("tabindex")).toBe("0");
+      });
+
+      it("ArrowLeft 应该将焦点移到上一个 tab", async () => {
+        const tabs = createTabs({ active: "panel1" });
+        container.appendChild(tabs);
+        await waitForRender();
+
+        const navEl = tabs.shadowRoot.querySelector('[part="nav"]');
+        navEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+        await waitForRender();
+
+        const firstTab = tabs.querySelector('ea-tab[panel="panel0"]');
+        expect(firstTab.getAttribute("tabindex")).toBe("0");
+      });
     });
   });
 });

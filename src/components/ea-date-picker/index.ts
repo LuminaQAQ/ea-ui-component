@@ -121,6 +121,9 @@ export class EaDatePicker extends EaFormAssociatedBase {
   @query(".ea-date-picker__month-panel")
   private _monthPanel!: HTMLElement;
 
+  private static _instanceCount: number = 0;
+  private readonly _uniqueId: number = EaDatePicker._instanceCount++;
+
   private _abortController?: AbortController | null;
 
   private _states = {
@@ -184,8 +187,16 @@ export class EaDatePicker extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaDatePicker, newVal: boolean) {
       this._inputElement.toggleAttribute("disabled", newVal);
+      if (newVal) {
+        this._closeDropdown();
+      }
+      this._updateDropdownInert();
       this.updateContainerClasslist();
     },
   })
@@ -288,11 +299,42 @@ export class EaDatePicker extends EaFormAssociatedBase {
     }
   }
 
+  /** 设置 ARIA 属性，遵循 W3C combobox datepicker 模式 */
+  private _setupAria(): void {
+    const dialogId = `ea-date-picker-${this._uniqueId}-dialog`;
+    const headerLabelId = `ea-date-picker-${this._uniqueId}-label`;
+
+    this._inputElement.setAttribute("role", "combobox");
+    this._inputElement.setAttribute("aria-expanded", "false");
+    this._inputElement.setAttribute("aria-haspopup", "dialog");
+    this._inputElement.setAttribute("aria-autocomplete", "none");
+    this._inputElement.setAttribute("aria-controls", dialogId);
+
+    this._dropdownWrap.id = dialogId;
+    this._dropdownWrap.setAttribute("role", "dialog");
+    this._dropdownWrap.setAttribute("aria-modal", "true");
+    this._dropdownWrap.setAttribute("aria-labelledby", headerLabelId);
+  }
+
+  /** 更新 aria-expanded 属性 */
+  private _updateAriaExpanded(): void {
+    const isOpen = this._container.classList.contains("is-open");
+    this._inputElement.setAttribute("aria-expanded", String(isOpen));
+  }
+
+  /** 根据 disabled 和 open 状态设置下拉框的 inert 属性 */
+  private _updateDropdownInert = (): void => {
+    const isOpen = this._container?.classList.contains("is-open");
+    this._dropdownWrap.inert = this.disabled || !isOpen;
+  };
+
   html(): string {
     i18nManager.locale = this.locale;
     dayjs.locale(this.locale.toLowerCase());
 
     const monthsShort = i18nManager.t("calendar.monthsShort");
+
+    const headerLabelId = `ea-date-picker-${this._uniqueId}-label`;
 
     return `
       <div class='${bem()}' part='container'>
@@ -306,7 +348,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
                 <ea-button class='${bem.e("header-btn")} ${bem.e("btn-prev-year")}' part='header-btn' aria-label="Previous year" text>«</ea-button>
                 <ea-button class='${bem.e("header-btn")} ${bem.e("btn-prev-month")}' part='header-btn' aria-label="Previous month" text>‹</ea-button>
               </div>
-              <div class='${bem.e("header-center")}' part='header-center'>
+              <div class='${bem.e("header-center")}' part='header-center' id='${headerLabelId}' aria-live='polite' aria-atomic='true'>
                 <ea-button class='${bem.e("header-year")}' part='header-year' aria-label="Year" text></ea-button>
                 <ea-button class='${bem.e("header-month")}' part='header-month' aria-label="Month" text></ea-button>
               </div>
@@ -318,11 +360,11 @@ export class EaDatePicker extends EaFormAssociatedBase {
             <div class='${bem.e("calendar-body")}' part='calendar-body'>
               <ea-calendar class="${bem.e("calendar")}" size="small" part='calendar'></ea-calendar>
             </div>
-            <div class='${bem.e("year-panel")}' part='year-panel'></div>
-            <div class='${bem.e("month-panel")}' part='month-panel'>${monthsShort
+            <div class='${bem.e("year-panel")}' part='year-panel' role='listbox' aria-label='Select year'></div>
+            <div class='${bem.e("month-panel")}' part='month-panel' role='listbox' aria-label='Select month'>${monthsShort
               .map(
                 (month: string, i: number) =>
-                  `<button class='${bem.e("month-item")}' part='month-item' data-month='${i + 1}'>${month}</button>`
+                  `<button class='${bem.e("month-item")}' part='month-item' data-month='${i + 1}' role='option' aria-selected='false'>${month}</button>`
               )
               .join("")}</div>
           </div>
@@ -429,7 +471,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
     let yearHtml = Array.from({ length: 10 }, (_, i) => {
       const y = decadeStart + i;
       const isSelected = y === this._states.selectedYear;
-      return `<button class='${bem.e("year-item")} ${isSelected ? bem.s("selected") : ""}' data-year='${y}' part='year-item'>${y}</button>`;
+      return `<button class='${bem.e("year-item")} ${isSelected ? bem.s("selected") : ""}' data-year='${y}' part='year-item' role='option' aria-selected='${isSelected}'>${y}</button>`;
     }).join("");
 
     yearPanel.innerHTML = html(yearHtml);
@@ -448,6 +490,7 @@ export class EaDatePicker extends EaFormAssociatedBase {
         this._states.currentDate.year() === this._states.selectedYear;
 
       item.classList.toggle(bem.s("selected"), isSelected);
+      item.setAttribute("aria-selected", String(isSelected));
     });
   };
 
@@ -622,7 +665,11 @@ export class EaDatePicker extends EaFormAssociatedBase {
 
   @listen("click", ".ea-date-picker__input")
   private _onInputClick(): void {
-    this._toggleDropdown();
+    if (this._container.classList.contains("is-open")) {
+      this._closeDropdown();
+    } else {
+      this._openDropdown();
+    }
   }
 
   @listen("focus", ".ea-date-picker__input")
@@ -635,13 +682,44 @@ export class EaDatePicker extends EaFormAssociatedBase {
     this.emit("blur");
   }
 
+  /** @param e - 键盘事件，ArrowDown 打开 dialog（仅输入框），ESC 关闭 dialog（全局） */
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent): void {
+    const isFromInput = e.composedPath().includes(this._inputElement);
+
+    if (isFromInput) {
+      if (e.ctrlKey || e.shiftKey) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        e.stopPropagation();
+        this._openDropdown();
+      }
+    }
+
+    if (e.key === "Escape" && this._container.classList.contains("is-open")) {
+      e.preventDefault();
+      e.stopPropagation();
+      this._closeDropdown();
+    }
+  }
+
+  @listen("focusout")
+  private _onFocusOut(): void {
+    requestAnimationFrame(() => {
+      if (!this.contains(document.activeElement)) {
+        this._closeDropdown(false);
+      }
+    });
+  }
+
   @listen("click", "window")
   private _onWindowClick(e: MouseEvent): void {
     const path = e.composedPath();
     const isInsideDatePicker =
       path.includes(this) || path.includes(this.shadowRoot!);
     if (!isInsideDatePicker) {
-      this._closeDropdown();
+      this._closeDropdown(false);
     }
   }
 
@@ -690,6 +768,8 @@ export class EaDatePicker extends EaFormAssociatedBase {
     if (this.disabled) return;
     const wasOpen = this._container.classList.contains("is-open");
     this._container.classList.add("is-open");
+    this._updateDropdownInert();
+    this._updateAriaExpanded();
 
     if (!wasOpen) {
       this.dispatchEvent(new EaDatePickerVisibleChangeEvent({ visible: true }));
@@ -704,15 +784,23 @@ export class EaDatePicker extends EaFormAssociatedBase {
     }
   };
 
-  /** 关闭下拉面板 */
-  private _closeDropdown = (): void => {
+  /**
+   * @param focusCombobox - 关闭后是否聚焦回输入框，默认 true
+   */
+  private _closeDropdown = (focusCombobox = true): void => {
     const wasOpen = this._container.classList.contains("is-open");
     this._container.classList.remove("is-open");
+    this._updateDropdownInert();
+    this._updateAriaExpanded();
 
     if (wasOpen) {
       this.dispatchEvent(
         new EaDatePickerVisibleChangeEvent({ visible: false })
       );
+    }
+
+    if (focusCombobox && wasOpen) {
+      this._inputElement.focus();
     }
   };
 
@@ -767,6 +855,8 @@ export class EaDatePicker extends EaFormAssociatedBase {
   }
 
   $mount(): void {
+    this._setupAria();
+    this._updateDropdownInert();
     this.updateContainerClasslist();
     this._updateHeaderDisplay();
   }

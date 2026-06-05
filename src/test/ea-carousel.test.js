@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-carousel/index";
 
@@ -1485,6 +1486,184 @@ describe("EaCarousel", () => {
       expect(containerEl.classList.contains("ea-carousel--vertical")).toBe(
         true
       );
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("Keyboard Interaction", () => {
+      it("ArrowRight 应该切换到下一个轮播项", async () => {
+        const el = document.createElement("ea-carousel");
+        el.setAttribute("autoplay", "false");
+        el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        if (indicatorWrap) {
+          indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+          await waitForRender();
+        }
+      });
+
+      it("ArrowLeft 应该切换到上一个轮播项", async () => {
+        const el = document.createElement("ea-carousel");
+        el.setAttribute("autoplay", "false");
+        el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        if (indicatorWrap) {
+          indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+          await waitForRender();
+        }
+      });
+
+      it("Home 应该切换到第一个轮播项", async () => {
+        const el = document.createElement("ea-carousel");
+        el.setAttribute("autoplay", "false");
+        el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        if (indicatorWrap) {
+          indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Home", bubbles: true }));
+          await waitForRender();
+        }
+      });
+
+      it("End 应该切换到最后一个轮播项", async () => {
+        const el = document.createElement("ea-carousel");
+        el.setAttribute("autoplay", "false");
+        el.innerHTML = `<ea-carousel-item>1</ea-carousel-item><ea-carousel-item>2</ea-carousel-item><ea-carousel-item>3</ea-carousel-item>`;
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        const indicatorWrap = el.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        if (indicatorWrap) {
+          indicatorWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "End", bubbles: true }));
+          await waitForRender();
+        }
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-carousel");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器应该有 role=region", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const containerEl = getContainer(carousel);
+        expect(containerEl.getAttribute("role")).toBe("region");
+      });
+
+      it("容器应该有 aria-roledescription=carousel", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const containerEl = getContainer(carousel);
+        expect(containerEl.getAttribute("aria-roledescription")).toBe("carousel");
+      });
+
+      it("容器应该有 aria-label=Carousel", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const containerEl = getContainer(carousel);
+        expect(containerEl.getAttribute("aria-label")).toBe("Carousel");
+      });
+
+      it("content 区域应该有 aria-live=off（自动播放时）", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const content = getContent(carousel);
+        expect(content.getAttribute("aria-live")).toBe("off");
+      });
+
+      it("indicator-wrap 应该有 role=tablist", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const indicatorWrap = carousel.shadowRoot.querySelector(".ea-carousel__indicator-wrap");
+        expect(indicatorWrap.getAttribute("role")).toBe("tablist");
+      });
+
+      it("indicator 应该有 role=tab", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const indicators = getIndicators(carousel);
+        expect(indicators[0].getAttribute("role")).toBe("tab");
+      });
+
+      it("激活的 indicator 应该有 aria-selected=true", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const indicators = getIndicators(carousel);
+        expect(indicators[0].getAttribute("aria-selected")).toBe("true");
+      });
+
+      it("非激活的 indicator 应该有 aria-selected=false", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const indicators = getIndicators(carousel);
+        expect(indicators[1].getAttribute("aria-selected")).toBe("false");
+      });
+
+      it("indicator 应该有 aria-controls 属性", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const indicators = getIndicators(carousel);
+        expect(indicators[0].getAttribute("aria-controls")).toBeTruthy();
+      });
+
+      it("箭头按钮应该有 aria-label", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
+        const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
+        expect(leftArrow.getAttribute("aria-label")).toBeTruthy();
+        expect(rightArrow.getAttribute("aria-label")).toBeTruthy();
+      });
+
+      it("箭头按钮应该有 aria-controls=carousel-content", async () => {
+        const carousel = createCarousel(3);
+        container.appendChild(carousel);
+        await waitForRender();
+        const leftArrow = carousel.shadowRoot.querySelector(".arrow-left");
+        const rightArrow = carousel.shadowRoot.querySelector(".arrow-right");
+        expect(leftArrow.getAttribute("aria-controls")).toBe("carousel-content");
+        expect(rightArrow.getAttribute("aria-controls")).toBe("carousel-content");
+      });
+
+      it("ea-carousel-item 容器应该有 role=group", async () => {
+        const item = document.createElement("ea-carousel-item");
+        container.appendChild(item);
+        await waitForRender();
+        const containerEl = item.shadowRoot.querySelector(".ea-carousel-item");
+        expect(containerEl.getAttribute("role")).toBe("group");
+      });
+
+      it("ea-carousel-item 容器应该有 aria-roledescription=slide", async () => {
+        const item = document.createElement("ea-carousel-item");
+        container.appendChild(item);
+        await waitForRender();
+        const containerEl = item.shadowRoot.querySelector(".ea-carousel-item");
+        expect(containerEl.getAttribute("aria-roledescription")).toBe("slide");
+      });
     });
   });
 });

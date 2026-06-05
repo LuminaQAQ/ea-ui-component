@@ -270,7 +270,7 @@ export class EaTable extends EaBase {
   html(): string {
     return `
       <slot id='defaultSlot' part='default-slot'></slot>
-      <table class='ea-table' part='container'>
+      <table class='ea-table' part='container' role='table' aria-label='Data Table' aria-rowcount='0' aria-colcount='0'>
         <colgroup class='ea-table__colgroup' part='colgroup'></colgroup>
         <thead class='ea-table__thead' part='thead'></thead>
         <tbody class='ea-table__tbody' part='tbody'></tbody>
@@ -353,6 +353,7 @@ export class EaTable extends EaBase {
     const columns = this._states.columns.filter(
       item => !item.template || item.template instanceof HTMLTemplateElement
     );
+    const theadRowCount = this._thead.querySelectorAll("tr").length;
 
     const typeTemplate: Record<string, () => string> = {
       selection: () =>
@@ -371,13 +372,15 @@ export class EaTable extends EaBase {
     this._states.dataSource = new WeakMap();
     this._states.originData = dataSource;
 
-    columns.forEach(column => {
+    columns.forEach((column, columnIndex) => {
       const row = rowTpl;
       const { template } = column;
       const td = document.createElement("td");
 
       td.part?.add("tbody-td");
       td.className = "ea-table__td";
+      td.setAttribute("role", "cell");
+      td.setAttribute("aria-colindex", String(columnIndex + 1));
       const isFixed = column.fixed && column.fixed !== "false";
       td.classList.toggle(`is-fixed`, !!isFixed);
       td.classList.toggle(`fixed-${column.fixed}`, !!isFixed);
@@ -411,6 +414,7 @@ export class EaTable extends EaBase {
       const trNode = rowTpl.cloneNode(true) as HTMLTableRowElement;
 
       trNode.setAttribute("data-index", String(i));
+      trNode.setAttribute("aria-rowindex", String(i + theadRowCount + 1));
 
       if (typeof this.selectable === "function") {
         const selectable = !this.selectable(item);
@@ -474,6 +478,9 @@ export class EaTable extends EaBase {
 
     this._handleFixedColumn();
     this._handleScroll();
+
+    this._container.setAttribute("aria-rowcount", String(dataSource.length + theadRowCount));
+    this._container.setAttribute("aria-colcount", String(columns.length));
 
     this.updateContainerClasslist();
 
@@ -646,7 +653,7 @@ export class EaTable extends EaBase {
     );
   }
 
-  /** 更新表头全选复选框的状态（选中、半选、未选） */
+  /** 更新表头全选复选框的状态（选中、半选、未选）并同步行 aria-selected */
   private _handleSelectionUpdate(): void {
     const theadCheckboxEl = this._thead.querySelector(
       `ea-checkbox[data-type="selection"]`
@@ -654,11 +661,15 @@ export class EaTable extends EaBase {
 
     if (!theadCheckboxEl) return;
 
-    const isAllChecked = [
+    const allCheckboxes = [
       ...this._tbody.querySelectorAll(
         `ea-checkbox[data-type="selection"]:not([disabled])`
       ),
-    ].every(checkbox => checkbox.hasAttribute("checked"));
+    ] as HTMLElement[];
+
+    const isAllChecked = allCheckboxes.every(checkbox =>
+      checkbox.hasAttribute("checked")
+    );
 
     const isSomeChecked = [
       ...this._tbody.querySelectorAll(`ea-checkbox[data-type="selection"]`),
@@ -674,6 +685,18 @@ export class EaTable extends EaBase {
       theadCheckboxEl.removeAttribute("checked");
       theadCheckboxEl.removeAttribute("indeterminate");
     }
+
+    this._tbody.querySelectorAll("tr[part='tbody-tr']").forEach(tr => {
+      const checkbox = tr.querySelector(
+        `ea-checkbox[data-type="selection"]`
+      ) as HTMLElement;
+      if (checkbox) {
+        (tr as HTMLElement).setAttribute(
+          "aria-selected",
+          String(checkbox.hasAttribute("checked"))
+        );
+      }
+    });
   }
 
   /** 处理固定列的样式计算和偏移量设置 */
@@ -1033,9 +1056,17 @@ export class EaTable extends EaBase {
           desc: sortableEl.querySelector('[part="desc-icon"]'),
         };
         sortableEl.setAttribute("data-order", newOrder);
+        sortableEl.setAttribute("aria-sort", newOrder === "asc" ? "ascending" : "descending");
         sortableEl.querySelectorAll(".ea-table__sort-icon").forEach(icon => {
           icon.classList.toggle("is-active", orderEls[newOrder] === icon);
         });
+
+        this._thead.querySelectorAll(".is-sortable").forEach(th => {
+          if (th !== sortableEl) {
+            th.setAttribute("aria-sort", "none");
+          }
+        });
+
         this.sort(prop, newOrder as "asc" | "desc");
       }
     }

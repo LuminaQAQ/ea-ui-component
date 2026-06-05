@@ -168,7 +168,7 @@ export class EaTimelineItem extends EaBase {
 
   html(): string {
     return `
-      <div class="${bem()}" part="container">
+      <div class="${bem()}" part="container" role="listitem">
         <aside class="${bem.e("wrapper")}" part="left-wrapper">
           <slot name="dot">
             <section class="${bem.e("dot")}" part="dot"></section>

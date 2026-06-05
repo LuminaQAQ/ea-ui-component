@@ -4,6 +4,7 @@ import "../components/ea-icon/index";
 import "../components/ea-button/index";
 import "../components/ea-tour/index";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 function createTour(stepsHTML = "", attrs = {}) {
   const tour = document.createElement("ea-tour");
@@ -1934,6 +1935,42 @@ describe("EaTourStep Component", () => {
       await waitForRender();
 
       expect(step.placement).toBe("top-start");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-tour-step");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "aria-prohibited-attr": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("step 容器应该有 role='dialog'", async () => {
+        const el = document.createElement("ea-tour-step");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("dialog");
+      });
+
+      it("step 容器应该有 aria-modal='true'", async () => {
+        const el = document.createElement("ea-tour-step");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-modal")).toBe("true");
+      });
+
+      it("关闭图标应该有 aria-label='close'", async () => {
+        const el = document.createElement("ea-tour-step");
+        container.appendChild(el);
+        await waitForRender();
+        const closeIcon = el.shadowRoot.querySelector('[part="close-icon"]');
+        expect(closeIcon.getAttribute("aria-label")).toBe("close");
+      });
     });
   });
 });

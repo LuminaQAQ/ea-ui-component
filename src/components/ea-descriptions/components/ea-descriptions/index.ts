@@ -138,9 +138,9 @@ export class EaDescriptions extends EaBase {
   html(): string {
     return `
       <slot id='defaultSlot' part='default-slot'></slot>
-      <table class='${bem()}' part='container'>
+      <table class='${bem()}' part='container' aria-labelledby='descriptions-title'>
         <caption class='${bem.e("caption")}' part='caption'>
-          <section class='${bem.e("title")}' part='title'>
+          <section class='${bem.e("title")}' part='title' id='descriptions-title'>
             <slot name='header'></slot>
           </section>
           <section class='${bem.e("extra")}' part='extra'>
@@ -298,8 +298,8 @@ export class EaDescriptions extends EaBase {
       className,
       {
         part: `label cell ${item["label-part"] || ""}`,
-        tabindex: 1,
         style: this._getCellStyle(item, true),
+        role: "rowheader",
       },
       item.label
     );
@@ -326,7 +326,6 @@ export class EaDescriptions extends EaBase {
       className,
       {
         part: `content cell ${item["content-part"] || ""}`,
-        tabindex: 1,
         style: this._getCellStyle(item, false),
       },
       html(item.content)
@@ -381,10 +380,10 @@ export class EaDescriptions extends EaBase {
         bem.e("label"),
         {
           part: `label cell ${item["label-part"] || ""}`,
-          tabindex: 1,
           colspan: 1,
           rowspan: item.rowspan,
           style: this._getCellStyle(item, true),
+          role: "rowheader",
         },
         item.label
       );
@@ -394,7 +393,6 @@ export class EaDescriptions extends EaBase {
         bem.e("content"),
         {
           part: `content cell ${item["content-part"] || ""}`,
-          tabindex: 1,
           rowspan: item.rowspan,
           colspan: needsExtraColspan ? 6 - (index + 1) : item.colspan || 1,
           style: this._getCellStyle(item, false),
@@ -419,12 +417,13 @@ export class EaDescriptions extends EaBase {
         `${bem.e("label")} ${bem.e("header")}`,
         {
           part: `label cell ${item["label-part"] || ""}`,
-          tabindex: 1,
           rowspan: 1,
           colspan: needsExtraColspan(index)
             ? 6 - (index + 1)
             : item.colspan || 1,
           style: this._getCellStyle(item, true),
+          scope: "row",
+          role: "rowheader",
         },
         item.label
       )
@@ -436,7 +435,6 @@ export class EaDescriptions extends EaBase {
         `${bem.e("content")} ${bem.e("cell")}`,
         {
           part: `content cell ${item["content-part"] || ""}`,
-          tabindex: 1,
           rowspan: item.rowspan * 2 - 1,
           colspan: needsExtraColspan(index)
             ? 6 - (index + 1)

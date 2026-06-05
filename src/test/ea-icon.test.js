@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-icon/index";
 
@@ -551,6 +552,37 @@ describe("EaIcon", () => {
       icon.remove();
 
       expect(container.contains(icon)).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-icon");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("无 aria-label 时内部 i 元素应该有 aria-hidden=true", async () => {
+        const el = document.createElement("ea-icon");
+        el.setAttribute("name", "star");
+        container.appendChild(el);
+        await waitForRender();
+        const iElement = el.shadowRoot.querySelector("i.ea-icon");
+        expect(iElement.getAttribute("aria-hidden")).toBe("true");
+      });
+
+      it("有 aria-label 时内部 i 元素不应该有 aria-hidden=true", async () => {
+        const el = document.createElement("ea-icon");
+        el.setAttribute("name", "star");
+        el.setAttribute("aria-label", "Star icon");
+        container.appendChild(el);
+        await waitForRender();
+        const iElement = el.shadowRoot.querySelector("i.ea-icon");
+        expect(iElement.getAttribute("aria-hidden")).toBe("false");
+      });
     });
   });
 });

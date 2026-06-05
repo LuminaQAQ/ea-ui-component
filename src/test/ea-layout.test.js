@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-layout/index.ts";
 
@@ -894,6 +895,25 @@ describe("EaLayout Component (EaRow & EaCol)", () => {
       expect(row.style.getPropertyValue("--ea-row-gutter")).toBe("20px");
       expect(row.style.getPropertyValue("--ea-row-justify")).toBe("space-between");
       expect(row.style.getPropertyValue("--ea-row-align")).toBe("bottom");
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("作为布局组件不需要特定 ARIA 属性", async () => {
+        const el = document.createElement("ea-row");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBeNull();
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-row");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

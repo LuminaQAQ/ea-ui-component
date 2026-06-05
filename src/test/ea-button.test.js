@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-button/index";
 
@@ -49,12 +50,12 @@ describe("EaButton Component", () => {
       expect(slot).toBeDefined();
     });
 
-    it("容器应该有 tabindex=-1", () => {
+    it("容器不应有 tabindex 属性（原生 button 自带焦点能力）", () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
       const buttonContainer = button.shadowRoot.querySelector(".ea-button");
-      expect(buttonContainer.getAttribute("tabindex")).toBe("-1");
+      expect(buttonContainer.getAttribute("tabindex")).toBeNull();
     });
 
     it("应该包含 loading-icon 和 icon 元素", () => {
@@ -1071,17 +1072,17 @@ describe("EaButton Component", () => {
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
 
-      const keypressEvent = new KeyboardEvent("keypress", {
+      const keydownEvent = new KeyboardEvent("keydown", {
         key: "Enter",
         bubbles: true,
         composed: true,
       });
-      button.dispatchEvent(keypressEvent);
+      button.dispatchEvent(keydownEvent);
 
       expect(clickHandler).toHaveBeenCalled();
     });
 
-    it("非 Enter 键不应触发 click", async () => {
+    it("应该响应 Space 键触发 click", async () => {
       const button = document.createElement("ea-button");
       container.appendChild(button);
 
@@ -1090,12 +1091,31 @@ describe("EaButton Component", () => {
       const clickHandler = vi.fn();
       button.addEventListener("click", clickHandler);
 
-      const keypressEvent = new KeyboardEvent("keypress", {
-        key: "Space",
+      const keydownEvent = new KeyboardEvent("keydown", {
+        key: " ",
         bubbles: true,
         composed: true,
       });
-      button.dispatchEvent(keypressEvent);
+      button.dispatchEvent(keydownEvent);
+
+      expect(clickHandler).toHaveBeenCalled();
+    });
+
+    it("非 Enter/Space 键不应触发 click", async () => {
+      const button = document.createElement("ea-button");
+      container.appendChild(button);
+
+      await waitForRender();
+
+      const clickHandler = vi.fn();
+      button.addEventListener("click", clickHandler);
+
+      const keydownEvent = new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        composed: true,
+      });
+      button.dispatchEvent(keydownEvent);
 
       expect(clickHandler).not.toHaveBeenCalled();
     });
@@ -1397,6 +1417,115 @@ describe("EaButton Component", () => {
           container.removeChild(button);
         }
       }
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const button = document.createElement("ea-button");
+      button.textContent = "Button";
+      container.appendChild(button);
+
+      await waitForRender();
+
+      const results = await runAxe(button);
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const button = document.createElement("ea-button");
+      button.setAttribute("disabled", "");
+      button.textContent = "Disabled Button";
+      container.appendChild(button);
+
+      await waitForRender();
+
+      const results = await runAxe(button);
+      assertNoA11yViolations(results);
+    });
+
+    it("link 模式应该无 a11y 违规", async () => {
+      const button = document.createElement("ea-button");
+      button.setAttribute("link", "");
+      button.setAttribute("href", "https://example.com");
+      button.textContent = "Link Button";
+      container.appendChild(button);
+
+      await waitForRender();
+
+      const results = await runAxe(button);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("disabled 时应该设置 aria-disabled 为 true", async () => {
+        const el = document.createElement("ea-button");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("非 disabled 时 aria-disabled 应该为 false", async () => {
+        const el = document.createElement("ea-button");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("disabled 移除后 aria-disabled 应该变为 false", async () => {
+        const el = document.createElement("ea-button");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+
+        el.removeAttribute("disabled");
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("loading 时应该设置 aria-busy 为 true", async () => {
+        const el = document.createElement("ea-button");
+        el.setAttribute("loading", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-busy")).toBe("true");
+      });
+
+      it("非 loading 时 aria-busy 应该为 false", async () => {
+        const el = document.createElement("ea-button");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-busy")).toBe("false");
+      });
+
+      it("loading 移除后 aria-busy 应该变为 false", async () => {
+        const el = document.createElement("ea-button");
+        el.setAttribute("loading", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-busy")).toBe("true");
+
+        el.removeAttribute("loading");
+        await waitForRender();
+        expect(el.getAttribute("aria-busy")).toBe("false");
+      });
+
+      it("toggle 按钮应该设置 aria-pressed 为 true", async () => {
+        const el = document.createElement("ea-button");
+        el.setAttribute("toggle", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-pressed")).toBe("true");
+      });
+
+      it("非 toggle 按钮时 aria-pressed 应该为 false", async () => {
+        const el = document.createElement("ea-button");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-pressed")).toBe("false");
+      });
     });
   });
 });

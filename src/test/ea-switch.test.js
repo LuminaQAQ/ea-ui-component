@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-switch/index.ts";
 
@@ -1681,6 +1682,138 @@ describe("EaSwitch Component", () => {
       expect(content.querySelector(".ea-switch__label-left")).toBeTruthy();
       expect(content.querySelector(".ea-switch__inner")).toBeTruthy();
       expect(content.querySelector(".ea-switch__label-right")).toBeTruthy();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-switch");
+      el.setAttribute("label", "Switch");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-switch");
+      el.setAttribute("label", "Switch");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("宿主元素应该有 role=switch", async () => {
+        const el = document.createElement("ea-switch");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("switch");
+      });
+
+      it("关闭时 aria-checked 应该为 false", async () => {
+        const el = document.createElement("ea-switch");
+        el.setAttribute("value", "false");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-checked")).toBe("false");
+      });
+
+      it("开启时 aria-checked 应该为 true", async () => {
+        const el = document.createElement("ea-switch");
+        el.setAttribute("value", "true");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-checked")).toBe("true");
+      });
+
+      it("切换 value 后 aria-checked 应该更新", async () => {
+        const el = document.createElement("ea-switch");
+        el.setAttribute("value", "false");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-checked")).toBe("false");
+
+        el.setAttribute("value", "true");
+        await waitForRender();
+        expect(el.getAttribute("aria-checked")).toBe("true");
+      });
+
+      it("disabled 时应该设置 aria-disabled 为 true", async () => {
+        const el = document.createElement("ea-switch");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("非 disabled 时 aria-disabled 应该为 false", async () => {
+        const el = document.createElement("ea-switch");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("disabled 移除后 aria-disabled 应该变为 false", async () => {
+        const el = document.createElement("ea-switch");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+
+        el.removeAttribute("disabled");
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("Space 键应该切换开关状态", async () => {
+        const el = document.createElement("ea-switch");
+        container.appendChild(el);
+        await waitForRender();
+
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
+        await waitForRender();
+        expect(el.getAttribute("value")).toBe("true");
+      });
+
+      it("Enter 键应该切换开关状态", async () => {
+        const el = document.createElement("ea-switch");
+        container.appendChild(el);
+        await waitForRender();
+
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+        await waitForRender();
+        expect(el.getAttribute("value")).toBe("true");
+      });
+
+      it("disabled 时 Space 键不应该切换状态", async () => {
+        const el = document.createElement("ea-switch");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
+        await waitForRender();
+        expect(el.value).toBe(false);
+      });
+
+      it("连续按 Space 应该交替切换状态", async () => {
+        const el = document.createElement("ea-switch");
+        container.appendChild(el);
+        await waitForRender();
+
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
+        await waitForRender();
+        expect(el.getAttribute("value")).toBe("true");
+
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
+        await waitForRender();
+        expect(el.getAttribute("value")).toBe("false");
+      });
     });
   });
 });

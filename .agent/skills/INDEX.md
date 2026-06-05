@@ -1,6 +1,6 @@
 # 技能模块索引
 
-> **版本**: 3.6.0 | **最后更新**: 2026-06-02  
+> **版本**: 3.7.0 | **最后更新**: 2026-06-04
 > 共 17 个原子化技能模块，覆盖组件开发全流程
 
 ## 按开发阶段分类
@@ -17,8 +17,8 @@
 
 | 技能 | 名称 | 触发场景 |
 |------|------|---------|
-| `attribute` | @attribute 装饰器 | 定义映射 HTML attribute 的属性 |
-| `property` | @property 装饰器 | 定义纯 JS 属性（不映射 HTML attribute） |
+| `attribute` | @attribute 装饰器 | 定义映射 HTML attribute 的属性，含 `a11y` 无障碍属性同步 |
+| `property` | @property 装饰器 | 定义纯 JS 属性（不映射 HTML attribute），含 `a11y` 无障碍属性同步 |
 | `variant` | Variant 类型系统 | 定义组件视觉变体属性 |
 
 ### 🔍 DOM 与事件
@@ -59,8 +59,8 @@
 | 装饰器 | 技能模块 | 说明 |
 |--------|---------|------|
 | `@CustomElement` | `custom-element` | 注册自定义元素 |
-| `@attribute` | `attribute` | HTML attribute 映射属性 |
-| `@property` | `property` | 纯 JS 属性 |
+| `@attribute` | `attribute` | HTML attribute 映射属性，含 `a11y` 无障碍同步 |
+| `@property` | `property` | 纯 JS 属性，含 `a11y` 无障碍同步 |
 | `@query` | `query` | 查询单个 DOM 元素 |
 | `@queryAll` | `query` | 查询多个 DOM 元素 |
 | `@children` | `children` | 查询 Light DOM 子元素 |

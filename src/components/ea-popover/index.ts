@@ -1,6 +1,6 @@
 import { EaPopper } from "@common/ea-popper/index";
 import { createBEM } from "@utils/bem";
-import { CustomElement, attribute, query } from "@decorator";
+import { CustomElement, attribute, listen, query } from "@decorator";
 import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -54,6 +54,8 @@ export class EaPopover extends EaPopper {
 
   private _triggerAbortController?: AbortController;
   private _contextmenuAbortController?: AbortController;
+  private _popoverAbortController?: AbortController;
+  private _keyboardActivated = false;
 
   @attribute({
     type: Enum(TRIGGER_TYPES),
@@ -105,6 +107,34 @@ export class EaPopover extends EaPopper {
     return className;
   }
 
+  /** 设置 ARIA 关联属性，使非交互式触发元素可聚焦 */
+  protected _setupAria(): void {
+    super._setupAria();
+    this._originalPopper.setAttribute("role", "dialog");
+    const trigger = this._getReferenceTrigger();
+    if (trigger) {
+      trigger.setAttribute("aria-haspopup", "dialog");
+      if (!this._isNativelyFocusable(trigger)) {
+        trigger.setAttribute("tabindex", "0");
+        trigger.setAttribute("role", "button");
+      }
+    }
+    if (this.heading && this._titleElement) {
+      const contentId = this._originalPopper.getAttribute("id") || "";
+      const titleId = `${contentId}-title`;
+      this._titleElement.setAttribute("id", titleId);
+      this._originalPopper.setAttribute("aria-labelledby", titleId);
+    }
+  }
+
+  /** 检查元素是否原生可聚焦 */
+  private _isNativelyFocusable(el: HTMLElement): boolean {
+    const focusableTags = ["A", "BUTTON", "INPUT", "SELECT", "TEXTAREA"];
+    if (focusableTags.includes(el.tagName)) return true;
+    if (el.tabIndex >= 0) return true;
+    return false;
+  }
+
   /** 初始化触发事件监听 */
   private _initTriggerEvent(): void {
     this._triggerAbortController?.abort();
@@ -143,7 +173,8 @@ export class EaPopover extends EaPopper {
     click: () => {
       this.addEventListener(
         "click",
-        () => {
+        (e: MouseEvent) => {
+          if (e.detail === 0) return;
           this.toggle();
         },
         { signal: this._triggerAbortController!.signal }
@@ -151,17 +182,22 @@ export class EaPopover extends EaPopper {
     },
     focus: () => {
       this.addEventListener(
-        "focus",
+        "focusin",
         () => {
-          this.show();
-
-          this.addEventListener(
-            "blur",
-            () => {
+          if (!this.visible) {
+            this.show();
+          }
+        },
+        { signal: this._triggerAbortController!.signal }
+      );
+      this.addEventListener(
+        "focusout",
+        () => {
+          requestAnimationFrame(() => {
+            if (this.visible && !this.contains(document.activeElement)) {
               this.hide();
-            },
-            { signal: this._triggerAbortController!.signal }
-          );
+            }
+          });
         },
         { signal: this._triggerAbortController!.signal }
       );
@@ -195,16 +231,161 @@ export class EaPopover extends EaPopper {
     customized: () => {},
   };
 
+  /** 可聚焦元素的 CSS 选择器（用于 Light DOM 查询） */
+  private static readonly FOCUSABLE_SELECTOR =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  /** 获取内容区内的可聚焦元素（排除触发元素），包括自定义元素内部的可聚焦元素 */
+  private _getContentFocusableElements(): HTMLElement[] {
+    const trigger = this._getReferenceTrigger();
+    const result: HTMLElement[] = [];
+
+    const collect = (root: Element) => {
+      const children = root.querySelectorAll<HTMLElement>("*");
+      for (const el of children) {
+        if (el === trigger || trigger?.contains(el)) continue;
+        if (el.hasAttribute("disabled")) continue;
+
+        // 自身是可聚焦元素
+        if (el.tabIndex >= 0 || el.matches(EaPopover.FOCUSABLE_SELECTOR)) {
+          result.push(el);
+          continue;
+        }
+
+        // 自定义元素：检查 Shadow DOM 内是否有可聚焦元素
+        if (el.shadowRoot) {
+          const shadowFocusable = el.shadowRoot.querySelector<HTMLElement>(
+            EaPopover.FOCUSABLE_SELECTOR
+          );
+          if (shadowFocusable) {
+            result.push(el);
+          }
+        }
+      }
+    };
+
+    collect(this);
+    return result;
+  }
+
+  /** 处理键盘事件 */
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent) {
+    const target = e.target as HTMLElement;
+    const trigger = this._getReferenceTrigger();
+    const isTrigger = !!(
+      trigger &&
+      (target === trigger || trigger.contains(target))
+    );
+    const isContent = this.contains(target) && !isTrigger;
+
+    // 触发元素上的键盘事件
+    if (isTrigger) {
+      if (e.key === "Enter" || e.key === " ") {
+        // focus 模式由 focus/blur 控制，不需要键盘激活
+        if (this.trigger === "focus") return;
+        // customized 模式由外部控制开关，只标记键盘激活
+        if (this.trigger === "customized") {
+          this._keyboardActivated = true;
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        this._keyboardActivated = true;
+        if (!this.visible) {
+          this.show();
+        } else {
+          this.hide();
+        }
+        return;
+      }
+      return;
+    }
+
+    // 内容区内的键盘事件
+    if (isContent && this.visible) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+        this.hide();
+        trigger?.focus();
+        return;
+      }
+      if (e.key === "Tab") {
+        const focusable = this._getContentFocusableElements();
+        if (focusable.length === 0) return;
+        const firstEl = focusable[0];
+        const lastEl = focusable[focusable.length - 1];
+
+        // 找到 target 对应的 focusable 宿主元素
+        const targetHost = focusable.find(
+          el => el === target || el.contains(target)
+        );
+
+        if (e.shiftKey) {
+          if (!targetHost || targetHost === firstEl) {
+            e.preventDefault();
+            this._focusElement(lastEl);
+          }
+        } else {
+          if (!targetHost || targetHost === lastEl) {
+            e.preventDefault();
+            this._focusElement(firstEl);
+          }
+        }
+        return;
+      }
+    }
+  }
+
+  /** 将焦点移入弹出内容区，优先聚焦第一个可交互元素 */
+  private _focusContent(): void {
+    const focusable = this._getContentFocusableElements();
+    if (focusable.length > 0) {
+      this._focusElement(focusable[0]);
+    } else {
+      this._originalPopper.tabIndex = 0;
+      this._originalPopper.focus();
+    }
+  }
+
+  /** 聚焦元素，如果是自定义元素则聚焦其 Shadow DOM 内第一个可聚焦元素 */
+  private _focusElement(el: HTMLElement): void {
+    if (el.shadowRoot) {
+      const inner = el.shadowRoot.querySelector<HTMLElement>(
+        EaPopover.FOCUSABLE_SELECTOR
+      );
+      if (inner) {
+        inner.focus();
+        return;
+      }
+    }
+    el.focus();
+  }
+
+  /** 焦点离开弹出框时自动关闭（仅 click/hover/contextmenu 模式） */
+  @listen("focusout")
+  private _handleFocusout() {
+    if (!this.visible) return;
+    if (this.trigger === "focus" || this.trigger === "customized") return;
+    requestAnimationFrame(() => {
+      if (!this.visible) return;
+      const activeEl = document.activeElement;
+      if (activeEl && this.contains(activeEl)) return;
+      this.hide();
+    });
+  }
+
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container" tabindex="-1">
         <div class="ea-popper__reference" part="reference" tabindex="-1">
-          <div class="ea-popper__original" part="original" tabindex="0">
+          <slot name="reference"></slot>
+          <div class="ea-popper__original" part="original" tabindex="-1" inert>
             <div class="${bem.e("title")}" part="title"></div>
             <slot></slot>
             <div class="${bem.e("content")}" part="content"></div>
           </div>
-          <slot name="reference"></slot>
         </div>
       </div>
     `;
@@ -220,11 +401,48 @@ export class EaPopover extends EaPopper {
     if (this.content && this._contentElement) {
       this._contentElement.textContent = this.content;
     }
+
+    // 管理 _originalPopper：关闭时 inert 阻止聚焦，打开时移除 inert
+    if (this._originalPopper) {
+      this._originalPopper.inert = true;
+    }
+
+    this._popoverAbortController?.abort();
+    this._popoverAbortController = new AbortController();
+
+    this.addEventListener(
+      "ea-show",
+      () => {
+        if (this._originalPopper) {
+          this._originalPopper.inert = false;
+        }
+        // 键盘激活时自动将焦点移入内容区
+        if (this._keyboardActivated) {
+          this._keyboardActivated = false;
+          requestAnimationFrame(() => this._focusContent());
+        }
+      },
+      { signal: this._popoverAbortController.signal }
+    );
+
+    this.addEventListener(
+      "ea-hide",
+      () => {
+        if (this._originalPopper) {
+          this._originalPopper.inert = true;
+        }
+        const trigger = this._getReferenceTrigger();
+        if (trigger) trigger.setAttribute("aria-expanded", "false");
+        this._keyboardActivated = false;
+      },
+      { signal: this._popoverAbortController.signal }
+    );
   }
 
   $beforeUnmount(): void {
     super.$beforeUnmount();
     this._triggerAbortController?.abort();
     this._contextmenuAbortController?.abort();
+    this._popoverAbortController?.abort();
   }
 }

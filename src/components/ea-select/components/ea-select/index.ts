@@ -50,6 +50,8 @@ export type SelectSize = "large" | "default" | "small";
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaSelect extends EaFormAssociatedBase {
+  private static _idCounter = 0;
+
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -80,9 +82,17 @@ export class EaSelect extends EaFormAssociatedBase {
     isTagImport: false,
   };
 
+  private _activeOptionIndex: number = -1;
+  private _searchString: string = "";
+  private _searchTimeout: ReturnType<typeof setTimeout> | null = null;
+  private _dropdownId: string = "";
+  private _isComposing: boolean = false;
+  private _inlineCompletionLength: number = 0;
+
   @attribute({
     type: String,
     default: "",
+    a11y: { ariaAttr: "aria-label", map: v => v || null },
     observer(this: EaSelect, newVal: string) {
       this._updateInputAttribute("label", newVal);
     },
@@ -110,9 +120,15 @@ export class EaSelect extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaSelect, newVal: boolean) {
       this._updateInputAttribute("disabled", newVal);
       this.updateContainerClasslist();
+      if (newVal) {
+        this.tabIndex = -1;
+      } else {
+        this.tabIndex = 0;
+      }
     },
   })
   disabled: boolean = false;
@@ -144,6 +160,11 @@ export class EaSelect extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-multiselectable",
+      target: bem.ce("dropdown"),
+      map: v => String(v),
+    },
     observer(this: EaSelect, newVal: boolean) {
       this._abortControllerStates.tagRemoveAbortController?.abort();
       this._handleMultipleModeChange(newVal);
@@ -172,6 +193,10 @@ export class EaSelect extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-autocomplete",
+      map: v => v ? "both" : null,
+    },
     observer(this: EaSelect, newVal: boolean) {
       this._abortControllerStates.inputFilterAbortController?.abort();
       this._handleFilterableChange(newVal);
@@ -182,6 +207,7 @@ export class EaSelect extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-required", map: v => String(v) },
   })
   required: boolean = false;
 
@@ -257,7 +283,7 @@ export class EaSelect extends EaFormAssociatedBase {
           <ea-icon slot="suffix" class="${bem.e("clear-icon")}" part="clear-icon" name='xmark'></ea-icon>
           <ea-icon slot="suffix" class="${bem.e("dropdown-icon")}" part="dropdown-icon" name='angle-down'></ea-icon>
         </ea-input>
-        <section class="${bem.e("dropdown")}" part="dropdown">
+        <section class="${bem.e("dropdown")}" part="dropdown" role="listbox">
           <slot></slot>
         </section>
       </div>
@@ -320,6 +346,8 @@ export class EaSelect extends EaFormAssociatedBase {
       this._input.addEventListener("input", this._onFilterEvent, {
         signal: this._abortControllerStates.inputFilterAbortController.signal,
       });
+    } else {
+      this._clearInlineCompletion();
     }
 
     this.updateContainerClasslist();
@@ -497,19 +525,144 @@ export class EaSelect extends EaFormAssociatedBase {
       : "none";
   }
 
-  @listen("click", bem.ce("input"))
-  private async _onDropdownVisibleChangeEvent(): Promise<void> {
-    if (this.disabled) return;
+  /** 获取可导航的选项列表（可见且未禁用） */
+  private _getNavigableOptions(): Element[] {
+    return [...this.querySelectorAll("ea-option")].filter(option => {
+      const el = option as HTMLElement;
+      return el.style.display !== "none" && !(option as any).disabled;
+    });
+  }
+
+  /** 设置活跃选项 */
+  private _setActiveOption(index: number): void {
+    const options = this._getNavigableOptions();
+    if (options.length === 0 || index < 0 || index >= options.length) return;
+
+    this._clearActiveOption();
+
+    this._activeOptionIndex = index;
+    const activeOption = options[index] as any;
+    activeOption.active = true;
+
+    this.setAttribute("aria-activedescendant", activeOption.id);
+    (activeOption as HTMLElement).scrollIntoView({ block: "nearest" });
+  }
+
+  /** 清除所有活跃选项状态 */
+  private _clearActiveOption(): void {
+    this.querySelectorAll("ea-option").forEach(option => {
+      (option as any).active = false;
+    });
+    this._activeOptionIndex = -1;
+  }
+
+  /** 初始化活跃选项（打开下拉框时调用） */
+  private _initActiveOption(): void {
+    const options = this._getNavigableOptions();
+    if (options.length === 0) return;
+
+    let selectedIndex = -1;
+    if (!this.multiple && this.value !== "" && this.value != null) {
+      selectedIndex = options.findIndex(
+        option => String((option as any).value) === String(this.value)
+      );
+    }
+
+    this._setActiveOption(selectedIndex >= 0 ? selectedIndex : 0);
+  }
+
+  /** 移动到下一个选项 */
+  private _moveToNextOption(): void {
+    const options = this._getNavigableOptions();
+    if (options.length === 0) return;
+
+    const nextIndex = Math.min(this._activeOptionIndex + 1, options.length - 1);
+    this._setActiveOption(nextIndex);
+  }
+
+  /** 移动到上一个选项 */
+  private _moveToPreviousOption(): void {
+    const options = this._getNavigableOptions();
+    if (options.length === 0) return;
+
+    const prevIndex = Math.max(this._activeOptionIndex - 1, 0);
+    this._setActiveOption(prevIndex);
+  }
+
+  /** 选择当前活跃选项 */
+  private _selectActiveOption(): void {
+    const options = this._getNavigableOptions();
+    if (
+      this._activeOptionIndex < 0 ||
+      this._activeOptionIndex >= options.length
+    )
+      return;
+
+    const activeOption = options[this._activeOptionIndex] as any;
+    if (activeOption.disabled) return;
+
+    this._clearInlineCompletion();
+
+    let newVal;
+    if (!this.multiple) {
+      newVal = activeOption.value;
+      this.value = newVal;
+      this.hide();
+    } else {
+      if (!Array.isArray(this.value)) this.value = [];
+      const currentValue = this.value as (string | number | boolean)[];
+
+      if (currentValue.includes(activeOption.value)) {
+        newVal = currentValue.filter(v => v !== activeOption.value);
+      } else {
+        newVal = [...currentValue, activeOption.value];
+      }
+      this.value = newVal;
+    }
+
+    this.dispatchEvent(new EaSelectChangeEvent({ value: newVal }));
+  }
+
+  /** 通过字符搜索选项 */
+  private _searchOption(char: string): void {
+    if (this._searchTimeout !== null) {
+      clearTimeout(this._searchTimeout);
+    }
+
+    this._searchString += char.toLowerCase();
+    this._searchTimeout = setTimeout(() => {
+      this._searchString = "";
+    }, 500);
+
+    const options = this._getNavigableOptions();
+    const searchStr = this._searchString;
+
+    const matchIndex = options.findIndex(option => {
+      const label = (
+        (option as any).label ||
+        option.textContent ||
+        ""
+      ).toLowerCase();
+      return label.startsWith(searchStr);
+    });
+
+    if (matchIndex >= 0) {
+      this._setActiveOption(matchIndex);
+    }
+  }
+
+  /** 打开下拉框 */
+  private _openDropdown(): void {
+    if (this.disabled || this._states.isFocus) return;
 
     this._abortControllerStates.closeAbortController?.abort();
-
-    this._states.isFocus = true;
-    this.updateContainerClasslist();
-    this.dispatchEvent(new EaSelectVisibleChangeEvent({ visible: true }));
-
     this._abortControllerStates.closeAbortController = new AbortController();
 
-    await customElements.whenDefined("ea-option");
+    this._states.isFocus = true;
+    this.setAttribute("aria-expanded", "true");
+    this._dropdown.inert = false;
+    this.updateContainerClasslist();
+    this.dispatchEvent(new EaSelectVisibleChangeEvent({ visible: true }));
 
     this.addEventListener("ea-option-click", this._onOptionClick, {
       signal: this._abortControllerStates.closeAbortController.signal,
@@ -519,9 +672,24 @@ export class EaSelect extends EaFormAssociatedBase {
       signal: this._abortControllerStates.closeAbortController.signal,
     });
 
-    this.addEventListener("keydown", this._onDropdownKeydown, {
-      signal: this._abortControllerStates.closeAbortController.signal,
-    });
+    this._initActiveOption();
+  }
+
+  @listen("click", bem.ce("input"))
+  private _handleInputClick(): void {
+    if (this.disabled) return;
+
+    if (this.filterable) {
+      if (!this._states.isFocus) {
+        this._openDropdown();
+      }
+    } else {
+      if (this._states.isFocus) {
+        this.hide();
+      } else {
+        this._openDropdown();
+      }
+    }
   }
 
   private _onOptionClick = (e: Event): void => {
@@ -531,6 +699,12 @@ export class EaSelect extends EaFormAssociatedBase {
       (e as CustomEvent).detail?.target ||
       (e.target as Element).closest("ea-option");
     if (!target || (target as any).disabled) return;
+
+    const options = this._getNavigableOptions();
+    const clickedIndex = options.indexOf(target);
+    if (clickedIndex >= 0) {
+      this._setActiveOption(clickedIndex);
+    }
 
     let newVal;
     if (!this.multiple) {
@@ -555,20 +729,174 @@ export class EaSelect extends EaFormAssociatedBase {
   private _onSelectClose = (e: Event): void => {
     if (e.composedPath().includes(this)) return;
     this.hide();
-    this._abortControllerStates.closeAbortController?.abort();
   };
 
-  private _onDropdownKeydown = (e: KeyboardEvent): void => {
-    const arrows = new Set(["Escape", "ArrowUp", "ArrowDown"]);
-    if (!arrows.has(e.key)) return;
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent): void {
+    if (this.disabled) return;
 
-    e.preventDefault();
+    const isOpen = this._states.isFocus;
 
-    if (e.key === "Escape") {
-      this.hide();
-      this._abortControllerStates.closeAbortController?.abort();
+    switch (e.key) {
+      case "ArrowDown": {
+        e.preventDefault();
+        if (e.altKey) {
+          if (!isOpen) this._openDropdown();
+        } else if (!isOpen) {
+          this._openDropdown();
+        } else {
+          this._moveToNextOption();
+        }
+        break;
+      }
+      case "ArrowUp": {
+        e.preventDefault();
+        if (e.altKey && isOpen) {
+          this.hide();
+        } else if (!isOpen) {
+          this._openDropdown();
+          this._setActiveOption(0);
+        } else {
+          this._moveToPreviousOption();
+        }
+        break;
+      }
+      case "ArrowLeft":
+      case "ArrowRight": {
+        if (this.filterable) {
+          this._clearInlineCompletion();
+        }
+        break;
+      }
+      case "Enter": {
+        e.preventDefault();
+        if (!isOpen) {
+          this._openDropdown();
+        } else {
+          this._selectActiveOption();
+        }
+        break;
+      }
+      case " ": {
+        if (!this.filterable) {
+          e.preventDefault();
+          if (!isOpen) {
+            this._openDropdown();
+          } else {
+            this._selectActiveOption();
+          }
+        }
+        break;
+      }
+      case "Escape": {
+        if (isOpen) {
+          e.preventDefault();
+          this.hide();
+        } else if (this.filterable) {
+          this._clearInlineCompletion();
+          this._updateInputAttribute("value", "");
+          this._handleFilteredOptionStyle("");
+          this._clearActiveOption();
+        }
+        break;
+      }
+      case "Home": {
+        if (this.filterable) {
+          this._clearInlineCompletion();
+        } else {
+          e.preventDefault();
+          if (!isOpen) {
+            this._openDropdown();
+          }
+          this._setActiveOption(0);
+        }
+        break;
+      }
+      case "End": {
+        if (this.filterable) {
+          this._clearInlineCompletion();
+        } else {
+          e.preventDefault();
+          if (!isOpen) {
+            this._openDropdown();
+          }
+          const options = this._getNavigableOptions();
+          this._setActiveOption(options.length - 1);
+        }
+        break;
+      }
+      case "PageUp": {
+        if (isOpen) {
+          e.preventDefault();
+          const newIndex = Math.max(this._activeOptionIndex - 10, 0);
+          this._setActiveOption(newIndex);
+        }
+        break;
+      }
+      case "PageDown": {
+        if (isOpen) {
+          e.preventDefault();
+          const options = this._getNavigableOptions();
+          const newIndex = Math.min(
+            this._activeOptionIndex + 10,
+            options.length - 1
+          );
+          this._setActiveOption(newIndex);
+        }
+        break;
+      }
+      case "Tab": {
+        if (isOpen) {
+          this._selectActiveOption();
+        }
+        break;
+      }
+      default: {
+        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          if (this.filterable) {
+            this._clearInlineCompletion();
+            if (!isOpen) {
+              this._openDropdown();
+            }
+          } else {
+            e.preventDefault();
+            if (!isOpen) {
+              this._openDropdown();
+            }
+            this._searchOption(e.key);
+          }
+        }
+        break;
+      }
     }
-  };
+  }
+
+  /** 管理焦点：非可搜索模式下重定向到宿主，可搜索模式下重定向到内部 input */
+  @listen("focusin")
+  private _handleFocusin(e: FocusEvent): void {
+    if (this.filterable) {
+      if (e.target === this && this._input) {
+        this._input.focus();
+      }
+    } else if (e.target !== this) {
+      this.focus();
+    }
+  }
+
+  /** 失焦时自动关闭下拉框 */
+  @listen("focusout")
+  private _handleFocusout(): void {
+    if (!this._states.isFocus) return;
+
+    requestAnimationFrame(() => {
+      if (!this._states.isFocus) return;
+
+      const active = document.activeElement;
+      if (active !== this && !this.contains(active)) {
+        this.hide();
+      }
+    });
+  }
 
   private _onMultipleTagRemoveEvent = (e: Event): void => {
     const target = e.target as HTMLElement;
@@ -588,38 +916,107 @@ export class EaSelect extends EaFormAssociatedBase {
   };
 
   private _onFilterEvent = (e: Event): void => {
+    if (this._isComposing) return;
+
     const value =
       (e as CustomEvent).detail?.value ?? (e.target as HTMLInputElement).value;
     if (typeof value === "string") {
       this.filterMethod(value);
       this._handleFilteredOptionStyle(value);
+
+      if (!this._states.isFocus && value) {
+        this._openDropdown();
+      }
+
+      if (!this.multiple) {
+        const options = this._getNavigableOptions();
+        if (options.length > 0 && value) {
+          this._setActiveOption(0);
+          const firstOption = options[0] as any;
+          const matchLabel = (
+            firstOption.label ||
+            firstOption.textContent ||
+            ""
+          ).trim();
+          if (
+            matchLabel.toLowerCase().startsWith(value.toLowerCase()) &&
+            matchLabel.length > value.length
+          ) {
+            this._setInlineCompletion(value, matchLabel);
+          }
+        } else {
+          this._clearActiveOption();
+          this.removeAttribute("aria-activedescendant");
+        }
+      }
     }
   };
 
+  /** 设置内联自动补全：将输入框值设为完整匹配文本，并选中未输入部分 */
+  private _setInlineCompletion(typedText: string, matchLabel: string): void {
+    this._isComposing = true;
+    this._updateInputAttribute("value", matchLabel);
+    this._isComposing = false;
+
+    this._inlineCompletionLength = typedText.length;
+
+    requestAnimationFrame(() => {
+      (this._input as any).setSelectionRange(
+        typedText.length,
+        matchLabel.length
+      );
+    });
+  }
+
+  /** 清除内联自动补全：恢复为用户实际输入的文本 */
+  private _clearInlineCompletion(): void {
+    if (this._inlineCompletionLength <= 0) return;
+
+    const currentValue = (this._input as any).value || "";
+    const typedText = currentValue.substring(0, this._inlineCompletionLength);
+
+    this._isComposing = true;
+    this._updateInputAttribute("value", typedText);
+    this._isComposing = false;
+
+    this._inlineCompletionLength = 0;
+  }
+
   show(): void {
-    this._input.dispatchEvent(new CustomEvent("click"));
+    this._openDropdown();
   }
 
   hide(): void {
+    if (!this._states.isFocus) return;
+
     this._states.isFocus = false;
+    this.setAttribute("aria-expanded", "false");
+    this.removeAttribute("aria-activedescendant");
+    this._dropdown.inert = true;
+    this._clearActiveOption();
+    this._clearInlineCompletion();
     this.updateContainerClasslist();
     this.dispatchEvent(new EaSelectVisibleChangeEvent({ visible: false }));
+    this._abortControllerStates.closeAbortController?.abort();
   }
 
   async $mount() {
+    this.setAttribute("role", "combobox");
+    this.tabIndex = 0;
+    this.setAttribute("aria-haspopup", "listbox");
+    this.setAttribute("aria-expanded", "false");
+
+    this._dropdownId = `ea-select-listbox-${EaSelect._idCounter++}`;
+    this._dropdown.id = this._dropdownId;
+    this._dropdown.inert = true;
+    this.setAttribute("aria-controls", this._dropdownId);
+
     this.updateContainerClasslist();
 
     await customElements.whenDefined("ea-input");
     await customElements.whenDefined("ea-option");
 
     if (!this.name) this.name = Math.random().toString(36).substring(2, 15);
-  }
-
-  @listen("keydown")
-  private _onKeydown(e: KeyboardEvent): void {
-    if (e.key === "Enter") {
-      this._input.dispatchEvent(new CustomEvent("click"));
-    }
   }
 
   $beforeUnmount() {

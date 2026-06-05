@@ -19,7 +19,7 @@ export class EaCarouselItem extends EaBase {
   /** 渲染模板 */
   html(): string {
     return `
-      <div class='${bem()}' part='container'>
+      <div class='${bem()}' part='container' role="group" aria-roledescription="slide">
         <slot></slot>
       </div>
     `;

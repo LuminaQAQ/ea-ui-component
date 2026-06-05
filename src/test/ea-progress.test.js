@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 if (!window.CSS) {
   window.CSS = {};
@@ -2352,6 +2353,84 @@ describe("EaProgress Component", () => {
       );
       expect(icon).toBeTruthy();
       expect(icon.getAttribute("name")).toBe("circle-xmark");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-progress");
+      el.setAttribute("percentage", "50");
+      el.setAttribute("aria-label", "Progress");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("line 变体宿主元素应该有 role=progressbar", async () => {
+        const el = document.createElement("ea-progress");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("progressbar");
+      });
+
+      it("circle 变体宿主元素应该有 role=progressbar", async () => {
+        const el = document.createElement("ea-progress");
+        el.variant = "circle";
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("progressbar");
+      });
+
+      it("dashboard 变体宿主元素应该有 role=meter", async () => {
+        const el = document.createElement("ea-progress");
+        el.variant = "dashboard";
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("meter");
+      });
+
+      it("宿主元素应该有 aria-valuenow 等于 percentage", async () => {
+        const el = document.createElement("ea-progress");
+        el.percentage = 50;
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuenow")).toBe("50");
+      });
+
+      it("宿主元素应该有 aria-valuemin=0", async () => {
+        const el = document.createElement("ea-progress");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuemin")).toBe("0");
+      });
+
+      it("宿主元素应该有 aria-valuemax=100", async () => {
+        const el = document.createElement("ea-progress");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuemax")).toBe("100");
+      });
+
+      it("percentage 变化时 aria-valuenow 应该同步更新", async () => {
+        const el = document.createElement("ea-progress");
+        container.appendChild(el);
+        await waitForRender();
+        el.percentage = 75;
+        await waitForRender();
+        expect(el.getAttribute("aria-valuenow")).toBe("75");
+      });
+
+      it("variant 变化时 role 应该同步更新", async () => {
+        const el = document.createElement("ea-progress");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("progressbar");
+        el.variant = "dashboard";
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("meter");
+      });
     });
   });
 });

@@ -489,6 +489,20 @@ export class EaTour extends EaBase {
     );
 
     this.addEventListener(
+      "ea-show",
+      () => {
+        const children = [...this.querySelectorAll("ea-tour-step")] as HTMLElement[];
+        if (children[this.current]) {
+          const stepContainer = children[this.current].shadowRoot?.querySelector(".ea-tour-step") as HTMLElement;
+          if (stepContainer) {
+            stepContainer.focus();
+          }
+        }
+      },
+      { signal: this._abortController.signal }
+    );
+
+    this.addEventListener(
       "ea-tour-step-finish",
       () => {
         this.visible = false;

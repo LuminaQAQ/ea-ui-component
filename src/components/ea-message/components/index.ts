@@ -77,7 +77,10 @@ export class EaMessageElement extends EaBase {
     type: Enum(VARIANT_TYPES),
     default: VARIANT_DEFAULT,
     observer(this: EaMessageElement, newVal: VariantType) {
-      this._messageIcon.setAttribute("name", this.icon || VARIANT_ICON_MAP[newVal]);
+      this._messageIcon.setAttribute(
+        "name",
+        this.icon || VARIANT_ICON_MAP[newVal]
+      );
       this.updateContainerClasslist();
     },
   })
@@ -160,7 +163,10 @@ export class EaMessageElement extends EaBase {
     type: String,
     default: "",
     observer(this: EaMessageElement, newVal: string) {
-      this._messageIcon.setAttribute("name", newVal || VARIANT_ICON_MAP[this.variant]);
+      this._messageIcon.setAttribute(
+        "name",
+        newVal || VARIANT_ICON_MAP[this.variant]
+      );
       this.updateContainerClasslist();
     },
   })
@@ -266,6 +272,9 @@ export class EaMessageElement extends EaBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "alert");
+    this.setAttribute("aria-live", "assertive");
+    this.setAttribute("aria-atomic", "true");
     this.updateContainerClasslist();
   }
 

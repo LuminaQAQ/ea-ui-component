@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-backtop/index";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaBacktop", () => {
   let container;
@@ -355,6 +356,58 @@ describe("EaBacktop", () => {
       await waitForRender(0);
 
       expect(backtop.visibilityHeight).toBe(250);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-backtop");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器应该有 role='button'", async () => {
+        const el = document.createElement("ea-backtop");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("button");
+      });
+
+      it("容器应该有 aria-label='Back to top'", async () => {
+        const el = document.createElement("ea-backtop");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-label")).toBe("Back to top");
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("按下 Enter 键应该触发滚动到顶部", async () => {
+        const el = document.createElement("ea-backtop");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        const scrollSpy = vi.spyOn(el, "_scrollToTop").mockImplementation(() => {});
+        containerEl.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+        expect(scrollSpy).toHaveBeenCalled();
+        scrollSpy.mockRestore();
+      });
+
+      it("按下 Space 键应该触发滚动到顶部", async () => {
+        const el = document.createElement("ea-backtop");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        const scrollSpy = vi.spyOn(el, "_scrollToTop").mockImplementation(() => {});
+        containerEl.dispatchEvent(new KeyboardEvent("keydown", { key: " " }));
+        expect(scrollSpy).toHaveBeenCalled();
+        scrollSpy.mockRestore();
+      });
     });
   });
 });

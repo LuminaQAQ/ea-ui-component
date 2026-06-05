@@ -1,5 +1,5 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query } from "@decorator";
+import { CustomElement, attribute, property, query } from "@decorator";
 import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -25,11 +25,58 @@ export class EaSplitterBar extends EaBase {
   @attribute({
     type: Enum(["horizontal", "vertical"] as const),
     default: "horizontal",
+    a11y: {
+      ariaAttr: "aria-orientation",
+      map: (v: "horizontal" | "vertical") => (v === "horizontal" ? "vertical" : "horizontal"),
+    },
     observer(this: EaSplitterBar) {
       this._container.className = this.updateContainerClasslist();
     },
   })
   layout: "horizontal" | "vertical" = "horizontal";
+
+  @attribute({
+    type: String,
+    default: "",
+    a11y: {
+      ariaAttr: "aria-label",
+      map: (v: string) => v || null,
+    },
+  })
+  label: string = "";
+
+  @attribute({
+    type: Number,
+    default: 10,
+  })
+  step: number = 10;
+
+  @property({
+    type: Number,
+    default: 50,
+    observer(this: EaSplitterBar, newVal: number) {
+      this.setAttribute("aria-valuenow", String(newVal));
+    },
+  })
+  valuenow: number = 50;
+
+  @property({
+    type: Number,
+    default: 0,
+    observer(this: EaSplitterBar, newVal: number) {
+      this.setAttribute("aria-valuemin", String(newVal));
+    },
+  })
+  valuemin: number = 0;
+
+  @property({
+    type: Number,
+    default: 100,
+    observer(this: EaSplitterBar, newVal: number) {
+      this.setAttribute("aria-valuemax", String(newVal));
+    },
+  })
+  valuemax: number = 100;
 
   /** 更新容器类名 */
   updateContainerClasslist(): string {
@@ -41,5 +88,13 @@ export class EaSplitterBar extends EaBase {
     return `
       <div class="${this.updateContainerClasslist()}" part="container"></div>
     `;
+  }
+
+  $mount(): void {
+    this.setAttribute("role", "separator");
+    this.tabIndex = 0;
+    this.setAttribute("aria-valuenow", String(this.valuenow));
+    this.setAttribute("aria-valuemin", String(this.valuemin));
+    this.setAttribute("aria-valuemax", String(this.valuemax));
   }
 }

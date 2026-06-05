@@ -27,6 +27,8 @@ export interface PropertyOptions {
   rawFunction?: boolean;
   /** @description 是否可重复（用于数组类型） */
   repeatable?: boolean;
+  /** @description 无障碍属性同步配置 */
+  a11y?: import('./attribute').A11yOption;
 }
 
 /**

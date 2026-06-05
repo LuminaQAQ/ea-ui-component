@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-icon/index.ts";
 import "../components/ea-drawer/index.ts";
@@ -1079,6 +1080,107 @@ describe("EaDrawer Component", () => {
       expect(drawer.backgroundColor).toBe("");
       expect(drawer.contentWidth).toBe("");
       expect(drawer.contentHeight).toBe("");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("应有 role='dialog'", async () => {
+      const drawer = document.createElement("ea-drawer");
+      container.appendChild(drawer);
+      await waitForRender();
+
+      expect(drawer.getAttribute("role")).toBe("dialog");
+    });
+
+    it("应有 aria-modal='true'", async () => {
+      const drawer = document.createElement("ea-drawer");
+      container.appendChild(drawer);
+      await waitForRender();
+
+      expect(drawer.getAttribute("aria-modal")).toBe("true");
+    });
+
+    it("有 heading 时应设置 aria-labelledby 指向标题元素", async () => {
+      const drawer = document.createElement("ea-drawer");
+      drawer.heading = "Test Drawer";
+      container.appendChild(drawer);
+      await waitForRender();
+
+      const labelledBy = drawer.getAttribute("aria-labelledby");
+      expect(labelledBy).not.toBeNull();
+
+      const heading = drawer.shadowRoot.querySelector(
+        '[part="heading"]'
+      );
+      expect(heading.id).toBe(labelledBy);
+    });
+
+    it("无 heading 时不应有 aria-labelledby 或 aria-label", async () => {
+      const drawer = document.createElement("ea-drawer");
+      container.appendChild(drawer);
+      await waitForRender();
+
+      expect(drawer.hasAttribute("aria-labelledby")).toBe(false);
+      expect(drawer.hasAttribute("aria-label")).toBe(false);
+    });
+
+    it("有 description 时应设置 aria-describedby", async () => {
+      const drawer = document.createElement("ea-drawer");
+      drawer.description = "This is a description";
+      container.appendChild(drawer);
+      await waitForRender();
+
+      const describedBy = drawer.getAttribute("aria-describedby");
+      expect(describedBy).not.toBeNull();
+
+      const content = drawer.shadowRoot.querySelector(
+        ".ea-drawer-main__content"
+      );
+      expect(content.id).toBe(describedBy);
+    });
+
+    it("无 description 时不应有 aria-describedby", async () => {
+      const drawer = document.createElement("ea-drawer");
+      container.appendChild(drawer);
+      await waitForRender();
+
+      expect(drawer.hasAttribute("aria-describedby")).toBe(false);
+    });
+
+    it("动态修改 heading 应更新 aria-labelledby", async () => {
+      const drawer = document.createElement("ea-drawer");
+      container.appendChild(drawer);
+      await waitForRender();
+
+      expect(drawer.hasAttribute("aria-labelledby")).toBe(false);
+
+      drawer.heading = "New Title";
+      await waitForRender();
+
+      const labelledBy = drawer.getAttribute("aria-labelledby");
+      expect(labelledBy).not.toBeNull();
+    });
+
+    it("动态修改 description 应更新 aria-describedby", async () => {
+      const drawer = document.createElement("ea-drawer");
+      container.appendChild(drawer);
+      await waitForRender();
+
+      expect(drawer.hasAttribute("aria-describedby")).toBe(false);
+
+      drawer.description = "New description";
+      await waitForRender();
+
+      expect(drawer.hasAttribute("aria-describedby")).toBe(true);
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-drawer");
+      el.setAttribute("heading", "Test Drawer");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

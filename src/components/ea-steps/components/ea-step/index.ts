@@ -107,6 +107,7 @@ export class EaStep extends EaBase {
     default: "",
     observer(this: EaStep, newVal: StepStatus) {
       this.updateContainerClasslist();
+      this._updateAriaCurrent(newVal);
       if (this.icon) return;
       this._updateStatus(newVal);
     },
@@ -181,9 +182,20 @@ export class EaStep extends EaBase {
     }
   }
 
+  /** 根据 status 更新 aria-current 属性 */
+  private _updateAriaCurrent(status: StepStatus = this.status): void {
+    if (!this._container) return;
+
+    if (status === "process") {
+      this._container.setAttribute("aria-current", "step");
+    } else {
+      this._container.removeAttribute("aria-current");
+    }
+  }
+
   html(): string {
     return `
-      <div class='${bem()}' part='container'>
+      <div class='${bem()}' part='container' role='listitem'>
         <section class="${bem.e("head")}" part="head">
           <div class="${bem.e("icon-wrapper")}" part="icon-wrapper">
             <slot name="icon">
@@ -209,6 +221,7 @@ export class EaStep extends EaBase {
 
   $mount(): void {
     this.updateContainerClasslist();
+    this._updateAriaCurrent();
   }
 }
 

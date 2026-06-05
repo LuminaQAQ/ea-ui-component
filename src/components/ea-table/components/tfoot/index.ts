@@ -14,13 +14,15 @@ export const tfootRenderer = (columns: ColumnOption[]): string => {
       {
         part: "tfoot-tr",
       },
-      columns.map(col =>
+      columns.map((col, index) =>
         h(
           "td",
           `ea-table__td ${col.fixed && col.fixed !== "false" ? ` is-fixed fixed-${col.fixed}` : ""}`,
           {
             part: "tfoot-td",
             "data-scope": col.prop,
+            role: "cell",
+            "aria-colindex": String(index + 1),
           },
           null
         )

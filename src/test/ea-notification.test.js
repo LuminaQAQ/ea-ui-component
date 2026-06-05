@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-notification/index";
 import { EaNotification } from "../components/ea-notification/utils/EaNotificationInstance";
@@ -1918,6 +1919,44 @@ describe("EaNotification Component", () => {
       expect(containerEl.classList.contains("ea-notification--top-right")).toBe(
         true
       );
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-notification");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, {
+        rules: { "aria-prohibited-attr": { enabled: false } },
+      });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器应该有 role='alert'", async () => {
+        const el = document.createElement("ea-notification");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("alert");
+      });
+
+      it("容器应该有 aria-live='polite'", async () => {
+        const el = document.createElement("ea-notification");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-live")).toBe("polite");
+      });
+
+      it("关闭图标应该有 aria-label='close'", async () => {
+        const el = document.createElement("ea-notification");
+        container.appendChild(el);
+        await waitForRender();
+        const closeIcon = el.shadowRoot.querySelector('[part="close-icon"]');
+        expect(closeIcon.getAttribute("aria-label")).toBe("close");
+      });
     });
   });
 });

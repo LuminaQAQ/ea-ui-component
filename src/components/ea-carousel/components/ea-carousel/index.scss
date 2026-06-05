@@ -50,6 +50,40 @@ $name: ea-carousel;
     transition: transform var(--#{$name}-transition);
   }
 
+  @include element(rotation) {
+    border: none;
+
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-circle);
+    background-color: var(--#{$name}-arrow-color);
+    color: var(--color-white);
+
+    cursor: pointer;
+    user-select: none;
+
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: var(--#{$name}-arrow-hover-color);
+    }
+
+    ea-icon {
+      color: var(--color-white);
+    }
+  }
+
   @include element(arrow) {
     border: none;
 
@@ -154,6 +188,7 @@ $name: ea-carousel;
   }
 
   @include state(arrow-hover) {
+
     .arrow-left,
     .arrow-right {
       opacity: 1;
@@ -162,6 +197,7 @@ $name: ea-carousel;
   }
 
   @include state(arrow-always) {
+
     .arrow-left,
     .arrow-right {
       opacity: 1;

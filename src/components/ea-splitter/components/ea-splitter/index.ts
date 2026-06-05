@@ -6,6 +6,7 @@ import { EaSplitterPanelResizeEvent } from "./events/EaSplitterPanelResizeEvent"
 import { EaSplitterPanelResizeEndEvent } from "./events/EaSplitterPanelResizeEndEvent";
 import stylesheet from "./index.scss?inline";
 import type { EaSplitterPanel, SplitterLayoutType } from "../ea-splitter-panel";
+import type { EaSplitterBar } from "../ea-splitter-bar";
 
 const TAG_NAME = "ea-splitter" as const;
 const bem = createBEM(TAG_NAME);
@@ -103,6 +104,7 @@ export class EaSplitter extends EaBase {
 
     const preChild = this.children[index - 1] as EaSplitterPanel;
     const nextChild = this.children[index + 1] as EaSplitterPanel;
+    const splitterBar = this.children[index] as EaSplitterBar;
 
     const startX = e.clientX;
 
@@ -136,6 +138,8 @@ export class EaSplitter extends EaBase {
       preChild.size = newPreWidth + "px";
       nextChild.size = newNextWidth + "px";
 
+      this._updateBarA11y(splitterBar, preChild);
+
       this._dispatchResizeEvent(EaSplitterPanelResizeEvent);
     };
 
@@ -162,6 +166,7 @@ export class EaSplitter extends EaBase {
 
     const preChild = this.children[index - 1] as EaSplitterPanel;
     const nextChild = this.children[index + 1] as EaSplitterPanel;
+    const splitterBar = this.children[index] as EaSplitterBar;
 
     const startY = e.clientY;
 
@@ -196,6 +201,8 @@ export class EaSplitter extends EaBase {
       preChild.size = newPreHeight + "px";
       nextChild.size = newNextHeight + "px";
 
+      this._updateBarA11y(splitterBar, preChild);
+
       this._dispatchResizeEvent(EaSplitterPanelResizeEvent);
     };
 
@@ -212,7 +219,151 @@ export class EaSplitter extends EaBase {
     });
   };
 
-  /** 渲染模板 */
+  /**
+   * 更新分隔条的 a11y 属性
+   * @param bar 分隔条元素
+   * @param prePanel 前一个面板元素
+   */
+  private _updateBarA11y(bar: EaSplitterBar, prePanel: EaSplitterPanel): void {
+    const containerSize =
+      this.layout === "vertical"
+        ? this._container.clientHeight
+        : this._container.clientWidth;
+    const panelSize = prePanel.getBoundingClientRect()[
+      this.layout === "vertical" ? "height" : "width"
+    ];
+    const percentage = containerSize > 0 ? Math.round((panelSize / containerSize) * 100) : 50;
+    bar.valuenow = percentage;
+  }
+
+  /**
+   * 获取面板的最小尺寸（像素）
+   * @param panel 面板元素
+   * @param containerSize 容器尺寸
+   */
+  private _getMinSize(panel: EaSplitterPanel, containerSize: number): number {
+    if (!panel.min) return 0;
+    if (panel.min.endsWith("%")) {
+      return containerSize * parseCSSMinValue(panel.min);
+    }
+    return parseCSSMinValue(panel.min);
+  }
+
+  /**
+   * 对指定 bar 相邻的面板执行步进调整
+   * @param barIndex bar 的索引
+   * @param delta 像素增量（正数增大主面板，负数缩小主面板）
+   */
+  private _resizeByStep(barIndex: number, delta: number): void {
+    const preChild = this.children[barIndex - 1] as EaSplitterPanel;
+    const nextChild = this.children[barIndex + 1] as EaSplitterPanel;
+    const splitterBar = this.children[barIndex] as EaSplitterBar;
+    if (!preChild || !nextChild) return;
+
+    const isVertical = this.layout === "vertical";
+    const containerSize = isVertical
+      ? this._container.clientHeight
+      : this._container.clientWidth;
+    const dimension = isVertical ? "height" : "width";
+
+    const preSize = preChild.getBoundingClientRect()[dimension];
+    const nextSize = nextChild.getBoundingClientRect()[dimension];
+
+    const newPreSize = preSize + delta;
+    const newNextSize = nextSize - delta;
+
+    const minPreSize = this._getMinSize(preChild, containerSize);
+    const minNextSize = this._getMinSize(nextChild, containerSize);
+
+    if (newPreSize <= minPreSize || newNextSize <= minNextSize) return;
+
+    this._dispatchResizeEvent(EaSplitterPanelResizeStartEvent);
+
+    preChild.size = newPreSize + "px";
+    nextChild.size = newNextSize + "px";
+
+    this._updateBarA11y(splitterBar, preChild);
+    this._dispatchResizeEvent(EaSplitterPanelResizeEvent);
+    this._dispatchResizeEvent(EaSplitterPanelResizeEndEvent);
+  }
+
+  /**
+   * 将主面板折叠到最小尺寸或恢复到之前的位置
+   * @param barIndex bar 的索引
+   */
+  private _toggleCollapse(barIndex: number): void {
+    const preChild = this.children[barIndex - 1] as EaSplitterPanel;
+    const nextChild = this.children[barIndex + 1] as EaSplitterPanel;
+    const splitterBar = this.children[barIndex] as EaSplitterBar;
+    if (!preChild || !nextChild) return;
+
+    const isVertical = this.layout === "vertical";
+    const containerSize = isVertical
+      ? this._container.clientHeight
+      : this._container.clientWidth;
+    const dimension = isVertical ? "height" : "width";
+    const minPreSize = this._getMinSize(preChild, containerSize);
+    const preSize = preChild.getBoundingClientRect()[dimension];
+
+    if (preSize > minPreSize) {
+      (splitterBar as any)._prevPreSize = preSize;
+      (splitterBar as any)._prevNextSize = nextChild.getBoundingClientRect()[dimension];
+
+      this._dispatchResizeEvent(EaSplitterPanelResizeStartEvent);
+      preChild.size = minPreSize + "px";
+      nextChild.size = (containerSize - minPreSize) + "px";
+      this._updateBarA11y(splitterBar, preChild);
+      this._dispatchResizeEvent(EaSplitterPanelResizeEvent);
+      this._dispatchResizeEvent(EaSplitterPanelResizeEndEvent);
+    } else {
+      const prevPreSize = (splitterBar as any)._prevPreSize;
+      const prevNextSize = (splitterBar as any)._prevNextSize;
+      if (prevPreSize == null) return;
+
+      this._dispatchResizeEvent(EaSplitterPanelResizeStartEvent);
+      preChild.size = prevPreSize + "px";
+      nextChild.size = prevNextSize + "px";
+      this._updateBarA11y(splitterBar, preChild);
+      this._dispatchResizeEvent(EaSplitterPanelResizeEvent);
+      this._dispatchResizeEvent(EaSplitterPanelResizeEndEvent);
+    }
+  }
+
+  /**
+   * 将主面板调整到最小或最大尺寸
+   * @param barIndex bar 的索引
+   * @param toMin 是否调整到最小尺寸
+   */
+  private _resizeToExtent(barIndex: number, toMin: boolean): void {
+    const preChild = this.children[barIndex - 1] as EaSplitterPanel;
+    const nextChild = this.children[barIndex + 1] as EaSplitterPanel;
+    const splitterBar = this.children[barIndex] as EaSplitterBar;
+    if (!preChild || !nextChild) return;
+
+    const isVertical = this.layout === "vertical";
+    const containerSize = isVertical
+      ? this._container.clientHeight
+      : this._container.clientWidth;
+
+    const minPreSize = this._getMinSize(preChild, containerSize);
+    const minNextSize = this._getMinSize(nextChild, containerSize);
+
+    this._dispatchResizeEvent(EaSplitterPanelResizeStartEvent);
+
+    if (toMin) {
+      preChild.size = minPreSize + "px";
+      nextChild.size = (containerSize - minPreSize) + "px";
+    } else {
+      const maxPreSize = containerSize - minNextSize;
+      preChild.size = maxPreSize + "px";
+      nextChild.size = minNextSize + "px";
+    }
+
+    this._updateBarA11y(splitterBar, preChild);
+    this._dispatchResizeEvent(EaSplitterPanelResizeEvent);
+    this._dispatchResizeEvent(EaSplitterPanelResizeEndEvent);
+  }
+
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container">
@@ -244,6 +395,64 @@ export class EaSplitter extends EaBase {
     }
   }
 
+  /**
+   * 处理键盘事件 - 支持方向键调整、Enter 折叠/恢复、Home/End 极值
+   * @param e 键盘事件
+   */
+  @listen("keydown")
+  private _handleKeyDown(e: KeyboardEvent): void {
+    const target = e.target as HTMLElement;
+    const bar = target.closest("ea-splitter-bar") as HTMLElement;
+    if (!bar) return;
+
+    const index = Number(bar.getAttribute("data-index"));
+    if (isNaN(index)) return;
+
+    const step = (bar as EaSplitterBar).step || 10;
+    const isHorizontal = this.layout === "horizontal";
+
+    switch (e.key) {
+      case "ArrowLeft":
+        if (isHorizontal) {
+          e.preventDefault();
+          this._resizeByStep(index, -step);
+        }
+        break;
+      case "ArrowRight":
+        if (isHorizontal) {
+          e.preventDefault();
+          this._resizeByStep(index, step);
+        }
+        break;
+      case "ArrowUp":
+        if (!isHorizontal) {
+          e.preventDefault();
+          this._resizeByStep(index, -step);
+        }
+        break;
+      case "ArrowDown":
+        if (!isHorizontal) {
+          e.preventDefault();
+          this._resizeByStep(index, step);
+        }
+        break;
+      case "Enter":
+        e.preventDefault();
+        this._toggleCollapse(index);
+        break;
+      case "Home":
+        e.preventDefault();
+        this._resizeToExtent(index, true);
+        break;
+      case "End":
+        e.preventDefault();
+        this._resizeToExtent(index, false);
+        break;
+    }
+  }
+
+  private _panelIdCounter: number = 0;
+
   $mount(): void {
     queueMicrotask(() => {
       const panels = [...this.children].filter(
@@ -254,13 +463,20 @@ export class EaSplitter extends EaBase {
         panel.setAttribute("layout", this.layout);
         panel.setAttribute("data-panel-index", String(index));
 
+        if (!panel.id) {
+          panel.id = `${TAG_NAME}-panel-${this._panelIdCounter++}`;
+        }
+
         if (index < panels.length - 1) {
-          const splitterBar = document.createElement("ea-splitter-bar");
+          const splitterBar = document.createElement("ea-splitter-bar") as EaSplitterBar;
           this.insertBefore(splitterBar, panel.nextSibling);
 
           const barIndex = [...this.children].indexOf(splitterBar);
           splitterBar.setAttribute("data-index", String(barIndex));
           splitterBar.setAttribute("layout", this.layout);
+          splitterBar.setAttribute("aria-controls", panel.id);
+
+          this._updateBarA11y(splitterBar, panel);
         }
       });
     });

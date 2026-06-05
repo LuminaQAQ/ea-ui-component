@@ -44,6 +44,7 @@ export class EaRadioGroup extends EaFormAssociatedBase {
   @attribute({
     type: String,
     default: "",
+    a11y: { ariaAttr: "aria-label", map: v => v || null },
     observer(this: EaRadioGroup, newVal: string) {
       if (this._label) this._label.textContent = newVal;
     },
@@ -65,6 +66,7 @@ export class EaRadioGroup extends EaFormAssociatedBase {
     observer(this: EaRadioGroup) {
       this._updateRadioChildrenValue();
       this.setValue(this.value);
+      this._updateActiveDescendant();
     },
   })
   value: string = "";
@@ -103,6 +105,7 @@ export class EaRadioGroup extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-required" },
   })
   required: boolean = false;
 
@@ -116,8 +119,8 @@ export class EaRadioGroup extends EaFormAssociatedBase {
 
   html(): string {
     return `
-      <label class="${bem.e("form-label")}" part="form-label"></label>
-      <div class="${this.updateContainerClasslist()}" part="container" role="radiogroup">
+      <div class="${this.updateContainerClasslist()}" part="container">
+        <label class="${bem.e("form-label")}" part="form-label"></label>
         <slot></slot>
       </div>
     `;
@@ -146,10 +149,33 @@ export class EaRadioGroup extends EaFormAssociatedBase {
     });
   };
 
+  /** 获取非禁用的 radio 列表 */
+  private _getEnabledRadios(): HTMLElement[] {
+    return Array.from(this._radioItems || []).filter(
+      r => !r.hasAttribute("disabled")
+    );
+  }
+
+  /** 更新 aria-activedescendant 指向当前选中或第一个 radio */
+  private _updateActiveDescendant(): void {
+    const radios = this._radioItems;
+    if (!radios || !radios.length) return;
+
+    const checkedRadio = Array.from(radios).find(r =>
+      r.hasAttribute("checked")
+    );
+    const target = checkedRadio || radios[0];
+
+    if (target?.id) {
+      this.setAttribute("aria-activedescendant", target.id);
+    }
+  }
+
   @listen("slotchange", "shadowRoot")
   private _handleSlotChange = (): void => {
     this._updateRadioChildrenName();
     this._updateRadioChildrenValue();
+    this._updateActiveDescendant();
   };
 
   @listen("change", undefined, { capture: true })
@@ -157,6 +183,53 @@ export class EaRadioGroup extends EaFormAssociatedBase {
     if (!(e instanceof EaRadioChangeEvent)) return;
     const { value } = e.detail;
     this.value = value;
+  };
+
+  /** 处理键盘导航（aria-activedescendant 模式） */
+  @listen("keydown")
+  private _handleKeydown = (e: KeyboardEvent): void => {
+    const enabledRadios = this._getEnabledRadios();
+    if (!enabledRadios.length) return;
+
+    const currentIndex = enabledRadios.findIndex(r =>
+      r.hasAttribute("checked")
+    );
+    let newIndex = currentIndex;
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault();
+        newIndex =
+          currentIndex < enabledRadios.length - 1 ? currentIndex + 1 : 0;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault();
+        newIndex =
+          currentIndex > 0 ? currentIndex - 1 : enabledRadios.length - 1;
+        break;
+      case " ":
+        e.preventDefault();
+        if (currentIndex < 0 && enabledRadios[0]) {
+          const radioValue = enabledRadios[0].getAttribute("value") || "";
+          this.value = radioValue;
+          this.dispatchEvent(
+            new EaRadioChangeEvent({ value: radioValue, checked: true })
+          );
+        }
+        return;
+      default:
+        return;
+    }
+
+    if (newIndex !== currentIndex && enabledRadios[newIndex]) {
+      const radioValue = enabledRadios[newIndex].getAttribute("value") || "";
+      this.value = radioValue;
+      this.dispatchEvent(
+        new EaRadioChangeEvent({ value: radioValue, checked: true })
+      );
+    }
   };
 
   formResetCallback(): void {
@@ -168,6 +241,9 @@ export class EaRadioGroup extends EaFormAssociatedBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "radiogroup");
+    this.tabIndex = 0;
+
     if (!this.name) this.name = Math.random().toString(36).substring(2, 15);
 
     this.updateContainerClasslist();
@@ -179,6 +255,7 @@ export class EaRadioGroup extends EaFormAssociatedBase {
     queueMicrotask(() => {
       this._updateRadioChildrenName();
       this._updateRadioChildrenValue();
+      this._updateActiveDescendant();
     });
   }
 

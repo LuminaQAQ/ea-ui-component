@@ -161,11 +161,18 @@ $name: ea-slider;
     height: 100%;
     width: auto;
 
+    transform: rotate(180deg);
+
     .#{$name}__runway {
       height: 100%;
       width: auto;
 
       display: flex;
+    }
+
+    .#{$name}__trigger::part(container) {
+      transform-origin: center center;
+      rotate: 180deg;
     }
 
     .#{$name}__rail {

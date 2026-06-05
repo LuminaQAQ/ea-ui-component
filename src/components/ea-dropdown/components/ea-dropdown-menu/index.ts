@@ -23,4 +23,9 @@ export class EaDropdownMenu extends EaBase {
       </div>
     `;
   }
+
+  $mount(): void {
+    this.setAttribute("role", "menu");
+    this.setAttribute("aria-label", "Menu");
+  }
 }

@@ -76,11 +76,14 @@ export class EaTree extends EaBase {
     selectedPath: null as string | null,
   };
 
+  private _focusedPath: string | null = null;
+
   @attribute({
     type: Boolean,
     default: false,
     observer(this: EaTree) {
       this._updateCheckboxVisibility();
+      this._updateTreeAriaAttrs();
     },
   })
   showCheckbox: boolean = false;
@@ -96,6 +99,15 @@ export class EaTree extends EaBase {
     default: "",
   })
   nodeKey: string = "";
+
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaTree) {
+      this._updateTreeAriaAttrs();
+    },
+  })
+  label: string = "";
 
   @attribute({
     type: Boolean,
@@ -140,10 +152,17 @@ export class EaTree extends EaBase {
 
     this._nodeStates.clear();
     this._container.innerHTML = "";
+    this._focusedPath = null;
 
     if (newVal && newVal.length > 0) {
       this._buildNodeStates(newVal, "");
       this._container.innerHTML = this._renderTree(newVal, "");
+
+      const rootPaths = this._getRootPaths();
+      if (rootPaths.length > 0) {
+        this._focusedPath = rootPaths[0];
+        this._updateNodeDOM(rootPaths[0]);
+      }
 
       timeout(() => {
         this._handleDefaultExpandedKeys(this.defaultExpandedKeys);
@@ -207,11 +226,12 @@ export class EaTree extends EaBase {
         const hasChildren = childItems.length > 0;
         const isDisabled = item[disabled] === true;
         const text = item[label] || "";
+        const isFirstNode = !parentPath && index === 0;
 
         const stateClasses = this._getNodeStateClasses(state);
 
         const childrenHTML = hasChildren
-          ? `<div class="${bem.e("children")}">${this._renderTree(
+          ? `<div class="${bem.e("children")}" role="group">${this._renderTree(
               childItems,
               path
             )}</div>`
@@ -221,9 +241,15 @@ export class EaTree extends EaBase {
           ? `<ea-icon name="angle-right" class="${bem.e("toggle-icon")}"></ea-icon>`
           : "";
 
+        const ariaSelected = ` aria-selected="${state.selected}"`;
+        const ariaChecked = this.showCheckbox
+          ? ` aria-checked="${state.checked || state.indeterminate ? (state.indeterminate ? "mixed" : String(state.checked)) : "false"}"`
+          : "";
+        const tabindex = isFirstNode && !this._focusedPath ? 'tabindex="0"' : 'tabindex="-1"';
+
         return `
-<div class="${bem.e("node")} ${stateClasses}" data-path="${path}">
-  <div class="${bem.e("label")}" data-path="${path}">
+<div class="${bem.e("node")} ${stateClasses}" data-path="${path}" role="treeitem" aria-label="${text}"${hasChildren ? ` aria-expanded="${state.expanded}"` : ""}${ariaSelected}${ariaChecked}>
+  <div class="${bem.e("label")}" data-path="${path}" ${tabindex}>
     ${toggleIconHTML}
     <ea-checkbox class="${bem.e("checkbox")}"${
           state.checked ? " checked" : ""
@@ -301,6 +327,27 @@ export class EaTree extends EaBase {
 
     const stateClasses = this._getNodeStateClasses(state);
     nodeEl.className = `${bem.e("node")} ${stateClasses}`;
+
+    if (state.hasChildren) {
+      nodeEl.setAttribute("aria-expanded", String(state.expanded));
+    }
+
+    nodeEl.setAttribute("aria-selected", String(state.selected));
+
+    if (this.showCheckbox) {
+      const ariaCheckedValue = state.indeterminate ? "mixed" : String(state.checked);
+      nodeEl.setAttribute("aria-checked", ariaCheckedValue);
+    } else {
+      nodeEl.removeAttribute("aria-checked");
+    }
+
+    const labelEl = this._getLabelElement(path);
+    if (labelEl) {
+      labelEl.setAttribute(
+        "tabindex",
+        this._focusedPath === path ? "0" : "-1"
+      );
+    }
 
     const checkboxEl = this._getCheckboxElement(path);
     if (checkboxEl) {
@@ -623,6 +670,8 @@ export class EaTree extends EaBase {
     const state = this._nodeStates.get(path);
     if (!state) return;
 
+    this._moveFocus(path);
+
     const isCheckboxClick = this._isCheckboxInPath(composedPath);
     if (isCheckboxClick) return;
 
@@ -691,6 +740,200 @@ export class EaTree extends EaBase {
     );
   }
 
+  /** 处理键盘导航 */
+  @listen("keydown", bem.ce("label"))
+  private _handleKeydown(e: KeyboardEvent): void {
+    const labelEl = e.target as HTMLElement;
+    const path = labelEl.dataset.path;
+    if (!path) return;
+
+    const state = this._nodeStates.get(path);
+    if (!state || state.disabled) return;
+
+    const visiblePaths = this._getVisiblePaths();
+
+    switch (e.key) {
+      case "ArrowDown": {
+        e.preventDefault();
+        const currentIndex = visiblePaths.indexOf(path);
+        if (currentIndex < visiblePaths.length - 1) {
+          this._moveFocus(visiblePaths[currentIndex + 1]);
+        }
+        break;
+      }
+      case "ArrowUp": {
+        e.preventDefault();
+        const currentIndex = visiblePaths.indexOf(path);
+        if (currentIndex > 0) {
+          this._moveFocus(visiblePaths[currentIndex - 1]);
+        }
+        break;
+      }
+      case "ArrowRight": {
+        e.preventDefault();
+        if (state.hasChildren) {
+          if (!state.expanded) {
+            this._expandPath(path);
+          } else {
+            const childPaths = this._getDirectChildrenPaths(path).filter(p => {
+              const childEl = this._getNodeElement(p);
+              return childEl !== null;
+            });
+            if (childPaths.length > 0) {
+              this._moveFocus(childPaths[0]);
+            }
+          }
+        }
+        break;
+      }
+      case "ArrowLeft": {
+        e.preventDefault();
+        if (state.hasChildren && state.expanded) {
+          this._collapsePath(path);
+        } else {
+          const parentPath = this._getParentPath(path);
+          if (parentPath) {
+            this._moveFocus(parentPath);
+          }
+        }
+        break;
+      }
+      case "Home": {
+        e.preventDefault();
+        if (visiblePaths.length > 0) {
+          this._moveFocus(visiblePaths[0]);
+        }
+        break;
+      }
+      case "End": {
+        e.preventDefault();
+        if (visiblePaths.length > 0) {
+          this._moveFocus(visiblePaths[visiblePaths.length - 1]);
+        }
+        break;
+      }
+      case "Enter": {
+        e.preventDefault();
+        if (state.hasChildren) {
+          this._toggleExpand(path);
+        } else {
+          this._selectPath(path);
+        }
+        break;
+      }
+      case " ": {
+        e.preventDefault();
+        if (this.showCheckbox) {
+          this._handleCheckboxToggle(path);
+        } else {
+          this._selectPath(path);
+        }
+        break;
+      }
+      case "*": {
+        e.preventDefault();
+        this._expandSiblingNodes(path);
+        break;
+      }
+      default: {
+        if (e.key.length === 1 && /[a-zA-Z0-9]/.test(e.key)) {
+          e.preventDefault();
+          this._handleTypeAhead(path, e.key);
+        }
+        break;
+      }
+    }
+  }
+
+  /** 获取所有可见节点的路径列表 */
+  private _getVisiblePaths(): string[] {
+    const result: string[] = [];
+    const rootPaths = this._getRootPaths();
+
+    const traverse = (paths: string[]) => {
+      for (const p of paths) {
+        const state = this._nodeStates.get(p);
+        if (!state) continue;
+        result.push(p);
+        if (state.hasChildren && state.expanded) {
+          const childPaths = this._getDirectChildrenPaths(p);
+          traverse(childPaths);
+        }
+      }
+    };
+
+    traverse(rootPaths);
+    return result;
+  }
+
+  /** 获取根节点路径列表 */
+  private _getRootPaths(): string[] {
+    const result: string[] = [];
+    this._nodeStates.forEach((state, path) => {
+      if (state.depth === 1) {
+        result.push(path);
+      }
+    });
+    result.sort();
+    return result;
+  }
+
+  /** 获取父节点路径 */
+  private _getParentPath(path: string): string | null {
+    const parts = path.split("-");
+    if (parts.length <= 1) return null;
+    parts.pop();
+    return parts.join("-");
+  }
+
+  /** 移动焦点到指定路径的节点 */
+  private _moveFocus(targetPath: string): void {
+    const prevPath = this._focusedPath;
+    this._focusedPath = targetPath;
+
+    if (prevPath) {
+      this._updateNodeDOM(prevPath);
+    }
+    this._updateNodeDOM(targetPath);
+
+    const labelEl = this._getLabelElement(targetPath);
+    if (labelEl) {
+      labelEl.focus();
+    }
+  }
+
+  /** 展开同级所有节点 */
+  private _expandSiblingNodes(path: string): void {
+    const parentPath = this._getParentPath(path);
+    const siblingPaths = parentPath
+      ? this._getDirectChildrenPaths(parentPath)
+      : this._getRootPaths();
+
+    for (const siblingPath of siblingPaths) {
+      const siblingState = this._nodeStates.get(siblingPath);
+      if (siblingState && siblingState.hasChildren && !siblingState.expanded) {
+        this._expandPath(siblingPath);
+      }
+    }
+  }
+
+  /** 处理 type-ahead 查找 */
+  private _handleTypeAhead(currentPath: string, char: string): void {
+    const visiblePaths = this._getVisiblePaths();
+    const currentIndex = visiblePaths.indexOf(currentPath);
+    const lowerChar = char.toLowerCase();
+
+    for (let i = 1; i < visiblePaths.length; i++) {
+      const nextIndex = (currentIndex + i) % visiblePaths.length;
+      const nextPath = visiblePaths[nextIndex];
+      const nextState = this._nodeStates.get(nextPath);
+      if (nextState && nextState.label.toLowerCase().startsWith(lowerChar)) {
+        this._moveFocus(nextPath);
+        return;
+      }
+    }
+  }
+
   html(): string {
     return `
       <div class="${bem()}" part="container"></div>
@@ -699,7 +942,26 @@ export class EaTree extends EaBase {
   }
 
   $mount(): void {
+    this._container.setAttribute("role", "tree");
+    this._updateTreeAriaAttrs();
     this.updateContainerClasslist();
+  }
+
+  /** 更新树容器的 ARIA 属性 */
+  private _updateTreeAriaAttrs(): void {
+    if (!this._container) return;
+
+    if (this.label) {
+      this._container.setAttribute("aria-label", this.label);
+    } else {
+      this._container.removeAttribute("aria-label");
+    }
+
+    if (this.showCheckbox) {
+      this._container.setAttribute("aria-multiselectable", "true");
+    } else {
+      this._container.removeAttribute("aria-multiselectable");
+    }
   }
 
   /** 更新容器类名 */

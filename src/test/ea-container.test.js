@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-container/index";
 
@@ -708,6 +709,86 @@ describe("EaContainer", () => {
 
       const className = el.updateContainerClasslist();
       expect(className).toContain("ea-container--vertical");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-container");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("ea-header 设置 label 时应该有 aria-label", async () => {
+        const header = document.createElement("ea-header");
+        header.setAttribute("label", "Site header");
+        container.appendChild(header);
+        await waitForRender();
+        const headerEl = header.shadowRoot.querySelector(".ea-header");
+        expect(headerEl.getAttribute("aria-label")).toBe("Site header");
+      });
+
+      it("ea-header 未设置 label 时不应该有 aria-label", async () => {
+        const header = document.createElement("ea-header");
+        container.appendChild(header);
+        await waitForRender();
+        const headerEl = header.shadowRoot.querySelector(".ea-header");
+        expect(headerEl.hasAttribute("aria-label")).toBe(false);
+      });
+
+      it("ea-footer 设置 label 时应该有 aria-label", async () => {
+        const footer = document.createElement("ea-footer");
+        footer.setAttribute("label", "Site footer");
+        container.appendChild(footer);
+        await waitForRender();
+        const footerEl = footer.shadowRoot.querySelector(".ea-footer");
+        expect(footerEl.getAttribute("aria-label")).toBe("Site footer");
+      });
+
+      it("ea-footer 未设置 label 时不应该有 aria-label", async () => {
+        const footer = document.createElement("ea-footer");
+        container.appendChild(footer);
+        await waitForRender();
+        const footerEl = footer.shadowRoot.querySelector(".ea-footer");
+        expect(footerEl.hasAttribute("aria-label")).toBe(false);
+      });
+
+      it("ea-aside 设置 label 时应该有 aria-label", async () => {
+        const aside = document.createElement("ea-aside");
+        aside.setAttribute("label", "Sidebar navigation");
+        container.appendChild(aside);
+        await waitForRender();
+        const asideEl = aside.shadowRoot.querySelector(".ea-aside");
+        expect(asideEl.getAttribute("aria-label")).toBe("Sidebar navigation");
+      });
+
+      it("ea-aside 未设置 label 时不应该有 aria-label", async () => {
+        const aside = document.createElement("ea-aside");
+        container.appendChild(aside);
+        await waitForRender();
+        const asideEl = aside.shadowRoot.querySelector(".ea-aside");
+        expect(asideEl.hasAttribute("aria-label")).toBe(false);
+      });
+
+      it("ea-main 设置 label 时应该有 aria-label", async () => {
+        const main = document.createElement("ea-main");
+        main.setAttribute("label", "Main content");
+        container.appendChild(main);
+        await waitForRender();
+        const mainEl = main.shadowRoot.querySelector(".ea-main");
+        expect(mainEl.getAttribute("aria-label")).toBe("Main content");
+      });
+
+      it("ea-main 未设置 label 时不应该有 aria-label", async () => {
+        const main = document.createElement("ea-main");
+        container.appendChild(main);
+        await waitForRender();
+        const mainEl = main.shadowRoot.querySelector(".ea-main");
+        expect(mainEl.hasAttribute("aria-label")).toBe(false);
+      });
     });
   });
 });

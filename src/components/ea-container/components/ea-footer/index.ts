@@ -21,6 +21,17 @@ const bem = createBEM(TAG_NAME);
 export class EaFooter extends EaBase {
   @attribute({
     type: String,
+    default: "",
+    a11y: {
+      ariaAttr: "aria-label",
+      target: ".ea-footer",
+      map: v => v || null,
+    },
+  })
+  label: string = "";
+
+  @attribute({
+    type: String,
     default: "60px",
     observer(this: EaFooter, newVal: string) {
       if (newVal && CSS.supports("height", newVal)) {

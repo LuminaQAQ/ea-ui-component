@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 if (typeof CSS === "undefined") {
   global.CSS = {
@@ -1082,6 +1083,50 @@ describe("EaEmpty", () => {
 
       expect(empty.image).toBe("https://example.com/b.png");
       expect(empty.imageSize).toBe("300px");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-empty");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器元素应该有 role='status'", async () => {
+        const empty = document.createElement("ea-empty");
+        container.appendChild(empty);
+
+        await waitForRender();
+
+        const containerEl = empty.shadowRoot.querySelector(".ea-empty");
+        expect(containerEl.getAttribute("role")).toBe("status");
+      });
+
+      it("设置 description 后容器仍然有 role='status'", async () => {
+        const empty = document.createElement("ea-empty");
+        empty.setAttribute("description", "暂无数据");
+        container.appendChild(empty);
+
+        await waitForRender();
+
+        const containerEl = empty.shadowRoot.querySelector(".ea-empty");
+        expect(containerEl.getAttribute("role")).toBe("status");
+      });
+
+      it("设置 image 后容器仍然有 role='status'", async () => {
+        const empty = document.createElement("ea-empty");
+        empty.setAttribute("image", "https://example.com/empty.png");
+        container.appendChild(empty);
+
+        await waitForRender();
+
+        const containerEl = empty.shadowRoot.querySelector(".ea-empty");
+        expect(containerEl.getAttribute("role")).toBe("status");
+      });
     });
   });
 });

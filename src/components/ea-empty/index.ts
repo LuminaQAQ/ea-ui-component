@@ -97,7 +97,7 @@ export class EaEmpty extends EaBase {
 
   html(): string {
     return `
-      <div class="${bem()}" part="container">
+      <div class="${bem()}" part="container" role="status">
         <div class="${bem.e("placeholder")}" part="placeholder">
           <slot name="image">
             <section class="${bem.e("default")}">${emptyStatusSVG}</section>

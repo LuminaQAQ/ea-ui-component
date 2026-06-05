@@ -84,14 +84,14 @@ export class EaBreadcrumbItem extends EaBase {
     const linkClass = isLink ? bem.s("link") : "";
 
     return `
-      <div class="${bem()}" part="container">
+      <li class="${bem()}" part="container" role="listitem">
         <${tag} class="${bem.e("content")} ${linkClass}" part="content" ${isLink ? `href="${this.href}"` : ""}>
           <slot></slot>
         </${tag}>
-        <span class="${bem.e("separator")}" part="separator">
+        <span class="${bem.e("separator")}" part="separator" aria-hidden="true">
           <slot name="separator"></slot>
         </span>
-      </div>
+      </li>
     `;
   }
 

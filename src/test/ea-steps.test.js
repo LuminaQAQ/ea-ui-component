@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-steps/index.ts";
 
@@ -1369,6 +1370,83 @@ describe("EaSteps Component", () => {
       const result = step.updateContainerClasslist();
       expect(result).toContain("ea-step");
       expect(result).toContain("ea-step--horizontal");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-steps");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("ea-steps 容器应该有 role=list", async () => {
+        const steps = document.createElement("ea-steps");
+        container.appendChild(steps);
+        await waitForRender();
+        const containerEl = steps.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("list");
+      });
+
+      it("ea-step 容器应该有 role=listitem", async () => {
+        const step = document.createElement("ea-step");
+        container.appendChild(step);
+        await waitForRender();
+        const containerEl = step.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("listitem");
+      });
+
+      it("process 状态的 step 应该有 aria-current=step", async () => {
+        const steps = document.createElement("ea-steps");
+        steps.innerHTML = `
+          <ea-step heading="Step 1"></ea-step>
+          <ea-step heading="Step 2"></ea-step>
+          <ea-step heading="Step 3"></ea-step>
+        `;
+        container.appendChild(steps);
+        await waitForRender();
+        const stepElements = steps.querySelectorAll("ea-step");
+        const processStep = stepElements[0].shadowRoot.querySelector('[part="container"]');
+        expect(processStep.getAttribute("aria-current")).toBe("step");
+      });
+
+      it("非 process 状态的 step 不应该有 aria-current", async () => {
+        const steps = document.createElement("ea-steps");
+        steps.innerHTML = `
+          <ea-step heading="Step 1"></ea-step>
+          <ea-step heading="Step 2"></ea-step>
+          <ea-step heading="Step 3"></ea-step>
+        `;
+        container.appendChild(steps);
+        await waitForRender();
+        const stepElements = steps.querySelectorAll("ea-step");
+        const waitStep = stepElements[1].shadowRoot.querySelector('[part="container"]');
+        expect(waitStep.hasAttribute("aria-current")).toBe(false);
+      });
+
+      it("active 变化时 aria-current 应该跟随更新", async () => {
+        const steps = document.createElement("ea-steps");
+        steps.innerHTML = `
+          <ea-step heading="Step 1"></ea-step>
+          <ea-step heading="Step 2"></ea-step>
+        `;
+        container.appendChild(steps);
+        await waitForRender();
+
+        const stepElements = steps.querySelectorAll("ea-step");
+        const container0 = stepElements[0].shadowRoot.querySelector('[part="container"]');
+        expect(container0.getAttribute("aria-current")).toBe("step");
+
+        steps.active = 1;
+        await waitForRender();
+
+        expect(container0.hasAttribute("aria-current")).toBe(false);
+        const container1 = stepElements[1].shadowRoot.querySelector('[part="container"]');
+        expect(container1.getAttribute("aria-current")).toBe("step");
+      });
     });
   });
 });

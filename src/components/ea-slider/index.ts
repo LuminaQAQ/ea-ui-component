@@ -109,6 +109,10 @@ export class EaSlider extends EaFormAssociatedBase {
   @attribute({
     type: String,
     default: "",
+    a11y: {
+      ariaAttr: "aria-label",
+      map: v => v || null,
+    },
     observer(this: EaSlider, newVal: string) {
       if (this._label) this._label.textContent = newVal;
     },
@@ -118,6 +122,7 @@ export class EaSlider extends EaFormAssociatedBase {
   @attribute({
     type: Number,
     default: 0,
+    a11y: { ariaAttr: "aria-valuenow" },
     observer(this: EaSlider, newVal: number) {
       const clampedValue = Math.max(this.min, Math.min(this.max, newVal));
       this.setValue(String(clampedValue));
@@ -129,6 +134,7 @@ export class EaSlider extends EaFormAssociatedBase {
   @attribute({
     type: Number,
     default: 0,
+    a11y: { ariaAttr: "aria-valuemin" },
     observer(this: EaSlider) {
       this._updateSlider();
     },
@@ -138,6 +144,7 @@ export class EaSlider extends EaFormAssociatedBase {
   @attribute({
     type: Number,
     default: 100,
+    a11y: { ariaAttr: "aria-valuemax" },
     observer(this: EaSlider) {
       this._updateSlider();
     },
@@ -166,6 +173,10 @@ export class EaSlider extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaSlider) {
       this.updateContainerClasslist();
     },
@@ -175,6 +186,10 @@ export class EaSlider extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-orientation",
+      map: v => (v ? "vertical" : null),
+    },
     observer(this: EaSlider) {
       this._updateSlider();
     },
@@ -552,6 +567,66 @@ export class EaSlider extends EaFormAssociatedBase {
     this.dispatchEvent(new EaSliderChangeEvent({ value: this.value }));
   }
 
+  /**
+   * 键盘事件处理，支持 WAI-ARIA Slider Pattern 规范的键盘交互
+   * @param e - 键盘事件
+   */
+  @listen("keydown")
+  private _onKeyDown(e: KeyboardEvent): void {
+    if (this.disabled) return;
+
+    let newValue: number | null = null;
+    const bigStep = this.step * 10;
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowUp":
+        e.preventDefault();
+        newValue = this._fixPrecision(
+          Math.min(this.max, this.value + this.step)
+        );
+        break;
+      case "ArrowLeft":
+      case "ArrowDown":
+        e.preventDefault();
+        newValue = this._fixPrecision(
+          Math.max(this.min, this.value - this.step)
+        );
+        break;
+      case "Home":
+        e.preventDefault();
+        newValue = this.min;
+        break;
+      case "End":
+        e.preventDefault();
+        newValue = this.max;
+        break;
+      case "PageUp":
+        e.preventDefault();
+        newValue = this._fixPrecision(Math.min(this.max, this.value + bigStep));
+        break;
+      case "PageDown":
+        e.preventDefault();
+        newValue = this._fixPrecision(Math.max(this.min, this.value - bigStep));
+        break;
+      default:
+        return;
+    }
+
+    if (newValue !== null && newValue !== this.value) {
+      this.value = newValue;
+      this._trigger.toggleAttribute("visible", true);
+      this.dispatchEvent(new EaSliderInputEvent({ value: this.value }));
+      this.dispatchEvent(new EaSliderChangeEvent({ value: this.value }));
+    }
+  }
+
+  /** 失去焦点时隐藏 tooltip */
+  @listen("blur")
+  private _onBlur(): void {
+    this._trigger.toggleAttribute("visible", false);
+  }
+
   /** 鼠标进入滑块，显示 tooltip */
   @listen("mouseenter", bem.ce("thumb"))
   private _onThumbMouseEnter(): void {
@@ -606,6 +681,8 @@ export class EaSlider extends EaFormAssociatedBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "slider");
+    this.tabIndex = 0;
     this._updateSlider();
   }
 

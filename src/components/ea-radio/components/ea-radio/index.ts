@@ -12,6 +12,8 @@ const bem = createBEM(TAG_NAME);
 
 export type RadioSize = "small" | "default" | "large";
 
+let radioIdCounter = 0;
+
 /**
  * @summary 单选框组件，用于在多个备选项中进行单选，支持禁用、边框和多种尺寸。
  * @status stable
@@ -87,6 +89,7 @@ export class EaRadio extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-checked", map: v => String(!!v) },
     observer(this: EaRadio, newVal: boolean) {
       if (this._original) this._original.checked = newVal;
 
@@ -104,6 +107,7 @@ export class EaRadio extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaRadio, newVal: boolean) {
       if (this._original) this._original.disabled = newVal;
       this.updateContainerClasslist();
@@ -171,38 +175,41 @@ export class EaRadio extends EaFormAssociatedBase {
     this._dispatchChangeEvent();
   };
 
-  @listen("keydown")
-  private _handleKeydownEvent = (e: KeyboardEvent): void => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      this._original.checked = true;
-      this.checked = true;
-      this._dispatchChangeEvent();
-    }
-  };
-
+  /** 处理 inner 元素 focus 事件 */
   @listen("focus", bem.ce("inner"))
-  private _handleFocusEvent = (): void => {
+  private _handleFocusEvent = (e: Event): void => {
     this._isFocus = true;
     this.updateContainerClasslist();
     this.dispatchEvent(
       new EaRadioFocusEvent({
         value: this.value,
-        checked: this.checked,
+        checked: Boolean(this.checked),
       })
     );
   };
 
+  /** 处理 inner 元素 blur 事件 */
   @listen("blur", bem.ce("inner"))
-  private _handleBlurEvent = (): void => {
+  private _handleBlurEvent = (e: Event): void => {
     this._isFocus = false;
     this.updateContainerClasslist();
     this.dispatchEvent(
       new EaRadioBlurEvent({
         value: this.value,
-        checked: this.checked,
+        checked: Boolean(this.checked),
       })
     );
+  };
+
+  /** 处理键盘事件 */
+  @listen("keydown")
+  private _handleKeydownEvent = (e: KeyboardEvent): void => {
+    if (this.disabled || this.limitDisabled) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      this.checked = true;
+      this._dispatchChangeEvent();
+    }
   };
 
   /** 获取焦点 */
@@ -221,6 +228,10 @@ export class EaRadio extends EaFormAssociatedBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "radio");
+    if (!this.id) {
+      this.id = `${TAG_NAME}-${++radioIdCounter}`;
+    }
     this.updateContainerClasslist();
   }
 

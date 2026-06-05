@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-popover/index.ts";
 
@@ -823,6 +824,60 @@ describe("EaPopover Component", () => {
 
       expect(popover.shadowRoot).toBeTruthy();
       expect(popover.placement).toBe("top");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-popover");
+      el.setAttribute("heading", "Test Popover");
+      el.innerHTML = `<button slot="reference">Trigger</button>`;
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("触发元素应该有 aria-haspopup='dialog'", async () => {
+        const el = document.createElement("ea-popover");
+        el.setAttribute("heading", "Test Popover");
+        el.innerHTML = `<button slot="reference">Trigger</button>`;
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.querySelector('[slot="reference"]');
+        expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
+      });
+
+      it("弹出层应该有 role='dialog'", async () => {
+        const el = document.createElement("ea-popover");
+        el.setAttribute("heading", "Test Popover");
+        el.innerHTML = `<button slot="reference">Trigger</button>`;
+        container.appendChild(el);
+        await waitForRender();
+        const popper = el.shadowRoot.querySelector('[part="original"]');
+        expect(popper.getAttribute("role")).toBe("dialog");
+      });
+
+      it("设置 heading 时弹出层应该有 aria-labelledby", async () => {
+        const el = document.createElement("ea-popover");
+        el.setAttribute("heading", "Test Popover");
+        el.innerHTML = `<button slot="reference">Trigger</button>`;
+        container.appendChild(el);
+        await waitForRender();
+        const popper = el.shadowRoot.querySelector('[part="original"]');
+        expect(popper.getAttribute("aria-labelledby")).toBeTruthy();
+      });
+
+      it("触发元素应该有 aria-expanded 属性", async () => {
+        const el = document.createElement("ea-popover");
+        el.setAttribute("heading", "Test Popover");
+        el.innerHTML = `<button slot="reference">Trigger</button>`;
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.querySelector('[slot="reference"]');
+        expect(trigger.hasAttribute("aria-expanded")).toBe(true);
+      });
     });
   });
 });

@@ -12,7 +12,7 @@ interface EntryConfigs {
 interface ExportsConfig {
   [key: string]:
     | string
-    | { import?: string; require?: string; default?: string };
+    | { import?: string; require?: string; default?: string; types?: string };
 }
 
 export const handleImportModules = (): void => {
@@ -48,7 +48,10 @@ export const handlePackageExport = (): void => {
   };
 
   const exportsConfig: ExportsConfig = {
-    ".": "./dist/components/index.ts",
+    ".": {
+      import: "./dist/components/index.js",
+      types: "./dist/types/components/index.d.ts",
+    },
     "./icon-assets": {
       import: "./dist/assets/icon.css",
       require: "./dist/assets/icon.css",
@@ -77,7 +80,8 @@ export const handlePackageExport = (): void => {
       entryConfigs[file] = entryPath;
 
       exportsConfig[`./${file}`] = {
-        import: `./dist/components/${file}.ts`,
+        import: `./dist/components/${file}.js`,
+        types: `./dist/types/components/${file}/index.d.ts`,
       };
     }
   });

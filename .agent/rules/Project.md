@@ -1,7 +1,7 @@
 # ea-ui-component 项目开发规范
 
-> **版本**: 3.6.0  
-> **最后更新**: 2026-06-02  
+> **版本**: 3.7.0
+> **最后更新**: 2026-06-04
 > **更新日志**: 见文末
 
 本项目是基于 Web Components 的组件库，使用 TypeScript 和装饰器模式实现，开发时必须遵循以下规范。
@@ -62,6 +62,7 @@ src/
 5. **事件监听**：手动 `addEventListener` → `@listen()` 装饰器
 6. **DOM 查询**：手动 `querySelector` → `@query()` / `@queryAll()` 装饰器（Shadow DOM）/ `@children()` 装饰器（Light DOM）
 7. **HTML 安全**：使用 `html()` 工具函数处理 HTML 内容
+8. **a11y 属性同步**：使用 `@attribute` / `@property` 装饰器的 `a11y` 选项自动同步 ARIA 属性，禁止在 observer 中手动 `setAttribute`/`removeAttribute`
 
 ## TypeScript 开发规范
 
@@ -132,6 +133,10 @@ export class EaComponent extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaComponent) {
       this.updateContainerClasslist();
     },
@@ -179,6 +184,7 @@ export class EaComponent extends EaBase {
 - 使用 `@listen` 装饰器绑定事件
 - 使用 `createBEM()` 生成 BEM 类名
 - 使用 `html()` 函数处理 HTML 内容（防止 XSS）
+- 使用 `a11y` 选项自动同步 ARIA 属性，禁止在 observer 中手动 `setAttribute`/`removeAttribute`
 - 样式导入使用 `?inline` 后缀
 - 私有属性使用 `_` 前缀（`#` 与装饰器不兼容）
 
@@ -358,6 +364,85 @@ this._container.innerHTML = html(newVal);
 ```
 
 **注意：** `html()` 函数会自动保护 `<slot>` 标签不被 DOMPurify 清洗，并允许 `ea-` 前缀的自定义元素标签和属性。
+
+### a11y 无障碍属性同步
+
+当组件属性变化时需要同步更新 ARIA 属性（如 `aria-disabled`、`aria-expanded`、`aria-checked`）或 HTML `inert` 属性时，**必须使用 `@attribute` / `@property` 装饰器的 `a11y` 选项**，禁止在 observer 中手动 `setAttribute`/`removeAttribute`。
+
+> 详细的 `A11yOption` 配置、映射模式和不适用场景参见 `attribute` 技能模块。
+
+#### A11yOption 配置
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `ariaAttr` | `string` | 是 | 同步到的 ARIA 属性名（如 `"aria-disabled"`、`"aria-expanded"`、`"inert"`） |
+| `target` | `string` | 否 | 目标元素 CSS 选择器，默认 `":host"` 表示组件宿主元素 |
+| `map` | `(val: any) => string \| null` | 否 | 值映射函数，返回 `null` 时移除属性；省略时用 `String(value)` |
+
+#### 使用示例
+
+```typescript
+// disabled → aria-disabled（宿主元素）
+@attribute({
+  type: Boolean,
+  default: false,
+  a11y: {
+    ariaAttr: "aria-disabled",
+    map: v => String(v),
+  },
+})
+disabled: boolean = false;
+
+// open → aria-expanded（Shadow DOM 内部元素）
+@attribute({
+  type: Boolean,
+  default: false,
+  a11y: {
+    ariaAttr: "aria-expanded",
+    target: ".ea-sub-menu__title",
+  },
+  observer(this: EaSubMenu) {
+    this.updateContainerClasslist();
+  },
+})
+open: boolean = false;
+
+// active → inert（关闭时阻止焦点进入）
+@attribute({
+  type: Boolean,
+  default: false,
+  a11y: {
+    ariaAttr: "inert",
+    map: v => v ? null : "",
+  },
+})
+active: boolean = false;
+```
+
+#### 使用规则
+
+**必须使用 `a11y` 选项的场景**（属性值直接决定 ARIA 属性值，目标为宿主或 Shadow DOM 内固定元素）：
+
+| 场景 | ariaAttr | map | 示例组件 |
+|------|----------|-----|---------|
+| `disabled` → `aria-disabled` | `"aria-disabled"` | `v => String(v)` | ea-button, ea-input, ea-switch |
+| `checked` → `aria-checked` | `"aria-checked"` | `v => String(!!v)` | ea-checkbox, ea-radio |
+| `open` → `aria-expanded` | `"aria-expanded"` | 无需 map | ea-sub-menu, ea-collapse-item |
+| `active` → `inert`（关闭时阻止焦点） | `"inert"` | `v => v ? null : ""` | ea-tab-panel |
+| `filterable` → `aria-autocomplete` | `"aria-autocomplete"` | `v => v ? "both" : null` | ea-select |
+| `value` → `aria-valuenow` | `"aria-valuenow"` | `v => String(v)` | ea-slider, ea-rate |
+| `min` → `aria-valuemin` | `"aria-valuemin"` | `v => String(v)` | ea-slider |
+| `max` → `aria-valuemax` | `"aria-valuemax"` | `v => String(v)` | ea-slider, ea-rate |
+
+**禁止使用 `a11y` 选项的场景**（仍需手动管理）：
+
+| 场景 | 原因 | 示例 |
+|------|------|------|
+| 动态 ID 引用 | 值由运行时生成的唯一 ID 决定 | `aria-labelledby`, `aria-controls`, `aria-describedby`, `aria-activedescendant` |
+| 多元素批量操作 | 循环中对多个动态元素设置 ARIA 属性 | ea-tree 节点、ea-carousel 项、ea-pagination 按钮 |
+| Light DOM 目标 | `target` 只支持 Shadow DOM 内部元素 | ea-tooltip 触发器、ea-dropdown 触发器 |
+| 复杂条件逻辑 | 多个属性共同决定一个 ARIA 属性的值 | `disabled || limitDisabled` |
+| 一次性静态设置 | 不随属性变化的固定值 | `aria-modal="true"`, `aria-haspopup="listbox"` |
 
 ## CSS 开发规范
 
@@ -571,6 +656,14 @@ $mount(): void {
 ---
 
 ## 更新日志
+
+### v3.7.0 (2026-06-04)
+
+- **a11y 无障碍属性同步规范**：新增完整的 a11y 规范章节，定义 `a11y` 装饰器选项的使用规则
+- **核心变更新增 a11y**：属性同步从手动 `setAttribute` 改为 `@attribute`/`@property` 的 `a11y` 选项
+- **组件示例更新**：组件结构规范示例中 `disabled` 属性添加 `a11y` 选项演示
+- **核心要点更新**：新增"使用 `a11y` 选项自动同步 ARIA 属性"规则
+- **使用规则定义**：明确必须使用和禁止使用 `a11y` 选项的场景
 
 ### v3.6.0 (2026-06-02)
 

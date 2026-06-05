@@ -210,6 +210,10 @@ export class EaColorPicker extends EaFormAssociatedBase {
   })
   predefine: string[] = [];
 
+  private static _instanceCount: number = 0;
+
+  private readonly _uniqueId: number = EaColorPicker._instanceCount++;
+
   private _abortControllerStates = {
     close: null as AbortController | null,
   };
@@ -286,12 +290,14 @@ export class EaColorPicker extends EaFormAssociatedBase {
   private _handlePopperShow() {
     this._states.isOpen = true;
     this.updateContainerClasslist();
+    this._updateAriaExpanded();
   }
 
   @listen("hide", bem.ce("popper"))
   private _handlePopperHide() {
     this._states.isOpen = false;
     this.updateContainerClasslist();
+    this._updateAriaExpanded();
 
     if (
       this._states.previousValue !== undefined &&
@@ -392,6 +398,26 @@ export class EaColorPicker extends EaFormAssociatedBase {
     this._statusIcon.setAttribute("name", colorValue ? "angle-down" : "xmark");
   }
 
+  /** 设置触发器的 ARIA 属性，遵循 W3C disclosure 模式 */
+  private _setupAria(): void {
+    if (!this._trigger) return;
+
+    this._trigger.setAttribute("aria-expanded", "false");
+    this._trigger.setAttribute("aria-haspopup", "dialog");
+    this._trigger.setAttribute("role", "button");
+
+    if (!this._trigger.hasAttribute("tabindex")) {
+      this._trigger.setAttribute("tabindex", "0");
+    }
+  }
+
+  /** 更新触发器的 aria-expanded 状态 */
+  private _updateAriaExpanded(): void {
+    if (!this._trigger) return;
+
+    this._trigger.setAttribute("aria-expanded", String(this._states.isOpen));
+  }
+
   show() {
     this._showPopper();
   }
@@ -442,6 +468,7 @@ export class EaColorPicker extends EaFormAssociatedBase {
 
   $mount(): void {
     this.updateContainerClasslist();
+    this._setupAria();
   }
 
   $mounted(): void {

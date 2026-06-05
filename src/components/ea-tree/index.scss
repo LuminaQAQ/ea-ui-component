@@ -59,9 +59,16 @@ $name: ea-tree;
     color: var(--#{$name}-text-color);
     min-height: 36px;
     position: relative;
+    outline: none;
 
     &:hover {
       background-color: var(--#{$name}-hover-bg);
+    }
+
+    &:focus-visible {
+      background-color: var(--#{$name}-hover-bg);
+      outline: 2px solid var(--primary-color);
+      outline-offset: -2px;
     }
   }
 

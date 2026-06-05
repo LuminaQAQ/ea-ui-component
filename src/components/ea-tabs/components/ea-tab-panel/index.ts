@@ -44,6 +44,16 @@ export class EaTabPanel extends EaBase {
   })
   type: "" | "card" | "border-card" = "";
 
+  @attribute({
+    type: Boolean,
+    default: false,
+    a11y: {
+      ariaAttr: "inert",
+      map: v => v ? null : "",
+    },
+  })
+  active: boolean = false;
+
   updateContainerClasslist(): string {
     const className = bem({ [this.type]: !!this.type });
 
@@ -62,7 +72,20 @@ export class EaTabPanel extends EaBase {
     `;
   }
 
+  /** 设置 ARIA 属性，遵循 W3C tabs 模式 */
+  private _setupAria(): void {
+    this._container.setAttribute("role", "tabpanel");
+    this._container.id = `ea-tab-panel-${this.name}`;
+    this._container.setAttribute("tabindex", "0");
+
+    const tab = this.closest("ea-tabs")?.querySelector(`ea-tab[panel="${this.name}"]`);
+    if (tab?.id) {
+      this._container.setAttribute("aria-labelledby", tab.id);
+    }
+  }
+
   $mount(): void {
     this.updateContainerClasslist();
+    this._setupAria();
   }
 }

@@ -194,7 +194,7 @@ export class EaSteps extends EaBase {
 
   html(): string {
     return `
-      <div class='${bem()}' part='container'>
+      <div class='${bem()}' part='container' role='list'>
         <slot></slot>
       </div>
     `;

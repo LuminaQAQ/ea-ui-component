@@ -34,6 +34,11 @@ export class EaOptionGroup extends EaBase {
   @attribute({
     type: String,
     default: "",
+    a11y: {
+      ariaAttr: "aria-label",
+      target: bem.ce("content"),
+      map: v => v || null,
+    },
     observer(this: EaOptionGroup, newVal: string) {
       if (this._headerSlot) {
         this._headerSlot.textContent = newVal;
@@ -48,10 +53,13 @@ export class EaOptionGroup extends EaBase {
         <header class='${bem.e("header")}' part='header'>
           <slot name='header'></slot>
         </header>
-        <section class='${bem.e("content")}' part='content'>
+        <section class='${bem.e("content")}' part='content' role='group'>
           <slot></slot>
         </section>
       </div>
     `;
+  }
+
+  $mounted() {
   }
 }

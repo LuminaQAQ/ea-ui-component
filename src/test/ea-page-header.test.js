@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-page-header/index.ts";
 
@@ -1498,6 +1499,25 @@ describe("EaPageHeader Component", () => {
         ".ea-page-header__divider"
       );
       expect(divider.textContent.trim()).toBe("|");
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("作为展示组件不需要特定 ARIA 属性", async () => {
+        const el = document.createElement("ea-page-header");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBeNull();
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-page-header");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

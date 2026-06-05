@@ -54,6 +54,10 @@ export type PanelType = "source" | "target";
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTransferPanel extends EaBase {
+  private static _idCounter = 0;
+
+  private readonly _uniqueId: number = EaTransferPanel._idCounter++;
+
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -196,11 +200,13 @@ export class EaTransferPanel extends EaBase {
   html(): string {
     i18nManager.locale = this.locale;
 
+    const titleId = `ea-transfer-panel-title-${this._uniqueId}`;
+
     return `
       <div class='${bem()}' part='container'>
         <div class='${bem.e("header")}' part='header'>
           <ea-checkbox class='${bem.e("checkbox")}' part='checkbox'>
-            <span class='${bem.e("title")}' part='title'></span>
+            <span class='${bem.e("title")}' part='title' id='${titleId}'></span>
           </ea-checkbox>
           <span class='${bem.e("count")}' part='count'></span>
         </div>
@@ -217,7 +223,7 @@ export class EaTransferPanel extends EaBase {
           <div class='${bem.e("empty")}' part='empty'>
             <slot name="empty"></slot>
           </div>
-          <ul class='${bem.e("list")}' part='list'></ul>
+          <ul class='${bem.e("list")}' part='list' role='listbox' aria-labelledby='${titleId}' aria-multiselectable='true'></ul>
           <div class='${bem.e("footer")}' part='footer'>
             <slot name="footer"></slot>
           </div>
@@ -276,6 +282,8 @@ export class EaTransferPanel extends EaBase {
       this._states.selectedKeys.delete(li);
     }
 
+    li.setAttribute("aria-selected", String(isChecked));
+
     this._updateSelectAllState();
 
     this.emit("ea-transfer-panel-select-change", {
@@ -318,6 +326,8 @@ export class EaTransferPanel extends EaBase {
       } else {
         this._states.selectedKeys.delete(li);
       }
+
+      li.setAttribute("aria-selected", String(isChecked));
     });
 
     this.emit("ea-transfer-panel-select-all", {

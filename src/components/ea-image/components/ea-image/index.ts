@@ -420,7 +420,7 @@ export class EaImage extends EaBase {
     return `
       <div class="${bem()}" part="container">
         <img class="${bem.e("image")}" part="image" />
-        <section class="${bem.e("error")}" part="error">
+        <section class="${bem.e("error")}" part="error" role="alert">
           <slot name="error">FAILED</slot>
         </section>
         <section class="${bem.e("placeholder")}" part="placeholder">

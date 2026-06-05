@@ -244,12 +244,12 @@ export class EaNotificationElement extends EaBase {
 
   html(): string {
     return `
-      <div class="${this.updateContainerClasslist()}" part="container">
+      <div class="${this.updateContainerClasslist()}" part="container" role="alert" aria-live="polite">
         <ea-icon class="${bem.e("icon")}" name="${VARIANT_ICON_MAP[this.variant]}" part="icon"></ea-icon>
         <div class="${bem.e("content")}" part="content">
           <header class="${bem.e("header")}" part="header">
             <h2 class="${bem.e("title")}" part="title"> </h2>
-            <ea-icon class="${bem.e("close-icon")}" name="xmark" part="close-icon"></ea-icon>
+            <ea-icon class="${bem.e("close-icon")}" name="xmark" part="close-icon" aria-label="close"></ea-icon>
           </header>
           <main class="${bem.e("main")}" part="main"><slot></slot> </main>
         </div>

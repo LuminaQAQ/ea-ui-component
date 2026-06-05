@@ -134,6 +134,11 @@ export class EaAlert extends EaBase {
   @attribute({
     type: Boolean,
     default: true,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-alert__close-btn",
+      map: v => (v ? null : ""),
+    },
     observer(this: EaAlert) {
       this._updateCloseBtn();
     },
@@ -241,7 +246,14 @@ export class EaAlert extends EaBase {
       }
     );
 
-    if (this._container) this._container.className = className;
+    if (this._container) {
+      this._container.className = className;
+      if (this._isHidden) {
+        this._container.setAttribute("inert", "");
+      } else {
+        this._container.removeAttribute("inert");
+      }
+    }
 
     return className;
   }
@@ -271,7 +283,7 @@ export class EaAlert extends EaBase {
             <slot>${html(this.description)}</slot>
           </p>
         </div>
-        <button type="button" class="${bem.e("close-btn")}" part="close-btn">${closeContent}</button>
+        <button type="button" class="${bem.e("close-btn")}" part="close-btn" aria-label="Close">${closeContent}</button>
       </div>
     `;
   }
@@ -323,6 +335,7 @@ export class EaAlert extends EaBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "alert");
     this.updateContainerClasslist();
   }
 

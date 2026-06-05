@@ -71,6 +71,10 @@ export class EaTransfer extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaTransfer) {
       this.updateContainerClasslist();
       this._handleDisabledUpdate();
@@ -205,7 +209,7 @@ export class EaTransfer extends EaFormAssociatedBase {
     i18nManager.locale = this.locale;
 
     return `
-      <div class='${bem()}' part='container'>
+      <div class='${bem()}' part='container' role='group' aria-label='Transfer'>
         <ea-transfer-panel
           class='${bem.e("panel")} ${bem.e("panel")}--source'
           part='panel source-panel'
@@ -404,6 +408,8 @@ export class EaTransfer extends EaFormAssociatedBase {
         if (isDisabled) stateClasses.push("is-disabled");
         if (isChecked) stateClasses.push("is-checked");
         li.className = [panelBem.e("item"), ...stateClasses].join(" ");
+        li.setAttribute("role", "option");
+        li.setAttribute("aria-selected", String(isChecked));
 
         li.innerHTML = `
         <ea-checkbox

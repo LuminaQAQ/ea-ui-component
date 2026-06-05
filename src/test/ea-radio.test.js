@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-radio/index.js";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 describe("EaRadio and EaRadioGroup Components", () => {
   let container;
@@ -590,8 +591,7 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       await waitForRender();
 
-      const containerEl = group.shadowRoot.querySelector(".ea-radio-group");
-      expect(containerEl.getAttribute("role")).toBe("radiogroup");
+      expect(group.getAttribute("role")).toBe("radiogroup");
     });
   });
 
@@ -972,6 +972,27 @@ describe("EaRadio and EaRadioGroup Components", () => {
 
       const result = group.updateContainerClasslist();
       expect(result).toBe("ea-radio-group");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-radio");
+      el.setAttribute("label", "Radio");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-radio");
+      el.setAttribute("label", "Radio");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
     });
   });
 });

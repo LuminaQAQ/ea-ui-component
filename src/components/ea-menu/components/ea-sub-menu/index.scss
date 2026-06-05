@@ -24,6 +24,15 @@ $name: ea-sub-menu;
   display: block;
 }
 
+:host(:focus-visible) {
+  outline: none;
+}
+
+:host(:focus-visible) .#{$name}__title {
+  color: var(--ea-menu-active-text-color);
+  background-color: var(--ea-menu-hover-bg-color);
+}
+
 @include block($name) {
   position: relative;
 
@@ -31,7 +40,6 @@ $name: ea-sub-menu;
   align-items: center;
 
   box-sizing: border-box;
-  padding: 0 var(--#{$name}-spacing);
   border-bottom: 2px solid transparent;
 
   width: 100%;
@@ -42,9 +50,9 @@ $name: ea-sub-menu;
   white-space: nowrap;
 
   transition: border-color var(--#{$name}-transition),
-    background-color var(--#{$name}-transition),
-    color var(--#{$name}-transition),
-    height var(--#{$name}-transition);
+  background-color var(--#{$name}-transition),
+  color var(--#{$name}-transition),
+  height var(--#{$name}-transition);
 
   @include element(arrow) {
     margin-left: var(--spacing-sm);
@@ -52,9 +60,13 @@ $name: ea-sub-menu;
   }
 
   @include element(title) {
+    box-sizing: border-box;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    padding: 0 var(--#{$name}-spacing);
 
     color: var(--ea-menu-text-color);
     height: var(--#{$name}-height);
@@ -64,8 +76,14 @@ $name: ea-sub-menu;
     text-overflow: ellipsis;
     overflow: hidden;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: var(--ea-menu-active-text-color);
+      background-color: var(--ea-menu-hover-bg-color);
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 
@@ -77,8 +95,8 @@ $name: ea-sub-menu;
     background-color: var(--ea-menu-bg-color);
 
     transition: transform var(--#{$name}-transition),
-      height var(--#{$name}-transition),
-      min-height var(--#{$name}-transition);
+    height var(--#{$name}-transition),
+    min-height var(--#{$name}-transition);
 
     z-index: var(--#{$name}-z-index);
   }

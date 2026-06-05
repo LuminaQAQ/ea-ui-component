@@ -47,11 +47,16 @@ type DirectionType = (typeof DIRECTION_TYPES)[number];
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaDrawer extends EaOverlay {
+  private static _idCounter = 0;
+
   @query(bemMain.ce("header"))
   private _header!: HTMLElement;
 
   @query(bemMain.ce("heading"))
   private _heading!: HTMLElement;
+
+  @query(bemMain.ce("content"))
+  private _content!: HTMLElement;
 
   @attribute({
     type: Enum(DIRECTION_TYPES),
@@ -76,6 +81,7 @@ export class EaDrawer extends EaOverlay {
     default: "",
     observer(this: EaDrawer, newVal: string) {
       if (this._heading) this._heading.textContent = newVal;
+      this._updateAriaLabelledBy();
     },
   })
   heading: string = "";
@@ -83,6 +89,11 @@ export class EaDrawer extends EaOverlay {
   @attribute({
     type: Boolean,
     default: true,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-drawer-main__close-icon",
+      map: v => v ? null : "",
+    },
     observer(this: EaDrawer) {
       this.updateContainerClasslist();
     },
@@ -104,6 +115,15 @@ export class EaDrawer extends EaOverlay {
   })
   beforeClose: ((done: (cancel?: boolean) => void) => void) | null = null;
 
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaDrawer) {
+      this._updateAriaDescribedBy();
+    },
+  })
+  description: string = "";
+
   html(): string {
     const tpl = document.createElement("template");
     tpl.innerHTML = super.html();
@@ -115,7 +135,7 @@ export class EaDrawer extends EaOverlay {
         <header class='${bemMain.e("header")}' part='header'>
           <slot name="title">
             <span class='${bemMain.e("heading")}' part='heading'></span>
-            <ea-icon class='${bemMain.e("close-icon")}' name='xmark' part='close-icon'></ea-icon>
+            <ea-icon class='${bemMain.e("close-icon")}' name='xmark' part='close-icon' tabindex='0' role='button' aria-label='Close'></ea-icon>
           </slot>
         </header>
         <main class='${bemMain.e("content")}' part='content'>
@@ -169,6 +189,38 @@ export class EaDrawer extends EaOverlay {
     this.hide();
   }
 
+  // ==================== a11y 方法 ====================
+
+  /** 更新 aria-labelledby 指向标题元素 */
+  private _updateAriaLabelledBy(): void {
+    if (this._heading && this.heading) {
+      if (!this._heading.id) {
+        this._heading.id = `ea-drawer-heading-${EaDrawer._idCounter++}`;
+      }
+      this.setAttribute("aria-labelledby", this._heading.id);
+    } else if (this.heading) {
+      this.setAttribute("aria-label", this.heading);
+      this.removeAttribute("aria-labelledby");
+    } else {
+      this.removeAttribute("aria-label");
+      this.removeAttribute("aria-labelledby");
+    }
+  }
+
+  /** 更新 aria-describedby 指向描述内容 */
+  private _updateAriaDescribedBy(): void {
+    if (this.description && this._content) {
+      if (!this._content.id) {
+        this._content.id = `ea-drawer-desc-${EaDrawer._idCounter++}`;
+      }
+      this.setAttribute("aria-describedby", this._content.id);
+    } else {
+      this.removeAttribute("aria-describedby");
+    }
+  }
+
+  // ==================== 生命周期 ====================
+
   $mount(): void {
     super.$mount?.();
 
@@ -178,7 +230,14 @@ export class EaDrawer extends EaOverlay {
       this.role = "dialog";
     }
 
+    this.setAttribute("aria-modal", "true");
+
     this.updateContainerClasslist();
+  }
+
+  $mounted(): void {
+    this._updateAriaLabelledBy();
+    this._updateAriaDescribedBy();
   }
 
   $beforeUnmount(): void {

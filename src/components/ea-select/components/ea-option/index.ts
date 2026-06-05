@@ -1,5 +1,5 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query, listen } from "@decorator";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
 import stylesheet from "./index.scss?inline";
 
 const TAG_NAME = "ea-option" as const;
@@ -16,6 +16,8 @@ const bem = createBEM(TAG_NAME);
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaOption extends EaBase {
+  private static _idCounter = 0;
+
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -34,6 +36,7 @@ export class EaOption extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-selected", map: (v: boolean) => String(v) },
     observer(this: EaOption) {
       this.updateContainerClasslist();
     },
@@ -43,11 +46,21 @@ export class EaOption extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-disabled", map: (v: boolean) => String(v) },
     observer(this: EaOption) {
       this.updateContainerClasslist();
     },
   })
   disabled: boolean = false;
+
+  @property({
+    type: Boolean,
+    default: false,
+    observer(this: EaOption) {
+      this.updateContainerClasslist();
+    },
+  })
+  active: boolean = false;
 
   updateContainerClasslist(): string {
     const className = bem(
@@ -55,12 +68,12 @@ export class EaOption extends EaBase {
       {
         selected: this.selected,
         disabled: this.disabled,
+        active: this.active,
       }
     );
 
     if (this._container) {
       this._container.className = className;
-      this._container.setAttribute("tabindex", this.disabled ? "-1" : "0");
     }
 
     return className;
@@ -80,17 +93,14 @@ export class EaOption extends EaBase {
     e.stopImmediatePropagation();
     if (this.disabled) return;
 
-    this.emit("ea-option-click", { detail: { value: this.value, target: this } });
-  }
-
-  @listen("keydown")
-  private _handleKeydown(e: KeyboardEvent): void {
-    if (e.key === "Enter") {
-      this._handleClick(e);
-    }
+    this.emit("ea-option-click", {
+      detail: { value: this.value, target: this },
+    });
   }
 
   $mounted() {
+    this.setAttribute("role", "option");
+    this.id = `ea-option-${EaOption._idCounter++}`;
     this.updateContainerClasslist();
   }
 }

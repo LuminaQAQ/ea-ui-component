@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-color-picker/index.ts";
 
@@ -1423,6 +1424,128 @@ describe("EaColorPickerPanel Component", () => {
         "--ea-color-picker-panel-background-color"
       );
       expect(bgColor).toBeTruthy();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-color-picker");
+      el.setAttribute("label", "Color");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "aria-command-name": { enabled: false }, label: { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-color-picker");
+      el.setAttribute("label", "Color");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "aria-command-name": { enabled: false }, label: { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("trigger 应该有 role='button'", async () => {
+        const el = document.createElement("ea-color-picker");
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.shadowRoot.querySelector('[part="trigger"]');
+        expect(trigger.getAttribute("role")).toBe("button");
+      });
+
+      it("trigger 应该有 aria-haspopup='dialog'", async () => {
+        const el = document.createElement("ea-color-picker");
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.shadowRoot.querySelector('[part="trigger"]');
+        expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
+      });
+
+      it("trigger 应该有 aria-expanded 属性", async () => {
+        const el = document.createElement("ea-color-picker");
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.shadowRoot.querySelector('[part="trigger"]');
+        expect(trigger.hasAttribute("aria-expanded")).toBe(true);
+      });
+
+      it("svpanel 应该有 role='slider'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
+        expect(svpanel.getAttribute("role")).toBe("slider");
+      });
+
+      it("svpanel 应该有 aria-label='Saturation and brightness'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
+        expect(svpanel.getAttribute("aria-label")).toBe("Saturation and brightness");
+      });
+
+      it("svpanel 应该有 aria-valuemin='0' 和 aria-valuemax='100'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const svpanel = panel.shadowRoot.querySelector('[part="svpanel"]');
+        expect(svpanel.getAttribute("aria-valuemin")).toBe("0");
+        expect(svpanel.getAttribute("aria-valuemax")).toBe("100");
+      });
+
+      it("hue slider 应该有 role='slider'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
+        expect(hueSlider.getAttribute("role")).toBe("slider");
+      });
+
+      it("hue slider 应该有 aria-label='Hue'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
+        expect(hueSlider.getAttribute("aria-label")).toBe("Hue");
+      });
+
+      it("hue slider 应该有 aria-valuemin='0' 和 aria-valuemax='360'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const hueSlider = panel.shadowRoot.querySelector('[part="hue-slider"]');
+        expect(hueSlider.getAttribute("aria-valuemin")).toBe("0");
+        expect(hueSlider.getAttribute("aria-valuemax")).toBe("360");
+      });
+
+      it("alpha slider 应该有 role='slider'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const alphaSlider = panel.shadowRoot.querySelector('[part="alpha-slider"]');
+        expect(alphaSlider.getAttribute("role")).toBe("slider");
+      });
+
+      it("alpha slider 应该有 aria-label='Opacity'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const alphaSlider = panel.shadowRoot.querySelector('[part="alpha-slider"]');
+        expect(alphaSlider.getAttribute("aria-label")).toBe("Opacity");
+      });
+
+      it("alpha slider 应该有 aria-valuemin='0' 和 aria-valuemax='100'", async () => {
+        const panel = document.createElement("ea-color-picker-panel");
+        container.appendChild(panel);
+        await waitForRender();
+        const alphaSlider = panel.shadowRoot.querySelector('[part="alpha-slider"]');
+        expect(alphaSlider.getAttribute("aria-valuemin")).toBe("0");
+        expect(alphaSlider.getAttribute("aria-valuemax")).toBe("100");
+      });
     });
   });
 });

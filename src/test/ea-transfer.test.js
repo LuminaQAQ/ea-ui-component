@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 import "../components/ea-transfer/index";
 
 ElementInternals.prototype.setValidity =
@@ -1434,6 +1435,49 @@ describe("EaTransfer", () => {
 
       transfer.remove();
       expect(container.contains(transfer)).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-transfer");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "button-name": { enabled: false }, "nested-interactive": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器应该有 role='group'", async () => {
+        const el = document.createElement("ea-transfer");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("group");
+      });
+
+      it("容器应该有 aria-label='Transfer'", async () => {
+        const el = document.createElement("ea-transfer");
+        container.appendChild(el);
+        await waitForRender();
+        const containerEl = el.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-label")).toBe("Transfer");
+      });
+
+      it("disabled 时宿主元素应该有 aria-disabled='true'", async () => {
+        const el = document.createElement("ea-transfer");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("未 disabled 时宿主元素应该有 aria-disabled='false'", async () => {
+        const el = document.createElement("ea-transfer");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
     });
   });
 });

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-countdown/index.ts";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 describe("EaCountdown Component", () => {
   let container;
@@ -1032,6 +1033,34 @@ describe("EaCountdown Component", () => {
       await waitForRender();
 
       expect(countdown.refreshInterval).toBe(0);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-countdown");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("number 元素应该有 aria-live='polite'", async () => {
+        const el = document.createElement("ea-countdown");
+        container.appendChild(el);
+        await waitForRender();
+        const number = el.shadowRoot.querySelector(".ea-countdown__number");
+        expect(number.getAttribute("aria-live")).toBe("polite");
+      });
+
+      it("number 元素应该有 aria-atomic='true'", async () => {
+        const el = document.createElement("ea-countdown");
+        container.appendChild(el);
+        await waitForRender();
+        const number = el.shadowRoot.querySelector(".ea-countdown__number");
+        expect(number.getAttribute("aria-atomic")).toBe("true");
+      });
     });
   });
 });

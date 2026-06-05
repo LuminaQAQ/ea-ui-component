@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 import "../components/ea-tree/index";
 import { EaTreeCheckChangeEvent } from "../components/ea-tree/events/EaTreeCheckChangeEvent";
 import { EaTreeCheckEvent } from "../components/ea-tree/events/EaTreeCheckEvent";
@@ -2761,6 +2762,194 @@ describe("EaTree", () => {
 
       const rootNode = findNodeByPath(tree, "1$");
       expect(rootNode.classList.contains("is-checked")).toBe(true);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-tree");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器应该有 role=tree", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const containerEl = tree.shadowRoot.querySelector(".ea-tree");
+        expect(containerEl.getAttribute("role")).toBe("tree");
+      });
+
+      it("设置 label 属性时容器应该有 aria-label", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        tree.setAttribute("label", "File Tree");
+        container.appendChild(tree);
+        await waitForRender();
+        const containerEl = tree.shadowRoot.querySelector(".ea-tree");
+        expect(containerEl.getAttribute("aria-label")).toBe("File Tree");
+      });
+
+      it("showCheckbox 时容器应该有 aria-multiselectable=true", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const containerEl = tree.shadowRoot.querySelector(".ea-tree");
+        expect(containerEl.getAttribute("aria-multiselectable")).toBe("true");
+      });
+
+      it("不设置 showCheckbox 时容器不应该有 aria-multiselectable", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const containerEl = tree.shadowRoot.querySelector(".ea-tree");
+        expect(containerEl.hasAttribute("aria-multiselectable")).toBe(false);
+      });
+
+      it("节点应该有 role=treeitem", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const node = findNodeByPath(tree, "1$");
+        expect(node.getAttribute("role")).toBe("treeitem");
+      });
+
+      it("节点应该有 aria-label 属性", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const node = findNodeByPath(tree, "1$");
+        expect(node.getAttribute("aria-label")).toBe("Level one 1");
+      });
+
+      it("有子节点的节点展开时应该有 aria-expanded=true", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        tree._expandPath("1$");
+        const node = findNodeByPath(tree, "1$");
+        expect(node.getAttribute("aria-expanded")).toBe("true");
+      });
+
+      it("有子节点的节点折叠时应该有 aria-expanded=false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const node = findNodeByPath(tree, "1$");
+        expect(node.getAttribute("aria-expanded")).toBe("false");
+      });
+
+      it("选中节点应该有 aria-selected=true", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        tree._selectPath("1$");
+        const node = findNodeByPath(tree, "1$");
+        expect(node.getAttribute("aria-selected")).toBe("true");
+      });
+
+      it("未选中节点应该有 aria-selected=false", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const node = findNodeByPath(tree, "1$");
+        expect(node.getAttribute("aria-selected")).toBe("false");
+      });
+
+      it("showCheckbox 时勾选节点应该有 aria-checked=true", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = generateIdTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        tree._handleCheckboxToggle("1$-1-1");
+        const node = findNodeByPath(tree, "1$-1-1");
+        expect(node.getAttribute("aria-checked")).toBe("true");
+      });
+
+      it("showCheckbox 时半选节点应该有 aria-checked=mixed", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.showCheckbox = true;
+        tree.data = [
+          { id: 1, label: "Parent", children: [{ id: 2, label: "Child 1" }, { id: 3, label: "Child 2" }] },
+        ];
+        container.appendChild(tree);
+        await waitForRender();
+        tree._handleCheckboxToggle("1$-1");
+        const parentNode = findNodeByPath(tree, "1$");
+        expect(parentNode.getAttribute("aria-checked")).toBe("mixed");
+      });
+
+      it("子节点容器应该有 role=group", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        tree._expandPath("1$");
+        const childrenEl = findChildrenByPath(tree, "1$");
+        expect(childrenEl.getAttribute("role")).toBe("group");
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("ArrowDown 应该将焦点移到下一个节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const firstLabel = findLabelByPath(tree, "1$");
+        firstLabel.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+        await waitForRender();
+        const secondLabel = findLabelByPath(tree, "2$");
+        expect(secondLabel.getAttribute("tabindex")).toBe("0");
+      });
+
+      it("ArrowUp 应该将焦点移到上一个节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const secondLabel = findLabelByPath(tree, "2$");
+        secondLabel.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+        await waitForRender();
+        const firstLabel = findLabelByPath(tree, "1$");
+        expect(firstLabel.getAttribute("tabindex")).toBe("0");
+      });
+
+      it("Enter 应该选中叶子节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = [{ label: "Leaf 1" }, { label: "Leaf 2" }];
+        container.appendChild(tree);
+        await waitForRender();
+        const labelEl = findLabelByPath(tree, "1$");
+        labelEl.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        await waitForRender();
+        expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(true);
+      });
+
+      it("Space 应该选中节点", async () => {
+        const tree = document.createElement("ea-tree");
+        tree.data = generateTestData();
+        container.appendChild(tree);
+        await waitForRender();
+        const labelEl = findLabelByPath(tree, "1$");
+        labelEl.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+        await waitForRender();
+        expect(findNodeByPath(tree, "1$").classList.contains("is-selected")).toBe(true);
+      });
     });
   });
 });

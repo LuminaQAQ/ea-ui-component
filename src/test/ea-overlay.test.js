@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../common/ea-overlay/index";
 
@@ -888,6 +889,102 @@ describe("EaOverlay", () => {
 
       expect(overlay.isConnected).toBe(true);
       expect(overlay.shadowRoot).toBeTruthy();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("打开时应记录先前焦点元素", async () => {
+      const overlay = document.createElement("ea-overlay");
+      const btn = document.createElement("button");
+      btn.textContent = "Trigger";
+      container.appendChild(btn);
+      container.appendChild(overlay);
+      await waitForRender();
+
+      btn.focus();
+      overlay.visible = true;
+      await waitForRender(200);
+
+      expect(overlay.visible).toBe(true);
+    });
+
+    it("关闭时应恢复焦点到先前焦点元素", async () => {
+      const overlay = document.createElement("ea-overlay");
+      const btn = document.createElement("button");
+      btn.textContent = "Trigger";
+      container.appendChild(btn);
+      container.appendChild(overlay);
+      await waitForRender();
+
+      btn.focus();
+      overlay.visible = true;
+      await waitForRender(200);
+
+      overlay.visible = false;
+      await waitForRender(200);
+
+      expect(document.activeElement).toBe(btn);
+    });
+
+    it("Tab 键应在弹窗内循环（焦点陷阱）", async () => {
+      const overlay = document.createElement("ea-overlay");
+      const btn1 = document.createElement("button");
+      btn1.textContent = "First";
+      const btn2 = document.createElement("button");
+      btn2.textContent = "Last";
+      overlay.appendChild(btn1);
+      overlay.appendChild(btn2);
+      container.appendChild(overlay);
+      await waitForRender();
+
+      overlay.visible = true;
+      await waitForRender(200);
+
+      btn2.focus();
+      const tabEvent = new KeyboardEvent("keydown", {
+        key: "Tab",
+        bubbles: true,
+        cancelable: true,
+      });
+      document.dispatchEvent(tabEvent);
+      await waitForRender();
+
+      expect(document.activeElement).toBe(btn1);
+    });
+
+    it("Shift+Tab 应在弹窗内循环（焦点陷阱）", async () => {
+      const overlay = document.createElement("ea-overlay");
+      const btn1 = document.createElement("button");
+      btn1.textContent = "First";
+      const btn2 = document.createElement("button");
+      btn2.textContent = "Last";
+      overlay.appendChild(btn1);
+      overlay.appendChild(btn2);
+      container.appendChild(overlay);
+      await waitForRender();
+
+      overlay.visible = true;
+      await waitForRender(200);
+
+      btn1.focus();
+      const shiftTabEvent = new KeyboardEvent("keydown", {
+        key: "Tab",
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      document.dispatchEvent(shiftTabEvent);
+      await waitForRender();
+
+      expect(document.activeElement).toBe(btn2);
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-overlay");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

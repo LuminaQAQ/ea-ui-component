@@ -209,6 +209,11 @@ export class EaInput extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-required",
+      target: bem.ce("original"),
+      map: v => String(v),
+    },
     observer(this: EaInput, newVal: boolean) {
       this._original.required = newVal;
     },
@@ -263,6 +268,11 @@ export class EaInput extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      target: ".ea-input__original",
+      map: v => String(v),
+    },
     observer(this: EaInput, newVal: boolean) {
       this._original.disabled = newVal;
       this.updateContainerClasslist();
@@ -459,8 +469,10 @@ export class EaInput extends EaFormAssociatedBase {
   @attribute({
     type: String,
     default: "",
-    observer(this: EaInput, newVal: string) {
-      this._original.setAttribute("aria-label", newVal);
+    a11y: {
+      ariaAttr: "aria-label",
+      target: ".ea-input__original",
+      map: v => v || null,
     },
   })
   ariaLabel!: string;
@@ -560,9 +572,6 @@ export class EaInput extends EaFormAssociatedBase {
       }
     }
 
-    if (this.ariaLabel) {
-      this._original.setAttribute("aria-label", this.ariaLabel);
-    }
     if (this.tabindex) {
       this._original.tabIndex = this.tabindex ? parseInt(this.tabindex) : 0;
     }
@@ -863,6 +872,17 @@ export class EaInput extends EaFormAssociatedBase {
       );
 
       this.internals?.reportValidity();
+    }
+
+    this._syncAriaInvalid();
+  }
+
+  private _syncAriaInvalid(): void {
+    const isValid = this.internals?.validity?.valid ?? true;
+    if (isValid) {
+      this._original.removeAttribute("aria-invalid");
+    } else {
+      this._original.setAttribute("aria-invalid", "true");
     }
   }
 

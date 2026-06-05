@@ -27,6 +27,10 @@ export class EaCheckTag extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-checked",
+      map: v => String(!!v),
+    },
     observer(this: EaCheckTag) {
       this.updateContainerClasslist();
     },
@@ -36,6 +40,10 @@ export class EaCheckTag extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaCheckTag) {
       this.updateContainerClasslist();
     },
@@ -70,7 +78,7 @@ export class EaCheckTag extends EaBase {
   /** 渲染模板 */
   html(): string {
     return `
-      <div class='${this.updateContainerClasslist()}' part='container'>
+      <div class='${this.updateContainerClasslist()}' part='container' role='checkbox'>
         <slot></slot>
       </div>
     `;

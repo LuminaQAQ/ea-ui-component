@@ -50,6 +50,7 @@ export interface EaTreeElement extends HTMLElement {
   showCheckbox: boolean;
   checkStrictly: boolean;
   nodeKey: string;
+  label: string;
   expandOnIconClick: boolean;
   data: any[];
   dataProps: Record<string, string>;
@@ -123,6 +124,7 @@ export interface EaTreeVueProps {
   showCheckbox?: boolean;
   checkStrictly?: boolean;
   nodeKey?: string;
+  label?: string;
   expandOnIconClick?: boolean;
   data?: any[];
   dataProps?: Record<string, string>;
@@ -171,6 +173,7 @@ export interface EaTreeReactProps extends HTMLAttributes<HTMLElement> {
   showCheckbox?: boolean;
   checkStrictly?: boolean;
   nodeKey?: string;
+  label?: string;
   expandOnIconClick?: boolean;
   data?: any[];
   dataProps?: Record<string, string>;

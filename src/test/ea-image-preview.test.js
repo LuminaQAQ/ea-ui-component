@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 class MockIntersectionObserver {
   constructor(callback) {
@@ -1411,6 +1412,40 @@ describe("EaImagePreview Component", () => {
       await waitForRender();
 
       expect(preview.isConnected).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("应有 role='dialog'", async () => {
+      const preview = document.createElement("ea-image-preview");
+      container.appendChild(preview);
+      await waitForRender();
+
+      expect(preview.getAttribute("role")).toBe("dialog");
+    });
+
+    it("应有 aria-modal='true'", async () => {
+      const preview = document.createElement("ea-image-preview");
+      container.appendChild(preview);
+      await waitForRender();
+
+      expect(preview.getAttribute("aria-modal")).toBe("true");
+    });
+
+    it("应有 aria-label='Image Preview'", async () => {
+      const preview = document.createElement("ea-image-preview");
+      container.appendChild(preview);
+      await waitForRender();
+
+      expect(preview.getAttribute("aria-label")).toBe("Image Preview");
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-image-preview");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

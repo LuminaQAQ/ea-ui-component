@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 // 尝试加载 EaFormAssociatedBase，处理组件尚未重构为 TypeScript 的情况
 let componentReady = false;
@@ -300,6 +301,26 @@ suite("EaFormAssociatedBase", () => {
       expect(element.getAttribute("custom-validation-message")).toBe(
         "Custom error"
       );
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("作为表单关联基类不直接设置 ARIA 属性", async () => {
+        const el = document.createElement("ea-form-associated-base");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBeNull();
+        expect(el.getAttribute("aria-disabled")).toBeNull();
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-form-associated-base");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

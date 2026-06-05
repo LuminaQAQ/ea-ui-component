@@ -45,8 +45,11 @@ export class EaDropdownItem extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaDropdownItem, newVal: boolean) {
-      this.toggleAttribute("aria-disabled", newVal);
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
+    observer(this: EaDropdownItem) {
       this.updateContainerClasslist();
     },
   })
@@ -95,7 +98,18 @@ export class EaDropdownItem extends EaBase {
     }
   }
 
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent) {
+    if (this.disabled) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      this.click();
+    }
+  }
+
   $mount(): void {
+    this.tabIndex = 0;
+    this.setAttribute("role", "menuitem");
     this.updateContainerClasslist();
   }
 }

@@ -42,6 +42,10 @@ const bem = createBEM(TAG_NAME);
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaCollapseItem extends EaBase {
+  private static _instanceCount: number = 0;
+
+  private readonly _uniqueId: number = EaCollapseItem._instanceCount++;
+
   @query(bem.cb())
   private _container!: HTMLElement;
 
@@ -86,8 +90,16 @@ export class EaCollapseItem extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      target: ".ea-collapse-item__header-wrap",
+      map: v => String(v),
+    },
     observer(this: EaCollapseItem) {
       this.updateContainerClasslist();
+      if (this._headerWrap) {
+        this._headerWrap.setAttribute("tabindex", this.disabled ? "-1" : "0");
+      }
     },
   })
   disabled: boolean = false;
@@ -95,8 +107,14 @@ export class EaCollapseItem extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-expanded",
+      target: ".ea-collapse-item__header-wrap",
+      map: v => String(v),
+    },
     observer(this: EaCollapseItem, newVal: boolean) {
       this._updateCollapseHeight(newVal);
+      this._updateContentInert(newVal);
     },
   })
   active: boolean = false;
@@ -105,7 +123,8 @@ export class EaCollapseItem extends EaBase {
   updateContainerClasslist(): string {
     const className = bem(
       {
-        [`indicator-${this.expandIconPosition}`]: this.expandIconPosition !== "right",
+        [`indicator-${this.expandIconPosition}`]:
+          this.expandIconPosition !== "right",
       },
       {
         disabled: this.disabled,
@@ -131,14 +150,24 @@ export class EaCollapseItem extends EaBase {
     });
   }
 
+  /** 设置内容区域的 inert 状态：未展开时阻止焦点进入 */
+  private _updateContentInert(isActive: boolean = this.active): void {
+    if (!this._content) return;
+    if (isActive) {
+      this._content.removeAttribute("inert");
+    } else {
+      this._content.setAttribute("inert", "");
+    }
+  }
+
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container">
-        <div class="${bem.e("header-wrap")}" part="header-wrap">
+        <div class="${bem.e("header-wrap")}" part="header-wrap" role="button" tabindex="0">
           <span class="${bem.e("header")}" part="header">
             <slot name="header"></slot>
           </span>
-          <span class="${bem.e("indicator")}" part="indicator">
+          <span class="${bem.e("indicator")}" part="indicator" inert>
             <slot name="icon">
               <ea-icon class="${bem.e("expand-icon")}" name="angle-down" part="icon"></ea-icon>
             </slot>
@@ -168,6 +197,24 @@ export class EaCollapseItem extends EaBase {
     });
   }
 
+  /** 处理键盘交互：Enter/Space 切换展开状态 */
+  @listen("keydown", bem.ce("header-wrap"))
+  private _handleKeydown(e: KeyboardEvent) {
+    if (this.disabled) return;
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      this.emit("ea-collapse-item-click", {
+        detail: {
+          name: this.name,
+          target: this,
+        },
+        bubbles: true,
+        cancelable: true,
+      });
+    }
+  }
+
   @listen("slotchange", "slot:not([name])")
   private _handleSlotChange() {
     if (this._container) {
@@ -179,8 +226,24 @@ export class EaCollapseItem extends EaBase {
     }
   }
 
+  /** 设置 ARIA 关联属性 */
+  private _setupAria(): void {
+    const id = `ea-collapse-item-${this._uniqueId}`;
+    this._headerWrap.setAttribute("id", `${id}-header`);
+    this._headerWrap.setAttribute("aria-controls", `${id}-panel`);
+    this._content.setAttribute("id", `${id}-panel`);
+    this._content.setAttribute("role", "region");
+    this._content.setAttribute("aria-labelledby", `${id}-header`);
+
+    if (this.disabled) {
+      this._headerWrap.setAttribute("tabindex", "-1");
+    }
+  }
+
   $mount(): void {
     this.updateContainerClasslist();
+    this._setupAria();
+    this._updateContentInert();
     if (this.active) {
       this._updateCollapseHeight(true);
     }

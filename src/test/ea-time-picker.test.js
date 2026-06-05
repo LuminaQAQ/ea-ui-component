@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-time-picker/index";
 
@@ -1663,6 +1664,152 @@ describe("EaTimePicker Component", () => {
         ".ea-time-picker__dropdown-item.is-active"
       );
       expect(items.length).toBe(0);
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("Keyboard Interaction", () => {
+      it("Escape 应该关闭时间面板", async () => {
+        const el = document.createElement("ea-time-picker");
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        el.handleOpen();
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+        await waitForRender();
+        expect(el._container.classList.contains("is-open")).toBe(false);
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-time-picker");
+      el.setAttribute("label", "Time");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { list: { enabled: false }, "aria-required-children": { enabled: false }, "aria-required-parent": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("输入框应该有 role=combobox", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const input = timePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("role")).toBe("combobox");
+      });
+
+      it("输入框应该有 aria-haspopup=listbox", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const input = timePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("aria-haspopup")).toBe("listbox");
+      });
+
+      it("输入框应该有 aria-controls 指向 dropdown", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const input = timePicker.shadowRoot.querySelector("ea-input");
+        const dropdown = timePicker.shadowRoot.querySelector(
+          ".ea-time-picker__dropdown"
+        );
+        expect(input.getAttribute("aria-controls")).toBe(dropdown.id);
+      });
+
+      it("关闭时输入框 aria-expanded 应该为 false", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const input = timePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("aria-expanded")).toBe("false");
+      });
+
+      it("打开时输入框 aria-expanded 应该为 true", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        timePicker.handleOpen();
+        await waitForRender();
+        const input = timePicker.shadowRoot.querySelector("ea-input");
+        expect(input.getAttribute("aria-expanded")).toBe("true");
+      });
+
+      it("下拉面板应该有 role=listbox", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const dropdown = timePicker.shadowRoot.querySelector(
+          ".ea-time-picker__dropdown"
+        );
+        expect(dropdown.getAttribute("role")).toBe("listbox");
+      });
+
+      it("宿主元素 disabled 时应该有 aria-disabled=true", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        timePicker.disabled = true;
+        container.appendChild(timePicker);
+        await waitForRender();
+        expect(timePicker.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("宿主元素非 disabled 时 aria-disabled 应该为 false", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        expect(timePicker.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("时间项应该有 role=option", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const items = timePicker.shadowRoot.querySelectorAll(
+          ".ea-time-picker__dropdown-item"
+        );
+        expect(items.length).toBeGreaterThan(0);
+        items.forEach(item => {
+          expect(item.getAttribute("role")).toBe("option");
+        });
+      });
+
+      it("时间项应该有 aria-selected 属性", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const items = timePicker.shadowRoot.querySelectorAll(
+          ".ea-time-picker__dropdown-item"
+        );
+        items.forEach(item => {
+          expect(item.hasAttribute("aria-selected")).toBe(true);
+        });
+      });
+
+      it("选中时间项的 aria-selected 应该为 true", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        timePicker.setAttribute("value", "14:30:45");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const hourWrap = timePicker.shadowRoot.querySelector(
+          ".ea-time-picker__dropdown-inner--hour"
+        );
+        const hour14 = hourWrap.querySelector('li[data-value="14"]');
+        expect(hour14.getAttribute("aria-selected")).toBe("true");
+      });
+
+      it("未选中时间项的 aria-selected 应该为 false", async () => {
+        const timePicker = document.createElement("ea-time-picker");
+        timePicker.setAttribute("value", "14:30:45");
+        container.appendChild(timePicker);
+        await waitForRender();
+        const hourWrap = timePicker.shadowRoot.querySelector(
+          ".ea-time-picker__dropdown-inner--hour"
+        );
+        const hour00 = hourWrap.querySelector('li[data-value="0"]');
+        expect(hour00.getAttribute("aria-selected")).toBe("false");
+      });
     });
   });
 });

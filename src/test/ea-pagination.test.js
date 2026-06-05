@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-pagination/index.ts";
 
@@ -1298,6 +1299,140 @@ describe("EaPagination", () => {
         ".ea-pagination__total"
       );
       expect(totalEl.textContent).toBe("Total 100000");
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("Keyboard Interaction", () => {
+      it("ArrowRight 应该移动到下一页", async () => {
+        const el = document.createElement("ea-pagination");
+        el.setAttribute("total", "100");
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        const prevCurrent = el.currentPage;
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        await waitForRender();
+      });
+
+      it("ArrowLeft 应该移动到上一页", async () => {
+        const el = document.createElement("ea-pagination");
+        el.setAttribute("total", "100");
+        el.setAttribute("current-page", "2");
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+        await waitForRender();
+      });
+
+      it("Home 应该移动到第一页", async () => {
+        const el = document.createElement("ea-pagination");
+        el.setAttribute("total", "100");
+        el.setAttribute("current-page", "5");
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Home", bubbles: true }));
+        await waitForRender();
+      });
+
+      it("End 应该移动到最后一页", async () => {
+        const el = document.createElement("ea-pagination");
+        el.setAttribute("total", "100");
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "End", bubbles: true }));
+        await waitForRender();
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-pagination");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "aria-prohibited-attr": { enabled: false }, label: { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("应该包含 nav 元素且带有 aria-label=Pagination", async () => {
+        const pagination = document.createElement("ea-pagination");
+        pagination.setAttribute("total", "100");
+        container.appendChild(pagination);
+        await waitForRender();
+        const nav = pagination.shadowRoot.querySelector("nav");
+        expect(nav).toBeTruthy();
+        expect(nav.getAttribute("aria-label")).toBe("Pagination");
+      });
+
+      it("上一页图标应该有 aria-label=Previous page", async () => {
+        const pagination = document.createElement("ea-pagination");
+        pagination.setAttribute("total", "100");
+        container.appendChild(pagination);
+        await waitForRender();
+        const prevIcon = pagination.shadowRoot.querySelector(".ea-pagination__icon--prev");
+        expect(prevIcon.getAttribute("aria-label")).toBe("Previous page");
+      });
+
+      it("下一页图标应该有 aria-label=Next page", async () => {
+        const pagination = document.createElement("ea-pagination");
+        pagination.setAttribute("total", "100");
+        container.appendChild(pagination);
+        await waitForRender();
+        const nextIcon = pagination.shadowRoot.querySelector(".ea-pagination__icon--next");
+        expect(nextIcon.getAttribute("aria-label")).toBe("Next page");
+      });
+
+      it("第一页时上一页图标应该有 aria-disabled=true", async () => {
+        const pagination = document.createElement("ea-pagination");
+        pagination.setAttribute("total", "100");
+        container.appendChild(pagination);
+        await waitForRender();
+        const prevIcon = pagination.shadowRoot.querySelector(".ea-pagination__icon--prev");
+        expect(prevIcon.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("非第一页时上一页图标不应该有 aria-disabled=true", async () => {
+        const pagination = document.createElement("ea-pagination");
+        pagination.setAttribute("total", "100");
+        pagination.setAttribute("current-page", "3");
+        container.appendChild(pagination);
+        await waitForRender();
+        const prevIcon = pagination.shadowRoot.querySelector(".ea-pagination__icon--prev");
+        expect(prevIcon.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("最后一页时下一页图标应该有 aria-disabled=true", async () => {
+        const pagination = document.createElement("ea-pagination");
+        pagination.setAttribute("total", "100");
+        pagination.setAttribute("current-page", "10");
+        container.appendChild(pagination);
+        await waitForRender();
+        const nextIcon = pagination.shadowRoot.querySelector(".ea-pagination__icon--next");
+        expect(nextIcon.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("激活页码应该有 aria-current=page", async () => {
+        const pagination = document.createElement("ea-pagination");
+        pagination.setAttribute("total", "100");
+        pagination.setAttribute("current-page", "3");
+        container.appendChild(pagination);
+        await waitForRender();
+        const activePage = pagination.shadowRoot.querySelector('.ea-pagination__page.is-active');
+        expect(activePage).toBeTruthy();
+        expect(activePage.getAttribute("aria-current")).toBe("page");
+      });
+
+      it("宿主元素 disabled 时应该有 aria-disabled=true", async () => {
+        const pagination = document.createElement("ea-pagination");
+        pagination.setAttribute("total", "100");
+        pagination.setAttribute("disabled", "");
+        container.appendChild(pagination);
+        await waitForRender();
+        expect(pagination.getAttribute("aria-disabled")).toBe("true");
+      });
     });
   });
 });

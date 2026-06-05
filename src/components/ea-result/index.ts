@@ -120,9 +120,9 @@ export class EaResult extends EaBase {
 
   html(): string {
     return `
-      <div class="${bem()}" part="container">
+      <div class="${bem()}" part="container" role="status">
         <div class="${bem.e("icon-wrap")}" part="icon-wrap"><slot name="icon"><ea-icon class="${bem.e("icon")}" part="icon"></ea-icon></slot></div>
-        <div class="${bem.e("title")}" part="title"><slot name="title"></slot></div>
+        <h3 class="${bem.e("title")}" part="title"><slot name="title"></slot></h3>
         <div class="${bem.e("sub-title")}" part="sub-title"><slot name="sub-title"></slot></div>
         <div class="${bem.e("extra")}" part="extra"><slot name="extra"></slot></div>
       </div>

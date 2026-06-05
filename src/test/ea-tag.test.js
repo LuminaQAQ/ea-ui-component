@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-tag/index";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaTag", () => {
   let container;
@@ -831,5 +832,112 @@ describe("Combined Tests", () => {
 
     const checkTags = container.querySelectorAll("ea-check-tag");
     expect(checkTags.length).toBe(5);
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-tag");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("ea-tag 关闭图标应该有 role=button", async () => {
+        const tag = document.createElement("ea-tag");
+        tag.closable = true;
+        container.appendChild(tag);
+
+        await waitForRender();
+
+        const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
+        expect(closeIcon.getAttribute("role")).toBe("button");
+      });
+
+      it("ea-tag 关闭图标应该有 aria-label='close'", async () => {
+        const tag = document.createElement("ea-tag");
+        tag.closable = true;
+        container.appendChild(tag);
+
+        await waitForRender();
+
+        const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
+        expect(closeIcon.getAttribute("aria-label")).toBe("close");
+      });
+
+      it("ea-tag 关闭图标应该有 tabindex='0'", async () => {
+        const tag = document.createElement("ea-tag");
+        tag.closable = true;
+        container.appendChild(tag);
+
+        await waitForRender();
+
+        const closeIcon = tag.shadowRoot.querySelector('[part="close-icon"]');
+        expect(closeIcon.getAttribute("tabindex")).toBe("0");
+      });
+
+      it("ea-check-tag 容器应该有 role=checkbox", async () => {
+        const checkTag = document.createElement("ea-check-tag");
+        container.appendChild(checkTag);
+
+        await waitForRender();
+
+        const containerEl = checkTag.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("role")).toBe("checkbox");
+      });
+
+      it("ea-check-tag checked=true 时宿主元素应该有 aria-checked='true'", async () => {
+        const checkTag = document.createElement("ea-check-tag");
+        checkTag.checked = true;
+        container.appendChild(checkTag);
+
+        await waitForRender();
+
+        expect(checkTag.getAttribute("aria-checked")).toBe("true");
+      });
+
+      it("ea-check-tag checked=false 时宿主元素应该有 aria-checked='false'", async () => {
+        const checkTag = document.createElement("ea-check-tag");
+        container.appendChild(checkTag);
+
+        await waitForRender();
+
+        expect(checkTag.getAttribute("aria-checked")).toBe("false");
+      });
+
+      it("ea-check-tag disabled=true 时宿主元素应该有 aria-disabled='true'", async () => {
+        const checkTag = document.createElement("ea-check-tag");
+        checkTag.disabled = true;
+        container.appendChild(checkTag);
+
+        await waitForRender();
+
+        expect(checkTag.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("ea-check-tag disabled=false 时宿主元素应该有 aria-disabled='false'", async () => {
+        const checkTag = document.createElement("ea-check-tag");
+        container.appendChild(checkTag);
+
+        await waitForRender();
+
+        expect(checkTag.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("ea-check-tag checked 动态变化时 aria-checked 应该同步更新", async () => {
+        const checkTag = document.createElement("ea-check-tag");
+        container.appendChild(checkTag);
+
+        await waitForRender();
+
+        expect(checkTag.getAttribute("aria-checked")).toBe("false");
+
+        checkTag.checked = true;
+        await waitForRender();
+
+        expect(checkTag.getAttribute("aria-checked")).toBe("true");
+      });
+    });
   });
 });

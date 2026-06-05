@@ -57,6 +57,8 @@ export type ImagePreviewStatus = "loading" | "success" | "error";
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaImagePreview extends EaOverlay {
+  private static _idCounter = 0;
+
   @query(".ea-image-preview__progress")
   private _progress!: HTMLElement;
 
@@ -521,6 +523,15 @@ export class EaImagePreview extends EaOverlay {
 
   $mount(): void {
     super.$mount?.();
+
+    try {
+      this.setAttribute("role", "dialog");
+    } catch {
+      this.role = "dialog";
+    }
+
+    this.setAttribute("aria-modal", "true");
+    this.setAttribute("aria-label", "Image Preview");
 
     this.updateContainerClasslist();
   }

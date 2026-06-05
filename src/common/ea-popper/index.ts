@@ -95,6 +95,10 @@ const flipPlacement = (el: HTMLElement, placement: string): string => {
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaPopper extends EaBase {
+  private static _instanceCount: number = 0;
+
+  private readonly _uniqueId: number = EaPopper._instanceCount++;
+
   @query(bem.cb())
   protected _container!: HTMLElement;
 
@@ -103,6 +107,9 @@ export class EaPopper extends EaBase {
 
   @query(bem.ce("reference"))
   protected _referenceElement!: HTMLElement;
+
+  @query('slot[name="reference"]')
+  protected _referenceSlot!: HTMLSlotElement;
 
   private _visibleAbortController?: AbortController;
   private _originPlacement!: string;
@@ -150,6 +157,8 @@ export class EaPopper extends EaBase {
       } else {
         this._handleHideTransition();
       }
+
+      this._updateAriaExpanded();
     },
   })
   visible: boolean = false;
@@ -259,7 +268,7 @@ export class EaPopper extends EaBase {
     return `
       <div class="${this.updateContainerClasslist()}" part="container" tabindex="-1">
         <div class="${bem.e("reference")}" part="reference" tabindex="-1">
-          <div class="${bem.e("original")}" part="original" tabindex="0">
+          <div class="${bem.e("original")}" part="original" tabindex="-1">
             <slot></slot>
           </div>
           <slot name="reference"></slot>
@@ -280,9 +289,37 @@ export class EaPopper extends EaBase {
     this.visible = !this.visible;
   }
 
+  /** 获取 reference 插槽中的第一个已分配元素 */
+  protected _getReferenceTrigger(): HTMLElement | null {
+    if (!this._referenceSlot) return null;
+    const assigned = this._referenceSlot.assignedElements();
+    return (assigned[0] as HTMLElement) || null;
+  }
+
+  /** 设置 ARIA 关联属性：为 original 添加 id，为触发器添加 aria-controls */
+  protected _setupAria(): void {
+    const id = `ea-popper-${this._uniqueId}`;
+    this._originalPopper.setAttribute("id", `${id}-content`);
+
+    const trigger = this._getReferenceTrigger();
+    if (trigger) {
+      trigger.setAttribute("aria-controls", `${id}-content`);
+      trigger.setAttribute("aria-expanded", String(this.visible));
+    }
+  }
+
+  /** 更新触发器的 aria-expanded 状态 */
+  protected _updateAriaExpanded(): void {
+    const trigger = this._getReferenceTrigger();
+    if (trigger) {
+      trigger.setAttribute("aria-expanded", String(this.visible));
+    }
+  }
+
   $mount(): void {
     this.updateContainerClasslist();
     this._originPlacement = this.placement;
+    this._setupAria();
   }
 
   $beforeUnmount(): void {

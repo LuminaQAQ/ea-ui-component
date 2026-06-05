@@ -116,7 +116,7 @@ export class EaMenu extends EaBase {
 
   html(): string {
     return `
-      <ul class="${bem()}" role="menubar" part="container">
+      <ul class="${bem()}" role="menubar" aria-label="Menu" part="container">
         <slot></slot>
       </ul>
     `;
@@ -131,6 +131,94 @@ export class EaMenu extends EaBase {
       subMenu.setAttribute("mode", mode);
     });
   };
+
+  /** 处理键盘导航（Disclosure 模式 + 可选方向键增强） */
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent) {
+    const target = e.target as HTMLElement;
+
+    if (e.key === "Escape") {
+      this.querySelectorAll("ea-sub-menu[open]").forEach(subMenu => {
+        subMenu.removeAttribute("open");
+      });
+      return;
+    }
+
+    const menuItem = target.closest?.("ea-menu-item") as HTMLElement | null;
+    if (!menuItem) return;
+
+    if (e.key === "ArrowUp" && this.mode === "vertical") {
+      e.preventDefault();
+      this._focusPrevItem(menuItem);
+      return;
+    }
+    if (e.key === "ArrowDown" && this.mode === "vertical") {
+      e.preventDefault();
+      this._focusNextItem(menuItem);
+      return;
+    }
+    if (e.key === "ArrowLeft" && this.mode === "horizontal") {
+      e.preventDefault();
+      this._focusPrevItem(menuItem);
+      return;
+    }
+    if (e.key === "ArrowRight" && this.mode === "horizontal") {
+      e.preventDefault();
+      this._focusNextItem(menuItem);
+      return;
+    }
+    if (e.key === "Home") {
+      e.preventDefault();
+      const items = this._getTopLevelItems();
+      if (items.length > 0) items[0].focus();
+      return;
+    }
+    if (e.key === "End") {
+      e.preventDefault();
+      const items = this._getTopLevelItems();
+      if (items.length > 0) items[items.length - 1].focus();
+      return;
+    }
+  }
+
+  /** 获取顶层菜单项（ea-menu-item 宿主元素 + ea-sub-menu 宿主元素），排除 disabled */
+  private _getTopLevelItems(): HTMLElement[] {
+    const items: HTMLElement[] = [];
+    const slot = this._container.querySelector("slot");
+    if (!slot) return items;
+
+    const children = (slot as HTMLSlotElement).assignedElements();
+    for (const child of children) {
+      if (child.tagName === "EA-MENU-ITEM") {
+        if (!(child as HTMLElement).hasAttribute("disabled")) {
+          items.push(child as HTMLElement);
+        }
+      } else if (child.tagName === "EA-SUB-MENU") {
+        if (!(child as HTMLElement).hasAttribute("disabled")) {
+          items.push(child as HTMLElement);
+        }
+      }
+    }
+    return items;
+  }
+
+  /** 聚焦上一个顶层菜单项 */
+  private _focusPrevItem(currentItem: HTMLElement): void {
+    const items = this._getTopLevelItems();
+    const currentIndex = items.indexOf(currentItem);
+    if (currentIndex > 0) {
+      items[currentIndex - 1].focus();
+    }
+  }
+
+  /** 聚焦下一个顶层菜单项 */
+  private _focusNextItem(currentItem: HTMLElement): void {
+    const items = this._getTopLevelItems();
+    const currentIndex = items.indexOf(currentItem);
+    if (currentIndex >= 0 && currentIndex < items.length - 1) {
+      items[currentIndex + 1].focus();
+    }
+  }
 
   @listen("click")
   private _handleMenuItemClick(e: MouseEvent) {
@@ -234,6 +322,11 @@ export class EaMenu extends EaBase {
     });
 
     this.updateContainerClasslist();
+
+    if (this.mode === "vertical") {
+      this._container.setAttribute("aria-orientation", "vertical");
+    }
+
     this._initDefaultActiveItem();
   }
 

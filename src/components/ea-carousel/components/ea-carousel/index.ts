@@ -71,6 +71,9 @@ export class EaCarousel extends EaBase {
   @query(bem.ce("indicator-wrap"))
   private _indicatorWrap!: HTMLElement;
 
+  @query(bem.ce("rotation"))
+  private _rotationBtn!: HTMLButtonElement;
+
   @queryAll(bem.ce("indicator"))
   private _indicatorNodes!: NodeListOf<HTMLElement>;
 
@@ -110,6 +113,7 @@ export class EaCarousel extends EaBase {
     default: "horizontal",
     observer(this: EaCarousel) {
       this.updateContainerClasslist();
+      this._updateArrowInert();
     },
   })
   direction: DirectionType = "horizontal";
@@ -173,6 +177,7 @@ export class EaCarousel extends EaBase {
     default: "hover",
     observer(this: EaCarousel) {
       this.updateContainerClasslist();
+      this._updateArrowInert();
     },
   })
   arrow: ArrowType = "hover";
@@ -186,6 +191,9 @@ export class EaCarousel extends EaBase {
       if (newVal) {
         this._handleAutoPlay();
       }
+
+      this._updateRotationBtn();
+      this._updateAriaLive();
     },
   })
   autoplay: boolean = true;
@@ -207,6 +215,7 @@ export class EaCarousel extends EaBase {
     default: "",
     observer(this: EaCarousel) {
       this.updateContainerClasslist();
+      this._updateIndicatorInert();
     },
   })
   indicatorPosition: IndicatorPositionType = "";
@@ -232,19 +241,22 @@ export class EaCarousel extends EaBase {
   /** 渲染模板 */
   html(): string {
     return `
-      <div class='${bem()}' part='container'>
-        <button class="${bem.e("arrow")} arrow-left" part="arrow-left">
+      <div class='${bem()}' part='container' role="region" aria-roledescription="carousel" aria-label="Carousel">
+        <button class="${bem.e("rotation")}" part="rotation" aria-label="Stop automatic slide show">
+          <ea-icon name="pause" part="rotation-icon"></ea-icon>
+        </button>
+        <button class="${bem.e("arrow")} arrow-left" part="arrow-left" aria-label="Previous Slide" aria-controls="carousel-content">
           <ea-icon name="angle-left" part="arrow-left-icon"></ea-icon>
         </button>
-        <button class="${bem.e("arrow")} arrow-right" part="arrow-right">
+        <button class="${bem.e("arrow")} arrow-right" part="arrow-right" aria-label="Next Slide" aria-controls="carousel-content">
           <ea-icon name="angle-right" part="arrow-right-icon"></ea-icon>
         </button>
-        <ul class="${bem.e("content")}" part="content">
+        <ul class="${bem.e("content")}" part="content" id="carousel-content" aria-live="off">
             <slot name="clone-last"></slot>
             <slot></slot>
             <slot name="clone-first"></slot>
         </ul>
-        <footer class="${bem.e("indicator-wrap")}" part="indicator-wrap">
+        <footer class="${bem.e("indicator-wrap")}" part="indicator-wrap" role="tablist" aria-label="Choose slide to display">
         </footer>
       </div>
     `;
@@ -261,13 +273,23 @@ export class EaCarousel extends EaBase {
     return this.index;
   };
 
+  /** 更新轮播项的 aria-label（"N of M" 格式） */
+  private _updateSlideLabels(): void {
+    const items = this._carouselItems;
+    const total = items.length;
+    items.forEach((item, index) => {
+      item.setAttribute("aria-label", `${index + 1} of ${total}`);
+      item.setAttribute("id", `carousel-slide-${index}`);
+    });
+  }
+
   /** 渲染指示器项 */
   private _renderIndicatorItems = (): void => {
     const count = this._carouselItems.length;
     const indicatorButtons = Array.from(
       { length: count },
       (_, i) =>
-        `<button class='${bem.e("indicator")}' part='indicator' tabindex="1" data-index="${i}"></button>`
+        `<button class='${bem.e("indicator")}' part='indicator' role="tab" tabindex="${i === 0 ? 0 : -1}" data-index="${i}" aria-label="Slide ${i + 1}" aria-selected="${i === 0 ? "true" : "false"}" aria-controls="carousel-slide-${i}"></button>`
     ).join("");
 
     this._indicatorWrap.innerHTML = html(indicatorButtons);
@@ -364,12 +386,61 @@ export class EaCarousel extends EaBase {
     this._updateIndicatorPosition();
   };
 
-  /** 更新指示器激活状态 */
+  /** 更新指示器激活状态和轮播项的可交互性 */
   private _updateIndicatorPosition = (): void => {
+    const activeIndex = this._handleIndexOverflow();
     this._indicatorNodes.forEach((item, index) => {
-      item.classList.toggle("is-active", index === this._handleIndexOverflow());
+      const isActive = index === activeIndex;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-selected", String(isActive));
+      item.setAttribute("tabindex", isActive ? "0" : "-1");
     });
+    this._updateSlideInert(activeIndex);
   };
+
+  /** 设置非当前轮播项为 inert，防止 Tab 聚焦到不可见内容 */
+  private _updateSlideInert(activeIndex: number): void {
+    const items = this._carouselItems;
+    items.forEach((item, index) => {
+      if (index === activeIndex) {
+        item.removeAttribute("inert");
+      } else {
+        item.setAttribute("inert", "");
+      }
+    });
+    this._cloneItems?.forEach(clone => {
+      clone.setAttribute("inert", "");
+    });
+  }
+
+  /** 根据方向和 arrow 属性更新箭头按钮的可交互性 */
+  private _updateArrowInert(): void {
+    const arrows = this.shadowRoot?.querySelectorAll<HTMLButtonElement>(
+      bem.ce("arrow")
+    );
+    if (!arrows) return;
+    const shouldInert =
+      this.direction === "vertical" ||
+      this.arrow === "never" ||
+      (this.arrow === "hover" && !this._states.isMouseEnter);
+    arrows.forEach(arrow => {
+      if (shouldInert) {
+        arrow.setAttribute("inert", "");
+      } else {
+        arrow.removeAttribute("inert");
+      }
+    });
+  }
+
+  /** none-indicator 模式下指示器容器设置 inert */
+  private _updateIndicatorInert(): void {
+    if (!this._indicatorWrap) return;
+    if (this.indicatorPosition === "none") {
+      this._indicatorWrap.setAttribute("inert", "");
+    } else {
+      this._indicatorWrap.removeAttribute("inert");
+    }
+  }
 
   /** 清除自动播放定时器 */
   private _handleTimerClear(): void {
@@ -385,6 +456,30 @@ export class EaCarousel extends EaBase {
 
     this._handleTimerClear();
     this._states.timer = setInterval(this.next, this.interval);
+    this._updateAriaLive();
+  }
+
+  /** 更新 aria-live 状态：自动播放时为 off，暂停时为 polite */
+  private _updateAriaLive(): void {
+    if (!this._content) return;
+    this._content.setAttribute(
+      "aria-live",
+      this._states.timer !== null ? "off" : "polite"
+    );
+  }
+
+  /** 更新旋转控制按钮的标签、图标和可见性 */
+  private _updateRotationBtn(): void {
+    if (!this._rotationBtn) return;
+    this._rotationBtn.hidden = !this.autoplay;
+    if (!this.autoplay) return;
+    const isPlaying = this._states.timer !== null;
+    this._rotationBtn.setAttribute(
+      "aria-label",
+      isPlaying ? "Stop automatic slide show" : "Start automatic slide show"
+    );
+    const icon = this._rotationBtn.querySelector("ea-icon");
+    if (icon) icon.setAttribute("name", isPlaying ? "pause" : "play");
   }
 
   /** 开启过渡动画 */
@@ -435,6 +530,9 @@ export class EaCarousel extends EaBase {
     this._states.isMouseEnter = true;
     if (this.pauseOnHover) this._handleTimerClear();
     this.updateContainerClasslist();
+    this._updateAriaLive();
+    this._updateRotationBtn();
+    this._updateArrowInert();
   };
 
   /** slot 变更事件处理 */
@@ -457,6 +555,7 @@ export class EaCarousel extends EaBase {
 
     this._renderIndicatorItems();
     this._initCarouselItem();
+    this._updateSlideLabels();
 
     this._updateIndicatorPosition();
 
@@ -496,6 +595,37 @@ export class EaCarousel extends EaBase {
     this.next();
   }
 
+  /** 旋转控制按钮点击：切换自动播放 */
+  @listen("click", bem.ce("rotation"))
+  private _onRotationClick(): void {
+    if (this._states.timer) {
+      this._handleTimerClear();
+    } else {
+      this._handleAutoPlay();
+    }
+    this._updateRotationBtn();
+    this._updateAriaLive();
+  }
+
+  /** 键盘焦点进入时暂停自动播放 */
+  @listen("focusin", bem.cb())
+  private _onFocusIn(): void {
+    if (this.autoplay) {
+      this._handleTimerClear();
+      this._updateAriaLive();
+      this._updateRotationBtn();
+    }
+  }
+
+  /** 键盘焦点离开时恢复自动播放 */
+  @listen("focusout", bem.cb())
+  private _onFocusOut(): void {
+    if (this.autoplay && !this._states.isMouseEnter) {
+      this._handleAutoPlay();
+      this._updateRotationBtn();
+    }
+  }
+
   @listen("transitionend", bem.ce("content"))
   private _onTransitionEnd(): void {
     this._onCarouselChangeEndEvent();
@@ -512,6 +642,9 @@ export class EaCarousel extends EaBase {
     this._states.isMouseEnter = false;
     if (this.pauseOnHover) this._handleAutoPlay();
     this.updateContainerClasslist();
+    this._updateAriaLive();
+    this._updateRotationBtn();
+    this._updateArrowInert();
   }
 
   @listen("mouseover", "shadowRoot")
@@ -526,6 +659,48 @@ export class EaCarousel extends EaBase {
     if (this.trigger !== "click") return;
     if (!(e.target as HTMLElement).closest(bem.ce("indicator"))) return;
     this._onIndicatorHandleEvent(e);
+  }
+
+  /** 指示器 tablist 键盘导航 */
+  @listen("keydown", bem.ce("indicator-wrap"))
+  private _handleIndicatorKeydown(e: KeyboardEvent): void {
+    const target = e.target as HTMLElement;
+    if (!target.closest(bem.ce("indicator"))) return;
+
+    const indicators = Array.from(this._indicatorNodes);
+    const currentIndex = indicators.indexOf(target);
+    if (currentIndex === -1) return;
+
+    let nextIndex = -1;
+    const isHorizontal = this.direction === "horizontal";
+
+    switch (e.key) {
+      case isHorizontal ? "ArrowRight" : "ArrowDown":
+        e.preventDefault();
+        nextIndex = currentIndex + 1;
+        if (nextIndex >= indicators.length) nextIndex = 0;
+        break;
+      case isHorizontal ? "ArrowLeft" : "ArrowUp":
+        e.preventDefault();
+        nextIndex = currentIndex - 1;
+        if (nextIndex < 0) nextIndex = indicators.length - 1;
+        break;
+      case "Home":
+        e.preventDefault();
+        nextIndex = 0;
+        break;
+      case "End":
+        e.preventDefault();
+        nextIndex = indicators.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    if (nextIndex >= 0 && nextIndex < indicators.length) {
+      this.index = nextIndex;
+      indicators[nextIndex].focus();
+    }
   }
 
   @listen("resize", "window")
@@ -550,6 +725,7 @@ export class EaCarousel extends EaBase {
 
     this._renderIndicatorItems();
     this._initCarouselItem();
+    this._updateSlideLabels();
     if (this.autoplay) this._handleAutoPlay();
 
     queueMicrotask(() => {
@@ -557,6 +733,9 @@ export class EaCarousel extends EaBase {
     });
 
     this._isMounted = true;
+    this._updateRotationBtn();
+    this._updateArrowInert();
+    this._updateIndicatorInert();
   }
 
   $beforeUnmount(): void {

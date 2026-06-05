@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 let observerInstances = [];
 
@@ -1353,6 +1354,96 @@ describe("EaInfiniteScroll", () => {
 
       observer.trigger([{ isIntersecting: true, target: placeholder }]);
       expect(loadmoreHandler).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-infinite-scroll");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, { rules: { "aria-required-children": { enabled: false } } });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("宿主元素应该有 role=feed", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("feed");
+      });
+
+      it("status=loading 时宿主元素应该有 aria-busy=true", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        el.status = "loading";
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-busy")).toBe("true");
+      });
+
+      it("status=finished 时宿主元素不应该有 aria-busy", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.hasAttribute("aria-busy")).toBe(false);
+      });
+
+      it("status=noMore 时宿主元素不应该有 aria-busy", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        el.status = "noMore";
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.hasAttribute("aria-busy")).toBe(false);
+      });
+
+      it("设置 label 时宿主元素应该有 aria-label", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        el.setAttribute("label", "News feed");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-label")).toBe("News feed");
+      });
+
+      it("未设置 label 时宿主元素不应该有 aria-label", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.hasAttribute("aria-label")).toBe(false);
+      });
+
+      it("子元素应该自动获得 role=article", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        el.innerHTML = "<div>Item 1</div><div>Item 2</div>";
+        container.appendChild(el);
+        await waitForRender();
+        const articles = el.querySelectorAll("[role='article']");
+        expect(articles.length).toBe(2);
+      });
+
+      it("子元素应该有 aria-posinset 属性", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        el.innerHTML = "<div>Item 1</div><div>Item 2</div><div>Item 3</div>";
+        container.appendChild(el);
+        await waitForRender();
+        const articles = el.querySelectorAll("[role='article']");
+        articles.forEach((article, i) => {
+          expect(article.getAttribute("aria-posinset")).toBe(
+            String(i + 1)
+          );
+        });
+      });
+
+      it("子元素应该有 aria-setsize 属性", async () => {
+        const el = document.createElement("ea-infinite-scroll");
+        el.innerHTML = "<div>Item 1</div><div>Item 2</div><div>Item 3</div>";
+        container.appendChild(el);
+        await waitForRender();
+        const articles = el.querySelectorAll("[role='article']");
+        articles.forEach(article => {
+          expect(article.getAttribute("aria-setsize")).toBe("3");
+        });
+      });
     });
   });
 });

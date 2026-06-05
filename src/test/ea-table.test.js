@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-table/index";
 
@@ -2174,6 +2175,118 @@ describe("EaTable Component", () => {
       const emptySlot = table.shadowRoot.querySelector(".ea-table__empty");
       expect(emptySlot).toBeTruthy();
       expect(emptySlot.classList.contains("is-data")).toBe(true);
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("table 元素应该有 role=table", async () => {
+        const table = document.createElement("ea-table");
+        container.appendChild(table);
+        await waitForRender();
+        const tableEl = table.shadowRoot.querySelector("table.ea-table");
+        expect(tableEl.getAttribute("role")).toBe("table");
+      });
+
+      it("table 元素应该有 aria-label", async () => {
+        const table = document.createElement("ea-table");
+        container.appendChild(table);
+        await waitForRender();
+        const tableEl = table.shadowRoot.querySelector("table.ea-table");
+        expect(tableEl.getAttribute("aria-label")).toBeTruthy();
+      });
+
+      it("setData 后 table 元素应该有 aria-rowcount", async () => {
+        const table = createTableWithColumns(`
+          <ea-table-column label="ID" prop="id"></ea-table-column>
+        `);
+        container.appendChild(table);
+        await waitForRender(200);
+        table.setData(testData);
+        await waitForRender(200);
+        const tableEl = table.shadowRoot.querySelector("table.ea-table");
+        expect(tableEl.getAttribute("aria-rowcount")).toBe("4");
+      });
+
+      it("setData 后 table 元素应该有 aria-colcount", async () => {
+        const table = createTableWithColumns(`
+          <ea-table-column label="ID" prop="id"></ea-table-column>
+        `);
+        container.appendChild(table);
+        await waitForRender(200);
+        table.setData(testData);
+        await waitForRender(200);
+        const tableEl = table.shadowRoot.querySelector("table.ea-table");
+        expect(tableEl.getAttribute("aria-colcount")).toBe("1");
+      });
+
+      it("tbody td 应该有 role=cell", async () => {
+        const table = createTableWithColumns(`
+          <ea-table-column label="ID" prop="id"></ea-table-column>
+        `);
+        container.appendChild(table);
+        await waitForRender(200);
+        table.setData(testData);
+        await waitForRender(200);
+        const td = table.shadowRoot.querySelector("tbody .ea-table__td[data-scope]");
+        expect(td.getAttribute("role")).toBe("cell");
+      });
+
+      it("tbody td 应该有 aria-colindex", async () => {
+        const table = createTableWithColumns(`
+          <ea-table-column label="ID" prop="id"></ea-table-column>
+        `);
+        container.appendChild(table);
+        await waitForRender(200);
+        table.setData(testData);
+        await waitForRender(200);
+        const td = table.shadowRoot.querySelector("tbody .ea-table__td[data-scope]");
+        expect(td.getAttribute("aria-colindex")).toBeTruthy();
+      });
+
+      it("tbody tr 应该有 aria-rowindex", async () => {
+        const table = createTableWithColumns(`
+          <ea-table-column label="ID" prop="id"></ea-table-column>
+        `);
+        container.appendChild(table);
+        await waitForRender(200);
+        table.setData(testData);
+        await waitForRender(200);
+        const tr = table.shadowRoot.querySelector("tbody .ea-table__tr");
+        expect(tr.getAttribute("aria-rowindex")).toBeTruthy();
+      });
+
+      it("sortable 列的 th 应该有 aria-sort", async () => {
+        const table = createTableWithColumns(`
+          <ea-table-column label="ID" prop="id" sortable></ea-table-column>
+        `);
+        container.appendChild(table);
+        await waitForRender(200);
+        const th = table.shadowRoot.querySelector("thead .ea-table__th.is-sortable");
+        expect(th.getAttribute("aria-sort")).toBeTruthy();
+      });
+
+      it("排序后 aria-sort 应该更新", async () => {
+        const table = createTableWithColumns(`
+          <ea-table-column label="ID" prop="id" sortable></ea-table-column>
+        `);
+        container.appendChild(table);
+        await waitForRender(200);
+        table.setData(testData);
+        await waitForRender(200);
+        const th = table.shadowRoot.querySelector("thead .ea-table__th.is-sortable");
+        th.click();
+        await waitForRender();
+        expect(th.getAttribute("aria-sort")).toBe("descending");
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-table");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

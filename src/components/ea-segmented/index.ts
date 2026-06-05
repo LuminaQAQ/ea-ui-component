@@ -9,6 +9,8 @@ import stylesheet from "./index.scss?inline";
 const TAG_NAME = "ea-segmented" as const;
 const bem = createBEM(TAG_NAME);
 
+let segmentedItemId = 0;
+
 export type SegmentedSize = "large" | "default" | "small";
 export type SegmentedDirection = "horizontal" | "vertical";
 export type SegmentedOption =
@@ -88,6 +90,7 @@ export class EaSegmented extends EaBase {
     default: "",
     observer(this: EaSegmented, newVal: string) {
       this._updateIndicatorPosition(newVal);
+      this._updateActiveDescendant();
     },
   })
   value: string = "";
@@ -115,6 +118,7 @@ export class EaSegmented extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaSegmented) {
       this.updateContainerClasslist();
     },
@@ -153,6 +157,30 @@ export class EaSegmented extends EaBase {
     `;
   }
 
+  /** 获取非禁用的选项列表 */
+  private _getEnabledItems(): HTMLLabelElement[] {
+    if (!this._container) return [];
+    return Array.from(
+      this._container.querySelectorAll(".ea-segmented__item")
+    ).filter(el => !el.hasAttribute("aria-disabled")) as HTMLLabelElement[];
+  }
+
+  /** 更新 aria-activedescendant 指向当前选中项 */
+  private _updateActiveDescendant(): void {
+    if (!this._container) return;
+
+    const items = this._container.querySelectorAll(".ea-segmented__item");
+    const checkedItem = Array.from(items).find(
+      el => el.getAttribute("aria-checked") === "true"
+    );
+
+    if (checkedItem?.id) {
+      this.setAttribute("aria-activedescendant", checkedItem.id);
+    } else if (items[0]?.id) {
+      this.setAttribute("aria-activedescendant", items[0].id);
+    }
+  }
+
   /** 渲染选项列表 */
   private _renderOptions(options: SegmentedOption[]): void {
     if (!this._container) return;
@@ -189,13 +217,21 @@ export class EaSegmented extends EaBase {
         if (isDisabled) inputProps.disabled = true;
         if (isChecked) inputProps.checked = true;
 
+        const labelAttrs: Record<string, any> = {
+          part: "item",
+          for: label || itemValue,
+          id: `${TAG_NAME}-item-${++segmentedItemId}`,
+          role: "radio",
+          "aria-checked": String(isChecked),
+        };
+        if (isDisabled) {
+          labelAttrs["aria-disabled"] = "true";
+        }
+
         return h(
           "label",
           itemClassName,
-          {
-            part: "item",
-            for: label || itemValue,
-          },
+          labelAttrs,
           [
             h("input", bem.e("original"), inputProps, ""),
             h(
@@ -203,7 +239,6 @@ export class EaSegmented extends EaBase {
               bem.e("label"),
               {
                 part: "label",
-                "aria-label": label || itemValue,
               },
               label || itemValue
             ),
@@ -223,6 +258,7 @@ export class EaSegmented extends EaBase {
       [optionsTemplate, indicatorTemplate].join("")
     );
     this._updateIndicatorPosition(this.value);
+    this._updateActiveDescendant();
   }
 
   /** 处理选项变更事件 */
@@ -233,6 +269,63 @@ export class EaSegmented extends EaBase {
     const value = (e.target as HTMLInputElement).value;
     this.value = value;
     this.dispatchEvent(new EaSegmentedChangeEvent({ value }));
+  }
+
+  /** 处理键盘导航（aria-activedescendant 模式） */
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent): void {
+    if (this.disabled) return;
+
+    const enabledItems = this._getEnabledItems();
+    if (!enabledItems.length) return;
+
+    const currentIndex = enabledItems.findIndex(
+      el => el.getAttribute("aria-checked") === "true"
+    );
+    let newIndex = currentIndex;
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault();
+        newIndex =
+          currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault();
+        newIndex =
+          currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
+        break;
+      case " ":
+        e.preventDefault();
+        if (currentIndex < 0 && enabledItems[0]) {
+          const input = enabledItems[0].querySelector(
+            ".ea-segmented__original"
+          ) as HTMLInputElement;
+          if (input) {
+            this.value = input.value;
+            this.dispatchEvent(
+              new EaSegmentedChangeEvent({ value: input.value })
+            );
+          }
+        }
+        return;
+      default:
+        return;
+    }
+
+    if (newIndex !== currentIndex && enabledItems[newIndex]) {
+      const input = enabledItems[newIndex].querySelector(
+        ".ea-segmented__original"
+      ) as HTMLInputElement;
+      if (input) {
+        this.value = input.value;
+        this.dispatchEvent(
+          new EaSegmentedChangeEvent({ value: input.value })
+        );
+      }
+    }
   }
 
   /**
@@ -259,7 +352,9 @@ export class EaSegmented extends EaBase {
           const input = child.querySelector(
             ".ea-segmented__original"
           ) as HTMLInputElement;
-          child.classList.toggle("is-checked", input?.value === value);
+          const isChecked = input?.value === value;
+          child.classList.toggle("is-checked", isChecked);
+          child.setAttribute("aria-checked", String(isChecked));
 
           if (input?.value === value) {
             const rect = child.getBoundingClientRect();
@@ -286,6 +381,9 @@ export class EaSegmented extends EaBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "radiogroup");
+    this.tabIndex = 0;
+
     this.updateContainerClasslist();
     if (this.options && this.options.length > 0) {
       this._renderOptions(this.options);

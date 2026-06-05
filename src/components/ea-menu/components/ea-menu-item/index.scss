@@ -50,9 +50,14 @@ $name: ea-menu-item;
     background-color var(--#{$name}-transition),
     color var(--#{$name}-transition);
 
-  &:hover {
+  &:hover,
+  :host(:focus-visible) & {
     color: var(--ea-menu-active-text-color);
     background-color: var(--ea-menu-hover-bg-color);
+  }
+
+  :host(:focus) {
+    outline: none;
   }
 
   @include state(active) {

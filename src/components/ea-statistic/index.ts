@@ -58,7 +58,7 @@ export class EaStatistic extends EaBase {
           <span class='${bem.e("prefix")}' part='prefix'>
             <slot name='prefix'></slot>
           </span>
-          <span class='${bem.e("number")}' part='number'>
+          <span class='${bem.e("number")}' part='number' aria-live="polite">
             <slot></slot>
           </span>
           <span class='${bem.e("suffix")}' part='suffix'>

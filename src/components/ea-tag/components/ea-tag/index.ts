@@ -152,7 +152,7 @@ export class EaTag extends EaBase {
     return `
       <div class='${this.updateContainerClasslist()}' part='container'>
         <span class="${bem.e("content")}"><slot></slot></span>
-        <ea-icon class="${bem.e("close")}" part="close-icon" name="xmark"></ea-icon>
+        <ea-icon class="${bem.e("close")}" part="close-icon" name="xmark" role="button" aria-label="close" tabindex="0"></ea-icon>
       </div>
     `;
   }

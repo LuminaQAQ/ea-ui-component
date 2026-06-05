@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-rate/index";
 
@@ -1317,6 +1318,152 @@ describe("EaRate", () => {
 
       const containerEl = rate.shadowRoot.querySelector(".ea-rate");
       expect(containerEl.classList.contains("ea-rate--x-large")).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-rate");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-rate");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("宿主元素应该有 role=radiogroup", async () => {
+        const el = document.createElement("ea-rate");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("radiogroup");
+      });
+
+      it("每个评分项应该有 role=radio", async () => {
+        const el = document.createElement("ea-rate");
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        symbols.forEach(symbol => {
+          expect(symbol.getAttribute("role")).toBe("radio");
+        });
+      });
+
+      it("value=3 时第3项应该有 aria-checked=true", async () => {
+        const el = document.createElement("ea-rate");
+        el.value = 3;
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        expect(symbols[2].getAttribute("aria-checked")).toBe("true");
+      });
+
+      it("value=3 时非选中项应该有 aria-checked=false", async () => {
+        const el = document.createElement("ea-rate");
+        el.value = 3;
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        expect(symbols[0].getAttribute("aria-checked")).toBe("false");
+        expect(symbols[3].getAttribute("aria-checked")).toBe("false");
+      });
+
+      it("disabled 时宿主元素应该有 aria-disabled=true", async () => {
+        const el = document.createElement("ea-rate");
+        el.disabled = true;
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("每个评分项应该有 aria-label", async () => {
+        const el = document.createElement("ea-rate");
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        symbols.forEach(symbol => {
+          expect(symbol.getAttribute("aria-label")).toBeTruthy();
+        });
+      });
+
+      it("value 变化时 aria-checked 应该同步更新", async () => {
+        const el = document.createElement("ea-rate");
+        el.value = 2;
+        container.appendChild(el);
+        await waitForRender();
+        el.value = 4;
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        expect(symbols[3].getAttribute("aria-checked")).toBe("true");
+        expect(symbols[1].getAttribute("aria-checked")).toBe("false");
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("ArrowRight 应该移动焦点到下一个评分项", async () => {
+        const el = document.createElement("ea-rate");
+        el.value = 2;
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        await waitForRender();
+        expect(el.value).toBe(3);
+      });
+
+      it("ArrowLeft 应该移动焦点到上一个评分项", async () => {
+        const el = document.createElement("ea-rate");
+        el.value = 3;
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        symbols[2].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }));
+        await waitForRender();
+        expect(el.value).toBe(2);
+      });
+
+      it("Space 应该选中当前评分项", async () => {
+        const el = document.createElement("ea-rate");
+        el.value = 0;
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        symbols[2].dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+        await waitForRender();
+        expect(el.value).toBe(3);
+      });
+
+      it("disabled 时键盘操作不应该改变 value", async () => {
+        const el = document.createElement("ea-rate");
+        el.value = 2;
+        el.disabled = true;
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        await waitForRender();
+        expect(el.value).toBe(2);
+      });
+
+      it("readonly 时键盘操作不应该改变 value", async () => {
+        const el = document.createElement("ea-rate");
+        el.value = 2;
+        el.readonly = true;
+        container.appendChild(el);
+        await waitForRender();
+        const symbols = el.shadowRoot.querySelectorAll(".ea-rate__symbol");
+        symbols[1].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+        await waitForRender();
+        expect(el.value).toBe(2);
+      });
     });
   });
 });

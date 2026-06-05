@@ -36,6 +36,7 @@ propertyName: type = defaultValue;
 | `type` | `StringConstructor \| NumberConstructor \| BooleanConstructor \| DateConstructor \| ArrayConstructor \| RegExpConstructor \| FunctionConstructor \| Object \| any[]` | 是 | 属性类型 |
 | `default` | `any` | 否 | 默认值 |
 | `observer` | `(this: Component, newVal: any, oldVal: any) => void` | 否 | 属性变化回调 |
+| `a11y` | `A11yOption` | 否 | 无障碍属性同步配置（同 @attribute 的 a11y） |
 | `rawFunction` | `boolean` | 否 | 是否保留函数原始值（不执行函数） |
 | `repeatable` | `boolean` | 否 | 是否可重复（用于数组类型） |
 
@@ -80,6 +81,27 @@ config: Record<string, any> = {};
 })
 isExpanded: boolean = false;
 ```
+
+### a11y 无障碍属性同步
+
+`@property` 同样支持 `a11y` 选项，用法与 `@attribute` 完全一致。适用于不映射 HTML attribute 但需要同步 ARIA 属性的内部状态。
+
+```typescript
+@property({
+  type: Boolean,
+  default: false,
+  a11y: {
+    ariaAttr: "aria-expanded",
+    target: ".ea-sub-menu__title",
+  },
+  observer(this: EaSubMenu) {
+    this.updateContainerClasslist();
+  },
+})
+open: boolean = false;
+```
+
+详细的 `a11y` 配置说明和映射模式参见 `attribute` 技能模块。
 
 ## 核心行为
 

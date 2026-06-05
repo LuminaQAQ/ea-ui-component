@@ -24,6 +24,9 @@ const bem = createBEM(TAG_NAME);
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaTab extends EaBase {
+  private static _instanceCount: number = 0;
+  private readonly _uniqueId: number = EaTab._instanceCount++;
+
   get _hostTabsContext(): HTMLElement | null {
     try {
       return this.closest("ea-tabs");
@@ -53,6 +56,10 @@ export class EaTab extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaTab) {
       this.updateContainerClasslist();
     },
@@ -62,6 +69,11 @@ export class EaTab extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-selected",
+      target: ".ea-tab",
+      map: v => String(v),
+    },
     observer(this: EaTab) {
       this.updateContainerClasslist();
     },
@@ -122,6 +134,16 @@ export class EaTab extends EaBase {
     return className;
   }
 
+  /** 设置 ARIA 属性，遵循 W3C tabs 模式。 */
+  private _setupAria(): void {
+    this._container.setAttribute("role", "tab");
+    if (this.panel) {
+      this._container.setAttribute("aria-controls", `ea-tab-panel-${this.panel}`);
+    }
+    this._container.id = `ea-tab-${this._uniqueId}`;
+    this.id = `ea-tab-${this._uniqueId}`;
+  }
+
   html(): string {
     return `
       <div class='${bem()}' part='container'>
@@ -146,5 +168,6 @@ export class EaTab extends EaBase {
 
   $mount(): void {
     this.updateContainerClasslist();
+    this._setupAria();
   }
 }

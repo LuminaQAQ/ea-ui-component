@@ -45,6 +45,8 @@ const bem = createBEM(TAG_NAME);
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaDialog extends EaOverlay {
+  private static _idCounter = 0;
+
   // ==================== DOM 元素引用 ====================
 
   @query(bem.ce("header"))
@@ -56,6 +58,9 @@ export class EaDialog extends EaOverlay {
   @query(bem.ce("close-icon"))
   private _closeIcon!: HTMLElement;
 
+  @query(bem.ce("content"))
+  private _content!: HTMLElement;
+
   // ==================== 属性定义 ====================
 
   @attribute({
@@ -63,6 +68,7 @@ export class EaDialog extends EaOverlay {
     default: "",
     observer(this: EaDialog, newVal: string) {
       if (this._heading) this._heading.textContent = newVal;
+      this._updateAriaLabelledBy();
     },
   })
   heading: string = "";
@@ -112,6 +118,11 @@ export class EaDialog extends EaOverlay {
   @attribute({
     type: Boolean,
     default: true,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-dialog__close-icon",
+      map: v => v ? null : "",
+    },
     observer(this: EaDialog) {
       this.updateContainerClasslist();
     },
@@ -136,6 +147,24 @@ export class EaDialog extends EaOverlay {
   })
   movable: boolean = false;
 
+  @attribute({
+    type: Boolean,
+    default: false,
+    observer(this: EaDialog) {
+      this._updateRole();
+    },
+  })
+  alertdialog: boolean = false;
+
+  @attribute({
+    type: String,
+    default: "",
+    observer(this: EaDialog) {
+      this._updateAriaDescribedBy();
+    },
+  })
+  description: string = "";
+
   // ==================== 方法 ====================
 
   html(): string {
@@ -149,7 +178,7 @@ export class EaDialog extends EaOverlay {
         <header class='${bem.e("header")}' part='header'>
           <slot name="header">
             <span class='${bem.e("heading")}' part='heading'></span>
-            <ea-icon class='${bem.e("close-icon")}' name='xmark' part='close-icon'></ea-icon>
+            <ea-icon class='${bem.e("close-icon")}' name='xmark' part='close-icon' tabindex='0' role='button' aria-label='Close'></ea-icon>
           </slot>
         </header>
         <main class='${bem.e("content")}' part='content'>
@@ -242,30 +271,64 @@ export class EaDialog extends EaOverlay {
     this.visible = false;
   }
 
-  /**
-   * 处理关闭动画结束事件
-   */
-  @listen("ea-closed")
-  private _handleClosed(e: EaOverlayClosedEvent): void {
-    if (e.target !== this) return;
-    this.hide();
+  // ==================== 生命周期 ====================
+
+  /** 根据 alertdialog 属性更新 role */
+  private _updateRole(): void {
+    const role = this.alertdialog ? "alertdialog" : "dialog";
+    try {
+      this.setAttribute("role", role);
+    } catch {
+      this.role = role;
+    }
   }
 
-  // ==================== 生命周期 ====================
+  /** 更新 aria-labelledby 指向标题元素 */
+  private _updateAriaLabelledBy(): void {
+    if (this._heading && this.heading) {
+      if (!this._heading.id) {
+        this._heading.id = `ea-dialog-heading-${EaDialog._idCounter++}`;
+      }
+      this.setAttribute("aria-labelledby", this._heading.id);
+    } else if (this.heading) {
+      this.setAttribute("aria-label", this.heading);
+      this.removeAttribute("aria-labelledby");
+    } else {
+      this.removeAttribute("aria-label");
+      this.removeAttribute("aria-labelledby");
+    }
+  }
+
+  /** 更新 aria-describedby 指向描述内容 */
+  private _updateAriaDescribedBy(): void {
+    if (this.description && this._content) {
+      if (!this._content.id) {
+        this._content.id = `ea-dialog-desc-${EaDialog._idCounter++}`;
+      }
+      this.setAttribute("aria-describedby", this._content.id);
+    } else {
+      this.removeAttribute("aria-describedby");
+    }
+  }
 
   $mount(): void {
     super.$mount?.();
 
-    try {
-      this.setAttribute("role", "dialog");
-    } catch {
-      this.role = "dialog";
-    }
+    this._updateRole();
+
+    this.setAttribute("aria-modal", "true");
 
     this.updateContainerClasslist();
   }
 
-  $beforeUnmount(): void {
-    super.$beforeUnmount?.();
+  $mounted(): void {
+    this._updateAriaLabelledBy();
+    this._updateAriaDescribedBy();
+  }
+
+  @listen("ea-closed")
+  private _handleClosed(e: EaOverlayClosedEvent): void {
+    if (e.target !== this) return;
+    this.hide();
   }
 }

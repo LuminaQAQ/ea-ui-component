@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-tooltip/index.ts";
 
@@ -316,12 +317,12 @@ describe("EaTooltip Component", () => {
 
       await waitForRender();
 
-      tooltip.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      tooltip.dispatchEvent(new MouseEvent("click", { detail: 1, bubbles: true }));
       await waitForRender();
 
       expect(tooltip.visible).toBe(true);
 
-      tooltip.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      tooltip.dispatchEvent(new MouseEvent("click", { detail: 1, bubbles: true }));
       await waitForRender();
 
       expect(tooltip.visible).toBe(false);
@@ -335,7 +336,7 @@ describe("EaTooltip Component", () => {
 
       await waitForRender();
 
-      tooltip.dispatchEvent(new FocusEvent("focus", { bubbles: true }));
+      tooltip.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
       await waitForRender();
 
       expect(tooltip.visible).toBe(true);
@@ -375,7 +376,7 @@ describe("EaTooltip Component", () => {
       tooltip.setAttribute("trigger", "click");
       await waitForRender();
 
-      tooltip.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      tooltip.dispatchEvent(new MouseEvent("click", { detail: 1, bubbles: true }));
       await waitForRender();
       expect(tooltip.visible).toBe(true);
     });
@@ -1321,6 +1322,51 @@ describe("EaTooltip Component", () => {
       await waitForRender();
 
       expect(containerEl.classList.contains("is-show-arrow")).toBe(true);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-tooltip");
+      el.setAttribute("content", "Tooltip text");
+      el.innerHTML = `<span slot="reference">Hover me</span>`;
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("弹出层应该有 role=tooltip", async () => {
+        const el = document.createElement("ea-tooltip");
+        el.setAttribute("content", "Tooltip text");
+        el.innerHTML = `<span slot="reference">Hover me</span>`;
+        container.appendChild(el);
+        await waitForRender();
+        const original = el.shadowRoot.querySelector(".ea-popper__original");
+        expect(original.getAttribute("role")).toBe("tooltip");
+      });
+
+      it("触发器应该有 aria-describedby 指向弹出层", async () => {
+        const el = document.createElement("ea-tooltip");
+        el.setAttribute("content", "Tooltip text");
+        el.innerHTML = `<button slot="reference">Hover me</button>`;
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.querySelector("[slot='reference']");
+        const original = el.shadowRoot.querySelector(".ea-popper__original");
+        expect(trigger.getAttribute("aria-describedby")).toBe(original.id);
+      });
+
+      it("非原生可聚焦触发器应该有 tabindex=0", async () => {
+        const el = document.createElement("ea-tooltip");
+        el.setAttribute("content", "Tooltip text");
+        el.innerHTML = `<span slot="reference">Hover me</span>`;
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.querySelector("[slot='reference']");
+        expect(trigger.getAttribute("tabindex")).toBe("0");
+      });
     });
   });
 });

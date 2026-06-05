@@ -7,6 +7,9 @@ global.cancelAnimationFrame = id => {
   clearTimeout(id);
 };
 
+Element.prototype.scrollIntoView =
+  Element.prototype.scrollIntoView || function () {};
+
 const originalAttachInternals = HTMLElement.prototype.attachInternals;
 HTMLElement.prototype.attachInternals = function () {
   const internals = originalAttachInternals?.call(this) || {};
@@ -54,6 +57,7 @@ HTMLElement.prototype.attachInternals = function () {
 
 import "../components/ea-select/index.js";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 describe("EaSelect Component", () => {
   let container;
@@ -1054,14 +1058,178 @@ describe("EaSelect Component", () => {
       expect(containerEl.classList.contains("is-focus")).toBe(true);
     });
 
-    it("非 Enter 键不应打开下拉框", async () => {
+    it("ArrowDown 键应打开下拉框", async () => {
       const select = document.createElement("ea-select");
       select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
       container.appendChild(select);
       await waitForRender();
 
       select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+      );
+      await waitForRender();
+
+      const containerEl = select.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-focus")).toBe(true);
+    });
+
+    it("Space 键应打开下拉框（非 filterable 模式）", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: " ", bubbles: true })
+      );
+      await waitForRender();
+
+      const containerEl = select.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-focus")).toBe(true);
+    });
+
+    it("Escape 键应关闭下拉框", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
         new KeyboardEvent("keydown", { key: "Escape", bubbles: true })
+      );
+      await waitForRender();
+
+      const containerEl = select.shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-focus")).toBe(false);
+    });
+
+    it("ArrowDown 应移动到下一个选项", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option><ea-option value="3">Option 3</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+      );
+      await waitForRender();
+
+      const options = select.querySelectorAll("ea-option");
+      expect(options[1].active).toBe(true);
+      expect(select.getAttribute("aria-activedescendant")).toBe(options[1].id);
+    });
+
+    it("ArrowUp 应移动到上一个选项", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+      );
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true })
+      );
+      await waitForRender();
+
+      const options = select.querySelectorAll("ea-option");
+      expect(options[0].active).toBe(true);
+    });
+
+    it("Enter 键在打开状态下应选择活跃选项", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+      );
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
+      );
+      await waitForRender();
+
+      expect(select.value).toBe("2");
+    });
+
+    it("Home 键应跳转到第一个选项", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option><ea-option value="3">Option 3</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+      );
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+      );
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Home", bubbles: true })
+      );
+      await waitForRender();
+
+      const options = select.querySelectorAll("ea-option");
+      expect(options[0].active).toBe(true);
+    });
+
+    it("End 键应跳转到最后一个选项", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option><ea-option value="3">Option 3</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "End", bubbles: true })
+      );
+      await waitForRender();
+
+      const options = select.querySelectorAll("ea-option");
+      expect(options[2].active).toBe(true);
+    });
+
+    it("disabled 时不响应键盘", async () => {
+      const select = document.createElement("ea-select");
+      select.disabled = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Enter", bubbles: true })
       );
       await waitForRender();
 
@@ -1414,7 +1582,7 @@ describe("EaSelect Component", () => {
       expect(containerEl.classList.contains("is-disabled")).toBe(true);
     });
 
-    it("disabled option 应有 tabindex='-1'", async () => {
+    it("disabled option 不应有 tabindex", async () => {
       const option = document.createElement("ea-option");
       option.value = "1";
       option.disabled = true;
@@ -1422,17 +1590,17 @@ describe("EaSelect Component", () => {
       await waitForRender();
 
       const containerEl = option.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.getAttribute("tabindex")).toBe("-1");
+      expect(containerEl.hasAttribute("tabindex")).toBe(false);
     });
 
-    it("非 disabled option 应有 tabindex='0'", async () => {
+    it("option 不应有 tabindex（由 aria-activedescendant 管理）", async () => {
       const option = document.createElement("ea-option");
       option.value = "1";
       container.appendChild(option);
       await waitForRender();
 
       const containerEl = option.shadowRoot.querySelector('[part="container"]');
-      expect(containerEl.getAttribute("tabindex")).toBe("0");
+      expect(containerEl.hasAttribute("tabindex")).toBe(false);
     });
 
     it("组件从 DOM 移除后应正常清理", async () => {
@@ -1583,6 +1751,538 @@ describe("EaSelect Component", () => {
         const element = group.shadowRoot.querySelector(`[part="${partName}"]`);
         expect(element).toBeTruthy();
       });
+    });
+  });
+
+  describe("Accessibility (a11y)", () => {
+    it("ea-select 应有 role='combobox'", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.getAttribute("role")).toBe("combobox");
+    });
+
+    it("ea-select 应有 aria-haspopup='listbox'", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.getAttribute("aria-haspopup")).toBe("listbox");
+    });
+
+    it("ea-select 初始应有 aria-expanded='false'", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.getAttribute("aria-expanded")).toBe("false");
+    });
+
+    it("打开下拉框时 aria-expanded 应为 'true'", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      expect(select.getAttribute("aria-expanded")).toBe("true");
+    });
+
+    it("关闭下拉框时 aria-expanded 应恢复 'false'", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.hide();
+      await waitForRender();
+
+      expect(select.getAttribute("aria-expanded")).toBe("false");
+    });
+
+    it("ea-select 应有 aria-controls 指向 dropdown", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      const ariaControls = select.getAttribute("aria-controls");
+      expect(ariaControls).toBeTruthy();
+
+      const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
+      expect(dropdown.id).toBe(ariaControls);
+    });
+
+    it("dropdown 应有 role='listbox'", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
+      expect(dropdown.getAttribute("role")).toBe("listbox");
+    });
+
+    it("dropdown 初始应有 inert 属性", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
+      expect(dropdown.inert).toBe(true);
+    });
+
+    it("打开下拉框时 inert 应被移除", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      const dropdown = select.shadowRoot.querySelector('[part="dropdown"]');
+      expect(dropdown.inert).toBe(false);
+    });
+
+    it("ea-option 应有 role='option'", async () => {
+      const option = document.createElement("ea-option");
+      option.value = "1";
+      option.textContent = "Option 1";
+      container.appendChild(option);
+      await waitForRender();
+
+      expect(option.getAttribute("role")).toBe("option");
+    });
+
+    it("ea-option 应有唯一 id", async () => {
+      const option1 = document.createElement("ea-option");
+      option1.value = "1";
+      option1.textContent = "Option 1";
+      const option2 = document.createElement("ea-option");
+      option2.value = "2";
+      option2.textContent = "Option 2";
+      container.appendChild(option1);
+      container.appendChild(option2);
+      await waitForRender();
+
+      expect(option1.id).toBeTruthy();
+      expect(option2.id).toBeTruthy();
+      expect(option1.id).not.toBe(option2.id);
+    });
+
+    it("ea-option selected 时应有 aria-selected='true'", async () => {
+      const option = document.createElement("ea-option");
+      option.value = "1";
+      option.selected = true;
+      container.appendChild(option);
+      await waitForRender();
+
+      expect(option.getAttribute("aria-selected")).toBe("true");
+    });
+
+    it("ea-option 未选中时应有 aria-selected='false'", async () => {
+      const option = document.createElement("ea-option");
+      option.value = "1";
+      container.appendChild(option);
+      await waitForRender();
+
+      expect(option.getAttribute("aria-selected")).toBe("false");
+    });
+
+    it("ea-option disabled 时应有 aria-disabled='true'", async () => {
+      const option = document.createElement("ea-option");
+      option.value = "1";
+      option.disabled = true;
+      container.appendChild(option);
+      await waitForRender();
+
+      expect(option.getAttribute("aria-disabled")).toBe("true");
+    });
+
+    it("ea-select disabled 时应有 aria-disabled='true'", async () => {
+      const select = document.createElement("ea-select");
+      select.disabled = true;
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.getAttribute("aria-disabled")).toBe("true");
+    });
+
+    it("ea-select required 时应有 aria-required='true'", async () => {
+      const select = document.createElement("ea-select");
+      select.required = true;
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.getAttribute("aria-required")).toBe("true");
+    });
+
+    it("ea-select label 应映射为 aria-label", async () => {
+      const select = document.createElement("ea-select");
+      select.label = "Choose an option";
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.getAttribute("aria-label")).toBe("Choose an option");
+    });
+
+    it("ea-select 空 label 不应设置 aria-label", async () => {
+      const select = document.createElement("ea-select");
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.hasAttribute("aria-label")).toBe(false);
+    });
+
+    it("ea-select 应有 tabIndex=0", async () => {
+      const select = document.createElement("ea-select");
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.tabIndex).toBe(0);
+    });
+
+    it("ea-select disabled 时 tabIndex 应为 -1", async () => {
+      const select = document.createElement("ea-select");
+      select.disabled = true;
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.tabIndex).toBe(-1);
+    });
+
+    it("ea-option-group content 应有 role='group'", async () => {
+      const group = document.createElement("ea-option-group");
+      group.label = "Group 1";
+      container.appendChild(group);
+      await waitForRender();
+
+      const content = group.shadowRoot.querySelector('[part="content"]');
+      expect(content.getAttribute("role")).toBe("group");
+    });
+
+    it("ea-option-group content 应有 aria-label", async () => {
+      const group = document.createElement("ea-option-group");
+      group.label = "Group A";
+      container.appendChild(group);
+      await waitForRender();
+
+      const content = group.shadowRoot.querySelector('[part="content"]');
+      expect(content.getAttribute("aria-label")).toBe("Group A");
+    });
+
+    it("打开下拉框时应有 aria-activedescendant", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      const activedesc = select.getAttribute("aria-activedescendant");
+      expect(activedesc).toBeTruthy();
+
+      const options = select.querySelectorAll("ea-option");
+      expect(options[0].id).toBe(activedesc);
+    });
+
+    it("关闭下拉框时应移除 aria-activedescendant", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.hide();
+      await waitForRender();
+
+      expect(select.hasAttribute("aria-activedescendant")).toBe(false);
+    });
+
+    it("方向键导航应更新 aria-activedescendant", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+      );
+      await waitForRender();
+
+      const options = select.querySelectorAll("ea-option");
+      expect(select.getAttribute("aria-activedescendant")).toBe(options[1].id);
+    });
+
+    it("活跃选项应有 active 状态类", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true })
+      );
+      await waitForRender();
+
+      const options = select.querySelectorAll("ea-option");
+      const containerEl =
+        options[1].shadowRoot.querySelector('[part="container"]');
+      expect(containerEl.classList.contains("is-active")).toBe(true);
+    });
+  });
+
+  describe("Filterable Mode a11y", () => {
+    it("filterable 时应有 aria-autocomplete='both'", async () => {
+      const select = document.createElement("ea-select");
+      select.filterable = true;
+      select.innerHTML = '<ea-option value="1">Alabama</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.getAttribute("aria-autocomplete")).toBe("both");
+    });
+
+    it("非 filterable 时不应有 aria-autocomplete", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.hasAttribute("aria-autocomplete")).toBe(false);
+    });
+
+    it("filterable 模式下 Home/End 不应阻止默认行为", async () => {
+      const select = document.createElement("ea-select");
+      select.filterable = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      const homeEvent = new KeyboardEvent("keydown", {
+        key: "Home",
+        bubbles: true,
+        cancelable: true,
+      });
+      select.dispatchEvent(homeEvent);
+      expect(homeEvent.defaultPrevented).toBe(false);
+
+      const endEvent = new KeyboardEvent("keydown", {
+        key: "End",
+        bubbles: true,
+        cancelable: true,
+      });
+      select.dispatchEvent(endEvent);
+      expect(endEvent.defaultPrevented).toBe(false);
+    });
+
+    it("非 filterable 模式下 Home/End 应阻止默认行为", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      const homeEvent = new KeyboardEvent("keydown", {
+        key: "Home",
+        bubbles: true,
+        cancelable: true,
+      });
+      select.dispatchEvent(homeEvent);
+      expect(homeEvent.defaultPrevented).toBe(true);
+    });
+
+    it("filterable 模式下可打印字符不应阻止默认行为", async () => {
+      const select = document.createElement("ea-select");
+      select.filterable = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      const event = new KeyboardEvent("keydown", {
+        key: "a",
+        bubbles: true,
+        cancelable: true,
+      });
+      select.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(false);
+    });
+
+    it("非 filterable 模式下可打印字符应阻止默认行为", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      const event = new KeyboardEvent("keydown", {
+        key: "a",
+        bubbles: true,
+        cancelable: true,
+      });
+      select.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+    });
+
+    it("filterable 模式下 Escape 关闭下拉框时不应清空输入", async () => {
+      const select = document.createElement("ea-select");
+      select.filterable = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      const event = new KeyboardEvent("keydown", {
+        key: "Escape",
+        bubbles: true,
+        cancelable: true,
+      });
+      select.dispatchEvent(event);
+      await waitForRender();
+
+      expect(select.getAttribute("aria-expanded")).toBe("false");
+    });
+
+    it("filterable 模式下 Escape 未打开时应清空输入框", async () => {
+      const select = document.createElement("ea-select");
+      select.filterable = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      const input = select.shadowRoot.querySelector("ea-input");
+      if (input) {
+        input.value = "test";
+      }
+
+      const event = new KeyboardEvent("keydown", {
+        key: "Escape",
+        bubbles: true,
+      });
+      select.dispatchEvent(event);
+      await waitForRender();
+
+      expect(input.value).toBe("");
+    });
+
+    it("Alt+ArrowDown 应打开下拉框但不移动选择", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML =
+        '<ea-option value="1">Option 1</ea-option><ea-option value="2">Option 2</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowDown",
+          altKey: true,
+          bubbles: true,
+        })
+      );
+      await waitForRender();
+
+      expect(select.getAttribute("aria-expanded")).toBe("true");
+    });
+
+    it("Alt+ArrowUp 打开状态下应关闭下拉框", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      select.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "ArrowUp",
+          altKey: true,
+          bubbles: true,
+        })
+      );
+      await waitForRender();
+
+      expect(select.getAttribute("aria-expanded")).toBe("false");
+    });
+
+    it("filterable 模式下点击 input 不应关闭下拉框", async () => {
+      const select = document.createElement("ea-select");
+      select.filterable = true;
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      select.show();
+      await waitForRender();
+
+      const input = select.shadowRoot.querySelector("ea-input");
+      input.dispatchEvent(new Event("click", { bubbles: true }));
+      await waitForRender();
+
+      expect(select.getAttribute("aria-expanded")).toBe("true");
+    });
+
+    it("动态切换 filterable 应更新 aria-autocomplete", async () => {
+      const select = document.createElement("ea-select");
+      select.innerHTML = '<ea-option value="1">Option 1</ea-option>';
+      container.appendChild(select);
+      await waitForRender();
+
+      expect(select.hasAttribute("aria-autocomplete")).toBe(false);
+
+      select.filterable = true;
+      await waitForRender();
+
+      expect(select.getAttribute("aria-autocomplete")).toBe("both");
+
+      select.filterable = false;
+      await waitForRender();
+
+      expect(select.hasAttribute("aria-autocomplete")).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-select");
+      el.setAttribute("label", "Select");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-select");
+      el.setAttribute("label", "Select");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

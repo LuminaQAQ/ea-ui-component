@@ -1,6 +1,6 @@
 import { EaPopper } from "@common/ea-popper/index";
 import { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query } from "@decorator";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 
@@ -105,6 +105,35 @@ export class EaTooltip extends EaPopper {
     return className;
   }
 
+  /** 设置 ARIA 关联属性：tooltip 使用 aria-describedby，非交互式触发元素添加 tabindex */
+  protected _setupAria(): void {
+    super._setupAria();
+    this._originalPopper.setAttribute("role", "tooltip");
+
+    const trigger = this._getReferenceTrigger();
+    if (trigger) {
+      trigger.removeAttribute("aria-controls");
+      trigger.removeAttribute("aria-expanded");
+      trigger.setAttribute("aria-describedby", this._originalPopper.id);
+      if (!this._isNativelyFocusable(trigger)) {
+        trigger.setAttribute("tabindex", "0");
+      }
+    }
+  }
+
+  /** tooltip 不使用 aria-expanded */
+  protected _updateAriaExpanded(): void {
+    // tooltip 模式不需要 aria-expanded
+  }
+
+  /** 检查元素是否原生可聚焦 */
+  private _isNativelyFocusable(el: HTMLElement): boolean {
+    const focusableTags = ["A", "BUTTON", "INPUT", "SELECT", "TEXTAREA"];
+    if (focusableTags.includes(el.tagName)) return true;
+    if (el.tabIndex >= 0) return true;
+    return false;
+  }
+
   /** 初始化触发事件监听 */
   private _initTriggerEvent(): void {
     this._triggerAbortController?.abort();
@@ -124,18 +153,40 @@ export class EaTooltip extends EaPopper {
   /** 触发事件策略映射 */
   private _triggerEventStrategies: Record<TriggerType, () => void> = {
     hover: () => {
+      // 鼠标悬停
       this.addEventListener(
         "mouseover",
         () => {
           this.show();
-
-          this.addEventListener(
-            "mouseout",
-            () => {
+        },
+        { signal: this._triggerAbortController!.signal }
+      );
+      this.addEventListener(
+        "mouseout",
+        () => {
+          // 焦点仍在时不关闭（键盘用户可能同时 hover 和 focus）
+          if (!this.contains(document.activeElement)) {
+            this.hide();
+          }
+        },
+        { signal: this._triggerAbortController!.signal }
+      );
+      // 键盘聚焦
+      this.addEventListener(
+        "focusin",
+        () => {
+          this.show();
+        },
+        { signal: this._triggerAbortController!.signal }
+      );
+      this.addEventListener(
+        "focusout",
+        () => {
+          requestAnimationFrame(() => {
+            if (this.visible && !this.contains(document.activeElement)) {
               this.hide();
-            },
-            { once: true, signal: this._triggerAbortController!.signal }
-          );
+            }
+          });
         },
         { signal: this._triggerAbortController!.signal }
       );
@@ -143,7 +194,8 @@ export class EaTooltip extends EaPopper {
     click: () => {
       this.addEventListener(
         "click",
-        () => {
+        (e: MouseEvent) => {
+          if (e.detail === 0) return;
           this.toggle();
         },
         { signal: this._triggerAbortController!.signal }
@@ -151,17 +203,22 @@ export class EaTooltip extends EaPopper {
     },
     focus: () => {
       this.addEventListener(
-        "focus",
+        "focusin",
         () => {
-          this.show();
-
-          this.addEventListener(
-            "blur",
-            () => {
+          if (!this.visible) {
+            this.show();
+          }
+        },
+        { signal: this._triggerAbortController!.signal }
+      );
+      this.addEventListener(
+        "focusout",
+        () => {
+          requestAnimationFrame(() => {
+            if (this.visible && !this.contains(document.activeElement)) {
               this.hide();
-            },
-            { signal: this._triggerAbortController!.signal }
-          );
+            }
+          });
         },
         { signal: this._triggerAbortController!.signal }
       );
@@ -195,15 +252,49 @@ export class EaTooltip extends EaPopper {
     customized: () => {},
   };
 
+  /** 处理键盘事件：触发器上 ESC 关闭 tooltip，click 模式 Enter/Space 切换 */
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent) {
+    const target = e.target as HTMLElement;
+    const trigger = this._getReferenceTrigger();
+    const isTrigger = !!(
+      trigger &&
+      (target === trigger || trigger.contains(target))
+    );
+
+    if (!isTrigger) return;
+
+    // ESC 关闭 tooltip
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+      this.hide();
+      return;
+    }
+
+    if (e.key === "Enter" || e.key === " ") {
+      // focus 模式由 focusin/focusout 控制
+      if (this.trigger === "focus") return;
+      // hover 模式由 mouseover/focusin 控制
+      if (this.trigger === "hover") return;
+      // customized 模式由外部控制
+      if (this.trigger === "customized") return;
+      // click 模式：Enter/Space 切换
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggle();
+    }
+  }
+
   html(): string {
     return `
       <div class="${this.updateContainerClasslist()}" part="container" tabindex="-1">
         <div class="${popperBem.e("reference")}" part="reference" tabindex="-1">
-          <div class="${popperBem.e("original")}" part="original" tabindex="0">
+          <slot name="reference"></slot>
+          <div class="${popperBem.e("original")}" part="original" tabindex="-1" inert>
             <slot></slot>
             <div class="${bem.e("content")}" part="content"></div>
           </div>
-          <slot name="reference"></slot>
         </div>
       </div>
     `;

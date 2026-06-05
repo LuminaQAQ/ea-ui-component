@@ -81,6 +81,7 @@
     "@eslint/js": "^9.39.2",
     "@types/node": "^24.0.14",
     "@vitest/coverage-v8": "^4.1.0",
+    "axe-core": "^4.12.0",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.28.0",
@@ -97,22 +98,17 @@
     "prettier": "^3.7.4",
     "rollup-plugin-visualizer": "^6.0.3",
     "sass": "^1.77.2",
-    "sass-embedded": "^1.93.2",
-    "scss": "^0.2.4",
-    "scss-loader": "^0.0.1",
+    "sass-loader": "^16.0.5",
     "tsx": "^4.22.3",
     "vite": "^5.4.1",
+    "vite-plugin-dts": "^4.5.4",
     "vitepress": "^1.2.0",
     "vitest": "^4.1.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
     "dayjs": "^1.11.19",
-    "dompurify": "^3.3.1",
-    "path": "^0.12.7",
-    "sass": "^1.89.2",
-    "sass-loader": "^16.0.5",
-    "vite-plugin-dts": "^4.5.4"
+    "dompurify": "^3.3.1"
   },
   "config": {
     "commitizen": {
@@ -120,7 +116,10 @@
     }
   },
   "exports": {
-    ".": "./dist/components/index.ts",
+    ".": {
+      "import": "./dist/components/index.js",
+      "types": "./dist/types/components/index.d.ts"
+    },
     "./icon-assets": {
       "import": "./dist/assets/icon.css",
       "require": "./dist/assets/icon.css",
@@ -139,190 +138,252 @@
       "import": "./dist/themes/controller.js"
     },
     "./ea-alert": {
-      "import": "./dist/components/ea-alert.ts"
+      "import": "./dist/components/ea-alert.js",
+      "types": "./dist/types/components/ea-alert/index.d.ts"
     },
     "./ea-avatar": {
-      "import": "./dist/components/ea-avatar.ts"
+      "import": "./dist/components/ea-avatar.js",
+      "types": "./dist/types/components/ea-avatar/index.d.ts"
     },
     "./ea-backtop": {
-      "import": "./dist/components/ea-backtop.ts"
+      "import": "./dist/components/ea-backtop.js",
+      "types": "./dist/types/components/ea-backtop/index.d.ts"
     },
     "./ea-badge": {
-      "import": "./dist/components/ea-badge.ts"
+      "import": "./dist/components/ea-badge.js",
+      "types": "./dist/types/components/ea-badge/index.d.ts"
     },
     "./ea-breadcrumb": {
-      "import": "./dist/components/ea-breadcrumb.ts"
+      "import": "./dist/components/ea-breadcrumb.js",
+      "types": "./dist/types/components/ea-breadcrumb/index.d.ts"
     },
     "./ea-button": {
-      "import": "./dist/components/ea-button.ts"
+      "import": "./dist/components/ea-button.js",
+      "types": "./dist/types/components/ea-button/index.d.ts"
     },
     "./ea-calendar": {
-      "import": "./dist/components/ea-calendar.ts"
+      "import": "./dist/components/ea-calendar.js",
+      "types": "./dist/types/components/ea-calendar/index.d.ts"
     },
     "./ea-card": {
-      "import": "./dist/components/ea-card.ts"
+      "import": "./dist/components/ea-card.js",
+      "types": "./dist/types/components/ea-card/index.d.ts"
     },
     "./ea-carousel": {
-      "import": "./dist/components/ea-carousel.ts"
+      "import": "./dist/components/ea-carousel.js",
+      "types": "./dist/types/components/ea-carousel/index.d.ts"
     },
     "./ea-checkbox": {
-      "import": "./dist/components/ea-checkbox.ts"
+      "import": "./dist/components/ea-checkbox.js",
+      "types": "./dist/types/components/ea-checkbox/index.d.ts"
     },
     "./ea-collapse": {
-      "import": "./dist/components/ea-collapse.ts"
+      "import": "./dist/components/ea-collapse.js",
+      "types": "./dist/types/components/ea-collapse/index.d.ts"
     },
     "./ea-color-picker": {
-      "import": "./dist/components/ea-color-picker.ts"
+      "import": "./dist/components/ea-color-picker.js",
+      "types": "./dist/types/components/ea-color-picker/index.d.ts"
     },
     "./ea-container": {
-      "import": "./dist/components/ea-container.ts"
+      "import": "./dist/components/ea-container.js",
+      "types": "./dist/types/components/ea-container/index.d.ts"
     },
     "./ea-countdown": {
-      "import": "./dist/components/ea-countdown.ts"
+      "import": "./dist/components/ea-countdown.js",
+      "types": "./dist/types/components/ea-countdown/index.d.ts"
     },
     "./ea-date-picker": {
-      "import": "./dist/components/ea-date-picker.ts"
+      "import": "./dist/components/ea-date-picker.js",
+      "types": "./dist/types/components/ea-date-picker/index.d.ts"
     },
     "./ea-descriptions": {
-      "import": "./dist/components/ea-descriptions.ts"
+      "import": "./dist/components/ea-descriptions.js",
+      "types": "./dist/types/components/ea-descriptions/index.d.ts"
     },
     "./ea-dialog": {
-      "import": "./dist/components/ea-dialog.ts"
+      "import": "./dist/components/ea-dialog.js",
+      "types": "./dist/types/components/ea-dialog/index.d.ts"
     },
     "./ea-drawer": {
-      "import": "./dist/components/ea-drawer.ts"
+      "import": "./dist/components/ea-drawer.js",
+      "types": "./dist/types/components/ea-drawer/index.d.ts"
     },
     "./ea-dropdown": {
-      "import": "./dist/components/ea-dropdown.ts"
+      "import": "./dist/components/ea-dropdown.js",
+      "types": "./dist/types/components/ea-dropdown/index.d.ts"
     },
     "./ea-empty": {
-      "import": "./dist/components/ea-empty.ts"
+      "import": "./dist/components/ea-empty.js",
+      "types": "./dist/types/components/ea-empty/index.d.ts"
     },
     "./ea-icon": {
-      "import": "./dist/components/ea-icon.ts"
+      "import": "./dist/components/ea-icon.js",
+      "types": "./dist/types/components/ea-icon/index.d.ts"
     },
     "./ea-image": {
-      "import": "./dist/components/ea-image.ts"
+      "import": "./dist/components/ea-image.js",
+      "types": "./dist/types/components/ea-image/index.d.ts"
     },
     "./ea-image-preview": {
-      "import": "./dist/components/ea-image-preview.ts"
+      "import": "./dist/components/ea-image-preview.js",
+      "types": "./dist/types/components/ea-image-preview/index.d.ts"
     },
     "./ea-infinite-scroll": {
-      "import": "./dist/components/ea-infinite-scroll.ts"
+      "import": "./dist/components/ea-infinite-scroll.js",
+      "types": "./dist/types/components/ea-infinite-scroll/index.d.ts"
     },
     "./ea-input": {
-      "import": "./dist/components/ea-input.ts"
+      "import": "./dist/components/ea-input.js",
+      "types": "./dist/types/components/ea-input/index.d.ts"
     },
     "./ea-input-number": {
-      "import": "./dist/components/ea-input-number.ts"
+      "import": "./dist/components/ea-input-number.js",
+      "types": "./dist/types/components/ea-input-number/index.d.ts"
     },
     "./ea-layout": {
-      "import": "./dist/components/ea-layout.ts"
+      "import": "./dist/components/ea-layout.js",
+      "types": "./dist/types/components/ea-layout/index.d.ts"
     },
     "./ea-link": {
-      "import": "./dist/components/ea-link.ts"
+      "import": "./dist/components/ea-link.js",
+      "types": "./dist/types/components/ea-link/index.d.ts"
     },
     "./ea-loading": {
-      "import": "./dist/components/ea-loading.ts"
+      "import": "./dist/components/ea-loading.js",
+      "types": "./dist/types/components/ea-loading/index.d.ts"
     },
     "./ea-menu": {
-      "import": "./dist/components/ea-menu.ts"
+      "import": "./dist/components/ea-menu.js",
+      "types": "./dist/types/components/ea-menu/index.d.ts"
     },
     "./ea-message": {
-      "import": "./dist/components/ea-message.ts"
+      "import": "./dist/components/ea-message.js",
+      "types": "./dist/types/components/ea-message/index.d.ts"
     },
     "./ea-message-box": {
-      "import": "./dist/components/ea-message-box.ts"
+      "import": "./dist/components/ea-message-box.js",
+      "types": "./dist/types/components/ea-message-box/index.d.ts"
     },
     "./ea-notification": {
-      "import": "./dist/components/ea-notification.ts"
+      "import": "./dist/components/ea-notification.js",
+      "types": "./dist/types/components/ea-notification/index.d.ts"
     },
     "./ea-page-header": {
-      "import": "./dist/components/ea-page-header.ts"
+      "import": "./dist/components/ea-page-header.js",
+      "types": "./dist/types/components/ea-page-header/index.d.ts"
     },
     "./ea-pagination": {
-      "import": "./dist/components/ea-pagination.ts"
+      "import": "./dist/components/ea-pagination.js",
+      "types": "./dist/types/components/ea-pagination/index.d.ts"
     },
     "./ea-popconfirm": {
-      "import": "./dist/components/ea-popconfirm.ts"
+      "import": "./dist/components/ea-popconfirm.js",
+      "types": "./dist/types/components/ea-popconfirm/index.d.ts"
     },
     "./ea-popover": {
-      "import": "./dist/components/ea-popover.ts"
+      "import": "./dist/components/ea-popover.js",
+      "types": "./dist/types/components/ea-popover/index.d.ts"
     },
     "./ea-progress": {
-      "import": "./dist/components/ea-progress.ts"
+      "import": "./dist/components/ea-progress.js",
+      "types": "./dist/types/components/ea-progress/index.d.ts"
     },
     "./ea-radio": {
-      "import": "./dist/components/ea-radio.ts"
+      "import": "./dist/components/ea-radio.js",
+      "types": "./dist/types/components/ea-radio/index.d.ts"
     },
     "./ea-rate": {
-      "import": "./dist/components/ea-rate.ts"
+      "import": "./dist/components/ea-rate.js",
+      "types": "./dist/types/components/ea-rate/index.d.ts"
     },
     "./ea-result": {
-      "import": "./dist/components/ea-result.ts"
+      "import": "./dist/components/ea-result.js",
+      "types": "./dist/types/components/ea-result/index.d.ts"
     },
     "./ea-scrollbar": {
-      "import": "./dist/components/ea-scrollbar.ts"
+      "import": "./dist/components/ea-scrollbar.js",
+      "types": "./dist/types/components/ea-scrollbar/index.d.ts"
     },
     "./ea-segmented": {
-      "import": "./dist/components/ea-segmented.ts"
+      "import": "./dist/components/ea-segmented.js",
+      "types": "./dist/types/components/ea-segmented/index.d.ts"
     },
     "./ea-select": {
-      "import": "./dist/components/ea-select.ts"
+      "import": "./dist/components/ea-select.js",
+      "types": "./dist/types/components/ea-select/index.d.ts"
     },
     "./ea-skeleton": {
-      "import": "./dist/components/ea-skeleton.ts"
+      "import": "./dist/components/ea-skeleton.js",
+      "types": "./dist/types/components/ea-skeleton/index.d.ts"
     },
     "./ea-slider": {
-      "import": "./dist/components/ea-slider.ts"
+      "import": "./dist/components/ea-slider.js",
+      "types": "./dist/types/components/ea-slider/index.d.ts"
     },
     "./ea-space": {
-      "import": "./dist/components/ea-space.ts"
+      "import": "./dist/components/ea-space.js",
+      "types": "./dist/types/components/ea-space/index.d.ts"
     },
     "./ea-splitter": {
-      "import": "./dist/components/ea-splitter.ts"
+      "import": "./dist/components/ea-splitter.js",
+      "types": "./dist/types/components/ea-splitter/index.d.ts"
     },
     "./ea-statistic": {
-      "import": "./dist/components/ea-statistic.ts"
+      "import": "./dist/components/ea-statistic.js",
+      "types": "./dist/types/components/ea-statistic/index.d.ts"
     },
     "./ea-steps": {
-      "import": "./dist/components/ea-steps.ts"
+      "import": "./dist/components/ea-steps.js",
+      "types": "./dist/types/components/ea-steps/index.d.ts"
     },
     "./ea-switch": {
-      "import": "./dist/components/ea-switch.ts"
+      "import": "./dist/components/ea-switch.js",
+      "types": "./dist/types/components/ea-switch/index.d.ts"
     },
     "./ea-table": {
-      "import": "./dist/components/ea-table.ts"
+      "import": "./dist/components/ea-table.js",
+      "types": "./dist/types/components/ea-table/index.d.ts"
     },
     "./ea-tabs": {
-      "import": "./dist/components/ea-tabs.ts"
+      "import": "./dist/components/ea-tabs.js",
+      "types": "./dist/types/components/ea-tabs/index.d.ts"
     },
     "./ea-tag": {
-      "import": "./dist/components/ea-tag.ts"
+      "import": "./dist/components/ea-tag.js",
+      "types": "./dist/types/components/ea-tag/index.d.ts"
     },
     "./ea-text": {
-      "import": "./dist/components/ea-text.ts"
+      "import": "./dist/components/ea-text.js",
+      "types": "./dist/types/components/ea-text/index.d.ts"
     },
     "./ea-theme-toggle": {
-      "import": "./dist/components/ea-theme-toggle.ts"
+      "import": "./dist/components/ea-theme-toggle.js",
+      "types": "./dist/types/components/ea-theme-toggle/index.d.ts"
     },
     "./ea-time-picker": {
-      "import": "./dist/components/ea-time-picker.ts"
+      "import": "./dist/components/ea-time-picker.js",
+      "types": "./dist/types/components/ea-time-picker/index.d.ts"
     },
     "./ea-timeline": {
-      "import": "./dist/components/ea-timeline.ts"
+      "import": "./dist/components/ea-timeline.js",
+      "types": "./dist/types/components/ea-timeline/index.d.ts"
     },
     "./ea-tooltip": {
-      "import": "./dist/components/ea-tooltip.ts"
+      "import": "./dist/components/ea-tooltip.js",
+      "types": "./dist/types/components/ea-tooltip/index.d.ts"
     },
     "./ea-tour": {
-      "import": "./dist/components/ea-tour.ts"
+      "import": "./dist/components/ea-tour.js",
+      "types": "./dist/types/components/ea-tour/index.d.ts"
     },
     "./ea-transfer": {
-      "import": "./dist/components/ea-transfer.ts"
+      "import": "./dist/components/ea-transfer.js",
+      "types": "./dist/types/components/ea-transfer/index.d.ts"
     },
     "./ea-tree": {
-      "import": "./dist/components/ea-tree.ts"
+      "import": "./dist/components/ea-tree.js",
+      "types": "./dist/types/components/ea-tree/index.d.ts"
     }
   }
 }

@@ -56,8 +56,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
   @query(bem.ce("label"))
   private _labelSlot!: HTMLElement;
 
-  private _isFocus: boolean = false;
-
   @attribute({
     type: Enum(["small", "default", "large"]),
     default: "default",
@@ -93,6 +91,7 @@ export class EaCheckbox extends EaFormAssociatedBase {
       if (this._original) this._original.checked = newVal;
       this._updateCheckboxValue();
       this.updateContainerClasslist();
+      this._updateAriaChecked();
     },
   })
   checked: boolean = false;
@@ -103,6 +102,7 @@ export class EaCheckbox extends EaFormAssociatedBase {
     observer(this: EaCheckbox, newVal: boolean) {
       if (this._original) this._original.disabled = newVal;
       this.updateContainerClasslist();
+      this._updateAriaDisabled();
     },
   })
   disabled: boolean = false;
@@ -110,8 +110,10 @@ export class EaCheckbox extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
-    observer(this: EaCheckbox) {
+    observer(this: EaCheckbox, newVal: boolean) {
+      if (this._original) this._original.indeterminate = newVal;
       this.updateContainerClasslist();
+      this._updateAriaChecked();
     },
   })
   indeterminate: boolean = false;
@@ -131,6 +133,7 @@ export class EaCheckbox extends EaFormAssociatedBase {
     observer(this: EaCheckbox, newVal: boolean) {
       if (this._original) this._original.disabled = newVal;
       this.updateContainerClasslist();
+      this._updateAriaDisabled();
     },
   })
   limitDisabled: boolean = false;
@@ -138,6 +141,7 @@ export class EaCheckbox extends EaFormAssociatedBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-required", map: v => String(v) },
     observer(this: EaCheckbox, newVal: boolean) {
       if (this._original) this._original.toggleAttribute("required", newVal);
     },
@@ -153,7 +157,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
         indeterminate: this.indeterminate,
         "limit-disabled": this.limitDisabled,
         border: this.border,
-        focus: this._isFocus,
       }
     );
 
@@ -178,7 +181,7 @@ export class EaCheckbox extends EaFormAssociatedBase {
           ${this.disabled ? "disabled" : ""}
           ${this.required ? "required" : ""}
         />
-        <span class="${bem.e("inner")}" part="input" tabindex="0"></span>
+        <span class="${bem.e("inner")}" part="input"></span>
         <span class="${bem.e("label")}" part="label">
           <slot>${this.label || ""}</slot>
         </span>
@@ -192,6 +195,19 @@ export class EaCheckbox extends EaFormAssociatedBase {
     if (this.checked) this.setValue(value as string);
     else this.setValue(null);
   };
+
+  /** 根据 checked 和 indeterminate 更新 aria-checked 属性 */
+  private _updateAriaChecked(): void {
+    const value = this.indeterminate ? "mixed" : String(!!this.checked);
+    this.setAttribute("aria-checked", value);
+  }
+
+  /** 根据 disabled 和 limitDisabled 更新 aria-disabled 属性和 tabIndex */
+  private _updateAriaDisabled(): void {
+    const isDisabled = this.disabled || this.limitDisabled;
+    this.setAttribute("aria-disabled", String(isDisabled));
+    this.tabIndex = isDisabled ? -1 : 0;
+  }
 
   /** 派发 change 事件 */
   private _dispatchChangeEvent = () => {
@@ -212,7 +228,8 @@ export class EaCheckbox extends EaFormAssociatedBase {
 
   @listen("keydown")
   private _handleKeydownEvent = (e: KeyboardEvent): void => {
-    if (e.key === "Enter" || e.key === " ") {
+    if (this.disabled || this.limitDisabled) return;
+    if (e.key === " ") {
       e.preventDefault();
       this._original.checked = !this.checked;
       this.checked = this._original.checked;
@@ -220,10 +237,9 @@ export class EaCheckbox extends EaFormAssociatedBase {
     }
   };
 
-  @listen("focus", bem.ce("inner"))
-  private _handleFocusEvent = (): void => {
-    this._isFocus = true;
-    this.updateContainerClasslist();
+  @listen("focus")
+  private _handleFocusEvent = (e: Event): void => {
+    if (!(e instanceof FocusEvent)) return;
     this.dispatchEvent(
       new EaCheckboxFocusEvent({
         value: this.value,
@@ -232,10 +248,9 @@ export class EaCheckbox extends EaFormAssociatedBase {
     );
   };
 
-  @listen("blur", bem.ce("inner"))
-  private _handleBlurEvent = (): void => {
-    this._isFocus = false;
-    this.updateContainerClasslist();
+  @listen("blur")
+  private _handleBlurEvent = (e: Event): void => {
+    if (!(e instanceof FocusEvent)) return;
     this.dispatchEvent(
       new EaCheckboxBlurEvent({
         value: this.value,
@@ -243,16 +258,6 @@ export class EaCheckbox extends EaFormAssociatedBase {
       })
     );
   };
-
-  /** 获取焦点 */
-  focus(): void {
-    this._innerEl?.focus();
-  }
-
-  /** 失去焦点 */
-  blur(): void {
-    this._innerEl?.blur();
-  }
 
   /** 切换选中状态 */
   toggle(): void {
@@ -266,6 +271,10 @@ export class EaCheckbox extends EaFormAssociatedBase {
   }
 
   $mount(): void {
+    this.setAttribute("role", "checkbox");
+    this.tabIndex = 0;
+    this._updateAriaChecked();
+    this._updateAriaDisabled();
     this.updateContainerClasslist();
   }
 

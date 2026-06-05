@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-loading/index";
 
@@ -1265,6 +1266,66 @@ describe("EaLoading", () => {
       const content = loading.shadowRoot.querySelector(".ea-loading__content");
       const defaultSlot = content.querySelector("slot:not([name])");
       expect(defaultSlot).not.toBeNull();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-loading");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("loading=true 时内容区域应该有 inert 属性", async () => {
+        const loading = document.createElement("ea-loading");
+        loading.loading = true;
+        container.appendChild(loading);
+        await waitForRender();
+        const content = loading.shadowRoot.querySelector(
+          ".ea-loading__content"
+        );
+        expect(content.hasAttribute("inert")).toBe(true);
+      });
+
+      it("loading=false 时内容区域不应该有 inert 属性", async () => {
+        const loading = document.createElement("ea-loading");
+        container.appendChild(loading);
+        await waitForRender();
+        const content = loading.shadowRoot.querySelector(
+          ".ea-loading__content"
+        );
+        expect(content.hasAttribute("inert")).toBe(false);
+      });
+
+      it("动态设置 loading=true 应该添加 inert 属性", async () => {
+        const loading = document.createElement("ea-loading");
+        container.appendChild(loading);
+        await waitForRender();
+        const content = loading.shadowRoot.querySelector(
+          ".ea-loading__content"
+        );
+        expect(content.hasAttribute("inert")).toBe(false);
+        loading.loading = true;
+        await waitForRender();
+        expect(content.hasAttribute("inert")).toBe(true);
+      });
+
+      it("动态移除 loading 应该移除 inert 属性", async () => {
+        const loading = document.createElement("ea-loading");
+        loading.loading = true;
+        container.appendChild(loading);
+        await waitForRender();
+        const content = loading.shadowRoot.querySelector(
+          ".ea-loading__content"
+        );
+        expect(content.hasAttribute("inert")).toBe(true);
+        loading.loading = false;
+        await waitForRender();
+        expect(content.hasAttribute("inert")).toBe(false);
+      });
     });
   });
 });

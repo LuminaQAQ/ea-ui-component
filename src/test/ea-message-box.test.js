@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-message-box/index";
 import { EaMessageBox } from "../components/ea-message-box/utils/EaMessageBoxInstance";
@@ -1755,10 +1756,10 @@ describe("EaMessageBox Component", () => {
   // ==================== 生命周期测试 ====================
 
   describe("Lifecycle", () => {
-    it("$mount should set role to dialog", async () => {
+    it("$mount should set role to alertdialog", async () => {
       const messageBox = createMessageBox();
       await waitForRender();
-      expect(messageBox.getAttribute("role")).toBe("dialog");
+      expect(messageBox.getAttribute("role")).toBe("alertdialog");
     });
 
     it("$mount should set CSS variables for content dimensions", async () => {
@@ -3261,10 +3262,10 @@ describe("EaMessageBox Component", () => {
   // ==================== 生命周期深度测试 ====================
 
   describe("Lifecycle Deep Tests", () => {
-    it("component should have role=dialog after mount", async () => {
+    it("component should have role=alertdialog after mount", async () => {
       const messageBox = createMessageBox();
       await waitForRender();
-      expect(messageBox.getAttribute("role")).toBe("dialog");
+      expect(messageBox.getAttribute("role")).toBe("alertdialog");
     });
 
     it("removing and re-adding component should work correctly", async () => {
@@ -3778,6 +3779,55 @@ describe("EaMessageBox Component", () => {
       } catch (action) {
         expect(action).toBe("cancel");
       }
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("应有 role='alertdialog'", async () => {
+      const msgBox = document.createElement("ea-message-box");
+      container.appendChild(msgBox);
+      await waitForRender();
+
+      expect(msgBox.getAttribute("role")).toBe("alertdialog");
+    });
+
+    it("应有 aria-modal='true'", async () => {
+      const msgBox = document.createElement("ea-message-box");
+      container.appendChild(msgBox);
+      await waitForRender();
+
+      expect(msgBox.getAttribute("aria-modal")).toBe("true");
+    });
+
+    it("有 heading 时应设置 aria-labelledby", async () => {
+      const msgBox = document.createElement("ea-message-box");
+      msgBox.heading = "Test Title";
+      container.appendChild(msgBox);
+      await waitForRender();
+
+      const labelledBy = msgBox.getAttribute("aria-labelledby");
+      expect(labelledBy).not.toBeNull();
+    });
+
+    it("有 message 时应设置 aria-describedby", async () => {
+      const msgBox = document.createElement("ea-message-box");
+      msgBox.message = "Test message";
+      container.appendChild(msgBox);
+      await waitForRender();
+
+      const describedBy = msgBox.getAttribute("aria-describedby");
+      expect(describedBy).not.toBeNull();
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-message-box");
+      el.setAttribute("heading", "Test Message Box");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, {
+        rules: { label: { enabled: false } },
+      });
+      assertNoA11yViolations(results);
     });
   });
 });

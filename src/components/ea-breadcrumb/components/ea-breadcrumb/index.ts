@@ -63,7 +63,7 @@ export class EaBreadcrumb extends EaBase {
   }
 
   /**
-   * 渲染分隔符到非末尾的面包屑项中
+   * 渲染分隔符到非末尾的面包屑项中，并标记最后一项为当前页
    */
   private _renderSeparator(): void {
     const defaultSlot = this.shadowRoot!.querySelector("#defaultSlot") as HTMLSlotElement;
@@ -76,19 +76,26 @@ export class EaBreadcrumb extends EaBase {
     const separator = this._getSeparatorItem(this.separator);
 
     breadcrumbItems.forEach((item, index) => {
-      if (
-        index < breadcrumbItems.length - 1 &&
-        !item.querySelector("[slot='separator']")
-      ) {
+      const isLast = index === breadcrumbItems.length - 1;
+
+      if (!isLast && !item.querySelector("[slot='separator']")) {
         item.appendChild(separator.cloneNode(true));
+      }
+
+      if (isLast) {
+        item.setAttribute("aria-current", "page");
+      } else {
+        item.removeAttribute("aria-current");
       }
     });
   }
 
   html(): string {
     return `
-      <nav class="${bem()}" part="container">
-        <slot id="defaultSlot"></slot>
+      <nav aria-label="Breadcrumb">
+        <ol class="${bem()}" part="container" role="list">
+          <slot id="defaultSlot"></slot>
+        </ol>
       </nav>
       <slot id="separatorSlot" name="separator"></slot>
     `;

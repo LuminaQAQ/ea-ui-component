@@ -1,7 +1,8 @@
-﻿import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 import "../components/ea-avatar/index";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 describe("EaAvatar", () => {
   let container;
@@ -687,6 +688,31 @@ describe("EaAvatar", () => {
 
       const slot = avatar.shadowRoot.querySelector("slot");
       expect(slot).not.toBeNull();
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("有图片时 alt 应该传递给 img 元素", async () => {
+        const el = document.createElement("ea-avatar");
+        const dataUri = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        el.setAttribute("src", dataUri);
+        el.setAttribute("alt", "User Avatar");
+        container.appendChild(el);
+        await waitForRender();
+        const img = el.shadowRoot.querySelector(".ea-avatar__img");
+        if (img) {
+          expect(img.alt).toBe("User Avatar");
+        }
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-avatar");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

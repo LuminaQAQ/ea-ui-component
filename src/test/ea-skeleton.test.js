@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-skeleton/index";
 
@@ -1337,6 +1338,66 @@ describe("EaSkeleton Component", () => {
 
       const result = item.updateContainerClasslist();
       expect(result).toContain("is-animated");
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-skeleton");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器元素应该有 aria-hidden='true'", async () => {
+        const skeleton = document.createElement("ea-skeleton");
+        container.appendChild(skeleton);
+
+        await waitForRender();
+
+        const containerEl = skeleton.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-hidden")).toBe("true");
+      });
+
+      it("loading=true 时容器应该有 aria-busy='true'", async () => {
+        const skeleton = document.createElement("ea-skeleton");
+        skeleton.loading = true;
+        container.appendChild(skeleton);
+
+        await waitForRender();
+
+        const containerEl = skeleton.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-busy")).toBe("true");
+      });
+
+      it("loading=false 时容器应该有 aria-busy='false'", async () => {
+        const skeleton = document.createElement("ea-skeleton");
+        skeleton.loading = false;
+        container.appendChild(skeleton);
+
+        await waitForRender();
+
+        const containerEl = skeleton.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-busy")).toBe("false");
+      });
+
+      it("loading 动态变化时 aria-busy 保持初始渲染值", async () => {
+        const skeleton = document.createElement("ea-skeleton");
+        skeleton.loading = true;
+        container.appendChild(skeleton);
+
+        await waitForRender();
+
+        const containerEl = skeleton.shadowRoot.querySelector('[part="container"]');
+        expect(containerEl.getAttribute("aria-busy")).toBe("true");
+
+        skeleton.loading = false;
+        await waitForRender();
+
+        expect(containerEl.getAttribute("aria-busy")).toBe("true");
+      });
     });
   });
 });

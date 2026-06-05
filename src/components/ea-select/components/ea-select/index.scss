@@ -20,6 +20,17 @@ $name: ea-select;
   display: inline-block;
 }
 
+:host(:focus-visible) {
+  .#{$name}__input::part(inner) {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--blue-200);
+  }
+}
+
+:host([disabled]) {
+  cursor: not-allowed;
+}
+
 :host(:invalid) {
   .#{$name}__input::part(inner) {
     border-color: var(--#{$name}-border-invalid-color);

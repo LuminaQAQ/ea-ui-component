@@ -70,6 +70,8 @@ type ButtonSize = (typeof BUTTON_SIZES)[number];
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaMessageBoxElement extends EaOverlay {
+  private static _idCounter = 0;
+
   @query(bemMain.ce("header"))
   private _header!: HTMLElement;
 
@@ -114,6 +116,7 @@ export class EaMessageBoxElement extends EaOverlay {
     default: "",
     observer(this: EaMessageBoxElement, newVal: string) {
       if (this._title) this._title.textContent = newVal;
+      this._updateAriaLabelledBy();
     },
   })
   heading: string = "";
@@ -128,6 +131,7 @@ export class EaMessageBoxElement extends EaOverlay {
       } else {
         this._description.textContent = newVal;
       }
+      this._updateAriaDescribedBy();
     },
   })
   message: string = "";
@@ -538,10 +542,12 @@ export class EaMessageBoxElement extends EaOverlay {
     super.$mount?.();
 
     try {
-      this.setAttribute("role", "dialog");
+      this.setAttribute("role", "alertdialog");
     } catch {
-      this.role = "dialog";
+      this.role = "alertdialog";
     }
+
+    this.setAttribute("aria-modal", "true");
 
     this.style.setProperty("--ea-overlay-content-width", "100%");
     this.style.setProperty("--ea-overlay-content-max-width", "420px");
@@ -549,6 +555,39 @@ export class EaMessageBoxElement extends EaOverlay {
 
     this._syncInputProps();
     this.updateContainerClasslist();
+  }
+
+  $mounted(): void {
+    this._updateAriaLabelledBy();
+    this._updateAriaDescribedBy();
+  }
+
+  /** 更新 aria-labelledby 指向标题元素 */
+  private _updateAriaLabelledBy(): void {
+    if (this._title && this.heading) {
+      if (!this._title.id) {
+        this._title.id = `ea-message-box-title-${EaMessageBoxElement._idCounter++}`;
+      }
+      this.setAttribute("aria-labelledby", this._title.id);
+    } else if (this.heading) {
+      this.setAttribute("aria-label", this.heading);
+      this.removeAttribute("aria-labelledby");
+    } else {
+      this.removeAttribute("aria-label");
+      this.removeAttribute("aria-labelledby");
+    }
+  }
+
+  /** 更新 aria-describedby 指向描述内容 */
+  private _updateAriaDescribedBy(): void {
+    if (this.message && this._description) {
+      if (!this._description.id) {
+        this._description.id = `ea-message-box-desc-${EaMessageBoxElement._idCounter++}`;
+      }
+      this.setAttribute("aria-describedby", this._description.id);
+    } else {
+      this.removeAttribute("aria-describedby");
+    }
   }
 
   $beforeUnmount(): void {

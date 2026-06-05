@@ -59,6 +59,16 @@ export interface EaSplitterPanelElement extends HTMLElement {
 export interface EaSplitterBarElement extends HTMLElement {
   /** 布局方向 */
   layout: "horizontal" | "vertical";
+  /** 可访问名称 */
+  label: string;
+  /** 键盘步进步长（像素） */
+  step: number;
+  /** 当前值（主面板占比百分比） */
+  valuenow: number;
+  /** 最小值 */
+  valuemin: number;
+  /** 最大值 */
+  valuemax: number;
 }
 
 // ==================== Vue 类型声明 ====================
@@ -91,6 +101,10 @@ export interface EaSplitterPanelVueProps {
 export interface EaSplitterBarVueProps {
   /** 布局方向 */
   layout?: "horizontal" | "vertical";
+  /** 可访问名称 */
+  label?: string;
+  /** 键盘步进步长（像素） */
+  step?: number;
 }
 
 /**
@@ -228,6 +242,10 @@ export interface EaSplitterPanelReactProps extends HTMLAttributes<HTMLElement> {
 export interface EaSplitterBarReactProps extends HTMLAttributes<HTMLElement> {
   /** 布局方向 */
   layout?: "horizontal" | "vertical";
+  /** 可访问名称 */
+  label?: string;
+  /** 键盘步进步长（像素） */
+  step?: number;
   /** 子元素 */
   children?: ReactNode;
 }

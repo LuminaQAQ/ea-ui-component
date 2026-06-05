@@ -98,8 +98,11 @@ export class EaBacktop extends EaBase {
    */
   private _handleScroll(): void {
     const scrollTop = this._getCurrentScrollTop();
+    const visible = scrollTop > this.visibilityHeight;
 
-    if (scrollTop > this.visibilityHeight) {
+    this._container.setAttribute("tabindex", visible ? "0" : "-1");
+
+    if (visible) {
       this._container.classList.add(bem.s("before-enter"));
       void this._container.offsetWidth;
       this.updateContainerClasslist();
@@ -140,14 +143,29 @@ export class EaBacktop extends EaBase {
    */
   html(): string {
     return `
-      <div class="${bem()}" part="container">
+      <div class="${bem()}" part="container" role="button" tabindex="-1" aria-label="Back to top">
         <slot></slot>
       </div>
     `;
   }
 
-  @listen("click")
+  /** 点击处理 */
+  @listen("click", bem.cb())
   private _handleClick(): void {
+    this._scrollToTop();
+  }
+
+  /** 键盘激活处理 */
+  @listen("keydown", bem.cb())
+  private _handleKeydown(e: KeyboardEvent): void {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      this._scrollToTop();
+    }
+  }
+
+  /** 滚动到顶部 */
+  private _scrollToTop(): void {
     const el = document.querySelector(this.target) || window;
 
     el.scrollTo({

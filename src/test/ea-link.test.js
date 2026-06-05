@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-link/index.ts";
 
@@ -675,6 +676,64 @@ describe("EaLink", () => {
       link.remove();
 
       expect(container.contains(link)).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-link");
+      el.setAttribute("href", "https://example.com");
+      el.textContent = "Link";
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-link");
+      el.setAttribute("href", "https://example.com");
+      el.setAttribute("disabled", "");
+      el.textContent = "Link";
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("disabled 时宿主元素应该有 aria-disabled=true", async () => {
+        const el = document.createElement("ea-link");
+        el.disabled = true;
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("非 disabled 时宿主元素 aria-disabled 应该为 false", async () => {
+        const el = document.createElement("ea-link");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("无 href 时内部 a 元素应该有 role=link", async () => {
+        const el = document.createElement("ea-link");
+        el.textContent = "Link";
+        container.appendChild(el);
+        await waitForRender();
+        const anchor = el.shadowRoot.querySelector("a.ea-link");
+        expect(anchor.getAttribute("role")).toBe("link");
+      });
+
+      it("有 href 时内部 a 元素不应该有 role=link", async () => {
+        const el = document.createElement("ea-link");
+        el.href = "https://example.com";
+        container.appendChild(el);
+        await waitForRender();
+        const anchor = el.shadowRoot.querySelector("a.ea-link");
+        expect(anchor.getAttribute("role")).toBeNull();
+      });
     });
   });
 });

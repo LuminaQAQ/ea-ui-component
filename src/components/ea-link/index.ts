@@ -1,10 +1,7 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query } from "@decorator";
+import { CustomElement, attribute, query, listen } from "@decorator";
 import { Enum } from "@utils/Enum";
-import {
-  VARIANT_TYPES,
-  type VariantType,
-} from "@constants/variant";
+import { VARIANT_TYPES, type VariantType } from "@constants/variant";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
 
@@ -50,8 +47,13 @@ export class EaLink extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaLink) {
       this.updateContainerClasslist();
+      this._updateTabindex();
     },
   })
   disabled: boolean = false;
@@ -70,6 +72,8 @@ export class EaLink extends EaBase {
     default: "",
     observer(this: EaLink, newVal: string) {
       if (this._container) this._container.href = newVal;
+      this._updateLinkRole();
+      this._updateTabindex();
     },
   })
   href: string = "";
@@ -135,6 +139,28 @@ export class EaLink extends EaBase {
     if (this.hasAttribute("download")) this._container.download = this.download;
   }
 
+  /** disabled 时或无 href 时更新 tabindex */
+  private _updateTabindex(): void {
+    if (!this._container) return;
+    if (this.disabled) {
+      this._container.setAttribute("tabindex", "-1");
+    } else if (!this.href) {
+      this._container.setAttribute("tabindex", "0");
+    } else {
+      this._container.removeAttribute("tabindex");
+    }
+  }
+
+  /** 无 href 时添加 role="link" 保持链接语义 */
+  private _updateLinkRole(): void {
+    if (!this._container) return;
+    if (!this.href) {
+      this._container.setAttribute("role", "link");
+    } else {
+      this._container.removeAttribute("role");
+    }
+  }
+
   /** 渲染模板 */
   html(): string {
     const hrefAttr = this.href ? `href="${this.href}"` : "";
@@ -143,9 +169,15 @@ export class EaLink extends EaBase {
     const downloadAttr = this.hasAttribute("download")
       ? `download="${this.download}"`
       : "";
+    const roleAttr = !this.href ? 'role="link"' : "";
+    const tabindexAttr = this.disabled
+      ? 'tabindex="-1"'
+      : !this.href
+        ? 'tabindex="0"'
+        : "";
 
     return `
-      <a class="${this.updateContainerClasslist()}" part="container" tabindex="-1" ${hrefAttr} ${targetAttr} ${relAttr} ${downloadAttr}>
+      <a class="${this.updateContainerClasslist()}" part="container" ${hrefAttr} ${targetAttr} ${relAttr} ${downloadAttr} ${roleAttr} ${tabindexAttr}>
         <ea-icon class="${bem.e("icon")}" part="icon"></ea-icon>
         <slot></slot>
       </a>
@@ -155,6 +187,17 @@ export class EaLink extends EaBase {
   $mount(): void {
     this.updateContainerClasslist();
     this._syncLinkAttributes();
+    this._updateTabindex();
+    this._updateLinkRole();
+  }
+
+  /** 无 href 时按 Enter 触发点击，符合 WAI-ARIA link 键盘交互规范 */
+  @listen("keydown", bem.cb())
+  private _handleKeydown(e: KeyboardEvent): void {
+    if (this.disabled) return;
+    if (e.key === "Enter" && !this.href) {
+      this._container.click();
+    }
   }
 }
 

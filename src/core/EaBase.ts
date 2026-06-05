@@ -48,7 +48,10 @@ export default class EaBase extends HTMLElement implements EaElement {
   connectedCallback(): void {
     if (this._isInitialized) return;
 
-    this.tabIndex = Number(this.getAttribute("tabindex")) || 0;
+    const tabindexAttr = this.getAttribute("tabindex");
+    if (tabindexAttr !== null) {
+      this.tabIndex = Number(tabindexAttr);
+    }
 
     requestAnimationFrame(() => {
       this.$mount();
@@ -136,5 +139,47 @@ export default class EaBase extends HTMLElement implements EaElement {
         ...options,
       })
     );
+  }
+
+  // ==================== 焦点管理 ====================
+
+  /**
+   * 获取可聚焦元素列表
+   * @param scope 查询范围：'shadow' 仅 Shadow DOM，'light' 仅 Light DOM，'all' 两者
+   * @returns 可聚焦的 HTMLElement 数组
+   */
+  $getFocusableElements(
+    scope: "shadow" | "light" | "all" = "shadow"
+  ): HTMLElement[] {
+    const selector =
+      'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const shadowFocusable = Array.from(
+      this.shadowRoot?.querySelectorAll(selector) ?? []
+    ) as HTMLElement[];
+    if (scope === "shadow") return shadowFocusable;
+
+    const lightFocusable = Array.from(
+      this.querySelectorAll(selector)
+    ) as HTMLElement[];
+    if (scope === "light") return lightFocusable;
+
+    return [...shadowFocusable, ...lightFocusable];
+  }
+
+  /**
+   * 聚焦到第一个可聚焦元素
+   * @param scope 查询范围
+   */
+  $focusFirst(scope: "shadow" | "light" | "all" = "shadow"): void {
+    this.$getFocusableElements(scope)[0]?.focus();
+  }
+
+  /**
+   * 聚焦到最后一个可聚焦元素
+   * @param scope 查询范围
+   */
+  $focusLast(scope: "shadow" | "light" | "all" = "shadow"): void {
+    const els = this.$getFocusableElements(scope);
+    els[els.length - 1]?.focus();
   }
 }

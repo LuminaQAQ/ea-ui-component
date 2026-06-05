@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-input-number/index.ts";
 
@@ -98,7 +99,7 @@ describe("EaInputNumber", () => {
         "input.ea-input-number__inner"
       );
       expect(inputElement).toBeTruthy();
-      expect(inputElement.type).toBe("number");
+      expect(inputElement.type).toBe("text");
     });
 
     it("应该包含 decrease 和 increase 操作按钮", async () => {
@@ -922,7 +923,7 @@ describe("EaInputNumber", () => {
   });
 
   describe("Name Attribute", () => {
-    it("设置 name 属性应该同步到 input 元素的 name 和 id", async () => {
+    it("设置 name 属性应该同步到 input 元素的 name", async () => {
       const el = document.createElement("ea-input-number");
       el.setAttribute("name", "quantity");
       container.appendChild(el);
@@ -932,7 +933,6 @@ describe("EaInputNumber", () => {
         "input.ea-input-number__inner"
       );
       expect(inputElement.name).toBe("quantity");
-      expect(inputElement.id).toBe("quantity");
     });
 
     it("动态修改 name 应该实时更新", async () => {
@@ -947,7 +947,6 @@ describe("EaInputNumber", () => {
         "input.ea-input-number__inner"
       );
       expect(inputElement.name).toBe("newName");
-      expect(inputElement.id).toBe("newName");
     });
   });
 
@@ -1924,6 +1923,209 @@ describe("EaInputNumber", () => {
       );
 
       expect(el.value).toBe(5);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-input-number");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-input-number");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("input 元素应该有 role=spinbutton", async () => {
+        const el = document.createElement("ea-input-number");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        expect(inputEl.getAttribute("role")).toBe("spinbutton");
+      });
+
+      it("input 元素应该有 aria-valuenow", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "5");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        expect(inputEl.getAttribute("aria-valuenow")).toBe("5");
+      });
+
+      it("value 变化时 aria-valuenow 应该更新", async () => {
+        const el = document.createElement("ea-input-number");
+        container.appendChild(el);
+        await waitForRender();
+        el.value = 10;
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        expect(inputEl.getAttribute("aria-valuenow")).toBe("10");
+      });
+
+      it("设置 min 后 input 元素应该有 aria-valuemin", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("min", "0");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        expect(inputEl.getAttribute("aria-valuemin")).toBe("0");
+      });
+
+      it("设置 max 后 input 元素应该有 aria-valuemax", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("max", "100");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        expect(inputEl.getAttribute("aria-valuemax")).toBe("100");
+      });
+
+      it("disabled 时宿主元素应该设置 aria-disabled 为 true", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("非 disabled 时宿主元素 aria-disabled 应该为 false", async () => {
+        const el = document.createElement("ea-input-number");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-disabled")).toBe("false");
+      });
+
+      it("输入超出范围的科学计数法值时 input 元素应该设置 aria-invalid 为 true", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("min", "0");
+        el.setAttribute("max", "100");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.value = "1E3";
+        inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+        await waitForRender();
+        expect(inputEl.getAttribute("aria-invalid")).toBe("true");
+      });
+
+      it("值在范围内时 input 元素不应有 aria-invalid 属性", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("min", "0");
+        el.setAttribute("max", "100");
+        el.setAttribute("value", "50");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        expect(inputEl.hasAttribute("aria-invalid")).toBe(false);
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("ArrowUp 应该增加值", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "5");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp" }));
+        await waitForRender();
+        expect(el.value).toBe(6);
+      });
+
+      it("ArrowDown 应该减少值", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "5");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+        await waitForRender();
+        expect(el.value).toBe(4);
+      });
+
+      it("ArrowUp 应该按 step 增加值", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "0");
+        el.setAttribute("step", "5");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp" }));
+        await waitForRender();
+        expect(el.value).toBe(5);
+      });
+
+      it("ArrowDown 应该按 step 减少值", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "10");
+        el.setAttribute("step", "5");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+        await waitForRender();
+        expect(el.value).toBe(5);
+      });
+
+      it("ArrowUp 达到 max 时应该被 clamp", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "9");
+        el.setAttribute("max", "10");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp" }));
+        await waitForRender();
+        expect(el.value).toBe(10);
+      });
+
+      it("ArrowDown 达到 min 时应该被 clamp", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "1");
+        el.setAttribute("min", "0");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+        await waitForRender();
+        expect(el.value).toBe(0);
+      });
+
+      it("Home 键应该设置值为 min", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "50");
+        el.setAttribute("min", "0");
+        el.setAttribute("max", "100");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", { key: "Home" }));
+        await waitForRender();
+        expect(el.value).toBe(0);
+      });
+
+      it("End 键应该设置值为 max", async () => {
+        const el = document.createElement("ea-input-number");
+        el.setAttribute("value", "50");
+        el.setAttribute("min", "0");
+        el.setAttribute("max", "100");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input-number__inner");
+        inputEl.dispatchEvent(new KeyboardEvent("keydown", { key: "End" }));
+        await waitForRender();
+        expect(el.value).toBe(100);
+      });
     });
   });
 });

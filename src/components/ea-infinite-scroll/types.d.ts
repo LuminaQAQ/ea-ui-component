@@ -7,6 +7,7 @@ declare global {
 export interface EaInfiniteScrollElement extends HTMLElement {
   status: "finished" | "loading" | "noMore";
   distance: number;
+  label: string;
 }
 
 import type { DefineComponent } from "vue";
@@ -14,6 +15,7 @@ import type { DefineComponent } from "vue";
 export interface EaInfiniteScrollVueProps {
   status?: "finished" | "loading" | "noMore";
   distance?: number;
+  label?: string;
 }
 
 export interface EaInfiniteScrollVueSlots {
@@ -47,6 +49,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 export interface EaInfiniteScrollReactProps extends HTMLAttributes<HTMLElement> {
   status?: "finished" | "loading" | "noMore";
   distance?: number;
+  label?: string;
   children?: ReactNode;
 }
 

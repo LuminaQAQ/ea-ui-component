@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-menu/index";
 
@@ -684,13 +685,13 @@ describe("EaMenu Component", () => {
       ).toBeTruthy();
     });
 
-    it("container 应该是 li 元素且 role 为 menuitem", async () => {
+    it("container 应该是 li 元素且宿主元素 role 为 menuitem", async () => {
       const menuItem = document.createElement("ea-menu-item");
       container.appendChild(menuItem);
       await waitForRender();
       const el = menuItem.shadowRoot.querySelector('[part="container"]');
       expect(el.tagName).toBe("LI");
-      expect(el.getAttribute("role")).toBe("menuitem");
+      expect(menuItem.getAttribute("role")).toBe("menuitem");
     });
 
     it("应该渲染 slot 内容", async () => {
@@ -1778,6 +1779,92 @@ describe("EaMenu Component", () => {
 
       const titleEl = subMenu.shadowRoot.querySelector('[part="title"]');
       expect(() => titleEl.click()).not.toThrow();
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("ea-menu-item 宿主元素应该有 role=menuitem", async () => {
+        const menu = document.createElement("ea-menu");
+        menu.innerHTML = `<ea-menu-item>Item</ea-menu-item>`;
+        container.appendChild(menu);
+        await waitForRender();
+        await waitForRender();
+        const item = menu.querySelector("ea-menu-item");
+        expect(item.getAttribute("role")).toBe("menuitem");
+      });
+
+      it("ea-menu-item disabled 时宿主元素应该有 aria-disabled=true", async () => {
+        const menu = document.createElement("ea-menu");
+        menu.innerHTML = `<ea-menu-item disabled>Item</ea-menu-item>`;
+        container.appendChild(menu);
+        await waitForRender();
+        await waitForRender();
+        const item = menu.querySelector("ea-menu-item");
+        expect(item.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("ea-sub-menu title 应该有 role=menuitem", async () => {
+        const menu = document.createElement("ea-menu");
+        menu.innerHTML = `<ea-sub-menu heading="Sub"><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
+        container.appendChild(menu);
+        await waitForRender();
+        await waitForRender();
+        const subMenu = menu.querySelector("ea-sub-menu");
+        const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
+        expect(title.getAttribute("role")).toBe("menuitem");
+      });
+
+      it("ea-sub-menu content 应该有 role=menu", async () => {
+        const menu = document.createElement("ea-menu");
+        menu.innerHTML = `<ea-sub-menu heading="Sub"><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
+        container.appendChild(menu);
+        await waitForRender();
+        await waitForRender();
+        const subMenu = menu.querySelector("ea-sub-menu");
+        const content = subMenu.shadowRoot.querySelector(".ea-sub-menu__content");
+        expect(content.getAttribute("role")).toBe("menu");
+      });
+
+      it("ea-sub-menu title 应该有 aria-haspopup=menu", async () => {
+        const menu = document.createElement("ea-menu");
+        menu.innerHTML = `<ea-sub-menu heading="Sub"><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
+        container.appendChild(menu);
+        await waitForRender();
+        await waitForRender();
+        const subMenu = menu.querySelector("ea-sub-menu");
+        const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
+        expect(title.getAttribute("aria-haspopup")).toBe("menu");
+      });
+
+      it("ea-sub-menu 关闭时 title 的 aria-expanded 应该为 false", async () => {
+        const menu = document.createElement("ea-menu");
+        menu.innerHTML = `<ea-sub-menu heading="Sub"><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
+        container.appendChild(menu);
+        await waitForRender();
+        await waitForRender();
+        const subMenu = menu.querySelector("ea-sub-menu");
+        const title = subMenu.shadowRoot.querySelector(".ea-sub-menu__title");
+        expect(title.getAttribute("aria-expanded")).toBe("false");
+      });
+
+      it("ea-sub-menu disabled 时宿主元素应该有 aria-disabled=true", async () => {
+        const menu = document.createElement("ea-menu");
+        menu.innerHTML = `<ea-sub-menu heading="Sub" disabled><ea-menu-item>Item</ea-menu-item></ea-sub-menu>`;
+        container.appendChild(menu);
+        await waitForRender();
+        await waitForRender();
+        const subMenu = menu.querySelector("ea-sub-menu");
+        expect(subMenu.getAttribute("aria-disabled")).toBe("true");
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-menu");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

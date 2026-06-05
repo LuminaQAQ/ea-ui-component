@@ -82,7 +82,7 @@ export class EaSkeletonItem extends EaBase {
     const imageVariant = this.variant === "image" ? skeletonImageSVG : "";
 
     return `
-      <div class="${bem()}" part="container">${imageVariant}</div>
+      <div class="${bem()}" part="container" aria-hidden="true">${imageVariant}</div>
     `;
   }
 

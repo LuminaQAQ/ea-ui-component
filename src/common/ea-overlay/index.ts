@@ -48,6 +48,8 @@ export class EaOverlay extends EaBase {
   private _inBeforeClose: boolean = false;
   private _waitingBeforeClose: boolean = false;
   private _appendHandled: boolean = false;
+  private _previousFocusElement: HTMLElement | null = null;
+  private _isRedirectingFocus: boolean = false;
 
   @attribute({
     type: Boolean,
@@ -67,7 +69,6 @@ export class EaOverlay extends EaBase {
 
       if (newVal) {
         this._handleOpenTransition();
-        this._handleFocus();
       } else {
         this._handleCloseRequest();
       }
@@ -213,10 +214,22 @@ export class EaOverlay extends EaBase {
   private _handleOpenTransition(): void {
     this.updateContainerClasslist();
     this.dispatchEvent(new EaOverlayOpenEvent());
-    this._handleFocus();
+
+    // 保存先前焦点元素（必须在焦点移动前同步保存）
+    this._previousFocusElement = document.activeElement as HTMLElement;
 
     requestAnimationFrame(() => {
       this._container.classList.add(bem.s("show"));
+
+      // 下一帧再聚焦，避免 focus() 触发同步重排导致 CSS transition 无法触发
+      requestAnimationFrame(() => {
+        const first = this.$getFocusableElements("all")[0];
+        if (first) {
+          first.focus();
+        } else {
+          this.focus();
+        }
+      });
 
       this._container.addEventListener(
         "transitionend",
@@ -275,6 +288,12 @@ export class EaOverlay extends EaBase {
     this._container.classList.add(bem.s("before-close"));
     this.dispatchEvent(new EaOverlayCloseEvent());
 
+    // 立即恢复焦点（不等动画结束，确保焦点不留在隐藏内容上）
+    if (this._previousFocusElement) {
+      this._previousFocusElement.focus();
+      this._previousFocusElement = null;
+    }
+
     this._container.addEventListener(
       "transitionend",
       () => {
@@ -285,13 +304,41 @@ export class EaOverlay extends EaBase {
     );
   }
 
-  /** 处理焦点管理 */
-  private _handleFocus(): void {
-    (document.activeElement as HTMLElement)?.blur();
+  /** 焦点陷阱：焦点逃逸出弹窗时拉回 */
+  @listen("focusin", "document")
+  private _handleFocusin(e: FocusEvent): void {
+    if (!this.visible || this._isRedirectingFocus) return;
 
-    requestAnimationFrame(() => {
+    // 使用 composedPath 检查焦点是否在弹窗内（包括 Shadow DOM）
+    if (e.composedPath().includes(this)) return;
+
+    // 焦点逃逸出弹窗，拉回
+    this._isRedirectingFocus = true;
+    const focusable = this.$getFocusableElements("all");
+    if (focusable.length > 0) {
+      focusable[0].focus();
+    } else {
       this.focus();
-    });
+    }
+    this._isRedirectingFocus = false;
+  }
+
+  /** Tab 键边界循环 */
+  private _trapFocus(e: KeyboardEvent): void {
+    const focusable = this.$getFocusableElements("all");
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+
+    if (e.shiftKey && active === first) {
+      e.preventDefault();
+      last?.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault();
+      first?.focus();
+    }
   }
 
   /** 显示遮罩层 */
@@ -323,8 +370,15 @@ export class EaOverlay extends EaBase {
   }
 
   @listen("keydown", "document")
-  protected _handleKeyDown(e: KeyboardEvent) {
-    if (!this.visible || !this.closeOnPressEscape || e.key !== "Escape") return;
+  protected _handleKeyDown(e: KeyboardEvent): void {
+    if (!this.visible) return;
+
+    if (e.key === "Tab") {
+      this._trapFocus(e);
+      return;
+    }
+
+    if (!this.closeOnPressEscape || e.key !== "Escape") return;
     e.stopImmediatePropagation();
     e.preventDefault();
 
@@ -332,6 +386,7 @@ export class EaOverlay extends EaBase {
   }
 
   $mount(): void {
+    this.tabIndex = -1;
     this._handleAppendTo();
     this.updateContainerClasslist();
   }

@@ -165,10 +165,10 @@ export class EaTourStep extends EaBase {
   /** 渲染模板 */
   html(): string {
     return `
-      <div class='${bem()}' part='container'>
+      <div class='${bem()}' part='container' role='dialog' aria-modal='true' tabindex='-1'>
         <header class='ea-tour-step__header' part='header'>
           <slot name='header'></slot>
-          <ea-icon class='ea-tour-step__close-icon' part='close-icon' name="xmark"></ea-icon>
+          <ea-icon class='ea-tour-step__close-icon' part='close-icon' name="xmark" aria-label="close"></ea-icon>
         </header>
         <main class='ea-tour-step__content' part='content'>
           <slot></slot>

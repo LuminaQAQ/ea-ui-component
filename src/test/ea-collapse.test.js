@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-collapse/index";
 
@@ -898,6 +899,197 @@ describe("EaCollapseItem Component", () => {
 
       const icon = item.shadowRoot.querySelector(".ea-collapse-item__expand-icon");
       expect(icon).toBeTruthy();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-collapse");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("header-wrap 应该有 role=button", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        item.setAttribute("name", "1");
+        container.appendChild(item);
+        await waitForRender();
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        expect(headerWrap.getAttribute("role")).toBe("button");
+      });
+
+      it("header-wrap 应该有 tabindex=0", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        container.appendChild(item);
+        await waitForRender();
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        expect(headerWrap.getAttribute("tabindex")).toBe("0");
+      });
+
+      it("未展开时 header-wrap 应该有 aria-expanded=false", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        container.appendChild(item);
+        await waitForRender();
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        expect(headerWrap.getAttribute("aria-expanded")).toBe("false");
+      });
+
+      it("展开时 header-wrap 应该有 aria-expanded=true", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        item.setAttribute("active", "");
+        container.appendChild(item);
+        await waitForRender();
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        expect(headerWrap.getAttribute("aria-expanded")).toBe("true");
+      });
+
+      it("header-wrap 应该有 aria-controls 指向对应 panel", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        container.appendChild(item);
+        await waitForRender();
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        const ariaControls = headerWrap.getAttribute("aria-controls");
+        expect(ariaControls).toBeTruthy();
+        expect(ariaControls).toContain("-panel");
+      });
+
+      it("content 应该有 role=region", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        container.appendChild(item);
+        await waitForRender();
+        const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
+        expect(content.getAttribute("role")).toBe("region");
+      });
+
+      it("content 应该有 aria-labelledby 指向对应 header", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        container.appendChild(item);
+        await waitForRender();
+        const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
+        const labelledby = content.getAttribute("aria-labelledby");
+        expect(labelledby).toBeTruthy();
+        expect(labelledby).toContain("-header");
+      });
+
+      it("disabled 时 header-wrap 应该有 aria-disabled=true", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        item.setAttribute("disabled", "");
+        container.appendChild(item);
+        await waitForRender();
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        expect(headerWrap.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("disabled 时 header-wrap 应该有 tabindex=-1", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        item.setAttribute("disabled", "");
+        container.appendChild(item);
+        await waitForRender();
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        expect(headerWrap.getAttribute("tabindex")).toBe("-1");
+      });
+
+      it("未展开时 content 应该有 inert 属性", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        container.appendChild(item);
+        await waitForRender();
+        const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
+        expect(content.hasAttribute("inert")).toBe(true);
+      });
+
+      it("展开时 content 不应该有 inert 属性", async () => {
+        const item = document.createElement("ea-collapse-item");
+        item.setAttribute("header", "Test");
+        item.setAttribute("active", "");
+        container.appendChild(item);
+        await waitForRender();
+        const content = item.shadowRoot.querySelector(".ea-collapse-item__content");
+        expect(content.hasAttribute("inert")).toBe(false);
+      });
+    });
+
+    describe("Keyboard Interaction", () => {
+      it("Enter 键应该展开折叠面板", async () => {
+        const collapse = document.createElement("ea-collapse");
+        collapse.innerHTML = `
+          <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
+        `;
+        container.appendChild(collapse);
+        await waitForRender();
+
+        const item = collapse.querySelector("ea-collapse-item");
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        await waitForRender();
+
+        expect(item.hasAttribute("active")).toBe(true);
+      });
+
+      it("Space 键应该展开折叠面板", async () => {
+        const collapse = document.createElement("ea-collapse");
+        collapse.innerHTML = `
+          <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
+        `;
+        container.appendChild(collapse);
+        await waitForRender();
+
+        const item = collapse.querySelector("ea-collapse-item");
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+        await waitForRender();
+
+        expect(item.hasAttribute("active")).toBe(true);
+      });
+
+      it("Enter 键再次按下应该收起面板", async () => {
+        const collapse = document.createElement("ea-collapse");
+        collapse.innerHTML = `
+          <ea-collapse-item header="Item 1" name="1">Content 1</ea-collapse-item>
+        `;
+        container.appendChild(collapse);
+        await waitForRender();
+
+        collapse.setActiveNames(["1"]);
+        await waitForRender();
+
+        const item = collapse.querySelector("ea-collapse-item");
+        expect(item.hasAttribute("active")).toBe(true);
+
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        await waitForRender();
+
+        expect(item.hasAttribute("active")).toBe(false);
+      });
+
+      it("disabled 时 Enter 键不应该触发展开", async () => {
+        const collapse = document.createElement("ea-collapse");
+        collapse.innerHTML = `
+          <ea-collapse-item header="Item 1" name="1" disabled>Content 1</ea-collapse-item>
+        `;
+        container.appendChild(collapse);
+        await waitForRender();
+
+        const item = collapse.querySelector("ea-collapse-item");
+        const headerWrap = item.shadowRoot.querySelector(".ea-collapse-item__header-wrap");
+        headerWrap.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        await waitForRender();
+
+        expect(item.hasAttribute("active")).toBe(false);
+      });
     });
   });
 });

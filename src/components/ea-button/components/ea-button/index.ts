@@ -39,6 +39,7 @@ export class EaButton extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-disabled", map: v => String(v) },
     observer(this: EaButton) {
       this.updateContainerClasslist();
     },
@@ -127,6 +128,7 @@ export class EaButton extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: { ariaAttr: "aria-busy", map: v => String(v) },
     observer(this: EaButton, newVal: boolean) {
       this.toggleAttribute("disabled", newVal === true);
 
@@ -196,6 +198,16 @@ export class EaButton extends EaBase {
   })
   download: string = "";
 
+  @attribute({
+    type: Boolean,
+    default: false,
+    a11y: {
+      ariaAttr: "aria-pressed",
+      map: v => String(v),
+    },
+  })
+  toggle: boolean = false;
+
   /** 更新容器类名 */
   updateContainerClasslist(): string {
     const hasIcon = !!this.icon;
@@ -250,7 +262,7 @@ export class EaButton extends EaBase {
     const typeAttr = !this.link ? `type="${this.type}"` : "";
 
     return `
-      <${tag} class="${bem()}" part="container" tabindex="-1" ${hrefAttr} ${targetAttr} ${relAttr} ${downloadAttr} ${typeAttr}>
+      <${tag} class="${bem()}" part="container" ${hrefAttr} ${targetAttr} ${relAttr} ${downloadAttr} ${typeAttr}>
         <ea-icon class="${bem.e("loading-icon")}" name="spinner" spin part="loading-icon"></ea-icon>
         <ea-icon class="${bem.e("icon")}" part="icon"></ea-icon>
         <slot></slot>
@@ -258,10 +270,11 @@ export class EaButton extends EaBase {
     `;
   }
 
-  @listen("keypress")
-  private _handleKeyPress(e: KeyboardEvent) {
-    if (e.key === "Enter") {
-      this.click();
+  @listen("keydown")
+  private _handleKeyDown(e: KeyboardEvent) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      this._container?.click();
     }
   }
 

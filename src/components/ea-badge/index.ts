@@ -168,7 +168,7 @@ export class EaBadge extends EaBase {
   html(): string {
     return `
       <div class="${bem()}" part="container">
-        <sup class="${bem.e("content")}" part="content"></sup>
+        <sup class="${bem.e("content")}" part="content" aria-hidden="true"></sup>
         <slot></slot>
       </div>
     `;

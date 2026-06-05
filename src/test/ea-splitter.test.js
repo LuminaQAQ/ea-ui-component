@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-splitter/index";
 
@@ -589,6 +590,70 @@ describe("EaSplitterBar", () => {
       const bars = splitter.querySelectorAll("ea-splitter-bar");
       expect(bars[0].getAttribute("data-index")).toBeTruthy();
       expect(bars[1].getAttribute("data-index")).toBeTruthy();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-splitter-bar");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("ea-splitter-bar 宿主元素应该有 role=separator", async () => {
+        const el = document.createElement("ea-splitter-bar");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("role")).toBe("separator");
+      });
+
+      it("horizontal 布局时 ea-splitter-bar 应该有 aria-orientation=vertical", async () => {
+        const el = document.createElement("ea-splitter-bar");
+        el.layout = "horizontal";
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-orientation")).toBe("vertical");
+      });
+
+      it("vertical 布局时 ea-splitter-bar 应该有 aria-orientation=horizontal", async () => {
+        const el = document.createElement("ea-splitter-bar");
+        el.layout = "vertical";
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-orientation")).toBe("horizontal");
+      });
+
+      it("ea-splitter-bar 应该有 aria-valuenow", async () => {
+        const el = document.createElement("ea-splitter-bar");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuenow")).toBeTruthy();
+      });
+
+      it("ea-splitter-bar 应该有 aria-valuemin", async () => {
+        const el = document.createElement("ea-splitter-bar");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuemin")).toBeTruthy();
+      });
+
+      it("ea-splitter-bar 应该有 aria-valuemax", async () => {
+        const el = document.createElement("ea-splitter-bar");
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-valuemax")).toBeTruthy();
+      });
+
+      it("设置 label 时 ea-splitter-bar 应该有 aria-label", async () => {
+        const el = document.createElement("ea-splitter-bar");
+        el.label = "Resize panel";
+        container.appendChild(el);
+        await waitForRender();
+        expect(el.getAttribute("aria-label")).toBe("Resize panel");
+      });
     });
   });
 });

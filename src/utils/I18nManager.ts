@@ -1,5 +1,7 @@
 type Locale = "zh-CN" | "en-US" | string;
 
+type MessageValue = string | string[] | ((params?: Record<string, string | number>) => string);
+
 interface CalendarMessages {
   selectYear: string;
   selectMonth: string;
@@ -8,6 +10,7 @@ interface CalendarMessages {
   nextMonth: string;
   today: string;
   weekDays: string[];
+  weekDaysFull?: string[];
   months: string[];
   monthsShort?: string[];
 }
@@ -19,8 +22,8 @@ interface ButtonMessages {
 }
 
 interface PaginationMessages {
-  total: string;
-  itemsPerPage: string;
+  total: (params?: Record<string, string | number>) => string;
+  itemsPerPage: (params?: Record<string, string | number>) => string;
   goto: string;
   page: string;
 }
@@ -55,6 +58,10 @@ interface TransferMessages {
   filterPlaceholder: string;
 }
 
+interface RateMessages {
+  star: (params?: Record<string, string | number>) => string;
+}
+
 interface LocaleMessages {
   calendar: CalendarMessages;
   button: ButtonMessages;
@@ -65,6 +72,7 @@ interface LocaleMessages {
   drawer: DrawerMessages;
   empty: EmptyMessages;
   transfer: TransferMessages;
+  rate: RateMessages;
   [key: string]: any;
 }
 
@@ -87,6 +95,7 @@ class I18nManager {
           nextMonth: "下个月",
           today: "今天",
           weekDays: ["一", "二", "三", "四", "五", "六", "日"],
+          weekDaysFull: ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
           months: [
             "一月",
             "二月",
@@ -108,8 +117,8 @@ class I18nManager {
           confirm: "确认",
         },
         pagination: {
-          total: "共 {total} 条",
-          itemsPerPage: "每页 {size} 条",
+          total: (p) => `共 ${p!.total} 条`,
+          itemsPerPage: (p) => `每页 ${p!.size} 条`,
           goto: "前往",
           page: "页",
         },
@@ -137,6 +146,9 @@ class I18nManager {
           list2: "列表 2",
           filterPlaceholder: "输入关键词",
         },
+        rate: {
+          star: (p) => `${p!.n} 星`,
+        },
       },
       "en-US": {
         calendar: {
@@ -148,6 +160,7 @@ class I18nManager {
           today: "Today",
 
           weekDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+          weekDaysFull: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
           months: [
             "January",
             "February",
@@ -183,8 +196,8 @@ class I18nManager {
           confirm: "Confirm",
         },
         pagination: {
-          total: "Total {total}",
-          itemsPerPage: "{size} per page",
+          total: (p) => `Total ${p!.total}`,
+          itemsPerPage: (p) => `${p!.size} per page`,
           goto: "Goto",
           page: "",
         },
@@ -211,6 +224,9 @@ class I18nManager {
           list1: "List 1",
           list2: "List 2",
           filterPlaceholder: "Enter keyword",
+        },
+        rate: {
+          star: (p) => `${p!.n} star(s)`,
         },
       },
     },
@@ -260,7 +276,7 @@ class I18nManager {
   /**
    * 获取翻译文本
    * @param key - 翻译键路径，例如 'calendar.prevMonth'
-   * @param params - 参数对象，用于替换模板字符串中的变量
+   * @param params - 参数对象，传递给函数模板
    * @returns 翻译后的文本
    */
   t(key: string, params?: Record<string, string | number>): any {
@@ -276,13 +292,8 @@ class I18nManager {
       }
     }
 
-    if (typeof result === "string" && params) {
-      Object.keys(params).forEach(paramKey => {
-        result = result.replace(
-          new RegExp(`\\{${paramKey}\\}`, "g"),
-          String(params[paramKey])
-        );
-      });
+    if (typeof result === "function") {
+      return result(params);
     }
 
     return result || key;
@@ -292,4 +303,17 @@ class I18nManager {
 const i18nManager = new I18nManager();
 
 export { i18nManager, I18nManager };
-export type { Locale, LocaleMessages, CalendarMessages, ButtonMessages, PaginationMessages, InputNumberMessages, SelectMessages, DialogMessages, DrawerMessages, EmptyMessages, TransferMessages };
+export type {
+  Locale,
+  LocaleMessages,
+  CalendarMessages,
+  ButtonMessages,
+  PaginationMessages,
+  InputNumberMessages,
+  SelectMessages,
+  DialogMessages,
+  DrawerMessages,
+  EmptyMessages,
+  TransferMessages,
+  RateMessages,
+};

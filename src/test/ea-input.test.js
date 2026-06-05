@@ -54,6 +54,7 @@ HTMLElement.prototype.attachInternals = function () {
 };
 
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-input/index.ts";
 
@@ -1643,6 +1644,103 @@ describe("EaInput", () => {
 
       expect(handler).toHaveBeenCalled();
       expect(handler.mock.calls[0][0].detail.oldValue).toBe("test value");
+    });
+  });
+
+  describe("Accessibility", () => {
+    describe("ARIA Attributes", () => {
+      it("aria-required 应该同步到 input 元素", async () => {
+        const el = document.createElement("ea-input");
+        el.setAttribute("required", "");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
+        expect(inputEl.getAttribute("aria-required")).toBe("true");
+      });
+
+      it("aria-disabled 应该同步到 input 元素", async () => {
+        const el = document.createElement("ea-input");
+        el.setAttribute("disabled", "");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
+        expect(inputEl.getAttribute("aria-disabled")).toBe("true");
+      });
+
+      it("aria-label 应该同步到 input 元素", async () => {
+        const el = document.createElement("ea-input");
+        el.setAttribute("aria-label", "用户名");
+        container.appendChild(el);
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
+        expect(inputEl.getAttribute("aria-label")).toBe("用户名");
+      });
+
+      it("验证失败时 input 元素应该设置 aria-invalid 为 true", async () => {
+        const el = document.createElement("ea-input");
+        el.setAttribute("required", "");
+        container.appendChild(el);
+        await waitForRender();
+        el.checkValidity();
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
+        expect(inputEl.getAttribute("aria-invalid")).toBe("true");
+      });
+
+      it("验证通过时 input 元素不应有 aria-invalid 属性", async () => {
+        const el = document.createElement("ea-input");
+        el.setAttribute("value", "hello");
+        container.appendChild(el);
+        await waitForRender();
+        el.checkValidity();
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
+        expect(inputEl.hasAttribute("aria-invalid")).toBe(false);
+      });
+
+      it("setCustomValidity 设置错误后 aria-invalid 应为 true", async () => {
+        const el = document.createElement("ea-input");
+        container.appendChild(el);
+        await waitForRender();
+        el.setCustomValidity("自定义错误");
+        el.checkValidity();
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
+        expect(inputEl.getAttribute("aria-invalid")).toBe("true");
+      });
+
+      it("清除自定义错误后 aria-invalid 应被移除", async () => {
+        const el = document.createElement("ea-input");
+        container.appendChild(el);
+        await waitForRender();
+        el.setCustomValidity("自定义错误");
+        el.checkValidity();
+        await waitForRender();
+        el.setCustomValidity("");
+        el.checkValidity();
+        await waitForRender();
+        const inputEl = el.shadowRoot.querySelector("input.ea-input__original");
+        expect(inputEl.hasAttribute("aria-invalid")).toBe(false);
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-input");
+      el.setAttribute("label", "Input");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    it("disabled 状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-input");
+      el.setAttribute("label", "Input");
+      el.setAttribute("disabled", "");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
     });
   });
 });

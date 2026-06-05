@@ -24,6 +24,16 @@ const bem = createBEM(TAG_NAME);
  */
 @CustomElement(TAG_NAME, { styles: [stylesheet] })
 export class EaMenuItemGroup extends EaBase {
+  private static _instanceCount: number = 0;
+
+  private readonly _uniqueId: number = EaMenuItemGroup._instanceCount++;
+
+  @query(bem.ce("title"))
+  private _titleEl!: HTMLElement;
+
+  @query(bem.ce("content"))
+  private _contentEl!: HTMLElement;
+
   @query('slot[name="title"]')
   private _titleSlot!: HTMLSlotElement;
 
@@ -44,11 +54,22 @@ export class EaMenuItemGroup extends EaBase {
         <header class="${bem.e("title")}" part="title">
           <slot name="title">${this.groupTitle}</slot>
         </header>
-        <div class="${bem.e("content")}" part="content">
+        <div class="${bem.e("content")}" part="content" role="group">
           <slot></slot>
         </div>
       </div>
     `;
+  }
+
+  /** 设置 ARIA 关联属性 */
+  private _setupAria(): void {
+    const id = `ea-menu-item-group-${this._uniqueId}`;
+    this._titleEl.setAttribute("id", `${id}-title`);
+    this._contentEl.setAttribute("aria-labelledby", `${id}-title`);
+  }
+
+  $mount(): void {
+    this._setupAria();
   }
 }
 

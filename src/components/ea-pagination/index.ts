@@ -2,6 +2,7 @@ import EaBase, { createBEM } from "@core/EaBase";
 import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { html } from "@utils/html";
 import { Enum } from "@utils/Enum";
+import { i18nManager } from "@utils/I18nManager";
 import { getPageItem } from "./components/pageItem.js";
 import { getMoreItem } from "./components/moreItem.js";
 import { EaPaginationCurrentChangeEvent } from "./events/EaPaginationCurrentChangeEvent";
@@ -25,9 +26,9 @@ export type PaginationLayoutItem =
   | "->";
 
 const LAYOUT_TEMPLATE: Record<string, string> = {
-  prev: `<ea-icon class="${bem.e("icon")} ${bem.e("icon")}--prev" name="angle-left" part="icon prev-icon" tabindex="0"></ea-icon>`,
+  prev: `<ea-icon class="${bem.e("icon")} ${bem.e("icon")}--prev" name="angle-left" part="icon prev-icon" tabindex="0" aria-label="Previous page"></ea-icon>`,
   pager: `<section class="${bem.e("pager")}" part="pager"></section>`,
-  next: `<ea-icon class="${bem.e("icon")} ${bem.e("icon")}--next" name="angle-right" part="icon next-icon" tabindex="0"></ea-icon>`,
+  next: `<ea-icon class="${bem.e("icon")} ${bem.e("icon")}--next" name="angle-right" part="icon next-icon" tabindex="0" aria-label="Next page"></ea-icon>`,
   total: `<span class="${bem.e("total")}" part="total"></span>`,
   jumper: `<span class="${bem.e("wrapper")}" part="jumper-wrap">Go to <ea-input-number class="${bem.e("jumper")}" part="jumper" controls="false" min="1"></ea-input-number> </span>`,
   sizes: `<ea-select class="${bem.e("sizes")}" part="sizes"></ea-select>`,
@@ -213,6 +214,10 @@ export class EaPagination extends EaBase {
   @attribute({
     type: Boolean,
     default: false,
+    a11y: {
+      ariaAttr: "aria-disabled",
+      map: v => String(v),
+    },
     observer(this: EaPagination, newVal: boolean) {
       this.updateContainerClasslist();
 
@@ -285,9 +290,9 @@ export class EaPagination extends EaBase {
 
   html(): string {
     return `
-      <div class="${bem()}" part="container">
+      <nav class="${bem()}" part="container" aria-label="Pagination">
         ${this._getLayoutHTML()}
-      </div>
+      </nav>
     `;
   }
 
@@ -303,8 +308,15 @@ export class EaPagination extends EaBase {
     );
 
     els.forEach(el => {
-      el.classList.toggle(bem.s("active"), el === target);
-      el.setAttribute("aria-current", String(el === target));
+      const isActive = el === target;
+      el.classList.toggle(bem.s("active"), isActive);
+      if (isActive) {
+        el.setAttribute("aria-current", "page");
+        el.setAttribute("tabindex", "0");
+      } else {
+        el.removeAttribute("aria-current");
+        el.setAttribute("tabindex", "-1");
+      }
     });
   }
 
@@ -410,7 +422,9 @@ export class EaPagination extends EaBase {
   private _handleTotalRender(): void {
     if (!this.layout.includes("total") || !this._total) return;
 
-    this._total.textContent = `Total ${this.total}`;
+    this._total.textContent = i18nManager.t("pagination.total", {
+      total: this.total,
+    });
   }
 
   /** 渲染跳转输入框并绑定事件 */
@@ -463,7 +477,7 @@ export class EaPagination extends EaBase {
     this._sizesAbortController = new AbortController();
 
     const renderCallback = (size: number): string => {
-      return `<ea-option value="${size}" ${size === this.pageSize ? "selected" : ""}>${size}/page</ea-option>`;
+      return `<ea-option value="${size}" ${size === this.pageSize ? "selected" : ""}>${i18nManager.t("pagination.itemsPerPage", { size })}</ea-option>`;
     };
 
     const onSizesChangeEvent = (e: Event) => {
@@ -582,6 +596,104 @@ export class EaPagination extends EaBase {
     );
     if (!matched) return;
 
+    if (
+      this.currentPage >= Math.ceil(this.total / this.pageSize) ||
+      this.disabled
+    )
+      return;
+
+    this.currentPage++;
+
+    this.dispatchEvent(
+      new EaPaginationNextClickEvent({ value: this.currentPage })
+    );
+  }
+
+  /** 处理分页器键盘导航 */
+  @listen("keydown", "shadowRoot")
+  private _handleKeydown(e: KeyboardEvent) {
+    const target = e.target as Element;
+
+    const isPage = target.closest?.(bem.ce("page"));
+    const isPrevIcon = target.closest?.(`${bem.ce("icon")}--prev`);
+    const isNextIcon = target.closest?.(`${bem.ce("icon")}--next`);
+
+    if (!isPage && !isPrevIcon && !isNextIcon) return;
+
+    const totalPage = Math.ceil(this.total / this.pageSize);
+
+    switch (e.key) {
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault();
+        this._moveFocusToPage(this.currentPage - 1);
+        break;
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault();
+        this._moveFocusToPage(this.currentPage + 1);
+        break;
+      case "Home":
+        e.preventDefault();
+        this._moveFocusToPage(1);
+        break;
+      case "End":
+        e.preventDefault();
+        this._moveFocusToPage(totalPage);
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        if (isPrevIcon) {
+          this._handlePrevAction();
+        } else if (isNextIcon) {
+          this._handleNextAction();
+        } else if (isPage && !target.closest(bem.ce("more"))) {
+          const targetPage = Number((target as HTMLElement).dataset?.page);
+          if (targetPage && targetPage !== this.currentPage) {
+            this.currentPage = targetPage;
+          }
+        }
+        break;
+    }
+  }
+
+  /** 将焦点移动到指定页码 */
+  private _moveFocusToPage(page: number): void {
+    const totalPage = Math.ceil(this.total / this.pageSize);
+    if (page < 1 || page > totalPage) return;
+
+    if (page === this.currentPage) {
+      const activePage = this._pagination?.querySelector(
+        `${bem.ce("page")}[data-page="${page}"]`
+      ) as HTMLElement | null;
+      activePage?.focus();
+      return;
+    }
+
+    this.currentPage = page;
+
+    requestAnimationFrame(() => {
+      const activePage = this._pagination?.querySelector(
+        `${bem.ce("page")}[data-page="${page}"]`
+      ) as HTMLElement | null;
+      activePage?.focus();
+    });
+  }
+
+  /** 执行上一页操作 */
+  private _handlePrevAction(): void {
+    if (this.currentPage <= 1 || this.total <= 0 || this.disabled) return;
+
+    this.currentPage--;
+
+    this.dispatchEvent(
+      new EaPaginationPrevClickEvent({ value: this.currentPage })
+    );
+  }
+
+  /** 执行下一页操作 */
+  private _handleNextAction(): void {
     if (
       this.currentPage >= Math.ceil(this.total / this.pageSize) ||
       this.disabled

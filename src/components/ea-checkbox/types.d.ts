@@ -20,8 +20,6 @@ export interface EaCheckboxElement extends HTMLElement {
   border: boolean;
   limitDisabled: boolean;
   required: boolean;
-  focus(): void;
-  blur(): void;
   toggle(): void;
 
   addEventListener(

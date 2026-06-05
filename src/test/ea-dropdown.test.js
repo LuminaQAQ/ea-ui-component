@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-dropdown/index.ts";
 
@@ -106,7 +107,7 @@ describe("EaDropdown Component", () => {
       expect(containerEl.getAttribute("tabindex")).toBe("-1");
     });
 
-    it("original 应该有 tabindex=0", async () => {
+    it("original 应该有 tabindex=-1", async () => {
       const dropdown = createDropdown({}, withReference());
       container.appendChild(dropdown);
       await waitForRender();
@@ -114,7 +115,7 @@ describe("EaDropdown Component", () => {
       const originalEl = dropdown.shadowRoot.querySelector(
         ".ea-popper__original"
       );
-      expect(originalEl.getAttribute("tabindex")).toBe("0");
+      expect(originalEl.getAttribute("tabindex")).toBe("-1");
     });
 
     it("reference 应该有 tabindex=-1", async () => {
@@ -1746,5 +1747,58 @@ describe("Integration Tests", () => {
     await waitForRender(0);
 
     expect(dropdown.visible).toBe(true);
+  });
+
+  describe("Accessibility", () => {
+    describe("Keyboard Interaction", () => {
+      it("Escape 应该关闭下拉菜单", async () => {
+        const el = document.createElement("ea-dropdown");
+        el.innerHTML = `<span slot="reference" class="ref">Trigger</span><ea-dropdown-menu><ea-dropdown-item>1</ea-dropdown-item></ea-dropdown-menu>`;
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        el.visible = true;
+        await waitForRender();
+        el.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+        await waitForRender();
+        expect(el.visible).toBe(false);
+      });
+
+      it("Enter 应该切换下拉菜单", async () => {
+        const el = document.createElement("ea-dropdown");
+        el.innerHTML = `<span slot="reference" class="ref">Trigger</span><ea-dropdown-menu><ea-dropdown-item>1</ea-dropdown-item></ea-dropdown-menu>`;
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        const trigger = el.querySelector('[slot="reference"]');
+        trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+        await waitForRender();
+        expect(el.visible).toBe(true);
+      });
+
+      it("Space 应该切换下拉菜单", async () => {
+        const el = document.createElement("ea-dropdown");
+        el.innerHTML = `<span slot="reference" class="ref">Trigger</span><ea-dropdown-menu><ea-dropdown-item>1</ea-dropdown-item></ea-dropdown-menu>`;
+        container.appendChild(el);
+        await waitForRender();
+        await waitForRender();
+        const trigger = el.querySelector('[slot="reference"]');
+        trigger.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+        await waitForRender();
+        expect(el.visible).toBe(true);
+      });
+    });
+
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-dropdown");
+      el.innerHTML = `<span slot="reference">Trigger</span>
+       <ea-dropdown-menu>
+         <ea-dropdown-item>Item 1</ea-dropdown-item>
+       </ea-dropdown-menu>`;
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
   });
 });

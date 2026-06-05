@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 import "../components/ea-calendar/index";
 
@@ -582,6 +583,183 @@ describe("EaCalendar", () => {
         calendar.shadowRoot.querySelectorAll(".is-current-month");
       expect(currentMonthDays.length).toBeGreaterThanOrEqual(28);
       expect(currentMonthDays.length).toBeLessThanOrEqual(31);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-calendar");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("table 应该有 role=grid", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const table = calendar.shadowRoot.querySelector(
+          ".ea-calendar__body"
+        );
+        expect(table.getAttribute("role")).toBe("grid");
+      });
+
+      it("table 应该有 aria-labelledby 指向 title", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const table = calendar.shadowRoot.querySelector(
+          ".ea-calendar__body"
+        );
+        const title = calendar.shadowRoot.querySelector(
+          ".ea-calendar__title"
+        );
+        expect(table.getAttribute("aria-labelledby")).toBe(title.id);
+      });
+
+      it("table 应该有 aria-colcount=7", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const table = calendar.shadowRoot.querySelector(
+          ".ea-calendar__body"
+        );
+        expect(table.getAttribute("aria-colcount")).toBe("7");
+      });
+
+      it("表头行应该有 role=row 和 aria-rowindex=1", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const theadRow = calendar.shadowRoot.querySelector(
+          ".ea-calendar__week"
+        );
+        expect(theadRow.getAttribute("role")).toBe("row");
+        expect(theadRow.getAttribute("aria-rowindex")).toBe("1");
+      });
+
+      it("表头单元格应该有 role=columnheader", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const ths = calendar.shadowRoot.querySelectorAll(".ea-calendar__th");
+        expect(ths.length).toBe(7);
+        ths.forEach(th => {
+          expect(th.getAttribute("role")).toBe("columnheader");
+        });
+      });
+
+      it("表头单元格应该有 aria-colindex", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const ths = calendar.shadowRoot.querySelectorAll(".ea-calendar__th");
+        ths.forEach((th, i) => {
+          expect(th.getAttribute("aria-colindex")).toBe(String(i + 1));
+        });
+      });
+
+      it("日期行应该有 role=row", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const rows = calendar.shadowRoot.querySelectorAll(
+          ".ea-calendar__row"
+        );
+        rows.forEach(row => {
+          expect(row.getAttribute("role")).toBe("row");
+        });
+      });
+
+      it("日期行应该有 aria-rowindex", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const rows = calendar.shadowRoot.querySelectorAll(
+          ".ea-calendar__row"
+        );
+        rows.forEach(row => {
+          expect(row.hasAttribute("aria-rowindex")).toBe(true);
+        });
+      });
+
+      it("日期单元格应该有 role=gridcell", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const cells = calendar.shadowRoot.querySelectorAll(
+          "td[role='gridcell']"
+        );
+        expect(cells.length).toBeGreaterThan(0);
+      });
+
+      it("选中日期应该有 aria-selected=true", async () => {
+        const calendar = document.createElement("ea-calendar");
+        calendar.setAttribute("value", "2026-06-15");
+        container.appendChild(calendar);
+        await waitForRender();
+        const selectedCell = calendar.shadowRoot.querySelector(
+          'td[role="gridcell"][aria-selected="true"]'
+        );
+        expect(selectedCell).toBeTruthy();
+      });
+
+      it("今天应该有 aria-current=date", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const todayCell = calendar.shadowRoot.querySelector(
+          'td[aria-current="date"]'
+        );
+        expect(todayCell).toBeTruthy();
+      });
+
+      it("非当月日期应该有 aria-disabled=true", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const prevMonthCells = calendar.shadowRoot.querySelectorAll(
+          ".is-prev-month"
+        );
+        const nextMonthCells = calendar.shadowRoot.querySelectorAll(
+          ".is-next-month"
+        );
+        const outOfRangeCells = [
+          ...prevMonthCells,
+          ...nextMonthCells,
+        ];
+        expect(outOfRangeCells.length).toBeGreaterThan(0);
+        outOfRangeCells.forEach(cell => {
+          expect(cell.getAttribute("aria-disabled")).toBe("true");
+        });
+      });
+
+      it("当月日期不应该有 aria-disabled", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const currentMonthCells = calendar.shadowRoot.querySelectorAll(
+          ".is-current-month"
+        );
+        expect(currentMonthCells.length).toBeGreaterThan(0);
+        currentMonthCells.forEach(cell => {
+          expect(cell.getAttribute("aria-disabled")).toBeFalsy();
+        });
+      });
+
+      it("日期单元格应该有 aria-colindex", async () => {
+        const calendar = document.createElement("ea-calendar");
+        container.appendChild(calendar);
+        await waitForRender();
+        const cells = calendar.shadowRoot.querySelectorAll(
+          "td[role='gridcell']"
+        );
+        cells.forEach(cell => {
+          expect(cell.hasAttribute("aria-colindex")).toBe(true);
+        });
+      });
     });
   });
 });

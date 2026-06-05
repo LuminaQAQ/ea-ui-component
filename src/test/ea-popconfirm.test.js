@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y.js";
 
 import "../components/ea-popconfirm/index";
 
@@ -78,7 +79,7 @@ describe("EaPopconfirm", () => {
       expect(containerEl.getAttribute("tabindex")).toBe("-1");
     });
 
-    it("original 应该有 tabindex=0", async () => {
+    it("original 应该有 tabindex=-1", async () => {
       const popconfirm = createPopconfirm({}, withReference());
       container.appendChild(popconfirm);
       await waitForRender();
@@ -86,7 +87,7 @@ describe("EaPopconfirm", () => {
       const originalEl = popconfirm.shadowRoot.querySelector(
         ".ea-popper__original"
       );
-      expect(originalEl.getAttribute("tabindex")).toBe("0");
+      expect(originalEl.getAttribute("tabindex")).toBe("-1");
     });
 
     it("reference 应该有 tabindex=-1", async () => {
@@ -1265,7 +1266,7 @@ describe("EaPopconfirm", () => {
       const referenceSlot = popconfirm.shadowRoot.querySelector(
         'slot[name="reference"]'
       );
-      referenceSlot.click();
+      referenceSlot.dispatchEvent(new MouseEvent("click", { detail: 1, bubbles: true }));
       await waitForRender();
 
       expect(popconfirm.visible).toBe(true);
@@ -1563,6 +1564,52 @@ describe("EaPopconfirm", () => {
 
       popconfirm.toggle();
       expect(popconfirm.visible).toBe(true);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-popconfirm");
+      el.setAttribute("heading", "Are you sure?");
+      el.innerHTML = `<button slot="reference">Delete</button>`;
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el, {
+        rules: { "aria-valid-attr-value": { enabled: false } },
+      });
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("触发元素应该有 aria-haspopup='alertdialog'", async () => {
+        const el = document.createElement("ea-popconfirm");
+        el.setAttribute("heading", "Are you sure?");
+        el.innerHTML = `<button slot="reference">Delete</button>`;
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.querySelector('[slot="reference"]');
+        expect(trigger.getAttribute("aria-haspopup")).toBe("alertdialog");
+      });
+
+      it("弹出层应该有 role='alertdialog'", async () => {
+        const el = document.createElement("ea-popconfirm");
+        el.setAttribute("heading", "Are you sure?");
+        el.innerHTML = `<button slot="reference">Delete</button>`;
+        container.appendChild(el);
+        await waitForRender();
+        const popper = el.shadowRoot.querySelector('[part="original"]');
+        expect(popper.getAttribute("role")).toBe("alertdialog");
+      });
+
+      it("触发元素应该有 aria-expanded 属性", async () => {
+        const el = document.createElement("ea-popconfirm");
+        el.setAttribute("heading", "Are you sure?");
+        el.innerHTML = `<button slot="reference">Delete</button>`;
+        container.appendChild(el);
+        await waitForRender();
+        const trigger = el.querySelector('[slot="reference"]');
+        expect(trigger.hasAttribute("aria-expanded")).toBe(true);
+      });
     });
   });
 });

@@ -121,7 +121,8 @@ function createAttributeSetter(name: string) {
         if (marked) marked.delete(attrName);
       } else {
         this.removeAttribute(attrName);
-        if (!(this as any)[BOOLEAN_FALSE_ATTRS]) (this as any)[BOOLEAN_FALSE_ATTRS] = new Set();
+        if (!(this as any)[BOOLEAN_FALSE_ATTRS])
+          (this as any)[BOOLEAN_FALSE_ATTRS] = new Set();
         (this as any)[BOOLEAN_FALSE_ATTRS].add(attrName);
       }
     } else {
@@ -146,21 +147,49 @@ function createPropertyGetter(name: string, defaultValue: any) {
  * 创建属性的 setter 函数（不映射到 HTML attribute，仅作为 JS 属性）
  * @param name 属性名
  * @param observer 可选的观察者回调
+ * @param a11y 可选的无障碍同步配置
  */
 function createPropertySetter(
   name: string,
-  observer?: (newVal: any, oldVal: any) => void
+  observer?: (newVal: any, oldVal: any) => void,
+  a11y?: AttributeOptions["a11y"]
 ) {
   return function (this: any, newVal: any) {
     const privateName = `__prop_${name}`;
     const oldVal = this[privateName];
     this[privateName] = newVal;
 
-    // 调用观察者回调
     if (observer) {
       observer.call(this, newVal, oldVal);
     }
+
+    if (a11y) {
+      syncA11yAttribute(this, a11y, newVal);
+    }
   };
+}
+
+/**
+ * 将 a11y 配置同步到目标元素的 ARIA 属性
+ * @param instance 组件实例
+ * @param a11y a11y 配置
+ * @param value 当前属性值
+ */
+function syncA11yAttribute(
+  instance: any,
+  a11y: NonNullable<AttributeOptions["a11y"]>,
+  value: any
+): void {
+  const { ariaAttr, target = ":host", map } = a11y;
+  const ariaValue = map ? map(value) : String(value);
+  const targetEl =
+    target === ":host" ? instance : instance.shadowRoot?.querySelector(target);
+  if (!targetEl) return;
+  if (ariaValue === null) {
+    targetEl.removeAttribute(ariaAttr);
+  } else {
+    targetEl.setAttribute(ariaAttr, ariaValue);
+  }
 }
 
 /**
@@ -215,30 +244,63 @@ function initBooleanDefaults(instance: any, CustomElementClass: any) {
 }
 
 /**
+ * 初始化 @attribute 的 a11y 同步（首次 connectedCallback 时调用）
+ * @param instance 组件实例
+ * @param CustomElementClass 组件类
+ */
+function initA11yAttributes(instance: any, CustomElementClass: any) {
+  const chain: any[] = [];
+  let current: any = CustomElementClass;
+  while (current && current !== HTMLElement) {
+    chain.unshift(current);
+    current = Object.getPrototypeOf(current);
+  }
+
+  chain.forEach(cls => {
+    const attrs = ElementAttributesMap.get(cls);
+    if (!attrs) return;
+
+    Object.keys(attrs).forEach(name => {
+      const { a11y } = attrs[name];
+      if (a11y) {
+        const currentValue = instance[name];
+        syncA11yAttribute(instance, a11y, currentValue);
+      }
+    });
+  });
+}
+
+/**
  * 定义响应式属性（不映射到 HTML attribute，仅作为 JS 属性）
  * @param instance 组件实例
  * @param name 属性名
  * @param defaultValue 默认值
  * @param observer 可选的观察者回调
+ * @param a11y 可选的无障碍同步配置
  */
 function defineReactiveProperty(
   instance: any,
   name: string,
   defaultValue: any,
-  observer?: (newVal: any, oldVal: any) => void
+  observer?: (newVal: any, oldVal: any) => void,
+  a11y?: AttributeOptions["a11y"]
 ): void {
-  // 删除已有属性
   if (Object.getOwnPropertyDescriptor(instance, name)) {
     delete instance[name];
   }
 
-  // 定义响应式属性
   Object.defineProperty(instance, name, {
     get: createPropertyGetter(name, defaultValue),
-    set: createPropertySetter(name, observer),
+    set: createPropertySetter(name, observer, a11y),
     configurable: true,
     enumerable: true,
   });
+
+  if (a11y) {
+    const initialValue =
+      defaultValue !== undefined ? defaultValue : instance[name];
+    syncA11yAttribute(instance, a11y, initialValue);
+  }
 }
 
 /**
@@ -266,7 +328,10 @@ function applyStyles(elementClass: any, shadowRoot: ShadowRoot | null): void {
 
   if (uniqueStyles.length === 0) return;
 
-  if ("adoptedStyleSheets" in ShadowRoot.prototype && shadowRoot.adoptedStyleSheets !== undefined) {
+  if (
+    "adoptedStyleSheets" in ShadowRoot.prototype &&
+    shadowRoot.adoptedStyleSheets !== undefined
+  ) {
     const sheets = uniqueStyles.map(css => StylesheetCache.getOrCreate(css));
     shadowRoot.adoptedStyleSheets = sheets;
   } else {
@@ -398,8 +463,8 @@ function CustomElement(
 
           if (props) {
             Object.keys(props).forEach(name => {
-              const { default: defaultValue, observer } = props[name];
-              defineReactiveProperty(this, name, defaultValue, observer);
+              const { default: defaultValue, observer, a11y } = props[name];
+              defineReactiveProperty(this, name, defaultValue, observer, a11y);
             });
           }
         });
@@ -409,6 +474,8 @@ function CustomElement(
         initBooleanDefaults(this, CustomElementClass);
 
         mount(this, CustomElementClass);
+
+        initA11yAttributes(this, CustomElementClass);
 
         const parent = Object.getPrototypeOf(Object.getPrototypeOf(this));
         if (parent && typeof parent.connectedCallback === "function") {
@@ -436,8 +503,8 @@ function CustomElement(
                 let oldValue: any;
 
                 if (option.type === Boolean) {
-                  newValue = newVal !== null;
-                  oldValue = oldVal !== null;
+                  newValue = newVal !== null && newVal !== "false";
+                  oldValue = oldVal !== null && oldVal !== "false";
                 } else {
                   newValue = parseAttributeValue(
                     this,
@@ -469,6 +536,11 @@ function CustomElement(
                 }
 
                 option.observer?.call(this, newValue, oldValue);
+
+                if (option.a11y) {
+                  syncA11yAttribute(this, option.a11y, newValue);
+                }
+
                 found = true;
                 break;
               }

@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender.js";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 class MockIntersectionObserver {
   constructor(callback) {
@@ -1134,6 +1135,29 @@ describe("EaImage Component", () => {
       await waitForRender();
 
       expect(image.isConnected).toBe(false);
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-image");
+      el.setAttribute("src", "https://example.com/image.png");
+      el.setAttribute("alt", "Example image");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("错误区域应该有 role='alert'", async () => {
+        const el = document.createElement("ea-image");
+        el.setAttribute("src", "invalid-image.png");
+        container.appendChild(el);
+        await waitForRender();
+        const error = el.shadowRoot.querySelector('[part="error"]');
+        expect(error.getAttribute("role")).toBe("alert");
+      });
     });
   });
 });

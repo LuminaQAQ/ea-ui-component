@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { waitForRender } from "./utils/waitForRender";
+import { runAxe, assertNoA11yViolations } from "./utils/a11y";
 
 if (typeof CSS === "undefined") {
   global.CSS = {
@@ -1582,6 +1583,50 @@ describe("EaResult", () => {
       await waitForRender();
 
       expect(result.shadowRoot.querySelector(".ea-result")).toBeTruthy();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("默认状态应该无 a11y 违规", async () => {
+      const el = document.createElement("ea-result");
+      container.appendChild(el);
+      await waitForRender();
+      const results = await runAxe(el);
+      assertNoA11yViolations(results);
+    });
+
+    describe("ARIA Attributes", () => {
+      it("容器元素应该有 role='status'", async () => {
+        const result = document.createElement("ea-result");
+        container.appendChild(result);
+
+        await waitForRender();
+
+        const containerEl = result.shadowRoot.querySelector(".ea-result");
+        expect(containerEl.getAttribute("role")).toBe("status");
+      });
+
+      it("设置 variant 后容器仍然有 role='status'", async () => {
+        const result = document.createElement("ea-result");
+        result.setAttribute("variant", "success");
+        container.appendChild(result);
+
+        await waitForRender();
+
+        const containerEl = result.shadowRoot.querySelector(".ea-result");
+        expect(containerEl.getAttribute("role")).toBe("status");
+      });
+
+      it("设置 heading 后容器仍然有 role='status'", async () => {
+        const result = document.createElement("ea-result");
+        result.setAttribute("heading", "操作成功");
+        container.appendChild(result);
+
+        await waitForRender();
+
+        const containerEl = result.shadowRoot.querySelector(".ea-result");
+        expect(containerEl.getAttribute("role")).toBe("status");
+      });
     });
   });
 });

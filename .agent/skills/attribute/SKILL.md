@@ -27,6 +27,7 @@ propertyName: type = defaultValue;
 | `type` | `StringConstructor \| NumberConstructor \| BooleanConstructor \| DateConstructor \| EnumConstructor \| object` | 是 | 属性类型 |
 | `default` | `any` | 否 | 默认值 |
 | `observer` | `(this: Component, newVal: any, oldVal: any) => void` | 否 | 属性变化回调 |
+| `a11y` | `A11yOption` | 否 | 无障碍属性同步配置 |
 
 ### 类型说明
 
@@ -98,6 +99,104 @@ import { VARIANT_TYPES, VARIANT_DEFAULT, type VariantType } from "@constants/var
 })
 variant: VariantType = VARIANT_DEFAULT;
 ```
+
+### a11y 无障碍属性同步
+
+当属性变化时需要同步更新 ARIA 属性（如 `aria-disabled`、`aria-expanded`、`aria-checked`）或 HTML `inert` 属性时，**必须使用 `a11y` 选项**，禁止在 observer 中手动 `setAttribute`/`removeAttribute`。
+
+#### A11yOption 配置
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `ariaAttr` | `string` | 是 | 同步到的 ARIA 属性名（如 `"aria-disabled"`、`"aria-expanded"`、`"inert"`） |
+| `target` | `string` | 否 | 目标元素 CSS 选择器，默认 `":host"` 表示组件宿主元素 |
+| `map` | `(val: any) => string \| null` | 否 | 值映射函数，返回 `null` 时移除属性；省略时用 `String(value)` |
+
+#### 基础用法：宿主元素 ARIA 属性
+
+```typescript
+@attribute({
+  type: Boolean,
+  default: false,
+  a11y: {
+    ariaAttr: "aria-disabled",
+    map: v => String(v),
+  },
+})
+disabled: boolean = false;
+```
+
+#### 目标元素为 Shadow DOM 内部元素
+
+```typescript
+@attribute({
+  type: Boolean,
+  default: false,
+  a11y: {
+    ariaAttr: "aria-expanded",
+    target: ".ea-sub-menu__title",
+  },
+})
+open: boolean = false;
+```
+
+#### 条件移除属性（map 返回 null）
+
+```typescript
+// placeholder 为空时移除 aria-label
+@attribute({
+  type: String,
+  default: "",
+  a11y: {
+    ariaAttr: "aria-label",
+    map: v => v || null,
+  },
+})
+placeholder: string = "";
+
+// 关闭时设置 inert，打开时移除
+@attribute({
+  type: Boolean,
+  default: false,
+  a11y: {
+    ariaAttr: "inert",
+    target: ".ea-collapse-item__content",
+    map: v => v ? null : "",
+  },
+})
+active: boolean = false;
+```
+
+#### 常见 a11y 映射模式
+
+| 场景 | ariaAttr | map | 说明 |
+|------|----------|-----|------|
+| `disabled` → `aria-disabled` | `"aria-disabled"` | `v => String(v)` | 布尔属性映射 |
+| `checked` → `aria-checked` | `"aria-checked"` | `v => String(!!v)` | 布尔属性映射 |
+| `open` → `aria-expanded` | `"aria-expanded"` | 无需 map | 默认 `String(value)` |
+| `open` → `inert`（关闭时阻止焦点） | `"inert"` | `v => v ? null : ""` | 打开时移除 inert |
+| `placeholder` → `aria-label` | `"aria-label"` | `v => v \|\| null` | 空值时移除属性 |
+| `filterable` → `aria-autocomplete` | `"aria-autocomplete"` | `v => v ? "both" : null` | 条件映射 |
+| `value` → `aria-valuenow` | `"aria-valuenow"` | `v => String(v)` | 数值映射 |
+| `min` → `aria-valuemin` | `"aria-valuemin"` | `v => String(v)` | 数值映射 |
+| `max` → `aria-valuemax` | `"aria-valuemax"` | `v => String(v)` | 数值映射 |
+
+#### 核心行为
+
+- `a11y` 在属性变化时自动调用 `syncA11yAttribute`，无需在 observer 中手动 `setAttribute`
+- `connectedCallback` 中 `initA11yAttributes` 自动初始化，不依赖 `$mount` 执行顺序
+- `target` 为 `":host"` 时直接操作宿主元素，其他值通过 `shadowRoot.querySelector` 查找
+- `map` 返回 `null` 时调用 `removeAttribute`，返回字符串时调用 `setAttribute`
+
+#### 不适用 a11y 的场景
+
+以下场景仍需手动管理，不适合使用 `a11y` 选项：
+
+- **动态 ID 引用**：`aria-activedescendant`、`aria-labelledby`、`aria-describedby` 的值是子元素动态 ID
+- **多元素批量操作**：循环中对多个动态创建的元素设置 ARIA 属性
+- **Light DOM 目标**：`target` 只支持 Shadow DOM 内部元素，不支持 Light DOM
+- **复杂条件逻辑**：多个属性共同决定一个 ARIA 属性的值（如 `disabled || limitDisabled`）
+- **一次性静态设置**：`_setupAria()` 中的 `id`、`aria-controls`、`aria-haspopup` 等不随属性变化的设置
 
 ## 属性命名规则
 
