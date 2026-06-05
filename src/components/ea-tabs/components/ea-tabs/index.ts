@@ -102,12 +102,15 @@ export class EaTabs extends EaBase {
   @attribute({
     type: Enum(["top", "bottom", "left", "right"]),
     default: "top",
+    a11y: {
+      ariaAttr: "aria-orientation",
+      map: (v: TabPosition) => (v === "left" || v === "right" ? "vertical" : "horizontal"),
+    },
     observer(this: EaTabs, newVal: TabPosition) {
       this.updateContainerClasslist();
 
       this._updateTabNavigationPosition(newVal);
       this._updateTabsActive(this.active);
-      this._updateAriaOrientation(newVal);
 
       this.querySelectorAll("ea-tab").forEach(tab => {
         tab.setAttribute("tab-position", newVal);
@@ -402,7 +405,6 @@ export class EaTabs extends EaBase {
 
   $mount(): void {
     this.setAttribute("role", "tablist");
-    this._updateAriaOrientation();
 
     if (!this.active) {
       const activeAttr = this.getAttribute("active");
@@ -433,12 +435,6 @@ export class EaTabs extends EaBase {
     }
 
     this._initRovingTabindex();
-  }
-
-  /** 根据 tabPosition 更新 aria-orientation 属性 */
-  private _updateAriaOrientation(position: TabPosition = this.tabPosition): void {
-    const isVertical = position === "left" || position === "right";
-    this.setAttribute("aria-orientation", isVertical ? "vertical" : "horizontal");
   }
 
   /** 初始化键盘导航 */

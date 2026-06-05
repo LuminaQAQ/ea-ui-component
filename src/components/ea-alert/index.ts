@@ -1,5 +1,5 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query, listen } from "@decorator";
+import { CustomElement, attribute, query, listen, property } from "@decorator";
 import { html } from "@utils/html";
 import { timeout } from "@utils/timeout";
 import { Enum } from "@utils/Enum";
@@ -75,8 +75,6 @@ export class EaAlert extends EaBase {
 
   private _closeFallbackTimer?: number;
 
-  private _isHidden: boolean = false;
-
   private _hasDescription: boolean = false;
 
   private _showAfterTimer?: number;
@@ -84,6 +82,17 @@ export class EaAlert extends EaBase {
   private _autoCloseTimer?: number;
 
   private _hideAfterTimer?: number;
+
+  @property({
+    type: Boolean,
+    default: false,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-alert",
+      map: (v: boolean) => (v ? "" : null),
+    },
+  })
+  _isHidden: boolean = false;
 
   @attribute({
     type: String,
@@ -248,11 +257,6 @@ export class EaAlert extends EaBase {
 
     if (this._container) {
       this._container.className = className;
-      if (this._isHidden) {
-        this._container.setAttribute("inert", "");
-      } else {
-        this._container.removeAttribute("inert");
-      }
     }
 
     return className;

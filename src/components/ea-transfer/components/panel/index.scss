@@ -120,6 +120,12 @@ $name: ea-transfer-panel;
       background-color: var(--#{$name}-item-hover-background);
     }
 
+    @include state(active) {
+      background-color: var(--#{$name}-item-hover-background);
+      outline: 1px solid var(--primary-color);
+      outline-offset: -1px;
+    }
+
     @include state(disabled) {
       color: var(--#{$name}-item-disabled-color);
       cursor: not-allowed;

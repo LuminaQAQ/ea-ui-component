@@ -1,5 +1,5 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, query, listen } from "@decorator";
+import { CustomElement, attribute, query, listen, property } from "@decorator";
 import { Enum } from "@utils/Enum";
 import stylesheet from "./index.scss?inline";
 import "@/components/ea-icon/index";
@@ -114,10 +114,20 @@ export class EaCollapseItem extends EaBase {
     },
     observer(this: EaCollapseItem, newVal: boolean) {
       this._updateCollapseHeight(newVal);
-      this._updateContentInert(newVal);
     },
   })
   active: boolean = false;
+
+  @property({
+    type: Boolean,
+    default: false,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-collapse-item__content",
+      map: (v: boolean) => (v ? null : ""),
+    },
+  })
+  _contentActive: boolean = false;
 
   /** 更新容器类名 */
   updateContainerClasslist(): string {
@@ -150,14 +160,9 @@ export class EaCollapseItem extends EaBase {
     });
   }
 
-  /** 设置内容区域的 inert 状态：未展开时阻止焦点进入 */
+  /** 同步内容区域的激活状态 */
   private _updateContentInert(isActive: boolean = this.active): void {
-    if (!this._content) return;
-    if (isActive) {
-      this._content.removeAttribute("inert");
-    } else {
-      this._content.setAttribute("inert", "");
-    }
+    this._contentActive = isActive;
   }
 
   html(): string {

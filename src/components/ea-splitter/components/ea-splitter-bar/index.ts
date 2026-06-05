@@ -27,7 +27,8 @@ export class EaSplitterBar extends EaBase {
     default: "horizontal",
     a11y: {
       ariaAttr: "aria-orientation",
-      map: (v: "horizontal" | "vertical") => (v === "horizontal" ? "vertical" : "horizontal"),
+      map: (v: "horizontal" | "vertical") =>
+        v === "horizontal" ? "vertical" : "horizontal",
     },
     observer(this: EaSplitterBar) {
       this._container.className = this.updateContainerClasslist();

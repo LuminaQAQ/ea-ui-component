@@ -291,6 +291,9 @@ export class EaTimePicker extends EaFormAssociatedBase {
     this._input.setAttribute("role", "combobox");
     this._input.setAttribute("aria-expanded", "false");
     this._input.setAttribute("aria-haspopup", "listbox");
+    if (this.label) {
+      this._input.setAttribute("aria-label", this.label);
+    }
 
     const dropdown = this._container.querySelector(
       `.${bem.e("dropdown")}`
@@ -299,7 +302,18 @@ export class EaTimePicker extends EaFormAssociatedBase {
       const listboxId = `ea-time-picker-${this._uniqueId}-listbox`;
       dropdown.id = listboxId;
       dropdown.setAttribute("role", "listbox");
+      dropdown.setAttribute("aria-label", this.label || "Select time");
       this._input.setAttribute("aria-controls", listboxId);
+    }
+
+    if (this._hourWrap) {
+      this._hourWrap.setAttribute("aria-label", "Hours");
+    }
+    if (this._minuteWrap) {
+      this._minuteWrap.setAttribute("aria-label", "Minutes");
+    }
+    if (this._secondWrap) {
+      this._secondWrap.setAttribute("aria-label", "Seconds");
     }
   };
 

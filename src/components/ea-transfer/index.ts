@@ -391,6 +391,8 @@ export class EaTransfer extends EaFormAssociatedBase {
     }
   }
 
+  private static _optionIdCounter = 0;
+
   /** 根据数据创建面板列表项元素 */
   private _createPanelData(data: any[], defaultChecked: any[]): HTMLElement[] {
     const { key, label, disabled } = this.dataProps;
@@ -403,11 +405,13 @@ export class EaTransfer extends EaFormAssociatedBase {
         const dataItem = data[index];
         const isDisabled = dataItem[disabled];
         const isChecked = defaultChecked.includes(dataItem[key]);
+        const optionId = `ea-transfer-option-${EaTransfer._optionIdCounter++}`;
 
         const stateClasses: string[] = [];
         if (isDisabled) stateClasses.push("is-disabled");
         if (isChecked) stateClasses.push("is-checked");
         li.className = [panelBem.e("item"), ...stateClasses].join(" ");
+        li.id = optionId;
         li.setAttribute("role", "option");
         li.setAttribute("aria-selected", String(isChecked));
 

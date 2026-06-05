@@ -111,6 +111,11 @@ export class EaColorPicker extends EaFormAssociatedBase {
     observer(this: EaColorPicker, newVal: string) {
       this._label.textContent = newVal;
     },
+    a11y: {
+      ariaAttr: "aria-label",
+      target: ".ea-color-picker__trigger",
+      map: (v: string) => v || "颜色选择",
+    },
   })
   label: string = "";
 
@@ -131,6 +136,11 @@ export class EaColorPicker extends EaFormAssociatedBase {
     default: false,
     observer(this: EaColorPicker) {
       this.updateContainerClasslist();
+    },
+    a11y: {
+      ariaAttr: "aria-disabled",
+      target: ".ea-color-picker__trigger",
+      map: v => String(v),
     },
   })
   override disabled: boolean = false;

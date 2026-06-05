@@ -214,6 +214,10 @@ export class EaDropdown extends EaPopper {
     if (currentItem && this.visible) {
       const currentIndex = items.indexOf(currentItem);
 
+      if (e.key === "Tab") {
+        this.hide();
+        return;
+      }
       if (e.key === "ArrowDown" || e.key === "ArrowRight") {
         e.preventDefault();
         const nextIndex = currentIndex + 1;

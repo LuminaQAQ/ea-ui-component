@@ -309,6 +309,14 @@ export class EaRate extends EaFormAssociatedBase {
         e.preventDefault();
         newIndex = currentIndex > 0 ? currentIndex - 1 : children.length - 1;
         break;
+      case "Home":
+        e.preventDefault();
+        newIndex = 0;
+        break;
+      case "End":
+        e.preventDefault();
+        newIndex = children.length - 1;
+        break;
       case " ":
         e.preventDefault();
         const displayValue = currentIndex + 1;

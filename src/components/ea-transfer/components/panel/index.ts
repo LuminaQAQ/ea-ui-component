@@ -1,5 +1,5 @@
 import EaBase, { createBEM } from "@core/EaBase";
-import { CustomElement, attribute, property, query } from "@decorator";
+import { CustomElement, attribute, property, query, listen } from "@decorator";
 import { Enum } from "@utils/Enum";
 import { i18nManager } from "@utils/I18nManager";
 import "@components/ea-checkbox/index.js";
@@ -220,10 +220,10 @@ export class EaTransferPanel extends EaBase {
               clearable
             ></ea-input>
           </div>
+          <ul class='${bem.e("list")}' part='list' role='listbox' tabindex='0' aria-labelledby='${titleId}' aria-multiselectable='true' aria-activedescendant=''></ul>
           <div class='${bem.e("empty")}' part='empty'>
             <slot name="empty"></slot>
           </div>
-          <ul class='${bem.e("list")}' part='list' role='listbox' aria-labelledby='${titleId}' aria-multiselectable='true'></ul>
           <div class='${bem.e("footer")}' part='footer'>
             <slot name="footer"></slot>
           </div>
@@ -299,6 +299,114 @@ export class EaTransferPanel extends EaBase {
     this._updateCount();
   }
 
+  /** 处理键盘导航，使用 aria-activedescendant 管理焦点 */
+  @listen("keydown", bem.ce("list"))
+  private _handleListKeydown(e: KeyboardEvent): void {
+    if (this.disabled) return;
+
+    const items = this._getVisibleItems();
+    if (items.length === 0) return;
+
+    const currentId = this._list.getAttribute("aria-activedescendant") || "";
+    const currentIndex = items.findIndex(item => item.id === currentId);
+
+    switch (e.key) {
+      case "ArrowDown": {
+        e.preventDefault();
+        const nextIndex =
+          currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+        this._setActiveDescendant(items[nextIndex]);
+        break;
+      }
+      case "ArrowUp": {
+        e.preventDefault();
+        const prevIndex =
+          currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+        this._setActiveDescendant(items[prevIndex]);
+        break;
+      }
+      case "Home": {
+        e.preventDefault();
+        this._setActiveDescendant(items[0]);
+        break;
+      }
+      case "End": {
+        e.preventDefault();
+        this._setActiveDescendant(items[items.length - 1]);
+        break;
+      }
+      case " ": {
+        e.preventDefault();
+        if (currentIndex >= 0) {
+          this._toggleItemSelection(items[currentIndex]);
+        }
+        break;
+      }
+    }
+  }
+
+  /** listbox 获得焦点时，自动聚焦到第一个选项或已选中选项 */
+  @listen("focus", bem.ce("list"))
+  private _handleListFocus(): void {
+    const currentId = this._list.getAttribute("aria-activedescendant");
+    if (currentId) return;
+
+    const items = this._getVisibleItems();
+    if (items.length === 0) return;
+
+    const firstSelected = items.find(
+      item => item.getAttribute("aria-selected") === "true"
+    );
+    this._setActiveDescendant(firstSelected || items[0]);
+  }
+
+  /** listbox 失去焦点时，清除 activedescendant 视觉样式 */
+  @listen("blur", bem.ce("list"))
+  private _handleListBlur(): void {
+    const currentId = this._list.getAttribute("aria-activedescendant");
+    if (currentId) {
+      const item = this._list.querySelector(`#${currentId}`) as HTMLElement;
+      if (item) item.classList.remove("is-active");
+    }
+  }
+
+  /** 设置 aria-activedescendant 指向的当前活动选项 */
+  private _setActiveDescendant(item: HTMLElement): void {
+    const prevId = this._list.getAttribute("aria-activedescendant");
+    if (prevId) {
+      const prevItem = this._list.querySelector(`#${prevId}`) as HTMLElement;
+      if (prevItem) prevItem.classList.remove("is-active");
+    }
+
+    this._list.setAttribute("aria-activedescendant", item.id);
+    item.classList.add("is-active");
+
+    item.scrollIntoView({ block: "nearest" });
+  }
+
+  /** 切换列表项的选中状态 */
+  private _toggleItemSelection(item: HTMLElement): void {
+    const checkbox = item.querySelector(
+      `.${bem.e("item-checkbox")}:not([disabled])`
+    ) as any;
+    if (!checkbox) return;
+
+    checkbox.checked = !checkbox.checked;
+
+    checkbox.dispatchEvent(
+      new CustomEvent("change", { bubbles: true, composed: true })
+    );
+  }
+
+  /** 获取当前可见且可交互的列表项 */
+  private _getVisibleItems(): HTMLElement[] {
+    return [
+      ...this._list.querySelectorAll(
+        `.${bem.e("item")}:not(.is-disabled):not(.is-filtered-out)`
+      ),
+    ] as HTMLElement[];
+  }
+
   /** 处理全选复选框变化 */
   private _handleSelectAllChange(e: Event): void {
     e.stopImmediatePropagation();
@@ -306,8 +414,9 @@ export class EaTransferPanel extends EaBase {
     if (this.disabled) return;
 
     const isChecked = Boolean((e.target as any).checked);
-    const isFiltering =
-      !!(this._states.filterText && this._states.filterText.trim() !== "");
+    const isFiltering = !!(
+      this._states.filterText && this._states.filterText.trim() !== ""
+    );
 
     const listItems = this._getSelectableItems(isFiltering);
 
@@ -402,6 +511,8 @@ export class EaTransferPanel extends EaBase {
       this._list.appendChild(item);
     });
 
+    this._removeCheckboxFromTabSequence();
+
     this._filterData();
 
     if (newData.length === 0) {
@@ -414,6 +525,18 @@ export class EaTransferPanel extends EaBase {
 
     this._updateCount();
     this._updateSelectAllState();
+  }
+
+  /** 将列表项内 checkbox 从 Tab 序列中移除，由 listbox 统一管理焦点 */
+  private _removeCheckboxFromTabSequence(): void {
+    requestAnimationFrame(() => {
+      const checkboxes = this._list.querySelectorAll(
+        `.${bem.e("item-checkbox")}`
+      );
+      checkboxes.forEach((checkbox: Element) => {
+        (checkbox as HTMLElement).tabIndex = -1;
+      });
+    });
   }
 
   /** 处理 filterable 属性内部更新 */

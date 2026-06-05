@@ -186,6 +186,12 @@ export class EaPopconfirm extends EaPopper {
         trigger.setAttribute("role", "button");
       }
     }
+    if (this._titleContent) {
+      const contentId = this._originalPopper.getAttribute("id") || "";
+      const titleId = `${contentId}-title`;
+      this._titleContent.setAttribute("id", titleId);
+      this._originalPopper.setAttribute("aria-labelledby", titleId);
+    }
   }
 
   /** 检查元素是否原生可聚焦 */

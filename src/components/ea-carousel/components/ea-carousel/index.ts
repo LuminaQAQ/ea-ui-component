@@ -693,6 +693,11 @@ export class EaCarousel extends EaBase {
         e.preventDefault();
         nextIndex = indicators.length - 1;
         break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        this.index = currentIndex;
+        return;
       default:
         return;
     }

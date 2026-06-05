@@ -188,6 +188,54 @@ export class EaCollapse extends EaBase {
     );
   }
 
+  /** 获取所有非禁用的折叠面板项 */
+  private _getEnabledItems(): EaCollapseItem[] {
+    return Array.from(this.querySelectorAll("ea-collapse-item")).filter(
+      item => !item.hasAttribute("disabled")
+    ) as EaCollapseItem[];
+  }
+
+  /** 处理面板间键盘导航：ArrowUp/ArrowDown/Home/End */
+  @listen("keydown")
+  private _handleKeydown(e: KeyboardEvent): void {
+    const target = e.target as HTMLElement;
+    const collapseItem = target.closest?.("ea-collapse-item");
+    if (!collapseItem || collapseItem.hasAttribute("disabled")) return;
+
+    const items = this._getEnabledItems();
+    if (items.length === 0) return;
+
+    const currentIndex = items.indexOf(collapseItem as EaCollapseItem);
+    if (currentIndex < 0) return;
+
+    let newIndex = currentIndex;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        newIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        newIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+        break;
+      case "Home":
+        e.preventDefault();
+        newIndex = 0;
+        break;
+      case "End":
+        e.preventDefault();
+        newIndex = items.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    if (newIndex !== currentIndex) {
+      items[newIndex].focus();
+    }
+  }
+
   $mount(): void {
     this._initCollapseStatus();
   }

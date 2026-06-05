@@ -70,10 +70,20 @@ export class EaSubMenu extends EaBase {
     },
     observer(this: EaSubMenu) {
       this.updateContainerClasslist();
-      this._updateContentInert();
     },
   })
   open: boolean = false;
+
+  @property({
+    type: Boolean,
+    default: false,
+    a11y: {
+      ariaAttr: "inert",
+      target: ".ea-sub-menu__content",
+      map: (v: boolean) => (v ? null : ""),
+    },
+  })
+  _contentOpen: boolean = false;
 
   @attribute({
     type: String,
@@ -324,7 +334,9 @@ export class EaSubMenu extends EaBase {
 
   /** 获取子菜单内所有菜单项 */
   private _getSubMenuItems(): HTMLElement[] {
-    return [...this.querySelectorAll("ea-menu-item:not([disabled])")] as HTMLElement[];
+    return [
+      ...this.querySelectorAll("ea-menu-item:not([disabled])"),
+    ] as HTMLElement[];
   }
 
   /** 焦点离开子菜单时自动关闭 */
@@ -385,12 +397,7 @@ export class EaSubMenu extends EaBase {
 
   /** 设置折叠内容的 inert 状态：折叠时阻止焦点进入 */
   private _updateContentInert(): void {
-    if (!this._contentEl) return;
-    if (this.open) {
-      this._contentEl.removeAttribute("inert");
-    } else {
-      this._contentEl.setAttribute("inert", "");
-    }
+    this._contentOpen = this.open;
   }
 
   /** 设置 ARIA 关联属性 */

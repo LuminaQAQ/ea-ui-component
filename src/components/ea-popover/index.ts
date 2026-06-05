@@ -119,11 +119,16 @@ export class EaPopover extends EaPopper {
         trigger.setAttribute("role", "button");
       }
     }
+    const contentId = this._originalPopper.getAttribute("id") || "";
     if (this.heading && this._titleElement) {
-      const contentId = this._originalPopper.getAttribute("id") || "";
       const titleId = `${contentId}-title`;
       this._titleElement.setAttribute("id", titleId);
       this._originalPopper.setAttribute("aria-labelledby", titleId);
+    }
+    if (this.content && this._contentElement) {
+      const descId = `${contentId}-desc`;
+      this._contentElement.setAttribute("id", descId);
+      this._originalPopper.setAttribute("aria-describedby", descId);
     }
   }
 
