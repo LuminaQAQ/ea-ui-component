@@ -105,14 +105,9 @@ export default defineConfig({
         text: "开始",
         items: [
           { text: "安装", link: "/guide/install" },
-          // { text: "快速上手", link: "/guide/example" },
           { text: "使用", link: "/guide/Usage" },
+          { text: "主题", link: "/guide/theme" },
           { text: "Form 表单", link: "/ea-form" },
-          // { text: "如何改变图标链接？", link: "/guide/customIconFontHref" },
-          // {
-          //   text: "如何处理图标丢失的问题？",
-          //   link: "/guide/HowDoIDealWithIconLoss",
-          // },
         ],
       },
       {

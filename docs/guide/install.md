@@ -9,8 +9,6 @@ description: 了解如何通过 npm 或 CDN 安装 Easy UI 组件库，快速集
 ## npm 安装
 
 ```bash
-npm init -y
-
 npm i easy-component-ui
 ```
 
@@ -19,6 +17,11 @@ npm i easy-component-ui
 通过 unpkg CDN 引入最新版本：
 
 ```html
+<!-- 引入主题样式 -->
+<script type="module">
+  import "https://unpkg.com/easy-component-ui/dist/themes/source.js";
+</script>
+
 <!-- 引入全部组件 -->
 <script type="module">
   import "https://unpkg.com/easy-component-ui/dist/components/index.js";
@@ -34,26 +37,33 @@ npm i easy-component-ui
 
 安装后，在 HTML 文件中直接引入：
 
-:::warning
-如果项目中会使用到带有图标的组件，需要先引入图标样式文件
-:::
-
 ```html
-<!-- 引入图标样式（如果需要使用图标） -->
-<link
-  rel="stylesheet"
-  href="./node_modules/easy-component-ui/dist/assets/icon.css"
-/>
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Easy UI 示例</title>
+  </head>
+  <body>
+    <ea-button variant="primary">主要按钮</ea-button>
 
-<!-- 引入全部组件 -->
-<script type="module">
-  import "./node_modules/easy-component-ui/dist/components/index.js";
-</script>
+    <!-- 引入主题样式 -->
+    <script type="module">
+      import "./node_modules/easy-component-ui/dist/themes/source.js";
+    </script>
 
-<!-- 或按需引入单个组件 -->
-<script type="module">
-  import "./node_modules/easy-component-ui/dist/components/ea-button.js";
-</script>
+    <!-- 引入全部组件 -->
+    <script type="module">
+      import "./node_modules/easy-component-ui/dist/components/index.js";
+    </script>
+
+    <!-- 或按需引入单个组件 -->
+    <script type="module">
+      import "./node_modules/easy-component-ui/dist/components/ea-button.js";
+    </script>
+  </body>
+</html>
 ```
 
 ## 在 Vite + Vue 项目中引入
@@ -65,6 +75,9 @@ npm i easy-component-ui
 ```js
 import { createApp } from "vue";
 import "./style.css";
+
+// 引入主题样式
+import "easy-component-ui/themes/source";
 
 // 引入图标样式（如果需要使用图标）
 import "easy-component-ui/icon-assets";
@@ -82,6 +95,9 @@ createApp(App).mount("#app");
 ```js
 import { createApp } from "vue";
 import "./style.css";
+
+// 引入主题样式
+import "easy-component-ui/themes/source";
 
 // 引入图标样式（如果需要使用图标）
 import "easy-component-ui/icon-assets";
@@ -116,29 +132,27 @@ export default defineConfig({
 });
 ```
 
-## 如何获取单独的图标组件
-
-> 1. [npm 安装](#npm-安装)
-> 2. [jsdelivr](https://www.jsdelivr.com/package/npm/easy-component-ui?tab=files)
-> 3. [github 发布页](https://github.com/LuminaQAQ/ea-ui-component/releases)
-
 ## 文件目录结构
 
 ```txt
 easy-component-ui/
 ├─dist/
 │  ├─assets/
-│  │  └─icon.css              # 图标字体样式
+│  │  └─icon.css              # 图标字体样式（Font Awesome）
 │  ├─components/
 │  │  ├─index.js              # 全部组件入口
-│  │  ├─Base.js               # 组件基类
 │  │  ├─ea-button.js          # 按钮组件
 │  │  ├─ea-icon.js            # 图标组件
 │  │  └─...                   # 其他组件
 │  ├─core/
-│  │  └─EaFormAssociatedBase.ts  # 表单组件基类
+│  │  └─*.js                  # 核心基类
 │  ├─css/
 │  │  └─*.style.js            # 组件样式
+│  ├─themes/
+│  │  ├─source.js             # 主题基础变量
+│  │  ├─light.js              # 浅色主题
+│  │  ├─dark.js               # 深色主题
+│  │  └─controller.js         # 主题切换控制器
 │  └─utils/
 │     └─*.js                  # 工具函数
 ├─README.md
@@ -151,4 +165,6 @@ easy-component-ui/
 - `dist/components/index.js` - 全部组件入口，引入后会注册所有组件
 - `dist/components/ea-*.js` - 单个组件文件，可按需引入
 - `dist/assets/icon.css` - 图标字体样式，使用图标组件时需要引入
+- `dist/themes/source.js` - 主题基础变量，使用组件前必须引入
+- `dist/themes/controller.js` - 主题切换控制器，支持浅色/深色/自动模式
   :::
