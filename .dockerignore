@@ -1,0 +1,14 @@
+node_modules
+dist
+docs/.vitepress/dist
+docs/.vitepress/cache
+.git
+.husky
+.trae
+*.md
+!README.md
+LICENSE
+.gitignore
+.eslintrc*
+.prettierrc*
+commitlint.config.*

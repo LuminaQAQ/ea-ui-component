@@ -90,7 +90,8 @@ export default defineConfig({
            */
           const findComponentName = pathChunks => {
             const chunk = pathChunks.pop();
-            return chunk?.startsWith("ea-")
+            if (!chunk) return null;
+            return chunk.startsWith("ea-")
               ? chunk
               : findComponentName(pathChunks);
           };
@@ -100,7 +101,8 @@ export default defineConfig({
            */
           const findCoreComponentName = pathChunks => {
             const chunk = pathChunks.pop();
-            return chunk?.includes("Base")
+            if (!chunk) return null;
+            return chunk.includes("Base")
               ? chunk
               : findCoreComponentName(pathChunks);
           };
