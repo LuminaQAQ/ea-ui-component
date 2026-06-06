@@ -13,3 +13,13 @@ declare module "*.css?inline" {
   const content: string;
   export default content;
 }
+
+/**
+ * SCSS 文件 side-effect 导入
+ */
+declare module "*.scss";
+
+/**
+ * CSS 文件 side-effect 导入
+ */
+declare module "*.css";

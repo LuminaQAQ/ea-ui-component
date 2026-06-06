@@ -28,6 +28,7 @@ export const handleImportModules = (): void => {
     }
   });
 
+  fs.appendFileSync(entryPath, `import './ea-icon/index.scss';\n`);
   fs.appendFileSync(
     entryPath,
     `import { initTheme } from "@themes/controller";\n`
