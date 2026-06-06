@@ -14,6 +14,18 @@ if (args.includes("--index-css")) {
   if (existsSync(indexCssSrc)) {
     cpSync(indexCssSrc, indexCssDest);
   }
+
+  const buildDistDir = resolve(root, "dist");
+  const publicDistDir = resolve(publicDir, "dist");
+
+  if (existsSync(buildDistDir)) {
+    for (const dir of ["css", "components", "themes", "assets"]) {
+      const src = resolve(buildDistDir, dir);
+      if (existsSync(src)) {
+        cpSync(src, resolve(publicDistDir, dir), { recursive: true });
+      }
+    }
+  }
 } else {
   if (existsSync(publicDir)) {
     mkdirSync(distDir, { recursive: true });
