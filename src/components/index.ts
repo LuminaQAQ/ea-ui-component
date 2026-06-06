@@ -60,6 +60,5 @@ import './ea-tooltip/index';
 import './ea-tour/index';
 import './ea-transfer/index';
 import './ea-tree/index';
-import './ea-icon/index.scss';
 import { initTheme } from "@themes/controller";
 initTheme();

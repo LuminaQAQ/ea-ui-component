@@ -204,7 +204,7 @@ export class EaRadio extends EaFormAssociatedBase {
   /** 处理键盘事件 */
   @listen("keydown")
   private _handleKeydownEvent = (e: KeyboardEvent): void => {
-    if (this.disabled || this.limitDisabled) return;
+    if (this.disabled) return;
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       this.checked = true;
