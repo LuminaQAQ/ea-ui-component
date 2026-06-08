@@ -13,8 +13,8 @@ const PROJECT_ROOT = path.resolve(__dirname, "..", "..", "..");
 /** 组件源码目录 */
 const COMPONENTS_DIR = path.join(PROJECT_ROOT, "src", "components");
 
-/** 缓存输出路径 */
-const CACHE_DIR = path.join(__dirname, "..", "cache");
+/** 缓存输出路径（源码目录下，可提交到仓库） */
+const CACHE_DIR = path.join(__dirname, "..", "..", "src", "cache");
 const CACHE_FILE = path.join(CACHE_DIR, "components-meta.json");
 
 /**

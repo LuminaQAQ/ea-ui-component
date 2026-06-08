@@ -137,20 +137,28 @@ function parsePropertyDecorator(
 
 /** 获取类的装饰器列表（兼容新旧 TS API） */
 function getDecorators(node: ts.ClassDeclaration): ts.Decorator[] {
-  return (node as any).decorators
-    ? [...(node as any).decorators]
-    : ts.canHaveDecorators(node)
-      ? [...ts.getDecorators(node)!]
-      : [];
+  // 旧版 TS：decorators 属性直接存在于节点上
+  if ((node as any).decorators) {
+    return [...(node as any).decorators];
+  }
+  // 新版 TS 5.0+：通过 ts.getDecorators 获取
+  if (typeof ts.getDecorators === "function") {
+    const result = ts.getDecorators(node);
+    if (result) return [...result];
+  }
+  return [];
 }
 
 /** 获取属性声明的装饰器列表 */
 function getPropertyDecorators(node: ts.PropertyDeclaration): ts.Decorator[] {
-  return (node as any).decorators
-    ? [...(node as any).decorators]
-    : ts.canHaveDecorators(node)
-      ? [...ts.getDecorators(node)!]
-      : [];
+  if ((node as any).decorators) {
+    return [...(node as any).decorators];
+  }
+  if (typeof ts.getDecorators === "function") {
+    const result = ts.getDecorators(node);
+    if (result) return [...result];
+  }
+  return [];
 }
 
 /** 获取装饰器名称 */
