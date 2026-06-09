@@ -10,23 +10,25 @@ MCP Server 让 AI 助手能够实时检索 Easy UI 组件信息，无需翻阅�
 
 ## 功能
 
-| Tool                    | 说明                                                               |
-| ----------------------- | ------------------------------------------------------------------ |
-| `list_components`       | 列出组件库中所有组件                                               |
-| `get_component`         | 获取单个组件的完整信息（Props、Events、Slots、CSS 变量、子组件等） |
-| `search_components`     | 按关键词模糊搜索组件                                               |
-| `get_component_example` | 获取组件的使用示例代码                                             |
+| Tool                    | 说明                                                             |
+| ----------------------- | ---------------------------------------------------------------- |
+| `list_components`       | 列出组件库中所有组件                                             |
+| `get_component`         | 获取单个组件的完整信息（Props、Events、Slots、CSS 变量、示例等） |
+| `search_components`     | 按关键词模糊搜索组件                                             |
+| `get_component_example` | 获取组件的使用示例代码                                           |
 
 ## 安装
 
+安装 `easy-component-ui` 后自动包含 MCP Server，无需额外安装：
+
 ```bash
-npm install -g ea-ui-mcp-server
+npm install easy-component-ui
 ```
 
 或直接通过 npx 使用，无需安装：
 
 ```bash
-npx ea-ui-mcp-server
+npx ea-ui-mcp
 ```
 
 ## 配置
@@ -40,7 +42,7 @@ npx ea-ui-mcp-server
   "mcpServers": {
     "ea-ui-component": {
       "command": "npx",
-      "args": ["-y", "ea-ui-mcp-server"]
+      "args": ["ea-ui-mcp"]
     }
   }
 }
@@ -62,7 +64,7 @@ npx ea-ui-mcp-server
   "mcpServers": {
     "ea-ui-component": {
       "command": "npx",
-      "args": ["-y", "ea-ui-mcp-server"]
+      "args": ["ea-ui-mcp"]
     }
   }
 }
@@ -77,7 +79,7 @@ npx ea-ui-mcp-server
   "mcpServers": {
     "ea-ui-component": {
       "command": "npx",
-      "args": ["-y", "ea-ui-mcp-server"]
+      "args": ["ea-ui-mcp"]
     }
   }
 }
@@ -164,6 +166,7 @@ AI 会自动调用 MCP Tool 查询组件信息并回答。
 - CSS Parts — CSS Part（名称、描述）
 - Sub Components — 子组件列表
 - Dependencies — 依赖的其他组件
+- Examples — 使用示例（标题、类型、代码）
 
 ### search_components
 
@@ -194,7 +197,7 @@ AI 会自动调用 MCP Tool 查询组件信息并回答。
 ```bash
 cd mcp-server
 npm install
-npm run mcp:build   # 构建并生成组件元数据缓存
+npm run mcp:build   # 构建并生成组件元数据缓存（含示例预提取）
 npm run mcp:start   # 启动 MCP Server
 ```
 

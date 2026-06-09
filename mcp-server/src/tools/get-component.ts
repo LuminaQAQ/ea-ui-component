@@ -32,6 +32,10 @@ export function getComponent(
           default: p.default,
           isAttribute: p.isAttribute,
         })),
+        examples: comp.examples?.slice(0, 3).map((e) => ({
+          title: e.title,
+          type: e.type,
+        })) || [],
       },
     };
   }

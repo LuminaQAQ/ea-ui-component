@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc && node -e \"const fs=require('fs');const p='dist/cache';if(!fs.existsSync(p))fs.mkdirSync(p,{recursive:true});fs.copyFileSync('src/cache/components-meta.json',p+'/components-meta.json')\"",
-    "mcp:build": "tsc && node dist/parser/index.js && node -e \"const fs=require('fs');const p='dist/cache';if(!fs.existsSync(p))fs.mkdirSync(p,{recursive:true});fs.copyFileSync('src/cache/components-meta.json',p+'/components-meta.json')\"",
+    "mcp:build": "tsc && node dist/parser/index.js && node dist/tools/prepare-examples.js && node -e \"const fs=require('fs');const p='dist/cache';if(!fs.existsSync(p))fs.mkdirSync(p,{recursive:true});fs.copyFileSync('src/cache/components-meta.json',p+'/components-meta.json')\"",
     "prepublishOnly": "npm run mcp:build",
     "mcp:start": "node dist/index.js"
   },

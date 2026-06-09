@@ -10,10 +10,13 @@
     "README.md",
     "LICENSE"
   ],
+  "bin": {
+    "ea-ui-mcp": "./dist/mcp-server/index.js"
+  },
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "dev:doc": "vitepress dev docs --host 0.0.0.0",
-    "build": "tsx scripts/index.ts && vite build && tsx scripts/copy-assets.ts",
+    "build": "tsx scripts/index.ts && vite build && tsx scripts/copy-assets.ts && npm run mcp:build",
     "build:doc": "tsx scripts/copy-doc-assets.ts --index-css && vitepress build docs && tsx scripts/copy-doc-assets.ts",
     "preview:doc": "cross-env VITEPRESS_BASE=___EMPTY___ && tsx scripts/copy-doc-assets.ts --index-css && vitepress build docs && tsx scripts/copy-doc-assets.ts && vitepress preview docs",
     "preview": "vite preview",
@@ -30,7 +33,7 @@
     "minor": "npm version minor && git push --follow-tags",
     "major": "npm version major && git push --follow-tags",
     "publish:github": "npm run build && npm publish --registry=https://npm.pkg.github.com",
-    "mcp:build": "cd mcp-server && npm run mcp:build"
+    "mcp:build": "cd mcp-server && npm run mcp:build && node -e \"const fs=require('fs');const p='../dist/mcp-server';if(fs.existsSync(p))fs.rmSync(p,{recursive:true});fs.cpSync('dist',p,{recursive:true})\""
   },
   "repository": {
     "type": "git",
@@ -111,8 +114,10 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
+    "@modelcontextprotocol/sdk": "^1.12.1",
     "dayjs": "^1.11.19",
-    "dompurify": "^3.3.1"
+    "dompurify": "^3.3.1",
+    "zod": "^3.25.0"
   },
   "config": {
     "commitizen": {

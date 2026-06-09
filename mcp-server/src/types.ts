@@ -111,6 +111,8 @@ export interface ComponentMeta {
   subComponents: SubComponentInfo[];
   /** 依赖的组件标签名列表 */
   dependencies: string[];
+  /** 预提取的使用示例（构建时从 docs 中提取，运行时不再依赖 docs 目录） */
+  examples?: ComponentExample[];
   /** 解析错误信息 */
   parseError?: string;
 }

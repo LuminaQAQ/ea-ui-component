@@ -34,9 +34,6 @@ function loadComponentsMeta(): ComponentMeta[] {
 /** 组件元数据（内存缓存） */
 let components: ComponentMeta[] = [];
 
-/** 文档目录 */
-let docsDir: string = "";
-
 /** 创建 MCP Server */
 const server = new McpServer(
   {
@@ -70,7 +67,8 @@ server.registerTool(
 server.registerTool(
   "get_component",
   {
-    description: "获取单个组件的完整信息，包括 Props、Events、Slots、CSS 变量、子组件等",
+    description:
+      "获取单个组件的完整信息，包括 Props、Events、Slots、CSS 变量、子组件等",
     inputSchema: {
       name: z.string().describe("组件名，如 ea-table、ea-select"),
       detail: z
@@ -108,13 +106,16 @@ server.registerTool(
 server.registerTool(
   "search_components",
   {
-    description: "按关键词搜索组件，支持模糊匹配组件名、显示名称、描述和属性名",
+    description:
+      "按关键词搜索组件，支持模糊匹配组件名、显示名称、描述和属性名",
     inputSchema: {
       keyword: z.string().describe("搜索关键词，如 table、表单、选择"),
       category: z
         .string()
         .optional()
-        .describe("按分类过滤：basic/form/data-display/navigation/feedback/foundation"),
+        .describe(
+          "按分类过滤：basic/form/data-display/navigation/feedback/foundation"
+        ),
     },
   },
   async ({ keyword, category }) => {
@@ -129,7 +130,7 @@ server.registerTool(
 server.registerTool(
   "get_component_example",
   {
-    description: "获取组件的使用示例代码，从 VitePress 文档中提取",
+    description: "获取组件的使用示例代码，从预提取缓存中读取",
     inputSchema: {
       name: z.string().describe("组件名，如 ea-button、ea-table"),
       exampleType: z
@@ -154,7 +155,7 @@ server.registerTool(
       };
     }
 
-    const examples = getComponentExample(docsDir, name, exampleType);
+    const examples = getComponentExample(components, name, exampleType);
 
     return {
       content: [
@@ -170,7 +171,6 @@ server.registerTool(
 // ===== 启动 Server =====
 async function main() {
   components = loadComponentsMeta();
-  docsDir = path.resolve(__dirname, "..", "..", "docs");
   console.error(`已加载 ${components.length} 个组件元数据`);
 
   const transport = new StdioServerTransport();
