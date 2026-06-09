@@ -1,6 +1,6 @@
 {
   "name": "easy-component-ui",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "使用 WebComponent 编写的原生组件库",
   "main": "dist/components/index.js",
   "module": "dist/components/index.js",
