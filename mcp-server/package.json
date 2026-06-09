@@ -4,11 +4,43 @@
   "description": "ea-ui-component 组件库 MCP Server，提供组件文档检索能力",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "ea-ui-mcp-server": "dist/index.js"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/cache/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc && node -e \"const fs=require('fs');const p='dist/cache';if(!fs.existsSync(p))fs.mkdirSync(p,{recursive:true});fs.copyFileSync('src/cache/components-meta.json',p+'/components-meta.json')\"",
     "mcp:build": "tsc && node dist/parser/index.js && node -e \"const fs=require('fs');const p='dist/cache';if(!fs.existsSync(p))fs.mkdirSync(p,{recursive:true});fs.copyFileSync('src/cache/components-meta.json',p+'/components-meta.json')\"",
+    "prepublishOnly": "npm run mcp:build",
     "mcp:start": "node dist/index.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "ea-ui-component",
+    "web-components",
+    "documentation",
+    "ai",
+    "model-context-protocol"
+  ],
+  "license": "MIT",
+  "author": "LuminaQAQ",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuminaQAQ/ea-ui-component.git",
+    "directory": "mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/LuminaQAQ/ea-ui-component/issues"
+  },
+  "homepage": "https://luminaqaq.github.io/ea-ui-component/",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
     "zod": "^3.25.0"
