@@ -108,6 +108,7 @@ export default defineConfig({
           { text: "使用", link: "/guide/Usage" },
           { text: "主题", link: "/guide/theme" },
           { text: "Form 表单", link: "/ea-form" },
+          { text: "MCP Server", link: "/guide/mcp-server" },
         ],
       },
       {
